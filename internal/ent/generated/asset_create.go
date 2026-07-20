@@ -16,16 +16,20 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
+	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
+	"github.com/theopenlane/core/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/internal/ent/generated/review"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 )
 
 // AssetCreate is the builder for creating a Asset entity.
@@ -960,6 +964,66 @@ func (_c *AssetCreate) AddInternalPolicies(v ...*InternalPolicy) *AssetCreate {
 	return _c.AddInternalPolicyIDs(ids...)
 }
 
+// AddFindingIDs adds the "findings" edge to the Finding entity by IDs.
+func (_c *AssetCreate) AddFindingIDs(ids ...string) *AssetCreate {
+	_c.mutation.AddFindingIDs(ids...)
+	return _c
+}
+
+// AddFindings adds the "findings" edges to the Finding entity.
+func (_c *AssetCreate) AddFindings(v ...*Finding) *AssetCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddFindingIDs(ids...)
+}
+
+// AddVulnerabilityIDs adds the "vulnerabilities" edge to the Vulnerability entity by IDs.
+func (_c *AssetCreate) AddVulnerabilityIDs(ids ...string) *AssetCreate {
+	_c.mutation.AddVulnerabilityIDs(ids...)
+	return _c
+}
+
+// AddVulnerabilities adds the "vulnerabilities" edges to the Vulnerability entity.
+func (_c *AssetCreate) AddVulnerabilities(v ...*Vulnerability) *AssetCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddVulnerabilityIDs(ids...)
+}
+
+// AddReviewIDs adds the "reviews" edge to the Review entity by IDs.
+func (_c *AssetCreate) AddReviewIDs(ids ...string) *AssetCreate {
+	_c.mutation.AddReviewIDs(ids...)
+	return _c
+}
+
+// AddReviews adds the "reviews" edges to the Review entity.
+func (_c *AssetCreate) AddReviews(v ...*Review) *AssetCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddReviewIDs(ids...)
+}
+
+// AddRemediationIDs adds the "remediations" edge to the Remediation entity by IDs.
+func (_c *AssetCreate) AddRemediationIDs(ids ...string) *AssetCreate {
+	_c.mutation.AddRemediationIDs(ids...)
+	return _c
+}
+
+// AddRemediations adds the "remediations" edges to the Remediation entity.
+func (_c *AssetCreate) AddRemediations(v ...*Remediation) *AssetCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddRemediationIDs(ids...)
+}
+
 // SetSourcePlatform sets the "source_platform" edge to the Platform entity.
 func (_c *AssetCreate) SetSourcePlatform(v *Platform) *AssetCreate {
 	return _c.SetSourcePlatformID(v.ID)
@@ -1698,6 +1762,74 @@ func (_c *AssetCreate) createSpec() (*Asset, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.InternalPolicyAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.FindingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.FindingsTable,
+			Columns: asset.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.FindingAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.VulnerabilitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.VulnerabilitiesTable,
+			Columns: asset.VulnerabilitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.VulnerabilityAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ReviewsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.ReviewsTable,
+			Columns: asset.ReviewsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.ReviewAssets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.RemediationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.RemediationsTable,
+			Columns: asset.RemediationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.RemediationAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

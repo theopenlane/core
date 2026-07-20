@@ -149,6 +149,9 @@
         "awssecurityhub": {
           "$ref": "#/$defs/awssecurityhub.Config"
         },
+        "cloudflareruntime": {
+          "$ref": "#/$defs/cloudflare.RuntimeConfig"
+        },
         "githubapp": {
           "$ref": "#/$defs/githubapp.Config"
         },
@@ -184,6 +187,24 @@
         },
         "organizationdelete": {
           "$ref": "#/$defs/operations.OrganizationDeleteConfig"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "cloudflare.RuntimeConfig": {
+      "properties": {
+        "apitoken": {
+          "type": "string",
+          "description": "Cloudflare API token for the operator-owned account"
+        },
+        "accountid": {
+          "type": "string",
+          "description": "Cloudflare account ID for the operator-owned account"
+        },
+        "domainscan": {
+          "$ref": "#/$defs/domainscan.ReportConfig",
+          "description": "Vendor/technology classification and enrichment behavior for onboarding domain scan reports"
         }
       },
       "additionalProperties": false,
@@ -228,7 +249,7 @@
       },
       "additionalProperties": false,
       "type": "object",
-      "description": "Backfill configures one-time startup data backfill routines that populate fields introduced by recent migrations for organizations and memberships that pre-date them"
+      "description": "Backfill configures one-time startup data backfill routines that populate fields introduced by recent\nmigrations for organizations and memberships that pre-date them"
     },
     "config.KeyWatcher": {
       "properties": {
@@ -446,6 +467,21 @@
       "additionalProperties": false,
       "type": "object",
       "description": "Config defines configuration for the CSRF middleware wrapper."
+    },
+    "domainscan.ReportConfig": {
+      "properties": {
+        "nonvendorcategories": {
+          "$ref": "#/$defs/[]string"
+        },
+        "deniedvendornames": {
+          "$ref": "#/$defs/[]string"
+        },
+        "scanttl": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     },
     "email.RuntimeEmailConfig": {
       "properties": {
@@ -1098,7 +1134,7 @@
       },
       "additionalProperties": false,
       "type": "object",
-      "description": "SupportAccessConfig contains configuration for the Openlane support access flow."
+      "description": "SupportAccessConfig contains configuration for the Openlane support access flow. The support\nidentity is virtual and authenticated entirely from these values, never from the database. This is\nthe single place that holds the support identity, its shared password, and the second factor\nidentity provider configuration, since both authentications must occur together"
     },
     "map[string][]string": {
       "additionalProperties": {
@@ -1678,7 +1714,7 @@
       },
       "additionalProperties": false,
       "type": "object",
-      "description": "ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future"
+      "description": "ProviderConfigs contains configuration for all storage providers\nThis is structured to allow easy extension for additional providers in the future"
     },
     "storage.ProviderCredentials": {
       "properties": {

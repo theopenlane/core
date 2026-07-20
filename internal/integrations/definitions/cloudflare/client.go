@@ -2,6 +2,8 @@ package cloudflare
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -9,7 +11,32 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/option"
 
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/domainscan"
 )
+
+// CloudflareClient wraps the Cloudflare SDK client with the account it's scoped to:
+// the customer's own account for installation-bound operations, or the operator-owned
+// account for system-initiated operations run through the runtime path.
+// Config.DomainScan is only populated for the runtime (system) client, used by the
+// domain scan enrichment operation
+type CloudflareClient struct { //nolint:revive
+	*cf.Client
+	// Config holds the account scope and domain scan settings this client was built with
+	Config ClientConfig
+}
+
+// ClientConfig holds the account and domain scan settings a CloudflareClient is built from, sourced from either
+// per-installation credentials or the operator-owned runtime config
+type ClientConfig struct {
+	// AccountID is the Cloudflare account this client is scoped to
+	AccountID string
+	// APIToken is the raw Cloudflare API token, needed by calls made outside the SDK client
+	// (e.g. Browser Rendering requests issued directly by the domain scan enrichment operation)
+	APIToken string
+	// DomainScan configures vendor/technology classification for onboarding domain scan
+	// reports; runtime client only
+	DomainScan domainscan.ReportConfig
+}
 
 // Client builds Cloudflare API clients for one installation
 type Client struct{}
@@ -25,10 +52,44 @@ func (Client) Build(_ context.Context, req types.ClientBuildRequest) (any, error
 		return nil, ErrAPITokenMissing
 	}
 
-	return cf.NewClient(
-		option.WithAPIToken(cred.APIToken),
-		option.WithHTTPClient(&http.Client{Timeout: time.Minute}),
-	), nil
+	return &CloudflareClient{
+		Client: cf.NewClient(
+			option.WithAPIToken(cred.APIToken),
+			option.WithHTTPClient(&http.Client{Timeout: time.Minute}),
+		),
+		Config: ClientConfig{
+			AccountID: cred.AccountID,
+			APIToken:  cred.APIToken,
+		},
+	}, nil
+}
+
+// runtimeCloudflareClientBuilder returns a build function that constructs a Cloudflare API
+// client for the runtime (system) path, using the operator-owned account's API token, account
+// ID, and domain scan report classification config
+func runtimeCloudflareClientBuilder() func(context.Context, json.RawMessage) (any, error) {
+	return func(_ context.Context, config json.RawMessage) (any, error) {
+		var cfg RuntimeConfig
+		if err := json.Unmarshal(config, &cfg); err != nil {
+			return nil, fmt.Errorf("%w: %w", ErrRuntimeConfigDecode, err)
+		}
+
+		if !cfg.Provisioned() {
+			return nil, ErrRuntimeConfigInvalid
+		}
+
+		return &CloudflareClient{
+			Client: cf.NewClient(
+				option.WithAPIToken(cfg.APIToken),
+				option.WithHTTPClient(&http.Client{Timeout: time.Minute}),
+			),
+			Config: ClientConfig{
+				AccountID:  cfg.AccountID,
+				APIToken:   cfg.APIToken,
+				DomainScan: cfg.DomainScan,
+			},
+		}, nil
+	}
 }
 
 func resolveCredential(bindings types.CredentialBindings) (CredentialSchema, error) {

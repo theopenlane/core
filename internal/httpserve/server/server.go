@@ -14,6 +14,7 @@ import (
 
 	"github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/httpserve/route"
+	"github.com/theopenlane/core/internal/httpserve/specs"
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/metrics"
@@ -28,8 +29,6 @@ type Server struct {
 	handlers []handler
 	// Router makes the router directly accessible on the Server struct
 	Router *route.Router
-	// SchemaRegistry manages OpenAPI schemas dynamically
-	SchemaRegistry *SchemaRegistry
 }
 
 // LogConfig is a struct that holds the configuration for logging in the echo server
@@ -86,20 +85,29 @@ type handler interface {
 	Routes(*echo.Group)
 }
 
-// NewRouter creates a wrapper router so that the echo server and OAS specification can be generated simultaneously
-func NewRouter(c LogConfig) (*route.Router, error) {
+// NewRouter creates the runtime router; it carries no OpenAPI state, the published
+// spec is generated ahead of time and served from the embedded artifact
+func NewRouter(c LogConfig) *route.Router {
+	return &route.Router{
+		Echo: ConfigureEcho(c),
+	}
+}
+
+// NewSpecRouter creates a router in spec-build mode: route registration derives the OpenAPI
+// document from the handler sources, reflecting schemas from the generated model instances.
+// Only spec generation uses this
+func NewSpecRouter(c LogConfig) (*route.Router, error) {
 	oas, err := NewOpenAPISpec()
 	if err != nil {
 		return nil, err
 	}
 
-	// Create schema registry for dynamic type registration
-	schemaRegistry := NewSchemaRegistry(oas, openapi3gen.UseAllExportedFields(), customizer)
-
 	return &route.Router{
 		Echo:           ConfigureEcho(c),
 		OAS:            oas,
-		SchemaRegistry: schemaRegistry,
+		SchemaRegistry: NewSchemaRegistry(oas, openapi3gen.UseAllExportedFields(), customizer),
+		SpecInstances:  specs.SpecInstances,
+		SpecTypes:      make(map[string]bool),
 	}, nil
 }
 
@@ -122,14 +130,9 @@ func NewServer(c config.Config) (*Server, error) {
 		logConfig.LogLevel = echo_log.INFO
 	}
 
-	srv, err := NewRouter(logConfig)
-	if err != nil {
-		return nil, err
-	}
-
 	return &Server{
 		config: c,
-		Router: srv,
+		Router: NewRouter(logConfig),
 	}, nil
 }
 
@@ -168,16 +171,10 @@ func (s *Server) StartEchoServer(ctx context.Context) error {
 		handler.Routes(s.Router.Echo.Group("", s.config.GraphMiddleware...))
 	}
 
-	// Generate tag definitions from registered operations
-	generateTagsFromOperations(s.Router.OAS)
-
 	// Print routes on startup
 	routes := s.Router.Echo.Router().Routes()
 	for _, r := range routes {
-		log.Info().
-			Str("route", r.Path()).
-			Str("method", r.Method()).
-			Msg("registered route")
+		log.Info().Str("route", r.Path()).Str("method", r.Method()).Msg("registered route")
 	}
 
 	log.Info().Msg(startBlock)

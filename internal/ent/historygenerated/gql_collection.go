@@ -4672,6 +4672,11 @@ func (_q *EntityHistoryQuery) collectField(ctx context.Context, oneNode bool, op
 				selectedFields = append(selectedFields, entityhistory.FieldDomains)
 				fieldSeen[entityhistory.FieldDomains] = struct{}{}
 			}
+		case "aliases":
+			if _, ok := fieldSeen[entityhistory.FieldAliases]; !ok {
+				selectedFields = append(selectedFields, entityhistory.FieldAliases)
+				fieldSeen[entityhistory.FieldAliases] = struct{}{}
+			}
 		case "entityTypeID":
 			if _, ok := fieldSeen[entityhistory.FieldEntityTypeID]; !ok {
 				selectedFields = append(selectedFields, entityhistory.FieldEntityTypeID)

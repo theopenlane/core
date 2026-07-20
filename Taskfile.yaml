@@ -36,7 +36,7 @@ env:
   # go build
   GOFLAGS: -buildvcs=false
   # for test container settings
-  RYUK_CONNECTION_TIMEOUT: "5m"
+  RYUK_CONNECTION_TIMEOUT: "10m"
   RYUK_VERBOSE: "true"
   COMPOSE_PROJECT_NAME: openlane
   # CLI demo environment variables
@@ -691,4 +691,5 @@ tasks:
   generate:openapi:
     desc: Generate OpenAPI spec file
     cmds:
-      - go run ./internal/httpserve/specs/generate/main.go
+      - go run ./internal/httpserve/specs/generate --emit-types
+      - go run ./internal/httpserve/specs/generate

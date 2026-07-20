@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -36,6 +37,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 )
 
@@ -957,6 +959,36 @@ func (_c *SubcontrolCreate) AddIdentityHolders(v ...*IdentityHolder) *Subcontrol
 	return _c.AddIdentityHolderIDs(ids...)
 }
 
+// AddVulnerabilityIDs adds the "vulnerabilities" edge to the Vulnerability entity by IDs.
+func (_c *SubcontrolCreate) AddVulnerabilityIDs(ids ...string) *SubcontrolCreate {
+	_c.mutation.AddVulnerabilityIDs(ids...)
+	return _c
+}
+
+// AddVulnerabilities adds the "vulnerabilities" edges to the Vulnerability entity.
+func (_c *SubcontrolCreate) AddVulnerabilities(v ...*Vulnerability) *SubcontrolCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddVulnerabilityIDs(ids...)
+}
+
+// AddFindingIDs adds the "findings" edge to the Finding entity by IDs.
+func (_c *SubcontrolCreate) AddFindingIDs(ids ...string) *SubcontrolCreate {
+	_c.mutation.AddFindingIDs(ids...)
+	return _c
+}
+
+// AddFindings adds the "findings" edges to the Finding entity.
+func (_c *SubcontrolCreate) AddFindings(v ...*Finding) *SubcontrolCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddFindingIDs(ids...)
+}
+
 // Mutation returns the SubcontrolMutation object of the builder.
 func (_c *SubcontrolCreate) Mutation() *SubcontrolMutation {
 	return _c.mutation
@@ -1760,6 +1792,40 @@ func (_c *SubcontrolCreate) createSpec() (*Subcontrol, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.SubcontrolIdentityHolders
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.VulnerabilitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.VulnerabilitiesTable,
+			Columns: subcontrol.VulnerabilitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.VulnerabilitySubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.FindingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.FindingsTable,
+			Columns: subcontrol.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.FindingSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

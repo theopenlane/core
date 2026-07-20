@@ -25,14 +25,10 @@ import (
 const maxQuestionnaireResendAttempts = 5
 
 // ResendQuestionnaireEmail handles requests to resend the questionnaire authentication email with a new JWT token
-func (h *Handler) ResendQuestionnaireEmail(ctx echo.Context, openapi *OpenAPIContext) error {
-	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleResendQuestionnaireRequest, models.ExampleResendQuestionnaireResponse, openapi.Registry)
+func (h *Handler) ResendQuestionnaireEmail(ctx echo.Context) error {
+	in, err := BindAndValidate[models.ResendQuestionnaireRequest](ctx)
 	if err != nil {
-		return h.InvalidInput(ctx, err, openapi)
-	}
-
-	if isRegistrationContext(ctx) {
-		return nil
+		return h.InvalidInput(ctx, err)
 	}
 
 	reqCtx := ctx.Request().Context()
@@ -40,7 +36,7 @@ func (h *Handler) ResendQuestionnaireEmail(ctx echo.Context, openapi *OpenAPICon
 	allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
 	allowCtx = auth.WithCaller(allowCtx, auth.NewWebhookCaller(""))
 
-	out := &models.ResendReply{
+	out := &models.ResendResponse{
 		Reply:   rout.Reply{Success: true},
 		Message: "If the email address is associated with an active assessment, a new link has been sent to access this",
 	}
@@ -53,24 +49,24 @@ func (h *Handler) ResendQuestionnaireEmail(ctx echo.Context, openapi *OpenAPICon
 		Only(allowCtx)
 	if err != nil {
 		if generated.IsNotFound(err) {
-			return h.Success(ctx, out, openapi)
+			return h.Success(ctx, out)
 		}
 
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error querying assessment response")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	if assessmentResp.Status == enums.AssessmentResponseStatusCompleted {
-		return h.Success(ctx, out, openapi)
+		return h.Success(ctx, out)
 	}
 
 	if !assessmentResp.DueDate.IsZero() && time.Now().After(assessmentResp.DueDate) {
-		return h.BadRequest(ctx, ErrAssessmentResponseOverdue, openapi)
+		return h.BadRequest(ctx, ErrAssessmentResponseOverdue)
 	}
 
 	if assessmentResp.SendAttempts >= maxQuestionnaireResendAttempts {
-		return h.Success(ctx, out, openapi)
+		return h.Success(ctx, out)
 	}
 
 	assessmentResp, err = h.DBClient.AssessmentResponse.UpdateOneID(assessmentResp.ID).
@@ -79,7 +75,7 @@ func (h *Handler) ResendQuestionnaireEmail(ctx echo.Context, openapi *OpenAPICon
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error incrementing send attempts")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	assessmentData, err := h.DBClient.Assessment.Query().
@@ -89,13 +85,13 @@ func (h *Handler) ResendQuestionnaireEmail(ctx echo.Context, openapi *OpenAPICon
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error querying assessment")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	baseURL, err := url.Parse(h.IntegrationsConfig.Email.ProductURL + "/questionnaire")
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error parsing questionnaire base URL")
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	duration := h.DBClient.TokenManager.Config().AssessmentAccessDuration
@@ -112,7 +108,7 @@ func (h *Handler) ResendQuestionnaireEmail(ctx echo.Context, openapi *OpenAPICon
 	})
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error generating questionnaire auth URL")
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	if err := h.sendEmail(reqCtx, email.QuestionnaireAuthOp.Name(), email.QuestionnaireAuthEmail{
@@ -122,8 +118,8 @@ func (h *Handler) ResendQuestionnaireEmail(ctx echo.Context, openapi *OpenAPICon
 	}); err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error sending questionnaire auth email")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
-	return h.Success(ctx, out, openapi)
+	return h.Success(ctx, out)
 }

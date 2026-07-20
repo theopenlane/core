@@ -23,8 +23,8 @@ import (
 func (suite *HandlerTestSuite) TestForgotPasswordHandler() {
 	t := suite.T()
 
-	// Register test handler with OpenAPI context
-	suite.registerTestHandler("POST", "forgot-password", suite.createImpersonationOperation("ForgotPassword", "Test forgot password"), suite.h.ForgotPassword)
+	// Register test handler
+	suite.registerTestHandler("POST", "forgot-password", suite.h.ForgotPassword)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 
@@ -106,7 +106,7 @@ func (suite *HandlerTestSuite) TestForgotPasswordHandler() {
 			assert.Equal(t, tc.expectedStatus, recorder.Code)
 
 			if tc.expectedStatus != http.StatusOK {
-				var out *models.ForgotPasswordReply
+				var out *models.ForgotPasswordResponse
 
 				// parse request body
 				if err := json.NewDecoder(res.Body).Decode(&out); err != nil {

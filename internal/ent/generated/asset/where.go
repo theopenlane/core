@@ -4226,6 +4226,122 @@ func HasInternalPoliciesWith(preds ...predicate.InternalPolicy) predicate.Asset 
 	})
 }
 
+// HasFindings applies the HasEdge predicate on the "findings" edge.
+func HasFindings() predicate.Asset {
+	return predicate.Asset(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, FindingsTable, FindingsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.FindingAssets
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasFindingsWith applies the HasEdge predicate on the "findings" edge with a given conditions (other predicates).
+func HasFindingsWith(preds ...predicate.Finding) predicate.Asset {
+	return predicate.Asset(func(s *sql.Selector) {
+		step := newFindingsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.FindingAssets
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasVulnerabilities applies the HasEdge predicate on the "vulnerabilities" edge.
+func HasVulnerabilities() predicate.Asset {
+	return predicate.Asset(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, VulnerabilitiesTable, VulnerabilitiesPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Vulnerability
+		step.Edge.Schema = schemaConfig.VulnerabilityAssets
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasVulnerabilitiesWith applies the HasEdge predicate on the "vulnerabilities" edge with a given conditions (other predicates).
+func HasVulnerabilitiesWith(preds ...predicate.Vulnerability) predicate.Asset {
+	return predicate.Asset(func(s *sql.Selector) {
+		step := newVulnerabilitiesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Vulnerability
+		step.Edge.Schema = schemaConfig.VulnerabilityAssets
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasReviews applies the HasEdge predicate on the "reviews" edge.
+func HasReviews() predicate.Asset {
+	return predicate.Asset(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, ReviewsTable, ReviewsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Review
+		step.Edge.Schema = schemaConfig.ReviewAssets
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasReviewsWith applies the HasEdge predicate on the "reviews" edge with a given conditions (other predicates).
+func HasReviewsWith(preds ...predicate.Review) predicate.Asset {
+	return predicate.Asset(func(s *sql.Selector) {
+		step := newReviewsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Review
+		step.Edge.Schema = schemaConfig.ReviewAssets
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasRemediations applies the HasEdge predicate on the "remediations" edge.
+func HasRemediations() predicate.Asset {
+	return predicate.Asset(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, RemediationsTable, RemediationsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Remediation
+		step.Edge.Schema = schemaConfig.RemediationAssets
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasRemediationsWith applies the HasEdge predicate on the "remediations" edge with a given conditions (other predicates).
+func HasRemediationsWith(preds ...predicate.Remediation) predicate.Asset {
+	return predicate.Asset(func(s *sql.Selector) {
+		step := newRemediationsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Remediation
+		step.Edge.Schema = schemaConfig.RemediationAssets
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasSourcePlatform applies the HasEdge predicate on the "source_platform" edge.
 func HasSourcePlatform() predicate.Asset {
 	return predicate.Asset(func(s *sql.Selector) {

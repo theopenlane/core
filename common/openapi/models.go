@@ -28,6 +28,13 @@ type ExampleProvider interface {
 	ExampleResponse() any
 }
 
+// ExampleSetProvider interface allows models to explicitly register their curated named examples
+// for the OpenAPI spec; it takes precedence over ExampleProvider and supports several examples per
+// model, keyed by the example name published in the spec
+type ExampleSetProvider interface {
+	ExampleSet() map[string]any
+}
+
 var (
 	errProviderRequired      = errors.New("provider parameter is required")
 	errIntegrationIDRequired = errors.New("integration ID is required")
@@ -104,8 +111,8 @@ type LoginRequest struct {
 	Reason string `json:"reason,omitempty" description:"For Openlane support login only: the reason for accessing the organization"`
 }
 
-// LoginReply contains authentication tokens and user information after successful login
-type LoginReply struct {
+// LoginResponse contains authentication tokens and user information after successful login
+type LoginResponse struct {
 	// Reply is the reply value.
 	rout.Reply
 	// AuthData is the authdata value.
@@ -120,9 +127,9 @@ type LoginReply struct {
 	Message string `json:"message"`
 }
 
-// ExampleResponse returns an example LoginReply for OpenAPI documentation
-func (r *LoginReply) ExampleResponse() any {
-	return LoginReply{
+// ExampleResponse returns an example LoginResponse for OpenAPI documentation
+func (r *LoginResponse) ExampleResponse() any {
+	return LoginResponse{
 		Reply: rout.Reply{
 			Success: true,
 		},
@@ -161,17 +168,17 @@ func (r *LoginRequest) Validate() error {
 	return nil
 }
 
-// AvailableAuthTypeReply holds the response to AvailableAuthTypeLoginRequest
-type AvailableAuthTypeReply struct {
+// AvailableAuthTypeResponse holds the response to AvailableAuthTypeLoginRequest
+type AvailableAuthTypeResponse struct {
 	// Reply is the reply value.
 	rout.Reply
 	// Methods is the methods value.
 	Methods []enums.AuthProvider `json:"methods,omitempty"`
 }
 
-// ExampleResponse returns an example AvailableAuthTypeReply for OpenAPI documentation
-func (r *AvailableAuthTypeReply) ExampleResponse() any {
-	return AvailableAuthTypeReply{
+// ExampleResponse returns an example AvailableAuthTypeResponse for OpenAPI documentation
+func (r *AvailableAuthTypeResponse) ExampleResponse() any {
+	return AvailableAuthTypeResponse{
 		Reply:   rout.Reply{Success: true},
 		Methods: []enums.AuthProvider{enums.AuthProviderCredentials, enums.AuthProviderWebauthn},
 	}
@@ -199,19 +206,21 @@ func (r *AvailableAuthTypeLoginRequest) Validate() error {
 	return nil
 }
 
-// ExampleLoginSuccessRequest is an example of a successful login request for OpenAPI documentation
-var ExampleLoginSuccessRequest = LoginRequest{
-	Username: "sfunky@theopenlane.io",
-	Password: "mitb!",
-}
-
-// ExampleAvailableAuthTypeRequest is an example of a successful available auth type check for OpenAPI documentation
-var ExampleAvailableAuthTypeRequest = LoginRequest{
-	Username: "sfunky@theopenlane.io",
+// ExampleSet returns the curated named examples published for LoginRequest in the OpenAPI spec
+func (LoginRequest) ExampleSet() map[string]any {
+	return map[string]any{
+		"LoginSuccessRequest": LoginRequest{
+			Username: "sfunky@theopenlane.io",
+			Password: "mitb!",
+		},
+		"AvailableAuthTypeRequest": LoginRequest{
+			Username: "sfunky@theopenlane.io",
+		},
+	}
 }
 
 // ExampleAvailableAuthTypeSuccessResponse is an example of a successful available auth methods check response for OpenAPI documentation
-var ExampleAvailableAuthTypeSuccessResponse = AvailableAuthTypeReply{
+var ExampleAvailableAuthTypeSuccessResponse = AvailableAuthTypeResponse{
 	Reply: rout.Reply{
 		Success: true,
 	},
@@ -221,18 +230,22 @@ var ExampleAvailableAuthTypeSuccessResponse = AvailableAuthTypeReply{
 	},
 }
 
-// ExampleLoginSuccessResponse is an example of a successful login response for OpenAPI documentation
-var ExampleLoginSuccessResponse = LoginReply{
-	Reply: rout.Reply{
-		Success: true,
-	},
-	TFAEnabled: true,
-	AuthData: AuthData{
-		AccessToken:  "access_token",
-		RefreshToken: "refresh_token",
-		Session:      "session",
-		TokenType:    "bearer",
-	},
+// ExampleSet returns the curated named examples published for LoginResponse in the OpenAPI spec
+func (LoginResponse) ExampleSet() map[string]any {
+	return map[string]any{
+		"LoginSuccessResponse": LoginResponse{
+			Reply: rout.Reply{
+				Success: true,
+			},
+			TFAEnabled: true,
+			AuthData: AuthData{
+				AccessToken:  "access_token",
+				RefreshToken: "refresh_token",
+				Session:      "session",
+				TokenType:    "bearer",
+			},
+		},
+	}
 }
 
 // =========
@@ -245,8 +258,8 @@ type RefreshRequest struct {
 	RefreshToken string `json:"refresh_token" description:"The token to be used to refresh the access token after expiration"`
 }
 
-// RefreshReply contains new authentication tokens after successful refresh
-type RefreshReply struct {
+// RefreshResponse contains new authentication tokens after successful refresh
+type RefreshResponse struct {
 	// Reply is the reply value.
 	rout.Reply
 	// Message is the message value.
@@ -255,9 +268,9 @@ type RefreshReply struct {
 	AuthData
 }
 
-// ExampleResponse returns an example RefreshReply for OpenAPI documentation
-func (r *RefreshReply) ExampleResponse() any {
-	return RefreshReply{
+// ExampleResponse returns an example RefreshResponse for OpenAPI documentation
+func (r *RefreshResponse) ExampleResponse() any {
+	return RefreshResponse{
 		Reply: rout.Reply{
 			Success: true,
 		},
@@ -280,21 +293,29 @@ func (r *RefreshRequest) Validate() error {
 	return nil
 }
 
-// ExampleRefreshRequest is an example of a successful refresh request for OpenAPI documentation
-var ExampleRefreshRequest = RefreshRequest{
-	RefreshToken: "token",
+// ExampleSet returns the curated named examples published for RefreshRequest in the OpenAPI spec
+func (RefreshRequest) ExampleSet() map[string]any {
+	return map[string]any{
+		"RefreshRequest": RefreshRequest{
+			RefreshToken: "token",
+		},
+	}
 }
 
-// ExampleRefreshSuccessResponse is an example of a successful refresh response for OpenAPI documentation
-var ExampleRefreshSuccessResponse = RefreshReply{
-	Reply:   rout.Reply{Success: true},
-	Message: "success",
-	AuthData: AuthData{
-		AccessToken:  "access_token",
-		RefreshToken: "refresh_token",
-		Session:      "session",
-		TokenType:    "bearer",
-	},
+// ExampleSet returns the curated named examples published for RefreshResponse in the OpenAPI spec
+func (RefreshResponse) ExampleSet() map[string]any {
+	return map[string]any{
+		"RefreshSuccessResponse": RefreshResponse{
+			Reply:   rout.Reply{Success: true},
+			Message: "success",
+			AuthData: AuthData{
+				AccessToken:  "access_token",
+				RefreshToken: "refresh_token",
+				Session:      "session",
+				TokenType:    "bearer",
+			},
+		},
+	}
 }
 
 // =========
@@ -307,17 +328,17 @@ type LogoutRequest struct {
 	RefreshToken string `json:"refresh_token,omitempty" description:"Optional refresh token to revoke when not provided via cookie"`
 }
 
-// LogoutReply confirms the session and tokens were revoked
-type LogoutReply struct {
+// LogoutResponse confirms the session and tokens were revoked
+type LogoutResponse struct {
 	// Reply is the reply value.
 	rout.Reply
 	// Message is the message value.
 	Message string `json:"message,omitempty"`
 }
 
-// ExampleResponse returns an example LogoutReply for OpenAPI documentation
-func (r *LogoutReply) ExampleResponse() any {
-	return LogoutReply{
+// ExampleResponse returns an example LogoutResponse for OpenAPI documentation
+func (r *LogoutResponse) ExampleResponse() any {
+	return LogoutResponse{
 		Reply:   rout.Reply{Success: true},
 		Message: "logged out successfully",
 	}
@@ -329,23 +350,31 @@ func (r *LogoutRequest) Validate() error {
 	return nil
 }
 
-// ExampleLogoutRequest is an example logout request for OpenAPI documentation
-var ExampleLogoutRequest = LogoutRequest{
-	RefreshToken: "token",
+// ExampleSet returns the curated named examples published for LogoutRequest in the OpenAPI spec
+func (LogoutRequest) ExampleSet() map[string]any {
+	return map[string]any{
+		"LogoutRequest": LogoutRequest{
+			RefreshToken: "token",
+		},
+	}
 }
 
-// ExampleLogoutSuccessResponse is an example of a successful logout response for OpenAPI documentation
-var ExampleLogoutSuccessResponse = LogoutReply{
-	Reply:   rout.Reply{Success: true},
-	Message: "success",
+// ExampleSet returns the curated named examples published for LogoutResponse in the OpenAPI spec
+func (LogoutResponse) ExampleSet() map[string]any {
+	return map[string]any{
+		"LogoutSuccessResponse": LogoutResponse{
+			Reply:   rout.Reply{Success: true},
+			Message: "success",
+		},
+	}
 }
 
 // =========
 // USERINFO
 // =========
 
-// UserInfoReply contains user information for authenticated requests
-type UserInfoReply struct {
+// UserInfoResponse contains user information for authenticated requests
+type UserInfoResponse struct {
 	// Reply is the reply value.
 	rout.Reply
 	// ID is the id value.
@@ -369,7 +398,7 @@ type UserInfoReply struct {
 }
 
 // ExampleUserInfoSuccessResponse is an example of a successful userinfo response for OpenAPI documentation
-var ExampleUserInfoSuccessResponse = UserInfoReply{
+var ExampleUserInfoSuccessResponse = UserInfoResponse{
 	Reply:           rout.Reply{Success: true},
 	ID:              "01J4EXD5MM60CX4YNYN0DEE3Y1",
 	Email:           "jsnow@example.com",
@@ -405,8 +434,8 @@ type RegisterRequest struct {
 	Token *string `json:"token" description:"A newly invited user can use this to join a org as at the same time they are creating their account"`
 }
 
-// RegisterReply contains authentication tokens and user information after successful registration
-type RegisterReply struct {
+// RegisterResponse contains authentication tokens and user information after successful registration
+type RegisterResponse struct {
 	// Reply is the reply value.
 	rout.Reply
 	// ID is the user_id value.
@@ -419,9 +448,9 @@ type RegisterReply struct {
 	Token string `json:"token,omitempty" exclude:"true"` // only used for requests against local development, excluded from OpenAPI documentation
 }
 
-// ExampleResponse returns an example RegisterReply for OpenAPI documentation
-func (r *RegisterReply) ExampleResponse() any {
-	return RegisterReply{
+// ExampleResponse returns an example RegisterResponse for OpenAPI documentation
+func (r *RegisterResponse) ExampleResponse() any {
+	return RegisterResponse{
 		Reply:   rout.Reply{Success: true},
 		ID:      exampleULID("user"),
 		Email:   "jsnow@example.com",
@@ -454,21 +483,29 @@ func (r *RegisterRequest) Validate() error {
 	return nil
 }
 
-// ExampleRegisterSuccessRequest is an example of a successful register request for OpenAPI documentation
-var ExampleRegisterSuccessRequest = RegisterRequest{
-	FirstName: "Sarah",
-	LastName:  "Funk",
-	Email:     "sfunky@theopenlane.io",
-	Password:  "mitb!",
-	Token:     stringPtr("invite_token_example"),
+// ExampleSet returns the curated named examples published for RegisterRequest in the OpenAPI spec
+func (RegisterRequest) ExampleSet() map[string]any {
+	return map[string]any{
+		"RegisterSuccessRequest": RegisterRequest{
+			FirstName: "Sarah",
+			LastName:  "Funk",
+			Email:     "sfunky@theopenlane.io",
+			Password:  "mitb!",
+			Token:     stringPtr("invite_token_example"),
+		},
+	}
 }
 
-// ExampleRegisterSuccessResponse is an example of a successful register response for OpenAPI documentation
-var ExampleRegisterSuccessResponse = RegisterReply{
-	Reply:   rout.Reply{Success: true},
-	ID:      "1234",
-	Email:   "",
-	Message: "Welcome to Openlane!",
+// ExampleSet returns the curated named examples published for RegisterResponse in the OpenAPI spec
+func (RegisterResponse) ExampleSet() map[string]any {
+	return map[string]any{
+		"RegisterSuccessResponse": RegisterResponse{
+			Reply:   rout.Reply{Success: true},
+			ID:      "1234",
+			Email:   "",
+			Message: "Welcome to Openlane!",
+		},
+	}
 }
 
 // =========
@@ -481,8 +518,8 @@ type SwitchOrganizationRequest struct {
 	TargetOrganizationID string `json:"target_organization_id" description:"The ID of the organization to switch to" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
 }
 
-// SwitchOrganizationReply holds the new authentication and session information for the user for the new organization
-type SwitchOrganizationReply struct {
+// SwitchOrganizationResponse holds the new authentication and session information for the user for the new organization
+type SwitchOrganizationResponse struct {
 	// Reply is the reply value.
 	rout.Reply
 	// AuthData is the authdata value.
@@ -495,9 +532,9 @@ type SwitchOrganizationReply struct {
 	RedirectURI string `json:"redirect_uri,omitempty"`
 }
 
-// ExampleResponse returns an example SwitchOrganizationReply for OpenAPI documentation
-func (r *SwitchOrganizationReply) ExampleResponse() any {
-	return SwitchOrganizationReply{
+// ExampleResponse returns an example SwitchOrganizationResponse for OpenAPI documentation
+func (r *SwitchOrganizationResponse) ExampleResponse() any {
+	return SwitchOrganizationResponse{
 		Reply: rout.Reply{Success: true},
 		AuthData: AuthData{
 			AccessToken:  "new_access_token",
@@ -517,22 +554,30 @@ func (r *SwitchOrganizationRequest) Validate() error {
 	return nil
 }
 
-// ExampleSwitchSuccessRequest is an example of a successful switch organization request for OpenAPI documentation
-var ExampleSwitchSuccessRequest = SwitchOrganizationRequest{
-	TargetOrganizationID: exampleULID("organization"),
+// ExampleSet returns the curated named examples published for SwitchOrganizationRequest in the OpenAPI spec
+func (SwitchOrganizationRequest) ExampleSet() map[string]any {
+	return map[string]any{
+		"SwitchSuccessRequest": SwitchOrganizationRequest{
+			TargetOrganizationID: exampleULID("organization"),
+		},
+	}
 }
 
-// ExampleSwitchSuccessReply is an example of a successful switch organization response for OpenAPI documentation
-var ExampleSwitchSuccessReply = SwitchOrganizationReply{
-	Reply: rout.Reply{
-		Success: true,
-	},
-	AuthData: AuthData{
-		AccessToken:  "access_token",
-		RefreshToken: "refresh_token",
-		Session:      "session",
-		TokenType:    "bearer",
-	},
+// ExampleSet returns the curated named examples published for SwitchOrganizationResponse in the OpenAPI spec
+func (SwitchOrganizationResponse) ExampleSet() map[string]any {
+	return map[string]any{
+		"SwitchSuccessResponse": SwitchOrganizationResponse{
+			Reply: rout.Reply{
+				Success: true,
+			},
+			AuthData: AuthData{
+				AccessToken:  "access_token",
+				RefreshToken: "refresh_token",
+				Session:      "session",
+				TokenType:    "bearer",
+			},
+		},
+	}
 }
 
 // =========
@@ -545,8 +590,8 @@ type VerifyRequest struct {
 	Token string `query:"token" description:"The token to be used to verify the email address, token is sent via email"`
 }
 
-// VerifyReply holds the fields that are sent on a response to the `/verify` endpoint
-type VerifyReply struct {
+// VerifyResponse holds the fields that are sent on a response to the `/verify` endpoint
+type VerifyResponse struct {
 	// Reply is the reply value.
 	rout.Reply
 	// ID is the user_id value.
@@ -559,9 +604,9 @@ type VerifyReply struct {
 	AuthData
 }
 
-// ExampleResponse returns an example VerifyReply for OpenAPI documentation
-func (r *VerifyReply) ExampleResponse() any {
-	return VerifyReply{
+// ExampleResponse returns an example VerifyResponse for OpenAPI documentation
+func (r *VerifyResponse) ExampleResponse() any {
+	return VerifyResponse{
 		Reply:   rout.Reply{Success: true},
 		ID:      exampleULID("user"),
 		Email:   "jsnow@example.com",
@@ -584,25 +629,33 @@ func (r *VerifyRequest) Validate() error {
 	return nil
 }
 
-// ExampleVerifySuccessRequest is an example of a successful verify request for OpenAPI documentation
-var ExampleVerifySuccessRequest = VerifyRequest{
-	Token: "token",
+// ExampleSet returns the curated named examples published for VerifyRequest in the OpenAPI spec
+func (VerifyRequest) ExampleSet() map[string]any {
+	return map[string]any{
+		"VerifySuccessRequest": VerifyRequest{
+			Token: "token",
+		},
+	}
 }
 
-// ExampleVerifySuccessResponse is an example of a successful verify response for OpenAPI documentation
-var ExampleVerifySuccessResponse = VerifyReply{
-	Reply: rout.Reply{
-		Success: true,
-	},
-	ID:      exampleULID("user_alt"),
-	Email:   "gregor.clegane@theopenlane.io",
-	Message: "Email has been verified",
-	AuthData: AuthData{
-		AccessToken:  "access_token",
-		RefreshToken: "refresh_token",
-		Session:      "session",
-		TokenType:    "bearer",
-	},
+// ExampleSet returns the curated named examples published for VerifyResponse in the OpenAPI spec
+func (VerifyResponse) ExampleSet() map[string]any {
+	return map[string]any{
+		"VerifySuccessResponse": VerifyResponse{
+			Reply: rout.Reply{
+				Success: true,
+			},
+			ID:      exampleULID("user_alt"),
+			Email:   "gregor.clegane@theopenlane.io",
+			Message: "Email has been verified",
+			AuthData: AuthData{
+				AccessToken:  "access_token",
+				RefreshToken: "refresh_token",
+				Session:      "session",
+				TokenType:    "bearer",
+			},
+		},
+	}
 }
 
 // =========
@@ -632,8 +685,8 @@ var ExampleFileDownloadRequest = FileDownload{
 	Token: "token",
 }
 
-// UploadFilesReply holds the fields that are sent on a response to the `/upload` endpoint
-type FileDownloadReply struct {
+// UploadFilesResponse holds the fields that are sent on a response to the `/upload` endpoint
+type FileDownloadResponse struct {
 	// Reply is the reply value.
 	rout.Reply
 	// Message is the message value.
@@ -642,9 +695,9 @@ type FileDownloadReply struct {
 	File File `json:"file" description:"The files that were uploaded"`
 }
 
-// ExampleResponse returns an example UploadFilesReply for OpenAPI documentation
-func (r *FileDownloadReply) ExampleResponse() any {
-	return FileDownloadReply{
+// ExampleResponse returns an example UploadFilesResponse for OpenAPI documentation
+func (r *FileDownloadResponse) ExampleResponse() any {
+	return FileDownloadResponse{
 		Reply:   rout.Reply{Success: true},
 		Message: "Files uploaded successfully",
 		File:    File{OriginalName: "example1.pdf"}, //nolint:mnd
@@ -661,17 +714,17 @@ type ResendRequest struct {
 	Email string `json:"email" description:"The email address to resend the verification email to, must match the email address on the existing account"`
 }
 
-// ResendReply holds the fields that are sent on a response to the `/resend` endpoint
-type ResendReply struct {
+// ResendResponse holds the fields that are sent on a response to the `/resend` endpoint
+type ResendResponse struct {
 	// Reply is the reply value.
 	rout.Reply
 	// Message is the message value.
 	Message string `json:"message"`
 }
 
-// ExampleResponse returns an example ResendReply for OpenAPI documentation
-func (r *ResendReply) ExampleResponse() any {
-	return ResendReply{
+// ExampleResponse returns an example ResendResponse for OpenAPI documentation
+func (r *ResendResponse) ExampleResponse() any {
+	return ResendResponse{
 		Reply:   rout.Reply{Success: true},
 		Message: "Verification email resent successfully",
 	}
@@ -686,17 +739,32 @@ func (r *ResendRequest) Validate() error {
 	return nil
 }
 
-// ExampleResendEmailSuccessRequest is an example of a successful resend email request for OpenAPI documentation
-var ExampleResendEmailSuccessRequest = ResendRequest{
-	Email: "cercei.lannister@theopenlane.io",
+// ExampleSet returns the curated named examples published for ResendRequest in the OpenAPI spec
+func (ResendRequest) ExampleSet() map[string]any {
+	return map[string]any{
+		"ResendEmailSuccessRequest": ResendRequest{
+			Email: "cercei.lannister@theopenlane.io",
+		},
+	}
 }
 
-// ExampleResendEmailSuccessResponse is an example of a successful resend email response for OpenAPI documentation
-var ExampleResendEmailSuccessResponse = ResendReply{
-	Reply: rout.Reply{
-		Success: true,
-	},
-	Message: "Email has been resent",
+// ExampleSet returns the curated named examples published for ResendResponse in the OpenAPI spec;
+// the reply is shared by the resend email and resend questionnaire endpoints
+func (ResendResponse) ExampleSet() map[string]any {
+	return map[string]any{
+		"ResendEmailSuccessResponse": ResendResponse{
+			Reply: rout.Reply{
+				Success: true,
+			},
+			Message: "Email has been resent",
+		},
+		"ResendQuestionnaireResponse": ResendResponse{
+			Reply: rout.Reply{
+				Success: true,
+			},
+			Message: "If the email address is associated with an active assessment, a new authentication email has been sent",
+		},
+	}
 }
 
 // =========
@@ -709,17 +777,17 @@ type ForgotPasswordRequest struct {
 	Email string `json:"email" description:"The email address associated with the account to send the password reset email to" example:"jsnow@example.com"`
 }
 
-// ForgotPasswordReply contains fields for a forgot password response
-type ForgotPasswordReply struct {
+// ForgotPasswordResponse contains fields for a forgot password response
+type ForgotPasswordResponse struct {
 	// Reply is the reply value.
 	rout.Reply
 	// Message is the message value.
 	Message string `json:"message,omitempty"`
 }
 
-// ExampleResponse returns an example ForgotPasswordReply for OpenAPI documentation
-func (r *ForgotPasswordReply) ExampleResponse() any {
-	return ForgotPasswordReply{
+// ExampleResponse returns an example ForgotPasswordResponse for OpenAPI documentation
+func (r *ForgotPasswordResponse) ExampleResponse() any {
+	return ForgotPasswordResponse{
 		Reply:   rout.Reply{Success: true},
 		Message: "Password reset email sent successfully",
 	}
@@ -734,17 +802,25 @@ func (r *ForgotPasswordRequest) Validate() error {
 	return nil
 }
 
-// ExampleForgotPasswordSuccessRequest is an example of a successful forgot password request for OpenAPI documentation
-var ExampleForgotPasswordSuccessRequest = ForgotPasswordRequest{
-	Email: "example@theopenlane.io",
+// ExampleSet returns the curated named examples published for ForgotPasswordRequest in the OpenAPI spec
+func (ForgotPasswordRequest) ExampleSet() map[string]any {
+	return map[string]any{
+		"ForgotPasswordSuccessRequest": ForgotPasswordRequest{
+			Email: "example@theopenlane.io",
+		},
+	}
 }
 
-// ExampleForgotPasswordSuccessResponse is an example of a successful forgot password response for OpenAPI documentation
-var ExampleForgotPasswordSuccessResponse = ForgotPasswordReply{
-	Reply: rout.Reply{
-		Success: true,
-	},
-	Message: "We've received your request to have the password associated with this email reset. Please check your email.",
+// ExampleSet returns the curated named examples published for ForgotPasswordResponse in the OpenAPI spec
+func (ForgotPasswordResponse) ExampleSet() map[string]any {
+	return map[string]any{
+		"ForgotPasswordSuccessResponse": ForgotPasswordResponse{
+			Reply: rout.Reply{
+				Success: true,
+			},
+			Message: "We've received your request to have the password associated with this email reset. Please check your email.",
+		},
+	}
 }
 
 // =========
@@ -759,18 +835,18 @@ type ResetPasswordRequest struct {
 	Token string `json:"token" description:"The token to be used to reset the password, token is sent via email"`
 }
 
-// ResetPasswordReply is the response returned from a non-successful password reset request
+// ResetPasswordResponse is the response returned from a non-successful password reset request
 // on success, no content is returned (204)
-type ResetPasswordReply struct {
+type ResetPasswordResponse struct {
 	// Reply is the reply value.
 	rout.Reply
 	// Message is the message value.
 	Message string `json:"message"`
 }
 
-// ExampleResponse returns an example ResetPasswordReply for OpenAPI documentation
-func (r *ResetPasswordReply) ExampleResponse() any {
-	return ResetPasswordReply{
+// ExampleResponse returns an example ResetPasswordResponse for OpenAPI documentation
+func (r *ResetPasswordResponse) ExampleResponse() any {
+	return ResetPasswordResponse{
 		Reply:   rout.Reply{Success: true},
 		Message: "Password reset successfully",
 	}
@@ -792,18 +868,26 @@ func (r *ResetPasswordRequest) Validate() error {
 	return nil
 }
 
-// ExampleResetPasswordSuccessRequest is an example of a successful reset password request for OpenAPI documentation
-var ExampleResetPasswordSuccessRequest = ResetPasswordRequest{
-	Password: "mitb!",
-	Token:    "token",
+// ExampleSet returns the curated named examples published for ResetPasswordRequest in the OpenAPI spec
+func (ResetPasswordRequest) ExampleSet() map[string]any {
+	return map[string]any{
+		"ResetPasswordSuccessRequest": ResetPasswordRequest{
+			Password: "mitb!",
+			Token:    "token",
+		},
+	}
 }
 
-// ExampleResetPasswordSuccessResponse is an example of a successful reset password response for OpenAPI documentation
-var ExampleResetPasswordSuccessResponse = ResetPasswordReply{
-	Reply: rout.Reply{
-		Success: true,
-	},
-	Message: "Password has been reset",
+// ExampleSet returns the curated named examples published for ResetPasswordResponse in the OpenAPI spec
+func (ResetPasswordResponse) ExampleSet() map[string]any {
+	return map[string]any{
+		"ResetPasswordSuccessResponse": ResetPasswordResponse{
+			Reply: rout.Reply{
+				Success: true,
+			},
+			Message: "Password has been reset",
+		},
+	}
 }
 
 // =========
@@ -1081,8 +1165,8 @@ type VerifySubscribeRequest struct {
 	Token string `query:"token" description:"The token to be used to verify the subscription, token is sent via email"`
 }
 
-// VerifySubscribeReply holds the fields that are sent on a response to the `/subscribe/verify` endpoint
-type VerifySubscribeReply struct {
+// VerifySubscribeResponse holds the fields that are sent on a response to the `/subscribe/verify` endpoint
+type VerifySubscribeResponse struct {
 	// Reply is the reply value.
 	rout.Reply
 	// Message is the message value.
@@ -1101,15 +1185,23 @@ func (r *VerifySubscribeRequest) Validate() error {
 // BindsQueryParams opts this request into query-param binding on any HTTP method
 func (r *VerifySubscribeRequest) BindsQueryParams() bool { return true }
 
-// ExampleVerifySubscriptionSuccessRequest is an example of a successful verify subscription request for OpenAPI documentation
-var ExampleVerifySubscriptionSuccessRequest = VerifySubscribeRequest{
-	Token: "token",
+// ExampleSet returns the curated named examples published for VerifySubscribeRequest in the OpenAPI spec
+func (VerifySubscribeRequest) ExampleSet() map[string]any {
+	return map[string]any{
+		"VerifySubscriptionSuccessRequest": VerifySubscribeRequest{
+			Token: "token",
+		},
+	}
 }
 
-// ExampleVerifySubscriptionResponse is an example of a successful verify subscription response for OpenAPI documentation
-var ExampleVerifySubscriptionResponse = VerifySubscribeReply{
-	Reply:   rout.Reply{Success: true},
-	Message: "Subscription confirmed, looking forward to sending you updates!",
+// ExampleSet returns the curated named examples published for VerifySubscribeResponse in the OpenAPI spec
+func (VerifySubscribeResponse) ExampleSet() map[string]any {
+	return map[string]any{
+		"VerifySubscriptionResponse": VerifySubscribeResponse{
+			Reply:   rout.Reply{Success: true},
+			Message: "Subscription confirmed, looking forward to sending you updates!",
+		},
+	}
 }
 
 // =========
@@ -1122,8 +1214,8 @@ type UnsubscribeRequest struct {
 	Token string `query:"token" description:"The token to be used to unsubscribe, token is sent via email"`
 }
 
-// UnsubscribeReply holds the fields that are sent on a response to the `/unsubscribe` endpoint
-type UnsubscribeReply struct {
+// UnsubscribeResponse holds the fields that are sent on a response to the `/unsubscribe` endpoint
+type UnsubscribeResponse struct {
 	// Reply is the reply value.
 	rout.Reply
 	// Message is the message value.
@@ -1142,15 +1234,23 @@ func (r *UnsubscribeRequest) Validate() error {
 // BindsQueryParams opts this request into query-param binding on any HTTP method
 func (r *UnsubscribeRequest) BindsQueryParams() bool { return true }
 
-// ExampleUnsubscribeRequest is an example of a successful unsubscribe request for OpenAPI documentation
-var ExampleUnsubscribeRequest = UnsubscribeRequest{
-	Token: "token",
+// ExampleSet returns the curated named examples published for UnsubscribeRequest in the OpenAPI spec
+func (UnsubscribeRequest) ExampleSet() map[string]any {
+	return map[string]any{
+		"UnsubscribeRequest": UnsubscribeRequest{
+			Token: "token",
+		},
+	}
 }
 
-// ExampleUnsubscribeResponse is an example of a successful unsubscribe response for OpenAPI documentation
-var ExampleUnsubscribeResponse = UnsubscribeReply{
-	Reply:   rout.Reply{Success: true},
-	Message: "You have been unsubscribed and will no longer receive updates.",
+// ExampleSet returns the curated named examples published for UnsubscribeResponse in the OpenAPI spec
+func (UnsubscribeResponse) ExampleSet() map[string]any {
+	return map[string]any{
+		"UnsubscribeResponse": UnsubscribeResponse{
+			Reply:   rout.Reply{Success: true},
+			Message: "You have been unsubscribed and will no longer receive updates.",
+		},
+	}
 }
 
 // =========
@@ -1163,8 +1263,8 @@ type InviteRequest struct {
 	Token string `query:"token" description:"The token to be used to accept the invitation, token is sent via email"`
 }
 
-// InviteReply holds the fields that are sent on a response to an accepted invitation
-type InviteReply struct {
+// InviteResponse holds the fields that are sent on a response to an accepted invitation
+type InviteResponse struct {
 	// Reply is the reply value.
 	rout.Reply
 	// ID is the user_id value.
@@ -1183,9 +1283,9 @@ type InviteReply struct {
 	AuthData
 }
 
-// ExampleResponse returns an example InviteReply for OpenAPI documentation
-func (r *InviteReply) ExampleResponse() any {
-	return InviteReply{
+// ExampleResponse returns an example InviteResponse for OpenAPI documentation
+func (r *InviteResponse) ExampleResponse() any {
+	return InviteResponse{
 		Reply:       rout.Reply{Success: true},
 		ID:          exampleULID("user"),
 		Email:       "jsnow@example.com",
@@ -1210,25 +1310,33 @@ func (r *InviteRequest) Validate() error {
 	return nil
 }
 
-// ExampleInviteRequest is an example of a successful invite request for OpenAPI documentation
-var ExampleInviteRequest = InviteRequest{
-	Token: "token",
+// ExampleSet returns the curated named examples published for InviteRequest in the OpenAPI spec
+func (InviteRequest) ExampleSet() map[string]any {
+	return map[string]any{
+		"InviteRequest": InviteRequest{
+			Token: "token",
+		},
+	}
 }
 
-// ExampleInviteResponse is an example of a successful invite response for OpenAPI documentation
-var ExampleInviteResponse = InviteReply{
-	Reply:       rout.Reply{Success: true},
-	ID:          "1234",
-	Email:       "",
-	JoinedOrgID: "1234",
-	Role:        "admin",
-	Message:     "Welcome to your new organization!",
-	AuthData: AuthData{
-		AccessToken:  "access_token",
-		RefreshToken: "refresh_token",
-		Session:      "session",
-		TokenType:    "bearer",
-	},
+// ExampleSet returns the curated named examples published for InviteResponse in the OpenAPI spec
+func (InviteResponse) ExampleSet() map[string]any {
+	return map[string]any{
+		"InviteResponse": InviteResponse{
+			Reply:       rout.Reply{Success: true},
+			ID:          "1234",
+			Email:       "",
+			JoinedOrgID: "1234",
+			Role:        "admin",
+			Message:     "Welcome to your new organization!",
+			AuthData: AuthData{
+				AccessToken:  "access_token",
+				RefreshToken: "refresh_token",
+				Session:      "session",
+				TokenType:    "bearer",
+			},
+		},
+	}
 }
 
 // =========
@@ -1282,17 +1390,17 @@ type AccountAccessRequest struct {
 	SubjectType string `json:"subject_type,omitempty" description:"The type of subject to check access for, e.g. service, user" example:"user"`
 }
 
-// AccountAccessReply holds the fields that are sent on a response to the `/account/access` endpoint
-type AccountAccessReply struct {
+// AccountAccessResponse holds the fields that are sent on a response to the `/account/access` endpoint
+type AccountAccessResponse struct {
 	// Reply is the reply value.
 	rout.Reply
 	// Allowed is the allowed value.
 	Allowed bool `json:"allowed"`
 }
 
-// ExampleResponse returns an example AccountAccessReply for OpenAPI documentation
-func (r *AccountAccessReply) ExampleResponse() any {
-	return AccountAccessReply{
+// ExampleResponse returns an example AccountAccessResponse for OpenAPI documentation
+func (r *AccountAccessResponse) ExampleResponse() any {
+	return AccountAccessResponse{
 		Reply:   rout.Reply{Success: true},
 		Allowed: true,
 	}
@@ -1320,15 +1428,19 @@ func (r *AccountAccessRequest) Validate() error {
 	return nil
 }
 
-// ExampleAccountAccessRequest is an example of a successful `/account/access` request for OpenAPI documentation
-var ExampleAccountAccessRequest = AccountAccessRequest{
-	Relation:   "can_view",
-	ObjectType: "organization",
-	ObjectID:   "01J4EXD5MM60CX4YNYN0DEE3Y1",
+// ExampleSet returns the curated named examples published for AccountAccessRequest in the OpenAPI spec
+func (AccountAccessRequest) ExampleSet() map[string]any {
+	return map[string]any{
+		"AccountAccessRequest": AccountAccessRequest{
+			Relation:   "can_view",
+			ObjectType: "organization",
+			ObjectID:   "01J4EXD5MM60CX4YNYN0DEE3Y1",
+		},
+	}
 }
 
-// ExampleAccountAccessReply is an example of a successful `/account/access` response for OpenAPI documentation
-var ExampleAccountAccessReply = AccountAccessReply{
+// ExampleAccountAccessResponse is an example of a successful `/account/access` response for OpenAPI documentation
+var ExampleAccountAccessResponse = AccountAccessResponse{
 	Reply:   rout.Reply{Success: true},
 	Allowed: true,
 }
@@ -1351,8 +1463,8 @@ type AccountRolesRequest struct {
 	Relations []string `json:"relations,omitempty" description:"The relations to check roles for, e.g. can_view, can_edit"`
 }
 
-// AccountRolesReply holds the fields that are sent on a response to the `/account/roles` endpoint
-type AccountRolesReply struct {
+// AccountRolesResponse holds the fields that are sent on a response to the `/account/roles` endpoint
+type AccountRolesResponse struct {
 	// Reply is the reply value.
 	rout.Reply
 	// Roles is a list of roles the user has for the specified object(s)
@@ -1362,9 +1474,9 @@ type AccountRolesReply struct {
 	ObjectRoles map[string][]string `json:"object_roles,omitempty" description:"A map of object IDs to the roles the subject has for each object ID"`
 }
 
-// ExampleResponse returns an example AccountRolesReply for OpenAPI documentation
-func (r *AccountRolesReply) ExampleResponse() any {
-	return AccountRolesReply{
+// ExampleResponse returns an example AccountRolesResponse for OpenAPI documentation
+func (r *AccountRolesResponse) ExampleResponse() any {
+	return AccountRolesResponse{
 		Reply: rout.Reply{Success: true},
 		Roles: []string{"admin", "member"},
 	}
@@ -1388,14 +1500,18 @@ func (r *AccountRolesRequest) Validate() error {
 	return nil
 }
 
-// ExampleAccountRolesRequest is an example of a successful `/account/roles` request for OpenAPI documentation
-var ExampleAccountRolesRequest = AccountRolesRequest{
-	ObjectType: "organization",
-	ObjectID:   "01J4EXD5MM60CX4YNYN0DEE3Y1",
+// ExampleSet returns the curated named examples published for AccountRolesRequest in the OpenAPI spec
+func (AccountRolesRequest) ExampleSet() map[string]any {
+	return map[string]any{
+		"AccountRolesRequest": AccountRolesRequest{
+			ObjectType: "organization",
+			ObjectID:   "01J4EXD5MM60CX4YNYN0DEE3Y1",
+		},
+	}
 }
 
-// ExampleAccountRolesReply is an example of a successful `/account/roles` response for OpenAPI documentation
-var ExampleAccountRolesReply = AccountRolesReply{
+// ExampleAccountRolesResponse is an example of a successful `/account/roles` response for OpenAPI documentation
+var ExampleAccountRolesResponse = AccountRolesResponse{
 	Reply: rout.Reply{Success: true},
 	Roles: []string{"can_view", "can_edit", "audit_log_viewer"},
 }
@@ -1410,8 +1526,8 @@ type AccountRolesOrganizationRequest struct {
 	ID string `param:"id" description:"The ID of the organization to check roles for" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 }
 
-// AccountRolesOrganizationReply holds the fields that are sent on a response to the `/account/roles/organization` endpoint
-type AccountRolesOrganizationReply struct {
+// AccountRolesOrganizationResponse holds the fields that are sent on a response to the `/account/roles/organization` endpoint
+type AccountRolesOrganizationResponse struct {
 	// Reply is the reply value.
 	rout.Reply
 	// Roles is the roles value.
@@ -1420,9 +1536,9 @@ type AccountRolesOrganizationReply struct {
 	OrganizationID string `json:"organization_id" description:"The ID of the organization the user has roles in" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 }
 
-// ExampleResponse returns an example AccountRolesOrganizationReply for OpenAPI documentation
-func (r *AccountRolesOrganizationReply) ExampleResponse() any {
-	return AccountRolesOrganizationReply{
+// ExampleResponse returns an example AccountRolesOrganizationResponse for OpenAPI documentation
+func (r *AccountRolesOrganizationResponse) ExampleResponse() any {
+	return AccountRolesOrganizationResponse{
 		Reply:          rout.Reply{Success: true},
 		Roles:          []string{"can_view", "can_edit"},
 		OrganizationID: exampleULID("organization"),
@@ -1435,16 +1551,24 @@ func (r *AccountRolesOrganizationRequest) Validate() error {
 	return nil
 }
 
-// ExampleAccountRolesOrganizationRequest is an example of a successful `/account/roles/organization` request for OpenAPI documentation
-var ExampleAccountRolesOrganizationRequest = AccountRolesOrganizationRequest{
-	ID: "01J4HMNDSZCCQBTY93BF9CBF5D",
+// ExampleSet returns the curated named examples published for AccountRolesOrganizationRequest in the OpenAPI spec
+func (AccountRolesOrganizationRequest) ExampleSet() map[string]any {
+	return map[string]any{
+		"AccountRolesOrganizationRequest": AccountRolesOrganizationRequest{
+			ID: "01J4HMNDSZCCQBTY93BF9CBF5D",
+		},
+	}
 }
 
-// ExampleAccountRolesOrganizationReply is an example of a successful `/account/roles/organization` response for OpenAPI documentation
-var ExampleAccountRolesOrganizationReply = AccountRolesOrganizationReply{
-	Reply:          rout.Reply{Success: true},
-	Roles:          []string{"can_view", "can_edit", "audit_log_viewer"},
-	OrganizationID: "01J4HMNDSZCCQBTY93BF9CBF5D",
+// ExampleSet returns the curated named examples published for AccountRolesOrganizationResponse in the OpenAPI spec
+func (AccountRolesOrganizationResponse) ExampleSet() map[string]any {
+	return map[string]any{
+		"AccountRolesOrganizationResponse": AccountRolesOrganizationResponse{
+			Reply:          rout.Reply{Success: true},
+			Roles:          []string{"can_view", "can_edit", "audit_log_viewer"},
+			OrganizationID: "01J4HMNDSZCCQBTY93BF9CBF5D",
+		},
+	}
 }
 
 // =========
@@ -1457,8 +1581,8 @@ type AccountFeaturesRequest struct {
 	ID string `param:"id" description:"The ID of the organization to check roles for" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 }
 
-// AccountFeaturesReply holds the fields that are sent on a response to the `/account/features` endpoint
-type AccountFeaturesReply struct {
+// AccountFeaturesResponse holds the fields that are sent on a response to the `/account/features` endpoint
+type AccountFeaturesResponse struct {
 	// Reply is the reply value.
 	rout.Reply
 	// Features is the features value.
@@ -1467,9 +1591,9 @@ type AccountFeaturesReply struct {
 	OrganizationID string `json:"organization_id" description:"The ID of the organization the user has features in" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 }
 
-// ExampleResponse returns an example AccountFeaturesReply for OpenAPI documentation
-func (r *AccountFeaturesReply) ExampleResponse() any {
-	return AccountFeaturesReply{
+// ExampleResponse returns an example AccountFeaturesResponse for OpenAPI documentation
+func (r *AccountFeaturesResponse) ExampleResponse() any {
+	return AccountFeaturesResponse{
 		Reply:          rout.Reply{Success: true},
 		Features:       []string{"policy-and-procedure-module", "compliance-module"},
 		OrganizationID: exampleULID("organization"),
@@ -1482,21 +1606,29 @@ func (r *AccountFeaturesRequest) Validate() error {
 	return nil
 }
 
-// ExampleAccountFeaturesRequest is an example of a successful `/account/features` request for OpenAPI documentation
-var ExampleAccountFeaturesRequest = AccountFeaturesRequest{
-	ID: "01J4HMNDSZCCQBTY93BF9CBF5D",
+// ExampleSet returns the curated named examples published for AccountFeaturesRequest in the OpenAPI spec
+func (AccountFeaturesRequest) ExampleSet() map[string]any {
+	return map[string]any{
+		"AccountFeaturesRequest": AccountFeaturesRequest{
+			ID: "01J4HMNDSZCCQBTY93BF9CBF5D",
+		},
+	}
 }
 
-// ExampleAccountFeaturesReply is an example of a successful `/account/features` response for OpenAPI documentation
-var ExampleAccountFeaturesReply = AccountFeaturesReply{
-	Reply: rout.Reply{Success: true},
-	Features: []string{
-		"policy-and-procedure-module",
-		"centralized-audit-documentation",
-		"risk-management",
-		"compliance-module",
-	},
-	OrganizationID: "01J4HMNDSZCCQBTY93BF9CBF5D",
+// ExampleSet returns the curated named examples published for AccountFeaturesResponse in the OpenAPI spec
+func (AccountFeaturesResponse) ExampleSet() map[string]any {
+	return map[string]any{
+		"AccountFeaturesResponse": AccountFeaturesResponse{
+			Reply: rout.Reply{Success: true},
+			Features: []string{
+				"policy-and-procedure-module",
+				"centralized-audit-documentation",
+				"risk-management",
+				"compliance-module",
+			},
+			OrganizationID: "01J4HMNDSZCCQBTY93BF9CBF5D",
+		},
+	}
 }
 
 // =========
@@ -1509,8 +1641,8 @@ type UploadFilesRequest struct {
 	UploadFile multipart.FileHeader `form:"uploadFile" description:"The file to be uploaded"`
 }
 
-// UploadFilesReply holds the fields that are sent on a response to the `/upload` endpoint
-type UploadFilesReply struct {
+// UploadFilesResponse holds the fields that are sent on a response to the `/upload` endpoint
+type UploadFilesResponse struct {
 	// Reply is the reply value.
 	rout.Reply
 	// Message is the message value.
@@ -1521,9 +1653,9 @@ type UploadFilesReply struct {
 	Files []File `json:"files,omitempty" description:"The files that were uploaded"`
 }
 
-// ExampleResponse returns an example UploadFilesReply for OpenAPI documentation
-func (r *UploadFilesReply) ExampleResponse() any {
-	return UploadFilesReply{
+// ExampleResponse returns an example UploadFilesResponse for OpenAPI documentation
+func (r *UploadFilesResponse) ExampleResponse() any {
+	return UploadFilesResponse{
 		Reply:     rout.Reply{Success: true},
 		Message:   "Files uploaded successfully",
 		FileCount: 2, //nolint:mnd
@@ -1546,7 +1678,7 @@ var ExampleUploadFileRequest = UploadFilesRequest{
 }
 
 // ExampleUploadFilesSuccessResponse is an example of a successful upload response for OpenAPI documentation
-var ExampleUploadFilesSuccessResponse = UploadFilesReply{
+var ExampleUploadFilesSuccessResponse = UploadFilesResponse{
 	Reply: rout.Reply{
 		Success: true,
 	},
@@ -1575,17 +1707,17 @@ type TFARequest struct {
 	RecoveryCode string `json:"recovery_code,omitempty" description:"The recovery code to validate, only used if TOTP code is not provided" example:"8VM7AL91"`
 }
 
-// TFAReply holds the response to TFARequest
-type TFAReply struct {
+// TFAResponse holds the response to TFARequest
+type TFAResponse struct {
 	// Reply is the reply value.
 	rout.Reply
 	// Message is the message value.
 	Message string `json:"message"`
 }
 
-// ExampleResponse returns an example TFAReply for OpenAPI documentation
-func (r *TFAReply) ExampleResponse() any {
-	return TFAReply{
+// ExampleResponse returns an example TFAResponse for OpenAPI documentation
+func (r *TFAResponse) ExampleResponse() any {
+	return TFAResponse{
 		Reply:   rout.Reply{Success: true},
 		Message: "Two-factor authentication validated successfully",
 	}
@@ -1606,7 +1738,7 @@ var ExampleTFASuccessRequest = TFARequest{
 }
 
 // ExampleLoginSuccessResponse is an example of a successful tfa validation response for OpenAPI documentation
-var ExampleTFASSuccessResponse = TFAReply{
+var ExampleTFASSuccessResponse = TFAResponse{
 	Reply: rout.Reply{
 		Success: true,
 	},
@@ -1634,87 +1766,6 @@ func (r *ExampleCSVRequest) Validate() error {
 // ExampleLoginSuccessRequest is an example of a successful tfa validation request for OpenAPI documentation
 var ExampleExampleCSVRequest = ExampleCSVRequest{
 	Filename: "actionplan",
-}
-
-// =========
-// JOB RUNNERS
-// =========
-
-// JobRunnerRegistrationRequest is the request to register a new node
-type JobRunnerRegistrationRequest struct {
-	// IPAddress is the ip_address value.
-	IPAddress string `json:"ip_address" description:"The IP address of the node being registered"`
-	// Token is the token value.
-	Token string `json:"token" description:"Your agent registration token"`
-	// Name is the name value.
-	Name string `json:"name" description:"the name of your job runner node"`
-	// Tags is the tags value.
-	Tags []string `json:"tags" description:"The tags for your runner node"`
-}
-
-// Validate ensures the required fields are set on the AgentNodeRegistrationRequest
-func (r *JobRunnerRegistrationRequest) Validate() error {
-	if r.IPAddress == "" {
-		return rout.NewMissingRequiredFieldError("ip_address")
-	}
-
-	if r.Token == "" {
-		return rout.NewMissingRequiredFieldError("token")
-	}
-
-	if r.Name == "" {
-		return rout.NewMissingRequiredFieldError("name")
-	}
-
-	if len(r.Tags) == 0 {
-		r.Tags = append(r.Tags, "self-hosted")
-	}
-
-	return nil
-}
-
-// JobRunnerRegistrationReply is the response to begin a job runner registration
-// this includes the credential creation options and the session token
-type JobRunnerRegistrationReply struct {
-	// Reply is the reply value.
-	Reply rout.Reply
-	// Message is the message value.
-	Message string `json:"message"`
-}
-
-// ExampleResponse returns an example JobRunnerRegistrationReply for OpenAPI documentation
-func (r *JobRunnerRegistrationReply) ExampleResponse() any {
-	return JobRunnerRegistrationReply{
-		Reply:   rout.Reply{Success: true},
-		Message: "Job runner registered successfully",
-	}
-}
-
-// ExampleJobRunnerRegistrationRequest is an example of a successful job runner
-// registration request
-var ExampleJobRunnerRegistrationRequest = JobRunnerRegistrationRequest{
-	IPAddress: "192.168.0.1",
-	Name:      "ubuntu-eu-west-2",
-	Token:     "registration_tokenhere",
-	Tags:      []string{"self-hosted", "eu-west-2", "gcp", "kubernetes"},
-}
-
-// ExampleJobRunnerRegistrationResponse is an example of a successful job runner
-// registration response
-var ExampleJobRunnerRegistrationResponse = JobRunnerRegistrationReply{
-	Reply:   rout.Reply{Success: true},
-	Message: "Job runner node registered",
-}
-
-// AcmeSolverRequest is the request to solve an acme challenge
-type AcmeSolverRequest struct {
-	// Path is the path value.
-	Path string `param:"path" description:"The path to the acme challenge" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
-}
-
-// ExampleAcmeSolverRequest is an example ACME solver request for OpenAPI documentation
-var ExampleAcmeSolverRequest = AcmeSolverRequest{
-	Path: "01J4HMNDSZCCQBTY93BF9CBF5D",
 }
 
 // =========
@@ -1828,9 +1879,13 @@ func (r *SSOInitiateRequest) Validate() error {
 	return nil
 }
 
-// ExampleSSOInitiateRequest is an example request for OpenAPI documentation
-var ExampleSSOInitiateRequest = SSOInitiateRequest{
-	SlugName: "acme",
+// ExampleSet returns the curated named examples published for SSOInitiateRequest in the OpenAPI spec
+func (SSOInitiateRequest) ExampleSet() map[string]any {
+	return map[string]any{
+		"SSOInitiateRequest": SSOInitiateRequest{
+			SlugName: "acme",
+		},
+	}
 }
 
 // SSOTokenCallbackRequest holds the query parameters for completing token SSO authorization
@@ -1876,16 +1931,16 @@ func (r *SSOStatusRequest) Validate() error {
 	return nil
 }
 
-// SSOLoginReply is the response for the SSO login
-type SSOLoginReply struct {
+// SSOLoginResponse is the response for the SSO login
+type SSOLoginResponse struct {
 	// Reply is the reply value.
 	rout.Reply
 	// RedirectURI is the redirect_uri value.
 	RedirectURI string `json:"redirect_uri,omitempty"`
 }
 
-// SSOStatusReply is the response for SSOStatusRequest
-type SSOStatusReply struct {
+// SSOStatusResponse is the response for SSOStatusRequest
+type SSOStatusResponse struct {
 	// Reply is the reply value.
 	rout.Reply
 	// Enforced is the enforced value.
@@ -1906,9 +1961,9 @@ type SSOStatusReply struct {
 	IsOrgOwner bool `json:"is_org_owner,omitempty"`
 }
 
-// ExampleResponse returns an example SSOStatusReply for OpenAPI documentation
-func (r *SSOStatusReply) ExampleResponse() any {
-	return SSOStatusReply{
+// ExampleResponse returns an example SSOStatusResponse for OpenAPI documentation
+func (r *SSOStatusResponse) ExampleResponse() any {
+	return SSOStatusResponse{
 		Reply:          rout.Reply{Success: true},
 		Enforced:       true,
 		Provider:       enums.SSOProviderOkta,
@@ -1925,8 +1980,8 @@ var ExampleSSOStatusRequest = SSOStatusRequest{
 	Resource: "acct:mitb@theopenlane.io",
 }
 
-// ExampleSSOStatusReply is an example response for OpenAPI documentation
-var ExampleSSOStatusReply = SSOStatusReply{
+// ExampleSSOStatusResponse is an example response for OpenAPI documentation
+var ExampleSSOStatusResponse = SSOStatusResponse{
 	Reply:          rout.Reply{Success: true},
 	Enforced:       true,
 	Provider:       enums.SSOProviderOkta,
@@ -1966,9 +2021,9 @@ func (r *SSOTokenAuthorizeRequest) Validate() error {
 	return nil
 }
 
-// SSOTokenAuthorizeReply is returned when a token has been successfully
+// SSOTokenAuthorizeResponse is returned when a token has been successfully
 // authorized for SSO
-type SSOTokenAuthorizeReply struct {
+type SSOTokenAuthorizeResponse struct {
 	// Reply is the reply value.
 	rout.Reply
 	// OrganizationID is the organization_id value.
@@ -1979,9 +2034,9 @@ type SSOTokenAuthorizeReply struct {
 	Message string `json:"message,omitempty"`
 }
 
-// ExampleResponse returns an example SSOTokenAuthorizeReply for OpenAPI documentation
-func (r *SSOTokenAuthorizeReply) ExampleResponse() any {
-	return SSOTokenAuthorizeReply{
+// ExampleResponse returns an example SSOTokenAuthorizeResponse for OpenAPI documentation
+func (r *SSOTokenAuthorizeResponse) ExampleResponse() any {
+	return SSOTokenAuthorizeResponse{
 		Reply:          rout.Reply{Success: true},
 		OrganizationID: exampleULID("organization"),
 		TokenID:        exampleULID("token"),
@@ -1996,8 +2051,8 @@ var ExampleSSOTokenAuthorizeRequest = SSOTokenAuthorizeRequest{
 	TokenType:      "api",
 }
 
-// ExampleSSOTokenAuthorizeReply is an example response for OpenAPI documentation
-var ExampleSSOTokenAuthorizeReply = SSOTokenAuthorizeReply{
+// ExampleSSOTokenAuthorizeResponse is an example response for OpenAPI documentation
+var ExampleSSOTokenAuthorizeResponse = SSOTokenAuthorizeResponse{
 	Reply:          rout.Reply{Success: true},
 	OrganizationID: exampleULID("organization"),
 	TokenID:        exampleULID("token"),
@@ -2055,12 +2110,16 @@ func (r *GetQuestionnaireResponse) ExampleResponse() any {
 	}
 }
 
-// ExampleGetQuestionnaireResponse is an example questionnaire response for OpenAPI documentation
-var ExampleGetQuestionnaireResponse = GetQuestionnaireResponse{
-	Jsonconfig: map[string]any{
-		"title":       "Sample Questionnaire",
-		"description": "A sample questionnaire template",
-	},
+// ExampleSet returns the curated named examples published for GetQuestionnaireResponse in the OpenAPI spec
+func (GetQuestionnaireResponse) ExampleSet() map[string]any {
+	return map[string]any{
+		"GetQuestionnaireResponse": GetQuestionnaireResponse{
+			Jsonconfig: map[string]any{
+				"title":       "Sample Questionnaire",
+				"description": "A sample questionnaire template",
+			},
+		},
+	}
 }
 
 // SubmitQuestionnaireRequest is the request to submit questionnaire response data
@@ -2073,15 +2132,19 @@ type SubmitQuestionnaireRequest struct {
 	IsDraft bool `json:"is_draft,omitempty"`
 }
 
-// ExampleSubmitQuestionnaireRequest is an example questionnaire submission request for OpenAPI documentation
-var ExampleSubmitQuestionnaireRequest = SubmitQuestionnaireRequest{
-	Data: map[string]any{
-		"q1": "Answer to question 1",
-		"q2": "Answer to question 2",
-		"q3": map[string]any{
-			"nested": "data",
+// ExampleSet returns the curated named examples published for SubmitQuestionnaireRequest in the OpenAPI spec
+func (SubmitQuestionnaireRequest) ExampleSet() map[string]any {
+	return map[string]any{
+		"SubmitQuestionnaireRequest": SubmitQuestionnaireRequest{
+			Data: map[string]any{
+				"q1": "Answer to question 1",
+				"q2": "Answer to question 2",
+				"q3": map[string]any{
+					"nested": "data",
+				},
+			},
 		},
-	},
+	}
 }
 
 // SubmitQuestionnaireResponse is the response after successfully submitting questionnaire data
@@ -2103,11 +2166,15 @@ func (r *SubmitQuestionnaireResponse) ExampleResponse() any {
 	}
 }
 
-// ExampleSubmitQuestionnaireResponse is an example questionnaire submission response for OpenAPI documentation
-var ExampleSubmitQuestionnaireResponse = SubmitQuestionnaireResponse{
-	DocumentDataID: "01JCQR8Z9X1A2B3C4D5E6F7G8H",
-	Status:         "COMPLETED",
-	CompletedAt:    "2024-01-01T12:00:00Z",
+// ExampleSet returns the curated named examples published for SubmitQuestionnaireResponse in the OpenAPI spec
+func (SubmitQuestionnaireResponse) ExampleSet() map[string]any {
+	return map[string]any{
+		"SubmitQuestionnaireResponse": SubmitQuestionnaireResponse{
+			DocumentDataID: "01JCQR8Z9X1A2B3C4D5E6F7G8H",
+			Status:         "COMPLETED",
+			CompletedAt:    "2024-01-01T12:00:00Z",
+		},
+	}
 }
 
 // ResendQuestionnaireRequest contains fields for requesting a new questionnaire auth email
@@ -2131,18 +2198,14 @@ func (r *ResendQuestionnaireRequest) Validate() error {
 	return nil
 }
 
-// ExampleResendQuestionnaireRequest is an example request for OpenAPI documentation
-var ExampleResendQuestionnaireRequest = ResendQuestionnaireRequest{
-	Email:        "vendor@example.com",
-	AssessmentID: "01JCQR8Z9X1A2B3C4D5E6F7G8H",
-}
-
-// ExampleResendQuestionnaireResponse is an example response for OpenAPI documentation
-var ExampleResendQuestionnaireResponse = ResendReply{
-	Reply: rout.Reply{
-		Success: true,
-	},
-	Message: "If the email address is associated with an active assessment, a new authentication email has been sent",
+// ExampleSet returns the curated named examples published for ResendQuestionnaireRequest in the OpenAPI spec
+func (ResendQuestionnaireRequest) ExampleSet() map[string]any {
+	return map[string]any{
+		"ResendQuestionnaireRequest": ResendQuestionnaireRequest{
+			Email:        "vendor@example.com",
+			AssessmentID: "01JCQR8Z9X1A2B3C4D5E6F7G8H",
+		},
+	}
 }
 
 // =================
@@ -2171,8 +2234,8 @@ type StartImpersonationRequest struct {
 	OrganizationID string `json:"organization_id,omitempty" description:"Organization context for impersonation"`
 }
 
-// StartImpersonationReply represents the response when starting impersonation
-type StartImpersonationReply struct {
+// StartImpersonationResponse represents the response when starting impersonation
+type StartImpersonationResponse struct {
 	// Reply is the reply value.
 	rout.Reply
 	// Token is the token value.
@@ -2185,9 +2248,9 @@ type StartImpersonationReply struct {
 	Message string `json:"message" description:"Success message"`
 }
 
-// ExampleResponse returns an example StartImpersonationReply for OpenAPI documentation
-func (r *StartImpersonationReply) ExampleResponse() any {
-	return StartImpersonationReply{
+// ExampleResponse returns an example StartImpersonationResponse for OpenAPI documentation
+func (r *StartImpersonationResponse) ExampleResponse() any {
+	return StartImpersonationResponse{
 		Reply:     rout.Reply{Success: true},
 		Token:     "impersonation_token_example",
 		ExpiresAt: exampleTime(time.Hour),
@@ -2204,17 +2267,17 @@ type EndImpersonationRequest struct {
 	Reason string `json:"reason,omitempty" description:"Optional reason for ending the session"`
 }
 
-// EndImpersonationReply represents the response when ending impersonation
-type EndImpersonationReply struct {
+// EndImpersonationResponse represents the response when ending impersonation
+type EndImpersonationResponse struct {
 	// Reply is the reply value.
 	rout.Reply
 	// Message is the message value.
 	Message string `json:"message" description:"Success message"`
 }
 
-// ExampleResponse returns an example EndImpersonationReply for OpenAPI documentation
-func (r *EndImpersonationReply) ExampleResponse() any {
-	return EndImpersonationReply{
+// ExampleResponse returns an example EndImpersonationResponse for OpenAPI documentation
+func (r *EndImpersonationResponse) ExampleResponse() any {
+	return EndImpersonationResponse{
 		Reply:   rout.Reply{Success: true},
 		Message: "Impersonation session ended successfully",
 	}
@@ -2269,8 +2332,8 @@ var ExampleSupportCallbackRequest = SupportCallbackRequest{
 	State: "state123",
 }
 
-// SupportAccessReply represents the support session token returned after the second factor completes
-type SupportAccessReply struct {
+// SupportAccessResponse represents the support session token returned after the second factor completes
+type SupportAccessResponse struct {
 	// Reply is the reply value
 	rout.Reply
 	// AuthData contains the session token required for subsequent authenticated requests
@@ -2289,9 +2352,9 @@ type SupportAccessReply struct {
 	Message string `json:"message" description:"Success message"`
 }
 
-// ExampleResponse returns an example SupportAccessReply for OpenAPI documentation
-func (r *SupportAccessReply) ExampleResponse() any {
-	return SupportAccessReply{
+// ExampleResponse returns an example SupportAccessResponse for OpenAPI documentation
+func (r *SupportAccessResponse) ExampleResponse() any {
+	return SupportAccessResponse{
 		Reply:     rout.Reply{Success: true},
 		AuthData:  AuthData{Session: "session"},
 		Token:     "imp_" + exampleULID("token"),
@@ -2301,8 +2364,8 @@ func (r *SupportAccessReply) ExampleResponse() any {
 	}
 }
 
-// ExampleSupportAccessReply is an example response for OpenAPI documentation
-var ExampleSupportAccessReply = SupportAccessReply{
+// ExampleSupportAccessResponse is an example response for OpenAPI documentation
+var ExampleSupportAccessResponse = SupportAccessResponse{
 	Reply:     rout.Reply{Success: true},
 	AuthData:  AuthData{Session: "session"},
 	Token:     "imp_" + exampleULID("token"),
@@ -2455,8 +2518,8 @@ var ExampleStartImpersonationRequest = StartImpersonationRequest{
 	Duration:     nil, // Use default
 }
 
-// ExampleStartImpersonationReply is an example response for OpenAPI documentation
-var ExampleStartImpersonationReply = StartImpersonationReply{
+// ExampleStartImpersonationResponse is an example response for OpenAPI documentation
+var ExampleStartImpersonationResponse = StartImpersonationResponse{
 	Reply:     rout.Reply{Success: true},
 	Token:     "imp_" + exampleULID("token"),
 	ExpiresAt: exampleTime(time.Hour),
@@ -2470,8 +2533,8 @@ var ExampleEndImpersonationRequest = EndImpersonationRequest{
 	Reason:    "Support task completed",
 }
 
-// ExampleEndImpersonationReply is an example response for OpenAPI documentation
-var ExampleEndImpersonationReply = EndImpersonationReply{
+// ExampleEndImpersonationResponse is an example response for OpenAPI documentation
+var ExampleEndImpersonationResponse = EndImpersonationResponse{
 	Reply:   rout.Reply{Success: true},
 	Message: "Impersonation session ended successfully",
 }
@@ -2534,8 +2597,8 @@ type ProductCatalogRequest struct {
 	IncludePrivate bool `query:"include_private" description:"Whether to include private products in the catalog" example:"false"`
 }
 
-// ProductCatalogReply holds the fields that are sent on a response to the `/products` endpoint
-type ProductCatalogReply struct {
+// ProductCatalogResponse holds the fields that are sent on a response to the `/products` endpoint
+type ProductCatalogResponse struct {
 	// Reply is the reply value.
 	rout.Reply
 	// Catalog is the catalog value.
@@ -2552,55 +2615,58 @@ type OnboardingQuestionsReply struct {
 	Steps []models.Step `json:"steps"`
 }
 
-// ExampleResponse returns an example ProductCatalogReply for OpenAPI documentation
-func (r *ProductCatalogReply) ExampleResponse() any {
-	return ExampleProductCatalogReply
-}
-
 // Validate ensures the required fields are set on the ProductCatalogRequest
 func (r *ProductCatalogRequest) Validate() error {
 	// all fields are optional, if none are set only public proucts are returned
 	return nil
 }
 
-// ExampleProductCatalogRequest is an example of a successful `/products` request for OpenAPI documentation
-var ExampleProductCatalogRequest = ProductCatalogRequest{
-	IncludeBeta:    false,
-	IncludePrivate: false,
+// ExampleSet returns the curated named examples published for ProductCatalogRequest in the OpenAPI spec
+func (ProductCatalogRequest) ExampleSet() map[string]any {
+	return map[string]any{
+		"ProductCatalogRequest": ProductCatalogRequest{
+			IncludeBeta:    false,
+			IncludePrivate: false,
+		},
+	}
 }
 
-// ExampleProductCatalogReply is an example of a successful `/products` response for OpenAPI documentation
-var ExampleProductCatalogReply = ProductCatalogReply{
-	Reply: rout.Reply{Success: true},
-	Catalog: models.Catalog{
-		Addons:  map[string]models.Feature{},
-		Version: "v0.0.1",
-		SHA:     "12a4a1212888e9316a16826ba074b37230b4b7ba903cd8d7e627e4a8d03a6211",
-		Modules: map[string]models.Feature{
-			string(models.CatalogComplianceModule): {
-				Audience: "public",
-				Billing: models.Billing{Prices: []models.ItemPrice{{
-					Interval:   "month",
-					LookupKey:  "price_compliance_monthly",
-					Nickname:   "price_compliance_monthly",
-					PriceID:    "price_1S3qX6JIzM4Pa2ZcRtuinRdG",
-					UnitAmount: int64(45000), //nolint:mnd
-				}, {
-					Interval:   "year",
-					LookupKey:  "price_compliance_annually",
-					Nickname:   "price_compliance_annually",
-					PriceID:    "price_1S3qX7JIzM4Pa2ZchMVxiS1l",
-					UnitAmount: int64(500000), //nolint:mnd
-				}}},
-				Description:          "Core Compliance Automation and Standards Library",
-				DisplayName:          "Core Compliance Module",
-				IncludeWithTrial:     true,
-				LookupKey:            "compliance_module",
-				MarketingDescription: "Automate evidence collection and task tracking to simplify SOC 2, ISO 27001, and other certification workflows",
-				ProductID:            "prod_SzqDyAvxP2D7fA",
-				Usage:                &models.Usage{EvidenceStorageGB: int64(25000)}, //nolint:mnd
-			},
-		}},
+// ExampleSet returns the curated named examples published for ProductCatalogResponse in the OpenAPI spec
+func (ProductCatalogResponse) ExampleSet() map[string]any {
+	return map[string]any{
+		"ProductCatalogResponse": ProductCatalogResponse{
+			Reply: rout.Reply{Success: true},
+			Catalog: models.Catalog{
+				Addons:  map[string]models.Feature{},
+				Version: "v0.0.1",
+				SHA:     "12a4a1212888e9316a16826ba074b37230b4b7ba903cd8d7e627e4a8d03a6211",
+				Modules: map[string]models.Feature{
+					string(models.CatalogComplianceModule): {
+						Audience: "public",
+						Billing: models.Billing{Prices: []models.ItemPrice{{
+							Interval:   "month",
+							LookupKey:  "price_compliance_monthly",
+							Nickname:   "price_compliance_monthly",
+							PriceID:    "price_1S3qX6JIzM4Pa2ZcRtuinRdG",
+							UnitAmount: int64(45000), //nolint:mnd
+						}, {
+							Interval:   "year",
+							LookupKey:  "price_compliance_annually",
+							Nickname:   "price_compliance_annually",
+							PriceID:    "price_1S3qX7JIzM4Pa2ZchMVxiS1l",
+							UnitAmount: int64(500000), //nolint:mnd
+						}}},
+						Description:          "Core Compliance Automation and Standards Library",
+						DisplayName:          "Core Compliance Module",
+						IncludeWithTrial:     true,
+						LookupKey:            "compliance_module",
+						MarketingDescription: "Automate evidence collection and task tracking to simplify SOC 2, ISO 27001, and other certification workflows",
+						ProductID:            "prod_SzqDyAvxP2D7fA",
+						Usage:                &models.Usage{EvidenceStorageGB: int64(25000)}, //nolint:mnd
+					},
+				}},
+		},
+	}
 }
 
 // DisconnectIntegrationRequest is the request payload for disconnecting an integration
@@ -2609,9 +2675,13 @@ type DisconnectIntegrationRequest struct {
 	IntegrationID string `param:"integrationID" description:"Integration ID to disconnect" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 }
 
-// ExampleDisconnectIntegrationRequest provides an example disconnect request for OpenAPI documentation
-var ExampleDisconnectIntegrationRequest = DisconnectIntegrationRequest{
-	IntegrationID: "01J4HMNDSZCCQBTY93BF9CBF5D",
+// ExampleSet returns the curated named examples published for DisconnectIntegrationRequest in the OpenAPI spec
+func (DisconnectIntegrationRequest) ExampleSet() map[string]any {
+	return map[string]any{
+		"DisconnectIntegrationRequest": DisconnectIntegrationRequest{
+			IntegrationID: "01J4HMNDSZCCQBTY93BF9CBF5D",
+		},
+	}
 }
 
 // =========
@@ -2626,8 +2696,8 @@ type SnapshotRequest struct {
 	WaitForSelector string `json:"waitForSelector,omitempty" description:"optional CSS selector to wait for before taking the snapshot" example:"img#main-image"`
 }
 
-// SnapshotReply holds the fields that are sent on a response to the `/snapshot` endpoint
-type SnapshotReply struct {
+// SnapshotResponse holds the fields that are sent on a response to the `/snapshot` endpoint
+type SnapshotResponse struct {
 	// Reply is the reply value.
 	rout.Reply
 	// Message is the message value.
@@ -2638,8 +2708,8 @@ type SnapshotReply struct {
 	MIMEType string `json:"mimeType" description:"MIME type of the snapshot image" example:"image/png"`
 }
 
-// ExampleResponse returns an example SnapshotReply for OpenAPI documentation
-func (r *SnapshotReply) ExampleResponse() any {
+// ExampleResponse returns an example SnapshotResponse for OpenAPI documentation
+func (r *SnapshotResponse) ExampleResponse() any {
 	return ExampleSnapshotSuccessResponse
 }
 
@@ -2670,7 +2740,7 @@ var ExampleSnapshotSuccessRequest = SnapshotRequest{
 }
 
 // ExampleSnapshotSuccessResponse is an example of a successful snapshot response for OpenAPI documentation
-var ExampleSnapshotSuccessResponse = SnapshotReply{
+var ExampleSnapshotSuccessResponse = SnapshotResponse{
 	Reply:    rout.Reply{Success: true},
 	Message:  "Snapshot taken successfully",
 	Image:    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO3Zf6kAAAAASUVORK5CYII=",
@@ -2684,17 +2754,17 @@ var ExampleSnapshotSuccessResponse = SnapshotReply{
 // ScopesRequest contains scopes that can be used for an API token
 type ScopesRequest struct{}
 
-// ScopesReply holds the fields that are sent on a response to the `/scopes` endpoint
-type ScopesReply struct {
+// ScopesResponse holds the fields that are sent on a response to the `/scopes` endpoint
+type ScopesResponse struct {
 	// Reply is the reply value.
 	rout.Reply
 	// Scopes is a map of object types to the scopes
 	Scopes map[string][]string `json:"scopes,omitempty" description:"A map of object types to operations that can be set for an API Token"`
 }
 
-// ExampleResponse returns an example ScopesReply for OpenAPI documentation
-func (r *ScopesReply) ExampleResponse() any {
-	return ExampleScopesReply
+// ExampleResponse returns an example ScopesResponse for OpenAPI documentation
+func (r *ScopesResponse) ExampleResponse() any {
+	return ExampleScopesResponse
 }
 
 // Validate ensures the required fields are set on the ScopesRequest
@@ -2702,11 +2772,13 @@ func (r *ScopesRequest) Validate() error {
 	return nil
 }
 
-// ExampleScopesRequest is an example of a successful `/scopes` request for OpenAPI documentation
-var ExampleScopesRequest = ScopesRequest{}
+// ExampleSet returns the curated named examples published for ScopesRequest in the OpenAPI spec
+func (ScopesRequest) ExampleSet() map[string]any {
+	return map[string]any{"ScopesRequest": ScopesRequest{}}
+}
 
-// ExampleScopesReply is an example of a successful `/scopes` response for OpenAPI documentation
-var ExampleScopesReply = ScopesReply{
+// ExampleScopesResponse is an example of a successful `/scopes` response for OpenAPI documentation
+var ExampleScopesResponse = ScopesResponse{
 	Reply: rout.Reply{Success: true},
 	Scopes: map[string][]string{
 		"internal_policy": {"read", "write", "delete"},
@@ -2729,17 +2801,17 @@ type OrganizationRole struct {
 // RolesRequest contains roles that can be assigned to users on top of org roles
 type RolesRequest struct{}
 
-// RolesReply holds the fields that are sent on a response to the `/roles` endpoint
-type RolesReply struct {
+// RolesResponse holds the fields that are sent on a response to the `/roles` endpoint
+type RolesResponse struct {
 	// Reply is the reply value.
 	rout.Reply
 	// Roles is a list of organization responsibility roles that can be assigned.
 	Roles []OrganizationRole `json:"roles,omitempty" description:"Organization roles and responsibilities that can be assigned"`
 }
 
-// ExampleResponse returns an example RolesReply for OpenAPI documentation
-func (r *RolesReply) ExampleResponse() any {
-	return ExampleRolesReply
+// ExampleResponse returns an example RolesResponse for OpenAPI documentation
+func (r *RolesResponse) ExampleResponse() any {
+	return ExampleRolesResponse
 }
 
 // Validate ensures the required fields are set on the RolesRequest
@@ -2747,11 +2819,13 @@ func (r *RolesRequest) Validate() error {
 	return nil
 }
 
-// ExampleRolesRequest is an example of a successful `/roles` request for OpenAPI documentation
-var ExampleRolesRequest = RolesRequest{}
+// ExampleSet returns the curated named examples published for RolesRequest in the OpenAPI spec
+func (RolesRequest) ExampleSet() map[string]any {
+	return map[string]any{"RolesRequest": RolesRequest{}}
+}
 
-// ExampleRolesReply is an example of a successful `/roles` response for OpenAPI documentation
-var ExampleRolesReply = RolesReply{
+// ExampleRolesResponse is an example of a successful `/roles` response for OpenAPI documentation
+var ExampleRolesResponse = RolesResponse{
 	Reply: rout.Reply{Success: true},
 	Roles: []OrganizationRole{
 		{
@@ -2775,8 +2849,8 @@ type OrganizationRolesRequest struct {
 	GroupIDs       []string `json:"group_ids,omitempty" description:"Group IDs to assign the role to"`
 }
 
-// OrganizationRolesReply contains the newly assigned/removed role.
-type OrganizationRolesReply struct {
+// OrganizationRolesResponse contains the newly assigned/removed role.
+type OrganizationRolesResponse struct {
 	rout.Reply
 	OrganizationID string `json:"organization_id" description:"The ID of the organization the role was applied to" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 	Role           string `json:"role" description:"The organization responsibility role" example:"policy_manager"`
@@ -2785,8 +2859,8 @@ type OrganizationRolesReply struct {
 // AccountRolesMeRequest contains no input; it uses the authenticated caller.
 type AccountRolesMeRequest struct{}
 
-// AccountRolesMeReply holds the organization responsibility roles assigned to the authenticated caller.
-type AccountRolesMeReply struct {
+// AccountRolesMeResponse holds the organization responsibility roles assigned to the authenticated caller.
+type AccountRolesMeResponse struct {
 	rout.Reply
 	Roles          []OrganizationRole `json:"roles" description:"Organization responsibility roles assigned to the authenticated caller"`
 	OrganizationID string             `json:"organization_id" description:"The ID of the organization the roles apply to" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
@@ -2817,37 +2891,58 @@ func (r *AccountRolesMeRequest) Validate() error {
 	return nil
 }
 
-func (r *OrganizationRolesReply) ExampleResponse() any {
-	return ExampleOrganizationRolesReply
-}
-
-func (r *AccountRolesMeReply) ExampleResponse() any {
-	return ExampleAccountRolesMeReply
-}
-
-var ExampleOrganizationRolesRequest = OrganizationRolesRequest{
-	OrganizationID: "01J4HMNDSZCCQBTY93BF9CBF5D",
-	Role:           "policy_manager",
-	UserIDs:        []string{"01J4EXD5MM60CX4YNYN0DEE3Y1"},
-	GroupIDs:       []string{"01J4EXD5MM60CX4YNYN0DEE3Y2"},
-}
-
-var ExampleOrganizationRolesReply = OrganizationRolesReply{
-	Reply:          rout.Reply{Success: true},
-	OrganizationID: "01J4HMNDSZCCQBTY93BF9CBF5D",
-	Role:           "policy_manager",
-}
-
-var ExampleAccountRolesMeRequest = AccountRolesMeRequest{}
-
-var ExampleAccountRolesMeReply = AccountRolesMeReply{
-	Reply: rout.Reply{Success: true},
-	Roles: []OrganizationRole{
-		{
-			ID:          "policy_manager",
-			Name:        "Policy Manager",
-			Description: "Can manage all policies and procedures",
+// ExampleSet returns the curated named examples published for OrganizationRolesRequest in the OpenAPI spec
+func (OrganizationRolesRequest) ExampleSet() map[string]any {
+	return map[string]any{
+		"OrganizationRolesRequest": OrganizationRolesRequest{
+			OrganizationID: "01J4HMNDSZCCQBTY93BF9CBF5D",
+			Role:           "policy_manager",
+			UserIDs:        []string{"01J4EXD5MM60CX4YNYN0DEE3Y1"},
+			GroupIDs:       []string{"01J4EXD5MM60CX4YNYN0DEE3Y2"},
 		},
-	},
-	OrganizationID: "01J4HMNDSZCCQBTY93BF9CBF5D",
+	}
+}
+
+// ExampleSet returns the curated named examples published for OrganizationRolesResponse in the OpenAPI spec
+func (OrganizationRolesResponse) ExampleSet() map[string]any {
+	return map[string]any{
+		"OrganizationRolesResponse": OrganizationRolesResponse{
+			Reply:          rout.Reply{Success: true},
+			OrganizationID: "01J4HMNDSZCCQBTY93BF9CBF5D",
+			Role:           "policy_manager",
+		},
+	}
+}
+
+// ExampleSet returns the curated named examples published for AccountRolesMeRequest in the OpenAPI spec
+func (AccountRolesMeRequest) ExampleSet() map[string]any {
+	return map[string]any{"AccountRolesMeRequest": AccountRolesMeRequest{}}
+}
+
+// ExampleSet returns the curated named examples published for AccountRolesMeResponse in the OpenAPI spec
+func (AccountRolesMeResponse) ExampleSet() map[string]any {
+	return map[string]any{
+		"AccountRolesMeResponse": AccountRolesMeResponse{
+			Reply: rout.Reply{Success: true},
+			Roles: []OrganizationRole{
+				{
+					ID:          "policy_manager",
+					Name:        "Policy Manager",
+					Description: "Can manage all policies and procedures",
+				},
+			},
+			OrganizationID: "01J4HMNDSZCCQBTY93BF9CBF5D",
+		},
+	}
+}
+
+// AcmeSolverRequest is the request to solve an acme challenge
+type AcmeSolverRequest struct {
+	// Path is the path value.
+	Path string `param:"path" description:"The path to the acme challenge" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
+}
+
+// ExampleAcmeSolverRequest is an example ACME solver request for OpenAPI documentation
+var ExampleAcmeSolverRequest = AcmeSolverRequest{
+	Path: "01J4HMNDSZCCQBTY93BF9CBF5D",
 }

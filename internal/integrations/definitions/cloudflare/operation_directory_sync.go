@@ -70,13 +70,13 @@ type cloudflareGroupMemberPayload struct {
 
 // IngestHandle adapts directory sync to the ingest operation registration boundary
 func (d DirectorySync) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequest(cloudflareClient, func(ctx context.Context, request types.OperationRequest, client *cf.Client) ([]types.IngestPayloadSet, error) {
+	return providerkit.WithClientRequest(cloudflareClient, func(ctx context.Context, request types.OperationRequest, client *CloudflareClient) ([]types.IngestPayloadSet, error) {
 		return d.Run(ctx, request.Credentials, client)
 	})
 }
 
 // Run collects Cloudflare account members and emits directory account ingest payloads
-func (DirectorySync) Run(ctx context.Context, credentials types.CredentialBindings, client *cf.Client) ([]types.IngestPayloadSet, error) {
+func (DirectorySync) Run(ctx context.Context, credentials types.CredentialBindings, client *CloudflareClient) ([]types.IngestPayloadSet, error) {
 	meta, err := resolveCredential(credentials)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("cloudflare: error attempting to resolve credentials")
@@ -167,7 +167,7 @@ func isIncludedUserMember(member cloudflareMemberPayload, includedUsers map[stri
 }
 
 // listDirectoryUsers pages through all Cloudflare members for the given account
-func listDirectoryUsers(ctx context.Context, client *cf.Client, accountID string) ([]cloudflareMemberPayload, error) {
+func listDirectoryUsers(ctx context.Context, client *CloudflareClient, accountID string) ([]cloudflareMemberPayload, error) {
 	iter := client.Accounts.Members.ListAutoPaging(ctx, accounts.MemberListParams{
 		AccountID: cf.F(accountID),
 	})
@@ -207,7 +207,7 @@ func listDirectoryUsers(ctx context.Context, client *cf.Client, accountID string
 }
 
 // listDirectoryGroups pages through all Cloudflare roles and groups for the given account
-func listDirectoryGroups(ctx context.Context, client *cf.Client, accountID string) ([]cloudflareGroupPayload, error) {
+func listDirectoryGroups(ctx context.Context, client *CloudflareClient, accountID string) ([]cloudflareGroupPayload, error) {
 	iterUser := client.IAM.UserGroups.ListAutoPaging(ctx, iam.UserGroupListParams{
 		AccountID: cf.F(accountID),
 	})

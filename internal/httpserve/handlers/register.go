@@ -27,14 +27,10 @@ const (
 // RegisterHandler handles the registration of a new user, creating the user, personal organization
 // and sending an email verification to the email address in the request
 // the user will not be able to authenticate until the email is verified
-func (h *Handler) RegisterHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleRegisterSuccessRequest, models.ExampleRegisterSuccessResponse, openapi.Registry)
+func (h *Handler) RegisterHandler(ctx echo.Context) error {
+	req, err := BindAndValidate[models.RegisterRequest](ctx)
 	if err != nil {
-		return h.InvalidInput(ctx, err, openapi)
-	}
-
-	if isRegistrationContext(ctx) {
-		return nil
+		return h.InvalidInput(ctx, err)
 	}
 
 	// create user
@@ -58,15 +54,15 @@ func (h *Handler) RegisterHandler(ctx echo.Context, openapi *OpenAPIContext) err
 		if err != nil {
 			logx.FromContext(reqCtx).Error().Err(err).Str("email", input.Email).Msg("error retrieving invite token")
 
-			return h.BadRequest(ctx, err, openapi)
+			return h.BadRequest(ctx, err)
 		}
 
 		if !strings.EqualFold(invitedUser.Recipient, input.Email) {
-			return h.BadRequest(ctx, ErrUnableToVerifyEmail, openapi)
+			return h.BadRequest(ctx, ErrUnableToVerifyEmail)
 		}
 
 		if invitedUser.Expires.Before(time.Now()) {
-			return h.BadRequest(ctx, ErrExpiredToken, openapi)
+			return h.BadRequest(ctx, ErrExpiredToken)
 		}
 	}
 
@@ -75,17 +71,17 @@ func (h *Handler) RegisterHandler(ctx echo.Context, openapi *OpenAPIContext) err
 		logx.FromContext(reqCtx).Error().Err(err).Str("email", input.Email).Msg("error creating new user")
 
 		if IsUniqueConstraintError(err) {
-			return h.Conflict(ctx, "user already exists", UserExistsErrCode, openapi)
+			return h.Conflict(ctx, "user already exists", UserExistsErrCode)
 		}
 
 		if generated.IsValidationError(err) {
-			return h.InvalidInput(ctx, invalidInputError(err), openapi)
+			return h.InvalidInput(ctx, invalidInputError(err))
 		}
 
 		if errors.Is(err, entval.ErrEmailNotAllowed) {
 			logx.FromContext(reqCtx).Error().Err(err).Str("email", input.Email).Msg("email not allowed")
 
-			return h.InvalidInput(ctx, err, openapi)
+			return h.InvalidInput(ctx, err)
 		}
 
 		return err
@@ -101,17 +97,17 @@ func (h *Handler) RegisterHandler(ctx echo.Context, openapi *OpenAPIContext) err
 		if err != nil {
 			logx.FromContext(reqCtx).Error().Err(err).Str("email", input.Email).Msg("error processing invitation")
 
-			return h.BadRequest(ctx, ErrUnableToVerifyEmail, openapi)
+			return h.BadRequest(ctx, ErrUnableToVerifyEmail)
 		}
 
 		if err := h.setEmailConfirmed(userCtx, meowuser); err != nil {
 			logx.FromContext(reqCtx).Error().Err(err).Str("email", input.Email).Msg("unable to set email as verified")
 
-			return h.BadRequest(ctx, ErrUnableToVerifyEmail, openapi)
+			return h.BadRequest(ctx, ErrUnableToVerifyEmail)
 		}
 	}
 
-	out := &models.RegisterReply{
+	out := &models.RegisterResponse{
 		Reply:   rout.Reply{Success: true},
 		ID:      meowuser.ID,
 		Email:   meowuser.Email,
@@ -131,7 +127,7 @@ func (h *Handler) RegisterHandler(ctx echo.Context, openapi *OpenAPIContext) err
 		if err != nil {
 			logx.FromContext(reqCtx).Error().Err(err).Str("email", input.Email).Msg("error storing email verification token")
 
-			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+			return h.InternalServerError(ctx, ErrProcessingRequest)
 		}
 
 		// only return the token in development
@@ -140,7 +136,7 @@ func (h *Handler) RegisterHandler(ctx echo.Context, openapi *OpenAPIContext) err
 		}
 	}
 
-	return h.Created(ctx, out, openapi)
+	return h.Created(ctx, out)
 }
 
 func (h *Handler) storeAndSendEmailVerificationToken(ctx context.Context, user *User) (*generated.EmailVerificationToken, error) {

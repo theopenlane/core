@@ -2536,53 +2536,53 @@ func init() {
 	// entity.DomainsValidator is a validator for the "domains" field. It is called by the builders before save.
 	entity.DomainsValidator = entityDescDomains.Validators[0].(func([]string) error)
 	// entityDescApprovedForUse is the schema descriptor for approved_for_use field.
-	entityDescApprovedForUse := entityFields[6].Descriptor()
+	entityDescApprovedForUse := entityFields[7].Descriptor()
 	// entity.DefaultApprovedForUse holds the default value on creation for the approved_for_use field.
 	entity.DefaultApprovedForUse = entityDescApprovedForUse.Default.(bool)
 	// entityDescLinkedAssetIds is the schema descriptor for linked_asset_ids field.
-	entityDescLinkedAssetIds := entityFields[7].Descriptor()
+	entityDescLinkedAssetIds := entityFields[8].Descriptor()
 	// entity.DefaultLinkedAssetIds holds the default value on creation for the linked_asset_ids field.
 	entity.DefaultLinkedAssetIds = entityDescLinkedAssetIds.Default.([]string)
 	// entityDescHasSoc2 is the schema descriptor for has_soc2 field.
-	entityDescHasSoc2 := entityFields[8].Descriptor()
+	entityDescHasSoc2 := entityFields[9].Descriptor()
 	// entity.DefaultHasSoc2 holds the default value on creation for the has_soc2 field.
 	entity.DefaultHasSoc2 = entityDescHasSoc2.Default.(bool)
 	// entityDescAutoRenews is the schema descriptor for auto_renews field.
-	entityDescAutoRenews := entityFields[12].Descriptor()
+	entityDescAutoRenews := entityFields[13].Descriptor()
 	// entity.DefaultAutoRenews holds the default value on creation for the auto_renews field.
 	entity.DefaultAutoRenews = entityDescAutoRenews.Default.(bool)
 	// entityDescSpendCurrency is the schema descriptor for spend_currency field.
-	entityDescSpendCurrency := entityFields[15].Descriptor()
+	entityDescSpendCurrency := entityFields[16].Descriptor()
 	// entity.DefaultSpendCurrency holds the default value on creation for the spend_currency field.
 	entity.DefaultSpendCurrency = entityDescSpendCurrency.Default.(string)
 	// entityDescSSOEnforced is the schema descriptor for sso_enforced field.
-	entityDescSSOEnforced := entityFields[18].Descriptor()
+	entityDescSSOEnforced := entityFields[19].Descriptor()
 	// entity.DefaultSSOEnforced holds the default value on creation for the sso_enforced field.
 	entity.DefaultSSOEnforced = entityDescSSOEnforced.Default.(bool)
 	// entityDescMfaSupported is the schema descriptor for mfa_supported field.
-	entityDescMfaSupported := entityFields[19].Descriptor()
+	entityDescMfaSupported := entityFields[20].Descriptor()
 	// entity.DefaultMfaSupported holds the default value on creation for the mfa_supported field.
 	entity.DefaultMfaSupported = entityDescMfaSupported.Default.(bool)
 	// entityDescMfaEnforced is the schema descriptor for mfa_enforced field.
-	entityDescMfaEnforced := entityFields[20].Descriptor()
+	entityDescMfaEnforced := entityFields[21].Descriptor()
 	// entity.DefaultMfaEnforced holds the default value on creation for the mfa_enforced field.
 	entity.DefaultMfaEnforced = entityDescMfaEnforced.Default.(bool)
 	// entityDescStatusPageURL is the schema descriptor for status_page_url field.
-	entityDescStatusPageURL := entityFields[21].Descriptor()
+	entityDescStatusPageURL := entityFields[22].Descriptor()
 	// entity.StatusPageURLValidator is a validator for the "status_page_url" field. It is called by the builders before save.
 	entity.StatusPageURLValidator = entityDescStatusPageURL.Validators[0].(func(string) error)
 	// entityDescProvidedServices is the schema descriptor for provided_services field.
-	entityDescProvidedServices := entityFields[22].Descriptor()
+	entityDescProvidedServices := entityFields[23].Descriptor()
 	// entity.DefaultProvidedServices holds the default value on creation for the provided_services field.
 	entity.DefaultProvidedServices = entityDescProvidedServices.Default.([]string)
 	// entityDescLinks is the schema descriptor for links field.
-	entityDescLinks := entityFields[23].Descriptor()
+	entityDescLinks := entityFields[24].Descriptor()
 	// entity.DefaultLinks holds the default value on creation for the links field.
 	entity.DefaultLinks = entityDescLinks.Default.([]string)
 	// entity.LinksValidator is a validator for the "links" field. It is called by the builders before save.
 	entity.LinksValidator = entityDescLinks.Validators[0].(func([]string) error)
 	// entityDescLogoRemoteURL is the schema descriptor for logo_remote_url field.
-	entityDescLogoRemoteURL := entityFields[32].Descriptor()
+	entityDescLogoRemoteURL := entityFields[33].Descriptor()
 	// entity.LogoRemoteURLValidator is a validator for the "logo_remote_url" field. It is called by the builders before save.
 	entity.LogoRemoteURLValidator = func() func(string) error {
 		validators := entityDescLogoRemoteURL.Validators
@@ -5730,6 +5730,8 @@ func init() {
 	organizationsetting.Hooks[7] = organizationsettingHooks[2]
 
 	organizationsetting.Hooks[8] = organizationsettingHooks[3]
+
+	organizationsetting.Hooks[9] = organizationsettingHooks[4]
 	organizationsettingMixinInters2 := organizationsettingMixin[2].Interceptors()
 	organizationsettingInters := schema.OrganizationSetting{}.Interceptors()
 	organizationsetting.Interceptors[0] = organizationsettingMixinInters2[0]

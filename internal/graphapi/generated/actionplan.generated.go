@@ -219,6 +219,7 @@ type MutationResolver interface {
 	CreateBulkCSVFindingControl(ctx context.Context, input graphql.Upload) (*model.FindingControlBulkCreatePayload, error)
 	UpdateFindingControl(ctx context.Context, id string, input generated.UpdateFindingControlInput) (*model.FindingControlUpdatePayload, error)
 	DeleteFindingControl(ctx context.Context, id string) (*model.FindingControlDeletePayload, error)
+	DeleteBulkFindingControl(ctx context.Context, ids []string) (*model.FindingControlBulkDeletePayload, error)
 	CreateGroup(ctx context.Context, input generated.CreateGroupInput, avatarFile *graphql.Upload, avatarFileMetadata *model.FileMetadataInput) (*model.GroupCreatePayload, error)
 	CreateBulkGroup(ctx context.Context, input []*generated.CreateGroupInput) (*model.GroupBulkCreatePayload, error)
 	CreateBulkCSVGroup(ctx context.Context, input graphql.Upload) (*model.GroupBulkCreatePayload, error)
@@ -4949,6 +4950,20 @@ func (ec *executionContext) field_Mutation_deleteBulkEvidence_args(ctx context.C
 }
 
 func (ec *executionContext) field_Mutation_deleteBulkExport_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids",
+		func(ctx context.Context, v any) ([]string, error) {
+			return ec.unmarshalNID2ᚕstringᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_deleteBulkFindingControl_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
 	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids",
@@ -20649,6 +20664,50 @@ func (ec *executionContext) fieldContext_Mutation_deleteFindingControl(ctx conte
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_deleteFindingControl_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_deleteBulkFindingControl(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Mutation_deleteBulkFindingControl(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.Resolvers.Mutation().DeleteBulkFindingControl(ctx, fc.Args["ids"].([]string))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *model.FindingControlBulkDeletePayload) graphql.Marshaler {
+			return ec.marshalNFindingControlBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFindingControlBulkDeletePayload(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Mutation_deleteBulkFindingControl(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_FindingControlBulkDeletePayload(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_deleteBulkFindingControl_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -40398,6 +40457,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "deleteFindingControl":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteFindingControl(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "deleteBulkFindingControl":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_deleteBulkFindingControl(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++

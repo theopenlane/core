@@ -11,7 +11,6 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
@@ -110,9 +109,7 @@ func operationTestDefinitionBuilder(definitionID string, inlineNonHealth bool) r
 func (suite *HandlerTestSuite) TestRunIntegrationOperationHealthCheckInline() {
 	t := suite.T()
 
-	op := openapi3.NewOperation()
-	op.OperationID = "RunIntegrationOperationHealthCheckInline"
-	suite.registerRouteOnce(http.MethodPost, operationTestPath, op, suite.h.RunIntegrationOperation)
+	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
 	restore := suite.withDefinitionRuntime(t, []registry.Builder{operationTestDefinitionBuilder(operationTestDefinitionID, false)})
 	defer restore()
@@ -149,9 +146,7 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationHealthCheckInline() {
 func (suite *HandlerTestSuite) TestRunIntegrationOperationInlinePolicy() {
 	t := suite.T()
 
-	op := openapi3.NewOperation()
-	op.OperationID = "RunIntegrationOperationInlinePolicy"
-	suite.registerRouteOnce(http.MethodPost, operationTestPath, op, suite.h.RunIntegrationOperation)
+	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
 	restore := suite.withDefinitionRuntime(t, []registry.Builder{operationTestDefinitionBuilder(operationTestInlineDefinitionID, true)})
 	defer restore()
@@ -188,9 +183,7 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationInlinePolicy() {
 func (suite *HandlerTestSuite) TestRunIntegrationOperationQueuedAsync() {
 	t := suite.T()
 
-	op := openapi3.NewOperation()
-	op.OperationID = "RunIntegrationOperationQueuedAsync"
-	suite.registerRouteOnce(http.MethodPost, operationTestPath, op, suite.h.RunIntegrationOperation)
+	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
 	restore := suite.withDefinitionRuntime(t, []registry.Builder{operationTestDefinitionBuilder(operationTestDefinitionID, false)})
 	defer restore()
@@ -228,9 +221,7 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationQueuedAsync() {
 func (suite *HandlerTestSuite) TestRunIntegrationOperationUnauthorized() {
 	t := suite.T()
 
-	op := openapi3.NewOperation()
-	op.OperationID = "RunIntegrationOperationUnauthorized"
-	suite.registerRouteOnce(http.MethodPost, operationTestPath, op, suite.h.RunIntegrationOperation)
+	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
 	body, err := json.Marshal(handlers.RunIntegrationOperationRequest{
 		Body: handlers.RunIntegrationOperationBody{
@@ -251,9 +242,7 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationUnauthorized() {
 func (suite *HandlerTestSuite) TestRunIntegrationOperationInvalidProvider() {
 	t := suite.T()
 
-	op := openapi3.NewOperation()
-	op.OperationID = "RunIntegrationOperationInvalidProvider"
-	suite.registerRouteOnce(http.MethodPost, operationTestPath, op, suite.h.RunIntegrationOperation)
+	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
 	reqCtx := echocontext.NewTestEchoContext().Request().Context()
 	testUser := suite.userBuilderWithInput(reqCtx, &userInput{confirmedUser: true})
@@ -277,9 +266,7 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationInvalidProvider() {
 func (suite *HandlerTestSuite) TestRunIntegrationOperationMissingOperationName() {
 	t := suite.T()
 
-	op := openapi3.NewOperation()
-	op.OperationID = "RunIntegrationOperationMissingName"
-	suite.registerRouteOnce(http.MethodPost, operationTestPath, op, suite.h.RunIntegrationOperation)
+	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
 	restore := suite.withDefinitionRuntime(t, []registry.Builder{operationTestDefinitionBuilder(operationTestDefinitionID, false)})
 	defer restore()
@@ -304,9 +291,7 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationMissingOperationName()
 func (suite *HandlerTestSuite) TestRunIntegrationOperationUnknownOperation() {
 	t := suite.T()
 
-	op := openapi3.NewOperation()
-	op.OperationID = "RunIntegrationOperationUnknown"
-	suite.registerRouteOnce(http.MethodPost, operationTestPath, op, suite.h.RunIntegrationOperation)
+	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
 	restore := suite.withDefinitionRuntime(t, []registry.Builder{operationTestDefinitionBuilder(operationTestDefinitionID, false)})
 	defer restore()
@@ -333,9 +318,7 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationUnknownOperation() {
 func (suite *HandlerTestSuite) TestRunIntegrationOperationInvalidConfig() {
 	t := suite.T()
 
-	op := openapi3.NewOperation()
-	op.OperationID = "RunIntegrationOperationInvalidConfig"
-	suite.registerRouteOnce(http.MethodPost, operationTestPath, op, suite.h.RunIntegrationOperation)
+	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
 	restore := suite.withDefinitionRuntime(t, []registry.Builder{operationTestDefinitionBuilder(operationTestDefinitionID, false)})
 	defer restore()
@@ -366,9 +349,7 @@ func (suite *HandlerTestSuite) TestRunIntegrationOperationInvalidConfig() {
 func (suite *HandlerTestSuite) TestRunIntegrationOperationInstallationNotFound() {
 	t := suite.T()
 
-	op := openapi3.NewOperation()
-	op.OperationID = "RunIntegrationOperationInstallNotFound"
-	suite.registerRouteOnce(http.MethodPost, operationTestPath, op, suite.h.RunIntegrationOperation)
+	suite.registerRouteOnce(http.MethodPost, operationTestPath, suite.h.RunIntegrationOperation)
 
 	restore := suite.withDefinitionRuntime(t, []registry.Builder{operationTestDefinitionBuilder(operationTestDefinitionID, false)})
 	defer restore()

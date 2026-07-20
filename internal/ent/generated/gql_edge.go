@@ -964,6 +964,90 @@ func (_m *Asset) InternalPolicies(
 	return _m.QueryInternalPolicies().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (_m *Asset) Findings(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*FindingOrder, where *FindingWhereInput,
+) (*FindingConnection, error) {
+	opts := []FindingPaginateOption{
+		WithFindingOrder(orderBy),
+		WithFindingFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[23][alias]
+	if nodes, err := _m.NamedFindings(alias); err == nil || hasTotalCount {
+		pager, err := newFindingPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &FindingConnection{Edges: []*FindingEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryFindings().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *Asset) Vulnerabilities(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*VulnerabilityOrder, where *VulnerabilityWhereInput,
+) (*VulnerabilityConnection, error) {
+	opts := []VulnerabilityPaginateOption{
+		WithVulnerabilityOrder(orderBy),
+		WithVulnerabilityFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[24][alias]
+	if nodes, err := _m.NamedVulnerabilities(alias); err == nil || hasTotalCount {
+		pager, err := newVulnerabilityPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &VulnerabilityConnection{Edges: []*VulnerabilityEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryVulnerabilities().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *Asset) Reviews(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*ReviewOrder, where *ReviewWhereInput,
+) (*ReviewConnection, error) {
+	opts := []ReviewPaginateOption{
+		WithReviewOrder(orderBy),
+		WithReviewFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[25][alias]
+	if nodes, err := _m.NamedReviews(alias); err == nil || hasTotalCount {
+		pager, err := newReviewPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &ReviewConnection{Edges: []*ReviewEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryReviews().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *Asset) Remediations(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*RemediationOrder, where *RemediationWhereInput,
+) (*RemediationConnection, error) {
+	opts := []RemediationPaginateOption{
+		WithRemediationOrder(orderBy),
+		WithRemediationFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[26][alias]
+	if nodes, err := _m.NamedRemediations(alias); err == nil || hasTotalCount {
+		pager, err := newRemediationPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &RemediationConnection{Edges: []*RemediationEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryRemediations().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (_m *Asset) SourcePlatform(ctx context.Context) (*Platform, error) {
 	result, err := _m.Edges.SourcePlatformOrErr()
 	if IsNotLoaded(err) {
@@ -988,7 +1072,7 @@ func (_m *Asset) ConnectedAssets(
 		WithAssetFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[25][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[29][alias]
 	if nodes, err := _m.NamedConnectedAssets(alias); err == nil || hasTotalCount {
 		pager, err := newAssetPager(opts, last != nil)
 		if err != nil {
@@ -1009,7 +1093,7 @@ func (_m *Asset) ConnectedFrom(
 		WithAssetFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[26][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[30][alias]
 	if nodes, err := _m.NamedConnectedFrom(alias); err == nil || hasTotalCount {
 		pager, err := newAssetPager(opts, last != nil)
 		if err != nil {
@@ -1338,7 +1422,7 @@ func (_m *CampaignTarget) Campaign(ctx context.Context) (*Campaign, error) {
 	if IsNotLoaded(err) {
 		result, err = _m.QueryCampaign().Only(ctx)
 	}
-	return result, err
+	return result, MaskNotFound(err)
 }
 
 func (_m *CampaignTarget) Contact(ctx context.Context) (*Contact, error) {
@@ -2062,6 +2146,27 @@ func (_m *Control) Platforms(
 	return _m.QueryPlatforms().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (_m *Control) Vulnerabilities(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*VulnerabilityOrder, where *VulnerabilityWhereInput,
+) (*VulnerabilityConnection, error) {
+	opts := []VulnerabilityPaginateOption{
+		WithVulnerabilityOrder(orderBy),
+		WithVulnerabilityFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[26][alias]
+	if nodes, err := _m.NamedVulnerabilities(alias); err == nil || hasTotalCount {
+		pager, err := newVulnerabilityPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &VulnerabilityConnection{Edges: []*VulnerabilityEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryVulnerabilities().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (_m *Control) Assets(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*AssetOrder, where *AssetWhereInput,
 ) (*AssetConnection, error) {
@@ -2070,7 +2175,7 @@ func (_m *Control) Assets(
 		WithAssetFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[26][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[27][alias]
 	if nodes, err := _m.NamedAssets(alias); err == nil || hasTotalCount {
 		pager, err := newAssetPager(opts, last != nil)
 		if err != nil {
@@ -2091,7 +2196,7 @@ func (_m *Control) Entities(
 		WithEntityFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[27][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[28][alias]
 	if nodes, err := _m.NamedEntities(alias); err == nil || hasTotalCount {
 		pager, err := newEntityPager(opts, last != nil)
 		if err != nil {
@@ -2112,7 +2217,7 @@ func (_m *Control) IdentityHolders(
 		WithIdentityHolderFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[28][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[29][alias]
 	if nodes, err := _m.NamedIdentityHolders(alias); err == nil || hasTotalCount {
 		pager, err := newIdentityHolderPager(opts, last != nil)
 		if err != nil {
@@ -2133,7 +2238,7 @@ func (_m *Control) Campaigns(
 		WithCampaignFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[29][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[30][alias]
 	if nodes, err := _m.NamedCampaigns(alias); err == nil || hasTotalCount {
 		pager, err := newCampaignPager(opts, last != nil)
 		if err != nil {
@@ -2154,7 +2259,7 @@ func (_m *Control) Findings(
 		WithFindingFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[30][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[31][alias]
 	if nodes, err := _m.NamedFindings(alias); err == nil || hasTotalCount {
 		pager, err := newFindingPager(opts, last != nil)
 		if err != nil {
@@ -2175,7 +2280,7 @@ func (_m *Control) ControlImplementations(
 		WithControlImplementationFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[31][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[32][alias]
 	if nodes, err := _m.NamedControlImplementations(alias); err == nil || hasTotalCount {
 		pager, err := newControlImplementationPager(opts, last != nil)
 		if err != nil {
@@ -2196,7 +2301,7 @@ func (_m *Control) Subcontrols(
 		WithSubcontrolFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[32][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[33][alias]
 	if nodes, err := _m.NamedSubcontrols(alias); err == nil || hasTotalCount {
 		pager, err := newSubcontrolPager(opts, last != nil)
 		if err != nil {
@@ -2217,7 +2322,7 @@ func (_m *Control) ScheduledJobs(
 		WithScheduledJobFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[33][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[34][alias]
 	if nodes, err := _m.NamedScheduledJobs(alias); err == nil || hasTotalCount {
 		pager, err := newScheduledJobPager(opts, last != nil)
 		if err != nil {
@@ -2238,7 +2343,7 @@ func (_m *Control) WorkflowObjectRefs(
 		WithWorkflowObjectRefFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[34][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[35][alias]
 	if nodes, err := _m.NamedWorkflowObjectRefs(alias); err == nil || hasTotalCount {
 		pager, err := newWorkflowObjectRefPager(opts, last != nil)
 		if err != nil {
@@ -2259,7 +2364,7 @@ func (_m *Control) ControlMappings(
 		WithFindingControlFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[35][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[36][alias]
 	if nodes, err := _m.NamedControlMappings(alias); err == nil || hasTotalCount {
 		pager, err := newFindingControlPager(opts, last != nil)
 		if err != nil {
@@ -4193,6 +4298,90 @@ func (_m *Entity) Subcontrols(
 	return _m.QuerySubcontrols().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (_m *Entity) Findings(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*FindingOrder, where *FindingWhereInput,
+) (*FindingConnection, error) {
+	opts := []FindingPaginateOption{
+		WithFindingOrder(orderBy),
+		WithFindingFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[29][alias]
+	if nodes, err := _m.NamedFindings(alias); err == nil || hasTotalCount {
+		pager, err := newFindingPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &FindingConnection{Edges: []*FindingEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryFindings().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *Entity) Vulnerabilities(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*VulnerabilityOrder, where *VulnerabilityWhereInput,
+) (*VulnerabilityConnection, error) {
+	opts := []VulnerabilityPaginateOption{
+		WithVulnerabilityOrder(orderBy),
+		WithVulnerabilityFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[30][alias]
+	if nodes, err := _m.NamedVulnerabilities(alias); err == nil || hasTotalCount {
+		pager, err := newVulnerabilityPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &VulnerabilityConnection{Edges: []*VulnerabilityEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryVulnerabilities().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *Entity) Reviews(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*ReviewOrder, where *ReviewWhereInput,
+) (*ReviewConnection, error) {
+	opts := []ReviewPaginateOption{
+		WithReviewOrder(orderBy),
+		WithReviewFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[31][alias]
+	if nodes, err := _m.NamedReviews(alias); err == nil || hasTotalCount {
+		pager, err := newReviewPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &ReviewConnection{Edges: []*ReviewEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryReviews().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *Entity) Remediations(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*RemediationOrder, where *RemediationWhereInput,
+) (*RemediationConnection, error) {
+	opts := []RemediationPaginateOption{
+		WithRemediationOrder(orderBy),
+		WithRemediationFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[32][alias]
+	if nodes, err := _m.NamedRemediations(alias); err == nil || hasTotalCount {
+		pager, err := newRemediationPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &RemediationConnection{Edges: []*RemediationEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryRemediations().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (_m *Entity) Platforms(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*PlatformOrder, where *PlatformWhereInput,
 ) (*PlatformConnection, error) {
@@ -4201,7 +4390,7 @@ func (_m *Entity) Platforms(
 		WithPlatformFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[29][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[33][alias]
 	if nodes, err := _m.NamedPlatforms(alias); err == nil || hasTotalCount {
 		pager, err := newPlatformPager(opts, last != nil)
 		if err != nil {
@@ -4222,7 +4411,7 @@ func (_m *Entity) OutOfScopePlatforms(
 		WithPlatformFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[30][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[34][alias]
 	if nodes, err := _m.NamedOutOfScopePlatforms(alias); err == nil || hasTotalCount {
 		pager, err := newPlatformPager(opts, last != nil)
 		if err != nil {
@@ -4243,7 +4432,7 @@ func (_m *Entity) SourcePlatforms(
 		WithPlatformFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[31][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[35][alias]
 	if nodes, err := _m.NamedSourcePlatforms(alias); err == nil || hasTotalCount {
 		pager, err := newPlatformPager(opts, last != nil)
 		if err != nil {
@@ -4280,7 +4469,7 @@ func (_m *Entity) InternalPolicies(
 		WithInternalPolicyFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[34][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[38][alias]
 	if nodes, err := _m.NamedInternalPolicies(alias); err == nil || hasTotalCount {
 		pager, err := newInternalPolicyPager(opts, last != nil)
 		if err != nil {
@@ -13895,6 +14084,90 @@ func (_m *Program) SystemDetails(
 	return _m.QuerySystemDetails().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (_m *Program) Findings(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*FindingOrder, where *FindingWhereInput,
+) (*FindingConnection, error) {
+	opts := []FindingPaginateOption{
+		WithFindingOrder(orderBy),
+		WithFindingFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[18][alias]
+	if nodes, err := _m.NamedFindings(alias); err == nil || hasTotalCount {
+		pager, err := newFindingPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &FindingConnection{Edges: []*FindingEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryFindings().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *Program) Vulnerabilities(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*VulnerabilityOrder, where *VulnerabilityWhereInput,
+) (*VulnerabilityConnection, error) {
+	opts := []VulnerabilityPaginateOption{
+		WithVulnerabilityOrder(orderBy),
+		WithVulnerabilityFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[19][alias]
+	if nodes, err := _m.NamedVulnerabilities(alias); err == nil || hasTotalCount {
+		pager, err := newVulnerabilityPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &VulnerabilityConnection{Edges: []*VulnerabilityEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryVulnerabilities().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *Program) Reviews(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*ReviewOrder, where *ReviewWhereInput,
+) (*ReviewConnection, error) {
+	opts := []ReviewPaginateOption{
+		WithReviewOrder(orderBy),
+		WithReviewFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[20][alias]
+	if nodes, err := _m.NamedReviews(alias); err == nil || hasTotalCount {
+		pager, err := newReviewPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &ReviewConnection{Edges: []*ReviewEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryReviews().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *Program) Remediations(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*RemediationOrder, where *RemediationWhereInput,
+) (*RemediationConnection, error) {
+	opts := []RemediationPaginateOption{
+		WithRemediationOrder(orderBy),
+		WithRemediationFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[21][alias]
+	if nodes, err := _m.NamedRemediations(alias); err == nil || hasTotalCount {
+		pager, err := newRemediationPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &RemediationConnection{Edges: []*RemediationEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryRemediations().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (_m *Program) Users(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*UserOrder, where *UserWhereInput,
 ) (*UserConnection, error) {
@@ -13903,7 +14176,7 @@ func (_m *Program) Users(
 		WithUserFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[18][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[22][alias]
 	if nodes, err := _m.NamedUsers(alias); err == nil || hasTotalCount {
 		pager, err := newUserPager(opts, last != nil)
 		if err != nil {
@@ -13932,7 +14205,7 @@ func (_m *Program) Members(
 		WithProgramMembershipFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[20][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[24][alias]
 	if nodes, err := _m.NamedMembers(alias); err == nil || hasTotalCount {
 		pager, err := newProgramMembershipPager(opts, last != nil)
 		if err != nil {
@@ -15186,6 +15459,48 @@ func (_m *Risk) Remediations(
 	return _m.QueryRemediations().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (_m *Risk) Vulnerabilities(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*VulnerabilityOrder, where *VulnerabilityWhereInput,
+) (*VulnerabilityConnection, error) {
+	opts := []VulnerabilityPaginateOption{
+		WithVulnerabilityOrder(orderBy),
+		WithVulnerabilityFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[25][alias]
+	if nodes, err := _m.NamedVulnerabilities(alias); err == nil || hasTotalCount {
+		pager, err := newVulnerabilityPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &VulnerabilityConnection{Edges: []*VulnerabilityEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryVulnerabilities().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *Risk) Findings(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*FindingOrder, where *FindingWhereInput,
+) (*FindingConnection, error) {
+	opts := []FindingPaginateOption{
+		WithFindingOrder(orderBy),
+		WithFindingFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[26][alias]
+	if nodes, err := _m.NamedFindings(alias); err == nil || hasTotalCount {
+		pager, err := newFindingPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &FindingConnection{Edges: []*FindingEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryFindings().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (_m *Risk) WorkflowObjectRefs(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*WorkflowObjectRefOrder, where *WorkflowObjectRefWhereInput,
 ) (*WorkflowObjectRefConnection, error) {
@@ -15194,7 +15509,7 @@ func (_m *Risk) WorkflowObjectRefs(
 		WithWorkflowObjectRefFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[25][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[27][alias]
 	if nodes, err := _m.NamedWorkflowObjectRefs(alias); err == nil || hasTotalCount {
 		pager, err := newWorkflowObjectRefPager(opts, last != nil)
 		if err != nil {
@@ -16266,6 +16581,48 @@ func (_m *Subcontrol) IdentityHolders(
 		return conn, nil
 	}
 	return _m.QueryIdentityHolders().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *Subcontrol) Vulnerabilities(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*VulnerabilityOrder, where *VulnerabilityWhereInput,
+) (*VulnerabilityConnection, error) {
+	opts := []VulnerabilityPaginateOption{
+		WithVulnerabilityOrder(orderBy),
+		WithVulnerabilityFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[25][alias]
+	if nodes, err := _m.NamedVulnerabilities(alias); err == nil || hasTotalCount {
+		pager, err := newVulnerabilityPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &VulnerabilityConnection{Edges: []*VulnerabilityEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryVulnerabilities().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *Subcontrol) Findings(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*FindingOrder, where *FindingWhereInput,
+) (*FindingConnection, error) {
+	opts := []FindingPaginateOption{
+		WithFindingOrder(orderBy),
+		WithFindingFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[26][alias]
+	if nodes, err := _m.NamedFindings(alias); err == nil || hasTotalCount {
+		pager, err := newFindingPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &FindingConnection{Edges: []*FindingEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryFindings().Paginate(ctx, after, first, before, last, opts...)
 }
 
 func (_m *Subprocessor) Owner(ctx context.Context) (*Organization, error) {

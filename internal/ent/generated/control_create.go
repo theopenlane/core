@@ -43,6 +43,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 )
 
@@ -1019,6 +1020,21 @@ func (_c *ControlCreate) AddPlatforms(v ...*Platform) *ControlCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddPlatformIDs(ids...)
+}
+
+// AddVulnerabilityIDs adds the "vulnerabilities" edge to the Vulnerability entity by IDs.
+func (_c *ControlCreate) AddVulnerabilityIDs(ids ...string) *ControlCreate {
+	_c.mutation.AddVulnerabilityIDs(ids...)
+	return _c
+}
+
+// AddVulnerabilities adds the "vulnerabilities" edges to the Vulnerability entity.
+func (_c *ControlCreate) AddVulnerabilities(v ...*Vulnerability) *ControlCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddVulnerabilityIDs(ids...)
 }
 
 // AddAssetIDs adds the "assets" edge to the Asset entity by IDs.
@@ -2007,6 +2023,23 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.PlatformControls
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.VulnerabilitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.VulnerabilitiesTable,
+			Columns: control.VulnerabilitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.VulnerabilityControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

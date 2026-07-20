@@ -7847,6 +7847,10 @@ func (m *EntityMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetDomains(domains)
 	}
 
+	if aliases, exists := m.Aliases(); exists {
+		create = create.SetAliases(aliases)
+	}
+
 	if entityTypeID, exists := m.EntityTypeID(); exists {
 		create = create.SetEntityTypeID(entityTypeID)
 	}
@@ -8204,6 +8208,12 @@ func (m *EntityMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDomains(entity.Domains)
 		}
 
+		if aliases, exists := m.Aliases(); exists {
+			create = create.SetAliases(aliases)
+		} else {
+			create = create.SetAliases(entity.Aliases)
+		}
+
 		if entityTypeID, exists := m.EntityTypeID(); exists {
 			create = create.SetEntityTypeID(entityTypeID)
 		} else {
@@ -8464,6 +8474,7 @@ func (m *EntityMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDisplayName(entity.DisplayName).
 			SetDescription(entity.Description).
 			SetDomains(entity.Domains).
+			SetAliases(entity.Aliases).
 			SetEntityTypeID(entity.EntityTypeID).
 			SetStatus(entity.Status).
 			SetApprovedForUse(entity.ApprovedForUse).

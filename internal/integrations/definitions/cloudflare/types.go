@@ -1,21 +1,20 @@
 package cloudflare
 
 import (
-	cf "github.com/cloudflare/cloudflare-go/v7"
-
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/domainscan"
 )
 
 var (
-	// definitionID is the stable identifier for the Cloudflare integration definition
-	definitionID = types.NewDefinitionRef("def_01K0CFLARE00000000000000001")
+	// DefinitionID is the stable identifier for the Cloudflare integration definition
+	DefinitionID = types.NewDefinitionRef("def_01K0CFLARE00000000000000001")
 	// installation is the typed installation metadata handle for the Cloudflare definition
 	installation = types.NewInstallationRef(resolveInstallationMetadata)
 	// cloudflareSchema is the credential schema for the Cloudflare integration definition
 	cloudflareSchema, cloudflareCredential = providerkit.CredentialSchema[CredentialSchema]()
 	// cloudflareClient is the client ref for the Cloudflare API client used by this definition
-	cloudflareClient = types.NewClientRef[*cf.Client]()
+	cloudflareClient = types.NewClientRef[*CloudflareClient]()
 	// healthDefaultOperation is the operation ref for the Cloudflare health check
 	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
 	// directorySyncSchema is the operation ref for the directory account sync operation
@@ -24,7 +23,35 @@ var (
 	assetSyncSchema, assetSyncOperation = providerkit.OperationSchema[AssetSync]()
 	// findingsSyncSchema is the operation ref for the Security Center insights finding sync operation
 	findingsSyncSchema, findingsSyncOperation = providerkit.OperationSchema[FindingsSync]()
+	// domainScanSubmitSchema is the operation ref for submitting domains to the URL Scanner
+	domainScanSubmitSchema, DomainScanSubmitOp = providerkit.OperationSchema[DomainScanSubmit]() //nolint:revive
+	// domainScanPollSchema is the operation ref for polling a submitted URL Scanner result
+	domainScanPollSchema, DomainScanPollOp = providerkit.OperationSchema[DomainScanPoll]() //nolint:revive
+	// domainScanGatherEnrichmentSchema is the operation ref for gathering enrichment data for a domain
+	domainScanGatherEnrichmentSchema, DomainScanGatherEnrichmentOp = providerkit.OperationSchema[DomainScanGatherEnrichment]() //nolint:revive
+	// domainScanBuildReportSchema is the operation ref for building the scan report from a completed URL Scanner result and gathered enrichment
+	domainScanBuildReportSchema, DomainScanBuildReportOp = providerkit.OperationSchema[DomainScanBuildReport]() //nolint:revive
+	// runtimeCloudflareSchema is the JSON schema and typed ref for the runtime Cloudflare config
+	runtimeCloudflareSchema, runtimeCloudflareRef = providerkit.RuntimeSchema[RuntimeConfig]()
 )
+
+// RuntimeConfig is the runtime-provisioned configuration for the operator-owned
+// Cloudflare account. Sourced from koanf/environment at startup; used for system-initiated
+// Cloudflare calls (e.g. onboarding domain scans) that are not tied to a customer installation
+type RuntimeConfig struct {
+	// APIToken is the Cloudflare API token for the operator-owned account
+	APIToken string `json:"apitoken" koanf:"apitoken" jsonschema:"description=Cloudflare API token for the operator-owned account" sensitive:"true"`
+	// AccountID is the Cloudflare account identifier for the operator-owned account
+	AccountID string `json:"accountid" koanf:"accountid" jsonschema:"description=Cloudflare account ID for the operator-owned account"`
+	// DomainScan configures vendor/technology classification and enrichment behavior for
+	// onboarding domain scan reports
+	DomainScan domainscan.ReportConfig `json:"domainscan" koanf:"domainscan" jsonschema:"description=Vendor/technology classification and enrichment behavior for onboarding domain scan reports"`
+}
+
+// Provisioned reports whether the runtime config has the minimum required fields to make Cloudflare API calls
+func (c RuntimeConfig) Provisioned() bool {
+	return c.APIToken != "" && c.AccountID != ""
+}
 
 const (
 	assetSyncRegistrarPageSize = 50

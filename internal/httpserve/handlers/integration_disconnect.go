@@ -15,27 +15,27 @@ import (
 )
 
 // DisconnectIntegration executes the definition-driven teardown flow for one installed integration
-func (h *Handler) DisconnectIntegration(ctx echo.Context, openapi *OpenAPIContext) error {
-	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleDisconnectIntegrationRequest, models.DeleteIntegrationResponse{}, openapi.Registry)
+func (h *Handler) DisconnectIntegration(ctx echo.Context) error {
+	in, err := BindAndValidate[models.DisconnectIntegrationRequest](ctx)
 	if err != nil {
-		return h.InvalidInput(ctx, err, openapi)
+		return h.InvalidInput(ctx, err)
 	}
 
-	if isRegistrationContext(ctx) {
-		return nil
+	if h.IntegrationsRuntime == nil {
+		return h.BadRequest(ctx, ErrIntegrationsNotEnabled)
 	}
 
 	userCtx := ctx.Request().Context()
 
 	caller, ok := auth.CallerFromContext(userCtx)
 	if !ok || caller == nil {
-		return h.Unauthorized(ctx, ErrUnauthorized, openapi)
+		return h.Unauthorized(ctx, ErrUnauthorized)
 	}
 
 	if in.IntegrationID == "" {
 		logx.FromContext(userCtx).Error().Err(ErrIntegrationIDRequired).Msg("missing integrationID in request")
 
-		return h.BadRequest(ctx, ErrIntegrationIDRequired, openapi)
+		return h.BadRequest(ctx, ErrIntegrationIDRequired)
 	}
 
 	record, err := h.IntegrationsRuntime.ResolveIntegration(userCtx, integrationsruntime.IntegrationLookup{
@@ -45,19 +45,19 @@ func (h *Handler) DisconnectIntegration(ctx echo.Context, openapi *OpenAPIContex
 	if err != nil {
 		logx.FromContext(userCtx).Error().Err(err).Interface("request", in).Msg("failed to resolve integration record")
 
-		return h.BadRequest(ctx, ErrIntegrationNotFound, openapi)
+		return h.BadRequest(ctx, ErrIntegrationNotFound)
 	}
 
 	def, ok := h.IntegrationsRuntime.Registry().Definition(record.DefinitionID)
 	if !ok {
-		return h.BadRequest(ctx, ErrIntegrationNotFound, openapi)
+		return h.BadRequest(ctx, ErrIntegrationNotFound)
 	}
 
 	result, err := h.IntegrationsRuntime.Disconnect(userCtx, record)
 	if err != nil {
 		logx.FromContext(userCtx).Error().Err(err).Interface("request", in).Msg("disconnect failed")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	resp := models.DeleteIntegrationResponse{

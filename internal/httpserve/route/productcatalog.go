@@ -10,16 +10,17 @@ import (
 func registerProductCatalogHandler(router *Router) error {
 	// add route without the path param
 	config := Config{
-		Path:        "/products",
-		Method:      http.MethodGet,
-		Name:        "ProductCatalog",
-		Description: "List products available in the product catalog",
-		Tags:        []string{"catalog"},
-		OperationID: "ProductCatalog",
-		Security:    handlers.PublicSecurity,
-		Middlewares: *publicEndpoint,
-		RateLimit:   publicStaticRateLimit,
-		Handler:     router.Handler.ProductCatalogHandler,
+		Path:         "/products",
+		Method:       http.MethodGet,
+		Name:         "ProductCatalog",
+		Description:  "List products available in the product catalog",
+		Tags:         []string{"Products"},
+		OperationID:  "ProductCatalog",
+		IncludeInOAS: true,
+		Security:     handlers.PublicSecurity,
+		Middlewares:  *publicEndpoint,
+		RateLimit:    publicStaticRateLimit,
+		Handler:      router.Handler.ProductCatalogHandler,
 	}
 
 	return router.AddV1HandlerRoute(config)

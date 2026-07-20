@@ -14,26 +14,30 @@ import (
 // registerOpenAPIHandler embeds our generated open api specs and serves it behind /api-docs
 func registerOpenAPIHandler(router *Router) (err error) {
 	config := Config{
-		Path:        "/api-docs",
-		Method:      http.MethodGet,
-		Name:        "APIDocs",
-		Description: "Get OpenAPI 3.1.1 specification for this API",
-		Tags:        []string{"documentation"},
-		OperationID: "APIDocs",
-		Security:    handlers.PublicSecurity,
-		Middlewares: *publicEndpoint,
-		RateLimit:   publicStaticRateLimit,
-		SimpleHandler: func(ctx echo.Context) error {
-			if len(specs.OpenlaneSpec) == 0 {
-				return ctx.NoContent(http.StatusInternalServerError)
-			}
-
-			ctx.Response().Header().Set(httpsling.HeaderContentType, httpsling.ContentTypeJSON)
-			return ctx.Blob(http.StatusOK, httpsling.ContentTypeJSON, specs.OpenlaneSpec)
-		},
+		Path:         "/api-docs",
+		Method:       http.MethodGet,
+		Name:         "APIDocs",
+		Description:  "Get OpenAPI 3.1.1 specification for this API",
+		Tags:         []string{"documentation"},
+		OperationID:  "APIDocs",
+		Security:     handlers.PublicSecurity,
+		Middlewares:  *publicEndpoint,
+		IncludeInOAS: true,
+		RateLimit:    publicStaticRateLimit,
+		Handler:      apiDocsHandler,
 	}
 
 	return router.AddUnversionedHandlerRoute(config)
+}
+
+// apiDocsHandler serves the embedded OpenAPI specification
+func apiDocsHandler(ctx echo.Context) error {
+	if len(specs.OpenlaneSpec) == 0 {
+		return ctx.NoContent(http.StatusInternalServerError)
+	}
+
+	ctx.Response().Header().Set(httpsling.HeaderContentType, httpsling.ContentTypeJSON)
+	return ctx.Blob(http.StatusOK, httpsling.ContentTypeJSON, specs.OpenlaneSpec)
 }
 
 //go:embed robots.txt
@@ -51,7 +55,7 @@ func registerRobotsHandler(router *Router) (err error) {
 		Security:    handlers.PublicSecurity,
 		Middlewares: *publicEndpoint,
 		RateLimit:   publicStaticRateLimit,
-		SimpleHandler: func(ctx echo.Context) error {
+		Handler: func(ctx echo.Context) error {
 			return echo.StaticFileHandler("robots.txt", robotsTxt)(ctx)
 		},
 	}
@@ -74,7 +78,7 @@ func registerFaviconHandler(router *Router) (err error) {
 		Security:    handlers.PublicSecurity,
 		Middlewares: *publicEndpoint,
 		RateLimit:   publicStaticRateLimit,
-		SimpleHandler: func(ctx echo.Context) error {
+		Handler: func(ctx echo.Context) error {
 			return echo.StaticFileHandler("assets/favicon.ico", assets)(ctx)
 		},
 	}
@@ -93,9 +97,10 @@ func registerExampleCSVHandler(router *Router) (err error) {
 		OperationID: "ExampleCSV",
 		Security:    handlers.AuthenticatedSecurity,
 		Middlewares: *authenticatedEndpoint,
-		Handler: func(ctx echo.Context, openapi *handlers.OpenAPIContext) error {
+		Handler: func(ctx echo.Context) error {
 			ctx.Response().Header().Set(httpsling.HeaderContentType, "text/csv")
-			return router.Handler.ExampleCSV(ctx, openapi)
+
+			return router.Handler.ExampleCSV(ctx)
 		},
 	}
 

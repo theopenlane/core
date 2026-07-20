@@ -21,10 +21,10 @@ import (
 )
 
 // OauthRegister returns the TokenResponse for a verified authenticated external oauth user
-func (h *Handler) OauthRegister(ctx echo.Context, openapi *OpenAPIContext) error {
-	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleOauthTokenRequest, models.ExampleLoginSuccessResponse, openapi.Registry)
+func (h *Handler) OauthRegister(ctx echo.Context) error {
+	in, err := BindAndValidate[models.OauthTokenRequest](ctx)
 	if err != nil {
-		return h.InvalidInput(ctx, err, openapi)
+		return h.InvalidInput(ctx, err)
 	}
 
 	reqCtx := ctx.Request().Context()
@@ -38,7 +38,7 @@ func (h *Handler) OauthRegister(ctx echo.Context, openapi *OpenAPIContext) error
 
 	// verify the token provided to ensure the user is valid
 	if err := h.verifyClientToken(ctxWithToken, in.AuthProvider, tok, in.Email); err != nil {
-		return h.InvalidInput(ctx, err, openapi)
+		return h.InvalidInput(ctx, err)
 	}
 
 	// check if users exists and create if not, updates last seen of existing user
@@ -47,10 +47,10 @@ func (h *Handler) OauthRegister(ctx echo.Context, openapi *OpenAPIContext) error
 		if errors.Is(err, entval.ErrEmailNotAllowed) {
 			logx.FromContext(reqCtx).Error().Err(err).Str("email", in.Email).Msg("email not allowed during registration")
 
-			return h.InvalidInput(ctx, err, openapi)
+			return h.InvalidInput(ctx, err)
 		}
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	// set user to verified
@@ -58,7 +58,7 @@ func (h *Handler) OauthRegister(ctx echo.Context, openapi *OpenAPIContext) error
 		if err := h.setEmailConfirmed(ctxWithToken, user); err != nil {
 			logx.FromContext(reqCtx).Error().Err(err).Msg("unable to set email as verified")
 
-			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+			return h.InternalServerError(ctx, ErrProcessingRequest)
 		}
 	}
 
@@ -67,10 +67,10 @@ func (h *Handler) OauthRegister(ctx echo.Context, openapi *OpenAPIContext) error
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to create new auth session")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
-	out := models.LoginReply{
+	out := models.LoginResponse{
 		Reply:      rout.Reply{Success: true},
 		TFAEnabled: user.Edges.Setting.IsTfaEnabled,
 		Message:    "success",
@@ -78,7 +78,7 @@ func (h *Handler) OauthRegister(ctx echo.Context, openapi *OpenAPIContext) error
 	}
 
 	// Return the access token
-	return h.Success(ctx, out, openapi)
+	return h.Success(ctx, out)
 }
 
 // verifyClientToken verifies the provided access token from an external oauth2 provider is valid and matches the user's email

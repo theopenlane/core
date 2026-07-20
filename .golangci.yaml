@@ -36,6 +36,7 @@ linters:
       - pkg/entitlements/mocks
       - pkg/objects/mocks
       - pkg/objects/examples
+      - pkg/domainscan/example
       - internal/testutils
       - internal/graphapi/generated
       - internal/graphapi/historygenerated
@@ -46,6 +47,7 @@ linters:
       - internal/ent/integrationgenerated
       - internal/integrations/cli
       - internal/integrations/definitions/email/themmes
+      - internal/httpserve/specs
 formatters:
   enable:
     - gofmt
@@ -61,3 +63,4 @@ formatters:
       - internal/workflows/examples/*
       - internal/ent/csvgenerated/*
       - internal/ent/workflowgenerated/*
+      - internal/httpserve/specs/*

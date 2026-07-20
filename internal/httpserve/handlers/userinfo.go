@@ -1,17 +1,17 @@
 package handlers
 
 import (
-	"github.com/theopenlane/core/pkg/logx"
 	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/httpsling"
+
+	"github.com/theopenlane/core/pkg/logx"
 
 	"github.com/theopenlane/iam/auth"
 )
 
 // UserInfo returns the user information for the authenticated user
-func (h *Handler) UserInfo(ctx echo.Context, openapi *OpenAPIContext) error {
-	if isRegistrationContext(ctx) {
-		return nil
-	}
+func (h *Handler) UserInfo(ctx echo.Context) error {
+	ctx.Response().Header().Set(httpsling.HeaderContentType, httpsling.ContentTypeJSONUTF8)
 
 	// setup view context
 	reqCtx := ctx.Request().Context()
@@ -20,7 +20,7 @@ func (h *Handler) UserInfo(ctx echo.Context, openapi *OpenAPIContext) error {
 	if !ok || caller == nil || caller.SubjectID == "" {
 		logx.FromContext(reqCtx).Error().Msg("unable to get user id from context")
 
-		return h.BadRequest(ctx, auth.ErrNoAuthUser, openapi)
+		return h.BadRequest(ctx, auth.ErrNoAuthUser)
 	}
 
 	userID := caller.SubjectID
@@ -30,7 +30,7 @@ func (h *Handler) UserInfo(ctx echo.Context, openapi *OpenAPIContext) error {
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to get user by subject")
 
-		return h.BadRequest(ctx, err, openapi)
+		return h.BadRequest(ctx, err)
 	}
 
 	return h.Success(ctx, user)

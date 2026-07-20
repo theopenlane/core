@@ -186,6 +186,7 @@ const (
 
 // Integration mapping input keys for Entity
 const (
+	InputKeyEntityAliases                               = "aliases"
 	InputKeyEntityAnnualSpend                           = "annual_spend"
 	InputKeyEntityApprovedForUse                        = "approved_for_use"
 	InputKeyEntityAutoRenews                            = "auto_renews"

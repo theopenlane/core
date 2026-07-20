@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/utils/envparse"
 
 	"github.com/theopenlane/core/config"
+	"github.com/theopenlane/core/internal/genhelpers"
 	"github.com/theopenlane/core/pkg/middleware/ratelimit"
 )
 
@@ -39,17 +40,17 @@ const (
 	dirPermission           = 0755
 )
 
-// commentPackages is a minimal list of packages to parse for Go comments.
+// commentPackages is a minimal list of package patterns to parse for Go comments.
 // Keep this scoped to config-related types to avoid walking large generated trees.
 var commentPackages = []string{
-	"./config",
-	"./internal/ent/entconfig",
-	"./internal/ent/validator",
-	"./internal/httpserve/handlers",
-	"./pkg/middleware",
-	"./pkg/objects",
-	"./pkg/entitlements",
-	"./pkg/summarizer",
+	"./config/...",
+	"./internal/ent/entconfig/...",
+	"./internal/ent/validator/...",
+	"./internal/httpserve/handlers/...",
+	"./pkg/middleware/...",
+	"./pkg/objects/...",
+	"./pkg/entitlements/...",
+	"./pkg/summarizer/...",
 }
 
 // sensitiveFields lists configuration paths that are sensitive but reside in external packages
@@ -113,28 +114,12 @@ func newSchemaConfig(opts ...schemaOption) schemaConfig {
 	return c
 }
 
-// buildCommentMap parses Go comments once and reuses the map across reflectors.
-func buildCommentMap(packages []string) (map[string]string, error) {
-	r := &jsonschema.Reflector{}
-	for _, pkg := range packages {
-		if err := r.AddGoComments("github.com/theopenlane/core/", pkg); err != nil {
-			return nil, fmt.Errorf("failed to add go comments for package %s: %w", pkg, err)
-		}
-	}
-
-	if r.CommentMap == nil {
-		return map[string]string{}, nil
-	}
-
-	return r.CommentMap, nil
-}
-
 // main is the entry point for the schema generator. It creates a new schemaConfig and generates all configuration files.
 func main() {
 	c := newSchemaConfig()
 	defaultConfig := buildDefaultConfig()
 
-	commentMap, err := buildCommentMap(commentPackages)
+	commentMap, err := genhelpers.LoadCommentMap(commentPackages...)
 	if err != nil {
 		panic(err)
 	}

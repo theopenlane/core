@@ -29,7 +29,7 @@ import (
 
 var (
 	// ErrCustomEnumCreationFailed is returned when a custom enum value does not exist but is attempted to be set
-	ErrCustomEnumCreationFailed = errors.New("value does not exist")
+	ErrCustomEnumCreationFailed = errors.New("enum value does not exist")
 	// ErrCustomEnumInUse is returned when a custom enum is in use and cannot be deleted
 	ErrCustomEnumInUse = errors.New("enum is in use")
 	// ErrInvalidGlobalEnumField is returned when creating a global enum with an invalid field

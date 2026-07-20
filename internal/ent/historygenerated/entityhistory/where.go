@@ -2684,6 +2684,16 @@ func DomainsNotNil() predicate.EntityHistory {
 	return predicate.EntityHistory(sql.FieldNotNull(FieldDomains))
 }
 
+// AliasesIsNil applies the IsNil predicate on the "aliases" field.
+func AliasesIsNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldIsNull(FieldAliases))
+}
+
+// AliasesNotNil applies the NotNil predicate on the "aliases" field.
+func AliasesNotNil() predicate.EntityHistory {
+	return predicate.EntityHistory(sql.FieldNotNull(FieldAliases))
+}
+
 // EntityTypeIDEQ applies the EQ predicate on the "entity_type_id" field.
 func EntityTypeIDEQ(v string) predicate.EntityHistory {
 	return predicate.EntityHistory(sql.FieldEQ(FieldEntityTypeID, v))

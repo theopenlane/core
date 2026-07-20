@@ -36,18 +36,14 @@ type DownloadToken struct {
 }
 
 // FileDownloadHandler serves files that are stored in the database backend using a presigned token.
-func (h *Handler) FileDownloadHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.FileDownload{}, models.ExampleFileDownloadRequest, openapi.Registry)
+func (h *Handler) FileDownloadHandler(ctx echo.Context) error {
+	in, err := BindAndValidate[models.FileDownload](ctx)
 	if err != nil {
-		return h.InvalidInput(ctx, err, openapi)
-	}
-
-	if isRegistrationContext(ctx) {
-		return nil
+		return h.InvalidInput(ctx, err)
 	}
 
 	if h.ObjectStore == nil {
-		return h.InternalServerError(ctx, ErrObjectStoreUnavailable, openapi)
+		return h.InternalServerError(ctx, ErrObjectStoreUnavailable)
 	}
 
 	requestCtx := ctx.Request().Context()
@@ -57,11 +53,11 @@ func (h *Handler) FileDownloadHandler(ctx echo.Context, openapi *OpenAPIContext)
 	downloadFile, downloadTokenRecord, err := h.getFilebyDownloadToken(ctxWithToken, in.Token)
 	if err != nil {
 		if ent.IsNotFound(err) {
-			return h.BadRequest(ctx, err, openapi)
+			return h.BadRequest(ctx, err)
 		}
 
 		logx.FromContext(requestCtx).Error().Err(err).Msg("error retrieving user token")
-		return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
+		return h.InternalServerError(ctx, ErrUnableToVerifyEmail)
 	}
 
 	logx.FromContext(requestCtx).Debug().Msg("able to fetch file by download token")
@@ -72,18 +68,18 @@ func (h *Handler) FileDownloadHandler(ctx echo.Context, openapi *OpenAPIContext)
 
 	if err := d.setDownloadTokens(downloadTokenRecord, d.Token); err != nil {
 		logx.FromContext(requestCtx).Debug().Err(err).Msg("download token mismatch")
-		return h.Unauthorized(ctx, ErrUnauthorized, openapi)
+		return h.Unauthorized(ctx, ErrUnauthorized)
 	}
 
 	expiresAt, err := d.GetDownloadExpires()
 	if err != nil {
 		logx.FromContext(requestCtx).Error().Err(err).Msg("unable to parse download token expiration")
-		return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
+		return h.InternalServerError(ctx, ErrUnableToVerifyEmail)
 	}
 
 	if expiresAt.IsZero() {
 		logx.FromContext(requestCtx).Debug().Msg("download token missing expiration")
-		return h.Unauthorized(ctx, ErrUnauthorized, openapi)
+		return h.Unauthorized(ctx, ErrUnauthorized)
 	}
 
 	storFile := buildStorageFile(downloadFile)
@@ -114,15 +110,15 @@ func (h *Handler) FileDownloadHandler(ctx echo.Context, openapi *OpenAPIContext)
 		logx.FromContext(requestCtx).Debug().Err(err).Msg("download token verification failed")
 
 		if errors.Is(err, tokens.ErrTokenExpired) {
-			return h.BadRequest(ctx, err, openapi)
+			return h.BadRequest(ctx, err)
 		}
 
-		return h.Unauthorized(ctx, ErrUnauthorized, openapi)
+		return h.Unauthorized(ctx, ErrUnauthorized)
 	}
 
 	if err := validateTokenAuthorization(requestCtx, downloadToken); err != nil {
 		logx.FromContext(requestCtx).Debug().Err(err).Msg("token authorization failed")
-		return h.Unauthorized(ctx, err, openapi)
+		return h.Unauthorized(ctx, err)
 	}
 
 	download, err := h.ObjectStore.Download(requestCtx, nil, storFile, &storage.DownloadOptions{})
@@ -130,11 +126,11 @@ func (h *Handler) FileDownloadHandler(ctx echo.Context, openapi *OpenAPIContext)
 		if errors.Is(err, dbprovider.ErrFileNotFound) || ent.IsNotFound(err) {
 			logx.FromContext(requestCtx).Debug().Err(err).Msg("file not found in storage")
 
-			return h.NotFound(ctx, ErrNotFound, openapi)
+			return h.NotFound(ctx, ErrNotFound)
 		}
 
 		logx.FromContext(requestCtx).Error().Err(err).Msg("error downloading file from storage")
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	// FormatMediaType quotes/escapes the user-supplied filename so it can't

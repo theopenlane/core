@@ -3454,6 +3454,64 @@ func HasRemediationsWith(preds ...predicate.Remediation) predicate.Risk {
 	})
 }
 
+// HasVulnerabilities applies the HasEdge predicate on the "vulnerabilities" edge.
+func HasVulnerabilities() predicate.Risk {
+	return predicate.Risk(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, VulnerabilitiesTable, VulnerabilitiesPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Vulnerability
+		step.Edge.Schema = schemaConfig.VulnerabilityRisks
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasVulnerabilitiesWith applies the HasEdge predicate on the "vulnerabilities" edge with a given conditions (other predicates).
+func HasVulnerabilitiesWith(preds ...predicate.Vulnerability) predicate.Risk {
+	return predicate.Risk(func(s *sql.Selector) {
+		step := newVulnerabilitiesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Vulnerability
+		step.Edge.Schema = schemaConfig.VulnerabilityRisks
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasFindings applies the HasEdge predicate on the "findings" edge.
+func HasFindings() predicate.Risk {
+	return predicate.Risk(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, FindingsTable, FindingsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.FindingRisks
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasFindingsWith applies the HasEdge predicate on the "findings" edge with a given conditions (other predicates).
+func HasFindingsWith(preds ...predicate.Finding) predicate.Risk {
+	return predicate.Risk(func(s *sql.Selector) {
+		step := newFindingsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.FindingRisks
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasWorkflowObjectRefs applies the HasEdge predicate on the "workflow_object_refs" edge.
 func HasWorkflowObjectRefs() predicate.Risk {
 	return predicate.Risk(func(s *sql.Selector) {

@@ -213,6 +213,7 @@ func (OrganizationSetting) Hooks() []ent.Hook {
 		hooks.HookOrganizationCreatePolicy(),
 		hooks.HookOrganizationUpdatePolicy(),
 		hooks.HookBillingEmailChange(),
+		hooks.HookDomainScanUpdate(),
 	}
 }
 

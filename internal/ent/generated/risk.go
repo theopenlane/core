@@ -117,8 +117,6 @@ type Risk struct {
 	control_objective_risks          *string
 	custom_type_enum_risks           *string
 	custom_type_enum_risk_categories *string
-	finding_risks                    *string
-	vulnerability_risks              *string
 	selectValues                     sql.SelectValues
 }
 
@@ -174,13 +172,17 @@ type RiskEdges struct {
 	Reviews []*Review `json:"reviews,omitempty"`
 	// Remediations holds the value of the remediations edge.
 	Remediations []*Remediation `json:"remediations,omitempty"`
+	// Vulnerabilities holds the value of the vulnerabilities edge.
+	Vulnerabilities []*Vulnerability `json:"vulnerabilities,omitempty"`
+	// Findings holds the value of the findings edge.
+	Findings []*Finding `json:"findings,omitempty"`
 	// WorkflowObjectRefs holds the value of the workflow_object_refs edge.
 	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [26]bool
+	loadedTypes [28]bool
 	// totalCount holds the count of the edges above.
-	totalCount [26]map[string]int
+	totalCount [28]map[string]int
 
 	namedBlockedGroups      map[string][]*Group
 	namedEditors            map[string][]*Group
@@ -200,6 +202,8 @@ type RiskEdges struct {
 	namedDiscussions        map[string][]*Discussion
 	namedReviews            map[string][]*Review
 	namedRemediations       map[string][]*Remediation
+	namedVulnerabilities    map[string][]*Vulnerability
+	namedFindings           map[string][]*Finding
 	namedWorkflowObjectRefs map[string][]*WorkflowObjectRef
 }
 
@@ -442,10 +446,28 @@ func (e RiskEdges) RemediationsOrErr() ([]*Remediation, error) {
 	return nil, &NotLoadedError{edge: "remediations"}
 }
 
+// VulnerabilitiesOrErr returns the Vulnerabilities value or an error if the edge
+// was not loaded in eager-loading.
+func (e RiskEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
+	if e.loadedTypes[25] {
+		return e.Vulnerabilities, nil
+	}
+	return nil, &NotLoadedError{edge: "vulnerabilities"}
+}
+
+// FindingsOrErr returns the Findings value or an error if the edge
+// was not loaded in eager-loading.
+func (e RiskEdges) FindingsOrErr() ([]*Finding, error) {
+	if e.loadedTypes[26] {
+		return e.Findings, nil
+	}
+	return nil, &NotLoadedError{edge: "findings"}
+}
+
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e RiskEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[25] {
+	if e.loadedTypes[27] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -473,10 +495,6 @@ func (*Risk) scanValues(columns []string) ([]any, error) {
 		case risk.ForeignKeys[1]: // custom_type_enum_risks
 			values[i] = new(sql.NullString)
 		case risk.ForeignKeys[2]: // custom_type_enum_risk_categories
-			values[i] = new(sql.NullString)
-		case risk.ForeignKeys[3]: // finding_risks
-			values[i] = new(sql.NullString)
-		case risk.ForeignKeys[4]: // vulnerability_risks
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -799,20 +817,6 @@ func (_m *Risk) assignValues(columns []string, values []any) error {
 				_m.custom_type_enum_risk_categories = new(string)
 				*_m.custom_type_enum_risk_categories = value.String
 			}
-		case risk.ForeignKeys[3]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field finding_risks", values[i])
-			} else if value.Valid {
-				_m.finding_risks = new(string)
-				*_m.finding_risks = value.String
-			}
-		case risk.ForeignKeys[4]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field vulnerability_risks", values[i])
-			} else if value.Valid {
-				_m.vulnerability_risks = new(string)
-				*_m.vulnerability_risks = value.String
-			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -949,6 +953,16 @@ func (_m *Risk) QueryReviews() *ReviewQuery {
 // QueryRemediations queries the "remediations" edge of the Risk entity.
 func (_m *Risk) QueryRemediations() *RemediationQuery {
 	return NewRiskClient(_m.config).QueryRemediations(_m)
+}
+
+// QueryVulnerabilities queries the "vulnerabilities" edge of the Risk entity.
+func (_m *Risk) QueryVulnerabilities() *VulnerabilityQuery {
+	return NewRiskClient(_m.config).QueryVulnerabilities(_m)
+}
+
+// QueryFindings queries the "findings" edge of the Risk entity.
+func (_m *Risk) QueryFindings() *FindingQuery {
+	return NewRiskClient(_m.config).QueryFindings(_m)
 }
 
 // QueryWorkflowObjectRefs queries the "workflow_object_refs" edge of the Risk entity.
@@ -1557,6 +1571,54 @@ func (_m *Risk) appendNamedRemediations(name string, edges ...*Remediation) {
 		_m.Edges.namedRemediations[name] = []*Remediation{}
 	} else {
 		_m.Edges.namedRemediations[name] = append(_m.Edges.namedRemediations[name], edges...)
+	}
+}
+
+// NamedVulnerabilities returns the Vulnerabilities named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Risk) NamedVulnerabilities(name string) ([]*Vulnerability, error) {
+	if _m.Edges.namedVulnerabilities == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedVulnerabilities[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Risk) appendNamedVulnerabilities(name string, edges ...*Vulnerability) {
+	if _m.Edges.namedVulnerabilities == nil {
+		_m.Edges.namedVulnerabilities = make(map[string][]*Vulnerability)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedVulnerabilities[name] = []*Vulnerability{}
+	} else {
+		_m.Edges.namedVulnerabilities[name] = append(_m.Edges.namedVulnerabilities[name], edges...)
+	}
+}
+
+// NamedFindings returns the Findings named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Risk) NamedFindings(name string) ([]*Finding, error) {
+	if _m.Edges.namedFindings == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedFindings[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Risk) appendNamedFindings(name string, edges ...*Finding) {
+	if _m.Edges.namedFindings == nil {
+		_m.Edges.namedFindings = make(map[string][]*Finding)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedFindings[name] = []*Finding{}
+	} else {
+		_m.Edges.namedFindings[name] = append(_m.Edges.namedFindings[name], edges...)
 	}
 }
 
