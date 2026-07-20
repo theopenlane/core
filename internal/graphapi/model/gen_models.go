@@ -1441,6 +1441,16 @@ type FindingControlBulkCreatePayload struct {
 	FindingControls []*generated.FindingControl `json:"findingControls,omitempty"`
 }
 
+// Return response for deleteBulkFindingControl mutation
+type FindingControlBulkDeletePayload struct {
+	// Deleted findingControl IDs
+	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
+}
+
 // Return response for createFindingControl mutation
 type FindingControlCreatePayload struct {
 	// Created findingControl

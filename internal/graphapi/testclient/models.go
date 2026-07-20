@@ -18121,6 +18121,16 @@ type FindingControlBulkCreatePayload struct {
 	FindingControls []*FindingControl `json:"findingControls,omitempty"`
 }
 
+// Return response for deleteBulkFindingControl mutation
+type FindingControlBulkDeletePayload struct {
+	// Deleted findingControl IDs
+	DeletedIDs []string `json:"deletedIDs"`
+	// IDs that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs"`
+	// Error message when the bulk delete did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
+}
+
 // A connection to a list of items.
 type FindingControlConnection struct {
 	// A list of edges.
