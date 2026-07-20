@@ -125,7 +125,7 @@ func (r *Runtime) Reconcile(ctx context.Context, installation *ent.Integration, 
 // reconcileUserInput validates and persists user input for one installation
 func (r *Runtime) reconcileUserInput(ctx context.Context, installation *ent.Integration, def types.Definition, userInput json.RawMessage) error {
 	if def.UserInput != nil {
-		if err := validatePayload(def.UserInput.Schema, userInput, ErrUserInputInvalid); err != nil {
+		if err := validatePayload(ctx, def.UserInput.Schema, userInput, ErrUserInputInvalid); err != nil {
 			return err
 		}
 	}
@@ -222,7 +222,7 @@ func (r *Runtime) reconcileCredential(ctx context.Context, installation *ent.Int
 		return err
 	}
 
-	if err := validatePayload(registration.Schema, credential.Data, ErrCredentialInvalid); err != nil {
+	if err := validatePayload(ctx, registration.Schema, credential.Data, ErrCredentialInvalid); err != nil {
 		return err
 	}
 

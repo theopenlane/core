@@ -18,6 +18,8 @@ var (
 	NotificationTopicStandardUpdate NotificationTopic = "STANDARD_UPDATE"
 	// NotificationTopicDomainScan indicates the domain scan.
 	NotificationTopicDomainScan NotificationTopic = "DOMAIN_SCAN"
+	// NotificationTopicImportComplete indicates an accepted import finished creating its records.
+	NotificationTopicImportComplete NotificationTopic = "IMPORT_COMPLETE"
 	// NotificationTopicInvalid is used when an unknown or unsupported value is provided.
 	NotificationTopicInvalid NotificationTopic = "NOTIFICATIONTOPIC_INVALID"
 )
@@ -29,6 +31,7 @@ var notificationTopicValues = []NotificationTopic{
 	NotificationTopicExport,
 	NotificationTopicStandardUpdate,
 	NotificationTopicDomainScan,
+	NotificationTopicImportComplete,
 }
 
 // Values returns a slice of strings representing all valid NotificationTopic values.

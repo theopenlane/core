@@ -473,6 +473,7 @@ func RegisterRoutes(router *Router) error {
 		registerResendQuestionnaireHandler,
 		registerStartImpersonationHandler,
 		registerEndImpersonationHandler,
+		registerDomainScanHandler,
 		registerSupportCallbackHandler,
 		registerProductCatalogHandler,
 		registerFileDownloadHandler,

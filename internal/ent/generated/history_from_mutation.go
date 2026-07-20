@@ -20431,6 +20431,18 @@ func (m *ScanMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetOwnerID(ownerID)
 	}
 
+	if systemOwned, exists := m.SystemOwned(); exists {
+		create = create.SetSystemOwned(systemOwned)
+	}
+
+	if internalNotes, exists := m.InternalNotes(); exists {
+		create = create.SetNillableInternalNotes(&internalNotes)
+	}
+
+	if systemInternalID, exists := m.SystemInternalID(); exists {
+		create = create.SetNillableSystemInternalID(&systemInternalID)
+	}
+
 	if reviewedBy, exists := m.ReviewedBy(); exists {
 		create = create.SetReviewedBy(reviewedBy)
 	}
@@ -20602,6 +20614,24 @@ func (m *ScanMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetOwnerID(ownerID)
 		} else {
 			create = create.SetOwnerID(scan.OwnerID)
+		}
+
+		if systemOwned, exists := m.SystemOwned(); exists {
+			create = create.SetSystemOwned(systemOwned)
+		} else {
+			create = create.SetSystemOwned(scan.SystemOwned)
+		}
+
+		if internalNotes, exists := m.InternalNotes(); exists {
+			create = create.SetNillableInternalNotes(&internalNotes)
+		} else {
+			create = create.SetNillableInternalNotes(scan.InternalNotes)
+		}
+
+		if systemInternalID, exists := m.SystemInternalID(); exists {
+			create = create.SetNillableSystemInternalID(&systemInternalID)
+		} else {
+			create = create.SetNillableSystemInternalID(scan.SystemInternalID)
 		}
 
 		if reviewedBy, exists := m.ReviewedBy(); exists {
@@ -20780,6 +20810,9 @@ func (m *ScanMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDeletedBy(scan.DeletedBy).
 			SetTags(scan.Tags).
 			SetOwnerID(scan.OwnerID).
+			SetSystemOwned(scan.SystemOwned).
+			SetNillableInternalNotes(scan.InternalNotes).
+			SetNillableSystemInternalID(scan.SystemInternalID).
 			SetReviewedBy(scan.ReviewedBy).
 			SetReviewedByUserID(scan.ReviewedByUserID).
 			SetReviewedByGroupID(scan.ReviewedByGroupID).

@@ -13,6 +13,8 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/option"
 	"github.com/theopenlane/httpsling"
 	"golang.org/x/sync/errgroup"
+
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 const (
@@ -24,6 +26,11 @@ const (
 	browserWaitUntil = "load"
 	// browserWaitForTimeout is an additional delay, in milliseconds, held  after the page load event fires and before extraction runs
 	browserWaitForTimeout = 3000
+	// companyProfileWaitForTimeout is a longer post-load delay used for company profile pages
+	// (homepage and companyProfileSubpaths), since marketing/pricing pages are frequently
+	// client-rendered and the default browserWaitForTimeout isn't always enough for their real
+	// content (pricing tables, plan details) to hydrate before extraction runs
+	companyProfileWaitForTimeout = 8000
 	// trustCenterWaitForSelectorTimeout bounds how long we wait for trust center content to mount client-side before giving up and extracting
 	// whatever is present; bestAttempt ensures this never hard-fails the request.
 	trustCenterWaitForSelectorTimeout = 8000
@@ -226,17 +233,20 @@ func (c *Config) GetCompanyData(ctx context.Context, url string) (*CompanyProfil
 		g.Go(func() error {
 			pageURL, ok := subpathURL(url, sub)
 			if !ok {
+				logx.FromContext(ctx).Debug().Str("subpath", sub).Msg("domainscan: subpath has no valid URL, skipping")
 				return nil
 			}
 
 			resolved, reachable := urlReachable(ctx, pageURL)
 			if !reachable {
+				logx.FromContext(ctx).Debug().Str("subpath", sub).Str("url", pageURL).Msg("domainscan: subpath not reachable, skipping")
 				return nil
 			}
 
 			page, err := c.fetchCompanyProfilePage(ctx, resolved, "")
 			if err != nil {
 				// this subpath may have failed to render, not an actual error
+				logx.FromContext(ctx).Debug().Err(err).Str("subpath", sub).Str("url", resolved).Msg("domainscan: subpath failed to render, skipping")
 				return nil
 			}
 
@@ -273,10 +283,22 @@ func (c *Config) fetchCompanyProfilePage(ctx context.Context, url, promptSuffix 
 		return nil, err
 	}
 
+	logx.FromContext(ctx).Debug().Str("url", url).RawJSON("raw_response", data).Msg("domainscan: raw company profile response from cloudflare")
+
 	profile := &CompanyProfile{}
 	if err := json.Unmarshal(data, profile); err != nil {
 		return nil, err
 	}
+
+	logx.FromContext(ctx).Debug().
+		Str("url", url).
+		Bool("sso_supported", profile.SSOSupported).
+		Bool("mfa_supported", profile.MFASupported).
+		Bool("social_login_supported", profile.SocialLoginSupported).
+		Bool("credentials_supported", profile.CredentialsSupported).
+		Bool("passkey_supported", profile.PasskeySupported).
+		Strs("provided_services", profile.ProvidedServices).
+		Msg("domainscan: parsed company profile page result")
 
 	return profile, nil
 }
@@ -360,12 +382,17 @@ func (c *Config) getBrowserRenderingJSONParams(url string, prompt string, kind P
 		schema = buildCompanyProfileSchema()
 	}
 
+	waitForTimeout := browserWaitForTimeout
+	if kind == promptCompany {
+		waitForTimeout = companyProfileWaitForTimeout
+	}
+
 	body := browser_rendering.JsonNewParamsBody{
 		URL:            cloudflare.String(url),
 		Prompt:         cloudflare.String(prompt),
 		ResponseFormat: cloudflare.F[any](schema),
 		GotoOptions:    cloudflare.F[any](gotoOptions{WaitUntil: browserWaitUntil, Timeout: browserNavigationTimeout}),
-		WaitForTimeout: cloudflare.Float(browserWaitForTimeout),
+		WaitForTimeout: cloudflare.Float(float64(waitForTimeout)),
 	}
 
 	if kind == promptTrustCenter {
@@ -458,6 +485,14 @@ func buildCompanyProfileSchema() ResponseFormat {
 						Description: "A technology vendor or SaaS platform name",
 					},
 				},
+				"provided_services": {
+					Type:        "array",
+					Description: "The services or product categories this company itself provides to its own customers (e.g. compliance automation, payment processing, CRM, email marketing, identity management). This describes what the company sells, not third-party tools it uses internally.",
+					Items: &JSONSchemaProperty{
+						Type:        "string",
+						Description: "A service or product category the company provides",
+					},
+				},
 				"status_page_url": {
 					Type:        "string",
 					Description: "The URL of the company's public status/uptime page, if linked anywhere on the site (e.g. status.<domain>, or a hosted platform like Statuspage.io, BetterStack, Instatus, or incident.io). Leave empty if none is found.",
@@ -477,6 +512,18 @@ func buildCompanyProfileSchema() ResponseFormat {
 				"mfa_supported": {
 					Type:        "boolean",
 					Description: "True if the site advertises multi-factor authentication (MFA) support for its product, false otherwise",
+				},
+				"social_login_supported": {
+					Type:        "boolean",
+					Description: "True if the site advertises signing in via a third-party social/consumer identity provider, e.g. \"Sign in with Google\", \"Continue with GitHub\", \"Sign in with Apple\", or Microsoft/Facebook login, false otherwise",
+				},
+				"credentials_supported": {
+					Type:        "boolean",
+					Description: "True if the site advertises traditional username/email and password authentication (a standard login form), false otherwise",
+				},
+				"passkey_supported": {
+					Type:        "boolean",
+					Description: "True if the site advertises passwordless authentication via passkeys, WebAuthn, or biometric sign-in (e.g. Face ID, Touch ID, security keys), false otherwise",
 				},
 			},
 		},

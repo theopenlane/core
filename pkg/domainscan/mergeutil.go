@@ -86,9 +86,13 @@ func mergeCompanyProfiles(pages ...*CompanyProfile) *CompanyProfile {
 
 		merged.Customers = mergeStrings(merged.Customers, p.Customers)
 		merged.Technologies = mergeStrings(merged.Technologies, p.Technologies)
+		merged.ProvidedServices = mergeStrings(merged.ProvidedServices, p.ProvidedServices)
 		merged.SubdomainLinks = mergeStrings(merged.SubdomainLinks, p.SubdomainLinks)
 		merged.SSOSupported = merged.SSOSupported || p.SSOSupported
 		merged.MFASupported = merged.MFASupported || p.MFASupported
+		merged.SocialLoginSupported = merged.SocialLoginSupported || p.SocialLoginSupported
+		merged.CredentialsSupported = merged.CredentialsSupported || p.CredentialsSupported
+		merged.PasskeySupported = merged.PasskeySupported || p.PasskeySupported
 	}
 
 	merged.Systems = systems

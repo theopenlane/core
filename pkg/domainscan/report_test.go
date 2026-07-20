@@ -97,6 +97,68 @@ func TestDomainVendorName(t *testing.T) {
 	}
 }
 
+func TestVendorNameFromASNOrg(t *testing.T) {
+	tests := []struct {
+		name string
+		org  string
+		want string
+	}{
+		{name: "strips Inc suffix and canonicalizes", org: "Cloudflare, Inc.", want: "Cloudflare"},
+		{name: "strips LLC suffix", org: "Google LLC", want: "Google"},
+		{name: "strips Limited suffix", org: "Datacamp Limited", want: "Datacamp"},
+		{name: "strips GmbH suffix", org: "Hetzner Online GmbH", want: "Hetzner Online"},
+		{name: "empty org returns empty", org: "", want: ""},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := vendorNameFromASNOrg(tt.org)
+
+			assert.Check(t, is.Equal(tt.want, got))
+		})
+	}
+}
+
+func TestHostVendorName(t *testing.T) {
+	tests := []struct {
+		name       string
+		host       string
+		apexDomain string
+		pageASNOrg string
+		want       string
+	}{
+		{
+			name:       "third-party host matched by domain",
+			host:       "cdn.iubenda.com",
+			apexDomain: "theopenlane.io",
+			pageASNOrg: "Cloudflare, Inc.",
+			want:       "Iubenda",
+		},
+		{
+			name:       "apex domain falls back to the page's hosting ASN org",
+			host:       "theopenlane.io",
+			apexDomain: "theopenlane.io",
+			pageASNOrg: "Cloudflare, Inc.",
+			want:       "Cloudflare",
+		},
+		{
+			name:       "apex domain with no ASN org returns empty",
+			host:       "theopenlane.io",
+			apexDomain: "theopenlane.io",
+			pageASNOrg: "",
+			want:       "",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := hostVendorName(tt.host, tt.apexDomain, tt.pageASNOrg)
+
+			assert.Check(t, is.Equal(tt.want, got))
+		})
+	}
+}
+
 func TestVendorGroupsAddAndFinalize(t *testing.T) {
 	g := newVendorGroups()
 
@@ -319,9 +381,37 @@ func TestBuildPlatform(t *testing.T) {
 			"social_links":      SocialLinks{GitHub: "https://github.com/acme"},
 			"status_page_url":   "https://status.acme.com",
 			"customers":         []string{"Globex"},
+			"auth_methods":      []string{"sso"},
 		}
 
 		assert.Check(t, is.DeepEqual(want, got))
+	})
+
+	t.Run("auth_methods lists every advertised method", func(t *testing.T) {
+		enrichment := Enrichment{
+			Company: &CompanyProfile{
+				Name:                 "Acme",
+				SSOSupported:         true,
+				SocialLoginSupported: true,
+				CredentialsSupported: true,
+				PasskeySupported:     true,
+			},
+		}
+
+		got := buildPlatform(enrichment)
+
+		assert.Check(t, is.DeepEqual([]string{"sso", "social", "credentials", "passkeys"}, got["auth_methods"]))
+	})
+
+	t.Run("auth_methods omitted when none advertised", func(t *testing.T) {
+		enrichment := Enrichment{
+			Company: &CompanyProfile{Name: "Acme"},
+		}
+
+		got := buildPlatform(enrichment)
+
+		_, ok := got["auth_methods"]
+		assert.Check(t, !ok)
 	})
 }
 
@@ -385,6 +475,36 @@ func TestBuildComplianceSection(t *testing.T) {
 	})
 }
 
+func TestBuildRegistrar(t *testing.T) {
+	t.Run("nil registrar returns nil", func(t *testing.T) {
+		got := buildRegistrar(Enrichment{})
+
+		assert.Check(t, got == nil)
+	})
+
+	t.Run("includes optional fields only when present", func(t *testing.T) {
+		enrichment := Enrichment{
+			Registrar: &RegistrarInfo{
+				Registrar:   "Cloudflare, Inc.",
+				CreatedDate: "2020-01-01T00:00:00Z",
+				Nameservers: []string{"abdullah.ns.cloudflare.com"},
+				DNSSEC:      true,
+			},
+		}
+
+		got := buildRegistrar(enrichment)
+
+		want := map[string]any{
+			"dnssec":       true,
+			"registrar":    "Cloudflare, Inc.",
+			"created_date": "2020-01-01T00:00:00Z",
+			"nameservers":  []string{"abdullah.ns.cloudflare.com"},
+		}
+
+		assert.Check(t, is.DeepEqual(want, got))
+	})
+}
+
 func TestBuildAgentReadinessChecklistMarkdown(t *testing.T) {
 	failedChecks := []map[string]any{
 		{"check": "markdown", "message": "missing markdown negotiation"},
@@ -430,4 +550,63 @@ func TestWalkAgentReadinessChecks(t *testing.T) {
 	}
 
 	assert.Check(t, is.DeepEqual(want, failedChecks))
+}
+
+func TestBuildScanReportNilResult(t *testing.T) {
+	enrichment := Enrichment{
+		Company: &CompanyProfile{
+			Name: "Acme",
+			Systems: []System{
+				{Name: "Console", Summary: "The web console"},
+			},
+		},
+		Compliance: &CompliancePage{
+			Frameworks: []string{"SOC 2"},
+		},
+		DNS: &DNSVendorInfo{
+			Vendors: []DNSVendor{
+				{Name: "Cloudflare", URL: "https://cloudflare.com"},
+			},
+		},
+	}
+
+	data := BuildScanReport(nil, enrichment, nil, nil)
+
+	// URL-scanner-only sections must be absent when result is nil, not merely empty
+	_, hasExternalScanID := data["external_scan_id"]
+	assert.Check(t, !hasExternalScanID)
+
+	_, hasURL := data["url"]
+	assert.Check(t, !hasURL)
+
+	_, hasMeta := data["meta"]
+	assert.Check(t, !hasMeta)
+
+	_, hasTrustCenter := data["trust_center_settings"]
+	assert.Check(t, !hasTrustCenter)
+
+	// enrichment-derived sections should still be populated
+	platform, ok := data["platform"].(map[string]any)
+	assert.Assert(t, ok)
+	assert.Check(t, is.Equal("Acme", platform["name"]))
+
+	systems, ok := data["systems"].([]map[string]any)
+	assert.Assert(t, ok)
+	assert.Assert(t, is.Len(systems, 1))
+	assert.Check(t, is.Equal("Console", systems[0]["system_name"]))
+
+	compliance, ok := data["compliance"].(map[string]any)
+	assert.Assert(t, ok)
+	assert.Check(t, is.DeepEqual([]string{"SOC 2"}, compliance["frameworks"]))
+
+	vendors, ok := data["vendors"].([]map[string]any)
+	assert.Assert(t, ok)
+	assert.Assert(t, is.Len(vendors, 1))
+	assert.Check(t, is.Equal("Cloudflare", vendors[0]["name"]))
+
+	findings, ok := data["findings"].(map[string]any)
+	assert.Assert(t, ok)
+
+	_, hasSecurityViolations := findings["security_violations"]
+	assert.Check(t, !hasSecurityViolations)
 }

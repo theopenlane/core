@@ -93,7 +93,7 @@ var knownVendorAliases = []vendorAlias{
 	{name: "Google Workspace", hosts: []string{"admin.google.com"}},
 	{name: "Google Cloud", alsoKnownAs: []string{"Googlecloud"}, hosts: []string{"cloud.google.com"}},
 	{name: "Google Drive", alsoKnownAs: []string{"Googlecloud"}, hosts: []string{"drive.google.com"}},
-	{name: "AWS", alsoKnownAs: []string{"Amazonses", "Amazon Web Services", "Cloudfront", "Amazon CloudFront"}, domains: []string{"aws.amazon.com", "cloudfront.net"}},
+	{name: "AWS", alsoKnownAs: []string{"Amazonses", "Amazon Web Services", "Cloudfront", "Amazon CloudFront", "Awsdns"}, domains: []string{"aws.amazon.com", "cloudfront.net"}},
 	{name: "Openlane", alsoKnownAs: []string{"The Open Lane", "TheOpenLane"}, domains: []string{"theopenlane.io"}},
 	{name: "Hubspot", alsoKnownAs: []string{"hubspotemail"}, domains: []string{"hubspot.com"}},
 	{name: "Help Scout", alsoKnownAs: []string{"Helpscoutdocs"}, domains: []string{"helpscoutdocs.com"}},

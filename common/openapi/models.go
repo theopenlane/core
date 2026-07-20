@@ -85,13 +85,13 @@ func exampleTime(offset time.Duration) time.Time {
 // =========
 
 type AuthData struct {
-	// AccessToken is the access_token value.
+	// AccessToken is the access_token value
 	AccessToken string `json:"access_token" description:"The access token to be used for authentication"`
-	// RefreshToken is the refresh_token value.
+	// RefreshToken is the refresh_token value
 	RefreshToken string `json:"refresh_token,omitempty" description:"The refresh token to be used to refresh the access token after it expires"`
-	// Session is the session value.
+	// Session is the session value
 	Session string `json:"session,omitempty" description:"The short-lived session token required for authentication"`
-	// TokenType is the token_type value.
+	// TokenType is the token_type value
 	TokenType string `json:"token_type,omitempty" description:"The type of token being returned" example:"bearer"`
 }
 
@@ -101,9 +101,9 @@ type AuthData struct {
 
 // LoginRequest contains credentials for user authentication
 type LoginRequest struct {
-	// Username is the username value.
+	// Username is the username value
 	Username string `json:"username" description:"The email address associated with the existing account" example:"jsnow@example.com"`
-	// Password is the password value.
+	// Password is the password value
 	Password string `json:"password" description:"The password associated with the account" example:"Wint3rIsC0ming123!"`
 	// TargetOrganizationID is only used for the Openlane support login path to scope the support session
 	TargetOrganizationID string `json:"target_organization_id,omitempty" description:"For Openlane support login only: the organization to access"`
@@ -113,17 +113,17 @@ type LoginRequest struct {
 
 // LoginResponse contains authentication tokens and user information after successful login
 type LoginResponse struct {
-	// Reply is the reply value.
+	// Reply is the reply value
 	rout.Reply
-	// AuthData is the authdata value.
+	// AuthData is the authdata value
 	AuthData
-	// TFAEnabled is the tfa_enabled value.
+	// TFAEnabled is the tfa_enabled value
 	TFAEnabled bool `json:"tfa_enabled,omitempty"`
-	// TFASetupRequired is the tfa_required value.
+	// TFASetupRequired is the tfa_required value
 	TFASetupRequired bool `json:"tfa_required,omitempty"`
 	// RedirectURI directs the caller to a second factor identity provider; set for the Openlane support login path
 	RedirectURI string `json:"redirect_uri,omitempty"`
-	// Message is the message value.
+	// Message is the message value
 	Message string `json:"message"`
 }
 
@@ -170,9 +170,9 @@ func (r *LoginRequest) Validate() error {
 
 // AvailableAuthTypeResponse holds the response to AvailableAuthTypeLoginRequest
 type AvailableAuthTypeResponse struct {
-	// Reply is the reply value.
+	// Reply is the reply value
 	rout.Reply
-	// Methods is the methods value.
+	// Methods is the methods value
 	Methods []enums.AuthProvider `json:"methods,omitempty"`
 }
 
@@ -187,7 +187,7 @@ func (r *AvailableAuthTypeResponse) ExampleResponse() any {
 // AvailableAuthTypeLoginRequest holds the payload for checking the auth types available to a user
 // passkeys? or both passkeys and credentials or just credentials
 type AvailableAuthTypeLoginRequest struct {
-	// Username is the username value.
+	// Username is the username value
 	Username string `json:"username" description:"The email address associated with the existing account" example:"jsnow@example.com"`
 }
 
@@ -254,17 +254,17 @@ func (LoginResponse) ExampleSet() map[string]any {
 
 // RefreshRequest contains the refresh token used to obtain new access tokens
 type RefreshRequest struct {
-	// RefreshToken is the refresh_token value.
+	// RefreshToken is the refresh_token value
 	RefreshToken string `json:"refresh_token" description:"The token to be used to refresh the access token after expiration"`
 }
 
 // RefreshResponse contains new authentication tokens after successful refresh
 type RefreshResponse struct {
-	// Reply is the reply value.
+	// Reply is the reply value
 	rout.Reply
-	// Message is the message value.
+	// Message is the message value
 	Message string `json:"message,omitempty"`
-	// AuthData is the authdata value.
+	// AuthData is the authdata value
 	AuthData
 }
 
@@ -330,9 +330,9 @@ type LogoutRequest struct {
 
 // LogoutResponse confirms the session and tokens were revoked
 type LogoutResponse struct {
-	// Reply is the reply value.
+	// Reply is the reply value
 	rout.Reply
-	// Message is the message value.
+	// Message is the message value
 	Message string `json:"message,omitempty"`
 }
 
@@ -375,25 +375,25 @@ func (LogoutResponse) ExampleSet() map[string]any {
 
 // UserInfoResponse contains user information for authenticated requests
 type UserInfoResponse struct {
-	// Reply is the reply value.
+	// Reply is the reply value
 	rout.Reply
-	// ID is the id value.
+	// ID is the id value
 	ID string `json:"id" description:"The ID of the user" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
-	// Email is the email value.
+	// Email is the email value
 	Email string `json:"email" description:"The email address of the user" example:"jsnow@example.com"`
-	// FirstName is the first_name value.
+	// FirstName is the first_name value
 	FirstName string `json:"first_name,omitempty" description:"The first name of the user" example:"Jon"`
-	// LastName is the last_name value.
+	// LastName is the last_name value
 	LastName string `json:"last_name,omitempty" description:"The last name of the user" example:"Snow"`
-	// DisplayName is the display_name value.
+	// DisplayName is the display_name value
 	DisplayName string `json:"display_name,omitempty" description:"The display name of the user" example:"Jon Snow"`
-	// AvatarRemoteURL is the avatar_remote_url value.
+	// AvatarRemoteURL is the avatar_remote_url value
 	AvatarRemoteURL *string `json:"avatar_remote_url,omitempty" description:"URL of the user's remote avatar" example:"https://example.com/avatar.jpg"`
-	// LastSeen is the last_seen value.
+	// LastSeen is the last_seen value
 	LastSeen *string `json:"last_seen,omitempty" description:"The time the user was last seen" example:"2023-01-01T00:00:00Z"`
-	// Role is the role value.
+	// Role is the role value
 	Role string `json:"role,omitempty" description:"The user's role" example:"ADMIN"`
-	// Sub is the sub value.
+	// Sub is the sub value
 	Sub string `json:"sub" description:"The subject of the user JWT" example:"user123"`
 }
 
@@ -422,29 +422,29 @@ func stringPtr(s string) *string {
 
 // RegisterRequest contains user registration information for creating new accounts
 type RegisterRequest struct {
-	// FirstName is the first_name value.
+	// FirstName is the first_name value
 	FirstName string `json:"first_name,omitempty" description:"The first name of the user" example:"Jon"`
-	// LastName is the last_name value.
+	// LastName is the last_name value
 	LastName string `json:"last_name,omitempty" description:"The last name of the user" example:"Snow"`
-	// Email is the email value.
+	// Email is the email value
 	Email string `json:"email,omitempty" description:"The email address of the user" example:"jsnow@example.com"`
-	// Password is the password value.
+	// Password is the password value
 	Password string `json:"password,omitempty" description:"The password to be used for authentication after registration" example:"Wint3rIsC0ming123!"`
-	// Token is the token value.
+	// Token is the token value
 	Token *string `json:"token" description:"A newly invited user can use this to join a org as at the same time they are creating their account"`
 }
 
 // RegisterResponse contains authentication tokens and user information after successful registration
 type RegisterResponse struct {
-	// Reply is the reply value.
+	// Reply is the reply value
 	rout.Reply
-	// ID is the user_id value.
+	// ID is the user_id value
 	ID string `json:"user_id" description:"The ID of the user that was created" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
-	// Email is the email value.
+	// Email is the email value
 	Email string `json:"email" description:"The email address of the user" example:"jsnow@example.com"`
-	// Message is the message value.
+	// Message is the message value
 	Message string `json:"message"`
-	// Token is the token value.
+	// Token is the token value
 	Token string `json:"token,omitempty" exclude:"true"` // only used for requests against local development, excluded from OpenAPI documentation
 }
 
@@ -514,21 +514,21 @@ func (RegisterResponse) ExampleSet() map[string]any {
 
 // SwitchOrganizationRequest contains the target organization ID being switched to for the /switch endpoint
 type SwitchOrganizationRequest struct {
-	// TargetOrganizationID is the target_organization_id value.
+	// TargetOrganizationID is the target_organization_id value
 	TargetOrganizationID string `json:"target_organization_id" description:"The ID of the organization to switch to" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
 }
 
 // SwitchOrganizationResponse holds the new authentication and session information for the user for the new organization
 type SwitchOrganizationResponse struct {
-	// Reply is the reply value.
+	// Reply is the reply value
 	rout.Reply
-	// AuthData is the authdata value.
+	// AuthData is the authdata value
 	AuthData
-	// NeedsSSO is the needs_sso value.
+	// NeedsSSO is the needs_sso value
 	NeedsSSO bool `json:"needs_sso,omitempty"`
-	// NeedsTFA is the needs_tfa value.
+	// NeedsTFA is the needs_tfa value
 	NeedsTFA bool `json:"needs_tfa,omitempty"`
-	// RedirectURI is the redirect_uri value.
+	// RedirectURI is the redirect_uri value
 	RedirectURI string `json:"redirect_uri,omitempty"`
 }
 
@@ -586,21 +586,21 @@ func (SwitchOrganizationResponse) ExampleSet() map[string]any {
 
 // VerifyRequest contains email verification token
 type VerifyRequest struct {
-	// Token is the token value.
+	// Token is the token value
 	Token string `query:"token" description:"The token to be used to verify the email address, token is sent via email"`
 }
 
 // VerifyResponse holds the fields that are sent on a response to the `/verify` endpoint
 type VerifyResponse struct {
-	// Reply is the reply value.
+	// Reply is the reply value
 	rout.Reply
-	// ID is the user_id value.
+	// ID is the user_id value
 	ID string `json:"user_id" description:"The ID of the user that was created" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
-	// Email is the email value.
+	// Email is the email value
 	Email string `json:"email" description:"The email address of the user" example:"jsnow@example.com"`
-	// Message is the message value.
+	// Message is the message value
 	Message string `json:"message,omitempty"`
-	// AuthData is the authdata value.
+	// AuthData is the authdata value
 	AuthData
 }
 
@@ -665,9 +665,9 @@ func (VerifyResponse) ExampleSet() map[string]any {
 type File = storagetypes.File
 
 type FileDownload struct {
-	// ID is the id value.
+	// ID is the id value
 	ID string `param:"id" description:"the file ID" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
-	// Token is the token value.
+	// Token is the token value
 	Token string `query:"token" description:"The token to be used to verify the email address, token is sent via email"`
 }
 
@@ -687,11 +687,11 @@ var ExampleFileDownloadRequest = FileDownload{
 
 // UploadFilesResponse holds the fields that are sent on a response to the `/upload` endpoint
 type FileDownloadResponse struct {
-	// Reply is the reply value.
+	// Reply is the reply value
 	rout.Reply
-	// Message is the message value.
+	// Message is the message value
 	Message string `json:"message,omitempty"`
-	// File is the file value.
+	// File is the file value
 	File File `json:"file" description:"The files that were uploaded"`
 }
 
@@ -710,15 +710,15 @@ func (r *FileDownloadResponse) ExampleResponse() any {
 
 // ResendRequest contains fields for a resend email verification request to the `/resend` endpoint
 type ResendRequest struct {
-	// Email is the email value.
+	// Email is the email value
 	Email string `json:"email" description:"The email address to resend the verification email to, must match the email address on the existing account"`
 }
 
 // ResendResponse holds the fields that are sent on a response to the `/resend` endpoint
 type ResendResponse struct {
-	// Reply is the reply value.
+	// Reply is the reply value
 	rout.Reply
-	// Message is the message value.
+	// Message is the message value
 	Message string `json:"message"`
 }
 
@@ -773,15 +773,15 @@ func (ResendResponse) ExampleSet() map[string]any {
 
 // ForgotPasswordRequest contains fields for a forgot password request
 type ForgotPasswordRequest struct {
-	// Email is the email value.
+	// Email is the email value
 	Email string `json:"email" description:"The email address associated with the account to send the password reset email to" example:"jsnow@example.com"`
 }
 
 // ForgotPasswordResponse contains fields for a forgot password response
 type ForgotPasswordResponse struct {
-	// Reply is the reply value.
+	// Reply is the reply value
 	rout.Reply
-	// Message is the message value.
+	// Message is the message value
 	Message string `json:"message,omitempty"`
 }
 
@@ -829,18 +829,18 @@ func (ForgotPasswordResponse) ExampleSet() map[string]any {
 
 // ResetPasswordRequest contains user input required to reset a user's password using /password-reset endpoint
 type ResetPasswordRequest struct {
-	// Password is the password value.
+	// Password is the password value
 	Password string `json:"password" description:"The new password to be used for authentication"`
-	// Token is the token value.
+	// Token is the token value
 	Token string `json:"token" description:"The token to be used to reset the password, token is sent via email"`
 }
 
 // ResetPasswordResponse is the response returned from a non-successful password reset request
 // on success, no content is returned (204)
 type ResetPasswordResponse struct {
-	// Reply is the reply value.
+	// Reply is the reply value
 	rout.Reply
-	// Message is the message value.
+	// Message is the message value
 	Message string `json:"message"`
 }
 
@@ -896,9 +896,9 @@ func (ResetPasswordResponse) ExampleSet() map[string]any {
 
 // WebauthnRegistrationRequest is the request to begin a webauthn login
 type WebauthnRegistrationRequest struct {
-	// Email is the email value.
+	// Email is the email value
 	Email string `json:"email" description:"The email address associated with the account" example:"jsnow@example.com"`
-	// Name is the name value.
+	// Name is the name value
 	Name string `json:"name,omitempty" description:"The name of the user" example:"Jon Snow"`
 }
 
@@ -913,11 +913,11 @@ func (r *WebauthnRegistrationRequest) Validate() error {
 // WebauthnBeginRegistrationResponse is the response to begin a webauthn login
 // this includes the credential creation options and the session token
 type WebauthnBeginRegistrationResponse struct {
-	// Reply is the reply value.
+	// Reply is the reply value
 	Reply rout.Reply
-	// CredentialCreation is the credentialcreation value.
+	// CredentialCreation is the credentialcreation value
 	*protocol.CredentialCreation
-	// Session is the session value.
+	// Session is the session value
 	Session string `json:"session,omitempty"`
 }
 
@@ -960,17 +960,17 @@ var ExampleWebauthnBeginRegistrationResponse = WebauthnBeginRegistrationResponse
 // WebauthnRegistrationFinishRequest is the request to finish webauthn registration
 // This represents the credential creation response from the browser's WebAuthn API
 type WebauthnRegistrationFinishRequest struct {
-	// ID is the id value.
+	// ID is the id value
 	ID string `json:"id" description:"The credential ID"`
-	// RawID is the rawId value.
+	// RawID is the rawId value
 	RawID string `json:"rawId" description:"The raw credential ID"`
-	// Type is the type value.
+	// Type is the type value
 	Type string `json:"type" description:"The credential type, should be 'public-key'"`
-	// AuthenticatorAttachment is the authenticatorAttachment value.
+	// AuthenticatorAttachment is the authenticatorAttachment value
 	AuthenticatorAttachment string `json:"authenticatorAttachment,omitempty" description:"How the authenticator is attached"`
-	// ClientExtensionResults is the clientExtensionResults value.
+	// ClientExtensionResults is the clientExtensionResults value
 	ClientExtensionResults map[string]interface{} `json:"clientExtensionResults,omitempty" description:"Extension results"`
-	// Response is the response value.
+	// Response is the response value
 	Response struct {
 		AttestationObject  string   `json:"attestationObject" description:"The attestation object"`
 		ClientDataJSON     string   `json:"clientDataJSON" description:"The client data JSON"`
@@ -1007,11 +1007,11 @@ var ExampleWebauthnRegistrationFinishRequest = WebauthnRegistrationFinishRequest
 
 // WebauthnRegistrationResponse is the response after a successful webauthn registration
 type WebauthnRegistrationResponse struct {
-	// Reply is the reply value.
+	// Reply is the reply value
 	rout.Reply
-	// Message is the message value.
+	// Message is the message value
 	Message string `json:"message,omitempty"`
-	// AuthData is the authdata value.
+	// AuthData is the authdata value
 	AuthData
 }
 
@@ -1031,7 +1031,7 @@ func (r *WebauthnRegistrationResponse) ExampleResponse() any {
 
 // WebauthnLoginRequest is the request to begin a webauthn login
 type WebauthnLoginRequest struct {
-	// Email is the email value.
+	// Email is the email value
 	Email string `json:"email,omitempty" description:"The email address associated with the account" example:"jsnow@example.com"`
 }
 
@@ -1049,28 +1049,28 @@ func (r *WebauthnLoginRequest) Validate() error {
 // WebauthnBeginLoginResponse is the response to begin a webauthn login
 // this includes the credential assertion options and the session token
 type WebauthnBeginLoginResponse struct {
-	// Reply is the reply value.
+	// Reply is the reply value
 	Reply rout.Reply
-	// CredentialAssertion is the credentialassertion value.
+	// CredentialAssertion is the credentialassertion value
 	*protocol.CredentialAssertion
-	// Session is the session value.
+	// Session is the session value
 	Session string `json:"session,omitempty"`
 }
 
 // WebauthnLoginFinishRequest is the request to finish webauthn login
 // This represents the credential assertion response from the browser's WebAuthn API
 type WebauthnLoginFinishRequest struct {
-	// ID is the id value.
+	// ID is the id value
 	ID string `json:"id" description:"The credential ID"`
-	// RawID is the rawId value.
+	// RawID is the rawId value
 	RawID string `json:"rawId" description:"The raw credential ID"`
-	// Type is the type value.
+	// Type is the type value
 	Type string `json:"type" description:"The credential type, should be 'public-key'"`
-	// AuthenticatorAttachment is the authenticatorAttachment value.
+	// AuthenticatorAttachment is the authenticatorAttachment value
 	AuthenticatorAttachment string `json:"authenticatorAttachment,omitempty" description:"How the authenticator is attached"`
-	// ClientExtensionResults is the clientExtensionResults value.
+	// ClientExtensionResults is the clientExtensionResults value
 	ClientExtensionResults map[string]interface{} `json:"clientExtensionResults,omitempty" description:"Extension results"`
-	// Response is the response value.
+	// Response is the response value
 	Response struct {
 		AuthenticatorData string `json:"authenticatorData" description:"The authenticator data"`
 		ClientDataJSON    string `json:"clientDataJSON" description:"The client data JSON"`
@@ -1081,11 +1081,11 @@ type WebauthnLoginFinishRequest struct {
 
 // WebauthnLoginResponse is the response after a successful webauthn login
 type WebauthnLoginResponse struct {
-	// Reply is the reply value.
+	// Reply is the reply value
 	rout.Reply
-	// Message is the message value.
+	// Message is the message value
 	Message string `json:"message,omitempty"`
-	// AuthData is the authdata value.
+	// AuthData is the authdata value
 	AuthData
 }
 
@@ -1161,15 +1161,15 @@ var ExampleWebauthnRegistrationResponse = WebauthnRegistrationResponse{
 
 // VerifySubscribeRequest contains subscription verification information
 type VerifySubscribeRequest struct {
-	// Token is the token value.
+	// Token is the token value
 	Token string `query:"token" description:"The token to be used to verify the subscription, token is sent via email"`
 }
 
 // VerifySubscribeResponse holds the fields that are sent on a response to the `/subscribe/verify` endpoint
 type VerifySubscribeResponse struct {
-	// Reply is the reply value.
+	// Reply is the reply value
 	rout.Reply
-	// Message is the message value.
+	// Message is the message value
 	Message string `json:"message,omitempty"`
 }
 
@@ -1210,15 +1210,15 @@ func (VerifySubscribeResponse) ExampleSet() map[string]any {
 
 // UnsubscribeRequest contains the token used to unsubscribe from communications
 type UnsubscribeRequest struct {
-	// Token is the token value.
+	// Token is the token value
 	Token string `query:"token" description:"The token to be used to unsubscribe, token is sent via email"`
 }
 
 // UnsubscribeResponse holds the fields that are sent on a response to the `/unsubscribe` endpoint
 type UnsubscribeResponse struct {
-	// Reply is the reply value.
+	// Reply is the reply value
 	rout.Reply
-	// Message is the message value.
+	// Message is the message value
 	Message string `json:"message,omitempty"`
 }
 
@@ -1259,27 +1259,27 @@ func (UnsubscribeResponse) ExampleSet() map[string]any {
 
 // InviteRequest contains invitation token for organization membership
 type InviteRequest struct {
-	// Token is the token value.
+	// Token is the token value
 	Token string `query:"token" description:"The token to be used to accept the invitation, token is sent via email"`
 }
 
 // InviteResponse holds the fields that are sent on a response to an accepted invitation
 type InviteResponse struct {
-	// Reply is the reply value.
+	// Reply is the reply value
 	rout.Reply
-	// ID is the user_id value.
+	// ID is the user_id value
 	ID string `json:"user_id" description:"The ID of the user that was created" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
-	// Email is the email value.
+	// Email is the email value
 	Email string `json:"email" description:"The email address of the user" example:"jsnow@example.com"`
-	// Message is the message value.
+	// Message is the message value
 	Message string `json:"message"`
-	// JoinedOrgID is the joined_org_id value.
+	// JoinedOrgID is the joined_org_id value
 	JoinedOrgID string `json:"joined_org_id" description:"The ID of the organization the user joined" example:"01JJFVMGENQS9ZG3GVA50QVX5E"`
-	// Role is the role value.
+	// Role is the role value
 	Role string `json:"role" description:"The role the user has in the organization" example:"admin"`
-	// NeedsSSO is the needs_sso value.
+	// NeedsSSO is the needs_sso value
 	NeedsSSO bool `json:"needs_sso,omitempty"`
-	// AuthData is the authdata value.
+	// AuthData is the authdata value
 	AuthData
 }
 
@@ -1345,21 +1345,21 @@ func (InviteResponse) ExampleSet() map[string]any {
 
 // OauthTokenRequest to authenticate an oauth user with the Server
 type OauthTokenRequest struct {
-	// Name is the name value.
+	// Name is the name value
 	Name string `json:"name" description:"The name of the user" example:"Jon Snow"`
-	// Email is the email value.
+	// Email is the email value
 	Email string `json:"email" description:"The email address of the user" example:"jsnow@example.com"`
-	// AuthProvider is the authProvider value.
+	// AuthProvider is the authProvider value
 	AuthProvider string `json:"authProvider" description:"The provider used to authenticate the user, e.g. google, github, etc." example:"google"`
-	// ExternalUserID is the externalUserId value.
+	// ExternalUserID is the externalUserId value
 	ExternalUserID string `json:"externalUserId" description:"The ID of the user from the external provider" example:"1234567890"`
-	// ExternalUserName is the externalUserName value.
+	// ExternalUserName is the externalUserName value
 	ExternalUserName string `json:"externalUserName" description:"The username of the user from the external provider" example:"jsnow"`
-	// ClientToken is the clientToken value.
+	// ClientToken is the clientToken value
 	ClientToken string `json:"clientToken" description:"The token provided by the external provider"`
-	// Image is the image value.
+	// Image is the image value
 	Image string `json:"image,omitempty" description:"The image URL of the user from the external provider"`
-	// OrgID is the org_id value.
+	// OrgID is the org_id value
 	OrgID string `json:"org_id,omitempty" description:"the organization id for the sso connection"`
 }
 
@@ -1380,21 +1380,21 @@ var ExampleOauthTokenRequest = OauthTokenRequest{
 
 // AccountAccessRequest contains organization ID for checking access permissions
 type AccountAccessRequest struct {
-	// ObjectID is the object_id value.
+	// ObjectID is the object_id value
 	ObjectID string `json:"object_id" description:"The ID of the object to check access for" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
-	// ObjectType is the object_type value.
+	// ObjectType is the object_type value
 	ObjectType string `json:"object_type" description:"The type of object to check access for, e.g. organization, program, procedure, etc" example:"organization"`
-	// Relation is the relation value.
+	// Relation is the relation value
 	Relation string `json:"relation" description:"The relation to check access for, e.g. can_view, can_edit" example:"can_view"`
-	// SubjectType is the subject_type value.
+	// SubjectType is the subject_type value
 	SubjectType string `json:"subject_type,omitempty" description:"The type of subject to check access for, e.g. service, user" example:"user"`
 }
 
 // AccountAccessResponse holds the fields that are sent on a response to the `/account/access` endpoint
 type AccountAccessResponse struct {
-	// Reply is the reply value.
+	// Reply is the reply value
 	rout.Reply
-	// Allowed is the allowed value.
+	// Allowed is the allowed value
 	Allowed bool `json:"allowed"`
 }
 
@@ -1453,19 +1453,19 @@ var ExampleAccountAccessResponse = AccountAccessResponse{
 type AccountRolesRequest struct {
 	// @deprecated use ObjectIDs instead, may be removed in a future release
 	ObjectID string `json:"object_id,omitempty" description:" @deprecated use ObjectIDs instead. The ID of the object to check roles for" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
-	// ObjectIDs is the object_ids value.
+	// ObjectIDs is the object_ids value
 	ObjectIDs []string `json:"object_ids,omitempty" description:"The IDs of the object to check roles for, can be used to check multiple ids in one request"` // example:"["01J4EXD5MM60CX4YNYN0DEE3Y1", "01J4EXD5MM60CX4YNYN0DEE3Y2"]"
-	// ObjectType is the object_type value.
+	// ObjectType is the object_type value
 	ObjectType string `json:"object_type" description:"The type of object to check roles for, e.g. organization, program, procedure, etc" example:"organization"`
-	// SubjectType is the subject_type value.
+	// SubjectType is the subject_type value
 	SubjectType string `json:"subject_type,omitempty" description:"The type of subject to check roles for, e.g. service, user" example:"user"`
-	// Relations is the relations value.
+	// Relations is the relations value
 	Relations []string `json:"relations,omitempty" description:"The relations to check roles for, e.g. can_view, can_edit"`
 }
 
 // AccountRolesResponse holds the fields that are sent on a response to the `/account/roles` endpoint
 type AccountRolesResponse struct {
-	// Reply is the reply value.
+	// Reply is the reply value
 	rout.Reply
 	// Roles is a list of roles the user has for the specified object(s)
 	// @deprecated use ObjectRoles instead, may be removed in a future release
@@ -1522,17 +1522,17 @@ var ExampleAccountRolesResponse = AccountRolesResponse{
 
 // AccountRolesOrganizationRequest contains organization ID for retrieving organization-specific roles
 type AccountRolesOrganizationRequest struct {
-	// ID is the id value.
+	// ID is the id value
 	ID string `param:"id" description:"The ID of the organization to check roles for" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 }
 
 // AccountRolesOrganizationResponse holds the fields that are sent on a response to the `/account/roles/organization` endpoint
 type AccountRolesOrganizationResponse struct {
-	// Reply is the reply value.
+	// Reply is the reply value
 	rout.Reply
-	// Roles is the roles value.
+	// Roles is the roles value
 	Roles []string `json:"roles" description:"The roles the user has in the organization, e.g. can_view, can_edit"`
-	// OrganizationID is the organization_id value.
+	// OrganizationID is the organization_id value
 	OrganizationID string `json:"organization_id" description:"The ID of the organization the user has roles in" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 }
 
@@ -1577,17 +1577,17 @@ func (AccountRolesOrganizationResponse) ExampleSet() map[string]any {
 
 // AccountFeaturesRequest contains organization ID for retrieving available features
 type AccountFeaturesRequest struct {
-	// ID is the id value.
+	// ID is the id value
 	ID string `param:"id" description:"The ID of the organization to check roles for" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 }
 
 // AccountFeaturesResponse holds the fields that are sent on a response to the `/account/features` endpoint
 type AccountFeaturesResponse struct {
-	// Reply is the reply value.
+	// Reply is the reply value
 	rout.Reply
-	// Features is the features value.
+	// Features is the features value
 	Features []string `json:"features" description:"The features the user has access to in the organization, e.g. policy-and-procedure-module, compliance-module"`
-	// OrganizationID is the organization_id value.
+	// OrganizationID is the organization_id value
 	OrganizationID string `json:"organization_id" description:"The ID of the organization the user has features in" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 }
 
@@ -1637,19 +1637,19 @@ func (AccountFeaturesResponse) ExampleSet() map[string]any {
 
 // UploadFilesRequest contains file upload data and metadata
 type UploadFilesRequest struct {
-	// UploadFile is the uploadfile value.
+	// UploadFile is the uploadfile value
 	UploadFile multipart.FileHeader `form:"uploadFile" description:"The file to be uploaded"`
 }
 
 // UploadFilesResponse holds the fields that are sent on a response to the `/upload` endpoint
 type UploadFilesResponse struct {
-	// Reply is the reply value.
+	// Reply is the reply value
 	rout.Reply
-	// Message is the message value.
+	// Message is the message value
 	Message string `json:"message,omitempty"`
-	// FileCount is the file_count value.
+	// FileCount is the file_count value
 	FileCount int64 `json:"file_count,omitempty" description:"The number of files uploaded"`
-	// Files is the files value.
+	// Files is the files value
 	Files []File `json:"files,omitempty" description:"The files that were uploaded"`
 }
 
@@ -1701,17 +1701,17 @@ var ExampleUploadFilesSuccessResponse = UploadFilesResponse{
 
 // TFARequest holds the payload for verifying the 2fa code (/2fa/validate)
 type TFARequest struct {
-	// TOTPCode is the totp_code value.
+	// TOTPCode is the totp_code value
 	TOTPCode string `json:"totp_code,omitempty" description:"The TOTP code to validate, always takes precedence over recovery code" example:"113371"`
-	// RecoveryCode is the recovery_code value.
+	// RecoveryCode is the recovery_code value
 	RecoveryCode string `json:"recovery_code,omitempty" description:"The recovery code to validate, only used if TOTP code is not provided" example:"8VM7AL91"`
 }
 
 // TFAResponse holds the response to TFARequest
 type TFAResponse struct {
-	// Reply is the reply value.
+	// Reply is the reply value
 	rout.Reply
-	// Message is the message value.
+	// Message is the message value
 	Message string `json:"message"`
 }
 
@@ -1750,7 +1750,7 @@ var ExampleTFASSuccessResponse = TFAResponse{
 
 // ExampleCSVRequest holds the payload for serving example CSV files
 type ExampleCSVRequest struct {
-	// Filename is the filename value.
+	// Filename is the filename value
 	Filename string `json:"filename" description:"the file name to check for" example:"actionplan"`
 }
 
@@ -1778,7 +1778,7 @@ var ExampleExampleCSVRequest = ExampleCSVRequest{
 // The `resource` field must be provided and should be prefixed with
 // `org:` for organization lookups or `acct:` for user lookups
 type WebfingerRequest struct {
-	// Resource is the resource value.
+	// Resource is the resource value
 	Resource string `query:"resource" description:"resource identifier prefixed with org: or acct:" example:"acct:meowmeow@kitties.com"`
 }
 
@@ -1802,11 +1802,11 @@ var ExampleWebfingerRequest = WebfingerRequest{
 
 // SSOLoginRequest holds the query parameters for initiating an SSO login flow
 type SSOLoginRequest struct {
-	// OrganizationID is the organization_id value.
+	// OrganizationID is the organization_id value
 	OrganizationID string `json:"organization_id" query:"organization_id" description:"organization id" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
-	// ReturnURL is the return value.
+	// ReturnURL is the return value
 	ReturnURL string `json:"return" query:"return" description:"return url after authentication" example:"https://app.mitb.com"`
-	// IsTest is the is_test value.
+	// IsTest is the is_test value
 	IsTest bool `json:"is_test" query:"is_test" description:"Used when testing the sso was successfully connected"`
 }
 
@@ -1830,11 +1830,11 @@ var ExampleSSOLoginRequest = SSOLoginRequest{
 
 // SSOCallbackRequest holds the query parameters for completing the SSO login flow
 type SSOCallbackRequest struct {
-	// Code is the code value.
+	// Code is the code value
 	Code string `json:"code" query:"code" description:"authorization code" example:"abc"`
-	// State is the state value.
+	// State is the state value
 	State string `json:"state" query:"state" description:"state value" example:"state123"`
-	// OrganizationID is the organization_id value.
+	// OrganizationID is the organization_id value
 	OrganizationID string `json:"organization_id" query:"organization_id" description:"organization id" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
 }
 
@@ -1890,9 +1890,9 @@ func (SSOInitiateRequest) ExampleSet() map[string]any {
 
 // SSOTokenCallbackRequest holds the query parameters for completing token SSO authorization
 type SSOTokenCallbackRequest struct {
-	// Code is the code value.
+	// Code is the code value
 	Code string `json:"code" query:"code" description:"authorization code" example:"abc"`
-	// State is the state value.
+	// State is the state value
 	State string `json:"state" query:"state" description:"state value" example:"state123"`
 }
 
@@ -1918,7 +1918,7 @@ var ExampleSSOTokenCallbackRequest = SSOTokenCallbackRequest{
 
 // SSOStatusRequest is the request to check if SSO login is enforced for an organization
 type SSOStatusRequest struct {
-	// Resource is the resource value.
+	// Resource is the resource value
 	Resource string `query:"resource" description:"organization or user email to check" example:"org:01J4EXD5MM60CX4YNYN0DEE3Y1"`
 }
 
@@ -1933,31 +1933,31 @@ func (r *SSOStatusRequest) Validate() error {
 
 // SSOLoginResponse is the response for the SSO login
 type SSOLoginResponse struct {
-	// Reply is the reply value.
+	// Reply is the reply value
 	rout.Reply
-	// RedirectURI is the redirect_uri value.
+	// RedirectURI is the redirect_uri value
 	RedirectURI string `json:"redirect_uri,omitempty"`
 }
 
 // SSOStatusResponse is the response for SSOStatusRequest
 type SSOStatusResponse struct {
-	// Reply is the reply value.
+	// Reply is the reply value
 	rout.Reply
-	// Enforced is the enforced value.
+	// Enforced is the enforced value
 	Enforced bool `json:"enforced"`
-	// Provider is the provider value.
+	// Provider is the provider value
 	Provider enums.SSOProvider `json:"provider,omitempty"`
-	// DiscoveryURL is the discovery_url value.
+	// DiscoveryURL is the discovery_url value
 	DiscoveryURL string `json:"discovery_url,omitempty"`
-	// SAMLSignInURL is the saml_signin_url value.
+	// SAMLSignInURL is the saml_signin_url value
 	SAMLSignInURL string `json:"saml_signin_url,omitempty"`
-	// OrganizationID is the organization_id value.
+	// OrganizationID is the organization_id value
 	OrganizationID string `json:"organization_id,omitempty"`
-	// OrgTFAEnforced is the tfa_enforced value.
+	// OrgTFAEnforced is the tfa_enforced value
 	OrgTFAEnforced bool `json:"tfa_enforced"`
-	// UserTFAEnabled is the user_tfa_enabled value.
+	// UserTFAEnabled is the user_tfa_enabled value
 	UserTFAEnabled bool `json:"user_tfa_enabled,omitempty"`
-	// IsOrgOwner is the is_org_owner value.
+	// IsOrgOwner is the is_org_owner value
 	IsOrgOwner bool `json:"is_org_owner,omitempty"`
 }
 
@@ -1995,11 +1995,11 @@ var ExampleSSOStatusResponse = SSOStatusResponse{
 // SSOTokenAuthorizeRequest is the request for authorizing a token for SSO use
 // with an organization
 type SSOTokenAuthorizeRequest struct {
-	// OrganizationID is the organization_id value.
+	// OrganizationID is the organization_id value
 	OrganizationID string `json:"organization_id" query:"organization_id" description:"organization id" example:"01J4EXD5MM60CX4YNYN0DEE3Y1"`
-	// TokenID is the token_id value.
+	// TokenID is the token_id value
 	TokenID string `json:"token_id" query:"token_id" description:"token id to authorize" example:"01JJFVMGENQS9ZG3GVA50QVX5E"`
-	// TokenType is the token_type value.
+	// TokenType is the token_type value
 	TokenType string `json:"token_type" query:"token_type" description:"token type: api or personal" example:"api"`
 }
 
@@ -2024,13 +2024,13 @@ func (r *SSOTokenAuthorizeRequest) Validate() error {
 // SSOTokenAuthorizeResponse is returned when a token has been successfully
 // authorized for SSO
 type SSOTokenAuthorizeResponse struct {
-	// Reply is the reply value.
+	// Reply is the reply value
 	rout.Reply
-	// OrganizationID is the organization_id value.
+	// OrganizationID is the organization_id value
 	OrganizationID string `json:"organization_id"`
-	// TokenID is the token_id value.
+	// TokenID is the token_id value
 	TokenID string `json:"token_id"`
-	// Message is the message value.
+	// Message is the message value
 	Message string `json:"message,omitempty"`
 }
 
@@ -2061,7 +2061,7 @@ var ExampleSSOTokenAuthorizeResponse = SSOTokenAuthorizeResponse{
 
 // CreateTrustCenterAnonymousJWTResponse is the response to a request to create a trust center anonymous JWT
 type CreateTrustCenterAnonymousJWTResponse struct {
-	// AuthData is the authdata value.
+	// AuthData is the authdata value
 	AuthData
 }
 
@@ -2085,9 +2085,9 @@ var ExampleCreateTrustCenterAnonymousJWTResponse = CreateTrustCenterAnonymousJWT
 
 // GetQuestionnaireResponse is the response containing the questionnaire template's JSON configuration
 type GetQuestionnaireResponse struct {
-	// Jsonconfig is the jsonconfig value.
+	// Jsonconfig is the jsonconfig value
 	Jsonconfig map[string]any `json:"jsonconfig,omitempty"`
-	// UISchema is the uischema value.
+	// UISchema is the uischema value
 	UISchema map[string]any `json:"uischema,omitempty"`
 	// SavedData is the previously saved draft data, if any.
 	SavedData map[string]any `json:"saved_data,omitempty"`
@@ -2124,9 +2124,9 @@ func (GetQuestionnaireResponse) ExampleSet() map[string]any {
 
 // SubmitQuestionnaireRequest is the request to submit questionnaire response data
 type SubmitQuestionnaireRequest struct {
-	// AssessmentID is the assessment_id value.
+	// AssessmentID is the assessment_id value
 	AssessmentID string `json:"assessment_id,omitempty"`
-	// Data is the data value.
+	// Data is the data value
 	Data map[string]any `json:"data" binding:"required"`
 	// IsDraft when true saves partial progress without completing the questionnaire.
 	IsDraft bool `json:"is_draft,omitempty"`
@@ -2149,11 +2149,11 @@ func (SubmitQuestionnaireRequest) ExampleSet() map[string]any {
 
 // SubmitQuestionnaireResponse is the response after successfully submitting questionnaire data
 type SubmitQuestionnaireResponse struct {
-	// DocumentDataID is the document_data_id value.
+	// DocumentDataID is the document_data_id value
 	DocumentDataID string `json:"document_data_id"`
-	// Status is the status value.
+	// Status is the status value
 	Status string `json:"status"`
-	// CompletedAt is the completed_at value.
+	// CompletedAt is the completed_at value
 	CompletedAt string `json:"completed_at,omitempty"`
 }
 
@@ -2222,29 +2222,29 @@ const (
 
 // StartImpersonationRequest represents a request to start impersonating a user
 type StartImpersonationRequest struct {
-	// TargetUserID is the target_user_id value.
+	// TargetUserID is the target_user_id value
 	TargetUserID string `json:"target_user_id" validate:"required" description:"The ID of the user to impersonate"`
-	// Type is the type value.
+	// Type is the type value
 	Type string `json:"type" validate:"required,oneof=support job admin" description:"The type of impersonation (support, job, admin)"`
-	// Reason is the reason value.
+	// Reason is the reason value
 	Reason string `json:"reason" validate:"required,min=10,max=500" description:"Reason for the impersonation"`
-	// Duration is the duration_hours value.
+	// Duration is the duration_hours value
 	Duration *int `json:"duration_hours,omitempty" description:"Duration in hours (optional, defaults to 1 hour)"`
-	// OrganizationID is the organization_id value.
+	// OrganizationID is the organization_id value
 	OrganizationID string `json:"organization_id,omitempty" description:"Organization context for impersonation"`
 }
 
 // StartImpersonationResponse represents the response when starting impersonation
 type StartImpersonationResponse struct {
-	// Reply is the reply value.
+	// Reply is the reply value
 	rout.Reply
-	// Token is the token value.
+	// Token is the token value
 	Token string `json:"token" description:"The impersonation token"`
-	// ExpiresAt is the expires_at value.
+	// ExpiresAt is the expires_at value
 	ExpiresAt time.Time `json:"expires_at" description:"When the impersonation token expires"`
-	// SessionID is the session_id value.
+	// SessionID is the session_id value
 	SessionID string `json:"session_id" description:"The impersonation session ID"`
-	// Message is the message value.
+	// Message is the message value
 	Message string `json:"message" description:"Success message"`
 }
 
@@ -2261,17 +2261,17 @@ func (r *StartImpersonationResponse) ExampleResponse() any {
 
 // EndImpersonationRequest represents a request to end an impersonation session
 type EndImpersonationRequest struct {
-	// SessionID is the session_id value.
+	// SessionID is the session_id value
 	SessionID string `json:"session_id" validate:"required" description:"The session ID to end"`
-	// Reason is the reason value.
+	// Reason is the reason value
 	Reason string `json:"reason,omitempty" description:"Optional reason for ending the session"`
 }
 
 // EndImpersonationResponse represents the response when ending impersonation
 type EndImpersonationResponse struct {
-	// Reply is the reply value.
+	// Reply is the reply value
 	rout.Reply
-	// Message is the message value.
+	// Message is the message value
 	Message string `json:"message" description:"Success message"`
 }
 
@@ -2380,9 +2380,9 @@ var ExampleSupportAccessResponse = SupportAccessResponse{
 
 // ListIntegrationsResponse is the response for listing integrations
 type ListIntegrationsResponse struct {
-	// Reply is the reply value.
+	// Reply is the reply value
 	rout.Reply
-	// Integrations is the integrations value.
+	// Integrations is the integrations value
 	Integrations any `json:"integrations"` // Will be []*ent.Integration
 }
 
@@ -2402,19 +2402,19 @@ type DeleteIntegrationResponse struct {
 
 // GetIntegrationTokenRequest is the request for getting integration tokens
 type GetIntegrationTokenRequest struct {
-	// Provider is the provider value.
+	// Provider is the provider value
 	Provider string `param:"provider" description:"OAuth provider (github, slack, etc.)" example:"github"`
 }
 
 // DeleteIntegrationRequest is the request for deleting an integration
 type DeleteIntegrationRequest struct {
-	// ID is the id value.
+	// ID is the id value
 	ID string `param:"id" description:"Integration ID" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 }
 
 // GetIntegrationStatusRequest is the request for checking integration status
 type GetIntegrationStatusRequest struct {
-	// Provider is the provider value.
+	// Provider is the provider value
 	Provider string `param:"provider" description:"OAuth provider (github, slack, etc.)" example:"github"`
 }
 
@@ -2454,13 +2454,13 @@ func (r *GetIntegrationStatusRequest) Validate() error {
 
 // OAuthFlowRequest represents the initial OAuth flow request
 type OAuthFlowRequest struct {
-	// Provider is the provider value.
+	// Provider is the provider value
 	Provider string `json:"provider" description:"OAuth provider (github, slack, etc.)" example:"github"`
 	// IntegrationID scopes the OAuth callback credential save to a specific integration record.
 	IntegrationID string `json:"integrationId,omitempty" description:"Optional integration ID to attach OAuth credentials to" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
-	// RedirectURI is the redirectUri value.
+	// RedirectURI is the redirectUri value
 	RedirectURI string `json:"redirectUri,omitempty" description:"Custom redirect URI after OAuth flow" example:"https://app.example.com/integrations"`
-	// Scopes is the scopes value.
+	// Scopes is the scopes value
 	Scopes []string `json:"scopes,omitempty" description:"Additional OAuth scopes to request"` // example: ["repo", "gist"]
 }
 
@@ -2487,15 +2487,15 @@ func (r *OAuthFlowRequest) Validate() error {
 
 // OAuthFlowResponse contains the OAuth authorization URL
 type OAuthFlowResponse struct {
-	// Reply is the reply value.
+	// Reply is the reply value
 	rout.Reply
-	// AuthURL is the authUrl value.
+	// AuthURL is the authUrl value
 	AuthURL string `json:"authUrl" description:"URL to redirect user to for OAuth authorization" example:"https://github.com/login/oauth/authorize?client_id=..."`
-	// State is the state value.
+	// State is the state value
 	State string `json:"state,omitempty" description:"OAuth state parameter for security" example:"eyJvcmdJRCI6IjAxSE..."`
-	// Message is the message value.
+	// Message is the message value
 	Message string `json:"message,omitempty" description:"Optional message (e.g., for authentication required)" example:"Authentication required. Please login first."`
-	// RequiresLogin is the requiresLogin value.
+	// RequiresLogin is the requiresLogin value
 	RequiresLogin bool `json:"requiresLogin,omitempty" description:"Whether user needs to login before OAuth flow"`
 }
 
@@ -2550,9 +2550,9 @@ var ExampleOAuthFlowResponse = OAuthFlowResponse{
 
 // GitHubAppWebhookResponse acknowledges GitHub App webhooks.
 type GitHubAppWebhookResponse struct {
-	// Reply is the reply value.
+	// Reply is the reply value
 	rout.Reply
-	// Persisted is the persisted value.
+	// Persisted is the persisted value
 	Persisted map[string]any `json:"persisted,omitempty" description:"Summary of persisted alerts"`
 }
 
@@ -2575,7 +2575,7 @@ func (r *GitHubAppWebhookResponse) ExampleResponse() any {
 
 // StripeWebhookRequest contains the query parameters for Stripe webhook requests
 type StripeWebhookRequest struct {
-	// APIVersion is the apiversion value.
+	// APIVersion is the apiversion value
 	APIVersion string `query:"api_version" description:"Stripe API version for this webhook request" example:"2024-11-20.acacia"`
 }
 
@@ -2591,17 +2591,17 @@ func (r *StripeWebhookRequest) Validate() error {
 
 // ProductCatalogRequest
 type ProductCatalogRequest struct {
-	// IncludeBeta is the includebeta value.
+	// IncludeBeta is the includebeta value
 	IncludeBeta bool `query:"include_beta" description:"Whether to include beta products in the catalog" example:"false"`
-	// IncludePrivate is the includeprivate value.
+	// IncludePrivate is the includeprivate value
 	IncludePrivate bool `query:"include_private" description:"Whether to include private products in the catalog" example:"false"`
 }
 
 // ProductCatalogResponse holds the fields that are sent on a response to the `/products` endpoint
 type ProductCatalogResponse struct {
-	// Reply is the reply value.
+	// Reply is the reply value
 	rout.Reply
-	// Catalog is the catalog value.
+	// Catalog is the catalog value
 	models.Catalog
 }
 
@@ -2680,21 +2680,21 @@ func (DisconnectIntegrationRequest) ExampleSet() map[string]any {
 
 // SnapshotRequest contains fields for a snapshot request to the `/snapshot` endpoint
 type SnapshotRequest struct {
-	// URL is the url value.
+	// URL is the url value
 	URL string `json:"url" description:"The URL of the domain to take a snapshot of" example:"https://www.example.com"`
-	// WaitForSelector is the waitForSelector value.
+	// WaitForSelector is the waitForSelector value
 	WaitForSelector string `json:"waitForSelector,omitempty" description:"optional CSS selector to wait for before taking the snapshot" example:"img#main-image"`
 }
 
 // SnapshotResponse holds the fields that are sent on a response to the `/snapshot` endpoint
 type SnapshotResponse struct {
-	// Reply is the reply value.
+	// Reply is the reply value
 	rout.Reply
-	// Message is the message value.
+	// Message is the message value
 	Message string `json:"message"`
-	// Image is the image value.
+	// Image is the image value
 	Image string `json:"image" description:"Base64-encoded image data of the snapshot"`
-	// MIMEType is the mimeType value.
+	// MIMEType is the mimeType value
 	MIMEType string `json:"mimeType" description:"MIME type of the snapshot image" example:"image/png"`
 }
 
@@ -2746,7 +2746,7 @@ type ScopesRequest struct{}
 
 // ScopesResponse holds the fields that are sent on a response to the `/scopes` endpoint
 type ScopesResponse struct {
-	// Reply is the reply value.
+	// Reply is the reply value
 	rout.Reply
 	// Scopes is a map of object types to the scopes
 	Scopes map[string][]string `json:"scopes,omitempty" description:"A map of object types to operations that can be set for an API Token"`
@@ -2793,7 +2793,7 @@ type RolesRequest struct{}
 
 // RolesResponse holds the fields that are sent on a response to the `/roles` endpoint
 type RolesResponse struct {
-	// Reply is the reply value.
+	// Reply is the reply value
 	rout.Reply
 	// Roles is a list of organization responsibility roles that can be assigned.
 	Roles []OrganizationRole `json:"roles,omitempty" description:"Organization roles and responsibilities that can be assigned"`
@@ -2928,11 +2928,61 @@ func (AccountRolesMeResponse) ExampleSet() map[string]any {
 
 // AcmeSolverRequest is the request to solve an acme challenge
 type AcmeSolverRequest struct {
-	// Path is the path value.
+	// Path is the path value
 	Path string `param:"path" description:"The path to the acme challenge" example:"01J4HMNDSZCCQBTY93BF9CBF5D"`
 }
 
 // ExampleAcmeSolverRequest is an example ACME solver request for OpenAPI documentation
 var ExampleAcmeSolverRequest = AcmeSolverRequest{
 	Path: "01J4HMNDSZCCQBTY93BF9CBF5D",
+}
+
+// =========
+// DOMAIN SCAN
+// =========
+
+// DomainScanRequest is the request to queue a domain scan for a single domain
+// The scan runs asynchronously
+type DomainScanRequest struct {
+	// Domain is the domain to scan
+	Domain string `json:"domain" description:"domain to scan"`
+	// ForceRefresh bypasses the cloudflare cache, forcing a fresh render
+	// instead of reusing one from a previous scan of the same domain
+	ForceRefresh bool `json:"forceRefresh,omitempty" description:"bypass the render cache and force a fresh scan"`
+}
+
+// Validate validates the request has all the required fields
+func (r *DomainScanRequest) Validate() error {
+	if r.Domain == "" {
+		return rout.NewMissingRequiredFieldError("domain")
+	}
+
+	return nil
+}
+
+// DomainScanReply acknowledges that a domain scan was queued and returns the created scan id
+type DomainScanReply struct {
+	// Reply is the reply value
+	Reply rout.Reply
+	// Message describes what was queued
+	Message string `json:"message"`
+	// ScanID is the ID of the Scan record created for this request
+	ScanID string `json:"scanID"`
+}
+
+// ExampleResponse returns an example DomainScanReply for OpenAPI documentation
+func (r *DomainScanReply) ExampleResponse() any {
+	return ExampleDomainScanResponse
+}
+
+// ExampleDomainScanRequest is an example domain scan request for OpenAPI documentation
+var ExampleDomainScanRequest = DomainScanRequest{
+	Domain: "example.com",
+}
+
+// ExampleDomainScanResponse is an example domain scan response for OpenAPI documentation
+var ExampleDomainScanResponse = DomainScanReply{
+	Reply:   rout.Reply{Success: true},
+	Message: "domain scan queued",
+	ScanID:  "01J4HMNDSZCCQBTY93BF9CBF5D",
 }

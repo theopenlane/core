@@ -516,8 +516,6 @@ func submitAndPollScan(cfg *domainscan.Config, domain string) *url_scanner.ScanG
 
 	fmt.Printf("submitted scan %s for %s, polling for results...\n", scanID, domain)
 
-	time.Sleep(operations.DomainScanInitialWait)
-
 	for attempt := 0; attempt < operations.DomainScanMaxAttempts; attempt++ {
 		pollResult, err := cloudflare.DomainScanPoll{}.Run(ctx, client, cloudflare.DomainScanPoll{
 			ScanResultID: scanID,

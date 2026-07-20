@@ -161,6 +161,7 @@ func (r *Runtime) createVendor(ctx context.Context, ownerID string, def types.De
 	existingEntityType, err := r.DB().EntityType.Query().
 		Where(
 			entitytype.NameEqualFold("vendor"),
+			entitytype.OwnerID(ownerID),
 		).
 		Only(ctx)
 	if err != nil {

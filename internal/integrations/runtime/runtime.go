@@ -315,5 +315,9 @@ func New(config Config) (*Runtime, error) {
 		return nil, err
 	}
 
+	if err := operations.RegisterDomainScanImportListener(rt.Gala(), rt.HandleImportDomainScanReview); err != nil {
+		return nil, err
+	}
+
 	return rt, nil
 }

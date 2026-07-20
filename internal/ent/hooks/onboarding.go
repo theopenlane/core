@@ -117,6 +117,16 @@ func createOrgUniqueName(ctx context.Context, m *generated.OnboardingMutation, i
 
 	org, err := m.Client().Organization.Create().SetInput(input).Save(ctx)
 	if err != nil {
+		// a concurrent onboarding request may have created an organization with this name
+		// between the existence check above and this insert; retry with a freshly suffixed
+		// name instead of surfacing the raw constraint violation to the caller
+		if IsUniqueConstraintError(err) {
+			input.Name = uniqueOrganizationName(input.Name)
+			attempt++
+
+			return createOrgUniqueName(ctx, m, input, attempt)
+		}
+
 		return nil, err
 	}
 

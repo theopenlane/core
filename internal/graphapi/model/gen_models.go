@@ -1801,6 +1801,99 @@ type IdentityHolderUpdatePayload struct {
 	IdentityHolder *generated.IdentityHolder `json:"identityHolder"`
 }
 
+// An asset accepted from a domain scan review, keyed by a client-assigned ref so it can be
+// referenced from ImportDomainScanReviewPlatformInput/ImportDomainScanReviewSystemInput before it
+// has a real id
+type ImportDomainScanReviewAssetInput struct {
+	// client-assigned identifier for this asset, referenced by assetRefs elsewhere in the input
+	Ref string `json:"ref"`
+	// the asset's display name
+	Name string `json:"name"`
+	// the asset's domain, IP, or other unique identifier
+	Identifier *string `json:"identifier,omitempty"`
+	// the asset's URL, if known
+	Website *string `json:"website,omitempty"`
+	// the asset's detected categories
+	Categories []string `json:"categories,omitempty"`
+}
+
+// One accepted finding
+type ImportDomainScanReviewFindingInput struct {
+	// the finding's category
+	Category *string `json:"category,omitempty"`
+	// the finding's description
+	Description *string `json:"description,omitempty"`
+	// the finding's severity
+	Severity *string `json:"severity,omitempty"`
+}
+
+// Input for importDomainScanReview mutation
+type ImportDomainScanReviewInput struct {
+	// the Scan records the created records should link back to
+	ScanIDs []string `json:"scanIDs"`
+	// the accepted platforms, if any
+	Platforms []*ImportDomainScanReviewPlatformInput `json:"platforms,omitempty"`
+	// the accepted system details
+	Systems []*ImportDomainScanReviewSystemInput `json:"systems,omitempty"`
+	// the accepted vendors
+	Vendors []*ImportDomainScanReviewVendorInput `json:"vendors"`
+	// the accepted assets
+	Assets []*ImportDomainScanReviewAssetInput `json:"assets"`
+	// the accepted findings
+	Findings []*ImportDomainScanReviewFindingInput `json:"findings,omitempty"`
+}
+
+// Return response for importDomainScanReview mutation. Creation happens asynchronously, so this
+// only confirms the review was accepted - the created objects surface via a follow-up Notification
+// once the import finishes
+type ImportDomainScanReviewPayload struct {
+	// whether the review was accepted for import
+	Accepted bool `json:"accepted"`
+}
+
+// An accepted platform, linked to a subset of the accepted vendors/assets, and keyed by a
+// client-assigned ref so it can be referenced from ImportDomainScanReviewSystemInput
+type ImportDomainScanReviewPlatformInput struct {
+	// client-assigned identifier for this platform, referenced by platformRefs elsewhere in the input
+	Ref string `json:"ref"`
+	// the platform's name
+	Name string `json:"name"`
+	// the platform's description
+	Description *string `json:"description,omitempty"`
+	// refs of accepted vendors linked to this platform
+	EntityRefs []string `json:"entityRefs,omitempty"`
+	// refs of accepted assets linked to this platform
+	AssetRefs []string `json:"assetRefs,omitempty"`
+}
+
+// One accepted system detail, linked to its own subset of the accepted vendors/assets/platforms
+type ImportDomainScanReviewSystemInput struct {
+	// the system's name
+	Name string `json:"name"`
+	// the system's description
+	Description *string `json:"description,omitempty"`
+	// refs of accepted vendors linked to this system
+	EntityRefs []string `json:"entityRefs,omitempty"`
+	// refs of accepted assets linked to this system
+	AssetRefs []string `json:"assetRefs,omitempty"`
+	// refs of accepted platforms this system belongs to
+	PlatformRefs []string `json:"platformRefs,omitempty"`
+}
+
+// A vendor accepted from a domain scan review, keyed by a client-assigned ref so it can be
+// referenced from ImportDomainScanReviewPlatformInput/ImportDomainScanReviewSystemInput before it
+// has a real id
+type ImportDomainScanReviewVendorInput struct {
+	// client-assigned identifier for this vendor, referenced by entityRefs elsewhere in the input
+	Ref string `json:"ref"`
+	// the vendor's name
+	Name string `json:"name"`
+	// the vendor's domain, if known
+	Domain *string `json:"domain,omitempty"`
+	// the vendor's detected categories
+	Categories []string `json:"categories,omitempty"`
+}
+
 // Return response for deleteIntegration mutation
 type IntegrationDeletePayload struct {
 	// Deleted integration ID

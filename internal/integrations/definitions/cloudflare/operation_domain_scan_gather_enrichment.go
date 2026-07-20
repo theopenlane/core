@@ -43,6 +43,10 @@ func (e DomainScanGatherEnrichment) Handle() types.OperationHandler {
 
 // Run gathers company profile, compliance, and DNS vendor data for the domain
 func (DomainScanGatherEnrichment) Run(ctx context.Context, client *CloudflareClient, cfg DomainScanGatherEnrichment) (DomainScanGatherEnrichmentResult, error) {
+	ctx = logx.WithFields(ctx, logx.LogFields{
+		"domain": cfg.Domain,
+	})
+
 	cacheTTL := client.Config.DomainScan.ScanTTL
 	if cfg.ForceRefresh {
 		cacheTTL = 0
@@ -55,25 +59,27 @@ func (DomainScanGatherEnrichment) Run(ctx context.Context, client *CloudflareCli
 	}
 
 	enrichment, enrichmentErrs := enrichmentCfg.GatherEnrichment(ctx, cfg.Domain, domainScanEnrichmentTimeout)
-	logDomainScanEnrichmentErrors(ctx, cfg.Domain, enrichmentErrs)
+	logDomainScanEnrichmentErrors(ctx, enrichmentErrs)
 
 	return DomainScanGatherEnrichmentResult{Enrichment: enrichment}, nil
 }
 
 // logDomainScanEnrichmentErrors logs any per-lookup enrichment failures through the structured
 // logger; each is best-effort (the report is built without that section) so these are warnings, not errors
-func logDomainScanEnrichmentErrors(ctx context.Context, domain string, errs domainscan.EnrichmentErrors) {
-	logger := logx.FromContext(ctx).With().Str("domain", domain).Logger()
-
+func logDomainScanEnrichmentErrors(ctx context.Context, errs domainscan.EnrichmentErrors) {
 	if errs.Company != nil {
-		logger.Warn().Err(errs.Company).Msg("domain scan: failed to get company profile")
+		logx.FromContext(ctx).Warn().Err(errs.Company).Msg("domain scan: failed to get company profile")
 	}
 
 	if errs.Compliance != nil {
-		logger.Warn().Err(errs.Compliance).Msg("domain scan: failed to get compliance data")
+		logx.FromContext(ctx).Warn().Err(errs.Compliance).Msg("domain scan: failed to get compliance data")
 	}
 
 	if errs.DNS != nil {
-		logger.Warn().Err(errs.DNS).Msg("domain scan: failed to get dns vendor info")
+		logx.FromContext(ctx).Warn().Err(errs.DNS).Msg("domain scan: failed to get dns vendor info")
+	}
+
+	if errs.Registrar != nil {
+		logx.FromContext(ctx).Warn().Err(errs.Registrar).Msg("domain scan: failed to get registrar info")
 	}
 }

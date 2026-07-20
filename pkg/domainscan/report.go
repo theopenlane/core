@@ -18,11 +18,13 @@ import (
 // domain
 type Enrichment struct {
 	// Company is the base company profile
-	Company *CompanyProfile
+	Company *CompanyProfile `json:"company,omitempty"`
 	// Compliance is compliance specific data such as soc2 attestation, subprocessors, etc
-	Compliance *CompliancePage
+	Compliance *CompliancePage `json:"compliance,omitempty"`
 	// DNS includes DNS probed data
-	DNS *DNSVendorInfo
+	DNS *DNSVendorInfo `json:"dns,omitempty"`
+	// Registrar is WHOIS registration data for the domain
+	Registrar *RegistrarInfo `json:"registrar,omitempty"`
 }
 
 // EnrichmentErrors holds the per-lookup errors from GatherEnrichment, each nil on success
@@ -30,6 +32,7 @@ type EnrichmentErrors struct {
 	Company    error
 	Compliance error
 	DNS        error
+	Registrar  error
 }
 
 // GatherEnrichment runs the company profile, compliance, and DNS vendor
@@ -70,6 +73,16 @@ func (c *Config) GatherEnrichment(ctx context.Context, domain string, timeout ti
 			errs.DNS = err
 		} else {
 			enrichment.DNS = dnsInfo
+		}
+
+		return nil
+	})
+
+	g.Go(func() error {
+		if registrar, err := c.GetRegistrarInfo(ctx, domain); err != nil {
+			errs.Registrar = err
+		} else {
+			enrichment.Registrar = registrar
 		}
 
 		return nil
@@ -245,9 +258,11 @@ type ReportConfig struct {
 // BuildScanReport combines a Cloudflare URL Scanner result with the Enrichment gathered by GatherEnrichment into a single report
 // unified vendors/technologies, assets, findings, meta, platform, systems, and compliance sections
 func BuildScanReport(result *url_scanner.ScanGetResponse, enrichment Enrichment, nonVendorCategories, deniedVendorNames []string) map[string]any {
-	data := map[string]any{
-		"external_scan_id": result.Task.UUID,
-		"url":              result.Task.URL,
+	data := map[string]any{}
+
+	if result != nil {
+		data["external_scan_id"] = result.Task.UUID
+		data["url"] = result.Task.URL
 	}
 
 	vendors, technologies := buildVendorsAndTechnologies(result, enrichment, nonVendorCategories, deniedVendorNames)
@@ -285,12 +300,17 @@ func BuildScanReport(result *url_scanner.ScanGetResponse, enrichment Enrichment,
 		data["compliance"] = compliance
 	}
 
+	if registrar := buildRegistrar(enrichment); registrar != nil {
+		data["registrar"] = registrar
+	}
+
 	return data
 }
 
 // buildVendorsAndTechnologies gets vendors and technologies from the scan combining Wappa
 // data with third-party request domains, then folds in vendor signals from the domainscan enrichment
-// deduped by the same keying, and drops any vendor matching deniedVendorNames
+// deduped by the same keying, and drops any vendor matching deniedVendorNames. result may be nil,
+// in which case only the enrichment-derived vendors are included
 func buildVendorsAndTechnologies(result *url_scanner.ScanGetResponse, enrichment Enrichment, nonVendorCategories, deniedVendorNames []string) (vendors, technologies []map[string]any) {
 	nonVendorCategorySet := make(map[string]bool, len(nonVendorCategories))
 	for _, c := range nonVendorCategories {
@@ -302,9 +322,14 @@ func buildVendorsAndTechnologies(result *url_scanner.ScanGetResponse, enrichment
 		deniedVendorNameSet[strings.ToLower(name)] = true
 	}
 
-	groups, technologies := groupWappaDetections(result.Meta.Processors.Wappa.Data, nonVendorCategorySet, deniedVendorNameSet)
+	var groups *vendorGroups
 
-	mergeRequestVendors(result.Data.Requests, result.Task.ApexDomain, groups)
+	if result != nil {
+		groups, technologies = groupWappaDetections(result.Meta.Processors.Wappa.Data, nonVendorCategorySet, deniedVendorNameSet)
+		mergeRequestVendors(result.Data.Requests, result.Task.ApexDomain, groups)
+	} else {
+		groups = newVendorGroups()
+	}
 
 	mergeEnrichmentVendors(enrichment, groups)
 
@@ -505,25 +530,94 @@ func mergeRequestVendors(requests []url_scanner.ScanGetResponseDataRequest, apex
 	}
 }
 
-// buildDNSRecords combines the scan's resolved A records with the domainscan enrichment's NS records for the scanned domain's apex
+// buildDNSRecords combines the scan's resolved A records with the domainscan enrichment's NS
+// records for the scanned domain's apex. result may be nil, in which case only the enrichment's
+// NS records are included
 func buildDNSRecords(result *url_scanner.ScanGetResponse, enrichment Enrichment) []map[string]string {
-	dnsRecords := make([]map[string]string, 0, len(result.Lists.Domains))
+	var dnsRecords []map[string]string
 
-	for _, d := range result.Lists.Domains {
-		dnsRecords = append(dnsRecords, map[string]string{"domain": d, "type": "A"})
+	if result != nil {
+		dnsRecords = make([]map[string]string, 0, len(result.Lists.Domains))
+
+		for _, d := range result.Lists.Domains {
+			record := map[string]string{"domain": d, "type": "A"}
+
+			if vendor := hostVendorName(d, result.Task.ApexDomain, result.Page.Asnname); vendor != "" {
+				record["vendor"] = vendor
+			}
+
+			dnsRecords = append(dnsRecords, record)
+		}
 	}
 
 	if enrichment.DNS != nil {
 		for _, ns := range enrichment.DNS.NSHosts {
-			dnsRecords = append(dnsRecords, map[string]string{"domain": ns, "type": "NS"})
+			record := map[string]string{"domain": ns, "type": "NS"}
+
+			if name, _ := vendorNameFromHostname(ns); name != "" {
+				record["vendor"] = name
+			}
+
+			dnsRecords = append(dnsRecords, record)
 		}
 	}
 
 	return dnsRecords
 }
 
-// buildAssets reports the DNS records and IP addresses resolved during the scan, annotating each IP with its ASN/organization when known,
-// plus any internal subdomains discovered by the domainscan enrichment
+// hostVendorName returns the vendor a DNS record's hostname belongs to. Third-party hosts are
+// matched by domain; the scanned site's own apex (or a subdomain of it) has no distinguishing
+// hostname to match on, so it falls back to whoever's fronting it per the scan's ASN data (e.g.
+// Cloudflare proxying the customer's own domain)
+func hostVendorName(host, apexDomain, pageASNOrg string) string {
+	domain, ok := icannRegistrableDomain(host)
+	if !ok {
+		return ""
+	}
+
+	if domain != apexDomain {
+		return domainVendorName(domain)
+	}
+
+	return vendorNameFromASNOrg(pageASNOrg)
+}
+
+// asnOrgLegalSuffixes are corporate suffixes stripped from an ASN organization name before it's
+// used as a vendor display name, e.g. "Cloudflare, Inc." -> "Cloudflare"
+var asnOrgLegalSuffixes = []string{
+	", Inc.", ", Inc", " Inc.", " Inc",
+	", LLC", " LLC",
+	", Ltd.", " Ltd.", " Ltd",
+	", Limited", " Limited",
+	" GmbH",
+	", Corporation", " Corporation", " Corp.", " Corp",
+	" S.A.", " S.p.A.", " B.V.", " AG", " Co.",
+}
+
+// vendorNameFromASNOrg derives a vendor display name from an ASN organization name (e.g.
+// "Cloudflare, Inc." -> "Cloudflare"), canonicalizing it against known vendor aliases when possible
+func vendorNameFromASNOrg(org string) string {
+	name := strings.TrimSpace(org)
+	if name == "" {
+		return ""
+	}
+
+	for _, suffix := range asnOrgLegalSuffixes {
+		name = strings.TrimSuffix(name, suffix)
+	}
+
+	name = strings.TrimSpace(strings.TrimSuffix(name, ","))
+
+	if canonical, ok := vendorCanonicalNames[strings.ToLower(name)]; ok {
+		return canonical
+	}
+
+	return name
+}
+
+// buildAssets reports the DNS records and IP addresses resolved during the scan, annotating each
+// IP with its ASN/organization when known, plus any internal subdomains discovered by the
+// domainscan enrichment. result may be nil, in which case only enrichment-derived assets are included
 func buildAssets(result *url_scanner.ScanGetResponse, enrichment Enrichment) map[string]any {
 	assets := map[string]any{}
 
@@ -531,7 +625,7 @@ func buildAssets(result *url_scanner.ScanGetResponse, enrichment Enrichment) map
 		assets["dns_records"] = dnsRecords
 	}
 
-	if len(result.Lists.IPs) > 0 {
+	if result != nil && len(result.Lists.IPs) > 0 {
 		asnByIP := make(map[string]url_scanner.ScanGetResponseMetaProcessorsASNData, len(result.Meta.Processors.ASN.Data))
 		for _, a := range result.Meta.Processors.ASN.Data {
 			asnByIP[a.IP] = a
@@ -616,9 +710,13 @@ func buildInternalDomains(enrichment Enrichment) []string {
 	return domains
 }
 
-// buildTrustCenterSettings extracts the site favicon from the scan's page
-// data, returning nil when no favicon was captured
+// buildTrustCenterSettings extracts the site favicon from the scan's page data, returning nil
+// when no favicon was captured or result is nil
 func buildTrustCenterSettings(result *url_scanner.ScanGetResponse) map[string]any {
+	if result == nil {
+		return nil
+	}
+
 	type pageFavicon struct {
 		URL  string `json:"url"`
 		Hash string `json:"hash"`
@@ -646,20 +744,23 @@ func buildTrustCenterSettings(result *url_scanner.ScanGetResponse) map[string]an
 	}
 }
 
-// buildFindings reports the scan's overall security verdict, any failing
-// agent-readiness checks, and any expected compliance links that weren't found
+// buildFindings reports the scan's overall security verdict, any failing agent-readiness checks,
+// and any expected compliance links that weren't found. result may be nil, in which case only
+// the enrichment-derived missing-compliance-links finding is included
 func buildFindings(result *url_scanner.ScanGetResponse, enrichment Enrichment) map[string]any {
-	findings := map[string]any{
-		"security_violations": result.Verdicts.Overall.Categories,
-		"risks":               result.Verdicts.Overall.Tags,
-	}
+	findings := map[string]any{}
 
-	if result.Verdicts.Overall.Malicious {
-		findings["is_malicious"] = true
-	}
+	if result != nil {
+		findings["security_violations"] = result.Verdicts.Overall.Categories
+		findings["risks"] = result.Verdicts.Overall.Tags
 
-	if agentReadiness := buildAgentReadinessFindings(result.Meta.Processors.AgentReadiness); agentReadiness != nil {
-		findings["agent_readiness"] = agentReadiness
+		if result.Verdicts.Overall.Malicious {
+			findings["is_malicious"] = true
+		}
+
+		if agentReadiness := buildAgentReadinessFindings(result.Meta.Processors.AgentReadiness); agentReadiness != nil {
+			findings["agent_readiness"] = agentReadiness
+		}
 	}
 
 	if missing := buildMissingComplianceLinks(enrichment); missing != "" {
@@ -786,8 +887,13 @@ func walkAgentReadinessChecks(node map[string]any, path string, failedChecks *[]
 	}
 }
 
-// buildMeta collects scan-level metadata (radar rank, categories, geolocation), returning nil when none of it was present in the scan
+// buildMeta collects scan-level metadata (radar rank, categories, geolocation), returning nil
+// when none of it was present in the scan, or result is nil
 func buildMeta(result *url_scanner.ScanGetResponse) map[string]any {
+	if result == nil {
+		return nil
+	}
+
 	meta := map[string]any{}
 
 	if len(result.Meta.Processors.RadarRank.Data) > 0 && result.Meta.Processors.RadarRank.Data[0].Rank > 0 {
@@ -860,7 +966,39 @@ func buildPlatform(enrichment Enrichment) map[string]any {
 		platform["customers"] = company.Customers
 	}
 
+	if len(company.ProvidedServices) > 0 {
+		platform["provided_services"] = company.ProvidedServices
+	}
+
+	if methods := authMethods(company); len(methods) > 0 {
+		platform["auth_methods"] = methods
+	}
+
 	return platform
+}
+
+// authMethods reports which authentication methods the company's product advertises support
+// for, from the LLM-derived CompanyProfile booleans
+func authMethods(company *CompanyProfile) []string {
+	var methods []string
+
+	if company.SSOSupported {
+		methods = append(methods, "sso")
+	}
+
+	if company.SocialLoginSupported {
+		methods = append(methods, "social")
+	}
+
+	if company.CredentialsSupported {
+		methods = append(methods, "credentials")
+	}
+
+	if company.PasskeySupported {
+		methods = append(methods, "passkeys")
+	}
+
+	return methods
 }
 
 // buildSystems shapes each of the company's systems, using field names that
@@ -906,6 +1044,42 @@ func buildComplianceSection(enrichment Enrichment) map[string]any {
 
 	if len(compliance.Documents) > 0 {
 		section["documents"] = compliance.Documents
+	}
+
+	return section
+}
+
+// buildRegistrar shapes the domain's WHOIS registration data
+func buildRegistrar(enrichment Enrichment) map[string]any {
+	registrar := enrichment.Registrar
+	if registrar == nil {
+		return nil
+	}
+
+	section := map[string]any{"dnssec": registrar.DNSSEC}
+
+	if registrar.Registrar != "" {
+		section["registrar"] = registrar.Registrar
+	}
+
+	if registrar.CreatedDate != "" {
+		section["created_date"] = registrar.CreatedDate
+	}
+
+	if registrar.ExpirationDate != "" {
+		section["expiration_date"] = registrar.ExpirationDate
+	}
+
+	if registrar.UpdatedDate != "" {
+		section["updated_date"] = registrar.UpdatedDate
+	}
+
+	if len(registrar.Nameservers) > 0 {
+		section["nameservers"] = registrar.Nameservers
+	}
+
+	if len(registrar.Status) > 0 {
+		section["status"] = registrar.Status
 	}
 
 	return section

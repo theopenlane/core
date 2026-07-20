@@ -2878,6 +2878,9 @@ var schemaGraph = func() *sqlgraph.Schema {
 			scan.FieldDeletedBy:                  {Type: field.TypeString, Column: scan.FieldDeletedBy},
 			scan.FieldTags:                       {Type: field.TypeJSON, Column: scan.FieldTags},
 			scan.FieldOwnerID:                    {Type: field.TypeString, Column: scan.FieldOwnerID},
+			scan.FieldSystemOwned:                {Type: field.TypeBool, Column: scan.FieldSystemOwned},
+			scan.FieldInternalNotes:              {Type: field.TypeString, Column: scan.FieldInternalNotes},
+			scan.FieldSystemInternalID:           {Type: field.TypeString, Column: scan.FieldSystemInternalID},
 			scan.FieldReviewedBy:                 {Type: field.TypeString, Column: scan.FieldReviewedBy},
 			scan.FieldReviewedByUserID:           {Type: field.TypeString, Column: scan.FieldReviewedByUserID},
 			scan.FieldReviewedByGroupID:          {Type: field.TypeString, Column: scan.FieldReviewedByGroupID},
@@ -44357,6 +44360,21 @@ func (f *ScanFilter) WhereTags(p entql.BytesP) {
 // WhereOwnerID applies the entql string predicate on the owner_id field.
 func (f *ScanFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(scan.FieldOwnerID))
+}
+
+// WhereSystemOwned applies the entql bool predicate on the system_owned field.
+func (f *ScanFilter) WhereSystemOwned(p entql.BoolP) {
+	f.Where(p.Field(scan.FieldSystemOwned))
+}
+
+// WhereInternalNotes applies the entql string predicate on the internal_notes field.
+func (f *ScanFilter) WhereInternalNotes(p entql.StringP) {
+	f.Where(p.Field(scan.FieldInternalNotes))
+}
+
+// WhereSystemInternalID applies the entql string predicate on the system_internal_id field.
+func (f *ScanFilter) WhereSystemInternalID(p entql.StringP) {
+	f.Where(p.Field(scan.FieldSystemInternalID))
 }
 
 // WhereReviewedBy applies the entql string predicate on the reviewed_by field.

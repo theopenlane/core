@@ -254,7 +254,7 @@ func (r *Runtime) executeOperationInline(ctx context.Context, integration *ent.I
 	ctx = intobvs.WithOperation(ctx, operation.Name)
 
 	if len(config) > 0 {
-		if err := validatePayload(operation.ConfigSchema, config, ErrOperationConfigInvalid); err != nil {
+		if err := validatePayload(ctx, operation.ConfigSchema, config, ErrOperationConfigInvalid); err != nil {
 			return nil, err
 		}
 	}
