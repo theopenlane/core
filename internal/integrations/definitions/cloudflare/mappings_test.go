@@ -12,7 +12,7 @@ import (
 )
 
 func TestMappingExpressionsValid(t *testing.T) {
-	def, err := Builder()()
+	def, err := Builder(&RuntimeConfig{})()
 	assert.NilError(t, err)
 
 	for _, m := range def.Mappings {
@@ -32,7 +32,7 @@ func TestMappingExpressionsValid(t *testing.T) {
 }
 
 func TestSecurityCenterInsightsMapping(t *testing.T) {
-	def, err := Builder()()
+	def, err := Builder(&RuntimeConfig{})()
 	assert.NilError(t, err)
 
 	spec := mappingtest.MappingSpec(t, def.Mappings, "Finding")
@@ -76,7 +76,7 @@ func TestSecurityCenterInsightsMapping(t *testing.T) {
 }
 
 func TestDomainRegistrationsAssetMapping(t *testing.T) {
-	def, err := Builder()()
+	def, err := Builder(&RuntimeConfig{})()
 	assert.NilError(t, err)
 
 	spec := mappingtest.MappingSpec(t, def.Mappings, "Asset")
