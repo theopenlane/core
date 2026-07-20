@@ -93,9 +93,7 @@ func CanCreateObjectsUnderParents(edges []string) privacy.MutationRuleFunc {
 }
 
 // CanEditObjectUnderParents checks edit access on update/delete, granting access if the
-// user can edit any of the given parents, e.g. "control", "finding". fetch returns the
-// parent id for a given field name (e.g. "control_id") on the current row - OldField
-// only works for OpUpdateOne, so delete operations need the row looked up directly
+// user can edit any of the given parents
 func CanEditObjectUnderParents(parents []string, fetch func(ctx context.Context, m generated.Mutation, field string) (string, error)) privacy.MutationRuleFunc {
 	return privacy.MutationRuleFunc(func(ctx context.Context, m generated.Mutation) error {
 		if m.Op() == generated.OpCreate {
