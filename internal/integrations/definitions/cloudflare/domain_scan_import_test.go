@@ -1,6 +1,7 @@
 package cloudflare
 
 import (
+	"strings"
 	"testing"
 
 	"gotest.tools/v3/assert"
@@ -45,7 +46,7 @@ func TestResolveDomainScanRefs(t *testing.T) {
 	}
 }
 
-func TestDomainScanVendorAssetMatches(t *testing.T) {
+func TestDomainScanMappingMatches(t *testing.T) {
 	assets := []operations.ImportDomainScanReviewAsset{
 		{Ref: "a1", Identifier: "cdn.iubenda.com"},
 		{Ref: "a2", Identifier: "iubenda.com"},
@@ -59,30 +60,33 @@ func TestDomainScanVendorAssetMatches(t *testing.T) {
 	}
 
 	tests := []struct {
-		name         string
-		vendorDomain string
-		want         []string
+		name   string
+		domain string
+		want   []string
 	}{
 		{
-			name:         "matches subdomain and exact domain",
-			vendorDomain: "iubenda.com",
-			want:         []string{"asset-1", "asset-2"},
+			name:   "matches subdomain and exact domain",
+			domain: "iubenda.com",
+			want:   []string{"asset-1", "asset-2"},
 		},
 		{
-			name:         "no match for unrelated domain",
-			vendorDomain: "theopenlane.io",
-			want:         []string{"asset-3"},
+			name:   "no match for unrelated domain",
+			domain: "theopenlane.io",
+			want:   []string{"asset-3"},
 		},
 		{
-			name:         "empty vendor domain matches nothing",
-			vendorDomain: "",
-			want:         nil,
+			name:   "empty domain matches nothing",
+			domain: "",
+			want:   nil,
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := domainScanVendorAssetMatches(tt.vendorDomain, assets, assetIDByRef)
+			domain := tt.domain
+			got := domainScanMappingMatches(assets, assetIDByRef, func(assetDomain string) bool {
+				return domain != "" && (assetDomain == domain || strings.HasSuffix(assetDomain, "."+domain))
+			})
 
 			assert.DeepEqual(t, got, tt.want)
 		})

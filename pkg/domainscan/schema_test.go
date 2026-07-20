@@ -10,5 +10,5 @@ import (
 
 func TestDomainScanReportSchemaReflects(t *testing.T) {
 	assert.Assert(t, len(DomainScanReportSchema) > 0)
-	assert.Equal(t, jsonx.SchemaID(DomainScanReportSchema), "DomainScanReport")
+	assert.Equal(t, jsonx.SchemaID(DomainScanReportSchema), "Report")
 }

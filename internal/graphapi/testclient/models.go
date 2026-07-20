@@ -9489,7 +9489,7 @@ type CreateScanInput struct {
 	PerformedBy *string `json:"performedBy,omitempty"`
 	// identifiers of vulnerabilities discovered during the scan
 	DiscoveredVulnerabilityIds []string `json:"discoveredVulnerabilityIds,omitempty"`
-	// the status of the scan, e.g., processing, completed, failed
+	// the status of the scan, e.g., pending, processing, completed, failed
 	Status                *enums.ScanStatus `json:"status,omitempty"`
 	OwnerID               *string           `json:"ownerID,omitempty"`
 	BlockedGroupIDs       []string          `json:"blockedGroupIDs,omitempty"`
@@ -33999,7 +33999,7 @@ type Scan struct {
 	GeneratedByPlatformID *string `json:"generatedByPlatformID,omitempty"`
 	// identifiers of vulnerabilities discovered during the scan
 	DiscoveredVulnerabilityIds []string `json:"discoveredVulnerabilityIds,omitempty"`
-	// the status of the scan, e.g., processing, completed, failed
+	// the status of the scan, e.g., pending, processing, completed, failed
 	Status              enums.ScanStatus         `json:"status"`
 	Owner               *Organization            `json:"owner,omitempty"`
 	BlockedGroups       *GroupConnection         `json:"blockedGroups"`
@@ -47016,7 +47016,7 @@ type UpdateScanInput struct {
 	DiscoveredVulnerabilityIds       []string `json:"discoveredVulnerabilityIds,omitempty"`
 	AppendDiscoveredVulnerabilityIds []string `json:"appendDiscoveredVulnerabilityIds,omitempty"`
 	ClearDiscoveredVulnerabilityIds  *bool    `json:"clearDiscoveredVulnerabilityIds,omitempty"`
-	// the status of the scan, e.g., processing, completed, failed
+	// the status of the scan, e.g., pending, processing, completed, failed
 	Status                   *enums.ScanStatus `json:"status,omitempty"`
 	AddBlockedGroupIDs       []string          `json:"addBlockedGroupIDs,omitempty"`
 	RemoveBlockedGroupIDs    []string          `json:"removeBlockedGroupIDs,omitempty"`

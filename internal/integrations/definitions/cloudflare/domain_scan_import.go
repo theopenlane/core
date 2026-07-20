@@ -11,13 +11,16 @@ import (
 	generated "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
+	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/workflows"
+	"github.com/theopenlane/core/pkg/domainscan"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-// domainScanImportVendorEntityType is the EntityType.Name assigned to vendors created from an accepted domain scan review
+// domainScanImportVendorEntityType is the entityTypeName to use when creating the entities from
+// a completed scan
 const domainScanImportVendorEntityType = "vendor"
 
 // importSummary counts what an accepted domain scan review created, for the follow-up notification
@@ -29,11 +32,9 @@ type importSummary struct {
 	FindingIDs      []string `json:"finding_ids,omitempty"`
 }
 
-// HandleImportDomainScanReview creates the real Platform/SystemDetail/Entity/Asset/Finding
-// records for a reviewer-accepted domain scan report, all under one transaction, then sends a
-// follow-up Notification once done - the GraphQL mutation that emitted this envelope already
-// returned before this ran, so this is how the caller learns the import actually finished and
-// what got created
+// HandleImportDomainScanReview creates the
+// records for a reviewer-accepted domain scan report, all under one transaction, and sends a
+// follow-up Notification once done
 func (s domainScanSaga) HandleImportDomainScanReview(ctx context.Context, envelope operations.ImportDomainScanReviewEnvelope) error {
 	ctx = logx.WithFields(ctx, logx.LogFields{
 		"organization_id": envelope.OrganizationID,
@@ -53,8 +54,7 @@ func (s domainScanSaga) HandleImportDomainScanReview(ctx context.Context, envelo
 	return s.notifyDomainScanImportComplete(systemCtx, envelope.OrganizationID, summary)
 }
 
-// notifyDomainScanImportComplete sends the Notification that surfaces an import's results, since
-// the GraphQL mutation that triggered it already returned before this ran
+// notifyDomainScanImportComplete sends the Notification that surfaces an import's results
 func (s domainScanSaga) notifyDomainScanImportComplete(ctx context.Context, organizationID string, summary importSummary) error {
 	data, err := jsonx.ToMap(summary)
 	if err != nil {
@@ -86,11 +86,9 @@ func importDomainScanReview(ctx context.Context, client *generated.Client, envel
 	var summary importSummary
 
 	if len(envelope.Systems) > 0 && len(envelope.Platforms) == 0 {
-		return summary, fmt.Errorf("%w: systems were submitted without any platform to attach them to", errDomainScanImportInvalid)
+		return summary, fmt.Errorf("%w: systems were submitted without any platform to attach them to", ErrDomainScanImportInvalid)
 	}
 
-	// assets are created before vendors so a vendor whose domain matches an asset's identifier
-	// can be auto-linked to it on creation, without the reviewer having to draw that link explicitly
 	assetIDByRef, err := createDomainScanAssets(ctx, client, envelope.OrganizationID, envelope.Assets, envelope.ScanIDs)
 	if err != nil {
 		return summary, err
@@ -100,7 +98,12 @@ func importDomainScanReview(ctx context.Context, client *generated.Client, envel
 		summary.AssetIDs = append(summary.AssetIDs, id)
 	}
 
-	entityIDByRef, err := findOrCreateDomainScanVendors(ctx, client, envelope.OrganizationID, envelope.Vendors, envelope.Assets, assetIDByRef, envelope.ScanIDs)
+	vendorNameByAssetDomain, err := domainScanAssetVendorNames(ctx, client, envelope.ScanIDs)
+	if err != nil {
+		return summary, err
+	}
+
+	entityIDByRef, err := findOrCreateDomainScanVendors(ctx, client, envelope.OrganizationID, envelope.Vendors, envelope.Assets, assetIDByRef, vendorNameByAssetDomain, envelope.ScanIDs)
 	if err != nil {
 		return summary, err
 	}
@@ -125,7 +128,7 @@ func importDomainScanReview(ctx context.Context, client *generated.Client, envel
 		}
 	}
 
-	summary.FindingIDs, err = createDomainScanFindings(ctx, client, envelope.OrganizationID, envelope.Findings, envelope.ScanIDs)
+	summary.FindingIDs, err = createDomainScanFindings(ctx, client, envelope.OrganizationID, envelope.Findings, envelope.Assets, assetIDByRef, envelope.ScanIDs)
 	if err != nil {
 		return summary, err
 	}
@@ -133,30 +136,43 @@ func importDomainScanReview(ctx context.Context, client *generated.Client, envel
 	return summary, nil
 }
 
-// errDomainScanImportInvalid is returned when an accepted domain scan review is structurally invalid
-var errDomainScanImportInvalid = fmt.Errorf("domain scan import: invalid review")
-
 // findOrCreateDomainScanVendors resolves each accepted vendor to an Entity ID, reusing an
-// existing org Entity by name if one already exists, and auto-links any accepted asset whose
-// domain belongs to the vendor
-func findOrCreateDomainScanVendors(ctx context.Context, client *generated.Client, ownerID string, vendors []operations.ImportDomainScanReviewVendor, assets []operations.ImportDomainScanReviewAsset, assetIDByRef map[string]string, scanIDs []string) (map[string]string, error) {
+// existing org Entity by name if one already exists, and auto-links any accepted asset the scan
+// itself attributed to that vendor
+func findOrCreateDomainScanVendors(ctx context.Context, client *generated.Client, ownerID string, vendors []operations.ImportDomainScanReviewVendor, assets []operations.ImportDomainScanReviewAsset, assetIDByRef, vendorNameByAssetDomain map[string]string, scanIDs []string) (map[string]string, error) {
 	ids := make(map[string]string, len(vendors))
 	if len(vendors) == 0 {
 		return ids, nil
 	}
 
-	vendorEntityType, err := client.EntityType.Query().Where(entitytype.NameEqualFold(domainScanImportVendorEntityType), entitytype.OwnerID(ownerID)).Only(ctx)
+	vendorEntityTypeID, err := client.EntityType.Query().Where(entitytype.NameEqualFold(domainScanImportVendorEntityType), entitytype.OwnerID(ownerID)).OnlyID(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("looking up vendor entity type: %w", err)
 	}
 
 	for _, vendor := range vendors {
-		matchedAssetIDs := domainScanVendorAssetMatches(vendor.Domain, assets, assetIDByRef)
+		matchedAssetIDs := domainScanMappingMatches(assets, assetIDByRef, func(assetDomain string) bool {
+			registrable, ok := domainscan.RegistrableDomain(assetDomain)
+			if !ok {
+				return false
+			}
+
+			return strings.EqualFold(vendorNameByAssetDomain[registrable], vendor.Name)
+		})
+
+		entityName := vendor.LegalName
+		if entityName == "" {
+			entityName = vendor.Name
+		}
 
 		existing, err := client.Entity.Query().
 			Where(
 				entity.OwnerID(ownerID),
-				entity.Or(entity.NameEqualFold(vendor.Name), entity.DisplayNameEqualFold(vendor.Name)),
+				entity.Or(
+					entity.NameEqualFold(entityName),
+					entity.NameEqualFold(vendor.Name),
+					entity.DisplayNameEqualFold(vendor.Name),
+				),
 			).
 			First(ctx)
 
@@ -176,10 +192,11 @@ func findOrCreateDomainScanVendors(ctx context.Context, client *generated.Client
 		}
 
 		input := generated.CreateEntityInput{
-			Name:           &vendor.Name,
+			Name:           &entityName,
+			DisplayName:    &vendor.Name,
 			OwnerID:        &ownerID,
 			ApprovedForUse: lo.ToPtr(true),
-			EntityTypeID:   &vendorEntityType.ID,
+			EntityTypeID:   &vendorEntityTypeID,
 			ScanIDs:        scanIDs,
 			Tags:           vendor.Categories,
 			AssetIDs:       matchedAssetIDs,
@@ -200,14 +217,42 @@ func findOrCreateDomainScanVendors(ctx context.Context, client *generated.Client
 	return ids, nil
 }
 
-// domainScanVendorAssetMatches returns asset IDs whose domain matches or is a subdomain of vendorDomain
-func domainScanVendorAssetMatches(vendorDomain string, assets []operations.ImportDomainScanReviewAsset, assetIDByRef map[string]string) []string {
-	if vendorDomain == "" {
-		return nil
+// domainScanAssetVendorNames maps each domain (lowercased) to the vendor name the scan itself
+// attributed it to, read back from the completed scans' own dns_records
+func domainScanAssetVendorNames(ctx context.Context, client *generated.Client, scanIDs []string) (map[string]string, error) {
+	scans, err := client.Scan.Query().Where(scan.IDIn(scanIDs...)).All(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("looking up scans for vendor-asset attribution: %w", err)
 	}
 
-	vendorDomain = strings.ToLower(strings.TrimSuffix(vendorDomain, "."))
+	vendorNameByDomain := map[string]string{}
 
+	for _, s := range scans {
+		var report domainscan.ScanReport
+		if err := jsonx.RoundTrip(s.Metadata, &report); err != nil || report.Assets == nil {
+			continue
+		}
+
+		for _, record := range report.Assets.DNSRecords {
+			if record.Domain == "" || record.Vendor == "" {
+				continue
+			}
+
+			registrable, ok := domainscan.RegistrableDomain(record.Domain)
+			if !ok {
+				continue
+			}
+
+			vendorNameByDomain[registrable] = record.Vendor
+		}
+	}
+
+	return vendorNameByDomain, nil
+}
+
+// domainScanMappingMatches returns the IDs of accepted assets whose lowercased, dot-trimmed
+// identifier satisfies match
+func domainScanMappingMatches(assets []operations.ImportDomainScanReviewAsset, assetIDByRef map[string]string, match func(assetDomain string) bool) []string {
 	var ids []string
 
 	for _, asset := range assets {
@@ -216,7 +261,7 @@ func domainScanVendorAssetMatches(vendorDomain string, assets []operations.Impor
 		}
 
 		assetDomain := strings.ToLower(strings.TrimSuffix(asset.Identifier, "."))
-		if assetDomain != vendorDomain && !strings.HasSuffix(assetDomain, "."+vendorDomain) {
+		if !match(assetDomain) {
 			continue
 		}
 
@@ -298,7 +343,7 @@ func createDomainScanSystemDetails(ctx context.Context, client *generated.Client
 	for _, system := range systems {
 		platformIDs := resolveDomainScanRefs(system.PlatformRefs, platformIDByRef)
 		if len(platformIDs) == 0 {
-			return nil, fmt.Errorf("%w: system %q has no platform to attach to", errDomainScanImportInvalid, system.Name)
+			return nil, fmt.Errorf("%w: system %q has no platform to attach to", ErrDomainScanImportInvalid, system.Name)
 		}
 
 		input := generated.CreateSystemDetailInput{
@@ -324,14 +369,20 @@ func createDomainScanSystemDetails(ctx context.Context, client *generated.Client
 	return ids, nil
 }
 
-// createDomainScanFindings creates one Finding per accepted finding, linked to the scans it came from
-func createDomainScanFindings(ctx context.Context, client *generated.Client, ownerID string, findings []operations.ImportDomainScanReviewFinding, scanIDs []string) ([]string, error) {
+// createDomainScanFindings creates one Finding per accepted finding, linked to the scans it came
+// from and auto-linked to any accepted asset matching its domain
+func createDomainScanFindings(ctx context.Context, client *generated.Client, ownerID string, findings []operations.ImportDomainScanReviewFinding, assets []operations.ImportDomainScanReviewAsset, assetIDByRef map[string]string, scanIDs []string) ([]string, error) {
 	ids := make([]string, 0, len(findings))
 
 	for _, finding := range findings {
+		domain := strings.ToLower(strings.TrimSuffix(finding.Domain, "."))
+
 		input := generated.CreateFindingInput{
 			OwnerID: &ownerID,
 			ScanIDs: scanIDs,
+			AssetIDs: domainScanMappingMatches(assets, assetIDByRef, func(assetDomain string) bool {
+				return domain != "" && (assetDomain == domain || strings.HasSuffix(assetDomain, "."+domain))
+			}),
 		}
 
 		if finding.Category != "" {

@@ -17,6 +17,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/integrations/operations"
@@ -70,7 +71,29 @@ func domainScanListeners() types.GalaListenerRegistration {
 				return nil, err
 			}
 
-			return append(createIDs, pollIDs...), nil
+			submitExistingIDs, err := gala.RegisterListeners(registry, gala.Definition[operations.DomainScanSubmitEnvelope]{
+				Topic: gala.Topic[operations.DomainScanSubmitEnvelope]{Name: operations.DomainScanSubmitTopic},
+				Name:  operations.DomainScanSubmitListenerName,
+				Handle: func(hc gala.HandlerContext, envelope operations.DomainScanSubmitEnvelope) error {
+					return saga.submitAndScheduleDomainScan(hc.Context, envelope.OrganizationID, envelope.ScanID, envelope.Domain, envelope.ForceRefresh)
+				},
+			})
+			if err != nil {
+				return nil, err
+			}
+
+			importIDs, err := gala.RegisterListeners(registry, gala.Definition[operations.ImportDomainScanReviewEnvelope]{
+				Topic: gala.Topic[operations.ImportDomainScanReviewEnvelope]{Name: operations.DomainScanImportTopic},
+				Name:  operations.DomainScanImportListenerName,
+				Handle: func(hc gala.HandlerContext, envelope operations.ImportDomainScanReviewEnvelope) error {
+					return saga.HandleImportDomainScanReview(hc.Context, envelope)
+				},
+			})
+			if err != nil {
+				return nil, err
+			}
+
+			return append(append(append(createIDs, pollIDs...), submitExistingIDs...), importIDs...), nil
 		},
 	}
 }
@@ -96,17 +119,35 @@ func (s domainScanSaga) handleCreate(ctx context.Context, envelope operations.Do
 	createCtx := workflows.SkipEventEmission(systemCtx)
 
 	for _, domain := range envelope.Domains {
-		scanRecord, err := s.services.DB().Scan.Create().
-			SetOwnerID(envelope.OrganizationID).
-			SetTarget(domain).
-			SetScanType(enums.ScanTypeDomain).
-			SetScanDate(*now).
-			SetPerformedBy(operations.DomainScanPerformedBy).
-			SetStatus(enums.ScanStatusPending).
-			Save(createCtx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Str("domain", domain).Msg("domain scan: failed creating scan record")
+		// a retry of this same job (e.g. after a transient failure) re-runs from the top, so reuse
+		// a still-pending scan from an earlier attempt instead of creating another one for it
+		scanRecord, err := s.services.DB().Scan.Query().
+			Where(
+				scan.OwnerID(envelope.OrganizationID),
+				scan.Target(domain),
+				scan.ScanTypeEQ(enums.ScanTypeDomain),
+				scan.PerformedBy(operations.DomainScanPerformedBy),
+				scan.StatusEQ(enums.ScanStatusPending),
+			).
+			First(createCtx)
+		if err != nil && !generated.IsNotFound(err) {
+			logx.FromContext(ctx).Error().Err(err).Str("domain", domain).Msg("domain scan: failed checking for existing pending scan record")
 			return err
+		}
+
+		if scanRecord == nil {
+			scanRecord, err = s.services.DB().Scan.Create().
+				SetOwnerID(envelope.OrganizationID).
+				SetTarget(domain).
+				SetScanType(enums.ScanTypeDomain).
+				SetScanDate(*now).
+				SetPerformedBy(operations.DomainScanPerformedBy).
+				SetStatus(enums.ScanStatusPending).
+				Save(createCtx)
+			if err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("domain", domain).Msg("domain scan: failed creating scan record")
+				return err
+			}
 		}
 
 		scanIDs[domain] = scanRecord.ID
@@ -115,8 +156,8 @@ func (s domainScanSaga) handleCreate(ctx context.Context, envelope operations.Do
 	return s.submitAndScheduleDomainScans(ctx, envelope.OrganizationID, scanIDs, envelope.ForceRefresh)
 }
 
-// HandleDomainScanSubmit submits a single already-created Scan record to domain scanner and schedules its poll cycle
-func (s domainScanSaga) HandleDomainScanSubmit(ctx context.Context, organizationID, scanID, domain string, forceRefresh bool) error {
+// submitAndScheduleDomainScan submits a single already-created Scan record to domain scanner and schedules its poll cycle
+func (s domainScanSaga) submitAndScheduleDomainScan(ctx context.Context, organizationID, scanID, domain string, forceRefresh bool) error {
 	ctx = logx.WithFields(ctx, logx.LogFields{
 		"organization_id": organizationID,
 		"domain":          domain,
@@ -495,13 +536,13 @@ func (s domainScanSaga) maybeNotifyDomainScanGroup(ctx context.Context, organiza
 		}
 	}
 
-	results := make([]domainscan.DomainScanResult, 0, len(siblings))
-	reports := make([]map[string]any, 0, len(siblings))
+	results := make([]domainscan.Result, 0, len(siblings))
+	reports := make([]domainscan.ScanReportInput, 0, len(siblings))
 
 	var completed, failed int
 
 	for _, sibling := range siblings {
-		domainResult := domainscan.DomainScanResult{
+		domainResult := domainscan.Result{
 			Domain:         sibling.Target,
 			InternalScanID: sibling.ID,
 			Status:         "failed",
@@ -511,16 +552,15 @@ func (s domainScanSaga) maybeNotifyDomainScanGroup(ctx context.Context, organiza
 			domainResult.Status = "completed"
 			completed++
 
-			report := sibling.Metadata
-			reports = append(reports, report)
-
-			if externalScanID, ok := report["external_scan_id"].(string); ok {
-				domainResult.ExternalScanID = externalScanID
+			var report domainscan.ScanReport
+			if err := jsonx.RoundTrip(sibling.Metadata, &report); err != nil {
+				return err
 			}
 
-			if reportURL, ok := report["url"].(string); ok {
-				domainResult.URL = reportURL
-			}
+			reports = append(reports, domainscan.ScanReportInput{Domain: domainResult.Domain, Report: report})
+
+			domainResult.ExternalScanID = report.ExternalScanID
+			domainResult.URL = report.URL
 		} else {
 			failed++
 		}

@@ -116,9 +116,9 @@ func (Scan) Fields() []ent.Field {
 			Default([]string{}).
 			Optional(),
 		field.Enum("status").
-			Comment("the status of the scan, e.g., processing, completed, failed").
+			Comment("the status of the scan, e.g., pending, processing, completed, failed").
 			GoType(enums.ScanStatus("")).
-			Default(enums.ScanStatusProcessing.String()).
+			Default(enums.ScanStatusPending.String()).
 			Annotations(entgql.OrderField("STATUS"), entx.FieldSearchable()),
 	}
 }

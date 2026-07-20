@@ -36,7 +36,7 @@ func TestIsPendingDomainScan(t *testing.T) {
 	}{
 		{
 			name: "domain scan awaiting submission",
-			scan: &generated.Scan{ScanType: enums.ScanTypeDomain, Status: enums.ScanStatusProcessing, PerformedBy: operations.DomainScanPerformedBy},
+			scan: &generated.Scan{ScanType: enums.ScanTypeDomain, Status: enums.ScanStatusPending, PerformedBy: operations.DomainScanPerformedBy},
 			want: true,
 		},
 		{
@@ -46,7 +46,7 @@ func TestIsPendingDomainScan(t *testing.T) {
 		},
 		{
 			name: "non-domain scan is ignored",
-			scan: &generated.Scan{ScanType: enums.ScanTypeVulnerability, Status: enums.ScanStatusProcessing, PerformedBy: operations.DomainScanPerformedBy},
+			scan: &generated.Scan{ScanType: enums.ScanTypeVulnerability, Status: enums.ScanStatusPending, PerformedBy: operations.DomainScanPerformedBy},
 			want: false,
 		},
 		{
@@ -61,7 +61,7 @@ func TestIsPendingDomainScan(t *testing.T) {
 		},
 		{
 			name: "domain scan not marked as openlane-managed is ignored",
-			scan: &generated.Scan{ScanType: enums.ScanTypeDomain, Status: enums.ScanStatusProcessing, PerformedBy: "third-party-pentest"},
+			scan: &generated.Scan{ScanType: enums.ScanTypeDomain, Status: enums.ScanStatusPending, PerformedBy: "third-party-pentest"},
 			want: false,
 		},
 	}

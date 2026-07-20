@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/definitions/cloudflare"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/pkg/domainscan"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 func main() {
@@ -160,8 +161,13 @@ func printFullReport(cfg *domainscan.Config, domain, format string) {
 		return
 	}
 
+	var typed domainscan.ScanReport
+	if err := jsonx.RoundTrip(report, &typed); err != nil {
+		log.Fatalf("failed to decode report: %v", err)
+	}
+
 	fmt.Println("\n------- Full Report --------")
-	printReportTables(report)
+	printReportTables(typed)
 }
 
 // reportTableMaxWidth bounds each table's total width so long cells (e.g. a
@@ -191,38 +197,31 @@ func joinOrDash(items []string) string {
 	return strings.Join(items, ", ")
 }
 
-// stringSlice type-asserts v to []string, returning nil if it isn't one
-func stringSlice(v any) []string {
-	s, _ := v.([]string)
-	return s
-}
-
 // printReportTables renders every section of a BuildScanReport result as its own table,
 // skipping sections the report doesn't contain
-func printReportTables(report map[string]any) {
+func printReportTables(report domainscan.ScanReport) {
 	printSummaryTable(report)
-	printVendorsTable(report)
-	printTechnologiesTable(report)
-	printAssetsTables(report)
-	printFindingsTables(report)
-	printMetaTable(report)
-	printPlatformTable(report)
-	printSystemsTable(report)
-	printComplianceTable(report)
+	printVendorsTable(report.Vendors)
+	printTechnologiesTable(report.Technologies)
+	printAssetsTables(report.Assets)
+	printFindingsTables(report.Findings)
+	printMetaTable(report.Meta)
+	printPlatformTable(report.Platform)
+	printSystemsTable(report.Systems)
+	printComplianceTable(report.Compliance)
 }
 
-func printSummaryTable(report map[string]any) {
+func printSummaryTable(report domainscan.ScanReport) {
 	printSectionHeading("Summary")
 
 	t := newTable("Field", "Value")
-	t.Append([]string{"Scan ID", fmt.Sprint(report["external_scan_id"])})
-	t.Append([]string{"URL", fmt.Sprint(report["url"])})
+	t.Append([]string{"Scan ID", report.ExternalScanID})
+	t.Append([]string{"URL", report.URL})
 	t.Render()
 }
 
-func printVendorsTable(report map[string]any) {
-	vendors, ok := report["vendors"].([]map[string]any)
-	if !ok || len(vendors) == 0 {
+func printVendorsTable(vendors []domainscan.Vendor) {
+	if len(vendors) == 0 {
 		return
 	}
 
@@ -230,15 +229,14 @@ func printVendorsTable(report map[string]any) {
 
 	t := newTable("Name", "URL", "Categories")
 	for _, v := range vendors {
-		t.Append([]string{fmt.Sprint(v["name"]), fmt.Sprint(v["url"]), joinOrDash(stringSlice(v["categories"]))})
+		t.Append([]string{v.Name, v.URL, joinOrDash(v.Categories)})
 	}
 
 	t.Render()
 }
 
-func printTechnologiesTable(report map[string]any) {
-	technologies, ok := report["technologies"].([]map[string]any)
-	if !ok || len(technologies) == 0 {
+func printTechnologiesTable(technologies []domainscan.Technology) {
+	if len(technologies) == 0 {
 		return
 	}
 
@@ -246,88 +244,67 @@ func printTechnologiesTable(report map[string]any) {
 
 	t := newTable("Name", "URL", "Categories")
 	for _, tech := range technologies {
-		t.Append([]string{fmt.Sprint(tech["name"]), fmt.Sprint(tech["url"]), joinOrDash(stringSlice(tech["categories"]))})
+		t.Append([]string{tech.Name, tech.URL, joinOrDash(tech.Categories)})
 	}
 
 	t.Render()
 }
 
-func printAssetsTables(report map[string]any) {
-	assets, ok := report["assets"].(map[string]any)
-	if !ok {
+func printAssetsTables(assets *domainscan.Assets) {
+	if assets == nil {
 		return
 	}
 
 	printSectionHeading("Assets")
 
-	if dnsRecords, ok := assets["dns_records"].([]map[string]string); ok && len(dnsRecords) > 0 {
-		t := newTable("Domain", "Type")
-		for _, r := range dnsRecords {
-			t.Append([]string{r["domain"], r["type"]})
+	if len(assets.DNSRecords) > 0 {
+		t := newTable("Domain", "Type", "Vendor")
+		for _, r := range assets.DNSRecords {
+			t.Append([]string{r.Domain, r.Type, r.Vendor})
 		}
 
 		t.Render()
 	}
 
-	if ipAddresses, ok := assets["ip_addresses"].([]map[string]string); ok && len(ipAddresses) > 0 {
+	if len(assets.IPAddresses) > 0 {
 		t := newTable("Address", "ASN", "Org")
-		for _, ip := range ipAddresses {
-			t.Append([]string{ip["address"], ip["asn"], ip["org"]})
-		}
-
-		t.Render()
-	}
-
-	if internalDomains := stringSlice(assets["internal_domains"]); len(internalDomains) > 0 {
-		t := newTable("Internal Domain")
-		for _, d := range internalDomains {
-			t.Append([]string{d})
+		for _, ip := range assets.IPAddresses {
+			t.Append([]string{ip.Address, ip.ASN, ip.Org})
 		}
 
 		t.Render()
 	}
 }
 
-func printFindingsTables(report map[string]any) {
-	findings, ok := report["findings"].(map[string]any)
-	if !ok {
-		return
-	}
-
+func printFindingsTables(findings domainscan.Findings) {
 	printSectionHeading("Findings")
 
-	malicious, _ := findings["is_malicious"].(bool)
-
 	t := newTable("Field", "Value")
-	t.Append([]string{"Security Violations", joinOrDash(stringSlice(findings["security_violations"]))})
-	t.Append([]string{"Risks", joinOrDash(stringSlice(findings["risks"]))})
-	t.Append([]string{"Malicious", fmt.Sprint(malicious)})
+	t.Append([]string{"Security Violations", joinOrDash(findings.SecurityViolations)})
+	t.Append([]string{"Risks", joinOrDash(findings.Risks)})
+	t.Append([]string{"Malicious", fmt.Sprint(findings.IsMalicious)})
 	t.Render()
 
-	if missingComplianceLinks, ok := findings["missing_compliance_links"].(string); ok && missingComplianceLinks != "" {
+	if findings.MissingComplianceLinks != "" {
 		fmt.Println("\nMissing Compliance Links:")
-		fmt.Println(missingComplianceLinks)
+		fmt.Println(findings.MissingComplianceLinks)
 	}
 
-	agentReadiness, ok := findings["agent_readiness"].(map[string]any)
-	if !ok {
-		return
-	}
+	for _, agentReadiness := range findings.AgentReadiness {
+		fmt.Printf("\nAgent Readiness: level %v (%v)\n", agentReadiness.Level, agentReadiness.LevelName)
 
-	fmt.Printf("\nAgent Readiness: level %v (%v)\n", agentReadiness["level"], agentReadiness["level_name"])
+		if agentReadiness.Checklist != "" {
+			fmt.Println(agentReadiness.Checklist)
+		}
 
-	if checklist, ok := agentReadiness["checklist"].(string); ok && checklist != "" {
-		fmt.Println(checklist)
-	}
-
-	if reference, ok := agentReadiness["reference"].(string); ok && reference != "" {
-		fmt.Printf("Reference: %s\n", reference)
+		if agentReadiness.Reference != "" {
+			fmt.Printf("Reference: %s\n", agentReadiness.Reference)
+		}
 	}
 }
 
-func printMetaTable(report map[string]any) {
-	meta, ok := report["meta"].(map[string]any)
-	if !ok {
+func printMetaTable(meta *domainscan.Meta) {
+	if meta == nil {
 		return
 	}
 
@@ -335,61 +312,57 @@ func printMetaTable(report map[string]any) {
 
 	t := newTable("Field", "Value")
 
-	if rank, ok := meta["rank"]; ok {
-		t.Append([]string{"Rank", fmt.Sprint(rank)})
+	if meta.Rank != 0 {
+		t.Append([]string{"Rank", fmt.Sprint(meta.Rank)})
 	}
 
-	if urlCategories := stringSlice(meta["url_categories"]); len(urlCategories) > 0 {
-		t.Append([]string{"URL Categories", joinOrDash(urlCategories)})
+	if len(meta.URLCategories) > 0 {
+		t.Append([]string{"URL Categories", joinOrDash(meta.URLCategories)})
 	}
 
-	if domainCategories := stringSlice(meta["domain_categories"]); len(domainCategories) > 0 {
-		t.Append([]string{"Domain Categories", joinOrDash(domainCategories)})
+	if len(meta.DomainCategories) > 0 {
+		t.Append([]string{"Domain Categories", joinOrDash(meta.DomainCategories)})
 	}
 
-	if geo, ok := meta["geolocation"].(map[string]any); ok {
-		t.Append([]string{"City", fmt.Sprint(geo["city"])})
-		t.Append([]string{"Country", fmt.Sprintf("%v (%v)", geo["country_name"], geo["country"])})
-		t.Append([]string{"Region", fmt.Sprint(geo["region"])})
-		t.Append([]string{"Coordinates", fmt.Sprintf("%v, %v", geo["latitude"], geo["longitude"])})
+	if geo := meta.Geolocation; geo != nil {
+		t.Append([]string{"City", geo.City})
+		t.Append([]string{"Country", fmt.Sprintf("%v (%v)", geo.CountryName, geo.Country)})
+		t.Append([]string{"Region", geo.Region})
+		t.Append([]string{"Coordinates", fmt.Sprintf("%v, %v", geo.Latitude, geo.Longitude)})
 	}
 
 	t.Render()
 }
 
-func printPlatformTable(report map[string]any) {
-	platform, ok := report["platform"].(map[string]any)
-	if !ok {
+func printPlatformTable(platform *domainscan.Platform) {
+	if platform == nil {
 		return
 	}
 
 	printSectionHeading("Platform")
 
 	t := newTable("Field", "Value")
-	t.Append([]string{"Name", fmt.Sprint(platform["name"])})
-	t.Append([]string{"Description", fmt.Sprint(platform["description"])})
-	t.Append([]string{"Industry", fmt.Sprint(platform["industry"])})
-	t.Append([]string{"Location", fmt.Sprint(platform["location"])})
-	t.Append([]string{"Employees", fmt.Sprint(platform["employee_range"])})
-	t.Append([]string{"Founded", fmt.Sprint(platform["founded_year"])})
-	t.Append([]string{"Est. Revenue", fmt.Sprint(platform["estimated_revenue"])})
-	t.Append([]string{"SSO Supported", fmt.Sprint(platform["sso_supported"])})
-	t.Append([]string{"MFA Supported", fmt.Sprint(platform["mfa_supported"])})
+	t.Append([]string{"Name", platform.Name})
+	t.Append([]string{"Description", platform.Description})
+	t.Append([]string{"Industry", platform.Industry})
+	t.Append([]string{"Location", platform.Location})
+	t.Append([]string{"Employees", platform.EmployeeRange})
+	t.Append([]string{"Founded", platform.FoundedYear})
+	t.Append([]string{"Est. Revenue", platform.EstimatedRevenue})
+	t.Append([]string{"SSO Supported", fmt.Sprint(platform.SSOSupported)})
+	t.Append([]string{"MFA Supported", fmt.Sprint(platform.MFASupported)})
 
-	if statusPage, ok := platform["status_page_url"].(string); ok && statusPage != "" {
-		t.Append([]string{"Status Page", statusPage})
+	if platform.StatusPageURL != "" {
+		t.Append([]string{"Status Page", platform.StatusPageURL})
 	}
 
-	if customers := stringSlice(platform["customers"]); len(customers) > 0 {
-		t.Append([]string{"Customers", joinOrDash(customers)})
+	if len(platform.Customers) > 0 {
+		t.Append([]string{"Customers", joinOrDash(platform.Customers)})
 	}
 
 	t.Render()
 
-	social, ok := platform["social_links"].(domainscan.SocialLinks)
-	if !ok {
-		return
-	}
+	social := platform.SocialLinks
 
 	type socialLink struct {
 		network string
@@ -425,9 +398,8 @@ func printPlatformTable(report map[string]any) {
 	}
 }
 
-func printSystemsTable(report map[string]any) {
-	systems, ok := report["systems"].([]map[string]any)
-	if !ok || len(systems) == 0 {
+func printSystemsTable(systems []domainscan.SystemEntry) {
+	if len(systems) == 0 {
 		return
 	}
 
@@ -435,38 +407,36 @@ func printSystemsTable(report map[string]any) {
 
 	t := newTable("System", "Description")
 	for _, s := range systems {
-		t.Append([]string{fmt.Sprint(s["system_name"]), fmt.Sprint(s["description"])})
+		t.Append([]string{s.SystemName, s.Description})
 	}
 
 	t.Render()
 }
 
-func printComplianceTable(report map[string]any) {
-	compliance, ok := report["compliance"].(map[string]any)
-	if !ok {
+func printComplianceTable(compliance *domainscan.Compliance) {
+	if compliance == nil {
 		return
 	}
 
 	printSectionHeading("Compliance")
 
 	t := newTable("Field", "Value")
-	t.Append([]string{"Frameworks", joinOrDash(stringSlice(compliance["frameworks"]))})
-	t.Append([]string{"SOC 2 Certified", fmt.Sprint(compliance["is_soc2"])})
-	t.Append([]string{"Controls", joinOrDash(stringSlice(compliance["controls"]))})
+	t.Append([]string{"Frameworks", joinOrDash(compliance.Frameworks)})
+	t.Append([]string{"SOC 2 Certified", fmt.Sprint(compliance.IsSOC2)})
+	t.Append([]string{"Controls", joinOrDash(compliance.Controls)})
 
-	if hostedBy, ok := compliance["trust_center_hosted_by"].(string); ok && hostedBy != "" {
-		t.Append([]string{"Trust Center Hosted By", hostedBy})
+	if compliance.TrustCenterHostedBy != "" {
+		t.Append([]string{"Trust Center Hosted By", compliance.TrustCenterHostedBy})
 	}
 
 	t.Render()
 
-	documents, ok := compliance["documents"].([]domainscan.TrustDocument)
-	if !ok || len(documents) == 0 {
+	if len(compliance.Documents) == 0 {
 		return
 	}
 
 	dt := newTable("Document", "Public", "URL")
-	for _, d := range documents {
+	for _, d := range compliance.Documents {
 		dt.Append([]string{d.Name, fmt.Sprint(d.Public), d.URL})
 	}
 

@@ -17312,7 +17312,7 @@ input CreateScanInput {
 	"""
 	discoveredVulnerabilityIds: [String!]
 	"""
-	the status of the scan, e.g., processing, completed, failed
+	the status of the scan, e.g., pending, processing, completed, failed
 	"""
 	status: ScanScanStatus
 	ownerID: ID
@@ -79136,7 +79136,7 @@ type Scan implements Node {
 	"""
 	discoveredVulnerabilityIds: [String!]
 	"""
-	the status of the scan, e.g., processing, completed, failed
+	the status of the scan, e.g., pending, processing, completed, failed
 	"""
 	status: ScanScanStatus!
 	owner: Organization
@@ -99726,7 +99726,7 @@ input UpdateScanInput {
 	appendDiscoveredVulnerabilityIds: [String!]
 	clearDiscoveredVulnerabilityIds: Boolean
 	"""
-	the status of the scan, e.g., processing, completed, failed
+	the status of the scan, e.g., pending, processing, completed, failed
 	"""
 	status: ScanScanStatus
 	addBlockedGroupIDs: [ID!]

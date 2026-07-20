@@ -11,23 +11,30 @@ import (
 	"github.com/theopenlane/core/internal/integrations/operations"
 	intruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
-// ErrDomainScanReviewInvalidRef is returned when a platform/system entityRef or assetRef doesn't
-// match any ref among the accepted vendors/assets in the same review
-var ErrDomainScanReviewInvalidRef = errors.New("domain scan review: unknown ref")
+var (
+	// ErrDomainScanReviewInvalidRef is returned when a platform/system entityRef or assetRef doesn't
+	// match any ref among the accepted vendors/assets in the same review
+	ErrDomainScanReviewInvalidRef = errors.New("domain scan review: unknown ref")
 
-// ErrDomainScanReviewNoScans is returned when none of the submitted scan IDs resolve to a Scan
-// the caller can see
-var ErrDomainScanReviewNoScans = errors.New("domain scan review: no matching scans found")
+	// ErrDomainScanReviewNoScans is returned when none of the submitted scan IDs resolve to a Scan
+	// the caller can see
+	ErrDomainScanReviewNoScans = errors.New("domain scan review: no matching scans found")
 
-// ErrDomainScanReviewMixedOrganizations is returned when the submitted scan IDs belong to more
-// than one organization
-var ErrDomainScanReviewMixedOrganizations = errors.New("domain scan review: scans belong to more than one organization")
+	// ErrDomainScanReviewMixedOrganizations is returned when the submitted scan IDs belong to more
+	// than one organization
+	ErrDomainScanReviewMixedOrganizations = errors.New("domain scan review: scans belong to more than one organization")
 
-// ErrDomainScanReviewUnknownScan is returned when one or more submitted scan IDs don't resolve to
-// a Scan the caller can see
-var ErrDomainScanReviewUnknownScan = errors.New("domain scan review: one or more scan IDs could not be resolved")
+	// ErrDomainScanReviewUnknownScan is returned when one or more submitted scan IDs don't resolve to
+	// a Scan the caller can see
+	ErrDomainScanReviewUnknownScan = errors.New("domain scan review: one or more scan IDs could not be resolved")
+
+	// ErrDomainScanReviewImportFailed is returned when the accepted review could not be queued for
+	// import; the underlying cause is internal and gets logged, not surfaced
+	ErrDomainScanReviewImportFailed = errors.New("domain scan review: failed to queue import")
+)
 
 // importDomainScanReview validates the accepted review, resolves the organization it belongs to
 // from the referenced scans, and emits it for asynchronous processing
@@ -76,7 +83,8 @@ func (r *mutationResolver) importDomainScanReview(ctx context.Context, input mod
 
 	receipt := rt.Gala().EmitWithHeaders(ctx, operations.DomainScanImportTopic, buildDomainScanImportEnvelope(organizationID, input), gala.Headers{})
 	if receipt.Err != nil {
-		return nil, receipt.Err
+		logx.FromContext(ctx).Error().Err(receipt.Err).Msg("domain scan review: failed to queue import")
+		return nil, ErrDomainScanReviewImportFailed
 	}
 
 	return &model.ImportDomainScanReviewPayload{Accepted: true}, nil

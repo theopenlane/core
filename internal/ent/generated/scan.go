@@ -91,7 +91,7 @@ type Scan struct {
 	GeneratedByPlatformID string `json:"generated_by_platform_id,omitempty"`
 	// identifiers of vulnerabilities discovered during the scan
 	DiscoveredVulnerabilityIds []string `json:"discovered_vulnerability_ids,omitempty"`
-	// the status of the scan, e.g., processing, completed, failed
+	// the status of the scan, e.g., pending, processing, completed, failed
 	Status enums.ScanStatus `json:"status,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ScanQuery when eager-loading is set.

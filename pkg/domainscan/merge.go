@@ -2,159 +2,80 @@ package domainscan
 
 import (
 	"slices"
-	"sort"
 	"strings"
 )
 
-// MergeReports combines one BuildScanReport output per domain (already vendor-enriched, as
-// stored on each domain's own Scan.Metadata) into a single DomainScanReport: vendors,
-// technologies, and systems are deduped by name across every domain; assets and findings are
-// unioned; platform/compliance/meta/trust_center_settings take the first non-empty value found,
-// since they describe the company rather than any one domain
-func MergeReports(results []DomainScanResult, reports []map[string]any) DomainScanReport {
-	merged := DomainScanReport{Scans: results}
+// ScanReportInput pairs one domain with its typed scan report, for MergeReports. Domain is
+// carried alongside the report (rather than embedded in it) since it identifies which scan
+// produced the report, not something the report describes about itself
+type ScanReportInput struct {
+	// Domain is the domain that was scanned
+	Domain string
+	// Report is that domain's BuildScanReport output
+	Report ScanReport
+}
 
-	vendors := newNameDedup()
-	technologies := newNameDedup()
-	systems := newNameDedup()
+// MergeReports combines one BuildScanReport output per domain (already vendor-enriched, as
+// stored on each domain's own Scan.Metadata) into a single report
+func MergeReports(results []Result, reports []ScanReportInput) Report {
+	merged := Report{Scans: results}
+
+	vendors := newNameDedup(func(v Vendor) string { return v.Name })
+	technologies := newNameDedup(func(t Technology) string { return t.Name })
+	systems := newNameDedup(func(s SystemEntry) string { return s.SystemName })
 
 	assets := newAssetMerge()
 	findings := newFindingsMerge()
 
-	for _, report := range reports {
-		vendors.addAll(mapSlice(report["vendors"]), "name")
-		technologies.addAll(mapSlice(report["technologies"]), "name")
-		systems.addAll(mapSlice(report["systems"]), "system_name")
+	for _, input := range reports {
+		report := input.Report
 
-		if section, ok := asMap(report["assets"]); ok {
-			assets.add(section)
-		}
+		vendors.addAll(report.Vendors)
+		technologies.addAll(report.Technologies)
+		systems.addAll(report.Systems)
 
-		if section, ok := asMap(report["findings"]); ok {
-			findings.add(section)
-		}
+		assets.add(report.Assets)
+		findings.add(input.Domain, report.Findings)
 
-		if merged.Platform == nil {
-			if section, ok := asMap(report["platform"]); ok && len(section) > 0 {
-				merged.Platform = section
-			}
-		}
-
-		if merged.Compliance == nil {
-			if section, ok := asMap(report["compliance"]); ok && len(section) > 0 {
-				merged.Compliance = section
-			}
-		}
-
-		if merged.Meta == nil {
-			if section, ok := asMap(report["meta"]); ok && len(section) > 0 {
-				merged.Meta = section
-			}
-		}
-
-		if merged.TrustCenterSettings == nil {
-			if section, ok := asMap(report["trust_center_settings"]); ok && len(section) > 0 {
-				merged.TrustCenterSettings = section
-			}
-		}
-
-		if merged.Registrar == nil {
-			if section, ok := asMap(report["registrar"]); ok && len(section) > 0 {
-				merged.Registrar = section
-			}
-		}
+		firstNonNil(&merged.Platform, report.Platform)
+		firstNonNil(&merged.Compliance, report.Compliance)
+		firstNonNil(&merged.Meta, report.Meta)
+		firstNonNil(&merged.Branding, report.Branding)
+		firstNonNil(&merged.Registrar, report.Registrar)
 	}
 
-	if entries := vendors.entries(); len(entries) > 0 {
-		merged.Vendors = entries
-	}
-
-	if entries := technologies.entries(); len(entries) > 0 {
-		merged.Technologies = entries
-	}
-
-	if entries := systems.entries(); len(entries) > 0 {
-		merged.Systems = entries
-	}
-
-	if section := assets.result(); len(section) > 0 {
-		merged.Assets = section
-	}
-
-	if section := findings.result(); len(section) > 0 {
-		merged.Findings = section
-	}
+	merged.Vendors = vendors.entries()
+	merged.Technologies = technologies.entries()
+	merged.Systems = systems.entries()
+	merged.Assets = assets.result()
+	merged.Findings = findings.result()
 
 	return merged
 }
 
-// asMap type-asserts raw as map[string]any, the shape a JSON object section decodes to
-// whether or not it round-tripped through JSON storage first
-func asMap(raw any) (map[string]any, bool) {
-	m, ok := raw.(map[string]any)
-	return m, ok
-}
-
-// mapSlice normalizes raw to []map[string]any, whether it's still []map[string]any (built
-// in-process) or has round-tripped through JSON (e.g. read back from Scan.Metadata) and decoded
-// as []any of map[string]any
-func mapSlice(raw any) []map[string]any {
-	switch v := raw.(type) {
-	case []map[string]any:
-		return v
-	case []any:
-		maps := make([]map[string]any, 0, len(v))
-
-		for _, item := range v {
-			if m, ok := item.(map[string]any); ok {
-				maps = append(maps, m)
-			}
-		}
-
-		return maps
-	default:
-		return nil
+// firstNonNil sets *dst to src if *dst is still unset, so the first non-empty value found across
+// every domain's report wins
+func firstNonNil[T any](dst **T, src *T) {
+	if *dst == nil && src != nil {
+		*dst = src
 	}
 }
 
-// stringSlice normalizes raw to []string, whether it's still []string or has round-tripped
-// through JSON and decoded as []any of string
-func stringSlice(raw any) []string {
-	switch v := raw.(type) {
-	case []string:
-		return v
-	case []any:
-		out := make([]string, 0, len(v))
-
-		for _, item := range v {
-			if s, ok := item.(string); ok {
-				out = append(out, s)
-			}
-		}
-
-		return out
-	default:
-		return nil
-	}
-}
-
-// nameDedup accumulates map[string]any entries keyed by a lowercased name field (the field name
-// varies by section, e.g. "name" for vendors/technologies, "system_name" for systems), keeping
+// nameDedup accumulates entries keyed by a lowercased, trimmed name keeping
 // the first-seen entry for each name and preserving first-seen order
-type nameDedup struct {
-	seen  map[string]bool
-	order []map[string]any
+type nameDedup[T any] struct {
+	seen   map[string]bool
+	order  []T
+	nameOf func(T) string
 }
 
-func newNameDedup() *nameDedup {
-	return &nameDedup{seen: map[string]bool{}}
+func newNameDedup[T any](nameOf func(T) string) *nameDedup[T] {
+	return &nameDedup[T]{seen: map[string]bool{}, nameOf: nameOf}
 }
 
-func (d *nameDedup) addAll(entries []map[string]any, nameField string) {
+func (d *nameDedup[T]) addAll(entries []T) {
 	for _, entry := range entries {
-		name, _ := entry[nameField].(string)
-
-		key := strings.ToLower(strings.TrimSpace(name))
+		key := strings.ToLower(strings.TrimSpace(d.nameOf(entry)))
 		if key == "" || d.seen[key] {
 			continue
 		}
@@ -164,36 +85,33 @@ func (d *nameDedup) addAll(entries []map[string]any, nameField string) {
 	}
 }
 
-func (d *nameDedup) entries() []map[string]any {
+func (d *nameDedup[T]) entries() []T {
 	return d.order
 }
 
-// assetMerge unions the dns_records, ip_addresses, and internal_domains sections of an assets
-// map across every domain's report, deduping dns_records by domain+type, ip_addresses by
-// address, and internal_domains by hostname
+// assetMerge unions the dns_records and ip_addresses sections of an Assets section across every
+// domain's report, deduping dns_records by domain+type and ip_addresses by address
 type assetMerge struct {
-	dnsRecordsSeen      map[string]bool
-	dnsRecords          []map[string]any
-	ipAddrsSeen         map[string]bool
-	ipAddresses         []map[string]any
-	internalDomainsSeen map[string]bool
-	internalDomains     []string
+	dnsRecordsSeen map[string]bool
+	dnsRecords     []DNSRecord
+	ipAddrsSeen    map[string]bool
+	ipAddresses    []IPAddress
 }
 
 func newAssetMerge() *assetMerge {
 	return &assetMerge{
-		dnsRecordsSeen:      map[string]bool{},
-		ipAddrsSeen:         map[string]bool{},
-		internalDomainsSeen: map[string]bool{},
+		dnsRecordsSeen: map[string]bool{},
+		ipAddrsSeen:    map[string]bool{},
 	}
 }
 
-func (a *assetMerge) add(assets map[string]any) {
-	for _, record := range mapSlice(assets["dns_records"]) {
-		domain, _ := record["domain"].(string)
-		recordType, _ := record["type"].(string)
+func (a *assetMerge) add(assets *Assets) {
+	if assets == nil {
+		return
+	}
 
-		key := strings.ToLower(domain) + "|" + strings.ToLower(recordType)
+	for _, record := range assets.DNSRecords {
+		key := strings.ToLower(record.Domain) + "|" + strings.ToLower(record.Type)
 		if key == "|" || a.dnsRecordsSeen[key] {
 			continue
 		}
@@ -202,44 +120,25 @@ func (a *assetMerge) add(assets map[string]any) {
 		a.dnsRecords = append(a.dnsRecords, record)
 	}
 
-	for _, entry := range mapSlice(assets["ip_addresses"]) {
-		address, _ := entry["address"].(string)
-		if address == "" || a.ipAddrsSeen[address] {
+	for _, entry := range assets.IPAddresses {
+		if entry.Address == "" || a.ipAddrsSeen[entry.Address] {
 			continue
 		}
 
-		a.ipAddrsSeen[address] = true
+		a.ipAddrsSeen[entry.Address] = true
 		a.ipAddresses = append(a.ipAddresses, entry)
-	}
-
-	for _, domain := range stringSlice(assets["internal_domains"]) {
-		domain = strings.ToLower(strings.TrimSpace(domain))
-		if domain == "" || a.internalDomainsSeen[domain] {
-			continue
-		}
-
-		a.internalDomainsSeen[domain] = true
-		a.internalDomains = append(a.internalDomains, domain)
 	}
 }
 
-func (a *assetMerge) result() map[string]any {
-	assets := map[string]any{}
-
-	if len(a.dnsRecords) > 0 {
-		assets["dns_records"] = a.dnsRecords
+func (a *assetMerge) result() *Assets {
+	if len(a.dnsRecords) == 0 && len(a.ipAddresses) == 0 {
+		return nil
 	}
 
-	if len(a.ipAddresses) > 0 {
-		assets["ip_addresses"] = a.ipAddresses
+	return &Assets{
+		DNSRecords:  a.dnsRecords,
+		IPAddresses: a.ipAddresses,
 	}
-
-	if len(a.internalDomains) > 0 {
-		sort.Strings(a.internalDomains)
-		assets["internal_domains"] = a.internalDomains
-	}
-
-	return assets
 }
 
 // findingsMerge unions security_violations and risks, ORs is_malicious, concatenates
@@ -249,51 +148,41 @@ type findingsMerge struct {
 	risks              []string
 	isMalicious        bool
 	missingLinks       []string
-	agentReadiness     []map[string]any
+	agentReadiness     []AgentReadinessFinding
 }
 
 func newFindingsMerge() *findingsMerge {
 	return &findingsMerge{}
 }
 
-func (f *findingsMerge) add(findings map[string]any) {
-	f.securityViolations = unionStrings(f.securityViolations, stringSlice(findings["security_violations"]))
-	f.risks = unionStrings(f.risks, stringSlice(findings["risks"]))
+func (f *findingsMerge) add(domain string, findings Findings) {
+	f.securityViolations = unionStrings(f.securityViolations, findings.SecurityViolations)
+	f.risks = unionStrings(f.risks, findings.Risks)
 
-	if malicious, ok := findings["is_malicious"].(bool); ok && malicious {
+	if findings.IsMalicious {
 		f.isMalicious = true
 	}
 
-	if links, ok := findings["missing_compliance_links"].(string); ok && strings.TrimSpace(links) != "" {
-		f.missingLinks = append(f.missingLinks, links)
+	if strings.TrimSpace(findings.MissingComplianceLinks) != "" {
+		f.missingLinks = append(f.missingLinks, findings.MissingComplianceLinks)
 	}
 
-	if readiness, ok := findings["agent_readiness"].(map[string]any); ok && len(readiness) > 0 {
-		f.agentReadiness = append(f.agentReadiness, readiness)
+	for _, finding := range findings.AgentReadiness {
+		finding.Domain = domain
+		f.agentReadiness = append(f.agentReadiness, finding)
 	}
 }
 
-func (f *findingsMerge) result() map[string]any {
-	findings := map[string]any{}
-
-	if len(f.securityViolations) > 0 {
-		findings["security_violations"] = f.securityViolations
-	}
-
-	if len(f.risks) > 0 {
-		findings["risks"] = f.risks
-	}
-
-	if f.isMalicious {
-		findings["is_malicious"] = true
+func (f *findingsMerge) result() Findings {
+	findings := Findings{
+		SecurityViolations: f.securityViolations,
+		Risks:              f.risks,
+		IsMalicious:        f.isMalicious,
+		AgentReadiness:     f.agentReadiness,
 	}
 
 	if len(f.missingLinks) > 0 {
-		findings["missing_compliance_links"] = strings.Join(f.missingLinks, "\n\n")
-	}
-
-	if len(f.agentReadiness) > 0 {
-		findings["agent_readiness"] = f.agentReadiness
+		findings.MissingComplianceLinks = strings.Join(f.missingLinks, "\n\n")
 	}
 
 	return findings

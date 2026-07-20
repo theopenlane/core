@@ -2498,7 +2498,7 @@ var (
 		{Name: "performed_by_group_id", Type: field.TypeString, Nullable: true},
 		{Name: "generated_by_platform_id", Type: field.TypeString, Nullable: true},
 		{Name: "discovered_vulnerability_ids", Type: field.TypeJSON, Nullable: true},
-		{Name: "status", Type: field.TypeEnum, Enums: []string{"PENDING", "PROCESSING", "COMPLETED", "FAILED"}, Default: "PROCESSING"},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"PENDING", "PROCESSING", "COMPLETED", "FAILED"}, Default: "PENDING"},
 	}
 	// ScanHistoryTable holds the schema information for the "scan_history" table.
 	ScanHistoryTable = &schema.Table{

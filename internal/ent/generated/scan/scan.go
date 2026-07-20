@@ -426,7 +426,7 @@ func ScanTypeValidator(st enums.ScanType) error {
 	}
 }
 
-const DefaultStatus enums.ScanStatus = "PROCESSING"
+const DefaultStatus enums.ScanStatus = "PENDING"
 
 // StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
 func StatusValidator(s enums.ScanStatus) error {

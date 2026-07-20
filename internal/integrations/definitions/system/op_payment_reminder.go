@@ -50,22 +50,22 @@ func (p PaymentReminderSweep) Handle() types.OperationHandler {
 }
 
 // Run executes one payment reminder sweep and returns the number of dispatched notifications
-func (sweep PaymentReminderSweep) Run(ctx context.Context, req types.OperationRequest) (int, error) {
+func (p PaymentReminderSweep) Run(ctx context.Context, req types.OperationRequest) (int, error) {
 	db := req.DB
 	logger := logx.FromContext(ctx)
 
-	if sweep.PaymentMethodInterval == 0 {
-		sweep.PaymentMethodInterval = DefaultPaymentMethodInterval
+	if p.PaymentMethodInterval == 0 {
+		p.PaymentMethodInterval = DefaultPaymentMethodInterval
 	}
 
-	if sweep.DeletionDays == 0 {
-		sweep.DeletionDays = DefaultDeletionDays
+	if p.DeletionDays == 0 {
+		p.DeletionDays = DefaultDeletionDays
 	}
 
 	systemCtx := systemSweepContext(ctx)
 
 	now := time.Now()
-	canceledBefore := now.Add(-time.Duration(sweep.PaymentMethodInterval) * 24 * time.Hour)
+	canceledBefore := now.Add(-time.Duration(p.PaymentMethodInterval) * 24 * time.Hour)
 
 	settings, err := db.OrganizationSetting.Query().
 		Where(
@@ -107,7 +107,7 @@ func (sweep PaymentReminderSweep) Run(ctx context.Context, req types.OperationRe
 			continue
 		}
 
-		if sweep.DryRun {
+		if p.DryRun {
 			logger.Info().Str("organization_id", org.ID).Str("organization_name", org.Name).Msg("dry run: would schedule for deletion")
 			orgsToDelete = append(orgsToDelete, fmt.Sprintf("%s (%s)", org.Name, org.ID))
 			dispatched++
@@ -115,7 +115,7 @@ func (sweep PaymentReminderSweep) Run(ctx context.Context, req types.OperationRe
 			continue
 		}
 
-		pendingDeletionAt := now.AddDate(0, 0, int(sweep.DeletionDays))
+		pendingDeletionAt := now.AddDate(0, 0, int(p.DeletionDays))
 
 		if err := db.OrganizationSetting.UpdateOneID(setting.ID).
 			SetPendingDeletionAt(models.DateTime(pendingDeletionAt)).
@@ -182,7 +182,7 @@ func (sweep PaymentReminderSweep) Run(ctx context.Context, req types.OperationRe
 		config, err := json.Marshal(slackdef.OrganizationsPendingDeletionMessage{
 			Count:         len(orgsToDelete),
 			Organizations: orgsToDelete,
-			DryRun:        sweep.DryRun,
+			DryRun:        p.DryRun,
 		})
 		if err != nil {
 			logger.Error().Err(err).Msg("failed to marshal org deletion reminder slack notification")

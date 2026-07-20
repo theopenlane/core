@@ -95,7 +95,7 @@ type ScanHistory struct {
 	GeneratedByPlatformID string `json:"generated_by_platform_id,omitempty"`
 	// identifiers of vulnerabilities discovered during the scan
 	DiscoveredVulnerabilityIds []string `json:"discovered_vulnerability_ids,omitempty"`
-	// the status of the scan, e.g., processing, completed, failed
+	// the status of the scan, e.g., pending, processing, completed, failed
 	Status       enums.ScanStatus `json:"status,omitempty"`
 	selectValues sql.SelectValues
 }

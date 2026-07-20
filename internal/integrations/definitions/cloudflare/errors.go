@@ -43,4 +43,6 @@ var (
 	ErrDomainScanTaskFailed = errors.New("cloudflare: domain scan task failed")
 	// ErrDomainScanMaxAttemptsReached indicates a scan never completed within the poll budget
 	ErrDomainScanMaxAttemptsReached = errors.New("cloudflare: domain scan max poll attempts reached")
+	// ErrDomainScanImportInvalid is returned when an accepted domain scan review is structurally invalid
+	ErrDomainScanImportInvalid = errors.New("domain scan import: invalid review input")
 )

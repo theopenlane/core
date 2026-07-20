@@ -61,6 +61,29 @@ var (
 	DomainScanCreateListenerName = "domainscan.create." + domainScanCreateSchemaName + ".handler"
 )
 
+// DomainScanSubmitEnvelope submits an already-created scan object record to the domain scan
+type DomainScanSubmitEnvelope struct {
+	// OrganizationID is the organization that owns the scan
+	OrganizationID string `json:"organizationId"`
+	// ScanID is the id of the already-created Scan record to submit
+	ScanID string `json:"scanId"`
+	// Domain is the target domain of the scan
+	Domain string `json:"domain"`
+	// ForceRefresh bypasses Cloudflare's Browser Rendering cache, forcing a fresh render
+	// instead of reusing one from a previous scan of the same domain
+	ForceRefresh bool `json:"forceRefresh,omitempty"`
+}
+
+// domainScanSubmitExistingSchemaName is the type name derived from the JSON schema reflector
+var domainScanSubmitExistingSchemaName = jsonx.SchemaID(jsonx.SchemaFrom[DomainScanSubmitEnvelope]())
+
+var (
+	// DomainScanSubmitTopic is the Gala topic name for submitting an already-created scan object
+	DomainScanSubmitTopic = gala.TopicName("domainscan.submit." + domainScanSubmitExistingSchemaName)
+	// DomainScanSubmitListenerName is the Gala listener name for the domain scan submit-existing handler
+	DomainScanSubmitListenerName = "domainscan.submit." + domainScanSubmitExistingSchemaName + ".handler"
+)
+
 // DomainScanPollEnvelope carries one submitted scan through poll cycles until it's ready or the attempt budget is exhausted
 type DomainScanPollEnvelope struct {
 	// OrganizationID is the organization that owns the scan
@@ -100,6 +123,8 @@ type ImportDomainScanReviewVendor struct {
 	Ref string `json:"ref"`
 	// Name is the vendor's name
 	Name string `json:"name"`
+	// LegalName is the vendor's raw legal entity name, if known and different from Name
+	LegalName string `json:"legalName,omitempty"`
 	// Domain is the vendor's domain, if known
 	Domain string `json:"domain,omitempty"`
 	// Categories are the vendor's detected categories
@@ -161,6 +186,8 @@ type ImportDomainScanReviewFinding struct {
 	Description string `json:"description,omitempty"`
 	// Severity is the finding's severity
 	Severity string `json:"severity,omitempty"`
+	// Domain is the domain this finding was raised against, if known
+	Domain string `json:"domain,omitempty"`
 }
 
 // ImportDomainScanReviewEnvelope carries what a reviewer accepted from a domain scan report so
@@ -189,23 +216,6 @@ var domainScanImportSchemaName = jsonx.SchemaID(jsonx.SchemaFrom[ImportDomainSca
 var (
 	// DomainScanImportTopic is the Gala topic name for importing an accepted domain scan review
 	DomainScanImportTopic = gala.TopicName("domainscan.import." + domainScanImportSchemaName)
-	// domainScanImportListenerName is the Gala listener name for the domain scan import handler
-	domainScanImportListenerName = "domainscan.import." + domainScanImportSchemaName + ".handler"
+	// DomainScanImportListenerName is the Gala listener name for the domain scan import handler
+	DomainScanImportListenerName = "domainscan.import." + domainScanImportSchemaName + ".handler"
 )
-
-// DomainScanImportHandler creates the real objects for an accepted domain scan review
-type DomainScanImportHandler func(context.Context, ImportDomainScanReviewEnvelope) error
-
-// RegisterDomainScanImportListener registers the Gala listener that creates the real objects
-// for an accepted domain scan review
-func RegisterDomainScanImportListener(runtime *gala.Gala, handleImport DomainScanImportHandler) error {
-	_, err := gala.RegisterListeners(runtime.Registry(), gala.Definition[ImportDomainScanReviewEnvelope]{
-		Topic: gala.Topic[ImportDomainScanReviewEnvelope]{Name: DomainScanImportTopic},
-		Name:  domainScanImportListenerName,
-		Handle: func(hc gala.HandlerContext, envelope ImportDomainScanReviewEnvelope) error {
-			return handleImport(hc.Context, envelope)
-		},
-	})
-
-	return err
-}

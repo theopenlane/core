@@ -670,6 +670,8 @@ components:
                                                     type: boolean
                                                 reconcile:
                                                     type: boolean
+                                                scheduled:
+                                                    type: boolean
                                                 skipRunRecord:
                                                     type: boolean
                                             type: object

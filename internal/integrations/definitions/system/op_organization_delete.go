@@ -36,12 +36,12 @@ func (o OrganizationDeleteSweep) Handle() types.OperationHandler {
 }
 
 // Run executes one organization deletion sweep and returns the number of deleted organizations
-func (sweep OrganizationDeleteSweep) Run(ctx context.Context, req types.OperationRequest) (int, error) {
+func (o OrganizationDeleteSweep) Run(ctx context.Context, req types.OperationRequest) (int, error) {
 	db := req.DB
 	logger := logx.FromContext(ctx)
 
-	if sweep.MaxDeletesPerRun <= 0 {
-		sweep.MaxDeletesPerRun = DefaultOrganizationDeleteMaxPerRun
+	if o.MaxDeletesPerRun <= 0 {
+		o.MaxDeletesPerRun = DefaultOrganizationDeleteMaxPerRun
 	}
 
 	systemCtx := systemSweepContext(ctx)
@@ -64,7 +64,7 @@ func (sweep OrganizationDeleteSweep) Run(ctx context.Context, req types.Operatio
 		).
 		WithOrganization().
 		Order(organizationsetting.ByUpdatedAt()).
-		Limit(sweep.MaxDeletesPerRun).
+		Limit(o.MaxDeletesPerRun).
 		All(systemCtx)
 	if err != nil {
 		logger.Error().Err(err).Msg("failed querying organizations pending deletion")

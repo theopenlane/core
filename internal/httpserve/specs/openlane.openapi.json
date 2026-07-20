@@ -910,6 +910,9 @@
                           "reconcile": {
                             "type": "boolean"
                           },
+                          "scheduled": {
+                            "type": "boolean"
+                          },
                           "skipRunRecord": {
                             "type": "boolean"
                           }

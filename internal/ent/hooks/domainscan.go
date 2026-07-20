@@ -15,20 +15,41 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-// sendDomainScanCreate emits a domain scan create event via the integration runtime on the ent client
-func sendDomainScanCreate(ctx context.Context, client *generated.Client, organizationID string, domains []string, forceRefresh bool) error {
+// sendDomainScanCreate emits a domain scan create event via the integration runtime on the ent client,
+// deferring emission until commit if a transaction is active
+func sendDomainScanCreate(ctx context.Context, client *generated.Client, organizationID string, domains []string, forceRefresh bool) {
 	rt := intruntime.FromClient(ctx, client)
 	if rt == nil {
-		return nil
+		return
 	}
 
-	receipt := rt.Gala().EmitWithHeaders(ctx, operations.DomainScanCreateTopic, operations.DomainScanCreateEnvelope{
-		OrganizationID: organizationID,
-		Domains:        domains,
-		ForceRefresh:   forceRefresh,
-	}, gala.Headers{})
+	emit := func() {
+		receipt := rt.Gala().EmitWithHeaders(ctx, operations.DomainScanCreateTopic, operations.DomainScanCreateEnvelope{
+			OrganizationID: organizationID,
+			Domains:        domains,
+			ForceRefresh:   forceRefresh,
+		}, gala.Headers{})
+		if receipt.Err != nil {
+			logx.FromContext(ctx).Error().Err(receipt.Err).Msg("unable to emit domain scan create event")
+		}
+	}
 
-	return receipt.Err
+	tx := transactionFromContext(ctx)
+	if tx == nil {
+		emit()
+		return
+	}
+
+	tx.OnCommit(func(next generated.Committer) generated.Committer {
+		return generated.CommitFunc(func(ctx context.Context, tx *generated.Tx) error {
+			err := next.Commit(ctx, tx)
+			if err == nil {
+				defer emit()
+			}
+
+			return err
+		})
+	})
 }
 
 // HookDomainScanUpdate triggers a new domain scan whenever domains are added to an organization's settings
@@ -67,9 +88,7 @@ func HookDomainScanUpdate() ent.Hook {
 				return retVal, nil
 			}
 
-			if err := sendDomainScanCreate(ctx, m.Client(), orgID, addedDomains, false); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Msg("unable to emit domain scan create event")
-			}
+			sendDomainScanCreate(ctx, m.Client(), orgID, addedDomains, false)
 
 			return retVal, nil
 		})

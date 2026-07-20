@@ -53505,7 +53505,7 @@ type ScanHistory implements Node {
   """
   discoveredVulnerabilityIds: [String!]
   """
-  the status of the scan, e.g., processing, completed, failed
+  the status of the scan, e.g., pending, processing, completed, failed
   """
   status: ScanHistoryScanStatus!
 }

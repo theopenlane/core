@@ -8,153 +8,176 @@ import (
 )
 
 func TestMergeReportsVendorsTechnologiesSystemsDedup(t *testing.T) {
-	results := []DomainScanResult{
+	results := []Result{
 		{Domain: "example.com", InternalScanID: "scan-1", Status: "completed"},
 		{Domain: "example.org", InternalScanID: "scan-2", Status: "completed"},
 	}
 
-	reports := []map[string]any{
+	reports := []ScanReportInput{
 		{
-			"vendors":      []map[string]any{{"name": "Cloudflare", "url": "https://cloudflare.com"}},
-			"technologies": []map[string]any{{"name": "Astro"}},
-			"systems":      []map[string]any{{"system_name": "Console"}},
+			Domain: "example.com",
+			Report: ScanReport{
+				Vendors:      []Vendor{{Name: "Cloudflare", URL: "https://cloudflare.com"}},
+				Technologies: []Technology{{Name: "Astro"}},
+				Systems:      []SystemEntry{{SystemName: "Console"}},
+			},
 		},
 		{
 			// same vendor/technology/system by name (different case), should not duplicate
-			"vendors":      []map[string]any{{"name": "cloudflare", "url": "https://cloudflare.com"}, {"name": "Stripe"}},
-			"technologies": []map[string]any{{"name": "astro"}, {"name": "React"}},
-			"systems":      []map[string]any{{"system_name": "Console"}, {"system_name": "API"}},
+			Domain: "example.org",
+			Report: ScanReport{
+				Vendors:      []Vendor{{Name: "cloudflare", URL: "https://cloudflare.com"}, {Name: "Stripe"}},
+				Technologies: []Technology{{Name: "astro"}, {Name: "React"}},
+				Systems:      []SystemEntry{{SystemName: "Console"}, {SystemName: "API"}},
+			},
 		},
 	}
 
 	got := MergeReports(results, reports)
 
 	assert.Assert(t, is.Len(got.Vendors, 2))
-	assert.Equal(t, got.Vendors[0]["name"], "Cloudflare")
-	assert.Equal(t, got.Vendors[1]["name"], "Stripe")
+	assert.Equal(t, got.Vendors[0].Name, "Cloudflare")
+	assert.Equal(t, got.Vendors[1].Name, "Stripe")
 
 	assert.Assert(t, is.Len(got.Technologies, 2))
-	assert.Equal(t, got.Technologies[0]["name"], "Astro")
-	assert.Equal(t, got.Technologies[1]["name"], "React")
+	assert.Equal(t, got.Technologies[0].Name, "Astro")
+	assert.Equal(t, got.Technologies[1].Name, "React")
 
 	assert.Assert(t, is.Len(got.Systems, 2))
-	assert.Equal(t, got.Systems[0]["system_name"], "Console")
-	assert.Equal(t, got.Systems[1]["system_name"], "API")
+	assert.Equal(t, got.Systems[0].SystemName, "Console")
+	assert.Equal(t, got.Systems[1].SystemName, "API")
 }
 
 func TestMergeReportsAssetsUnion(t *testing.T) {
-	results := []DomainScanResult{{Domain: "example.com", InternalScanID: "scan-1", Status: "completed"}}
+	results := []Result{{Domain: "example.com", InternalScanID: "scan-1", Status: "completed"}}
 
-	reports := []map[string]any{
+	reports := []ScanReportInput{
 		{
-			"assets": map[string]any{
-				"dns_records":      []map[string]any{{"domain": "example.com", "type": "A"}, {"domain": "example.com", "type": "A"}},
-				"ip_addresses":     []map[string]any{{"address": "1.2.3.4"}, {"address": "1.2.3.4"}},
-				"internal_domains": []string{"b.example.com", "a.example.com"},
+			Domain: "example.com",
+			Report: ScanReport{
+				Assets: &Assets{
+					DNSRecords: []DNSRecord{
+						{Domain: "example.com", Type: "A"}, {Domain: "example.com", Type: "A"},
+						{Domain: "b.example.com", Type: "internal"}, {Domain: "a.example.com", Type: "internal"},
+					},
+					IPAddresses: []IPAddress{{Address: "1.2.3.4"}, {Address: "1.2.3.4"}},
+				},
 			},
 		},
 		{
-			"assets": map[string]any{
-				"dns_records":      []map[string]any{{"domain": "example.com", "type": "NS"}},
-				"ip_addresses":     []map[string]any{{"address": "5.6.7.8"}},
-				"internal_domains": []string{"a.example.com", "c.example.com"},
+			Domain: "example.com",
+			Report: ScanReport{
+				Assets: &Assets{
+					DNSRecords: []DNSRecord{
+						{Domain: "example.com", Type: "NS"},
+						{Domain: "a.example.com", Type: "internal"}, {Domain: "c.example.com", Type: "internal"},
+					},
+					IPAddresses: []IPAddress{{Address: "5.6.7.8"}},
+				},
 			},
 		},
 	}
 
 	got := MergeReports(results, reports)
 
-	dnsRecords, ok := got.Assets["dns_records"].([]map[string]any)
-	assert.Assert(t, ok)
-	assert.Assert(t, is.Len(dnsRecords, 2))
-
-	ipAddresses, ok := got.Assets["ip_addresses"].([]map[string]any)
-	assert.Assert(t, ok)
-	assert.Assert(t, is.Len(ipAddresses, 2))
-
-	internalDomains, ok := got.Assets["internal_domains"].([]string)
-	assert.Assert(t, ok)
-	assert.DeepEqual(t, internalDomains, []string{"a.example.com", "b.example.com", "c.example.com"})
+	assert.Assert(t, got.Assets != nil)
+	assert.Assert(t, is.Len(got.Assets.DNSRecords, 5))
+	assert.Assert(t, is.Len(got.Assets.IPAddresses, 2))
 }
 
 func TestMergeReportsFindingsUnion(t *testing.T) {
-	results := []DomainScanResult{{Domain: "example.com", InternalScanID: "scan-1", Status: "completed"}}
+	results := []Result{{Domain: "example.com", InternalScanID: "scan-1", Status: "completed"}}
 
-	reports := []map[string]any{
+	reports := []ScanReportInput{
 		{
-			"findings": map[string]any{
-				"security_violations": []string{"malware"},
-				"risks":               []string{"phishing"},
-				"is_malicious":        false,
+			Domain: "example.com",
+			Report: ScanReport{
+				Findings: Findings{
+					SecurityViolations: []string{"malware"},
+					Risks:              []string{"phishing"},
+					IsMalicious:        false,
+				},
 			},
 		},
 		{
-			"findings": map[string]any{
-				"security_violations":      []string{"malware", "spam"},
-				"is_malicious":             true,
-				"missing_compliance_links": "- [ ] privacy_policy",
-				"agent_readiness":          map[string]any{"level": int64(1), "checklist": "- [ ] no MCP server card"},
+			Domain: "example.org",
+			Report: ScanReport{
+				Findings: Findings{
+					SecurityViolations:     []string{"malware", "spam"},
+					IsMalicious:            true,
+					MissingComplianceLinks: "- [ ] privacy_policy",
+					AgentReadiness:         []AgentReadinessFinding{{Level: 1, Checklist: "- [ ] no MCP server card"}},
+				},
 			},
 		},
 	}
 
 	got := MergeReports(results, reports)
 
-	assert.DeepEqual(t, got.Findings["security_violations"], []string{"malware", "spam"})
-	assert.DeepEqual(t, got.Findings["risks"], []string{"phishing"})
-	assert.Equal(t, got.Findings["is_malicious"], true)
-	assert.Equal(t, got.Findings["missing_compliance_links"], "- [ ] privacy_policy")
-	assert.DeepEqual(t, got.Findings["agent_readiness"], []map[string]any{
-		{"level": int64(1), "checklist": "- [ ] no MCP server card"},
+	assert.DeepEqual(t, got.Findings.SecurityViolations, []string{"malware", "spam"})
+	assert.DeepEqual(t, got.Findings.Risks, []string{"phishing"})
+	assert.Equal(t, got.Findings.IsMalicious, true)
+	assert.Equal(t, got.Findings.MissingComplianceLinks, "- [ ] privacy_policy")
+	assert.DeepEqual(t, got.Findings.AgentReadiness, []AgentReadinessFinding{
+		{Level: 1, Checklist: "- [ ] no MCP server card", Domain: "example.org"},
 	})
 }
 
 func TestMergeReportsPlatformCompliancMetaFirstNonEmptyWins(t *testing.T) {
-	results := []DomainScanResult{
+	results := []Result{
 		{Domain: "example.com", InternalScanID: "scan-1", Status: "failed"},
 		{Domain: "example.org", InternalScanID: "scan-2", Status: "completed"},
 	}
 
-	reports := []map[string]any{
+	reports := []ScanReportInput{
 		{
-			"platform":   map[string]any{"name": "Openlane"},
-			"compliance": map[string]any{"is_soc2": true},
-			"meta":       map[string]any{"rank": 1},
-			"registrar":  map[string]any{"registrar": "Cloudflare, Inc."},
+			Domain: "example.com",
+			Report: ScanReport{
+				Platform:   &Platform{Name: "Openlane"},
+				Compliance: &Compliance{IsSOC2: true},
+				Meta:       &Meta{Rank: 1},
+				Registrar:  &Registrar{Registrar: "Cloudflare, Inc."},
+			},
 		},
 		{
-			"platform":   map[string]any{"name": "should not win"},
-			"compliance": map[string]any{"is_soc2": false},
-			"meta":       map[string]any{"rank": 2},
-			"registrar":  map[string]any{"registrar": "should not win"},
+			Domain: "example.org",
+			Report: ScanReport{
+				Platform:   &Platform{Name: "should not win"},
+				Compliance: &Compliance{IsSOC2: false},
+				Meta:       &Meta{Rank: 2},
+				Registrar:  &Registrar{Registrar: "should not win"},
+			},
 		},
 	}
 
 	got := MergeReports(results, reports)
 
-	assert.Equal(t, got.Platform["name"], "Openlane")
-	assert.Equal(t, got.Compliance["is_soc2"], true)
-	assert.Equal(t, got.Meta["rank"], 1)
-	assert.Equal(t, got.Registrar["registrar"], "Cloudflare, Inc.")
+	assert.Equal(t, got.Platform.Name, "Openlane")
+	assert.Equal(t, got.Compliance.IsSOC2, true)
+	assert.Equal(t, got.Meta.Rank, 1)
+	assert.Equal(t, got.Registrar.Registrar, "Cloudflare, Inc.")
 }
 
 func TestMergeReportsPreservesScansIncludingFailed(t *testing.T) {
-	results := []DomainScanResult{
+	results := []Result{
 		{Domain: "example.com", InternalScanID: "scan-1", Status: "completed"},
 		{Domain: "bad-domain.example", InternalScanID: "scan-2", Status: "failed"},
 	}
 
-	got := MergeReports(results, []map[string]any{{}})
+	got := MergeReports(results, []ScanReportInput{{Domain: "example.com"}})
 
 	assert.DeepEqual(t, got.Scans, results)
 }
 
 func TestMergeReportsSingleDomainIsTrivialCase(t *testing.T) {
-	results := []DomainScanResult{{Domain: "example.com", InternalScanID: "scan-1", Status: "completed"}}
+	results := []Result{{Domain: "example.com", InternalScanID: "scan-1", Status: "completed"}}
 
-	reports := []map[string]any{
+	reports := []ScanReportInput{
 		{
-			"vendors": []map[string]any{{"name": "Vercel"}},
+			Domain: "example.com",
+			Report: ScanReport{
+				Vendors: []Vendor{{Name: "Vercel"}},
+			},
 		},
 	}
 
@@ -162,5 +185,5 @@ func TestMergeReportsSingleDomainIsTrivialCase(t *testing.T) {
 
 	assert.Assert(t, is.Len(got.Scans, 1))
 	assert.Assert(t, is.Len(got.Vendors, 1))
-	assert.Equal(t, got.Vendors[0]["name"], "Vercel")
+	assert.Equal(t, got.Vendors[0].Name, "Vercel")
 }
