@@ -14,7 +14,7 @@ func registerOnboardingQuestionsHandler(router *Router) error {
 		Description: "List backend-defined onboarding steps and questions",
 		Tags:        []string{"onboarding"},
 		OperationID: "ListOnboardingQuestions",
-		Security:    handlers.AllSecurityRequirements(),
+		Security:    handlers.AuthenticatedSecurity,
 		Middlewares: *authenticatedEndpoint,
 		Handler:     router.Handler.ListOnboardingQuestions,
 	}

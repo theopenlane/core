@@ -66,47 +66,44 @@ mutation CreateFindingControl($input: CreateFindingControlInput!) {
     }
   }
 }
-
-mutation DeleteBulkFindingControl($ids: [ID!]!) {
-  deleteBulkFindingControl(ids: $ids) {
-    deletedIDs
-  }
+mutation DeleteBulkFindingControl ($ids: [ID!]!) {
+	deleteBulkFindingControl(ids: $ids) {
+		deletedIDs
+	}
 }
-
-mutation DeleteFindingControl($deleteFindingControlId: ID!) {
-  deleteFindingControl(id: $deleteFindingControlId) {
-    deletedID
-  }
+mutation DeleteFindingControl ($deleteFindingControlId: ID!) {
+	deleteFindingControl(id: $deleteFindingControlId) {
+		deletedID
+	}
 }
-
 query GetAllFindingControls {
-  findingControls {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        controlID
-        createdAt
-        createdBy
-        discoveredAt
-        externalControlID
-        externalStandard
-        externalStandardVersion
-        findingID
-        id
-        metadata
-        source
-        standardID
-        updatedAt
-        updatedBy
-      }
-    }
-  }
+	findingControls {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				controlID
+				createdAt
+				createdBy
+				discoveredAt
+				externalControlID
+				externalStandard
+				externalStandardVersion
+				findingID
+				id
+				metadata
+				source
+				standardID
+				updatedAt
+				updatedBy
+			}
+		}
+	}
 }
 
 query GetFindingControlByID($findingControlId: ID!) {
@@ -129,35 +126,34 @@ query GetFindingControlByID($findingControlId: ID!) {
     updatedByImpersonator
   }
 }
-
-query GetFindingControls($first: Int, $last: Int, $where: FindingControlWhereInput) {
-  findingControls(first: $first, last: $last, where: $where) {
-    totalCount
-    pageInfo {
-      startCursor
-      endCursor
-      hasPreviousPage
-      hasNextPage
-    }
-    edges {
-      node {
-        controlID
-        createdAt
-        createdBy
-        discoveredAt
-        externalControlID
-        externalStandard
-        externalStandardVersion
-        findingID
-        id
-        metadata
-        source
-        standardID
-        updatedAt
-        updatedBy
-      }
-    }
-  }
+query GetFindingControls ($first: Int, $last: Int, $where: FindingControlWhereInput) {
+	findingControls(first: $first, last: $last, where: $where) {
+		totalCount
+		pageInfo {
+			startCursor
+			endCursor
+			hasPreviousPage
+			hasNextPage
+		}
+		edges {
+			node {
+				controlID
+				createdAt
+				createdBy
+				discoveredAt
+				externalControlID
+				externalStandard
+				externalStandardVersion
+				findingID
+				id
+				metadata
+				source
+				standardID
+				updatedAt
+				updatedBy
+			}
+		}
+	}
 }
 
 mutation UpdateFindingControl($updateFindingControlId: ID!, $input: UpdateFindingControlInput!) {
