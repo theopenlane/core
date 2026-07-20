@@ -148,9 +148,9 @@ func createOnboardingTasks(ctx context.Context, client *generated.Client, orgID 
 			mutation.SetAvailableAt(*t.AvailableAt)
 		}
 
-		// if len(t.Metadata) > 0 {
-		// 	mutation.SetMetadata(t.Metadata)
-		// }
+		if len(t.Metadata) > 0 {
+			mutation.SetMetadata(t.Metadata)
+		}
 
 		if _, err := mutation.Save(allowCtx); err != nil {
 			return err
