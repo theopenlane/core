@@ -28455,7 +28455,6 @@ type CreateTrustCenterNDARequestInput struct {
 	Reason            *string                                 `json:"reason,omitempty"`
 	AccessLevel       *enums.TrustCenterNDARequestAccessLevel `json:"access_level,omitempty"`
 	ApprovedAt        *models.DateTime                        `json:"approved_at,omitempty"`
-	ApprovedByUserID  *string                                 `json:"approved_by_user_id,omitempty"`
 	SignedAt          *models.DateTime                        `json:"signed_at,omitempty"`
 	BlockedGroupIDs   []string                                `json:"blocked_group_ids,omitempty"`
 	EditorIDs         []string                                `json:"editor_ids,omitempty"`
@@ -28463,6 +28462,7 @@ type CreateTrustCenterNDARequestInput struct {
 	TrustCenterDocIDs []string                                `json:"trust_center_doc_ids,omitempty"`
 	DocumentID        *string                                 `json:"document_id,omitempty"`
 	FileID            *string                                 `json:"file_id,omitempty"`
+	ApprovedByUserID  *string                                 `json:"approved_by_user_id,omitempty"`
 }
 
 // Mutate applies the CreateTrustCenterNDARequestInput on the TrustCenterNDARequestMutation builder.
@@ -28485,9 +28485,6 @@ func (i *CreateTrustCenterNDARequestInput) Mutate(m *TrustCenterNDARequestMutati
 	if v := i.ApprovedAt; v != nil {
 		m.SetApprovedAt(*v)
 	}
-	if v := i.ApprovedByUserID; v != nil {
-		m.SetApprovedByUserID(*v)
-	}
 	if v := i.SignedAt; v != nil {
 		m.SetSignedAt(*v)
 	}
@@ -28508,6 +28505,9 @@ func (i *CreateTrustCenterNDARequestInput) Mutate(m *TrustCenterNDARequestMutati
 	}
 	if v := i.FileID; v != nil {
 		m.SetFileID(*v)
+	}
+	if v := i.ApprovedByUserID; v != nil {
+		m.SetApprovedByUserID(*v)
 	}
 }
 
@@ -28535,8 +28535,6 @@ type UpdateTrustCenterNDARequestInput struct {
 	Status                  *enums.TrustCenterNDARequestStatus `json:"status,omitempty"`
 	ClearApprovedAt         bool
 	ApprovedAt              *models.DateTime `json:"approved_at,omitempty"`
-	ClearApprovedByUserID   bool
-	ApprovedByUserID        *string `json:"approved_by_user_id,omitempty"`
 	ClearSignedAt           bool
 	SignedAt                *models.DateTime `json:"signed_at,omitempty"`
 	ClearBlockedGroups      bool
@@ -28552,6 +28550,8 @@ type UpdateTrustCenterNDARequestInput struct {
 	DocumentID              *string `json:"document_id,omitempty"`
 	ClearFile               bool
 	FileID                  *string `json:"file_id,omitempty"`
+	ClearApprovedByUser     bool
+	ApprovedByUserID        *string `json:"approved_by_user_id,omitempty"`
 }
 
 // Mutate applies the UpdateTrustCenterNDARequestInput on the TrustCenterNDARequestMutation builder.
@@ -28604,12 +28604,6 @@ func (i *UpdateTrustCenterNDARequestInput) Mutate(m *TrustCenterNDARequestMutati
 	if v := i.ApprovedAt; v != nil {
 		m.SetApprovedAt(*v)
 	}
-	if i.ClearApprovedByUserID {
-		m.ClearApprovedByUserID()
-	}
-	if v := i.ApprovedByUserID; v != nil {
-		m.SetApprovedByUserID(*v)
-	}
 	if i.ClearSignedAt {
 		m.ClearSignedAt()
 	}
@@ -28654,6 +28648,12 @@ func (i *UpdateTrustCenterNDARequestInput) Mutate(m *TrustCenterNDARequestMutati
 	}
 	if v := i.FileID; v != nil {
 		m.SetFileID(*v)
+	}
+	if i.ClearApprovedByUser {
+		m.ClearApprovedByUser()
+	}
+	if v := i.ApprovedByUserID; v != nil {
+		m.SetApprovedByUserID(*v)
 	}
 }
 

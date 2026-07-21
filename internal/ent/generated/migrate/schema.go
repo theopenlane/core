@@ -8028,11 +8028,11 @@ var (
 		{Name: "access_level", Type: field.TypeEnum, Nullable: true, Enums: []string{"FULL", "LIMITED"}, Default: "FULL"},
 		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"REQUESTED", "NEEDS_APPROVAL", "APPROVED", "SIGNED", "DECLINED"}, Default: "REQUESTED"},
 		{Name: "approved_at", Type: field.TypeTime, Nullable: true},
-		{Name: "approved_by_user_id", Type: field.TypeString, Nullable: true},
 		{Name: "signed_at", Type: field.TypeTime, Nullable: true},
 		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
 		{Name: "document_data_id", Type: field.TypeString, Nullable: true},
 		{Name: "file_id", Type: field.TypeString, Nullable: true},
+		{Name: "approved_by_user_id", Type: field.TypeString, Nullable: true},
 	}
 	// TrustCenterNdaRequestsTable holds the schema information for the "trust_center_nda_requests" table.
 	TrustCenterNdaRequestsTable = &schema.Table{
@@ -8042,20 +8042,26 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "trust_center_nda_requests_trust_centers_trust_center_nda_requests",
-				Columns:    []*schema.Column{TrustCenterNdaRequestsColumns[19]},
+				Columns:    []*schema.Column{TrustCenterNdaRequestsColumns[18]},
 				RefColumns: []*schema.Column{TrustCentersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "trust_center_nda_requests_document_data_document",
-				Columns:    []*schema.Column{TrustCenterNdaRequestsColumns[20]},
+				Columns:    []*schema.Column{TrustCenterNdaRequestsColumns[19]},
 				RefColumns: []*schema.Column{DocumentDataColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "trust_center_nda_requests_files_file",
-				Columns:    []*schema.Column{TrustCenterNdaRequestsColumns[21]},
+				Columns:    []*schema.Column{TrustCenterNdaRequestsColumns[20]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "trust_center_nda_requests_users_approved_by_user",
+				Columns:    []*schema.Column{TrustCenterNdaRequestsColumns[21]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -15808,6 +15814,7 @@ func init() {
 	TrustCenterNdaRequestsTable.ForeignKeys[0].RefTable = TrustCentersTable
 	TrustCenterNdaRequestsTable.ForeignKeys[1].RefTable = DocumentDataTable
 	TrustCenterNdaRequestsTable.ForeignKeys[2].RefTable = FilesTable
+	TrustCenterNdaRequestsTable.ForeignKeys[3].RefTable = UsersTable
 	TrustCenterSettingsTable.ForeignKeys[0].RefTable = FilesTable
 	TrustCenterSettingsTable.ForeignKeys[1].RefTable = FilesTable
 	TrustCenterSettingsTable.ForeignKeys[2].RefTable = FilesTable

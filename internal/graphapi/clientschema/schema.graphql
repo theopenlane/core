@@ -18125,10 +18125,6 @@ input CreateTrustCenterNDARequestInput {
 	"""
 	approvedAt: DateTime
 	"""
-	ID of the user who approved the request
-	"""
-	approvedByUserID: String
-	"""
 	timestamp when the NDA was signed
 	"""
 	signedAt: DateTime
@@ -18138,6 +18134,7 @@ input CreateTrustCenterNDARequestInput {
 	trustCenterDocIDs: [ID!]
 	documentID: ID
 	fileID: ID
+	approvedByUserID: ID
 }
 """
 Input for createTrustCenterPreviewSetting mutation
@@ -90033,7 +90030,7 @@ type TrustCenterNDARequest implements Node {
 	"""
 	ID of the user who approved the request
 	"""
-	approvedByUserID: String
+	approvedByUserID: ID
 	"""
 	timestamp when the NDA was signed
 	"""
@@ -90148,6 +90145,7 @@ type TrustCenterNDARequest implements Node {
 	the template file at the time the NDA was signed
 	"""
 	file: File
+	approvedByUser: User
 }
 """
 Return response for createBulkTrustCenterNDARequest mutation
@@ -90506,21 +90504,21 @@ input TrustCenterNDARequestWhereInput {
 	"""
 	approved_by_user_id field predicates
 	"""
-	approvedByUserID: String
-	approvedByUserIDNEQ: String
-	approvedByUserIDIn: [String!]
-	approvedByUserIDNotIn: [String!]
-	approvedByUserIDGT: String
-	approvedByUserIDGTE: String
-	approvedByUserIDLT: String
-	approvedByUserIDLTE: String
-	approvedByUserIDContains: String
-	approvedByUserIDHasPrefix: String
-	approvedByUserIDHasSuffix: String
+	approvedByUserID: ID
+	approvedByUserIDNEQ: ID
+	approvedByUserIDIn: [ID!]
+	approvedByUserIDNotIn: [ID!]
+	approvedByUserIDGT: ID
+	approvedByUserIDGTE: ID
+	approvedByUserIDLT: ID
+	approvedByUserIDLTE: ID
+	approvedByUserIDContains: ID
+	approvedByUserIDHasPrefix: ID
+	approvedByUserIDHasSuffix: ID
 	approvedByUserIDIsNil: Boolean
 	approvedByUserIDNotNil: Boolean
-	approvedByUserIDEqualFold: String
-	approvedByUserIDContainsFold: String
+	approvedByUserIDEqualFold: ID
+	approvedByUserIDContainsFold: ID
 	"""
 	signed_at field predicates
 	"""
@@ -90600,6 +90598,11 @@ input TrustCenterNDARequestWhereInput {
 	"""
 	hasFile: Boolean
 	hasFileWith: [FileWhereInput!]
+	"""
+	approved_by_user edge predicates
+	"""
+	hasApprovedByUser: Boolean
+	hasApprovedByUserWith: [UserWhereInput!]
 	"""
 	Filter for tagsHas to contain a specific value
 	"""
@@ -100655,11 +100658,6 @@ input UpdateTrustCenterNDARequestInput {
 	approvedAt: DateTime
 	clearApprovedAt: Boolean
 	"""
-	ID of the user who approved the request
-	"""
-	approvedByUserID: String
-	clearApprovedByUserID: Boolean
-	"""
 	timestamp when the NDA was signed
 	"""
 	signedAt: DateTime
@@ -100677,6 +100675,8 @@ input UpdateTrustCenterNDARequestInput {
 	clearDocument: Boolean
 	fileID: ID
 	clearFile: Boolean
+	approvedByUserID: ID
+	clearApprovedByUser: Boolean
 }
 """
 UpdateTrustCenterSettingInput is used for update TrustCenterSetting object.

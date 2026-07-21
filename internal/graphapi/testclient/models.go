@@ -10013,8 +10013,6 @@ type CreateTrustCenterNDARequestInput struct {
 	AccessLevel *enums.TrustCenterNDARequestAccessLevel `json:"accessLevel,omitempty"`
 	// timestamp when the request was approved
 	ApprovedAt *models.DateTime `json:"approvedAt,omitempty"`
-	// ID of the user who approved the request
-	ApprovedByUserID *string `json:"approvedByUserID,omitempty"`
 	// timestamp when the NDA was signed
 	SignedAt          *models.DateTime `json:"signedAt,omitempty"`
 	BlockedGroupIDs   []string         `json:"blockedGroupIDs,omitempty"`
@@ -10023,6 +10021,7 @@ type CreateTrustCenterNDARequestInput struct {
 	TrustCenterDocIDs []string         `json:"trustCenterDocIDs,omitempty"`
 	DocumentID        *string          `json:"documentID,omitempty"`
 	FileID            *string          `json:"fileID,omitempty"`
+	ApprovedByUserID  *string          `json:"approvedByUserID,omitempty"`
 }
 
 // Input for createTrustCenterPreviewSetting mutation
@@ -40007,7 +40006,8 @@ type TrustCenterNDARequest struct {
 	// the signed NDA document data
 	Document *DocumentData `json:"document,omitempty"`
 	// the template file at the time the NDA was signed
-	File *File `json:"file,omitempty"`
+	File           *File `json:"file,omitempty"`
+	ApprovedByUser *User `json:"approvedByUser,omitempty"`
 }
 
 func (TrustCenterNDARequest) IsNode() {}
@@ -40351,6 +40351,9 @@ type TrustCenterNDARequestWhereInput struct {
 	// file edge predicates
 	HasFile     *bool             `json:"hasFile,omitempty"`
 	HasFileWith []*FileWhereInput `json:"hasFileWith,omitempty"`
+	// approved_by_user edge predicates
+	HasApprovedByUser     *bool             `json:"hasApprovedByUser,omitempty"`
+	HasApprovedByUserWith []*UserWhereInput `json:"hasApprovedByUserWith,omitempty"`
 	// Filter for tagsHas to contain a specific value
 	TagsHas *string `json:"tagsHas,omitempty"`
 }
@@ -47752,9 +47755,6 @@ type UpdateTrustCenterNDARequestInput struct {
 	// timestamp when the request was approved
 	ApprovedAt      *models.DateTime `json:"approvedAt,omitempty"`
 	ClearApprovedAt *bool            `json:"clearApprovedAt,omitempty"`
-	// ID of the user who approved the request
-	ApprovedByUserID      *string `json:"approvedByUserID,omitempty"`
-	ClearApprovedByUserID *bool   `json:"clearApprovedByUserID,omitempty"`
 	// timestamp when the NDA was signed
 	SignedAt                *models.DateTime `json:"signedAt,omitempty"`
 	ClearSignedAt           *bool            `json:"clearSignedAt,omitempty"`
@@ -47771,6 +47771,8 @@ type UpdateTrustCenterNDARequestInput struct {
 	ClearDocument           *bool            `json:"clearDocument,omitempty"`
 	FileID                  *string          `json:"fileID,omitempty"`
 	ClearFile               *bool            `json:"clearFile,omitempty"`
+	ApprovedByUserID        *string          `json:"approvedByUserID,omitempty"`
+	ClearApprovedByUser     *bool            `json:"clearApprovedByUser,omitempty"`
 }
 
 // UpdateTrustCenterSettingInput is used for update TrustCenterSetting object.

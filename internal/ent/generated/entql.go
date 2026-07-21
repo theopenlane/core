@@ -17366,6 +17366,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"File",
 	)
 	graph.MustAddE(
+		"approved_by_user",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterndarequest.ApprovedByUserTable,
+			Columns: []string{trustcenterndarequest.ApprovedByUserColumn},
+			Bidi:    false,
+		},
+		"TrustCenterNDARequest",
+		"User",
+	)
+	graph.MustAddE(
 		"blocked_groups",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -49123,6 +49135,20 @@ func (f *TrustCenterNDARequestFilter) WhereHasFile() {
 // WhereHasFileWith applies a predicate to check if query has an edge file with a given conditions (other predicates).
 func (f *TrustCenterNDARequestFilter) WhereHasFileWith(preds ...predicate.File) {
 	f.Where(entql.HasEdgeWith("file", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasApprovedByUser applies a predicate to check if query has an edge approved_by_user.
+func (f *TrustCenterNDARequestFilter) WhereHasApprovedByUser() {
+	f.Where(entql.HasEdge("approved_by_user"))
+}
+
+// WhereHasApprovedByUserWith applies a predicate to check if query has an edge approved_by_user with a given conditions (other predicates).
+func (f *TrustCenterNDARequestFilter) WhereHasApprovedByUserWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("approved_by_user", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

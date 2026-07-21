@@ -88540,6 +88540,21 @@ func (_q *TrustCenterNDARequestQuery) collectField(ctx context.Context, oneNode 
 				selectedFields = append(selectedFields, trustcenterndarequest.FieldFileID)
 				fieldSeen[trustcenterndarequest.FieldFileID] = struct{}{}
 			}
+
+		case "approvedByUser":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&UserClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+				return err
+			}
+			_q.withApprovedByUser = query
+			if _, ok := fieldSeen[trustcenterndarequest.FieldApprovedByUserID]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequest.FieldApprovedByUserID)
+				fieldSeen[trustcenterndarequest.FieldApprovedByUserID] = struct{}{}
+			}
 		case "createdAt":
 			if _, ok := fieldSeen[trustcenterndarequest.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, trustcenterndarequest.FieldCreatedAt)
