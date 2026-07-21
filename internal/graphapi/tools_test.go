@@ -52,6 +52,7 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/config"
 	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 	slackdef "github.com/theopenlane/core/internal/integrations/definitions/slack"
+	systemdef "github.com/theopenlane/core/internal/integrations/definitions/system"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	intruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/keystore"
@@ -322,6 +323,7 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 		DefinitionBuilders: []registry.Builder{
 			emaildef.Builder(emaildef.MockRuntimeConfig(), false),
 			slackdef.Builder(slackdef.Config{}, &slackdef.RuntimeSlackConfig{WebhookURL: "https://hooks.slack.com/services/test/mock/url"}, false),
+			systemdef.Builder(systemdef.PaymentReminderConfig{}, systemdef.OrganizationDeleteConfig{}),
 		},
 	})
 	requireNoError(t, err)

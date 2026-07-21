@@ -29232,7 +29232,7 @@ func (_m *ScanQuery) Paginate(
 	if _m, err = pager.applyCursors(_m, after, before); err != nil {
 		return nil, err
 	}
-	limit := paginateLimitSingle(first, last)
+	limit := paginateLimit(first, last)
 	if limit != 0 {
 		_m.Limit(limit)
 	}

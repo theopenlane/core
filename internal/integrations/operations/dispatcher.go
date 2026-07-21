@@ -8,6 +8,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/gala"
@@ -17,9 +18,9 @@ import (
 // Dispatch validates and enqueues one operation execution request. When
 // DispatchRequest.Runtime is true, no DB integration lookup is performed and
 // the client is resolved from the registry at execution time
-func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runtime *gala.Gala, req DispatchRequest) (DispatchResult, error) {
+func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runtime *gala.Gala, req types.DispatchRequest) (types.DispatchResult, error) {
 	if req.Operation == "" || (!req.Runtime && req.IntegrationID == "") {
-		return DispatchResult{}, ErrDispatchInputInvalid
+		return types.DispatchResult{}, ErrDispatchInputInvalid
 	}
 
 	var (
@@ -34,7 +35,7 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 	default:
 		record, err := db.Integration.Get(ctx, req.IntegrationID)
 		if err != nil {
-			return DispatchResult{}, err
+			return types.DispatchResult{}, err
 		}
 
 		installation = record
@@ -44,15 +45,15 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 
 	operation, err := reg.Operation(definitionID, req.Operation)
 	if err != nil {
-		return DispatchResult{}, err
+		return types.DispatchResult{}, err
 	}
 
 	if err := ValidateConfig(operation.ConfigSchema, req.Config); err != nil {
 		if errors.Is(err, ErrOperationConfigInvalid) {
-			return DispatchResult{}, ErrDispatchInputInvalid
+			return types.DispatchResult{}, ErrDispatchInputInvalid
 		}
 
-		return DispatchResult{}, err
+		return types.DispatchResult{}, err
 	}
 
 	runType := req.RunType
@@ -71,7 +72,7 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 	}
 
 	if installation != nil && !operation.Policy.SkipRunRecord {
-		runRecord, err := CreatePendingRun(ctx, db, installation, DispatchRequest{
+		runRecord, err := CreatePendingRun(ctx, db, installation, types.DispatchRequest{
 			IntegrationID:      req.IntegrationID,
 			Operation:          req.Operation,
 			Config:             jsonx.CloneRawMessage(req.Config),
@@ -79,7 +80,7 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 			RunType:            runType,
 		})
 		if err != nil {
-			return DispatchResult{}, err
+			return types.DispatchResult{}, err
 		}
 
 		metadata.RunID = runRecord.ID
@@ -108,18 +109,48 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 				Summary: "dispatch failed",
 				Error:   receipt.Err.Error(),
 			}); completeErr != nil {
-				return DispatchResult{}, errors.Join(receipt.Err, completeErr)
+				return types.DispatchResult{}, errors.Join(receipt.Err, completeErr)
 			}
 		}
 
-		return DispatchResult{}, receipt.Err
+		return types.DispatchResult{}, receipt.Err
 	}
 
-	return DispatchResult{
+	return types.DispatchResult{
 		RunID:   metadata.RunID,
 		EventID: string(receipt.EventID),
 		Status:  enums.IntegrationRunStatusPending,
 	}, nil
+}
+
+// ResolveOwnerIntegration finds a connected integration for the given definition
+// and owner. When multiple connected integrations exist, the optional prefer
+// function selects among them. Returns empty string with no error when no
+// integration is found, allowing the caller to fall through to runtime dispatch
+func ResolveOwnerIntegration(ctx context.Context, db *ent.Client, definitionID, ownerID string, prefer ...func(*ent.Integration) bool) (string, error) {
+	integrations, err := db.Integration.Query().
+		Where(
+			integration.OwnerIDEQ(ownerID),
+			integration.DefinitionIDEQ(definitionID),
+			integration.StatusEQ(enums.IntegrationStatusConnected),
+		).All(ctx)
+	if err != nil {
+		return "", err
+	}
+
+	if len(integrations) == 1 {
+		return integrations[0].ID, nil
+	}
+
+	if len(prefer) > 0 {
+		for _, inst := range integrations {
+			if prefer[0](inst) {
+				return inst.ID, nil
+			}
+		}
+	}
+
+	return "", nil
 }
 
 // inheritWebhookContext propagates webhook/event context from a parent execution

@@ -94,11 +94,15 @@ type reconcileOutput struct {
 	DurationMS int64 `json:"duration_ms"`
 }
 
-// HandleReconcile executes one reconcilable operation inline and returns the
-// number of records processed as the delta for adaptive scheduling
+// HandleReconcile executes one recurring operation cycle inline and returns the delta
+// for adaptive scheduling; envelopes with no integration ID run the scheduled runtime path
 func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.ReconcileEnvelope) (int, error) {
 	metadata := envelope.ExecutionMetadata
 	ctx = intobvs.WithContext(ctx, metadata)
+
+	if envelope.IntegrationID == "" {
+		return r.handleScheduledCycle(ctx, envelope)
+	}
 
 	installation, err := r.ResolveIntegration(ctx, IntegrationLookup{IntegrationID: envelope.IntegrationID})
 	if err != nil {
@@ -144,7 +148,7 @@ func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.Recon
 		return 0, operations.ErrOperationDisabled
 	}
 
-	runRecord, err := operations.CreatePendingRun(ctx, db, installation, operations.DispatchRequest{
+	runRecord, err := operations.CreatePendingRun(ctx, db, installation, types.DispatchRequest{
 		IntegrationID: envelope.IntegrationID,
 		Operation:     envelope.Operation,
 		RunType:       enums.IntegrationRunTypeReconcile,
@@ -254,7 +258,7 @@ func (r *Runtime) executeOperationInline(ctx context.Context, integration *ent.I
 	ctx = intobvs.WithOperation(ctx, operation.Name)
 
 	if len(config) > 0 {
-		if err := validatePayload(operation.ConfigSchema, config, ErrOperationConfigInvalid); err != nil {
+		if err := validatePayload(ctx, operation.ConfigSchema, config, ErrOperationConfigInvalid); err != nil {
 			return nil, err
 		}
 	}
@@ -394,6 +398,15 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 		lastRunAt = &t
 	}
 
+	allowed, err := r.checkRateLimit(ctx, operation, integration)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	if !allowed {
+		return nil, 0, ErrOperationRateLimited
+	}
+
 	req := types.OperationRequest{
 		Integration: integration,
 		Credentials: credentials,
@@ -401,6 +414,8 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 		Config:      jsonx.CloneRawMessage(config),
 		LastRunAt:   lastRunAt,
 		DB:          r.DB(),
+		Dispatch:    r.Dispatch,
+		Services:    r,
 	}
 
 	if operation.IngestHandle != nil {

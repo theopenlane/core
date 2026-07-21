@@ -910,6 +910,9 @@
                           "reconcile": {
                             "type": "boolean"
                           },
+                          "scheduled": {
+                            "type": "boolean"
+                          },
                           "skipRunRecord": {
                             "type": "boolean"
                           }
@@ -5392,6 +5395,42 @@
               }
             },
             "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "error": {
+                    "value": {
+                      "error": "forbidden",
+                      "success": false
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorReply"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "error": {
+                    "value": {
+                      "error": "too many requests",
+                      "success": false
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorReply"
+                }
+              }
+            },
+            "description": "Too Many Requests"
           },
           "500": {
             "content": {

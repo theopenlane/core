@@ -24100,6 +24100,8 @@ func (c *SLADefinitionUpdateOne) SetInput(i UpdateSLADefinitionInput) *SLADefini
 // CreateScanInput represents a mutation input for creating scans.
 type CreateScanInput struct {
 	Tags                       []string               `json:"tags,omitempty"`
+	InternalNotes              *string                `json:"internal_notes,omitempty"`
+	SystemInternalID           *string                `json:"system_internal_id,omitempty"`
 	ReviewedBy                 *string                `json:"reviewed_by,omitempty"`
 	AssignedTo                 *string                `json:"assigned_to,omitempty"`
 	EnvironmentName            *string                `json:"environment_name,omitempty"`
@@ -24143,6 +24145,12 @@ type CreateScanInput struct {
 func (i *CreateScanInput) Mutate(m *ScanMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	if v := i.ReviewedBy; v != nil {
 		m.SetReviewedBy(*v)
@@ -24266,6 +24274,10 @@ type UpdateScanInput struct {
 	ClearTags                        bool
 	Tags                             []string `json:"tags,omitempty"`
 	AppendTags                       []string
+	ClearInternalNotes               bool
+	InternalNotes                    *string `json:"internal_notes,omitempty"`
+	ClearSystemInternalID            bool
+	SystemInternalID                 *string `json:"system_internal_id,omitempty"`
 	ClearReviewedBy                  bool
 	ReviewedBy                       *string `json:"reviewed_by,omitempty"`
 	ClearAssignedTo                  bool
@@ -24362,6 +24374,18 @@ func (i *UpdateScanInput) Mutate(m *ScanMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearInternalNotes {
+		m.ClearInternalNotes()
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if i.ClearSystemInternalID {
+		m.ClearSystemInternalID()
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	if i.ClearReviewedBy {
 		m.ClearReviewedBy()

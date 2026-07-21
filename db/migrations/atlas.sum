@@ -1,4 +1,4 @@
-h1:6Mlzv4l+OKi54UvIisK0+AoQ80+YPnUraEcccE4uuCw=
+h1:LuSRKGpyKMGdCJccwaw8P2wTJBWv48AD8f3bWQREBOs=
 20251229183159_init.sql h1:3uf/ftr28zW8YUD9qAaY2GESQHC7pYmkhlI6oDWUCKU=
 20251229183201_init_history.sql h1:1tFSeCDWvZgb2Ctw80C/s3tqVPNLADQw9fSDACzL8WA=
 20251231045221_workflow.sql h1:5bLq4cHh2kxUV7xajK5bq5McKKpr88HmufYauTdsgUw=
@@ -165,3 +165,5 @@ h1:6Mlzv4l+OKi54UvIisK0+AoQ80+YPnUraEcccE4uuCw=
 20260721024528_m2m_edges.sql h1:Pl4vDp3/9sSJ/dRgOLLpqcXtojSYg+cbL9yKc2a0zAE=
 20260721024532_m2m_edges_history.sql h1:W6qItPr58mglJbMpA9sX3kZfo7j2NatsJbVxDFi54GA=
 20260721114033_nda_requests_user.sql h1:0bQkMQTYcNbjT8vcg5T2K4diZ/d/dJBAwOVuIiK3lwA=
+20260721143210_scan_sytem_owned.sql h1:5ONAPK+VIvLw50jcg4RyiC8WG3gloQaS1mbUr9B3hfc=
+20260721143215_scan_sytem_owned_history.sql h1:SFAk0skllgXMaQBS2G68SHvLvaGRBKbQO0GlulJUhP4=

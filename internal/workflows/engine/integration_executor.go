@@ -174,7 +174,7 @@ func (e *WorkflowEngine) QueueIntegrationOperation(ctx context.Context, req Inte
 		runType = enums.IntegrationRunTypeEvent
 	}
 
-	result, err := e.integrationRuntime.Dispatch(allowCtx, operations.DispatchRequest{
+	result, err := e.integrationRuntime.Dispatch(allowCtx, types.DispatchRequest{
 		IntegrationID:      installationRecord.ID,
 		Operation:          req.Operation,
 		Config:             jsonx.CloneRawMessage(req.Config),

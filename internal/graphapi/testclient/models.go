@@ -9461,6 +9461,10 @@ type CreateSLADefinitionInput struct {
 type CreateScanInput struct {
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// who reviewed the scan when no user or group is linked
 	ReviewedBy *string `json:"reviewedBy,omitempty"`
 	// who the scan is assigned to when no user or group is linked
@@ -9485,7 +9489,7 @@ type CreateScanInput struct {
 	PerformedBy *string `json:"performedBy,omitempty"`
 	// identifiers of vulnerabilities discovered during the scan
 	DiscoveredVulnerabilityIds []string `json:"discoveredVulnerabilityIds,omitempty"`
-	// the status of the scan, e.g., processing, completed, failed
+	// the status of the scan, e.g., pending, processing, completed, failed
 	Status                *enums.ScanStatus `json:"status,omitempty"`
 	OwnerID               *string           `json:"ownerID,omitempty"`
 	BlockedGroupIDs       []string          `json:"blockedGroupIDs,omitempty"`
@@ -21364,6 +21368,101 @@ type IdentityHolderWhereInput struct {
 	TagsHas *string `json:"tagsHas,omitempty"`
 	// Filter for emailAliasesHas to contain a specific value
 	EmailAliasesHas *string `json:"emailAliasesHas,omitempty"`
+}
+
+// An asset accepted from a domain scan review, keyed by a client-assigned ref so it can be
+// referenced from ImportDomainScanReviewPlatformInput/ImportDomainScanReviewSystemInput before it
+// has a real id
+type ImportDomainScanReviewAssetInput struct {
+	// client-assigned identifier for this asset, referenced by assetRefs elsewhere in the input
+	Ref string `json:"ref"`
+	// the asset's display name
+	Name string `json:"name"`
+	// the asset's domain, IP, or other unique identifier
+	Identifier *string `json:"identifier,omitempty"`
+	// the asset's URL, if known
+	Website *string `json:"website,omitempty"`
+	// the asset's detected categories
+	Categories []string `json:"categories,omitempty"`
+}
+
+// One accepted finding
+type ImportDomainScanReviewFindingInput struct {
+	// the finding's category
+	Category *string `json:"category,omitempty"`
+	// the finding's description
+	Description *string `json:"description,omitempty"`
+	// the finding's severity
+	Severity *string `json:"severity,omitempty"`
+}
+
+// Input for importDomainScanReview mutation
+type ImportDomainScanReviewInput struct {
+	// the Scan records the created records should link back to
+	ScanIDs []string `json:"scanIDs"`
+	// the accepted platforms, if any
+	Platforms []*ImportDomainScanReviewPlatformInput `json:"platforms,omitempty"`
+	// the accepted system details
+	Systems []*ImportDomainScanReviewSystemInput `json:"systems,omitempty"`
+	// the accepted vendors
+	Vendors []*ImportDomainScanReviewVendorInput `json:"vendors"`
+	// the accepted assets
+	Assets []*ImportDomainScanReviewAssetInput `json:"assets"`
+	// the accepted findings
+	Findings []*ImportDomainScanReviewFindingInput `json:"findings,omitempty"`
+}
+
+// Return response for importDomainScanReview mutation. Creation happens asynchronously, so this
+// only confirms the review was accepted - the created objects surface via a follow-up Notification
+// once the import finishes
+type ImportDomainScanReviewPayload struct {
+	// whether the review was accepted for import
+	Accepted bool `json:"accepted"`
+}
+
+// An accepted platform, linked to a subset of the accepted vendors/assets, and keyed by a
+// client-assigned ref so it can be referenced from ImportDomainScanReviewSystemInput
+type ImportDomainScanReviewPlatformInput struct {
+	// client-assigned identifier for this platform, referenced by platformRefs elsewhere in the input
+	Ref string `json:"ref"`
+	// the platform's name
+	Name string `json:"name"`
+	// the platform's description
+	Description *string `json:"description,omitempty"`
+	// refs of accepted vendors linked to this platform
+	EntityRefs []string `json:"entityRefs,omitempty"`
+	// refs of accepted assets linked to this platform
+	AssetRefs []string `json:"assetRefs,omitempty"`
+}
+
+// One accepted system detail, linked to its own subset of the accepted vendors/assets/platforms
+type ImportDomainScanReviewSystemInput struct {
+	// the system's name
+	Name string `json:"name"`
+	// the system's description
+	Description *string `json:"description,omitempty"`
+	// refs of accepted vendors linked to this system
+	EntityRefs []string `json:"entityRefs,omitempty"`
+	// refs of accepted assets linked to this system
+	AssetRefs []string `json:"assetRefs,omitempty"`
+	// refs of accepted platforms this system belongs to
+	PlatformRefs []string `json:"platformRefs,omitempty"`
+}
+
+// A vendor accepted from a domain scan review, keyed by a client-assigned ref so it can be
+// referenced from ImportDomainScanReviewPlatformInput/ImportDomainScanReviewSystemInput before it
+// has a real id
+type ImportDomainScanReviewVendorInput struct {
+	// client-assigned identifier for this vendor, referenced by entityRefs elsewhere in the input
+	Ref string `json:"ref"`
+	// the vendor's name
+	Name string `json:"name"`
+	// the vendor's raw legal entity name, if known and different from name
+	LegalName *string `json:"legalName,omitempty"`
+	// the vendor's domain, if known
+	Domain *string `json:"domain,omitempty"`
+	// the vendor's detected categories
+	Categories []string `json:"categories,omitempty"`
 }
 
 type Integration struct {
@@ -33853,6 +33952,12 @@ type Scan struct {
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned *bool `json:"systemOwned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"systemInternalID,omitempty"`
 	// who reviewed the scan when no user or group is linked
 	ReviewedBy *string `json:"reviewedBy,omitempty"`
 	// the user id that reviewed the scan
@@ -33895,7 +34000,7 @@ type Scan struct {
 	GeneratedByPlatformID *string `json:"generatedByPlatformID,omitempty"`
 	// identifiers of vulnerabilities discovered during the scan
 	DiscoveredVulnerabilityIds []string `json:"discoveredVulnerabilityIds,omitempty"`
-	// the status of the scan, e.g., processing, completed, failed
+	// the status of the scan, e.g., pending, processing, completed, failed
 	Status              enums.ScanStatus         `json:"status"`
 	Owner               *Organization            `json:"owner,omitempty"`
 	BlockedGroups       *GroupConnection         `json:"blockedGroups"`
@@ -34096,6 +34201,43 @@ type ScanWhereInput struct {
 	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// system_owned field predicates
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNeq    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  *bool `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil *bool `json:"systemOwnedNotNil,omitempty"`
+	// internal_notes field predicates
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNeq          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGt           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGte          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLt           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLte          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        *bool    `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       *bool    `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+	// system_internal_id field predicates
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIdneq          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIdgt           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIdgte          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIdlt           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIdlte          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        *bool    `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       *bool    `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
 	// reviewed_by field predicates
 	ReviewedBy             *string  `json:"reviewedBy,omitempty"`
 	ReviewedByNeq          *string  `json:"reviewedByNEQ,omitempty"`
@@ -46838,6 +46980,12 @@ type UpdateScanInput struct {
 	Tags       []string `json:"tags,omitempty"`
 	AppendTags []string `json:"appendTags,omitempty"`
 	ClearTags  *bool    `json:"clearTags,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes      *string `json:"internalNotes,omitempty"`
+	ClearInternalNotes *bool   `json:"clearInternalNotes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID      *string `json:"systemInternalID,omitempty"`
+	ClearSystemInternalID *bool   `json:"clearSystemInternalID,omitempty"`
 	// who reviewed the scan when no user or group is linked
 	ReviewedBy      *string `json:"reviewedBy,omitempty"`
 	ClearReviewedBy *bool   `json:"clearReviewedBy,omitempty"`
@@ -46873,7 +47021,7 @@ type UpdateScanInput struct {
 	DiscoveredVulnerabilityIds       []string `json:"discoveredVulnerabilityIds,omitempty"`
 	AppendDiscoveredVulnerabilityIds []string `json:"appendDiscoveredVulnerabilityIds,omitempty"`
 	ClearDiscoveredVulnerabilityIds  *bool    `json:"clearDiscoveredVulnerabilityIds,omitempty"`
-	// the status of the scan, e.g., processing, completed, failed
+	// the status of the scan, e.g., pending, processing, completed, failed
 	Status                   *enums.ScanStatus `json:"status,omitempty"`
 	AddBlockedGroupIDs       []string          `json:"addBlockedGroupIDs,omitempty"`
 	RemoveBlockedGroupIDs    []string          `json:"removeBlockedGroupIDs,omitempty"`

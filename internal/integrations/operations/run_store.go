@@ -9,6 +9,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/integrationrun"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/mapx"
 )
@@ -26,7 +27,7 @@ type RunResult struct {
 }
 
 // CreatePendingRun inserts one pending run record for a dispatch request
-func CreatePendingRun(ctx context.Context, db *ent.Client, installation *ent.Integration, req DispatchRequest) (*ent.IntegrationRun, error) {
+func CreatePendingRun(ctx context.Context, db *ent.Client, installation *ent.Integration, req types.DispatchRequest) (*ent.IntegrationRun, error) {
 	if installation == nil {
 		return nil, ErrInstallationIDRequired
 	}
