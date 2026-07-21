@@ -44,14 +44,15 @@ func (d DomainScanRequest) Handle() types.OperationHandler {
 		}
 
 		organizationID := cfg.OrganizationID
-		if organizationID == "" {
-			return nil, ErrInstallationRequired
-		}
-
 		groupID := cfg.GroupID
+
 		if request.Integration != nil {
 			organizationID = request.Integration.OwnerID
 			groupID = ""
+		}
+
+		if organizationID == "" {
+			return nil, ErrInstallationRequired
 		}
 
 		scanRecord, err := request.DB.Scan.Query().
