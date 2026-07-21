@@ -33635,33 +33635,6 @@ var (
 			}
 		},
 	}
-	// TaskOrderFieldAvailableAt orders Task by available_at.
-	TaskOrderFieldAvailableAt = &TaskOrderField{
-		Value: func(_m *Task) (ent.Value, error) {
-			// allow for nil values for fields
-			if _m.AvailableAt == nil {
-				return nil, nil
-			}
-			return _m.AvailableAt, nil
-		},
-		column: task.FieldAvailableAt,
-		toTerm: func(opts ...sql.OrderTermOption) task.OrderOption {
-			opts = append(opts, sql.OrderNullsLast())
-			return task.ByAvailableAt(opts...)
-		},
-		toCursor: func(_m *Task) Cursor {
-			if _m.AvailableAt == nil {
-				return Cursor{
-					ID:    _m.ID,
-					Value: nil, // handle nil values for fields
-				}
-			}
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.AvailableAt,
-			}
-		},
-	}
 )
 
 // String implement fmt.Stringer interface.
@@ -33686,8 +33659,6 @@ func (f TaskOrderField) String() string {
 		str = "is_suggested"
 	case TaskOrderFieldPriority.column:
 		str = "priority"
-	case TaskOrderFieldAvailableAt.column:
-		str = "available_at"
 	}
 	return str
 }
@@ -33722,8 +33693,6 @@ func (f *TaskOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *TaskOrderFieldIsSuggested
 	case "priority":
 		*f = *TaskOrderFieldPriority
-	case "available_at":
-		*f = *TaskOrderFieldAvailableAt
 	default:
 		return fmt.Errorf("%s is not a valid TaskOrderField", str)
 	}

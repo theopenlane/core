@@ -3,7 +3,6 @@ mutation CreateBulkCSVTask ($input: Upload!) {
 		tasks {
 			assigneeID
 			assignerID
-			availableAt
 			completed
 			createdAt
 			createdBy
@@ -68,7 +67,6 @@ mutation CreateBulkTask ($input: [CreateTaskInput!]) {
 		tasks {
 			assigneeID
 			assignerID
-			availableAt
 			completed
 			createdAt
 			createdBy
@@ -133,7 +131,6 @@ mutation CreateTask ($input: CreateTaskInput!) {
 		task {
 			assigneeID
 			assignerID
-			availableAt
 			completed
 			createdAt
 			createdBy
@@ -211,7 +208,6 @@ query GetAllTasks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $or
 			node {
 				assigneeID
 				assignerID
-				availableAt
 				completed
 				createdAt
 				createdBy
@@ -290,7 +286,6 @@ query GetTaskByID ($taskId: ID!) {
 	task(id: $taskId) {
 		assigneeID
 		assignerID
-		availableAt
 		completed
 		createdAt
 		createdBy
@@ -376,7 +371,6 @@ query GetTasks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $order
 			node {
 				assigneeID
 				assignerID
-				availableAt
 				completed
 				createdAt
 				createdBy
@@ -452,7 +446,6 @@ mutation UpdateBulkTask ($ids: [ID!]!, $input: UpdateTaskInput!) {
 		tasks {
 			assigneeID
 			assignerID
-			availableAt
 			completed
 			createdAt
 			createdBy
@@ -518,7 +511,6 @@ mutation UpdateTask ($updateTaskId: ID!, $input: UpdateTaskInput!) {
 		task {
 			assigneeID
 			assignerID
-			availableAt
 			completed
 			createdAt
 			createdBy

@@ -64,10 +64,9 @@ type QuestionOption struct {
 }
 
 type TaskRule struct {
-	Key                string         `json:"-" yaml:"key"`
-	Title              string         `json:"-" yaml:"title"`
-	Details            string         `json:"-" yaml:"details"`
-	Priority           int            `json:"-" yaml:"priority"`
-	AvailableAfterDays int            `json:"-" yaml:"availableAfterDays,omitempty"`
-	Metadata           map[string]any `json:"-" yaml:"metadata,omitempty"`
+	Key      string         `json:"-" yaml:"key"`
+	Title    string         `json:"-" yaml:"title"`
+	Details  string         `json:"-" yaml:"details"`
+	Priority int            `json:"-" yaml:"priority"`
+	Metadata map[string]any `json:"-" yaml:"metadata,omitempty"`
 }

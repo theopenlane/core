@@ -188,7 +188,7 @@ func (Task) Indexes() []ent.Index {
 			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
 		index.Fields(ownerFieldName, "idempotency_key").
 			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL AND idempotency_key IS NOT NULL")),
-		index.Fields(ownerFieldName, "is_suggested", "available_at", "priority").
+		index.Fields(ownerFieldName, "is_suggested", "priority").
 			Annotations(entsql.IndexWhere("deleted_at is NULL")),
 	}
 }

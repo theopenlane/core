@@ -437,20 +437,6 @@ func (_c *TaskCreate) SetNillablePriority(v *int) *TaskCreate {
 	return _c
 }
 
-// SetAvailableAt sets the "available_at" field.
-func (_c *TaskCreate) SetAvailableAt(v models.DateTime) *TaskCreate {
-	_c.mutation.SetAvailableAt(v)
-	return _c
-}
-
-// SetNillableAvailableAt sets the "available_at" field if the given value is not nil.
-func (_c *TaskCreate) SetNillableAvailableAt(v *models.DateTime) *TaskCreate {
-	if v != nil {
-		_c.SetAvailableAt(*v)
-	}
-	return _c
-}
-
 // SetSource sets the "source" field.
 func (_c *TaskCreate) SetSource(v string) *TaskCreate {
 	_c.mutation.SetSource(v)
@@ -1133,10 +1119,6 @@ func (_c *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Priority(); ok {
 		_spec.SetField(task.FieldPriority, field.TypeInt, value)
 		_node.Priority = value
-	}
-	if value, ok := _c.mutation.AvailableAt(); ok {
-		_spec.SetField(task.FieldAvailableAt, field.TypeTime, value)
-		_node.AvailableAt = &value
 	}
 	if value, ok := _c.mutation.Source(); ok {
 		_spec.SetField(task.FieldSource, field.TypeString, value)

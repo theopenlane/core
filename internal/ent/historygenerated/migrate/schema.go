@@ -2778,7 +2778,6 @@ var (
 		{Name: "is_template", Type: field.TypeBool, Default: false},
 		{Name: "is_suggested", Type: field.TypeBool, Default: false},
 		{Name: "priority", Type: field.TypeInt, Default: 0},
-		{Name: "available_at", Type: field.TypeTime, Nullable: true},
 		{Name: "source", Type: field.TypeString, Nullable: true},
 		{Name: "source_key", Type: field.TypeString, Nullable: true},
 		{Name: "idempotency_key", Type: field.TypeString, Nullable: true},

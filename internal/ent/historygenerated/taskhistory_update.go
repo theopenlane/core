@@ -527,26 +527,6 @@ func (_u *TaskHistoryUpdate) AddPriority(v int) *TaskHistoryUpdate {
 	return _u
 }
 
-// SetAvailableAt sets the "available_at" field.
-func (_u *TaskHistoryUpdate) SetAvailableAt(v models.DateTime) *TaskHistoryUpdate {
-	_u.mutation.SetAvailableAt(v)
-	return _u
-}
-
-// SetNillableAvailableAt sets the "available_at" field if the given value is not nil.
-func (_u *TaskHistoryUpdate) SetNillableAvailableAt(v *models.DateTime) *TaskHistoryUpdate {
-	if v != nil {
-		_u.SetAvailableAt(*v)
-	}
-	return _u
-}
-
-// ClearAvailableAt clears the value of the "available_at" field.
-func (_u *TaskHistoryUpdate) ClearAvailableAt() *TaskHistoryUpdate {
-	_u.mutation.ClearAvailableAt()
-	return _u
-}
-
 // SetSource sets the "source" field.
 func (_u *TaskHistoryUpdate) SetSource(v string) *TaskHistoryUpdate {
 	_u.mutation.SetSource(v)
@@ -888,12 +868,6 @@ func (_u *TaskHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if value, ok := _u.mutation.AddedPriority(); ok {
 		_spec.AddField(taskhistory.FieldPriority, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.AvailableAt(); ok {
-		_spec.SetField(taskhistory.FieldAvailableAt, field.TypeTime, value)
-	}
-	if _u.mutation.AvailableAtCleared() {
-		_spec.ClearField(taskhistory.FieldAvailableAt, field.TypeTime)
 	}
 	if value, ok := _u.mutation.Source(); ok {
 		_spec.SetField(taskhistory.FieldSource, field.TypeString, value)
@@ -1445,26 +1419,6 @@ func (_u *TaskHistoryUpdateOne) AddPriority(v int) *TaskHistoryUpdateOne {
 	return _u
 }
 
-// SetAvailableAt sets the "available_at" field.
-func (_u *TaskHistoryUpdateOne) SetAvailableAt(v models.DateTime) *TaskHistoryUpdateOne {
-	_u.mutation.SetAvailableAt(v)
-	return _u
-}
-
-// SetNillableAvailableAt sets the "available_at" field if the given value is not nil.
-func (_u *TaskHistoryUpdateOne) SetNillableAvailableAt(v *models.DateTime) *TaskHistoryUpdateOne {
-	if v != nil {
-		_u.SetAvailableAt(*v)
-	}
-	return _u
-}
-
-// ClearAvailableAt clears the value of the "available_at" field.
-func (_u *TaskHistoryUpdateOne) ClearAvailableAt() *TaskHistoryUpdateOne {
-	_u.mutation.ClearAvailableAt()
-	return _u
-}
-
 // SetSource sets the "source" field.
 func (_u *TaskHistoryUpdateOne) SetSource(v string) *TaskHistoryUpdateOne {
 	_u.mutation.SetSource(v)
@@ -1836,12 +1790,6 @@ func (_u *TaskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TaskHistory
 	}
 	if value, ok := _u.mutation.AddedPriority(); ok {
 		_spec.AddField(taskhistory.FieldPriority, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.AvailableAt(); ok {
-		_spec.SetField(taskhistory.FieldAvailableAt, field.TypeTime, value)
-	}
-	if _u.mutation.AvailableAtCleared() {
-		_spec.ClearField(taskhistory.FieldAvailableAt, field.TypeTime)
 	}
 	if value, ok := _u.mutation.Source(); ok {
 		_spec.SetField(taskhistory.FieldSource, field.TypeString, value)

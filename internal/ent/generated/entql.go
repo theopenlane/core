@@ -3257,7 +3257,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			task.FieldIsTemplate:             {Type: field.TypeBool, Column: task.FieldIsTemplate},
 			task.FieldIsSuggested:            {Type: field.TypeBool, Column: task.FieldIsSuggested},
 			task.FieldPriority:               {Type: field.TypeInt, Column: task.FieldPriority},
-			task.FieldAvailableAt:            {Type: field.TypeTime, Column: task.FieldAvailableAt},
 			task.FieldSource:                 {Type: field.TypeString, Column: task.FieldSource},
 			task.FieldSourceKey:              {Type: field.TypeString, Column: task.FieldSourceKey},
 			task.FieldIdempotencyKey:         {Type: field.TypeString, Column: task.FieldIdempotencyKey},
@@ -47204,11 +47203,6 @@ func (f *TaskFilter) WhereIsSuggested(p entql.BoolP) {
 // WherePriority applies the entql int predicate on the priority field.
 func (f *TaskFilter) WherePriority(p entql.IntP) {
 	f.Where(p.Field(task.FieldPriority))
-}
-
-// WhereAvailableAt applies the entql time.Time predicate on the available_at field.
-func (f *TaskFilter) WhereAvailableAt(p entql.TimeP) {
-	f.Where(p.Field(task.FieldAvailableAt))
 }
 
 // WhereSource applies the entql string predicate on the source field.

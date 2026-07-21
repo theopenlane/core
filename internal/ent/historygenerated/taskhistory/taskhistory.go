@@ -88,8 +88,6 @@ const (
 	FieldIsSuggested = "is_suggested"
 	// FieldPriority holds the string denoting the priority field in the database.
 	FieldPriority = "priority"
-	// FieldAvailableAt holds the string denoting the available_at field in the database.
-	FieldAvailableAt = "available_at"
 	// FieldSource holds the string denoting the source field in the database.
 	FieldSource = "source"
 	// FieldSourceKey holds the string denoting the source_key field in the database.
@@ -141,7 +139,6 @@ var Columns = []string{
 	FieldIsTemplate,
 	FieldIsSuggested,
 	FieldPriority,
-	FieldAvailableAt,
 	FieldSource,
 	FieldSourceKey,
 	FieldIdempotencyKey,
@@ -375,11 +372,6 @@ func ByIsSuggested(opts ...sql.OrderTermOption) OrderOption {
 // ByPriority orders the results by the priority field.
 func ByPriority(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPriority, opts...).ToFunc()
-}
-
-// ByAvailableAt orders the results by the available_at field.
-func ByAvailableAt(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldAvailableAt, opts...).ToFunc()
 }
 
 // BySource orders the results by the source field.

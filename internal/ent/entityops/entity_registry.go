@@ -4767,7 +4767,6 @@ func init() {
 	SchemaTask.Fields = []FieldDescriptor{
 		{Name: "assignee_id", Label: "AssigneeID", Type: "string", MatchKey: true},
 		{Name: "assigner_id", Label: "AssignerID", Type: "string", MatchKey: true},
-		{Name: "available_at", Label: "AvailableAt", Type: "models.DateTime"},
 		{Name: "completed", Label: "Completed", Type: "models.DateTime", WorkflowEligible: true},
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
 		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},

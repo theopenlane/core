@@ -91,8 +91,6 @@ type TaskHistory struct {
 	IsSuggested bool `json:"is_suggested,omitempty"`
 	// relative ordering priority for suggested and system-generated tasks
 	Priority int `json:"priority,omitempty"`
-	// the time when the task should become available to users
-	AvailableAt *models.DateTime `json:"available_at,omitempty"`
 	// the system or workflow that created or suggested the task
 	Source string `json:"source,omitempty"`
 	// stable source-specific key for the task
@@ -111,7 +109,7 @@ func (*TaskHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case taskhistory.FieldDue, taskhistory.FieldCompleted, taskhistory.FieldAvailableAt:
+		case taskhistory.FieldDue, taskhistory.FieldCompleted:
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
 		case taskhistory.FieldTags, taskhistory.FieldDetailsJSON, taskhistory.FieldMetadata, taskhistory.FieldExternalReferenceURL:
 			values[i] = new([]byte)
@@ -360,13 +358,6 @@ func (_m *TaskHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Priority = int(value.Int64)
 			}
-		case taskhistory.FieldAvailableAt:
-			if value, ok := values[i].(*sql.NullScanner); !ok {
-				return fmt.Errorf("unexpected type %T for field available_at", values[i])
-			} else if value.Valid {
-				_m.AvailableAt = new(models.DateTime)
-				*_m.AvailableAt = *value.S.(*models.DateTime)
-			}
 		case taskhistory.FieldSource:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field source", values[i])
@@ -545,11 +536,6 @@ func (_m *TaskHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("priority=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Priority))
-	builder.WriteString(", ")
-	if v := _m.AvailableAt; v != nil {
-		builder.WriteString("available_at=")
-		builder.WriteString(fmt.Sprintf("%v", *v))
-	}
 	builder.WriteString(", ")
 	builder.WriteString("source=")
 	builder.WriteString(_m.Source)

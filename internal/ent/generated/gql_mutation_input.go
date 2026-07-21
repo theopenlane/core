@@ -26778,7 +26778,6 @@ type CreateTaskInput struct {
 	IsTemplate               *bool                  `json:"is_template,omitempty"`
 	IsSuggested              *bool                  `json:"is_suggested,omitempty"`
 	Priority                 *int                   `json:"priority,omitempty"`
-	AvailableAt              *models.DateTime       `json:"available_at,omitempty"`
 	Source                   *string                `json:"source,omitempty"`
 	SourceKey                *string                `json:"source_key,omitempty"`
 	ExternalReferenceURL     []string               `json:"external_reference_url,omitempty"`
@@ -26860,9 +26859,6 @@ func (i *CreateTaskInput) Mutate(m *TaskMutation) {
 	}
 	if v := i.Priority; v != nil {
 		m.SetPriority(*v)
-	}
-	if v := i.AvailableAt; v != nil {
-		m.SetAvailableAt(*v)
 	}
 	if v := i.Source; v != nil {
 		m.SetSource(*v)
@@ -26991,8 +26987,6 @@ type UpdateTaskInput struct {
 	IsTemplate                     *bool            `json:"is_template,omitempty"`
 	IsSuggested                    *bool            `json:"is_suggested,omitempty"`
 	Priority                       *int             `json:"priority,omitempty"`
-	ClearAvailableAt               bool
-	AvailableAt                    *models.DateTime `json:"available_at,omitempty"`
 	ClearSource                    bool
 	Source                         *string `json:"source,omitempty"`
 	ClearSourceKey                 bool
@@ -27162,12 +27156,6 @@ func (i *UpdateTaskInput) Mutate(m *TaskMutation) {
 	}
 	if v := i.Priority; v != nil {
 		m.SetPriority(*v)
-	}
-	if i.ClearAvailableAt {
-		m.ClearAvailableAt()
-	}
-	if v := i.AvailableAt; v != nil {
-		m.SetAvailableAt(*v)
 	}
 	if i.ClearSource {
 		m.ClearSource()

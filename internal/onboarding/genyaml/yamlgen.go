@@ -287,10 +287,6 @@ func taskRuleLit(rule models.TaskRule) jen.Code {
 		jen.Id("Priority"): jen.Lit(rule.Priority),
 	}
 
-	if rule.AvailableAfterDays > 0 {
-		fields[jen.Id("AvailableAfterDays")] = jen.Lit(rule.AvailableAfterDays)
-	}
-
 	if len(rule.Metadata) > 0 {
 		fields[jen.Id("Metadata")] = metadataLit(rule.Metadata)
 	}

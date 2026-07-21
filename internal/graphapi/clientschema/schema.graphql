@@ -17871,10 +17871,6 @@ input CreateTaskInput {
 	"""
 	priority: Int
 	"""
-	the time when the task should become available to users
-	"""
-	availableAt: DateTime
-	"""
 	the system or workflow that created or suggested the task
 	"""
 	source: String
@@ -86027,10 +86023,6 @@ type Task implements Node {
 	"""
 	priority: Int!
 	"""
-	the time when the task should become available to users
-	"""
-	availableAt: DateTime
-	"""
 	the system or workflow that created or suggested the task
 	"""
 	source: String
@@ -86746,7 +86738,6 @@ enum TaskOrderField {
 	is_template
 	is_suggested
 	priority
-	available_at
 }
 """
 TaskTaskStatus is enum for the field status
@@ -87164,19 +87155,6 @@ input TaskWhereInput {
 	priorityGTE: Int
 	priorityLT: Int
 	priorityLTE: Int
-	"""
-	available_at field predicates
-	"""
-	availableAt: DateTime
-	availableAtNEQ: DateTime
-	availableAtIn: [DateTime!]
-	availableAtNotIn: [DateTime!]
-	availableAtGT: DateTime
-	availableAtGTE: DateTime
-	availableAtLT: DateTime
-	availableAtLTE: DateTime
-	availableAtIsNil: Boolean
-	availableAtNotNil: Boolean
 	"""
 	source field predicates
 	"""
@@ -100737,11 +100715,6 @@ input UpdateTaskInput {
 	relative ordering priority for suggested and system-generated tasks
 	"""
 	priority: Int
-	"""
-	the time when the task should become available to users
-	"""
-	availableAt: DateTime
-	clearAvailableAt: Boolean
 	"""
 	the system or workflow that created or suggested the task
 	"""

@@ -84573,11 +84573,6 @@ func (_q *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				selectedFields = append(selectedFields, task.FieldPriority)
 				fieldSeen[task.FieldPriority] = struct{}{}
 			}
-		case "availableAt":
-			if _, ok := fieldSeen[task.FieldAvailableAt]; !ok {
-				selectedFields = append(selectedFields, task.FieldAvailableAt)
-				fieldSeen[task.FieldAvailableAt] = struct{}{}
-			}
 		case "source":
 			if _, ok := fieldSeen[task.FieldSource]; !ok {
 				selectedFields = append(selectedFields, task.FieldSource)

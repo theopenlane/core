@@ -22847,10 +22847,6 @@ func (m *TaskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetPriority(priority)
 	}
 
-	if availableAt, exists := m.AvailableAt(); exists {
-		create = create.SetNillableAvailableAt(&availableAt)
-	}
-
 	if source, exists := m.Source(); exists {
 		create = create.SetSource(source)
 	}
@@ -23088,12 +23084,6 @@ func (m *TaskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetPriority(task.Priority)
 		}
 
-		if availableAt, exists := m.AvailableAt(); exists {
-			create = create.SetNillableAvailableAt(&availableAt)
-		} else {
-			create = create.SetNillableAvailableAt(task.AvailableAt)
-		}
-
 		if source, exists := m.Source(); exists {
 			create = create.SetSource(source)
 		} else {
@@ -23190,7 +23180,6 @@ func (m *TaskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetIsTemplate(task.IsTemplate).
 			SetIsSuggested(task.IsSuggested).
 			SetPriority(task.Priority).
-			SetNillableAvailableAt(task.AvailableAt).
 			SetSource(task.Source).
 			SetSourceKey(task.SourceKey).
 			SetIdempotencyKey(task.IdempotencyKey).

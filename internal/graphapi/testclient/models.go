@@ -9830,8 +9830,6 @@ type CreateTaskInput struct {
 	IsSuggested *bool `json:"isSuggested,omitempty"`
 	// relative ordering priority for suggested and system-generated tasks
 	Priority *int64 `json:"priority,omitempty"`
-	// the time when the task should become available to users
-	AvailableAt *models.DateTime `json:"availableAt,omitempty"`
 	// the system or workflow that created or suggested the task
 	Source *string `json:"source,omitempty"`
 	// stable source-specific key for the task
@@ -37988,8 +37986,6 @@ type Task struct {
 	IsSuggested bool `json:"isSuggested"`
 	// relative ordering priority for suggested and system-generated tasks
 	Priority int64 `json:"priority"`
-	// the time when the task should become available to users
-	AvailableAt *models.DateTime `json:"availableAt,omitempty"`
 	// the system or workflow that created or suggested the task
 	Source *string `json:"source,omitempty"`
 	// stable source-specific key for the task
@@ -38447,17 +38443,6 @@ type TaskWhereInput struct {
 	PriorityGte   *int64  `json:"priorityGTE,omitempty"`
 	PriorityLt    *int64  `json:"priorityLT,omitempty"`
 	PriorityLte   *int64  `json:"priorityLTE,omitempty"`
-	// available_at field predicates
-	AvailableAt       *models.DateTime   `json:"availableAt,omitempty"`
-	AvailableAtNeq    *models.DateTime   `json:"availableAtNEQ,omitempty"`
-	AvailableAtIn     []*models.DateTime `json:"availableAtIn,omitempty"`
-	AvailableAtNotIn  []*models.DateTime `json:"availableAtNotIn,omitempty"`
-	AvailableAtGt     *models.DateTime   `json:"availableAtGT,omitempty"`
-	AvailableAtGte    *models.DateTime   `json:"availableAtGTE,omitempty"`
-	AvailableAtLt     *models.DateTime   `json:"availableAtLT,omitempty"`
-	AvailableAtLte    *models.DateTime   `json:"availableAtLTE,omitempty"`
-	AvailableAtIsNil  *bool              `json:"availableAtIsNil,omitempty"`
-	AvailableAtNotNil *bool              `json:"availableAtNotNil,omitempty"`
 	// source field predicates
 	Source             *string  `json:"source,omitempty"`
 	SourceNeq          *string  `json:"sourceNEQ,omitempty"`
@@ -47738,9 +47723,6 @@ type UpdateTaskInput struct {
 	IsSuggested *bool `json:"isSuggested,omitempty"`
 	// relative ordering priority for suggested and system-generated tasks
 	Priority *int64 `json:"priority,omitempty"`
-	// the time when the task should become available to users
-	AvailableAt      *models.DateTime `json:"availableAt,omitempty"`
-	ClearAvailableAt *bool            `json:"clearAvailableAt,omitempty"`
 	// the system or workflow that created or suggested the task
 	Source      *string `json:"source,omitempty"`
 	ClearSource *bool   `json:"clearSource,omitempty"`
@@ -59126,7 +59108,6 @@ const (
 	TaskOrderFieldIsTemplate  TaskOrderField = "is_template"
 	TaskOrderFieldIsSuggested TaskOrderField = "is_suggested"
 	TaskOrderFieldPriority    TaskOrderField = "priority"
-	TaskOrderFieldAvailableAt TaskOrderField = "available_at"
 )
 
 var AllTaskOrderField = []TaskOrderField{
@@ -59139,12 +59120,11 @@ var AllTaskOrderField = []TaskOrderField{
 	TaskOrderFieldIsTemplate,
 	TaskOrderFieldIsSuggested,
 	TaskOrderFieldPriority,
-	TaskOrderFieldAvailableAt,
 }
 
 func (e TaskOrderField) IsValid() bool {
 	switch e {
-	case TaskOrderFieldCreatedAt, TaskOrderFieldUpdatedAt, TaskOrderFieldTitle, TaskOrderFieldStatus, TaskOrderFieldDue, TaskOrderFieldCompleted, TaskOrderFieldIsTemplate, TaskOrderFieldIsSuggested, TaskOrderFieldPriority, TaskOrderFieldAvailableAt:
+	case TaskOrderFieldCreatedAt, TaskOrderFieldUpdatedAt, TaskOrderFieldTitle, TaskOrderFieldStatus, TaskOrderFieldDue, TaskOrderFieldCompleted, TaskOrderFieldIsTemplate, TaskOrderFieldIsSuggested, TaskOrderFieldPriority:
 		return true
 	}
 	return false

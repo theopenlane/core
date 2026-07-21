@@ -1463,7 +1463,6 @@ type TaskProjection struct {
 	ID                     string                 `json:"id,omitempty"`
 	AssigneeID             string                 `json:"assignee_id,omitempty"`
 	AssignerID             string                 `json:"assigner_id,omitempty"`
-	AvailableAt            models.DateTime        `json:"available_at,omitempty"`
 	Completed              models.DateTime        `json:"completed,omitempty"`
 	CreatedAt              time.Time              `json:"created_at,omitempty"`
 	CreatedBy              string                 `json:"created_by,omitempty"`

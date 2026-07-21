@@ -7524,7 +7524,6 @@ var (
 		{Name: "is_template", Type: field.TypeBool, Default: false},
 		{Name: "is_suggested", Type: field.TypeBool, Default: false},
 		{Name: "priority", Type: field.TypeInt, Default: 0},
-		{Name: "available_at", Type: field.TypeTime, Nullable: true},
 		{Name: "source", Type: field.TypeString, Nullable: true},
 		{Name: "source_key", Type: field.TypeString, Nullable: true},
 		{Name: "idempotency_key", Type: field.TypeString, Nullable: true},
@@ -7549,67 +7548,67 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "tasks_custom_type_enums_tasks",
-				Columns:    []*schema.Column{TasksColumns[31]},
+				Columns:    []*schema.Column{TasksColumns[30]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "tasks_integrations_tasks",
-				Columns:    []*schema.Column{TasksColumns[32]},
+				Columns:    []*schema.Column{TasksColumns[31]},
 				RefColumns: []*schema.Column{IntegrationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "tasks_organizations_tasks",
-				Columns:    []*schema.Column{TasksColumns[33]},
+				Columns:    []*schema.Column{TasksColumns[32]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "tasks_remediations_tasks",
-				Columns:    []*schema.Column{TasksColumns[34]},
+				Columns:    []*schema.Column{TasksColumns[33]},
 				RefColumns: []*schema.Column{RemediationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "tasks_reviews_tasks",
-				Columns:    []*schema.Column{TasksColumns[35]},
+				Columns:    []*schema.Column{TasksColumns[34]},
 				RefColumns: []*schema.Column{ReviewsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "tasks_custom_type_enums_task_kind",
-				Columns:    []*schema.Column{TasksColumns[36]},
+				Columns:    []*schema.Column{TasksColumns[35]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "tasks_custom_type_enums_environment",
-				Columns:    []*schema.Column{TasksColumns[37]},
+				Columns:    []*schema.Column{TasksColumns[36]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "tasks_custom_type_enums_scope",
-				Columns:    []*schema.Column{TasksColumns[38]},
+				Columns:    []*schema.Column{TasksColumns[37]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "tasks_tasks_tasks",
-				Columns:    []*schema.Column{TasksColumns[39]},
+				Columns:    []*schema.Column{TasksColumns[38]},
 				RefColumns: []*schema.Column{TasksColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "tasks_users_assigner_tasks",
-				Columns:    []*schema.Column{TasksColumns[40]},
+				Columns:    []*schema.Column{TasksColumns[39]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "tasks_users_assignee_tasks",
-				Columns:    []*schema.Column{TasksColumns[41]},
+				Columns:    []*schema.Column{TasksColumns[40]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -7618,12 +7617,12 @@ var (
 			{
 				Name:    "task_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{TasksColumns[8], TasksColumns[33]},
+				Columns: []*schema.Column{TasksColumns[8], TasksColumns[32]},
 			},
 			{
 				Name:    "task_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{TasksColumns[33]},
+				Columns: []*schema.Column{TasksColumns[32]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -7631,7 +7630,7 @@ var (
 			{
 				Name:    "task_external_uuid_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{TasksColumns[14], TasksColumns[33]},
+				Columns: []*schema.Column{TasksColumns[14], TasksColumns[32]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -7639,15 +7638,15 @@ var (
 			{
 				Name:    "task_owner_id_idempotency_key",
 				Unique:  true,
-				Columns: []*schema.Column{TasksColumns[33], TasksColumns[29]},
+				Columns: []*schema.Column{TasksColumns[32], TasksColumns[28]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL AND idempotency_key IS NOT NULL",
 				},
 			},
 			{
-				Name:    "task_owner_id_is_suggested_available_at_priority",
+				Name:    "task_owner_id_is_suggested_priority",
 				Unique:  false,
-				Columns: []*schema.Column{TasksColumns[33], TasksColumns[24], TasksColumns[26], TasksColumns[25]},
+				Columns: []*schema.Column{TasksColumns[32], TasksColumns[24], TasksColumns[25]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},

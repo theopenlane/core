@@ -7830,7 +7830,7 @@ func init() {
 	// task.DefaultPriority holds the default value on creation for the priority field.
 	task.DefaultPriority = taskDescPriority.Default.(int)
 	// taskDescExternalReferenceURL is the schema descriptor for external_reference_url field.
-	taskDescExternalReferenceURL := taskFields[18].Descriptor()
+	taskDescExternalReferenceURL := taskFields[17].Descriptor()
 	// task.ExternalReferenceURLValidator is a validator for the "external_reference_url" field. It is called by the builders before save.
 	task.ExternalReferenceURLValidator = taskDescExternalReferenceURL.Validators[0].(func([]string) error)
 	// taskDescID is the schema descriptor for id field.

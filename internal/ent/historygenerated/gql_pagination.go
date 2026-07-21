@@ -25565,33 +25565,6 @@ var (
 			}
 		},
 	}
-	// TaskHistoryOrderFieldAvailableAt orders TaskHistory by available_at.
-	TaskHistoryOrderFieldAvailableAt = &TaskHistoryOrderField{
-		Value: func(_m *TaskHistory) (ent.Value, error) {
-			// allow for nil values for fields
-			if _m.AvailableAt == nil {
-				return nil, nil
-			}
-			return _m.AvailableAt, nil
-		},
-		column: taskhistory.FieldAvailableAt,
-		toTerm: func(opts ...sql.OrderTermOption) taskhistory.OrderOption {
-			opts = append(opts, sql.OrderNullsLast())
-			return taskhistory.ByAvailableAt(opts...)
-		},
-		toCursor: func(_m *TaskHistory) Cursor {
-			if _m.AvailableAt == nil {
-				return Cursor{
-					ID:    _m.ID,
-					Value: nil, // handle nil values for fields
-				}
-			}
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.AvailableAt,
-			}
-		},
-	}
 )
 
 // String implement fmt.Stringer interface.
@@ -25618,8 +25591,6 @@ func (f TaskHistoryOrderField) String() string {
 		str = "is_suggested"
 	case TaskHistoryOrderFieldPriority.column:
 		str = "priority"
-	case TaskHistoryOrderFieldAvailableAt.column:
-		str = "available_at"
 	}
 	return str
 }
@@ -25656,8 +25627,6 @@ func (f *TaskHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *TaskHistoryOrderFieldIsSuggested
 	case "priority":
 		*f = *TaskHistoryOrderFieldPriority
-	case "available_at":
-		*f = *TaskHistoryOrderFieldAvailableAt
 	default:
 		return fmt.Errorf("%s is not a valid TaskHistoryOrderField", str)
 	}

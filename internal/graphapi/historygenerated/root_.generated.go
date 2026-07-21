@@ -2631,7 +2631,6 @@ type ComplexityRoot struct {
 	TaskHistory struct {
 		AssigneeID             func(childComplexity int) int
 		AssignerID             func(childComplexity int) int
-		AvailableAt            func(childComplexity int) int
 		Completed              func(childComplexity int) int
 		CreatedAt              func(childComplexity int) int
 		CreatedBy              func(childComplexity int) int
@@ -16536,12 +16535,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TaskHistory.AssignerID(childComplexity), true
-	case "TaskHistory.availableAt":
-		if e.ComplexityRoot.TaskHistory.AvailableAt == nil {
-			break
-		}
-
-		return e.ComplexityRoot.TaskHistory.AvailableAt(childComplexity), true
 	case "TaskHistory.completed":
 		if e.ComplexityRoot.TaskHistory.Completed == nil {
 			break
@@ -56921,10 +56914,6 @@ type TaskHistory implements Node {
   """
   priority: Int!
   """
-  the time when the task should become available to users
-  """
-  availableAt: DateTime
-  """
   the system or workflow that created or suggested the task
   """
   source: String
@@ -57010,7 +56999,6 @@ enum TaskHistoryOrderField {
   is_template
   is_suggested
   priority
-  available_at
 }
 """
 TaskHistoryTaskStatus is enum for the field status
@@ -57455,19 +57443,6 @@ input TaskHistoryWhereInput {
   priorityGTE: Int
   priorityLT: Int
   priorityLTE: Int
-  """
-  available_at field predicates
-  """
-  availableAt: DateTime
-  availableAtNEQ: DateTime
-  availableAtIn: [DateTime!]
-  availableAtNotIn: [DateTime!]
-  availableAtGT: DateTime
-  availableAtGTE: DateTime
-  availableAtLT: DateTime
-  availableAtLTE: DateTime
-  availableAtIsNil: Boolean
-  availableAtNotNil: Boolean
   """
   source field predicates
   """
@@ -72975,8 +72950,6 @@ func (ec *executionContext) childFields_TaskHistory(ctx context.Context, field g
 		return ec.fieldContext_TaskHistory_isSuggested(ctx, field)
 	case "priority":
 		return ec.fieldContext_TaskHistory_priority(ctx, field)
-	case "availableAt":
-		return ec.fieldContext_TaskHistory_availableAt(ctx, field)
 	case "source":
 		return ec.fieldContext_TaskHistory_source(ctx, field)
 	case "sourceKey":

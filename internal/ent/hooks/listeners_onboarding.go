@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"strings"
-	"time"
 
 	"entgo.io/ent"
 	"github.com/samber/lo"
@@ -25,12 +24,11 @@ const onboardingTaskSource = "onboarding"
 var onboardingTaskKeyReplacer = strings.NewReplacer(" ", "-", "/", "-", "_", "-", ":", "-")
 
 type suggestedTask struct {
-	Key         string
-	Title       string
-	Details     string
-	Priority    int
-	AvailableAt *models.DateTime
-	Metadata    map[string]any
+	Key      string
+	Title    string
+	Details  string
+	Priority int
+	Metadata map[string]any
 }
 
 // RegisterGalaOnboardingListeners registers onboarding mutation listeners on Gala.
@@ -81,11 +79,10 @@ func createOnboardingTasks(ctx context.Context, client *generated.Client, orgID 
 	}
 
 	tasks := []suggestedTask{}
-	now := time.Now()
 
 	for _, step := range questionnaire.Steps {
 		for _, rule := range step.Tasks {
-			tasks = append(tasks, generateTaskFromRule(rule, nil, now))
+			tasks = append(tasks, generateTaskFromRule(rule, nil))
 		}
 
 		for _, question := range step.Questions {
@@ -99,7 +96,7 @@ func createOnboardingTasks(ctx context.Context, client *generated.Client, orgID 
 				if match == "eachSelected" {
 					values, _ := retrieveValueFromAnswer[[]string](answer)
 					for _, value := range values {
-						tasks = append(tasks, generateTaskFromRule(rule, onboardingTaskTemplateValues(value, getOptionLabel(question.Options, value)), now))
+						tasks = append(tasks, generateTaskFromRule(rule, onboardingTaskTemplateValues(value, getOptionLabel(question.Options, value))))
 					}
 
 					continue
@@ -107,7 +104,7 @@ func createOnboardingTasks(ctx context.Context, client *generated.Client, orgID 
 
 				value, _ := retrieveValueFromAnswer[string](answer)
 				if value == match {
-					tasks = append(tasks, generateTaskFromRule(rule, onboardingTaskTemplateValues(match, getOptionLabel(question.Options, match)), now))
+					tasks = append(tasks, generateTaskFromRule(rule, onboardingTaskTemplateValues(match, getOptionLabel(question.Options, match))))
 				}
 			}
 		}
@@ -144,10 +141,6 @@ func createOnboardingTasks(ctx context.Context, client *generated.Client, orgID 
 			SetSourceKey(t.Key).
 			SetIdempotencyKey(idempotencyKey)
 
-		if t.AvailableAt != nil {
-			mutation.SetAvailableAt(*t.AvailableAt)
-		}
-
 		if len(t.Metadata) > 0 {
 			mutation.SetMetadata(t.Metadata)
 		}
@@ -160,21 +153,14 @@ func createOnboardingTasks(ctx context.Context, client *generated.Client, orgID 
 	return nil
 }
 
-func generateTaskFromRule(rule models.TaskRule, values map[string]string, t time.Time) suggestedTask {
-	task := suggestedTask{
+func generateTaskFromRule(rule models.TaskRule, values map[string]string) suggestedTask {
+	return suggestedTask{
 		Key:      replaceOnboardingTemplateHolder(rule.Key, values),
 		Title:    replaceOnboardingTemplateHolder(rule.Title, values),
 		Details:  replaceOnboardingTemplateHolder(rule.Details, values),
 		Priority: rule.Priority,
 		Metadata: rule.Metadata,
 	}
-
-	if rule.AvailableAfterDays > 0 {
-		availableAt := models.DateTime(t.Add(time.Duration(rule.AvailableAfterDays) * 24 * time.Hour))
-		task.AvailableAt = &availableAt
-	}
-
-	return task
 }
 
 func replaceOnboardingTemplateHolder(value string, replacements map[string]string) string {

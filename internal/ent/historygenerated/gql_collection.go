@@ -13294,11 +13294,6 @@ func (_q *TaskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, taskhistory.FieldPriority)
 				fieldSeen[taskhistory.FieldPriority] = struct{}{}
 			}
-		case "availableAt":
-			if _, ok := fieldSeen[taskhistory.FieldAvailableAt]; !ok {
-				selectedFields = append(selectedFields, taskhistory.FieldAvailableAt)
-				fieldSeen[taskhistory.FieldAvailableAt] = struct{}{}
-			}
 		case "source":
 			if _, ok := fieldSeen[taskhistory.FieldSource]; !ok {
 				selectedFields = append(selectedFields, taskhistory.FieldSource)

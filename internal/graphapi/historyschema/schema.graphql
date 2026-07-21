@@ -36094,10 +36094,6 @@ type TaskHistory implements Node {
 	"""
 	priority: Int!
 	"""
-	the time when the task should become available to users
-	"""
-	availableAt: DateTime
-	"""
 	the system or workflow that created or suggested the task
 	"""
 	source: String
@@ -36183,7 +36179,6 @@ enum TaskHistoryOrderField {
 	is_template
 	is_suggested
 	priority
-	available_at
 }
 """
 TaskHistoryTaskStatus is enum for the field status
@@ -36628,19 +36623,6 @@ input TaskHistoryWhereInput {
 	priorityGTE: Int
 	priorityLT: Int
 	priorityLTE: Int
-	"""
-	available_at field predicates
-	"""
-	availableAt: DateTime
-	availableAtNEQ: DateTime
-	availableAtIn: [DateTime!]
-	availableAtNotIn: [DateTime!]
-	availableAtGT: DateTime
-	availableAtGTE: DateTime
-	availableAtLT: DateTime
-	availableAtLTE: DateTime
-	availableAtIsNil: Boolean
-	availableAtNotNil: Boolean
 	"""
 	source field predicates
 	"""

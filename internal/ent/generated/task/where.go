@@ -204,11 +204,6 @@ func Priority(v int) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldPriority, v))
 }
 
-// AvailableAt applies equality check predicate on the "available_at" field. It's identical to AvailableAtEQ.
-func AvailableAt(v models.DateTime) predicate.Task {
-	return predicate.Task(sql.FieldEQ(FieldAvailableAt, v))
-}
-
 // Source applies equality check predicate on the "source" field. It's identical to SourceEQ.
 func Source(v string) predicate.Task {
 	return predicate.Task(sql.FieldEQ(FieldSource, v))
@@ -1882,56 +1877,6 @@ func PriorityLT(v int) predicate.Task {
 // PriorityLTE applies the LTE predicate on the "priority" field.
 func PriorityLTE(v int) predicate.Task {
 	return predicate.Task(sql.FieldLTE(FieldPriority, v))
-}
-
-// AvailableAtEQ applies the EQ predicate on the "available_at" field.
-func AvailableAtEQ(v models.DateTime) predicate.Task {
-	return predicate.Task(sql.FieldEQ(FieldAvailableAt, v))
-}
-
-// AvailableAtNEQ applies the NEQ predicate on the "available_at" field.
-func AvailableAtNEQ(v models.DateTime) predicate.Task {
-	return predicate.Task(sql.FieldNEQ(FieldAvailableAt, v))
-}
-
-// AvailableAtIn applies the In predicate on the "available_at" field.
-func AvailableAtIn(vs ...models.DateTime) predicate.Task {
-	return predicate.Task(sql.FieldIn(FieldAvailableAt, vs...))
-}
-
-// AvailableAtNotIn applies the NotIn predicate on the "available_at" field.
-func AvailableAtNotIn(vs ...models.DateTime) predicate.Task {
-	return predicate.Task(sql.FieldNotIn(FieldAvailableAt, vs...))
-}
-
-// AvailableAtGT applies the GT predicate on the "available_at" field.
-func AvailableAtGT(v models.DateTime) predicate.Task {
-	return predicate.Task(sql.FieldGT(FieldAvailableAt, v))
-}
-
-// AvailableAtGTE applies the GTE predicate on the "available_at" field.
-func AvailableAtGTE(v models.DateTime) predicate.Task {
-	return predicate.Task(sql.FieldGTE(FieldAvailableAt, v))
-}
-
-// AvailableAtLT applies the LT predicate on the "available_at" field.
-func AvailableAtLT(v models.DateTime) predicate.Task {
-	return predicate.Task(sql.FieldLT(FieldAvailableAt, v))
-}
-
-// AvailableAtLTE applies the LTE predicate on the "available_at" field.
-func AvailableAtLTE(v models.DateTime) predicate.Task {
-	return predicate.Task(sql.FieldLTE(FieldAvailableAt, v))
-}
-
-// AvailableAtIsNil applies the IsNil predicate on the "available_at" field.
-func AvailableAtIsNil() predicate.Task {
-	return predicate.Task(sql.FieldIsNull(FieldAvailableAt))
-}
-
-// AvailableAtNotNil applies the NotNil predicate on the "available_at" field.
-func AvailableAtNotNil() predicate.Task {
-	return predicate.Task(sql.FieldNotNull(FieldAvailableAt))
 }
 
 // SourceEQ applies the EQ predicate on the "source" field.
