@@ -27,13 +27,13 @@ require (
 	github.com/alicebob/miniredis/v2 v2.38.0
 	github.com/alitto/pond/v2 v2.7.1
 	github.com/aws/aws-sdk-go-v2 v1.42.1
-	github.com/aws/aws-sdk-go-v2/config v1.32.27
-	github.com/aws/aws-sdk-go-v2/credentials v1.19.26
+	github.com/aws/aws-sdk-go-v2/config v1.32.30
+	github.com/aws/aws-sdk-go-v2/credentials v1.19.29
 	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.22.30
-	github.com/aws/aws-sdk-go-v2/feature/s3/transfermanager v0.2.13
-	github.com/aws/aws-sdk-go-v2/service/configservice v1.65.0
-	github.com/aws/aws-sdk-go-v2/service/iam v1.54.7
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.104.2
+	github.com/aws/aws-sdk-go-v2/feature/s3/transfermanager v0.3.2
+	github.com/aws/aws-sdk-go-v2/service/configservice v1.67.1
+	github.com/aws/aws-sdk-go-v2/service/iam v1.55.1
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.105.1
 	github.com/brianvoe/gofakeit/v7 v7.15.0
 	github.com/cenkalti/backoff/v5 v5.0.3
 	github.com/cloudflare/cloudflare-go/v7 v7.6.0
@@ -177,7 +177,7 @@ require (
 require (
 	cloud.google.com/go/longrunning v0.9.0 // indirect
 	github.com/Azure/azure-sdk-for-go/sdk/internal v1.12.0 // indirect
-	github.com/aws/aws-sdk-go-v2/service/signin v1.2.2 // indirect
+	github.com/aws/aws-sdk-go-v2/service/signin v1.4.1 // indirect
 	github.com/clipperhouse/displaywidth v0.10.0 // indirect
 	github.com/clipperhouse/uax29/v2 v2.7.0 // indirect
 	github.com/di-wu/parser v0.3.0 // indirect
@@ -224,9 +224,9 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.9.23 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.13.30 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.19.31 // indirect
-	github.com/aws/aws-sdk-go-v2/service/sso v1.31.5 // indirect
-	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.36.8 // indirect
-	github.com/aws/aws-sdk-go-v2/service/sts v1.43.5
+	github.com/aws/aws-sdk-go-v2/service/sso v1.32.1 // indirect
+	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.37.1 // indirect
+	github.com/aws/aws-sdk-go-v2/service/sts v1.44.1
 	github.com/aws/smithy-go v1.27.3 // indirect
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
@@ -300,7 +300,7 @@ require (
 )
 
 require (
-	github.com/aws/aws-sdk-go-v2/service/securityhub v1.71.9
+	github.com/aws/aws-sdk-go-v2/service/securityhub v1.73.1
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.4.1 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
