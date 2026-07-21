@@ -178,24 +178,6 @@ type Compliance struct {
 	Documents []TrustDocument `json:"documents,omitempty"`
 }
 
-// Registrar is the domain's WHOIS registration data
-type Registrar struct {
-	// DNSSEC reports whether DNSSEC is enabled for the domain
-	DNSSEC bool `json:"dnssec,omitempty"`
-	// Registrar is the domain's registrar of record
-	Registrar string `json:"registrar,omitempty"`
-	// CreatedDate is when the domain was registered, RFC3339
-	CreatedDate string `json:"created_date,omitempty"`
-	// ExpirationDate is when the domain's registration expires, RFC3339
-	ExpirationDate string `json:"expiration_date,omitempty"`
-	// UpdatedDate is when the domain's registration was last updated, RFC3339
-	UpdatedDate string `json:"updated_date,omitempty"`
-	// Nameservers are the domain's authoritative nameservers per WHOIS
-	Nameservers []string `json:"nameservers,omitempty"`
-	// Status lists the domain's registry status codes (e.g. clientTransferProhibited)
-	Status []string `json:"status,omitempty"`
-}
-
 // Favicon is the scanned site's favicon
 type Favicon struct {
 	// URL is the favicon's URL
@@ -235,8 +217,6 @@ type ScanReport struct {
 	Systems []SystemEntry `json:"systems,omitempty"`
 	// Compliance is the company's compliance posture gathered by the domainscan enrichment
 	Compliance *Compliance `json:"compliance,omitempty"`
-	// Registrar is the domain's WHOIS registration data
-	Registrar *Registrar `json:"registrar,omitempty"`
 }
 
 // Report is the JSON-schema-described payload attached to a domain scan completion Notification.
@@ -264,8 +244,6 @@ type Report struct {
 	Systems []SystemEntry `json:"systems,omitempty"`
 	// Compliance is the first non-empty compliance section found across completed domains
 	Compliance *Compliance `json:"compliance,omitempty"`
-	// Registrar is the first non-empty WHOIS registration section found across completed domains
-	Registrar *Registrar `json:"registrar,omitempty"`
 }
 
 // Result is one domain's outcome within a DomainScanReport

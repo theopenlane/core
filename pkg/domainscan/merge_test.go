@@ -136,7 +136,6 @@ func TestMergeReportsPlatformCompliancMetaFirstNonEmptyWins(t *testing.T) {
 				Platform:   &Platform{Name: "Openlane"},
 				Compliance: &Compliance{IsSOC2: true},
 				Meta:       &Meta{Rank: 1},
-				Registrar:  &Registrar{Registrar: "Cloudflare, Inc."},
 			},
 		},
 		{
@@ -145,7 +144,6 @@ func TestMergeReportsPlatformCompliancMetaFirstNonEmptyWins(t *testing.T) {
 				Platform:   &Platform{Name: "should not win"},
 				Compliance: &Compliance{IsSOC2: false},
 				Meta:       &Meta{Rank: 2},
-				Registrar:  &Registrar{Registrar: "should not win"},
 			},
 		},
 	}
@@ -155,7 +153,6 @@ func TestMergeReportsPlatformCompliancMetaFirstNonEmptyWins(t *testing.T) {
 	assert.Equal(t, got.Platform.Name, "Openlane")
 	assert.Equal(t, got.Compliance.IsSOC2, true)
 	assert.Equal(t, got.Meta.Rank, 1)
-	assert.Equal(t, got.Registrar.Registrar, "Cloudflare, Inc.")
 }
 
 func TestMergeReportsPreservesScansIncludingFailed(t *testing.T) {

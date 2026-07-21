@@ -138,32 +138,3 @@ func TestBuildComplianceSection(t *testing.T) {
 	})
 }
 
-func TestBuildRegistrar(t *testing.T) {
-	t.Run("nil registrar returns nil", func(t *testing.T) {
-		got := buildRegistrar(Enrichment{})
-
-		assert.Check(t, got == nil)
-	})
-
-	t.Run("includes optional fields only when present", func(t *testing.T) {
-		enrichment := Enrichment{
-			Registrar: &RegistrarInfo{
-				Registrar:   "Cloudflare, Inc.",
-				CreatedDate: "2020-01-01T00:00:00Z",
-				Nameservers: []string{"abdullah.ns.cloudflare.com"},
-				DNSSEC:      true,
-			},
-		}
-
-		got := buildRegistrar(enrichment)
-
-		want := &Registrar{
-			DNSSEC:      true,
-			Registrar:   "Cloudflare, Inc.",
-			CreatedDate: "2020-01-01T00:00:00Z",
-			Nameservers: []string{"abdullah.ns.cloudflare.com"},
-		}
-
-		assert.Check(t, is.DeepEqual(want, got))
-	})
-}

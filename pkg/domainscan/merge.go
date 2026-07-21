@@ -41,7 +41,6 @@ func MergeReports(results []Result, reports []ScanReportInput) Report {
 		firstNonNil(&merged.Compliance, report.Compliance)
 		firstNonNil(&merged.Meta, report.Meta)
 		firstNonNil(&merged.Branding, report.Branding)
-		firstNonNil(&merged.Registrar, report.Registrar)
 	}
 
 	merged.Vendors = vendors.entries()

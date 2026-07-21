@@ -78,8 +78,4 @@ func logDomainScanEnrichmentErrors(ctx context.Context, errs domainscan.Enrichme
 	if errs.DNS != nil {
 		logx.FromContext(ctx).Warn().Err(errs.DNS).Msg("domain scan: failed to get dns vendor info")
 	}
-
-	if errs.Registrar != nil {
-		logx.FromContext(ctx).Warn().Err(errs.Registrar).Msg("domain scan: failed to get registrar info")
-	}
 }

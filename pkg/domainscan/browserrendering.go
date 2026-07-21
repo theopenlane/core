@@ -39,6 +39,10 @@ const (
 	browserRendering422MaxAttempts = 3
 	// browserRendering422BaseDelay is the base delay between 422 retries
 	browserRendering422BaseDelay = time.Second
+	// cloudflareErrNetworkConnectionClosed is the Cloudflare error code for a target the browser
+	// couldn't connect to at all (e.g. DNS doesn't resolve, connection refused) - retrying doesn't
+	// help since the domain itself is unreachable, not the render
+	cloudflareErrNetworkConnectionClosed = 5006
 )
 
 // trustCenterContentSelector is a best-effort CSS selector for the content
@@ -339,9 +343,24 @@ func (c *Config) browserRendering(ctx context.Context, target string, kind Promp
 		if !errors.As(err, &apiErr) || apiErr.StatusCode != http.StatusUnprocessableEntity {
 			return nil, err
 		}
+
+		if hasCloudflareErrorCode(apiErr, cloudflareErrNetworkConnectionClosed) {
+			return nil, err
+		}
 	}
 
 	return nil, lastErr
+}
+
+// hasCloudflareErrorCode reports whether apiErr contains a Cloudflare error with the given code
+func hasCloudflareErrorCode(apiErr *cloudflare.Error, code int64) bool {
+	for _, e := range apiErr.Errors {
+		if e.Code == code {
+			return true
+		}
+	}
+
+	return false
 }
 
 // gotoOptions controls page navigation behavior in the browser rendering API

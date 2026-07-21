@@ -121,26 +121,6 @@ func buildComplianceSection(enrichment Enrichment) *Compliance {
 	return &section
 }
 
-// buildRegistrar shapes the domain's WHOIS registration data
-func buildRegistrar(enrichment Enrichment) *Registrar {
-	registrar := enrichment.Registrar
-	if registrar == nil {
-		return nil
-	}
-
-	section := Registrar{
-		DNSSEC:         registrar.DNSSEC,
-		Registrar:      registrar.Registrar,
-		CreatedDate:    registrar.CreatedDate,
-		ExpirationDate: registrar.ExpirationDate,
-		UpdatedDate:    registrar.UpdatedDate,
-		Nameservers:    registrar.Nameservers,
-		Status:         registrar.Status,
-	}
-
-	return &section
-}
-
 // authMethod names one authentication method a company's product advertises support for
 type authMethod string
 

@@ -19,8 +19,6 @@ type Enrichment struct {
 	Compliance *CompliancePage `json:"compliance,omitempty"`
 	// DNS includes DNS probed data
 	DNS *DNSVendorInfo `json:"dns,omitempty"`
-	// Registrar is WHOIS registration data for the domain
-	Registrar *RegistrarInfo `json:"registrar,omitempty"`
 }
 
 // EnrichmentErrors holds the per-lookup errors from GatherEnrichment, each nil on success
@@ -28,7 +26,6 @@ type EnrichmentErrors struct {
 	Company    error
 	Compliance error
 	DNS        error
-	Registrar  error
 }
 
 // ReportConfig configures how BuildScanReport classifies vendors versus
@@ -86,16 +83,6 @@ func (c *Config) GatherEnrichment(ctx context.Context, domain string, timeout ti
 		return nil
 	})
 
-	g.Go(func() error {
-		if registrar, err := c.GetRegistrarInfo(ctx, domain); err != nil {
-			errs.Registrar = err
-		} else {
-			enrichment.Registrar = registrar
-		}
-
-		return nil
-	})
-
 	_ = g.Wait() // per-lookup errors are captured in errs above; this never fails
 
 	return enrichment, errs
@@ -120,7 +107,6 @@ func BuildScanReport(result *url_scanner.ScanGetResponse, enrichment Enrichment,
 	report.Platform = buildPlatform(enrichment)
 	report.Systems = buildSystems(enrichment)
 	report.Compliance = buildComplianceSection(enrichment)
-	report.Registrar = buildRegistrar(enrichment)
 
 	data, _ := jsonx.ToMap(report)
 
