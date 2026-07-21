@@ -398,7 +398,7 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 		lastRunAt = &t
 	}
 
-	allowed, err := r.checkRateLimit(ctx, operation, integration)
+	allowed, err := r.checkRateLimit(ctx, operation)
 	if err != nil {
 		return nil, 0, err
 	}

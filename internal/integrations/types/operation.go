@@ -24,11 +24,14 @@ type WorkflowMeta struct {
 	ObjectType enums.WorkflowObjectType `json:"objectType,omitempty"`
 }
 
-// RateLimitPolicy bounds how often one operation may run per organization. Operations that
-// leave this nil on their OperationRegistration are never rate limited
+// RateLimitPolicy bounds how often one operation may run per calling organization within a rolling
+// window, enforced identically on every execution path. Operations that leave this nil on their
+// OperationRegistration are never rate limited
 type RateLimitPolicy struct {
-	// Window is the cooldown duration between allowed runs for the same organization
+	// Window is the rolling window duration for the operation's execution budget
 	Window time.Duration
+	// Limit is the number of executions allowed per window; values below one default to a single execution
+	Limit int
 }
 
 // ExecutionPolicy controls synchronous execution behavior for one operation

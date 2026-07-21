@@ -17,7 +17,7 @@ func Builder() registry.Builder {
 				DisplayName: "Authentik",
 				Description: "Collect Authentik directory users, groups, and memberships for identity posture and access governance.",
 				Category:    "identity",
-				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/authentik/overview",
+				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/authentik",
 				Tags:        []string{"directory"},
 				Active:      true,
 				Visible:     true,

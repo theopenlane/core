@@ -17,7 +17,7 @@ func Builder() registry.Builder {
 				DisplayName: "Okta",
 				Description: "Collect Okta tenant and sign-on policy metadata for identity posture and access governance.",
 				Category:    "identity",
-				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/okta/overview",
+				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/okta",
 				Tags:        []string{"directory"},
 				Active:      false,
 				Visible:     true,

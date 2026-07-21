@@ -317,9 +317,10 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	requireNoError(t, err)
 
 	rt, err := intruntime.New(intruntime.Config{
-		DB:       c.db,
-		Gala:     galaInstance,
-		Keystore: credStore,
+		DB:          c.db,
+		Gala:        galaInstance,
+		Keystore:    credStore,
+		RedisClient: coreutils.NewRedisClient(),
 		DefinitionBuilders: []registry.Builder{
 			emaildef.Builder(emaildef.MockRuntimeConfig(), false),
 			slackdef.Builder(slackdef.Config{}, &slackdef.RuntimeSlackConfig{WebhookURL: "https://hooks.slack.com/services/test/mock/url"}, false),
