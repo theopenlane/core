@@ -8,8 +8,8 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
+	"github.com/theopenlane/core/pkg/catalog"
 	"github.com/theopenlane/core/pkg/catalog/gencatalog"
 )
 
@@ -38,12 +38,8 @@ func Catalog(ctx context.Context, client *generated.Client) (models.Questionnair
 }
 
 func getModules(client *generated.Client) []models.Module {
-
-	cat := gencatalog.DefaultCatalog
-
-	if client != nil && client.EntConfig != nil && client.EntConfig.Modules.UseSandbox {
-		cat = gencatalog.DefaultSandboxCatalog
-	}
+	useSandbox := client != nil && client.EntConfig != nil && client.EntConfig.Modules.UseSandbox
+	cat := catalog.FilterByAudience(false, false, gencatalog.GetDefaultCatalog(useSandbox))
 
 	modules := make([]models.Module, 0, len(models.TrialModules))
 
@@ -82,8 +78,6 @@ func getFrameworkOptions(ctx context.Context, client *generated.Client) ([]model
 		return nil, nil
 	}
 
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
 	standards, err := client.Standard.Query().
 		Where(
 			standard.StatusEQ(enums.StandardActive),
@@ -94,7 +88,7 @@ func getFrameworkOptions(ctx context.Context, client *generated.Client) ([]model
 			),
 		).
 		Order(standard.ByPriority(sql.OrderDesc())).
-		All(allowCtx)
+		All(ctx)
 	if err != nil {
 		return nil, err
 	}
