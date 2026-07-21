@@ -2,15 +2,17 @@ package graphapi
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/internal/integrations/operations"
+	"github.com/theopenlane/core/internal/integrations/definitions/cloudflare"
 	intruntime "github.com/theopenlane/core/internal/integrations/runtime"
-	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -81,9 +83,20 @@ func (r *mutationResolver) importDomainScanReview(ctx context.Context, input mod
 		return nil, ErrCampaignDispatchRuntimeRequired
 	}
 
-	receipt := rt.Gala().EmitWithHeaders(ctx, operations.DomainScanImportTopic, buildDomainScanImportEnvelope(organizationID, input), gala.Headers{})
-	if receipt.Err != nil {
-		logx.FromContext(ctx).Error().Err(receipt.Err).Msg("domain scan review: failed to queue import")
+	config, err := json.Marshal(buildDomainScanImportEnvelope(organizationID, input))
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("domain scan review: failed to encode import config")
+		return nil, ErrDomainScanReviewImportFailed
+	}
+
+	if _, err := rt.Dispatch(ctx, types.DispatchRequest{
+		DefinitionID: cloudflare.DefinitionID.ID(),
+		Operation:    cloudflare.DomainScanImportOp.Name(),
+		Config:       config,
+		RunType:      enums.IntegrationRunTypeEvent,
+		Runtime:      true,
+	}); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("domain scan review: failed to queue import")
 		return nil, ErrDomainScanReviewImportFailed
 	}
 
@@ -148,16 +161,16 @@ func validateDomainScanReviewRefs(input model.ImportDomainScanReviewInput) error
 
 // buildDomainScanImportEnvelope translates the GraphQL input into the envelope the async import
 // handler consumes
-func buildDomainScanImportEnvelope(organizationID string, input model.ImportDomainScanReviewInput) operations.ImportDomainScanReviewEnvelope {
-	envelope := operations.ImportDomainScanReviewEnvelope{
+func buildDomainScanImportEnvelope(organizationID string, input model.ImportDomainScanReviewInput) cloudflare.DomainScanImport {
+	envelope := cloudflare.DomainScanImport{
 		OrganizationID: organizationID,
 		ScanIDs:        input.ScanIDs,
-		Vendors:        make([]operations.ImportDomainScanReviewVendor, 0, len(input.Vendors)),
-		Assets:         make([]operations.ImportDomainScanReviewAsset, 0, len(input.Assets)),
+		Vendors:        make([]cloudflare.DomainScanImportVendor, 0, len(input.Vendors)),
+		Assets:         make([]cloudflare.DomainScanImportAsset, 0, len(input.Assets)),
 	}
 
 	for _, vendor := range input.Vendors {
-		v := operations.ImportDomainScanReviewVendor{
+		v := cloudflare.DomainScanImportVendor{
 			Ref:        vendor.Ref,
 			Name:       vendor.Name,
 			Categories: vendor.Categories,
@@ -171,7 +184,7 @@ func buildDomainScanImportEnvelope(organizationID string, input model.ImportDoma
 	}
 
 	for _, asset := range input.Assets {
-		a := operations.ImportDomainScanReviewAsset{
+		a := cloudflare.DomainScanImportAsset{
 			Ref:        asset.Ref,
 			Name:       asset.Name,
 			Categories: asset.Categories,
@@ -189,7 +202,7 @@ func buildDomainScanImportEnvelope(organizationID string, input model.ImportDoma
 	}
 
 	for _, platform := range input.Platforms {
-		p := operations.ImportDomainScanReviewPlatform{
+		p := cloudflare.DomainScanImportPlatform{
 			Ref:        platform.Ref,
 			Name:       platform.Name,
 			EntityRefs: platform.EntityRefs,
@@ -204,7 +217,7 @@ func buildDomainScanImportEnvelope(organizationID string, input model.ImportDoma
 	}
 
 	for _, system := range input.Systems {
-		s := operations.ImportDomainScanReviewSystem{
+		s := cloudflare.DomainScanImportSystem{
 			Name:         system.Name,
 			EntityRefs:   system.EntityRefs,
 			AssetRefs:    system.AssetRefs,
@@ -219,7 +232,7 @@ func buildDomainScanImportEnvelope(organizationID string, input model.ImportDoma
 	}
 
 	for _, finding := range input.Findings {
-		f := operations.ImportDomainScanReviewFinding{}
+		f := cloudflare.DomainScanImportFinding{}
 
 		if finding.Category != nil {
 			f.Category = *finding.Category

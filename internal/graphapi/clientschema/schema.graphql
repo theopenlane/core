@@ -39542,6 +39542,10 @@ input ImportDomainScanReviewVendorInput {
 	"""
 	name: String!
 	"""
+	the vendor's raw legal entity name, if known and different from name
+	"""
+	legalName: String
+	"""
 	the vendor's domain, if known
 	"""
 	domain: String

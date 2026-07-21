@@ -345,7 +345,7 @@ func (ec *executionContext) unmarshalInputImportDomainScanReviewVendorInput(ctx 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"ref", "name", "domain", "categories"}
+	fieldsInOrder := [...]string{"ref", "name", "legalName", "domain", "categories"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -366,6 +366,13 @@ func (ec *executionContext) unmarshalInputImportDomainScanReviewVendorInput(ctx 
 				return it, err
 			}
 			it.Name = data
+		case "legalName":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("legalName"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.LegalName = data
 		case "domain":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("domain"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)

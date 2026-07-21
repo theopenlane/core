@@ -5741,8 +5741,6 @@ func init() {
 	organizationsetting.Hooks[7] = organizationsettingHooks[2]
 
 	organizationsetting.Hooks[8] = organizationsettingHooks[3]
-
-	organizationsetting.Hooks[9] = organizationsettingHooks[4]
 	organizationsettingMixinInters2 := organizationsettingMixin[2].Interceptors()
 	organizationsettingInters := schema.OrganizationSetting{}.Interceptors()
 	organizationsetting.Interceptors[0] = organizationsettingMixinInters2[0]

@@ -398,6 +398,15 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 		lastRunAt = &t
 	}
 
+	allowed, err := r.checkRateLimit(ctx, operation, integration)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	if !allowed {
+		return nil, 0, ErrOperationRateLimited
+	}
+
 	req := types.OperationRequest{
 		Integration: integration,
 		Credentials: credentials,
@@ -406,6 +415,7 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 		LastRunAt:   lastRunAt,
 		DB:          r.DB(),
 		Dispatch:    r.Dispatch,
+		Services:    r,
 	}
 
 	if operation.IngestHandle != nil {

@@ -24,6 +24,13 @@ type WorkflowMeta struct {
 	ObjectType enums.WorkflowObjectType `json:"objectType,omitempty"`
 }
 
+// RateLimitPolicy bounds how often one operation may run per organization. Operations that
+// leave this nil on their OperationRegistration are never rate limited
+type RateLimitPolicy struct {
+	// Window is the cooldown duration between allowed runs for the same organization
+	Window time.Duration
+}
+
 // ExecutionPolicy controls synchronous execution behavior for one operation
 type ExecutionPolicy struct {
 	// Inline indicates the operation should execute synchronously for direct API callers
@@ -68,6 +75,9 @@ type OperationRequest struct {
 	// Dispatch enqueues other integration operations through the runtime-managed dispatcher,
 	// used by operations that orchestrate downstream dispatches
 	Dispatch DispatchFunc
+	// Services exposes the full runtime service surface (DB, Gala, ExecuteRuntimeOperation, Dispatch),
+	// used by operations that hand off to saga-style Gala listener machinery
+	Services RuntimeServices
 }
 
 // OperationHandler executes one definition operation
@@ -94,10 +104,18 @@ type OperationRegistration struct {
 	UISchema json.RawMessage `json:"uiSchema,omitempty"`
 	// CustomerSelectable controls whether the operation is exposed in customer-facing surfaces;
 	// nil (default) and true are treated as selectable, false hides the operation from
-	// provider listings and catalog pickers (used for internal system operations)
+	// provider listings and catalog pickers
 	CustomerSelectable *bool `json:"customerSelectable,omitempty"`
+	// Internal marks the operation as reachable only through its own listener or saga
+	// machinery, never directly through RunIntegrationOperation.
+	Internal bool `json:"-"`
+	// RequiresPaymentMethod gates direct invocation through RunIntegrationOperation on the
+	// calling organization having a payment method on file
+	RequiresPaymentMethod bool `json:"-"`
 	// Policy controls synchronous execution behavior for the operation
 	Policy ExecutionPolicy `json:"policy"`
+	// RateLimit bounds how often this operation may run per organization; nil (default) means unlimited
+	RateLimit *RateLimitPolicy `json:"-"`
 	// Ingest declares the normalized schemas emitted by the operation
 	Ingest []IngestContract `json:"ingest,omitempty"`
 	// Handle executes the operation; set for operations that do not produce ingest payloads

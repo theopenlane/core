@@ -31,8 +31,24 @@ var (
 	domainScanGatherEnrichmentSchema, DomainScanEnrichmentOp = providerkit.OperationSchema[DomainScanGatherEnrichment]() //nolint:revive
 	// domainScanBuildReportSchema is the operation ref for building the scan report from a completed URL Scanner result and gathered enrichment
 	domainScanBuildReportSchema, DomainScanBuildReportOp = providerkit.OperationSchema[DomainScanBuildReport]() //nolint:revive
+	// domainScanRequestSchema is the operation ref for requesting a domain scan; used both by
+	// customer-facing calls (queues a pending Scan) and the system re-dispatch from the listener
+	// on Scan creation (actually runs the saga for it)
+	domainScanRequestSchema, DomainScanRequestOp = providerkit.OperationSchema[DomainScanRequest]() //nolint:revive
+	// domainScanImportSchema is the operation ref for importing an accepted domain scan review
+	domainScanImportSchema, DomainScanImportOp = providerkit.OperationSchema[DomainScanImport]() //nolint:revive
 	// runtimeCloudflareSchema is the JSON schema and typed ref for the runtime Cloudflare config
 	runtimeCloudflareSchema, runtimeCloudflareRef = providerkit.RuntimeSchema[RuntimeConfig]()
+)
+
+const (
+	// DomainScanPerformedBy marks a Scan record as one the system should actually submit to the cloudflare domain scan job
+	DomainScanPerformedBy = "openlane_domain_scan"
+	// DomainScanGroupMetadataKey is the Scan.Metadata key carrying the shared group id for scans
+	// created together (e.g. every domain from one organization settings update), so scans
+	// submitted independently can still be recombined into a single notification once the whole
+	// group reaches a terminal state
+	DomainScanGroupMetadataKey = "scan_group_id"
 )
 
 // RuntimeConfig is the runtime-provisioned configuration for the operator-owned

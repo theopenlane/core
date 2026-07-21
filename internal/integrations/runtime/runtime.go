@@ -124,6 +124,11 @@ func (r *Runtime) Gala() *gala.Gala {
 	return do.MustInvoke[*gala.Gala](r.injector)
 }
 
+// Redis returns the shared Redis client from the injector, nil when Redis isn't configured
+func (r *Runtime) Redis() *redis.Client {
+	return do.MustInvoke[*redis.Client](r.injector)
+}
+
 // keymaker returns the auth flow service from the injector
 func (r *Runtime) keymaker() *keymaker.Service {
 	return do.MustInvoke[*keymaker.Service](r.injector)
@@ -187,6 +192,7 @@ func NewForTesting(reg *registry.Registry) *Runtime {
 	injector := do.New()
 	do.ProvideValue(injector, reg)
 	do.ProvideValue(injector, &ent.Client{})
+	do.ProvideValue(injector, (*redis.Client)(nil))
 
 	return &Runtime{
 		injector:        injector,
@@ -211,6 +217,7 @@ func New(config Config) (*Runtime, error) {
 	do.ProvideValue(injector, config.DB)
 	do.ProvideValue(injector, config.Gala)
 	do.ProvideValue(injector, config.Keystore)
+	do.ProvideValue(injector, config.RedisClient)
 
 	if err := rt.registerContextCodecs(); err != nil {
 		return nil, err

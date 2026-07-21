@@ -5,8 +5,6 @@ import (
 	"testing"
 
 	"gotest.tools/v3/assert"
-
-	"github.com/theopenlane/core/internal/integrations/operations"
 )
 
 func TestResolveDomainScanRefs(t *testing.T) {
@@ -47,7 +45,7 @@ func TestResolveDomainScanRefs(t *testing.T) {
 }
 
 func TestDomainScanMappingMatches(t *testing.T) {
-	assets := []operations.ImportDomainScanReviewAsset{
+	assets := []DomainScanImportAsset{
 		{Ref: "a1", Identifier: "cdn.iubenda.com"},
 		{Ref: "a2", Identifier: "iubenda.com"},
 		{Ref: "a3", Identifier: "theopenlane.io"},

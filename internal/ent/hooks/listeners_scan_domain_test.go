@@ -9,7 +9,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/eventqueue"
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/integrations/operations"
+	"github.com/theopenlane/core/internal/integrations/definitions/cloudflare"
 	"github.com/theopenlane/core/pkg/gala"
 )
 
@@ -36,27 +36,27 @@ func TestIsPendingDomainScan(t *testing.T) {
 	}{
 		{
 			name: "domain scan awaiting submission",
-			scan: &generated.Scan{ScanType: enums.ScanTypeDomain, Status: enums.ScanStatusPending, PerformedBy: operations.DomainScanPerformedBy},
+			scan: &generated.Scan{ScanType: enums.ScanTypeDomain, Status: enums.ScanStatusPending, PerformedBy: cloudflare.DomainScanPerformedBy},
 			want: true,
 		},
 		{
 			name: "domain scan queued via the REST endpoint",
-			scan: &generated.Scan{ScanType: enums.ScanTypeDomain, Status: enums.ScanStatusPending, PerformedBy: operations.DomainScanPerformedBy},
+			scan: &generated.Scan{ScanType: enums.ScanTypeDomain, Status: enums.ScanStatusPending, PerformedBy: cloudflare.DomainScanPerformedBy},
 			want: true,
 		},
 		{
 			name: "non-domain scan is ignored",
-			scan: &generated.Scan{ScanType: enums.ScanTypeVulnerability, Status: enums.ScanStatusPending, PerformedBy: operations.DomainScanPerformedBy},
+			scan: &generated.Scan{ScanType: enums.ScanTypeVulnerability, Status: enums.ScanStatusPending, PerformedBy: cloudflare.DomainScanPerformedBy},
 			want: false,
 		},
 		{
 			name: "already-completed historical record is not resubmitted",
-			scan: &generated.Scan{ScanType: enums.ScanTypeDomain, Status: enums.ScanStatusCompleted, PerformedBy: operations.DomainScanPerformedBy},
+			scan: &generated.Scan{ScanType: enums.ScanTypeDomain, Status: enums.ScanStatusCompleted, PerformedBy: cloudflare.DomainScanPerformedBy},
 			want: false,
 		},
 		{
 			name: "already-failed historical record is not resubmitted",
-			scan: &generated.Scan{ScanType: enums.ScanTypeDomain, Status: enums.ScanStatusFailed, PerformedBy: operations.DomainScanPerformedBy},
+			scan: &generated.Scan{ScanType: enums.ScanTypeDomain, Status: enums.ScanStatusFailed, PerformedBy: cloudflare.DomainScanPerformedBy},
 			want: false,
 		},
 		{

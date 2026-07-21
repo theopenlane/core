@@ -18,7 +18,6 @@ import (
 	"github.com/olekukonko/tablewriter"
 
 	"github.com/theopenlane/core/internal/integrations/definitions/cloudflare"
-	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/pkg/domainscan"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
@@ -486,7 +485,7 @@ func submitAndPollScan(cfg *domainscan.Config, domain string) *url_scanner.ScanG
 
 	fmt.Printf("submitted scan %s for %s, polling for results...\n", scanID, domain)
 
-	for attempt := 0; attempt < operations.DomainScanMaxAttempts; attempt++ {
+	for attempt := 0; attempt < cloudflare.DomainScanMaxAttempts; attempt++ {
 		pollResult, err := cloudflare.DomainScanPoll{}.Run(ctx, client, cloudflare.DomainScanPoll{
 			ScanResultID: scanID,
 		})
@@ -502,7 +501,7 @@ func submitAndPollScan(cfg *domainscan.Config, domain string) *url_scanner.ScanG
 			return pollResult.Result
 		}
 
-		time.Sleep(operations.DomainScanPollBackoff(attempt))
+		time.Sleep(cloudflare.DomainScanPollBackoff(attempt))
 	}
 
 	log.Fatal("timed out waiting for scan to complete")

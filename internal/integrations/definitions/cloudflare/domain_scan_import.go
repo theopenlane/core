@@ -12,7 +12,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
-	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/domainscan"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -34,7 +33,7 @@ type importSummary struct {
 
 // HandleImportDomainScanReview creates the records for a reviewer-accepted domain scan report,
 // all under one transaction, and sends a follow-up Notification once done
-func (s domainScanSaga) HandleImportDomainScanReview(ctx context.Context, envelope operations.ImportDomainScanReviewEnvelope) error {
+func (s domainScanSaga) HandleImportDomainScanReview(ctx context.Context, envelope DomainScanImport) error {
 	ctx = logx.WithFields(ctx, logx.LogFields{
 		"organization_id": envelope.OrganizationID,
 		"scan_ids":        envelope.ScanIDs,
@@ -81,7 +80,7 @@ func (s domainScanSaga) notifyDomainScanImportComplete(ctx context.Context, orga
 // importDomainScanReview creates every accepted object in order: vendors and assets first (so
 // their real IDs are known), then the platform and its system details (which link back to the
 // vendors/assets via ref), then findings
-func importDomainScanReview(ctx context.Context, client *generated.Client, envelope operations.ImportDomainScanReviewEnvelope) (importSummary, error) {
+func importDomainScanReview(ctx context.Context, client *generated.Client, envelope DomainScanImport) (importSummary, error) {
 	var summary importSummary
 
 	assetIDByRef, err := createDomainScanAssets(ctx, client, envelope.OrganizationID, envelope.Assets, envelope.ScanIDs)
@@ -138,7 +137,7 @@ func importDomainScanReview(ctx context.Context, client *generated.Client, envel
 // findOrCreateDomainScanVendors resolves each accepted vendor to an Entity ID, reusing an
 // existing org Entity by name if one already exists, and auto-links any accepted asset the scan
 // itself attributed to that vendor
-func findOrCreateDomainScanVendors(ctx context.Context, client *generated.Client, ownerID string, vendors []operations.ImportDomainScanReviewVendor, assets []operations.ImportDomainScanReviewAsset, assetIDByRef, vendorNameByAssetDomain map[string]string, scanIDs []string) (map[string]string, error) {
+func findOrCreateDomainScanVendors(ctx context.Context, client *generated.Client, ownerID string, vendors []DomainScanImportVendor, assets []DomainScanImportAsset, assetIDByRef, vendorNameByAssetDomain map[string]string, scanIDs []string) (map[string]string, error) {
 	ids := make(map[string]string, len(vendors))
 	if len(vendors) == 0 {
 		return ids, nil
@@ -251,7 +250,7 @@ func domainScanAssetVendorNames(ctx context.Context, client *generated.Client, s
 
 // domainScanMappingMatches returns the IDs of accepted assets whose lowercased, dot-trimmed
 // identifier satisfies match
-func domainScanMappingMatches(assets []operations.ImportDomainScanReviewAsset, assetIDByRef map[string]string, match func(assetDomain string) bool) []string {
+func domainScanMappingMatches(assets []DomainScanImportAsset, assetIDByRef map[string]string, match func(assetDomain string) bool) []string {
 	var ids []string
 
 	for _, asset := range assets {
@@ -273,7 +272,7 @@ func domainScanMappingMatches(assets []operations.ImportDomainScanReviewAsset, a
 }
 
 // createDomainScanAssets creates one Asset per accepted asset
-func createDomainScanAssets(ctx context.Context, client *generated.Client, ownerID string, assets []operations.ImportDomainScanReviewAsset, scanIDs []string) (map[string]string, error) {
+func createDomainScanAssets(ctx context.Context, client *generated.Client, ownerID string, assets []DomainScanImportAsset, scanIDs []string) (map[string]string, error) {
 	ids := make(map[string]string, len(assets))
 
 	for _, asset := range assets {
@@ -300,7 +299,7 @@ func createDomainScanAssets(ctx context.Context, client *generated.Client, owner
 // createDomainScanPlatforms creates one Platform per accepted platform, each linked to the scans
 // they were generated from and to whichever accepted vendors/assets the reviewer marked as
 // belonging to it, returning a ref -> Platform ID map so systems can attach to them by ref
-func createDomainScanPlatforms(ctx context.Context, client *generated.Client, ownerID string, platforms []operations.ImportDomainScanReviewPlatform, scanIDs []string, entityIDByRef, assetIDByRef map[string]string) (map[string]string, error) {
+func createDomainScanPlatforms(ctx context.Context, client *generated.Client, ownerID string, platforms []DomainScanImportPlatform, scanIDs []string, entityIDByRef, assetIDByRef map[string]string) (map[string]string, error) {
 	ids := make(map[string]string, len(platforms))
 
 	for _, platform := range platforms {
@@ -330,7 +329,7 @@ func createDomainScanPlatforms(ctx context.Context, client *generated.Client, ow
 // createDomainScanSystemDetails creates one SystemDetail per accepted system, parented to the
 // platforms it references by ref (required by SystemDetail's policy) and linked to that system's
 // own subset of accepted vendors/assets
-func createDomainScanSystemDetails(ctx context.Context, client *generated.Client, ownerID string, systems []operations.ImportDomainScanReviewSystem, platformIDByRef, entityIDByRef, assetIDByRef map[string]string) ([]string, error) {
+func createDomainScanSystemDetails(ctx context.Context, client *generated.Client, ownerID string, systems []DomainScanImportSystem, platformIDByRef, entityIDByRef, assetIDByRef map[string]string) ([]string, error) {
 	ids := make([]string, 0, len(systems))
 
 	for _, system := range systems {
@@ -358,7 +357,7 @@ func createDomainScanSystemDetails(ctx context.Context, client *generated.Client
 
 // createDomainScanFindings creates one Finding per accepted finding, linked to the scans it came
 // from and auto-linked to any accepted asset matching its domain
-func createDomainScanFindings(ctx context.Context, client *generated.Client, ownerID string, findings []operations.ImportDomainScanReviewFinding, assets []operations.ImportDomainScanReviewAsset, assetIDByRef map[string]string, scanIDs []string) ([]string, error) {
+func createDomainScanFindings(ctx context.Context, client *generated.Client, ownerID string, findings []DomainScanImportFinding, assets []DomainScanImportAsset, assetIDByRef map[string]string, scanIDs []string) ([]string, error) {
 	ids := make([]string, 0, len(findings))
 
 	for _, finding := range findings {

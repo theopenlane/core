@@ -21458,6 +21458,8 @@ type ImportDomainScanReviewVendorInput struct {
 	Ref string `json:"ref"`
 	// the vendor's name
 	Name string `json:"name"`
+	// the vendor's raw legal entity name, if known and different from name
+	LegalName *string `json:"legalName,omitempty"`
 	// the vendor's domain, if known
 	Domain *string `json:"domain,omitempty"`
 	// the vendor's detected categories
