@@ -17,7 +17,7 @@ func Builder(cfg Config) registry.Builder {
 				DisplayName: "Microsoft Teams",
 				Description: "Send notification messages to Microsoft Teams channels via Microsoft Graph.",
 				Category:    "collaboration",
-				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/microsoft_teams/overview",
+				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/microsoft_teams/",
 				Tags:        []string{"messaging"},
 				Active:      false,
 				Visible:     true,

@@ -17,7 +17,7 @@ func Builder() registry.Builder {
 				DisplayName: "Microsoft Defender for Cloud",
 				Description: "Collect security assessment findings and vulnerability data from Microsoft Defender for Cloud across an Azure subscription.",
 				Category:    "security-posture",
-				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/azure_security_center/overview",
+				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/azure_security_center",
 				Tags:        []string{"vulnerabilities", "assets"},
 				Active:      false,
 				Visible:     true,

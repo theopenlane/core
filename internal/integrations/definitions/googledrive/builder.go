@@ -19,7 +19,7 @@ func Builder(cfg Config) registry.Builder {
 				DisplayName: "Google Drive",
 				Description: "Live, read-only integration with Google Drive for on-the-fly HTML export of Google Docs.",
 				Category:    "document",
-				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/google_drive/overview",
+				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/google_drive",
 				Tags:        []string{"document"},
 				Active:      true,
 				Visible:     true,

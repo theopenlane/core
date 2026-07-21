@@ -17,7 +17,7 @@ func Builder() registry.Builder {
 				DisplayName: "Keycloak",
 				Description: "Collect Keycloak realm users, groups, and memberships for identity posture and access governance.",
 				Category:    "identity",
-				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/keycloak/overview",
+				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/keycloak",
 				Tags:        []string{"directory"},
 				Active:      false,
 				Visible:     true,
