@@ -364,9 +364,7 @@ func domainVendorName(domain string) string {
 }
 
 // vendorNameForURL derives a vendor's grouping domain and display name from rawURL,
-// preferring an exact vendorHostNames match (for hosts that share a registrable
-// domain with another product, e.g. admin.google.com vs cloud.google.com) before
-// collapsing to the registrable domain via domainVendorName
+// preferring an exact vendorHostNames match
 func vendorNameForURL(rawURL string) (name, domain string) {
 	domain = registrableDomain(rawURL)
 	if domain == "" {
@@ -375,9 +373,17 @@ func vendorNameForURL(rawURL string) (name, domain string) {
 
 	if u, err := url.Parse(rawURL); err == nil {
 		if override, ok := vendorHostNames[strings.ToLower(u.Hostname())]; ok {
-			return override, domain
+			name = override
 		}
 	}
 
-	return domainVendorName(domain), domain
+	if name == "" {
+		name = domainVendorName(domain)
+	}
+
+	if canonical, ok := vendorNameDomains[strings.ToLower(name)]; ok {
+		domain = canonical
+	}
+
+	return name, domain
 }
