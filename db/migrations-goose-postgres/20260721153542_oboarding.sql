@@ -1,4 +1,6 @@
 -- +goose Up
+-- modify "standards" table
+ALTER TABLE "standards" ADD COLUMN "priority" bigint NOT NULL DEFAULT 0;
 -- modify "tasks" table
 ALTER TABLE "tasks" ADD COLUMN "metadata" jsonb NULL, ADD COLUMN "is_suggested" boolean NOT NULL DEFAULT false, ADD COLUMN "priority" bigint NOT NULL DEFAULT 0, ADD COLUMN "available_at" timestamptz NULL, ADD COLUMN "source" character varying NULL, ADD COLUMN "source_key" character varying NULL;
 -- create index "task_owner_id_idempotency_key" to table: "tasks"
@@ -13,3 +15,5 @@ DROP INDEX "task_owner_id_is_suggested_available_at_priority";
 DROP INDEX "task_owner_id_idempotency_key";
 -- reverse: modify "tasks" table
 ALTER TABLE "tasks" DROP COLUMN "source_key", DROP COLUMN "source", DROP COLUMN "available_at", DROP COLUMN "priority", DROP COLUMN "is_suggested", DROP COLUMN "metadata";
+-- reverse: modify "standards" table
+ALTER TABLE "standards" DROP COLUMN "priority";

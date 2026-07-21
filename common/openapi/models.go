@@ -2615,65 +2615,6 @@ type OnboardingQuestionsReply struct {
 	Steps []models.Step `json:"steps"`
 }
 
-// ExampleResponse returns an example ProductCatalogReply for OpenAPI documentation
-func (r *ProductCatalogReply) ExampleResponse() any {
-	return ExampleProductCatalogReply
-}
-
-// Validate ensures the required fields are set on the ProductCatalogRequest
-func (r *ProductCatalogRequest) Validate() error {
-	// all fields are optional, if none are set only public proucts are returned
-	return nil
-}
-
-// ExampleSet returns the curated named examples published for ProductCatalogRequest in the OpenAPI spec
-func (ProductCatalogRequest) ExampleSet() map[string]any {
-	return map[string]any{
-		"ProductCatalogRequest": ProductCatalogRequest{
-			IncludeBeta:    false,
-			IncludePrivate: false,
-		},
-	}
-}
-
-// ExampleSet returns the curated named examples published for ProductCatalogResponse in the OpenAPI spec
-func (ProductCatalogResponse) ExampleSet() map[string]any {
-	return map[string]any{
-		"ProductCatalogResponse": ProductCatalogResponse{
-			Reply: rout.Reply{Success: true},
-			Catalog: models.Catalog{
-				Addons:  map[string]models.Feature{},
-				Version: "v0.0.1",
-				SHA:     "12a4a1212888e9316a16826ba074b37230b4b7ba903cd8d7e627e4a8d03a6211",
-				Modules: map[string]models.Feature{
-					string(models.CatalogComplianceModule): {
-						Audience: "public",
-						Billing: models.Billing{Prices: []models.ItemPrice{{
-							Interval:   "month",
-							LookupKey:  "price_compliance_monthly",
-							Nickname:   "price_compliance_monthly",
-							PriceID:    "price_1S3qX6JIzM4Pa2ZcRtuinRdG",
-							UnitAmount: int64(45000), //nolint:mnd
-						}, {
-							Interval:   "year",
-							LookupKey:  "price_compliance_annually",
-							Nickname:   "price_compliance_annually",
-							PriceID:    "price_1S3qX7JIzM4Pa2ZchMVxiS1l",
-							UnitAmount: int64(500000), //nolint:mnd
-						}}},
-						Description:          "Core Compliance Automation and Standards Library",
-						DisplayName:          "Core Compliance Module",
-						IncludeWithTrial:     true,
-						LookupKey:            "compliance_module",
-						MarketingDescription: "Automate evidence collection and task tracking to simplify SOC 2, ISO 27001, and other certification workflows",
-						ProductID:            "prod_SzqDyAvxP2D7fA",
-						Usage:                &models.Usage{EvidenceStorageGB: int64(25000)}, //nolint:mnd
-					},
-				}},
-		},
-	}
-}
-
 // DisconnectIntegrationRequest is the request payload for disconnecting an integration
 type DisconnectIntegrationRequest struct {
 	// IntegrationID is the integration ID to disconnect
