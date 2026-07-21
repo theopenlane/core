@@ -100,31 +100,20 @@ func getFrameworkOptions(ctx context.Context, client *generated.Client) ([]model
 	}
 
 	options := make([]models.QuestionOption, 0, len(standards))
-	seen := map[string]struct{}{}
 
 	for _, std := range standards {
-		value := std.Framework
-		if value == "" {
-			value = std.ID
-		}
-
-		if _, ok := seen[value]; ok {
-			continue
-		}
-
 		label := std.ShortName
 		if label == "" {
 			label = std.Name
 		}
 
 		options = append(options, models.QuestionOption{
-			Value:       value,
+			Value:       std.ID,
 			Label:       label,
 			Description: std.Description,
 			LogoURL:     std.GoverningBodyLogoURL,
 			Priority:    std.Priority,
 		})
-		seen[value] = struct{}{}
 	}
 
 	options = append(options, models.QuestionOption{

@@ -13,70 +13,11 @@ import (
 	"github.com/dave/jennifer/jen"
 	yaml "github.com/goccy/go-yaml"
 	"github.com/urfave/cli/v3"
+
+	"github.com/theopenlane/core/common/models"
 )
 
 const modelsPkg = "github.com/theopenlane/core/common/models"
-
-type questionnaire struct {
-	Version string `yaml:"version"`
-	Steps   []step `yaml:"steps"`
-}
-
-type step struct {
-	Key            string     `yaml:"key"`
-	Title          string     `yaml:"title"`
-	Description    string     `yaml:"description"`
-	Order          int        `yaml:"order"`
-	Hidden         bool       `yaml:"hidden"`
-	Questions      []question `yaml:"questions"`
-	Modules        []module   `yaml:"modules"`
-	DynamicModules bool       `yaml:"dynamicModules"`
-	Tasks          []taskRule `yaml:"tasks"`
-}
-
-type question struct {
-	Key            string           `yaml:"key"`
-	Label          string           `yaml:"label"`
-	Description    string           `yaml:"description"`
-	InputType      string           `yaml:"inputType"`
-	Format         string           `yaml:"format"`
-	CheckboxLabel  string           `yaml:"checkboxLabel"`
-	Required       bool             `yaml:"required"`
-	Hidden         bool             `yaml:"hidden"`
-	DependsOn      *dependency      `yaml:"dependsOn"`
-	DynamicOptions bool             `yaml:"dynamicOptions"`
-	Options        []questionOption    `yaml:"options"`
-	Tasks          map[string]taskRule `yaml:"tasks"`
-}
-
-type dependency struct {
-	Key    string `yaml:"key"`
-	Equals any    `yaml:"equals"`
-}
-
-type module struct {
-	Key         string `yaml:"key"`
-	Title       string `yaml:"title"`
-	Description string `yaml:"description"`
-}
-
-type questionOption struct {
-	Value       string `yaml:"value"`
-	Label       string `yaml:"label"`
-	Description string `yaml:"description"`
-	LogoURL     string `yaml:"logoUrl"`
-	Priority    int    `yaml:"priority"`
-	Hidden      bool   `yaml:"hidden"`
-}
-
-type taskRule struct {
-	Key                string `yaml:"key"`
-	Title              string `yaml:"title"`
-	Details            string `yaml:"details"`
-	Priority           int    `yaml:"priority"`
-	AvailableAfterDays int    `yaml:"availableAfterDays"`
-	Metadata           map[string]any `yaml:"metadata"`
-}
 
 func main() {
 	if err := app().Run(context.Background(), os.Args); err != nil {
@@ -109,7 +50,7 @@ func app() *cli.Command {
 				return err
 			}
 
-			var parsed questionnaire
+			var parsed models.Questionnaire
 			if err := yaml.Unmarshal(data, &parsed); err != nil {
 				return err
 			}
@@ -142,14 +83,14 @@ func app() *cli.Command {
 	}
 }
 
-func questionnaireLit(questionnaire questionnaire) *jen.Statement {
+func questionnaireLit(questionnaire models.Questionnaire) *jen.Statement {
 	return jen.Qual(modelsPkg, "Questionnaire").Values(jen.Dict{
 		jen.Id("Version"): jen.Lit(questionnaire.Version),
 		jen.Id("Steps"):   jen.Index().Qual(modelsPkg, "Step").Values(stepLits(questionnaire.Steps)...),
 	})
 }
 
-func stepLits(steps []step) []jen.Code {
+func stepLits(steps []models.Step) []jen.Code {
 	out := make([]jen.Code, 0, len(steps))
 	for _, step := range steps {
 		out = append(out, stepLit(step))
@@ -158,7 +99,7 @@ func stepLits(steps []step) []jen.Code {
 	return out
 }
 
-func stepLit(step step) jen.Code {
+func stepLit(step models.Step) jen.Code {
 	fields := jen.Dict{
 		jen.Id("Key"):   jen.Lit(step.Key),
 		jen.Id("Title"): jen.Lit(step.Title),
@@ -190,7 +131,7 @@ func stepLit(step step) jen.Code {
 	return jen.Qual(modelsPkg, "Step").Values(fields)
 }
 
-func questionLits(questions []question) []jen.Code {
+func questionLits(questions []models.Question) []jen.Code {
 	out := make([]jen.Code, 0, len(questions))
 	for _, question := range questions {
 		out = append(out, questionLit(question))
@@ -199,7 +140,7 @@ func questionLits(questions []question) []jen.Code {
 	return out
 }
 
-func questionLit(question question) jen.Code {
+func questionLit(question models.Question) jen.Code {
 	fields := jen.Dict{
 		jen.Id("Key"):       jen.Lit(question.Key),
 		jen.Id("Label"):     jen.Lit(question.Label),
@@ -248,7 +189,7 @@ func questionLit(question question) jen.Code {
 	return jen.Qual(modelsPkg, "Question").Values(fields)
 }
 
-func validateQuestionnaire(questionnaire questionnaire) error {
+func validateQuestionnaire(questionnaire models.Questionnaire) error {
 	for _, step := range questionnaire.Steps {
 		for _, question := range step.Questions {
 			if getInputType(question.InputType) == "" {
@@ -260,26 +201,26 @@ func validateQuestionnaire(questionnaire questionnaire) error {
 	return nil
 }
 
-func getInputType(typ string) string {
+func getInputType(typ models.InputType) string {
 	switch typ {
-	case "string":
+	case models.InputTypeString:
 		return "InputTypeString"
-	case "boolean":
+	case models.InputTypeBoolean:
 		return "InputTypeBoolean"
-	case "checkbox":
+	case models.InputTypeCheckbox:
 		return "InputTypeCheckbox"
-	case "select":
+	case models.InputTypeSelect:
 		return "InputTypeSelect"
-	case "multiselect":
+	case models.InputTypeMultiselect:
 		return "InputTypeMultiselect"
-	case "multi-input":
+	case models.InputTypeMultiInput:
 		return "InputTypeMultiInput"
 	default:
 		return ""
 	}
 }
 
-func moduleLits(modules []module) []jen.Code {
+func moduleLits(modules []models.Module) []jen.Code {
 	out := make([]jen.Code, 0, len(modules))
 	for _, module := range modules {
 		out = append(out, jen.Qual(modelsPkg, "Module").Values(jen.Dict{
@@ -315,7 +256,7 @@ func literal(value any) jen.Code {
 	}
 }
 
-func taskRuleLits(rules []taskRule) []jen.Code {
+func taskRuleLits(rules []models.TaskRule) []jen.Code {
 	out := make([]jen.Code, 0, len(rules))
 	for _, rule := range rules {
 		out = append(out, taskRuleLit(rule))
@@ -324,7 +265,7 @@ func taskRuleLits(rules []taskRule) []jen.Code {
 	return out
 }
 
-func taskRuleMap(rules map[string]taskRule) jen.Code {
+func taskRuleMap(rules map[string]models.TaskRule) jen.Code {
 	keys := make([]string, 0, len(rules))
 	for key := range rules {
 		keys = append(keys, key)
@@ -338,7 +279,7 @@ func taskRuleMap(rules map[string]taskRule) jen.Code {
 	})
 }
 
-func taskRuleLit(rule taskRule) jen.Code {
+func taskRuleLit(rule models.TaskRule) jen.Code {
 	fields := jen.Dict{
 		jen.Id("Key"):      jen.Lit(rule.Key),
 		jen.Id("Title"):    jen.Lit(rule.Title),
@@ -371,7 +312,7 @@ func metadataLit(metadata map[string]any) jen.Code {
 	})
 }
 
-func optionLits(options []questionOption) []jen.Code {
+func optionLits(options []models.QuestionOption) []jen.Code {
 	out := make([]jen.Code, 0, len(options))
 	for _, option := range options {
 		fields := jen.Dict{
