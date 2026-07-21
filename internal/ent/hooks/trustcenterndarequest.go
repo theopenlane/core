@@ -7,6 +7,7 @@ import (
 
 	"entgo.io/ent"
 	"github.com/samber/lo"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/common/enums"
@@ -244,6 +245,14 @@ func HookTrustCenterNDARequestUpdate() ent.Hook {
 			}
 
 			m.SetApprovedAt(*now)
+			if _, ok := m.ApprovedByUserID(); !ok {
+				userID, err := auth.GetSubjectIDFromContext(ctx)
+				if err != nil || userID == "" {
+					return nil, auth.ErrNoAuthUser
+				}
+
+				m.SetApprovedByUserID(userID)
+			}
 
 			v, err := next.Mutate(ctx, m)
 			if err != nil {
