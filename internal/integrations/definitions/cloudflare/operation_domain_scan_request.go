@@ -9,6 +9,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/internal/workflows"
 )
 
 // DomainScanRequest queues a domain scan for a single domain by creating a pending Scan record which
@@ -74,6 +75,13 @@ func (d DomainScanRequest) Handle() types.OperationHandler {
 				metadata[DomainScanGroupMetadataKey] = groupID
 			}
 
+			// on the internal path (Integration == nil) we're about to run the saga ourselves
+			// below, so skip the event emissions
+			createCtx := ctx
+			if request.Integration == nil {
+				createCtx = workflows.SkipEventEmission(ctx)
+			}
+
 			scanRecord, err = request.DB.Scan.Create().
 				SetOwnerID(organizationID).
 				SetTarget(cfg.Domain).
@@ -81,7 +89,7 @@ func (d DomainScanRequest) Handle() types.OperationHandler {
 				SetPerformedBy(DomainScanPerformedBy).
 				SetStatus(enums.ScanStatusPending).
 				SetMetadata(metadata).
-				Save(ctx)
+				Save(createCtx)
 			if err != nil {
 				return nil, err
 			}

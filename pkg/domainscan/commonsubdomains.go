@@ -100,7 +100,7 @@ var knownVendorAliases = []vendorAlias{
 	{name: "Atlassian Statuspage", alsoKnownAs: []string{"stspg-customer"}, domains: []string{"stspg-customer.com"}},
 	{name: "Vercel", alsoKnownAs: []string{"vercel-dns"}, domains: []string{"vercel-dns.com"}},
 	{name: "Stripe", alsoKnownAs: []string{"Stripecdn"}, domains: []string{"stripe.com"}},
-	{name: "Cloudflare", alsoKnownAs: []string{"Cloudflareinsights", "Cloudflare Browser Insights", "CLOUDFLARENET"}, domains: []string{"cloudflare.com"}},
+	{name: "Cloudflare", alsoKnownAs: []string{"Cloudflareinsights", "Cloudflare Browser Insights", "CLOUDFLARENET", "CLOUDFLARESPECTRUM"}, domains: []string{"cloudflare.com"}},
 	{name: "Squarespace", alsoKnownAs: []string{"Sqspcdn", "Squarespace-cdn"}, domains: []string{"squarespace.com"}},
 	{name: "GoDaddy", alsoKnownAs: []string{"Domaincontrol"}, domains: []string{"godaddy.com", "domaincontrol.com"}},
 	{name: "Namecheap", alsoKnownAs: []string{"Registrar-servers"}, domains: []string{"namecheap.com", "registrar-servers.com"}},
