@@ -33,7 +33,7 @@ func RegisterGalaDomainScanUpdateListener(registry *gala.Registry) ([]gala.Liste
 	return gala.RegisterListeners(registry, gala.Definition[eventqueue.MutationGalaPayload]{
 		Topic:      eventqueue.MutationTopic(eventqueue.MutationConcernDirect, generated.TypeOrganizationSetting),
 		Name:       "domainscan.organization_setting_update",
-		Operations: []string{ent.OpUpdate.String(), ent.OpUpdateOne.String()},
+		Operations: []string{ent.OpUpdateOne.String()},
 		Handle:     handleOrganizationSettingDomainsUpdated,
 	})
 }
