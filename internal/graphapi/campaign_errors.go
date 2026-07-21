@@ -4,8 +4,10 @@ import "errors"
 
 // Campaign error constants used by dispatch/test-email flows.
 var (
-	// ErrCampaignTestEmailNotQuestionnaire is returned when sending test emails for a non-questionnaire campaign.
-	ErrCampaignTestEmailNotQuestionnaire = errors.New("campaign must be of type QUESTIONNAIRE to send a test email")
+	// ErrCampaignTestEmailTooManyRecipients is returned when a test email request exceeds the recipient cap
+	ErrCampaignTestEmailTooManyRecipients = errors.New("test emails are limited to 5 recipients per request")
+	// ErrCampaignTestEmailRateLimited is returned when a campaign exhausts its hourly test email budget
+	ErrCampaignTestEmailRateLimited = errors.New("campaign test email hourly limit reached, try again later")
 	// ErrCampaignMissingAssessmentID is returned when a campaign lacks an assessment reference.
 	ErrCampaignMissingAssessmentID = errors.New("campaign is missing an assessment_id")
 	// ErrCampaignDispatchInactive is returned when attempting to dispatch an inactive campaign.

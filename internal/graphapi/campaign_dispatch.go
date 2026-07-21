@@ -120,6 +120,54 @@ func (r *mutationResolver) validateCampaignDispatch(ctx context.Context, campaig
 		return ErrCampaignDispatchInactive
 	}
 
+	if err := ensureCampaignAssessment(ctx, campaignObj); err != nil {
+		return err
+	}
+
+	return validateCampaignContentSource(campaignObj)
+}
+
+// ensureCampaignAssessment backfills the assessment for questionnaire campaigns created with only a
+// questionnaire template reference, creating an assessment from the template and linking it to the
+// campaign. The assessment create inherits the template jsonconfig and uischema via the assessment hook
+func ensureCampaignAssessment(ctx context.Context, campaignObj *generated.Campaign) error {
+	if campaignObj.CampaignType != enums.CampaignTypeQuestionnaire || campaignObj.AssessmentID != "" || campaignObj.TemplateID == "" {
+		return nil
+	}
+
+	client := withTransactionalMutation(ctx)
+
+	templateObj, err := client.Template.Get(ctx, campaignObj.TemplateID)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", campaignObj.ID).Str("template_id", campaignObj.TemplateID).Msg("failed loading template for assessment backfill")
+
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "template"})
+	}
+
+	assessmentObj, err := client.Assessment.Create().
+		SetName(templateObj.Name).
+		SetTemplateID(templateObj.ID).
+		SetOwnerID(campaignObj.OwnerID).
+		Save(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", campaignObj.ID).Str("template_id", templateObj.ID).Msg("failed creating assessment for questionnaire campaign")
+
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "assessment"})
+	}
+
+	if err := client.Campaign.UpdateOneID(campaignObj.ID).SetAssessmentID(assessmentObj.ID).Exec(ctx); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", campaignObj.ID).Str("assessment_id", assessmentObj.ID).Msg("failed linking backfilled assessment to campaign")
+
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "campaign"})
+	}
+
+	campaignObj.AssessmentID = assessmentObj.ID
+
+	return nil
+}
+
+// validateCampaignContentSource ensures the campaign references the content source its type renders from
+func validateCampaignContentSource(campaignObj *generated.Campaign) error {
 	switch campaignObj.CampaignType {
 	case enums.CampaignTypeQuestionnaire:
 		if campaignObj.AssessmentID == "" {
@@ -316,6 +364,7 @@ func (r *mutationResolver) buildCampaignEmailDispatchRequest(ctx context.Context
 			Resend:         resend,
 			IncludeOverdue: includeOverdue,
 		},
+		TestEmail: testEmail,
 	})
 	if campaignObj.CampaignType == enums.CampaignTypeQuestionnaire {
 		operation = emaildef.SendQuestionnaireCampaignOp.Name()
