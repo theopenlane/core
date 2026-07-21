@@ -27,9 +27,7 @@ func (suite *HandlerTestSuite) TestResetPasswordHandler() {
 	t := suite.T()
 
 	// setup request request
-	// Create operation for ResetPassword
-	operation := suite.createImpersonationOperation("ResetPassword", "Reset user password")
-	suite.registerTestHandler("POST", "password-reset", operation, suite.h.ResetPassword)
+	suite.registerTestHandler("POST", "password-reset", suite.h.ResetPassword)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 
@@ -146,7 +144,7 @@ func (suite *HandlerTestSuite) TestResetPasswordHandler() {
 			// check status
 			assert.Equal(t, tc.expectedStatus, recorder.Code)
 
-			var out *models.ResetPasswordReply
+			var out *models.ResetPasswordResponse
 
 			// parse request body
 			if err := json.NewDecoder(res.Body).Decode(&out); err != nil {

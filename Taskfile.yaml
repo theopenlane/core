@@ -671,4 +671,5 @@ tasks:
   generate:openapi:
     desc: Generate OpenAPI spec file
     cmds:
-      - go run ./internal/httpserve/specs/generate/main.go
+      - go run ./internal/httpserve/specs/generate --emit-types
+      - go run ./internal/httpserve/specs/generate

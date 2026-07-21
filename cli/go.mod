@@ -167,7 +167,7 @@ require (
 	github.com/testcontainers/testcontainers-go v0.43.0 // indirect
 	github.com/theopenlane/echox v0.3.0 // indirect
 	github.com/theopenlane/eddy v0.1.0 // indirect
-	github.com/theopenlane/entx v0.30.0 // indirect
+	github.com/theopenlane/entx v0.30.1 // indirect
 	github.com/theopenlane/riverboat v0.9.18 // indirect
 	github.com/tidwall/gjson v1.19.0 // indirect
 	github.com/tidwall/match v1.2.0 // indirect
@@ -207,7 +207,7 @@ require (
 	gocloud.dev v0.46.0 // indirect
 	golang.org/x/crypto v0.53.0 // indirect
 	golang.org/x/exp v0.0.0-20260508232706-74f9aab9d74a // indirect
-	golang.org/x/image v0.41.0 // indirect
+	golang.org/x/image v0.43.0 // indirect
 	golang.org/x/mod v0.37.0 // indirect
 	golang.org/x/net v0.56.0 // indirect
 	golang.org/x/sync v0.22.0 // indirect

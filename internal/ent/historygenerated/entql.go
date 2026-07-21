@@ -985,6 +985,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			entityhistory.FieldDisplayName:                           {Type: field.TypeString, Column: entityhistory.FieldDisplayName},
 			entityhistory.FieldDescription:                           {Type: field.TypeString, Column: entityhistory.FieldDescription},
 			entityhistory.FieldDomains:                               {Type: field.TypeJSON, Column: entityhistory.FieldDomains},
+			entityhistory.FieldAliases:                               {Type: field.TypeJSON, Column: entityhistory.FieldAliases},
 			entityhistory.FieldEntityTypeID:                          {Type: field.TypeString, Column: entityhistory.FieldEntityTypeID},
 			entityhistory.FieldStatus:                                {Type: field.TypeEnum, Column: entityhistory.FieldStatus},
 			entityhistory.FieldApprovedForUse:                        {Type: field.TypeBool, Column: entityhistory.FieldApprovedForUse},
@@ -1161,6 +1162,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			findingcontrolhistory.FieldCreatedBy:               {Type: field.TypeString, Column: findingcontrolhistory.FieldCreatedBy},
 			findingcontrolhistory.FieldUpdatedBy:               {Type: field.TypeString, Column: findingcontrolhistory.FieldUpdatedBy},
 			findingcontrolhistory.FieldUpdatedByImpersonator:   {Type: field.TypeString, Column: findingcontrolhistory.FieldUpdatedByImpersonator},
+			findingcontrolhistory.FieldOwnerID:                 {Type: field.TypeString, Column: findingcontrolhistory.FieldOwnerID},
 			findingcontrolhistory.FieldFindingID:               {Type: field.TypeString, Column: findingcontrolhistory.FieldFindingID},
 			findingcontrolhistory.FieldControlID:               {Type: field.TypeString, Column: findingcontrolhistory.FieldControlID},
 			findingcontrolhistory.FieldStandardID:              {Type: field.TypeString, Column: findingcontrolhistory.FieldStandardID},
@@ -2359,6 +2361,9 @@ var schemaGraph = func() *sqlgraph.Schema {
 			scanhistory.FieldDeletedBy:                  {Type: field.TypeString, Column: scanhistory.FieldDeletedBy},
 			scanhistory.FieldTags:                       {Type: field.TypeJSON, Column: scanhistory.FieldTags},
 			scanhistory.FieldOwnerID:                    {Type: field.TypeString, Column: scanhistory.FieldOwnerID},
+			scanhistory.FieldSystemOwned:                {Type: field.TypeBool, Column: scanhistory.FieldSystemOwned},
+			scanhistory.FieldInternalNotes:              {Type: field.TypeString, Column: scanhistory.FieldInternalNotes},
+			scanhistory.FieldSystemInternalID:           {Type: field.TypeString, Column: scanhistory.FieldSystemInternalID},
 			scanhistory.FieldReviewedBy:                 {Type: field.TypeString, Column: scanhistory.FieldReviewedBy},
 			scanhistory.FieldReviewedByUserID:           {Type: field.TypeString, Column: scanhistory.FieldReviewedByUserID},
 			scanhistory.FieldReviewedByGroupID:          {Type: field.TypeString, Column: scanhistory.FieldReviewedByGroupID},
@@ -7417,6 +7422,11 @@ func (f *EntityHistoryFilter) WhereDomains(p entql.BytesP) {
 	f.Where(p.Field(entityhistory.FieldDomains))
 }
 
+// WhereAliases applies the entql json.RawMessage predicate on the aliases field.
+func (f *EntityHistoryFilter) WhereAliases(p entql.BytesP) {
+	f.Where(p.Field(entityhistory.FieldAliases))
+}
+
 // WhereEntityTypeID applies the entql string predicate on the entity_type_id field.
 func (f *EntityHistoryFilter) WhereEntityTypeID(p entql.StringP) {
 	f.Where(p.Field(entityhistory.FieldEntityTypeID))
@@ -8195,6 +8205,11 @@ func (f *FindingControlHistoryFilter) WhereUpdatedBy(p entql.StringP) {
 // WhereUpdatedByImpersonator applies the entql string predicate on the updated_by_impersonator field.
 func (f *FindingControlHistoryFilter) WhereUpdatedByImpersonator(p entql.StringP) {
 	f.Where(p.Field(findingcontrolhistory.FieldUpdatedByImpersonator))
+}
+
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *FindingControlHistoryFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(findingcontrolhistory.FieldOwnerID))
 }
 
 // WhereFindingID applies the entql string predicate on the finding_id field.
@@ -13485,6 +13500,21 @@ func (f *ScanHistoryFilter) WhereTags(p entql.BytesP) {
 // WhereOwnerID applies the entql string predicate on the owner_id field.
 func (f *ScanHistoryFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(scanhistory.FieldOwnerID))
+}
+
+// WhereSystemOwned applies the entql bool predicate on the system_owned field.
+func (f *ScanHistoryFilter) WhereSystemOwned(p entql.BoolP) {
+	f.Where(p.Field(scanhistory.FieldSystemOwned))
+}
+
+// WhereInternalNotes applies the entql string predicate on the internal_notes field.
+func (f *ScanHistoryFilter) WhereInternalNotes(p entql.StringP) {
+	f.Where(p.Field(scanhistory.FieldInternalNotes))
+}
+
+// WhereSystemInternalID applies the entql string predicate on the system_internal_id field.
+func (f *ScanHistoryFilter) WhereSystemInternalID(p entql.StringP) {
+	f.Where(p.Field(scanhistory.FieldSystemInternalID))
 }
 
 // WhereReviewedBy applies the entql string predicate on the reviewed_by field.

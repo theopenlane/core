@@ -28,9 +28,7 @@ func (suite *HandlerTestSuite) TestVerifyHandler() {
 	t := suite.T()
 
 	// add handler
-	// Create operation for VerifyEmail
-	operation := suite.createImpersonationOperation("VerifyEmail", "Verify email address")
-	suite.registerTestHandler("GET", "verify", operation, suite.h.VerifyEmail)
+	suite.registerTestHandler("GET", "verify", suite.h.VerifyEmail)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 
@@ -155,7 +153,7 @@ func (suite *HandlerTestSuite) TestVerifyHandler() {
 
 			assert.Equal(t, tc.expectedStatus, recorder.Code)
 
-			var out *models.VerifyReply
+			var out *models.VerifyResponse
 
 			// parse request body
 			if err := json.NewDecoder(res.Body).Decode(&out); err != nil {
@@ -181,8 +179,7 @@ func (suite *HandlerTestSuite) TestVerifyHandler() {
 func (suite *HandlerTestSuite) TestVerifyHandler_AutoJoinMarksPendingInvitesAsAccepted() {
 	t := suite.T()
 
-	operation := suite.createImpersonationOperation("VerifyEmail", "Verify email address")
-	suite.registerTestHandler("GET", "verify", operation, suite.h.VerifyEmail)
+	suite.registerTestHandler("GET", "verify", suite.h.VerifyEmail)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 	ctx := privacy.DecisionContext(ec, privacy.Allow)

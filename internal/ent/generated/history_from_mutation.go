@@ -7847,6 +7847,10 @@ func (m *EntityMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetDomains(domains)
 	}
 
+	if aliases, exists := m.Aliases(); exists {
+		create = create.SetAliases(aliases)
+	}
+
 	if entityTypeID, exists := m.EntityTypeID(); exists {
 		create = create.SetEntityTypeID(entityTypeID)
 	}
@@ -8204,6 +8208,12 @@ func (m *EntityMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDomains(entity.Domains)
 		}
 
+		if aliases, exists := m.Aliases(); exists {
+			create = create.SetAliases(aliases)
+		} else {
+			create = create.SetAliases(entity.Aliases)
+		}
+
 		if entityTypeID, exists := m.EntityTypeID(); exists {
 			create = create.SetEntityTypeID(entityTypeID)
 		} else {
@@ -8464,6 +8474,7 @@ func (m *EntityMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDisplayName(entity.DisplayName).
 			SetDescription(entity.Description).
 			SetDomains(entity.Domains).
+			SetAliases(entity.Aliases).
 			SetEntityTypeID(entity.EntityTypeID).
 			SetStatus(entity.Status).
 			SetApprovedForUse(entity.ApprovedForUse).
@@ -10423,6 +10434,10 @@ func (m *FindingControlMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
 	}
 
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
 	if findingID, exists := m.FindingID(); exists {
 		create = create.SetFindingID(findingID)
 	}
@@ -10520,6 +10535,12 @@ func (m *FindingControlMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetNillableUpdatedByImpersonator(findingcontrol.UpdatedByImpersonator)
 		}
 
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(findingcontrol.OwnerID)
+		}
+
 		if findingID, exists := m.FindingID(); exists {
 			create = create.SetFindingID(findingID)
 		} else {
@@ -10614,6 +10635,7 @@ func (m *FindingControlMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetCreatedBy(findingcontrol.CreatedBy).
 			SetUpdatedBy(findingcontrol.UpdatedBy).
 			SetNillableUpdatedByImpersonator(findingcontrol.UpdatedByImpersonator).
+			SetOwnerID(findingcontrol.OwnerID).
 			SetFindingID(findingcontrol.FindingID).
 			SetControlID(findingcontrol.ControlID).
 			SetStandardID(findingcontrol.StandardID).
@@ -20409,6 +20431,18 @@ func (m *ScanMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetOwnerID(ownerID)
 	}
 
+	if systemOwned, exists := m.SystemOwned(); exists {
+		create = create.SetSystemOwned(systemOwned)
+	}
+
+	if internalNotes, exists := m.InternalNotes(); exists {
+		create = create.SetNillableInternalNotes(&internalNotes)
+	}
+
+	if systemInternalID, exists := m.SystemInternalID(); exists {
+		create = create.SetNillableSystemInternalID(&systemInternalID)
+	}
+
 	if reviewedBy, exists := m.ReviewedBy(); exists {
 		create = create.SetReviewedBy(reviewedBy)
 	}
@@ -20580,6 +20614,24 @@ func (m *ScanMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetOwnerID(ownerID)
 		} else {
 			create = create.SetOwnerID(scan.OwnerID)
+		}
+
+		if systemOwned, exists := m.SystemOwned(); exists {
+			create = create.SetSystemOwned(systemOwned)
+		} else {
+			create = create.SetSystemOwned(scan.SystemOwned)
+		}
+
+		if internalNotes, exists := m.InternalNotes(); exists {
+			create = create.SetNillableInternalNotes(&internalNotes)
+		} else {
+			create = create.SetNillableInternalNotes(scan.InternalNotes)
+		}
+
+		if systemInternalID, exists := m.SystemInternalID(); exists {
+			create = create.SetNillableSystemInternalID(&systemInternalID)
+		} else {
+			create = create.SetNillableSystemInternalID(scan.SystemInternalID)
 		}
 
 		if reviewedBy, exists := m.ReviewedBy(); exists {
@@ -20758,6 +20810,9 @@ func (m *ScanMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDeletedBy(scan.DeletedBy).
 			SetTags(scan.Tags).
 			SetOwnerID(scan.OwnerID).
+			SetSystemOwned(scan.SystemOwned).
+			SetNillableInternalNotes(scan.InternalNotes).
+			SetNillableSystemInternalID(scan.SystemInternalID).
 			SetReviewedBy(scan.ReviewedBy).
 			SetReviewedByUserID(scan.ReviewedByUserID).
 			SetReviewedByGroupID(scan.ReviewedByGroupID).

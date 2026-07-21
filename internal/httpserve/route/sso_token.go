@@ -15,7 +15,7 @@ func registerSSOTokenAuthorizeHandler(router *Router) error {
 		Description: "Authorize SSO token request",
 		Tags:        []string{"sso"},
 		OperationID: "SSOTokenAuthorize",
-		Security:    handlers.AllSecurityRequirements(),
+		Security:    handlers.AuthenticatedSecurity,
 		Middlewares: *authenticatedEndpoint,
 		Handler:     router.Handler.SSOTokenAuthorizeHandler,
 	}

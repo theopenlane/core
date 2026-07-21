@@ -25,6 +25,8 @@ const (
 	FieldUpdatedBy = "updated_by"
 	// FieldUpdatedByImpersonator holds the string denoting the updated_by_impersonator field in the database.
 	FieldUpdatedByImpersonator = "updated_by_impersonator"
+	// FieldOwnerID holds the string denoting the owner_id field in the database.
+	FieldOwnerID = "owner_id"
 	// FieldFindingID holds the string denoting the finding_id field in the database.
 	FieldFindingID = "finding_id"
 	// FieldControlID holds the string denoting the control_id field in the database.
@@ -43,6 +45,8 @@ const (
 	FieldMetadata = "metadata"
 	// FieldDiscoveredAt holds the string denoting the discovered_at field in the database.
 	FieldDiscoveredAt = "discovered_at"
+	// EdgeOwner holds the string denoting the owner edge name in mutations.
+	EdgeOwner = "owner"
 	// EdgeFinding holds the string denoting the finding edge name in mutations.
 	EdgeFinding = "finding"
 	// EdgeControl holds the string denoting the control edge name in mutations.
@@ -51,6 +55,13 @@ const (
 	EdgeStandard = "standard"
 	// Table holds the table name of the findingcontrol in the database.
 	Table = "finding_controls"
+	// OwnerTable is the table that holds the owner relation/edge.
+	OwnerTable = "finding_controls"
+	// OwnerInverseTable is the table name for the Organization entity.
+	// It exists in this package in order to avoid circular dependency with the "organization" package.
+	OwnerInverseTable = "organizations"
+	// OwnerColumn is the table column denoting the owner relation/edge.
+	OwnerColumn = "owner_id"
 	// FindingTable is the table that holds the finding relation/edge.
 	FindingTable = "finding_controls"
 	// FindingInverseTable is the table name for the Finding entity.
@@ -82,6 +93,7 @@ var Columns = []string{
 	FieldCreatedBy,
 	FieldUpdatedBy,
 	FieldUpdatedByImpersonator,
+	FieldOwnerID,
 	FieldFindingID,
 	FieldControlID,
 	FieldStandardID,
@@ -109,14 +121,17 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks  [3]ent.Hook
-	Policy ent.Policy
+	Hooks        [4]ent.Hook
+	Interceptors [1]ent.Interceptor
+	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
+	// OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	OwnerIDValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -152,6 +167,11 @@ func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
 // ByUpdatedByImpersonator orders the results by the updated_by_impersonator field.
 func ByUpdatedByImpersonator(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedByImpersonator, opts...).ToFunc()
+}
+
+// ByOwnerID orders the results by the owner_id field.
+func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
 }
 
 // ByFindingID orders the results by the finding_id field.
@@ -194,6 +214,13 @@ func ByDiscoveredAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDiscoveredAt, opts...).ToFunc()
 }
 
+// ByOwnerField orders the results by owner field.
+func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newOwnerStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByFindingField orders the results by finding field.
 func ByFindingField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -213,6 +240,13 @@ func ByStandardField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newStandardStep(), sql.OrderByField(field, opts...))
 	}
+}
+func newOwnerStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(OwnerInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
+	)
 }
 func newFindingStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(

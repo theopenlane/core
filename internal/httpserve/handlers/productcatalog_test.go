@@ -18,9 +18,7 @@ func (suite *HandlerTestSuite) TestProductCatalogHandler() {
 	t := suite.T()
 
 	// add handler
-	// Create operation for ProductCatalogHandler
-	operation := suite.createImpersonationOperation("ProductCatalogHandler", "Get product catalog")
-	suite.registerTestHandler(http.MethodGet, "products", operation, suite.h.ProductCatalogHandler)
+	suite.registerTestHandler(http.MethodGet, "products", suite.h.ProductCatalogHandler)
 
 	testCases := []struct {
 		name                  string
@@ -81,7 +79,7 @@ func (suite *HandlerTestSuite) TestProductCatalogHandler() {
 			res := recorder.Result()
 			defer res.Body.Close()
 
-			var out *apimodels.ProductCatalogReply
+			var out *apimodels.ProductCatalogResponse
 
 			// parse request body
 			if err := json.NewDecoder(res.Body).Decode(&out); err != nil {

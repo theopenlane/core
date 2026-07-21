@@ -4672,6 +4672,11 @@ func (_q *EntityHistoryQuery) collectField(ctx context.Context, oneNode bool, op
 				selectedFields = append(selectedFields, entityhistory.FieldDomains)
 				fieldSeen[entityhistory.FieldDomains] = struct{}{}
 			}
+		case "aliases":
+			if _, ok := fieldSeen[entityhistory.FieldAliases]; !ok {
+				selectedFields = append(selectedFields, entityhistory.FieldAliases)
+				fieldSeen[entityhistory.FieldAliases] = struct{}{}
+			}
 		case "entityTypeID":
 			if _, ok := fieldSeen[entityhistory.FieldEntityTypeID]; !ok {
 				selectedFields = append(selectedFields, entityhistory.FieldEntityTypeID)
@@ -5592,6 +5597,11 @@ func (_q *FindingControlHistoryQuery) collectField(ctx context.Context, oneNode 
 			if _, ok := fieldSeen[findingcontrolhistory.FieldUpdatedByImpersonator]; !ok {
 				selectedFields = append(selectedFields, findingcontrolhistory.FieldUpdatedByImpersonator)
 				fieldSeen[findingcontrolhistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[findingcontrolhistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, findingcontrolhistory.FieldOwnerID)
+				fieldSeen[findingcontrolhistory.FieldOwnerID] = struct{}{}
 			}
 		case "findingID":
 			if _, ok := fieldSeen[findingcontrolhistory.FieldFindingID]; !ok {
@@ -11829,6 +11839,21 @@ func (_q *ScanHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[scanhistory.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, scanhistory.FieldOwnerID)
 				fieldSeen[scanhistory.FieldOwnerID] = struct{}{}
+			}
+		case "systemOwned":
+			if _, ok := fieldSeen[scanhistory.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, scanhistory.FieldSystemOwned)
+				fieldSeen[scanhistory.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[scanhistory.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, scanhistory.FieldInternalNotes)
+				fieldSeen[scanhistory.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[scanhistory.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, scanhistory.FieldSystemInternalID)
+				fieldSeen[scanhistory.FieldSystemInternalID] = struct{}{}
 			}
 		case "reviewedBy":
 			if _, ok := fieldSeen[scanhistory.FieldReviewedBy]; !ok {

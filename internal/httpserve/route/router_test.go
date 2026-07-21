@@ -18,42 +18,6 @@ func newTestRouter() *Router {
 	}
 }
 
-func TestAddRoute(t *testing.T) {
-	r := newTestRouter()
-	op := &openapi3.Operation{OperationID: "op"}
-	rt := echo.Route{Path: "/t", Method: http.MethodGet, Handler: func(echo.Context) error { return nil }}
-	if err := r.AddRoute("/t", http.MethodGet, op, rt); err != nil {
-		t.Fatalf("add route failed: %v", err)
-	}
-	if r.OAS.Paths.Find("/t") == nil {
-		t.Fatalf("path not registered")
-	}
-}
-
-func TestAddV1Route(t *testing.T) {
-	r := newTestRouter()
-	op := &openapi3.Operation{OperationID: "v1"}
-	rt := echo.Route{Path: "/v1/t", Method: http.MethodGet, Handler: func(echo.Context) error { return nil }}
-	if err := r.AddV1Route("/v1/t", http.MethodGet, op, rt); err != nil {
-		t.Fatalf("add v1 route failed: %v", err)
-	}
-	if r.OAS.Paths.Find("/v1/t") == nil {
-		t.Fatalf("path not registered")
-	}
-}
-
-func TestAddUnversionedRoute(t *testing.T) {
-	r := newTestRouter()
-	op := &openapi3.Operation{OperationID: "u"}
-	rt := echo.Route{Path: "/u", Method: http.MethodGet, Handler: func(echo.Context) error { return nil }}
-	if err := r.AddUnversionedRoute("/u", http.MethodGet, op, rt); err != nil {
-		t.Fatalf("add unversioned route failed: %v", err)
-	}
-	if r.OAS.Paths.Find("/u") == nil {
-		t.Fatalf("path not registered")
-	}
-}
-
 func TestRateLimitedMiddlewares(t *testing.T) {
 	base := []echo.MiddlewareFunc{func(next echo.HandlerFunc) echo.HandlerFunc { return next }}
 

@@ -21,14 +21,10 @@ import (
 // https://datatracker.ietf.org/doc/html/rfc7033
 // per the RFC, response codes should not always be 201 or similar, but 404, 200, etc.,
 // regular status codes should be used
-func (h *Handler) WebfingerHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleSSOStatusRequest, models.ExampleSSOStatusReply, openapi.Registry)
+func (h *Handler) WebfingerHandler(ctx echo.Context) error {
+	in, err := BindAndValidate[models.SSOStatusRequest](ctx)
 	if err != nil {
-		return h.InvalidInput(ctx, err, openapi)
-	}
-
-	if isRegistrationContext(ctx) {
-		return nil
+		return h.InvalidInput(ctx, err)
 	}
 
 	reqCtx := ctx.Request().Context()
@@ -47,24 +43,24 @@ func (h *Handler) WebfingerHandler(ctx echo.Context, openapi *OpenAPIContext) er
 		if err != nil {
 			logx.FromContext(reqCtx).Debug().Err(err).Msg("webfinger user lookup failed")
 
-			return h.NotFound(ctx, ErrNotFound, openapi)
+			return h.NotFound(ctx, ErrNotFound)
 		}
 
 		orgID, err = h.getUserDefaultOrgID(allowCtx, user.ID)
 		if err != nil {
 			logx.FromContext(reqCtx).Debug().Err(err).Msg("webfinger org lookup failed")
 
-			return h.NotFound(ctx, ErrNotFound, openapi)
+			return h.NotFound(ctx, ErrNotFound)
 		}
 
 		userID = user.ID
 
 	default:
-		return h.BadRequest(ctx, ErrMissingField, openapi)
+		return h.BadRequest(ctx, ErrMissingField)
 	}
 
 	if orgID == "" {
-		return h.BadRequest(ctx, ErrMissingField, openapi)
+		return h.BadRequest(ctx, ErrMissingField)
 	}
 
 	out, err := h.fetchSSOStatus(reqCtx, orgID, userID)
@@ -72,15 +68,15 @@ func (h *Handler) WebfingerHandler(ctx echo.Context, openapi *OpenAPIContext) er
 		if ent.IsNotFound(err) {
 			logx.FromContext(reqCtx).Debug().Err(err).Msg("webfinger org setting not found")
 
-			return h.NotFound(ctx, ErrNotFound, openapi)
+			return h.NotFound(ctx, ErrNotFound)
 		}
 
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error fetching sso status")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
-	return h.Success(ctx, out, openapi)
+	return h.Success(ctx, out)
 }
 
 type nonce string
@@ -89,13 +85,13 @@ type nonce string
 // reports the raw organization enforcement; when a userID is provided it additionally applies that
 // user's owner, per-user, and per-domain exemptions, so callers and the webfinger acct lookup do not
 // route an exempt user through SSO. Provider, discovery URL, and TFA enforcement are always reported
-func (h *Handler) fetchSSOStatus(ctx context.Context, orgID, userID string) (models.SSOStatusReply, error) {
+func (h *Handler) fetchSSOStatus(ctx context.Context, orgID, userID string) (models.SSOStatusResponse, error) {
 	in, setting, err := sso.LoadEnforcement(ctx, h.DBClient, orgID, userID, "")
 	if err != nil {
-		return models.SSOStatusReply{}, err
+		return models.SSOStatusResponse{}, err
 	}
 
-	out := models.SSOStatusReply{
+	out := models.SSOStatusResponse{
 		Reply:          rout.Reply{Success: true},
 		Enforced:       setting.IdentityProviderLoginEnforced,
 		OrganizationID: orgID,

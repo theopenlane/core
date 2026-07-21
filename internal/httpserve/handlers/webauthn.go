@@ -31,14 +31,10 @@ const (
 )
 
 // BeginWebauthnRegistration is the request to begin a webauthn login
-func (h *Handler) BeginWebauthnRegistration(ctx echo.Context, openapi *OpenAPIContext) error {
-	r, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleWebauthnBeginRegistrationRequest, models.ExampleWebauthnBeginRegistrationResponse, openapi.Registry)
+func (h *Handler) BeginWebauthnRegistration(ctx echo.Context) error {
+	r, err := BindAndValidate[models.WebauthnRegistrationRequest](ctx)
 	if err != nil {
-		return h.InvalidInput(ctx, err, openapi)
-	}
-
-	if isRegistrationContext(ctx) {
-		return nil
+		return h.InvalidInput(ctx, err)
 	}
 
 	reqCtx := ctx.Request().Context()
@@ -54,12 +50,12 @@ func (h *Handler) BeginWebauthnRegistration(ctx echo.Context, openapi *OpenAPICo
 		if errors.Is(err, entval.ErrEmailNotAllowed) {
 			logx.FromContext(reqCtx).Error().Err(err).Str("email", r.Email).Msg("email not allowed")
 
-			return h.InvalidInput(ctx, err, openapi)
+			return h.InvalidInput(ctx, err)
 		}
 
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error provisioning user")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	// set context for remaining request based on logged in user
@@ -69,7 +65,7 @@ func (h *Handler) BeginWebauthnRegistration(ctx echo.Context, openapi *OpenAPICo
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error querying user webauthn credentials")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	var credentials = make([]webauthn.Credential, 0, len(webAuthns))
@@ -111,7 +107,7 @@ func (h *Handler) BeginWebauthnRegistration(ctx echo.Context, openapi *OpenAPICo
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to save session")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	// return the session value for the UI to use
@@ -121,7 +117,7 @@ func (h *Handler) BeginWebauthnRegistration(ctx echo.Context, openapi *OpenAPICo
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to get session token")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	out := &models.WebauthnBeginRegistrationResponse{
@@ -130,20 +126,20 @@ func (h *Handler) BeginWebauthnRegistration(ctx echo.Context, openapi *OpenAPICo
 		Session:            s,
 	}
 
-	return h.Success(ctx, out, openapi)
+	return h.Success(ctx, out)
 }
 
 // FinishWebauthnRegistration is the request to finish a webauthn registration - this is where we get the credential created by the user back
-func (h *Handler) FinishWebauthnRegistration(ctx echo.Context, openapi *OpenAPIContext) error {
-	requestData, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleWebauthnRegistrationFinishRequest, models.ExampleWebauthnRegistrationResponse, openapi.Registry)
+func (h *Handler) FinishWebauthnRegistration(ctx echo.Context) error {
+	requestData, err := BindAndValidate[models.WebauthnRegistrationFinishRequest](ctx)
 	if err != nil {
-		return h.InvalidInput(ctx, err, openapi)
+		return h.InvalidInput(ctx, err)
 	}
 
 	// lookup userID in cache to ensure cookie and tokens match
 	session, err := h.SessionConfig.SessionManager.Get(ctx.Request(), h.SessionConfig.CookieConfig.Name)
 	if err != nil {
-		return h.BadRequest(ctx, err, openapi)
+		return h.BadRequest(ctx, err)
 	}
 
 	reqCtx := ctx.Request().Context()
@@ -153,7 +149,7 @@ func (h *Handler) FinishWebauthnRegistration(ctx echo.Context, openapi *OpenAPIC
 
 	userID, err := h.SessionConfig.RedisStore.GetSession(reqCtx, sessionID)
 	if err != nil {
-		return h.BadRequest(ctx, err, openapi)
+		return h.BadRequest(ctx, err)
 	}
 
 	// get session data from cookie to get the user id stored
@@ -163,7 +159,7 @@ func (h *Handler) FinishWebauthnRegistration(ctx echo.Context, openapi *OpenAPIC
 
 	// ensure the user is the same as the one who started the registration
 	if userIDFromCookie != userID {
-		return h.BadRequest(ctx, err, openapi)
+		return h.BadRequest(ctx, err)
 	}
 
 	// get user from the database
@@ -171,17 +167,17 @@ func (h *Handler) FinishWebauthnRegistration(ctx echo.Context, openapi *OpenAPIC
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to get user by id")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	data, err := json.Marshal(requestData)
 	if err != nil {
-		return h.BadRequest(ctx, err, openapi)
+		return h.BadRequest(ctx, err)
 	}
 
 	response, err := protocol.ParseCredentialCreationResponseBytes(data)
 	if err != nil {
-		return h.BadRequest(ctx, err, openapi)
+		return h.BadRequest(ctx, err)
 	}
 
 	userCtx = token.NewContextWithWebauthnCreationContextKey(userCtx)
@@ -191,7 +187,7 @@ func (h *Handler) FinishWebauthnRegistration(ctx echo.Context, openapi *OpenAPIC
 
 	wd, ok := webauthnData.(webauthn.SessionData)
 	if !ok {
-		return h.BadRequest(ctx, ErrLoginFailed, openapi)
+		return h.BadRequest(ctx, ErrLoginFailed)
 	}
 
 	user := &provider.User{
@@ -203,7 +199,7 @@ func (h *Handler) FinishWebauthnRegistration(ctx echo.Context, openapi *OpenAPIC
 	// validate the credential
 	credential, err := h.WebAuthn.CreateCredential(user, wd, response)
 	if err != nil {
-		return h.BadRequest(ctx, err, openapi)
+		return h.BadRequest(ctx, err)
 	}
 
 	// save the credential to the database
@@ -214,13 +210,13 @@ func (h *Handler) FinishWebauthnRegistration(ctx echo.Context, openapi *OpenAPIC
 
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to add credential to user")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	if err := h.setWebauthnAllowed(userCtx, entUser); err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to set webauthn allowed for user")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	// create new claims for the user
@@ -228,7 +224,7 @@ func (h *Handler) FinishWebauthnRegistration(ctx echo.Context, openapi *OpenAPIC
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to create new auth session")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	out := &models.WebauthnRegistrationResponse{
@@ -237,15 +233,15 @@ func (h *Handler) FinishWebauthnRegistration(ctx echo.Context, openapi *OpenAPIC
 		AuthData: *auth,
 	}
 
-	return h.Success(ctx, out, openapi)
+	return h.Success(ctx, out)
 }
 
 // BeginWebauthnLogin is the request to begin a webauthn login
-func (h *Handler) BeginWebauthnLogin(ctx echo.Context, openapi *OpenAPIContext) error {
-	r, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleWebauthnLoginRequest, models.ExampleWebauthnBeginLoginResponse, openapi.Registry)
+func (h *Handler) BeginWebauthnLogin(ctx echo.Context) error {
+	r, err := BindAndValidate[models.WebauthnLoginRequest](ctx)
 	if err != nil {
 		metrics.RecordLogin(false)
-		return h.InvalidInput(ctx, err, openapi)
+		return h.InvalidInput(ctx, err)
 	}
 
 	credential, session, err := h.WebAuthn.BeginDiscoverableLogin()
@@ -271,7 +267,7 @@ func (h *Handler) BeginWebauthnLogin(ctx echo.Context, openapi *OpenAPIContext) 
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to save session")
 		metrics.RecordLogin(false)
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	// return the session value for the UI to use
@@ -282,7 +278,7 @@ func (h *Handler) BeginWebauthnLogin(ctx echo.Context, openapi *OpenAPIContext) 
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to get session token")
 		metrics.RecordLogin(false)
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	out := &models.WebauthnBeginLoginResponse{
@@ -291,19 +287,15 @@ func (h *Handler) BeginWebauthnLogin(ctx echo.Context, openapi *OpenAPIContext) 
 		Session:             s,
 	}
 
-	return h.Success(ctx, out, openapi)
+	return h.Success(ctx, out)
 }
 
 // FinishWebauthnLogin is the request to finish a webauthn login
-func (h *Handler) FinishWebauthnLogin(ctx echo.Context, openapi *OpenAPIContext) error {
-	requestData, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleWebauthnLoginFinishRequest, models.ExampleWebauthnLoginResponse, openapi.Registry)
+func (h *Handler) FinishWebauthnLogin(ctx echo.Context) error {
+	requestData, err := BindAndValidate[models.WebauthnLoginFinishRequest](ctx)
 	if err != nil {
 		metrics.RecordLogin(false)
-		return h.InvalidInput(ctx, err, openapi)
-	}
-
-	if isRegistrationContext(ctx) {
-		return nil
+		return h.InvalidInput(ctx, err)
 	}
 
 	reqCtx := ctx.Request().Context()
@@ -313,7 +305,7 @@ func (h *Handler) FinishWebauthnLogin(ctx echo.Context, openapi *OpenAPIContext)
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to get session from cookie")
 		metrics.RecordLogin(false)
 
-		return h.BadRequest(ctx, ErrInvalidCredentials, openapi)
+		return h.BadRequest(ctx, ErrInvalidCredentials)
 	}
 
 	sessionData := h.SessionConfig.SessionManager.GetSessionDataFromCookie(session)
@@ -323,14 +315,14 @@ func (h *Handler) FinishWebauthnLogin(ctx echo.Context, openapi *OpenAPIContext)
 	if !ok {
 		metrics.RecordLogin(false)
 
-		return h.BadRequest(ctx, ErrLoginFailed, openapi)
+		return h.BadRequest(ctx, ErrLoginFailed)
 	}
 
 	data, err := json.Marshal(requestData)
 	if err != nil {
 		metrics.RecordLogin(false)
 
-		return h.BadRequest(ctx, err, openapi)
+		return h.BadRequest(ctx, err)
 	}
 
 	response, err := protocol.ParseCredentialRequestResponseBytes(data)
@@ -338,14 +330,14 @@ func (h *Handler) FinishWebauthnLogin(ctx echo.Context, openapi *OpenAPIContext)
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to parse credential request response body")
 		metrics.RecordLogin(false)
 
-		return h.BadRequest(ctx, ErrInvalidCredentials, openapi)
+		return h.BadRequest(ctx, ErrInvalidCredentials)
 	}
 
 	if _, err = h.WebAuthn.ValidateDiscoverableLogin(h.userHandler(reqCtx), wd, response); err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to validate webauthn login")
 		metrics.RecordLogin(false)
 
-		return h.BadRequest(ctx, ErrInvalidCredentials, openapi)
+		return h.BadRequest(ctx, ErrInvalidCredentials)
 	}
 
 	userID := string(response.Response.UserHandle)
@@ -357,7 +349,7 @@ func (h *Handler) FinishWebauthnLogin(ctx echo.Context, openapi *OpenAPIContext)
 		logx.FromContext(reqCtx).Error().Err(err).Msg("challenge ids do not match")
 		metrics.RecordLogin(false)
 
-		return h.BadRequest(ctx, ErrInvalidCredentials, openapi)
+		return h.BadRequest(ctx, ErrInvalidCredentials)
 	}
 
 	// get user from the database
@@ -366,7 +358,7 @@ func (h *Handler) FinishWebauthnLogin(ctx echo.Context, openapi *OpenAPIContext)
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to get user by id")
 		metrics.RecordLogin(false)
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	orgStatus := h.orgEnforcementsForUser(reqCtx, entUser.Email)
@@ -382,7 +374,7 @@ func (h *Handler) FinishWebauthnLogin(ctx echo.Context, openapi *OpenAPIContext)
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to create new auth session")
 		metrics.RecordLogin(false)
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	// set the last seen for the user
@@ -390,7 +382,7 @@ func (h *Handler) FinishWebauthnLogin(ctx echo.Context, openapi *OpenAPIContext)
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to update last seen")
 		metrics.RecordLogin(false)
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	out := &models.WebauthnLoginResponse{
@@ -401,7 +393,7 @@ func (h *Handler) FinishWebauthnLogin(ctx echo.Context, openapi *OpenAPIContext)
 
 	metrics.RecordLogin(true)
 
-	return h.Success(ctx, out, openapi)
+	return h.Success(ctx, out)
 }
 
 // userHandler returns a webauthn.DiscoverableUserHandler that can be used to look up a user by their userHandle

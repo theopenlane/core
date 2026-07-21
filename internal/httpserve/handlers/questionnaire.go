@@ -19,28 +19,21 @@ import (
 )
 
 // GetQuestionnaire retrieves questionnaire template configuration for authenticated anonymous users
-func (h *Handler) GetQuestionnaire(ctx echo.Context, openapi *OpenAPIContext) error {
-	if isRegistrationContext(ctx) {
-		response := models.GetQuestionnaireResponse{
-			Jsonconfig: map[string]any{},
-		}
-		return h.Success(ctx, response, openapi)
-	}
-
+func (h *Handler) GetQuestionnaire(ctx echo.Context) error {
 	reqCtx := ctx.Request().Context()
 
 	assessmentID, ok := auth.ActiveAssessmentIDKey.Get(reqCtx)
 	if !ok {
-		return h.Unauthorized(ctx, ErrMissingQuestionnaireContext, openapi)
+		return h.Unauthorized(ctx, ErrMissingQuestionnaireContext)
 	}
 
 	if assessmentID == "" {
-		return h.BadRequest(ctx, ErrMissingAssessmentID, openapi)
+		return h.BadRequest(ctx, ErrMissingAssessmentID)
 	}
 
 	caller, callerOk := auth.CallerFromContext(reqCtx)
 	if !callerOk || caller == nil {
-		return h.Unauthorized(ctx, ErrMissingQuestionnaireContext, openapi)
+		return h.Unauthorized(ctx, ErrMissingQuestionnaireContext)
 	}
 
 	email := caller.SubjectEmail
@@ -66,13 +59,13 @@ func (h *Handler) GetQuestionnaire(ctx echo.Context, openapi *OpenAPIContext) er
 			Only(allowCtx)
 		if err != nil && !generated.IsNotFound(err) {
 			logx.FromContext(reqCtx).Err(err).Msg("could not fetch assessment response")
-			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+			return h.InternalServerError(ctx, ErrProcessingRequest)
 		}
 	}
 
 	if assessmentResponse != nil {
 		if assessmentResponse.Status == enums.AssessmentResponseStatusCompleted {
-			return h.BadRequest(ctx, ErrAssessmentResponseAlreadyCompleted, openapi)
+			return h.BadRequest(ctx, ErrAssessmentResponseAlreadyCompleted)
 		}
 
 		if !assessmentResponse.DueDate.IsZero() && time.Now().After(assessmentResponse.DueDate) {
@@ -81,10 +74,10 @@ func (h *Handler) GetQuestionnaire(ctx echo.Context, openapi *OpenAPIContext) er
 				Save(allowCtx)
 			if err != nil {
 				logx.FromContext(reqCtx).Err(err).Msg("could not update assessment response due date")
-				return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+				return h.InternalServerError(ctx, ErrProcessingRequest)
 			}
 
-			return h.BadRequest(ctx, ErrAssessmentResponseOverdue, openapi)
+			return h.BadRequest(ctx, ErrAssessmentResponseOverdue)
 		}
 	}
 
@@ -94,11 +87,11 @@ func (h *Handler) GetQuestionnaire(ctx echo.Context, openapi *OpenAPIContext) er
 		Only(allowCtx)
 	if err != nil {
 		if generated.IsNotFound(err) {
-			return h.NotFound(ctx, ErrAssessmentNotFound, openapi)
+			return h.NotFound(ctx, ErrAssessmentNotFound)
 		}
 
 		logx.FromContext(reqCtx).Err(err).Msg("could not fetch assessment")
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	response := models.GetQuestionnaireResponse{
@@ -115,19 +108,14 @@ func (h *Handler) GetQuestionnaire(ctx echo.Context, openapi *OpenAPIContext) er
 		response.SavedData = assessmentResponse.Edges.Document.Data
 	}
 
-	return h.Success(ctx, response, openapi)
+	return h.Success(ctx, response)
 }
 
 // SubmitQuestionnaire submits questionnaire response data for authenticated anonymous users
-func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext) error {
-	if isRegistrationContext(ctx) {
-		response := models.SubmitQuestionnaireResponse{}
-		return h.Success(ctx, response, openapi)
-	}
-
-	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleSubmitQuestionnaireRequest, models.ExampleSubmitQuestionnaireResponse, openapi.Registry)
+func (h *Handler) SubmitQuestionnaire(ctx echo.Context) error {
+	req, err := BindAndValidate[models.SubmitQuestionnaireRequest](ctx)
 	if err != nil {
-		return h.InvalidInput(ctx, err, openapi)
+		return h.InvalidInput(ctx, err)
 	}
 
 	reqCtx := ctx.Request().Context()
@@ -161,7 +149,7 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 		qCaller, qOk := auth.CallerFromContext(reqCtx)
 		if !qOk || qCaller == nil {
 			logx.FromContext(reqCtx).Error().Msg("error getting authenticated user")
-			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+			return h.InternalServerError(ctx, ErrProcessingRequest)
 		}
 
 		// for regular/normal authenticated users, we expect the assessment id to be passed
@@ -169,7 +157,7 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 		//
 		// for anon users, it's embedded inside the jwt already
 		if req.AssessmentID == "" {
-			return h.BadRequest(ctx, ErrMissingAssessmentID, openapi)
+			return h.BadRequest(ctx, ErrMissingAssessmentID)
 		}
 
 		assessmentID = req.AssessmentID
@@ -186,15 +174,15 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 	}
 
 	if assessmentID == "" {
-		return h.BadRequest(ctx, ErrMissingAssessmentID, openapi)
+		return h.BadRequest(ctx, ErrMissingAssessmentID)
 	}
 
 	if len(req.Data) == 0 {
-		return h.BadRequest(ctx, ErrMissingQuestionnaireData, openapi)
+		return h.BadRequest(ctx, ErrMissingQuestionnaireData)
 	}
 
 	if isAnonymous && req.IsDraft {
-		return h.BadRequest(ctx, ErrAnonymousQuestionnaireDraft, openapi)
+		return h.BadRequest(ctx, ErrAnonymousQuestionnaireDraft)
 	}
 
 	assessment, err := h.DBClient.Assessment.Query().
@@ -203,12 +191,12 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 		Only(allowCtx)
 	if err != nil {
 		if generated.IsNotFound(err) {
-			return h.NotFound(ctx, ErrAssessmentNotFound, openapi)
+			return h.NotFound(ctx, ErrAssessmentNotFound)
 		}
 
 		logx.FromContext(reqCtx).Err(err).Msg("could not fetch assessment")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	if ownerID == "" {
@@ -224,16 +212,16 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 			Only(allowCtx)
 
 		if generated.IsNotFound(err) {
-			return h.NotFound(ctx, ErrAssessmentResponseNotFound, openapi)
+			return h.NotFound(ctx, ErrAssessmentResponseNotFound)
 		}
 
 		if err != nil {
-			return h.NotFound(ctx, err, openapi)
+			return h.NotFound(ctx, err)
 		}
 	}
 
 	if assessmentResponse != nil && assessmentResponse.Status == enums.AssessmentResponseStatusCompleted {
-		return h.BadRequest(ctx, ErrAssessmentResponseAlreadyCompleted, openapi)
+		return h.BadRequest(ctx, ErrAssessmentResponseAlreadyCompleted)
 	}
 
 	var documentDataID string
@@ -244,7 +232,7 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 			Exec(allowCtx)
 		if err != nil {
 			logx.FromContext(reqCtx).Err(err).Msg("could not update document data")
-			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+			return h.InternalServerError(ctx, ErrProcessingRequest)
 		}
 
 		documentDataID = assessmentResponse.DocumentDataID
@@ -259,7 +247,7 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 		documentData, err := documentDataQuery.SetData(req.Data).Save(allowCtx)
 		if err != nil {
 			logx.FromContext(reqCtx).Err(err).Msg("could not create document data")
-			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+			return h.InternalServerError(ctx, ErrProcessingRequest)
 		}
 
 		documentDataID = documentData.ID
@@ -272,7 +260,7 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 			Save(allowCtx)
 		if err != nil {
 			logx.FromContext(reqCtx).Err(err).Msg("could not create assessment response")
-			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+			return h.InternalServerError(ctx, ErrProcessingRequest)
 		}
 	}
 
@@ -293,11 +281,11 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 	freshResponse, err := responseUpdate.Save(allowCtx)
 	if err != nil {
 		if errors.Is(err, hooks.ErrAssessmentInCompleted) {
-			return h.BadRequest(ctx, err, openapi)
+			return h.BadRequest(ctx, err)
 		}
 
 		logx.FromContext(reqCtx).Err(err).Msg("could not update assessment response")
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	response := models.SubmitQuestionnaireResponse{
@@ -309,5 +297,5 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 		response.CompletedAt = freshResponse.CompletedAt.Format(time.RFC3339)
 	}
 
-	return h.Success(ctx, response, openapi)
+	return h.Success(ctx, response)
 }

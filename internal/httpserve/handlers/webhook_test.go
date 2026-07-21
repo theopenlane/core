@@ -81,8 +81,7 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 		SetStripeSubscriptionID(seedStripeSubscriptionID).
 		ExecX(testUser1.UserCtx)
 
-	operation := suite.createImpersonationOperation("WebhookReceiverHandler", "Webhook receiver handler")
-	suite.registerTestHandler(http.MethodPost, "/webhook", operation, suite.h.WebhookReceiverHandler)
+	suite.registerTestHandler(http.MethodPost, "/webhook", suite.h.WebhookReceiverHandler)
 
 	originalBinder := suite.e.Binder
 	suite.e.Binder = &webhookBinder{Binder: originalBinder}

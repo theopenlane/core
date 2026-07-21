@@ -41,6 +41,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/export"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/finding"
+	"github.com/theopenlane/core/internal/ent/generated/findingcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
@@ -265,6 +266,7 @@ type OrganizationQuery struct {
 	withTagDefinitions                          *TagDefinitionQuery
 	withRemediations                            *RemediationQuery
 	withFindings                                *FindingQuery
+	withFindingControls                         *FindingControlQuery
 	withReviews                                 *ReviewQuery
 	withVulnerabilities                         *VulnerabilityQuery
 	withNotifications                           *NotificationQuery
@@ -434,6 +436,7 @@ type OrganizationQuery struct {
 	withNamedTagDefinitions                     map[string]*TagDefinitionQuery
 	withNamedRemediations                       map[string]*RemediationQuery
 	withNamedFindings                           map[string]*FindingQuery
+	withNamedFindingControls                    map[string]*FindingControlQuery
 	withNamedReviews                            map[string]*ReviewQuery
 	withNamedVulnerabilities                    map[string]*VulnerabilityQuery
 	withNamedNotifications                      map[string]*NotificationQuery
@@ -4288,6 +4291,31 @@ func (_q *OrganizationQuery) QueryFindings() *FindingQuery {
 	return query
 }
 
+// QueryFindingControls chains the current query on the "finding_controls" edge.
+func (_q *OrganizationQuery) QueryFindingControls() *FindingControlQuery {
+	query := (&FindingControlClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(findingcontrol.Table, findingcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.FindingControlsTable, organization.FindingControlsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.FindingControl
+		step.Edge.Schema = schemaConfig.FindingControl
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryReviews chains the current query on the "reviews" edge.
 func (_q *OrganizationQuery) QueryReviews() *ReviewQuery {
 	query := (&ReviewClient{config: _q.config}).Query()
@@ -5082,6 +5110,7 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withTagDefinitions:                     _q.withTagDefinitions.Clone(),
 		withRemediations:                       _q.withRemediations.Clone(),
 		withFindings:                           _q.withFindings.Clone(),
+		withFindingControls:                    _q.withFindingControls.Clone(),
 		withReviews:                            _q.withReviews.Clone(),
 		withVulnerabilities:                    _q.withVulnerabilities.Clone(),
 		withNotifications:                      _q.withNotifications.Clone(),
@@ -6779,6 +6808,17 @@ func (_q *OrganizationQuery) WithFindings(opts ...func(*FindingQuery)) *Organiza
 	return _q
 }
 
+// WithFindingControls tells the query-builder to eager-load the nodes that are connected to
+// the "finding_controls" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithFindingControls(opts ...func(*FindingControlQuery)) *OrganizationQuery {
+	query := (&FindingControlClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withFindingControls = query
+	return _q
+}
+
 // WithReviews tells the query-builder to eager-load the nodes that are connected to
 // the "reviews" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *OrganizationQuery) WithReviews(opts ...func(*ReviewQuery)) *OrganizationQuery {
@@ -7061,7 +7101,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = _q.querySpec()
-		loadedTypes = [170]bool{
+		loadedTypes = [171]bool{
 			_q.withActionPlanCreators != nil,
 			_q.withAPITokenCreators != nil,
 			_q.withAssessmentCreators != nil,
@@ -7214,6 +7254,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withTagDefinitions != nil,
 			_q.withRemediations != nil,
 			_q.withFindings != nil,
+			_q.withFindingControls != nil,
 			_q.withReviews != nil,
 			_q.withVulnerabilities != nil,
 			_q.withNotifications != nil,
@@ -8424,6 +8465,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := _q.withFindingControls; query != nil {
+		if err := _q.loadFindingControls(ctx, query, nodes,
+			func(n *Organization) { n.Edges.FindingControls = []*FindingControl{} },
+			func(n *Organization, e *FindingControl) { n.Edges.FindingControls = append(n.Edges.FindingControls, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withReviews; query != nil {
 		if err := _q.loadReviews(ctx, query, nodes,
 			func(n *Organization) { n.Edges.Reviews = []*Review{} },
@@ -9616,6 +9664,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadFindings(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedFindings(name) },
 			func(n *Organization, e *Finding) { n.appendNamedFindings(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedFindingControls {
+		if err := _q.loadFindingControls(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedFindingControls(name) },
+			func(n *Organization, e *FindingControl) { n.appendNamedFindingControls(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -14543,6 +14598,36 @@ func (_q *OrganizationQuery) loadFindings(ctx context.Context, query *FindingQue
 	}
 	return nil
 }
+func (_q *OrganizationQuery) loadFindingControls(ctx context.Context, query *FindingControlQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *FindingControl)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(findingcontrol.FieldOwnerID)
+	}
+	query.Where(predicate.FindingControl(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.FindingControlsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *OrganizationQuery) loadReviews(ctx context.Context, query *ReviewQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Review)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Organization)
@@ -17277,6 +17362,20 @@ func (_q *OrganizationQuery) WithNamedFindings(name string, opts ...func(*Findin
 		_q.withNamedFindings = make(map[string]*FindingQuery)
 	}
 	_q.withNamedFindings[name] = query
+	return _q
+}
+
+// WithNamedFindingControls tells the query-builder to eager-load the nodes that are connected to the "finding_controls"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedFindingControls(name string, opts ...func(*FindingControlQuery)) *OrganizationQuery {
+	query := (&FindingControlClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedFindingControls == nil {
+		_q.withNamedFindingControls = make(map[string]*FindingControlQuery)
+	}
+	_q.withNamedFindingControls[name] = query
 	return _q
 }
 

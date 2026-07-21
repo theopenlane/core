@@ -177,6 +177,48 @@ func (_c *ScanHistoryCreate) SetNillableOwnerID(v *string) *ScanHistoryCreate {
 	return _c
 }
 
+// SetSystemOwned sets the "system_owned" field.
+func (_c *ScanHistoryCreate) SetSystemOwned(v bool) *ScanHistoryCreate {
+	_c.mutation.SetSystemOwned(v)
+	return _c
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (_c *ScanHistoryCreate) SetNillableSystemOwned(v *bool) *ScanHistoryCreate {
+	if v != nil {
+		_c.SetSystemOwned(*v)
+	}
+	return _c
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_c *ScanHistoryCreate) SetInternalNotes(v string) *ScanHistoryCreate {
+	_c.mutation.SetInternalNotes(v)
+	return _c
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_c *ScanHistoryCreate) SetNillableInternalNotes(v *string) *ScanHistoryCreate {
+	if v != nil {
+		_c.SetInternalNotes(*v)
+	}
+	return _c
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_c *ScanHistoryCreate) SetSystemInternalID(v string) *ScanHistoryCreate {
+	_c.mutation.SetSystemInternalID(v)
+	return _c
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_c *ScanHistoryCreate) SetNillableSystemInternalID(v *string) *ScanHistoryCreate {
+	if v != nil {
+		_c.SetSystemInternalID(*v)
+	}
+	return _c
+}
+
 // SetReviewedBy sets the "reviewed_by" field.
 func (_c *ScanHistoryCreate) SetReviewedBy(v string) *ScanHistoryCreate {
 	_c.mutation.SetReviewedBy(v)
@@ -537,6 +579,10 @@ func (_c *ScanHistoryCreate) defaults() error {
 		v := scanhistory.DefaultTags
 		_c.mutation.SetTags(v)
 	}
+	if _, ok := _c.mutation.SystemOwned(); !ok {
+		v := scanhistory.DefaultSystemOwned
+		_c.mutation.SetSystemOwned(v)
+	}
 	if _, ok := _c.mutation.ScanType(); !ok {
 		v := scanhistory.DefaultScanType
 		_c.mutation.SetScanType(v)
@@ -679,6 +725,18 @@ func (_c *ScanHistoryCreate) createSpec() (*ScanHistory, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.OwnerID(); ok {
 		_spec.SetField(scanhistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
+	}
+	if value, ok := _c.mutation.SystemOwned(); ok {
+		_spec.SetField(scanhistory.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
+	}
+	if value, ok := _c.mutation.InternalNotes(); ok {
+		_spec.SetField(scanhistory.FieldInternalNotes, field.TypeString, value)
+		_node.InternalNotes = &value
+	}
+	if value, ok := _c.mutation.SystemInternalID(); ok {
+		_spec.SetField(scanhistory.FieldSystemInternalID, field.TypeString, value)
+		_node.SystemInternalID = &value
 	}
 	if value, ok := _c.mutation.ReviewedBy(); ok {
 		_spec.SetField(scanhistory.FieldReviewedBy, field.TypeString, value)

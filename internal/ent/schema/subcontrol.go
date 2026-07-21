@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/entx/oscalgen"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/entfga"
@@ -148,6 +149,20 @@ func (s Subcontrol) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(s, Asset{}),
 		defaultEdgeToWithPagination(s, Entity{}),
 		defaultEdgeToWithPagination(s, IdentityHolder{}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: s,
+			edgeSchema: Vulnerability{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Vulnerability{}.Name()),
+			},
+		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: s,
+			edgeSchema: Finding{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Finding{}.Name()),
+			},
+		}),
 	}
 }
 

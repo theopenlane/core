@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	echo "github.com/theopenlane/echox"
@@ -10,8 +11,11 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 )
@@ -27,28 +31,28 @@ type integrationOperationQueueDetails struct {
 }
 
 // RunIntegrationOperation queues operation execution; operations have individual policies dictating when or how they run
-func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIContext) error {
-	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapiCtx.Operation, ExampleRunIntegrationOperationRequest, RunIntegrationOperationResponse{}, openapiCtx.Registry)
+func (h *Handler) RunIntegrationOperation(ctx echo.Context) error {
+	req, err := BindAndValidate[RunIntegrationOperationRequest](ctx)
 	if err != nil {
-		return h.InvalidInput(ctx, err, openapiCtx)
+		return h.InvalidInput(ctx, err)
 	}
 
-	if isRegistrationContext(ctx) {
-		return nil
+	if h.IntegrationsRuntime == nil {
+		return h.BadRequest(ctx, ErrIntegrationsNotEnabled)
 	}
 
 	requestCtx := ctx.Request().Context()
 
 	caller, ok := auth.CallerFromContext(requestCtx)
 	if !ok || caller == nil {
-		return h.Unauthorized(ctx, auth.ErrNoAuthUser, openapiCtx)
+		return h.Unauthorized(ctx, auth.ErrNoAuthUser)
 	}
 
 	if req.IntegrationID == "" || req.Body.Operation == "" {
 		// not terribly concerned about distinct error responses here since this isn't intended to be used as a primary execution method
 		logx.FromContext(requestCtx).Error().Err(ErrIntegrationIDRequired).Msg("missing integrationID or Operation in request")
 
-		return h.BadRequest(ctx, ErrIntegrationIDRequired, openapiCtx)
+		return h.BadRequest(ctx, ErrIntegrationIDRequired)
 	}
 
 	integrationRef, err := h.IntegrationsRuntime.ResolveIntegration(requestCtx, integrationsruntime.IntegrationLookup{
@@ -58,20 +62,20 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 	if err != nil {
 		logx.FromContext(requestCtx).Error().Err(err).Interface("request", req).Msg("failed to resolve installation")
 
-		return h.BadRequest(ctx, ErrIntegrationNotFound, openapiCtx)
+		return h.BadRequest(ctx, ErrIntegrationNotFound)
 	}
 
 	def, ok := h.IntegrationsRuntime.Registry().Definition(integrationRef.DefinitionID)
 	if !ok {
 		logx.FromContext(requestCtx).Error().Str("definitionID", integrationRef.DefinitionID).Msg("definition not found in registry")
 
-		return h.BadRequest(ctx, ErrIntegrationNotFound, openapiCtx)
+		return h.BadRequest(ctx, ErrIntegrationNotFound)
 	}
 
 	if !def.Active {
 		logx.FromContext(requestCtx).Error().Err(ErrProviderDisabled).Str("definitionID", integrationRef.DefinitionID).Msg("integration provider is disabled, not executing operation")
 
-		return h.BadRequest(ctx, ErrProviderDisabled, openapiCtx)
+		return h.BadRequest(ctx, ErrProviderDisabled)
 	}
 
 	operationName := req.Body.Operation
@@ -79,7 +83,19 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 	if err != nil {
 		logx.FromContext(requestCtx).Error().Err(err).Interface("request", req).Msg("operation not found")
 
-		return h.BadRequest(ctx, operations.ErrDispatchInputInvalid, openapiCtx)
+		return h.BadRequest(ctx, operations.ErrDispatchInputInvalid)
+	}
+
+	if operation.Internal {
+		logx.FromContext(requestCtx).Error().Interface("request", req).Msg("operation is internal and cannot be invoked directly")
+
+		return h.BadRequest(ctx, operations.ErrDispatchInputInvalid)
+	}
+
+	if operation.RequiresPaymentMethod {
+		if err := rule.RequirePaymentMethod()(requestCtx, nil); err != nil && !errors.Is(err, privacy.Skip) {
+			return h.Forbidden(ctx, err)
+		}
 	}
 
 	inlineExecution := operation.Policy.Inline
@@ -91,7 +107,7 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 		if err := operations.ValidateConfig(operation.ConfigSchema, configDoc); err != nil {
 			logx.FromContext(requestCtx).Error().Err(err).Msg("invalid operation config")
 
-			return h.BadRequest(ctx, operations.ErrDispatchInputInvalid, openapiCtx)
+			return h.BadRequest(ctx, operations.ErrDispatchInputInvalid)
 		}
 	}
 
@@ -100,7 +116,11 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 		if err != nil {
 			logx.FromContext(requestCtx).Error().Err(err).Interface("request", req).Msg("operation execution failed")
 
-			return h.BadRequest(ctx, err, openapiCtx)
+			if errors.Is(err, integrationsruntime.ErrOperationRateLimited) {
+				return h.TooManyRequests(ctx, err)
+			}
+
+			return h.BadRequest(ctx, err)
 		}
 
 		meta := integrationRef.Metadata
@@ -130,7 +150,7 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 		})
 	}
 
-	result, err := h.IntegrationsRuntime.Dispatch(queueCtx, operations.DispatchRequest{
+	result, err := h.IntegrationsRuntime.Dispatch(queueCtx, types.DispatchRequest{
 		IntegrationID: integrationRef.ID,
 		Operation:     operationName,
 		Config:        configDoc,
@@ -139,7 +159,7 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 	if err != nil {
 		logx.FromContext(requestCtx).Error().Err(err).Interface("request", req).Msg("failed to queue operation")
 
-		return h.BadRequest(ctx, err, openapiCtx)
+		return h.BadRequest(ctx, err)
 	}
 
 	queueDetails, err := jsonx.ToRawMessage(integrationOperationQueueDetails{
@@ -148,7 +168,7 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context, openapiCtx *OpenAPIC
 		Status:  result.Status.String(),
 	})
 	if err != nil {
-		return h.InternalServerError(ctx, err, openapiCtx)
+		return h.InternalServerError(ctx, err)
 	}
 
 	return h.Success(ctx, RunIntegrationOperationResponse{

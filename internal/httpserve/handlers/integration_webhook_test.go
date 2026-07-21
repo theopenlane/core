@@ -13,7 +13,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
@@ -122,9 +121,7 @@ func webhookHMACSHA256(secret string, payload []byte) string {
 func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerSuccess() {
 	t := suite.T()
 
-	op := openapi3.NewOperation()
-	op.OperationID = "IntegrationWebhookHandlerSuccess"
-	suite.registerRouteOnce(http.MethodPost, webhookTestPath, op, suite.h.IntegrationWebhookHandler)
+	suite.registerRouteOnce(http.MethodPost, webhookTestPath, suite.h.IntegrationWebhookHandler)
 
 	restore := suite.withDefinitionRuntime(t, []registry.Builder{webhookTestDefinitionBuilder(webhookTestDefinitionID)})
 	defer restore()
@@ -149,10 +146,8 @@ func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerSuccess() {
 func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerMissingEndpointID() {
 	t := suite.T()
 
-	op := openapi3.NewOperation()
-	op.OperationID = "IntegrationWebhookHandlerMissingEndpointID"
 	// Register with a path that will result in empty endpointID
-	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/webhooks/", op, suite.h.IntegrationWebhookHandler)
+	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/webhooks/", suite.h.IntegrationWebhookHandler)
 
 	payload := []byte(`{"event":"test"}`)
 	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/webhooks/", strings.NewReader(string(payload)))
@@ -168,9 +163,7 @@ func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerMissingEndpointID() 
 func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerEmptyPayload() {
 	t := suite.T()
 
-	op := openapi3.NewOperation()
-	op.OperationID = "IntegrationWebhookHandlerEmptyPayload"
-	suite.registerRouteOnce(http.MethodPost, webhookTestPath, op, suite.h.IntegrationWebhookHandler)
+	suite.registerRouteOnce(http.MethodPost, webhookTestPath, suite.h.IntegrationWebhookHandler)
 
 	req := httptest.NewRequest(http.MethodPost, "/v1/integrations/webhooks/some-endpoint", strings.NewReader(""))
 	req.Header.Set("Content-Type", "application/json")
@@ -184,9 +177,7 @@ func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerEmptyPayload() {
 func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerInvalidSignature() {
 	t := suite.T()
 
-	op := openapi3.NewOperation()
-	op.OperationID = "IntegrationWebhookHandlerInvalidSig"
-	suite.registerRouteOnce(http.MethodPost, webhookTestPath, op, suite.h.IntegrationWebhookHandler)
+	suite.registerRouteOnce(http.MethodPost, webhookTestPath, suite.h.IntegrationWebhookHandler)
 
 	restore := suite.withDefinitionRuntime(t, []registry.Builder{webhookTestDefinitionBuilder(webhookTestDefinitionID)})
 	defer restore()
@@ -211,9 +202,7 @@ func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerInvalidSignature() {
 func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerMissingSignature() {
 	t := suite.T()
 
-	op := openapi3.NewOperation()
-	op.OperationID = "IntegrationWebhookHandlerMissingSig"
-	suite.registerRouteOnce(http.MethodPost, webhookTestPath, op, suite.h.IntegrationWebhookHandler)
+	suite.registerRouteOnce(http.MethodPost, webhookTestPath, suite.h.IntegrationWebhookHandler)
 
 	restore := suite.withDefinitionRuntime(t, []registry.Builder{webhookTestDefinitionBuilder(webhookTestDefinitionID)})
 	defer restore()
@@ -237,9 +226,7 @@ func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerMissingSignature() {
 func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerEndpointNotFound() {
 	t := suite.T()
 
-	op := openapi3.NewOperation()
-	op.OperationID = "IntegrationWebhookHandlerEndpointNotFound"
-	suite.registerRouteOnce(http.MethodPost, webhookTestPath, op, suite.h.IntegrationWebhookHandler)
+	suite.registerRouteOnce(http.MethodPost, webhookTestPath, suite.h.IntegrationWebhookHandler)
 
 	restore := suite.withDefinitionRuntime(t, []registry.Builder{webhookTestDefinitionBuilder(webhookTestDefinitionID)})
 	defer restore()
@@ -259,9 +246,7 @@ func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerEndpointNotFound() {
 func (suite *HandlerTestSuite) TestIntegrationWebhookHandlerEmptyEventNameReturnsSuccess() {
 	t := suite.T()
 
-	op := openapi3.NewOperation()
-	op.OperationID = "IntegrationWebhookHandlerEmptyEvent"
-	suite.registerRouteOnce(http.MethodPost, webhookTestPath, op, suite.h.IntegrationWebhookHandler)
+	suite.registerRouteOnce(http.MethodPost, webhookTestPath, suite.h.IntegrationWebhookHandler)
 
 	restore := suite.withDefinitionRuntime(t, []registry.Builder{webhookTestDefinitionBuilder(webhookTestDefinitionID)})
 	defer restore()

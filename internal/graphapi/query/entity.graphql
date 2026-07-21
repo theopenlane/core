@@ -1,389 +1,411 @@
-mutation CreateBulkCSVEntity ($input: Upload!, $entityTypeName: String) {
-	createBulkCSVEntity(input: $input, entityTypeName: $entityTypeName) {
-		entities {
-			createdAt
-			createdBy
-			description
-			displayName
-			status
-			domains
-			notes {
-				edges {
-					node {
-						text
-						updatedAt
-						updatedBy
-					}
-				}
-			}
-			entityType {
-				id
-				name
-			}
-			id
-			name
-			ownerID
-			tags
-			updatedAt
-			updatedBy
-		}
-	}
+mutation CreateBulkCSVEntity($input: Upload!, $entityTypeName: String) {
+  createBulkCSVEntity(input: $input, entityTypeName: $entityTypeName) {
+    entities {
+      createdAt
+      createdBy
+      description
+      displayName
+      status
+      domains
+      notes {
+        edges {
+          node {
+            text
+            updatedAt
+            updatedBy
+          }
+        }
+      }
+      entityType {
+        id
+        name
+      }
+      id
+      name
+      ownerID
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
 }
-mutation CreateBulkEntity ($input: [CreateEntityInput!], $entityTypeName: String) {
-	createBulkEntity(input: $input, entityTypeName: $entityTypeName) {
-		entities {
-			createdAt
-			createdBy
-			description
-			displayName
-			status
-			domains
-			notes {
-				edges {
-					node {
-						text
-						updatedAt
-						updatedBy
-					}
-				}
-			}
-			entityType {
-				id
-				name
-			}
-			id
-			name
-			ownerID
-			tags
-			updatedAt
-			updatedBy
-		}
-	}
+
+mutation CreateBulkEntity($input: [CreateEntityInput!], $entityTypeName: String) {
+  createBulkEntity(input: $input, entityTypeName: $entityTypeName) {
+    entities {
+      createdAt
+      createdBy
+      description
+      displayName
+      status
+      domains
+      notes {
+        edges {
+          node {
+            text
+            updatedAt
+            updatedBy
+          }
+        }
+      }
+      entityType {
+        id
+        name
+      }
+      id
+      name
+      ownerID
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
 }
-mutation CreateEntity ($input: CreateEntityInput!, $entityTypeName: String, $entityFiles: [Upload!], $entityFilesMetadata: [FileMetadataInput!], $logoFile: Upload, $logoFileMetadata: FileMetadataInput) {
-	createEntity(input: $input, entityTypeName: $entityTypeName, entityFiles: $entityFiles, entityFilesMetadata: $entityFilesMetadata, logoFile: $logoFile, logoFileMetadata: $logoFileMetadata) {
-		entity {
-			createdAt
-			createdBy
-			description
-			displayName
-			status
-			domains
-			notes {
-				edges {
-					node {
-						text
-						updatedAt
-						updatedBy
-					}
-				}
-			}
-			entityType {
-				id
-				name
-			}
-			id
-			logoFileID
-			logoRemoteURL
-			name
-			ownerID
-			tags
-			updatedAt
-			updatedBy
-			logoFile {
-				id
-				name
-				metadata
-				presignedURL
-			}
-			files {
-				edges {
-					node {
-						id
-						name
-						metadata
-						presignedURL
-					}
-				}
-			}
-		}
-	}
+
+mutation CreateEntity($input: CreateEntityInput!, $entityTypeName: String, $entityFiles: [Upload!], $entityFilesMetadata: [FileMetadataInput!], $logoFile: Upload, $logoFileMetadata: FileMetadataInput) {
+  createEntity(
+    input: $input
+    entityTypeName: $entityTypeName
+    entityFiles: $entityFiles
+    entityFilesMetadata: $entityFilesMetadata
+    logoFile: $logoFile
+    logoFileMetadata: $logoFileMetadata
+  ) {
+    entity {
+      createdAt
+      createdBy
+      description
+      displayName
+      status
+      domains
+      notes {
+        edges {
+          node {
+            text
+            updatedAt
+            updatedBy
+          }
+        }
+      }
+      entityType {
+        id
+        name
+      }
+      id
+      logoFileID
+      logoRemoteURL
+      name
+      ownerID
+      tags
+      updatedAt
+      updatedBy
+      logoFile {
+        id
+        name
+        metadata
+        presignedURL
+      }
+      files {
+        edges {
+          node {
+            id
+            name
+            metadata
+            presignedURL
+          }
+        }
+      }
+    }
+  }
 }
-mutation DeleteEntity ($deleteEntityId: ID!) {
-	deleteEntity(id: $deleteEntityId) {
-		deletedID
-	}
+
+mutation DeleteEntity($deleteEntityId: ID!) {
+  deleteEntity(id: $deleteEntityId) {
+    deletedID
+  }
 }
+
 query GetAllEntities {
-	entities {
-		edges {
-			node {
-				createdAt
-				createdBy
-				description
-				displayName
-				status
-				domains
-				notes {
-					edges {
-						node {
-							text
-							updatedAt
-							updatedBy
-						}
-					}
-				}
-				entityType {
-					id
-					name
-				}
-				id
-				name
-				ownerID
-				tags
-				updatedAt
-				updatedBy
-			}
-		}
-	}
+  entities {
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        displayName
+        status
+        domains
+        notes {
+          edges {
+            node {
+              text
+              updatedAt
+              updatedBy
+            }
+          }
+        }
+        entityType {
+          id
+          name
+        }
+        id
+        name
+        ownerID
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
 }
-query GetEntities ($where: EntityWhereInput) {
-	entities(where: $where) {
-		edges {
-			node {
-				createdAt
-				createdBy
-				description
-				displayName
-				status
-				domains
-				notes {
-					edges {
-						node {
-							text
-							updatedAt
-							updatedBy
-						}
-					}
-				}
-				entityType {
-					id
-					name
-				}
-				id
-				name
-				ownerID
-				tags
-				updatedAt
-				updatedBy
-			}
-		}
-	}
+
+query GetEntities($where: EntityWhereInput) {
+  entities(where: $where) {
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        displayName
+        status
+        domains
+        notes {
+          edges {
+            node {
+              text
+              updatedAt
+              updatedBy
+            }
+          }
+        }
+        entityType {
+          id
+          name
+        }
+        id
+        name
+        ownerID
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
 }
-query GetEntityByID ($entityId: ID!) {
-	entity(id: $entityId) {
-		annualSpend
-		approvedForUse
-		autoRenews
-		billingModel
-		contractEndDate
-		contractRenewalAt
-		contractStartDate
-		createdAt
-		createdBy
-		description
-		displayName
-		domains
-		entityRelationshipStateID
-		entityRelationshipStateName
-		entitySecurityQuestionnaireStatusID
-		entitySecurityQuestionnaireStatusName
-		entitySourceTypeID
-		entitySourceTypeName
-		entityTypeID
-		environmentID
-		environmentName
-		externalID
-		hasSoc2
-		id
-		internalNotes
-		internalOwner
-		internalOwnerGroupID
-		internalOwnerUserID
-		lastReviewedAt
-		linkedAssetIds
-		links
-		logoFileID
-		logoRemoteURL
-		mfaEnforced
-		mfaSupported
-		name
-		nextReviewAt
-		observedAt
-		ownerID
-		providedServices
-		renewalRisk
-		reviewFrequency
-		reviewedBy
-		reviewedByGroupID
-		reviewedByUserID
-		riskRating
-		riskScore
-		riskScoreCoverage
-		scopeID
-		scopeName
-		soc2PeriodEnd
-		spendCurrency
-		ssoEnforced
-		status
-		statusPageURL
-		systemInternalID
-		systemOwned
-		tags
-		terminationNoticeDays
-		tier
-		updatedAt
-		updatedBy
-		updatedByImpersonator
-		vendorMetadata
-		logoFile {
-			id
-			name
-			metadata
-			presignedURL
-		}
-		files {
-			edges {
-				node {
-					id
-					name
-					metadata
-					presignedURL
-				}
-			}
-		}
-		notes {
-			edges {
-				node {
-					text
-					updatedAt
-					updatedBy
-				}
-			}
-		}
-		entityType {
-			id
-			name
-		}
-		contacts {
-			edges {
-				node {
-					id
-					fullName
-					email
-					title
-					company
-					address
-					phoneNumber
-				}
-			}
-		}
-	}
+
+query GetEntityByID($entityId: ID!) {
+  entity(id: $entityId) {
+    aliases
+    annualSpend
+    approvedForUse
+    autoRenews
+    billingModel
+    contractEndDate
+    contractRenewalAt
+    contractStartDate
+    createdAt
+    createdBy
+    description
+    displayName
+    domains
+    entityRelationshipStateID
+    entityRelationshipStateName
+    entitySecurityQuestionnaireStatusID
+    entitySecurityQuestionnaireStatusName
+    entitySourceTypeID
+    entitySourceTypeName
+    entityTypeID
+    environmentID
+    environmentName
+    externalID
+    hasSoc2
+    id
+    internalNotes
+    internalOwner
+    internalOwnerGroupID
+    internalOwnerUserID
+    lastReviewedAt
+    linkedAssetIds
+    links
+    logoFileID
+    logoRemoteURL
+    mfaEnforced
+    mfaSupported
+    name
+    nextReviewAt
+    observedAt
+    ownerID
+    providedServices
+    renewalRisk
+    reviewFrequency
+    reviewedBy
+    reviewedByGroupID
+    reviewedByUserID
+    riskRating
+    riskScore
+    riskScoreCoverage
+    scopeID
+    scopeName
+    soc2PeriodEnd
+    spendCurrency
+    ssoEnforced
+    status
+    statusPageURL
+    systemInternalID
+    systemOwned
+    tags
+    terminationNoticeDays
+    tier
+    updatedAt
+    updatedBy
+    updatedByImpersonator
+    vendorMetadata
+    logoFile {
+      id
+      name
+      metadata
+      presignedURL
+    }
+    files {
+      edges {
+        node {
+          id
+          name
+          metadata
+          presignedURL
+        }
+      }
+    }
+    notes {
+      edges {
+        node {
+          text
+          updatedAt
+          updatedBy
+        }
+      }
+    }
+    entityType {
+      id
+      name
+    }
+    contacts {
+      edges {
+        node {
+          id
+          fullName
+          email
+          title
+          company
+          address
+          phoneNumber
+        }
+      }
+    }
+  }
 }
-mutation UpdateEntity ($updateEntityId: ID!, $input: UpdateEntityInput!, $entityFiles: [Upload!], $entityFilesMetadata: [FileMetadataInput!], $logoFile: Upload, $logoFileMetadata: FileMetadataInput) {
-	updateEntity(id: $updateEntityId, input: $input, entityFiles: $entityFiles, entityFilesMetadata: $entityFilesMetadata, logoFile: $logoFile, logoFileMetadata: $logoFileMetadata) {
-		entity {
-			annualSpend
-			approvedForUse
-			autoRenews
-			billingModel
-			contractEndDate
-			contractRenewalAt
-			contractStartDate
-			createdAt
-			createdBy
-			description
-			displayName
-			domains
-			entityRelationshipStateID
-			entityRelationshipStateName
-			entitySecurityQuestionnaireStatusID
-			entitySecurityQuestionnaireStatusName
-			entitySourceTypeID
-			entitySourceTypeName
-			entityTypeID
-			environmentID
-			environmentName
-			externalID
-			hasSoc2
-			id
-			internalNotes
-			internalOwner
-			internalOwnerGroupID
-			internalOwnerUserID
-			lastReviewedAt
-			linkedAssetIds
-			links
-			logoFileID
-			mfaEnforced
-			mfaSupported
-			name
-			nextReviewAt
-			observedAt
-			ownerID
-			providedServices
-			renewalRisk
-			reviewFrequency
-			reviewedBy
-			reviewedByGroupID
-			reviewedByUserID
-			riskRating
-			riskScore
-			riskScoreCoverage
-			scopeID
-			scopeName
-			soc2PeriodEnd
-			spendCurrency
-			ssoEnforced
-			status
-			statusPageURL
-			systemInternalID
-			systemOwned
-			tags
-			terminationNoticeDays
-			tier
-			updatedAt
-			updatedBy
-			vendorMetadata
-			logoFile {
-				id
-				name
-				metadata
-				presignedURL
-			}
-			files {
-				edges {
-					node {
-						id
-						name
-						metadata
-						presignedURL
-					}
-				}
-			}
-			notes {
-				edges {
-					node {
-						text
-						updatedAt
-						updatedBy
-					}
-				}
-			}
-			entityType {
-				id
-				name
-			}
-		}
-	}
+
+mutation UpdateEntity($updateEntityId: ID!, $input: UpdateEntityInput!, $entityFiles: [Upload!], $entityFilesMetadata: [FileMetadataInput!], $logoFile: Upload, $logoFileMetadata: FileMetadataInput) {
+  updateEntity(
+    id: $updateEntityId
+    input: $input
+    entityFiles: $entityFiles
+    entityFilesMetadata: $entityFilesMetadata
+    logoFile: $logoFile
+    logoFileMetadata: $logoFileMetadata
+  ) {
+    entity {
+      annualSpend
+      approvedForUse
+      autoRenews
+      billingModel
+      contractEndDate
+      contractRenewalAt
+      contractStartDate
+      createdAt
+      createdBy
+      description
+      displayName
+      domains
+      entityRelationshipStateID
+      entityRelationshipStateName
+      entitySecurityQuestionnaireStatusID
+      entitySecurityQuestionnaireStatusName
+      entitySourceTypeID
+      entitySourceTypeName
+      entityTypeID
+      environmentID
+      environmentName
+      externalID
+      hasSoc2
+      id
+      internalNotes
+      internalOwner
+      internalOwnerGroupID
+      internalOwnerUserID
+      lastReviewedAt
+      linkedAssetIds
+      links
+      logoFileID
+      mfaEnforced
+      mfaSupported
+      name
+      nextReviewAt
+      observedAt
+      ownerID
+      providedServices
+      renewalRisk
+      reviewFrequency
+      reviewedBy
+      reviewedByGroupID
+      reviewedByUserID
+      riskRating
+      riskScore
+      riskScoreCoverage
+      scopeID
+      scopeName
+      soc2PeriodEnd
+      spendCurrency
+      ssoEnforced
+      status
+      statusPageURL
+      systemInternalID
+      systemOwned
+      tags
+      terminationNoticeDays
+      tier
+      updatedAt
+      updatedBy
+      vendorMetadata
+      logoFile {
+        id
+        name
+        metadata
+        presignedURL
+      }
+      files {
+        edges {
+          node {
+            id
+            name
+            metadata
+            presignedURL
+          }
+        }
+      }
+      notes {
+        edges {
+          node {
+            text
+            updatedAt
+            updatedBy
+          }
+        }
+      }
+      entityType {
+        id
+        name
+      }
+    }
+  }
 }

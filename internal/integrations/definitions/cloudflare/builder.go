@@ -102,7 +102,7 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 					IngestHandle:        DirectorySync{}.IngestHandle(),
 					SkipDefaultLookback: true,
 					RequiredPermissions: []string{"Account Settings Read", "Access: Users Read", "Access: Groups Read", "Access: Organizations, Identity Providers, and Groups Read"},
-					ReconcileSchedule:   gala.NewFullFetchSchedule(),
+					Schedule:            gala.NewFullFetchSchedule(),
 				},
 				{
 					Name:           findingsSyncOperation.Name(),
@@ -138,7 +138,7 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 					IngestHandle:        AssetCollect{}.IngestHandle(),
 					SkipDefaultLookback: true,
 					RequiredPermissions: []string{"Registrar Domains Read"},
-					ReconcileSchedule: gala.NewFullFetchSchedule(
+					Schedule: gala.NewFullFetchSchedule(
 						gala.WithMinInterval(assetSyncMinIntervalHours*time.Hour),
 						gala.WithMaxInterval(assetSyncMaxIntervalDays*assetSyncMinIntervalHours*time.Hour),
 					),
@@ -152,6 +152,7 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 					Policy:             types.ExecutionPolicy{SkipRunRecord: true},
 					Handle:             DomainScanSubmit{}.Handle(),
 					CustomerSelectable: lo.ToPtr(false),
+					Internal:           true,
 				},
 				{
 					Name:               DomainScanPollOp.Name(),
@@ -162,16 +163,18 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 					Policy:             types.ExecutionPolicy{SkipRunRecord: true},
 					Handle:             DomainScanPoll{}.Handle(),
 					CustomerSelectable: lo.ToPtr(false),
+					Internal:           true,
 				},
 				{
-					Name:               DomainScanGatherEnrichmentOp.Name(),
+					Name:               DomainScanEnrichmentOp.Name(),
 					Description:        "Gather company profile, compliance, and DNS vendor data for a domain",
-					Topic:              DefinitionID.OperationTopic(DomainScanGatherEnrichmentOp.Name()),
+					Topic:              DefinitionID.OperationTopic(DomainScanEnrichmentOp.Name()),
 					ClientRef:          cloudflareClient.ID(),
 					ConfigSchema:       domainScanGatherEnrichmentSchema,
 					Policy:             types.ExecutionPolicy{SkipRunRecord: true},
 					Handle:             DomainScanGatherEnrichment{}.Handle(),
 					CustomerSelectable: lo.ToPtr(false),
+					Internal:           true,
 				},
 				{
 					Name:               DomainScanBuildReportOp.Name(),
@@ -182,9 +185,34 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 					Policy:             types.ExecutionPolicy{SkipRunRecord: true},
 					Handle:             DomainScanBuildReport{}.Handle(),
 					CustomerSelectable: lo.ToPtr(false),
+					Internal:           true,
+				},
+				{
+					Name:                  DomainScanRequestOp.Name(),
+					Description:           "Request a domain scan for a single domain",
+					Topic:                 DefinitionID.OperationTopic(DomainScanRequestOp.Name()),
+					ConfigSchema:          domainScanRequestSchema,
+					Policy:                types.ExecutionPolicy{Inline: true, SkipRunRecord: true},
+					RateLimit:             &types.RateLimitPolicy{Window: time.Hour},
+					Handle:                DomainScanRequest{}.Handle(),
+					CustomerSelectable:    lo.ToPtr(false),
+					RequiresPaymentMethod: true,
+				},
+				{
+					Name:               DomainScanImportOp.Name(),
+					Description:        "Import a reviewer-accepted domain scan report into real records",
+					Topic:              DefinitionID.OperationTopic(DomainScanImportOp.Name()),
+					ConfigSchema:       domainScanImportSchema,
+					Policy:             types.ExecutionPolicy{SkipRunRecord: true},
+					Handle:             DomainScanImport{}.Handle(),
+					CustomerSelectable: lo.ToPtr(false),
+					Internal:           true,
 				},
 			},
 			Mappings: cloudflareMappings(),
+			GalaListeners: []types.GalaListenerRegistration{
+				domainScanListeners(),
+			},
 		}
 
 		if runtime.Provisioned() {

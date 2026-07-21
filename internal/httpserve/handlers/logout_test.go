@@ -12,7 +12,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/redis/go-redis/v9"
 	"github.com/stretchr/testify/assert"
 	echo "github.com/theopenlane/echox"
@@ -118,7 +117,7 @@ func TestLogoutHandler(t *testing.T) {
 	assert.False(t, revoked)
 
 	// perform the logout
-	err = h.LogoutHandler(ctx, &handlers.OpenAPIContext{Operation: &openapi3.Operation{}})
+	err = h.LogoutHandler(ctx)
 	assert.NoError(t, err)
 	assert.Equal(t, http.StatusOK, rec.Code)
 
@@ -169,7 +168,7 @@ func TestLogoutHandlerWithoutCredentials(t *testing.T) {
 	rec := httptest.NewRecorder()
 	ctx := echo.New().NewContext(req, rec)
 
-	err = h.LogoutHandler(ctx, &handlers.OpenAPIContext{Operation: &openapi3.Operation{}})
+	err = h.LogoutHandler(ctx)
 	assert.NoError(t, err)
 	assert.Equal(t, http.StatusOK, rec.Code)
 }

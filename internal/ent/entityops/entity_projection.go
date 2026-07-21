@@ -674,6 +674,7 @@ type EmailTemplateProjection struct {
 type EntityProjection struct {
 	// ID is the entity identifier, exposed to expressions as "id"
 	ID                                    string                 `json:"id,omitempty"`
+	Aliases                               []string               `json:"aliases,omitempty"`
 	AnnualSpend                           float64                `json:"annual_spend,omitempty"`
 	ApprovedForUse                        bool                   `json:"approved_for_use,omitempty"`
 	AutoRenews                            bool                   `json:"auto_renews,omitempty"`
@@ -1296,6 +1297,7 @@ type ScanProjection struct {
 	EnvironmentID              string                 `json:"environment_id,omitempty"`
 	EnvironmentName            string                 `json:"environment_name,omitempty"`
 	GeneratedByPlatformID      string                 `json:"generated_by_platform_id,omitempty"`
+	InternalNotes              string                 `json:"internal_notes,omitempty"`
 	Metadata                   map[string]interface{} `json:"metadata,omitempty"`
 	NextScanRunAt              models.DateTime        `json:"next_scan_run_at,omitempty"`
 	OwnerID                    string                 `json:"owner_id,omitempty"`
@@ -1311,6 +1313,8 @@ type ScanProjection struct {
 	ScopeID                    string                 `json:"scope_id,omitempty"`
 	ScopeName                  string                 `json:"scope_name,omitempty"`
 	Status                     enums.ScanStatus       `json:"status,omitempty"`
+	SystemInternalID           string                 `json:"system_internal_id,omitempty"`
+	SystemOwned                bool                   `json:"system_owned,omitempty"`
 	Tags                       []string               `json:"tags,omitempty"`
 	Target                     string                 `json:"target,omitempty"`
 	UpdatedAt                  time.Time              `json:"updated_at,omitempty"`

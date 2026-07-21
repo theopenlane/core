@@ -104,6 +104,7 @@ func (c Control) Edges() []ent.Edge {
 		defaultEdgeFromWithPagination(c, CheckResult{}),
 		defaultEdgeFromWithPagination(c, Program{}),
 		defaultEdgeFromWithPagination(c, Platform{}),
+		defaultEdgeFromWithPagination(c, Vulnerability{}),
 		defaultEdgeToWithPagination(c, Asset{}),
 		defaultEdgeToWithPagination(c, Entity{}),
 		defaultEdgeToWithPagination(c, IdentityHolder{}),
@@ -114,6 +115,7 @@ func (c Control) Edges() []ent.Edge {
 				entgql.RelayConnection(),
 				entgql.QueryField(),
 				entgql.MultiOrder(),
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 			).
 			Through("control_mappings", FindingControl.Type),
 		edgeToWithPagination(&edgeDefinition{

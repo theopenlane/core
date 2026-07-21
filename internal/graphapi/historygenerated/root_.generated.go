@@ -880,6 +880,7 @@ type ComplexityRoot struct {
 	}
 
 	EntityHistory struct {
+		Aliases                               func(childComplexity int) int
 		AnnualSpend                           func(childComplexity int) int
 		ApprovedForUse                        func(childComplexity int) int
 		AutoRenews                            func(childComplexity int) int
@@ -1095,6 +1096,7 @@ type ComplexityRoot struct {
 		ID                      func(childComplexity int) int
 		Metadata                func(childComplexity int) int
 		Operation               func(childComplexity int) int
+		OwnerID                 func(childComplexity int) int
 		Ref                     func(childComplexity int) int
 		Source                  func(childComplexity int) int
 		StandardID              func(childComplexity int) int
@@ -2380,6 +2382,7 @@ type ComplexityRoot struct {
 		GeneratedByPlatformID      func(childComplexity int) int
 		HistoryTime                func(childComplexity int) int
 		ID                         func(childComplexity int) int
+		InternalNotes              func(childComplexity int) int
 		Metadata                   func(childComplexity int) int
 		NextScanRunAt              func(childComplexity int) int
 		Operation                  func(childComplexity int) int
@@ -2397,6 +2400,8 @@ type ComplexityRoot struct {
 		ScopeID                    func(childComplexity int) int
 		ScopeName                  func(childComplexity int) int
 		Status                     func(childComplexity int) int
+		SystemInternalID           func(childComplexity int) int
+		SystemOwned                func(childComplexity int) int
 		Tags                       func(childComplexity int) int
 		Target                     func(childComplexity int) int
 		UpdatedAt                  func(childComplexity int) int
@@ -7580,6 +7585,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.EmailTemplateHistoryEdge.Node(childComplexity), true
 
+	case "EntityHistory.aliases":
+		if e.ComplexityRoot.EntityHistory.Aliases == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EntityHistory.Aliases(childComplexity), true
 	case "EntityHistory.annualSpend":
 		if e.ComplexityRoot.EntityHistory.AnnualSpend == nil {
 			break
@@ -8666,6 +8677,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.FindingControlHistory.Operation(childComplexity), true
+	case "FindingControlHistory.ownerID":
+		if e.ComplexityRoot.FindingControlHistory.OwnerID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.FindingControlHistory.OwnerID(childComplexity), true
 	case "FindingControlHistory.ref":
 		if e.ComplexityRoot.FindingControlHistory.Ref == nil {
 			break
@@ -15320,6 +15337,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ScanHistory.ID(childComplexity), true
+	case "ScanHistory.internalNotes":
+		if e.ComplexityRoot.ScanHistory.InternalNotes == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ScanHistory.InternalNotes(childComplexity), true
 	case "ScanHistory.metadata":
 		if e.ComplexityRoot.ScanHistory.Metadata == nil {
 			break
@@ -15422,6 +15445,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ScanHistory.Status(childComplexity), true
+	case "ScanHistory.systemInternalID":
+		if e.ComplexityRoot.ScanHistory.SystemInternalID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ScanHistory.SystemInternalID(childComplexity), true
+	case "ScanHistory.systemOwned":
+		if e.ComplexityRoot.ScanHistory.SystemOwned == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ScanHistory.SystemOwned(childComplexity), true
 	case "ScanHistory.tags":
 		if e.ComplexityRoot.ScanHistory.Tags == nil {
 			break
@@ -24630,7 +24665,7 @@ type CampaignTargetHistory implements Node {
   """
   the campaign this target belongs to
   """
-  campaignID: String!
+  campaignID: String
   """
   the contact associated with the campaign target
   """
@@ -24922,6 +24957,8 @@ input CampaignTargetHistoryWhereInput {
   campaignIDContains: String
   campaignIDHasPrefix: String
   campaignIDHasSuffix: String
+  campaignIDIsNil: Boolean
+  campaignIDNotNil: Boolean
   campaignIDEqualFold: String
   campaignIDContainsFold: String
   """
@@ -32378,6 +32415,10 @@ type EntityHistory implements Node {
   """
   domains: [String!]
   """
+  common matching names that should match with the entity
+  """
+  aliases: [String!]
+  """
   The type of the entity
   """
   entityTypeID: String
@@ -35212,6 +35253,10 @@ type FindingControlHistory implements Node {
   """
   updatedByImpersonator: String
   """
+  the organization id that owns the object
+  """
+  ownerID: String
+  """
   the id of the finding associated with the control
   """
   findingID: String!
@@ -35444,6 +35489,24 @@ input FindingControlHistoryWhereInput {
   updatedByImpersonatorNotNil: Boolean
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
   """
   finding_id field predicates
   """
@@ -53346,6 +53409,18 @@ type ScanHistory implements Node {
   """
   ownerID: String
   """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
   who reviewed the scan when no user or group is linked
   """
   reviewedBy: String
@@ -53430,7 +53505,7 @@ type ScanHistory implements Node {
   """
   discoveredVulnerabilityIds: [String!]
   """
-  the status of the scan, e.g., processing, completed, failed
+  the status of the scan, e.g., pending, processing, completed, failed
   """
   status: ScanHistoryScanStatus!
 }
@@ -53670,6 +53745,49 @@ input ScanHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
   """
   reviewed_by field predicates
   """
@@ -69274,6 +69392,8 @@ func (ec *executionContext) childFields_EntityHistory(ctx context.Context, field
 		return ec.fieldContext_EntityHistory_description(ctx, field)
 	case "domains":
 		return ec.fieldContext_EntityHistory_domains(ctx, field)
+	case "aliases":
+		return ec.fieldContext_EntityHistory_aliases(ctx, field)
 	case "entityTypeID":
 		return ec.fieldContext_EntityHistory_entityTypeID(ctx, field)
 	case "status":
@@ -69628,6 +69748,8 @@ func (ec *executionContext) childFields_FindingControlHistory(ctx context.Contex
 		return ec.fieldContext_FindingControlHistory_updatedBy(ctx, field)
 	case "updatedByImpersonator":
 		return ec.fieldContext_FindingControlHistory_updatedByImpersonator(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_FindingControlHistory_ownerID(ctx, field)
 	case "findingID":
 		return ec.fieldContext_FindingControlHistory_findingID(ctx, field)
 	case "controlID":
@@ -72036,6 +72158,12 @@ func (ec *executionContext) childFields_ScanHistory(ctx context.Context, field g
 		return ec.fieldContext_ScanHistory_tags(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_ScanHistory_ownerID(ctx, field)
+	case "systemOwned":
+		return ec.fieldContext_ScanHistory_systemOwned(ctx, field)
+	case "internalNotes":
+		return ec.fieldContext_ScanHistory_internalNotes(ctx, field)
+	case "systemInternalID":
+		return ec.fieldContext_ScanHistory_systemInternalID(ctx, field)
 	case "reviewedBy":
 		return ec.fieldContext_ScanHistory_reviewedBy(ctx, field)
 	case "reviewedByUserID":

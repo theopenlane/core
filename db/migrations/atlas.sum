@@ -1,4 +1,4 @@
-h1:wilvRXA22CMP1NnFmAlmjMIgsfWSmD5hhkzl+AXUzI8=
+h1:mbdPwsHjxlq/VCU1UOliCqxMGNmazi0nzZahkQHJMjI=
 20251229183159_init.sql h1:3uf/ftr28zW8YUD9qAaY2GESQHC7pYmkhlI6oDWUCKU=
 20251229183201_init_history.sql h1:1tFSeCDWvZgb2Ctw80C/s3tqVPNLADQw9fSDACzL8WA=
 20251231045221_workflow.sql h1:5bLq4cHh2kxUV7xajK5bq5McKKpr88HmufYauTdsgUw=
@@ -158,3 +158,11 @@ h1:wilvRXA22CMP1NnFmAlmjMIgsfWSmD5hhkzl+AXUzI8=
 20260713215408_drop_campaign_name_uniqueness.sql h1:FcPmIa7F+dGPesVCJgNLnhlTKRoKMPWZZ7mLJQUEi8A=
 20260713225819_discoveredvulnids.sql h1:XM9rcAwa2EdB/6IJsIep7KZgh00V/98eK0V4YFEof7Q=
 20260713225823_discoveredvulnids_history.sql h1:6eTTmGu2J1spPKmfQ4jVG23wZI5BrjOmY9u6w4a2K6k=
+20260715204512_entity_aliases.sql h1:zC+MMNkgQyvOuYgxTHNC/os+1WATHufkvr6FGZ0doTM=
+20260715204519_entity_aliases_history.sql h1:xs9M7CgSoLbnk8q7pSaXRKY7+sOIlspDaeLs2Fwi8ho=
+20260717174105_campaign_targets.sql h1:KkckC0Wf5Rtg/igjlKH7WpyirbhEq2cvVJdF6zrRKNI=
+20260717174109_campaign_targets_history.sql h1:WG37WkdOv4ofJwb1LonrUIJCFrNdxsoWSQ65iC8LkyY=
+20260721024528_m2m_edges.sql h1:Pl4vDp3/9sSJ/dRgOLLpqcXtojSYg+cbL9yKc2a0zAE=
+20260721024532_m2m_edges_history.sql h1:W6qItPr58mglJbMpA9sX3kZfo7j2NatsJbVxDFi54GA=
+20260721143210_scan_sytem_owned.sql h1:ikZRH+X+STVIk2rKjgozCA/NiKiK5z31nsDYjzZ3+5Y=
+20260721143215_scan_sytem_owned_history.sql h1:X3LkDmsR6YSM9jPiJEeWL8a0++yyrR/FvjZhIy9E7u4=

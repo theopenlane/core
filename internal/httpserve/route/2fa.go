@@ -15,7 +15,7 @@ func register2faHandler(router *Router) error {
 		Description: "Validate a user's TOTP code",
 		Tags:        []string{"tfa"},
 		OperationID: "TFAValidation",
-		Security:    handlers.AllSecurityRequirements(),
+		Security:    handlers.AuthenticatedSecurity,
 		Middlewares: *authenticatedEndpoint,
 		RateLimit:   authRateLimit,
 		Handler:     router.Handler.ValidateTOTP,

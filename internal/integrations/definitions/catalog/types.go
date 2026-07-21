@@ -12,7 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/definitions/oidclocal"
 	"github.com/theopenlane/core/internal/integrations/definitions/onedrive"
 	"github.com/theopenlane/core/internal/integrations/definitions/slack"
-	"github.com/theopenlane/core/internal/integrations/operations"
+	"github.com/theopenlane/core/internal/integrations/definitions/system"
 )
 
 // Config aggregates the definitions configuration structs (for when definitions require operator-held credentials or other config)
@@ -45,8 +45,8 @@ type Config struct {
 	OIDCLocal oidclocal.Config `json:"oidclocal" koanf:"oidclocal"`
 	// Email holds operator-level email integration configuration
 	Email email.RuntimeEmailConfig `json:"email" koanf:"email"`
-	// PaymentReminder configures the scheduled payment reminder listener
-	PaymentReminder operations.PaymentReminderConfig `json:"paymentreminder" koanf:"paymentreminder"`
-	// OrganizationDelete configures the scheduled organization deletion listener
-	OrganizationDelete operations.OrganizationDeleteConfig `json:"organizationdelete" koanf:"organizationdelete"`
+	// PaymentReminder configures the scheduled payment reminder sweep
+	PaymentReminder system.PaymentReminderConfig `json:"paymentreminder" koanf:"paymentreminder"`
+	// OrganizationDelete configures the scheduled organization deletion sweep
+	OrganizationDelete system.OrganizationDeleteConfig `json:"organizationdelete" koanf:"organizationdelete"`
 }

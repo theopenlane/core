@@ -27,7 +27,7 @@ Config contains the configuration for the core server
 |[**workflows**](#workflows)|`object`|||
 |[**cloudflare**](#cloudflare)|`object`|CloudflareConfig contains configuration for Cloudflare integration.<br/>||
 |[**shortlinks**](#shortlinks)|`object`|||
-|[**backfill**](#backfill)|`object`|Backfill configures one-time startup data backfill routines that populate fields introduced by recent migrations for organizations and memberships that pre-date them<br/>||
+|[**backfill**](#backfill)|`object`|Backfill configures one-time startup data backfill routines that populate fields introduced by recent<br/>||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -641,7 +641,7 @@ Auth settings including oauth2 providers and token configuration
 |[**token**](#authtoken)|`object`||yes|
 |[**supportedproviders**](#authsupportedproviders)|`string[]`||no|
 |[**providers**](#authproviders)|`object`|OauthProviderConfig represents the configuration for OAuth providers such as Github and Google<br/>|no|
-|[**supportaccess**](#authsupportaccess)|`object`|SupportAccessConfig contains configuration for the Openlane support access flow.<br/>|no|
+|[**supportaccess**](#authsupportaccess)|`object`|SupportAccessConfig contains configuration for the Openlane support access flow. The support<br/>|no|
 
 **Additional Properties:** not allowed  
 **Example**
@@ -896,7 +896,10 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 <a name="authsupportaccess"></a>
 ### auth\.supportaccess: object
 
-SupportAccessConfig contains configuration for the Openlane support access flow.
+SupportAccessConfig contains configuration for the Openlane support access flow. The support
+identity is virtual and authenticated entirely from these values, never from the database. This is
+the single place that holds the support identity, its shared password, and the second factor
+identity provider configuration, since both authentications must occur together
 
 
 **Properties**
@@ -1397,10 +1400,10 @@ ProviderConfig contains configuration for object storage providers
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|[**s3**](#objectstorageproviderss3)|`object`|ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future<br/>||
-|[**r2**](#objectstorageprovidersr2)|`object`|ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future<br/>||
-|[**disk**](#objectstorageprovidersdisk)|`object`|ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future<br/>||
-|[**database**](#objectstorageprovidersdatabase)|`object`|ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future<br/>||
+|[**s3**](#objectstorageproviderss3)|`object`|ProviderConfigs contains configuration for all storage providers<br/>||
+|[**r2**](#objectstorageprovidersr2)|`object`|ProviderConfigs contains configuration for all storage providers<br/>||
+|[**disk**](#objectstorageprovidersdisk)|`object`|ProviderConfigs contains configuration for all storage providers<br/>||
+|[**database**](#objectstorageprovidersdatabase)|`object`|ProviderConfigs contains configuration for all storage providers<br/>||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -1425,7 +1428,8 @@ ProviderConfig contains configuration for object storage providers
 <a name="objectstorageproviderss3"></a>
 #### objectstorage\.providers\.s3: object
 
-ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future
+ProviderConfigs contains configuration for all storage providers
+This is structured to allow easy extension for additional providers in the future
 
 
 **Properties**
@@ -1470,7 +1474,8 @@ ProviderCredentials contains credentials for a storage provider
 <a name="objectstorageprovidersr2"></a>
 #### objectstorage\.providers\.r2: object
 
-ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future
+ProviderConfigs contains configuration for all storage providers
+This is structured to allow easy extension for additional providers in the future
 
 
 **Properties**
@@ -1515,7 +1520,8 @@ ProviderCredentials contains credentials for a storage provider
 <a name="objectstorageprovidersdisk"></a>
 #### objectstorage\.providers\.disk: object
 
-ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future
+ProviderConfigs contains configuration for all storage providers
+This is structured to allow easy extension for additional providers in the future
 
 
 **Properties**
@@ -1560,7 +1566,8 @@ ProviderCredentials contains credentials for a storage provider
 <a name="objectstorageprovidersdatabase"></a>
 #### objectstorage\.providers\.database: object
 
-ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future
+ProviderConfigs contains configuration for all storage providers
+This is structured to allow easy extension for additional providers in the future
 
 
 **Properties**
@@ -2060,7 +2067,8 @@ CloudflareConfig contains configuration for Cloudflare integration.
 <a name="backfill"></a>
 ## backfill: object
 
-Backfill configures one-time startup data backfill routines that populate fields introduced by recent migrations for organizations and memberships that pre-date them
+Backfill configures one-time startup data backfill routines that populate fields introduced by recent
+migrations for organizations and memberships that pre-date them
 
 
 **Properties**

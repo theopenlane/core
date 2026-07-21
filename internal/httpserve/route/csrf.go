@@ -21,7 +21,7 @@ func registerCSRFHandler(router *Router) (err error) {
 		Security:    handlers.PublicSecurity,
 		Middlewares: *publicEndpoint,
 		RateLimit:   publicStaticRateLimit,
-		SimpleHandler: func(ctx echo.Context) error {
+		Handler: func(ctx echo.Context) error {
 			token := ctx.Get(middleware.DefaultCSRFConfig.ContextKey)
 
 			return ctx.JSON(http.StatusOK, echo.Map{

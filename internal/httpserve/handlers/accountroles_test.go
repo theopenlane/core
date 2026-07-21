@@ -18,9 +18,7 @@ func (suite *HandlerTestSuite) TestAccountRolesHandler() {
 	t := suite.T()
 
 	// add handler
-	// Create operation for AccountRolesHandler
-	operation := suite.createImpersonationOperation("AccountRolesHandler", "Get account roles")
-	suite.registerTestHandler("POST", "account/roles", operation, suite.h.AccountRolesHandler)
+	suite.registerTestHandler("POST", "account/roles", suite.h.AccountRolesHandler)
 
 	testCases := []struct {
 		name          string
@@ -88,7 +86,7 @@ func (suite *HandlerTestSuite) TestAccountRolesHandler() {
 			res := recorder.Result()
 			defer res.Body.Close()
 
-			var out *models.AccountRolesReply
+			var out *models.AccountRolesResponse
 
 			// parse request body
 			if err := json.NewDecoder(res.Body).Decode(&out); err != nil {

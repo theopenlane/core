@@ -18,15 +18,10 @@ import (
 var errInvalidTokenType = errors.New("invalid token type")
 
 // SSOTokenAuthorizeHandler marks a token as authorized for SSO for an organization
-func (h *Handler) SSOTokenAuthorizeHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	in, err := BindAndValidateQueryParamsWithResponse(ctx, openapi.Operation, apimodels.ExampleSSOTokenAuthorizeRequest, apimodels.SSOTokenAuthorizeReply{}, openapi.Registry)
+func (h *Handler) SSOTokenAuthorizeHandler(ctx echo.Context) error {
+	in, err := BindAndValidate[apimodels.SSOTokenAuthorizeRequest](ctx)
 	if err != nil {
-		return h.InvalidInput(ctx, err, openapi)
-	}
-
-	// Skip actual handler logic during OpenAPI registration
-	if isRegistrationContext(ctx) {
-		return nil
+		return h.InvalidInput(ctx, err)
 	}
 
 	reqCtx := privacy.DecisionContext(ctx.Request().Context(), privacy.Allow)
@@ -36,21 +31,21 @@ func (h *Handler) SSOTokenAuthorizeHandler(ctx echo.Context, openapi *OpenAPICon
 		if _, err := h.DBClient.APIToken.Get(reqCtx, in.TokenID); err != nil {
 			logx.FromContext(reqCtx).Error().Err(err).Msg("unable to find api token for SSO")
 
-			return h.BadRequest(ctx, err, openapi)
+			return h.BadRequest(ctx, err)
 		}
 	case "personal":
 		if _, err := h.DBClient.PersonalAccessToken.Get(reqCtx, in.TokenID); err != nil {
 			logx.FromContext(reqCtx).Error().Err(err).Msg("unable to find personal access token")
 
-			return h.BadRequest(ctx, err, openapi)
+			return h.BadRequest(ctx, err)
 		}
 	default:
-		return h.BadRequest(ctx, errInvalidTokenType, openapi)
+		return h.BadRequest(ctx, errInvalidTokenType)
 	}
 
 	authURL, err := h.generateSSOAuthURL(ctx, in.OrganizationID)
 	if err != nil {
-		return h.BadRequest(ctx, err, openapi)
+		return h.BadRequest(ctx, err)
 	}
 
 	// set token-specific cookies for the token SSO flow
@@ -62,21 +57,21 @@ func (h *Handler) SSOTokenAuthorizeHandler(ctx echo.Context, openapi *OpenAPICon
 		authenticatedUserSSOCookieName: authenticatedUserSSOCookieValue,
 	})
 
-	out := apimodels.SSOLoginReply{
+	out := apimodels.SSOLoginResponse{
 		Reply:       rout.Reply{Success: true},
 		RedirectURI: authURL,
 	}
 
-	return h.Success(ctx, out, openapi)
+	return h.Success(ctx, out)
 }
 
 // SSOTokenCallbackHandler completes the SSO authorization flow for a token.
 // It validates the state and nonce, exchanges the code if required and updates
 // the token's SSO authorizations for the organization.
-func (h *Handler) SSOTokenCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	in, err := BindAndValidateQueryParamsWithResponse(ctx, openapi.Operation, apimodels.ExampleSSOTokenCallbackRequest, apimodels.SSOTokenAuthorizeReply{}, openapi.Registry)
+func (h *Handler) SSOTokenCallbackHandler(ctx echo.Context) error {
+	in, err := BindAndValidate[apimodels.SSOTokenCallbackRequest](ctx)
 	if err != nil {
-		return h.InvalidInput(ctx, err, openapi)
+		return h.InvalidInput(ctx, err)
 	}
 
 	req := ctx.Request()
@@ -85,37 +80,37 @@ func (h *Handler) SSOTokenCallbackHandler(ctx echo.Context, openapi *OpenAPICont
 	// read cookies set during the authorize step
 	tokenIDCookie, err := sessions.GetCookie(req, "token_id")
 	if err != nil {
-		return h.BadRequest(ctx, ErrMissingField, openapi)
+		return h.BadRequest(ctx, ErrMissingField)
 	}
 
 	tokenTypeCookie, err := sessions.GetCookie(req, "token_type")
 	if err != nil {
-		return h.BadRequest(ctx, ErrMissingField, openapi)
+		return h.BadRequest(ctx, ErrMissingField)
 	}
 
 	orgCookie, err := sessions.GetCookie(req, "organization_id")
 	if err != nil {
-		return h.BadRequest(ctx, ErrMissingField, openapi)
+		return h.BadRequest(ctx, ErrMissingField)
 	}
 
 	stateCookie, err := sessions.GetCookie(req, "state")
 	if err != nil || in.State != stateCookie.Value {
-		return h.BadRequest(ctx, ErrStateMismatch, openapi)
+		return h.BadRequest(ctx, ErrStateMismatch)
 	}
 
 	nonceCookie, err := sessions.GetCookie(req, "nonce")
 	if err != nil {
-		return h.BadRequest(ctx, ErrNonceMissing, openapi)
+		return h.BadRequest(ctx, ErrNonceMissing)
 	}
 
 	rpCfg, err := h.oidcConfig(reqCtx, orgCookie.Value)
 	if err != nil {
-		return h.BadRequest(ctx, err, openapi)
+		return h.BadRequest(ctx, err)
 	}
 
 	nonceCtx := ssoNonceContextKey.Set(reqCtx, nonce(nonceCookie.Value))
 	if _, err = rp.CodeExchange[*oidc.IDTokenClaims](nonceCtx, in.Code, rpCfg); err != nil {
-		return h.BadRequest(ctx, err, openapi)
+		return h.BadRequest(ctx, err)
 	}
 
 	allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
@@ -125,7 +120,7 @@ func (h *Handler) SSOTokenCallbackHandler(ctx echo.Context, openapi *OpenAPICont
 	case "api":
 		tkn, err := h.DBClient.APIToken.Get(allowCtx, tokenIDCookie.Value)
 		if err != nil {
-			return h.BadRequest(ctx, err, openapi)
+			return h.BadRequest(ctx, err)
 		}
 
 		if tkn.SSOAuthorizations == nil {
@@ -138,12 +133,12 @@ func (h *Handler) SSOTokenCallbackHandler(ctx echo.Context, openapi *OpenAPICont
 		if err != nil {
 			logx.FromContext(reqCtx).Error().Err(err).Msg("error updating api token")
 
-			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+			return h.InternalServerError(ctx, ErrProcessingRequest)
 		}
 	case "personal":
 		tkn, err := h.DBClient.PersonalAccessToken.Get(allowCtx, tokenIDCookie.Value)
 		if err != nil {
-			return h.BadRequest(ctx, err, openapi)
+			return h.BadRequest(ctx, err)
 		}
 
 		if tkn.SSOAuthorizations == nil {
@@ -156,21 +151,21 @@ func (h *Handler) SSOTokenCallbackHandler(ctx echo.Context, openapi *OpenAPICont
 		if err != nil {
 			logx.FromContext(reqCtx).Error().Err(err).Msg("error updating personal access token")
 
-			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+			return h.InternalServerError(ctx, ErrProcessingRequest)
 		}
 	default:
-		return h.BadRequest(ctx, errInvalidTokenType, openapi)
+		return h.BadRequest(ctx, errInvalidTokenType)
 	}
 
 	// cleanup cookies
 	h.clearAuthFlowCookies(ctx.Response().Writer, "token_id", "token_type", "organization_id", "state", "nonce")
 
-	out := apimodels.SSOTokenAuthorizeReply{
+	out := apimodels.SSOTokenAuthorizeResponse{
 		Reply:          rout.Reply{Success: true},
 		OrganizationID: orgCookie.Value,
 		TokenID:        tokenIDCookie.Value,
 		Message:        "authorized",
 	}
 
-	return h.Success(ctx, out, openapi)
+	return h.Success(ctx, out)
 }

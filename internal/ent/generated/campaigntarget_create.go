@@ -161,6 +161,14 @@ func (_c *CampaignTargetCreate) SetCampaignID(v string) *CampaignTargetCreate {
 	return _c
 }
 
+// SetNillableCampaignID sets the "campaign_id" field if the given value is not nil.
+func (_c *CampaignTargetCreate) SetNillableCampaignID(v *string) *CampaignTargetCreate {
+	if v != nil {
+		_c.SetCampaignID(*v)
+	}
+	return _c
+}
+
 // SetContactID sets the "contact_id" field.
 func (_c *CampaignTargetCreate) SetContactID(v string) *CampaignTargetCreate {
 	_c.mutation.SetContactID(v)
@@ -420,9 +428,6 @@ func (_c *CampaignTargetCreate) check() error {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "CampaignTarget.owner_id": %w`, err)}
 		}
 	}
-	if _, ok := _c.mutation.CampaignID(); !ok {
-		return &ValidationError{Name: "campaign_id", err: errors.New(`generated: missing required field "CampaignTarget.campaign_id"`)}
-	}
 	if v, ok := _c.mutation.CampaignID(); ok {
 		if err := campaigntarget.CampaignIDValidator(v); err != nil {
 			return &ValidationError{Name: "campaign_id", err: fmt.Errorf(`generated: validator failed for field "CampaignTarget.campaign_id": %w`, err)}
@@ -443,9 +448,6 @@ func (_c *CampaignTargetCreate) check() error {
 		if err := campaigntarget.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "CampaignTarget.status": %w`, err)}
 		}
-	}
-	if len(_c.mutation.CampaignIDs()) == 0 {
-		return &ValidationError{Name: "campaign", err: errors.New(`generated: missing required edge "CampaignTarget.campaign"`)}
 	}
 	return nil
 }

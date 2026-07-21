@@ -61,8 +61,8 @@ func newSSOConfig(opts ...SSOOption) *ssoConfig {
 }
 
 // fetchSSOStatus queries the webfinger endpoint for SSO enforcement status
-func fetchSSOStatus(ctx context.Context, client *openlane.Client, email string) (models.SSOStatusReply, error) {
-	var out models.SSOStatusReply
+func fetchSSOStatus(ctx context.Context, client *openlane.Client, email string) (models.SSOStatusResponse, error) {
+	var out models.SSOStatusResponse
 	resp, err := client.HTTPSlingRequester().ReceiveWithContext(ctx, &out,
 		httpsling.Get("/.well-known/webfinger"),
 		httpsling.QueryParam("resource", fmt.Sprintf("acct:%s", email)),

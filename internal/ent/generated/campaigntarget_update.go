@@ -13,7 +13,6 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/group"
@@ -148,20 +147,6 @@ func (_u *CampaignTargetUpdate) SetNillableWorkflowEligibleMarker(v *bool) *Camp
 // ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
 func (_u *CampaignTargetUpdate) ClearWorkflowEligibleMarker() *CampaignTargetUpdate {
 	_u.mutation.ClearWorkflowEligibleMarker()
-	return _u
-}
-
-// SetCampaignID sets the "campaign_id" field.
-func (_u *CampaignTargetUpdate) SetCampaignID(v string) *CampaignTargetUpdate {
-	_u.mutation.SetCampaignID(v)
-	return _u
-}
-
-// SetNillableCampaignID sets the "campaign_id" field if the given value is not nil.
-func (_u *CampaignTargetUpdate) SetNillableCampaignID(v *string) *CampaignTargetUpdate {
-	if v != nil {
-		_u.SetCampaignID(*v)
-	}
 	return _u
 }
 
@@ -345,11 +330,6 @@ func (_u *CampaignTargetUpdate) ClearMetadata() *CampaignTargetUpdate {
 	return _u
 }
 
-// SetCampaign sets the "campaign" edge to the Campaign entity.
-func (_u *CampaignTargetUpdate) SetCampaign(v *Campaign) *CampaignTargetUpdate {
-	return _u.SetCampaignID(v.ID)
-}
-
 // SetContact sets the "contact" edge to the Contact entity.
 func (_u *CampaignTargetUpdate) SetContact(v *Contact) *CampaignTargetUpdate {
 	return _u.SetContactID(v.ID)
@@ -388,12 +368,6 @@ func (_u *CampaignTargetUpdate) AddWorkflowObjectRefs(v ...*WorkflowObjectRef) *
 // Mutation returns the CampaignTargetMutation object of the builder.
 func (_u *CampaignTargetUpdate) Mutation() *CampaignTargetMutation {
 	return _u.mutation
-}
-
-// ClearCampaign clears the "campaign" edge to the Campaign entity.
-func (_u *CampaignTargetUpdate) ClearCampaign() *CampaignTargetUpdate {
-	_u.mutation.ClearCampaign()
-	return _u
 }
 
 // ClearContact clears the "contact" edge to the Contact entity.
@@ -485,11 +459,6 @@ func (_u *CampaignTargetUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *CampaignTargetUpdate) check() error {
-	if v, ok := _u.mutation.CampaignID(); ok {
-		if err := campaigntarget.CampaignIDValidator(v); err != nil {
-			return &ValidationError{Name: "campaign_id", err: fmt.Errorf(`generated: validator failed for field "CampaignTarget.campaign_id": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.Email(); ok {
 		if err := campaigntarget.EmailValidator(v); err != nil {
 			return &ValidationError{Name: "email", err: fmt.Errorf(`generated: validator failed for field "CampaignTarget.email": %w`, err)}
@@ -499,9 +468,6 @@ func (_u *CampaignTargetUpdate) check() error {
 		if err := campaigntarget.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "CampaignTarget.status": %w`, err)}
 		}
-	}
-	if _u.mutation.CampaignCleared() && len(_u.mutation.CampaignIDs()) > 0 {
-		return errors.New(`generated: clearing a required unique edge "CampaignTarget.campaign"`)
 	}
 	return nil
 }
@@ -595,37 +561,6 @@ func (_u *CampaignTargetUpdate) sqlSave(ctx context.Context) (_node int, err err
 	}
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(campaigntarget.FieldMetadata, field.TypeJSON)
-	}
-	if _u.mutation.CampaignCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   campaigntarget.CampaignTable,
-			Columns: []string{campaigntarget.CampaignColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.CampaignTarget
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.CampaignIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   campaigntarget.CampaignTable,
-			Columns: []string{campaigntarget.CampaignColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.CampaignTarget
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.ContactCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -935,20 +870,6 @@ func (_u *CampaignTargetUpdateOne) ClearWorkflowEligibleMarker() *CampaignTarget
 	return _u
 }
 
-// SetCampaignID sets the "campaign_id" field.
-func (_u *CampaignTargetUpdateOne) SetCampaignID(v string) *CampaignTargetUpdateOne {
-	_u.mutation.SetCampaignID(v)
-	return _u
-}
-
-// SetNillableCampaignID sets the "campaign_id" field if the given value is not nil.
-func (_u *CampaignTargetUpdateOne) SetNillableCampaignID(v *string) *CampaignTargetUpdateOne {
-	if v != nil {
-		_u.SetCampaignID(*v)
-	}
-	return _u
-}
-
 // SetContactID sets the "contact_id" field.
 func (_u *CampaignTargetUpdateOne) SetContactID(v string) *CampaignTargetUpdateOne {
 	_u.mutation.SetContactID(v)
@@ -1129,11 +1050,6 @@ func (_u *CampaignTargetUpdateOne) ClearMetadata() *CampaignTargetUpdateOne {
 	return _u
 }
 
-// SetCampaign sets the "campaign" edge to the Campaign entity.
-func (_u *CampaignTargetUpdateOne) SetCampaign(v *Campaign) *CampaignTargetUpdateOne {
-	return _u.SetCampaignID(v.ID)
-}
-
 // SetContact sets the "contact" edge to the Contact entity.
 func (_u *CampaignTargetUpdateOne) SetContact(v *Contact) *CampaignTargetUpdateOne {
 	return _u.SetContactID(v.ID)
@@ -1172,12 +1088,6 @@ func (_u *CampaignTargetUpdateOne) AddWorkflowObjectRefs(v ...*WorkflowObjectRef
 // Mutation returns the CampaignTargetMutation object of the builder.
 func (_u *CampaignTargetUpdateOne) Mutation() *CampaignTargetMutation {
 	return _u.mutation
-}
-
-// ClearCampaign clears the "campaign" edge to the Campaign entity.
-func (_u *CampaignTargetUpdateOne) ClearCampaign() *CampaignTargetUpdateOne {
-	_u.mutation.ClearCampaign()
-	return _u
 }
 
 // ClearContact clears the "contact" edge to the Contact entity.
@@ -1282,11 +1192,6 @@ func (_u *CampaignTargetUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *CampaignTargetUpdateOne) check() error {
-	if v, ok := _u.mutation.CampaignID(); ok {
-		if err := campaigntarget.CampaignIDValidator(v); err != nil {
-			return &ValidationError{Name: "campaign_id", err: fmt.Errorf(`generated: validator failed for field "CampaignTarget.campaign_id": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.Email(); ok {
 		if err := campaigntarget.EmailValidator(v); err != nil {
 			return &ValidationError{Name: "email", err: fmt.Errorf(`generated: validator failed for field "CampaignTarget.email": %w`, err)}
@@ -1296,9 +1201,6 @@ func (_u *CampaignTargetUpdateOne) check() error {
 		if err := campaigntarget.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`generated: validator failed for field "CampaignTarget.status": %w`, err)}
 		}
-	}
-	if _u.mutation.CampaignCleared() && len(_u.mutation.CampaignIDs()) > 0 {
-		return errors.New(`generated: clearing a required unique edge "CampaignTarget.campaign"`)
 	}
 	return nil
 }
@@ -1409,37 +1311,6 @@ func (_u *CampaignTargetUpdateOne) sqlSave(ctx context.Context) (_node *Campaign
 	}
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(campaigntarget.FieldMetadata, field.TypeJSON)
-	}
-	if _u.mutation.CampaignCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   campaigntarget.CampaignTable,
-			Columns: []string{campaigntarget.CampaignColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.CampaignTarget
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.CampaignIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   campaigntarget.CampaignTable,
-			Columns: []string{campaigntarget.CampaignColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.CampaignTarget
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if _u.mutation.ContactCleared() {
 		edge := &sqlgraph.EdgeSpec{

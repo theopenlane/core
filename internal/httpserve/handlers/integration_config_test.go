@@ -12,7 +12,6 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/theopenlane/echox/middleware/echocontext"
@@ -44,9 +43,7 @@ var (
 func (suite *HandlerTestSuite) TestConfigureIntegrationProviderSuccess() {
 	t := suite.T()
 
-	op := openapi3.NewOperation()
-	op.OperationID = "ConfigureIntegrationProviderSuccess"
-	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", op, suite.h.ConfigureIntegrationProvider)
+	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", suite.h.ConfigureIntegrationProvider)
 
 	restore := suite.withDefinitionRuntime(t, []registry.Builder{configTestDefinitionBuilder(configTestProviderID, false)})
 	defer restore()
@@ -92,9 +89,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderSuccess() {
 func (suite *HandlerTestSuite) TestConfigureIntegrationProviderReturnsSCIMEndpointDetails() {
 	t := suite.T()
 
-	op := openapi3.NewOperation()
-	op.OperationID = "ConfigureIntegrationProviderSCIM"
-	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", op, suite.h.ConfigureIntegrationProvider)
+	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", suite.h.ConfigureIntegrationProvider)
 
 	restore := suite.withDefinitionRuntime(t, []registry.Builder{definitionscim.Builder()})
 	defer restore()
@@ -146,9 +141,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderReturnsSCIMEndpoi
 func (suite *HandlerTestSuite) TestConfigureIntegrationProviderAcceptsDefinitionID() {
 	t := suite.T()
 
-	op := openapi3.NewOperation()
-	op.OperationID = "ConfigureIntegrationProviderByID"
-	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", op, suite.h.ConfigureIntegrationProvider)
+	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", suite.h.ConfigureIntegrationProvider)
 
 	restore := suite.withDefinitionRuntime(t, []registry.Builder{configTestDefinitionBuilder(configTestProviderID, false)})
 	defer restore()
@@ -173,9 +166,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderAcceptsDefinition
 func (suite *HandlerTestSuite) TestConfigureIntegrationProviderInvalidPayload() {
 	t := suite.T()
 
-	op := openapi3.NewOperation()
-	op.OperationID = "ConfigureIntegrationProviderInvalid"
-	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", op, suite.h.ConfigureIntegrationProvider)
+	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", suite.h.ConfigureIntegrationProvider)
 
 	restore := suite.withDefinitionRuntime(t, []registry.Builder{configTestDefinitionBuilder(configTestProviderID, false)})
 	defer restore()
@@ -200,9 +191,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderInvalidPayload() 
 func (suite *HandlerTestSuite) TestConfigureIntegrationProviderRejectsNonObjectPayload() {
 	t := suite.T()
 
-	op := openapi3.NewOperation()
-	op.OperationID = "ConfigureIntegrationProviderRejectsNonObjectPayload"
-	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", op, suite.h.ConfigureIntegrationProvider)
+	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", suite.h.ConfigureIntegrationProvider)
 
 	restore := suite.withDefinitionRuntime(t, []registry.Builder{configTestDefinitionBuilder(configTestProviderID, false)})
 	defer restore()
@@ -227,9 +216,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderRejectsNonObjectP
 func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUnauthorized() {
 	t := suite.T()
 
-	op := openapi3.NewOperation()
-	op.OperationID = "ConfigureIntegrationProviderUnauthorized"
-	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", op, suite.h.ConfigureIntegrationProvider)
+	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", suite.h.ConfigureIntegrationProvider)
 
 	restore := suite.withDefinitionRuntime(t, []registry.Builder{configTestDefinitionBuilder(configTestProviderID, false)})
 	defer restore()
@@ -251,9 +238,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUnauthorized() {
 func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExisting() {
 	t := suite.T()
 
-	op := openapi3.NewOperation()
-	op.OperationID = "ConfigureIntegrationProviderUpdate"
-	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", op, suite.h.ConfigureIntegrationProvider)
+	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", suite.h.ConfigureIntegrationProvider)
 
 	restore := suite.withDefinitionRuntime(t, []registry.Builder{configTestDefinitionBuilder(configTestProviderID, false)})
 	defer restore()
@@ -289,9 +274,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExisting() 
 func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExistingUserInputOnly() {
 	t := suite.T()
 
-	op := openapi3.NewOperation()
-	op.OperationID = "ConfigureIntegrationProviderUpdateUserInputOnly"
-	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", op, suite.h.ConfigureIntegrationProvider)
+	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", suite.h.ConfigureIntegrationProvider)
 
 	restore := suite.withDefinitionRuntime(t, []registry.Builder{configTestDefinitionBuilder(configTestProviderID, false)})
 	defer restore()
@@ -330,9 +313,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExistingUse
 func (suite *HandlerTestSuite) TestConfigureIntegrationProviderUpdateExistingUserInputOnlyWithEmptyObjectBody() {
 	t := suite.T()
 
-	op := openapi3.NewOperation()
-	op.OperationID = "ConfigureIntegrationProviderUpdateUserInputOnlyEmptyObjectBody"
-	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", op, suite.h.ConfigureIntegrationProvider)
+	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", suite.h.ConfigureIntegrationProvider)
 
 	restore := suite.withDefinitionRuntime(t, []registry.Builder{configTestDefinitionBuilder(configTestProviderID, false)})
 	defer restore()
@@ -375,9 +356,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderAllowsUserInputOn
 
 	const definitionID = "def_01K0TESTUIONLY000000000001"
 
-	op := openapi3.NewOperation()
-	op.OperationID = "ConfigureIntegrationProviderUserInputOnly"
-	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", op, suite.h.ConfigureIntegrationProvider)
+	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", suite.h.ConfigureIntegrationProvider)
 
 	restore := suite.withDefinitionRuntime(t, []registry.Builder{userInputOnlyTestDefinitionBuilder(definitionID)})
 	defer restore()
@@ -413,9 +392,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderAllowsUserInputOn
 func (suite *HandlerTestSuite) TestConfigureIntegrationProviderRejectsInstallationDefinitionMismatch() {
 	t := suite.T()
 
-	op := openapi3.NewOperation()
-	op.OperationID = "ConfigureIntegrationProviderMismatch"
-	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", op, suite.h.ConfigureIntegrationProvider)
+	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", suite.h.ConfigureIntegrationProvider)
 
 	restore := suite.withDefinitionRuntime(t, []registry.Builder{
 		configTestDefinitionBuilder(configTestProviderID, false),
@@ -450,9 +427,7 @@ func (suite *HandlerTestSuite) TestConfigureIntegrationProviderRejectsInstallati
 func (suite *HandlerTestSuite) TestConfigureIntegrationProviderHealthFailureDoesNotPersistCredential() {
 	t := suite.T()
 
-	op := openapi3.NewOperation()
-	op.OperationID = "ConfigureIntegrationProviderHealthFailure"
-	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", op, suite.h.ConfigureIntegrationProvider)
+	suite.registerRouteOnce(http.MethodPost, "/v1/integrations/:definitionID/config", suite.h.ConfigureIntegrationProvider)
 
 	restore := suite.withDefinitionRuntime(t, []registry.Builder{configTestDefinitionBuilder(configTestFailHealthProviderID, true)})
 	defer restore()

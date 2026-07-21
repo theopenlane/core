@@ -82,7 +82,7 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:          "scan",
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
-	HasSystemOwnedField: false,
+	HasSystemOwnedField: true,
 }, "reviews": {
 	ObjectType:          "review",
 	SkipEditCheck:       false,
@@ -280,7 +280,7 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:          "scan",
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
-	HasSystemOwnedField: false,
+	HasSystemOwnedField: true,
 }, "entities": {
 	ObjectType:          "entity",
 	SkipEditCheck:       false,
@@ -318,6 +318,26 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	HasSystemOwnedField: true,
 }, "internal_policies": {
 	ObjectType:          "internal_policy",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: true,
+}, "findings": {
+	ObjectType:          "finding",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: true,
+}, "vulnerabilities": {
+	ObjectType:          "vulnerability",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: true,
+}, "reviews": {
+	ObjectType:          "review",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: true,
+}, "remediations": {
+	ObjectType:          "remediation",
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: true,
@@ -620,7 +640,7 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:          "scan",
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
-	HasSystemOwnedField: false,
+	HasSystemOwnedField: true,
 }, "owner": {
 	ObjectType:          "owner",
 	SkipEditCheck:       true,
@@ -671,6 +691,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
+}, "vulnerabilities": {
+	ObjectType:          "vulnerability",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: true,
 }, "assets": {
 	ObjectType:          "asset",
 	SkipEditCheck:       false,
@@ -1339,7 +1364,7 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:          "scan",
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
-	HasSystemOwnedField: false,
+	HasSystemOwnedField: true,
 }, "campaigns": {
 	ObjectType:          "campaign",
 	SkipEditCheck:       false,
@@ -1387,6 +1412,26 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	HasSystemOwnedField: true,
 }, "subcontrols": {
 	ObjectType:          "subcontrol",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: true,
+}, "findings": {
+	ObjectType:          "finding",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: true,
+}, "vulnerabilities": {
+	ObjectType:          "vulnerability",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: true,
+}, "reviews": {
+	ObjectType:          "review",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: true,
+}, "remediations": {
+	ObjectType:          "remediation",
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: true,
@@ -1552,7 +1597,7 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:          "scan",
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
-	HasSystemOwnedField: false,
+	HasSystemOwnedField: true,
 }, "comments": {
 	ObjectType:          "note",
 	SkipEditCheck:       false,
@@ -1654,7 +1699,7 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:          "scan",
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
-	HasSystemOwnedField: false,
+	HasSystemOwnedField: true,
 }, "events": {
 	ObjectType:          "event",
 	SkipEditCheck:       false,
@@ -1749,8 +1794,8 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	HasSystemOwnedField: true,
 }, "vulnerabilities": {
 	ObjectType:          "vulnerability",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
 	HasSystemOwnedField: true,
 }, "action_plans": {
 	ObjectType:          "action_plan",
@@ -1764,34 +1809,34 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	HasSystemOwnedField: true,
 }, "subcontrols": {
 	ObjectType:          "subcontrol",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
 	HasSystemOwnedField: true,
 }, "risks": {
 	ObjectType:          "risk",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
 	HasSystemOwnedField: false,
 }, "programs": {
 	ObjectType:          "program",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
 	HasSystemOwnedField: false,
 }, "assets": {
 	ObjectType:          "asset",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
 	HasSystemOwnedField: true,
 }, "entities": {
 	ObjectType:          "entity",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
 	HasSystemOwnedField: true,
 }, "scans": {
 	ObjectType:          "scan",
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
-	HasSystemOwnedField: false,
+	HasSystemOwnedField: true,
 }, "tasks": {
 	ObjectType:          "task",
 	SkipEditCheck:       false,
@@ -1843,20 +1888,25 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess:     true,
 	HasSystemOwnedField: true,
 },
-}, "finding_control": {"finding": {
-	ObjectType:          "finding",
+}, "finding_control": {"owner": {
+	ObjectType:          "owner",
 	SkipEditCheck:       true,
 	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+}, "finding": {
+	ObjectType:          "finding",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
 	HasSystemOwnedField: true,
 }, "control": {
 	ObjectType:          "control",
 	SkipEditCheck:       true,
-	CheckViewAccess:     false,
+	CheckViewAccess:     true,
 	HasSystemOwnedField: true,
 }, "standard": {
 	ObjectType:          "standard",
 	SkipEditCheck:       true,
-	CheckViewAccess:     false,
+	CheckViewAccess:     true,
 	HasSystemOwnedField: true,
 },
 }, "group": {"owner": {
@@ -2028,12 +2078,12 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:          "scan",
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
-	HasSystemOwnedField: false,
+	HasSystemOwnedField: true,
 }, "scan_blocked_groups": {
 	ObjectType:          "scan",
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
-	HasSystemOwnedField: false,
+	HasSystemOwnedField: true,
 }, "entity_editors": {
 	ObjectType:          "entity",
 	SkipEditCheck:       false,
@@ -3727,7 +3777,7 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:          "scan",
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
-	HasSystemOwnedField: false,
+	HasSystemOwnedField: true,
 }, "sla_definitions": {
 	ObjectType:          "sla_definition",
 	SkipEditCheck:       false,
@@ -3783,6 +3833,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: true,
+}, "finding_controls": {
+	ObjectType:          "finding_control",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
 }, "reviews": {
 	ObjectType:          "review",
 	SkipEditCheck:       false,
@@ -4061,7 +4116,7 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:          "scan",
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
-	HasSystemOwnedField: false,
+	HasSystemOwnedField: true,
 }, "tasks": {
 	ObjectType:          "task",
 	SkipEditCheck:       false,
@@ -4329,6 +4384,26 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
+}, "findings": {
+	ObjectType:          "finding",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: true,
+}, "vulnerabilities": {
+	ObjectType:          "vulnerability",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: true,
+}, "reviews": {
+	ObjectType:          "review",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: true,
+}, "remediations": {
+	ObjectType:          "remediation",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: true,
 }, "users": {
 	ObjectType:          "user",
 	SkipEditCheck:       false,
@@ -4395,7 +4470,7 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:          "scan",
 	SkipEditCheck:       true,
 	CheckViewAccess:     true,
-	HasSystemOwnedField: false,
+	HasSystemOwnedField: true,
 }, "findings": {
 	ObjectType:          "finding",
 	SkipEditCheck:       true,
@@ -4667,7 +4742,7 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:          "scan",
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
-	HasSystemOwnedField: false,
+	HasSystemOwnedField: true,
 }, "stakeholder": {
 	ObjectType:          "group",
 	SkipEditCheck:       true,
@@ -4690,13 +4765,23 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	HasSystemOwnedField: false,
 }, "reviews": {
 	ObjectType:          "review",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
 	HasSystemOwnedField: true,
 }, "remediations": {
 	ObjectType:          "remediation",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: true,
+}, "vulnerabilities": {
+	ObjectType:          "vulnerability",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: true,
+}, "findings": {
+	ObjectType:          "finding",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
 	HasSystemOwnedField: true,
 }, "workflow_object_refs": {
 	ObjectType:          "workflow_object_ref",
@@ -4993,7 +5078,7 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:          "scan",
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
-	HasSystemOwnedField: false,
+	HasSystemOwnedField: true,
 }, "owner": {
 	ObjectType:          "owner",
 	SkipEditCheck:       true,
@@ -5049,6 +5134,16 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
+}, "vulnerabilities": {
+	ObjectType:          "vulnerability",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: true,
+}, "findings": {
+	ObjectType:          "finding",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: true,
 },
 }, "subprocessor": {"owner": {
 	ObjectType:          "owner",
@@ -5224,7 +5319,7 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:          "scan",
 	SkipEditCheck:       true,
 	CheckViewAccess:     true,
-	HasSystemOwnedField: false,
+	HasSystemOwnedField: true,
 }, "identity_holders": {
 	ObjectType:          "identity_holder",
 	SkipEditCheck:       true,
@@ -5882,8 +5977,8 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	HasSystemOwnedField: true,
 }, "findings": {
 	ObjectType:          "finding",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
 	HasSystemOwnedField: true,
 }, "action_plans": {
 	ObjectType:          "action_plan",
@@ -5892,39 +5987,39 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	HasSystemOwnedField: true,
 }, "controls": {
 	ObjectType:          "control",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
 	HasSystemOwnedField: true,
 }, "subcontrols": {
 	ObjectType:          "subcontrol",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
 	HasSystemOwnedField: true,
 }, "risks": {
 	ObjectType:          "risk",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
 	HasSystemOwnedField: false,
 }, "programs": {
 	ObjectType:          "program",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
 	HasSystemOwnedField: false,
 }, "assets": {
 	ObjectType:          "asset",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
 	HasSystemOwnedField: true,
 }, "entities": {
 	ObjectType:          "entity",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
 	HasSystemOwnedField: true,
 }, "scans": {
 	ObjectType:          "scan",
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
-	HasSystemOwnedField: false,
+	HasSystemOwnedField: true,
 }, "tasks": {
 	ObjectType:          "task",
 	SkipEditCheck:       false,
@@ -5932,13 +6027,13 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	HasSystemOwnedField: false,
 }, "remediations": {
 	ObjectType:          "remediation",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
 	HasSystemOwnedField: true,
 }, "reviews": {
 	ObjectType:          "review",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
 	HasSystemOwnedField: true,
 }, "comments": {
 	ObjectType:          "note",

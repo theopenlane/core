@@ -2536,53 +2536,53 @@ func init() {
 	// entity.DomainsValidator is a validator for the "domains" field. It is called by the builders before save.
 	entity.DomainsValidator = entityDescDomains.Validators[0].(func([]string) error)
 	// entityDescApprovedForUse is the schema descriptor for approved_for_use field.
-	entityDescApprovedForUse := entityFields[6].Descriptor()
+	entityDescApprovedForUse := entityFields[7].Descriptor()
 	// entity.DefaultApprovedForUse holds the default value on creation for the approved_for_use field.
 	entity.DefaultApprovedForUse = entityDescApprovedForUse.Default.(bool)
 	// entityDescLinkedAssetIds is the schema descriptor for linked_asset_ids field.
-	entityDescLinkedAssetIds := entityFields[7].Descriptor()
+	entityDescLinkedAssetIds := entityFields[8].Descriptor()
 	// entity.DefaultLinkedAssetIds holds the default value on creation for the linked_asset_ids field.
 	entity.DefaultLinkedAssetIds = entityDescLinkedAssetIds.Default.([]string)
 	// entityDescHasSoc2 is the schema descriptor for has_soc2 field.
-	entityDescHasSoc2 := entityFields[8].Descriptor()
+	entityDescHasSoc2 := entityFields[9].Descriptor()
 	// entity.DefaultHasSoc2 holds the default value on creation for the has_soc2 field.
 	entity.DefaultHasSoc2 = entityDescHasSoc2.Default.(bool)
 	// entityDescAutoRenews is the schema descriptor for auto_renews field.
-	entityDescAutoRenews := entityFields[12].Descriptor()
+	entityDescAutoRenews := entityFields[13].Descriptor()
 	// entity.DefaultAutoRenews holds the default value on creation for the auto_renews field.
 	entity.DefaultAutoRenews = entityDescAutoRenews.Default.(bool)
 	// entityDescSpendCurrency is the schema descriptor for spend_currency field.
-	entityDescSpendCurrency := entityFields[15].Descriptor()
+	entityDescSpendCurrency := entityFields[16].Descriptor()
 	// entity.DefaultSpendCurrency holds the default value on creation for the spend_currency field.
 	entity.DefaultSpendCurrency = entityDescSpendCurrency.Default.(string)
 	// entityDescSSOEnforced is the schema descriptor for sso_enforced field.
-	entityDescSSOEnforced := entityFields[18].Descriptor()
+	entityDescSSOEnforced := entityFields[19].Descriptor()
 	// entity.DefaultSSOEnforced holds the default value on creation for the sso_enforced field.
 	entity.DefaultSSOEnforced = entityDescSSOEnforced.Default.(bool)
 	// entityDescMfaSupported is the schema descriptor for mfa_supported field.
-	entityDescMfaSupported := entityFields[19].Descriptor()
+	entityDescMfaSupported := entityFields[20].Descriptor()
 	// entity.DefaultMfaSupported holds the default value on creation for the mfa_supported field.
 	entity.DefaultMfaSupported = entityDescMfaSupported.Default.(bool)
 	// entityDescMfaEnforced is the schema descriptor for mfa_enforced field.
-	entityDescMfaEnforced := entityFields[20].Descriptor()
+	entityDescMfaEnforced := entityFields[21].Descriptor()
 	// entity.DefaultMfaEnforced holds the default value on creation for the mfa_enforced field.
 	entity.DefaultMfaEnforced = entityDescMfaEnforced.Default.(bool)
 	// entityDescStatusPageURL is the schema descriptor for status_page_url field.
-	entityDescStatusPageURL := entityFields[21].Descriptor()
+	entityDescStatusPageURL := entityFields[22].Descriptor()
 	// entity.StatusPageURLValidator is a validator for the "status_page_url" field. It is called by the builders before save.
 	entity.StatusPageURLValidator = entityDescStatusPageURL.Validators[0].(func(string) error)
 	// entityDescProvidedServices is the schema descriptor for provided_services field.
-	entityDescProvidedServices := entityFields[22].Descriptor()
+	entityDescProvidedServices := entityFields[23].Descriptor()
 	// entity.DefaultProvidedServices holds the default value on creation for the provided_services field.
 	entity.DefaultProvidedServices = entityDescProvidedServices.Default.([]string)
 	// entityDescLinks is the schema descriptor for links field.
-	entityDescLinks := entityFields[23].Descriptor()
+	entityDescLinks := entityFields[24].Descriptor()
 	// entity.DefaultLinks holds the default value on creation for the links field.
 	entity.DefaultLinks = entityDescLinks.Default.([]string)
 	// entity.LinksValidator is a validator for the "links" field. It is called by the builders before save.
 	entity.LinksValidator = entityDescLinks.Validators[0].(func([]string) error)
 	// entityDescLogoRemoteURL is the schema descriptor for logo_remote_url field.
-	entityDescLogoRemoteURL := entityFields[32].Descriptor()
+	entityDescLogoRemoteURL := entityFields[33].Descriptor()
 	// entity.LogoRemoteURLValidator is a validator for the "logo_remote_url" field. It is called by the builders before save.
 	entity.LogoRemoteURLValidator = func() func(string) error {
 		validators := entityDescLogoRemoteURL.Validators
@@ -3175,14 +3175,21 @@ func init() {
 	}
 	findingcontrolMixinHooks0 := findingcontrolMixin[0].Hooks()
 	findingcontrolMixinHooks1 := findingcontrolMixin[1].Hooks()
+	findingcontrolMixinHooks4 := findingcontrolMixin[4].Hooks()
 
 	findingcontrol.Hooks[1] = findingcontrolMixinHooks0[0]
 
 	findingcontrol.Hooks[2] = findingcontrolMixinHooks1[0]
+
+	findingcontrol.Hooks[3] = findingcontrolMixinHooks4[0]
+	findingcontrolMixinInters4 := findingcontrolMixin[4].Interceptors()
+	findingcontrol.Interceptors[0] = findingcontrolMixinInters4[0]
 	findingcontrolMixinFields0 := findingcontrolMixin[0].Fields()
 	_ = findingcontrolMixinFields0
 	findingcontrolMixinFields2 := findingcontrolMixin[2].Fields()
 	_ = findingcontrolMixinFields2
+	findingcontrolMixinFields4 := findingcontrolMixin[4].Fields()
+	_ = findingcontrolMixinFields4
 	findingcontrolFields := schema.FindingControl{}.Fields()
 	_ = findingcontrolFields
 	// findingcontrolDescCreatedAt is the schema descriptor for created_at field.
@@ -3195,6 +3202,10 @@ func init() {
 	findingcontrol.DefaultUpdatedAt = findingcontrolDescUpdatedAt.Default.(func() time.Time)
 	// findingcontrol.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	findingcontrol.UpdateDefaultUpdatedAt = findingcontrolDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// findingcontrolDescOwnerID is the schema descriptor for owner_id field.
+	findingcontrolDescOwnerID := findingcontrolMixinFields4[0].Descriptor()
+	// findingcontrol.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	findingcontrol.OwnerIDValidator = findingcontrolDescOwnerID.Validators[0].(func(string) error)
 	// findingcontrolDescID is the schema descriptor for id field.
 	findingcontrolDescID := findingcontrolMixinFields2[0].Descriptor()
 	// findingcontrol.DefaultID holds the default value on creation for the id field.
@@ -5730,8 +5741,6 @@ func init() {
 	organizationsetting.Hooks[7] = organizationsettingHooks[2]
 
 	organizationsetting.Hooks[8] = organizationsettingHooks[3]
-
-	organizationsetting.Hooks[9] = organizationsettingHooks[4]
 	organizationsettingMixinInters2 := organizationsettingMixin[2].Interceptors()
 	organizationsettingInters := schema.OrganizationSetting{}.Interceptors()
 	organizationsetting.Interceptors[0] = organizationsettingMixinInters2[0]
@@ -6806,7 +6815,7 @@ func init() {
 	// sladefinition.DefaultID holds the default value on creation for the id field.
 	sladefinition.DefaultID = sladefinitionDescID.Default.(func() string)
 	scanMixin := schema.Scan{}.Mixin()
-	scan.Policy = privacy.NewPolicies(schema.Scan{})
+	scan.Policy = privacy.NewPolicies(scanMixin[7], schema.Scan{})
 	scan.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			if err := scan.Policy.EvalMutation(ctx, m); err != nil {
@@ -6821,8 +6830,9 @@ func init() {
 	scanMixinHooks4 := scanMixin[4].Hooks()
 	scanMixinHooks6 := scanMixin[6].Hooks()
 	scanMixinHooks7 := scanMixin[7].Hooks()
-	scanMixinHooks9 := scanMixin[9].Hooks()
+	scanMixinHooks8 := scanMixin[8].Hooks()
 	scanMixinHooks10 := scanMixin[10].Hooks()
+	scanMixinHooks11 := scanMixin[11].Hooks()
 
 	scan.Hooks[1] = scanMixinHooks0[0]
 
@@ -6838,18 +6848,20 @@ func init() {
 
 	scan.Hooks[7] = scanMixinHooks7[0]
 
-	scan.Hooks[8] = scanMixinHooks7[1]
+	scan.Hooks[8] = scanMixinHooks8[0]
 
-	scan.Hooks[9] = scanMixinHooks9[0]
+	scan.Hooks[9] = scanMixinHooks8[1]
 
 	scan.Hooks[10] = scanMixinHooks10[0]
+
+	scan.Hooks[11] = scanMixinHooks11[0]
 	scanMixinInters2 := scanMixin[2].Interceptors()
 	scanMixinInters6 := scanMixin[6].Interceptors()
-	scanMixinInters7 := scanMixin[7].Interceptors()
+	scanMixinInters8 := scanMixin[8].Interceptors()
 	scan.Interceptors[0] = scanMixinInters2[0]
 	scan.Interceptors[1] = scanMixinInters6[0]
 	scan.Interceptors[2] = scanMixinInters6[1]
-	scan.Interceptors[3] = scanMixinInters7[0]
+	scan.Interceptors[3] = scanMixinInters8[0]
 	scanMixinFields0 := scanMixin[0].Fields()
 	_ = scanMixinFields0
 	scanMixinFields3 := scanMixin[3].Fields()
@@ -6858,6 +6870,8 @@ func init() {
 	_ = scanMixinFields4
 	scanMixinFields6 := scanMixin[6].Fields()
 	_ = scanMixinFields6
+	scanMixinFields7 := scanMixin[7].Fields()
+	_ = scanMixinFields7
 	scanFields := schema.Scan{}.Fields()
 	_ = scanFields
 	// scanDescCreatedAt is the schema descriptor for created_at field.
@@ -6878,6 +6892,10 @@ func init() {
 	scanDescOwnerID := scanMixinFields6[0].Descriptor()
 	// scan.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	scan.OwnerIDValidator = scanDescOwnerID.Validators[0].(func(string) error)
+	// scanDescSystemOwned is the schema descriptor for system_owned field.
+	scanDescSystemOwned := scanMixinFields7[0].Descriptor()
+	// scan.DefaultSystemOwned holds the default value on creation for the system_owned field.
+	scan.DefaultSystemOwned = scanDescSystemOwned.Default.(bool)
 	// scanDescTarget is the schema descriptor for target field.
 	scanDescTarget := scanFields[0].Descriptor()
 	// scan.TargetValidator is a validator for the "target" field. It is called by the builders before save.

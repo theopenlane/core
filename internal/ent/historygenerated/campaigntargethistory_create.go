@@ -191,6 +191,14 @@ func (_c *CampaignTargetHistoryCreate) SetCampaignID(v string) *CampaignTargetHi
 	return _c
 }
 
+// SetNillableCampaignID sets the "campaign_id" field if the given value is not nil.
+func (_c *CampaignTargetHistoryCreate) SetNillableCampaignID(v *string) *CampaignTargetHistoryCreate {
+	if v != nil {
+		_c.SetCampaignID(*v)
+	}
+	return _c
+}
+
 // SetContactID sets the "contact_id" field.
 func (_c *CampaignTargetHistoryCreate) SetContactID(v string) *CampaignTargetHistoryCreate {
 	_c.mutation.SetContactID(v)
@@ -417,9 +425,6 @@ func (_c *CampaignTargetHistoryCreate) check() error {
 		if err := campaigntargethistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`historygenerated: validator failed for field "CampaignTargetHistory.operation": %w`, err)}
 		}
-	}
-	if _, ok := _c.mutation.CampaignID(); !ok {
-		return &ValidationError{Name: "campaign_id", err: errors.New(`historygenerated: missing required field "CampaignTargetHistory.campaign_id"`)}
 	}
 	if _, ok := _c.mutation.Email(); !ok {
 		return &ValidationError{Name: "email", err: errors.New(`historygenerated: missing required field "CampaignTargetHistory.email"`)}
