@@ -2,7 +2,6 @@ package vendorenrich
 
 import (
 	"context"
-	"net/url"
 	"slices"
 	"strings"
 
@@ -13,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/pkg/domain"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
@@ -93,12 +93,12 @@ func vendorDomain(vendor map[string]any) string {
 		return ""
 	}
 
-	u, err := url.Parse(rawURL)
+	hostname, err := domain.NormalizeHostname(rawURL)
 	if err != nil {
 		return ""
 	}
 
-	return strings.ToLower(u.Hostname())
+	return hostname
 }
 
 // lookupReferences queries system-owned vendor Entities matching any candidate's name, display
