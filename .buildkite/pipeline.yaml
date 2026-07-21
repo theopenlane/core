@@ -46,7 +46,7 @@ steps:
           - internal/graphapi/**
           - common/enums/**
         plugins:
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               command: ["task", "generate:checksums"]
@@ -67,7 +67,7 @@ steps:
           - pkg/**
           - config/**
         plugins:
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               command: ["task", "config:ci"]
@@ -87,7 +87,7 @@ steps:
           - config/configmap-config-file.yaml
           - config/helm-values.yaml
         plugins:
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/draft-pr-automation.sh"]
@@ -113,7 +113,7 @@ steps:
           - sparse-checkout#v1.8.0:
               paths:
                 - .buildkite
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/link-pr-automation.sh"]
@@ -135,7 +135,7 @@ steps:
               paths:
                 - .buildkite
                 - config
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/helm-automation.sh"]
@@ -158,7 +158,7 @@ steps:
           - sparse-checkout#v1.8.0:
               paths:
                 - .buildkite
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/post-merge-pr-automation.sh"]
@@ -178,7 +178,7 @@ steps:
         depends_on: "post_merge_automation"
         if: build.branch == "main"
         plugins:
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/cleanup-draft-prs.sh"]
@@ -194,7 +194,7 @@ steps:
           - "go_tests"
         if: build.tag != null && build.tag !~ /cli\// && build.tag !~ /common\//
         plugins:
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/image-tag-automation.sh"]
@@ -224,7 +224,7 @@ steps:
         timeout_in_minutes: 30
         key: "lint_graphapi"
         plugins:
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               command: ["task", "go:lint:ci:graphapi"]
               always_pull: true
@@ -248,7 +248,7 @@ steps:
         timeout_in_minutes: 30
         key: "lint_handlers"
         plugins:
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               command: ["task", "go:lint:ci:handlers"]
               always_pull: true
@@ -276,7 +276,7 @@ steps:
         timeout_in_minutes: 30
         key: "lint_non_api"
         plugins:
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               command: ["task", "go:lint:ci:no-api"]
               always_pull: true
@@ -310,7 +310,7 @@ steps:
             version:
               - 17-alpine
         plugins:
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: ghcr.io/theopenlane/build-image:latest
               always_pull: true
               command: ["task", "go:testsum:ci:graph"]
@@ -346,7 +346,7 @@ steps:
             version:
               - 17-alpine
         plugins:
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: ghcr.io/theopenlane/build-image:latest
               always_pull: true
               command: ["task", "go:testsum:ci:handlers"]
@@ -382,7 +382,7 @@ steps:
             version:
               - 17-alpine
         plugins:
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: ghcr.io/theopenlane/build-image:latest
               always_pull: true
               command: ["task", "go:testsum:ci:no-graph"]
@@ -410,7 +410,7 @@ steps:
           - sparse-checkout#v1.8.0:
               paths:
                 - fga
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: openfga/cli:v0.5.1
               propagate-environment: true
               command: ["model", "test", "--tests", "fga/tests/tests.yaml"]
@@ -491,7 +491,7 @@ steps:
               download: "junit-graph.xml"
               step: "go_test_graph"
 
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: "sonarsource/sonar-scanner-cli:11.5"
               propagate-environment: true
               volumes:
@@ -534,7 +534,7 @@ steps:
           - artifacts#v1.9.4:
               download: "junit-graph.xml"
               step: "go_test_graph"
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: "sonarsource/sonar-scanner-cli:11.5"
               propagate-environment: true
               volumes:
@@ -564,7 +564,7 @@ steps:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
         plugins:
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               propagate-environment: true
@@ -588,7 +588,7 @@ steps:
             - cli/**
             - common/**
         plugins:
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               propagate-environment: true
@@ -609,7 +609,7 @@ steps:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
         plugins:
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               propagate-environment: true
@@ -629,7 +629,7 @@ steps:
         cancel_on_build_failing: true
         artifact_paths: "bin/openlane-cli"
         plugins:
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               propagate-environment: true
@@ -706,7 +706,7 @@ steps:
           - sparse-checkout#v1.8.0:
               paths:
                 - internal/graphapi
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               propagate-environment: true
@@ -803,7 +803,7 @@ steps:
           - sparse-checkout#v1.8.0:
               paths:
                 - internal/graphapi
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               propagate-environment: true
@@ -825,7 +825,7 @@ steps:
           - cluster-secrets#v1.0.0:
               variables:
                 APOLLO_KEY: APOLLO_HISTORY_KEY
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               propagate-environment: true
