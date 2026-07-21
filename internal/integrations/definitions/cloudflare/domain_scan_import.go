@@ -360,8 +360,15 @@ func createDomainScanSystemDetails(ctx context.Context, client *generated.Client
 func createDomainScanFindings(ctx context.Context, client *generated.Client, ownerID string, findings []DomainScanImportFinding, assets []DomainScanImportAsset, assetIDByRef map[string]string, scanIDs []string) ([]string, error) {
 	ids := make([]string, 0, len(findings))
 
+	// a single-domain review (the common case) has exactly one scan behind it, so its target
+	// stands in for any finding that didn't carry its own domain
+	fallbackDomain := domainScanSingleTarget(ctx, client, scanIDs)
+
 	for _, finding := range findings {
 		domain := strings.ToLower(strings.TrimSuffix(finding.Domain, "."))
+		if domain == "" {
+			domain = fallbackDomain
+		}
 
 		input := generated.CreateFindingInput{
 			OwnerID: &ownerID,
@@ -374,6 +381,13 @@ func createDomainScanFindings(ctx context.Context, client *generated.Client, own
 			Severity:    &finding.Severity,
 		}
 
+		displayName := finding.Category
+		if domain != "" {
+			displayName = fmt.Sprintf("%s (%s)", finding.Category, domain)
+		}
+
+		input.DisplayName = &displayName
+
 		created, err := client.Finding.Create().SetInput(input).Save(ctx)
 		if err != nil {
 			return nil, fmt.Errorf("creating finding: %w", err)
@@ -383,6 +397,21 @@ func createDomainScanFindings(ctx context.Context, client *generated.Client, own
 	}
 
 	return ids, nil
+}
+
+// domainScanSingleTarget returns the target domain when scanIDs resolves to exactly one scan -
+// ambiguous for a multi-domain review, where it returns ""
+func domainScanSingleTarget(ctx context.Context, client *generated.Client, scanIDs []string) string {
+	if len(scanIDs) != 1 {
+		return ""
+	}
+
+	scanRecord, err := client.Scan.Get(ctx, scanIDs[0])
+	if err != nil {
+		return ""
+	}
+
+	return scanRecord.Target
 }
 
 // resolveDomainScanRefs looks up each ref in idByRef, skipping any that don't resolve. The
