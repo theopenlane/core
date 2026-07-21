@@ -10531,6 +10531,26 @@ func (_q *ProgramHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, programhistory.FieldEndDate)
 				fieldSeen[programhistory.FieldEndDate] = struct{}{}
 			}
+		case "observationPeriodStartDate":
+			if _, ok := fieldSeen[programhistory.FieldObservationPeriodStartDate]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldObservationPeriodStartDate)
+				fieldSeen[programhistory.FieldObservationPeriodStartDate] = struct{}{}
+			}
+		case "observationPeriodEndDate":
+			if _, ok := fieldSeen[programhistory.FieldObservationPeriodEndDate]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldObservationPeriodEndDate)
+				fieldSeen[programhistory.FieldObservationPeriodEndDate] = struct{}{}
+			}
+		case "fieldworkStartDate":
+			if _, ok := fieldSeen[programhistory.FieldFieldworkStartDate]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldFieldworkStartDate)
+				fieldSeen[programhistory.FieldFieldworkStartDate] = struct{}{}
+			}
+		case "fieldworkEndDate":
+			if _, ok := fieldSeen[programhistory.FieldFieldworkEndDate]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldFieldworkEndDate)
+				fieldSeen[programhistory.FieldFieldworkEndDate] = struct{}{}
+			}
 		case "auditorReady":
 			if _, ok := fieldSeen[programhistory.FieldAuditorReady]; !ok {
 				selectedFields = append(selectedFields, programhistory.FieldAuditorReady)

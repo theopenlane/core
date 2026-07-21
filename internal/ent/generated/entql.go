@@ -2628,32 +2628,36 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "Program",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			program.FieldCreatedAt:             {Type: field.TypeTime, Column: program.FieldCreatedAt},
-			program.FieldUpdatedAt:             {Type: field.TypeTime, Column: program.FieldUpdatedAt},
-			program.FieldCreatedBy:             {Type: field.TypeString, Column: program.FieldCreatedBy},
-			program.FieldUpdatedBy:             {Type: field.TypeString, Column: program.FieldUpdatedBy},
-			program.FieldUpdatedByImpersonator: {Type: field.TypeString, Column: program.FieldUpdatedByImpersonator},
-			program.FieldDeletedAt:             {Type: field.TypeTime, Column: program.FieldDeletedAt},
-			program.FieldDeletedBy:             {Type: field.TypeString, Column: program.FieldDeletedBy},
-			program.FieldDisplayID:             {Type: field.TypeString, Column: program.FieldDisplayID},
-			program.FieldTags:                  {Type: field.TypeJSON, Column: program.FieldTags},
-			program.FieldOwnerID:               {Type: field.TypeString, Column: program.FieldOwnerID},
-			program.FieldProgramKindName:       {Type: field.TypeString, Column: program.FieldProgramKindName},
-			program.FieldProgramKindID:         {Type: field.TypeString, Column: program.FieldProgramKindID},
-			program.FieldExternalUUID:          {Type: field.TypeString, Column: program.FieldExternalUUID},
-			program.FieldName:                  {Type: field.TypeString, Column: program.FieldName},
-			program.FieldDescription:           {Type: field.TypeString, Column: program.FieldDescription},
-			program.FieldStatus:                {Type: field.TypeEnum, Column: program.FieldStatus},
-			program.FieldFrameworkName:         {Type: field.TypeString, Column: program.FieldFrameworkName},
-			program.FieldStartDate:             {Type: field.TypeTime, Column: program.FieldStartDate},
-			program.FieldEndDate:               {Type: field.TypeTime, Column: program.FieldEndDate},
-			program.FieldAuditorReady:          {Type: field.TypeBool, Column: program.FieldAuditorReady},
-			program.FieldAuditorWriteComments:  {Type: field.TypeBool, Column: program.FieldAuditorWriteComments},
-			program.FieldAuditorReadComments:   {Type: field.TypeBool, Column: program.FieldAuditorReadComments},
-			program.FieldAuditFirm:             {Type: field.TypeString, Column: program.FieldAuditFirm},
-			program.FieldAuditor:               {Type: field.TypeString, Column: program.FieldAuditor},
-			program.FieldAuditorEmail:          {Type: field.TypeString, Column: program.FieldAuditorEmail},
-			program.FieldProgramOwnerID:        {Type: field.TypeString, Column: program.FieldProgramOwnerID},
+			program.FieldCreatedAt:                  {Type: field.TypeTime, Column: program.FieldCreatedAt},
+			program.FieldUpdatedAt:                  {Type: field.TypeTime, Column: program.FieldUpdatedAt},
+			program.FieldCreatedBy:                  {Type: field.TypeString, Column: program.FieldCreatedBy},
+			program.FieldUpdatedBy:                  {Type: field.TypeString, Column: program.FieldUpdatedBy},
+			program.FieldUpdatedByImpersonator:      {Type: field.TypeString, Column: program.FieldUpdatedByImpersonator},
+			program.FieldDeletedAt:                  {Type: field.TypeTime, Column: program.FieldDeletedAt},
+			program.FieldDeletedBy:                  {Type: field.TypeString, Column: program.FieldDeletedBy},
+			program.FieldDisplayID:                  {Type: field.TypeString, Column: program.FieldDisplayID},
+			program.FieldTags:                       {Type: field.TypeJSON, Column: program.FieldTags},
+			program.FieldOwnerID:                    {Type: field.TypeString, Column: program.FieldOwnerID},
+			program.FieldProgramKindName:            {Type: field.TypeString, Column: program.FieldProgramKindName},
+			program.FieldProgramKindID:              {Type: field.TypeString, Column: program.FieldProgramKindID},
+			program.FieldExternalUUID:               {Type: field.TypeString, Column: program.FieldExternalUUID},
+			program.FieldName:                       {Type: field.TypeString, Column: program.FieldName},
+			program.FieldDescription:                {Type: field.TypeString, Column: program.FieldDescription},
+			program.FieldStatus:                     {Type: field.TypeEnum, Column: program.FieldStatus},
+			program.FieldFrameworkName:              {Type: field.TypeString, Column: program.FieldFrameworkName},
+			program.FieldStartDate:                  {Type: field.TypeTime, Column: program.FieldStartDate},
+			program.FieldEndDate:                    {Type: field.TypeTime, Column: program.FieldEndDate},
+			program.FieldObservationPeriodStartDate: {Type: field.TypeTime, Column: program.FieldObservationPeriodStartDate},
+			program.FieldObservationPeriodEndDate:   {Type: field.TypeTime, Column: program.FieldObservationPeriodEndDate},
+			program.FieldFieldworkStartDate:         {Type: field.TypeTime, Column: program.FieldFieldworkStartDate},
+			program.FieldFieldworkEndDate:           {Type: field.TypeTime, Column: program.FieldFieldworkEndDate},
+			program.FieldAuditorReady:               {Type: field.TypeBool, Column: program.FieldAuditorReady},
+			program.FieldAuditorWriteComments:       {Type: field.TypeBool, Column: program.FieldAuditorWriteComments},
+			program.FieldAuditorReadComments:        {Type: field.TypeBool, Column: program.FieldAuditorReadComments},
+			program.FieldAuditFirm:                  {Type: field.TypeString, Column: program.FieldAuditFirm},
+			program.FieldAuditor:                    {Type: field.TypeString, Column: program.FieldAuditor},
+			program.FieldAuditorEmail:               {Type: field.TypeString, Column: program.FieldAuditorEmail},
+			program.FieldProgramOwnerID:             {Type: field.TypeString, Column: program.FieldProgramOwnerID},
 		},
 	}
 	graph.Nodes[68] = &sqlgraph.Node{
@@ -41960,6 +41964,26 @@ func (f *ProgramFilter) WhereStartDate(p entql.TimeP) {
 // WhereEndDate applies the entql time.Time predicate on the end_date field.
 func (f *ProgramFilter) WhereEndDate(p entql.TimeP) {
 	f.Where(p.Field(program.FieldEndDate))
+}
+
+// WhereObservationPeriodStartDate applies the entql time.Time predicate on the observation_period_start_date field.
+func (f *ProgramFilter) WhereObservationPeriodStartDate(p entql.TimeP) {
+	f.Where(p.Field(program.FieldObservationPeriodStartDate))
+}
+
+// WhereObservationPeriodEndDate applies the entql time.Time predicate on the observation_period_end_date field.
+func (f *ProgramFilter) WhereObservationPeriodEndDate(p entql.TimeP) {
+	f.Where(p.Field(program.FieldObservationPeriodEndDate))
+}
+
+// WhereFieldworkStartDate applies the entql time.Time predicate on the fieldwork_start_date field.
+func (f *ProgramFilter) WhereFieldworkStartDate(p entql.TimeP) {
+	f.Where(p.Field(program.FieldFieldworkStartDate))
+}
+
+// WhereFieldworkEndDate applies the entql time.Time predicate on the fieldwork_end_date field.
+func (f *ProgramFilter) WhereFieldworkEndDate(p entql.TimeP) {
+	f.Where(p.Field(program.FieldFieldworkEndDate))
 }
 
 // WhereAuditorReady applies the entql bool predicate on the auditor_ready field.

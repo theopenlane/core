@@ -6240,6 +6240,10 @@ var (
 		{Name: "framework_name", Type: field.TypeString, Nullable: true},
 		{Name: "start_date", Type: field.TypeTime, Nullable: true},
 		{Name: "end_date", Type: field.TypeTime, Nullable: true},
+		{Name: "observation_period_start_date", Type: field.TypeTime, Nullable: true},
+		{Name: "observation_period_end_date", Type: field.TypeTime, Nullable: true},
+		{Name: "fieldwork_start_date", Type: field.TypeTime, Nullable: true},
+		{Name: "fieldwork_end_date", Type: field.TypeTime, Nullable: true},
 		{Name: "auditor_ready", Type: field.TypeBool, Default: false},
 		{Name: "auditor_write_comments", Type: field.TypeBool, Default: false},
 		{Name: "auditor_read_comments", Type: field.TypeBool, Default: false},
@@ -6259,25 +6263,25 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "programs_custom_type_enums_programs",
-				Columns:    []*schema.Column{ProgramsColumns[24]},
+				Columns:    []*schema.Column{ProgramsColumns[28]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "programs_organizations_programs",
-				Columns:    []*schema.Column{ProgramsColumns[25]},
+				Columns:    []*schema.Column{ProgramsColumns[29]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "programs_custom_type_enums_program_kind",
-				Columns:    []*schema.Column{ProgramsColumns[26]},
+				Columns:    []*schema.Column{ProgramsColumns[30]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "programs_users_programs_owned",
-				Columns:    []*schema.Column{ProgramsColumns[27]},
+				Columns:    []*schema.Column{ProgramsColumns[31]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -6286,12 +6290,12 @@ var (
 			{
 				Name:    "program_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ProgramsColumns[8], ProgramsColumns[25]},
+				Columns: []*schema.Column{ProgramsColumns[8], ProgramsColumns[29]},
 			},
 			{
 				Name:    "program_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ProgramsColumns[25]},
+				Columns: []*schema.Column{ProgramsColumns[29]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -6299,7 +6303,7 @@ var (
 			{
 				Name:    "program_external_uuid_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ProgramsColumns[11], ProgramsColumns[25]},
+				Columns: []*schema.Column{ProgramsColumns[11], ProgramsColumns[29]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},

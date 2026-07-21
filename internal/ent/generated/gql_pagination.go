@@ -26560,6 +26560,62 @@ var (
 			}
 		},
 	}
+	// ProgramOrderFieldObservationPeriodStartDate orders Program by observation_period_start_date.
+	ProgramOrderFieldObservationPeriodStartDate = &ProgramOrderField{
+		Value: func(_m *Program) (ent.Value, error) {
+			return _m.ObservationPeriodStartDate, nil
+		},
+		column: program.FieldObservationPeriodStartDate,
+		toTerm: program.ByObservationPeriodStartDate,
+		toCursor: func(_m *Program) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ObservationPeriodStartDate,
+			}
+		},
+	}
+	// ProgramOrderFieldObservationPeriodEndDate orders Program by observation_period_end_date.
+	ProgramOrderFieldObservationPeriodEndDate = &ProgramOrderField{
+		Value: func(_m *Program) (ent.Value, error) {
+			return _m.ObservationPeriodEndDate, nil
+		},
+		column: program.FieldObservationPeriodEndDate,
+		toTerm: program.ByObservationPeriodEndDate,
+		toCursor: func(_m *Program) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ObservationPeriodEndDate,
+			}
+		},
+	}
+	// ProgramOrderFieldFieldworkStartDate orders Program by fieldwork_start_date.
+	ProgramOrderFieldFieldworkStartDate = &ProgramOrderField{
+		Value: func(_m *Program) (ent.Value, error) {
+			return _m.FieldworkStartDate, nil
+		},
+		column: program.FieldFieldworkStartDate,
+		toTerm: program.ByFieldworkStartDate,
+		toCursor: func(_m *Program) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.FieldworkStartDate,
+			}
+		},
+	}
+	// ProgramOrderFieldFieldworkEndDate orders Program by fieldwork_end_date.
+	ProgramOrderFieldFieldworkEndDate = &ProgramOrderField{
+		Value: func(_m *Program) (ent.Value, error) {
+			return _m.FieldworkEndDate, nil
+		},
+		column: program.FieldFieldworkEndDate,
+		toTerm: program.ByFieldworkEndDate,
+		toCursor: func(_m *Program) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.FieldworkEndDate,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -26580,6 +26636,14 @@ func (f ProgramOrderField) String() string {
 		str = "start_date"
 	case ProgramOrderFieldEndDate.column:
 		str = "end_date"
+	case ProgramOrderFieldObservationPeriodStartDate.column:
+		str = "observation_period_start_date"
+	case ProgramOrderFieldObservationPeriodEndDate.column:
+		str = "observation_period_end_date"
+	case ProgramOrderFieldFieldworkStartDate.column:
+		str = "fieldwork_start_date"
+	case ProgramOrderFieldFieldworkEndDate.column:
+		str = "fieldwork_end_date"
 	}
 	return str
 }
@@ -26610,6 +26674,14 @@ func (f *ProgramOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ProgramOrderFieldStartDate
 	case "end_date":
 		*f = *ProgramOrderFieldEndDate
+	case "observation_period_start_date":
+		*f = *ProgramOrderFieldObservationPeriodStartDate
+	case "observation_period_end_date":
+		*f = *ProgramOrderFieldObservationPeriodEndDate
+	case "fieldwork_start_date":
+		*f = *ProgramOrderFieldFieldworkStartDate
+	case "fieldwork_end_date":
+		*f = *ProgramOrderFieldFieldworkEndDate
 	default:
 		return fmt.Errorf("%s is not a valid ProgramOrderField", str)
 	}

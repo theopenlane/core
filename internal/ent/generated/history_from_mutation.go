@@ -18132,6 +18132,22 @@ func (m *ProgramMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetEndDate(endDate)
 	}
 
+	if observationPeriodStartDate, exists := m.ObservationPeriodStartDate(); exists {
+		create = create.SetObservationPeriodStartDate(observationPeriodStartDate)
+	}
+
+	if observationPeriodEndDate, exists := m.ObservationPeriodEndDate(); exists {
+		create = create.SetObservationPeriodEndDate(observationPeriodEndDate)
+	}
+
+	if fieldworkStartDate, exists := m.FieldworkStartDate(); exists {
+		create = create.SetFieldworkStartDate(fieldworkStartDate)
+	}
+
+	if fieldworkEndDate, exists := m.FieldworkEndDate(); exists {
+		create = create.SetFieldworkEndDate(fieldworkEndDate)
+	}
+
 	if auditorReady, exists := m.AuditorReady(); exists {
 		create = create.SetAuditorReady(auditorReady)
 	}
@@ -18305,6 +18321,30 @@ func (m *ProgramMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetEndDate(program.EndDate)
 		}
 
+		if observationPeriodStartDate, exists := m.ObservationPeriodStartDate(); exists {
+			create = create.SetObservationPeriodStartDate(observationPeriodStartDate)
+		} else {
+			create = create.SetObservationPeriodStartDate(program.ObservationPeriodStartDate)
+		}
+
+		if observationPeriodEndDate, exists := m.ObservationPeriodEndDate(); exists {
+			create = create.SetObservationPeriodEndDate(observationPeriodEndDate)
+		} else {
+			create = create.SetObservationPeriodEndDate(program.ObservationPeriodEndDate)
+		}
+
+		if fieldworkStartDate, exists := m.FieldworkStartDate(); exists {
+			create = create.SetFieldworkStartDate(fieldworkStartDate)
+		} else {
+			create = create.SetFieldworkStartDate(program.FieldworkStartDate)
+		}
+
+		if fieldworkEndDate, exists := m.FieldworkEndDate(); exists {
+			create = create.SetFieldworkEndDate(fieldworkEndDate)
+		} else {
+			create = create.SetFieldworkEndDate(program.FieldworkEndDate)
+		}
+
 		if auditorReady, exists := m.AuditorReady(); exists {
 			create = create.SetAuditorReady(auditorReady)
 		} else {
@@ -18401,6 +18441,10 @@ func (m *ProgramMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetFrameworkName(program.FrameworkName).
 			SetStartDate(program.StartDate).
 			SetEndDate(program.EndDate).
+			SetObservationPeriodStartDate(program.ObservationPeriodStartDate).
+			SetObservationPeriodEndDate(program.ObservationPeriodEndDate).
+			SetFieldworkStartDate(program.FieldworkStartDate).
+			SetFieldworkEndDate(program.FieldworkEndDate).
 			SetAuditorReady(program.AuditorReady).
 			SetAuditorWriteComments(program.AuditorWriteComments).
 			SetAuditorReadComments(program.AuditorReadComments).

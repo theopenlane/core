@@ -68928,6 +68928,26 @@ func (_q *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				selectedFields = append(selectedFields, program.FieldEndDate)
 				fieldSeen[program.FieldEndDate] = struct{}{}
 			}
+		case "observationPeriodStartDate":
+			if _, ok := fieldSeen[program.FieldObservationPeriodStartDate]; !ok {
+				selectedFields = append(selectedFields, program.FieldObservationPeriodStartDate)
+				fieldSeen[program.FieldObservationPeriodStartDate] = struct{}{}
+			}
+		case "observationPeriodEndDate":
+			if _, ok := fieldSeen[program.FieldObservationPeriodEndDate]; !ok {
+				selectedFields = append(selectedFields, program.FieldObservationPeriodEndDate)
+				fieldSeen[program.FieldObservationPeriodEndDate] = struct{}{}
+			}
+		case "fieldworkStartDate":
+			if _, ok := fieldSeen[program.FieldFieldworkStartDate]; !ok {
+				selectedFields = append(selectedFields, program.FieldFieldworkStartDate)
+				fieldSeen[program.FieldFieldworkStartDate] = struct{}{}
+			}
+		case "fieldworkEndDate":
+			if _, ok := fieldSeen[program.FieldFieldworkEndDate]; !ok {
+				selectedFields = append(selectedFields, program.FieldFieldworkEndDate)
+				fieldSeen[program.FieldFieldworkEndDate] = struct{}{}
+			}
 		case "auditorReady":
 			if _, ok := fieldSeen[program.FieldAuditorReady]; !ok {
 				selectedFields = append(selectedFields, program.FieldAuditorReady)

@@ -2206,15 +2206,15 @@ func init() {
 	// programhistory.DefaultTags holds the default value on creation for the tags field.
 	programhistory.DefaultTags = programhistoryDescTags.Default.([]string)
 	// programhistoryDescAuditorReady is the schema descriptor for auditor_ready field.
-	programhistoryDescAuditorReady := programhistoryFields[23].Descriptor()
+	programhistoryDescAuditorReady := programhistoryFields[27].Descriptor()
 	// programhistory.DefaultAuditorReady holds the default value on creation for the auditor_ready field.
 	programhistory.DefaultAuditorReady = programhistoryDescAuditorReady.Default.(bool)
 	// programhistoryDescAuditorWriteComments is the schema descriptor for auditor_write_comments field.
-	programhistoryDescAuditorWriteComments := programhistoryFields[24].Descriptor()
+	programhistoryDescAuditorWriteComments := programhistoryFields[28].Descriptor()
 	// programhistory.DefaultAuditorWriteComments holds the default value on creation for the auditor_write_comments field.
 	programhistory.DefaultAuditorWriteComments = programhistoryDescAuditorWriteComments.Default.(bool)
 	// programhistoryDescAuditorReadComments is the schema descriptor for auditor_read_comments field.
-	programhistoryDescAuditorReadComments := programhistoryFields[25].Descriptor()
+	programhistoryDescAuditorReadComments := programhistoryFields[29].Descriptor()
 	// programhistory.DefaultAuditorReadComments holds the default value on creation for the auditor_read_comments field.
 	programhistory.DefaultAuditorReadComments = programhistoryDescAuditorReadComments.Default.(bool)
 	// programhistoryDescID is the schema descriptor for id field.

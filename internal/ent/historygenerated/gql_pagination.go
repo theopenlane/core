@@ -20379,6 +20379,62 @@ var (
 			}
 		},
 	}
+	// ProgramHistoryOrderFieldObservationPeriodStartDate orders ProgramHistory by observation_period_start_date.
+	ProgramHistoryOrderFieldObservationPeriodStartDate = &ProgramHistoryOrderField{
+		Value: func(_m *ProgramHistory) (ent.Value, error) {
+			return _m.ObservationPeriodStartDate, nil
+		},
+		column: programhistory.FieldObservationPeriodStartDate,
+		toTerm: programhistory.ByObservationPeriodStartDate,
+		toCursor: func(_m *ProgramHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ObservationPeriodStartDate,
+			}
+		},
+	}
+	// ProgramHistoryOrderFieldObservationPeriodEndDate orders ProgramHistory by observation_period_end_date.
+	ProgramHistoryOrderFieldObservationPeriodEndDate = &ProgramHistoryOrderField{
+		Value: func(_m *ProgramHistory) (ent.Value, error) {
+			return _m.ObservationPeriodEndDate, nil
+		},
+		column: programhistory.FieldObservationPeriodEndDate,
+		toTerm: programhistory.ByObservationPeriodEndDate,
+		toCursor: func(_m *ProgramHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ObservationPeriodEndDate,
+			}
+		},
+	}
+	// ProgramHistoryOrderFieldFieldworkStartDate orders ProgramHistory by fieldwork_start_date.
+	ProgramHistoryOrderFieldFieldworkStartDate = &ProgramHistoryOrderField{
+		Value: func(_m *ProgramHistory) (ent.Value, error) {
+			return _m.FieldworkStartDate, nil
+		},
+		column: programhistory.FieldFieldworkStartDate,
+		toTerm: programhistory.ByFieldworkStartDate,
+		toCursor: func(_m *ProgramHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.FieldworkStartDate,
+			}
+		},
+	}
+	// ProgramHistoryOrderFieldFieldworkEndDate orders ProgramHistory by fieldwork_end_date.
+	ProgramHistoryOrderFieldFieldworkEndDate = &ProgramHistoryOrderField{
+		Value: func(_m *ProgramHistory) (ent.Value, error) {
+			return _m.FieldworkEndDate, nil
+		},
+		column: programhistory.FieldFieldworkEndDate,
+		toTerm: programhistory.ByFieldworkEndDate,
+		toCursor: func(_m *ProgramHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.FieldworkEndDate,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -20401,6 +20457,14 @@ func (f ProgramHistoryOrderField) String() string {
 		str = "start_date"
 	case ProgramHistoryOrderFieldEndDate.column:
 		str = "end_date"
+	case ProgramHistoryOrderFieldObservationPeriodStartDate.column:
+		str = "observation_period_start_date"
+	case ProgramHistoryOrderFieldObservationPeriodEndDate.column:
+		str = "observation_period_end_date"
+	case ProgramHistoryOrderFieldFieldworkStartDate.column:
+		str = "fieldwork_start_date"
+	case ProgramHistoryOrderFieldFieldworkEndDate.column:
+		str = "fieldwork_end_date"
 	}
 	return str
 }
@@ -20433,6 +20497,14 @@ func (f *ProgramHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ProgramHistoryOrderFieldStartDate
 	case "end_date":
 		*f = *ProgramHistoryOrderFieldEndDate
+	case "observation_period_start_date":
+		*f = *ProgramHistoryOrderFieldObservationPeriodStartDate
+	case "observation_period_end_date":
+		*f = *ProgramHistoryOrderFieldObservationPeriodEndDate
+	case "fieldwork_start_date":
+		*f = *ProgramHistoryOrderFieldFieldworkStartDate
+	case "fieldwork_end_date":
+		*f = *ProgramHistoryOrderFieldFieldworkEndDate
 	default:
 		return fmt.Errorf("%s is not a valid ProgramHistoryOrderField", str)
 	}

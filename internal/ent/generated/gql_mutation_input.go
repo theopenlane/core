@@ -21311,44 +21311,48 @@ func (c *ProcedureUpdateOne) SetInput(i UpdateProcedureInput) *ProcedureUpdateOn
 
 // CreateProgramInput represents a mutation input for creating programs.
 type CreateProgramInput struct {
-	Tags                 []string             `json:"tags,omitempty"`
-	ProgramKindName      *string              `json:"program_kind_name,omitempty"`
-	ExternalUUID         *string              `json:"external_uuid,omitempty"`
-	Name                 string               `json:"name,omitempty"`
-	Description          *string              `json:"description,omitempty"`
-	Status               *enums.ProgramStatus `json:"status,omitempty"`
-	FrameworkName        *string              `json:"framework_name,omitempty"`
-	StartDate            *time.Time           `json:"start_date,omitempty"`
-	EndDate              *time.Time           `json:"end_date,omitempty"`
-	AuditorReady         *bool                `json:"auditor_ready,omitempty"`
-	AuditorWriteComments *bool                `json:"auditor_write_comments,omitempty"`
-	AuditorReadComments  *bool                `json:"auditor_read_comments,omitempty"`
-	AuditFirm            *string              `json:"audit_firm,omitempty"`
-	Auditor              *string              `json:"auditor,omitempty"`
-	AuditorEmail         *string              `json:"auditor_email,omitempty"`
-	OwnerID              *string              `json:"owner_id,omitempty"`
-	BlockedGroupIDs      []string             `json:"blocked_group_ids,omitempty"`
-	EditorIDs            []string             `json:"editor_ids,omitempty"`
-	ViewerIDs            []string             `json:"viewer_ids,omitempty"`
-	ProgramKindID        *string              `json:"program_kind_id,omitempty"`
-	ControlIDs           []string             `json:"control_ids,omitempty"`
-	SubcontrolIDs        []string             `json:"subcontrol_ids,omitempty"`
-	ControlObjectiveIDs  []string             `json:"control_objective_ids,omitempty"`
-	InternalPolicyIDs    []string             `json:"internal_policy_ids,omitempty"`
-	ProcedureIDs         []string             `json:"procedure_ids,omitempty"`
-	RiskIDs              []string             `json:"risk_ids,omitempty"`
-	TaskIDs              []string             `json:"task_ids,omitempty"`
-	NoteIDs              []string             `json:"note_ids,omitempty"`
-	FileIDs              []string             `json:"file_ids,omitempty"`
-	EvidenceIDs          []string             `json:"evidence_ids,omitempty"`
-	NarrativeIDs         []string             `json:"narrative_ids,omitempty"`
-	ActionPlanIDs        []string             `json:"action_plan_ids,omitempty"`
-	SystemDetailIDs      []string             `json:"system_detail_ids,omitempty"`
-	FindingIDs           []string             `json:"finding_ids,omitempty"`
-	VulnerabilityIDs     []string             `json:"vulnerability_ids,omitempty"`
-	ReviewIDs            []string             `json:"review_ids,omitempty"`
-	RemediationIDs       []string             `json:"remediation_ids,omitempty"`
-	ProgramOwnerID       *string              `json:"program_owner_id,omitempty"`
+	Tags                       []string             `json:"tags,omitempty"`
+	ProgramKindName            *string              `json:"program_kind_name,omitempty"`
+	ExternalUUID               *string              `json:"external_uuid,omitempty"`
+	Name                       string               `json:"name,omitempty"`
+	Description                *string              `json:"description,omitempty"`
+	Status                     *enums.ProgramStatus `json:"status,omitempty"`
+	FrameworkName              *string              `json:"framework_name,omitempty"`
+	StartDate                  *time.Time           `json:"start_date,omitempty"`
+	EndDate                    *time.Time           `json:"end_date,omitempty"`
+	ObservationPeriodStartDate *time.Time           `json:"observation_period_start_date,omitempty"`
+	ObservationPeriodEndDate   *time.Time           `json:"observation_period_end_date,omitempty"`
+	FieldworkStartDate         *time.Time           `json:"fieldwork_start_date,omitempty"`
+	FieldworkEndDate           *time.Time           `json:"fieldwork_end_date,omitempty"`
+	AuditorReady               *bool                `json:"auditor_ready,omitempty"`
+	AuditorWriteComments       *bool                `json:"auditor_write_comments,omitempty"`
+	AuditorReadComments        *bool                `json:"auditor_read_comments,omitempty"`
+	AuditFirm                  *string              `json:"audit_firm,omitempty"`
+	Auditor                    *string              `json:"auditor,omitempty"`
+	AuditorEmail               *string              `json:"auditor_email,omitempty"`
+	OwnerID                    *string              `json:"owner_id,omitempty"`
+	BlockedGroupIDs            []string             `json:"blocked_group_ids,omitempty"`
+	EditorIDs                  []string             `json:"editor_ids,omitempty"`
+	ViewerIDs                  []string             `json:"viewer_ids,omitempty"`
+	ProgramKindID              *string              `json:"program_kind_id,omitempty"`
+	ControlIDs                 []string             `json:"control_ids,omitempty"`
+	SubcontrolIDs              []string             `json:"subcontrol_ids,omitempty"`
+	ControlObjectiveIDs        []string             `json:"control_objective_ids,omitempty"`
+	InternalPolicyIDs          []string             `json:"internal_policy_ids,omitempty"`
+	ProcedureIDs               []string             `json:"procedure_ids,omitempty"`
+	RiskIDs                    []string             `json:"risk_ids,omitempty"`
+	TaskIDs                    []string             `json:"task_ids,omitempty"`
+	NoteIDs                    []string             `json:"note_ids,omitempty"`
+	FileIDs                    []string             `json:"file_ids,omitempty"`
+	EvidenceIDs                []string             `json:"evidence_ids,omitempty"`
+	NarrativeIDs               []string             `json:"narrative_ids,omitempty"`
+	ActionPlanIDs              []string             `json:"action_plan_ids,omitempty"`
+	SystemDetailIDs            []string             `json:"system_detail_ids,omitempty"`
+	FindingIDs                 []string             `json:"finding_ids,omitempty"`
+	VulnerabilityIDs           []string             `json:"vulnerability_ids,omitempty"`
+	ReviewIDs                  []string             `json:"review_ids,omitempty"`
+	RemediationIDs             []string             `json:"remediation_ids,omitempty"`
+	ProgramOwnerID             *string              `json:"program_owner_id,omitempty"`
 }
 
 // Mutate applies the CreateProgramInput on the ProgramMutation builder.
@@ -21377,6 +21381,18 @@ func (i *CreateProgramInput) Mutate(m *ProgramMutation) {
 	}
 	if v := i.EndDate; v != nil {
 		m.SetEndDate(*v)
+	}
+	if v := i.ObservationPeriodStartDate; v != nil {
+		m.SetObservationPeriodStartDate(*v)
+	}
+	if v := i.ObservationPeriodEndDate; v != nil {
+		m.SetObservationPeriodEndDate(*v)
+	}
+	if v := i.FieldworkStartDate; v != nil {
+		m.SetFieldworkStartDate(*v)
+	}
+	if v := i.FieldworkEndDate; v != nil {
+		m.SetFieldworkEndDate(*v)
 	}
 	if v := i.AuditorReady; v != nil {
 		m.SetAuditorReady(*v)
@@ -21475,98 +21491,106 @@ func (c *ProgramCreate) SetInput(i CreateProgramInput) *ProgramCreate {
 
 // UpdateProgramInput represents a mutation input for updating programs.
 type UpdateProgramInput struct {
-	ClearTags                 bool
-	Tags                      []string `json:"tags,omitempty"`
-	AppendTags                []string
-	ClearProgramKindName      bool
-	ProgramKindName           *string `json:"program_kind_name,omitempty"`
-	ClearExternalUUID         bool
-	ExternalUUID              *string `json:"external_uuid,omitempty"`
-	Name                      *string `json:"name,omitempty"`
-	ClearDescription          bool
-	Description               *string              `json:"description,omitempty"`
-	Status                    *enums.ProgramStatus `json:"status,omitempty"`
-	ClearFrameworkName        bool
-	FrameworkName             *string `json:"framework_name,omitempty"`
-	ClearStartDate            bool
-	StartDate                 *time.Time `json:"start_date,omitempty"`
-	ClearEndDate              bool
-	EndDate                   *time.Time `json:"end_date,omitempty"`
-	AuditorReady              *bool      `json:"auditor_ready,omitempty"`
-	AuditorWriteComments      *bool      `json:"auditor_write_comments,omitempty"`
-	AuditorReadComments       *bool      `json:"auditor_read_comments,omitempty"`
-	ClearAuditFirm            bool
-	AuditFirm                 *string `json:"audit_firm,omitempty"`
-	ClearAuditor              bool
-	Auditor                   *string `json:"auditor,omitempty"`
-	ClearAuditorEmail         bool
-	AuditorEmail              *string `json:"auditor_email,omitempty"`
-	ClearOwner                bool
-	OwnerID                   *string `json:"owner_id,omitempty"`
-	ClearBlockedGroups        bool
-	AddBlockedGroupIDs        []string `json:"add_blocked_group_ids,omitempty"`
-	RemoveBlockedGroupIDs     []string `json:"remove_blocked_group_ids,omitempty"`
-	ClearEditors              bool
-	AddEditorIDs              []string `json:"add_editor_ids,omitempty"`
-	RemoveEditorIDs           []string `json:"remove_editor_ids,omitempty"`
-	ClearViewers              bool
-	AddViewerIDs              []string `json:"add_viewer_ids,omitempty"`
-	RemoveViewerIDs           []string `json:"remove_viewer_ids,omitempty"`
-	ClearProgramKind          bool
-	ProgramKindID             *string `json:"program_kind_id,omitempty"`
-	ClearControls             bool
-	AddControlIDs             []string `json:"add_control_ids,omitempty"`
-	RemoveControlIDs          []string `json:"remove_control_ids,omitempty"`
-	ClearSubcontrols          bool
-	AddSubcontrolIDs          []string `json:"add_subcontrol_ids,omitempty"`
-	RemoveSubcontrolIDs       []string `json:"remove_subcontrol_ids,omitempty"`
-	ClearControlObjectives    bool
-	AddControlObjectiveIDs    []string `json:"add_control_objective_ids,omitempty"`
-	RemoveControlObjectiveIDs []string `json:"remove_control_objective_ids,omitempty"`
-	ClearInternalPolicies     bool
-	AddInternalPolicyIDs      []string `json:"add_internal_policy_ids,omitempty"`
-	RemoveInternalPolicyIDs   []string `json:"remove_internal_policy_ids,omitempty"`
-	ClearProcedures           bool
-	AddProcedureIDs           []string `json:"add_procedure_ids,omitempty"`
-	RemoveProcedureIDs        []string `json:"remove_procedure_ids,omitempty"`
-	ClearRisks                bool
-	AddRiskIDs                []string `json:"add_risk_ids,omitempty"`
-	RemoveRiskIDs             []string `json:"remove_risk_ids,omitempty"`
-	ClearTasks                bool
-	AddTaskIDs                []string `json:"add_task_ids,omitempty"`
-	RemoveTaskIDs             []string `json:"remove_task_ids,omitempty"`
-	ClearNotes                bool
-	AddNoteIDs                []string `json:"add_note_ids,omitempty"`
-	RemoveNoteIDs             []string `json:"remove_note_ids,omitempty"`
-	ClearFiles                bool
-	AddFileIDs                []string `json:"add_file_ids,omitempty"`
-	RemoveFileIDs             []string `json:"remove_file_ids,omitempty"`
-	ClearEvidence             bool
-	AddEvidenceIDs            []string `json:"add_evidence_ids,omitempty"`
-	RemoveEvidenceIDs         []string `json:"remove_evidence_ids,omitempty"`
-	ClearNarratives           bool
-	AddNarrativeIDs           []string `json:"add_narrative_ids,omitempty"`
-	RemoveNarrativeIDs        []string `json:"remove_narrative_ids,omitempty"`
-	ClearActionPlans          bool
-	AddActionPlanIDs          []string `json:"add_action_plan_ids,omitempty"`
-	RemoveActionPlanIDs       []string `json:"remove_action_plan_ids,omitempty"`
-	ClearSystemDetails        bool
-	AddSystemDetailIDs        []string `json:"add_system_detail_ids,omitempty"`
-	RemoveSystemDetailIDs     []string `json:"remove_system_detail_ids,omitempty"`
-	ClearFindings             bool
-	AddFindingIDs             []string `json:"add_finding_ids,omitempty"`
-	RemoveFindingIDs          []string `json:"remove_finding_ids,omitempty"`
-	ClearVulnerabilities      bool
-	AddVulnerabilityIDs       []string `json:"add_vulnerability_ids,omitempty"`
-	RemoveVulnerabilityIDs    []string `json:"remove_vulnerability_ids,omitempty"`
-	ClearReviews              bool
-	AddReviewIDs              []string `json:"add_review_ids,omitempty"`
-	RemoveReviewIDs           []string `json:"remove_review_ids,omitempty"`
-	ClearRemediations         bool
-	AddRemediationIDs         []string `json:"add_remediation_ids,omitempty"`
-	RemoveRemediationIDs      []string `json:"remove_remediation_ids,omitempty"`
-	ClearProgramOwner         bool
-	ProgramOwnerID            *string `json:"program_owner_id,omitempty"`
+	ClearTags                       bool
+	Tags                            []string `json:"tags,omitempty"`
+	AppendTags                      []string
+	ClearProgramKindName            bool
+	ProgramKindName                 *string `json:"program_kind_name,omitempty"`
+	ClearExternalUUID               bool
+	ExternalUUID                    *string `json:"external_uuid,omitempty"`
+	Name                            *string `json:"name,omitempty"`
+	ClearDescription                bool
+	Description                     *string              `json:"description,omitempty"`
+	Status                          *enums.ProgramStatus `json:"status,omitempty"`
+	ClearFrameworkName              bool
+	FrameworkName                   *string `json:"framework_name,omitempty"`
+	ClearStartDate                  bool
+	StartDate                       *time.Time `json:"start_date,omitempty"`
+	ClearEndDate                    bool
+	EndDate                         *time.Time `json:"end_date,omitempty"`
+	ClearObservationPeriodStartDate bool
+	ObservationPeriodStartDate      *time.Time `json:"observation_period_start_date,omitempty"`
+	ClearObservationPeriodEndDate   bool
+	ObservationPeriodEndDate        *time.Time `json:"observation_period_end_date,omitempty"`
+	ClearFieldworkStartDate         bool
+	FieldworkStartDate              *time.Time `json:"fieldwork_start_date,omitempty"`
+	ClearFieldworkEndDate           bool
+	FieldworkEndDate                *time.Time `json:"fieldwork_end_date,omitempty"`
+	AuditorReady                    *bool      `json:"auditor_ready,omitempty"`
+	AuditorWriteComments            *bool      `json:"auditor_write_comments,omitempty"`
+	AuditorReadComments             *bool      `json:"auditor_read_comments,omitempty"`
+	ClearAuditFirm                  bool
+	AuditFirm                       *string `json:"audit_firm,omitempty"`
+	ClearAuditor                    bool
+	Auditor                         *string `json:"auditor,omitempty"`
+	ClearAuditorEmail               bool
+	AuditorEmail                    *string `json:"auditor_email,omitempty"`
+	ClearOwner                      bool
+	OwnerID                         *string `json:"owner_id,omitempty"`
+	ClearBlockedGroups              bool
+	AddBlockedGroupIDs              []string `json:"add_blocked_group_ids,omitempty"`
+	RemoveBlockedGroupIDs           []string `json:"remove_blocked_group_ids,omitempty"`
+	ClearEditors                    bool
+	AddEditorIDs                    []string `json:"add_editor_ids,omitempty"`
+	RemoveEditorIDs                 []string `json:"remove_editor_ids,omitempty"`
+	ClearViewers                    bool
+	AddViewerIDs                    []string `json:"add_viewer_ids,omitempty"`
+	RemoveViewerIDs                 []string `json:"remove_viewer_ids,omitempty"`
+	ClearProgramKind                bool
+	ProgramKindID                   *string `json:"program_kind_id,omitempty"`
+	ClearControls                   bool
+	AddControlIDs                   []string `json:"add_control_ids,omitempty"`
+	RemoveControlIDs                []string `json:"remove_control_ids,omitempty"`
+	ClearSubcontrols                bool
+	AddSubcontrolIDs                []string `json:"add_subcontrol_ids,omitempty"`
+	RemoveSubcontrolIDs             []string `json:"remove_subcontrol_ids,omitempty"`
+	ClearControlObjectives          bool
+	AddControlObjectiveIDs          []string `json:"add_control_objective_ids,omitempty"`
+	RemoveControlObjectiveIDs       []string `json:"remove_control_objective_ids,omitempty"`
+	ClearInternalPolicies           bool
+	AddInternalPolicyIDs            []string `json:"add_internal_policy_ids,omitempty"`
+	RemoveInternalPolicyIDs         []string `json:"remove_internal_policy_ids,omitempty"`
+	ClearProcedures                 bool
+	AddProcedureIDs                 []string `json:"add_procedure_ids,omitempty"`
+	RemoveProcedureIDs              []string `json:"remove_procedure_ids,omitempty"`
+	ClearRisks                      bool
+	AddRiskIDs                      []string `json:"add_risk_ids,omitempty"`
+	RemoveRiskIDs                   []string `json:"remove_risk_ids,omitempty"`
+	ClearTasks                      bool
+	AddTaskIDs                      []string `json:"add_task_ids,omitempty"`
+	RemoveTaskIDs                   []string `json:"remove_task_ids,omitempty"`
+	ClearNotes                      bool
+	AddNoteIDs                      []string `json:"add_note_ids,omitempty"`
+	RemoveNoteIDs                   []string `json:"remove_note_ids,omitempty"`
+	ClearFiles                      bool
+	AddFileIDs                      []string `json:"add_file_ids,omitempty"`
+	RemoveFileIDs                   []string `json:"remove_file_ids,omitempty"`
+	ClearEvidence                   bool
+	AddEvidenceIDs                  []string `json:"add_evidence_ids,omitempty"`
+	RemoveEvidenceIDs               []string `json:"remove_evidence_ids,omitempty"`
+	ClearNarratives                 bool
+	AddNarrativeIDs                 []string `json:"add_narrative_ids,omitempty"`
+	RemoveNarrativeIDs              []string `json:"remove_narrative_ids,omitempty"`
+	ClearActionPlans                bool
+	AddActionPlanIDs                []string `json:"add_action_plan_ids,omitempty"`
+	RemoveActionPlanIDs             []string `json:"remove_action_plan_ids,omitempty"`
+	ClearSystemDetails              bool
+	AddSystemDetailIDs              []string `json:"add_system_detail_ids,omitempty"`
+	RemoveSystemDetailIDs           []string `json:"remove_system_detail_ids,omitempty"`
+	ClearFindings                   bool
+	AddFindingIDs                   []string `json:"add_finding_ids,omitempty"`
+	RemoveFindingIDs                []string `json:"remove_finding_ids,omitempty"`
+	ClearVulnerabilities            bool
+	AddVulnerabilityIDs             []string `json:"add_vulnerability_ids,omitempty"`
+	RemoveVulnerabilityIDs          []string `json:"remove_vulnerability_ids,omitempty"`
+	ClearReviews                    bool
+	AddReviewIDs                    []string `json:"add_review_ids,omitempty"`
+	RemoveReviewIDs                 []string `json:"remove_review_ids,omitempty"`
+	ClearRemediations               bool
+	AddRemediationIDs               []string `json:"add_remediation_ids,omitempty"`
+	RemoveRemediationIDs            []string `json:"remove_remediation_ids,omitempty"`
+	ClearProgramOwner               bool
+	ProgramOwnerID                  *string `json:"program_owner_id,omitempty"`
 }
 
 // Mutate applies the UpdateProgramInput on the ProgramMutation builder.
@@ -21621,6 +21645,30 @@ func (i *UpdateProgramInput) Mutate(m *ProgramMutation) {
 	}
 	if v := i.EndDate; v != nil {
 		m.SetEndDate(*v)
+	}
+	if i.ClearObservationPeriodStartDate {
+		m.ClearObservationPeriodStartDate()
+	}
+	if v := i.ObservationPeriodStartDate; v != nil {
+		m.SetObservationPeriodStartDate(*v)
+	}
+	if i.ClearObservationPeriodEndDate {
+		m.ClearObservationPeriodEndDate()
+	}
+	if v := i.ObservationPeriodEndDate; v != nil {
+		m.SetObservationPeriodEndDate(*v)
+	}
+	if i.ClearFieldworkStartDate {
+		m.ClearFieldworkStartDate()
+	}
+	if v := i.FieldworkStartDate; v != nil {
+		m.SetFieldworkStartDate(*v)
+	}
+	if i.ClearFieldworkEndDate {
+		m.ClearFieldworkEndDate()
+	}
+	if v := i.FieldworkEndDate; v != nil {
+		m.SetFieldworkEndDate(*v)
 	}
 	if v := i.AuditorReady; v != nil {
 		m.SetAuditorReady(*v)

@@ -9144,6 +9144,14 @@ type CreateProgramInput struct {
 	StartDate *time.Time `json:"startDate,omitempty"`
 	// the end date of the period
 	EndDate *time.Time `json:"endDate,omitempty"`
+	// the start date of the observation period
+	ObservationPeriodStartDate *time.Time `json:"observationPeriodStartDate,omitempty"`
+	// the end date of the observation period
+	ObservationPeriodEndDate *time.Time `json:"observationPeriodEndDate,omitempty"`
+	// the start date of fieldwork
+	FieldworkStartDate *time.Time `json:"fieldworkStartDate,omitempty"`
+	// the end date of fieldwork
+	FieldworkEndDate *time.Time `json:"fieldworkEndDate,omitempty"`
 	// is the program ready for the auditor
 	AuditorReady *bool `json:"auditorReady,omitempty"`
 	// can the auditor write comments
@@ -30777,6 +30785,14 @@ type Program struct {
 	StartDate *time.Time `json:"startDate,omitempty"`
 	// the end date of the period
 	EndDate *time.Time `json:"endDate,omitempty"`
+	// the start date of the observation period
+	ObservationPeriodStartDate *time.Time `json:"observationPeriodStartDate,omitempty"`
+	// the end date of the observation period
+	ObservationPeriodEndDate *time.Time `json:"observationPeriodEndDate,omitempty"`
+	// the start date of fieldwork
+	FieldworkStartDate *time.Time `json:"fieldworkStartDate,omitempty"`
+	// the end date of fieldwork
+	FieldworkEndDate *time.Time `json:"fieldworkEndDate,omitempty"`
 	// is the program ready for the auditor
 	AuditorReady bool `json:"auditorReady"`
 	// can the auditor write comments
@@ -31307,6 +31323,50 @@ type ProgramWhereInput struct {
 	EndDateLte    *time.Time   `json:"endDateLTE,omitempty"`
 	EndDateIsNil  *bool        `json:"endDateIsNil,omitempty"`
 	EndDateNotNil *bool        `json:"endDateNotNil,omitempty"`
+	// observation_period_start_date field predicates
+	ObservationPeriodStartDate       *time.Time   `json:"observationPeriodStartDate,omitempty"`
+	ObservationPeriodStartDateNeq    *time.Time   `json:"observationPeriodStartDateNEQ,omitempty"`
+	ObservationPeriodStartDateIn     []*time.Time `json:"observationPeriodStartDateIn,omitempty"`
+	ObservationPeriodStartDateNotIn  []*time.Time `json:"observationPeriodStartDateNotIn,omitempty"`
+	ObservationPeriodStartDateGt     *time.Time   `json:"observationPeriodStartDateGT,omitempty"`
+	ObservationPeriodStartDateGte    *time.Time   `json:"observationPeriodStartDateGTE,omitempty"`
+	ObservationPeriodStartDateLt     *time.Time   `json:"observationPeriodStartDateLT,omitempty"`
+	ObservationPeriodStartDateLte    *time.Time   `json:"observationPeriodStartDateLTE,omitempty"`
+	ObservationPeriodStartDateIsNil  *bool        `json:"observationPeriodStartDateIsNil,omitempty"`
+	ObservationPeriodStartDateNotNil *bool        `json:"observationPeriodStartDateNotNil,omitempty"`
+	// observation_period_end_date field predicates
+	ObservationPeriodEndDate       *time.Time   `json:"observationPeriodEndDate,omitempty"`
+	ObservationPeriodEndDateNeq    *time.Time   `json:"observationPeriodEndDateNEQ,omitempty"`
+	ObservationPeriodEndDateIn     []*time.Time `json:"observationPeriodEndDateIn,omitempty"`
+	ObservationPeriodEndDateNotIn  []*time.Time `json:"observationPeriodEndDateNotIn,omitempty"`
+	ObservationPeriodEndDateGt     *time.Time   `json:"observationPeriodEndDateGT,omitempty"`
+	ObservationPeriodEndDateGte    *time.Time   `json:"observationPeriodEndDateGTE,omitempty"`
+	ObservationPeriodEndDateLt     *time.Time   `json:"observationPeriodEndDateLT,omitempty"`
+	ObservationPeriodEndDateLte    *time.Time   `json:"observationPeriodEndDateLTE,omitempty"`
+	ObservationPeriodEndDateIsNil  *bool        `json:"observationPeriodEndDateIsNil,omitempty"`
+	ObservationPeriodEndDateNotNil *bool        `json:"observationPeriodEndDateNotNil,omitempty"`
+	// fieldwork_start_date field predicates
+	FieldworkStartDate       *time.Time   `json:"fieldworkStartDate,omitempty"`
+	FieldworkStartDateNeq    *time.Time   `json:"fieldworkStartDateNEQ,omitempty"`
+	FieldworkStartDateIn     []*time.Time `json:"fieldworkStartDateIn,omitempty"`
+	FieldworkStartDateNotIn  []*time.Time `json:"fieldworkStartDateNotIn,omitempty"`
+	FieldworkStartDateGt     *time.Time   `json:"fieldworkStartDateGT,omitempty"`
+	FieldworkStartDateGte    *time.Time   `json:"fieldworkStartDateGTE,omitempty"`
+	FieldworkStartDateLt     *time.Time   `json:"fieldworkStartDateLT,omitempty"`
+	FieldworkStartDateLte    *time.Time   `json:"fieldworkStartDateLTE,omitempty"`
+	FieldworkStartDateIsNil  *bool        `json:"fieldworkStartDateIsNil,omitempty"`
+	FieldworkStartDateNotNil *bool        `json:"fieldworkStartDateNotNil,omitempty"`
+	// fieldwork_end_date field predicates
+	FieldworkEndDate       *time.Time   `json:"fieldworkEndDate,omitempty"`
+	FieldworkEndDateNeq    *time.Time   `json:"fieldworkEndDateNEQ,omitempty"`
+	FieldworkEndDateIn     []*time.Time `json:"fieldworkEndDateIn,omitempty"`
+	FieldworkEndDateNotIn  []*time.Time `json:"fieldworkEndDateNotIn,omitempty"`
+	FieldworkEndDateGt     *time.Time   `json:"fieldworkEndDateGT,omitempty"`
+	FieldworkEndDateGte    *time.Time   `json:"fieldworkEndDateGTE,omitempty"`
+	FieldworkEndDateLt     *time.Time   `json:"fieldworkEndDateLT,omitempty"`
+	FieldworkEndDateLte    *time.Time   `json:"fieldworkEndDateLTE,omitempty"`
+	FieldworkEndDateIsNil  *bool        `json:"fieldworkEndDateIsNil,omitempty"`
+	FieldworkEndDateNotNil *bool        `json:"fieldworkEndDateNotNil,omitempty"`
 	// auditor_ready field predicates
 	AuditorReady    *bool `json:"auditorReady,omitempty"`
 	AuditorReadyNeq *bool `json:"auditorReadyNEQ,omitempty"`
@@ -46506,6 +46566,18 @@ type UpdateProgramInput struct {
 	// the end date of the period
 	EndDate      *time.Time `json:"endDate,omitempty"`
 	ClearEndDate *bool      `json:"clearEndDate,omitempty"`
+	// the start date of the observation period
+	ObservationPeriodStartDate      *time.Time `json:"observationPeriodStartDate,omitempty"`
+	ClearObservationPeriodStartDate *bool      `json:"clearObservationPeriodStartDate,omitempty"`
+	// the end date of the observation period
+	ObservationPeriodEndDate      *time.Time `json:"observationPeriodEndDate,omitempty"`
+	ClearObservationPeriodEndDate *bool      `json:"clearObservationPeriodEndDate,omitempty"`
+	// the start date of fieldwork
+	FieldworkStartDate      *time.Time `json:"fieldworkStartDate,omitempty"`
+	ClearFieldworkStartDate *bool      `json:"clearFieldworkStartDate,omitempty"`
+	// the end date of fieldwork
+	FieldworkEndDate      *time.Time `json:"fieldworkEndDate,omitempty"`
+	ClearFieldworkEndDate *bool      `json:"clearFieldworkEndDate,omitempty"`
 	// is the program ready for the auditor
 	AuditorReady *bool `json:"auditorReady,omitempty"`
 	// can the auditor write comments
@@ -58073,13 +58145,17 @@ func (e ProgramMembershipOrderField) MarshalJSON() ([]byte, error) {
 type ProgramOrderField string
 
 const (
-	ProgramOrderFieldCreatedAt ProgramOrderField = "created_at"
-	ProgramOrderFieldUpdatedAt ProgramOrderField = "updated_at"
-	ProgramOrderFieldName      ProgramOrderField = "name"
-	ProgramOrderFieldStatus    ProgramOrderField = "STATUS"
-	ProgramOrderFieldFramework ProgramOrderField = "framework"
-	ProgramOrderFieldStartDate ProgramOrderField = "start_date"
-	ProgramOrderFieldEndDate   ProgramOrderField = "end_date"
+	ProgramOrderFieldCreatedAt                  ProgramOrderField = "created_at"
+	ProgramOrderFieldUpdatedAt                  ProgramOrderField = "updated_at"
+	ProgramOrderFieldName                       ProgramOrderField = "name"
+	ProgramOrderFieldStatus                     ProgramOrderField = "STATUS"
+	ProgramOrderFieldFramework                  ProgramOrderField = "framework"
+	ProgramOrderFieldStartDate                  ProgramOrderField = "start_date"
+	ProgramOrderFieldEndDate                    ProgramOrderField = "end_date"
+	ProgramOrderFieldObservationPeriodStartDate ProgramOrderField = "observation_period_start_date"
+	ProgramOrderFieldObservationPeriodEndDate   ProgramOrderField = "observation_period_end_date"
+	ProgramOrderFieldFieldworkStartDate         ProgramOrderField = "fieldwork_start_date"
+	ProgramOrderFieldFieldworkEndDate           ProgramOrderField = "fieldwork_end_date"
 )
 
 var AllProgramOrderField = []ProgramOrderField{
@@ -58090,11 +58166,15 @@ var AllProgramOrderField = []ProgramOrderField{
 	ProgramOrderFieldFramework,
 	ProgramOrderFieldStartDate,
 	ProgramOrderFieldEndDate,
+	ProgramOrderFieldObservationPeriodStartDate,
+	ProgramOrderFieldObservationPeriodEndDate,
+	ProgramOrderFieldFieldworkStartDate,
+	ProgramOrderFieldFieldworkEndDate,
 }
 
 func (e ProgramOrderField) IsValid() bool {
 	switch e {
-	case ProgramOrderFieldCreatedAt, ProgramOrderFieldUpdatedAt, ProgramOrderFieldName, ProgramOrderFieldStatus, ProgramOrderFieldFramework, ProgramOrderFieldStartDate, ProgramOrderFieldEndDate:
+	case ProgramOrderFieldCreatedAt, ProgramOrderFieldUpdatedAt, ProgramOrderFieldName, ProgramOrderFieldStatus, ProgramOrderFieldFramework, ProgramOrderFieldStartDate, ProgramOrderFieldEndDate, ProgramOrderFieldObservationPeriodStartDate, ProgramOrderFieldObservationPeriodEndDate, ProgramOrderFieldFieldworkStartDate, ProgramOrderFieldFieldworkEndDate:
 		return true
 	}
 	return false

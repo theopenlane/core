@@ -353,6 +353,86 @@ func (_u *ProgramUpdate) ClearEndDate() *ProgramUpdate {
 	return _u
 }
 
+// SetObservationPeriodStartDate sets the "observation_period_start_date" field.
+func (_u *ProgramUpdate) SetObservationPeriodStartDate(v time.Time) *ProgramUpdate {
+	_u.mutation.SetObservationPeriodStartDate(v)
+	return _u
+}
+
+// SetNillableObservationPeriodStartDate sets the "observation_period_start_date" field if the given value is not nil.
+func (_u *ProgramUpdate) SetNillableObservationPeriodStartDate(v *time.Time) *ProgramUpdate {
+	if v != nil {
+		_u.SetObservationPeriodStartDate(*v)
+	}
+	return _u
+}
+
+// ClearObservationPeriodStartDate clears the value of the "observation_period_start_date" field.
+func (_u *ProgramUpdate) ClearObservationPeriodStartDate() *ProgramUpdate {
+	_u.mutation.ClearObservationPeriodStartDate()
+	return _u
+}
+
+// SetObservationPeriodEndDate sets the "observation_period_end_date" field.
+func (_u *ProgramUpdate) SetObservationPeriodEndDate(v time.Time) *ProgramUpdate {
+	_u.mutation.SetObservationPeriodEndDate(v)
+	return _u
+}
+
+// SetNillableObservationPeriodEndDate sets the "observation_period_end_date" field if the given value is not nil.
+func (_u *ProgramUpdate) SetNillableObservationPeriodEndDate(v *time.Time) *ProgramUpdate {
+	if v != nil {
+		_u.SetObservationPeriodEndDate(*v)
+	}
+	return _u
+}
+
+// ClearObservationPeriodEndDate clears the value of the "observation_period_end_date" field.
+func (_u *ProgramUpdate) ClearObservationPeriodEndDate() *ProgramUpdate {
+	_u.mutation.ClearObservationPeriodEndDate()
+	return _u
+}
+
+// SetFieldworkStartDate sets the "fieldwork_start_date" field.
+func (_u *ProgramUpdate) SetFieldworkStartDate(v time.Time) *ProgramUpdate {
+	_u.mutation.SetFieldworkStartDate(v)
+	return _u
+}
+
+// SetNillableFieldworkStartDate sets the "fieldwork_start_date" field if the given value is not nil.
+func (_u *ProgramUpdate) SetNillableFieldworkStartDate(v *time.Time) *ProgramUpdate {
+	if v != nil {
+		_u.SetFieldworkStartDate(*v)
+	}
+	return _u
+}
+
+// ClearFieldworkStartDate clears the value of the "fieldwork_start_date" field.
+func (_u *ProgramUpdate) ClearFieldworkStartDate() *ProgramUpdate {
+	_u.mutation.ClearFieldworkStartDate()
+	return _u
+}
+
+// SetFieldworkEndDate sets the "fieldwork_end_date" field.
+func (_u *ProgramUpdate) SetFieldworkEndDate(v time.Time) *ProgramUpdate {
+	_u.mutation.SetFieldworkEndDate(v)
+	return _u
+}
+
+// SetNillableFieldworkEndDate sets the "fieldwork_end_date" field if the given value is not nil.
+func (_u *ProgramUpdate) SetNillableFieldworkEndDate(v *time.Time) *ProgramUpdate {
+	if v != nil {
+		_u.SetFieldworkEndDate(*v)
+	}
+	return _u
+}
+
+// ClearFieldworkEndDate clears the value of the "fieldwork_end_date" field.
+func (_u *ProgramUpdate) ClearFieldworkEndDate() *ProgramUpdate {
+	_u.mutation.ClearFieldworkEndDate()
+	return _u
+}
+
 // SetAuditorReady sets the "auditor_ready" field.
 func (_u *ProgramUpdate) SetAuditorReady(v bool) *ProgramUpdate {
 	_u.mutation.SetAuditorReady(v)
@@ -1478,6 +1558,30 @@ func (_u *ProgramUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.EndDateCleared() {
 		_spec.ClearField(program.FieldEndDate, field.TypeTime)
+	}
+	if value, ok := _u.mutation.ObservationPeriodStartDate(); ok {
+		_spec.SetField(program.FieldObservationPeriodStartDate, field.TypeTime, value)
+	}
+	if _u.mutation.ObservationPeriodStartDateCleared() {
+		_spec.ClearField(program.FieldObservationPeriodStartDate, field.TypeTime)
+	}
+	if value, ok := _u.mutation.ObservationPeriodEndDate(); ok {
+		_spec.SetField(program.FieldObservationPeriodEndDate, field.TypeTime, value)
+	}
+	if _u.mutation.ObservationPeriodEndDateCleared() {
+		_spec.ClearField(program.FieldObservationPeriodEndDate, field.TypeTime)
+	}
+	if value, ok := _u.mutation.FieldworkStartDate(); ok {
+		_spec.SetField(program.FieldFieldworkStartDate, field.TypeTime, value)
+	}
+	if _u.mutation.FieldworkStartDateCleared() {
+		_spec.ClearField(program.FieldFieldworkStartDate, field.TypeTime)
+	}
+	if value, ok := _u.mutation.FieldworkEndDate(); ok {
+		_spec.SetField(program.FieldFieldworkEndDate, field.TypeTime, value)
+	}
+	if _u.mutation.FieldworkEndDateCleared() {
+		_spec.ClearField(program.FieldFieldworkEndDate, field.TypeTime)
 	}
 	if value, ok := _u.mutation.AuditorReady(); ok {
 		_spec.SetField(program.FieldAuditorReady, field.TypeBool, value)
@@ -2998,6 +3102,86 @@ func (_u *ProgramUpdateOne) ClearEndDate() *ProgramUpdateOne {
 	return _u
 }
 
+// SetObservationPeriodStartDate sets the "observation_period_start_date" field.
+func (_u *ProgramUpdateOne) SetObservationPeriodStartDate(v time.Time) *ProgramUpdateOne {
+	_u.mutation.SetObservationPeriodStartDate(v)
+	return _u
+}
+
+// SetNillableObservationPeriodStartDate sets the "observation_period_start_date" field if the given value is not nil.
+func (_u *ProgramUpdateOne) SetNillableObservationPeriodStartDate(v *time.Time) *ProgramUpdateOne {
+	if v != nil {
+		_u.SetObservationPeriodStartDate(*v)
+	}
+	return _u
+}
+
+// ClearObservationPeriodStartDate clears the value of the "observation_period_start_date" field.
+func (_u *ProgramUpdateOne) ClearObservationPeriodStartDate() *ProgramUpdateOne {
+	_u.mutation.ClearObservationPeriodStartDate()
+	return _u
+}
+
+// SetObservationPeriodEndDate sets the "observation_period_end_date" field.
+func (_u *ProgramUpdateOne) SetObservationPeriodEndDate(v time.Time) *ProgramUpdateOne {
+	_u.mutation.SetObservationPeriodEndDate(v)
+	return _u
+}
+
+// SetNillableObservationPeriodEndDate sets the "observation_period_end_date" field if the given value is not nil.
+func (_u *ProgramUpdateOne) SetNillableObservationPeriodEndDate(v *time.Time) *ProgramUpdateOne {
+	if v != nil {
+		_u.SetObservationPeriodEndDate(*v)
+	}
+	return _u
+}
+
+// ClearObservationPeriodEndDate clears the value of the "observation_period_end_date" field.
+func (_u *ProgramUpdateOne) ClearObservationPeriodEndDate() *ProgramUpdateOne {
+	_u.mutation.ClearObservationPeriodEndDate()
+	return _u
+}
+
+// SetFieldworkStartDate sets the "fieldwork_start_date" field.
+func (_u *ProgramUpdateOne) SetFieldworkStartDate(v time.Time) *ProgramUpdateOne {
+	_u.mutation.SetFieldworkStartDate(v)
+	return _u
+}
+
+// SetNillableFieldworkStartDate sets the "fieldwork_start_date" field if the given value is not nil.
+func (_u *ProgramUpdateOne) SetNillableFieldworkStartDate(v *time.Time) *ProgramUpdateOne {
+	if v != nil {
+		_u.SetFieldworkStartDate(*v)
+	}
+	return _u
+}
+
+// ClearFieldworkStartDate clears the value of the "fieldwork_start_date" field.
+func (_u *ProgramUpdateOne) ClearFieldworkStartDate() *ProgramUpdateOne {
+	_u.mutation.ClearFieldworkStartDate()
+	return _u
+}
+
+// SetFieldworkEndDate sets the "fieldwork_end_date" field.
+func (_u *ProgramUpdateOne) SetFieldworkEndDate(v time.Time) *ProgramUpdateOne {
+	_u.mutation.SetFieldworkEndDate(v)
+	return _u
+}
+
+// SetNillableFieldworkEndDate sets the "fieldwork_end_date" field if the given value is not nil.
+func (_u *ProgramUpdateOne) SetNillableFieldworkEndDate(v *time.Time) *ProgramUpdateOne {
+	if v != nil {
+		_u.SetFieldworkEndDate(*v)
+	}
+	return _u
+}
+
+// ClearFieldworkEndDate clears the value of the "fieldwork_end_date" field.
+func (_u *ProgramUpdateOne) ClearFieldworkEndDate() *ProgramUpdateOne {
+	_u.mutation.ClearFieldworkEndDate()
+	return _u
+}
+
 // SetAuditorReady sets the "auditor_ready" field.
 func (_u *ProgramUpdateOne) SetAuditorReady(v bool) *ProgramUpdateOne {
 	_u.mutation.SetAuditorReady(v)
@@ -4153,6 +4337,30 @@ func (_u *ProgramUpdateOne) sqlSave(ctx context.Context) (_node *Program, err er
 	}
 	if _u.mutation.EndDateCleared() {
 		_spec.ClearField(program.FieldEndDate, field.TypeTime)
+	}
+	if value, ok := _u.mutation.ObservationPeriodStartDate(); ok {
+		_spec.SetField(program.FieldObservationPeriodStartDate, field.TypeTime, value)
+	}
+	if _u.mutation.ObservationPeriodStartDateCleared() {
+		_spec.ClearField(program.FieldObservationPeriodStartDate, field.TypeTime)
+	}
+	if value, ok := _u.mutation.ObservationPeriodEndDate(); ok {
+		_spec.SetField(program.FieldObservationPeriodEndDate, field.TypeTime, value)
+	}
+	if _u.mutation.ObservationPeriodEndDateCleared() {
+		_spec.ClearField(program.FieldObservationPeriodEndDate, field.TypeTime)
+	}
+	if value, ok := _u.mutation.FieldworkStartDate(); ok {
+		_spec.SetField(program.FieldFieldworkStartDate, field.TypeTime, value)
+	}
+	if _u.mutation.FieldworkStartDateCleared() {
+		_spec.ClearField(program.FieldFieldworkStartDate, field.TypeTime)
+	}
+	if value, ok := _u.mutation.FieldworkEndDate(); ok {
+		_spec.SetField(program.FieldFieldworkEndDate, field.TypeTime, value)
+	}
+	if _u.mutation.FieldworkEndDateCleared() {
+		_spec.ClearField(program.FieldFieldworkEndDate, field.TypeTime)
 	}
 	if value, ok := _u.mutation.AuditorReady(); ok {
 		_spec.SetField(program.FieldAuditorReady, field.TypeBool, value)

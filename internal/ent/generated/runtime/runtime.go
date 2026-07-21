@@ -6358,19 +6358,19 @@ func init() {
 	// program.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	program.NameValidator = programDescName.Validators[0].(func(string) error)
 	// programDescAuditorReady is the schema descriptor for auditor_ready field.
-	programDescAuditorReady := programFields[7].Descriptor()
+	programDescAuditorReady := programFields[11].Descriptor()
 	// program.DefaultAuditorReady holds the default value on creation for the auditor_ready field.
 	program.DefaultAuditorReady = programDescAuditorReady.Default.(bool)
 	// programDescAuditorWriteComments is the schema descriptor for auditor_write_comments field.
-	programDescAuditorWriteComments := programFields[8].Descriptor()
+	programDescAuditorWriteComments := programFields[12].Descriptor()
 	// program.DefaultAuditorWriteComments holds the default value on creation for the auditor_write_comments field.
 	program.DefaultAuditorWriteComments = programDescAuditorWriteComments.Default.(bool)
 	// programDescAuditorReadComments is the schema descriptor for auditor_read_comments field.
-	programDescAuditorReadComments := programFields[9].Descriptor()
+	programDescAuditorReadComments := programFields[13].Descriptor()
 	// program.DefaultAuditorReadComments holds the default value on creation for the auditor_read_comments field.
 	program.DefaultAuditorReadComments = programDescAuditorReadComments.Default.(bool)
 	// programDescAuditorEmail is the schema descriptor for auditor_email field.
-	programDescAuditorEmail := programFields[12].Descriptor()
+	programDescAuditorEmail := programFields[16].Descriptor()
 	// program.AuditorEmailValidator is a validator for the "auditor_email" field. It is called by the builders before save.
 	program.AuditorEmailValidator = programDescAuditorEmail.Validators[0].(func(string) error)
 	// programDescID is the schema descriptor for id field.
