@@ -13,7 +13,6 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	slackdef "github.com/theopenlane/core/internal/integrations/definitions/slack"
-	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -125,7 +124,7 @@ func (r *Runtime) Reconcile(ctx context.Context, installation *ent.Integration, 
 // reconcileUserInput validates and persists user input for one installation
 func (r *Runtime) reconcileUserInput(ctx context.Context, installation *ent.Integration, def types.Definition, userInput json.RawMessage) error {
 	if def.UserInput != nil {
-		if err := validatePayload(def.UserInput.Schema, userInput, ErrUserInputInvalid); err != nil {
+		if err := validatePayload(ctx, def.UserInput.Schema, userInput, ErrUserInputInvalid); err != nil {
 			return err
 		}
 	}
@@ -222,7 +221,7 @@ func (r *Runtime) reconcileCredential(ctx context.Context, installation *ent.Int
 		return err
 	}
 
-	if err := validatePayload(registration.Schema, credential.Data, ErrCredentialInvalid); err != nil {
+	if err := validatePayload(ctx, registration.Schema, credential.Data, ErrCredentialInvalid); err != nil {
 		return err
 	}
 
@@ -396,7 +395,7 @@ func (r *Runtime) notifyIntegrationInstalled(ctx context.Context, installation *
 		return
 	}
 
-	if _, err := r.Dispatch(ctx, operations.DispatchRequest{
+	if _, err := r.Dispatch(ctx, types.DispatchRequest{
 		DefinitionID: slackdef.DefinitionID.ID(),
 		Operation:    slackdef.IntegrationInstalledOp.Name(),
 		Config:       config,

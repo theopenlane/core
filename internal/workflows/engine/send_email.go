@@ -15,7 +15,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
-	"github.com/theopenlane/core/internal/integrations/operations"
 	intruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/integrations/types"
 	wfworkflows "github.com/theopenlane/core/internal/workflows"
@@ -211,7 +210,7 @@ func (e *WorkflowEngine) dispatchSendEmail(ctx context.Context, instance *genera
 		return nil
 	}
 
-	if _, err := e.integrationRuntime.Dispatch(ctx, operations.DispatchRequest{
+	if _, err := e.integrationRuntime.Dispatch(ctx, types.DispatchRequest{
 		DefinitionID: emaildef.DefinitionID.ID(),
 		OwnerID:      ownerID,
 		Operation:    emaildef.SendEmailOp.Name(),

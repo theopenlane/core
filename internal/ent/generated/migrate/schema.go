@@ -2905,6 +2905,7 @@ var (
 		{Name: "finding_id", Type: field.TypeString},
 		{Name: "control_id", Type: field.TypeString},
 		{Name: "standard_id", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// FindingControlsTable holds the schema information for the "finding_controls" table.
 	FindingControlsTable = &schema.Table{
@@ -2928,6 +2929,12 @@ var (
 				Symbol:     "finding_controls_standards_standard",
 				Columns:    []*schema.Column{FindingControlsColumns[14]},
 				RefColumns: []*schema.Column{StandardsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "finding_controls_organizations_finding_controls",
+				Columns:    []*schema.Column{FindingControlsColumns[15]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -5185,7 +5192,7 @@ var (
 		{Name: "data", Type: field.TypeJSON, Nullable: true},
 		{Name: "read_at", Type: field.TypeTime, Nullable: true},
 		{Name: "channels", Type: field.TypeJSON, Nullable: true},
-		{Name: "topic", Type: field.TypeEnum, Nullable: true, Enums: []string{"TASK_ASSIGNMENT", "APPROVAL", "MENTION", "EXPORT", "STANDARD_UPDATE", "DOMAIN_SCAN"}},
+		{Name: "topic", Type: field.TypeEnum, Nullable: true, Enums: []string{"TASK_ASSIGNMENT", "APPROVAL", "MENTION", "EXPORT", "STANDARD_UPDATE", "DOMAIN_SCAN", "IMPORT_COMPLETE"}},
 		{Name: "template_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "user_id", Type: field.TypeString, Nullable: true},
@@ -6731,6 +6738,9 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
+		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
 		{Name: "reviewed_by", Type: field.TypeString, Nullable: true},
 		{Name: "assigned_to", Type: field.TypeString, Nullable: true},
 		{Name: "environment_name", Type: field.TypeString, Nullable: true},
@@ -6743,7 +6753,7 @@ var (
 		{Name: "next_scan_run_at", Type: field.TypeTime, Nullable: true},
 		{Name: "performed_by", Type: field.TypeString, Nullable: true},
 		{Name: "discovered_vulnerability_ids", Type: field.TypeJSON, Nullable: true},
-		{Name: "status", Type: field.TypeEnum, Enums: []string{"PENDING", "PROCESSING", "COMPLETED", "FAILED"}, Default: "PROCESSING"},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"PENDING", "PROCESSING", "COMPLETED", "FAILED"}, Default: "PENDING"},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "generated_by_platform_id", Type: field.TypeString, Nullable: true},
 		{Name: "risk_scans", Type: field.TypeString, Nullable: true},
@@ -6764,67 +6774,67 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "scans_organizations_scans",
-				Columns:    []*schema.Column{ScansColumns[22]},
+				Columns:    []*schema.Column{ScansColumns[25]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "scans_platforms_generated_scans",
-				Columns:    []*schema.Column{ScansColumns[23]},
+				Columns:    []*schema.Column{ScansColumns[26]},
 				RefColumns: []*schema.Column{PlatformsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "scans_risks_scans",
-				Columns:    []*schema.Column{ScansColumns[24]},
+				Columns:    []*schema.Column{ScansColumns[27]},
 				RefColumns: []*schema.Column{RisksColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "scans_users_reviewed_by_user",
-				Columns:    []*schema.Column{ScansColumns[25]},
+				Columns:    []*schema.Column{ScansColumns[28]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "scans_groups_reviewed_by_group",
-				Columns:    []*schema.Column{ScansColumns[26]},
+				Columns:    []*schema.Column{ScansColumns[29]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "scans_users_assigned_to_user",
-				Columns:    []*schema.Column{ScansColumns[27]},
+				Columns:    []*schema.Column{ScansColumns[30]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "scans_groups_assigned_to_group",
-				Columns:    []*schema.Column{ScansColumns[28]},
+				Columns:    []*schema.Column{ScansColumns[31]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "scans_custom_type_enums_environment",
-				Columns:    []*schema.Column{ScansColumns[29]},
+				Columns:    []*schema.Column{ScansColumns[32]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "scans_custom_type_enums_scope",
-				Columns:    []*schema.Column{ScansColumns[30]},
+				Columns:    []*schema.Column{ScansColumns[33]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "scans_users_performed_by_user",
-				Columns:    []*schema.Column{ScansColumns[31]},
+				Columns:    []*schema.Column{ScansColumns[34]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "scans_groups_performed_by_group",
-				Columns:    []*schema.Column{ScansColumns[32]},
+				Columns:    []*schema.Column{ScansColumns[35]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -6833,7 +6843,7 @@ var (
 			{
 				Name:    "scan_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ScansColumns[22]},
+				Columns: []*schema.Column{ScansColumns[25]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -8044,11 +8054,11 @@ var (
 		{Name: "access_level", Type: field.TypeEnum, Nullable: true, Enums: []string{"FULL", "LIMITED"}, Default: "FULL"},
 		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"REQUESTED", "NEEDS_APPROVAL", "APPROVED", "SIGNED", "DECLINED"}, Default: "REQUESTED"},
 		{Name: "approved_at", Type: field.TypeTime, Nullable: true},
-		{Name: "approved_by_user_id", Type: field.TypeString, Nullable: true},
 		{Name: "signed_at", Type: field.TypeTime, Nullable: true},
 		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
 		{Name: "document_data_id", Type: field.TypeString, Nullable: true},
 		{Name: "file_id", Type: field.TypeString, Nullable: true},
+		{Name: "approved_by_user_id", Type: field.TypeString, Nullable: true},
 	}
 	// TrustCenterNdaRequestsTable holds the schema information for the "trust_center_nda_requests" table.
 	TrustCenterNdaRequestsTable = &schema.Table{
@@ -8058,20 +8068,26 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "trust_center_nda_requests_trust_centers_trust_center_nda_requests",
-				Columns:    []*schema.Column{TrustCenterNdaRequestsColumns[19]},
+				Columns:    []*schema.Column{TrustCenterNdaRequestsColumns[18]},
 				RefColumns: []*schema.Column{TrustCentersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "trust_center_nda_requests_document_data_document",
-				Columns:    []*schema.Column{TrustCenterNdaRequestsColumns[20]},
+				Columns:    []*schema.Column{TrustCenterNdaRequestsColumns[19]},
 				RefColumns: []*schema.Column{DocumentDataColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "trust_center_nda_requests_files_file",
-				Columns:    []*schema.Column{TrustCenterNdaRequestsColumns[21]},
+				Columns:    []*schema.Column{TrustCenterNdaRequestsColumns[20]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "trust_center_nda_requests_users_approved_by_user",
+				Columns:    []*schema.Column{TrustCenterNdaRequestsColumns[21]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -15468,6 +15484,7 @@ func init() {
 	FindingControlsTable.ForeignKeys[0].RefTable = FindingsTable
 	FindingControlsTable.ForeignKeys[1].RefTable = ControlsTable
 	FindingControlsTable.ForeignKeys[2].RefTable = StandardsTable
+	FindingControlsTable.ForeignKeys[3].RefTable = OrganizationsTable
 	GroupsTable.ForeignKeys[0].RefTable = AssessmentsTable
 	GroupsTable.ForeignKeys[1].RefTable = AssessmentsTable
 	GroupsTable.ForeignKeys[2].RefTable = AssessmentsTable
@@ -15823,6 +15840,7 @@ func init() {
 	TrustCenterNdaRequestsTable.ForeignKeys[0].RefTable = TrustCentersTable
 	TrustCenterNdaRequestsTable.ForeignKeys[1].RefTable = DocumentDataTable
 	TrustCenterNdaRequestsTable.ForeignKeys[2].RefTable = FilesTable
+	TrustCenterNdaRequestsTable.ForeignKeys[3].RefTable = UsersTable
 	TrustCenterSettingsTable.ForeignKeys[0].RefTable = FilesTable
 	TrustCenterSettingsTable.ForeignKeys[1].RefTable = FilesTable
 	TrustCenterSettingsTable.ForeignKeys[2].RefTable = FilesTable

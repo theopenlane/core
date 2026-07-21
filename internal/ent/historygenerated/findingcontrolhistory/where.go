@@ -103,6 +103,11 @@ func UpdatedByImpersonator(v string) predicate.FindingControlHistory {
 	return predicate.FindingControlHistory(sql.FieldEQ(FieldUpdatedByImpersonator, v))
 }
 
+// OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
+func OwnerID(v string) predicate.FindingControlHistory {
+	return predicate.FindingControlHistory(sql.FieldEQ(FieldOwnerID, v))
+}
+
 // FindingID applies equality check predicate on the "finding_id" field. It's identical to FindingIDEQ.
 func FindingID(v string) predicate.FindingControlHistory {
 	return predicate.FindingControlHistory(sql.FieldEQ(FieldFindingID, v))
@@ -601,6 +606,81 @@ func UpdatedByImpersonatorEqualFold(v string) predicate.FindingControlHistory {
 // UpdatedByImpersonatorContainsFold applies the ContainsFold predicate on the "updated_by_impersonator" field.
 func UpdatedByImpersonatorContainsFold(v string) predicate.FindingControlHistory {
 	return predicate.FindingControlHistory(sql.FieldContainsFold(FieldUpdatedByImpersonator, v))
+}
+
+// OwnerIDEQ applies the EQ predicate on the "owner_id" field.
+func OwnerIDEQ(v string) predicate.FindingControlHistory {
+	return predicate.FindingControlHistory(sql.FieldEQ(FieldOwnerID, v))
+}
+
+// OwnerIDNEQ applies the NEQ predicate on the "owner_id" field.
+func OwnerIDNEQ(v string) predicate.FindingControlHistory {
+	return predicate.FindingControlHistory(sql.FieldNEQ(FieldOwnerID, v))
+}
+
+// OwnerIDIn applies the In predicate on the "owner_id" field.
+func OwnerIDIn(vs ...string) predicate.FindingControlHistory {
+	return predicate.FindingControlHistory(sql.FieldIn(FieldOwnerID, vs...))
+}
+
+// OwnerIDNotIn applies the NotIn predicate on the "owner_id" field.
+func OwnerIDNotIn(vs ...string) predicate.FindingControlHistory {
+	return predicate.FindingControlHistory(sql.FieldNotIn(FieldOwnerID, vs...))
+}
+
+// OwnerIDGT applies the GT predicate on the "owner_id" field.
+func OwnerIDGT(v string) predicate.FindingControlHistory {
+	return predicate.FindingControlHistory(sql.FieldGT(FieldOwnerID, v))
+}
+
+// OwnerIDGTE applies the GTE predicate on the "owner_id" field.
+func OwnerIDGTE(v string) predicate.FindingControlHistory {
+	return predicate.FindingControlHistory(sql.FieldGTE(FieldOwnerID, v))
+}
+
+// OwnerIDLT applies the LT predicate on the "owner_id" field.
+func OwnerIDLT(v string) predicate.FindingControlHistory {
+	return predicate.FindingControlHistory(sql.FieldLT(FieldOwnerID, v))
+}
+
+// OwnerIDLTE applies the LTE predicate on the "owner_id" field.
+func OwnerIDLTE(v string) predicate.FindingControlHistory {
+	return predicate.FindingControlHistory(sql.FieldLTE(FieldOwnerID, v))
+}
+
+// OwnerIDContains applies the Contains predicate on the "owner_id" field.
+func OwnerIDContains(v string) predicate.FindingControlHistory {
+	return predicate.FindingControlHistory(sql.FieldContains(FieldOwnerID, v))
+}
+
+// OwnerIDHasPrefix applies the HasPrefix predicate on the "owner_id" field.
+func OwnerIDHasPrefix(v string) predicate.FindingControlHistory {
+	return predicate.FindingControlHistory(sql.FieldHasPrefix(FieldOwnerID, v))
+}
+
+// OwnerIDHasSuffix applies the HasSuffix predicate on the "owner_id" field.
+func OwnerIDHasSuffix(v string) predicate.FindingControlHistory {
+	return predicate.FindingControlHistory(sql.FieldHasSuffix(FieldOwnerID, v))
+}
+
+// OwnerIDIsNil applies the IsNil predicate on the "owner_id" field.
+func OwnerIDIsNil() predicate.FindingControlHistory {
+	return predicate.FindingControlHistory(sql.FieldIsNull(FieldOwnerID))
+}
+
+// OwnerIDNotNil applies the NotNil predicate on the "owner_id" field.
+func OwnerIDNotNil() predicate.FindingControlHistory {
+	return predicate.FindingControlHistory(sql.FieldNotNull(FieldOwnerID))
+}
+
+// OwnerIDEqualFold applies the EqualFold predicate on the "owner_id" field.
+func OwnerIDEqualFold(v string) predicate.FindingControlHistory {
+	return predicate.FindingControlHistory(sql.FieldEqualFold(FieldOwnerID, v))
+}
+
+// OwnerIDContainsFold applies the ContainsFold predicate on the "owner_id" field.
+func OwnerIDContainsFold(v string) predicate.FindingControlHistory {
+	return predicate.FindingControlHistory(sql.FieldContainsFold(FieldOwnerID, v))
 }
 
 // FindingIDEQ applies the EQ predicate on the "finding_id" field.

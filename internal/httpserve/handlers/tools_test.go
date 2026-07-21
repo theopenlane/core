@@ -45,7 +45,6 @@ import (
 	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
 	definitionscim "github.com/theopenlane/core/internal/integrations/definitions/scim"
 	slackdef "github.com/theopenlane/core/internal/integrations/definitions/slack"
-	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -478,7 +477,7 @@ func (suite *HandlerTestSuite) dispatchSystemEmail(ctx context.Context, operatio
 	config, err := json.Marshal(input)
 	require.NoError(t, err)
 
-	_, err = suite.sharedIntegrationsRT.Dispatch(ctx, operations.DispatchRequest{
+	_, err = suite.sharedIntegrationsRT.Dispatch(ctx, types.DispatchRequest{
 		DefinitionID: emaildef.DefinitionID.ID(),
 		Operation:    operationName,
 		Config:       config,

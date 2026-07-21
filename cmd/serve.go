@@ -308,20 +308,8 @@ func serve(ctx context.Context) error {
 	)
 
 	if rt := so.Config.Handler.IntegrationsRuntime; rt != nil {
-		if err := rt.SeedRecurringCampaigns(ctx); err != nil {
-			log.Error().Err(err).Msg("failed to seed recurring campaign listener")
-		}
-
-		if err := rt.SeedPaymentReminders(ctx); err != nil {
-			log.Error().Err(err).Msg("failed to seed payment reminder listener")
-		}
-
-		if err := rt.SeedOrganizationDeletes(ctx); err != nil {
-			log.Error().Err(err).Msg("failed to seed organization delete listener")
-		}
-
-		if err := rt.SeedTrustCenterNotifications(ctx); err != nil {
-			log.Error().Err(err).Msg("failed to seed trust center notification listener")
+		if err := rt.SeedScheduledOperations(ctx); err != nil {
+			log.Error().Err(err).Msg("failed to seed one or more scheduled operation listeners")
 		}
 	}
 

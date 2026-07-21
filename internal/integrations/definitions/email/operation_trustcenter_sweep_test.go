@@ -1,4 +1,4 @@
-package runtime
+package email
 
 import (
 	"testing"
@@ -7,7 +7,6 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 )
 
 // TestSubprocessorEntries verifies changed join rows are coalesced per subprocessor and classified by
@@ -58,7 +57,7 @@ func TestSubprocessorEntries(t *testing.T) {
 		row(ephemeral, after, after),
 	}, floor)
 
-	assert.Equal(t, []emaildef.SubprocessorEntry{
+	assert.Equal(t, []SubprocessorEntry{
 		{Name: "Amazon Web Services", Change: "Removed"},
 		{Name: "Google Cloud", Change: "Added"},
 		{Name: "Datadog", Change: "Updated"},

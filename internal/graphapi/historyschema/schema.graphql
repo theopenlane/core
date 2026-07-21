@@ -14474,6 +14474,10 @@ type FindingControlHistory implements Node {
 	"""
 	updatedByImpersonator: String
 	"""
+	the organization id that owns the object
+	"""
+	ownerID: String
+	"""
 	the id of the finding associated with the control
 	"""
 	findingID: String!
@@ -14706,6 +14710,24 @@ input FindingControlHistoryWhereInput {
 	updatedByImpersonatorNotNil: Boolean
 	updatedByImpersonatorEqualFold: String
 	updatedByImpersonatorContainsFold: String
+	"""
+	owner_id field predicates
+	"""
+	ownerID: String
+	ownerIDNEQ: String
+	ownerIDIn: [String!]
+	ownerIDNotIn: [String!]
+	ownerIDGT: String
+	ownerIDGTE: String
+	ownerIDLT: String
+	ownerIDLTE: String
+	ownerIDContains: String
+	ownerIDHasPrefix: String
+	ownerIDHasSuffix: String
+	ownerIDIsNil: Boolean
+	ownerIDNotNil: Boolean
+	ownerIDEqualFold: String
+	ownerIDContainsFold: String
 	"""
 	finding_id field predicates
 	"""
@@ -32637,6 +32659,18 @@ type ScanHistory implements Node {
 	"""
 	ownerID: String
 	"""
+	indicates if the record is owned by the the openlane system and not by an organization
+	"""
+	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
+	"""
 	who reviewed the scan when no user or group is linked
 	"""
 	reviewedBy: String
@@ -32721,7 +32755,7 @@ type ScanHistory implements Node {
 	"""
 	discoveredVulnerabilityIds: [String!]
 	"""
-	the status of the scan, e.g., processing, completed, failed
+	the status of the scan, e.g., pending, processing, completed, failed
 	"""
 	status: ScanHistoryScanStatus!
 }
@@ -32961,6 +32995,49 @@ input ScanHistoryWhereInput {
 	ownerIDNotNil: Boolean
 	ownerIDEqualFold: String
 	ownerIDContainsFold: String
+	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
 	"""
 	reviewed_by field predicates
 	"""

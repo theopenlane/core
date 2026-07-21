@@ -1864,6 +1864,8 @@ func adminSearchScans(ctx context.Context, query string, after *entgql.Cursor[st
 					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
 				},
 				scan.OwnerIDContainsFold(query),           // search by OwnerID
+				scan.InternalNotesContainsFold(query),     // search by InternalNotes
+				scan.SystemInternalIDContainsFold(query),  // search by SystemInternalID
 				scan.ReviewedByContainsFold(query),        // search by ReviewedBy
 				scan.ReviewedByUserIDContainsFold(query),  // search by ReviewedByUserID
 				scan.ReviewedByGroupIDContainsFold(query), // search by ReviewedByGroupID
@@ -1877,7 +1879,7 @@ func adminSearchScans(ctx context.Context, query string, after *entgql.Cursor[st
 				scan.TargetContainsFold(query),            // search by Target
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(metadata)::text LIKE $16", likeQuery)) // search by Metadata
+					s.Where(sql.ExprP("(metadata)::text LIKE $18", likeQuery)) // search by Metadata
 				},
 				scan.PerformedByContainsFold(query),           // search by PerformedBy
 				scan.PerformedByUserIDContainsFold(query),     // search by PerformedByUserID
@@ -1885,7 +1887,7 @@ func adminSearchScans(ctx context.Context, query string, after *entgql.Cursor[st
 				scan.GeneratedByPlatformIDContainsFold(query), // search by GeneratedByPlatformID
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(discovered_vulnerability_ids)::text LIKE $21", likeQuery)) // search by DiscoveredVulnerabilityIds
+					s.Where(sql.ExprP("(discovered_vulnerability_ids)::text LIKE $23", likeQuery)) // search by DiscoveredVulnerabilityIds
 				},
 			),
 		)

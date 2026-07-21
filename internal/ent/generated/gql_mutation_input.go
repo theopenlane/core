@@ -11195,6 +11195,7 @@ type CreateFindingControlInput struct {
 	Source                  *string                `json:"source,omitempty"`
 	Metadata                map[string]interface{} `json:"metadata,omitempty"`
 	DiscoveredAt            *models.DateTime       `json:"discovered_at,omitempty"`
+	OwnerID                 *string                `json:"owner_id,omitempty"`
 	FindingID               string                 `json:"finding_id,omitempty"`
 	ControlID               string                 `json:"control_id,omitempty"`
 	StandardID              *string                `json:"standard_id,omitempty"`
@@ -11219,6 +11220,9 @@ func (i *CreateFindingControlInput) Mutate(m *FindingControlMutation) {
 	}
 	if v := i.DiscoveredAt; v != nil {
 		m.SetDiscoveredAt(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
 	}
 	m.SetFindingID(i.FindingID)
 	m.SetControlID(i.ControlID)
@@ -11247,6 +11251,8 @@ type UpdateFindingControlInput struct {
 	Metadata                     map[string]interface{} `json:"metadata,omitempty"`
 	ClearDiscoveredAt            bool
 	DiscoveredAt                 *models.DateTime `json:"discovered_at,omitempty"`
+	ClearOwner                   bool
+	OwnerID                      *string `json:"owner_id,omitempty"`
 }
 
 // Mutate applies the UpdateFindingControlInput on the FindingControlMutation builder.
@@ -11286,6 +11292,12 @@ func (i *UpdateFindingControlInput) Mutate(m *FindingControlMutation) {
 	}
 	if v := i.DiscoveredAt; v != nil {
 		m.SetDiscoveredAt(*v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
 	}
 }
 
@@ -24088,6 +24100,8 @@ func (c *SLADefinitionUpdateOne) SetInput(i UpdateSLADefinitionInput) *SLADefini
 // CreateScanInput represents a mutation input for creating scans.
 type CreateScanInput struct {
 	Tags                       []string               `json:"tags,omitempty"`
+	InternalNotes              *string                `json:"internal_notes,omitempty"`
+	SystemInternalID           *string                `json:"system_internal_id,omitempty"`
 	ReviewedBy                 *string                `json:"reviewed_by,omitempty"`
 	AssignedTo                 *string                `json:"assigned_to,omitempty"`
 	EnvironmentName            *string                `json:"environment_name,omitempty"`
@@ -24131,6 +24145,12 @@ type CreateScanInput struct {
 func (i *CreateScanInput) Mutate(m *ScanMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	if v := i.ReviewedBy; v != nil {
 		m.SetReviewedBy(*v)
@@ -24254,6 +24274,10 @@ type UpdateScanInput struct {
 	ClearTags                        bool
 	Tags                             []string `json:"tags,omitempty"`
 	AppendTags                       []string
+	ClearInternalNotes               bool
+	InternalNotes                    *string `json:"internal_notes,omitempty"`
+	ClearSystemInternalID            bool
+	SystemInternalID                 *string `json:"system_internal_id,omitempty"`
 	ClearReviewedBy                  bool
 	ReviewedBy                       *string `json:"reviewed_by,omitempty"`
 	ClearAssignedTo                  bool
@@ -24350,6 +24374,18 @@ func (i *UpdateScanInput) Mutate(m *ScanMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearInternalNotes {
+		m.ClearInternalNotes()
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if i.ClearSystemInternalID {
+		m.ClearSystemInternalID()
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
 	}
 	if i.ClearReviewedBy {
 		m.ClearReviewedBy()
@@ -28515,7 +28551,6 @@ type CreateTrustCenterNDARequestInput struct {
 	Reason            *string                                 `json:"reason,omitempty"`
 	AccessLevel       *enums.TrustCenterNDARequestAccessLevel `json:"access_level,omitempty"`
 	ApprovedAt        *models.DateTime                        `json:"approved_at,omitempty"`
-	ApprovedByUserID  *string                                 `json:"approved_by_user_id,omitempty"`
 	SignedAt          *models.DateTime                        `json:"signed_at,omitempty"`
 	BlockedGroupIDs   []string                                `json:"blocked_group_ids,omitempty"`
 	EditorIDs         []string                                `json:"editor_ids,omitempty"`
@@ -28523,6 +28558,7 @@ type CreateTrustCenterNDARequestInput struct {
 	TrustCenterDocIDs []string                                `json:"trust_center_doc_ids,omitempty"`
 	DocumentID        *string                                 `json:"document_id,omitempty"`
 	FileID            *string                                 `json:"file_id,omitempty"`
+	ApprovedByUserID  *string                                 `json:"approved_by_user_id,omitempty"`
 }
 
 // Mutate applies the CreateTrustCenterNDARequestInput on the TrustCenterNDARequestMutation builder.
@@ -28545,9 +28581,6 @@ func (i *CreateTrustCenterNDARequestInput) Mutate(m *TrustCenterNDARequestMutati
 	if v := i.ApprovedAt; v != nil {
 		m.SetApprovedAt(*v)
 	}
-	if v := i.ApprovedByUserID; v != nil {
-		m.SetApprovedByUserID(*v)
-	}
 	if v := i.SignedAt; v != nil {
 		m.SetSignedAt(*v)
 	}
@@ -28568,6 +28601,9 @@ func (i *CreateTrustCenterNDARequestInput) Mutate(m *TrustCenterNDARequestMutati
 	}
 	if v := i.FileID; v != nil {
 		m.SetFileID(*v)
+	}
+	if v := i.ApprovedByUserID; v != nil {
+		m.SetApprovedByUserID(*v)
 	}
 }
 
@@ -28595,8 +28631,6 @@ type UpdateTrustCenterNDARequestInput struct {
 	Status                  *enums.TrustCenterNDARequestStatus `json:"status,omitempty"`
 	ClearApprovedAt         bool
 	ApprovedAt              *models.DateTime `json:"approved_at,omitempty"`
-	ClearApprovedByUserID   bool
-	ApprovedByUserID        *string `json:"approved_by_user_id,omitempty"`
 	ClearSignedAt           bool
 	SignedAt                *models.DateTime `json:"signed_at,omitempty"`
 	ClearBlockedGroups      bool
@@ -28612,6 +28646,8 @@ type UpdateTrustCenterNDARequestInput struct {
 	DocumentID              *string `json:"document_id,omitempty"`
 	ClearFile               bool
 	FileID                  *string `json:"file_id,omitempty"`
+	ClearApprovedByUser     bool
+	ApprovedByUserID        *string `json:"approved_by_user_id,omitempty"`
 }
 
 // Mutate applies the UpdateTrustCenterNDARequestInput on the TrustCenterNDARequestMutation builder.
@@ -28664,12 +28700,6 @@ func (i *UpdateTrustCenterNDARequestInput) Mutate(m *TrustCenterNDARequestMutati
 	if v := i.ApprovedAt; v != nil {
 		m.SetApprovedAt(*v)
 	}
-	if i.ClearApprovedByUserID {
-		m.ClearApprovedByUserID()
-	}
-	if v := i.ApprovedByUserID; v != nil {
-		m.SetApprovedByUserID(*v)
-	}
 	if i.ClearSignedAt {
 		m.ClearSignedAt()
 	}
@@ -28714,6 +28744,12 @@ func (i *UpdateTrustCenterNDARequestInput) Mutate(m *TrustCenterNDARequestMutati
 	}
 	if v := i.FileID; v != nil {
 		m.SetFileID(*v)
+	}
+	if i.ClearApprovedByUser {
+		m.ClearApprovedByUser()
+	}
+	if v := i.ApprovedByUserID; v != nil {
+		m.SetApprovedByUserID(*v)
 	}
 }
 

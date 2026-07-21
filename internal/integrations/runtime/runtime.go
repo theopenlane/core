@@ -39,10 +39,6 @@ type Config struct {
 	RedisClient *redis.Client
 	// CatalogConfig supplies operator-level credentials for all built-in definitions
 	CatalogConfig catalog.Config
-	// PaymentReminder configures the payment reminder scheduled listener
-	PaymentReminder operations.PaymentReminderConfig
-	// OrganizationDelete configures the scheduled organization deletion listener
-	OrganizationDelete operations.OrganizationDeleteConfig
 	// DevMode is the server-level development flag; when true, integrations that
 	// support it use local file-based senders instead of calling provider APIs
 	DevMode bool
@@ -63,10 +59,6 @@ type Runtime struct {
 	postExecutionHook PostExecutionHook
 	// defaultLookback is applied as LastRunAt when an operation has no prior successful run
 	defaultLookback time.Duration
-	// paymentReminderConfig holds the payment reminder scheduling parameters
-	paymentReminderConfig operations.PaymentReminderConfig
-	// organizationDeleteConfig holds the organization deletion scheduling parameters
-	organizationDeleteConfig operations.OrganizationDeleteConfig
 	// devMode indicates the server is running in development mode
 	devMode bool
 }
@@ -132,6 +124,11 @@ func (r *Runtime) Gala() *gala.Gala {
 	return do.MustInvoke[*gala.Gala](r.injector)
 }
 
+// Redis returns the shared Redis client from the injector, nil when Redis isn't configured
+func (r *Runtime) Redis() *redis.Client {
+	return do.MustInvoke[*redis.Client](r.injector)
+}
+
 // keymaker returns the auth flow service from the injector
 func (r *Runtime) keymaker() *keymaker.Service {
 	return do.MustInvoke[*keymaker.Service](r.injector)
@@ -153,10 +150,10 @@ func (r *Runtime) Definition(id string) (types.Definition, bool) {
 }
 
 // Dispatch enqueues one integration operation through the runtime-managed dispatcher
-func (r *Runtime) Dispatch(ctx context.Context, req operations.DispatchRequest) (operations.DispatchResult, error) {
+func (r *Runtime) Dispatch(ctx context.Context, req types.DispatchRequest) (types.DispatchResult, error) {
 	result, err := operations.Dispatch(ctx, r.Registry(), r.DB(), r.Gala(), req)
 	if err != nil {
-		return operations.DispatchResult{}, normalizeDispatchError(err)
+		return types.DispatchResult{}, normalizeDispatchError(err)
 	}
 
 	return result, err
@@ -195,6 +192,7 @@ func NewForTesting(reg *registry.Registry) *Runtime {
 	injector := do.New()
 	do.ProvideValue(injector, reg)
 	do.ProvideValue(injector, &ent.Client{})
+	do.ProvideValue(injector, (*redis.Client)(nil))
 
 	return &Runtime{
 		injector:        injector,
@@ -211,16 +209,15 @@ func New(config Config) (*Runtime, error) {
 
 	injector := do.New()
 	rt := &Runtime{
-		injector:                 injector,
-		defaultLookback:          lookback,
-		paymentReminderConfig:    config.PaymentReminder,
-		organizationDeleteConfig: config.OrganizationDelete,
-		devMode:                  config.DevMode,
+		injector:        injector,
+		defaultLookback: lookback,
+		devMode:         config.DevMode,
 	}
 
 	do.ProvideValue(injector, config.DB)
 	do.ProvideValue(injector, config.Gala)
 	do.ProvideValue(injector, config.Keystore)
+	do.ProvideValue(injector, config.RedisClient)
 
 	if err := rt.registerContextCodecs(); err != nil {
 		return nil, err
@@ -277,41 +274,11 @@ func New(config Config) (*Runtime, error) {
 		return nil, err
 	}
 
-	paymentReminderSchedule := gala.NewSchedule(
-		gala.WithMinInterval(operations.PaymentReminderMinInterval),
-		gala.WithMaxInterval(operations.PaymentReminderMaxInterval),
-	)
-
-	organizationDeleteSchedule := gala.NewSchedule(
-		gala.WithMinInterval(operations.OrganizationDeleteMinInterval),
-		gala.WithMaxInterval(operations.OrganizationDeleteMaxInterval),
-	)
-
-	if err := operations.RegisterRuntimeListeners(rt.Gala(), rt.Registry(), rt.HandleOperation, rt.HandleWebhookEvent); err != nil {
+	if err := operations.RegisterRuntimeListeners(rt.Gala(), rt.Registry(), rt, rt.HandleOperation, rt.HandleWebhookEvent); err != nil {
 		return nil, err
 	}
 
 	if err := operations.RegisterReconcileListener(rt.Gala(), rt.Registry(), rt.HandleReconcile, gala.NewSchedule()); err != nil {
-		return nil, err
-	}
-
-	if err := operations.RegisterRecurringCampaignListener(rt.Gala(), rt.HandleRecurringCampaigns, gala.NewSchedule()); err != nil {
-		return nil, err
-	}
-
-	if err := operations.RegisterPaymentReminderListener(rt.Gala(), rt.HandlePaymentReminders, paymentReminderSchedule); err != nil {
-		return nil, err
-	}
-
-	if err := operations.RegisterOrganizationDeleteListener(rt.Gala(), rt.HandleOrganizationDeletes, organizationDeleteSchedule); err != nil {
-		return nil, err
-	}
-
-	if err := operations.RegisterTrustCenterNotificationListener(rt.Gala(), rt.HandleTrustCenterNotifications, gala.NewSchedule()); err != nil {
-		return nil, err
-	}
-
-	if err := operations.RegisterDomainScanListeners(rt.Gala(), rt.HandleDomainScanCreate, rt.HandleDomainScanPoll); err != nil {
 		return nil, err
 	}
 

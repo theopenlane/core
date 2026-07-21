@@ -13373,6 +13373,7 @@ input CreateFindingControlInput {
   timestamp when the mapping was first observed
   """
   discoveredAt: DateTime
+  ownerID: ID
   findingID: ID!
   controlID: ID!
   standardID: ID
@@ -15813,6 +15814,14 @@ input CreateScanInput {
   """
   tags: [String!]
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  """
   who reviewed the scan when no user or group is linked
   """
   reviewedBy: String
@@ -15861,7 +15870,7 @@ input CreateScanInput {
   """
   discoveredVulnerabilityIds: [String!]
   """
-  the status of the scan, e.g., processing, completed, failed
+  the status of the scan, e.g., pending, processing, completed, failed
   """
   status: ScanScanStatus
   ownerID: ID
@@ -16689,10 +16698,6 @@ input CreateTrustCenterNDARequestInput {
   """
   approvedAt: DateTime
   """
-  ID of the user who approved the request
-  """
-  approvedByUserID: String
-  """
   timestamp when the NDA was signed
   """
   signedAt: DateTime
@@ -16702,6 +16707,7 @@ input CreateTrustCenterNDARequestInput {
   trustCenterDocIDs: [ID!]
   documentID: ID
   fileID: ID
+  approvedByUserID: ID
 }
 """
 CreateTrustCenterSettingInput is used for create TrustCenterSetting object.
@@ -30268,6 +30274,10 @@ type FindingControl implements Node {
   """
   updatedByImpersonator: String
   """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
   the id of the finding associated with the control
   """
   findingID: ID!
@@ -30303,6 +30313,7 @@ type FindingControl implements Node {
   timestamp when the mapping was first observed
   """
   discoveredAt: DateTime
+  owner: Organization
   finding: Finding!
   control: Control!
   standard: Standard
@@ -43263,6 +43274,7 @@ enum NotificationNotificationTopic @goModel(model: "github.com/theopenlane/core/
   EXPORT
   STANDARD_UPDATE
   DOMAIN_SCAN
+  IMPORT_COMPLETE
 }
 """
 NotificationNotificationType is enum for the field notification_type
@@ -49716,6 +49728,37 @@ type Organization implements Node {
     """
     where: FindingWhereInput
   ): FindingConnection!
+  findingControls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for FindingControls returned from the connection.
+    """
+    orderBy: [FindingControlOrder!]
+
+    """
+    Filtering options for FindingControls returned from the connection.
+    """
+    where: FindingControlWhereInput
+  ): FindingControlConnection!
   reviews(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -51903,6 +51946,11 @@ input OrganizationWhereInput {
   """
   hasFindings: Boolean
   hasFindingsWith: [FindingWhereInput!]
+  """
+  finding_controls edge predicates
+  """
+  hasFindingControls: Boolean
+  hasFindingControlsWith: [FindingControlWhereInput!]
   """
   reviews edge predicates
   """
@@ -65249,6 +65297,18 @@ type Scan implements Node {
   """
   ownerID: ID
   """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
   who reviewed the scan when no user or group is linked
   """
   reviewedBy: String
@@ -65333,7 +65393,7 @@ type Scan implements Node {
   """
   discoveredVulnerabilityIds: [String!]
   """
-  the status of the scan, e.g., processing, completed, failed
+  the status of the scan, e.g., pending, processing, completed, failed
   """
   status: ScanScanStatus!
   owner: Organization
@@ -65972,6 +66032,49 @@ input ScanWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: ID
   ownerIDContainsFold: ID
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
   """
   reviewed_by field predicates
   """
@@ -75428,7 +75531,7 @@ type TrustCenterNDARequest implements Node {
   """
   ID of the user who approved the request
   """
-  approvedByUserID: String
+  approvedByUserID: ID
   """
   timestamp when the NDA was signed
   """
@@ -75543,6 +75646,7 @@ type TrustCenterNDARequest implements Node {
   the template file at the time the NDA was signed
   """
   file: File
+  approvedByUser: User
 }
 """
 A connection to a list of items.
@@ -75848,21 +75952,21 @@ input TrustCenterNDARequestWhereInput {
   """
   approved_by_user_id field predicates
   """
-  approvedByUserID: String
-  approvedByUserIDNEQ: String
-  approvedByUserIDIn: [String!]
-  approvedByUserIDNotIn: [String!]
-  approvedByUserIDGT: String
-  approvedByUserIDGTE: String
-  approvedByUserIDLT: String
-  approvedByUserIDLTE: String
-  approvedByUserIDContains: String
-  approvedByUserIDHasPrefix: String
-  approvedByUserIDHasSuffix: String
+  approvedByUserID: ID
+  approvedByUserIDNEQ: ID
+  approvedByUserIDIn: [ID!]
+  approvedByUserIDNotIn: [ID!]
+  approvedByUserIDGT: ID
+  approvedByUserIDGTE: ID
+  approvedByUserIDLT: ID
+  approvedByUserIDLTE: ID
+  approvedByUserIDContains: ID
+  approvedByUserIDHasPrefix: ID
+  approvedByUserIDHasSuffix: ID
   approvedByUserIDIsNil: Boolean
   approvedByUserIDNotNil: Boolean
-  approvedByUserIDEqualFold: String
-  approvedByUserIDContainsFold: String
+  approvedByUserIDEqualFold: ID
+  approvedByUserIDContainsFold: ID
   """
   signed_at field predicates
   """
@@ -75942,6 +76046,11 @@ input TrustCenterNDARequestWhereInput {
   """
   hasFile: Boolean
   hasFileWith: [FileWhereInput!]
+  """
+  approved_by_user edge predicates
+  """
+  hasApprovedByUser: Boolean
+  hasApprovedByUserWith: [UserWhereInput!]
   """
   Filter for tagsHas to contain a specific value
   """
@@ -80908,6 +81017,8 @@ input UpdateFindingControlInput {
   """
   discoveredAt: DateTime
   clearDiscoveredAt: Boolean
+  ownerID: ID
+  clearOwner: Boolean
 }
 """
 UpdateFindingInput is used for update Finding object.
@@ -84552,6 +84663,16 @@ input UpdateScanInput {
   appendTags: [String!]
   clearTags: Boolean
   """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  clearSystemInternalID: Boolean
+  """
   who reviewed the scan when no user or group is linked
   """
   reviewedBy: String
@@ -84611,7 +84732,7 @@ input UpdateScanInput {
   appendDiscoveredVulnerabilityIds: [String!]
   clearDiscoveredVulnerabilityIds: Boolean
   """
-  the status of the scan, e.g., processing, completed, failed
+  the status of the scan, e.g., pending, processing, completed, failed
   """
   status: ScanScanStatus
   addBlockedGroupIDs: [ID!]
@@ -85791,11 +85912,6 @@ input UpdateTrustCenterNDARequestInput {
   approvedAt: DateTime
   clearApprovedAt: Boolean
   """
-  ID of the user who approved the request
-  """
-  approvedByUserID: String
-  clearApprovedByUserID: Boolean
-  """
   timestamp when the NDA was signed
   """
   signedAt: DateTime
@@ -85813,6 +85929,8 @@ input UpdateTrustCenterNDARequestInput {
   clearDocument: Boolean
   fileID: ID
   clearFile: Boolean
+  approvedByUserID: ID
+  clearApprovedByUser: Boolean
 }
 """
 UpdateTrustCenterSettingInput is used for update TrustCenterSetting object.

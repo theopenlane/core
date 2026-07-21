@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -439,6 +440,11 @@ func (_u *TrustCenterNDARequestUpdate) SetFile(v *File) *TrustCenterNDARequestUp
 	return _u.SetFileID(v.ID)
 }
 
+// SetApprovedByUser sets the "approved_by_user" edge to the User entity.
+func (_u *TrustCenterNDARequestUpdate) SetApprovedByUser(v *User) *TrustCenterNDARequestUpdate {
+	return _u.SetApprovedByUserID(v.ID)
+}
+
 // Mutation returns the TrustCenterNDARequestMutation object of the builder.
 func (_u *TrustCenterNDARequestUpdate) Mutation() *TrustCenterNDARequestMutation {
 	return _u.mutation
@@ -516,6 +522,12 @@ func (_u *TrustCenterNDARequestUpdate) ClearDocument() *TrustCenterNDARequestUpd
 // ClearFile clears the "file" edge to the File entity.
 func (_u *TrustCenterNDARequestUpdate) ClearFile() *TrustCenterNDARequestUpdate {
 	_u.mutation.ClearFile()
+	return _u
+}
+
+// ClearApprovedByUser clears the "approved_by_user" edge to the User entity.
+func (_u *TrustCenterNDARequestUpdate) ClearApprovedByUser() *TrustCenterNDARequestUpdate {
+	_u.mutation.ClearApprovedByUser()
 	return _u
 }
 
@@ -694,12 +706,6 @@ func (_u *TrustCenterNDARequestUpdate) sqlSave(ctx context.Context) (_node int, 
 	}
 	if _u.mutation.ApprovedAtCleared() {
 		_spec.ClearField(trustcenterndarequest.FieldApprovedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.ApprovedByUserID(); ok {
-		_spec.SetField(trustcenterndarequest.FieldApprovedByUserID, field.TypeString, value)
-	}
-	if _u.mutation.ApprovedByUserIDCleared() {
-		_spec.ClearField(trustcenterndarequest.FieldApprovedByUserID, field.TypeString)
 	}
 	if value, ok := _u.mutation.SignedAt(); ok {
 		_spec.SetField(trustcenterndarequest.FieldSignedAt, field.TypeTime, value)
@@ -905,6 +911,37 @@ func (_u *TrustCenterNDARequestUpdate) sqlSave(ctx context.Context) (_node int, 
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterNDARequest
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ApprovedByUserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterndarequest.ApprovedByUserTable,
+			Columns: []string{trustcenterndarequest.ApprovedByUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterNDARequest
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ApprovedByUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterndarequest.ApprovedByUserTable,
+			Columns: []string{trustcenterndarequest.ApprovedByUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.TrustCenterNDARequest
@@ -1338,6 +1375,11 @@ func (_u *TrustCenterNDARequestUpdateOne) SetFile(v *File) *TrustCenterNDAReques
 	return _u.SetFileID(v.ID)
 }
 
+// SetApprovedByUser sets the "approved_by_user" edge to the User entity.
+func (_u *TrustCenterNDARequestUpdateOne) SetApprovedByUser(v *User) *TrustCenterNDARequestUpdateOne {
+	return _u.SetApprovedByUserID(v.ID)
+}
+
 // Mutation returns the TrustCenterNDARequestMutation object of the builder.
 func (_u *TrustCenterNDARequestUpdateOne) Mutation() *TrustCenterNDARequestMutation {
 	return _u.mutation
@@ -1415,6 +1457,12 @@ func (_u *TrustCenterNDARequestUpdateOne) ClearDocument() *TrustCenterNDARequest
 // ClearFile clears the "file" edge to the File entity.
 func (_u *TrustCenterNDARequestUpdateOne) ClearFile() *TrustCenterNDARequestUpdateOne {
 	_u.mutation.ClearFile()
+	return _u
+}
+
+// ClearApprovedByUser clears the "approved_by_user" edge to the User entity.
+func (_u *TrustCenterNDARequestUpdateOne) ClearApprovedByUser() *TrustCenterNDARequestUpdateOne {
+	_u.mutation.ClearApprovedByUser()
 	return _u
 }
 
@@ -1624,12 +1672,6 @@ func (_u *TrustCenterNDARequestUpdateOne) sqlSave(ctx context.Context) (_node *T
 	if _u.mutation.ApprovedAtCleared() {
 		_spec.ClearField(trustcenterndarequest.FieldApprovedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.ApprovedByUserID(); ok {
-		_spec.SetField(trustcenterndarequest.FieldApprovedByUserID, field.TypeString, value)
-	}
-	if _u.mutation.ApprovedByUserIDCleared() {
-		_spec.ClearField(trustcenterndarequest.FieldApprovedByUserID, field.TypeString)
-	}
 	if value, ok := _u.mutation.SignedAt(); ok {
 		_spec.SetField(trustcenterndarequest.FieldSignedAt, field.TypeTime, value)
 	}
@@ -1834,6 +1876,37 @@ func (_u *TrustCenterNDARequestUpdateOne) sqlSave(ctx context.Context) (_node *T
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterNDARequest
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ApprovedByUserCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterndarequest.ApprovedByUserTable,
+			Columns: []string{trustcenterndarequest.ApprovedByUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterNDARequest
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ApprovedByUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterndarequest.ApprovedByUserTable,
+			Columns: []string{trustcenterndarequest.ApprovedByUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.TrustCenterNDARequest

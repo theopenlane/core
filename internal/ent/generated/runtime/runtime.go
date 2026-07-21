@@ -3175,14 +3175,21 @@ func init() {
 	}
 	findingcontrolMixinHooks0 := findingcontrolMixin[0].Hooks()
 	findingcontrolMixinHooks1 := findingcontrolMixin[1].Hooks()
+	findingcontrolMixinHooks4 := findingcontrolMixin[4].Hooks()
 
 	findingcontrol.Hooks[1] = findingcontrolMixinHooks0[0]
 
 	findingcontrol.Hooks[2] = findingcontrolMixinHooks1[0]
+
+	findingcontrol.Hooks[3] = findingcontrolMixinHooks4[0]
+	findingcontrolMixinInters4 := findingcontrolMixin[4].Interceptors()
+	findingcontrol.Interceptors[0] = findingcontrolMixinInters4[0]
 	findingcontrolMixinFields0 := findingcontrolMixin[0].Fields()
 	_ = findingcontrolMixinFields0
 	findingcontrolMixinFields2 := findingcontrolMixin[2].Fields()
 	_ = findingcontrolMixinFields2
+	findingcontrolMixinFields4 := findingcontrolMixin[4].Fields()
+	_ = findingcontrolMixinFields4
 	findingcontrolFields := schema.FindingControl{}.Fields()
 	_ = findingcontrolFields
 	// findingcontrolDescCreatedAt is the schema descriptor for created_at field.
@@ -3195,6 +3202,10 @@ func init() {
 	findingcontrol.DefaultUpdatedAt = findingcontrolDescUpdatedAt.Default.(func() time.Time)
 	// findingcontrol.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	findingcontrol.UpdateDefaultUpdatedAt = findingcontrolDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// findingcontrolDescOwnerID is the schema descriptor for owner_id field.
+	findingcontrolDescOwnerID := findingcontrolMixinFields4[0].Descriptor()
+	// findingcontrol.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	findingcontrol.OwnerIDValidator = findingcontrolDescOwnerID.Validators[0].(func(string) error)
 	// findingcontrolDescID is the schema descriptor for id field.
 	findingcontrolDescID := findingcontrolMixinFields2[0].Descriptor()
 	// findingcontrol.DefaultID holds the default value on creation for the id field.
@@ -5730,8 +5741,6 @@ func init() {
 	organizationsetting.Hooks[7] = organizationsettingHooks[2]
 
 	organizationsetting.Hooks[8] = organizationsettingHooks[3]
-
-	organizationsetting.Hooks[9] = organizationsettingHooks[4]
 	organizationsettingMixinInters2 := organizationsettingMixin[2].Interceptors()
 	organizationsettingInters := schema.OrganizationSetting{}.Interceptors()
 	organizationsetting.Interceptors[0] = organizationsettingMixinInters2[0]
@@ -6806,7 +6815,7 @@ func init() {
 	// sladefinition.DefaultID holds the default value on creation for the id field.
 	sladefinition.DefaultID = sladefinitionDescID.Default.(func() string)
 	scanMixin := schema.Scan{}.Mixin()
-	scan.Policy = privacy.NewPolicies(schema.Scan{})
+	scan.Policy = privacy.NewPolicies(scanMixin[7], schema.Scan{})
 	scan.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			if err := scan.Policy.EvalMutation(ctx, m); err != nil {
@@ -6821,8 +6830,9 @@ func init() {
 	scanMixinHooks4 := scanMixin[4].Hooks()
 	scanMixinHooks6 := scanMixin[6].Hooks()
 	scanMixinHooks7 := scanMixin[7].Hooks()
-	scanMixinHooks9 := scanMixin[9].Hooks()
+	scanMixinHooks8 := scanMixin[8].Hooks()
 	scanMixinHooks10 := scanMixin[10].Hooks()
+	scanMixinHooks11 := scanMixin[11].Hooks()
 
 	scan.Hooks[1] = scanMixinHooks0[0]
 
@@ -6838,18 +6848,20 @@ func init() {
 
 	scan.Hooks[7] = scanMixinHooks7[0]
 
-	scan.Hooks[8] = scanMixinHooks7[1]
+	scan.Hooks[8] = scanMixinHooks8[0]
 
-	scan.Hooks[9] = scanMixinHooks9[0]
+	scan.Hooks[9] = scanMixinHooks8[1]
 
 	scan.Hooks[10] = scanMixinHooks10[0]
+
+	scan.Hooks[11] = scanMixinHooks11[0]
 	scanMixinInters2 := scanMixin[2].Interceptors()
 	scanMixinInters6 := scanMixin[6].Interceptors()
-	scanMixinInters7 := scanMixin[7].Interceptors()
+	scanMixinInters8 := scanMixin[8].Interceptors()
 	scan.Interceptors[0] = scanMixinInters2[0]
 	scan.Interceptors[1] = scanMixinInters6[0]
 	scan.Interceptors[2] = scanMixinInters6[1]
-	scan.Interceptors[3] = scanMixinInters7[0]
+	scan.Interceptors[3] = scanMixinInters8[0]
 	scanMixinFields0 := scanMixin[0].Fields()
 	_ = scanMixinFields0
 	scanMixinFields3 := scanMixin[3].Fields()
@@ -6858,6 +6870,8 @@ func init() {
 	_ = scanMixinFields4
 	scanMixinFields6 := scanMixin[6].Fields()
 	_ = scanMixinFields6
+	scanMixinFields7 := scanMixin[7].Fields()
+	_ = scanMixinFields7
 	scanFields := schema.Scan{}.Fields()
 	_ = scanFields
 	// scanDescCreatedAt is the schema descriptor for created_at field.
@@ -6878,6 +6892,10 @@ func init() {
 	scanDescOwnerID := scanMixinFields6[0].Descriptor()
 	// scan.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	scan.OwnerIDValidator = scanDescOwnerID.Validators[0].(func(string) error)
+	// scanDescSystemOwned is the schema descriptor for system_owned field.
+	scanDescSystemOwned := scanMixinFields7[0].Descriptor()
+	// scan.DefaultSystemOwned holds the default value on creation for the system_owned field.
+	scan.DefaultSystemOwned = scanDescSystemOwned.Default.(bool)
 	// scanDescTarget is the schema descriptor for target field.
 	scanDescTarget := scanFields[0].Descriptor()
 	// scan.TargetValidator is a validator for the "target" field. It is called by the builders before save.

@@ -12,8 +12,136 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 )
 
+func TestQueryFindingControl(t *testing.T) {
+	finding := createFinding(t, sharedTestUser1.UserCtx, "Query Finding Control Finding")
+	control := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+
+	resp, err := suite.client.api.CreateFindingControl(sharedTestUser1.UserCtx, testclient.CreateFindingControlInput{
+		FindingID: finding.ID,
+		ControlID: control.ID,
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+
+	fc := resp.CreateFindingControl.FindingControl
+
+	testCases := []struct {
+		name     string
+		client   *testclient.TestClient
+		ctx      context.Context
+		errorMsg string
+	}{
+		{
+			name:   "happy path, owner queries finding control",
+			client: suite.client.api,
+			ctx:    sharedTestUser1.UserCtx,
+		},
+		{
+			name:   "happy path, admin queries finding control",
+			client: suite.client.api,
+			ctx:    sharedAdminUser.UserCtx,
+		},
+		{
+			name:     "no access, user of different org",
+			client:   suite.client.api,
+			ctx:      sharedTestUser2.UserCtx,
+			errorMsg: notFoundErrorMsg,
+		},
+		{
+			name:     "no access, api token of different org",
+			client:   suite.client.apiWithTokenOrg2,
+			ctx:      context.Background(),
+			errorMsg: notFoundErrorMsg,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("Get "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.GetFindingControlByID(tc.ctx, fc.ID)
+
+			if tc.errorMsg != "" {
+				assert.ErrorContains(t, err, tc.errorMsg)
+
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+			assert.Check(t, is.Equal(fc.ID, resp.FindingControl.ID))
+		})
+	}
+
+	(&Cleanup[*generated.FindingControlDeleteOne]{client: suite.client.db.FindingControl, ID: fc.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.FindingDeleteOne]{client: suite.client.db.Finding, ID: finding.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+}
+
+func TestQueryFindingControls(t *testing.T) {
+	finding1 := createFinding(t, sharedTestUser1.UserCtx, "List Finding Control Finding 1")
+	control1 := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	control2 := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+
+	createFC := func(ctx context.Context, findingID, controlID string) string {
+		resp, err := suite.client.api.CreateFindingControl(ctx, testclient.CreateFindingControlInput{
+			FindingID: findingID,
+			ControlID: controlID,
+		})
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
+
+		return resp.CreateFindingControl.FindingControl.ID
+	}
+
+	fc1 := createFC(sharedTestUser1.UserCtx, finding1.ID, control1.ID)
+	fc2 := createFC(sharedTestUser1.UserCtx, finding1.ID, control2.ID)
+
+	// finding control that belongs to a different organization
+	finding2 := createFinding(t, sharedTestUser2.UserCtx, "List Finding Control Finding 2")
+	control3 := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser2.UserCtx, t)
+	fc3 := createFC(sharedTestUser2.UserCtx, finding2.ID, control3.ID)
+
+	t.Run("owner only sees finding controls within their organization", func(t *testing.T) {
+		resp, err := suite.client.api.GetAllFindingControls(sharedTestUser1.UserCtx)
+
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
+
+		ids := make([]string, 0, len(resp.FindingControls.Edges))
+		for _, edge := range resp.FindingControls.Edges {
+			ids = append(ids, edge.Node.ID)
+		}
+
+		assert.Check(t, lo.Contains(ids, fc1))
+		assert.Check(t, lo.Contains(ids, fc2))
+		assert.Check(t, !lo.Contains(ids, fc3))
+	})
+
+	t.Run("user of another org only sees their own organization's finding controls", func(t *testing.T) {
+		resp, err := suite.client.api.GetAllFindingControls(sharedTestUser2.UserCtx)
+
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
+
+		ids := make([]string, 0, len(resp.FindingControls.Edges))
+		for _, edge := range resp.FindingControls.Edges {
+			ids = append(ids, edge.Node.ID)
+		}
+
+		assert.Check(t, lo.Contains(ids, fc3))
+		assert.Check(t, !lo.Contains(ids, fc1))
+		assert.Check(t, !lo.Contains(ids, fc2))
+	})
+
+	(&Cleanup[*generated.FindingControlDeleteOne]{client: suite.client.db.FindingControl, IDs: []string{fc1, fc2}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.FindingControlDeleteOne]{client: suite.client.db.FindingControl, ID: fc3}).MustDelete(sharedTestUser2.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{control1.ID, control2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control3.ID}).MustDelete(sharedTestUser2.UserCtx, t)
+	(&Cleanup[*generated.FindingDeleteOne]{client: suite.client.db.Finding, ID: finding1.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.FindingDeleteOne]{client: suite.client.db.Finding, ID: finding2.ID}).MustDelete(sharedTestUser2.UserCtx, t)
+}
+
 func TestMutationCreateFindingControl(t *testing.T) {
-	finding := createFinding(t, sharedTestUser1.UserCtx, sharedTestUser1.OrganizationID, "Create Finding Control Finding")
+	finding := createFinding(t, sharedTestUser1.UserCtx, "Create Finding Control Finding")
 
 	control1 := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 	control2 := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
@@ -81,7 +209,7 @@ func TestMutationCreateFindingControl(t *testing.T) {
 }
 
 func TestMutationUpdateFindingControl(t *testing.T) {
-	finding := createFinding(t, sharedTestUser1.UserCtx, sharedTestUser1.OrganizationID, "Update Finding Control Finding")
+	finding := createFinding(t, sharedTestUser1.UserCtx, "Update Finding Control Finding")
 
 	control1 := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 	control2 := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
@@ -160,7 +288,7 @@ func TestMutationUpdateFindingControl(t *testing.T) {
 }
 
 func TestMutationDeleteFindingControl(t *testing.T) {
-	finding := createFinding(t, sharedTestUser1.UserCtx, sharedTestUser1.OrganizationID, "Delete Finding Control Finding")
+	finding := createFinding(t, sharedTestUser1.UserCtx, "Delete Finding Control Finding")
 
 	control1 := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 	control2 := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
@@ -238,7 +366,7 @@ func TestMutationDeleteFindingControl(t *testing.T) {
 }
 
 func TestMutationDeleteBulkFindingControl(t *testing.T) {
-	finding := createFinding(t, sharedTestUser1.UserCtx, sharedTestUser1.OrganizationID, "Bulk Delete Finding Control Finding")
+	finding := createFinding(t, sharedTestUser1.UserCtx, "Bulk Delete Finding Control Finding")
 
 	control1 := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 	control2 := (&ControlBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)

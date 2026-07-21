@@ -15,7 +15,7 @@ import (
 )
 
 func TestMutationCreateFinding(t *testing.T) {
-	finding := createFinding(t, sharedTestUser1.UserCtx, sharedTestUser1.OrganizationID, "Existing Finding")
+	finding := createFinding(t, sharedTestUser1.UserCtx, "Existing Finding")
 
 	editingGroup := (&GroupBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 	groupMember := (&GroupMemberBuilder{client: suite.client, GroupID: editingGroup.ID, UserID: sharedAuditorUser.ID}).MustNew(sharedTestUser1.UserCtx, t)
@@ -254,7 +254,7 @@ func TestMutationCreateFindingUnderLinkedObject(t *testing.T) {
 
 func TestMutationCreateBulkFinding(t *testing.T) {
 
-	finding := createFinding(t, sharedTestUser1.UserCtx, sharedTestUser1.OrganizationID, "Existing Bulk Finding")
+	finding := createFinding(t, sharedTestUser1.UserCtx, "Existing Bulk Finding")
 
 	creationRequests := []*testclient.CreateFindingInput{
 		{
@@ -340,11 +340,11 @@ func TestMutationCreateBulkFinding(t *testing.T) {
 }
 
 func TestMutationUpdateFinding(t *testing.T) {
-	finding := createFinding(t, sharedTestUser1.UserCtx, sharedTestUser1.OrganizationID, "Update Finding")
+	finding := createFinding(t, sharedTestUser1.UserCtx, "Update Finding")
 
-	duplicateFinding := createFinding(t, sharedTestUser1.UserCtx, sharedTestUser1.OrganizationID, "Duplicate Update Finding")
+	duplicateFinding := createFinding(t, sharedTestUser1.UserCtx, "Duplicate Update Finding")
 
-	anotherOrgFinding := createFinding(t, sharedTestUser2.UserCtx, sharedTestUser2.OrganizationID, "Unauthorized Update Finding")
+	anotherOrgFinding := createFinding(t, sharedTestUser2.UserCtx, "Unauthorized Update Finding")
 
 	testCases := []struct {
 		name        string
@@ -497,9 +497,9 @@ func TestMutationUpdateFinding(t *testing.T) {
 }
 
 func TestMutationDeleteFinding(t *testing.T) {
-	finding := createFinding(t, sharedTestUser1.UserCtx, sharedTestUser1.OrganizationID, "Delete Finding")
-	anotherOrgFinding := createFinding(t, sharedTestUser2.UserCtx, sharedTestUser2.OrganizationID, "Unauthorized Delete Finding")
-	auditorFinding := createFinding(t, sharedTestUser1.UserCtx, sharedTestUser1.OrganizationID, "Auditor Delete Finding")
+	finding := createFinding(t, sharedTestUser1.UserCtx, "Delete Finding")
+	anotherOrgFinding := createFinding(t, sharedTestUser2.UserCtx, "Unauthorized Delete Finding")
+	auditorFinding := createFinding(t, sharedTestUser1.UserCtx, "Auditor Delete Finding")
 
 	testCases := []struct {
 		name        string
@@ -564,12 +564,12 @@ func TestMutationDeleteFinding(t *testing.T) {
 }
 
 func TestMutationDeleteBulkFinding(t *testing.T) {
-	finding1 := createFinding(t, sharedTestUser1.UserCtx, sharedTestUser1.OrganizationID, "Bulk Delete Finding 1")
-	finding2 := createFinding(t, sharedTestUser1.UserCtx, sharedTestUser1.OrganizationID, "Bulk Delete Finding 2")
-	finding3 := createFinding(t, sharedTestUser1.UserCtx, sharedTestUser1.OrganizationID, "Bulk Delete Finding 3")
+	finding1 := createFinding(t, sharedTestUser1.UserCtx, "Bulk Delete Finding 1")
+	finding2 := createFinding(t, sharedTestUser1.UserCtx, "Bulk Delete Finding 2")
+	finding3 := createFinding(t, sharedTestUser1.UserCtx, "Bulk Delete Finding 3")
 
-	orgFinding := createFinding(t, sharedTestUser2.UserCtx, sharedTestUser2.OrganizationID, "Unauthorized Bulk Delete Finding")
-	auditorFinding := createFinding(t, sharedTestUser1.UserCtx, sharedTestUser1.OrganizationID, "Auditor Bulk Delete Finding")
+	orgFinding := createFinding(t, sharedTestUser2.UserCtx, "Unauthorized Bulk Delete Finding")
+	auditorFinding := createFinding(t, sharedTestUser1.UserCtx, "Auditor Bulk Delete Finding")
 
 	testCases := []struct {
 		name                 string
@@ -635,14 +635,13 @@ func TestMutationDeleteBulkFinding(t *testing.T) {
 	(&Cleanup[*generated.FindingDeleteOne]{client: suite.client.db.Finding, ID: orgFinding.ID}).MustDelete(sharedTestUser2.UserCtx, t)
 }
 
-func createFinding(t *testing.T, ctx context.Context, ownerID string, displayName string) *testclient.CreateFinding_CreateFinding_Finding {
+func createFinding(t *testing.T, ctx context.Context, displayName string) *testclient.CreateFinding_CreateFinding_Finding {
 	t.Helper()
 
 	resp, err := suite.client.api.CreateFinding(ctx, testclient.CreateFindingInput{
 		DisplayName:     &displayName,
 		ExternalID:      lo.ToPtr("finding-" + ulids.New().String()),
 		ExternalOwnerID: lo.ToPtr("external-owner"),
-		OwnerID:         &ownerID,
 	})
 	assert.NilError(t, err)
 	assert.Assert(t, resp != nil)

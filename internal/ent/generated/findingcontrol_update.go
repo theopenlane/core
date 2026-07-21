@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/findingcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -81,6 +82,26 @@ func (_u *FindingControlUpdate) SetNillableUpdatedByImpersonator(v *string) *Fin
 // ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
 func (_u *FindingControlUpdate) ClearUpdatedByImpersonator() *FindingControlUpdate {
 	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (_u *FindingControlUpdate) SetOwnerID(v string) *FindingControlUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (_u *FindingControlUpdate) SetNillableOwnerID(v *string) *FindingControlUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
+	}
+	return _u
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (_u *FindingControlUpdate) ClearOwnerID() *FindingControlUpdate {
+	_u.mutation.ClearOwnerID()
 	return _u
 }
 
@@ -196,9 +217,20 @@ func (_u *FindingControlUpdate) ClearDiscoveredAt() *FindingControlUpdate {
 	return _u
 }
 
+// SetOwner sets the "owner" edge to the Organization entity.
+func (_u *FindingControlUpdate) SetOwner(v *Organization) *FindingControlUpdate {
+	return _u.SetOwnerID(v.ID)
+}
+
 // Mutation returns the FindingControlMutation object of the builder.
 func (_u *FindingControlUpdate) Mutation() *FindingControlMutation {
 	return _u.mutation
+}
+
+// ClearOwner clears the "owner" edge to the Organization entity.
+func (_u *FindingControlUpdate) ClearOwner() *FindingControlUpdate {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -245,6 +277,11 @@ func (_u *FindingControlUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *FindingControlUpdate) check() error {
+	if v, ok := _u.mutation.OwnerID(); ok {
+		if err := findingcontrol.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "FindingControl.owner_id": %w`, err)}
+		}
+	}
 	if _u.mutation.FindingCleared() && len(_u.mutation.FindingIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "FindingControl.finding"`)
 	}
@@ -332,6 +369,37 @@ func (_u *FindingControlUpdate) sqlSave(ctx context.Context) (_node int, err err
 	if _u.mutation.DiscoveredAtCleared() {
 		_spec.ClearField(findingcontrol.FieldDiscoveredAt, field.TypeTime)
 	}
+	if _u.mutation.OwnerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   findingcontrol.OwnerTable,
+			Columns: []string{findingcontrol.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingControl
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   findingcontrol.OwnerTable,
+			Columns: []string{findingcontrol.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingControl
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = _u.schemaConfig.FindingControl
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
@@ -405,6 +473,26 @@ func (_u *FindingControlUpdateOne) SetNillableUpdatedByImpersonator(v *string) *
 // ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
 func (_u *FindingControlUpdateOne) ClearUpdatedByImpersonator() *FindingControlUpdateOne {
 	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (_u *FindingControlUpdateOne) SetOwnerID(v string) *FindingControlUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (_u *FindingControlUpdateOne) SetNillableOwnerID(v *string) *FindingControlUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
+	}
+	return _u
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (_u *FindingControlUpdateOne) ClearOwnerID() *FindingControlUpdateOne {
+	_u.mutation.ClearOwnerID()
 	return _u
 }
 
@@ -520,9 +608,20 @@ func (_u *FindingControlUpdateOne) ClearDiscoveredAt() *FindingControlUpdateOne 
 	return _u
 }
 
+// SetOwner sets the "owner" edge to the Organization entity.
+func (_u *FindingControlUpdateOne) SetOwner(v *Organization) *FindingControlUpdateOne {
+	return _u.SetOwnerID(v.ID)
+}
+
 // Mutation returns the FindingControlMutation object of the builder.
 func (_u *FindingControlUpdateOne) Mutation() *FindingControlMutation {
 	return _u.mutation
+}
+
+// ClearOwner clears the "owner" edge to the Organization entity.
+func (_u *FindingControlUpdateOne) ClearOwner() *FindingControlUpdateOne {
+	_u.mutation.ClearOwner()
+	return _u
 }
 
 // Where appends a list predicates to the FindingControlUpdate builder.
@@ -582,6 +681,11 @@ func (_u *FindingControlUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *FindingControlUpdateOne) check() error {
+	if v, ok := _u.mutation.OwnerID(); ok {
+		if err := findingcontrol.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "FindingControl.owner_id": %w`, err)}
+		}
+	}
 	if _u.mutation.FindingCleared() && len(_u.mutation.FindingIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "FindingControl.finding"`)
 	}
@@ -685,6 +789,37 @@ func (_u *FindingControlUpdateOne) sqlSave(ctx context.Context) (_node *FindingC
 	}
 	if _u.mutation.DiscoveredAtCleared() {
 		_spec.ClearField(findingcontrol.FieldDiscoveredAt, field.TypeTime)
+	}
+	if _u.mutation.OwnerCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   findingcontrol.OwnerTable,
+			Columns: []string{findingcontrol.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingControl
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   findingcontrol.OwnerTable,
+			Columns: []string{findingcontrol.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingControl
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_spec.Node.Schema = _u.schemaConfig.FindingControl
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

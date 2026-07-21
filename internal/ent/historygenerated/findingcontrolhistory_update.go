@@ -86,6 +86,26 @@ func (_u *FindingControlHistoryUpdate) ClearUpdatedByImpersonator() *FindingCont
 	return _u
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (_u *FindingControlHistoryUpdate) SetOwnerID(v string) *FindingControlHistoryUpdate {
+	_u.mutation.SetOwnerID(v)
+	return _u
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (_u *FindingControlHistoryUpdate) SetNillableOwnerID(v *string) *FindingControlHistoryUpdate {
+	if v != nil {
+		_u.SetOwnerID(*v)
+	}
+	return _u
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (_u *FindingControlHistoryUpdate) ClearOwnerID() *FindingControlHistoryUpdate {
+	_u.mutation.ClearOwnerID()
+	return _u
+}
+
 // SetExternalStandard sets the "external_standard" field.
 func (_u *FindingControlHistoryUpdate) SetExternalStandard(v string) *FindingControlHistoryUpdate {
 	_u.mutation.SetExternalStandard(v)
@@ -287,6 +307,12 @@ func (_u *FindingControlHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(findingcontrolhistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
+	if value, ok := _u.mutation.OwnerID(); ok {
+		_spec.SetField(findingcontrolhistory.FieldOwnerID, field.TypeString, value)
+	}
+	if _u.mutation.OwnerIDCleared() {
+		_spec.ClearField(findingcontrolhistory.FieldOwnerID, field.TypeString)
+	}
 	if _u.mutation.StandardIDCleared() {
 		_spec.ClearField(findingcontrolhistory.FieldStandardID, field.TypeString)
 	}
@@ -399,6 +425,26 @@ func (_u *FindingControlHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *st
 // ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
 func (_u *FindingControlHistoryUpdateOne) ClearUpdatedByImpersonator() *FindingControlHistoryUpdateOne {
 	_u.mutation.ClearUpdatedByImpersonator()
+	return _u
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (_u *FindingControlHistoryUpdateOne) SetOwnerID(v string) *FindingControlHistoryUpdateOne {
+	_u.mutation.SetOwnerID(v)
+	return _u
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (_u *FindingControlHistoryUpdateOne) SetNillableOwnerID(v *string) *FindingControlHistoryUpdateOne {
+	if v != nil {
+		_u.SetOwnerID(*v)
+	}
+	return _u
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (_u *FindingControlHistoryUpdateOne) ClearOwnerID() *FindingControlHistoryUpdateOne {
+	_u.mutation.ClearOwnerID()
 	return _u
 }
 
@@ -632,6 +678,12 @@ func (_u *FindingControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *F
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(findingcontrolhistory.FieldUpdatedByImpersonator, field.TypeString)
+	}
+	if value, ok := _u.mutation.OwnerID(); ok {
+		_spec.SetField(findingcontrolhistory.FieldOwnerID, field.TypeString, value)
+	}
+	if _u.mutation.OwnerIDCleared() {
+		_spec.ClearField(findingcontrolhistory.FieldOwnerID, field.TypeString)
 	}
 	if _u.mutation.StandardIDCleared() {
 		_spec.ClearField(findingcontrolhistory.FieldStandardID, field.TypeString)

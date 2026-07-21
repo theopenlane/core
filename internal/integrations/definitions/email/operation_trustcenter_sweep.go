@@ -1,4 +1,4 @@
-package runtime
+package email
 
 import (
 	"context"
@@ -21,10 +21,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
-	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/internal/integrations/operations"
+	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/trustcenterurl"
-	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -32,55 +32,51 @@ import (
 // for before subscribers are notified, giving authors time to make further edits
 const trustCenterNotificationGrace = time.Hour
 
-// SeedTrustCenterNotifications starts the durable trust center notification polling loop after runtime
-// listeners have been registered
-func (r *Runtime) SeedTrustCenterNotifications(ctx context.Context) error {
-	active, err := r.Gala().HasActiveJobForTopic(ctx, operations.TrustCenterNotificationTopic)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed checking for active trust center notification poller")
+// TrustCenterNotificationSweep configures one trust center notification sweep cycle
+type TrustCenterNotificationSweep struct{}
 
-		return err
-	}
+var trustCenterNotificationSweepSchema, TrustCenterNotificationOp = providerkit.OperationSchema[TrustCenterNotificationSweep]() //nolint:revive
 
-	if active {
-		logx.FromContext(ctx).Debug().Msg("trust center notification poller already active, skipping seed")
-
-		return nil
-	}
-
-	receipt := r.Gala().EmitWithHeaders(ctx, operations.TrustCenterNotificationTopic, operations.TrustCenterNotificationEnvelope{}, gala.Headers{
-		Tags: []string{"trustcenter-notifications"},
-	})
-
-	return receipt.Err
-}
-
-// HandleTrustCenterNotifications polls for trust center posts and subprocessor changes that have been
-// stable for the grace window and dispatches a subscriber notification campaign for each. Returns the
-// number dispatched as the delta for adaptive scheduling; a returned error feeds the scheduler's
-// error-streak backoff while per-item failures inside each sweep only log and continue
-func (r *Runtime) HandleTrustCenterNotifications(ctx context.Context, _ operations.TrustCenterNotificationEnvelope) (int, error) {
-	now := time.Now()
-	cutoff := now.Add(-trustCenterNotificationGrace)
-	// the poller scans trust center settings and subprocessors across every organization, and the
-	// per-trust-center sends it dispatches must load branding from the trust center setting. The
-	// cross-org bypass rides on the caller (which gala persists across the durable dispatch boundary,
-	// unlike the privacy decision), matching the other scheduled pollers' system caller
-	systemCtx := auth.WithCaller(privacy.DecisionContext(ctx, privacy.Allow), &auth.Caller{
+// systemSweepContext builds a cross-organization system caller context bypassing org filtering and FGA
+func systemSweepContext(ctx context.Context) context.Context {
+	return auth.WithCaller(privacy.DecisionContext(ctx, privacy.Allow), &auth.Caller{
 		Capabilities: auth.CapBypassOrgFilter | auth.CapBypassFGA | auth.CapInternalOperation,
 	})
+}
 
-	posts, postsErr := r.dispatchDuePosts(systemCtx, cutoff, now)
-	subprocessors, subprocessorsErr := r.dispatchDueSubprocessorChanges(systemCtx, cutoff)
+// Handle adapts the trust center notification sweep to the generic operation registration boundary
+func (t TrustCenterNotificationSweep) Handle() types.OperationHandler {
+	return func(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
+		processed, err := t.Run(ctx, req)
+		if err != nil {
+			return nil, err
+		}
+
+		return providerkit.EncodeResult(types.ScheduledCycleResult{Processed: processed}, ErrResultEncode)
+	}
+}
+
+// Run executes one trust center notification sweep, returning the number of notifications
+// dispatched; per-item failures log and continue while the joined error feeds the backoff
+func (TrustCenterNotificationSweep) Run(ctx context.Context, req types.OperationRequest) (int, error) {
+	now := time.Now()
+	cutoff := now.Add(-trustCenterNotificationGrace)
+	// the sweep scans trust center settings and subprocessors across every organization, and the
+	// per-trust-center sends it dispatches must load branding from the trust center setting. The
+	// cross-org bypass rides on the caller (which gala persists across the durable dispatch boundary,
+	// unlike the privacy decision), matching the other scheduled sweeps' system caller
+	systemCtx := systemSweepContext(ctx)
+
+	posts, postsErr := dispatchDuePosts(systemCtx, req, cutoff, now)
+	subprocessors, subprocessorsErr := dispatchDueSubprocessorChanges(systemCtx, req, cutoff)
 
 	return posts + subprocessors, errors.Join(postsErr, subprocessorsErr)
 }
 
-// dispatchDuePosts notifies subscribers about published posts flagged for notification that have been
-// stable for the grace window. Per-post failures continue the sweep so one broken trust center does
-// not block the rest; every failure is joined into the returned error for the scheduler's backoff
-func (r *Runtime) dispatchDuePosts(ctx context.Context, cutoff, now time.Time) (int, error) {
-	posts, err := r.DB().Note.Query().
+// dispatchDuePosts notifies subscribers about published posts flagged for notification that have
+// been stable for the grace window
+func dispatchDuePosts(ctx context.Context, req types.OperationRequest, cutoff, now time.Time) (int, error) {
+	posts, err := req.DB.Note.Query().
 		Where(
 			note.NotifySubscribers(true),
 			note.NotifiedAtIsNil(),
@@ -97,7 +93,7 @@ func (r *Runtime) dispatchDuePosts(ctx context.Context, cutoff, now time.Time) (
 	var errs []error
 
 	for _, post := range posts {
-		tc, customDomain, err := r.loadTrustCenter(ctx, post.TrustCenterID)
+		tc, customDomain, err := loadTrustCenter(ctx, req, post.TrustCenterID)
 		if err != nil {
 			errs = append(errs, fmt.Errorf("loading trust center for post %s: %w", post.ID, err))
 
@@ -108,7 +104,7 @@ func (r *Runtime) dispatchDuePosts(ctx context.Context, cutoff, now time.Time) (
 		// the subject and body copy and the branding is resolved from the trust center setting at render
 		title := lo.FromPtr(post.Title)
 
-		content, err := emaildef.TrustCenterUpdateContent(emaildef.TrustCenterUpdateRequest{
+		content, err := TrustCenterUpdateContent(TrustCenterUpdateRequest{
 			PostTitle:      title,
 			PostText:       post.Text,
 			TrustCenterURL: trustcenterurl.BuildURL(customDomain, tc.Slug),
@@ -122,15 +118,15 @@ func (r *Runtime) dispatchDuePosts(ctx context.Context, cutoff, now time.Time) (
 
 		content["postID"] = post.ID
 
-		name := lo.CoalesceOrEmpty(title, emaildef.DefaultTrustCenterUpdateTitle)
+		name := lo.CoalesceOrEmpty(title, DefaultTrustCenterUpdateTitle)
 
-		if err := r.createAndDispatchTrustCenterCampaign(ctx, tc.OwnerID, post.TrustCenterID, name, content); err != nil {
+		if err := createAndDispatchTrustCenterCampaign(ctx, req, tc.OwnerID, post.TrustCenterID, name, content); err != nil {
 			errs = append(errs, fmt.Errorf("dispatching notification for post %s: %w", post.ID, err))
 
 			continue
 		}
 
-		if err := r.DB().Note.UpdateOneID(post.ID).SetNotifiedAt(now).Exec(ctx); err != nil {
+		if err := req.DB.Note.UpdateOneID(post.ID).SetNotifiedAt(now).Exec(ctx); err != nil {
 			errs = append(errs, fmt.Errorf("marking post %s notified: %w", post.ID, err))
 		}
 
@@ -141,11 +137,9 @@ func (r *Runtime) dispatchDuePosts(ctx context.Context, cutoff, now time.Time) (
 }
 
 // dispatchDueSubprocessorChanges notifies subscribers about subprocessor changes for trust centers
-// that opted in, coalescing all changes since the last notification into one send per trust center.
-// Per-trust-center failures continue the sweep so one broken trust center does not block the rest;
-// every failure is joined into the returned error for the scheduler's backoff
-func (r *Runtime) dispatchDueSubprocessorChanges(ctx context.Context, cutoff time.Time) (int, error) {
-	settings, err := r.DB().TrustCenterSetting.Query().
+// that opted in, coalescing all changes since the last notification into one send per trust center
+func dispatchDueSubprocessorChanges(ctx context.Context, req types.OperationRequest, cutoff time.Time) (int, error) {
+	settings, err := req.DB.TrustCenterSetting.Query().
 		Where(
 			trustcentersetting.NotifySubscribersOnSubprocessorChange(true),
 			trustcentersetting.TrustCenterIDNotNil(),
@@ -164,7 +158,7 @@ func (r *Runtime) dispatchDueSubprocessorChanges(ctx context.Context, cutoff tim
 		// a zero floor would treat the trust center's entire subprocessor history as changes, so establish the
 		// baseline at the cutoff and notify from the next change instead
 		if setting.SubprocessorsNotifiedAt == nil {
-			if err := r.DB().TrustCenterSetting.UpdateOneID(setting.ID).SetSubprocessorsNotifiedAt(cutoff).Exec(ctx); err != nil {
+			if err := req.DB.TrustCenterSetting.UpdateOneID(setting.ID).SetSubprocessorsNotifiedAt(cutoff).Exec(ctx); err != nil {
 				errs = append(errs, fmt.Errorf("initializing subprocessor notified baseline for trust center %s: %w", setting.TrustCenterID, err))
 			}
 
@@ -175,7 +169,7 @@ func (r *Runtime) dispatchDueSubprocessorChanges(ctx context.Context, cutoff tim
 
 		// include soft-deleted rows so subprocessor removals are detected via their bumped updated_at, and
 		// eager-load each row's subprocessor for the vendor name and logo
-		changed, err := r.DB().TrustCenterSubprocessor.Query().
+		changed, err := req.DB.TrustCenterSubprocessor.Query().
 			Where(
 				trustcentersubprocessor.TrustCenterID(setting.TrustCenterID),
 				trustcentersubprocessor.UpdatedAtGT(floor),
@@ -197,7 +191,7 @@ func (r *Runtime) dispatchDueSubprocessorChanges(ctx context.Context, cutoff tim
 			return a.UpdatedAt.After(b.UpdatedAt)
 		}).UpdatedAt
 
-		tc, customDomain, err := r.loadTrustCenter(ctx, setting.TrustCenterID)
+		tc, customDomain, err := loadTrustCenter(ctx, req, setting.TrustCenterID)
 		if err != nil {
 			errs = append(errs, fmt.Errorf("loading trust center %s for subprocessor notification: %w", setting.TrustCenterID, err))
 
@@ -209,7 +203,7 @@ func (r *Runtime) dispatchDueSubprocessorChanges(ctx context.Context, cutoff tim
 		// churn that nets to no change (e.g. a vendor added and removed within the window) leaves nothing
 		// to report: advance the baseline past the processed rows without emailing
 		if len(entries) == 0 {
-			if err := r.DB().TrustCenterSetting.UpdateOneID(setting.ID).SetSubprocessorsNotifiedAt(latest).Exec(ctx); err != nil {
+			if err := req.DB.TrustCenterSetting.UpdateOneID(setting.ID).SetSubprocessorsNotifiedAt(latest).Exec(ctx); err != nil {
 				errs = append(errs, fmt.Errorf("advancing subprocessor notified baseline for trust center %s: %w", setting.TrustCenterID, err))
 			}
 
@@ -218,7 +212,7 @@ func (r *Runtime) dispatchDueSubprocessorChanges(ctx context.Context, cutoff tim
 
 		// the subprocessor notification is a direct system email: send it to each active subscriber
 		// with their unsubscribe token, like every other system email
-		subscribers, err := r.activeTrustCenterSubscribers(ctx, setting.TrustCenterID)
+		subscribers, err := activeTrustCenterSubscribers(ctx, req, setting.TrustCenterID)
 		if err != nil {
 			errs = append(errs, fmt.Errorf("loading subscribers for trust center %s subprocessor notification: %w", setting.TrustCenterID, err))
 
@@ -227,8 +221,8 @@ func (r *Runtime) dispatchDueSubprocessorChanges(ctx context.Context, cutoff tim
 
 		// the request carries only data; the subprocessor operation composes the subject and body copy
 		// from the branding's company name with defined fallbacks
-		base := emaildef.SubprocessorNotificationRequest{
-			TrustCenterBranding: emaildef.TrustCenterBrandingFromSetting(setting),
+		base := SubprocessorNotificationRequest{
+			TrustCenterBranding: TrustCenterBrandingFromSetting(setting),
 			Subprocessors:       entries,
 			TrustCenterURL:      trustcenterurl.BuildURL(customDomain, tc.Slug),
 		}
@@ -243,16 +237,16 @@ func (r *Runtime) dispatchDueSubprocessorChanges(ctx context.Context, cutoff tim
 		failedSends := 0
 
 		for _, sub := range subscribers {
-			req := base
-			req.RecipientInfo = emaildef.RecipientInfo{
+			sendReq := base
+			sendReq.RecipientInfo = RecipientInfo{
 				Email:            sub.Email,
 				UnsubscribeToken: sub.Token,
 			}
 			// the direct system dispatch does not run template interpolation, so resolve the per-recipient
 			// unsubscribe link here with the subscriber's actual token
-			req.UnsubscribeURL = trustcenterurl.UnsubscribeURLWithToken(customDomain, tc.Slug, sub.Token)
+			sendReq.UnsubscribeURL = trustcenterurl.UnsubscribeURLWithToken(customDomain, tc.Slug, sub.Token)
 
-			if err := r.sendSubprocessorNotification(ctx, req); err != nil {
+			if err := sendSubprocessorNotification(ctx, req, sendReq); err != nil {
 				errs = append(errs, fmt.Errorf("sending subprocessor notification to subscriber %s for trust center %s: %w", sub.ID, setting.TrustCenterID, err))
 
 				failedSends++
@@ -265,7 +259,7 @@ func (r *Runtime) dispatchDueSubprocessorChanges(ctx context.Context, cutoff tim
 			continue
 		}
 
-		if err := r.DB().TrustCenterSetting.UpdateOneID(setting.ID).SetSubprocessorsNotifiedAt(latest).Exec(ctx); err != nil {
+		if err := req.DB.TrustCenterSetting.UpdateOneID(setting.ID).SetSubprocessorsNotifiedAt(latest).Exec(ctx); err != nil {
 			errs = append(errs, fmt.Errorf("advancing subprocessor notified baseline for trust center %s: %w", setting.TrustCenterID, err))
 		}
 
@@ -275,10 +269,9 @@ func (r *Runtime) dispatchDueSubprocessorChanges(ctx context.Context, cutoff tim
 	return dispatched, errors.Join(errs...)
 }
 
-// loadTrustCenter loads a trust center with its custom domain and returns the resolved custom
-// domain (empty when none)
-func (r *Runtime) loadTrustCenter(ctx context.Context, trustCenterID string) (*ent.TrustCenter, string, error) {
-	tc, err := r.DB().TrustCenter.Query().
+// loadTrustCenter loads a trust center with its custom domain, returning the resolved custom domain
+func loadTrustCenter(ctx context.Context, req types.OperationRequest, trustCenterID string) (*ent.TrustCenter, string, error) {
+	tc, err := req.DB.TrustCenter.Query().
 		Where(trustcenter.IDEQ(trustCenterID)).
 		WithCustomDomain().
 		Only(ctx)
@@ -297,11 +290,9 @@ func (r *Runtime) loadTrustCenter(ctx context.Context, trustCenterID string) (*e
 }
 
 // createAndDispatchTrustCenterCampaign creates a trust center update campaign carrying the supplied
-// content and dispatches it through the campaign send, which materializes subscriber targets. The
-// message is fully composed in the campaign metadata and rendered through the system trust center
-// update operation, so no email template is linked
-func (r *Runtime) createAndDispatchTrustCenterCampaign(ctx context.Context, ownerID, trustCenterID, name string, content map[string]any) error {
-	camp, err := r.DB().Campaign.Create().
+// content and dispatches it through the campaign send, which materializes subscriber targets
+func createAndDispatchTrustCenterCampaign(ctx context.Context, req types.OperationRequest, ownerID, trustCenterID, name string, content map[string]any) error {
+	camp, err := req.DB.Campaign.Create().
 		SetOwnerID(ownerID).
 		SetName(name).
 		SetCampaignType(enums.CampaignTypeTrustCenterUpdate).
@@ -314,8 +305,8 @@ func (r *Runtime) createAndDispatchTrustCenterCampaign(ctx context.Context, owne
 		return err
 	}
 
-	config, err := json.Marshal(emaildef.SendBrandedCampaignRequest{
-		CampaignDispatchInput: emaildef.CampaignDispatchInput{CampaignID: camp.ID},
+	config, err := json.Marshal(SendBrandedCampaignRequest{
+		CampaignDispatchInput: CampaignDispatchInput{CampaignID: camp.ID},
 	})
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", camp.ID).Msg("failed marshaling campaign dispatch config")
@@ -323,7 +314,7 @@ func (r *Runtime) createAndDispatchTrustCenterCampaign(ctx context.Context, owne
 		return err
 	}
 
-	integrationID, err := r.ResolveOwnerIntegration(ctx, emaildef.DefinitionID.ID(), ownerID, func(inst *ent.Integration) bool {
+	integrationID, err := operations.ResolveOwnerIntegration(ctx, req.DB, DefinitionID.ID(), ownerID, func(inst *ent.Integration) bool {
 		return inst.CampaignEmail
 	})
 	if err != nil {
@@ -332,11 +323,11 @@ func (r *Runtime) createAndDispatchTrustCenterCampaign(ctx context.Context, owne
 		return err
 	}
 
-	_, err = r.Dispatch(ctx, operations.DispatchRequest{
+	_, err = req.Dispatch(ctx, types.DispatchRequest{
 		IntegrationID: integrationID,
-		DefinitionID:  emaildef.DefinitionID.ID(),
+		DefinitionID:  DefinitionID.ID(),
 		OwnerID:       ownerID,
-		Operation:     emaildef.SendCampaignOp.Name(),
+		Operation:     SendCampaignOp.Name(),
 		Config:        config,
 		RunType:       enums.IntegrationRunTypeScheduled,
 		Runtime:       integrationID == "",
@@ -346,11 +337,8 @@ func (r *Runtime) createAndDispatchTrustCenterCampaign(ctx context.Context, owne
 }
 
 // subprocessorEntries coalesces the changed trust center subprocessor join rows per subprocessor and
-// maps each vendor's net change relative to the last notification floor into a structured change entry,
-// reading the vendor name from the eager-loaded subprocessor edge. Coalescing keeps a vendor whose row
-// was deleted and recreated within one window (e.g. a full list re-import) from rendering as both a
-// removal and an addition
-func subprocessorEntries(changed []*ent.TrustCenterSubprocessor, floor time.Time) []emaildef.SubprocessorEntry {
+// maps each vendor's net change relative to the last notification floor into a structured change entry
+func subprocessorEntries(changed []*ent.TrustCenterSubprocessor, floor time.Time) []SubprocessorEntry {
 	withVendor := lo.Filter(changed, func(sp *ent.TrustCenterSubprocessor, _ int) bool {
 		return sp.Edges.Subprocessor != nil
 	})
@@ -361,22 +349,20 @@ func subprocessorEntries(changed []*ent.TrustCenterSubprocessor, floor time.Time
 
 	return lo.FilterMap(lo.UniqBy(withVendor, func(sp *ent.TrustCenterSubprocessor) string {
 		return sp.SubprocessorID
-	}), func(sp *ent.TrustCenterSubprocessor, _ int) (emaildef.SubprocessorEntry, bool) {
+	}), func(sp *ent.TrustCenterSubprocessor, _ int) (SubprocessorEntry, bool) {
 		change, ok := subprocessorNetChange(groups[sp.SubprocessorID], floor)
 		if !ok {
-			return emaildef.SubprocessorEntry{}, false
+			return SubprocessorEntry{}, false
 		}
 
-		return emaildef.SubprocessorEntry{
+		return SubprocessorEntry{
 			Name:   sp.Edges.Subprocessor.Name,
 			Change: change,
 		}, true
 	})
 }
 
-// subprocessorNetChange classifies a vendor's changed join rows relative to the last notification floor:
-// present at the floor but not anymore is a removal, newly present is an addition, present at both is an
-// update, and a vendor both added and removed within the window nets to no change and is dropped
+// subprocessorNetChange classifies a vendor's changed join rows relative to the last notification floor
 func subprocessorNetChange(rows []*ent.TrustCenterSubprocessor, floor time.Time) (string, bool) {
 	wasPresent := lo.SomeBy(rows, func(sp *ent.TrustCenterSubprocessor) bool {
 		return !sp.CreatedAt.After(floor)
@@ -397,10 +383,9 @@ func subprocessorNetChange(rows []*ent.TrustCenterSubprocessor, floor time.Time)
 	}
 }
 
-// activeTrustCenterSubscribers returns the trust center's subscribers eligible for notifications:
-// active, email-verified, and not unsubscribed
-func (r *Runtime) activeTrustCenterSubscribers(ctx context.Context, trustCenterID string) ([]*ent.Subscriber, error) {
-	return r.DB().Subscriber.Query().
+// activeTrustCenterSubscribers returns the trust center's active, verified, subscribed recipients
+func activeTrustCenterSubscribers(ctx context.Context, req types.OperationRequest, trustCenterID string) ([]*ent.Subscriber, error) {
+	return req.DB.Subscriber.Query().
 		Where(
 			subscriber.TrustCenterID(trustCenterID),
 			subscriber.Active(true),
@@ -411,16 +396,16 @@ func (r *Runtime) activeTrustCenterSubscribers(ctx context.Context, trustCenterI
 }
 
 // sendSubprocessorNotification dispatches the subprocessor notification to a single recipient as a
-// runtime system email, mirroring how subscribe and other system emails are sent
-func (r *Runtime) sendSubprocessorNotification(ctx context.Context, req emaildef.SubprocessorNotificationRequest) error {
-	config, err := json.Marshal(req)
+// runtime system email
+func sendSubprocessorNotification(ctx context.Context, req types.OperationRequest, sendReq SubprocessorNotificationRequest) error {
+	config, err := json.Marshal(sendReq)
 	if err != nil {
 		return err
 	}
 
-	_, err = r.Dispatch(ctx, operations.DispatchRequest{
-		DefinitionID: emaildef.DefinitionID.ID(),
-		Operation:    emaildef.SubprocessorNotificationOp.Name(),
+	_, err = req.Dispatch(ctx, types.DispatchRequest{
+		DefinitionID: DefinitionID.ID(),
+		Operation:    SubprocessorNotificationOp.Name(),
 		Config:       config,
 		RunType:      enums.IntegrationRunTypeScheduled,
 		Runtime:      true,
@@ -431,9 +416,7 @@ func (r *Runtime) sendSubprocessorNotification(ctx context.Context, req emaildef
 
 const logoCheckTimeout = 5 * time.Second
 
-// logoURLReachable reports whether a logo URL currently serves a successful response. Only the status is
-// inspected (the body is discarded), so a dead URL can fall back to the default logo instead of rendering
-// a broken image
+// logoURLReachable reports whether a logo URL currently serves a successful response
 func logoURLReachable(ctx context.Context, rawURL string) bool {
 	resp, err := httpsling.SendWithContext(ctx,
 		httpsling.Get(),

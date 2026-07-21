@@ -12622,6 +12622,25 @@ func (c *FindingControlClient) GetX(ctx context.Context, id string) *FindingCont
 	return obj
 }
 
+// QueryOwner queries the owner edge of a FindingControl.
+func (c *FindingControlClient) QueryOwner(_m *FindingControl) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(findingcontrol.Table, findingcontrol.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, findingcontrol.OwnerTable, findingcontrol.OwnerColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.FindingControl
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryFinding queries the finding edge of a FindingControl.
 func (c *FindingControlClient) QueryFinding(_m *FindingControl) *FindingQuery {
 	query := (&FindingClient{config: c.config}).Query()
@@ -12687,7 +12706,8 @@ func (c *FindingControlClient) Hooks() []Hook {
 
 // Interceptors returns the client interceptors.
 func (c *FindingControlClient) Interceptors() []Interceptor {
-	return c.inters.FindingControl
+	inters := c.inters.FindingControl
+	return append(inters[:len(inters):len(inters)], findingcontrol.Interceptors[:]...)
 }
 
 func (c *FindingControlClient) mutate(ctx context.Context, m *FindingControlMutation) (Value, error) {
@@ -23929,6 +23949,25 @@ func (c *OrganizationClient) QueryFindings(_m *Organization) *FindingQuery {
 	return query
 }
 
+// QueryFindingControls queries the finding_controls edge of a Organization.
+func (c *OrganizationClient) QueryFindingControls(_m *Organization) *FindingControlQuery {
+	query := (&FindingControlClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(findingcontrol.Table, findingcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.FindingControlsTable, organization.FindingControlsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.FindingControl
+		step.Edge.Schema = schemaConfig.FindingControl
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryReviews queries the reviews edge of a Organization.
 func (c *OrganizationClient) QueryReviews(_m *Organization) *ReviewQuery {
 	query := (&ReviewClient{config: c.config}).Query()
@@ -34601,6 +34640,25 @@ func (c *TrustCenterNDARequestClient) QueryFile(_m *TrustCenterNDARequest) *File
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.TrustCenterNDARequest
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryApprovedByUser queries the approved_by_user edge of a TrustCenterNDARequest.
+func (c *TrustCenterNDARequestClient) QueryApprovedByUser(_m *TrustCenterNDARequest) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenterndarequest.Table, trustcenterndarequest.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, trustcenterndarequest.ApprovedByUserTable, trustcenterndarequest.ApprovedByUserColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.TrustCenterNDARequest
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil

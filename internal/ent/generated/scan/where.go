@@ -109,6 +109,21 @@ func OwnerID(v string) predicate.Scan {
 	return predicate.Scan(sql.FieldEQ(FieldOwnerID, v))
 }
 
+// SystemOwned applies equality check predicate on the "system_owned" field. It's identical to SystemOwnedEQ.
+func SystemOwned(v bool) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldSystemOwned, v))
+}
+
+// InternalNotes applies equality check predicate on the "internal_notes" field. It's identical to InternalNotesEQ.
+func InternalNotes(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldInternalNotes, v))
+}
+
+// SystemInternalID applies equality check predicate on the "system_internal_id" field. It's identical to SystemInternalIDEQ.
+func SystemInternalID(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldSystemInternalID, v))
+}
+
 // ReviewedBy applies equality check predicate on the "reviewed_by" field. It's identical to ReviewedByEQ.
 func ReviewedBy(v string) predicate.Scan {
 	return predicate.Scan(sql.FieldEQ(FieldReviewedBy, v))
@@ -732,6 +747,176 @@ func OwnerIDEqualFold(v string) predicate.Scan {
 // OwnerIDContainsFold applies the ContainsFold predicate on the "owner_id" field.
 func OwnerIDContainsFold(v string) predicate.Scan {
 	return predicate.Scan(sql.FieldContainsFold(FieldOwnerID, v))
+}
+
+// SystemOwnedEQ applies the EQ predicate on the "system_owned" field.
+func SystemOwnedEQ(v bool) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldSystemOwned, v))
+}
+
+// SystemOwnedNEQ applies the NEQ predicate on the "system_owned" field.
+func SystemOwnedNEQ(v bool) predicate.Scan {
+	return predicate.Scan(sql.FieldNEQ(FieldSystemOwned, v))
+}
+
+// SystemOwnedIsNil applies the IsNil predicate on the "system_owned" field.
+func SystemOwnedIsNil() predicate.Scan {
+	return predicate.Scan(sql.FieldIsNull(FieldSystemOwned))
+}
+
+// SystemOwnedNotNil applies the NotNil predicate on the "system_owned" field.
+func SystemOwnedNotNil() predicate.Scan {
+	return predicate.Scan(sql.FieldNotNull(FieldSystemOwned))
+}
+
+// InternalNotesEQ applies the EQ predicate on the "internal_notes" field.
+func InternalNotesEQ(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldInternalNotes, v))
+}
+
+// InternalNotesNEQ applies the NEQ predicate on the "internal_notes" field.
+func InternalNotesNEQ(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldNEQ(FieldInternalNotes, v))
+}
+
+// InternalNotesIn applies the In predicate on the "internal_notes" field.
+func InternalNotesIn(vs ...string) predicate.Scan {
+	return predicate.Scan(sql.FieldIn(FieldInternalNotes, vs...))
+}
+
+// InternalNotesNotIn applies the NotIn predicate on the "internal_notes" field.
+func InternalNotesNotIn(vs ...string) predicate.Scan {
+	return predicate.Scan(sql.FieldNotIn(FieldInternalNotes, vs...))
+}
+
+// InternalNotesGT applies the GT predicate on the "internal_notes" field.
+func InternalNotesGT(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldGT(FieldInternalNotes, v))
+}
+
+// InternalNotesGTE applies the GTE predicate on the "internal_notes" field.
+func InternalNotesGTE(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldGTE(FieldInternalNotes, v))
+}
+
+// InternalNotesLT applies the LT predicate on the "internal_notes" field.
+func InternalNotesLT(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldLT(FieldInternalNotes, v))
+}
+
+// InternalNotesLTE applies the LTE predicate on the "internal_notes" field.
+func InternalNotesLTE(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldLTE(FieldInternalNotes, v))
+}
+
+// InternalNotesContains applies the Contains predicate on the "internal_notes" field.
+func InternalNotesContains(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldContains(FieldInternalNotes, v))
+}
+
+// InternalNotesHasPrefix applies the HasPrefix predicate on the "internal_notes" field.
+func InternalNotesHasPrefix(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldHasPrefix(FieldInternalNotes, v))
+}
+
+// InternalNotesHasSuffix applies the HasSuffix predicate on the "internal_notes" field.
+func InternalNotesHasSuffix(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldHasSuffix(FieldInternalNotes, v))
+}
+
+// InternalNotesIsNil applies the IsNil predicate on the "internal_notes" field.
+func InternalNotesIsNil() predicate.Scan {
+	return predicate.Scan(sql.FieldIsNull(FieldInternalNotes))
+}
+
+// InternalNotesNotNil applies the NotNil predicate on the "internal_notes" field.
+func InternalNotesNotNil() predicate.Scan {
+	return predicate.Scan(sql.FieldNotNull(FieldInternalNotes))
+}
+
+// InternalNotesEqualFold applies the EqualFold predicate on the "internal_notes" field.
+func InternalNotesEqualFold(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEqualFold(FieldInternalNotes, v))
+}
+
+// InternalNotesContainsFold applies the ContainsFold predicate on the "internal_notes" field.
+func InternalNotesContainsFold(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldContainsFold(FieldInternalNotes, v))
+}
+
+// SystemInternalIDEQ applies the EQ predicate on the "system_internal_id" field.
+func SystemInternalIDEQ(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEQ(FieldSystemInternalID, v))
+}
+
+// SystemInternalIDNEQ applies the NEQ predicate on the "system_internal_id" field.
+func SystemInternalIDNEQ(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldNEQ(FieldSystemInternalID, v))
+}
+
+// SystemInternalIDIn applies the In predicate on the "system_internal_id" field.
+func SystemInternalIDIn(vs ...string) predicate.Scan {
+	return predicate.Scan(sql.FieldIn(FieldSystemInternalID, vs...))
+}
+
+// SystemInternalIDNotIn applies the NotIn predicate on the "system_internal_id" field.
+func SystemInternalIDNotIn(vs ...string) predicate.Scan {
+	return predicate.Scan(sql.FieldNotIn(FieldSystemInternalID, vs...))
+}
+
+// SystemInternalIDGT applies the GT predicate on the "system_internal_id" field.
+func SystemInternalIDGT(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldGT(FieldSystemInternalID, v))
+}
+
+// SystemInternalIDGTE applies the GTE predicate on the "system_internal_id" field.
+func SystemInternalIDGTE(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldGTE(FieldSystemInternalID, v))
+}
+
+// SystemInternalIDLT applies the LT predicate on the "system_internal_id" field.
+func SystemInternalIDLT(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldLT(FieldSystemInternalID, v))
+}
+
+// SystemInternalIDLTE applies the LTE predicate on the "system_internal_id" field.
+func SystemInternalIDLTE(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldLTE(FieldSystemInternalID, v))
+}
+
+// SystemInternalIDContains applies the Contains predicate on the "system_internal_id" field.
+func SystemInternalIDContains(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldContains(FieldSystemInternalID, v))
+}
+
+// SystemInternalIDHasPrefix applies the HasPrefix predicate on the "system_internal_id" field.
+func SystemInternalIDHasPrefix(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldHasPrefix(FieldSystemInternalID, v))
+}
+
+// SystemInternalIDHasSuffix applies the HasSuffix predicate on the "system_internal_id" field.
+func SystemInternalIDHasSuffix(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldHasSuffix(FieldSystemInternalID, v))
+}
+
+// SystemInternalIDIsNil applies the IsNil predicate on the "system_internal_id" field.
+func SystemInternalIDIsNil() predicate.Scan {
+	return predicate.Scan(sql.FieldIsNull(FieldSystemInternalID))
+}
+
+// SystemInternalIDNotNil applies the NotNil predicate on the "system_internal_id" field.
+func SystemInternalIDNotNil() predicate.Scan {
+	return predicate.Scan(sql.FieldNotNull(FieldSystemInternalID))
+}
+
+// SystemInternalIDEqualFold applies the EqualFold predicate on the "system_internal_id" field.
+func SystemInternalIDEqualFold(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldEqualFold(FieldSystemInternalID, v))
+}
+
+// SystemInternalIDContainsFold applies the ContainsFold predicate on the "system_internal_id" field.
+func SystemInternalIDContainsFold(v string) predicate.Scan {
+	return predicate.Scan(sql.FieldContainsFold(FieldSystemInternalID, v))
 }
 
 // ReviewedByEQ applies the EQ predicate on the "reviewed_by" field.

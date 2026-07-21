@@ -1,6 +1,8 @@
 -- +goose Up
 -- create "finding_assets" table
 CREATE TABLE "finding_assets" ("finding_id" character varying NOT NULL, "asset_id" character varying NOT NULL, PRIMARY KEY ("finding_id", "asset_id"), CONSTRAINT "finding_assets_asset_id" FOREIGN KEY ("asset_id") REFERENCES "assets" ("id") ON UPDATE NO ACTION ON DELETE CASCADE, CONSTRAINT "finding_assets_finding_id" FOREIGN KEY ("finding_id") REFERENCES "findings" ("id") ON UPDATE NO ACTION ON DELETE CASCADE);
+-- modify "finding_controls" table
+ALTER TABLE "finding_controls" ADD COLUMN "owner_id" character varying NULL, ADD CONSTRAINT "finding_controls_organizations_finding_controls" FOREIGN KEY ("owner_id") REFERENCES "organizations" ("id") ON UPDATE NO ACTION ON DELETE SET NULL;
 -- create "finding_entities" table
 CREATE TABLE "finding_entities" ("finding_id" character varying NOT NULL, "entity_id" character varying NOT NULL, PRIMARY KEY ("finding_id", "entity_id"), CONSTRAINT "finding_entities_entity_id" FOREIGN KEY ("entity_id") REFERENCES "entities" ("id") ON UPDATE NO ACTION ON DELETE CASCADE, CONSTRAINT "finding_entities_finding_id" FOREIGN KEY ("finding_id") REFERENCES "findings" ("id") ON UPDATE NO ACTION ON DELETE CASCADE);
 -- create "finding_programs" table
@@ -51,6 +53,8 @@ INSERT INTO "vulnerability_risks" ("vulnerability_id", "risk_id") SELECT "vulner
 INSERT INTO "finding_subcontrols" ("finding_id", "subcontrol_id") SELECT "finding_subcontrols", "id" FROM "subcontrols" WHERE "finding_subcontrols" IS NOT NULL AND "deleted_at" IS NULL ON CONFLICT DO NOTHING;
 INSERT INTO "vulnerability_subcontrols" ("vulnerability_id", "subcontrol_id") SELECT "vulnerability_subcontrols", "id" FROM "subcontrols" WHERE "vulnerability_subcontrols" IS NOT NULL AND "deleted_at" IS NULL ON CONFLICT DO NOTHING;
 INSERT INTO "vulnerability_controls" ("vulnerability_id", "control_id") SELECT "vulnerability_controls", "id" FROM "controls" WHERE "vulnerability_controls" IS NOT NULL AND "deleted_at" IS NULL ON CONFLICT DO NOTHING;
+-- backfill finding_controls.owner_id from the owning finding
+UPDATE "finding_controls" SET "owner_id" = "findings"."owner_id" FROM "findings" WHERE "findings"."id" = "finding_controls"."finding_id" AND "finding_controls"."owner_id" IS NULL;
 -- modify "assets" table
 ALTER TABLE "assets" DROP COLUMN "finding_assets", DROP COLUMN "remediation_assets", DROP COLUMN "review_assets", DROP COLUMN "vulnerability_assets";
 -- modify "entities" table
@@ -107,6 +111,8 @@ ALTER TABLE "programs" ADD COLUMN "vulnerability_programs" character varying NUL
 DROP TABLE "finding_entities";
 -- reverse: modify "entities" table
 ALTER TABLE "entities" ADD COLUMN "vulnerability_entities" character varying NULL, ADD COLUMN "review_entities" character varying NULL, ADD COLUMN "remediation_entities" character varying NULL, ADD COLUMN "finding_entities" character varying NULL;
+-- reverse: modify "finding_controls" table
+ALTER TABLE "finding_controls" DROP CONSTRAINT "finding_controls_organizations_finding_controls", DROP COLUMN "owner_id";
 -- reverse: create "finding_assets" table
 DROP TABLE "finding_assets";
 -- reverse: modify "assets" table

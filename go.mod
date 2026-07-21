@@ -192,7 +192,7 @@ require (
 	github.com/wundergraph/astjson v1.1.0
 	github.com/wundergraph/go-arena v0.0.0-20251008210416-55cb97e6f68f // indirect
 	go.uber.org/atomic v1.11.0 // indirect
-	golang.org/x/image v0.41.0 // indirect
+	golang.org/x/image v0.43.0 // indirect
 	golang.org/x/term v0.44.0 // indirect
 )
 

@@ -183,10 +183,10 @@
           "$ref": "#/$defs/email.RuntimeEmailConfig"
         },
         "paymentreminder": {
-          "$ref": "#/$defs/operations.PaymentReminderConfig"
+          "$ref": "#/$defs/system.PaymentReminderConfig"
         },
         "organizationdelete": {
-          "$ref": "#/$defs/operations.OrganizationDeleteConfig"
+          "$ref": "#/$defs/system.OrganizationDeleteConfig"
         }
       },
       "additionalProperties": false,
@@ -1242,47 +1242,6 @@
       "additionalProperties": false,
       "type": "object"
     },
-    "operations.OrganizationDeleteConfig": {
-      "properties": {
-        "maxdeletesperrun": {
-          "type": "integer",
-          "description": "Maximum overdue organizations to delete per run",
-          "default": 25
-        },
-        "enabled": {
-          "type": "boolean",
-          "description": "Whether the organization deletion listener is enabled"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object"
-    },
-    "operations.PaymentReminderConfig": {
-      "properties": {
-        "paymentmethodinterval": {
-          "type": "integer",
-          "description": "Days after org creation before marking for deletion",
-          "default": 30
-        },
-        "deletiondays": {
-          "type": "integer",
-          "description": "Days between marking and actual deletion",
-          "default": 7
-        },
-        "enabled": {
-          "type": "boolean",
-          "description": "Whether the payment reminder listener is enabled",
-          "default": false
-        },
-        "dryrun": {
-          "type": "boolean",
-          "description": "If true only log organization IDs that would be processed",
-          "default": true
-        }
-      },
-      "additionalProperties": false,
-      "type": "object"
-    },
     "ratelimit.Config": {
       "properties": {
         "enabled": {
@@ -1879,6 +1838,47 @@
       "additionalProperties": false,
       "type": "object",
       "description": "OpenAIConfig contains OpenAI specific configuration"
+    },
+    "system.OrganizationDeleteConfig": {
+      "properties": {
+        "maxdeletesperrun": {
+          "type": "integer",
+          "description": "Maximum overdue organizations to delete per run",
+          "default": 25
+        },
+        "enabled": {
+          "type": "boolean",
+          "description": "Whether the organization deletion listener is enabled"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "system.PaymentReminderConfig": {
+      "properties": {
+        "paymentmethodinterval": {
+          "type": "integer",
+          "description": "Days after org creation before marking for deletion",
+          "default": 30
+        },
+        "deletiondays": {
+          "type": "integer",
+          "description": "Days between marking and actual deletion",
+          "default": 7
+        },
+        "enabled": {
+          "type": "boolean",
+          "description": "Whether the payment reminder listener is enabled",
+          "default": false
+        },
+        "dryrun": {
+          "type": "boolean",
+          "description": "If true only log organization IDs that would be processed",
+          "default": true
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     },
     "tokens.APITokenConfig": {
       "properties": {

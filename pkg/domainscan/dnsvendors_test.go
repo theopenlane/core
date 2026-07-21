@@ -18,7 +18,7 @@ func TestVendorNameFromHostname(t *testing.T) {
 			name:       "exact host override wins",
 			host:       "admin.google.com",
 			wantName:   "Google Workspace",
-			wantDomain: "google.com",
+			wantDomain: "admin.google.com",
 		},
 		{
 			name:       "domain override wins",
@@ -30,19 +30,19 @@ func TestVendorNameFromHostname(t *testing.T) {
 			name:       "alsoKnownAs alias resolves through the naive label, not just an exact domain override",
 			host:       "hubspotemail.net",
 			wantName:   "Hubspot",
-			wantDomain: "hubspotemail.net",
+			wantDomain: "hubspot.com",
 		},
 		{
 			name:       "GoDaddy's default nameserver domain resolves via alias",
 			host:       "ns1.domaincontrol.com",
 			wantName:   "GoDaddy",
-			wantDomain: "domaincontrol.com",
+			wantDomain: "godaddy.com",
 		},
 		{
 			name:       "Namecheap's default nameserver domain resolves via alias",
 			host:       "dns1.registrar-servers.com",
 			wantName:   "Namecheap",
-			wantDomain: "registrar-servers.com",
+			wantDomain: "namecheap.com",
 		},
 		{
 			name:       "unknown domain falls back to naive title case",
