@@ -1394,6 +1394,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			findingcontrol.FieldCreatedBy:               {Type: field.TypeString, Column: findingcontrol.FieldCreatedBy},
 			findingcontrol.FieldUpdatedBy:               {Type: field.TypeString, Column: findingcontrol.FieldUpdatedBy},
 			findingcontrol.FieldUpdatedByImpersonator:   {Type: field.TypeString, Column: findingcontrol.FieldUpdatedByImpersonator},
+			findingcontrol.FieldOwnerID:                 {Type: field.TypeString, Column: findingcontrol.FieldOwnerID},
 			findingcontrol.FieldFindingID:               {Type: field.TypeString, Column: findingcontrol.FieldFindingID},
 			findingcontrol.FieldControlID:               {Type: field.TypeString, Column: findingcontrol.FieldControlID},
 			findingcontrol.FieldStandardID:              {Type: field.TypeString, Column: findingcontrol.FieldStandardID},
@@ -8485,6 +8486,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"FindingControl",
 	)
 	graph.MustAddE(
+		"owner",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   findingcontrol.OwnerTable,
+			Columns: []string{findingcontrol.OwnerColumn},
+			Bidi:    false,
+		},
+		"FindingControl",
+		"Organization",
+	)
+	graph.MustAddE(
 		"finding",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -13067,6 +13080,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Organization",
 		"Finding",
+	)
+	graph.MustAddE(
+		"finding_controls",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.FindingControlsTable,
+			Columns: []string{organization.FindingControlsColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"FindingControl",
 	)
 	graph.MustAddE(
 		"reviews",
@@ -29914,6 +29939,11 @@ func (f *FindingControlFilter) WhereUpdatedByImpersonator(p entql.StringP) {
 	f.Where(p.Field(findingcontrol.FieldUpdatedByImpersonator))
 }
 
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *FindingControlFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(findingcontrol.FieldOwnerID))
+}
+
 // WhereFindingID applies the entql string predicate on the finding_id field.
 func (f *FindingControlFilter) WhereFindingID(p entql.StringP) {
 	f.Where(p.Field(findingcontrol.FieldFindingID))
@@ -29957,6 +29987,20 @@ func (f *FindingControlFilter) WhereMetadata(p entql.BytesP) {
 // WhereDiscoveredAt applies the entql time.Time predicate on the discovered_at field.
 func (f *FindingControlFilter) WhereDiscoveredAt(p entql.TimeP) {
 	f.Where(p.Field(findingcontrol.FieldDiscoveredAt))
+}
+
+// WhereHasOwner applies a predicate to check if query has an edge owner.
+func (f *FindingControlFilter) WhereHasOwner() {
+	f.Where(entql.HasEdge("owner"))
+}
+
+// WhereHasOwnerWith applies a predicate to check if query has an edge owner with a given conditions (other predicates).
+func (f *FindingControlFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
+	f.Where(entql.HasEdgeWith("owner", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasFinding applies a predicate to check if query has an edge finding.
@@ -39436,6 +39480,20 @@ func (f *OrganizationFilter) WhereHasFindings() {
 // WhereHasFindingsWith applies a predicate to check if query has an edge findings with a given conditions (other predicates).
 func (f *OrganizationFilter) WhereHasFindingsWith(preds ...predicate.Finding) {
 	f.Where(entql.HasEdgeWith("findings", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFindingControls applies a predicate to check if query has an edge finding_controls.
+func (f *OrganizationFilter) WhereHasFindingControls() {
+	f.Where(entql.HasEdge("finding_controls"))
+}
+
+// WhereHasFindingControlsWith applies a predicate to check if query has an edge finding_controls with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasFindingControlsWith(preds ...predicate.FindingControl) {
+	f.Where(entql.HasEdgeWith("finding_controls", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

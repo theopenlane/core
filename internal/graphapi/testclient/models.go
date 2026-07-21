@@ -7865,6 +7865,7 @@ type CreateFindingControlInput struct {
 	Metadata map[string]any `json:"metadata,omitempty"`
 	// timestamp when the mapping was first observed
 	DiscoveredAt *models.DateTime `json:"discoveredAt,omitempty"`
+	OwnerID      *string          `json:"ownerID,omitempty"`
 	FindingID    string           `json:"findingID"`
 	ControlID    string           `json:"controlID"`
 	StandardID   *string          `json:"standardID,omitempty"`
@@ -18090,6 +18091,8 @@ type FindingControl struct {
 	UpdatedBy *string    `json:"updatedBy,omitempty"`
 	// the real user acting through an impersonation session when the record was last mutated, if any
 	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
+	// the organization id that owns the object
+	OwnerID *string `json:"ownerID,omitempty"`
 	// the id of the finding associated with the control
 	FindingID string `json:"findingID"`
 	// the id of the control mapped to the finding when it exists in the catalog
@@ -18108,6 +18111,7 @@ type FindingControl struct {
 	Metadata map[string]any `json:"metadata,omitempty"`
 	// timestamp when the mapping was first observed
 	DiscoveredAt *models.DateTime `json:"discoveredAt,omitempty"`
+	Owner        *Organization    `json:"owner,omitempty"`
 	Finding      *Finding         `json:"finding"`
 	Control      *Control         `json:"control"`
 	Standard     *Standard        `json:"standard,omitempty"`
@@ -27235,6 +27239,7 @@ type Organization struct {
 	TagDefinitions                     *TagDefinitionConnection              `json:"tagDefinitions"`
 	Remediations                       *RemediationConnection                `json:"remediations"`
 	Findings                           *FindingConnection                    `json:"findings"`
+	FindingControls                    *FindingControlConnection             `json:"findingControls"`
 	Reviews                            *ReviewConnection                     `json:"reviews"`
 	Vulnerabilities                    *VulnerabilityConnection              `json:"vulnerabilities"`
 	WorkflowDefinitions                *WorkflowDefinitionConnection         `json:"workflowDefinitions"`
@@ -28460,6 +28465,9 @@ type OrganizationWhereInput struct {
 	// findings edge predicates
 	HasFindings     *bool                `json:"hasFindings,omitempty"`
 	HasFindingsWith []*FindingWhereInput `json:"hasFindingsWith,omitempty"`
+	// finding_controls edge predicates
+	HasFindingControls     *bool                       `json:"hasFindingControls,omitempty"`
+	HasFindingControlsWith []*FindingControlWhereInput `json:"hasFindingControlsWith,omitempty"`
 	// reviews edge predicates
 	HasReviews     *bool               `json:"hasReviews,omitempty"`
 	HasReviewsWith []*ReviewWhereInput `json:"hasReviewsWith,omitempty"`
@@ -43989,6 +43997,8 @@ type UpdateFindingControlInput struct {
 	// timestamp when the mapping was first observed
 	DiscoveredAt      *models.DateTime `json:"discoveredAt,omitempty"`
 	ClearDiscoveredAt *bool            `json:"clearDiscoveredAt,omitempty"`
+	OwnerID           *string          `json:"ownerID,omitempty"`
+	ClearOwner        *bool            `json:"clearOwner,omitempty"`
 }
 
 // UpdateFindingInput is used for update Finding object.

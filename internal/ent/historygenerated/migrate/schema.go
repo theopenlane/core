@@ -1163,6 +1163,7 @@ var (
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by_impersonator", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "finding_id", Type: field.TypeString},
 		{Name: "control_id", Type: field.TypeString},
 		{Name: "standard_id", Type: field.TypeString, Nullable: true},

@@ -1162,6 +1162,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			findingcontrolhistory.FieldCreatedBy:               {Type: field.TypeString, Column: findingcontrolhistory.FieldCreatedBy},
 			findingcontrolhistory.FieldUpdatedBy:               {Type: field.TypeString, Column: findingcontrolhistory.FieldUpdatedBy},
 			findingcontrolhistory.FieldUpdatedByImpersonator:   {Type: field.TypeString, Column: findingcontrolhistory.FieldUpdatedByImpersonator},
+			findingcontrolhistory.FieldOwnerID:                 {Type: field.TypeString, Column: findingcontrolhistory.FieldOwnerID},
 			findingcontrolhistory.FieldFindingID:               {Type: field.TypeString, Column: findingcontrolhistory.FieldFindingID},
 			findingcontrolhistory.FieldControlID:               {Type: field.TypeString, Column: findingcontrolhistory.FieldControlID},
 			findingcontrolhistory.FieldStandardID:              {Type: field.TypeString, Column: findingcontrolhistory.FieldStandardID},
@@ -8201,6 +8202,11 @@ func (f *FindingControlHistoryFilter) WhereUpdatedBy(p entql.StringP) {
 // WhereUpdatedByImpersonator applies the entql string predicate on the updated_by_impersonator field.
 func (f *FindingControlHistoryFilter) WhereUpdatedByImpersonator(p entql.StringP) {
 	f.Where(p.Field(findingcontrolhistory.FieldUpdatedByImpersonator))
+}
+
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *FindingControlHistoryFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(findingcontrolhistory.FieldOwnerID))
 }
 
 // WhereFindingID applies the entql string predicate on the finding_id field.

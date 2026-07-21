@@ -1096,6 +1096,7 @@ type ComplexityRoot struct {
 		ID                      func(childComplexity int) int
 		Metadata                func(childComplexity int) int
 		Operation               func(childComplexity int) int
+		OwnerID                 func(childComplexity int) int
 		Ref                     func(childComplexity int) int
 		Source                  func(childComplexity int) int
 		StandardID              func(childComplexity int) int
@@ -8673,6 +8674,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.FindingControlHistory.Operation(childComplexity), true
+	case "FindingControlHistory.ownerID":
+		if e.ComplexityRoot.FindingControlHistory.OwnerID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.FindingControlHistory.OwnerID(childComplexity), true
 	case "FindingControlHistory.ref":
 		if e.ComplexityRoot.FindingControlHistory.Ref == nil {
 			break
@@ -35225,6 +35232,10 @@ type FindingControlHistory implements Node {
   """
   updatedByImpersonator: String
   """
+  the organization id that owns the object
+  """
+  ownerID: String
+  """
   the id of the finding associated with the control
   """
   findingID: String!
@@ -35457,6 +35468,24 @@ input FindingControlHistoryWhereInput {
   updatedByImpersonatorNotNil: Boolean
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
   """
   finding_id field predicates
   """
@@ -69643,6 +69672,8 @@ func (ec *executionContext) childFields_FindingControlHistory(ctx context.Contex
 		return ec.fieldContext_FindingControlHistory_updatedBy(ctx, field)
 	case "updatedByImpersonator":
 		return ec.fieldContext_FindingControlHistory_updatedByImpersonator(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_FindingControlHistory_ownerID(ctx, field)
 	case "findingID":
 		return ec.fieldContext_FindingControlHistory_findingID(ctx, field)
 	case "controlID":
