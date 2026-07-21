@@ -1888,7 +1888,12 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess:     true,
 	HasSystemOwnedField: true,
 },
-}, "finding_control": {"finding": {
+}, "finding_control": {"owner": {
+	ObjectType:          "owner",
+	SkipEditCheck:       true,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+}, "finding": {
 	ObjectType:          "finding",
 	SkipEditCheck:       true,
 	CheckViewAccess:     true,
@@ -3828,6 +3833,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: true,
+}, "finding_controls": {
+	ObjectType:          "finding_control",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
 }, "reviews": {
 	ObjectType:          "review",
 	SkipEditCheck:       false,

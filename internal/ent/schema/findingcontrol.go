@@ -120,11 +120,14 @@ func (FindingControl) Indexes() []ent.Index {
 }
 
 // Mixin of the FindingControl
-func (FindingControl) Mixin() []ent.Mixin {
+func (fc FindingControl) Mixin() []ent.Mixin {
 	return mixinConfig{
 		excludeSoftDelete: true,
 		excludeTags:       true,
-	}.getMixins(FindingControl{})
+		additionalMixins: []ent.Mixin{
+			newOrgOwnedMixin(fc),
+		},
+	}.getMixins(fc)
 }
 
 // Modules of the FindingControl

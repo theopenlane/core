@@ -2905,6 +2905,7 @@ var (
 		{Name: "finding_id", Type: field.TypeString},
 		{Name: "control_id", Type: field.TypeString},
 		{Name: "standard_id", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// FindingControlsTable holds the schema information for the "finding_controls" table.
 	FindingControlsTable = &schema.Table{
@@ -2928,6 +2929,12 @@ var (
 				Symbol:     "finding_controls_standards_standard",
 				Columns:    []*schema.Column{FindingControlsColumns[14]},
 				RefColumns: []*schema.Column{StandardsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "finding_controls_organizations_finding_controls",
+				Columns:    []*schema.Column{FindingControlsColumns[15]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -15445,6 +15452,7 @@ func init() {
 	FindingControlsTable.ForeignKeys[0].RefTable = FindingsTable
 	FindingControlsTable.ForeignKeys[1].RefTable = ControlsTable
 	FindingControlsTable.ForeignKeys[2].RefTable = StandardsTable
+	FindingControlsTable.ForeignKeys[3].RefTable = OrganizationsTable
 	GroupsTable.ForeignKeys[0].RefTable = AssessmentsTable
 	GroupsTable.ForeignKeys[1].RefTable = AssessmentsTable
 	GroupsTable.ForeignKeys[2].RefTable = AssessmentsTable

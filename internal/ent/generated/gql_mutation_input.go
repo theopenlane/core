@@ -11195,6 +11195,7 @@ type CreateFindingControlInput struct {
 	Source                  *string                `json:"source,omitempty"`
 	Metadata                map[string]interface{} `json:"metadata,omitempty"`
 	DiscoveredAt            *models.DateTime       `json:"discovered_at,omitempty"`
+	OwnerID                 *string                `json:"owner_id,omitempty"`
 	FindingID               string                 `json:"finding_id,omitempty"`
 	ControlID               string                 `json:"control_id,omitempty"`
 	StandardID              *string                `json:"standard_id,omitempty"`
@@ -11219,6 +11220,9 @@ func (i *CreateFindingControlInput) Mutate(m *FindingControlMutation) {
 	}
 	if v := i.DiscoveredAt; v != nil {
 		m.SetDiscoveredAt(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
 	}
 	m.SetFindingID(i.FindingID)
 	m.SetControlID(i.ControlID)
@@ -11247,6 +11251,8 @@ type UpdateFindingControlInput struct {
 	Metadata                     map[string]interface{} `json:"metadata,omitempty"`
 	ClearDiscoveredAt            bool
 	DiscoveredAt                 *models.DateTime `json:"discovered_at,omitempty"`
+	ClearOwner                   bool
+	OwnerID                      *string `json:"owner_id,omitempty"`
 }
 
 // Mutate applies the UpdateFindingControlInput on the FindingControlMutation builder.
@@ -11286,6 +11292,12 @@ func (i *UpdateFindingControlInput) Mutate(m *FindingControlMutation) {
 	}
 	if v := i.DiscoveredAt; v != nil {
 		m.SetDiscoveredAt(*v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
 	}
 }
 

@@ -14474,6 +14474,10 @@ type FindingControlHistory implements Node {
 	"""
 	updatedByImpersonator: String
 	"""
+	the organization id that owns the object
+	"""
+	ownerID: String
+	"""
 	the id of the finding associated with the control
 	"""
 	findingID: String!
@@ -14706,6 +14710,24 @@ input FindingControlHistoryWhereInput {
 	updatedByImpersonatorNotNil: Boolean
 	updatedByImpersonatorEqualFold: String
 	updatedByImpersonatorContainsFold: String
+	"""
+	owner_id field predicates
+	"""
+	ownerID: String
+	ownerIDNEQ: String
+	ownerIDIn: [String!]
+	ownerIDNotIn: [String!]
+	ownerIDGT: String
+	ownerIDGTE: String
+	ownerIDLT: String
+	ownerIDLTE: String
+	ownerIDContains: String
+	ownerIDHasPrefix: String
+	ownerIDHasSuffix: String
+	ownerIDIsNil: Boolean
+	ownerIDNotNil: Boolean
+	ownerIDEqualFold: String
+	ownerIDContainsFold: String
 	"""
 	finding_id field predicates
 	"""

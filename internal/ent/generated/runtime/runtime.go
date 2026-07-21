@@ -3175,14 +3175,21 @@ func init() {
 	}
 	findingcontrolMixinHooks0 := findingcontrolMixin[0].Hooks()
 	findingcontrolMixinHooks1 := findingcontrolMixin[1].Hooks()
+	findingcontrolMixinHooks4 := findingcontrolMixin[4].Hooks()
 
 	findingcontrol.Hooks[1] = findingcontrolMixinHooks0[0]
 
 	findingcontrol.Hooks[2] = findingcontrolMixinHooks1[0]
+
+	findingcontrol.Hooks[3] = findingcontrolMixinHooks4[0]
+	findingcontrolMixinInters4 := findingcontrolMixin[4].Interceptors()
+	findingcontrol.Interceptors[0] = findingcontrolMixinInters4[0]
 	findingcontrolMixinFields0 := findingcontrolMixin[0].Fields()
 	_ = findingcontrolMixinFields0
 	findingcontrolMixinFields2 := findingcontrolMixin[2].Fields()
 	_ = findingcontrolMixinFields2
+	findingcontrolMixinFields4 := findingcontrolMixin[4].Fields()
+	_ = findingcontrolMixinFields4
 	findingcontrolFields := schema.FindingControl{}.Fields()
 	_ = findingcontrolFields
 	// findingcontrolDescCreatedAt is the schema descriptor for created_at field.
@@ -3195,6 +3202,10 @@ func init() {
 	findingcontrol.DefaultUpdatedAt = findingcontrolDescUpdatedAt.Default.(func() time.Time)
 	// findingcontrol.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
 	findingcontrol.UpdateDefaultUpdatedAt = findingcontrolDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// findingcontrolDescOwnerID is the schema descriptor for owner_id field.
+	findingcontrolDescOwnerID := findingcontrolMixinFields4[0].Descriptor()
+	// findingcontrol.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	findingcontrol.OwnerIDValidator = findingcontrolDescOwnerID.Validators[0].(func(string) error)
 	// findingcontrolDescID is the schema descriptor for id field.
 	findingcontrolDescID := findingcontrolMixinFields2[0].Descriptor()
 	// findingcontrol.DefaultID holds the default value on creation for the id field.

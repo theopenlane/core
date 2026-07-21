@@ -40,6 +40,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/export"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/finding"
+	"github.com/theopenlane/core/internal/ent/generated/findingcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
@@ -2633,6 +2634,21 @@ func (_u *OrganizationUpdate) AddFindings(v ...*Finding) *OrganizationUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.AddFindingIDs(ids...)
+}
+
+// AddFindingControlIDs adds the "finding_controls" edge to the FindingControl entity by IDs.
+func (_u *OrganizationUpdate) AddFindingControlIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddFindingControlIDs(ids...)
+	return _u
+}
+
+// AddFindingControls adds the "finding_controls" edges to the FindingControl entity.
+func (_u *OrganizationUpdate) AddFindingControls(v ...*FindingControl) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFindingControlIDs(ids...)
 }
 
 // AddReviewIDs adds the "reviews" edge to the Review entity by IDs.
@@ -6049,6 +6065,27 @@ func (_u *OrganizationUpdate) RemoveFindings(v ...*Finding) *OrganizationUpdate 
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveFindingIDs(ids...)
+}
+
+// ClearFindingControls clears all "finding_controls" edges to the FindingControl entity.
+func (_u *OrganizationUpdate) ClearFindingControls() *OrganizationUpdate {
+	_u.mutation.ClearFindingControls()
+	return _u
+}
+
+// RemoveFindingControlIDs removes the "finding_controls" edge to FindingControl entities by IDs.
+func (_u *OrganizationUpdate) RemoveFindingControlIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveFindingControlIDs(ids...)
+	return _u
+}
+
+// RemoveFindingControls removes "finding_controls" edges to FindingControl entities.
+func (_u *OrganizationUpdate) RemoveFindingControls(v ...*FindingControl) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFindingControlIDs(ids...)
 }
 
 // ClearReviews clears all "reviews" edges to the Review entity.
@@ -13827,6 +13864,54 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.FindingControlsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.FindingControlsTable,
+			Columns: []string{organization.FindingControlsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(findingcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingControl
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFindingControlsIDs(); len(nodes) > 0 && !_u.mutation.FindingControlsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.FindingControlsTable,
+			Columns: []string{organization.FindingControlsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(findingcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingControl
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FindingControlsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.FindingControlsTable,
+			Columns: []string{organization.FindingControlsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(findingcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingControl
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.ReviewsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -17230,6 +17315,21 @@ func (_u *OrganizationUpdateOne) AddFindings(v ...*Finding) *OrganizationUpdateO
 		ids[i] = v[i].ID
 	}
 	return _u.AddFindingIDs(ids...)
+}
+
+// AddFindingControlIDs adds the "finding_controls" edge to the FindingControl entity by IDs.
+func (_u *OrganizationUpdateOne) AddFindingControlIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddFindingControlIDs(ids...)
+	return _u
+}
+
+// AddFindingControls adds the "finding_controls" edges to the FindingControl entity.
+func (_u *OrganizationUpdateOne) AddFindingControls(v ...*FindingControl) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFindingControlIDs(ids...)
 }
 
 // AddReviewIDs adds the "reviews" edge to the Review entity by IDs.
@@ -20646,6 +20746,27 @@ func (_u *OrganizationUpdateOne) RemoveFindings(v ...*Finding) *OrganizationUpda
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveFindingIDs(ids...)
+}
+
+// ClearFindingControls clears all "finding_controls" edges to the FindingControl entity.
+func (_u *OrganizationUpdateOne) ClearFindingControls() *OrganizationUpdateOne {
+	_u.mutation.ClearFindingControls()
+	return _u
+}
+
+// RemoveFindingControlIDs removes the "finding_controls" edge to FindingControl entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveFindingControlIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveFindingControlIDs(ids...)
+	return _u
+}
+
+// RemoveFindingControls removes "finding_controls" edges to FindingControl entities.
+func (_u *OrganizationUpdateOne) RemoveFindingControls(v ...*FindingControl) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFindingControlIDs(ids...)
 }
 
 // ClearReviews clears all "reviews" edges to the Review entity.
@@ -28449,6 +28570,54 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 			},
 		}
 		edge.Schema = _u.schemaConfig.Finding
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FindingControlsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.FindingControlsTable,
+			Columns: []string{organization.FindingControlsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(findingcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingControl
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFindingControlsIDs(); len(nodes) > 0 && !_u.mutation.FindingControlsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.FindingControlsTable,
+			Columns: []string{organization.FindingControlsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(findingcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingControl
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FindingControlsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.FindingControlsTable,
+			Columns: []string{organization.FindingControlsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(findingcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingControl
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

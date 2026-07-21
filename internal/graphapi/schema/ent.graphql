@@ -13373,6 +13373,7 @@ input CreateFindingControlInput {
   timestamp when the mapping was first observed
   """
   discoveredAt: DateTime
+  ownerID: ID
   findingID: ID!
   controlID: ID!
   standardID: ID
@@ -30240,6 +30241,10 @@ type FindingControl implements Node {
   """
   updatedByImpersonator: String
   """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
   the id of the finding associated with the control
   """
   findingID: ID!
@@ -30275,6 +30280,7 @@ type FindingControl implements Node {
   timestamp when the mapping was first observed
   """
   discoveredAt: DateTime
+  owner: Organization
   finding: Finding!
   control: Control!
   standard: Standard
@@ -49688,6 +49694,37 @@ type Organization implements Node {
     """
     where: FindingWhereInput
   ): FindingConnection!
+  findingControls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for FindingControls returned from the connection.
+    """
+    orderBy: [FindingControlOrder!]
+
+    """
+    Filtering options for FindingControls returned from the connection.
+    """
+    where: FindingControlWhereInput
+  ): FindingControlConnection!
   reviews(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -51875,6 +51912,11 @@ input OrganizationWhereInput {
   """
   hasFindings: Boolean
   hasFindingsWith: [FindingWhereInput!]
+  """
+  finding_controls edge predicates
+  """
+  hasFindingControls: Boolean
+  hasFindingControlsWith: [FindingControlWhereInput!]
   """
   reviews edge predicates
   """
@@ -80772,6 +80814,8 @@ input UpdateFindingControlInput {
   """
   discoveredAt: DateTime
   clearDiscoveredAt: Boolean
+  ownerID: ID
+  clearOwner: Boolean
 }
 """
 UpdateFindingInput is used for update Finding object.

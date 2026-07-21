@@ -5598,6 +5598,11 @@ func (_q *FindingControlHistoryQuery) collectField(ctx context.Context, oneNode 
 				selectedFields = append(selectedFields, findingcontrolhistory.FieldUpdatedByImpersonator)
 				fieldSeen[findingcontrolhistory.FieldUpdatedByImpersonator] = struct{}{}
 			}
+		case "ownerID":
+			if _, ok := fieldSeen[findingcontrolhistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, findingcontrolhistory.FieldOwnerID)
+				fieldSeen[findingcontrolhistory.FieldOwnerID] = struct{}{}
+			}
 		case "findingID":
 			if _, ok := fieldSeen[findingcontrolhistory.FieldFindingID]; !ok {
 				selectedFields = append(selectedFields, findingcontrolhistory.FieldFindingID)

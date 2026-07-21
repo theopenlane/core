@@ -11,6 +11,7 @@ mutation CreateBulkCSVFindingControl($input: Upload!) {
       findingID
       id
       metadata
+      ownerID
       source
       standardID
       updatedAt
@@ -33,6 +34,7 @@ mutation CreateBulkFindingControl($input: [CreateFindingControlInput!]) {
       findingID
       id
       metadata
+      ownerID
       source
       standardID
       updatedAt
@@ -55,6 +57,7 @@ mutation CreateFindingControl($input: CreateFindingControlInput!) {
       findingID
       id
       metadata
+      ownerID
       source
       standardID
       updatedAt
@@ -118,6 +121,7 @@ query GetFindingControlByID($findingControlId: ID!) {
     findingID
     id
     metadata
+    ownerID
     source
     standardID
     updatedAt
@@ -169,6 +173,7 @@ mutation UpdateFindingControl($updateFindingControlId: ID!, $input: UpdateFindin
       findingID
       id
       metadata
+      ownerID
       source
       standardID
       updatedAt
