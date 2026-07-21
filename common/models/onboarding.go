@@ -23,8 +23,8 @@ type Step struct {
 	Order          int                  `json:"order" yaml:"order"`
 	Hidden         bool                 `json:"hidden" yaml:"hidden"`
 	Questions      []Question           `json:"questions" yaml:"questions"`
-	Modules        []Module             `json:"modules,omitempty" yaml:"modules,omitempty"`
-	DynamicModules bool                 `json:"-" yaml:"dynamicModules,omitempty"`
+	Cards          []Card               `json:"cards,omitempty" yaml:"cards,omitempty"`
+	DynamicCards   bool                 `json:"-" yaml:"dynamicCards,omitempty"`
 	Tasks          []TaskRule `json:"-" yaml:"tasks,omitempty"`
 }
 
@@ -48,7 +48,7 @@ type QuestionDependency struct {
 	Equals any    `json:"equals" yaml:"equals"`
 }
 
-type Module struct {
+type Card struct {
 	Key         string `json:"key" yaml:"key"`
 	Title       string `json:"title" yaml:"title"`
 	Description string `json:"description" yaml:"description"`

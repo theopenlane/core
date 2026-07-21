@@ -263,10 +263,10 @@ var defaultQuestionnaire = models.Questionnaire{
 		}},
 		Title: "Support Preferences",
 	}, models.Step{
-		DynamicModules: true,
-		Key:            "trial",
-		Order:          6,
-		Questions:      []models.Question{},
+		DynamicCards: true,
+		Key:          "trial",
+		Order:        6,
+		Questions:    []models.Question{},
 		Tasks: []models.TaskRule{models.TaskRule{
 			Details:  "Add a payment method before the trial ends to keep paid modules active.",
 			Key:      "setup-payment-method",

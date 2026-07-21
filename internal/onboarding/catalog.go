@@ -22,8 +22,8 @@ func Catalog(ctx context.Context, client *generated.Client) (models.Questionnair
 	}
 
 	for stepIndex := range questionnaire.Steps {
-		if questionnaire.Steps[stepIndex].DynamicModules {
-			questionnaire.Steps[stepIndex].Modules = getModules(client)
+		if questionnaire.Steps[stepIndex].DynamicCards {
+			questionnaire.Steps[stepIndex].Cards = getCards(client)
 		}
 
 		for questionIndex := range questionnaire.Steps[stepIndex].Questions {
@@ -37,11 +37,12 @@ func Catalog(ctx context.Context, client *generated.Client) (models.Questionnair
 	return questionnaire, nil
 }
 
-func getModules(client *generated.Client) []models.Module {
+// getCards returns onboarding cards backed by catalog modules.
+func getCards(client *generated.Client) []models.Card {
 	useSandbox := client != nil && client.EntConfig != nil && client.EntConfig.Modules.UseSandbox
 	cat := catalog.FilterByAudience(false, false, gencatalog.GetDefaultCatalog(useSandbox))
 
-	modules := make([]models.Module, 0, len(models.TrialModules))
+	cards := make([]models.Card, 0, len(models.TrialModules))
 
 	for _, orgModule := range models.TrialModules {
 		if orgModule == models.CatalogBaseModule {
@@ -63,14 +64,14 @@ func getModules(client *generated.Client) []models.Module {
 			key = orgModule.String()
 		}
 
-		modules = append(modules, models.Module{
+		cards = append(cards, models.Card{
 			Key:         key,
 			Title:       module.DisplayName,
 			Description: description,
 		})
 	}
 
-	return modules
+	return cards
 }
 
 func getFrameworkOptions(ctx context.Context, client *generated.Client) ([]models.QuestionOption, error) {

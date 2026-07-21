@@ -208,7 +208,7 @@ steps:
   - key: trial
     title: Your free 30-day trial
     order: 6
-    dynamicModules: true
+    dynamicCards: true
     tasks:
       - key: setup-payment-method
         title: Set up payment method

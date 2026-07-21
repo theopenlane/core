@@ -116,12 +116,12 @@ func stepLit(step models.Step) jen.Code {
 
 	fields[jen.Id("Questions")] = jen.Index().Qual(modelsPkg, "Question").Values(questionLits(step.Questions)...)
 
-	if len(step.Modules) > 0 {
-		fields[jen.Id("Modules")] = jen.Index().Qual(modelsPkg, "Module").Values(moduleLits(step.Modules)...)
+	if len(step.Cards) > 0 {
+		fields[jen.Id("Cards")] = jen.Index().Qual(modelsPkg, "Card").Values(cardLits(step.Cards)...)
 	}
 
-	if step.DynamicModules {
-		fields[jen.Id("DynamicModules")] = jen.True()
+	if step.DynamicCards {
+		fields[jen.Id("DynamicCards")] = jen.True()
 	}
 
 	if len(step.Tasks) > 0 {
@@ -220,13 +220,13 @@ func getInputType(typ models.InputType) string {
 	}
 }
 
-func moduleLits(modules []models.Module) []jen.Code {
-	out := make([]jen.Code, 0, len(modules))
-	for _, module := range modules {
-		out = append(out, jen.Qual(modelsPkg, "Module").Values(jen.Dict{
-			jen.Id("Key"):         jen.Lit(module.Key),
-			jen.Id("Title"):       jen.Lit(module.Title),
-			jen.Id("Description"): jen.Lit(module.Description),
+func cardLits(cards []models.Card) []jen.Code {
+	out := make([]jen.Code, 0, len(cards))
+	for _, card := range cards {
+		out = append(out, jen.Qual(modelsPkg, "Card").Values(jen.Dict{
+			jen.Id("Key"):         jen.Lit(card.Key),
+			jen.Id("Title"):       jen.Lit(card.Title),
+			jen.Id("Description"): jen.Lit(card.Description),
 		}))
 	}
 
