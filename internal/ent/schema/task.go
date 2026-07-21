@@ -158,14 +158,6 @@ func (Task) Fields() []ent.Field {
 				entgql.OrderField("priority"),
 			).
 			Default(0),
-		field.Time("available_at").
-			GoType(models.DateTime{}).
-			Comment("the time when the task should become available to users").
-			Annotations(
-				entgql.OrderField("available_at"),
-			).
-			Nillable().
-			Optional(),
 		field.String("source").
 			Comment("the system or workflow that created or suggested the task").
 			Optional(),

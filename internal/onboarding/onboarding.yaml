@@ -214,6 +214,5 @@ steps:
         title: Set up payment method
         details: Add a payment method before the trial ends to keep paid modules active.
         priority: 90
-        availableAfterDays: 21
         metadata:
           link: /organization-settings/billing
