@@ -166,7 +166,7 @@ func Builder(cfg Config) registry.Builder {
 					},
 					IngestHandle:        DirectorySync{}.IngestHandle(),
 					SkipDefaultLookback: true,
-					ReconcileSchedule:   gala.NewFullFetchSchedule(),
+					Schedule:            gala.NewFullFetchSchedule(),
 				},
 			},
 			Mappings: githubAppMappings(),

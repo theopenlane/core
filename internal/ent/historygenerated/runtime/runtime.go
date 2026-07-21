@@ -2447,8 +2447,12 @@ func init() {
 	scanhistoryDescTags := scanhistoryFields[11].Descriptor()
 	// scanhistory.DefaultTags holds the default value on creation for the tags field.
 	scanhistory.DefaultTags = scanhistoryDescTags.Default.([]string)
+	// scanhistoryDescSystemOwned is the schema descriptor for system_owned field.
+	scanhistoryDescSystemOwned := scanhistoryFields[13].Descriptor()
+	// scanhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
+	scanhistory.DefaultSystemOwned = scanhistoryDescSystemOwned.Default.(bool)
 	// scanhistoryDescDiscoveredVulnerabilityIds is the schema descriptor for discovered_vulnerability_ids field.
-	scanhistoryDescDiscoveredVulnerabilityIds := scanhistoryFields[33].Descriptor()
+	scanhistoryDescDiscoveredVulnerabilityIds := scanhistoryFields[36].Descriptor()
 	// scanhistory.DefaultDiscoveredVulnerabilityIds holds the default value on creation for the discovered_vulnerability_ids field.
 	scanhistory.DefaultDiscoveredVulnerabilityIds = scanhistoryDescDiscoveredVulnerabilityIds.Default.([]string)
 	// scanhistoryDescID is the schema descriptor for id field.

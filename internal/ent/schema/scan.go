@@ -10,7 +10,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/interceptors"
+	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/entx"
@@ -116,9 +116,9 @@ func (Scan) Fields() []ent.Field {
 			Default([]string{}).
 			Optional(),
 		field.Enum("status").
-			Comment("the status of the scan, e.g., processing, completed, failed").
+			Comment("the status of the scan, e.g., pending, processing, completed, failed").
 			GoType(enums.ScanStatus("")).
-			Default(enums.ScanStatusProcessing.String()).
+			Default(enums.ScanStatusPending.String()).
 			Annotations(entgql.OrderField("STATUS"), entx.FieldSearchable()),
 	}
 }
@@ -137,8 +137,9 @@ func (s Scan) Mixin() []ent.Mixin {
 				),
 				withOrganizationOwner(),
 				withSkipForSystemAdmin(),
-				withSkipFilterInterceptor(interceptors.SkipAllQuery|interceptors.SkipIDsQuery),
+				withSkipperFunc(skipInterceptorForSystemAdmins),
 			),
+			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 			newGroupPermissionsMixin(withSkipViewPermissions(), withGroupPermissionsInterceptor()),
 			newResponsibilityMixin(s, withReviewedBy(), withAssignedTo()),
 			newCustomEnumMixin(s, withEnumFieldName("environment"), withGlobalEnum()),

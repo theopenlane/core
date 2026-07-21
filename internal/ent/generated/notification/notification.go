@@ -157,7 +157,7 @@ func NotificationTypeValidator(nt enums.NotificationType) error {
 // TopicValidator is a validator for the "topic" field enum values. It is called by the builders before save.
 func TopicValidator(t enums.NotificationTopic) error {
 	switch t.String() {
-	case "TASK_ASSIGNMENT", "APPROVAL", "MENTION", "EXPORT", "STANDARD_UPDATE", "DOMAIN_SCAN":
+	case "TASK_ASSIGNMENT", "APPROVAL", "MENTION", "EXPORT", "STANDARD_UPDATE", "DOMAIN_SCAN", "IMPORT_COMPLETE":
 		return nil
 	default:
 		return fmt.Errorf("notification: invalid enum value for topic field: %q", t)

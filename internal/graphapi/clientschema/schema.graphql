@@ -17256,6 +17256,14 @@ input CreateScanInput {
 	"""
 	tags: [String!]
 	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
+	"""
 	who reviewed the scan when no user or group is linked
 	"""
 	reviewedBy: String
@@ -17304,7 +17312,7 @@ input CreateScanInput {
 	"""
 	discoveredVulnerabilityIds: [String!]
 	"""
-	the status of the scan, e.g., processing, completed, failed
+	the status of the scan, e.g., pending, processing, completed, failed
 	"""
 	status: ScanScanStatus
 	ownerID: ID
@@ -39384,6 +39392,168 @@ input IdentityHolderWhereInput {
 The `ImplementationGuidance` scalar type that represents steps to take to implement a control; they can come directly from the control source or pulled from external sources
 """
 scalar ImplementationGuidance
+"""
+An asset accepted from a domain scan review, keyed by a client-assigned ref so it can be
+referenced from ImportDomainScanReviewPlatformInput/ImportDomainScanReviewSystemInput before it
+has a real id
+"""
+input ImportDomainScanReviewAssetInput {
+	"""
+	client-assigned identifier for this asset, referenced by assetRefs elsewhere in the input
+	"""
+	ref: String!
+	"""
+	the asset's display name
+	"""
+	name: String!
+	"""
+	the asset's domain, IP, or other unique identifier
+	"""
+	identifier: String
+	"""
+	the asset's URL, if known
+	"""
+	website: String
+	"""
+	the asset's detected categories
+	"""
+	categories: [String!]
+}
+"""
+One accepted finding
+"""
+input ImportDomainScanReviewFindingInput {
+	"""
+	the finding's category
+	"""
+	category: String
+	"""
+	the finding's description
+	"""
+	description: String
+	"""
+	the finding's severity
+	"""
+	severity: String
+}
+"""
+Input for importDomainScanReview mutation
+"""
+input ImportDomainScanReviewInput {
+	"""
+	the Scan records the created records should link back to
+	"""
+	scanIDs: [ID!]!
+	"""
+	the accepted platforms, if any
+	"""
+	platforms: [ImportDomainScanReviewPlatformInput!]
+	"""
+	the accepted system details
+	"""
+	systems: [ImportDomainScanReviewSystemInput!]
+	"""
+	the accepted vendors
+	"""
+	vendors: [ImportDomainScanReviewVendorInput!]!
+	"""
+	the accepted assets
+	"""
+	assets: [ImportDomainScanReviewAssetInput!]!
+	"""
+	the accepted findings
+	"""
+	findings: [ImportDomainScanReviewFindingInput!]
+}
+"""
+Return response for importDomainScanReview mutation. Creation happens asynchronously, so this
+only confirms the review was accepted - the created objects surface via a follow-up Notification
+once the import finishes
+"""
+type ImportDomainScanReviewPayload {
+	"""
+	whether the review was accepted for import
+	"""
+	accepted: Boolean!
+}
+"""
+An accepted platform, linked to a subset of the accepted vendors/assets, and keyed by a
+client-assigned ref so it can be referenced from ImportDomainScanReviewSystemInput
+"""
+input ImportDomainScanReviewPlatformInput {
+	"""
+	client-assigned identifier for this platform, referenced by platformRefs elsewhere in the input
+	"""
+	ref: String!
+	"""
+	the platform's name
+	"""
+	name: String!
+	"""
+	the platform's description
+	"""
+	description: String
+	"""
+	refs of accepted vendors linked to this platform
+	"""
+	entityRefs: [String!]
+	"""
+	refs of accepted assets linked to this platform
+	"""
+	assetRefs: [String!]
+}
+"""
+One accepted system detail, linked to its own subset of the accepted vendors/assets/platforms
+"""
+input ImportDomainScanReviewSystemInput {
+	"""
+	the system's name
+	"""
+	name: String!
+	"""
+	the system's description
+	"""
+	description: String
+	"""
+	refs of accepted vendors linked to this system
+	"""
+	entityRefs: [String!]
+	"""
+	refs of accepted assets linked to this system
+	"""
+	assetRefs: [String!]
+	"""
+	refs of accepted platforms this system belongs to
+	"""
+	platformRefs: [String!]
+}
+"""
+A vendor accepted from a domain scan review, keyed by a client-assigned ref so it can be
+referenced from ImportDomainScanReviewPlatformInput/ImportDomainScanReviewSystemInput before it
+has a real id
+"""
+input ImportDomainScanReviewVendorInput {
+	"""
+	client-assigned identifier for this vendor, referenced by entityRefs elsewhere in the input
+	"""
+	ref: String!
+	"""
+	the vendor's name
+	"""
+	name: String!
+	"""
+	the vendor's raw legal entity name, if known and different from name
+	"""
+	legalName: String
+	"""
+	the vendor's domain, if known
+	"""
+	domain: String
+	"""
+	the vendor's detected categories
+	"""
+	categories: [String!]
+}
 type Integration implements Node {
 	id: ID!
 	createdAt: Time
@@ -47098,6 +47268,16 @@ type Mutation {
 		input: Upload!
 	): DocumentDataBulkUpdatePayload!
 	"""
+	Accept a domain scan review and asynchronously create the corresponding platform, system
+	details, vendors, assets, and findings
+	"""
+	importDomainScanReview(
+		"""
+		the accepted domain scan review
+		"""
+		input: ImportDomainScanReviewInput!
+	): ImportDomainScanReviewPayload!
+	"""
 	Create a new emailTemplate
 	"""
 	createEmailTemplate(
@@ -53409,6 +53589,7 @@ enum NotificationNotificationTopic @goModel(model: "github.com/theopenlane/core/
 	EXPORT
 	STANDARD_UPDATE
 	DOMAIN_SCAN
+	IMPORT_COMPLETE
 }
 """
 NotificationNotificationType is enum for the field notification_type
@@ -78863,6 +79044,18 @@ type Scan implements Node {
 	"""
 	ownerID: ID
 	"""
+	indicates if the record is owned by the the openlane system and not by an organization
+	"""
+	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
+	"""
 	who reviewed the scan when no user or group is linked
 	"""
 	reviewedBy: String
@@ -78947,7 +79140,7 @@ type Scan implements Node {
 	"""
 	discoveredVulnerabilityIds: [String!]
 	"""
-	the status of the scan, e.g., processing, completed, failed
+	the status of the scan, e.g., pending, processing, completed, failed
 	"""
 	status: ScanScanStatus!
 	owner: Organization
@@ -79652,6 +79845,49 @@ input ScanWhereInput {
 	ownerIDNotNil: Boolean
 	ownerIDEqualFold: ID
 	ownerIDContainsFold: ID
+	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
 	"""
 	reviewed_by field predicates
 	"""
@@ -99425,6 +99661,16 @@ input UpdateScanInput {
 	appendTags: [String!]
 	clearTags: Boolean
 	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	clearInternalNotes: Boolean @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
+	clearSystemInternalID: Boolean
+	"""
 	who reviewed the scan when no user or group is linked
 	"""
 	reviewedBy: String
@@ -99484,7 +99730,7 @@ input UpdateScanInput {
 	appendDiscoveredVulnerabilityIds: [String!]
 	clearDiscoveredVulnerabilityIds: Boolean
 	"""
-	the status of the scan, e.g., processing, completed, failed
+	the status of the scan, e.g., pending, processing, completed, failed
 	"""
 	status: ScanScanStatus
 	addBlockedGroupIDs: [ID!]

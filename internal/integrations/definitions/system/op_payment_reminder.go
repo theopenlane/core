@@ -1,4 +1,4 @@
-package runtime
+package system
 
 import (
 	"context"
@@ -9,72 +9,63 @@ import (
 
 	"github.com/samber/lo"
 	"github.com/stripe/stripe-go/v84"
-	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/consts"
+	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 	slackdef "github.com/theopenlane/core/internal/integrations/definitions/slack"
-	"github.com/theopenlane/core/internal/integrations/operations"
-	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
+// reminderStaggerDifference spaces successive deletion notice emails apart to avoid
+// bursting the email provider
 const reminderStaggerDifference = 30 * time.Second
 
-// SeedPaymentReminders starts the durable payment reminder polling loop
-// after runtime listeners have been registered. It is a no-op when an active job
-// already exists, preventing duplicate loops from accumulating across restarts
-func (r *Runtime) SeedPaymentReminders(ctx context.Context) error {
-	if !r.paymentReminderConfig.Enabled {
-		logx.FromContext(ctx).Info().Msg("payment reminder listener disabled, skipping seed")
-		return nil
+// Handle adapts the payment reminder sweep to the generic operation registration boundary;
+// the receiver carries the operator defaults and request config overlays a copy
+func (p PaymentReminderSweep) Handle() types.OperationHandler {
+	return func(ctx context.Context, req types.OperationRequest) (json.RawMessage, error) {
+		sweep := p
+
+		if err := jsonx.UnmarshalIfPresent(req.Config, &sweep); err != nil {
+			return nil, ErrOperationConfigInvalid
+		}
+
+		processed, err := sweep.Run(ctx, req)
+		if err != nil {
+			return nil, err
+		}
+
+		return providerkit.EncodeResult(types.ScheduledCycleResult{Processed: processed}, ErrResultEncode)
 	}
-
-	active, err := r.Gala().HasActiveJobForTopic(ctx, operations.PaymentReminderTopic)
-	if err != nil {
-		return err
-	}
-
-	if active {
-		logx.FromContext(ctx).Debug().Msg("payment reminder poller already active, skipping seed")
-		return nil
-	}
-
-	receipt := r.Gala().EmitWithHeaders(ctx, operations.PaymentReminderTopic, operations.PaymentReminderEnvelope{}, gala.Headers{
-		Tags: []string{"payment-reminders"},
-	})
-
-	return receipt.Err
 }
 
-// HandlePaymentReminders marks canceled organizations for deletion and dispatches
-// notification emails to admin/owner members and the billing contact.
-func (r *Runtime) HandlePaymentReminders(ctx context.Context, _ operations.PaymentReminderEnvelope) (int, error) {
-	db := r.DB()
+// Run executes one payment reminder sweep and returns the number of dispatched notifications
+func (p PaymentReminderSweep) Run(ctx context.Context, req types.OperationRequest) (int, error) {
+	db := req.DB
 	logger := logx.FromContext(ctx)
 
-	cfg := r.paymentReminderConfig
-	if cfg.PaymentMethodInterval == 0 {
-		cfg.PaymentMethodInterval = operations.DefaultPaymentMethodInterval
+	if p.PaymentMethodInterval == 0 {
+		p.PaymentMethodInterval = DefaultPaymentMethodInterval
 	}
 
-	if cfg.DeletionDays == 0 {
-		cfg.DeletionDays = operations.DefaultDeletionDays
+	if p.DeletionDays == 0 {
+		p.DeletionDays = DefaultDeletionDays
 	}
 
-	systemCtx := auth.WithCaller(privacy.DecisionContext(ctx, privacy.Allow), &auth.Caller{
-		Capabilities: auth.CapBypassOrgFilter | auth.CapBypassFGA | auth.CapInternalOperation,
-	})
+	systemCtx := systemSweepContext(ctx)
 
 	now := time.Now()
-	canceledBefore := now.Add(-time.Duration(cfg.PaymentMethodInterval) * 24 * time.Hour)
+	canceledBefore := now.Add(-time.Duration(p.PaymentMethodInterval) * 24 * time.Hour)
 
 	settings, err := db.OrganizationSetting.Query().
 		Where(
@@ -116,7 +107,7 @@ func (r *Runtime) HandlePaymentReminders(ctx context.Context, _ operations.Payme
 			continue
 		}
 
-		if cfg.DryRun {
+		if p.DryRun {
 			logger.Info().Str("organization_id", org.ID).Str("organization_name", org.Name).Msg("dry run: would schedule for deletion")
 			orgsToDelete = append(orgsToDelete, fmt.Sprintf("%s (%s)", org.Name, org.ID))
 			dispatched++
@@ -124,7 +115,7 @@ func (r *Runtime) HandlePaymentReminders(ctx context.Context, _ operations.Payme
 			continue
 		}
 
-		pendingDeletionAt := now.AddDate(0, 0, int(cfg.DeletionDays))
+		pendingDeletionAt := now.AddDate(0, 0, int(p.DeletionDays))
 
 		if err := db.OrganizationSetting.UpdateOneID(setting.ID).
 			SetPendingDeletionAt(models.DateTime(pendingDeletionAt)).
@@ -147,33 +138,7 @@ func (r *Runtime) HandlePaymentReminders(ctx context.Context, _ operations.Payme
 			continue
 		}
 
-		recipients := make([]paymentReminderRecipient, 0, len(members)+1)
-
-		for _, member := range members {
-			user := member.Edges.User
-			if user == nil || user.Email == "" {
-				continue
-			}
-
-			recipients = append(recipients, paymentReminderRecipient{
-				email:     user.Email,
-				firstName: user.FirstName,
-				lastName:  user.LastName,
-			})
-		}
-
-		billingEmail := strings.TrimSpace(setting.BillingEmail)
-		if billingEmail != "" {
-			recipients = append(recipients, paymentReminderRecipient{
-				email:     billingEmail,
-				firstName: "Billing",
-				lastName:  "Admin",
-			})
-		}
-
-		recipients = lo.UniqBy(recipients, func(rcp paymentReminderRecipient) string {
-			return strings.ToLower(strings.TrimSpace(rcp.email))
-		})
+		recipients := paymentReminderRecipients(members, setting.BillingEmail)
 
 		for _, rcp := range recipients {
 			input := emaildef.OrgDeletionNoticeEmail{
@@ -194,7 +159,7 @@ func (r *Runtime) HandlePaymentReminders(ctx context.Context, _ operations.Payme
 
 			scheduledAt := now.Add(time.Duration(emailQueueOffset) * reminderStaggerDifference)
 
-			if _, err := r.Dispatch(systemCtx, operations.DispatchRequest{
+			if _, err := req.Dispatch(systemCtx, types.DispatchRequest{
 				DefinitionID: emaildef.DefinitionID.ID(),
 				Operation:    emaildef.OrgDeletionNoticeOp.Name(),
 				Config:       config,
@@ -217,14 +182,14 @@ func (r *Runtime) HandlePaymentReminders(ctx context.Context, _ operations.Payme
 		config, err := json.Marshal(slackdef.OrganizationsPendingDeletionMessage{
 			Count:         len(orgsToDelete),
 			Organizations: orgsToDelete,
-			DryRun:        cfg.DryRun,
+			DryRun:        p.DryRun,
 		})
 		if err != nil {
 			logger.Error().Err(err).Msg("failed to marshal org deletion reminder slack notification")
 			return dispatched, err
 		}
 
-		if _, err := r.Dispatch(systemCtx, operations.DispatchRequest{
+		if _, err := req.Dispatch(systemCtx, types.DispatchRequest{
 			DefinitionID: slackdef.DefinitionID.ID(),
 			Operation:    slackdef.OrganizationsPendingDeletionOp.Name(),
 			Config:       config,
@@ -242,4 +207,36 @@ type paymentReminderRecipient struct {
 	email     string
 	firstName string
 	lastName  string
+}
+
+// paymentReminderRecipients collects the unique admin/owner members and billing contact
+// eligible for a deletion notice
+func paymentReminderRecipients(members []*ent.OrgMembership, billingEmail string) []paymentReminderRecipient {
+	recipients := make([]paymentReminderRecipient, 0, len(members)+1)
+
+	for _, member := range members {
+		user := member.Edges.User
+		if user == nil || user.Email == "" {
+			continue
+		}
+
+		recipients = append(recipients, paymentReminderRecipient{
+			email:     user.Email,
+			firstName: user.FirstName,
+			lastName:  user.LastName,
+		})
+	}
+
+	billingEmail = strings.TrimSpace(billingEmail)
+	if billingEmail != "" {
+		recipients = append(recipients, paymentReminderRecipient{
+			email:     billingEmail,
+			firstName: "Billing",
+			lastName:  "Admin",
+		})
+	}
+
+	return lo.UniqBy(recipients, func(rcp paymentReminderRecipient) string {
+		return strings.ToLower(strings.TrimSpace(rcp.email))
+	})
 }

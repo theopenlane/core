@@ -11840,6 +11840,21 @@ func (_q *ScanHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, scanhistory.FieldOwnerID)
 				fieldSeen[scanhistory.FieldOwnerID] = struct{}{}
 			}
+		case "systemOwned":
+			if _, ok := fieldSeen[scanhistory.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, scanhistory.FieldSystemOwned)
+				fieldSeen[scanhistory.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[scanhistory.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, scanhistory.FieldInternalNotes)
+				fieldSeen[scanhistory.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[scanhistory.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, scanhistory.FieldSystemInternalID)
+				fieldSeen[scanhistory.FieldSystemInternalID] = struct{}{}
+			}
 		case "reviewedBy":
 			if _, ok := fieldSeen[scanhistory.FieldReviewedBy]; !ok {
 				selectedFields = append(selectedFields, scanhistory.FieldReviewedBy)

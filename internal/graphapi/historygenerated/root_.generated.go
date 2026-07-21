@@ -2382,6 +2382,7 @@ type ComplexityRoot struct {
 		GeneratedByPlatformID      func(childComplexity int) int
 		HistoryTime                func(childComplexity int) int
 		ID                         func(childComplexity int) int
+		InternalNotes              func(childComplexity int) int
 		Metadata                   func(childComplexity int) int
 		NextScanRunAt              func(childComplexity int) int
 		Operation                  func(childComplexity int) int
@@ -2399,6 +2400,8 @@ type ComplexityRoot struct {
 		ScopeID                    func(childComplexity int) int
 		ScopeName                  func(childComplexity int) int
 		Status                     func(childComplexity int) int
+		SystemInternalID           func(childComplexity int) int
+		SystemOwned                func(childComplexity int) int
 		Tags                       func(childComplexity int) int
 		Target                     func(childComplexity int) int
 		UpdatedAt                  func(childComplexity int) int
@@ -15334,6 +15337,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ScanHistory.ID(childComplexity), true
+	case "ScanHistory.internalNotes":
+		if e.ComplexityRoot.ScanHistory.InternalNotes == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ScanHistory.InternalNotes(childComplexity), true
 	case "ScanHistory.metadata":
 		if e.ComplexityRoot.ScanHistory.Metadata == nil {
 			break
@@ -15436,6 +15445,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ScanHistory.Status(childComplexity), true
+	case "ScanHistory.systemInternalID":
+		if e.ComplexityRoot.ScanHistory.SystemInternalID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ScanHistory.SystemInternalID(childComplexity), true
+	case "ScanHistory.systemOwned":
+		if e.ComplexityRoot.ScanHistory.SystemOwned == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ScanHistory.SystemOwned(childComplexity), true
 	case "ScanHistory.tags":
 		if e.ComplexityRoot.ScanHistory.Tags == nil {
 			break
@@ -53388,6 +53409,18 @@ type ScanHistory implements Node {
   """
   ownerID: String
   """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
   who reviewed the scan when no user or group is linked
   """
   reviewedBy: String
@@ -53472,7 +53505,7 @@ type ScanHistory implements Node {
   """
   discoveredVulnerabilityIds: [String!]
   """
-  the status of the scan, e.g., processing, completed, failed
+  the status of the scan, e.g., pending, processing, completed, failed
   """
   status: ScanHistoryScanStatus!
 }
@@ -53712,6 +53745,49 @@ input ScanHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
   """
   reviewed_by field predicates
   """
@@ -72082,6 +72158,12 @@ func (ec *executionContext) childFields_ScanHistory(ctx context.Context, field g
 		return ec.fieldContext_ScanHistory_tags(ctx, field)
 	case "ownerID":
 		return ec.fieldContext_ScanHistory_ownerID(ctx, field)
+	case "systemOwned":
+		return ec.fieldContext_ScanHistory_systemOwned(ctx, field)
+	case "internalNotes":
+		return ec.fieldContext_ScanHistory_internalNotes(ctx, field)
+	case "systemInternalID":
+		return ec.fieldContext_ScanHistory_systemInternalID(ctx, field)
 	case "reviewedBy":
 		return ec.fieldContext_ScanHistory_reviewedBy(ctx, field)
 	case "reviewedByUserID":

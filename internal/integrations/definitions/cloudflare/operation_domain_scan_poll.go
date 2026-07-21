@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
-	"time"
 
 	cf "github.com/cloudflare/cloudflare-go/v7"
 	"github.com/cloudflare/cloudflare-go/v7/url_scanner"
@@ -15,17 +14,6 @@ import (
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/logx"
-)
-
-const (
-	// domainScanResultNotReadyMaxAttempts bounds how many times a poll cycle
-	// retries when Cloudflare doesn't yet recognize the scan submission (a
-	// brief indexing delay right after submission returns, distinct from the
-	// scan itself still running, which is reported via Task.Success rather
-	// than an HTTP error)
-	domainScanResultNotReadyMaxAttempts = 3
-	// domainScanResultNotReadyRetryDelay is the flat wait between those retries
-	domainScanResultNotReadyRetryDelay = 20 * time.Second
 )
 
 // DomainScanPoll retrieves a previously submitted URL Scanner result by scan ID
@@ -40,6 +28,10 @@ type DomainScanPollResult struct {
 	Result *url_scanner.ScanGetResponse `json:"result"`
 	// TaskErrors lists task-level errors reported alongside the result, if any
 	TaskErrors ScanTaskErrors `json:"taskErrors,omitempty"`
+	// NotReady is true when Cloudflare reported the scan isn't available yet (either not yet
+	// indexed, or still running) rather than a genuine fetch failure. The caller's own poll
+	// backoff/retry schedule is responsible for trying again, not this operation
+	NotReady bool `json:"notReady,omitempty"`
 }
 
 // ScanTaskError is a single error reported in a URL Scanner task's error list
@@ -101,36 +93,21 @@ func (p DomainScanPoll) Handle() types.OperationHandler {
 	})
 }
 
-// Run retrieves a URL Scanner result by scan ID through. A 400 or 404 shortly after submission usually just means
-// Cloudflare hasn't indexed the scan yet, so those are retried with a flat delay before giving up
+// Run retrieves a URL Scanner result by scan ID. Cloudflare reports both "not yet indexed" and
+// "still running" through a 400/404, so those are reported back as NotReady rather than an error -
+// the caller's own poll backoff/retry schedule owns waiting for the scan to finish, not this operation
 func (DomainScanPoll) Run(ctx context.Context, client *CloudflareClient, cfg DomainScanPoll) (DomainScanPollResult, error) {
-	var lastErr error
-
-	for attempt := range domainScanResultNotReadyMaxAttempts {
-		if attempt > 0 {
-			select {
-			case <-ctx.Done():
-				return DomainScanPollResult{}, ctx.Err()
-			case <-time.After(domainScanResultNotReadyRetryDelay):
-			}
-		}
-
-		result, taskErrors, err := getScanResultOnce(ctx, client, cfg.ScanResultID)
-		if err == nil {
-			return DomainScanPollResult{Result: result, TaskErrors: taskErrors}, nil
-		}
-
-		lastErr = err
-
-		var apiErr *cf.Error
-		if !errors.As(err, &apiErr) || (apiErr.StatusCode != http.StatusBadRequest && apiErr.StatusCode != http.StatusNotFound) {
-			logx.FromContext(ctx).Error().Err(err).Msg("cloudflare: error fetching domain scan result")
-
-			return DomainScanPollResult{}, ErrDomainScanResultFailed
-		}
+	result, taskErrors, err := getScanResultOnce(ctx, client, cfg.ScanResultID)
+	if err == nil {
+		return DomainScanPollResult{Result: result, TaskErrors: taskErrors}, nil
 	}
 
-	logx.FromContext(ctx).Error().Err(lastErr).Msg("cloudflare: domain scan result not ready after max attempts")
+	var apiErr *cf.Error
+	if errors.As(err, &apiErr) && (apiErr.StatusCode == http.StatusBadRequest || apiErr.StatusCode == http.StatusNotFound) {
+		return DomainScanPollResult{NotReady: true}, nil
+	}
+
+	logx.FromContext(ctx).Error().Err(err).Msg("cloudflare: error fetching domain scan result")
 
 	return DomainScanPollResult{}, ErrDomainScanResultFailed
 }
