@@ -34,7 +34,7 @@ halves must always stay in sync.
 | `templates.go` | loads and validates the YAML at init, exposes `Lookup` |
 
 The template YAML files are embedded into the binary (`//go:embed templates/*.yaml`) and parsed
-once at package init. There is no disk read at request time.
+once at package init
 
 ## How a rule fires
 
@@ -43,7 +43,7 @@ once at package init. There is no disk read at request time.
 - **`Expression`** — a CEL boolean evaluated against the field value. Fires **at most one** task
   when it evaluates true. Example:
   ```go
-  {RuleID: RuleInviteTeam, Expression: notPersonalOrg, Trigger: entx.TaskRuleOnCreateOnly}
+  {RuleID: RuleInviteTeam, Expression: "!has(value.personal_org) || value.personal_org == false", Trigger: entx.TaskRuleOnCreateOnly}
   ```
 - **`EachElement`** — a CEL expression that evaluates to a **list**. Fires **one task per element**,
   with each element bound as `{{.value}}` (and a resolved `{{.label}}`) in the template. Example:
@@ -100,7 +100,7 @@ rules:
 
 `title`, `details`, `priority`, and `taskKindName` are the core task fields; `source` and
 `metadata` are optional. The task's `Key` (its stable identifier) is generated automatically from
-the rule ID (and the element value for `EachElement` rules) — it is not set in YAML.
+the rule ID (and the element value for `EachElement` rules)
 
 ## Templating
 
@@ -123,8 +123,7 @@ link: '{{if eq .value "soc2"}}/programs/create/soc2{{else}}/programs/create/fram
 ## Adding a new rule
 
 1. **Pick a rule ID** and add a constant in the rule-spec `*.go` file for that source entity,
-   creating a new file if the entity does not have one yet. Rule IDs are unique across *all* YAML
-   files — a duplicate panics at init.
+   creating a new file if the entity does not have one yet. Rule IDs are unique across *all* YAML files.
 
 2. **Add the rule spec** to the appropriate `[]entx.TaskRuleSpec` slice, choosing `Expression`
    (fire once) or `EachElement` (fire per list item) and a `Trigger`.

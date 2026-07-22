@@ -10,6 +10,10 @@ import (
 )
 
 func (h *Handler) ListOnboardingQuestions(ctx echo.Context) error {
+	if _, err := BindAndValidate[models.OnboardingQuestionsRequest](ctx); err != nil {
+		return h.InvalidInput(ctx, err)
+	}
+
 	questionnaire, err := onboarding.Catalog(ctx.Request().Context(), h.DBClient)
 	if err != nil {
 		logx.FromContext(ctx.Request().Context()).Error().Err(err).Msg("unable to build onboarding questionnaire")

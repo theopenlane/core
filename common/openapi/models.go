@@ -2605,6 +2605,15 @@ type ProductCatalogResponse struct {
 	models.Catalog
 }
 
+// OnboardingQuestionsRequest holds the fields accepted by the onboarding questions endpoint
+type OnboardingQuestionsRequest struct{}
+
+// Validate ensures the required fields are set on the OnboardingQuestionsRequest
+func (r *OnboardingQuestionsRequest) Validate() error {
+	// no fields are required
+	return nil
+}
+
 // OnboardingQuestionsResponse holds the fields sent on a response to the onboarding questions endpoint.
 type OnboardingQuestionsResponse struct {
 	// Reply is the reply value.
