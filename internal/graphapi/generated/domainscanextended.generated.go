@@ -443,8 +443,7 @@ func (ec *executionContext) _ImportDomainScanReviewPayload(ctx context.Context, 
 // region    ***************************** type.gotpl *****************************
 
 func (ec *executionContext) unmarshalNImportDomainScanReviewAssetInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewAssetInputᚄ(ctx context.Context, v any) ([]*model.ImportDomainScanReviewAssetInput, error) {
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*model.ImportDomainScanReviewAssetInput, len(vSlice))
 	for i := range vSlice {
@@ -497,8 +496,7 @@ func (ec *executionContext) unmarshalNImportDomainScanReviewSystemInput2ᚖgithu
 }
 
 func (ec *executionContext) unmarshalNImportDomainScanReviewVendorInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐImportDomainScanReviewVendorInputᚄ(ctx context.Context, v any) ([]*model.ImportDomainScanReviewVendorInput, error) {
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*model.ImportDomainScanReviewVendorInput, len(vSlice))
 	for i := range vSlice {
@@ -520,8 +518,7 @@ func (ec *executionContext) unmarshalOImportDomainScanReviewFindingInput2ᚕᚖg
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*model.ImportDomainScanReviewFindingInput, len(vSlice))
 	for i := range vSlice {
@@ -538,8 +535,7 @@ func (ec *executionContext) unmarshalOImportDomainScanReviewPlatformInput2ᚕᚖ
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*model.ImportDomainScanReviewPlatformInput, len(vSlice))
 	for i := range vSlice {
@@ -556,8 +552,7 @@ func (ec *executionContext) unmarshalOImportDomainScanReviewSystemInput2ᚕᚖgi
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*model.ImportDomainScanReviewSystemInput, len(vSlice))
 	for i := range vSlice {

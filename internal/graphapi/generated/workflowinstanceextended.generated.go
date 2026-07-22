@@ -556,8 +556,7 @@ func (ec *executionContext) unmarshalOWorkflowProposalState2ᚕgithubᚗcomᚋth
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.WorkflowProposalState, len(vSlice))
 	for i := range vSlice {

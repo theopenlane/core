@@ -12,6 +12,8 @@ tool (
 
 replace github.com/theopenlane/core/common => ./common
 
+replace github.com/theopenlane/entx => /Users/manderson/entx
+
 require (
 	ariga.io/entcache v0.1.0
 	cloud.google.com/go/securitycenter v1.45.0
@@ -208,7 +210,7 @@ require (
 	github.com/Azure/go-ansiterm v0.0.0-20250102033503-faa5f7b0171c // indirect
 	github.com/Microsoft/go-winio v0.6.2 // indirect
 	github.com/Nvveen/Gotty v0.0.0-20120604004816-cd527374f1e5 // indirect
-	github.com/XSAM/otelsql v0.42.0 // indirect
+	github.com/XSAM/otelsql v0.43.0 // indirect
 	github.com/Yiling-J/theine-go v0.6.2 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/agnivade/levenshtein v1.2.1 // indirect
@@ -313,7 +315,7 @@ require (
 	github.com/fxamacker/cbor/v2 v2.9.2 // indirect
 	github.com/go-logr/logr v1.4.3 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
-	github.com/go-openapi/inflect v0.21.5 // indirect
+	github.com/go-openapi/inflect v0.21.6 // indirect
 	github.com/go-openapi/jsonpointer v0.22.5 // indirect
 	github.com/go-openapi/swag/jsonname v0.25.5 // indirect
 	github.com/go-redis/redis/v8 v8.11.5 // indirect

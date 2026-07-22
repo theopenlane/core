@@ -444,6 +444,9 @@ type ActionPlanIngestRequested struct {
 	OperationContext gala.OperationContext `json:"operationContext"`
 	// Input is the ent create input for the record to persist
 	Input generated.CreateActionPlanInput `json:"input"`
+	// ThroughEdgeIDs carries cross-object link target ids per through edge, which have no field
+	// on the create input and are applied as join entity rows after the record persists
+	ThroughEdgeIDs map[string][]string `json:"throughEdgeIds,omitempty"`
 }
 
 // TopicActionPlan is the typed gala topic for ActionPlan ingest requests
@@ -457,6 +460,9 @@ type AssetIngestRequested struct {
 	OperationContext gala.OperationContext `json:"operationContext"`
 	// Input is the ent create input for the record to persist
 	Input generated.CreateAssetInput `json:"input"`
+	// ThroughEdgeIDs carries cross-object link target ids per through edge, which have no field
+	// on the create input and are applied as join entity rows after the record persists
+	ThroughEdgeIDs map[string][]string `json:"throughEdgeIds,omitempty"`
 }
 
 // TopicAsset is the typed gala topic for Asset ingest requests
@@ -470,6 +476,9 @@ type CheckResultIngestRequested struct {
 	OperationContext gala.OperationContext `json:"operationContext"`
 	// Input is the ent create input for the record to persist
 	Input generated.CreateCheckResultInput `json:"input"`
+	// ThroughEdgeIDs carries cross-object link target ids per through edge, which have no field
+	// on the create input and are applied as join entity rows after the record persists
+	ThroughEdgeIDs map[string][]string `json:"throughEdgeIds,omitempty"`
 }
 
 // TopicCheckResult is the typed gala topic for CheckResult ingest requests
@@ -483,6 +492,9 @@ type ContactIngestRequested struct {
 	OperationContext gala.OperationContext `json:"operationContext"`
 	// Input is the ent create input for the record to persist
 	Input generated.CreateContactInput `json:"input"`
+	// ThroughEdgeIDs carries cross-object link target ids per through edge, which have no field
+	// on the create input and are applied as join entity rows after the record persists
+	ThroughEdgeIDs map[string][]string `json:"throughEdgeIds,omitempty"`
 }
 
 // TopicContact is the typed gala topic for Contact ingest requests
@@ -496,6 +508,9 @@ type DirectoryAccountIngestRequested struct {
 	OperationContext gala.OperationContext `json:"operationContext"`
 	// Input is the ent create input for the record to persist
 	Input generated.CreateDirectoryAccountInput `json:"input"`
+	// ThroughEdgeIDs carries cross-object link target ids per through edge, which have no field
+	// on the create input and are applied as join entity rows after the record persists
+	ThroughEdgeIDs map[string][]string `json:"throughEdgeIds,omitempty"`
 }
 
 // TopicDirectoryAccount is the typed gala topic for DirectoryAccount ingest requests
@@ -509,6 +524,9 @@ type DirectoryGroupIngestRequested struct {
 	OperationContext gala.OperationContext `json:"operationContext"`
 	// Input is the ent create input for the record to persist
 	Input generated.CreateDirectoryGroupInput `json:"input"`
+	// ThroughEdgeIDs carries cross-object link target ids per through edge, which have no field
+	// on the create input and are applied as join entity rows after the record persists
+	ThroughEdgeIDs map[string][]string `json:"throughEdgeIds,omitempty"`
 }
 
 // TopicDirectoryGroup is the typed gala topic for DirectoryGroup ingest requests
@@ -522,6 +540,9 @@ type DirectoryMembershipIngestRequested struct {
 	OperationContext gala.OperationContext `json:"operationContext"`
 	// Input is the ent create input for the record to persist
 	Input generated.CreateDirectoryMembershipInput `json:"input"`
+	// ThroughEdgeIDs carries cross-object link target ids per through edge, which have no field
+	// on the create input and are applied as join entity rows after the record persists
+	ThroughEdgeIDs map[string][]string `json:"throughEdgeIds,omitempty"`
 }
 
 // TopicDirectoryMembership is the typed gala topic for DirectoryMembership ingest requests
@@ -535,6 +556,9 @@ type EntityIngestRequested struct {
 	OperationContext gala.OperationContext `json:"operationContext"`
 	// Input is the ent create input for the record to persist
 	Input generated.CreateEntityInput `json:"input"`
+	// ThroughEdgeIDs carries cross-object link target ids per through edge, which have no field
+	// on the create input and are applied as join entity rows after the record persists
+	ThroughEdgeIDs map[string][]string `json:"throughEdgeIds,omitempty"`
 }
 
 // TopicEntity is the typed gala topic for Entity ingest requests
@@ -548,6 +572,9 @@ type FindingIngestRequested struct {
 	OperationContext gala.OperationContext `json:"operationContext"`
 	// Input is the ent create input for the record to persist
 	Input generated.CreateFindingInput `json:"input"`
+	// ThroughEdgeIDs carries cross-object link target ids per through edge, which have no field
+	// on the create input and are applied as join entity rows after the record persists
+	ThroughEdgeIDs map[string][]string `json:"throughEdgeIds,omitempty"`
 }
 
 // TopicFinding is the typed gala topic for Finding ingest requests
@@ -561,6 +588,9 @@ type InternalPolicyIngestRequested struct {
 	OperationContext gala.OperationContext `json:"operationContext"`
 	// Input is the ent create input for the record to persist
 	Input generated.CreateInternalPolicyInput `json:"input"`
+	// ThroughEdgeIDs carries cross-object link target ids per through edge, which have no field
+	// on the create input and are applied as join entity rows after the record persists
+	ThroughEdgeIDs map[string][]string `json:"throughEdgeIds,omitempty"`
 }
 
 // TopicInternalPolicy is the typed gala topic for InternalPolicy ingest requests
@@ -574,6 +604,9 @@ type ProcedureIngestRequested struct {
 	OperationContext gala.OperationContext `json:"operationContext"`
 	// Input is the ent create input for the record to persist
 	Input generated.CreateProcedureInput `json:"input"`
+	// ThroughEdgeIDs carries cross-object link target ids per through edge, which have no field
+	// on the create input and are applied as join entity rows after the record persists
+	ThroughEdgeIDs map[string][]string `json:"throughEdgeIds,omitempty"`
 }
 
 // TopicProcedure is the typed gala topic for Procedure ingest requests
@@ -587,6 +620,9 @@ type RiskIngestRequested struct {
 	OperationContext gala.OperationContext `json:"operationContext"`
 	// Input is the ent create input for the record to persist
 	Input generated.CreateRiskInput `json:"input"`
+	// ThroughEdgeIDs carries cross-object link target ids per through edge, which have no field
+	// on the create input and are applied as join entity rows after the record persists
+	ThroughEdgeIDs map[string][]string `json:"throughEdgeIds,omitempty"`
 }
 
 // TopicRisk is the typed gala topic for Risk ingest requests
@@ -600,6 +636,9 @@ type VulnerabilityIngestRequested struct {
 	OperationContext gala.OperationContext `json:"operationContext"`
 	// Input is the ent create input for the record to persist
 	Input generated.CreateVulnerabilityInput `json:"input"`
+	// ThroughEdgeIDs carries cross-object link target ids per through edge, which have no field
+	// on the create input and are applied as join entity rows after the record persists
+	ThroughEdgeIDs map[string][]string `json:"throughEdgeIds,omitempty"`
 }
 
 // TopicVulnerability is the typed gala topic for Vulnerability ingest requests

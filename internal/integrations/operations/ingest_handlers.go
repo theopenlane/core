@@ -74,123 +74,125 @@ var ingestSchemaOrder = []string{
 // handler is built from the generated typed topic, the schema-specific input preparation, and the
 // hand-written upsert persistence closure
 var ingestHandlers = map[string]entityops.SchemaHandler{
-	entityops.SchemaActionPlan.Name: buildIngestHandler(entityops.TopicActionPlan,
-		func(oc gala.OperationContext, in ent.CreateActionPlanInput) entityops.ActionPlanIngestRequested {
-			return entityops.ActionPlanIngestRequested{OperationContext: oc, Input: in}
+	entityops.SchemaActionPlan.Name: buildIngestHandler(entityops.SchemaActionPlan, entityops.TopicActionPlan,
+		func(oc gala.OperationContext, in ent.CreateActionPlanInput, through map[string][]string) entityops.ActionPlanIngestRequested {
+			return entityops.ActionPlanIngestRequested{OperationContext: oc, Input: in, ThroughEdgeIDs: through}
 		},
-		func(e entityops.ActionPlanIngestRequested) (gala.OperationContext, ent.CreateActionPlanInput) {
-			return e.OperationContext, e.Input
+		func(e entityops.ActionPlanIngestRequested) (gala.OperationContext, ent.CreateActionPlanInput, map[string][]string) {
+			return e.OperationContext, e.Input, e.ThroughEdgeIDs
 		},
 		prepareActionPlanInput, persistActionPlanInput),
-	entityops.SchemaAsset.Name: buildIngestHandler(entityops.TopicAsset,
-		func(oc gala.OperationContext, in ent.CreateAssetInput) entityops.AssetIngestRequested {
-			return entityops.AssetIngestRequested{OperationContext: oc, Input: in}
+	entityops.SchemaAsset.Name: buildIngestHandler(entityops.SchemaAsset, entityops.TopicAsset,
+		func(oc gala.OperationContext, in ent.CreateAssetInput, through map[string][]string) entityops.AssetIngestRequested {
+			return entityops.AssetIngestRequested{OperationContext: oc, Input: in, ThroughEdgeIDs: through}
 		},
-		func(e entityops.AssetIngestRequested) (gala.OperationContext, ent.CreateAssetInput) {
-			return e.OperationContext, e.Input
+		func(e entityops.AssetIngestRequested) (gala.OperationContext, ent.CreateAssetInput, map[string][]string) {
+			return e.OperationContext, e.Input, e.ThroughEdgeIDs
 		},
 		prepareAssetInput, persistAssetInput),
-	entityops.SchemaCheckResult.Name: buildIngestHandler(entityops.TopicCheckResult,
-		func(oc gala.OperationContext, in ent.CreateCheckResultInput) entityops.CheckResultIngestRequested {
-			return entityops.CheckResultIngestRequested{OperationContext: oc, Input: in}
+	entityops.SchemaCheckResult.Name: buildIngestHandler(entityops.SchemaCheckResult, entityops.TopicCheckResult,
+		func(oc gala.OperationContext, in ent.CreateCheckResultInput, through map[string][]string) entityops.CheckResultIngestRequested {
+			return entityops.CheckResultIngestRequested{OperationContext: oc, Input: in, ThroughEdgeIDs: through}
 		},
-		func(e entityops.CheckResultIngestRequested) (gala.OperationContext, ent.CreateCheckResultInput) {
-			return e.OperationContext, e.Input
+		func(e entityops.CheckResultIngestRequested) (gala.OperationContext, ent.CreateCheckResultInput, map[string][]string) {
+			return e.OperationContext, e.Input, e.ThroughEdgeIDs
 		},
 		prepareCheckResultInput, persistCheckResultInput),
-	entityops.SchemaContact.Name: buildIngestHandler(entityops.TopicContact,
-		func(oc gala.OperationContext, in ent.CreateContactInput) entityops.ContactIngestRequested {
-			return entityops.ContactIngestRequested{OperationContext: oc, Input: in}
+	entityops.SchemaContact.Name: buildIngestHandler(entityops.SchemaContact, entityops.TopicContact,
+		func(oc gala.OperationContext, in ent.CreateContactInput, through map[string][]string) entityops.ContactIngestRequested {
+			return entityops.ContactIngestRequested{OperationContext: oc, Input: in, ThroughEdgeIDs: through}
 		},
-		func(e entityops.ContactIngestRequested) (gala.OperationContext, ent.CreateContactInput) {
-			return e.OperationContext, e.Input
+		func(e entityops.ContactIngestRequested) (gala.OperationContext, ent.CreateContactInput, map[string][]string) {
+			return e.OperationContext, e.Input, e.ThroughEdgeIDs
 		},
 		prepareContactInput, persistContactInput),
-	entityops.SchemaDirectoryAccount.Name: buildIngestHandler(entityops.TopicDirectoryAccount,
-		func(oc gala.OperationContext, in ent.CreateDirectoryAccountInput) entityops.DirectoryAccountIngestRequested {
-			return entityops.DirectoryAccountIngestRequested{OperationContext: oc, Input: in}
+	entityops.SchemaDirectoryAccount.Name: buildIngestHandler(entityops.SchemaDirectoryAccount, entityops.TopicDirectoryAccount,
+		func(oc gala.OperationContext, in ent.CreateDirectoryAccountInput, through map[string][]string) entityops.DirectoryAccountIngestRequested {
+			return entityops.DirectoryAccountIngestRequested{OperationContext: oc, Input: in, ThroughEdgeIDs: through}
 		},
-		func(e entityops.DirectoryAccountIngestRequested) (gala.OperationContext, ent.CreateDirectoryAccountInput) {
-			return e.OperationContext, e.Input
+		func(e entityops.DirectoryAccountIngestRequested) (gala.OperationContext, ent.CreateDirectoryAccountInput, map[string][]string) {
+			return e.OperationContext, e.Input, e.ThroughEdgeIDs
 		},
 		prepareDirectoryAccountInput, persistDirectoryAccountInput),
-	entityops.SchemaDirectoryGroup.Name: buildIngestHandler(entityops.TopicDirectoryGroup,
-		func(oc gala.OperationContext, in ent.CreateDirectoryGroupInput) entityops.DirectoryGroupIngestRequested {
-			return entityops.DirectoryGroupIngestRequested{OperationContext: oc, Input: in}
+	entityops.SchemaDirectoryGroup.Name: buildIngestHandler(entityops.SchemaDirectoryGroup, entityops.TopicDirectoryGroup,
+		func(oc gala.OperationContext, in ent.CreateDirectoryGroupInput, through map[string][]string) entityops.DirectoryGroupIngestRequested {
+			return entityops.DirectoryGroupIngestRequested{OperationContext: oc, Input: in, ThroughEdgeIDs: through}
 		},
-		func(e entityops.DirectoryGroupIngestRequested) (gala.OperationContext, ent.CreateDirectoryGroupInput) {
-			return e.OperationContext, e.Input
+		func(e entityops.DirectoryGroupIngestRequested) (gala.OperationContext, ent.CreateDirectoryGroupInput, map[string][]string) {
+			return e.OperationContext, e.Input, e.ThroughEdgeIDs
 		},
 		prepareDirectoryGroupInput, persistDirectoryGroupInput),
-	entityops.SchemaDirectoryMembership.Name: buildIngestHandler(entityops.TopicDirectoryMembership,
-		func(oc gala.OperationContext, in ent.CreateDirectoryMembershipInput) entityops.DirectoryMembershipIngestRequested {
-			return entityops.DirectoryMembershipIngestRequested{OperationContext: oc, Input: in}
+	entityops.SchemaDirectoryMembership.Name: buildIngestHandler(entityops.SchemaDirectoryMembership, entityops.TopicDirectoryMembership,
+		func(oc gala.OperationContext, in ent.CreateDirectoryMembershipInput, through map[string][]string) entityops.DirectoryMembershipIngestRequested {
+			return entityops.DirectoryMembershipIngestRequested{OperationContext: oc, Input: in, ThroughEdgeIDs: through}
 		},
-		func(e entityops.DirectoryMembershipIngestRequested) (gala.OperationContext, ent.CreateDirectoryMembershipInput) {
-			return e.OperationContext, e.Input
+		func(e entityops.DirectoryMembershipIngestRequested) (gala.OperationContext, ent.CreateDirectoryMembershipInput, map[string][]string) {
+			return e.OperationContext, e.Input, e.ThroughEdgeIDs
 		},
 		prepareDirectoryMembershipInput, persistDirectoryMembershipInput),
-	entityops.SchemaEntity.Name: buildIngestHandler(entityops.TopicEntity,
-		func(oc gala.OperationContext, in ent.CreateEntityInput) entityops.EntityIngestRequested {
-			return entityops.EntityIngestRequested{OperationContext: oc, Input: in}
+	entityops.SchemaEntity.Name: buildIngestHandler(entityops.SchemaEntity, entityops.TopicEntity,
+		func(oc gala.OperationContext, in ent.CreateEntityInput, through map[string][]string) entityops.EntityIngestRequested {
+			return entityops.EntityIngestRequested{OperationContext: oc, Input: in, ThroughEdgeIDs: through}
 		},
-		func(e entityops.EntityIngestRequested) (gala.OperationContext, ent.CreateEntityInput) {
-			return e.OperationContext, e.Input
+		func(e entityops.EntityIngestRequested) (gala.OperationContext, ent.CreateEntityInput, map[string][]string) {
+			return e.OperationContext, e.Input, e.ThroughEdgeIDs
 		},
 		prepareEntityInput, persistEntityInput),
-	entityops.SchemaFinding.Name: buildIngestHandler(entityops.TopicFinding,
-		func(oc gala.OperationContext, in ent.CreateFindingInput) entityops.FindingIngestRequested {
-			return entityops.FindingIngestRequested{OperationContext: oc, Input: in}
+	entityops.SchemaFinding.Name: buildIngestHandler(entityops.SchemaFinding, entityops.TopicFinding,
+		func(oc gala.OperationContext, in ent.CreateFindingInput, through map[string][]string) entityops.FindingIngestRequested {
+			return entityops.FindingIngestRequested{OperationContext: oc, Input: in, ThroughEdgeIDs: through}
 		},
-		func(e entityops.FindingIngestRequested) (gala.OperationContext, ent.CreateFindingInput) {
-			return e.OperationContext, e.Input
+		func(e entityops.FindingIngestRequested) (gala.OperationContext, ent.CreateFindingInput, map[string][]string) {
+			return e.OperationContext, e.Input, e.ThroughEdgeIDs
 		},
 		prepareFindingInput, persistFindingInput),
-	entityops.SchemaInternalPolicy.Name: buildIngestHandler(entityops.TopicInternalPolicy,
-		func(oc gala.OperationContext, in ent.CreateInternalPolicyInput) entityops.InternalPolicyIngestRequested {
-			return entityops.InternalPolicyIngestRequested{OperationContext: oc, Input: in}
+	entityops.SchemaInternalPolicy.Name: buildIngestHandler(entityops.SchemaInternalPolicy, entityops.TopicInternalPolicy,
+		func(oc gala.OperationContext, in ent.CreateInternalPolicyInput, through map[string][]string) entityops.InternalPolicyIngestRequested {
+			return entityops.InternalPolicyIngestRequested{OperationContext: oc, Input: in, ThroughEdgeIDs: through}
 		},
-		func(e entityops.InternalPolicyIngestRequested) (gala.OperationContext, ent.CreateInternalPolicyInput) {
-			return e.OperationContext, e.Input
+		func(e entityops.InternalPolicyIngestRequested) (gala.OperationContext, ent.CreateInternalPolicyInput, map[string][]string) {
+			return e.OperationContext, e.Input, e.ThroughEdgeIDs
 		},
 		prepareInternalPolicyInput, persistInternalPolicyInput),
-	entityops.SchemaProcedure.Name: buildIngestHandler(entityops.TopicProcedure,
-		func(oc gala.OperationContext, in ent.CreateProcedureInput) entityops.ProcedureIngestRequested {
-			return entityops.ProcedureIngestRequested{OperationContext: oc, Input: in}
+	entityops.SchemaProcedure.Name: buildIngestHandler(entityops.SchemaProcedure, entityops.TopicProcedure,
+		func(oc gala.OperationContext, in ent.CreateProcedureInput, through map[string][]string) entityops.ProcedureIngestRequested {
+			return entityops.ProcedureIngestRequested{OperationContext: oc, Input: in, ThroughEdgeIDs: through}
 		},
-		func(e entityops.ProcedureIngestRequested) (gala.OperationContext, ent.CreateProcedureInput) {
-			return e.OperationContext, e.Input
+		func(e entityops.ProcedureIngestRequested) (gala.OperationContext, ent.CreateProcedureInput, map[string][]string) {
+			return e.OperationContext, e.Input, e.ThroughEdgeIDs
 		},
 		prepareProcedureInput, persistProcedureInput),
-	entityops.SchemaRisk.Name: buildIngestHandler(entityops.TopicRisk,
-		func(oc gala.OperationContext, in ent.CreateRiskInput) entityops.RiskIngestRequested {
-			return entityops.RiskIngestRequested{OperationContext: oc, Input: in}
+	entityops.SchemaRisk.Name: buildIngestHandler(entityops.SchemaRisk, entityops.TopicRisk,
+		func(oc gala.OperationContext, in ent.CreateRiskInput, through map[string][]string) entityops.RiskIngestRequested {
+			return entityops.RiskIngestRequested{OperationContext: oc, Input: in, ThroughEdgeIDs: through}
 		},
-		func(e entityops.RiskIngestRequested) (gala.OperationContext, ent.CreateRiskInput) {
-			return e.OperationContext, e.Input
+		func(e entityops.RiskIngestRequested) (gala.OperationContext, ent.CreateRiskInput, map[string][]string) {
+			return e.OperationContext, e.Input, e.ThroughEdgeIDs
 		},
 		prepareRiskInput, persistRiskInput),
-	entityops.SchemaVulnerability.Name: buildIngestHandler(entityops.TopicVulnerability,
-		func(oc gala.OperationContext, in ent.CreateVulnerabilityInput) entityops.VulnerabilityIngestRequested {
-			return entityops.VulnerabilityIngestRequested{OperationContext: oc, Input: in}
+	entityops.SchemaVulnerability.Name: buildIngestHandler(entityops.SchemaVulnerability, entityops.TopicVulnerability,
+		func(oc gala.OperationContext, in ent.CreateVulnerabilityInput, through map[string][]string) entityops.VulnerabilityIngestRequested {
+			return entityops.VulnerabilityIngestRequested{OperationContext: oc, Input: in, ThroughEdgeIDs: through}
 		},
-		func(e entityops.VulnerabilityIngestRequested) (gala.OperationContext, ent.CreateVulnerabilityInput) {
-			return e.OperationContext, e.Input
+		func(e entityops.VulnerabilityIngestRequested) (gala.OperationContext, ent.CreateVulnerabilityInput, map[string][]string) {
+			return e.OperationContext, e.Input, e.ThroughEdgeIDs
 		},
 		prepareVulnerabilityInput, persistVulnerabilityInput),
 }
 
-// buildIngestHandler assembles one entityops schema handler from the generated typed topic and the
-// schema-specific preparation and persistence closures. Integration-scoped preparation runs inside
-// the persist closure, where the integration record is resolved from context
+// buildIngestHandler assembles one entityops schema handler from the catalog entry, the generated
+// typed topic, and the schema-specific preparation and persistence closures. Integration-scoped
+// preparation runs inside the persist closure, where the integration record is resolved from context
 func buildIngestHandler[TInput any, TEvent any](
+	schema *entityops.Schema,
 	topic gala.Topic[TEvent],
-	wrap func(gala.OperationContext, TInput) TEvent,
-	unwrap func(TEvent) (gala.OperationContext, TInput),
+	wrap func(gala.OperationContext, TInput, map[string][]string) TEvent,
+	unwrap func(TEvent) (gala.OperationContext, TInput, map[string][]string),
 	prepare func(context.Context, TInput, *ent.Integration) TInput,
 	persist func(context.Context, *ent.Client, *ent.Integration, TInput) (string, error),
 ) entityops.SchemaHandler {
 	return entityops.BuildSchemaHandler(entityops.SchemaHandlerConfig[TInput, TEvent]{
+		Schema:  schema,
 		Topic:   topic,
 		Prepare: func(_ context.Context, input TInput) TInput { return input },
 		Wrap:    wrap,
