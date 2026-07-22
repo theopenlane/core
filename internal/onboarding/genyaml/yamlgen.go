@@ -124,10 +124,6 @@ func stepLit(step models.Step) jen.Code {
 		fields[jen.Id("DynamicCards")] = jen.True()
 	}
 
-	if len(step.Tasks) > 0 {
-		fields[jen.Id("Tasks")] = jen.Index().Qual(modelsPkg, "TaskRule").Values(taskRuleLits(step.Tasks)...)
-	}
-
 	return jen.Qual(modelsPkg, "Step").Values(fields)
 }
 
@@ -180,10 +176,6 @@ func questionLit(question models.Question) jen.Code {
 
 	if len(question.Options) > 0 {
 		fields[jen.Id("Options")] = jen.Index().Qual(modelsPkg, "QuestionOption").Values(optionLits(question.Options)...)
-	}
-
-	if len(question.Tasks) > 0 {
-		fields[jen.Id("Tasks")] = taskRuleMap(question.Tasks)
 	}
 
 	return jen.Qual(modelsPkg, "Question").Values(fields)
@@ -254,44 +246,6 @@ func literal(value any) jen.Code {
 	default:
 		return jen.Lit(fmt.Sprint(v))
 	}
-}
-
-func taskRuleLits(rules []models.TaskRule) []jen.Code {
-	out := make([]jen.Code, 0, len(rules))
-	for _, rule := range rules {
-		out = append(out, taskRuleLit(rule))
-	}
-
-	return out
-}
-
-func taskRuleMap(rules map[string]models.TaskRule) jen.Code {
-	keys := make([]string, 0, len(rules))
-	for key := range rules {
-		keys = append(keys, key)
-	}
-	sort.Strings(keys)
-
-	return jen.Map(jen.String()).Qual(modelsPkg, "TaskRule").ValuesFunc(func(g *jen.Group) {
-		for _, key := range keys {
-			g.Lit(key).Op(":").Add(taskRuleLit(rules[key]))
-		}
-	})
-}
-
-func taskRuleLit(rule models.TaskRule) jen.Code {
-	fields := jen.Dict{
-		jen.Id("Key"):      jen.Lit(rule.Key),
-		jen.Id("Title"):    jen.Lit(rule.Title),
-		jen.Id("Details"):  jen.Lit(rule.Details),
-		jen.Id("Priority"): jen.Lit(rule.Priority),
-	}
-
-	if len(rule.Metadata) > 0 {
-		fields[jen.Id("Metadata")] = metadataLit(rule.Metadata)
-	}
-
-	return jen.Qual(modelsPkg, "TaskRule").Values(fields)
 }
 
 func metadataLit(metadata map[string]any) jen.Code {

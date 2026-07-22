@@ -103,7 +103,7 @@ func getFrameworkOptions(ctx context.Context, client *generated.Client) ([]model
 		}
 
 		options = append(options, models.QuestionOption{
-			Value:       std.ID,
+			Value:       std.Framework,
 			Label:       label,
 			Description: std.Description,
 			LogoURL:     std.GoverningBodyLogoURL,
