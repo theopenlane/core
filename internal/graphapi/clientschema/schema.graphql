@@ -53627,6 +53627,7 @@ enum NotificationNotificationTopic @goModel(model: "github.com/theopenlane/core/
 	STANDARD_UPDATE
 	DOMAIN_SCAN
 	IMPORT_COMPLETE
+	SUGGESTED_TASKS
 }
 """
 NotificationNotificationType is enum for the field notification_type

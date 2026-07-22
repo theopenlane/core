@@ -20,6 +20,8 @@ var (
 	NotificationTopicDomainScan NotificationTopic = "DOMAIN_SCAN"
 	// NotificationTopicImportComplete indicates an accepted import finished creating its records.
 	NotificationTopicImportComplete NotificationTopic = "IMPORT_COMPLETE"
+	// NotificationTopicSuggestedTasks indicates a suggested-task generation batch finished for an entity.
+	NotificationTopicSuggestedTasks NotificationTopic = "SUGGESTED_TASKS"
 	// NotificationTopicInvalid is used when an unknown or unsupported value is provided.
 	NotificationTopicInvalid NotificationTopic = "NOTIFICATIONTOPIC_INVALID"
 )
@@ -32,6 +34,7 @@ var notificationTopicValues = []NotificationTopic{
 	NotificationTopicStandardUpdate,
 	NotificationTopicDomainScan,
 	NotificationTopicImportComplete,
+	NotificationTopicSuggestedTasks,
 }
 
 // Values returns a slice of strings representing all valid NotificationTopic values.

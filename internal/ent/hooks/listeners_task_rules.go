@@ -10,6 +10,8 @@ import (
 	"text/template"
 
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"github.com/google/cel-go/cel"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
@@ -17,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/ent/eventqueue"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/notification"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/taskrules"
@@ -102,6 +105,8 @@ func handleTaskRuleMutation(ctx gala.HandlerContext, schema *entityops.Schema, p
 
 	placeholders := entityPlaceholders(entityID, entity)
 
+	taskCount := 0
+
 	for _, fieldRule := range schema.AllTaskRules() {
 		if !operationAllowed(fieldRule.Rule.Trigger, payload.Operation) {
 			continue
@@ -123,9 +128,80 @@ func handleTaskRuleMutation(ctx gala.HandlerContext, schema *entityops.Schema, p
 				return err
 			}
 		}
+
+		taskCount += len(rendered)
 	}
 
-	return nil
+	if payload.Operation != ent.OpCreate.String() {
+		return nil
+	}
+
+	return notifySuggestedTasksGenerated(systemCtx, client, schema, entityID, entity, taskCount)
+}
+
+// notifySuggestedTasksGenerated persists a SUGGESTED_TASKS notification once a schema's task-rule
+// batch has run (even when it created zero tasks), gated by taskrules.SetupTaskNotificationGates
+func notifySuggestedTasksGenerated(ctx context.Context, client *generated.Client, schema *entityops.Schema, entityID string, entity map[string]json.RawMessage, taskCount int) error {
+	gate, ok := taskrules.SetupTaskNotificationGates[schema.Snake]
+	if !ok {
+		return nil
+	}
+
+	if gate != "" {
+		fire, err := evaluateCELBool(ctx, gate, decodeEntityFields(entity))
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("schema", schema.Snake).Msg("entityops: notification gate evaluation failed")
+			return nil
+		}
+
+		if !fire {
+			return nil
+		}
+	}
+
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil || caller.OrganizationID == "" {
+		return generated.ErrPermissionDenied
+	}
+
+	exists, err := client.Notification.Query().
+		Where(
+			notification.OwnerID(caller.OrganizationID),
+			notification.TopicEQ(enums.NotificationTopicSuggestedTasks),
+			func(sel *sql.Selector) {
+				sel.Where(sqljson.ValueEQ(notification.FieldData, entityID, sqljson.Path("entity_id")))
+			},
+		).
+		Exist(ctx)
+	if err != nil {
+		return err
+	}
+
+	if exists {
+		return nil
+	}
+
+	body := fmt.Sprintf("Generated %d suggested task(s) for your workspace setup", taskCount)
+	if taskCount == 0 {
+		body = "Setup task generation finished, no new tasks were needed"
+	}
+
+	_, err = client.Notification.Create().
+		SetOwnerID(caller.OrganizationID).
+		SetNotificationType(enums.NotificationTypeOrganization).
+		SetObjectType("task.suggested").
+		SetTitle("Suggested tasks generated").
+		SetBody(body).
+		SetData(map[string]any{
+			"schema":     schema.Snake,
+			"entity_id":  entityID,
+			"task_count": taskCount,
+			"url":        "/dashboard",
+		}).
+		SetTopic(enums.NotificationTopicSuggestedTasks).
+		Save(ctx)
+
+	return err
 }
 
 // taskRuleSystemContext augments gala's restored caller with the capabilities task-rule
@@ -143,16 +219,7 @@ func taskRuleSystemContext(ctx context.Context) context.Context {
 // ruleValue resolves what "value" binds to in a rule's CEL expression
 func ruleValue(fieldRule entityops.FieldTaskRule, entity map[string]json.RawMessage) (any, bool) {
 	if fieldRule.Field == "" {
-		whole := make(map[string]any, len(entity))
-
-		for key, raw := range entity {
-			var decoded any
-			if json.Unmarshal(raw, &decoded) == nil {
-				whole[key] = decoded
-			}
-		}
-
-		return whole, true
+		return decodeEntityFields(entity), true
 	}
 
 	raw, ok := entity[fieldRule.Field]
@@ -166,6 +233,20 @@ func ruleValue(fieldRule entityops.FieldTaskRule, entity map[string]json.RawMess
 	}
 
 	return decoded, true
+}
+
+// decodeEntityFields decodes every raw entity field for whole-entity CEL evaluation
+func decodeEntityFields(entity map[string]json.RawMessage) map[string]any {
+	whole := make(map[string]any, len(entity))
+
+	for key, raw := range entity {
+		var decoded any
+		if json.Unmarshal(raw, &decoded) == nil {
+			whole[key] = decoded
+		}
+	}
+
+	return whole
 }
 
 // entityPlaceholders builds the {fieldname} substitutions available to every rule on this
