@@ -103,54 +103,54 @@ rules:
         - name: Sync Policies with GitHub Actions
           url: https://docs.theopenlane.io/docs/platform/compliance-management/policy-and-procedure-management/import#continuous-sync-from-github
 
-import-policy-templates:
-  title: Start with policy templates
-  taskKindName: Policy Review
-  details: |
-    Learn about the different ways to create and manage policies in Openlane. Start with open-source templates, generate drafts with AI, or synchronize existing policies from your document systems or GitHub as your compliance program matures.
+  import-policy-templates:
+    title: Start with policy templates
+    taskKindName: Policy Review
+    details: |
+      Learn about the different ways to create and manage policies in Openlane. Start with open-source templates, generate drafts with AI, or synchronize existing policies from your document systems or GitHub as your compliance program matures.
 
-    ### Create policies in Openlane
+      ### Create policies in Openlane
 
-    Choose the approach that best fits your organization.
+      Choose the approach that best fits your organization.
 
-    #### Start with Policy Hub
+      #### Start with Policy Hub
 
-    Browse Openlane's library of open-source policy templates and customize them to reflect how your organization operates.
+      Browse Openlane's library of open-source policy templates and customize them to reflect how your organization operates.
 
-    [Open Policies](https://console.theopenlane.io/policies)
+      [Open Policies](https://console.theopenlane.io/policies)
 
-    #### Generate with AI
+      #### Generate with AI
 
-    Create draft policies tailored to your organization and selected compliance frameworks, then review and customize them before adoption.
+      Create draft policies tailored to your organization and selected compliance frameworks, then review and customize them before adoption.
 
-    [Generate policies](https://console.theopenlane.io/policies)
+      [Generate policies](https://console.theopenlane.io/policies)
 
-    ### Import or synchronize existing policies
+      ### Import or synchronize existing policies
 
-    #### Connect document sources
+      #### Connect document sources
 
-    Keep policies synchronized from Google Drive, OneDrive, and other supported document providers so Openlane stays aligned with your existing documentation.
+      Keep policies synchronized from Google Drive, OneDrive, and other supported document providers so Openlane stays aligned with your existing documentation.
 
-    [Manage document integrations](https://console.theopenlane.io/automation/integrations?tags=document)
+      [Manage document integrations](https://console.theopenlane.io/automation/integrations?tags=document)
 
-    #### Sync from GitHub
+      #### Sync from GitHub
 
-    Automatically synchronize Markdown-based policies from a GitHub repository as they change.
+      Automatically synchronize Markdown-based policies from a GitHub repository as they change.
 
-  priority: 70
-  metadata:
-    docsLink: /docs/platform/compliance-management/policy-and-procedure-management/policies
-    references:
-      - name: Best practices for writing policies
-        url: https://docs.theopenlane.io/docs/platform/compliance-management/policy-and-procedure-management/policies#writing-policies-that-hold-up
-      - name: Policy framework mappings
-        url: https://docs.theopenlane.io/docs/platform/compliance-management/policy-and-procedure-management/policy-framework-mapping
-      - name: Importing existing policies
-        url: https://docs.theopenlane.io/docs/platform/compliance-management/policy-and-procedure-management/import
-      - name: Openlane Policy Hub on GitHub
-        url: https://github.com/theopenlane/policy-hub
-      - name: Continuous GitHub synchronization
-        url: https://docs.theopenlane.io/docs/platform/compliance-management/policy-and-procedure-management/import#continuous-sync-from-github
+    priority: 70
+    metadata:
+      docsLink: /docs/platform/compliance-management/policy-and-procedure-management/policies
+      references:
+        - name: Best practices for writing policies
+          url: https://docs.theopenlane.io/docs/platform/compliance-management/policy-and-procedure-management/policies#writing-policies-that-hold-up
+        - name: Policy framework mappings
+          url: https://docs.theopenlane.io/docs/platform/compliance-management/policy-and-procedure-management/policy-framework-mapping
+        - name: Importing existing policies
+          url: https://docs.theopenlane.io/docs/platform/compliance-management/policy-and-procedure-management/import
+        - name: Openlane Policy Hub on GitHub
+          url: https://github.com/theopenlane/policy-hub
+        - name: Continuous GitHub synchronization
+          url: https://docs.theopenlane.io/docs/platform/compliance-management/policy-and-procedure-management/import#continuous-sync-from-github
 
 
   has-auditor-at-onboarding:

@@ -143,10 +143,12 @@ func handleTaskRuleMutation(ctx gala.HandlerContext, schema *entityops.Schema, p
 // notifyOrganizationReady emits NotificationTopicOrganizationReady once an orgs
 // suggested tasks have all been created
 func notifyOrganizationReady(ctx context.Context, client *generated.Client, organizationID string) error {
+	const organizationReadyObjectType = "organization.ready"
+
 	_, err := client.Notification.Create().
 		SetOwnerID(organizationID).
 		SetNotificationType(enums.NotificationTypeOrganization).
-		SetObjectType("organization.ready").
+		SetObjectType(organizationReadyObjectType).
 		SetTitle("Organization ready").
 		SetBody("Your organization is ready. Review your recommended next steps to get started.").
 		SetTopic(enums.NotificationTopicOrganizationReady).
