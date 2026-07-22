@@ -144,6 +144,13 @@ func (r *Runtime) Catalog() []types.DefinitionSpec {
 	return r.Registry().Catalog()
 }
 
+// RuntimeClientConfigured reports whether a pre-built runtime client exists for the definition
+func (r *Runtime) RuntimeClientConfigured(definitionID string) bool {
+	_, ok := r.Registry().RuntimeClient(definitionID)
+
+	return ok
+}
+
 // Definition returns one definition by canonical identifier
 func (r *Runtime) Definition(id string) (types.Definition, bool) {
 	return r.Registry().Definition(id)
