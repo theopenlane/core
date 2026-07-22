@@ -32,6 +32,9 @@ const taskRuleSource = "entityops"
 // ErrMissingTaskTemplate indicates a rule fired but no taskrules.Template is registered for it
 var ErrMissingTaskTemplate = errors.New("entityops: missing task template")
 
+// ErrExpressionNotList indicates an EachElement expression evaluated to a non-list value
+var ErrExpressionNotList = errors.New("entityops: expression did not evaluate to a list")
+
 // RegisterGalaTaskRuleListeners registers one gala listener per eligible schema evaluating each schema's rules on mutation and creates suggested
 // task records
 func RegisterGalaTaskRuleListeners(registry *gala.Registry) ([]gala.ListenerID, error) {
@@ -266,7 +269,7 @@ func renderTask(tmpl taskrules.Template, ruleID, value, label string, placeholde
 		key += "-" + slugifyTaskKey(value)
 	}
 
-	data := make(map[string]any, len(placeholders)+2)
+	data := make(map[string]any, len(placeholders)+2) //nolint:mnd
 	for name, v := range placeholders {
 		data[name] = v
 	}
@@ -468,7 +471,7 @@ func evaluateCELList(ctx context.Context, expression string, value any) ([]any, 
 
 	list, ok := decoded.([]any)
 	if !ok {
-		return nil, fmt.Errorf("expression %q did not evaluate to a list", expression)
+		return nil, fmt.Errorf("%w: %q", ErrExpressionNotList, expression)
 	}
 
 	return list, nil
