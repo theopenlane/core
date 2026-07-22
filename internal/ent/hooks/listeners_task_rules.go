@@ -360,6 +360,12 @@ func slugifyTaskKey(value string) string {
 }
 
 func createSuggestedTask(ctx context.Context, client *generated.Client, schema *entityops.Schema, entityID string, rendered renderedTask) error {
+
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil || caller.OrganizationID == "" {
+		return generated.ErrPermissionDenied
+	}
+
 	sourceKey := schema.Snake + rendered.Key
 	idempotencyKey := fmt.Sprintf("%s:%s:%s%s", taskRuleSource, schema.Snake, entityID, rendered.Key)
 
@@ -378,6 +384,7 @@ func createSuggestedTask(ctx context.Context, client *generated.Client, schema *
 	}
 
 	mutation := client.Task.Create().
+		SetOwnerID(caller.OrganizationID).
 		SetTitle(rendered.Title).
 		SetDetails(rendered.Details).
 		SetSystemGenerated(true).
