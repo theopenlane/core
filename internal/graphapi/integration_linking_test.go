@@ -118,14 +118,7 @@ func TestIntegrationCrossObjectLinking(t *testing.T) {
 		assert.DeepEqual(t, refCodes, []string{"LINK-CC-1"})
 	})
 
-	// multiTargetSkip marks permutations blocked on the pre-existing through-edge bug: batch
-	// m2m inserts evaluate the FindingControl id default once, so adding 2+ controls in one
-	// mutation violates finding_controls_pkey. Unskip when the edge-schema fix lands
-	const multiTargetSkip = "blocked on finding_controls through-edge fix: multi-target adds duplicate the join row id"
-
 	t.Run("list field match links every element", func(t *testing.T) {
-		t.Skip(multiTargetSkip)
-
 		def := linkTestDefinition("def_linktest", fieldMatchRules)
 
 		err := ingestFindings(ctx, t, integration, def, `{"external_id":"link-f-2","display_name":"f2","categories":["LINK-CC-2","LINK-CC-3"]}`)
@@ -137,8 +130,6 @@ func TestIntegrationCrossObjectLinking(t *testing.T) {
 	})
 
 	t.Run("scalar and list values are merged and deduplicated", func(t *testing.T) {
-		t.Skip(multiTargetSkip)
-
 		def := linkTestDefinition("def_linktest", fieldMatchRules)
 
 		err := ingestFindings(ctx, t, integration, def, `{"external_id":"link-f-3","display_name":"f3","category":"LINK-CC-1","categories":["LINK-CC-1","LINK-CC-2"]}`)
@@ -195,8 +186,6 @@ func TestIntegrationCrossObjectLinking(t *testing.T) {
 	})
 
 	t.Run("multiple rules apply independently", func(t *testing.T) {
-		t.Skip(multiTargetSkip)
-
 		def := linkTestDefinition("def_linktest", []integrationtypes.LinkRule{
 			{
 				TargetSchema: entityops.SchemaControl.Name,
