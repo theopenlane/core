@@ -311,7 +311,7 @@ func renderTemplateString(name, text string, data map[string]any) (string, error
 		return "", nil
 	}
 
-	tmpl, err := template.New(name).Parse(text)
+	tmpl, err := template.New(name).Option("missingkey=zero").Parse(text)
 	if err != nil {
 		return "", fmt.Errorf("parse %s template: %w", name, err)
 	}
@@ -321,7 +321,7 @@ func renderTemplateString(name, text string, data map[string]any) (string, error
 		return "", fmt.Errorf("execute %s template: %w", name, err)
 	}
 
-	return buf.String(), nil
+	return strings.ReplaceAll(buf.String(), "<no value>", ""), nil
 }
 
 // renderMetadata applies replacer to every string value in metadata, leaving other value types untouched
@@ -496,7 +496,7 @@ func resolveLabel(ctx context.Context, client *generated.Client, ruleID, value s
 	return value
 }
 
-// resolveFrameworkLabel resolves a Standard ID (the value submitted for the "frameworks"
+// resolveFrameworkLabel resolves a framework code (the value submitted for the "frameworks"
 // onboarding question, see internal/onboarding/catalog.go's getFrameworkOptions) to its display name
 func resolveFrameworkLabel(ctx context.Context, client *generated.Client, value string) string {
 	if client == nil {
@@ -505,7 +505,7 @@ func resolveFrameworkLabel(ctx context.Context, client *generated.Client, value 
 
 	std, err := client.Standard.Query().
 		Where(
-			standard.IDEQ(value),
+			standard.FrameworkEQ(value),
 			standard.StatusEQ(enums.StandardActive),
 		).
 		First(ctx)
