@@ -90,11 +90,11 @@ func getFrameworkOptions(ctx context.Context, client *generated.Client) ([]model
 	standards, err := client.Standard.Query().
 		Where(
 			standard.StatusEQ(enums.StandardActive),
-			standard.Or(
+			standard.FrameworkNotIn("openlane-standard", "openlane-trust-center"),
+			standard.And(
 				standard.SystemOwned(true),
 				standard.IsPublic(true),
 				standard.FreeToUse(true),
-				standard.FrameworkNotIn("openlane-standard", "openlane-trust-center"),
 			),
 		).
 		All(ctx)
