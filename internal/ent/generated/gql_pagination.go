@@ -30612,20 +30612,6 @@ var (
 			}
 		},
 	}
-	// StandardOrderFieldPriority orders Standard by priority.
-	StandardOrderFieldPriority = &StandardOrderField{
-		Value: func(_m *Standard) (ent.Value, error) {
-			return _m.Priority, nil
-		},
-		column: standard.FieldPriority,
-		toTerm: standard.ByPriority,
-		toCursor: func(_m *Standard) Cursor {
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.Priority,
-			}
-		},
-	}
 )
 
 // String implement fmt.Stringer interface.
@@ -30650,8 +30636,6 @@ func (f StandardOrderField) String() string {
 		str = "STATUS"
 	case StandardOrderFieldStandardType.column:
 		str = "standard_type"
-	case StandardOrderFieldPriority.column:
-		str = "priority"
 	}
 	return str
 }
@@ -30686,8 +30670,6 @@ func (f *StandardOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *StandardOrderFieldStatus
 	case "standard_type":
 		*f = *StandardOrderFieldStandardType
-	case "priority":
-		*f = *StandardOrderFieldPriority
 	default:
 		return fmt.Errorf("%s is not a valid StandardOrderField", str)
 	}

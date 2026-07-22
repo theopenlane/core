@@ -71,8 +71,6 @@ type Standard struct {
 	FreeToUse bool `json:"free_to_use,omitempty"`
 	// type of the standard - cybersecurity, healthcare , financial, etc.
 	StandardType string `json:"standard_type,omitempty"`
-	// priority for displaying standards
-	Priority int `json:"priority,omitempty"`
 	// version of the standard
 	Version string `json:"version,omitempty"`
 	// URL of the logo
@@ -176,8 +174,6 @@ func (*Standard) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case standard.FieldSystemOwned, standard.FieldIsPublic, standard.FieldFreeToUse:
 			values[i] = new(sql.NullBool)
-		case standard.FieldPriority:
-			values[i] = new(sql.NullInt64)
 		case standard.FieldID, standard.FieldCreatedBy, standard.FieldUpdatedBy, standard.FieldUpdatedByImpersonator, standard.FieldDeletedBy, standard.FieldRevision, standard.FieldOwnerID, standard.FieldInternalNotes, standard.FieldSystemInternalID, standard.FieldName, standard.FieldShortName, standard.FieldFramework, standard.FieldDescription, standard.FieldGoverningBodyLogoURL, standard.FieldGoverningBody, standard.FieldLink, standard.FieldStatus, standard.FieldStandardType, standard.FieldVersion, standard.FieldLogoFileID:
 			values[i] = new(sql.NullString)
 		case standard.FieldCreatedAt, standard.FieldUpdatedAt, standard.FieldDeletedAt:
@@ -360,12 +356,6 @@ func (_m *Standard) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.StandardType = value.String
 			}
-		case standard.FieldPriority:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field priority", values[i])
-			} else if value.Valid {
-				_m.Priority = int(value.Int64)
-			}
 		case standard.FieldVersion:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field version", values[i])
@@ -525,9 +515,6 @@ func (_m *Standard) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("standard_type=")
 	builder.WriteString(_m.StandardType)
-	builder.WriteString(", ")
-	builder.WriteString("priority=")
-	builder.WriteString(fmt.Sprintf("%v", _m.Priority))
 	builder.WriteString(", ")
 	builder.WriteString("version=")
 	builder.WriteString(_m.Version)

@@ -23892,20 +23892,6 @@ var (
 			}
 		},
 	}
-	// StandardHistoryOrderFieldPriority orders StandardHistory by priority.
-	StandardHistoryOrderFieldPriority = &StandardHistoryOrderField{
-		Value: func(_m *StandardHistory) (ent.Value, error) {
-			return _m.Priority, nil
-		},
-		column: standardhistory.FieldPriority,
-		toTerm: standardhistory.ByPriority,
-		toCursor: func(_m *StandardHistory) Cursor {
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.Priority,
-			}
-		},
-	}
 )
 
 // String implement fmt.Stringer interface.
@@ -23932,8 +23918,6 @@ func (f StandardHistoryOrderField) String() string {
 		str = "STATUS"
 	case StandardHistoryOrderFieldStandardType.column:
 		str = "standard_type"
-	case StandardHistoryOrderFieldPriority.column:
-		str = "priority"
 	}
 	return str
 }
@@ -23970,8 +23954,6 @@ func (f *StandardHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *StandardHistoryOrderFieldStatus
 	case "standard_type":
 		*f = *StandardHistoryOrderFieldStandardType
-	case "priority":
-		*f = *StandardHistoryOrderFieldPriority
 	default:
 		return fmt.Errorf("%s is not a valid StandardHistoryOrderField", str)
 	}

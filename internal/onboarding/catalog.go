@@ -3,8 +3,6 @@ package onboarding
 import (
 	"context"
 
-	"entgo.io/ent/dialect/sql"
-
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -88,7 +86,6 @@ func getFrameworkOptions(ctx context.Context, client *generated.Client) ([]model
 				standard.FreeToUse(true),
 			),
 		).
-		Order(standard.ByPriority(sql.OrderDesc())).
 		All(ctx)
 	if err != nil {
 		return nil, err
@@ -107,7 +104,6 @@ func getFrameworkOptions(ctx context.Context, client *generated.Client) ([]model
 			Label:       label,
 			Description: std.Description,
 			LogoURL:     std.GoverningBodyLogoURL,
-			Priority:    std.Priority,
 		})
 	}
 

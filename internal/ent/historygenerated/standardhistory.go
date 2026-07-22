@@ -78,8 +78,6 @@ type StandardHistory struct {
 	FreeToUse bool `json:"free_to_use,omitempty"`
 	// type of the standard - cybersecurity, healthcare , financial, etc.
 	StandardType string `json:"standard_type,omitempty"`
-	// priority for displaying standards
-	Priority int `json:"priority,omitempty"`
 	// version of the standard
 	Version string `json:"version,omitempty"`
 	// URL of the logo
@@ -98,8 +96,6 @@ func (*StandardHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case standardhistory.FieldSystemOwned, standardhistory.FieldIsPublic, standardhistory.FieldFreeToUse:
 			values[i] = new(sql.NullBool)
-		case standardhistory.FieldPriority:
-			values[i] = new(sql.NullInt64)
 		case standardhistory.FieldID, standardhistory.FieldRef, standardhistory.FieldCreatedBy, standardhistory.FieldUpdatedBy, standardhistory.FieldUpdatedByImpersonator, standardhistory.FieldDeletedBy, standardhistory.FieldRevision, standardhistory.FieldOwnerID, standardhistory.FieldInternalNotes, standardhistory.FieldSystemInternalID, standardhistory.FieldName, standardhistory.FieldShortName, standardhistory.FieldFramework, standardhistory.FieldDescription, standardhistory.FieldGoverningBodyLogoURL, standardhistory.FieldGoverningBody, standardhistory.FieldLink, standardhistory.FieldStatus, standardhistory.FieldStandardType, standardhistory.FieldVersion, standardhistory.FieldLogoFileID:
 			values[i] = new(sql.NullString)
 		case standardhistory.FieldHistoryTime, standardhistory.FieldCreatedAt, standardhistory.FieldUpdatedAt, standardhistory.FieldDeletedAt:
@@ -300,12 +296,6 @@ func (_m *StandardHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.StandardType = value.String
 			}
-		case standardhistory.FieldPriority:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for field priority", values[i])
-			} else if value.Valid {
-				_m.Priority = int(value.Int64)
-			}
 		case standardhistory.FieldVersion:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field version", values[i])
@@ -444,9 +434,6 @@ func (_m *StandardHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("standard_type=")
 	builder.WriteString(_m.StandardType)
-	builder.WriteString(", ")
-	builder.WriteString("priority=")
-	builder.WriteString(fmt.Sprintf("%v", _m.Priority))
 	builder.WriteString(", ")
 	builder.WriteString("version=")
 	builder.WriteString(_m.Version)

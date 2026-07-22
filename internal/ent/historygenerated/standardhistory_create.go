@@ -384,20 +384,6 @@ func (_c *StandardHistoryCreate) SetNillableStandardType(v *string) *StandardHis
 	return _c
 }
 
-// SetPriority sets the "priority" field.
-func (_c *StandardHistoryCreate) SetPriority(v int) *StandardHistoryCreate {
-	_c.mutation.SetPriority(v)
-	return _c
-}
-
-// SetNillablePriority sets the "priority" field if the given value is not nil.
-func (_c *StandardHistoryCreate) SetNillablePriority(v *int) *StandardHistoryCreate {
-	if v != nil {
-		_c.SetPriority(*v)
-	}
-	return _c
-}
-
 // SetVersion sets the "version" field.
 func (_c *StandardHistoryCreate) SetVersion(v string) *StandardHistoryCreate {
 	_c.mutation.SetVersion(v)
@@ -522,10 +508,6 @@ func (_c *StandardHistoryCreate) defaults() error {
 		v := standardhistory.DefaultFreeToUse
 		_c.mutation.SetFreeToUse(v)
 	}
-	if _, ok := _c.mutation.Priority(); !ok {
-		v := standardhistory.DefaultPriority
-		_c.mutation.SetPriority(v)
-	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if standardhistory.DefaultID == nil {
 			return fmt.Errorf("historygenerated: uninitialized standardhistory.DefaultID (forgotten import historygenerated/runtime?)")
@@ -556,9 +538,6 @@ func (_c *StandardHistoryCreate) check() error {
 		if err := standardhistory.StatusValidator(v); err != nil {
 			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "StandardHistory.status": %w`, err)}
 		}
-	}
-	if _, ok := _c.mutation.Priority(); !ok {
-		return &ValidationError{Name: "priority", err: errors.New(`historygenerated: missing required field "StandardHistory.priority"`)}
 	}
 	return nil
 }
@@ -707,10 +686,6 @@ func (_c *StandardHistoryCreate) createSpec() (*StandardHistory, *sqlgraph.Creat
 	if value, ok := _c.mutation.StandardType(); ok {
 		_spec.SetField(standardhistory.FieldStandardType, field.TypeString, value)
 		_node.StandardType = value
-	}
-	if value, ok := _c.mutation.Priority(); ok {
-		_spec.SetField(standardhistory.FieldPriority, field.TypeInt, value)
-		_node.Priority = value
 	}
 	if value, ok := _c.mutation.Version(); ok {
 		_spec.SetField(standardhistory.FieldVersion, field.TypeString, value)

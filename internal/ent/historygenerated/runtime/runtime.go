@@ -2541,10 +2541,6 @@ func init() {
 	standardhistoryDescFreeToUse := standardhistoryFields[27].Descriptor()
 	// standardhistory.DefaultFreeToUse holds the default value on creation for the free_to_use field.
 	standardhistory.DefaultFreeToUse = standardhistoryDescFreeToUse.Default.(bool)
-	// standardhistoryDescPriority is the schema descriptor for priority field.
-	standardhistoryDescPriority := standardhistoryFields[29].Descriptor()
-	// standardhistory.DefaultPriority holds the default value on creation for the priority field.
-	standardhistory.DefaultPriority = standardhistoryDescPriority.Default.(int)
 	// standardhistoryDescID is the schema descriptor for id field.
 	standardhistoryDescID := standardhistoryFields[10].Descriptor()
 	// standardhistory.DefaultID holds the default value on creation for the id field.

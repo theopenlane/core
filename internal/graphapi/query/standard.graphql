@@ -122,7 +122,6 @@ query GetStandardByID ($standardId: ID!) {
 		logoFileID
 		name
 		ownerID
-		priority
 		revision
 		shortName
 		standardType

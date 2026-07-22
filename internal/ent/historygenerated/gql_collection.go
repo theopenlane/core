@@ -12358,11 +12358,6 @@ func (_q *StandardHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 				selectedFields = append(selectedFields, standardhistory.FieldStandardType)
 				fieldSeen[standardhistory.FieldStandardType] = struct{}{}
 			}
-		case "priority":
-			if _, ok := fieldSeen[standardhistory.FieldPriority]; !ok {
-				selectedFields = append(selectedFields, standardhistory.FieldPriority)
-				fieldSeen[standardhistory.FieldPriority] = struct{}{}
-			}
 		case "version":
 			if _, ok := fieldSeen[standardhistory.FieldVersion]; !ok {
 				selectedFields = append(selectedFields, standardhistory.FieldVersion)

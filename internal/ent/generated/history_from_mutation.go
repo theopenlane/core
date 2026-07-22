@@ -21249,10 +21249,6 @@ func (m *StandardMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetStandardType(standardType)
 	}
 
-	if priority, exists := m.Priority(); exists {
-		create = create.SetPriority(priority)
-	}
-
 	if version, exists := m.Version(); exists {
 		create = create.SetVersion(version)
 	}
@@ -21442,12 +21438,6 @@ func (m *StandardMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetStandardType(standard.StandardType)
 		}
 
-		if priority, exists := m.Priority(); exists {
-			create = create.SetPriority(priority)
-		} else {
-			create = create.SetPriority(standard.Priority)
-		}
-
 		if version, exists := m.Version(); exists {
 			create = create.SetVersion(version)
 		} else {
@@ -21520,7 +21510,6 @@ func (m *StandardMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetIsPublic(standard.IsPublic).
 			SetFreeToUse(standard.FreeToUse).
 			SetStandardType(standard.StandardType).
-			SetPriority(standard.Priority).
 			SetVersion(standard.Version).
 			SetNillableLogoFileID(standard.LogoFileID).
 			Save(ctx)

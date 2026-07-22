@@ -2582,7 +2582,6 @@ var (
 		{Name: "is_public", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "free_to_use", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "standard_type", Type: field.TypeString, Nullable: true},
-		{Name: "priority", Type: field.TypeInt, Default: 0},
 		{Name: "version", Type: field.TypeString, Nullable: true},
 		{Name: "logo_file_id", Type: field.TypeString, Nullable: true},
 	}
