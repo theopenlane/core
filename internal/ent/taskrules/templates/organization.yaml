@@ -68,6 +68,7 @@ rules:
       To keep your Registry up to date, we recommend connecting one of our supported [integrations](https://docs.theopenlane.io/docs/platform/integrations/overview) to automatically synchronize vendors, personnel, assets, and other records where available.
     priority: 90
     metadata:
+      docsLink: https://docs.theopenlane.io/docs/platform/registry/overview
       references:
         - name: Defining your platform
           url: https://docs.theopenlane.io/docs/platform/registry/platforms
@@ -88,4 +89,4 @@ rules:
     priority: 5
     metadata:
       link: /trust-center/overview
-      docsLink: /docs/platform/trust-center/overview
+      docsLink: https://docs.theopenlane.io/docs/platform/trust-center/overview

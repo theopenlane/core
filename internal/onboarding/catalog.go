@@ -21,6 +21,7 @@ var frameworkOrder = map[string]int{
 	"PCI DSS":   4, //nolint:mnd
 }
 
+// Catalog returns the onboarding questionnaire with its dynamic cards and framework options populated
 func Catalog(ctx context.Context, client *generated.Client) (models.Questionnaire, error) {
 	questionnaire := defaultQuestionnaire
 

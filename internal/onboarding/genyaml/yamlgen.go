@@ -19,6 +19,16 @@ import (
 
 const modelsPkg = "github.com/theopenlane/core/common/models"
 
+// validInputTypes is the set of input types a question may declare
+var validInputTypes = map[models.InputType]bool{
+	models.InputTypeString:      true,
+	models.InputTypeBoolean:     true,
+	models.InputTypeCheckbox:    true,
+	models.InputTypeSelect:      true,
+	models.InputTypeMultiselect: true,
+	models.InputTypeMultiInput:  true,
+}
+
 func main() {
 	if err := app().Run(context.Background(), os.Args); err != nil {
 		fmt.Fprintln(os.Stderr, err)
@@ -140,7 +150,7 @@ func questionLit(question models.Question) jen.Code {
 	fields := jen.Dict{
 		jen.Id("Key"):       jen.Lit(question.Key),
 		jen.Id("Label"):     jen.Lit(question.Label),
-		jen.Id("InputType"): jen.Qual(modelsPkg, getInputType(question.InputType)),
+		jen.Id("InputType"): jen.Qual(modelsPkg, "InputType").Call(jen.Lit(string(question.InputType))),
 	}
 
 	if question.Description != "" {
@@ -184,32 +194,13 @@ func questionLit(question models.Question) jen.Code {
 func validateQuestionnaire(questionnaire models.Questionnaire) error {
 	for _, step := range questionnaire.Steps {
 		for _, question := range step.Questions {
-			if getInputType(question.InputType) == "" {
+			if !validInputTypes[question.InputType] {
 				return fmt.Errorf("question %q has unsupported inputType %q", question.Key, question.InputType)
 			}
 		}
 	}
 
 	return nil
-}
-
-func getInputType(typ models.InputType) string {
-	switch typ {
-	case models.InputTypeString:
-		return "InputTypeString"
-	case models.InputTypeBoolean:
-		return "InputTypeBoolean"
-	case models.InputTypeCheckbox:
-		return "InputTypeCheckbox"
-	case models.InputTypeSelect:
-		return "InputTypeSelect"
-	case models.InputTypeMultiselect:
-		return "InputTypeMultiselect"
-	case models.InputTypeMultiInput:
-		return "InputTypeMultiInput"
-	default:
-		return ""
-	}
 }
 
 func cardLits(cards []models.Card) []jen.Code {

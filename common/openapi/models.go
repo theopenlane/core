@@ -2605,8 +2605,8 @@ type ProductCatalogResponse struct {
 	models.Catalog
 }
 
-// OnboardingQuestionsReply holds the fields sent on a response to the onboarding questions endpoint.
-type OnboardingQuestionsReply struct {
+// OnboardingQuestionsResponse holds the fields sent on a response to the onboarding questions endpoint.
+type OnboardingQuestionsResponse struct {
 	// Reply is the reply value.
 	rout.Reply
 	// Version is the onboarding questionnaire version.
@@ -2946,4 +2946,3 @@ type AcmeSolverRequest struct {
 var ExampleAcmeSolverRequest = AcmeSolverRequest{
 	Path: "01J4HMNDSZCCQBTY93BF9CBF5D",
 }
-

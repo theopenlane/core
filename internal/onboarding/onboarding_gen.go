@@ -10,17 +10,17 @@ var defaultQuestionnaire = models.Questionnaire{
 		Key:         "company_info",
 		Order:       1,
 		Questions: []models.Question{models.Question{
-			InputType: models.InputTypeString,
+			InputType: models.InputType("string"),
 			Key:       "company_name",
 			Label:     "Company Name",
 			Required:  true,
 		}, models.Question{
 			Description: "We'll use this to setup auto-join to your organization for your teammates and discovery of your vendors and assets automatically.",
-			InputType:   models.InputTypeMultiInput,
+			InputType:   models.InputType("multi-input"),
 			Key:         "company_domains",
 			Label:       "Company Domains",
 		}, models.Question{
-			InputType: models.InputTypeSelect,
+			InputType: models.InputType("select"),
 			Key:       "company_size",
 			Label:     "Company Size",
 			Options: []models.QuestionOption{models.QuestionOption{
@@ -43,7 +43,7 @@ var defaultQuestionnaire = models.Questionnaire{
 				Value: "1001+",
 			}},
 		}, models.Question{
-			InputType: models.InputTypeSelect,
+			InputType: models.InputType("select"),
 			Key:       "company_sector",
 			Label:     "Company Sector",
 			Options: []models.QuestionOption{models.QuestionOption{
@@ -70,7 +70,7 @@ var defaultQuestionnaire = models.Questionnaire{
 				Equals: "other",
 				Key:    "company_sector",
 			},
-			InputType: models.InputTypeString,
+			InputType: models.InputType("string"),
 			Key:       "company_sector_other",
 			Label:     "Please specify",
 		}},
@@ -80,7 +80,7 @@ var defaultQuestionnaire = models.Questionnaire{
 		Key:         "user_info",
 		Order:       2,
 		Questions: []models.Question{models.Question{
-			InputType: models.InputTypeSelect,
+			InputType: models.InputType("select"),
 			Key:       "user_role",
 			Label:     "Role",
 			Options: []models.QuestionOption{models.QuestionOption{
@@ -107,11 +107,11 @@ var defaultQuestionnaire = models.Questionnaire{
 				Equals: "other",
 				Key:    "user_role",
 			},
-			InputType: models.InputTypeString,
+			InputType: models.InputType("string"),
 			Key:       "user_role_other",
 			Label:     "Please specify",
 		}, models.Question{
-			InputType: models.InputTypeSelect,
+			InputType: models.InputType("select"),
 			Key:       "user_department",
 			Label:     "Department",
 			Options: []models.QuestionOption{models.QuestionOption{
@@ -141,7 +141,7 @@ var defaultQuestionnaire = models.Questionnaire{
 		Questions: []models.Question{models.Question{
 			Description:    "Select all frameworks you are currently pursuing.",
 			DynamicOptions: true,
-			InputType:      models.InputTypeMultiselect,
+			InputType:      models.InputType("multiselect"),
 			Key:            "frameworks",
 			Label:          "What compliance program(s) are you working toward?",
 		}, models.Question{
@@ -149,7 +149,7 @@ var defaultQuestionnaire = models.Questionnaire{
 				Equals: "other",
 				Key:    "frameworks",
 			},
-			InputType: models.InputTypeString,
+			InputType: models.InputType("string"),
 			Key:       "other_framework_description",
 			Label:     "Which other framework(s)?",
 		}},
@@ -160,12 +160,12 @@ var defaultQuestionnaire = models.Questionnaire{
 		Order:       4,
 		Questions: []models.Question{models.Question{
 			Description: "Controls are the security and operational practices your organization follows, like requiring MFA, reviewing access, or backing up data.",
-			InputType:   models.InputTypeBoolean,
+			InputType:   models.InputType("boolean"),
 			Key:         "has_existing_controls",
 			Label:       "Do you already have controls documented?",
 		}, models.Question{
 			Description: "Policies and procedures explain how your organization works, like how employees handle data, respond to incidents, or request access.",
-			InputType:   models.InputTypeBoolean,
+			InputType:   models.InputType("boolean"),
 			Key:         "has_existing_policies",
 			Label:       "Do you already have policies and procedures documented?",
 		}},
@@ -176,7 +176,7 @@ var defaultQuestionnaire = models.Questionnaire{
 		Order:       5,
 		Questions: []models.Question{models.Question{
 			Description: "We can suggest audit partners and next steps when you're ready.",
-			InputType:   models.InputTypeSelect,
+			InputType:   models.InputType("select"),
 			Key:         "auditor_status",
 			Label:       "Are you currently working with an auditor?",
 			Options: []models.QuestionOption{models.QuestionOption{
@@ -194,7 +194,7 @@ var defaultQuestionnaire = models.Questionnaire{
 				Equals: "yes",
 				Key:    "auditor_status",
 			},
-			InputType: models.InputTypeString,
+			InputType: models.InputType("string"),
 			Key:       "auditor_name",
 			Label:     "Auditor name",
 		}, models.Question{
@@ -203,12 +203,12 @@ var defaultQuestionnaire = models.Questionnaire{
 				Key:    "auditor_status",
 			},
 			Format:    "email",
-			InputType: models.InputTypeString,
+			InputType: models.InputType("string"),
 			Key:       "auditor_email",
 			Label:     "Auditor email",
 		}, models.Question{
 			Description: "We can suggest partners and next steps when you're ready.",
-			InputType:   models.InputTypeSelect,
+			InputType:   models.InputType("select"),
 			Key:         "vciso_preference",
 			Label:       "Do you want help from a hands-on compliance partner?",
 			Options: []models.QuestionOption{models.QuestionOption{
@@ -224,7 +224,7 @@ var defaultQuestionnaire = models.Questionnaire{
 		}, models.Question{
 			CheckboxLabel: "Yes, have someone reach out to me",
 			Description:   "Our team can help with onboarding, product questions, and best practices.",
-			InputType:     models.InputTypeCheckbox,
+			InputType:     models.InputType("checkbox"),
 			Key:           "demo_requested",
 			Label:         "Would you like help getting started?",
 		}},

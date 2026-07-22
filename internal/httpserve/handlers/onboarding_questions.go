@@ -17,7 +17,7 @@ func (h *Handler) ListOnboardingQuestions(ctx echo.Context) error {
 		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
-	return h.Success(ctx, models.OnboardingQuestionsReply{
+	return h.Success(ctx, models.OnboardingQuestionsResponse{
 		Reply:   rout.Reply{Success: true},
 		Version: questionnaire.Version,
 		Steps:   questionnaire.Steps,

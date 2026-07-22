@@ -6,7 +6,7 @@ rules:
       Kick your program off by creating a program with the framework controls
     priority: 10
     metadata:
-      docsLink: /docs/platform/compliance-management/programs/overview
+      docsLink: https://docs.theopenlane.io/docs/platform/compliance-management/programs/overview
       link: '{{if eq .value "soc2"}}/programs/create/soc2?onboarding=true{{else}}/programs/create/framework-based?onboarding=true&framework={{.label}}{{end}}{{if .auditor_name}}&auditorName={{.auditor_name}}{{end}}{{if .auditor_email}}&auditorEmail={{.auditor_email}}{{end}}'
 
   framework-generic:
@@ -16,7 +16,7 @@ rules:
       Kick your program off by creating a program with the controls you need
     priority: 10
     metadata:
-      docsLink: /docs/platform/compliance-management/programs/overview
+      docsLink: https://docs.theopenlane.io/docs/platform/compliance-management/programs/overview
       link: /programs/create?onboarding=true
 
   import-existing-controls:
@@ -26,7 +26,7 @@ rules:
       Controls define how you actually meet requirements, grounded in the policies you just wrote. We built CSV import so you can bring in controls you have already defined in other systems or spreadsheets.
     priority: 50
     metadata:
-      docsLink: /docs/platform/compliance-management/controls/import
+      docsLink: https://docs.theopenlane.io/docs/platform/compliance-management/controls/import
       references:
         - name: "Getting started: From Gaps to Controls"
           url: https://docs.theopenlane.io/docs/platform/grc-fundamentals/audit/gapanalysis#from-gaps-to-controls
@@ -48,7 +48,7 @@ rules:
   #   metadata:
   #     # TODO: this is not a real link, this needs to be implemented before this is used
   #     link: /compliance/controls/templates
-  #     docsLink: /docs/platform/compliance-management/controls/writing-controls
+  #     docsLink: https://docs.theopenlane.io/docs/platform/compliance-management/controls/writing-controls
 
   # Using until template control work is complete
   import-template-controls:
@@ -62,7 +62,7 @@ rules:
       Need some help? [Book](https://calendly.com/kwaters-theopenlane) some time with us and we'll get you started.
     priority: 50
     metadata:
-      docsLink: /docs/platform/compliance-management/controls/writing-controls
+      docsLink: https://docs.theopenlane.io/docs/platform/compliance-management/controls/writing-controls
       references:
         - name: "Getting Started: From Gaps To Controls"
           url: https://docs.theopenlane.io/docs/platform/grc-fundamentals/audit/gapanalysis#from-gaps-to-controls
@@ -94,7 +94,7 @@ rules:
       Keep Markdown-based policies in sync directly from a GitHub repository.
     priority: 70
     metadata:
-      docsLink: /docs/platform/compliance-management/policy-and-procedure-management/import
+      docsLink: https://docs.theopenlane.io/docs/platform/compliance-management/policy-and-procedure-management/import
       references:
         - name: "Best Practices: Writing Policies That Hold Up"
           url: https://docs.theopenlane.io/docs/platform/compliance-management/policy-and-procedure-management/policies#writing-policies-that-hold-up
@@ -139,7 +139,7 @@ rules:
 
     priority: 70
     metadata:
-      docsLink: /docs/platform/compliance-management/policy-and-procedure-management/policies
+      docsLink: https://docs.theopenlane.io/docs/platform/compliance-management/policy-and-procedure-management/policies
       references:
         - name: Best practices for writing policies
           url: https://docs.theopenlane.io/docs/platform/compliance-management/policy-and-procedure-management/policies#writing-policies-that-hold-up
@@ -159,16 +159,12 @@ rules:
     details: |
       When you're ready for your audit, invite your auditor to Openlane so they can review evidence, request additional documentation, and collaborate with your team throughout the audit.
 
-      ### Next Steps
-
       #### Invite your auditor
 
-      Invite your auditor as a member of your Openlane organization with the Auditor role.
-
-      - [Console](https://console.theopenlane.io/settings/members)
-      - [Documentation](https://docs.theopenlane.io/docs/platform/organizations/members)
+      [Invite](https://console.theopenlane.io/settings/members) your auditor as a member of your Openlane organization with the Auditor role
     priority: 40
     metadata:
+      docsLink: https://docs.theopenlane.io/docs/platform/organizations/members
       references:
         - name: Find an Openlane Auditor Partner
           url: https://www.theopenlane.io/alliances/auditors
@@ -187,8 +183,6 @@ rules:
       references:
         - name: "Best Practices: Selecting an Audit Firm"
           url: https://docs.theopenlane.io/docs/platform/grc-fundamentals/audit/firms
-        - name: Find an Openlane Auditor Partner
-          url: https://www.theopenlane.io/alliances/auditors
 
   wants-partner-recommendation:
     title: Get matched with a vCISO

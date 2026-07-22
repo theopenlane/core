@@ -3,7 +3,6 @@ package taskrules
 import (
 	"embed"
 	"fmt"
-	"strings"
 
 	"gopkg.in/yaml.v3"
 )
@@ -11,26 +10,20 @@ import (
 //go:embed templates/*.yaml
 var templatesFS embed.FS
 
-// DocsBaseURL is prepended to any metadata.docsLink value that starts with "/", so task
-// definitions can use relative paths (e.g. "/compliance/controls") instead of full URLs
-const DocsBaseURL = "https://docs.theopenlane.io"
-
 // Template is the rendered content for one task rule
 type Template struct {
-	Title        string         `yaml:"title"`
-	Details      string         `yaml:"details"`
-	Priority     int            `yaml:"priority"`
-	TaskKindName string         `yaml:"taskKindName,omitempty"`
-	Source       Source         `yaml:"source,omitempty"`
-	Metadata     map[string]any `yaml:"metadata,omitempty"`
-}
-
-// validSources are the Source values allowed in a template YAML file; empty defaults to
-// SourceRecommendations at lookup time, so it's valid here too
-var validSources = map[Source]bool{
-	"":                    true,
-	SourceRecommendations: true,
-	SourceOnboarding:      true,
+	// Title is the title of the generated task
+	Title string `yaml:"title"`
+	// Details is the body content of the generated task
+	Details string `yaml:"details"`
+	// Priority is the priority of the generated task
+	Priority int `yaml:"priority"`
+	// TaskKindName is the kind of task to generate
+	TaskKindName string `yaml:"taskKindName,omitempty"`
+	// Source is where the task rule originates
+	Source Source `yaml:"source,omitempty"`
+	// Metadata is arbitrary extra data attached to the task
+	Metadata map[string]any `yaml:"metadata,omitempty"`
 }
 
 type templateFile struct {
@@ -72,28 +65,11 @@ func mustLoadTemplates() map[string]Template {
 				panic(fmt.Sprintf("taskrules: duplicate template rule id %q", ruleID))
 			}
 
-			if !validSources[tmpl.Source] {
-				panic(fmt.Sprintf("taskrules: rule %q has unrecognized source %q", ruleID, tmpl.Source))
-			}
-
-			resolveDocsLink(tmpl.Metadata)
-
 			out[ruleID] = tmpl
 		}
 	}
 
 	return out
-}
-
-// resolveDocsLink rewrites a relative metadata.docsLink value (starting with "/") to a full URL
-// under DocsBaseURL, in place. Absolute URLs and missing/non-string values are left as-is
-func resolveDocsLink(metadata map[string]any) {
-	link, ok := metadata["docsLink"].(string)
-	if !ok || !strings.HasPrefix(link, "/") {
-		return
-	}
-
-	metadata["docsLink"] = DocsBaseURL + link
 }
 
 // Lookup returns the rendered template registered for ruleID
