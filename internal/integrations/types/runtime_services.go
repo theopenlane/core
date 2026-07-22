@@ -16,8 +16,6 @@ type RuntimeServices interface {
 	Gala() *gala.Gala
 	// ExecuteRuntimeOperation runs one system-initiated operation inline with no installation or run tracking
 	ExecuteRuntimeOperation(ctx context.Context, definitionID, operationName string, config json.RawMessage) (json.RawMessage, error)
-	// RuntimeClientConfigured reports whether a pre-built runtime client exists for the definition
-	RuntimeClientConfigured(definitionID string) bool
 	// Dispatch enqueues one integration operation through the runtime-managed dispatcher
 	Dispatch(ctx context.Context, req DispatchRequest) (DispatchResult, error)
 }

@@ -108,14 +108,6 @@ func (s domainScanSaga) submitAndScheduleDomainScan(ctx context.Context, organiz
 func (s domainScanSaga) submitAndScheduleDomainScans(ctx context.Context, organizationID string, scanIDs map[string]string, forceRefresh bool, siblingScanIDs []string) error {
 	systemCtx := domainScanSystemContext(ctx, organizationID)
 
-	// skip submission when the runtime client isn't configured so we don't fail the operation and
-	// trigger endless resubmission of a scan that can never run in this environment
-	if !s.services.RuntimeClientConfigured(DefinitionID.ID()) {
-		logx.FromContext(ctx).Warn().Msg("domain scan: runtime client not configured, skipping submission")
-
-		return nil
-	}
-
 	if err := s.services.DB().Scan.Update().
 		Where(scan.IDIn(siblingScanIDs...)).
 		SetStatus(enums.ScanStatusProcessing).

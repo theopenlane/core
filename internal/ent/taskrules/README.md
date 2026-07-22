@@ -1,8 +1,6 @@
 # taskrules
 
-This package defines **suggested-task rules**: rules that automatically create tasks for an
-organization in response to an entity being created or updated (onboarding answers submitted, an
-organization created, a notification raised, and so on).
+This package defines **suggested-task rules**: rules that automatically create tasks for an organization in response to an entity being created or updated (onboarding answers submitted, an organization created, a notification raised, etc)
 
 A rule has two halves that are joined by a shared **rule ID**:
 
@@ -98,15 +96,12 @@ rules:
           url: https://docs.theopenlane.io/docs/platform/compliance-management/controls/import#fields
 ```
 
-`title`, `details`, `priority`, and `taskKindName` are the core task fields; `source` and
-`metadata` are optional. The task's `Key` (its stable identifier) is generated automatically from
-the rule ID (and the element value for `EachElement` rules)
+`title`, `details`, `priority`, and `taskKindName` are the core task fields; `source` and `metadata` are optional. The task's `Key` (its stable identifier) is generated automatically from the rule ID (and the element value for `EachElement` rules)
 
 ## Templating
 
 `title`, `details`, and every string value in `metadata` are executed as
-[Go `text/template`](https://pkg.go.dev/text/template) strings when the task is rendered. Available
-data:
+[Go `text/template`](https://pkg.go.dev/text/template) strings when the task is rendered. Available data:
 
 - **`{{.value}}`** — the current element (EachElement rules only; empty for Expression rules).
 - **`{{.label}}`** — a human-readable label for `.value`, resolved by an optional per-rule resolver
@@ -114,8 +109,7 @@ data:
   `.value`.
 - **the firing entity's own scalar fields** — e.g. `{{.id}}`, `{{.body}}`, `{{.auditor_email}}`.
 
-Missing keys render as empty (`missingkey=zero`), so conditional links are safe:
-
+Example:
 ```yaml
 link: '{{if eq .value "soc2"}}/programs/create/soc2{{else}}/programs/create/framework-based?framework={{.label}}{{end}}'
 ```
@@ -132,7 +126,7 @@ link: '{{if eq .value "soc2"}}/programs/create/soc2{{else}}/programs/create/fram
    schema it should watch:
    ```go
    // on a field:
-   Annotations(entx.FieldTaskRule(taskrules.OnboardingComplianceRules...))
+   entx.FieldTaskRule(taskrules.OnboardingComplianceRules...)
    // or on a schema:
    entx.SchemaTaskRule(taskrules.OrganizationSuggestedRules...)
    ```
@@ -144,5 +138,4 @@ link: '{{if eq .value "soc2"}}/programs/create/soc2{{else}}/programs/create/fram
    the raw value — register one in `taskLabelResolvers`
    (`internal/ent/hooks/listeners_task_rules.go`).
 
-6. **Regenerate any dependent code and run the tests.** A rule spec with no matching template (or a
-   template with no spec) will surface as a missing-template error when the rule fires.
+6. **Regenerate any dependent code and run the tests.** A rule spec with no matching template (or a template with no spec) will surface as a missing-template error when the rule fires.

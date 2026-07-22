@@ -193,6 +193,8 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 					Topic:        DefinitionID.OperationTopic(DomainScanRequestOp.Name()),
 					ConfigSchema: domainScanRequestSchema,
 					Policy:       types.ExecutionPolicy{Inline: true, SkipRunRecord: true},
+					// Disable if the runtime is not provisioned
+					DisabledForAll: !runtime.Provisioned(),
 					// only applied to user created scans, not onboarding scans
 					RateLimit:             &types.RateLimitPolicy{Window: time.Hour},
 					Handle:                DomainScanRequest{}.Handle(),
