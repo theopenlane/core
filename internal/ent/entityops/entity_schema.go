@@ -7,7 +7,9 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/entx"
+
+	generated "github.com/theopenlane/core/internal/ent/generated"
 )
 
 // SchemaDescriptor is the canonical identity for an entity schema
@@ -77,6 +79,25 @@ type FieldDescriptor struct {
 	InputKey string `json:"inputKey,omitempty"`
 	// LookupKey reports whether the field is the ingest upsert lookup column for its schema
 	LookupKey bool `json:"lookupKey,omitempty"`
+	// TaskRules are suggested-task rules declared on this field via entx.FieldTaskRule
+	TaskRules []TaskRuleDescriptor `json:"taskRules,omitempty"`
+}
+
+// TaskRuleDescriptor describes one suggested-task trigger: a CEL condition plus the RuleID a
+// runtime engine uses to look up the task's template content
+type TaskRuleDescriptor struct {
+	// RuleID identifies which task template to render at rule evaluation time
+	RuleID string `json:"ruleId"`
+	// Expression is a CEL boolean expression evaluated with the owning field's decoded JSON value
+	// bound as "value" (e.g. "value.policies.has_existing == true"); empty always fires. Ignored
+	// when EachElement is set
+	Expression string `json:"expression,omitempty"`
+	// EachElement, when set, is a CEL expression resolving to a list within the field's value; the
+	// rule expands to fire once per element instead of evaluating Expression as a single boolean
+	EachElement string `json:"eachElement,omitempty"`
+	// Trigger selects create-and-update (empty) or create-only evaluation; compare against
+	// entx.TaskRuleOnCreateOnly / entx.TaskRuleOnCreateOrUpdate
+	Trigger entx.TaskRuleTrigger `json:"trigger,omitempty"`
 }
 
 // EdgeDescriptor describes an edge on a schema. It is the single edge-capability record shared by

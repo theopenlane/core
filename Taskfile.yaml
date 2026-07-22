@@ -96,8 +96,10 @@ tasks:
       - internal/ent/generate/**/*.go
       - internal/ent/mixin/**/*.go
       - internal/ent/templates/**/*
+      - internal/ent/taskrules/**/*.go
     generates:
       - internal/ent/generated/**/*.go
+      - internal/ent/entityops/**/*.go
       - internal/graphapi/schema/ent.graphql
       - internal/graphapi/schema/history/ent.graphql
     method: checksum

@@ -103,14 +103,6 @@ steps:
         description: Select all frameworks you are currently pursuing.
         inputType: multiselect
         dynamicOptions: true
-        tasks:
-          eachSelected:
-            key: framework-{key}
-            title: Set up your {label} program
-            details: Create the compliance program and start mapping the required controls, policies, and evidence.
-            priority: 10
-            metadata:
-              docsLink: https://docs.theopenlane.io/compliance
       - key: other_framework_description
         label: Which other framework(s)?
         inputType: string
@@ -126,40 +118,10 @@ steps:
         label: Do you already have controls documented?
         description: Controls are the security and operational practices your organization follows, like requiring MFA, reviewing access, or backing up data.
         inputType: boolean
-        tasks:
-          "true":
-            key: import-existing-controls
-            title: Import existing controls
-            details: Bring your documented controls into Openlane and connect them to your compliance program.
-            priority: 20
-            metadata:
-              docsLink: https://docs.theopenlane.io/compliance/controls
-          "false":
-            key: import-template-controls
-            title: Start with template controls
-            details: Import a recommended starter set of controls and customize them for your organization.
-            priority: 20
-            metadata:
-              docsLink: https://docs.theopenlane.io/compliance/controls
       - key: has_existing_policies
         label: Do you already have policies and procedures documented?
         description: Policies and procedures explain how your organization works, like how employees handle data, respond to incidents, or request access.
         inputType: boolean
-        tasks:
-          "true":
-            key: import-existing-policies
-            title: Import existing policies
-            details: Upload existing policies or connect a document source so Openlane can track them.
-            priority: 30
-            metadata:
-              docsLink: https://docs.theopenlane.io/policies
-          "false":
-            key: import-policy-templates
-            title: Start with policy templates
-            details: Create starter policies and procedures that your team can customize.
-            priority: 30
-            metadata:
-              docsLink: https://docs.theopenlane.io/policies
   - key: support_preferences
     title: Support Preferences
     description: "[Optional] Help us recommend the right partners and resources."
