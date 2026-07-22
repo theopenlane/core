@@ -3,7 +3,7 @@ module github.com/theopenlane/core/cli
 go 1.26.5
 
 require (
-	github.com/99designs/gqlgen v0.17.93
+	github.com/99designs/gqlgen v0.17.94
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
 	github.com/go-viper/mapstructure/v2 v2.5.0
 	github.com/goccy/go-yaml v1.19.2
@@ -19,7 +19,7 @@ require (
 	github.com/spf13/cobra v1.10.2
 	github.com/theopenlane/core v1.26.1
 	github.com/theopenlane/core/common v1.0.24
-	github.com/theopenlane/go-client v0.12.3
+	github.com/theopenlane/go-client v0.12.5
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.35.0
 	github.com/theopenlane/utils v0.7.1
@@ -208,13 +208,13 @@ require (
 	golang.org/x/crypto v0.54.0 // indirect
 	golang.org/x/exp v0.0.0-20260508232706-74f9aab9d74a // indirect
 	golang.org/x/image v0.43.0 // indirect
-	golang.org/x/mod v0.37.0 // indirect
+	golang.org/x/mod v0.38.0 // indirect
 	golang.org/x/net v0.57.0 // indirect
 	golang.org/x/sync v0.22.0 // indirect
 	golang.org/x/sys v0.47.0 // indirect
 	golang.org/x/text v0.40.0 // indirect
 	golang.org/x/time v0.15.0 // indirect
-	golang.org/x/tools v0.47.0 // indirect
+	golang.org/x/tools v0.48.0 // indirect
 	golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da // indirect
 	gonum.org/v1/gonum v0.17.0 // indirect
 	google.golang.org/api v0.288.0 // indirect
