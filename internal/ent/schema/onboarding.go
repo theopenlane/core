@@ -71,7 +71,8 @@ func (Onboarding) Fields() []ent.Field {
 			Annotations(entx.FieldTaskRule(taskrules.OnboardingComplianceRules...)),
 		field.Bool("demo_requested").
 			Default(false).
-			Optional(),
+			Optional().
+			Annotations(entx.FieldTaskRule(taskrules.OnboardingDemoRequestedRule...)),
 	}
 }
 

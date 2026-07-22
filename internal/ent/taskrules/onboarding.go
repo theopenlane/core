@@ -30,44 +30,48 @@ var OnboardingComplianceRules = []entx.TaskRuleSpec{
 	},
 	{
 		RuleID:     RuleImportExistingControls,
-		Expression: "value.has_existing_controls == true",
+		Expression: "value.existing_controls == true",
 		Trigger:    entx.TaskRuleOnCreateOnly,
 	},
 	{
 		RuleID:     RuleImportTemplateControls,
-		Expression: "!(has(value.has_existing_controls) && value.has_existing_controls == true)",
+		Expression: "!(has(value.existing_controls) && value.existing_controls == true)",
 		Trigger:    entx.TaskRuleOnCreateOnly,
 	},
 	{
 		RuleID:     RuleImportExistingPolicies,
-		Expression: "value.has_existing_policies == true",
+		Expression: "value.existing_policies_procedures == true",
 		Trigger:    entx.TaskRuleOnCreateOnly,
 	},
 	{
 		RuleID:     RuleImportPolicyTemplates,
-		Expression: "!(has(value.has_existing_policies) && value.has_existing_policies == true)",
+		Expression: "!(has(value.existing_policies_procedures) && value.existing_policies_procedures == true)",
 		Trigger:    entx.TaskRuleOnCreateOnly,
 	},
 	{
 		RuleID:     RuleHasAuditorAtOnboarding,
-		Expression: "value.auditor_status == 'yes'",
+		Expression: "value.has_auditor == true",
 		Trigger:    entx.TaskRuleOnCreateOnly,
 	},
 	{
 		RuleID:     RuleWantsAuditorRecommendation,
-		Expression: "value.auditor_status == 'recommendations'",
+		Expression: "value.recommend_auditors == true",
 		Trigger:    entx.TaskRuleOnCreateOnly,
 	},
 	{
 		RuleID:     RuleWantsPartnerRecommendation,
-		Expression: "value.vciso_preference == 'connect_vciso_partner'",
+		Expression: "value.recommend_vciso_partner == true",
 		Trigger:    entx.TaskRuleOnCreateOnly,
 	},
+}
+
+// OnboardingDemoRequestedRule fires directly off the sibling demo_requested field --
+// it lives outside OnboardingComplianceRules because "compliance" and "demo_requested"
+// are separate ent fields
+var OnboardingDemoRequestedRule = []entx.TaskRuleSpec{
 	{
-		RuleID: RuleDemoRequested,
-		Expression: "value.demo_requested == true || (" +
-			"!(has(value.auditor_status) && (value.auditor_status == 'yes' || value.auditor_status == 'recommendations')) && " +
-			"!(has(value.vciso_preference) && value.vciso_preference == 'connect_vciso_partner'))",
-		Trigger: entx.TaskRuleOnCreateOnly,
+		RuleID:     RuleDemoRequested,
+		Expression: "value == true",
+		Trigger:    entx.TaskRuleOnCreateOnly,
 	},
 }
