@@ -26,7 +26,7 @@ func Builder(cfg Config) registry.Builder {
 				DisplayName: "GitHub App",
 				Description: "Install the Openlane GitHub App to collect repository metadata and security alerts",
 				Category:    "source-control",
-				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/github_app/overview",
+				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/github_app",
 				Tags:        []string{"vulnerabilities", "assets", "directory"},
 				Active:      true,
 				Visible:     true,
