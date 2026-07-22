@@ -4,6 +4,6 @@ rules:
     taskKindName: Registry
     details: |
       {{.body}}
-    priority: 90
+    priority: 100
     metadata:
       link: /exposure/scans/domain-scan?scanId={{.id}}
