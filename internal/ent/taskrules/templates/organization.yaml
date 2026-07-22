@@ -67,19 +67,6 @@ rules:
 
       To keep your Registry up to date, we recommend connecting one of our supported [integrations](https://docs.theopenlane.io/docs/platform/integrations/overview) to automatically synchronize vendors, personnel, assets, and other records where available.
     priority: 90
-    metadata:
-      docsLink: https://docs.theopenlane.io/docs/platform/registry/overview
-      references:
-        - name: Defining your platform
-          url: https://docs.theopenlane.io/docs/platform/registry/platforms
-        - name: Managing vendors
-          url: https://docs.theopenlane.io/docs/platform/registry/entities
-        - name: Managing personnel
-          url: https://docs.theopenlane.io/docs/platform/registry/personnel/overview
-        - name: Inventorying assets
-          url: https://docs.theopenlane.io/docs/platform/registry/assets
-        - name: Connecting integrations
-          url: https://docs.theopenlane.io/docs/platform/integrations/overview
 
   suggested-configure-trust-center:
     title: Configure your trust center

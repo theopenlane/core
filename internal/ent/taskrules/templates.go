@@ -22,7 +22,10 @@ type Template struct {
 	TaskKindName string `yaml:"taskKindName,omitempty"`
 	// Source is where the task rule originates
 	Source Source `yaml:"source,omitempty"`
-	// Metadata is arbitrary extra data attached to the task
+	// Metadata is arbitrary extra data attached to the task. Recognized keys by the frontend:
+	//   link: if provided, the task is not opened and the user is taken there instead, so details should be short
+	//   docsLink: the URL for the View Docs/Docs buttons
+	//   references: additional information shown in the task view
 	Metadata map[string]any `yaml:"metadata,omitempty"`
 }
 
@@ -36,24 +39,16 @@ const (
 	dirName = "templates"
 )
 
-// mustLoadTemplates reads every *.yaml file in templates
+// mustLoadTemplates reads every *.yaml file in templates. The embed directive guarantees the
+// directory and files exist, so only their contents need validating here
 func mustLoadTemplates() map[string]Template {
-	entries, err := templatesFS.ReadDir(dirName)
-	if err != nil {
-		panic(fmt.Sprintf("taskrules: reading %s dir: %v", dirName, err))
-	}
+	entries, _ := templatesFS.ReadDir(dirName) //nolint:errcheck
 
 	out := map[string]Template{}
 
 	for _, entry := range entries {
-		if entry.IsDir() {
-			continue
-		}
-
-		raw, err := templatesFS.ReadFile(dirName + "/" + entry.Name())
-		if err != nil {
-			panic(fmt.Sprintf("taskrules: reading %s: %v", entry.Name(), err))
-		}
+		// error is ignored: the entry was just listed from the embedded FS
+		raw, _ := templatesFS.ReadFile(dirName + "/" + entry.Name())
 
 		var f templateFile
 		if err := yaml.Unmarshal(raw, &f); err != nil {
