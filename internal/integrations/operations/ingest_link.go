@@ -14,11 +14,7 @@ import (
 
 // injectLinks resolves the mapping's cross-object link rules and writes the matched target ids into
 // the mapped create-input payload under each edge's create-input key, so the record is created (or
-// emitted for async creation) with its edges already set rather than linked in a post-persist step.
-// rules are the effective link rules (installation override or definition default); the payload's
-// snake_case input keys double as the source context the rule matches and CEL expressions read.
-// Each rule translates to a shared LinkSpec keyed by the resolved edge name — the same shape a
-// workflow definition uses — with ambiguous target types rejected rather than guessed at
+// emitted for async creation) with its edges already set rather than linked in a post-persist step
 func injectLinks(ctx context.Context, db *ent.Client, ownerID string, rules []types.LinkRule, sourceSchema *entityops.Schema, payload json.RawMessage) (json.RawMessage, error) {
 	if len(rules) == 0 {
 		return payload, nil
