@@ -33702,10 +33702,6 @@ type StandardHistory implements Node {
   """
   standardType: String
   """
-  priority for displaying standards
-  """
-  priority: Int!
-  """
   version of the standard
   """
   version: String
@@ -33779,7 +33775,6 @@ enum StandardHistoryOrderField {
   governing_body
   STATUS
   standard_type
-  priority
 }
 """
 StandardHistoryStandardStatus is enum for the field status
@@ -34170,17 +34165,6 @@ input StandardHistoryWhereInput {
   standardTypeNotNil: Boolean
   standardTypeEqualFold: String
   standardTypeContainsFold: String
-  """
-  priority field predicates
-  """
-  priority: Int
-  priorityNEQ: Int
-  priorityIn: [Int!]
-  priorityNotIn: [Int!]
-  priorityGT: Int
-  priorityGTE: Int
-  priorityLT: Int
-  priorityLTE: Int
   """
   version field predicates
   """

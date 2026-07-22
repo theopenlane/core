@@ -123,12 +123,6 @@ func (Standard) Fields() []ent.Field {
 			).
 			Optional().
 			Comment("type of the standard - cybersecurity, healthcare , financial, etc."),
-		field.Int("priority").
-			Default(0).
-			Annotations(
-				entgql.OrderField("priority"),
-			).
-			Comment("priority for displaying standards"),
 		field.String("version").
 			Optional().
 			Comment("version of the standard"),

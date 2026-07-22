@@ -461,27 +461,6 @@ func (_u *StandardUpdate) ClearStandardType() *StandardUpdate {
 	return _u
 }
 
-// SetPriority sets the "priority" field.
-func (_u *StandardUpdate) SetPriority(v int) *StandardUpdate {
-	_u.mutation.ResetPriority()
-	_u.mutation.SetPriority(v)
-	return _u
-}
-
-// SetNillablePriority sets the "priority" field if the given value is not nil.
-func (_u *StandardUpdate) SetNillablePriority(v *int) *StandardUpdate {
-	if v != nil {
-		_u.SetPriority(*v)
-	}
-	return _u
-}
-
-// AddPriority adds value to the "priority" field.
-func (_u *StandardUpdate) AddPriority(v int) *StandardUpdate {
-	_u.mutation.AddPriority(v)
-	return _u
-}
-
 // SetVersion sets the "version" field.
 func (_u *StandardUpdate) SetVersion(v string) *StandardUpdate {
 	_u.mutation.SetVersion(v)
@@ -924,12 +903,6 @@ func (_u *StandardUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.StandardTypeCleared() {
 		_spec.ClearField(standard.FieldStandardType, field.TypeString)
-	}
-	if value, ok := _u.mutation.Priority(); ok {
-		_spec.SetField(standard.FieldPriority, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.AddedPriority(); ok {
-		_spec.AddField(standard.FieldPriority, field.TypeInt, value)
 	}
 	if value, ok := _u.mutation.Version(); ok {
 		_spec.SetField(standard.FieldVersion, field.TypeString, value)
@@ -1637,27 +1610,6 @@ func (_u *StandardUpdateOne) ClearStandardType() *StandardUpdateOne {
 	return _u
 }
 
-// SetPriority sets the "priority" field.
-func (_u *StandardUpdateOne) SetPriority(v int) *StandardUpdateOne {
-	_u.mutation.ResetPriority()
-	_u.mutation.SetPriority(v)
-	return _u
-}
-
-// SetNillablePriority sets the "priority" field if the given value is not nil.
-func (_u *StandardUpdateOne) SetNillablePriority(v *int) *StandardUpdateOne {
-	if v != nil {
-		_u.SetPriority(*v)
-	}
-	return _u
-}
-
-// AddPriority adds value to the "priority" field.
-func (_u *StandardUpdateOne) AddPriority(v int) *StandardUpdateOne {
-	_u.mutation.AddPriority(v)
-	return _u
-}
-
 // SetVersion sets the "version" field.
 func (_u *StandardUpdateOne) SetVersion(v string) *StandardUpdateOne {
 	_u.mutation.SetVersion(v)
@@ -2130,12 +2082,6 @@ func (_u *StandardUpdateOne) sqlSave(ctx context.Context) (_node *Standard, err 
 	}
 	if _u.mutation.StandardTypeCleared() {
 		_spec.ClearField(standard.FieldStandardType, field.TypeString)
-	}
-	if value, ok := _u.mutation.Priority(); ok {
-		_spec.SetField(standard.FieldPriority, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.AddedPriority(); ok {
-		_spec.AddField(standard.FieldPriority, field.TypeInt, value)
 	}
 	if value, ok := _u.mutation.Version(); ok {
 		_spec.SetField(standard.FieldVersion, field.TypeString, value)

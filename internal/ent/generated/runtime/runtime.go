@@ -7173,10 +7173,6 @@ func init() {
 	standardDescFreeToUse := standardFields[10].Descriptor()
 	// standard.DefaultFreeToUse holds the default value on creation for the free_to_use field.
 	standard.DefaultFreeToUse = standardDescFreeToUse.Default.(bool)
-	// standardDescPriority is the schema descriptor for priority field.
-	standardDescPriority := standardFields[12].Descriptor()
-	// standard.DefaultPriority holds the default value on creation for the priority field.
-	standard.DefaultPriority = standardDescPriority.Default.(int)
 	// standardDescID is the schema descriptor for id field.
 	standardDescID := standardMixinFields3[0].Descriptor()
 	// standard.DefaultID holds the default value on creation for the id field.

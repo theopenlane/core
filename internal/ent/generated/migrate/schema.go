@@ -6993,7 +6993,6 @@ var (
 		{Name: "is_public", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "free_to_use", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "standard_type", Type: field.TypeString, Nullable: true},
-		{Name: "priority", Type: field.TypeInt, Default: 0},
 		{Name: "version", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "logo_file_id", Type: field.TypeString, Nullable: true},
@@ -7006,13 +7005,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "standards_organizations_standards",
-				Columns:    []*schema.Column{StandardsColumns[27]},
+				Columns:    []*schema.Column{StandardsColumns[26]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "standards_files_logo_file",
-				Columns:    []*schema.Column{StandardsColumns[28]},
+				Columns:    []*schema.Column{StandardsColumns[27]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -7021,7 +7020,7 @@ var (
 			{
 				Name:    "standard_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{StandardsColumns[27]},
+				Columns: []*schema.Column{StandardsColumns[26]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},

@@ -2472,7 +2472,6 @@ type ComplexityRoot struct {
 		Name                  func(childComplexity int) int
 		Operation             func(childComplexity int) int
 		OwnerID               func(childComplexity int) int
-		Priority              func(childComplexity int) int
 		Ref                   func(childComplexity int) int
 		Revision              func(childComplexity int) int
 		ShortName             func(childComplexity int) int
@@ -15785,12 +15784,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.StandardHistory.OwnerID(childComplexity), true
-	case "StandardHistory.priority":
-		if e.ComplexityRoot.StandardHistory.Priority == nil {
-			break
-		}
-
-		return e.ComplexityRoot.StandardHistory.Priority(childComplexity), true
 	case "StandardHistory.ref":
 		if e.ComplexityRoot.StandardHistory.Ref == nil {
 			break
@@ -54637,10 +54630,6 @@ type StandardHistory implements Node {
   """
   standardType: String
   """
-  priority for displaying standards
-  """
-  priority: Int!
-  """
   version of the standard
   """
   version: String
@@ -54714,7 +54703,6 @@ enum StandardHistoryOrderField {
   governing_body
   STATUS
   standard_type
-  priority
 }
 """
 StandardHistoryStandardStatus is enum for the field status
@@ -55105,17 +55093,6 @@ input StandardHistoryWhereInput {
   standardTypeNotNil: Boolean
   standardTypeEqualFold: String
   standardTypeContainsFold: String
-  """
-  priority field predicates
-  """
-  priority: Int
-  priorityNEQ: Int
-  priorityIn: [Int!]
-  priorityNotIn: [Int!]
-  priorityGT: Int
-  priorityGTE: Int
-  priorityLT: Int
-  priorityLTE: Int
   """
   version field predicates
   """
@@ -72590,8 +72567,6 @@ func (ec *executionContext) childFields_StandardHistory(ctx context.Context, fie
 		return ec.fieldContext_StandardHistory_freeToUse(ctx, field)
 	case "standardType":
 		return ec.fieldContext_StandardHistory_standardType(ctx, field)
-	case "priority":
-		return ec.fieldContext_StandardHistory_priority(ctx, field)
 	case "version":
 		return ec.fieldContext_StandardHistory_version(ctx, field)
 	case "logoFileID":

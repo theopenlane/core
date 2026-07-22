@@ -2998,7 +2998,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			standard.FieldIsPublic:              {Type: field.TypeBool, Column: standard.FieldIsPublic},
 			standard.FieldFreeToUse:             {Type: field.TypeBool, Column: standard.FieldFreeToUse},
 			standard.FieldStandardType:          {Type: field.TypeString, Column: standard.FieldStandardType},
-			standard.FieldPriority:              {Type: field.TypeInt, Column: standard.FieldPriority},
 			standard.FieldVersion:               {Type: field.TypeString, Column: standard.FieldVersion},
 			standard.FieldLogoFileID:            {Type: field.TypeString, Column: standard.FieldLogoFileID},
 		},
@@ -45355,11 +45354,6 @@ func (f *StandardFilter) WhereFreeToUse(p entql.BoolP) {
 // WhereStandardType applies the entql string predicate on the standard_type field.
 func (f *StandardFilter) WhereStandardType(p entql.StringP) {
 	f.Where(p.Field(standard.FieldStandardType))
-}
-
-// WherePriority applies the entql int predicate on the priority field.
-func (f *StandardFilter) WherePriority(p entql.IntP) {
-	f.Where(p.Field(standard.FieldPriority))
 }
 
 // WhereVersion applies the entql string predicate on the version field.

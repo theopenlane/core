@@ -2,6 +2,7 @@ package onboarding
 
 import (
 	"context"
+	"sort"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
@@ -10,6 +11,15 @@ import (
 	"github.com/theopenlane/core/pkg/catalog"
 	"github.com/theopenlane/core/pkg/catalog/gencatalog"
 )
+
+// frameworkOrder pins the display order of these frameworks ahead of the rest
+var frameworkOrder = map[string]int{
+	"SOC 2":     0,
+	"ISO 42001": 1,
+	"ISO 27001": 2,
+	"HIPAA":     3,
+	"PCI DSS":   4,
+}
 
 func Catalog(ctx context.Context, client *generated.Client) (models.Questionnaire, error) {
 	questionnaire := defaultQuestionnaire
@@ -104,9 +114,20 @@ func getFrameworkOptions(ctx context.Context, client *generated.Client) ([]model
 			Label:       label,
 			Description: std.Description,
 			LogoURL:     std.GoverningBodyLogoURL,
-			Priority:    std.Priority,
 		})
 	}
+
+	rank := func(label string) int {
+		if r, ok := frameworkOrder[label]; ok {
+			return r
+		}
+
+		return len(frameworkOrder)
+	}
+
+	sort.SliceStable(options, func(i, j int) bool {
+		return rank(options[i].Label) < rank(options[j].Label)
+	})
 
 	options = append(options, models.QuestionOption{
 		Value:    "other",

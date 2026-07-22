@@ -68,8 +68,6 @@ const (
 	FieldFreeToUse = "free_to_use"
 	// FieldStandardType holds the string denoting the standard_type field in the database.
 	FieldStandardType = "standard_type"
-	// FieldPriority holds the string denoting the priority field in the database.
-	FieldPriority = "priority"
 	// FieldVersion holds the string denoting the version field in the database.
 	FieldVersion = "version"
 	// FieldLogoFileID holds the string denoting the logo_file_id field in the database.
@@ -158,7 +156,6 @@ var Columns = []string{
 	FieldIsPublic,
 	FieldFreeToUse,
 	FieldStandardType,
-	FieldPriority,
 	FieldVersion,
 	FieldLogoFileID,
 }
@@ -212,8 +209,6 @@ var (
 	DefaultIsPublic bool
 	// DefaultFreeToUse holds the default value on creation for the "free_to_use" field.
 	DefaultFreeToUse bool
-	// DefaultPriority holds the default value on creation for the "priority" field.
-	DefaultPriority int
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -351,11 +346,6 @@ func ByFreeToUse(opts ...sql.OrderTermOption) OrderOption {
 // ByStandardType orders the results by the standard_type field.
 func ByStandardType(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStandardType, opts...).ToFunc()
-}
-
-// ByPriority orders the results by the priority field.
-func ByPriority(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldPriority, opts...).ToFunc()
 }
 
 // ByVersion orders the results by the version field.

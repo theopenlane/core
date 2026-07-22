@@ -9592,8 +9592,6 @@ type CreateStandardInput struct {
 	FreeToUse *bool `json:"freeToUse,omitempty"`
 	// type of the standard - cybersecurity, healthcare , financial, etc.
 	StandardType *string `json:"standardType,omitempty"`
-	// priority for displaying standards
-	Priority *int64 `json:"priority,omitempty"`
 	// version of the standard
 	Version                  *string  `json:"version,omitempty"`
 	OwnerID                  *string  `json:"ownerID,omitempty"`
@@ -35288,8 +35286,6 @@ type Standard struct {
 	FreeToUse *bool `json:"freeToUse,omitempty"`
 	// type of the standard - cybersecurity, healthcare , financial, etc.
 	StandardType *string `json:"standardType,omitempty"`
-	// priority for displaying standards
-	Priority int64 `json:"priority"`
 	// version of the standard
 	Version *string `json:"version,omitempty"`
 	// URL of the logo
@@ -35653,15 +35649,6 @@ type StandardWhereInput struct {
 	StandardTypeNotNil       *bool    `json:"standardTypeNotNil,omitempty"`
 	StandardTypeEqualFold    *string  `json:"standardTypeEqualFold,omitempty"`
 	StandardTypeContainsFold *string  `json:"standardTypeContainsFold,omitempty"`
-	// priority field predicates
-	Priority      *int64  `json:"priority,omitempty"`
-	PriorityNeq   *int64  `json:"priorityNEQ,omitempty"`
-	PriorityIn    []int64 `json:"priorityIn,omitempty"`
-	PriorityNotIn []int64 `json:"priorityNotIn,omitempty"`
-	PriorityGt    *int64  `json:"priorityGT,omitempty"`
-	PriorityGte   *int64  `json:"priorityGTE,omitempty"`
-	PriorityLt    *int64  `json:"priorityLT,omitempty"`
-	PriorityLte   *int64  `json:"priorityLTE,omitempty"`
 	// version field predicates
 	Version             *string  `json:"version,omitempty"`
 	VersionNeq          *string  `json:"versionNEQ,omitempty"`
@@ -47321,8 +47308,6 @@ type UpdateStandardInput struct {
 	// type of the standard - cybersecurity, healthcare , financial, etc.
 	StandardType      *string `json:"standardType,omitempty"`
 	ClearStandardType *bool   `json:"clearStandardType,omitempty"`
-	// priority for displaying standards
-	Priority *int64 `json:"priority,omitempty"`
 	// version of the standard
 	Version                        *string             `json:"version,omitempty"`
 	ClearVersion                   *bool               `json:"clearVersion,omitempty"`
@@ -58664,7 +58649,6 @@ const (
 	StandardOrderFieldGoverningBody StandardOrderField = "governing_body"
 	StandardOrderFieldStatus        StandardOrderField = "STATUS"
 	StandardOrderFieldStandardType  StandardOrderField = "standard_type"
-	StandardOrderFieldPriority      StandardOrderField = "priority"
 )
 
 var AllStandardOrderField = []StandardOrderField{
@@ -58677,12 +58661,11 @@ var AllStandardOrderField = []StandardOrderField{
 	StandardOrderFieldGoverningBody,
 	StandardOrderFieldStatus,
 	StandardOrderFieldStandardType,
-	StandardOrderFieldPriority,
 }
 
 func (e StandardOrderField) IsValid() bool {
 	switch e {
-	case StandardOrderFieldCreatedAt, StandardOrderFieldUpdatedAt, StandardOrderFieldRevision, StandardOrderFieldName, StandardOrderFieldShortName, StandardOrderFieldFramework, StandardOrderFieldGoverningBody, StandardOrderFieldStatus, StandardOrderFieldStandardType, StandardOrderFieldPriority:
+	case StandardOrderFieldCreatedAt, StandardOrderFieldUpdatedAt, StandardOrderFieldRevision, StandardOrderFieldName, StandardOrderFieldShortName, StandardOrderFieldFramework, StandardOrderFieldGoverningBody, StandardOrderFieldStatus, StandardOrderFieldStandardType:
 		return true
 	}
 	return false

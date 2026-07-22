@@ -24913,7 +24913,6 @@ type CreateStandardInput struct {
 	IsPublic                 *bool                 `json:"is_public,omitempty"`
 	FreeToUse                *bool                 `json:"free_to_use,omitempty"`
 	StandardType             *string               `json:"standard_type,omitempty"`
-	Priority                 *int                  `json:"priority,omitempty"`
 	Version                  *string               `json:"version,omitempty"`
 	OwnerID                  *string               `json:"owner_id,omitempty"`
 	ControlIDs               []string              `json:"control_ids,omitempty"`
@@ -24970,9 +24969,6 @@ func (i *CreateStandardInput) Mutate(m *StandardMutation) {
 	}
 	if v := i.StandardType; v != nil {
 		m.SetStandardType(*v)
-	}
-	if v := i.Priority; v != nil {
-		m.SetPriority(*v)
 	}
 	if v := i.Version; v != nil {
 		m.SetVersion(*v)
@@ -25038,7 +25034,6 @@ type UpdateStandardInput struct {
 	FreeToUse                      *bool `json:"free_to_use,omitempty"`
 	ClearStandardType              bool
 	StandardType                   *string `json:"standard_type,omitempty"`
-	Priority                       *int    `json:"priority,omitempty"`
 	ClearVersion                   bool
 	Version                        *string `json:"version,omitempty"`
 	ClearOwner                     bool
@@ -25159,9 +25154,6 @@ func (i *UpdateStandardInput) Mutate(m *StandardMutation) {
 	}
 	if v := i.StandardType; v != nil {
 		m.SetStandardType(*v)
-	}
-	if v := i.Priority; v != nil {
-		m.SetPriority(*v)
 	}
 	if i.ClearVersion {
 		m.ClearVersion()
