@@ -25,11 +25,11 @@ func TestSubscribeAndPublish(t *testing.T) {
 	notificationChan := make(chan Notification, NotificationChannelBufferSize)
 
 	// Subscribe
-	manager.Subscribe(userID, notificationChan)
+	manager.Subscribe(userID, "", notificationChan)
 
 	// Verify subscription was added
 	manager.mu.RLock()
-	assert.Len(t, manager.subscribers[userID], 1)
+	assert.Len(t, manager.subscribers[userKey(userID)], 1)
 	manager.mu.RUnlock()
 
 	// Create a mock notification
@@ -39,7 +39,7 @@ func TestSubscribeAndPublish(t *testing.T) {
 	}
 
 	// Publish the notification
-	err := manager.Publish(userID, notification)
+	err := manager.Publish(userID, "", notification)
 	require.NoError(t, err)
 
 	// Verify the notification was received
@@ -65,7 +65,7 @@ func TestPublishNoSubscribers(t *testing.T) {
 	}
 
 	// Publish to user with no subscribers should not error
-	err := manager.Publish(userID, notification)
+	err := manager.Publish(userID, "", notification)
 	require.NoError(t, err)
 }
 
@@ -75,19 +75,19 @@ func TestUnsubscribe(t *testing.T) {
 
 	// Create and subscribe a channel
 	notificationChan := make(chan Notification, NotificationChannelBufferSize)
-	manager.Subscribe(userID, notificationChan)
+	manager.Subscribe(userID, "", notificationChan)
 
 	// Verify subscription exists
 	manager.mu.RLock()
-	assert.Len(t, manager.subscribers[userID], 1)
+	assert.Len(t, manager.subscribers[userKey(userID)], 1)
 	manager.mu.RUnlock()
 
 	// Unsubscribe
-	manager.Unsubscribe(userID, notificationChan)
+	manager.Unsubscribe(userID, "", notificationChan)
 
 	// Verify subscription was removed
 	manager.mu.RLock()
-	assert.Len(t, manager.subscribers[userID], 0)
+	assert.Len(t, manager.subscribers[userKey(userID)], 0)
 	manager.mu.RUnlock()
 
 	// Verify channel is closed
@@ -105,13 +105,13 @@ func TestMultipleSubscribers(t *testing.T) {
 	chan3 := make(chan Notification, NotificationChannelBufferSize)
 
 	// Subscribe all channels
-	manager.Subscribe(userID, chan1)
-	manager.Subscribe(userID, chan2)
-	manager.Subscribe(userID, chan3)
+	manager.Subscribe(userID, "", chan1)
+	manager.Subscribe(userID, "", chan2)
+	manager.Subscribe(userID, "", chan3)
 
 	// Verify all subscriptions
 	manager.mu.RLock()
-	assert.Len(t, manager.subscribers[userID], 3)
+	assert.Len(t, manager.subscribers[userKey(userID)], 3)
 	manager.mu.RUnlock()
 
 	// Publish a notification
@@ -120,7 +120,7 @@ func TestMultipleSubscribers(t *testing.T) {
 		Title: "Multi Subscriber Notification",
 	}
 
-	err := manager.Publish(userID, notification)
+	err := manager.Publish(userID, "", notification)
 	require.NoError(t, err)
 
 	// Verify all subscribers received the notification
@@ -144,7 +144,7 @@ func TestUnsubscribeNonExistent(t *testing.T) {
 
 	// Unsubscribe without subscribing should not panic
 	require.NotPanics(t, func() {
-		manager.Unsubscribe(userID, notificationChan)
+		manager.Unsubscribe(userID, "", notificationChan)
 	})
 }
 
@@ -153,7 +153,7 @@ func TestConcurrentPublish(t *testing.T) {
 	userID := "test-user-concurrent"
 
 	notificationChan := make(chan Notification, 100) // Larger buffer for concurrent test
-	manager.Subscribe(userID, notificationChan)
+	manager.Subscribe(userID, "", notificationChan)
 
 	numGoroutines := 10
 	numNotificationsPerGoroutine := 10
@@ -170,7 +170,7 @@ func TestConcurrentPublish(t *testing.T) {
 					ID:    "notification-" + string(rune(goroutineID)) + "-" + string(rune(j)),
 					Title: "Concurrent Notification",
 				}
-				err := manager.Publish(userID, notification)
+				err := manager.Publish(userID, "", notification)
 				require.NoError(t, err)
 			}
 		}(i)
@@ -200,7 +200,7 @@ func TestPublishToFullChannel(t *testing.T) {
 
 	// Create a small buffer channel
 	notificationChan := make(chan Notification, 2)
-	manager.Subscribe(userID, notificationChan)
+	manager.Subscribe(userID, "", notificationChan)
 
 	// Fill the channel
 	for i := 0; i < 2; i++ {
@@ -208,7 +208,7 @@ func TestPublishToFullChannel(t *testing.T) {
 			ID:    "notification-fill-" + string(rune(i)),
 			Title: "Fill Notification",
 		}
-		err := manager.Publish(userID, notification)
+		err := manager.Publish(userID, "", notification)
 		require.NoError(t, err)
 	}
 
@@ -220,7 +220,7 @@ func TestPublishToFullChannel(t *testing.T) {
 
 	done := make(chan bool, 1)
 	go func() {
-		err := manager.Publish(userID, notification)
+		err := manager.Publish(userID, "", notification)
 		require.NoError(t, err)
 		done <- true
 	}()
@@ -236,4 +236,117 @@ func TestPublishToFullChannel(t *testing.T) {
 func TestChannelBufferSize(t *testing.T) {
 	// Verify the constant is set to expected value
 	assert.Equal(t, 10, NotificationChannelBufferSize)
+}
+
+func TestOrgScopedDelivery(t *testing.T) {
+	manager := NewManager()
+	userID, orgID := "test-user-org", "test-org"
+
+	notificationChan := make(chan Notification, NotificationChannelBufferSize)
+	manager.Subscribe(userID, orgID, notificationChan)
+
+	manager.mu.RLock()
+	assert.Len(t, manager.subscribers[userKey(userID)], 1)
+	assert.Len(t, manager.subscribers[orgKey(orgID)], 1)
+	manager.mu.RUnlock()
+
+	// a notification with no user is addressed to the whole org
+	err := manager.Publish("", orgID, &generated.Notification{ID: "org-notification"})
+	require.NoError(t, err)
+
+	select {
+	case received := <-notificationChan:
+		concrete, ok := received.(*generated.Notification)
+		require.True(t, ok)
+		assert.Equal(t, "org-notification", concrete.ID)
+	case <-time.After(time.Second):
+		t.Fatal("org-scoped notification was not delivered")
+	}
+}
+
+func TestPublishDeliversOnceWhenUserAndOrgBothSet(t *testing.T) {
+	manager := NewManager()
+	userID, orgID := "test-user-once", "test-org-once"
+
+	notificationChan := make(chan Notification, NotificationChannelBufferSize)
+	manager.Subscribe(userID, orgID, notificationChan)
+
+	err := manager.Publish(userID, orgID, &generated.Notification{ID: "single-delivery"})
+	require.NoError(t, err)
+
+	<-notificationChan
+
+	select {
+	case extra := <-notificationChan:
+		t.Fatalf("notification delivered twice to a socket registered under both keys: %v", extra)
+	case <-time.After(100 * time.Millisecond):
+	}
+}
+
+func TestPersonalNotificationDoesNotFanOutToOrg(t *testing.T) {
+	manager := NewManager()
+	orgID := "test-org-shared"
+
+	targetChan := make(chan Notification, NotificationChannelBufferSize)
+	bystanderChan := make(chan Notification, NotificationChannelBufferSize)
+	manager.Subscribe("target-user", orgID, targetChan)
+	manager.Subscribe("bystander-user", orgID, bystanderChan)
+
+	err := manager.Publish("target-user", orgID, &generated.Notification{ID: "personal"})
+	require.NoError(t, err)
+
+	select {
+	case received := <-targetChan:
+		concrete, ok := received.(*generated.Notification)
+		require.True(t, ok)
+		assert.Equal(t, "personal", concrete.ID)
+	case <-time.After(time.Second):
+		t.Fatal("target did not receive their own notification")
+	}
+
+	select {
+	case leaked := <-bystanderChan:
+		t.Fatalf("personal notification leaked to another org member: %v", leaked)
+	case <-time.After(100 * time.Millisecond):
+	}
+}
+
+func TestUnsubscribeClosesOnceAcrossBothKeys(t *testing.T) {
+	manager := NewManager()
+	userID, orgID := "test-user-teardown", "test-org-teardown"
+
+	notificationChan := make(chan Notification, NotificationChannelBufferSize)
+	manager.Subscribe(userID, orgID, notificationChan)
+	manager.Unsubscribe(userID, orgID, notificationChan)
+
+	manager.mu.RLock()
+	assert.Empty(t, manager.subscribers, "channel must be removed from every key it was registered under")
+	manager.mu.RUnlock()
+
+	_, open := <-notificationChan
+	assert.False(t, open, "channel should be closed exactly once")
+
+	// the org key must no longer reference the closed channel, otherwise this panics
+	require.NotPanics(t, func() {
+		_ = manager.Publish("", orgID, &generated.Notification{ID: "after-teardown"})
+	})
+}
+
+func TestUnsubscribeWithDivergentScopeDoesNotStrandChannel(t *testing.T) {
+	manager := NewManager()
+	userID := "test-user-divergent"
+
+	notificationChan := make(chan Notification, NotificationChannelBufferSize)
+	manager.Subscribe(userID, "org-at-subscribe", notificationChan)
+
+	// caller passes a different org than it subscribed with
+	manager.Unsubscribe(userID, "org-at-unsubscribe", notificationChan)
+
+	manager.mu.RLock()
+	assert.Empty(t, manager.subscribers)
+	manager.mu.RUnlock()
+
+	require.NotPanics(t, func() {
+		_ = manager.Publish("", "org-at-subscribe", &generated.Notification{ID: "stranded"})
+	})
 }

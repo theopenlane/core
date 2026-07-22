@@ -92,19 +92,20 @@ func HookNotificationPublish() ent.Hook {
 				return val, nil
 			}
 
-			// Get the user ID to publish to
+			// a notification targets a single user when it names one, otherwise every session in the owning org
 			userID := notification.UserID
-			if userID == "" {
-				// No specific user, skip publishing
-				logx.FromContext(ctx).Debug().Str("notification_id", notification.ID).Msg("notification hook: userID is empty, skipping publish")
+			ownerID := notification.OwnerID
+
+			if userID == "" && ownerID == "" {
+				logx.FromContext(ctx).Debug().Str("notification_id", notification.ID).Msg("notification hook: no user or owner to route to, skipping publish")
 				return val, nil
 			}
 
-			logx.FromContext(ctx).Debug().Str("user_id", userID).Str("notification_id", notification.ID).Msg("notification hook: publishing to subscription manager")
+			logx.FromContext(ctx).Debug().Str("user_id", userID).Str("owner_id", ownerID).Str("notification_id", notification.ID).Msg("notification hook: publishing to subscription manager")
 
 			// Publish the notification to subscribers
-			if err := manager.Publish(userID, notification); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("user_id", userID).Msg("failed to publish notification to subscribers")
+			if err := manager.Publish(userID, ownerID, notification); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("user_id", userID).Str("owner_id", ownerID).Msg("failed to publish notification to subscribers")
 			}
 
 			return val, nil
