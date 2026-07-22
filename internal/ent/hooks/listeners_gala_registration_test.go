@@ -43,18 +43,20 @@ func TestRegisterGalaOrganizationAvatarListeners(t *testing.T) {
 	require.False(t, registry.InterestedIn(topic, ent.OpUpdate.String()))
 }
 
-func TestRegisterGalaOnboardingListeners(t *testing.T) {
+func TestRegisterGalaTaskRuleListeners(t *testing.T) {
 	t.Parallel()
 
 	registry := gala.NewRegistry()
 
-	ids, err := RegisterGalaOnboardingListeners(registry)
+	ids, err := RegisterGalaTaskRuleListeners(registry)
 	require.NoError(t, err)
-	require.Len(t, ids, 1)
+	require.NotEmpty(t, ids)
 
-	topic := eventqueue.MutationTopicName(eventqueue.MutationConcernDirect, entgen.TypeOnboarding)
-	require.True(t, registry.InterestedIn(topic, ent.OpCreate.String()))
-	require.False(t, registry.InterestedIn(topic, ent.OpUpdate.String()))
+	for _, schemaType := range []string{entgen.TypeOnboarding, entgen.TypeOrganization, entgen.TypeNotification} {
+		topic := eventqueue.MutationTopicName(eventqueue.MutationConcernDirect, schemaType)
+		require.True(t, registry.InterestedIn(topic, ent.OpCreate.String()), "expected %s to subscribe to create", schemaType)
+		require.False(t, registry.InterestedIn(topic, ent.OpUpdate.String()), "expected %s not to subscribe to update", schemaType)
+	}
 }
 
 func TestRegisterGalaTrustCenterCacheListeners(t *testing.T) {

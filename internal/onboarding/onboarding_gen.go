@@ -144,13 +144,6 @@ var defaultQuestionnaire = models.Questionnaire{
 			InputType:      models.InputTypeMultiselect,
 			Key:            "frameworks",
 			Label:          "What compliance program(s) are you working toward?",
-			Tasks: map[string]models.TaskRule{"eachSelected": models.TaskRule{
-				Details:  "Create the compliance program and start mapping the required controls, policies, and evidence.",
-				Key:      "framework-{key}",
-				Metadata: map[string]any{"docsLink": "https://docs.theopenlane.io/compliance"},
-				Priority: 10,
-				Title:    "Set up your {label} program",
-			}},
 		}, models.Question{
 			DependsOn: &models.QuestionDependency{
 				Equals: "other",
@@ -170,37 +163,11 @@ var defaultQuestionnaire = models.Questionnaire{
 			InputType:   models.InputTypeBoolean,
 			Key:         "has_existing_controls",
 			Label:       "Do you already have controls documented?",
-			Tasks: map[string]models.TaskRule{"false": models.TaskRule{
-				Details:  "Import a recommended starter set of controls and customize them for your organization.",
-				Key:      "import-template-controls",
-				Metadata: map[string]any{"docsLink": "https://docs.theopenlane.io/compliance/controls"},
-				Priority: 20,
-				Title:    "Start with template controls",
-			}, "true": models.TaskRule{
-				Details:  "Bring your documented controls into Openlane and connect them to your compliance program.",
-				Key:      "import-existing-controls",
-				Metadata: map[string]any{"docsLink": "https://docs.theopenlane.io/compliance/controls"},
-				Priority: 20,
-				Title:    "Import existing controls",
-			}},
 		}, models.Question{
 			Description: "Policies and procedures explain how your organization works, like how employees handle data, respond to incidents, or request access.",
 			InputType:   models.InputTypeBoolean,
 			Key:         "has_existing_policies",
 			Label:       "Do you already have policies and procedures documented?",
-			Tasks: map[string]models.TaskRule{"false": models.TaskRule{
-				Details:  "Create starter policies and procedures that your team can customize.",
-				Key:      "import-policy-templates",
-				Metadata: map[string]any{"docsLink": "https://docs.theopenlane.io/policies"},
-				Priority: 30,
-				Title:    "Start with policy templates",
-			}, "true": models.TaskRule{
-				Details:  "Upload existing policies or connect a document source so Openlane can track them.",
-				Key:      "import-existing-policies",
-				Metadata: map[string]any{"docsLink": "https://docs.theopenlane.io/policies"},
-				Priority: 30,
-				Title:    "Import existing policies",
-			}},
 		}},
 		Title: "Starting Point",
 	}, models.Step{
@@ -267,14 +234,7 @@ var defaultQuestionnaire = models.Questionnaire{
 		Key:          "trial",
 		Order:        6,
 		Questions:    []models.Question{},
-		Tasks: []models.TaskRule{models.TaskRule{
-			Details:  "Add a payment method before the trial ends to keep paid modules active.",
-			Key:      "setup-payment-method",
-			Metadata: map[string]any{"link": "/organization-settings/billing"},
-			Priority: 90,
-			Title:    "Set up payment method",
-		}},
-		Title: "Your free 30-day trial",
+		Title:        "Your free 30-day trial",
 	}},
 	Version: "2026-07-16",
 }

@@ -9,7 +9,7 @@ import (
 
 	"github.com/rs/zerolog"
 
-	"github.com/theopenlane/core/internal/ent/generated"
+	generated "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 )

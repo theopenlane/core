@@ -1,0 +1,190 @@
+rules:
+  framework:
+    title: Set up your {{.label}} program
+    taskKindName: Operational
+    details: |
+      Kick your program off by creating a program with the framework controls
+    priority: 10
+    metadata:
+      docsLink: /docs/platform/compliance-management/programs/overview
+      link: '{{if eq .value "soc2"}}/programs/create/soc2?onboarding=true{{else}}/programs/create/framework-based?onboarding=true{{end}}'
+
+  framework-generic:
+    title: Set up your compliance program
+    taskKindName: Operational
+    details: |
+      Kick your program off by creating a program with the controls you need
+    priority: 10
+    metadata:
+      docsLink: /docs/platform/compliance-management/programs/overview
+      link: /programs/create?onboarding=true
+
+  import-existing-controls:
+    title: Import existing controls
+    taskKindName: Control Implementation
+    details: |
+      Controls define how you actually meet requirements, grounded in the policies you just wrote. We built CSV import so you can bring in controls you have already defined in other systems or spreadsheets.
+
+      References:
+      - [From Gaps To Controls](https://docs.theopenlane.io/docs/platform/grc-fundamentals/audit/gapanalysis#from-gaps-to-controls)
+      - [Writing Good Controls](https://docs.theopenlane.io/docs/platform/compliance-management/controls/implementations#writing-a-good-implementation)
+      - [Import Field](https://docs.theopenlane.io/docs/platform/compliance-management/controls/import#framework-control-csv-fields)
+    priority: 50
+    metadata:
+      docsLink: /docs/platform/compliance-management/controls/import
+
+  import-template-controls:
+    title: Start with template controls
+    taskKindName: Control Implementation
+    details: |
+      Import a recommended set of control templates to jump-start your
+      compliance program. Review each control and customize the implementation,
+      owner, review frequency, evidence requirements, and linked policies to
+      reflect how your organization actually operates.
+    priority: 50
+    metadata:
+      link: /compliance/controls/templates
+      docsLink: /docs/platform/compliance-management/controls/writing-controls
+
+  import-existing-policies:
+    title: Import existing policies
+    taskKindName: Policy Review
+    details: |
+      Import your existing policies into Openlane so they can be reviewed, updated, assigned to controls, and managed alongside the rest of your compliance program.
+
+      ## Options
+
+      ### Upload from Console
+
+      Upload existing policies in Markdown or Microsoft Word format.
+
+      [Console](https://console.theopenlane.io/policies)
+      [Documentation](https://docs.theopenlane.io/docs/platform/compliance-management/policy-and-procedure-management/import)
+
+      ### Connect Google Workspace or OneDrive
+
+      Sync policies directly from Google Drive or OneDrive to keep Openlane aligned with your existing documentation.
+
+      [Console](https://console.theopenlane.io/automation/integrations?tags=document)
+      [Documentation](https://docs.theopenlane.io/docs/platform/compliance-management/policy-and-procedure-management/import)
+
+      ### Sync from GitHub
+
+      Keep Markdown-based policies in sync directly from a GitHub repository.
+
+      [Documentation](https://docs.theopenlane.io/docs/platform/compliance-management/policy-and-procedure-management/import#continuous-sync-from-github)
+
+      References:
+      - [Writing Policies That Hold Up](https://docs.theopenlane.io/docs/platform/compliance-management/policy-and-procedure-management/policies#writing-policies-that-hold-up)
+    priority: 70
+    metadata:
+      docsLink: /docs/platform/compliance-management/policy-and-procedure-management/import
+
+  import-policy-templates:
+    title: Start with policy templates
+    taskKindName: Policy Review
+    details: |
+      Learn more about the different ways to create and manage policies in Openlane. You can start with open-source templates, generate drafts with AI, or connect a document source later as your program matures.
+
+      ## Create New Policies
+
+      ### Policy Hub
+
+      Start from Openlane's library of open-source policy templates and customize them to match your organization's practices.
+
+      [Console](https://console.theopenlane.io/policies)
+      [Documentation](https://github.com/theopenlane/policy-hub)
+
+      ### Generate with AI
+
+      Generate policy drafts using Openlane AI based on your organization and compliance framework, then review and edit them so they accurately reflect how your organization operates.
+
+      [Console](https://console.theopenlane.io/policies)
+
+      ## Other Ways to Manage Policies
+
+      ### Connect Google Workspace or OneDrive
+
+      As your program grows, you can synchronize policies from Google Drive or OneDrive to keep Openlane aligned with your document library.
+
+      [Console](https://console.theopenlane.io/automation/integrations?tags=document)
+      [Documentation](https://docs.theopenlane.io/docs/platform/integrations/overview)
+
+      ### Sync from GitHub
+
+      Store your policies as Markdown in GitHub and keep them continuously synchronized with Openlane.
+
+      [Console](https://console.theopenlane.io/automation/integrations?tags=document)
+      [Documentation](https://docs.theopenlane.io/docs/platform/compliance-management/policy-and-procedure-management/import#continuous-sync-from-github)
+
+      ## References
+
+      - [Writing Policies That Hold Up](https://docs.theopenlane.io/docs/platform/compliance-management/policy-and-procedure-management/policies#writing-policies-that-hold-up)
+      - [Policies by Framework](https://docs.theopenlane.io/docs/platform/compliance-management/policy-and-procedure-management/policy-framework-mapping)
+    priority: 70
+    metadata:
+      docsLink: /docs/platform/compliance-management/policy-and-procedure-management/policies
+
+  has-auditor-at-onboarding:
+    title: Connect your auditor
+    taskKindName: Operational
+    details: |
+      When you're ready for your audit, invite your auditor to Openlane so they can review evidence, request additional documentation, and collaborate with your team throughout the audit.
+
+      ## Next Steps
+
+      ### Invite your auditor
+
+      Invite your auditor as a member of your Openlane organization with the Auditor role.
+
+      [Console](https://console.theopenlane.io/settings/members)
+      [Documentation](https://docs.theopenlane.io/docs/platform/organizations/members)
+
+      ## References
+
+      - [Find an Openlane Auditor Partner](https://www.theopenlane.io/alliances/auditors)
+    priority: 40
+
+  wants-auditor-recommendation:
+    title: Get matched with an auditor
+    taskKindName: Operational
+    details: |
+      Need an auditor? Browse Openlane's network of trusted audit partners experienced with SOC 2, ISO 27001, HIPAA, and other compliance frameworks. Choose the firm that's the best fit for your organization and engage them when you're ready to begin your audit.
+
+      ## Find an Auditor
+
+      [Browse Auditor Partners](https://www.theopenlane.io/alliances/auditors)
+
+      ## References
+
+      - [Selecting an Audit Firm](https://docs.theopenlane.io/docs/platform/grc-fundamentals/audit/firms)
+    priority: 40
+
+  wants-partner-recommendation:
+    title: Get matched with a vCISO
+    taskKindName: Operational
+    details: |
+      Need help building or managing your compliance program? Openlane works with experienced virtual CISOs and compliance consultants who can help implement controls, write policies, prepare evidence, and guide you through your audit.
+
+      ## Find a Service Provider
+
+      [Browse Service Providers](https://www.theopenlane.io/alliances/service-providers)
+    priority: 40
+
+  demo-requested:
+    title: Schedule your onboarding call
+    taskKindName: Operational
+    details: |
+      Meet with the Openlane team to get your workspace set up, review your compliance goals, and learn best practices for building and managing your compliance program.
+
+      ## Book Time
+
+      [Schedule an Onboarding Call](https://calendly.com/kwaters-theopenlane)
+
+      ## We'll Cover
+
+      - Setting up your compliance program
+      - Importing policies and controls
+      - Configuring integrations and automations
+      - Questions about frameworks, audits, and best practices
+    priority: 100
