@@ -14,11 +14,11 @@ import (
 
 // frameworkOrder pins the display order of these frameworks ahead of the rest
 var frameworkOrder = map[string]int{
-	"SOC 2":     0,
-	"ISO 42001": 1,
-	"ISO 27001": 2,
-	"HIPAA":     3,
-	"PCI DSS":   4,
+	"SOC 2":     0, //nolint:mnd
+	"ISO 42001": 1, //nolint:mnd
+	"ISO 27001": 2, //nolint:mnd
+	"HIPAA":     3, //nolint:mnd
+	"PCI DSS":   4, //nolint:mnd
 }
 
 func Catalog(ctx context.Context, client *generated.Client) (models.Questionnaire, error) {
