@@ -437,6 +437,7 @@ func RegisterRoutes(router *Router) error {
 		registerWebauthnAuthVerificationHandler,
 		registerUserInfoHandler,
 		registerOAuthRegisterHandler,
+		registerOnboardingQuestionsHandler,
 		registerIntegrationAuthStartHandler,
 		registerIntegrationAuthCallbackHandler,
 		registerStaticWebhookRoutes,

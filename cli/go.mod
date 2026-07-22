@@ -31,6 +31,8 @@ require (
 	ariga.io/atlas v1.2.3 // indirect
 	ariga.io/entcache v0.1.0 // indirect
 	cel.dev/expr v0.25.2 // indirect
+	cloud.google.com/go/iam v1.11.0 // indirect
+	cloud.google.com/go/longrunning v1.2.0 // indirect
 	entgo.io/contrib v0.7.0 // indirect
 	entgo.io/ent v0.14.6 // indirect
 	github.com/AfterShip/email-verifier v1.4.1 // indirect
@@ -76,12 +78,12 @@ require (
 	github.com/godbus/dbus/v5 v5.2.2 // indirect
 	github.com/golang-jwt/jwt/v5 v5.3.1 // indirect
 	github.com/golang/groupcache v0.0.0-20241129210726-2c02b8208cf8 // indirect
-	github.com/google/cel-go v0.29.1 // indirect
+	github.com/google/cel-go v0.29.2 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
 	github.com/google/go-querystring v1.2.0 // indirect
 	github.com/google/go-tpm v0.9.8 // indirect
 	github.com/google/uuid v1.6.0 // indirect
-	github.com/googleapis/gax-go/v2 v2.22.0 // indirect
+	github.com/googleapis/gax-go/v2 v2.23.0 // indirect
 	github.com/gorilla/css v1.0.1 // indirect
 	github.com/gorilla/securecookie v1.1.2 // indirect
 	github.com/gqlgo/gqlgenc v0.37.1 // indirect
@@ -119,7 +121,7 @@ require (
 	github.com/moby/moby/client v0.5.0 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/natefinch/wrap v0.2.0 // indirect
-	github.com/nyaruka/phonenumbers v1.8.0 // indirect
+	github.com/nyaruka/phonenumbers v1.8.1 // indirect
 	github.com/oklog/ulid/v2 v2.1.1 // indirect
 	github.com/olekukonko/cat v0.0.0-20250911104152-50322a0618f6 // indirect
 	github.com/olekukonko/errors v1.2.0 // indirect
@@ -127,7 +129,7 @@ require (
 	github.com/olekukonko/tablewriter v1.1.4 // indirect
 	github.com/openfga/api/proto v0.0.0-20260319214821-f153694bfc20 // indirect
 	github.com/openfga/go-sdk v0.8.2 // indirect
-	github.com/openfga/language/pkg/go v0.3.0 // indirect
+	github.com/openfga/language/pkg/go v0.3.1 // indirect
 	github.com/openfga/openfga v1.18.0 // indirect
 	github.com/pb33f/ordered-map/v2 v2.3.1 // indirect
 	github.com/pelletier/go-toml/v2 v2.3.1 // indirect
@@ -149,7 +151,7 @@ require (
 	github.com/riverqueue/rivercontrib/otelriver v0.8.0 // indirect
 	github.com/robfig/cron/v3 v3.0.1 // indirect
 	github.com/sagikazarmark/locafero v0.12.0 // indirect
-	github.com/samber/do/v2 v2.0.0 // indirect
+	github.com/samber/do/v2 v2.1.0 // indirect
 	github.com/samber/go-type-to-string v1.8.0 // indirect
 	github.com/samber/mo v1.17.0 // indirect
 	github.com/segmentio/asm v1.2.1 // indirect
@@ -167,7 +169,7 @@ require (
 	github.com/testcontainers/testcontainers-go v0.43.0 // indirect
 	github.com/theopenlane/echox v0.3.0 // indirect
 	github.com/theopenlane/eddy v0.1.0 // indirect
-	github.com/theopenlane/entx v0.30.1 // indirect
+	github.com/theopenlane/entx v0.30.2 // indirect
 	github.com/theopenlane/riverboat v0.9.18 // indirect
 	github.com/tidwall/gjson v1.19.0 // indirect
 	github.com/tidwall/match v1.2.0 // indirect
@@ -188,7 +190,7 @@ require (
 	github.com/xeipuuv/gojsonpointer v0.0.0-20190905194746-02993c407bfb // indirect
 	github.com/xeipuuv/gojsonreference v0.0.0-20180127040603-bd5ef7bd5415 // indirect
 	github.com/xeipuuv/gojsonschema v1.2.0 // indirect
-	github.com/yuin/goldmark v1.8.2 // indirect
+	github.com/yuin/goldmark v1.8.4 // indirect
 	github.com/zalando/go-keyring v0.2.8 // indirect
 	github.com/zclconf/go-cty v1.18.1 // indirect
 	github.com/zclconf/go-cty-yaml v1.2.0 // indirect
@@ -218,7 +220,7 @@ require (
 	golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da // indirect
 	gonum.org/v1/gonum v0.17.0 // indirect
 	google.golang.org/api v0.288.0 // indirect
-	google.golang.org/genproto/googleapis/api v0.0.0-20260526163538-3dc84a4a5aaa // indirect
+	google.golang.org/genproto/googleapis/api v0.0.0-20260720211330-0afa2a65878a // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260720211330-0afa2a65878a // indirect
 	google.golang.org/grpc v1.82.1 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect

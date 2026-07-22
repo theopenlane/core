@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // Dispatch validates and enqueues one operation execution request. When
@@ -46,6 +47,12 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 	operation, err := reg.Operation(definitionID, req.Operation)
 	if err != nil {
 		return types.DispatchResult{}, err
+	}
+
+	if operation.DisabledForAll {
+		logx.FromContext(ctx).Debug().Str("operation", req.Operation).Msg("operation is disabled, skipping dispatch")
+
+		return types.DispatchResult{Status: enums.IntegrationRunStatusCancelled}, nil
 	}
 
 	if err := ValidateConfig(operation.ConfigSchema, req.Config); err != nil {

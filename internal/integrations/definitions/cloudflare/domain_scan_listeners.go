@@ -444,7 +444,7 @@ func (s domainScanSaga) maybeNotifyDomainScanGroup(ctx context.Context, organiza
 
 	systemCtx := domainScanSystemContext(ctx, organizationID)
 
-	siblings, err := s.services.DB().Scan.Query().Where(scan.IDIn(siblingScanIDs...)).All(systemCtx)
+	siblings, err := s.services.DB().Scan.Query().Where(scan.IDIn(siblingScanIDs...), scan.OwnerID(organizationID)).All(systemCtx)
 	if err != nil {
 		return err
 	}

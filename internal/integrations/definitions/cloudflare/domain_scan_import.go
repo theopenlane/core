@@ -9,9 +9,13 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	generated "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
+	"github.com/theopenlane/core/internal/ent/generated/finding"
+	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
+	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/domainscan"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -22,13 +26,26 @@ import (
 // a completed scan
 const domainScanImportVendorEntityType = "vendor"
 
-// importSummary counts what an accepted domain scan review created, for the follow-up notification
+// importSummary records what an accepted domain scan review resolved to, for the follow-up
+// notification. The per-type fields hold every resolved record; CreatedIDs holds the subset that
+// this import actually created, so a resubmission can report what was new versus already there
 type importSummary struct {
 	PlatformIDs     []string `json:"platform_ids,omitempty"`
 	SystemDetailIDs []string `json:"system_detail_ids,omitempty"`
 	EntityIDs       []string `json:"entity_ids,omitempty"`
 	AssetIDs        []string `json:"asset_ids,omitempty"`
 	FindingIDs      []string `json:"finding_ids,omitempty"`
+	CreatedIDs      []string `json:"created_ids,omitempty"`
+}
+
+// createdCount returns how many of ids this import created rather than reused
+func (s importSummary) createdCount(ids []string) int {
+	return len(lo.Intersect(ids, s.CreatedIDs))
+}
+
+// resolvedCount returns how many records the import resolved in total, created or reused
+func (s importSummary) resolvedCount() int {
+	return len(s.EntityIDs) + len(s.AssetIDs) + len(s.PlatformIDs) + len(s.SystemDetailIDs) + len(s.FindingIDs)
 }
 
 // HandleImportDomainScanReview creates the records for a reviewer-accepted domain scan report,
@@ -61,8 +78,17 @@ func (s domainScanSaga) notifyDomainScanImportComplete(ctx context.Context, orga
 
 	body := fmt.Sprintf(
 		"Imported %d vendor(s), %d asset(s), %d system(s), and %d finding(s)",
-		len(summary.EntityIDs), len(summary.AssetIDs), len(summary.SystemDetailIDs), len(summary.FindingIDs),
+		summary.createdCount(summary.EntityIDs),
+		summary.createdCount(summary.AssetIDs),
+		summary.createdCount(summary.SystemDetailIDs),
+		summary.createdCount(summary.FindingIDs),
 	)
+
+	// a resubmitted review resolves to records that already exist - call that out rather than
+	// reporting zeros with no explanation
+	if reused := summary.resolvedCount() - len(summary.CreatedIDs); reused > 0 {
+		body += fmt.Sprintf("; %d existing record(s) were linked to this scan", reused)
+	}
 
 	_, err = s.services.DB().Notification.Create().
 		SetOwnerID(organizationID).
@@ -83,7 +109,7 @@ func (s domainScanSaga) notifyDomainScanImportComplete(ctx context.Context, orga
 func importDomainScanReview(ctx context.Context, client *generated.Client, envelope DomainScanImport) (importSummary, error) {
 	var summary importSummary
 
-	assetIDByRef, err := createDomainScanAssets(ctx, client, envelope.OrganizationID, envelope.Assets, envelope.ScanIDs)
+	assetIDByRef, createdAssetIDs, err := findOrCreateDomainScanAssets(ctx, client, envelope.OrganizationID, envelope.Assets, envelope.ScanIDs)
 	if err != nil {
 		return summary, err
 	}
@@ -92,12 +118,14 @@ func importDomainScanReview(ctx context.Context, client *generated.Client, envel
 		summary.AssetIDs = append(summary.AssetIDs, id)
 	}
 
+	summary.CreatedIDs = append(summary.CreatedIDs, createdAssetIDs...)
+
 	vendorNameByAssetDomain, err := domainScanAssetVendorNames(ctx, client, envelope.ScanIDs)
 	if err != nil {
 		return summary, err
 	}
 
-	entityIDByRef, err := findOrCreateDomainScanVendors(ctx, client, envelope.OrganizationID, envelope.Vendors, envelope.Assets, assetIDByRef, vendorNameByAssetDomain, envelope.ScanIDs)
+	entityIDByRef, createdEntityIDs, err := findOrCreateDomainScanVendors(ctx, client, envelope.OrganizationID, envelope.Vendors, envelope.Assets, assetIDByRef, vendorNameByAssetDomain, envelope.ScanIDs)
 	if err != nil {
 		return summary, err
 	}
@@ -106,10 +134,14 @@ func importDomainScanReview(ctx context.Context, client *generated.Client, envel
 		summary.EntityIDs = append(summary.EntityIDs, id)
 	}
 
+	summary.CreatedIDs = append(summary.CreatedIDs, createdEntityIDs...)
+
 	platformIDByRef := map[string]string{}
 
 	if len(envelope.Platforms) > 0 {
-		platformIDByRef, err = createDomainScanPlatforms(ctx, client, envelope.OrganizationID, envelope.Platforms, envelope.ScanIDs, entityIDByRef, assetIDByRef)
+		var createdPlatformIDs []string
+
+		platformIDByRef, createdPlatformIDs, err = findOrCreateDomainScanPlatforms(ctx, client, envelope.OrganizationID, envelope.Platforms, envelope.ScanIDs, entityIDByRef, assetIDByRef)
 		if err != nil {
 			return summary, err
 		}
@@ -117,19 +149,29 @@ func importDomainScanReview(ctx context.Context, client *generated.Client, envel
 		for _, id := range platformIDByRef {
 			summary.PlatformIDs = append(summary.PlatformIDs, id)
 		}
+
+		summary.CreatedIDs = append(summary.CreatedIDs, createdPlatformIDs...)
 	}
 
 	if len(envelope.Systems) > 0 {
-		summary.SystemDetailIDs, err = createDomainScanSystemDetails(ctx, client, envelope.OrganizationID, envelope.Systems, platformIDByRef, entityIDByRef, assetIDByRef)
+		var createdSystemDetailIDs []string
+
+		summary.SystemDetailIDs, createdSystemDetailIDs, err = findOrCreateDomainScanSystemDetails(ctx, client, envelope.OrganizationID, envelope.Systems, platformIDByRef, entityIDByRef, assetIDByRef)
 		if err != nil {
 			return summary, err
 		}
+
+		summary.CreatedIDs = append(summary.CreatedIDs, createdSystemDetailIDs...)
 	}
 
-	summary.FindingIDs, err = createDomainScanFindings(ctx, client, envelope.OrganizationID, envelope.Findings, envelope.Assets, assetIDByRef, envelope.ScanIDs)
+	var createdFindingIDs []string
+
+	summary.FindingIDs, createdFindingIDs, err = findOrCreateDomainScanFindings(ctx, client, envelope.OrganizationID, envelope.Findings, envelope.Assets, assetIDByRef, envelope.ScanIDs)
 	if err != nil {
 		return summary, err
 	}
+
+	summary.CreatedIDs = append(summary.CreatedIDs, createdFindingIDs...)
 
 	return summary, nil
 }
@@ -137,15 +179,18 @@ func importDomainScanReview(ctx context.Context, client *generated.Client, envel
 // findOrCreateDomainScanVendors resolves each accepted vendor to an Entity ID, reusing an
 // existing org Entity by name if one already exists, and auto-links any accepted asset the scan
 // itself attributed to that vendor
-func findOrCreateDomainScanVendors(ctx context.Context, client *generated.Client, ownerID string, vendors []DomainScanImportVendor, assets []DomainScanImportAsset, assetIDByRef, vendorNameByAssetDomain map[string]string, scanIDs []string) (map[string]string, error) {
+func findOrCreateDomainScanVendors(ctx context.Context, client *generated.Client, ownerID string, vendors []DomainScanImportVendor, assets []DomainScanImportAsset, assetIDByRef, vendorNameByAssetDomain map[string]string, scanIDs []string) (map[string]string, []string, error) {
 	ids := make(map[string]string, len(vendors))
+
+	var createdIDs []string
+
 	if len(vendors) == 0 {
-		return ids, nil
+		return ids, nil, nil
 	}
 
-	vendorEntityTypeID, err := client.EntityType.Query().Where(entitytype.NameEqualFold(domainScanImportVendorEntityType), entitytype.OwnerID(ownerID)).OnlyID(ctx)
+	vendorEntityTypeID, err := client.EntityType.Query().Where(entitytype.NameEqualFold(domainScanImportVendorEntityType)).OnlyID(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("looking up vendor entity type: %w", err)
+		return nil, nil, fmt.Errorf("looking up vendor entity type: %w", err)
 	}
 
 	for _, vendor := range vendors {
@@ -165,7 +210,6 @@ func findOrCreateDomainScanVendors(ctx context.Context, client *generated.Client
 
 		existing, err := client.Entity.Query().
 			Where(
-				entity.OwnerID(ownerID),
 				entity.Or(
 					entity.NameEqualFold(entityName),
 					entity.NameEqualFold(vendor.Name),
@@ -178,15 +222,20 @@ func findOrCreateDomainScanVendors(ctx context.Context, client *generated.Client
 		case err == nil:
 			ids[vendor.Ref] = existing.ID
 
-			if len(matchedAssetIDs) > 0 {
-				if err := client.Entity.UpdateOneID(existing.ID).AddAssetIDs(matchedAssetIDs...).Exec(ctx); err != nil {
-					return nil, fmt.Errorf("linking assets to existing vendor %q: %w", vendor.Name, err)
+			linkedAssetIDs, err := existing.QueryAssets().IDs(ctx)
+			if err != nil {
+				return nil, nil, fmt.Errorf("looking up assets linked to vendor %q: %w", vendor.Name, err)
+			}
+
+			if missing := unlinkedDomainScanIDs(matchedAssetIDs, linkedAssetIDs); len(missing) > 0 {
+				if err := client.Entity.UpdateOneID(existing.ID).AddAssetIDs(missing...).Exec(ctx); err != nil {
+					return nil, nil, fmt.Errorf("linking assets to existing vendor %q: %w", vendor.Name, err)
 				}
 			}
 
 			continue
 		case !generated.IsNotFound(err):
-			return nil, fmt.Errorf("looking up existing vendor %q: %w", vendor.Name, err)
+			return nil, nil, fmt.Errorf("looking up existing vendor %q: %w", vendor.Name, err)
 		}
 
 		input := generated.CreateEntityInput{
@@ -206,13 +255,14 @@ func findOrCreateDomainScanVendors(ctx context.Context, client *generated.Client
 
 		created, err := client.Entity.Create().SetInput(input).Save(ctx)
 		if err != nil {
-			return nil, fmt.Errorf("creating vendor %q: %w", vendor.Name, err)
+			return nil, nil, fmt.Errorf("creating vendor %q: %w", vendor.Name, err)
 		}
 
 		ids[vendor.Ref] = created.ID
+		createdIDs = append(createdIDs, created.ID)
 	}
 
-	return ids, nil
+	return ids, createdIDs, nil
 }
 
 // domainScanAssetVendorNames maps each domain (lowercased) to the vendor name the scan itself
@@ -253,17 +303,17 @@ func domainScanAssetVendorNames(ctx context.Context, client *generated.Client, s
 func domainScanMappingMatches(assets []DomainScanImportAsset, assetIDByRef map[string]string, match func(assetDomain string) bool) []string {
 	var ids []string
 
-	for _, asset := range assets {
-		if asset.Identifier == "" {
+	for _, a := range assets {
+		if a.Identifier == "" {
 			continue
 		}
 
-		assetDomain := strings.ToLower(strings.TrimSuffix(asset.Identifier, "."))
+		assetDomain := strings.ToLower(strings.TrimSuffix(a.Identifier, "."))
 		if !match(assetDomain) {
 			continue
 		}
 
-		if id, ok := assetIDByRef[asset.Ref]; ok {
+		if id, ok := assetIDByRef[a.Ref]; ok {
 			ids = append(ids, id)
 		}
 	}
@@ -271,132 +321,310 @@ func domainScanMappingMatches(assets []DomainScanImportAsset, assetIDByRef map[s
 	return ids
 }
 
-// createDomainScanAssets creates one Asset per accepted asset
-func createDomainScanAssets(ctx context.Context, client *generated.Client, ownerID string, assets []DomainScanImportAsset, scanIDs []string) (map[string]string, error) {
+// findOrCreateDomainScanAssets resolves each accepted asset to an Asset ID, reusing the existing
+// org Asset of the same name when the review is imported more than once, and returns the subset
+// of IDs it created
+func findOrCreateDomainScanAssets(ctx context.Context, client *generated.Client, ownerID string, assets []DomainScanImportAsset, scanIDs []string) (map[string]string, []string, error) {
 	ids := make(map[string]string, len(assets))
 
-	for _, asset := range assets {
+	var createdIDs []string
+
+	for _, a := range assets {
+		existing, err := client.Asset.Query().
+			Where(asset.NameEqualFold(a.Name)).
+			First(ctx)
+
+		switch {
+		case err == nil:
+			ids[a.Ref] = existing.ID
+
+			linkedScanIDs, err := existing.QueryScans().IDs(ctx)
+			if err != nil {
+				return nil, nil, fmt.Errorf("looking up scans linked to asset %q: %w", a.Name, err)
+			}
+
+			if missing := unlinkedDomainScanIDs(scanIDs, linkedScanIDs); len(missing) > 0 {
+				if err := client.Asset.UpdateOneID(existing.ID).AddScanIDs(missing...).Exec(ctx); err != nil {
+					return nil, nil, fmt.Errorf("linking scans to existing asset %q: %w", a.Name, err)
+				}
+			}
+
+			continue
+		case !generated.IsNotFound(err):
+			return nil, nil, fmt.Errorf("looking up existing asset %q: %w", a.Name, err)
+		}
+
 		input := generated.CreateAssetInput{
-			Name:       asset.Name,
+			Name:       a.Name,
 			OwnerID:    &ownerID,
-			Categories: asset.Categories,
+			Categories: a.Categories,
 			ScanIDs:    scanIDs,
-			Identifier: &asset.Identifier,
-			Website:    &asset.Website,
+			Identifier: &a.Identifier,
+			Website:    &a.Website,
 		}
 
 		created, err := client.Asset.Create().SetInput(input).Save(ctx)
 		if err != nil {
-			return nil, fmt.Errorf("creating asset %q: %w", asset.Name, err)
+			return nil, nil, fmt.Errorf("creating asset %q: %w", a.Name, err)
 		}
 
-		ids[asset.Ref] = created.ID
+		ids[a.Ref] = created.ID
+		createdIDs = append(createdIDs, created.ID)
 	}
 
-	return ids, nil
+	return ids, createdIDs, nil
 }
 
-// createDomainScanPlatforms creates one Platform per accepted platform, each linked to the scans
-// they were generated from and to whichever accepted vendors/assets the reviewer marked as
-// belonging to it, returning a ref -> Platform ID map so systems can attach to them by ref
-func createDomainScanPlatforms(ctx context.Context, client *generated.Client, ownerID string, platforms []DomainScanImportPlatform, scanIDs []string, entityIDByRef, assetIDByRef map[string]string) (map[string]string, error) {
+// unlinkedDomainScanIDs returns the desired IDs that aren't already linked, so re-importing a
+// review doesn't try to insert an edge row that's already there
+func unlinkedDomainScanIDs(desired, linked []string) []string {
+	return lo.Without(lo.Uniq(desired), linked...)
+}
+
+// findOrCreateDomainScanPlatforms resolves each accepted platform to a Platform ID, reusing the
+// existing org Platform of the same name, and links it to the scans it was generated from and to
+// whichever accepted vendors/assets the reviewer marked as belonging to it. Returns a
+// ref -> Platform ID map so systems can attach to them by ref, plus the subset of IDs it created
+func findOrCreateDomainScanPlatforms(ctx context.Context, client *generated.Client, ownerID string, platforms []DomainScanImportPlatform, scanIDs []string, entityIDByRef, assetIDByRef map[string]string) (map[string]string, []string, error) {
 	ids := make(map[string]string, len(platforms))
 
-	for _, platform := range platforms {
-		input := generated.CreatePlatformInput{
-			Name:             platform.Name,
-			OwnerID:          &ownerID,
-			GeneratedScanIDs: scanIDs,
-			EntityIDs:        resolveDomainScanRefs(platform.EntityRefs, entityIDByRef),
-			AssetIDs:         resolveDomainScanRefs(platform.AssetRefs, assetIDByRef),
+	var createdIDs []string
+
+	for _, p := range platforms {
+		entityIDs := resolveDomainScanRefs(p.EntityRefs, entityIDByRef)
+		assetIDs := resolveDomainScanRefs(p.AssetRefs, assetIDByRef)
+
+		existing, err := client.Platform.Query().
+			Where(platform.NameEqualFold(p.Name)).
+			First(ctx)
+
+		switch {
+		case err == nil:
+			ids[p.Ref] = existing.ID
+
+			if err := relinkDomainScanPlatform(ctx, client, existing, scanIDs, entityIDs, assetIDs); err != nil {
+				return nil, nil, fmt.Errorf("linking to existing platform %q: %w", p.Name, err)
+			}
+
+			continue
+		case !generated.IsNotFound(err):
+			return nil, nil, fmt.Errorf("looking up existing platform %q: %w", p.Name, err)
 		}
 
-		if platform.Description != "" {
-			input.Description = &platform.Description
+		input := generated.CreatePlatformInput{
+			Name:             p.Name,
+			OwnerID:          &ownerID,
+			GeneratedScanIDs: scanIDs,
+			EntityIDs:        entityIDs,
+			AssetIDs:         assetIDs,
+		}
+
+		if p.Description != "" {
+			input.Description = &p.Description
 		}
 
 		created, err := client.Platform.Create().SetInput(input).Save(ctx)
 		if err != nil {
-			return nil, fmt.Errorf("creating platform %q: %w", platform.Name, err)
+			return nil, nil, fmt.Errorf("creating platform %q: %w", p.Name, err)
 		}
 
-		ids[platform.Ref] = created.ID
+		ids[p.Ref] = created.ID
+		createdIDs = append(createdIDs, created.ID)
 	}
 
-	return ids, nil
+	return ids, createdIDs, nil
 }
 
-// createDomainScanSystemDetails creates one SystemDetail per accepted system, parented to the
-// platforms it references by ref (required by SystemDetail's policy) and linked to that system's
-// own subset of accepted vendors/assets
-func createDomainScanSystemDetails(ctx context.Context, client *generated.Client, ownerID string, systems []DomainScanImportSystem, platformIDByRef, entityIDByRef, assetIDByRef map[string]string) ([]string, error) {
+// relinkDomainScanPlatform adds only the scan/vendor/asset links an existing Platform is missing
+func relinkDomainScanPlatform(ctx context.Context, client *generated.Client, existing *generated.Platform, scanIDs, entityIDs, assetIDs []string) error {
+	linkedScanIDs, err := existing.QueryGeneratedScans().IDs(ctx)
+	if err != nil {
+		return err
+	}
+
+	linkedEntityIDs, err := existing.QueryEntities().IDs(ctx)
+	if err != nil {
+		return err
+	}
+
+	linkedAssetIDs, err := existing.QueryAssets().IDs(ctx)
+	if err != nil {
+		return err
+	}
+
+	update := client.Platform.UpdateOneID(existing.ID).
+		AddGeneratedScanIDs(unlinkedDomainScanIDs(scanIDs, linkedScanIDs)...).
+		AddEntityIDs(unlinkedDomainScanIDs(entityIDs, linkedEntityIDs)...).
+		AddAssetIDs(unlinkedDomainScanIDs(assetIDs, linkedAssetIDs)...)
+
+	return update.Exec(ctx)
+}
+
+// findOrCreateDomainScanSystemDetails resolves each accepted system to a SystemDetail ID, reusing
+// the existing org SystemDetail of the same name, parented to the platforms it references by ref
+// (required by SystemDetail's policy) and linked to that system's own subset of accepted
+// vendors/assets. Returns every resolved ID plus the subset it created
+func findOrCreateDomainScanSystemDetails(ctx context.Context, client *generated.Client, ownerID string, systems []DomainScanImportSystem, platformIDByRef, entityIDByRef, assetIDByRef map[string]string) ([]string, []string, error) {
 	ids := make([]string, 0, len(systems))
+
+	var createdIDs []string
 
 	for _, system := range systems {
 		platformIDs := resolveDomainScanRefs(system.PlatformRefs, platformIDByRef)
+		entityIDs := resolveDomainScanRefs(system.EntityRefs, entityIDByRef)
+		assetIDs := resolveDomainScanRefs(system.AssetRefs, assetIDByRef)
+
+		existing, err := client.SystemDetail.Query().
+			Where(systemdetail.SystemNameEqualFold(system.Name)).
+			First(ctx)
+
+		switch {
+		case err == nil:
+			ids = append(ids, existing.ID)
+
+			if err := relinkDomainScanSystemDetail(ctx, client, existing, platformIDs, entityIDs, assetIDs); err != nil {
+				return nil, nil, fmt.Errorf("linking to existing system detail %q: %w", system.Name, err)
+			}
+
+			continue
+		case !generated.IsNotFound(err):
+			return nil, nil, fmt.Errorf("looking up existing system detail %q: %w", system.Name, err)
+		}
 
 		input := generated.CreateSystemDetailInput{
 			SystemName:  system.Name,
 			OwnerID:     &ownerID,
 			PlatformIDs: platformIDs,
-			EntityIDs:   resolveDomainScanRefs(system.EntityRefs, entityIDByRef),
-			AssetIDs:    resolveDomainScanRefs(system.AssetRefs, assetIDByRef),
+			EntityIDs:   entityIDs,
+			AssetIDs:    assetIDs,
 			Description: &system.Description,
 		}
 
 		created, err := client.SystemDetail.Create().SetInput(input).Save(ctx)
 		if err != nil {
-			return nil, fmt.Errorf("creating system detail %q: %w", system.Name, err)
+			return nil, nil, fmt.Errorf("creating system detail %q: %w", system.Name, err)
 		}
 
 		ids = append(ids, created.ID)
+		createdIDs = append(createdIDs, created.ID)
 	}
 
-	return ids, nil
+	return ids, createdIDs, nil
 }
 
-// createDomainScanFindings creates one Finding per accepted finding, linked to the scans it came
-// from and auto-linked to any accepted asset matching its domain
-func createDomainScanFindings(ctx context.Context, client *generated.Client, ownerID string, findings []DomainScanImportFinding, assets []DomainScanImportAsset, assetIDByRef map[string]string, scanIDs []string) ([]string, error) {
+// relinkDomainScanSystemDetail adds only the platform/vendor/asset links an existing SystemDetail
+// is missing
+func relinkDomainScanSystemDetail(ctx context.Context, client *generated.Client, existing *generated.SystemDetail, platformIDs, entityIDs, assetIDs []string) error {
+	linkedPlatformIDs, err := existing.QueryPlatforms().IDs(ctx)
+	if err != nil {
+		return err
+	}
+
+	linkedEntityIDs, err := existing.QueryEntities().IDs(ctx)
+	if err != nil {
+		return err
+	}
+
+	linkedAssetIDs, err := existing.QueryAssets().IDs(ctx)
+	if err != nil {
+		return err
+	}
+
+	update := client.SystemDetail.UpdateOneID(existing.ID).
+		AddPlatformIDs(unlinkedDomainScanIDs(platformIDs, linkedPlatformIDs)...).
+		AddEntityIDs(unlinkedDomainScanIDs(entityIDs, linkedEntityIDs)...).
+		AddAssetIDs(unlinkedDomainScanIDs(assetIDs, linkedAssetIDs)...)
+
+	return update.Exec(ctx)
+}
+
+// findOrCreateDomainScanFindings resolves each accepted finding to a Finding ID, reusing the
+// existing org Finding with the same category and display name, linked to the scans it came from
+// and auto-linked to any accepted asset matching its domain. Returns every resolved ID plus the
+// subset it created
+func findOrCreateDomainScanFindings(ctx context.Context, client *generated.Client, ownerID string, findings []DomainScanImportFinding, assets []DomainScanImportAsset, assetIDByRef map[string]string, scanIDs []string) ([]string, []string, error) {
 	ids := make([]string, 0, len(findings))
+
+	var createdIDs []string
 
 	// a single-domain review (the common case) has exactly one scan behind it, so its target
 	// stands in for any finding that didn't carry its own domain
 	fallbackDomain := domainScanSingleTarget(ctx, client, scanIDs)
 
-	for _, finding := range findings {
-		domain := strings.ToLower(strings.TrimSuffix(finding.Domain, "."))
+	for _, f := range findings {
+		domain := strings.ToLower(strings.TrimSuffix(f.Domain, "."))
 		if domain == "" {
 			domain = fallbackDomain
 		}
 
-		input := generated.CreateFindingInput{
-			OwnerID: &ownerID,
-			ScanIDs: scanIDs,
-			AssetIDs: domainScanMappingMatches(assets, assetIDByRef, func(assetDomain string) bool {
-				return domain != "" && (assetDomain == domain || strings.HasSuffix(assetDomain, "."+domain))
-			}),
-			Category:    &finding.Category,
-			Description: &finding.Description,
-			Severity:    &finding.Severity,
-		}
+		matchedAssetIDs := domainScanMappingMatches(assets, assetIDByRef, func(assetDomain string) bool {
+			return domain != "" && (assetDomain == domain || strings.HasSuffix(assetDomain, "."+domain))
+		})
 
-		displayName := finding.Category
+		displayName := f.Category
 		if domain != "" {
-			displayName = fmt.Sprintf("%s (%s)", finding.Category, domain)
+			displayName = fmt.Sprintf("%s (%s)", f.Category, domain)
 		}
 
-		input.DisplayName = &displayName
+		existing, err := client.Finding.Query().
+			Where(
+				finding.Category(f.Category),
+				finding.DisplayNameEqualFold(displayName),
+			).
+			First(ctx)
+
+		switch {
+		case err == nil:
+			ids = append(ids, existing.ID)
+
+			if err := relinkDomainScanFinding(ctx, client, existing, scanIDs, matchedAssetIDs); err != nil {
+				return nil, nil, fmt.Errorf("linking to existing finding %q: %w", displayName, err)
+			}
+
+			continue
+		case !generated.IsNotFound(err):
+			return nil, nil, fmt.Errorf("looking up existing finding %q: %w", displayName, err)
+		}
+
+		input := generated.CreateFindingInput{
+			OwnerID:     &ownerID,
+			ScanIDs:     scanIDs,
+			AssetIDs:    matchedAssetIDs,
+			Category:    &f.Category,
+			Description: &f.Description,
+			Severity:    &f.Severity,
+			DisplayName: &displayName,
+		}
 
 		created, err := client.Finding.Create().SetInput(input).Save(ctx)
 		if err != nil {
-			return nil, fmt.Errorf("creating finding: %w", err)
+			return nil, nil, fmt.Errorf("creating finding: %w", err)
 		}
 
 		ids = append(ids, created.ID)
+		createdIDs = append(createdIDs, created.ID)
 	}
 
-	return ids, nil
+	return ids, createdIDs, nil
+}
+
+// relinkDomainScanFinding adds only the scan/asset links an existing Finding is missing
+func relinkDomainScanFinding(ctx context.Context, client *generated.Client, existing *generated.Finding, scanIDs, assetIDs []string) error {
+	linkedScanIDs, err := existing.QueryScans().IDs(ctx)
+	if err != nil {
+		return err
+	}
+
+	linkedAssetIDs, err := existing.QueryAssets().IDs(ctx)
+	if err != nil {
+		return err
+	}
+
+	update := client.Finding.UpdateOneID(existing.ID).
+		AddScanIDs(unlinkedDomainScanIDs(scanIDs, linkedScanIDs)...).
+		AddAssetIDs(unlinkedDomainScanIDs(assetIDs, linkedAssetIDs)...)
+
+	return update.Exec(ctx)
 }
 
 // domainScanSingleTarget returns the target domain when scanIDs resolves to exactly one scan -

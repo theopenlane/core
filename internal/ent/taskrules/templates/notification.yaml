@@ -1,0 +1,9 @@
+rules:
+  review-domain-scan:
+    title: Review domain scan results
+    taskKindName: Registry
+    details: |
+      {{.body}}
+    priority: 100
+    metadata:
+      link: /exposure/scans/domain-scan?scanId={{.id}}
