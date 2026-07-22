@@ -13,6 +13,7 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/finding"
+	"github.com/theopenlane/core/internal/ent/generated/findingcontrol"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	intregistry "github.com/theopenlane/core/internal/integrations/registry"
 	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
@@ -87,8 +88,10 @@ func TestIntegrationCrossObjectLinking(t *testing.T) {
 	ctx := setContext(sharedTestUser1.UserCtx, suite.client.db)
 
 	// seed link targets with stable ref codes; other tests' controls use random UUID ref codes
+	controlIDs := make([]string, 0, 4)
 	for _, refCode := range []string{"LINK-CC-1", "LINK-CC-2", "LINK-CC-3", "LINK-EXPR-1"} {
-		(&ControlBuilder{client: suite.client, RefCode: refCode}).MustNew(sharedTestUser1.UserCtx, t)
+		seeded := (&ControlBuilder{client: suite.client, RefCode: refCode}).MustNew(sharedTestUser1.UserCtx, t)
+		controlIDs = append(controlIDs, seeded.ID)
 	}
 
 	integration, err := suite.client.db.Integration.Create().
@@ -98,6 +101,30 @@ func TestIntegrationCrossObjectLinking(t *testing.T) {
 		Save(ctx)
 	requireNoError(t, err)
 	assert.Assert(t, integration.OwnerID != "", "seeded integration must be org-owned")
+
+	// other tests assert exact integration/record counts in the shared org, so remove everything
+	// this test creates: join rows first (their FKs block finding deletion), then findings,
+	// controls, and the integration
+	t.Cleanup(func() {
+		findings, err := suite.client.db.Finding.Query().Where(finding.ExternalIDHasPrefix("link-f-")).All(ctx)
+		requireNoError(t, err)
+
+		findingIDs := lo.Map(findings, func(f *ent.Finding, _ int) string { return f.ID })
+
+		joinRows, err := suite.client.db.FindingControl.Query().Where(findingcontrol.FindingIDIn(findingIDs...)).All(ctx)
+		requireNoError(t, err)
+
+		if len(joinRows) > 0 {
+			(&Cleanup[*ent.FindingControlDeleteOne]{client: suite.client.db.FindingControl, IDs: lo.Map(joinRows, func(fc *ent.FindingControl, _ int) string { return fc.ID })}).MustDelete(sharedTestUser1.UserCtx, t)
+		}
+
+		if len(findingIDs) > 0 {
+			(&Cleanup[*ent.FindingDeleteOne]{client: suite.client.db.Finding, IDs: findingIDs}).MustDelete(sharedTestUser1.UserCtx, t)
+		}
+
+		(&Cleanup[*ent.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlIDs}).MustDelete(sharedTestUser1.UserCtx, t)
+		(&Cleanup[*ent.IntegrationDeleteOne]{client: suite.client.db.Integration, ID: integration.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	})
 
 	fieldMatchRules := []integrationtypes.LinkRule{
 		{
