@@ -94,6 +94,7 @@ func getFrameworkOptions(ctx context.Context, client *generated.Client) ([]model
 				standard.SystemOwned(true),
 				standard.IsPublic(true),
 				standard.FreeToUse(true),
+				standard.FrameworkNotIn("openlane-standard", "openlane-trust-center"),
 			),
 		).
 		All(ctx)
