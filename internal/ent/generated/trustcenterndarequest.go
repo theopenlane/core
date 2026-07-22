@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // TrustCenterNDARequest is the model entity for the TrustCenterNDARequest schema.
@@ -85,11 +86,13 @@ type TrustCenterNDARequestEdges struct {
 	Document *DocumentData `json:"document,omitempty"`
 	// the template file at the time the NDA was signed
 	File *File `json:"file,omitempty"`
+	// ApprovedByUser holds the value of the approved_by_user edge.
+	ApprovedByUser *User `json:"approved_by_user,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [6]bool
+	loadedTypes [7]bool
 	// totalCount holds the count of the edges above.
-	totalCount [6]map[string]int
+	totalCount [7]map[string]int
 
 	namedBlockedGroups   map[string][]*Group
 	namedEditors         map[string][]*Group
@@ -154,6 +157,17 @@ func (e TrustCenterNDARequestEdges) FileOrErr() (*File, error) {
 		return nil, &NotFoundError{label: file.Label}
 	}
 	return nil, &NotLoadedError{edge: "file"}
+}
+
+// ApprovedByUserOrErr returns the ApprovedByUser value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TrustCenterNDARequestEdges) ApprovedByUserOrErr() (*User, error) {
+	if e.ApprovedByUser != nil {
+		return e.ApprovedByUser, nil
+	} else if e.loadedTypes[6] {
+		return nil, &NotFoundError{label: user.Label}
+	}
+	return nil, &NotLoadedError{edge: "approved_by_user"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -367,6 +381,11 @@ func (_m *TrustCenterNDARequest) QueryDocument() *DocumentDataQuery {
 // QueryFile queries the "file" edge of the TrustCenterNDARequest entity.
 func (_m *TrustCenterNDARequest) QueryFile() *FileQuery {
 	return NewTrustCenterNDARequestClient(_m.config).QueryFile(_m)
+}
+
+// QueryApprovedByUser queries the "approved_by_user" edge of the TrustCenterNDARequest entity.
+func (_m *TrustCenterNDARequest) QueryApprovedByUser() *UserQuery {
+	return NewTrustCenterNDARequestClient(_m.config).QueryApprovedByUser(_m)
 }
 
 // Update returns a builder for updating this TrustCenterNDARequest.

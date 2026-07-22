@@ -18132,6 +18132,22 @@ func (m *ProgramMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetEndDate(endDate)
 	}
 
+	if observationPeriodStartDate, exists := m.ObservationPeriodStartDate(); exists {
+		create = create.SetObservationPeriodStartDate(observationPeriodStartDate)
+	}
+
+	if observationPeriodEndDate, exists := m.ObservationPeriodEndDate(); exists {
+		create = create.SetObservationPeriodEndDate(observationPeriodEndDate)
+	}
+
+	if fieldworkStartDate, exists := m.FieldworkStartDate(); exists {
+		create = create.SetFieldworkStartDate(fieldworkStartDate)
+	}
+
+	if fieldworkEndDate, exists := m.FieldworkEndDate(); exists {
+		create = create.SetFieldworkEndDate(fieldworkEndDate)
+	}
+
 	if auditorReady, exists := m.AuditorReady(); exists {
 		create = create.SetAuditorReady(auditorReady)
 	}
@@ -18305,6 +18321,30 @@ func (m *ProgramMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetEndDate(program.EndDate)
 		}
 
+		if observationPeriodStartDate, exists := m.ObservationPeriodStartDate(); exists {
+			create = create.SetObservationPeriodStartDate(observationPeriodStartDate)
+		} else {
+			create = create.SetObservationPeriodStartDate(program.ObservationPeriodStartDate)
+		}
+
+		if observationPeriodEndDate, exists := m.ObservationPeriodEndDate(); exists {
+			create = create.SetObservationPeriodEndDate(observationPeriodEndDate)
+		} else {
+			create = create.SetObservationPeriodEndDate(program.ObservationPeriodEndDate)
+		}
+
+		if fieldworkStartDate, exists := m.FieldworkStartDate(); exists {
+			create = create.SetFieldworkStartDate(fieldworkStartDate)
+		} else {
+			create = create.SetFieldworkStartDate(program.FieldworkStartDate)
+		}
+
+		if fieldworkEndDate, exists := m.FieldworkEndDate(); exists {
+			create = create.SetFieldworkEndDate(fieldworkEndDate)
+		} else {
+			create = create.SetFieldworkEndDate(program.FieldworkEndDate)
+		}
+
 		if auditorReady, exists := m.AuditorReady(); exists {
 			create = create.SetAuditorReady(auditorReady)
 		} else {
@@ -18401,6 +18441,10 @@ func (m *ProgramMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetFrameworkName(program.FrameworkName).
 			SetStartDate(program.StartDate).
 			SetEndDate(program.EndDate).
+			SetObservationPeriodStartDate(program.ObservationPeriodStartDate).
+			SetObservationPeriodEndDate(program.ObservationPeriodEndDate).
+			SetFieldworkStartDate(program.FieldworkStartDate).
+			SetFieldworkEndDate(program.FieldworkEndDate).
 			SetAuditorReady(program.AuditorReady).
 			SetAuditorWriteComments(program.AuditorWriteComments).
 			SetAuditorReadComments(program.AuditorReadComments).
@@ -22752,6 +22796,10 @@ func (m *TaskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetDetailsJSON(detailsJSON)
 	}
 
+	if metadata, exists := m.Metadata(); exists {
+		create = create.SetMetadata(metadata)
+	}
+
 	if status, exists := m.Status(); exists {
 		create = create.SetStatus(status)
 	}
@@ -22778,6 +22826,22 @@ func (m *TaskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if isTemplate, exists := m.IsTemplate(); exists {
 		create = create.SetIsTemplate(isTemplate)
+	}
+
+	if isSuggested, exists := m.IsSuggested(); exists {
+		create = create.SetIsSuggested(isSuggested)
+	}
+
+	if priority, exists := m.Priority(); exists {
+		create = create.SetPriority(priority)
+	}
+
+	if source, exists := m.Source(); exists {
+		create = create.SetSource(source)
+	}
+
+	if sourceKey, exists := m.SourceKey(); exists {
+		create = create.SetSourceKey(sourceKey)
 	}
 
 	if idempotencyKey, exists := m.IdempotencyKey(); exists {
@@ -22949,6 +23013,12 @@ func (m *TaskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDetailsJSON(task.DetailsJSON)
 		}
 
+		if metadata, exists := m.Metadata(); exists {
+			create = create.SetMetadata(metadata)
+		} else {
+			create = create.SetMetadata(task.Metadata)
+		}
+
 		if status, exists := m.Status(); exists {
 			create = create.SetStatus(status)
 		} else {
@@ -22989,6 +23059,30 @@ func (m *TaskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetIsTemplate(isTemplate)
 		} else {
 			create = create.SetIsTemplate(task.IsTemplate)
+		}
+
+		if isSuggested, exists := m.IsSuggested(); exists {
+			create = create.SetIsSuggested(isSuggested)
+		} else {
+			create = create.SetIsSuggested(task.IsSuggested)
+		}
+
+		if priority, exists := m.Priority(); exists {
+			create = create.SetPriority(priority)
+		} else {
+			create = create.SetPriority(task.Priority)
+		}
+
+		if source, exists := m.Source(); exists {
+			create = create.SetSource(source)
+		} else {
+			create = create.SetSource(task.Source)
+		}
+
+		if sourceKey, exists := m.SourceKey(); exists {
+			create = create.SetSourceKey(sourceKey)
+		} else {
+			create = create.SetSourceKey(task.SourceKey)
 		}
 
 		if idempotencyKey, exists := m.IdempotencyKey(); exists {
@@ -23065,6 +23159,7 @@ func (m *TaskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetTitle(task.Title).
 			SetDetails(task.Details).
 			SetDetailsJSON(task.DetailsJSON).
+			SetMetadata(task.Metadata).
 			SetStatus(task.Status).
 			SetNillableDue(task.Due).
 			SetNillableCompleted(task.Completed).
@@ -23072,6 +23167,10 @@ func (m *TaskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetAssignerID(task.AssignerID).
 			SetSystemGenerated(task.SystemGenerated).
 			SetIsTemplate(task.IsTemplate).
+			SetIsSuggested(task.IsSuggested).
+			SetPriority(task.Priority).
+			SetSource(task.Source).
+			SetSourceKey(task.SourceKey).
 			SetIdempotencyKey(task.IdempotencyKey).
 			SetExternalReferenceURL(task.ExternalReferenceURL).
 			SetNillableParentTaskID(task.ParentTaskID).

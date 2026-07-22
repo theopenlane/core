@@ -16750,6 +16750,22 @@ input CreateProgramInput {
 	"""
 	endDate: Time
 	"""
+	the start date of the observation period
+	"""
+	observationPeriodStartDate: Time
+	"""
+	the end date of the observation period
+	"""
+	observationPeriodEndDate: Time
+	"""
+	the start date of fieldwork
+	"""
+	fieldworkStartDate: Time
+	"""
+	the end date of fieldwork
+	"""
+	fieldworkEndDate: Time
+	"""
 	is the program ready for the auditor
 	"""
 	auditorReady: Boolean
@@ -17819,6 +17835,10 @@ input CreateTaskInput {
 	"""
 	detailsJSON: [Any!]
 	"""
+	structured metadata used by clients for task presentation and routing
+	"""
+	metadata: Map
+	"""
 	the status of the task
 	"""
 	status: TaskTaskStatus
@@ -17838,6 +17858,22 @@ input CreateTaskInput {
 	indicates if the task is intended to be used as a template
 	"""
 	isTemplate: Boolean
+	"""
+	indicates if the task is suggested by the system as a recommended next action
+	"""
+	isSuggested: Boolean
+	"""
+	relative ordering priority for suggested and system-generated tasks
+	"""
+	priority: Int
+	"""
+	the system or workflow that created or suggested the task
+	"""
+	source: String
+	"""
+	stable source-specific key for the task
+	"""
+	sourceKey: String
 	"""
 	an optional external reference URL for the task
 	"""
@@ -18133,10 +18169,6 @@ input CreateTrustCenterNDARequestInput {
 	"""
 	approvedAt: DateTime
 	"""
-	ID of the user who approved the request
-	"""
-	approvedByUserID: String
-	"""
 	timestamp when the NDA was signed
 	"""
 	signedAt: DateTime
@@ -18146,6 +18178,7 @@ input CreateTrustCenterNDARequestInput {
 	trustCenterDocIDs: [ID!]
 	documentID: ID
 	fileID: ID
+	approvedByUserID: ID
 }
 """
 Input for createTrustCenterPreviewSetting mutation
@@ -66940,6 +66973,22 @@ type Program implements Node {
 	"""
 	endDate: Time
 	"""
+	the start date of the observation period
+	"""
+	observationPeriodStartDate: Time
+	"""
+	the end date of the observation period
+	"""
+	observationPeriodEndDate: Time
+	"""
+	the start date of fieldwork
+	"""
+	fieldworkStartDate: Time
+	"""
+	the end date of fieldwork
+	"""
+	fieldworkEndDate: Time
+	"""
 	is the program ready for the auditor
 	"""
 	auditorReady: Boolean!
@@ -68016,6 +68065,10 @@ enum ProgramOrderField {
 	framework
 	start_date
 	end_date
+	observation_period_start_date
+	observation_period_end_date
+	fieldwork_start_date
+	fieldwork_end_date
 }
 """
 ProgramProgramStatus is enum for the field status
@@ -68311,6 +68364,58 @@ input ProgramWhereInput {
 	endDateLTE: Time
 	endDateIsNil: Boolean
 	endDateNotNil: Boolean
+	"""
+	observation_period_start_date field predicates
+	"""
+	observationPeriodStartDate: Time
+	observationPeriodStartDateNEQ: Time
+	observationPeriodStartDateIn: [Time!]
+	observationPeriodStartDateNotIn: [Time!]
+	observationPeriodStartDateGT: Time
+	observationPeriodStartDateGTE: Time
+	observationPeriodStartDateLT: Time
+	observationPeriodStartDateLTE: Time
+	observationPeriodStartDateIsNil: Boolean
+	observationPeriodStartDateNotNil: Boolean
+	"""
+	observation_period_end_date field predicates
+	"""
+	observationPeriodEndDate: Time
+	observationPeriodEndDateNEQ: Time
+	observationPeriodEndDateIn: [Time!]
+	observationPeriodEndDateNotIn: [Time!]
+	observationPeriodEndDateGT: Time
+	observationPeriodEndDateGTE: Time
+	observationPeriodEndDateLT: Time
+	observationPeriodEndDateLTE: Time
+	observationPeriodEndDateIsNil: Boolean
+	observationPeriodEndDateNotNil: Boolean
+	"""
+	fieldwork_start_date field predicates
+	"""
+	fieldworkStartDate: Time
+	fieldworkStartDateNEQ: Time
+	fieldworkStartDateIn: [Time!]
+	fieldworkStartDateNotIn: [Time!]
+	fieldworkStartDateGT: Time
+	fieldworkStartDateGTE: Time
+	fieldworkStartDateLT: Time
+	fieldworkStartDateLTE: Time
+	fieldworkStartDateIsNil: Boolean
+	fieldworkStartDateNotNil: Boolean
+	"""
+	fieldwork_end_date field predicates
+	"""
+	fieldworkEndDate: Time
+	fieldworkEndDateNEQ: Time
+	fieldworkEndDateIn: [Time!]
+	fieldworkEndDateNotIn: [Time!]
+	fieldworkEndDateGT: Time
+	fieldworkEndDateGTE: Time
+	fieldworkEndDateLT: Time
+	fieldworkEndDateLTE: Time
+	fieldworkEndDateIsNil: Boolean
+	fieldworkEndDateNotNil: Boolean
 	"""
 	auditor_ready field predicates
 	"""
@@ -85858,6 +85963,10 @@ type Task implements Node {
 	"""
 	detailsJSON: [Any!]
 	"""
+	structured metadata used by clients for task presentation and routing
+	"""
+	metadata: Map
+	"""
 	the status of the task
 	"""
 	status: TaskTaskStatus!
@@ -85885,6 +85994,22 @@ type Task implements Node {
 	indicates if the task is intended to be used as a template
 	"""
 	isTemplate: Boolean!
+	"""
+	indicates if the task is suggested by the system as a recommended next action
+	"""
+	isSuggested: Boolean!
+	"""
+	relative ordering priority for suggested and system-generated tasks
+	"""
+	priority: Int!
+	"""
+	the system or workflow that created or suggested the task
+	"""
+	source: String
+	"""
+	stable source-specific key for the task
+	"""
+	sourceKey: String
 	"""
 	key to prevent duplicates for auto-generated task based on rules
 	"""
@@ -86591,6 +86716,8 @@ enum TaskOrderField {
 	due
 	completed
 	is_template
+	is_suggested
+	priority
 }
 """
 TaskTaskStatus is enum for the field status
@@ -86992,6 +87119,58 @@ input TaskWhereInput {
 	"""
 	isTemplate: Boolean
 	isTemplateNEQ: Boolean
+	"""
+	is_suggested field predicates
+	"""
+	isSuggested: Boolean
+	isSuggestedNEQ: Boolean
+	"""
+	priority field predicates
+	"""
+	priority: Int
+	priorityNEQ: Int
+	priorityIn: [Int!]
+	priorityNotIn: [Int!]
+	priorityGT: Int
+	priorityGTE: Int
+	priorityLT: Int
+	priorityLTE: Int
+	"""
+	source field predicates
+	"""
+	source: String
+	sourceNEQ: String
+	sourceIn: [String!]
+	sourceNotIn: [String!]
+	sourceGT: String
+	sourceGTE: String
+	sourceLT: String
+	sourceLTE: String
+	sourceContains: String
+	sourceHasPrefix: String
+	sourceHasSuffix: String
+	sourceIsNil: Boolean
+	sourceNotNil: Boolean
+	sourceEqualFold: String
+	sourceContainsFold: String
+	"""
+	source_key field predicates
+	"""
+	sourceKey: String
+	sourceKeyNEQ: String
+	sourceKeyIn: [String!]
+	sourceKeyNotIn: [String!]
+	sourceKeyGT: String
+	sourceKeyGTE: String
+	sourceKeyLT: String
+	sourceKeyLTE: String
+	sourceKeyContains: String
+	sourceKeyHasPrefix: String
+	sourceKeyHasSuffix: String
+	sourceKeyIsNil: Boolean
+	sourceKeyNotNil: Boolean
+	sourceKeyEqualFold: String
+	sourceKeyContainsFold: String
 	"""
 	idempotency_key field predicates
 	"""
@@ -90269,7 +90448,7 @@ type TrustCenterNDARequest implements Node {
 	"""
 	ID of the user who approved the request
 	"""
-	approvedByUserID: String
+	approvedByUserID: ID
 	"""
 	timestamp when the NDA was signed
 	"""
@@ -90384,6 +90563,7 @@ type TrustCenterNDARequest implements Node {
 	the template file at the time the NDA was signed
 	"""
 	file: File
+	approvedByUser: User
 }
 """
 Return response for createBulkTrustCenterNDARequest mutation
@@ -90742,21 +90922,21 @@ input TrustCenterNDARequestWhereInput {
 	"""
 	approved_by_user_id field predicates
 	"""
-	approvedByUserID: String
-	approvedByUserIDNEQ: String
-	approvedByUserIDIn: [String!]
-	approvedByUserIDNotIn: [String!]
-	approvedByUserIDGT: String
-	approvedByUserIDGTE: String
-	approvedByUserIDLT: String
-	approvedByUserIDLTE: String
-	approvedByUserIDContains: String
-	approvedByUserIDHasPrefix: String
-	approvedByUserIDHasSuffix: String
+	approvedByUserID: ID
+	approvedByUserIDNEQ: ID
+	approvedByUserIDIn: [ID!]
+	approvedByUserIDNotIn: [ID!]
+	approvedByUserIDGT: ID
+	approvedByUserIDGTE: ID
+	approvedByUserIDLT: ID
+	approvedByUserIDLTE: ID
+	approvedByUserIDContains: ID
+	approvedByUserIDHasPrefix: ID
+	approvedByUserIDHasSuffix: ID
 	approvedByUserIDIsNil: Boolean
 	approvedByUserIDNotNil: Boolean
-	approvedByUserIDEqualFold: String
-	approvedByUserIDContainsFold: String
+	approvedByUserIDEqualFold: ID
+	approvedByUserIDContainsFold: ID
 	"""
 	signed_at field predicates
 	"""
@@ -90836,6 +91016,11 @@ input TrustCenterNDARequestWhereInput {
 	"""
 	hasFile: Boolean
 	hasFileWith: [FileWhereInput!]
+	"""
+	approved_by_user edge predicates
+	"""
+	hasApprovedByUser: Boolean
+	hasApprovedByUserWith: [UserWhereInput!]
 	"""
 	Filter for tagsHas to contain a specific value
 	"""
@@ -98917,6 +99102,26 @@ input UpdateProgramInput {
 	endDate: Time
 	clearEndDate: Boolean
 	"""
+	the start date of the observation period
+	"""
+	observationPeriodStartDate: Time
+	clearObservationPeriodStartDate: Boolean
+	"""
+	the end date of the observation period
+	"""
+	observationPeriodEndDate: Time
+	clearObservationPeriodEndDate: Boolean
+	"""
+	the start date of fieldwork
+	"""
+	fieldworkStartDate: Time
+	clearFieldworkStartDate: Boolean
+	"""
+	the end date of fieldwork
+	"""
+	fieldworkEndDate: Time
+	clearFieldworkEndDate: Boolean
+	"""
 	is the program ready for the auditor
 	"""
 	auditorReady: Boolean
@@ -100452,6 +100657,11 @@ input UpdateTaskInput {
 	appendDetailsJSON: [Any!]
 	clearDetailsJSON: Boolean
 	"""
+	structured metadata used by clients for task presentation and routing
+	"""
+	metadata: Map
+	clearMetadata: Boolean
+	"""
 	the status of the task
 	"""
 	status: TaskTaskStatus
@@ -100473,6 +100683,24 @@ input UpdateTaskInput {
 	indicates if the task is intended to be used as a template
 	"""
 	isTemplate: Boolean
+	"""
+	indicates if the task is suggested by the system as a recommended next action
+	"""
+	isSuggested: Boolean
+	"""
+	relative ordering priority for suggested and system-generated tasks
+	"""
+	priority: Int
+	"""
+	the system or workflow that created or suggested the task
+	"""
+	source: String
+	clearSource: Boolean
+	"""
+	stable source-specific key for the task
+	"""
+	sourceKey: String
+	clearSourceKey: Boolean
 	"""
 	an optional external reference URL for the task
 	"""
@@ -100901,11 +101129,6 @@ input UpdateTrustCenterNDARequestInput {
 	approvedAt: DateTime
 	clearApprovedAt: Boolean
 	"""
-	ID of the user who approved the request
-	"""
-	approvedByUserID: String
-	clearApprovedByUserID: Boolean
-	"""
 	timestamp when the NDA was signed
 	"""
 	signedAt: DateTime
@@ -100923,6 +101146,8 @@ input UpdateTrustCenterNDARequestInput {
 	clearDocument: Boolean
 	fileID: ID
 	clearFile: Boolean
+	approvedByUserID: ID
+	clearApprovedByUser: Boolean
 }
 """
 UpdateTrustCenterSettingInput is used for update TrustCenterSetting object.

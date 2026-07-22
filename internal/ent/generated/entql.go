@@ -2628,32 +2628,36 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "Program",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			program.FieldCreatedAt:             {Type: field.TypeTime, Column: program.FieldCreatedAt},
-			program.FieldUpdatedAt:             {Type: field.TypeTime, Column: program.FieldUpdatedAt},
-			program.FieldCreatedBy:             {Type: field.TypeString, Column: program.FieldCreatedBy},
-			program.FieldUpdatedBy:             {Type: field.TypeString, Column: program.FieldUpdatedBy},
-			program.FieldUpdatedByImpersonator: {Type: field.TypeString, Column: program.FieldUpdatedByImpersonator},
-			program.FieldDeletedAt:             {Type: field.TypeTime, Column: program.FieldDeletedAt},
-			program.FieldDeletedBy:             {Type: field.TypeString, Column: program.FieldDeletedBy},
-			program.FieldDisplayID:             {Type: field.TypeString, Column: program.FieldDisplayID},
-			program.FieldTags:                  {Type: field.TypeJSON, Column: program.FieldTags},
-			program.FieldOwnerID:               {Type: field.TypeString, Column: program.FieldOwnerID},
-			program.FieldProgramKindName:       {Type: field.TypeString, Column: program.FieldProgramKindName},
-			program.FieldProgramKindID:         {Type: field.TypeString, Column: program.FieldProgramKindID},
-			program.FieldExternalUUID:          {Type: field.TypeString, Column: program.FieldExternalUUID},
-			program.FieldName:                  {Type: field.TypeString, Column: program.FieldName},
-			program.FieldDescription:           {Type: field.TypeString, Column: program.FieldDescription},
-			program.FieldStatus:                {Type: field.TypeEnum, Column: program.FieldStatus},
-			program.FieldFrameworkName:         {Type: field.TypeString, Column: program.FieldFrameworkName},
-			program.FieldStartDate:             {Type: field.TypeTime, Column: program.FieldStartDate},
-			program.FieldEndDate:               {Type: field.TypeTime, Column: program.FieldEndDate},
-			program.FieldAuditorReady:          {Type: field.TypeBool, Column: program.FieldAuditorReady},
-			program.FieldAuditorWriteComments:  {Type: field.TypeBool, Column: program.FieldAuditorWriteComments},
-			program.FieldAuditorReadComments:   {Type: field.TypeBool, Column: program.FieldAuditorReadComments},
-			program.FieldAuditFirm:             {Type: field.TypeString, Column: program.FieldAuditFirm},
-			program.FieldAuditor:               {Type: field.TypeString, Column: program.FieldAuditor},
-			program.FieldAuditorEmail:          {Type: field.TypeString, Column: program.FieldAuditorEmail},
-			program.FieldProgramOwnerID:        {Type: field.TypeString, Column: program.FieldProgramOwnerID},
+			program.FieldCreatedAt:                  {Type: field.TypeTime, Column: program.FieldCreatedAt},
+			program.FieldUpdatedAt:                  {Type: field.TypeTime, Column: program.FieldUpdatedAt},
+			program.FieldCreatedBy:                  {Type: field.TypeString, Column: program.FieldCreatedBy},
+			program.FieldUpdatedBy:                  {Type: field.TypeString, Column: program.FieldUpdatedBy},
+			program.FieldUpdatedByImpersonator:      {Type: field.TypeString, Column: program.FieldUpdatedByImpersonator},
+			program.FieldDeletedAt:                  {Type: field.TypeTime, Column: program.FieldDeletedAt},
+			program.FieldDeletedBy:                  {Type: field.TypeString, Column: program.FieldDeletedBy},
+			program.FieldDisplayID:                  {Type: field.TypeString, Column: program.FieldDisplayID},
+			program.FieldTags:                       {Type: field.TypeJSON, Column: program.FieldTags},
+			program.FieldOwnerID:                    {Type: field.TypeString, Column: program.FieldOwnerID},
+			program.FieldProgramKindName:            {Type: field.TypeString, Column: program.FieldProgramKindName},
+			program.FieldProgramKindID:              {Type: field.TypeString, Column: program.FieldProgramKindID},
+			program.FieldExternalUUID:               {Type: field.TypeString, Column: program.FieldExternalUUID},
+			program.FieldName:                       {Type: field.TypeString, Column: program.FieldName},
+			program.FieldDescription:                {Type: field.TypeString, Column: program.FieldDescription},
+			program.FieldStatus:                     {Type: field.TypeEnum, Column: program.FieldStatus},
+			program.FieldFrameworkName:              {Type: field.TypeString, Column: program.FieldFrameworkName},
+			program.FieldStartDate:                  {Type: field.TypeTime, Column: program.FieldStartDate},
+			program.FieldEndDate:                    {Type: field.TypeTime, Column: program.FieldEndDate},
+			program.FieldObservationPeriodStartDate: {Type: field.TypeTime, Column: program.FieldObservationPeriodStartDate},
+			program.FieldObservationPeriodEndDate:   {Type: field.TypeTime, Column: program.FieldObservationPeriodEndDate},
+			program.FieldFieldworkStartDate:         {Type: field.TypeTime, Column: program.FieldFieldworkStartDate},
+			program.FieldFieldworkEndDate:           {Type: field.TypeTime, Column: program.FieldFieldworkEndDate},
+			program.FieldAuditorReady:               {Type: field.TypeBool, Column: program.FieldAuditorReady},
+			program.FieldAuditorWriteComments:       {Type: field.TypeBool, Column: program.FieldAuditorWriteComments},
+			program.FieldAuditorReadComments:        {Type: field.TypeBool, Column: program.FieldAuditorReadComments},
+			program.FieldAuditFirm:                  {Type: field.TypeString, Column: program.FieldAuditFirm},
+			program.FieldAuditor:                    {Type: field.TypeString, Column: program.FieldAuditor},
+			program.FieldAuditorEmail:               {Type: field.TypeString, Column: program.FieldAuditorEmail},
+			program.FieldProgramOwnerID:             {Type: field.TypeString, Column: program.FieldProgramOwnerID},
 		},
 	}
 	graph.Nodes[68] = &sqlgraph.Node{
@@ -3242,6 +3246,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			task.FieldTitle:                  {Type: field.TypeString, Column: task.FieldTitle},
 			task.FieldDetails:                {Type: field.TypeString, Column: task.FieldDetails},
 			task.FieldDetailsJSON:            {Type: field.TypeJSON, Column: task.FieldDetailsJSON},
+			task.FieldMetadata:               {Type: field.TypeJSON, Column: task.FieldMetadata},
 			task.FieldStatus:                 {Type: field.TypeEnum, Column: task.FieldStatus},
 			task.FieldDue:                    {Type: field.TypeTime, Column: task.FieldDue},
 			task.FieldCompleted:              {Type: field.TypeTime, Column: task.FieldCompleted},
@@ -3249,6 +3254,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 			task.FieldAssignerID:             {Type: field.TypeString, Column: task.FieldAssignerID},
 			task.FieldSystemGenerated:        {Type: field.TypeBool, Column: task.FieldSystemGenerated},
 			task.FieldIsTemplate:             {Type: field.TypeBool, Column: task.FieldIsTemplate},
+			task.FieldIsSuggested:            {Type: field.TypeBool, Column: task.FieldIsSuggested},
+			task.FieldPriority:               {Type: field.TypeInt, Column: task.FieldPriority},
+			task.FieldSource:                 {Type: field.TypeString, Column: task.FieldSource},
+			task.FieldSourceKey:              {Type: field.TypeString, Column: task.FieldSourceKey},
 			task.FieldIdempotencyKey:         {Type: field.TypeString, Column: task.FieldIdempotencyKey},
 			task.FieldExternalReferenceURL:   {Type: field.TypeJSON, Column: task.FieldExternalReferenceURL},
 			task.FieldParentTaskID:           {Type: field.TypeString, Column: task.FieldParentTaskID},
@@ -17367,6 +17376,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"TrustCenterNDARequest",
 		"File",
+	)
+	graph.MustAddE(
+		"approved_by_user",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterndarequest.ApprovedByUserTable,
+			Columns: []string{trustcenterndarequest.ApprovedByUserColumn},
+			Bidi:    false,
+		},
+		"TrustCenterNDARequest",
+		"User",
 	)
 	graph.MustAddE(
 		"blocked_groups",
@@ -41943,6 +41964,26 @@ func (f *ProgramFilter) WhereEndDate(p entql.TimeP) {
 	f.Where(p.Field(program.FieldEndDate))
 }
 
+// WhereObservationPeriodStartDate applies the entql time.Time predicate on the observation_period_start_date field.
+func (f *ProgramFilter) WhereObservationPeriodStartDate(p entql.TimeP) {
+	f.Where(p.Field(program.FieldObservationPeriodStartDate))
+}
+
+// WhereObservationPeriodEndDate applies the entql time.Time predicate on the observation_period_end_date field.
+func (f *ProgramFilter) WhereObservationPeriodEndDate(p entql.TimeP) {
+	f.Where(p.Field(program.FieldObservationPeriodEndDate))
+}
+
+// WhereFieldworkStartDate applies the entql time.Time predicate on the fieldwork_start_date field.
+func (f *ProgramFilter) WhereFieldworkStartDate(p entql.TimeP) {
+	f.Where(p.Field(program.FieldFieldworkStartDate))
+}
+
+// WhereFieldworkEndDate applies the entql time.Time predicate on the fieldwork_end_date field.
+func (f *ProgramFilter) WhereFieldworkEndDate(p entql.TimeP) {
+	f.Where(p.Field(program.FieldFieldworkEndDate))
+}
+
 // WhereAuditorReady applies the entql bool predicate on the auditor_ready field.
 func (f *ProgramFilter) WhereAuditorReady(p entql.BoolP) {
 	f.Where(p.Field(program.FieldAuditorReady))
@@ -47108,6 +47149,11 @@ func (f *TaskFilter) WhereDetailsJSON(p entql.BytesP) {
 	f.Where(p.Field(task.FieldDetailsJSON))
 }
 
+// WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
+func (f *TaskFilter) WhereMetadata(p entql.BytesP) {
+	f.Where(p.Field(task.FieldMetadata))
+}
+
 // WhereStatus applies the entql string predicate on the status field.
 func (f *TaskFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(task.FieldStatus))
@@ -47141,6 +47187,26 @@ func (f *TaskFilter) WhereSystemGenerated(p entql.BoolP) {
 // WhereIsTemplate applies the entql bool predicate on the is_template field.
 func (f *TaskFilter) WhereIsTemplate(p entql.BoolP) {
 	f.Where(p.Field(task.FieldIsTemplate))
+}
+
+// WhereIsSuggested applies the entql bool predicate on the is_suggested field.
+func (f *TaskFilter) WhereIsSuggested(p entql.BoolP) {
+	f.Where(p.Field(task.FieldIsSuggested))
+}
+
+// WherePriority applies the entql int predicate on the priority field.
+func (f *TaskFilter) WherePriority(p entql.IntP) {
+	f.Where(p.Field(task.FieldPriority))
+}
+
+// WhereSource applies the entql string predicate on the source field.
+func (f *TaskFilter) WhereSource(p entql.StringP) {
+	f.Where(p.Field(task.FieldSource))
+}
+
+// WhereSourceKey applies the entql string predicate on the source_key field.
+func (f *TaskFilter) WhereSourceKey(p entql.StringP) {
+	f.Where(p.Field(task.FieldSourceKey))
 }
 
 // WhereIdempotencyKey applies the entql string predicate on the idempotency_key field.
@@ -49141,6 +49207,20 @@ func (f *TrustCenterNDARequestFilter) WhereHasFile() {
 // WhereHasFileWith applies a predicate to check if query has an edge file with a given conditions (other predicates).
 func (f *TrustCenterNDARequestFilter) WhereHasFileWith(preds ...predicate.File) {
 	f.Where(entql.HasEdgeWith("file", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasApprovedByUser applies a predicate to check if query has an edge approved_by_user.
+func (f *TrustCenterNDARequestFilter) WhereHasApprovedByUser() {
+	f.Where(entql.HasEdge("approved_by_user"))
+}
+
+// WhereHasApprovedByUserWith applies a predicate to check if query has an edge approved_by_user with a given conditions (other predicates).
+func (f *TrustCenterNDARequestFilter) WhereHasApprovedByUserWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("approved_by_user", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

@@ -137,4 +137,3 @@ func TestBuildComplianceSection(t *testing.T) {
 		assert.Check(t, is.DeepEqual(want, got))
 	})
 }
-

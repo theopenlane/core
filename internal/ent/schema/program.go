@@ -124,6 +124,30 @@ func (Program) Fields() []ent.Field {
 				entgql.OrderField("end_date"),
 			).
 			Optional(),
+		field.Time("observation_period_start_date").
+			Comment("the start date of the observation period").
+			Annotations(
+				entgql.OrderField("observation_period_start_date"),
+			).
+			Optional(),
+		field.Time("observation_period_end_date").
+			Comment("the end date of the observation period").
+			Annotations(
+				entgql.OrderField("observation_period_end_date"),
+			).
+			Optional(),
+		field.Time("fieldwork_start_date").
+			Comment("the start date of fieldwork").
+			Annotations(
+				entgql.OrderField("fieldwork_start_date"),
+			).
+			Optional(),
+		field.Time("fieldwork_end_date").
+			Comment("the end date of fieldwork").
+			Annotations(
+				entgql.OrderField("fieldwork_end_date"),
+			).
+			Optional(),
 		field.Bool("auditor_ready").
 			Comment("is the program ready for the auditor").
 			Default(false),

@@ -18157,6 +18157,14 @@ func (_m *TrustCenterNDARequest) File(ctx context.Context) (*File, error) {
 	return result, MaskNotFound(err)
 }
 
+func (_m *TrustCenterNDARequest) ApprovedByUser(ctx context.Context) (*User, error) {
+	result, err := _m.Edges.ApprovedByUserOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryApprovedByUser().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (_m *TrustCenterSetting) BlockedGroups(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*GroupOrder, where *GroupWhereInput,
 ) (*GroupConnection, error) {

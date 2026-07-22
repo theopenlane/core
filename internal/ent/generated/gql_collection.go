@@ -68928,6 +68928,26 @@ func (_q *ProgramQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				selectedFields = append(selectedFields, program.FieldEndDate)
 				fieldSeen[program.FieldEndDate] = struct{}{}
 			}
+		case "observationPeriodStartDate":
+			if _, ok := fieldSeen[program.FieldObservationPeriodStartDate]; !ok {
+				selectedFields = append(selectedFields, program.FieldObservationPeriodStartDate)
+				fieldSeen[program.FieldObservationPeriodStartDate] = struct{}{}
+			}
+		case "observationPeriodEndDate":
+			if _, ok := fieldSeen[program.FieldObservationPeriodEndDate]; !ok {
+				selectedFields = append(selectedFields, program.FieldObservationPeriodEndDate)
+				fieldSeen[program.FieldObservationPeriodEndDate] = struct{}{}
+			}
+		case "fieldworkStartDate":
+			if _, ok := fieldSeen[program.FieldFieldworkStartDate]; !ok {
+				selectedFields = append(selectedFields, program.FieldFieldworkStartDate)
+				fieldSeen[program.FieldFieldworkStartDate] = struct{}{}
+			}
+		case "fieldworkEndDate":
+			if _, ok := fieldSeen[program.FieldFieldworkEndDate]; !ok {
+				selectedFields = append(selectedFields, program.FieldFieldworkEndDate)
+				fieldSeen[program.FieldFieldworkEndDate] = struct{}{}
+			}
 		case "auditorReady":
 			if _, ok := fieldSeen[program.FieldAuditorReady]; !ok {
 				selectedFields = append(selectedFields, program.FieldAuditorReady)
@@ -84498,6 +84518,11 @@ func (_q *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				selectedFields = append(selectedFields, task.FieldDetailsJSON)
 				fieldSeen[task.FieldDetailsJSON] = struct{}{}
 			}
+		case "metadata":
+			if _, ok := fieldSeen[task.FieldMetadata]; !ok {
+				selectedFields = append(selectedFields, task.FieldMetadata)
+				fieldSeen[task.FieldMetadata] = struct{}{}
+			}
 		case "status":
 			if _, ok := fieldSeen[task.FieldStatus]; !ok {
 				selectedFields = append(selectedFields, task.FieldStatus)
@@ -84532,6 +84557,26 @@ func (_q *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			if _, ok := fieldSeen[task.FieldIsTemplate]; !ok {
 				selectedFields = append(selectedFields, task.FieldIsTemplate)
 				fieldSeen[task.FieldIsTemplate] = struct{}{}
+			}
+		case "isSuggested":
+			if _, ok := fieldSeen[task.FieldIsSuggested]; !ok {
+				selectedFields = append(selectedFields, task.FieldIsSuggested)
+				fieldSeen[task.FieldIsSuggested] = struct{}{}
+			}
+		case "priority":
+			if _, ok := fieldSeen[task.FieldPriority]; !ok {
+				selectedFields = append(selectedFields, task.FieldPriority)
+				fieldSeen[task.FieldPriority] = struct{}{}
+			}
+		case "source":
+			if _, ok := fieldSeen[task.FieldSource]; !ok {
+				selectedFields = append(selectedFields, task.FieldSource)
+				fieldSeen[task.FieldSource] = struct{}{}
+			}
+		case "sourceKey":
+			if _, ok := fieldSeen[task.FieldSourceKey]; !ok {
+				selectedFields = append(selectedFields, task.FieldSourceKey)
+				fieldSeen[task.FieldSourceKey] = struct{}{}
 			}
 		case "idempotencyKey":
 			if _, ok := fieldSeen[task.FieldIdempotencyKey]; !ok {
@@ -88554,6 +88599,21 @@ func (_q *TrustCenterNDARequestQuery) collectField(ctx context.Context, oneNode 
 			if _, ok := fieldSeen[trustcenterndarequest.FieldFileID]; !ok {
 				selectedFields = append(selectedFields, trustcenterndarequest.FieldFileID)
 				fieldSeen[trustcenterndarequest.FieldFileID] = struct{}{}
+			}
+
+		case "approvedByUser":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&UserClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+				return err
+			}
+			_q.withApprovedByUser = query
+			if _, ok := fieldSeen[trustcenterndarequest.FieldApprovedByUserID]; !ok {
+				selectedFields = append(selectedFields, trustcenterndarequest.FieldApprovedByUserID)
+				fieldSeen[trustcenterndarequest.FieldApprovedByUserID] = struct{}{}
 			}
 		case "createdAt":
 			if _, ok := fieldSeen[trustcenterndarequest.FieldCreatedAt]; !ok {
