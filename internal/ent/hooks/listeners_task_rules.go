@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/ent/eventqueue"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/notification"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/taskrules"
@@ -145,7 +146,24 @@ func handleTaskRuleMutation(ctx gala.HandlerContext, schema *entityops.Schema, p
 func notifyOrganizationReady(ctx context.Context, client *generated.Client, organizationID string) error {
 	const organizationReadyObjectType = "organization.ready"
 
-	_, err := client.Notification.Create().
+	// gala delivers at-least-once, so skip if this org already has the notification
+	// if another organization event fails, they all get retriggered and we don't want multiple
+	// notifications
+	exists, err := client.Notification.Query().
+		Where(
+			notification.OwnerIDEQ(organizationID),
+			notification.ObjectTypeEQ(organizationReadyObjectType),
+		).
+		Exist(ctx)
+	if err != nil {
+		return err
+	}
+
+	if exists {
+		return nil
+	}
+
+	_, err = client.Notification.Create().
 		SetOwnerID(organizationID).
 		SetNotificationType(enums.NotificationTypeOrganization).
 		SetObjectType(organizationReadyObjectType).
