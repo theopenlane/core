@@ -56,6 +56,14 @@ const (
 	FieldStartDate = "start_date"
 	// FieldEndDate holds the string denoting the end_date field in the database.
 	FieldEndDate = "end_date"
+	// FieldObservationPeriodStartDate holds the string denoting the observation_period_start_date field in the database.
+	FieldObservationPeriodStartDate = "observation_period_start_date"
+	// FieldObservationPeriodEndDate holds the string denoting the observation_period_end_date field in the database.
+	FieldObservationPeriodEndDate = "observation_period_end_date"
+	// FieldFieldworkStartDate holds the string denoting the fieldwork_start_date field in the database.
+	FieldFieldworkStartDate = "fieldwork_start_date"
+	// FieldFieldworkEndDate holds the string denoting the fieldwork_end_date field in the database.
+	FieldFieldworkEndDate = "fieldwork_end_date"
 	// FieldAuditorReady holds the string denoting the auditor_ready field in the database.
 	FieldAuditorReady = "auditor_ready"
 	// FieldAuditorWriteComments holds the string denoting the auditor_write_comments field in the database.
@@ -283,6 +291,10 @@ var Columns = []string{
 	FieldFrameworkName,
 	FieldStartDate,
 	FieldEndDate,
+	FieldObservationPeriodStartDate,
+	FieldObservationPeriodEndDate,
+	FieldFieldworkStartDate,
+	FieldFieldworkEndDate,
 	FieldAuditorReady,
 	FieldAuditorWriteComments,
 	FieldAuditorReadComments,
@@ -516,6 +528,26 @@ func ByStartDate(opts ...sql.OrderTermOption) OrderOption {
 // ByEndDate orders the results by the end_date field.
 func ByEndDate(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEndDate, opts...).ToFunc()
+}
+
+// ByObservationPeriodStartDate orders the results by the observation_period_start_date field.
+func ByObservationPeriodStartDate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldObservationPeriodStartDate, opts...).ToFunc()
+}
+
+// ByObservationPeriodEndDate orders the results by the observation_period_end_date field.
+func ByObservationPeriodEndDate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldObservationPeriodEndDate, opts...).ToFunc()
+}
+
+// ByFieldworkStartDate orders the results by the fieldwork_start_date field.
+func ByFieldworkStartDate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFieldworkStartDate, opts...).ToFunc()
+}
+
+// ByFieldworkEndDate orders the results by the fieldwork_end_date field.
+func ByFieldworkEndDate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFieldworkEndDate, opts...).ToFunc()
 }
 
 // ByAuditorReady orders the results by the auditor_ready field.

@@ -2286,12 +2286,18 @@ func adminSearchTasks(ctx context.Context, query string, after *entgql.Cursor[st
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(details_json)::text LIKE $15", likeQuery)) // search by DetailsJSON
 				},
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(metadata)::text LIKE $16", likeQuery)) // search by Metadata
+				},
 				task.AssigneeIDContainsFold(query),     // search by AssigneeID
 				task.AssignerIDContainsFold(query),     // search by AssignerID
+				task.SourceContainsFold(query),         // search by Source
+				task.SourceKeyContainsFold(query),      // search by SourceKey
 				task.IdempotencyKeyContainsFold(query), // search by IdempotencyKey
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(external_reference_url)::text LIKE $19", likeQuery)) // search by ExternalReferenceURL
+					s.Where(sql.ExprP("(external_reference_url)::text LIKE $22", likeQuery)) // search by ExternalReferenceURL
 				},
 				task.ParentTaskIDContainsFold(query), // search by ParentTaskID
 			),

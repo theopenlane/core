@@ -2090,35 +2090,39 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "ProgramHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			programhistory.FieldHistoryTime:           {Type: field.TypeTime, Column: programhistory.FieldHistoryTime},
-			programhistory.FieldRef:                   {Type: field.TypeString, Column: programhistory.FieldRef},
-			programhistory.FieldOperation:             {Type: field.TypeEnum, Column: programhistory.FieldOperation},
-			programhistory.FieldCreatedAt:             {Type: field.TypeTime, Column: programhistory.FieldCreatedAt},
-			programhistory.FieldUpdatedAt:             {Type: field.TypeTime, Column: programhistory.FieldUpdatedAt},
-			programhistory.FieldCreatedBy:             {Type: field.TypeString, Column: programhistory.FieldCreatedBy},
-			programhistory.FieldUpdatedBy:             {Type: field.TypeString, Column: programhistory.FieldUpdatedBy},
-			programhistory.FieldUpdatedByImpersonator: {Type: field.TypeString, Column: programhistory.FieldUpdatedByImpersonator},
-			programhistory.FieldDeletedAt:             {Type: field.TypeTime, Column: programhistory.FieldDeletedAt},
-			programhistory.FieldDeletedBy:             {Type: field.TypeString, Column: programhistory.FieldDeletedBy},
-			programhistory.FieldDisplayID:             {Type: field.TypeString, Column: programhistory.FieldDisplayID},
-			programhistory.FieldTags:                  {Type: field.TypeJSON, Column: programhistory.FieldTags},
-			programhistory.FieldOwnerID:               {Type: field.TypeString, Column: programhistory.FieldOwnerID},
-			programhistory.FieldProgramKindName:       {Type: field.TypeString, Column: programhistory.FieldProgramKindName},
-			programhistory.FieldProgramKindID:         {Type: field.TypeString, Column: programhistory.FieldProgramKindID},
-			programhistory.FieldExternalUUID:          {Type: field.TypeString, Column: programhistory.FieldExternalUUID},
-			programhistory.FieldName:                  {Type: field.TypeString, Column: programhistory.FieldName},
-			programhistory.FieldDescription:           {Type: field.TypeString, Column: programhistory.FieldDescription},
-			programhistory.FieldStatus:                {Type: field.TypeEnum, Column: programhistory.FieldStatus},
-			programhistory.FieldFrameworkName:         {Type: field.TypeString, Column: programhistory.FieldFrameworkName},
-			programhistory.FieldStartDate:             {Type: field.TypeTime, Column: programhistory.FieldStartDate},
-			programhistory.FieldEndDate:               {Type: field.TypeTime, Column: programhistory.FieldEndDate},
-			programhistory.FieldAuditorReady:          {Type: field.TypeBool, Column: programhistory.FieldAuditorReady},
-			programhistory.FieldAuditorWriteComments:  {Type: field.TypeBool, Column: programhistory.FieldAuditorWriteComments},
-			programhistory.FieldAuditorReadComments:   {Type: field.TypeBool, Column: programhistory.FieldAuditorReadComments},
-			programhistory.FieldAuditFirm:             {Type: field.TypeString, Column: programhistory.FieldAuditFirm},
-			programhistory.FieldAuditor:               {Type: field.TypeString, Column: programhistory.FieldAuditor},
-			programhistory.FieldAuditorEmail:          {Type: field.TypeString, Column: programhistory.FieldAuditorEmail},
-			programhistory.FieldProgramOwnerID:        {Type: field.TypeString, Column: programhistory.FieldProgramOwnerID},
+			programhistory.FieldHistoryTime:                {Type: field.TypeTime, Column: programhistory.FieldHistoryTime},
+			programhistory.FieldRef:                        {Type: field.TypeString, Column: programhistory.FieldRef},
+			programhistory.FieldOperation:                  {Type: field.TypeEnum, Column: programhistory.FieldOperation},
+			programhistory.FieldCreatedAt:                  {Type: field.TypeTime, Column: programhistory.FieldCreatedAt},
+			programhistory.FieldUpdatedAt:                  {Type: field.TypeTime, Column: programhistory.FieldUpdatedAt},
+			programhistory.FieldCreatedBy:                  {Type: field.TypeString, Column: programhistory.FieldCreatedBy},
+			programhistory.FieldUpdatedBy:                  {Type: field.TypeString, Column: programhistory.FieldUpdatedBy},
+			programhistory.FieldUpdatedByImpersonator:      {Type: field.TypeString, Column: programhistory.FieldUpdatedByImpersonator},
+			programhistory.FieldDeletedAt:                  {Type: field.TypeTime, Column: programhistory.FieldDeletedAt},
+			programhistory.FieldDeletedBy:                  {Type: field.TypeString, Column: programhistory.FieldDeletedBy},
+			programhistory.FieldDisplayID:                  {Type: field.TypeString, Column: programhistory.FieldDisplayID},
+			programhistory.FieldTags:                       {Type: field.TypeJSON, Column: programhistory.FieldTags},
+			programhistory.FieldOwnerID:                    {Type: field.TypeString, Column: programhistory.FieldOwnerID},
+			programhistory.FieldProgramKindName:            {Type: field.TypeString, Column: programhistory.FieldProgramKindName},
+			programhistory.FieldProgramKindID:              {Type: field.TypeString, Column: programhistory.FieldProgramKindID},
+			programhistory.FieldExternalUUID:               {Type: field.TypeString, Column: programhistory.FieldExternalUUID},
+			programhistory.FieldName:                       {Type: field.TypeString, Column: programhistory.FieldName},
+			programhistory.FieldDescription:                {Type: field.TypeString, Column: programhistory.FieldDescription},
+			programhistory.FieldStatus:                     {Type: field.TypeEnum, Column: programhistory.FieldStatus},
+			programhistory.FieldFrameworkName:              {Type: field.TypeString, Column: programhistory.FieldFrameworkName},
+			programhistory.FieldStartDate:                  {Type: field.TypeTime, Column: programhistory.FieldStartDate},
+			programhistory.FieldEndDate:                    {Type: field.TypeTime, Column: programhistory.FieldEndDate},
+			programhistory.FieldObservationPeriodStartDate: {Type: field.TypeTime, Column: programhistory.FieldObservationPeriodStartDate},
+			programhistory.FieldObservationPeriodEndDate:   {Type: field.TypeTime, Column: programhistory.FieldObservationPeriodEndDate},
+			programhistory.FieldFieldworkStartDate:         {Type: field.TypeTime, Column: programhistory.FieldFieldworkStartDate},
+			programhistory.FieldFieldworkEndDate:           {Type: field.TypeTime, Column: programhistory.FieldFieldworkEndDate},
+			programhistory.FieldAuditorReady:               {Type: field.TypeBool, Column: programhistory.FieldAuditorReady},
+			programhistory.FieldAuditorWriteComments:       {Type: field.TypeBool, Column: programhistory.FieldAuditorWriteComments},
+			programhistory.FieldAuditorReadComments:        {Type: field.TypeBool, Column: programhistory.FieldAuditorReadComments},
+			programhistory.FieldAuditFirm:                  {Type: field.TypeString, Column: programhistory.FieldAuditFirm},
+			programhistory.FieldAuditor:                    {Type: field.TypeString, Column: programhistory.FieldAuditor},
+			programhistory.FieldAuditorEmail:               {Type: field.TypeString, Column: programhistory.FieldAuditorEmail},
+			programhistory.FieldProgramOwnerID:             {Type: field.TypeString, Column: programhistory.FieldProgramOwnerID},
 		},
 	}
 	graph.Nodes[46] = &sqlgraph.Node{
@@ -2626,6 +2630,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			taskhistory.FieldTitle:                  {Type: field.TypeString, Column: taskhistory.FieldTitle},
 			taskhistory.FieldDetails:                {Type: field.TypeString, Column: taskhistory.FieldDetails},
 			taskhistory.FieldDetailsJSON:            {Type: field.TypeJSON, Column: taskhistory.FieldDetailsJSON},
+			taskhistory.FieldMetadata:               {Type: field.TypeJSON, Column: taskhistory.FieldMetadata},
 			taskhistory.FieldStatus:                 {Type: field.TypeEnum, Column: taskhistory.FieldStatus},
 			taskhistory.FieldDue:                    {Type: field.TypeTime, Column: taskhistory.FieldDue},
 			taskhistory.FieldCompleted:              {Type: field.TypeTime, Column: taskhistory.FieldCompleted},
@@ -2633,6 +2638,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 			taskhistory.FieldAssignerID:             {Type: field.TypeString, Column: taskhistory.FieldAssignerID},
 			taskhistory.FieldSystemGenerated:        {Type: field.TypeBool, Column: taskhistory.FieldSystemGenerated},
 			taskhistory.FieldIsTemplate:             {Type: field.TypeBool, Column: taskhistory.FieldIsTemplate},
+			taskhistory.FieldIsSuggested:            {Type: field.TypeBool, Column: taskhistory.FieldIsSuggested},
+			taskhistory.FieldPriority:               {Type: field.TypeInt, Column: taskhistory.FieldPriority},
+			taskhistory.FieldSource:                 {Type: field.TypeString, Column: taskhistory.FieldSource},
+			taskhistory.FieldSourceKey:              {Type: field.TypeString, Column: taskhistory.FieldSourceKey},
 			taskhistory.FieldIdempotencyKey:         {Type: field.TypeString, Column: taskhistory.FieldIdempotencyKey},
 			taskhistory.FieldExternalReferenceURL:   {Type: field.TypeJSON, Column: taskhistory.FieldExternalReferenceURL},
 			taskhistory.FieldParentTaskID:           {Type: field.TypeString, Column: taskhistory.FieldParentTaskID},
@@ -12407,6 +12416,26 @@ func (f *ProgramHistoryFilter) WhereEndDate(p entql.TimeP) {
 	f.Where(p.Field(programhistory.FieldEndDate))
 }
 
+// WhereObservationPeriodStartDate applies the entql time.Time predicate on the observation_period_start_date field.
+func (f *ProgramHistoryFilter) WhereObservationPeriodStartDate(p entql.TimeP) {
+	f.Where(p.Field(programhistory.FieldObservationPeriodStartDate))
+}
+
+// WhereObservationPeriodEndDate applies the entql time.Time predicate on the observation_period_end_date field.
+func (f *ProgramHistoryFilter) WhereObservationPeriodEndDate(p entql.TimeP) {
+	f.Where(p.Field(programhistory.FieldObservationPeriodEndDate))
+}
+
+// WhereFieldworkStartDate applies the entql time.Time predicate on the fieldwork_start_date field.
+func (f *ProgramHistoryFilter) WhereFieldworkStartDate(p entql.TimeP) {
+	f.Where(p.Field(programhistory.FieldFieldworkStartDate))
+}
+
+// WhereFieldworkEndDate applies the entql time.Time predicate on the fieldwork_end_date field.
+func (f *ProgramHistoryFilter) WhereFieldworkEndDate(p entql.TimeP) {
+	f.Where(p.Field(programhistory.FieldFieldworkEndDate))
+}
+
 // WhereAuditorReady applies the entql bool predicate on the auditor_ready field.
 func (f *ProgramHistoryFilter) WhereAuditorReady(p entql.BoolP) {
 	f.Where(p.Field(programhistory.FieldAuditorReady))
@@ -14677,6 +14706,11 @@ func (f *TaskHistoryFilter) WhereDetailsJSON(p entql.BytesP) {
 	f.Where(p.Field(taskhistory.FieldDetailsJSON))
 }
 
+// WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
+func (f *TaskHistoryFilter) WhereMetadata(p entql.BytesP) {
+	f.Where(p.Field(taskhistory.FieldMetadata))
+}
+
 // WhereStatus applies the entql string predicate on the status field.
 func (f *TaskHistoryFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(taskhistory.FieldStatus))
@@ -14710,6 +14744,26 @@ func (f *TaskHistoryFilter) WhereSystemGenerated(p entql.BoolP) {
 // WhereIsTemplate applies the entql bool predicate on the is_template field.
 func (f *TaskHistoryFilter) WhereIsTemplate(p entql.BoolP) {
 	f.Where(p.Field(taskhistory.FieldIsTemplate))
+}
+
+// WhereIsSuggested applies the entql bool predicate on the is_suggested field.
+func (f *TaskHistoryFilter) WhereIsSuggested(p entql.BoolP) {
+	f.Where(p.Field(taskhistory.FieldIsSuggested))
+}
+
+// WherePriority applies the entql int predicate on the priority field.
+func (f *TaskHistoryFilter) WherePriority(p entql.IntP) {
+	f.Where(p.Field(taskhistory.FieldPriority))
+}
+
+// WhereSource applies the entql string predicate on the source field.
+func (f *TaskHistoryFilter) WhereSource(p entql.StringP) {
+	f.Where(p.Field(taskhistory.FieldSource))
+}
+
+// WhereSourceKey applies the entql string predicate on the source_key field.
+func (f *TaskHistoryFilter) WhereSourceKey(p entql.StringP) {
+	f.Where(p.Field(taskhistory.FieldSourceKey))
 }
 
 // WhereIdempotencyKey applies the entql string predicate on the idempotency_key field.

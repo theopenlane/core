@@ -13,9 +13,13 @@ mutation CreateBulkCSVProgram ($input: Upload!) {
 			displayID
 			endDate
 			externalUUID
+			fieldworkEndDate
+			fieldworkStartDate
 			frameworkName
 			id
 			name
+			observationPeriodEndDate
+			observationPeriodStartDate
 			ownerID
 			programKindID
 			programKindName
@@ -44,9 +48,13 @@ mutation CreateBulkProgram ($input: [CreateProgramInput!]) {
 			displayID
 			endDate
 			externalUUID
+			fieldworkEndDate
+			fieldworkStartDate
 			frameworkName
 			id
 			name
+			observationPeriodEndDate
+			observationPeriodStartDate
 			ownerID
 			programKindID
 			programKindName
@@ -168,9 +176,13 @@ mutation CreateProgram ($input: CreateProgramInput!) {
 			displayID
 			endDate
 			externalUUID
+			fieldworkEndDate
+			fieldworkStartDate
 			frameworkName
 			id
 			name
+			observationPeriodEndDate
+			observationPeriodStartDate
 			ownerID
 			programKindID
 			programKindName
@@ -384,9 +396,13 @@ query GetProgramByID ($programId: ID!) {
 		displayID
 		endDate
 		externalUUID
+		fieldworkEndDate
+		fieldworkStartDate
 		frameworkName
 		id
 		name
+		observationPeriodEndDate
+		observationPeriodStartDate
 		ownerID
 		programKindID
 		programKindName
@@ -582,9 +598,13 @@ mutation UpdateProgram ($updateProgramId: ID!, $input: UpdateProgramInput!) {
 			displayID
 			endDate
 			externalUUID
+			fieldworkEndDate
+			fieldworkStartDate
 			frameworkName
 			id
 			name
+			observationPeriodEndDate
+			observationPeriodStartDate
 			ownerID
 			programKindID
 			programKindName

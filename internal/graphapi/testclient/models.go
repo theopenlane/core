@@ -9144,6 +9144,14 @@ type CreateProgramInput struct {
 	StartDate *time.Time `json:"startDate,omitempty"`
 	// the end date of the period
 	EndDate *time.Time `json:"endDate,omitempty"`
+	// the start date of the observation period
+	ObservationPeriodStartDate *time.Time `json:"observationPeriodStartDate,omitempty"`
+	// the end date of the observation period
+	ObservationPeriodEndDate *time.Time `json:"observationPeriodEndDate,omitempty"`
+	// the start date of fieldwork
+	FieldworkStartDate *time.Time `json:"fieldworkStartDate,omitempty"`
+	// the end date of fieldwork
+	FieldworkEndDate *time.Time `json:"fieldworkEndDate,omitempty"`
 	// is the program ready for the auditor
 	AuditorReady *bool `json:"auditorReady,omitempty"`
 	// can the auditor write comments
@@ -9804,6 +9812,8 @@ type CreateTaskInput struct {
 	Details *string `json:"details,omitempty"`
 	// structured details of the task in JSON format
 	DetailsJSON []any `json:"detailsJSON,omitempty"`
+	// structured metadata used by clients for task presentation and routing
+	Metadata map[string]any `json:"metadata,omitempty"`
 	// the status of the task
 	Status *enums.TaskStatus `json:"status,omitempty"`
 	// the due date of the task
@@ -9814,6 +9824,14 @@ type CreateTaskInput struct {
 	SystemGenerated *bool `json:"systemGenerated,omitempty"`
 	// indicates if the task is intended to be used as a template
 	IsTemplate *bool `json:"isTemplate,omitempty"`
+	// indicates if the task is suggested by the system as a recommended next action
+	IsSuggested *bool `json:"isSuggested,omitempty"`
+	// relative ordering priority for suggested and system-generated tasks
+	Priority *int64 `json:"priority,omitempty"`
+	// the system or workflow that created or suggested the task
+	Source *string `json:"source,omitempty"`
+	// stable source-specific key for the task
+	SourceKey *string `json:"sourceKey,omitempty"`
 	// an optional external reference URL for the task
 	ExternalReferenceURL     []string `json:"externalReferenceURL,omitempty"`
 	OwnerID                  *string  `json:"ownerID,omitempty"`
@@ -10017,8 +10035,6 @@ type CreateTrustCenterNDARequestInput struct {
 	AccessLevel *enums.TrustCenterNDARequestAccessLevel `json:"accessLevel,omitempty"`
 	// timestamp when the request was approved
 	ApprovedAt *models.DateTime `json:"approvedAt,omitempty"`
-	// ID of the user who approved the request
-	ApprovedByUserID *string `json:"approvedByUserID,omitempty"`
 	// timestamp when the NDA was signed
 	SignedAt          *models.DateTime `json:"signedAt,omitempty"`
 	BlockedGroupIDs   []string         `json:"blockedGroupIDs,omitempty"`
@@ -10027,6 +10043,7 @@ type CreateTrustCenterNDARequestInput struct {
 	TrustCenterDocIDs []string         `json:"trustCenterDocIDs,omitempty"`
 	DocumentID        *string          `json:"documentID,omitempty"`
 	FileID            *string          `json:"fileID,omitempty"`
+	ApprovedByUserID  *string          `json:"approvedByUserID,omitempty"`
 }
 
 // Input for createTrustCenterPreviewSetting mutation
@@ -30764,6 +30781,14 @@ type Program struct {
 	StartDate *time.Time `json:"startDate,omitempty"`
 	// the end date of the period
 	EndDate *time.Time `json:"endDate,omitempty"`
+	// the start date of the observation period
+	ObservationPeriodStartDate *time.Time `json:"observationPeriodStartDate,omitempty"`
+	// the end date of the observation period
+	ObservationPeriodEndDate *time.Time `json:"observationPeriodEndDate,omitempty"`
+	// the start date of fieldwork
+	FieldworkStartDate *time.Time `json:"fieldworkStartDate,omitempty"`
+	// the end date of fieldwork
+	FieldworkEndDate *time.Time `json:"fieldworkEndDate,omitempty"`
 	// is the program ready for the auditor
 	AuditorReady bool `json:"auditorReady"`
 	// can the auditor write comments
@@ -31294,6 +31319,50 @@ type ProgramWhereInput struct {
 	EndDateLte    *time.Time   `json:"endDateLTE,omitempty"`
 	EndDateIsNil  *bool        `json:"endDateIsNil,omitempty"`
 	EndDateNotNil *bool        `json:"endDateNotNil,omitempty"`
+	// observation_period_start_date field predicates
+	ObservationPeriodStartDate       *time.Time   `json:"observationPeriodStartDate,omitempty"`
+	ObservationPeriodStartDateNeq    *time.Time   `json:"observationPeriodStartDateNEQ,omitempty"`
+	ObservationPeriodStartDateIn     []*time.Time `json:"observationPeriodStartDateIn,omitempty"`
+	ObservationPeriodStartDateNotIn  []*time.Time `json:"observationPeriodStartDateNotIn,omitempty"`
+	ObservationPeriodStartDateGt     *time.Time   `json:"observationPeriodStartDateGT,omitempty"`
+	ObservationPeriodStartDateGte    *time.Time   `json:"observationPeriodStartDateGTE,omitempty"`
+	ObservationPeriodStartDateLt     *time.Time   `json:"observationPeriodStartDateLT,omitempty"`
+	ObservationPeriodStartDateLte    *time.Time   `json:"observationPeriodStartDateLTE,omitempty"`
+	ObservationPeriodStartDateIsNil  *bool        `json:"observationPeriodStartDateIsNil,omitempty"`
+	ObservationPeriodStartDateNotNil *bool        `json:"observationPeriodStartDateNotNil,omitempty"`
+	// observation_period_end_date field predicates
+	ObservationPeriodEndDate       *time.Time   `json:"observationPeriodEndDate,omitempty"`
+	ObservationPeriodEndDateNeq    *time.Time   `json:"observationPeriodEndDateNEQ,omitempty"`
+	ObservationPeriodEndDateIn     []*time.Time `json:"observationPeriodEndDateIn,omitempty"`
+	ObservationPeriodEndDateNotIn  []*time.Time `json:"observationPeriodEndDateNotIn,omitempty"`
+	ObservationPeriodEndDateGt     *time.Time   `json:"observationPeriodEndDateGT,omitempty"`
+	ObservationPeriodEndDateGte    *time.Time   `json:"observationPeriodEndDateGTE,omitempty"`
+	ObservationPeriodEndDateLt     *time.Time   `json:"observationPeriodEndDateLT,omitempty"`
+	ObservationPeriodEndDateLte    *time.Time   `json:"observationPeriodEndDateLTE,omitempty"`
+	ObservationPeriodEndDateIsNil  *bool        `json:"observationPeriodEndDateIsNil,omitempty"`
+	ObservationPeriodEndDateNotNil *bool        `json:"observationPeriodEndDateNotNil,omitempty"`
+	// fieldwork_start_date field predicates
+	FieldworkStartDate       *time.Time   `json:"fieldworkStartDate,omitempty"`
+	FieldworkStartDateNeq    *time.Time   `json:"fieldworkStartDateNEQ,omitempty"`
+	FieldworkStartDateIn     []*time.Time `json:"fieldworkStartDateIn,omitempty"`
+	FieldworkStartDateNotIn  []*time.Time `json:"fieldworkStartDateNotIn,omitempty"`
+	FieldworkStartDateGt     *time.Time   `json:"fieldworkStartDateGT,omitempty"`
+	FieldworkStartDateGte    *time.Time   `json:"fieldworkStartDateGTE,omitempty"`
+	FieldworkStartDateLt     *time.Time   `json:"fieldworkStartDateLT,omitempty"`
+	FieldworkStartDateLte    *time.Time   `json:"fieldworkStartDateLTE,omitempty"`
+	FieldworkStartDateIsNil  *bool        `json:"fieldworkStartDateIsNil,omitempty"`
+	FieldworkStartDateNotNil *bool        `json:"fieldworkStartDateNotNil,omitempty"`
+	// fieldwork_end_date field predicates
+	FieldworkEndDate       *time.Time   `json:"fieldworkEndDate,omitempty"`
+	FieldworkEndDateNeq    *time.Time   `json:"fieldworkEndDateNEQ,omitempty"`
+	FieldworkEndDateIn     []*time.Time `json:"fieldworkEndDateIn,omitempty"`
+	FieldworkEndDateNotIn  []*time.Time `json:"fieldworkEndDateNotIn,omitempty"`
+	FieldworkEndDateGt     *time.Time   `json:"fieldworkEndDateGT,omitempty"`
+	FieldworkEndDateGte    *time.Time   `json:"fieldworkEndDateGTE,omitempty"`
+	FieldworkEndDateLt     *time.Time   `json:"fieldworkEndDateLT,omitempty"`
+	FieldworkEndDateLte    *time.Time   `json:"fieldworkEndDateLTE,omitempty"`
+	FieldworkEndDateIsNil  *bool        `json:"fieldworkEndDateIsNil,omitempty"`
+	FieldworkEndDateNotNil *bool        `json:"fieldworkEndDateNotNil,omitempty"`
 	// auditor_ready field predicates
 	AuditorReady    *bool `json:"auditorReady,omitempty"`
 	AuditorReadyNeq *bool `json:"auditorReadyNEQ,omitempty"`
@@ -37884,6 +37953,8 @@ type Task struct {
 	Details *string `json:"details,omitempty"`
 	// structured details of the task in JSON format
 	DetailsJSON []any `json:"detailsJSON,omitempty"`
+	// structured metadata used by clients for task presentation and routing
+	Metadata map[string]any `json:"metadata,omitempty"`
 	// the status of the task
 	Status enums.TaskStatus `json:"status"`
 	// the due date of the task
@@ -37898,6 +37969,14 @@ type Task struct {
 	SystemGenerated bool `json:"systemGenerated"`
 	// indicates if the task is intended to be used as a template
 	IsTemplate bool `json:"isTemplate"`
+	// indicates if the task is suggested by the system as a recommended next action
+	IsSuggested bool `json:"isSuggested"`
+	// relative ordering priority for suggested and system-generated tasks
+	Priority int64 `json:"priority"`
+	// the system or workflow that created or suggested the task
+	Source *string `json:"source,omitempty"`
+	// stable source-specific key for the task
+	SourceKey *string `json:"sourceKey,omitempty"`
 	// key to prevent duplicates for auto-generated task based on rules
 	IdempotencyKey *string `json:"idempotencyKey,omitempty"`
 	// an optional external reference URL for the task
@@ -38339,6 +38418,50 @@ type TaskWhereInput struct {
 	// is_template field predicates
 	IsTemplate    *bool `json:"isTemplate,omitempty"`
 	IsTemplateNeq *bool `json:"isTemplateNEQ,omitempty"`
+	// is_suggested field predicates
+	IsSuggested    *bool `json:"isSuggested,omitempty"`
+	IsSuggestedNeq *bool `json:"isSuggestedNEQ,omitempty"`
+	// priority field predicates
+	Priority      *int64  `json:"priority,omitempty"`
+	PriorityNeq   *int64  `json:"priorityNEQ,omitempty"`
+	PriorityIn    []int64 `json:"priorityIn,omitempty"`
+	PriorityNotIn []int64 `json:"priorityNotIn,omitempty"`
+	PriorityGt    *int64  `json:"priorityGT,omitempty"`
+	PriorityGte   *int64  `json:"priorityGTE,omitempty"`
+	PriorityLt    *int64  `json:"priorityLT,omitempty"`
+	PriorityLte   *int64  `json:"priorityLTE,omitempty"`
+	// source field predicates
+	Source             *string  `json:"source,omitempty"`
+	SourceNeq          *string  `json:"sourceNEQ,omitempty"`
+	SourceIn           []string `json:"sourceIn,omitempty"`
+	SourceNotIn        []string `json:"sourceNotIn,omitempty"`
+	SourceGt           *string  `json:"sourceGT,omitempty"`
+	SourceGte          *string  `json:"sourceGTE,omitempty"`
+	SourceLt           *string  `json:"sourceLT,omitempty"`
+	SourceLte          *string  `json:"sourceLTE,omitempty"`
+	SourceContains     *string  `json:"sourceContains,omitempty"`
+	SourceHasPrefix    *string  `json:"sourceHasPrefix,omitempty"`
+	SourceHasSuffix    *string  `json:"sourceHasSuffix,omitempty"`
+	SourceIsNil        *bool    `json:"sourceIsNil,omitempty"`
+	SourceNotNil       *bool    `json:"sourceNotNil,omitempty"`
+	SourceEqualFold    *string  `json:"sourceEqualFold,omitempty"`
+	SourceContainsFold *string  `json:"sourceContainsFold,omitempty"`
+	// source_key field predicates
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNeq          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyGt           *string  `json:"sourceKeyGT,omitempty"`
+	SourceKeyGte          *string  `json:"sourceKeyGTE,omitempty"`
+	SourceKeyLt           *string  `json:"sourceKeyLT,omitempty"`
+	SourceKeyLte          *string  `json:"sourceKeyLTE,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        *bool    `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       *bool    `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
 	// idempotency_key field predicates
 	IdempotencyKey             *string  `json:"idempotencyKey,omitempty"`
 	IdempotencyKeyNeq          *string  `json:"idempotencyKeyNEQ,omitempty"`
@@ -40149,7 +40272,8 @@ type TrustCenterNDARequest struct {
 	// the signed NDA document data
 	Document *DocumentData `json:"document,omitempty"`
 	// the template file at the time the NDA was signed
-	File *File `json:"file,omitempty"`
+	File           *File `json:"file,omitempty"`
+	ApprovedByUser *User `json:"approvedByUser,omitempty"`
 }
 
 func (TrustCenterNDARequest) IsNode() {}
@@ -40493,6 +40617,9 @@ type TrustCenterNDARequestWhereInput struct {
 	// file edge predicates
 	HasFile     *bool             `json:"hasFile,omitempty"`
 	HasFileWith []*FileWhereInput `json:"hasFileWith,omitempty"`
+	// approved_by_user edge predicates
+	HasApprovedByUser     *bool             `json:"hasApprovedByUser,omitempty"`
+	HasApprovedByUserWith []*UserWhereInput `json:"hasApprovedByUserWith,omitempty"`
 	// Filter for tagsHas to contain a specific value
 	TagsHas *string `json:"tagsHas,omitempty"`
 }
@@ -46411,6 +46538,18 @@ type UpdateProgramInput struct {
 	// the end date of the period
 	EndDate      *time.Time `json:"endDate,omitempty"`
 	ClearEndDate *bool      `json:"clearEndDate,omitempty"`
+	// the start date of the observation period
+	ObservationPeriodStartDate      *time.Time `json:"observationPeriodStartDate,omitempty"`
+	ClearObservationPeriodStartDate *bool      `json:"clearObservationPeriodStartDate,omitempty"`
+	// the end date of the observation period
+	ObservationPeriodEndDate      *time.Time `json:"observationPeriodEndDate,omitempty"`
+	ClearObservationPeriodEndDate *bool      `json:"clearObservationPeriodEndDate,omitempty"`
+	// the start date of fieldwork
+	FieldworkStartDate      *time.Time `json:"fieldworkStartDate,omitempty"`
+	ClearFieldworkStartDate *bool      `json:"clearFieldworkStartDate,omitempty"`
+	// the end date of fieldwork
+	FieldworkEndDate      *time.Time `json:"fieldworkEndDate,omitempty"`
+	ClearFieldworkEndDate *bool      `json:"clearFieldworkEndDate,omitempty"`
 	// is the program ready for the auditor
 	AuditorReady *bool `json:"auditorReady,omitempty"`
 	// can the auditor write comments
@@ -47550,6 +47689,9 @@ type UpdateTaskInput struct {
 	DetailsJSON       []any `json:"detailsJSON,omitempty"`
 	AppendDetailsJSON []any `json:"appendDetailsJSON,omitempty"`
 	ClearDetailsJSON  *bool `json:"clearDetailsJSON,omitempty"`
+	// structured metadata used by clients for task presentation and routing
+	Metadata      map[string]any `json:"metadata,omitempty"`
+	ClearMetadata *bool          `json:"clearMetadata,omitempty"`
 	// the status of the task
 	Status *enums.TaskStatus `json:"status,omitempty"`
 	// the due date of the task
@@ -47562,6 +47704,16 @@ type UpdateTaskInput struct {
 	SystemGenerated *bool `json:"systemGenerated,omitempty"`
 	// indicates if the task is intended to be used as a template
 	IsTemplate *bool `json:"isTemplate,omitempty"`
+	// indicates if the task is suggested by the system as a recommended next action
+	IsSuggested *bool `json:"isSuggested,omitempty"`
+	// relative ordering priority for suggested and system-generated tasks
+	Priority *int64 `json:"priority,omitempty"`
+	// the system or workflow that created or suggested the task
+	Source      *string `json:"source,omitempty"`
+	ClearSource *bool   `json:"clearSource,omitempty"`
+	// stable source-specific key for the task
+	SourceKey      *string `json:"sourceKey,omitempty"`
+	ClearSourceKey *bool   `json:"clearSourceKey,omitempty"`
 	// an optional external reference URL for the task
 	ExternalReferenceURL           []string         `json:"externalReferenceURL,omitempty"`
 	AppendExternalReferenceURL     []string         `json:"appendExternalReferenceURL,omitempty"`
@@ -47900,9 +48052,6 @@ type UpdateTrustCenterNDARequestInput struct {
 	// timestamp when the request was approved
 	ApprovedAt      *models.DateTime `json:"approvedAt,omitempty"`
 	ClearApprovedAt *bool            `json:"clearApprovedAt,omitempty"`
-	// ID of the user who approved the request
-	ApprovedByUserID      *string `json:"approvedByUserID,omitempty"`
-	ClearApprovedByUserID *bool   `json:"clearApprovedByUserID,omitempty"`
 	// timestamp when the NDA was signed
 	SignedAt                *models.DateTime `json:"signedAt,omitempty"`
 	ClearSignedAt           *bool            `json:"clearSignedAt,omitempty"`
@@ -47919,6 +48068,8 @@ type UpdateTrustCenterNDARequestInput struct {
 	ClearDocument           *bool            `json:"clearDocument,omitempty"`
 	FileID                  *string          `json:"fileID,omitempty"`
 	ClearFile               *bool            `json:"clearFile,omitempty"`
+	ApprovedByUserID        *string          `json:"approvedByUserID,omitempty"`
+	ClearApprovedByUser     *bool            `json:"clearApprovedByUser,omitempty"`
 }
 
 // UpdateTrustCenterSettingInput is used for update TrustCenterSetting object.
@@ -57961,13 +58112,17 @@ func (e ProgramMembershipOrderField) MarshalJSON() ([]byte, error) {
 type ProgramOrderField string
 
 const (
-	ProgramOrderFieldCreatedAt ProgramOrderField = "created_at"
-	ProgramOrderFieldUpdatedAt ProgramOrderField = "updated_at"
-	ProgramOrderFieldName      ProgramOrderField = "name"
-	ProgramOrderFieldStatus    ProgramOrderField = "STATUS"
-	ProgramOrderFieldFramework ProgramOrderField = "framework"
-	ProgramOrderFieldStartDate ProgramOrderField = "start_date"
-	ProgramOrderFieldEndDate   ProgramOrderField = "end_date"
+	ProgramOrderFieldCreatedAt                  ProgramOrderField = "created_at"
+	ProgramOrderFieldUpdatedAt                  ProgramOrderField = "updated_at"
+	ProgramOrderFieldName                       ProgramOrderField = "name"
+	ProgramOrderFieldStatus                     ProgramOrderField = "STATUS"
+	ProgramOrderFieldFramework                  ProgramOrderField = "framework"
+	ProgramOrderFieldStartDate                  ProgramOrderField = "start_date"
+	ProgramOrderFieldEndDate                    ProgramOrderField = "end_date"
+	ProgramOrderFieldObservationPeriodStartDate ProgramOrderField = "observation_period_start_date"
+	ProgramOrderFieldObservationPeriodEndDate   ProgramOrderField = "observation_period_end_date"
+	ProgramOrderFieldFieldworkStartDate         ProgramOrderField = "fieldwork_start_date"
+	ProgramOrderFieldFieldworkEndDate           ProgramOrderField = "fieldwork_end_date"
 )
 
 var AllProgramOrderField = []ProgramOrderField{
@@ -57978,11 +58133,15 @@ var AllProgramOrderField = []ProgramOrderField{
 	ProgramOrderFieldFramework,
 	ProgramOrderFieldStartDate,
 	ProgramOrderFieldEndDate,
+	ProgramOrderFieldObservationPeriodStartDate,
+	ProgramOrderFieldObservationPeriodEndDate,
+	ProgramOrderFieldFieldworkStartDate,
+	ProgramOrderFieldFieldworkEndDate,
 }
 
 func (e ProgramOrderField) IsValid() bool {
 	switch e {
-	case ProgramOrderFieldCreatedAt, ProgramOrderFieldUpdatedAt, ProgramOrderFieldName, ProgramOrderFieldStatus, ProgramOrderFieldFramework, ProgramOrderFieldStartDate, ProgramOrderFieldEndDate:
+	case ProgramOrderFieldCreatedAt, ProgramOrderFieldUpdatedAt, ProgramOrderFieldName, ProgramOrderFieldStatus, ProgramOrderFieldFramework, ProgramOrderFieldStartDate, ProgramOrderFieldEndDate, ProgramOrderFieldObservationPeriodStartDate, ProgramOrderFieldObservationPeriodEndDate, ProgramOrderFieldFieldworkStartDate, ProgramOrderFieldFieldworkEndDate:
 		return true
 	}
 	return false
@@ -58923,13 +59082,15 @@ func (e TagDefinitionOrderField) MarshalJSON() ([]byte, error) {
 type TaskOrderField string
 
 const (
-	TaskOrderFieldCreatedAt  TaskOrderField = "created_at"
-	TaskOrderFieldUpdatedAt  TaskOrderField = "updated_at"
-	TaskOrderFieldTitle      TaskOrderField = "title"
-	TaskOrderFieldStatus     TaskOrderField = "STATUS"
-	TaskOrderFieldDue        TaskOrderField = "due"
-	TaskOrderFieldCompleted  TaskOrderField = "completed"
-	TaskOrderFieldIsTemplate TaskOrderField = "is_template"
+	TaskOrderFieldCreatedAt   TaskOrderField = "created_at"
+	TaskOrderFieldUpdatedAt   TaskOrderField = "updated_at"
+	TaskOrderFieldTitle       TaskOrderField = "title"
+	TaskOrderFieldStatus      TaskOrderField = "STATUS"
+	TaskOrderFieldDue         TaskOrderField = "due"
+	TaskOrderFieldCompleted   TaskOrderField = "completed"
+	TaskOrderFieldIsTemplate  TaskOrderField = "is_template"
+	TaskOrderFieldIsSuggested TaskOrderField = "is_suggested"
+	TaskOrderFieldPriority    TaskOrderField = "priority"
 )
 
 var AllTaskOrderField = []TaskOrderField{
@@ -58940,11 +59101,13 @@ var AllTaskOrderField = []TaskOrderField{
 	TaskOrderFieldDue,
 	TaskOrderFieldCompleted,
 	TaskOrderFieldIsTemplate,
+	TaskOrderFieldIsSuggested,
+	TaskOrderFieldPriority,
 }
 
 func (e TaskOrderField) IsValid() bool {
 	switch e {
-	case TaskOrderFieldCreatedAt, TaskOrderFieldUpdatedAt, TaskOrderFieldTitle, TaskOrderFieldStatus, TaskOrderFieldDue, TaskOrderFieldCompleted, TaskOrderFieldIsTemplate:
+	case TaskOrderFieldCreatedAt, TaskOrderFieldUpdatedAt, TaskOrderFieldTitle, TaskOrderFieldStatus, TaskOrderFieldDue, TaskOrderFieldCompleted, TaskOrderFieldIsTemplate, TaskOrderFieldIsSuggested, TaskOrderFieldPriority:
 		return true
 	}
 	return false
