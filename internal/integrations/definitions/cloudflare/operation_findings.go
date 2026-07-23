@@ -8,7 +8,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/option"
 	"github.com/cloudflare/cloudflare-go/v7/security_center"
 
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/logx"
@@ -24,13 +24,13 @@ type FindingsCollect struct{}
 
 // IngestHandle adapts findings collection to the ingest operation registration boundary
 func (f FindingsCollect) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequestConfig(cloudflareClient, findingsSyncOperation, ErrOperationConfigInvalid, func(ctx context.Context, request types.OperationRequest, client *cf.Client, _ FindingsSync) ([]types.IngestPayloadSet, error) {
+	return providerkit.WithClientRequestConfig(cloudflareClient, findingsSyncOperation, ErrOperationConfigInvalid, func(ctx context.Context, request types.OperationRequest, client *CloudflareClient, _ FindingsSync) ([]types.IngestPayloadSet, error) {
 		return f.Run(ctx, request.Credentials, client, request.LastRunAt)
 	})
 }
 
 // Run collects Cloudflare Security Center insights and emits finding ingest payloads
-func (FindingsCollect) Run(ctx context.Context, credentials types.CredentialBindings, client *cf.Client, lastRunAt *time.Time) ([]types.IngestPayloadSet, error) {
+func (FindingsCollect) Run(ctx context.Context, credentials types.CredentialBindings, client *CloudflareClient, lastRunAt *time.Time) ([]types.IngestPayloadSet, error) {
 	meta, err := resolveCredential(credentials)
 	if err != nil {
 		return nil, err
@@ -62,7 +62,7 @@ func (FindingsCollect) Run(ctx context.Context, credentials types.CredentialBind
 
 	return []types.IngestPayloadSet{
 		{
-			Schema:    integrationgenerated.IntegrationMappingSchemaFinding,
+			Schema:    entityops.SchemaFinding.Name,
 			Envelopes: envelopes,
 		},
 	}, nil
@@ -73,7 +73,7 @@ type cloudflareInsightsResponse struct {
 	Result security_center.InsightListResponse `json:"result"`
 }
 
-func fetchSecurityInsights(ctx context.Context, client *cf.Client, accountID string) ([]security_center.InsightListResponseIssue, error) {
+func fetchSecurityInsights(ctx context.Context, client *CloudflareClient, accountID string) ([]security_center.InsightListResponseIssue, error) {
 	issues := make([]security_center.InsightListResponseIssue, 0)
 
 	defaultPage := int64(1)

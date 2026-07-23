@@ -12,7 +12,6 @@ env:
   GRAPHQL_HISTORY_SCHEMA_LOCATION: "internal/graphapi/historyschema/schema.graphql"
   GRAPHQL_SCHEMA_NAME: "Openlane-0dedz@current"
   GRAPHQL_HISTORY_SCHEMA_NAME: "Openlane-History@current"
-  GOFLAGS: -buildvcs=false
   GOCACHE: $HOME/.cache/go-build
   GOMODCACHE: $HOME/.cache/go/pkg/mod
   GOLANGCI_LINT_CACHE: $HOME/.cache/golangci-lint
@@ -47,7 +46,7 @@ steps:
           - internal/graphapi/**
           - common/enums/**
         plugins:
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               command: ["task", "generate:checksums"]
@@ -68,7 +67,7 @@ steps:
           - pkg/**
           - config/**
         plugins:
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               command: ["task", "config:ci"]
@@ -88,7 +87,7 @@ steps:
           - config/configmap-config-file.yaml
           - config/helm-values.yaml
         plugins:
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/draft-pr-automation.sh"]
@@ -114,7 +113,7 @@ steps:
           - sparse-checkout#v1.8.0:
               paths:
                 - .buildkite
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/link-pr-automation.sh"]
@@ -136,7 +135,7 @@ steps:
               paths:
                 - .buildkite
                 - config
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/helm-automation.sh"]
@@ -159,7 +158,7 @@ steps:
           - sparse-checkout#v1.8.0:
               paths:
                 - .buildkite
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/post-merge-pr-automation.sh"]
@@ -179,7 +178,7 @@ steps:
         depends_on: "post_merge_automation"
         if: build.branch == "main"
         plugins:
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/cleanup-draft-prs.sh"]
@@ -194,8 +193,12 @@ steps:
           - "docker-build-and-tag"
           - "go_tests"
         if: build.tag != null && build.tag !~ /cli\// && build.tag !~ /common\//
+        agents:
+          queue: $LARGE_RUNNER_QUEUE
+          size: $RUNNER_LARGE
+          location: NYC # gcp runners having issues pushing, setting location for now
         plugins:
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               command: ["sh", "-c", "apk add --no-cache bash >/dev/null 2>&1 && bash .buildkite/image-tag-automation.sh"]
@@ -225,7 +228,7 @@ steps:
         timeout_in_minutes: 30
         key: "lint_graphapi"
         plugins:
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               command: ["task", "go:lint:ci:graphapi"]
               always_pull: true
@@ -249,7 +252,7 @@ steps:
         timeout_in_minutes: 30
         key: "lint_handlers"
         plugins:
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               command: ["task", "go:lint:ci:handlers"]
               always_pull: true
@@ -277,7 +280,7 @@ steps:
         timeout_in_minutes: 30
         key: "lint_non_api"
         plugins:
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               command: ["task", "go:lint:ci:no-api"]
               always_pull: true
@@ -311,7 +314,7 @@ steps:
             version:
               - 17-alpine
         plugins:
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: ghcr.io/theopenlane/build-image:latest
               always_pull: true
               command: ["task", "go:testsum:ci:graph"]
@@ -347,7 +350,7 @@ steps:
             version:
               - 17-alpine
         plugins:
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: ghcr.io/theopenlane/build-image:latest
               always_pull: true
               command: ["task", "go:testsum:ci:handlers"]
@@ -383,7 +386,7 @@ steps:
             version:
               - 17-alpine
         plugins:
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: ghcr.io/theopenlane/build-image:latest
               always_pull: true
               command: ["task", "go:testsum:ci:no-graph"]
@@ -411,7 +414,7 @@ steps:
           - sparse-checkout#v1.8.0:
               paths:
                 - fga
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: openfga/cli:v0.5.1
               propagate-environment: true
               command: ["model", "test", "--tests", "fga/tests/tests.yaml"]
@@ -492,7 +495,7 @@ steps:
               download: "junit-graph.xml"
               step: "go_test_graph"
 
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: "sonarsource/sonar-scanner-cli:11.5"
               propagate-environment: true
               volumes:
@@ -535,7 +538,7 @@ steps:
           - artifacts#v1.9.4:
               download: "junit-graph.xml"
               step: "go_test_graph"
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: "sonarsource/sonar-scanner-cli:11.5"
               propagate-environment: true
               volumes:
@@ -551,6 +554,7 @@ steps:
       - label: ":golang: build"
         key: "gobuild-server"
         cancel_on_build_failing: true
+        if: build.tag == null
         artifact_paths: "bin/${APP_NAME}"
         if_changed:
           include:
@@ -564,7 +568,7 @@ steps:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
         plugins:
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               propagate-environment: true
@@ -573,9 +577,7 @@ steps:
                 - $GOMODCACHE:$GOMODCACHE
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
               environment:
-                - CGO_ENABLED=0
                 - GOOS=linux
-                - GOFLAGS="-buildvcs=false -gcflags=all=-l"
               command: ["task", "go:build:ci"]
       - label: ":terminal: build cli"
         key: "gobuild-cli"
@@ -590,7 +592,7 @@ steps:
             - cli/**
             - common/**
         plugins:
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               propagate-environment: true
@@ -599,10 +601,8 @@ steps:
                 - $GOMODCACHE:$GOMODCACHE
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
               environment:
-                - CGO_ENABLED=0
                 - GOOS=darwin
                 - GOARCH=arm64
-                - GOFLAGS="-buildvcs=false -gcflags=all=-l"
               command: ["task", "go:build-cli:ci"]
       - label: ":golang: build release"
         key: "gobuild-server-release"
@@ -613,7 +613,7 @@ steps:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
         plugins:
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               propagate-environment: true
@@ -622,9 +622,8 @@ steps:
                 - $GOMODCACHE:$GOMODCACHE
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
               environment:
-                - CGO_ENABLED=0
                 - GOOS=linux
-              command: ["task", "go:build:ci"]
+              command: ["task", "go:build:ci:release"]
       - label: ":terminal: build cli release"
         if: build.tag != null && build.tag =~ /cli\//
         key: "gobuild-cli-release"
@@ -634,7 +633,7 @@ steps:
         cancel_on_build_failing: true
         artifact_paths: "bin/openlane-cli"
         plugins:
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               propagate-environment: true
@@ -643,7 +642,6 @@ steps:
                 - $GOMODCACHE:$GOMODCACHE
                 - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
               environment:
-                - CGO_ENABLED=0
                 - GOOS=darwin
                 - GOARCH=arm64
               command: ["task", "go:build-cli:ci"]
@@ -712,7 +710,7 @@ steps:
           - sparse-checkout#v1.8.0:
               paths:
                 - internal/graphapi
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               propagate-environment: true
@@ -809,7 +807,7 @@ steps:
           - sparse-checkout#v1.8.0:
               paths:
                 - internal/graphapi
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               propagate-environment: true
@@ -831,7 +829,7 @@ steps:
           - cluster-secrets#v1.0.0:
               variables:
                 APOLLO_KEY: APOLLO_HISTORY_KEY
-          - docker#v5.13.0:
+          - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"
               always_pull: true
               propagate-environment: true

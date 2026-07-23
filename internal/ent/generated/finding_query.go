@@ -36,6 +36,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 
@@ -53,6 +54,10 @@ type FindingQuery struct {
 	withOwner                   *OrganizationQuery
 	withBlockedGroups           *GroupQuery
 	withEditors                 *GroupQuery
+	withReviewedByUser          *UserQuery
+	withReviewedByGroup         *GroupQuery
+	withAssignedToUser          *UserQuery
+	withAssignedToGroup         *GroupQuery
 	withEnvironment             *CustomTypeEnumQuery
 	withScope                   *CustomTypeEnumQuery
 	withFindingStatus           *CustomTypeEnumQuery
@@ -205,6 +210,106 @@ func (_q *FindingQuery) QueryEditors() *GroupQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
 		step.Edge.Schema = schemaConfig.FindingEditors
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryReviewedByUser chains the current query on the "reviewed_by_user" edge.
+func (_q *FindingQuery) QueryReviewedByUser() *UserQuery {
+	query := (&UserClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, finding.ReviewedByUserTable, finding.ReviewedByUserColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Finding
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryReviewedByGroup chains the current query on the "reviewed_by_group" edge.
+func (_q *FindingQuery) QueryReviewedByGroup() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, finding.ReviewedByGroupTable, finding.ReviewedByGroupColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Finding
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryAssignedToUser chains the current query on the "assigned_to_user" edge.
+func (_q *FindingQuery) QueryAssignedToUser() *UserQuery {
+	query := (&UserClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, finding.AssignedToUserTable, finding.AssignedToUserColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Finding
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryAssignedToGroup chains the current query on the "assigned_to_group" edge.
+func (_q *FindingQuery) QueryAssignedToGroup() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, finding.AssignedToGroupTable, finding.AssignedToGroupColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Finding
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -400,11 +505,11 @@ func (_q *FindingQuery) QuerySubcontrols() *SubcontrolQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(finding.Table, finding.FieldID, selector),
 			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, finding.SubcontrolsTable, finding.SubcontrolsColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, finding.SubcontrolsTable, finding.SubcontrolsPrimaryKey...),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.FindingSubcontrols
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -425,11 +530,11 @@ func (_q *FindingQuery) QueryRisks() *RiskQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(finding.Table, finding.FieldID, selector),
 			sqlgraph.To(risk.Table, risk.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, finding.RisksTable, finding.RisksColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, finding.RisksTable, finding.RisksPrimaryKey...),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Risk
-		step.Edge.Schema = schemaConfig.Risk
+		step.Edge.Schema = schemaConfig.FindingRisks
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -450,11 +555,11 @@ func (_q *FindingQuery) QueryPrograms() *ProgramQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(finding.Table, finding.FieldID, selector),
 			sqlgraph.To(program.Table, program.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, finding.ProgramsTable, finding.ProgramsColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, finding.ProgramsTable, finding.ProgramsPrimaryKey...),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.FindingPrograms
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -475,11 +580,11 @@ func (_q *FindingQuery) QueryAssets() *AssetQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(finding.Table, finding.FieldID, selector),
 			sqlgraph.To(asset.Table, asset.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, finding.AssetsTable, finding.AssetsColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, finding.AssetsTable, finding.AssetsPrimaryKey...),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Asset
-		step.Edge.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.FindingAssets
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -500,11 +605,11 @@ func (_q *FindingQuery) QueryEntities() *EntityQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(finding.Table, finding.FieldID, selector),
 			sqlgraph.To(entity.Table, entity.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, finding.EntitiesTable, finding.EntitiesColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, finding.EntitiesTable, finding.EntitiesPrimaryKey...),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.FindingEntities
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -525,11 +630,11 @@ func (_q *FindingQuery) QueryScans() *ScanQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(finding.Table, finding.FieldID, selector),
 			sqlgraph.To(scan.Table, scan.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, finding.ScansTable, finding.ScansColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, finding.ScansTable, finding.ScansPrimaryKey...),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Scan
-		step.Edge.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.FindingScans
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -981,6 +1086,10 @@ func (_q *FindingQuery) Clone() *FindingQuery {
 		withOwner:              _q.withOwner.Clone(),
 		withBlockedGroups:      _q.withBlockedGroups.Clone(),
 		withEditors:            _q.withEditors.Clone(),
+		withReviewedByUser:     _q.withReviewedByUser.Clone(),
+		withReviewedByGroup:    _q.withReviewedByGroup.Clone(),
+		withAssignedToUser:     _q.withAssignedToUser.Clone(),
+		withAssignedToGroup:    _q.withAssignedToGroup.Clone(),
 		withEnvironment:        _q.withEnvironment.Clone(),
 		withScope:              _q.withScope.Clone(),
 		withFindingStatus:      _q.withFindingStatus.Clone(),
@@ -1041,6 +1150,50 @@ func (_q *FindingQuery) WithEditors(opts ...func(*GroupQuery)) *FindingQuery {
 		opt(query)
 	}
 	_q.withEditors = query
+	return _q
+}
+
+// WithReviewedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "reviewed_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *FindingQuery) WithReviewedByUser(opts ...func(*UserQuery)) *FindingQuery {
+	query := (&UserClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withReviewedByUser = query
+	return _q
+}
+
+// WithReviewedByGroup tells the query-builder to eager-load the nodes that are connected to
+// the "reviewed_by_group" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *FindingQuery) WithReviewedByGroup(opts ...func(*GroupQuery)) *FindingQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withReviewedByGroup = query
+	return _q
+}
+
+// WithAssignedToUser tells the query-builder to eager-load the nodes that are connected to
+// the "assigned_to_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *FindingQuery) WithAssignedToUser(opts ...func(*UserQuery)) *FindingQuery {
+	query := (&UserClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAssignedToUser = query
+	return _q
+}
+
+// WithAssignedToGroup tells the query-builder to eager-load the nodes that are connected to
+// the "assigned_to_group" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *FindingQuery) WithAssignedToGroup(opts ...func(*GroupQuery)) *FindingQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAssignedToGroup = query
 	return _q
 }
 
@@ -1381,10 +1534,14 @@ func (_q *FindingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Find
 	var (
 		nodes       = []*Finding{}
 		_spec       = _q.querySpec()
-		loadedTypes = [26]bool{
+		loadedTypes = [30]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
+			_q.withReviewedByUser != nil,
+			_q.withReviewedByGroup != nil,
+			_q.withAssignedToUser != nil,
+			_q.withAssignedToGroup != nil,
 			_q.withEnvironment != nil,
 			_q.withScope != nil,
 			_q.withFindingStatus != nil,
@@ -1450,6 +1607,30 @@ func (_q *FindingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Find
 		if err := _q.loadEditors(ctx, query, nodes,
 			func(n *Finding) { n.Edges.Editors = []*Group{} },
 			func(n *Finding, e *Group) { n.Edges.Editors = append(n.Edges.Editors, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withReviewedByUser; query != nil {
+		if err := _q.loadReviewedByUser(ctx, query, nodes, nil,
+			func(n *Finding, e *User) { n.Edges.ReviewedByUser = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withReviewedByGroup; query != nil {
+		if err := _q.loadReviewedByGroup(ctx, query, nodes, nil,
+			func(n *Finding, e *Group) { n.Edges.ReviewedByGroup = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withAssignedToUser; query != nil {
+		if err := _q.loadAssignedToUser(ctx, query, nodes, nil,
+			func(n *Finding, e *User) { n.Edges.AssignedToUser = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withAssignedToGroup; query != nil {
+		if err := _q.loadAssignedToGroup(ctx, query, nodes, nil,
+			func(n *Finding, e *Group) { n.Edges.AssignedToGroup = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1930,6 +2111,122 @@ func (_q *FindingQuery) loadEditors(ctx context.Context, query *GroupQuery, node
 	}
 	return nil
 }
+func (_q *FindingQuery) loadReviewedByUser(ctx context.Context, query *UserQuery, nodes []*Finding, init func(*Finding), assign func(*Finding, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Finding)
+	for i := range nodes {
+		fk := nodes[i].ReviewedByUserID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "reviewed_by_user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *FindingQuery) loadReviewedByGroup(ctx context.Context, query *GroupQuery, nodes []*Finding, init func(*Finding), assign func(*Finding, *Group)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Finding)
+	for i := range nodes {
+		fk := nodes[i].ReviewedByGroupID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(group.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "reviewed_by_group_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *FindingQuery) loadAssignedToUser(ctx context.Context, query *UserQuery, nodes []*Finding, init func(*Finding), assign func(*Finding, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Finding)
+	for i := range nodes {
+		fk := nodes[i].AssignedToUserID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "assigned_to_user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *FindingQuery) loadAssignedToGroup(ctx context.Context, query *GroupQuery, nodes []*Finding, init func(*Finding), assign func(*Finding, *Group)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Finding)
+	for i := range nodes {
+		fk := nodes[i].AssignedToGroupID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(group.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "assigned_to_group_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (_q *FindingQuery) loadEnvironment(ctx context.Context, query *CustomTypeEnumQuery, nodes []*Finding, init func(*Finding), assign func(*Finding, *CustomTypeEnum)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Finding)
@@ -2266,188 +2563,374 @@ func (_q *FindingQuery) loadControls(ctx context.Context, query *ControlQuery, n
 	return nil
 }
 func (_q *FindingQuery) loadSubcontrols(ctx context.Context, query *SubcontrolQuery, nodes []*Finding, init func(*Finding), assign func(*Finding, *Subcontrol)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Finding)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Finding)
+	nids := make(map[string]map[*Finding]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
 		if init != nil {
-			init(nodes[i])
+			init(node)
 		}
 	}
-	query.withFKs = true
-	query.Where(predicate.Subcontrol(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(finding.SubcontrolsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(finding.SubcontrolsTable)
+		joinT.Schema(_q.schemaConfig.FindingSubcontrols)
+		s.Join(joinT).On(s.C(subcontrol.FieldID), joinT.C(finding.SubcontrolsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(finding.SubcontrolsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(finding.SubcontrolsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Finding]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Subcontrol](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.finding_subcontrols
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "finding_subcontrols" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "finding_subcontrols" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected "subcontrols" node returned %v`, n.ID)
 		}
-		assign(node, n)
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }
 func (_q *FindingQuery) loadRisks(ctx context.Context, query *RiskQuery, nodes []*Finding, init func(*Finding), assign func(*Finding, *Risk)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Finding)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Finding)
+	nids := make(map[string]map[*Finding]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
 		if init != nil {
-			init(nodes[i])
+			init(node)
 		}
 	}
-	query.withFKs = true
-	query.Where(predicate.Risk(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(finding.RisksColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(finding.RisksTable)
+		joinT.Schema(_q.schemaConfig.FindingRisks)
+		s.Join(joinT).On(s.C(risk.FieldID), joinT.C(finding.RisksPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(finding.RisksPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(finding.RisksPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Finding]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Risk](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.finding_risks
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "finding_risks" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "finding_risks" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected "risks" node returned %v`, n.ID)
 		}
-		assign(node, n)
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }
 func (_q *FindingQuery) loadPrograms(ctx context.Context, query *ProgramQuery, nodes []*Finding, init func(*Finding), assign func(*Finding, *Program)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Finding)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Finding)
+	nids := make(map[string]map[*Finding]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
 		if init != nil {
-			init(nodes[i])
+			init(node)
 		}
 	}
-	query.withFKs = true
-	query.Where(predicate.Program(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(finding.ProgramsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(finding.ProgramsTable)
+		joinT.Schema(_q.schemaConfig.FindingPrograms)
+		s.Join(joinT).On(s.C(program.FieldID), joinT.C(finding.ProgramsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(finding.ProgramsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(finding.ProgramsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Finding]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Program](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.finding_programs
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "finding_programs" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "finding_programs" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected "programs" node returned %v`, n.ID)
 		}
-		assign(node, n)
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }
 func (_q *FindingQuery) loadAssets(ctx context.Context, query *AssetQuery, nodes []*Finding, init func(*Finding), assign func(*Finding, *Asset)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Finding)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Finding)
+	nids := make(map[string]map[*Finding]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
 		if init != nil {
-			init(nodes[i])
+			init(node)
 		}
 	}
-	query.withFKs = true
-	query.Where(predicate.Asset(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(finding.AssetsColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(finding.AssetsTable)
+		joinT.Schema(_q.schemaConfig.FindingAssets)
+		s.Join(joinT).On(s.C(asset.FieldID), joinT.C(finding.AssetsPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(finding.AssetsPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(finding.AssetsPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Finding]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Asset](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.finding_assets
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "finding_assets" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "finding_assets" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected "assets" node returned %v`, n.ID)
 		}
-		assign(node, n)
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }
 func (_q *FindingQuery) loadEntities(ctx context.Context, query *EntityQuery, nodes []*Finding, init func(*Finding), assign func(*Finding, *Entity)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Finding)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Finding)
+	nids := make(map[string]map[*Finding]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
 		if init != nil {
-			init(nodes[i])
+			init(node)
 		}
 	}
-	query.withFKs = true
-	query.Where(predicate.Entity(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(finding.EntitiesColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(finding.EntitiesTable)
+		joinT.Schema(_q.schemaConfig.FindingEntities)
+		s.Join(joinT).On(s.C(entity.FieldID), joinT.C(finding.EntitiesPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(finding.EntitiesPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(finding.EntitiesPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Finding]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Entity](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.finding_entities
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "finding_entities" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "finding_entities" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected "entities" node returned %v`, n.ID)
 		}
-		assign(node, n)
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }
 func (_q *FindingQuery) loadScans(ctx context.Context, query *ScanQuery, nodes []*Finding, init func(*Finding), assign func(*Finding, *Scan)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*Finding)
-	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Finding)
+	nids := make(map[string]map[*Finding]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
 		if init != nil {
-			init(nodes[i])
+			init(node)
 		}
 	}
-	query.withFKs = true
-	query.Where(predicate.Scan(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(finding.ScansColumn), fks...))
-	}))
-	neighbors, err := query.All(ctx)
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(finding.ScansTable)
+		joinT.Schema(_q.schemaConfig.FindingScans)
+		s.Join(joinT).On(s.C(scan.FieldID), joinT.C(finding.ScansPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(finding.ScansPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(finding.ScansPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Finding]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Scan](ctx, query, qr, query.inters)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.finding_scans
-		if fk == nil {
-			return fmt.Errorf(`foreign-key "finding_scans" is nil for node %v`, n.ID)
-		}
-		node, ok := nodeids[*fk]
+		nodes, ok := nids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "finding_scans" returned %v for node %v`, *fk, n.ID)
+			return fmt.Errorf(`unexpected "scans" node returned %v`, n.ID)
 		}
-		assign(node, n)
+		for kn := range nodes {
+			assign(kn, n)
+		}
 	}
 	return nil
 }
@@ -2979,6 +3462,18 @@ func (_q *FindingQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(finding.FieldOwnerID)
+		}
+		if _q.withReviewedByUser != nil {
+			_spec.Node.AddColumnOnce(finding.FieldReviewedByUserID)
+		}
+		if _q.withReviewedByGroup != nil {
+			_spec.Node.AddColumnOnce(finding.FieldReviewedByGroupID)
+		}
+		if _q.withAssignedToUser != nil {
+			_spec.Node.AddColumnOnce(finding.FieldAssignedToUserID)
+		}
+		if _q.withAssignedToGroup != nil {
+			_spec.Node.AddColumnOnce(finding.FieldAssignedToGroupID)
 		}
 		if _q.withEnvironment != nil {
 			_spec.Node.AddColumnOnce(finding.FieldEnvironmentID)

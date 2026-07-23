@@ -8,13 +8,16 @@ import (
 	"entgo.io/ent/schema/index"
 
 	"github.com/gertd/go-pluralize"
+	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/history"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
-	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/core/internal/ent/taskrules"
 )
 
 // Notification holds the schema definition for the Notification entity
@@ -93,7 +96,10 @@ func (Notification) Fields() []ent.Field {
 			GoType(enums.NotificationTopic("")).
 			Optional().
 			Immutable().
-			Annotations(entgql.Skip(entgql.SkipMutationUpdateInput)),
+			Annotations(
+				entgql.Skip(entgql.SkipMutationUpdateInput),
+				entx.FieldTaskRule(taskrules.NotificationTaskRules...),
+			),
 	}
 }
 

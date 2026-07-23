@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/internal/consts"
 	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
@@ -388,7 +389,8 @@ type FileBuilder struct {
 	client *client
 
 	// Fields
-	Name string
+	Name    string
+	MD5Hash string
 }
 
 type TemplateBuilder struct {
@@ -597,13 +599,17 @@ func (o *OrganizationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Or
 	org, err := m.Save(ctx)
 	requireNoError(t, err)
 
-	if o.AllowedDomains != nil {
-		orgSetting, err := org.Setting(ctx)
-		requireNoError(t, err)
+	orgSetting, err := org.Setting(ctx)
+	requireNoError(t, err)
+	update := orgSetting.Update()
 
-		err = orgSetting.Update().SetAllowedEmailDomains(o.AllowedDomains).Exec(ctx)
-		requireNoError(t, err)
+	if o.AllowedDomains != nil {
+		update.SetAllowedEmailDomains(o.AllowedDomains)
 	}
+
+	// turn on so all tests have this by default
+	err = update.SetAllowSupportAccess(true).Exec(ctx)
+	requireNoError(t, err)
 
 	o.enableModules(ctx, t, org.ID)
 
@@ -2030,6 +2036,13 @@ func (tc *TrustCenterBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Tr
 	trustCenter, err := mutation.Save(ctx)
 	requireNoError(t, err)
 
+	// the trust center create hook seeds a customizable message-updates email template; remove it when
+	// the test ends so it does not leak into shared-org email template assertions
+	t.Cleanup(func() {
+		cleanupCtx := privacy.DecisionContext(setContext(ctx, tc.client.db), privacy.Allow)
+		_, _ = tc.client.db.EmailTemplate.Delete().Where(emailtemplate.TrustCenterID(trustCenter.ID)).Exec(cleanupCtx)
+	})
+
 	return trustCenter
 }
 
@@ -2295,6 +2308,10 @@ func (fb *FileBuilder) MustNew(ctx context.Context, t *testing.T) *ent.File {
 		SetProvidedFileExtension("csv").
 		SetDetectedContentType("application/csv").
 		SetURI(url)
+
+	if fb.MD5Hash != "" {
+		mutation.SetMd5Hash(fb.MD5Hash)
+	}
 
 	file, err := mutation.Save(ctx)
 	requireNoError(t, err)

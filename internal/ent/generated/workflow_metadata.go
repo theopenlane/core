@@ -53,6 +53,65 @@ func GetWorkflowMetadata() []WorkflowObjectTypeInfo {
 			},
 		},
 		{
+			Type:        enums.WorkflowObjectTypeAssessment,
+			Label:       "Assessment",
+			Description: "Assessment objects",
+			EligibleFields: []WorkflowFieldInfo{
+				{
+					Name:  "workflow_eligible_marker",
+					Label: "WorkflowEligibleMarker",
+					Type:  "bool",
+				},
+				{
+					Name:  "response_due_duration",
+					Label: "ResponseDueDuration",
+					Type:  "int64",
+				},
+			},
+		},
+		{
+			Type:        enums.WorkflowObjectTypeAssessmentResponse,
+			Label:       "AssessmentResponse",
+			Description: "AssessmentResponse objects",
+			EligibleFields: []WorkflowFieldInfo{
+				{
+					Name:  "workflow_eligible_marker",
+					Label: "WorkflowEligibleMarker",
+					Type:  "bool",
+				},
+				{
+					Name:  "send_attempts",
+					Label: "SendAttempts",
+					Type:  "int",
+				},
+				{
+					Name:  "status",
+					Label: "Status",
+					Type:  "enums.AssessmentResponseStatus",
+				},
+				{
+					Name:  "started_at",
+					Label: "StartedAt",
+					Type:  "time.Time",
+				},
+				{
+					Name:  "completed_at",
+					Label: "CompletedAt",
+					Type:  "time.Time",
+				},
+				{
+					Name:  "due_date",
+					Label: "DueDate",
+					Type:  "time.Time",
+				},
+				{
+					Name:  "is_draft",
+					Label: "IsDraft",
+					Type:  "bool",
+				},
+			},
+		},
+		{
 			Type:        enums.WorkflowObjectTypeCampaign,
 			Label:       "Campaign",
 			Description: "Campaign objects",
@@ -211,6 +270,88 @@ func GetWorkflowMetadata() []WorkflowObjectTypeInfo {
 			},
 		},
 		{
+			Type:        enums.WorkflowObjectTypeFinding,
+			Label:       "Finding",
+			Description: "Finding objects",
+			EligibleFields: []WorkflowFieldInfo{
+				{
+					Name:  "workflow_eligible_marker",
+					Label: "WorkflowEligibleMarker",
+					Type:  "bool",
+				},
+				{
+					Name:  "security_level",
+					Label: "SecurityLevel",
+					Type:  "enums.SecurityLevel",
+				},
+				{
+					Name:  "state",
+					Label: "State",
+					Type:  "string",
+				},
+				{
+					Name:  "category",
+					Label: "Category",
+					Type:  "string",
+				},
+				{
+					Name:  "severity",
+					Label: "Severity",
+					Type:  "string",
+				},
+				{
+					Name:  "score",
+					Label: "Score",
+					Type:  "float64",
+				},
+				{
+					Name:  "priority",
+					Label: "Priority",
+					Type:  "string",
+				},
+				{
+					Name:  "open",
+					Label: "Open",
+					Type:  "bool",
+				},
+				{
+					Name:  "blocks_production",
+					Label: "BlocksProduction",
+					Type:  "bool",
+				},
+				{
+					Name:  "production",
+					Label: "Production",
+					Type:  "bool",
+				},
+				{
+					Name:  "public",
+					Label: "Public",
+					Type:  "bool",
+				},
+				{
+					Name:  "validated",
+					Label: "Validated",
+					Type:  "bool",
+				},
+				{
+					Name:  "remediation_sla",
+					Label: "RemediationSLA",
+					Type:  "int",
+				},
+				{
+					Name:  "event_time",
+					Label: "EventTime",
+					Type:  "models.DateTime",
+				},
+				{
+					Name:  "reported_at",
+					Label: "ReportedAt",
+					Type:  "models.DateTime",
+				},
+			},
+		},
+		{
 			Type:        enums.WorkflowObjectTypeIdentityHolder,
 			Label:       "IdentityHolder",
 			Description: "IdentityHolder objects",
@@ -329,6 +470,110 @@ func GetWorkflowMetadata() []WorkflowObjectTypeInfo {
 			},
 		},
 		{
+			Type:        enums.WorkflowObjectTypeRemediation,
+			Label:       "Remediation",
+			Description: "Remediation objects",
+			EligibleFields: []WorkflowFieldInfo{
+				{
+					Name:  "workflow_eligible_marker",
+					Label: "WorkflowEligibleMarker",
+					Type:  "bool",
+				},
+				{
+					Name:  "status",
+					Label: "Status",
+					Type:  "enums.RemediationStatus",
+				},
+				{
+					Name:  "state",
+					Label: "State",
+					Type:  "string",
+				},
+				{
+					Name:  "due_at",
+					Label: "DueAt",
+					Type:  "models.DateTime",
+				},
+				{
+					Name:  "completed_at",
+					Label: "CompletedAt",
+					Type:  "models.DateTime",
+				},
+			},
+		},
+		{
+			Type:        enums.WorkflowObjectTypeRisk,
+			Label:       "Risk",
+			Description: "Risk objects",
+			EligibleFields: []WorkflowFieldInfo{
+				{
+					Name:  "workflow_eligible_marker",
+					Label: "WorkflowEligibleMarker",
+					Type:  "bool",
+				},
+				{
+					Name:  "status",
+					Label: "Status",
+					Type:  "enums.RiskStatus",
+				},
+				{
+					Name:  "impact",
+					Label: "Impact",
+					Type:  "enums.RiskImpact",
+				},
+				{
+					Name:  "likelihood",
+					Label: "Likelihood",
+					Type:  "enums.RiskLikelihood",
+				},
+				{
+					Name:  "score",
+					Label: "Score",
+					Type:  "int",
+				},
+				{
+					Name:  "mitigated_at",
+					Label: "MitigatedAt",
+					Type:  "models.DateTime",
+				},
+				{
+					Name:  "review_required",
+					Label: "ReviewRequired",
+					Type:  "bool",
+				},
+				{
+					Name:  "last_reviewed_at",
+					Label: "LastReviewedAt",
+					Type:  "models.DateTime",
+				},
+				{
+					Name:  "review_frequency",
+					Label: "ReviewFrequency",
+					Type:  "enums.Frequency",
+				},
+				{
+					Name:  "due_date",
+					Label: "DueDate",
+					Type:  "models.DateTime",
+				},
+				{
+					Name:  "next_review_due_at",
+					Label: "NextReviewDueAt",
+					Type:  "models.DateTime",
+				},
+				{
+					Name:  "residual_score",
+					Label: "ResidualScore",
+					Type:  "int",
+				},
+				{
+					Name:  "risk_decision",
+					Label: "RiskDecision",
+					Type:  "enums.RiskDecision",
+				},
+			},
+		},
+		{
 			Type:        enums.WorkflowObjectTypeSubcontrol,
 			Label:       "Subcontrol",
 			Description: "Subcontrol objects",
@@ -392,6 +637,120 @@ func GetWorkflowMetadata() []WorkflowObjectTypeInfo {
 					Name:  "workflow_eligible_marker",
 					Label: "WorkflowEligibleMarker",
 					Type:  "bool",
+				},
+			},
+		},
+		{
+			Type:        enums.WorkflowObjectTypeTask,
+			Label:       "Task",
+			Description: "Task objects",
+			EligibleFields: []WorkflowFieldInfo{
+				{
+					Name:  "workflow_eligible_marker",
+					Label: "WorkflowEligibleMarker",
+					Type:  "bool",
+				},
+				{
+					Name:  "status",
+					Label: "Status",
+					Type:  "enums.TaskStatus",
+				},
+				{
+					Name:  "due",
+					Label: "Due",
+					Type:  "models.DateTime",
+				},
+				{
+					Name:  "completed",
+					Label: "Completed",
+					Type:  "models.DateTime",
+				},
+				{
+					Name:  "system_generated",
+					Label: "SystemGenerated",
+					Type:  "bool",
+				},
+			},
+		},
+		{
+			Type:        enums.WorkflowObjectTypeVulnerability,
+			Label:       "Vulnerability",
+			Description: "Vulnerability objects",
+			EligibleFields: []WorkflowFieldInfo{
+				{
+					Name:  "workflow_eligible_marker",
+					Label: "WorkflowEligibleMarker",
+					Type:  "bool",
+				},
+				{
+					Name:  "security_level",
+					Label: "SecurityLevel",
+					Type:  "enums.SecurityLevel",
+				},
+				{
+					Name:  "severity",
+					Label: "Severity",
+					Type:  "string",
+				},
+				{
+					Name:  "score",
+					Label: "Score",
+					Type:  "float64",
+				},
+				{
+					Name:  "priority",
+					Label: "Priority",
+					Type:  "string",
+				},
+				{
+					Name:  "remediation_sla",
+					Label: "RemediationSLA",
+					Type:  "int",
+				},
+				{
+					Name:  "open",
+					Label: "Open",
+					Type:  "bool",
+				},
+				{
+					Name:  "blocking",
+					Label: "Blocking",
+					Type:  "bool",
+				},
+				{
+					Name:  "production",
+					Label: "Production",
+					Type:  "bool",
+				},
+				{
+					Name:  "public",
+					Label: "Public",
+					Type:  "bool",
+				},
+				{
+					Name:  "validated",
+					Label: "Validated",
+					Type:  "bool",
+				},
+				{
+					Name:  "fix_available",
+					Label: "FixAvailable",
+					Type:  "bool",
+				},
+				{
+					Name:  "discovered_at",
+					Label: "DiscoveredAt",
+					Type:  "models.DateTime",
+				},
+				{
+					Name:  "dismissed_at",
+					Label: "DismissedAt",
+					Type:  "models.DateTime",
+				},
+				{
+					Name:  "fixed_at",
+					Label: "FixedAt",
+					Type:  "models.DateTime",
 				},
 			},
 		},

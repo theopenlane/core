@@ -18,17 +18,17 @@ servers:
     description: SCIM v2 API base path
 
 tags:
-  - name: Users
+  - name: SCIM Users
     description: Operations for managing user accounts
     externalDocs:
       description: SCIM User Resource Schema
       url: https://datatracker.ietf.org/doc/html/rfc7643#section-4.1
-  - name: Groups
+  - name: SCIM Groups
     description: Operations for managing groups
     externalDocs:
       description: SCIM Group Resource Schema
       url: https://datatracker.ietf.org/doc/html/rfc7643#section-4.2
-  - name: Discovery
+  - name: SCIM Discovery
     description: Discovery endpoints for service provider capabilities
     externalDocs:
       description: SCIM Service Provider Configuration
@@ -38,7 +38,7 @@ paths:
   /Users:
     get:
       tags:
-        - Users
+        - SCIM Users
       summary: List users
       description: Returns a list of users with optional filtering and pagination
       operationId: listUsers
@@ -64,7 +64,7 @@ paths:
 
     post:
       tags:
-        - Users
+        - SCIM Users
       summary: Create a new user
       description: Creates a new user with the provided attributes
       operationId: createUser
@@ -89,7 +89,7 @@ paths:
   /Users/{id}:
     get:
       tags:
-        - Users
+        - SCIM Users
       summary: Get user by ID
       description: Retrieves details of a specific user by ID
       operationId: getUserById
@@ -113,7 +113,7 @@ paths:
 
     put:
       tags:
-        - Users
+        - SCIM Users
       summary: Replace user
       description: Replaces all attributes of an existing user
       operationId: replaceUser
@@ -139,7 +139,7 @@ paths:
 
     patch:
       tags:
-        - Users
+        - SCIM Users
       summary: Update user
       description: Applies partial modifications to a user using SCIM PATCH operations
       operationId: patchUser
@@ -165,7 +165,7 @@ paths:
 
     delete:
       tags:
-        - Users
+        - SCIM Users
       summary: Delete user
       description: Removes a user from the system
       operationId: deleteUser
@@ -188,7 +188,7 @@ paths:
   /Groups:
     get:
       tags:
-        - Groups
+        - SCIM Groups
       summary: List groups
       description: Returns a list of groups with optional filtering and pagination
       operationId: listGroups
@@ -214,7 +214,7 @@ paths:
 
     post:
       tags:
-        - Groups
+        - SCIM Groups
       summary: Create a new group
       description: Creates a new group with the provided attributes
       operationId: createGroup
@@ -239,7 +239,7 @@ paths:
   /Groups/{id}:
     get:
       tags:
-        - Groups
+        - SCIM Groups
       summary: Get group by ID
       description: Retrieves details of a specific group by ID
       operationId: getGroupById
@@ -263,7 +263,7 @@ paths:
 
     put:
       tags:
-        - Groups
+        - SCIM Groups
       summary: Replace group
       description: Replaces all attributes of an existing group
       operationId: replaceGroup
@@ -289,7 +289,7 @@ paths:
 
     patch:
       tags:
-        - Groups
+        - SCIM Groups
       summary: Update group
       description: Applies partial modifications to a group using SCIM PATCH operations
       operationId: patchGroup
@@ -315,7 +315,7 @@ paths:
 
     delete:
       tags:
-        - Groups
+        - SCIM Groups
       summary: Delete group
       description: Removes a group from the system
       operationId: deleteGroup
@@ -338,7 +338,7 @@ paths:
   /ServiceProviderConfig:
     get:
       tags:
-        - Discovery
+        - SCIM Discovery
       summary: Get service provider configuration
       description: Returns the service provider's configuration, including supported features and authentication schemes
       operationId: getServiceProviderConfig
@@ -359,7 +359,7 @@ paths:
   /ResourceTypes:
     get:
       tags:
-        - Discovery
+        - SCIM Discovery
       summary: Get resource types
       description: Returns available SCIM resource types supported by this service provider
       operationId: getResourceTypes
@@ -393,7 +393,7 @@ paths:
   /ResourceTypes/{name}:
     get:
       tags:
-        - Discovery
+        - SCIM Discovery
       summary: Get resource type by name
       description: Returns detailed information about a specific resource type
       operationId: getResourceTypeByName
@@ -424,7 +424,7 @@ paths:
   /Schemas:
     get:
       tags:
-        - Discovery
+        - SCIM Discovery
       summary: Get schemas
       description: Returns SCIM schemas supported by this service provider
       operationId: getSchemas
@@ -458,7 +458,7 @@ paths:
   /Schemas/{uri}:
     get:
       tags:
-        - Discovery
+        - SCIM Discovery
       summary: Get schema by URI
       description: Returns detailed schema definition for a specific schema URI
       operationId: getSchemaByUri

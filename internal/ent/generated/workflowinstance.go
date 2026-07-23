@@ -13,16 +13,24 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/assessment"
+	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
@@ -87,6 +95,22 @@ type WorkflowInstance struct {
 	IdentityHolderID string `json:"identity_holder_id,omitempty"`
 	// ID of the platform this workflow instance is associated with
 	PlatformID string `json:"platform_id,omitempty"`
+	// ID of the assessment this workflow instance is associated with
+	AssessmentID string `json:"assessment_id,omitempty"`
+	// ID of the assessment response this workflow instance is associated with
+	AssessmentResponseID string `json:"assessment_response_id,omitempty"`
+	// ID of the finding this workflow instance is associated with
+	FindingID string `json:"finding_id,omitempty"`
+	// ID of the integration this workflow instance is associated with
+	IntegrationID string `json:"integration_id,omitempty"`
+	// ID of the remediation this workflow instance is associated with
+	RemediationID string `json:"remediation_id,omitempty"`
+	// ID of the risk this workflow instance is associated with
+	RiskID string `json:"risk_id,omitempty"`
+	// ID of the task this workflow instance is associated with
+	TaskID string `json:"task_id,omitempty"`
+	// ID of the vulnerability this workflow instance is associated with
+	VulnerabilityID string `json:"vulnerability_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the WorkflowInstanceQuery when eager-loading is set.
 	Edges        WorkflowInstanceEdges `json:"edges"`
@@ -119,6 +143,22 @@ type WorkflowInstanceEdges struct {
 	IdentityHolder *IdentityHolder `json:"identity_holder,omitempty"`
 	// Platform this workflow instance is associated with
 	Platform *Platform `json:"platform,omitempty"`
+	// Assessment this workflow instance is associated with
+	Assessment *Assessment `json:"assessment,omitempty"`
+	// Assessment response this workflow instance is associated with
+	AssessmentResponse *AssessmentResponse `json:"assessment_response,omitempty"`
+	// Finding this workflow instance is associated with
+	Finding *Finding `json:"finding,omitempty"`
+	// Integration this workflow instance is associated with
+	Integration *Integration `json:"integration,omitempty"`
+	// Remediation this workflow instance is associated with
+	Remediation *Remediation `json:"remediation,omitempty"`
+	// Risk this workflow instance is associated with
+	Risk *Risk `json:"risk,omitempty"`
+	// Task this workflow instance is associated with
+	Task *Task `json:"task,omitempty"`
+	// Vulnerability this workflow instance is associated with
+	Vulnerability *Vulnerability `json:"vulnerability,omitempty"`
 	// Proposal this workflow instance is associated with
 	WorkflowProposal *WorkflowProposal `json:"workflow_proposal,omitempty"`
 	// Assignments associated with this workflow instance
@@ -131,9 +171,9 @@ type WorkflowInstanceEdges struct {
 	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [17]bool
+	loadedTypes [25]bool
 	// totalCount holds the count of the edges above.
-	totalCount [16]map[string]int
+	totalCount [24]map[string]int
 
 	namedWorkflowAssignments map[string][]*WorkflowAssignment
 	namedWorkflowEvents      map[string][]*WorkflowEvent
@@ -273,12 +313,100 @@ func (e WorkflowInstanceEdges) PlatformOrErr() (*Platform, error) {
 	return nil, &NotLoadedError{edge: "platform"}
 }
 
+// AssessmentOrErr returns the Assessment value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e WorkflowInstanceEdges) AssessmentOrErr() (*Assessment, error) {
+	if e.Assessment != nil {
+		return e.Assessment, nil
+	} else if e.loadedTypes[12] {
+		return nil, &NotFoundError{label: assessment.Label}
+	}
+	return nil, &NotLoadedError{edge: "assessment"}
+}
+
+// AssessmentResponseOrErr returns the AssessmentResponse value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e WorkflowInstanceEdges) AssessmentResponseOrErr() (*AssessmentResponse, error) {
+	if e.AssessmentResponse != nil {
+		return e.AssessmentResponse, nil
+	} else if e.loadedTypes[13] {
+		return nil, &NotFoundError{label: assessmentresponse.Label}
+	}
+	return nil, &NotLoadedError{edge: "assessment_response"}
+}
+
+// FindingOrErr returns the Finding value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e WorkflowInstanceEdges) FindingOrErr() (*Finding, error) {
+	if e.Finding != nil {
+		return e.Finding, nil
+	} else if e.loadedTypes[14] {
+		return nil, &NotFoundError{label: finding.Label}
+	}
+	return nil, &NotLoadedError{edge: "finding"}
+}
+
+// IntegrationOrErr returns the Integration value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e WorkflowInstanceEdges) IntegrationOrErr() (*Integration, error) {
+	if e.Integration != nil {
+		return e.Integration, nil
+	} else if e.loadedTypes[15] {
+		return nil, &NotFoundError{label: integration.Label}
+	}
+	return nil, &NotLoadedError{edge: "integration"}
+}
+
+// RemediationOrErr returns the Remediation value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e WorkflowInstanceEdges) RemediationOrErr() (*Remediation, error) {
+	if e.Remediation != nil {
+		return e.Remediation, nil
+	} else if e.loadedTypes[16] {
+		return nil, &NotFoundError{label: remediation.Label}
+	}
+	return nil, &NotLoadedError{edge: "remediation"}
+}
+
+// RiskOrErr returns the Risk value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e WorkflowInstanceEdges) RiskOrErr() (*Risk, error) {
+	if e.Risk != nil {
+		return e.Risk, nil
+	} else if e.loadedTypes[17] {
+		return nil, &NotFoundError{label: risk.Label}
+	}
+	return nil, &NotLoadedError{edge: "risk"}
+}
+
+// TaskOrErr returns the Task value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e WorkflowInstanceEdges) TaskOrErr() (*Task, error) {
+	if e.Task != nil {
+		return e.Task, nil
+	} else if e.loadedTypes[18] {
+		return nil, &NotFoundError{label: task.Label}
+	}
+	return nil, &NotLoadedError{edge: "task"}
+}
+
+// VulnerabilityOrErr returns the Vulnerability value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e WorkflowInstanceEdges) VulnerabilityOrErr() (*Vulnerability, error) {
+	if e.Vulnerability != nil {
+		return e.Vulnerability, nil
+	} else if e.loadedTypes[19] {
+		return nil, &NotFoundError{label: vulnerability.Label}
+	}
+	return nil, &NotLoadedError{edge: "vulnerability"}
+}
+
 // WorkflowProposalOrErr returns the WorkflowProposal value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e WorkflowInstanceEdges) WorkflowProposalOrErr() (*WorkflowProposal, error) {
 	if e.WorkflowProposal != nil {
 		return e.WorkflowProposal, nil
-	} else if e.loadedTypes[12] {
+	} else if e.loadedTypes[20] {
 		return nil, &NotFoundError{label: workflowproposal.Label}
 	}
 	return nil, &NotLoadedError{edge: "workflow_proposal"}
@@ -287,7 +415,7 @@ func (e WorkflowInstanceEdges) WorkflowProposalOrErr() (*WorkflowProposal, error
 // WorkflowAssignmentsOrErr returns the WorkflowAssignments value or an error if the edge
 // was not loaded in eager-loading.
 func (e WorkflowInstanceEdges) WorkflowAssignmentsOrErr() ([]*WorkflowAssignment, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[21] {
 		return e.WorkflowAssignments, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_assignments"}
@@ -296,7 +424,7 @@ func (e WorkflowInstanceEdges) WorkflowAssignmentsOrErr() ([]*WorkflowAssignment
 // WorkflowEventsOrErr returns the WorkflowEvents value or an error if the edge
 // was not loaded in eager-loading.
 func (e WorkflowInstanceEdges) WorkflowEventsOrErr() ([]*WorkflowEvent, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[22] {
 		return e.WorkflowEvents, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_events"}
@@ -305,7 +433,7 @@ func (e WorkflowInstanceEdges) WorkflowEventsOrErr() ([]*WorkflowEvent, error) {
 // EmailTemplatesOrErr returns the EmailTemplates value or an error if the edge
 // was not loaded in eager-loading.
 func (e WorkflowInstanceEdges) EmailTemplatesOrErr() ([]*EmailTemplate, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[23] {
 		return e.EmailTemplates, nil
 	}
 	return nil, &NotLoadedError{edge: "email_templates"}
@@ -314,7 +442,7 @@ func (e WorkflowInstanceEdges) EmailTemplatesOrErr() ([]*EmailTemplate, error) {
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e WorkflowInstanceEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[24] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -329,7 +457,7 @@ func (*WorkflowInstance) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case workflowinstance.FieldCurrentActionIndex:
 			values[i] = new(sql.NullInt64)
-		case workflowinstance.FieldID, workflowinstance.FieldCreatedBy, workflowinstance.FieldUpdatedBy, workflowinstance.FieldUpdatedByImpersonator, workflowinstance.FieldDeletedBy, workflowinstance.FieldDisplayID, workflowinstance.FieldOwnerID, workflowinstance.FieldWorkflowDefinitionID, workflowinstance.FieldWorkflowProposalID, workflowinstance.FieldState, workflowinstance.FieldControlID, workflowinstance.FieldInternalPolicyID, workflowinstance.FieldEvidenceID, workflowinstance.FieldSubcontrolID, workflowinstance.FieldActionPlanID, workflowinstance.FieldProcedureID, workflowinstance.FieldCampaignID, workflowinstance.FieldCampaignTargetID, workflowinstance.FieldIdentityHolderID, workflowinstance.FieldPlatformID:
+		case workflowinstance.FieldID, workflowinstance.FieldCreatedBy, workflowinstance.FieldUpdatedBy, workflowinstance.FieldUpdatedByImpersonator, workflowinstance.FieldDeletedBy, workflowinstance.FieldDisplayID, workflowinstance.FieldOwnerID, workflowinstance.FieldWorkflowDefinitionID, workflowinstance.FieldWorkflowProposalID, workflowinstance.FieldState, workflowinstance.FieldControlID, workflowinstance.FieldInternalPolicyID, workflowinstance.FieldEvidenceID, workflowinstance.FieldSubcontrolID, workflowinstance.FieldActionPlanID, workflowinstance.FieldProcedureID, workflowinstance.FieldCampaignID, workflowinstance.FieldCampaignTargetID, workflowinstance.FieldIdentityHolderID, workflowinstance.FieldPlatformID, workflowinstance.FieldAssessmentID, workflowinstance.FieldAssessmentResponseID, workflowinstance.FieldFindingID, workflowinstance.FieldIntegrationID, workflowinstance.FieldRemediationID, workflowinstance.FieldRiskID, workflowinstance.FieldTaskID, workflowinstance.FieldVulnerabilityID:
 			values[i] = new(sql.NullString)
 		case workflowinstance.FieldCreatedAt, workflowinstance.FieldUpdatedAt, workflowinstance.FieldDeletedAt, workflowinstance.FieldLastEvaluatedAt:
 			values[i] = new(sql.NullTime)
@@ -524,6 +652,54 @@ func (_m *WorkflowInstance) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.PlatformID = value.String
 			}
+		case workflowinstance.FieldAssessmentID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field assessment_id", values[i])
+			} else if value.Valid {
+				_m.AssessmentID = value.String
+			}
+		case workflowinstance.FieldAssessmentResponseID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field assessment_response_id", values[i])
+			} else if value.Valid {
+				_m.AssessmentResponseID = value.String
+			}
+		case workflowinstance.FieldFindingID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field finding_id", values[i])
+			} else if value.Valid {
+				_m.FindingID = value.String
+			}
+		case workflowinstance.FieldIntegrationID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field integration_id", values[i])
+			} else if value.Valid {
+				_m.IntegrationID = value.String
+			}
+		case workflowinstance.FieldRemediationID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field remediation_id", values[i])
+			} else if value.Valid {
+				_m.RemediationID = value.String
+			}
+		case workflowinstance.FieldRiskID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field risk_id", values[i])
+			} else if value.Valid {
+				_m.RiskID = value.String
+			}
+		case workflowinstance.FieldTaskID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field task_id", values[i])
+			} else if value.Valid {
+				_m.TaskID = value.String
+			}
+		case workflowinstance.FieldVulnerabilityID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field vulnerability_id", values[i])
+			} else if value.Valid {
+				_m.VulnerabilityID = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -595,6 +771,46 @@ func (_m *WorkflowInstance) QueryIdentityHolder() *IdentityHolderQuery {
 // QueryPlatform queries the "platform" edge of the WorkflowInstance entity.
 func (_m *WorkflowInstance) QueryPlatform() *PlatformQuery {
 	return NewWorkflowInstanceClient(_m.config).QueryPlatform(_m)
+}
+
+// QueryAssessment queries the "assessment" edge of the WorkflowInstance entity.
+func (_m *WorkflowInstance) QueryAssessment() *AssessmentQuery {
+	return NewWorkflowInstanceClient(_m.config).QueryAssessment(_m)
+}
+
+// QueryAssessmentResponse queries the "assessment_response" edge of the WorkflowInstance entity.
+func (_m *WorkflowInstance) QueryAssessmentResponse() *AssessmentResponseQuery {
+	return NewWorkflowInstanceClient(_m.config).QueryAssessmentResponse(_m)
+}
+
+// QueryFinding queries the "finding" edge of the WorkflowInstance entity.
+func (_m *WorkflowInstance) QueryFinding() *FindingQuery {
+	return NewWorkflowInstanceClient(_m.config).QueryFinding(_m)
+}
+
+// QueryIntegration queries the "integration" edge of the WorkflowInstance entity.
+func (_m *WorkflowInstance) QueryIntegration() *IntegrationQuery {
+	return NewWorkflowInstanceClient(_m.config).QueryIntegration(_m)
+}
+
+// QueryRemediation queries the "remediation" edge of the WorkflowInstance entity.
+func (_m *WorkflowInstance) QueryRemediation() *RemediationQuery {
+	return NewWorkflowInstanceClient(_m.config).QueryRemediation(_m)
+}
+
+// QueryRisk queries the "risk" edge of the WorkflowInstance entity.
+func (_m *WorkflowInstance) QueryRisk() *RiskQuery {
+	return NewWorkflowInstanceClient(_m.config).QueryRisk(_m)
+}
+
+// QueryTask queries the "task" edge of the WorkflowInstance entity.
+func (_m *WorkflowInstance) QueryTask() *TaskQuery {
+	return NewWorkflowInstanceClient(_m.config).QueryTask(_m)
+}
+
+// QueryVulnerability queries the "vulnerability" edge of the WorkflowInstance entity.
+func (_m *WorkflowInstance) QueryVulnerability() *VulnerabilityQuery {
+	return NewWorkflowInstanceClient(_m.config).QueryVulnerability(_m)
 }
 
 // QueryWorkflowProposal queries the "workflow_proposal" edge of the WorkflowInstance entity.
@@ -729,6 +945,30 @@ func (_m *WorkflowInstance) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("platform_id=")
 	builder.WriteString(_m.PlatformID)
+	builder.WriteString(", ")
+	builder.WriteString("assessment_id=")
+	builder.WriteString(_m.AssessmentID)
+	builder.WriteString(", ")
+	builder.WriteString("assessment_response_id=")
+	builder.WriteString(_m.AssessmentResponseID)
+	builder.WriteString(", ")
+	builder.WriteString("finding_id=")
+	builder.WriteString(_m.FindingID)
+	builder.WriteString(", ")
+	builder.WriteString("integration_id=")
+	builder.WriteString(_m.IntegrationID)
+	builder.WriteString(", ")
+	builder.WriteString("remediation_id=")
+	builder.WriteString(_m.RemediationID)
+	builder.WriteString(", ")
+	builder.WriteString("risk_id=")
+	builder.WriteString(_m.RiskID)
+	builder.WriteString(", ")
+	builder.WriteString("task_id=")
+	builder.WriteString(_m.TaskID)
+	builder.WriteString(", ")
+	builder.WriteString("vulnerability_id=")
+	builder.WriteString(_m.VulnerabilityID)
 	builder.WriteByte(')')
 	return builder.String()
 }

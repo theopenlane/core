@@ -80,7 +80,7 @@ func (g GroupMembership) Edges() []ent.Edge {
 			immutable:  true,
 			field:      "user_id",
 			annotations: []schema.Annotation{
-				accessmap.EdgeNoAuthCheck(),
+				accessmap.EdgeViewCheck(User{}.Name()),
 			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{

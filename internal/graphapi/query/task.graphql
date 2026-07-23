@@ -16,11 +16,16 @@ mutation CreateBulkCSVTask ($input: Upload!) {
 			externalUUID
 			id
 			idempotencyKey
+			isSuggested
 			isTemplate
+			metadata
 			ownerID
 			parentTaskID
+			priority
 			scopeID
 			scopeName
+			source
+			sourceKey
 			status
 			systemGenerated
 			tags
@@ -30,6 +35,7 @@ mutation CreateBulkCSVTask ($input: Upload!) {
 			updatedAt
 			updatedBy
 			updatedByImpersonator
+			workflowEligibleMarker
 			assignee {
 				id
 				firstName
@@ -74,11 +80,16 @@ mutation CreateBulkTask ($input: [CreateTaskInput!]) {
 			externalUUID
 			id
 			idempotencyKey
+			isSuggested
 			isTemplate
+			metadata
 			ownerID
 			parentTaskID
+			priority
 			scopeID
 			scopeName
+			source
+			sourceKey
 			status
 			systemGenerated
 			tags
@@ -88,6 +99,7 @@ mutation CreateBulkTask ($input: [CreateTaskInput!]) {
 			updatedAt
 			updatedBy
 			updatedByImpersonator
+			workflowEligibleMarker
 			assignee {
 				id
 				firstName
@@ -132,11 +144,16 @@ mutation CreateTask ($input: CreateTaskInput!) {
 			externalUUID
 			id
 			idempotencyKey
+			isSuggested
 			isTemplate
+			metadata
 			ownerID
 			parentTaskID
+			priority
 			scopeID
 			scopeName
+			source
+			sourceKey
 			status
 			systemGenerated
 			tags
@@ -146,6 +163,7 @@ mutation CreateTask ($input: CreateTaskInput!) {
 			updatedAt
 			updatedBy
 			updatedByImpersonator
+			workflowEligibleMarker
 			assignee {
 				id
 				firstName
@@ -203,11 +221,16 @@ query GetAllTasks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $or
 				externalUUID
 				id
 				idempotencyKey
+				isSuggested
 				isTemplate
+				metadata
 				ownerID
 				parentTaskID
+				priority
 				scopeID
 				scopeName
+				source
+				sourceKey
 				status
 				systemGenerated
 				tags
@@ -217,6 +240,7 @@ query GetAllTasks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $or
 				updatedAt
 				updatedBy
 				updatedByImpersonator
+				workflowEligibleMarker
 				assignee {
 					id
 					firstName
@@ -275,11 +299,16 @@ query GetTaskByID ($taskId: ID!) {
 		externalUUID
 		id
 		idempotencyKey
+		isSuggested
 		isTemplate
+		metadata
 		ownerID
 		parentTaskID
+		priority
 		scopeID
 		scopeName
+		source
+		sourceKey
 		status
 		systemGenerated
 		tags
@@ -289,6 +318,7 @@ query GetTaskByID ($taskId: ID!) {
 		updatedAt
 		updatedBy
 		updatedByImpersonator
+		workflowEligibleMarker
 		assignee {
 			id
 			firstName
@@ -354,11 +384,16 @@ query GetTasks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $order
 				externalUUID
 				id
 				idempotencyKey
+				isSuggested
 				isTemplate
+				metadata
 				ownerID
 				parentTaskID
+				priority
 				scopeID
 				scopeName
+				source
+				sourceKey
 				status
 				systemGenerated
 				tags
@@ -368,6 +403,7 @@ query GetTasks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $order
 				updatedAt
 				updatedBy
 				updatedByImpersonator
+				workflowEligibleMarker
 				assignee {
 					id
 					firstName
@@ -423,11 +459,16 @@ mutation UpdateBulkTask ($ids: [ID!]!, $input: UpdateTaskInput!) {
 			externalUUID
 			id
 			idempotencyKey
+			isSuggested
 			isTemplate
+			metadata
 			ownerID
 			parentTaskID
+			priority
 			scopeID
 			scopeName
+			source
+			sourceKey
 			status
 			systemGenerated
 			tags
@@ -437,6 +478,7 @@ mutation UpdateBulkTask ($ids: [ID!]!, $input: UpdateTaskInput!) {
 			updatedAt
 			updatedBy
 			updatedByImpersonator
+			workflowEligibleMarker
 			assignee {
 				id
 				firstName
@@ -482,11 +524,16 @@ mutation UpdateTask ($updateTaskId: ID!, $input: UpdateTaskInput!) {
 			externalUUID
 			id
 			idempotencyKey
+			isSuggested
 			isTemplate
+			metadata
 			ownerID
 			parentTaskID
+			priority
 			scopeID
 			scopeName
+			source
+			sourceKey
 			status
 			systemGenerated
 			tags
@@ -496,6 +543,7 @@ mutation UpdateTask ($updateTaskId: ID!, $input: UpdateTaskInput!) {
 			updatedAt
 			updatedBy
 			updatedByImpersonator
+			workflowEligibleMarker
 			assignee {
 				id
 				firstName

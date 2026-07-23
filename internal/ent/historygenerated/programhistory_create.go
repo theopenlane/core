@@ -300,6 +300,62 @@ func (_c *ProgramHistoryCreate) SetNillableEndDate(v *time.Time) *ProgramHistory
 	return _c
 }
 
+// SetObservationPeriodStartDate sets the "observation_period_start_date" field.
+func (_c *ProgramHistoryCreate) SetObservationPeriodStartDate(v time.Time) *ProgramHistoryCreate {
+	_c.mutation.SetObservationPeriodStartDate(v)
+	return _c
+}
+
+// SetNillableObservationPeriodStartDate sets the "observation_period_start_date" field if the given value is not nil.
+func (_c *ProgramHistoryCreate) SetNillableObservationPeriodStartDate(v *time.Time) *ProgramHistoryCreate {
+	if v != nil {
+		_c.SetObservationPeriodStartDate(*v)
+	}
+	return _c
+}
+
+// SetObservationPeriodEndDate sets the "observation_period_end_date" field.
+func (_c *ProgramHistoryCreate) SetObservationPeriodEndDate(v time.Time) *ProgramHistoryCreate {
+	_c.mutation.SetObservationPeriodEndDate(v)
+	return _c
+}
+
+// SetNillableObservationPeriodEndDate sets the "observation_period_end_date" field if the given value is not nil.
+func (_c *ProgramHistoryCreate) SetNillableObservationPeriodEndDate(v *time.Time) *ProgramHistoryCreate {
+	if v != nil {
+		_c.SetObservationPeriodEndDate(*v)
+	}
+	return _c
+}
+
+// SetFieldworkStartDate sets the "fieldwork_start_date" field.
+func (_c *ProgramHistoryCreate) SetFieldworkStartDate(v time.Time) *ProgramHistoryCreate {
+	_c.mutation.SetFieldworkStartDate(v)
+	return _c
+}
+
+// SetNillableFieldworkStartDate sets the "fieldwork_start_date" field if the given value is not nil.
+func (_c *ProgramHistoryCreate) SetNillableFieldworkStartDate(v *time.Time) *ProgramHistoryCreate {
+	if v != nil {
+		_c.SetFieldworkStartDate(*v)
+	}
+	return _c
+}
+
+// SetFieldworkEndDate sets the "fieldwork_end_date" field.
+func (_c *ProgramHistoryCreate) SetFieldworkEndDate(v time.Time) *ProgramHistoryCreate {
+	_c.mutation.SetFieldworkEndDate(v)
+	return _c
+}
+
+// SetNillableFieldworkEndDate sets the "fieldwork_end_date" field if the given value is not nil.
+func (_c *ProgramHistoryCreate) SetNillableFieldworkEndDate(v *time.Time) *ProgramHistoryCreate {
+	if v != nil {
+		_c.SetFieldworkEndDate(*v)
+	}
+	return _c
+}
+
 // SetAuditorReady sets the "auditor_ready" field.
 func (_c *ProgramHistoryCreate) SetAuditorReady(v bool) *ProgramHistoryCreate {
 	_c.mutation.SetAuditorReady(v)
@@ -659,6 +715,22 @@ func (_c *ProgramHistoryCreate) createSpec() (*ProgramHistory, *sqlgraph.CreateS
 	if value, ok := _c.mutation.EndDate(); ok {
 		_spec.SetField(programhistory.FieldEndDate, field.TypeTime, value)
 		_node.EndDate = value
+	}
+	if value, ok := _c.mutation.ObservationPeriodStartDate(); ok {
+		_spec.SetField(programhistory.FieldObservationPeriodStartDate, field.TypeTime, value)
+		_node.ObservationPeriodStartDate = value
+	}
+	if value, ok := _c.mutation.ObservationPeriodEndDate(); ok {
+		_spec.SetField(programhistory.FieldObservationPeriodEndDate, field.TypeTime, value)
+		_node.ObservationPeriodEndDate = value
+	}
+	if value, ok := _c.mutation.FieldworkStartDate(); ok {
+		_spec.SetField(programhistory.FieldFieldworkStartDate, field.TypeTime, value)
+		_node.FieldworkStartDate = value
+	}
+	if value, ok := _c.mutation.FieldworkEndDate(); ok {
+		_spec.SetField(programhistory.FieldFieldworkEndDate, field.TypeTime, value)
+		_node.FieldworkEndDate = value
 	}
 	if value, ok := _c.mutation.AuditorReady(); ok {
 		_spec.SetField(programhistory.FieldAuditorReady, field.TypeBool, value)

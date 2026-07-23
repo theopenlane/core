@@ -149,6 +149,9 @@
         "awssecurityhub": {
           "$ref": "#/$defs/awssecurityhub.Config"
         },
+        "cloudflareruntime": {
+          "$ref": "#/$defs/cloudflare.RuntimeConfig"
+        },
         "githubapp": {
           "$ref": "#/$defs/githubapp.Config"
         },
@@ -180,7 +183,28 @@
           "$ref": "#/$defs/email.RuntimeEmailConfig"
         },
         "paymentreminder": {
-          "$ref": "#/$defs/operations.PaymentReminderConfig"
+          "$ref": "#/$defs/system.PaymentReminderConfig"
+        },
+        "organizationdelete": {
+          "$ref": "#/$defs/system.OrganizationDeleteConfig"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "cloudflare.RuntimeConfig": {
+      "properties": {
+        "apitoken": {
+          "type": "string",
+          "description": "Cloudflare API token for the operator-owned account"
+        },
+        "accountid": {
+          "type": "string",
+          "description": "Cloudflare account ID for the operator-owned account"
+        },
+        "domainscan": {
+          "$ref": "#/$defs/domainscan.ReportConfig",
+          "description": "Vendor/technology classification and enrichment behavior for onboarding domain scan reports"
         }
       },
       "additionalProperties": false,
@@ -225,7 +249,7 @@
       },
       "additionalProperties": false,
       "type": "object",
-      "description": "Backfill configures one-time startup data backfill routines that populate fields introduced by recent migrations for organizations and memberships that pre-date them"
+      "description": "Backfill configures one-time startup data backfill routines that populate fields introduced by recent\nmigrations for organizations and memberships that pre-date them"
     },
     "config.KeyWatcher": {
       "properties": {
@@ -444,6 +468,21 @@
       "type": "object",
       "description": "Config defines configuration for the CSRF middleware wrapper."
     },
+    "domainscan.ReportConfig": {
+      "properties": {
+        "nonvendorcategories": {
+          "$ref": "#/$defs/[]string"
+        },
+        "deniedvendornames": {
+          "$ref": "#/$defs/[]string"
+        },
+        "scanttl": {
+          "type": "integer"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
     "email.RuntimeEmailConfig": {
       "properties": {
         "testdir": {
@@ -488,6 +527,10 @@
         "docsurl": {
           "type": "string",
           "description": "Documentation URL"
+        },
+        "apiurl": {
+          "type": "string",
+          "description": "Public base URL of the API for email links that hit the API directly"
         },
         "CompanyName": {
           "type": "string",
@@ -572,6 +615,10 @@
         "FooterTextColor": {
           "type": "string",
           "description": "Muted text color for headers footers and secondary content"
+        },
+        "AccentBorderColor": {
+          "type": "string",
+          "description": "Decorative accent color applied to borders only"
         },
         "Tagline": {
           "type": "string",
@@ -1054,7 +1101,7 @@
         },
         "subjectid": {
           "type": "string",
-          "description": "SubjectID is the stable subject id of the virtual support identity used for created_by/updated_by\nattribution. It must be a valid ULID and is consistent without a backing user row"
+          "description": "SubjectID is the stable subject id of the virtual support identity used for created_by/updated_by\nattribution. It must be a valid ULID and is consistent without a backing user row. Default should match anon.SupportSubjectID"
         },
         "password": {
           "type": "string",
@@ -1087,7 +1134,7 @@
       },
       "additionalProperties": false,
       "type": "object",
-      "description": "SupportAccessConfig contains configuration for the Openlane support access flow."
+      "description": "SupportAccessConfig contains configuration for the Openlane support access flow. The support\nidentity is virtual and authenticated entirely from these values, never from the database. This is\nthe single place that holds the support identity, its shared password, and the second factor\nidentity provider configuration, since both authentications must occur together"
     },
     "map[string][]string": {
       "additionalProperties": {
@@ -1190,30 +1237,6 @@
         },
         "applicationid": {
           "type": "string"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object"
-    },
-    "operations.PaymentReminderConfig": {
-      "properties": {
-        "paymentmethodinterval": {
-          "type": "integer",
-          "description": "Days after org creation before marking for deletion",
-          "default": 30
-        },
-        "deletiondays": {
-          "type": "integer",
-          "description": "Days between marking and actual deletion",
-          "default": 7
-        },
-        "enabled": {
-          "type": "boolean",
-          "description": "Whether the payment reminder listener is enabled"
-        },
-        "dryrun": {
-          "type": "boolean",
-          "description": "If true only log organization IDs that would be processed"
         }
       },
       "additionalProperties": false,
@@ -1650,7 +1673,7 @@
       },
       "additionalProperties": false,
       "type": "object",
-      "description": "ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future"
+      "description": "ProviderConfigs contains configuration for all storage providers\nThis is structured to allow easy extension for additional providers in the future"
     },
     "storage.ProviderCredentials": {
       "properties": {
@@ -1815,6 +1838,47 @@
       "additionalProperties": false,
       "type": "object",
       "description": "OpenAIConfig contains OpenAI specific configuration"
+    },
+    "system.OrganizationDeleteConfig": {
+      "properties": {
+        "maxdeletesperrun": {
+          "type": "integer",
+          "description": "Maximum overdue organizations to delete per run",
+          "default": 25
+        },
+        "enabled": {
+          "type": "boolean",
+          "description": "Whether the organization deletion listener is enabled"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "system.PaymentReminderConfig": {
+      "properties": {
+        "paymentmethodinterval": {
+          "type": "integer",
+          "description": "Days after org creation before marking for deletion",
+          "default": 30
+        },
+        "deletiondays": {
+          "type": "integer",
+          "description": "Days between marking and actual deletion",
+          "default": 7
+        },
+        "enabled": {
+          "type": "boolean",
+          "description": "Whether the payment reminder listener is enabled",
+          "default": false
+        },
+        "dryrun": {
+          "type": "boolean",
+          "description": "If true only log organization IDs that would be processed",
+          "default": true
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     },
     "tokens.APITokenConfig": {
       "properties": {

@@ -8,12 +8,15 @@ import (
 
 	"github.com/theopenlane/iam/tokens"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
-	slackdef "github.com/theopenlane/core/internal/integrations/definitions/slack"
+	"github.com/theopenlane/core/internal/trustcenterurl"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -32,6 +35,11 @@ func HookSubscriberCreate() ent.Hook {
 
 			// lowercase the email for uniqueness
 			m.SetEmail(strings.ToLower(email))
+
+			// block subscriber creation for a trust center that has not enabled accepting subscribers
+			if err := checkTrustCenterAllowsSubscribers(ctx, m); err != nil {
+				return nil, err
+			}
 
 			if err := createVerificationToken(m, email); err != nil {
 				return nil, err
@@ -66,22 +74,22 @@ func HookSubscriberCreate() ent.Hook {
 			tokenValue, _ := m.Token()
 			emailAddress, _ := m.Email()
 			orgID, _ := m.OwnerID()
+			trustCenterID, _ := m.TrustCenterID()
 
 			orgName, err := organizationDisplayNameByID(ctx, m.Client(), orgID)
 			if err != nil {
 				return nil, err
 			}
 
-			if err := sendSystemEmail(ctx, m.Client(), emaildef.SubscribeOp.Name(), emaildef.SubscribeRequest{
-				RecipientInfo: emaildef.RecipientInfo{Email: emailAddress},
-				OrgName:       orgName,
-				Token:         tokenValue,
-			}); err != nil {
-				return nil, err
-			}
+			customDomain, slug, branding := subscriberTrustCenterDomain(ctx, m.Client(), trustCenterID)
 
-			if err := sendSystemSlack(ctx, m.Client(), slackdef.NewSubscriberOp.Name(), slackdef.NewSubscriberMessage{
-				Email: emailAddress,
+			if err := sendSystemEmail(ctx, m.Client(), emaildef.SubscribeOp.Name(), emaildef.SubscribeRequest{
+				RecipientInfo:       emaildef.RecipientInfo{Email: emailAddress},
+				TrustCenterBranding: branding,
+				OrgName:             orgName,
+				Token:               tokenValue,
+				VerifyURL:           trustcenterurl.SubscribeVerifyURLWithToken(customDomain, slug, tokenValue),
+				UnsubscribeURL:      trustcenterurl.UnsubscribeURLWithToken(customDomain, slug, tokenValue),
 			}); err != nil {
 				return nil, err
 			}
@@ -111,6 +119,36 @@ func HookSubscriberUpdated() ent.Hook {
 	)
 }
 
+// checkTrustCenterAllowsSubscribers rejects subscriber creation when the subscriber's trust center has
+// not enabled accepting subscribers. Subscribers with no trust center have no setting to gate
+func checkTrustCenterAllowsSubscribers(ctx context.Context, m *generated.SubscriberMutation) error {
+	tcID, ok := m.TrustCenterID()
+	if !ok || tcID == "" {
+		return nil
+	}
+
+	setting, err := m.Client().TrustCenterSetting.Query().
+		Where(
+			trustcentersetting.TrustCenterID(tcID),
+			trustcentersetting.EnvironmentEQ(enums.TrustCenterEnvironmentLive),
+		).
+		Only(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("trust_center_id", tcID).Msg("unable to load trust center setting for subscriber gate")
+
+		return err
+	}
+
+	if !setting.AllowSubscribers {
+		return gqlerrors.NewCustomError(
+			gqlerrors.BadRequestErrorCode,
+			"this trust center is not accepting new subscribers",
+			ErrSubscribersNotAllowed)
+	}
+
+	return nil
+}
+
 // createVerificationToken creates a new email verification token for the user
 func createVerificationToken(m *generated.SubscriberMutation, email string) error {
 	// Create a unique token from the user's email address
@@ -132,6 +170,7 @@ func createVerificationToken(m *generated.SubscriberMutation, email string) erro
 	return nil
 }
 
+// getSubscriber looks up an existing subscriber by email and owner ID, optionally scoped to a trust center
 func getSubscriber(ctx context.Context, m *generated.SubscriberMutation) (*generated.Subscriber, error) {
 	email, _ := m.Email()
 	ownerID, _ := m.OwnerID()
@@ -140,9 +179,8 @@ func getSubscriber(ctx context.Context, m *generated.SubscriberMutation) (*gener
 		Where(subscriber.Email(email)).
 		Where(subscriber.OwnerID(ownerID))
 
-	// scope the lookup to the trust center so the same email can subscribe to multiple
-	// trust centers within the same organization; legacy organization-level subscribers
-	// have a null trust center
+	// scope the lookup to the trust center so the same email can subscribe to multiple trust centers
+	// within the same organization; subscribers with no trust center match the null scope
 	if tcID, ok := m.TrustCenterID(); ok && tcID != "" {
 		query = query.Where(subscriber.TrustCenterID(tcID))
 	} else {
@@ -152,6 +190,33 @@ func getSubscriber(ctx context.Context, m *generated.SubscriberMutation) (*gener
 	return query.Only(ctx)
 }
 
+// subscriberTrustCenterDomain resolves a subscriber's trust center custom domain and slug for link
+// building along with the trust center branding for the confirmation email; zero values when there
+// is no trust center or it cannot be resolved
+func subscriberTrustCenterDomain(ctx context.Context, client *generated.Client, trustCenterID string) (customDomain, slug string, branding emaildef.TrustCenterBranding) {
+	if trustCenterID == "" {
+		return "", "", emaildef.TrustCenterBranding{}
+	}
+
+	tc, err := client.TrustCenter.Query().
+		Where(trustcenter.ID(trustCenterID)).
+		WithCustomDomain().
+		WithSetting().
+		Only(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("unable to resolve trust center for subscriber link")
+
+		return "", "", emaildef.TrustCenterBranding{}
+	}
+
+	if tc.Edges.CustomDomain != nil {
+		customDomain = tc.Edges.CustomDomain.CnameRecord
+	}
+
+	return customDomain, tc.Slug, emaildef.TrustCenterBrandingFromSetting(tc.Edges.Setting)
+}
+
+// updateSubscriber updates an existing subscriber's send attempts and resets the verified email status
 func updateSubscriber(ctx context.Context,
 	m *generated.SubscriberMutation, subscriber *generated.Subscriber) (*generated.Subscriber, error) {
 	if subscriber.SendAttempts >= maxAttempts {
@@ -165,20 +230,24 @@ func updateSubscriber(ctx context.Context,
 
 	m.SetSendAttempts(subscriber.SendAttempts)
 
-	// if a user is unsubscribed but getting here again
-	// we should toggle that
+	// a contact re-subscribing here (including one that previously unsubscribed) must re-confirm: clear
+	// unsubscribed and reset verified_email so the fresh verify link drives reactivation through the
+	// handler. This is the only path that resurrects an unsubscribed contact
 	if subscriber.Unsubscribed {
 		subscriber.Unsubscribed = false
 	}
 
 	secret, _ := m.Secret()
 	token, _ := m.Token()
+	ttl, _ := m.TTL()
 
 	return m.Client().Subscriber.
 		UpdateOneID(subscriber.ID).
 		SetSendAttempts(subscriber.SendAttempts).
 		SetUnsubscribed(subscriber.Unsubscribed).
+		SetVerifiedEmail(false).
 		SetToken(token).
 		SetSecret(secret).
+		SetTTL(ttl).
 		Save(ctx)
 }

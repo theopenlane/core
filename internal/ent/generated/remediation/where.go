@@ -149,6 +149,11 @@ func ScopeID(v string) predicate.Remediation {
 	return predicate.Remediation(sql.FieldEQ(FieldScopeID, v))
 }
 
+// WorkflowEligibleMarker applies equality check predicate on the "workflow_eligible_marker" field. It's identical to WorkflowEligibleMarkerEQ.
+func WorkflowEligibleMarker(v bool) predicate.Remediation {
+	return predicate.Remediation(sql.FieldEQ(FieldWorkflowEligibleMarker, v))
+}
+
 // ExternalID applies equality check predicate on the "external_id" field. It's identical to ExternalIDEQ.
 func ExternalID(v string) predicate.Remediation {
 	return predicate.Remediation(sql.FieldEQ(FieldExternalID, v))
@@ -1307,6 +1312,26 @@ func ScopeIDEqualFold(v string) predicate.Remediation {
 // ScopeIDContainsFold applies the ContainsFold predicate on the "scope_id" field.
 func ScopeIDContainsFold(v string) predicate.Remediation {
 	return predicate.Remediation(sql.FieldContainsFold(FieldScopeID, v))
+}
+
+// WorkflowEligibleMarkerEQ applies the EQ predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerEQ(v bool) predicate.Remediation {
+	return predicate.Remediation(sql.FieldEQ(FieldWorkflowEligibleMarker, v))
+}
+
+// WorkflowEligibleMarkerNEQ applies the NEQ predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerNEQ(v bool) predicate.Remediation {
+	return predicate.Remediation(sql.FieldNEQ(FieldWorkflowEligibleMarker, v))
+}
+
+// WorkflowEligibleMarkerIsNil applies the IsNil predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerIsNil() predicate.Remediation {
+	return predicate.Remediation(sql.FieldIsNull(FieldWorkflowEligibleMarker))
+}
+
+// WorkflowEligibleMarkerNotNil applies the NotNil predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerNotNil() predicate.Remediation {
+	return predicate.Remediation(sql.FieldNotNull(FieldWorkflowEligibleMarker))
 }
 
 // ExternalIDEQ applies the EQ predicate on the "external_id" field.
@@ -3045,11 +3070,11 @@ func HasPrograms() predicate.Remediation {
 	return predicate.Remediation(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, ProgramsTable, ProgramsColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, ProgramsTable, ProgramsPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.RemediationPrograms
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -3060,7 +3085,7 @@ func HasProgramsWith(preds ...predicate.Program) predicate.Remediation {
 		step := newProgramsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.RemediationPrograms
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -3074,11 +3099,11 @@ func HasAssets() predicate.Remediation {
 	return predicate.Remediation(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, AssetsTable, AssetsColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, AssetsTable, AssetsPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Asset
-		step.Edge.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.RemediationAssets
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -3089,7 +3114,7 @@ func HasAssetsWith(preds ...predicate.Asset) predicate.Remediation {
 		step := newAssetsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Asset
-		step.Edge.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.RemediationAssets
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -3103,11 +3128,11 @@ func HasEntities() predicate.Remediation {
 	return predicate.Remediation(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, EntitiesTable, EntitiesColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, EntitiesTable, EntitiesPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.RemediationEntities
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -3118,7 +3143,7 @@ func HasEntitiesWith(preds ...predicate.Entity) predicate.Remediation {
 		step := newEntitiesStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.RemediationEntities
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -3206,6 +3231,35 @@ func HasFilesWith(preds ...predicate.File) predicate.Remediation {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.File
 		step.Edge.Schema = schemaConfig.File
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasWorkflowObjectRefs applies the HasEdge predicate on the "workflow_object_refs" edge.
+func HasWorkflowObjectRefs() predicate.Remediation {
+	return predicate.Remediation(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, WorkflowObjectRefsTable, WorkflowObjectRefsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasWorkflowObjectRefsWith applies the HasEdge predicate on the "workflow_object_refs" edge with a given conditions (other predicates).
+func HasWorkflowObjectRefsWith(preds ...predicate.WorkflowObjectRef) predicate.Remediation {
+	return predicate.Remediation(func(s *sql.Selector) {
+		step := newWorkflowObjectRefsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

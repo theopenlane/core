@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	minNameLength = 3
+	minNameLength = 2
 )
 
 // SchemaFuncs defines the methods that a custom schema must implement

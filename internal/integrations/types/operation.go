@@ -24,14 +24,34 @@ type WorkflowMeta struct {
 	ObjectType enums.WorkflowObjectType `json:"objectType,omitempty"`
 }
 
+// RateLimitPolicy bounds how often one operation may run per calling organization within a rolling
+// window, enforced identically on every execution path. Operations that leave this nil on their
+// OperationRegistration are never rate limited
+type RateLimitPolicy struct {
+	// Window is the rolling window duration for the operation's execution budget
+	Window time.Duration
+	// Limit is the number of executions allowed per window; values below one default to a single execution
+	Limit int
+}
+
 // ExecutionPolicy controls synchronous execution behavior for one operation
 type ExecutionPolicy struct {
 	// Inline indicates the operation should execute synchronously for direct API callers
 	Inline bool `json:"inline,omitempty"`
-	// Reconcile indicates the operation should be dispatched on a recurring schedule
+	// Reconcile indicates the operation should be dispatched on a recurring schedule per connected installation
 	Reconcile bool `json:"reconcile,omitempty"`
+	// Scheduled indicates the operation runs on a recurring schedule through the runtime
+	// provider path, with no installation; used for system-level sweeps
+	Scheduled bool `json:"scheduled,omitempty"`
 	// SkipRunRecord indicates the IntegrationRun record creation should be skipped
 	SkipRunRecord bool `json:"skipRunRecord,omitempty"`
+}
+
+// ScheduledCycleResult is the conventional response payload for scheduled runtime operations,
+// carrying the cycle delta used for adaptive scheduling
+type ScheduledCycleResult struct {
+	// Processed is the number of records handled during the cycle
+	Processed int `json:"processed"`
 }
 
 // IngestContract declares one ingest target emitted by an operation
@@ -55,6 +75,12 @@ type OperationRequest struct {
 	LastRunAt *time.Time
 	// DB is the ent client for operations that need database access
 	DB *generated.Client
+	// Dispatch enqueues other integration operations through the runtime-managed dispatcher,
+	// used by operations that orchestrate downstream dispatches
+	Dispatch DispatchFunc
+	// Services exposes the full runtime service surface (DB, Gala, ExecuteRuntimeOperation, Dispatch),
+	// used by operations that hand off to saga-style Gala listener machinery
+	Services RuntimeServices
 }
 
 // OperationHandler executes one definition operation
@@ -81,10 +107,18 @@ type OperationRegistration struct {
 	UISchema json.RawMessage `json:"uiSchema,omitempty"`
 	// CustomerSelectable controls whether the operation is exposed in customer-facing surfaces;
 	// nil (default) and true are treated as selectable, false hides the operation from
-	// provider listings and catalog pickers (used for internal system operations)
+	// provider listings and catalog pickers
 	CustomerSelectable *bool `json:"customerSelectable,omitempty"`
+	// Internal marks the operation as reachable only through its own listener or saga
+	// machinery, never directly through RunIntegrationOperation.
+	Internal bool `json:"-"`
+	// RequiresPaymentMethod gates direct invocation through RunIntegrationOperation on the
+	// calling organization having a payment method on file
+	RequiresPaymentMethod bool `json:"-"`
 	// Policy controls synchronous execution behavior for the operation
 	Policy ExecutionPolicy `json:"policy"`
+	// RateLimit bounds how often this operation may run per organization; nil (default) means unlimited
+	RateLimit *RateLimitPolicy `json:"-"`
 	// Ingest declares the normalized schemas emitted by the operation
 	Ingest []IngestContract `json:"ingest,omitempty"`
 	// Handle executes the operation; set for operations that do not produce ingest payloads
@@ -101,9 +135,10 @@ type OperationRegistration struct {
 	// when set, the resolved config is used as the operation config for reconcile runs and as the
 	// source for per-operation filter expressions in the ingest pipeline
 	ConfigResolver func(userInput json.RawMessage) json.RawMessage `json:"-"`
-	// ReconcileSchedule overrides the default adaptive schedule for this operation's reconcile cycles;
-	// useful for operations that always do a full fetch and should run less frequently
-	ReconcileSchedule *gala.Schedule `json:"-"`
+	// Schedule overrides the default adaptive schedule for this operation's recurring
+	// reconcile or scheduled cycles; useful for operations that always do a full fetch
+	// and should run less frequently, or scheduled sweeps with fixed cadences
+	Schedule *gala.Schedule `json:"-"`
 	// SkipDefaultLookback disables the runtime's default lookback window on initial runs;
 	// when true, LastRunAt is nil on first run so the handler performs a full fetch
 	SkipDefaultLookback bool `json:"-"`

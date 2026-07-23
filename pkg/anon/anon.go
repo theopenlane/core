@@ -6,6 +6,11 @@ import (
 	"github.com/theopenlane/iam/auth"
 )
 
+const (
+	// SupportSubjectID is the subject ID used to identify the support user
+	SupportSubjectID = "01JSPPRT000000000000000000"
+)
+
 // TrustCenterScope reports whether ctx carries an anonymous trust center caller
 // A caller qualifies only when it has the anonymous role, holds CapTrustCenterAnonymous, and carries
 // a non-empty active trust center id in context

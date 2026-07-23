@@ -292,8 +292,7 @@ func (ec *executionContext) unmarshalOAny2ᚕinterfaceᚄ(ctx context.Context, v
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]any, len(vSlice))
 	for i := range vSlice {
@@ -328,8 +327,7 @@ func (ec *executionContext) unmarshalOAssessmentMethod2ᚕgithubᚗcomᚋtheopen
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]models.AssessmentMethod, len(vSlice))
 	for i := range vSlice {
@@ -364,8 +362,7 @@ func (ec *executionContext) unmarshalOAssessmentObjective2ᚕgithubᚗcomᚋtheo
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]models.AssessmentObjective, len(vSlice))
 	for i := range vSlice {
@@ -396,12 +393,21 @@ func (ec *executionContext) marshalOAssessmentObjective2ᚕgithubᚗcomᚋtheope
 	return ret
 }
 
+func (ec *executionContext) unmarshalOAssignmentOutcome2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐAssignmentOutcome(ctx context.Context, v any) (models.AssignmentOutcome, error) {
+	var res models.AssignmentOutcome
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOAssignmentOutcome2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐAssignmentOutcome(ctx context.Context, sel ast.SelectionSet, v models.AssignmentOutcome) graphql.Marshaler {
+	return v
+}
+
 func (ec *executionContext) unmarshalOChannel2ᚕstringᚄ(ctx context.Context, v any) ([]string, error) {
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]string, len(vSlice))
 	for i := range vSlice {
@@ -462,8 +468,7 @@ func (ec *executionContext) unmarshalODateTime2ᚕgithubᚗcomᚋtheopenlaneᚋc
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]models.DateTime, len(vSlice))
 	for i := range vSlice {
@@ -514,8 +519,7 @@ func (ec *executionContext) unmarshalOEvidenceRequests2ᚕgithubᚗcomᚋtheopen
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]models.EvidenceRequests, len(vSlice))
 	for i := range vSlice {
@@ -550,8 +554,7 @@ func (ec *executionContext) unmarshalOExampleEvidence2ᚕgithubᚗcomᚋtheopenl
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]models.ExampleEvidence, len(vSlice))
 	for i := range vSlice {
@@ -612,8 +615,7 @@ func (ec *executionContext) unmarshalOImplementationGuidance2ᚕgithubᚗcomᚋt
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]models.ImplementationGuidance, len(vSlice))
 	for i := range vSlice {
@@ -664,8 +666,7 @@ func (ec *executionContext) unmarshalOReference2ᚕgithubᚗcomᚋtheopenlaneᚋ
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]models.Reference, len(vSlice))
 	for i := range vSlice {
@@ -758,8 +759,7 @@ func (ec *executionContext) unmarshalOTestingProcedures2ᚕgithubᚗcomᚋtheope
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]models.TestingProcedures, len(vSlice))
 	for i := range vSlice {
@@ -794,8 +794,7 @@ func (ec *executionContext) unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgq
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*graphql.Upload, len(vSlice))
 	for i := range vSlice {
@@ -949,6 +948,16 @@ func (ec *executionContext) unmarshalOWorkflowInstanceContext2githubᚗcomᚋthe
 }
 
 func (ec *executionContext) marshalOWorkflowInstanceContext2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐWorkflowInstanceContext(ctx context.Context, sel ast.SelectionSet, v models.WorkflowInstanceContext) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalOWorkflowProposedChanges2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐWorkflowProposedChanges(ctx context.Context, v any) (models.WorkflowProposedChanges, error) {
+	var res models.WorkflowProposedChanges
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOWorkflowProposedChanges2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐWorkflowProposedChanges(ctx context.Context, sel ast.SelectionSet, v models.WorkflowProposedChanges) graphql.Marshaler {
 	return v
 }
 

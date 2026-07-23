@@ -713,6 +713,10 @@ func (m *AssessmentMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetNillableSystemInternalID(&systemInternalID)
 	}
 
+	if workflowEligibleMarker, exists := m.WorkflowEligibleMarker(); exists {
+		create = create.SetWorkflowEligibleMarker(workflowEligibleMarker)
+	}
+
 	if name, exists := m.Name(); exists {
 		create = create.SetName(name)
 	}
@@ -840,6 +844,12 @@ func (m *AssessmentMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetNillableSystemInternalID(assessment.SystemInternalID)
 		}
 
+		if workflowEligibleMarker, exists := m.WorkflowEligibleMarker(); exists {
+			create = create.SetWorkflowEligibleMarker(workflowEligibleMarker)
+		} else {
+			create = create.SetWorkflowEligibleMarker(assessment.WorkflowEligibleMarker)
+		}
+
 		if name, exists := m.Name(); exists {
 			create = create.SetName(name)
 		} else {
@@ -923,6 +933,7 @@ func (m *AssessmentMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetSystemOwned(assessment.SystemOwned).
 			SetNillableInternalNotes(assessment.InternalNotes).
 			SetNillableSystemInternalID(assessment.SystemInternalID).
+			SetWorkflowEligibleMarker(assessment.WorkflowEligibleMarker).
 			SetName(assessment.Name).
 			SetAssessmentType(assessment.AssessmentType).
 			SetTemplateID(assessment.TemplateID).
@@ -984,6 +995,10 @@ func (m *AssessmentResponseMutation) CreateHistoryFromCreate(ctx context.Context
 
 	if ownerID, exists := m.OwnerID(); exists {
 		create = create.SetOwnerID(ownerID)
+	}
+
+	if workflowEligibleMarker, exists := m.WorkflowEligibleMarker(); exists {
+		create = create.SetWorkflowEligibleMarker(workflowEligibleMarker)
 	}
 
 	if assessmentID, exists := m.AssessmentID(); exists {
@@ -1151,6 +1166,12 @@ func (m *AssessmentResponseMutation) CreateHistoryFromUpdate(ctx context.Context
 			create = create.SetOwnerID(ownerID)
 		} else {
 			create = create.SetOwnerID(assessmentresponse.OwnerID)
+		}
+
+		if workflowEligibleMarker, exists := m.WorkflowEligibleMarker(); exists {
+			create = create.SetWorkflowEligibleMarker(workflowEligibleMarker)
+		} else {
+			create = create.SetWorkflowEligibleMarker(assessmentresponse.WorkflowEligibleMarker)
 		}
 
 		if assessmentID, exists := m.AssessmentID(); exists {
@@ -1328,6 +1349,7 @@ func (m *AssessmentResponseMutation) CreateHistoryFromDelete(ctx context.Context
 			SetDeletedAt(assessmentresponse.DeletedAt).
 			SetDeletedBy(assessmentresponse.DeletedBy).
 			SetOwnerID(assessmentresponse.OwnerID).
+			SetWorkflowEligibleMarker(assessmentresponse.WorkflowEligibleMarker).
 			SetAssessmentID(assessmentresponse.AssessmentID).
 			SetIsTest(assessmentresponse.IsTest).
 			SetCampaignID(assessmentresponse.CampaignID).
@@ -7825,6 +7847,10 @@ func (m *EntityMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetDomains(domains)
 	}
 
+	if aliases, exists := m.Aliases(); exists {
+		create = create.SetAliases(aliases)
+	}
+
 	if entityTypeID, exists := m.EntityTypeID(); exists {
 		create = create.SetEntityTypeID(entityTypeID)
 	}
@@ -8182,6 +8208,12 @@ func (m *EntityMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDomains(entity.Domains)
 		}
 
+		if aliases, exists := m.Aliases(); exists {
+			create = create.SetAliases(aliases)
+		} else {
+			create = create.SetAliases(entity.Aliases)
+		}
+
 		if entityTypeID, exists := m.EntityTypeID(); exists {
 			create = create.SetEntityTypeID(entityTypeID)
 		} else {
@@ -8442,6 +8474,7 @@ func (m *EntityMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDisplayName(entity.DisplayName).
 			SetDescription(entity.Description).
 			SetDomains(entity.Domains).
+			SetAliases(entity.Aliases).
 			SetEntityTypeID(entity.EntityTypeID).
 			SetStatus(entity.Status).
 			SetApprovedForUse(entity.ApprovedForUse).
@@ -9637,6 +9670,30 @@ func (m *FindingMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetOwnerID(ownerID)
 	}
 
+	if reviewedBy, exists := m.ReviewedBy(); exists {
+		create = create.SetReviewedBy(reviewedBy)
+	}
+
+	if reviewedByUserID, exists := m.ReviewedByUserID(); exists {
+		create = create.SetReviewedByUserID(reviewedByUserID)
+	}
+
+	if reviewedByGroupID, exists := m.ReviewedByGroupID(); exists {
+		create = create.SetReviewedByGroupID(reviewedByGroupID)
+	}
+
+	if assignedTo, exists := m.AssignedTo(); exists {
+		create = create.SetAssignedTo(assignedTo)
+	}
+
+	if assignedToUserID, exists := m.AssignedToUserID(); exists {
+		create = create.SetAssignedToUserID(assignedToUserID)
+	}
+
+	if assignedToGroupID, exists := m.AssignedToGroupID(); exists {
+		create = create.SetAssignedToGroupID(assignedToGroupID)
+	}
+
 	if systemOwned, exists := m.SystemOwned(); exists {
 		create = create.SetSystemOwned(systemOwned)
 	}
@@ -9671,6 +9728,10 @@ func (m *FindingMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if findingStatusID, exists := m.FindingStatusID(); exists {
 		create = create.SetFindingStatusID(findingStatusID)
+	}
+
+	if workflowEligibleMarker, exists := m.WorkflowEligibleMarker(); exists {
+		create = create.SetWorkflowEligibleMarker(workflowEligibleMarker)
 	}
 
 	if externalID, exists := m.ExternalID(); exists {
@@ -9912,6 +9973,42 @@ func (m *FindingMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetOwnerID(finding.OwnerID)
 		}
 
+		if reviewedBy, exists := m.ReviewedBy(); exists {
+			create = create.SetReviewedBy(reviewedBy)
+		} else {
+			create = create.SetReviewedBy(finding.ReviewedBy)
+		}
+
+		if reviewedByUserID, exists := m.ReviewedByUserID(); exists {
+			create = create.SetReviewedByUserID(reviewedByUserID)
+		} else {
+			create = create.SetReviewedByUserID(finding.ReviewedByUserID)
+		}
+
+		if reviewedByGroupID, exists := m.ReviewedByGroupID(); exists {
+			create = create.SetReviewedByGroupID(reviewedByGroupID)
+		} else {
+			create = create.SetReviewedByGroupID(finding.ReviewedByGroupID)
+		}
+
+		if assignedTo, exists := m.AssignedTo(); exists {
+			create = create.SetAssignedTo(assignedTo)
+		} else {
+			create = create.SetAssignedTo(finding.AssignedTo)
+		}
+
+		if assignedToUserID, exists := m.AssignedToUserID(); exists {
+			create = create.SetAssignedToUserID(assignedToUserID)
+		} else {
+			create = create.SetAssignedToUserID(finding.AssignedToUserID)
+		}
+
+		if assignedToGroupID, exists := m.AssignedToGroupID(); exists {
+			create = create.SetAssignedToGroupID(assignedToGroupID)
+		} else {
+			create = create.SetAssignedToGroupID(finding.AssignedToGroupID)
+		}
+
 		if systemOwned, exists := m.SystemOwned(); exists {
 			create = create.SetSystemOwned(systemOwned)
 		} else {
@@ -9964,6 +10061,12 @@ func (m *FindingMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetFindingStatusID(findingStatusID)
 		} else {
 			create = create.SetFindingStatusID(finding.FindingStatusID)
+		}
+
+		if workflowEligibleMarker, exists := m.WorkflowEligibleMarker(); exists {
+			create = create.SetWorkflowEligibleMarker(workflowEligibleMarker)
+		} else {
+			create = create.SetWorkflowEligibleMarker(finding.WorkflowEligibleMarker)
 		}
 
 		if externalID, exists := m.ExternalID(); exists {
@@ -10233,6 +10336,12 @@ func (m *FindingMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDisplayID(finding.DisplayID).
 			SetTags(finding.Tags).
 			SetOwnerID(finding.OwnerID).
+			SetReviewedBy(finding.ReviewedBy).
+			SetReviewedByUserID(finding.ReviewedByUserID).
+			SetReviewedByGroupID(finding.ReviewedByGroupID).
+			SetAssignedTo(finding.AssignedTo).
+			SetAssignedToUserID(finding.AssignedToUserID).
+			SetAssignedToGroupID(finding.AssignedToGroupID).
 			SetSystemOwned(finding.SystemOwned).
 			SetNillableInternalNotes(finding.InternalNotes).
 			SetNillableSystemInternalID(finding.SystemInternalID).
@@ -10242,6 +10351,7 @@ func (m *FindingMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetScopeID(finding.ScopeID).
 			SetFindingStatusName(finding.FindingStatusName).
 			SetFindingStatusID(finding.FindingStatusID).
+			SetWorkflowEligibleMarker(finding.WorkflowEligibleMarker).
 			SetExternalID(finding.ExternalID).
 			SetSecurityLevel(finding.SecurityLevel).
 			SetExternalOwnerID(finding.ExternalOwnerID).
@@ -10322,6 +10432,10 @@ func (m *FindingControlMutation) CreateHistoryFromCreate(ctx context.Context) er
 
 	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
 		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
 	}
 
 	if findingID, exists := m.FindingID(); exists {
@@ -10421,6 +10535,12 @@ func (m *FindingControlMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetNillableUpdatedByImpersonator(findingcontrol.UpdatedByImpersonator)
 		}
 
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(findingcontrol.OwnerID)
+		}
+
 		if findingID, exists := m.FindingID(); exists {
 			create = create.SetFindingID(findingID)
 		} else {
@@ -10515,6 +10635,7 @@ func (m *FindingControlMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetCreatedBy(findingcontrol.CreatedBy).
 			SetUpdatedBy(findingcontrol.UpdatedBy).
 			SetNillableUpdatedByImpersonator(findingcontrol.UpdatedByImpersonator).
+			SetOwnerID(findingcontrol.OwnerID).
 			SetFindingID(findingcontrol.FindingID).
 			SetControlID(findingcontrol.ControlID).
 			SetStandardID(findingcontrol.StandardID).
@@ -18011,6 +18132,22 @@ func (m *ProgramMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetEndDate(endDate)
 	}
 
+	if observationPeriodStartDate, exists := m.ObservationPeriodStartDate(); exists {
+		create = create.SetObservationPeriodStartDate(observationPeriodStartDate)
+	}
+
+	if observationPeriodEndDate, exists := m.ObservationPeriodEndDate(); exists {
+		create = create.SetObservationPeriodEndDate(observationPeriodEndDate)
+	}
+
+	if fieldworkStartDate, exists := m.FieldworkStartDate(); exists {
+		create = create.SetFieldworkStartDate(fieldworkStartDate)
+	}
+
+	if fieldworkEndDate, exists := m.FieldworkEndDate(); exists {
+		create = create.SetFieldworkEndDate(fieldworkEndDate)
+	}
+
 	if auditorReady, exists := m.AuditorReady(); exists {
 		create = create.SetAuditorReady(auditorReady)
 	}
@@ -18184,6 +18321,30 @@ func (m *ProgramMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetEndDate(program.EndDate)
 		}
 
+		if observationPeriodStartDate, exists := m.ObservationPeriodStartDate(); exists {
+			create = create.SetObservationPeriodStartDate(observationPeriodStartDate)
+		} else {
+			create = create.SetObservationPeriodStartDate(program.ObservationPeriodStartDate)
+		}
+
+		if observationPeriodEndDate, exists := m.ObservationPeriodEndDate(); exists {
+			create = create.SetObservationPeriodEndDate(observationPeriodEndDate)
+		} else {
+			create = create.SetObservationPeriodEndDate(program.ObservationPeriodEndDate)
+		}
+
+		if fieldworkStartDate, exists := m.FieldworkStartDate(); exists {
+			create = create.SetFieldworkStartDate(fieldworkStartDate)
+		} else {
+			create = create.SetFieldworkStartDate(program.FieldworkStartDate)
+		}
+
+		if fieldworkEndDate, exists := m.FieldworkEndDate(); exists {
+			create = create.SetFieldworkEndDate(fieldworkEndDate)
+		} else {
+			create = create.SetFieldworkEndDate(program.FieldworkEndDate)
+		}
+
 		if auditorReady, exists := m.AuditorReady(); exists {
 			create = create.SetAuditorReady(auditorReady)
 		} else {
@@ -18280,6 +18441,10 @@ func (m *ProgramMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetFrameworkName(program.FrameworkName).
 			SetStartDate(program.StartDate).
 			SetEndDate(program.EndDate).
+			SetObservationPeriodStartDate(program.ObservationPeriodStartDate).
+			SetObservationPeriodEndDate(program.ObservationPeriodEndDate).
+			SetFieldworkStartDate(program.FieldworkStartDate).
+			SetFieldworkEndDate(program.FieldworkEndDate).
 			SetAuditorReady(program.AuditorReady).
 			SetAuditorWriteComments(program.AuditorWriteComments).
 			SetAuditorReadComments(program.AuditorReadComments).
@@ -18559,6 +18724,10 @@ func (m *RemediationMutation) CreateHistoryFromCreate(ctx context.Context) error
 		create = create.SetScopeID(scopeID)
 	}
 
+	if workflowEligibleMarker, exists := m.WorkflowEligibleMarker(); exists {
+		create = create.SetWorkflowEligibleMarker(workflowEligibleMarker)
+	}
+
 	if externalID, exists := m.ExternalID(); exists {
 		create = create.SetExternalID(externalID)
 	}
@@ -18772,6 +18941,12 @@ func (m *RemediationMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetScopeID(remediation.ScopeID)
 		}
 
+		if workflowEligibleMarker, exists := m.WorkflowEligibleMarker(); exists {
+			create = create.SetWorkflowEligibleMarker(workflowEligibleMarker)
+		} else {
+			create = create.SetWorkflowEligibleMarker(remediation.WorkflowEligibleMarker)
+		}
+
 		if externalID, exists := m.ExternalID(); exists {
 			create = create.SetExternalID(externalID)
 		} else {
@@ -18944,6 +19119,7 @@ func (m *RemediationMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetEnvironmentID(remediation.EnvironmentID).
 			SetScopeName(remediation.ScopeName).
 			SetScopeID(remediation.ScopeID).
+			SetWorkflowEligibleMarker(remediation.WorkflowEligibleMarker).
 			SetExternalID(remediation.ExternalID).
 			SetExternalOwnerID(remediation.ExternalOwnerID).
 			SetTitle(remediation.Title).
@@ -19537,6 +19713,10 @@ func (m *RiskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetScopeID(scopeID)
 	}
 
+	if workflowEligibleMarker, exists := m.WorkflowEligibleMarker(); exists {
+		create = create.SetWorkflowEligibleMarker(workflowEligibleMarker)
+	}
+
 	if externalID, exists := m.ExternalID(); exists {
 		create = create.SetExternalID(externalID)
 	}
@@ -19776,6 +19956,12 @@ func (m *RiskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetScopeID(risk.ScopeID)
 		}
 
+		if workflowEligibleMarker, exists := m.WorkflowEligibleMarker(); exists {
+			create = create.SetWorkflowEligibleMarker(workflowEligibleMarker)
+		} else {
+			create = create.SetWorkflowEligibleMarker(risk.WorkflowEligibleMarker)
+		}
+
 		if externalID, exists := m.ExternalID(); exists {
 			create = create.SetExternalID(externalID)
 		} else {
@@ -19979,6 +20165,7 @@ func (m *RiskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetEnvironmentID(risk.EnvironmentID).
 			SetScopeName(risk.ScopeName).
 			SetScopeID(risk.ScopeID).
+			SetWorkflowEligibleMarker(risk.WorkflowEligibleMarker).
 			SetExternalID(risk.ExternalID).
 			SetIntegrationID(risk.IntegrationID).
 			SetNillableObservedAt(risk.ObservedAt).
@@ -20288,6 +20475,18 @@ func (m *ScanMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetOwnerID(ownerID)
 	}
 
+	if systemOwned, exists := m.SystemOwned(); exists {
+		create = create.SetSystemOwned(systemOwned)
+	}
+
+	if internalNotes, exists := m.InternalNotes(); exists {
+		create = create.SetNillableInternalNotes(&internalNotes)
+	}
+
+	if systemInternalID, exists := m.SystemInternalID(); exists {
+		create = create.SetNillableSystemInternalID(&systemInternalID)
+	}
+
 	if reviewedBy, exists := m.ReviewedBy(); exists {
 		create = create.SetReviewedBy(reviewedBy)
 	}
@@ -20368,8 +20567,8 @@ func (m *ScanMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetGeneratedByPlatformID(generatedByPlatformID)
 	}
 
-	if vulnerabilityIds, exists := m.VulnerabilityIds(); exists {
-		create = create.SetVulnerabilityIds(vulnerabilityIds)
+	if discoveredVulnerabilityIds, exists := m.DiscoveredVulnerabilityIds(); exists {
+		create = create.SetDiscoveredVulnerabilityIds(discoveredVulnerabilityIds)
 	}
 
 	if status, exists := m.Status(); exists {
@@ -20459,6 +20658,24 @@ func (m *ScanMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetOwnerID(ownerID)
 		} else {
 			create = create.SetOwnerID(scan.OwnerID)
+		}
+
+		if systemOwned, exists := m.SystemOwned(); exists {
+			create = create.SetSystemOwned(systemOwned)
+		} else {
+			create = create.SetSystemOwned(scan.SystemOwned)
+		}
+
+		if internalNotes, exists := m.InternalNotes(); exists {
+			create = create.SetNillableInternalNotes(&internalNotes)
+		} else {
+			create = create.SetNillableInternalNotes(scan.InternalNotes)
+		}
+
+		if systemInternalID, exists := m.SystemInternalID(); exists {
+			create = create.SetNillableSystemInternalID(&systemInternalID)
+		} else {
+			create = create.SetNillableSystemInternalID(scan.SystemInternalID)
 		}
 
 		if reviewedBy, exists := m.ReviewedBy(); exists {
@@ -20581,10 +20798,10 @@ func (m *ScanMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetGeneratedByPlatformID(scan.GeneratedByPlatformID)
 		}
 
-		if vulnerabilityIds, exists := m.VulnerabilityIds(); exists {
-			create = create.SetVulnerabilityIds(vulnerabilityIds)
+		if discoveredVulnerabilityIds, exists := m.DiscoveredVulnerabilityIds(); exists {
+			create = create.SetDiscoveredVulnerabilityIds(discoveredVulnerabilityIds)
 		} else {
-			create = create.SetVulnerabilityIds(scan.VulnerabilityIds)
+			create = create.SetDiscoveredVulnerabilityIds(scan.DiscoveredVulnerabilityIds)
 		}
 
 		if status, exists := m.Status(); exists {
@@ -20637,6 +20854,9 @@ func (m *ScanMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetDeletedBy(scan.DeletedBy).
 			SetTags(scan.Tags).
 			SetOwnerID(scan.OwnerID).
+			SetSystemOwned(scan.SystemOwned).
+			SetNillableInternalNotes(scan.InternalNotes).
+			SetNillableSystemInternalID(scan.SystemInternalID).
 			SetReviewedBy(scan.ReviewedBy).
 			SetReviewedByUserID(scan.ReviewedByUserID).
 			SetReviewedByGroupID(scan.ReviewedByGroupID).
@@ -20657,7 +20877,7 @@ func (m *ScanMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetPerformedByUserID(scan.PerformedByUserID).
 			SetPerformedByGroupID(scan.PerformedByGroupID).
 			SetGeneratedByPlatformID(scan.GeneratedByPlatformID).
-			SetVulnerabilityIds(scan.VulnerabilityIds).
+			SetDiscoveredVulnerabilityIds(scan.DiscoveredVulnerabilityIds).
 			SetStatus(scan.Status).
 			Save(ctx)
 		if err != nil {
@@ -22243,14 +22463,6 @@ func (m *SystemDetailMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		create = create.SetOwnerID(ownerID)
 	}
 
-	if programID, exists := m.ProgramID(); exists {
-		create = create.SetNillableProgramID(&programID)
-	}
-
-	if platformID, exists := m.PlatformID(); exists {
-		create = create.SetNillablePlatformID(&platformID)
-	}
-
 	if systemName, exists := m.SystemName(); exists {
 		create = create.SetSystemName(systemName)
 	}
@@ -22374,18 +22586,6 @@ func (m *SystemDetailMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetOwnerID(systemdetail.OwnerID)
 		}
 
-		if programID, exists := m.ProgramID(); exists {
-			create = create.SetNillableProgramID(&programID)
-		} else {
-			create = create.SetNillableProgramID(systemdetail.ProgramID)
-		}
-
-		if platformID, exists := m.PlatformID(); exists {
-			create = create.SetNillablePlatformID(&platformID)
-		} else {
-			create = create.SetNillablePlatformID(systemdetail.PlatformID)
-		}
-
 		if systemName, exists := m.SystemName(); exists {
 			create = create.SetSystemName(systemName)
 		} else {
@@ -22479,8 +22679,6 @@ func (m *SystemDetailMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetDisplayID(systemdetail.DisplayID).
 			SetTags(systemdetail.Tags).
 			SetOwnerID(systemdetail.OwnerID).
-			SetNillableProgramID(systemdetail.ProgramID).
-			SetNillablePlatformID(systemdetail.PlatformID).
 			SetSystemName(systemdetail.SystemName).
 			SetVersion(systemdetail.Version).
 			SetDescription(systemdetail.Description).
@@ -22578,6 +22776,10 @@ func (m *TaskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetScopeID(scopeID)
 	}
 
+	if workflowEligibleMarker, exists := m.WorkflowEligibleMarker(); exists {
+		create = create.SetWorkflowEligibleMarker(workflowEligibleMarker)
+	}
+
 	if externalUUID, exists := m.ExternalUUID(); exists {
 		create = create.SetNillableExternalUUID(&externalUUID)
 	}
@@ -22592,6 +22794,10 @@ func (m *TaskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if detailsJSON, exists := m.DetailsJSON(); exists {
 		create = create.SetDetailsJSON(detailsJSON)
+	}
+
+	if metadata, exists := m.Metadata(); exists {
+		create = create.SetMetadata(metadata)
 	}
 
 	if status, exists := m.Status(); exists {
@@ -22620,6 +22826,22 @@ func (m *TaskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 	if isTemplate, exists := m.IsTemplate(); exists {
 		create = create.SetIsTemplate(isTemplate)
+	}
+
+	if isSuggested, exists := m.IsSuggested(); exists {
+		create = create.SetIsSuggested(isSuggested)
+	}
+
+	if priority, exists := m.Priority(); exists {
+		create = create.SetPriority(priority)
+	}
+
+	if source, exists := m.Source(); exists {
+		create = create.SetSource(source)
+	}
+
+	if sourceKey, exists := m.SourceKey(); exists {
+		create = create.SetSourceKey(sourceKey)
 	}
 
 	if idempotencyKey, exists := m.IdempotencyKey(); exists {
@@ -22761,6 +22983,12 @@ func (m *TaskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetScopeID(task.ScopeID)
 		}
 
+		if workflowEligibleMarker, exists := m.WorkflowEligibleMarker(); exists {
+			create = create.SetWorkflowEligibleMarker(workflowEligibleMarker)
+		} else {
+			create = create.SetWorkflowEligibleMarker(task.WorkflowEligibleMarker)
+		}
+
 		if externalUUID, exists := m.ExternalUUID(); exists {
 			create = create.SetNillableExternalUUID(&externalUUID)
 		} else {
@@ -22783,6 +23011,12 @@ func (m *TaskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetDetailsJSON(detailsJSON)
 		} else {
 			create = create.SetDetailsJSON(task.DetailsJSON)
+		}
+
+		if metadata, exists := m.Metadata(); exists {
+			create = create.SetMetadata(metadata)
+		} else {
+			create = create.SetMetadata(task.Metadata)
 		}
 
 		if status, exists := m.Status(); exists {
@@ -22825,6 +23059,30 @@ func (m *TaskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetIsTemplate(isTemplate)
 		} else {
 			create = create.SetIsTemplate(task.IsTemplate)
+		}
+
+		if isSuggested, exists := m.IsSuggested(); exists {
+			create = create.SetIsSuggested(isSuggested)
+		} else {
+			create = create.SetIsSuggested(task.IsSuggested)
+		}
+
+		if priority, exists := m.Priority(); exists {
+			create = create.SetPriority(priority)
+		} else {
+			create = create.SetPriority(task.Priority)
+		}
+
+		if source, exists := m.Source(); exists {
+			create = create.SetSource(source)
+		} else {
+			create = create.SetSource(task.Source)
+		}
+
+		if sourceKey, exists := m.SourceKey(); exists {
+			create = create.SetSourceKey(sourceKey)
+		} else {
+			create = create.SetSourceKey(task.SourceKey)
 		}
 
 		if idempotencyKey, exists := m.IdempotencyKey(); exists {
@@ -22896,10 +23154,12 @@ func (m *TaskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetEnvironmentID(task.EnvironmentID).
 			SetScopeName(task.ScopeName).
 			SetScopeID(task.ScopeID).
+			SetWorkflowEligibleMarker(task.WorkflowEligibleMarker).
 			SetNillableExternalUUID(task.ExternalUUID).
 			SetTitle(task.Title).
 			SetDetails(task.Details).
 			SetDetailsJSON(task.DetailsJSON).
+			SetMetadata(task.Metadata).
 			SetStatus(task.Status).
 			SetNillableDue(task.Due).
 			SetNillableCompleted(task.Completed).
@@ -22907,6 +23167,10 @@ func (m *TaskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetAssignerID(task.AssignerID).
 			SetSystemGenerated(task.SystemGenerated).
 			SetIsTemplate(task.IsTemplate).
+			SetIsSuggested(task.IsSuggested).
+			SetPriority(task.Priority).
+			SetSource(task.Source).
+			SetSourceKey(task.SourceKey).
 			SetIdempotencyKey(task.IdempotencyKey).
 			SetExternalReferenceURL(task.ExternalReferenceURL).
 			SetNillableParentTaskID(task.ParentTaskID).
@@ -24957,6 +25221,10 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromCreate(ctx context.Context
 		create = create.SetNdaApprovalRequired(ndaApprovalRequired)
 	}
 
+	if allowSubscribers, exists := m.AllowSubscribers(); exists {
+		create = create.SetAllowSubscribers(allowSubscribers)
+	}
+
 	if notifySubscribersOnSubprocessorChange, exists := m.NotifySubscribersOnSubprocessorChange(); exists {
 		create = create.SetNotifySubscribersOnSubprocessorChange(notifySubscribersOnSubprocessorChange)
 	}
@@ -25184,6 +25452,12 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromUpdate(ctx context.Context
 			create = create.SetNdaApprovalRequired(trustcentersetting.NdaApprovalRequired)
 		}
 
+		if allowSubscribers, exists := m.AllowSubscribers(); exists {
+			create = create.SetAllowSubscribers(allowSubscribers)
+		} else {
+			create = create.SetAllowSubscribers(trustcentersetting.AllowSubscribers)
+		}
+
 		if notifySubscribersOnSubprocessorChange, exists := m.NotifySubscribersOnSubprocessorChange(); exists {
 			create = create.SetNotifySubscribersOnSubprocessorChange(notifySubscribersOnSubprocessorChange)
 		} else {
@@ -25273,6 +25547,7 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromDelete(ctx context.Context
 			SetNillableCompanyDomain(trustcentersetting.CompanyDomain).
 			SetNillableSecurityContact(trustcentersetting.SecurityContact).
 			SetNdaApprovalRequired(trustcentersetting.NdaApprovalRequired).
+			SetAllowSubscribers(trustcentersetting.AllowSubscribers).
 			SetNotifySubscribersOnSubprocessorChange(trustcentersetting.NotifySubscribersOnSubprocessorChange).
 			SetNillableSubprocessorsNotifiedAt(trustcentersetting.SubprocessorsNotifiedAt).
 			SetNillableNdaApproverGroupID(trustcentersetting.NdaApproverGroupID).
@@ -27087,6 +27362,30 @@ func (m *VulnerabilityMutation) CreateHistoryFromCreate(ctx context.Context) err
 		create = create.SetOwnerID(ownerID)
 	}
 
+	if reviewedBy, exists := m.ReviewedBy(); exists {
+		create = create.SetReviewedBy(reviewedBy)
+	}
+
+	if reviewedByUserID, exists := m.ReviewedByUserID(); exists {
+		create = create.SetReviewedByUserID(reviewedByUserID)
+	}
+
+	if reviewedByGroupID, exists := m.ReviewedByGroupID(); exists {
+		create = create.SetReviewedByGroupID(reviewedByGroupID)
+	}
+
+	if assignedTo, exists := m.AssignedTo(); exists {
+		create = create.SetAssignedTo(assignedTo)
+	}
+
+	if assignedToUserID, exists := m.AssignedToUserID(); exists {
+		create = create.SetAssignedToUserID(assignedToUserID)
+	}
+
+	if assignedToGroupID, exists := m.AssignedToGroupID(); exists {
+		create = create.SetAssignedToGroupID(assignedToGroupID)
+	}
+
 	if systemOwned, exists := m.SystemOwned(); exists {
 		create = create.SetSystemOwned(systemOwned)
 	}
@@ -27121,6 +27420,10 @@ func (m *VulnerabilityMutation) CreateHistoryFromCreate(ctx context.Context) err
 
 	if vulnerabilityStatusID, exists := m.VulnerabilityStatusID(); exists {
 		create = create.SetVulnerabilityStatusID(vulnerabilityStatusID)
+	}
+
+	if workflowEligibleMarker, exists := m.WorkflowEligibleMarker(); exists {
+		create = create.SetWorkflowEligibleMarker(workflowEligibleMarker)
 	}
 
 	if externalOwnerID, exists := m.ExternalOwnerID(); exists {
@@ -27382,6 +27685,42 @@ func (m *VulnerabilityMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetOwnerID(vulnerability.OwnerID)
 		}
 
+		if reviewedBy, exists := m.ReviewedBy(); exists {
+			create = create.SetReviewedBy(reviewedBy)
+		} else {
+			create = create.SetReviewedBy(vulnerability.ReviewedBy)
+		}
+
+		if reviewedByUserID, exists := m.ReviewedByUserID(); exists {
+			create = create.SetReviewedByUserID(reviewedByUserID)
+		} else {
+			create = create.SetReviewedByUserID(vulnerability.ReviewedByUserID)
+		}
+
+		if reviewedByGroupID, exists := m.ReviewedByGroupID(); exists {
+			create = create.SetReviewedByGroupID(reviewedByGroupID)
+		} else {
+			create = create.SetReviewedByGroupID(vulnerability.ReviewedByGroupID)
+		}
+
+		if assignedTo, exists := m.AssignedTo(); exists {
+			create = create.SetAssignedTo(assignedTo)
+		} else {
+			create = create.SetAssignedTo(vulnerability.AssignedTo)
+		}
+
+		if assignedToUserID, exists := m.AssignedToUserID(); exists {
+			create = create.SetAssignedToUserID(assignedToUserID)
+		} else {
+			create = create.SetAssignedToUserID(vulnerability.AssignedToUserID)
+		}
+
+		if assignedToGroupID, exists := m.AssignedToGroupID(); exists {
+			create = create.SetAssignedToGroupID(assignedToGroupID)
+		} else {
+			create = create.SetAssignedToGroupID(vulnerability.AssignedToGroupID)
+		}
+
 		if systemOwned, exists := m.SystemOwned(); exists {
 			create = create.SetSystemOwned(systemOwned)
 		} else {
@@ -27434,6 +27773,12 @@ func (m *VulnerabilityMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetVulnerabilityStatusID(vulnerabilityStatusID)
 		} else {
 			create = create.SetVulnerabilityStatusID(vulnerability.VulnerabilityStatusID)
+		}
+
+		if workflowEligibleMarker, exists := m.WorkflowEligibleMarker(); exists {
+			create = create.SetWorkflowEligibleMarker(workflowEligibleMarker)
+		} else {
+			create = create.SetWorkflowEligibleMarker(vulnerability.WorkflowEligibleMarker)
 		}
 
 		if externalOwnerID, exists := m.ExternalOwnerID(); exists {
@@ -27733,6 +28078,12 @@ func (m *VulnerabilityMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetDisplayID(vulnerability.DisplayID).
 			SetTags(vulnerability.Tags).
 			SetOwnerID(vulnerability.OwnerID).
+			SetReviewedBy(vulnerability.ReviewedBy).
+			SetReviewedByUserID(vulnerability.ReviewedByUserID).
+			SetReviewedByGroupID(vulnerability.ReviewedByGroupID).
+			SetAssignedTo(vulnerability.AssignedTo).
+			SetAssignedToUserID(vulnerability.AssignedToUserID).
+			SetAssignedToGroupID(vulnerability.AssignedToGroupID).
 			SetSystemOwned(vulnerability.SystemOwned).
 			SetNillableInternalNotes(vulnerability.InternalNotes).
 			SetNillableSystemInternalID(vulnerability.SystemInternalID).
@@ -27742,6 +28093,7 @@ func (m *VulnerabilityMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetScopeID(vulnerability.ScopeID).
 			SetVulnerabilityStatusName(vulnerability.VulnerabilityStatusName).
 			SetVulnerabilityStatusID(vulnerability.VulnerabilityStatusID).
+			SetWorkflowEligibleMarker(vulnerability.WorkflowEligibleMarker).
 			SetExternalOwnerID(vulnerability.ExternalOwnerID).
 			SetSecurityLevel(vulnerability.SecurityLevel).
 			SetExternalID(vulnerability.ExternalID).
@@ -27887,6 +28239,10 @@ func (m *WorkflowAssignmentMutation) CreateHistoryFromCreate(ctx context.Context
 
 	if invalidationMetadata, exists := m.InvalidationMetadata(); exists {
 		create = create.SetInvalidationMetadata(invalidationMetadata)
+	}
+
+	if outcomeMetadata, exists := m.OutcomeMetadata(); exists {
+		create = create.SetOutcomeMetadata(outcomeMetadata)
 	}
 
 	if decidedAt, exists := m.DecidedAt(); exists {
@@ -28060,6 +28416,12 @@ func (m *WorkflowAssignmentMutation) CreateHistoryFromUpdate(ctx context.Context
 			create = create.SetInvalidationMetadata(workflowassignment.InvalidationMetadata)
 		}
 
+		if outcomeMetadata, exists := m.OutcomeMetadata(); exists {
+			create = create.SetOutcomeMetadata(outcomeMetadata)
+		} else {
+			create = create.SetOutcomeMetadata(workflowassignment.OutcomeMetadata)
+		}
+
 		if decidedAt, exists := m.DecidedAt(); exists {
 			create = create.SetNillableDecidedAt(&decidedAt)
 		} else {
@@ -28145,6 +28507,7 @@ func (m *WorkflowAssignmentMutation) CreateHistoryFromDelete(ctx context.Context
 			SetApprovalMetadata(workflowassignment.ApprovalMetadata).
 			SetRejectionMetadata(workflowassignment.RejectionMetadata).
 			SetInvalidationMetadata(workflowassignment.InvalidationMetadata).
+			SetOutcomeMetadata(workflowassignment.OutcomeMetadata).
 			SetNillableDecidedAt(workflowassignment.DecidedAt).
 			SetActorUserID(workflowassignment.ActorUserID).
 			SetActorGroupID(workflowassignment.ActorGroupID).
@@ -29194,6 +29557,38 @@ func (m *WorkflowInstanceMutation) CreateHistoryFromCreate(ctx context.Context) 
 		create = create.SetPlatformID(platformID)
 	}
 
+	if assessmentID, exists := m.AssessmentID(); exists {
+		create = create.SetAssessmentID(assessmentID)
+	}
+
+	if assessmentResponseID, exists := m.AssessmentResponseID(); exists {
+		create = create.SetAssessmentResponseID(assessmentResponseID)
+	}
+
+	if findingID, exists := m.FindingID(); exists {
+		create = create.SetFindingID(findingID)
+	}
+
+	if integrationID, exists := m.IntegrationID(); exists {
+		create = create.SetIntegrationID(integrationID)
+	}
+
+	if remediationID, exists := m.RemediationID(); exists {
+		create = create.SetRemediationID(remediationID)
+	}
+
+	if riskID, exists := m.RiskID(); exists {
+		create = create.SetRiskID(riskID)
+	}
+
+	if taskID, exists := m.TaskID(); exists {
+		create = create.SetTaskID(taskID)
+	}
+
+	if vulnerabilityID, exists := m.VulnerabilityID(); exists {
+		create = create.SetVulnerabilityID(vulnerabilityID)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -29387,6 +29782,54 @@ func (m *WorkflowInstanceMutation) CreateHistoryFromUpdate(ctx context.Context) 
 			create = create.SetPlatformID(workflowinstance.PlatformID)
 		}
 
+		if assessmentID, exists := m.AssessmentID(); exists {
+			create = create.SetAssessmentID(assessmentID)
+		} else {
+			create = create.SetAssessmentID(workflowinstance.AssessmentID)
+		}
+
+		if assessmentResponseID, exists := m.AssessmentResponseID(); exists {
+			create = create.SetAssessmentResponseID(assessmentResponseID)
+		} else {
+			create = create.SetAssessmentResponseID(workflowinstance.AssessmentResponseID)
+		}
+
+		if findingID, exists := m.FindingID(); exists {
+			create = create.SetFindingID(findingID)
+		} else {
+			create = create.SetFindingID(workflowinstance.FindingID)
+		}
+
+		if integrationID, exists := m.IntegrationID(); exists {
+			create = create.SetIntegrationID(integrationID)
+		} else {
+			create = create.SetIntegrationID(workflowinstance.IntegrationID)
+		}
+
+		if remediationID, exists := m.RemediationID(); exists {
+			create = create.SetRemediationID(remediationID)
+		} else {
+			create = create.SetRemediationID(workflowinstance.RemediationID)
+		}
+
+		if riskID, exists := m.RiskID(); exists {
+			create = create.SetRiskID(riskID)
+		} else {
+			create = create.SetRiskID(workflowinstance.RiskID)
+		}
+
+		if taskID, exists := m.TaskID(); exists {
+			create = create.SetTaskID(taskID)
+		} else {
+			create = create.SetTaskID(workflowinstance.TaskID)
+		}
+
+		if vulnerabilityID, exists := m.VulnerabilityID(); exists {
+			create = create.SetVulnerabilityID(vulnerabilityID)
+		} else {
+			create = create.SetVulnerabilityID(workflowinstance.VulnerabilityID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -29449,6 +29892,14 @@ func (m *WorkflowInstanceMutation) CreateHistoryFromDelete(ctx context.Context) 
 			SetCampaignTargetID(workflowinstance.CampaignTargetID).
 			SetIdentityHolderID(workflowinstance.IdentityHolderID).
 			SetPlatformID(workflowinstance.PlatformID).
+			SetAssessmentID(workflowinstance.AssessmentID).
+			SetAssessmentResponseID(workflowinstance.AssessmentResponseID).
+			SetFindingID(workflowinstance.FindingID).
+			SetIntegrationID(workflowinstance.IntegrationID).
+			SetRemediationID(workflowinstance.RemediationID).
+			SetRiskID(workflowinstance.RiskID).
+			SetTaskID(workflowinstance.TaskID).
+			SetVulnerabilityID(workflowinstance.VulnerabilityID).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -29564,6 +30015,26 @@ func (m *WorkflowObjectRefMutation) CreateHistoryFromCreate(ctx context.Context)
 
 	if platformID, exists := m.PlatformID(); exists {
 		create = create.SetPlatformID(platformID)
+	}
+
+	if vulnerabilityID, exists := m.VulnerabilityID(); exists {
+		create = create.SetVulnerabilityID(vulnerabilityID)
+	}
+
+	if riskID, exists := m.RiskID(); exists {
+		create = create.SetRiskID(riskID)
+	}
+
+	if assessmentID, exists := m.AssessmentID(); exists {
+		create = create.SetAssessmentID(assessmentID)
+	}
+
+	if assessmentResponseID, exists := m.AssessmentResponseID(); exists {
+		create = create.SetAssessmentResponseID(assessmentResponseID)
+	}
+
+	if remediationID, exists := m.RemediationID(); exists {
+		create = create.SetRemediationID(remediationID)
 	}
 
 	_, err := create.Save(ctx)
@@ -29735,6 +30206,36 @@ func (m *WorkflowObjectRefMutation) CreateHistoryFromUpdate(ctx context.Context)
 			create = create.SetPlatformID(workflowobjectref.PlatformID)
 		}
 
+		if vulnerabilityID, exists := m.VulnerabilityID(); exists {
+			create = create.SetVulnerabilityID(vulnerabilityID)
+		} else {
+			create = create.SetVulnerabilityID(workflowobjectref.VulnerabilityID)
+		}
+
+		if riskID, exists := m.RiskID(); exists {
+			create = create.SetRiskID(riskID)
+		} else {
+			create = create.SetRiskID(workflowobjectref.RiskID)
+		}
+
+		if assessmentID, exists := m.AssessmentID(); exists {
+			create = create.SetAssessmentID(assessmentID)
+		} else {
+			create = create.SetAssessmentID(workflowobjectref.AssessmentID)
+		}
+
+		if assessmentResponseID, exists := m.AssessmentResponseID(); exists {
+			create = create.SetAssessmentResponseID(assessmentResponseID)
+		} else {
+			create = create.SetAssessmentResponseID(workflowobjectref.AssessmentResponseID)
+		}
+
+		if remediationID, exists := m.RemediationID(); exists {
+			create = create.SetRemediationID(remediationID)
+		} else {
+			create = create.SetRemediationID(workflowobjectref.RemediationID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -29793,6 +30294,11 @@ func (m *WorkflowObjectRefMutation) CreateHistoryFromDelete(ctx context.Context)
 			SetCampaignTargetID(workflowobjectref.CampaignTargetID).
 			SetIdentityHolderID(workflowobjectref.IdentityHolderID).
 			SetPlatformID(workflowobjectref.PlatformID).
+			SetVulnerabilityID(workflowobjectref.VulnerabilityID).
+			SetRiskID(workflowobjectref.RiskID).
+			SetAssessmentID(workflowobjectref.AssessmentID).
+			SetAssessmentResponseID(workflowobjectref.AssessmentResponseID).
+			SetRemediationID(workflowobjectref.RemediationID).
 			Save(ctx)
 		if err != nil {
 			return err

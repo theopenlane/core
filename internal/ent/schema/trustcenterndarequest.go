@@ -6,6 +6,7 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema"
+	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
@@ -154,6 +155,12 @@ func (t TrustCenterNDARequest) Edges() []ent.Edge {
 			field:      "file_id",
 			comment:    "the template file at the time the NDA was signed",
 		}),
+		edge.To("approved_by_user", User.Type).
+			Field("approved_by_user_id").
+			Unique().
+			Annotations(
+				accessmap.EdgeAuthCheck(User{}.Name()),
+			),
 	}
 }
 

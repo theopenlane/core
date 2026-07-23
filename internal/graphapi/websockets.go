@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/99designs/gqlgen/graphql/handler/transport"
-	"github.com/gorilla/websocket"
+	"github.com/coder/websocket"
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/contextx"
@@ -26,7 +26,7 @@ func (r *Resolver) CreateWebsocketClient() transport.Websocket {
 		KeepAlivePingInterval: r.websocketPingInterval,
 		InitTimeout:           defaultInitTimeout,
 		InitFunc:              r.webSocketInit,
-		Upgrader:              r.upgraderFunc(),
+		Implementation:        r.websocketImplementation(),
 		CloseFunc: func(ctx context.Context, _ int) {
 			t, ok := websocketConnectionTrackerContextKey.Get(ctx)
 			if !ok {
@@ -71,22 +71,42 @@ func (r *Resolver) webSocketInit(
 	return ctx, nil, nil
 }
 
-// upgraderFunc returns a websocket upgrader with the appropriate origin check
-func (r *Resolver) upgraderFunc() websocket.Upgrader {
-	return websocket.Upgrader{
-		CheckOrigin: func(req *http.Request) bool {
-			if len(r.origins) == 0 {
-				return true // allow all origins if none are set
-			}
+// websocketImplementation returns a websocket implementation with the appropriate origin check
+func (r *Resolver) websocketImplementation() transport.WebsocketImplementation {
+	return originCheckedWebsocket{origins: r.origins}
+}
 
-			o := req.Header.Get(httpsling.HeaderOrigin)
-			if o == "" {
-				return false
-			}
+// originCheckedWebsocket wraps the coder websocket implementation with an origin check
+type originCheckedWebsocket struct {
+	origins map[string]struct{}
+}
 
-			return checkOrigin(o, r.origins)
-		},
+// Accept validates the request origin before delegating the upgrade to the coder implementation
+func (o originCheckedWebsocket) Accept(w http.ResponseWriter, req *http.Request, options transport.WebsocketAcceptOptions) (transport.WebsocketConn, error) {
+	if !o.originAllowed(req) {
+		return nil, ErrOriginNotAllowed
 	}
+
+	impl := transport.CoderWebsocketImplementation{
+		// origin verification is handled above, matching origins against the full origin string rather than the host
+		AcceptOptions: websocket.AcceptOptions{InsecureSkipVerify: true},
+	}
+
+	return impl.Accept(w, req, options)
+}
+
+// originAllowed reports whether the request origin is allowed based on the configured origins
+func (o originCheckedWebsocket) originAllowed(req *http.Request) bool {
+	if len(o.origins) == 0 {
+		return true // allow all origins if none are set
+	}
+
+	origin := req.Header.Get(httpsling.HeaderOrigin)
+	if origin == "" {
+		return false
+	}
+
+	return checkOrigin(origin, o.origins)
 }
 
 // checkOrigin checks if the given origin is allowed based on the allowed origins map

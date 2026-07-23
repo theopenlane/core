@@ -904,6 +904,16 @@ func CampaignIDHasSuffix(v string) predicate.CampaignTargetHistory {
 	return predicate.CampaignTargetHistory(sql.FieldHasSuffix(FieldCampaignID, v))
 }
 
+// CampaignIDIsNil applies the IsNil predicate on the "campaign_id" field.
+func CampaignIDIsNil() predicate.CampaignTargetHistory {
+	return predicate.CampaignTargetHistory(sql.FieldIsNull(FieldCampaignID))
+}
+
+// CampaignIDNotNil applies the NotNil predicate on the "campaign_id" field.
+func CampaignIDNotNil() predicate.CampaignTargetHistory {
+	return predicate.CampaignTargetHistory(sql.FieldNotNull(FieldCampaignID))
+}
+
 // CampaignIDEqualFold applies the EqualFold predicate on the "campaign_id" field.
 func CampaignIDEqualFold(v string) predicate.CampaignTargetHistory {
 	return predicate.CampaignTargetHistory(sql.FieldEqualFold(FieldCampaignID, v))

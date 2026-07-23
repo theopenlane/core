@@ -9,12 +9,33 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/samber/lo"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/utils/ulids"
 )
+
+// TestPreviewEmailTemplateGate verifies the preview resolver admits customer-selectable catalog
+// entries and the system trust center update message while rejecting internal system emails
+func TestPreviewEmailTemplateGate(t *testing.T) {
+	tcOrg := createFreshOrgWithTrustCenter(t)
+
+	// the system trust center update message is previewable so editors can see what subscribers receive
+	resp, err := suite.client.api.PreviewEmailTemplate(tcOrg.owner.UserCtx, emaildef.TrustCenterUpdateTemplate, map[string]any{})
+	assert.NilError(t, err)
+	assert.Check(t, resp.PreviewEmailTemplate != "")
+
+	// customer-selectable catalog entries remain previewable
+	resp, err = suite.client.api.PreviewEmailTemplate(tcOrg.owner.UserCtx, emaildef.BrandedMessageOp.Name(), map[string]any{})
+	assert.NilError(t, err)
+	assert.Check(t, resp.PreviewEmailTemplate != "")
+
+	// internal system emails are not previewable
+	_, err = suite.client.api.PreviewEmailTemplate(tcOrg.owner.UserCtx, emaildef.SubprocessorNotificationOp.Name(), map[string]any{})
+	assert.ErrorContains(t, err, "not a customer-selectable")
+}
 
 func validEmailTemplateDefaults() map[string]any {
 	return map[string]any{

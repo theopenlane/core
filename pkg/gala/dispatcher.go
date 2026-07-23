@@ -96,6 +96,8 @@ type riverJobMetadata struct {
 	Listeners []string `json:"listeners,omitempty"`
 	// Properties contains envelope header properties for UI visibility
 	Properties map[string]string `json:"properties,omitempty"`
+	// Metadata carries structured operation context for UI visibility
+	Metadata json.RawMessage `json:"metadata,omitempty"`
 }
 
 // Dispatch dispatches an envelope to River for processing by a Worker
@@ -128,6 +130,7 @@ func (d *RiverDispatcher) Dispatch(ctx context.Context, envelope Envelope) error
 		EventID:    string(envelope.ID),
 		Listeners:  envelope.Headers.Listeners,
 		Properties: envelope.Headers.Properties,
+		Metadata:   envelope.Headers.Metadata,
 	})
 	if err != nil {
 		logx.FromContext(ctx).Err(err).Msg("gala: error marshaling envelope")

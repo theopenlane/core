@@ -1035,6 +1035,28 @@ data:
         arn: {{ .Values.openlane.coreConfiguration.integrations.awssecurityhub.arn | quote }}
         {{- end }}
       {{- end }}
+      {{- if .Values.openlane.coreConfiguration.integrations.cloudflareruntime }}
+      cloudflareruntime:
+        {{- if .Values.openlane.coreConfiguration.integrations.cloudflareruntime.accountid }}
+        accountid: {{ .Values.openlane.coreConfiguration.integrations.cloudflareruntime.accountid | quote }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.cloudflareruntime.domainscan }}
+        domainscan:
+          {{- $sliceValue := (.Values.openlane.coreConfiguration.integrations.cloudflareruntime.domainscan.nonvendorcategories | default (list)) }}
+          {{- if gt (len $sliceValue) 0 }}
+          nonvendorcategories:
+          {{- toYaml $sliceValue | nindent 12 }}
+          {{- end }}
+          {{- $sliceValue := (.Values.openlane.coreConfiguration.integrations.cloudflareruntime.domainscan.deniedvendornames | default (list)) }}
+          {{- if gt (len $sliceValue) 0 }}
+          deniedvendornames:
+          {{- toYaml $sliceValue | nindent 12 }}
+          {{- end }}
+          {{- if .Values.openlane.coreConfiguration.integrations.cloudflareruntime.domainscan.scanttl }}
+          scanttl: {{ .Values.openlane.coreConfiguration.integrations.cloudflareruntime.domainscan.scanttl }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.githubapp }}
       githubapp:
         {{- if .Values.openlane.coreConfiguration.integrations.githubapp.appslug }}
@@ -1166,6 +1188,9 @@ data:
         {{- if .Values.openlane.coreConfiguration.integrations.email.docsurl }}
         docsurl: {{ .Values.openlane.coreConfiguration.integrations.email.docsurl | quote }}
         {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.email.apiurl }}
+        apiurl: {{ .Values.openlane.coreConfiguration.integrations.email.apiurl | quote }}
+        {{- end }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrations.paymentreminder }}
       paymentreminder:
@@ -1180,6 +1205,15 @@ data:
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.integrations.paymentreminder.dryrun }}
         dryrun: {{ .Values.openlane.coreConfiguration.integrations.paymentreminder.dryrun }}
+        {{- end }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.integrations.organizationdelete }}
+      organizationdelete:
+        {{- if .Values.openlane.coreConfiguration.integrations.organizationdelete.maxdeletesperrun }}
+        maxdeletesperrun: {{ .Values.openlane.coreConfiguration.integrations.organizationdelete.maxdeletesperrun }}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.integrations.organizationdelete.enabled }}
+        enabled: {{ .Values.openlane.coreConfiguration.integrations.organizationdelete.enabled }}
         {{- end }}
       {{- end }}
     {{- end }}

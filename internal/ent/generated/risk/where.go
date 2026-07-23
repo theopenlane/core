@@ -154,6 +154,11 @@ func ScopeID(v string) predicate.Risk {
 	return predicate.Risk(sql.FieldEQ(FieldScopeID, v))
 }
 
+// WorkflowEligibleMarker applies equality check predicate on the "workflow_eligible_marker" field. It's identical to WorkflowEligibleMarkerEQ.
+func WorkflowEligibleMarker(v bool) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldWorkflowEligibleMarker, v))
+}
+
 // ExternalID applies equality check predicate on the "external_id" field. It's identical to ExternalIDEQ.
 func ExternalID(v string) predicate.Risk {
 	return predicate.Risk(sql.FieldEQ(FieldExternalID, v))
@@ -1437,6 +1442,26 @@ func ScopeIDEqualFold(v string) predicate.Risk {
 // ScopeIDContainsFold applies the ContainsFold predicate on the "scope_id" field.
 func ScopeIDContainsFold(v string) predicate.Risk {
 	return predicate.Risk(sql.FieldContainsFold(FieldScopeID, v))
+}
+
+// WorkflowEligibleMarkerEQ applies the EQ predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerEQ(v bool) predicate.Risk {
+	return predicate.Risk(sql.FieldEQ(FieldWorkflowEligibleMarker, v))
+}
+
+// WorkflowEligibleMarkerNEQ applies the NEQ predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerNEQ(v bool) predicate.Risk {
+	return predicate.Risk(sql.FieldNEQ(FieldWorkflowEligibleMarker, v))
+}
+
+// WorkflowEligibleMarkerIsNil applies the IsNil predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerIsNil() predicate.Risk {
+	return predicate.Risk(sql.FieldIsNull(FieldWorkflowEligibleMarker))
+}
+
+// WorkflowEligibleMarkerNotNil applies the NotNil predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerNotNil() predicate.Risk {
+	return predicate.Risk(sql.FieldNotNull(FieldWorkflowEligibleMarker))
 }
 
 // ExternalIDEQ applies the EQ predicate on the "external_id" field.
@@ -3421,6 +3446,93 @@ func HasRemediationsWith(preds ...predicate.Remediation) predicate.Risk {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Remediation
 		step.Edge.Schema = schemaConfig.RemediationRisks
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasVulnerabilities applies the HasEdge predicate on the "vulnerabilities" edge.
+func HasVulnerabilities() predicate.Risk {
+	return predicate.Risk(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, VulnerabilitiesTable, VulnerabilitiesPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Vulnerability
+		step.Edge.Schema = schemaConfig.VulnerabilityRisks
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasVulnerabilitiesWith applies the HasEdge predicate on the "vulnerabilities" edge with a given conditions (other predicates).
+func HasVulnerabilitiesWith(preds ...predicate.Vulnerability) predicate.Risk {
+	return predicate.Risk(func(s *sql.Selector) {
+		step := newVulnerabilitiesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Vulnerability
+		step.Edge.Schema = schemaConfig.VulnerabilityRisks
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasFindings applies the HasEdge predicate on the "findings" edge.
+func HasFindings() predicate.Risk {
+	return predicate.Risk(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, FindingsTable, FindingsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.FindingRisks
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasFindingsWith applies the HasEdge predicate on the "findings" edge with a given conditions (other predicates).
+func HasFindingsWith(preds ...predicate.Finding) predicate.Risk {
+	return predicate.Risk(func(s *sql.Selector) {
+		step := newFindingsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.FindingRisks
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasWorkflowObjectRefs applies the HasEdge predicate on the "workflow_object_refs" edge.
+func HasWorkflowObjectRefs() predicate.Risk {
+	return predicate.Risk(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, WorkflowObjectRefsTable, WorkflowObjectRefsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasWorkflowObjectRefsWith applies the HasEdge predicate on the "workflow_object_refs" edge with a given conditions (other predicates).
+func HasWorkflowObjectRefsWith(preds ...predicate.WorkflowObjectRef) predicate.Risk {
+	return predicate.Risk(func(s *sql.Selector) {
+		step := newWorkflowObjectRefsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

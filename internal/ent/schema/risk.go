@@ -100,6 +100,7 @@ func (Risk) Fields() []ent.Field {
 			GoType(enums.RiskStatus("")).
 			Annotations(
 				entgql.OrderField("STATUS"),
+				entx.FieldWorkflowEligible(),
 			).
 			Optional().
 			Comment("status of the risk - identified, mitigated, accepted, closed, transferred, and archived."),
@@ -107,6 +108,7 @@ func (Risk) Fields() []ent.Field {
 			GoType(enums.RiskImpact("")).
 			Annotations(
 				entgql.OrderField("IMPACT"),
+				entx.FieldWorkflowEligible(),
 			).
 			Optional().
 			Comment("impact of the risk -critical, high, medium, low"),
@@ -116,6 +118,7 @@ func (Risk) Fields() []ent.Field {
 			Optional().
 			Annotations(
 				entgql.OrderField("LIKELIHOOD"),
+				entx.FieldWorkflowEligible(),
 			).
 			Comment("likelihood of the risk occurring; unlikely, likely, highly likely"),
 		field.Int("score").
@@ -123,6 +126,7 @@ func (Risk) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("score"),
 				entx.FieldSearchable(),
+				entx.FieldWorkflowEligible(),
 			).
 			Comment("score of the risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)"),
 		field.Text("mitigation").
@@ -181,12 +185,14 @@ func (Risk) Fields() []ent.Field {
 			Nillable().
 			Annotations(
 				entgql.OrderField("mitigated_at"),
+				entx.FieldWorkflowEligible(),
 			).
 			Comment("the time when the risk was mitigated"),
 		field.Bool("review_required").
 			Optional().
 			Annotations(
 				entgql.OrderField("review_required"),
+				entx.FieldWorkflowEligible(),
 			).
 			Default(true).
 			Comment("indicates if a periodic review is required for the risk"),
@@ -196,6 +202,7 @@ func (Risk) Fields() []ent.Field {
 			Nillable().
 			Annotations(
 				entgql.OrderField("last_reviewed_at"),
+				entx.FieldWorkflowEligible(),
 			).
 			Comment("the time when the risk was last reviewed"),
 		field.Enum("review_frequency").
@@ -204,6 +211,7 @@ func (Risk) Fields() []ent.Field {
 			Optional().
 			Annotations(
 				entgql.OrderField("review_frequency"),
+				entx.FieldWorkflowEligible(),
 			),
 		field.Time("due_date").
 			GoType(models.DateTime{}).
@@ -211,6 +219,7 @@ func (Risk) Fields() []ent.Field {
 			Nillable().
 			Annotations(
 				entgql.OrderField("due_date"),
+				entx.FieldWorkflowEligible(),
 			).
 			Comment("the time when the risk is due to be resolved by, based on the sla config but can be manually updated"),
 		field.Time("next_review_due_at").
@@ -219,12 +228,14 @@ func (Risk) Fields() []ent.Field {
 			Nillable().
 			Annotations(
 				entgql.OrderField("next_review_due_at"),
+				entx.FieldWorkflowEligible(),
 			).
 			Comment("the time when the next review is due for the risk"),
 		field.Int("residual_score").
 			Optional().
 			Annotations(
 				entgql.OrderField("residual_score"),
+				entx.FieldWorkflowEligible(),
 			).
 			Comment("score of the residual risk based on impact and likelihood (1-4 unlikely, 5-9 likely, 10-16 highly likely, 17-20 critical)"),
 		field.Enum("risk_decision").
@@ -233,6 +244,7 @@ func (Risk) Fields() []ent.Field {
 			Optional().
 			Annotations(
 				entgql.OrderField("risk_decision"),
+				entx.FieldWorkflowEligible(),
 			).
 			Comment("the decision made for the risk - accept, transfer, avoid, mitigate, or none"),
 	}
@@ -333,8 +345,40 @@ func (r Risk) Edges() []ent.Edge {
 				accessmap.EdgeAuthCheck(Note{}.Name()),
 			},
 		}),
-		defaultEdgeFromWithPagination(r, Review{}),
-		defaultEdgeFromWithPagination(r, Remediation{}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: r,
+			edgeSchema: Review{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Review{}.Name()),
+			},
+		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: r,
+			edgeSchema: Remediation{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Remediation{}.Name()),
+			},
+		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: r,
+			edgeSchema: Vulnerability{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Vulnerability{}.Name()),
+			},
+		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: r,
+			edgeSchema: Finding{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Finding{}.Name()),
+			},
+		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: r,
+			edgeSchema: WorkflowObjectRef{},
+			name:       "workflow_object_refs",
+			ref:        "risk",
+		}),
 	}
 }
 
@@ -386,6 +430,7 @@ func (r Risk) Mixin() []ent.Mixin {
 			newCustomEnumMixin(r, withEnumFieldName("category")),
 			newCustomEnumMixin(r, withEnumFieldName("environment"), withGlobalEnum()),
 			newCustomEnumMixin(r, withEnumFieldName("scope"), withGlobalEnum()),
+			WorkflowApprovalMixin{},
 		},
 	}.getMixins(r)
 }

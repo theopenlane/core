@@ -31,20 +31,22 @@ import (
 // login enforcement, following the configure -> mark tested -> enforce sequence the organization setting
 // hooks require before enforcement is allowed
 func (suite *HandlerTestSuite) enforceSSOOnSetting(ctx context.Context, settingID string) {
-	suite.db.OrganizationSetting.UpdateOneID(settingID).
+	t := suite.T()
+
+	require.NoError(t, suite.db.OrganizationSetting.UpdateOneID(settingID).
 		SetIdentityProvider(enums.SSOProviderOkta).
 		SetIdentityProviderClientID("client").
 		SetIdentityProviderClientSecret("secret").
 		SetOidcDiscoveryEndpoint("http://example.com").
-		ExecX(ctx)
+		Exec(ctx))
 
-	suite.db.OrganizationSetting.UpdateOneID(settingID).
+	require.NoError(t, suite.db.OrganizationSetting.UpdateOneID(settingID).
 		SetIdentityProviderAuthTested(true).
-		ExecX(ctx)
+		Exec(ctx))
 
-	suite.db.OrganizationSetting.UpdateOneID(settingID).
+	require.NoError(t, suite.db.OrganizationSetting.UpdateOneID(settingID).
 		SetIdentityProviderLoginEnforced(true).
-		ExecX(ctx)
+		Exec(ctx))
 }
 
 // ssoEnforcedOrg creates an SSO-enforced organization owned by a fresh user and returns it
@@ -56,14 +58,18 @@ func (suite *HandlerTestSuite) ssoEnforcedOrg() *ent.Organization {
 	ownerCtx := privacy.DecisionContext(owner.UserCtx, privacy.Allow)
 	ownerCtx = ent.NewContext(ownerCtx, suite.db)
 
-	setting := suite.db.OrganizationSetting.Create().SaveX(ownerCtx)
+	t := suite.T()
 
-	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
+	setting, err := suite.db.OrganizationSetting.Create().Save(ownerCtx)
+	require.NoError(t, err)
+
+	org, err := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
 		Name:      ulids.New().String(),
 		SettingID: &setting.ID,
-	}).SaveX(ownerCtx)
+	}).Save(ownerCtx)
+	require.NoError(t, err)
 
-	suite.db.OrganizationSetting.UpdateOneID(setting.ID).SetOrganizationID(org.ID).ExecX(ownerCtx)
+	require.NoError(t, suite.db.OrganizationSetting.UpdateOneID(setting.ID).SetOrganizationID(org.ID).Exec(ownerCtx))
 
 	suite.enforceSSOOnSetting(ownerCtx, setting.ID)
 
@@ -73,7 +79,7 @@ func (suite *HandlerTestSuite) ssoEnforcedOrg() *ent.Organization {
 func (suite *HandlerTestSuite) TestLoginHandlerSSOExemptMember() {
 	t := suite.T()
 
-	suite.registerTestHandler("POST", "login", suite.createImpersonationOperation("LoginHandler", "Test login"), suite.h.LoginHandler)
+	suite.registerTestHandler("POST", "login", suite.h.LoginHandler)
 
 	org := suite.ssoEnforcedOrg()
 
@@ -85,14 +91,14 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOExemptMember() {
 	memberCtx = ent.NewContext(memberCtx, suite.db)
 
 	// member is explicitly exempt from SSO for this organization
-	suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
+	require.NoError(t, suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
 		OrganizationID: org.ID,
 		UserID:         member.UserInfo.ID,
 		Role:           &enums.RoleMember,
 		SSOExempt:      lo.ToPtr(true),
-	}).ExecX(memberCtx)
+	}).Exec(memberCtx))
 
-	suite.db.UserSetting.UpdateOneID(member.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).ExecX(memberCtx)
+	require.NoError(t, suite.db.UserSetting.UpdateOneID(member.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).Exec(memberCtx))
 
 	body, _ := json.Marshal(models.LoginRequest{Username: member.UserInfo.Email, Password: "$uper$ecretP@ssword"})
 	req := httptest.NewRequest(http.MethodPost, "/login", strings.NewReader(string(body)))
@@ -102,7 +108,7 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOExemptMember() {
 
 	// the exempt member is not redirected to SSO; password login succeeds
 	require.Equal(t, http.StatusOK, rec.Code)
-	var out models.LoginReply
+	var out models.LoginResponse
 	require.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
 	assert.True(t, out.Success)
 }
@@ -110,7 +116,7 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOExemptMember() {
 func (suite *HandlerTestSuite) TestLoginHandlerSSOExemptDomain() {
 	t := suite.T()
 
-	suite.registerTestHandler("POST", "login", suite.createImpersonationOperation("LoginHandler", "Test login"), suite.h.LoginHandler)
+	suite.registerTestHandler("POST", "login", suite.h.LoginHandler)
 
 	org := suite.ssoEnforcedOrg()
 
@@ -118,10 +124,10 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOExemptDomain() {
 	ctx = ent.NewContext(ctx, suite.db)
 
 	exemptDomain := strings.ToLower(ulids.New().String()) + ".example.com"
-	suite.db.OrganizationSetting.Update().
+	require.NoError(t, suite.db.OrganizationSetting.Update().
 		Where(organizationsetting.OrganizationID(org.ID)).
 		SetSSOExemptDomains([]string{exemptDomain}).
-		ExecX(ctx)
+		Exec(ctx))
 
 	memberEmail := "auditor" + strings.ToLower(ulids.New().String()) + "@" + exemptDomain
 	member := suite.userBuilderWithInput(ctx, &userInput{email: memberEmail, password: "$uper$ecretP@ssword", confirmedUser: true})
@@ -131,13 +137,13 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOExemptDomain() {
 	memberCtx = ent.NewContext(memberCtx, suite.db)
 
 	// member relies on the per-domain exemption, not a per-user flag
-	suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
+	require.NoError(t, suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
 		OrganizationID: org.ID,
 		UserID:         member.UserInfo.ID,
 		Role:           &enums.RoleMember,
-	}).ExecX(memberCtx)
+	}).Exec(memberCtx))
 
-	suite.db.UserSetting.UpdateOneID(member.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).ExecX(memberCtx)
+	require.NoError(t, suite.db.UserSetting.UpdateOneID(member.UserInfo.Edges.Setting.ID).SetDefaultOrgID(org.ID).Exec(memberCtx))
 
 	body, _ := json.Marshal(models.LoginRequest{Username: member.UserInfo.Email, Password: "$uper$ecretP@ssword"})
 	req := httptest.NewRequest(http.MethodPost, "/login", strings.NewReader(string(body)))
@@ -146,7 +152,7 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOExemptDomain() {
 	suite.e.ServeHTTP(rec, req)
 
 	require.Equal(t, http.StatusOK, rec.Code)
-	var out models.LoginReply
+	var out models.LoginResponse
 	require.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
 	assert.True(t, out.Success)
 }
@@ -154,8 +160,7 @@ func (suite *HandlerTestSuite) TestLoginHandlerSSOExemptDomain() {
 func (suite *HandlerTestSuite) TestWebfingerHandlerExemptMember() {
 	t := suite.T()
 
-	webfingerOp := suite.createImpersonationOperation("WebfingerHandler", "Webfinger handler")
-	suite.registerTestHandler("GET", ".well-known/webfinger", webfingerOp, suite.h.WebfingerHandler)
+	suite.registerTestHandler("GET", ".well-known/webfinger", suite.h.WebfingerHandler)
 
 	org := suite.ssoEnforcedOrg()
 
@@ -166,21 +171,21 @@ func (suite *HandlerTestSuite) TestWebfingerHandlerExemptMember() {
 	memberCtx = privacy.DecisionContext(memberCtx, privacy.Allow)
 	memberCtx = ent.NewContext(memberCtx, suite.db)
 
-	suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
+	require.NoError(t, suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
 		OrganizationID: org.ID,
 		UserID:         member.UserInfo.ID,
 		Role:           &enums.RoleMember,
 		SSOExempt:      lo.ToPtr(true),
-	}).ExecX(memberCtx)
+	}).Exec(memberCtx))
 
-	suite.db.UserSetting.Update().Where(usersetting.UserID(member.ID)).SetDefaultOrgID(org.ID).ExecX(memberCtx)
+	require.NoError(t, suite.db.UserSetting.Update().Where(usersetting.UserID(member.ID)).SetDefaultOrgID(org.ID).Exec(memberCtx))
 
 	// the org level lookup still reports enforcement
 	orgReq := httptest.NewRequest(http.MethodGet, "/.well-known/webfinger?resource=org:"+org.ID, nil)
 	orgRec := httptest.NewRecorder()
 	suite.e.ServeHTTP(orgRec, orgReq)
 	require.Equal(t, http.StatusOK, orgRec.Code)
-	var orgOut models.SSOStatusReply
+	var orgOut models.SSOStatusResponse
 	require.NoError(t, json.NewDecoder(orgRec.Body).Decode(&orgOut))
 	assert.True(t, orgOut.Enforced, "org level lookup reports enforcement")
 
@@ -189,7 +194,7 @@ func (suite *HandlerTestSuite) TestWebfingerHandlerExemptMember() {
 	acctRec := httptest.NewRecorder()
 	suite.e.ServeHTTP(acctRec, acctReq)
 	require.Equal(t, http.StatusOK, acctRec.Code)
-	var acctOut models.SSOStatusReply
+	var acctOut models.SSOStatusResponse
 	require.NoError(t, json.NewDecoder(acctRec.Body).Decode(&acctOut))
 	assert.False(t, acctOut.Enforced, "exempt member is not required to use SSO")
 }
@@ -200,13 +205,15 @@ func (suite *HandlerTestSuite) TestOrgOwnerSeededSSOExempt() {
 	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 	ctx = ent.NewContext(ctx, suite.db)
 
-	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
+	org, err := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
 		Name: ulids.New().String(),
-	}).SaveX(ctx)
+	}).Save(ctx)
+	require.NoError(t, err)
 
-	member := suite.db.OrgMembership.Query().
+	member, err := suite.db.OrgMembership.Query().
 		Where(orgmembership.OrganizationID(org.ID), orgmembership.UserID(testUser1.ID)).
-		OnlyX(ctx)
+		Only(ctx)
+	require.NoError(t, err)
 
 	assert.Equal(t, enums.RoleOwner, member.Role)
 	assert.True(t, member.SSOExempt, "organization owner is auto-seeded as SSO exempt")
@@ -217,8 +224,7 @@ func (suite *HandlerTestSuite) TestOrgOwnerSeededSSOExempt() {
 func (suite *HandlerTestSuite) TestSwitchHandlerSSOExemptMember() {
 	t := suite.T()
 
-	operation := suite.createImpersonationOperation("SwitchHandler", "Switch organization context")
-	suite.registerTestHandler("POST", "switch", operation, suite.h.SwitchHandler)
+	suite.registerTestHandler("POST", "switch", suite.h.SwitchHandler)
 
 	org := suite.ssoEnforcedOrg()
 
@@ -229,12 +235,12 @@ func (suite *HandlerTestSuite) TestSwitchHandlerSSOExemptMember() {
 	memberCtx = privacy.DecisionContext(memberCtx, privacy.Allow)
 	memberCtx = ent.NewContext(memberCtx, suite.db)
 
-	suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
+	require.NoError(t, suite.db.OrgMembership.Create().SetInput(generated.CreateOrgMembershipInput{
 		OrganizationID: org.ID,
 		UserID:         member.UserInfo.ID,
 		Role:           &enums.RoleMember,
 		SSOExempt:      lo.ToPtr(true),
-	}).ExecX(memberCtx)
+	}).Exec(memberCtx))
 
 	body, _ := json.Marshal(models.SwitchOrganizationRequest{TargetOrganizationID: org.ID})
 	req := httptest.NewRequest(http.MethodPost, "/switch", strings.NewReader(string(body)))
@@ -244,7 +250,7 @@ func (suite *HandlerTestSuite) TestSwitchHandlerSSOExemptMember() {
 
 	// the exempt member switches into the SSO-enforced org without being redirected through SSO
 	require.Equal(t, http.StatusOK, rec.Code)
-	var out models.SwitchOrganizationReply
+	var out models.SwitchOrganizationResponse
 	require.NoError(t, json.NewDecoder(rec.Body).Decode(&out))
 	assert.False(t, out.NeedsSSO, "exempt member is not required to use SSO when switching")
 }
@@ -258,33 +264,36 @@ func (suite *HandlerTestSuite) TestInviteGrantsSSOExempt() {
 	orgID := testUser1.OrganizationID
 
 	recipientEmail := "auditor" + strings.ToLower(ulids.New().String()) + "@partner.example.com"
-	recipient := suite.db.User.Create().
+	recipient, err := suite.db.User.Create().
 		SetEmail(recipientEmail).
 		SetFirstName("Audit").
 		SetLastName("Or").
 		SetAuthProvider(enums.AuthProviderCredentials).
 		SetLastLoginProvider(enums.AuthProviderCredentials).
 		SetLastSeen(time.Now()).
-		SaveX(ctx)
+		Save(ctx)
+	require.NoError(t, err)
 
 	// an invitation that grants an SSO exemption on acceptance
 	role := enums.RoleMember
-	inv := suite.db.Invite.Create().
+	inv, err := suite.db.Invite.Create().
 		SetRecipient(recipientEmail).
 		SetRole(role).
 		SetSSOExempt(true).
-		SaveX(ctx)
+		Save(ctx)
+	require.NoError(t, err)
 
 	// accepting the invite as the recipient triggers the accepted hook, which creates the membership
 	recipientCtx := auth.NewTestContextWithOrgID(recipient.ID, orgID)
 	recipientCtx = privacy.DecisionContext(recipientCtx, privacy.Allow)
 	recipientCtx = ent.NewContext(recipientCtx, suite.db)
 
-	suite.db.Invite.UpdateOneID(inv.ID).SetStatus(enums.InvitationAccepted).ExecX(recipientCtx)
+	require.NoError(t, suite.db.Invite.UpdateOneID(inv.ID).SetStatus(enums.InvitationAccepted).Exec(recipientCtx))
 
-	member := suite.db.OrgMembership.Query().
+	member, err := suite.db.OrgMembership.Query().
 		Where(orgmembership.OrganizationID(orgID), orgmembership.UserID(recipient.ID)).
-		OnlyX(ctx)
+		Only(ctx)
+	require.NoError(t, err)
 
 	assert.True(t, member.SSOExempt, "invite-granted exemption sets the membership exemption")
 	require.NotNil(t, member.SSOExemptReason)
@@ -315,10 +324,11 @@ func (suite *HandlerTestSuite) TestImpersonatorAttributionStamped() {
 	impCtx = privacy.DecisionContext(impCtx, privacy.Allow)
 	impCtx = ent.NewContext(impCtx, suite.db)
 
-	group := suite.db.Group.Create().
+	group, err := suite.db.Group.Create().
 		SetName("Support Touched " + ulids.New().String()).
 		SetOwnerID(testUser1.OrganizationID).
-		SaveX(impCtx)
+		Save(impCtx)
+	require.NoError(t, err)
 
 	require.NotNil(t, group.UpdatedByImpersonator)
 	assert.Equal(t, "engineer@theopenlane.io", *group.UpdatedByImpersonator)
@@ -334,14 +344,16 @@ func (suite *HandlerTestSuite) TestExemptDomainAllowedDomainOverlap() {
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 	ctx = ent.NewContext(ctx, suite.db)
 
-	setting := suite.db.OrganizationSetting.Create().
+	setting, err := suite.db.OrganizationSetting.Create().
 		SetAllowedEmailDomains([]string{"audit.com"}).
-		SaveX(ctx)
+		Save(ctx)
+	require.NoError(t, err)
 
 	// the same domain may also be marked sso exempt; previously this was rejected as a conflict
-	updated := suite.db.OrganizationSetting.UpdateOneID(setting.ID).
+	updated, err := suite.db.OrganizationSetting.UpdateOneID(setting.ID).
 		SetSSOExemptDomains([]string{"audit.com"}).
-		SaveX(ctx)
+		Save(ctx)
+	require.NoError(t, err)
 	assert.Equal(t, []string{"audit.com"}, updated.AllowedEmailDomains)
 	assert.Equal(t, []string{"audit.com"}, updated.SSOExemptDomains)
 }
@@ -359,35 +371,41 @@ func (suite *HandlerTestSuite) TestAutoJoinSuppressedWhenSSOEnforced() {
 	const allowedDomain = "enforced-autojoin.com"
 
 	// an organization that has domain auto-join configured AND enforces SSO
-	setting := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
+	setting, err := suite.db.OrganizationSetting.Create().SetInput(generated.CreateOrganizationSettingInput{
 		AllowedEmailDomains:          []string{allowedDomain},
 		AllowMatchingDomainsAutojoin: lo.ToPtr(true),
-	}).SaveX(ctx)
+	}).Save(ctx)
+	require.NoError(t, err)
 
-	org := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
+	org, err := suite.db.Organization.Create().SetInput(generated.CreateOrganizationInput{
 		Name:      ulids.New().String(),
 		SettingID: &setting.ID,
-	}).SaveX(ctx)
+	}).Save(ctx)
+	require.NoError(t, err)
 
-	suite.db.OrganizationSetting.UpdateOneID(setting.ID).SetOrganizationID(org.ID).ExecX(ctx)
+	require.NoError(t, suite.db.OrganizationSetting.UpdateOneID(setting.ID).SetOrganizationID(org.ID).Exec(ctx))
 	suite.enforceSSOOnSetting(ctx, setting.ID)
 
 	// a brand-new user on the allowed domain confirms their email, which triggers the auto-join hook
-	userSetting := suite.db.UserSetting.Create().SetEmailConfirmed(false).SaveX(ctx)
-	user := suite.db.User.Create().
+	userSetting, err := suite.db.UserSetting.Create().SetEmailConfirmed(false).Save(ctx)
+	require.NoError(t, err)
+
+	user, err := suite.db.User.Create().
 		SetFirstName("Auto").
 		SetLastName("Join").
 		SetEmail(ulids.New().String() + "@" + allowedDomain).
 		SetSetting(userSetting).
 		SetLastLoginProvider(enums.AuthProviderCredentials).
 		SetLastSeen(time.Now()).
-		SaveX(ctx)
+		Save(ctx)
+	require.NoError(t, err)
 
-	suite.db.UserSetting.UpdateOneID(userSetting.ID).SetEmailConfirmed(true).ExecX(ctx)
+	require.NoError(t, suite.db.UserSetting.UpdateOneID(userSetting.ID).SetEmailConfirmed(true).Exec(ctx))
 
 	// the enforced organization must not have auto-joined the user
-	exists := suite.db.OrgMembership.Query().
+	exists, err := suite.db.OrgMembership.Query().
 		Where(orgmembership.UserID(user.ID), orgmembership.OrganizationID(org.ID)).
-		ExistX(ctx)
+		Exist(ctx)
+	require.NoError(t, err)
 	assert.False(t, exists, "auto-join must be suppressed for SSO-enforced organizations")
 }

@@ -5,14 +5,15 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/ulids"
+
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/httpserve/authmanager"
 )
 
 func cleanupOrganizationDataWithContext(ctx context.Context, t *testing.T) {
@@ -56,6 +57,8 @@ type trustCenterOrg struct {
 	organizationID string
 	trustCenter    *generated.TrustCenter
 	ndaTemplateID  *string
+	ndaFileID      *string
+	supportCtx     context.Context
 	*testOrgUsers
 }
 
@@ -64,8 +67,18 @@ type trustCenterConfig struct {
 	trustCenterID    *string
 	customDomainID   *string
 	ndaTemplateID    *string
+	ndaFileID        *string
 	seedAllUserTypes bool
 	seedAPIClients   bool
+	seedSupportUser  bool
+}
+
+// withSupportUser creates an org-scoped support session (auth.NewOrgSupportCaller) for the org,
+// available as trustCenterOrg.supportCtx
+func withSupportUser() trustCenterOption {
+	return func(ctx context.Context, t *testing.T, c *trustCenterConfig) {
+		c.seedSupportUser = true
+	}
 }
 
 // withAllUserTypes creates the owner, super admin, admin (with api and pat clients), member, and auditor users
@@ -101,13 +114,21 @@ func withNDATemplate() trustCenterOption {
 			return
 		}
 
+		ndaFile := (&FileBuilder{
+			client:  suite.client,
+			Name:    "hello.pdf",
+			MD5Hash: getMD5Hash(t, pdfFilePath),
+		}).MustNew(ctx, t)
+
 		tmpl := (&TemplateBuilder{
 			client:        suite.client,
 			Kind:          enums.TemplateKindTrustCenterNda,
 			TrustCenterID: *c.trustCenterID,
+			FileIDs:       []string{ndaFile.ID},
 		}).MustNew(ctx, t)
 
 		c.ndaTemplateID = &tmpl.ID
+		c.ndaFileID = &ndaFile.ID
 	}
 }
 
@@ -153,10 +174,17 @@ func createFreshOrgWithTrustCenter(t *testing.T, opts ...trustCenterOption) *tru
 		opt(ownerCtx, t, &config)
 	}
 
+	var supportCtx context.Context
+	if config.seedSupportUser {
+		supportCtx = newSupportCtx(ownerCtx, localUsers.owner.OrganizationID)
+	}
+
 	return &trustCenterOrg{
 		organizationID: localUsers.owner.OrganizationID,
 		trustCenter:    localTrustCenter,
 		ndaTemplateID:  config.ndaTemplateID,
+		ndaFileID:      config.ndaFileID,
+		supportCtx:     supportCtx,
 		testOrgUsers:   localUsers,
 	}
 }

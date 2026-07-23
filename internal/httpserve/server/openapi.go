@@ -3,9 +3,9 @@ package server
 import (
 	"context"
 	"fmt"
-	"go/doc"
 	"maps"
 	"net/url"
+	"os"
 	"reflect"
 	"sort"
 	"strings"
@@ -14,10 +14,25 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/getkin/kin-openapi/openapi3gen"
 	"github.com/rs/zerolog/log"
-	"golang.org/x/tools/go/packages"
 
+	"github.com/theopenlane/utils/rout"
+
+	"github.com/theopenlane/core/internal/genhelpers"
+	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/internal/httpserve/specs"
 )
+
+// specVersion returns the version stamped into the published OpenAPI spec.
+// CI sets OPENLANE_SPEC_VERSION (typically from the release tag) when
+// generating the spec artifact so the version tracks builds over time; local
+// generation falls back to the development placeholder.
+func specVersion() string {
+	if v := os.Getenv("OPENLANE_SPEC_VERSION"); v != "" {
+		return v
+	}
+
+	return "v0.0.0-dev"
+}
 
 // NewOpenAPISpec creates a new OpenAPI 3.1.0 specification based on the configured go interfaces and the operation types appended within the individual handlers
 func NewOpenAPISpec() (*openapi3.T, error) {
@@ -28,9 +43,17 @@ func NewOpenAPISpec() (*openapi3.T, error) {
 	securityschemes := make(openapi3.SecuritySchemes)
 	examples := make(openapi3.Examples)
 
-	internalServerError := openapi3.NewResponse().
-		WithDescription("Internal Server Error")
-	responses["InternalServerError"] = &openapi3.ResponseRef{Value: internalServerError}
+	// register the shared error schema (rout.Reply) that every handler error helper
+	// serializes so error responses on operations can reference it instead of
+	// repeating inline definitions
+	generator := openapi3gen.NewGenerator(openapi3gen.UseAllExportedFields(), customizer)
+
+	errorReply, err := generator.NewSchemaRefForValue(&rout.Reply{}, schemas)
+	if err != nil {
+		return nil, err
+	}
+
+	schemas[handlers.ErrorReplySchemaName] = errorReply
 
 	securityschemes["bearer"] = &openapi3.SecuritySchemeRef{
 		Value: openapi3.NewSecurityScheme().
@@ -48,35 +71,16 @@ func NewOpenAPISpec() (*openapi3.T, error) {
 			WithDescription("API Key authentication, the key must be a valid API key"),
 	}
 
-	securityschemes["basic"] = &openapi3.SecuritySchemeRef{
-		Value: openapi3.NewSecurityScheme().
-			WithType("http").
-			WithScheme("basic").
-			WithDescription("Username and Password based authentication"),
-	}
-
-	securityschemes["oauth2"] = &openapi3.SecuritySchemeRef{
-		Value: (*OAuth2)(&OAuth2{ //nolint:gosec
-			AuthorizationURL: "https://api.theopenlane.io/oauth2/authorize",
-			TokenURL:         "https://api.theopenlane.io/oauth2/token",
-			RefreshURL:       "https://api.theopenlane.io/oauth2/refresh",
-			Scopes: map[string]string{
-				"read":  "Read access",
-				"write": "Write access",
-			},
-		}).Scheme(),
-	}
-
 	spec := &openapi3.T{
 		OpenAPI: "3.1.1",
 		Info: &openapi3.Info{
 			Title:       "Openlane OpenAPI 3.1.1 Specifications",
 			Description: "Openlane's API services are designed to provide a simple and easy to use interface for interacting with the Openlane platform. This API is designed to be used by both internal and external clients to interact with the Openlane platform.",
-			Version:     "v1.0.0",
+			Version:     specVersion(),
 			Contact: &openapi3.Contact{
 				Name:  "Openlane",
 				Email: "support@theopenlane.io",
-				URL:   "https://theopenlane.io",
+				URL:   "https://www.theopenlane.io",
 			},
 			License: &openapi3.License{
 				Name: "Apache 2.0",
@@ -116,13 +120,6 @@ func NewOpenAPISpec() (*openapi3.T, error) {
 	return spec, nil
 }
 
-var (
-	// ErrFailedToGetFilePath is returned when runtime.Caller fails to get the current file path
-	ErrFailedToGetFilePath = fmt.Errorf("failed to get current file path")
-	// ErrSCIMSpecNotFound is returned when the SCIM spec file is not found
-	ErrSCIMSpecNotFound = fmt.Errorf("SCIM spec file not found")
-)
-
 // mergeSCIMSpec loads the SCIM OpenAPI specification and merges it into the main spec
 func mergeSCIMSpec(mainSpec *openapi3.T) error {
 	if len(specs.SCIMSpec) == 0 {
@@ -150,10 +147,7 @@ func mergeSCIMSpec(mainSpec *openapi3.T) error {
 	mergeComponents(mainSpec, scimSpec)
 	mergeTags(mainSpec, scimSpec)
 
-	log.Info().
-		Int("paths", len(scimSpec.Paths.Map())).
-		Int("schemas", len(scimSpec.Components.Schemas)).
-		Msg("successfully merged SCIM spec into main OpenAPI spec")
+	log.Info().Int("paths", len(scimSpec.Paths.Map())).Int("schemas", len(scimSpec.Components.Schemas)).Msg("successfully merged SCIM spec into main OpenAPI spec")
 
 	return nil
 }
@@ -360,7 +354,7 @@ var customizer = openapi3gen.SchemaCustomizer(func(_ string, t reflect.Type, tag
 
 	// For all structs, try to extract description from Go doc comments if not already set
 	if schema.Description == "" && t.Kind() == reflect.Struct {
-		if desc := getTypeDescription(t); desc != "" {
+		if desc := typeDoc(t.PkgPath(), t.Name()); desc != "" {
 			schema.Description = desc
 		}
 	}
@@ -368,148 +362,49 @@ var customizer = openapi3gen.SchemaCustomizer(func(_ string, t reflect.Type, tag
 	return nil
 })
 
-// OAuth2 is a struct that represents an OAuth2 security scheme
-type OAuth2 struct {
-	AuthorizationURL string
-	TokenURL         string
-	RefreshURL       string
-	Scopes           map[string]string
-}
-
-// Scheme returns the OAuth2 security scheme
-func (i *OAuth2) Scheme() *openapi3.SecurityScheme {
-	return &openapi3.SecurityScheme{
-		Type:        "oauth2",
-		Description: "OAuth 2.0 authorization code flow for secure API access",
-		Flows: &openapi3.OAuthFlows{
-			AuthorizationCode: &openapi3.OAuthFlow{
-				AuthorizationURL: i.AuthorizationURL,
-				TokenURL:         i.TokenURL,
-				RefreshURL:       i.RefreshURL,
-				Scopes:           i.Scopes,
-			},
-		},
-	}
-}
-
-// OpenID is a struct that represents an OpenID Connect security scheme
-type OpenID struct {
-	ConnectURL string
-}
-
-// Scheme returns the OpenID Connect security scheme
-func (i *OpenID) Scheme() *openapi3.SecurityScheme {
-	return &openapi3.SecurityScheme{
-		Type:             "openIdConnect",
-		Description:      "OpenID Connect authentication for secure API access",
-		OpenIdConnectUrl: i.ConnectURL,
-	}
-}
-
-// APIKey is a struct that represents an API Key security scheme
-type APIKey struct {
-	Name string
-}
-
-// Scheme returns the API Key security scheme
-func (k *APIKey) Scheme() *openapi3.SecurityScheme {
-	return &openapi3.SecurityScheme{
-		Type: "http",
-		In:   "header",
-		Name: k.Name,
-	}
-}
-
-// Basic is a struct that represents a Basic Auth security scheme
-type Basic struct {
-	Username string
-	Password string
-}
-
-// Scheme returns the Basic Auth security scheme
-func (b *Basic) Scheme() *openapi3.SecurityScheme {
-	return &openapi3.SecurityScheme{
-		Type:   "http",
-		Scheme: "basic",
-	}
-}
+// openapiModelsPackage is the package whose type doc comments describe the published component schemas
+const openapiModelsPackage = "github.com/theopenlane/core/common/openapi"
 
 var (
-	docCache = make(map[string]string)
-	docMutex sync.RWMutex
+	docMutex   sync.Mutex
+	docPkgSeen = make(map[string]bool)
+	docCache   = make(map[string]string)
 )
 
-// getTypeDescription extracts the Go doc comment for a given type
-func getTypeDescription(t reflect.Type) string {
-	if t.PkgPath() == "" {
+// typeDoc returns the Go doc comment for the named type, extracting the whole package's comments
+// through the shared generation helper on first use; extraction only succeeds where the module
+// source is on disk, which is the case everywhere the spec is built
+func typeDoc(pkgPath, typeName string) string {
+	if pkgPath == "" || typeName == "" {
 		return ""
 	}
 
-	// Create cache key
-	cacheKey := t.PkgPath() + "." + t.Name()
+	docMutex.Lock()
+	defer docMutex.Unlock()
 
-	// Check cache first
-	docMutex.RLock()
+	if !docPkgSeen[pkgPath] {
+		docPkgSeen[pkgPath] = true
 
-	if desc, exists := docCache[cacheKey]; exists {
-		docMutex.RUnlock()
-		return desc
-	}
-
-	docMutex.RUnlock()
-
-	// Get the source file path for this type
-	pkgPath := t.PkgPath()
-
-	// Find the Go source files for this package
-	cfg := &packages.Config{
-		Mode: packages.NeedName | packages.NeedSyntax,
-	}
-
-	// Load the package by import path, respecting build tags
-	pkgs, err := packages.Load(cfg, pkgPath)
-	if err != nil {
-		return ""
-	}
-
-	// Look through all packages
-	for _, pkg := range pkgs {
-		// Create doc package
-		docPkg, err := doc.NewFromFiles(pkg.Fset, pkg.Syntax, pkg.PkgPath)
+		comments, err := genhelpers.LoadCommentMap(pkgPath)
 		if err != nil {
-			continue
+			log.Warn().Err(err).Str("package", pkgPath).Msg("failed to extract doc comments for schema descriptions")
+
+			return ""
 		}
 
-		// Look for the type in the package
-		for _, typ := range docPkg.Types {
-			if typ.Name == t.Name() {
-				// Cache and return the description
-				description := strings.TrimSpace(typ.Doc)
-
-				docMutex.Lock()
-
-				docCache[cacheKey] = description
-
-				docMutex.Unlock()
-
-				return description
-			}
-		}
+		maps.Copy(docCache, comments)
 	}
 
-	return ""
+	return docCache[pkgPath+"."+typeName]
 }
 
-// addSchemaDescriptions extracts Go doc comments and adds them as descriptions to schemas
+// addSchemaDescriptions adds Go doc comments from the openapi models package as descriptions to
+// component schemas that do not carry one; component schema names are the bare model type names
 func addSchemaDescriptions(spec *openapi3.T) {
 	if spec == nil || spec.Components == nil || spec.Components.Schemas == nil {
 		return
 	}
 
-	// Extract all type descriptions from the openapi package
-	typeDescriptions := extractOpenAPITypeDescriptions()
-
-	// Apply descriptions to schemas
 	for name, schemaRef := range spec.Components.Schemas {
 		if schemaRef == nil || schemaRef.Value == nil {
 			continue
@@ -517,46 +412,12 @@ func addSchemaDescriptions(spec *openapi3.T) {
 
 		schema := schemaRef.Value
 
-		// Only add description if one doesn't exist
 		if schema.Description == "" {
-			if desc, exists := typeDescriptions[name]; exists {
+			if desc := typeDoc(openapiModelsPackage, name); desc != "" {
 				schema.Description = desc
 			}
 		}
 	}
-}
-
-// extractOpenAPITypeDescriptions parses the openapi package and extracts type descriptions
-func extractOpenAPITypeDescriptions() map[string]string {
-	descriptions := make(map[string]string)
-
-	// Load the package by import path, respecting build tags
-	cfg := &packages.Config{
-		Mode: packages.NeedName | packages.NeedSyntax,
-	}
-
-	// Navigate from server -> httpserve -> internal -> core -> common/openapi
-	pkgs, err := packages.Load(cfg, "github.com/theopenlane/core/common/openapi")
-	if err != nil {
-		log.Warn().Err(err).Msg("failed to load openapi package for type descriptions")
-		return descriptions
-	}
-
-	// Extract type descriptions from all packages in the directory
-	for _, pkg := range pkgs {
-		docPkg, err := doc.NewFromFiles(pkg.Fset, pkg.Syntax, pkg.PkgPath)
-		if err != nil {
-			continue
-		}
-
-		for _, typ := range docPkg.Types {
-			if typ.Doc != "" {
-				descriptions[typ.Name] = strings.TrimSpace(typ.Doc)
-			}
-		}
-	}
-
-	return descriptions
 }
 
 // generateTagsFromOperations collects all unique tags from operations and generates tag definitions using operation descriptions

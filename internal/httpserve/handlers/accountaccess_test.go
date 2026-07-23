@@ -19,9 +19,7 @@ func (suite *HandlerTestSuite) TestAccountAccessHandler() {
 	t := suite.T()
 
 	// add handler
-	// Create operation for AccountAccessHandler
-	operation := suite.createImpersonationOperation("AccountAccessHandler", "Check account access")
-	suite.registerTestHandler("POST", "account/access", operation, suite.h.AccountAccessHandler)
+	suite.registerTestHandler("POST", "account/access", suite.h.AccountAccessHandler)
 
 	testCases := []struct {
 		name    string
@@ -94,7 +92,7 @@ func (suite *HandlerTestSuite) TestAccountAccessHandler() {
 			res := recorder.Result()
 			defer res.Body.Close()
 
-			var out *models.AccountAccessReply
+			var out *models.AccountAccessResponse
 
 			// parse request body
 			if err := json.NewDecoder(res.Body).Decode(&out); err != nil {

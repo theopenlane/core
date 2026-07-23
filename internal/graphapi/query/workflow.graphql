@@ -6,6 +6,8 @@ query GetActionPlanWorkflowStatus($actionPlanId: ID!) {
     hasWorkflowHistory
     activeWorkflowInstances {
       actionPlanID
+      assessmentID
+      assessmentResponseID
       campaignID
       campaignTargetID
       context
@@ -16,19 +18,25 @@ query GetActionPlanWorkflowStatus($actionPlanId: ID!) {
       definitionSnapshot
       displayID
       evidenceID
+      findingID
       id
       identityHolderID
+      integrationID
       internalPolicyID
       lastEvaluatedAt
       ownerID
       platformID
       procedureID
+      remediationID
+      riskID
       state
       subcontrolID
       tags
+      taskID
       updatedAt
       updatedBy
       updatedByImpersonator
+      vulnerabilityID
       workflowDefinitionID
       workflowProposalID
     }
@@ -74,13 +82,15 @@ query GetActionPlanWorkflowTimeline($actionPlanId: ID!, $first: Int, $last: Int,
   }
 }
 
-query GetCampaignWorkflowStatus($campaignId: ID!) {
-  campaign(id: $campaignId) {
+query GetAssessmentWorkflowStatus($assessmentId: ID!) {
+  assessment(id: $assessmentId) {
     id
     hasPendingWorkflow
     hasWorkflowHistory
     activeWorkflowInstances {
       actionPlanID
+      assessmentID
+      assessmentResponseID
       campaignID
       campaignTargetID
       context
@@ -91,19 +101,191 @@ query GetCampaignWorkflowStatus($campaignId: ID!) {
       definitionSnapshot
       displayID
       evidenceID
+      findingID
       id
       identityHolderID
+      integrationID
       internalPolicyID
       lastEvaluatedAt
       ownerID
       platformID
       procedureID
+      remediationID
+      riskID
       state
       subcontrolID
       tags
+      taskID
       updatedAt
       updatedBy
       updatedByImpersonator
+      vulnerabilityID
+      workflowDefinitionID
+      workflowProposalID
+    }
+  }
+}
+
+query GetAssessmentWorkflowTimeline($assessmentId: ID!, $first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [WorkflowEventOrder!], $where: WorkflowEventWhereInput, $includeEmitFailures: Boolean) {
+  assessment(id: $assessmentId) {
+    id
+    workflowTimeline(
+      first: $first
+      last: $last
+      after: $after
+      before: $before
+      orderBy: $orderBy
+      where: $where
+      includeEmitFailures: $includeEmitFailures
+    ) {
+      totalCount
+      pageInfo {
+        startCursor
+        endCursor
+        hasPreviousPage
+        hasNextPage
+      }
+      edges {
+        node {
+          createdAt
+          createdBy
+          displayID
+          eventType
+          id
+          ownerID
+          payload
+          tags
+          updatedAt
+          updatedBy
+          updatedByImpersonator
+          workflowInstanceID
+        }
+      }
+    }
+  }
+}
+
+query GetAssessmentResponseWorkflowStatus($assessmentResponseId: ID!) {
+  assessmentResponse(id: $assessmentResponseId) {
+    id
+    hasPendingWorkflow
+    hasWorkflowHistory
+    activeWorkflowInstances {
+      actionPlanID
+      assessmentID
+      assessmentResponseID
+      campaignID
+      campaignTargetID
+      context
+      controlID
+      createdAt
+      createdBy
+      currentActionIndex
+      definitionSnapshot
+      displayID
+      evidenceID
+      findingID
+      id
+      identityHolderID
+      integrationID
+      internalPolicyID
+      lastEvaluatedAt
+      ownerID
+      platformID
+      procedureID
+      remediationID
+      riskID
+      state
+      subcontrolID
+      tags
+      taskID
+      updatedAt
+      updatedBy
+      updatedByImpersonator
+      vulnerabilityID
+      workflowDefinitionID
+      workflowProposalID
+    }
+  }
+}
+
+query GetAssessmentResponseWorkflowTimeline($assessmentResponseId: ID!, $first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [WorkflowEventOrder!], $where: WorkflowEventWhereInput, $includeEmitFailures: Boolean) {
+  assessmentResponse(id: $assessmentResponseId) {
+    id
+    workflowTimeline(
+      first: $first
+      last: $last
+      after: $after
+      before: $before
+      orderBy: $orderBy
+      where: $where
+      includeEmitFailures: $includeEmitFailures
+    ) {
+      totalCount
+      pageInfo {
+        startCursor
+        endCursor
+        hasPreviousPage
+        hasNextPage
+      }
+      edges {
+        node {
+          createdAt
+          createdBy
+          displayID
+          eventType
+          id
+          ownerID
+          payload
+          tags
+          updatedAt
+          updatedBy
+          updatedByImpersonator
+          workflowInstanceID
+        }
+      }
+    }
+  }
+}
+
+query GetCampaignWorkflowStatus($campaignId: ID!) {
+  campaign(id: $campaignId) {
+    id
+    hasPendingWorkflow
+    hasWorkflowHistory
+    activeWorkflowInstances {
+      actionPlanID
+      assessmentID
+      assessmentResponseID
+      campaignID
+      campaignTargetID
+      context
+      controlID
+      createdAt
+      createdBy
+      currentActionIndex
+      definitionSnapshot
+      displayID
+      evidenceID
+      findingID
+      id
+      identityHolderID
+      integrationID
+      internalPolicyID
+      lastEvaluatedAt
+      ownerID
+      platformID
+      procedureID
+      remediationID
+      riskID
+      state
+      subcontrolID
+      tags
+      taskID
+      updatedAt
+      updatedBy
+      updatedByImpersonator
+      vulnerabilityID
       workflowDefinitionID
       workflowProposalID
     }
@@ -156,6 +338,8 @@ query GetCampaignTargetWorkflowStatus($campaignTargetId: ID!) {
     hasWorkflowHistory
     activeWorkflowInstances {
       actionPlanID
+      assessmentID
+      assessmentResponseID
       campaignID
       campaignTargetID
       context
@@ -166,19 +350,25 @@ query GetCampaignTargetWorkflowStatus($campaignTargetId: ID!) {
       definitionSnapshot
       displayID
       evidenceID
+      findingID
       id
       identityHolderID
+      integrationID
       internalPolicyID
       lastEvaluatedAt
       ownerID
       platformID
       procedureID
+      remediationID
+      riskID
       state
       subcontrolID
       tags
+      taskID
       updatedAt
       updatedBy
       updatedByImpersonator
+      vulnerabilityID
       workflowDefinitionID
       workflowProposalID
     }
@@ -231,6 +421,8 @@ query GetControlWorkflowStatus($controlId: ID!) {
     hasWorkflowHistory
     activeWorkflowInstances {
       actionPlanID
+      assessmentID
+      assessmentResponseID
       campaignID
       campaignTargetID
       context
@@ -241,19 +433,25 @@ query GetControlWorkflowStatus($controlId: ID!) {
       definitionSnapshot
       displayID
       evidenceID
+      findingID
       id
       identityHolderID
+      integrationID
       internalPolicyID
       lastEvaluatedAt
       ownerID
       platformID
       procedureID
+      remediationID
+      riskID
       state
       subcontrolID
       tags
+      taskID
       updatedAt
       updatedBy
       updatedByImpersonator
+      vulnerabilityID
       workflowDefinitionID
       workflowProposalID
     }
@@ -306,6 +504,8 @@ query GetEvidenceWorkflowStatus($evidenceId: ID!) {
     hasWorkflowHistory
     activeWorkflowInstances {
       actionPlanID
+      assessmentID
+      assessmentResponseID
       campaignID
       campaignTargetID
       context
@@ -316,19 +516,25 @@ query GetEvidenceWorkflowStatus($evidenceId: ID!) {
       definitionSnapshot
       displayID
       evidenceID
+      findingID
       id
       identityHolderID
+      integrationID
       internalPolicyID
       lastEvaluatedAt
       ownerID
       platformID
       procedureID
+      remediationID
+      riskID
       state
       subcontrolID
       tags
+      taskID
       updatedAt
       updatedBy
       updatedByImpersonator
+      vulnerabilityID
       workflowDefinitionID
       workflowProposalID
     }
@@ -374,13 +580,15 @@ query GetEvidenceWorkflowTimeline($evidenceId: ID!, $first: Int, $last: Int, $af
   }
 }
 
-query GetIdentityHolderWorkflowStatus($identityHolderId: ID!) {
-  identityHolder(id: $identityHolderId) {
+query GetFindingWorkflowStatus($findingId: ID!) {
+  finding(id: $findingId) {
     id
     hasPendingWorkflow
     hasWorkflowHistory
     activeWorkflowInstances {
       actionPlanID
+      assessmentID
+      assessmentResponseID
       campaignID
       campaignTargetID
       context
@@ -391,19 +599,108 @@ query GetIdentityHolderWorkflowStatus($identityHolderId: ID!) {
       definitionSnapshot
       displayID
       evidenceID
+      findingID
       id
       identityHolderID
+      integrationID
       internalPolicyID
       lastEvaluatedAt
       ownerID
       platformID
       procedureID
+      remediationID
+      riskID
       state
       subcontrolID
       tags
+      taskID
       updatedAt
       updatedBy
       updatedByImpersonator
+      vulnerabilityID
+      workflowDefinitionID
+      workflowProposalID
+    }
+  }
+}
+
+query GetFindingWorkflowTimeline($findingId: ID!, $first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [WorkflowEventOrder!], $where: WorkflowEventWhereInput, $includeEmitFailures: Boolean) {
+  finding(id: $findingId) {
+    id
+    workflowTimeline(
+      first: $first
+      last: $last
+      after: $after
+      before: $before
+      orderBy: $orderBy
+      where: $where
+      includeEmitFailures: $includeEmitFailures
+    ) {
+      totalCount
+      pageInfo {
+        startCursor
+        endCursor
+        hasPreviousPage
+        hasNextPage
+      }
+      edges {
+        node {
+          createdAt
+          createdBy
+          displayID
+          eventType
+          id
+          ownerID
+          payload
+          tags
+          updatedAt
+          updatedBy
+          updatedByImpersonator
+          workflowInstanceID
+        }
+      }
+    }
+  }
+}
+
+query GetIdentityHolderWorkflowStatus($identityHolderId: ID!) {
+  identityHolder(id: $identityHolderId) {
+    id
+    hasPendingWorkflow
+    hasWorkflowHistory
+    activeWorkflowInstances {
+      actionPlanID
+      assessmentID
+      assessmentResponseID
+      campaignID
+      campaignTargetID
+      context
+      controlID
+      createdAt
+      createdBy
+      currentActionIndex
+      definitionSnapshot
+      displayID
+      evidenceID
+      findingID
+      id
+      identityHolderID
+      integrationID
+      internalPolicyID
+      lastEvaluatedAt
+      ownerID
+      platformID
+      procedureID
+      remediationID
+      riskID
+      state
+      subcontrolID
+      tags
+      taskID
+      updatedAt
+      updatedBy
+      updatedByImpersonator
+      vulnerabilityID
       workflowDefinitionID
       workflowProposalID
     }
@@ -456,6 +753,8 @@ query GetInternalPolicyWorkflowStatus($internalPolicyId: ID!) {
     hasWorkflowHistory
     activeWorkflowInstances {
       actionPlanID
+      assessmentID
+      assessmentResponseID
       campaignID
       campaignTargetID
       context
@@ -466,19 +765,25 @@ query GetInternalPolicyWorkflowStatus($internalPolicyId: ID!) {
       definitionSnapshot
       displayID
       evidenceID
+      findingID
       id
       identityHolderID
+      integrationID
       internalPolicyID
       lastEvaluatedAt
       ownerID
       platformID
       procedureID
+      remediationID
+      riskID
       state
       subcontrolID
       tags
+      taskID
       updatedAt
       updatedBy
       updatedByImpersonator
+      vulnerabilityID
       workflowDefinitionID
       workflowProposalID
     }
@@ -531,6 +836,8 @@ query GetPlatformWorkflowStatus($platformId: ID!) {
     hasWorkflowHistory
     activeWorkflowInstances {
       actionPlanID
+      assessmentID
+      assessmentResponseID
       campaignID
       campaignTargetID
       context
@@ -541,19 +848,25 @@ query GetPlatformWorkflowStatus($platformId: ID!) {
       definitionSnapshot
       displayID
       evidenceID
+      findingID
       id
       identityHolderID
+      integrationID
       internalPolicyID
       lastEvaluatedAt
       ownerID
       platformID
       procedureID
+      remediationID
+      riskID
       state
       subcontrolID
       tags
+      taskID
       updatedAt
       updatedBy
       updatedByImpersonator
+      vulnerabilityID
       workflowDefinitionID
       workflowProposalID
     }
@@ -606,6 +919,8 @@ query GetProcedureWorkflowStatus($procedureId: ID!) {
     hasWorkflowHistory
     activeWorkflowInstances {
       actionPlanID
+      assessmentID
+      assessmentResponseID
       campaignID
       campaignTargetID
       context
@@ -616,19 +931,25 @@ query GetProcedureWorkflowStatus($procedureId: ID!) {
       definitionSnapshot
       displayID
       evidenceID
+      findingID
       id
       identityHolderID
+      integrationID
       internalPolicyID
       lastEvaluatedAt
       ownerID
       platformID
       procedureID
+      remediationID
+      riskID
       state
       subcontrolID
       tags
+      taskID
       updatedAt
       updatedBy
       updatedByImpersonator
+      vulnerabilityID
       workflowDefinitionID
       workflowProposalID
     }
@@ -674,13 +995,15 @@ query GetProcedureWorkflowTimeline($procedureId: ID!, $first: Int, $last: Int, $
   }
 }
 
-query GetSubcontrolWorkflowStatus($subcontrolId: ID!) {
-  subcontrol(id: $subcontrolId) {
+query GetRemediationWorkflowStatus($remediationId: ID!) {
+  remediation(id: $remediationId) {
     id
     hasPendingWorkflow
     hasWorkflowHistory
     activeWorkflowInstances {
       actionPlanID
+      assessmentID
+      assessmentResponseID
       campaignID
       campaignTargetID
       context
@@ -691,19 +1014,191 @@ query GetSubcontrolWorkflowStatus($subcontrolId: ID!) {
       definitionSnapshot
       displayID
       evidenceID
+      findingID
       id
       identityHolderID
+      integrationID
       internalPolicyID
       lastEvaluatedAt
       ownerID
       platformID
       procedureID
+      remediationID
+      riskID
       state
       subcontrolID
       tags
+      taskID
       updatedAt
       updatedBy
       updatedByImpersonator
+      vulnerabilityID
+      workflowDefinitionID
+      workflowProposalID
+    }
+  }
+}
+
+query GetRemediationWorkflowTimeline($remediationId: ID!, $first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [WorkflowEventOrder!], $where: WorkflowEventWhereInput, $includeEmitFailures: Boolean) {
+  remediation(id: $remediationId) {
+    id
+    workflowTimeline(
+      first: $first
+      last: $last
+      after: $after
+      before: $before
+      orderBy: $orderBy
+      where: $where
+      includeEmitFailures: $includeEmitFailures
+    ) {
+      totalCount
+      pageInfo {
+        startCursor
+        endCursor
+        hasPreviousPage
+        hasNextPage
+      }
+      edges {
+        node {
+          createdAt
+          createdBy
+          displayID
+          eventType
+          id
+          ownerID
+          payload
+          tags
+          updatedAt
+          updatedBy
+          updatedByImpersonator
+          workflowInstanceID
+        }
+      }
+    }
+  }
+}
+
+query GetRiskWorkflowStatus($riskId: ID!) {
+  risk(id: $riskId) {
+    id
+    hasPendingWorkflow
+    hasWorkflowHistory
+    activeWorkflowInstances {
+      actionPlanID
+      assessmentID
+      assessmentResponseID
+      campaignID
+      campaignTargetID
+      context
+      controlID
+      createdAt
+      createdBy
+      currentActionIndex
+      definitionSnapshot
+      displayID
+      evidenceID
+      findingID
+      id
+      identityHolderID
+      integrationID
+      internalPolicyID
+      lastEvaluatedAt
+      ownerID
+      platformID
+      procedureID
+      remediationID
+      riskID
+      state
+      subcontrolID
+      tags
+      taskID
+      updatedAt
+      updatedBy
+      updatedByImpersonator
+      vulnerabilityID
+      workflowDefinitionID
+      workflowProposalID
+    }
+  }
+}
+
+query GetRiskWorkflowTimeline($riskId: ID!, $first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [WorkflowEventOrder!], $where: WorkflowEventWhereInput, $includeEmitFailures: Boolean) {
+  risk(id: $riskId) {
+    id
+    workflowTimeline(
+      first: $first
+      last: $last
+      after: $after
+      before: $before
+      orderBy: $orderBy
+      where: $where
+      includeEmitFailures: $includeEmitFailures
+    ) {
+      totalCount
+      pageInfo {
+        startCursor
+        endCursor
+        hasPreviousPage
+        hasNextPage
+      }
+      edges {
+        node {
+          createdAt
+          createdBy
+          displayID
+          eventType
+          id
+          ownerID
+          payload
+          tags
+          updatedAt
+          updatedBy
+          updatedByImpersonator
+          workflowInstanceID
+        }
+      }
+    }
+  }
+}
+
+query GetSubcontrolWorkflowStatus($subcontrolId: ID!) {
+  subcontrol(id: $subcontrolId) {
+    id
+    hasPendingWorkflow
+    hasWorkflowHistory
+    activeWorkflowInstances {
+      actionPlanID
+      assessmentID
+      assessmentResponseID
+      campaignID
+      campaignTargetID
+      context
+      controlID
+      createdAt
+      createdBy
+      currentActionIndex
+      definitionSnapshot
+      displayID
+      evidenceID
+      findingID
+      id
+      identityHolderID
+      integrationID
+      internalPolicyID
+      lastEvaluatedAt
+      ownerID
+      platformID
+      procedureID
+      remediationID
+      riskID
+      state
+      subcontrolID
+      tags
+      taskID
+      updatedAt
+      updatedBy
+      updatedByImpersonator
+      vulnerabilityID
       workflowDefinitionID
       workflowProposalID
     }
@@ -712,6 +1207,172 @@ query GetSubcontrolWorkflowStatus($subcontrolId: ID!) {
 
 query GetSubcontrolWorkflowTimeline($subcontrolId: ID!, $first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [WorkflowEventOrder!], $where: WorkflowEventWhereInput, $includeEmitFailures: Boolean) {
   subcontrol(id: $subcontrolId) {
+    id
+    workflowTimeline(
+      first: $first
+      last: $last
+      after: $after
+      before: $before
+      orderBy: $orderBy
+      where: $where
+      includeEmitFailures: $includeEmitFailures
+    ) {
+      totalCount
+      pageInfo {
+        startCursor
+        endCursor
+        hasPreviousPage
+        hasNextPage
+      }
+      edges {
+        node {
+          createdAt
+          createdBy
+          displayID
+          eventType
+          id
+          ownerID
+          payload
+          tags
+          updatedAt
+          updatedBy
+          updatedByImpersonator
+          workflowInstanceID
+        }
+      }
+    }
+  }
+}
+
+query GetTaskWorkflowStatus($taskId: ID!) {
+  task(id: $taskId) {
+    id
+    hasPendingWorkflow
+    hasWorkflowHistory
+    activeWorkflowInstances {
+      actionPlanID
+      assessmentID
+      assessmentResponseID
+      campaignID
+      campaignTargetID
+      context
+      controlID
+      createdAt
+      createdBy
+      currentActionIndex
+      definitionSnapshot
+      displayID
+      evidenceID
+      findingID
+      id
+      identityHolderID
+      integrationID
+      internalPolicyID
+      lastEvaluatedAt
+      ownerID
+      platformID
+      procedureID
+      remediationID
+      riskID
+      state
+      subcontrolID
+      tags
+      taskID
+      updatedAt
+      updatedBy
+      updatedByImpersonator
+      vulnerabilityID
+      workflowDefinitionID
+      workflowProposalID
+    }
+  }
+}
+
+query GetTaskWorkflowTimeline($taskId: ID!, $first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [WorkflowEventOrder!], $where: WorkflowEventWhereInput, $includeEmitFailures: Boolean) {
+  task(id: $taskId) {
+    id
+    workflowTimeline(
+      first: $first
+      last: $last
+      after: $after
+      before: $before
+      orderBy: $orderBy
+      where: $where
+      includeEmitFailures: $includeEmitFailures
+    ) {
+      totalCount
+      pageInfo {
+        startCursor
+        endCursor
+        hasPreviousPage
+        hasNextPage
+      }
+      edges {
+        node {
+          createdAt
+          createdBy
+          displayID
+          eventType
+          id
+          ownerID
+          payload
+          tags
+          updatedAt
+          updatedBy
+          updatedByImpersonator
+          workflowInstanceID
+        }
+      }
+    }
+  }
+}
+
+query GetVulnerabilityWorkflowStatus($vulnerabilityId: ID!) {
+  vulnerability(id: $vulnerabilityId) {
+    id
+    hasPendingWorkflow
+    hasWorkflowHistory
+    activeWorkflowInstances {
+      actionPlanID
+      assessmentID
+      assessmentResponseID
+      campaignID
+      campaignTargetID
+      context
+      controlID
+      createdAt
+      createdBy
+      currentActionIndex
+      definitionSnapshot
+      displayID
+      evidenceID
+      findingID
+      id
+      identityHolderID
+      integrationID
+      internalPolicyID
+      lastEvaluatedAt
+      ownerID
+      platformID
+      procedureID
+      remediationID
+      riskID
+      state
+      subcontrolID
+      tags
+      taskID
+      updatedAt
+      updatedBy
+      updatedByImpersonator
+      vulnerabilityID
+      workflowDefinitionID
+      workflowProposalID
+    }
+  }
+}
+
+query GetVulnerabilityWorkflowTimeline($vulnerabilityId: ID!, $first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [WorkflowEventOrder!], $where: WorkflowEventWhereInput, $includeEmitFailures: Boolean) {
+  vulnerability(id: $vulnerabilityId) {
     id
     workflowTimeline(
       first: $first

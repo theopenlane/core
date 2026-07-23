@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -155,6 +156,46 @@ func (_u *ScanUpdate) AppendTags(v []string) *ScanUpdate {
 // ClearTags clears the value of the "tags" field.
 func (_u *ScanUpdate) ClearTags() *ScanUpdate {
 	_u.mutation.ClearTags()
+	return _u
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *ScanUpdate) SetInternalNotes(v string) *ScanUpdate {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *ScanUpdate) SetNillableInternalNotes(v *string) *ScanUpdate {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *ScanUpdate) ClearInternalNotes() *ScanUpdate {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *ScanUpdate) SetSystemInternalID(v string) *ScanUpdate {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *ScanUpdate) SetNillableSystemInternalID(v *string) *ScanUpdate {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *ScanUpdate) ClearSystemInternalID() *ScanUpdate {
+	_u.mutation.ClearSystemInternalID()
 	return _u
 }
 
@@ -538,21 +579,21 @@ func (_u *ScanUpdate) ClearGeneratedByPlatformID() *ScanUpdate {
 	return _u
 }
 
-// SetVulnerabilityIds sets the "vulnerability_ids" field.
-func (_u *ScanUpdate) SetVulnerabilityIds(v []string) *ScanUpdate {
-	_u.mutation.SetVulnerabilityIds(v)
+// SetDiscoveredVulnerabilityIds sets the "discovered_vulnerability_ids" field.
+func (_u *ScanUpdate) SetDiscoveredVulnerabilityIds(v []string) *ScanUpdate {
+	_u.mutation.SetDiscoveredVulnerabilityIds(v)
 	return _u
 }
 
-// AppendVulnerabilityIds appends value to the "vulnerability_ids" field.
-func (_u *ScanUpdate) AppendVulnerabilityIds(v []string) *ScanUpdate {
-	_u.mutation.AppendVulnerabilityIds(v)
+// AppendDiscoveredVulnerabilityIds appends value to the "discovered_vulnerability_ids" field.
+func (_u *ScanUpdate) AppendDiscoveredVulnerabilityIds(v []string) *ScanUpdate {
+	_u.mutation.AppendDiscoveredVulnerabilityIds(v)
 	return _u
 }
 
-// ClearVulnerabilityIds clears the value of the "vulnerability_ids" field.
-func (_u *ScanUpdate) ClearVulnerabilityIds() *ScanUpdate {
-	_u.mutation.ClearVulnerabilityIds()
+// ClearDiscoveredVulnerabilityIds clears the value of the "discovered_vulnerability_ids" field.
+func (_u *ScanUpdate) ClearDiscoveredVulnerabilityIds() *ScanUpdate {
+	_u.mutation.ClearDiscoveredVulnerabilityIds()
 	return _u
 }
 
@@ -793,6 +834,21 @@ func (_u *ScanUpdate) AddSubcontrols(v ...*Subcontrol) *ScanUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.AddSubcontrolIDs(ids...)
+}
+
+// AddFindingIDs adds the "findings" edge to the Finding entity by IDs.
+func (_u *ScanUpdate) AddFindingIDs(ids ...string) *ScanUpdate {
+	_u.mutation.AddFindingIDs(ids...)
+	return _u
+}
+
+// AddFindings adds the "findings" edges to the Finding entity.
+func (_u *ScanUpdate) AddFindings(v ...*Finding) *ScanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFindingIDs(ids...)
 }
 
 // SetGeneratedByPlatform sets the "generated_by_platform" edge to the Platform entity.
@@ -1124,6 +1180,27 @@ func (_u *ScanUpdate) RemoveSubcontrols(v ...*Subcontrol) *ScanUpdate {
 	return _u.RemoveSubcontrolIDs(ids...)
 }
 
+// ClearFindings clears all "findings" edges to the Finding entity.
+func (_u *ScanUpdate) ClearFindings() *ScanUpdate {
+	_u.mutation.ClearFindings()
+	return _u
+}
+
+// RemoveFindingIDs removes the "findings" edge to Finding entities by IDs.
+func (_u *ScanUpdate) RemoveFindingIDs(ids ...string) *ScanUpdate {
+	_u.mutation.RemoveFindingIDs(ids...)
+	return _u
+}
+
+// RemoveFindings removes "findings" edges to Finding entities.
+func (_u *ScanUpdate) RemoveFindings(v ...*Finding) *ScanUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFindingIDs(ids...)
+}
+
 // ClearGeneratedByPlatform clears the "generated_by_platform" edge to the Platform entity.
 func (_u *ScanUpdate) ClearGeneratedByPlatform() *ScanUpdate {
 	_u.mutation.ClearGeneratedByPlatform()
@@ -1274,6 +1351,21 @@ func (_u *ScanUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(scan.FieldTags, field.TypeJSON)
 	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(scan.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(scan.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(scan.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(scan.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(scan.FieldSystemInternalID, field.TypeString)
+	}
 	if value, ok := _u.mutation.ReviewedBy(); ok {
 		_spec.SetField(scan.FieldReviewedBy, field.TypeString, value)
 	}
@@ -1334,16 +1426,16 @@ func (_u *ScanUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.PerformedByCleared() {
 		_spec.ClearField(scan.FieldPerformedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.VulnerabilityIds(); ok {
-		_spec.SetField(scan.FieldVulnerabilityIds, field.TypeJSON, value)
+	if value, ok := _u.mutation.DiscoveredVulnerabilityIds(); ok {
+		_spec.SetField(scan.FieldDiscoveredVulnerabilityIds, field.TypeJSON, value)
 	}
-	if value, ok := _u.mutation.AppendedVulnerabilityIds(); ok {
+	if value, ok := _u.mutation.AppendedDiscoveredVulnerabilityIds(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, scan.FieldVulnerabilityIds, value)
+			sqljson.Append(u, scan.FieldDiscoveredVulnerabilityIds, value)
 		})
 	}
-	if _u.mutation.VulnerabilityIdsCleared() {
-		_spec.ClearField(scan.FieldVulnerabilityIds, field.TypeJSON)
+	if _u.mutation.DiscoveredVulnerabilityIdsCleared() {
+		_spec.ClearField(scan.FieldDiscoveredVulnerabilityIds, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(scan.FieldStatus, field.TypeEnum, value)
@@ -1680,30 +1772,30 @@ func (_u *ScanUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   scan.EntitiesTable,
-			Columns: []string{scan.EntitiesColumn},
+			Columns: scan.EntitiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.ScanEntities
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !_u.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   scan.EntitiesTable,
-			Columns: []string{scan.EntitiesColumn},
+			Columns: scan.EntitiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.ScanEntities
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1711,16 +1803,16 @@ func (_u *ScanUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if nodes := _u.mutation.EntitiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   scan.EntitiesTable,
-			Columns: []string{scan.EntitiesColumn},
+			Columns: scan.EntitiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.ScanEntities
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2158,6 +2250,54 @@ func (_u *ScanUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.FindingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.FindingsTable,
+			Columns: scan.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingScans
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFindingsIDs(); len(nodes) > 0 && !_u.mutation.FindingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.FindingsTable,
+			Columns: scan.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingScans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FindingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.FindingsTable,
+			Columns: scan.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingScans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.GeneratedByPlatformCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -2382,6 +2522,46 @@ func (_u *ScanUpdateOne) AppendTags(v []string) *ScanUpdateOne {
 // ClearTags clears the value of the "tags" field.
 func (_u *ScanUpdateOne) ClearTags() *ScanUpdateOne {
 	_u.mutation.ClearTags()
+	return _u
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *ScanUpdateOne) SetInternalNotes(v string) *ScanUpdateOne {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *ScanUpdateOne) SetNillableInternalNotes(v *string) *ScanUpdateOne {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *ScanUpdateOne) ClearInternalNotes() *ScanUpdateOne {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *ScanUpdateOne) SetSystemInternalID(v string) *ScanUpdateOne {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *ScanUpdateOne) SetNillableSystemInternalID(v *string) *ScanUpdateOne {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *ScanUpdateOne) ClearSystemInternalID() *ScanUpdateOne {
+	_u.mutation.ClearSystemInternalID()
 	return _u
 }
 
@@ -2765,21 +2945,21 @@ func (_u *ScanUpdateOne) ClearGeneratedByPlatformID() *ScanUpdateOne {
 	return _u
 }
 
-// SetVulnerabilityIds sets the "vulnerability_ids" field.
-func (_u *ScanUpdateOne) SetVulnerabilityIds(v []string) *ScanUpdateOne {
-	_u.mutation.SetVulnerabilityIds(v)
+// SetDiscoveredVulnerabilityIds sets the "discovered_vulnerability_ids" field.
+func (_u *ScanUpdateOne) SetDiscoveredVulnerabilityIds(v []string) *ScanUpdateOne {
+	_u.mutation.SetDiscoveredVulnerabilityIds(v)
 	return _u
 }
 
-// AppendVulnerabilityIds appends value to the "vulnerability_ids" field.
-func (_u *ScanUpdateOne) AppendVulnerabilityIds(v []string) *ScanUpdateOne {
-	_u.mutation.AppendVulnerabilityIds(v)
+// AppendDiscoveredVulnerabilityIds appends value to the "discovered_vulnerability_ids" field.
+func (_u *ScanUpdateOne) AppendDiscoveredVulnerabilityIds(v []string) *ScanUpdateOne {
+	_u.mutation.AppendDiscoveredVulnerabilityIds(v)
 	return _u
 }
 
-// ClearVulnerabilityIds clears the value of the "vulnerability_ids" field.
-func (_u *ScanUpdateOne) ClearVulnerabilityIds() *ScanUpdateOne {
-	_u.mutation.ClearVulnerabilityIds()
+// ClearDiscoveredVulnerabilityIds clears the value of the "discovered_vulnerability_ids" field.
+func (_u *ScanUpdateOne) ClearDiscoveredVulnerabilityIds() *ScanUpdateOne {
+	_u.mutation.ClearDiscoveredVulnerabilityIds()
 	return _u
 }
 
@@ -3020,6 +3200,21 @@ func (_u *ScanUpdateOne) AddSubcontrols(v ...*Subcontrol) *ScanUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.AddSubcontrolIDs(ids...)
+}
+
+// AddFindingIDs adds the "findings" edge to the Finding entity by IDs.
+func (_u *ScanUpdateOne) AddFindingIDs(ids ...string) *ScanUpdateOne {
+	_u.mutation.AddFindingIDs(ids...)
+	return _u
+}
+
+// AddFindings adds the "findings" edges to the Finding entity.
+func (_u *ScanUpdateOne) AddFindings(v ...*Finding) *ScanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFindingIDs(ids...)
 }
 
 // SetGeneratedByPlatform sets the "generated_by_platform" edge to the Platform entity.
@@ -3351,6 +3546,27 @@ func (_u *ScanUpdateOne) RemoveSubcontrols(v ...*Subcontrol) *ScanUpdateOne {
 	return _u.RemoveSubcontrolIDs(ids...)
 }
 
+// ClearFindings clears all "findings" edges to the Finding entity.
+func (_u *ScanUpdateOne) ClearFindings() *ScanUpdateOne {
+	_u.mutation.ClearFindings()
+	return _u
+}
+
+// RemoveFindingIDs removes the "findings" edge to Finding entities by IDs.
+func (_u *ScanUpdateOne) RemoveFindingIDs(ids ...string) *ScanUpdateOne {
+	_u.mutation.RemoveFindingIDs(ids...)
+	return _u
+}
+
+// RemoveFindings removes "findings" edges to Finding entities.
+func (_u *ScanUpdateOne) RemoveFindings(v ...*Finding) *ScanUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFindingIDs(ids...)
+}
+
 // ClearGeneratedByPlatform clears the "generated_by_platform" edge to the Platform entity.
 func (_u *ScanUpdateOne) ClearGeneratedByPlatform() *ScanUpdateOne {
 	_u.mutation.ClearGeneratedByPlatform()
@@ -3531,6 +3747,21 @@ func (_u *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) {
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(scan.FieldTags, field.TypeJSON)
 	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(scan.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(scan.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(scan.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(scan.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(scan.FieldSystemInternalID, field.TypeString)
+	}
 	if value, ok := _u.mutation.ReviewedBy(); ok {
 		_spec.SetField(scan.FieldReviewedBy, field.TypeString, value)
 	}
@@ -3591,16 +3822,16 @@ func (_u *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) {
 	if _u.mutation.PerformedByCleared() {
 		_spec.ClearField(scan.FieldPerformedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.VulnerabilityIds(); ok {
-		_spec.SetField(scan.FieldVulnerabilityIds, field.TypeJSON, value)
+	if value, ok := _u.mutation.DiscoveredVulnerabilityIds(); ok {
+		_spec.SetField(scan.FieldDiscoveredVulnerabilityIds, field.TypeJSON, value)
 	}
-	if value, ok := _u.mutation.AppendedVulnerabilityIds(); ok {
+	if value, ok := _u.mutation.AppendedDiscoveredVulnerabilityIds(); ok {
 		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, scan.FieldVulnerabilityIds, value)
+			sqljson.Append(u, scan.FieldDiscoveredVulnerabilityIds, value)
 		})
 	}
-	if _u.mutation.VulnerabilityIdsCleared() {
-		_spec.ClearField(scan.FieldVulnerabilityIds, field.TypeJSON)
+	if _u.mutation.DiscoveredVulnerabilityIdsCleared() {
+		_spec.ClearField(scan.FieldDiscoveredVulnerabilityIds, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(scan.FieldStatus, field.TypeEnum, value)
@@ -3937,30 +4168,30 @@ func (_u *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) {
 	}
 	if _u.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   scan.EntitiesTable,
-			Columns: []string{scan.EntitiesColumn},
+			Columns: scan.EntitiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.ScanEntities
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !_u.mutation.EntitiesCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   scan.EntitiesTable,
-			Columns: []string{scan.EntitiesColumn},
+			Columns: scan.EntitiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.ScanEntities
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3968,16 +4199,16 @@ func (_u *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) {
 	}
 	if nodes := _u.mutation.EntitiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   scan.EntitiesTable,
-			Columns: []string{scan.EntitiesColumn},
+			Columns: scan.EntitiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Entity
+		edge.Schema = _u.schemaConfig.ScanEntities
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4410,6 +4641,54 @@ func (_u *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.SubcontrolScans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FindingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.FindingsTable,
+			Columns: scan.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingScans
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFindingsIDs(); len(nodes) > 0 && !_u.mutation.FindingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.FindingsTable,
+			Columns: scan.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingScans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FindingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   scan.FindingsTable,
+			Columns: scan.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingScans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

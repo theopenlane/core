@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/pkg/logx"
@@ -38,6 +39,7 @@ type TrustCenterNDARequestQuery struct {
 	withTrustCenterDocs      *TrustCenterDocQuery
 	withDocument             *DocumentDataQuery
 	withFile                 *FileQuery
+	withApprovedByUser       *UserQuery
 	loadTotal                []func(context.Context, []*TrustCenterNDARequest) error
 	modifiers                []func(*sql.Selector)
 	withNamedBlockedGroups   map[string]*GroupQuery
@@ -222,6 +224,31 @@ func (_q *TrustCenterNDARequestQuery) QueryFile() *FileQuery {
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.TrustCenterNDARequest
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryApprovedByUser chains the current query on the "approved_by_user" edge.
+func (_q *TrustCenterNDARequestQuery) QueryApprovedByUser() *UserQuery {
+	query := (&UserClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenterndarequest.Table, trustcenterndarequest.FieldID, selector),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, trustcenterndarequest.ApprovedByUserTable, trustcenterndarequest.ApprovedByUserColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.TrustCenterNDARequest
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -427,6 +454,7 @@ func (_q *TrustCenterNDARequestQuery) Clone() *TrustCenterNDARequestQuery {
 		withTrustCenterDocs: _q.withTrustCenterDocs.Clone(),
 		withDocument:        _q.withDocument.Clone(),
 		withFile:            _q.withFile.Clone(),
+		withApprovedByUser:  _q.withApprovedByUser.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -497,6 +525,17 @@ func (_q *TrustCenterNDARequestQuery) WithFile(opts ...func(*FileQuery)) *TrustC
 		opt(query)
 	}
 	_q.withFile = query
+	return _q
+}
+
+// WithApprovedByUser tells the query-builder to eager-load the nodes that are connected to
+// the "approved_by_user" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TrustCenterNDARequestQuery) WithApprovedByUser(opts ...func(*UserQuery)) *TrustCenterNDARequestQuery {
+	query := (&UserClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withApprovedByUser = query
 	return _q
 }
 
@@ -584,13 +623,14 @@ func (_q *TrustCenterNDARequestQuery) sqlAll(ctx context.Context, hooks ...query
 	var (
 		nodes       = []*TrustCenterNDARequest{}
 		_spec       = _q.querySpec()
-		loadedTypes = [6]bool{
+		loadedTypes = [7]bool{
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
 			_q.withTrustCenter != nil,
 			_q.withTrustCenterDocs != nil,
 			_q.withDocument != nil,
 			_q.withFile != nil,
+			_q.withApprovedByUser != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -654,6 +694,12 @@ func (_q *TrustCenterNDARequestQuery) sqlAll(ctx context.Context, hooks ...query
 	if query := _q.withFile; query != nil {
 		if err := _q.loadFile(ctx, query, nodes, nil,
 			func(n *TrustCenterNDARequest, e *File) { n.Edges.File = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withApprovedByUser; query != nil {
+		if err := _q.loadApprovedByUser(ctx, query, nodes, nil,
+			func(n *TrustCenterNDARequest, e *User) { n.Edges.ApprovedByUser = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -872,6 +918,38 @@ func (_q *TrustCenterNDARequestQuery) loadFile(ctx context.Context, query *FileQ
 	}
 	return nil
 }
+func (_q *TrustCenterNDARequestQuery) loadApprovedByUser(ctx context.Context, query *UserQuery, nodes []*TrustCenterNDARequest, init func(*TrustCenterNDARequest), assign func(*TrustCenterNDARequest, *User)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*TrustCenterNDARequest)
+	for i := range nodes {
+		if nodes[i].ApprovedByUserID == nil {
+			continue
+		}
+		fk := *nodes[i].ApprovedByUserID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(user.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "approved_by_user_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 
 func (_q *TrustCenterNDARequestQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -911,6 +989,9 @@ func (_q *TrustCenterNDARequestQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withFile != nil {
 			_spec.Node.AddColumnOnce(trustcenterndarequest.FieldFileID)
+		}
+		if _q.withApprovedByUser != nil {
+			_spec.Node.AddColumnOnce(trustcenterndarequest.FieldApprovedByUserID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {

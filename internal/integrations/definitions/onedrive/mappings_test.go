@@ -10,8 +10,18 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
+// testMappings builds the OneDrive definition and returns its registered mappings
+func testMappings(t *testing.T) []types.MappingRegistration {
+	t.Helper()
+
+	def, err := Builder(Config{})()
+	assert.NilError(t, err)
+
+	return def.Mappings
+}
+
 func TestMappingExpressionsValid(t *testing.T) {
-	for _, m := range oneDriveMappings() {
+	for _, m := range testMappings(t) {
 		name := m.Schema
 		if m.Variant != "" {
 			name += "/" + m.Variant
@@ -28,7 +38,7 @@ func TestMappingExpressionsValid(t *testing.T) {
 }
 
 func TestInternalPolicyMappingWithWebURL(t *testing.T) {
-	spec := mappingtest.MappingSpec(t, oneDriveMappings(), "InternalPolicy")
+	spec := mappingtest.MappingSpec(t, testMappings(t), "InternalPolicy")
 
 	payload := mappingtest.LoadExample(t, "examples", "document_with_weburl.json")
 
@@ -41,14 +51,14 @@ func TestInternalPolicyMappingWithWebURL(t *testing.T) {
 	mapped := mappingtest.EvalMap(t, spec, envelope)
 
 	assert.Equal(t, "Security Policy.docx", mapped["name"])
-	assert.Equal(t, "01BYE5RZ6QN3ZWBTUFOFD3GSPGOHDJD36K", mapped["externalFileID"])
+	assert.Equal(t, "01BYE5RZ6QN3ZWBTUFOFD3GSPGOHDJD36K", mapped["external_file_id"])
 	assert.Equal(t, "https://contoso.sharepoint.com/sites/policies/Shared%20Documents/Security%20Policy.docx", mapped["url"])
-	assert.Equal(t, "INTEGRATION", mapped["managementMode"])
+	assert.Equal(t, "INTEGRATION", mapped["management_mode"])
 	assert.Equal(t, "DRAFT", mapped["status"])
 }
 
 func TestInternalPolicyMappingWithoutWebURL(t *testing.T) {
-	spec := mappingtest.MappingSpec(t, oneDriveMappings(), "InternalPolicy")
+	spec := mappingtest.MappingSpec(t, testMappings(t), "InternalPolicy")
 
 	payload := mappingtest.LoadExample(t, "examples", "document_without_weburl.json")
 
@@ -61,8 +71,8 @@ func TestInternalPolicyMappingWithoutWebURL(t *testing.T) {
 	mapped := mappingtest.EvalMap(t, spec, envelope)
 
 	assert.Equal(t, "Security Policy.docx", mapped["name"])
-	assert.Equal(t, "01BYE5RZ6QN3ZWBTUFOFD3GSPGOHDJD36K", mapped["externalFileID"])
+	assert.Equal(t, "01BYE5RZ6QN3ZWBTUFOFD3GSPGOHDJD36K", mapped["external_file_id"])
 	assert.Equal(t, nil, mapped["url"])
-	assert.Equal(t, "INTEGRATION", mapped["managementMode"])
+	assert.Equal(t, "INTEGRATION", mapped["management_mode"])
 	assert.Equal(t, "DRAFT", mapped["status"])
 }

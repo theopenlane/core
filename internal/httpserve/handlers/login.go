@@ -23,15 +23,13 @@ import (
 
 // LoginHandler validates the user credentials and returns a valid cookie
 // this handler only supports username password login
-func (h *Handler) LoginHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleLoginSuccessRequest, models.ExampleLoginSuccessResponse, openapi.Registry)
+func (h *Handler) LoginHandler(ctx echo.Context) error {
+	req, err := BindAndValidate[models.LoginRequest](ctx)
 	if err != nil {
 		metrics.RecordLogin(false)
-		return h.InvalidInput(ctx, err, openapi)
-	}
+		logx.FromContext(ctx.Request().Context()).Warn().Err(err).Msg("invalid login request")
 
-	if isRegistrationContext(ctx) {
-		return nil
+		return h.InvalidInput(ctx, err)
 	}
 
 	reqCtx := ctx.Request().Context()
@@ -40,7 +38,7 @@ func (h *Handler) LoginHandler(ctx echo.Context, openapi *OpenAPIContext) error 
 	// before any database lookup so this email can never authenticate against a database user, and route
 	// it to the configuration backed support login (password factor plus second factor identity provider)
 	if h.SupportAccessConfig.Enabled && strings.EqualFold(req.Username, h.SupportAccessConfig.Email) {
-		return h.supportFirstFactor(ctx, openapi, req)
+		return h.supportFirstFactor(ctx, req)
 	}
 
 	// check user in the database, username == email and ensure only one record is returned
@@ -49,14 +47,14 @@ func (h *Handler) LoginHandler(ctx echo.Context, openapi *OpenAPIContext) error 
 		metrics.RecordLogin(false)
 		logx.FromContext(reqCtx).Info().Str("email", req.Username).Err(err).Msg("unable to find user by email")
 
-		return h.BadRequest(ctx, ErrLoginFailed, openapi)
+		return h.BadRequest(ctx, ErrLoginFailed)
 	}
 
 	if user.Edges.Setting.Status != enums.UserStatusActive {
 		metrics.RecordLogin(false)
 		logx.FromContext(reqCtx).Info().Str("email", req.Username).Msg("user not active")
 
-		return h.BadRequest(ctx, ErrLoginFailed, openapi)
+		return h.BadRequest(ctx, ErrLoginFailed)
 	}
 
 	allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
@@ -70,7 +68,7 @@ func (h *Handler) LoginHandler(ctx echo.Context, openapi *OpenAPIContext) error 
 		metrics.RecordLogin(false)
 		logx.FromContext(reqCtx).Info().Str("email", req.Username).Msg("no password set for user")
 
-		return h.BadRequest(ctx, ErrLoginFailed, openapi)
+		return h.BadRequest(ctx, ErrLoginFailed)
 	}
 
 	// verify the password is correct
@@ -79,14 +77,14 @@ func (h *Handler) LoginHandler(ctx echo.Context, openapi *OpenAPIContext) error 
 		metrics.RecordLogin(false)
 		logx.FromContext(reqCtx).Info().Str("email", req.Username).Msg("invalid password provided during login")
 
-		return h.BadRequest(ctx, ErrLoginFailed, openapi)
+		return h.BadRequest(ctx, ErrLoginFailed)
 	}
 
 	if !user.Edges.Setting.EmailConfirmed {
 		metrics.RecordLogin(false)
 		logx.FromContext(reqCtx).Info().Str("email", req.Username).Msg("user email not verified, unable to login")
 
-		return h.BadRequest(ctx, fmt.Errorf("%w: please check your email and verify your account", auth.ErrUnverifiedUser), openapi)
+		return h.BadRequest(ctx, fmt.Errorf("%w: please check your email and verify your account", auth.ErrUnverifiedUser))
 	}
 
 	// set context for remaining request based on logged in user
@@ -97,13 +95,13 @@ func (h *Handler) LoginHandler(ctx echo.Context, openapi *OpenAPIContext) error 
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to create new auth session")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	if err := h.updateUserLastSeen(userCtx, user.ID, enums.AuthProviderCredentials); err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to update last seen")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
 	// check if orgStatus is enforced, but user has not yet configured
@@ -117,7 +115,7 @@ func (h *Handler) LoginHandler(ctx echo.Context, openapi *OpenAPIContext) error 
 		}
 	}
 
-	out := models.LoginReply{
+	out := models.LoginResponse{
 		Reply:            rout.Reply{Success: true},
 		TFAEnabled:       user.Edges.Setting.IsTfaEnabled,
 		TFASetupRequired: tfaSetupRequired,
@@ -127,5 +125,5 @@ func (h *Handler) LoginHandler(ctx echo.Context, openapi *OpenAPIContext) error 
 
 	metrics.RecordLogin(true)
 
-	return h.Success(ctx, out, openapi)
+	return h.Success(ctx, out)
 }

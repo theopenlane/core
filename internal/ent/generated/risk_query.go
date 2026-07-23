@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
+	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/note"
@@ -33,6 +34,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/pkg/logx"
@@ -41,56 +44,62 @@ import (
 // RiskQuery is the builder for querying Risk entities.
 type RiskQuery struct {
 	config
-	ctx                       *QueryContext
-	order                     []risk.OrderOption
-	inters                    []Interceptor
-	predicates                []predicate.Risk
-	withOwner                 *OrganizationQuery
-	withBlockedGroups         *GroupQuery
-	withEditors               *GroupQuery
-	withViewers               *GroupQuery
-	withRiskKind              *CustomTypeEnumQuery
-	withRiskCategory          *CustomTypeEnumQuery
-	withEnvironment           *CustomTypeEnumQuery
-	withScope                 *CustomTypeEnumQuery
-	withControls              *ControlQuery
-	withSubcontrols           *SubcontrolQuery
-	withProcedures            *ProcedureQuery
-	withInternalPolicies      *InternalPolicyQuery
-	withPrograms              *ProgramQuery
-	withPlatforms             *PlatformQuery
-	withActionPlans           *ActionPlanQuery
-	withTasks                 *TaskQuery
-	withAssets                *AssetQuery
-	withEntities              *EntityQuery
-	withScans                 *ScanQuery
-	withStakeholder           *GroupQuery
-	withDelegate              *GroupQuery
-	withComments              *NoteQuery
-	withDiscussions           *DiscussionQuery
-	withReviews               *ReviewQuery
-	withRemediations          *RemediationQuery
-	withFKs                   bool
-	loadTotal                 []func(context.Context, []*Risk) error
-	modifiers                 []func(*sql.Selector)
-	withNamedBlockedGroups    map[string]*GroupQuery
-	withNamedEditors          map[string]*GroupQuery
-	withNamedViewers          map[string]*GroupQuery
-	withNamedControls         map[string]*ControlQuery
-	withNamedSubcontrols      map[string]*SubcontrolQuery
-	withNamedProcedures       map[string]*ProcedureQuery
-	withNamedInternalPolicies map[string]*InternalPolicyQuery
-	withNamedPrograms         map[string]*ProgramQuery
-	withNamedPlatforms        map[string]*PlatformQuery
-	withNamedActionPlans      map[string]*ActionPlanQuery
-	withNamedTasks            map[string]*TaskQuery
-	withNamedAssets           map[string]*AssetQuery
-	withNamedEntities         map[string]*EntityQuery
-	withNamedScans            map[string]*ScanQuery
-	withNamedComments         map[string]*NoteQuery
-	withNamedDiscussions      map[string]*DiscussionQuery
-	withNamedReviews          map[string]*ReviewQuery
-	withNamedRemediations     map[string]*RemediationQuery
+	ctx                         *QueryContext
+	order                       []risk.OrderOption
+	inters                      []Interceptor
+	predicates                  []predicate.Risk
+	withOwner                   *OrganizationQuery
+	withBlockedGroups           *GroupQuery
+	withEditors                 *GroupQuery
+	withViewers                 *GroupQuery
+	withRiskKind                *CustomTypeEnumQuery
+	withRiskCategory            *CustomTypeEnumQuery
+	withEnvironment             *CustomTypeEnumQuery
+	withScope                   *CustomTypeEnumQuery
+	withControls                *ControlQuery
+	withSubcontrols             *SubcontrolQuery
+	withProcedures              *ProcedureQuery
+	withInternalPolicies        *InternalPolicyQuery
+	withPrograms                *ProgramQuery
+	withPlatforms               *PlatformQuery
+	withActionPlans             *ActionPlanQuery
+	withTasks                   *TaskQuery
+	withAssets                  *AssetQuery
+	withEntities                *EntityQuery
+	withScans                   *ScanQuery
+	withStakeholder             *GroupQuery
+	withDelegate                *GroupQuery
+	withComments                *NoteQuery
+	withDiscussions             *DiscussionQuery
+	withReviews                 *ReviewQuery
+	withRemediations            *RemediationQuery
+	withVulnerabilities         *VulnerabilityQuery
+	withFindings                *FindingQuery
+	withWorkflowObjectRefs      *WorkflowObjectRefQuery
+	withFKs                     bool
+	loadTotal                   []func(context.Context, []*Risk) error
+	modifiers                   []func(*sql.Selector)
+	withNamedBlockedGroups      map[string]*GroupQuery
+	withNamedEditors            map[string]*GroupQuery
+	withNamedViewers            map[string]*GroupQuery
+	withNamedControls           map[string]*ControlQuery
+	withNamedSubcontrols        map[string]*SubcontrolQuery
+	withNamedProcedures         map[string]*ProcedureQuery
+	withNamedInternalPolicies   map[string]*InternalPolicyQuery
+	withNamedPrograms           map[string]*ProgramQuery
+	withNamedPlatforms          map[string]*PlatformQuery
+	withNamedActionPlans        map[string]*ActionPlanQuery
+	withNamedTasks              map[string]*TaskQuery
+	withNamedAssets             map[string]*AssetQuery
+	withNamedEntities           map[string]*EntityQuery
+	withNamedScans              map[string]*ScanQuery
+	withNamedComments           map[string]*NoteQuery
+	withNamedDiscussions        map[string]*DiscussionQuery
+	withNamedReviews            map[string]*ReviewQuery
+	withNamedRemediations       map[string]*RemediationQuery
+	withNamedVulnerabilities    map[string]*VulnerabilityQuery
+	withNamedFindings           map[string]*FindingQuery
+	withNamedWorkflowObjectRefs map[string]*WorkflowObjectRefQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -752,6 +761,81 @@ func (_q *RiskQuery) QueryRemediations() *RemediationQuery {
 	return query
 }
 
+// QueryVulnerabilities chains the current query on the "vulnerabilities" edge.
+func (_q *RiskQuery) QueryVulnerabilities() *VulnerabilityQuery {
+	query := (&VulnerabilityClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, selector),
+			sqlgraph.To(vulnerability.Table, vulnerability.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, risk.VulnerabilitiesTable, risk.VulnerabilitiesPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Vulnerability
+		step.Edge.Schema = schemaConfig.VulnerabilityRisks
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryFindings chains the current query on the "findings" edge.
+func (_q *RiskQuery) QueryFindings() *FindingQuery {
+	query := (&FindingClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, selector),
+			sqlgraph.To(finding.Table, finding.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, risk.FindingsTable, risk.FindingsPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.FindingRisks
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryWorkflowObjectRefs chains the current query on the "workflow_object_refs" edge.
+func (_q *RiskQuery) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
+	query := (&WorkflowObjectRefClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(risk.Table, risk.FieldID, selector),
+			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, risk.WorkflowObjectRefsTable, risk.WorkflowObjectRefsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first Risk entity from the query.
 // Returns a *NotFoundError when no Risk was found.
 func (_q *RiskQuery) First(ctx context.Context) (*Risk, error) {
@@ -939,36 +1023,39 @@ func (_q *RiskQuery) Clone() *RiskQuery {
 		return nil
 	}
 	return &RiskQuery{
-		config:               _q.config,
-		ctx:                  _q.ctx.Clone(),
-		order:                append([]risk.OrderOption{}, _q.order...),
-		inters:               append([]Interceptor{}, _q.inters...),
-		predicates:           append([]predicate.Risk{}, _q.predicates...),
-		withOwner:            _q.withOwner.Clone(),
-		withBlockedGroups:    _q.withBlockedGroups.Clone(),
-		withEditors:          _q.withEditors.Clone(),
-		withViewers:          _q.withViewers.Clone(),
-		withRiskKind:         _q.withRiskKind.Clone(),
-		withRiskCategory:     _q.withRiskCategory.Clone(),
-		withEnvironment:      _q.withEnvironment.Clone(),
-		withScope:            _q.withScope.Clone(),
-		withControls:         _q.withControls.Clone(),
-		withSubcontrols:      _q.withSubcontrols.Clone(),
-		withProcedures:       _q.withProcedures.Clone(),
-		withInternalPolicies: _q.withInternalPolicies.Clone(),
-		withPrograms:         _q.withPrograms.Clone(),
-		withPlatforms:        _q.withPlatforms.Clone(),
-		withActionPlans:      _q.withActionPlans.Clone(),
-		withTasks:            _q.withTasks.Clone(),
-		withAssets:           _q.withAssets.Clone(),
-		withEntities:         _q.withEntities.Clone(),
-		withScans:            _q.withScans.Clone(),
-		withStakeholder:      _q.withStakeholder.Clone(),
-		withDelegate:         _q.withDelegate.Clone(),
-		withComments:         _q.withComments.Clone(),
-		withDiscussions:      _q.withDiscussions.Clone(),
-		withReviews:          _q.withReviews.Clone(),
-		withRemediations:     _q.withRemediations.Clone(),
+		config:                 _q.config,
+		ctx:                    _q.ctx.Clone(),
+		order:                  append([]risk.OrderOption{}, _q.order...),
+		inters:                 append([]Interceptor{}, _q.inters...),
+		predicates:             append([]predicate.Risk{}, _q.predicates...),
+		withOwner:              _q.withOwner.Clone(),
+		withBlockedGroups:      _q.withBlockedGroups.Clone(),
+		withEditors:            _q.withEditors.Clone(),
+		withViewers:            _q.withViewers.Clone(),
+		withRiskKind:           _q.withRiskKind.Clone(),
+		withRiskCategory:       _q.withRiskCategory.Clone(),
+		withEnvironment:        _q.withEnvironment.Clone(),
+		withScope:              _q.withScope.Clone(),
+		withControls:           _q.withControls.Clone(),
+		withSubcontrols:        _q.withSubcontrols.Clone(),
+		withProcedures:         _q.withProcedures.Clone(),
+		withInternalPolicies:   _q.withInternalPolicies.Clone(),
+		withPrograms:           _q.withPrograms.Clone(),
+		withPlatforms:          _q.withPlatforms.Clone(),
+		withActionPlans:        _q.withActionPlans.Clone(),
+		withTasks:              _q.withTasks.Clone(),
+		withAssets:             _q.withAssets.Clone(),
+		withEntities:           _q.withEntities.Clone(),
+		withScans:              _q.withScans.Clone(),
+		withStakeholder:        _q.withStakeholder.Clone(),
+		withDelegate:           _q.withDelegate.Clone(),
+		withComments:           _q.withComments.Clone(),
+		withDiscussions:        _q.withDiscussions.Clone(),
+		withReviews:            _q.withReviews.Clone(),
+		withRemediations:       _q.withRemediations.Clone(),
+		withVulnerabilities:    _q.withVulnerabilities.Clone(),
+		withFindings:           _q.withFindings.Clone(),
+		withWorkflowObjectRefs: _q.withWorkflowObjectRefs.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -1251,6 +1338,39 @@ func (_q *RiskQuery) WithRemediations(opts ...func(*RemediationQuery)) *RiskQuer
 	return _q
 }
 
+// WithVulnerabilities tells the query-builder to eager-load the nodes that are connected to
+// the "vulnerabilities" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *RiskQuery) WithVulnerabilities(opts ...func(*VulnerabilityQuery)) *RiskQuery {
+	query := (&VulnerabilityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withVulnerabilities = query
+	return _q
+}
+
+// WithFindings tells the query-builder to eager-load the nodes that are connected to
+// the "findings" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *RiskQuery) WithFindings(opts ...func(*FindingQuery)) *RiskQuery {
+	query := (&FindingClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withFindings = query
+	return _q
+}
+
+// WithWorkflowObjectRefs tells the query-builder to eager-load the nodes that are connected to
+// the "workflow_object_refs" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *RiskQuery) WithWorkflowObjectRefs(opts ...func(*WorkflowObjectRefQuery)) *RiskQuery {
+	query := (&WorkflowObjectRefClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withWorkflowObjectRefs = query
+	return _q
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -1336,7 +1456,7 @@ func (_q *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 		nodes       = []*Risk{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [25]bool{
+		loadedTypes = [28]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -1362,6 +1482,9 @@ func (_q *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 			_q.withDiscussions != nil,
 			_q.withReviews != nil,
 			_q.withRemediations != nil,
+			_q.withVulnerabilities != nil,
+			_q.withFindings != nil,
+			_q.withWorkflowObjectRefs != nil,
 		}
 	)
 	if withFKs {
@@ -1558,6 +1681,29 @@ func (_q *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 			return nil, err
 		}
 	}
+	if query := _q.withVulnerabilities; query != nil {
+		if err := _q.loadVulnerabilities(ctx, query, nodes,
+			func(n *Risk) { n.Edges.Vulnerabilities = []*Vulnerability{} },
+			func(n *Risk, e *Vulnerability) { n.Edges.Vulnerabilities = append(n.Edges.Vulnerabilities, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withFindings; query != nil {
+		if err := _q.loadFindings(ctx, query, nodes,
+			func(n *Risk) { n.Edges.Findings = []*Finding{} },
+			func(n *Risk, e *Finding) { n.Edges.Findings = append(n.Edges.Findings, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withWorkflowObjectRefs; query != nil {
+		if err := _q.loadWorkflowObjectRefs(ctx, query, nodes,
+			func(n *Risk) { n.Edges.WorkflowObjectRefs = []*WorkflowObjectRef{} },
+			func(n *Risk, e *WorkflowObjectRef) {
+				n.Edges.WorkflowObjectRefs = append(n.Edges.WorkflowObjectRefs, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedBlockedGroups {
 		if err := _q.loadBlockedGroups(ctx, query, nodes,
 			func(n *Risk) { n.appendNamedBlockedGroups(name) },
@@ -1681,6 +1827,27 @@ func (_q *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 		if err := _q.loadRemediations(ctx, query, nodes,
 			func(n *Risk) { n.appendNamedRemediations(name) },
 			func(n *Risk, e *Remediation) { n.appendNamedRemediations(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedVulnerabilities {
+		if err := _q.loadVulnerabilities(ctx, query, nodes,
+			func(n *Risk) { n.appendNamedVulnerabilities(name) },
+			func(n *Risk, e *Vulnerability) { n.appendNamedVulnerabilities(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedFindings {
+		if err := _q.loadFindings(ctx, query, nodes,
+			func(n *Risk) { n.appendNamedFindings(name) },
+			func(n *Risk, e *Finding) { n.appendNamedFindings(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedWorkflowObjectRefs {
+		if err := _q.loadWorkflowObjectRefs(ctx, query, nodes,
+			func(n *Risk) { n.appendNamedWorkflowObjectRefs(name) },
+			func(n *Risk, e *WorkflowObjectRef) { n.appendNamedWorkflowObjectRefs(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2856,6 +3023,161 @@ func (_q *RiskQuery) loadRemediations(ctx context.Context, query *RemediationQue
 	}
 	return nil
 }
+func (_q *RiskQuery) loadVulnerabilities(ctx context.Context, query *VulnerabilityQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Vulnerability)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Risk)
+	nids := make(map[string]map[*Risk]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(risk.VulnerabilitiesTable)
+		joinT.Schema(_q.schemaConfig.VulnerabilityRisks)
+		s.Join(joinT).On(s.C(vulnerability.FieldID), joinT.C(risk.VulnerabilitiesPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(risk.VulnerabilitiesPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(risk.VulnerabilitiesPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Risk]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Vulnerability](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "vulnerabilities" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *RiskQuery) loadFindings(ctx context.Context, query *FindingQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *Finding)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Risk)
+	nids := make(map[string]map[*Risk]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(risk.FindingsTable)
+		joinT.Schema(_q.schemaConfig.FindingRisks)
+		s.Join(joinT).On(s.C(finding.FieldID), joinT.C(risk.FindingsPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(risk.FindingsPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(risk.FindingsPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Risk]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Finding](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "findings" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
+func (_q *RiskQuery) loadWorkflowObjectRefs(ctx context.Context, query *WorkflowObjectRefQuery, nodes []*Risk, init func(*Risk), assign func(*Risk, *WorkflowObjectRef)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Risk)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(workflowobjectref.FieldRiskID)
+	}
+	query.Where(predicate.WorkflowObjectRef(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(risk.WorkflowObjectRefsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.RiskID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "risk_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 
 func (_q *RiskQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -3225,6 +3547,48 @@ func (_q *RiskQuery) WithNamedRemediations(name string, opts ...func(*Remediatio
 		_q.withNamedRemediations = make(map[string]*RemediationQuery)
 	}
 	_q.withNamedRemediations[name] = query
+	return _q
+}
+
+// WithNamedVulnerabilities tells the query-builder to eager-load the nodes that are connected to the "vulnerabilities"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *RiskQuery) WithNamedVulnerabilities(name string, opts ...func(*VulnerabilityQuery)) *RiskQuery {
+	query := (&VulnerabilityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedVulnerabilities == nil {
+		_q.withNamedVulnerabilities = make(map[string]*VulnerabilityQuery)
+	}
+	_q.withNamedVulnerabilities[name] = query
+	return _q
+}
+
+// WithNamedFindings tells the query-builder to eager-load the nodes that are connected to the "findings"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *RiskQuery) WithNamedFindings(name string, opts ...func(*FindingQuery)) *RiskQuery {
+	query := (&FindingClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedFindings == nil {
+		_q.withNamedFindings = make(map[string]*FindingQuery)
+	}
+	_q.withNamedFindings[name] = query
+	return _q
+}
+
+// WithNamedWorkflowObjectRefs tells the query-builder to eager-load the nodes that are connected to the "workflow_object_refs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *RiskQuery) WithNamedWorkflowObjectRefs(name string, opts ...func(*WorkflowObjectRefQuery)) *RiskQuery {
+	query := (&WorkflowObjectRefClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedWorkflowObjectRefs == nil {
+		_q.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery)
+	}
+	_q.withNamedWorkflowObjectRefs[name] = query
 	return _q
 }
 

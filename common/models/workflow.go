@@ -156,6 +156,18 @@ type WorkflowEventPayload struct {
 	Details json.RawMessage `json:"details,omitempty"`
 }
 
+// WorkflowProposedChanges stores staged field updates for a workflow proposal
+type WorkflowProposedChanges struct {
+	// Updates contains the field-level changes as opaque JSON keyed by field name
+	Updates json.RawMessage `json:"updates,omitempty"`
+	// DomainKey identifies the approval domain these changes belong to
+	DomainKey string `json:"domainKey,omitempty"`
+	// SchemaType is the target entity schema type
+	SchemaType string `json:"schemaType,omitempty"`
+	// FieldNames lists the field names present in the updates
+	FieldNames []string `json:"fieldNames,omitempty"`
+}
+
 // WorkflowAssignmentApproval captures structured metadata for workflow assignments
 type WorkflowAssignmentApproval struct {
 	// ActionKey is the workflow action key this assignment belongs to
@@ -204,6 +216,36 @@ type WorkflowAssignmentRejection struct {
 	RejectedHash string `json:"rejected_hash,omitempty"`
 	// ChangeRequestInputs stores optional structured inputs for change requests
 	ChangeRequestInputs map[string]any `json:"change_request_inputs,omitempty"`
+}
+
+// AssignmentOutcome captures the terminal outcome metadata for a workflow assignment,
+// unifying the former approval, rejection, and invalidation metadata behind a Decision
+// discriminator. Behavior is inferred from Decision, never from string comparison
+type AssignmentOutcome struct {
+	// ActionKey is the workflow action key this assignment belongs to
+	ActionKey string `json:"action_key,omitempty"`
+	// Decision is the terminal decision recorded for the assignment
+	Decision enums.WorkflowAssignmentStatus `json:"decision,omitempty"`
+	// Required indicates if this assignment is required for workflow progression
+	Required bool `json:"required,omitempty"`
+	// RequiredCount is the quorum count needed when using count-based approval
+	RequiredCount int `json:"required_count,omitempty"`
+	// Label is an optional human-readable label for the assignment
+	Label string `json:"label,omitempty"`
+	// ProposedHash is the hash of the proposal changes associated with the decision
+	ProposedHash string `json:"proposed_hash,omitempty"`
+	// DecidedAt captures when the terminal decision was recorded
+	DecidedAt string `json:"decided_at,omitempty"`
+	// DecidedByUserID is the user who recorded the decision
+	DecidedByUserID string `json:"decided_by_user_id,omitempty"`
+	// Reason is an optional reason for a rejection or invalidation decision
+	Reason string `json:"reason,omitempty"`
+	// ChangeRequestInputs stores optional structured inputs for change requests
+	ChangeRequestInputs map[string]any `json:"change_request_inputs,omitempty"`
+	// PreviousStatus is the status prior to invalidation when Decision reflects an invalidation
+	PreviousStatus enums.WorkflowAssignmentStatus `json:"previous_status,omitempty"`
+	// NewProposedHash is the new proposal hash after a change that invalidated a prior decision
+	NewProposedHash string `json:"new_proposed_hash,omitempty"`
 }
 
 // MarshalGQL implements the Marshaler interface for gqlgen.
@@ -358,4 +400,48 @@ func (p *WorkflowEventPayload) UnmarshalGQL(v any) error {
 	}
 
 	return json.Unmarshal(byteData, p)
+}
+
+// MarshalGQL implements the Marshaler interface for gqlgen.
+func (p WorkflowProposedChanges) MarshalGQL(w io.Writer) {
+	byteData, err := json.Marshal(p)
+	if err != nil {
+		log.Error().Err(err).Msg("error marshalling workflow proposed changes")
+	}
+
+	if _, err = w.Write(byteData); err != nil {
+		log.Error().Err(err).Msg("error writing workflow proposed changes")
+	}
+}
+
+// UnmarshalGQL implements the Unmarshaler interface for gqlgen.
+func (p *WorkflowProposedChanges) UnmarshalGQL(v any) error {
+	byteData, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	return json.Unmarshal(byteData, p)
+}
+
+// MarshalGQL implements the Marshaler interface for gqlgen.
+func (d AssignmentOutcome) MarshalGQL(w io.Writer) {
+	byteData, err := json.Marshal(d)
+	if err != nil {
+		log.Error().Err(err).Msg("error marshalling workflow assignment outcome")
+	}
+
+	if _, err = w.Write(byteData); err != nil {
+		log.Error().Err(err).Msg("error writing workflow assignment outcome")
+	}
+}
+
+// UnmarshalGQL implements the Unmarshaler interface for gqlgen.
+func (d *AssignmentOutcome) UnmarshalGQL(v any) error {
+	byteData, err := json.Marshal(v)
+	if err != nil {
+		return err
+	}
+
+	return json.Unmarshal(byteData, d)
 }

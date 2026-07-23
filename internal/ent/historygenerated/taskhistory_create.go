@@ -267,6 +267,20 @@ func (_c *TaskHistoryCreate) SetNillableScopeID(v *string) *TaskHistoryCreate {
 	return _c
 }
 
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_c *TaskHistoryCreate) SetWorkflowEligibleMarker(v bool) *TaskHistoryCreate {
+	_c.mutation.SetWorkflowEligibleMarker(v)
+	return _c
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_c *TaskHistoryCreate) SetNillableWorkflowEligibleMarker(v *bool) *TaskHistoryCreate {
+	if v != nil {
+		_c.SetWorkflowEligibleMarker(*v)
+	}
+	return _c
+}
+
 // SetExternalUUID sets the "external_uuid" field.
 func (_c *TaskHistoryCreate) SetExternalUUID(v string) *TaskHistoryCreate {
 	_c.mutation.SetExternalUUID(v)
@@ -304,6 +318,12 @@ func (_c *TaskHistoryCreate) SetNillableDetails(v *string) *TaskHistoryCreate {
 // SetDetailsJSON sets the "details_json" field.
 func (_c *TaskHistoryCreate) SetDetailsJSON(v []interface{}) *TaskHistoryCreate {
 	_c.mutation.SetDetailsJSON(v)
+	return _c
+}
+
+// SetMetadata sets the "metadata" field.
+func (_c *TaskHistoryCreate) SetMetadata(v map[string]interface{}) *TaskHistoryCreate {
+	_c.mutation.SetMetadata(v)
 	return _c
 }
 
@@ -401,6 +421,62 @@ func (_c *TaskHistoryCreate) SetIsTemplate(v bool) *TaskHistoryCreate {
 func (_c *TaskHistoryCreate) SetNillableIsTemplate(v *bool) *TaskHistoryCreate {
 	if v != nil {
 		_c.SetIsTemplate(*v)
+	}
+	return _c
+}
+
+// SetIsSuggested sets the "is_suggested" field.
+func (_c *TaskHistoryCreate) SetIsSuggested(v bool) *TaskHistoryCreate {
+	_c.mutation.SetIsSuggested(v)
+	return _c
+}
+
+// SetNillableIsSuggested sets the "is_suggested" field if the given value is not nil.
+func (_c *TaskHistoryCreate) SetNillableIsSuggested(v *bool) *TaskHistoryCreate {
+	if v != nil {
+		_c.SetIsSuggested(*v)
+	}
+	return _c
+}
+
+// SetPriority sets the "priority" field.
+func (_c *TaskHistoryCreate) SetPriority(v int) *TaskHistoryCreate {
+	_c.mutation.SetPriority(v)
+	return _c
+}
+
+// SetNillablePriority sets the "priority" field if the given value is not nil.
+func (_c *TaskHistoryCreate) SetNillablePriority(v *int) *TaskHistoryCreate {
+	if v != nil {
+		_c.SetPriority(*v)
+	}
+	return _c
+}
+
+// SetSource sets the "source" field.
+func (_c *TaskHistoryCreate) SetSource(v string) *TaskHistoryCreate {
+	_c.mutation.SetSource(v)
+	return _c
+}
+
+// SetNillableSource sets the "source" field if the given value is not nil.
+func (_c *TaskHistoryCreate) SetNillableSource(v *string) *TaskHistoryCreate {
+	if v != nil {
+		_c.SetSource(*v)
+	}
+	return _c
+}
+
+// SetSourceKey sets the "source_key" field.
+func (_c *TaskHistoryCreate) SetSourceKey(v string) *TaskHistoryCreate {
+	_c.mutation.SetSourceKey(v)
+	return _c
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_c *TaskHistoryCreate) SetNillableSourceKey(v *string) *TaskHistoryCreate {
+	if v != nil {
+		_c.SetSourceKey(*v)
 	}
 	return _c
 }
@@ -515,6 +591,10 @@ func (_c *TaskHistoryCreate) defaults() error {
 		v := taskhistory.DefaultTags
 		_c.mutation.SetTags(v)
 	}
+	if _, ok := _c.mutation.WorkflowEligibleMarker(); !ok {
+		v := taskhistory.DefaultWorkflowEligibleMarker
+		_c.mutation.SetWorkflowEligibleMarker(v)
+	}
 	if _, ok := _c.mutation.Status(); !ok {
 		v := taskhistory.DefaultStatus
 		_c.mutation.SetStatus(v)
@@ -526,6 +606,14 @@ func (_c *TaskHistoryCreate) defaults() error {
 	if _, ok := _c.mutation.IsTemplate(); !ok {
 		v := taskhistory.DefaultIsTemplate
 		_c.mutation.SetIsTemplate(v)
+	}
+	if _, ok := _c.mutation.IsSuggested(); !ok {
+		v := taskhistory.DefaultIsSuggested
+		_c.mutation.SetIsSuggested(v)
+	}
+	if _, ok := _c.mutation.Priority(); !ok {
+		v := taskhistory.DefaultPriority
+		_c.mutation.SetPriority(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if taskhistory.DefaultID == nil {
@@ -569,6 +657,12 @@ func (_c *TaskHistoryCreate) check() error {
 	}
 	if _, ok := _c.mutation.IsTemplate(); !ok {
 		return &ValidationError{Name: "is_template", err: errors.New(`historygenerated: missing required field "TaskHistory.is_template"`)}
+	}
+	if _, ok := _c.mutation.IsSuggested(); !ok {
+		return &ValidationError{Name: "is_suggested", err: errors.New(`historygenerated: missing required field "TaskHistory.is_suggested"`)}
+	}
+	if _, ok := _c.mutation.Priority(); !ok {
+		return &ValidationError{Name: "priority", err: errors.New(`historygenerated: missing required field "TaskHistory.priority"`)}
 	}
 	return nil
 }
@@ -682,6 +776,10 @@ func (_c *TaskHistoryCreate) createSpec() (*TaskHistory, *sqlgraph.CreateSpec) {
 		_spec.SetField(taskhistory.FieldScopeID, field.TypeString, value)
 		_node.ScopeID = value
 	}
+	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(taskhistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
+		_node.WorkflowEligibleMarker = value
+	}
 	if value, ok := _c.mutation.ExternalUUID(); ok {
 		_spec.SetField(taskhistory.FieldExternalUUID, field.TypeString, value)
 		_node.ExternalUUID = &value
@@ -697,6 +795,10 @@ func (_c *TaskHistoryCreate) createSpec() (*TaskHistory, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.DetailsJSON(); ok {
 		_spec.SetField(taskhistory.FieldDetailsJSON, field.TypeJSON, value)
 		_node.DetailsJSON = value
+	}
+	if value, ok := _c.mutation.Metadata(); ok {
+		_spec.SetField(taskhistory.FieldMetadata, field.TypeJSON, value)
+		_node.Metadata = value
 	}
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(taskhistory.FieldStatus, field.TypeEnum, value)
@@ -725,6 +827,22 @@ func (_c *TaskHistoryCreate) createSpec() (*TaskHistory, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.IsTemplate(); ok {
 		_spec.SetField(taskhistory.FieldIsTemplate, field.TypeBool, value)
 		_node.IsTemplate = value
+	}
+	if value, ok := _c.mutation.IsSuggested(); ok {
+		_spec.SetField(taskhistory.FieldIsSuggested, field.TypeBool, value)
+		_node.IsSuggested = value
+	}
+	if value, ok := _c.mutation.Priority(); ok {
+		_spec.SetField(taskhistory.FieldPriority, field.TypeInt, value)
+		_node.Priority = value
+	}
+	if value, ok := _c.mutation.Source(); ok {
+		_spec.SetField(taskhistory.FieldSource, field.TypeString, value)
+		_node.Source = value
+	}
+	if value, ok := _c.mutation.SourceKey(); ok {
+		_spec.SetField(taskhistory.FieldSourceKey, field.TypeString, value)
+		_node.SourceKey = value
 	}
 	if value, ok := _c.mutation.IdempotencyKey(); ok {
 		_spec.SetField(taskhistory.FieldIdempotencyKey, field.TypeString, value)

@@ -3,6 +3,7 @@ package graphapi_test
 import (
 	"context"
 	"testing"
+	"time"
 
 	"github.com/riverqueue/river/riverdriver/riverpgxv5"
 	"github.com/riverqueue/river/rivertest"
@@ -12,6 +13,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/jobspec"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 )
 
@@ -318,6 +320,85 @@ func TestUpdateTrustCenterSetting(t *testing.T) {
 	// Clean up
 	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
 	cleanupOrganizationDataWithContext(tcOrg2.owner.UserCtx, t)
+}
+
+// TestUpdateTrustCenterSettingSupportUser verifies that an org-scoped support session
+// (auth.NewOrgSupportCaller, CapOrgSupport) can update trust center branding on behalf
+// of the org it is scoped to, the same way a fully-scoped API token can
+func TestUpdateTrustCenterSettingSupportUser(t *testing.T) {
+	tcOrg := createFreshOrgWithTrustCenter(t, withSupportUser())
+	trustCenter := tcOrg.trustCenter
+	settingID := trustCenter.Edges.Setting.ID
+
+	resp, err := suite.client.api.UpdateTrustCenterSetting(tcOrg.supportCtx, settingID, testclient.UpdateTrustCenterSettingInput{
+		Title:        lo.ToPtr("Support Updated Branding"),
+		PrimaryColor: lo.ToPtr("#123456"),
+	}, nil, nil, nil, nil, nil, nil)
+
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+	assert.Check(t, is.Equal(settingID, resp.UpdateTrustCenterSetting.TrustCenterSetting.ID))
+	assert.Check(t, is.Equal("Support Updated Branding", *resp.UpdateTrustCenterSetting.TrustCenterSetting.Title))
+	assert.Check(t, is.Equal("#123456", *resp.UpdateTrustCenterSetting.TrustCenterSetting.PrimaryColor))
+
+	// Clean up
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
+}
+
+// TestSubprocessorNotifyWatermarkInitialized verifies enabling notify-on-subprocessor-change stamps
+// the notification watermark so subscribers are only notified about changes made after opting in,
+// not the trust center's pre-existing subprocessor list
+func TestSubprocessorNotifyWatermarkInitialized(t *testing.T) {
+	tcOrg := createFreshOrgWithTrustCenter(t)
+	settingID := tcOrg.trustCenter.Edges.Setting.ID
+
+	dbCtx := privacy.DecisionContext(setContext(tcOrg.owner.UserCtx, suite.client.db), privacy.Allow)
+
+	setting, err := suite.client.db.TrustCenterSetting.Get(dbCtx, settingID)
+	assert.NilError(t, err)
+	assert.Check(t, setting.SubprocessorsNotifiedAt == nil)
+
+	// enabling the flag stamps the watermark
+	_, err = suite.client.api.UpdateTrustCenterSetting(tcOrg.owner.UserCtx, settingID, testclient.UpdateTrustCenterSettingInput{
+		NotifySubscribersOnSubprocessorChange: lo.ToPtr(true),
+	}, nil, nil, nil, nil, nil, nil)
+	assert.NilError(t, err)
+
+	enabled, err := suite.client.db.TrustCenterSetting.Get(dbCtx, settingID)
+	assert.NilError(t, err)
+	assert.Assert(t, enabled.SubprocessorsNotifiedAt != nil)
+
+	stamped := *enabled.SubprocessorsNotifiedAt
+
+	// updating the setting with the flag already on leaves the watermark alone
+	_, err = suite.client.api.UpdateTrustCenterSetting(tcOrg.owner.UserCtx, settingID, testclient.UpdateTrustCenterSettingInput{
+		Title:                                 lo.ToPtr("Updated Title"),
+		NotifySubscribersOnSubprocessorChange: lo.ToPtr(true),
+	}, nil, nil, nil, nil, nil, nil)
+	assert.NilError(t, err)
+
+	unchanged, err := suite.client.db.TrustCenterSetting.Get(dbCtx, settingID)
+	assert.NilError(t, err)
+	assert.Assert(t, unchanged.SubprocessorsNotifiedAt != nil)
+	assert.Check(t, stamped.Equal(*unchanged.SubprocessorsNotifiedAt))
+
+	// a watermark set explicitly alongside the flag wins over the hook's stamp
+	explicit := time.Now().Add(-3 * time.Hour).Truncate(time.Second)
+	assert.NilError(t, suite.client.db.TrustCenterSetting.UpdateOneID(settingID).
+		SetNotifySubscribersOnSubprocessorChange(false).
+		Exec(dbCtx))
+	assert.NilError(t, suite.client.db.TrustCenterSetting.UpdateOneID(settingID).
+		SetNotifySubscribersOnSubprocessorChange(true).
+		SetSubprocessorsNotifiedAt(explicit).
+		Exec(dbCtx))
+
+	overridden, err := suite.client.db.TrustCenterSetting.Get(dbCtx, settingID)
+	assert.NilError(t, err)
+	assert.Assert(t, overridden.SubprocessorsNotifiedAt != nil)
+	assert.Check(t, explicit.Equal(*overridden.SubprocessorsNotifiedAt))
+
+	// Clean up
+	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
 }
 
 // TestDeleteTrustCenterSetting tests the deleteTrustCenterSetting mutation

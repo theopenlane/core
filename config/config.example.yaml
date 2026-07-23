@@ -165,9 +165,37 @@ integrations:
         clientsecret: ""
         defaulttenant: ""
         redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
+    cloudflareruntime:
+        accountid: ""
+        apitoken: ""
+        domainscan:
+            deniedvendornames:
+                - rfc-editor
+                - ajax
+                - website-files
+                - http/3
+                - googletagmanager
+                - cloudflareinsights
+                - googlesyndication
+                - gstatic
+                - hcaptcha
+                - googleapis
+                - hsforms
+                - hs-scripts
+                - hscollectedforms
+                - hsts
+                - hs-banner
+                - hs-analytics
+            nonvendorcategories:
+                - Miscellaneous
+                - JavaScript frameworks
+                - JavaScript libraries
+                - Static site generator
+            scanttl: 86400
     consoleintegrationpath: /organization-settings/integrations
     email:
         apikey: ""
+        apiurl: https://api.theopenlane.io
         docsurl: https://docs.theopenlane.io
         fromemail: support@mail.theopenlane.io
         producturl: https://console.theopenlane.io
@@ -207,6 +235,9 @@ integrations:
         clientsecret: ""
         contentmode: iframe
         redirecturl: https://api.theopenlane.io/v1/integrations/auth/callback
+    organizationdelete:
+        enabled: false
+        maxdeletesperrun: 0
     paymentreminder:
         deletiondays: 0
         dryrun: false

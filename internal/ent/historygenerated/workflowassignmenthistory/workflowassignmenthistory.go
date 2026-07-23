@@ -66,6 +66,8 @@ const (
 	FieldRejectionMetadata = "rejection_metadata"
 	// FieldInvalidationMetadata holds the string denoting the invalidation_metadata field in the database.
 	FieldInvalidationMetadata = "invalidation_metadata"
+	// FieldOutcomeMetadata holds the string denoting the outcome_metadata field in the database.
+	FieldOutcomeMetadata = "outcome_metadata"
 	// FieldDecidedAt holds the string denoting the decided_at field in the database.
 	FieldDecidedAt = "decided_at"
 	// FieldActorUserID holds the string denoting the actor_user_id field in the database.
@@ -106,6 +108,7 @@ var Columns = []string{
 	FieldApprovalMetadata,
 	FieldRejectionMetadata,
 	FieldInvalidationMetadata,
+	FieldOutcomeMetadata,
 	FieldDecidedAt,
 	FieldActorUserID,
 	FieldActorGroupID,

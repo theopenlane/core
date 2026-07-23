@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/vendorriskscore"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 )
 
 // AssessmentResponseCreate is the builder for creating a AssessmentResponse entity.
@@ -136,6 +137,20 @@ func (_c *AssessmentResponseCreate) SetOwnerID(v string) *AssessmentResponseCrea
 func (_c *AssessmentResponseCreate) SetNillableOwnerID(v *string) *AssessmentResponseCreate {
 	if v != nil {
 		_c.SetOwnerID(*v)
+	}
+	return _c
+}
+
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_c *AssessmentResponseCreate) SetWorkflowEligibleMarker(v bool) *AssessmentResponseCreate {
+	_c.mutation.SetWorkflowEligibleMarker(v)
+	return _c
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_c *AssessmentResponseCreate) SetNillableWorkflowEligibleMarker(v *bool) *AssessmentResponseCreate {
+	if v != nil {
+		_c.SetWorkflowEligibleMarker(*v)
 	}
 	return _c
 }
@@ -505,6 +520,21 @@ func (_c *AssessmentResponseCreate) AddVendorRiskScores(v ...*VendorRiskScore) *
 	return _c.AddVendorRiskScoreIDs(ids...)
 }
 
+// AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by IDs.
+func (_c *AssessmentResponseCreate) AddWorkflowObjectRefIDs(ids ...string) *AssessmentResponseCreate {
+	_c.mutation.AddWorkflowObjectRefIDs(ids...)
+	return _c
+}
+
+// AddWorkflowObjectRefs adds the "workflow_object_refs" edges to the WorkflowObjectRef entity.
+func (_c *AssessmentResponseCreate) AddWorkflowObjectRefs(v ...*WorkflowObjectRef) *AssessmentResponseCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddWorkflowObjectRefIDs(ids...)
+}
+
 // Mutation returns the AssessmentResponseMutation object of the builder.
 func (_c *AssessmentResponseCreate) Mutation() *AssessmentResponseMutation {
 	return _c.mutation
@@ -555,6 +585,10 @@ func (_c *AssessmentResponseCreate) defaults() error {
 		}
 		v := assessmentresponse.DefaultUpdatedAt()
 		_c.mutation.SetUpdatedAt(v)
+	}
+	if _, ok := _c.mutation.WorkflowEligibleMarker(); !ok {
+		v := assessmentresponse.DefaultWorkflowEligibleMarker
+		_c.mutation.SetWorkflowEligibleMarker(v)
 	}
 	if _, ok := _c.mutation.IsTest(); !ok {
 		v := assessmentresponse.DefaultIsTest
@@ -710,6 +744,10 @@ func (_c *AssessmentResponseCreate) createSpec() (*AssessmentResponse, *sqlgraph
 	if value, ok := _c.mutation.DeletedBy(); ok {
 		_spec.SetField(assessmentresponse.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
+	}
+	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(assessmentresponse.FieldWorkflowEligibleMarker, field.TypeBool, value)
+		_node.WorkflowEligibleMarker = value
 	}
 	if value, ok := _c.mutation.IsTest(); ok {
 		_spec.SetField(assessmentresponse.FieldIsTest, field.TypeBool, value)
@@ -899,6 +937,23 @@ func (_c *AssessmentResponseCreate) createSpec() (*AssessmentResponse, *sqlgraph
 			},
 		}
 		edge.Schema = _c.schemaConfig.VendorRiskScore
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.WorkflowObjectRefsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   assessmentresponse.WorkflowObjectRefsTable,
+			Columns: []string{assessmentresponse.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

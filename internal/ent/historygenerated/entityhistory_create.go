@@ -505,6 +505,12 @@ func (_c *EntityHistoryCreate) SetDomains(v []string) *EntityHistoryCreate {
 	return _c
 }
 
+// SetAliases sets the "aliases" field.
+func (_c *EntityHistoryCreate) SetAliases(v []string) *EntityHistoryCreate {
+	_c.mutation.SetAliases(v)
+	return _c
+}
+
 // SetEntityTypeID sets the "entity_type_id" field.
 func (_c *EntityHistoryCreate) SetEntityTypeID(v string) *EntityHistoryCreate {
 	_c.mutation.SetEntityTypeID(v)
@@ -1270,6 +1276,10 @@ func (_c *EntityHistoryCreate) createSpec() (*EntityHistory, *sqlgraph.CreateSpe
 	if value, ok := _c.mutation.Domains(); ok {
 		_spec.SetField(entityhistory.FieldDomains, field.TypeJSON, value)
 		_node.Domains = value
+	}
+	if value, ok := _c.mutation.Aliases(); ok {
+		_spec.SetField(entityhistory.FieldAliases, field.TypeJSON, value)
+		_node.Aliases = value
 	}
 	if value, ok := _c.mutation.EntityTypeID(); ok {
 		_spec.SetField(entityhistory.FieldEntityTypeID, field.TypeString, value)

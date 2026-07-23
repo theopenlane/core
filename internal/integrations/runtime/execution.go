@@ -15,7 +15,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	intobvs "github.com/theopenlane/core/internal/integrations/observability"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -47,18 +46,16 @@ func (r *Runtime) reconcileOperations(ctx context.Context, integration *ent.Inte
 			continue
 		}
 
-		metadata := types.ExecutionMetadata{
-			OwnerID:       integration.OwnerID,
+		oc := types.NewOperationContext(integration.OwnerID, op.Name, types.IntegrationSource{
 			IntegrationID: integration.ID,
 			DefinitionID:  integration.DefinitionID,
-			Operation:     op.Name,
 			RunType:       enums.IntegrationRunTypeReconcile,
-		}
+		})
 
-		receipt := r.Gala().EmitWithHeaders(types.WithExecutionMetadata(ctx, metadata), operations.ReconcileTopic, operations.ReconcileEnvelope{
-			ExecutionMetadata: metadata,
+		receipt := r.Gala().EmitWithHeaders(gala.WithOperationContext(ctx, oc), operations.ReconcileTopic, operations.ReconcileEnvelope{
+			OperationContext: oc,
 		}, gala.Headers{
-			Properties: metadata.Properties(),
+			Properties: oc.Properties(),
 		})
 
 		if receipt.Err != nil {
@@ -94,13 +91,18 @@ type reconcileOutput struct {
 	DurationMS int64 `json:"duration_ms"`
 }
 
-// HandleReconcile executes one reconcilable operation inline and returns the
-// number of records processed as the delta for adaptive scheduling
+// HandleReconcile executes one recurring operation cycle inline and returns the delta
+// for adaptive scheduling; envelopes with no integration ID run the scheduled runtime path
 func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.ReconcileEnvelope) (int, error) {
-	metadata := envelope.ExecutionMetadata
-	ctx = intobvs.WithContext(ctx, metadata)
+	oc := envelope.OperationContext
+	src := types.IntegrationSourceFrom(oc)
+	ctx = intobvs.WithContext(ctx, oc)
 
-	installation, err := r.ResolveIntegration(ctx, IntegrationLookup{IntegrationID: envelope.IntegrationID})
+	if src.IntegrationID == "" {
+		return r.handleScheduledCycle(ctx, envelope)
+	}
+
+	installation, err := r.ResolveIntegration(ctx, IntegrationLookup{IntegrationID: src.IntegrationID})
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("reconcile bootstrap failed")
 
@@ -133,7 +135,7 @@ func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.Recon
 
 	logx.FromContext(ctx).Info().Msg("reconcile cycle started")
 
-	operation, err := r.Registry().Operation(metadata.DefinitionID, envelope.Operation)
+	operation, err := r.Registry().Operation(src.DefinitionID, envelope.Operation)
 	if err != nil {
 		return 0, err
 	}
@@ -144,8 +146,8 @@ func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.Recon
 		return 0, operations.ErrOperationDisabled
 	}
 
-	runRecord, err := operations.CreatePendingRun(ctx, db, installation, operations.DispatchRequest{
-		IntegrationID: envelope.IntegrationID,
+	runRecord, err := operations.CreatePendingRun(ctx, db, installation, types.DispatchRequest{
+		IntegrationID: src.IntegrationID,
 		Operation:     envelope.Operation,
 		RunType:       enums.IntegrationRunTypeReconcile,
 	})
@@ -157,10 +159,14 @@ func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.Recon
 		return 0, err
 	}
 
-	metadata.RunID = runRecord.ID
-	ctx = intobvs.WithContext(ctx, metadata)
+	src.RunID = runRecord.ID
+	_ = gala.SetAttributes(&oc, src)
+	ctx = intobvs.WithContext(ctx, oc)
 
-	response, recordCount, execErr := r.executeResolvedOperation(ctx, installation, operation, nil, nil, false, operations.IngestOptionsFromMetadata(integrationgenerated.IntegrationIngestSourceOperation, metadata))
+	ingestOptions := operations.IngestOptionsFromOperationContext(oc)
+	ingestOptions.CompleteDirectorySnapshot = true
+
+	response, recordCount, execErr := r.executeResolvedOperation(ctx, installation, operation, nil, nil, false, ingestOptions)
 
 	if execErr != nil {
 		logx.FromContext(ctx).Error().Err(execErr).Msg("reconcile operation failed")
@@ -176,8 +182,8 @@ func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.Recon
 		}
 
 		if outputErr := river.RecordOutput(ctx, reconcileOutput{
-			IntegrationID: envelope.IntegrationID,
-			DefinitionID:  envelope.DefinitionID,
+			IntegrationID: src.IntegrationID,
+			DefinitionID:  src.DefinitionID,
 			Operation:     envelope.Operation,
 			RunID:         runRecord.ID,
 			Status:        enums.IntegrationRunStatusFailed,
@@ -204,8 +210,8 @@ func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.Recon
 	}
 
 	if outputErr := river.RecordOutput(ctx, reconcileOutput{
-		IntegrationID: envelope.IntegrationID,
-		DefinitionID:  envelope.DefinitionID,
+		IntegrationID: src.IntegrationID,
+		DefinitionID:  src.DefinitionID,
 		Operation:     envelope.Operation,
 		RunID:         runRecord.ID,
 		Records:       recordCount,
@@ -224,17 +230,42 @@ func (r *Runtime) ExecuteOperation(ctx context.Context, integration *ent.Integra
 		return nil, ErrInstallationRequired
 	}
 
-	ctx = intobvs.WithIntegration(ctx, integration.ID, integration.DefinitionID)
+	return r.executeOperationInline(ctx, integration, integration.DefinitionID, operation, credentials, config)
+}
+
+// ExecuteRuntimeOperation runs one system-initiated operation inline against a definition's cached runtime client,
+// with no Integration installation and no run tracking. Used for operator-owned calls that need their result back synchronously
+func (r *Runtime) ExecuteRuntimeOperation(ctx context.Context, definitionID, operationName string, config json.RawMessage) (json.RawMessage, error) {
+	operation, err := r.Registry().Operation(definitionID, operationName)
+	if err != nil {
+		return nil, err
+	}
+
+	return r.executeOperationInline(ctx, nil, definitionID, operation, nil, config)
+}
+
+// executeOperationInline runs one integration operation inline without run tracking, if there is no integration ID it runs as an runtime client
+func (r *Runtime) executeOperationInline(ctx context.Context, integration *ent.Integration, definitionID string, operation types.OperationRegistration, credentials types.CredentialBindings, config json.RawMessage) (json.RawMessage, error) {
+	if integration != nil {
+		ctx = intobvs.WithIntegration(ctx, integration.ID, integration.DefinitionID)
+	} else {
+		ctx = intobvs.WithIntegration(ctx, "", definitionID)
+		ctx = gala.WithOperationContext(ctx, types.NewOperationContext("", operation.Name, types.IntegrationSource{
+			DefinitionID: definitionID,
+			Runtime:      true,
+		}))
+	}
+
 	ctx = intobvs.WithOperation(ctx, operation.Name)
 
 	if len(config) > 0 {
-		if err := validatePayload(operation.ConfigSchema, config, ErrOperationConfigInvalid); err != nil {
+		if err := validatePayload(ctx, operation.ConfigSchema, config, ErrOperationConfigInvalid); err != nil {
 			return nil, err
 		}
 	}
 
 	response, _, err := r.executeResolvedOperation(ctx, integration, operation, credentials, config, false, operations.IngestOptions{
-		Source: integrationgenerated.IntegrationIngestSourceOperation,
+		CompleteDirectorySnapshot: true,
 	})
 
 	return response, err
@@ -242,25 +273,26 @@ func (r *Runtime) ExecuteOperation(ctx context.Context, integration *ent.Integra
 
 // HandleOperation executes one queued operation envelope through the runtime-managed dependencies
 func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envelope) error {
-	metadata := envelope.ExecutionMetadata
-	ctx = intobvs.WithContext(ctx, metadata)
+	oc := envelope.OperationContext
+	src := types.IntegrationSourceFrom(oc)
+	ctx = intobvs.WithContext(ctx, oc)
 
 	startedAt := time.Now()
 	db := r.DB()
-	tracked := envelope.RunID != ""
+	tracked := src.RunID != ""
 
 	var (
 		integration  *ent.Integration
 		bootstrapErr error
 	)
 
-	if !metadata.Runtime {
-		integration, bootstrapErr = r.ResolveIntegration(ctx, IntegrationLookup{IntegrationID: metadata.IntegrationID})
+	if !src.Runtime {
+		integration, bootstrapErr = r.ResolveIntegration(ctx, IntegrationLookup{IntegrationID: src.IntegrationID})
 	}
 
 	failRun := func(execErr error, response json.RawMessage) error {
 		if tracked {
-			if completeErr := operations.CompleteRun(ctx, db, envelope.RunID, startedAt, operations.RunResult{
+			if completeErr := operations.CompleteRun(ctx, db, src.RunID, startedAt, operations.RunResult{
 				Status: enums.IntegrationRunStatusFailed,
 				Error:  execErr.Error(),
 				Metrics: map[string]any{
@@ -289,17 +321,20 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 	}
 
 	if tracked {
-		if err := operations.MarkRunRunning(ctx, db, envelope.RunID); err != nil {
+		if err := operations.MarkRunRunning(ctx, db, src.RunID); err != nil {
 			return failRun(err, nil)
 		}
 	}
 
-	operation, err := r.Registry().Operation(metadata.DefinitionID, envelope.Operation)
+	operation, err := r.Registry().Operation(src.DefinitionID, envelope.Operation)
 	if err != nil {
 		return failRun(err, nil)
 	}
 
-	response, _, err := r.executeResolvedOperation(ctx, integration, operation, nil, envelope.Config, envelope.ForceClientRebuild, operations.IngestOptionsFromMetadata(integrationgenerated.IntegrationIngestSourceOperation, metadata))
+	ingestOptions := operations.IngestOptionsFromOperationContext(oc)
+	ingestOptions.CompleteDirectorySnapshot = true
+
+	response, _, err := r.executeResolvedOperation(ctx, integration, operation, nil, envelope.Config, envelope.ForceClientRebuild, ingestOptions)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("operation failed")
 
@@ -311,7 +346,7 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 	var completeErr error
 
 	if tracked {
-		completeErr = operations.CompleteRun(ctx, db, envelope.RunID, startedAt, operations.RunResult{
+		completeErr = operations.CompleteRun(ctx, db, src.RunID, startedAt, operations.RunResult{
 			Status:  enums.IntegrationRunStatusSuccess,
 			Summary: "operation completed",
 			Metrics: map[string]any{
@@ -368,6 +403,15 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 		lastRunAt = &t
 	}
 
+	allowed, err := r.checkRateLimit(ctx, operation)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	if !allowed {
+		return nil, 0, ErrOperationRateLimited
+	}
+
 	req := types.OperationRequest{
 		Integration: integration,
 		Credentials: credentials,
@@ -375,6 +419,8 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 		Config:      jsonx.CloneRawMessage(config),
 		LastRunAt:   lastRunAt,
 		DB:          r.DB(),
+		Dispatch:    r.Dispatch,
+		Services:    r,
 	}
 
 	if operation.IngestHandle != nil {
@@ -512,19 +558,17 @@ func (r *Runtime) seedReconcileJobsForInstallation(ctx context.Context, inst *en
 
 		logx.FromContext(ctx).Info().Str("integration_id", inst.ID).Str("operation", op.Name).Msg("seeding missing reconcile job")
 
-		metadata := types.ExecutionMetadata{
-			OwnerID:       inst.OwnerID,
+		oc := types.NewOperationContext(inst.OwnerID, op.Name, types.IntegrationSource{
 			IntegrationID: inst.ID,
 			DefinitionID:  inst.DefinitionID,
-			Operation:     op.Name,
 			RunType:       enums.IntegrationRunTypeReconcile,
-		}
+		})
 
 		receipt := r.Gala().EmitWithHeaders(
-			types.WithExecutionMetadata(ctx, metadata),
+			gala.WithOperationContext(ctx, oc),
 			operations.ReconcileTopic,
-			operations.ReconcileEnvelope{ExecutionMetadata: metadata},
-			gala.Headers{Properties: metadata.Properties()},
+			operations.ReconcileEnvelope{OperationContext: oc},
+			gala.Headers{Properties: oc.Properties()},
 		)
 		if receipt.Err != nil {
 			logx.FromContext(ctx).Error().Err(receipt.Err).Str("integration_id", inst.ID).Str("operation", op.Name).Msg("failed to seed reconcile job")
@@ -637,22 +681,24 @@ func (r *Runtime) resolveOperationClient(ctx context.Context, integration *ent.I
 			return nil, credentials, integration.DefinitionID, nil
 		}
 
-		meta, _ := types.ExecutionMetadataFromContext(ctx)
+		oc, _ := gala.OperationContextFromContext(ctx)
+		definitionID := types.IntegrationSourceFrom(oc).DefinitionID
 
-		return nil, credentials, meta.DefinitionID, nil
+		return nil, credentials, definitionID, nil
 	}
 
 	if integration == nil {
-		meta, _ := types.ExecutionMetadataFromContext(ctx)
+		oc, _ := gala.OperationContextFromContext(ctx)
+		definitionID := types.IntegrationSourceFrom(oc).DefinitionID
 
-		client, ok := r.Registry().RuntimeClient(meta.DefinitionID)
+		client, ok := r.Registry().RuntimeClient(definitionID)
 		if !ok {
-			return nil, credentials, meta.DefinitionID, ErrRuntimeClientNotFound
+			return nil, credentials, definitionID, ErrRuntimeClientNotFound
 		}
 
-		logx.FromContext(ctx).Info().Msg("runtime client resolved")
+		logx.FromContext(ctx).Debug().Msg("runtime client resolved")
 
-		return client, credentials, meta.DefinitionID, nil
+		return client, credentials, definitionID, nil
 	}
 
 	registration, err := r.Registry().Client(integration.DefinitionID, operation.ClientRef)
@@ -674,7 +720,7 @@ func (r *Runtime) resolveOperationClient(ctx context.Context, integration *ent.I
 		return nil, credentials, integration.DefinitionID, err
 	}
 
-	logx.FromContext(ctx).Info().Msg("client initialized")
+	logx.FromContext(ctx).Debug().Msg("client initialized")
 
 	return client, credentials, integration.DefinitionID, nil
 }

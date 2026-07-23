@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
+	"github.com/theopenlane/core/internal/ent/generated/review"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
@@ -391,6 +392,25 @@ func (_c *NoteCreate) SetNillableInternalPolicyID(id *string) *NoteCreate {
 // SetInternalPolicy sets the "internal_policy" edge to the InternalPolicy entity.
 func (_c *NoteCreate) SetInternalPolicy(v *InternalPolicy) *NoteCreate {
 	return _c.SetInternalPolicyID(v.ID)
+}
+
+// SetReviewID sets the "review" edge to the Review entity by ID.
+func (_c *NoteCreate) SetReviewID(id string) *NoteCreate {
+	_c.mutation.SetReviewID(id)
+	return _c
+}
+
+// SetNillableReviewID sets the "review" edge to the Review entity by ID if the given value is not nil.
+func (_c *NoteCreate) SetNillableReviewID(id *string) *NoteCreate {
+	if id != nil {
+		_c = _c.SetReviewID(*id)
+	}
+	return _c
+}
+
+// SetReview sets the "review" edge to the Review entity.
+func (_c *NoteCreate) SetReview(v *Review) *NoteCreate {
+	return _c.SetReviewID(v.ID)
 }
 
 // SetEvidenceID sets the "evidence" edge to the Evidence entity by ID.
@@ -767,6 +787,24 @@ func (_c *NoteCreate) createSpec() (*Note, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.internal_policy_comments = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ReviewIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.ReviewTable,
+			Columns: []string{note.ReviewColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.review_comments = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.EvidenceIDs(); len(nodes) > 0 {

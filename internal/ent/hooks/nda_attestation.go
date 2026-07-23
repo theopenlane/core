@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/objects"
+	"github.com/theopenlane/core/internal/objects/store"
 	"github.com/theopenlane/core/internal/objects/upload"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
@@ -159,7 +160,11 @@ func uploadAttestedPDF(ctx context.Context, client *generated.Client, attestedPD
 		OriginalName:         fileName,
 		FieldName:            "documentDataFile",
 		CorrelatedObjectID:   docData.ID,
-		CorrelatedObjectType: "DocumentData",
+		CorrelatedObjectType: generated.TypeDocumentData,
+		Parent: pkgobjects.ParentObject{
+			ID:   docData.ID,
+			Type: generated.TypeDocumentData,
+		},
 		FileMetadata: pkgobjects.FileMetadata{
 			ContentType: "application/pdf",
 			Size:        int64(len(attestedPDF)),
@@ -167,7 +172,7 @@ func uploadAttestedPDF(ctx context.Context, client *generated.Client, attestedPD
 		},
 	}
 
-	_, uploadedFiles, err := upload.HandleUploads(ctx, client.ObjectManager, []pkgobjects.File{file})
+	uploadCtx, uploadedFiles, err := upload.HandleUploads(ctx, client.ObjectManager, []pkgobjects.File{file})
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to upload pdf")
 
@@ -178,6 +183,12 @@ func uploadAttestedPDF(ctx context.Context, client *generated.Client, attestedPD
 		logx.FromContext(ctx).Error().Msg("no files were uploaded")
 
 		return ErrNoUploadedFiles
+	}
+
+	if _, err := store.AddFilePermissions(uploadCtx); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("could not add fga permissions for attested file upload")
+
+		return err
 	}
 
 	data := docData.Data
@@ -525,7 +536,8 @@ func wrapText(s, fontName string, fontSize int, maxWidth float64) string {
 	for word := range strings.FieldsSeq(s) {
 		if line.Len() > 0 {
 			if font.TextWidth(line.String()+" "+word, fontName, fontSize) <= maxWidth {
-				line.WriteString(" " + word)
+				line.WriteString(" ")
+				line.WriteString(word)
 
 				continue
 			}

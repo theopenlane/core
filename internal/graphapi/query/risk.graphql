@@ -43,6 +43,7 @@ mutation CreateBulkCSVRisk ($input: Upload!) {
 			updatedAt
 			updatedBy
 			updatedByImpersonator
+			workflowEligibleMarker
 			stakeholder {
 				id
 				name
@@ -99,6 +100,7 @@ mutation CreateBulkRisk ($input: [CreateRiskInput!]) {
 			updatedAt
 			updatedBy
 			updatedByImpersonator
+			workflowEligibleMarker
 			stakeholder {
 				id
 				name
@@ -155,6 +157,7 @@ mutation CreateRisk ($input: CreateRiskInput!) {
 			updatedAt
 			updatedBy
 			updatedByImpersonator
+			workflowEligibleMarker
 			programs {
 				edges {
 					node {
@@ -256,6 +259,7 @@ query GetAllRisks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $or
 				updatedAt
 				updatedBy
 				updatedByImpersonator
+				workflowEligibleMarker
 				programs {
 					edges {
 						node {
@@ -344,6 +348,7 @@ query GetRiskByID ($riskId: ID!) {
 		updatedAt
 		updatedBy
 		updatedByImpersonator
+		workflowEligibleMarker
 		programs {
 			edges {
 				node {
@@ -439,6 +444,7 @@ query GetRisks ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $order
 				updatedAt
 				updatedBy
 				updatedByImpersonator
+				workflowEligibleMarker
 				programs {
 					edges {
 						node {
@@ -528,6 +534,7 @@ mutation UpdateBulkRisk ($ids: [ID!]!, $input: UpdateRiskInput!) {
 			updatedAt
 			updatedBy
 			updatedByImpersonator
+			workflowEligibleMarker
 			stakeholder {
 				id
 				name
@@ -585,6 +592,7 @@ mutation UpdateRisk ($updateRiskId: ID!, $input: UpdateRiskInput!) {
 			updatedAt
 			updatedBy
 			updatedByImpersonator
+			workflowEligibleMarker
 			programs {
 				edges {
 					node {

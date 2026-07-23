@@ -10,7 +10,6 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	apimodels "github.com/theopenlane/core/common/openapi"
-	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/httpsling"
 )
 
@@ -18,9 +17,7 @@ func (suite *HandlerTestSuite) TestProductCatalogHandler() {
 	t := suite.T()
 
 	// add handler
-	// Create operation for ProductCatalogHandler
-	operation := suite.createImpersonationOperation("ProductCatalogHandler", "Get product catalog")
-	suite.registerTestHandler(http.MethodGet, "products", operation, suite.h.ProductCatalogHandler)
+	suite.registerTestHandler(http.MethodGet, "products", suite.h.ProductCatalogHandler)
 
 	testCases := []struct {
 		name                  string
@@ -81,7 +78,7 @@ func (suite *HandlerTestSuite) TestProductCatalogHandler() {
 			res := recorder.Result()
 			defer res.Body.Close()
 
-			var out *apimodels.ProductCatalogReply
+			var out *apimodels.ProductCatalogResponse
 
 			// parse request body
 			if err := json.NewDecoder(res.Body).Decode(&out); err != nil {
@@ -100,11 +97,11 @@ func (suite *HandlerTestSuite) TestProductCatalogHandler() {
 
 			for _, v := range out.Catalog.Modules {
 				switch v.Audience {
-				case handlers.PublicAudience:
+				case "public":
 					// always included
-				case handlers.BetaAudience:
+				case "beta":
 					assert.True(t, tc.expectBetaFeatures, "unexpected beta feature found: %v", v)
-				case handlers.PrivateAudience:
+				case "private":
 					assert.True(t, tc.expectPrivateFeatures, "unexpected private feature found: %v", v)
 				default:
 					// ensure we don't have new audiences we aren't handling
@@ -114,11 +111,11 @@ func (suite *HandlerTestSuite) TestProductCatalogHandler() {
 
 			for _, v := range out.Catalog.Addons {
 				switch v.Audience {
-				case handlers.PublicAudience:
+				case "public":
 					// always included
-				case handlers.BetaAudience:
+				case "beta":
 					assert.True(t, tc.expectBetaFeatures, "unexpected beta feature found: %v", v)
-				case handlers.PrivateAudience:
+				case "private":
 					assert.True(t, tc.expectPrivateFeatures, "unexpected private feature found: %v", v)
 				default:
 					// ensure we don't have new audiences we aren't handling

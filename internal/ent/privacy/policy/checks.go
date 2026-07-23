@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	access "github.com/theopenlane/core/internal/ent/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
@@ -88,6 +89,47 @@ func CanCreateObjectsUnderParents(edges []string) privacy.MutationRuleFunc {
 		}
 
 		return privacy.Allow
+	})
+}
+
+// CanEditObjectUnderParents checks edit access on update/delete, granting access if the
+// user can edit any of the given parents
+func CanEditObjectUnderParents(parents []string, fetch func(ctx context.Context, m generated.Mutation, field string) (string, error)) privacy.MutationRuleFunc {
+	return privacy.MutationRuleFunc(func(ctx context.Context, m generated.Mutation) error {
+		if m.Op() == generated.OpCreate {
+			return privacy.Skip
+		}
+
+		caller, ok := auth.CallerFromContext(ctx)
+		if !ok || caller == nil {
+			return auth.ErrNoAuthUser
+		}
+
+		authzClient := utils.AuthzClient(ctx, m)
+		if authzClient == nil {
+			return privacy.Skipf("unable to get authz client for parent access check")
+		}
+
+		for _, parent := range parents {
+			objectID, err := fetch(ctx, m, parent+"_id")
+			if err != nil || objectID == "" {
+				continue
+			}
+
+			ac := fgax.AccessCheck{
+				Relation:    fgax.CanEdit,
+				ObjectType:  fgax.Kind(parent),
+				ObjectID:    objectID,
+				SubjectType: caller.SubjectType(),
+				SubjectID:   caller.SubjectID,
+			}
+
+			if access, err := authzClient.CheckAccess(ctx, ac); err == nil && access {
+				return privacy.Allow
+			}
+		}
+
+		return privacy.Skip
 	})
 }
 
@@ -298,6 +340,13 @@ func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string, a
 
 			// check api token scope first, as api tokens will have full access to object types they have scope for
 			if confirmedInOrganization {
+				// if EnsureObjectInOrganization confirms the user is a member of the org,
+				// we do not check fga for user ( as no tuples exists ).
+				// the only check we need here is org membership validation
+				if edgeMap.ObjectType == user.Label && edgeMap.CheckViewAccess {
+					continue
+				}
+
 				if err := rule.CheckSubjectScope(ctx, edgeMap.ObjectType, relationCheck, nil); access.Allow(err) {
 					// make sure continue so all edges are checked, but no need to check fga as access is already allowed
 					continue

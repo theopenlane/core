@@ -11,10 +11,12 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 )
@@ -25,8 +27,10 @@ type IngestOptions struct {
 	DirectorySyncRunID string
 	// SkipDirectorySyncRunFinalization instructs the processor not to finalize the directory sync run after processing
 	SkipDirectorySyncRunFinalization bool
-	// Source identifies the mechanism that produced the ingest data (e.g. webhook, poll, manual)
-	Source integrationgenerated.IntegrationIngestSource
+	// CompleteDirectorySnapshot signals that the batch carries the provider's complete directory
+	// membership state, authorizing removal inference for memberships the batch did not confirm;
+	// partial sources (webhooks, scim, single-record pushes) leave this false
+	CompleteDirectorySnapshot bool
 	// RunID is a caller-supplied correlation identifier for the overall operation run
 	RunID string
 	// Webhook is the webhook name or identifier that triggered this ingest
@@ -39,15 +43,16 @@ type IngestOptions struct {
 	WorkflowMeta *types.WorkflowMeta
 }
 
-// IngestOptionsFromMetadata derives ingest options from execution metadata
-func IngestOptionsFromMetadata(source integrationgenerated.IntegrationIngestSource, m types.ExecutionMetadata) IngestOptions {
+// IngestOptionsFromOperationContext derives ingest options from an integration operation context
+func IngestOptionsFromOperationContext(oc gala.OperationContext) IngestOptions {
+	src := types.IntegrationSourceFrom(oc)
+
 	return IngestOptions{
-		Source:       source,
-		RunID:        m.RunID,
-		Webhook:      m.Webhook,
-		WebhookEvent: m.Event,
-		DeliveryID:   m.DeliveryID,
-		WorkflowMeta: m.Workflow,
+		RunID:        src.RunID,
+		Webhook:      src.Webhook,
+		WebhookEvent: src.Event,
+		DeliveryID:   src.DeliveryID,
+		WorkflowMeta: src.Workflow,
 	}
 }
 
@@ -84,9 +89,9 @@ func setIntegrationAuthCaller(ctx context.Context, integration *ent.Integration)
 
 // directorySyncRunSchemas is the set of mapping schemas that require a directory sync run record
 var directorySyncRunSchemas = map[string]struct{}{
-	integrationgenerated.IntegrationMappingSchemaDirectoryAccount:    {},
-	integrationgenerated.IntegrationMappingSchemaDirectoryGroup:      {},
-	integrationgenerated.IntegrationMappingSchemaDirectoryMembership: {},
+	entityops.SchemaDirectoryAccount.Name:    {},
+	entityops.SchemaDirectoryGroup.Name:      {},
+	entityops.SchemaDirectoryMembership.Name: {},
 }
 
 // EmitPayloadSets transforms one batch of mapped payload sets and dispatches them through the appropriate ingest path
@@ -105,10 +110,14 @@ func EmitPayloadSets(ctx context.Context, ic IngestContext, operationName string
 	})
 }
 
-// ProcessPayloadSets persists one batch of mapped payload sets synchronously
+// ProcessPayloadSets persists one batch of mapped payload sets synchronously. Cross-object links are
+// resolved and injected into each create input upstream in applyPayloadSets, so persistence creates
+// each record with its edges already set
 func ProcessPayloadSets(ctx context.Context, ic IngestContext, operationName string, contracts []types.IngestContract, payloadSets []types.IngestPayloadSet, options IngestOptions) error {
 	return applyPayloadSets(ctx, ic, operationName, contracts, payloadSets, options, func(handleCtx context.Context, record mappedIngestRecord) error {
-		return persistMappedRecord(handleCtx, ic.DB, ic.Integration, record.Schema, record.Payload)
+		_, err := persistMappedRecord(handleCtx, ic.DB, ic.Integration, record.Schema, record.Payload)
+
+		return err
 	})
 }
 
@@ -148,43 +157,114 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 		}()
 	}
 
+	var attempted, failed int
+	var membershipSetSeen bool
+
 	for _, payloadSet := range payloadSets {
 		if !contractIncludesSchema(contracts, payloadSet.Schema) {
 			return ErrIngestSchemaNotDeclared
 		}
 
-		if _, ok := integrationgenerated.IntegrationMappingSchemas[payloadSet.Schema]; !ok {
+		sourceSchema, ok := entityops.LookupSchema(payloadSet.Schema)
+		if !ok {
 			return ErrIngestSchemaNotFound
 		}
 
+		if payloadSet.Schema == entityops.SchemaDirectoryMembership.Name {
+			membershipSetSeen = true
+		}
+
 		for _, envelope := range payloadSet.Envelopes {
-			record, include, err := mapIngestRecord(ctx, definition, payloadSet.Schema, envelope, installationFilterExpr)
-			if err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("schema", payloadSet.Schema).Msg("error mapping ingest record")
-				return err
+			mapping, found := findMapping(definition.Mappings, payloadSet.Schema, envelope.Variant)
+			if !found {
+				logx.FromContext(ctx).Error().Err(ErrIngestMappingNotFound).Str("schema", payloadSet.Schema).Str("resource", envelope.Resource).Msg("error mapping ingest record")
+
+				attempted++
+				failed++
+
+				continue
+			}
+
+			record, include, mapErr := mapIngestRecord(ctx, mapping, payloadSet.Schema, envelope, installationFilterExpr)
+			if mapErr != nil {
+				logx.FromContext(ctx).Error().Err(mapErr).Str("schema", payloadSet.Schema).Str("resource", envelope.Resource).Msg("error mapping ingest record")
+
+				attempted++
+				failed++
+
+				continue
 			}
 
 			if !include {
 				continue
 			}
 
-			if err = handle(ctx, record); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("schema", payloadSet.Schema).Msg("ingest persist failed")
-				return err
+			// inject the mapping's cross-object links into the create input, so the record is
+			// created (or emitted for async creation) with its edges already set; link rules are
+			// declared on the definition's mapping and validated at registration
+			record.Payload, err = injectLinks(ctx, ic.DB, ic.Integration.OwnerID, mapping.Links, sourceSchema, record.Payload)
+			if err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("schema", payloadSet.Schema).Str("resource", envelope.Resource).Msg("ingest link injection failed")
+
+				attempted++
+				failed++
+
+				continue
 			}
+
+			attempted++
+
+			if handleErr := handle(ctx, record); handleErr != nil {
+				logx.FromContext(ctx).Error().Err(handleErr).Str("schema", payloadSet.Schema).Str("resource", envelope.Resource).Msg("ingest persist failed")
+
+				failed++
+			}
+		}
+	}
+
+	if failed > 0 {
+		return fmt.Errorf("%w: %d of %d records failed", ErrIngestRecordsFailed, failed, attempted)
+	}
+
+	// complete-snapshot directory syncs carry the full membership state, so any active membership
+	// the run did not confirm was removed upstream; partial sources (scim, webhooks) and runs
+	// finalized elsewhere never authorize removal inference
+	if directorySync && membershipSetSeen && !options.SkipDirectorySyncRunFinalization && options.CompleteDirectorySnapshot {
+		if err := markUnconfirmedDirectoryMembershipsRemoved(ctx, ic.DB, ic.Integration.ID, directorySyncRunID); err != nil {
+			return fmt.Errorf("%w: %w", ErrIngestPersistFailed, err)
 		}
 	}
 
 	return nil
 }
 
-// mapIngestRecord applies user-defined CEL expression filters over the data envelope so that we can filter out the data we import
-func mapIngestRecord(ctx context.Context, definition types.Definition, schema string, envelope types.MappingEnvelope, installationFilterExpr string) (mappedIngestRecord, bool, error) {
-	mapping, found := findMapping(definition.Mappings, schema, envelope.Variant)
-	if !found {
-		return mappedIngestRecord{}, false, ErrIngestMappingNotFound
+// markUnconfirmedDirectoryMembershipsRemoved records the removal side of the sync delta by
+// stamping removed_at on active memberships for the integration that were not confirmed by
+// the completed sync run
+func markUnconfirmedDirectoryMembershipsRemoved(ctx context.Context, db *ent.Client, integrationID string, runID string) error {
+	removed, err := db.DirectoryMembership.Update().
+		Where(directorymembership.IntegrationID(integrationID),
+			directorymembership.RemovedAtIsNil(),
+			directorymembership.Or(
+				directorymembership.LastConfirmedRunIDIsNil(),
+				directorymembership.LastConfirmedRunIDNEQ(runID),
+			)).
+		SetRemovedAt(time.Now()).
+		Save(ctx)
+	if err != nil {
+		return err
 	}
 
+	if removed > 0 {
+		logx.FromContext(ctx).Info().Int("removed_count", removed).Str("directory_sync_run_id", runID).Msg("marked directory memberships removed after sync run comparison")
+	}
+
+	return nil
+}
+
+// mapIngestRecord applies the resolved mapping's filters and map expression to one data envelope,
+// returning the mapped record and whether the envelope passed the include filters
+func mapIngestRecord(ctx context.Context, mapping types.MappingOverride, schema string, envelope types.MappingEnvelope, installationFilterExpr string) (mappedIngestRecord, bool, error) {
 	matched, err := envelopeIncludedByFilters(ctx, installationFilterExpr, mapping.FilterExpr, envelope)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("ingest filter failed")

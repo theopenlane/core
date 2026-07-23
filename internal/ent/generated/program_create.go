@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
@@ -25,11 +26,14 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
+	"github.com/theopenlane/core/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/internal/ent/generated/review"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 )
 
 // ProgramCreate is the builder for creating a Program entity.
@@ -277,6 +281,62 @@ func (_c *ProgramCreate) SetEndDate(v time.Time) *ProgramCreate {
 func (_c *ProgramCreate) SetNillableEndDate(v *time.Time) *ProgramCreate {
 	if v != nil {
 		_c.SetEndDate(*v)
+	}
+	return _c
+}
+
+// SetObservationPeriodStartDate sets the "observation_period_start_date" field.
+func (_c *ProgramCreate) SetObservationPeriodStartDate(v time.Time) *ProgramCreate {
+	_c.mutation.SetObservationPeriodStartDate(v)
+	return _c
+}
+
+// SetNillableObservationPeriodStartDate sets the "observation_period_start_date" field if the given value is not nil.
+func (_c *ProgramCreate) SetNillableObservationPeriodStartDate(v *time.Time) *ProgramCreate {
+	if v != nil {
+		_c.SetObservationPeriodStartDate(*v)
+	}
+	return _c
+}
+
+// SetObservationPeriodEndDate sets the "observation_period_end_date" field.
+func (_c *ProgramCreate) SetObservationPeriodEndDate(v time.Time) *ProgramCreate {
+	_c.mutation.SetObservationPeriodEndDate(v)
+	return _c
+}
+
+// SetNillableObservationPeriodEndDate sets the "observation_period_end_date" field if the given value is not nil.
+func (_c *ProgramCreate) SetNillableObservationPeriodEndDate(v *time.Time) *ProgramCreate {
+	if v != nil {
+		_c.SetObservationPeriodEndDate(*v)
+	}
+	return _c
+}
+
+// SetFieldworkStartDate sets the "fieldwork_start_date" field.
+func (_c *ProgramCreate) SetFieldworkStartDate(v time.Time) *ProgramCreate {
+	_c.mutation.SetFieldworkStartDate(v)
+	return _c
+}
+
+// SetNillableFieldworkStartDate sets the "fieldwork_start_date" field if the given value is not nil.
+func (_c *ProgramCreate) SetNillableFieldworkStartDate(v *time.Time) *ProgramCreate {
+	if v != nil {
+		_c.SetFieldworkStartDate(*v)
+	}
+	return _c
+}
+
+// SetFieldworkEndDate sets the "fieldwork_end_date" field.
+func (_c *ProgramCreate) SetFieldworkEndDate(v time.Time) *ProgramCreate {
+	_c.mutation.SetFieldworkEndDate(v)
+	return _c
+}
+
+// SetNillableFieldworkEndDate sets the "fieldwork_end_date" field if the given value is not nil.
+func (_c *ProgramCreate) SetNillableFieldworkEndDate(v *time.Time) *ProgramCreate {
+	if v != nil {
+		_c.SetFieldworkEndDate(*v)
 	}
 	return _c
 }
@@ -628,23 +688,79 @@ func (_c *ProgramCreate) AddActionPlans(v ...*ActionPlan) *ProgramCreate {
 	return _c.AddActionPlanIDs(ids...)
 }
 
-// SetSystemDetailID sets the "system_detail" edge to the SystemDetail entity by ID.
-func (_c *ProgramCreate) SetSystemDetailID(id string) *ProgramCreate {
-	_c.mutation.SetSystemDetailID(id)
+// AddSystemDetailIDs adds the "system_details" edge to the SystemDetail entity by IDs.
+func (_c *ProgramCreate) AddSystemDetailIDs(ids ...string) *ProgramCreate {
+	_c.mutation.AddSystemDetailIDs(ids...)
 	return _c
 }
 
-// SetNillableSystemDetailID sets the "system_detail" edge to the SystemDetail entity by ID if the given value is not nil.
-func (_c *ProgramCreate) SetNillableSystemDetailID(id *string) *ProgramCreate {
-	if id != nil {
-		_c = _c.SetSystemDetailID(*id)
+// AddSystemDetails adds the "system_details" edges to the SystemDetail entity.
+func (_c *ProgramCreate) AddSystemDetails(v ...*SystemDetail) *ProgramCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
+	return _c.AddSystemDetailIDs(ids...)
+}
+
+// AddFindingIDs adds the "findings" edge to the Finding entity by IDs.
+func (_c *ProgramCreate) AddFindingIDs(ids ...string) *ProgramCreate {
+	_c.mutation.AddFindingIDs(ids...)
 	return _c
 }
 
-// SetSystemDetail sets the "system_detail" edge to the SystemDetail entity.
-func (_c *ProgramCreate) SetSystemDetail(v *SystemDetail) *ProgramCreate {
-	return _c.SetSystemDetailID(v.ID)
+// AddFindings adds the "findings" edges to the Finding entity.
+func (_c *ProgramCreate) AddFindings(v ...*Finding) *ProgramCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddFindingIDs(ids...)
+}
+
+// AddVulnerabilityIDs adds the "vulnerabilities" edge to the Vulnerability entity by IDs.
+func (_c *ProgramCreate) AddVulnerabilityIDs(ids ...string) *ProgramCreate {
+	_c.mutation.AddVulnerabilityIDs(ids...)
+	return _c
+}
+
+// AddVulnerabilities adds the "vulnerabilities" edges to the Vulnerability entity.
+func (_c *ProgramCreate) AddVulnerabilities(v ...*Vulnerability) *ProgramCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddVulnerabilityIDs(ids...)
+}
+
+// AddReviewIDs adds the "reviews" edge to the Review entity by IDs.
+func (_c *ProgramCreate) AddReviewIDs(ids ...string) *ProgramCreate {
+	_c.mutation.AddReviewIDs(ids...)
+	return _c
+}
+
+// AddReviews adds the "reviews" edges to the Review entity.
+func (_c *ProgramCreate) AddReviews(v ...*Review) *ProgramCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddReviewIDs(ids...)
+}
+
+// AddRemediationIDs adds the "remediations" edge to the Remediation entity by IDs.
+func (_c *ProgramCreate) AddRemediationIDs(ids ...string) *ProgramCreate {
+	_c.mutation.AddRemediationIDs(ids...)
+	return _c
+}
+
+// AddRemediations adds the "remediations" edges to the Remediation entity.
+func (_c *ProgramCreate) AddRemediations(v ...*Remediation) *ProgramCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddRemediationIDs(ids...)
 }
 
 // AddUserIDs adds the "users" edge to the User entity by IDs.
@@ -911,6 +1027,22 @@ func (_c *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.EndDate(); ok {
 		_spec.SetField(program.FieldEndDate, field.TypeTime, value)
 		_node.EndDate = value
+	}
+	if value, ok := _c.mutation.ObservationPeriodStartDate(); ok {
+		_spec.SetField(program.FieldObservationPeriodStartDate, field.TypeTime, value)
+		_node.ObservationPeriodStartDate = value
+	}
+	if value, ok := _c.mutation.ObservationPeriodEndDate(); ok {
+		_spec.SetField(program.FieldObservationPeriodEndDate, field.TypeTime, value)
+		_node.ObservationPeriodEndDate = value
+	}
+	if value, ok := _c.mutation.FieldworkStartDate(); ok {
+		_spec.SetField(program.FieldFieldworkStartDate, field.TypeTime, value)
+		_node.FieldworkStartDate = value
+	}
+	if value, ok := _c.mutation.FieldworkEndDate(); ok {
+		_spec.SetField(program.FieldFieldworkEndDate, field.TypeTime, value)
+		_node.FieldworkEndDate = value
 	}
 	if value, ok := _c.mutation.AuditorReady(); ok {
 		_spec.SetField(program.FieldAuditorReady, field.TypeBool, value)
@@ -1227,18 +1359,86 @@ func (_c *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := _c.mutation.SystemDetailIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.SystemDetailsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   program.SystemDetailTable,
-			Columns: []string{program.SystemDetailColumn},
+			Table:   program.SystemDetailsTable,
+			Columns: program.SystemDetailsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.SystemDetail
+		edge.Schema = _c.schemaConfig.ProgramSystemDetails
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.FindingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   program.FindingsTable,
+			Columns: program.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.FindingPrograms
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.VulnerabilitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   program.VulnerabilitiesTable,
+			Columns: program.VulnerabilitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.VulnerabilityPrograms
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ReviewsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   program.ReviewsTable,
+			Columns: program.ReviewsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.ReviewPrograms
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.RemediationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   program.RemediationsTable,
+			Columns: program.RemediationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.RemediationPrograms
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

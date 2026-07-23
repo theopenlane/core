@@ -15,9 +15,9 @@ import (
 )
 
 // AccountAccessHandler checks if a subject has access to an object
-func (h *Handler) AccountAccessHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	return ProcessAuthenticatedRequest(ctx, h, openapi, models.ExampleAccountAccessRequest, models.ExampleAccountAccessReply,
-		func(reqCtx context.Context, in *models.AccountAccessRequest, caller *auth.Caller) (*models.AccountAccessReply, error) {
+func (h *Handler) AccountAccessHandler(ctx echo.Context) error {
+	return ProcessAuthenticatedRequest(ctx, h,
+		func(reqCtx context.Context, in *models.AccountAccessRequest, caller *auth.Caller) (*models.AccountAccessResponse, error) {
 			req := fgax.AccessCheck{
 				SubjectType: in.SubjectType,
 				Relation:    in.Relation,
@@ -32,7 +32,7 @@ func (h *Handler) AccountAccessHandler(ctx echo.Context, openapi *OpenAPIContext
 				return nil, ErrInvalidInput
 			}
 
-			return &models.AccountAccessReply{
+			return &models.AccountAccessResponse{
 				Reply:   rout.Reply{Success: true},
 				Allowed: allow,
 			}, nil

@@ -183,6 +183,90 @@ func (_c *FindingHistoryCreate) SetNillableOwnerID(v *string) *FindingHistoryCre
 	return _c
 }
 
+// SetReviewedBy sets the "reviewed_by" field.
+func (_c *FindingHistoryCreate) SetReviewedBy(v string) *FindingHistoryCreate {
+	_c.mutation.SetReviewedBy(v)
+	return _c
+}
+
+// SetNillableReviewedBy sets the "reviewed_by" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableReviewedBy(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetReviewedBy(*v)
+	}
+	return _c
+}
+
+// SetReviewedByUserID sets the "reviewed_by_user_id" field.
+func (_c *FindingHistoryCreate) SetReviewedByUserID(v string) *FindingHistoryCreate {
+	_c.mutation.SetReviewedByUserID(v)
+	return _c
+}
+
+// SetNillableReviewedByUserID sets the "reviewed_by_user_id" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableReviewedByUserID(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetReviewedByUserID(*v)
+	}
+	return _c
+}
+
+// SetReviewedByGroupID sets the "reviewed_by_group_id" field.
+func (_c *FindingHistoryCreate) SetReviewedByGroupID(v string) *FindingHistoryCreate {
+	_c.mutation.SetReviewedByGroupID(v)
+	return _c
+}
+
+// SetNillableReviewedByGroupID sets the "reviewed_by_group_id" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableReviewedByGroupID(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetReviewedByGroupID(*v)
+	}
+	return _c
+}
+
+// SetAssignedTo sets the "assigned_to" field.
+func (_c *FindingHistoryCreate) SetAssignedTo(v string) *FindingHistoryCreate {
+	_c.mutation.SetAssignedTo(v)
+	return _c
+}
+
+// SetNillableAssignedTo sets the "assigned_to" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableAssignedTo(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetAssignedTo(*v)
+	}
+	return _c
+}
+
+// SetAssignedToUserID sets the "assigned_to_user_id" field.
+func (_c *FindingHistoryCreate) SetAssignedToUserID(v string) *FindingHistoryCreate {
+	_c.mutation.SetAssignedToUserID(v)
+	return _c
+}
+
+// SetNillableAssignedToUserID sets the "assigned_to_user_id" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableAssignedToUserID(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetAssignedToUserID(*v)
+	}
+	return _c
+}
+
+// SetAssignedToGroupID sets the "assigned_to_group_id" field.
+func (_c *FindingHistoryCreate) SetAssignedToGroupID(v string) *FindingHistoryCreate {
+	_c.mutation.SetAssignedToGroupID(v)
+	return _c
+}
+
+// SetNillableAssignedToGroupID sets the "assigned_to_group_id" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableAssignedToGroupID(v *string) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetAssignedToGroupID(*v)
+	}
+	return _c
+}
+
 // SetSystemOwned sets the "system_owned" field.
 func (_c *FindingHistoryCreate) SetSystemOwned(v bool) *FindingHistoryCreate {
 	_c.mutation.SetSystemOwned(v)
@@ -305,6 +389,20 @@ func (_c *FindingHistoryCreate) SetFindingStatusID(v string) *FindingHistoryCrea
 func (_c *FindingHistoryCreate) SetNillableFindingStatusID(v *string) *FindingHistoryCreate {
 	if v != nil {
 		_c.SetFindingStatusID(*v)
+	}
+	return _c
+}
+
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_c *FindingHistoryCreate) SetWorkflowEligibleMarker(v bool) *FindingHistoryCreate {
+	_c.mutation.SetWorkflowEligibleMarker(v)
+	return _c
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_c *FindingHistoryCreate) SetNillableWorkflowEligibleMarker(v *bool) *FindingHistoryCreate {
+	if v != nil {
+		_c.SetWorkflowEligibleMarker(*v)
 	}
 	return _c
 }
@@ -851,6 +949,10 @@ func (_c *FindingHistoryCreate) defaults() error {
 		v := findinghistory.DefaultSystemOwned
 		_c.mutation.SetSystemOwned(v)
 	}
+	if _, ok := _c.mutation.WorkflowEligibleMarker(); !ok {
+		v := findinghistory.DefaultWorkflowEligibleMarker
+		_c.mutation.SetWorkflowEligibleMarker(v)
+	}
 	if _, ok := _c.mutation.SecurityLevel(); !ok {
 		v := findinghistory.DefaultSecurityLevel
 		_c.mutation.SetSecurityLevel(v)
@@ -994,6 +1096,30 @@ func (_c *FindingHistoryCreate) createSpec() (*FindingHistory, *sqlgraph.CreateS
 		_spec.SetField(findinghistory.FieldOwnerID, field.TypeString, value)
 		_node.OwnerID = value
 	}
+	if value, ok := _c.mutation.ReviewedBy(); ok {
+		_spec.SetField(findinghistory.FieldReviewedBy, field.TypeString, value)
+		_node.ReviewedBy = value
+	}
+	if value, ok := _c.mutation.ReviewedByUserID(); ok {
+		_spec.SetField(findinghistory.FieldReviewedByUserID, field.TypeString, value)
+		_node.ReviewedByUserID = value
+	}
+	if value, ok := _c.mutation.ReviewedByGroupID(); ok {
+		_spec.SetField(findinghistory.FieldReviewedByGroupID, field.TypeString, value)
+		_node.ReviewedByGroupID = value
+	}
+	if value, ok := _c.mutation.AssignedTo(); ok {
+		_spec.SetField(findinghistory.FieldAssignedTo, field.TypeString, value)
+		_node.AssignedTo = value
+	}
+	if value, ok := _c.mutation.AssignedToUserID(); ok {
+		_spec.SetField(findinghistory.FieldAssignedToUserID, field.TypeString, value)
+		_node.AssignedToUserID = value
+	}
+	if value, ok := _c.mutation.AssignedToGroupID(); ok {
+		_spec.SetField(findinghistory.FieldAssignedToGroupID, field.TypeString, value)
+		_node.AssignedToGroupID = value
+	}
 	if value, ok := _c.mutation.SystemOwned(); ok {
 		_spec.SetField(findinghistory.FieldSystemOwned, field.TypeBool, value)
 		_node.SystemOwned = value
@@ -1029,6 +1155,10 @@ func (_c *FindingHistoryCreate) createSpec() (*FindingHistory, *sqlgraph.CreateS
 	if value, ok := _c.mutation.FindingStatusID(); ok {
 		_spec.SetField(findinghistory.FieldFindingStatusID, field.TypeString, value)
 		_node.FindingStatusID = value
+	}
+	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(findinghistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
+		_node.WorkflowEligibleMarker = value
 	}
 	if value, ok := _c.mutation.ExternalID(); ok {
 		_spec.SetField(findinghistory.FieldExternalID, field.TypeString, value)

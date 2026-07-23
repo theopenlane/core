@@ -20,6 +20,9 @@ includes:
   catalog:
     taskfile: ./pkg/catalog/Taskfile.yaml
     dir: ./pkg/catalog
+  onboarding:
+    taskfile: ./internal/onboarding/Taskfile.yaml
+    dir: ./internal/onboarding
   bats:
     taskfile: ./.buildkite/tests/Taskfile.yaml
 
@@ -33,7 +36,7 @@ env:
   # go build
   GOFLAGS: -buildvcs=false
   # for test container settings
-  RYUK_CONNECTION_TIMEOUT: "5m"
+  RYUK_CONNECTION_TIMEOUT: "10m"
   RYUK_VERBOSE: "true"
   COMPOSE_PROJECT_NAME: openlane
   # CLI demo environment variables
@@ -67,6 +70,7 @@ tasks:
     env:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     deps:
+      - task: generate:onboarding:smart
       - task: generate:core
       - task: generate:catalog:smart
       - task: fga:generate
@@ -92,8 +96,10 @@ tasks:
       - internal/ent/generate/**/*.go
       - internal/ent/mixin/**/*.go
       - internal/ent/templates/**/*
+      - internal/ent/taskrules/**/*.go
     generates:
       - internal/ent/generated/**/*.go
+      - internal/ent/entityops/**/*.go
       - internal/graphapi/schema/ent.graphql
       - internal/graphapi/schema/history/ent.graphql
     method: checksum
@@ -136,6 +142,22 @@ tasks:
     method: checksum
     cmds:
       - go generate pkg/catalog/generate.go
+
+  generate:onboarding:smart:
+    desc: Generate onboarding code from YAML definitions
+    aliases: ['generate:onboarding']
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
+    sources:
+      - internal/onboarding/generate.go
+      - internal/onboarding/types.go
+      - internal/onboarding/genyaml/**/*.go
+      - internal/onboarding/onboarding.yaml
+    generates:
+      - internal/onboarding/onboarding_gen.go
+    method: checksum
+    cmds:
+      - go generate internal/onboarding/generate.go
 
   generate:openapi:smart:
     desc: Generate OpenAPI specification with checksum tracking
@@ -448,9 +470,19 @@ tasks:
       - "CGO_ENABLED=0 {{ .GOOS }} {{ .GOARCH }} go build -o core"
 
   go:build:ci:
-    desc: Runs go build for the core server
+    desc: Runs go build for the core server for PR/branch CI, favors build speed over binary size
     cmds:
-      - CGO_ENABLED=0 go build -mod=readonly -o bin/core
+      # -gcflags=all=-l disables inlining, which is faster to compile and gives more
+      # accurate stack traces, at the cost of a larger, unstripped binary
+      # these binaries are not published so the larger size is ok here
+      - CGO_ENABLED=0 go build -mod=readonly -gcflags=all=-l -o bin/core
+
+  go:build:ci:release:
+    desc: Runs go build for the core server for tagged releases, favors binary size over build speed
+    cmds:
+      # -s -w strip the symbol table and DWARF debug info (biggest size win)
+      # -trimpath removes local build paths from the binary
+      - CGO_ENABLED=0 go build -mod=readonly -trimpath -ldflags="-s -w" -o bin/core
 
   go:build-cli:
     aliases: [buildcli]
@@ -661,4 +693,5 @@ tasks:
   generate:openapi:
     desc: Generate OpenAPI spec file
     cmds:
-      - go run ./internal/httpserve/specs/generate/main.go
+      - go run ./internal/httpserve/specs/generate --emit-types
+      - go run ./internal/httpserve/specs/generate

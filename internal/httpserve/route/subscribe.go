@@ -3,22 +3,24 @@ package route
 import (
 	"net/http"
 
-	"github.com/getkin/kin-openapi/openapi3"
+	"github.com/theopenlane/core/internal/httpserve/handlers"
 )
 
 // registerVerifySubscribeHandler registers the verify subscription handler and route
 func registerVerifySubscribeHandler(router *Router) error {
 	config := Config{
-		Path:        "/subscribe/verify",
-		Method:      http.MethodGet,
-		Name:        "VerifySubscription",
-		Description: "Verify a subscription",
-		Tags:        []string{"subscription"},
-		OperationID: "VerifySubscription",
-		Security:    &openapi3.SecurityRequirements{},
-		Middlewares: *unauthenticatedEndpoint,
-		RateLimit:   authFlowRateLimit,
-		Handler:     router.Handler.VerifySubscriptionHandler,
+		Path:         "/subscribe/verify",
+		Method:       http.MethodPost,
+		Name:         "VerifySubscription",
+		Description:  "Verify a subscription",
+		Tags:         []string{"Subscribers"},
+		OperationID:  "VerifySubscription",
+		IncludeInOAS: true,
+		Security:     handlers.PublicSecurity,
+		Middlewares:  *unauthenticatedEndpoint,
+		RateLimit:    authFlowRateLimit,
+		Handler:      router.Handler.VerifySubscriptionHandler,
+		PublicCORS:   true,
 	}
 
 	return router.AddV1HandlerRoute(config)
@@ -27,16 +29,18 @@ func registerVerifySubscribeHandler(router *Router) error {
 // registerUnsubscribeHandler registers the unsubscribe handler and route
 func registerUnsubscribeHandler(router *Router) error {
 	config := Config{
-		Path:        "/unsubscribe",
-		Method:      http.MethodGet,
-		Name:        "Unsubscribe",
-		Description: "Unsubscribe from communications",
-		Tags:        []string{"subscription"},
-		OperationID: "Unsubscribe",
-		Security:    &openapi3.SecurityRequirements{},
-		Middlewares: *unauthenticatedEndpoint,
-		RateLimit:   authFlowRateLimit,
-		Handler:     router.Handler.UnsubscribeHandler,
+		Path:         "/unsubscribe",
+		Method:       http.MethodPost,
+		Name:         "Unsubscribe",
+		Description:  "Unsubscribe from communications",
+		Tags:         []string{"Subscribers"},
+		OperationID:  "Unsubscribe",
+		IncludeInOAS: true,
+		Security:     handlers.PublicSecurity,
+		Middlewares:  *unauthenticatedEndpoint,
+		RateLimit:    authFlowRateLimit,
+		Handler:      router.Handler.UnsubscribeHandler,
+		PublicCORS:   true,
 	}
 
 	return router.AddV1HandlerRoute(config)

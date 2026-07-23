@@ -124,6 +124,30 @@ func (Program) Fields() []ent.Field {
 				entgql.OrderField("end_date"),
 			).
 			Optional(),
+		field.Time("observation_period_start_date").
+			Comment("the start date of the observation period").
+			Annotations(
+				entgql.OrderField("observation_period_start_date"),
+			).
+			Optional(),
+		field.Time("observation_period_end_date").
+			Comment("the end date of the observation period").
+			Annotations(
+				entgql.OrderField("observation_period_end_date"),
+			).
+			Optional(),
+		field.Time("fieldwork_start_date").
+			Comment("the start date of fieldwork").
+			Annotations(
+				entgql.OrderField("fieldwork_start_date"),
+			).
+			Optional(),
+		field.Time("fieldwork_end_date").
+			Comment("the end date of fieldwork").
+			Annotations(
+				entgql.OrderField("fieldwork_end_date"),
+			).
+			Optional(),
 		field.Bool("auditor_ready").
 			Comment("is the program ready for the auditor").
 			Default(false),
@@ -214,9 +238,34 @@ func (p Program) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(p, Narrative{}),
 		// programs can have 1:many associated action plans
 		defaultEdgeToWithPagination(p, ActionPlan{}),
-		uniqueEdgeTo(&edgeDefinition{
+		defaultEdgeToWithPagination(p, SystemDetail{}),
+		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: p,
-			edgeSchema: SystemDetail{},
+			edgeSchema: Finding{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Finding{}.Name()),
+			},
+		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: p,
+			edgeSchema: Vulnerability{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Vulnerability{}.Name()),
+			},
+		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: p,
+			edgeSchema: Review{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Review{}.Name()),
+			},
+		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: p,
+			edgeSchema: Remediation{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Remediation{}.Name()),
+			},
 		}),
 		edge.From("users", User.Type).
 			Ref("programs").

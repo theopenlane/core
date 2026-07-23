@@ -77,6 +77,7 @@ func (Assessment) Fields() []ent.Field {
 			Comment("the duration in seconds that the user has to complete the assessment response, defaults to 7 days").
 			Annotations(
 				entgql.OrderField("response_due_duration"),
+				entx.FieldWorkflowEligible(),
 			),
 	}
 }
@@ -90,6 +91,7 @@ func (a Assessment) Mixin() []ent.Mixin {
 			),
 			newGroupPermissionsMixin(),
 			mixin.NewSystemOwnedMixin(),
+			WorkflowApprovalMixin{},
 		},
 	}.getMixins(a)
 }
@@ -108,6 +110,12 @@ func (a Assessment) Edges() []ent.Edge {
 		defaultEdgeFromWithPagination(a, IdentityHolder{}),
 		defaultEdgeToWithPagination(a, AssessmentResponse{}),
 		defaultEdgeToWithPagination(a, Campaign{}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: a,
+			edgeSchema: WorkflowObjectRef{},
+			name:       "workflow_object_refs",
+			ref:        "assessment",
+		}),
 	}
 }
 

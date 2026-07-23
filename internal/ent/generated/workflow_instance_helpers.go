@@ -29,6 +29,10 @@ func (c *Client) CreateWorkflowInstanceForObject(ctx context.Context, definition
 	switch objectType {
 	case enums.WorkflowObjectTypeActionPlan:
 		refCreate.SetActionPlanID(objectID)
+	case enums.WorkflowObjectTypeAssessment:
+		refCreate.SetAssessmentID(objectID)
+	case enums.WorkflowObjectTypeAssessmentResponse:
+		refCreate.SetAssessmentResponseID(objectID)
 	case enums.WorkflowObjectTypeCampaign:
 		refCreate.SetCampaignID(objectID)
 	case enums.WorkflowObjectTypeCampaignTarget:
@@ -37,6 +41,8 @@ func (c *Client) CreateWorkflowInstanceForObject(ctx context.Context, definition
 		refCreate.SetControlID(objectID)
 	case enums.WorkflowObjectTypeEvidence:
 		refCreate.SetEvidenceID(objectID)
+	case enums.WorkflowObjectTypeFinding:
+		refCreate.SetFindingID(objectID)
 	case enums.WorkflowObjectTypeIdentityHolder:
 		refCreate.SetIdentityHolderID(objectID)
 	case enums.WorkflowObjectTypeInternalPolicy:
@@ -45,8 +51,16 @@ func (c *Client) CreateWorkflowInstanceForObject(ctx context.Context, definition
 		refCreate.SetPlatformID(objectID)
 	case enums.WorkflowObjectTypeProcedure:
 		refCreate.SetProcedureID(objectID)
+	case enums.WorkflowObjectTypeRemediation:
+		refCreate.SetRemediationID(objectID)
+	case enums.WorkflowObjectTypeRisk:
+		refCreate.SetRiskID(objectID)
 	case enums.WorkflowObjectTypeSubcontrol:
 		refCreate.SetSubcontrolID(objectID)
+	case enums.WorkflowObjectTypeTask:
+		refCreate.SetTaskID(objectID)
+	case enums.WorkflowObjectTypeVulnerability:
+		refCreate.SetVulnerabilityID(objectID)
 	default:
 		return nil, fmt.Errorf("unsupported object type: %s", objectType)
 	}
@@ -72,6 +86,50 @@ func (c *Client) CreateWorkflowInstanceForActionPlan(ctx context.Context, defini
 	if _, err := c.WorkflowObjectRef.Create().
 		SetWorkflowInstanceID(instance.ID).
 		SetActionPlanID(actionplanID).
+		SetOwnerID(orgID).
+		Save(ctx); err != nil {
+		return nil, err
+	}
+
+	return instance, nil
+}
+
+// CreateWorkflowInstanceForAssessment creates a workflow instance and object ref for a Assessment
+func (c *Client) CreateWorkflowInstanceForAssessment(ctx context.Context, definitionID string, assessmentID string, orgID string) (*WorkflowInstance, error) {
+	instance, err := c.WorkflowInstance.Create().
+		SetWorkflowDefinitionID(definitionID).
+		SetOwnerID(orgID).
+		SetState(enums.WorkflowInstanceStateRunning).
+		Save(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, err := c.WorkflowObjectRef.Create().
+		SetWorkflowInstanceID(instance.ID).
+		SetAssessmentID(assessmentID).
+		SetOwnerID(orgID).
+		Save(ctx); err != nil {
+		return nil, err
+	}
+
+	return instance, nil
+}
+
+// CreateWorkflowInstanceForAssessmentResponse creates a workflow instance and object ref for a AssessmentResponse
+func (c *Client) CreateWorkflowInstanceForAssessmentResponse(ctx context.Context, definitionID string, assessmentresponseID string, orgID string) (*WorkflowInstance, error) {
+	instance, err := c.WorkflowInstance.Create().
+		SetWorkflowDefinitionID(definitionID).
+		SetOwnerID(orgID).
+		SetState(enums.WorkflowInstanceStateRunning).
+		Save(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, err := c.WorkflowObjectRef.Create().
+		SetWorkflowInstanceID(instance.ID).
+		SetAssessmentResponseID(assessmentresponseID).
 		SetOwnerID(orgID).
 		Save(ctx); err != nil {
 		return nil, err
@@ -168,6 +226,28 @@ func (c *Client) CreateWorkflowInstanceForEvidence(ctx context.Context, definiti
 	return instance, nil
 }
 
+// CreateWorkflowInstanceForFinding creates a workflow instance and object ref for a Finding
+func (c *Client) CreateWorkflowInstanceForFinding(ctx context.Context, definitionID string, findingID string, orgID string) (*WorkflowInstance, error) {
+	instance, err := c.WorkflowInstance.Create().
+		SetWorkflowDefinitionID(definitionID).
+		SetOwnerID(orgID).
+		SetState(enums.WorkflowInstanceStateRunning).
+		Save(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, err := c.WorkflowObjectRef.Create().
+		SetWorkflowInstanceID(instance.ID).
+		SetFindingID(findingID).
+		SetOwnerID(orgID).
+		Save(ctx); err != nil {
+		return nil, err
+	}
+
+	return instance, nil
+}
+
 // CreateWorkflowInstanceForIdentityHolder creates a workflow instance and object ref for a IdentityHolder
 func (c *Client) CreateWorkflowInstanceForIdentityHolder(ctx context.Context, definitionID string, identityholderID string, orgID string) (*WorkflowInstance, error) {
 	instance, err := c.WorkflowInstance.Create().
@@ -256,6 +336,50 @@ func (c *Client) CreateWorkflowInstanceForProcedure(ctx context.Context, definit
 	return instance, nil
 }
 
+// CreateWorkflowInstanceForRemediation creates a workflow instance and object ref for a Remediation
+func (c *Client) CreateWorkflowInstanceForRemediation(ctx context.Context, definitionID string, remediationID string, orgID string) (*WorkflowInstance, error) {
+	instance, err := c.WorkflowInstance.Create().
+		SetWorkflowDefinitionID(definitionID).
+		SetOwnerID(orgID).
+		SetState(enums.WorkflowInstanceStateRunning).
+		Save(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, err := c.WorkflowObjectRef.Create().
+		SetWorkflowInstanceID(instance.ID).
+		SetRemediationID(remediationID).
+		SetOwnerID(orgID).
+		Save(ctx); err != nil {
+		return nil, err
+	}
+
+	return instance, nil
+}
+
+// CreateWorkflowInstanceForRisk creates a workflow instance and object ref for a Risk
+func (c *Client) CreateWorkflowInstanceForRisk(ctx context.Context, definitionID string, riskID string, orgID string) (*WorkflowInstance, error) {
+	instance, err := c.WorkflowInstance.Create().
+		SetWorkflowDefinitionID(definitionID).
+		SetOwnerID(orgID).
+		SetState(enums.WorkflowInstanceStateRunning).
+		Save(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, err := c.WorkflowObjectRef.Create().
+		SetWorkflowInstanceID(instance.ID).
+		SetRiskID(riskID).
+		SetOwnerID(orgID).
+		Save(ctx); err != nil {
+		return nil, err
+	}
+
+	return instance, nil
+}
+
 // CreateWorkflowInstanceForSubcontrol creates a workflow instance and object ref for a Subcontrol
 func (c *Client) CreateWorkflowInstanceForSubcontrol(ctx context.Context, definitionID string, subcontrolID string, orgID string) (*WorkflowInstance, error) {
 	instance, err := c.WorkflowInstance.Create().
@@ -270,6 +394,50 @@ func (c *Client) CreateWorkflowInstanceForSubcontrol(ctx context.Context, defini
 	if _, err := c.WorkflowObjectRef.Create().
 		SetWorkflowInstanceID(instance.ID).
 		SetSubcontrolID(subcontrolID).
+		SetOwnerID(orgID).
+		Save(ctx); err != nil {
+		return nil, err
+	}
+
+	return instance, nil
+}
+
+// CreateWorkflowInstanceForTask creates a workflow instance and object ref for a Task
+func (c *Client) CreateWorkflowInstanceForTask(ctx context.Context, definitionID string, taskID string, orgID string) (*WorkflowInstance, error) {
+	instance, err := c.WorkflowInstance.Create().
+		SetWorkflowDefinitionID(definitionID).
+		SetOwnerID(orgID).
+		SetState(enums.WorkflowInstanceStateRunning).
+		Save(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, err := c.WorkflowObjectRef.Create().
+		SetWorkflowInstanceID(instance.ID).
+		SetTaskID(taskID).
+		SetOwnerID(orgID).
+		Save(ctx); err != nil {
+		return nil, err
+	}
+
+	return instance, nil
+}
+
+// CreateWorkflowInstanceForVulnerability creates a workflow instance and object ref for a Vulnerability
+func (c *Client) CreateWorkflowInstanceForVulnerability(ctx context.Context, definitionID string, vulnerabilityID string, orgID string) (*WorkflowInstance, error) {
+	instance, err := c.WorkflowInstance.Create().
+		SetWorkflowDefinitionID(definitionID).
+		SetOwnerID(orgID).
+		SetState(enums.WorkflowInstanceStateRunning).
+		Save(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, err := c.WorkflowObjectRef.Create().
+		SetWorkflowInstanceID(instance.ID).
+		SetVulnerabilityID(vulnerabilityID).
 		SetOwnerID(orgID).
 		Save(ctx); err != nil {
 		return nil, err

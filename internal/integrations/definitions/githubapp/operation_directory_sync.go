@@ -3,10 +3,12 @@ package githubapp
 import (
 	"context"
 	"fmt"
+	"strings"
 
+	"github.com/samber/lo"
 	"github.com/shurcooL/githubv4"
 
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/logx"
@@ -46,6 +48,8 @@ type orgMemberNode struct {
 	Org string
 	// CanonicalEmail is the best-resolved email, populated after query
 	CanonicalEmail string
+	// EmailAliases are the remaining confirmed emails for the member beyond the canonical email
+	EmailAliases []string
 	// GivenName is the user's first name from SAML identity when available
 	GivenName string
 	// FamilyName is the user's last name from SAML identity when available
@@ -66,7 +70,7 @@ type teamNodeGQL struct {
 	Privacy string
 	// Members are the users assigned to the team
 	Members struct {
-		Nodes    []teamMemberNodeGQL
+		Edges    []teamMemberEdgeGQL
 		PageInfo pageInfo
 	} `graphql:"members(first: $memberFirst)"`
 }
@@ -85,6 +89,14 @@ type teamMemberNodeGQL struct {
 	DatabaseID int `graphql:"databaseId"`
 	// Login is the GitHub username
 	Login string
+}
+
+// teamMemberEdgeGQL is a GitHub team membership edge carrying the member role
+type teamMemberEdgeGQL struct {
+	// Node is the team member
+	Node teamMemberNodeGQL
+	// Role is the member's role in the team, MEMBER or MAINTAINER
+	Role string
 }
 
 // teamMembershipNode represents one GitHub team membership edge for ingest
@@ -106,9 +118,9 @@ type orgNode struct {
 }
 
 // IngestHandle adapts directory sync to the ingest operation registration boundary
-func (d DirectorySync) IngestHandle() types.IngestHandler {
-	return providerkit.WithClientRequest(gitHubClient, func(ctx context.Context, _ types.OperationRequest, client GraphQLClient) ([]types.IngestPayloadSet, error) {
-		return d.Run(ctx, client)
+func (DirectorySync) IngestHandle() types.IngestHandler {
+	return providerkit.WithClientRequestConfig(gitHubClient, directorySyncOperation, ErrOperationConfigInvalid, func(ctx context.Context, _ types.OperationRequest, client GraphQLClient, cfg DirectorySync) ([]types.IngestPayloadSet, error) {
+		return cfg.Run(ctx, client)
 	})
 }
 
@@ -206,7 +218,7 @@ func (d DirectorySync) Run(ctx context.Context, client GraphQLClient) ([]types.I
 
 	payloadSets := []types.IngestPayloadSet{
 		{
-			Schema:    integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
+			Schema:    entityops.SchemaDirectoryAccount.Name,
 			Envelopes: userAccountEnvelopes,
 		},
 	}
@@ -214,11 +226,11 @@ func (d DirectorySync) Run(ctx context.Context, client GraphQLClient) ([]types.I
 	if !d.DisableGroupSync {
 		payloadSets = append(payloadSets,
 			types.IngestPayloadSet{
-				Schema:    integrationgenerated.IntegrationMappingSchemaDirectoryGroup,
+				Schema:    entityops.SchemaDirectoryGroup.Name,
 				Envelopes: groupEnvelopes,
 			},
 			types.IngestPayloadSet{
-				Schema:    integrationgenerated.IntegrationMappingSchemaDirectoryMembership,
+				Schema:    entityops.SchemaDirectoryMembership.Name,
 				Envelopes: membershipEnvelopes,
 			},
 		)
@@ -228,7 +240,8 @@ func (d DirectorySync) Run(ctx context.Context, client GraphQLClient) ([]types.I
 }
 
 // resolveCanonicalEmail sets the best email for a member using the priority chain:
-// SAML nameId > organization verified domain email > public profile email
+// SAML nameId > organization verified domain email > public profile email, and collects
+// every remaining confirmed email as an alias for identity resolution
 func resolveCanonicalEmail(member *orgMemberNode, samlMap map[string]samlIdentity) {
 	if samlMap != nil {
 		if saml, ok := samlMap[member.Login]; ok {
@@ -245,6 +258,11 @@ func resolveCanonicalEmail(member *orgMemberNode, samlMap map[string]samlIdentit
 	if member.CanonicalEmail == "" {
 		member.CanonicalEmail = member.Email
 	}
+
+	candidates := append([]string{member.Email}, member.OrganizationVerifiedDomainEmails...)
+	member.EmailAliases = lo.Uniq(lo.Filter(candidates, func(email string, _ int) bool {
+		return email != "" && !strings.EqualFold(email, member.CanonicalEmail)
+	}))
 }
 
 // queryViewerOrganizations discovers organizations accessible to the GitHub App installation
@@ -453,7 +471,7 @@ func queryOrganizationTeams(ctx context.Context, client GraphQLClient, orgLogin 
 		}
 
 		for _, team := range query.Organization.Teams.Nodes {
-			members := team.Members.Nodes
+			members := team.Members.Edges
 			if team.Members.PageInfo.HasNextPage && team.Slug != "" {
 				remaining, err := queryOrganizationTeamMembers(ctx, client, orgLogin, team.Slug, team.Members.PageInfo.EndCursor)
 				if err != nil {
@@ -473,8 +491,8 @@ func queryOrganizationTeams(ctx context.Context, client GraphQLClient, orgLogin 
 				memberships = append(memberships, teamMembershipNode{
 					Org:    orgLogin,
 					Team:   team,
-					Member: member,
-					Role:   "MEMBER",
+					Member: member.Node,
+					Role:   member.Role,
 				})
 			}
 		}
@@ -490,8 +508,8 @@ func queryOrganizationTeams(ctx context.Context, client GraphQLClient, orgLogin 
 }
 
 // queryOrganizationTeamMembers fetches additional member pages for the requested team
-func queryOrganizationTeamMembers(ctx context.Context, client GraphQLClient, orgLogin string, teamSlug string, firstAfter string) ([]teamMemberNodeGQL, error) {
-	members := make([]teamMemberNodeGQL, 0)
+func queryOrganizationTeamMembers(ctx context.Context, client GraphQLClient, orgLogin string, teamSlug string, firstAfter string) ([]teamMemberEdgeGQL, error) {
+	members := make([]teamMemberEdgeGQL, 0)
 	after := githubv4.NewString(githubv4.String(firstAfter))
 
 	for {
@@ -503,7 +521,7 @@ func queryOrganizationTeamMembers(ctx context.Context, client GraphQLClient, org
 			Organization struct {
 				Team struct {
 					Members struct {
-						Nodes    []teamMemberNodeGQL
+						Edges    []teamMemberEdgeGQL
 						PageInfo pageInfo
 					} `graphql:"members(first: $first, after: $after)"`
 				} `graphql:"team(slug: $slug)"`
@@ -521,7 +539,7 @@ func queryOrganizationTeamMembers(ctx context.Context, client GraphQLClient, org
 			return nil, fmt.Errorf("%w: %w", ErrAPIRequest, err)
 		}
 
-		members = append(members, query.Organization.Team.Members.Nodes...)
+		members = append(members, query.Organization.Team.Members.Edges...)
 
 		if !query.Organization.Team.Members.PageInfo.HasNextPage || query.Organization.Team.Members.PageInfo.EndCursor == "" {
 			break

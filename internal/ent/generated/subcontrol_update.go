@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -38,6 +39,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -1213,6 +1215,36 @@ func (_u *SubcontrolUpdate) AddIdentityHolders(v ...*IdentityHolder) *Subcontrol
 	return _u.AddIdentityHolderIDs(ids...)
 }
 
+// AddVulnerabilityIDs adds the "vulnerabilities" edge to the Vulnerability entity by IDs.
+func (_u *SubcontrolUpdate) AddVulnerabilityIDs(ids ...string) *SubcontrolUpdate {
+	_u.mutation.AddVulnerabilityIDs(ids...)
+	return _u
+}
+
+// AddVulnerabilities adds the "vulnerabilities" edges to the Vulnerability entity.
+func (_u *SubcontrolUpdate) AddVulnerabilities(v ...*Vulnerability) *SubcontrolUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddVulnerabilityIDs(ids...)
+}
+
+// AddFindingIDs adds the "findings" edge to the Finding entity by IDs.
+func (_u *SubcontrolUpdate) AddFindingIDs(ids ...string) *SubcontrolUpdate {
+	_u.mutation.AddFindingIDs(ids...)
+	return _u
+}
+
+// AddFindings adds the "findings" edges to the Finding entity.
+func (_u *SubcontrolUpdate) AddFindings(v ...*Finding) *SubcontrolUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFindingIDs(ids...)
+}
+
 // Mutation returns the SubcontrolMutation object of the builder.
 func (_u *SubcontrolUpdate) Mutation() *SubcontrolMutation {
 	return _u.mutation
@@ -1687,6 +1719,48 @@ func (_u *SubcontrolUpdate) RemoveIdentityHolders(v ...*IdentityHolder) *Subcont
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveIdentityHolderIDs(ids...)
+}
+
+// ClearVulnerabilities clears all "vulnerabilities" edges to the Vulnerability entity.
+func (_u *SubcontrolUpdate) ClearVulnerabilities() *SubcontrolUpdate {
+	_u.mutation.ClearVulnerabilities()
+	return _u
+}
+
+// RemoveVulnerabilityIDs removes the "vulnerabilities" edge to Vulnerability entities by IDs.
+func (_u *SubcontrolUpdate) RemoveVulnerabilityIDs(ids ...string) *SubcontrolUpdate {
+	_u.mutation.RemoveVulnerabilityIDs(ids...)
+	return _u
+}
+
+// RemoveVulnerabilities removes "vulnerabilities" edges to Vulnerability entities.
+func (_u *SubcontrolUpdate) RemoveVulnerabilities(v ...*Vulnerability) *SubcontrolUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveVulnerabilityIDs(ids...)
+}
+
+// ClearFindings clears all "findings" edges to the Finding entity.
+func (_u *SubcontrolUpdate) ClearFindings() *SubcontrolUpdate {
+	_u.mutation.ClearFindings()
+	return _u
+}
+
+// RemoveFindingIDs removes the "findings" edge to Finding entities by IDs.
+func (_u *SubcontrolUpdate) RemoveFindingIDs(ids ...string) *SubcontrolUpdate {
+	_u.mutation.RemoveFindingIDs(ids...)
+	return _u
+}
+
+// RemoveFindings removes "findings" edges to Finding entities.
+func (_u *SubcontrolUpdate) RemoveFindings(v ...*Finding) *SubcontrolUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFindingIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -3244,6 +3318,102 @@ func (_u *SubcontrolUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.VulnerabilitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.VulnerabilitiesTable,
+			Columns: subcontrol.VulnerabilitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.VulnerabilitySubcontrols
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedVulnerabilitiesIDs(); len(nodes) > 0 && !_u.mutation.VulnerabilitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.VulnerabilitiesTable,
+			Columns: subcontrol.VulnerabilitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.VulnerabilitySubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.VulnerabilitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.VulnerabilitiesTable,
+			Columns: subcontrol.VulnerabilitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.VulnerabilitySubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FindingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.FindingsTable,
+			Columns: subcontrol.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingSubcontrols
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFindingsIDs(); len(nodes) > 0 && !_u.mutation.FindingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.FindingsTable,
+			Columns: subcontrol.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingSubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FindingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.FindingsTable,
+			Columns: subcontrol.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingSubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = _u.schemaConfig.Subcontrol
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
@@ -4424,6 +4594,36 @@ func (_u *SubcontrolUpdateOne) AddIdentityHolders(v ...*IdentityHolder) *Subcont
 	return _u.AddIdentityHolderIDs(ids...)
 }
 
+// AddVulnerabilityIDs adds the "vulnerabilities" edge to the Vulnerability entity by IDs.
+func (_u *SubcontrolUpdateOne) AddVulnerabilityIDs(ids ...string) *SubcontrolUpdateOne {
+	_u.mutation.AddVulnerabilityIDs(ids...)
+	return _u
+}
+
+// AddVulnerabilities adds the "vulnerabilities" edges to the Vulnerability entity.
+func (_u *SubcontrolUpdateOne) AddVulnerabilities(v ...*Vulnerability) *SubcontrolUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddVulnerabilityIDs(ids...)
+}
+
+// AddFindingIDs adds the "findings" edge to the Finding entity by IDs.
+func (_u *SubcontrolUpdateOne) AddFindingIDs(ids ...string) *SubcontrolUpdateOne {
+	_u.mutation.AddFindingIDs(ids...)
+	return _u
+}
+
+// AddFindings adds the "findings" edges to the Finding entity.
+func (_u *SubcontrolUpdateOne) AddFindings(v ...*Finding) *SubcontrolUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFindingIDs(ids...)
+}
+
 // Mutation returns the SubcontrolMutation object of the builder.
 func (_u *SubcontrolUpdateOne) Mutation() *SubcontrolMutation {
 	return _u.mutation
@@ -4898,6 +5098,48 @@ func (_u *SubcontrolUpdateOne) RemoveIdentityHolders(v ...*IdentityHolder) *Subc
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveIdentityHolderIDs(ids...)
+}
+
+// ClearVulnerabilities clears all "vulnerabilities" edges to the Vulnerability entity.
+func (_u *SubcontrolUpdateOne) ClearVulnerabilities() *SubcontrolUpdateOne {
+	_u.mutation.ClearVulnerabilities()
+	return _u
+}
+
+// RemoveVulnerabilityIDs removes the "vulnerabilities" edge to Vulnerability entities by IDs.
+func (_u *SubcontrolUpdateOne) RemoveVulnerabilityIDs(ids ...string) *SubcontrolUpdateOne {
+	_u.mutation.RemoveVulnerabilityIDs(ids...)
+	return _u
+}
+
+// RemoveVulnerabilities removes "vulnerabilities" edges to Vulnerability entities.
+func (_u *SubcontrolUpdateOne) RemoveVulnerabilities(v ...*Vulnerability) *SubcontrolUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveVulnerabilityIDs(ids...)
+}
+
+// ClearFindings clears all "findings" edges to the Finding entity.
+func (_u *SubcontrolUpdateOne) ClearFindings() *SubcontrolUpdateOne {
+	_u.mutation.ClearFindings()
+	return _u
+}
+
+// RemoveFindingIDs removes the "findings" edge to Finding entities by IDs.
+func (_u *SubcontrolUpdateOne) RemoveFindingIDs(ids ...string) *SubcontrolUpdateOne {
+	_u.mutation.RemoveFindingIDs(ids...)
+	return _u
+}
+
+// RemoveFindings removes "findings" edges to Finding entities.
+func (_u *SubcontrolUpdateOne) RemoveFindings(v ...*Finding) *SubcontrolUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFindingIDs(ids...)
 }
 
 // Where appends a list predicates to the SubcontrolUpdate builder.
@@ -6480,6 +6722,102 @@ func (_u *SubcontrolUpdateOne) sqlSave(ctx context.Context) (_node *Subcontrol, 
 			},
 		}
 		edge.Schema = _u.schemaConfig.SubcontrolIdentityHolders
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.VulnerabilitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.VulnerabilitiesTable,
+			Columns: subcontrol.VulnerabilitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.VulnerabilitySubcontrols
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedVulnerabilitiesIDs(); len(nodes) > 0 && !_u.mutation.VulnerabilitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.VulnerabilitiesTable,
+			Columns: subcontrol.VulnerabilitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.VulnerabilitySubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.VulnerabilitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.VulnerabilitiesTable,
+			Columns: subcontrol.VulnerabilitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.VulnerabilitySubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FindingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.FindingsTable,
+			Columns: subcontrol.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingSubcontrols
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFindingsIDs(); len(nodes) > 0 && !_u.mutation.FindingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.FindingsTable,
+			Columns: subcontrol.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingSubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FindingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.FindingsTable,
+			Columns: subcontrol.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.FindingSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

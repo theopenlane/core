@@ -7,7 +7,7 @@ import (
 
 	"github.com/elimity-com/scim"
 
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
 )
 
@@ -26,7 +26,7 @@ func BuildDirectoryAccountPayloadSet(attributes scim.ResourceAttributes, action 
 	payload["externalId"] = externalID
 
 	return BuildDirectoryPayloadSet(
-		integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
+		entityops.SchemaDirectoryAccount.Name,
 		payload, externalID, action,
 	)
 }
@@ -43,7 +43,7 @@ func BuildDirectoryGroupPayloadSets(attributes scim.ResourceAttributes, action s
 	payload["externalId"] = externalID
 
 	groupPayloadSet, err := BuildDirectoryPayloadSet(
-		integrationgenerated.IntegrationMappingSchemaDirectoryGroup,
+		entityops.SchemaDirectoryGroup.Name,
 		payload, externalID, action,
 	)
 	if err != nil {
@@ -68,7 +68,7 @@ func BuildDirectoryGroupPayloadSets(attributes scim.ResourceAttributes, action s
 	}
 
 	membershipPayloadSet, err := BuildDirectoryPayloadSet(
-		integrationgenerated.IntegrationMappingSchemaDirectoryMembership,
+		entityops.SchemaDirectoryMembership.Name,
 		membershipPayloads, externalID, action,
 	)
 	if err != nil {

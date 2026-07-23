@@ -20379,6 +20379,62 @@ var (
 			}
 		},
 	}
+	// ProgramHistoryOrderFieldObservationPeriodStartDate orders ProgramHistory by observation_period_start_date.
+	ProgramHistoryOrderFieldObservationPeriodStartDate = &ProgramHistoryOrderField{
+		Value: func(_m *ProgramHistory) (ent.Value, error) {
+			return _m.ObservationPeriodStartDate, nil
+		},
+		column: programhistory.FieldObservationPeriodStartDate,
+		toTerm: programhistory.ByObservationPeriodStartDate,
+		toCursor: func(_m *ProgramHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ObservationPeriodStartDate,
+			}
+		},
+	}
+	// ProgramHistoryOrderFieldObservationPeriodEndDate orders ProgramHistory by observation_period_end_date.
+	ProgramHistoryOrderFieldObservationPeriodEndDate = &ProgramHistoryOrderField{
+		Value: func(_m *ProgramHistory) (ent.Value, error) {
+			return _m.ObservationPeriodEndDate, nil
+		},
+		column: programhistory.FieldObservationPeriodEndDate,
+		toTerm: programhistory.ByObservationPeriodEndDate,
+		toCursor: func(_m *ProgramHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ObservationPeriodEndDate,
+			}
+		},
+	}
+	// ProgramHistoryOrderFieldFieldworkStartDate orders ProgramHistory by fieldwork_start_date.
+	ProgramHistoryOrderFieldFieldworkStartDate = &ProgramHistoryOrderField{
+		Value: func(_m *ProgramHistory) (ent.Value, error) {
+			return _m.FieldworkStartDate, nil
+		},
+		column: programhistory.FieldFieldworkStartDate,
+		toTerm: programhistory.ByFieldworkStartDate,
+		toCursor: func(_m *ProgramHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.FieldworkStartDate,
+			}
+		},
+	}
+	// ProgramHistoryOrderFieldFieldworkEndDate orders ProgramHistory by fieldwork_end_date.
+	ProgramHistoryOrderFieldFieldworkEndDate = &ProgramHistoryOrderField{
+		Value: func(_m *ProgramHistory) (ent.Value, error) {
+			return _m.FieldworkEndDate, nil
+		},
+		column: programhistory.FieldFieldworkEndDate,
+		toTerm: programhistory.ByFieldworkEndDate,
+		toCursor: func(_m *ProgramHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.FieldworkEndDate,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -20401,6 +20457,14 @@ func (f ProgramHistoryOrderField) String() string {
 		str = "start_date"
 	case ProgramHistoryOrderFieldEndDate.column:
 		str = "end_date"
+	case ProgramHistoryOrderFieldObservationPeriodStartDate.column:
+		str = "observation_period_start_date"
+	case ProgramHistoryOrderFieldObservationPeriodEndDate.column:
+		str = "observation_period_end_date"
+	case ProgramHistoryOrderFieldFieldworkStartDate.column:
+		str = "fieldwork_start_date"
+	case ProgramHistoryOrderFieldFieldworkEndDate.column:
+		str = "fieldwork_end_date"
 	}
 	return str
 }
@@ -20433,6 +20497,14 @@ func (f *ProgramHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *ProgramHistoryOrderFieldStartDate
 	case "end_date":
 		*f = *ProgramHistoryOrderFieldEndDate
+	case "observation_period_start_date":
+		*f = *ProgramHistoryOrderFieldObservationPeriodStartDate
+	case "observation_period_end_date":
+		*f = *ProgramHistoryOrderFieldObservationPeriodEndDate
+	case "fieldwork_start_date":
+		*f = *ProgramHistoryOrderFieldFieldworkStartDate
+	case "fieldwork_end_date":
+		*f = *ProgramHistoryOrderFieldFieldworkEndDate
 	default:
 		return fmt.Errorf("%s is not a valid ProgramHistoryOrderField", str)
 	}
@@ -25447,6 +25519,34 @@ var (
 			}
 		},
 	}
+	// TaskHistoryOrderFieldIsSuggested orders TaskHistory by is_suggested.
+	TaskHistoryOrderFieldIsSuggested = &TaskHistoryOrderField{
+		Value: func(_m *TaskHistory) (ent.Value, error) {
+			return _m.IsSuggested, nil
+		},
+		column: taskhistory.FieldIsSuggested,
+		toTerm: taskhistory.ByIsSuggested,
+		toCursor: func(_m *TaskHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.IsSuggested,
+			}
+		},
+	}
+	// TaskHistoryOrderFieldPriority orders TaskHistory by priority.
+	TaskHistoryOrderFieldPriority = &TaskHistoryOrderField{
+		Value: func(_m *TaskHistory) (ent.Value, error) {
+			return _m.Priority, nil
+		},
+		column: taskhistory.FieldPriority,
+		toTerm: taskhistory.ByPriority,
+		toCursor: func(_m *TaskHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Priority,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -25469,6 +25569,10 @@ func (f TaskHistoryOrderField) String() string {
 		str = "completed"
 	case TaskHistoryOrderFieldIsTemplate.column:
 		str = "is_template"
+	case TaskHistoryOrderFieldIsSuggested.column:
+		str = "is_suggested"
+	case TaskHistoryOrderFieldPriority.column:
+		str = "priority"
 	}
 	return str
 }
@@ -25501,6 +25605,10 @@ func (f *TaskHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *TaskHistoryOrderFieldCompleted
 	case "is_template":
 		*f = *TaskHistoryOrderFieldIsTemplate
+	case "is_suggested":
+		*f = *TaskHistoryOrderFieldIsSuggested
+	case "priority":
+		*f = *TaskHistoryOrderFieldPriority
 	default:
 		return fmt.Errorf("%s is not a valid TaskHistoryOrderField", str)
 	}
@@ -30783,6 +30891,20 @@ var (
 			}
 		},
 	}
+	// VulnerabilityHistoryOrderFieldScore orders VulnerabilityHistory by score.
+	VulnerabilityHistoryOrderFieldScore = &VulnerabilityHistoryOrderField{
+		Value: func(_m *VulnerabilityHistory) (ent.Value, error) {
+			return _m.Score, nil
+		},
+		column: vulnerabilityhistory.FieldScore,
+		toTerm: vulnerabilityhistory.ByScore,
+		toCursor: func(_m *VulnerabilityHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Score,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -30807,6 +30929,8 @@ func (f VulnerabilityHistoryOrderField) String() string {
 		str = "category"
 	case VulnerabilityHistoryOrderFieldSeverity.column:
 		str = "severity"
+	case VulnerabilityHistoryOrderFieldScore.column:
+		str = "score"
 	}
 	return str
 }
@@ -30841,6 +30965,8 @@ func (f *VulnerabilityHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *VulnerabilityHistoryOrderFieldCategory
 	case "severity":
 		*f = *VulnerabilityHistoryOrderFieldSeverity
+	case "score":
+		*f = *VulnerabilityHistoryOrderFieldScore
 	default:
 		return fmt.Errorf("%s is not a valid VulnerabilityHistoryOrderField", str)
 	}

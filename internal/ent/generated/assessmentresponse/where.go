@@ -108,6 +108,11 @@ func OwnerID(v string) predicate.AssessmentResponse {
 	return predicate.AssessmentResponse(sql.FieldEQ(FieldOwnerID, v))
 }
 
+// WorkflowEligibleMarker applies equality check predicate on the "workflow_eligible_marker" field. It's identical to WorkflowEligibleMarkerEQ.
+func WorkflowEligibleMarker(v bool) predicate.AssessmentResponse {
+	return predicate.AssessmentResponse(sql.FieldEQ(FieldWorkflowEligibleMarker, v))
+}
+
 // AssessmentID applies equality check predicate on the "assessment_id" field. It's identical to AssessmentIDEQ.
 func AssessmentID(v string) predicate.AssessmentResponse {
 	return predicate.AssessmentResponse(sql.FieldEQ(FieldAssessmentID, v))
@@ -731,6 +736,26 @@ func OwnerIDEqualFold(v string) predicate.AssessmentResponse {
 // OwnerIDContainsFold applies the ContainsFold predicate on the "owner_id" field.
 func OwnerIDContainsFold(v string) predicate.AssessmentResponse {
 	return predicate.AssessmentResponse(sql.FieldContainsFold(FieldOwnerID, v))
+}
+
+// WorkflowEligibleMarkerEQ applies the EQ predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerEQ(v bool) predicate.AssessmentResponse {
+	return predicate.AssessmentResponse(sql.FieldEQ(FieldWorkflowEligibleMarker, v))
+}
+
+// WorkflowEligibleMarkerNEQ applies the NEQ predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerNEQ(v bool) predicate.AssessmentResponse {
+	return predicate.AssessmentResponse(sql.FieldNEQ(FieldWorkflowEligibleMarker, v))
+}
+
+// WorkflowEligibleMarkerIsNil applies the IsNil predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerIsNil() predicate.AssessmentResponse {
+	return predicate.AssessmentResponse(sql.FieldIsNull(FieldWorkflowEligibleMarker))
+}
+
+// WorkflowEligibleMarkerNotNil applies the NotNil predicate on the "workflow_eligible_marker" field.
+func WorkflowEligibleMarkerNotNil() predicate.AssessmentResponse {
+	return predicate.AssessmentResponse(sql.FieldNotNull(FieldWorkflowEligibleMarker))
 }
 
 // AssessmentIDEQ applies the EQ predicate on the "assessment_id" field.
@@ -2023,6 +2048,35 @@ func HasVendorRiskScoresWith(preds ...predicate.VendorRiskScore) predicate.Asses
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.VendorRiskScore
 		step.Edge.Schema = schemaConfig.VendorRiskScore
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasWorkflowObjectRefs applies the HasEdge predicate on the "workflow_object_refs" edge.
+func HasWorkflowObjectRefs() predicate.AssessmentResponse {
+	return predicate.AssessmentResponse(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, WorkflowObjectRefsTable, WorkflowObjectRefsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasWorkflowObjectRefsWith applies the HasEdge predicate on the "workflow_object_refs" edge with a given conditions (other predicates).
+func HasWorkflowObjectRefsWith(preds ...predicate.WorkflowObjectRef) predicate.AssessmentResponse {
+	return predicate.AssessmentResponse(func(s *sql.Selector) {
+		step := newWorkflowObjectRefsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

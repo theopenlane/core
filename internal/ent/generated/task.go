@@ -55,6 +55,8 @@ type Task struct {
 	ScopeName string `json:"scope_name,omitempty"`
 	// the scope of the task
 	ScopeID string `json:"scope_id,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker bool `json:"-"`
 	// stable external UUID for deterministic OSCAL export and round-tripping
 	ExternalUUID *string `json:"external_uuid,omitempty"`
 	// the title of the task
@@ -63,6 +65,8 @@ type Task struct {
 	Details string `json:"details,omitempty"`
 	// structured details of the task in JSON format
 	DetailsJSON []interface{} `json:"details_json,omitempty"`
+	// structured metadata used by clients for task presentation and routing
+	Metadata map[string]interface{} `json:"metadata,omitempty"`
 	// the status of the task
 	Status enums.TaskStatus `json:"status,omitempty"`
 	// the due date of the task
@@ -77,6 +81,14 @@ type Task struct {
 	SystemGenerated bool `json:"system_generated,omitempty"`
 	// indicates if the task is intended to be used as a template
 	IsTemplate bool `json:"is_template,omitempty"`
+	// indicates if the task is suggested by the system as a recommended next action
+	IsSuggested bool `json:"is_suggested,omitempty"`
+	// relative ordering priority for suggested and system-generated tasks
+	Priority int `json:"priority,omitempty"`
+	// the system or workflow that created or suggested the task
+	Source string `json:"source,omitempty"`
+	// stable source-specific key for the task
+	SourceKey string `json:"source_key,omitempty"`
 	// key to prevent duplicates for auto-generated task based on rules
 	IdempotencyKey string `json:"idempotency_key,omitempty"`
 	// an optional external reference URL for the task
@@ -429,11 +441,13 @@ func (*Task) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case task.FieldDue, task.FieldCompleted:
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
-		case task.FieldTags, task.FieldDetailsJSON, task.FieldExternalReferenceURL:
+		case task.FieldTags, task.FieldDetailsJSON, task.FieldMetadata, task.FieldExternalReferenceURL:
 			values[i] = new([]byte)
-		case task.FieldSystemGenerated, task.FieldIsTemplate:
+		case task.FieldWorkflowEligibleMarker, task.FieldSystemGenerated, task.FieldIsTemplate, task.FieldIsSuggested:
 			values[i] = new(sql.NullBool)
-		case task.FieldID, task.FieldCreatedBy, task.FieldUpdatedBy, task.FieldUpdatedByImpersonator, task.FieldDeletedBy, task.FieldDisplayID, task.FieldOwnerID, task.FieldTaskKindName, task.FieldTaskKindID, task.FieldEnvironmentName, task.FieldEnvironmentID, task.FieldScopeName, task.FieldScopeID, task.FieldExternalUUID, task.FieldTitle, task.FieldDetails, task.FieldStatus, task.FieldAssigneeID, task.FieldAssignerID, task.FieldIdempotencyKey, task.FieldParentTaskID:
+		case task.FieldPriority:
+			values[i] = new(sql.NullInt64)
+		case task.FieldID, task.FieldCreatedBy, task.FieldUpdatedBy, task.FieldUpdatedByImpersonator, task.FieldDeletedBy, task.FieldDisplayID, task.FieldOwnerID, task.FieldTaskKindName, task.FieldTaskKindID, task.FieldEnvironmentName, task.FieldEnvironmentID, task.FieldScopeName, task.FieldScopeID, task.FieldExternalUUID, task.FieldTitle, task.FieldDetails, task.FieldStatus, task.FieldAssigneeID, task.FieldAssignerID, task.FieldSource, task.FieldSourceKey, task.FieldIdempotencyKey, task.FieldParentTaskID:
 			values[i] = new(sql.NullString)
 		case task.FieldCreatedAt, task.FieldUpdatedAt, task.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -565,6 +579,12 @@ func (_m *Task) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.ScopeID = value.String
 			}
+		case task.FieldWorkflowEligibleMarker:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field workflow_eligible_marker", values[i])
+			} else if value.Valid {
+				_m.WorkflowEligibleMarker = value.Bool
+			}
 		case task.FieldExternalUUID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field external_uuid", values[i])
@@ -590,6 +610,14 @@ func (_m *Task) assignValues(columns []string, values []any) error {
 			} else if value != nil && len(*value) > 0 {
 				if err := json.Unmarshal(*value, &_m.DetailsJSON); err != nil {
 					return fmt.Errorf("unmarshal field details_json: %w", err)
+				}
+			}
+		case task.FieldMetadata:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field metadata", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.Metadata); err != nil {
+					return fmt.Errorf("unmarshal field metadata: %w", err)
 				}
 			}
 		case task.FieldStatus:
@@ -635,6 +663,30 @@ func (_m *Task) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field is_template", values[i])
 			} else if value.Valid {
 				_m.IsTemplate = value.Bool
+			}
+		case task.FieldIsSuggested:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_suggested", values[i])
+			} else if value.Valid {
+				_m.IsSuggested = value.Bool
+			}
+		case task.FieldPriority:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field priority", values[i])
+			} else if value.Valid {
+				_m.Priority = int(value.Int64)
+			}
+		case task.FieldSource:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source", values[i])
+			} else if value.Valid {
+				_m.Source = value.String
+			}
+		case task.FieldSourceKey:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field source_key", values[i])
+			} else if value.Valid {
+				_m.SourceKey = value.String
 			}
 		case task.FieldIdempotencyKey:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -901,6 +953,9 @@ func (_m *Task) String() string {
 	builder.WriteString("scope_id=")
 	builder.WriteString(_m.ScopeID)
 	builder.WriteString(", ")
+	builder.WriteString("workflow_eligible_marker=")
+	builder.WriteString(fmt.Sprintf("%v", _m.WorkflowEligibleMarker))
+	builder.WriteString(", ")
 	if v := _m.ExternalUUID; v != nil {
 		builder.WriteString("external_uuid=")
 		builder.WriteString(*v)
@@ -914,6 +969,9 @@ func (_m *Task) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("details_json=")
 	builder.WriteString(fmt.Sprintf("%v", _m.DetailsJSON))
+	builder.WriteString(", ")
+	builder.WriteString("metadata=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))
@@ -939,6 +997,18 @@ func (_m *Task) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("is_template=")
 	builder.WriteString(fmt.Sprintf("%v", _m.IsTemplate))
+	builder.WriteString(", ")
+	builder.WriteString("is_suggested=")
+	builder.WriteString(fmt.Sprintf("%v", _m.IsSuggested))
+	builder.WriteString(", ")
+	builder.WriteString("priority=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Priority))
+	builder.WriteString(", ")
+	builder.WriteString("source=")
+	builder.WriteString(_m.Source)
+	builder.WriteString(", ")
+	builder.WriteString("source_key=")
+	builder.WriteString(_m.SourceKey)
 	builder.WriteString(", ")
 	builder.WriteString("idempotency_key=")
 	builder.WriteString(_m.IdempotencyKey)

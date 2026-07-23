@@ -38,6 +38,18 @@ const (
 	FieldTags = "tags"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
+	// FieldReviewedBy holds the string denoting the reviewed_by field in the database.
+	FieldReviewedBy = "reviewed_by"
+	// FieldReviewedByUserID holds the string denoting the reviewed_by_user_id field in the database.
+	FieldReviewedByUserID = "reviewed_by_user_id"
+	// FieldReviewedByGroupID holds the string denoting the reviewed_by_group_id field in the database.
+	FieldReviewedByGroupID = "reviewed_by_group_id"
+	// FieldAssignedTo holds the string denoting the assigned_to field in the database.
+	FieldAssignedTo = "assigned_to"
+	// FieldAssignedToUserID holds the string denoting the assigned_to_user_id field in the database.
+	FieldAssignedToUserID = "assigned_to_user_id"
+	// FieldAssignedToGroupID holds the string denoting the assigned_to_group_id field in the database.
+	FieldAssignedToGroupID = "assigned_to_group_id"
 	// FieldSystemOwned holds the string denoting the system_owned field in the database.
 	FieldSystemOwned = "system_owned"
 	// FieldInternalNotes holds the string denoting the internal_notes field in the database.
@@ -56,6 +68,8 @@ const (
 	FieldFindingStatusName = "finding_status_name"
 	// FieldFindingStatusID holds the string denoting the finding_status_id field in the database.
 	FieldFindingStatusID = "finding_status_id"
+	// FieldWorkflowEligibleMarker holds the string denoting the workflow_eligible_marker field in the database.
+	FieldWorkflowEligibleMarker = "workflow_eligible_marker"
 	// FieldExternalID holds the string denoting the external_id field in the database.
 	FieldExternalID = "external_id"
 	// FieldSecurityLevel holds the string denoting the security_level field in the database.
@@ -136,6 +150,14 @@ const (
 	EdgeBlockedGroups = "blocked_groups"
 	// EdgeEditors holds the string denoting the editors edge name in mutations.
 	EdgeEditors = "editors"
+	// EdgeReviewedByUser holds the string denoting the reviewed_by_user edge name in mutations.
+	EdgeReviewedByUser = "reviewed_by_user"
+	// EdgeReviewedByGroup holds the string denoting the reviewed_by_group edge name in mutations.
+	EdgeReviewedByGroup = "reviewed_by_group"
+	// EdgeAssignedToUser holds the string denoting the assigned_to_user edge name in mutations.
+	EdgeAssignedToUser = "assigned_to_user"
+	// EdgeAssignedToGroup holds the string denoting the assigned_to_group edge name in mutations.
+	EdgeAssignedToGroup = "assigned_to_group"
 	// EdgeEnvironment holds the string denoting the environment edge name in mutations.
 	EdgeEnvironment = "environment"
 	// EdgeScope holds the string denoting the scope edge name in mutations.
@@ -201,6 +223,34 @@ const (
 	// EditorsInverseTable is the table name for the Group entity.
 	// It exists in this package in order to avoid circular dependency with the "group" package.
 	EditorsInverseTable = "groups"
+	// ReviewedByUserTable is the table that holds the reviewed_by_user relation/edge.
+	ReviewedByUserTable = "findings"
+	// ReviewedByUserInverseTable is the table name for the User entity.
+	// It exists in this package in order to avoid circular dependency with the "user" package.
+	ReviewedByUserInverseTable = "users"
+	// ReviewedByUserColumn is the table column denoting the reviewed_by_user relation/edge.
+	ReviewedByUserColumn = "reviewed_by_user_id"
+	// ReviewedByGroupTable is the table that holds the reviewed_by_group relation/edge.
+	ReviewedByGroupTable = "findings"
+	// ReviewedByGroupInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	ReviewedByGroupInverseTable = "groups"
+	// ReviewedByGroupColumn is the table column denoting the reviewed_by_group relation/edge.
+	ReviewedByGroupColumn = "reviewed_by_group_id"
+	// AssignedToUserTable is the table that holds the assigned_to_user relation/edge.
+	AssignedToUserTable = "findings"
+	// AssignedToUserInverseTable is the table name for the User entity.
+	// It exists in this package in order to avoid circular dependency with the "user" package.
+	AssignedToUserInverseTable = "users"
+	// AssignedToUserColumn is the table column denoting the assigned_to_user relation/edge.
+	AssignedToUserColumn = "assigned_to_user_id"
+	// AssignedToGroupTable is the table that holds the assigned_to_group relation/edge.
+	AssignedToGroupTable = "findings"
+	// AssignedToGroupInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	AssignedToGroupInverseTable = "groups"
+	// AssignedToGroupColumn is the table column denoting the assigned_to_group relation/edge.
+	AssignedToGroupColumn = "assigned_to_group_id"
 	// EnvironmentTable is the table that holds the environment relation/edge.
 	EnvironmentTable = "findings"
 	// EnvironmentInverseTable is the table name for the CustomTypeEnum entity.
@@ -242,48 +292,36 @@ const (
 	// ControlsInverseTable is the table name for the Control entity.
 	// It exists in this package in order to avoid circular dependency with the "control" package.
 	ControlsInverseTable = "controls"
-	// SubcontrolsTable is the table that holds the subcontrols relation/edge.
-	SubcontrolsTable = "subcontrols"
+	// SubcontrolsTable is the table that holds the subcontrols relation/edge. The primary key declared below.
+	SubcontrolsTable = "finding_subcontrols"
 	// SubcontrolsInverseTable is the table name for the Subcontrol entity.
 	// It exists in this package in order to avoid circular dependency with the "subcontrol" package.
 	SubcontrolsInverseTable = "subcontrols"
-	// SubcontrolsColumn is the table column denoting the subcontrols relation/edge.
-	SubcontrolsColumn = "finding_subcontrols"
-	// RisksTable is the table that holds the risks relation/edge.
-	RisksTable = "risks"
+	// RisksTable is the table that holds the risks relation/edge. The primary key declared below.
+	RisksTable = "finding_risks"
 	// RisksInverseTable is the table name for the Risk entity.
 	// It exists in this package in order to avoid circular dependency with the "risk" package.
 	RisksInverseTable = "risks"
-	// RisksColumn is the table column denoting the risks relation/edge.
-	RisksColumn = "finding_risks"
-	// ProgramsTable is the table that holds the programs relation/edge.
-	ProgramsTable = "programs"
+	// ProgramsTable is the table that holds the programs relation/edge. The primary key declared below.
+	ProgramsTable = "finding_programs"
 	// ProgramsInverseTable is the table name for the Program entity.
 	// It exists in this package in order to avoid circular dependency with the "program" package.
 	ProgramsInverseTable = "programs"
-	// ProgramsColumn is the table column denoting the programs relation/edge.
-	ProgramsColumn = "finding_programs"
-	// AssetsTable is the table that holds the assets relation/edge.
-	AssetsTable = "assets"
+	// AssetsTable is the table that holds the assets relation/edge. The primary key declared below.
+	AssetsTable = "finding_assets"
 	// AssetsInverseTable is the table name for the Asset entity.
 	// It exists in this package in order to avoid circular dependency with the "asset" package.
 	AssetsInverseTable = "assets"
-	// AssetsColumn is the table column denoting the assets relation/edge.
-	AssetsColumn = "finding_assets"
-	// EntitiesTable is the table that holds the entities relation/edge.
-	EntitiesTable = "entities"
+	// EntitiesTable is the table that holds the entities relation/edge. The primary key declared below.
+	EntitiesTable = "finding_entities"
 	// EntitiesInverseTable is the table name for the Entity entity.
 	// It exists in this package in order to avoid circular dependency with the "entity" package.
 	EntitiesInverseTable = "entities"
-	// EntitiesColumn is the table column denoting the entities relation/edge.
-	EntitiesColumn = "finding_entities"
-	// ScansTable is the table that holds the scans relation/edge.
-	ScansTable = "scans"
+	// ScansTable is the table that holds the scans relation/edge. The primary key declared below.
+	ScansTable = "finding_scans"
 	// ScansInverseTable is the table name for the Scan entity.
 	// It exists in this package in order to avoid circular dependency with the "scan" package.
 	ScansInverseTable = "scans"
-	// ScansColumn is the table column denoting the scans relation/edge.
-	ScansColumn = "finding_scans"
 	// TasksTable is the table that holds the tasks relation/edge. The primary key declared below.
 	TasksTable = "finding_tasks"
 	// TasksInverseTable is the table name for the Task entity.
@@ -357,6 +395,12 @@ var Columns = []string{
 	FieldDisplayID,
 	FieldTags,
 	FieldOwnerID,
+	FieldReviewedBy,
+	FieldReviewedByUserID,
+	FieldReviewedByGroupID,
+	FieldAssignedTo,
+	FieldAssignedToUserID,
+	FieldAssignedToGroupID,
 	FieldSystemOwned,
 	FieldInternalNotes,
 	FieldSystemInternalID,
@@ -366,6 +410,7 @@ var Columns = []string{
 	FieldScopeID,
 	FieldFindingStatusName,
 	FieldFindingStatusID,
+	FieldWorkflowEligibleMarker,
 	FieldExternalID,
 	FieldSecurityLevel,
 	FieldExternalOwnerID,
@@ -424,6 +469,24 @@ var (
 	// ControlsPrimaryKey and ControlsColumn2 are the table columns denoting the
 	// primary key for the controls relation (M2M).
 	ControlsPrimaryKey = []string{"finding_id", "control_id"}
+	// SubcontrolsPrimaryKey and SubcontrolsColumn2 are the table columns denoting the
+	// primary key for the subcontrols relation (M2M).
+	SubcontrolsPrimaryKey = []string{"finding_id", "subcontrol_id"}
+	// RisksPrimaryKey and RisksColumn2 are the table columns denoting the
+	// primary key for the risks relation (M2M).
+	RisksPrimaryKey = []string{"finding_id", "risk_id"}
+	// ProgramsPrimaryKey and ProgramsColumn2 are the table columns denoting the
+	// primary key for the programs relation (M2M).
+	ProgramsPrimaryKey = []string{"finding_id", "program_id"}
+	// AssetsPrimaryKey and AssetsColumn2 are the table columns denoting the
+	// primary key for the assets relation (M2M).
+	AssetsPrimaryKey = []string{"finding_id", "asset_id"}
+	// EntitiesPrimaryKey and EntitiesColumn2 are the table columns denoting the
+	// primary key for the entities relation (M2M).
+	EntitiesPrimaryKey = []string{"finding_id", "entity_id"}
+	// ScansPrimaryKey and ScansColumn2 are the table columns denoting the
+	// primary key for the scans relation (M2M).
+	ScansPrimaryKey = []string{"finding_id", "scan_id"}
 	// TasksPrimaryKey and TasksColumn2 are the table columns denoting the
 	// primary key for the tasks relation (M2M).
 	TasksPrimaryKey = []string{"finding_id", "task_id"}
@@ -460,7 +523,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [15]ent.Hook
+	Hooks        [16]ent.Hook
 	Interceptors [4]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -477,6 +540,8 @@ var (
 	OwnerIDValidator func(string) error
 	// DefaultSystemOwned holds the default value on creation for the "system_owned" field.
 	DefaultSystemOwned bool
+	// DefaultWorkflowEligibleMarker holds the default value on creation for the "workflow_eligible_marker" field.
+	DefaultWorkflowEligibleMarker bool
 	// DefaultCategories holds the default value on creation for the "categories" field.
 	DefaultCategories []string
 	// DefaultOpen holds the default value on creation for the "open" field.
@@ -556,6 +621,36 @@ func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
 }
 
+// ByReviewedBy orders the results by the reviewed_by field.
+func ByReviewedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewedBy, opts...).ToFunc()
+}
+
+// ByReviewedByUserID orders the results by the reviewed_by_user_id field.
+func ByReviewedByUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewedByUserID, opts...).ToFunc()
+}
+
+// ByReviewedByGroupID orders the results by the reviewed_by_group_id field.
+func ByReviewedByGroupID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewedByGroupID, opts...).ToFunc()
+}
+
+// ByAssignedTo orders the results by the assigned_to field.
+func ByAssignedTo(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAssignedTo, opts...).ToFunc()
+}
+
+// ByAssignedToUserID orders the results by the assigned_to_user_id field.
+func ByAssignedToUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAssignedToUserID, opts...).ToFunc()
+}
+
+// ByAssignedToGroupID orders the results by the assigned_to_group_id field.
+func ByAssignedToGroupID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAssignedToGroupID, opts...).ToFunc()
+}
+
 // BySystemOwned orders the results by the system_owned field.
 func BySystemOwned(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSystemOwned, opts...).ToFunc()
@@ -599,6 +694,11 @@ func ByFindingStatusName(opts ...sql.OrderTermOption) OrderOption {
 // ByFindingStatusID orders the results by the finding_status_id field.
 func ByFindingStatusID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldFindingStatusID, opts...).ToFunc()
+}
+
+// ByWorkflowEligibleMarker orders the results by the workflow_eligible_marker field.
+func ByWorkflowEligibleMarker(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldWorkflowEligibleMarker, opts...).ToFunc()
 }
 
 // ByExternalID orders the results by the external_id field.
@@ -783,6 +883,34 @@ func ByEditorsCount(opts ...sql.OrderTermOption) OrderOption {
 func ByEditors(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newEditorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByReviewedByUserField orders the results by reviewed_by_user field.
+func ByReviewedByUserField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newReviewedByUserStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByReviewedByGroupField orders the results by reviewed_by_group field.
+func ByReviewedByGroupField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newReviewedByGroupStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByAssignedToUserField orders the results by assigned_to_user field.
+func ByAssignedToUserField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAssignedToUserStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByAssignedToGroupField orders the results by assigned_to_group field.
+func ByAssignedToGroupField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAssignedToGroupStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -1107,6 +1235,34 @@ func newEditorsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, false, EditorsTable, EditorsPrimaryKey...),
 	)
 }
+func newReviewedByUserStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ReviewedByUserInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, ReviewedByUserTable, ReviewedByUserColumn),
+	)
+}
+func newReviewedByGroupStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ReviewedByGroupInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, ReviewedByGroupTable, ReviewedByGroupColumn),
+	)
+}
+func newAssignedToUserStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AssignedToUserInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, AssignedToUserTable, AssignedToUserColumn),
+	)
+}
+func newAssignedToGroupStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AssignedToGroupInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, AssignedToGroupTable, AssignedToGroupColumn),
+	)
+}
 func newEnvironmentStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -1160,42 +1316,42 @@ func newSubcontrolsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(SubcontrolsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, SubcontrolsTable, SubcontrolsColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, SubcontrolsTable, SubcontrolsPrimaryKey...),
 	)
 }
 func newRisksStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(RisksInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, RisksTable, RisksColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, RisksTable, RisksPrimaryKey...),
 	)
 }
 func newProgramsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ProgramsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, ProgramsTable, ProgramsColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, ProgramsTable, ProgramsPrimaryKey...),
 	)
 }
 func newAssetsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(AssetsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, AssetsTable, AssetsColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, AssetsTable, AssetsPrimaryKey...),
 	)
 }
 func newEntitiesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EntitiesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, EntitiesTable, EntitiesColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, EntitiesTable, EntitiesPrimaryKey...),
 	)
 }
 func newScansStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ScansInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, ScansTable, ScansColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, ScansTable, ScansPrimaryKey...),
 	)
 }
 func newTasksStep() *sqlgraph.Step {

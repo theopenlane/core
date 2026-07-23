@@ -49,6 +49,18 @@ type FindingHistory struct {
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// who reviewed the finding when no user or group is linked
+	ReviewedBy string `json:"reviewed_by,omitempty"`
+	// the user id that reviewed the finding
+	ReviewedByUserID string `json:"reviewed_by_user_id,omitempty"`
+	// the group id that reviewed the finding
+	ReviewedByGroupID string `json:"reviewed_by_group_id,omitempty"`
+	// who the finding is assigned to when no user or group is linked
+	AssignedTo string `json:"assigned_to,omitempty"`
+	// the user id assigned to the finding
+	AssignedToUserID string `json:"assigned_to_user_id,omitempty"`
+	// the group id assigned to the finding
+	AssignedToGroupID string `json:"assigned_to_group_id,omitempty"`
 	// indicates if the record is owned by the the openlane system and not by an organization
 	SystemOwned bool `json:"system_owned,omitempty"`
 	// internal notes about the object creation, this field is only available to system admins
@@ -67,6 +79,8 @@ type FindingHistory struct {
 	FindingStatusName string `json:"finding_status_name,omitempty"`
 	// the status of the finding
 	FindingStatusID string `json:"finding_status_id,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker bool `json:"-"`
 	// external identifier from the integration source for the finding
 	ExternalID string `json:"external_id,omitempty"`
 	// incoming source severity
@@ -155,13 +169,13 @@ func (*FindingHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case findinghistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case findinghistory.FieldSystemOwned, findinghistory.FieldOpen, findinghistory.FieldBlocksProduction, findinghistory.FieldProduction, findinghistory.FieldPublic, findinghistory.FieldValidated:
+		case findinghistory.FieldSystemOwned, findinghistory.FieldWorkflowEligibleMarker, findinghistory.FieldOpen, findinghistory.FieldBlocksProduction, findinghistory.FieldProduction, findinghistory.FieldPublic, findinghistory.FieldValidated:
 			values[i] = new(sql.NullBool)
 		case findinghistory.FieldNumericSeverity, findinghistory.FieldScore, findinghistory.FieldImpact, findinghistory.FieldExploitability:
 			values[i] = new(sql.NullFloat64)
 		case findinghistory.FieldRemediationSLA:
 			values[i] = new(sql.NullInt64)
-		case findinghistory.FieldID, findinghistory.FieldRef, findinghistory.FieldCreatedBy, findinghistory.FieldUpdatedBy, findinghistory.FieldUpdatedByImpersonator, findinghistory.FieldDeletedBy, findinghistory.FieldDisplayID, findinghistory.FieldOwnerID, findinghistory.FieldInternalNotes, findinghistory.FieldSystemInternalID, findinghistory.FieldEnvironmentName, findinghistory.FieldEnvironmentID, findinghistory.FieldScopeName, findinghistory.FieldScopeID, findinghistory.FieldFindingStatusName, findinghistory.FieldFindingStatusID, findinghistory.FieldExternalID, findinghistory.FieldSecurityLevel, findinghistory.FieldExternalOwnerID, findinghistory.FieldSource, findinghistory.FieldResourceName, findinghistory.FieldDisplayName, findinghistory.FieldState, findinghistory.FieldCategory, findinghistory.FieldFindingClass, findinghistory.FieldSeverity, findinghistory.FieldPriority, findinghistory.FieldAssessmentID, findinghistory.FieldDescription, findinghistory.FieldRecommendation, findinghistory.FieldRecommendedActions, findinghistory.FieldVector, findinghistory.FieldExternalURI:
+		case findinghistory.FieldID, findinghistory.FieldRef, findinghistory.FieldCreatedBy, findinghistory.FieldUpdatedBy, findinghistory.FieldUpdatedByImpersonator, findinghistory.FieldDeletedBy, findinghistory.FieldDisplayID, findinghistory.FieldOwnerID, findinghistory.FieldReviewedBy, findinghistory.FieldReviewedByUserID, findinghistory.FieldReviewedByGroupID, findinghistory.FieldAssignedTo, findinghistory.FieldAssignedToUserID, findinghistory.FieldAssignedToGroupID, findinghistory.FieldInternalNotes, findinghistory.FieldSystemInternalID, findinghistory.FieldEnvironmentName, findinghistory.FieldEnvironmentID, findinghistory.FieldScopeName, findinghistory.FieldScopeID, findinghistory.FieldFindingStatusName, findinghistory.FieldFindingStatusID, findinghistory.FieldExternalID, findinghistory.FieldSecurityLevel, findinghistory.FieldExternalOwnerID, findinghistory.FieldSource, findinghistory.FieldResourceName, findinghistory.FieldDisplayName, findinghistory.FieldState, findinghistory.FieldCategory, findinghistory.FieldFindingClass, findinghistory.FieldSeverity, findinghistory.FieldPriority, findinghistory.FieldAssessmentID, findinghistory.FieldDescription, findinghistory.FieldRecommendation, findinghistory.FieldRecommendedActions, findinghistory.FieldVector, findinghistory.FieldExternalURI:
 			values[i] = new(sql.NullString)
 		case findinghistory.FieldHistoryTime, findinghistory.FieldCreatedAt, findinghistory.FieldUpdatedAt, findinghistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -267,6 +281,42 @@ func (_m *FindingHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.OwnerID = value.String
 			}
+		case findinghistory.FieldReviewedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field reviewed_by", values[i])
+			} else if value.Valid {
+				_m.ReviewedBy = value.String
+			}
+		case findinghistory.FieldReviewedByUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field reviewed_by_user_id", values[i])
+			} else if value.Valid {
+				_m.ReviewedByUserID = value.String
+			}
+		case findinghistory.FieldReviewedByGroupID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field reviewed_by_group_id", values[i])
+			} else if value.Valid {
+				_m.ReviewedByGroupID = value.String
+			}
+		case findinghistory.FieldAssignedTo:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field assigned_to", values[i])
+			} else if value.Valid {
+				_m.AssignedTo = value.String
+			}
+		case findinghistory.FieldAssignedToUserID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field assigned_to_user_id", values[i])
+			} else if value.Valid {
+				_m.AssignedToUserID = value.String
+			}
+		case findinghistory.FieldAssignedToGroupID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field assigned_to_group_id", values[i])
+			} else if value.Valid {
+				_m.AssignedToGroupID = value.String
+			}
 		case findinghistory.FieldSystemOwned:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field system_owned", values[i])
@@ -322,6 +372,12 @@ func (_m *FindingHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field finding_status_id", values[i])
 			} else if value.Valid {
 				_m.FindingStatusID = value.String
+			}
+		case findinghistory.FieldWorkflowEligibleMarker:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field workflow_eligible_marker", values[i])
+			} else if value.Valid {
+				_m.WorkflowEligibleMarker = value.Bool
 			}
 		case findinghistory.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -639,6 +695,24 @@ func (_m *FindingHistory) String() string {
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
+	builder.WriteString("reviewed_by=")
+	builder.WriteString(_m.ReviewedBy)
+	builder.WriteString(", ")
+	builder.WriteString("reviewed_by_user_id=")
+	builder.WriteString(_m.ReviewedByUserID)
+	builder.WriteString(", ")
+	builder.WriteString("reviewed_by_group_id=")
+	builder.WriteString(_m.ReviewedByGroupID)
+	builder.WriteString(", ")
+	builder.WriteString("assigned_to=")
+	builder.WriteString(_m.AssignedTo)
+	builder.WriteString(", ")
+	builder.WriteString("assigned_to_user_id=")
+	builder.WriteString(_m.AssignedToUserID)
+	builder.WriteString(", ")
+	builder.WriteString("assigned_to_group_id=")
+	builder.WriteString(_m.AssignedToGroupID)
+	builder.WriteString(", ")
 	builder.WriteString("system_owned=")
 	builder.WriteString(fmt.Sprintf("%v", _m.SystemOwned))
 	builder.WriteString(", ")
@@ -669,6 +743,9 @@ func (_m *FindingHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("finding_status_id=")
 	builder.WriteString(_m.FindingStatusID)
+	builder.WriteString(", ")
+	builder.WriteString("workflow_eligible_marker=")
+	builder.WriteString(fmt.Sprintf("%v", _m.WorkflowEligibleMarker))
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

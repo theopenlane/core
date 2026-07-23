@@ -13,17 +13,12 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-// UnsubscribeHandler is the handler for the unsubscribe endpoint. The token sent in update
-// emails is an unguessable bearer token, so possession is sufficient proof to unsubscribe;
-// no TTL is enforced so unsubscribe links remain valid indefinitely
-func (h *Handler) UnsubscribeHandler(ctx echo.Context, openapi *OpenAPIContext) error {
-	in, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleUnsubscribeRequest, models.ExampleUnsubscribeResponse, openapi.Registry)
+// UnsubscribeHandler unsubscribes a subscriber by their bearer token. The token is embedded in every
+// campaign email's unsubscribe link, so it stays valid while subscribed; a replay is an idempotent no-op
+func (h *Handler) UnsubscribeHandler(ctx echo.Context) error {
+	in, err := BindAndValidate[models.UnsubscribeRequest](ctx)
 	if err != nil {
-		return h.InvalidInput(ctx, err, openapi)
-	}
-
-	if isRegistrationContext(ctx) {
-		return nil
+		return h.InvalidInput(ctx, err)
 	}
 
 	reqCtx := ctx.Request().Context()
@@ -34,34 +29,41 @@ func (h *Handler) UnsubscribeHandler(ctx echo.Context, openapi *OpenAPIContext) 
 	entSubscriber, err := h.getSubscriberByToken(ctxWithToken, in.Token)
 	if err != nil {
 		if generated.IsNotFound(err) {
-			return h.BadRequest(ctx, err, openapi)
+			return h.BadRequest(ctx, err)
 		}
 
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error retrieving subscriber")
 
-		return h.InternalServerError(ctx, ErrUnableToUnsubscribe, openapi)
+		return h.InternalServerError(ctx, ErrUnableToUnsubscribe)
 	}
 
-	// add org to the authenticated context so the update passes org-scoped checks
-	reqCtx = auth.WithCaller(ctxWithToken, &auth.Caller{
+	// scope the caller to the subscriber's owning org so the update passes the org-ownership pre-policy
+	// (DenyIfNotInOrganization); the verify token set above is preserved and authorizes the mutation
+	ctxWithToken = auth.WithCaller(ctxWithToken, &auth.Caller{
 		OrganizationID:  entSubscriber.OwnerID,
 		OrganizationIDs: []string{entSubscriber.OwnerID},
 	})
 
-	ctxWithToken = token.NewContextWithVerifyToken(reqCtx, in.Token)
-
-	if !entSubscriber.Unsubscribed {
-		if err := h.setSubscriberUnsubscribed(ctxWithToken, entSubscriber.ID); err != nil {
-			logx.FromContext(reqCtx).Error().Err(err).Msg("error unsubscribing subscriber")
-
-			return h.InternalServerError(ctx, ErrUnableToUnsubscribe, openapi)
+	// idempotent replay
+	if entSubscriber.Unsubscribed {
+		out := &models.UnsubscribeResponse{
+			Reply:   rout.Reply{Success: true},
+			Message: "You are already unsubscribed and will not receive updates.",
 		}
+
+		return h.Success(ctx, out)
 	}
 
-	out := &models.UnsubscribeReply{
+	if err := h.setSubscriberUnsubscribed(ctxWithToken, entSubscriber.ID); err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error unsubscribing subscriber")
+
+		return h.InternalServerError(ctx, ErrUnableToUnsubscribe)
+	}
+
+	out := &models.UnsubscribeResponse{
 		Reply:   rout.Reply{Success: true},
 		Message: "You have been unsubscribed and will no longer receive updates.",
 	}
 
-	return h.Success(ctx, out, openapi)
+	return h.Success(ctx, out)
 }

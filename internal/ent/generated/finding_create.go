@@ -34,6 +34,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 )
@@ -169,6 +170,90 @@ func (_c *FindingCreate) SetNillableOwnerID(v *string) *FindingCreate {
 	return _c
 }
 
+// SetReviewedBy sets the "reviewed_by" field.
+func (_c *FindingCreate) SetReviewedBy(v string) *FindingCreate {
+	_c.mutation.SetReviewedBy(v)
+	return _c
+}
+
+// SetNillableReviewedBy sets the "reviewed_by" field if the given value is not nil.
+func (_c *FindingCreate) SetNillableReviewedBy(v *string) *FindingCreate {
+	if v != nil {
+		_c.SetReviewedBy(*v)
+	}
+	return _c
+}
+
+// SetReviewedByUserID sets the "reviewed_by_user_id" field.
+func (_c *FindingCreate) SetReviewedByUserID(v string) *FindingCreate {
+	_c.mutation.SetReviewedByUserID(v)
+	return _c
+}
+
+// SetNillableReviewedByUserID sets the "reviewed_by_user_id" field if the given value is not nil.
+func (_c *FindingCreate) SetNillableReviewedByUserID(v *string) *FindingCreate {
+	if v != nil {
+		_c.SetReviewedByUserID(*v)
+	}
+	return _c
+}
+
+// SetReviewedByGroupID sets the "reviewed_by_group_id" field.
+func (_c *FindingCreate) SetReviewedByGroupID(v string) *FindingCreate {
+	_c.mutation.SetReviewedByGroupID(v)
+	return _c
+}
+
+// SetNillableReviewedByGroupID sets the "reviewed_by_group_id" field if the given value is not nil.
+func (_c *FindingCreate) SetNillableReviewedByGroupID(v *string) *FindingCreate {
+	if v != nil {
+		_c.SetReviewedByGroupID(*v)
+	}
+	return _c
+}
+
+// SetAssignedTo sets the "assigned_to" field.
+func (_c *FindingCreate) SetAssignedTo(v string) *FindingCreate {
+	_c.mutation.SetAssignedTo(v)
+	return _c
+}
+
+// SetNillableAssignedTo sets the "assigned_to" field if the given value is not nil.
+func (_c *FindingCreate) SetNillableAssignedTo(v *string) *FindingCreate {
+	if v != nil {
+		_c.SetAssignedTo(*v)
+	}
+	return _c
+}
+
+// SetAssignedToUserID sets the "assigned_to_user_id" field.
+func (_c *FindingCreate) SetAssignedToUserID(v string) *FindingCreate {
+	_c.mutation.SetAssignedToUserID(v)
+	return _c
+}
+
+// SetNillableAssignedToUserID sets the "assigned_to_user_id" field if the given value is not nil.
+func (_c *FindingCreate) SetNillableAssignedToUserID(v *string) *FindingCreate {
+	if v != nil {
+		_c.SetAssignedToUserID(*v)
+	}
+	return _c
+}
+
+// SetAssignedToGroupID sets the "assigned_to_group_id" field.
+func (_c *FindingCreate) SetAssignedToGroupID(v string) *FindingCreate {
+	_c.mutation.SetAssignedToGroupID(v)
+	return _c
+}
+
+// SetNillableAssignedToGroupID sets the "assigned_to_group_id" field if the given value is not nil.
+func (_c *FindingCreate) SetNillableAssignedToGroupID(v *string) *FindingCreate {
+	if v != nil {
+		_c.SetAssignedToGroupID(*v)
+	}
+	return _c
+}
+
 // SetSystemOwned sets the "system_owned" field.
 func (_c *FindingCreate) SetSystemOwned(v bool) *FindingCreate {
 	_c.mutation.SetSystemOwned(v)
@@ -291,6 +376,20 @@ func (_c *FindingCreate) SetFindingStatusID(v string) *FindingCreate {
 func (_c *FindingCreate) SetNillableFindingStatusID(v *string) *FindingCreate {
 	if v != nil {
 		_c.SetFindingStatusID(*v)
+	}
+	return _c
+}
+
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_c *FindingCreate) SetWorkflowEligibleMarker(v bool) *FindingCreate {
+	_c.mutation.SetWorkflowEligibleMarker(v)
+	return _c
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_c *FindingCreate) SetNillableWorkflowEligibleMarker(v *bool) *FindingCreate {
+	if v != nil {
+		_c.SetWorkflowEligibleMarker(*v)
 	}
 	return _c
 }
@@ -806,6 +905,26 @@ func (_c *FindingCreate) AddEditors(v ...*Group) *FindingCreate {
 	return _c.AddEditorIDs(ids...)
 }
 
+// SetReviewedByUser sets the "reviewed_by_user" edge to the User entity.
+func (_c *FindingCreate) SetReviewedByUser(v *User) *FindingCreate {
+	return _c.SetReviewedByUserID(v.ID)
+}
+
+// SetReviewedByGroup sets the "reviewed_by_group" edge to the Group entity.
+func (_c *FindingCreate) SetReviewedByGroup(v *Group) *FindingCreate {
+	return _c.SetReviewedByGroupID(v.ID)
+}
+
+// SetAssignedToUser sets the "assigned_to_user" edge to the User entity.
+func (_c *FindingCreate) SetAssignedToUser(v *User) *FindingCreate {
+	return _c.SetAssignedToUserID(v.ID)
+}
+
+// SetAssignedToGroup sets the "assigned_to_group" edge to the Group entity.
+func (_c *FindingCreate) SetAssignedToGroup(v *Group) *FindingCreate {
+	return _c.SetAssignedToGroupID(v.ID)
+}
+
 // SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
 func (_c *FindingCreate) SetEnvironment(v *CustomTypeEnum) *FindingCreate {
 	return _c.SetEnvironmentID(v.ID)
@@ -1180,6 +1299,10 @@ func (_c *FindingCreate) defaults() error {
 		v := finding.DefaultSystemOwned
 		_c.mutation.SetSystemOwned(v)
 	}
+	if _, ok := _c.mutation.WorkflowEligibleMarker(); !ok {
+		v := finding.DefaultWorkflowEligibleMarker
+		_c.mutation.SetWorkflowEligibleMarker(v)
+	}
 	if _, ok := _c.mutation.SecurityLevel(); !ok {
 		v := finding.DefaultSecurityLevel
 		_c.mutation.SetSecurityLevel(v)
@@ -1306,6 +1429,14 @@ func (_c *FindingCreate) createSpec() (*Finding, *sqlgraph.CreateSpec) {
 		_spec.SetField(finding.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
+	if value, ok := _c.mutation.ReviewedBy(); ok {
+		_spec.SetField(finding.FieldReviewedBy, field.TypeString, value)
+		_node.ReviewedBy = value
+	}
+	if value, ok := _c.mutation.AssignedTo(); ok {
+		_spec.SetField(finding.FieldAssignedTo, field.TypeString, value)
+		_node.AssignedTo = value
+	}
 	if value, ok := _c.mutation.SystemOwned(); ok {
 		_spec.SetField(finding.FieldSystemOwned, field.TypeBool, value)
 		_node.SystemOwned = value
@@ -1329,6 +1460,10 @@ func (_c *FindingCreate) createSpec() (*Finding, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.FindingStatusName(); ok {
 		_spec.SetField(finding.FieldFindingStatusName, field.TypeString, value)
 		_node.FindingStatusName = value
+	}
+	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(finding.FieldWorkflowEligibleMarker, field.TypeBool, value)
+		_node.WorkflowEligibleMarker = value
 	}
 	if value, ok := _c.mutation.ExternalID(); ok {
 		_spec.SetField(finding.FieldExternalID, field.TypeString, value)
@@ -1530,6 +1665,78 @@ func (_c *FindingCreate) createSpec() (*Finding, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := _c.mutation.ReviewedByUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.ReviewedByUserTable,
+			Columns: []string{finding.ReviewedByUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Finding
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ReviewedByUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ReviewedByGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.ReviewedByGroupTable,
+			Columns: []string{finding.ReviewedByGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Finding
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ReviewedByGroupID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.AssignedToUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.AssignedToUserTable,
+			Columns: []string{finding.AssignedToUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Finding
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.AssignedToUserID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.AssignedToGroupIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   finding.AssignedToGroupTable,
+			Columns: []string{finding.AssignedToGroupColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Finding
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.AssignedToGroupID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := _c.mutation.EnvironmentIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -1661,16 +1868,16 @@ func (_c *FindingCreate) createSpec() (*Finding, *sqlgraph.CreateSpec) {
 	}
 	if nodes := _c.mutation.SubcontrolsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   finding.SubcontrolsTable,
-			Columns: []string{finding.SubcontrolsColumn},
+			Columns: finding.SubcontrolsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Subcontrol
+		edge.Schema = _c.schemaConfig.FindingSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1678,16 +1885,16 @@ func (_c *FindingCreate) createSpec() (*Finding, *sqlgraph.CreateSpec) {
 	}
 	if nodes := _c.mutation.RisksIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   finding.RisksTable,
-			Columns: []string{finding.RisksColumn},
+			Columns: finding.RisksPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Risk
+		edge.Schema = _c.schemaConfig.FindingRisks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1695,16 +1902,16 @@ func (_c *FindingCreate) createSpec() (*Finding, *sqlgraph.CreateSpec) {
 	}
 	if nodes := _c.mutation.ProgramsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   finding.ProgramsTable,
-			Columns: []string{finding.ProgramsColumn},
+			Columns: finding.ProgramsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Program
+		edge.Schema = _c.schemaConfig.FindingPrograms
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1712,16 +1919,16 @@ func (_c *FindingCreate) createSpec() (*Finding, *sqlgraph.CreateSpec) {
 	}
 	if nodes := _c.mutation.AssetsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   finding.AssetsTable,
-			Columns: []string{finding.AssetsColumn},
+			Columns: finding.AssetsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Asset
+		edge.Schema = _c.schemaConfig.FindingAssets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1729,16 +1936,16 @@ func (_c *FindingCreate) createSpec() (*Finding, *sqlgraph.CreateSpec) {
 	}
 	if nodes := _c.mutation.EntitiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   finding.EntitiesTable,
-			Columns: []string{finding.EntitiesColumn},
+			Columns: finding.EntitiesPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Entity
+		edge.Schema = _c.schemaConfig.FindingEntities
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1746,16 +1953,16 @@ func (_c *FindingCreate) createSpec() (*Finding, *sqlgraph.CreateSpec) {
 	}
 	if nodes := _c.mutation.ScansIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   finding.ScansTable,
-			Columns: []string{finding.ScansColumn},
+			Columns: finding.ScansPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(scan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Scan
+		edge.Schema = _c.schemaConfig.FindingScans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

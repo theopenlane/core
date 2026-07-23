@@ -178,6 +178,8 @@ const (
 	EdgePrograms = "programs"
 	// EdgePlatforms holds the string denoting the platforms edge name in mutations.
 	EdgePlatforms = "platforms"
+	// EdgeVulnerabilities holds the string denoting the vulnerabilities edge name in mutations.
+	EdgeVulnerabilities = "vulnerabilities"
 	// EdgeAssets holds the string denoting the assets edge name in mutations.
 	EdgeAssets = "assets"
 	// EdgeEntities holds the string denoting the entities edge name in mutations.
@@ -354,6 +356,11 @@ const (
 	// PlatformsInverseTable is the table name for the Platform entity.
 	// It exists in this package in order to avoid circular dependency with the "platform" package.
 	PlatformsInverseTable = "platforms"
+	// VulnerabilitiesTable is the table that holds the vulnerabilities relation/edge. The primary key declared below.
+	VulnerabilitiesTable = "vulnerability_controls"
+	// VulnerabilitiesInverseTable is the table name for the Vulnerability entity.
+	// It exists in this package in order to avoid circular dependency with the "vulnerability" package.
+	VulnerabilitiesInverseTable = "vulnerabilities"
 	// AssetsTable is the table that holds the assets relation/edge. The primary key declared below.
 	AssetsTable = "control_assets"
 	// AssetsInverseTable is the table name for the Asset entity.
@@ -485,7 +492,6 @@ var Columns = []string{
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"custom_type_enum_controls",
-	"vulnerability_controls",
 }
 
 var (
@@ -537,6 +543,9 @@ var (
 	// PlatformsPrimaryKey and PlatformsColumn2 are the table columns denoting the
 	// primary key for the platforms relation (M2M).
 	PlatformsPrimaryKey = []string{"platform_id", "control_id"}
+	// VulnerabilitiesPrimaryKey and VulnerabilitiesColumn2 are the table columns denoting the
+	// primary key for the vulnerabilities relation (M2M).
+	VulnerabilitiesPrimaryKey = []string{"vulnerability_id", "control_id"}
 	// AssetsPrimaryKey and AssetsColumn2 are the table columns denoting the
 	// primary key for the assets relation (M2M).
 	AssetsPrimaryKey = []string{"control_id", "asset_id"}
@@ -621,7 +630,7 @@ const DefaultStatus enums.ControlStatus = "NOT_IMPLEMENTED"
 // StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
 func StatusValidator(s enums.ControlStatus) error {
 	switch s.String() {
-	case "PREPARING", "NEEDS_APPROVAL", "CHANGES_REQUESTED", "APPROVED", "ARCHIVED", "NOT_IMPLEMENTED", "NOT_APPLICABLE":
+	case "DRAFT", "PREPARING", "NEEDS_APPROVAL", "CHANGES_REQUESTED", "APPROVED", "ARCHIVED", "NOT_IMPLEMENTED", "NOT_APPLICABLE":
 		return nil
 	default:
 		return fmt.Errorf("control: invalid enum value for status field: %q", s)
@@ -1190,6 +1199,20 @@ func ByPlatforms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByVulnerabilitiesCount orders the results by vulnerabilities count.
+func ByVulnerabilitiesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newVulnerabilitiesStep(), opts...)
+	}
+}
+
+// ByVulnerabilities orders the results by vulnerabilities terms.
+func ByVulnerabilities(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newVulnerabilitiesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByAssetsCount orders the results by assets count.
 func ByAssetsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1537,6 +1560,13 @@ func newPlatformsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(PlatformsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, PlatformsTable, PlatformsPrimaryKey...),
+	)
+}
+func newVulnerabilitiesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(VulnerabilitiesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, VulnerabilitiesTable, VulnerabilitiesPrimaryKey...),
 	)
 }
 func newAssetsStep() *sqlgraph.Step {

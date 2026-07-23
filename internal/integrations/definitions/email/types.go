@@ -62,6 +62,9 @@ type RuntimeEmailConfig struct {
 	ProductURL string `json:"producturl" koanf:"producturl" jsonschema:"description=Product home URL" default:"https://console.theopenlane.io"`
 	// DocsURL is the documentation URL
 	DocsURL string `json:"docsurl" koanf:"docsurl" jsonschema:"description=Documentation URL" default:"https://docs.theopenlane.io"`
+	// APIURL is the public base URL of this API, used for email links that must hit the API directly
+	// (rather than the console), e.g. the subscriber verify link that confirms then redirects to the trust center
+	APIURL string `json:"apiurl" koanf:"apiurl" jsonschema:"description=Public base URL of the API for email links that hit the API directly" default:"https://api.theopenlane.io"`
 	// CompanyName is the display name of the sending company
 	CompanyName string `json:"companyName" jsonschema:"description=Company display name" default:"Openlane"`
 	// CompanyAddress is the mailing address of the company
@@ -101,7 +104,10 @@ type RuntimeEmailConfig struct {
 	// TextColor is the body paragraph text color
 	TextColor string `json:"textColor,omitempty" jsonschema:"description=Body paragraph text color" default:"#43454b"`
 	// FooterTextColor is the muted text color for headers, footers, and secondary content
-	FooterTextColor string `json:"footerTextColor,omitempty" jsonschema:"description=Muted text color for headers footers and secondary content" default:"#7b7d81"`
+	FooterTextColor string `json:"footerTextColor,omitempty" jsonschema:"description=Muted text color for headers footers and secondary content" default:"#5f6165"`
+	// AccentBorderColor is an optional decorative accent applied to borders only (e.g. the card top
+	// bar and callout edge); it never drives container, text, or button colors
+	AccentBorderColor string `json:"accentBorderColor,omitempty" jsonschema:"description=Decorative accent color applied to borders only"`
 	// Tagline is a short descriptive footer line rendered in modern themes above the social row
 	Tagline string `json:"tagline,omitempty" jsonschema:"description=Short descriptive footer line rendered above the social row in modern themes"`
 	// Social is the ordered list of social footer entries rendered by modern themes
@@ -142,57 +148,18 @@ type Credential struct {
 }
 
 // UserInput is the installation-scoped configuration that customers provide
-// when setting up their own email integration. These fields supply the branding
-// and sender identity that the Client carries for all customer-initiated sends
+// when setting up their own email integration. It carries only the sender identity
+// and the footer identity that cannot come from an email template. Email appearance
+// and content (colors, layout, logos, body) are defined by the email template
+// associated with the send, and trust center update emails additionally inherit the
+// trust center's own branding, so those values are intentionally not collected here
 type UserInput struct {
-	// FromEmail is the default sender email address
-	FromEmail string `json:"fromEmail" jsonschema:"required,description=Default sender email address"`
-	// CompanyName is the display name used in email templates
-	CompanyName string `json:"companyName" jsonschema:"required,description=Company display name for email templates"`
-	// CompanyAddress is the mailing address for CAN-SPAM compliance
-	CompanyAddress string `json:"companyAddress,omitempty" jsonschema:"description=Company mailing address"`
-	// Corporation is the legal corporation name
-	Corporation string `json:"corporation,omitempty" jsonschema:"description=Legal corporation name"`
-	// SupportEmail is the support contact email address
-	SupportEmail string `json:"supportEmail,omitempty" jsonschema:"description=Support contact email address"`
-	// LogoURL is the hero logo URL displayed prominently in the email body
-	LogoURL string `json:"logoURL,omitempty" jsonschema:"description=Hero logo URL displayed in the email body"`
-	// HeaderLogoURL is the small logo/icon displayed in the top header bar
-	HeaderLogoURL string `json:"headerLogoURL,omitempty" jsonschema:"description=Small logo or icon displayed in the top header bar"`
-	// RootURL is the root application URL used to construct email action links
-	RootURL string `json:"rootURL,omitempty" jsonschema:"description=Root application URL"`
-	// ProductURL is the product home URL
-	ProductURL string `json:"productURL,omitempty" jsonschema:"description=Product home URL"`
-	// DocsURL is the documentation URL
-	DocsURL string `json:"docsURL,omitempty" jsonschema:"description=Documentation URL"`
-	// Copyright is the copyright notice for email footers
-	Copyright string `json:"copyright,omitempty" jsonschema:"description=Copyright notice for email footers; auto-generated from corporation and year when empty"`
-	// TroubleText is the fallback help text shown below action buttons
-	TroubleText string `json:"troubleText,omitempty" jsonschema:"description=Help text shown below action buttons"`
-	// UnsubscribeURL is the unsubscribe link for email footers
-	UnsubscribeURL string `json:"unsubscribeURL,omitempty" jsonschema:"description=Unsubscribe URL for email footers"`
-	// Tagline is a short descriptive footer line rendered in modern themes above the social row
-	Tagline string `json:"tagline,omitempty" jsonschema:"description=Short descriptive footer line rendered above the social row in modern themes"`
-	// Social is the ordered list of social footer entries rendered by modern themes
-	Social []SocialLink `json:"social,omitempty" jsonschema:"-"`
-	// CardStyle controls the card visual style; elevated adds rounded corners and a drop shadow
-	CardStyle string `json:"cardStyle,omitempty" jsonschema:"enum=flat,enum=elevated,description=Card visual style"`
-	// BodyBackgroundColor is the outer page background color
-	BodyBackgroundColor string `json:"bodyBackgroundColor,omitempty" jsonschema:"description=Outer page background color"`
-	// CardBackgroundColor is the card container background color
-	CardBackgroundColor string `json:"cardBackgroundColor,omitempty" jsonschema:"description=Card container background color"`
-	// HeroBackgroundColor is the hero banner section background color
-	HeroBackgroundColor string `json:"heroBackgroundColor,omitempty" jsonschema:"description=Hero banner section background color"`
-	// ButtonColor is the call-to-action button background color
-	ButtonColor string `json:"buttonColor,omitempty" jsonschema:"description=Call-to-action button background color"`
-	// ButtonTextColor is the call-to-action button text color
-	ButtonTextColor string `json:"buttonTextColor,omitempty" jsonschema:"description=Call-to-action button text color"`
-	// HeadingColor is the heading and title text color
-	HeadingColor string `json:"headingColor,omitempty" jsonschema:"description=Heading and title text color"`
-	// TextColor is the body paragraph text color
-	TextColor string `json:"textColor,omitempty" jsonschema:"description=Body paragraph text color"`
-	// FooterTextColor is the muted text color for headers, footers, and secondary content
-	FooterTextColor string `json:"footerTextColor,omitempty" jsonschema:"description=Muted text color for headers footers and secondary content"`
+	// FromEmail is the address customer-initiated emails are sent from, using the configured provider key
+	FromEmail string `json:"fromEmail" jsonschema:"required,description=Email address your emails are sent from using your configured provider key"`
+	// CompanyName is the display name shown in the email footer
+	CompanyName string `json:"companyName" jsonschema:"required,description=Company display name shown in the email footer"`
+	// CompanyAddress is the mailing address shown in the footer for CAN-SPAM compliance
+	CompanyAddress string `json:"companyAddress,omitempty" jsonschema:"description=Company mailing address shown in the email footer for CAN-SPAM compliance"`
 }
 
 // ToRuntimeConfig converts customer user input to a RuntimeEmailConfig

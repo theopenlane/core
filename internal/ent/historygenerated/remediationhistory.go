@@ -63,6 +63,8 @@ type RemediationHistory struct {
 	ScopeName string `json:"scope_name,omitempty"`
 	// the scope of the remediation
 	ScopeID string `json:"scope_id,omitempty"`
+	// internal marker field for workflow eligibility, not exposed in API
+	WorkflowEligibleMarker bool `json:"-"`
 	// external identifier from the integration source for the remediation
 	ExternalID string `json:"external_id,omitempty"`
 	// external identifier from the integration source for the remediation
@@ -117,7 +119,7 @@ func (*RemediationHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case remediationhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case remediationhistory.FieldSystemOwned:
+		case remediationhistory.FieldSystemOwned, remediationhistory.FieldWorkflowEligibleMarker:
 			values[i] = new(sql.NullBool)
 		case remediationhistory.FieldID, remediationhistory.FieldRef, remediationhistory.FieldCreatedBy, remediationhistory.FieldUpdatedBy, remediationhistory.FieldUpdatedByImpersonator, remediationhistory.FieldDeletedBy, remediationhistory.FieldDisplayID, remediationhistory.FieldOwnerID, remediationhistory.FieldInternalNotes, remediationhistory.FieldSystemInternalID, remediationhistory.FieldEnvironmentName, remediationhistory.FieldEnvironmentID, remediationhistory.FieldScopeName, remediationhistory.FieldScopeID, remediationhistory.FieldExternalID, remediationhistory.FieldExternalOwnerID, remediationhistory.FieldTitle, remediationhistory.FieldStatus, remediationhistory.FieldState, remediationhistory.FieldIntent, remediationhistory.FieldSummary, remediationhistory.FieldExplanation, remediationhistory.FieldInstructions, remediationhistory.FieldOwnerReference, remediationhistory.FieldRepositoryURI, remediationhistory.FieldPullRequestURI, remediationhistory.FieldTicketReference, remediationhistory.FieldError, remediationhistory.FieldSource, remediationhistory.FieldExternalURI:
 			values[i] = new(sql.NullString)
@@ -268,6 +270,12 @@ func (_m *RemediationHistory) assignValues(columns []string, values []any) error
 				return fmt.Errorf("unexpected type %T for field scope_id", values[i])
 			} else if value.Valid {
 				_m.ScopeID = value.String
+			}
+		case remediationhistory.FieldWorkflowEligibleMarker:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field workflow_eligible_marker", values[i])
+			} else if value.Valid {
+				_m.WorkflowEligibleMarker = value.Bool
 			}
 		case remediationhistory.FieldExternalID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -495,6 +503,9 @@ func (_m *RemediationHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("scope_id=")
 	builder.WriteString(_m.ScopeID)
+	builder.WriteString(", ")
+	builder.WriteString("workflow_eligible_marker=")
+	builder.WriteString(fmt.Sprintf("%v", _m.WorkflowEligibleMarker))
 	builder.WriteString(", ")
 	builder.WriteString("external_id=")
 	builder.WriteString(_m.ExternalID)

@@ -23,8 +23,7 @@ import (
 func (suite *HandlerTestSuite) TestOrganizationRolesHandler() {
 	t := suite.T()
 
-	operation := suite.createImpersonationOperation("OrganizationRolesHandler", "Get organization roles")
-	suite.registerRouteOnce("GET", "account/organization-roles", operation, suite.h.RolesHandler)
+	suite.registerRouteOnce("GET", "account/organization-roles", suite.h.RolesHandler)
 
 	req := httptest.NewRequest(http.MethodGet, "/account/organization-roles", nil)
 	recorder := httptest.NewRecorder()
@@ -34,7 +33,7 @@ func (suite *HandlerTestSuite) TestOrganizationRolesHandler() {
 	response := recorder.Result()
 	defer response.Body.Close()
 
-	var out models.RolesReply
+	var out models.RolesResponse
 	require.NoError(t, json.NewDecoder(response.Body).Decode(&out))
 
 	assert.Equal(t, http.StatusOK, recorder.Code)
@@ -55,9 +54,8 @@ func (suite *HandlerTestSuite) TestOrganizationRolesHandler() {
 func (suite *HandlerTestSuite) TestOrganizationRolesAssignmentHandler() {
 	t := suite.T()
 
-	operation := suite.createImpersonationOperation("AssignOrganizationRolesHandler", "Assign organization roles")
-	suite.registerRouteOnce("POST", "account/organization-roles", operation, suite.h.AssignOrganizationRolesHandler)
-	suite.registerRouteOnce("DELETE", "account/organization-roles", operation, suite.h.DeleteOrganizationRolesHandler)
+	suite.registerRouteOnce("POST", "account/organization-roles", suite.h.AssignOrganizationRolesHandler)
+	suite.registerRouteOnce("DELETE", "account/organization-roles", suite.h.DeleteOrganizationRolesHandler)
 
 	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 	ownerCtx := auth.NewTestContextWithOrgID(testUser1.ID, testUser1.OrganizationID, auth.WithOrganizationRole(auth.OwnerRole))
@@ -223,7 +221,7 @@ func (suite *HandlerTestSuite) TestOrganizationRolesAssignmentHandler() {
 			response := recorder.Result()
 			defer response.Body.Close()
 
-			var out models.OrganizationRolesReply
+			var out models.OrganizationRolesResponse
 			require.NoError(t, json.NewDecoder(response.Body).Decode(&out))
 
 			assert.Equal(t, tc.statusCode, recorder.Code)
@@ -242,8 +240,7 @@ func (suite *HandlerTestSuite) TestOrganizationRolesAssignmentHandler() {
 func (suite *HandlerTestSuite) TestAccountRolesMeHandler() {
 	t := suite.T()
 
-	operation := suite.createImpersonationOperation("AccountRolesMeHandler", "Get account roles for current user")
-	suite.registerRouteOnce("GET", "account/roles/me", operation, suite.h.AccountRolesMeHandler)
+	suite.registerRouteOnce("GET", "account/roles/me", suite.h.AccountRolesMeHandler)
 
 	ctx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
 	group, err := suite.db.Group.Create().
@@ -298,7 +295,7 @@ func (suite *HandlerTestSuite) TestAccountRolesMeHandler() {
 	res := recorder.Result()
 	defer res.Body.Close()
 
-	var out models.AccountRolesMeReply
+	var out models.AccountRolesMeResponse
 	require.NoError(t, json.NewDecoder(res.Body).Decode(&out))
 
 	assert.Equal(t, http.StatusOK, recorder.Code)

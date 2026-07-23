@@ -86,7 +86,7 @@ func TestMutationCreateProgramMembers(t *testing.T) {
 			role:      enums.RoleMember,
 			client:    suite.client.api,
 			ctx:       sharedTestUser1.UserCtx,
-			errMsg:    "user not in organization",
+			errMsg:    notAuthorizedErrorMsg,
 		},
 		{
 			name:      "invalid program",

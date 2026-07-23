@@ -1257,9 +1257,10 @@ func TestManagedGroups(t *testing.T) {
 	assert.ErrorContains(t, err, "managed groups cannot be modified")
 
 	// you should not be able to add group members to a managed group
+	orgMember := (&OrgMemberBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 	_, err = suite.client.api.AddUserToGroupWithRole(testUser.UserCtx, testclient.CreateGroupMembershipInput{
 		GroupID: groupID,
-		UserID:  sharedTestUser2.ID,
+		UserID:  orgMember.UserID,
 	})
 	assert.ErrorContains(t, err, "managed groups cannot be modified")
 

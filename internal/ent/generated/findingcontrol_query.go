@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/findingcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 
@@ -29,6 +30,7 @@ type FindingControlQuery struct {
 	order        []findingcontrol.OrderOption
 	inters       []Interceptor
 	predicates   []predicate.FindingControl
+	withOwner    *OrganizationQuery
 	withFinding  *FindingQuery
 	withControl  *ControlQuery
 	withStandard *StandardQuery
@@ -68,6 +70,31 @@ func (_q *FindingControlQuery) Unique(unique bool) *FindingControlQuery {
 func (_q *FindingControlQuery) Order(o ...findingcontrol.OrderOption) *FindingControlQuery {
 	_q.order = append(_q.order, o...)
 	return _q
+}
+
+// QueryOwner chains the current query on the "owner" edge.
+func (_q *FindingControlQuery) QueryOwner() *OrganizationQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(findingcontrol.Table, findingcontrol.FieldID, selector),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, findingcontrol.OwnerTable, findingcontrol.OwnerColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.FindingControl
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryFinding chains the current query on the "finding" edge.
@@ -337,6 +364,7 @@ func (_q *FindingControlQuery) Clone() *FindingControlQuery {
 		order:        append([]findingcontrol.OrderOption{}, _q.order...),
 		inters:       append([]Interceptor{}, _q.inters...),
 		predicates:   append([]predicate.FindingControl{}, _q.predicates...),
+		withOwner:    _q.withOwner.Clone(),
 		withFinding:  _q.withFinding.Clone(),
 		withControl:  _q.withControl.Clone(),
 		withStandard: _q.withStandard.Clone(),
@@ -345,6 +373,17 @@ func (_q *FindingControlQuery) Clone() *FindingControlQuery {
 		path:      _q.path,
 		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
+}
+
+// WithOwner tells the query-builder to eager-load the nodes that are connected to
+// the "owner" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *FindingControlQuery) WithOwner(opts ...func(*OrganizationQuery)) *FindingControlQuery {
+	query := (&OrganizationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withOwner = query
+	return _q
 }
 
 // WithFinding tells the query-builder to eager-load the nodes that are connected to
@@ -464,7 +503,8 @@ func (_q *FindingControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	var (
 		nodes       = []*FindingControl{}
 		_spec       = _q.querySpec()
-		loadedTypes = [3]bool{
+		loadedTypes = [4]bool{
+			_q.withOwner != nil,
 			_q.withFinding != nil,
 			_q.withControl != nil,
 			_q.withStandard != nil,
@@ -493,6 +533,12 @@ func (_q *FindingControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := _q.withOwner; query != nil {
+		if err := _q.loadOwner(ctx, query, nodes, nil,
+			func(n *FindingControl, e *Organization) { n.Edges.Owner = e }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withFinding; query != nil {
 		if err := _q.loadFinding(ctx, query, nodes, nil,
 			func(n *FindingControl, e *Finding) { n.Edges.Finding = e }); err != nil {
@@ -519,6 +565,35 @@ func (_q *FindingControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	return nodes, nil
 }
 
+func (_q *FindingControlQuery) loadOwner(ctx context.Context, query *OrganizationQuery, nodes []*FindingControl, init func(*FindingControl), assign func(*FindingControl, *Organization)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*FindingControl)
+	for i := range nodes {
+		fk := nodes[i].OwnerID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(organization.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "owner_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (_q *FindingControlQuery) loadFinding(ctx context.Context, query *FindingQuery, nodes []*FindingControl, init func(*FindingControl), assign func(*FindingControl, *Finding)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*FindingControl)
@@ -636,6 +711,9 @@ func (_q *FindingControlQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != findingcontrol.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
+		}
+		if _q.withOwner != nil {
+			_spec.Node.AddColumnOnce(findingcontrol.FieldOwnerID)
 		}
 		if _q.withFinding != nil {
 			_spec.Node.AddColumnOnce(findingcontrol.FieldFindingID)

@@ -9,8 +9,8 @@ import (
 	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/core/common/openapi"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
@@ -137,27 +137,27 @@ func TestNeedsDirectorySyncRun(t *testing.T) {
 	}{
 		{
 			name:      "directory account triggers sync run",
-			contracts: []types.IngestContract{{Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount}},
+			contracts: []types.IngestContract{{Schema: entityops.SchemaDirectoryAccount.Name}},
 			want:      true,
 		},
 		{
 			name:      "directory group triggers sync run",
-			contracts: []types.IngestContract{{Schema: integrationgenerated.IntegrationMappingSchemaDirectoryGroup}},
+			contracts: []types.IngestContract{{Schema: entityops.SchemaDirectoryGroup.Name}},
 			want:      true,
 		},
 		{
 			name:      "directory membership triggers sync run",
-			contracts: []types.IngestContract{{Schema: integrationgenerated.IntegrationMappingSchemaDirectoryMembership}},
+			contracts: []types.IngestContract{{Schema: entityops.SchemaDirectoryMembership.Name}},
 			want:      true,
 		},
 		{
 			name:      "asset does not trigger sync run",
-			contracts: []types.IngestContract{{Schema: integrationgenerated.IntegrationMappingSchemaAsset}},
+			contracts: []types.IngestContract{{Schema: entityops.SchemaAsset.Name}},
 			want:      false,
 		},
 		{
 			name:      "mixed with directory schema triggers",
-			contracts: []types.IngestContract{{Schema: "asset"}, {Schema: integrationgenerated.IntegrationMappingSchemaDirectoryGroup}},
+			contracts: []types.IngestContract{{Schema: "asset"}, {Schema: entityops.SchemaDirectoryGroup.Name}},
 			want:      true,
 		},
 		{
@@ -448,22 +448,16 @@ func TestMapIngestRecord(t *testing.T) {
 			},
 			wantInclude: false,
 		},
-		{
-			name:   "no mapping found",
-			schema: "unknown_schema",
-			envelope: types.MappingEnvelope{
-				Variant: "",
-				Payload: json.RawMessage(`{}`),
-			},
-			wantErr: ErrIngestMappingNotFound,
-		},
 	}
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			record, include, err := mapIngestRecord(context.Background(), definition, tc.schema, tc.envelope, "")
+			mapping, found := findMapping(definition.Mappings, tc.schema, tc.envelope.Variant)
+			assert.Assert(t, found)
+
+			record, include, err := mapIngestRecord(context.Background(), mapping, tc.schema, tc.envelope, "")
 			if tc.wantErr != nil {
 				assert.ErrorIs(t, err, tc.wantErr)
 				return
@@ -577,7 +571,7 @@ func TestProcessPayloadSets_SchemaNotDeclared(t *testing.T) {
 	t.Parallel()
 
 	reg, _ := testDefinition(t, []types.MappingRegistration{
-		{Schema: integrationgenerated.IntegrationMappingSchemaAsset, Variant: "", Spec: types.MappingOverride{MapExpr: `payload`}},
+		{Schema: entityops.SchemaAsset.Name, Variant: "", Spec: types.MappingOverride{MapExpr: `payload`}},
 	})
 
 	ic := IngestContext{
@@ -586,9 +580,9 @@ func TestProcessPayloadSets_SchemaNotDeclared(t *testing.T) {
 	}
 
 	// contracts say "contact", but payload set says "asset"
-	contracts := []types.IngestContract{{Schema: integrationgenerated.IntegrationMappingSchemaContact}}
+	contracts := []types.IngestContract{{Schema: entityops.SchemaContact.Name}}
 	payloadSets := []types.IngestPayloadSet{
-		{Schema: integrationgenerated.IntegrationMappingSchemaAsset, Envelopes: []types.MappingEnvelope{{Payload: json.RawMessage(`{}`)}}},
+		{Schema: entityops.SchemaAsset.Name, Envelopes: []types.MappingEnvelope{{Payload: json.RawMessage(`{}`)}}},
 	}
 
 	err := applyPayloadSets(context.Background(), ic, "", contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
@@ -631,10 +625,10 @@ func TestProcessPayloadSets_MappingNotFound(t *testing.T) {
 		Integration: &ent.Integration{DefinitionID: "test-def"},
 	}
 
-	contracts := []types.IngestContract{{Schema: integrationgenerated.IntegrationMappingSchemaAsset}}
+	contracts := []types.IngestContract{{Schema: entityops.SchemaAsset.Name}}
 	payloadSets := []types.IngestPayloadSet{
 		{
-			Schema: integrationgenerated.IntegrationMappingSchemaAsset,
+			Schema: entityops.SchemaAsset.Name,
 			Envelopes: []types.MappingEnvelope{
 				{Variant: "", Payload: json.RawMessage(`{"name":"test"}`)},
 			},
@@ -645,7 +639,7 @@ func TestProcessPayloadSets_MappingNotFound(t *testing.T) {
 		return nil
 	})
 
-	assert.ErrorIs(t, err, ErrIngestMappingNotFound)
+	assert.ErrorIs(t, err, ErrIngestRecordsFailed)
 }
 
 func TestProcessPayloadSets_InvalidInstallationFilterConfig(t *testing.T) {
@@ -673,7 +667,7 @@ func TestProcessPayloadSets_SuccessfulMapping(t *testing.T) {
 
 	reg, _ := testDefinition(t, []types.MappingRegistration{
 		{
-			Schema:  integrationgenerated.IntegrationMappingSchemaAsset,
+			Schema:  entityops.SchemaAsset.Name,
 			Variant: "",
 			Spec:    types.MappingOverride{MapExpr: `{"sourceIdentifier": payload.id}`},
 		},
@@ -684,10 +678,10 @@ func TestProcessPayloadSets_SuccessfulMapping(t *testing.T) {
 		Integration: &ent.Integration{DefinitionID: "test-def"},
 	}
 
-	contracts := []types.IngestContract{{Schema: integrationgenerated.IntegrationMappingSchemaAsset}}
+	contracts := []types.IngestContract{{Schema: entityops.SchemaAsset.Name}}
 	payloadSets := []types.IngestPayloadSet{
 		{
-			Schema: integrationgenerated.IntegrationMappingSchemaAsset,
+			Schema: entityops.SchemaAsset.Name,
 			Envelopes: []types.MappingEnvelope{
 				{Variant: "", Payload: json.RawMessage(`{"id":"asset-001"}`)},
 			},
@@ -703,7 +697,7 @@ func TestProcessPayloadSets_SuccessfulMapping(t *testing.T) {
 
 	assert.NilError(t, err)
 	assert.Equal(t, len(handled), 1)
-	assert.Equal(t, handled[0].Schema, integrationgenerated.IntegrationMappingSchemaAsset)
+	assert.Equal(t, handled[0].Schema, entityops.SchemaAsset.Name)
 }
 
 func TestProcessPayloadSets_EmptyPayloadSets(t *testing.T) {
@@ -729,7 +723,7 @@ func TestProcessPayloadSets_FilteredEnvelopes(t *testing.T) {
 
 	reg, _ := testDefinition(t, []types.MappingRegistration{
 		{
-			Schema:  integrationgenerated.IntegrationMappingSchemaAsset,
+			Schema:  entityops.SchemaAsset.Name,
 			Variant: "",
 			Spec: types.MappingOverride{
 				FilterExpr: `resource == "wanted"`,
@@ -743,10 +737,10 @@ func TestProcessPayloadSets_FilteredEnvelopes(t *testing.T) {
 		Integration: &ent.Integration{DefinitionID: "test-def"},
 	}
 
-	contracts := []types.IngestContract{{Schema: integrationgenerated.IntegrationMappingSchemaAsset}}
+	contracts := []types.IngestContract{{Schema: entityops.SchemaAsset.Name}}
 	payloadSets := []types.IngestPayloadSet{
 		{
-			Schema: integrationgenerated.IntegrationMappingSchemaAsset,
+			Schema: entityops.SchemaAsset.Name,
 			Envelopes: []types.MappingEnvelope{
 				{Resource: "unwanted", Payload: json.RawMessage(`{"name":"skip"}`)},
 				{Resource: "wanted", Payload: json.RawMessage(`{"name":"keep"}`)},
@@ -770,7 +764,7 @@ func TestProcessPayloadSets_HandleError(t *testing.T) {
 
 	reg, _ := testDefinition(t, []types.MappingRegistration{
 		{
-			Schema:  integrationgenerated.IntegrationMappingSchemaAsset,
+			Schema:  entityops.SchemaAsset.Name,
 			Variant: "",
 			Spec:    types.MappingOverride{MapExpr: `payload`},
 		},
@@ -781,23 +775,31 @@ func TestProcessPayloadSets_HandleError(t *testing.T) {
 		Integration: &ent.Integration{DefinitionID: "test-def"},
 	}
 
-	contracts := []types.IngestContract{{Schema: integrationgenerated.IntegrationMappingSchemaAsset}}
+	contracts := []types.IngestContract{{Schema: entityops.SchemaAsset.Name}}
 	payloadSets := []types.IngestPayloadSet{
 		{
-			Schema: integrationgenerated.IntegrationMappingSchemaAsset,
+			Schema: entityops.SchemaAsset.Name,
 			Envelopes: []types.MappingEnvelope{
-				{Payload: json.RawMessage(`{"name":"test"}`)},
+				{Payload: json.RawMessage(`{"name":"first"}`)},
+				{Payload: json.RawMessage(`{"name":"second"}`)},
 			},
 		},
 	}
 
 	handleErr := errors.New("persist failed")
+	handled := 0
 
 	err := applyPayloadSets(context.Background(), ic, "", contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
-		return handleErr
+		handled++
+		if handled == 1 {
+			return handleErr
+		}
+
+		return nil
 	})
 
-	assert.ErrorIs(t, err, handleErr)
+	assert.ErrorIs(t, err, ErrIngestRecordsFailed)
+	assert.Equal(t, 2, handled, "a failing record must not abort the remaining records")
 }
 
 // TestProcessPayloadSets_NestedInstallationFilter verifies that a filterExpr stored inside a
@@ -836,7 +838,7 @@ func TestProcessPayloadSets_NestedInstallationFilter(t *testing.T) {
 		},
 		Mappings: []types.MappingRegistration{
 			{
-				Schema:  integrationgenerated.IntegrationMappingSchemaAsset,
+				Schema:  entityops.SchemaAsset.Name,
 				Variant: "",
 				Spec:    types.MappingOverride{MapExpr: `payload`},
 			},
@@ -856,10 +858,10 @@ func TestProcessPayloadSets_NestedInstallationFilter(t *testing.T) {
 		},
 	}
 
-	contracts := []types.IngestContract{{Schema: integrationgenerated.IntegrationMappingSchemaAsset}}
+	contracts := []types.IngestContract{{Schema: entityops.SchemaAsset.Name}}
 	payloadSets := []types.IngestPayloadSet{
 		{
-			Schema: integrationgenerated.IntegrationMappingSchemaAsset,
+			Schema: entityops.SchemaAsset.Name,
 			Envelopes: []types.MappingEnvelope{
 				{Payload: json.RawMessage(`{"name":"private-repo","is_private":true}`)},
 				{Payload: json.RawMessage(`{"name":"public-repo","is_private":false}`)},
@@ -931,7 +933,7 @@ func TestProcessPayloadSets_NestedFilterDoesNotLeakAcrossOperations(t *testing.T
 		},
 		Mappings: []types.MappingRegistration{
 			{
-				Schema:  integrationgenerated.IntegrationMappingSchemaAsset,
+				Schema:  entityops.SchemaAsset.Name,
 				Variant: "",
 				Spec:    types.MappingOverride{MapExpr: `payload`},
 			},
@@ -952,10 +954,10 @@ func TestProcessPayloadSets_NestedFilterDoesNotLeakAcrossOperations(t *testing.T
 		},
 	}
 
-	contracts := []types.IngestContract{{Schema: integrationgenerated.IntegrationMappingSchemaAsset}}
+	contracts := []types.IngestContract{{Schema: entityops.SchemaAsset.Name}}
 	payloadSets := []types.IngestPayloadSet{
 		{
-			Schema: integrationgenerated.IntegrationMappingSchemaAsset,
+			Schema: entityops.SchemaAsset.Name,
 			Envelopes: []types.MappingEnvelope{
 				{Payload: json.RawMessage(`{"name":"asset-001"}`)},
 				{Payload: json.RawMessage(`{"name":"asset-002"}`)},
@@ -979,7 +981,7 @@ func TestEmitPayloadSets_NilRuntime_NonDirectorySync(t *testing.T) {
 
 	reg, _ := testDefinition(t, []types.MappingRegistration{
 		{
-			Schema:  integrationgenerated.IntegrationMappingSchemaAsset,
+			Schema:  entityops.SchemaAsset.Name,
 			Variant: "",
 			Spec:    types.MappingOverride{MapExpr: `payload`},
 		},
@@ -991,10 +993,10 @@ func TestEmitPayloadSets_NilRuntime_NonDirectorySync(t *testing.T) {
 		Runtime:     nil,
 	}
 
-	contracts := []types.IngestContract{{Schema: integrationgenerated.IntegrationMappingSchemaAsset}}
+	contracts := []types.IngestContract{{Schema: entityops.SchemaAsset.Name}}
 	payloadSets := []types.IngestPayloadSet{
 		{
-			Schema:    integrationgenerated.IntegrationMappingSchemaAsset,
+			Schema:    entityops.SchemaAsset.Name,
 			Envelopes: []types.MappingEnvelope{{Payload: json.RawMessage(`{}`)}},
 		},
 	}

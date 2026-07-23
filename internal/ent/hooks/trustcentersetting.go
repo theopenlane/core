@@ -2,6 +2,7 @@ package hooks
 
 import (
 	"context"
+	"time"
 
 	"entgo.io/ent"
 
@@ -62,9 +63,35 @@ func HookTrustCenterSetting() ent.Hook {
 				return nil, err
 			}
 
+			initializeSubprocessorWatermark(ctx, m)
+
 			return next.Mutate(ctx, m)
 		})
 	}, ent.OpCreate|ent.OpUpdateOne)
+}
+
+// initializeSubprocessorWatermark stamps the subprocessor notification watermark when the
+// notify-on-subprocessor-change flag turns on, so subscribers are only notified about changes made
+// after opting in rather than the trust center's entire subprocessor history. A watermark set
+// explicitly on the same mutation wins
+func initializeSubprocessorWatermark(ctx context.Context, m *generated.TrustCenterSettingMutation) {
+	enabled, ok := m.NotifySubscribersOnSubprocessorChange()
+	if !ok || !enabled {
+		return
+	}
+
+	if _, ok := m.SubprocessorsNotifiedAt(); ok {
+		return
+	}
+
+	if m.Op().Is(ent.OpUpdateOne) {
+		wasEnabled, err := m.OldNotifySubscribersOnSubprocessorChange(ctx)
+		if err == nil && wasEnabled {
+			return
+		}
+	}
+
+	m.SetSubprocessorsNotifiedAt(time.Now())
 }
 
 // setDefaultCompanyName will add the company name either from the org display name or if provided in the mutation

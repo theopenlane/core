@@ -338,7 +338,7 @@ func (c Campaign) Edges() []ent.Edge {
 func (Campaign) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("name", ownerFieldName).
-			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
+			Annotations(entsql.IndexWhere("deleted_at is NULL")),
 		index.Fields("entity_id"),
 	}
 }

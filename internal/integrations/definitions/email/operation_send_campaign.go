@@ -9,6 +9,7 @@ import (
 
 	"github.com/theopenlane/newman"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/file"
@@ -42,6 +43,8 @@ type CampaignDispatchInput struct {
 // SendBrandedCampaignRequest is the operation config for dispatching a branded email campaign
 type SendBrandedCampaignRequest struct {
 	CampaignDispatchInput
+	// TestEmail dispatches a single test message without creating or updating campaign targets
+	TestEmail string `json:"testEmail,omitempty" jsonschema:"description=Recipient email for a test campaign send"`
 }
 
 // SendBrandedCampaign dispatches templated branded emails to all pending campaign targets
@@ -52,48 +55,60 @@ func (s SendBrandedCampaign) Handle() types.OperationHandler {
 	return providerkit.WithClientRequestConfig(emailClientRef, SendCampaignOp, ErrTemplateRenderFailed, s.Run)
 }
 
-// Run loads the campaign and pending targets, renders all messages, then sends
-// via batch API or rate-limited individual sends depending on whether
-// attachments are present. Returns a marshaled CampaignDispatchResult with counts
-func (SendBrandedCampaign) Run(ctx context.Context, req types.OperationRequest, client *Client, cfg SendBrandedCampaignRequest) (json.RawMessage, error) {
-	camp, dispatchable, skipped, err := loadCampaignWithTargets(ctx, req.DB, cfg.CampaignDispatchInput, func(q *generated.CampaignQuery) {
-		q.WithEmailTemplate(func(tq *generated.EmailTemplateQuery) {
-			tq.WithFiles(func(fq *generated.FileQuery) {
-				fq.Select(
-					file.FieldProvidedFileName,
-					file.FieldProvidedFileExtension,
-					file.FieldDetectedMimeType,
-					file.FieldFileContents)
-			})
-		})
-		// trust center campaigns brand the email from the trust center setting
-		q.WithTrustCenter(func(tcq *generated.TrustCenterQuery) {
-			tcq.WithSetting()
+// brandedCampaignEdges eager-loads the email template (with inline files) and trust center
+// setting edges needed to render branded campaign messages
+func brandedCampaignEdges(q *generated.CampaignQuery) {
+	q.WithEmailTemplate(func(tq *generated.EmailTemplateQuery) {
+		tq.WithFiles(func(fq *generated.FileQuery) {
+			fq.Select(
+				file.FieldProvidedFileName,
+				file.FieldProvidedFileExtension,
+				file.FieldDetectedMimeType,
+				file.FieldFileContents)
 		})
 	})
-	if err != nil {
-		return nil, err
-	}
+	// trust center campaigns brand the email from the trust center setting
+	q.WithTrustCenter(func(tcq *generated.TrustCenterQuery) {
+		tcq.WithSetting()
+	})
+}
 
-	template := camp.Edges.EmailTemplate
-	if template == nil {
-		return nil, fmt.Errorf("%w: no email template linked to campaign", ErrDispatcherNotFound)
-	}
-
-	dispatcher, ok := DispatcherByKey(template.Key)
-	if !ok {
-		return nil, fmt.Errorf("%w: %s", ErrDispatcherNotFound, template.Key)
-	}
-
-	overlay := CampaignContext{
+// campaignOverlay builds the campaign template context shared by all recipients
+func campaignOverlay(camp *generated.Campaign) CampaignContext {
+	return CampaignContext{
 		CampaignID:          camp.ID,
 		CampaignName:        camp.Name,
 		CampaignDescription: camp.Description,
 		CampaignDueDate:     formatCampaignDueDate(camp.DueDate),
 	}
+}
 
-	messages, targetIDs, renderFailed := renderMessagesForCampaign(ctx, client, dispatcher, camp, template, overlay, dispatchable)
-	attachments := staticAttachmentsFromFiles(ctx, template.Edges.Files)
+// Run loads the campaign and pending targets, renders all messages, then sends
+// via batch API or rate-limited individual sends depending on whether
+// attachments are present. Returns a marshaled CampaignDispatchResult with counts
+func (SendBrandedCampaign) Run(ctx context.Context, req types.OperationRequest, client *Client, cfg SendBrandedCampaignRequest) (json.RawMessage, error) {
+	if cfg.TestEmail != "" {
+		return sendBrandedCampaignTestEmail(ctx, req.DB, client, cfg)
+	}
+
+	camp, dispatchable, skipped, err := loadCampaignWithTargets(ctx, req.DB, cfg.CampaignDispatchInput, brandedCampaignEdges)
+	if err != nil {
+		return nil, err
+	}
+
+	template := camp.Edges.EmailTemplate
+
+	dispatcher, err := campaignDispatcher(camp)
+	if err != nil {
+		return nil, err
+	}
+
+	messages, targetIDs, renderFailed := renderMessagesForCampaign(ctx, client, dispatcher, camp, template, campaignOverlay(camp), dispatchable)
+
+	var attachments []*newman.Attachment
+	if template != nil {
+		attachments = staticAttachmentsFromFiles(ctx, template.Edges.Files)
+	}
 
 	sentCount, sendFailed := sendCampaignMessages(ctx, req.DB, client, messages, targetIDs, attachments)
 
@@ -104,6 +119,68 @@ func (SendBrandedCampaign) Run(ctx context.Context, req types.OperationRequest, 
 	}
 
 	return json.Marshal(result)
+}
+
+// sendBrandedCampaignTestEmail renders and sends a single test message for the campaign without
+// snapshotting trust center subscribers or creating and updating campaign targets
+func sendBrandedCampaignTestEmail(ctx context.Context, db *generated.Client, client *Client, cfg SendBrandedCampaignRequest) (json.RawMessage, error) {
+	camp, err := loadCampaign(ctx, db, cfg.CampaignID, brandedCampaignEdges)
+	if err != nil {
+		return nil, err
+	}
+
+	dispatcher, err := campaignDispatcher(camp)
+	if err != nil {
+		return nil, err
+	}
+
+	template := camp.Edges.EmailTemplate
+
+	messages, _, renderFailed := renderMessagesForCampaign(ctx, client, dispatcher, camp, template, campaignOverlay(camp), []*generated.CampaignTarget{{Email: cfg.TestEmail}})
+	if renderFailed > 0 || len(messages) == 0 {
+		logx.FromContext(ctx).Error().Str("campaign_id", camp.ID).Msg("failed rendering campaign test email")
+
+		return nil, fmt.Errorf("%w: %s", ErrTemplateRenderFailed, cfg.TestEmail)
+	}
+
+	msg := messages[0]
+	// replace the empty target correlation tag from the synthetic target with the test marker
+	msg.Tags = []newman.Tag{{Name: TagIsTest, Value: "true"}}
+
+	if template != nil {
+		msg.Attachments = append(msg.Attachments, staticAttachmentsFromFiles(ctx, template.Edges.Files)...)
+	}
+
+	if err := client.Sender.SendEmailWithContext(ctx, msg); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", camp.ID).Msg("failed sending campaign test email")
+
+		return nil, fmt.Errorf("%w: %s", ErrSendFailed, cfg.TestEmail)
+	}
+
+	return json.Marshal(CampaignDispatchResult{SentCount: 1})
+}
+
+// campaignDispatcher resolves the message renderer for a campaign: trust center update campaigns
+// render through the system-registered trust center update operation and need no linked email
+// template, while every other campaign type resolves through its linked template's key
+func campaignDispatcher(camp *generated.Campaign) (Dispatcher, error) {
+	key := TrustCenterUpdateTemplate
+
+	if camp.CampaignType != enums.CampaignTypeTrustCenterUpdate {
+		template := camp.Edges.EmailTemplate
+		if template == nil {
+			return nil, fmt.Errorf("%w: no email template linked to campaign", ErrDispatcherNotFound)
+		}
+
+		key = template.Key
+	}
+
+	dispatcher, ok := DispatcherByKey(key)
+	if !ok {
+		return nil, fmt.Errorf("%w: %s", ErrDispatcherNotFound, key)
+	}
+
+	return dispatcher, nil
 }
 
 // filterCampaignTargets returns the subset of targets that are dispatchable based on status, sent history, and resend/overdue flags

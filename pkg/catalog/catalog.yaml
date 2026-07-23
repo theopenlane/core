@@ -79,7 +79,7 @@ modules:
         nickname: price_registry_annually
         lookup_key: price_registry_annually
         price_id: price_1Tm5QPBvxky1R7Sv1ZJwq41b
-    audience: public
+    audience: private
     product_id: prod_Ulcf3iUMbFB4R4
     include_with_trial: true
   trust_center_module:

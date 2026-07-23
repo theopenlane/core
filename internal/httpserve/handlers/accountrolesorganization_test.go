@@ -14,10 +14,8 @@ func (suite *HandlerTestSuite) TestAccountRolesOrganizationHandler() {
 	t := suite.T()
 
 	// add handler
-	// Create operation for AccountRolesOrganizationHandler
-	operation := suite.createImpersonationOperation("AccountRolesOrganizationHandler", "Get account roles for organization")
-	suite.registerTestHandler("GET", "account/roles/organization", operation, suite.h.AccountRolesOrganizationHandler)
-	suite.registerTestHandler("GET", "account/roles/organization/:id", operation, suite.h.AccountRolesOrganizationHandler)
+	suite.registerTestHandler("GET", "account/roles/organization", suite.h.AccountRolesOrganizationHandler)
+	suite.registerTestHandler("GET", "account/roles/organization/:id", suite.h.AccountRolesOrganizationHandler)
 
 	testCases := []struct {
 		name   string
@@ -53,7 +51,7 @@ func (suite *HandlerTestSuite) TestAccountRolesOrganizationHandler() {
 			res := recorder.Result()
 			defer res.Body.Close()
 
-			var out *models.AccountRolesOrganizationReply
+			var out *models.AccountRolesOrganizationResponse
 
 			// parse request body
 			if err := json.NewDecoder(res.Body).Decode(&out); err != nil {

@@ -47,6 +47,12 @@ type ScanHistory struct {
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned bool `json:"system_owned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internal_notes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"system_internal_id,omitempty"`
 	// who reviewed the scan when no user or group is linked
 	ReviewedBy string `json:"reviewed_by,omitempty"`
 	// the user id that reviewed the scan
@@ -88,8 +94,8 @@ type ScanHistory struct {
 	// the platform that generated the scan
 	GeneratedByPlatformID string `json:"generated_by_platform_id,omitempty"`
 	// identifiers of vulnerabilities discovered during the scan
-	VulnerabilityIds []string `json:"vulnerability_ids,omitempty"`
-	// the status of the scan, e.g., processing, completed, failed
+	DiscoveredVulnerabilityIds []string `json:"discovered_vulnerability_ids,omitempty"`
+	// the status of the scan, e.g., pending, processing, completed, failed
 	Status       enums.ScanStatus `json:"status,omitempty"`
 	selectValues sql.SelectValues
 }
@@ -103,11 +109,13 @@ func (*ScanHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = &sql.NullScanner{S: new(models.Cron)}
 		case scanhistory.FieldScanDate, scanhistory.FieldNextScanRunAt:
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
-		case scanhistory.FieldTags, scanhistory.FieldMetadata, scanhistory.FieldVulnerabilityIds:
+		case scanhistory.FieldTags, scanhistory.FieldMetadata, scanhistory.FieldDiscoveredVulnerabilityIds:
 			values[i] = new([]byte)
 		case scanhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case scanhistory.FieldID, scanhistory.FieldRef, scanhistory.FieldCreatedBy, scanhistory.FieldUpdatedBy, scanhistory.FieldUpdatedByImpersonator, scanhistory.FieldDeletedBy, scanhistory.FieldOwnerID, scanhistory.FieldReviewedBy, scanhistory.FieldReviewedByUserID, scanhistory.FieldReviewedByGroupID, scanhistory.FieldAssignedTo, scanhistory.FieldAssignedToUserID, scanhistory.FieldAssignedToGroupID, scanhistory.FieldEnvironmentName, scanhistory.FieldEnvironmentID, scanhistory.FieldScopeName, scanhistory.FieldScopeID, scanhistory.FieldTarget, scanhistory.FieldScanType, scanhistory.FieldPerformedBy, scanhistory.FieldPerformedByUserID, scanhistory.FieldPerformedByGroupID, scanhistory.FieldGeneratedByPlatformID, scanhistory.FieldStatus:
+		case scanhistory.FieldSystemOwned:
+			values[i] = new(sql.NullBool)
+		case scanhistory.FieldID, scanhistory.FieldRef, scanhistory.FieldCreatedBy, scanhistory.FieldUpdatedBy, scanhistory.FieldUpdatedByImpersonator, scanhistory.FieldDeletedBy, scanhistory.FieldOwnerID, scanhistory.FieldInternalNotes, scanhistory.FieldSystemInternalID, scanhistory.FieldReviewedBy, scanhistory.FieldReviewedByUserID, scanhistory.FieldReviewedByGroupID, scanhistory.FieldAssignedTo, scanhistory.FieldAssignedToUserID, scanhistory.FieldAssignedToGroupID, scanhistory.FieldEnvironmentName, scanhistory.FieldEnvironmentID, scanhistory.FieldScopeName, scanhistory.FieldScopeID, scanhistory.FieldTarget, scanhistory.FieldScanType, scanhistory.FieldPerformedBy, scanhistory.FieldPerformedByUserID, scanhistory.FieldPerformedByGroupID, scanhistory.FieldGeneratedByPlatformID, scanhistory.FieldStatus:
 			values[i] = new(sql.NullString)
 		case scanhistory.FieldHistoryTime, scanhistory.FieldCreatedAt, scanhistory.FieldUpdatedAt, scanhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -206,6 +214,26 @@ func (_m *ScanHistory) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
 				_m.OwnerID = value.String
+			}
+		case scanhistory.FieldSystemOwned:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field system_owned", values[i])
+			} else if value.Valid {
+				_m.SystemOwned = value.Bool
+			}
+		case scanhistory.FieldInternalNotes:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_notes", values[i])
+			} else if value.Valid {
+				_m.InternalNotes = new(string)
+				*_m.InternalNotes = value.String
+			}
+		case scanhistory.FieldSystemInternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field system_internal_id", values[i])
+			} else if value.Valid {
+				_m.SystemInternalID = new(string)
+				*_m.SystemInternalID = value.String
 			}
 		case scanhistory.FieldReviewedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -332,12 +360,12 @@ func (_m *ScanHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.GeneratedByPlatformID = value.String
 			}
-		case scanhistory.FieldVulnerabilityIds:
+		case scanhistory.FieldDiscoveredVulnerabilityIds:
 			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field vulnerability_ids", values[i])
+				return fmt.Errorf("unexpected type %T for field discovered_vulnerability_ids", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &_m.VulnerabilityIds); err != nil {
-					return fmt.Errorf("unmarshal field vulnerability_ids: %w", err)
+				if err := json.Unmarshal(*value, &_m.DiscoveredVulnerabilityIds); err != nil {
+					return fmt.Errorf("unmarshal field discovered_vulnerability_ids: %w", err)
 				}
 			}
 		case scanhistory.FieldStatus:
@@ -420,6 +448,19 @@ func (_m *ScanHistory) String() string {
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
+	builder.WriteString("system_owned=")
+	builder.WriteString(fmt.Sprintf("%v", _m.SystemOwned))
+	builder.WriteString(", ")
+	if v := _m.InternalNotes; v != nil {
+		builder.WriteString("internal_notes=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.SystemInternalID; v != nil {
+		builder.WriteString("system_internal_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
 	builder.WriteString("reviewed_by=")
 	builder.WriteString(_m.ReviewedBy)
 	builder.WriteString(", ")
@@ -486,8 +527,8 @@ func (_m *ScanHistory) String() string {
 	builder.WriteString("generated_by_platform_id=")
 	builder.WriteString(_m.GeneratedByPlatformID)
 	builder.WriteString(", ")
-	builder.WriteString("vulnerability_ids=")
-	builder.WriteString(fmt.Sprintf("%v", _m.VulnerabilityIds))
+	builder.WriteString("discovered_vulnerability_ids=")
+	builder.WriteString(fmt.Sprintf("%v", _m.DiscoveredVulnerabilityIds))
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))

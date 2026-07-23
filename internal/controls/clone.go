@@ -2,9 +2,11 @@ package controls
 
 import (
 	"context"
+	"strings"
 	"sync"
 
 	"github.com/samber/lo"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/control"
@@ -14,10 +16,15 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 )
 
+// prefix is 0L-
+const openlaneBaseRefCodePrefix = "OL-"
+
 // SubcontrolToCreate is used to track which subcontrols need to be created for a given control
 type SubcontrolToCreate struct {
 	NewControlID string
 	RefControl   *generated.Control
+	isTemplate   bool
+	sourceName   *string
 }
 
 // ControlToUpdate is used to track existing controls that need to be updated due to changes
@@ -88,6 +95,8 @@ func CloneControls(ctx context.Context, client *generated.Client, controlsToClon
 				subcontrolsToCreate = append(subcontrolsToCreate, SubcontrolToCreate{
 					NewControlID: newControlID,
 					RefControl:   c,
+					isTemplate:   isOpenlaneBaseControl(c),
+					sourceName:   getSourceNameOfTemplateToClone(c),
 				})
 			}
 
@@ -124,16 +133,55 @@ func CloneControls(ctx context.Context, client *generated.Client, controlsToClon
 	return createdControlIDs, subcontrolsToCreate, nil
 }
 
+func isOpenlaneBaseControl(c *generated.Control) bool {
+	if c == nil || c.Edges.Standard == nil || !c.Edges.Standard.SystemOwned {
+		return false
+	}
+
+	refCode := strings.ToUpper(strings.TrimSpace(c.RefCode))
+
+	return strings.HasPrefix(refCode, openlaneBaseRefCodePrefix)
+}
+
+func getSourceNameOfTemplateToClone(c *generated.Control) *string {
+	if c == nil {
+		return nil
+	}
+
+	if c.SourceName != nil && strings.TrimSpace(*c.SourceName) != "" {
+		return c.SourceName
+	}
+
+	if c.Edges.Standard != nil && strings.TrimSpace(c.Edges.Standard.Name) != "" {
+		return &c.Edges.Standard.Name
+	}
+
+	return nil
+}
+
 // CreateCloneControlInput creates a CreateControlInput from the given control that is being cloned
 // and returns the input, the standard ID that was set, and whether the control is a trust center control
 func CreateCloneControlInput(c *generated.Control, programID *string, orgID string) (generated.CreateControlInput, bool) {
+
+	source := c.Source
+	status := enums.ControlStatusNotImplemented
+
+	var sourceName *string
+
+	if isOpenlaneBaseControl(c) {
+		source = enums.ControlSourceTemplate
+		status = enums.ControlStatusDraft
+		sourceName = getSourceNameOfTemplateToClone(c)
+	}
+
 	controlInput := generated.CreateControlInput{
 		// grab fields from the existing control
 		RefCode:                c.RefCode,
 		Title:                  &c.Title,
 		Aliases:                c.Aliases,
 		Description:            &c.Description,
-		Source:                 &c.Source,
+		Source:                 &source,
+		SourceName:             sourceName,
 		Category:               &c.Category,
 		CategoryID:             &c.CategoryID,
 		Subcategory:            &c.Subcategory,
@@ -146,29 +194,21 @@ func CreateCloneControlInput(c *generated.Control, programID *string, orgID stri
 		References:             c.References,
 		TestingProcedures:      c.TestingProcedures,
 		EvidenceRequests:       c.EvidenceRequests,
-		// set default status to not implemented
-		Status:  &enums.ControlStatusNotImplemented,
-		OwnerID: &orgID,
+		Status:                 &status,
+		OwnerID:                &orgID,
 	}
 
-	if c.Edges.Standard != nil {
-		// if the control has a standard, we will set the reference framework to the standard
+	if c.Edges.Standard != nil && !isOpenlaneBaseControl(c) {
 		controlInput.ReferenceFramework = &c.Edges.Standard.ShortName
 		controlInput.ReferenceFrameworkRevision = &c.Edges.Standard.Revision
 	}
 
-	// set the standard information
-	var standardID string
-	if c.Edges.Standard != nil {
-		standardID = c.Edges.Standard.ID
-	}
-
-	if standardID == "" {
-		standardID = c.StandardID
-	}
-
-	if standardID != "" {
-		controlInput.StandardID = &standardID
+	if !isOpenlaneBaseControl(c) {
+		if c.Edges.Standard != nil && c.Edges.Standard.ID != "" {
+			controlInput.StandardID = &c.Edges.Standard.ID
+		} else if c.StandardID != "" {
+			controlInput.StandardID = &c.StandardID
+		}
 	}
 
 	if programID != nil {
@@ -179,12 +219,32 @@ func CreateCloneControlInput(c *generated.Control, programID *string, orgID stri
 }
 
 // CreateCloneSubcontrolInput creates a CreateSubcontrolInput from the given subcontrol that is being cloned
-func CreateCloneSubcontrolInput(subcontrol *generated.Subcontrol, orgID string) *generated.CreateSubcontrolInput {
+func CreateCloneSubcontrolInput(subcontrol *generated.Subcontrol, orgID string, clone SubcontrolToCreate) *generated.CreateSubcontrolInput {
+	source := subcontrol.Source
+	status := enums.ControlStatusNotImplemented
+	sourceName := subcontrol.SourceName
+	refFramework := subcontrol.ReferenceFramework
+	refFrameworkRevision := subcontrol.ReferenceFrameworkRevision
+
+	if clone.isTemplate {
+		source = enums.ControlSourceTemplate
+		status = enums.ControlStatusDraft
+		sourceName = clone.sourceName
+		refFramework = nil
+		refFrameworkRevision = nil
+
+	} else if clone.RefControl != nil && clone.RefControl.Edges.Standard != nil {
+
+		refFramework = &clone.RefControl.Edges.Standard.ShortName
+		refFrameworkRevision = &clone.RefControl.Edges.Standard.Revision
+	}
+
 	return &generated.CreateSubcontrolInput{
 		RefCode:                    subcontrol.RefCode,
 		Title:                      &subcontrol.Title,
 		Description:                &subcontrol.Description,
-		Source:                     &subcontrol.Source,
+		Source:                     &source,
+		SourceName:                 sourceName,
 		ControlID:                  subcontrol.ControlID,
 		Category:                   &subcontrol.Category,
 		CategoryID:                 &subcontrol.CategoryID,
@@ -198,9 +258,9 @@ func CreateCloneSubcontrolInput(subcontrol *generated.Subcontrol, orgID string) 
 		TestingProcedures:          subcontrol.TestingProcedures,
 		EvidenceRequests:           subcontrol.EvidenceRequests,
 		References:                 subcontrol.References,
-		Status:                     &enums.ControlStatusNotImplemented,
-		ReferenceFramework:         subcontrol.ReferenceFramework,
-		ReferenceFrameworkRevision: subcontrol.ReferenceFrameworkRevision,
+		Status:                     &status,
+		ReferenceFramework:         refFramework,
+		ReferenceFrameworkRevision: refFrameworkRevision,
 		OwnerID:                    &orgID,
 		// set to empty string to avoid a second query, we know the control owner ID is not set
 		ControlOwnerID: lo.ToPtr(""),

@@ -46,6 +46,18 @@ const (
 	FieldTags = "tags"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
+	// FieldReviewedBy holds the string denoting the reviewed_by field in the database.
+	FieldReviewedBy = "reviewed_by"
+	// FieldReviewedByUserID holds the string denoting the reviewed_by_user_id field in the database.
+	FieldReviewedByUserID = "reviewed_by_user_id"
+	// FieldReviewedByGroupID holds the string denoting the reviewed_by_group_id field in the database.
+	FieldReviewedByGroupID = "reviewed_by_group_id"
+	// FieldAssignedTo holds the string denoting the assigned_to field in the database.
+	FieldAssignedTo = "assigned_to"
+	// FieldAssignedToUserID holds the string denoting the assigned_to_user_id field in the database.
+	FieldAssignedToUserID = "assigned_to_user_id"
+	// FieldAssignedToGroupID holds the string denoting the assigned_to_group_id field in the database.
+	FieldAssignedToGroupID = "assigned_to_group_id"
 	// FieldSystemOwned holds the string denoting the system_owned field in the database.
 	FieldSystemOwned = "system_owned"
 	// FieldInternalNotes holds the string denoting the internal_notes field in the database.
@@ -64,6 +76,8 @@ const (
 	FieldFindingStatusName = "finding_status_name"
 	// FieldFindingStatusID holds the string denoting the finding_status_id field in the database.
 	FieldFindingStatusID = "finding_status_id"
+	// FieldWorkflowEligibleMarker holds the string denoting the workflow_eligible_marker field in the database.
+	FieldWorkflowEligibleMarker = "workflow_eligible_marker"
 	// FieldExternalID holds the string denoting the external_id field in the database.
 	FieldExternalID = "external_id"
 	// FieldSecurityLevel holds the string denoting the security_level field in the database.
@@ -158,6 +172,12 @@ var Columns = []string{
 	FieldDisplayID,
 	FieldTags,
 	FieldOwnerID,
+	FieldReviewedBy,
+	FieldReviewedByUserID,
+	FieldReviewedByGroupID,
+	FieldAssignedTo,
+	FieldAssignedToUserID,
+	FieldAssignedToGroupID,
 	FieldSystemOwned,
 	FieldInternalNotes,
 	FieldSystemInternalID,
@@ -167,6 +187,7 @@ var Columns = []string{
 	FieldScopeID,
 	FieldFindingStatusName,
 	FieldFindingStatusID,
+	FieldWorkflowEligibleMarker,
 	FieldExternalID,
 	FieldSecurityLevel,
 	FieldExternalOwnerID,
@@ -237,6 +258,8 @@ var (
 	DefaultTags []string
 	// DefaultSystemOwned holds the default value on creation for the "system_owned" field.
 	DefaultSystemOwned bool
+	// DefaultWorkflowEligibleMarker holds the default value on creation for the "workflow_eligible_marker" field.
+	DefaultWorkflowEligibleMarker bool
 	// DefaultCategories holds the default value on creation for the "categories" field.
 	DefaultCategories []string
 	// DefaultOpen holds the default value on creation for the "open" field.
@@ -341,6 +364,36 @@ func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
 }
 
+// ByReviewedBy orders the results by the reviewed_by field.
+func ByReviewedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewedBy, opts...).ToFunc()
+}
+
+// ByReviewedByUserID orders the results by the reviewed_by_user_id field.
+func ByReviewedByUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewedByUserID, opts...).ToFunc()
+}
+
+// ByReviewedByGroupID orders the results by the reviewed_by_group_id field.
+func ByReviewedByGroupID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldReviewedByGroupID, opts...).ToFunc()
+}
+
+// ByAssignedTo orders the results by the assigned_to field.
+func ByAssignedTo(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAssignedTo, opts...).ToFunc()
+}
+
+// ByAssignedToUserID orders the results by the assigned_to_user_id field.
+func ByAssignedToUserID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAssignedToUserID, opts...).ToFunc()
+}
+
+// ByAssignedToGroupID orders the results by the assigned_to_group_id field.
+func ByAssignedToGroupID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldAssignedToGroupID, opts...).ToFunc()
+}
+
 // BySystemOwned orders the results by the system_owned field.
 func BySystemOwned(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSystemOwned, opts...).ToFunc()
@@ -384,6 +437,11 @@ func ByFindingStatusName(opts ...sql.OrderTermOption) OrderOption {
 // ByFindingStatusID orders the results by the finding_status_id field.
 func ByFindingStatusID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldFindingStatusID, opts...).ToFunc()
+}
+
+// ByWorkflowEligibleMarker orders the results by the workflow_eligible_marker field.
+func ByWorkflowEligibleMarker(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldWorkflowEligibleMarker, opts...).ToFunc()
 }
 
 // ByExternalID orders the results by the external_id field.

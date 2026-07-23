@@ -13,8 +13,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/platform"
-	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/systemdetail"
 )
 
@@ -43,10 +41,6 @@ type SystemDetail struct {
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
-	// optional program anchor for this system detail
-	ProgramID *string `json:"program_id,omitempty"`
-	// optional platform anchor for this system detail
-	PlatformID *string `json:"platform_id,omitempty"`
 	// system name used in OSCAL metadata
 	SystemName string `json:"system_name,omitempty"`
 	// system version used in OSCAL metadata
@@ -73,15 +67,24 @@ type SystemDetail struct {
 type SystemDetailEdges struct {
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
-	// optional program this detail belongs to
-	Program *Program `json:"program,omitempty"`
-	// optional platform this detail belongs to
-	Platform *Platform `json:"platform,omitempty"`
+	// Programs holds the value of the programs edge.
+	Programs []*Program `json:"programs,omitempty"`
+	// Platforms holds the value of the platforms edge.
+	Platforms []*Platform `json:"platforms,omitempty"`
+	// Entities holds the value of the entities edge.
+	Entities []*Entity `json:"entities,omitempty"`
+	// Assets holds the value of the assets edge.
+	Assets []*Asset `json:"assets,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [5]bool
 	// totalCount holds the count of the edges above.
-	totalCount [3]map[string]int
+	totalCount [5]map[string]int
+
+	namedPrograms  map[string][]*Program
+	namedPlatforms map[string][]*Platform
+	namedEntities  map[string][]*Entity
+	namedAssets    map[string][]*Asset
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -95,26 +98,40 @@ func (e SystemDetailEdges) OwnerOrErr() (*Organization, error) {
 	return nil, &NotLoadedError{edge: "owner"}
 }
 
-// ProgramOrErr returns the Program value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e SystemDetailEdges) ProgramOrErr() (*Program, error) {
-	if e.Program != nil {
-		return e.Program, nil
-	} else if e.loadedTypes[1] {
-		return nil, &NotFoundError{label: program.Label}
+// ProgramsOrErr returns the Programs value or an error if the edge
+// was not loaded in eager-loading.
+func (e SystemDetailEdges) ProgramsOrErr() ([]*Program, error) {
+	if e.loadedTypes[1] {
+		return e.Programs, nil
 	}
-	return nil, &NotLoadedError{edge: "program"}
+	return nil, &NotLoadedError{edge: "programs"}
 }
 
-// PlatformOrErr returns the Platform value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e SystemDetailEdges) PlatformOrErr() (*Platform, error) {
-	if e.Platform != nil {
-		return e.Platform, nil
-	} else if e.loadedTypes[2] {
-		return nil, &NotFoundError{label: platform.Label}
+// PlatformsOrErr returns the Platforms value or an error if the edge
+// was not loaded in eager-loading.
+func (e SystemDetailEdges) PlatformsOrErr() ([]*Platform, error) {
+	if e.loadedTypes[2] {
+		return e.Platforms, nil
 	}
-	return nil, &NotLoadedError{edge: "platform"}
+	return nil, &NotLoadedError{edge: "platforms"}
+}
+
+// EntitiesOrErr returns the Entities value or an error if the edge
+// was not loaded in eager-loading.
+func (e SystemDetailEdges) EntitiesOrErr() ([]*Entity, error) {
+	if e.loadedTypes[3] {
+		return e.Entities, nil
+	}
+	return nil, &NotLoadedError{edge: "entities"}
+}
+
+// AssetsOrErr returns the Assets value or an error if the edge
+// was not loaded in eager-loading.
+func (e SystemDetailEdges) AssetsOrErr() ([]*Asset, error) {
+	if e.loadedTypes[4] {
+		return e.Assets, nil
+	}
+	return nil, &NotLoadedError{edge: "assets"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -126,7 +143,7 @@ func (*SystemDetail) scanValues(columns []string) ([]any, error) {
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
 		case systemdetail.FieldTags, systemdetail.FieldRevisionHistory, systemdetail.FieldOscalMetadataJSON:
 			values[i] = new([]byte)
-		case systemdetail.FieldID, systemdetail.FieldCreatedBy, systemdetail.FieldUpdatedBy, systemdetail.FieldUpdatedByImpersonator, systemdetail.FieldDeletedBy, systemdetail.FieldDisplayID, systemdetail.FieldOwnerID, systemdetail.FieldProgramID, systemdetail.FieldPlatformID, systemdetail.FieldSystemName, systemdetail.FieldVersion, systemdetail.FieldDescription, systemdetail.FieldAuthorizationBoundary, systemdetail.FieldSensitivityLevel:
+		case systemdetail.FieldID, systemdetail.FieldCreatedBy, systemdetail.FieldUpdatedBy, systemdetail.FieldUpdatedByImpersonator, systemdetail.FieldDeletedBy, systemdetail.FieldDisplayID, systemdetail.FieldOwnerID, systemdetail.FieldSystemName, systemdetail.FieldVersion, systemdetail.FieldDescription, systemdetail.FieldAuthorizationBoundary, systemdetail.FieldSensitivityLevel:
 			values[i] = new(sql.NullString)
 		case systemdetail.FieldCreatedAt, systemdetail.FieldUpdatedAt, systemdetail.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -214,20 +231,6 @@ func (_m *SystemDetail) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.OwnerID = value.String
 			}
-		case systemdetail.FieldProgramID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field program_id", values[i])
-			} else if value.Valid {
-				_m.ProgramID = new(string)
-				*_m.ProgramID = value.String
-			}
-		case systemdetail.FieldPlatformID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field platform_id", values[i])
-			} else if value.Valid {
-				_m.PlatformID = new(string)
-				*_m.PlatformID = value.String
-			}
 		case systemdetail.FieldSystemName:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field system_name", values[i])
@@ -299,14 +302,24 @@ func (_m *SystemDetail) QueryOwner() *OrganizationQuery {
 	return NewSystemDetailClient(_m.config).QueryOwner(_m)
 }
 
-// QueryProgram queries the "program" edge of the SystemDetail entity.
-func (_m *SystemDetail) QueryProgram() *ProgramQuery {
-	return NewSystemDetailClient(_m.config).QueryProgram(_m)
+// QueryPrograms queries the "programs" edge of the SystemDetail entity.
+func (_m *SystemDetail) QueryPrograms() *ProgramQuery {
+	return NewSystemDetailClient(_m.config).QueryPrograms(_m)
 }
 
-// QueryPlatform queries the "platform" edge of the SystemDetail entity.
-func (_m *SystemDetail) QueryPlatform() *PlatformQuery {
-	return NewSystemDetailClient(_m.config).QueryPlatform(_m)
+// QueryPlatforms queries the "platforms" edge of the SystemDetail entity.
+func (_m *SystemDetail) QueryPlatforms() *PlatformQuery {
+	return NewSystemDetailClient(_m.config).QueryPlatforms(_m)
+}
+
+// QueryEntities queries the "entities" edge of the SystemDetail entity.
+func (_m *SystemDetail) QueryEntities() *EntityQuery {
+	return NewSystemDetailClient(_m.config).QueryEntities(_m)
+}
+
+// QueryAssets queries the "assets" edge of the SystemDetail entity.
+func (_m *SystemDetail) QueryAssets() *AssetQuery {
+	return NewSystemDetailClient(_m.config).QueryAssets(_m)
 }
 
 // Update returns a builder for updating this SystemDetail.
@@ -364,16 +377,6 @@ func (_m *SystemDetail) String() string {
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
-	if v := _m.ProgramID; v != nil {
-		builder.WriteString("program_id=")
-		builder.WriteString(*v)
-	}
-	builder.WriteString(", ")
-	if v := _m.PlatformID; v != nil {
-		builder.WriteString("platform_id=")
-		builder.WriteString(*v)
-	}
-	builder.WriteString(", ")
 	builder.WriteString("system_name=")
 	builder.WriteString(_m.SystemName)
 	builder.WriteString(", ")
@@ -401,6 +404,102 @@ func (_m *SystemDetail) String() string {
 	builder.WriteString(fmt.Sprintf("%v", _m.OscalMetadataJSON))
 	builder.WriteByte(')')
 	return builder.String()
+}
+
+// NamedPrograms returns the Programs named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *SystemDetail) NamedPrograms(name string) ([]*Program, error) {
+	if _m.Edges.namedPrograms == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedPrograms[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *SystemDetail) appendNamedPrograms(name string, edges ...*Program) {
+	if _m.Edges.namedPrograms == nil {
+		_m.Edges.namedPrograms = make(map[string][]*Program)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedPrograms[name] = []*Program{}
+	} else {
+		_m.Edges.namedPrograms[name] = append(_m.Edges.namedPrograms[name], edges...)
+	}
+}
+
+// NamedPlatforms returns the Platforms named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *SystemDetail) NamedPlatforms(name string) ([]*Platform, error) {
+	if _m.Edges.namedPlatforms == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedPlatforms[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *SystemDetail) appendNamedPlatforms(name string, edges ...*Platform) {
+	if _m.Edges.namedPlatforms == nil {
+		_m.Edges.namedPlatforms = make(map[string][]*Platform)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedPlatforms[name] = []*Platform{}
+	} else {
+		_m.Edges.namedPlatforms[name] = append(_m.Edges.namedPlatforms[name], edges...)
+	}
+}
+
+// NamedEntities returns the Entities named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *SystemDetail) NamedEntities(name string) ([]*Entity, error) {
+	if _m.Edges.namedEntities == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedEntities[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *SystemDetail) appendNamedEntities(name string, edges ...*Entity) {
+	if _m.Edges.namedEntities == nil {
+		_m.Edges.namedEntities = make(map[string][]*Entity)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedEntities[name] = []*Entity{}
+	} else {
+		_m.Edges.namedEntities[name] = append(_m.Edges.namedEntities[name], edges...)
+	}
+}
+
+// NamedAssets returns the Assets named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *SystemDetail) NamedAssets(name string) ([]*Asset, error) {
+	if _m.Edges.namedAssets == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedAssets[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *SystemDetail) appendNamedAssets(name string, edges ...*Asset) {
+	if _m.Edges.namedAssets == nil {
+		_m.Edges.namedAssets = make(map[string][]*Asset)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedAssets[name] = []*Asset{}
+	} else {
+		_m.Edges.namedAssets[name] = append(_m.Edges.namedAssets[name], edges...)
+	}
 }
 
 // SystemDetails is a parsable slice of SystemDetail.

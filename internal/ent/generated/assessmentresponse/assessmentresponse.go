@@ -34,6 +34,8 @@ const (
 	FieldDeletedBy = "deleted_by"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
+	// FieldWorkflowEligibleMarker holds the string denoting the workflow_eligible_marker field in the database.
+	FieldWorkflowEligibleMarker = "workflow_eligible_marker"
 	// FieldAssessmentID holds the string denoting the assessment_id field in the database.
 	FieldAssessmentID = "assessment_id"
 	// FieldIsTest holds the string denoting the is_test field in the database.
@@ -92,6 +94,8 @@ const (
 	EdgeDocument = "document"
 	// EdgeVendorRiskScores holds the string denoting the vendor_risk_scores edge name in mutations.
 	EdgeVendorRiskScores = "vendor_risk_scores"
+	// EdgeWorkflowObjectRefs holds the string denoting the workflow_object_refs edge name in mutations.
+	EdgeWorkflowObjectRefs = "workflow_object_refs"
 	// Table holds the table name of the assessmentresponse in the database.
 	Table = "assessment_responses"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -143,6 +147,13 @@ const (
 	VendorRiskScoresInverseTable = "vendor_risk_scores"
 	// VendorRiskScoresColumn is the table column denoting the vendor_risk_scores relation/edge.
 	VendorRiskScoresColumn = "assessment_response_vendor_risk_scores"
+	// WorkflowObjectRefsTable is the table that holds the workflow_object_refs relation/edge.
+	WorkflowObjectRefsTable = "workflow_object_refs"
+	// WorkflowObjectRefsInverseTable is the table name for the WorkflowObjectRef entity.
+	// It exists in this package in order to avoid circular dependency with the "workflowobjectref" package.
+	WorkflowObjectRefsInverseTable = "workflow_object_refs"
+	// WorkflowObjectRefsColumn is the table column denoting the workflow_object_refs relation/edge.
+	WorkflowObjectRefsColumn = "assessment_response_id"
 )
 
 // Columns holds all SQL columns for assessmentresponse fields.
@@ -156,6 +167,7 @@ var Columns = []string{
 	FieldDeletedAt,
 	FieldDeletedBy,
 	FieldOwnerID,
+	FieldWorkflowEligibleMarker,
 	FieldAssessmentID,
 	FieldIsTest,
 	FieldCampaignID,
@@ -196,7 +208,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [8]ent.Hook
+	Hooks        [9]ent.Hook
 	Interceptors [4]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -207,6 +219,8 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	OwnerIDValidator func(string) error
+	// DefaultWorkflowEligibleMarker holds the default value on creation for the "workflow_eligible_marker" field.
+	DefaultWorkflowEligibleMarker bool
 	// AssessmentIDValidator is a validator for the "assessment_id" field. It is called by the builders before save.
 	AssessmentIDValidator func(string) error
 	// DefaultIsTest holds the default value on creation for the "is_test" field.
@@ -287,6 +301,11 @@ func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 // ByOwnerID orders the results by the owner_id field.
 func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
+}
+
+// ByWorkflowEligibleMarker orders the results by the workflow_eligible_marker field.
+func ByWorkflowEligibleMarker(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldWorkflowEligibleMarker, opts...).ToFunc()
 }
 
 // ByAssessmentID orders the results by the assessment_id field.
@@ -449,6 +468,20 @@ func ByVendorRiskScores(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption 
 		sqlgraph.OrderByNeighborTerms(s, newVendorRiskScoresStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByWorkflowObjectRefsCount orders the results by workflow_object_refs count.
+func ByWorkflowObjectRefsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newWorkflowObjectRefsStep(), opts...)
+	}
+}
+
+// ByWorkflowObjectRefs orders the results by workflow_object_refs terms.
+func ByWorkflowObjectRefs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newWorkflowObjectRefsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -496,6 +529,13 @@ func newVendorRiskScoresStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(VendorRiskScoresInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, VendorRiskScoresTable, VendorRiskScoresColumn),
+	)
+}
+func newWorkflowObjectRefsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(WorkflowObjectRefsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, true, WorkflowObjectRefsTable, WorkflowObjectRefsColumn),
 	)
 }
 

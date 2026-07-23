@@ -206,7 +206,14 @@ func (g GroupPermissionsMixin) Interceptors() []ent.Interceptor {
 			return nil
 		}
 
-		groupIDs, err := generated.FromContext(ctx).Group.Query().Where(
+		// skip when the request is coming from a REST endpoint, e.g. create integration
+		// will attempt to add vendor which falls in this path
+		client := generated.FromContext(ctx)
+		if client == nil {
+			return nil
+		}
+
+		groupIDs, err := client.Group.Query().Where(
 			group.HasMembersWith(
 				groupmembership.UserID(caller.SubjectID),
 			),

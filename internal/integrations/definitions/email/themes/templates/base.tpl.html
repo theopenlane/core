@@ -100,7 +100,7 @@
                               cellspacing="0"
                               role="presentation"
                               class="mobile_px-2"
-                              style="background-color:{{ or .Config.CardBackgroundColor "#ffffff" }};padding-right:1.5rem;padding-left:1.5rem;padding-bottom:1rem;padding-top:1rem{{ if eq .Config.CardStyle "elevated" }};border-radius:20px;box-shadow:0 4px 16px rgba(0,0,0,0.10),0 12px 40px rgba(0,0,0,0.06){{ end }}">
+                              style="background-color:{{ or .Config.CardBackgroundColor "#ffffff" }};padding-right:1.5rem;padding-left:1.5rem;padding-bottom:1rem;padding-top:1rem{{ if .Config.AccentBorderColor }};border-top:4px solid {{ .Config.AccentBorderColor }}{{ end }}{{ if eq .Config.CardStyle "elevated" }};border-radius:20px;box-shadow:0 4px 16px rgba(0,0,0,0.10),0 12px 40px rgba(0,0,0,0.06){{ end }}">
                               <tbody>
                                 <tr>
                                   <td>
@@ -167,7 +167,7 @@
                                                     <p
                                                       style="font-size:13px;line-height:1.5;font-weight:420;letter-spacing:-0.039px;margin:0rem;text-align:right;font-family:Inter,system-ui,Arial,sans-serif;margin-top:0rem;margin-bottom:0rem;margin-left:0rem;margin-right:0rem">
                                                       <span
-                                                        style="color:{{ or .Config.FooterTextColor "#7b7d81" }}"
+                                                        style="color:{{ or .Config.FooterTextColor "#5f6165" }}"
                                                         >{{ .Config.HeaderText }}</span
                                                       >
                                                     </p>
@@ -239,6 +239,29 @@
                                               {{ $line }}
                                             </p>
                                             {{ end }}
+                                            {{ if .Body.ContentBlocks }}
+                                            <table
+                                              align="center"
+                                              width="100%"
+                                              border="0"
+                                              cellpadding="0"
+                                              cellspacing="0"
+                                              role="presentation"
+                                              style="margin-bottom:1.5rem;max-width:380px;margin-right:auto;margin-left:auto">
+                                              <tbody>
+                                                <tr>
+                                                  <td style="background-color:{{ or .Config.CardBackgroundColor "#ffffff" }};border-radius:8px;padding:16px 20px;text-align:left{{ if .Config.AccentBorderColor }};border-left:3px solid {{ .Config.AccentBorderColor }}{{ end }}">
+                                                    {{ range $block := .Body.ContentBlocks }}
+                                                    <div
+                                                      style="font-size:14px;line-height:1.6;font-weight:420;letter-spacing:-0.042px;color:{{ or $.Config.TextColor "#43454b" }};font-family:Inter,system-ui,Arial,sans-serif">
+                                                      {{ $block }}
+                                                    </div>
+                                                    {{ end }}
+                                                  </td>
+                                                </tr>
+                                              </tbody>
+                                            </table>
+                                            {{ end }}
                                             {{ if .Body.Callout }}
                                             <table
                                               align="center"
@@ -250,7 +273,7 @@
                                               style="margin-bottom:1.5rem;max-width:380px;margin-right:auto;margin-left:auto">
                                               <tbody>
                                                 <tr>
-                                                  <td style="background-color:{{ or .Body.Callout.Style.BackgroundColor $.Config.CardBackgroundColor "#ffffff" }};border-radius:8px;padding:16px 20px;text-align:left">
+                                                  <td style="background-color:{{ or .Body.Callout.Style.BackgroundColor $.Config.CardBackgroundColor "#ffffff" }};border-radius:8px;padding:16px 20px;text-align:left{{ if $.Config.AccentBorderColor }};border-left:3px solid {{ $.Config.AccentBorderColor }}{{ end }}">
                                                     {{ if .Body.Callout.Title }}
                                                     <p
                                                       style="font-size:14px;font-weight:600;letter-spacing:-0.042px;color:{{ or .Body.Callout.Style.PrimaryColor "#14171e" }};margin:0 0 8px 0;font-family:Inter,system-ui,Arial,sans-serif">
@@ -387,7 +410,7 @@
                                                     style="padding-right:1.5rem;padding-left:1.5rem;padding-bottom:2.5rem;padding-top:2.5rem;text-align:center">
                                                     {{ if .Config.Tagline }}
                                                     <p
-                                                      style="font-size:13px;line-height:1.5;font-weight:420;letter-spacing:-0.039px;color:{{ or .Config.FooterTextColor "#7b7d81" }};margin-right:auto;margin-left:auto;margin-top:0rem;margin-bottom:2rem;max-width:280px;text-align:center;font-family:Inter,system-ui,Arial,sans-serif">
+                                                      style="font-size:13px;line-height:1.5;font-weight:420;letter-spacing:-0.039px;color:{{ or .Config.FooterTextColor "#5f6165" }};margin-right:auto;margin-left:auto;margin-top:0rem;margin-bottom:2rem;max-width:280px;text-align:center;font-family:Inter,system-ui,Arial,sans-serif">
                                                       {{ .Config.Tagline }}
                                                     </p>
                                                     {{ end }}
@@ -421,21 +444,21 @@
                                                     {{ end }}
                                                     {{ if .Config.CompanyAddress }}
                                                     <p
-                                                      style="font-size:11px;line-height:1.5;font-weight:420;letter-spacing:-0.033px;color:{{ or .Config.FooterTextColor "#7b7d81" }};margin-top:0rem;margin-bottom:0.5rem;text-align:center;font-family:Inter,system-ui,Arial,sans-serif">
+                                                      style="font-size:11px;line-height:1.5;font-weight:420;letter-spacing:-0.033px;color:{{ or .Config.FooterTextColor "#5f6165" }};margin-top:0rem;margin-bottom:0.5rem;text-align:center;font-family:Inter,system-ui,Arial,sans-serif">
                                                       {{ .Config.CompanyAddress }}
                                                     </p>
                                                     {{ end }}
                                                     {{ if or .Config.TermsURL .Config.PrivacyURL .Config.UnsubscribeURL }}
                                                     <p
-                                                      style="font-size:11px;line-height:1.5;font-weight:420;letter-spacing:-0.033px;color:{{ or .Config.FooterTextColor "#7b7d81" }};margin-top:0rem;margin-bottom:0.5rem;text-align:center;font-family:Inter,system-ui,Arial,sans-serif">
-                                                      {{ if .Config.TermsURL }}<a href="{{ .Config.TermsURL }}" style="color:{{ or .Config.FooterTextColor "#7b7d81" }};text-decoration-line:none" target="_blank">Terms</a>{{ end }}
+                                                      style="font-size:11px;line-height:1.5;font-weight:420;letter-spacing:-0.033px;color:{{ or .Config.FooterTextColor "#5f6165" }};margin-top:0rem;margin-bottom:0.5rem;text-align:center;font-family:Inter,system-ui,Arial,sans-serif">
+                                                      {{ if .Config.TermsURL }}<a href="{{ .Config.TermsURL }}" style="color:{{ or .Config.FooterTextColor "#5f6165" }};text-decoration-line:underline" target="_blank">Terms</a>{{ end }}
                                                       {{ if and .Config.TermsURL .Config.PrivacyURL }}&nbsp;·&nbsp;{{ end }}
-                                                      {{ if .Config.PrivacyURL }}<a href="{{ .Config.PrivacyURL }}" style="color:{{ or .Config.FooterTextColor "#7b7d81" }};text-decoration-line:none" target="_blank">Privacy</a>{{ end }}
+                                                      {{ if .Config.PrivacyURL }}<a href="{{ .Config.PrivacyURL }}" style="color:{{ or .Config.FooterTextColor "#5f6165" }};text-decoration-line:underline" target="_blank">Privacy</a>{{ end }}
                                                       {{ if .Config.UnsubscribeURL }}
                                                       {{ if or .Config.TermsURL .Config.PrivacyURL }}&nbsp;·&nbsp;{{ end }}
                                                       <a
                                                         href="{{ .Config.UnsubscribeURL }}"
-                                                        style="color:{{ or .Config.FooterTextColor "#7b7d81" }};text-decoration-line:none"
+                                                        style="color:{{ or .Config.FooterTextColor "#5f6165" }};text-decoration-line:underline"
                                                         target="_blank"
                                                         >Unsubscribe</a>
                                                       {{ end }}
@@ -443,7 +466,7 @@
                                                     {{ end }}
                                                     {{ if or .Config.Copyright .Config.Corporation }}
                                                     <p
-                                                      style="font-size:11px;line-height:1.5;font-weight:420;letter-spacing:-0.033px;color:{{ or .Config.FooterTextColor "#7b7d81" }};margin-top:0.25rem;margin-bottom:0rem;text-align:center;font-family:Inter,system-ui,Arial,sans-serif">
+                                                      style="font-size:11px;line-height:1.5;font-weight:420;letter-spacing:-0.033px;color:{{ or .Config.FooterTextColor "#5f6165" }};margin-top:0.25rem;margin-bottom:0rem;text-align:center;font-family:Inter,system-ui,Arial,sans-serif">
                                                       {{ if .Config.Copyright }}{{ .Config.Copyright }}{{ else }}&copy; {{ now | date "2006" }} {{ .Config.Corporation }} All rights reserved.{{ end }}
                                                     </p>
                                                     {{ end }}

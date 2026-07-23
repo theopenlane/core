@@ -285,7 +285,7 @@ coreConfiguration:
       # -- DisplayName is the display name of the virtual support identity, used for record attribution
       displayname: "Openlane Support"  # @schema type:string; default:Openlane Support
       # -- SubjectID is the stable subject id of the virtual support identity used for created_by/updated_by
-      # attribution. It must be a valid ULID and is consistent without a backing user row
+      # attribution. It must be a valid ULID and is consistent without a backing user row. Default should match anon.SupportSubjectID
       subjectid: "01JSPPRT000000000000000000"  # @schema type:string; default:01JSPPRT000000000000000000
       # -- IssuerURL is the issuer URL of the second factor identity provider
       issuerurl: ""  # @schema type:string
@@ -569,6 +569,34 @@ coreConfiguration:
     consoleintegrationpath: "/organization-settings/integrations"  # @schema type:string; default:/organization-settings/integrations
     awssecurityhub:
       arn: ""  # @schema type:string
+    cloudflareruntime:
+      # -- Cloudflare account ID for the operator-owned account
+      accountid: ""  # @schema type:string
+      # -- Vendor/technology classification and enrichment behavior for onboarding domain scan reports
+      domainscan:
+        nonvendorcategories:
+            - Miscellaneous
+            - JavaScript frameworks
+            - JavaScript libraries
+            - Static site generator
+        deniedvendornames:
+            - rfc-editor
+            - ajax
+            - website-files
+            - http/3
+            - googletagmanager
+            - cloudflareinsights
+            - googlesyndication
+            - gstatic
+            - hcaptcha
+            - googleapis
+            - hsforms
+            - hs-scripts
+            - hscollectedforms
+            - hsts
+            - hs-banner
+            - hs-analytics
+        scanttl: 86400  # @schema type:integer; default:86400
     githubapp:
       appslug: ""  # @schema type:string
     slack:
@@ -624,15 +652,22 @@ coreConfiguration:
       producturl: "https://console.theopenlane.io"  # @schema type:string; default:https://console.theopenlane.io
       # -- Documentation URL
       docsurl: "https://docs.theopenlane.io"  # @schema type:string; default:https://docs.theopenlane.io
+      # -- Public base URL of the API for email links that hit the API directly
+      apiurl: "https://api.theopenlane.io"  # @schema type:string; default:https://api.theopenlane.io
     paymentreminder:
       # -- Days after org creation before marking for deletion
       paymentmethodinterval: 0
       # -- Days between marking and actual deletion
-      deletion_days: 0
+      deletiondays: 0
       # -- Whether the payment reminder listener is enabled
       enabled: false  # @schema type:boolean
       # -- If true only log organization IDs that would be processed
       dryrun: false  # @schema type:boolean
+    organizationdelete:
+      # -- Maximum overdue organizations to delete per run
+      maxdeletesperrun: 0  # @schema type:integer
+      # -- Whether the organization deletion listener is enabled
+      enabled: false  # @schema type:boolean
   # -- Workflows contains the configuration for the workflows engine
   workflows:
     enabled: false  # @schema type:boolean; default:false
@@ -1004,6 +1039,14 @@ externalSecrets:
       secretKey: "CORE_INTEGRATIONS_AWSSECURITYHUB_SECRETACCESSKEY"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-integrations-awssecurityhub-secretaccesskey"  # @schema type:string
+    # -- core-integrations-cloudflareruntime-apitoken secret configuration
+    core-integrations-cloudflareruntime-apitoken:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for integrations.cloudflareruntime.apitoken
+      secretKey: "CORE_INTEGRATIONS_CLOUDFLARERUNTIME_APITOKEN"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-integrations-cloudflareruntime-apitoken"  # @schema type:string
     # -- core-integrations-githubapp-appid secret configuration
     core-integrations-githubapp-appid:
       # -- Enable this external secret

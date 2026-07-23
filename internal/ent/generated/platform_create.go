@@ -1348,23 +1348,19 @@ func (_c *PlatformCreate) SetPlatformOwner(v *User) *PlatformCreate {
 	return _c.SetPlatformOwnerID(v.ID)
 }
 
-// SetSystemDetailID sets the "system_detail" edge to the SystemDetail entity by ID.
-func (_c *PlatformCreate) SetSystemDetailID(id string) *PlatformCreate {
-	_c.mutation.SetSystemDetailID(id)
+// AddSystemDetailIDs adds the "system_details" edge to the SystemDetail entity by IDs.
+func (_c *PlatformCreate) AddSystemDetailIDs(ids ...string) *PlatformCreate {
+	_c.mutation.AddSystemDetailIDs(ids...)
 	return _c
 }
 
-// SetNillableSystemDetailID sets the "system_detail" edge to the SystemDetail entity by ID if the given value is not nil.
-func (_c *PlatformCreate) SetNillableSystemDetailID(id *string) *PlatformCreate {
-	if id != nil {
-		_c = _c.SetSystemDetailID(*id)
+// AddSystemDetails adds the "system_details" edges to the SystemDetail entity.
+func (_c *PlatformCreate) AddSystemDetails(v ...*SystemDetail) *PlatformCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return _c
-}
-
-// SetSystemDetail sets the "system_detail" edge to the SystemDetail entity.
-func (_c *PlatformCreate) SetSystemDetail(v *SystemDetail) *PlatformCreate {
-	return _c.SetSystemDetailID(v.ID)
+	return _c.AddSystemDetailIDs(ids...)
 }
 
 // Mutation returns the PlatformMutation object of the builder.
@@ -2483,18 +2479,18 @@ func (_c *PlatformCreate) createSpec() (*Platform, *sqlgraph.CreateSpec) {
 		_node.PlatformOwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := _c.mutation.SystemDetailIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.SystemDetailsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
-			Table:   platform.SystemDetailTable,
-			Columns: []string{platform.SystemDetailColumn},
+			Table:   platform.SystemDetailsTable,
+			Columns: platform.SystemDetailsPrimaryKey,
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(systemdetail.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.SystemDetail
+		edge.Schema = _c.schemaConfig.PlatformSystemDetails
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

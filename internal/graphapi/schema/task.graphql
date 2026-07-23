@@ -1,3 +1,30 @@
+extend type Task {
+    """
+    Indicates if this task has pending changes awaiting workflow approval
+    """
+    hasPendingWorkflow: Boolean!
+    """
+    Indicates if this task has any workflow history (completed or failed instances)
+    """
+    hasWorkflowHistory: Boolean!
+    """
+    Returns active workflow instances for this task (RUNNING or PAUSED)
+    """
+    activeWorkflowInstances: [WorkflowInstance!]!
+    """
+    Returns the workflow event timeline for this task across all workflow instances
+    """
+    workflowTimeline(
+        after: Cursor
+        first: Int
+        before: Cursor
+        last: Int
+        orderBy: [WorkflowEventOrder!]
+        where: WorkflowEventWhereInput
+        includeEmitFailures: Boolean
+    ): WorkflowEventConnection!
+}
+
 extend type Query {
     """
     Look up task by ID

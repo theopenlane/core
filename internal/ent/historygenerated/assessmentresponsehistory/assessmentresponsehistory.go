@@ -42,6 +42,8 @@ const (
 	FieldDeletedBy = "deleted_by"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
+	// FieldWorkflowEligibleMarker holds the string denoting the workflow_eligible_marker field in the database.
+	FieldWorkflowEligibleMarker = "workflow_eligible_marker"
 	// FieldAssessmentID holds the string denoting the assessment_id field in the database.
 	FieldAssessmentID = "assessment_id"
 	// FieldIsTest holds the string denoting the is_test field in the database.
@@ -104,6 +106,7 @@ var Columns = []string{
 	FieldDeletedAt,
 	FieldDeletedBy,
 	FieldOwnerID,
+	FieldWorkflowEligibleMarker,
 	FieldAssessmentID,
 	FieldIsTest,
 	FieldCampaignID,
@@ -155,6 +158,8 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
+	// DefaultWorkflowEligibleMarker holds the default value on creation for the "workflow_eligible_marker" field.
+	DefaultWorkflowEligibleMarker bool
 	// DefaultIsTest holds the default value on creation for the "is_test" field.
 	DefaultIsTest bool
 	// DefaultSendAttempts holds the default value on creation for the "send_attempts" field.
@@ -256,6 +261,11 @@ func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 // ByOwnerID orders the results by the owner_id field.
 func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
+}
+
+// ByWorkflowEligibleMarker orders the results by the workflow_eligible_marker field.
+func ByWorkflowEligibleMarker(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldWorkflowEligibleMarker, opts...).ToFunc()
 }
 
 // ByAssessmentID orders the results by the assessment_id field.

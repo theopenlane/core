@@ -37,8 +37,7 @@ func defaultGitHubAppSpec() githubapp.Config {
 }
 
 func (suite *HandlerTestSuite) registerGitHubAppWebhookRoute() {
-	op := suite.createImpersonationOperation("GitHubAppWebhook", "Handle GitHub App security alert webhooks")
-	suite.registerRouteOnce(http.MethodPost, githubAppWebhookPath, op, suite.h.IntegrationStaticWebhookHandler(githubAppDefinitionID, githubapp.InstallationEventsWebhook.Name()))
+	suite.registerRouteOnce(http.MethodPost, githubAppWebhookPath, suite.h.IntegrationStaticWebhookHandler(githubAppDefinitionID, githubapp.InstallationEventsWebhook.Name()))
 }
 
 func (suite *HandlerTestSuite) TestGitHubAppWebhookDoesNotRequireCaller() {

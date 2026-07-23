@@ -75,6 +75,7 @@ type SchemaConfig struct {
 	EntityDocuments                    string // Entity-documents->DocumentData table.
 	EntityFiles                        string // Entity-files->File table.
 	EntityAssets                       string // Entity-assets->Asset table.
+	EntitySystemDetails                string // Entity-system_details->SystemDetail table.
 	EntityIntegrations                 string // Entity-integrations->Integration table.
 	EntitySubprocessors                string // Entity-subprocessors->Subprocessor table.
 	EntityType                         string // EntityType table.
@@ -95,6 +96,12 @@ type SchemaConfig struct {
 	FindingVulnerabilities             string // Finding-vulnerabilities->Vulnerability table.
 	FindingActionPlans                 string // Finding-action_plans->ActionPlan table.
 	FindingControls                    string // Finding-controls->Control table.
+	FindingSubcontrols                 string // Finding-subcontrols->Subcontrol table.
+	FindingRisks                       string // Finding-risks->Risk table.
+	FindingPrograms                    string // Finding-programs->Program table.
+	FindingAssets                      string // Finding-assets->Asset table.
+	FindingEntities                    string // Finding-entities->Entity table.
+	FindingScans                       string // Finding-scans->Scan table.
 	FindingTasks                       string // Finding-tasks->Task table.
 	FindingDirectoryAccounts           string // Finding-directory_accounts->DirectoryAccount table.
 	FindingIdentityHolders             string // Finding-identity_holders->IdentityHolder table.
@@ -203,6 +210,7 @@ type SchemaConfig struct {
 	PlatformOutOfScopeAssets           string // Platform-out_of_scope_assets->Asset table.
 	PlatformOutOfScopeVendors          string // Platform-out_of_scope_vendors->Entity table.
 	PlatformApplicableFrameworks       string // Platform-applicable_frameworks->Standard table.
+	PlatformSystemDetails              string // Platform-system_details->SystemDetail table.
 	Procedure                          string // Procedure table.
 	ProcedureBlockedGroups             string // Procedure-blocked_groups->Group table.
 	ProcedureEditors                   string // Procedure-editors->Group table.
@@ -223,6 +231,7 @@ type SchemaConfig struct {
 	ProgramEvidence                    string // Program-evidence->Evidence table.
 	ProgramNarratives                  string // Program-narratives->Narrative table.
 	ProgramActionPlans                 string // Program-action_plans->ActionPlan table.
+	ProgramSystemDetails               string // Program-system_details->SystemDetail table.
 	ProgramMembership                  string // ProgramMembership table.
 	Remediation                        string // Remediation table.
 	RemediationBlockedGroups           string // Remediation-blocked_groups->Group table.
@@ -233,6 +242,9 @@ type SchemaConfig struct {
 	RemediationControls                string // Remediation-controls->Control table.
 	RemediationSubcontrols             string // Remediation-subcontrols->Subcontrol table.
 	RemediationRisks                   string // Remediation-risks->Risk table.
+	RemediationPrograms                string // Remediation-programs->Program table.
+	RemediationAssets                  string // Remediation-assets->Asset table.
+	RemediationEntities                string // Remediation-entities->Entity table.
 	Review                             string // Review table.
 	ReviewBlockedGroups                string // Review-blocked_groups->Group table.
 	ReviewEditors                      string // Review-editors->Group table.
@@ -243,6 +255,9 @@ type SchemaConfig struct {
 	ReviewControls                     string // Review-controls->Control table.
 	ReviewSubcontrols                  string // Review-subcontrols->Subcontrol table.
 	ReviewRisks                        string // Review-risks->Risk table.
+	ReviewPrograms                     string // Review-programs->Program table.
+	ReviewAssets                       string // Review-assets->Asset table.
+	ReviewEntities                     string // Review-entities->Entity table.
 	ReviewInternalPolicies             string // Review-internal_policies->InternalPolicy table.
 	Risk                               string // Risk table.
 	RiskBlockedGroups                  string // Risk-blocked_groups->Group table.
@@ -255,6 +270,7 @@ type SchemaConfig struct {
 	ScanBlockedGroups                  string // Scan-blocked_groups->Group table.
 	ScanEditors                        string // Scan-editors->Group table.
 	ScanAssets                         string // Scan-assets->Asset table.
+	ScanEntities                       string // Scan-entities->Entity table.
 	ScanEvidence                       string // Scan-evidence->Evidence table.
 	ScanFiles                          string // Scan-files->File table.
 	ScanRemediations                   string // Scan-remediations->Remediation table.
@@ -279,6 +295,7 @@ type SchemaConfig struct {
 	Subscriber                         string // Subscriber table.
 	SubscriberEvents                   string // Subscriber-events->Event table.
 	SystemDetail                       string // SystemDetail table.
+	SystemDetailAssets                 string // SystemDetail-assets->Asset table.
 	TFASetting                         string // TFASetting table.
 	TagDefinition                      string // TagDefinition table.
 	Task                               string // Task table.
@@ -304,6 +321,12 @@ type SchemaConfig struct {
 	VendorScoringConfig                string // VendorScoringConfig table.
 	Vulnerability                      string // Vulnerability table.
 	VulnerabilityActionPlans           string // Vulnerability-action_plans->ActionPlan table.
+	VulnerabilityControls              string // Vulnerability-controls->Control table.
+	VulnerabilitySubcontrols           string // Vulnerability-subcontrols->Subcontrol table.
+	VulnerabilityRisks                 string // Vulnerability-risks->Risk table.
+	VulnerabilityPrograms              string // Vulnerability-programs->Program table.
+	VulnerabilityAssets                string // Vulnerability-assets->Asset table.
+	VulnerabilityEntities              string // Vulnerability-entities->Entity table.
 	VulnerabilityScans                 string // Vulnerability-scans->Scan table.
 	VulnerabilityTasks                 string // Vulnerability-tasks->Task table.
 	Webauthn                           string // Webauthn table.

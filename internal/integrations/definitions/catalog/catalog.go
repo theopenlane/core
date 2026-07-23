@@ -11,12 +11,14 @@ import (
 	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
 	"github.com/theopenlane/core/internal/integrations/definitions/googledrive"
 	"github.com/theopenlane/core/internal/integrations/definitions/googleworkspace"
+	"github.com/theopenlane/core/internal/integrations/definitions/keycloak"
 	"github.com/theopenlane/core/internal/integrations/definitions/microsoftteams"
 	"github.com/theopenlane/core/internal/integrations/definitions/oidclocal"
 	"github.com/theopenlane/core/internal/integrations/definitions/okta"
 	"github.com/theopenlane/core/internal/integrations/definitions/onedrive"
 	"github.com/theopenlane/core/internal/integrations/definitions/scim"
 	"github.com/theopenlane/core/internal/integrations/definitions/slack"
+	"github.com/theopenlane/core/internal/integrations/definitions/system"
 	"github.com/theopenlane/core/internal/integrations/definitions/tailscale"
 	"github.com/theopenlane/core/internal/integrations/registry"
 )
@@ -30,18 +32,20 @@ func Builders(cfg Config, devMode bool) []registry.Builder {
 		awssecurityhub.Builder(cfg.AWSSecurityHub),
 		azureentraid.Builder(cfg.AzureEntraID),
 		azuresecuritycenter.Builder(),
-		cloudflare.Builder(),
+		cloudflare.Builder(&cfg.CloudflareRuntime),
 		email.Builder(&cfg.Email, devMode),
 		gcpscc.Builder(),
 		githubapp.Builder(cfg.GitHubApp),
 		googledrive.Builder(cfg.GoogleDrive),
 		googleworkspace.Builder(cfg.GoogleWorkspace),
+		keycloak.Builder(),
 		microsoftteams.Builder(cfg.MicrosoftTeams),
 		onedrive.Builder(cfg.OneDrive),
 		oidclocal.Builder(cfg.OIDCLocal),
 		okta.Builder(),
 		scim.Builder(),
 		slack.Builder(cfg.Slack, &cfg.SlackRuntime, devMode),
+		system.Builder(cfg.PaymentReminder, cfg.OrganizationDelete),
 		tailscale.Builder(),
 	}
 }

@@ -56,6 +56,14 @@ const (
 	FieldStartDate = "start_date"
 	// FieldEndDate holds the string denoting the end_date field in the database.
 	FieldEndDate = "end_date"
+	// FieldObservationPeriodStartDate holds the string denoting the observation_period_start_date field in the database.
+	FieldObservationPeriodStartDate = "observation_period_start_date"
+	// FieldObservationPeriodEndDate holds the string denoting the observation_period_end_date field in the database.
+	FieldObservationPeriodEndDate = "observation_period_end_date"
+	// FieldFieldworkStartDate holds the string denoting the fieldwork_start_date field in the database.
+	FieldFieldworkStartDate = "fieldwork_start_date"
+	// FieldFieldworkEndDate holds the string denoting the fieldwork_end_date field in the database.
+	FieldFieldworkEndDate = "fieldwork_end_date"
 	// FieldAuditorReady holds the string denoting the auditor_ready field in the database.
 	FieldAuditorReady = "auditor_ready"
 	// FieldAuditorWriteComments holds the string denoting the auditor_write_comments field in the database.
@@ -104,8 +112,16 @@ const (
 	EdgeNarratives = "narratives"
 	// EdgeActionPlans holds the string denoting the action_plans edge name in mutations.
 	EdgeActionPlans = "action_plans"
-	// EdgeSystemDetail holds the string denoting the system_detail edge name in mutations.
-	EdgeSystemDetail = "system_detail"
+	// EdgeSystemDetails holds the string denoting the system_details edge name in mutations.
+	EdgeSystemDetails = "system_details"
+	// EdgeFindings holds the string denoting the findings edge name in mutations.
+	EdgeFindings = "findings"
+	// EdgeVulnerabilities holds the string denoting the vulnerabilities edge name in mutations.
+	EdgeVulnerabilities = "vulnerabilities"
+	// EdgeReviews holds the string denoting the reviews edge name in mutations.
+	EdgeReviews = "reviews"
+	// EdgeRemediations holds the string denoting the remediations edge name in mutations.
+	EdgeRemediations = "remediations"
 	// EdgeUsers holds the string denoting the users edge name in mutations.
 	EdgeUsers = "users"
 	// EdgeProgramOwner holds the string denoting the program_owner edge name in mutations.
@@ -207,13 +223,31 @@ const (
 	// ActionPlansInverseTable is the table name for the ActionPlan entity.
 	// It exists in this package in order to avoid circular dependency with the "actionplan" package.
 	ActionPlansInverseTable = "action_plans"
-	// SystemDetailTable is the table that holds the system_detail relation/edge.
-	SystemDetailTable = "system_details"
-	// SystemDetailInverseTable is the table name for the SystemDetail entity.
+	// SystemDetailsTable is the table that holds the system_details relation/edge. The primary key declared below.
+	SystemDetailsTable = "program_system_details"
+	// SystemDetailsInverseTable is the table name for the SystemDetail entity.
 	// It exists in this package in order to avoid circular dependency with the "systemdetail" package.
-	SystemDetailInverseTable = "system_details"
-	// SystemDetailColumn is the table column denoting the system_detail relation/edge.
-	SystemDetailColumn = "program_id"
+	SystemDetailsInverseTable = "system_details"
+	// FindingsTable is the table that holds the findings relation/edge. The primary key declared below.
+	FindingsTable = "finding_programs"
+	// FindingsInverseTable is the table name for the Finding entity.
+	// It exists in this package in order to avoid circular dependency with the "finding" package.
+	FindingsInverseTable = "findings"
+	// VulnerabilitiesTable is the table that holds the vulnerabilities relation/edge. The primary key declared below.
+	VulnerabilitiesTable = "vulnerability_programs"
+	// VulnerabilitiesInverseTable is the table name for the Vulnerability entity.
+	// It exists in this package in order to avoid circular dependency with the "vulnerability" package.
+	VulnerabilitiesInverseTable = "vulnerabilities"
+	// ReviewsTable is the table that holds the reviews relation/edge. The primary key declared below.
+	ReviewsTable = "review_programs"
+	// ReviewsInverseTable is the table name for the Review entity.
+	// It exists in this package in order to avoid circular dependency with the "review" package.
+	ReviewsInverseTable = "reviews"
+	// RemediationsTable is the table that holds the remediations relation/edge. The primary key declared below.
+	RemediationsTable = "remediation_programs"
+	// RemediationsInverseTable is the table name for the Remediation entity.
+	// It exists in this package in order to avoid circular dependency with the "remediation" package.
+	RemediationsInverseTable = "remediations"
 	// UsersTable is the table that holds the users relation/edge. The primary key declared below.
 	UsersTable = "program_memberships"
 	// UsersInverseTable is the table name for the User entity.
@@ -257,6 +291,10 @@ var Columns = []string{
 	FieldFrameworkName,
 	FieldStartDate,
 	FieldEndDate,
+	FieldObservationPeriodStartDate,
+	FieldObservationPeriodEndDate,
+	FieldFieldworkStartDate,
+	FieldFieldworkEndDate,
 	FieldAuditorReady,
 	FieldAuditorWriteComments,
 	FieldAuditorReadComments,
@@ -270,10 +308,6 @@ var Columns = []string{
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"custom_type_enum_programs",
-	"finding_programs",
-	"remediation_programs",
-	"review_programs",
-	"vulnerability_programs",
 }
 
 var (
@@ -316,6 +350,21 @@ var (
 	// ActionPlansPrimaryKey and ActionPlansColumn2 are the table columns denoting the
 	// primary key for the action_plans relation (M2M).
 	ActionPlansPrimaryKey = []string{"program_id", "action_plan_id"}
+	// SystemDetailsPrimaryKey and SystemDetailsColumn2 are the table columns denoting the
+	// primary key for the system_details relation (M2M).
+	SystemDetailsPrimaryKey = []string{"program_id", "system_detail_id"}
+	// FindingsPrimaryKey and FindingsColumn2 are the table columns denoting the
+	// primary key for the findings relation (M2M).
+	FindingsPrimaryKey = []string{"finding_id", "program_id"}
+	// VulnerabilitiesPrimaryKey and VulnerabilitiesColumn2 are the table columns denoting the
+	// primary key for the vulnerabilities relation (M2M).
+	VulnerabilitiesPrimaryKey = []string{"vulnerability_id", "program_id"}
+	// ReviewsPrimaryKey and ReviewsColumn2 are the table columns denoting the
+	// primary key for the reviews relation (M2M).
+	ReviewsPrimaryKey = []string{"review_id", "program_id"}
+	// RemediationsPrimaryKey and RemediationsColumn2 are the table columns denoting the
+	// primary key for the remediations relation (M2M).
+	RemediationsPrimaryKey = []string{"remediation_id", "program_id"}
 	// UsersPrimaryKey and UsersColumn2 are the table columns denoting the
 	// primary key for the users relation (M2M).
 	UsersPrimaryKey = []string{"user_id", "program_id"}
@@ -479,6 +528,26 @@ func ByStartDate(opts ...sql.OrderTermOption) OrderOption {
 // ByEndDate orders the results by the end_date field.
 func ByEndDate(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEndDate, opts...).ToFunc()
+}
+
+// ByObservationPeriodStartDate orders the results by the observation_period_start_date field.
+func ByObservationPeriodStartDate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldObservationPeriodStartDate, opts...).ToFunc()
+}
+
+// ByObservationPeriodEndDate orders the results by the observation_period_end_date field.
+func ByObservationPeriodEndDate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldObservationPeriodEndDate, opts...).ToFunc()
+}
+
+// ByFieldworkStartDate orders the results by the fieldwork_start_date field.
+func ByFieldworkStartDate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFieldworkStartDate, opts...).ToFunc()
+}
+
+// ByFieldworkEndDate orders the results by the fieldwork_end_date field.
+func ByFieldworkEndDate(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldFieldworkEndDate, opts...).ToFunc()
 }
 
 // ByAuditorReady orders the results by the auditor_ready field.
@@ -740,10 +809,73 @@ func ByActionPlans(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// BySystemDetailField orders the results by system_detail field.
-func BySystemDetailField(field string, opts ...sql.OrderTermOption) OrderOption {
+// BySystemDetailsCount orders the results by system_details count.
+func BySystemDetailsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newSystemDetailStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborsCount(s, newSystemDetailsStep(), opts...)
+	}
+}
+
+// BySystemDetails orders the results by system_details terms.
+func BySystemDetails(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSystemDetailsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByFindingsCount orders the results by findings count.
+func ByFindingsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newFindingsStep(), opts...)
+	}
+}
+
+// ByFindings orders the results by findings terms.
+func ByFindings(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFindingsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByVulnerabilitiesCount orders the results by vulnerabilities count.
+func ByVulnerabilitiesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newVulnerabilitiesStep(), opts...)
+	}
+}
+
+// ByVulnerabilities orders the results by vulnerabilities terms.
+func ByVulnerabilities(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newVulnerabilitiesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByReviewsCount orders the results by reviews count.
+func ByReviewsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newReviewsStep(), opts...)
+	}
+}
+
+// ByReviews orders the results by reviews terms.
+func ByReviews(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newReviewsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByRemediationsCount orders the results by remediations count.
+func ByRemediationsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newRemediationsStep(), opts...)
+	}
+}
+
+// ByRemediations orders the results by remediations terms.
+func ByRemediations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newRemediationsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -900,11 +1032,39 @@ func newActionPlansStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, false, ActionPlansTable, ActionPlansPrimaryKey...),
 	)
 }
-func newSystemDetailStep() *sqlgraph.Step {
+func newSystemDetailsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(SystemDetailInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2O, false, SystemDetailTable, SystemDetailColumn),
+		sqlgraph.To(SystemDetailsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, SystemDetailsTable, SystemDetailsPrimaryKey...),
+	)
+}
+func newFindingsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FindingsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, FindingsTable, FindingsPrimaryKey...),
+	)
+}
+func newVulnerabilitiesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(VulnerabilitiesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, VulnerabilitiesTable, VulnerabilitiesPrimaryKey...),
+	)
+}
+func newReviewsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ReviewsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ReviewsTable, ReviewsPrimaryKey...),
+	)
+}
+func newRemediationsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(RemediationsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, RemediationsTable, RemediationsPrimaryKey...),
 	)
 }
 func newUsersStep() *sqlgraph.Step {

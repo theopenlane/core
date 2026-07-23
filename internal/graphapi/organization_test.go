@@ -390,7 +390,7 @@ func TestMutationCreateOrganization(t *testing.T) {
 		},
 		{
 			name:           "invalid organization name, too short",
-			orgName:        "ab",
+			orgName:        "a",
 			orgDescription: gofakeit.HipsterSentence(),
 			errorMsg:       "value is less than the required length",
 			client:         suite.client.api,

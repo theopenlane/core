@@ -17,8 +17,8 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
-	"github.com/theopenlane/core/internal/integrations/operations"
 	intruntime "github.com/theopenlane/core/internal/integrations/runtime"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
 )
@@ -120,18 +120,64 @@ func (r *mutationResolver) validateCampaignDispatch(ctx context.Context, campaig
 		return ErrCampaignDispatchInactive
 	}
 
+	if err := ensureCampaignAssessment(ctx, campaignObj); err != nil {
+		return err
+	}
+
+	return validateCampaignContentSource(campaignObj)
+}
+
+// ensureCampaignAssessment backfills the assessment for questionnaire campaigns created with only a
+// questionnaire template reference, creating an assessment from the template and linking it to the
+// campaign. The assessment create inherits the template jsonconfig and uischema via the assessment hook
+func ensureCampaignAssessment(ctx context.Context, campaignObj *generated.Campaign) error {
+	if campaignObj.CampaignType != enums.CampaignTypeQuestionnaire || campaignObj.AssessmentID != "" || campaignObj.TemplateID == "" {
+		return nil
+	}
+
+	client := withTransactionalMutation(ctx)
+
+	templateObj, err := client.Template.Get(ctx, campaignObj.TemplateID)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", campaignObj.ID).Str("template_id", campaignObj.TemplateID).Msg("failed loading template for assessment backfill")
+
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "template"})
+	}
+
+	assessmentObj, err := client.Assessment.Create().
+		SetName(templateObj.Name).
+		SetTemplateID(templateObj.ID).
+		SetOwnerID(campaignObj.OwnerID).
+		Save(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", campaignObj.ID).Str("template_id", templateObj.ID).Msg("failed creating assessment for questionnaire campaign")
+
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "assessment"})
+	}
+
+	if err := client.Campaign.UpdateOneID(campaignObj.ID).SetAssessmentID(assessmentObj.ID).Exec(ctx); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", campaignObj.ID).Str("assessment_id", assessmentObj.ID).Msg("failed linking backfilled assessment to campaign")
+
+		return parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "campaign"})
+	}
+
+	campaignObj.AssessmentID = assessmentObj.ID
+
+	return nil
+}
+
+// validateCampaignContentSource ensures the campaign references the content source its type renders from
+func validateCampaignContentSource(campaignObj *generated.Campaign) error {
 	switch campaignObj.CampaignType {
 	case enums.CampaignTypeQuestionnaire:
 		if campaignObj.AssessmentID == "" {
 			return ErrCampaignMissingAssessmentID
 		}
 	case enums.CampaignTypeTrustCenterUpdate:
+		// trust center update campaigns render through the system trust center update
+		// operation with content from the campaign metadata, so no template is required
 		if campaignObj.TrustCenterID == "" {
 			return ErrCampaignMissingTrustCenter
-		}
-
-		if campaignObj.EmailTemplateID == "" {
-			return ErrCampaignMissingEmailTemplate
 		}
 	default:
 		if campaignObj.EmailTemplateID == "" {
@@ -306,9 +352,9 @@ func resolveCampaignScheduleAt(now time.Time, campaignObj *generated.Campaign, a
 }
 
 // buildCampaignEmailDispatchRequest constructs the integration dispatch request for the campaign email operation
-func (r *mutationResolver) buildCampaignEmailDispatchRequest(ctx context.Context, rt *intruntime.Runtime, campaignObj *generated.Campaign, resend bool, includeOverdue bool, testEmail string, scheduledAt *time.Time) (operations.DispatchRequest, error) {
+func (r *mutationResolver) buildCampaignEmailDispatchRequest(ctx context.Context, rt *intruntime.Runtime, campaignObj *generated.Campaign, resend bool, includeOverdue bool, testEmail string, scheduledAt *time.Time) (types.DispatchRequest, error) {
 	if campaignObj == nil {
-		return operations.DispatchRequest{}, emaildef.ErrCampaignNotFound
+		return types.DispatchRequest{}, emaildef.ErrCampaignNotFound
 	}
 
 	operation := emaildef.SendCampaignOp.Name()
@@ -318,6 +364,7 @@ func (r *mutationResolver) buildCampaignEmailDispatchRequest(ctx context.Context
 			Resend:         resend,
 			IncludeOverdue: includeOverdue,
 		},
+		TestEmail: testEmail,
 	})
 	if campaignObj.CampaignType == enums.CampaignTypeQuestionnaire {
 		operation = emaildef.SendQuestionnaireCampaignOp.Name()
@@ -331,17 +378,17 @@ func (r *mutationResolver) buildCampaignEmailDispatchRequest(ctx context.Context
 		})
 	}
 	if err != nil {
-		return operations.DispatchRequest{}, err
+		return types.DispatchRequest{}, err
 	}
 
 	integrationID, err := rt.ResolveOwnerIntegration(ctx, emaildef.DefinitionID.ID(), campaignObj.OwnerID, func(inst *generated.Integration) bool {
 		return inst.CampaignEmail
 	})
 	if err != nil {
-		return operations.DispatchRequest{}, err
+		return types.DispatchRequest{}, err
 	}
 
-	return operations.DispatchRequest{
+	return types.DispatchRequest{
 		IntegrationID: integrationID,
 		DefinitionID:  emaildef.DefinitionID.ID(),
 		OwnerID:       campaignObj.OwnerID,

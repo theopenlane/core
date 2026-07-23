@@ -882,6 +882,10 @@ type AssessmentHistory implements Node {
   """
   systemInternalID: String @hidden(if: true)
   """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
+  """
   the name of the assessment, e.g. cloud providers, marketing team
   """
   name: String!
@@ -1171,6 +1175,13 @@ input AssessmentHistoryWhereInput {
   systemInternalIDEqualFold: String
   systemInternalIDContainsFold: String
   """
+  workflow_eligible_marker field predicates
+  """
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
+  """
   name field predicates
   """
   name: String
@@ -1242,6 +1253,10 @@ type AssessmentResponseHistory implements Node {
   the ID of the organization owner of the object
   """
   ownerID: String
+  """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
   """
   the assessment this response is for
   """
@@ -1570,6 +1585,13 @@ input AssessmentResponseHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
+  """
+  workflow_eligible_marker field predicates
+  """
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
   """
   assessment_id field predicates
   """
@@ -3778,7 +3800,7 @@ type CampaignTargetHistory implements Node {
   """
   the campaign this target belongs to
   """
-  campaignID: String!
+  campaignID: String
   """
   the contact associated with the campaign target
   """
@@ -4070,6 +4092,8 @@ input CampaignTargetHistoryWhereInput {
   campaignIDContains: String
   campaignIDHasPrefix: String
   campaignIDHasSuffix: String
+  campaignIDIsNil: Boolean
+  campaignIDNotNil: Boolean
   campaignIDEqualFold: String
   campaignIDContainsFold: String
   """
@@ -5275,6 +5299,7 @@ enum ControlHistoryControlSource @goModel(model: "github.com/theopenlane/core/co
 ControlHistoryControlStatus is enum for the field status
 """
 enum ControlHistoryControlStatus @goModel(model: "github.com/theopenlane/core/common/enums.ControlStatus") {
+  DRAFT
   PREPARING
   NEEDS_APPROVAL
   CHANGES_REQUESTED
@@ -9640,6 +9665,7 @@ DirectoryMembershipHistoryDirectoryMembershipRole is enum for the field role
 """
 enum DirectoryMembershipHistoryDirectoryMembershipRole @goModel(model: "github.com/theopenlane/core/common/enums.DirectoryMembershipRole") {
   MEMBER
+  MAINTAINER
   MANAGER
   OWNER
 }
@@ -11523,6 +11549,10 @@ type EntityHistory implements Node {
   domains associated with the entity
   """
   domains: [String!]
+  """
+  common matching names that should match with the entity
+  """
+  aliases: [String!]
   """
   The type of the entity
   """
@@ -14358,6 +14388,10 @@ type FindingControlHistory implements Node {
   """
   updatedByImpersonator: String
   """
+  the organization id that owns the object
+  """
+  ownerID: String
+  """
   the id of the finding associated with the control
   """
   findingID: String!
@@ -14591,6 +14625,24 @@ input FindingControlHistoryWhereInput {
   updatedByImpersonatorEqualFold: String
   updatedByImpersonatorContainsFold: String
   """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
   finding_id field predicates
   """
   findingID: String
@@ -14752,6 +14804,30 @@ type FindingHistory implements Node {
   """
   ownerID: String
   """
+  who reviewed the finding when no user or group is linked
+  """
+  reviewedBy: String
+  """
+  the user id that reviewed the finding
+  """
+  reviewedByUserID: String
+  """
+  the group id that reviewed the finding
+  """
+  reviewedByGroupID: String
+  """
+  who the finding is assigned to when no user or group is linked
+  """
+  assignedTo: String
+  """
+  the user id assigned to the finding
+  """
+  assignedToUserID: String
+  """
+  the group id assigned to the finding
+  """
+  assignedToGroupID: String
+  """
   indicates if the record is owned by the the openlane system and not by an organization
   """
   systemOwned: Boolean
@@ -14787,6 +14863,10 @@ type FindingHistory implements Node {
   the status of the finding
   """
   findingStatusID: String
+  """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
   """
   external identifier from the integration source for the finding
   """
@@ -15184,6 +15264,114 @@ input FindingHistoryWhereInput {
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
+  reviewed_by field predicates
+  """
+  reviewedBy: String
+  reviewedByNEQ: String
+  reviewedByIn: [String!]
+  reviewedByNotIn: [String!]
+  reviewedByGT: String
+  reviewedByGTE: String
+  reviewedByLT: String
+  reviewedByLTE: String
+  reviewedByContains: String
+  reviewedByHasPrefix: String
+  reviewedByHasSuffix: String
+  reviewedByIsNil: Boolean
+  reviewedByNotNil: Boolean
+  reviewedByEqualFold: String
+  reviewedByContainsFold: String
+  """
+  reviewed_by_user_id field predicates
+  """
+  reviewedByUserID: String
+  reviewedByUserIDNEQ: String
+  reviewedByUserIDIn: [String!]
+  reviewedByUserIDNotIn: [String!]
+  reviewedByUserIDGT: String
+  reviewedByUserIDGTE: String
+  reviewedByUserIDLT: String
+  reviewedByUserIDLTE: String
+  reviewedByUserIDContains: String
+  reviewedByUserIDHasPrefix: String
+  reviewedByUserIDHasSuffix: String
+  reviewedByUserIDIsNil: Boolean
+  reviewedByUserIDNotNil: Boolean
+  reviewedByUserIDEqualFold: String
+  reviewedByUserIDContainsFold: String
+  """
+  reviewed_by_group_id field predicates
+  """
+  reviewedByGroupID: String
+  reviewedByGroupIDNEQ: String
+  reviewedByGroupIDIn: [String!]
+  reviewedByGroupIDNotIn: [String!]
+  reviewedByGroupIDGT: String
+  reviewedByGroupIDGTE: String
+  reviewedByGroupIDLT: String
+  reviewedByGroupIDLTE: String
+  reviewedByGroupIDContains: String
+  reviewedByGroupIDHasPrefix: String
+  reviewedByGroupIDHasSuffix: String
+  reviewedByGroupIDIsNil: Boolean
+  reviewedByGroupIDNotNil: Boolean
+  reviewedByGroupIDEqualFold: String
+  reviewedByGroupIDContainsFold: String
+  """
+  assigned_to field predicates
+  """
+  assignedTo: String
+  assignedToNEQ: String
+  assignedToIn: [String!]
+  assignedToNotIn: [String!]
+  assignedToGT: String
+  assignedToGTE: String
+  assignedToLT: String
+  assignedToLTE: String
+  assignedToContains: String
+  assignedToHasPrefix: String
+  assignedToHasSuffix: String
+  assignedToIsNil: Boolean
+  assignedToNotNil: Boolean
+  assignedToEqualFold: String
+  assignedToContainsFold: String
+  """
+  assigned_to_user_id field predicates
+  """
+  assignedToUserID: String
+  assignedToUserIDNEQ: String
+  assignedToUserIDIn: [String!]
+  assignedToUserIDNotIn: [String!]
+  assignedToUserIDGT: String
+  assignedToUserIDGTE: String
+  assignedToUserIDLT: String
+  assignedToUserIDLTE: String
+  assignedToUserIDContains: String
+  assignedToUserIDHasPrefix: String
+  assignedToUserIDHasSuffix: String
+  assignedToUserIDIsNil: Boolean
+  assignedToUserIDNotNil: Boolean
+  assignedToUserIDEqualFold: String
+  assignedToUserIDContainsFold: String
+  """
+  assigned_to_group_id field predicates
+  """
+  assignedToGroupID: String
+  assignedToGroupIDNEQ: String
+  assignedToGroupIDIn: [String!]
+  assignedToGroupIDNotIn: [String!]
+  assignedToGroupIDGT: String
+  assignedToGroupIDGTE: String
+  assignedToGroupIDLT: String
+  assignedToGroupIDLTE: String
+  assignedToGroupIDContains: String
+  assignedToGroupIDHasPrefix: String
+  assignedToGroupIDHasSuffix: String
+  assignedToGroupIDIsNil: Boolean
+  assignedToGroupIDNotNil: Boolean
+  assignedToGroupIDEqualFold: String
+  assignedToGroupIDContainsFold: String
+  """
   system_owned field predicates
   """
   systemOwned: Boolean
@@ -15334,6 +15522,13 @@ input FindingHistoryWhereInput {
   findingStatusIDNotNil: Boolean
   findingStatusIDEqualFold: String
   findingStatusIDContainsFold: String
+  """
+  workflow_eligible_marker field predicates
+  """
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
   """
   external_id field predicates
   """
@@ -26324,6 +26519,22 @@ type ProgramHistory implements Node {
   """
   endDate: Time
   """
+  the start date of the observation period
+  """
+  observationPeriodStartDate: Time
+  """
+  the end date of the observation period
+  """
+  observationPeriodEndDate: Time
+  """
+  the start date of fieldwork
+  """
+  fieldworkStartDate: Time
+  """
+  the end date of fieldwork
+  """
+  fieldworkEndDate: Time
+  """
   is the program ready for the auditor
   """
   auditorReady: Boolean!
@@ -26415,6 +26626,10 @@ enum ProgramHistoryOrderField {
   framework
   start_date
   end_date
+  observation_period_start_date
+  observation_period_end_date
+  fieldwork_start_date
+  fieldwork_end_date
 }
 """
 ProgramHistoryProgramStatus is enum for the field status
@@ -26737,6 +26952,58 @@ input ProgramHistoryWhereInput {
   endDateLTE: Time
   endDateIsNil: Boolean
   endDateNotNil: Boolean
+  """
+  observation_period_start_date field predicates
+  """
+  observationPeriodStartDate: Time
+  observationPeriodStartDateNEQ: Time
+  observationPeriodStartDateIn: [Time!]
+  observationPeriodStartDateNotIn: [Time!]
+  observationPeriodStartDateGT: Time
+  observationPeriodStartDateGTE: Time
+  observationPeriodStartDateLT: Time
+  observationPeriodStartDateLTE: Time
+  observationPeriodStartDateIsNil: Boolean
+  observationPeriodStartDateNotNil: Boolean
+  """
+  observation_period_end_date field predicates
+  """
+  observationPeriodEndDate: Time
+  observationPeriodEndDateNEQ: Time
+  observationPeriodEndDateIn: [Time!]
+  observationPeriodEndDateNotIn: [Time!]
+  observationPeriodEndDateGT: Time
+  observationPeriodEndDateGTE: Time
+  observationPeriodEndDateLT: Time
+  observationPeriodEndDateLTE: Time
+  observationPeriodEndDateIsNil: Boolean
+  observationPeriodEndDateNotNil: Boolean
+  """
+  fieldwork_start_date field predicates
+  """
+  fieldworkStartDate: Time
+  fieldworkStartDateNEQ: Time
+  fieldworkStartDateIn: [Time!]
+  fieldworkStartDateNotIn: [Time!]
+  fieldworkStartDateGT: Time
+  fieldworkStartDateGTE: Time
+  fieldworkStartDateLT: Time
+  fieldworkStartDateLTE: Time
+  fieldworkStartDateIsNil: Boolean
+  fieldworkStartDateNotNil: Boolean
+  """
+  fieldwork_end_date field predicates
+  """
+  fieldworkEndDate: Time
+  fieldworkEndDateNEQ: Time
+  fieldworkEndDateIn: [Time!]
+  fieldworkEndDateNotIn: [Time!]
+  fieldworkEndDateGT: Time
+  fieldworkEndDateGTE: Time
+  fieldworkEndDateLT: Time
+  fieldworkEndDateLTE: Time
+  fieldworkEndDateIsNil: Boolean
+  fieldworkEndDateNotNil: Boolean
   """
   auditor_ready field predicates
   """
@@ -29610,6 +29877,10 @@ type RemediationHistory implements Node {
   """
   scopeID: String
   """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
+  """
   external identifier from the integration source for the remediation
   """
   externalID: String
@@ -30050,6 +30321,13 @@ input RemediationHistoryWhereInput {
   scopeIDNotNil: Boolean
   scopeIDEqualFold: String
   scopeIDContainsFold: String
+  """
+  workflow_eligible_marker field predicates
+  """
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
   """
   external_id field predicates
   """
@@ -31166,6 +31444,10 @@ type RiskHistory implements Node {
   """
   scopeID: String
   """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
+  """
   stable identifier assigned by the source system, used for integration ingest deduplication
   """
   externalID: String
@@ -31706,6 +31988,13 @@ input RiskHistoryWhereInput {
   scopeIDNotNil: Boolean
   scopeIDEqualFold: String
   scopeIDContainsFold: String
+  """
+  workflow_eligible_marker field predicates
+  """
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
   """
   external_id field predicates
   """
@@ -32327,6 +32616,18 @@ type ScanHistory implements Node {
   """
   ownerID: String
   """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
   who reviewed the scan when no user or group is linked
   """
   reviewedBy: String
@@ -32409,9 +32710,9 @@ type ScanHistory implements Node {
   """
   identifiers of vulnerabilities discovered during the scan
   """
-  vulnerabilityIds: [String!]
+  discoveredVulnerabilityIds: [String!]
   """
-  the status of the scan, e.g., processing, completed, failed
+  the status of the scan, e.g., pending, processing, completed, failed
   """
   status: ScanHistoryScanStatus!
 }
@@ -32651,6 +32952,49 @@ input ScanHistoryWhereInput {
   ownerIDNotNil: Boolean
   ownerIDEqualFold: String
   ownerIDContainsFold: String
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
   """
   reviewed_by field predicates
   """
@@ -34076,6 +34420,7 @@ enum SubcontrolHistoryControlSource @goModel(model: "github.com/theopenlane/core
 SubcontrolHistoryControlStatus is enum for the field status
 """
 enum SubcontrolHistoryControlStatus @goModel(model: "github.com/theopenlane/core/common/enums.ControlStatus") {
+  DRAFT
   PREPARING
   NEEDS_APPROVAL
   CHANGES_REQUESTED
@@ -35143,14 +35488,6 @@ type SystemDetailHistory implements Node {
   """
   ownerID: String
   """
-  optional program anchor for this system detail
-  """
-  programID: String
-  """
-  optional platform anchor for this system detail
-  """
-  platformID: String
-  """
   system name used in OSCAL metadata
   """
   systemName: String!
@@ -35424,42 +35761,6 @@ input SystemDetailHistoryWhereInput {
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
-  program_id field predicates
-  """
-  programID: String
-  programIDNEQ: String
-  programIDIn: [String!]
-  programIDNotIn: [String!]
-  programIDGT: String
-  programIDGTE: String
-  programIDLT: String
-  programIDLTE: String
-  programIDContains: String
-  programIDHasPrefix: String
-  programIDHasSuffix: String
-  programIDIsNil: Boolean
-  programIDNotNil: Boolean
-  programIDEqualFold: String
-  programIDContainsFold: String
-  """
-  platform_id field predicates
-  """
-  platformID: String
-  platformIDNEQ: String
-  platformIDIn: [String!]
-  platformIDNotIn: [String!]
-  platformIDGT: String
-  platformIDGTE: String
-  platformIDLT: String
-  platformIDLTE: String
-  platformIDContains: String
-  platformIDHasPrefix: String
-  platformIDHasSuffix: String
-  platformIDIsNil: Boolean
-  platformIDNotNil: Boolean
-  platformIDEqualFold: String
-  platformIDContainsFold: String
-  """
   system_name field predicates
   """
   systemName: String
@@ -35602,6 +35903,10 @@ type TaskHistory implements Node {
   """
   scopeID: String
   """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
+  """
   stable external UUID for deterministic OSCAL export and round-tripping
   """
   externalUUID: String
@@ -35617,6 +35922,10 @@ type TaskHistory implements Node {
   structured details of the task in JSON format
   """
   detailsJSON: [Any!]
+  """
+  structured metadata used by clients for task presentation and routing
+  """
+  metadata: Map
   """
   the status of the task
   """
@@ -35645,6 +35954,22 @@ type TaskHistory implements Node {
   indicates if the task is intended to be used as a template
   """
   isTemplate: Boolean!
+  """
+  indicates if the task is suggested by the system as a recommended next action
+  """
+  isSuggested: Boolean!
+  """
+  relative ordering priority for suggested and system-generated tasks
+  """
+  priority: Int!
+  """
+  the system or workflow that created or suggested the task
+  """
+  source: String
+  """
+  stable source-specific key for the task
+  """
+  sourceKey: String
   """
   key to prevent duplicates for auto-generated task based on rules
   """
@@ -35721,6 +36046,8 @@ enum TaskHistoryOrderField {
   due
   completed
   is_template
+  is_suggested
+  priority
 }
 """
 TaskHistoryTaskStatus is enum for the field status
@@ -36012,6 +36339,13 @@ input TaskHistoryWhereInput {
   scopeIDEqualFold: String
   scopeIDContainsFold: String
   """
+  workflow_eligible_marker field predicates
+  """
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
+  """
   external_uuid field predicates
   """
   externalUUID: String
@@ -36142,6 +36476,58 @@ input TaskHistoryWhereInput {
   """
   isTemplate: Boolean
   isTemplateNEQ: Boolean
+  """
+  is_suggested field predicates
+  """
+  isSuggested: Boolean
+  isSuggestedNEQ: Boolean
+  """
+  priority field predicates
+  """
+  priority: Int
+  priorityNEQ: Int
+  priorityIn: [Int!]
+  priorityNotIn: [Int!]
+  priorityGT: Int
+  priorityGTE: Int
+  priorityLT: Int
+  priorityLTE: Int
+  """
+  source field predicates
+  """
+  source: String
+  sourceNEQ: String
+  sourceIn: [String!]
+  sourceNotIn: [String!]
+  sourceGT: String
+  sourceGTE: String
+  sourceLT: String
+  sourceLTE: String
+  sourceContains: String
+  sourceHasPrefix: String
+  sourceHasSuffix: String
+  sourceIsNil: Boolean
+  sourceNotNil: Boolean
+  sourceEqualFold: String
+  sourceContainsFold: String
+  """
+  source_key field predicates
+  """
+  sourceKey: String
+  sourceKeyNEQ: String
+  sourceKeyIn: [String!]
+  sourceKeyNotIn: [String!]
+  sourceKeyGT: String
+  sourceKeyGTE: String
+  sourceKeyLT: String
+  sourceKeyLTE: String
+  sourceKeyContains: String
+  sourceKeyHasPrefix: String
+  sourceKeyHasSuffix: String
+  sourceKeyIsNil: Boolean
+  sourceKeyNotNil: Boolean
+  sourceKeyEqualFold: String
+  sourceKeyContainsFold: String
   """
   idempotency_key field predicates
   """
@@ -39003,6 +39389,10 @@ type TrustCenterSettingHistory implements Node {
   """
   ndaApprovalRequired: Boolean
   """
+  whether the trust center accepts new subscriber registrations; when false, subscriber creation for the trust center is blocked
+  """
+  allowSubscribers: Boolean
+  """
   whether to email trust center subscribers when subprocessors are added, updated, or removed
   """
   notifySubscribersOnSubprocessorChange: Boolean
@@ -39603,6 +39993,13 @@ input TrustCenterSettingHistoryWhereInput {
   ndaApprovalRequiredNEQ: Boolean
   ndaApprovalRequiredIsNil: Boolean
   ndaApprovalRequiredNotNil: Boolean
+  """
+  allow_subscribers field predicates
+  """
+  allowSubscribers: Boolean
+  allowSubscribersNEQ: Boolean
+  allowSubscribersIsNil: Boolean
+  allowSubscribersNotNil: Boolean
   """
   notify_subscribers_on_subprocessor_change field predicates
   """
@@ -42104,6 +42501,30 @@ type VulnerabilityHistory implements Node {
   """
   ownerID: String
   """
+  who reviewed the vulnerability when no user or group is linked
+  """
+  reviewedBy: String
+  """
+  the user id that reviewed the vulnerability
+  """
+  reviewedByUserID: String
+  """
+  the group id that reviewed the vulnerability
+  """
+  reviewedByGroupID: String
+  """
+  who the vulnerability is assigned to when no user or group is linked
+  """
+  assignedTo: String
+  """
+  the user id assigned to the vulnerability
+  """
+  assignedToUserID: String
+  """
+  the group id assigned to the vulnerability
+  """
+  assignedToGroupID: String
+  """
   indicates if the record is owned by the the openlane system and not by an organization
   """
   systemOwned: Boolean
@@ -42139,6 +42560,10 @@ type VulnerabilityHistory implements Node {
   the status of the vulnerability
   """
   vulnerabilityStatusID: String
+  """
+  internal marker field for workflow eligibility, not exposed in API
+  """
+  workflowEligibleMarker: Boolean
   """
   owner of the vulnerability
   """
@@ -42372,6 +42797,7 @@ enum VulnerabilityHistoryOrderField {
   cve_id
   category
   severity
+  score
 }
 """
 VulnerabilityHistorySecurityLevel is enum for the field security_level
@@ -42555,6 +42981,114 @@ input VulnerabilityHistoryWhereInput {
   ownerIDEqualFold: String
   ownerIDContainsFold: String
   """
+  reviewed_by field predicates
+  """
+  reviewedBy: String
+  reviewedByNEQ: String
+  reviewedByIn: [String!]
+  reviewedByNotIn: [String!]
+  reviewedByGT: String
+  reviewedByGTE: String
+  reviewedByLT: String
+  reviewedByLTE: String
+  reviewedByContains: String
+  reviewedByHasPrefix: String
+  reviewedByHasSuffix: String
+  reviewedByIsNil: Boolean
+  reviewedByNotNil: Boolean
+  reviewedByEqualFold: String
+  reviewedByContainsFold: String
+  """
+  reviewed_by_user_id field predicates
+  """
+  reviewedByUserID: String
+  reviewedByUserIDNEQ: String
+  reviewedByUserIDIn: [String!]
+  reviewedByUserIDNotIn: [String!]
+  reviewedByUserIDGT: String
+  reviewedByUserIDGTE: String
+  reviewedByUserIDLT: String
+  reviewedByUserIDLTE: String
+  reviewedByUserIDContains: String
+  reviewedByUserIDHasPrefix: String
+  reviewedByUserIDHasSuffix: String
+  reviewedByUserIDIsNil: Boolean
+  reviewedByUserIDNotNil: Boolean
+  reviewedByUserIDEqualFold: String
+  reviewedByUserIDContainsFold: String
+  """
+  reviewed_by_group_id field predicates
+  """
+  reviewedByGroupID: String
+  reviewedByGroupIDNEQ: String
+  reviewedByGroupIDIn: [String!]
+  reviewedByGroupIDNotIn: [String!]
+  reviewedByGroupIDGT: String
+  reviewedByGroupIDGTE: String
+  reviewedByGroupIDLT: String
+  reviewedByGroupIDLTE: String
+  reviewedByGroupIDContains: String
+  reviewedByGroupIDHasPrefix: String
+  reviewedByGroupIDHasSuffix: String
+  reviewedByGroupIDIsNil: Boolean
+  reviewedByGroupIDNotNil: Boolean
+  reviewedByGroupIDEqualFold: String
+  reviewedByGroupIDContainsFold: String
+  """
+  assigned_to field predicates
+  """
+  assignedTo: String
+  assignedToNEQ: String
+  assignedToIn: [String!]
+  assignedToNotIn: [String!]
+  assignedToGT: String
+  assignedToGTE: String
+  assignedToLT: String
+  assignedToLTE: String
+  assignedToContains: String
+  assignedToHasPrefix: String
+  assignedToHasSuffix: String
+  assignedToIsNil: Boolean
+  assignedToNotNil: Boolean
+  assignedToEqualFold: String
+  assignedToContainsFold: String
+  """
+  assigned_to_user_id field predicates
+  """
+  assignedToUserID: String
+  assignedToUserIDNEQ: String
+  assignedToUserIDIn: [String!]
+  assignedToUserIDNotIn: [String!]
+  assignedToUserIDGT: String
+  assignedToUserIDGTE: String
+  assignedToUserIDLT: String
+  assignedToUserIDLTE: String
+  assignedToUserIDContains: String
+  assignedToUserIDHasPrefix: String
+  assignedToUserIDHasSuffix: String
+  assignedToUserIDIsNil: Boolean
+  assignedToUserIDNotNil: Boolean
+  assignedToUserIDEqualFold: String
+  assignedToUserIDContainsFold: String
+  """
+  assigned_to_group_id field predicates
+  """
+  assignedToGroupID: String
+  assignedToGroupIDNEQ: String
+  assignedToGroupIDIn: [String!]
+  assignedToGroupIDNotIn: [String!]
+  assignedToGroupIDGT: String
+  assignedToGroupIDGTE: String
+  assignedToGroupIDLT: String
+  assignedToGroupIDLTE: String
+  assignedToGroupIDContains: String
+  assignedToGroupIDHasPrefix: String
+  assignedToGroupIDHasSuffix: String
+  assignedToGroupIDIsNil: Boolean
+  assignedToGroupIDNotNil: Boolean
+  assignedToGroupIDEqualFold: String
+  assignedToGroupIDContainsFold: String
+  """
   system_owned field predicates
   """
   systemOwned: Boolean
@@ -42705,6 +43239,13 @@ input VulnerabilityHistoryWhereInput {
   vulnerabilityStatusIDNotNil: Boolean
   vulnerabilityStatusIDEqualFold: String
   vulnerabilityStatusIDContainsFold: String
+  """
+  workflow_eligible_marker field predicates
+  """
+  workflowEligibleMarker: Boolean
+  workflowEligibleMarkerNEQ: Boolean
+  workflowEligibleMarkerIsNil: Boolean
+  workflowEligibleMarkerNotNil: Boolean
   """
   external_owner_id field predicates
   """
@@ -43310,6 +43851,10 @@ type WorkflowAssignmentHistory implements Node {
   structured invalidation metadata
   """
   invalidationMetadata: WorkflowAssignmentInvalidation
+  """
+  consolidated terminal outcome metadata discriminated by decision (supersedes approval/rejection/invalidation metadata)
+  """
+  outcomeMetadata: AssignmentOutcome
   """
   Timestamp when the assignment was decided
   """
@@ -44976,6 +45521,38 @@ type WorkflowInstanceHistory implements Node {
   ID of the platform this workflow instance is associated with
   """
   platformID: String
+  """
+  ID of the assessment this workflow instance is associated with
+  """
+  assessmentID: String
+  """
+  ID of the assessment response this workflow instance is associated with
+  """
+  assessmentResponseID: String
+  """
+  ID of the finding this workflow instance is associated with
+  """
+  findingID: String
+  """
+  ID of the integration this workflow instance is associated with
+  """
+  integrationID: String
+  """
+  ID of the remediation this workflow instance is associated with
+  """
+  remediationID: String
+  """
+  ID of the risk this workflow instance is associated with
+  """
+  riskID: String
+  """
+  ID of the task this workflow instance is associated with
+  """
+  taskID: String
+  """
+  ID of the vulnerability this workflow instance is associated with
+  """
+  vulnerabilityID: String
 }
 """
 A connection to a list of items.
@@ -45452,6 +46029,150 @@ input WorkflowInstanceHistoryWhereInput {
   platformIDNotNil: Boolean
   platformIDEqualFold: String
   platformIDContainsFold: String
+  """
+  assessment_id field predicates
+  """
+  assessmentID: String
+  assessmentIDNEQ: String
+  assessmentIDIn: [String!]
+  assessmentIDNotIn: [String!]
+  assessmentIDGT: String
+  assessmentIDGTE: String
+  assessmentIDLT: String
+  assessmentIDLTE: String
+  assessmentIDContains: String
+  assessmentIDHasPrefix: String
+  assessmentIDHasSuffix: String
+  assessmentIDIsNil: Boolean
+  assessmentIDNotNil: Boolean
+  assessmentIDEqualFold: String
+  assessmentIDContainsFold: String
+  """
+  assessment_response_id field predicates
+  """
+  assessmentResponseID: String
+  assessmentResponseIDNEQ: String
+  assessmentResponseIDIn: [String!]
+  assessmentResponseIDNotIn: [String!]
+  assessmentResponseIDGT: String
+  assessmentResponseIDGTE: String
+  assessmentResponseIDLT: String
+  assessmentResponseIDLTE: String
+  assessmentResponseIDContains: String
+  assessmentResponseIDHasPrefix: String
+  assessmentResponseIDHasSuffix: String
+  assessmentResponseIDIsNil: Boolean
+  assessmentResponseIDNotNil: Boolean
+  assessmentResponseIDEqualFold: String
+  assessmentResponseIDContainsFold: String
+  """
+  finding_id field predicates
+  """
+  findingID: String
+  findingIDNEQ: String
+  findingIDIn: [String!]
+  findingIDNotIn: [String!]
+  findingIDGT: String
+  findingIDGTE: String
+  findingIDLT: String
+  findingIDLTE: String
+  findingIDContains: String
+  findingIDHasPrefix: String
+  findingIDHasSuffix: String
+  findingIDIsNil: Boolean
+  findingIDNotNil: Boolean
+  findingIDEqualFold: String
+  findingIDContainsFold: String
+  """
+  integration_id field predicates
+  """
+  integrationID: String
+  integrationIDNEQ: String
+  integrationIDIn: [String!]
+  integrationIDNotIn: [String!]
+  integrationIDGT: String
+  integrationIDGTE: String
+  integrationIDLT: String
+  integrationIDLTE: String
+  integrationIDContains: String
+  integrationIDHasPrefix: String
+  integrationIDHasSuffix: String
+  integrationIDIsNil: Boolean
+  integrationIDNotNil: Boolean
+  integrationIDEqualFold: String
+  integrationIDContainsFold: String
+  """
+  remediation_id field predicates
+  """
+  remediationID: String
+  remediationIDNEQ: String
+  remediationIDIn: [String!]
+  remediationIDNotIn: [String!]
+  remediationIDGT: String
+  remediationIDGTE: String
+  remediationIDLT: String
+  remediationIDLTE: String
+  remediationIDContains: String
+  remediationIDHasPrefix: String
+  remediationIDHasSuffix: String
+  remediationIDIsNil: Boolean
+  remediationIDNotNil: Boolean
+  remediationIDEqualFold: String
+  remediationIDContainsFold: String
+  """
+  risk_id field predicates
+  """
+  riskID: String
+  riskIDNEQ: String
+  riskIDIn: [String!]
+  riskIDNotIn: [String!]
+  riskIDGT: String
+  riskIDGTE: String
+  riskIDLT: String
+  riskIDLTE: String
+  riskIDContains: String
+  riskIDHasPrefix: String
+  riskIDHasSuffix: String
+  riskIDIsNil: Boolean
+  riskIDNotNil: Boolean
+  riskIDEqualFold: String
+  riskIDContainsFold: String
+  """
+  task_id field predicates
+  """
+  taskID: String
+  taskIDNEQ: String
+  taskIDIn: [String!]
+  taskIDNotIn: [String!]
+  taskIDGT: String
+  taskIDGTE: String
+  taskIDLT: String
+  taskIDLTE: String
+  taskIDContains: String
+  taskIDHasPrefix: String
+  taskIDHasSuffix: String
+  taskIDIsNil: Boolean
+  taskIDNotNil: Boolean
+  taskIDEqualFold: String
+  taskIDContainsFold: String
+  """
+  vulnerability_id field predicates
+  """
+  vulnerabilityID: String
+  vulnerabilityIDNEQ: String
+  vulnerabilityIDIn: [String!]
+  vulnerabilityIDNotIn: [String!]
+  vulnerabilityIDGT: String
+  vulnerabilityIDGTE: String
+  vulnerabilityIDLT: String
+  vulnerabilityIDLTE: String
+  vulnerabilityIDContains: String
+  vulnerabilityIDHasPrefix: String
+  vulnerabilityIDHasSuffix: String
+  vulnerabilityIDIsNil: Boolean
+  vulnerabilityIDNotNil: Boolean
+  vulnerabilityIDEqualFold: String
+  vulnerabilityIDContainsFold: String
 }
 """
 WorkflowInstanceHistoryWorkflowInstanceState is enum for the field state
@@ -45547,6 +46268,26 @@ type WorkflowObjectRefHistory implements Node {
   Platform referenced by this workflow instance
   """
   platformID: String
+  """
+  Vulnerability referenced by this workflow instance
+  """
+  vulnerabilityID: String
+  """
+  Risk referenced by this workflow instance
+  """
+  riskID: String
+  """
+  Assessment referenced by this workflow instance
+  """
+  assessmentID: String
+  """
+  Assessment response referenced by this workflow instance
+  """
+  assessmentResponseID: String
+  """
+  Remediation referenced by this workflow instance
+  """
+  remediationID: String
 }
 """
 A connection to a list of items.
@@ -46064,4 +46805,94 @@ input WorkflowObjectRefHistoryWhereInput {
   platformIDNotNil: Boolean
   platformIDEqualFold: String
   platformIDContainsFold: String
+  """
+  vulnerability_id field predicates
+  """
+  vulnerabilityID: String
+  vulnerabilityIDNEQ: String
+  vulnerabilityIDIn: [String!]
+  vulnerabilityIDNotIn: [String!]
+  vulnerabilityIDGT: String
+  vulnerabilityIDGTE: String
+  vulnerabilityIDLT: String
+  vulnerabilityIDLTE: String
+  vulnerabilityIDContains: String
+  vulnerabilityIDHasPrefix: String
+  vulnerabilityIDHasSuffix: String
+  vulnerabilityIDIsNil: Boolean
+  vulnerabilityIDNotNil: Boolean
+  vulnerabilityIDEqualFold: String
+  vulnerabilityIDContainsFold: String
+  """
+  risk_id field predicates
+  """
+  riskID: String
+  riskIDNEQ: String
+  riskIDIn: [String!]
+  riskIDNotIn: [String!]
+  riskIDGT: String
+  riskIDGTE: String
+  riskIDLT: String
+  riskIDLTE: String
+  riskIDContains: String
+  riskIDHasPrefix: String
+  riskIDHasSuffix: String
+  riskIDIsNil: Boolean
+  riskIDNotNil: Boolean
+  riskIDEqualFold: String
+  riskIDContainsFold: String
+  """
+  assessment_id field predicates
+  """
+  assessmentID: String
+  assessmentIDNEQ: String
+  assessmentIDIn: [String!]
+  assessmentIDNotIn: [String!]
+  assessmentIDGT: String
+  assessmentIDGTE: String
+  assessmentIDLT: String
+  assessmentIDLTE: String
+  assessmentIDContains: String
+  assessmentIDHasPrefix: String
+  assessmentIDHasSuffix: String
+  assessmentIDIsNil: Boolean
+  assessmentIDNotNil: Boolean
+  assessmentIDEqualFold: String
+  assessmentIDContainsFold: String
+  """
+  assessment_response_id field predicates
+  """
+  assessmentResponseID: String
+  assessmentResponseIDNEQ: String
+  assessmentResponseIDIn: [String!]
+  assessmentResponseIDNotIn: [String!]
+  assessmentResponseIDGT: String
+  assessmentResponseIDGTE: String
+  assessmentResponseIDLT: String
+  assessmentResponseIDLTE: String
+  assessmentResponseIDContains: String
+  assessmentResponseIDHasPrefix: String
+  assessmentResponseIDHasSuffix: String
+  assessmentResponseIDIsNil: Boolean
+  assessmentResponseIDNotNil: Boolean
+  assessmentResponseIDEqualFold: String
+  assessmentResponseIDContainsFold: String
+  """
+  remediation_id field predicates
+  """
+  remediationID: String
+  remediationIDNEQ: String
+  remediationIDIn: [String!]
+  remediationIDNotIn: [String!]
+  remediationIDGT: String
+  remediationIDGTE: String
+  remediationIDLT: String
+  remediationIDLTE: String
+  remediationIDContains: String
+  remediationIDHasPrefix: String
+  remediationIDHasSuffix: String
+  remediationIDIsNil: Boolean
+  remediationIDNotNil: Boolean
+  remediationIDEqualFold: String
+  remediationIDContainsFold: String
 }

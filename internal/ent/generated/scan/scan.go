@@ -36,6 +36,12 @@ const (
 	FieldTags = "tags"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
 	FieldOwnerID = "owner_id"
+	// FieldSystemOwned holds the string denoting the system_owned field in the database.
+	FieldSystemOwned = "system_owned"
+	// FieldInternalNotes holds the string denoting the internal_notes field in the database.
+	FieldInternalNotes = "internal_notes"
+	// FieldSystemInternalID holds the string denoting the system_internal_id field in the database.
+	FieldSystemInternalID = "system_internal_id"
 	// FieldReviewedBy holds the string denoting the reviewed_by field in the database.
 	FieldReviewedBy = "reviewed_by"
 	// FieldReviewedByUserID holds the string denoting the reviewed_by_user_id field in the database.
@@ -76,8 +82,8 @@ const (
 	FieldPerformedByGroupID = "performed_by_group_id"
 	// FieldGeneratedByPlatformID holds the string denoting the generated_by_platform_id field in the database.
 	FieldGeneratedByPlatformID = "generated_by_platform_id"
-	// FieldVulnerabilityIds holds the string denoting the vulnerability_ids field in the database.
-	FieldVulnerabilityIds = "vulnerability_ids"
+	// FieldDiscoveredVulnerabilityIds holds the string denoting the discovered_vulnerability_ids field in the database.
+	FieldDiscoveredVulnerabilityIds = "discovered_vulnerability_ids"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
@@ -120,6 +126,8 @@ const (
 	EdgeControls = "controls"
 	// EdgeSubcontrols holds the string denoting the subcontrols edge name in mutations.
 	EdgeSubcontrols = "subcontrols"
+	// EdgeFindings holds the string denoting the findings edge name in mutations.
+	EdgeFindings = "findings"
 	// EdgeGeneratedByPlatform holds the string denoting the generated_by_platform edge name in mutations.
 	EdgeGeneratedByPlatform = "generated_by_platform"
 	// EdgePerformedByUser holds the string denoting the performed_by_user edge name in mutations.
@@ -192,13 +200,11 @@ const (
 	// AssetsInverseTable is the table name for the Asset entity.
 	// It exists in this package in order to avoid circular dependency with the "asset" package.
 	AssetsInverseTable = "assets"
-	// EntitiesTable is the table that holds the entities relation/edge.
-	EntitiesTable = "entities"
+	// EntitiesTable is the table that holds the entities relation/edge. The primary key declared below.
+	EntitiesTable = "scan_entities"
 	// EntitiesInverseTable is the table name for the Entity entity.
 	// It exists in this package in order to avoid circular dependency with the "entity" package.
 	EntitiesInverseTable = "entities"
-	// EntitiesColumn is the table column denoting the entities relation/edge.
-	EntitiesColumn = "scan_entities"
 	// EvidenceTable is the table that holds the evidence relation/edge. The primary key declared below.
 	EvidenceTable = "scan_evidence"
 	// EvidenceInverseTable is the table name for the Evidence entity.
@@ -244,6 +250,11 @@ const (
 	// SubcontrolsInverseTable is the table name for the Subcontrol entity.
 	// It exists in this package in order to avoid circular dependency with the "subcontrol" package.
 	SubcontrolsInverseTable = "subcontrols"
+	// FindingsTable is the table that holds the findings relation/edge. The primary key declared below.
+	FindingsTable = "finding_scans"
+	// FindingsInverseTable is the table name for the Finding entity.
+	// It exists in this package in order to avoid circular dependency with the "finding" package.
+	FindingsInverseTable = "findings"
 	// GeneratedByPlatformTable is the table that holds the generated_by_platform relation/edge.
 	GeneratedByPlatformTable = "scans"
 	// GeneratedByPlatformInverseTable is the table name for the Platform entity.
@@ -279,6 +290,9 @@ var Columns = []string{
 	FieldDeletedBy,
 	FieldTags,
 	FieldOwnerID,
+	FieldSystemOwned,
+	FieldInternalNotes,
+	FieldSystemInternalID,
 	FieldReviewedBy,
 	FieldReviewedByUserID,
 	FieldReviewedByGroupID,
@@ -299,15 +313,13 @@ var Columns = []string{
 	FieldPerformedByUserID,
 	FieldPerformedByGroupID,
 	FieldGeneratedByPlatformID,
-	FieldVulnerabilityIds,
+	FieldDiscoveredVulnerabilityIds,
 	FieldStatus,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "scans"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
-	"entity_scans",
-	"finding_scans",
 	"risk_scans",
 }
 
@@ -321,6 +333,9 @@ var (
 	// AssetsPrimaryKey and AssetsColumn2 are the table columns denoting the
 	// primary key for the assets relation (M2M).
 	AssetsPrimaryKey = []string{"scan_id", "asset_id"}
+	// EntitiesPrimaryKey and EntitiesColumn2 are the table columns denoting the
+	// primary key for the entities relation (M2M).
+	EntitiesPrimaryKey = []string{"scan_id", "entity_id"}
 	// EvidencePrimaryKey and EvidenceColumn2 are the table columns denoting the
 	// primary key for the evidence relation (M2M).
 	EvidencePrimaryKey = []string{"scan_id", "evidence_id"}
@@ -348,6 +363,9 @@ var (
 	// SubcontrolsPrimaryKey and SubcontrolsColumn2 are the table columns denoting the
 	// primary key for the subcontrols relation (M2M).
 	SubcontrolsPrimaryKey = []string{"subcontrol_id", "scan_id"}
+	// FindingsPrimaryKey and FindingsColumn2 are the table columns denoting the
+	// primary key for the findings relation (M2M).
+	FindingsPrimaryKey = []string{"finding_id", "scan_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -371,7 +389,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [11]ent.Hook
+	Hooks        [12]ent.Hook
 	Interceptors [4]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -384,12 +402,14 @@ var (
 	DefaultTags []string
 	// OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	OwnerIDValidator func(string) error
+	// DefaultSystemOwned holds the default value on creation for the "system_owned" field.
+	DefaultSystemOwned bool
 	// TargetValidator is a validator for the "target" field. It is called by the builders before save.
 	TargetValidator func(string) error
 	// ScanScheduleValidator is a validator for the "scan_schedule" field. It is called by the builders before save.
 	ScanScheduleValidator func(string) error
-	// DefaultVulnerabilityIds holds the default value on creation for the "vulnerability_ids" field.
-	DefaultVulnerabilityIds []string
+	// DefaultDiscoveredVulnerabilityIds holds the default value on creation for the "discovered_vulnerability_ids" field.
+	DefaultDiscoveredVulnerabilityIds []string
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -406,7 +426,7 @@ func ScanTypeValidator(st enums.ScanType) error {
 	}
 }
 
-const DefaultStatus enums.ScanStatus = "PROCESSING"
+const DefaultStatus enums.ScanStatus = "PENDING"
 
 // StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
 func StatusValidator(s enums.ScanStatus) error {
@@ -464,6 +484,21 @@ func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
 // ByOwnerID orders the results by the owner_id field.
 func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
+}
+
+// BySystemOwned orders the results by the system_owned field.
+func BySystemOwned(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSystemOwned, opts...).ToFunc()
+}
+
+// ByInternalNotes orders the results by the internal_notes field.
+func ByInternalNotes(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldInternalNotes, opts...).ToFunc()
+}
+
+// BySystemInternalID orders the results by the system_internal_id field.
+func BySystemInternalID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSystemInternalID, opts...).ToFunc()
 }
 
 // ByReviewedBy orders the results by the reviewed_by field.
@@ -797,6 +832,20 @@ func BySubcontrols(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByFindingsCount orders the results by findings count.
+func ByFindingsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newFindingsStep(), opts...)
+	}
+}
+
+// ByFindings orders the results by findings terms.
+func ByFindings(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFindingsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByGeneratedByPlatformField orders the results by generated_by_platform field.
 func ByGeneratedByPlatformField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -891,7 +940,7 @@ func newEntitiesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EntitiesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, EntitiesTable, EntitiesColumn),
+		sqlgraph.Edge(sqlgraph.M2M, false, EntitiesTable, EntitiesPrimaryKey...),
 	)
 }
 func newEvidenceStep() *sqlgraph.Step {
@@ -955,6 +1004,13 @@ func newSubcontrolsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(SubcontrolsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, SubcontrolsTable, SubcontrolsPrimaryKey...),
+	)
+}
+func newFindingsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FindingsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, FindingsTable, FindingsPrimaryKey...),
 	)
 }
 func newGeneratedByPlatformStep() *sqlgraph.Step {

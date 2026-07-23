@@ -298,6 +298,17 @@ func TestMutationCreateRisk(t *testing.T) {
 			expectedImpact: enums.RiskImpactLow,
 		},
 		{
+			name: "using api token with only risk read/write scope, missing sla_definition scope",
+			request: testclient.CreateRiskInput{
+				Name: "Risk",
+			},
+			// the group and program are specific to the risk query in CreateRisk
+			client:         setupAPIToken(sharedTestUser1.UserCtx, t, []string{"risk:write", "group:read", "program:read"}),
+			ctx:            context.Background(),
+			expectedStatus: enums.RiskIdentified,
+			expectedImpact: enums.RiskImpactLow,
+		},
+		{
 			name: "user not authorized, not enough permissions",
 			request: testclient.CreateRiskInput{
 				Name: "Risk",

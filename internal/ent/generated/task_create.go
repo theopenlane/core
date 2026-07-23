@@ -251,6 +251,20 @@ func (_c *TaskCreate) SetNillableScopeID(v *string) *TaskCreate {
 	return _c
 }
 
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_c *TaskCreate) SetWorkflowEligibleMarker(v bool) *TaskCreate {
+	_c.mutation.SetWorkflowEligibleMarker(v)
+	return _c
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_c *TaskCreate) SetNillableWorkflowEligibleMarker(v *bool) *TaskCreate {
+	if v != nil {
+		_c.SetWorkflowEligibleMarker(*v)
+	}
+	return _c
+}
+
 // SetExternalUUID sets the "external_uuid" field.
 func (_c *TaskCreate) SetExternalUUID(v string) *TaskCreate {
 	_c.mutation.SetExternalUUID(v)
@@ -288,6 +302,12 @@ func (_c *TaskCreate) SetNillableDetails(v *string) *TaskCreate {
 // SetDetailsJSON sets the "details_json" field.
 func (_c *TaskCreate) SetDetailsJSON(v []interface{}) *TaskCreate {
 	_c.mutation.SetDetailsJSON(v)
+	return _c
+}
+
+// SetMetadata sets the "metadata" field.
+func (_c *TaskCreate) SetMetadata(v map[string]interface{}) *TaskCreate {
+	_c.mutation.SetMetadata(v)
 	return _c
 }
 
@@ -385,6 +405,62 @@ func (_c *TaskCreate) SetIsTemplate(v bool) *TaskCreate {
 func (_c *TaskCreate) SetNillableIsTemplate(v *bool) *TaskCreate {
 	if v != nil {
 		_c.SetIsTemplate(*v)
+	}
+	return _c
+}
+
+// SetIsSuggested sets the "is_suggested" field.
+func (_c *TaskCreate) SetIsSuggested(v bool) *TaskCreate {
+	_c.mutation.SetIsSuggested(v)
+	return _c
+}
+
+// SetNillableIsSuggested sets the "is_suggested" field if the given value is not nil.
+func (_c *TaskCreate) SetNillableIsSuggested(v *bool) *TaskCreate {
+	if v != nil {
+		_c.SetIsSuggested(*v)
+	}
+	return _c
+}
+
+// SetPriority sets the "priority" field.
+func (_c *TaskCreate) SetPriority(v int) *TaskCreate {
+	_c.mutation.SetPriority(v)
+	return _c
+}
+
+// SetNillablePriority sets the "priority" field if the given value is not nil.
+func (_c *TaskCreate) SetNillablePriority(v *int) *TaskCreate {
+	if v != nil {
+		_c.SetPriority(*v)
+	}
+	return _c
+}
+
+// SetSource sets the "source" field.
+func (_c *TaskCreate) SetSource(v string) *TaskCreate {
+	_c.mutation.SetSource(v)
+	return _c
+}
+
+// SetNillableSource sets the "source" field if the given value is not nil.
+func (_c *TaskCreate) SetNillableSource(v *string) *TaskCreate {
+	if v != nil {
+		_c.SetSource(*v)
+	}
+	return _c
+}
+
+// SetSourceKey sets the "source_key" field.
+func (_c *TaskCreate) SetSourceKey(v string) *TaskCreate {
+	_c.mutation.SetSourceKey(v)
+	return _c
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_c *TaskCreate) SetNillableSourceKey(v *string) *TaskCreate {
+	if v != nil {
+		_c.SetSourceKey(*v)
 	}
 	return _c
 }
@@ -826,6 +902,10 @@ func (_c *TaskCreate) defaults() error {
 		v := task.DefaultTags
 		_c.mutation.SetTags(v)
 	}
+	if _, ok := _c.mutation.WorkflowEligibleMarker(); !ok {
+		v := task.DefaultWorkflowEligibleMarker
+		_c.mutation.SetWorkflowEligibleMarker(v)
+	}
 	if _, ok := _c.mutation.Status(); !ok {
 		v := task.DefaultStatus
 		_c.mutation.SetStatus(v)
@@ -837,6 +917,14 @@ func (_c *TaskCreate) defaults() error {
 	if _, ok := _c.mutation.IsTemplate(); !ok {
 		v := task.DefaultIsTemplate
 		_c.mutation.SetIsTemplate(v)
+	}
+	if _, ok := _c.mutation.IsSuggested(); !ok {
+		v := task.DefaultIsSuggested
+		_c.mutation.SetIsSuggested(v)
+	}
+	if _, ok := _c.mutation.Priority(); !ok {
+		v := task.DefaultPriority
+		_c.mutation.SetPriority(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if task.DefaultID == nil {
@@ -884,6 +972,12 @@ func (_c *TaskCreate) check() error {
 	}
 	if _, ok := _c.mutation.IsTemplate(); !ok {
 		return &ValidationError{Name: "is_template", err: errors.New(`generated: missing required field "Task.is_template"`)}
+	}
+	if _, ok := _c.mutation.IsSuggested(); !ok {
+		return &ValidationError{Name: "is_suggested", err: errors.New(`generated: missing required field "Task.is_suggested"`)}
+	}
+	if _, ok := _c.mutation.Priority(); !ok {
+		return &ValidationError{Name: "priority", err: errors.New(`generated: missing required field "Task.priority"`)}
 	}
 	if v, ok := _c.mutation.ExternalReferenceURL(); ok {
 		if err := task.ExternalReferenceURLValidator(v); err != nil {
@@ -974,6 +1068,10 @@ func (_c *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 		_spec.SetField(task.FieldScopeName, field.TypeString, value)
 		_node.ScopeName = value
 	}
+	if value, ok := _c.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(task.FieldWorkflowEligibleMarker, field.TypeBool, value)
+		_node.WorkflowEligibleMarker = value
+	}
 	if value, ok := _c.mutation.ExternalUUID(); ok {
 		_spec.SetField(task.FieldExternalUUID, field.TypeString, value)
 		_node.ExternalUUID = &value
@@ -989,6 +1087,10 @@ func (_c *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.DetailsJSON(); ok {
 		_spec.SetField(task.FieldDetailsJSON, field.TypeJSON, value)
 		_node.DetailsJSON = value
+	}
+	if value, ok := _c.mutation.Metadata(); ok {
+		_spec.SetField(task.FieldMetadata, field.TypeJSON, value)
+		_node.Metadata = value
 	}
 	if value, ok := _c.mutation.Status(); ok {
 		_spec.SetField(task.FieldStatus, field.TypeEnum, value)
@@ -1009,6 +1111,22 @@ func (_c *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.IsTemplate(); ok {
 		_spec.SetField(task.FieldIsTemplate, field.TypeBool, value)
 		_node.IsTemplate = value
+	}
+	if value, ok := _c.mutation.IsSuggested(); ok {
+		_spec.SetField(task.FieldIsSuggested, field.TypeBool, value)
+		_node.IsSuggested = value
+	}
+	if value, ok := _c.mutation.Priority(); ok {
+		_spec.SetField(task.FieldPriority, field.TypeInt, value)
+		_node.Priority = value
+	}
+	if value, ok := _c.mutation.Source(); ok {
+		_spec.SetField(task.FieldSource, field.TypeString, value)
+		_node.Source = value
+	}
+	if value, ok := _c.mutation.SourceKey(); ok {
+		_spec.SetField(task.FieldSourceKey, field.TypeString, value)
+		_node.SourceKey = value
 	}
 	if value, ok := _c.mutation.IdempotencyKey(); ok {
 		_spec.SetField(task.FieldIdempotencyKey, field.TypeString, value)

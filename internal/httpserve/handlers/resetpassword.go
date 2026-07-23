@@ -26,14 +26,10 @@ import (
 // set a new password - the password reset token needs to be set in the request
 // and not expired. If the request is successful, a confirmation of the reset is sent
 // to the user and a 204 no content is returned
-func (h *Handler) ResetPassword(ctx echo.Context, openapi *OpenAPIContext) error {
-	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, models.ExampleResetPasswordSuccessRequest, models.ExampleResetPasswordSuccessResponse, openapi.Registry)
+func (h *Handler) ResetPassword(ctx echo.Context) error {
+	req, err := BindAndValidate[models.ResetPasswordRequest](ctx)
 	if err != nil {
-		return h.InvalidInput(ctx, err, openapi)
-	}
-
-	if isRegistrationContext(ctx) {
-		return nil
+		return h.InvalidInput(ctx, err)
 	}
 
 	reqCtx := ctx.Request().Context()
@@ -47,10 +43,10 @@ func (h *Handler) ResetPassword(ctx echo.Context, openapi *OpenAPIContext) error
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error retrieving user token")
 
 		if generated.IsNotFound(err) {
-			return h.BadRequest(ctx, ErrPassWordResetTokenInvalid, openapi)
+			return h.BadRequest(ctx, ErrPassWordResetTokenInvalid)
 		}
 
-		return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
+		return h.InternalServerError(ctx, ErrUnableToVerifyEmail)
 	}
 
 	// ent user to &User for funcs
@@ -63,7 +59,7 @@ func (h *Handler) ResetPassword(ctx echo.Context, openapi *OpenAPIContext) error
 	if err := user.setResetTokens(entUser, req.Token); err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to set reset tokens for request")
 
-		return h.BadRequest(ctx, err, openapi)
+		return h.BadRequest(ctx, err)
 	}
 
 	// Construct the user token from the database fields
@@ -81,7 +77,7 @@ func (h *Handler) ResetPassword(ctx echo.Context, openapi *OpenAPIContext) error
 	if token.ExpiresAt, err = user.GetPasswordResetExpires(); err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to parse expiration")
 
-		return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
+		return h.InternalServerError(ctx, ErrUnableToVerifyEmail)
 	}
 
 	// Verify the token is valid with the stored secret
@@ -89,10 +85,10 @@ func (h *Handler) ResetPassword(ctx echo.Context, openapi *OpenAPIContext) error
 		if errors.Is(err, tokens.ErrTokenExpired) {
 			errMsg := "reset token is expired, please request a new token using forgot-password"
 
-			return h.BadRequest(ctx, fmt.Errorf("%w: %s", ErrPassWordResetTokenInvalid, errMsg), openapi)
+			return h.BadRequest(ctx, fmt.Errorf("%w: %s", ErrPassWordResetTokenInvalid, errMsg))
 		}
 
-		return h.BadRequest(ctx, err, openapi)
+		return h.BadRequest(ctx, err)
 	}
 
 	// make sure its not the same password as current
@@ -101,7 +97,7 @@ func (h *Handler) ResetPassword(ctx echo.Context, openapi *OpenAPIContext) error
 	if entUser.Password != nil {
 		valid, err := passwd.VerifyDerivedKey(*entUser.Password, req.Password)
 		if err != nil || valid {
-			return h.BadRequest(ctx, ErrNonUniquePassword, openapi)
+			return h.BadRequest(ctx, ErrNonUniquePassword)
 		}
 	}
 
@@ -111,13 +107,13 @@ func (h *Handler) ResetPassword(ctx echo.Context, openapi *OpenAPIContext) error
 	if err := h.updateUserPassword(userCtx, entUser.ID, req.Password); err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error updating user password")
 
-		return h.BadRequest(ctx, err, openapi)
+		return h.BadRequest(ctx, err)
 	}
 
 	if err := h.expireAllResetTokensUserByEmail(userCtx, user.Email); err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error expiring existing tokens")
 
-		return h.BadRequest(ctx, err, openapi)
+		return h.BadRequest(ctx, err)
 	}
 
 	if err := h.sendEmail(userCtx, email.ResetSuccessOp.Name(), email.PasswordResetSuccessRequest{
@@ -129,15 +125,15 @@ func (h *Handler) ResetPassword(ctx echo.Context, openapi *OpenAPIContext) error
 	}); err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error sending password reset success email")
 
-		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest)
 	}
 
-	out := &models.ResetPasswordReply{
+	out := &models.ResetPasswordResponse{
 		Reply:   rout.Reply{Success: true},
 		Message: "password has been re-set successfully",
 	}
 
-	return h.Success(ctx, out, openapi)
+	return h.Success(ctx, out)
 }
 
 // setResetTokens sets the fields for the password reset

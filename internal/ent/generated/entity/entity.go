@@ -84,6 +84,8 @@ const (
 	FieldDescription = "description"
 	// FieldDomains holds the string denoting the domains field in the database.
 	FieldDomains = "domains"
+	// FieldAliases holds the string denoting the aliases field in the database.
+	FieldAliases = "aliases"
 	// FieldEntityTypeID holds the string denoting the entity_type_id field in the database.
 	FieldEntityTypeID = "entity_type_id"
 	// FieldStatus holds the string denoting the status field in the database.
@@ -182,6 +184,8 @@ const (
 	EdgeFiles = "files"
 	// EdgeAssets holds the string denoting the assets edge name in mutations.
 	EdgeAssets = "assets"
+	// EdgeSystemDetails holds the string denoting the system_details edge name in mutations.
+	EdgeSystemDetails = "system_details"
 	// EdgeScans holds the string denoting the scans edge name in mutations.
 	EdgeScans = "scans"
 	// EdgeCampaigns holds the string denoting the campaigns edge name in mutations.
@@ -204,6 +208,14 @@ const (
 	EdgeControls = "controls"
 	// EdgeSubcontrols holds the string denoting the subcontrols edge name in mutations.
 	EdgeSubcontrols = "subcontrols"
+	// EdgeFindings holds the string denoting the findings edge name in mutations.
+	EdgeFindings = "findings"
+	// EdgeVulnerabilities holds the string denoting the vulnerabilities edge name in mutations.
+	EdgeVulnerabilities = "vulnerabilities"
+	// EdgeReviews holds the string denoting the reviews edge name in mutations.
+	EdgeReviews = "reviews"
+	// EdgeRemediations holds the string denoting the remediations edge name in mutations.
+	EdgeRemediations = "remediations"
 	// EdgePlatforms holds the string denoting the platforms edge name in mutations.
 	EdgePlatforms = "platforms"
 	// EdgeOutOfScopePlatforms holds the string denoting the out_of_scope_platforms edge name in mutations.
@@ -325,13 +337,16 @@ const (
 	// AssetsInverseTable is the table name for the Asset entity.
 	// It exists in this package in order to avoid circular dependency with the "asset" package.
 	AssetsInverseTable = "assets"
-	// ScansTable is the table that holds the scans relation/edge.
-	ScansTable = "scans"
+	// SystemDetailsTable is the table that holds the system_details relation/edge. The primary key declared below.
+	SystemDetailsTable = "entity_system_details"
+	// SystemDetailsInverseTable is the table name for the SystemDetail entity.
+	// It exists in this package in order to avoid circular dependency with the "systemdetail" package.
+	SystemDetailsInverseTable = "system_details"
+	// ScansTable is the table that holds the scans relation/edge. The primary key declared below.
+	ScansTable = "scan_entities"
 	// ScansInverseTable is the table name for the Scan entity.
 	// It exists in this package in order to avoid circular dependency with the "scan" package.
 	ScansInverseTable = "scans"
-	// ScansColumn is the table column denoting the scans relation/edge.
-	ScansColumn = "entity_scans"
 	// CampaignsTable is the table that holds the campaigns relation/edge.
 	CampaignsTable = "campaigns"
 	// CampaignsInverseTable is the table name for the Campaign entity.
@@ -392,6 +407,26 @@ const (
 	// SubcontrolsInverseTable is the table name for the Subcontrol entity.
 	// It exists in this package in order to avoid circular dependency with the "subcontrol" package.
 	SubcontrolsInverseTable = "subcontrols"
+	// FindingsTable is the table that holds the findings relation/edge. The primary key declared below.
+	FindingsTable = "finding_entities"
+	// FindingsInverseTable is the table name for the Finding entity.
+	// It exists in this package in order to avoid circular dependency with the "finding" package.
+	FindingsInverseTable = "findings"
+	// VulnerabilitiesTable is the table that holds the vulnerabilities relation/edge. The primary key declared below.
+	VulnerabilitiesTable = "vulnerability_entities"
+	// VulnerabilitiesInverseTable is the table name for the Vulnerability entity.
+	// It exists in this package in order to avoid circular dependency with the "vulnerability" package.
+	VulnerabilitiesInverseTable = "vulnerabilities"
+	// ReviewsTable is the table that holds the reviews relation/edge. The primary key declared below.
+	ReviewsTable = "review_entities"
+	// ReviewsInverseTable is the table name for the Review entity.
+	// It exists in this package in order to avoid circular dependency with the "review" package.
+	ReviewsInverseTable = "reviews"
+	// RemediationsTable is the table that holds the remediations relation/edge. The primary key declared below.
+	RemediationsTable = "remediation_entities"
+	// RemediationsInverseTable is the table name for the Remediation entity.
+	// It exists in this package in order to avoid circular dependency with the "remediation" package.
+	RemediationsInverseTable = "remediations"
 	// PlatformsTable is the table that holds the platforms relation/edge. The primary key declared below.
 	PlatformsTable = "platform_entities"
 	// PlatformsInverseTable is the table name for the Platform entity.
@@ -464,6 +499,7 @@ var Columns = []string{
 	FieldDisplayName,
 	FieldDescription,
 	FieldDomains,
+	FieldAliases,
 	FieldEntityTypeID,
 	FieldStatus,
 	FieldApprovedForUse,
@@ -502,12 +538,7 @@ var Columns = []string{
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"entity_type_entities",
-	"finding_entities",
-	"remediation_entities",
-	"review_entities",
 	"risk_entities",
-	"scan_entities",
-	"vulnerability_entities",
 }
 
 var (
@@ -529,6 +560,12 @@ var (
 	// AssetsPrimaryKey and AssetsColumn2 are the table columns denoting the
 	// primary key for the assets relation (M2M).
 	AssetsPrimaryKey = []string{"entity_id", "asset_id"}
+	// SystemDetailsPrimaryKey and SystemDetailsColumn2 are the table columns denoting the
+	// primary key for the system_details relation (M2M).
+	SystemDetailsPrimaryKey = []string{"entity_id", "system_detail_id"}
+	// ScansPrimaryKey and ScansColumn2 are the table columns denoting the
+	// primary key for the scans relation (M2M).
+	ScansPrimaryKey = []string{"scan_id", "entity_id"}
 	// IntegrationsPrimaryKey and IntegrationsColumn2 are the table columns denoting the
 	// primary key for the integrations relation (M2M).
 	IntegrationsPrimaryKey = []string{"entity_id", "integration_id"}
@@ -544,6 +581,18 @@ var (
 	// SubcontrolsPrimaryKey and SubcontrolsColumn2 are the table columns denoting the
 	// primary key for the subcontrols relation (M2M).
 	SubcontrolsPrimaryKey = []string{"subcontrol_id", "entity_id"}
+	// FindingsPrimaryKey and FindingsColumn2 are the table columns denoting the
+	// primary key for the findings relation (M2M).
+	FindingsPrimaryKey = []string{"finding_id", "entity_id"}
+	// VulnerabilitiesPrimaryKey and VulnerabilitiesColumn2 are the table columns denoting the
+	// primary key for the vulnerabilities relation (M2M).
+	VulnerabilitiesPrimaryKey = []string{"vulnerability_id", "entity_id"}
+	// ReviewsPrimaryKey and ReviewsColumn2 are the table columns denoting the
+	// primary key for the reviews relation (M2M).
+	ReviewsPrimaryKey = []string{"review_id", "entity_id"}
+	// RemediationsPrimaryKey and RemediationsColumn2 are the table columns denoting the
+	// primary key for the remediations relation (M2M).
+	RemediationsPrimaryKey = []string{"remediation_id", "entity_id"}
 	// PlatformsPrimaryKey and PlatformsColumn2 are the table columns denoting the
 	// primary key for the platforms relation (M2M).
 	PlatformsPrimaryKey = []string{"platform_id", "entity_id"}
@@ -1137,6 +1186,20 @@ func ByAssets(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// BySystemDetailsCount orders the results by system_details count.
+func BySystemDetailsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newSystemDetailsStep(), opts...)
+	}
+}
+
+// BySystemDetails orders the results by system_details terms.
+func BySystemDetails(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSystemDetailsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByScansCount orders the results by scans count.
 func ByScansCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1288,6 +1351,62 @@ func BySubcontrolsCount(opts ...sql.OrderTermOption) OrderOption {
 func BySubcontrols(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newSubcontrolsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByFindingsCount orders the results by findings count.
+func ByFindingsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newFindingsStep(), opts...)
+	}
+}
+
+// ByFindings orders the results by findings terms.
+func ByFindings(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFindingsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByVulnerabilitiesCount orders the results by vulnerabilities count.
+func ByVulnerabilitiesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newVulnerabilitiesStep(), opts...)
+	}
+}
+
+// ByVulnerabilities orders the results by vulnerabilities terms.
+func ByVulnerabilities(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newVulnerabilitiesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByReviewsCount orders the results by reviews count.
+func ByReviewsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newReviewsStep(), opts...)
+	}
+}
+
+// ByReviews orders the results by reviews terms.
+func ByReviews(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newReviewsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByRemediationsCount orders the results by remediations count.
+func ByRemediationsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newRemediationsStep(), opts...)
+	}
+}
+
+// ByRemediations orders the results by remediations terms.
+func ByRemediations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newRemediationsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -1479,11 +1598,18 @@ func newAssetsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, false, AssetsTable, AssetsPrimaryKey...),
 	)
 }
+func newSystemDetailsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SystemDetailsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, false, SystemDetailsTable, SystemDetailsPrimaryKey...),
+	)
+}
 func newScansStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ScansInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, ScansTable, ScansColumn),
+		sqlgraph.Edge(sqlgraph.M2M, true, ScansTable, ScansPrimaryKey...),
 	)
 }
 func newCampaignsStep() *sqlgraph.Step {
@@ -1554,6 +1680,34 @@ func newSubcontrolsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(SubcontrolsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, SubcontrolsTable, SubcontrolsPrimaryKey...),
+	)
+}
+func newFindingsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FindingsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, FindingsTable, FindingsPrimaryKey...),
+	)
+}
+func newVulnerabilitiesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(VulnerabilitiesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, VulnerabilitiesTable, VulnerabilitiesPrimaryKey...),
+	)
+}
+func newReviewsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ReviewsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, ReviewsTable, ReviewsPrimaryKey...),
+	)
+}
+func newRemediationsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(RemediationsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, RemediationsTable, RemediationsPrimaryKey...),
 	)
 }
 func newPlatformsStep() *sqlgraph.Step {

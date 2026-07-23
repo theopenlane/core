@@ -71,6 +71,11 @@ extend input UpdateEvidenceInput {
     deleteComment: ID
 }
 
+extend input UpdateReviewInput {
+    addComment: CreateNoteInput
+    deleteComment: ID
+}
+
 extend input CreateTrustCenterFAQInput {
     createNote: CreateNoteInput
 }
@@ -254,6 +259,24 @@ extend type Mutation{
         noteFiles: [Upload!]
         noteFilesMetadata: [FileMetadataInput!]
     ): EvidenceUpdatePayload!
+    """
+    Update an existing review comment
+    """
+    updateReviewComment(
+        """
+        ID of the comment
+        """
+        id: ID!
+        """
+        New values for the comment
+        """
+        input: UpdateNoteInput!
+        """
+        Files to attach to the comment
+        """
+        noteFiles: [Upload!]
+        noteFilesMetadata: [FileMetadataInput!]
+    ): ReviewUpdatePayload!
     """
     Delete an existing note
     """

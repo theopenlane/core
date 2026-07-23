@@ -8,18 +8,20 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // Dispatch validates and enqueues one operation execution request. When
 // DispatchRequest.Runtime is true, no DB integration lookup is performed and
 // the client is resolved from the registry at execution time
-func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runtime *gala.Gala, req DispatchRequest) (DispatchResult, error) {
+func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runtime *gala.Gala, req types.DispatchRequest) (types.DispatchResult, error) {
 	if req.Operation == "" || (!req.Runtime && req.IntegrationID == "") {
-		return DispatchResult{}, ErrDispatchInputInvalid
+		return types.DispatchResult{}, ErrDispatchInputInvalid
 	}
 
 	var (
@@ -34,7 +36,7 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 	default:
 		record, err := db.Integration.Get(ctx, req.IntegrationID)
 		if err != nil {
-			return DispatchResult{}, err
+			return types.DispatchResult{}, err
 		}
 
 		installation = record
@@ -44,15 +46,21 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 
 	operation, err := reg.Operation(definitionID, req.Operation)
 	if err != nil {
-		return DispatchResult{}, err
+		return types.DispatchResult{}, err
+	}
+
+	if operation.DisabledForAll {
+		logx.FromContext(ctx).Debug().Str("operation", req.Operation).Msg("operation is disabled, skipping dispatch")
+
+		return types.DispatchResult{Status: enums.IntegrationRunStatusCancelled}, nil
 	}
 
 	if err := ValidateConfig(operation.ConfigSchema, req.Config); err != nil {
 		if errors.Is(err, ErrOperationConfigInvalid) {
-			return DispatchResult{}, ErrDispatchInputInvalid
+			return types.DispatchResult{}, ErrDispatchInputInvalid
 		}
 
-		return DispatchResult{}, err
+		return types.DispatchResult{}, err
 	}
 
 	runType := req.RunType
@@ -60,18 +68,18 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 		runType = enums.IntegrationRunTypeManual
 	}
 
-	metadata := types.ExecutionMetadata{
-		OwnerID:       ownerID,
+	src := types.IntegrationSource{
 		IntegrationID: req.IntegrationID,
 		DefinitionID:  definitionID,
-		Operation:     req.Operation,
 		RunType:       runType,
 		Workflow:      req.Workflow,
 		Runtime:       req.Runtime,
 	}
 
+	var runID string
+
 	if installation != nil && !operation.Policy.SkipRunRecord {
-		runRecord, err := CreatePendingRun(ctx, db, installation, DispatchRequest{
+		runRecord, err := CreatePendingRun(ctx, db, installation, types.DispatchRequest{
 			IntegrationID:      req.IntegrationID,
 			Operation:          req.Operation,
 			Config:             jsonx.CloneRawMessage(req.Config),
@@ -79,67 +87,100 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 			RunType:            runType,
 		})
 		if err != nil {
-			return DispatchResult{}, err
+			return types.DispatchResult{}, err
 		}
 
-		metadata.RunID = runRecord.ID
+		runID = runRecord.ID
+		src.RunID = runID
 	}
 
-	inheritWebhookContext(ctx, &metadata)
+	inheritWebhookContext(ctx, &src)
 
-	tags := types.GetTagsForExecutionMetadata(metadata)
+	oc := types.NewOperationContext(ownerID, req.Operation, src)
 
-	emitCtx := types.WithExecutionMetadata(ctx, metadata)
+	emitCtx := gala.WithOperationContext(ctx, oc)
 	receipt := runtime.EmitWithHeaders(emitCtx, operation.Topic, Envelope{
-		ExecutionMetadata:  metadata,
+		OperationContext:   oc,
 		Config:             jsonx.CloneRawMessage(req.Config),
-		ForceClientRebuild: req.ForceClientRebuild,
-	}, gala.Headers{
-		IdempotencyKey: metadata.RunID,
-		Properties:     metadata.Properties(),
-		Tags:           tags,
-		ScheduledAt:    req.ScheduledAt,
-	})
+		ForceClientRebuild: req.ForceClientRebuild},
+		gala.Headers{
+			IdempotencyKey: runID,
+			Properties:     oc.Properties(),
+			Tags:           types.GetTagsForOperationContext(oc),
+			ScheduledAt:    req.ScheduledAt,
+		})
 
 	if receipt.Err != nil {
-		if metadata.RunID != "" {
-			if completeErr := CompleteRun(ctx, db, metadata.RunID, time.Now(), RunResult{
+		if runID != "" {
+			if completeErr := CompleteRun(ctx, db, runID, time.Now(), RunResult{
 				Status:  enums.IntegrationRunStatusFailed,
 				Summary: "dispatch failed",
 				Error:   receipt.Err.Error(),
 			}); completeErr != nil {
-				return DispatchResult{}, errors.Join(receipt.Err, completeErr)
+				return types.DispatchResult{}, errors.Join(receipt.Err, completeErr)
 			}
 		}
 
-		return DispatchResult{}, receipt.Err
+		return types.DispatchResult{}, receipt.Err
 	}
 
-	return DispatchResult{
-		RunID:   metadata.RunID,
+	return types.DispatchResult{
+		RunID:   runID,
 		EventID: string(receipt.EventID),
 		Status:  enums.IntegrationRunStatusPending,
 	}, nil
 }
 
+// ResolveOwnerIntegration finds a connected integration for the given definition
+// and owner. When multiple connected integrations exist, the optional prefer
+// function selects among them. Returns empty string with no error when no
+// integration is found, allowing the caller to fall through to runtime dispatch
+func ResolveOwnerIntegration(ctx context.Context, db *ent.Client, definitionID, ownerID string, prefer ...func(*ent.Integration) bool) (string, error) {
+	integrations, err := db.Integration.Query().
+		Where(
+			integration.OwnerIDEQ(ownerID),
+			integration.DefinitionIDEQ(definitionID),
+			integration.StatusEQ(enums.IntegrationStatusConnected),
+		).All(ctx)
+	if err != nil {
+		return "", err
+	}
+
+	if len(integrations) == 1 {
+		return integrations[0].ID, nil
+	}
+
+	if len(prefer) > 0 {
+		for _, inst := range integrations {
+			if prefer[0](inst) {
+				return inst.ID, nil
+			}
+		}
+	}
+
+	return "", nil
+}
+
 // inheritWebhookContext propagates webhook/event context from a parent execution
 // so the envelope carries the triggering event identity
-func inheritWebhookContext(ctx context.Context, metadata *types.ExecutionMetadata) {
-	existing, ok := types.ExecutionMetadataFromContext(ctx)
+func inheritWebhookContext(ctx context.Context, src *types.IntegrationSource) {
+	oc, ok := gala.OperationContextFromContext(ctx)
 	if !ok {
 		return
 	}
 
-	if metadata.Webhook == "" {
-		metadata.Webhook = existing.Webhook
+	existing := types.IntegrationSourceFrom(oc)
+
+	if src.Webhook == "" {
+		src.Webhook = existing.Webhook
 	}
 
-	if metadata.Event == "" {
-		metadata.Event = existing.Event
+	if src.Event == "" {
+		src.Event = existing.Event
 	}
 
-	if metadata.DeliveryID == "" {
-		metadata.DeliveryID = existing.DeliveryID
+	if src.DeliveryID == "" {
+		src.DeliveryID = existing.DeliveryID
 	}
 }
 

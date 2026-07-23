@@ -43,6 +43,12 @@ type Scan struct {
 	Tags []string `json:"tags,omitempty"`
 	// the ID of the organization owner of the object
 	OwnerID string `json:"owner_id,omitempty"`
+	// indicates if the record is owned by the the openlane system and not by an organization
+	SystemOwned bool `json:"system_owned,omitempty"`
+	// internal notes about the object creation, this field is only available to system admins
+	InternalNotes *string `json:"internal_notes,omitempty"`
+	// an internal identifier for the mapping, this field is only available to system admins
+	SystemInternalID *string `json:"system_internal_id,omitempty"`
 	// who reviewed the scan when no user or group is linked
 	ReviewedBy string `json:"reviewed_by,omitempty"`
 	// the user id that reviewed the scan
@@ -84,16 +90,14 @@ type Scan struct {
 	// the platform that generated the scan
 	GeneratedByPlatformID string `json:"generated_by_platform_id,omitempty"`
 	// identifiers of vulnerabilities discovered during the scan
-	VulnerabilityIds []string `json:"vulnerability_ids,omitempty"`
-	// the status of the scan, e.g., processing, completed, failed
+	DiscoveredVulnerabilityIds []string `json:"discovered_vulnerability_ids,omitempty"`
+	// the status of the scan, e.g., pending, processing, completed, failed
 	Status enums.ScanStatus `json:"status,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ScanQuery when eager-loading is set.
-	Edges         ScanEdges `json:"edges"`
-	entity_scans  *string
-	finding_scans *string
-	risk_scans    *string
-	selectValues  sql.SelectValues
+	Edges        ScanEdges `json:"edges"`
+	risk_scans   *string
+	selectValues sql.SelectValues
 }
 
 // ScanEdges holds the relations/edges for other nodes in the graph.
@@ -138,6 +142,8 @@ type ScanEdges struct {
 	Controls []*Control `json:"controls,omitempty"`
 	// Subcontrols holds the value of the subcontrols edge.
 	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
+	// Findings holds the value of the findings edge.
+	Findings []*Finding `json:"findings,omitempty"`
 	// GeneratedByPlatform holds the value of the generated_by_platform edge.
 	GeneratedByPlatform *Platform `json:"generated_by_platform,omitempty"`
 	// PerformedByUser holds the value of the performed_by_user edge.
@@ -146,9 +152,9 @@ type ScanEdges struct {
 	PerformedByGroup *Group `json:"performed_by_group,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [23]bool
+	loadedTypes [24]bool
 	// totalCount holds the count of the edges above.
-	totalCount [23]map[string]int
+	totalCount [24]map[string]int
 
 	namedBlockedGroups   map[string][]*Group
 	namedEditors         map[string][]*Group
@@ -163,6 +169,7 @@ type ScanEdges struct {
 	namedVulnerabilities map[string][]*Vulnerability
 	namedControls        map[string][]*Control
 	namedSubcontrols     map[string][]*Subcontrol
+	namedFindings        map[string][]*Finding
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -359,12 +366,21 @@ func (e ScanEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 	return nil, &NotLoadedError{edge: "subcontrols"}
 }
 
+// FindingsOrErr returns the Findings value or an error if the edge
+// was not loaded in eager-loading.
+func (e ScanEdges) FindingsOrErr() ([]*Finding, error) {
+	if e.loadedTypes[20] {
+		return e.Findings, nil
+	}
+	return nil, &NotLoadedError{edge: "findings"}
+}
+
 // GeneratedByPlatformOrErr returns the GeneratedByPlatform value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ScanEdges) GeneratedByPlatformOrErr() (*Platform, error) {
 	if e.GeneratedByPlatform != nil {
 		return e.GeneratedByPlatform, nil
-	} else if e.loadedTypes[20] {
+	} else if e.loadedTypes[21] {
 		return nil, &NotFoundError{label: platform.Label}
 	}
 	return nil, &NotLoadedError{edge: "generated_by_platform"}
@@ -375,7 +391,7 @@ func (e ScanEdges) GeneratedByPlatformOrErr() (*Platform, error) {
 func (e ScanEdges) PerformedByUserOrErr() (*User, error) {
 	if e.PerformedByUser != nil {
 		return e.PerformedByUser, nil
-	} else if e.loadedTypes[21] {
+	} else if e.loadedTypes[22] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "performed_by_user"}
@@ -386,7 +402,7 @@ func (e ScanEdges) PerformedByUserOrErr() (*User, error) {
 func (e ScanEdges) PerformedByGroupOrErr() (*Group, error) {
 	if e.PerformedByGroup != nil {
 		return e.PerformedByGroup, nil
-	} else if e.loadedTypes[22] {
+	} else if e.loadedTypes[23] {
 		return nil, &NotFoundError{label: group.Label}
 	}
 	return nil, &NotLoadedError{edge: "performed_by_group"}
@@ -401,17 +417,15 @@ func (*Scan) scanValues(columns []string) ([]any, error) {
 			values[i] = &sql.NullScanner{S: new(models.Cron)}
 		case scan.FieldScanDate, scan.FieldNextScanRunAt:
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
-		case scan.FieldTags, scan.FieldMetadata, scan.FieldVulnerabilityIds:
+		case scan.FieldTags, scan.FieldMetadata, scan.FieldDiscoveredVulnerabilityIds:
 			values[i] = new([]byte)
-		case scan.FieldID, scan.FieldCreatedBy, scan.FieldUpdatedBy, scan.FieldUpdatedByImpersonator, scan.FieldDeletedBy, scan.FieldOwnerID, scan.FieldReviewedBy, scan.FieldReviewedByUserID, scan.FieldReviewedByGroupID, scan.FieldAssignedTo, scan.FieldAssignedToUserID, scan.FieldAssignedToGroupID, scan.FieldEnvironmentName, scan.FieldEnvironmentID, scan.FieldScopeName, scan.FieldScopeID, scan.FieldTarget, scan.FieldScanType, scan.FieldPerformedBy, scan.FieldPerformedByUserID, scan.FieldPerformedByGroupID, scan.FieldGeneratedByPlatformID, scan.FieldStatus:
+		case scan.FieldSystemOwned:
+			values[i] = new(sql.NullBool)
+		case scan.FieldID, scan.FieldCreatedBy, scan.FieldUpdatedBy, scan.FieldUpdatedByImpersonator, scan.FieldDeletedBy, scan.FieldOwnerID, scan.FieldInternalNotes, scan.FieldSystemInternalID, scan.FieldReviewedBy, scan.FieldReviewedByUserID, scan.FieldReviewedByGroupID, scan.FieldAssignedTo, scan.FieldAssignedToUserID, scan.FieldAssignedToGroupID, scan.FieldEnvironmentName, scan.FieldEnvironmentID, scan.FieldScopeName, scan.FieldScopeID, scan.FieldTarget, scan.FieldScanType, scan.FieldPerformedBy, scan.FieldPerformedByUserID, scan.FieldPerformedByGroupID, scan.FieldGeneratedByPlatformID, scan.FieldStatus:
 			values[i] = new(sql.NullString)
 		case scan.FieldCreatedAt, scan.FieldUpdatedAt, scan.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
-		case scan.ForeignKeys[0]: // entity_scans
-			values[i] = new(sql.NullString)
-		case scan.ForeignKeys[1]: // finding_scans
-			values[i] = new(sql.NullString)
-		case scan.ForeignKeys[2]: // risk_scans
+		case scan.ForeignKeys[0]: // risk_scans
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -490,6 +504,26 @@ func (_m *Scan) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
 			} else if value.Valid {
 				_m.OwnerID = value.String
+			}
+		case scan.FieldSystemOwned:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field system_owned", values[i])
+			} else if value.Valid {
+				_m.SystemOwned = value.Bool
+			}
+		case scan.FieldInternalNotes:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field internal_notes", values[i])
+			} else if value.Valid {
+				_m.InternalNotes = new(string)
+				*_m.InternalNotes = value.String
+			}
+		case scan.FieldSystemInternalID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field system_internal_id", values[i])
+			} else if value.Valid {
+				_m.SystemInternalID = new(string)
+				*_m.SystemInternalID = value.String
 			}
 		case scan.FieldReviewedBy:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -616,12 +650,12 @@ func (_m *Scan) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.GeneratedByPlatformID = value.String
 			}
-		case scan.FieldVulnerabilityIds:
+		case scan.FieldDiscoveredVulnerabilityIds:
 			if value, ok := values[i].(*[]byte); !ok {
-				return fmt.Errorf("unexpected type %T for field vulnerability_ids", values[i])
+				return fmt.Errorf("unexpected type %T for field discovered_vulnerability_ids", values[i])
 			} else if value != nil && len(*value) > 0 {
-				if err := json.Unmarshal(*value, &_m.VulnerabilityIds); err != nil {
-					return fmt.Errorf("unmarshal field vulnerability_ids: %w", err)
+				if err := json.Unmarshal(*value, &_m.DiscoveredVulnerabilityIds); err != nil {
+					return fmt.Errorf("unmarshal field discovered_vulnerability_ids: %w", err)
 				}
 			}
 		case scan.FieldStatus:
@@ -631,20 +665,6 @@ func (_m *Scan) assignValues(columns []string, values []any) error {
 				_m.Status = enums.ScanStatus(value.String)
 			}
 		case scan.ForeignKeys[0]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field entity_scans", values[i])
-			} else if value.Valid {
-				_m.entity_scans = new(string)
-				*_m.entity_scans = value.String
-			}
-		case scan.ForeignKeys[1]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field finding_scans", values[i])
-			} else if value.Valid {
-				_m.finding_scans = new(string)
-				*_m.finding_scans = value.String
-			}
-		case scan.ForeignKeys[2]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field risk_scans", values[i])
 			} else if value.Valid {
@@ -764,6 +784,11 @@ func (_m *Scan) QuerySubcontrols() *SubcontrolQuery {
 	return NewScanClient(_m.config).QuerySubcontrols(_m)
 }
 
+// QueryFindings queries the "findings" edge of the Scan entity.
+func (_m *Scan) QueryFindings() *FindingQuery {
+	return NewScanClient(_m.config).QueryFindings(_m)
+}
+
 // QueryGeneratedByPlatform queries the "generated_by_platform" edge of the Scan entity.
 func (_m *Scan) QueryGeneratedByPlatform() *PlatformQuery {
 	return NewScanClient(_m.config).QueryGeneratedByPlatform(_m)
@@ -831,6 +856,19 @@ func (_m *Scan) String() string {
 	builder.WriteString("owner_id=")
 	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
+	builder.WriteString("system_owned=")
+	builder.WriteString(fmt.Sprintf("%v", _m.SystemOwned))
+	builder.WriteString(", ")
+	if v := _m.InternalNotes; v != nil {
+		builder.WriteString("internal_notes=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.SystemInternalID; v != nil {
+		builder.WriteString("system_internal_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
 	builder.WriteString("reviewed_by=")
 	builder.WriteString(_m.ReviewedBy)
 	builder.WriteString(", ")
@@ -897,8 +935,8 @@ func (_m *Scan) String() string {
 	builder.WriteString("generated_by_platform_id=")
 	builder.WriteString(_m.GeneratedByPlatformID)
 	builder.WriteString(", ")
-	builder.WriteString("vulnerability_ids=")
-	builder.WriteString(fmt.Sprintf("%v", _m.VulnerabilityIds))
+	builder.WriteString("discovered_vulnerability_ids=")
+	builder.WriteString(fmt.Sprintf("%v", _m.DiscoveredVulnerabilityIds))
 	builder.WriteString(", ")
 	builder.WriteString("status=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Status))
@@ -1215,6 +1253,30 @@ func (_m *Scan) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
 		_m.Edges.namedSubcontrols[name] = []*Subcontrol{}
 	} else {
 		_m.Edges.namedSubcontrols[name] = append(_m.Edges.namedSubcontrols[name], edges...)
+	}
+}
+
+// NamedFindings returns the Findings named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Scan) NamedFindings(name string) ([]*Finding, error) {
+	if _m.Edges.namedFindings == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedFindings[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Scan) appendNamedFindings(name string, edges ...*Finding) {
+	if _m.Edges.namedFindings == nil {
+		_m.Edges.namedFindings = make(map[string][]*Finding)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedFindings[name] = []*Finding{}
+	} else {
+		_m.Edges.namedFindings[name] = append(_m.Edges.namedFindings[name], edges...)
 	}
 }
 

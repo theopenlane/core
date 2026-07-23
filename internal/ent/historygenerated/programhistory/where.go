@@ -163,6 +163,26 @@ func EndDate(v time.Time) predicate.ProgramHistory {
 	return predicate.ProgramHistory(sql.FieldEQ(FieldEndDate, v))
 }
 
+// ObservationPeriodStartDate applies equality check predicate on the "observation_period_start_date" field. It's identical to ObservationPeriodStartDateEQ.
+func ObservationPeriodStartDate(v time.Time) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldEQ(FieldObservationPeriodStartDate, v))
+}
+
+// ObservationPeriodEndDate applies equality check predicate on the "observation_period_end_date" field. It's identical to ObservationPeriodEndDateEQ.
+func ObservationPeriodEndDate(v time.Time) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldEQ(FieldObservationPeriodEndDate, v))
+}
+
+// FieldworkStartDate applies equality check predicate on the "fieldwork_start_date" field. It's identical to FieldworkStartDateEQ.
+func FieldworkStartDate(v time.Time) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldEQ(FieldFieldworkStartDate, v))
+}
+
+// FieldworkEndDate applies equality check predicate on the "fieldwork_end_date" field. It's identical to FieldworkEndDateEQ.
+func FieldworkEndDate(v time.Time) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldEQ(FieldFieldworkEndDate, v))
+}
+
 // AuditorReady applies equality check predicate on the "auditor_ready" field. It's identical to AuditorReadyEQ.
 func AuditorReady(v bool) predicate.ProgramHistory {
 	return predicate.ProgramHistory(sql.FieldEQ(FieldAuditorReady, v))
@@ -1501,6 +1521,206 @@ func EndDateIsNil() predicate.ProgramHistory {
 // EndDateNotNil applies the NotNil predicate on the "end_date" field.
 func EndDateNotNil() predicate.ProgramHistory {
 	return predicate.ProgramHistory(sql.FieldNotNull(FieldEndDate))
+}
+
+// ObservationPeriodStartDateEQ applies the EQ predicate on the "observation_period_start_date" field.
+func ObservationPeriodStartDateEQ(v time.Time) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldEQ(FieldObservationPeriodStartDate, v))
+}
+
+// ObservationPeriodStartDateNEQ applies the NEQ predicate on the "observation_period_start_date" field.
+func ObservationPeriodStartDateNEQ(v time.Time) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldNEQ(FieldObservationPeriodStartDate, v))
+}
+
+// ObservationPeriodStartDateIn applies the In predicate on the "observation_period_start_date" field.
+func ObservationPeriodStartDateIn(vs ...time.Time) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldIn(FieldObservationPeriodStartDate, vs...))
+}
+
+// ObservationPeriodStartDateNotIn applies the NotIn predicate on the "observation_period_start_date" field.
+func ObservationPeriodStartDateNotIn(vs ...time.Time) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldNotIn(FieldObservationPeriodStartDate, vs...))
+}
+
+// ObservationPeriodStartDateGT applies the GT predicate on the "observation_period_start_date" field.
+func ObservationPeriodStartDateGT(v time.Time) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldGT(FieldObservationPeriodStartDate, v))
+}
+
+// ObservationPeriodStartDateGTE applies the GTE predicate on the "observation_period_start_date" field.
+func ObservationPeriodStartDateGTE(v time.Time) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldGTE(FieldObservationPeriodStartDate, v))
+}
+
+// ObservationPeriodStartDateLT applies the LT predicate on the "observation_period_start_date" field.
+func ObservationPeriodStartDateLT(v time.Time) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldLT(FieldObservationPeriodStartDate, v))
+}
+
+// ObservationPeriodStartDateLTE applies the LTE predicate on the "observation_period_start_date" field.
+func ObservationPeriodStartDateLTE(v time.Time) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldLTE(FieldObservationPeriodStartDate, v))
+}
+
+// ObservationPeriodStartDateIsNil applies the IsNil predicate on the "observation_period_start_date" field.
+func ObservationPeriodStartDateIsNil() predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldIsNull(FieldObservationPeriodStartDate))
+}
+
+// ObservationPeriodStartDateNotNil applies the NotNil predicate on the "observation_period_start_date" field.
+func ObservationPeriodStartDateNotNil() predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldNotNull(FieldObservationPeriodStartDate))
+}
+
+// ObservationPeriodEndDateEQ applies the EQ predicate on the "observation_period_end_date" field.
+func ObservationPeriodEndDateEQ(v time.Time) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldEQ(FieldObservationPeriodEndDate, v))
+}
+
+// ObservationPeriodEndDateNEQ applies the NEQ predicate on the "observation_period_end_date" field.
+func ObservationPeriodEndDateNEQ(v time.Time) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldNEQ(FieldObservationPeriodEndDate, v))
+}
+
+// ObservationPeriodEndDateIn applies the In predicate on the "observation_period_end_date" field.
+func ObservationPeriodEndDateIn(vs ...time.Time) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldIn(FieldObservationPeriodEndDate, vs...))
+}
+
+// ObservationPeriodEndDateNotIn applies the NotIn predicate on the "observation_period_end_date" field.
+func ObservationPeriodEndDateNotIn(vs ...time.Time) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldNotIn(FieldObservationPeriodEndDate, vs...))
+}
+
+// ObservationPeriodEndDateGT applies the GT predicate on the "observation_period_end_date" field.
+func ObservationPeriodEndDateGT(v time.Time) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldGT(FieldObservationPeriodEndDate, v))
+}
+
+// ObservationPeriodEndDateGTE applies the GTE predicate on the "observation_period_end_date" field.
+func ObservationPeriodEndDateGTE(v time.Time) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldGTE(FieldObservationPeriodEndDate, v))
+}
+
+// ObservationPeriodEndDateLT applies the LT predicate on the "observation_period_end_date" field.
+func ObservationPeriodEndDateLT(v time.Time) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldLT(FieldObservationPeriodEndDate, v))
+}
+
+// ObservationPeriodEndDateLTE applies the LTE predicate on the "observation_period_end_date" field.
+func ObservationPeriodEndDateLTE(v time.Time) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldLTE(FieldObservationPeriodEndDate, v))
+}
+
+// ObservationPeriodEndDateIsNil applies the IsNil predicate on the "observation_period_end_date" field.
+func ObservationPeriodEndDateIsNil() predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldIsNull(FieldObservationPeriodEndDate))
+}
+
+// ObservationPeriodEndDateNotNil applies the NotNil predicate on the "observation_period_end_date" field.
+func ObservationPeriodEndDateNotNil() predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldNotNull(FieldObservationPeriodEndDate))
+}
+
+// FieldworkStartDateEQ applies the EQ predicate on the "fieldwork_start_date" field.
+func FieldworkStartDateEQ(v time.Time) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldEQ(FieldFieldworkStartDate, v))
+}
+
+// FieldworkStartDateNEQ applies the NEQ predicate on the "fieldwork_start_date" field.
+func FieldworkStartDateNEQ(v time.Time) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldNEQ(FieldFieldworkStartDate, v))
+}
+
+// FieldworkStartDateIn applies the In predicate on the "fieldwork_start_date" field.
+func FieldworkStartDateIn(vs ...time.Time) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldIn(FieldFieldworkStartDate, vs...))
+}
+
+// FieldworkStartDateNotIn applies the NotIn predicate on the "fieldwork_start_date" field.
+func FieldworkStartDateNotIn(vs ...time.Time) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldNotIn(FieldFieldworkStartDate, vs...))
+}
+
+// FieldworkStartDateGT applies the GT predicate on the "fieldwork_start_date" field.
+func FieldworkStartDateGT(v time.Time) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldGT(FieldFieldworkStartDate, v))
+}
+
+// FieldworkStartDateGTE applies the GTE predicate on the "fieldwork_start_date" field.
+func FieldworkStartDateGTE(v time.Time) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldGTE(FieldFieldworkStartDate, v))
+}
+
+// FieldworkStartDateLT applies the LT predicate on the "fieldwork_start_date" field.
+func FieldworkStartDateLT(v time.Time) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldLT(FieldFieldworkStartDate, v))
+}
+
+// FieldworkStartDateLTE applies the LTE predicate on the "fieldwork_start_date" field.
+func FieldworkStartDateLTE(v time.Time) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldLTE(FieldFieldworkStartDate, v))
+}
+
+// FieldworkStartDateIsNil applies the IsNil predicate on the "fieldwork_start_date" field.
+func FieldworkStartDateIsNil() predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldIsNull(FieldFieldworkStartDate))
+}
+
+// FieldworkStartDateNotNil applies the NotNil predicate on the "fieldwork_start_date" field.
+func FieldworkStartDateNotNil() predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldNotNull(FieldFieldworkStartDate))
+}
+
+// FieldworkEndDateEQ applies the EQ predicate on the "fieldwork_end_date" field.
+func FieldworkEndDateEQ(v time.Time) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldEQ(FieldFieldworkEndDate, v))
+}
+
+// FieldworkEndDateNEQ applies the NEQ predicate on the "fieldwork_end_date" field.
+func FieldworkEndDateNEQ(v time.Time) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldNEQ(FieldFieldworkEndDate, v))
+}
+
+// FieldworkEndDateIn applies the In predicate on the "fieldwork_end_date" field.
+func FieldworkEndDateIn(vs ...time.Time) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldIn(FieldFieldworkEndDate, vs...))
+}
+
+// FieldworkEndDateNotIn applies the NotIn predicate on the "fieldwork_end_date" field.
+func FieldworkEndDateNotIn(vs ...time.Time) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldNotIn(FieldFieldworkEndDate, vs...))
+}
+
+// FieldworkEndDateGT applies the GT predicate on the "fieldwork_end_date" field.
+func FieldworkEndDateGT(v time.Time) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldGT(FieldFieldworkEndDate, v))
+}
+
+// FieldworkEndDateGTE applies the GTE predicate on the "fieldwork_end_date" field.
+func FieldworkEndDateGTE(v time.Time) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldGTE(FieldFieldworkEndDate, v))
+}
+
+// FieldworkEndDateLT applies the LT predicate on the "fieldwork_end_date" field.
+func FieldworkEndDateLT(v time.Time) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldLT(FieldFieldworkEndDate, v))
+}
+
+// FieldworkEndDateLTE applies the LTE predicate on the "fieldwork_end_date" field.
+func FieldworkEndDateLTE(v time.Time) predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldLTE(FieldFieldworkEndDate, v))
+}
+
+// FieldworkEndDateIsNil applies the IsNil predicate on the "fieldwork_end_date" field.
+func FieldworkEndDateIsNil() predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldIsNull(FieldFieldworkEndDate))
+}
+
+// FieldworkEndDateNotNil applies the NotNil predicate on the "fieldwork_end_date" field.
+func FieldworkEndDateNotNil() predicate.ProgramHistory {
+	return predicate.ProgramHistory(sql.FieldNotNull(FieldFieldworkEndDate))
 }
 
 // AuditorReadyEQ applies the EQ predicate on the "auditor_ready" field.

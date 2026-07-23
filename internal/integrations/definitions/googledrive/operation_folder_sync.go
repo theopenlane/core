@@ -5,7 +5,7 @@ import (
 
 	"google.golang.org/api/drive/v3"
 
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -60,7 +60,7 @@ func (FolderSync) Run(ctx context.Context, svc DriveClient, folderID string) ([]
 
 	return []types.IngestPayloadSet{
 		{
-			Schema:    integrationgenerated.IntegrationMappingSchemaInternalPolicy,
+			Schema:    entityops.SchemaInternalPolicy.Name,
 			Envelopes: envelopes,
 		},
 	}, nil

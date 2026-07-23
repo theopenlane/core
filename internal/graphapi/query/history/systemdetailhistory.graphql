@@ -20,8 +20,6 @@ query GetAllSystemDetailHistories ($first: Int, $last: Int, $after: Cursor, $bef
 				operation
 				oscalMetadataJSON
 				ownerID
-				platformID
-				programID
 				ref
 				revisionHistory
 				sensitivityLevel
@@ -57,8 +55,6 @@ query GetSystemDetailHistories ($first: Int, $last: Int, $after: Cursor, $before
 				operation
 				oscalMetadataJSON
 				ownerID
-				platformID
-				programID
 				ref
 				revisionHistory
 				sensitivityLevel

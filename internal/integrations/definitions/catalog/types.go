@@ -3,6 +3,7 @@ package catalog
 import (
 	"github.com/theopenlane/core/internal/integrations/definitions/awssecurityhub"
 	"github.com/theopenlane/core/internal/integrations/definitions/azureentraid"
+	"github.com/theopenlane/core/internal/integrations/definitions/cloudflare"
 	"github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/internal/integrations/definitions/githubapp"
 	"github.com/theopenlane/core/internal/integrations/definitions/googledrive"
@@ -11,7 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/definitions/oidclocal"
 	"github.com/theopenlane/core/internal/integrations/definitions/onedrive"
 	"github.com/theopenlane/core/internal/integrations/definitions/slack"
-	"github.com/theopenlane/core/internal/integrations/operations"
+	"github.com/theopenlane/core/internal/integrations/definitions/system"
 )
 
 // Config aggregates the definitions configuration structs (for when definitions require operator-held credentials or other config)
@@ -21,6 +22,9 @@ type Config struct {
 	ConsoleIntegrationPath string `json:"consoleintegrationpath" koanf:"consoleintegrationpath" default:"/organization-settings/integrations"`
 	// AWSSecurityHub holds operator credentials for the AWS Security Hub definition
 	AWSSecurityHub awssecurityhub.Config `json:"awssecurityhub" koanf:"awssecurityhub"`
+	// CloudflareRuntime holds runtime-provisioned configuration for the operator-owned
+	// account, used for system-initiated calls
+	CloudflareRuntime cloudflare.RuntimeConfig `json:"cloudflareruntime" koanf:"cloudflareruntime"`
 	// GitHubApp holds operator credentials for the GitHub App definition
 	GitHubApp githubapp.Config `json:"githubapp" koanf:"githubapp"`
 	// Slack holds OAuth credentials for the Slack definition
@@ -41,6 +45,8 @@ type Config struct {
 	OIDCLocal oidclocal.Config `json:"oidclocal" koanf:"oidclocal"`
 	// Email holds operator-level email integration configuration
 	Email email.RuntimeEmailConfig `json:"email" koanf:"email"`
-	// PaymentReminder configures the scheduled payment reminder listener
-	PaymentReminder operations.PaymentReminderConfig `json:"paymentreminder" koanf:"paymentreminder"`
+	// PaymentReminder configures the scheduled payment reminder sweep
+	PaymentReminder system.PaymentReminderConfig `json:"paymentreminder" koanf:"paymentreminder"`
+	// OrganizationDelete configures the scheduled organization deletion sweep
+	OrganizationDelete system.OrganizationDeleteConfig `json:"organizationdelete" koanf:"organizationdelete"`
 }

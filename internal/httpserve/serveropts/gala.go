@@ -86,6 +86,7 @@ func ConfigureGala(ctx context.Context, galaApp, notificationGala *gala.Gala, db
 		register func(*gala.Registry) ([]gala.ListenerID, error)
 	}{
 		{galaApp, hooks.RegisterGalaOrganizationAvatarListeners},
+		{galaApp, hooks.RegisterGalaTaskRuleListeners},
 		{galaApp, hooks.RegisterGalaEntitlementListeners},
 		{galaApp, hooks.RegisterGalaTrustCenterCacheListeners},
 		{galaApp, hooks.RegisterGalaTrustCenterWatermarkListeners},
@@ -97,6 +98,8 @@ func ConfigureGala(ctx context.Context, galaApp, notificationGala *gala.Gala, db
 		{galaApp, hooks.RegisterGalaCampaignRecurringListeners},
 		{galaApp, hooks.RegisterGalaSubscriberLinkListeners},
 		{galaApp, hooks.RegisterGalaNDAAttestationListeners},
+		{galaApp, hooks.RegisterGalaDomainScanSubmitListeners},
+		{galaApp, hooks.RegisterGalaDomainScanUpdateListener},
 		{notificationGala, hooks.RegisterGalaNotificationListeners},
 	}
 

@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"net/http"
+	"strings"
 
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/newman"
@@ -17,6 +18,9 @@ type EmailTestSendRequest struct {
 	To string `json:"to" jsonschema:"required,description=Recipient email address"`
 	// Name filters to a single dispatcher; empty sends all registered dispatchers
 	Name string `json:"name,omitempty" jsonschema:"description=Dispatcher name to send (empty sends all)"`
+	// Branding selects the trust center branding variant for trust-center emails: "default" renders the
+	// Openlane fallback (no configured branding); any other value renders the configured trust center branding
+	Branding string `json:"branding,omitempty" jsonschema:"description=Trust center branding variant: default or trustcenter"`
 }
 
 // EmailTestSendResult is the per-dispatcher outcome in the response
@@ -42,38 +46,34 @@ var ExampleEmailTestSendRequest = EmailTestSendRequest{
 
 // EmailTestSendHandler renders and sends test emails through registered dispatchers
 // using the runtime's already-initialized email client. Only available when IsDev is true
-func (h *Handler) EmailTestSendHandler(ctx echo.Context, openapi *OpenAPIContext) error {
+func (h *Handler) EmailTestSendHandler(ctx echo.Context) error {
 	if !h.IsDev {
-		return h.BadRequest(ctx, ErrDevModeRequired, openapi)
+		return h.BadRequest(ctx, ErrDevModeRequired)
 	}
 
 	if h.IntegrationsRuntime == nil {
-		return h.InternalServerError(ctx, ErrIntegrationsNotConfigured, openapi)
+		return h.InternalServerError(ctx, ErrIntegrationsNotConfigured)
 	}
 
-	req, err := BindAndValidateWithAutoRegistry(ctx, h, openapi.Operation, ExampleEmailTestSendRequest, EmailTestSendResponse{}, openapi.Registry)
+	req, err := BindAndValidate[EmailTestSendRequest](ctx)
 	if err != nil {
-		return h.InvalidInput(ctx, err, openapi)
-	}
-
-	if isRegistrationContext(ctx) {
-		return nil
+		return h.InvalidInput(ctx, err)
 	}
 
 	requestCtx := ctx.Request().Context()
 
 	if req.To == "" {
-		return h.BadRequest(ctx, ErrRecipientRequired, openapi)
+		return h.BadRequest(ctx, ErrRecipientRequired)
 	}
 
 	client, ok := h.IntegrationsRuntime.Registry().RuntimeClient(email.DefinitionID.ID())
 	if !ok {
-		return h.InternalServerError(ctx, ErrEmailClientNotAvailable, openapi)
+		return h.InternalServerError(ctx, ErrEmailClientNotAvailable)
 	}
 
 	emailClient, ok := client.(*email.Client)
 	if !ok {
-		return h.InternalServerError(ctx, ErrEmailClientNotAvailable, openapi)
+		return h.InternalServerError(ctx, ErrEmailClientNotAvailable)
 	}
 
 	ops := email.AllEmailOperations()
@@ -90,7 +90,7 @@ func (h *Handler) EmailTestSendHandler(ctx echo.Context, openapi *OpenAPIContext
 		}
 
 		if !found {
-			return h.BadRequest(ctx, ErrDispatcherNotFound, openapi)
+			return h.BadRequest(ctx, ErrDispatcherNotFound)
 		}
 	}
 
@@ -104,7 +104,7 @@ func (h *Handler) EmailTestSendHandler(ctx echo.Context, openapi *OpenAPIContext
 			continue
 		}
 
-		payload := email.TestFixture(op.Name, req.To)
+		payload := email.TestFixture(op.Name, req.To, strings.EqualFold(req.Branding, "default"))
 		if payload == nil {
 			results = append(results, EmailTestSendResult{Name: op.Name, Status: "SKIP", Error: "no fixture defined"})
 			continue

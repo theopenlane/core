@@ -153,6 +153,26 @@ func EndDate(v time.Time) predicate.Program {
 	return predicate.Program(sql.FieldEQ(FieldEndDate, v))
 }
 
+// ObservationPeriodStartDate applies equality check predicate on the "observation_period_start_date" field. It's identical to ObservationPeriodStartDateEQ.
+func ObservationPeriodStartDate(v time.Time) predicate.Program {
+	return predicate.Program(sql.FieldEQ(FieldObservationPeriodStartDate, v))
+}
+
+// ObservationPeriodEndDate applies equality check predicate on the "observation_period_end_date" field. It's identical to ObservationPeriodEndDateEQ.
+func ObservationPeriodEndDate(v time.Time) predicate.Program {
+	return predicate.Program(sql.FieldEQ(FieldObservationPeriodEndDate, v))
+}
+
+// FieldworkStartDate applies equality check predicate on the "fieldwork_start_date" field. It's identical to FieldworkStartDateEQ.
+func FieldworkStartDate(v time.Time) predicate.Program {
+	return predicate.Program(sql.FieldEQ(FieldFieldworkStartDate, v))
+}
+
+// FieldworkEndDate applies equality check predicate on the "fieldwork_end_date" field. It's identical to FieldworkEndDateEQ.
+func FieldworkEndDate(v time.Time) predicate.Program {
+	return predicate.Program(sql.FieldEQ(FieldFieldworkEndDate, v))
+}
+
 // AuditorReady applies equality check predicate on the "auditor_ready" field. It's identical to AuditorReadyEQ.
 func AuditorReady(v bool) predicate.Program {
 	return predicate.Program(sql.FieldEQ(FieldAuditorReady, v))
@@ -1358,6 +1378,206 @@ func EndDateNotNil() predicate.Program {
 	return predicate.Program(sql.FieldNotNull(FieldEndDate))
 }
 
+// ObservationPeriodStartDateEQ applies the EQ predicate on the "observation_period_start_date" field.
+func ObservationPeriodStartDateEQ(v time.Time) predicate.Program {
+	return predicate.Program(sql.FieldEQ(FieldObservationPeriodStartDate, v))
+}
+
+// ObservationPeriodStartDateNEQ applies the NEQ predicate on the "observation_period_start_date" field.
+func ObservationPeriodStartDateNEQ(v time.Time) predicate.Program {
+	return predicate.Program(sql.FieldNEQ(FieldObservationPeriodStartDate, v))
+}
+
+// ObservationPeriodStartDateIn applies the In predicate on the "observation_period_start_date" field.
+func ObservationPeriodStartDateIn(vs ...time.Time) predicate.Program {
+	return predicate.Program(sql.FieldIn(FieldObservationPeriodStartDate, vs...))
+}
+
+// ObservationPeriodStartDateNotIn applies the NotIn predicate on the "observation_period_start_date" field.
+func ObservationPeriodStartDateNotIn(vs ...time.Time) predicate.Program {
+	return predicate.Program(sql.FieldNotIn(FieldObservationPeriodStartDate, vs...))
+}
+
+// ObservationPeriodStartDateGT applies the GT predicate on the "observation_period_start_date" field.
+func ObservationPeriodStartDateGT(v time.Time) predicate.Program {
+	return predicate.Program(sql.FieldGT(FieldObservationPeriodStartDate, v))
+}
+
+// ObservationPeriodStartDateGTE applies the GTE predicate on the "observation_period_start_date" field.
+func ObservationPeriodStartDateGTE(v time.Time) predicate.Program {
+	return predicate.Program(sql.FieldGTE(FieldObservationPeriodStartDate, v))
+}
+
+// ObservationPeriodStartDateLT applies the LT predicate on the "observation_period_start_date" field.
+func ObservationPeriodStartDateLT(v time.Time) predicate.Program {
+	return predicate.Program(sql.FieldLT(FieldObservationPeriodStartDate, v))
+}
+
+// ObservationPeriodStartDateLTE applies the LTE predicate on the "observation_period_start_date" field.
+func ObservationPeriodStartDateLTE(v time.Time) predicate.Program {
+	return predicate.Program(sql.FieldLTE(FieldObservationPeriodStartDate, v))
+}
+
+// ObservationPeriodStartDateIsNil applies the IsNil predicate on the "observation_period_start_date" field.
+func ObservationPeriodStartDateIsNil() predicate.Program {
+	return predicate.Program(sql.FieldIsNull(FieldObservationPeriodStartDate))
+}
+
+// ObservationPeriodStartDateNotNil applies the NotNil predicate on the "observation_period_start_date" field.
+func ObservationPeriodStartDateNotNil() predicate.Program {
+	return predicate.Program(sql.FieldNotNull(FieldObservationPeriodStartDate))
+}
+
+// ObservationPeriodEndDateEQ applies the EQ predicate on the "observation_period_end_date" field.
+func ObservationPeriodEndDateEQ(v time.Time) predicate.Program {
+	return predicate.Program(sql.FieldEQ(FieldObservationPeriodEndDate, v))
+}
+
+// ObservationPeriodEndDateNEQ applies the NEQ predicate on the "observation_period_end_date" field.
+func ObservationPeriodEndDateNEQ(v time.Time) predicate.Program {
+	return predicate.Program(sql.FieldNEQ(FieldObservationPeriodEndDate, v))
+}
+
+// ObservationPeriodEndDateIn applies the In predicate on the "observation_period_end_date" field.
+func ObservationPeriodEndDateIn(vs ...time.Time) predicate.Program {
+	return predicate.Program(sql.FieldIn(FieldObservationPeriodEndDate, vs...))
+}
+
+// ObservationPeriodEndDateNotIn applies the NotIn predicate on the "observation_period_end_date" field.
+func ObservationPeriodEndDateNotIn(vs ...time.Time) predicate.Program {
+	return predicate.Program(sql.FieldNotIn(FieldObservationPeriodEndDate, vs...))
+}
+
+// ObservationPeriodEndDateGT applies the GT predicate on the "observation_period_end_date" field.
+func ObservationPeriodEndDateGT(v time.Time) predicate.Program {
+	return predicate.Program(sql.FieldGT(FieldObservationPeriodEndDate, v))
+}
+
+// ObservationPeriodEndDateGTE applies the GTE predicate on the "observation_period_end_date" field.
+func ObservationPeriodEndDateGTE(v time.Time) predicate.Program {
+	return predicate.Program(sql.FieldGTE(FieldObservationPeriodEndDate, v))
+}
+
+// ObservationPeriodEndDateLT applies the LT predicate on the "observation_period_end_date" field.
+func ObservationPeriodEndDateLT(v time.Time) predicate.Program {
+	return predicate.Program(sql.FieldLT(FieldObservationPeriodEndDate, v))
+}
+
+// ObservationPeriodEndDateLTE applies the LTE predicate on the "observation_period_end_date" field.
+func ObservationPeriodEndDateLTE(v time.Time) predicate.Program {
+	return predicate.Program(sql.FieldLTE(FieldObservationPeriodEndDate, v))
+}
+
+// ObservationPeriodEndDateIsNil applies the IsNil predicate on the "observation_period_end_date" field.
+func ObservationPeriodEndDateIsNil() predicate.Program {
+	return predicate.Program(sql.FieldIsNull(FieldObservationPeriodEndDate))
+}
+
+// ObservationPeriodEndDateNotNil applies the NotNil predicate on the "observation_period_end_date" field.
+func ObservationPeriodEndDateNotNil() predicate.Program {
+	return predicate.Program(sql.FieldNotNull(FieldObservationPeriodEndDate))
+}
+
+// FieldworkStartDateEQ applies the EQ predicate on the "fieldwork_start_date" field.
+func FieldworkStartDateEQ(v time.Time) predicate.Program {
+	return predicate.Program(sql.FieldEQ(FieldFieldworkStartDate, v))
+}
+
+// FieldworkStartDateNEQ applies the NEQ predicate on the "fieldwork_start_date" field.
+func FieldworkStartDateNEQ(v time.Time) predicate.Program {
+	return predicate.Program(sql.FieldNEQ(FieldFieldworkStartDate, v))
+}
+
+// FieldworkStartDateIn applies the In predicate on the "fieldwork_start_date" field.
+func FieldworkStartDateIn(vs ...time.Time) predicate.Program {
+	return predicate.Program(sql.FieldIn(FieldFieldworkStartDate, vs...))
+}
+
+// FieldworkStartDateNotIn applies the NotIn predicate on the "fieldwork_start_date" field.
+func FieldworkStartDateNotIn(vs ...time.Time) predicate.Program {
+	return predicate.Program(sql.FieldNotIn(FieldFieldworkStartDate, vs...))
+}
+
+// FieldworkStartDateGT applies the GT predicate on the "fieldwork_start_date" field.
+func FieldworkStartDateGT(v time.Time) predicate.Program {
+	return predicate.Program(sql.FieldGT(FieldFieldworkStartDate, v))
+}
+
+// FieldworkStartDateGTE applies the GTE predicate on the "fieldwork_start_date" field.
+func FieldworkStartDateGTE(v time.Time) predicate.Program {
+	return predicate.Program(sql.FieldGTE(FieldFieldworkStartDate, v))
+}
+
+// FieldworkStartDateLT applies the LT predicate on the "fieldwork_start_date" field.
+func FieldworkStartDateLT(v time.Time) predicate.Program {
+	return predicate.Program(sql.FieldLT(FieldFieldworkStartDate, v))
+}
+
+// FieldworkStartDateLTE applies the LTE predicate on the "fieldwork_start_date" field.
+func FieldworkStartDateLTE(v time.Time) predicate.Program {
+	return predicate.Program(sql.FieldLTE(FieldFieldworkStartDate, v))
+}
+
+// FieldworkStartDateIsNil applies the IsNil predicate on the "fieldwork_start_date" field.
+func FieldworkStartDateIsNil() predicate.Program {
+	return predicate.Program(sql.FieldIsNull(FieldFieldworkStartDate))
+}
+
+// FieldworkStartDateNotNil applies the NotNil predicate on the "fieldwork_start_date" field.
+func FieldworkStartDateNotNil() predicate.Program {
+	return predicate.Program(sql.FieldNotNull(FieldFieldworkStartDate))
+}
+
+// FieldworkEndDateEQ applies the EQ predicate on the "fieldwork_end_date" field.
+func FieldworkEndDateEQ(v time.Time) predicate.Program {
+	return predicate.Program(sql.FieldEQ(FieldFieldworkEndDate, v))
+}
+
+// FieldworkEndDateNEQ applies the NEQ predicate on the "fieldwork_end_date" field.
+func FieldworkEndDateNEQ(v time.Time) predicate.Program {
+	return predicate.Program(sql.FieldNEQ(FieldFieldworkEndDate, v))
+}
+
+// FieldworkEndDateIn applies the In predicate on the "fieldwork_end_date" field.
+func FieldworkEndDateIn(vs ...time.Time) predicate.Program {
+	return predicate.Program(sql.FieldIn(FieldFieldworkEndDate, vs...))
+}
+
+// FieldworkEndDateNotIn applies the NotIn predicate on the "fieldwork_end_date" field.
+func FieldworkEndDateNotIn(vs ...time.Time) predicate.Program {
+	return predicate.Program(sql.FieldNotIn(FieldFieldworkEndDate, vs...))
+}
+
+// FieldworkEndDateGT applies the GT predicate on the "fieldwork_end_date" field.
+func FieldworkEndDateGT(v time.Time) predicate.Program {
+	return predicate.Program(sql.FieldGT(FieldFieldworkEndDate, v))
+}
+
+// FieldworkEndDateGTE applies the GTE predicate on the "fieldwork_end_date" field.
+func FieldworkEndDateGTE(v time.Time) predicate.Program {
+	return predicate.Program(sql.FieldGTE(FieldFieldworkEndDate, v))
+}
+
+// FieldworkEndDateLT applies the LT predicate on the "fieldwork_end_date" field.
+func FieldworkEndDateLT(v time.Time) predicate.Program {
+	return predicate.Program(sql.FieldLT(FieldFieldworkEndDate, v))
+}
+
+// FieldworkEndDateLTE applies the LTE predicate on the "fieldwork_end_date" field.
+func FieldworkEndDateLTE(v time.Time) predicate.Program {
+	return predicate.Program(sql.FieldLTE(FieldFieldworkEndDate, v))
+}
+
+// FieldworkEndDateIsNil applies the IsNil predicate on the "fieldwork_end_date" field.
+func FieldworkEndDateIsNil() predicate.Program {
+	return predicate.Program(sql.FieldIsNull(FieldFieldworkEndDate))
+}
+
+// FieldworkEndDateNotNil applies the NotNil predicate on the "fieldwork_end_date" field.
+func FieldworkEndDateNotNil() predicate.Program {
+	return predicate.Program(sql.FieldNotNull(FieldFieldworkEndDate))
+}
+
 // AuditorReadyEQ applies the EQ predicate on the "auditor_ready" field.
 func AuditorReadyEQ(v bool) predicate.Program {
 	return predicate.Program(sql.FieldEQ(FieldAuditorReady, v))
@@ -2181,27 +2401,143 @@ func HasActionPlansWith(preds ...predicate.ActionPlan) predicate.Program {
 	})
 }
 
-// HasSystemDetail applies the HasEdge predicate on the "system_detail" edge.
-func HasSystemDetail() predicate.Program {
+// HasSystemDetails applies the HasEdge predicate on the "system_details" edge.
+func HasSystemDetails() predicate.Program {
 	return predicate.Program(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, false, SystemDetailTable, SystemDetailColumn),
+			sqlgraph.Edge(sqlgraph.M2M, false, SystemDetailsTable, SystemDetailsPrimaryKey...),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.SystemDetail
-		step.Edge.Schema = schemaConfig.SystemDetail
+		step.Edge.Schema = schemaConfig.ProgramSystemDetails
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasSystemDetailWith applies the HasEdge predicate on the "system_detail" edge with a given conditions (other predicates).
-func HasSystemDetailWith(preds ...predicate.SystemDetail) predicate.Program {
+// HasSystemDetailsWith applies the HasEdge predicate on the "system_details" edge with a given conditions (other predicates).
+func HasSystemDetailsWith(preds ...predicate.SystemDetail) predicate.Program {
 	return predicate.Program(func(s *sql.Selector) {
-		step := newSystemDetailStep()
+		step := newSystemDetailsStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.SystemDetail
-		step.Edge.Schema = schemaConfig.SystemDetail
+		step.Edge.Schema = schemaConfig.ProgramSystemDetails
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasFindings applies the HasEdge predicate on the "findings" edge.
+func HasFindings() predicate.Program {
+	return predicate.Program(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, FindingsTable, FindingsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.FindingPrograms
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasFindingsWith applies the HasEdge predicate on the "findings" edge with a given conditions (other predicates).
+func HasFindingsWith(preds ...predicate.Finding) predicate.Program {
+	return predicate.Program(func(s *sql.Selector) {
+		step := newFindingsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.FindingPrograms
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasVulnerabilities applies the HasEdge predicate on the "vulnerabilities" edge.
+func HasVulnerabilities() predicate.Program {
+	return predicate.Program(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, VulnerabilitiesTable, VulnerabilitiesPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Vulnerability
+		step.Edge.Schema = schemaConfig.VulnerabilityPrograms
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasVulnerabilitiesWith applies the HasEdge predicate on the "vulnerabilities" edge with a given conditions (other predicates).
+func HasVulnerabilitiesWith(preds ...predicate.Vulnerability) predicate.Program {
+	return predicate.Program(func(s *sql.Selector) {
+		step := newVulnerabilitiesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Vulnerability
+		step.Edge.Schema = schemaConfig.VulnerabilityPrograms
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasReviews applies the HasEdge predicate on the "reviews" edge.
+func HasReviews() predicate.Program {
+	return predicate.Program(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, ReviewsTable, ReviewsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Review
+		step.Edge.Schema = schemaConfig.ReviewPrograms
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasReviewsWith applies the HasEdge predicate on the "reviews" edge with a given conditions (other predicates).
+func HasReviewsWith(preds ...predicate.Review) predicate.Program {
+	return predicate.Program(func(s *sql.Selector) {
+		step := newReviewsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Review
+		step.Edge.Schema = schemaConfig.ReviewPrograms
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasRemediations applies the HasEdge predicate on the "remediations" edge.
+func HasRemediations() predicate.Program {
+	return predicate.Program(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, RemediationsTable, RemediationsPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Remediation
+		step.Edge.Schema = schemaConfig.RemediationPrograms
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasRemediationsWith applies the HasEdge predicate on the "remediations" edge with a given conditions (other predicates).
+func HasRemediationsWith(preds ...predicate.Remediation) predicate.Program {
+	return predicate.Program(func(s *sql.Selector) {
+		step := newRemediationsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Remediation
+		step.Edge.Schema = schemaConfig.RemediationPrograms
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

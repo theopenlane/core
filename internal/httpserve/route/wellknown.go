@@ -24,7 +24,7 @@ func registerWebAuthnWellKnownHandler(router *Router) (err error) {
 		Security:    handlers.PublicSecurity,
 		Middlewares: *publicEndpoint,
 		RateLimit:   publicStaticRateLimit,
-		SimpleHandler: func(ctx echo.Context) error {
+		Handler: func(ctx echo.Context) error {
 			return echo.StaticFileHandler("webauthn", webauthn)(ctx)
 		},
 	}
@@ -44,7 +44,7 @@ func registerJwksWellKnownHandler(router *Router) (err error) {
 		Security:    handlers.PublicSecurity,
 		Middlewares: *publicEndpoint,
 		RateLimit:   publicStaticRateLimit,
-		SimpleHandler: func(ctx echo.Context) error {
+		Handler: func(ctx echo.Context) error {
 			return ctx.JSON(http.StatusOK, router.Handler.JWTKeys)
 		},
 	}
@@ -67,9 +67,65 @@ func registerSecurityTxtHandler(router *Router) (err error) {
 		Security:    handlers.PublicSecurity,
 		Middlewares: *publicEndpoint,
 		RateLimit:   publicStaticRateLimit,
-		SimpleHandler: func(ctx echo.Context) error {
+		Handler: func(ctx echo.Context) error {
 			return echo.StaticFileHandler("security.txt", securityTxt)(ctx)
 		},
+	}
+
+	return router.AddUnversionedHandlerRoute(config)
+}
+
+// registerWebfingerHandler registers the /.well-known/webfinger handler
+func registerWebfingerHandler(router *Router) error {
+	config := Config{
+		Path:        "/.well-known/webfinger",
+		Method:      http.MethodGet,
+		Name:        "Webfinger",
+		Description: "WebFinger endpoint for federated identity",
+		Tags:        []string{"webfinger"},
+		OperationID: "Webfinger",
+		Middlewares: *publicEndpoint,
+		RateLimit:   publicStaticRateLimit,
+		Handler:     router.Handler.WebfingerHandler,
+	}
+
+	// unversioned because .well-known
+	return router.AddUnversionedHandlerRoute(config)
+}
+
+// registerAcmeSolverHandler registers the acme solver handler and route
+func registerAcmeSolverHandler(router *Router) error {
+	config := Config{
+		Path:        "/.well-known/acme-challenge/:path",
+		Method:      http.MethodGet,
+		Name:        "AcmeSolver",
+		Description: "ACME challenge solver for Let's Encrypt certificate validation",
+		Tags:        []string{"acme", "certificates"},
+		OperationID: "AcmeSolver",
+		Security:    handlers.PublicSecurity,
+		Middlewares: *unauthenticatedEndpoint, // leaves off the additional middleware(including csrf)
+		RateLimit:   publicStaticRateLimit,
+		Handler:     router.Handler.ACMESolverHandler,
+	}
+
+	return router.AddUnversionedHandlerRoute(config)
+}
+
+// registerMSFTIdentityWellKnownHandler serves up the msft identity well-known endpoint
+// in order to register an application with your domain in Azure, you must host a well-known file at
+// https://<domain>/.well-known/microsoft-identity-association.json
+func registerMSFTIdentityWellKnownHandler(router *Router) (err error) {
+	config := Config{
+		Path:        "/.well-known/microsoft-identity-association.json",
+		Method:      http.MethodGet,
+		Name:        "MSFTIdentityWellKnown",
+		Description: "Microsoft Identity Association well-known configuration file",
+		Tags:        []string{"well-known", "msft", "azure"},
+		OperationID: "MSFTIdentityWellKnown",
+		Security:    handlers.PublicSecurity,
+		Middlewares: *publicEndpoint,
+		RateLimit:   publicStaticRateLimit,
+		Handler:     router.Handler.MSFTIdentityWellKnownHandler,
 	}
 
 	return router.AddUnversionedHandlerRoute(config)

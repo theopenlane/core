@@ -16,6 +16,10 @@ func SetWorkflowInstanceObjectID(builder *WorkflowInstanceCreate, objectType enu
 	switch objectType {
 	case enums.WorkflowObjectTypeActionPlan:
 		return builder.SetActionPlanID(objectID)
+	case enums.WorkflowObjectTypeAssessment:
+		return builder.SetAssessmentID(objectID)
+	case enums.WorkflowObjectTypeAssessmentResponse:
+		return builder.SetAssessmentResponseID(objectID)
 	case enums.WorkflowObjectTypeCampaign:
 		return builder.SetCampaignID(objectID)
 	case enums.WorkflowObjectTypeCampaignTarget:
@@ -24,6 +28,8 @@ func SetWorkflowInstanceObjectID(builder *WorkflowInstanceCreate, objectType enu
 		return builder.SetControlID(objectID)
 	case enums.WorkflowObjectTypeEvidence:
 		return builder.SetEvidenceID(objectID)
+	case enums.WorkflowObjectTypeFinding:
+		return builder.SetFindingID(objectID)
 	case enums.WorkflowObjectTypeIdentityHolder:
 		return builder.SetIdentityHolderID(objectID)
 	case enums.WorkflowObjectTypeInternalPolicy:
@@ -32,8 +38,16 @@ func SetWorkflowInstanceObjectID(builder *WorkflowInstanceCreate, objectType enu
 		return builder.SetPlatformID(objectID)
 	case enums.WorkflowObjectTypeProcedure:
 		return builder.SetProcedureID(objectID)
+	case enums.WorkflowObjectTypeRemediation:
+		return builder.SetRemediationID(objectID)
+	case enums.WorkflowObjectTypeRisk:
+		return builder.SetRiskID(objectID)
 	case enums.WorkflowObjectTypeSubcontrol:
 		return builder.SetSubcontrolID(objectID)
+	case enums.WorkflowObjectTypeTask:
+		return builder.SetTaskID(objectID)
+	case enums.WorkflowObjectTypeVulnerability:
+		return builder.SetVulnerabilityID(objectID)
 	default:
 		return builder
 	}
@@ -44,6 +58,10 @@ func SetWorkflowObjectRefObjectID(builder *WorkflowObjectRefCreate, objectType e
 	switch objectType {
 	case enums.WorkflowObjectTypeActionPlan:
 		return builder.SetActionPlanID(objectID)
+	case enums.WorkflowObjectTypeAssessment:
+		return builder.SetAssessmentID(objectID)
+	case enums.WorkflowObjectTypeAssessmentResponse:
+		return builder.SetAssessmentResponseID(objectID)
 	case enums.WorkflowObjectTypeCampaign:
 		return builder.SetCampaignID(objectID)
 	case enums.WorkflowObjectTypeCampaignTarget:
@@ -52,6 +70,8 @@ func SetWorkflowObjectRefObjectID(builder *WorkflowObjectRefCreate, objectType e
 		return builder.SetControlID(objectID)
 	case enums.WorkflowObjectTypeEvidence:
 		return builder.SetEvidenceID(objectID)
+	case enums.WorkflowObjectTypeFinding:
+		return builder.SetFindingID(objectID)
 	case enums.WorkflowObjectTypeIdentityHolder:
 		return builder.SetIdentityHolderID(objectID)
 	case enums.WorkflowObjectTypeInternalPolicy:
@@ -60,8 +80,16 @@ func SetWorkflowObjectRefObjectID(builder *WorkflowObjectRefCreate, objectType e
 		return builder.SetPlatformID(objectID)
 	case enums.WorkflowObjectTypeProcedure:
 		return builder.SetProcedureID(objectID)
+	case enums.WorkflowObjectTypeRemediation:
+		return builder.SetRemediationID(objectID)
+	case enums.WorkflowObjectTypeRisk:
+		return builder.SetRiskID(objectID)
 	case enums.WorkflowObjectTypeSubcontrol:
 		return builder.SetSubcontrolID(objectID)
+	case enums.WorkflowObjectTypeTask:
+		return builder.SetTaskID(objectID)
+	case enums.WorkflowObjectTypeVulnerability:
+		return builder.SetVulnerabilityID(objectID)
 	default:
 		return builder
 	}
@@ -72,6 +100,10 @@ func ApplyWorkflowInstanceObjectPredicate(query *WorkflowInstanceQuery, objectTy
 	switch objectType {
 	case enums.WorkflowObjectTypeActionPlan:
 		return query.Where(workflowinstance.ActionPlanIDEQ(objectID))
+	case enums.WorkflowObjectTypeAssessment:
+		return query.Where(workflowinstance.AssessmentIDEQ(objectID))
+	case enums.WorkflowObjectTypeAssessmentResponse:
+		return query.Where(workflowinstance.AssessmentResponseIDEQ(objectID))
 	case enums.WorkflowObjectTypeCampaign:
 		return query.Where(workflowinstance.CampaignIDEQ(objectID))
 	case enums.WorkflowObjectTypeCampaignTarget:
@@ -80,6 +112,8 @@ func ApplyWorkflowInstanceObjectPredicate(query *WorkflowInstanceQuery, objectTy
 		return query.Where(workflowinstance.ControlIDEQ(objectID))
 	case enums.WorkflowObjectTypeEvidence:
 		return query.Where(workflowinstance.EvidenceIDEQ(objectID))
+	case enums.WorkflowObjectTypeFinding:
+		return query.Where(workflowinstance.FindingIDEQ(objectID))
 	case enums.WorkflowObjectTypeIdentityHolder:
 		return query.Where(workflowinstance.IdentityHolderIDEQ(objectID))
 	case enums.WorkflowObjectTypeInternalPolicy:
@@ -88,8 +122,16 @@ func ApplyWorkflowInstanceObjectPredicate(query *WorkflowInstanceQuery, objectTy
 		return query.Where(workflowinstance.PlatformIDEQ(objectID))
 	case enums.WorkflowObjectTypeProcedure:
 		return query.Where(workflowinstance.ProcedureIDEQ(objectID))
+	case enums.WorkflowObjectTypeRemediation:
+		return query.Where(workflowinstance.RemediationIDEQ(objectID))
+	case enums.WorkflowObjectTypeRisk:
+		return query.Where(workflowinstance.RiskIDEQ(objectID))
 	case enums.WorkflowObjectTypeSubcontrol:
 		return query.Where(workflowinstance.SubcontrolIDEQ(objectID))
+	case enums.WorkflowObjectTypeTask:
+		return query.Where(workflowinstance.TaskIDEQ(objectID))
+	case enums.WorkflowObjectTypeVulnerability:
+		return query.Where(workflowinstance.VulnerabilityIDEQ(objectID))
 	default:
 		return query
 	}
@@ -100,6 +142,10 @@ func ApplyWorkflowObjectRefObjectPredicate(query *WorkflowObjectRefQuery, object
 	switch objectType {
 	case enums.WorkflowObjectTypeActionPlan:
 		return query.Where(workflowobjectref.ActionPlanIDEQ(objectID))
+	case enums.WorkflowObjectTypeAssessment:
+		return query.Where(workflowobjectref.AssessmentIDEQ(objectID))
+	case enums.WorkflowObjectTypeAssessmentResponse:
+		return query.Where(workflowobjectref.AssessmentResponseIDEQ(objectID))
 	case enums.WorkflowObjectTypeCampaign:
 		return query.Where(workflowobjectref.CampaignIDEQ(objectID))
 	case enums.WorkflowObjectTypeCampaignTarget:
@@ -108,6 +154,8 @@ func ApplyWorkflowObjectRefObjectPredicate(query *WorkflowObjectRefQuery, object
 		return query.Where(workflowobjectref.ControlIDEQ(objectID))
 	case enums.WorkflowObjectTypeEvidence:
 		return query.Where(workflowobjectref.EvidenceIDEQ(objectID))
+	case enums.WorkflowObjectTypeFinding:
+		return query.Where(workflowobjectref.FindingIDEQ(objectID))
 	case enums.WorkflowObjectTypeIdentityHolder:
 		return query.Where(workflowobjectref.IdentityHolderIDEQ(objectID))
 	case enums.WorkflowObjectTypeInternalPolicy:
@@ -116,8 +164,16 @@ func ApplyWorkflowObjectRefObjectPredicate(query *WorkflowObjectRefQuery, object
 		return query.Where(workflowobjectref.PlatformIDEQ(objectID))
 	case enums.WorkflowObjectTypeProcedure:
 		return query.Where(workflowobjectref.ProcedureIDEQ(objectID))
+	case enums.WorkflowObjectTypeRemediation:
+		return query.Where(workflowobjectref.RemediationIDEQ(objectID))
+	case enums.WorkflowObjectTypeRisk:
+		return query.Where(workflowobjectref.RiskIDEQ(objectID))
 	case enums.WorkflowObjectTypeSubcontrol:
 		return query.Where(workflowobjectref.SubcontrolIDEQ(objectID))
+	case enums.WorkflowObjectTypeTask:
+		return query.Where(workflowobjectref.TaskIDEQ(objectID))
+	case enums.WorkflowObjectTypeVulnerability:
+		return query.Where(workflowobjectref.VulnerabilityIDEQ(objectID))
 	default:
 		return query
 	}
@@ -128,6 +184,18 @@ func GetObjectOwnerID(ctx context.Context, client *Client, objectType enums.Work
 	switch objectType {
 	case enums.WorkflowObjectTypeActionPlan:
 		rec, err := client.ActionPlan.Get(ctx, objectID)
+		if err != nil {
+			return "", err
+		}
+		return rec.OwnerID, nil
+	case enums.WorkflowObjectTypeAssessment:
+		rec, err := client.Assessment.Get(ctx, objectID)
+		if err != nil {
+			return "", err
+		}
+		return rec.OwnerID, nil
+	case enums.WorkflowObjectTypeAssessmentResponse:
+		rec, err := client.AssessmentResponse.Get(ctx, objectID)
 		if err != nil {
 			return "", err
 		}
@@ -156,6 +224,12 @@ func GetObjectOwnerID(ctx context.Context, client *Client, objectType enums.Work
 			return "", err
 		}
 		return rec.OwnerID, nil
+	case enums.WorkflowObjectTypeFinding:
+		rec, err := client.Finding.Get(ctx, objectID)
+		if err != nil {
+			return "", err
+		}
+		return rec.OwnerID, nil
 	case enums.WorkflowObjectTypeIdentityHolder:
 		rec, err := client.IdentityHolder.Get(ctx, objectID)
 		if err != nil {
@@ -180,8 +254,32 @@ func GetObjectOwnerID(ctx context.Context, client *Client, objectType enums.Work
 			return "", err
 		}
 		return rec.OwnerID, nil
+	case enums.WorkflowObjectTypeRemediation:
+		rec, err := client.Remediation.Get(ctx, objectID)
+		if err != nil {
+			return "", err
+		}
+		return rec.OwnerID, nil
+	case enums.WorkflowObjectTypeRisk:
+		rec, err := client.Risk.Get(ctx, objectID)
+		if err != nil {
+			return "", err
+		}
+		return rec.OwnerID, nil
 	case enums.WorkflowObjectTypeSubcontrol:
 		rec, err := client.Subcontrol.Get(ctx, objectID)
+		if err != nil {
+			return "", err
+		}
+		return rec.OwnerID, nil
+	case enums.WorkflowObjectTypeTask:
+		rec, err := client.Task.Get(ctx, objectID)
+		if err != nil {
+			return "", err
+		}
+		return rec.OwnerID, nil
+	case enums.WorkflowObjectTypeVulnerability:
+		rec, err := client.Vulnerability.Get(ctx, objectID)
 		if err != nil {
 			return "", err
 		}
@@ -196,6 +294,10 @@ func ApplyObjectFieldUpdates(ctx context.Context, client *Client, objectType enu
 	switch objectType {
 	case enums.WorkflowObjectTypeActionPlan:
 		return client.ActionPlan.ApplyFieldUpdates(ctx, objectID, updates)
+	case enums.WorkflowObjectTypeAssessment:
+		return client.Assessment.ApplyFieldUpdates(ctx, objectID, updates)
+	case enums.WorkflowObjectTypeAssessmentResponse:
+		return client.AssessmentResponse.ApplyFieldUpdates(ctx, objectID, updates)
 	case enums.WorkflowObjectTypeCampaign:
 		return client.Campaign.ApplyFieldUpdates(ctx, objectID, updates)
 	case enums.WorkflowObjectTypeCampaignTarget:
@@ -204,6 +306,8 @@ func ApplyObjectFieldUpdates(ctx context.Context, client *Client, objectType enu
 		return client.Control.ApplyFieldUpdates(ctx, objectID, updates)
 	case enums.WorkflowObjectTypeEvidence:
 		return client.Evidence.ApplyFieldUpdates(ctx, objectID, updates)
+	case enums.WorkflowObjectTypeFinding:
+		return client.Finding.ApplyFieldUpdates(ctx, objectID, updates)
 	case enums.WorkflowObjectTypeIdentityHolder:
 		return client.IdentityHolder.ApplyFieldUpdates(ctx, objectID, updates)
 	case enums.WorkflowObjectTypeInternalPolicy:
@@ -212,8 +316,16 @@ func ApplyObjectFieldUpdates(ctx context.Context, client *Client, objectType enu
 		return client.Platform.ApplyFieldUpdates(ctx, objectID, updates)
 	case enums.WorkflowObjectTypeProcedure:
 		return client.Procedure.ApplyFieldUpdates(ctx, objectID, updates)
+	case enums.WorkflowObjectTypeRemediation:
+		return client.Remediation.ApplyFieldUpdates(ctx, objectID, updates)
+	case enums.WorkflowObjectTypeRisk:
+		return client.Risk.ApplyFieldUpdates(ctx, objectID, updates)
 	case enums.WorkflowObjectTypeSubcontrol:
 		return client.Subcontrol.ApplyFieldUpdates(ctx, objectID, updates)
+	case enums.WorkflowObjectTypeTask:
+		return client.Task.ApplyFieldUpdates(ctx, objectID, updates)
+	case enums.WorkflowObjectTypeVulnerability:
+		return client.Vulnerability.ApplyFieldUpdates(ctx, objectID, updates)
 	default:
 		return nil
 	}

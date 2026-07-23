@@ -22,6 +22,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/vendorriskscore"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/pkg/logx"
@@ -30,20 +31,22 @@ import (
 // AssessmentResponseQuery is the builder for querying AssessmentResponse entities.
 type AssessmentResponseQuery struct {
 	config
-	ctx                       *QueryContext
-	order                     []assessmentresponse.OrderOption
-	inters                    []Interceptor
-	predicates                []predicate.AssessmentResponse
-	withOwner                 *OrganizationQuery
-	withAssessment            *AssessmentQuery
-	withCampaign              *CampaignQuery
-	withIdentityHolder        *IdentityHolderQuery
-	withEntity                *EntityQuery
-	withDocument              *DocumentDataQuery
-	withVendorRiskScores      *VendorRiskScoreQuery
-	loadTotal                 []func(context.Context, []*AssessmentResponse) error
-	modifiers                 []func(*sql.Selector)
-	withNamedVendorRiskScores map[string]*VendorRiskScoreQuery
+	ctx                         *QueryContext
+	order                       []assessmentresponse.OrderOption
+	inters                      []Interceptor
+	predicates                  []predicate.AssessmentResponse
+	withOwner                   *OrganizationQuery
+	withAssessment              *AssessmentQuery
+	withCampaign                *CampaignQuery
+	withIdentityHolder          *IdentityHolderQuery
+	withEntity                  *EntityQuery
+	withDocument                *DocumentDataQuery
+	withVendorRiskScores        *VendorRiskScoreQuery
+	withWorkflowObjectRefs      *WorkflowObjectRefQuery
+	loadTotal                   []func(context.Context, []*AssessmentResponse) error
+	modifiers                   []func(*sql.Selector)
+	withNamedVendorRiskScores   map[string]*VendorRiskScoreQuery
+	withNamedWorkflowObjectRefs map[string]*WorkflowObjectRefQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -255,6 +258,31 @@ func (_q *AssessmentResponseQuery) QueryVendorRiskScores() *VendorRiskScoreQuery
 	return query
 }
 
+// QueryWorkflowObjectRefs chains the current query on the "workflow_object_refs" edge.
+func (_q *AssessmentResponseQuery) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
+	query := (&WorkflowObjectRefClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessmentresponse.Table, assessmentresponse.FieldID, selector),
+			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, assessmentresponse.WorkflowObjectRefsTable, assessmentresponse.WorkflowObjectRefsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first AssessmentResponse entity from the query.
 // Returns a *NotFoundError when no AssessmentResponse was found.
 func (_q *AssessmentResponseQuery) First(ctx context.Context) (*AssessmentResponse, error) {
@@ -442,18 +470,19 @@ func (_q *AssessmentResponseQuery) Clone() *AssessmentResponseQuery {
 		return nil
 	}
 	return &AssessmentResponseQuery{
-		config:               _q.config,
-		ctx:                  _q.ctx.Clone(),
-		order:                append([]assessmentresponse.OrderOption{}, _q.order...),
-		inters:               append([]Interceptor{}, _q.inters...),
-		predicates:           append([]predicate.AssessmentResponse{}, _q.predicates...),
-		withOwner:            _q.withOwner.Clone(),
-		withAssessment:       _q.withAssessment.Clone(),
-		withCampaign:         _q.withCampaign.Clone(),
-		withIdentityHolder:   _q.withIdentityHolder.Clone(),
-		withEntity:           _q.withEntity.Clone(),
-		withDocument:         _q.withDocument.Clone(),
-		withVendorRiskScores: _q.withVendorRiskScores.Clone(),
+		config:                 _q.config,
+		ctx:                    _q.ctx.Clone(),
+		order:                  append([]assessmentresponse.OrderOption{}, _q.order...),
+		inters:                 append([]Interceptor{}, _q.inters...),
+		predicates:             append([]predicate.AssessmentResponse{}, _q.predicates...),
+		withOwner:              _q.withOwner.Clone(),
+		withAssessment:         _q.withAssessment.Clone(),
+		withCampaign:           _q.withCampaign.Clone(),
+		withIdentityHolder:     _q.withIdentityHolder.Clone(),
+		withEntity:             _q.withEntity.Clone(),
+		withDocument:           _q.withDocument.Clone(),
+		withVendorRiskScores:   _q.withVendorRiskScores.Clone(),
+		withWorkflowObjectRefs: _q.withWorkflowObjectRefs.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -535,6 +564,17 @@ func (_q *AssessmentResponseQuery) WithVendorRiskScores(opts ...func(*VendorRisk
 		opt(query)
 	}
 	_q.withVendorRiskScores = query
+	return _q
+}
+
+// WithWorkflowObjectRefs tells the query-builder to eager-load the nodes that are connected to
+// the "workflow_object_refs" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssessmentResponseQuery) WithWorkflowObjectRefs(opts ...func(*WorkflowObjectRefQuery)) *AssessmentResponseQuery {
+	query := (&WorkflowObjectRefClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withWorkflowObjectRefs = query
 	return _q
 }
 
@@ -622,7 +662,7 @@ func (_q *AssessmentResponseQuery) sqlAll(ctx context.Context, hooks ...queryHoo
 	var (
 		nodes       = []*AssessmentResponse{}
 		_spec       = _q.querySpec()
-		loadedTypes = [7]bool{
+		loadedTypes = [8]bool{
 			_q.withOwner != nil,
 			_q.withAssessment != nil,
 			_q.withCampaign != nil,
@@ -630,6 +670,7 @@ func (_q *AssessmentResponseQuery) sqlAll(ctx context.Context, hooks ...queryHoo
 			_q.withEntity != nil,
 			_q.withDocument != nil,
 			_q.withVendorRiskScores != nil,
+			_q.withWorkflowObjectRefs != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -700,10 +741,26 @@ func (_q *AssessmentResponseQuery) sqlAll(ctx context.Context, hooks ...queryHoo
 			return nil, err
 		}
 	}
+	if query := _q.withWorkflowObjectRefs; query != nil {
+		if err := _q.loadWorkflowObjectRefs(ctx, query, nodes,
+			func(n *AssessmentResponse) { n.Edges.WorkflowObjectRefs = []*WorkflowObjectRef{} },
+			func(n *AssessmentResponse, e *WorkflowObjectRef) {
+				n.Edges.WorkflowObjectRefs = append(n.Edges.WorkflowObjectRefs, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedVendorRiskScores {
 		if err := _q.loadVendorRiskScores(ctx, query, nodes,
 			func(n *AssessmentResponse) { n.appendNamedVendorRiskScores(name) },
 			func(n *AssessmentResponse, e *VendorRiskScore) { n.appendNamedVendorRiskScores(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedWorkflowObjectRefs {
+		if err := _q.loadWorkflowObjectRefs(ctx, query, nodes,
+			func(n *AssessmentResponse) { n.appendNamedWorkflowObjectRefs(name) },
+			func(n *AssessmentResponse, e *WorkflowObjectRef) { n.appendNamedWorkflowObjectRefs(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -920,6 +977,37 @@ func (_q *AssessmentResponseQuery) loadVendorRiskScores(ctx context.Context, que
 	}
 	return nil
 }
+func (_q *AssessmentResponseQuery) loadWorkflowObjectRefs(ctx context.Context, query *WorkflowObjectRefQuery, nodes []*AssessmentResponse, init func(*AssessmentResponse), assign func(*AssessmentResponse, *WorkflowObjectRef)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*AssessmentResponse)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(workflowobjectref.FieldAssessmentResponseID)
+	}
+	query.Where(predicate.WorkflowObjectRef(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(assessmentresponse.WorkflowObjectRefsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.AssessmentResponseID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "assessment_response_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 
 func (_q *AssessmentResponseQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -1048,6 +1136,20 @@ func (_q *AssessmentResponseQuery) WithNamedVendorRiskScores(name string, opts .
 		_q.withNamedVendorRiskScores = make(map[string]*VendorRiskScoreQuery)
 	}
 	_q.withNamedVendorRiskScores[name] = query
+	return _q
+}
+
+// WithNamedWorkflowObjectRefs tells the query-builder to eager-load the nodes that are connected to the "workflow_object_refs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssessmentResponseQuery) WithNamedWorkflowObjectRefs(name string, opts ...func(*WorkflowObjectRefQuery)) *AssessmentResponseQuery {
+	query := (&WorkflowObjectRefClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedWorkflowObjectRefs == nil {
+		_q.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery)
+	}
+	_q.withNamedWorkflowObjectRefs[name] = query
 	return _q
 }
 

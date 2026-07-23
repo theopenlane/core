@@ -210,3 +210,29 @@ tasks:
     cmds:
       - task: authentik
       - task: authentik:open
+
+  keycloak:
+    dir: ..
+    desc: brings up the compose environment for keycloak
+    cmds:
+      - "docker compose -f ./docker/docker-compose-pg.yml -f ./docker/docker-compose-keycloak.yml up -d"
+
+  keycloak:down:
+    dir: ..
+    desc: brings the keycloak compose environment down
+    cmds:
+      - "docker compose -f ./docker/docker-compose-pg.yml -f ./docker/docker-compose-keycloak.yml down"
+
+  keycloak:open:
+    dir: ..
+    desc: opens the keycloak admin console in a browser
+    cmds:
+      - 'open "http://localhost:8180"'
+
+  keycloak:up:
+    dir: ..
+    desc: brings the keycloak compose environment up and opens the admin console
+    aliases: [keycloakup]
+    cmds:
+      - task: keycloak
+      - task: keycloak:open

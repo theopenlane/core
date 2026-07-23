@@ -37,6 +37,7 @@ mutation CreateBulkCSVRemediation ($input: Upload!) {
 			updatedAt
 			updatedBy
 			updatedByImpersonator
+			workflowEligibleMarker
 		}
 	}
 }
@@ -79,6 +80,7 @@ mutation CreateBulkRemediation ($input: [CreateRemediationInput!]) {
 			updatedAt
 			updatedBy
 			updatedByImpersonator
+			workflowEligibleMarker
 		}
 	}
 }
@@ -121,6 +123,7 @@ mutation CreateRemediation ($input: CreateRemediationInput!) {
 			updatedAt
 			updatedBy
 			updatedByImpersonator
+			workflowEligibleMarker
 		}
 	}
 }
@@ -212,6 +215,7 @@ query GetRemediationByID ($remediationId: ID!) {
 		updatedAt
 		updatedBy
 		updatedByImpersonator
+		workflowEligibleMarker
 	}
 }
 query GetRemediations ($first: Int, $last: Int, $where: RemediationWhereInput) {
@@ -293,6 +297,7 @@ mutation UpdateBulkCSVRemediation ($input: Upload!) {
 			updatedAt
 			updatedBy
 			updatedByImpersonator
+			workflowEligibleMarker
 		}
 		updatedIDs
 	}
@@ -336,6 +341,7 @@ mutation UpdateBulkRemediation ($ids: [ID!]!, $input: UpdateRemediationInput!) {
 			updatedAt
 			updatedBy
 			updatedByImpersonator
+			workflowEligibleMarker
 		}
 		updatedIDs
 	}
@@ -379,6 +385,7 @@ mutation UpdateRemediation ($updateRemediationId: ID!, $input: UpdateRemediation
 			updatedAt
 			updatedBy
 			updatedByImpersonator
+			workflowEligibleMarker
 		}
 	}
 }

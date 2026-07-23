@@ -23,7 +23,7 @@ type Reply struct {
 	Success bool
 }
 
-type SSOStatusReply struct {
+type SSOStatusResponse struct {
 	Reply          Reply
 	Enforced       bool
 	OrganizationID string
@@ -47,8 +47,8 @@ func (db *MockDB) GetUserDefaultOrgID(userID string) (string, error) {
 	return "", errors.New("org not found")
 }
 
-func (db *MockDB) FetchSSOStatus(orgID, userID string) (SSOStatusReply, error) {
-	return SSOStatusReply{
+func (db *MockDB) FetchSSOStatus(orgID, userID string) (SSOStatusResponse, error) {
+	return SSOStatusResponse{
 		Reply:          Reply{Success: true},
 		Enforced:       true,
 		OrganizationID: orgID,

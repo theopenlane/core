@@ -306,6 +306,26 @@ func (_u *RiskHistoryUpdate) ClearScopeID() *RiskHistoryUpdate {
 	return _u
 }
 
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_u *RiskHistoryUpdate) SetWorkflowEligibleMarker(v bool) *RiskHistoryUpdate {
+	_u.mutation.SetWorkflowEligibleMarker(v)
+	return _u
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_u *RiskHistoryUpdate) SetNillableWorkflowEligibleMarker(v *bool) *RiskHistoryUpdate {
+	if v != nil {
+		_u.SetWorkflowEligibleMarker(*v)
+	}
+	return _u
+}
+
+// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
+func (_u *RiskHistoryUpdate) ClearWorkflowEligibleMarker() *RiskHistoryUpdate {
+	_u.mutation.ClearWorkflowEligibleMarker()
+	return _u
+}
+
 // SetExternalID sets the "external_id" field.
 func (_u *RiskHistoryUpdate) SetExternalID(v string) *RiskHistoryUpdate {
 	_u.mutation.SetExternalID(v)
@@ -1004,6 +1024,12 @@ func (_u *RiskHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if _u.mutation.ScopeIDCleared() {
 		_spec.ClearField(riskhistory.FieldScopeID, field.TypeString)
 	}
+	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(riskhistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
+	}
+	if _u.mutation.WorkflowEligibleMarkerCleared() {
+		_spec.ClearField(riskhistory.FieldWorkflowEligibleMarker, field.TypeBool)
+	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(riskhistory.FieldExternalID, field.TypeString, value)
 	}
@@ -1463,6 +1489,26 @@ func (_u *RiskHistoryUpdateOne) SetNillableScopeID(v *string) *RiskHistoryUpdate
 // ClearScopeID clears the value of the "scope_id" field.
 func (_u *RiskHistoryUpdateOne) ClearScopeID() *RiskHistoryUpdateOne {
 	_u.mutation.ClearScopeID()
+	return _u
+}
+
+// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
+func (_u *RiskHistoryUpdateOne) SetWorkflowEligibleMarker(v bool) *RiskHistoryUpdateOne {
+	_u.mutation.SetWorkflowEligibleMarker(v)
+	return _u
+}
+
+// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
+func (_u *RiskHistoryUpdateOne) SetNillableWorkflowEligibleMarker(v *bool) *RiskHistoryUpdateOne {
+	if v != nil {
+		_u.SetWorkflowEligibleMarker(*v)
+	}
+	return _u
+}
+
+// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
+func (_u *RiskHistoryUpdateOne) ClearWorkflowEligibleMarker() *RiskHistoryUpdateOne {
+	_u.mutation.ClearWorkflowEligibleMarker()
 	return _u
 }
 
@@ -2193,6 +2239,12 @@ func (_u *RiskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *RiskHistory
 	}
 	if _u.mutation.ScopeIDCleared() {
 		_spec.ClearField(riskhistory.FieldScopeID, field.TypeString)
+	}
+	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
+		_spec.SetField(riskhistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
+	}
+	if _u.mutation.WorkflowEligibleMarkerCleared() {
+		_spec.ClearField(riskhistory.FieldWorkflowEligibleMarker, field.TypeBool)
 	}
 	if value, ok := _u.mutation.ExternalID(); ok {
 		_spec.SetField(riskhistory.FieldExternalID, field.TypeString, value)

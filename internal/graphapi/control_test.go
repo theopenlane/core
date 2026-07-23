@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	controlgen "github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/internal/testutils"
@@ -1028,6 +1029,81 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: subcontrolIDs}).MustDelete(sharedSystemAdminUser.UserCtx, t)
 	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: subcontrolID2s}).MustDelete(sharedSystemAdminUser.UserCtx, t)
 	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+}
+
+func TestMutationCreateControlsByCloneOpenlaneControls(t *testing.T) {
+
+	standard := (&StandardBuilder{
+		client:    suite.client,
+		Name:      "Openlane Baseline",
+		Framework: "openlane-standard",
+		IsPublic:  true,
+	}).MustNew(sharedSystemAdminUser.UserCtx, t)
+
+	ctrl := (&ControlBuilder{
+		client:     suite.client,
+		StandardID: standard.ID,
+		RefCode:    "OL-" + ulids.New().String(),
+		AllFields:  true,
+	}).MustNew(sharedSystemAdminUser.UserCtx, t)
+
+	// link a subcontrol
+	systemSubcontrol := (&SubcontrolBuilder{
+		client:    suite.client,
+		ControlID: ctrl.ID,
+		Name:      ctrl.RefCode + "-1",
+	}).MustNew(sharedSystemAdminUser.UserCtx, t)
+
+	resp, err := suite.client.api.CreateControlsByClone(sharedTestUser1.UserCtx, testclient.CloneControlInput{
+		StandardID: &standard.ID,
+	})
+	assert.NilError(t, err)
+	assert.Check(t, resp != nil)
+	assert.Check(t, is.Len(resp.CreateControlsByClone.Controls, 1))
+
+	clonedControlID := resp.CreateControlsByClone.Controls[0].ID
+
+	dbCtx := setContext(sharedTestUser1.UserCtx, suite.client.db)
+
+	control, err := suite.client.db.Control.Query().
+		Where(controlgen.ID(clonedControlID)).
+		WithSubcontrols().
+		Only(dbCtx)
+	assert.NilError(t, err)
+
+	assert.Check(t, is.Equal(ctrl.RefCode, control.RefCode))
+	assert.Check(t, is.Equal("", control.StandardID))
+	assert.Check(t, control.ReferenceFramework == nil)
+	assert.Check(t, control.ReferenceFrameworkRevision == nil)
+	assert.Check(t, is.Equal(enums.ControlStatusDraft, control.Status))
+	assert.Check(t, is.Equal(enums.ControlSourceTemplate, control.Source))
+	assert.Check(t, control.SourceName != nil)
+	assert.Check(t, is.Equal(standard.Name, *control.SourceName))
+	assert.Check(t, is.Len(control.Edges.Subcontrols, 1))
+
+	subcontrol := control.Edges.Subcontrols[0]
+	assert.Check(t, is.Equal(enums.ControlStatusDraft, subcontrol.Status))
+	assert.Check(t, is.Equal(enums.ControlSourceTemplate, subcontrol.Source))
+	assert.Check(t, subcontrol.SourceName != nil)
+	assert.Check(t, is.Equal(standard.Name, *subcontrol.SourceName))
+	assert.Check(t, subcontrol.ReferenceFramework == nil)
+	assert.Check(t, subcontrol.ReferenceFrameworkRevision == nil)
+
+	resp, err = suite.client.api.CreateControlsByClone(sharedTestUser1.UserCtx, testclient.CloneControlInput{
+		StandardID: &standard.ID,
+	})
+	assert.NilError(t, err)
+	assert.Check(t, resp != nil)
+	assert.Check(t, is.Len(resp.CreateControlsByClone.Controls, 1))
+	assert.Check(t, is.Equal(clonedControlID, resp.CreateControlsByClone.Controls[0].ID))
+
+	// subcontrols do not cascade with control deletion; remove them explicitly so
+	// they don't linger as orphans visible to later subcontrol queries
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, ID: subcontrol.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, ID: systemSubcontrol.ID}).MustDelete(sharedSystemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: clonedControlID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: ctrl.ID}).MustDelete(sharedSystemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, ID: standard.ID}).MustDelete(sharedSystemAdminUser.UserCtx, t)
 }
 
 func TestMutationCreateControlsByCloneCSV(t *testing.T) {

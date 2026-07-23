@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/golang-jwt/jwt/v5"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/utils/ulids"
@@ -29,9 +28,7 @@ func (suite *HandlerTestSuite) TestVerifyHandler() {
 	t := suite.T()
 
 	// add handler
-	// Create operation for VerifyEmail
-	operation := suite.createImpersonationOperation("VerifyEmail", "Verify email address")
-	suite.registerTestHandler("GET", "verify", operation, suite.h.VerifyEmail)
+	suite.registerTestHandler("GET", "verify", suite.h.VerifyEmail)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 
@@ -57,12 +54,12 @@ func (suite *HandlerTestSuite) TestVerifyHandler() {
 			expectedSubject: "Welcome to",
 		},
 		{
-			name:            "happy path, already confirmed user",
+			name:            "already confirmed user is rejected as single-use",
 			userConfirmed:   true,
 			email:           "sitb@theopenlane.io",
 			tokenSet:        true,
-			expectedMessage: "success",
-			expectedStatus:  http.StatusOK,
+			expectedMessage: "already been verified",
+			expectedStatus:  http.StatusBadRequest,
 		},
 		{
 			name:            "missing token",
@@ -156,7 +153,7 @@ func (suite *HandlerTestSuite) TestVerifyHandler() {
 
 			assert.Equal(t, tc.expectedStatus, recorder.Code)
 
-			var out *models.VerifyReply
+			var out *models.VerifyResponse
 
 			// parse request body
 			if err := json.NewDecoder(res.Body).Decode(&out); err != nil {
@@ -166,23 +163,12 @@ func (suite *HandlerTestSuite) TestVerifyHandler() {
 			if tc.expectedStatus >= http.StatusOK && tc.expectedStatus <= http.StatusCreated {
 				assert.Contains(t, out.Message, tc.expectedMessage)
 
-				if tc.userConfirmed {
-					// check the claims to ensure the the claims are set correctly
-					token, _, err := new(jwt.Parser).ParseUnverified(out.AccessToken, jwt.MapClaims{})
-					require.NoError(t, err)
+				suite.WaitForEvents()
 
-					claims, ok := token.Claims.(jwt.MapClaims)
-					require.True(t, ok)
-
-					assert.NotEmpty(t, claims["org"])
-				} else {
-					suite.WaitForEvents()
-
-					msgs := suite.mockEmailSender().Messages()
-					require.NotEmpty(t, msgs)
-					assert.Contains(t, msgs[0].Subject, tc.expectedSubject)
-					assert.Equal(t, []string{tc.email}, msgs[0].To)
-				}
+				msgs := suite.mockEmailSender().Messages()
+				require.NotEmpty(t, msgs)
+				assert.Contains(t, msgs[0].Subject, tc.expectedSubject)
+				assert.Equal(t, []string{tc.email}, msgs[0].To)
 			} else {
 				assert.Contains(t, out.Error, tc.expectedMessage)
 			}
@@ -193,8 +179,7 @@ func (suite *HandlerTestSuite) TestVerifyHandler() {
 func (suite *HandlerTestSuite) TestVerifyHandler_AutoJoinMarksPendingInvitesAsAccepted() {
 	t := suite.T()
 
-	operation := suite.createImpersonationOperation("VerifyEmail", "Verify email address")
-	suite.registerTestHandler("GET", "verify", operation, suite.h.VerifyEmail)
+	suite.registerTestHandler("GET", "verify", suite.h.VerifyEmail)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 	ctx := privacy.DecisionContext(ec, privacy.Allow)

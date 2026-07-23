@@ -15,9 +15,7 @@ import (
 func (suite *HandlerTestSuite) TestUserInfoHandler() {
 	t := suite.T()
 
-	// Create operation for UserInfo
-	operation := suite.createImpersonationOperation("UserInfo", "Get user information")
-	suite.registerTestHandler("GET", "oauth/userinfo", operation, suite.h.UserInfo)
+	suite.registerTestHandler("GET", "oauth/userinfo", suite.h.UserInfo)
 
 	tests := []struct {
 		name    string

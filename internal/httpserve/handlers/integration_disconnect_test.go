@@ -7,7 +7,6 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/stretchr/testify/assert"
 
 	"github.com/theopenlane/echox/middleware/echocontext"
@@ -23,9 +22,7 @@ const disconnectTestDefinitionID = "def_01K0TESTDISC0000000000001"
 func (suite *HandlerTestSuite) TestDisconnectIntegrationSuccess() {
 	t := suite.T()
 
-	op := openapi3.NewOperation()
-	op.OperationID = "DisconnectIntegration"
-	suite.registerRouteOnce(http.MethodDelete, "/v1/integrations/:integrationID", op, suite.h.DisconnectIntegration)
+	suite.registerRouteOnce(http.MethodDelete, "/v1/integrations/:integrationID", suite.h.DisconnectIntegration)
 
 	restore := suite.withDefinitionRuntime(t, []registry.Builder{githubTestDefinitionBuilder(disconnectTestDefinitionID)})
 	defer restore()
@@ -62,9 +59,7 @@ func (suite *HandlerTestSuite) TestDisconnectIntegrationSuccess() {
 func (suite *HandlerTestSuite) TestDisconnectIntegrationNotFound() {
 	t := suite.T()
 
-	op := openapi3.NewOperation()
-	op.OperationID = "DisconnectIntegrationNotFound"
-	suite.registerRouteOnce(http.MethodDelete, "/v1/integrations/:integrationID", op, suite.h.DisconnectIntegration)
+	suite.registerRouteOnce(http.MethodDelete, "/v1/integrations/:integrationID", suite.h.DisconnectIntegration)
 
 	ctx := echocontext.NewTestEchoContext().Request().Context()
 	testUser := suite.userBuilderWithInput(ctx, &userInput{confirmedUser: true})
@@ -102,9 +97,7 @@ func (suite *HandlerTestSuite) createTestIntegration(t *testing.T, ctx context.C
 func (suite *HandlerTestSuite) TestDisconnectIntegrationUnauthorized() {
 	t := suite.T()
 
-	op := openapi3.NewOperation()
-	op.OperationID = "DisconnectIntegrationUnauthorized"
-	suite.registerRouteOnce(http.MethodDelete, "/v1/integrations/:integrationID", op, suite.h.DisconnectIntegration)
+	suite.registerRouteOnce(http.MethodDelete, "/v1/integrations/:integrationID", suite.h.DisconnectIntegration)
 
 	req := httptest.NewRequest(http.MethodDelete, "/v1/integrations/"+disconnectTestDefinitionID, nil)
 

@@ -72,6 +72,8 @@ const (
 	EdgeDocument = "document"
 	// EdgeFile holds the string denoting the file edge name in mutations.
 	EdgeFile = "file"
+	// EdgeApprovedByUser holds the string denoting the approved_by_user edge name in mutations.
+	EdgeApprovedByUser = "approved_by_user"
 	// Table holds the table name of the trustcenterndarequest in the database.
 	Table = "trust_center_nda_requests"
 	// BlockedGroupsTable is the table that holds the blocked_groups relation/edge.
@@ -116,6 +118,13 @@ const (
 	FileInverseTable = "files"
 	// FileColumn is the table column denoting the file relation/edge.
 	FileColumn = "file_id"
+	// ApprovedByUserTable is the table that holds the approved_by_user relation/edge.
+	ApprovedByUserTable = "trust_center_nda_requests"
+	// ApprovedByUserInverseTable is the table name for the User entity.
+	// It exists in this package in order to avoid circular dependency with the "user" package.
+	ApprovedByUserInverseTable = "users"
+	// ApprovedByUserColumn is the table column denoting the approved_by_user relation/edge.
+	ApprovedByUserColumn = "approved_by_user_id"
 )
 
 // Columns holds all SQL columns for trustcenterndarequest fields.
@@ -377,6 +386,13 @@ func ByFileField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newFileStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByApprovedByUserField orders the results by approved_by_user field.
+func ByApprovedByUserField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newApprovedByUserStep(), sql.OrderByField(field, opts...))
+	}
+}
 func newBlockedGroupsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -417,6 +433,13 @@ func newFileStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(FileInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, FileTable, FileColumn),
+	)
+}
+func newApprovedByUserStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ApprovedByUserInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, ApprovedByUserTable, ApprovedByUserColumn),
 	)
 }
 

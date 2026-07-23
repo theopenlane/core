@@ -64,8 +64,8 @@ type Definition struct {
 type GalaListenerRegistration struct {
 	// Name is a stable listener identifier for diagnostics
 	Name string
-	// Register registers the listener on the supplied gala registry
-	Register func(registry *gala.Registry) ([]gala.ListenerID, error)
+	// Register registers the listener on the supplied gala registry with access to runtime services
+	Register func(registry *gala.Registry, services RuntimeServices) ([]gala.ListenerID, error)
 }
 
 // OperatorConfigRegistration describes operator-owned configuration for a definition

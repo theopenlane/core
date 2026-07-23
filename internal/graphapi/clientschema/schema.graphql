@@ -1939,6 +1939,10 @@ type Assessment implements Node {
 	"""
 	systemInternalID: String @hidden(if: true)
 	"""
+	internal marker field for workflow eligibility, not exposed in API
+	"""
+	workflowEligibleMarker: Boolean
+	"""
 	the name of the assessment, e.g. cloud providers, marketing team
 	"""
 	name: String!
@@ -2178,6 +2182,53 @@ type Assessment implements Node {
 		"""
 		where: CampaignWhereInput
 	): CampaignConnection!
+	workflowObjectRefs(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for WorkflowObjectRefs returned from the connection.
+		"""
+		orderBy: [WorkflowObjectRefOrder!]
+
+		"""
+		Filtering options for WorkflowObjectRefs returned from the connection.
+		"""
+		where: WorkflowObjectRefWhereInput
+	): WorkflowObjectRefConnection!
+	"""
+	Indicates if this assessment has pending changes awaiting workflow approval
+	"""
+	hasPendingWorkflow: Boolean!
+	"""
+	Indicates if this assessment has any workflow history (completed or failed instances)
+	"""
+	hasWorkflowHistory: Boolean!
+	"""
+	Returns active workflow instances for this assessment (RUNNING or PAUSED)
+	"""
+	activeWorkflowInstances: [WorkflowInstance!]!
+	"""
+	Returns the workflow event timeline for this assessment across all workflow instances
+	"""
+	workflowTimeline(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: [WorkflowEventOrder!], where: WorkflowEventWhereInput, includeEmitFailures: Boolean): WorkflowEventConnection!
 	accessURL: String
 }
 """
@@ -2297,6 +2348,10 @@ type AssessmentResponse implements Node {
 	the ID of the organization owner of the object
 	"""
 	ownerID: ID
+	"""
+	internal marker field for workflow eligibility, not exposed in API
+	"""
+	workflowEligibleMarker: Boolean
 	"""
 	the assessment this response is for
 	"""
@@ -2422,6 +2477,53 @@ type AssessmentResponse implements Node {
 		"""
 		where: VendorRiskScoreWhereInput
 	): VendorRiskScoreConnection!
+	workflowObjectRefs(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for WorkflowObjectRefs returned from the connection.
+		"""
+		orderBy: [WorkflowObjectRefOrder!]
+
+		"""
+		Filtering options for WorkflowObjectRefs returned from the connection.
+		"""
+		where: WorkflowObjectRefWhereInput
+	): WorkflowObjectRefConnection!
+	"""
+	Indicates if this assessmentResponse has pending changes awaiting workflow approval
+	"""
+	hasPendingWorkflow: Boolean!
+	"""
+	Indicates if this assessmentResponse has any workflow history (completed or failed instances)
+	"""
+	hasWorkflowHistory: Boolean!
+	"""
+	Returns active workflow instances for this assessmentResponse (RUNNING or PAUSED)
+	"""
+	activeWorkflowInstances: [WorkflowInstance!]!
+	"""
+	Returns the workflow event timeline for this assessmentResponse across all workflow instances
+	"""
+	workflowTimeline(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: [WorkflowEventOrder!], where: WorkflowEventWhereInput, includeEmitFailures: Boolean): WorkflowEventConnection!
 	questionnaireTransformError: String
 }
 """
@@ -2636,6 +2738,13 @@ input AssessmentResponseWhereInput {
 	ownerIDNotNil: Boolean
 	ownerIDEqualFold: ID
 	ownerIDContainsFold: ID
+	"""
+	workflow_eligible_marker field predicates
+	"""
+	workflowEligibleMarker: Boolean
+	workflowEligibleMarkerNEQ: Boolean
+	workflowEligibleMarkerIsNil: Boolean
+	workflowEligibleMarkerNotNil: Boolean
 	"""
 	assessment_id field predicates
 	"""
@@ -2931,6 +3040,11 @@ input AssessmentResponseWhereInput {
 	"""
 	hasVendorRiskScores: Boolean
 	hasVendorRiskScoresWith: [VendorRiskScoreWhereInput!]
+	"""
+	workflow_object_refs edge predicates
+	"""
+	hasWorkflowObjectRefs: Boolean
+	hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
 }
 """
 Return response for updateAssessment mutation
@@ -3104,6 +3218,13 @@ input AssessmentWhereInput {
 	systemInternalIDEqualFold: String
 	systemInternalIDContainsFold: String
 	"""
+	workflow_eligible_marker field predicates
+	"""
+	workflowEligibleMarker: Boolean
+	workflowEligibleMarkerNEQ: Boolean
+	workflowEligibleMarkerIsNil: Boolean
+	workflowEligibleMarkerNotNil: Boolean
+	"""
 	name field predicates
 	"""
 	name: String
@@ -3202,6 +3323,11 @@ input AssessmentWhereInput {
 	"""
 	hasCampaigns: Boolean
 	hasCampaignsWith: [CampaignWhereInput!]
+	"""
+	workflow_object_refs edge predicates
+	"""
+	hasWorkflowObjectRefs: Boolean
+	hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
 	"""
 	Filter for tagsHas to contain a specific value
 	"""
@@ -3583,6 +3709,37 @@ type Asset implements Node {
 		"""
 		where: PlatformWhereInput
 	): PlatformConnection!
+	systemDetails(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for SystemDetails returned from the connection.
+		"""
+		orderBy: [SystemDetailOrder!]
+
+		"""
+		Filtering options for SystemDetails returned from the connection.
+		"""
+		where: SystemDetailWhereInput
+	): SystemDetailConnection!
 	outOfScopePlatforms(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -3738,6 +3895,130 @@ type Asset implements Node {
 		"""
 		where: InternalPolicyWhereInput
 	): InternalPolicyConnection!
+	findings(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Findings returned from the connection.
+		"""
+		orderBy: [FindingOrder!]
+
+		"""
+		Filtering options for Findings returned from the connection.
+		"""
+		where: FindingWhereInput
+	): FindingConnection!
+	vulnerabilities(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Vulnerabilities returned from the connection.
+		"""
+		orderBy: [VulnerabilityOrder!]
+
+		"""
+		Filtering options for Vulnerabilities returned from the connection.
+		"""
+		where: VulnerabilityWhereInput
+	): VulnerabilityConnection!
+	reviews(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Reviews returned from the connection.
+		"""
+		orderBy: [ReviewOrder!]
+
+		"""
+		Filtering options for Reviews returned from the connection.
+		"""
+		where: ReviewWhereInput
+	): ReviewConnection!
+	remediations(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Remediations returned from the connection.
+		"""
+		orderBy: [RemediationOrder!]
+
+		"""
+		Filtering options for Remediations returned from the connection.
+		"""
+		where: RemediationWhereInput
+	): RemediationConnection!
 	sourcePlatform: Platform
 	"""
 	integration that owns this asset
@@ -4800,6 +5081,11 @@ input AssetWhereInput {
 	hasPlatforms: Boolean
 	hasPlatformsWith: [PlatformWhereInput!]
 	"""
+	system_details edge predicates
+	"""
+	hasSystemDetails: Boolean
+	hasSystemDetailsWith: [SystemDetailWhereInput!]
+	"""
 	out_of_scope_platforms edge predicates
 	"""
 	hasOutOfScopePlatforms: Boolean
@@ -4824,6 +5110,26 @@ input AssetWhereInput {
 	"""
 	hasInternalPolicies: Boolean
 	hasInternalPoliciesWith: [InternalPolicyWhereInput!]
+	"""
+	findings edge predicates
+	"""
+	hasFindings: Boolean
+	hasFindingsWith: [FindingWhereInput!]
+	"""
+	vulnerabilities edge predicates
+	"""
+	hasVulnerabilities: Boolean
+	hasVulnerabilitiesWith: [VulnerabilityWhereInput!]
+	"""
+	reviews edge predicates
+	"""
+	hasReviews: Boolean
+	hasReviewsWith: [ReviewWhereInput!]
+	"""
+	remediations edge predicates
+	"""
+	hasRemediations: Boolean
+	hasRemediationsWith: [RemediationWhereInput!]
 	"""
 	source_platform edge predicates
 	"""
@@ -4853,6 +5159,10 @@ input AssetWhereInput {
 	"""
 	categoriesHas: String
 }
+"""
+AssignmentOutcome captures consolidated terminal outcome metadata for a workflow assignment, discriminated by decision.
+"""
+scalar AssignmentOutcome
 """
 Return response for approveNDARequests or denyNDARequests mutation
 """
@@ -5559,7 +5869,7 @@ type CampaignTarget implements Node {
 	"""
 	the campaign this target belongs to
 	"""
-	campaignID: ID!
+	campaignID: ID
 	"""
 	the contact associated with the campaign target
 	"""
@@ -5601,7 +5911,7 @@ type CampaignTarget implements Node {
 	"""
 	metadata: Map
 	owner: Organization
-	campaign: Campaign!
+	campaign: Campaign
 	contact: Contact
 	user: User
 	group: Group
@@ -5895,6 +6205,8 @@ input CampaignTargetWhereInput {
 	campaignIDContains: ID
 	campaignIDHasPrefix: ID
 	campaignIDHasSuffix: ID
+	campaignIDIsNil: Boolean
+	campaignIDNotNil: Boolean
 	campaignIDEqualFold: ID
 	campaignIDContainsFold: ID
 	"""
@@ -8868,6 +9180,37 @@ type Control implements Node {
 		"""
 		where: PlatformWhereInput
 	): PlatformConnection!
+	vulnerabilities(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Vulnerabilities returned from the connection.
+		"""
+		orderBy: [VulnerabilityOrder!]
+
+		"""
+		Filtering options for Vulnerabilities returned from the connection.
+		"""
+		where: VulnerabilityWhereInput
+	): VulnerabilityConnection!
 	assets(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -9345,6 +9688,7 @@ enum ControlControlSource @goModel(model: "github.com/theopenlane/core/common/en
 ControlControlStatus is enum for the field status
 """
 enum ControlControlStatus @goModel(model: "github.com/theopenlane/core/common/enums.ControlStatus") {
+	DRAFT
 	PREPARING
 	NEEDS_APPROVAL
 	CHANGES_REQUESTED
@@ -12123,6 +12467,11 @@ input ControlWhereInput {
 	hasPlatforms: Boolean
 	hasPlatformsWith: [PlatformWhereInput!]
 	"""
+	vulnerabilities edge predicates
+	"""
+	hasVulnerabilities: Boolean
+	hasVulnerabilitiesWith: [VulnerabilityWhereInput!]
+	"""
 	assets edge predicates
 	"""
 	hasAssets: Boolean
@@ -12409,6 +12758,10 @@ input CreateAssessmentInput {
 	"""
 	systemInternalID: String @readOnly
 	"""
+	internal marker field for workflow eligibility, not exposed in API
+	"""
+	workflowEligibleMarker: Boolean
+	"""
 	the name of the assessment, e.g. cloud providers, marketing team
 	"""
 	name: String!
@@ -12434,12 +12787,17 @@ input CreateAssessmentInput {
 	identityHolderIDs: [ID!]
 	assessmentResponseIDs: [ID!]
 	campaignIDs: [ID!]
+	workflowObjectRefIDs: [ID!]
 }
 """
 CreateAssessmentResponseInput is used for create AssessmentResponse object.
 Input was generated by ent.
 """
 input CreateAssessmentResponseInput {
+	"""
+	internal marker field for workflow eligibility, not exposed in API
+	"""
+	workflowEligibleMarker: Boolean
 	"""
 	display name for the submitted assessment response
 	"""
@@ -12487,6 +12845,7 @@ input CreateAssessmentResponseInput {
 	entityID: ID
 	documentID: ID
 	vendorRiskScoreIDs: [ID!]
+	workflowObjectRefIDs: [ID!]
 }
 """
 CreateAssetInput is used for create Asset object.
@@ -12623,11 +12982,16 @@ input CreateAssetInput {
 	scanIDs: [ID!]
 	entityIDs: [ID!]
 	platformIDs: [ID!]
+	systemDetailIDs: [ID!]
 	outOfScopePlatformIDs: [ID!]
 	identityHolderIDs: [ID!]
 	controlIDs: [ID!]
 	subcontrolIDs: [ID!]
 	internalPolicyIDs: [ID!]
+	findingIDs: [ID!]
+	vulnerabilityIDs: [ID!]
+	reviewIDs: [ID!]
+	remediationIDs: [ID!]
 	sourcePlatformID: ID
 	integrationID: ID
 	connectedAssetIDs: [ID!]
@@ -12793,7 +13157,7 @@ input CreateCampaignTargetInput {
 	"""
 	metadata: Map
 	ownerID: ID
-	campaignID: ID!
+	campaignID: ID
 	contactID: ID
 	userID: ID
 	groupID: ID
@@ -12811,7 +13175,7 @@ input CreateCampaignWithTargetsInput {
 	"""
 	list of targets to create for the campaign
 	"""
-	targets: [CreateCampaignTargetInput!]
+	targets: [CreateCampaignTargetInput]
 }
 """
 CreateCheckResultInput is used for create CheckResult object.
@@ -13133,11 +13497,11 @@ input CreateControlInput {
 	checkResultIDs: [ID!]
 	programIDs: [ID!]
 	platformIDs: [ID!]
+	vulnerabilityIDs: [ID!]
 	assetIDs: [ID!]
 	entityIDs: [ID!]
 	identityHolderIDs: [ID!]
 	campaignIDs: [ID!]
-	findingIDs: [ID!]
 	controlImplementationIDs: [ID!]
 	subcontrolIDs: [ID!]
 	scheduledJobIDs: [ID!]
@@ -13485,7 +13849,6 @@ input CreateDirectoryAccountInput {
 	platformID: ID
 	identityHolderID: ID
 	avatarFileID: ID
-	groupIDs: [ID!]
 	findingIDs: [ID!]
 	workflowObjectRefIDs: [ID!]
 }
@@ -13928,6 +14291,10 @@ input CreateEntityInput {
 	"""
 	domains: [String!]
 	"""
+	common matching names that should match with the entity
+	"""
+	aliases: [String!]
+	"""
 	status of the entity
 	"""
 	status: EntityEntityStatus
@@ -14060,6 +14427,7 @@ input CreateEntityInput {
 	noteIDs: [ID!]
 	fileIDs: [ID!]
 	assetIDs: [ID!]
+	systemDetailIDs: [ID!]
 	scanIDs: [ID!]
 	campaignIDs: [ID!]
 	assessmentResponseIDs: [ID!]
@@ -14071,6 +14439,10 @@ input CreateEntityInput {
 	identityHolderIDs: [ID!]
 	controlIDs: [ID!]
 	subcontrolIDs: [ID!]
+	findingIDs: [ID!]
+	vulnerabilityIDs: [ID!]
+	reviewIDs: [ID!]
+	remediationIDs: [ID!]
 	platformIDs: [ID!]
 	outOfScopePlatformIDs: [ID!]
 	sourcePlatformIDs: [ID!]
@@ -14386,6 +14758,7 @@ input CreateFindingControlInput {
 	timestamp when the mapping was first observed
 	"""
 	discoveredAt: DateTime
+	ownerID: ID
 	findingID: ID!
 	controlID: ID!
 	standardID: ID
@@ -14399,6 +14772,14 @@ input CreateFindingInput {
 	tags associated with the object
 	"""
 	tags: [String!]
+	"""
+	who reviewed the finding when no user or group is linked
+	"""
+	reviewedBy: String
+	"""
+	who the finding is assigned to when no user or group is linked
+	"""
+	assignedTo: String
 	"""
 	internal notes about the object creation, this field is only available to system admins
 	"""
@@ -14419,6 +14800,10 @@ input CreateFindingInput {
 	the status of the finding
 	"""
 	findingStatusName: String
+	"""
+	internal marker field for workflow eligibility, not exposed in API
+	"""
+	workflowEligibleMarker: Boolean
 	"""
 	external identifier from the integration source for the finding
 	"""
@@ -14566,13 +14951,16 @@ input CreateFindingInput {
 	ownerID: ID
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
+	reviewedByUserID: ID
+	reviewedByGroupID: ID
+	assignedToUserID: ID
+	assignedToGroupID: ID
 	environmentID: ID
 	scopeID: ID
 	findingStatusID: ID
 	integrationIDs: [ID!]
 	vulnerabilityIDs: [ID!]
 	actionPlanIDs: [ID!]
-	controlIDs: [ID!]
 	subcontrolIDs: [ID!]
 	riskIDs: [ID!]
 	programIDs: [ID!]
@@ -15398,6 +15786,7 @@ input CreateNoteInput {
 	procedureID: ID
 	riskID: ID
 	internalPolicyID: ID
+	reviewID: ID
 	evidenceID: ID
 	trustCenterID: ID
 	discussionID: ID
@@ -16192,7 +16581,7 @@ input CreatePlatformInput {
 	applicableFrameworkIDs: [ID!]
 	generatedScanIDs: [ID!]
 	platformOwnerID: ID
-	systemDetailID: ID
+	systemDetailIDs: [ID!]
 }
 """
 CreateProcedureInput is used for create Procedure object.
@@ -16361,6 +16750,22 @@ input CreateProgramInput {
 	"""
 	endDate: Time
 	"""
+	the start date of the observation period
+	"""
+	observationPeriodStartDate: Time
+	"""
+	the end date of the observation period
+	"""
+	observationPeriodEndDate: Time
+	"""
+	the start date of fieldwork
+	"""
+	fieldworkStartDate: Time
+	"""
+	the end date of fieldwork
+	"""
+	fieldworkEndDate: Time
+	"""
 	is the program ready for the auditor
 	"""
 	auditorReady: Boolean
@@ -16401,7 +16806,11 @@ input CreateProgramInput {
 	evidenceIDs: [ID!]
 	narrativeIDs: [ID!]
 	actionPlanIDs: [ID!]
-	systemDetailID: ID
+	systemDetailIDs: [ID!]
+	findingIDs: [ID!]
+	vulnerabilityIDs: [ID!]
+	reviewIDs: [ID!]
+	remediationIDs: [ID!]
 	programOwnerID: ID
 }
 """
@@ -16464,6 +16873,10 @@ input CreateRemediationInput {
 	the scope of the remediation
 	"""
 	scopeName: String
+	"""
+	internal marker field for workflow eligibility, not exposed in API
+	"""
+	workflowEligibleMarker: Boolean
 	"""
 	external identifier from the integration source for the remediation
 	"""
@@ -16564,6 +16977,7 @@ input CreateRemediationInput {
 	reviewIDs: [ID!]
 	commentIDs: [ID!]
 	fileIDs: [ID!]
+	workflowObjectRefIDs: [ID!]
 }
 """
 CreateReviewInput is used for create Review object.
@@ -16710,6 +17124,10 @@ input CreateRiskInput {
 	"""
 	scopeName: String
 	"""
+	internal marker field for workflow eligibility, not exposed in API
+	"""
+	workflowEligibleMarker: Boolean
+	"""
 	stable identifier assigned by the source system, used for integration ingest deduplication
 	"""
 	externalID: String
@@ -16823,6 +17241,9 @@ input CreateRiskInput {
 	discussionIDs: [ID!]
 	reviewIDs: [ID!]
 	remediationIDs: [ID!]
+	vulnerabilityIDs: [ID!]
+	findingIDs: [ID!]
+	workflowObjectRefIDs: [ID!]
 }
 """
 CreateSLADefinitionInput is used for create SLADefinition object.
@@ -16850,6 +17271,14 @@ input CreateScanInput {
 	tags associated with the object
 	"""
 	tags: [String!]
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
 	"""
 	who reviewed the scan when no user or group is linked
 	"""
@@ -16897,9 +17326,9 @@ input CreateScanInput {
 	"""
 	identifiers of vulnerabilities discovered during the scan
 	"""
-	vulnerabilityIds: [String!]
+	discoveredVulnerabilityIds: [String!]
 	"""
-	the status of the scan, e.g., processing, completed, failed
+	the status of the scan, e.g., pending, processing, completed, failed
 	"""
 	status: ScanScanStatus
 	ownerID: ID
@@ -16922,6 +17351,7 @@ input CreateScanInput {
 	vulnerabilityIDs: [ID!]
 	controlIDs: [ID!]
 	subcontrolIDs: [ID!]
+	findingIDs: [ID!]
 	generatedByPlatformID: ID
 	performedByUserID: ID
 	performedByGroupID: ID
@@ -17214,6 +17644,8 @@ input CreateSubcontrolInput {
 	assetIDs: [ID!]
 	entityIDs: [ID!]
 	identityHolderIDs: [ID!]
+	vulnerabilityIDs: [ID!]
+	findingIDs: [ID!]
 }
 """
 CreateSubprocessorInput is used for create Subprocessor object.
@@ -17315,8 +17747,10 @@ input CreateSystemDetailInput {
 	"""
 	oscalMetadataJSON: Map
 	ownerID: ID
-	programID: ID
-	platformID: ID
+	programIDs: [ID!]
+	platformIDs: [ID!]
+	entityIDs: [ID!]
+	assetIDs: [ID!]
 }
 """
 CreateTFASettingInput is used for create TFASetting object.
@@ -17381,6 +17815,10 @@ input CreateTaskInput {
 	"""
 	scopeName: String
 	"""
+	internal marker field for workflow eligibility, not exposed in API
+	"""
+	workflowEligibleMarker: Boolean
+	"""
 	stable external UUID for deterministic OSCAL export and round-tripping
 	"""
 	externalUUID: String
@@ -17396,6 +17834,10 @@ input CreateTaskInput {
 	structured details of the task in JSON format
 	"""
 	detailsJSON: [Any!]
+	"""
+	structured metadata used by clients for task presentation and routing
+	"""
+	metadata: Map
 	"""
 	the status of the task
 	"""
@@ -17416,6 +17858,22 @@ input CreateTaskInput {
 	indicates if the task is intended to be used as a template
 	"""
 	isTemplate: Boolean
+	"""
+	indicates if the task is suggested by the system as a recommended next action
+	"""
+	isSuggested: Boolean
+	"""
+	relative ordering priority for suggested and system-generated tasks
+	"""
+	priority: Int
+	"""
+	the system or workflow that created or suggested the task
+	"""
+	source: String
+	"""
+	stable source-specific key for the task
+	"""
+	sourceKey: String
 	"""
 	an optional external reference URL for the task
 	"""
@@ -17711,10 +18169,6 @@ input CreateTrustCenterNDARequestInput {
 	"""
 	approvedAt: DateTime
 	"""
-	ID of the user who approved the request
-	"""
-	approvedByUserID: String
-	"""
 	timestamp when the NDA was signed
 	"""
 	signedAt: DateTime
@@ -17724,6 +18178,7 @@ input CreateTrustCenterNDARequestInput {
 	trustCenterDocIDs: [ID!]
 	documentID: ID
 	fileID: ID
+	approvedByUserID: ID
 }
 """
 Input for createTrustCenterPreviewSetting mutation
@@ -17867,6 +18322,10 @@ input CreateTrustCenterSettingInput {
 	whether NDA requests require approval before being processed
 	"""
 	ndaApprovalRequired: Boolean
+	"""
+	whether the trust center accepts new subscriber registrations; when false, subscriber creation for the trust center is blocked
+	"""
+	allowSubscribers: Boolean
 	"""
 	whether to email trust center subscribers when subprocessors are added, updated, or removed
 	"""
@@ -18162,6 +18621,14 @@ input CreateVulnerabilityInput {
 	"""
 	tags: [String!]
 	"""
+	who reviewed the vulnerability when no user or group is linked
+	"""
+	reviewedBy: String
+	"""
+	who the vulnerability is assigned to when no user or group is linked
+	"""
+	assignedTo: String
+	"""
 	internal notes about the object creation, this field is only available to system admins
 	"""
 	internalNotes: String @readOnly
@@ -18181,6 +18648,10 @@ input CreateVulnerabilityInput {
 	the status of the vulnerability
 	"""
 	vulnerabilityStatusName: String
+	"""
+	internal marker field for workflow eligibility, not exposed in API
+	"""
+	workflowEligibleMarker: Boolean
 	"""
 	owner of the vulnerability
 	"""
@@ -18349,6 +18820,10 @@ input CreateVulnerabilityInput {
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
 	viewerIDs: [ID!]
+	reviewedByUserID: ID
+	reviewedByGroupID: ID
+	assignedToUserID: ID
+	assignedToGroupID: ID
 	environmentID: ID
 	scopeID: ID
 	vulnerabilityStatusID: ID
@@ -18367,6 +18842,7 @@ input CreateVulnerabilityInput {
 	reviewIDs: [ID!]
 	commentIDs: [ID!]
 	fileIDs: [ID!]
+	workflowObjectRefIDs: [ID!]
 }
 """
 CreateWorkflowDefinitionInput is used for create WorkflowDefinition object.
@@ -22504,6 +22980,7 @@ DirectoryMembershipDirectoryMembershipRole is enum for the field role
 """
 enum DirectoryMembershipDirectoryMembershipRole @goModel(model: "github.com/theopenlane/core/common/enums.DirectoryMembershipRole") {
 	MEMBER
+	MAINTAINER
 	MANAGER
 	OWNER
 }
@@ -25399,6 +25876,10 @@ type Entity implements Node {
 	"""
 	domains: [String!]
 	"""
+	common matching names that should match with the entity
+	"""
+	aliases: [String!]
+	"""
 	The type of the entity
 	"""
 	entityTypeID: ID
@@ -25753,6 +26234,37 @@ type Entity implements Node {
 		"""
 		where: AssetWhereInput
 	): AssetConnection!
+	systemDetails(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for SystemDetails returned from the connection.
+		"""
+		orderBy: [SystemDetailOrder!]
+
+		"""
+		Filtering options for SystemDetails returned from the connection.
+		"""
+		where: SystemDetailWhereInput
+	): SystemDetailConnection!
 	scans(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -26094,6 +26606,130 @@ type Entity implements Node {
 		"""
 		where: SubcontrolWhereInput
 	): SubcontrolConnection!
+	findings(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Findings returned from the connection.
+		"""
+		orderBy: [FindingOrder!]
+
+		"""
+		Filtering options for Findings returned from the connection.
+		"""
+		where: FindingWhereInput
+	): FindingConnection!
+	vulnerabilities(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Vulnerabilities returned from the connection.
+		"""
+		orderBy: [VulnerabilityOrder!]
+
+		"""
+		Filtering options for Vulnerabilities returned from the connection.
+		"""
+		where: VulnerabilityWhereInput
+	): VulnerabilityConnection!
+	reviews(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Reviews returned from the connection.
+		"""
+		orderBy: [ReviewOrder!]
+
+		"""
+		Filtering options for Reviews returned from the connection.
+		"""
+		where: ReviewWhereInput
+	): ReviewConnection!
+	remediations(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Remediations returned from the connection.
+		"""
+		orderBy: [RemediationOrder!]
+
+		"""
+		Filtering options for Remediations returned from the connection.
+		"""
+		where: RemediationWhereInput
+	): RemediationConnection!
 	platforms(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -27743,6 +28379,11 @@ input EntityWhereInput {
 	hasAssets: Boolean
 	hasAssetsWith: [AssetWhereInput!]
 	"""
+	system_details edge predicates
+	"""
+	hasSystemDetails: Boolean
+	hasSystemDetailsWith: [SystemDetailWhereInput!]
+	"""
 	scans edge predicates
 	"""
 	hasScans: Boolean
@@ -27798,6 +28439,26 @@ input EntityWhereInput {
 	hasSubcontrols: Boolean
 	hasSubcontrolsWith: [SubcontrolWhereInput!]
 	"""
+	findings edge predicates
+	"""
+	hasFindings: Boolean
+	hasFindingsWith: [FindingWhereInput!]
+	"""
+	vulnerabilities edge predicates
+	"""
+	hasVulnerabilities: Boolean
+	hasVulnerabilitiesWith: [VulnerabilityWhereInput!]
+	"""
+	reviews edge predicates
+	"""
+	hasReviews: Boolean
+	hasReviewsWith: [ReviewWhereInput!]
+	"""
+	remediations edge predicates
+	"""
+	hasRemediations: Boolean
+	hasRemediationsWith: [RemediationWhereInput!]
+	"""
 	platforms edge predicates
 	"""
 	hasPlatforms: Boolean
@@ -27835,6 +28496,10 @@ input EntityWhereInput {
 	Filter for domainsHas to contain a specific value
 	"""
 	domainsHas: String
+	"""
+	Filter for aliasesHas to contain a specific value
+	"""
+	aliasesHas: String
 	"""
 	Filter for linkedAssetIdsHas to contain a specific value
 	"""
@@ -31141,6 +31806,30 @@ type Finding implements Node {
 	"""
 	ownerID: ID
 	"""
+	who reviewed the finding when no user or group is linked
+	"""
+	reviewedBy: String
+	"""
+	the user id that reviewed the finding
+	"""
+	reviewedByUserID: ID
+	"""
+	the group id that reviewed the finding
+	"""
+	reviewedByGroupID: ID
+	"""
+	who the finding is assigned to when no user or group is linked
+	"""
+	assignedTo: String
+	"""
+	the user id assigned to the finding
+	"""
+	assignedToUserID: ID
+	"""
+	the group id assigned to the finding
+	"""
+	assignedToGroupID: ID
+	"""
 	indicates if the record is owned by the the openlane system and not by an organization
 	"""
 	systemOwned: Boolean
@@ -31176,6 +31865,10 @@ type Finding implements Node {
 	the status of the finding
 	"""
 	findingStatusID: ID
+	"""
+	internal marker field for workflow eligibility, not exposed in API
+	"""
+	workflowEligibleMarker: Boolean
 	"""
 	external identifier from the integration source for the finding
 	"""
@@ -31387,6 +32080,10 @@ type Finding implements Node {
 		"""
 		where: GroupWhereInput
 	): GroupConnection!
+	reviewedByUser: User
+	reviewedByGroup: Group
+	assignedToUser: User
+	assignedToGroup: Group
 	environment: CustomTypeEnum
 	scope: CustomTypeEnum
 	findingStatus: CustomTypeEnum
@@ -32010,6 +32707,22 @@ type Finding implements Node {
 		"""
 		where: FindingControlWhereInput
 	): FindingControlConnection!
+	"""
+	Indicates if this finding has pending changes awaiting workflow approval
+	"""
+	hasPendingWorkflow: Boolean!
+	"""
+	Indicates if this finding has any workflow history (completed or failed instances)
+	"""
+	hasWorkflowHistory: Boolean!
+	"""
+	Returns active workflow instances for this finding (RUNNING or PAUSED)
+	"""
+	activeWorkflowInstances: [WorkflowInstance!]!
+	"""
+	Returns the workflow event timeline for this finding across all workflow instances
+	"""
+	workflowTimeline(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: [WorkflowEventOrder!], where: WorkflowEventWhereInput, includeEmitFailures: Boolean): WorkflowEventConnection!
 }
 """
 Return response for createBulkFinding mutation
@@ -32078,6 +32791,10 @@ type FindingControl implements Node {
 	"""
 	updatedByImpersonator: String
 	"""
+	the organization id that owns the object
+	"""
+	ownerID: ID
+	"""
 	the id of the finding associated with the control
 	"""
 	findingID: ID!
@@ -32113,6 +32830,7 @@ type FindingControl implements Node {
 	timestamp when the mapping was first observed
 	"""
 	discoveredAt: DateTime
+	owner: Organization
 	finding: Finding!
 	control: Control!
 	standard: Standard
@@ -32125,6 +32843,23 @@ type FindingControlBulkCreatePayload {
 	Created findingControls
 	"""
 	findingControls: [FindingControl!]
+}
+"""
+Return response for deleteBulkFindingControl mutation
+"""
+type FindingControlBulkDeletePayload {
+	"""
+	Deleted findingControl IDs
+	"""
+	deletedIDs: [ID!]!
+	"""
+	IDs that were not deleted
+	"""
+	notDeletedIDs: [ID!]!
+	"""
+	Error message when the bulk delete did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -32603,6 +33338,114 @@ input FindingWhereInput {
 	ownerIDEqualFold: ID
 	ownerIDContainsFold: ID
 	"""
+	reviewed_by field predicates
+	"""
+	reviewedBy: String
+	reviewedByNEQ: String
+	reviewedByIn: [String!]
+	reviewedByNotIn: [String!]
+	reviewedByGT: String
+	reviewedByGTE: String
+	reviewedByLT: String
+	reviewedByLTE: String
+	reviewedByContains: String
+	reviewedByHasPrefix: String
+	reviewedByHasSuffix: String
+	reviewedByIsNil: Boolean
+	reviewedByNotNil: Boolean
+	reviewedByEqualFold: String
+	reviewedByContainsFold: String
+	"""
+	reviewed_by_user_id field predicates
+	"""
+	reviewedByUserID: ID
+	reviewedByUserIDNEQ: ID
+	reviewedByUserIDIn: [ID!]
+	reviewedByUserIDNotIn: [ID!]
+	reviewedByUserIDGT: ID
+	reviewedByUserIDGTE: ID
+	reviewedByUserIDLT: ID
+	reviewedByUserIDLTE: ID
+	reviewedByUserIDContains: ID
+	reviewedByUserIDHasPrefix: ID
+	reviewedByUserIDHasSuffix: ID
+	reviewedByUserIDIsNil: Boolean
+	reviewedByUserIDNotNil: Boolean
+	reviewedByUserIDEqualFold: ID
+	reviewedByUserIDContainsFold: ID
+	"""
+	reviewed_by_group_id field predicates
+	"""
+	reviewedByGroupID: ID
+	reviewedByGroupIDNEQ: ID
+	reviewedByGroupIDIn: [ID!]
+	reviewedByGroupIDNotIn: [ID!]
+	reviewedByGroupIDGT: ID
+	reviewedByGroupIDGTE: ID
+	reviewedByGroupIDLT: ID
+	reviewedByGroupIDLTE: ID
+	reviewedByGroupIDContains: ID
+	reviewedByGroupIDHasPrefix: ID
+	reviewedByGroupIDHasSuffix: ID
+	reviewedByGroupIDIsNil: Boolean
+	reviewedByGroupIDNotNil: Boolean
+	reviewedByGroupIDEqualFold: ID
+	reviewedByGroupIDContainsFold: ID
+	"""
+	assigned_to field predicates
+	"""
+	assignedTo: String
+	assignedToNEQ: String
+	assignedToIn: [String!]
+	assignedToNotIn: [String!]
+	assignedToGT: String
+	assignedToGTE: String
+	assignedToLT: String
+	assignedToLTE: String
+	assignedToContains: String
+	assignedToHasPrefix: String
+	assignedToHasSuffix: String
+	assignedToIsNil: Boolean
+	assignedToNotNil: Boolean
+	assignedToEqualFold: String
+	assignedToContainsFold: String
+	"""
+	assigned_to_user_id field predicates
+	"""
+	assignedToUserID: ID
+	assignedToUserIDNEQ: ID
+	assignedToUserIDIn: [ID!]
+	assignedToUserIDNotIn: [ID!]
+	assignedToUserIDGT: ID
+	assignedToUserIDGTE: ID
+	assignedToUserIDLT: ID
+	assignedToUserIDLTE: ID
+	assignedToUserIDContains: ID
+	assignedToUserIDHasPrefix: ID
+	assignedToUserIDHasSuffix: ID
+	assignedToUserIDIsNil: Boolean
+	assignedToUserIDNotNil: Boolean
+	assignedToUserIDEqualFold: ID
+	assignedToUserIDContainsFold: ID
+	"""
+	assigned_to_group_id field predicates
+	"""
+	assignedToGroupID: ID
+	assignedToGroupIDNEQ: ID
+	assignedToGroupIDIn: [ID!]
+	assignedToGroupIDNotIn: [ID!]
+	assignedToGroupIDGT: ID
+	assignedToGroupIDGTE: ID
+	assignedToGroupIDLT: ID
+	assignedToGroupIDLTE: ID
+	assignedToGroupIDContains: ID
+	assignedToGroupIDHasPrefix: ID
+	assignedToGroupIDHasSuffix: ID
+	assignedToGroupIDIsNil: Boolean
+	assignedToGroupIDNotNil: Boolean
+	assignedToGroupIDEqualFold: ID
+	assignedToGroupIDContainsFold: ID
+	"""
 	system_owned field predicates
 	"""
 	systemOwned: Boolean
@@ -32753,6 +33596,13 @@ input FindingWhereInput {
 	findingStatusIDNotNil: Boolean
 	findingStatusIDEqualFold: ID
 	findingStatusIDContainsFold: ID
+	"""
+	workflow_eligible_marker field predicates
+	"""
+	workflowEligibleMarker: Boolean
+	workflowEligibleMarkerNEQ: Boolean
+	workflowEligibleMarkerIsNil: Boolean
+	workflowEligibleMarkerNotNil: Boolean
 	"""
 	external_id field predicates
 	"""
@@ -33204,6 +34054,26 @@ input FindingWhereInput {
 	"""
 	hasEditors: Boolean
 	hasEditorsWith: [GroupWhereInput!]
+	"""
+	reviewed_by_user edge predicates
+	"""
+	hasReviewedByUser: Boolean
+	hasReviewedByUserWith: [UserWhereInput!]
+	"""
+	reviewed_by_group edge predicates
+	"""
+	hasReviewedByGroup: Boolean
+	hasReviewedByGroupWith: [GroupWhereInput!]
+	"""
+	assigned_to_user edge predicates
+	"""
+	hasAssignedToUser: Boolean
+	hasAssignedToUserWith: [UserWhereInput!]
+	"""
+	assigned_to_group edge predicates
+	"""
+	hasAssignedToGroup: Boolean
+	hasAssignedToGroupWith: [GroupWhereInput!]
 	"""
 	environment edge predicates
 	"""
@@ -38555,6 +39425,168 @@ input IdentityHolderWhereInput {
 The `ImplementationGuidance` scalar type that represents steps to take to implement a control; they can come directly from the control source or pulled from external sources
 """
 scalar ImplementationGuidance
+"""
+An asset accepted from a domain scan review, keyed by a client-assigned ref so it can be
+referenced from ImportDomainScanReviewPlatformInput/ImportDomainScanReviewSystemInput before it
+has a real id
+"""
+input ImportDomainScanReviewAssetInput {
+	"""
+	client-assigned identifier for this asset, referenced by assetRefs elsewhere in the input
+	"""
+	ref: String!
+	"""
+	the asset's display name
+	"""
+	name: String!
+	"""
+	the asset's domain, IP, or other unique identifier
+	"""
+	identifier: String
+	"""
+	the asset's URL, if known
+	"""
+	website: String
+	"""
+	the asset's detected categories
+	"""
+	categories: [String!]
+}
+"""
+One accepted finding
+"""
+input ImportDomainScanReviewFindingInput {
+	"""
+	the finding's category
+	"""
+	category: String
+	"""
+	the finding's description
+	"""
+	description: String
+	"""
+	the finding's severity
+	"""
+	severity: String
+}
+"""
+Input for importDomainScanReview mutation
+"""
+input ImportDomainScanReviewInput {
+	"""
+	the Scan records the created records should link back to
+	"""
+	scanIDs: [ID!]!
+	"""
+	the accepted platforms, if any
+	"""
+	platforms: [ImportDomainScanReviewPlatformInput!]
+	"""
+	the accepted system details
+	"""
+	systems: [ImportDomainScanReviewSystemInput!]
+	"""
+	the accepted vendors
+	"""
+	vendors: [ImportDomainScanReviewVendorInput!]!
+	"""
+	the accepted assets
+	"""
+	assets: [ImportDomainScanReviewAssetInput!]!
+	"""
+	the accepted findings
+	"""
+	findings: [ImportDomainScanReviewFindingInput!]
+}
+"""
+Return response for importDomainScanReview mutation. Creation happens asynchronously, so this
+only confirms the review was accepted - the created objects surface via a follow-up Notification
+once the import finishes
+"""
+type ImportDomainScanReviewPayload {
+	"""
+	whether the review was accepted for import
+	"""
+	accepted: Boolean!
+}
+"""
+An accepted platform, linked to a subset of the accepted vendors/assets, and keyed by a
+client-assigned ref so it can be referenced from ImportDomainScanReviewSystemInput
+"""
+input ImportDomainScanReviewPlatformInput {
+	"""
+	client-assigned identifier for this platform, referenced by platformRefs elsewhere in the input
+	"""
+	ref: String!
+	"""
+	the platform's name
+	"""
+	name: String!
+	"""
+	the platform's description
+	"""
+	description: String
+	"""
+	refs of accepted vendors linked to this platform
+	"""
+	entityRefs: [String!]
+	"""
+	refs of accepted assets linked to this platform
+	"""
+	assetRefs: [String!]
+}
+"""
+One accepted system detail, linked to its own subset of the accepted vendors/assets/platforms
+"""
+input ImportDomainScanReviewSystemInput {
+	"""
+	the system's name
+	"""
+	name: String!
+	"""
+	the system's description
+	"""
+	description: String
+	"""
+	refs of accepted vendors linked to this system
+	"""
+	entityRefs: [String!]
+	"""
+	refs of accepted assets linked to this system
+	"""
+	assetRefs: [String!]
+	"""
+	refs of accepted platforms this system belongs to
+	"""
+	platformRefs: [String!]
+}
+"""
+A vendor accepted from a domain scan review, keyed by a client-assigned ref so it can be
+referenced from ImportDomainScanReviewPlatformInput/ImportDomainScanReviewSystemInput before it
+has a real id
+"""
+input ImportDomainScanReviewVendorInput {
+	"""
+	client-assigned identifier for this vendor, referenced by entityRefs elsewhere in the input
+	"""
+	ref: String!
+	"""
+	the vendor's name
+	"""
+	name: String!
+	"""
+	the vendor's raw legal entity name, if known and different from name
+	"""
+	legalName: String
+	"""
+	the vendor's domain, if known
+	"""
+	domain: String
+	"""
+	the vendor's detected categories
+	"""
+	categories: [String!]
+}
 type Integration implements Node {
 	id: ID!
 	createdAt: Time
@@ -46269,6 +47301,16 @@ type Mutation {
 		input: Upload!
 	): DocumentDataBulkUpdatePayload!
 	"""
+	Accept a domain scan review and asynchronously create the corresponding platform, system
+	details, vendors, assets, and findings
+	"""
+	importDomainScanReview(
+		"""
+		the accepted domain scan review
+		"""
+		input: ImportDomainScanReviewInput!
+	): ImportDomainScanReviewPayload!
+	"""
 	Create a new emailTemplate
 	"""
 	createEmailTemplate(
@@ -46890,6 +47932,15 @@ type Mutation {
 		"""
 		id: ID!
 	): FindingControlDeletePayload!
+	"""
+	Delete multiple findingControls
+	"""
+	deleteBulkFindingControl(
+		"""
+		IDs of the findingControls to delete
+		"""
+		ids: [ID!]!
+	): FindingControlBulkDeletePayload!
 	"""
 	Create a new group
 	"""
@@ -48148,6 +49199,25 @@ type Mutation {
 		"""
 		noteFiles: [Upload!]
 	noteFilesMetadata: [FileMetadataInput!]): EvidenceUpdatePayload!
+	"""
+	Update an existing review comment
+	"""
+	updateReviewComment(
+		"""
+		ID of the comment
+		"""
+		id: ID!
+
+		"""
+		New values for the comment
+		"""
+		input: UpdateNoteInput!
+
+		"""
+		Files to attach to the comment
+		"""
+		noteFiles: [Upload!]
+	noteFilesMetadata: [FileMetadataInput!]): ReviewUpdatePayload!
 	"""
 	Delete an existing note
 	"""
@@ -52002,6 +53072,7 @@ type Note implements Node {
 	procedure: Procedure
 	risk: Risk
 	internalPolicy: InternalPolicy
+	review: Review
 	evidence: Evidence
 	trustCenter: TrustCenter
 	discussion: Discussion
@@ -52411,6 +53482,11 @@ input NoteWhereInput {
 	hasInternalPolicy: Boolean
 	hasInternalPolicyWith: [InternalPolicyWhereInput!]
 	"""
+	review edge predicates
+	"""
+	hasReview: Boolean
+	hasReviewWith: [ReviewWhereInput!]
+	"""
 	evidence edge predicates
 	"""
 	hasEvidence: Boolean
@@ -52546,6 +53622,8 @@ enum NotificationNotificationTopic @goModel(model: "github.com/theopenlane/core/
 	EXPORT
 	STANDARD_UPDATE
 	DOMAIN_SCAN
+	IMPORT_COMPLETE
+	ORGANIZATION_READY
 }
 """
 NotificationNotificationType is enum for the field notification_type
@@ -59228,6 +60306,37 @@ type Organization implements Node {
 		"""
 		where: FindingWhereInput
 	): FindingConnection!
+	findingControls(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for FindingControls returned from the connection.
+		"""
+		orderBy: [FindingControlOrder!]
+
+		"""
+		Filtering options for FindingControls returned from the connection.
+		"""
+		where: FindingControlWhereInput
+	): FindingControlConnection!
 	reviews(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -61531,6 +62640,11 @@ input OrganizationWhereInput {
 	hasFindings: Boolean
 	hasFindingsWith: [FindingWhereInput!]
 	"""
+	finding_controls edge predicates
+	"""
+	hasFindingControls: Boolean
+	hasFindingControlsWith: [FindingControlWhereInput!]
+	"""
 	reviews edge predicates
 	"""
 	hasReviews: Boolean
@@ -63172,7 +64286,37 @@ type Platform implements Node {
 		where: ScanWhereInput
 	): ScanConnection!
 	platformOwner: User
-	systemDetail: SystemDetail
+	systemDetails(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for SystemDetails returned from the connection.
+		"""
+		orderBy: [SystemDetailOrder!]
+
+		"""
+		Filtering options for SystemDetails returned from the connection.
+		"""
+		where: SystemDetailWhereInput
+	): SystemDetailConnection!
 	"""
 	Indicates if this platform has pending changes awaiting workflow approval
 	"""
@@ -64411,10 +65555,10 @@ input PlatformWhereInput {
 	hasPlatformOwner: Boolean
 	hasPlatformOwnerWith: [UserWhereInput!]
 	"""
-	system_detail edge predicates
+	system_details edge predicates
 	"""
-	hasSystemDetail: Boolean
-	hasSystemDetailWith: [SystemDetailWhereInput!]
+	hasSystemDetails: Boolean
+	hasSystemDetailsWith: [SystemDetailWhereInput!]
 	"""
 	Filter for tagsHas to contain a specific value
 	"""
@@ -65830,6 +66974,22 @@ type Program implements Node {
 	"""
 	endDate: Time
 	"""
+	the start date of the observation period
+	"""
+	observationPeriodStartDate: Time
+	"""
+	the end date of the observation period
+	"""
+	observationPeriodEndDate: Time
+	"""
+	the start date of fieldwork
+	"""
+	fieldworkStartDate: Time
+	"""
+	the end date of fieldwork
+	"""
+	fieldworkEndDate: Time
+	"""
 	is the program ready for the auditor
 	"""
 	auditorReady: Boolean!
@@ -66324,7 +67484,161 @@ type Program implements Node {
 		"""
 		where: ActionPlanWhereInput
 	): ActionPlanConnection!
-	systemDetail: SystemDetail
+	systemDetails(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for SystemDetails returned from the connection.
+		"""
+		orderBy: [SystemDetailOrder!]
+
+		"""
+		Filtering options for SystemDetails returned from the connection.
+		"""
+		where: SystemDetailWhereInput
+	): SystemDetailConnection!
+	findings(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Findings returned from the connection.
+		"""
+		orderBy: [FindingOrder!]
+
+		"""
+		Filtering options for Findings returned from the connection.
+		"""
+		where: FindingWhereInput
+	): FindingConnection!
+	vulnerabilities(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Vulnerabilities returned from the connection.
+		"""
+		orderBy: [VulnerabilityOrder!]
+
+		"""
+		Filtering options for Vulnerabilities returned from the connection.
+		"""
+		where: VulnerabilityWhereInput
+	): VulnerabilityConnection!
+	reviews(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Reviews returned from the connection.
+		"""
+		orderBy: [ReviewOrder!]
+
+		"""
+		Filtering options for Reviews returned from the connection.
+		"""
+		where: ReviewWhereInput
+	): ReviewConnection!
+	remediations(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Remediations returned from the connection.
+		"""
+		orderBy: [RemediationOrder!]
+
+		"""
+		Filtering options for Remediations returned from the connection.
+		"""
+		where: RemediationWhereInput
+	): RemediationConnection!
 	users(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -66752,6 +68066,10 @@ enum ProgramOrderField {
 	framework
 	start_date
 	end_date
+	observation_period_start_date
+	observation_period_end_date
+	fieldwork_start_date
+	fieldwork_end_date
 }
 """
 ProgramProgramStatus is enum for the field status
@@ -67048,6 +68366,58 @@ input ProgramWhereInput {
 	endDateIsNil: Boolean
 	endDateNotNil: Boolean
 	"""
+	observation_period_start_date field predicates
+	"""
+	observationPeriodStartDate: Time
+	observationPeriodStartDateNEQ: Time
+	observationPeriodStartDateIn: [Time!]
+	observationPeriodStartDateNotIn: [Time!]
+	observationPeriodStartDateGT: Time
+	observationPeriodStartDateGTE: Time
+	observationPeriodStartDateLT: Time
+	observationPeriodStartDateLTE: Time
+	observationPeriodStartDateIsNil: Boolean
+	observationPeriodStartDateNotNil: Boolean
+	"""
+	observation_period_end_date field predicates
+	"""
+	observationPeriodEndDate: Time
+	observationPeriodEndDateNEQ: Time
+	observationPeriodEndDateIn: [Time!]
+	observationPeriodEndDateNotIn: [Time!]
+	observationPeriodEndDateGT: Time
+	observationPeriodEndDateGTE: Time
+	observationPeriodEndDateLT: Time
+	observationPeriodEndDateLTE: Time
+	observationPeriodEndDateIsNil: Boolean
+	observationPeriodEndDateNotNil: Boolean
+	"""
+	fieldwork_start_date field predicates
+	"""
+	fieldworkStartDate: Time
+	fieldworkStartDateNEQ: Time
+	fieldworkStartDateIn: [Time!]
+	fieldworkStartDateNotIn: [Time!]
+	fieldworkStartDateGT: Time
+	fieldworkStartDateGTE: Time
+	fieldworkStartDateLT: Time
+	fieldworkStartDateLTE: Time
+	fieldworkStartDateIsNil: Boolean
+	fieldworkStartDateNotNil: Boolean
+	"""
+	fieldwork_end_date field predicates
+	"""
+	fieldworkEndDate: Time
+	fieldworkEndDateNEQ: Time
+	fieldworkEndDateIn: [Time!]
+	fieldworkEndDateNotIn: [Time!]
+	fieldworkEndDateGT: Time
+	fieldworkEndDateGTE: Time
+	fieldworkEndDateLT: Time
+	fieldworkEndDateLTE: Time
+	fieldworkEndDateIsNil: Boolean
+	fieldworkEndDateNotNil: Boolean
+	"""
 	auditor_ready field predicates
 	"""
 	auditorReady: Boolean
@@ -67220,10 +68590,30 @@ input ProgramWhereInput {
 	hasActionPlans: Boolean
 	hasActionPlansWith: [ActionPlanWhereInput!]
 	"""
-	system_detail edge predicates
+	system_details edge predicates
 	"""
-	hasSystemDetail: Boolean
-	hasSystemDetailWith: [SystemDetailWhereInput!]
+	hasSystemDetails: Boolean
+	hasSystemDetailsWith: [SystemDetailWhereInput!]
+	"""
+	findings edge predicates
+	"""
+	hasFindings: Boolean
+	hasFindingsWith: [FindingWhereInput!]
+	"""
+	vulnerabilities edge predicates
+	"""
+	hasVulnerabilities: Boolean
+	hasVulnerabilitiesWith: [VulnerabilityWhereInput!]
+	"""
+	reviews edge predicates
+	"""
+	hasReviews: Boolean
+	hasReviewsWith: [ReviewWhereInput!]
+	"""
+	remediations edge predicates
+	"""
+	hasRemediations: Boolean
+	hasRemediationsWith: [RemediationWhereInput!]
 	"""
 	users edge predicates
 	"""
@@ -72659,6 +74049,10 @@ type Remediation implements Node {
 	"""
 	scopeID: ID
 	"""
+	internal marker field for workflow eligibility, not exposed in API
+	"""
+	workflowEligibleMarker: Boolean
+	"""
 	external identifier from the integration source for the remediation
 	"""
 	externalID: String
@@ -73268,6 +74662,53 @@ type Remediation implements Node {
 		"""
 		where: FileWhereInput
 	): FileConnection!
+	workflowObjectRefs(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for WorkflowObjectRefs returned from the connection.
+		"""
+		orderBy: [WorkflowObjectRefOrder!]
+
+		"""
+		Filtering options for WorkflowObjectRefs returned from the connection.
+		"""
+		where: WorkflowObjectRefWhereInput
+	): WorkflowObjectRefConnection!
+	"""
+	Indicates if this remediation has pending changes awaiting workflow approval
+	"""
+	hasPendingWorkflow: Boolean!
+	"""
+	Indicates if this remediation has any workflow history (completed or failed instances)
+	"""
+	hasWorkflowHistory: Boolean!
+	"""
+	Returns active workflow instances for this remediation (RUNNING or PAUSED)
+	"""
+	activeWorkflowInstances: [WorkflowInstance!]!
+	"""
+	Returns the workflow event timeline for this remediation across all workflow instances
+	"""
+	workflowTimeline(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: [WorkflowEventOrder!], where: WorkflowEventWhereInput, includeEmitFailures: Boolean): WorkflowEventConnection!
 }
 """
 Return response for createBulkRemediation mutation
@@ -73650,6 +75091,13 @@ input RemediationWhereInput {
 	scopeIDNotNil: Boolean
 	scopeIDEqualFold: ID
 	scopeIDContainsFold: ID
+	"""
+	workflow_eligible_marker field predicates
+	"""
+	workflowEligibleMarker: Boolean
+	workflowEligibleMarkerNEQ: Boolean
+	workflowEligibleMarkerIsNil: Boolean
+	workflowEligibleMarkerNotNil: Boolean
 	"""
 	external_id field predicates
 	"""
@@ -74068,6 +75516,11 @@ input RemediationWhereInput {
 	"""
 	hasFiles: Boolean
 	hasFilesWith: [FileWhereInput!]
+	"""
+	workflow_object_refs edge predicates
+	"""
+	hasWorkflowObjectRefs: Boolean
+	hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
 	"""
 	Filter for tagsHas to contain a specific value
 	"""
@@ -75574,6 +77027,10 @@ type Risk implements Node {
 	"""
 	scopeID: ID
 	"""
+	internal marker field for workflow eligibility, not exposed in API
+	"""
+	workflowEligibleMarker: Boolean
+	"""
 	stable identifier assigned by the source system, used for integration ingest deduplication
 	"""
 	externalID: String
@@ -76241,6 +77698,115 @@ type Risk implements Node {
 		"""
 		where: RemediationWhereInput
 	): RemediationConnection!
+	vulnerabilities(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Vulnerabilities returned from the connection.
+		"""
+		orderBy: [VulnerabilityOrder!]
+
+		"""
+		Filtering options for Vulnerabilities returned from the connection.
+		"""
+		where: VulnerabilityWhereInput
+	): VulnerabilityConnection!
+	findings(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Findings returned from the connection.
+		"""
+		orderBy: [FindingOrder!]
+
+		"""
+		Filtering options for Findings returned from the connection.
+		"""
+		where: FindingWhereInput
+	): FindingConnection!
+	workflowObjectRefs(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for WorkflowObjectRefs returned from the connection.
+		"""
+		orderBy: [WorkflowObjectRefOrder!]
+
+		"""
+		Filtering options for WorkflowObjectRefs returned from the connection.
+		"""
+		where: WorkflowObjectRefWhereInput
+	): WorkflowObjectRefConnection!
+	"""
+	Indicates if this risk has pending changes awaiting workflow approval
+	"""
+	hasPendingWorkflow: Boolean!
+	"""
+	Indicates if this risk has any workflow history (completed or failed instances)
+	"""
+	hasWorkflowHistory: Boolean!
+	"""
+	Returns active workflow instances for this risk (RUNNING or PAUSED)
+	"""
+	activeWorkflowInstances: [WorkflowInstance!]!
+	"""
+	Returns the workflow event timeline for this risk across all workflow instances
+	"""
+	workflowTimeline(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: [WorkflowEventOrder!], where: WorkflowEventWhereInput, includeEmitFailures: Boolean): WorkflowEventConnection!
 }
 """
 Return response for createBulkRisk mutation
@@ -76711,6 +78277,13 @@ input RiskWhereInput {
 	scopeIDEqualFold: ID
 	scopeIDContainsFold: ID
 	"""
+	workflow_eligible_marker field predicates
+	"""
+	workflowEligibleMarker: Boolean
+	workflowEligibleMarkerNEQ: Boolean
+	workflowEligibleMarkerIsNil: Boolean
+	workflowEligibleMarkerNotNil: Boolean
+	"""
 	external_id field predicates
 	"""
 	externalID: String
@@ -77139,6 +78712,21 @@ input RiskWhereInput {
 	hasRemediations: Boolean
 	hasRemediationsWith: [RemediationWhereInput!]
 	"""
+	vulnerabilities edge predicates
+	"""
+	hasVulnerabilities: Boolean
+	hasVulnerabilitiesWith: [VulnerabilityWhereInput!]
+	"""
+	findings edge predicates
+	"""
+	hasFindings: Boolean
+	hasFindingsWith: [FindingWhereInput!]
+	"""
+	workflow_object_refs edge predicates
+	"""
+	hasWorkflowObjectRefs: Boolean
+	hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
+	"""
 	Filter for tagsHas to contain a specific value
 	"""
 	tagsHas: String
@@ -77562,6 +79150,18 @@ type Scan implements Node {
 	"""
 	ownerID: ID
 	"""
+	indicates if the record is owned by the the openlane system and not by an organization
+	"""
+	systemOwned: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @hidden(if: true)
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @hidden(if: true)
+	"""
 	who reviewed the scan when no user or group is linked
 	"""
 	reviewedBy: String
@@ -77644,9 +79244,9 @@ type Scan implements Node {
 	"""
 	identifiers of vulnerabilities discovered during the scan
 	"""
-	vulnerabilityIds: [String!]
+	discoveredVulnerabilityIds: [String!]
 	"""
-	the status of the scan, e.g., processing, completed, failed
+	the status of the scan, e.g., pending, processing, completed, failed
 	"""
 	status: ScanScanStatus!
 	owner: Organization
@@ -78059,6 +79659,37 @@ type Scan implements Node {
 		"""
 		where: SubcontrolWhereInput
 	): SubcontrolConnection!
+	findings(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Findings returned from the connection.
+		"""
+		orderBy: [FindingOrder!]
+
+		"""
+		Filtering options for Findings returned from the connection.
+		"""
+		where: FindingWhereInput
+	): FindingConnection!
 	generatedByPlatform: Platform
 	performedByUser: User
 	performedByGroup: Group
@@ -78320,6 +79951,49 @@ input ScanWhereInput {
 	ownerIDNotNil: Boolean
 	ownerIDEqualFold: ID
 	ownerIDContainsFold: ID
+	"""
+	system_owned field predicates
+	"""
+	systemOwned: Boolean
+	systemOwnedNEQ: Boolean
+	systemOwnedIsNil: Boolean
+	systemOwnedNotNil: Boolean
+	"""
+	internal_notes field predicates
+	"""
+	internalNotes: String
+	internalNotesNEQ: String
+	internalNotesIn: [String!]
+	internalNotesNotIn: [String!]
+	internalNotesGT: String
+	internalNotesGTE: String
+	internalNotesLT: String
+	internalNotesLTE: String
+	internalNotesContains: String
+	internalNotesHasPrefix: String
+	internalNotesHasSuffix: String
+	internalNotesIsNil: Boolean
+	internalNotesNotNil: Boolean
+	internalNotesEqualFold: String
+	internalNotesContainsFold: String
+	"""
+	system_internal_id field predicates
+	"""
+	systemInternalID: String
+	systemInternalIDNEQ: String
+	systemInternalIDIn: [String!]
+	systemInternalIDNotIn: [String!]
+	systemInternalIDGT: String
+	systemInternalIDGTE: String
+	systemInternalIDLT: String
+	systemInternalIDLTE: String
+	systemInternalIDContains: String
+	systemInternalIDHasPrefix: String
+	systemInternalIDHasSuffix: String
+	systemInternalIDIsNil: Boolean
+	systemInternalIDNotNil: Boolean
+	systemInternalIDEqualFold: String
+	systemInternalIDContainsFold: String
 	"""
 	reviewed_by field predicates
 	"""
@@ -78729,6 +80403,11 @@ input ScanWhereInput {
 	hasSubcontrols: Boolean
 	hasSubcontrolsWith: [SubcontrolWhereInput!]
 	"""
+	findings edge predicates
+	"""
+	hasFindings: Boolean
+	hasFindingsWith: [FindingWhereInput!]
+	"""
 	generated_by_platform edge predicates
 	"""
 	hasGeneratedByPlatform: Boolean
@@ -78748,9 +80427,9 @@ input ScanWhereInput {
 	"""
 	tagsHas: String
 	"""
-	Filter for vulnerabilityIdsHas to contain a specific value
+	Filter for discoveredVulnerabilityIdsHas to contain a specific value
 	"""
-	vulnerabilityIdsHas: String
+	discoveredVulnerabilityIdsHas: String
 }
 type ScheduledJob implements Node {
 	id: ID!
@@ -81112,6 +82791,68 @@ type Subcontrol implements Node {
 		"""
 		where: IdentityHolderWhereInput
 	): IdentityHolderConnection!
+	vulnerabilities(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Vulnerabilities returned from the connection.
+		"""
+		orderBy: [VulnerabilityOrder!]
+
+		"""
+		Filtering options for Vulnerabilities returned from the connection.
+		"""
+		where: VulnerabilityWhereInput
+	): VulnerabilityConnection!
+	findings(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Findings returned from the connection.
+		"""
+		orderBy: [FindingOrder!]
+
+		"""
+		Filtering options for Findings returned from the connection.
+		"""
+		where: FindingWhereInput
+	): FindingConnection!
 	"""
 	relatedControls show the controls and frameworks mapped to this control
 	"""
@@ -81212,6 +82953,7 @@ enum SubcontrolControlSource @goModel(model: "github.com/theopenlane/core/common
 SubcontrolControlStatus is enum for the field status
 """
 enum SubcontrolControlStatus @goModel(model: "github.com/theopenlane/core/common/enums.ControlStatus") {
+	DRAFT
 	PREPARING
 	NEEDS_APPROVAL
 	CHANGES_REQUESTED
@@ -81983,6 +83725,16 @@ input SubcontrolWhereInput {
 	"""
 	hasIdentityHolders: Boolean
 	hasIdentityHoldersWith: [IdentityHolderWhereInput!]
+	"""
+	vulnerabilities edge predicates
+	"""
+	hasVulnerabilities: Boolean
+	hasVulnerabilitiesWith: [VulnerabilityWhereInput!]
+	"""
+	findings edge predicates
+	"""
+	hasFindings: Boolean
+	hasFindingsWith: [FindingWhereInput!]
 	"""
 	Filter for tagsHas to contain a specific value
 	"""
@@ -83015,14 +84767,6 @@ type SystemDetail implements Node {
 	"""
 	ownerID: ID
 	"""
-	optional program anchor for this system detail
-	"""
-	programID: ID
-	"""
-	optional platform anchor for this system detail
-	"""
-	platformID: ID
-	"""
 	system name used in OSCAL metadata
 	"""
 	systemName: String!
@@ -83055,14 +84799,130 @@ type SystemDetail implements Node {
 	"""
 	oscalMetadataJSON: Map
 	owner: Organization
-	"""
-	optional program this detail belongs to
-	"""
-	program: Program
-	"""
-	optional platform this detail belongs to
-	"""
-	platform: Platform
+	programs(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Programs returned from the connection.
+		"""
+		orderBy: [ProgramOrder!]
+
+		"""
+		Filtering options for Programs returned from the connection.
+		"""
+		where: ProgramWhereInput
+	): ProgramConnection!
+	platforms(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Platforms returned from the connection.
+		"""
+		orderBy: [PlatformOrder!]
+
+		"""
+		Filtering options for Platforms returned from the connection.
+		"""
+		where: PlatformWhereInput
+	): PlatformConnection!
+	entities(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Entities returned from the connection.
+		"""
+		orderBy: [EntityOrder!]
+
+		"""
+		Filtering options for Entities returned from the connection.
+		"""
+		where: EntityWhereInput
+	): EntityConnection!
+	assets(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Assets returned from the connection.
+		"""
+		orderBy: [AssetOrder!]
+
+		"""
+		Filtering options for Assets returned from the connection.
+		"""
+		where: AssetWhereInput
+	): AssetConnection!
 }
 """
 Return response for createBulkSystemDetail mutation
@@ -83326,42 +85186,6 @@ input SystemDetailWhereInput {
 	ownerIDEqualFold: ID
 	ownerIDContainsFold: ID
 	"""
-	program_id field predicates
-	"""
-	programID: ID
-	programIDNEQ: ID
-	programIDIn: [ID!]
-	programIDNotIn: [ID!]
-	programIDGT: ID
-	programIDGTE: ID
-	programIDLT: ID
-	programIDLTE: ID
-	programIDContains: ID
-	programIDHasPrefix: ID
-	programIDHasSuffix: ID
-	programIDIsNil: Boolean
-	programIDNotNil: Boolean
-	programIDEqualFold: ID
-	programIDContainsFold: ID
-	"""
-	platform_id field predicates
-	"""
-	platformID: ID
-	platformIDNEQ: ID
-	platformIDIn: [ID!]
-	platformIDNotIn: [ID!]
-	platformIDGT: ID
-	platformIDGTE: ID
-	platformIDLT: ID
-	platformIDLTE: ID
-	platformIDContains: ID
-	platformIDHasPrefix: ID
-	platformIDHasSuffix: ID
-	platformIDIsNil: Boolean
-	platformIDNotNil: Boolean
-	platformIDEqualFold: ID
-	platformIDContainsFold: ID
-	"""
 	system_name field predicates
 	"""
 	systemName: String
@@ -83459,15 +85283,25 @@ input SystemDetailWhereInput {
 	hasOwner: Boolean
 	hasOwnerWith: [OrganizationWhereInput!]
 	"""
-	program edge predicates
+	programs edge predicates
 	"""
-	hasProgram: Boolean
-	hasProgramWith: [ProgramWhereInput!]
+	hasPrograms: Boolean
+	hasProgramsWith: [ProgramWhereInput!]
 	"""
-	platform edge predicates
+	platforms edge predicates
 	"""
-	hasPlatform: Boolean
-	hasPlatformWith: [PlatformWhereInput!]
+	hasPlatforms: Boolean
+	hasPlatformsWith: [PlatformWhereInput!]
+	"""
+	entities edge predicates
+	"""
+	hasEntities: Boolean
+	hasEntitiesWith: [EntityWhereInput!]
+	"""
+	assets edge predicates
+	"""
+	hasAssets: Boolean
+	hasAssetsWith: [AssetWhereInput!]
 	"""
 	Filter for tagsHas to contain a specific value
 	"""
@@ -84110,6 +85944,10 @@ type Task implements Node {
 	"""
 	scopeID: ID
 	"""
+	internal marker field for workflow eligibility, not exposed in API
+	"""
+	workflowEligibleMarker: Boolean
+	"""
 	stable external UUID for deterministic OSCAL export and round-tripping
 	"""
 	externalUUID: String
@@ -84125,6 +85963,10 @@ type Task implements Node {
 	structured details of the task in JSON format
 	"""
 	detailsJSON: [Any!]
+	"""
+	structured metadata used by clients for task presentation and routing
+	"""
+	metadata: Map
 	"""
 	the status of the task
 	"""
@@ -84153,6 +85995,22 @@ type Task implements Node {
 	indicates if the task is intended to be used as a template
 	"""
 	isTemplate: Boolean!
+	"""
+	indicates if the task is suggested by the system as a recommended next action
+	"""
+	isSuggested: Boolean!
+	"""
+	relative ordering priority for suggested and system-generated tasks
+	"""
+	priority: Int!
+	"""
+	the system or workflow that created or suggested the task
+	"""
+	source: String
+	"""
+	stable source-specific key for the task
+	"""
+	sourceKey: String
 	"""
 	key to prevent duplicates for auto-generated task based on rules
 	"""
@@ -84731,6 +86589,22 @@ type Task implements Node {
 	): FindingConnection!
 	parent: Task
 	tasks: [Task!]
+	"""
+	Indicates if this task has pending changes awaiting workflow approval
+	"""
+	hasPendingWorkflow: Boolean!
+	"""
+	Indicates if this task has any workflow history (completed or failed instances)
+	"""
+	hasWorkflowHistory: Boolean!
+	"""
+	Returns active workflow instances for this task (RUNNING or PAUSED)
+	"""
+	activeWorkflowInstances: [WorkflowInstance!]!
+	"""
+	Returns the workflow event timeline for this task across all workflow instances
+	"""
+	workflowTimeline(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: [WorkflowEventOrder!], where: WorkflowEventWhereInput, includeEmitFailures: Boolean): WorkflowEventConnection!
 }
 """
 Return response for createBulkTask mutation
@@ -84843,6 +86717,8 @@ enum TaskOrderField {
 	due
 	completed
 	is_template
+	is_suggested
+	priority
 }
 """
 TaskTaskStatus is enum for the field status
@@ -85107,6 +86983,13 @@ input TaskWhereInput {
 	scopeIDEqualFold: ID
 	scopeIDContainsFold: ID
 	"""
+	workflow_eligible_marker field predicates
+	"""
+	workflowEligibleMarker: Boolean
+	workflowEligibleMarkerNEQ: Boolean
+	workflowEligibleMarkerIsNil: Boolean
+	workflowEligibleMarkerNotNil: Boolean
+	"""
 	external_uuid field predicates
 	"""
 	externalUUID: String
@@ -85237,6 +87120,58 @@ input TaskWhereInput {
 	"""
 	isTemplate: Boolean
 	isTemplateNEQ: Boolean
+	"""
+	is_suggested field predicates
+	"""
+	isSuggested: Boolean
+	isSuggestedNEQ: Boolean
+	"""
+	priority field predicates
+	"""
+	priority: Int
+	priorityNEQ: Int
+	priorityIn: [Int!]
+	priorityNotIn: [Int!]
+	priorityGT: Int
+	priorityGTE: Int
+	priorityLT: Int
+	priorityLTE: Int
+	"""
+	source field predicates
+	"""
+	source: String
+	sourceNEQ: String
+	sourceIn: [String!]
+	sourceNotIn: [String!]
+	sourceGT: String
+	sourceGTE: String
+	sourceLT: String
+	sourceLTE: String
+	sourceContains: String
+	sourceHasPrefix: String
+	sourceHasSuffix: String
+	sourceIsNil: Boolean
+	sourceNotNil: Boolean
+	sourceEqualFold: String
+	sourceContainsFold: String
+	"""
+	source_key field predicates
+	"""
+	sourceKey: String
+	sourceKeyNEQ: String
+	sourceKeyIn: [String!]
+	sourceKeyNotIn: [String!]
+	sourceKeyGT: String
+	sourceKeyGTE: String
+	sourceKeyLT: String
+	sourceKeyLTE: String
+	sourceKeyContains: String
+	sourceKeyHasPrefix: String
+	sourceKeyHasSuffix: String
+	sourceKeyIsNil: Boolean
+	sourceKeyNotNil: Boolean
+	sourceKeyEqualFold: String
+	sourceKeyContainsFold: String
 	"""
 	idempotency_key field predicates
 	"""
@@ -88514,7 +90449,7 @@ type TrustCenterNDARequest implements Node {
 	"""
 	ID of the user who approved the request
 	"""
-	approvedByUserID: String
+	approvedByUserID: ID
 	"""
 	timestamp when the NDA was signed
 	"""
@@ -88629,6 +90564,7 @@ type TrustCenterNDARequest implements Node {
 	the template file at the time the NDA was signed
 	"""
 	file: File
+	approvedByUser: User
 }
 """
 Return response for createBulkTrustCenterNDARequest mutation
@@ -88987,21 +90923,21 @@ input TrustCenterNDARequestWhereInput {
 	"""
 	approved_by_user_id field predicates
 	"""
-	approvedByUserID: String
-	approvedByUserIDNEQ: String
-	approvedByUserIDIn: [String!]
-	approvedByUserIDNotIn: [String!]
-	approvedByUserIDGT: String
-	approvedByUserIDGTE: String
-	approvedByUserIDLT: String
-	approvedByUserIDLTE: String
-	approvedByUserIDContains: String
-	approvedByUserIDHasPrefix: String
-	approvedByUserIDHasSuffix: String
+	approvedByUserID: ID
+	approvedByUserIDNEQ: ID
+	approvedByUserIDIn: [ID!]
+	approvedByUserIDNotIn: [ID!]
+	approvedByUserIDGT: ID
+	approvedByUserIDGTE: ID
+	approvedByUserIDLT: ID
+	approvedByUserIDLTE: ID
+	approvedByUserIDContains: ID
+	approvedByUserIDHasPrefix: ID
+	approvedByUserIDHasSuffix: ID
 	approvedByUserIDIsNil: Boolean
 	approvedByUserIDNotNil: Boolean
-	approvedByUserIDEqualFold: String
-	approvedByUserIDContainsFold: String
+	approvedByUserIDEqualFold: ID
+	approvedByUserIDContainsFold: ID
 	"""
 	signed_at field predicates
 	"""
@@ -89081,6 +91017,11 @@ input TrustCenterNDARequestWhereInput {
 	"""
 	hasFile: Boolean
 	hasFileWith: [FileWhereInput!]
+	"""
+	approved_by_user edge predicates
+	"""
+	hasApprovedByUser: Boolean
+	hasApprovedByUserWith: [UserWhereInput!]
 	"""
 	Filter for tagsHas to contain a specific value
 	"""
@@ -89220,6 +91161,10 @@ type TrustCenterSetting implements Node {
 	whether NDA requests require approval before being processed
 	"""
 	ndaApprovalRequired: Boolean
+	"""
+	whether the trust center accepts new subscriber registrations; when false, subscriber creation for the trust center is blocked
+	"""
+	allowSubscribers: Boolean
 	"""
 	whether to email trust center subscribers when subprocessors are added, updated, or removed
 	"""
@@ -89878,6 +91823,13 @@ input TrustCenterSettingWhereInput {
 	ndaApprovalRequiredNEQ: Boolean
 	ndaApprovalRequiredIsNil: Boolean
 	ndaApprovalRequiredNotNil: Boolean
+	"""
+	allow_subscribers field predicates
+	"""
+	allowSubscribers: Boolean
+	allowSubscribersNEQ: Boolean
+	allowSubscribersIsNil: Boolean
+	allowSubscribersNotNil: Boolean
 	"""
 	notify_subscribers_on_subprocessor_change field predicates
 	"""
@@ -91552,6 +93504,11 @@ input UpdateAssessmentInput {
 	systemInternalID: String @readOnly
 	clearSystemInternalID: Boolean
 	"""
+	internal marker field for workflow eligibility, not exposed in API
+	"""
+	workflowEligibleMarker: Boolean
+	clearWorkflowEligibleMarker: Boolean
+	"""
 	the name of the assessment, e.g. cloud providers, marketing team
 	"""
 	name: String
@@ -91593,6 +93550,9 @@ input UpdateAssessmentInput {
 	addCampaignIDs: [ID!]
 	removeCampaignIDs: [ID!]
 	clearCampaigns: Boolean
+	addWorkflowObjectRefIDs: [ID!]
+	removeWorkflowObjectRefIDs: [ID!]
+	clearWorkflowObjectRefs: Boolean
 }
 """
 UpdateAssetInput is used for update Asset object.
@@ -91778,6 +93738,9 @@ input UpdateAssetInput {
 	addPlatformIDs: [ID!]
 	removePlatformIDs: [ID!]
 	clearPlatforms: Boolean
+	addSystemDetailIDs: [ID!]
+	removeSystemDetailIDs: [ID!]
+	clearSystemDetails: Boolean
 	addOutOfScopePlatformIDs: [ID!]
 	removeOutOfScopePlatformIDs: [ID!]
 	clearOutOfScopePlatforms: Boolean
@@ -91793,6 +93756,18 @@ input UpdateAssetInput {
 	addInternalPolicyIDs: [ID!]
 	removeInternalPolicyIDs: [ID!]
 	clearInternalPolicies: Boolean
+	addFindingIDs: [ID!]
+	removeFindingIDs: [ID!]
+	clearFindings: Boolean
+	addVulnerabilityIDs: [ID!]
+	removeVulnerabilityIDs: [ID!]
+	clearVulnerabilities: Boolean
+	addReviewIDs: [ID!]
+	removeReviewIDs: [ID!]
+	clearReviews: Boolean
+	addRemediationIDs: [ID!]
+	removeRemediationIDs: [ID!]
+	clearRemediations: Boolean
 	sourcePlatformID: ID
 	clearSourcePlatform: Boolean
 	addConnectedAssetIDs: [ID!]
@@ -92016,7 +93991,6 @@ input UpdateCampaignTargetInput {
 	"""
 	metadata: Map
 	clearMetadata: Boolean
-	campaignID: ID
 	contactID: ID
 	clearContact: Boolean
 	userID: ID
@@ -92492,6 +94466,9 @@ input UpdateControlInput {
 	addPlatformIDs: [ID!]
 	removePlatformIDs: [ID!]
 	clearPlatforms: Boolean
+	addVulnerabilityIDs: [ID!]
+	removeVulnerabilityIDs: [ID!]
+	clearVulnerabilities: Boolean
 	addAssetIDs: [ID!]
 	removeAssetIDs: [ID!]
 	clearAssets: Boolean
@@ -92504,9 +94481,6 @@ input UpdateControlInput {
 	addCampaignIDs: [ID!]
 	removeCampaignIDs: [ID!]
 	clearCampaigns: Boolean
-	addFindingIDs: [ID!]
-	removeFindingIDs: [ID!]
-	clearFindings: Boolean
 	addControlImplementationIDs: [ID!]
 	removeControlImplementationIDs: [ID!]
 	clearControlImplementations: Boolean
@@ -92942,9 +94916,6 @@ input UpdateDirectoryAccountInput {
 	clearIdentityHolder: Boolean
 	avatarFileID: ID
 	clearAvatarFile: Boolean
-	addGroupIDs: [ID!]
-	removeGroupIDs: [ID!]
-	clearGroups: Boolean
 	addFindingIDs: [ID!]
 	removeFindingIDs: [ID!]
 	clearFindings: Boolean
@@ -93500,6 +95471,12 @@ input UpdateEntityInput {
 	appendDomains: [String!]
 	clearDomains: Boolean
 	"""
+	common matching names that should match with the entity
+	"""
+	aliases: [String!]
+	appendAliases: [String!]
+	clearAliases: Boolean
+	"""
 	status of the entity
 	"""
 	status: EntityEntityStatus
@@ -93686,6 +95663,9 @@ input UpdateEntityInput {
 	addAssetIDs: [ID!]
 	removeAssetIDs: [ID!]
 	clearAssets: Boolean
+	addSystemDetailIDs: [ID!]
+	removeSystemDetailIDs: [ID!]
+	clearSystemDetails: Boolean
 	addScanIDs: [ID!]
 	removeScanIDs: [ID!]
 	clearScans: Boolean
@@ -93719,6 +95699,18 @@ input UpdateEntityInput {
 	addSubcontrolIDs: [ID!]
 	removeSubcontrolIDs: [ID!]
 	clearSubcontrols: Boolean
+	addFindingIDs: [ID!]
+	removeFindingIDs: [ID!]
+	clearFindings: Boolean
+	addVulnerabilityIDs: [ID!]
+	removeVulnerabilityIDs: [ID!]
+	clearVulnerabilities: Boolean
+	addReviewIDs: [ID!]
+	removeReviewIDs: [ID!]
+	clearReviews: Boolean
+	addRemediationIDs: [ID!]
+	removeRemediationIDs: [ID!]
+	clearRemediations: Boolean
 	addPlatformIDs: [ID!]
 	removePlatformIDs: [ID!]
 	clearPlatforms: Boolean
@@ -94177,6 +96169,8 @@ input UpdateFindingControlInput {
 	"""
 	discoveredAt: DateTime
 	clearDiscoveredAt: Boolean
+	ownerID: ID
+	clearOwner: Boolean
 }
 """
 UpdateFindingInput is used for update Finding object.
@@ -94189,6 +96183,16 @@ input UpdateFindingInput {
 	tags: [String!]
 	appendTags: [String!]
 	clearTags: Boolean
+	"""
+	who reviewed the finding when no user or group is linked
+	"""
+	reviewedBy: String
+	clearReviewedBy: Boolean
+	"""
+	who the finding is assigned to when no user or group is linked
+	"""
+	assignedTo: String
+	clearAssignedTo: Boolean
 	"""
 	internal notes about the object creation, this field is only available to system admins
 	"""
@@ -94214,6 +96218,11 @@ input UpdateFindingInput {
 	"""
 	findingStatusName: String
 	clearFindingStatusName: Boolean
+	"""
+	internal marker field for workflow eligibility, not exposed in API
+	"""
+	workflowEligibleMarker: Boolean
+	clearWorkflowEligibleMarker: Boolean
 	"""
 	external identifier from the integration source for the finding
 	"""
@@ -94404,6 +96413,14 @@ input UpdateFindingInput {
 	addEditorIDs: [ID!]
 	removeEditorIDs: [ID!]
 	clearEditors: Boolean
+	reviewedByUserID: ID
+	clearReviewedByUser: Boolean
+	reviewedByGroupID: ID
+	clearReviewedByGroup: Boolean
+	assignedToUserID: ID
+	clearAssignedToUser: Boolean
+	assignedToGroupID: ID
+	clearAssignedToGroup: Boolean
 	environmentID: ID
 	clearEnvironment: Boolean
 	scopeID: ID
@@ -94419,9 +96436,6 @@ input UpdateFindingInput {
 	addActionPlanIDs: [ID!]
 	removeActionPlanIDs: [ID!]
 	clearActionPlans: Boolean
-	addControlIDs: [ID!]
-	removeControlIDs: [ID!]
-	clearControls: Boolean
 	addSubcontrolIDs: [ID!]
 	removeSubcontrolIDs: [ID!]
 	clearSubcontrols: Boolean
@@ -95588,6 +97602,8 @@ input UpdateNoteInput {
 	clearRisk: Boolean
 	internalPolicyID: ID
 	clearInternalPolicy: Boolean
+	reviewID: ID
+	clearReview: Boolean
 	evidenceID: ID
 	clearEvidence: Boolean
 	trustCenterID: ID
@@ -96839,8 +98855,9 @@ input UpdatePlatformInput {
 	clearGeneratedScans: Boolean
 	platformOwnerID: ID
 	clearPlatformOwner: Boolean
-	systemDetailID: ID
-	clearSystemDetail: Boolean
+	addSystemDetailIDs: [ID!]
+	removeSystemDetailIDs: [ID!]
+	clearSystemDetails: Boolean
 }
 """
 UpdateProcedureInput is used for update Procedure object.
@@ -97086,6 +99103,26 @@ input UpdateProgramInput {
 	endDate: Time
 	clearEndDate: Boolean
 	"""
+	the start date of the observation period
+	"""
+	observationPeriodStartDate: Time
+	clearObservationPeriodStartDate: Boolean
+	"""
+	the end date of the observation period
+	"""
+	observationPeriodEndDate: Time
+	clearObservationPeriodEndDate: Boolean
+	"""
+	the start date of fieldwork
+	"""
+	fieldworkStartDate: Time
+	clearFieldworkStartDate: Boolean
+	"""
+	the end date of fieldwork
+	"""
+	fieldworkEndDate: Time
+	clearFieldworkEndDate: Boolean
+	"""
 	is the program ready for the auditor
 	"""
 	auditorReady: Boolean
@@ -97161,8 +99198,21 @@ input UpdateProgramInput {
 	addActionPlanIDs: [ID!]
 	removeActionPlanIDs: [ID!]
 	clearActionPlans: Boolean
-	systemDetailID: ID
-	clearSystemDetail: Boolean
+	addSystemDetailIDs: [ID!]
+	removeSystemDetailIDs: [ID!]
+	clearSystemDetails: Boolean
+	addFindingIDs: [ID!]
+	removeFindingIDs: [ID!]
+	clearFindings: Boolean
+	addVulnerabilityIDs: [ID!]
+	removeVulnerabilityIDs: [ID!]
+	clearVulnerabilities: Boolean
+	addReviewIDs: [ID!]
+	removeReviewIDs: [ID!]
+	clearReviews: Boolean
+	addRemediationIDs: [ID!]
+	removeRemediationIDs: [ID!]
+	clearRemediations: Boolean
 	programOwnerID: ID
 	clearProgramOwner: Boolean
 	addProgramMembers: [AddProgramMembershipInput!]
@@ -97206,6 +99256,11 @@ input UpdateRemediationInput {
 	"""
 	scopeName: String
 	clearScopeName: Boolean
+	"""
+	internal marker field for workflow eligibility, not exposed in API
+	"""
+	workflowEligibleMarker: Boolean
+	clearWorkflowEligibleMarker: Boolean
 	"""
 	external identifier from the integration source for the remediation
 	"""
@@ -97361,6 +99416,9 @@ input UpdateRemediationInput {
 	addFileIDs: [ID!]
 	removeFileIDs: [ID!]
 	clearFiles: Boolean
+	addWorkflowObjectRefIDs: [ID!]
+	removeWorkflowObjectRefIDs: [ID!]
+	clearWorkflowObjectRefs: Boolean
 }
 """
 UpdateReviewInput is used for update Review object.
@@ -97539,6 +99597,8 @@ input UpdateReviewInput {
 	addInternalPolicyIDs: [ID!]
 	removeInternalPolicyIDs: [ID!]
 	clearInternalPolicies: Boolean
+	addComment: CreateNoteInput
+	deleteComment: ID
 }
 """
 UpdateRiskInput is used for update Risk object.
@@ -97571,6 +99631,11 @@ input UpdateRiskInput {
 	"""
 	scopeName: String
 	clearScopeName: Boolean
+	"""
+	internal marker field for workflow eligibility, not exposed in API
+	"""
+	workflowEligibleMarker: Boolean
+	clearWorkflowEligibleMarker: Boolean
 	"""
 	stable identifier assigned by the source system, used for integration ingest deduplication
 	"""
@@ -97751,6 +99816,15 @@ input UpdateRiskInput {
 	addRemediationIDs: [ID!]
 	removeRemediationIDs: [ID!]
 	clearRemediations: Boolean
+	addVulnerabilityIDs: [ID!]
+	removeVulnerabilityIDs: [ID!]
+	clearVulnerabilities: Boolean
+	addFindingIDs: [ID!]
+	removeFindingIDs: [ID!]
+	clearFindings: Boolean
+	addWorkflowObjectRefIDs: [ID!]
+	removeWorkflowObjectRefIDs: [ID!]
+	clearWorkflowObjectRefs: Boolean
 	addDiscussion: CreateDiscussionInput
 	updateDiscussion: UpdateDiscussionsInput
 	deleteDiscussion: ID
@@ -97792,6 +99866,16 @@ input UpdateScanInput {
 	tags: [String!]
 	appendTags: [String!]
 	clearTags: Boolean
+	"""
+	internal notes about the object creation, this field is only available to system admins
+	"""
+	internalNotes: String @readOnly
+	clearInternalNotes: Boolean @readOnly
+	"""
+	an internal identifier for the mapping, this field is only available to system admins
+	"""
+	systemInternalID: String @readOnly
+	clearSystemInternalID: Boolean
 	"""
 	who reviewed the scan when no user or group is linked
 	"""
@@ -97848,11 +99932,11 @@ input UpdateScanInput {
 	"""
 	identifiers of vulnerabilities discovered during the scan
 	"""
-	vulnerabilityIds: [String!]
-	appendVulnerabilityIds: [String!]
-	clearVulnerabilityIds: Boolean
+	discoveredVulnerabilityIds: [String!]
+	appendDiscoveredVulnerabilityIds: [String!]
+	clearDiscoveredVulnerabilityIds: Boolean
 	"""
-	the status of the scan, e.g., processing, completed, failed
+	the status of the scan, e.g., pending, processing, completed, failed
 	"""
 	status: ScanScanStatus
 	addBlockedGroupIDs: [ID!]
@@ -97906,6 +99990,9 @@ input UpdateScanInput {
 	addSubcontrolIDs: [ID!]
 	removeSubcontrolIDs: [ID!]
 	clearSubcontrols: Boolean
+	addFindingIDs: [ID!]
+	removeFindingIDs: [ID!]
+	clearFindings: Boolean
 	generatedByPlatformID: ID
 	clearGeneratedByPlatform: Boolean
 	performedByUserID: ID
@@ -98309,6 +100396,12 @@ input UpdateSubcontrolInput {
 	addIdentityHolderIDs: [ID!]
 	removeIdentityHolderIDs: [ID!]
 	clearIdentityHolders: Boolean
+	addVulnerabilityIDs: [ID!]
+	removeVulnerabilityIDs: [ID!]
+	clearVulnerabilities: Boolean
+	addFindingIDs: [ID!]
+	removeFindingIDs: [ID!]
+	clearFindings: Boolean
 	addDiscussion: CreateDiscussionInput
 	updateDiscussion: UpdateDiscussionsInput
 	deleteDiscussion: ID
@@ -98447,10 +100540,18 @@ input UpdateSystemDetailInput {
 	"""
 	oscalMetadataJSON: Map
 	clearOscalMetadataJSON: Boolean
-	programID: ID
-	clearProgram: Boolean
-	platformID: ID
-	clearPlatform: Boolean
+	addProgramIDs: [ID!]
+	removeProgramIDs: [ID!]
+	clearPrograms: Boolean
+	addPlatformIDs: [ID!]
+	removePlatformIDs: [ID!]
+	clearPlatforms: Boolean
+	addEntityIDs: [ID!]
+	removeEntityIDs: [ID!]
+	clearEntities: Boolean
+	addAssetIDs: [ID!]
+	removeAssetIDs: [ID!]
+	clearAssets: Boolean
 }
 """
 UpdateTFASettingInput is used for update TFASetting object.
@@ -98532,6 +100633,11 @@ input UpdateTaskInput {
 	scopeName: String
 	clearScopeName: Boolean
 	"""
+	internal marker field for workflow eligibility, not exposed in API
+	"""
+	workflowEligibleMarker: Boolean
+	clearWorkflowEligibleMarker: Boolean
+	"""
 	stable external UUID for deterministic OSCAL export and round-tripping
 	"""
 	externalUUID: String
@@ -98551,6 +100657,11 @@ input UpdateTaskInput {
 	detailsJSON: [Any!]
 	appendDetailsJSON: [Any!]
 	clearDetailsJSON: Boolean
+	"""
+	structured metadata used by clients for task presentation and routing
+	"""
+	metadata: Map
+	clearMetadata: Boolean
 	"""
 	the status of the task
 	"""
@@ -98573,6 +100684,24 @@ input UpdateTaskInput {
 	indicates if the task is intended to be used as a template
 	"""
 	isTemplate: Boolean
+	"""
+	indicates if the task is suggested by the system as a recommended next action
+	"""
+	isSuggested: Boolean
+	"""
+	relative ordering priority for suggested and system-generated tasks
+	"""
+	priority: Int
+	"""
+	the system or workflow that created or suggested the task
+	"""
+	source: String
+	clearSource: Boolean
+	"""
+	stable source-specific key for the task
+	"""
+	sourceKey: String
+	clearSourceKey: Boolean
 	"""
 	an optional external reference URL for the task
 	"""
@@ -99001,11 +101130,6 @@ input UpdateTrustCenterNDARequestInput {
 	approvedAt: DateTime
 	clearApprovedAt: Boolean
 	"""
-	ID of the user who approved the request
-	"""
-	approvedByUserID: String
-	clearApprovedByUserID: Boolean
-	"""
 	timestamp when the NDA was signed
 	"""
 	signedAt: DateTime
@@ -99023,6 +101147,8 @@ input UpdateTrustCenterNDARequestInput {
 	clearDocument: Boolean
 	fileID: ID
 	clearFile: Boolean
+	approvedByUserID: ID
+	clearApprovedByUser: Boolean
 }
 """
 UpdateTrustCenterSettingInput is used for update TrustCenterSetting object.
@@ -99119,6 +101245,11 @@ input UpdateTrustCenterSettingInput {
 	"""
 	ndaApprovalRequired: Boolean
 	clearNdaApprovalRequired: Boolean
+	"""
+	whether the trust center accepts new subscriber registrations; when false, subscriber creation for the trust center is blocked
+	"""
+	allowSubscribers: Boolean
+	clearAllowSubscribers: Boolean
 	"""
 	whether to email trust center subscribers when subprocessors are added, updated, or removed
 	"""
@@ -99517,6 +101648,16 @@ input UpdateVulnerabilityInput {
 	appendTags: [String!]
 	clearTags: Boolean
 	"""
+	who reviewed the vulnerability when no user or group is linked
+	"""
+	reviewedBy: String
+	clearReviewedBy: Boolean
+	"""
+	who the vulnerability is assigned to when no user or group is linked
+	"""
+	assignedTo: String
+	clearAssignedTo: Boolean
+	"""
 	internal notes about the object creation, this field is only available to system admins
 	"""
 	internalNotes: String @readOnly
@@ -99541,6 +101682,11 @@ input UpdateVulnerabilityInput {
 	"""
 	vulnerabilityStatusName: String
 	clearVulnerabilityStatusName: Boolean
+	"""
+	internal marker field for workflow eligibility, not exposed in API
+	"""
+	workflowEligibleMarker: Boolean
+	clearWorkflowEligibleMarker: Boolean
 	"""
 	owner of the vulnerability
 	"""
@@ -99757,6 +101903,14 @@ input UpdateVulnerabilityInput {
 	addViewerIDs: [ID!]
 	removeViewerIDs: [ID!]
 	clearViewers: Boolean
+	reviewedByUserID: ID
+	clearReviewedByUser: Boolean
+	reviewedByGroupID: ID
+	clearReviewedByGroup: Boolean
+	assignedToUserID: ID
+	clearAssignedToUser: Boolean
+	assignedToGroupID: ID
+	clearAssignedToGroup: Boolean
 	environmentID: ID
 	clearEnvironment: Boolean
 	scopeID: ID
@@ -99808,6 +101962,9 @@ input UpdateVulnerabilityInput {
 	addFileIDs: [ID!]
 	removeFileIDs: [ID!]
 	clearFiles: Boolean
+	addWorkflowObjectRefIDs: [ID!]
+	removeWorkflowObjectRefIDs: [ID!]
+	clearWorkflowObjectRefs: Boolean
 }
 """
 UpdateWorkflowDefinitionInput is used for update WorkflowDefinition object.
@@ -102523,6 +104680,30 @@ type Vulnerability implements Node {
 	"""
 	ownerID: ID
 	"""
+	who reviewed the vulnerability when no user or group is linked
+	"""
+	reviewedBy: String
+	"""
+	the user id that reviewed the vulnerability
+	"""
+	reviewedByUserID: ID
+	"""
+	the group id that reviewed the vulnerability
+	"""
+	reviewedByGroupID: ID
+	"""
+	who the vulnerability is assigned to when no user or group is linked
+	"""
+	assignedTo: String
+	"""
+	the user id assigned to the vulnerability
+	"""
+	assignedToUserID: ID
+	"""
+	the group id assigned to the vulnerability
+	"""
+	assignedToGroupID: ID
+	"""
 	indicates if the record is owned by the the openlane system and not by an organization
 	"""
 	systemOwned: Boolean
@@ -102558,6 +104739,10 @@ type Vulnerability implements Node {
 	the status of the vulnerability
 	"""
 	vulnerabilityStatusID: ID
+	"""
+	internal marker field for workflow eligibility, not exposed in API
+	"""
+	workflowEligibleMarker: Boolean
 	"""
 	owner of the vulnerability
 	"""
@@ -102820,6 +105005,10 @@ type Vulnerability implements Node {
 		"""
 		where: GroupWhereInput
 	): GroupConnection!
+	reviewedByUser: User
+	reviewedByGroup: Group
+	assignedToUser: User
+	assignedToGroup: Group
 	environment: CustomTypeEnum
 	scope: CustomTypeEnum
 	vulnerabilityStatus: CustomTypeEnum
@@ -103288,6 +105477,53 @@ type Vulnerability implements Node {
 		"""
 		where: FileWhereInput
 	): FileConnection!
+	workflowObjectRefs(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for WorkflowObjectRefs returned from the connection.
+		"""
+		orderBy: [WorkflowObjectRefOrder!]
+
+		"""
+		Filtering options for WorkflowObjectRefs returned from the connection.
+		"""
+		where: WorkflowObjectRefWhereInput
+	): WorkflowObjectRefConnection!
+	"""
+	Indicates if this vulnerability has pending changes awaiting workflow approval
+	"""
+	hasPendingWorkflow: Boolean!
+	"""
+	Indicates if this vulnerability has any workflow history (completed or failed instances)
+	"""
+	hasWorkflowHistory: Boolean!
+	"""
+	Returns active workflow instances for this vulnerability (RUNNING or PAUSED)
+	"""
+	activeWorkflowInstances: [WorkflowInstance!]!
+	"""
+	Returns the workflow event timeline for this vulnerability across all workflow instances
+	"""
+	workflowTimeline(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: [WorkflowEventOrder!], where: WorkflowEventWhereInput, includeEmitFailures: Boolean): WorkflowEventConnection!
 }
 """
 Return response for createBulkVulnerability mutation
@@ -103401,6 +105637,7 @@ enum VulnerabilityOrderField {
 	cve_id
 	category
 	severity
+	score
 }
 """
 Return response for resolveVulnerability mutation
@@ -103604,6 +105841,114 @@ input VulnerabilityWhereInput {
 	ownerIDEqualFold: ID
 	ownerIDContainsFold: ID
 	"""
+	reviewed_by field predicates
+	"""
+	reviewedBy: String
+	reviewedByNEQ: String
+	reviewedByIn: [String!]
+	reviewedByNotIn: [String!]
+	reviewedByGT: String
+	reviewedByGTE: String
+	reviewedByLT: String
+	reviewedByLTE: String
+	reviewedByContains: String
+	reviewedByHasPrefix: String
+	reviewedByHasSuffix: String
+	reviewedByIsNil: Boolean
+	reviewedByNotNil: Boolean
+	reviewedByEqualFold: String
+	reviewedByContainsFold: String
+	"""
+	reviewed_by_user_id field predicates
+	"""
+	reviewedByUserID: ID
+	reviewedByUserIDNEQ: ID
+	reviewedByUserIDIn: [ID!]
+	reviewedByUserIDNotIn: [ID!]
+	reviewedByUserIDGT: ID
+	reviewedByUserIDGTE: ID
+	reviewedByUserIDLT: ID
+	reviewedByUserIDLTE: ID
+	reviewedByUserIDContains: ID
+	reviewedByUserIDHasPrefix: ID
+	reviewedByUserIDHasSuffix: ID
+	reviewedByUserIDIsNil: Boolean
+	reviewedByUserIDNotNil: Boolean
+	reviewedByUserIDEqualFold: ID
+	reviewedByUserIDContainsFold: ID
+	"""
+	reviewed_by_group_id field predicates
+	"""
+	reviewedByGroupID: ID
+	reviewedByGroupIDNEQ: ID
+	reviewedByGroupIDIn: [ID!]
+	reviewedByGroupIDNotIn: [ID!]
+	reviewedByGroupIDGT: ID
+	reviewedByGroupIDGTE: ID
+	reviewedByGroupIDLT: ID
+	reviewedByGroupIDLTE: ID
+	reviewedByGroupIDContains: ID
+	reviewedByGroupIDHasPrefix: ID
+	reviewedByGroupIDHasSuffix: ID
+	reviewedByGroupIDIsNil: Boolean
+	reviewedByGroupIDNotNil: Boolean
+	reviewedByGroupIDEqualFold: ID
+	reviewedByGroupIDContainsFold: ID
+	"""
+	assigned_to field predicates
+	"""
+	assignedTo: String
+	assignedToNEQ: String
+	assignedToIn: [String!]
+	assignedToNotIn: [String!]
+	assignedToGT: String
+	assignedToGTE: String
+	assignedToLT: String
+	assignedToLTE: String
+	assignedToContains: String
+	assignedToHasPrefix: String
+	assignedToHasSuffix: String
+	assignedToIsNil: Boolean
+	assignedToNotNil: Boolean
+	assignedToEqualFold: String
+	assignedToContainsFold: String
+	"""
+	assigned_to_user_id field predicates
+	"""
+	assignedToUserID: ID
+	assignedToUserIDNEQ: ID
+	assignedToUserIDIn: [ID!]
+	assignedToUserIDNotIn: [ID!]
+	assignedToUserIDGT: ID
+	assignedToUserIDGTE: ID
+	assignedToUserIDLT: ID
+	assignedToUserIDLTE: ID
+	assignedToUserIDContains: ID
+	assignedToUserIDHasPrefix: ID
+	assignedToUserIDHasSuffix: ID
+	assignedToUserIDIsNil: Boolean
+	assignedToUserIDNotNil: Boolean
+	assignedToUserIDEqualFold: ID
+	assignedToUserIDContainsFold: ID
+	"""
+	assigned_to_group_id field predicates
+	"""
+	assignedToGroupID: ID
+	assignedToGroupIDNEQ: ID
+	assignedToGroupIDIn: [ID!]
+	assignedToGroupIDNotIn: [ID!]
+	assignedToGroupIDGT: ID
+	assignedToGroupIDGTE: ID
+	assignedToGroupIDLT: ID
+	assignedToGroupIDLTE: ID
+	assignedToGroupIDContains: ID
+	assignedToGroupIDHasPrefix: ID
+	assignedToGroupIDHasSuffix: ID
+	assignedToGroupIDIsNil: Boolean
+	assignedToGroupIDNotNil: Boolean
+	assignedToGroupIDEqualFold: ID
+	assignedToGroupIDContainsFold: ID
+	"""
 	system_owned field predicates
 	"""
 	systemOwned: Boolean
@@ -103754,6 +106099,13 @@ input VulnerabilityWhereInput {
 	vulnerabilityStatusIDNotNil: Boolean
 	vulnerabilityStatusIDEqualFold: ID
 	vulnerabilityStatusIDContainsFold: ID
+	"""
+	workflow_eligible_marker field predicates
+	"""
+	workflowEligibleMarker: Boolean
+	workflowEligibleMarkerNEQ: Boolean
+	workflowEligibleMarkerIsNil: Boolean
+	workflowEligibleMarkerNotNil: Boolean
 	"""
 	external_owner_id field predicates
 	"""
@@ -104314,6 +106666,26 @@ input VulnerabilityWhereInput {
 	hasViewers: Boolean
 	hasViewersWith: [GroupWhereInput!]
 	"""
+	reviewed_by_user edge predicates
+	"""
+	hasReviewedByUser: Boolean
+	hasReviewedByUserWith: [UserWhereInput!]
+	"""
+	reviewed_by_group edge predicates
+	"""
+	hasReviewedByGroup: Boolean
+	hasReviewedByGroupWith: [GroupWhereInput!]
+	"""
+	assigned_to_user edge predicates
+	"""
+	hasAssignedToUser: Boolean
+	hasAssignedToUserWith: [UserWhereInput!]
+	"""
+	assigned_to_group edge predicates
+	"""
+	hasAssignedToGroup: Boolean
+	hasAssignedToGroupWith: [GroupWhereInput!]
+	"""
 	environment edge predicates
 	"""
 	hasEnvironment: Boolean
@@ -104403,6 +106775,11 @@ input VulnerabilityWhereInput {
 	"""
 	hasFiles: Boolean
 	hasFilesWith: [FileWhereInput!]
+	"""
+	workflow_object_refs edge predicates
+	"""
+	hasWorkflowObjectRefs: Boolean
+	hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
 	"""
 	Filter for tagsHas to contain a specific value
 	"""
@@ -104658,6 +107035,10 @@ type WorkflowAssignment implements Node {
 	structured invalidation metadata
 	"""
 	invalidationMetadata: WorkflowAssignmentInvalidation
+	"""
+	consolidated terminal outcome metadata discriminated by decision (supersedes approval/rejection/invalidation metadata)
+	"""
+	outcomeMetadata: AssignmentOutcome
 	"""
 	Timestamp when the assignment was decided
 	"""
@@ -106674,6 +109055,38 @@ type WorkflowInstance implements Node {
 	ID of the platform this workflow instance is associated with
 	"""
 	platformID: ID
+	"""
+	ID of the assessment this workflow instance is associated with
+	"""
+	assessmentID: ID
+	"""
+	ID of the assessment response this workflow instance is associated with
+	"""
+	assessmentResponseID: ID
+	"""
+	ID of the finding this workflow instance is associated with
+	"""
+	findingID: ID
+	"""
+	ID of the integration this workflow instance is associated with
+	"""
+	integrationID: ID
+	"""
+	ID of the remediation this workflow instance is associated with
+	"""
+	remediationID: ID
+	"""
+	ID of the risk this workflow instance is associated with
+	"""
+	riskID: ID
+	"""
+	ID of the task this workflow instance is associated with
+	"""
+	taskID: ID
+	"""
+	ID of the vulnerability this workflow instance is associated with
+	"""
+	vulnerabilityID: ID
 	owner: Organization
 	"""
 	Definition driving this instance
@@ -106719,6 +109132,38 @@ type WorkflowInstance implements Node {
 	Platform this workflow instance is associated with
 	"""
 	platform: Platform
+	"""
+	Assessment this workflow instance is associated with
+	"""
+	assessment: Assessment
+	"""
+	Assessment response this workflow instance is associated with
+	"""
+	assessmentResponse: AssessmentResponse
+	"""
+	Finding this workflow instance is associated with
+	"""
+	finding: Finding
+	"""
+	Integration this workflow instance is associated with
+	"""
+	integration: Integration
+	"""
+	Remediation this workflow instance is associated with
+	"""
+	remediation: Remediation
+	"""
+	Risk this workflow instance is associated with
+	"""
+	risk: Risk
+	"""
+	Task this workflow instance is associated with
+	"""
+	task: Task
+	"""
+	Vulnerability this workflow instance is associated with
+	"""
+	vulnerability: Vulnerability
 	workflowAssignments(
 		"""
 		Returns the elements in the list that come after the specified cursor.
@@ -107302,6 +109747,150 @@ input WorkflowInstanceWhereInput {
 	platformIDEqualFold: ID
 	platformIDContainsFold: ID
 	"""
+	assessment_id field predicates
+	"""
+	assessmentID: ID
+	assessmentIDNEQ: ID
+	assessmentIDIn: [ID!]
+	assessmentIDNotIn: [ID!]
+	assessmentIDGT: ID
+	assessmentIDGTE: ID
+	assessmentIDLT: ID
+	assessmentIDLTE: ID
+	assessmentIDContains: ID
+	assessmentIDHasPrefix: ID
+	assessmentIDHasSuffix: ID
+	assessmentIDIsNil: Boolean
+	assessmentIDNotNil: Boolean
+	assessmentIDEqualFold: ID
+	assessmentIDContainsFold: ID
+	"""
+	assessment_response_id field predicates
+	"""
+	assessmentResponseID: ID
+	assessmentResponseIDNEQ: ID
+	assessmentResponseIDIn: [ID!]
+	assessmentResponseIDNotIn: [ID!]
+	assessmentResponseIDGT: ID
+	assessmentResponseIDGTE: ID
+	assessmentResponseIDLT: ID
+	assessmentResponseIDLTE: ID
+	assessmentResponseIDContains: ID
+	assessmentResponseIDHasPrefix: ID
+	assessmentResponseIDHasSuffix: ID
+	assessmentResponseIDIsNil: Boolean
+	assessmentResponseIDNotNil: Boolean
+	assessmentResponseIDEqualFold: ID
+	assessmentResponseIDContainsFold: ID
+	"""
+	finding_id field predicates
+	"""
+	findingID: ID
+	findingIDNEQ: ID
+	findingIDIn: [ID!]
+	findingIDNotIn: [ID!]
+	findingIDGT: ID
+	findingIDGTE: ID
+	findingIDLT: ID
+	findingIDLTE: ID
+	findingIDContains: ID
+	findingIDHasPrefix: ID
+	findingIDHasSuffix: ID
+	findingIDIsNil: Boolean
+	findingIDNotNil: Boolean
+	findingIDEqualFold: ID
+	findingIDContainsFold: ID
+	"""
+	integration_id field predicates
+	"""
+	integrationID: ID
+	integrationIDNEQ: ID
+	integrationIDIn: [ID!]
+	integrationIDNotIn: [ID!]
+	integrationIDGT: ID
+	integrationIDGTE: ID
+	integrationIDLT: ID
+	integrationIDLTE: ID
+	integrationIDContains: ID
+	integrationIDHasPrefix: ID
+	integrationIDHasSuffix: ID
+	integrationIDIsNil: Boolean
+	integrationIDNotNil: Boolean
+	integrationIDEqualFold: ID
+	integrationIDContainsFold: ID
+	"""
+	remediation_id field predicates
+	"""
+	remediationID: ID
+	remediationIDNEQ: ID
+	remediationIDIn: [ID!]
+	remediationIDNotIn: [ID!]
+	remediationIDGT: ID
+	remediationIDGTE: ID
+	remediationIDLT: ID
+	remediationIDLTE: ID
+	remediationIDContains: ID
+	remediationIDHasPrefix: ID
+	remediationIDHasSuffix: ID
+	remediationIDIsNil: Boolean
+	remediationIDNotNil: Boolean
+	remediationIDEqualFold: ID
+	remediationIDContainsFold: ID
+	"""
+	risk_id field predicates
+	"""
+	riskID: ID
+	riskIDNEQ: ID
+	riskIDIn: [ID!]
+	riskIDNotIn: [ID!]
+	riskIDGT: ID
+	riskIDGTE: ID
+	riskIDLT: ID
+	riskIDLTE: ID
+	riskIDContains: ID
+	riskIDHasPrefix: ID
+	riskIDHasSuffix: ID
+	riskIDIsNil: Boolean
+	riskIDNotNil: Boolean
+	riskIDEqualFold: ID
+	riskIDContainsFold: ID
+	"""
+	task_id field predicates
+	"""
+	taskID: ID
+	taskIDNEQ: ID
+	taskIDIn: [ID!]
+	taskIDNotIn: [ID!]
+	taskIDGT: ID
+	taskIDGTE: ID
+	taskIDLT: ID
+	taskIDLTE: ID
+	taskIDContains: ID
+	taskIDHasPrefix: ID
+	taskIDHasSuffix: ID
+	taskIDIsNil: Boolean
+	taskIDNotNil: Boolean
+	taskIDEqualFold: ID
+	taskIDContainsFold: ID
+	"""
+	vulnerability_id field predicates
+	"""
+	vulnerabilityID: ID
+	vulnerabilityIDNEQ: ID
+	vulnerabilityIDIn: [ID!]
+	vulnerabilityIDNotIn: [ID!]
+	vulnerabilityIDGT: ID
+	vulnerabilityIDGTE: ID
+	vulnerabilityIDLT: ID
+	vulnerabilityIDLTE: ID
+	vulnerabilityIDContains: ID
+	vulnerabilityIDHasPrefix: ID
+	vulnerabilityIDHasSuffix: ID
+	vulnerabilityIDIsNil: Boolean
+	vulnerabilityIDNotNil: Boolean
+	vulnerabilityIDEqualFold: ID
+	vulnerabilityIDContainsFold: ID
+	"""
 	owner edge predicates
 	"""
 	hasOwner: Boolean
@@ -107361,6 +109950,46 @@ input WorkflowInstanceWhereInput {
 	"""
 	hasPlatform: Boolean
 	hasPlatformWith: [PlatformWhereInput!]
+	"""
+	assessment edge predicates
+	"""
+	hasAssessment: Boolean
+	hasAssessmentWith: [AssessmentWhereInput!]
+	"""
+	assessment_response edge predicates
+	"""
+	hasAssessmentResponse: Boolean
+	hasAssessmentResponseWith: [AssessmentResponseWhereInput!]
+	"""
+	finding edge predicates
+	"""
+	hasFinding: Boolean
+	hasFindingWith: [FindingWhereInput!]
+	"""
+	integration edge predicates
+	"""
+	hasIntegration: Boolean
+	hasIntegrationWith: [IntegrationWhereInput!]
+	"""
+	remediation edge predicates
+	"""
+	hasRemediation: Boolean
+	hasRemediationWith: [RemediationWhereInput!]
+	"""
+	risk edge predicates
+	"""
+	hasRisk: Boolean
+	hasRiskWith: [RiskWhereInput!]
+	"""
+	task edge predicates
+	"""
+	hasTask: Boolean
+	hasTaskWith: [TaskWhereInput!]
+	"""
+	vulnerability edge predicates
+	"""
+	hasVulnerability: Boolean
+	hasVulnerabilityWith: [VulnerabilityWhereInput!]
 	"""
 	workflow_assignments edge predicates
 	"""
@@ -107490,6 +110119,26 @@ type WorkflowObjectRef implements Node {
 	Platform referenced by this workflow instance
 	"""
 	platformID: ID
+	"""
+	Vulnerability referenced by this workflow instance
+	"""
+	vulnerabilityID: ID
+	"""
+	Risk referenced by this workflow instance
+	"""
+	riskID: ID
+	"""
+	Assessment referenced by this workflow instance
+	"""
+	assessmentID: ID
+	"""
+	Assessment response referenced by this workflow instance
+	"""
+	assessmentResponseID: ID
+	"""
+	Remediation referenced by this workflow instance
+	"""
+	remediationID: ID
 	owner: Organization
 	"""
 	Workflow instance this object is associated with
@@ -107555,6 +110204,26 @@ type WorkflowObjectRef implements Node {
 	Platform referenced by this workflow instance
 	"""
 	platform: Platform
+	"""
+	Vulnerability referenced by this workflow instance
+	"""
+	vulnerability: Vulnerability
+	"""
+	Risk referenced by this workflow instance
+	"""
+	risk: Risk
+	"""
+	Assessment referenced by this workflow instance
+	"""
+	assessment: Assessment
+	"""
+	Assessment response referenced by this workflow instance
+	"""
+	assessmentResponse: AssessmentResponse
+	"""
+	Remediation referenced by this workflow instance
+	"""
+	remediation: Remediation
 }
 """
 A connection to a list of items.
@@ -108028,6 +110697,96 @@ input WorkflowObjectRefWhereInput {
 	platformIDEqualFold: ID
 	platformIDContainsFold: ID
 	"""
+	vulnerability_id field predicates
+	"""
+	vulnerabilityID: ID
+	vulnerabilityIDNEQ: ID
+	vulnerabilityIDIn: [ID!]
+	vulnerabilityIDNotIn: [ID!]
+	vulnerabilityIDGT: ID
+	vulnerabilityIDGTE: ID
+	vulnerabilityIDLT: ID
+	vulnerabilityIDLTE: ID
+	vulnerabilityIDContains: ID
+	vulnerabilityIDHasPrefix: ID
+	vulnerabilityIDHasSuffix: ID
+	vulnerabilityIDIsNil: Boolean
+	vulnerabilityIDNotNil: Boolean
+	vulnerabilityIDEqualFold: ID
+	vulnerabilityIDContainsFold: ID
+	"""
+	risk_id field predicates
+	"""
+	riskID: ID
+	riskIDNEQ: ID
+	riskIDIn: [ID!]
+	riskIDNotIn: [ID!]
+	riskIDGT: ID
+	riskIDGTE: ID
+	riskIDLT: ID
+	riskIDLTE: ID
+	riskIDContains: ID
+	riskIDHasPrefix: ID
+	riskIDHasSuffix: ID
+	riskIDIsNil: Boolean
+	riskIDNotNil: Boolean
+	riskIDEqualFold: ID
+	riskIDContainsFold: ID
+	"""
+	assessment_id field predicates
+	"""
+	assessmentID: ID
+	assessmentIDNEQ: ID
+	assessmentIDIn: [ID!]
+	assessmentIDNotIn: [ID!]
+	assessmentIDGT: ID
+	assessmentIDGTE: ID
+	assessmentIDLT: ID
+	assessmentIDLTE: ID
+	assessmentIDContains: ID
+	assessmentIDHasPrefix: ID
+	assessmentIDHasSuffix: ID
+	assessmentIDIsNil: Boolean
+	assessmentIDNotNil: Boolean
+	assessmentIDEqualFold: ID
+	assessmentIDContainsFold: ID
+	"""
+	assessment_response_id field predicates
+	"""
+	assessmentResponseID: ID
+	assessmentResponseIDNEQ: ID
+	assessmentResponseIDIn: [ID!]
+	assessmentResponseIDNotIn: [ID!]
+	assessmentResponseIDGT: ID
+	assessmentResponseIDGTE: ID
+	assessmentResponseIDLT: ID
+	assessmentResponseIDLTE: ID
+	assessmentResponseIDContains: ID
+	assessmentResponseIDHasPrefix: ID
+	assessmentResponseIDHasSuffix: ID
+	assessmentResponseIDIsNil: Boolean
+	assessmentResponseIDNotNil: Boolean
+	assessmentResponseIDEqualFold: ID
+	assessmentResponseIDContainsFold: ID
+	"""
+	remediation_id field predicates
+	"""
+	remediationID: ID
+	remediationIDNEQ: ID
+	remediationIDIn: [ID!]
+	remediationIDNotIn: [ID!]
+	remediationIDGT: ID
+	remediationIDGTE: ID
+	remediationIDLT: ID
+	remediationIDLTE: ID
+	remediationIDContains: ID
+	remediationIDHasPrefix: ID
+	remediationIDHasSuffix: ID
+	remediationIDIsNil: Boolean
+	remediationIDNotNil: Boolean
+	remediationIDEqualFold: ID
+	remediationIDContainsFold: ID
+	"""
 	owner edge predicates
 	"""
 	hasOwner: Boolean
@@ -108112,6 +110871,31 @@ input WorkflowObjectRefWhereInput {
 	"""
 	hasPlatform: Boolean
 	hasPlatformWith: [PlatformWhereInput!]
+	"""
+	vulnerability edge predicates
+	"""
+	hasVulnerability: Boolean
+	hasVulnerabilityWith: [VulnerabilityWhereInput!]
+	"""
+	risk edge predicates
+	"""
+	hasRisk: Boolean
+	hasRiskWith: [RiskWhereInput!]
+	"""
+	assessment edge predicates
+	"""
+	hasAssessment: Boolean
+	hasAssessmentWith: [AssessmentWhereInput!]
+	"""
+	assessment_response edge predicates
+	"""
+	hasAssessmentResponse: Boolean
+	hasAssessmentResponseWith: [AssessmentResponseWhereInput!]
+	"""
+	remediation edge predicates
+	"""
+	hasRemediation: Boolean
+	hasRemediationWith: [RemediationWhereInput!]
 }
 """
 Metadata for a workflow object type
@@ -108180,6 +110964,10 @@ type WorkflowProposal implements Node {
 	Staged field updates for this domain; applied only after approval
 	"""
 	changes: Map
+	"""
+	Staged field updates as opaque JSON; preferred over changes field
+	"""
+	proposedChanges: WorkflowProposedChanges
 	"""
 	Hash of the current proposed changes for approval verification
 	"""
@@ -108284,3 +111072,7 @@ enum WorkflowProposalWorkflowProposalState @goModel(model: "github.com/theopenla
 	REJECTED
 	SUPERSEDED
 }
+"""
+WorkflowProposedChanges captures staged field updates as opaque JSON for workflow proposals.
+"""
+scalar WorkflowProposedChanges

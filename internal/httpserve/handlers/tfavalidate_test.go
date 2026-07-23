@@ -27,9 +27,7 @@ func (suite *HandlerTestSuite) TestTFAValidate() {
 	t := suite.T()
 
 	// add login handler
-	// Create operation for ValidateTOTP
-	operation := suite.createImpersonationOperation("ValidateTOTP", "Validate TOTP code")
-	suite.registerTestHandler("POST", "2fa/validate", operation, suite.h.ValidateTOTP)
+	suite.registerTestHandler("POST", "2fa/validate", suite.h.ValidateTOTP)
 
 	// Create a fresh TFA-enabled user per subtest to avoid time-window and reuse
 	// collisions between tests.
@@ -133,7 +131,7 @@ func (suite *HandlerTestSuite) TestTFAValidate() {
 			res := recorder.Result()
 			defer res.Body.Close()
 
-			var out *models.TFAReply
+			var out *models.TFAResponse
 
 			// parse request body
 			if err := json.NewDecoder(res.Body).Decode(&out); err != nil {
@@ -157,7 +155,7 @@ func (suite *HandlerTestSuite) TestTFAValidate() {
 		require.NotEmpty(t, recoveryCodes)
 		recoveryCode := recoveryCodes[0]
 
-		send := func() (*httptest.ResponseRecorder, *models.TFAReply) {
+		send := func() (*httptest.ResponseRecorder, *models.TFAResponse) {
 			tfaJSON := models.TFARequest{
 				RecoveryCode: recoveryCode,
 			}
@@ -174,7 +172,7 @@ func (suite *HandlerTestSuite) TestTFAValidate() {
 			res := recorder.Result()
 			defer res.Body.Close()
 
-			var out *models.TFAReply
+			var out *models.TFAResponse
 			if err := json.NewDecoder(res.Body).Decode(&out); err != nil {
 				t.Error("error parsing response", err)
 			}

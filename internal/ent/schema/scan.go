@@ -10,7 +10,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/interceptors"
+	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/entx"
@@ -111,14 +111,14 @@ func (Scan) Fields() []ent.Field {
 			Annotations(
 				entx.CSVRef().FromColumn("GeneratedByPlatformName").MatchOn("name").CreateIfMissing(),
 			),
-		field.Strings("vulnerability_ids").
+		field.Strings("discovered_vulnerability_ids").
 			Comment("identifiers of vulnerabilities discovered during the scan").
 			Default([]string{}).
 			Optional(),
 		field.Enum("status").
-			Comment("the status of the scan, e.g., processing, completed, failed").
+			Comment("the status of the scan, e.g., pending, processing, completed, failed").
 			GoType(enums.ScanStatus("")).
-			Default(enums.ScanStatusProcessing.String()).
+			Default(enums.ScanStatusPending.String()).
 			Annotations(entgql.OrderField("STATUS"), entx.FieldSearchable()),
 	}
 }
@@ -137,8 +137,9 @@ func (s Scan) Mixin() []ent.Mixin {
 				),
 				withOrganizationOwner(),
 				withSkipForSystemAdmin(),
-				withSkipFilterInterceptor(interceptors.SkipAllQuery|interceptors.SkipIDsQuery),
+				withSkipperFunc(skipInterceptorForSystemAdmins),
 			),
+			mixin.NewSystemOwnedMixin(mixin.SkipTupleCreation()),
 			newGroupPermissionsMixin(withSkipViewPermissions(), withGroupPermissionsInterceptor()),
 			newResponsibilityMixin(s, withReviewedBy(), withAssignedTo()),
 			newCustomEnumMixin(s, withEnumFieldName("environment"), withGlobalEnum()),
@@ -161,6 +162,7 @@ func (s Scan) Edges() []ent.Edge {
 		defaultEdgeFromWithPagination(s, Vulnerability{}),
 		defaultEdgeFromWithPagination(s, Control{}),
 		defaultEdgeFromWithPagination(s, Subcontrol{}),
+		defaultEdgeFromWithPagination(s, Finding{}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: s,
 			name:       "generated_by_platform",

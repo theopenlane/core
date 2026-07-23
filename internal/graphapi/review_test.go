@@ -146,9 +146,26 @@ func TestCreateReviewUpdatesEntityReviewFields(t *testing.T) {
 
 func TestCreateReview(t *testing.T) {
 	entity1 := (&EntityBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	program := (&ProgramBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	program2 := (&ProgramBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	control := (&ControlBuilder{client: suite.client, ProgramID: program.ID}).MustNew(sharedTestUser1.UserCtx, t)
+
+	programInOrg2 := (&ProgramBuilder{client: suite.client}).MustNew(sharedTestUser2.UserCtx, t)
+	controlInOrg2 := (&ControlBuilder{client: suite.client, ProgramID: programInOrg2.ID}).MustNew(sharedTestUser2.UserCtx, t)
+
+	firstProgramReviewResp, err := suite.client.api.CreateReview(sharedTestUser1.UserCtx, testclient.CreateReviewInput{
+		Title:      "First Program Review",
+		ProgramIDs: []string{program.ID},
+	})
+	assert.NilError(t, err)
+	assert.Check(t, firstProgramReviewResp != nil)
 
 	entitiesToCleanup := []string{entity1.ID}
 	entityTypesToCleanup := []string{entity1.EntityTypeID}
+	controlsToCleanup := []string{control.ID}
+	programsToCleanup := []string{program.ID, program2.ID}
+	controlsNoAccessToCleanup := []string{controlInOrg2.ID}
+	programsNoAccessToCleanup := []string{programInOrg2.ID}
 
 	testCases := []struct {
 		name        string
@@ -179,6 +196,64 @@ func TestCreateReview(t *testing.T) {
 			},
 			client: suite.client.api,
 			ctx:    sharedTestUser1.UserCtx,
+		},
+		{
+			name: "happy path, auditor creating review linked to program",
+			reviewInput: testclient.CreateReviewInput{
+				Title:      "Program Review",
+				ProgramIDs: []string{program.ID},
+			},
+			client: suite.client.api,
+			ctx:    sharedAuditorUser.UserCtx,
+		},
+		{
+			name: "happy path, second review linked to same program",
+			reviewInput: testclient.CreateReviewInput{
+				Title:      "Second Program Review",
+				ProgramIDs: []string{program.ID},
+			},
+			client: suite.client.api,
+			ctx:    sharedTestUser1.UserCtx,
+		},
+		{
+			name: "happy path, auditor creating review linked to program with reviewer",
+			reviewInput: testclient.CreateReviewInput{
+				Title:      "Program Review with Reviewer",
+				ProgramIDs: []string{program2.ID},
+				Reporter:   lo.ToPtr("Reporter 1"),
+				ReviewerID: lo.ToPtr(sharedAuditorUser.ID),
+			},
+			client: suite.client.api,
+			ctx:    sharedAuditorUser.UserCtx,
+		},
+		{
+			name: "happy path, auditor creating review linked to control",
+			reviewInput: testclient.CreateReviewInput{
+				Title:      "Control Review",
+				ControlIDs: []string{control.ID},
+			},
+			client: suite.client.api,
+			ctx:    sharedAuditorUser.UserCtx,
+		},
+		{
+			name: "auditor unable to access program",
+			reviewInput: testclient.CreateReviewInput{
+				Title:      "Unauthorized Program Review",
+				ProgramIDs: []string{programInOrg2.ID},
+			},
+			client:      suite.client.api,
+			ctx:         sharedAuditorUser.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
+		},
+		{
+			name: "auditor unable to access control",
+			reviewInput: testclient.CreateReviewInput{
+				Title:      "Unauthorized Control Review",
+				ControlIDs: []string{controlInOrg2.ID},
+			},
+			client:      suite.client.api,
+			ctx:         sharedAuditorUser.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name: "happy path, using PAT",
@@ -227,7 +302,50 @@ func TestCreateReview(t *testing.T) {
 				assert.Check(t, is.Equal(*tc.reviewInput.Summary, *review.Summary))
 			}
 
-			if len(tc.reviewInput.EntityIDs) > 0 {
+			if tc.reviewInput.Reporter != nil {
+				assert.Check(t, is.Equal(*tc.reviewInput.Reporter, lo.FromPtr(review.Reporter)))
+			}
+
+			if tc.reviewInput.ReviewerID != nil {
+				assert.Check(t, is.Equal(*tc.reviewInput.ReviewerID, lo.FromPtr(review.ReviewerID)))
+			}
+
+			if len(tc.reviewInput.ProgramIDs) > 0 {
+				ctx := setContext(sharedTestUser1.UserCtx, suite.client.db)
+				entReview, err := suite.client.db.Review.Get(ctx, review.ID)
+				assert.NilError(t, err)
+
+				programs, err := entReview.QueryPrograms().All(ctx)
+				assert.NilError(t, err)
+				assert.Check(t, is.Len(programs, len(tc.reviewInput.ProgramIDs)))
+				if len(programs) > 0 {
+					assert.Check(t, is.Equal(tc.reviewInput.ProgramIDs[0], programs[0].ID))
+				}
+
+				if tc.reviewInput.ProgramIDs[0] == program.ID {
+					entProgram, err := suite.client.db.Program.Get(ctx, program.ID)
+					assert.NilError(t, err)
+
+					linkedReviews, err := entProgram.QueryReviews().All(ctx)
+					assert.NilError(t, err)
+					assert.Check(t, is.Len(linkedReviews, 2))
+				}
+			}
+
+			if len(tc.reviewInput.ControlIDs) > 0 {
+				ctx := setContext(sharedTestUser1.UserCtx, suite.client.db)
+				entReview, err := suite.client.db.Review.Get(ctx, review.ID)
+				assert.NilError(t, err)
+
+				controls, err := entReview.QueryControls().All(ctx)
+				assert.NilError(t, err)
+				assert.Check(t, is.Len(controls, len(tc.reviewInput.ControlIDs)))
+				if len(controls) > 0 {
+					assert.Check(t, is.Equal(tc.reviewInput.ControlIDs[0], controls[0].ID))
+				}
+			}
+
+			if len(tc.reviewInput.EntityIDs) > 0 || len(tc.reviewInput.ProgramIDs) > 0 || len(tc.reviewInput.ControlIDs) > 0 {
 				_, err = suite.client.api.DeleteReview(sharedTestUser1.UserCtx, review.ID)
 				assert.NilError(t, err)
 			}
@@ -236,6 +354,11 @@ func TestCreateReview(t *testing.T) {
 
 	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, IDs: entitiesToCleanup}).MustDelete(sharedTestUser1.UserCtx, t)
 	(&Cleanup[*generated.EntityTypeDeleteOne]{client: suite.client.db.EntityType, IDs: entityTypesToCleanup}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlsToCleanup}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.ReviewDeleteOne]{client: suite.client.db.Review, ID: firstProgramReviewResp.CreateReview.Review.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: programsToCleanup}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: controlsNoAccessToCleanup}).MustDelete(sharedTestUser2.UserCtx, t)
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: programsNoAccessToCleanup}).MustDelete(sharedTestUser2.UserCtx, t)
 }
 
 func TestQueryReview(t *testing.T) {

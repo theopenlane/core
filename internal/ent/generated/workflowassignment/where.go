@@ -1108,6 +1108,16 @@ func InvalidationMetadataNotNil() predicate.WorkflowAssignment {
 	return predicate.WorkflowAssignment(sql.FieldNotNull(FieldInvalidationMetadata))
 }
 
+// OutcomeMetadataIsNil applies the IsNil predicate on the "outcome_metadata" field.
+func OutcomeMetadataIsNil() predicate.WorkflowAssignment {
+	return predicate.WorkflowAssignment(sql.FieldIsNull(FieldOutcomeMetadata))
+}
+
+// OutcomeMetadataNotNil applies the NotNil predicate on the "outcome_metadata" field.
+func OutcomeMetadataNotNil() predicate.WorkflowAssignment {
+	return predicate.WorkflowAssignment(sql.FieldNotNull(FieldOutcomeMetadata))
+}
+
 // DecidedAtEQ applies the EQ predicate on the "decided_at" field.
 func DecidedAtEQ(v time.Time) predicate.WorkflowAssignment {
 	return predicate.WorkflowAssignment(sql.FieldEQ(FieldDecidedAt, v))

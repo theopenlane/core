@@ -54,6 +54,8 @@ const (
 	FieldScopeName = "scope_name"
 	// FieldScopeID holds the string denoting the scope_id field in the database.
 	FieldScopeID = "scope_id"
+	// FieldWorkflowEligibleMarker holds the string denoting the workflow_eligible_marker field in the database.
+	FieldWorkflowEligibleMarker = "workflow_eligible_marker"
 	// FieldExternalID holds the string denoting the external_id field in the database.
 	FieldExternalID = "external_id"
 	// FieldIntegrationID holds the string denoting the integration_id field in the database.
@@ -154,6 +156,12 @@ const (
 	EdgeReviews = "reviews"
 	// EdgeRemediations holds the string denoting the remediations edge name in mutations.
 	EdgeRemediations = "remediations"
+	// EdgeVulnerabilities holds the string denoting the vulnerabilities edge name in mutations.
+	EdgeVulnerabilities = "vulnerabilities"
+	// EdgeFindings holds the string denoting the findings edge name in mutations.
+	EdgeFindings = "findings"
+	// EdgeWorkflowObjectRefs holds the string denoting the workflow_object_refs edge name in mutations.
+	EdgeWorkflowObjectRefs = "workflow_object_refs"
 	// Table holds the table name of the risk in the database.
 	Table = "risks"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -305,6 +313,23 @@ const (
 	// RemediationsInverseTable is the table name for the Remediation entity.
 	// It exists in this package in order to avoid circular dependency with the "remediation" package.
 	RemediationsInverseTable = "remediations"
+	// VulnerabilitiesTable is the table that holds the vulnerabilities relation/edge. The primary key declared below.
+	VulnerabilitiesTable = "vulnerability_risks"
+	// VulnerabilitiesInverseTable is the table name for the Vulnerability entity.
+	// It exists in this package in order to avoid circular dependency with the "vulnerability" package.
+	VulnerabilitiesInverseTable = "vulnerabilities"
+	// FindingsTable is the table that holds the findings relation/edge. The primary key declared below.
+	FindingsTable = "finding_risks"
+	// FindingsInverseTable is the table name for the Finding entity.
+	// It exists in this package in order to avoid circular dependency with the "finding" package.
+	FindingsInverseTable = "findings"
+	// WorkflowObjectRefsTable is the table that holds the workflow_object_refs relation/edge.
+	WorkflowObjectRefsTable = "workflow_object_refs"
+	// WorkflowObjectRefsInverseTable is the table name for the WorkflowObjectRef entity.
+	// It exists in this package in order to avoid circular dependency with the "workflowobjectref" package.
+	WorkflowObjectRefsInverseTable = "workflow_object_refs"
+	// WorkflowObjectRefsColumn is the table column denoting the workflow_object_refs relation/edge.
+	WorkflowObjectRefsColumn = "risk_id"
 )
 
 // Columns holds all SQL columns for risk fields.
@@ -328,6 +353,7 @@ var Columns = []string{
 	FieldEnvironmentID,
 	FieldScopeName,
 	FieldScopeID,
+	FieldWorkflowEligibleMarker,
 	FieldExternalID,
 	FieldIntegrationID,
 	FieldObservedAt,
@@ -361,8 +387,6 @@ var ForeignKeys = []string{
 	"control_objective_risks",
 	"custom_type_enum_risks",
 	"custom_type_enum_risk_categories",
-	"finding_risks",
-	"vulnerability_risks",
 }
 
 var (
@@ -405,6 +429,12 @@ var (
 	// RemediationsPrimaryKey and RemediationsColumn2 are the table columns denoting the
 	// primary key for the remediations relation (M2M).
 	RemediationsPrimaryKey = []string{"remediation_id", "risk_id"}
+	// VulnerabilitiesPrimaryKey and VulnerabilitiesColumn2 are the table columns denoting the
+	// primary key for the vulnerabilities relation (M2M).
+	VulnerabilitiesPrimaryKey = []string{"vulnerability_id", "risk_id"}
+	// FindingsPrimaryKey and FindingsColumn2 are the table columns denoting the
+	// primary key for the findings relation (M2M).
+	FindingsPrimaryKey = []string{"finding_id", "risk_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -428,7 +458,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [19]ent.Hook
+	Hooks        [20]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -443,6 +473,8 @@ var (
 	DefaultTags []string
 	// OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	OwnerIDValidator func(string) error
+	// DefaultWorkflowEligibleMarker holds the default value on creation for the "workflow_eligible_marker" field.
+	DefaultWorkflowEligibleMarker bool
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
 	NameValidator func(string) error
 	// DefaultReviewRequired holds the default value on creation for the "review_required" field.
@@ -598,6 +630,11 @@ func ByScopeName(opts ...sql.OrderTermOption) OrderOption {
 // ByScopeID orders the results by the scope_id field.
 func ByScopeID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldScopeID, opts...).ToFunc()
+}
+
+// ByWorkflowEligibleMarker orders the results by the workflow_eligible_marker field.
+func ByWorkflowEligibleMarker(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldWorkflowEligibleMarker, opts...).ToFunc()
 }
 
 // ByExternalID orders the results by the external_id field.
@@ -1010,6 +1047,48 @@ func ByRemediations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newRemediationsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByVulnerabilitiesCount orders the results by vulnerabilities count.
+func ByVulnerabilitiesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newVulnerabilitiesStep(), opts...)
+	}
+}
+
+// ByVulnerabilities orders the results by vulnerabilities terms.
+func ByVulnerabilities(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newVulnerabilitiesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByFindingsCount orders the results by findings count.
+func ByFindingsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newFindingsStep(), opts...)
+	}
+}
+
+// ByFindings orders the results by findings terms.
+func ByFindings(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFindingsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByWorkflowObjectRefsCount orders the results by workflow_object_refs count.
+func ByWorkflowObjectRefsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newWorkflowObjectRefsStep(), opts...)
+	}
+}
+
+// ByWorkflowObjectRefs orders the results by workflow_object_refs terms.
+func ByWorkflowObjectRefs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newWorkflowObjectRefsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -1183,6 +1262,27 @@ func newRemediationsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(RemediationsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, RemediationsTable, RemediationsPrimaryKey...),
+	)
+}
+func newVulnerabilitiesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(VulnerabilitiesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, VulnerabilitiesTable, VulnerabilitiesPrimaryKey...),
+	)
+}
+func newFindingsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FindingsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2M, true, FindingsTable, FindingsPrimaryKey...),
+	)
+}
+func newWorkflowObjectRefsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(WorkflowObjectRefsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, true, WorkflowObjectRefsTable, WorkflowObjectRefsColumn),
 	)
 }
 

@@ -26,7 +26,7 @@ func (suite *HandlerTestSuite) TestStartImpersonation() {
 	t := suite.T()
 
 	// Register test handler
-	suite.registerTestHandler("POST", "impersonation/start", suite.startImpersonationOp, suite.h.StartImpersonation)
+	suite.registerTestHandler("POST", "impersonation/start", suite.h.StartImpersonation)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 	ctx := privacy.DecisionContext(ec, privacy.Allow)
@@ -97,7 +97,7 @@ func (suite *HandlerTestSuite) TestStartImpersonation() {
 			},
 			expectedStatus: http.StatusOK,
 			checkResponse: func(t *testing.T, rec *httptest.ResponseRecorder) {
-				var response models.StartImpersonationReply
+				var response models.StartImpersonationResponse
 				err := json.Unmarshal(rec.Body.Bytes(), &response)
 				require.NoError(t, err)
 				assert.True(t, response.Success)
@@ -204,7 +204,7 @@ func (suite *HandlerTestSuite) TestEndImpersonation() {
 	t := suite.T()
 
 	// Register test handler
-	suite.registerTestHandler("POST", "impersonation/end", suite.endImpersonationOp, suite.h.EndImpersonation)
+	suite.registerTestHandler("POST", "impersonation/end", suite.h.EndImpersonation)
 
 	testCases := []struct {
 		name           string
@@ -236,7 +236,7 @@ func (suite *HandlerTestSuite) TestEndImpersonation() {
 			},
 			expectedStatus: http.StatusOK,
 			checkResponse: func(t *testing.T, rec *httptest.ResponseRecorder) {
-				var response models.EndImpersonationReply
+				var response models.EndImpersonationResponse
 				err := json.Unmarshal(rec.Body.Bytes(), &response)
 				require.NoError(t, err)
 				assert.True(t, response.Success)
@@ -317,7 +317,7 @@ func (suite *HandlerTestSuite) TestExtractSessionIDFromToken() {
 	t := suite.T()
 
 	// Register test handler
-	suite.registerTestHandler("POST", "impersonation/start", suite.startImpersonationOp, suite.h.StartImpersonation)
+	suite.registerTestHandler("POST", "impersonation/start", suite.h.StartImpersonation)
 
 	// Create a valid impersonation token using the real TokenManager
 	opts := tokens.CreateImpersonationTokenOptions{
@@ -416,7 +416,7 @@ func (suite *HandlerTestSuite) TestExtractSessionIDFromToken() {
 	assert.Equal(t, http.StatusOK, rec.Code)
 
 	// Verify the response includes a session ID (which means extractSessionIDFromToken worked)
-	var response models.StartImpersonationReply
+	var response models.StartImpersonationResponse
 	err = json.Unmarshal(rec.Body.Bytes(), &response)
 	require.NoError(t, err)
 	assert.NotEmpty(t, response.SessionID)

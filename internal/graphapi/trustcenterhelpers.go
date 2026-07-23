@@ -18,15 +18,15 @@ func getTrustCenterID(ctx context.Context, trustCenterID *string, object string)
 	// check if the organization has a trust center and set the id
 	orgTrustCenterID, err := withTransactionalMutation(ctx).TrustCenter.Query().OnlyID(ctx)
 	if err != nil {
-		if trustCenterID == nil {
-			if generated.IsNotFound(err) {
-				return nil, rout.NewMissingRequiredFieldError("trustCenterID")
-			}
-
+		if !generated.IsNotFound(err) {
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: object})
 		}
 
-		logx.FromContext(ctx).Error().Str("provided_trust_center_id", *trustCenterID).Str("org_trust_center_id", orgTrustCenterID).Msg("mismatch between provided id and organization trust center id")
+		if trustCenterID == nil {
+			return nil, rout.NewMissingRequiredFieldError("trustCenterID")
+		}
+
+		logx.FromContext(ctx).Error().Str("provided_trust_center_id", *trustCenterID).Msg("trust center id provided but organization has no trust center")
 		return nil, parseRequestError(ctx, privacy.Deny, common.Action{Action: common.ActionCreate, Object: object})
 	}
 

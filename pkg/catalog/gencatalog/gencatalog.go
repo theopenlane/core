@@ -155,7 +155,7 @@ var DefaultCatalog = models.Catalog{
 			ProductID:            "prod_SeI59AdH137li3",
 		},
 		string(models.CatalogRegistryModule): models.Feature{
-			Audience: "public",
+			Audience: "private",
 			Billing: models.Billing{Prices: []models.ItemPrice{models.ItemPrice{
 				Interval:   "month",
 				LookupKey:  "price_registry_monthly",

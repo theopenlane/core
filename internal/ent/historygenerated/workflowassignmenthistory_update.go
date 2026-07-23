@@ -308,6 +308,26 @@ func (_u *WorkflowAssignmentHistoryUpdate) ClearInvalidationMetadata() *Workflow
 	return _u
 }
 
+// SetOutcomeMetadata sets the "outcome_metadata" field.
+func (_u *WorkflowAssignmentHistoryUpdate) SetOutcomeMetadata(v models.AssignmentOutcome) *WorkflowAssignmentHistoryUpdate {
+	_u.mutation.SetOutcomeMetadata(v)
+	return _u
+}
+
+// SetNillableOutcomeMetadata sets the "outcome_metadata" field if the given value is not nil.
+func (_u *WorkflowAssignmentHistoryUpdate) SetNillableOutcomeMetadata(v *models.AssignmentOutcome) *WorkflowAssignmentHistoryUpdate {
+	if v != nil {
+		_u.SetOutcomeMetadata(*v)
+	}
+	return _u
+}
+
+// ClearOutcomeMetadata clears the value of the "outcome_metadata" field.
+func (_u *WorkflowAssignmentHistoryUpdate) ClearOutcomeMetadata() *WorkflowAssignmentHistoryUpdate {
+	_u.mutation.ClearOutcomeMetadata()
+	return _u
+}
+
 // SetDecidedAt sets the "decided_at" field.
 func (_u *WorkflowAssignmentHistoryUpdate) SetDecidedAt(v time.Time) *WorkflowAssignmentHistoryUpdate {
 	_u.mutation.SetDecidedAt(v)
@@ -580,6 +600,12 @@ func (_u *WorkflowAssignmentHistoryUpdate) sqlSave(ctx context.Context) (_node i
 	}
 	if _u.mutation.InvalidationMetadataCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldInvalidationMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.OutcomeMetadata(); ok {
+		_spec.SetField(workflowassignmenthistory.FieldOutcomeMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.OutcomeMetadataCleared() {
+		_spec.ClearField(workflowassignmenthistory.FieldOutcomeMetadata, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.DecidedAt(); ok {
 		_spec.SetField(workflowassignmenthistory.FieldDecidedAt, field.TypeTime, value)
@@ -907,6 +933,26 @@ func (_u *WorkflowAssignmentHistoryUpdateOne) ClearInvalidationMetadata() *Workf
 	return _u
 }
 
+// SetOutcomeMetadata sets the "outcome_metadata" field.
+func (_u *WorkflowAssignmentHistoryUpdateOne) SetOutcomeMetadata(v models.AssignmentOutcome) *WorkflowAssignmentHistoryUpdateOne {
+	_u.mutation.SetOutcomeMetadata(v)
+	return _u
+}
+
+// SetNillableOutcomeMetadata sets the "outcome_metadata" field if the given value is not nil.
+func (_u *WorkflowAssignmentHistoryUpdateOne) SetNillableOutcomeMetadata(v *models.AssignmentOutcome) *WorkflowAssignmentHistoryUpdateOne {
+	if v != nil {
+		_u.SetOutcomeMetadata(*v)
+	}
+	return _u
+}
+
+// ClearOutcomeMetadata clears the value of the "outcome_metadata" field.
+func (_u *WorkflowAssignmentHistoryUpdateOne) ClearOutcomeMetadata() *WorkflowAssignmentHistoryUpdateOne {
+	_u.mutation.ClearOutcomeMetadata()
+	return _u
+}
+
 // SetDecidedAt sets the "decided_at" field.
 func (_u *WorkflowAssignmentHistoryUpdateOne) SetDecidedAt(v time.Time) *WorkflowAssignmentHistoryUpdateOne {
 	_u.mutation.SetDecidedAt(v)
@@ -1209,6 +1255,12 @@ func (_u *WorkflowAssignmentHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	}
 	if _u.mutation.InvalidationMetadataCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldInvalidationMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.OutcomeMetadata(); ok {
+		_spec.SetField(workflowassignmenthistory.FieldOutcomeMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.OutcomeMetadataCleared() {
+		_spec.ClearField(workflowassignmenthistory.FieldOutcomeMetadata, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.DecidedAt(); ok {
 		_spec.SetField(workflowassignmenthistory.FieldDecidedAt, field.TypeTime, value)
