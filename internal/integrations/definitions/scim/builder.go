@@ -1,7 +1,7 @@
 package scim
 
 import (
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -48,15 +48,37 @@ func Builder() registry.Builder {
 					ConfigSchema: directorySyncSchema,
 					Policy:       types.ExecutionPolicy{Inline: true},
 					Ingest: []types.IngestContract{
-						{Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount},
-						{Schema: integrationgenerated.IntegrationMappingSchemaDirectoryGroup},
-						{Schema: integrationgenerated.IntegrationMappingSchemaDirectoryMembership},
+						{Schema: entityops.SchemaDirectoryAccount.Name},
+						{Schema: entityops.SchemaDirectoryGroup.Name},
+						{Schema: entityops.SchemaDirectoryMembership.Name},
 					},
 					Handle:              providerkit.StaticHandler(DirectorySync{}.Run),
 					SkipDefaultLookback: true,
 				},
 			},
-			Mappings: scimMappings(),
+			Mappings: []types.MappingRegistration{
+				{
+					Schema: entityops.SchemaDirectoryAccount.Name,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprDirectoryAccount,
+					},
+				},
+				{
+					Schema: entityops.SchemaDirectoryGroup.Name,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprDirectoryGroup,
+					},
+				},
+				{
+					Schema: entityops.SchemaDirectoryMembership.Name,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprDirectoryMembership,
+					},
+				},
+			},
 		}, nil
 	})
 }

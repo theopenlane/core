@@ -36,7 +36,7 @@ require (
 	entgo.io/contrib v0.7.0 // indirect
 	entgo.io/ent v0.14.6 // indirect
 	github.com/AfterShip/email-verifier v1.4.1 // indirect
-	github.com/XSAM/otelsql v0.42.0 // indirect
+	github.com/XSAM/otelsql v0.43.0 // indirect
 	github.com/Yiling-J/theine-go v0.6.2 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/agnivade/levenshtein v1.2.1 // indirect
@@ -70,7 +70,7 @@ require (
 	github.com/gabriel-vasile/mimetype v1.4.13 // indirect
 	github.com/go-logr/logr v1.4.3 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
-	github.com/go-openapi/inflect v0.21.5 // indirect
+	github.com/go-openapi/inflect v0.21.6 // indirect
 	github.com/go-redis/redis/v8 v8.11.5 // indirect
 	github.com/go-webauthn/webauthn v0.17.4 // indirect
 	github.com/go-webauthn/x v0.2.6 // indirect
@@ -169,7 +169,7 @@ require (
 	github.com/testcontainers/testcontainers-go v0.43.0 // indirect
 	github.com/theopenlane/echox v0.3.0 // indirect
 	github.com/theopenlane/eddy v0.1.0 // indirect
-	github.com/theopenlane/entx v0.30.2 // indirect
+	github.com/theopenlane/entx v0.30.3 // indirect
 	github.com/theopenlane/riverboat v0.9.18 // indirect
 	github.com/tidwall/gjson v1.19.0 // indirect
 	github.com/tidwall/match v1.2.0 // indirect

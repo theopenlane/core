@@ -14,7 +14,6 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	intobvs "github.com/theopenlane/core/internal/integrations/observability"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/registry"
@@ -146,7 +145,7 @@ func (r *Runtime) DispatchWebhookEvent(ctx context.Context, integration *ent.Int
 		return err
 	}
 
-	metadata := types.ExecutionMetadata{
+	src := types.IntegrationSource{
 		DefinitionID: definitionID,
 		Webhook:      webhookName,
 		Event:        event.Name,
@@ -154,21 +153,23 @@ func (r *Runtime) DispatchWebhookEvent(ctx context.Context, integration *ent.Int
 		Runtime:      r.Registry().IsRuntimeIntegration(definitionID),
 	}
 
+	var ownerID string
+
 	if integration != nil {
-		metadata.OwnerID = integration.OwnerID
-		metadata.IntegrationID = integration.ID
+		ownerID = integration.OwnerID
+		src.IntegrationID = integration.ID
 	}
 
-	tags := types.GetTagsForExecutionMetadata(metadata)
+	oc := types.NewOperationContext(ownerID, "", src)
 
-	receipt := r.Gala().EmitWithHeaders(types.WithExecutionMetadata(ctx, metadata), registration.Topic, operations.WebhookEnvelope{
-		ExecutionMetadata: metadata,
-		Payload:           jsonx.CloneRawMessage(event.Payload),
-		Headers:           maps.Clone(event.Headers),
+	receipt := r.Gala().EmitWithHeaders(gala.WithOperationContext(ctx, oc), registration.Topic, operations.WebhookEnvelope{
+		OperationContext: oc,
+		Payload:          jsonx.CloneRawMessage(event.Payload),
+		Headers:          maps.Clone(event.Headers),
 	}, gala.Headers{
 		IdempotencyKey: event.DeliveryID,
-		Properties:     metadata.Properties(),
-		Tags:           tags,
+		Properties:     oc.Properties(),
+		Tags:           types.GetTagsForOperationContext(oc),
 	})
 
 	return receipt.Err
@@ -176,29 +177,30 @@ func (r *Runtime) DispatchWebhookEvent(ctx context.Context, integration *ent.Int
 
 // HandleWebhookEvent processes one emitted integration webhook envelope
 func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope operations.WebhookEnvelope) error {
-	metadata := envelope.ExecutionMetadata
-	ctx = intobvs.WithContext(ctx, metadata)
+	oc := envelope.OperationContext
+	src := types.IntegrationSourceFrom(oc)
+	ctx = intobvs.WithContext(ctx, oc)
 	ctx = ent.NewContext(privacy.DecisionContext(ctx, privacy.Allow), r.DB())
 
 	var integration *ent.Integration
 
-	if !metadata.Runtime {
+	if !src.Runtime {
 		var err error
 
-		integration, err = r.ResolveIntegration(ctx, IntegrationLookup{IntegrationID: metadata.IntegrationID})
+		integration, err = r.ResolveIntegration(ctx, IntegrationLookup{IntegrationID: src.IntegrationID})
 		if err != nil {
 			return err
 		}
 	}
 
-	registration, err := r.Registry().WebhookEvent(metadata.DefinitionID, envelope.Webhook, envelope.Event)
+	registration, err := r.Registry().WebhookEvent(src.DefinitionID, src.Webhook, src.Event)
 	if err != nil {
 		return err
 	}
 
 	event := types.WebhookReceivedEvent{
-		Name:       envelope.Event,
-		DeliveryID: envelope.DeliveryID,
+		Name:       src.Event,
+		DeliveryID: src.DeliveryID,
 		Payload:    jsonx.CloneRawMessage(envelope.Payload),
 		Headers:    maps.Clone(envelope.Headers),
 	}
@@ -207,7 +209,7 @@ func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope operations.We
 		return registration.Handle(ctx, types.WebhookHandleRequest{Event: event})
 	}
 
-	webhook, err := r.EnsureWebhook(ctx, integration, envelope.Webhook, "")
+	webhook, err := r.EnsureWebhook(ctx, integration, src.Webhook, "")
 	if err != nil {
 		return err
 	}
@@ -222,7 +224,7 @@ func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope operations.We
 				DB:          r.DB(),
 				Runtime:     r.Gala(),
 				Integration: integration,
-			}, envelope.Webhook, registration.Ingest, payloadSets, operations.IngestOptionsFromMetadata(integrationgenerated.IntegrationIngestSourceWebhook, metadata))
+			}, src.Webhook, registration.Ingest, payloadSets, operations.IngestOptionsFromOperationContext(oc))
 		},
 		DispatchOperation: func(dispatchCtx context.Context, operation string, config json.RawMessage) error {
 			_, dispatchErr := r.Dispatch(dispatchCtx, types.DispatchRequest{

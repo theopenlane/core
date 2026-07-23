@@ -6,7 +6,7 @@ import (
 
 	tsclient "github.com/tailscale/tailscale-client-go/v2"
 
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/logx"
@@ -61,7 +61,7 @@ func (DirectorySync) Run(ctx context.Context, client *tsclient.Client, cfg Direc
 
 	payloadSets := []types.IngestPayloadSet{
 		{
-			Schema:    integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
+			Schema:    entityops.SchemaDirectoryAccount.Name,
 			Envelopes: accountEnvelopes,
 		},
 	}
@@ -172,11 +172,11 @@ func (DirectorySync) Run(ctx context.Context, client *tsclient.Client, cfg Direc
 
 	payloadSets = append(payloadSets,
 		types.IngestPayloadSet{
-			Schema:    integrationgenerated.IntegrationMappingSchemaDirectoryGroup,
+			Schema:    entityops.SchemaDirectoryGroup.Name,
 			Envelopes: groupEnvelopes,
 		},
 		types.IngestPayloadSet{
-			Schema:    integrationgenerated.IntegrationMappingSchemaDirectoryMembership,
+			Schema:    entityops.SchemaDirectoryMembership.Name,
 			Envelopes: membershipEnvelopes,
 		},
 	)

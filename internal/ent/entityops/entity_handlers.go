@@ -28,14 +28,18 @@ type SchemaHandler struct {
 // SchemaHandlerConfig holds the typed closures for constructing a SchemaHandler.
 // This generalizes the integrations buildSchemaRegistration pattern for both packages.
 type SchemaHandlerConfig[TInput any, TEvent any] struct {
+	// Schema is the catalog entry for the handled entity, used to carry through-edge link ids
+	// around the typed input: the create/update input types have no fields for through edges,
+	// so their ids are split from the raw payload and applied as join entity rows after persist
+	Schema *Schema
 	// Topic is the Gala topic for this schema's events
 	Topic gala.Topic[TEvent]
 	// Prepare transforms the input before persistence or emission
 	Prepare func(context.Context, TInput) TInput
-	// Wrap constructs a typed event from operation context and input
-	Wrap func(gala.OperationContext, TInput) TEvent
-	// Unwrap extracts operation context and input from a typed event
-	Unwrap func(TEvent) (gala.OperationContext, TInput)
+	// Wrap constructs a typed event from operation context, input, and through-edge link ids
+	Wrap func(gala.OperationContext, TInput, map[string][]string) TEvent
+	// Unwrap extracts operation context, input, and through-edge link ids from a typed event
+	Unwrap func(TEvent) (gala.OperationContext, TInput, map[string][]string)
 	// Persist saves the entity and returns its ID
 	Persist func(context.Context, *generated.Client, TInput) (string, error)
 }
@@ -57,10 +61,15 @@ func BuildSchemaHandler[TInput any, TEvent any](cfg SchemaHandlerConfig[TInput, 
 						return logError(ctx.Context, ref, ErrClientResolveFailed, err)
 					}
 
-					_, input := cfg.Unwrap(payload)
+					_, input, throughIDs := cfg.Unwrap(payload)
 					prepared := cfg.Prepare(ctx.Context, input)
 
-					if _, err := cfg.Persist(ctx.Context, client, prepared); err != nil {
+					id, err := cfg.Persist(ctx.Context, client, prepared)
+					if err != nil {
+						return logPersistError(ctx.Context, ref, ErrPersistFailed, err)
+					}
+
+					if err := applyThroughEdgeIDs(ctx.Context, client, cfg.Schema, id, throughIDs); err != nil {
 						return logPersistError(ctx.Context, ref, ErrPersistFailed, err)
 					}
 
@@ -77,13 +86,15 @@ func BuildSchemaHandler[TInput any, TEvent any](cfg SchemaHandlerConfig[TInput, 
 		Emit: func(ctx context.Context, runtime *gala.Gala, oc gala.OperationContext, headers gala.Headers, payload json.RawMessage) error {
 			ref := SchemaRef{Schema: schema, Operation: OpEmit}
 
+			payload, throughIDs := splitThroughEdgeIDs(cfg.Schema, payload)
+
 			decoded, err := jsonx.Decode[TInput](payload)
 			if err != nil {
 				return logError(ctx, ref, ErrDecodeFailed, err)
 			}
 
 			prepared := cfg.Prepare(ctx, decoded)
-			event := cfg.Wrap(oc, prepared)
+			event := cfg.Wrap(oc, prepared, throughIDs)
 
 			if headers.Metadata == nil {
 				raw, marshalErr := json.Marshal(oc)
@@ -106,6 +117,8 @@ func BuildSchemaHandler[TInput any, TEvent any](cfg SchemaHandlerConfig[TInput, 
 		Persist: func(ctx context.Context, client *generated.Client, payload json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: schema, Operation: OpCreate}
 
+			payload, throughIDs := splitThroughEdgeIDs(cfg.Schema, payload)
+
 			decoded, err := jsonx.Decode[TInput](payload)
 			if err != nil {
 				return "", logError(ctx, ref, ErrDecodeFailed, err)
@@ -115,6 +128,10 @@ func BuildSchemaHandler[TInput any, TEvent any](cfg SchemaHandlerConfig[TInput, 
 
 			id, err := cfg.Persist(ctx, client, prepared)
 			if err != nil {
+				return "", logPersistError(ctx, ref, ErrPersistFailed, err)
+			}
+
+			if err := applyThroughEdgeIDs(ctx, client, cfg.Schema, id, throughIDs); err != nil {
 				return "", logPersistError(ctx, ref, ErrPersistFailed, err)
 			}
 

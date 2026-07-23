@@ -2,9 +2,7 @@ package scim
 
 import (
 	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
-	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // mapExprDirectoryAccount is the CEL mapping expression for SCIM user payloads mapped to DirectoryAccount
@@ -35,30 +33,3 @@ var mapExprDirectoryMembership = providerkit.CelMapExpr([]providerkit.CelMapEntr
 	{Key: entityops.InputKeyDirectoryMembershipRole, Expr: `dyn("MEMBER")`},
 	{Key: entityops.InputKeyDirectoryMembershipMetadata, Expr: "payload"},
 })
-
-// scimMappings returns the built-in SCIM ingest mappings
-func scimMappings() []types.MappingRegistration {
-	return []types.MappingRegistration{
-		{
-			Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
-			Spec: types.MappingOverride{
-				FilterExpr: "true",
-				MapExpr:    mapExprDirectoryAccount,
-			},
-		},
-		{
-			Schema: integrationgenerated.IntegrationMappingSchemaDirectoryGroup,
-			Spec: types.MappingOverride{
-				FilterExpr: "true",
-				MapExpr:    mapExprDirectoryGroup,
-			},
-		},
-		{
-			Schema: integrationgenerated.IntegrationMappingSchemaDirectoryMembership,
-			Spec: types.MappingOverride{
-				FilterExpr: "true",
-				MapExpr:    mapExprDirectoryMembership,
-			},
-		},
-	}
-}

@@ -3,12 +3,8 @@ package githubapp
 import (
 	"strconv"
 
-	"github.com/samber/lo"
-
 	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
-	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // webhookBaseEntries returns CEL map entries for webhook alert payloads (snake_case JSON keys)
@@ -166,65 +162,3 @@ var mapExprDirectoryMembership = providerkit.CelMapExpr([]providerkit.CelMapEntr
 	{Key: entityops.InputKeyDirectoryMembershipRole, Expr: `dyn(payload.Role != "" ? payload.Role : "MEMBER")`},
 	{Key: entityops.InputKeyDirectoryMembershipMetadata, Expr: "payload"},
 })
-
-// githubAppMappings returns all built-in ingest mappings for the GitHub App definition
-func githubAppMappings() []types.MappingRegistration {
-	overrides := map[string]types.MappingOverride{
-		githubAlertTypeDependabot: {
-			FilterExpr: "true",
-			MapExpr:    mapExprDependabot,
-		},
-		githubAlertTypeDependabotPoll: {
-			FilterExpr: "true",
-			MapExpr:    mapExprDependabotPoll,
-		},
-		githubAlertTypeCodeScanning: {
-			FilterExpr: "true",
-			MapExpr:    mapExprCodeScanning,
-		},
-		githubAlertTypeSecretScan: {
-			FilterExpr: "true",
-			MapExpr:    mapExprSecretScanning,
-		},
-	}
-
-	vulnMappings := lo.MapToSlice(overrides, func(variant string, override types.MappingOverride) types.MappingRegistration {
-		return types.MappingRegistration{
-			Schema:  integrationgenerated.IntegrationMappingSchemaVulnerability,
-			Variant: variant,
-			Spec:    override,
-		}
-	})
-
-	return append(vulnMappings,
-		types.MappingRegistration{
-			Schema:  integrationgenerated.IntegrationMappingSchemaAsset,
-			Variant: repositoryAssetVariant,
-			Spec: types.MappingOverride{
-				FilterExpr: "true",
-				MapExpr:    mapExprRepositoryAsset,
-			},
-		},
-		types.MappingRegistration{
-			Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
-			Spec: types.MappingOverride{
-				FilterExpr: "true",
-				MapExpr:    mapExprDirectoryAccount,
-			},
-		},
-		types.MappingRegistration{
-			Schema: integrationgenerated.IntegrationMappingSchemaDirectoryGroup,
-			Spec: types.MappingOverride{
-				FilterExpr: "true",
-				MapExpr:    mapExprDirectoryGroup,
-			},
-		},
-		types.MappingRegistration{
-			Schema: integrationgenerated.IntegrationMappingSchemaDirectoryMembership,
-			Spec: types.MappingOverride{
-				FilterExpr: "true",
-				MapExpr:    mapExprDirectoryMembership,
-			},
-		},
-	)
-}

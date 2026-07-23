@@ -15,7 +15,9 @@ import (
 
 // handleScheduledCycle executes one runtime-bound scheduled operation cycle inline
 func (r *Runtime) handleScheduledCycle(ctx context.Context, envelope operations.ReconcileEnvelope) (int, error) {
-	operation, err := r.Registry().Operation(envelope.DefinitionID, envelope.Operation)
+	src := types.IntegrationSourceFrom(envelope.OperationContext)
+
+	operation, err := r.Registry().Operation(src.DefinitionID, envelope.Operation)
 	if err != nil {
 		return 0, err
 	}
@@ -26,7 +28,7 @@ func (r *Runtime) handleScheduledCycle(ctx context.Context, envelope operations.
 
 	logx.FromContext(ctx).Info().Msg("scheduled operation cycle started")
 
-	response, err := r.executeOperationInline(ctx, nil, envelope.DefinitionID, operation, nil, nil)
+	response, err := r.executeOperationInline(ctx, nil, src.DefinitionID, operation, nil, nil)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("scheduled operation cycle failed")
 
@@ -64,14 +66,13 @@ func (r *Runtime) SeedScheduledOperations(ctx context.Context) error {
 				continue
 			}
 
-			metadata := types.ExecutionMetadata{
+			oc := types.NewOperationContext("", op.Name, types.IntegrationSource{
 				DefinitionID: def.ID,
-				Operation:    op.Name,
 				RunType:      enums.IntegrationRunTypeScheduled,
 				Runtime:      true,
-			}
+			})
 
-			if err := r.seedScheduledOperation(ctx, metadata); err != nil {
+			if err := r.seedScheduledOperation(ctx, oc); err != nil {
 				errs = append(errs, err)
 			}
 		}
@@ -81,34 +82,36 @@ func (r *Runtime) SeedScheduledOperations(ctx context.Context) error {
 }
 
 // seedScheduledOperation emits one scheduled operation cycle envelope when no active job exists for it
-func (r *Runtime) seedScheduledOperation(ctx context.Context, metadata types.ExecutionMetadata) error {
-	fragment, err := scheduledMetadataFragment(metadata)
+func (r *Runtime) seedScheduledOperation(ctx context.Context, oc gala.OperationContext) error {
+	src := types.IntegrationSourceFrom(oc)
+
+	fragment, err := scheduledMetadataFragment(oc)
 	if err != nil {
 		return err
 	}
 
 	active, err := r.Gala().HasActiveJobWithMetadata(ctx, fragment)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("definition_id", metadata.DefinitionID).Str("operation", metadata.Operation).Msg("failed to check for active scheduled operation job")
+		logx.FromContext(ctx).Error().Err(err).Str("definition_id", src.DefinitionID).Str("operation", oc.Operation).Msg("failed to check for active scheduled operation job")
 
 		return err
 	}
 
 	if active {
-		logx.FromContext(ctx).Debug().Str("definition_id", metadata.DefinitionID).Str("operation", metadata.Operation).Msg("scheduled operation already active, skipping seed")
+		logx.FromContext(ctx).Debug().Str("definition_id", src.DefinitionID).Str("operation", oc.Operation).Msg("scheduled operation already active, skipping seed")
 
 		return nil
 	}
 
-	logx.FromContext(ctx).Info().Str("definition_id", metadata.DefinitionID).Str("operation", metadata.Operation).Msg("seeding scheduled operation")
+	logx.FromContext(ctx).Info().Str("definition_id", src.DefinitionID).Str("operation", oc.Operation).Msg("seeding scheduled operation")
 
 	receipt := r.Gala().EmitWithHeaders(
-		types.WithExecutionMetadata(ctx, metadata),
+		gala.WithOperationContext(ctx, oc),
 		operations.ReconcileTopic,
-		operations.ReconcileEnvelope{ExecutionMetadata: metadata},
+		operations.ReconcileEnvelope{OperationContext: oc},
 		gala.Headers{
-			Properties: metadata.Properties(),
-			Tags:       types.GetTagsForExecutionMetadata(metadata),
+			Properties: types.GetPropertiesForOperationContext(oc),
+			Tags:       types.GetTagsForOperationContext(oc),
 		},
 	)
 
@@ -117,8 +120,8 @@ func (r *Runtime) seedScheduledOperation(ctx context.Context, metadata types.Exe
 
 // scheduledMetadataFragment builds the JSONB fragment for active-job checks; the run type
 // keeps it disjoint from installation-bound reconcile cycles sharing the topic
-func scheduledMetadataFragment(metadata types.ExecutionMetadata) (string, error) {
-	props := metadata.Properties()
+func scheduledMetadataFragment(oc gala.OperationContext) (string, error) {
+	props := types.GetPropertiesForOperationContext(oc)
 
 	b, err := json.Marshal(map[string]map[string]string{
 		"properties": {

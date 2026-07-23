@@ -8,14 +8,24 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
+// testMappings returns the ingest mappings from the built Google Workspace definition
+func testMappings(t *testing.T) []types.MappingRegistration {
+	t.Helper()
+
+	def, err := Builder(Config{})()
+	require.NoError(t, err)
+
+	return def.Mappings
+}
+
 func TestMappingExpressionsValid(t *testing.T) {
-	for _, m := range googleWorkspaceMappings() {
+	for _, m := range testMappings(t) {
 		name := m.Schema
 		if m.Variant != "" {
 			name += "/" + m.Variant
@@ -33,7 +43,7 @@ func TestMappingExpressionsValid(t *testing.T) {
 
 // TestGoogleWorkspaceMappingsEvalMap verifies Google Workspace payloads map into directory schemas
 func TestGoogleWorkspaceMappingsEvalMap(t *testing.T) {
-	accountRaw, err := providerkit.EvalMap(context.Background(), mappingSpecForSchema(t, integrationgenerated.IntegrationMappingSchemaDirectoryAccount).MapExpr, types.MappingEnvelope{
+	accountRaw, err := providerkit.EvalMap(context.Background(), mappingSpecForSchema(t, entityops.SchemaDirectoryAccount.Name).MapExpr, types.MappingEnvelope{
 		Resource: "alice@example.com",
 		Payload: json.RawMessage(`{
 			"id":"user-123",
@@ -62,7 +72,7 @@ func TestGoogleWorkspaceMappingsEvalMap(t *testing.T) {
 	assert.Equal(t, "ACTIVE", accountMapped["status"])
 	assert.Equal(t, "ENFORCED", accountMapped["mfa_state"])
 
-	groupRaw, err := providerkit.EvalMap(context.Background(), mappingSpecForSchema(t, integrationgenerated.IntegrationMappingSchemaDirectoryGroup).MapExpr, types.MappingEnvelope{
+	groupRaw, err := providerkit.EvalMap(context.Background(), mappingSpecForSchema(t, entityops.SchemaDirectoryGroup.Name).MapExpr, types.MappingEnvelope{
 		Resource: "eng@example.com",
 		Payload: json.RawMessage(`{
 			"id":"group-123",
@@ -83,7 +93,7 @@ func TestGoogleWorkspaceMappingsEvalMap(t *testing.T) {
 	assert.Equal(t, "DISTRIBUTION", groupMapped["classification"])
 	assert.Equal(t, "ACTIVE", groupMapped["status"])
 
-	membershipRaw, err := providerkit.EvalMap(context.Background(), mappingSpecForSchema(t, integrationgenerated.IntegrationMappingSchemaDirectoryMembership).MapExpr, types.MappingEnvelope{
+	membershipRaw, err := providerkit.EvalMap(context.Background(), mappingSpecForSchema(t, entityops.SchemaDirectoryMembership.Name).MapExpr, types.MappingEnvelope{
 		Resource: "eng@example.com",
 		Payload: json.RawMessage(`{
 			"email":"alice@example.com",
@@ -104,7 +114,7 @@ func TestGoogleWorkspaceMappingsEvalMap(t *testing.T) {
 
 // TestGoogleWorkspaceMappingsFallbacks verifies graceful fallback when fields are missing from the payload
 func TestGoogleWorkspaceMappingsFallbacks(t *testing.T) {
-	accountRaw, err := providerkit.EvalMap(context.Background(), mappingSpecForSchema(t, integrationgenerated.IntegrationMappingSchemaDirectoryAccount).MapExpr, types.MappingEnvelope{
+	accountRaw, err := providerkit.EvalMap(context.Background(), mappingSpecForSchema(t, entityops.SchemaDirectoryAccount.Name).MapExpr, types.MappingEnvelope{
 		Resource: "sparse@example.com",
 		Payload:  json.RawMessage(`{"id":"user-sparse","primaryEmail":"sparse@example.com"}`),
 	})
@@ -122,7 +132,7 @@ func TestGoogleWorkspaceMappingsFallbacks(t *testing.T) {
 	assert.Equal(t, "ACTIVE", accountMapped["status"])
 	assert.Equal(t, "DISABLED", accountMapped["mfa_state"])
 
-	membershipRaw, err := providerkit.EvalMap(context.Background(), mappingSpecForSchema(t, integrationgenerated.IntegrationMappingSchemaDirectoryMembership).MapExpr, types.MappingEnvelope{
+	membershipRaw, err := providerkit.EvalMap(context.Background(), mappingSpecForSchema(t, entityops.SchemaDirectoryMembership.Name).MapExpr, types.MappingEnvelope{
 		Resource: "eng@example.com",
 		Payload:  json.RawMessage(`{"email":"norole@example.com","type":"USER","id":"member-norole"}`),
 	})
@@ -133,7 +143,7 @@ func TestGoogleWorkspaceMappingsFallbacks(t *testing.T) {
 
 	assert.Equal(t, "MEMBER", membershipMapped["role"], "missing role must fall back to MEMBER so the row survives enum validation")
 
-	emptyRoleRaw, err := providerkit.EvalMap(context.Background(), mappingSpecForSchema(t, integrationgenerated.IntegrationMappingSchemaDirectoryMembership).MapExpr, types.MappingEnvelope{
+	emptyRoleRaw, err := providerkit.EvalMap(context.Background(), mappingSpecForSchema(t, entityops.SchemaDirectoryMembership.Name).MapExpr, types.MappingEnvelope{
 		Resource: "eng@example.com",
 		Payload:  json.RawMessage(`{"email":"emptyrole@example.com","role":"","type":"USER","id":"member-emptyrole"}`),
 	})
@@ -149,7 +159,7 @@ func TestGoogleWorkspaceMappingsFallbacks(t *testing.T) {
 func mappingSpecForSchema(t *testing.T, schema string) types.MappingOverride {
 	t.Helper()
 
-	for _, mapping := range googleWorkspaceMappings() {
+	for _, mapping := range testMappings(t) {
 		if mapping.Schema == schema {
 			return mapping.Spec
 		}

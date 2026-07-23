@@ -2,9 +2,7 @@ package cloudflare
 
 import (
 	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
-	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // mapExprDirectoryAccount is the CEL mapping expression for Cloudflare account member payloads mapped to DirectoryAccount
@@ -64,44 +62,3 @@ var mapExprAsset = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 	{Key: entityops.InputKeyAssetAssetType, Expr: `"DOMAIN"`},
 	{Key: entityops.InputKeyAssetObservedAt, Expr: `'created_at' in payload && payload.created_at != "" ? payload.created_at : null`},
 })
-
-// cloudflareMappings returns the built-in Cloudflare ingest mappings
-func cloudflareMappings() []types.MappingRegistration {
-	return []types.MappingRegistration{
-		{
-			Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
-			Spec: types.MappingOverride{
-				FilterExpr: "true",
-				MapExpr:    mapExprDirectoryAccount,
-			},
-		},
-		{
-			Schema: integrationgenerated.IntegrationMappingSchemaDirectoryGroup,
-			Spec: types.MappingOverride{
-				FilterExpr: "true",
-				MapExpr:    mapExprDirectoryGroup,
-			},
-		},
-		{
-			Schema: integrationgenerated.IntegrationMappingSchemaDirectoryMembership,
-			Spec: types.MappingOverride{
-				FilterExpr: "true",
-				MapExpr:    mapExprDirectoryMembership,
-			},
-		},
-		{
-			Schema: integrationgenerated.IntegrationMappingSchemaFinding,
-			Spec: types.MappingOverride{
-				FilterExpr: "true",
-				MapExpr:    mapExprFinding,
-			},
-		},
-		{
-			Schema: integrationgenerated.IntegrationMappingSchemaAsset,
-			Spec: types.MappingOverride{
-				FilterExpr: "true",
-				MapExpr:    mapExprAsset,
-			},
-		},
-	}
-}

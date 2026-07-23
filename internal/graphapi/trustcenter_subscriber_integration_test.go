@@ -301,12 +301,11 @@ func TestTrustCenterPostNotificationEmail(t *testing.T) {
 	suite.mockEmailSender().Reset()
 
 	_, err = suite.integrationsRT.HandleReconcile(context.Background(), operations.ReconcileEnvelope{
-		ExecutionMetadata: types.ExecutionMetadata{
+		OperationContext: types.NewOperationContext("", email.TrustCenterNotificationOp.Name(), types.IntegrationSource{
 			DefinitionID: email.DefinitionID.ID(),
-			Operation:    email.TrustCenterNotificationOp.Name(),
 			RunType:      enums.IntegrationRunTypeScheduled,
 			Runtime:      true,
-		},
+		}),
 	})
 	assert.NilError(t, err)
 
@@ -391,12 +390,11 @@ func TestTrustCenterSubprocessorNotificationEmail(t *testing.T) {
 	suite.mockEmailSender().Reset()
 
 	_, err = suite.integrationsRT.HandleReconcile(context.Background(), operations.ReconcileEnvelope{
-		ExecutionMetadata: types.ExecutionMetadata{
+		OperationContext: types.NewOperationContext("", email.TrustCenterNotificationOp.Name(), types.IntegrationSource{
 			DefinitionID: email.DefinitionID.ID(),
-			Operation:    email.TrustCenterNotificationOp.Name(),
 			RunType:      enums.IntegrationRunTypeScheduled,
 			Runtime:      true,
-		},
+		}),
 	})
 	assert.NilError(t, err)
 
