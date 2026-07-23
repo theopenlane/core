@@ -176,7 +176,7 @@ func TestRegisterGalaNotificationListeners(t *testing.T) {
 
 	ids, err := RegisterGalaNotificationListeners(registry)
 	require.NoError(t, err)
-	require.Len(t, ids, 7)
+	require.Len(t, ids, 8)
 
 	require.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeTask), ent.OpCreate.String()))
 	require.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeInternalPolicy), ent.OpUpdate.String()))
@@ -185,4 +185,7 @@ func TestRegisterGalaNotificationListeners(t *testing.T) {
 	require.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeNote), ent.OpCreate.String()))
 	require.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeExport), ent.OpUpdate.String()))
 	require.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeStandard), ent.OpUpdate.String()))
+	require.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeProgram), ent.OpUpdate.String()))
+	require.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeProgram), ent.OpUpdateOne.String()))
+	require.False(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeProgram), ent.OpCreate.String()))
 }
