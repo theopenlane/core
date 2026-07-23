@@ -152,6 +152,7 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 					case claims.AssessmentID != "" && claims.TrustCenterID == "":
 						ctx := auth.WithCaller(c.Request().Context(), auth.NewQuestionnaireCaller(claims.OrgID, claims.UserID, "Anonymous User", claims.Email))
 						ctx = auth.ActiveAssessmentIDKey.Set(ctx, claims.AssessmentID)
+						ctx = auth.ActiveAssessmentPreviewKey.Set(ctx, claims.AssessmentPreview)
 						c.SetRequest(c.Request().WithContext(ctx))
 					default:
 						// a token with neither or both scope claims is malformed and must not

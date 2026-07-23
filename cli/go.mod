@@ -21,7 +21,7 @@ require (
 	github.com/theopenlane/core/common v1.0.24
 	github.com/theopenlane/go-client v0.12.5
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.35.0
+	github.com/theopenlane/iam v0.35.1-0.20260723211559-15278f8a5e71
 	github.com/theopenlane/utils v0.7.1
 	golang.org/x/oauth2 v0.36.0
 	golang.org/x/term v0.45.0
@@ -117,7 +117,6 @@ require (
 	github.com/mitchellh/go-wordwrap v1.0.1 // indirect
 	github.com/mitchellh/hashstructure v1.1.0 // indirect
 	github.com/mitchellh/reflectwalk v1.0.2 // indirect
-	github.com/moby/moby/api v1.55.0 // indirect
 	github.com/moby/moby/client v0.5.0 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/natefinch/wrap v0.2.0 // indirect
@@ -130,7 +129,7 @@ require (
 	github.com/openfga/api/proto v0.0.0-20260319214821-f153694bfc20 // indirect
 	github.com/openfga/go-sdk v0.8.2 // indirect
 	github.com/openfga/language/pkg/go v0.3.1 // indirect
-	github.com/openfga/openfga v1.18.0 // indirect
+	github.com/openfga/openfga v1.18.1 // indirect
 	github.com/pb33f/ordered-map/v2 v2.3.1 // indirect
 	github.com/pelletier/go-toml/v2 v2.3.1 // indirect
 	github.com/philhofer/fwd v1.2.0 // indirect

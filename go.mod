@@ -108,7 +108,7 @@ require (
 	github.com/theopenlane/go-client v0.12.5
 	github.com/theopenlane/gqlgen-plugins v0.14.7
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.35.0
+	github.com/theopenlane/iam v0.35.1-0.20260723211559-15278f8a5e71
 	github.com/theopenlane/newman v0.4.2
 	github.com/theopenlane/riverboat v0.9.18
 	github.com/theopenlane/utils v0.7.1
@@ -360,7 +360,7 @@ require (
 	github.com/opencontainers/runc v1.3.6 // indirect
 	github.com/openfga/api/proto v0.0.0-20260319214821-f153694bfc20 // indirect
 	github.com/openfga/language/pkg/go v0.3.1
-	github.com/openfga/openfga v1.18.0 // indirect
+	github.com/openfga/openfga v1.18.1 // indirect
 	github.com/ory/dockertest v3.3.5+incompatible // indirect
 	github.com/pelletier/go-toml/v2 v2.3.1 // indirect
 	github.com/prometheus/client_model v0.6.2 // indirect
