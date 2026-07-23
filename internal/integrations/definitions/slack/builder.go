@@ -14,8 +14,6 @@ import (
 
 // Builder returns the Slack definition builder with the supplied operator and runtime config applied.
 // When runtime.Provisioned() is true, a RuntimeIntegration is included for system-send.
-// When devMode is true and the runtime config is not provisioned, a no-op runtime client
-// is registered so system message dispatches succeed silently without credentials
 func Builder(cfg Config, runtime *RuntimeSlackConfig, devMode bool) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		def := types.Definition{

@@ -1,0 +1,79 @@
+rules:
+  suggested-secure-organization:
+    title: Set up authentication
+    taskKindName: Operational
+    details: |
+      Review the authentication options and implement your preferred setup to secure your organization
+    priority: 100
+    source: openlane_onboarding
+    metadata:
+      link: /organization-settings/authentication
+      docsLink: https://docs.theopenlane.io/docs/platform/settings/authentication/overview
+
+  suggested-create-groups:
+    title: Create groups
+    taskKindName: Operational
+    details: |
+      Create groups and set permissions to organize who owns what
+    priority: 90
+    source: openlane_onboarding
+    metadata:
+      link: /user-management/groups
+      docsLink: https://docs.theopenlane.io/docs/platform/settings/groups/overview
+
+  suggested-invite-team:
+    title: Invite your team
+    taskKindName: Operational
+    details: |
+      Add teammates so they can collaborate on controls, policies, and evidence. There are no per-user fees, so bring in everyone the program touches
+    priority: 80
+    source: openlane_onboarding
+    metadata:
+      link: /user-management/members
+      docsLink: https://docs.theopenlane.io/docs/platform/settings/organizations/members#inviting-members
+
+  suggested-setup-integrations:
+    title: Set up integrations
+    taskKindName: Operational
+    details: |
+      Set up integrations to import records from the systems you already run, such as directory sync for personnel, instead of entering them by hand
+    priority: 70
+    source: openlane_onboarding
+    metadata:
+      link: /automation/integrations
+      docsLink: https://docs.theopenlane.io/docs/platform/integrations/overview
+
+  suggested-add-payment-method:
+    title: Set up payment method
+    taskKindName: Operational
+    details: |
+      Add a payment method to keep your subscription active and enable paid features when your trial ends
+    priority: 60
+    source: openlane_onboarding
+    metadata:
+      link: /organization-settings/billing
+
+  suggested-complete-registry:
+    title: Complete your asset registry
+    taskKindName: Registry
+    details: |
+      The Registry module helps define the people, systems, vendors, and assets that make up your organization's audit scope. These records become the foundation for your compliance program, allowing you to link policies, controls, evidence, risks, and other records back to the systems and people they apply to.
+
+      1. [Define your platform](https://docs.theopenlane.io/docs/platform/registry/platforms) by describing the product or service your organization delivers
+      2. [Add your vendors](https://docs.theopenlane.io/docs/platform/registry/entities) to document third-party services that support your business.
+      3. [Add your personnel](https://docs.theopenlane.io/docs/platform/registry/personnel/overview) so responsibilities and ownership can be assigned across your compliance program
+      4. [Inventory your assets](https://docs.theopenlane.io/docs/platform/registry/assets) to document the systems, infrastructure, and resources that support your platform
+
+
+      To keep your Registry up to date, we recommend connecting one of our supported [integrations](https://docs.theopenlane.io/docs/platform/integrations/overview) to automatically synchronize vendors, personnel, assets, and other records where available.
+    priority: 90
+
+  suggested-configure-trust-center:
+    title: Configure your trust center
+    taskKindName: Trust Center
+    details: |
+      Configure the branding, pages, and resources customers will see in your public trust center
+    priority: 5
+    metadata:
+      link: /trust-center/overview
+      docsLink: https://docs.theopenlane.io/docs/platform/trust-center/overview
