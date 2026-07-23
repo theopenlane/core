@@ -368,8 +368,7 @@ github.com/openfga/api/proto v0.0.0-20260319214821-f153694bfc20/go.mod h1:XDX4qY
 github.com/openfga/go-sdk v0.8.2 h1:eX2RJ7RD9sbxC4Oe8ZAFDZu6n/qYuO9SDrk7XAOE0Fg=
 github.com/openfga/go-sdk v0.8.2/go.mod h1:epiUE6IfG7Ezr3cYLepiUbCasChNowgP8AtJsN4HSpI=
 github.com/openfga/language/pkg/go v0.3.1 h1:o+m3s0aHyjjLH27wqu6/7vL6VWOL8sBqyrNXV87t/e8=
-github.com/openfga/openfga v1.18.0 h1:aNQHPNZGDYyf4DqxdTzzTT/5nQM4yAtKw3S3ZFhSPn0=
-github.com/openfga/openfga v1.18.0/go.mod h1:se83OqKfGcb9Ddw/Bk85d2WE7PisFmDv/CeZQh3ZyIM=
+github.com/openfga/openfga v1.18.1 h1:scfXscw1co45EJxPHSWQ9OXso+MnmkkGEdQ3+Y2P4mo=
 github.com/ory/dockertest v3.3.5+incompatible h1:iLLK6SQwIhcbrG783Dghaaa3WPzGc+4Emza6EbVUUGA=
 github.com/ory/dockertest v3.3.5+incompatible/go.mod h1:1vX4m9wsvi00u5bseYwXaSnhNrne+V0E6LAcBILJdPs=
 github.com/pb33f/ordered-map/v2 v2.3.1 h1:5319HDO0aw4DA4gzi+zv4FXU9UlSs3xGZ40wcP1nBjY=
@@ -486,8 +485,7 @@ github.com/theopenlane/go-client v0.12.5 h1:ueY1s8ku6Col7JUISNw8ZIa/P+n3I1mMXO63
 github.com/theopenlane/go-client v0.12.5/go.mod h1:Q4+MZWZVABWtySfRTLh7bTj2wQqJMohyPGgIK1F8UOs=
 github.com/theopenlane/httpsling v0.3.0 h1:Bad0dGdqCqAB8UVDyVo+YCevzRvGHhmkK22F7T3pXtY=
 github.com/theopenlane/httpsling v0.3.0/go.mod h1:iJc3XRLYTFIpfCnPpLZVMBP0xsWIPAb7ozARtQoclAE=
-github.com/theopenlane/iam v0.35.0 h1:daR2gfB419FfvLjkTkdo5HoCbriZwUx0PDHpFr45Qzk=
-github.com/theopenlane/iam v0.35.0/go.mod h1:q74a7kuZlnuUM6mQfpm21b3n0qn+dc3BLzvuWwHX6sM=
+github.com/theopenlane/iam v0.35.1 h1:F/tTPwmS7gO1TM0WOleco3z5K+h44QTZY/VUC9i/QdA=
 github.com/theopenlane/riverboat v0.9.18 h1:ea15FbJ3XMroIfR0h3XvKLMtRCB702NQuciVhim4MlQ=
 github.com/theopenlane/riverboat v0.9.18/go.mod h1:rUslZO2OUQXXKa3GNgrtTK5U95TmolRG6HfAgGkxNAg=
 github.com/theopenlane/utils v0.7.1 h1:x+9kVMgOALYqAH6GaLaDb9tj16nzasoGM8X0v0XNTn8=
