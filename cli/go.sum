@@ -485,7 +485,7 @@ github.com/theopenlane/go-client v0.12.5 h1:ueY1s8ku6Col7JUISNw8ZIa/P+n3I1mMXO63
 github.com/theopenlane/go-client v0.12.5/go.mod h1:Q4+MZWZVABWtySfRTLh7bTj2wQqJMohyPGgIK1F8UOs=
 github.com/theopenlane/httpsling v0.3.0 h1:Bad0dGdqCqAB8UVDyVo+YCevzRvGHhmkK22F7T3pXtY=
 github.com/theopenlane/httpsling v0.3.0/go.mod h1:iJc3XRLYTFIpfCnPpLZVMBP0xsWIPAb7ozARtQoclAE=
-github.com/theopenlane/iam v0.35.1-0.20260723211559-15278f8a5e71 h1:ljWog3w9hWE+pQe2uj+1gBMb1QI7HrsImdewJAPJTIU=
+github.com/theopenlane/iam v0.35.1 h1:F/tTPwmS7gO1TM0WOleco3z5K+h44QTZY/VUC9i/QdA=
 github.com/theopenlane/riverboat v0.9.18 h1:ea15FbJ3XMroIfR0h3XvKLMtRCB702NQuciVhim4MlQ=
 github.com/theopenlane/riverboat v0.9.18/go.mod h1:rUslZO2OUQXXKa3GNgrtTK5U95TmolRG6HfAgGkxNAg=
 github.com/theopenlane/utils v0.7.1 h1:x+9kVMgOALYqAH6GaLaDb9tj16nzasoGM8X0v0XNTn8=
