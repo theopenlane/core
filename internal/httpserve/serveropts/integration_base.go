@@ -40,6 +40,7 @@ func WithIntegrationsRuntime(ctx context.Context, dbClient *ent.Client) ServerOp
 			Keystore:      credStore,
 			RedisClient:   s.Config.Handler.RedisClient,
 			CatalogConfig: s.Config.Settings.Integrations,
+			IntegrationActor: s.Config.Settings.Auth.IntegrationActor,
 			DevMode:       s.Config.Settings.Server.Dev,
 		})
 		if err != nil {

@@ -231,6 +231,10 @@
         "supportaccess": {
           "$ref": "#/$defs/handlers.SupportAccessConfig",
           "description": "SupportAccess contains the configuration for the Openlane support access flow"
+        },
+        "integrationactor": {
+          "$ref": "#/$defs/identity.Config",
+          "description": "IntegrationActor contains the virtual integration actor values used for record attribution"
         }
       },
       "additionalProperties": false,
@@ -1135,6 +1139,21 @@
       "additionalProperties": false,
       "type": "object",
       "description": "SupportAccessConfig contains configuration for the Openlane support access flow. The support\nidentity is virtual and authenticated entirely from these values, never from the database. This is\nthe single place that holds the support identity, its shared password, and the second factor\nidentity provider configuration, since both authentications must occur together"
+    },
+    "identity.Config": {
+      "properties": {
+        "subjectid": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "displayname": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     },
     "map[string][]string": {
       "additionalProperties": {

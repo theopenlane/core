@@ -77,7 +77,8 @@ Config contains the configuration for the core server
             "google": {},
             "webauthn": {}
         },
-        "supportaccess": {}
+        "supportaccess": {},
+        "integrationactor": {}
     },
     "authz": {
         "credentials": {},
@@ -642,6 +643,7 @@ Auth settings including oauth2 providers and token configuration
 |[**supportedproviders**](#authsupportedproviders)|`string[]`||no|
 |[**providers**](#authproviders)|`object`|OauthProviderConfig represents the configuration for OAuth providers such as Github and Google<br/>|no|
 |[**supportaccess**](#authsupportaccess)|`object`|SupportAccessConfig contains configuration for the Openlane support access flow. The support<br/>|no|
+|[**integrationactor**](#authintegrationactor)|`object`||no|
 
 **Additional Properties:** not allowed  
 **Example**
@@ -662,7 +664,8 @@ Auth settings including oauth2 providers and token configuration
         "google": {},
         "webauthn": {}
     },
-    "supportaccess": {}
+    "supportaccess": {},
+    "integrationactor": {}
 }
 ```
 
@@ -917,6 +920,18 @@ identity provider configuration, since both authentications must occur together
 |**discoveryendpoint**|`string`|DiscoveryEndpoint is the optional OIDC discovery endpoint of the second factor identity provider<br/>||
 |**redirecturl**|`string`|RedirectURL is the callback URL registered with the second factor identity provider<br/>||
 |**alloweddomain**|`string`|AllowedDomain restricts which email domain may complete the second factor (e.g. theopenlane.io)<br/>||
+
+**Additional Properties:** not allowed  
+<a name="authintegrationactor"></a>
+### auth\.integrationactor: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**subjectid**|`string`|||
+|**email**|`string`|||
+|**displayname**|`string`|||
 
 **Additional Properties:** not allowed  
 <a name="authz"></a>

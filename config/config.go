@@ -28,6 +28,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/internal/integrations/definitions/catalog"
+	"github.com/theopenlane/core/internal/integrations/identity"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/middleware/cachecontrol"
@@ -176,6 +177,8 @@ type Auth struct {
 	Providers handlers.OauthProviderConfig `json:"providers" koanf:"providers"`
 	// SupportAccess contains the configuration for the Openlane support access flow
 	SupportAccess handlers.SupportAccessConfig `json:"supportaccess" koanf:"supportaccess"`
+	// IntegrationActor contains the integration user values used for audit fields
+	IntegrationActor identity.Config `json:"integrationactor" koanf:"integrationactor"`
 }
 
 // TLS settings for the server for secure connections

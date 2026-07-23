@@ -1,5 +1,9 @@
 auth:
     enabled: true
+    integrationactor:
+        displayname: Openlane Integrations
+        email: integrations@theopenlane.io
+        subjectid: 01JNTGACTR0000000000000000
     providers:
         github:
             clientendpoint: ""

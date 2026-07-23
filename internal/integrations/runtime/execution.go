@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/integrations/identity"
 	intobvs "github.com/theopenlane/core/internal/integrations/observability"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -52,11 +53,12 @@ func (r *Runtime) reconcileOperations(ctx context.Context, integration *ent.Inte
 			RunType:       enums.IntegrationRunTypeReconcile,
 		})
 
-		receipt := r.Gala().EmitWithHeaders(gala.WithOperationContext(ctx, oc), operations.ReconcileTopic, operations.ReconcileEnvelope{
-			OperationContext: oc,
-		}, gala.Headers{
-			Properties: oc.Properties(),
-		})
+		receipt := r.Gala().EmitWithHeaders(
+			identity.WithIntegrationCaller(gala.WithOperationContext(ctx, oc), integration, r.integrationActor),
+			operations.ReconcileTopic,
+			operations.ReconcileEnvelope{OperationContext: oc},
+			gala.Headers{Properties: oc.Properties()},
+		)
 
 		if receipt.Err != nil {
 			logx.FromContext(ctx).Error().Err(receipt.Err).Str("operation", op.Name).Msg("failed to emit reconcile envelope")
@@ -109,7 +111,7 @@ func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.Recon
 		return 0, err
 	}
 
-	ctx = ensureCallerOrg(ctx, installation.OwnerID)
+	ctx = identity.WithIntegrationCaller(ctx, installation, r.integrationActor)
 
 	if installation.Status != enums.IntegrationStatusConnected {
 		logx.FromContext(ctx).Info().Str("integration_id", installation.ID).
@@ -146,7 +148,7 @@ func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.Recon
 		return 0, operations.ErrOperationDisabled
 	}
 
-	runRecord, err := operations.CreatePendingRun(ctx, db, installation, types.DispatchRequest{
+	runRecord, err := operations.CreatePendingRun(ctx, db, installation, r.integrationActor, types.DispatchRequest{
 		IntegrationID: src.IntegrationID,
 		Operation:     envelope.Operation,
 		RunType:       enums.IntegrationRunTypeReconcile,
@@ -229,6 +231,8 @@ func (r *Runtime) ExecuteOperation(ctx context.Context, integration *ent.Integra
 	if integration == nil {
 		return nil, ErrInstallationRequired
 	}
+
+	ctx = identity.WithIntegrationCaller(ctx, integration, r.integrationActor)
 
 	return r.executeOperationInline(ctx, integration, integration.DefinitionID, operation, credentials, config)
 }
@@ -317,7 +321,7 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 	}
 
 	if integration != nil {
-		ctx = ensureCallerOrg(ctx, integration.OwnerID)
+		ctx = identity.WithIntegrationCaller(ctx, integration, r.integrationActor)
 	}
 
 	if tracked {
@@ -443,6 +447,7 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 			DB:          r.DB(),
 			Runtime:     r.Gala(),
 			Integration: integration,
+			IntegrationActorConfig: r.integrationActor,
 		}, operation.Name, operation.Ingest, payloadSets, ingestOptions); err != nil {
 			return nil, 0, err
 		}
@@ -565,7 +570,7 @@ func (r *Runtime) seedReconcileJobsForInstallation(ctx context.Context, inst *en
 		})
 
 		receipt := r.Gala().EmitWithHeaders(
-			gala.WithOperationContext(ctx, oc),
+			identity.WithIntegrationCaller(gala.WithOperationContext(ctx, oc), inst, r.integrationActor),
 			operations.ReconcileTopic,
 			operations.ReconcileEnvelope{OperationContext: oc},
 			gala.Headers{Properties: oc.Properties()},

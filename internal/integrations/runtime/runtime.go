@@ -10,6 +10,7 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/integrations/definitions/catalog"
+	"github.com/theopenlane/core/internal/integrations/identity"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -39,6 +40,8 @@ type Config struct {
 	RedisClient *redis.Client
 	// CatalogConfig supplies operator-level credentials for all built-in definitions
 	CatalogConfig catalog.Config
+	// IntegrationActor holds the integration virtual user value used when creating db objects by the integration
+	IntegrationActor identity.Config
 	// DevMode is the server-level development flag; when true, integrations that
 	// support it use local file-based senders instead of calling provider APIs
 	DevMode bool
@@ -61,6 +64,8 @@ type Runtime struct {
 	defaultLookback time.Duration
 	// devMode indicates the server is running in development mode
 	devMode bool
+	// integrationActor supplies the virtual actor values used for integration-created records
+	integrationActor identity.Config
 }
 
 // SetPostExecutionHook registers a callback invoked after each HandleOperation call
@@ -129,6 +134,11 @@ func (r *Runtime) Redis() *redis.Client {
 	return do.MustInvoke[*redis.Client](r.injector)
 }
 
+// IntegrationActorConfig returns the runtime-owned virtual integration actor config.
+func (r *Runtime) IntegrationActorConfig() identity.Config {
+	return r.integrationActor
+}
+
 // keymaker returns the auth flow service from the injector
 func (r *Runtime) keymaker() *keymaker.Service {
 	return do.MustInvoke[*keymaker.Service](r.injector)
@@ -151,7 +161,7 @@ func (r *Runtime) Definition(id string) (types.Definition, bool) {
 
 // Dispatch enqueues one integration operation through the runtime-managed dispatcher
 func (r *Runtime) Dispatch(ctx context.Context, req types.DispatchRequest) (types.DispatchResult, error) {
-	result, err := operations.Dispatch(ctx, r.Registry(), r.DB(), r.Gala(), req)
+	result, err := operations.Dispatch(ctx, r.Registry(), r.DB(), r.Gala(), r.integrationActor, req)
 	if err != nil {
 		return types.DispatchResult{}, normalizeDispatchError(err)
 	}
@@ -195,8 +205,8 @@ func NewForTesting(reg *registry.Registry) *Runtime {
 	do.ProvideValue(injector, (*redis.Client)(nil))
 
 	return &Runtime{
-		injector:        injector,
-		defaultLookback: defaultLookbackDuration,
+		injector:          injector,
+		defaultLookback:   defaultLookbackDuration,
 	}
 }
 
@@ -209,9 +219,10 @@ func New(config Config) (*Runtime, error) {
 
 	injector := do.New()
 	rt := &Runtime{
-		injector:        injector,
-		defaultLookback: lookback,
-		devMode:         config.DevMode,
+		injector:          injector,
+		defaultLookback:   lookback,
+		devMode:           config.DevMode,
+		integrationActor:  config.IntegrationActor,
 	}
 
 	do.ProvideValue(injector, config.DB)

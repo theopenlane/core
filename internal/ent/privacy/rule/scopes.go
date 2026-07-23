@@ -8,9 +8,10 @@ import (
 
 	"entgo.io/ent"
 	"github.com/stoewer/go-strcase"
-	fgamodel "github.com/theopenlane/core/fga/model"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
+
+	fgamodel "github.com/theopenlane/core/fga/model"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
@@ -120,16 +121,16 @@ func CheckSubjectScope(ctx context.Context, objectType string, relation string, 
 		return privacy.Skip
 	}
 
-	// org-scoped support sessions hold every scope for their organization, equivalent to a fully scoped
-	// token; delete is excluded so support cannot remove organizations or their objects. Delete is
-	// denied here rather than falling through to an FGA check it could never satisfy
-	if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil && caller.OrganizationID != "" &&
-		caller.Has(auth.CapOrgSupport) {
+	// Org-scoped support and integration actors hold every scope for their organization, equivalent
+	// to a fully scoped token; delete is excluded so they cannot remove organizations or their objects.
+	// Delete is denied here rather than falling through to an FGA check it could never satisfy.
+	if caller, ok := auth.CallerFromContext(ctx); ok && caller != nil &&
+		caller.OrganizationID != "" && (caller.Has(auth.CapOrgSupport) || caller.Has(auth.CapIntegrationActor)) {
 		if !strings.HasPrefix(scopedRelation, CanDeletePrefix) {
 			return privacy.Allow
 		}
 
-		logx.FromContext(ctx).Info().Str("scope", scopedRelation).Str("user_id", caller.SubjectID).Msg("support attempting to perform action thats not allowed")
+		logx.FromContext(ctx).Info().Str("scope", scopedRelation).Str("subject_id", caller.SubjectID).Msg("org-scoped actor attempting to perform action thats not allowed")
 
 		return ErrRequiredScopeNotSet
 	}

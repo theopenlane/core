@@ -9,6 +9,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/integrations/identity"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/gala"
@@ -19,7 +20,7 @@ import (
 // Dispatch validates and enqueues one operation execution request. When
 // DispatchRequest.Runtime is true, no DB integration lookup is performed and
 // the client is resolved from the registry at execution time
-func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runtime *gala.Gala, req types.DispatchRequest) (types.DispatchResult, error) {
+func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runtime *gala.Gala, integrationActorConfig identity.Config, req types.DispatchRequest) (types.DispatchResult, error) {
 	if req.Operation == "" || (!req.Runtime && req.IntegrationID == "") {
 		return types.DispatchResult{}, ErrDispatchInputInvalid
 	}
@@ -79,7 +80,7 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 	var runID string
 
 	if installation != nil && !operation.Policy.SkipRunRecord {
-		runRecord, err := CreatePendingRun(ctx, db, installation, types.DispatchRequest{
+		runRecord, err := CreatePendingRun(ctx, db, installation, integrationActorConfig, types.DispatchRequest{
 			IntegrationID:      req.IntegrationID,
 			Operation:          req.Operation,
 			Config:             jsonx.CloneRawMessage(req.Config),
@@ -99,6 +100,8 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 	oc := types.NewOperationContext(ownerID, req.Operation, src)
 
 	emitCtx := gala.WithOperationContext(ctx, oc)
+	emitCtx = identity.WithIntegrationCaller(emitCtx, installation, integrationActorConfig)
+
 	receipt := runtime.EmitWithHeaders(emitCtx, operation.Topic, Envelope{
 		OperationContext:   oc,
 		Config:             jsonx.CloneRawMessage(req.Config),

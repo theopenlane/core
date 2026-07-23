@@ -9,12 +9,13 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/rout"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/rout"
 )
 
 // CreateUser is the resolver for the createUser field.

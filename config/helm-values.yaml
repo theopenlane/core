@@ -295,6 +295,11 @@ coreConfiguration:
       redirecturl: ""  # @schema type:string
       # -- AllowedDomain restricts which email domain may complete the second factor (e.g. theopenlane.io)
       alloweddomain: ""  # @schema type:string
+    # -- IntegrationActor contains the virtual integration actor values used for record attribution
+    integrationactor:
+      subjectid: "01JNTGACTR0000000000000000"  # @schema type:string; default:01JNTGACTR0000000000000000
+      email: "integrations@theopenlane.io"  # @schema type:string; default:integrations@theopenlane.io
+      displayname: "Openlane Integrations"  # @schema type:string; default:Openlane Integrations
   # -- Authz contains the authorization settings for fine grained access control
   authz:
     # -- enables authorization checks with openFGA

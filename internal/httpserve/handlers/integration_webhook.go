@@ -16,6 +16,7 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/integrations/identity"
 	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/logx"
@@ -64,8 +65,7 @@ func (h *Handler) IntegrationWebhookHandler(ctx echo.Context) error {
 		return h.BadRequest(ctx, ErrIntegrationNotFound)
 	}
 
-	// Re-set the caller now that the owning organization is known
-	webhookCtx = auth.WithCaller(webhookCtx, auth.NewWebhookCaller(integration.OwnerID))
+	webhookCtx = identity.WithIntegrationCaller(webhookCtx, integration, h.IntegrationsRuntime.IntegrationActorConfig())
 
 	webhookReg, err := h.IntegrationsRuntime.Registry().Webhook(integration.DefinitionID, persistedWebhook.Name)
 	if err != nil {
@@ -259,7 +259,7 @@ func (h *Handler) handleStaticWebhookWithIntegration(webhookCtx context.Context,
 		return h.BadRequest(ctx, ErrIntegrationNotFound)
 	}
 
-	webhookCtx = auth.WithCaller(webhookCtx, auth.NewWebhookCaller(integration.OwnerID))
+	webhookCtx = identity.WithIntegrationCaller(webhookCtx, integration, h.IntegrationsRuntime.IntegrationActorConfig())
 
 	persistedWebhook, err := h.IntegrationsRuntime.EnsureWebhook(webhookCtx, integration, webhookName, "")
 	if err != nil {

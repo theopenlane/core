@@ -231,7 +231,10 @@ func ShouldSkipFeatureCheck(ctx context.Context) bool {
 			return true
 		}
 
-		if caller.Has(auth.CapInternalOperation) || caller.Has(auth.CapBypassFeatureCheck) || caller.OrganizationRole == auth.AnonymousRole {
+		if caller.Has(auth.CapInternalOperation) ||
+			caller.Has(auth.CapIntegrationActor) ||
+			caller.Has(auth.CapBypassFeatureCheck) ||
+			caller.OrganizationRole == auth.AnonymousRole {
 			return true
 		}
 	}

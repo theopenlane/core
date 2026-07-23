@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/integrations/identity"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/pkg/gala"
 )
@@ -20,6 +21,8 @@ type IngestContext struct {
 	Runtime *gala.Gala
 	// Integration is the integration record being ingested into
 	Integration *ent.Integration
+	// IntegrationActorConfig holds the integration user configuration values
+	IntegrationActorConfig identity.Config
 }
 
 // WebhookEnvelope is the durable payload emitted for one inbound integration webhook event

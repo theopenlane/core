@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/httpserve/handlers/scim"
 	definitionscim "github.com/theopenlane/core/internal/integrations/definitions/scim"
+	"github.com/theopenlane/core/internal/integrations/identity"
 	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 )
 
@@ -59,8 +60,7 @@ func (h *Handler) SCIMHandler(scimHandler http.Handler, routePrefix string) echo
 			return echo.NewHTTPError(http.StatusForbidden, "integration is not active")
 		}
 
-		// Narrow caller to the installation owner's org
-		ctx = auth.WithCaller(ctx, auth.NewWebhookCaller(installation.OwnerID))
+		ctx = identity.WithIntegrationCaller(ctx, installation, rt.IntegrationActorConfig())
 
 		ctx = scim.WithRequest(ctx, &scim.Request{
 			Installation: installation,

@@ -14,6 +14,7 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/integrations/identity"
 	intobvs "github.com/theopenlane/core/internal/integrations/observability"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/registry"
@@ -161,8 +162,9 @@ func (r *Runtime) DispatchWebhookEvent(ctx context.Context, integration *ent.Int
 	}
 
 	oc := types.NewOperationContext(ownerID, "", src)
+	emitCtx := identity.WithIntegrationCaller(gala.WithOperationContext(ctx, oc), integration, r.integrationActor)
 
-	receipt := r.Gala().EmitWithHeaders(gala.WithOperationContext(ctx, oc), registration.Topic, operations.WebhookEnvelope{
+	receipt := r.Gala().EmitWithHeaders(emitCtx, registration.Topic, operations.WebhookEnvelope{
 		OperationContext: oc,
 		Payload:          jsonx.CloneRawMessage(event.Payload),
 		Headers:          maps.Clone(event.Headers),
@@ -191,6 +193,8 @@ func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope operations.We
 		if err != nil {
 			return err
 		}
+
+		ctx = identity.WithIntegrationCaller(ctx, integration, r.integrationActor)
 	}
 
 	registration, err := r.Registry().WebhookEvent(src.DefinitionID, src.Webhook, src.Event)
@@ -224,6 +228,7 @@ func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope operations.We
 				DB:          r.DB(),
 				Runtime:     r.Gala(),
 				Integration: integration,
+				IntegrationActorConfig: r.integrationActor,
 			}, src.Webhook, registration.Ingest, payloadSets, operations.IngestOptionsFromOperationContext(oc))
 		},
 		DispatchOperation: func(dispatchCtx context.Context, operation string, config json.RawMessage) error {

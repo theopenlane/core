@@ -63,3 +63,33 @@ func TestCheckSubjectScopeOrgSupport(t *testing.T) {
 		})
 	}
 }
+
+func TestCheckSubjectScopeIntegrationUser(t *testing.T) {
+	var orgID = ulids.New().String()
+
+	tests := []struct {
+		name       string
+		objectType string
+		relation   string
+		op         *ent.Op
+		expected   error
+	}{
+		{name: "integration can query", objectType: "Control", relation: "can_view", expected: privacy.Allow},
+		{name: "integration can create", objectType: "Control", op: lo.ToPtr(ent.OpCreate), expected: privacy.Allow},
+		{name: "integration can edit", objectType: "Control", op: lo.ToPtr(ent.OpUpdateOne), expected: privacy.Allow},
+		{name: "integration cannot delete", objectType: "Control", op: lo.ToPtr(ent.OpDeleteOne), expected: ErrRequiredScopeNotSet},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ctx := auth.WithCaller(t.Context(), &auth.Caller{
+				SubjectID:      "integration-subject",
+				OrganizationID: orgID,
+				Capabilities:   auth.CapIntegrationActor,
+			})
+
+			err := CheckSubjectScope(ctx, tt.objectType, tt.relation, tt.op)
+			assert.True(t, errors.Is(err, tt.expected), "expected %v, got %v", tt.expected, err)
+		})
+	}
+}
