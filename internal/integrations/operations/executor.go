@@ -26,7 +26,7 @@ func RegisterRuntimeListeners(runtime *gala.Gala, reg *registry.Registry, servic
 			Handle: func(ctx gala.HandlerContext, envelope Envelope) error {
 				err := operationHandle(ctx.Context, envelope)
 				if ent.IsNotFound(err) {
-					logx.FromContext(ctx.Context).Error().Err(err).Str("integration_id", envelope.IntegrationID).Msg("integration not found, cancelling operation")
+					logx.FromContext(ctx.Context).Error().Err(err).Str("integration_id", envelope.EntityID).Msg("integration not found, cancelling operation")
 					return river.JobCancel(err)
 				}
 
@@ -48,7 +48,7 @@ func RegisterRuntimeListeners(runtime *gala.Gala, reg *registry.Registry, servic
 			Handle: func(ctx gala.HandlerContext, envelope WebhookEnvelope) error {
 				err := webhookHandle(ctx.Context, envelope)
 				if ent.IsNotFound(err) {
-					logx.FromContext(ctx.Context).Error().Err(err).Str("integration_id", envelope.IntegrationID).Msg("integration not found, cancelling webhook event")
+					logx.FromContext(ctx.Context).Error().Err(err).Str("integration_id", envelope.EntityID).Msg("integration not found, cancelling webhook event")
 					return river.JobCancel(err)
 				}
 

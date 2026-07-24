@@ -1850,8 +1850,7 @@ func (ec *executionContext) unmarshalOControlCategoryOrder2ᚕᚖgithubᚗcomᚋ
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*model.ControlCategoryOrder, len(vSlice))
 	for i := range vSlice {

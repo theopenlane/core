@@ -5,7 +5,7 @@ import (
 
 	admin "google.golang.org/api/admin/directory/v1"
 
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -94,15 +94,15 @@ func (DirectorySync) Run(ctx context.Context, svc *admin.Service, customerID str
 
 	return []types.IngestPayloadSet{
 		{
-			Schema:    integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
+			Schema:    entityops.SchemaDirectoryAccount.Name,
 			Envelopes: accountEnvelopes,
 		},
 		{
-			Schema:    integrationgenerated.IntegrationMappingSchemaDirectoryGroup,
+			Schema:    entityops.SchemaDirectoryGroup.Name,
 			Envelopes: groupEnvelopes,
 		},
 		{
-			Schema:    integrationgenerated.IntegrationMappingSchemaDirectoryMembership,
+			Schema:    entityops.SchemaDirectoryMembership.Name,
 			Envelopes: membershipEnvelopes,
 		},
 	}, nil

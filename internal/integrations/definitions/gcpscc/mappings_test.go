@@ -14,8 +14,18 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
+// testMappings returns the ingest mappings from the built GCP SCC definition
+func testMappings(t *testing.T) []types.MappingRegistration {
+	t.Helper()
+
+	def, err := Builder()()
+	require.NoError(t, err)
+
+	return def.Mappings
+}
+
 func TestMappingExpressionsValid(t *testing.T) {
-	for _, m := range gcpsccMappings() {
+	for _, m := range testMappings(t) {
 		name := m.Schema
 		if m.Variant != "" {
 			name += "/" + m.Variant
@@ -63,7 +73,7 @@ func TestGCPSCCMappingsEvalMap(t *testing.T) {
 			}`),
 		}
 
-		raw, err := providerkit.EvalMap(context.Background(), gcpsccMappings()[1].Spec.MapExpr, envelope)
+		raw, err := providerkit.EvalMap(context.Background(), testMappings(t)[1].Spec.MapExpr, envelope)
 		require.NoError(t, err)
 
 		mapped, err := jsonx.ToMap(raw)
@@ -100,7 +110,7 @@ func TestGCPSCCMappingsEvalMap(t *testing.T) {
 			}`),
 		}
 
-		raw, err := providerkit.EvalMap(context.Background(), gcpsccMappings()[1].Spec.MapExpr, envelope)
+		raw, err := providerkit.EvalMap(context.Background(), testMappings(t)[1].Spec.MapExpr, envelope)
 		require.NoError(t, err)
 
 		mapped, err := jsonx.ToMap(raw)
@@ -125,7 +135,7 @@ func TestGCPSCCMappingsFindingExample(t *testing.T) {
 	}
 
 	// mappings[2] is the finding schema
-	raw, err := providerkit.EvalMap(context.Background(), gcpsccMappings()[2].Spec.MapExpr, envelope)
+	raw, err := providerkit.EvalMap(context.Background(), testMappings(t)[2].Spec.MapExpr, envelope)
 	require.NoError(t, err)
 
 	mapped, err := jsonx.ToMap(raw)
@@ -163,7 +173,7 @@ func TestGCPSCCMappingsVulnerabilityExample(t *testing.T) {
 	}
 
 	// mappings[1] is the vulnerability schema
-	raw, err := providerkit.EvalMap(context.Background(), gcpsccMappings()[1].Spec.MapExpr, envelope)
+	raw, err := providerkit.EvalMap(context.Background(), testMappings(t)[1].Spec.MapExpr, envelope)
 	require.NoError(t, err)
 
 	mapped, err := jsonx.ToMap(raw)

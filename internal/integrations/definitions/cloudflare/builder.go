@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/samber/lo"
-
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/ent/entityops"
+	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -90,13 +90,13 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 					ConfigResolver: providerkit.ConfigFrom(func(u UserInput) DirectorySync { return u.DirectorySync }),
 					Ingest: []types.IngestContract{
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
+							Schema: entityops.SchemaDirectoryAccount.Name,
 						},
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryGroup,
+							Schema: entityops.SchemaDirectoryGroup.Name,
 						},
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryMembership,
+							Schema: entityops.SchemaDirectoryMembership.Name,
 						},
 					},
 					IngestHandle:        DirectorySync{}.IngestHandle(),
@@ -115,7 +115,7 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 					ConfigResolver: providerkit.ConfigFrom(func(u UserInput) FindingsSync { return u.FindingsSync }),
 					Ingest: []types.IngestContract{
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaFinding,
+							Schema: entityops.SchemaFinding.Name,
 						},
 					},
 					IngestHandle:        FindingsCollect{}.IngestHandle(),
@@ -132,7 +132,7 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 					ConfigResolver: providerkit.ConfigFrom(func(u UserInput) AssetSync { return u.AssetSync }),
 					Ingest: []types.IngestContract{
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaAsset,
+							Schema: entityops.SchemaAsset.Name,
 						},
 					},
 					IngestHandle:        AssetCollect{}.IngestHandle(),
@@ -212,9 +212,53 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 					Internal:           true,
 				},
 			},
-			Mappings: cloudflareMappings(),
 			GalaListeners: []types.GalaListenerRegistration{
 				domainScanListeners(),
+			},
+			Mappings: []types.MappingRegistration{
+				{
+					Schema: entityops.SchemaDirectoryAccount.Name,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprDirectoryAccount,
+					},
+				},
+				{
+					Schema: entityops.SchemaDirectoryGroup.Name,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprDirectoryGroup,
+					},
+				},
+				{
+					Schema: entityops.SchemaDirectoryMembership.Name,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprDirectoryMembership,
+					},
+				},
+				{
+					Schema: entityops.SchemaFinding.Name,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprFinding,
+						Links: []types.LinkRule{
+							{
+								TargetSchema: entityops.SchemaControl.Name,
+								TargetField:  control.FieldRefCode,
+								SourceField:  entityops.InputKeyFindingCategory,
+								SourceList:   entityops.InputKeyFindingCategories,
+							},
+						},
+					},
+				},
+				{
+					Schema: entityops.SchemaAsset.Name,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprAsset,
+					},
+				},
 			},
 		}
 

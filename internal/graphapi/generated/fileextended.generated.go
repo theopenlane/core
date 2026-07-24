@@ -81,8 +81,7 @@ func (ec *executionContext) unmarshalOFileMetadataInput2ᚕᚖgithubᚗcomᚋthe
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*model.FileMetadataInput, len(vSlice))
 	for i := range vSlice {

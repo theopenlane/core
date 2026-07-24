@@ -1,7 +1,7 @@
 package authentik
 
 import (
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -76,19 +76,41 @@ func Builder() registry.Builder {
 					SkipDefaultLookback: true,
 					Ingest: []types.IngestContract{
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
+							Schema: entityops.SchemaDirectoryAccount.Name,
 						},
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryGroup,
+							Schema: entityops.SchemaDirectoryGroup.Name,
 						},
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryMembership,
+							Schema: entityops.SchemaDirectoryMembership.Name,
 						},
 					},
 					IngestHandle: DirectorySync{}.IngestHandle(),
 				},
 			},
-			Mappings: authentikMappings(),
+			Mappings: []types.MappingRegistration{
+				{
+					Schema: entityops.SchemaDirectoryAccount.Name,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprDirectoryAccount,
+					},
+				},
+				{
+					Schema: entityops.SchemaDirectoryGroup.Name,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprDirectoryGroup,
+					},
+				},
+				{
+					Schema: entityops.SchemaDirectoryMembership.Name,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprDirectoryMembership,
+					},
+				},
+			},
 		}, nil
 	})
 }

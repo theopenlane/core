@@ -104,11 +104,11 @@ require (
 	github.com/theopenlane/core/common v1.0.24
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.3.0
-	github.com/theopenlane/entx v0.30.2
+	github.com/theopenlane/entx v0.30.3
 	github.com/theopenlane/go-client v0.12.5
 	github.com/theopenlane/gqlgen-plugins v0.14.7
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.35.0
+	github.com/theopenlane/iam v0.35.1
 	github.com/theopenlane/newman v0.4.2
 	github.com/theopenlane/riverboat v0.9.18
 	github.com/theopenlane/utils v0.7.1
@@ -208,7 +208,7 @@ require (
 	github.com/Azure/go-ansiterm v0.0.0-20250102033503-faa5f7b0171c // indirect
 	github.com/Microsoft/go-winio v0.6.2 // indirect
 	github.com/Nvveen/Gotty v0.0.0-20120604004816-cd527374f1e5 // indirect
-	github.com/XSAM/otelsql v0.42.0 // indirect
+	github.com/XSAM/otelsql v0.43.0 // indirect
 	github.com/Yiling-J/theine-go v0.6.2 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/agnivade/levenshtein v1.2.1 // indirect
@@ -313,7 +313,7 @@ require (
 	github.com/fxamacker/cbor/v2 v2.9.2 // indirect
 	github.com/go-logr/logr v1.4.3 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
-	github.com/go-openapi/inflect v0.21.5 // indirect
+	github.com/go-openapi/inflect v0.21.6 // indirect
 	github.com/go-openapi/jsonpointer v0.22.5 // indirect
 	github.com/go-openapi/swag/jsonname v0.25.5 // indirect
 	github.com/go-redis/redis/v8 v8.11.5 // indirect
@@ -360,7 +360,7 @@ require (
 	github.com/opencontainers/runc v1.3.6 // indirect
 	github.com/openfga/api/proto v0.0.0-20260319214821-f153694bfc20 // indirect
 	github.com/openfga/language/pkg/go v0.3.1
-	github.com/openfga/openfga v1.18.0 // indirect
+	github.com/openfga/openfga v1.18.1 // indirect
 	github.com/ory/dockertest v3.3.5+incompatible // indirect
 	github.com/pelletier/go-toml/v2 v2.3.1 // indirect
 	github.com/prometheus/client_model v0.6.2 // indirect

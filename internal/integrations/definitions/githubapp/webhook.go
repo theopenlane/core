@@ -14,9 +14,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqljson"
 
+	"github.com/theopenlane/core/internal/ent/entityops"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/mapx"
@@ -259,7 +259,7 @@ func ingestGitHubAlert(ctx context.Context, request types.WebhookHandleRequest, 
 
 	if err := request.Ingest(ctx, []types.IngestPayloadSet{
 		{
-			Schema: integrationgenerated.IntegrationMappingSchemaVulnerability,
+			Schema: entityops.SchemaVulnerability.Name,
 			Envelopes: []types.MappingEnvelope{
 				{
 					Variant:  variant,

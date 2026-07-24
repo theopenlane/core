@@ -11258,6 +11258,10 @@ func init() {
 // cleaned payload and the target ids per edge name. Malformed values are left in place so input
 // validation rejects them instead of being silently discarded
 func splitThroughEdgeIDs(s *Schema, payload json.RawMessage) (json.RawMessage, map[string][]string) {
+	if s == nil {
+		return payload, nil
+	}
+
 	var doc map[string]json.RawMessage
 	if err := json.Unmarshal(payload, &doc); err != nil {
 		return payload, nil
@@ -11302,6 +11306,10 @@ func splitThroughEdgeIDs(s *Schema, payload json.RawMessage) (json.RawMessage, m
 
 // applyThroughEdgeIDs creates the join entity rows for each split through edge
 func applyThroughEdgeIDs(ctx context.Context, client *generated.Client, s *Schema, sourceID string, ids map[string][]string) error {
+	if s == nil || len(ids) == 0 {
+		return nil
+	}
+
 	for name, targetIDs := range ids {
 		edge, ok := s.EdgeByName(name)
 		if !ok || edge.LinkThrough == nil || len(targetIDs) == 0 {

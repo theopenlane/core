@@ -7,6 +7,7 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -52,18 +53,20 @@ func WithIntegration(ctx context.Context, integrationID, definitionID string) co
 	})
 }
 
-// WithContext stores execution metadata on context and enriches the logger
+// WithContext stores the operation context on context and enriches the logger
 // with all non-empty execution fields
-func WithContext(ctx context.Context, metadata types.ExecutionMetadata) context.Context {
-	ctx = types.WithExecutionMetadata(ctx, metadata)
-	ctx = WithIntegration(ctx, metadata.IntegrationID, metadata.DefinitionID)
+func WithContext(ctx context.Context, oc gala.OperationContext) context.Context {
+	src := types.IntegrationSourceFrom(oc)
 
-	if metadata.Operation != "" {
-		ctx = WithOperation(ctx, metadata.Operation)
+	ctx = gala.WithOperationContext(ctx, oc)
+	ctx = WithIntegration(ctx, src.IntegrationID, src.DefinitionID)
+
+	if oc.Operation != "" {
+		ctx = WithOperation(ctx, oc.Operation)
 	}
 
-	if metadata.RunID != "" {
-		ctx = WithRunID(ctx, metadata.RunID)
+	if src.RunID != "" {
+		ctx = WithRunID(ctx, src.RunID)
 	}
 
 	return ctx

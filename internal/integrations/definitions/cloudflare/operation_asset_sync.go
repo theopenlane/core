@@ -8,7 +8,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v7/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v7/registrar"
 
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/logx"
@@ -54,7 +54,7 @@ func (AssetCollect) Run(ctx context.Context, credentials types.CredentialBinding
 
 	return []types.IngestPayloadSet{
 		{
-			Schema:    integrationgenerated.IntegrationMappingSchemaAsset,
+			Schema:    entityops.SchemaAsset.Name,
 			Envelopes: envelopes,
 		},
 	}, nil

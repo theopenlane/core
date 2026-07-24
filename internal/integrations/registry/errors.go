@@ -51,4 +51,14 @@ var (
 	ErrBuilderNil = errors.New("integrations/registry: builder is nil")
 	// ErrRuntimeBuildRequired indicates a runtime integration registration is missing its Build function
 	ErrRuntimeBuildRequired = errors.New("integrations/registry: runtime integration build function required")
+	// ErrLinkEdgeNotFound indicates a mapping opted into a link edge that does not exist on the source schema
+	ErrLinkEdgeNotFound = errors.New("integrations/registry: link edge not found on source schema")
+	// ErrLinkEdgeAmbiguous indicates a link rule's target type matches multiple edges and no edge name was set
+	ErrLinkEdgeAmbiguous = errors.New("integrations/registry: link target type is ambiguous, edge name required")
+	// ErrLinkRuleInvalid indicates a link rule sets neither or both of a field match and an expression
+	ErrLinkRuleInvalid = errors.New("integrations/registry: link rule must set exactly one of field match or expression")
+	// ErrLinkTargetFieldInvalid indicates a link rule's target field is not a match key on the target schema
+	ErrLinkTargetFieldInvalid = errors.New("integrations/registry: link target field is not a match key on the target schema")
+	// ErrLinkSourceFieldInvalid indicates a link rule's source field is not a mapped input key of the required shape
+	ErrLinkSourceFieldInvalid = errors.New("integrations/registry: link source field is not a mapped input key of the required shape")
 )

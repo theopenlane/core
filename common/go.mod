@@ -13,7 +13,7 @@ require (
 	github.com/stretchr/testify v1.11.1
 	github.com/theopenlane/core v1.26.1
 	github.com/theopenlane/echox v0.3.0
-	github.com/theopenlane/entx v0.30.2
+	github.com/theopenlane/entx v0.30.3
 	github.com/theopenlane/utils v0.7.1
 	github.com/zitadel/oidc/v3 v3.47.9
 	golang.org/x/oauth2 v0.36.0
@@ -24,7 +24,7 @@ require (
 	ariga.io/atlas v1.2.3 // indirect
 	entgo.io/contrib v0.7.0 // indirect
 	github.com/99designs/gqlgen v0.17.94 // indirect
-	github.com/XSAM/otelsql v0.42.0 // indirect
+	github.com/XSAM/otelsql v0.43.0 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/agnivade/levenshtein v1.2.1 // indirect
 	github.com/antlr4-go/antlr/v4 v4.13.1 // indirect
@@ -37,7 +37,7 @@ require (
 	github.com/go-jose/go-jose/v4 v4.1.4 // indirect
 	github.com/go-logr/logr v1.4.3 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
-	github.com/go-openapi/inflect v0.21.5 // indirect
+	github.com/go-openapi/inflect v0.21.6 // indirect
 	github.com/go-test/deep v1.1.1 // indirect
 	github.com/go-viper/mapstructure/v2 v2.5.0 // indirect
 	github.com/go-webauthn/x v0.2.6 // indirect

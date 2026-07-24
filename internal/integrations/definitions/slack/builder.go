@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/integrations/auth"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/registry"
@@ -151,7 +151,7 @@ func Builder(cfg Config, runtime *RuntimeSlackConfig, devMode bool) registry.Bui
 					Policy:       types.ExecutionPolicy{Reconcile: true},
 					Ingest: []types.IngestContract{
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
+							Schema: entityops.SchemaDirectoryAccount.Name,
 						},
 					},
 					IngestHandle:        DirectorySync{}.IngestHandle(),
@@ -161,7 +161,15 @@ func Builder(cfg Config, runtime *RuntimeSlackConfig, devMode bool) registry.Bui
 					ConfigResolver:      providerkit.ConfigFrom(func(u UserInput) DirectorySync { return u.DirectorySync }),
 				},
 			),
-			Mappings: slackMappings(),
+			Mappings: []types.MappingRegistration{
+				{
+					Schema: entityops.SchemaDirectoryAccount.Name,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprDirectoryAccount,
+					},
+				},
+			},
 		}
 
 		if runtime != nil && (devMode || runtime.Provisioned()) {

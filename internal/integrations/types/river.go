@@ -4,24 +4,43 @@ import (
 	"github.com/theopenlane/core/pkg/gala"
 )
 
-// GetTagsForExecutionMetadata safely translate execution metadata to river-safe tags
-func GetTagsForExecutionMetadata(meta ExecutionMetadata) []string {
+// GetTagsForOperationContext safely translates an operation context to river-safe tags
+func GetTagsForOperationContext(oc gala.OperationContext) []string {
+	src := IntegrationSourceFrom(oc)
+
 	tags := []string{}
-	if meta.DefinitionID != "" {
-		tags = append(tags, gala.SanitizeTag(meta.DefinitionID))
+	if src.DefinitionID != "" {
+		tags = append(tags, gala.SanitizeTag(src.DefinitionID))
 	}
 
-	if meta.Operation != "" {
-		tags = append(tags, gala.SanitizeTag(meta.Operation))
+	if oc.Operation != "" {
+		tags = append(tags, gala.SanitizeTag(oc.Operation))
 	}
 
-	if meta.RunType != "" {
-		tags = append(tags, gala.SanitizeTag(meta.RunType.String()))
+	if src.RunType != "" {
+		tags = append(tags, gala.SanitizeTag(src.RunType.String()))
 	}
 
-	if meta.Webhook != "" {
-		tags = append(tags, gala.SanitizeTag(meta.Webhook))
+	if src.Webhook != "" {
+		tags = append(tags, gala.SanitizeTag(src.Webhook))
 	}
 
 	return tags
+}
+
+// GetPropertiesForOperationContext returns header properties for an operation context,
+// merging source provenance fields used for active-job metadata matching
+func GetPropertiesForOperationContext(oc gala.OperationContext) map[string]string {
+	src := IntegrationSourceFrom(oc)
+	props := oc.Properties()
+
+	if src.DefinitionID != "" {
+		props["definitionId"] = src.DefinitionID
+	}
+
+	if src.RunType != "" {
+		props["runType"] = src.RunType.String()
+	}
+
+	return props
 }

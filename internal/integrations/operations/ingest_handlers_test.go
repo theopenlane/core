@@ -9,8 +9,8 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/openapi"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
@@ -31,7 +31,7 @@ func TestWithDirectorySyncRunID(t *testing.T) {
 	}
 }
 
-func TestLookupIngestSchemaRegistration(t *testing.T) {
+func TestLookupIngestHandler(t *testing.T) {
 	t.Parallel()
 
 	tests := []struct {
@@ -39,15 +39,15 @@ func TestLookupIngestSchemaRegistration(t *testing.T) {
 		schema string
 		want   bool
 	}{
-		{"asset schema exists", integrationgenerated.IntegrationMappingSchemaAsset, true},
-		{"contact schema exists", integrationgenerated.IntegrationMappingSchemaContact, true},
-		{"directory account exists", integrationgenerated.IntegrationMappingSchemaDirectoryAccount, true},
-		{"directory group exists", integrationgenerated.IntegrationMappingSchemaDirectoryGroup, true},
-		{"directory membership exists", integrationgenerated.IntegrationMappingSchemaDirectoryMembership, true},
-		{"entity exists", integrationgenerated.IntegrationMappingSchemaEntity, true},
-		{"finding exists", integrationgenerated.IntegrationMappingSchemaFinding, true},
-		{"risk exists", integrationgenerated.IntegrationMappingSchemaRisk, true},
-		{"vulnerability exists", integrationgenerated.IntegrationMappingSchemaVulnerability, true},
+		{"asset schema exists", entityops.SchemaAsset.Name, true},
+		{"contact schema exists", entityops.SchemaContact.Name, true},
+		{"directory account exists", entityops.SchemaDirectoryAccount.Name, true},
+		{"directory group exists", entityops.SchemaDirectoryGroup.Name, true},
+		{"directory membership exists", entityops.SchemaDirectoryMembership.Name, true},
+		{"entity exists", entityops.SchemaEntity.Name, true},
+		{"finding exists", entityops.SchemaFinding.Name, true},
+		{"risk exists", entityops.SchemaRisk.Name, true},
+		{"vulnerability exists", entityops.SchemaVulnerability.Name, true},
 		{"unknown schema missing", "nonexistent", false},
 		{"empty string missing", "", false},
 	}
@@ -56,74 +56,58 @@ func TestLookupIngestSchemaRegistration(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			_, ok := lookupIngestSchemaRegistration(tc.schema)
+			_, ok := lookupIngestHandler(tc.schema)
 			if ok != tc.want {
-				t.Fatalf("lookupIngestSchemaRegistration(%q)=%v, want %v", tc.schema, ok, tc.want)
+				t.Fatalf("lookupIngestHandler(%q)=%v, want %v", tc.schema, ok, tc.want)
 			}
 		})
 	}
 }
 
-func TestBuildIngestMetadata(t *testing.T) {
+func TestBuildIngestOperationContext(t *testing.T) {
 	t.Parallel()
 
 	integration := &ent.Integration{
 		ID:           "int-001",
 		DefinitionID: "def-001",
+		OwnerID:      "org-001",
 	}
 
-	t.Run("basic metadata without workflow", func(t *testing.T) {
+	t.Run("promotes integration and carries provenance", func(t *testing.T) {
 		t.Parallel()
 
-		record := mappedIngestRecord{
-			Schema:  "asset",
-			Variant: "server",
-		}
-
 		options := IngestOptions{
-			Source:       integrationgenerated.IntegrationIngestSourceWebhook,
 			RunID:        "run-001",
 			Webhook:      "github",
 			WebhookEvent: "push",
 			DeliveryID:   "delivery-001",
 		}
 
-		got := buildIngestMetadata(integration, "health", record, options)
+		oc := buildIngestOperationContext(integration, options)
 
-		if got.IntegrationID != "int-001" {
-			t.Fatalf("IntegrationID=%q, want %q", got.IntegrationID, "int-001")
+		if oc.OwnerID != "org-001" {
+			t.Fatalf("OwnerID=%q, want %q", oc.OwnerID, "org-001")
 		}
-		if got.DefinitionID != "def-001" {
-			t.Fatalf("DefinitionID=%q, want %q", got.DefinitionID, "def-001")
+		if oc.EntityID != "int-001" {
+			t.Fatalf("EntityID=%q, want %q", oc.EntityID, "int-001")
 		}
-		if got.Operation != "health" {
-			t.Fatalf("Operation=%q, want %q", got.Operation, "health")
+
+		src := types.IntegrationSourceFrom(oc)
+		if src.IntegrationID != "int-001" {
+			t.Fatalf("IntegrationID=%q, want %q", src.IntegrationID, "int-001")
 		}
-		if got.Variant != "server" {
-			t.Fatalf("Variant=%q, want %q", got.Variant, "server")
+		if src.DefinitionID != "def-001" {
+			t.Fatalf("DefinitionID=%q, want %q", src.DefinitionID, "def-001")
 		}
-		if got.Source != integrationgenerated.IntegrationIngestSourceWebhook {
-			t.Fatalf("Source=%q, want %q", got.Source, integrationgenerated.IntegrationIngestSourceWebhook)
+		if src.RunID != "run-001" {
+			t.Fatalf("RunID=%q, want %q", src.RunID, "run-001")
 		}
-		if got.RunID != "run-001" {
-			t.Fatalf("RunID=%q, want %q", got.RunID, "run-001")
-		}
-		if got.WorkflowInstanceID != "" {
-			t.Fatalf("WorkflowInstanceID=%q, want empty", got.WorkflowInstanceID)
+		if src.Webhook != "github" {
+			t.Fatalf("Webhook=%q, want %q", src.Webhook, "github")
 		}
 	})
 
-	t.Run("defaults source to direct", func(t *testing.T) {
-		t.Parallel()
-
-		got := buildIngestMetadata(integration, "sync", mappedIngestRecord{Schema: "asset"}, IngestOptions{})
-
-		if got.Source != integrationgenerated.IntegrationIngestSourceDirect {
-			t.Fatalf("Source=%q, want %q", got.Source, integrationgenerated.IntegrationIngestSourceDirect)
-		}
-	})
-
-	t.Run("includes workflow metadata", func(t *testing.T) {
+	t.Run("includes workflow provenance", func(t *testing.T) {
 		t.Parallel()
 
 		options := IngestOptions{
@@ -136,22 +120,11 @@ func TestBuildIngestMetadata(t *testing.T) {
 			},
 		}
 
-		got := buildIngestMetadata(integration, "collect", mappedIngestRecord{Schema: "risk"}, options)
+		oc := buildIngestOperationContext(integration, options)
+		src := types.IntegrationSourceFrom(oc)
 
-		if got.WorkflowInstanceID != "wf-001" {
-			t.Fatalf("WorkflowInstanceID=%q, want %q", got.WorkflowInstanceID, "wf-001")
-		}
-		if got.WorkflowActionKey != "action-key" {
-			t.Fatalf("WorkflowActionKey=%q, want %q", got.WorkflowActionKey, "action-key")
-		}
-		if got.WorkflowActionIndex != 3 {
-			t.Fatalf("WorkflowActionIndex=%d, want %d", got.WorkflowActionIndex, 3)
-		}
-		if got.WorkflowObjectID != "obj-001" {
-			t.Fatalf("WorkflowObjectID=%q, want %q", got.WorkflowObjectID, "obj-001")
-		}
-		if got.WorkflowObjectType != "risk" {
-			t.Fatalf("WorkflowObjectType=%q, want %q", got.WorkflowObjectType, "risk")
+		if src.Workflow == nil || src.Workflow.InstanceID != "wf-001" {
+			t.Fatalf("Workflow.InstanceID=%v, want %q", src.Workflow, "wf-001")
 		}
 	})
 }
@@ -159,20 +132,17 @@ func TestBuildIngestMetadata(t *testing.T) {
 func TestBuildIngestHeaders(t *testing.T) {
 	t.Parallel()
 
+	integration := &ent.Integration{ID: "int-001", DefinitionID: "def-001"}
+
 	t.Run("includes non-empty properties and tags", func(t *testing.T) {
 		t.Parallel()
 
 		record := mappedIngestRecord{Schema: "finding", Variant: "cve"}
-		metadata := integrationgenerated.IntegrationIngestMetadata{
-			IntegrationID: "int-001",
-			DefinitionID:  "def-001",
-			Operation:     "collect",
-			Source:        integrationgenerated.IntegrationIngestSourceWebhook,
-			RunID:         "run-001",
-			Variant:       "cve",
+		options := IngestOptions{
+			RunID: "run-001",
 		}
 
-		headers := buildIngestHeaders(record, metadata)
+		headers := buildIngestHeaders(integration, "collect", record, options)
 
 		if headers.Properties["schema"] != "finding" {
 			t.Fatalf("schema property=%q, want %q", headers.Properties["schema"], "finding")
@@ -183,24 +153,23 @@ func TestBuildIngestHeaders(t *testing.T) {
 		if _, ok := headers.Properties["delivery_id"]; ok {
 			t.Fatal("expected delivery_id to be omitted when empty")
 		}
-		if len(headers.Tags) != 3 {
-			t.Fatalf("expected 3 tags, got %d", len(headers.Tags))
+		if len(headers.Tags) != 2 {
+			t.Fatalf("expected 2 tags, got %d", len(headers.Tags))
 		}
 	})
 
-	t.Run("omits empty source from tags", func(t *testing.T) {
+	t.Run("tags definition and schema", func(t *testing.T) {
 		t.Parallel()
 
 		record := mappedIngestRecord{Schema: "asset"}
-		metadata := integrationgenerated.IntegrationIngestMetadata{}
 
-		headers := buildIngestHeaders(record, metadata)
+		headers := buildIngestHeaders(integration, "", record, IngestOptions{})
 
-		if len(headers.Tags) != 2 {
-			t.Fatalf("expected 2 tag, got %d: %v", len(headers.Tags), headers.Tags)
-		}
 		if !slices.Contains(headers.Tags, "schema_asset") {
-			t.Fatalf("expected tag %q, got %q", "asset", headers.Tags[0])
+			t.Fatalf("expected tag %q, got %v", "schema_asset", headers.Tags)
+		}
+		if !slices.Contains(headers.Tags, "def-001") {
+			t.Fatalf("expected tag %q, got %v", "def-001", headers.Tags)
 		}
 	})
 }
@@ -208,7 +177,7 @@ func TestBuildIngestHeaders(t *testing.T) {
 func TestPersistMappedRecord_UnsupportedSchema(t *testing.T) {
 	t.Parallel()
 
-	err := persistMappedRecord(context.Background(), nil, nil, "nonexistent_schema", json.RawMessage(`{}`))
+	_, err := persistMappedRecord(context.Background(), nil, nil, "nonexistent_schema", json.RawMessage(`{}`))
 	if !errors.Is(err, ErrIngestUnsupportedSchema) {
 		t.Fatalf("expected ErrIngestUnsupportedSchema, got %v", err)
 	}
@@ -331,9 +300,6 @@ func TestPrepareAssetInput(t *testing.T) {
 
 	input := ent.CreateAssetInput{}
 	got := prepareAssetInput(context.Background(), input, integration)
-
-	// prepareAssetInput delegates to integrationgenerated.PrepareAssetInput
-	// verify it returns without panic
 	_ = got
 }
 

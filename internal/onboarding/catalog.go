@@ -7,6 +7,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/pkg/catalog"
 	"github.com/theopenlane/core/pkg/catalog/gencatalog"
@@ -25,7 +26,8 @@ var frameworkOrder = map[string]int{
 func Catalog(ctx context.Context, client *generated.Client) (models.Questionnaire, error) {
 	questionnaire := defaultQuestionnaire
 
-	opts, err := getFrameworkOptions(ctx, client)
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	opts, err := getFrameworkOptions(allowCtx, client)
 	if err != nil {
 		return models.Questionnaire{}, err
 	}
