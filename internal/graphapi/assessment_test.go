@@ -485,7 +485,7 @@ func TestMutationDeleteAssessment(t *testing.T) {
 func TestMutationCreateAssessmentWithDuplicateName(t *testing.T) {
 	assessment1 := (&AssessmentBuilder{client: suite.client, Name: "Duplicate Test"}).MustNew(sharedTestUser1.UserCtx, t)
 
-	t.Run("duplicate name in same org should not be allowed", func(t *testing.T) {
+	t.Run("duplicate name in same org should be allowed", func(t *testing.T) {
 		template := (&TemplateBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
 
 		request := testclient.CreateAssessmentInput{
@@ -494,9 +494,12 @@ func TestMutationCreateAssessmentWithDuplicateName(t *testing.T) {
 			OwnerID:    &sharedTestUser1.OrganizationID,
 		}
 
-		_, err := suite.client.api.CreateAssessment(sharedTestUser1.UserCtx, request)
-		assert.ErrorContains(t, err, "assessment already exists")
+		resp, err := suite.client.api.CreateAssessment(sharedTestUser1.UserCtx, request)
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
+		assert.Check(t, is.Equal("Duplicate Test", resp.CreateAssessment.Assessment.Name))
 
+		(&Cleanup[*generated.AssessmentDeleteOne]{client: suite.client.db.Assessment, ID: resp.CreateAssessment.Assessment.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 		(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: template.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 	})
 

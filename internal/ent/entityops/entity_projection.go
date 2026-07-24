@@ -974,6 +974,32 @@ type NarrativeProjection struct {
 	UpdatedByImpersonator string    `json:"updated_by_impersonator,omitempty"`
 }
 
+// NotificationProjection is the flat, CEL- and jsonschema-facing view of a Notification: its
+// readable scalar fields (id, columns, foreign-key ids) with snake_case json tags matching the field
+// names used in expressions. It deliberately omits edges so it registers as a CEL native type, unlike
+// the full generated.Notification whose edge graph cannot be reflected
+type NotificationProjection struct {
+	// ID is the entity identifier, exposed to expressions as "id"
+	ID                    string                  `json:"id,omitempty"`
+	Body                  string                  `json:"body,omitempty"`
+	Channels              []enums.Channel         `json:"channels,omitempty"`
+	CreatedAt             time.Time               `json:"created_at,omitempty"`
+	CreatedBy             string                  `json:"created_by,omitempty"`
+	Data                  map[string]interface{}  `json:"data,omitempty"`
+	NotificationType      enums.NotificationType  `json:"notification_type,omitempty"`
+	ObjectType            string                  `json:"object_type,omitempty"`
+	OwnerID               string                  `json:"owner_id,omitempty"`
+	ReadAt                models.DateTime         `json:"read_at,omitempty"`
+	Tags                  []string                `json:"tags,omitempty"`
+	TemplateID            string                  `json:"template_id,omitempty"`
+	Title                 string                  `json:"title,omitempty"`
+	Topic                 enums.NotificationTopic `json:"topic,omitempty"`
+	UpdatedAt             time.Time               `json:"updated_at,omitempty"`
+	UpdatedBy             string                  `json:"updated_by,omitempty"`
+	UpdatedByImpersonator string                  `json:"updated_by_impersonator,omitempty"`
+	UserID                string                  `json:"user_id,omitempty"`
+}
+
 // NotificationTemplateProjection is the flat, CEL- and jsonschema-facing view of a NotificationTemplate: its
 // readable scalar fields (id, columns, foreign-key ids) with snake_case json tags matching the field
 // names used in expressions. It deliberately omits edges so it registers as a CEL native type, unlike
@@ -1015,6 +1041,51 @@ type NotificationTemplateProjection struct {
 	UpdatedByImpersonator string                           `json:"updated_by_impersonator,omitempty"`
 	Version               int                              `json:"version,omitempty"`
 	WorkflowDefinitionID  string                           `json:"workflow_definition_id,omitempty"`
+}
+
+// OnboardingProjection is the flat, CEL- and jsonschema-facing view of a Onboarding: its
+// readable scalar fields (id, columns, foreign-key ids) with snake_case json tags matching the field
+// names used in expressions. It deliberately omits edges so it registers as a CEL native type, unlike
+// the full generated.Onboarding whose edge graph cannot be reflected
+type OnboardingProjection struct {
+	// ID is the entity identifier, exposed to expressions as "id"
+	ID             string                 `json:"id,omitempty"`
+	CompanyDetails map[string]interface{} `json:"company_details,omitempty"`
+	CompanyName    string                 `json:"company_name,omitempty"`
+	Compliance     map[string]interface{} `json:"compliance,omitempty"`
+	DeletedAt      time.Time              `json:"deleted_at,omitempty"`
+	DeletedBy      string                 `json:"deleted_by,omitempty"`
+	DemoRequested  bool                   `json:"demo_requested,omitempty"`
+	Domains        []string               `json:"domains,omitempty"`
+	OrganizationID string                 `json:"organization_id,omitempty"`
+	UserDetails    map[string]interface{} `json:"user_details,omitempty"`
+}
+
+// OrganizationProjection is the flat, CEL- and jsonschema-facing view of a Organization: its
+// readable scalar fields (id, columns, foreign-key ids) with snake_case json tags matching the field
+// names used in expressions. It deliberately omits edges so it registers as a CEL native type, unlike
+// the full generated.Organization whose edge graph cannot be reflected
+type OrganizationProjection struct {
+	// ID is the entity identifier, exposed to expressions as "id"
+	ID                    string    `json:"id,omitempty"`
+	AvatarLocalFileID     string    `json:"avatar_local_file_id,omitempty"`
+	AvatarRemoteURL       string    `json:"avatar_remote_url,omitempty"`
+	AvatarUpdatedAt       time.Time `json:"avatar_updated_at,omitempty"`
+	CreatedAt             time.Time `json:"created_at,omitempty"`
+	CreatedBy             string    `json:"created_by,omitempty"`
+	DeletedAt             time.Time `json:"deleted_at,omitempty"`
+	DeletedBy             string    `json:"deleted_by,omitempty"`
+	Description           string    `json:"description,omitempty"`
+	DisplayName           string    `json:"display_name,omitempty"`
+	Name                  string    `json:"name,omitempty"`
+	ParentOrganizationID  string    `json:"parent_organization_id,omitempty"`
+	PersonalOrg           bool      `json:"personal_org,omitempty"`
+	SlugName              string    `json:"slug_name,omitempty"`
+	StripeCustomerID      string    `json:"stripe_customer_id,omitempty"`
+	Tags                  []string  `json:"tags,omitempty"`
+	UpdatedAt             time.Time `json:"updated_at,omitempty"`
+	UpdatedBy             string    `json:"updated_by,omitempty"`
+	UpdatedByImpersonator string    `json:"updated_by_impersonator,omitempty"`
 }
 
 // PlatformProjection is the flat, CEL- and jsonschema-facing view of a Platform: its
@@ -1460,38 +1531,43 @@ type SystemDetailProjection struct {
 // the full generated.Task whose edge graph cannot be reflected
 type TaskProjection struct {
 	// ID is the entity identifier, exposed to expressions as "id"
-	ID                     string           `json:"id,omitempty"`
-	AssigneeID             string           `json:"assignee_id,omitempty"`
-	AssignerID             string           `json:"assigner_id,omitempty"`
-	Completed              models.DateTime  `json:"completed,omitempty"`
-	CreatedAt              time.Time        `json:"created_at,omitempty"`
-	CreatedBy              string           `json:"created_by,omitempty"`
-	DeletedAt              time.Time        `json:"deleted_at,omitempty"`
-	DeletedBy              string           `json:"deleted_by,omitempty"`
-	Details                string           `json:"details,omitempty"`
-	DetailsJSON            []interface{}    `json:"details_json,omitempty"`
-	DisplayID              string           `json:"display_id,omitempty"`
-	Due                    models.DateTime  `json:"due,omitempty"`
-	EnvironmentID          string           `json:"environment_id,omitempty"`
-	EnvironmentName        string           `json:"environment_name,omitempty"`
-	ExternalReferenceURL   []string         `json:"external_reference_url,omitempty"`
-	ExternalUUID           string           `json:"external_uuid,omitempty"`
-	IdempotencyKey         string           `json:"idempotency_key,omitempty"`
-	IsTemplate             bool             `json:"is_template,omitempty"`
-	OwnerID                string           `json:"owner_id,omitempty"`
-	ParentTaskID           string           `json:"parent_task_id,omitempty"`
-	ScopeID                string           `json:"scope_id,omitempty"`
-	ScopeName              string           `json:"scope_name,omitempty"`
-	Status                 enums.TaskStatus `json:"status,omitempty"`
-	SystemGenerated        bool             `json:"system_generated,omitempty"`
-	Tags                   []string         `json:"tags,omitempty"`
-	TaskKindID             string           `json:"task_kind_id,omitempty"`
-	TaskKindName           string           `json:"task_kind_name,omitempty"`
-	Title                  string           `json:"title,omitempty"`
-	UpdatedAt              time.Time        `json:"updated_at,omitempty"`
-	UpdatedBy              string           `json:"updated_by,omitempty"`
-	UpdatedByImpersonator  string           `json:"updated_by_impersonator,omitempty"`
-	WorkflowEligibleMarker bool             `json:"workflow_eligible_marker,omitempty"`
+	ID                     string                 `json:"id,omitempty"`
+	AssigneeID             string                 `json:"assignee_id,omitempty"`
+	AssignerID             string                 `json:"assigner_id,omitempty"`
+	Completed              models.DateTime        `json:"completed,omitempty"`
+	CreatedAt              time.Time              `json:"created_at,omitempty"`
+	CreatedBy              string                 `json:"created_by,omitempty"`
+	DeletedAt              time.Time              `json:"deleted_at,omitempty"`
+	DeletedBy              string                 `json:"deleted_by,omitempty"`
+	Details                string                 `json:"details,omitempty"`
+	DetailsJSON            []interface{}          `json:"details_json,omitempty"`
+	DisplayID              string                 `json:"display_id,omitempty"`
+	Due                    models.DateTime        `json:"due,omitempty"`
+	EnvironmentID          string                 `json:"environment_id,omitempty"`
+	EnvironmentName        string                 `json:"environment_name,omitempty"`
+	ExternalReferenceURL   []string               `json:"external_reference_url,omitempty"`
+	ExternalUUID           string                 `json:"external_uuid,omitempty"`
+	IdempotencyKey         string                 `json:"idempotency_key,omitempty"`
+	IsSuggested            bool                   `json:"is_suggested,omitempty"`
+	IsTemplate             bool                   `json:"is_template,omitempty"`
+	Metadata               map[string]interface{} `json:"metadata,omitempty"`
+	OwnerID                string                 `json:"owner_id,omitempty"`
+	ParentTaskID           string                 `json:"parent_task_id,omitempty"`
+	Priority               int                    `json:"priority,omitempty"`
+	ScopeID                string                 `json:"scope_id,omitempty"`
+	ScopeName              string                 `json:"scope_name,omitempty"`
+	Source                 string                 `json:"source,omitempty"`
+	SourceKey              string                 `json:"source_key,omitempty"`
+	Status                 enums.TaskStatus       `json:"status,omitempty"`
+	SystemGenerated        bool                   `json:"system_generated,omitempty"`
+	Tags                   []string               `json:"tags,omitempty"`
+	TaskKindID             string                 `json:"task_kind_id,omitempty"`
+	TaskKindName           string                 `json:"task_kind_name,omitempty"`
+	Title                  string                 `json:"title,omitempty"`
+	UpdatedAt              time.Time              `json:"updated_at,omitempty"`
+	UpdatedBy              string                 `json:"updated_by,omitempty"`
+	UpdatedByImpersonator  string                 `json:"updated_by_impersonator,omitempty"`
+	WorkflowEligibleMarker bool                   `json:"workflow_eligible_marker,omitempty"`
 }
 
 // TemplateProjection is the flat, CEL- and jsonschema-facing view of a Template: its

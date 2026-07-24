@@ -193,6 +193,10 @@ steps:
           - "docker-build-and-tag"
           - "go_tests"
         if: build.tag != null && build.tag !~ /cli\// && build.tag !~ /common\//
+        agents:
+          queue: $LARGE_RUNNER_QUEUE
+          size: $RUNNER_LARGE
+          location: NYC # gcp runners having issues pushing, setting location for now
         plugins:
           - docker#v5.14.0:
               image: "ghcr.io/theopenlane/build-image:latest"

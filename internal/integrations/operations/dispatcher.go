@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // Dispatch validates and enqueues one operation execution request. When
@@ -48,6 +49,12 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 		return types.DispatchResult{}, err
 	}
 
+	if operation.DisabledForAll {
+		logx.FromContext(ctx).Debug().Str("operation", req.Operation).Msg("operation is disabled, skipping dispatch")
+
+		return types.DispatchResult{Status: enums.IntegrationRunStatusCancelled}, nil
+	}
+
 	if err := ValidateConfig(operation.ConfigSchema, req.Config); err != nil {
 		if errors.Is(err, ErrOperationConfigInvalid) {
 			return types.DispatchResult{}, ErrDispatchInputInvalid
@@ -61,15 +68,15 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 		runType = enums.IntegrationRunTypeManual
 	}
 
-	metadata := types.ExecutionMetadata{
-		OwnerID:       ownerID,
+	src := types.IntegrationSource{
 		IntegrationID: req.IntegrationID,
 		DefinitionID:  definitionID,
-		Operation:     req.Operation,
 		RunType:       runType,
 		Workflow:      req.Workflow,
 		Runtime:       req.Runtime,
 	}
+
+	var runID string
 
 	if installation != nil && !operation.Policy.SkipRunRecord {
 		runRecord, err := CreatePendingRun(ctx, db, installation, types.DispatchRequest{
@@ -83,28 +90,29 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 			return types.DispatchResult{}, err
 		}
 
-		metadata.RunID = runRecord.ID
+		runID = runRecord.ID
+		src.RunID = runID
 	}
 
-	inheritWebhookContext(ctx, &metadata)
+	inheritWebhookContext(ctx, &src)
 
-	tags := types.GetTagsForExecutionMetadata(metadata)
+	oc := types.NewOperationContext(ownerID, req.Operation, src)
 
-	emitCtx := types.WithExecutionMetadata(ctx, metadata)
+	emitCtx := gala.WithOperationContext(ctx, oc)
 	receipt := runtime.EmitWithHeaders(emitCtx, operation.Topic, Envelope{
-		ExecutionMetadata:  metadata,
+		OperationContext:   oc,
 		Config:             jsonx.CloneRawMessage(req.Config),
-		ForceClientRebuild: req.ForceClientRebuild,
-	}, gala.Headers{
-		IdempotencyKey: metadata.RunID,
-		Properties:     metadata.Properties(),
-		Tags:           tags,
-		ScheduledAt:    req.ScheduledAt,
-	})
+		ForceClientRebuild: req.ForceClientRebuild},
+		gala.Headers{
+			IdempotencyKey: runID,
+			Properties:     oc.Properties(),
+			Tags:           types.GetTagsForOperationContext(oc),
+			ScheduledAt:    req.ScheduledAt,
+		})
 
 	if receipt.Err != nil {
-		if metadata.RunID != "" {
-			if completeErr := CompleteRun(ctx, db, metadata.RunID, time.Now(), RunResult{
+		if runID != "" {
+			if completeErr := CompleteRun(ctx, db, runID, time.Now(), RunResult{
 				Status:  enums.IntegrationRunStatusFailed,
 				Summary: "dispatch failed",
 				Error:   receipt.Err.Error(),
@@ -117,7 +125,7 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 	}
 
 	return types.DispatchResult{
-		RunID:   metadata.RunID,
+		RunID:   runID,
 		EventID: string(receipt.EventID),
 		Status:  enums.IntegrationRunStatusPending,
 	}, nil
@@ -155,22 +163,24 @@ func ResolveOwnerIntegration(ctx context.Context, db *ent.Client, definitionID, 
 
 // inheritWebhookContext propagates webhook/event context from a parent execution
 // so the envelope carries the triggering event identity
-func inheritWebhookContext(ctx context.Context, metadata *types.ExecutionMetadata) {
-	existing, ok := types.ExecutionMetadataFromContext(ctx)
+func inheritWebhookContext(ctx context.Context, src *types.IntegrationSource) {
+	oc, ok := gala.OperationContextFromContext(ctx)
 	if !ok {
 		return
 	}
 
-	if metadata.Webhook == "" {
-		metadata.Webhook = existing.Webhook
+	existing := types.IntegrationSourceFrom(oc)
+
+	if src.Webhook == "" {
+		src.Webhook = existing.Webhook
 	}
 
-	if metadata.Event == "" {
-		metadata.Event = existing.Event
+	if src.Event == "" {
+		src.Event = existing.Event
 	}
 
-	if metadata.DeliveryID == "" {
-		metadata.DeliveryID = existing.DeliveryID
+	if src.DeliveryID == "" {
+		src.DeliveryID = existing.DeliveryID
 	}
 }
 

@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
@@ -39,7 +39,7 @@ func (RepositorySync) Run(ctx context.Context, client GraphQLClient, lastRunAt *
 
 	return []types.IngestPayloadSet{
 		{
-			Schema:    integrationgenerated.IntegrationMappingSchemaAsset,
+			Schema:    entityops.SchemaAsset.Name,
 			Envelopes: envelopes,
 		},
 	}, nil

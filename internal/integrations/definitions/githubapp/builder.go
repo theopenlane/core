@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -26,7 +26,7 @@ func Builder(cfg Config) registry.Builder {
 				DisplayName: "GitHub App",
 				Description: "Install the Openlane GitHub App to collect repository metadata and security alerts",
 				Category:    "source-control",
-				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/github_app/overview",
+				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/github_app",
 				Tags:        []string{"vulnerabilities", "assets", "directory"},
 				Active:      true,
 				Visible:     true,
@@ -122,7 +122,7 @@ func Builder(cfg Config) registry.Builder {
 					ConfigResolver: providerkit.ConfigFrom(func(u UserInput) RepositorySync { return u.RepositorySync }),
 					Ingest: []types.IngestContract{
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaAsset,
+							Schema: entityops.SchemaAsset.Name,
 						},
 					},
 					IngestHandle:        RepositorySync{}.IngestHandle(),
@@ -139,7 +139,7 @@ func Builder(cfg Config) registry.Builder {
 					ConfigResolver: providerkit.ConfigFrom(func(u UserInput) VulnerabilitySyncConfig { return u.VulnerabilitySync }),
 					Ingest: []types.IngestContract{
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaVulnerability,
+							Schema: entityops.SchemaVulnerability.Name,
 						},
 					},
 					IngestHandle: VulnerabilityCollect{}.IngestHandle(),
@@ -155,13 +155,13 @@ func Builder(cfg Config) registry.Builder {
 					ConfigResolver: providerkit.ConfigFrom(func(u UserInput) DirectorySync { return u.DirectorySync }),
 					Ingest: []types.IngestContract{
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
+							Schema: entityops.SchemaDirectoryAccount.Name,
 						},
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryGroup,
+							Schema: entityops.SchemaDirectoryGroup.Name,
 						},
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryMembership,
+							Schema: entityops.SchemaDirectoryMembership.Name,
 						},
 					},
 					IngestHandle:        DirectorySync{}.IngestHandle(),
@@ -169,7 +169,69 @@ func Builder(cfg Config) registry.Builder {
 					Schedule:            gala.NewFullFetchSchedule(),
 				},
 			},
-			Mappings: githubAppMappings(),
+			Mappings: []types.MappingRegistration{
+				{
+					Schema:  entityops.SchemaVulnerability.Name,
+					Variant: githubAlertTypeDependabot,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprDependabot,
+					},
+				},
+				{
+					Schema:  entityops.SchemaVulnerability.Name,
+					Variant: githubAlertTypeDependabotPoll,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprDependabotPoll,
+					},
+				},
+				{
+					Schema:  entityops.SchemaVulnerability.Name,
+					Variant: githubAlertTypeCodeScanning,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprCodeScanning,
+					},
+				},
+				{
+					Schema:  entityops.SchemaVulnerability.Name,
+					Variant: githubAlertTypeSecretScan,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprSecretScanning,
+					},
+				},
+				{
+					Schema:  entityops.SchemaAsset.Name,
+					Variant: repositoryAssetVariant,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprRepositoryAsset,
+					},
+				},
+				{
+					Schema: entityops.SchemaDirectoryAccount.Name,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprDirectoryAccount,
+					},
+				},
+				{
+					Schema: entityops.SchemaDirectoryGroup.Name,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprDirectoryGroup,
+					},
+				},
+				{
+					Schema: entityops.SchemaDirectoryMembership.Name,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprDirectoryMembership,
+					},
+				},
+			},
 			Webhooks: []types.WebhookRegistration{
 				{
 					Name:               InstallationEventsWebhook.Name(),
@@ -199,7 +261,7 @@ func Builder(cfg Config) registry.Builder {
 							Topic: DefinitionID.WebhookEventTopic(dependabotAlertWebhookEvent.Name()),
 							Ingest: []types.IngestContract{
 								{
-									Schema: integrationgenerated.IntegrationMappingSchemaVulnerability,
+									Schema: entityops.SchemaVulnerability.Name,
 								},
 							},
 							Handle: DependabotAlertWebhook{}.Handle,
@@ -209,7 +271,7 @@ func Builder(cfg Config) registry.Builder {
 							Topic: DefinitionID.WebhookEventTopic(codeScanningAlertWebhookEvent.Name()),
 							Ingest: []types.IngestContract{
 								{
-									Schema: integrationgenerated.IntegrationMappingSchemaVulnerability,
+									Schema: entityops.SchemaVulnerability.Name,
 								},
 							},
 							Handle: CodeScanningAlertWebhook{}.Handle,
@@ -219,7 +281,7 @@ func Builder(cfg Config) registry.Builder {
 							Topic: DefinitionID.WebhookEventTopic(secretScanningAlertWebhookEvent.Name()),
 							Ingest: []types.IngestContract{
 								{
-									Schema: integrationgenerated.IntegrationMappingSchemaVulnerability,
+									Schema: entityops.SchemaVulnerability.Name,
 								},
 							},
 							Handle: SecretScanningAlertWebhook{}.Handle,

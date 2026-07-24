@@ -9,6 +9,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/eventqueue"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/integrations/definitions/cloudflare"
 	intruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -131,6 +132,9 @@ func handleOrganizationSettingDomainsUpdated(ctx gala.HandlerContext, payload ev
 
 	groupID := string(ctx.Envelope.ID)
 
+	// set internal context to bypass rate limits on scan requests
+	dispatchCtx := rule.WithInternalContext(ctx.Context)
+
 	for _, domain := range setting.Domains {
 		config, err := json.Marshal(cloudflare.DomainScanRequest{
 			OrganizationID: setting.OrganizationID,
@@ -141,7 +145,7 @@ func handleOrganizationSettingDomainsUpdated(ctx gala.HandlerContext, payload ev
 			return err
 		}
 
-		if _, err := rt.Dispatch(ctx.Context, types.DispatchRequest{
+		if _, err := rt.Dispatch(dispatchCtx, types.DispatchRequest{
 			DefinitionID: cloudflare.DefinitionID.ID(),
 			Operation:    cloudflare.DomainScanRequestOp.Name(),
 			Config:       config,

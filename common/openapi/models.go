@@ -2605,6 +2605,25 @@ type ProductCatalogResponse struct {
 	models.Catalog
 }
 
+// OnboardingQuestionsRequest holds the fields accepted by the onboarding questions endpoint
+type OnboardingQuestionsRequest struct{}
+
+// Validate ensures the required fields are set on the OnboardingQuestionsRequest
+func (r *OnboardingQuestionsRequest) Validate() error {
+	// no fields are required
+	return nil
+}
+
+// OnboardingQuestionsResponse holds the fields sent on a response to the onboarding questions endpoint.
+type OnboardingQuestionsResponse struct {
+	// Reply is the reply value.
+	rout.Reply
+	// Version is the onboarding questionnaire version.
+	Version string `json:"version"`
+	// Steps is the list of onboarding steps and questions.
+	Steps []models.Step `json:"steps"`
+}
+
 // Validate ensures the required fields are set on the ProductCatalogRequest
 func (r *ProductCatalogRequest) Validate() error {
 	// all fields are optional, if none are set only public proucts are returned
@@ -2936,4 +2955,3 @@ type AcmeSolverRequest struct {
 var ExampleAcmeSolverRequest = AcmeSolverRequest{
 	Path: "01J4HMNDSZCCQBTY93BF9CBF5D",
 }
-

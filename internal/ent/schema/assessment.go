@@ -142,7 +142,7 @@ func (Assessment) Annotations() []schema.Annotation {
 func (Assessment) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("name", ownerFieldName).
-			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
+			Annotations(entsql.IndexWhere("deleted_at is NULL")),
 	}
 }
 

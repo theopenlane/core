@@ -1,0 +1,180 @@
+version: "2026-07-16"
+steps:
+  - key: company_info
+    title: Company Info
+    description: We'll use this information to configure your workspace.
+    order: 1
+    questions:
+      - key: company_name
+        label: Company Name
+        inputType: string
+        required: true
+      - key: company_domains
+        label: Company Domains
+        description: We'll use this to setup auto-join to your organization for your teammates and discovery of your vendors and assets automatically.
+        inputType: multi-input
+      - key: company_size
+        label: Company Size
+        inputType: select
+        options:
+          - value: "1-10"
+            label: "1-10"
+          - value: "11-50"
+            label: "11-50"
+          - value: "51-200"
+            label: "51-200"
+          - value: "201-500"
+            label: "201-500"
+          - value: "501-1000"
+            label: "501-1000"
+          - value: "1001+"
+            label: "1001+"
+      - key: company_sector
+        label: Company Sector
+        inputType: select
+        options:
+          - value: technology
+            label: Technology
+          - value: healthcare
+            label: Healthcare
+          - value: financial_services
+            label: Financial Services
+          - value: retail
+            label: Retail
+          - value: education
+            label: Education
+          - value: other
+            label: Other
+      - key: company_sector_other
+        label: Please specify
+        inputType: string
+        dependsOn:
+          key: company_sector
+          equals: other
+  - key: user_info
+    title: User Info
+    description: Help us personalize recommendations and templates.
+    order: 2
+    questions:
+      - key: user_role
+        label: Role
+        inputType: select
+        options:
+          - value: founder
+            label: Founder / Executive
+          - value: security
+            label: Security
+          - value: engineering
+            label: Engineering
+          - value: compliance
+            label: Compliance
+          - value: operations
+            label: Operations
+          - value: other
+            label: Other
+      - key: user_role_other
+        label: Please specify
+        inputType: string
+        dependsOn:
+          key: user_role
+          equals: other
+      - key: user_department
+        label: Department
+        inputType: select
+        options:
+          - value: security
+            label: Security
+          - value: engineering
+            label: Engineering
+          - value: compliance
+            label: Compliance
+          - value: legal
+            label: Legal
+          - value: operations
+            label: Operations
+          - value: other
+            label: Other
+  - key: compliance_setup
+    title: Compliance Setup
+    order: 3
+    questions:
+      - key: frameworks
+        label: What compliance program(s) are you working toward?
+        description: Select all frameworks you are currently pursuing.
+        inputType: multiselect
+        dynamicOptions: true
+      - key: other_framework_description
+        label: Which other framework(s)?
+        inputType: string
+        dependsOn:
+          key: frameworks
+          equals: other
+  - key: starting_point
+    title: Starting Point
+    description: We'll tailor recommendations based on what you already have.
+    order: 4
+    questions:
+      - key: has_existing_controls
+        label: Do you already have controls documented?
+        description: Controls are the security and operational practices your organization follows, like requiring MFA, reviewing access, or backing up data.
+        inputType: boolean
+      - key: has_existing_policies
+        label: Do you already have policies and procedures documented?
+        description: Policies and procedures explain how your organization works, like how employees handle data, respond to incidents, or request access.
+        inputType: boolean
+  - key: support_preferences
+    title: Support Preferences
+    description: "[Optional] Help us recommend the right partners and resources."
+    order: 5
+    questions:
+      - key: auditor_status
+        label: Are you currently working with an auditor?
+        description: We can suggest audit partners and next steps when you're ready.
+        inputType: select
+        options:
+          - value: yes
+            label: Yes
+          - value: recommendations
+            label: Need recommendations
+          - value: not_yet
+            label: Not yet
+      - key: auditor_name
+        label: Auditor name
+        inputType: string
+        dependsOn:
+          key: auditor_status
+          equals: yes
+      - key: auditor_email
+        label: Auditor email
+        inputType: string
+        format: email
+        dependsOn:
+          key: auditor_status
+          equals: yes
+      - key: vciso_preference
+        label: Do you want help from a hands-on compliance partner?
+        description: We can suggest partners and next steps when you're ready.
+        inputType: select
+        options:
+          - value: no
+            label: No
+          - value: connect_vciso_partner
+            label: Connect me with a vCISO
+          - value: existing_partner
+            label: I have a partner
+      - key: demo_requested
+        label: Would you like help getting started?
+        description: Our team can help with onboarding, product questions, and best practices.
+        inputType: checkbox
+        checkboxLabel: Yes, have someone reach out to me
+  - key: trial
+    title: Your free 30-day trial
+    order: 6
+    dynamicCards: true
+    tasks:
+      - key: setup-payment-method
+        title: Set up payment method
+        details: Add a payment method before the trial ends to keep paid modules active.
+        priority: 90
+        metadata:
+          link: /organization-settings/billing

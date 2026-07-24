@@ -60,6 +60,14 @@ type Program struct {
 	StartDate time.Time `json:"start_date,omitempty"`
 	// the end date of the period
 	EndDate time.Time `json:"end_date,omitempty"`
+	// the start date of the observation period
+	ObservationPeriodStartDate time.Time `json:"observation_period_start_date,omitempty"`
+	// the end date of the observation period
+	ObservationPeriodEndDate time.Time `json:"observation_period_end_date,omitempty"`
+	// the start date of fieldwork
+	FieldworkStartDate time.Time `json:"fieldwork_start_date,omitempty"`
+	// the end date of fieldwork
+	FieldworkEndDate time.Time `json:"fieldwork_end_date,omitempty"`
 	// is the program ready for the auditor
 	AuditorReady bool `json:"auditor_ready,omitempty"`
 	// can the auditor write comments
@@ -405,7 +413,7 @@ func (*Program) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case program.FieldID, program.FieldCreatedBy, program.FieldUpdatedBy, program.FieldUpdatedByImpersonator, program.FieldDeletedBy, program.FieldDisplayID, program.FieldOwnerID, program.FieldProgramKindName, program.FieldProgramKindID, program.FieldExternalUUID, program.FieldName, program.FieldDescription, program.FieldStatus, program.FieldFrameworkName, program.FieldAuditFirm, program.FieldAuditor, program.FieldAuditorEmail, program.FieldProgramOwnerID:
 			values[i] = new(sql.NullString)
-		case program.FieldCreatedAt, program.FieldUpdatedAt, program.FieldDeletedAt, program.FieldStartDate, program.FieldEndDate:
+		case program.FieldCreatedAt, program.FieldUpdatedAt, program.FieldDeletedAt, program.FieldStartDate, program.FieldEndDate, program.FieldObservationPeriodStartDate, program.FieldObservationPeriodEndDate, program.FieldFieldworkStartDate, program.FieldFieldworkEndDate:
 			values[i] = new(sql.NullTime)
 		case program.ForeignKeys[0]: // custom_type_enum_programs
 			values[i] = new(sql.NullString)
@@ -547,6 +555,30 @@ func (_m *Program) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field end_date", values[i])
 			} else if value.Valid {
 				_m.EndDate = value.Time
+			}
+		case program.FieldObservationPeriodStartDate:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field observation_period_start_date", values[i])
+			} else if value.Valid {
+				_m.ObservationPeriodStartDate = value.Time
+			}
+		case program.FieldObservationPeriodEndDate:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field observation_period_end_date", values[i])
+			} else if value.Valid {
+				_m.ObservationPeriodEndDate = value.Time
+			}
+		case program.FieldFieldworkStartDate:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field fieldwork_start_date", values[i])
+			} else if value.Valid {
+				_m.FieldworkStartDate = value.Time
+			}
+		case program.FieldFieldworkEndDate:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field fieldwork_end_date", values[i])
+			} else if value.Valid {
+				_m.FieldworkEndDate = value.Time
 			}
 		case program.FieldAuditorReady:
 			if value, ok := values[i].(*sql.NullBool); !ok {
@@ -818,6 +850,18 @@ func (_m *Program) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("end_date=")
 	builder.WriteString(_m.EndDate.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("observation_period_start_date=")
+	builder.WriteString(_m.ObservationPeriodStartDate.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("observation_period_end_date=")
+	builder.WriteString(_m.ObservationPeriodEndDate.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("fieldwork_start_date=")
+	builder.WriteString(_m.FieldworkStartDate.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("fieldwork_end_date=")
+	builder.WriteString(_m.FieldworkEndDate.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("auditor_ready=")
 	builder.WriteString(fmt.Sprintf("%v", _m.AuditorReady))

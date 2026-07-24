@@ -6,7 +6,7 @@ import (
 
 	slackgo "github.com/slack-go/slack"
 
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/logx"
@@ -92,7 +92,7 @@ func (DirectorySync) Run(ctx context.Context, client *slackgo.Client, lastRunAt 
 
 	return []types.IngestPayloadSet{
 		{
-			Schema:    integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
+			Schema:    entityops.SchemaDirectoryAccount.Name,
 			Envelopes: envelopes,
 		},
 	}, nil

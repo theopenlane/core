@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
@@ -69,8 +70,8 @@ func operationOwnerID(ctx context.Context, req types.OperationRequest) string {
 		return req.Integration.OwnerID
 	}
 
-	if meta, ok := types.ExecutionMetadataFromContext(ctx); ok {
-		return meta.OwnerID
+	if oc, ok := gala.OperationContextFromContext(ctx); ok {
+		return oc.OwnerID
 	}
 
 	return ""

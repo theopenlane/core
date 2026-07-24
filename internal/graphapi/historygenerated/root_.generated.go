@@ -2026,34 +2026,38 @@ type ComplexityRoot struct {
 	}
 
 	ProgramHistory struct {
-		AuditFirm             func(childComplexity int) int
-		Auditor               func(childComplexity int) int
-		AuditorEmail          func(childComplexity int) int
-		AuditorReadComments   func(childComplexity int) int
-		AuditorReady          func(childComplexity int) int
-		AuditorWriteComments  func(childComplexity int) int
-		CreatedAt             func(childComplexity int) int
-		CreatedBy             func(childComplexity int) int
-		Description           func(childComplexity int) int
-		DisplayID             func(childComplexity int) int
-		EndDate               func(childComplexity int) int
-		ExternalUUID          func(childComplexity int) int
-		FrameworkName         func(childComplexity int) int
-		HistoryTime           func(childComplexity int) int
-		ID                    func(childComplexity int) int
-		Name                  func(childComplexity int) int
-		Operation             func(childComplexity int) int
-		OwnerID               func(childComplexity int) int
-		ProgramKindID         func(childComplexity int) int
-		ProgramKindName       func(childComplexity int) int
-		ProgramOwnerID        func(childComplexity int) int
-		Ref                   func(childComplexity int) int
-		StartDate             func(childComplexity int) int
-		Status                func(childComplexity int) int
-		Tags                  func(childComplexity int) int
-		UpdatedAt             func(childComplexity int) int
-		UpdatedBy             func(childComplexity int) int
-		UpdatedByImpersonator func(childComplexity int) int
+		AuditFirm                  func(childComplexity int) int
+		Auditor                    func(childComplexity int) int
+		AuditorEmail               func(childComplexity int) int
+		AuditorReadComments        func(childComplexity int) int
+		AuditorReady               func(childComplexity int) int
+		AuditorWriteComments       func(childComplexity int) int
+		CreatedAt                  func(childComplexity int) int
+		CreatedBy                  func(childComplexity int) int
+		Description                func(childComplexity int) int
+		DisplayID                  func(childComplexity int) int
+		EndDate                    func(childComplexity int) int
+		ExternalUUID               func(childComplexity int) int
+		FieldworkEndDate           func(childComplexity int) int
+		FieldworkStartDate         func(childComplexity int) int
+		FrameworkName              func(childComplexity int) int
+		HistoryTime                func(childComplexity int) int
+		ID                         func(childComplexity int) int
+		Name                       func(childComplexity int) int
+		ObservationPeriodEndDate   func(childComplexity int) int
+		ObservationPeriodStartDate func(childComplexity int) int
+		Operation                  func(childComplexity int) int
+		OwnerID                    func(childComplexity int) int
+		ProgramKindID              func(childComplexity int) int
+		ProgramKindName            func(childComplexity int) int
+		ProgramOwnerID             func(childComplexity int) int
+		Ref                        func(childComplexity int) int
+		StartDate                  func(childComplexity int) int
+		Status                     func(childComplexity int) int
+		Tags                       func(childComplexity int) int
+		UpdatedAt                  func(childComplexity int) int
+		UpdatedBy                  func(childComplexity int) int
+		UpdatedByImpersonator      func(childComplexity int) int
 	}
 
 	ProgramHistoryConnection struct {
@@ -2640,13 +2644,18 @@ type ComplexityRoot struct {
 		HistoryTime            func(childComplexity int) int
 		ID                     func(childComplexity int) int
 		IdempotencyKey         func(childComplexity int) int
+		IsSuggested            func(childComplexity int) int
 		IsTemplate             func(childComplexity int) int
+		Metadata               func(childComplexity int) int
 		Operation              func(childComplexity int) int
 		OwnerID                func(childComplexity int) int
 		ParentTaskID           func(childComplexity int) int
+		Priority               func(childComplexity int) int
 		Ref                    func(childComplexity int) int
 		ScopeID                func(childComplexity int) int
 		ScopeName              func(childComplexity int) int
+		Source                 func(childComplexity int) int
+		SourceKey              func(childComplexity int) int
 		Status                 func(childComplexity int) int
 		SystemGenerated        func(childComplexity int) int
 		Tags                   func(childComplexity int) int
@@ -13190,6 +13199,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ProgramHistory.ExternalUUID(childComplexity), true
+	case "ProgramHistory.fieldworkEndDate":
+		if e.ComplexityRoot.ProgramHistory.FieldworkEndDate == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ProgramHistory.FieldworkEndDate(childComplexity), true
+	case "ProgramHistory.fieldworkStartDate":
+		if e.ComplexityRoot.ProgramHistory.FieldworkStartDate == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ProgramHistory.FieldworkStartDate(childComplexity), true
 	case "ProgramHistory.frameworkName":
 		if e.ComplexityRoot.ProgramHistory.FrameworkName == nil {
 			break
@@ -13214,6 +13235,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ProgramHistory.Name(childComplexity), true
+	case "ProgramHistory.observationPeriodEndDate":
+		if e.ComplexityRoot.ProgramHistory.ObservationPeriodEndDate == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ProgramHistory.ObservationPeriodEndDate(childComplexity), true
+	case "ProgramHistory.observationPeriodStartDate":
+		if e.ComplexityRoot.ProgramHistory.ObservationPeriodStartDate == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ProgramHistory.ObservationPeriodStartDate(childComplexity), true
 	case "ProgramHistory.operation":
 		if e.ComplexityRoot.ProgramHistory.Operation == nil {
 			break
@@ -16579,12 +16612,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TaskHistory.IdempotencyKey(childComplexity), true
+	case "TaskHistory.isSuggested":
+		if e.ComplexityRoot.TaskHistory.IsSuggested == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TaskHistory.IsSuggested(childComplexity), true
 	case "TaskHistory.isTemplate":
 		if e.ComplexityRoot.TaskHistory.IsTemplate == nil {
 			break
 		}
 
 		return e.ComplexityRoot.TaskHistory.IsTemplate(childComplexity), true
+	case "TaskHistory.metadata":
+		if e.ComplexityRoot.TaskHistory.Metadata == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TaskHistory.Metadata(childComplexity), true
 	case "TaskHistory.operation":
 		if e.ComplexityRoot.TaskHistory.Operation == nil {
 			break
@@ -16603,6 +16648,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TaskHistory.ParentTaskID(childComplexity), true
+	case "TaskHistory.priority":
+		if e.ComplexityRoot.TaskHistory.Priority == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TaskHistory.Priority(childComplexity), true
 	case "TaskHistory.ref":
 		if e.ComplexityRoot.TaskHistory.Ref == nil {
 			break
@@ -16621,6 +16672,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.TaskHistory.ScopeName(childComplexity), true
+	case "TaskHistory.source":
+		if e.ComplexityRoot.TaskHistory.Source == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TaskHistory.Source(childComplexity), true
+	case "TaskHistory.sourceKey":
+		if e.ComplexityRoot.TaskHistory.SourceKey == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TaskHistory.SourceKey(childComplexity), true
 	case "TaskHistory.status":
 		if e.ComplexityRoot.TaskHistory.Status == nil {
 			break
@@ -47384,6 +47447,22 @@ type ProgramHistory implements Node {
   """
   endDate: Time
   """
+  the start date of the observation period
+  """
+  observationPeriodStartDate: Time
+  """
+  the end date of the observation period
+  """
+  observationPeriodEndDate: Time
+  """
+  the start date of fieldwork
+  """
+  fieldworkStartDate: Time
+  """
+  the end date of fieldwork
+  """
+  fieldworkEndDate: Time
+  """
   is the program ready for the auditor
   """
   auditorReady: Boolean!
@@ -47475,6 +47554,10 @@ enum ProgramHistoryOrderField {
   framework
   start_date
   end_date
+  observation_period_start_date
+  observation_period_end_date
+  fieldwork_start_date
+  fieldwork_end_date
 }
 """
 ProgramHistoryProgramStatus is enum for the field status
@@ -47797,6 +47880,58 @@ input ProgramHistoryWhereInput {
   endDateLTE: Time
   endDateIsNil: Boolean
   endDateNotNil: Boolean
+  """
+  observation_period_start_date field predicates
+  """
+  observationPeriodStartDate: Time
+  observationPeriodStartDateNEQ: Time
+  observationPeriodStartDateIn: [Time!]
+  observationPeriodStartDateNotIn: [Time!]
+  observationPeriodStartDateGT: Time
+  observationPeriodStartDateGTE: Time
+  observationPeriodStartDateLT: Time
+  observationPeriodStartDateLTE: Time
+  observationPeriodStartDateIsNil: Boolean
+  observationPeriodStartDateNotNil: Boolean
+  """
+  observation_period_end_date field predicates
+  """
+  observationPeriodEndDate: Time
+  observationPeriodEndDateNEQ: Time
+  observationPeriodEndDateIn: [Time!]
+  observationPeriodEndDateNotIn: [Time!]
+  observationPeriodEndDateGT: Time
+  observationPeriodEndDateGTE: Time
+  observationPeriodEndDateLT: Time
+  observationPeriodEndDateLTE: Time
+  observationPeriodEndDateIsNil: Boolean
+  observationPeriodEndDateNotNil: Boolean
+  """
+  fieldwork_start_date field predicates
+  """
+  fieldworkStartDate: Time
+  fieldworkStartDateNEQ: Time
+  fieldworkStartDateIn: [Time!]
+  fieldworkStartDateNotIn: [Time!]
+  fieldworkStartDateGT: Time
+  fieldworkStartDateGTE: Time
+  fieldworkStartDateLT: Time
+  fieldworkStartDateLTE: Time
+  fieldworkStartDateIsNil: Boolean
+  fieldworkStartDateNotNil: Boolean
+  """
+  fieldwork_end_date field predicates
+  """
+  fieldworkEndDate: Time
+  fieldworkEndDateNEQ: Time
+  fieldworkEndDateIn: [Time!]
+  fieldworkEndDateNotIn: [Time!]
+  fieldworkEndDateGT: Time
+  fieldworkEndDateGTE: Time
+  fieldworkEndDateLT: Time
+  fieldworkEndDateLTE: Time
+  fieldworkEndDateIsNil: Boolean
+  fieldworkEndDateNotNil: Boolean
   """
   auditor_ready field predicates
   """
@@ -56716,6 +56851,10 @@ type TaskHistory implements Node {
   """
   detailsJSON: [Any!]
   """
+  structured metadata used by clients for task presentation and routing
+  """
+  metadata: Map
+  """
   the status of the task
   """
   status: TaskHistoryTaskStatus!
@@ -56743,6 +56882,22 @@ type TaskHistory implements Node {
   indicates if the task is intended to be used as a template
   """
   isTemplate: Boolean!
+  """
+  indicates if the task is suggested by the system as a recommended next action
+  """
+  isSuggested: Boolean!
+  """
+  relative ordering priority for suggested and system-generated tasks
+  """
+  priority: Int!
+  """
+  the system or workflow that created or suggested the task
+  """
+  source: String
+  """
+  stable source-specific key for the task
+  """
+  sourceKey: String
   """
   key to prevent duplicates for auto-generated task based on rules
   """
@@ -56819,6 +56974,8 @@ enum TaskHistoryOrderField {
   due
   completed
   is_template
+  is_suggested
+  priority
 }
 """
 TaskHistoryTaskStatus is enum for the field status
@@ -57247,6 +57404,58 @@ input TaskHistoryWhereInput {
   """
   isTemplate: Boolean
   isTemplateNEQ: Boolean
+  """
+  is_suggested field predicates
+  """
+  isSuggested: Boolean
+  isSuggestedNEQ: Boolean
+  """
+  priority field predicates
+  """
+  priority: Int
+  priorityNEQ: Int
+  priorityIn: [Int!]
+  priorityNotIn: [Int!]
+  priorityGT: Int
+  priorityGTE: Int
+  priorityLT: Int
+  priorityLTE: Int
+  """
+  source field predicates
+  """
+  source: String
+  sourceNEQ: String
+  sourceIn: [String!]
+  sourceNotIn: [String!]
+  sourceGT: String
+  sourceGTE: String
+  sourceLT: String
+  sourceLTE: String
+  sourceContains: String
+  sourceHasPrefix: String
+  sourceHasSuffix: String
+  sourceIsNil: Boolean
+  sourceNotNil: Boolean
+  sourceEqualFold: String
+  sourceContainsFold: String
+  """
+  source_key field predicates
+  """
+  sourceKey: String
+  sourceKeyNEQ: String
+  sourceKeyIn: [String!]
+  sourceKeyNotIn: [String!]
+  sourceKeyGT: String
+  sourceKeyGTE: String
+  sourceKeyLT: String
+  sourceKeyLTE: String
+  sourceKeyContains: String
+  sourceKeyHasPrefix: String
+  sourceKeyHasSuffix: String
+  sourceKeyIsNil: Boolean
+  sourceKeyNotNil: Boolean
+  sourceKeyEqualFold: String
+  sourceKeyContainsFold: String
   """
   idempotency_key field predicates
   """
@@ -71656,6 +71865,14 @@ func (ec *executionContext) childFields_ProgramHistory(ctx context.Context, fiel
 		return ec.fieldContext_ProgramHistory_startDate(ctx, field)
 	case "endDate":
 		return ec.fieldContext_ProgramHistory_endDate(ctx, field)
+	case "observationPeriodStartDate":
+		return ec.fieldContext_ProgramHistory_observationPeriodStartDate(ctx, field)
+	case "observationPeriodEndDate":
+		return ec.fieldContext_ProgramHistory_observationPeriodEndDate(ctx, field)
+	case "fieldworkStartDate":
+		return ec.fieldContext_ProgramHistory_fieldworkStartDate(ctx, field)
+	case "fieldworkEndDate":
+		return ec.fieldContext_ProgramHistory_fieldworkEndDate(ctx, field)
 	case "auditorReady":
 		return ec.fieldContext_ProgramHistory_auditorReady(ctx, field)
 	case "auditorWriteComments":
@@ -72688,6 +72905,8 @@ func (ec *executionContext) childFields_TaskHistory(ctx context.Context, field g
 		return ec.fieldContext_TaskHistory_details(ctx, field)
 	case "detailsJSON":
 		return ec.fieldContext_TaskHistory_detailsJSON(ctx, field)
+	case "metadata":
+		return ec.fieldContext_TaskHistory_metadata(ctx, field)
 	case "status":
 		return ec.fieldContext_TaskHistory_status(ctx, field)
 	case "due":
@@ -72702,6 +72921,14 @@ func (ec *executionContext) childFields_TaskHistory(ctx context.Context, field g
 		return ec.fieldContext_TaskHistory_systemGenerated(ctx, field)
 	case "isTemplate":
 		return ec.fieldContext_TaskHistory_isTemplate(ctx, field)
+	case "isSuggested":
+		return ec.fieldContext_TaskHistory_isSuggested(ctx, field)
+	case "priority":
+		return ec.fieldContext_TaskHistory_priority(ctx, field)
+	case "source":
+		return ec.fieldContext_TaskHistory_source(ctx, field)
+	case "sourceKey":
+		return ec.fieldContext_TaskHistory_sourceKey(ctx, field)
 	case "idempotencyKey":
 		return ec.fieldContext_TaskHistory_idempotencyKey(ctx, field)
 	case "externalReferenceURL":

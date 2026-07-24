@@ -2,9 +2,12 @@ package registry
 
 import (
 	"context"
+	"fmt"
+	"strings"
 
 	"github.com/samber/lo"
 
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/mapx"
@@ -59,6 +62,8 @@ func (r *Registry) Register(def types.Definition) error {
 	if err := r.validateDefinition(def); err != nil {
 		return err
 	}
+
+	populateMappingLinkTargets(def.Mappings)
 
 	entry, err := compileDefinition(def)
 	if err != nil {
@@ -187,6 +192,198 @@ func (r *Registry) validateDefinition(def types.Definition) error {
 		if def.RuntimeIntegration.Build == nil {
 			return ErrRuntimeBuildRequired
 		}
+	}
+
+	if err := validateMappingLinks(def.Mappings); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// populateMappingLinkTargets fills each mapping's cross-link inventory from the entityops catalog —
+// one entry per edge, carrying the edge name, the target's match-key fields, and the source's mapped
+// input keys — so the definition payload surfaces the exact identifiers a LinkRule may reference and
+// configuration never falls back to free-typed field names
+func populateMappingLinkTargets(mappings []types.MappingRegistration) {
+	for i := range mappings {
+		sourceSchema, ok := entityops.LookupSchema(mappings[i].Schema)
+		if !ok {
+			continue
+		}
+
+		sourceFields := sourceLinkFields(sourceSchema.Fields)
+
+		var targets []types.LinkTargetInfo
+
+		for _, edge := range sourceSchema.Edges {
+			if edge.TargetType == "" || edge.Target == nil {
+				continue
+			}
+
+			targets = append(targets, types.LinkTargetInfo{
+				Edge:         edge.Name,
+				TargetType:   edge.TargetType,
+				Label:        edge.Label,
+				TargetFields: targetLinkFields(edge.Target.Fields),
+				SourceFields: sourceFields,
+			})
+		}
+
+		mappings[i].LinkTargets = targets
+	}
+}
+
+// targetLinkFields projects the match-key (indexed string) fields of a target schema — the fields a
+// LinkRule.TargetField may name
+func targetLinkFields(fields []entityops.FieldDescriptor) []types.LinkFieldInfo {
+	return lo.FilterMap(fields, func(f entityops.FieldDescriptor, _ int) (types.LinkFieldInfo, bool) {
+		if !f.MatchKey {
+			return types.LinkFieldInfo{}, false
+		}
+
+		return types.LinkFieldInfo{Name: f.Name, Label: f.Label, Type: f.Type}, true
+	})
+}
+
+// sourceLinkFields projects the mapped input keys of the source schema — the keys present in the
+// mapped ingest payload that a LinkRule.SourceField (scalar) or SourceList (list) may name
+func sourceLinkFields(fields []entityops.FieldDescriptor) []types.LinkFieldInfo {
+	return lo.FilterMap(fields, func(f entityops.FieldDescriptor, _ int) (types.LinkFieldInfo, bool) {
+		if f.InputKey == "" {
+			return types.LinkFieldInfo{}, false
+		}
+
+		return types.LinkFieldInfo{Name: f.InputKey, Label: f.Label, Type: f.Type}, true
+	})
+}
+
+// ResolveLinkEdge resolves the edge a link rule links through: an explicit rule edge is looked up by
+// name and checked against the declared target type; otherwise the target type must identify exactly
+// one edge, since silently picking one of several (e.g. editors vs viewers, both targeting Group)
+// would link through an arbitrary edge
+func ResolveLinkEdge(sourceSchema *entityops.Schema, rule types.LinkRule) (entityops.EdgeDescriptor, error) {
+	if rule.Edge != "" {
+		edge, found := sourceSchema.EdgeByName(rule.Edge)
+		if !found {
+			return entityops.EdgeDescriptor{}, fmt.Errorf("%w: %s has no edge %s", ErrLinkEdgeNotFound, sourceSchema.Name, rule.Edge)
+		}
+
+		if rule.TargetSchema != "" && edge.TargetType != rule.TargetSchema {
+			return entityops.EdgeDescriptor{}, fmt.Errorf("%w: edge %s.%s targets %s, not %s", ErrLinkEdgeNotFound, sourceSchema.Name, rule.Edge, edge.TargetType, rule.TargetSchema)
+		}
+
+		return edge, nil
+	}
+
+	candidates := lo.Filter(sourceSchema.Edges, func(e entityops.EdgeDescriptor, _ int) bool {
+		return e.TargetType == rule.TargetSchema
+	})
+
+	switch len(candidates) {
+	case 0:
+		return entityops.EdgeDescriptor{}, fmt.Errorf("%w: %s has no edge to %s", ErrLinkEdgeNotFound, sourceSchema.Name, rule.TargetSchema)
+	case 1:
+		return candidates[0], nil
+	default:
+		names := lo.Map(candidates, func(e entityops.EdgeDescriptor, _ int) string { return e.Name })
+
+		return entityops.EdgeDescriptor{}, fmt.Errorf("%w: %s has %d edges to %s (%s); set the rule's edge", ErrLinkEdgeAmbiguous, sourceSchema.Name, len(candidates), rule.TargetSchema, strings.Join(names, ", "))
+	}
+}
+
+// validateMappingLinks verifies every link rule a mapping declares against the entityops catalog —
+// the edge resolves unambiguously, the match shape is coherent, the target field is a match key on
+// the target, and the source fields are mapped input keys of the right shape — so a typo or an
+// ambiguous target in a definition's link defaults fails at registration instead of silently
+// misbehaving at ingest
+func validateMappingLinks(mappings []types.MappingRegistration) error {
+	for _, mapping := range mappings {
+		if len(mapping.Spec.Links) == 0 {
+			continue
+		}
+
+		sourceSchema, ok := entityops.LookupSchema(mapping.Schema)
+		if !ok {
+			continue
+		}
+
+		if err := ValidateLinkRules(sourceSchema, mapping.Spec.Links); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// ValidateLinkRules validates each rule against the source schema's catalog: the edge resolves
+// unambiguously, the match shape is coherent, and the referenced fields exist with the right
+// shape. It is shared by definition registration and installation config validation so a bad
+// rule fails at declaration or save time rather than at ingest
+func ValidateLinkRules(sourceSchema *entityops.Schema, rules []types.LinkRule) error {
+	for _, rule := range rules {
+		edge, err := ResolveLinkEdge(sourceSchema, rule)
+		if err != nil {
+			return err
+		}
+
+		if err := validateLinkRuleFields(sourceSchema, edge, rule); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// validateLinkRuleFields checks one resolved rule's match configuration against the catalogs of the
+// source and target schemas
+func validateLinkRuleFields(sourceSchema *entityops.Schema, edge entityops.EdgeDescriptor, rule types.LinkRule) error {
+	fieldMatch := rule.TargetField != "" && (rule.SourceField != "" || rule.SourceList != "")
+
+	if fieldMatch == (rule.Expression != "") {
+		return fmt.Errorf("%w: %s -> %s must set either a target/source field match or an expression", ErrLinkRuleInvalid, sourceSchema.Name, edge.Name)
+	}
+
+	if !fieldMatch {
+		return nil
+	}
+
+	if edge.Target == nil || !edge.Target.MatchKeyField(rule.TargetField) {
+		return fmt.Errorf("%w: %s is not a match-key field on %s", ErrLinkTargetFieldInvalid, rule.TargetField, edge.TargetType)
+	}
+
+	if rule.SourceField != "" {
+		if err := validateSourceKey(sourceSchema, rule.SourceField, false); err != nil {
+			return err
+		}
+	}
+
+	if rule.SourceList != "" {
+		if err := validateSourceKey(sourceSchema, rule.SourceList, true); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// validateSourceKey checks that key is a mapped input key on the source schema whose type shape
+// (scalar vs list) matches its LinkRule slot
+func validateSourceKey(sourceSchema *entityops.Schema, key string, wantList bool) error {
+	field, found := lo.Find(sourceSchema.Fields, func(f entityops.FieldDescriptor) bool {
+		return f.InputKey == key
+	})
+	if !found {
+		return fmt.Errorf("%w: %s is not a mapped input key on %s", ErrLinkSourceFieldInvalid, key, sourceSchema.Name)
+	}
+
+	if isList := strings.HasPrefix(field.Type, "[]"); isList != wantList {
+		slot := "sourceField"
+		if wantList {
+			slot = "sourceList"
+		}
+
+		return fmt.Errorf("%w: %s.%s has type %s, which does not fit %s", ErrLinkSourceFieldInvalid, sourceSchema.Name, key, field.Type, slot)
 	}
 
 	return nil

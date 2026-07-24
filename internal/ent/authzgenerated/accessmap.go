@@ -5647,6 +5647,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: true,
+}, "approved_by_user": {
+	ObjectType:          "user",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
 },
 }, "trust_center_setting": {"blocked_groups": {
 	ObjectType:          "group",

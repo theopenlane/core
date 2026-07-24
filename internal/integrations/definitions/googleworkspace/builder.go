@@ -1,7 +1,7 @@
 package googleworkspace
 
 import (
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/integrations/auth"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -27,7 +27,7 @@ func Builder(cfg Config) registry.Builder {
 				DisplayName: "Google Workspace",
 				Description: "Collect Google Workspace directory and identity metadata to support account hygiene and compliance posture checks.",
 				Category:    "identity",
-				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/google_workspace/overview",
+				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/google_workspace",
 				Tags:        []string{"directory"},
 				Active:      true,
 				Visible:     true,
@@ -110,13 +110,13 @@ func Builder(cfg Config) registry.Builder {
 					Policy:       types.ExecutionPolicy{Reconcile: true},
 					Ingest: []types.IngestContract{
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
+							Schema: entityops.SchemaDirectoryAccount.Name,
 						},
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryGroup,
+							Schema: entityops.SchemaDirectoryGroup.Name,
 						},
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryMembership,
+							Schema: entityops.SchemaDirectoryMembership.Name,
 						},
 					},
 					IngestHandle:        DirectorySync{}.IngestHandle(),
@@ -125,7 +125,29 @@ func Builder(cfg Config) registry.Builder {
 					Schedule:            gala.NewFullFetchSchedule(),
 				},
 			},
-			Mappings: googleWorkspaceMappings(),
+			Mappings: []types.MappingRegistration{
+				{
+					Schema: entityops.SchemaDirectoryAccount.Name,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprDirectoryAccount,
+					},
+				},
+				{
+					Schema: entityops.SchemaDirectoryGroup.Name,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprDirectoryGroup,
+					},
+				},
+				{
+					Schema: entityops.SchemaDirectoryMembership.Name,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprDirectoryMembership,
+					},
+				},
+			},
 		}, nil
 	})
 }

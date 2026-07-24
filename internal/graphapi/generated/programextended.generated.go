@@ -317,8 +317,7 @@ func (ec *executionContext) unmarshalOAddProgramMembershipInput2ᚕᚖgithubᚗc
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*model.AddProgramMembershipInput, len(vSlice))
 	for i := range vSlice {
@@ -335,8 +334,7 @@ func (ec *executionContext) unmarshalOCreateControlWithSubcontrolsInput2ᚕᚖgi
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*model.CreateControlWithSubcontrolsInput, len(vSlice))
 	for i := range vSlice {
@@ -353,8 +351,7 @@ func (ec *executionContext) unmarshalOCreateMemberWithProgramInput2ᚕᚖgithub�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*model.CreateMemberWithProgramInput, len(vSlice))
 	for i := range vSlice {

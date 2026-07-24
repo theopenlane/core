@@ -99,7 +99,7 @@ func (r *mutationResolver) SendCampaignTestEmail(ctx context.Context, input mode
 		return nil, err
 	}
 
-	if err := r.processTestEmails(ctx, state, input.Emails); err != nil {
+	if err := r.processTestEmails(ctx, state); err != nil {
 		return nil, err
 	}
 

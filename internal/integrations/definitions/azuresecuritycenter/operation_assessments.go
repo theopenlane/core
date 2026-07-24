@@ -7,7 +7,7 @@ import (
 	"github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/security/armsecurity"
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
@@ -99,7 +99,7 @@ func (AssessmentsCollect) Run(ctx context.Context, client *azureSecurityClient) 
 
 	return []types.IngestPayloadSet{
 		{
-			Schema:    integrationgenerated.IntegrationMappingSchemaVulnerability,
+			Schema:    entityops.SchemaVulnerability.Name,
 			Envelopes: envelopes,
 		},
 	}, nil

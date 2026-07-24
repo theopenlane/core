@@ -10,11 +10,22 @@ import (
 	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
+// testMappings builds the Slack definition and returns its registered mappings
+func testMappings(t *testing.T) []types.MappingRegistration {
+	t.Helper()
+
+	def, err := Builder(Config{}, nil, false)()
+	assert.NilError(t, err)
+
+	return def.Mappings
+}
+
 func TestMappingExpressionsValid(t *testing.T) {
-	for _, m := range slackMappings() {
+	for _, m := range testMappings(t) {
 		name := m.Schema
 		if m.Variant != "" {
 			name += "/" + m.Variant
@@ -45,7 +56,7 @@ func TestSlackMappingsUserExample(t *testing.T) {
 	assert.NilError(t, err)
 
 	envelope := providerkit.RawEnvelope(outer.User.TeamID+"/"+outer.User.ID, rawPayload)
-	result, err := providerkit.EvalMap(context.Background(), slackMappings()[0].Spec.MapExpr, envelope)
+	result, err := providerkit.EvalMap(context.Background(), testMappings(t)[0].Spec.MapExpr, envelope)
 	assert.NilError(t, err)
 
 	mapped, err := jsonx.ToMap(result)
@@ -78,7 +89,7 @@ func TestSlackMappingsServiceExample(t *testing.T) {
 	assert.NilError(t, err)
 
 	envelope := providerkit.RawEnvelope(outer.User.TeamID+"/"+outer.User.ID, rawPayload)
-	result, err := providerkit.EvalMap(context.Background(), slackMappings()[0].Spec.MapExpr, envelope)
+	result, err := providerkit.EvalMap(context.Background(), testMappings(t)[0].Spec.MapExpr, envelope)
 	assert.NilError(t, err)
 
 	mapped, err := jsonx.ToMap(result)

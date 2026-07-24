@@ -9,7 +9,10 @@ import (
 )
 
 func TestMappingExpressionsValid(t *testing.T) {
-	for _, m := range oktaMappings() {
+	def, err := Builder()()
+	assert.NilError(t, err)
+
+	for _, m := range def.Mappings {
 		name := m.Schema
 		if m.Variant != "" {
 			name += "/" + m.Variant

@@ -6358,19 +6358,19 @@ func init() {
 	// program.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	program.NameValidator = programDescName.Validators[0].(func(string) error)
 	// programDescAuditorReady is the schema descriptor for auditor_ready field.
-	programDescAuditorReady := programFields[7].Descriptor()
+	programDescAuditorReady := programFields[11].Descriptor()
 	// program.DefaultAuditorReady holds the default value on creation for the auditor_ready field.
 	program.DefaultAuditorReady = programDescAuditorReady.Default.(bool)
 	// programDescAuditorWriteComments is the schema descriptor for auditor_write_comments field.
-	programDescAuditorWriteComments := programFields[8].Descriptor()
+	programDescAuditorWriteComments := programFields[12].Descriptor()
 	// program.DefaultAuditorWriteComments holds the default value on creation for the auditor_write_comments field.
 	program.DefaultAuditorWriteComments = programDescAuditorWriteComments.Default.(bool)
 	// programDescAuditorReadComments is the schema descriptor for auditor_read_comments field.
-	programDescAuditorReadComments := programFields[9].Descriptor()
+	programDescAuditorReadComments := programFields[13].Descriptor()
 	// program.DefaultAuditorReadComments holds the default value on creation for the auditor_read_comments field.
 	program.DefaultAuditorReadComments = programDescAuditorReadComments.Default.(bool)
 	// programDescAuditorEmail is the schema descriptor for auditor_email field.
-	programDescAuditorEmail := programFields[12].Descriptor()
+	programDescAuditorEmail := programFields[16].Descriptor()
 	// program.AuditorEmailValidator is a validator for the "auditor_email" field. It is called by the builders before save.
 	program.AuditorEmailValidator = programDescAuditorEmail.Validators[0].(func(string) error)
 	// programDescID is the schema descriptor for id field.
@@ -7810,15 +7810,23 @@ func init() {
 	// task.TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	task.TitleValidator = taskDescTitle.Validators[0].(func(string) error)
 	// taskDescSystemGenerated is the schema descriptor for system_generated field.
-	taskDescSystemGenerated := taskFields[9].Descriptor()
+	taskDescSystemGenerated := taskFields[10].Descriptor()
 	// task.DefaultSystemGenerated holds the default value on creation for the system_generated field.
 	task.DefaultSystemGenerated = taskDescSystemGenerated.Default.(bool)
 	// taskDescIsTemplate is the schema descriptor for is_template field.
-	taskDescIsTemplate := taskFields[10].Descriptor()
+	taskDescIsTemplate := taskFields[11].Descriptor()
 	// task.DefaultIsTemplate holds the default value on creation for the is_template field.
 	task.DefaultIsTemplate = taskDescIsTemplate.Default.(bool)
+	// taskDescIsSuggested is the schema descriptor for is_suggested field.
+	taskDescIsSuggested := taskFields[12].Descriptor()
+	// task.DefaultIsSuggested holds the default value on creation for the is_suggested field.
+	task.DefaultIsSuggested = taskDescIsSuggested.Default.(bool)
+	// taskDescPriority is the schema descriptor for priority field.
+	taskDescPriority := taskFields[13].Descriptor()
+	// task.DefaultPriority holds the default value on creation for the priority field.
+	task.DefaultPriority = taskDescPriority.Default.(int)
 	// taskDescExternalReferenceURL is the schema descriptor for external_reference_url field.
-	taskDescExternalReferenceURL := taskFields[12].Descriptor()
+	taskDescExternalReferenceURL := taskFields[17].Descriptor()
 	// task.ExternalReferenceURLValidator is a validator for the "external_reference_url" field. It is called by the builders before save.
 	task.ExternalReferenceURLValidator = taskDescExternalReferenceURL.Validators[0].(func([]string) error)
 	// taskDescID is the schema descriptor for id field.
