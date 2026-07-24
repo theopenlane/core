@@ -244,7 +244,7 @@
       "properties": {
         "enabled": {
           "type": "boolean",
-          "description": "Enabled runs the backfill routines on server startup; individual routines are toggled below"
+          "description": "Enabled runs the backfill routines on backfill command; individual routines are toggled below"
         },
         "directorysyncbackfill": {
           "type": "boolean",

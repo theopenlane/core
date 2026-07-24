@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqljson"
 	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
 
@@ -195,10 +196,18 @@ func backfillFileBackups(ctx context.Context, dbClient *ent.Client, galaApp *gal
 	lastKnownID := ""
 
 	for {
-		// filter only by provider here; whether a file still needs a backup is decided in Go against the
-		// unmarshaled backup_state, since JSON null-status predicates are unreliable for a NULL column
 		query := dbClient.File.Query().
-			Where(file.StorageProviderIn(sourceValues...)).
+			Where(
+				file.StorageProviderIn(sourceValues...),
+				// a file still needs a backup when it has never been attempted (backup_state is null) or
+				// its status is anything other than completed (e.g. a failed attempt to retry)
+				file.Or(
+					file.BackupStateIsNil(),
+					func(s *sql.Selector) {
+						s.Where(sql.Not(sqljson.ValueEQ(file.FieldBackupState, string(enums.FileBackupStatusCompleted), sqljson.Path("status"))))
+					},
+				),
+			).
 			Order(file.ByID()).
 			Limit(batchSize)
 
@@ -216,15 +225,10 @@ func backfillFileBackups(ctx context.Context, dbClient *ent.Client, galaApp *gal
 			break
 		}
 
+		totalFiles += len(files)
+
 		for _, f := range files {
 			lastKnownID = f.ID
-
-			// skip files already backed up; a missing/empty status means it was never attempted
-			if f.BackupState.Status == enums.FileBackupStatusCompleted {
-				continue
-			}
-
-			totalFiles++
 
 			if err := hooks.EnqueueFileBackup(ctx, galaApp, f.ID); err != nil {
 				failedCounter++

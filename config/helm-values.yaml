@@ -710,7 +710,7 @@ coreConfiguration:
     endpointurl: "https://admin.s.theopenlane.io/api/links"  # @schema type:string; default:https://admin.s.theopenlane.io/api/links
   # -- Backfill contains configuration for one-time startup data backfill routines
   backfill:
-    # -- Enabled runs the backfill routines on server startup; individual routines are toggled below
+    # -- Enabled runs the backfill routines on backfill command; individual routines are toggled below
     enabled: false  # @schema type:boolean; default:false
     # -- DirectorySyncBackfill backfills rewrites directory account and group external ids that the CEL double conversion stored in scientific notation
     directorysyncbackfill: true  # @schema type:boolean; default:true

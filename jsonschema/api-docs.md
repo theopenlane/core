@@ -2312,7 +2312,7 @@ routine can then be toggled individually so a single backfill can be run in isol
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled runs the backfill routines on server startup; individual routines are toggled below<br/>||
+|**enabled**|`boolean`|Enabled runs the backfill routines on backfill command; individual routines are toggled below<br/>||
 |**directorysyncbackfill**|`boolean`|DirectorySyncBackfill backfills rewrites directory account and group external ids that the CEL double conversion stored in scientific notation<br/>||
 |**filebackups**|`boolean`|FileBackups replicates existing files to their configured backup provider<br/>||
 
