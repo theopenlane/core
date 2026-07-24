@@ -482,8 +482,8 @@ github.com/testcontainers/testcontainers-go/modules/openfga v0.42.0 h1:o539g4y8N
 github.com/testcontainers/testcontainers-go/modules/openfga v0.42.0/go.mod h1:qQSUg95NxKo09d8drX57NrZ26vDhdpb7Ljo3g6BRgpg=
 github.com/theopenlane/core v1.27.12 h1:bnDXKL8rlOioALLGSM9GPNCKYCWmYz7nwxYUoV8+PMY=
 github.com/theopenlane/core v1.27.12/go.mod h1:lsEWVqsf4UTVnioSQEBvQsM8sf2sCg5tIehDNX8vXdk=
-github.com/theopenlane/core/common v1.0.24 h1:MIRjz6vnOwCHFSbC1oWjsuPCUCr8Xr9Z29+uLkMf694=
-github.com/theopenlane/core/common v1.0.24/go.mod h1:c3Jykrf6ENOf7bR7Wod4GpvCnspv9EAX49dgiWLY7DU=
+github.com/theopenlane/core/common v1.0.25 h1:HTsiNLJeCBPudPliSqALWz/BEuCrRhg5kr601pyYvOs=
+github.com/theopenlane/core/common v1.0.25/go.mod h1:HYQjD+iqJdxdM5x3kpD9lk7q/cs6KAnNv5U23KEYn+A=
 github.com/theopenlane/echox v0.3.0 h1:uwOKEw+r1utGQoOR6dZQqAVuY5j8TcasqnTwO5+rMsA=
 github.com/theopenlane/echox v0.3.0/go.mod h1:yTrXnj7s3VNIg0FCvB7Dut2Elr+LqJKU/nruxx1E1cM=
 github.com/theopenlane/eddy v0.1.0 h1:mtsBL9COYCJWMkjxPOb7LefPaysyPVmYb4idy7kL4lY=
