@@ -902,6 +902,33 @@ data:
           {{- if .Values.openlane.coreConfiguration.objectstorage.providers.s3.baseurl }}
           baseurl: {{ .Values.openlane.coreConfiguration.objectstorage.providers.s3.baseurl | quote }}
           {{- end }}
+          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.s3.backup }}
+          backup:
+            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.s3.backup.provider }}
+            provider: {{ .Values.openlane.coreConfiguration.objectstorage.providers.s3.backup.provider | quote }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.s3.backup.enabled }}
+            enabled: {{ .Values.openlane.coreConfiguration.objectstorage.providers.s3.backup.enabled }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.s3.backup.ensureavailable }}
+            ensureavailable: {{ .Values.openlane.coreConfiguration.objectstorage.providers.s3.backup.ensureavailable }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.s3.backup.region }}
+            region: {{ .Values.openlane.coreConfiguration.objectstorage.providers.s3.backup.region | quote }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.s3.backup.bucket }}
+            bucket: {{ .Values.openlane.coreConfiguration.objectstorage.providers.s3.backup.bucket | quote }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.s3.backup.endpoint }}
+            endpoint: {{ .Values.openlane.coreConfiguration.objectstorage.providers.s3.backup.endpoint | quote }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.s3.backup.proxypresignenabled }}
+            proxypresignenabled: {{ .Values.openlane.coreConfiguration.objectstorage.providers.s3.backup.proxypresignenabled }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.s3.backup.baseurl }}
+            baseurl: {{ .Values.openlane.coreConfiguration.objectstorage.providers.s3.backup.baseurl | quote }}
+            {{- end }}
+          {{- end }}
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.objectstorage.providers.r2 }}
         r2:
@@ -925,6 +952,33 @@ data:
           {{- end }}
           {{- if .Values.openlane.coreConfiguration.objectstorage.providers.r2.baseurl }}
           baseurl: {{ .Values.openlane.coreConfiguration.objectstorage.providers.r2.baseurl | quote }}
+          {{- end }}
+          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.r2.backup }}
+          backup:
+            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.r2.backup.provider }}
+            provider: {{ .Values.openlane.coreConfiguration.objectstorage.providers.r2.backup.provider | quote }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.r2.backup.enabled }}
+            enabled: {{ .Values.openlane.coreConfiguration.objectstorage.providers.r2.backup.enabled }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.r2.backup.ensureavailable }}
+            ensureavailable: {{ .Values.openlane.coreConfiguration.objectstorage.providers.r2.backup.ensureavailable }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.r2.backup.region }}
+            region: {{ .Values.openlane.coreConfiguration.objectstorage.providers.r2.backup.region | quote }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.r2.backup.bucket }}
+            bucket: {{ .Values.openlane.coreConfiguration.objectstorage.providers.r2.backup.bucket | quote }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.r2.backup.endpoint }}
+            endpoint: {{ .Values.openlane.coreConfiguration.objectstorage.providers.r2.backup.endpoint | quote }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.r2.backup.proxypresignenabled }}
+            proxypresignenabled: {{ .Values.openlane.coreConfiguration.objectstorage.providers.r2.backup.proxypresignenabled }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.r2.backup.baseurl }}
+            baseurl: {{ .Values.openlane.coreConfiguration.objectstorage.providers.r2.backup.baseurl | quote }}
+            {{- end }}
           {{- end }}
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.objectstorage.providers.disk }}
@@ -950,6 +1004,33 @@ data:
           {{- if .Values.openlane.coreConfiguration.objectstorage.providers.disk.baseurl }}
           baseurl: {{ .Values.openlane.coreConfiguration.objectstorage.providers.disk.baseurl | quote }}
           {{- end }}
+          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.disk.backup }}
+          backup:
+            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.disk.backup.provider }}
+            provider: {{ .Values.openlane.coreConfiguration.objectstorage.providers.disk.backup.provider | quote }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.disk.backup.enabled }}
+            enabled: {{ .Values.openlane.coreConfiguration.objectstorage.providers.disk.backup.enabled }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.disk.backup.ensureavailable }}
+            ensureavailable: {{ .Values.openlane.coreConfiguration.objectstorage.providers.disk.backup.ensureavailable }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.disk.backup.region }}
+            region: {{ .Values.openlane.coreConfiguration.objectstorage.providers.disk.backup.region | quote }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.disk.backup.bucket }}
+            bucket: {{ .Values.openlane.coreConfiguration.objectstorage.providers.disk.backup.bucket | quote }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.disk.backup.endpoint }}
+            endpoint: {{ .Values.openlane.coreConfiguration.objectstorage.providers.disk.backup.endpoint | quote }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.disk.backup.proxypresignenabled }}
+            proxypresignenabled: {{ .Values.openlane.coreConfiguration.objectstorage.providers.disk.backup.proxypresignenabled }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.disk.backup.baseurl }}
+            baseurl: {{ .Values.openlane.coreConfiguration.objectstorage.providers.disk.backup.baseurl | quote }}
+            {{- end }}
+          {{- end }}
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.objectstorage.providers.database }}
         database:
@@ -973,6 +1054,33 @@ data:
           {{- end }}
           {{- if .Values.openlane.coreConfiguration.objectstorage.providers.database.baseurl }}
           baseurl: {{ .Values.openlane.coreConfiguration.objectstorage.providers.database.baseurl | quote }}
+          {{- end }}
+          {{- if .Values.openlane.coreConfiguration.objectstorage.providers.database.backup }}
+          backup:
+            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.database.backup.provider }}
+            provider: {{ .Values.openlane.coreConfiguration.objectstorage.providers.database.backup.provider | quote }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.database.backup.enabled }}
+            enabled: {{ .Values.openlane.coreConfiguration.objectstorage.providers.database.backup.enabled }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.database.backup.ensureavailable }}
+            ensureavailable: {{ .Values.openlane.coreConfiguration.objectstorage.providers.database.backup.ensureavailable }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.database.backup.region }}
+            region: {{ .Values.openlane.coreConfiguration.objectstorage.providers.database.backup.region | quote }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.database.backup.bucket }}
+            bucket: {{ .Values.openlane.coreConfiguration.objectstorage.providers.database.backup.bucket | quote }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.database.backup.endpoint }}
+            endpoint: {{ .Values.openlane.coreConfiguration.objectstorage.providers.database.backup.endpoint | quote }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.database.backup.proxypresignenabled }}
+            proxypresignenabled: {{ .Values.openlane.coreConfiguration.objectstorage.providers.database.backup.proxypresignenabled }}
+            {{- end }}
+            {{- if .Values.openlane.coreConfiguration.objectstorage.providers.database.backup.baseurl }}
+            baseurl: {{ .Values.openlane.coreConfiguration.objectstorage.providers.database.backup.baseurl | quote }}
+            {{- end }}
           {{- end }}
         {{- end }}
       {{- end }}
@@ -1305,6 +1413,12 @@ data:
     backfill:
       {{- if .Values.openlane.coreConfiguration.backfill.enabled }}
       enabled: {{ .Values.openlane.coreConfiguration.backfill.enabled }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.backfill.directorysyncbackfill }}
+      directorysyncbackfill: {{ .Values.openlane.coreConfiguration.backfill.directorysyncbackfill }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.backfill.filebackups }}
+      filebackups: {{ .Values.openlane.coreConfiguration.backfill.filebackups }}
       {{- end }}
     {{- end }}
 {{- end }}

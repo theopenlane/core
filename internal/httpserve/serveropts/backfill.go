@@ -7,13 +7,20 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/rs/zerolog/log"
+	"github.com/samber/lo"
 
 	"github.com/theopenlane/iam/auth"
 
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/config"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/pkg/objects/storage"
 )
 
 // backfillBypassCaps lets the backfill write organizations and memberships without a request caller while
@@ -23,21 +30,22 @@ const backfillBypassCaps = auth.CapBypassOrgFilter | auth.CapBypassFGA | auth.Ca
 // maxExactExternalID is the largest float64 that can still hold every integer exactly (2^53)
 const maxExactExternalID = float64(1 << 53)
 
-// WithBackfill runs a one-time, non-blocking, config-gated, idempotent startup backfills
-// use-cases for this are things a db migration can't easily handle, computed data or fields, or repairs
-func WithBackfill(ctx context.Context, dbClient *ent.Client) ServerOption {
-	return newApplyFunc(func(s *ServerOptions) {
-		if dbClient == nil || !s.Config.Settings.Backfill.Enabled {
-			return
-		}
+// RunBackfills runs the enabled one-time, idempotent backfill routines synchronously
+func RunBackfills(ctx context.Context, dbClient *ent.Client, galaApp *gala.Gala, cfg config.Backfill) {
+	if dbClient == nil || !cfg.Enabled {
+		return
+	}
 
-		go func() {
-			backfillCtx := privacy.DecisionContext(ctx, privacy.Allow)
-			backfillCtx = auth.WithCaller(backfillCtx, &auth.Caller{Capabilities: backfillBypassCaps})
+	backfillCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	backfillCtx = auth.WithCaller(backfillCtx, &auth.Caller{Capabilities: backfillBypassCaps})
 
-			backfillDirectoryExternalIDs(backfillCtx, dbClient)
-		}()
-	})
+	if cfg.DirectorySyncBackfill {
+		backfillDirectoryExternalIDs(backfillCtx, dbClient)
+	}
+
+	if cfg.FileBackups {
+		backfillFileBackups(backfillCtx, dbClient, galaApp)
+	}
 }
 
 // backfillDirectoryExternalIDs rewrites directory account and group external ids that the CEL double
@@ -155,4 +163,82 @@ func decimalExternalID(externalID string) (string, bool) {
 	}
 
 	return strconv.FormatFloat(value, 'f', -1, 64), true
+}
+
+// backfillFileBackups enqueues a backup for existing files whose storage provider has a backup
+// configured and whose backup is not already completed
+func backfillFileBackups(ctx context.Context, dbClient *ent.Client, galaApp *gala.Gala) {
+	if dbClient.ObjectManager == nil {
+		log.Warn().Msg("backfill: object manager is nil, skipping backfill for file backups")
+		return
+	}
+
+	if galaApp == nil {
+		log.Warn().Msg("backfill: gala runtime is unavailable, skipping backfill for file backups")
+		return
+	}
+
+	sources := dbClient.ObjectManager.BackupSources()
+	if len(sources) == 0 {
+		return
+	}
+
+	sourceValues := lo.Map(sources, func(s storage.ProviderType, _ int) string {
+		return string(s)
+	})
+
+	const batchSize = 10
+
+	totalFiles := 0
+	enqueuedCounter := 0
+	failedCounter := 0
+	lastKnownID := ""
+
+	for {
+		// filter only by provider here; whether a file still needs a backup is decided in Go against the
+		// unmarshaled backup_state, since JSON null-status predicates are unreliable for a NULL column
+		query := dbClient.File.Query().
+			Where(file.StorageProviderIn(sourceValues...)).
+			Order(file.ByID()).
+			Limit(batchSize)
+
+		if lastKnownID != "" {
+			query = query.Where(file.IDGT(lastKnownID))
+		}
+
+		files, err := query.All(ctx)
+		if err != nil {
+			log.Error().Err(err).Msg("backfill: failed to query files missing a backup")
+			return
+		}
+
+		if len(files) == 0 {
+			break
+		}
+
+		for _, f := range files {
+			lastKnownID = f.ID
+
+			// skip files already backed up; a missing/empty status means it was never attempted
+			if f.BackupState.Status == enums.FileBackupStatusCompleted {
+				continue
+			}
+
+			totalFiles++
+
+			if err := hooks.EnqueueFileBackup(ctx, galaApp, f.ID); err != nil {
+				failedCounter++
+				log.Error().Err(err).Str("file_id", f.ID).Msg("backfill: failed to enqueue file backup")
+
+				continue
+			}
+
+			enqueuedCounter++
+		}
+	}
+
+	log.Info().Int("enqueued_files", enqueuedCounter).
+		Int("failed_files", failedCounter).
+		Int("total_candidate_files", totalFiles).
+		Msg("backfill: file backups enqueued")
 }

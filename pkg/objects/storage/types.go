@@ -129,6 +129,45 @@ type ProviderConfigs struct {
 	BaseURL string `json:"baseurl" koanf:"baseurl" default:"http://localhost:17608/v1/files"`
 	// Credentials contains the credentials for accessing the provider
 	Credentials ProviderCredentials `json:"credentials" koanf:"credentials"`
+	// Backup optionally replicates this provider's objects to another provider asynchronously
+	Backup *BackupConfig `json:"backup,omitempty" koanf:"backup"`
+}
+
+// BackupConfig defines an asynchronous replication target for a provider's objects
+type BackupConfig struct {
+	// Provider names the destination backend type, e.g. s3
+	Provider ProviderType `json:"provider" koanf:"provider"`
+	// Enabled indicates if this backup target is enabled
+	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
+	// EnsureAvailable enforces backup provider availability before completing server startup
+	EnsureAvailable bool `json:"ensureavailable" koanf:"ensureavailable" default:"false"`
+	// Region for cloud providers
+	Region string `json:"region" koanf:"region"`
+	// Bucket name for cloud providers
+	Bucket string `json:"bucket" koanf:"bucket"`
+	// Endpoint for custom endpoints
+	Endpoint string `json:"endpoint" koanf:"endpoint"`
+	// ProxyPresignEnabled toggles proxy-signed download URL generation
+	ProxyPresignEnabled bool `json:"proxypresignenabled" koanf:"proxypresignenabled" default:"false"`
+	// BaseURL is the prefix for proxy download URLs
+	BaseURL string `json:"baseurl" koanf:"baseurl" default:"http://localhost:17608/v1/files"`
+	// Credentials contains the credentials for accessing the backup provider
+	Credentials ProviderCredentials `json:"credentials" koanf:"credentials"`
+}
+
+// ProviderConfigs returns the backup target as a ProviderConfigs so it can reuse the shared
+// provider construction path
+func (b BackupConfig) ProviderConfigs() ProviderConfigs {
+	return ProviderConfigs{
+		Enabled:             b.Enabled,
+		EnsureAvailable:     b.EnsureAvailable,
+		Region:              b.Region,
+		Bucket:              b.Bucket,
+		Endpoint:            b.Endpoint,
+		ProxyPresignEnabled: b.ProxyPresignEnabled,
+		BaseURL:             b.BaseURL,
+		Credentials:         b.Credentials,
+	}
 }
 
 // ProviderCredentials contains credentials for a storage provider

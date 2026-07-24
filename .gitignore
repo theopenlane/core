@@ -84,3 +84,4 @@ internal/integrations/cli/config/.integrations.yaml
 
 # claude
 .claude
+/fixtures

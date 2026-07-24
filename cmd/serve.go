@@ -36,7 +36,7 @@ var serveCmd = &cobra.Command{
 	Use:   "serve",
 	Short: "start the core api server",
 	Run: func(cmd *cobra.Command, _ []string) {
-		err := serve(cmd.Context())
+		err := serve(cmd.Context(), false)
 		cobra.CheckErr(err)
 	},
 }
@@ -48,8 +48,10 @@ func init() {
 	serveCmd.PersistentFlags().String("config", "./config/.config.yaml", "config file location")
 }
 
-// serve initializes dependencies and starts the core API server.
-func serve(ctx context.Context) error {
+// serve initializes dependencies and starts the core API server
+// When backfillOnly is true it runs the one-time backfills synchronously and
+// returns instead of starting the server
+func serve(ctx context.Context, backfillOnly bool) error {
 	// setup db connection for server
 	var (
 		fgaClient *fgax.Client
@@ -215,8 +217,6 @@ func serve(ctx context.Context) error {
 
 	so.AddServerOptions(serveropts.WithSupportAccessConfig())
 
-	so.AddServerOptions(serveropts.WithBackfill(ctx, dbClient))
-
 	// closeDB ensures the database client is closed exactly once; both the shutdown
 	// goroutine and the defer call this, and sync.Once guarantees only one executes
 	var closeDBOnce sync.Once
@@ -253,6 +253,12 @@ func serve(ctx context.Context) error {
 	}()
 
 	defer closeDB()
+
+	// in backfill-only mode, run the one-time backfills synchronously and exit
+	if backfillOnly {
+		serveropts.RunBackfills(ctx, dbClient, galaApp, so.Config.Settings.Backfill)
+		return nil
+	}
 
 	// add auth session manager
 	so.Config.Handler.AuthManager = authmanager.New(dbClient)

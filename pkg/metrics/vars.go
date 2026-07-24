@@ -179,6 +179,25 @@ var (
 		Help: "Total number of files deleted per storage provider",
 	}, []string{"provider"})
 
+	// StorageBackupAttempts tracks backup replication attempts by source/destination provider and outcome
+	StorageBackupAttempts = prometheus.NewCounterVec(prometheus.CounterOpts{
+		Name: "openlane_storage_backup_attempts_total",
+		Help: "Total number of file backup replication attempts by source provider, destination provider, and status (success, failed)",
+	}, []string{"source", "destination", "status"})
+
+	// StorageBackupBytesReplicated tracks total bytes successfully replicated to a backup provider
+	StorageBackupBytesReplicated = prometheus.NewCounterVec(prometheus.CounterOpts{
+		Name: "openlane_storage_backup_bytes_replicated_total",
+		Help: "Total bytes successfully replicated per source and destination provider",
+	}, []string{"source", "destination"})
+
+	// StorageBackupDuration records the duration of backup replication operations
+	StorageBackupDuration = prometheus.NewHistogramVec(prometheus.HistogramOpts{
+		Name:    "openlane_storage_backup_duration_seconds",
+		Help:    "Duration of file backup replication operations by source provider, destination provider, and status",
+		Buckets: prometheus.DefBuckets,
+	}, []string{"source", "destination", "status"})
+
 	// AuthenticationAttempts tracks the number of authentication attempts by type
 	AuthenticationAttempts = prometheus.NewCounterVec(prometheus.CounterOpts{
 		Name: "openlane_authentication_attempts_total",
@@ -267,6 +286,9 @@ var (
 		StorageProviderDownloads,
 		StorageProviderBytesDownloaded,
 		StorageProviderDeletes,
+		StorageBackupAttempts,
+		StorageBackupBytesReplicated,
+		StorageBackupDuration,
 		AuthenticationAttempts,
 		WorkflowOperationsTotal,
 		WorkflowOperationDuration,

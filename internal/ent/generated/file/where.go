@@ -2497,6 +2497,16 @@ func StorageProviderContainsFold(v string) predicate.File {
 	return predicate.File(sql.FieldContainsFold(FieldStorageProvider, v))
 }
 
+// BackupStateIsNil applies the IsNil predicate on the "backup_state" field.
+func BackupStateIsNil() predicate.File {
+	return predicate.File(sql.FieldIsNull(FieldBackupState))
+}
+
+// BackupStateNotNil applies the NotNil predicate on the "backup_state" field.
+func BackupStateNotNil() predicate.File {
+	return predicate.File(sql.FieldNotNull(FieldBackupState))
+}
+
 // LastAccessedAtEQ applies the EQ predicate on the "last_accessed_at" field.
 func LastAccessedAtEQ(v time.Time) predicate.File {
 	return predicate.File(sql.FieldEQ(FieldLastAccessedAt, v))

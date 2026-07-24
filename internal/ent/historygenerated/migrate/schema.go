@@ -1137,6 +1137,7 @@ var (
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
 		{Name: "storage_region", Type: field.TypeString, Nullable: true},
 		{Name: "storage_provider", Type: field.TypeString, Nullable: true},
+		{Name: "backup_state", Type: field.TypeJSON, Nullable: true},
 		{Name: "last_accessed_at", Type: field.TypeTime, Nullable: true},
 	}
 	// FileHistoryTable holds the schema information for the "file_history" table.
