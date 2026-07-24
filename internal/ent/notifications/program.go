@@ -3,6 +3,7 @@ package notifications
 import (
 	"context"
 	"fmt"
+	"strings"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/eventqueue"
@@ -11,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 )
@@ -55,6 +57,10 @@ func addNotificationForAuditor(ctx context.Context, client *generated.Client, id
 		return fmt.Errorf("failed to query program: %w", err)
 	}
 
+	if err := inviteAuditor(ctx, client, program); err != nil {
+		return err
+	}
+
 	ids, err := getProgramAuditorUserIDs(ctx, client, id)
 	if err != nil {
 		return err
@@ -73,6 +79,39 @@ func addNotificationForAuditor(ctx context.Context, client *generated.Client, id
 	}
 
 	return newNotificationCreation(ctx, client, ids, buildNotificationInputForAuditor(program))
+}
+
+func inviteAuditor(ctx context.Context, client *generated.Client, programEntity *generated.Program) error {
+	email := strings.TrimSpace(programEntity.AuditorEmail)
+	if email == "" {
+		return nil
+	}
+
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	exists, err := client.OrgMembership.Query().
+		Where(
+			orgmembership.OrganizationID(programEntity.OwnerID),
+			orgmembership.HasUserWith(user.EmailEqualFold(email)),
+		).
+		Exist(allowCtx)
+	if err != nil {
+		return err
+	}
+
+	if exists {
+		return nil
+	}
+
+	role := enums.RoleAuditor
+	input := generated.CreateInviteInput{
+		Recipient: email,
+		Role:      &role,
+		OwnerID:   &programEntity.OwnerID,
+	}
+
+	_, err = client.Invite.Create().SetInput(input).Save(ctx)
+
+	return err
 }
 
 func getProgramAuditorUserIDs(ctx context.Context, client *generated.Client, programID string) ([]string, error) {
