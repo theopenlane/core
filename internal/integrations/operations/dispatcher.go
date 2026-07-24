@@ -9,6 +9,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	intobvs "github.com/theopenlane/core/internal/integrations/observability"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/gala"
@@ -50,7 +51,7 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 	}
 
 	if operation.DisabledForAll {
-		logx.FromContext(ctx).Debug().Str("operation", req.Operation).Msg("operation is disabled, skipping dispatch")
+		logx.FromContext(ctx).Debug().Str(intobvs.FieldOperation, req.Operation).Msg("operation is disabled, skipping dispatch")
 
 		return types.DispatchResult{Status: enums.IntegrationRunStatusCancelled}, nil
 	}
