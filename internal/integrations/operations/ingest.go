@@ -8,6 +8,8 @@ import (
 	"time"
 
 	"github.com/samber/lo"
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/entityops"
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -70,6 +72,21 @@ type mappedIngestRecord struct {
 	Payload json.RawMessage
 }
 
+func setIntegrationAuthCaller(ctx context.Context, integration *ent.Integration) context.Context {
+	if integration == nil || integration.ID == "" {
+		return ctx
+	}
+
+	caller := &auth.Caller{
+		SubjectID:      integration.ID,
+		SubjectName:    integration.Name,
+		OrganizationID: integration.OwnerID,
+		Capabilities:   auth.CapBypassOrgFilter | auth.CapBypassFGA | auth.CapInternalOperation,
+	}
+
+	return auth.WithCaller(ctx, caller)
+}
+
 // directorySyncRunSchemas is the set of mapping schemas that require a directory sync run record
 var directorySyncRunSchemas = map[string]struct{}{
 	entityops.SchemaDirectoryAccount.Name:    {},
@@ -106,6 +123,8 @@ func ProcessPayloadSets(ctx context.Context, ic IngestContext, operationName str
 
 // applyPayloadSets is the shared core for both async emit and sync persist paths
 func applyPayloadSets(ctx context.Context, ic IngestContext, operationName string, contracts []types.IngestContract, payloadSets []types.IngestPayloadSet, options IngestOptions, handle func(context.Context, mappedIngestRecord) error) (err error) {
+	ctx = setIntegrationAuthCaller(ctx, ic.Integration)
+
 	definition, ok := ic.Registry.Definition(ic.Integration.DefinitionID)
 	if !ok {
 		return ErrIngestDefinitionNotFound
