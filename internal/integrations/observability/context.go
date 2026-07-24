@@ -16,8 +16,10 @@ const (
 	FieldIntegrationID = "integration_id"
 	// FieldDefinitionID is the log field key for the integration definition identifier
 	FieldDefinitionID = "definition_id"
-	// FieldOperation is the log field key for the operation name
-	FieldOperation = "operation"
+	// FieldOperation is the log field key for the integration operation name (DirectorySync,
+	// HealthCheck, etc); named integration_operation so it can't collide with entityops' generic
+	// "operation" key on the same log line
+	FieldOperation = "integration_operation"
 	// FieldRunID is the log field key for the run identifier
 	FieldRunID = "run_id"
 )

@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"math"
 	"sync"
 	"time"
 
@@ -35,6 +36,9 @@ const (
 	celVarAction = "action"
 	// celVarPayload is the CEL variable name bound to the envelope payload field
 	celVarPayload = "payload"
+
+	// maxSafeInteger is the largest float64 that can still hold every integer exactly (2^53)
+	maxSafeInteger = float64(1 << 53)
 )
 
 var (
@@ -83,6 +87,33 @@ func buildEnvelopeEnv() (*cel.Env, error) {
 	))
 }
 
+// normalizeIntegralNumbers walks a JSON-decoded value and converts whole-number float64s to int64;
+// without this, CEL string() renders big IDs like 147884153 as "1.47884153e+08"
+func normalizeIntegralNumbers(value any) any {
+	switch v := value.(type) {
+	case map[string]any:
+		for key, item := range v {
+			v[key] = normalizeIntegralNumbers(item)
+		}
+
+		return v
+	case []any:
+		for i, item := range v {
+			v[i] = normalizeIntegralNumbers(item)
+		}
+
+		return v
+	case float64:
+		if v == math.Trunc(v) && math.Abs(v) < maxSafeInteger {
+			return int64(v)
+		}
+
+		return v
+	default:
+		return value
+	}
+}
+
 // envelopeToVars converts a MappingEnvelope into the CEL variable map
 func envelopeToVars(envelope types.MappingEnvelope) map[string]any {
 	var payload any
@@ -90,6 +121,8 @@ func envelopeToVars(envelope types.MappingEnvelope) map[string]any {
 	if len(envelope.Payload) > 0 {
 		if err := json.Unmarshal(envelope.Payload, &payload); err != nil {
 			payload = string(envelope.Payload)
+		} else {
+			payload = normalizeIntegralNumbers(payload)
 		}
 	}
 

@@ -41,7 +41,7 @@ func (r *Runtime) reconcileOperations(ctx context.Context, integration *ent.Inte
 		}
 
 		if op.Disabled != nil && op.Disabled(integration.Config.ClientConfig) {
-			logx.FromContext(ctx).Debug().Str("operation", op.Name).Msg("operation is disabled, skipping reconcile")
+			logx.FromContext(ctx).Debug().Str(intobvs.FieldOperation, op.Name).Msg("operation is disabled, skipping reconcile")
 
 			continue
 		}
@@ -59,13 +59,13 @@ func (r *Runtime) reconcileOperations(ctx context.Context, integration *ent.Inte
 		})
 
 		if receipt.Err != nil {
-			logx.FromContext(ctx).Error().Err(receipt.Err).Str("operation", op.Name).Msg("failed to emit reconcile envelope")
+			logx.FromContext(ctx).Error().Err(receipt.Err).Str(intobvs.FieldOperation, op.Name).Msg("failed to emit reconcile envelope")
 			errs = append(errs, receipt.Err)
 
 			continue
 		}
 
-		logx.FromContext(ctx).Info().Str("operation", op.Name).Msg("reconcile envelope emitted")
+		logx.FromContext(ctx).Info().Str(intobvs.FieldOperation, op.Name).Msg("reconcile envelope emitted")
 	}
 
 	return errors.Join(errs...)
@@ -546,17 +546,17 @@ func (r *Runtime) seedReconcileJobsForInstallation(ctx context.Context, inst *en
 
 		active, err := r.Gala().HasActiveJobWithMetadata(ctx, fragment)
 		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Str("integration_id", inst.ID).Str("operation", op.Name).Msg("failed to check for active reconcile job")
+			logx.FromContext(ctx).Error().Err(err).Str("integration_id", inst.ID).Str(intobvs.FieldOperation, op.Name).Msg("failed to check for active reconcile job")
 			errs = append(errs, err)
 			continue
 		}
 
 		if active {
-			logx.FromContext(ctx).Debug().Str("integration_id", inst.ID).Str("operation", op.Name).Msg("reconcile job already active, skipping seed")
+			logx.FromContext(ctx).Debug().Str("integration_id", inst.ID).Str(intobvs.FieldOperation, op.Name).Msg("reconcile job already active, skipping seed")
 			continue
 		}
 
-		logx.FromContext(ctx).Info().Str("integration_id", inst.ID).Str("operation", op.Name).Msg("seeding missing reconcile job")
+		logx.FromContext(ctx).Info().Str("integration_id", inst.ID).Str(intobvs.FieldOperation, op.Name).Msg("seeding missing reconcile job")
 
 		oc := types.NewOperationContext(inst.OwnerID, op.Name, types.IntegrationSource{
 			IntegrationID: inst.ID,
@@ -571,7 +571,7 @@ func (r *Runtime) seedReconcileJobsForInstallation(ctx context.Context, inst *en
 			gala.Headers{Properties: oc.Properties()},
 		)
 		if receipt.Err != nil {
-			logx.FromContext(ctx).Error().Err(receipt.Err).Str("integration_id", inst.ID).Str("operation", op.Name).Msg("failed to seed reconcile job")
+			logx.FromContext(ctx).Error().Err(receipt.Err).Str("integration_id", inst.ID).Str(intobvs.FieldOperation, op.Name).Msg("failed to seed reconcile job")
 			errs = append(errs, receipt.Err)
 		}
 	}

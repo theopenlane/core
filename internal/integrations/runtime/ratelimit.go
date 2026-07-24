@@ -9,6 +9,7 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
+	intobvs "github.com/theopenlane/core/internal/integrations/observability"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/logx"
 )
@@ -31,7 +32,7 @@ func (r *Runtime) checkRateLimit(ctx context.Context, operation types.OperationR
 	}
 
 	if caller.Has(auth.CapInternalOperation) {
-		logx.FromContext(ctx).Debug().Str("operation", operation.Name).Msg("internal operation caller, bypassing rate limit")
+		logx.FromContext(ctx).Debug().Str(intobvs.FieldOperation, operation.Name).Msg("internal operation caller, bypassing rate limit")
 
 		return true, nil
 	}
