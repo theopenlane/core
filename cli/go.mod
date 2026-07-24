@@ -17,7 +17,7 @@ require (
 	github.com/rs/zerolog v1.35.1
 	github.com/samber/lo v1.53.0
 	github.com/spf13/cobra v1.10.2
-	github.com/theopenlane/core v1.26.1
+	github.com/theopenlane/core v1.27.12
 	github.com/theopenlane/core/common v1.0.24
 	github.com/theopenlane/go-client v0.12.5
 	github.com/theopenlane/httpsling v0.3.0
@@ -117,7 +117,6 @@ require (
 	github.com/mitchellh/go-wordwrap v1.0.1 // indirect
 	github.com/mitchellh/hashstructure v1.1.0 // indirect
 	github.com/mitchellh/reflectwalk v1.0.2 // indirect
-	github.com/moby/moby/client v0.5.0 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/natefinch/wrap v0.2.0 // indirect
 	github.com/nyaruka/phonenumbers v1.8.1 // indirect
@@ -165,7 +164,6 @@ require (
 	github.com/stretchr/testify v1.11.1 // indirect
 	github.com/stripe/stripe-go/v84 v84.4.1 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
-	github.com/testcontainers/testcontainers-go v0.43.0 // indirect
 	github.com/theopenlane/echox v0.3.0 // indirect
 	github.com/theopenlane/eddy v0.1.0 // indirect
 	github.com/theopenlane/entx v0.30.3 // indirect
