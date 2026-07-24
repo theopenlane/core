@@ -17,6 +17,10 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 )
 
+// maxFileBackupAttempts caps how many times a file backup is retried before it is marked exhausted and
+// left alone, so a permanently broken file does not retry forever
+const maxFileBackupAttempts = 3
+
 // RegisterGalaFileBackupListeners registers the listener that asynchronously replicates a file to
 // its configured backup provider once the file's storage location has been written.
 func RegisterGalaFileBackupListeners(registry *gala.Registry) ([]gala.ListenerID, error) {
@@ -110,8 +114,25 @@ func handleFileBackup(ctx gala.HandlerContext, payload eventqueue.MutationGalaPa
 		state.Status = enums.FileBackupStatusFailed
 		state.Error = backupErr.Error()
 
+		// once the max attempts are reached, mark the backup exhausted and stop retrying so a permanently
+		// broken file (e.g. a missing source object) does not cycle forever
+		exhausted := state.Attempts >= maxFileBackupAttempts
+		if exhausted {
+			state.Status = enums.FileBackupStatusExhausted
+		}
+
 		if updateErr := persistBackupState(allowCtx, client, fileID, state); updateErr != nil {
 			logx.FromContext(allowCtx).Err(updateErr).Str("file_id", fileID).Msg("failed to persist file backup failure state")
+		}
+
+		if exhausted {
+			logx.FromContext(allowCtx).Warn().Err(backupErr).
+				Str("file_id", fileID).
+				Int("attempts", state.Attempts).
+				Msg("file backup exhausted max attempts; giving up")
+
+			// return nil so gala does not retry the backup
+			return nil
 		}
 
 		// return the error so gala retries the backup

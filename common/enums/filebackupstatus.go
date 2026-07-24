@@ -10,8 +10,10 @@ var (
 	FileBackupStatusPending FileBackupStatus = "PENDING"
 	// FileBackupStatusCompleted indicates the backup replication succeeded.
 	FileBackupStatusCompleted FileBackupStatus = "COMPLETED"
-	// FileBackupStatusFailed indicates the backup replication failed after retries.
+	// FileBackupStatusFailed indicates the backup replication failed and may be retried.
 	FileBackupStatusFailed FileBackupStatus = "FAILED"
+	// FileBackupStatusExhausted indicates the backup failed and the max attempts were reached, so it will not be retried.
+	FileBackupStatusExhausted FileBackupStatus = "EXHAUSTED"
 	// FileBackupStatusInvalid is used when an unknown or unsupported value is provided.
 	FileBackupStatusInvalid FileBackupStatus = "FILEBACKUPSTATUS_INVALID"
 )
@@ -20,6 +22,7 @@ var fileBackupStatusValues = []FileBackupStatus{
 	FileBackupStatusPending,
 	FileBackupStatusCompleted,
 	FileBackupStatusFailed,
+	FileBackupStatusExhausted,
 }
 
 // Values returns a slice of strings representing all valid FileBackupStatus values.

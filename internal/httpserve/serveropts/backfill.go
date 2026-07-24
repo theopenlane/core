@@ -199,12 +199,15 @@ func backfillFileBackups(ctx context.Context, dbClient *ent.Client, galaApp *gal
 		query := dbClient.File.Query().
 			Where(
 				file.StorageProviderIn(sourceValues...),
-				// a file still needs a backup when it has never been attempted (backup_state is null) or
-				// its status is anything other than completed (e.g. a failed attempt to retry)
+				// a file still needs a backup when it has never been attempted (backup_state is null) or it
+				// failed and has not yet exhausted its retries; completed and exhausted files are skipped
 				file.Or(
 					file.BackupStateIsNil(),
 					func(s *sql.Selector) {
-						s.Where(sql.Not(sqljson.ValueEQ(file.FieldBackupState, string(enums.FileBackupStatusCompleted), sqljson.Path("status"))))
+						s.Where(sql.And(
+							sql.Not(sqljson.ValueEQ(file.FieldBackupState, string(enums.FileBackupStatusCompleted), sqljson.Path("status"))),
+							sql.Not(sqljson.ValueEQ(file.FieldBackupState, string(enums.FileBackupStatusExhausted), sqljson.Path("status"))),
+						))
 					},
 				),
 			).
