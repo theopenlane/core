@@ -30,7 +30,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/config v1.32.30
 	github.com/aws/aws-sdk-go-v2/credentials v1.19.29
 	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.22.34
-	github.com/aws/aws-sdk-go-v2/feature/s3/transfermanager v0.3.3
+	github.com/aws/aws-sdk-go-v2/feature/s3/transfermanager v0.3.4
 	github.com/aws/aws-sdk-go-v2/service/configservice v1.67.1
 	github.com/aws/aws-sdk-go-v2/service/iam v1.55.1
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.105.2
@@ -101,7 +101,7 @@ require (
 	github.com/stretchr/testify v1.11.1
 	github.com/stripe/stripe-go/v84 v84.4.1
 	github.com/tailscale/tailscale-client-go/v2 v2.0.0-20250129222324-74c8fc3cb4d7
-	github.com/theopenlane/core/common v1.0.24
+	github.com/theopenlane/core/common v1.0.25
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/entx v0.30.3
