@@ -23,11 +23,8 @@ const backfillBypassCaps = auth.CapBypassOrgFilter | auth.CapBypassFGA | auth.Ca
 // maxExactExternalID is the largest float64 that can still hold every integer exactly (2^53)
 const maxExactExternalID = float64(1 << 53)
 
-// WithBackfill runs one-time, idempotent startup backfills for data introduced by recent migrations:
-// organization slug names, owner SSO exemptions, trust center update templates, file md5 hashes, and
-// directory external id notation repair.
-// It is gated by the Backfill.Enabled config flag and runs in the background so it never blocks
-// server startup
+// WithBackfill runs a one-time, non-blocking, config-gated, idempotent startup backfills
+// use-cases for this are things a db migration can't easily handle, computed data or fields, or repairs
 func WithBackfill(ctx context.Context, dbClient *ent.Client) ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		if dbClient == nil || !s.Config.Settings.Backfill.Enabled {
