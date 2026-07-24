@@ -12,6 +12,8 @@ import (
 
 	auth "github.com/theopenlane/iam/auth"
 
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
@@ -409,10 +411,30 @@ func TestMutationDeleteUser_OrgOwnerCannotBeDeleted(t *testing.T) {
 
 	_, err := suite.client.api.DeleteUser(localTestOrg.owner.UserCtx, localTestOrg.owner.ID)
 
-	assert.ErrorContains(t, err, "organization owner cannot be deleted")
+	assert.ErrorContains(t, err, hooks.ErrOrgOwnerCannotBeDeleted.Error())
 
 	// cleanup
 	cleanupOrganizationDataWithContext(localTestOrg.owner.UserCtx, t)
+}
+
+func TestMutationDeleteUser_OrgOwnerCannotDeleteFromAnotherOrg(t *testing.T) {
+	t.Parallel()
+
+	newOrgAsOwner := suite.seedOrgOwner(t)
+
+	// storing here to use in cleanup because addUserToOrganization updates the active org context of the user
+	ownerOrgCtx := newOrgAsOwner.owner.UserCtx
+
+	newOrgAsMember := suite.seedFreshMinimalOrgUsers(t, false)
+
+	suite.addUserToOrganization(newOrgAsMember.owner.UserCtx, t, newOrgAsOwner.owner, enums.RoleMember, newOrgAsMember.owner.OrganizationID)
+
+	_, err := suite.client.api.DeleteUser(newOrgAsOwner.owner.UserCtx, newOrgAsOwner.owner.ID)
+
+	assert.ErrorContains(t, err, hooks.ErrOrgOwnerCannotBeDeleted.Error())
+
+	cleanupOrganizationDataWithContext(ownerOrgCtx, t)
+	cleanupOrganizationDataWithContext(newOrgAsMember.owner.UserCtx, t)
 }
 
 func TestMutationUserCascadeDelete(t *testing.T) {

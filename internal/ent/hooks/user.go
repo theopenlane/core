@@ -220,7 +220,7 @@ func HookDeleteUser() ent.Hook {
 					Where(orgmembership.UserID(user.ID)).
 					Where(orgmembership.RoleEQ(enums.RoleOwner)).
 					Where(orgmembership.Not(orgmembership.OrganizationIDIn(personalOrgIDs...))).
-					Exist(ctx)
+					Exist(allowCtx)
 				if err != nil {
 					return nil, err
 				}
