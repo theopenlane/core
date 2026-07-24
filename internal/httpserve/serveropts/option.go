@@ -550,11 +550,14 @@ func WithObjectStorage() ServerOption {
 		authTokenCfg := s.Config.Settings.Auth.Token
 
 		// Create StorageService with resolver and cp using runtime config
-		storageService := resolver.NewServiceFromConfig(cfg,
+		storageService, err := resolver.NewServiceFromConfig(cfg,
 			resolver.WithPresignConfig(func() *tokens.TokenManager {
 				return s.Config.Handler.TokenManager
 			}, authTokenCfg.Issuer, authTokenCfg.Audience),
 		)
+		if err != nil {
+			log.Fatal().Err(err).Msg("failed to initialize object storage")
+		}
 
 		// Store in config for access
 		s.Config.StorageService = storageService

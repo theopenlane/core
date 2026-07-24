@@ -1140,6 +1140,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			filehistory.FieldMetadata:              {Type: field.TypeJSON, Column: filehistory.FieldMetadata},
 			filehistory.FieldStorageRegion:         {Type: field.TypeString, Column: filehistory.FieldStorageRegion},
 			filehistory.FieldStorageProvider:       {Type: field.TypeString, Column: filehistory.FieldStorageProvider},
+			filehistory.FieldBackupState:           {Type: field.TypeJSON, Column: filehistory.FieldBackupState},
 			filehistory.FieldLastAccessedAt:        {Type: field.TypeTime, Column: filehistory.FieldLastAccessedAt},
 		},
 	}
@@ -8129,6 +8130,11 @@ func (f *FileHistoryFilter) WhereStorageRegion(p entql.StringP) {
 // WhereStorageProvider applies the entql string predicate on the storage_provider field.
 func (f *FileHistoryFilter) WhereStorageProvider(p entql.StringP) {
 	f.Where(p.Field(filehistory.FieldStorageProvider))
+}
+
+// WhereBackupState applies the entql json.RawMessage predicate on the backup_state field.
+func (f *FileHistoryFilter) WhereBackupState(p entql.BytesP) {
+	f.Where(p.Field(filehistory.FieldBackupState))
 }
 
 // WhereLastAccessedAt applies the entql time.Time predicate on the last_accessed_at field.

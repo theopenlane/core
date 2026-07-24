@@ -91,18 +91,7 @@ func WithRuntimeOptions(runtime serviceOptions) RuleOption {
 
 // getBuilder returns the appropriate builder for a provider type
 func (rc *ruleCoordinator) getBuilder(provider storage.ProviderType) providerBuilder {
-	switch provider {
-	case storage.S3Provider:
-		return rc.builders.s3
-	case storage.R2Provider:
-		return rc.builders.r2
-	case storage.DiskProvider:
-		return rc.builders.disk
-	case storage.DatabaseProvider:
-		return rc.builders.db
-	default:
-		return nil
-	}
+	return builderFor(rc.builders, provider)
 }
 
 func devModeOptions() *storage.ProviderOptions {

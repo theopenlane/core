@@ -92,10 +92,15 @@ type Config struct {
 }
 
 // Backfill configures one-time startup data backfill routines that populate fields introduced by recent
-// migrations for organizations and memberships that pre-date them
+// migrations for organizations and memberships that pre-date them. Enabled is the master switch; each
+// routine can then be toggled individually so a single backfill can be run in isolation
 type Backfill struct {
-	// Enabled runs the backfill routines on server startup
+	// Enabled runs the backfill routines on backfill command; individual routines are toggled below
 	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
+	// DirectorySyncBackfill backfills rewrites directory account and group external ids that the CEL double conversion stored in scientific notation
+	DirectorySyncBackfill bool `json:"directorysyncbackfill" koanf:"directorysyncbackfill" default:"true"`
+	// FileBackups replicates existing files to their configured backup provider
+	FileBackups bool `json:"filebackups" koanf:"filebackups" default:"true"`
 }
 
 // Server settings for the echo server

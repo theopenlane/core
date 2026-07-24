@@ -24,9 +24,16 @@ type fakeProvider struct {
 	presignCallCount int
 	uploadMetadata   *storagetypes.UploadedFileMetadata
 	uploadErr        error
+	uploadCallCount  int
+	lastUploadOpts   *storagetypes.UploadFileOptions
+	downloadMetadata *storagetypes.DownloadedFileMetadata
+	downloadErr      error
 }
 
-func (f *fakeProvider) Upload(context.Context, io.Reader, *storagetypes.UploadFileOptions) (*storagetypes.UploadedFileMetadata, error) {
+func (f *fakeProvider) Upload(_ context.Context, _ io.Reader, opts *storagetypes.UploadFileOptions) (*storagetypes.UploadedFileMetadata, error) {
+	f.uploadCallCount++
+	f.lastUploadOpts = opts
+
 	if f.uploadErr != nil {
 		return nil, f.uploadErr
 	}
@@ -37,7 +44,10 @@ func (f *fakeProvider) Upload(context.Context, io.Reader, *storagetypes.UploadFi
 }
 
 func (f *fakeProvider) Download(context.Context, *storagetypes.File, *storagetypes.DownloadFileOptions) (*storagetypes.DownloadedFileMetadata, error) {
-	return nil, nil
+	if f.downloadErr != nil {
+		return nil, f.downloadErr
+	}
+	return f.downloadMetadata, nil
 }
 
 func (f *fakeProvider) Delete(context.Context, *storagetypes.File, *storagetypes.DeleteFileOptions) error {

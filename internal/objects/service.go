@@ -17,7 +17,9 @@ import (
 
 // ProviderCacheKey implements eddy.CacheKey for provider caching
 type ProviderCacheKey struct {
-	TenantID        string
+	// TenantID is the organization the cached provider client belongs to
+	TenantID string
+	// IntegrationType is the provider type the client was built for, e.g. s3
 	IntegrationType string
 }
 
@@ -31,13 +33,20 @@ type Service struct {
 	resolver      *eddy.Resolver[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]
 	clientService *eddy.ClientService[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]
 	objectService *storage.ObjectService
+	// backups holds backup destination providers keyed by source provider type
+	backups map[storage.ProviderType]storage.Provider
 }
 
 // Config holds configuration for creating a new Service
 type Config struct {
-	Resolver       *eddy.Resolver[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]
-	ClientService  *eddy.ClientService[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]
+	// Resolver selects the storage provider to use for a given request from context hints
+	Resolver *eddy.Resolver[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]
+	// ClientService caches and returns provider clients built by the resolver
+	ClientService *eddy.ClientService[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]
+	// ValidationFunc validates files before upload
 	ValidationFunc storage.ValidationFunc
+	// Backups maps a source provider type to its backup destination provider
+	Backups map[storage.ProviderType]storage.Provider
 }
 
 // NewService creates a new storage orchestration service
@@ -53,7 +62,15 @@ func NewService(cfg Config) *Service {
 		resolver:      cfg.Resolver,
 		clientService: cfg.ClientService,
 		objectService: objectService,
+		backups:       cfg.Backups,
 	}
+}
+
+// BackupProviderFor returns the configured backup destination provider for a source provider
+// type, if one is configured. When absent, the source provider has no backup and behaves as today.
+func (s *Service) BackupProviderFor(source storage.ProviderType) (storage.Provider, bool) {
+	provider, ok := s.backups[source]
+	return provider, ok
 }
 
 // Upload uploads a file using provider resolution

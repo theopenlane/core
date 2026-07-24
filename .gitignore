@@ -37,6 +37,7 @@ tmp/test.md
 
 # object files
 file_uploads/*
+file_uploads/backups/*
 
 # Packages
 *.7z

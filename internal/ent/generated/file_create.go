@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
@@ -476,6 +477,20 @@ func (_c *FileCreate) SetStorageProvider(v string) *FileCreate {
 func (_c *FileCreate) SetNillableStorageProvider(v *string) *FileCreate {
 	if v != nil {
 		_c.SetStorageProvider(*v)
+	}
+	return _c
+}
+
+// SetBackupState sets the "backup_state" field.
+func (_c *FileCreate) SetBackupState(v models.FileBackupState) *FileCreate {
+	_c.mutation.SetBackupState(v)
+	return _c
+}
+
+// SetNillableBackupState sets the "backup_state" field if the given value is not nil.
+func (_c *FileCreate) SetNillableBackupState(v *models.FileBackupState) *FileCreate {
+	if v != nil {
+		_c.SetBackupState(*v)
 	}
 	return _c
 }
@@ -1046,6 +1061,10 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.StorageProvider(); ok {
 		_spec.SetField(file.FieldStorageProvider, field.TypeString, value)
 		_node.StorageProvider = value
+	}
+	if value, ok := _c.mutation.BackupState(); ok {
+		_spec.SetField(file.FieldBackupState, field.TypeJSON, value)
+		_node.BackupState = value
 	}
 	if value, ok := _c.mutation.LastAccessedAt(); ok {
 		_spec.SetField(file.FieldLastAccessedAt, field.TypeTime, value)

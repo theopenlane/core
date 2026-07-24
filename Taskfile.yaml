@@ -469,6 +469,11 @@ tasks:
     cmds:
       - "CGO_ENABLED=0 {{ .GOOS }} {{ .GOARCH }} go build -o core"
 
+  backfill:
+    desc: runs data backfills against the configured database and exits
+    cmds:
+      - go run . backfill --config {{ .CONFIG | default "./config/.config.yaml" }}
+
   go:build:ci:
     desc: Runs go build for the core server for PR/branch CI, favors build speed over binary size
     cmds:

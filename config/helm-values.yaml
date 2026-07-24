@@ -488,6 +488,8 @@ coreConfiguration:
         baseurl: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
         # -- Credentials contains the credentials for accessing the provider
         credentials:
+        # -- Backup optionally replicates this provider's objects to another provider asynchronously
+        backup: &{ false false    false  {    }}
       # -- R2 provider configuration
       r2:
         # -- Enabled indicates if this provider is enabled
@@ -506,6 +508,8 @@ coreConfiguration:
         baseurl: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
         # -- Credentials contains the credentials for accessing the provider
         credentials:
+        # -- Backup optionally replicates this provider's objects to another provider asynchronously
+        backup: &{ false false    false  {    }}
       # -- Disk provider configuration
       disk:
         # -- Enabled indicates if this provider is enabled
@@ -524,6 +528,8 @@ coreConfiguration:
         baseurl: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
         # -- Credentials contains the credentials for accessing the provider
         credentials:
+        # -- Backup optionally replicates this provider's objects to another provider asynchronously
+        backup: &{ false false    false  {    }}
       # -- Database provider configuration
       database:
         # -- Enabled indicates if this provider is enabled
@@ -542,6 +548,8 @@ coreConfiguration:
         baseurl: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
         # -- Credentials contains the credentials for accessing the provider
         credentials:
+        # -- Backup optionally replicates this provider's objects to another provider asynchronously
+        backup: &{ false false    false  {    }}
   # -- Entitlements contains the configuration for the entitlements service
   subscription:
     # -- Enabled determines if the entitlements service is enabled
@@ -702,8 +710,12 @@ coreConfiguration:
     endpointurl: "https://admin.s.theopenlane.io/api/links"  # @schema type:string; default:https://admin.s.theopenlane.io/api/links
   # -- Backfill contains configuration for one-time startup data backfill routines
   backfill:
-    # -- Enabled runs the backfill routines on server startup
+    # -- Enabled runs the backfill routines on backfill command; individual routines are toggled below
     enabled: false  # @schema type:boolean; default:false
+    # -- DirectorySyncBackfill backfills rewrites directory account and group external ids that the CEL double conversion stored in scientific notation
+    directorysyncbackfill: true  # @schema type:boolean; default:true
+    # -- FileBackups replicates existing files to their configured backup provider
+    filebackups: true  # @schema type:boolean; default:true
 
 # -- External Secrets configuration
 externalSecrets:
@@ -863,6 +875,46 @@ externalSecrets:
       secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_S3_CREDENTIALS_APITOKEN"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-objectstorage-providers-s3-credentials-apitoken"  # @schema type:string
+    # -- core-objectstorage-providers-s3-backup-credentials-accesskeyid secret configuration
+    core-objectstorage-providers-s3-backup-credentials-accesskeyid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectstorage.providers.s3.backup.credentials.accesskeyid
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_S3_BACKUP_CREDENTIALS_ACCESSKEYID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-s3-backup-credentials-accesskeyid"  # @schema type:string
+    # -- core-objectstorage-providers-s3-backup-credentials-secretaccesskey secret configuration
+    core-objectstorage-providers-s3-backup-credentials-secretaccesskey:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectstorage.providers.s3.backup.credentials.secretaccesskey
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_S3_BACKUP_CREDENTIALS_SECRETACCESSKEY"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-s3-backup-credentials-secretaccesskey"  # @schema type:string
+    # -- core-objectstorage-providers-s3-backup-credentials-projectid secret configuration
+    core-objectstorage-providers-s3-backup-credentials-projectid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectstorage.providers.s3.backup.credentials.projectid
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_S3_BACKUP_CREDENTIALS_PROJECTID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-s3-backup-credentials-projectid"  # @schema type:string
+    # -- core-objectstorage-providers-s3-backup-credentials-accountid secret configuration
+    core-objectstorage-providers-s3-backup-credentials-accountid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectstorage.providers.s3.backup.credentials.accountid
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_S3_BACKUP_CREDENTIALS_ACCOUNTID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-s3-backup-credentials-accountid"  # @schema type:string
+    # -- core-objectstorage-providers-s3-backup-credentials-apitoken secret configuration
+    core-objectstorage-providers-s3-backup-credentials-apitoken:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectstorage.providers.s3.backup.credentials.apitoken
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_S3_BACKUP_CREDENTIALS_APITOKEN"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-s3-backup-credentials-apitoken"  # @schema type:string
     # -- core-objectstorage-providers-r2-credentials-accesskeyid secret configuration
     core-objectstorage-providers-r2-credentials-accesskeyid:
       # -- Enable this external secret
@@ -903,6 +955,46 @@ externalSecrets:
       secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_R2_CREDENTIALS_APITOKEN"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-objectstorage-providers-r2-credentials-apitoken"  # @schema type:string
+    # -- core-objectstorage-providers-r2-backup-credentials-accesskeyid secret configuration
+    core-objectstorage-providers-r2-backup-credentials-accesskeyid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectstorage.providers.r2.backup.credentials.accesskeyid
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_R2_BACKUP_CREDENTIALS_ACCESSKEYID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-r2-backup-credentials-accesskeyid"  # @schema type:string
+    # -- core-objectstorage-providers-r2-backup-credentials-secretaccesskey secret configuration
+    core-objectstorage-providers-r2-backup-credentials-secretaccesskey:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectstorage.providers.r2.backup.credentials.secretaccesskey
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_R2_BACKUP_CREDENTIALS_SECRETACCESSKEY"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-r2-backup-credentials-secretaccesskey"  # @schema type:string
+    # -- core-objectstorage-providers-r2-backup-credentials-projectid secret configuration
+    core-objectstorage-providers-r2-backup-credentials-projectid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectstorage.providers.r2.backup.credentials.projectid
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_R2_BACKUP_CREDENTIALS_PROJECTID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-r2-backup-credentials-projectid"  # @schema type:string
+    # -- core-objectstorage-providers-r2-backup-credentials-accountid secret configuration
+    core-objectstorage-providers-r2-backup-credentials-accountid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectstorage.providers.r2.backup.credentials.accountid
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_R2_BACKUP_CREDENTIALS_ACCOUNTID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-r2-backup-credentials-accountid"  # @schema type:string
+    # -- core-objectstorage-providers-r2-backup-credentials-apitoken secret configuration
+    core-objectstorage-providers-r2-backup-credentials-apitoken:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectstorage.providers.r2.backup.credentials.apitoken
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_R2_BACKUP_CREDENTIALS_APITOKEN"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-r2-backup-credentials-apitoken"  # @schema type:string
     # -- core-objectstorage-providers-disk-credentials-accesskeyid secret configuration
     core-objectstorage-providers-disk-credentials-accesskeyid:
       # -- Enable this external secret
@@ -943,6 +1035,46 @@ externalSecrets:
       secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DISK_CREDENTIALS_APITOKEN"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-objectstorage-providers-disk-credentials-apitoken"  # @schema type:string
+    # -- core-objectstorage-providers-disk-backup-credentials-accesskeyid secret configuration
+    core-objectstorage-providers-disk-backup-credentials-accesskeyid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectstorage.providers.disk.backup.credentials.accesskeyid
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DISK_BACKUP_CREDENTIALS_ACCESSKEYID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-disk-backup-credentials-accesskeyid"  # @schema type:string
+    # -- core-objectstorage-providers-disk-backup-credentials-secretaccesskey secret configuration
+    core-objectstorage-providers-disk-backup-credentials-secretaccesskey:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectstorage.providers.disk.backup.credentials.secretaccesskey
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DISK_BACKUP_CREDENTIALS_SECRETACCESSKEY"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-disk-backup-credentials-secretaccesskey"  # @schema type:string
+    # -- core-objectstorage-providers-disk-backup-credentials-projectid secret configuration
+    core-objectstorage-providers-disk-backup-credentials-projectid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectstorage.providers.disk.backup.credentials.projectid
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DISK_BACKUP_CREDENTIALS_PROJECTID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-disk-backup-credentials-projectid"  # @schema type:string
+    # -- core-objectstorage-providers-disk-backup-credentials-accountid secret configuration
+    core-objectstorage-providers-disk-backup-credentials-accountid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectstorage.providers.disk.backup.credentials.accountid
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DISK_BACKUP_CREDENTIALS_ACCOUNTID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-disk-backup-credentials-accountid"  # @schema type:string
+    # -- core-objectstorage-providers-disk-backup-credentials-apitoken secret configuration
+    core-objectstorage-providers-disk-backup-credentials-apitoken:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectstorage.providers.disk.backup.credentials.apitoken
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DISK_BACKUP_CREDENTIALS_APITOKEN"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-disk-backup-credentials-apitoken"  # @schema type:string
     # -- core-objectstorage-providers-database-credentials-accesskeyid secret configuration
     core-objectstorage-providers-database-credentials-accesskeyid:
       # -- Enable this external secret
@@ -983,6 +1115,46 @@ externalSecrets:
       secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DATABASE_CREDENTIALS_APITOKEN"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-objectstorage-providers-database-credentials-apitoken"  # @schema type:string
+    # -- core-objectstorage-providers-database-backup-credentials-accesskeyid secret configuration
+    core-objectstorage-providers-database-backup-credentials-accesskeyid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectstorage.providers.database.backup.credentials.accesskeyid
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DATABASE_BACKUP_CREDENTIALS_ACCESSKEYID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-database-backup-credentials-accesskeyid"  # @schema type:string
+    # -- core-objectstorage-providers-database-backup-credentials-secretaccesskey secret configuration
+    core-objectstorage-providers-database-backup-credentials-secretaccesskey:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectstorage.providers.database.backup.credentials.secretaccesskey
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DATABASE_BACKUP_CREDENTIALS_SECRETACCESSKEY"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-database-backup-credentials-secretaccesskey"  # @schema type:string
+    # -- core-objectstorage-providers-database-backup-credentials-projectid secret configuration
+    core-objectstorage-providers-database-backup-credentials-projectid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectstorage.providers.database.backup.credentials.projectid
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DATABASE_BACKUP_CREDENTIALS_PROJECTID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-database-backup-credentials-projectid"  # @schema type:string
+    # -- core-objectstorage-providers-database-backup-credentials-accountid secret configuration
+    core-objectstorage-providers-database-backup-credentials-accountid:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectstorage.providers.database.backup.credentials.accountid
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DATABASE_BACKUP_CREDENTIALS_ACCOUNTID"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-database-backup-credentials-accountid"  # @schema type:string
+    # -- core-objectstorage-providers-database-backup-credentials-apitoken secret configuration
+    core-objectstorage-providers-database-backup-credentials-apitoken:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for objectstorage.providers.database.backup.credentials.apitoken
+      secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DATABASE_BACKUP_CREDENTIALS_APITOKEN"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-objectstorage-providers-database-backup-credentials-apitoken"  # @schema type:string
     # -- core-subscription-privatestripekey secret configuration
     core-subscription-privatestripekey:
       # -- Enable this external secret

@@ -256,6 +256,22 @@ func RecordStorageDelete(provider string) {
 	StorageProviderDeletes.WithLabelValues(provider).Inc()
 }
 
+// RecordStorageBackup records the outcome of a file backup replication from source to destination.
+// On success it also records the number of bytes replicated
+func RecordStorageBackup(source, destination string, bytes int64, duration float64, err error) {
+	status := "success"
+	if err != nil {
+		status = "failed"
+	}
+
+	StorageBackupAttempts.WithLabelValues(source, destination, status).Inc()
+	StorageBackupDuration.WithLabelValues(source, destination, status).Observe(duration)
+
+	if err == nil {
+		StorageBackupBytesReplicated.WithLabelValues(source, destination).Add(float64(bytes))
+	}
+}
+
 // RecordAuthentication records an authentication attempt by type
 func RecordAuthentication(authType string) {
 	AuthenticationAttempts.WithLabelValues(authType).Inc()

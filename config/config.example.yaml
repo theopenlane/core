@@ -95,7 +95,9 @@ authz:
     storeid: ""
     storename: openlane
 backfill:
+    directorysyncbackfill: true
     enabled: false
+    filebackups: true
 cloudflare:
     accountid: ""
     apitoken: ""
@@ -305,6 +307,7 @@ objectstorage:
     maxsizemb: 0
     providers:
         database:
+            backup: null
             baseurl: http://localhost:17608/v1/files
             bucket: ""
             credentials:
@@ -319,6 +322,7 @@ objectstorage:
             proxypresignenabled: false
             region: ""
         disk:
+            backup: null
             baseurl: http://localhost:17608/v1/files
             bucket: ""
             credentials:
@@ -333,6 +337,7 @@ objectstorage:
             proxypresignenabled: false
             region: ""
         r2:
+            backup: null
             baseurl: http://localhost:17608/v1/files
             bucket: ""
             credentials:
@@ -347,6 +352,7 @@ objectstorage:
             proxypresignenabled: false
             region: ""
         s3:
+            backup: null
             baseurl: http://localhost:17608/v1/files
             bucket: ""
             credentials:

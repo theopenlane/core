@@ -44,7 +44,7 @@ func WithPresignBaseURL(baseURL string) Option {
 }
 
 // NewServiceFromConfig constructs a storage service complete with resolver rules derived from runtime configuration.
-func NewServiceFromConfig(config storage.ProviderConfig, opts ...Option) *objects.Service {
+func NewServiceFromConfig(config storage.ProviderConfig, opts ...Option) (*objects.Service, error) {
 	runtime := serviceOptions{}
 	for _, opt := range opts {
 		if opt != nil {
@@ -52,23 +52,28 @@ func NewServiceFromConfig(config storage.ProviderConfig, opts ...Option) *object
 		}
 	}
 
-	clientService, resolver := buildWithRuntime(config, runtime)
+	clientService, resolver, backups, err := buildWithRuntime(config, runtime)
+	if err != nil {
+		return nil, err
+	}
 
 	service := objects.NewService(objects.Config{
 		Resolver:       resolver,
 		ClientService:  clientService,
 		ValidationFunc: validators.MimeTypeValidator,
+		Backups:        backups,
 	})
 
-	return service
+	return service, nil
 }
 
 // Build constructs the cp client service and provider resolver from runtime configuration.
-func Build(config storage.ProviderConfig) (*providerClientService, *providerResolver) {
-	return buildWithRuntime(config, serviceOptions{})
+func Build(config storage.ProviderConfig) (*providerClientService, *providerResolver, error) {
+	clientService, resolver, _, err := buildWithRuntime(config, serviceOptions{})
+	return clientService, resolver, err
 }
 
-func buildWithRuntime(config storage.ProviderConfig, runtime serviceOptions) (*providerClientService, *providerResolver) {
+func buildWithRuntime(config storage.ProviderConfig, runtime serviceOptions) (*providerClientService, *providerResolver, map[storage.ProviderType]storage.Provider, error) {
 	pool := eddy.NewClientPool[storage.Provider](objects.DefaultClientPoolTTL)
 	clientService := eddy.NewClientService(pool, eddy.WithConfigClone[
 		storage.Provider,
@@ -103,5 +108,10 @@ func buildWithRuntime(config storage.ProviderConfig, runtime serviceOptions) (*p
 		WithRuntimeOptions(runtime),
 	)
 
-	return clientService, resolver
+	backups, err := buildBackupProviders(config, builderSet, runtime)
+	if err != nil {
+		return nil, nil, nil, err
+	}
+
+	return clientService, resolver, backups, nil
 }

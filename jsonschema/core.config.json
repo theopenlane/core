@@ -244,12 +244,20 @@
       "properties": {
         "enabled": {
           "type": "boolean",
-          "description": "Enabled runs the backfill routines on server startup"
+          "description": "Enabled runs the backfill routines on backfill command; individual routines are toggled below"
+        },
+        "directorysyncbackfill": {
+          "type": "boolean",
+          "description": "DirectorySyncBackfill backfills rewrites directory account and group external ids that the CEL double conversion stored in scientific notation"
+        },
+        "filebackups": {
+          "type": "boolean",
+          "description": "FileBackups replicates existing files to their configured backup provider"
         }
       },
       "additionalProperties": false,
       "type": "object",
-      "description": "Backfill configures one-time startup data backfill routines that populate fields introduced by recent\nmigrations for organizations and memberships that pre-date them"
+      "description": "Backfill configures one-time startup data backfill routines that populate fields introduced by recent\nmigrations for organizations and memberships that pre-date them. Enabled is the master switch; each\nroutine can then be toggled individually so a single backfill can be run in isolation"
     },
     "config.KeyWatcher": {
       "properties": {
@@ -1605,6 +1613,49 @@
       "additionalProperties": false,
       "type": "object"
     },
+    "storage.BackupConfig": {
+      "properties": {
+        "provider": {
+          "type": "string",
+          "description": "Provider names the destination backend type, e.g. s3"
+        },
+        "enabled": {
+          "type": "boolean",
+          "description": "Enabled indicates if this backup target is enabled"
+        },
+        "ensureavailable": {
+          "type": "boolean",
+          "description": "EnsureAvailable enforces backup provider availability before completing server startup"
+        },
+        "region": {
+          "type": "string",
+          "description": "Region for cloud providers"
+        },
+        "bucket": {
+          "type": "string",
+          "description": "Bucket name for cloud providers"
+        },
+        "endpoint": {
+          "type": "string",
+          "description": "Endpoint for custom endpoints"
+        },
+        "proxypresignenabled": {
+          "type": "boolean",
+          "description": "ProxyPresignEnabled toggles proxy-signed download URL generation"
+        },
+        "baseurl": {
+          "type": "string",
+          "description": "BaseURL is the prefix for proxy download URLs"
+        },
+        "credentials": {
+          "$ref": "#/$defs/storage.ProviderCredentials",
+          "description": "Credentials contains the credentials for accessing the backup provider"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "BackupConfig defines an asynchronous replication target for a provider's objects"
+    },
     "storage.ProviderConfig": {
       "properties": {
         "enabled": {
@@ -1669,6 +1720,10 @@
         "credentials": {
           "$ref": "#/$defs/storage.ProviderCredentials",
           "description": "Credentials contains the credentials for accessing the provider"
+        },
+        "backup": {
+          "$ref": "#/$defs/storage.BackupConfig",
+          "description": "Backup optionally replicates this provider's objects to another provider asynchronously"
         }
       },
       "additionalProperties": false,

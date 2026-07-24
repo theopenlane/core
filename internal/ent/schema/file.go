@@ -102,6 +102,12 @@ func (File) Fields() []ent.Field {
 		field.String("storage_provider").
 			Comment("the storage provider the file is stored in, if applicable").
 			Optional(),
+		field.JSON("backup_state", models.FileBackupState{}).
+			Comment("internal backup replication state for this file, if handled internally").
+			Optional().
+			Annotations(
+				entgql.Skip(), // internal-only backup info
+			),
 		field.Time("last_accessed_at").
 			Optional().
 			Annotations(
