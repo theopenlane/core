@@ -20,7 +20,14 @@ func WithKeyDirWatcher(dir string) ServerOption {
 			mu.Lock()
 			defer mu.Unlock()
 
-			WithKeyDir(dir).apply(s)
+			// use the error-returning loader so a transient failure (e.g. the key
+			// directory being removed) logs and skips the reload instead of
+			// panicking the whole process from this long-lived goroutine
+			if err := loadKeyDir(s, dir); err != nil {
+				log.Error().Err(err).Msg("unable to reload key directory")
+
+				return
+			}
 
 			tm, err := tokens.New(s.Config.Settings.Auth.Token)
 			if err != nil {

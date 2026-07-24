@@ -1,0 +1,19 @@
+{
+  "user_id": "8413c0cc-69a7-4726-a922-63e892264adc",
+  "state": 1,
+  "username": "john.doe",
+  "human": {
+    "profile": {
+      "given_name": "John",
+      "family_name": "Doe",
+      "display_name": "John Doe"
+    },
+    "email": {
+      "email": "john.doe@company.com",
+      "is_verified": true
+    }
+  },
+  "details": {
+    "creation_date": "2026-01-15T10:00:00Z"
+  }
+}
