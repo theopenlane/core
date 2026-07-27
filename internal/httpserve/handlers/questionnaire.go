@@ -49,11 +49,15 @@ func (h *Handler) GetQuestionnaire(ctx echo.Context) error {
 
 	// email not required because we can generate anon links that can now be shared
 	// but if it exists, verify that it matches the response we created when we sent it out
+	// preview tokens (sender test sends) resolve to the test response; real recipients get their real response
+	isPreview, _ := auth.ActiveAssessmentPreviewKey.Get(reqCtx)
+
 	if email != "" {
 		assessmentResponse, err = h.DBClient.AssessmentResponse.Query().
 			Where(
 				assessmentresponse.AssessmentIDEQ(assessmentID),
 				assessmentresponse.EmailEQ(email),
+				assessmentresponse.IsTestEQ(isPreview),
 			).
 			WithDocument().
 			Only(allowCtx)
@@ -205,10 +209,14 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context) error {
 
 	var assessmentResponse *generated.AssessmentResponse
 
+	// preview tokens resolve to the test response; real recipients get their real response
+	isPreview, _ := auth.ActiveAssessmentPreviewKey.Get(reqCtx)
+
 	if email != "" {
 		assessmentResponse, err = h.DBClient.AssessmentResponse.Query().
 			Where(assessmentresponse.EmailEqualFold(email),
-				assessmentresponse.AssessmentIDEQ(assessmentID)).
+				assessmentresponse.AssessmentIDEQ(assessmentID),
+				assessmentresponse.IsTestEQ(isPreview)).
 			Only(allowCtx)
 
 		if generated.IsNotFound(err) {

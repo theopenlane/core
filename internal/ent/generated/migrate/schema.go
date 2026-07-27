@@ -236,7 +236,7 @@ var (
 			},
 			{
 				Name:    "assessment_name_owner_id",
-				Unique:  true,
+				Unique:  false,
 				Columns: []*schema.Column{AssessmentsColumns[13], AssessmentsColumns[18]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
