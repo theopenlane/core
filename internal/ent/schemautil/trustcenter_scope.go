@@ -6,7 +6,6 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
-	"github.com/theopenlane/core/pkg/anon"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -26,7 +25,7 @@ func TrustCenterScopePredicate() func(*sql.Selector) {
 			return
 		}
 
-		if tcID, _, ok := anon.TrustCenterScope(ctx); ok {
+		if tcID, _, ok := auth.TrustCenterScopeFromContext(ctx); ok {
 			s.Where(sql.EQ(s.C("trust_center_id"), tcID))
 			return
 		}

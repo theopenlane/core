@@ -10,7 +10,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
-	"github.com/theopenlane/core/pkg/anon"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
@@ -37,7 +36,7 @@ func AllowIfTrustCenterAnonRequest() privacy.MutationRule {
 	return privacy.MutationRuleFunc(func(ctx context.Context, _ ent.Mutation) error {
 		logx.FromContext(ctx).Debug().Msg("checking for trust center anon context")
 
-		if anon.IsTrustCenter(ctx) {
+		if auth.IsTrustCenterFromContext(ctx) {
 			return privacy.Allow
 		}
 

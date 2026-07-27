@@ -23,7 +23,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
-	"github.com/theopenlane/core/pkg/anon"
 	"github.com/theopenlane/core/pkg/middleware/impersonation"
 	"github.com/theopenlane/utils/ulids"
 )
@@ -35,7 +34,7 @@ func supportTestConfig(issuer string) handlers.SupportAccessConfig {
 		Enabled:           true,
 		Email:             "support@theopenlane.io",
 		DisplayName:       "Openlane Support",
-		SubjectID:         anon.SupportSubjectID,
+		SubjectID:         auth.SupportSubjectID,
 		Password:          "super-secret-support-password",
 		ClientID:          "support-client",
 		ClientSecret:      "secret",
@@ -162,7 +161,7 @@ func (suite *HandlerTestSuite) TestSupportAccessLoginAndCallback() {
 			// the minted token must carry both identities: the virtual support user and the individual
 			claims, err := suite.h.TokenManager.ValidateImpersonationToken(context.Background(), cbOut.Token)
 			require.NoError(t, err)
-			assert.Equal(t, anon.SupportSubjectID, claims.UserID, "target is the virtual support identity")
+			assert.Equal(t, auth.SupportSubjectID, claims.UserID, "target is the virtual support identity")
 			assert.Equal(t, "engineer@theopenlane.io", claims.ImpersonatorID, "impersonator is the individual from the IdP")
 			assert.Equal(t, "support", claims.Type)
 			assert.Equal(t, org.ID, claims.OrgID)

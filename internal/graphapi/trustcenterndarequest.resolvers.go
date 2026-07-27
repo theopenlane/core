@@ -15,7 +15,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/pkg/anon"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
@@ -23,7 +22,7 @@ import (
 
 // CreateTrustCenterNDARequest is the resolver for the createTrustCenterNDARequest field.
 func (r *mutationResolver) CreateTrustCenterNDARequest(ctx context.Context, input generated.CreateTrustCenterNDARequestInput) (*model.TrustCenterNDARequestCreatePayload, error) {
-	if tcID, _, ok := anon.TrustCenterScope(ctx); ok {
+	if tcID, _, ok := auth.TrustCenterScopeFromContext(ctx); ok {
 		if input.TrustCenterID == nil || *input.TrustCenterID != tcID {
 			return nil, rout.ErrPermissionDenied
 		}
