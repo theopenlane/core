@@ -375635,7 +375635,7 @@ func (ec *executionContext) unmarshalInputUpdateAssessmentInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "name", "jsonconfig", "clearJsonconfig", "uischema", "clearUischema", "responseDueDuration", "clearResponseDueDuration", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "addViewerIDs", "removeViewerIDs", "clearViewers", "templateID", "clearTemplate", "addPlatformIDs", "removePlatformIDs", "clearPlatforms", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addAssessmentResponseIDs", "removeAssessmentResponseIDs", "clearAssessmentResponses", "addCampaignIDs", "removeCampaignIDs", "clearCampaigns", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "name", "assessmentType", "jsonconfig", "clearJsonconfig", "uischema", "clearUischema", "responseDueDuration", "clearResponseDueDuration", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "addViewerIDs", "removeViewerIDs", "clearViewers", "templateID", "clearTemplate", "addPlatformIDs", "removePlatformIDs", "clearPlatforms", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addAssessmentResponseIDs", "removeAssessmentResponseIDs", "clearAssessmentResponses", "addCampaignIDs", "removeCampaignIDs", "clearCampaigns", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -375761,6 +375761,13 @@ func (ec *executionContext) unmarshalInputUpdateAssessmentInput(ctx context.Cont
 				return it, err
 			}
 			it.Name = data
+		case "assessmentType":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assessmentType"))
+			data, err := ec.unmarshalOAssessmentAssessmentType2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐAssessmentType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssessmentType = data
 		case "jsonconfig":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("jsonconfig"))
 			data, err := ec.unmarshalOMap2map(ctx, v)

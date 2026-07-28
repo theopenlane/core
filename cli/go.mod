@@ -67,7 +67,7 @@ require (
 	github.com/fumiama/go-docx v0.0.0-20250506085032-0c30fd09304b // indirect
 	github.com/fumiama/imgsz v0.0.4 // indirect
 	github.com/fxamacker/cbor/v2 v2.9.2 // indirect
-	github.com/gabriel-vasile/mimetype v1.4.13 // indirect
+	github.com/gabriel-vasile/mimetype v1.4.14 // indirect
 	github.com/go-logr/logr v1.4.3 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-openapi/inflect v0.21.6 // indirect
@@ -86,7 +86,7 @@ require (
 	github.com/googleapis/gax-go/v2 v2.23.0 // indirect
 	github.com/gorilla/css v1.0.1 // indirect
 	github.com/gorilla/securecookie v1.1.2 // indirect
-	github.com/gqlgo/gqlgenc v0.37.1 // indirect
+	github.com/gqlgo/gqlgenc v0.38.0 // indirect
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.29.0 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
@@ -216,7 +216,7 @@ require (
 	golang.org/x/tools v0.48.0 // indirect
 	golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da // indirect
 	gonum.org/v1/gonum v0.17.0 // indirect
-	google.golang.org/api v0.288.0 // indirect
+	google.golang.org/api v0.289.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20260720211330-0afa2a65878a // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260720211330-0afa2a65878a // indirect
 	google.golang.org/grpc v1.82.1 // indirect
