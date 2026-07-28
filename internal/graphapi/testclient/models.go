@@ -42338,7 +42338,8 @@ type UpdateAssessmentInput struct {
 	WorkflowEligibleMarker      *bool `json:"workflowEligibleMarker,omitempty"`
 	ClearWorkflowEligibleMarker *bool `json:"clearWorkflowEligibleMarker,omitempty"`
 	// the name of the assessment, e.g. cloud providers, marketing team
-	Name *string `json:"name,omitempty"`
+	Name           *string               `json:"name,omitempty"`
+	AssessmentType *enums.AssessmentType `json:"assessmentType,omitempty"`
 	// the jsonschema object of the questionnaire. If not provided it will be inherited from the template.
 	Jsonconfig      map[string]any `json:"jsonconfig,omitempty"`
 	ClearJsonconfig *bool          `json:"clearJsonconfig,omitempty"`

@@ -1005,8 +1005,9 @@ type UpdateAssessmentInput struct {
 	ClearSystemInternalID       bool
 	SystemInternalID            *string `json:"system_internal_id,omitempty"`
 	ClearWorkflowEligibleMarker bool
-	WorkflowEligibleMarker      *bool   `json:"workflow_eligible_marker,omitempty"`
-	Name                        *string `json:"name,omitempty"`
+	WorkflowEligibleMarker      *bool                 `json:"workflow_eligible_marker,omitempty"`
+	Name                        *string               `json:"name,omitempty"`
+	AssessmentType              *enums.AssessmentType `json:"assessment_type,omitempty"`
 	ClearJsonconfig             bool
 	Jsonconfig                  map[string]interface{} `json:"jsonconfig,omitempty"`
 	ClearUischema               bool
@@ -1072,6 +1073,9 @@ func (i *UpdateAssessmentInput) Mutate(m *AssessmentMutation) {
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
+	}
+	if v := i.AssessmentType; v != nil {
+		m.SetAssessmentType(*v)
 	}
 	if i.ClearJsonconfig {
 		m.ClearJsonconfig()
