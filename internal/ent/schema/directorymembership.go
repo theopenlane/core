@@ -5,6 +5,7 @@ import (
 
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
@@ -215,6 +216,12 @@ func (DirectoryMembership) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("directory_account_id", "directory_group_id", "directory_sync_run_id").
 			Unique(),
+		// declaring the pair index ourselves keeps ent from adding its own fully-unique version
+		// for the M2M through edges; the partial predicate limits uniqueness to active rows so
+		// removed membership episodes can accumulate per (account, group) pair
+		index.Fields("directory_account_id", "directory_group_id").
+			Unique().
+			Annotations(entsql.IndexWhere("removed_at is NULL")),
 		index.Fields("directory_instance_id", "directory_account_id", "directory_group_id"),
 		index.Fields("directory_sync_run_id"),
 		index.Fields("integration_id", "directory_sync_run_id"),
