@@ -72594,6 +72594,58 @@ type OrgMembershipWhereInput struct {
 	SSOExemptGrantedAtIsNil  bool              `json:"ssoExemptGrantedAtIsNil,omitempty"`
 	SSOExemptGrantedAtNotNil bool              `json:"ssoExemptGrantedAtNotNil,omitempty"`
 
+	// "tfa_enforced" field predicates.
+	TfaEnforced       *bool `json:"tfaEnforced,omitempty"`
+	TfaEnforcedNEQ    *bool `json:"tfaEnforcedNEQ,omitempty"`
+	TfaEnforcedIsNil  bool  `json:"tfaEnforcedIsNil,omitempty"`
+	TfaEnforcedNotNil bool  `json:"tfaEnforcedNotNil,omitempty"`
+
+	// "tfa_enforced_reason" field predicates.
+	TfaEnforcedReason             *string  `json:"tfaEnforcedReason,omitempty"`
+	TfaEnforcedReasonNEQ          *string  `json:"tfaEnforcedReasonNEQ,omitempty"`
+	TfaEnforcedReasonIn           []string `json:"tfaEnforcedReasonIn,omitempty"`
+	TfaEnforcedReasonNotIn        []string `json:"tfaEnforcedReasonNotIn,omitempty"`
+	TfaEnforcedReasonGT           *string  `json:"tfaEnforcedReasonGT,omitempty"`
+	TfaEnforcedReasonGTE          *string  `json:"tfaEnforcedReasonGTE,omitempty"`
+	TfaEnforcedReasonLT           *string  `json:"tfaEnforcedReasonLT,omitempty"`
+	TfaEnforcedReasonLTE          *string  `json:"tfaEnforcedReasonLTE,omitempty"`
+	TfaEnforcedReasonContains     *string  `json:"tfaEnforcedReasonContains,omitempty"`
+	TfaEnforcedReasonHasPrefix    *string  `json:"tfaEnforcedReasonHasPrefix,omitempty"`
+	TfaEnforcedReasonHasSuffix    *string  `json:"tfaEnforcedReasonHasSuffix,omitempty"`
+	TfaEnforcedReasonIsNil        bool     `json:"tfaEnforcedReasonIsNil,omitempty"`
+	TfaEnforcedReasonNotNil       bool     `json:"tfaEnforcedReasonNotNil,omitempty"`
+	TfaEnforcedReasonEqualFold    *string  `json:"tfaEnforcedReasonEqualFold,omitempty"`
+	TfaEnforcedReasonContainsFold *string  `json:"tfaEnforcedReasonContainsFold,omitempty"`
+
+	// "tfa_enforced_by" field predicates.
+	TfaEnforcedBy             *string  `json:"tfaEnforcedBy,omitempty"`
+	TfaEnforcedByNEQ          *string  `json:"tfaEnforcedByNEQ,omitempty"`
+	TfaEnforcedByIn           []string `json:"tfaEnforcedByIn,omitempty"`
+	TfaEnforcedByNotIn        []string `json:"tfaEnforcedByNotIn,omitempty"`
+	TfaEnforcedByGT           *string  `json:"tfaEnforcedByGT,omitempty"`
+	TfaEnforcedByGTE          *string  `json:"tfaEnforcedByGTE,omitempty"`
+	TfaEnforcedByLT           *string  `json:"tfaEnforcedByLT,omitempty"`
+	TfaEnforcedByLTE          *string  `json:"tfaEnforcedByLTE,omitempty"`
+	TfaEnforcedByContains     *string  `json:"tfaEnforcedByContains,omitempty"`
+	TfaEnforcedByHasPrefix    *string  `json:"tfaEnforcedByHasPrefix,omitempty"`
+	TfaEnforcedByHasSuffix    *string  `json:"tfaEnforcedByHasSuffix,omitempty"`
+	TfaEnforcedByIsNil        bool     `json:"tfaEnforcedByIsNil,omitempty"`
+	TfaEnforcedByNotNil       bool     `json:"tfaEnforcedByNotNil,omitempty"`
+	TfaEnforcedByEqualFold    *string  `json:"tfaEnforcedByEqualFold,omitempty"`
+	TfaEnforcedByContainsFold *string  `json:"tfaEnforcedByContainsFold,omitempty"`
+
+	// "tfa_enforced_at" field predicates.
+	TfaEnforcedAt       *models.DateTime  `json:"tfaEnforcedAt,omitempty"`
+	TfaEnforcedAtNEQ    *models.DateTime  `json:"tfaEnforcedAtNEQ,omitempty"`
+	TfaEnforcedAtIn     []models.DateTime `json:"tfaEnforcedAtIn,omitempty"`
+	TfaEnforcedAtNotIn  []models.DateTime `json:"tfaEnforcedAtNotIn,omitempty"`
+	TfaEnforcedAtGT     *models.DateTime  `json:"tfaEnforcedAtGT,omitempty"`
+	TfaEnforcedAtGTE    *models.DateTime  `json:"tfaEnforcedAtGTE,omitempty"`
+	TfaEnforcedAtLT     *models.DateTime  `json:"tfaEnforcedAtLT,omitempty"`
+	TfaEnforcedAtLTE    *models.DateTime  `json:"tfaEnforcedAtLTE,omitempty"`
+	TfaEnforcedAtIsNil  bool              `json:"tfaEnforcedAtIsNil,omitempty"`
+	TfaEnforcedAtNotNil bool              `json:"tfaEnforcedAtNotNil,omitempty"`
+
 	// "organization" edge predicates.
 	HasOrganization     *bool                     `json:"hasOrganization,omitempty"`
 	HasOrganizationWith []*OrganizationWhereInput `json:"hasOrganizationWith,omitempty"`
@@ -73124,6 +73176,138 @@ func (i *OrgMembershipWhereInput) P() (predicate.OrgMembership, error) {
 	}
 	if i.SSOExemptGrantedAtNotNil {
 		predicates = append(predicates, orgmembership.SSOExemptGrantedAtNotNil())
+	}
+	if i.TfaEnforced != nil {
+		predicates = append(predicates, orgmembership.TfaEnforcedEQ(*i.TfaEnforced))
+	}
+	if i.TfaEnforcedNEQ != nil {
+		predicates = append(predicates, orgmembership.TfaEnforcedNEQ(*i.TfaEnforcedNEQ))
+	}
+	if i.TfaEnforcedIsNil {
+		predicates = append(predicates, orgmembership.TfaEnforcedIsNil())
+	}
+	if i.TfaEnforcedNotNil {
+		predicates = append(predicates, orgmembership.TfaEnforcedNotNil())
+	}
+	if i.TfaEnforcedReason != nil {
+		predicates = append(predicates, orgmembership.TfaEnforcedReasonEQ(*i.TfaEnforcedReason))
+	}
+	if i.TfaEnforcedReasonNEQ != nil {
+		predicates = append(predicates, orgmembership.TfaEnforcedReasonNEQ(*i.TfaEnforcedReasonNEQ))
+	}
+	if len(i.TfaEnforcedReasonIn) > 0 {
+		predicates = append(predicates, orgmembership.TfaEnforcedReasonIn(i.TfaEnforcedReasonIn...))
+	}
+	if len(i.TfaEnforcedReasonNotIn) > 0 {
+		predicates = append(predicates, orgmembership.TfaEnforcedReasonNotIn(i.TfaEnforcedReasonNotIn...))
+	}
+	if i.TfaEnforcedReasonGT != nil {
+		predicates = append(predicates, orgmembership.TfaEnforcedReasonGT(*i.TfaEnforcedReasonGT))
+	}
+	if i.TfaEnforcedReasonGTE != nil {
+		predicates = append(predicates, orgmembership.TfaEnforcedReasonGTE(*i.TfaEnforcedReasonGTE))
+	}
+	if i.TfaEnforcedReasonLT != nil {
+		predicates = append(predicates, orgmembership.TfaEnforcedReasonLT(*i.TfaEnforcedReasonLT))
+	}
+	if i.TfaEnforcedReasonLTE != nil {
+		predicates = append(predicates, orgmembership.TfaEnforcedReasonLTE(*i.TfaEnforcedReasonLTE))
+	}
+	if i.TfaEnforcedReasonContains != nil {
+		predicates = append(predicates, orgmembership.TfaEnforcedReasonContains(*i.TfaEnforcedReasonContains))
+	}
+	if i.TfaEnforcedReasonHasPrefix != nil {
+		predicates = append(predicates, orgmembership.TfaEnforcedReasonHasPrefix(*i.TfaEnforcedReasonHasPrefix))
+	}
+	if i.TfaEnforcedReasonHasSuffix != nil {
+		predicates = append(predicates, orgmembership.TfaEnforcedReasonHasSuffix(*i.TfaEnforcedReasonHasSuffix))
+	}
+	if i.TfaEnforcedReasonIsNil {
+		predicates = append(predicates, orgmembership.TfaEnforcedReasonIsNil())
+	}
+	if i.TfaEnforcedReasonNotNil {
+		predicates = append(predicates, orgmembership.TfaEnforcedReasonNotNil())
+	}
+	if i.TfaEnforcedReasonEqualFold != nil {
+		predicates = append(predicates, orgmembership.TfaEnforcedReasonEqualFold(*i.TfaEnforcedReasonEqualFold))
+	}
+	if i.TfaEnforcedReasonContainsFold != nil {
+		predicates = append(predicates, orgmembership.TfaEnforcedReasonContainsFold(*i.TfaEnforcedReasonContainsFold))
+	}
+	if i.TfaEnforcedBy != nil {
+		predicates = append(predicates, orgmembership.TfaEnforcedByEQ(*i.TfaEnforcedBy))
+	}
+	if i.TfaEnforcedByNEQ != nil {
+		predicates = append(predicates, orgmembership.TfaEnforcedByNEQ(*i.TfaEnforcedByNEQ))
+	}
+	if len(i.TfaEnforcedByIn) > 0 {
+		predicates = append(predicates, orgmembership.TfaEnforcedByIn(i.TfaEnforcedByIn...))
+	}
+	if len(i.TfaEnforcedByNotIn) > 0 {
+		predicates = append(predicates, orgmembership.TfaEnforcedByNotIn(i.TfaEnforcedByNotIn...))
+	}
+	if i.TfaEnforcedByGT != nil {
+		predicates = append(predicates, orgmembership.TfaEnforcedByGT(*i.TfaEnforcedByGT))
+	}
+	if i.TfaEnforcedByGTE != nil {
+		predicates = append(predicates, orgmembership.TfaEnforcedByGTE(*i.TfaEnforcedByGTE))
+	}
+	if i.TfaEnforcedByLT != nil {
+		predicates = append(predicates, orgmembership.TfaEnforcedByLT(*i.TfaEnforcedByLT))
+	}
+	if i.TfaEnforcedByLTE != nil {
+		predicates = append(predicates, orgmembership.TfaEnforcedByLTE(*i.TfaEnforcedByLTE))
+	}
+	if i.TfaEnforcedByContains != nil {
+		predicates = append(predicates, orgmembership.TfaEnforcedByContains(*i.TfaEnforcedByContains))
+	}
+	if i.TfaEnforcedByHasPrefix != nil {
+		predicates = append(predicates, orgmembership.TfaEnforcedByHasPrefix(*i.TfaEnforcedByHasPrefix))
+	}
+	if i.TfaEnforcedByHasSuffix != nil {
+		predicates = append(predicates, orgmembership.TfaEnforcedByHasSuffix(*i.TfaEnforcedByHasSuffix))
+	}
+	if i.TfaEnforcedByIsNil {
+		predicates = append(predicates, orgmembership.TfaEnforcedByIsNil())
+	}
+	if i.TfaEnforcedByNotNil {
+		predicates = append(predicates, orgmembership.TfaEnforcedByNotNil())
+	}
+	if i.TfaEnforcedByEqualFold != nil {
+		predicates = append(predicates, orgmembership.TfaEnforcedByEqualFold(*i.TfaEnforcedByEqualFold))
+	}
+	if i.TfaEnforcedByContainsFold != nil {
+		predicates = append(predicates, orgmembership.TfaEnforcedByContainsFold(*i.TfaEnforcedByContainsFold))
+	}
+	if i.TfaEnforcedAt != nil {
+		predicates = append(predicates, orgmembership.TfaEnforcedAtEQ(*i.TfaEnforcedAt))
+	}
+	if i.TfaEnforcedAtNEQ != nil {
+		predicates = append(predicates, orgmembership.TfaEnforcedAtNEQ(*i.TfaEnforcedAtNEQ))
+	}
+	if len(i.TfaEnforcedAtIn) > 0 {
+		predicates = append(predicates, orgmembership.TfaEnforcedAtIn(i.TfaEnforcedAtIn...))
+	}
+	if len(i.TfaEnforcedAtNotIn) > 0 {
+		predicates = append(predicates, orgmembership.TfaEnforcedAtNotIn(i.TfaEnforcedAtNotIn...))
+	}
+	if i.TfaEnforcedAtGT != nil {
+		predicates = append(predicates, orgmembership.TfaEnforcedAtGT(*i.TfaEnforcedAtGT))
+	}
+	if i.TfaEnforcedAtGTE != nil {
+		predicates = append(predicates, orgmembership.TfaEnforcedAtGTE(*i.TfaEnforcedAtGTE))
+	}
+	if i.TfaEnforcedAtLT != nil {
+		predicates = append(predicates, orgmembership.TfaEnforcedAtLT(*i.TfaEnforcedAtLT))
+	}
+	if i.TfaEnforcedAtLTE != nil {
+		predicates = append(predicates, orgmembership.TfaEnforcedAtLTE(*i.TfaEnforcedAtLTE))
+	}
+	if i.TfaEnforcedAtIsNil {
+		predicates = append(predicates, orgmembership.TfaEnforcedAtIsNil())
+	}
+	if i.TfaEnforcedAtNotNil {
+		predicates = append(predicates, orgmembership.TfaEnforcedAtNotNil())
 	}
 
 	if i.HasOrganization != nil {

@@ -40,7 +40,7 @@ func LoadEnforcement(ctx context.Context, db *ent.Client, orgID, userID, email s
 	// an invariant violation, not a benign non-member; surface it like any other error
 	member, mErr := db.OrgMembership.Query().
 		Where(orgmembership.OrganizationID(orgID), orgmembership.UserID(userID)).
-		Select(orgmembership.FieldRole, orgmembership.FieldSSOExempt).
+		Select(orgmembership.FieldRole, orgmembership.FieldSSOExempt, orgmembership.FieldTfaEnforced).
 		Only(allowCtx)
 	if mErr != nil {
 		return EnforcementInput{}, nil, mErr
@@ -49,6 +49,7 @@ func LoadEnforcement(ctx context.Context, db *ent.Client, orgID, userID, email s
 	in.IsMember = true
 	in.IsOwner = member.Role == enums.RoleOwner
 	in.MemberExempt = member.SSOExempt
+	in.MemberTFAEnforced = member.TfaEnforced
 
 	if in.Email == "" {
 		u, uErr := db.User.Query().Where(user.ID(userID)).Select(user.FieldEmail).Only(allowCtx)

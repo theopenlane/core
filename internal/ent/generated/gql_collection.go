@@ -46485,6 +46485,26 @@ func (_q *OrgMembershipQuery) collectField(ctx context.Context, oneNode bool, op
 				selectedFields = append(selectedFields, orgmembership.FieldSSOExemptGrantedAt)
 				fieldSeen[orgmembership.FieldSSOExemptGrantedAt] = struct{}{}
 			}
+		case "tfaEnforced":
+			if _, ok := fieldSeen[orgmembership.FieldTfaEnforced]; !ok {
+				selectedFields = append(selectedFields, orgmembership.FieldTfaEnforced)
+				fieldSeen[orgmembership.FieldTfaEnforced] = struct{}{}
+			}
+		case "tfaEnforcedReason":
+			if _, ok := fieldSeen[orgmembership.FieldTfaEnforcedReason]; !ok {
+				selectedFields = append(selectedFields, orgmembership.FieldTfaEnforcedReason)
+				fieldSeen[orgmembership.FieldTfaEnforcedReason] = struct{}{}
+			}
+		case "tfaEnforcedBy":
+			if _, ok := fieldSeen[orgmembership.FieldTfaEnforcedBy]; !ok {
+				selectedFields = append(selectedFields, orgmembership.FieldTfaEnforcedBy)
+				fieldSeen[orgmembership.FieldTfaEnforcedBy] = struct{}{}
+			}
+		case "tfaEnforcedAt":
+			if _, ok := fieldSeen[orgmembership.FieldTfaEnforcedAt]; !ok {
+				selectedFields = append(selectedFields, orgmembership.FieldTfaEnforcedAt)
+				fieldSeen[orgmembership.FieldTfaEnforcedAt] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:

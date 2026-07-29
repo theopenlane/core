@@ -15545,6 +15545,22 @@ func (m *OrgMembershipMutation) CreateHistoryFromCreate(ctx context.Context) err
 		create = create.SetNillableSSOExemptGrantedAt(&ssoExemptGrantedAt)
 	}
 
+	if tfaEnforced, exists := m.TfaEnforced(); exists {
+		create = create.SetTfaEnforced(tfaEnforced)
+	}
+
+	if tfaEnforcedReason, exists := m.TfaEnforcedReason(); exists {
+		create = create.SetNillableTfaEnforcedReason(&tfaEnforcedReason)
+	}
+
+	if tfaEnforcedBy, exists := m.TfaEnforcedBy(); exists {
+		create = create.SetNillableTfaEnforcedBy(&tfaEnforcedBy)
+	}
+
+	if tfaEnforcedAt, exists := m.TfaEnforcedAt(); exists {
+		create = create.SetNillableTfaEnforcedAt(&tfaEnforcedAt)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -15648,6 +15664,30 @@ func (m *OrgMembershipMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetNillableSSOExemptGrantedAt(orgmembership.SSOExemptGrantedAt)
 		}
 
+		if tfaEnforced, exists := m.TfaEnforced(); exists {
+			create = create.SetTfaEnforced(tfaEnforced)
+		} else {
+			create = create.SetTfaEnforced(orgmembership.TfaEnforced)
+		}
+
+		if tfaEnforcedReason, exists := m.TfaEnforcedReason(); exists {
+			create = create.SetNillableTfaEnforcedReason(&tfaEnforcedReason)
+		} else {
+			create = create.SetNillableTfaEnforcedReason(orgmembership.TfaEnforcedReason)
+		}
+
+		if tfaEnforcedBy, exists := m.TfaEnforcedBy(); exists {
+			create = create.SetNillableTfaEnforcedBy(&tfaEnforcedBy)
+		} else {
+			create = create.SetNillableTfaEnforcedBy(orgmembership.TfaEnforcedBy)
+		}
+
+		if tfaEnforcedAt, exists := m.TfaEnforcedAt(); exists {
+			create = create.SetNillableTfaEnforcedAt(&tfaEnforcedAt)
+		} else {
+			create = create.SetNillableTfaEnforcedAt(orgmembership.TfaEnforcedAt)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -15695,6 +15735,10 @@ func (m *OrgMembershipMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetNillableSSOExemptReason(orgmembership.SSOExemptReason).
 			SetNillableSSOExemptGrantedBy(orgmembership.SSOExemptGrantedBy).
 			SetNillableSSOExemptGrantedAt(orgmembership.SSOExemptGrantedAt).
+			SetTfaEnforced(orgmembership.TfaEnforced).
+			SetNillableTfaEnforcedReason(orgmembership.TfaEnforcedReason).
+			SetNillableTfaEnforcedBy(orgmembership.TfaEnforcedBy).
+			SetNillableTfaEnforcedAt(orgmembership.TfaEnforcedAt).
 			Save(ctx)
 		if err != nil {
 			return err

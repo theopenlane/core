@@ -9052,6 +9052,26 @@ func (_q *OrgMembershipHistoryQuery) collectField(ctx context.Context, oneNode b
 				selectedFields = append(selectedFields, orgmembershiphistory.FieldSSOExemptGrantedAt)
 				fieldSeen[orgmembershiphistory.FieldSSOExemptGrantedAt] = struct{}{}
 			}
+		case "tfaEnforced":
+			if _, ok := fieldSeen[orgmembershiphistory.FieldTfaEnforced]; !ok {
+				selectedFields = append(selectedFields, orgmembershiphistory.FieldTfaEnforced)
+				fieldSeen[orgmembershiphistory.FieldTfaEnforced] = struct{}{}
+			}
+		case "tfaEnforcedReason":
+			if _, ok := fieldSeen[orgmembershiphistory.FieldTfaEnforcedReason]; !ok {
+				selectedFields = append(selectedFields, orgmembershiphistory.FieldTfaEnforcedReason)
+				fieldSeen[orgmembershiphistory.FieldTfaEnforcedReason] = struct{}{}
+			}
+		case "tfaEnforcedBy":
+			if _, ok := fieldSeen[orgmembershiphistory.FieldTfaEnforcedBy]; !ok {
+				selectedFields = append(selectedFields, orgmembershiphistory.FieldTfaEnforcedBy)
+				fieldSeen[orgmembershiphistory.FieldTfaEnforcedBy] = struct{}{}
+			}
+		case "tfaEnforcedAt":
+			if _, ok := fieldSeen[orgmembershiphistory.FieldTfaEnforcedAt]; !ok {
+				selectedFields = append(selectedFields, orgmembershiphistory.FieldTfaEnforcedAt)
+				fieldSeen[orgmembershiphistory.FieldTfaEnforcedAt] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:

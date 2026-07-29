@@ -134,6 +134,26 @@ func SSOExemptGrantedAt(v models.DateTime) predicate.OrgMembershipHistory {
 	return predicate.OrgMembershipHistory(sql.FieldEQ(FieldSSOExemptGrantedAt, v))
 }
 
+// TfaEnforced applies equality check predicate on the "tfa_enforced" field. It's identical to TfaEnforcedEQ.
+func TfaEnforced(v bool) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldEQ(FieldTfaEnforced, v))
+}
+
+// TfaEnforcedReason applies equality check predicate on the "tfa_enforced_reason" field. It's identical to TfaEnforcedReasonEQ.
+func TfaEnforcedReason(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldEQ(FieldTfaEnforcedReason, v))
+}
+
+// TfaEnforcedBy applies equality check predicate on the "tfa_enforced_by" field. It's identical to TfaEnforcedByEQ.
+func TfaEnforcedBy(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldEQ(FieldTfaEnforcedBy, v))
+}
+
+// TfaEnforcedAt applies equality check predicate on the "tfa_enforced_at" field. It's identical to TfaEnforcedAtEQ.
+func TfaEnforcedAt(v models.DateTime) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldEQ(FieldTfaEnforcedAt, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.OrgMembershipHistory {
 	return predicate.OrgMembershipHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -972,6 +992,226 @@ func SSOExemptGrantedAtIsNil() predicate.OrgMembershipHistory {
 // SSOExemptGrantedAtNotNil applies the NotNil predicate on the "sso_exempt_granted_at" field.
 func SSOExemptGrantedAtNotNil() predicate.OrgMembershipHistory {
 	return predicate.OrgMembershipHistory(sql.FieldNotNull(FieldSSOExemptGrantedAt))
+}
+
+// TfaEnforcedEQ applies the EQ predicate on the "tfa_enforced" field.
+func TfaEnforcedEQ(v bool) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldEQ(FieldTfaEnforced, v))
+}
+
+// TfaEnforcedNEQ applies the NEQ predicate on the "tfa_enforced" field.
+func TfaEnforcedNEQ(v bool) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldNEQ(FieldTfaEnforced, v))
+}
+
+// TfaEnforcedIsNil applies the IsNil predicate on the "tfa_enforced" field.
+func TfaEnforcedIsNil() predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldIsNull(FieldTfaEnforced))
+}
+
+// TfaEnforcedNotNil applies the NotNil predicate on the "tfa_enforced" field.
+func TfaEnforcedNotNil() predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldNotNull(FieldTfaEnforced))
+}
+
+// TfaEnforcedReasonEQ applies the EQ predicate on the "tfa_enforced_reason" field.
+func TfaEnforcedReasonEQ(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldEQ(FieldTfaEnforcedReason, v))
+}
+
+// TfaEnforcedReasonNEQ applies the NEQ predicate on the "tfa_enforced_reason" field.
+func TfaEnforcedReasonNEQ(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldNEQ(FieldTfaEnforcedReason, v))
+}
+
+// TfaEnforcedReasonIn applies the In predicate on the "tfa_enforced_reason" field.
+func TfaEnforcedReasonIn(vs ...string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldIn(FieldTfaEnforcedReason, vs...))
+}
+
+// TfaEnforcedReasonNotIn applies the NotIn predicate on the "tfa_enforced_reason" field.
+func TfaEnforcedReasonNotIn(vs ...string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldNotIn(FieldTfaEnforcedReason, vs...))
+}
+
+// TfaEnforcedReasonGT applies the GT predicate on the "tfa_enforced_reason" field.
+func TfaEnforcedReasonGT(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldGT(FieldTfaEnforcedReason, v))
+}
+
+// TfaEnforcedReasonGTE applies the GTE predicate on the "tfa_enforced_reason" field.
+func TfaEnforcedReasonGTE(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldGTE(FieldTfaEnforcedReason, v))
+}
+
+// TfaEnforcedReasonLT applies the LT predicate on the "tfa_enforced_reason" field.
+func TfaEnforcedReasonLT(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldLT(FieldTfaEnforcedReason, v))
+}
+
+// TfaEnforcedReasonLTE applies the LTE predicate on the "tfa_enforced_reason" field.
+func TfaEnforcedReasonLTE(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldLTE(FieldTfaEnforcedReason, v))
+}
+
+// TfaEnforcedReasonContains applies the Contains predicate on the "tfa_enforced_reason" field.
+func TfaEnforcedReasonContains(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldContains(FieldTfaEnforcedReason, v))
+}
+
+// TfaEnforcedReasonHasPrefix applies the HasPrefix predicate on the "tfa_enforced_reason" field.
+func TfaEnforcedReasonHasPrefix(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldHasPrefix(FieldTfaEnforcedReason, v))
+}
+
+// TfaEnforcedReasonHasSuffix applies the HasSuffix predicate on the "tfa_enforced_reason" field.
+func TfaEnforcedReasonHasSuffix(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldHasSuffix(FieldTfaEnforcedReason, v))
+}
+
+// TfaEnforcedReasonIsNil applies the IsNil predicate on the "tfa_enforced_reason" field.
+func TfaEnforcedReasonIsNil() predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldIsNull(FieldTfaEnforcedReason))
+}
+
+// TfaEnforcedReasonNotNil applies the NotNil predicate on the "tfa_enforced_reason" field.
+func TfaEnforcedReasonNotNil() predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldNotNull(FieldTfaEnforcedReason))
+}
+
+// TfaEnforcedReasonEqualFold applies the EqualFold predicate on the "tfa_enforced_reason" field.
+func TfaEnforcedReasonEqualFold(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldEqualFold(FieldTfaEnforcedReason, v))
+}
+
+// TfaEnforcedReasonContainsFold applies the ContainsFold predicate on the "tfa_enforced_reason" field.
+func TfaEnforcedReasonContainsFold(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldContainsFold(FieldTfaEnforcedReason, v))
+}
+
+// TfaEnforcedByEQ applies the EQ predicate on the "tfa_enforced_by" field.
+func TfaEnforcedByEQ(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldEQ(FieldTfaEnforcedBy, v))
+}
+
+// TfaEnforcedByNEQ applies the NEQ predicate on the "tfa_enforced_by" field.
+func TfaEnforcedByNEQ(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldNEQ(FieldTfaEnforcedBy, v))
+}
+
+// TfaEnforcedByIn applies the In predicate on the "tfa_enforced_by" field.
+func TfaEnforcedByIn(vs ...string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldIn(FieldTfaEnforcedBy, vs...))
+}
+
+// TfaEnforcedByNotIn applies the NotIn predicate on the "tfa_enforced_by" field.
+func TfaEnforcedByNotIn(vs ...string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldNotIn(FieldTfaEnforcedBy, vs...))
+}
+
+// TfaEnforcedByGT applies the GT predicate on the "tfa_enforced_by" field.
+func TfaEnforcedByGT(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldGT(FieldTfaEnforcedBy, v))
+}
+
+// TfaEnforcedByGTE applies the GTE predicate on the "tfa_enforced_by" field.
+func TfaEnforcedByGTE(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldGTE(FieldTfaEnforcedBy, v))
+}
+
+// TfaEnforcedByLT applies the LT predicate on the "tfa_enforced_by" field.
+func TfaEnforcedByLT(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldLT(FieldTfaEnforcedBy, v))
+}
+
+// TfaEnforcedByLTE applies the LTE predicate on the "tfa_enforced_by" field.
+func TfaEnforcedByLTE(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldLTE(FieldTfaEnforcedBy, v))
+}
+
+// TfaEnforcedByContains applies the Contains predicate on the "tfa_enforced_by" field.
+func TfaEnforcedByContains(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldContains(FieldTfaEnforcedBy, v))
+}
+
+// TfaEnforcedByHasPrefix applies the HasPrefix predicate on the "tfa_enforced_by" field.
+func TfaEnforcedByHasPrefix(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldHasPrefix(FieldTfaEnforcedBy, v))
+}
+
+// TfaEnforcedByHasSuffix applies the HasSuffix predicate on the "tfa_enforced_by" field.
+func TfaEnforcedByHasSuffix(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldHasSuffix(FieldTfaEnforcedBy, v))
+}
+
+// TfaEnforcedByIsNil applies the IsNil predicate on the "tfa_enforced_by" field.
+func TfaEnforcedByIsNil() predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldIsNull(FieldTfaEnforcedBy))
+}
+
+// TfaEnforcedByNotNil applies the NotNil predicate on the "tfa_enforced_by" field.
+func TfaEnforcedByNotNil() predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldNotNull(FieldTfaEnforcedBy))
+}
+
+// TfaEnforcedByEqualFold applies the EqualFold predicate on the "tfa_enforced_by" field.
+func TfaEnforcedByEqualFold(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldEqualFold(FieldTfaEnforcedBy, v))
+}
+
+// TfaEnforcedByContainsFold applies the ContainsFold predicate on the "tfa_enforced_by" field.
+func TfaEnforcedByContainsFold(v string) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldContainsFold(FieldTfaEnforcedBy, v))
+}
+
+// TfaEnforcedAtEQ applies the EQ predicate on the "tfa_enforced_at" field.
+func TfaEnforcedAtEQ(v models.DateTime) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldEQ(FieldTfaEnforcedAt, v))
+}
+
+// TfaEnforcedAtNEQ applies the NEQ predicate on the "tfa_enforced_at" field.
+func TfaEnforcedAtNEQ(v models.DateTime) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldNEQ(FieldTfaEnforcedAt, v))
+}
+
+// TfaEnforcedAtIn applies the In predicate on the "tfa_enforced_at" field.
+func TfaEnforcedAtIn(vs ...models.DateTime) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldIn(FieldTfaEnforcedAt, vs...))
+}
+
+// TfaEnforcedAtNotIn applies the NotIn predicate on the "tfa_enforced_at" field.
+func TfaEnforcedAtNotIn(vs ...models.DateTime) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldNotIn(FieldTfaEnforcedAt, vs...))
+}
+
+// TfaEnforcedAtGT applies the GT predicate on the "tfa_enforced_at" field.
+func TfaEnforcedAtGT(v models.DateTime) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldGT(FieldTfaEnforcedAt, v))
+}
+
+// TfaEnforcedAtGTE applies the GTE predicate on the "tfa_enforced_at" field.
+func TfaEnforcedAtGTE(v models.DateTime) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldGTE(FieldTfaEnforcedAt, v))
+}
+
+// TfaEnforcedAtLT applies the LT predicate on the "tfa_enforced_at" field.
+func TfaEnforcedAtLT(v models.DateTime) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldLT(FieldTfaEnforcedAt, v))
+}
+
+// TfaEnforcedAtLTE applies the LTE predicate on the "tfa_enforced_at" field.
+func TfaEnforcedAtLTE(v models.DateTime) predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldLTE(FieldTfaEnforcedAt, v))
+}
+
+// TfaEnforcedAtIsNil applies the IsNil predicate on the "tfa_enforced_at" field.
+func TfaEnforcedAtIsNil() predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldIsNull(FieldTfaEnforcedAt))
+}
+
+// TfaEnforcedAtNotNil applies the NotNil predicate on the "tfa_enforced_at" field.
+func TfaEnforcedAtNotNil() predicate.OrgMembershipHistory {
+	return predicate.OrgMembershipHistory(sql.FieldNotNull(FieldTfaEnforcedAt))
 }
 
 // And groups predicates with the AND operator between them.

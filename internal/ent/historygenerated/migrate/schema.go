@@ -1891,6 +1891,10 @@ var (
 		{Name: "sso_exempt_reason", Type: field.TypeString, Nullable: true},
 		{Name: "sso_exempt_granted_by", Type: field.TypeString, Nullable: true},
 		{Name: "sso_exempt_granted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "tfa_enforced", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "tfa_enforced_reason", Type: field.TypeString, Nullable: true},
+		{Name: "tfa_enforced_by", Type: field.TypeString, Nullable: true},
+		{Name: "tfa_enforced_at", Type: field.TypeTime, Nullable: true},
 	}
 	// OrgMembershipHistoryTable holds the schema information for the "org_membership_history" table.
 	OrgMembershipHistoryTable = &schema.Table{

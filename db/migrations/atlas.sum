@@ -1,4 +1,4 @@
-h1:a04+WwgE24iL/+xkgQFAWTOB6I4jqCVGDstOKumBs7I=
+h1:UIZNn/a5N9u5OWI1xyYn8+EpdhHSQgmin6poHFiLPfY=
 20251229183159_init.sql h1:3uf/ftr28zW8YUD9qAaY2GESQHC7pYmkhlI6oDWUCKU=
 20251229183201_init_history.sql h1:1tFSeCDWvZgb2Ctw80C/s3tqVPNLADQw9fSDACzL8WA=
 20251231045221_workflow.sql h1:5bLq4cHh2kxUV7xajK5bq5McKKpr88HmufYauTdsgUw=
@@ -170,3 +170,5 @@ h1:a04+WwgE24iL/+xkgQFAWTOB6I4jqCVGDstOKumBs7I=
 20260722075914_onboarding_nda_requests_history.sql h1:h2Gq6sROKPreiAiM54UIjTHceGJacchauW0XDgUTDNo=
 20260723204906_assessment_name.sql h1:2yt7XqlG05AXHyzCje3SbjAzshIjeTW/77ANxnIp6/M=
 20260728193948_directorymembershipindex.sql h1:GMmB5LtkGz7WAmqILpbWGoqmZD1e8kq7eRcPyOrFs7Y=
+20260729110623_tfa_enforcement.sql h1:mpWrE6/mlJPkfxaERwoYJ+7UH6k7C82+4jxlE5s1X3s=
+20260729110633_tfa_enforcement_history.sql h1:Z2mg8+y6AQA2IAp39vnbJLCm2ijuxWIVz98IMp++8x0=

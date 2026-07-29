@@ -96896,6 +96896,10 @@ type OrgMembershipHistoryMutation struct {
 	sso_exempt_reason       *string
 	sso_exempt_granted_by   *string
 	sso_exempt_granted_at   *models.DateTime
+	tfa_enforced            *bool
+	tfa_enforced_reason     *string
+	tfa_enforced_by         *string
+	tfa_enforced_at         *models.DateTime
 	clearedFields           map[string]struct{}
 	done                    bool
 	oldValue                func(context.Context) (*OrgMembershipHistory, error)
@@ -97676,6 +97680,202 @@ func (m *OrgMembershipHistoryMutation) ResetSSOExemptGrantedAt() {
 	delete(m.clearedFields, orgmembershiphistory.FieldSSOExemptGrantedAt)
 }
 
+// SetTfaEnforced sets the "tfa_enforced" field.
+func (m *OrgMembershipHistoryMutation) SetTfaEnforced(b bool) {
+	m.tfa_enforced = &b
+}
+
+// TfaEnforced returns the value of the "tfa_enforced" field in the mutation.
+func (m *OrgMembershipHistoryMutation) TfaEnforced() (r bool, exists bool) {
+	v := m.tfa_enforced
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTfaEnforced returns the old "tfa_enforced" field's value of the OrgMembershipHistory entity.
+// If the OrgMembershipHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrgMembershipHistoryMutation) OldTfaEnforced(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTfaEnforced is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTfaEnforced requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTfaEnforced: %w", err)
+	}
+	return oldValue.TfaEnforced, nil
+}
+
+// ClearTfaEnforced clears the value of the "tfa_enforced" field.
+func (m *OrgMembershipHistoryMutation) ClearTfaEnforced() {
+	m.tfa_enforced = nil
+	m.clearedFields[orgmembershiphistory.FieldTfaEnforced] = struct{}{}
+}
+
+// TfaEnforcedCleared returns if the "tfa_enforced" field was cleared in this mutation.
+func (m *OrgMembershipHistoryMutation) TfaEnforcedCleared() bool {
+	_, ok := m.clearedFields[orgmembershiphistory.FieldTfaEnforced]
+	return ok
+}
+
+// ResetTfaEnforced resets all changes to the "tfa_enforced" field.
+func (m *OrgMembershipHistoryMutation) ResetTfaEnforced() {
+	m.tfa_enforced = nil
+	delete(m.clearedFields, orgmembershiphistory.FieldTfaEnforced)
+}
+
+// SetTfaEnforcedReason sets the "tfa_enforced_reason" field.
+func (m *OrgMembershipHistoryMutation) SetTfaEnforcedReason(s string) {
+	m.tfa_enforced_reason = &s
+}
+
+// TfaEnforcedReason returns the value of the "tfa_enforced_reason" field in the mutation.
+func (m *OrgMembershipHistoryMutation) TfaEnforcedReason() (r string, exists bool) {
+	v := m.tfa_enforced_reason
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTfaEnforcedReason returns the old "tfa_enforced_reason" field's value of the OrgMembershipHistory entity.
+// If the OrgMembershipHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrgMembershipHistoryMutation) OldTfaEnforcedReason(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTfaEnforcedReason is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTfaEnforcedReason requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTfaEnforcedReason: %w", err)
+	}
+	return oldValue.TfaEnforcedReason, nil
+}
+
+// ClearTfaEnforcedReason clears the value of the "tfa_enforced_reason" field.
+func (m *OrgMembershipHistoryMutation) ClearTfaEnforcedReason() {
+	m.tfa_enforced_reason = nil
+	m.clearedFields[orgmembershiphistory.FieldTfaEnforcedReason] = struct{}{}
+}
+
+// TfaEnforcedReasonCleared returns if the "tfa_enforced_reason" field was cleared in this mutation.
+func (m *OrgMembershipHistoryMutation) TfaEnforcedReasonCleared() bool {
+	_, ok := m.clearedFields[orgmembershiphistory.FieldTfaEnforcedReason]
+	return ok
+}
+
+// ResetTfaEnforcedReason resets all changes to the "tfa_enforced_reason" field.
+func (m *OrgMembershipHistoryMutation) ResetTfaEnforcedReason() {
+	m.tfa_enforced_reason = nil
+	delete(m.clearedFields, orgmembershiphistory.FieldTfaEnforcedReason)
+}
+
+// SetTfaEnforcedBy sets the "tfa_enforced_by" field.
+func (m *OrgMembershipHistoryMutation) SetTfaEnforcedBy(s string) {
+	m.tfa_enforced_by = &s
+}
+
+// TfaEnforcedBy returns the value of the "tfa_enforced_by" field in the mutation.
+func (m *OrgMembershipHistoryMutation) TfaEnforcedBy() (r string, exists bool) {
+	v := m.tfa_enforced_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTfaEnforcedBy returns the old "tfa_enforced_by" field's value of the OrgMembershipHistory entity.
+// If the OrgMembershipHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrgMembershipHistoryMutation) OldTfaEnforcedBy(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTfaEnforcedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTfaEnforcedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTfaEnforcedBy: %w", err)
+	}
+	return oldValue.TfaEnforcedBy, nil
+}
+
+// ClearTfaEnforcedBy clears the value of the "tfa_enforced_by" field.
+func (m *OrgMembershipHistoryMutation) ClearTfaEnforcedBy() {
+	m.tfa_enforced_by = nil
+	m.clearedFields[orgmembershiphistory.FieldTfaEnforcedBy] = struct{}{}
+}
+
+// TfaEnforcedByCleared returns if the "tfa_enforced_by" field was cleared in this mutation.
+func (m *OrgMembershipHistoryMutation) TfaEnforcedByCleared() bool {
+	_, ok := m.clearedFields[orgmembershiphistory.FieldTfaEnforcedBy]
+	return ok
+}
+
+// ResetTfaEnforcedBy resets all changes to the "tfa_enforced_by" field.
+func (m *OrgMembershipHistoryMutation) ResetTfaEnforcedBy() {
+	m.tfa_enforced_by = nil
+	delete(m.clearedFields, orgmembershiphistory.FieldTfaEnforcedBy)
+}
+
+// SetTfaEnforcedAt sets the "tfa_enforced_at" field.
+func (m *OrgMembershipHistoryMutation) SetTfaEnforcedAt(mt models.DateTime) {
+	m.tfa_enforced_at = &mt
+}
+
+// TfaEnforcedAt returns the value of the "tfa_enforced_at" field in the mutation.
+func (m *OrgMembershipHistoryMutation) TfaEnforcedAt() (r models.DateTime, exists bool) {
+	v := m.tfa_enforced_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTfaEnforcedAt returns the old "tfa_enforced_at" field's value of the OrgMembershipHistory entity.
+// If the OrgMembershipHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *OrgMembershipHistoryMutation) OldTfaEnforcedAt(ctx context.Context) (v *models.DateTime, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTfaEnforcedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTfaEnforcedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTfaEnforcedAt: %w", err)
+	}
+	return oldValue.TfaEnforcedAt, nil
+}
+
+// ClearTfaEnforcedAt clears the value of the "tfa_enforced_at" field.
+func (m *OrgMembershipHistoryMutation) ClearTfaEnforcedAt() {
+	m.tfa_enforced_at = nil
+	m.clearedFields[orgmembershiphistory.FieldTfaEnforcedAt] = struct{}{}
+}
+
+// TfaEnforcedAtCleared returns if the "tfa_enforced_at" field was cleared in this mutation.
+func (m *OrgMembershipHistoryMutation) TfaEnforcedAtCleared() bool {
+	_, ok := m.clearedFields[orgmembershiphistory.FieldTfaEnforcedAt]
+	return ok
+}
+
+// ResetTfaEnforcedAt resets all changes to the "tfa_enforced_at" field.
+func (m *OrgMembershipHistoryMutation) ResetTfaEnforcedAt() {
+	m.tfa_enforced_at = nil
+	delete(m.clearedFields, orgmembershiphistory.FieldTfaEnforcedAt)
+}
+
 // Where appends a list predicates to the OrgMembershipHistoryMutation builder.
 func (m *OrgMembershipHistoryMutation) Where(ps ...predicate.OrgMembershipHistory) {
 	m.predicates = append(m.predicates, ps...)
@@ -97710,7 +97910,7 @@ func (m *OrgMembershipHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *OrgMembershipHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 15)
+	fields := make([]string, 0, 19)
 	if m.history_time != nil {
 		fields = append(fields, orgmembershiphistory.FieldHistoryTime)
 	}
@@ -97756,6 +97956,18 @@ func (m *OrgMembershipHistoryMutation) Fields() []string {
 	if m.sso_exempt_granted_at != nil {
 		fields = append(fields, orgmembershiphistory.FieldSSOExemptGrantedAt)
 	}
+	if m.tfa_enforced != nil {
+		fields = append(fields, orgmembershiphistory.FieldTfaEnforced)
+	}
+	if m.tfa_enforced_reason != nil {
+		fields = append(fields, orgmembershiphistory.FieldTfaEnforcedReason)
+	}
+	if m.tfa_enforced_by != nil {
+		fields = append(fields, orgmembershiphistory.FieldTfaEnforcedBy)
+	}
+	if m.tfa_enforced_at != nil {
+		fields = append(fields, orgmembershiphistory.FieldTfaEnforcedAt)
+	}
 	return fields
 }
 
@@ -97794,6 +98006,14 @@ func (m *OrgMembershipHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.SSOExemptGrantedBy()
 	case orgmembershiphistory.FieldSSOExemptGrantedAt:
 		return m.SSOExemptGrantedAt()
+	case orgmembershiphistory.FieldTfaEnforced:
+		return m.TfaEnforced()
+	case orgmembershiphistory.FieldTfaEnforcedReason:
+		return m.TfaEnforcedReason()
+	case orgmembershiphistory.FieldTfaEnforcedBy:
+		return m.TfaEnforcedBy()
+	case orgmembershiphistory.FieldTfaEnforcedAt:
+		return m.TfaEnforcedAt()
 	}
 	return nil, false
 }
@@ -97833,6 +98053,14 @@ func (m *OrgMembershipHistoryMutation) OldField(ctx context.Context, name string
 		return m.OldSSOExemptGrantedBy(ctx)
 	case orgmembershiphistory.FieldSSOExemptGrantedAt:
 		return m.OldSSOExemptGrantedAt(ctx)
+	case orgmembershiphistory.FieldTfaEnforced:
+		return m.OldTfaEnforced(ctx)
+	case orgmembershiphistory.FieldTfaEnforcedReason:
+		return m.OldTfaEnforcedReason(ctx)
+	case orgmembershiphistory.FieldTfaEnforcedBy:
+		return m.OldTfaEnforcedBy(ctx)
+	case orgmembershiphistory.FieldTfaEnforcedAt:
+		return m.OldTfaEnforcedAt(ctx)
 	}
 	return nil, fmt.Errorf("unknown OrgMembershipHistory field %s", name)
 }
@@ -97947,6 +98175,34 @@ func (m *OrgMembershipHistoryMutation) SetField(name string, value ent.Value) er
 		}
 		m.SetSSOExemptGrantedAt(v)
 		return nil
+	case orgmembershiphistory.FieldTfaEnforced:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTfaEnforced(v)
+		return nil
+	case orgmembershiphistory.FieldTfaEnforcedReason:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTfaEnforcedReason(v)
+		return nil
+	case orgmembershiphistory.FieldTfaEnforcedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTfaEnforcedBy(v)
+		return nil
+	case orgmembershiphistory.FieldTfaEnforcedAt:
+		v, ok := value.(models.DateTime)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTfaEnforcedAt(v)
+		return nil
 	}
 	return fmt.Errorf("unknown OrgMembershipHistory field %s", name)
 }
@@ -98007,6 +98263,18 @@ func (m *OrgMembershipHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(orgmembershiphistory.FieldSSOExemptGrantedAt) {
 		fields = append(fields, orgmembershiphistory.FieldSSOExemptGrantedAt)
 	}
+	if m.FieldCleared(orgmembershiphistory.FieldTfaEnforced) {
+		fields = append(fields, orgmembershiphistory.FieldTfaEnforced)
+	}
+	if m.FieldCleared(orgmembershiphistory.FieldTfaEnforcedReason) {
+		fields = append(fields, orgmembershiphistory.FieldTfaEnforcedReason)
+	}
+	if m.FieldCleared(orgmembershiphistory.FieldTfaEnforcedBy) {
+		fields = append(fields, orgmembershiphistory.FieldTfaEnforcedBy)
+	}
+	if m.FieldCleared(orgmembershiphistory.FieldTfaEnforcedAt) {
+		fields = append(fields, orgmembershiphistory.FieldTfaEnforcedAt)
+	}
 	return fields
 }
 
@@ -98050,6 +98318,18 @@ func (m *OrgMembershipHistoryMutation) ClearField(name string) error {
 		return nil
 	case orgmembershiphistory.FieldSSOExemptGrantedAt:
 		m.ClearSSOExemptGrantedAt()
+		return nil
+	case orgmembershiphistory.FieldTfaEnforced:
+		m.ClearTfaEnforced()
+		return nil
+	case orgmembershiphistory.FieldTfaEnforcedReason:
+		m.ClearTfaEnforcedReason()
+		return nil
+	case orgmembershiphistory.FieldTfaEnforcedBy:
+		m.ClearTfaEnforcedBy()
+		return nil
+	case orgmembershiphistory.FieldTfaEnforcedAt:
+		m.ClearTfaEnforcedAt()
 		return nil
 	}
 	return fmt.Errorf("unknown OrgMembershipHistory nullable field %s", name)
@@ -98103,6 +98383,18 @@ func (m *OrgMembershipHistoryMutation) ResetField(name string) error {
 		return nil
 	case orgmembershiphistory.FieldSSOExemptGrantedAt:
 		m.ResetSSOExemptGrantedAt()
+		return nil
+	case orgmembershiphistory.FieldTfaEnforced:
+		m.ResetTfaEnforced()
+		return nil
+	case orgmembershiphistory.FieldTfaEnforcedReason:
+		m.ResetTfaEnforcedReason()
+		return nil
+	case orgmembershiphistory.FieldTfaEnforcedBy:
+		m.ResetTfaEnforcedBy()
+		return nil
+	case orgmembershiphistory.FieldTfaEnforcedAt:
+		m.ResetTfaEnforcedAt()
 		return nil
 	}
 	return fmt.Errorf("unknown OrgMembershipHistory field %s", name)

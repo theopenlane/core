@@ -84,7 +84,8 @@ type nonce string
 // fetchSSOStatus returns the SSO status for an organization. For the org level lookup (no userID) it
 // reports the raw organization enforcement; when a userID is provided it additionally applies that
 // user's owner, per-user, and per-domain exemptions, so callers and the webfinger acct lookup do not
-// route an exempt user through SSO. Provider, discovery URL, and TFA enforcement are always reported
+// route an exempt user through SSO. Provider and discovery URL are reported from the organization
+// setting. TFA enforcement is reported from the organization setting for org-level lookups
 func (h *Handler) fetchSSOStatus(ctx context.Context, orgID, userID string) (models.SSOStatusResponse, error) {
 	in, setting, err := sso.LoadEnforcement(ctx, h.DBClient, orgID, userID, "")
 	if err != nil {
@@ -99,8 +100,14 @@ func (h *Handler) fetchSSOStatus(ctx context.Context, orgID, userID string) (mod
 		IsOrgOwner:     in.IsOwner,
 	}
 
-	if userID != "" && out.Enforced {
-		out.Enforced = sso.Evaluate(in).MustSSO
+	if userID != "" {
+		decision := sso.Evaluate(in)
+
+		out.OrgTFAEnforced = decision.TFARequired
+
+		if out.Enforced {
+			out.Enforced = decision.MustSSO
+		}
 	}
 
 	if setting.IdentityProvider != enums.SSOProvider("") {

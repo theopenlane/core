@@ -37786,6 +37786,98 @@ func (ec *executionContext) fieldContext_OrgMembershipHistory_ssoExemptGrantedAt
 	return graphql.NewScalarFieldContext("OrgMembershipHistory", field, false, false, errors.New("field of type DateTime does not have child fields"))
 }
 
+func (ec *executionContext) _OrgMembershipHistory_tfaEnforced(ctx context.Context, field graphql.CollectedField, obj *historygenerated.OrgMembershipHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OrgMembershipHistory_tfaEnforced(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.TfaEnforced, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalOBoolean2bool(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OrgMembershipHistory_tfaEnforced(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OrgMembershipHistory", field, false, false, errors.New("field of type Boolean does not have child fields"))
+}
+
+func (ec *executionContext) _OrgMembershipHistory_tfaEnforcedReason(ctx context.Context, field graphql.CollectedField, obj *historygenerated.OrgMembershipHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OrgMembershipHistory_tfaEnforcedReason(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.TfaEnforcedReason, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OrgMembershipHistory_tfaEnforcedReason(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OrgMembershipHistory", field, false, false, errors.New("field of type String does not have child fields"))
+}
+
+func (ec *executionContext) _OrgMembershipHistory_tfaEnforcedBy(ctx context.Context, field graphql.CollectedField, obj *historygenerated.OrgMembershipHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OrgMembershipHistory_tfaEnforcedBy(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.TfaEnforcedBy, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OrgMembershipHistory_tfaEnforcedBy(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OrgMembershipHistory", field, false, false, errors.New("field of type String does not have child fields"))
+}
+
+func (ec *executionContext) _OrgMembershipHistory_tfaEnforcedAt(ctx context.Context, field graphql.CollectedField, obj *historygenerated.OrgMembershipHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_OrgMembershipHistory_tfaEnforcedAt(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.TfaEnforcedAt, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *models.DateTime) graphql.Marshaler {
+			return ec.marshalODateTime2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐDateTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_OrgMembershipHistory_tfaEnforcedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("OrgMembershipHistory", field, false, false, errors.New("field of type DateTime does not have child fields"))
+}
+
 func (ec *executionContext) _OrgMembershipHistoryConnection_edges(ctx context.Context, field graphql.CollectedField, obj *historygenerated.OrgMembershipHistoryConnection) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -162510,7 +162602,7 @@ func (ec *executionContext) unmarshalInputOrgMembershipHistoryWhereInput(ctx con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "idEqualFold", "idContainsFold", "historyTime", "historyTimeNEQ", "historyTimeIn", "historyTimeNotIn", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refGT", "refGTE", "refLT", "refLTE", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorGT", "updatedByImpersonatorGTE", "updatedByImpersonatorLT", "updatedByImpersonatorLTE", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "role", "roleNEQ", "roleIn", "roleNotIn", "organizationID", "organizationIDNEQ", "organizationIDIn", "organizationIDNotIn", "organizationIDGT", "organizationIDGTE", "organizationIDLT", "organizationIDLTE", "organizationIDContains", "organizationIDHasPrefix", "organizationIDHasSuffix", "organizationIDEqualFold", "organizationIDContainsFold", "userID", "userIDNEQ", "userIDIn", "userIDNotIn", "userIDGT", "userIDGTE", "userIDLT", "userIDLTE", "userIDContains", "userIDHasPrefix", "userIDHasSuffix", "userIDEqualFold", "userIDContainsFold", "ssoExempt", "ssoExemptNEQ", "ssoExemptIsNil", "ssoExemptNotNil", "ssoExemptReason", "ssoExemptReasonNEQ", "ssoExemptReasonIn", "ssoExemptReasonNotIn", "ssoExemptReasonGT", "ssoExemptReasonGTE", "ssoExemptReasonLT", "ssoExemptReasonLTE", "ssoExemptReasonContains", "ssoExemptReasonHasPrefix", "ssoExemptReasonHasSuffix", "ssoExemptReasonIsNil", "ssoExemptReasonNotNil", "ssoExemptReasonEqualFold", "ssoExemptReasonContainsFold", "ssoExemptGrantedBy", "ssoExemptGrantedByNEQ", "ssoExemptGrantedByIn", "ssoExemptGrantedByNotIn", "ssoExemptGrantedByGT", "ssoExemptGrantedByGTE", "ssoExemptGrantedByLT", "ssoExemptGrantedByLTE", "ssoExemptGrantedByContains", "ssoExemptGrantedByHasPrefix", "ssoExemptGrantedByHasSuffix", "ssoExemptGrantedByIsNil", "ssoExemptGrantedByNotNil", "ssoExemptGrantedByEqualFold", "ssoExemptGrantedByContainsFold", "ssoExemptGrantedAt", "ssoExemptGrantedAtNEQ", "ssoExemptGrantedAtIn", "ssoExemptGrantedAtNotIn", "ssoExemptGrantedAtGT", "ssoExemptGrantedAtGTE", "ssoExemptGrantedAtLT", "ssoExemptGrantedAtLTE", "ssoExemptGrantedAtIsNil", "ssoExemptGrantedAtNotNil"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "idEqualFold", "idContainsFold", "historyTime", "historyTimeNEQ", "historyTimeIn", "historyTimeNotIn", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refGT", "refGTE", "refLT", "refLTE", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorGT", "updatedByImpersonatorGTE", "updatedByImpersonatorLT", "updatedByImpersonatorLTE", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "role", "roleNEQ", "roleIn", "roleNotIn", "organizationID", "organizationIDNEQ", "organizationIDIn", "organizationIDNotIn", "organizationIDGT", "organizationIDGTE", "organizationIDLT", "organizationIDLTE", "organizationIDContains", "organizationIDHasPrefix", "organizationIDHasSuffix", "organizationIDEqualFold", "organizationIDContainsFold", "userID", "userIDNEQ", "userIDIn", "userIDNotIn", "userIDGT", "userIDGTE", "userIDLT", "userIDLTE", "userIDContains", "userIDHasPrefix", "userIDHasSuffix", "userIDEqualFold", "userIDContainsFold", "ssoExempt", "ssoExemptNEQ", "ssoExemptIsNil", "ssoExemptNotNil", "ssoExemptReason", "ssoExemptReasonNEQ", "ssoExemptReasonIn", "ssoExemptReasonNotIn", "ssoExemptReasonGT", "ssoExemptReasonGTE", "ssoExemptReasonLT", "ssoExemptReasonLTE", "ssoExemptReasonContains", "ssoExemptReasonHasPrefix", "ssoExemptReasonHasSuffix", "ssoExemptReasonIsNil", "ssoExemptReasonNotNil", "ssoExemptReasonEqualFold", "ssoExemptReasonContainsFold", "ssoExemptGrantedBy", "ssoExemptGrantedByNEQ", "ssoExemptGrantedByIn", "ssoExemptGrantedByNotIn", "ssoExemptGrantedByGT", "ssoExemptGrantedByGTE", "ssoExemptGrantedByLT", "ssoExemptGrantedByLTE", "ssoExemptGrantedByContains", "ssoExemptGrantedByHasPrefix", "ssoExemptGrantedByHasSuffix", "ssoExemptGrantedByIsNil", "ssoExemptGrantedByNotNil", "ssoExemptGrantedByEqualFold", "ssoExemptGrantedByContainsFold", "ssoExemptGrantedAt", "ssoExemptGrantedAtNEQ", "ssoExemptGrantedAtIn", "ssoExemptGrantedAtNotIn", "ssoExemptGrantedAtGT", "ssoExemptGrantedAtGTE", "ssoExemptGrantedAtLT", "ssoExemptGrantedAtLTE", "ssoExemptGrantedAtIsNil", "ssoExemptGrantedAtNotNil", "tfaEnforced", "tfaEnforcedNEQ", "tfaEnforcedIsNil", "tfaEnforcedNotNil", "tfaEnforcedReason", "tfaEnforcedReasonNEQ", "tfaEnforcedReasonIn", "tfaEnforcedReasonNotIn", "tfaEnforcedReasonGT", "tfaEnforcedReasonGTE", "tfaEnforcedReasonLT", "tfaEnforcedReasonLTE", "tfaEnforcedReasonContains", "tfaEnforcedReasonHasPrefix", "tfaEnforcedReasonHasSuffix", "tfaEnforcedReasonIsNil", "tfaEnforcedReasonNotNil", "tfaEnforcedReasonEqualFold", "tfaEnforcedReasonContainsFold", "tfaEnforcedBy", "tfaEnforcedByNEQ", "tfaEnforcedByIn", "tfaEnforcedByNotIn", "tfaEnforcedByGT", "tfaEnforcedByGTE", "tfaEnforcedByLT", "tfaEnforcedByLTE", "tfaEnforcedByContains", "tfaEnforcedByHasPrefix", "tfaEnforcedByHasSuffix", "tfaEnforcedByIsNil", "tfaEnforcedByNotNil", "tfaEnforcedByEqualFold", "tfaEnforcedByContainsFold", "tfaEnforcedAt", "tfaEnforcedAtNEQ", "tfaEnforcedAtIn", "tfaEnforcedAtNotIn", "tfaEnforcedAtGT", "tfaEnforcedAtGTE", "tfaEnforcedAtLT", "tfaEnforcedAtLTE", "tfaEnforcedAtIsNil", "tfaEnforcedAtNotNil"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -163770,6 +163862,314 @@ func (ec *executionContext) unmarshalInputOrgMembershipHistoryWhereInput(ctx con
 				return it, err
 			}
 			it.SSOExemptGrantedAtNotNil = data
+		case "tfaEnforced":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforced"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforced = data
+		case "tfaEnforcedNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedNEQ"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedNEQ = data
+		case "tfaEnforcedIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedIsNil = data
+		case "tfaEnforcedNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedNotNil = data
+		case "tfaEnforcedReason":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedReason"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedReason = data
+		case "tfaEnforcedReasonNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedReasonNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedReasonNEQ = data
+		case "tfaEnforcedReasonIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedReasonIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedReasonIn = data
+		case "tfaEnforcedReasonNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedReasonNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedReasonNotIn = data
+		case "tfaEnforcedReasonGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedReasonGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedReasonGT = data
+		case "tfaEnforcedReasonGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedReasonGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedReasonGTE = data
+		case "tfaEnforcedReasonLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedReasonLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedReasonLT = data
+		case "tfaEnforcedReasonLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedReasonLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedReasonLTE = data
+		case "tfaEnforcedReasonContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedReasonContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedReasonContains = data
+		case "tfaEnforcedReasonHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedReasonHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedReasonHasPrefix = data
+		case "tfaEnforcedReasonHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedReasonHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedReasonHasSuffix = data
+		case "tfaEnforcedReasonIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedReasonIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedReasonIsNil = data
+		case "tfaEnforcedReasonNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedReasonNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedReasonNotNil = data
+		case "tfaEnforcedReasonEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedReasonEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedReasonEqualFold = data
+		case "tfaEnforcedReasonContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedReasonContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedReasonContainsFold = data
+		case "tfaEnforcedBy":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedBy"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedBy = data
+		case "tfaEnforcedByNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedByNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedByNEQ = data
+		case "tfaEnforcedByIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedByIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedByIn = data
+		case "tfaEnforcedByNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedByNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedByNotIn = data
+		case "tfaEnforcedByGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedByGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedByGT = data
+		case "tfaEnforcedByGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedByGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedByGTE = data
+		case "tfaEnforcedByLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedByLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedByLT = data
+		case "tfaEnforcedByLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedByLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedByLTE = data
+		case "tfaEnforcedByContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedByContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedByContains = data
+		case "tfaEnforcedByHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedByHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedByHasPrefix = data
+		case "tfaEnforcedByHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedByHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedByHasSuffix = data
+		case "tfaEnforcedByIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedByIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedByIsNil = data
+		case "tfaEnforcedByNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedByNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedByNotNil = data
+		case "tfaEnforcedByEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedByEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedByEqualFold = data
+		case "tfaEnforcedByContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedByContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedByContainsFold = data
+		case "tfaEnforcedAt":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedAt"))
+			data, err := ec.unmarshalODateTime2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐDateTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedAt = data
+		case "tfaEnforcedAtNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedAtNEQ"))
+			data, err := ec.unmarshalODateTime2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐDateTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedAtNEQ = data
+		case "tfaEnforcedAtIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedAtIn"))
+			data, err := ec.unmarshalODateTime2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐDateTimeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedAtIn = data
+		case "tfaEnforcedAtNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedAtNotIn"))
+			data, err := ec.unmarshalODateTime2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐDateTimeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedAtNotIn = data
+		case "tfaEnforcedAtGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedAtGT"))
+			data, err := ec.unmarshalODateTime2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐDateTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedAtGT = data
+		case "tfaEnforcedAtGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedAtGTE"))
+			data, err := ec.unmarshalODateTime2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐDateTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedAtGTE = data
+		case "tfaEnforcedAtLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedAtLT"))
+			data, err := ec.unmarshalODateTime2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐDateTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedAtLT = data
+		case "tfaEnforcedAtLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedAtLTE"))
+			data, err := ec.unmarshalODateTime2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐDateTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedAtLTE = data
+		case "tfaEnforcedAtIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedAtIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedAtIsNil = data
+		case "tfaEnforcedAtNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tfaEnforcedAtNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.TfaEnforcedAtNotNil = data
 		}
 	}
 	return it, nil
@@ -260431,6 +260831,26 @@ func (ec *executionContext) _OrgMembershipHistory(ctx context.Context, sel ast.S
 			}
 		case "ssoExemptGrantedAt":
 			out.Values[i] = ec._OrgMembershipHistory_ssoExemptGrantedAt(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "tfaEnforced":
+			out.Values[i] = ec._OrgMembershipHistory_tfaEnforced(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "tfaEnforcedReason":
+			out.Values[i] = ec._OrgMembershipHistory_tfaEnforcedReason(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "tfaEnforcedBy":
+			out.Values[i] = ec._OrgMembershipHistory_tfaEnforcedBy(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "tfaEnforcedAt":
+			out.Values[i] = ec._OrgMembershipHistory_tfaEnforcedAt(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}

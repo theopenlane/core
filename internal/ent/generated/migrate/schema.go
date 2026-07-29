@@ -5446,6 +5446,10 @@ var (
 		{Name: "sso_exempt_reason", Type: field.TypeString, Nullable: true},
 		{Name: "sso_exempt_granted_by", Type: field.TypeString, Nullable: true},
 		{Name: "sso_exempt_granted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "tfa_enforced", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "tfa_enforced_reason", Type: field.TypeString, Nullable: true},
+		{Name: "tfa_enforced_by", Type: field.TypeString, Nullable: true},
+		{Name: "tfa_enforced_at", Type: field.TypeTime, Nullable: true},
 		{Name: "organization_id", Type: field.TypeString},
 		{Name: "user_id", Type: field.TypeString},
 	}
@@ -5457,13 +5461,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "org_memberships_organizations_organization",
-				Columns:    []*schema.Column{OrgMembershipsColumns[11]},
+				Columns:    []*schema.Column{OrgMembershipsColumns[15]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "org_memberships_users_user",
-				Columns:    []*schema.Column{OrgMembershipsColumns[12]},
+				Columns:    []*schema.Column{OrgMembershipsColumns[16]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -5472,7 +5476,7 @@ var (
 			{
 				Name:    "orgmembership_user_id_organization_id",
 				Unique:  true,
-				Columns: []*schema.Column{OrgMembershipsColumns[12], OrgMembershipsColumns[11]},
+				Columns: []*schema.Column{OrgMembershipsColumns[16], OrgMembershipsColumns[15]},
 			},
 		},
 	}
