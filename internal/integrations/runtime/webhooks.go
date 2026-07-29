@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/samber/lo"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/keygen"
 
 	"github.com/theopenlane/core/common/enums"
@@ -191,6 +192,8 @@ func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope operations.We
 		if err != nil {
 			return err
 		}
+
+		ctx = auth.EnsureIntegrationCaller(ctx, integration.OwnerID)
 	}
 
 	registration, err := r.Registry().WebhookEvent(src.DefinitionID, src.Webhook, src.Event)

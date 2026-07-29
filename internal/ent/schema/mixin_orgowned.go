@@ -18,7 +18,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
-	"github.com/theopenlane/core/pkg/anon"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -252,10 +251,10 @@ var defaultOrgInterceptorFunc InterceptorFunc = func(o ObjectOwnedMixin) ent.Int
 		}
 
 		// classify the anonymous caller for the access checks below
-		isAnon := anon.IsAnonymous(ctx)
+		isAnon := auth.IsAnonymousFromContext(ctx)
 
 		// questionnaire callers only happen via REST handlers
-		isQuestionnaireCaller := anon.IsQuestionnaire(ctx)
+		isQuestionnaireCaller := auth.IsQuestionnaireFromContext(ctx)
 
 		// Trust Center anon users without GraphQL key are blocked by BlockNonTrustCenterAnonymous middleware;
 		// questionnaire callers are legitimate REST callers and fall through to the org filter further down
@@ -312,7 +311,7 @@ func isAnonTrustCenterCaller(ctx context.Context) (string, bool, error) {
 		return "", false, auth.ErrNoAuthUser
 	}
 
-	if _, orgID, ok := anon.TrustCenterScope(ctx); ok {
+	if _, orgID, ok := auth.TrustCenterScopeFromContext(ctx); ok {
 		return orgID, true, nil
 	}
 
