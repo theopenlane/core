@@ -37,6 +37,11 @@ func (r *assessmentResolver) WorkflowTimeline(ctx context.Context, obj *generate
 	return workflowResolverTimeline(ctx, generated.TypeAssessment, obj.ID, after, first, before, last, orderBy, where, includeEmitFailures)
 }
 
+// CreateAssessmentTemplate is the resolver for the createAssessmentTemplate field.
+func (r *mutationResolver) CreateAssessmentTemplate(ctx context.Context, input model.CreateAssessmentTemplateInput) (*model.AssessmentTemplateCreatePayload, error) {
+	return createAssessmentTemplate(ctx, input)
+}
+
 // CreateAssessment is the resolver for the createAssessment field.
 func (r *mutationResolver) CreateAssessment(ctx context.Context, input generated.CreateAssessmentInput) (*model.AssessmentCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
