@@ -21,7 +21,6 @@ import (
 	access "github.com/theopenlane/core/internal/ent/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
-	"github.com/theopenlane/core/pkg/anon"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/mapx"
 )
@@ -136,7 +135,7 @@ func CanEditObjectUnderParents(parents []string, fetch func(ctx context.Context,
 // CheckOrgReadAccess checks if the requestor has access to read the organization
 func CheckOrgReadAccess() privacy.QueryRule {
 	return privacy.QueryRuleFunc(func(ctx context.Context, q ent.Query) error {
-		if anon.IsTrustCenter(ctx) {
+		if auth.IsTrustCenterFromContext(ctx) {
 			return privacy.Denyf("anonymous users cannot access organization data")
 		}
 
@@ -404,7 +403,7 @@ func mapEdgeToObjectType(ctx context.Context, schema string, edge string) authzg
 // for an anon trust center request and the only edge to check is for the
 // trust_center edge. This allows the setting of the edge on a trust center child when creating things like an nda request
 func allowTrustCenterEdgeForAnon(ctx context.Context, edges []string) bool {
-	if !anon.IsTrustCenter(ctx) {
+	if !auth.IsTrustCenterFromContext(ctx) {
 		return false
 	}
 

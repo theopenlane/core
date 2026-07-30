@@ -1785,6 +1785,14 @@ var (
 				Columns: []*schema.Column{DirectoryMembershipsColumns[22], DirectoryMembershipsColumns[23], DirectoryMembershipsColumns[24]},
 			},
 			{
+				Name:    "directorymembership_directory_account_id_directory_group_id",
+				Unique:  true,
+				Columns: []*schema.Column{DirectoryMembershipsColumns[22], DirectoryMembershipsColumns[23]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "removed_at is NULL",
+				},
+			},
+			{
 				Name:    "directorymembership_directory_instance_id_directory_account_id_directory_group_id",
 				Unique:  false,
 				Columns: []*schema.Column{DirectoryMembershipsColumns[9], DirectoryMembershipsColumns[22], DirectoryMembershipsColumns[23]},
@@ -1803,11 +1811,6 @@ var (
 				Name:    "directorymembership_platform_id_directory_sync_run_id",
 				Unique:  false,
 				Columns: []*schema.Column{DirectoryMembershipsColumns[27], DirectoryMembershipsColumns[24]},
-			},
-			{
-				Name:    "directorymembership_directory_account_id_directory_group_id",
-				Unique:  true,
-				Columns: []*schema.Column{DirectoryMembershipsColumns[22], DirectoryMembershipsColumns[23]},
 			},
 		},
 	}

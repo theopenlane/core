@@ -1101,7 +1101,7 @@
         },
         "subjectid": {
           "type": "string",
-          "description": "SubjectID is the stable subject id of the virtual support identity used for created_by/updated_by\nattribution. It must be a valid ULID and is consistent without a backing user row. Default should match anon.SupportSubjectID"
+          "description": "SubjectID is the stable subject id of the virtual support identity used for created_by/updated_by\nattribution. It must be a valid ULID and is consistent without a backing user row. Default should match auth.SupportSubjectID"
         },
         "password": {
           "type": "string",

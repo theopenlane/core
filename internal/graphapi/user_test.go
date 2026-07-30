@@ -12,10 +12,11 @@ import (
 
 	auth "github.com/theopenlane/iam/auth"
 
+	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/pkg/anon"
 )
 
 func TestQueryUser(t *testing.T) {
@@ -374,7 +375,7 @@ func TestMutationDeleteUser(t *testing.T) {
 func TestQueryUserSupportContext(t *testing.T) {
 	orgID := sharedTestUser1.OrganizationID
 
-	caller := auth.NewOrgSupportCaller(orgID, anon.SupportSubjectID, supportSubjectName, supportSubjectEmail)
+	caller := auth.NewOrgSupportCaller(orgID, auth.SupportSubjectID, supportSubjectName, supportSubjectEmail)
 	supportCtx := auth.WithCaller(sharedTestUser1.UserCtx, caller)
 
 	t.Run("Self returns synthetic support user", func(t *testing.T) {
@@ -383,7 +384,7 @@ func TestQueryUserSupportContext(t *testing.T) {
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
 
-		assert.Check(t, is.Equal(anon.SupportSubjectID, resp.Self.ID))
+		assert.Check(t, is.Equal(auth.SupportSubjectID, resp.Self.ID))
 		assert.Check(t, is.Equal(supportSubjectName, resp.Self.DisplayName))
 		assert.Check(t, is.Equal(supportSubjectEmail, resp.Self.Email))
 		assert.Check(t, resp.Self.Setting.EmailConfirmed)
@@ -392,12 +393,12 @@ func TestQueryUserSupportContext(t *testing.T) {
 	})
 
 	t.Run("User returns synthetic support user", func(t *testing.T) {
-		resp, err := suite.client.api.GetUserByID(supportCtx, anon.SupportSubjectID)
+		resp, err := suite.client.api.GetUserByID(supportCtx, auth.SupportSubjectID)
 
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
 
-		assert.Check(t, is.Equal(anon.SupportSubjectID, resp.User.ID))
+		assert.Check(t, is.Equal(auth.SupportSubjectID, resp.User.ID))
 		assert.Check(t, is.Equal(supportSubjectName, resp.User.DisplayName))
 		assert.Check(t, is.Equal(supportSubjectEmail, resp.User.Email))
 	})
@@ -409,10 +410,30 @@ func TestMutationDeleteUser_OrgOwnerCannotBeDeleted(t *testing.T) {
 
 	_, err := suite.client.api.DeleteUser(localTestOrg.owner.UserCtx, localTestOrg.owner.ID)
 
-	assert.ErrorContains(t, err, "organization owner cannot be deleted")
+	assert.ErrorContains(t, err, hooks.ErrOrgOwnerCannotBeDeleted.Error())
 
 	// cleanup
 	cleanupOrganizationDataWithContext(localTestOrg.owner.UserCtx, t)
+}
+
+func TestMutationDeleteUser_OrgOwnerCannotDeleteFromAnotherOrg(t *testing.T) {
+	t.Parallel()
+
+	newOrgAsOwner := suite.seedOrgOwner(t)
+
+	// storing here to use in cleanup because addUserToOrganization updates the active org context of the user
+	ownerOrgCtx := newOrgAsOwner.owner.UserCtx
+
+	newOrgAsMember := suite.seedFreshMinimalOrgUsers(t, false)
+
+	suite.addUserToOrganization(newOrgAsMember.owner.UserCtx, t, newOrgAsOwner.owner, enums.RoleMember, newOrgAsMember.owner.OrganizationID)
+
+	_, err := suite.client.api.DeleteUser(newOrgAsOwner.owner.UserCtx, newOrgAsOwner.owner.ID)
+
+	assert.ErrorContains(t, err, hooks.ErrOrgOwnerCannotBeDeleted.Error())
+
+	cleanupOrganizationDataWithContext(ownerOrgCtx, t)
+	cleanupOrganizationDataWithContext(newOrgAsMember.owner.UserCtx, t)
 }
 
 func TestMutationUserCascadeDelete(t *testing.T) {

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strconv"
 
 	"github.com/rs/zerolog/log"
 
@@ -12,6 +13,53 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
+
+// legacyScientificKey converts a numeric key like "147884153" into the "1.47884153e+08" form the
+// old CEL double conversion stored, so we can still find rows written before the fix; returns false
+// for non-numeric keys and for numbers small enough that the two forms are identical
+func legacyScientificKey(value string) (string, bool) {
+	parsed, err := strconv.ParseFloat(value, 64)
+	if err != nil {
+		return "", false
+	}
+
+	legacy := strconv.FormatFloat(parsed, 'g', -1, 64)
+	if legacy == value {
+		return "", false
+	}
+
+	return legacy, true
+}
+
+// findWithLegacyKeyAdoption runs the upsert lookup for one external id, retrying with the legacy
+// scientific notation form when the canonical form misses; a row found under the legacy key gets
+// its key repaired via the repair callback before it is returned, so the update path sees a row
+// that already carries the canonical key
+func findWithLegacyKeyAdoption[T any](ctx context.Context, externalID string, find func(context.Context, string) (T, error), repair func(context.Context, T) error) (T, error) {
+	existing, err := find(ctx, externalID)
+	if err == nil || !ent.IsNotFound(err) {
+		return existing, err
+	}
+
+	legacy, ok := legacyScientificKey(externalID)
+	if !ok {
+		return existing, err
+	}
+
+	adopted, legacyErr := find(ctx, legacy)
+	switch {
+	case ent.IsNotFound(legacyErr):
+		return existing, err
+	case legacyErr != nil:
+		return existing, legacyErr
+	}
+
+	if repairErr := repair(ctx, adopted); repairErr != nil {
+		return existing, repairErr
+	}
+
+	return adopted, nil
+}
 
 // persistCatalogUpsert marshals one prepared create input and persists it through the schema's
 // catalog-driven entityops upsert, mapping the entityops sentinels onto the ingest error classes.

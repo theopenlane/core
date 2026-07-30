@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/historygenerated/assessmenthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 
@@ -218,6 +219,20 @@ func (_u *AssessmentHistoryUpdate) SetNillableName(v *string) *AssessmentHistory
 	return _u
 }
 
+// SetAssessmentType sets the "assessment_type" field.
+func (_u *AssessmentHistoryUpdate) SetAssessmentType(v enums.AssessmentType) *AssessmentHistoryUpdate {
+	_u.mutation.SetAssessmentType(v)
+	return _u
+}
+
+// SetNillableAssessmentType sets the "assessment_type" field if the given value is not nil.
+func (_u *AssessmentHistoryUpdate) SetNillableAssessmentType(v *enums.AssessmentType) *AssessmentHistoryUpdate {
+	if v != nil {
+		_u.SetAssessmentType(*v)
+	}
+	return _u
+}
+
 // SetTemplateID sets the "template_id" field.
 func (_u *AssessmentHistoryUpdate) SetTemplateID(v string) *AssessmentHistoryUpdate {
 	_u.mutation.SetTemplateID(v)
@@ -336,6 +351,16 @@ func (_u *AssessmentHistoryUpdate) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *AssessmentHistoryUpdate) check() error {
+	if v, ok := _u.mutation.AssessmentType(); ok {
+		if err := assessmenthistory.AssessmentTypeValidator(v); err != nil {
+			return &ValidationError{Name: "assessment_type", err: fmt.Errorf(`historygenerated: validator failed for field "AssessmentHistory.assessment_type": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (_u *AssessmentHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *AssessmentHistoryUpdate {
 	_u.modifiers = append(_u.modifiers, modifiers...)
@@ -343,6 +368,9 @@ func (_u *AssessmentHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder
 }
 
 func (_u *AssessmentHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(assessmenthistory.Table, assessmenthistory.Columns, sqlgraph.NewFieldSpec(assessmenthistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -427,6 +455,9 @@ func (_u *AssessmentHistoryUpdate) sqlSave(ctx context.Context) (_node int, err 
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(assessmenthistory.FieldName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.AssessmentType(); ok {
+		_spec.SetField(assessmenthistory.FieldAssessmentType, field.TypeEnum, value)
 	}
 	if value, ok := _u.mutation.TemplateID(); ok {
 		_spec.SetField(assessmenthistory.FieldTemplateID, field.TypeString, value)
@@ -663,6 +694,20 @@ func (_u *AssessmentHistoryUpdateOne) SetNillableName(v *string) *AssessmentHist
 	return _u
 }
 
+// SetAssessmentType sets the "assessment_type" field.
+func (_u *AssessmentHistoryUpdateOne) SetAssessmentType(v enums.AssessmentType) *AssessmentHistoryUpdateOne {
+	_u.mutation.SetAssessmentType(v)
+	return _u
+}
+
+// SetNillableAssessmentType sets the "assessment_type" field if the given value is not nil.
+func (_u *AssessmentHistoryUpdateOne) SetNillableAssessmentType(v *enums.AssessmentType) *AssessmentHistoryUpdateOne {
+	if v != nil {
+		_u.SetAssessmentType(*v)
+	}
+	return _u
+}
+
 // SetTemplateID sets the "template_id" field.
 func (_u *AssessmentHistoryUpdateOne) SetTemplateID(v string) *AssessmentHistoryUpdateOne {
 	_u.mutation.SetTemplateID(v)
@@ -794,6 +839,16 @@ func (_u *AssessmentHistoryUpdateOne) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *AssessmentHistoryUpdateOne) check() error {
+	if v, ok := _u.mutation.AssessmentType(); ok {
+		if err := assessmenthistory.AssessmentTypeValidator(v); err != nil {
+			return &ValidationError{Name: "assessment_type", err: fmt.Errorf(`historygenerated: validator failed for field "AssessmentHistory.assessment_type": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (_u *AssessmentHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *AssessmentHistoryUpdateOne {
 	_u.modifiers = append(_u.modifiers, modifiers...)
@@ -801,6 +856,9 @@ func (_u *AssessmentHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuil
 }
 
 func (_u *AssessmentHistoryUpdateOne) sqlSave(ctx context.Context) (_node *AssessmentHistory, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(assessmenthistory.Table, assessmenthistory.Columns, sqlgraph.NewFieldSpec(assessmenthistory.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
@@ -902,6 +960,9 @@ func (_u *AssessmentHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Asses
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(assessmenthistory.FieldName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.AssessmentType(); ok {
+		_spec.SetField(assessmenthistory.FieldAssessmentType, field.TypeEnum, value)
 	}
 	if value, ok := _u.mutation.TemplateID(); ok {
 		_spec.SetField(assessmenthistory.FieldTemplateID, field.TypeString, value)

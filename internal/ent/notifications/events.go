@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 
+	"entgo.io/ent"
 	"github.com/stoewer/go-strcase"
 
 	"github.com/theopenlane/core/common/enums"
@@ -558,6 +559,12 @@ func RegisterGalaListeners(registry *gala.Registry) ([]gala.ListenerID, error) {
 			Topic:  eventqueue.MutationTopic(eventqueue.MutationConcernNotification, generated.TypeStandard),
 			Name:   "notifications.standard_update",
 			Handle: handleStandardMutation,
+		},
+		gala.Definition[eventqueue.MutationGalaPayload]{
+			Topic:      eventqueue.MutationTopic(eventqueue.MutationConcernNotification, generated.TypeProgram),
+			Name:       "notifications.program",
+			Operations: []string{ent.OpUpdate.String(), ent.OpUpdateOne.String()},
+			Handle:     handleProgramMutation,
 		},
 	)
 }

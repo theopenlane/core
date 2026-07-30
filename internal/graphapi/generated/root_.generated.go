@@ -135500,6 +135500,7 @@ input UpdateAssessmentInput {
   the name of the assessment, e.g. cloud providers, marketing team
   """
   name: String
+  assessmentType: AssessmentAssessmentType
   """
   the jsonschema object of the questionnaire. If not provided it will be inherited from the template.
   """

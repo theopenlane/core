@@ -5,6 +5,7 @@ import (
 	"errors"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	intobvs "github.com/theopenlane/core/internal/integrations/observability"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/gala"
@@ -68,12 +69,12 @@ func RegisterReconcileListener(runtime *gala.Gala, reg *registry.Registry, handl
 			}
 
 			if errors.Is(err, registry.ErrDefinitionNotFound) || errors.Is(err, registry.ErrOperationNotFound) {
-				logx.FromContext(ctx).Error().Err(err).Str("definition_id", src.DefinitionID).Str("operation", e.Operation).Msg("operation no longer registered, stopping cycle")
+				logx.FromContext(ctx).Error().Err(err).Str("definition_id", src.DefinitionID).Str(intobvs.FieldOperation, e.Operation).Msg("operation no longer registered, stopping cycle")
 				return true
 			}
 
 			if errors.Is(err, ErrOperationDisabled) {
-				logx.FromContext(ctx).Info().Str("integration_id", src.IntegrationID).Str("operation", e.Operation).Msg("operation disabled, stopping cycle")
+				logx.FromContext(ctx).Info().Str("integration_id", src.IntegrationID).Str(intobvs.FieldOperation, e.Operation).Msg("operation disabled, stopping cycle")
 				return true
 			}
 

@@ -6,6 +6,7 @@ import (
 	"errors"
 
 	"github.com/theopenlane/core/common/enums"
+	intobvs "github.com/theopenlane/core/internal/integrations/observability"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/gala"
@@ -61,7 +62,7 @@ func (r *Runtime) SeedScheduledOperations(ctx context.Context) error {
 			}
 
 			if op.DisabledForAll || (op.Disabled != nil && op.Disabled(nil)) {
-				logx.FromContext(ctx).Info().Str("definition_id", def.ID).Str("operation", op.Name).Msg("scheduled operation disabled, skipping seed")
+				logx.FromContext(ctx).Info().Str("definition_id", def.ID).Str(intobvs.FieldOperation, op.Name).Msg("scheduled operation disabled, skipping seed")
 
 				continue
 			}
@@ -92,18 +93,18 @@ func (r *Runtime) seedScheduledOperation(ctx context.Context, oc gala.OperationC
 
 	active, err := r.Gala().HasActiveJobWithMetadata(ctx, fragment)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("definition_id", src.DefinitionID).Str("operation", oc.Operation).Msg("failed to check for active scheduled operation job")
+		logx.FromContext(ctx).Error().Err(err).Str("definition_id", src.DefinitionID).Str(intobvs.FieldOperation, oc.Operation).Msg("failed to check for active scheduled operation job")
 
 		return err
 	}
 
 	if active {
-		logx.FromContext(ctx).Debug().Str("definition_id", src.DefinitionID).Str("operation", oc.Operation).Msg("scheduled operation already active, skipping seed")
+		logx.FromContext(ctx).Debug().Str("definition_id", src.DefinitionID).Str(intobvs.FieldOperation, oc.Operation).Msg("scheduled operation already active, skipping seed")
 
 		return nil
 	}
 
-	logx.FromContext(ctx).Info().Str("definition_id", src.DefinitionID).Str("operation", oc.Operation).Msg("seeding scheduled operation")
+	logx.FromContext(ctx).Info().Str("definition_id", src.DefinitionID).Str(intobvs.FieldOperation, oc.Operation).Msg("seeding scheduled operation")
 
 	receipt := r.Gala().EmitWithHeaders(
 		gala.WithOperationContext(ctx, oc),

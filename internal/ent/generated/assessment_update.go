@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
@@ -219,6 +220,20 @@ func (_u *AssessmentUpdate) SetName(v string) *AssessmentUpdate {
 func (_u *AssessmentUpdate) SetNillableName(v *string) *AssessmentUpdate {
 	if v != nil {
 		_u.SetName(*v)
+	}
+	return _u
+}
+
+// SetAssessmentType sets the "assessment_type" field.
+func (_u *AssessmentUpdate) SetAssessmentType(v enums.AssessmentType) *AssessmentUpdate {
+	_u.mutation.SetAssessmentType(v)
+	return _u
+}
+
+// SetNillableAssessmentType sets the "assessment_type" field if the given value is not nil.
+func (_u *AssessmentUpdate) SetNillableAssessmentType(v *enums.AssessmentType) *AssessmentUpdate {
+	if v != nil {
+		_u.SetAssessmentType(*v)
 	}
 	return _u
 }
@@ -647,6 +662,11 @@ func (_u *AssessmentUpdate) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Assessment.name": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.AssessmentType(); ok {
+		if err := assessment.AssessmentTypeValidator(v); err != nil {
+			return &ValidationError{Name: "assessment_type", err: fmt.Errorf(`generated: validator failed for field "Assessment.assessment_type": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -738,6 +758,9 @@ func (_u *AssessmentUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(assessment.FieldName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.AssessmentType(); ok {
+		_spec.SetField(assessment.FieldAssessmentType, field.TypeEnum, value)
 	}
 	if value, ok := _u.mutation.Jsonconfig(); ok {
 		_spec.SetField(assessment.FieldJsonconfig, field.TypeJSON, value)
@@ -1383,6 +1406,20 @@ func (_u *AssessmentUpdateOne) SetNillableName(v *string) *AssessmentUpdateOne {
 	return _u
 }
 
+// SetAssessmentType sets the "assessment_type" field.
+func (_u *AssessmentUpdateOne) SetAssessmentType(v enums.AssessmentType) *AssessmentUpdateOne {
+	_u.mutation.SetAssessmentType(v)
+	return _u
+}
+
+// SetNillableAssessmentType sets the "assessment_type" field if the given value is not nil.
+func (_u *AssessmentUpdateOne) SetNillableAssessmentType(v *enums.AssessmentType) *AssessmentUpdateOne {
+	if v != nil {
+		_u.SetAssessmentType(*v)
+	}
+	return _u
+}
+
 // SetTemplateID sets the "template_id" field.
 func (_u *AssessmentUpdateOne) SetTemplateID(v string) *AssessmentUpdateOne {
 	_u.mutation.SetTemplateID(v)
@@ -1820,6 +1857,11 @@ func (_u *AssessmentUpdateOne) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Assessment.name": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.AssessmentType(); ok {
+		if err := assessment.AssessmentTypeValidator(v); err != nil {
+			return &ValidationError{Name: "assessment_type", err: fmt.Errorf(`generated: validator failed for field "Assessment.assessment_type": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -1928,6 +1970,9 @@ func (_u *AssessmentUpdateOne) sqlSave(ctx context.Context) (_node *Assessment, 
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(assessment.FieldName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.AssessmentType(); ok {
+		_spec.SetField(assessment.FieldAssessmentType, field.TypeEnum, value)
 	}
 	if value, ok := _u.mutation.Jsonconfig(); ok {
 		_spec.SetField(assessment.FieldJsonconfig, field.TypeJSON, value)

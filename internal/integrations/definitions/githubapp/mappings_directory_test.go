@@ -41,6 +41,18 @@ func TestGitHubDirectoryMembershipMapping(t *testing.T) {
 	assert.NilError(t, err)
 
 	assert.Check(t, is.Equal("MEMBER", noRoleMapped["role"]))
+
+	largeIDRaw, err := providerkit.EvalMap(context.Background(), spec.MapExpr, types.MappingEnvelope{
+		Resource: "acme/security",
+		Payload:  json.RawMessage(`{"Org":"acme","Team":{"DatabaseID":17146926,"Slug":"security"},"Member":{"DatabaseID":147884153,"Login":"bigid"},"Role":"MEMBER"}`),
+	})
+	assert.NilError(t, err)
+
+	largeIDMapped, err := jsonx.ToMap(largeIDRaw)
+	assert.NilError(t, err)
+
+	assert.Check(t, is.Equal("147884153", largeIDMapped["directory_account_id"]), "large ids must not render in scientific notation")
+	assert.Check(t, is.Equal("17146926", largeIDMapped["directory_group_id"]))
 }
 
 // TestGitHubDirectoryAccountMapping verifies confirmed email aliases flow into the mapped account document

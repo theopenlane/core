@@ -21,7 +21,7 @@ func QueryLogger() ent.InterceptFunc {
 			start := time.Now()
 
 			defer func() {
-				logx.FromContext(ctx).Info().
+				logx.FromContext(ctx).Debug().
 					Str("duration", time.Since(start).String()).
 					Str("schema", q.Type()).
 					Msg("query duration")

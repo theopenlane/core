@@ -7,11 +7,13 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"github.com/samber/lo"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
+	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -69,7 +71,7 @@ func persistDirectoryMembershipInput(ctx context.Context, db *ent.Client, integr
 
 // resolveDirectoryMembershipInput normalizes provider lookup values into internal record IDs before persistence
 func resolveDirectoryMembershipInput(ctx context.Context, db *ent.Client, integration *ent.Integration, input ent.CreateDirectoryMembershipInput) (ent.CreateDirectoryMembershipInput, error) {
-	accountID, err := resolveDirectoryAccountID(ctx, db, integration, input.DirectoryAccountID)
+	accountID, err := resolveDirectoryAccountID(ctx, db, integration, lo.FromPtr(input.DirectoryInstanceID), input.DirectoryAccountID)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("account_ref", input.DirectoryAccountID).Str("group_ref", input.DirectoryGroupID).Msg("unresolved directory account for membership")
 
@@ -94,14 +96,21 @@ func resolveDirectoryMembershipInput(ctx context.Context, db *ent.Client, integr
 }
 
 // resolveDirectoryAccountID resolves a directory account reference to its internal ID by checking primary key, external ID, and canonical email
-func resolveDirectoryAccountID(ctx context.Context, db *ent.Client, integration *ent.Integration, value string) (string, error) {
+// Lookups are scoped the same way the account upsert is (owner + directory instance when the
+// membership carries one, integration otherwise) so accounts that survived a reinstall still resolve
+func resolveDirectoryAccountID(ctx context.Context, db *ent.Client, integration *ent.Integration, instanceID string, value string) (string, error) {
 	value = strings.TrimSpace(value)
 	if value == "" {
 		return "", ErrIngestUpsertKeyMissing
 	}
 
+	scope := directoryaccount.IntegrationID(integration.ID)
+	if instanceID != "" {
+		scope = directoryaccount.DirectoryInstanceID(instanceID)
+	}
+
 	account, err := db.DirectoryAccount.Query().
-		Where(directoryaccount.ID(value), directoryaccount.IntegrationID(integration.ID)).
+		Where(directoryaccount.ID(value), directoryaccount.OwnerID(integration.OwnerID)).
 		Only(ctx)
 	switch {
 	case err == nil:
@@ -110,12 +119,19 @@ func resolveDirectoryAccountID(ctx context.Context, db *ent.Client, integration 
 		return "", err
 	}
 
+	refs := []predicate.DirectoryAccount{
+		directoryaccount.ExternalID(value),
+		directoryaccount.CanonicalEmail(value),
+	}
+
+	// older rows may still hold the scientific notation form of the same key
+	if legacy, ok := legacyScientificKey(value); ok {
+		refs = append(refs, directoryaccount.ExternalID(legacy))
+	}
+
 	account, err = db.DirectoryAccount.Query().
-		Where(directoryaccount.IntegrationID(integration.ID)).
-		Where(directoryaccount.Or(
-			directoryaccount.ExternalID(value),
-			directoryaccount.CanonicalEmail(value),
-		)).
+		Where(directoryaccount.OwnerID(integration.OwnerID), scope).
+		Where(directoryaccount.Or(refs...)).
 		Order(directoryaccount.ByCreatedAt(sql.OrderDesc())).
 		First(ctx)
 	if err != nil {
@@ -146,12 +162,19 @@ func resolveDirectoryGroupID(ctx context.Context, db *ent.Client, integration *e
 		return "", err
 	}
 
+	refs := []predicate.DirectoryGroup{
+		directorygroup.ExternalID(value),
+		directorygroup.Email(value),
+	}
+
+	// older rows may still hold the scientific notation form of the same key
+	if legacy, ok := legacyScientificKey(value); ok {
+		refs = append(refs, directorygroup.ExternalID(legacy))
+	}
+
 	group, err = db.DirectoryGroup.Query().
 		Where(directorygroup.IntegrationID(integration.ID)).
-		Where(directorygroup.Or(
-			directorygroup.ExternalID(value),
-			directorygroup.Email(value),
-		)).
+		Where(directorygroup.Or(refs...)).
 		Order(directorygroup.ByCreatedAt(sql.OrderDesc())).
 		First(ctx)
 	if err != nil {

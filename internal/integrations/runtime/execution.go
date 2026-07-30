@@ -41,7 +41,7 @@ func (r *Runtime) reconcileOperations(ctx context.Context, integration *ent.Inte
 		}
 
 		if op.Disabled != nil && op.Disabled(integration.Config.ClientConfig) {
-			logx.FromContext(ctx).Debug().Str("operation", op.Name).Msg("operation is disabled, skipping reconcile")
+			logx.FromContext(ctx).Debug().Str(intobvs.FieldOperation, op.Name).Msg("operation is disabled, skipping reconcile")
 
 			continue
 		}
@@ -59,13 +59,13 @@ func (r *Runtime) reconcileOperations(ctx context.Context, integration *ent.Inte
 		})
 
 		if receipt.Err != nil {
-			logx.FromContext(ctx).Error().Err(receipt.Err).Str("operation", op.Name).Msg("failed to emit reconcile envelope")
+			logx.FromContext(ctx).Error().Err(receipt.Err).Str(intobvs.FieldOperation, op.Name).Msg("failed to emit reconcile envelope")
 			errs = append(errs, receipt.Err)
 
 			continue
 		}
 
-		logx.FromContext(ctx).Info().Str("operation", op.Name).Msg("reconcile envelope emitted")
+		logx.FromContext(ctx).Info().Str(intobvs.FieldOperation, op.Name).Msg("reconcile envelope emitted")
 	}
 
 	return errors.Join(errs...)
@@ -109,7 +109,7 @@ func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.Recon
 		return 0, err
 	}
 
-	ctx = ensureCallerOrg(ctx, installation.OwnerID)
+	ctx = auth.EnsureIntegrationCaller(ctx, installation.OwnerID)
 
 	if installation.Status != enums.IntegrationStatusConnected {
 		logx.FromContext(ctx).Info().Str("integration_id", installation.ID).
@@ -230,6 +230,8 @@ func (r *Runtime) ExecuteOperation(ctx context.Context, integration *ent.Integra
 		return nil, ErrInstallationRequired
 	}
 
+	ctx = auth.EnsureIntegrationCaller(ctx, integration.OwnerID)
+
 	return r.executeOperationInline(ctx, integration, integration.DefinitionID, operation, credentials, config)
 }
 
@@ -317,7 +319,7 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 	}
 
 	if integration != nil {
-		ctx = ensureCallerOrg(ctx, integration.OwnerID)
+		ctx = auth.EnsureIntegrationCaller(ctx, integration.OwnerID)
 	}
 
 	if tracked {
@@ -486,7 +488,7 @@ func (r *Runtime) SeedReconcileJobs(ctx context.Context) error {
 	logx.FromContext(ctx).Debug().Int("count", len(installations)).Msg("installations found to check for reconciliation")
 
 	for _, inst := range installations {
-		if err := r.seedReconcileJobsForInstallation(ensureCallerOrg(systemCtx, inst.OwnerID), inst); err != nil {
+		if err := r.seedReconcileJobsForInstallation(systemCtx, inst); err != nil {
 			errs = append(errs, err)
 		}
 	}
@@ -497,11 +499,7 @@ func (r *Runtime) SeedReconcileJobs(ctx context.Context) error {
 // SeedReconcileJobsForInstallation checks every reconcilable operation on the given
 // installation and emits a ReconcileEnvelope for any that do not have an active River job
 func (r *Runtime) SeedReconcileJobsForInstallation(ctx context.Context, inst *ent.Integration) error {
-	systemCtx := auth.WithCaller(privacy.DecisionContext(ctx, privacy.Allow), &auth.Caller{
-		Capabilities: auth.CapBypassOrgFilter | auth.CapBypassFGA | auth.CapInternalOperation,
-	})
-
-	return r.seedReconcileJobsForInstallation(ensureCallerOrg(systemCtx, inst.OwnerID), inst)
+	return r.seedReconcileJobsForInstallation(privacy.DecisionContext(ctx, privacy.Allow), inst)
 }
 
 // seedReconcileJobsForInstallation is the shared implementation used by both
@@ -546,17 +544,17 @@ func (r *Runtime) seedReconcileJobsForInstallation(ctx context.Context, inst *en
 
 		active, err := r.Gala().HasActiveJobWithMetadata(ctx, fragment)
 		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Str("integration_id", inst.ID).Str("operation", op.Name).Msg("failed to check for active reconcile job")
+			logx.FromContext(ctx).Error().Err(err).Str("integration_id", inst.ID).Str(intobvs.FieldOperation, op.Name).Msg("failed to check for active reconcile job")
 			errs = append(errs, err)
 			continue
 		}
 
 		if active {
-			logx.FromContext(ctx).Debug().Str("integration_id", inst.ID).Str("operation", op.Name).Msg("reconcile job already active, skipping seed")
+			logx.FromContext(ctx).Debug().Str("integration_id", inst.ID).Str(intobvs.FieldOperation, op.Name).Msg("reconcile job already active, skipping seed")
 			continue
 		}
 
-		logx.FromContext(ctx).Info().Str("integration_id", inst.ID).Str("operation", op.Name).Msg("seeding missing reconcile job")
+		logx.FromContext(ctx).Info().Str("integration_id", inst.ID).Str(intobvs.FieldOperation, op.Name).Msg("seeding missing reconcile job")
 
 		oc := types.NewOperationContext(inst.OwnerID, op.Name, types.IntegrationSource{
 			IntegrationID: inst.ID,
@@ -571,7 +569,7 @@ func (r *Runtime) seedReconcileJobsForInstallation(ctx context.Context, inst *en
 			gala.Headers{Properties: oc.Properties()},
 		)
 		if receipt.Err != nil {
-			logx.FromContext(ctx).Error().Err(receipt.Err).Str("integration_id", inst.ID).Str("operation", op.Name).Msg("failed to seed reconcile job")
+			logx.FromContext(ctx).Error().Err(receipt.Err).Str("integration_id", inst.ID).Str(intobvs.FieldOperation, op.Name).Msg("failed to seed reconcile job")
 			errs = append(errs, receipt.Err)
 		}
 	}
@@ -580,11 +578,17 @@ func (r *Runtime) seedReconcileJobsForInstallation(ctx context.Context, inst *en
 }
 
 func (r *Runtime) isOrgSubscriptionActive(ctx context.Context, orgID string) (bool, error) {
+	client := r.DB()
+
+	if client.EntitlementManager == nil || client.EntitlementManager.Config == nil || !client.EntitlementManager.Config.IsEnabled() {
+		return true, nil
+	}
+
 	if orgID == "" {
 		return false, nil
 	}
 
-	return r.DB().OrgSubscription.Query().
+	return client.OrgSubscription.Query().
 		Where(
 			orgsubscription.OwnerIDEQ(orgID),
 			orgsubscription.Or(
@@ -594,28 +598,6 @@ func (r *Runtime) isOrgSubscriptionActive(ctx context.Context, orgID string) (bo
 			orgsubscription.StripeSubscriptionStatusNEQ(string(stripe.SubscriptionStatusCanceled)),
 		).
 		Exist(privacy.DecisionContext(ctx, privacy.Allow))
-}
-
-// ensureCallerOrg sets the organization on the existing caller if not already present
-func ensureCallerOrg(ctx context.Context, orgID string) context.Context {
-	if orgID == "" {
-		return ctx
-	}
-
-	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil {
-		return ctx
-	}
-
-	if _, hasOrg := caller.ActiveOrg(); hasOrg {
-		return ctx
-	}
-
-	scoped := *caller
-	scoped.OrganizationID = orgID
-	scoped.OrganizationIDs = append([]string{orgID}, caller.OrgIDs()...)
-
-	return auth.WithCaller(ctx, &scoped)
 }
 
 // reconcilableDefinitionIDs returns the IDs of all registered definitions that
