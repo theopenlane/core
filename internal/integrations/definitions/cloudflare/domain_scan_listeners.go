@@ -270,9 +270,10 @@ func (s domainScanSaga) gatherDomainScanEnrichments(ctx context.Context, scans [
 // exhausted, and finalizing the scan once ready
 func (s domainScanSaga) handlePoll(ctx context.Context, envelope DomainScanPollEnvelope) (bool, error) {
 	ctx = logx.WithFields(ctx, logx.LogFields{
-		"organization_id": envelope.OrganizationID,
-		"scan_result_id":  envelope.ScanResultID,
-		"attempt":         envelope.Attempt,
+		"organization_id":  envelope.OrganizationID,
+		"scan_result_id":   envelope.ScanResultID,
+		"internal_scan_id": envelope.InternalScanID,
+		"attempt":          envelope.Attempt,
 	},
 	)
 
@@ -310,14 +311,12 @@ func (s domainScanSaga) handlePoll(ctx context.Context, envelope DomainScanPollE
 	if len(result.TaskErrors) > 0 {
 		taskErr := fmt.Errorf("%w: %s", ErrDomainScanTaskFailed, result.TaskErrors.Error())
 		// logged as info because the report still completes from whatever enrichment was gathered
-		logx.FromContext(ctx).Info().Err(taskErr).Msg("domain scan: cloudflare scan task failed, finalizing from enrichment alone")
+		logx.FromContext(ctx).Info().Err(taskErr).Interface("task_errors", result.TaskErrors).Msg("domain scan: cloudflare scan task failed, finalizing from enrichment alone")
 
-		if err := s.finalizeDomainScan(ctx, envelope.OrganizationID, envelope.InternalScanID, envelope.SiblingScanIDs, nil); err != nil {
+		if err := s.finalizeDomainScan(ctx, envelope.OrganizationID, envelope.InternalScanID, envelope.SiblingScanIDs, nil, enums.ScanStatusFailed); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("domain scan: failed finalizing scan after task failure")
 			return true, err
 		}
-
-		s.markDomainScanFailed(ctx, envelope.OrganizationID, envelope.InternalScanID)
 
 		return true, river.JobCancel(taskErr)
 	}
@@ -325,9 +324,8 @@ func (s domainScanSaga) handlePoll(ctx context.Context, envelope DomainScanPollE
 	if result.NotReady || !result.Result.Task.Success {
 		if envelope.Attempt >= DomainScanMaxAttempts {
 			logx.FromContext(ctx).Warn().Msg("domain scan: max poll attempts reached, finalizing from enrichment alone")
-			s.markDomainScanFailed(ctx, envelope.OrganizationID, envelope.InternalScanID)
 
-			if err := s.finalizeDomainScan(ctx, envelope.OrganizationID, envelope.InternalScanID, envelope.SiblingScanIDs, nil); err != nil {
+			if err := s.finalizeDomainScan(ctx, envelope.OrganizationID, envelope.InternalScanID, envelope.SiblingScanIDs, nil, enums.ScanStatusFailed); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("domain scan: failed finalizing scan after max attempts")
 				return true, err
 			}
@@ -354,7 +352,7 @@ func (s domainScanSaga) handlePoll(ctx context.Context, envelope DomainScanPollE
 		return false, nil
 	}
 
-	if err := s.finalizeDomainScan(ctx, envelope.OrganizationID, envelope.InternalScanID, envelope.SiblingScanIDs, &result); err != nil {
+	if err := s.finalizeDomainScan(ctx, envelope.OrganizationID, envelope.InternalScanID, envelope.SiblingScanIDs, &result, enums.ScanStatusCompleted); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("domain scan: failed finalizing scan")
 		return true, err
 	}
@@ -380,9 +378,10 @@ func (s domainScanSaga) markDomainScansFailed(ctx context.Context, organizationI
 	}
 }
 
-// finalizeDomainScan builds the structured scan report and marks the Scan record completed, then
-// notifies the organization once every sibling in the group has finished
-func (s domainScanSaga) finalizeDomainScan(ctx context.Context, organizationID, internalScanID string, siblingScanIDs []string, result *DomainScanPollResult) error {
+// finalizeDomainScan builds the scan report, stamps the Scan record with its terminal status, and
+// notifies the organization once every sibling has finished; status is applied before notifying so
+// the report cannot call a scan completed that is about to be marked failed
+func (s domainScanSaga) finalizeDomainScan(ctx context.Context, organizationID, internalScanID string, siblingScanIDs []string, result *DomainScanPollResult, status enums.ScanStatus) error {
 	systemCtx := domainScanSystemContext(ctx, organizationID)
 
 	scanRecord, err := s.services.DB().Scan.Get(systemCtx, internalScanID)
@@ -426,7 +425,7 @@ func (s domainScanSaga) finalizeDomainScan(ctx context.Context, organizationID, 
 	enriched.Data = vendorenrich.EnrichVendors(systemCtx, s.services.DB(), enriched.Data)
 
 	if err := s.services.DB().Scan.UpdateOneID(internalScanID).
-		SetStatus(enums.ScanStatusCompleted).
+		SetStatus(status).
 		SetMetadata(enriched.Data).
 		Exec(systemCtx); err != nil {
 		return err

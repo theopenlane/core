@@ -28,7 +28,7 @@ func (h HealthCheck) Handle() types.OperationHandler {
 // Run executes the health check using the Google Admin SDK
 func (HealthCheck) Run(ctx context.Context, svc *admin.Service) (json.RawMessage, error) {
 	resp, err := svc.Users.List().
-		Customer("my_customer").
+		Customer(defaultCustomerID).
 		MaxResults(healthMaxResults).
 		Projection("basic").
 		ViewType("admin_view").

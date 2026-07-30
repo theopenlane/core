@@ -22,6 +22,8 @@ var (
 	NotificationTopicImportComplete NotificationTopic = "IMPORT_COMPLETE"
 	// NotificationTopicOrganizationReady indicates an organization is ready to be viewed
 	NotificationTopicOrganizationReady NotificationTopic = "ORGANIZATION_READY"
+	// NotificationTopicIntegration indicates an installed integration needs the owner's attention
+	NotificationTopicIntegration NotificationTopic = "INTEGRATION"
 	// NotificationTopicInvalid is used when an unknown or unsupported value is provided.
 	NotificationTopicInvalid NotificationTopic = "NOTIFICATIONTOPIC_INVALID"
 )
@@ -35,6 +37,7 @@ var notificationTopicValues = []NotificationTopic{
 	NotificationTopicDomainScan,
 	NotificationTopicImportComplete,
 	NotificationTopicOrganizationReady,
+	NotificationTopicIntegration,
 }
 
 // Values returns a slice of strings representing all valid NotificationTopic values.

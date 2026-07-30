@@ -13,6 +13,7 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	slackdef "github.com/theopenlane/core/internal/integrations/definitions/slack"
+	intobvs "github.com/theopenlane/core/internal/integrations/observability"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -105,6 +106,8 @@ func (r *Runtime) Reconcile(ctx context.Context, installation *ent.Integration, 
 	if err != nil {
 		return err
 	}
+
+	ctx = intobvs.WithInstallation(ctx, installation)
 
 	if !jsonx.IsEmptyRawMessage(userInput) {
 		if err := r.reconcileUserInput(ctx, installation, def, userInput); err != nil {
