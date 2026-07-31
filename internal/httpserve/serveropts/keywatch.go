@@ -122,7 +122,7 @@ func WithKeyDirWatcher(dir string, base tokens.Config, archive keyArchive) Serve
 					}
 
 					timer.Reset(retry)
-					retry = min(retry*2, keyReloadMaxRetry)
+					retry = min(retry*2, keyReloadMaxRetry) //nolint:mnd
 				case err, ok := <-watcher.Errors:
 					if !ok {
 						return
