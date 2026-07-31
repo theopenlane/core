@@ -2,6 +2,7 @@ package googledrive
 
 import (
 	"context"
+	"fmt"
 
 	"google.golang.org/api/drive/v3"
 
@@ -27,12 +28,17 @@ func (f FolderSync) IngestHandle() types.IngestHandler {
 	return providerkit.WithClientRequest(driveClient, func(ctx context.Context, request types.OperationRequest, svc DriveClient) ([]types.IngestPayloadSet, error) {
 		var input UserInput
 
-		if request.Integration != nil {
-			_ = jsonx.UnmarshalIfPresent(request.Integration.Config.ClientConfig, &input)
+		// a malformed client config is a different failure than one that never had a folder selected
+		if err := jsonx.UnmarshalIfPresent(request.Integration.Config.ClientConfig, &input); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("client_config_bytes", len(request.Integration.Config.ClientConfig)).Msg("googledrive: installation client config could not be decoded into user input")
+
+			return nil, fmt.Errorf("%w: %w", ErrUserInputInvalid, err)
 		}
 
 		folderID := parseFolderID(input.FolderID)
 		if folderID == "" {
+			logx.FromContext(ctx).Error().Int("client_config_bytes", len(request.Integration.Config.ClientConfig)).Bool("folder_id_present", input.FolderID != "").Msg("googledrive: no folder id in the installation user input, the integration needs to be reconfigured with a folder selected")
+
 			return nil, ErrFolderIDMissing
 		}
 

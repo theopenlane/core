@@ -3,10 +3,8 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
-	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
-	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
@@ -298,14 +296,5 @@ func (a Asset) Annotations() []schema.Annotation {
 		entx.IntegrationMappingSchema().
 			StockPersist().
 			Exclude("source_platform_id"),
-	}
-}
-
-// Indexes of the Asset
-func (Asset) Indexes() []ent.Index {
-	return []ent.Index{
-		// names should be unique, but ignore deleted names
-		index.Fields("name", ownerFieldName).
-			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
 	}
 }

@@ -103,7 +103,7 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 
 	oc := types.NewOperationContext(ownerID, req.Operation, src)
 
-	emitCtx := gala.WithOperationContext(ctx, oc)
+	emitCtx := intobvs.WithContext(ctx, oc)
 	receipt := runtime.EmitWithHeaders(emitCtx, operation.Topic, Envelope{
 		OperationContext:   oc,
 		Config:             jsonx.CloneRawMessage(req.Config),

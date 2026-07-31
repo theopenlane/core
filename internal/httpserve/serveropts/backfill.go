@@ -2,6 +2,7 @@ package serveropts
 
 import (
 	"context"
+	"fmt"
 	"math"
 	"strconv"
 
@@ -10,10 +11,15 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
+	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	intobvs "github.com/theopenlane/core/internal/integrations/observability"
+	"github.com/theopenlane/core/internal/integrations/runtime"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // backfillBypassCaps lets the backfill write organizations and memberships without a request caller while
@@ -23,6 +29,9 @@ const backfillBypassCaps = auth.CapBypassOrgFilter | auth.CapBypassFGA | auth.Ca
 // maxExactExternalID is the largest float64 that can still hold every integer exactly (2^53)
 const maxExactExternalID = float64(1 << 53)
 
+// integrationReconfigureObjectType is the notification object type for a misconfigured installation
+const integrationReconfigureObjectType = "integration.reconfiguration.required"
+
 // WithBackfill runs a one-time, non-blocking, config-gated, idempotent startup backfills
 // use-cases for this are things a db migration can't easily handle, computed data or fields, or repairs
 func WithBackfill(ctx context.Context, dbClient *ent.Client) ServerOption {
@@ -31,13 +40,84 @@ func WithBackfill(ctx context.Context, dbClient *ent.Client) ServerOption {
 			return
 		}
 
+		rt := s.Config.Handler.IntegrationsRuntime
+
 		go func() {
 			backfillCtx := privacy.DecisionContext(ctx, privacy.Allow)
 			backfillCtx = auth.WithCaller(backfillCtx, &auth.Caller{Capabilities: backfillBypassCaps})
 
 			backfillDirectoryExternalIDs(backfillCtx, dbClient)
+
+			if rt != nil {
+				backfillIntegrationConfiguration(backfillCtx, dbClient, rt)
+			}
 		}()
 	})
+}
+
+// backfillIntegrationConfiguration flags connected installations whose stored user input no longer
+// satisfies their definition, so the owner is told to reconnect rather than left with a cycle that
+// fails on every run
+func backfillIntegrationConfiguration(ctx context.Context, dbClient *ent.Client, rt *runtime.Runtime) {
+	installations, err := dbClient.Integration.Query().
+		Where(integration.StatusEQ(enums.IntegrationStatusConnected)).
+		All(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("backfill: failed to query connected integrations")
+
+		return
+	}
+
+	var flagged int
+
+	for _, installation := range installations {
+		def, ok := rt.Registry().Definition(installation.DefinitionID)
+		if !ok {
+			continue
+		}
+
+		installCtx := intobvs.WithInstallation(ctx, installation)
+
+		if err := rt.ValidateUserInput(installCtx, def, installation.Config.ClientConfig); err == nil {
+			continue
+		}
+
+		if err := markIntegrationErrored(installCtx, dbClient, installation, def.DisplayName); err != nil {
+			logx.FromContext(installCtx).Error().Err(err).Msg("backfill: failed flagging misconfigured integration")
+
+			continue
+		}
+
+		flagged++
+	}
+
+	logx.FromContext(ctx).Info().Int("flagged_misconfigured", flagged).Int("reviewed", len(installations)).Msg("backfill: connected integrations reviewed")
+}
+
+// markIntegrationErrored flags one installation as misconfigured and notifies the owning organization
+func markIntegrationErrored(ctx context.Context, dbClient *ent.Client, installation *ent.Integration, displayName string) error {
+	if err := dbClient.Integration.UpdateOneID(installation.ID).
+		SetStatus(enums.IntegrationStatusErrored).
+		Exec(ctx); err != nil {
+		return err
+	}
+
+	logx.FromContext(ctx).Warn().Msg("backfill: integration is missing required configuration, marked errored")
+
+	_, err := dbClient.Notification.Create().
+		SetOwnerID(installation.OwnerID).
+		SetNotificationType(enums.NotificationTypeOrganization).
+		SetObjectType(integrationReconfigureObjectType).
+		SetTitle(fmt.Sprintf("%s needs to be reconnected", displayName)).
+		SetBody(fmt.Sprintf("The %s integration is missing required configuration and has stopped syncing. Reconnect it and supply the required settings to resume.", displayName)).
+		SetData(map[string]any{
+			"integration_id": installation.ID,
+			"definition_id":  installation.DefinitionID,
+		}).
+		SetTopic(enums.NotificationTopicIntegration).
+		Save(ctx)
+
+	return err
 }
 
 // backfillDirectoryExternalIDs rewrites directory account and group external ids that the CEL double
