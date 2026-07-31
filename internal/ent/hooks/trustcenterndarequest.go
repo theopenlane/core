@@ -24,7 +24,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
-	"github.com/theopenlane/core/pkg/anon"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -54,7 +53,7 @@ func HookTrustCenterNDARequestCreate() ent.Hook {
 			email, _ := m.Email()
 
 			queryCtx := ctx
-			if anon.IsTrustCenter(ctx) {
+			if auth.IsTrustCenterFromContext(ctx) {
 				queryCtx = privacy.DecisionContext(ctx, privacy.Allow)
 			}
 

@@ -390,6 +390,10 @@ type ComplexityRoot struct {
 		Node   func(childComplexity int) int
 	}
 
+	AssessmentTemplateCreatePayload struct {
+		Template func(childComplexity int) int
+	}
+
 	AssessmentUpdatePayload struct {
 		Assessment func(childComplexity int) int
 	}
@@ -3581,6 +3585,7 @@ type ComplexityRoot struct {
 		CreateActionPlan                     func(childComplexity int, input generated.CreateActionPlanInput) int
 		CreateAssessment                     func(childComplexity int, input generated.CreateAssessmentInput) int
 		CreateAssessmentResponse             func(childComplexity int, input generated.CreateAssessmentResponseInput) int
+		CreateAssessmentTemplate             func(childComplexity int, input model.CreateAssessmentTemplateInput) int
 		CreateAsset                          func(childComplexity int, input generated.CreateAssetInput) int
 		CreateBulkAPIToken                   func(childComplexity int, input []*generated.CreateAPITokenInput) int
 		CreateBulkActionPlan                 func(childComplexity int, input []*generated.CreateActionPlanInput) int
@@ -9721,6 +9726,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.AssessmentResponseEdge.Node(childComplexity), true
+
+	case "AssessmentTemplateCreatePayload.template":
+		if e.ComplexityRoot.AssessmentTemplateCreatePayload.Template == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssessmentTemplateCreatePayload.Template(childComplexity), true
 
 	case "AssessmentUpdatePayload.assessment":
 		if e.ComplexityRoot.AssessmentUpdatePayload.Assessment == nil {
@@ -24486,6 +24498,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.CreateAssessmentResponse(childComplexity, args["input"].(generated.CreateAssessmentResponseInput)), true
+	case "Mutation.createAssessmentTemplate":
+		if e.ComplexityRoot.Mutation.CreateAssessmentTemplate == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createAssessmentTemplate_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.CreateAssessmentTemplate(childComplexity, args["input"].(model.CreateAssessmentTemplateInput)), true
 	case "Mutation.createAsset":
 		if e.ComplexityRoot.Mutation.CreateAsset == nil {
 			break
@@ -52124,6 +52147,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateActionPlanInput,
 		ec.unmarshalInputCreateAssessmentInput,
 		ec.unmarshalInputCreateAssessmentResponseInput,
+		ec.unmarshalInputCreateAssessmentTemplateInput,
 		ec.unmarshalInputCreateAssetInput,
 		ec.unmarshalInputCreateCampaignInput,
 		ec.unmarshalInputCreateCampaignTargetInput,
@@ -53151,6 +53175,15 @@ extend type Query {
 
 extend type Mutation{
     """
+    Create a questionnaire template from an existing assessment
+    """
+    createAssessmentTemplate(
+        """
+        values for creating the assessment template
+        """
+        input: CreateAssessmentTemplateInput!
+    ): AssessmentTemplateCreatePayload!
+    """
     Create a new assessment
     """
     createAssessment(
@@ -53203,6 +53236,38 @@ type AssessmentCreatePayload {
 }
 
 """
+Return response for createAssessmentTemplate mutation
+"""
+type AssessmentTemplateCreatePayload {
+    """
+    Created template
+    """
+    template: Template!
+}
+
+"""
+Input for creating a questionnaire template from an assessment
+"""
+input CreateAssessmentTemplateInput {
+    """
+    ID of the assessment to turn into a template
+    """
+    assessmentID: ID!
+    """
+    Name for the template. Defaults to the assessment name when omitted.
+    """
+    name: String
+    """
+    Description for the template.
+    """
+    description: String
+    """
+    Tags for the template.
+    """
+    tags: [String!]
+}
+
+"""
 Return response for updateAssessment mutation
 """
 type AssessmentUpdatePayload {
@@ -53239,7 +53304,6 @@ type AssessmentBulkDeletePayload {
     """
     error: String
 }
-
 `, BuiltIn: false},
 	{Name: "../schema/assessmentextended.graphql", Input: `extend type Assessment {
     accessURL: String
@@ -165609,6 +165673,14 @@ func (ec *executionContext) childFields_AssessmentResponseEdge(ctx context.Conte
 		return ec.fieldContext_AssessmentResponseEdge_cursor(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type AssessmentResponseEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_AssessmentTemplateCreatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "template":
+		return ec.fieldContext_AssessmentTemplateCreatePayload_template(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AssessmentTemplateCreatePayload", field.Name)
 }
 
 func (ec *executionContext) childFields_AssessmentUpdatePayload(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {

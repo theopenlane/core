@@ -1,8 +1,9 @@
 package operations
 
 import (
-	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/iam/auth"
+
+	"github.com/theopenlane/core/pkg/gala"
 )
 
 const (
