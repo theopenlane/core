@@ -2,11 +2,13 @@ package graphapi
 
 import (
 	"slices"
+	"strings"
 	"testing"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
+
+	"github.com/theopenlane/core/internal/ent/generated"
 )
 
 func TestSearchContextTracker(t *testing.T) {
@@ -96,4 +98,64 @@ func TestExtractSnippets(t *testing.T) {
 
 	assert.Check(t, is.Equal(true, nameSnippetExists), "Should have snippet for Name field")
 	assert.Check(t, is.Equal(true, detailSnippetExists), "Should have snippet for Details field")
+}
+
+func TestSearchContextContentSanitization(t *testing.T) {
+	tt := []struct {
+		name         string
+		query        string
+		details      string
+		wantSnippet  string
+		wantMatch    bool
+		wantSanitize string
+	}{
+		{
+			name:  "html attributes ignored",
+			query: "slate",
+			details: `<span data-slate-node="text">` +
+				`<span data-slate-string="true">Visible objective</span></span>`,
+			wantMatch: false,
+		},
+		{
+			name:  "html stripped",
+			query: "objectives",
+			details: `<span class="slate-bold"><span data-slate-string="true">objectives</span></span>` +
+				`<span data-slate-node="text"> and responsibilities</span>`,
+			wantSnippet: "objectives and responsibilities",
+			wantMatch:   true,
+		},
+		{
+			name:         "markdown stripped",
+			details:      "## Recovery Objectives\n\n- [Objective owner](https://example.com)\n- **monitoring**",
+			wantSanitize: "Recovery Objectives Objective owner monitoring",
+		},
+	}
+
+	for _, tc := range tt {
+		t.Run(tc.name, func(t *testing.T) {
+			if tc.wantSanitize != "" {
+				assert.Check(t, is.Equal(tc.wantSanitize, sanitizeContent(tc.details)))
+				return
+			}
+
+			entity := &generated.ActionPlan{
+				ID:      "plan-123",
+				Details: tc.details,
+			}
+
+			checker := fieldMatchChecker{query: tc.query}
+			matches := checker.check(entity, []string{"Details"})
+			assert.Check(t, is.Equal(tc.wantMatch, slices.Contains(matches, "Details")))
+
+			if tc.wantSnippet == "" {
+				return
+			}
+
+			snippets := newContextTracker(tc.query).extractSnippets(entity, []string{"Details"})
+			assert.Assert(t, is.Len(snippets, 1))
+			assert.Check(t, is.Equal(tc.wantSnippet, snippets[0].Text))
+			assert.Check(t, !strings.Contains(snippets[0].Text, "<span"))
+			assert.Check(t, !strings.Contains(snippets[0].Text, "data-slate"))
+		})
+	}
 }
