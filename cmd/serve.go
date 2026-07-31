@@ -72,7 +72,7 @@ func serve(ctx context.Context) error {
 		serveropts.WithObjectStorage(),
 		serveropts.WithEntitlements(),
 		serveropts.WithSummarizer(),
-		serveropts.WithKeyDirOption(),
+		serveropts.WithKeyDirConfig(),
 		serveropts.WithShortlinks(),
 	)
 
@@ -125,6 +125,12 @@ func serve(ctx context.Context) error {
 			gala.WithPoolName("ent_client_pool"),
 		)
 	}
+
+	// watch the key directory once the token manager exists to mutate and redis is
+	// available to archive retired public keys
+	so.AddServerOptions(
+		serveropts.WithKeyDirKeyWatcher(redisClient),
+	)
 
 	// add session manager
 	so.AddServerOptions(
