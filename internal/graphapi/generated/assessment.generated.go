@@ -149,6 +149,38 @@ func (ec *executionContext) fieldContext_AssessmentDeletePayload_deletedID(_ con
 	return graphql.NewScalarFieldContext("AssessmentDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
+func (ec *executionContext) _AssessmentTemplateCreatePayload_template(ctx context.Context, field graphql.CollectedField, obj *model.AssessmentTemplateCreatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_AssessmentTemplateCreatePayload_template(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Template, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Template) graphql.Marshaler {
+			return ec.marshalNTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTemplate(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_AssessmentTemplateCreatePayload_template(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "AssessmentTemplateCreatePayload",
+		Field:      field,
+		IsMethod:   false,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_Template(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _AssessmentUpdatePayload_assessment(ctx context.Context, field graphql.CollectedField, obj *model.AssessmentUpdatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -184,6 +216,57 @@ func (ec *executionContext) fieldContext_AssessmentUpdatePayload_assessment(_ co
 // endregion **************************** field.gotpl *****************************
 
 // region    **************************** input.gotpl *****************************
+
+func (ec *executionContext) unmarshalInputCreateAssessmentTemplateInput(ctx context.Context, obj any) (model.CreateAssessmentTemplateInput, error) {
+	var it model.CreateAssessmentTemplateInput
+	if obj == nil {
+		return it, nil
+	}
+
+	asMap := map[string]any{}
+	for k, v := range obj.(map[string]any) {
+		asMap[k] = v
+	}
+
+	fieldsInOrder := [...]string{"assessmentID", "name", "description", "tags"}
+	for _, k := range fieldsInOrder {
+		v, ok := asMap[k]
+		if !ok {
+			continue
+		}
+		switch k {
+		case "assessmentID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assessmentID"))
+			data, err := ec.unmarshalNID2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssessmentID = data
+		case "name":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("name"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Name = data
+		case "description":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("description"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Description = data
+		case "tags":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tags"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Tags = data
+		}
+	}
+	return it, nil
+}
 
 // endregion **************************** input.gotpl *****************************
 
@@ -317,6 +400,44 @@ func (ec *executionContext) _AssessmentDeletePayload(ctx context.Context, sel as
 	return out
 }
 
+var assessmentTemplateCreatePayloadImplementors = []string{"AssessmentTemplateCreatePayload"}
+
+func (ec *executionContext) _AssessmentTemplateCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.AssessmentTemplateCreatePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, assessmentTemplateCreatePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferredFieldSet := graphql.NewFieldSet(nil)
+	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("AssessmentTemplateCreatePayload")
+		case "template":
+			out.Values[i] = ec._AssessmentTemplateCreatePayload_template(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
+
+	ec.ProcessDeferredGroup(graphql.DeferredGroup{
+		Defers:   deferLabelToView,
+		Path:     graphql.GetPath(ctx),
+		FieldSet: deferredFieldSet,
+		Context:  ctx,
+	})
+
+	return out
+}
+
 var assessmentUpdatePayloadImplementors = []string{"AssessmentUpdatePayload"}
 
 func (ec *executionContext) _AssessmentUpdatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.AssessmentUpdatePayload) graphql.Marshaler {
@@ -401,6 +522,20 @@ func (ec *executionContext) marshalNAssessmentDeletePayload2ᚖgithubᚗcomᚋth
 	return ec._AssessmentDeletePayload(ctx, sel, v)
 }
 
+func (ec *executionContext) marshalNAssessmentTemplateCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssessmentTemplateCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.AssessmentTemplateCreatePayload) graphql.Marshaler {
+	return ec._AssessmentTemplateCreatePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNAssessmentTemplateCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssessmentTemplateCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.AssessmentTemplateCreatePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._AssessmentTemplateCreatePayload(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNAssessmentUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssessmentUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.AssessmentUpdatePayload) graphql.Marshaler {
 	return ec._AssessmentUpdatePayload(ctx, sel, &v)
 }
@@ -413,6 +548,11 @@ func (ec *executionContext) marshalNAssessmentUpdatePayload2ᚖgithubᚗcomᚋth
 		return graphql.Null
 	}
 	return ec._AssessmentUpdatePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNCreateAssessmentTemplateInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCreateAssessmentTemplateInput(ctx context.Context, v any) (model.CreateAssessmentTemplateInput, error) {
+	res, err := ec.unmarshalInputCreateAssessmentTemplateInput(ctx, v)
+	return res, graphql.ErrorOnPath(ctx, err)
 }
 
 // endregion ***************************** type.gotpl *****************************

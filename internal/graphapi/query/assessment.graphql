@@ -22,6 +22,21 @@ mutation CreateAssessment ($input: CreateAssessmentInput!) {
 		}
 	}
 }
+mutation CreateAssessmentTemplate ($input: CreateAssessmentTemplateInput!) {
+	createAssessmentTemplate(input: $input) {
+		template {
+			id
+			name
+			description
+			kind
+			templateType
+			tags
+			ownerID
+			jsonconfig
+			uischema
+		}
+	}
+}
 mutation DeleteAssessment ($deleteAssessmentId: ID!) {
 	deleteAssessment(id: $deleteAssessmentId) {
 		deletedID
