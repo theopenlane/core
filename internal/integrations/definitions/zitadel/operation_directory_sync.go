@@ -36,7 +36,7 @@ func (d DirectorySync) IngestHandle() types.IngestHandler {
 }
 
 // Run collects Zitadel directory users
-func (DirectorySync) Run(ctx context.Context, c *client.Client, cfg UserInput) ([]types.IngestPayloadSet, error) {
+func (DirectorySync) Run(ctx context.Context, c *client.Client, _ UserInput) ([]types.IngestPayloadSet, error) {
 	users, err := listDirectoryUsers(ctx, c)
 	if err != nil {
 		return nil, err
@@ -70,7 +70,7 @@ func (DirectorySync) Run(ctx context.Context, c *client.Client, cfg UserInput) (
 // listDirectoryUsers pages through all Zitadel users using offset-based pagination
 func listDirectoryUsers(ctx context.Context, c *client.Client) ([]*userv2.User, error) {
 	users := make([]*userv2.User, 0)
-	var offset uint64 = 0
+	var offset uint64
 
 	for {
 		if err := ctx.Err(); err != nil {
