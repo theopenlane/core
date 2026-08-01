@@ -41,14 +41,14 @@ func TestExamplePayloads(t *testing.T) {
 
 		mapped := mappingtest.EvalMap(t, accountSpec, envelope)
 
-		assert.Equal(t, "8413c0cc-69a7-4726-a922-63e892264adc", mapped["externalID"])
-		assert.Equal(t, "john.doe@company.com", mapped["canonicalEmail"])
-		assert.Equal(t, "John Doe", mapped["displayName"])
-		assert.Equal(t, "John", mapped["givenName"])
-		assert.Equal(t, "Doe", mapped["familyName"])
+		assert.Equal(t, "8413c0cc-69a7-4726-a922-63e892264adc", mapped["external_id"])
+		assert.Equal(t, "john.doe@company.com", mapped["canonical_email"])
+		assert.Equal(t, "John Doe", mapped["display_name"])
+		assert.Equal(t, "John", mapped["given_name"])
+		assert.Equal(t, "Doe", mapped["family_name"])
 		assert.Equal(t, "ACTIVE", mapped["status"])
-		assert.Equal(t, "USER", mapped["accountType"])
-		assert.Equal(t, "2026-01-15T10:00:00Z", mapped["addedAt"])
+		assert.Equal(t, "USER", mapped["account_type"])
+		assert.Equal(t, "2026-01-15T10:00:00Z", mapped["added_at"])
 	})
 
 	t.Run("machine_user_json", func(t *testing.T) {
@@ -60,8 +60,8 @@ func TestExamplePayloads(t *testing.T) {
 
 		mapped := mappingtest.EvalMap(t, accountSpec, envelope)
 
-		assert.Equal(t, "19cac1ac-19e6-43ed-bf3b-90ced88d3548", mapped["externalID"])
-		assert.Equal(t, "SERVICE", mapped["accountType"])
+		assert.Equal(t, "19cac1ac-19e6-43ed-bf3b-90ced88d3548", mapped["external_id"])
+		assert.Equal(t, "SERVICE", mapped["account_type"])
 		assert.Equal(t, "ACTIVE", mapped["status"])
 	})
 
@@ -112,7 +112,7 @@ func TestExamplePayloads(t *testing.T) {
 		envelope := types.MappingEnvelope{Payload: json.RawMessage(payload)}
 		mapped := mappingtest.EvalMap(t, accountSpec, envelope)
 
-		assert.Equal(t, "janedoe", mapped["displayName"])
-		assert.Equal(t, "SERVICE", mapped["accountType"])
+		assert.Equal(t, "janedoe", mapped["display_name"])
+		assert.Equal(t, "SERVICE", mapped["account_type"])
 	})
 }

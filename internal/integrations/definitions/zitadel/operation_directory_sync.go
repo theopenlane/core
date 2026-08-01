@@ -8,7 +8,7 @@ import (
 	userv2 "github.com/zitadel/zitadel-go/v3/pkg/client/zitadel/user/v2"
 	"google.golang.org/protobuf/encoding/protojson"
 
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -61,7 +61,7 @@ func (DirectorySync) Run(ctx context.Context, c *client.Client, cfg UserInput) (
 
 	return []types.IngestPayloadSet{
 		{
-			Schema:    integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
+			Schema:    entityops.SchemaDirectoryAccount.Name,
 			Envelopes: accountEnvelopes,
 		},
 	}, nil

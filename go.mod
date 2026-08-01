@@ -118,6 +118,7 @@ require (
 	github.com/xeipuuv/gojsonschema v1.2.0
 	github.com/yuin/goldmark v1.8.4
 	github.com/zitadel/oidc/v3 v3.47.9
+	github.com/zitadel/zitadel-go/v3 v3.29.1
 	goauthentik.io/api/v3 v3.2026020.16
 	gocloud.dev v0.46.0
 	golang.org/x/crypto v0.54.0
@@ -170,7 +171,6 @@ require (
 	github.com/valyala/fastjson v1.6.10 // indirect
 	github.com/vanng822/css v1.0.1 // indirect
 	github.com/vanng822/go-premailer v1.34.0 // indirect
-	github.com/zitadel/zitadel-go/v3 v3.29.1 // indirect
 	go.yaml.in/yaml/v4 v4.0.0-rc.2 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
