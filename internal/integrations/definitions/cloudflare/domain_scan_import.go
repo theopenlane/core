@@ -330,23 +330,29 @@ func findOrCreateDomainScanAssets(ctx context.Context, client *generated.Client,
 	var createdIDs []string
 
 	for _, a := range assets {
-		existing, err := client.Asset.Query().
-			Where(asset.NameEqualFold(a.Name)).
-			First(ctx)
+		existing, err := findDomainScanAsset(ctx, client, a)
 
 		switch {
 		case err == nil:
 			ids[a.Ref] = existing.ID
+
+			update := client.Asset.UpdateOneID(existing.ID)
+
+			// a row matched by name predates the source identifier, so stamp it on to stop
+			// asset_sync creating a second row for the same domain
+			if existing.SourceIdentifier == "" && a.Identifier != "" {
+				update.SetSourceIdentifier(a.Identifier)
+			}
 
 			linkedScanIDs, err := existing.QueryScans().IDs(ctx)
 			if err != nil {
 				return nil, nil, fmt.Errorf("looking up scans linked to asset %q: %w", a.Name, err)
 			}
 
-			if missing := unlinkedDomainScanIDs(scanIDs, linkedScanIDs); len(missing) > 0 {
-				if err := client.Asset.UpdateOneID(existing.ID).AddScanIDs(missing...).Exec(ctx); err != nil {
-					return nil, nil, fmt.Errorf("linking scans to existing asset %q: %w", a.Name, err)
-				}
+			update.AddScanIDs(unlinkedDomainScanIDs(scanIDs, linkedScanIDs)...)
+
+			if err := update.Exec(ctx); err != nil {
+				return nil, nil, fmt.Errorf("updating existing asset %q: %w", a.Name, err)
 			}
 
 			continue
@@ -355,12 +361,13 @@ func findOrCreateDomainScanAssets(ctx context.Context, client *generated.Client,
 		}
 
 		input := generated.CreateAssetInput{
-			Name:       a.Name,
-			OwnerID:    &ownerID,
-			Categories: a.Categories,
-			ScanIDs:    scanIDs,
-			Identifier: &a.Identifier,
-			Website:    &a.Website,
+			Name:             a.Name,
+			OwnerID:          &ownerID,
+			Categories:       a.Categories,
+			ScanIDs:          scanIDs,
+			Identifier:       &a.Identifier,
+			SourceIdentifier: &a.Identifier,
+			Website:          &a.Website,
 		}
 
 		created, err := client.Asset.Create().SetInput(input).Save(ctx)
@@ -373,6 +380,23 @@ func findOrCreateDomainScanAssets(ctx context.Context, client *generated.Client,
 	}
 
 	return ids, createdIDs, nil
+}
+
+// findDomainScanAsset resolves one accepted asset to an existing org Asset, matching the
+// integration upsert key first so scan imports and asset syncs converge on the same row
+func findDomainScanAsset(ctx context.Context, client *generated.Client, a DomainScanImportAsset) (*generated.Asset, error) {
+	if a.Identifier != "" {
+		existing, err := client.Asset.Query().
+			Where(asset.SourceIdentifierEqualFold(a.Identifier)).
+			First(ctx)
+		if err == nil || !generated.IsNotFound(err) {
+			return existing, err
+		}
+	}
+
+	return client.Asset.Query().
+		Where(asset.NameEqualFold(a.Name)).
+		First(ctx)
 }
 
 // unlinkedDomainScanIDs returns the desired IDs that aren't already linked, so re-importing a

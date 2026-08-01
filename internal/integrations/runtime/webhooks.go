@@ -163,7 +163,7 @@ func (r *Runtime) DispatchWebhookEvent(ctx context.Context, integration *ent.Int
 
 	oc := types.NewOperationContext(ownerID, "", src)
 
-	receipt := r.Gala().EmitWithHeaders(gala.WithOperationContext(ctx, oc), registration.Topic, operations.WebhookEnvelope{
+	receipt := r.Gala().EmitWithHeaders(intobvs.WithContext(ctx, oc), registration.Topic, operations.WebhookEnvelope{
 		OperationContext: oc,
 		Payload:          jsonx.CloneRawMessage(event.Payload),
 		Headers:          maps.Clone(event.Headers),

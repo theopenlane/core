@@ -8,6 +8,7 @@ import (
 	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -55,6 +56,18 @@ func TestSkipFilter(t *testing.T) {
 		{
 			name:        "history request context skips regardless of forceFilter",
 			ctx:         history.WithContext(context.Background()),
+			forceFilter: alwaysForce,
+			want:        true,
+		},
+		{
+			name: "support caller skips result filtering",
+			ctx: auth.WithCaller(context.Background(), auth.NewOrgSupportCaller(
+				"01KY55W68HBPEA5X1E5Y0DGEFD",
+				auth.SupportSubjectID,
+				"Openlane Support",
+				"support@theopenlane.io",
+			)),
+			q:           &mockQuery{},
 			forceFilter: alwaysForce,
 			want:        true,
 		},

@@ -9,10 +9,11 @@ import (
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
+	"github.com/theopenlane/utils/ulids"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/utils/ulids"
 )
 
 func TestQueryAssessment(t *testing.T) {
@@ -270,6 +271,102 @@ func TestMutationCreateAssessment(t *testing.T) {
 	}
 
 	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: template.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+}
+
+func TestMutationTemplateFromAssessment(t *testing.T) {
+	assess := (&AssessmentBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+
+	newName := gofakeit.Company() + "-" + ulids.New().String()
+	fullName := gofakeit.Company() + "-" + ulids.New().String()
+
+	description := gofakeit.Sentence(10)
+
+	tags := []string{"cloned", "template"}
+
+	cases := []struct {
+		name                string
+		input               testclient.CreateAssessmentTemplateInput
+		expectedName        string
+		expectedDescription *string
+		expectedTags        []string
+		errorMsg            string
+	}{
+		{
+			name: "successfully created template from existing assessment",
+			input: testclient.CreateAssessmentTemplateInput{
+				AssessmentID: assess.ID,
+			},
+			expectedName: assess.Name,
+		},
+		{
+			name: "creating template from assessment fails if name already exists",
+			input: testclient.CreateAssessmentTemplateInput{
+				AssessmentID: assess.ID,
+			},
+			errorMsg: "already exists",
+		},
+		{
+			name: "creating template from existing assessment can use alternate name",
+			input: testclient.CreateAssessmentTemplateInput{
+				AssessmentID: assess.ID,
+				Name:         lo.ToPtr(newName),
+			},
+			expectedName: newName,
+		},
+		{
+			name: "creating template from existing assessment can use alternate description and tags",
+			input: testclient.CreateAssessmentTemplateInput{
+				AssessmentID: assess.ID,
+				Name:         lo.ToPtr(fullName),
+				Description:  lo.ToPtr(description),
+				Tags:         tags,
+			},
+			expectedName:        fullName,
+			expectedDescription: lo.ToPtr(description),
+			expectedTags:        tags,
+		},
+	}
+
+	templateIDs := []string{}
+
+	for _, tc := range cases {
+		t.Run("Create "+tc.name, func(t *testing.T) {
+			resp, err := suite.client.api.CreateAssessmentTemplate(sharedTestUser1.UserCtx, tc.input)
+
+			if tc.errorMsg != "" {
+				assert.ErrorContains(t, err, tc.errorMsg)
+
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+
+			template := resp.CreateAssessmentTemplate.Template
+			templateIDs = append(templateIDs, template.ID)
+
+			assert.Check(t, is.Equal(tc.expectedName, template.Name))
+			assert.Check(t, is.Equal(enums.Document, template.TemplateType))
+			assert.Assert(t, template.Kind != nil)
+			assert.Check(t, is.Equal(enums.TemplateKindQuestionnaire, *template.Kind))
+
+			if tc.expectedDescription != nil {
+				assert.Assert(t, template.Description != nil)
+				assert.Check(t, is.Equal(*tc.expectedDescription, *template.Description))
+			}
+
+			if len(tc.expectedTags) > 0 {
+				assert.Check(t, is.DeepEqual(tc.expectedTags, template.Tags))
+			}
+		})
+	}
+
+	if len(templateIDs) > 0 {
+		(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, IDs: templateIDs}).MustDelete(sharedTestUser1.UserCtx, t)
+	}
+
+	(&Cleanup[*generated.AssessmentDeleteOne]{client: suite.client.db.Assessment, ID: assess.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: assess.TemplateID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationUpdateAssessment(t *testing.T) {

@@ -3,6 +3,7 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 
 	cf "github.com/cloudflare/cloudflare-go/v7"
 	"github.com/cloudflare/cloudflare-go/v7/url_scanner"
@@ -66,9 +67,9 @@ func (DomainScanSubmit) Run(ctx context.Context, client *CloudflareClient, cfg D
 
 	result, err := client.URLScanner.Scans.BulkNew(ctx, params)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("cloudflare: error submitting domain scan batch")
+		logx.FromContext(ctx).Error().Err(err).Strs("domains", cfg.Domains).Str("account_id", client.Config.AccountID).Msg("cloudflare: error submitting domain scan batch")
 
-		return DomainScanSubmitResult{Scans: scans}, ErrDomainScanSubmitFailed
+		return DomainScanSubmitResult{Scans: scans}, fmt.Errorf("%w: %w", ErrDomainScanSubmitFailed, err)
 	}
 
 	scans = append(scans, *result...)

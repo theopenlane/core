@@ -22,6 +22,8 @@ const (
 	FieldOperation = "integration_operation"
 	// FieldRunID is the log field key for the run identifier
 	FieldRunID = "run_id"
+	// FieldOwnerID is the log field key for the organization owning the integration
+	FieldOwnerID = "owner_id"
 )
 
 // IntegrationRef carries integration identity for structured log embedding
@@ -55,6 +57,15 @@ func WithIntegration(ctx context.Context, integrationID, definitionID string) co
 	})
 }
 
+// WithInstallation enriches the context logger with one installation's identity fields
+func WithInstallation(ctx context.Context, integration *ent.Integration) context.Context {
+	return logx.WithFields(ctx, map[string]any{
+		FieldIntegrationID: integration.ID,
+		FieldDefinitionID:  integration.DefinitionID,
+		FieldOwnerID:       integration.OwnerID,
+	})
+}
+
 // WithContext stores the operation context on context and enriches the logger
 // with all non-empty execution fields
 func WithContext(ctx context.Context, oc gala.OperationContext) context.Context {
@@ -62,6 +73,10 @@ func WithContext(ctx context.Context, oc gala.OperationContext) context.Context 
 
 	ctx = gala.WithOperationContext(ctx, oc)
 	ctx = WithIntegration(ctx, src.IntegrationID, src.DefinitionID)
+
+	if oc.OwnerID != "" {
+		ctx = logx.WithField(ctx, FieldOwnerID, oc.OwnerID)
+	}
 
 	if oc.Operation != "" {
 		ctx = WithOperation(ctx, oc.Operation)

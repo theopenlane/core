@@ -210,6 +210,8 @@ var (
 	ErrIntegrationNotFound = errors.New("integration not found")
 	// ErrUnsupportedAuthType indicates the provider does not support the requested flow
 	ErrUnsupportedAuthType = errors.New("provider does not support this authentication flow")
+	// ErrIntegrationUserInputRequired indicates required configuration is missing for the integration
+	ErrIntegrationUserInputRequired = errors.New("integration configuration is incomplete, provide the required settings before connecting")
 	// ErrProviderHealthCheckFailed indicates the provider health check failed
 	ErrProviderHealthCheckFailed = errors.New("provider health check failed")
 	// ErrInvalidRedirectURI is returned when the redirect URI does not match the configured allowed host

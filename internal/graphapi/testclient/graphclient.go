@@ -29,6 +29,7 @@ type TestGraphClient interface {
 	GetAllAPITokens(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllAPITokens, error)
 	UpdateAPIToken(ctx context.Context, updateAPITokenID string, input UpdateAPITokenInput, interceptors ...clientv2.RequestInterceptor) (*UpdateAPIToken, error)
 	CreateAssessment(ctx context.Context, input CreateAssessmentInput, interceptors ...clientv2.RequestInterceptor) (*CreateAssessment, error)
+	CreateAssessmentTemplate(ctx context.Context, input CreateAssessmentTemplateInput, interceptors ...clientv2.RequestInterceptor) (*CreateAssessmentTemplate, error)
 	DeleteAssessment(ctx context.Context, deleteAssessmentID string, interceptors ...clientv2.RequestInterceptor) (*DeleteAssessment, error)
 	DeleteBulkAssessment(ctx context.Context, ids []string, interceptors ...clientv2.RequestInterceptor) (*DeleteBulkAssessment, error)
 	GetAllAssessments(ctx context.Context, interceptors ...clientv2.RequestInterceptor) (*GetAllAssessments, error)
@@ -4065,6 +4066,84 @@ func (t *CreateAssessment_CreateAssessment) GetAssessment() *CreateAssessment_Cr
 		t = &CreateAssessment_CreateAssessment{}
 	}
 	return &t.Assessment
+}
+
+type CreateAssessmentTemplate_CreateAssessmentTemplate_Template struct {
+	Description  *string             "json:\"description,omitempty\" graphql:\"description\""
+	ID           string              "json:\"id\" graphql:\"id\""
+	Jsonconfig   map[string]any      "json:\"jsonconfig\" graphql:\"jsonconfig\""
+	Kind         *enums.TemplateKind "json:\"kind,omitempty\" graphql:\"kind\""
+	Name         string              "json:\"name\" graphql:\"name\""
+	OwnerID      *string             "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Tags         []string            "json:\"tags,omitempty\" graphql:\"tags\""
+	TemplateType enums.DocumentType  "json:\"templateType\" graphql:\"templateType\""
+	Uischema     map[string]any      "json:\"uischema,omitempty\" graphql:\"uischema\""
+}
+
+func (t *CreateAssessmentTemplate_CreateAssessmentTemplate_Template) GetDescription() *string {
+	if t == nil {
+		t = &CreateAssessmentTemplate_CreateAssessmentTemplate_Template{}
+	}
+	return t.Description
+}
+func (t *CreateAssessmentTemplate_CreateAssessmentTemplate_Template) GetID() string {
+	if t == nil {
+		t = &CreateAssessmentTemplate_CreateAssessmentTemplate_Template{}
+	}
+	return t.ID
+}
+func (t *CreateAssessmentTemplate_CreateAssessmentTemplate_Template) GetJsonconfig() map[string]any {
+	if t == nil {
+		t = &CreateAssessmentTemplate_CreateAssessmentTemplate_Template{}
+	}
+	return t.Jsonconfig
+}
+func (t *CreateAssessmentTemplate_CreateAssessmentTemplate_Template) GetKind() *enums.TemplateKind {
+	if t == nil {
+		t = &CreateAssessmentTemplate_CreateAssessmentTemplate_Template{}
+	}
+	return t.Kind
+}
+func (t *CreateAssessmentTemplate_CreateAssessmentTemplate_Template) GetName() string {
+	if t == nil {
+		t = &CreateAssessmentTemplate_CreateAssessmentTemplate_Template{}
+	}
+	return t.Name
+}
+func (t *CreateAssessmentTemplate_CreateAssessmentTemplate_Template) GetOwnerID() *string {
+	if t == nil {
+		t = &CreateAssessmentTemplate_CreateAssessmentTemplate_Template{}
+	}
+	return t.OwnerID
+}
+func (t *CreateAssessmentTemplate_CreateAssessmentTemplate_Template) GetTags() []string {
+	if t == nil {
+		t = &CreateAssessmentTemplate_CreateAssessmentTemplate_Template{}
+	}
+	return t.Tags
+}
+func (t *CreateAssessmentTemplate_CreateAssessmentTemplate_Template) GetTemplateType() *enums.DocumentType {
+	if t == nil {
+		t = &CreateAssessmentTemplate_CreateAssessmentTemplate_Template{}
+	}
+	return &t.TemplateType
+}
+func (t *CreateAssessmentTemplate_CreateAssessmentTemplate_Template) GetUischema() map[string]any {
+	if t == nil {
+		t = &CreateAssessmentTemplate_CreateAssessmentTemplate_Template{}
+	}
+	return t.Uischema
+}
+
+type CreateAssessmentTemplate_CreateAssessmentTemplate struct {
+	Template CreateAssessmentTemplate_CreateAssessmentTemplate_Template "json:\"template\" graphql:\"template\""
+}
+
+func (t *CreateAssessmentTemplate_CreateAssessmentTemplate) GetTemplate() *CreateAssessmentTemplate_CreateAssessmentTemplate_Template {
+	if t == nil {
+		t = &CreateAssessmentTemplate_CreateAssessmentTemplate{}
+	}
+	return &t.Template
 }
 
 type DeleteAssessment_DeleteAssessment struct {
@@ -166792,6 +166871,17 @@ func (t *CreateAssessment) GetCreateAssessment() *CreateAssessment_CreateAssessm
 	return &t.CreateAssessment
 }
 
+type CreateAssessmentTemplate struct {
+	CreateAssessmentTemplate CreateAssessmentTemplate_CreateAssessmentTemplate "json:\"createAssessmentTemplate\" graphql:\"createAssessmentTemplate\""
+}
+
+func (t *CreateAssessmentTemplate) GetCreateAssessmentTemplate() *CreateAssessmentTemplate_CreateAssessmentTemplate {
+	if t == nil {
+		t = &CreateAssessmentTemplate{}
+	}
+	return &t.CreateAssessmentTemplate
+}
+
 type DeleteAssessment struct {
 	DeleteAssessment DeleteAssessment_DeleteAssessment "json:\"deleteAssessment\" graphql:\"deleteAssessment\""
 }
@@ -176209,6 +176299,40 @@ func (c *Client) CreateAssessment(ctx context.Context, input CreateAssessmentInp
 
 	var res CreateAssessment
 	if err := c.Client.Post(ctx, "CreateAssessment", CreateAssessmentDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const CreateAssessmentTemplateDocument = `mutation CreateAssessmentTemplate ($input: CreateAssessmentTemplateInput!) {
+	createAssessmentTemplate(input: $input) {
+		template {
+			id
+			name
+			description
+			kind
+			templateType
+			tags
+			ownerID
+			jsonconfig
+			uischema
+		}
+	}
+}
+`
+
+func (c *Client) CreateAssessmentTemplate(ctx context.Context, input CreateAssessmentTemplateInput, interceptors ...clientv2.RequestInterceptor) (*CreateAssessmentTemplate, error) {
+	vars := map[string]any{
+		"input": input,
+	}
+
+	var res CreateAssessmentTemplate
+	if err := c.Client.Post(ctx, "CreateAssessmentTemplate", CreateAssessmentTemplateDocument, &res, vars, interceptors...); err != nil {
 		if c.Client.ParseDataWhenErrors {
 			return &res, err
 		}
@@ -218609,6 +218733,7 @@ var DocumentOperationNames = map[string]string{
 	GetAllAPITokensDocument:                       "GetAllAPITokens",
 	UpdateAPITokenDocument:                        "UpdateAPIToken",
 	CreateAssessmentDocument:                      "CreateAssessment",
+	CreateAssessmentTemplateDocument:              "CreateAssessmentTemplate",
 	DeleteAssessmentDocument:                      "DeleteAssessment",
 	DeleteBulkAssessmentDocument:                  "DeleteBulkAssessment",
 	GetAllAssessmentsDocument:                     "GetAllAssessments",

@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/entityops"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // legacyScientificKey converts a numeric key like "147884153" into the "1.47884153e+08" form the
@@ -77,6 +78,12 @@ func persistCatalogUpsert(ctx context.Context, db *ent.Client, schema *entityops
 	case errors.Is(err, entityops.ErrUpsertKeyMissing):
 		return "", ErrIngestUpsertKeyMissing
 	case errors.Is(err, entityops.ErrUpsertConflict):
+		// a row exists that the lookup key could not see, so log both the key and the record identity
+		lookupField, _ := schema.LookupField()
+		doc, _ := jsonx.Decode[map[string]any](payload)
+
+		logx.FromContext(ctx).Error().Err(err).Str(entityops.FieldSchema, schema.Snake).Str("lookup_field", lookupField.Name).Interface("lookup_value", doc[lookupField.InputKey]).Interface("record_name", doc["name"]).Msg("ingest upsert conflict: lookup key found no existing record but the insert violated a unique constraint")
+
 		return "", fmt.Errorf("%w: %w", ErrIngestUpsertConflict, err)
 	default:
 		return "", wrapIngestPersistError(err)

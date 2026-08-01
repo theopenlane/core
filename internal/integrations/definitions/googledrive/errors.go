@@ -19,6 +19,8 @@ var (
 	ErrExportFailed = errors.New("googledrive: file export failed")
 	// ErrFolderIDMissing indicates the folder ID is not configured
 	ErrFolderIDMissing = errors.New("googledrive: folder id missing from user input")
+	// ErrUserInputInvalid indicates the installation's stored user input could not be decoded
+	ErrUserInputInvalid = errors.New("googledrive: user input invalid")
 	// ErrFolderListFailed indicates the Drive folder listing request failed
 	ErrFolderListFailed = errors.New("googledrive: folder list failed")
 	// ErrPayloadEncode indicates a provider payload could not be serialized

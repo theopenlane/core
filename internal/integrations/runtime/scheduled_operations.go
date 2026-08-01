@@ -107,7 +107,7 @@ func (r *Runtime) seedScheduledOperation(ctx context.Context, oc gala.OperationC
 	logx.FromContext(ctx).Info().Str("definition_id", src.DefinitionID).Str(intobvs.FieldOperation, oc.Operation).Msg("seeding scheduled operation")
 
 	receipt := r.Gala().EmitWithHeaders(
-		gala.WithOperationContext(ctx, oc),
+		intobvs.WithContext(ctx, oc),
 		operations.ReconcileTopic,
 		operations.ReconcileEnvelope{OperationContext: oc},
 		gala.Headers{

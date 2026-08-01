@@ -61,6 +61,19 @@ func (h *Handler) StartIntegrationAuth(ctx echo.Context) error {
 		return h.BadRequest(ctx, ErrIntegrationNotFound)
 	}
 
+	// required user input has to be satisfied before we hand out provider scopes, otherwise the
+	// install authorizes successfully and then fails every sync it runs
+	effectiveInput := in.UserInput
+	if jsonx.IsEmptyRawMessage(effectiveInput) {
+		effectiveInput = installationRec.Config.ClientConfig
+	}
+
+	if err := h.IntegrationsRuntime.ValidateUserInput(requestCtx, def, effectiveInput); err != nil {
+		logx.FromContext(requestCtx).Warn().Err(err).Str("definition_id", def.ID).Msg("integration user input incomplete, refusing to start auth flow")
+
+		return h.BadRequest(ctx, ErrIntegrationUserInputRequired)
+	}
+
 	// if we got optional config with the input, persist it
 	if !jsonx.IsEmptyRawMessage(in.UserInput) {
 		if err := h.IntegrationsRuntime.Reconcile(requestCtx, installationRec, in.UserInput, types.CredentialSlotID{}, nil, nil); err != nil {

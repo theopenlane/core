@@ -277,6 +277,12 @@ func skipFilter(ctx context.Context, q intercept.Query, forceFilter SkipperFunc,
 		return true
 	}
 
+	// skip object owned filtering for the support user
+	caller, ok := auth.CallerFromContext(ctx)
+	if ok && caller != nil && caller.Has(auth.CapOrgSupport) {
+		return true
+	}
+
 	// skip filter if the subject has full organization view access for the object type
 	objectType := rule.GetFGAObjectType(q)
 

@@ -3047,6 +3047,15 @@ input AssessmentResponseWhereInput {
 	hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
 }
 """
+Return response for createAssessmentTemplate mutation
+"""
+type AssessmentTemplateCreatePayload {
+	"""
+	Created template
+	"""
+	template: Template!
+}
+"""
 Return response for updateAssessment mutation
 """
 type AssessmentUpdatePayload {
@@ -12846,6 +12855,27 @@ input CreateAssessmentResponseInput {
 	documentID: ID
 	vendorRiskScoreIDs: [ID!]
 	workflowObjectRefIDs: [ID!]
+}
+"""
+Input for creating a questionnaire template from an assessment
+"""
+input CreateAssessmentTemplateInput {
+	"""
+	ID of the assessment to turn into a template
+	"""
+	assessmentID: ID!
+	"""
+	Name for the template. Defaults to the assessment name when omitted.
+	"""
+	name: String
+	"""
+	Description for the template.
+	"""
+	description: String
+	"""
+	Tags for the template.
+	"""
+	tags: [String!]
 }
 """
 CreateAssetInput is used for create Asset object.
@@ -46027,6 +46057,15 @@ type Mutation {
 		input: Upload!
 	): APITokenBulkUpdatePayload!
 	"""
+	Create a questionnaire template from an existing assessment
+	"""
+	createAssessmentTemplate(
+		"""
+		values for creating the assessment template
+		"""
+		input: CreateAssessmentTemplateInput!
+	): AssessmentTemplateCreatePayload!
+	"""
 	Create a new assessment
 	"""
 	createAssessment(
@@ -53624,6 +53663,7 @@ enum NotificationNotificationTopic @goModel(model: "github.com/theopenlane/core/
 	DOMAIN_SCAN
 	IMPORT_COMPLETE
 	ORGANIZATION_READY
+	INTEGRATION
 }
 """
 NotificationNotificationType is enum for the field notification_type

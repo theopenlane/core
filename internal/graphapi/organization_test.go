@@ -204,6 +204,24 @@ func TestQueryOrganizations(t *testing.T) {
 		assert.Check(t, org3Found)
 	})
 
+	t.Run("support user can read organization avatar", func(t *testing.T) {
+		ctx := newSupportCtx(orgUser.owner.UserCtx, org2ID)
+
+		resp, err := suite.client.api.GetAllOrganizations(ctx)
+
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
+		assert.Assert(t, resp.Organizations.Edges != nil)
+		assert.Check(t, is.Len(resp.Organizations.Edges, 1))
+
+		organization := resp.Organizations.Edges[0].Node
+
+		assert.Check(t, is.Equal(org2ID, organization.ID))
+		assert.Assert(t, organization.AvatarFile != nil)
+		assert.Check(t, is.Equal(avatarFileIDOrg2, organization.AvatarFile.ID))
+		assert.Check(t, organization.AvatarFile.PresignedURL != nil)
+	})
+
 	// cleanup orgs
 	cleanupOrganizationDataWithContext(orgUser.owner.UserCtx, t)
 }
