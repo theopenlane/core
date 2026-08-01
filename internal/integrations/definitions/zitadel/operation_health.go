@@ -37,10 +37,10 @@ func (HealthCheck) Run(ctx context.Context, c *client.Client, req types.Operatio
 	}
 
 	resp, err := c.UserServiceV2().ListUsers(ctx, &userv2.ListUsersRequest{
-	Query: &objectv2.ListQuery{
-		Limit: 1,
-	},
-})
+		Query: &objectv2.ListQuery{
+			Limit: 1,
+		},
+	})
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error listing users for health check")
 		return nil, ErrHealthCheckFailed
