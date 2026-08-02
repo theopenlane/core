@@ -1,4 +1,5 @@
-package ssoutils
+// Package ssoenforcement holds the db-aware loader
+package ssoenforcement
 
 import (
 	"context"
@@ -9,23 +10,24 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/user"
+	sso "github.com/theopenlane/core/pkg/ssoutils"
 )
 
 // LoadEnforcement loads the organization setting and, when a userID is provided, the subject's
 // membership and email, and returns the EnforcementInput plus the loaded setting. It is the single
 // db-aware source used by both the SSO handlers and the auth middleware to feed Evaluate, so the
 // membership query is projected to only the fields the decision needs
-func LoadEnforcement(ctx context.Context, db *ent.Client, orgID, userID, email string) (EnforcementInput, *ent.OrganizationSetting, error) {
+func LoadEnforcement(ctx context.Context, db *ent.Client, orgID, userID, email string) (sso.EnforcementInput, *ent.OrganizationSetting, error) {
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 	setting, err := db.OrganizationSetting.Query().
 		Where(organizationsetting.OrganizationID(orgID)).
 		Only(allowCtx)
 	if err != nil {
-		return EnforcementInput{}, nil, err
+		return sso.EnforcementInput{}, nil, err
 	}
 
-	in := EnforcementInput{
+	in := sso.EnforcementInput{
 		SSOEnforced:   setting.IdentityProviderLoginEnforced,
 		TFAEnforced:   setting.MultifactorAuthEnforced,
 		ExemptDomains: setting.SSOExemptDomains,
@@ -43,7 +45,7 @@ func LoadEnforcement(ctx context.Context, db *ent.Client, orgID, userID, email s
 		Select(orgmembership.FieldRole, orgmembership.FieldSSOExempt).
 		Only(allowCtx)
 	if mErr != nil {
-		return EnforcementInput{}, nil, mErr
+		return sso.EnforcementInput{}, nil, mErr
 	}
 
 	in.IsMember = true
@@ -53,7 +55,7 @@ func LoadEnforcement(ctx context.Context, db *ent.Client, orgID, userID, email s
 	if in.Email == "" {
 		u, uErr := db.User.Query().Where(user.ID(userID)).Select(user.FieldEmail).Only(allowCtx)
 		if uErr != nil {
-			return EnforcementInput{}, nil, uErr
+			return sso.EnforcementInput{}, nil, uErr
 		}
 
 		in.Email = u.Email
