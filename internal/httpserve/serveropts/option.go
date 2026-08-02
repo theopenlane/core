@@ -561,7 +561,7 @@ func WithObjectStorage() ServerOption {
 		s.Config.Handler.ObjectStore = storageService
 
 		// Strict availability check for providers with ensureAvailable=true
-		strictErrs := validators.ValidateAvailabilityByProvider(context.Background(), cfg)
+		strictErrs := validators.ValidateAvailabilityByProvider(context.Background(), cfg, true)
 		if len(strictErrs) > 0 {
 			log.Fatal().Err(errors.Join(strictErrs...)).Msg("object storage availability check failed")
 		}
