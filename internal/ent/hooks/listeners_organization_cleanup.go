@@ -16,11 +16,11 @@ import (
 )
 
 // RegisterGalaOrganizationCleanupListeners registers the organization cascade delete on Gala
-func RegisterGalaOrganizationCleanupListeners(registry *gala.Registry) ([]gala.ListenerID, error) {
-	return gala.RegisterListeners(registry,
-		gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic: eventqueue.MutationTopic(eventqueue.MutationConcernDirect, entgen.TypeOrganization),
-			Name:  "organization.cascade_delete",
+func RegisterGalaOrganizationCleanupListeners(g *gala.Gala) ([]gala.ListenerID, error) {
+	return eventqueue.RegisterMutationListeners(g,
+		eventqueue.MutationListener{
+			Schema: entgen.TypeOrganization,
+			Name:   "organization.cascade_delete",
 			Operations: []string{
 				ent.OpDelete.String(),
 				ent.OpDeleteOne.String(),
@@ -33,18 +33,10 @@ func RegisterGalaOrganizationCleanupListeners(registry *gala.Registry) ([]gala.L
 
 // handleOrganizationCascadeDelete removes everything an organization owns once it is deleted.
 // The records are hard deleted and their history rows purged along with files stored in object storage
-func handleOrganizationCascadeDelete(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	handlerCtx, client, ok := eventqueue.ClientFromHandler(ctx)
-	if !ok {
-		return nil
-	}
+func handleOrganizationCascadeDelete(inv eventqueue.Invocation, _ eventqueue.MutationGalaPayload) error {
+	orgID := inv.EntityID
 
-	orgID, ok := eventqueue.MutationEntityID(payload, handlerCtx.Envelope.Headers.Properties)
-	if !ok || orgID == "" {
-		return nil
-	}
-
-	cleanupCtx := entgen.NewContext(organizationCleanupContext(handlerCtx.Context, orgID), client)
+	cleanupCtx := entgen.NewContext(organizationCleanupContext(inv.Context, orgID), inv.Client)
 
 	cleanupCtx = logx.WithFields(cleanupCtx, logx.LogFields{
 		"organization_id": orgID,
@@ -66,9 +58,8 @@ func handleOrganizationCascadeDelete(ctx gala.HandlerContext, payload eventqueue
 	}
 
 	// the organization row goes last, once everything it owned is gone
-	if _, err := client.Organization.Delete().Where(organization.ID(orgID)).Exec(cleanupCtx); err != nil {
-		logx.FromContext(cleanupCtx).Error().Err(err).
-			Msg("failed to delete organization")
+	if _, err := inv.Client.Organization.Delete().Where(organization.ID(orgID)).Exec(cleanupCtx); err != nil {
+		logx.FromContext(cleanupCtx).Error().Err(err).Msg("failed to delete organization")
 
 		return err
 	}

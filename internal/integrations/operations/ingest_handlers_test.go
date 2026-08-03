@@ -8,7 +8,6 @@ import (
 	"testing"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/openapi"
 	"github.com/theopenlane/core/internal/ent/entityops"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -193,38 +192,6 @@ func TestEmitMappedRecord_UnsupportedSchema(t *testing.T) {
 	}
 }
 
-func TestPrepareContactInput_SetsOwnerID(t *testing.T) {
-	t.Parallel()
-
-	integration := &ent.Integration{
-		OwnerID: "org-001",
-		Config:  openapi.IntegrationConfig{},
-	}
-
-	input := ent.CreateContactInput{}
-	got := prepareContactInput(context.Background(), input, integration)
-
-	if got.OwnerID == nil || *got.OwnerID != "org-001" {
-		t.Fatalf("expected OwnerID=%q, got %v", "org-001", got.OwnerID)
-	}
-}
-
-func TestPrepareContactInput_DoesNotOverrideOwnerID(t *testing.T) {
-	t.Parallel()
-
-	existing := "org-existing"
-	integration := &ent.Integration{
-		OwnerID: "org-001",
-	}
-
-	input := ent.CreateContactInput{OwnerID: &existing}
-	got := prepareContactInput(context.Background(), input, integration)
-
-	if *got.OwnerID != "org-existing" {
-		t.Fatalf("expected OwnerID=%q, got %q", "org-existing", *got.OwnerID)
-	}
-}
-
 func TestPrepareDirectoryAccountInput_SetsContextFields(t *testing.T) {
 	t.Parallel()
 
@@ -289,66 +256,6 @@ func TestRegisterIngestListeners_NilRuntime(t *testing.T) {
 	if !errors.Is(err, ErrGalaRequired) {
 		t.Fatalf("expected ErrGalaRequired, got %v", err)
 	}
-}
-
-func TestPrepareAssetInput(t *testing.T) {
-	t.Parallel()
-
-	integration := &ent.Integration{
-		OwnerID: "org-001",
-	}
-
-	input := ent.CreateAssetInput{}
-	got := prepareAssetInput(context.Background(), input, integration)
-	_ = got
-}
-
-func TestPrepareEntityInput(t *testing.T) {
-	t.Parallel()
-
-	integration := &ent.Integration{
-		OwnerID: "org-001",
-	}
-
-	input := ent.CreateEntityInput{}
-	got := prepareEntityInput(context.Background(), input, integration)
-	_ = got
-}
-
-func TestPrepareFindingInput(t *testing.T) {
-	t.Parallel()
-
-	integration := &ent.Integration{
-		OwnerID: "org-001",
-	}
-
-	input := ent.CreateFindingInput{}
-	got := prepareFindingInput(context.Background(), input, integration)
-	_ = got
-}
-
-func TestPrepareRiskInput(t *testing.T) {
-	t.Parallel()
-
-	integration := &ent.Integration{
-		OwnerID: "org-001",
-	}
-
-	input := ent.CreateRiskInput{}
-	got := prepareRiskInput(context.Background(), input, integration)
-	_ = got
-}
-
-func TestPrepareVulnerabilityInput(t *testing.T) {
-	t.Parallel()
-
-	integration := &ent.Integration{
-		OwnerID: "org-001",
-	}
-
-	input := ent.CreateVulnerabilityInput{}
-	got := prepareVulnerabilityInput(context.Background(), input, integration)
-	_ = got
 }
 
 func TestPrepareDirectoryAccountInput_NoOverrideWhenSet(t *testing.T) {

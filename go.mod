@@ -2,6 +2,8 @@ module github.com/theopenlane/core
 
 go 1.26.5
 
+replace github.com/theopenlane/entx => /Users/manderson/entx
+
 tool (
 	github.com/dave/jennifer
 	github.com/invopop/jsonschema

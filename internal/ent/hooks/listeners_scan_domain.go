@@ -18,9 +18,9 @@ import (
 
 // RegisterGalaDomainScanSubmitListeners registers the listener that submits a openlane_domain_scan
 // when the domain scan is created in a pending state
-func RegisterGalaDomainScanSubmitListeners(registry *gala.Registry) ([]gala.ListenerID, error) {
-	return gala.RegisterListeners(registry, gala.Definition[eventqueue.MutationGalaPayload]{
-		Topic:      eventqueue.MutationTopic(eventqueue.MutationConcernDirect, generated.TypeScan),
+func RegisterGalaDomainScanSubmitListeners(g *gala.Gala) ([]gala.ListenerID, error) {
+	return eventqueue.RegisterMutationListeners(g, eventqueue.MutationListener{
+		Schema:     generated.TypeScan,
 		Name:       "scan.domain_submit",
 		Operations: []string{ent.OpCreate.String()},
 		Handle:     handleScanDomainCreated,
@@ -30,28 +30,19 @@ func RegisterGalaDomainScanSubmitListeners(registry *gala.Registry) ([]gala.List
 // RegisterGalaDomainScanUpdateListener registers the listener that creates a pending domain scan for
 // every current domain whenever an organization's settings domains field changes, this would then be picked
 // up by the scan submit listener to run the scan
-func RegisterGalaDomainScanUpdateListener(registry *gala.Registry) ([]gala.ListenerID, error) {
-	return gala.RegisterListeners(registry, gala.Definition[eventqueue.MutationGalaPayload]{
-		Topic:      eventqueue.MutationTopic(eventqueue.MutationConcernDirect, generated.TypeOrganizationSetting),
+func RegisterGalaDomainScanUpdateListener(g *gala.Gala) ([]gala.ListenerID, error) {
+	return eventqueue.RegisterMutationListeners(g, eventqueue.MutationListener{
+		Schema:     generated.TypeOrganizationSetting,
 		Name:       "domainscan.organization_setting_update",
 		Operations: []string{ent.OpUpdateOne.String()},
+		Fields:     []string{organizationsetting.FieldDomains},
 		Handle:     handleOrganizationSettingDomainsUpdated,
 	})
 }
 
 // handleScanDomainCreated submits a newly created domain-type scan to the domain_scan gathering data via urlScanner, enrichment with browserRendering.JSON, and dns lookups
-func handleScanDomainCreated(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	ctx, client, ok := eventqueue.ClientFromHandler(ctx)
-	if !ok {
-		return nil
-	}
-
-	scanID, ok := eventqueue.MutationEntityID(payload, ctx.Envelope.Headers.Properties)
-	if !ok || scanID == "" {
-		return nil
-	}
-
-	scanRecord, err := client.Scan.Get(ctx.Context, scanID)
+func handleScanDomainCreated(inv eventqueue.Invocation, _ eventqueue.MutationGalaPayload) error {
+	scanRecord, err := inv.Client.Scan.Get(inv.Context, inv.EntityID)
 	if err != nil {
 		if generated.IsNotFound(err) {
 			return nil
@@ -64,7 +55,7 @@ func handleScanDomainCreated(ctx gala.HandlerContext, payload eventqueue.Mutatio
 		return nil
 	}
 
-	rt := intruntime.FromClient(ctx.Context, client)
+	rt := intruntime.FromClient(inv.Context, inv.Client)
 	if rt == nil {
 		return nil
 	}
@@ -80,7 +71,7 @@ func handleScanDomainCreated(ctx gala.HandlerContext, payload eventqueue.Mutatio
 		return err
 	}
 
-	_, err = rt.Dispatch(ctx.Context, types.DispatchRequest{
+	_, err = rt.Dispatch(inv.Context, types.DispatchRequest{
 		DefinitionID: cloudflare.DefinitionID.ID(),
 		Operation:    cloudflare.DomainScanRequestOp.Name(),
 		Config:       config,
@@ -101,22 +92,8 @@ func isPendingDomainScan(scanRecord *generated.Scan) bool {
 // handleOrganizationSettingDomainsUpdated requests a scan for every current domain whenever an
 // organization's settings domains field changes; DomainScanRequestOp finds-or-creates and runs
 // each one, the same operation the REST-replacing customer request and handleScanDomainCreated use
-func handleOrganizationSettingDomainsUpdated(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	if !eventqueue.MutationFieldChanged(payload, organizationsetting.FieldDomains) {
-		return nil
-	}
-
-	ctx, client, ok := eventqueue.ClientFromHandler(ctx)
-	if !ok {
-		return nil
-	}
-
-	settingID, ok := eventqueue.MutationEntityID(payload, ctx.Envelope.Headers.Properties)
-	if !ok || settingID == "" {
-		return nil
-	}
-
-	setting, err := client.OrganizationSetting.Get(ctx.Context, settingID)
+func handleOrganizationSettingDomainsUpdated(inv eventqueue.Invocation, _ eventqueue.MutationGalaPayload) error {
+	setting, err := inv.Client.OrganizationSetting.Get(inv.Context, inv.EntityID)
 	if err != nil {
 		if generated.IsNotFound(err) {
 			return nil
@@ -125,15 +102,15 @@ func handleOrganizationSettingDomainsUpdated(ctx gala.HandlerContext, payload ev
 		return err
 	}
 
-	rt := intruntime.FromClient(ctx.Context, client)
+	rt := intruntime.FromClient(inv.Context, inv.Client)
 	if rt == nil {
 		return nil
 	}
 
-	groupID := string(ctx.Envelope.ID)
+	groupID := string(inv.Envelope.ID)
 
 	// set internal context to bypass rate limits on scan requests
-	dispatchCtx := rule.WithInternalContext(ctx.Context)
+	dispatchCtx := rule.WithInternalContext(inv.Context)
 
 	for _, domain := range setting.Domains {
 		config, err := json.Marshal(cloudflare.DomainScanRequest{

@@ -197,7 +197,7 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 		return runtime
 	}))
 
-	_, err = hooks.RegisterGalaWorkflowListeners(runtime.Registry())
+	_, err = hooks.RegisterGalaWorkflowListeners(runtime)
 	s.Require().NoError(err)
 
 	wfEngine, ok := db.WorkflowEngine.(*engine.WorkflowEngine)
@@ -316,13 +316,13 @@ func (s *WorkflowEngineTestSuite) requireWorkflowSetup(cfg *workflows.Config, ru
 	s.Require().NotNil(s.client.WorkflowEngine, "workflow engine not initialized")
 
 	s.Require().True(
-		runtime.Registry().InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernWorkflow, generated.TypeControl), ent.OpCreate.String()),
+		runtime.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernWorkflow, generated.TypeControl), ent.OpCreate.String()),
 		"mutation listeners not registered",
 	)
 
 	if cfg != nil && cfg.Enabled {
 		s.Require().True(
-			runtime.Registry().InterestedIn(gala.TopicWorkflowTriggered, ""),
+			runtime.InterestedIn(gala.TopicWorkflowTriggered, ""),
 			"workflow listeners not registered",
 		)
 	}

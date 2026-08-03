@@ -16,16 +16,17 @@ import (
 func TestRegisterGalaDomainScanSubmitListeners(t *testing.T) {
 	t.Parallel()
 
-	registry := gala.NewRegistry()
+	runtime, err := gala.NewInMemory()
+	assert.NilError(t, err)
 
-	ids, err := RegisterGalaDomainScanSubmitListeners(registry)
+	ids, err := RegisterGalaDomainScanSubmitListeners(runtime)
 	assert.NilError(t, err)
 	assert.Equal(t, len(ids), 1)
 
 	topic := eventqueue.MutationTopicName(eventqueue.MutationConcernDirect, generated.TypeScan)
-	assert.Check(t, registry.InterestedIn(topic, ent.OpCreate.String()))
-	assert.Check(t, !registry.InterestedIn(topic, ent.OpUpdate.String()))
-	assert.Check(t, !registry.InterestedIn(topic, ent.OpDelete.String()))
+	assert.Check(t, runtime.InterestedIn(topic, ent.OpCreate.String()))
+	assert.Check(t, !runtime.InterestedIn(topic, ent.OpUpdate.String()))
+	assert.Check(t, !runtime.InterestedIn(topic, ent.OpDelete.String()))
 }
 
 func TestIsPendingDomainScan(t *testing.T) {

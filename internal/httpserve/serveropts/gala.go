@@ -8,7 +8,6 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/gala"
 )
 
@@ -26,7 +25,6 @@ func NewGalaRuntimes(ctx context.Context, so *ServerOptions) (*gala.Gala, *gala.
 	}
 
 	galaApp, err := gala.NewGala(ctx, gala.Config{
-		Enabled:       galaCfg.Enabled,
 		ConnectionURI: so.Config.Settings.JobQueue.ConnectionURI,
 		QueueName:     galaQueueName,
 		WorkerCount:   max(galaCfg.WorkerCount, 1),
@@ -47,8 +45,6 @@ func NewGalaRuntimes(ctx context.Context, so *ServerOptions) (*gala.Gala, *gala.
 
 		return nil, nil, err
 	}
-
-	so.Config.Handler.Gala = galaApp
 
 	return galaApp, notificationGala, nil
 }
@@ -78,34 +74,25 @@ func ConfigureGala(ctx context.Context, galaApp, notificationGala *gala.Gala, db
 		return notificationGala
 	}))
 
-	provideGalaDependencies(galaApp.Injector(), galaApp, dbClient, true)
-	provideGalaDependencies(notificationGala.Injector(), notificationGala, dbClient, false)
+	if err := provideGalaDependencies(galaApp, dbClient); err != nil {
+		closeRuntimes()
 
-	registrations := []struct {
-		runtime  *gala.Gala
-		register func(*gala.Registry) ([]gala.ListenerID, error)
-	}{
-		{galaApp, hooks.RegisterGalaOrganizationAvatarListeners},
-		{galaApp, hooks.RegisterGalaTaskRuleListeners},
-		{galaApp, hooks.RegisterGalaEntitlementListeners},
-		{galaApp, hooks.RegisterGalaOrganizationCleanupListeners},
-		{galaApp, hooks.RegisterGalaTrustCenterCacheListeners},
-		{galaApp, hooks.RegisterGalaTrustCenterWatermarkListeners},
-		{galaApp, hooks.RegisterGalaWorkflowListeners},
-		{galaApp, hooks.RegisterGalaVendorScoringListeners},
-		{galaApp, hooks.RegisterGalaIdentityResolutionListeners},
-		{galaApp, hooks.RegisterGalaDocumentAssociationListeners},
-		{galaApp, hooks.RegisterGalaQuestionnaireTransformListeners},
-		{galaApp, hooks.RegisterGalaCampaignRecurringListeners},
-		{galaApp, hooks.RegisterGalaSubscriberLinkListeners},
-		{galaApp, hooks.RegisterGalaNDAAttestationListeners},
-		{galaApp, hooks.RegisterGalaDomainScanSubmitListeners},
-		{galaApp, hooks.RegisterGalaDomainScanUpdateListener},
-		{notificationGala, hooks.RegisterGalaNotificationListeners},
+		return err
 	}
 
-	for _, r := range registrations {
-		if _, err := r.register(r.runtime.Registry()); err != nil {
+	if err := provideGalaDependencies(notificationGala, dbClient); err != nil {
+		closeRuntimes()
+
+		return err
+	}
+
+	for _, registration := range hooks.GalaRegistrations {
+		runtime := galaApp
+		if registration.Runtime == hooks.GalaRuntimeNotification {
+			runtime = notificationGala
+		}
+
+		if _, err := registration.Register(runtime); err != nil {
 			closeRuntimes()
 
 			return err
@@ -123,28 +110,16 @@ func ConfigureGala(ctx context.Context, galaApp, notificationGala *gala.Gala, db
 	return nil
 }
 
-// provideGalaDependencies registers explicit dependencies that gala listeners resolve via samber/do.
-// Current listeners require:
-//   - *ent.Client: used by entitlement and workflow listeners
-//   - *engine.WorkflowEngine: used by workflow listeners (when workflows enabled)
-func provideGalaDependencies(injector do.Injector, galaApp *gala.Gala, dbClient *ent.Client, setWorkflowRuntime bool) {
-	if galaApp != nil {
-		do.ProvideValue(injector, galaApp)
-	}
+// provideGalaDependencies registers explicit dependencies that gala listeners resolve via samber/do
+// and the durable context codec that restores the ent client onto handler contexts; codec
+// registration failure is a wiring error and fails startup
+func provideGalaDependencies(galaApp *gala.Gala, dbClient *ent.Client) error {
+	injector := galaApp.Injector()
 
+	do.ProvideValue(injector, galaApp)
 	do.ProvideValue(injector, dbClient)
 
-	if err := galaApp.ContextManager().Register(
+	return galaApp.ContextManager().Register(
 		gala.NewInjectorCodec("ent_client", injector, ent.NewContext),
-	); err != nil {
-		log.Error().Err(err).Msg("failed to register ent client context codec")
-	}
-
-	if !setWorkflowRuntime {
-		return
-	}
-
-	if wfEngine, ok := dbClient.WorkflowEngine.(*engine.WorkflowEngine); ok && wfEngine != nil {
-		do.ProvideValue(injector, wfEngine)
-	}
+	)
 }

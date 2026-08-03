@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"net/mail"
-	"reflect"
 	"strconv"
 	"strings"
 	"time"
@@ -29,8 +28,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/integrations/operations"
-	"github.com/theopenlane/core/internal/integrations/registry"
-	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
@@ -39,36 +36,24 @@ import (
 // RegisterGalaQuestionnaireTransformListeners registers listeners that transform
 // completed questionnaire document data into configured target schemas.
 // Supported types are defined in `TemplateProjectionTarget` enums
-func RegisterGalaQuestionnaireTransformListeners(registry *gala.Registry) ([]gala.ListenerID, error) {
-	return gala.RegisterListeners(registry,
-		gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic:      eventqueue.MutationTopic(eventqueue.MutationConcernDirect, entgen.TypeAssessmentResponse),
-			Name:       operations.QuestionnaireTransformOperationName,
-			Operations: []string{ent.OpCreate.String(), ent.OpUpdate.String(), ent.OpUpdateOne.String()},
-			Handle:     handleAssessmentResponse,
-		},
-	)
+func RegisterGalaQuestionnaireTransformListeners(g *gala.Gala) ([]gala.ListenerID, error) {
+	return eventqueue.RegisterMutationListeners(g, eventqueue.MutationListener{
+		Schema:     entgen.TypeAssessmentResponse,
+		Name:       operations.QuestionnaireTransformOperationName,
+		Operations: []string{ent.OpCreate.String(), ent.OpUpdate.String(), ent.OpUpdateOne.String()},
+		Handle:     handleAssessmentResponse,
+	})
 }
 
-func handleAssessmentResponse(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
+func handleAssessmentResponse(inv eventqueue.Invocation, payload eventqueue.MutationGalaPayload) error {
 	if !questionnaireTransformFieldChanged(payload) {
 		return nil
 	}
 
-	ctx, client, ok := eventqueue.ClientFromHandler(ctx)
-	if !ok {
-		return nil
-	}
+	allowCtx := workflows.AllowContext(inv.Context)
 
-	id, ok := eventqueue.MutationEntityID(payload, ctx.Envelope.Headers.Properties)
-	if !ok || id == "" {
-		return nil
-	}
-
-	allowCtx := workflows.AllowContext(ctx.Context)
-
-	response, err := client.AssessmentResponse.Query().
-		Where(assessmentresponse.IDEQ(id)).
+	response, err := inv.Client.AssessmentResponse.Query().
+		Where(assessmentresponse.IDEQ(inv.EntityID)).
 		WithDocument().
 		WithAssessment(func(query *entgen.AssessmentQuery) {
 			query.WithTemplate()
@@ -76,17 +61,17 @@ func handleAssessmentResponse(ctx gala.HandlerContext, payload eventqueue.Mutati
 		Only(allowCtx)
 	if err != nil {
 		if entgen.IsNotFound(err) {
-			logx.FromContext(ctx.Context).Error().
+			logx.FromContext(inv.Context).Error().
 				Err(err).
-				Str("assessment_response_id", id).
+				Str("assessment_response_id", inv.EntityID).
 				Msg("assessment response not found for questionnaire transform")
 
 			return nil
 		}
 
-		logx.FromContext(ctx.Context).Error().
+		logx.FromContext(inv.Context).Error().
 			Err(err).
-			Str("assessment_response_id", id).
+			Str("assessment_response_id", inv.EntityID).
 			Msg("failed to load assessment response for questionnaire transform")
 
 		return err
@@ -117,22 +102,20 @@ func handleAssessmentResponse(ctx gala.HandlerContext, payload eventqueue.Mutati
 		Config:               config,
 	}
 
-	integrationRun, startedAt, created, err := createQuestionnaireTransformRun(allowCtx, client, req)
+	integrationRun, startedAt, created, err := createQuestionnaireTransformRun(allowCtx, inv.Client, req)
 	if err != nil {
 		return err
 	}
 
 	if !created {
-		logx.FromContext(ctx.Context).Debug().
+		logx.FromContext(inv.Context).Debug().
 			Str("assessment_response_id", response.ID).
 			Msg("questionnaire transform run already exists")
 
 		return nil
 	}
 
-	req.IntegrationRunID = integrationRun.ID
-
-	err = transformQuestionnaire(allowCtx, client, req)
+	err = transformQuestionnaire(allowCtx, inv.Client, req)
 
 	runResult := operations.RunResult{
 		Status:  enums.IntegrationRunStatusSuccess,
@@ -147,7 +130,7 @@ func handleAssessmentResponse(ctx gala.HandlerContext, payload eventqueue.Mutati
 		}
 	}
 
-	errFromRun := operations.CompleteRun(allowCtx, client, integrationRun.ID, startedAt, runResult)
+	errFromRun := operations.CompleteRun(allowCtx, inv.Client, integrationRun.ID, startedAt, runResult)
 	if errFromRun != nil {
 		if err == nil {
 			return errFromRun
@@ -159,7 +142,7 @@ func handleAssessmentResponse(ctx gala.HandlerContext, payload eventqueue.Mutati
 		return nil
 	}
 
-	logger := logx.FromContext(ctx.Context).Error().
+	logger := logx.FromContext(inv.Context).Error().
 		Err(err).
 		Str("assessment_response_id", response.ID).
 		Str("assessment_id", assessment.ID).
@@ -248,7 +231,6 @@ func questionnaireTransformFieldChanged(payload eventqueue.MutationGalaPayload) 
 const transformMetadataKey = "questionnaire_transform"
 const entityTransformFieldNotes = "notes"
 const entityTransformFieldEntityTypeID = "entityTypeID"
-const questionnaireTransformDefinitionID = "questionnaire_transform"
 
 type questionnaireValidationError struct {
 	Message string
@@ -267,7 +249,6 @@ type questionnaireTransformRequest struct {
 	TemplateKind         enums.TemplateKind
 	AssessmentID         string
 	AssessmentResponseID string
-	IntegrationRunID     string
 	DocumentDataID       string
 	Email                string
 	Data                 map[string]any
@@ -278,10 +259,6 @@ type mappedTransform struct {
 	Payload    map[string]any
 	Notes      string
 	ExternalID string
-}
-
-var questionnaireTransformInputTypes = map[string]reflect.Type{
-	entityops.SchemaEntity.Name: reflect.TypeOf(entgen.CreateEntityInput{}),
 }
 
 func transformQuestionnaire(ctx context.Context, client *entgen.Client, req questionnaireTransformRequest) error {
@@ -303,7 +280,7 @@ func transformQuestionnaire(ctx context.Context, client *entgen.Client, req ques
 }
 
 func handleEntityTransform(ctx context.Context, client *entgen.Client, req questionnaireTransformRequest) error {
-	values, err := resolveTransformMappings(ctx, client, req)
+	values, err := resolveTransformMappings(ctx, client, entityops.SchemaEntity, req)
 	if err != nil {
 		return err
 	}
@@ -333,7 +310,7 @@ func handleEntityTransform(ctx context.Context, client *entgen.Client, req quest
 	return nil
 }
 
-func resolveTransformMappings(ctx context.Context, client *entgen.Client, req questionnaireTransformRequest) (map[string]any, error) {
+func resolveTransformMappings(ctx context.Context, client *entgen.Client, schema *entityops.Schema, req questionnaireTransformRequest) (map[string]any, error) {
 	if len(req.Config.Mappings) == 0 {
 		return nil, &questionnaireValidationError{Message: "transform configuration has no mappings"}
 	}
@@ -374,13 +351,13 @@ func resolveTransformMappings(ctx context.Context, client *entgen.Client, req qu
 			continue
 		}
 
-		value, err := applyTransform(rawValue, mapping.Transform)
-		if err != nil {
-			return nil, err
-		}
-
 		if mapping.To == "" {
 			return nil, &questionnaireValidationError{Message: fmt.Sprintf("transform mapping for %q is missing target field", mapping.From)}
+		}
+
+		value, err := applyTransform(schema, mapping.To, rawValue, mapping.Transform)
+		if err != nil {
+			return nil, err
 		}
 
 		values[mapping.To] = value
@@ -514,33 +491,28 @@ func setVendorEntityType(ctx context.Context, client *entgen.Client, req questio
 	return nil
 }
 
-func applyTransform(value any, transform enums.TemplateProjectionTransform) (any, error) {
-	if transform == "" {
-		return value, nil
-	}
-
+// applyTransform applies the configured transform to a raw document value. Slugification keeps its
+// bespoke string handling; every other transform delegates type coercion to the schema catalog,
+// passing values through for fields the catalog does not describe (such as the notes pseudo-field)
+// so later key resolution remains the arbiter of unknown fields
+func applyTransform(schema *entityops.Schema, targetField string, value any, transform enums.TemplateProjectionTransform) (any, error) {
 	switch transform {
-	case enums.TemplateProjectionTransformString:
-		return getStringValue(value), nil
-
+	case "":
+		return value, nil
 	case enums.TemplateProjectionTransformSlugify:
 		return strcase.KebabCase(strings.TrimSpace(getStringValue(value))), nil
-
-	case enums.TemplateProjectionTransformDate:
-		return getDatetimeValue(value)
-
-	case enums.TemplateProjectionTransformBool:
-		return getBoolValue(value)
-
-	case enums.TemplateProjectionTransformFloat:
-		return getFloatValue(value)
-
-	case enums.TemplateProjectionTransformStringArray:
-
-		return getStringArrayValue(value), nil
-	default:
-		return nil, &questionnaireValidationError{Message: fmt.Sprintf("unsupported transform %q", transform)}
 	}
+
+	coerced, err := schema.CoerceValue(targetField, value)
+
+	switch {
+	case errors.Is(err, entityops.ErrFieldNotFound):
+		return value, nil
+	case err != nil:
+		return nil, &questionnaireValidationError{Message: fmt.Sprintf("invalid transform value for %q: %v", targetField, err)}
+	}
+
+	return coerced, nil
 }
 
 func buildMappedTransformPayload(schemaName string, values map[string]any, req questionnaireTransformRequest) (mappedTransform, error) {
@@ -560,7 +532,7 @@ func buildMappedTransformPayload(schemaName string, values map[string]any, req q
 			continue
 		}
 
-		inputKey, ok := getIntegrationKey(schemaName, schema, field)
+		inputKey, ok := schema.ResolveInputKey(field)
 		if !ok {
 			return mappedTransform{}, &questionnaireValidationError{Message: fmt.Sprintf("unsupported %s transform field %q", schemaName, field)}
 		}
@@ -583,114 +555,23 @@ func buildMappedTransformPayload(schemaName string, values map[string]any, req q
 	return mapped, nil
 }
 
-func getIntegrationKey(schemaName string, schema *entityops.Schema, key string) (string, bool) {
-	if schema.AllowedKey(key) {
-		return key, true
-	}
-
-	normalizedKey := strcase.LowerCamelCase(key)
-	if schema.AllowedKey(normalizedKey) {
-		return normalizedKey, true
-	}
-
-	for _, field := range schema.Fields {
-		if key == field.Name || strings.EqualFold(key, field.InputKey) || normalizedKey == field.InputKey {
-			return field.InputKey, true
-		}
-	}
-
-	return directInputKey(schemaName, normalizedKey)
-}
-
-func directInputKey(schemaName string, key string) (string, bool) {
-	inputType, ok := questionnaireTransformInputTypes[schemaName]
-	if !ok || key == "" {
-		return "", false
-	}
-
-	for i := 0; i < inputType.NumField(); i++ {
-		field := inputType.Field(i)
-		fieldKey := strcase.LowerCamelCase(field.Name)
-		if key == fieldKey || strings.EqualFold(key, field.Name) {
-			return fieldKey, true
-		}
-	}
-
-	return "", false
-}
-
 func persistTransformPayload(ctx context.Context, client *entgen.Client, req questionnaireTransformRequest, schema string, mapped mappedTransform) (*entgen.Entity, error) {
 	payload, err := json.Marshal(mapped.Payload)
 	if err != nil {
 		return nil, fmt.Errorf("marshal transformed input: %w", err)
 	}
 
-	ingestRegistry := registry.New()
-	if err := ingestRegistry.Register(questionnaireTransformDefinition()); err != nil {
-		return nil, fmt.Errorf("register questionnaire transform ingest definition: %w", err)
-	}
-
-	integration := &entgen.Integration{
-		DefinitionID: questionnaireTransformDefinitionID,
-		OwnerID:      req.OrganizationID,
-	}
-
-	sets := []integrationtypes.IngestPayloadSet{
-		{
-			Schema: schema,
-			Envelopes: []integrationtypes.MappingEnvelope{
-				{
-					Resource: "questionnaire_document_data",
-					Action:   "completed",
-					Payload:  payload,
-				},
-			},
-		},
-	}
-
-	if err := operations.ProcessPayloadSets(ctx, operations.IngestContext{
-		Registry:    ingestRegistry,
-		DB:          client,
-		Integration: integration,
-	}, "", []integrationtypes.IngestContract{
-		{Schema: schema},
-	}, sets, operations.IngestOptions{
-		RunID: req.IntegrationRunID,
-	}); err != nil {
+	entityID, err := operations.PersistRecord(ctx, client, nil, schema, payload)
+	if err != nil {
 		return nil, fmt.Errorf("persist transformed input: %w", err)
 	}
 
-	record, err := client.Entity.Query().
-		Where(
-			entity.OwnerIDEQ(req.OrganizationID),
-			entity.ExternalIDEQ(mapped.ExternalID),
-		).
-		Only(ctx)
+	record, err := client.Entity.Get(ctx, entityID)
 	if err != nil {
 		return nil, fmt.Errorf("query transformed entity: %w", err)
 	}
 
 	return record, nil
-}
-
-func questionnaireTransformDefinition() integrationtypes.Definition {
-	return integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{
-			ID:          questionnaireTransformDefinitionID,
-			Family:      questionnaireTransformDefinitionID,
-			DisplayName: "Questionnaire Transform",
-			Active:      true,
-			Visible:     false,
-		},
-		Mappings: []integrationtypes.MappingRegistration{
-			{
-				Schema: entityops.SchemaEntity.Name,
-				Spec: integrationtypes.MappingOverride{
-					MapExpr: "",
-				},
-			},
-		},
-	}
 }
 
 func connectEntitySources(ctx context.Context, client *entgen.Client, req questionnaireTransformRequest, record *entgen.Entity) error {
@@ -840,91 +721,5 @@ func getStringValue(value any) string {
 		return strconv.FormatInt(v, 10)
 	default:
 		return fmt.Sprintf("%v", value)
-	}
-}
-
-func getBoolValue(value any) (bool, error) {
-	switch v := value.(type) {
-	case bool:
-		return v, nil
-	case string:
-		switch strings.ToLower(strings.TrimSpace(v)) {
-
-		case "true", "yes", "y", "1":
-
-			return true, nil
-
-		case "false", "no", "n", "0":
-
-			return false, nil
-		}
-	}
-
-	return false, &questionnaireValidationError{Message: fmt.Sprintf("unsupported transform bool value %T", value)}
-}
-
-func getFloatValue(value any) (float64, error) {
-	switch v := value.(type) {
-	case float64:
-		return v, nil
-	case float32:
-		return float64(v), nil
-	case int:
-		return float64(v), nil
-	case int64:
-		return float64(v), nil
-	case string:
-		parsed, err := strconv.ParseFloat(strings.TrimSpace(v), 64)
-		if err != nil {
-			return 0, &questionnaireValidationError{Message: fmt.Sprintf("invalid transform float %q", v)}
-		}
-
-		return parsed, nil
-	default:
-		return 0, &questionnaireValidationError{Message: fmt.Sprintf("unsupported transform float value %T", value)}
-	}
-}
-
-func getStringArrayValue(value any) []string {
-	switch v := value.(type) {
-	case []string:
-		return v
-	case []any:
-		values := make([]string, 0, len(v))
-
-		for _, i := range v {
-			value := strings.TrimSpace(getStringValue(i))
-			if value != "" {
-				values = append(values, value)
-			}
-		}
-
-		return values
-	default:
-
-		value := strings.TrimSpace(getStringValue(value))
-		if value == "" {
-			return nil
-		}
-
-		return []string{value}
-	}
-}
-
-func getDatetimeValue(value any) (models.DateTime, error) {
-	switch v := value.(type) {
-	case models.DateTime:
-		return v, nil
-	case time.Time:
-		return models.DateTime(v), nil
-	case string:
-		parsed, err := models.ToDateTime(strings.TrimSpace(v))
-		if err != nil {
-			return models.DateTime{}, &questionnaireValidationError{Message: fmt.Sprintf("invalid transform date %q", v)}
-		}
-
-		return *parsed, nil
-	default:
-		return models.DateTime{}, &questionnaireValidationError{Message: fmt.Sprintf("unsupported transform date value %T", value)}
 	}
 }

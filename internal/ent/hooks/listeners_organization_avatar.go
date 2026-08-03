@@ -37,9 +37,9 @@ var avatarDiscoveryClient = &http.Client{
 }
 
 // RegisterGalaOrganizationAvatarListeners registers organization avatar discovery on Gala.
-func RegisterGalaOrganizationAvatarListeners(registry *gala.Registry) ([]gala.ListenerID, error) {
-	return gala.RegisterListeners(registry, gala.Definition[eventqueue.MutationGalaPayload]{
-		Topic:      eventqueue.MutationTopic(eventqueue.MutationConcernDirect, generated.TypeOrganization),
+func RegisterGalaOrganizationAvatarListeners(g *gala.Gala) ([]gala.ListenerID, error) {
+	return eventqueue.RegisterMutationListeners(g, eventqueue.MutationListener{
+		Schema:     generated.TypeOrganization,
 		Name:       "organization.avatar",
 		Operations: []string{ent.OpCreate.String()},
 		Handle:     handleOrganizationAvatarCreated,
@@ -47,21 +47,11 @@ func RegisterGalaOrganizationAvatarListeners(registry *gala.Registry) ([]gala.Li
 }
 
 // handleOrganizationAvatarCreated fetches icons from the domain name instead and sets it as the remote logo url
-func handleOrganizationAvatarCreated(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	ctx, client, ok := eventqueue.ClientFromHandler(ctx)
-	if !ok {
-		return nil
-	}
+func handleOrganizationAvatarCreated(inv eventqueue.Invocation, _ eventqueue.MutationGalaPayload) error {
+	allowCtx := workflows.AllowContext(inv.Context)
 
-	orgID, ok := eventqueue.MutationEntityID(payload, ctx.Envelope.Headers.Properties)
-	if !ok || orgID == "" {
-		return nil
-	}
-
-	allowCtx := workflows.AllowContext(ctx.Context)
-
-	org, err := client.Organization.Query().
-		Where(organization.IDEQ(orgID)).
+	org, err := inv.Client.Organization.Query().
+		Where(organization.IDEQ(inv.EntityID)).
 		WithSetting().
 		Only(allowCtx)
 	if err != nil {
@@ -77,10 +67,10 @@ func handleOrganizationAvatarCreated(ctx gala.HandlerContext, payload eventqueue
 		return nil
 	}
 
-	avatarURL, err := discoverAvatar(ctx.Context, avatarDiscoveryClient, setting.Domains)
+	avatarURL, err := discoverAvatar(inv.Context, avatarDiscoveryClient, setting.Domains)
 	if err != nil {
-		logx.FromContext(ctx.Context).Err(err).
-			Str("organization_id", orgID).
+		logx.FromContext(inv.Context).Err(err).
+			Str("organization_id", inv.EntityID).
 			Msg("organization avatar discovery failed")
 		return nil
 	}
@@ -89,7 +79,7 @@ func handleOrganizationAvatarCreated(ctx gala.HandlerContext, payload eventqueue
 		return nil
 	}
 
-	return client.Organization.UpdateOneID(orgID).
+	return inv.Client.Organization.UpdateOneID(inv.EntityID).
 		SetAvatarRemoteURL(avatarURL).
 		Exec(allowCtx)
 }

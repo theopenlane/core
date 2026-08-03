@@ -13,14 +13,18 @@ import (
 )
 
 // RegisterGalaVendorScoringListeners registers vendor scoring mutation listeners on Gala
-func RegisterGalaVendorScoringListeners(registry *gala.Registry) ([]gala.ListenerID, error) {
-	return gala.RegisterListeners(registry,
-		gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic: eventqueue.MutationTopic(eventqueue.MutationConcernDirect, entgen.TypeVendorScoringConfig),
-			Name:  "vendorscoring.config_mode_change",
+func RegisterGalaVendorScoringListeners(g *gala.Gala) ([]gala.ListenerID, error) {
+	return eventqueue.RegisterMutationListeners(g,
+		eventqueue.MutationListener{
+			Schema: entgen.TypeVendorScoringConfig,
+			Name:   "vendorscoring.config_mode_change",
 			Operations: []string{
 				ent.OpUpdate.String(),
 				ent.OpUpdateOne.String(),
+			},
+			Fields: []string{
+				vendorscoringconfig.FieldScoringMode,
+				vendorscoringconfig.FieldRiskThresholds,
 			},
 			Handle: handleVendorScoringConfigMutationGala,
 		},
@@ -29,29 +33,16 @@ func RegisterGalaVendorScoringListeners(registry *gala.Registry) ([]gala.Listene
 
 // handleVendorScoringConfigMutationGala recomputes entity risk aggregates when
 // scoring_mode or risk_thresholds change on a VendorScoringConfig
-func handleVendorScoringConfigMutationGala(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	if !eventqueue.MutationFieldChanged(payload, vendorscoringconfig.FieldScoringMode) &&
-		!eventqueue.MutationFieldChanged(payload, vendorscoringconfig.FieldRiskThresholds) {
-		return nil
-	}
-
-	ctx, client, ok := eventqueue.ClientFromHandler(ctx)
-	if !ok {
-		return nil
-	}
-
-	configID, ok := eventqueue.MutationEntityID(payload, ctx.Envelope.Headers.Properties)
-	if !ok || configID == "" {
-		return nil
-	}
+func handleVendorScoringConfigMutationGala(inv eventqueue.Invocation, _ eventqueue.MutationGalaPayload) error {
+	configID := inv.EntityID
 
 	// Find all distinct entity IDs that have risk scores under this config
-	scores, err := client.VendorRiskScore.Query().
+	scores, err := inv.Client.VendorRiskScore.Query().
 		Where(vendorriskscore.VendorScoringConfigID(configID)).
 		Select(vendorriskscore.FieldEntityID).
-		All(ctx.Context)
+		All(inv.Context)
 	if err != nil {
-		logx.FromContext(ctx.Context).Error().Err(err).Str("config_id", configID).Msg("failed to query entities for scoring mode recomputation")
+		logx.FromContext(inv.Context).Error().Err(err).Str("config_id", configID).Msg("failed to query entities for scoring mode recomputation")
 		return err
 	}
 
@@ -60,9 +51,9 @@ func handleVendorScoringConfigMutationGala(ctx gala.HandlerContext, payload even
 	}))
 
 	errs := lo.FilterMap(entityIDs, func(entityID string, _ int) (error, bool) {
-		err := RecomputeEntityRiskAggregate(ctx.Context, client, entityID)
+		err := RecomputeEntityRiskAggregate(inv.Context, inv.Client, entityID)
 		if err != nil {
-			logx.FromContext(ctx.Context).Error().Err(err).Str("entity_id", entityID).Str("config_id", configID).Msg("failed to recompute entity risk aggregate")
+			logx.FromContext(inv.Context).Error().Err(err).Str("entity_id", entityID).Str("config_id", configID).Msg("failed to recompute entity risk aggregate")
 		}
 
 		return err, err != nil

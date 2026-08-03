@@ -20,7 +20,7 @@ func RegisterRuntimeListeners(runtime *gala.Gala, reg *registry.Registry, servic
 	}
 
 	for _, operation := range reg.Listeners() {
-		if _, err := gala.RegisterListeners(runtime.Registry(), gala.Definition[Envelope]{
+		if _, err := gala.Register(runtime, gala.Definition[Envelope]{
 			Topic: gala.Topic[Envelope]{Name: operation.Topic},
 			Name:  operation.Name,
 			Handle: func(ctx gala.HandlerContext, envelope Envelope) error {
@@ -42,7 +42,7 @@ func RegisterRuntimeListeners(runtime *gala.Gala, reg *registry.Registry, servic
 	}
 
 	for _, event := range reg.WebhookListeners() {
-		if _, err := gala.RegisterListeners(runtime.Registry(), gala.Definition[WebhookEnvelope]{
+		if _, err := gala.Register(runtime, gala.Definition[WebhookEnvelope]{
 			Topic: gala.Topic[WebhookEnvelope]{Name: event.Topic},
 			Name:  event.Name,
 			Handle: func(ctx gala.HandlerContext, envelope WebhookEnvelope) error {
@@ -60,7 +60,7 @@ func RegisterRuntimeListeners(runtime *gala.Gala, reg *registry.Registry, servic
 	}
 
 	for _, listener := range reg.GalaListeners() {
-		if _, err := listener.Register(runtime.Registry(), services); err != nil {
+		if _, err := listener.Register(runtime, services); err != nil {
 			return err
 		}
 	}

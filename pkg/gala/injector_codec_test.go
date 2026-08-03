@@ -74,7 +74,7 @@ func TestInjectorCodecRoundTripViaContextManager(t *testing.T) {
 
 	codec := NewInjectorCodec("test_service", injector, testServiceSetter)
 
-	manager, err := NewContextManager(codec)
+	manager, err := newContextManager(codec)
 	require.NoError(t, err)
 
 	snapshot, err := manager.Capture(context.Background())

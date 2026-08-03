@@ -121,7 +121,7 @@ func SetupWorkflowEngine(ctx context.Context, client *generated.Client, connecti
 		return runtime
 	}))
 
-	if _, err := hooks.RegisterGalaWorkflowListeners(runtime.Registry()); err != nil {
+	if _, err := hooks.RegisterGalaWorkflowListeners(runtime); err != nil {
 		return nil, err
 	}
 

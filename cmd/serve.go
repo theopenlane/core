@@ -253,6 +253,12 @@ func serve(ctx context.Context) error {
 			}
 		}
 
+		if notifGala != nil {
+			if closeErr := notifGala.Close(); closeErr != nil {
+				log.Error().Err(closeErr).Msg("error closing notification gala runtime")
+			}
+		}
+
 		closeDB()
 	}()
 
@@ -287,7 +293,7 @@ func serve(ctx context.Context) error {
 	// add auth and integration options
 	so.AddServerOptions(
 		serveropts.WithAuth(),
-		serveropts.WithIntegrationsRuntime(ctx, dbClient),
+		serveropts.WithIntegrationsRuntime(ctx, dbClient, galaApp),
 	)
 
 	// backfills run after the integrations runtime so they can use it

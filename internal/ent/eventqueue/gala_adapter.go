@@ -1,9 +1,7 @@
 package eventqueue
 
 import (
-	"context"
 	"strings"
-	"time"
 
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/internal/mutations"
@@ -92,7 +90,6 @@ func NewMutationGalaMetadata(eventID string, payload MutationGalaPayload) Mutati
 // NewGalaHeadersFromMutationMetadata builds Gala headers from mutation metadata
 func NewGalaHeadersFromMutationMetadata(metadata MutationGalaMetadata) gala.Headers {
 	properties := normalizeMutationMetadataProperties(metadata.Properties)
-	eventID := strings.TrimSpace(metadata.EventID)
 
 	var tags []string
 
@@ -105,42 +102,9 @@ func NewGalaHeadersFromMutationMetadata(metadata MutationGalaMetadata) gala.Head
 	}
 
 	return gala.Headers{
-		IdempotencyKey: eventID,
-		Properties:     properties,
-		Tags:           tags,
+		Properties: properties,
+		Tags:       tags,
 	}
-}
-
-// NewMutationGalaEnvelope builds a gala envelope from mutation emit inputs
-func NewMutationGalaEnvelope(ctx context.Context, g *gala.Gala, topic gala.Topic[MutationGalaPayload], payload MutationGalaPayload, metadata MutationGalaMetadata) (envelope gala.Envelope, err error) {
-	headers := NewGalaHeadersFromMutationMetadata(metadata)
-
-	encodedPayload, err := g.Registry().EncodePayload(topic.Name, payload)
-	if err != nil {
-		return envelope, err
-	}
-
-	snapshot, err := g.ContextManager().Capture(ctx)
-	if err != nil {
-		return envelope, err
-	}
-
-	eventID := gala.EventID(headers.IdempotencyKey)
-	if eventID == "" {
-		eventID = gala.NewEventID()
-		headers.IdempotencyKey = string(eventID)
-	}
-
-	envelope = gala.Envelope{
-		ID:              eventID,
-		Topic:           topic.Name,
-		OccurredAt:      time.Now().UTC(),
-		Headers:         headers,
-		Payload:         encodedPayload,
-		ContextSnapshot: snapshot,
-	}
-
-	return envelope, nil
 }
 
 // mutationMetadataProperties builds listener fallback properties from payload proposed changes

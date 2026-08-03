@@ -62,7 +62,7 @@ func SetupIdentityResolution(ctx context.Context, client *generated.Client, conn
 		return runtime
 	}))
 
-	if _, err := hooks.RegisterGalaIdentityResolutionListeners(runtime.Registry()); err != nil {
+	if _, err := hooks.RegisterGalaIdentityResolutionListeners(runtime); err != nil {
 		_ = runtime.Close()
 
 		return nil, err

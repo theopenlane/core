@@ -6,6 +6,6 @@ import (
 )
 
 // RegisterGalaNotificationListeners registers notification mutation listeners on Gala.
-func RegisterGalaNotificationListeners(registry *gala.Registry) ([]gala.ListenerID, error) {
-	return notifications.RegisterGalaListeners(registry)
+func RegisterGalaNotificationListeners(g *gala.Gala) ([]gala.ListenerID, error) {
+	return notifications.RegisterGalaListeners(g)
 }

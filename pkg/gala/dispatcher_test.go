@@ -2,6 +2,7 @@ package gala
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"testing"
 	"time"
@@ -38,7 +39,7 @@ func (c *riverTestInsertClient) Insert(_ context.Context, args river.JobArgs, op
 
 // TestNewRiverDispatcherRequiresJobClient verifies construction fails without a job client.
 func TestNewRiverDispatcherRequiresJobClient(t *testing.T) {
-	_, err := NewRiverDispatcher(nil, "")
+	_, err := newRiverDispatcher(nil, "")
 	if !errors.Is(err, ErrRiverJobClientRequired) {
 		t.Fatalf("expected ErrRiverJobClientRequired, got %v", err)
 	}
@@ -52,16 +53,16 @@ func TestRiverDispatchArgsRoundTrip(t *testing.T) {
 		Payload: []byte(`{"message":"hello"}`),
 	}
 
-	args, err := NewRiverDispatchArgs(envelope)
+	args, err := newRiverDispatchArgs(envelope)
 	if err != nil {
 		t.Fatalf("unexpected args build error: %v", err)
 	}
 
-	if args.Kind() != RiverDispatchJobKind {
+	if args.Kind() != riverDispatchJobKind {
 		t.Fatalf("unexpected job kind %q", args.Kind())
 	}
 
-	decoded, err := args.DecodeEnvelope()
+	decoded, err := args.decodeEnvelope()
 	if err != nil {
 		t.Fatalf("unexpected decode error: %v", err)
 	}
@@ -78,7 +79,7 @@ func TestRiverDispatchArgsRoundTrip(t *testing.T) {
 // TestRiverDispatcherDispatchInsertsWithQueueMapping verifies queue selection and job insertion.
 func TestRiverDispatcherDispatchInsertsWithQueueMapping(t *testing.T) {
 	client := &riverTestInsertClient{}
-	dispatcher, err := NewRiverDispatcher(client, "queue_workflow")
+	dispatcher, err := newRiverDispatcher(client, "queue_workflow")
 	if err != nil {
 		t.Fatalf("failed to build dispatcher: %v", err)
 	}
@@ -102,12 +103,12 @@ func TestRiverDispatcherDispatchInsertsWithQueueMapping(t *testing.T) {
 		t.Fatalf("unexpected queue opts: %#v", client.lastOpts)
 	}
 
-	insertedArgs, ok := client.lastArgs.(RiverDispatchArgs)
+	insertedArgs, ok := client.lastArgs.(riverDispatchArgs)
 	if !ok {
 		t.Fatalf("unexpected args type %T", client.lastArgs)
 	}
 
-	decoded, err := insertedArgs.DecodeEnvelope()
+	decoded, err := insertedArgs.decodeEnvelope()
 	if err != nil {
 		t.Fatalf("unexpected decode error: %v", err)
 	}
@@ -122,15 +123,12 @@ func TestRiverDispatchWorkerWorkDispatchesEnvelope(t *testing.T) {
 	runtime := newTestGala(t, nil)
 
 	topic := Topic[runtimeTestPayload]{Name: TopicName("gala.test.worker")}
-	if err := RegisterTopic(runtime.Registry(), Registration[runtimeTestPayload]{
-		Topic: topic,
-		Codec: JSONCodec[runtimeTestPayload]{},
-	}); err != nil {
+	if err := registerTopic(runtime.registry, topic, JSONCodec[runtimeTestPayload]{}); err != nil {
 		t.Fatalf("failed to register topic: %v", err)
 	}
 
 	called := 0
-	if _, err := AttachListener(runtime.Registry(), Definition[runtimeTestPayload]{
+	if _, err := attachListener(runtime.registry, Definition[runtimeTestPayload]{
 		Topic: topic,
 		Name:  "gala.test.worker.listener",
 		Handle: func(_ HandlerContext, payload runtimeTestPayload) error {
@@ -145,7 +143,7 @@ func TestRiverDispatchWorkerWorkDispatchesEnvelope(t *testing.T) {
 		t.Fatalf("failed to register listener: %v", err)
 	}
 
-	encodedPayload, err := runtime.Registry().EncodePayload(topic.Name, runtimeTestPayload{Message: "from-worker"})
+	encodedPayload, err := json.Marshal(runtimeTestPayload{Message: "from-worker"})
 	if err != nil {
 		t.Fatalf("failed to encode payload: %v", err)
 	}
@@ -156,16 +154,16 @@ func TestRiverDispatchWorkerWorkDispatchesEnvelope(t *testing.T) {
 		Payload: encodedPayload,
 	}
 
-	args, err := NewRiverDispatchArgs(envelope)
+	args, err := newRiverDispatchArgs(envelope)
 	if err != nil {
 		t.Fatalf("failed to build river args: %v", err)
 	}
 
-	worker := NewRiverDispatchWorker(func() *Gala {
+	worker := newRiverDispatchWorker(func() *Gala {
 		return runtime
 	})
 
-	job := &river.Job[RiverDispatchArgs]{Args: args}
+	job := &river.Job[riverDispatchArgs]{Args: args}
 	if err := worker.Work(context.Background(), job); err != nil {
 		t.Fatalf("unexpected worker error: %v", err)
 	}
@@ -177,8 +175,8 @@ func TestRiverDispatchWorkerWorkDispatchesEnvelope(t *testing.T) {
 
 // TestRiverDispatchWorkerRequiresRuntimeProvider verifies runtime provider validation.
 func TestRiverDispatchWorkerRequiresRuntimeProvider(t *testing.T) {
-	worker := NewRiverDispatchWorker(nil)
-	job := &river.Job[RiverDispatchArgs]{}
+	worker := newRiverDispatchWorker(nil)
+	job := &river.Job[riverDispatchArgs]{}
 
 	err := worker.Work(context.Background(), job)
 	if !errors.Is(err, ErrRiverGalaProviderRequired) {
@@ -187,12 +185,12 @@ func TestRiverDispatchWorkerRequiresRuntimeProvider(t *testing.T) {
 }
 
 func TestRiverDispatchArgsDecodeEnvelopeErrors(t *testing.T) {
-	_, err := (RiverDispatchArgs{}).DecodeEnvelope()
+	_, err := (riverDispatchArgs{}).decodeEnvelope()
 	if !errors.Is(err, ErrRiverDispatchJobEnvelopeRequired) {
 		t.Fatalf("expected ErrRiverDispatchJobEnvelopeRequired, got %v", err)
 	}
 
-	_, err = (RiverDispatchArgs{Envelope: []byte("{bad")}).DecodeEnvelope()
+	_, err = (riverDispatchArgs{Envelope: []byte("{bad")}).decodeEnvelope()
 	if !errors.Is(err, ErrRiverEnvelopeDecodeFailed) {
 		t.Fatalf("expected ErrRiverEnvelopeDecodeFailed, got %v", err)
 	}
@@ -200,7 +198,7 @@ func TestRiverDispatchArgsDecodeEnvelopeErrors(t *testing.T) {
 
 func TestRiverDispatcherQueueSelection(t *testing.T) {
 	client := &riverTestInsertClient{}
-	dispatcher, err := NewRiverDispatcher(client, "queue_custom_default")
+	dispatcher, err := newRiverDispatcher(client, "queue_custom_default")
 	if err != nil {
 		t.Fatalf("failed to build dispatcher: %v", err)
 	}
@@ -223,7 +221,7 @@ func TestRiverDispatcherQueueSelection(t *testing.T) {
 
 func TestRiverDispatcherQueueSelectionUsesCustomDefaultQueue(t *testing.T) {
 	client := &riverTestInsertClient{}
-	dispatcher, err := NewRiverDispatcher(client, "queue_custom_default")
+	dispatcher, err := newRiverDispatcher(client, "queue_custom_default")
 	if err != nil {
 		t.Fatalf("failed to build dispatcher: %v", err)
 	}
@@ -246,7 +244,7 @@ func TestRiverDispatcherQueueSelectionUsesCustomDefaultQueue(t *testing.T) {
 
 func TestRiverDispatcherQueueSelectionUsesHeaderQueueOverride(t *testing.T) {
 	client := &riverTestInsertClient{}
-	dispatcher, err := NewRiverDispatcher(client, "queue_custom_default")
+	dispatcher, err := newRiverDispatcher(client, "queue_custom_default")
 	if err != nil {
 		t.Fatalf("failed to build dispatcher: %v", err)
 	}
@@ -272,7 +270,7 @@ func TestRiverDispatcherQueueSelectionUsesHeaderQueueOverride(t *testing.T) {
 
 func TestRiverDispatcherPassesHeaderMaxAttempts(t *testing.T) {
 	client := &riverTestInsertClient{}
-	dispatcher, err := NewRiverDispatcher(client, "queue_custom_default")
+	dispatcher, err := newRiverDispatcher(client, "queue_custom_default")
 	if err != nil {
 		t.Fatalf("failed to build dispatcher: %v", err)
 	}
@@ -298,7 +296,7 @@ func TestRiverDispatcherPassesHeaderMaxAttempts(t *testing.T) {
 
 func TestRiverDispatcherPassesHeaderScheduledAt(t *testing.T) {
 	client := &riverTestInsertClient{}
-	dispatcher, err := NewRiverDispatcher(client, "queue_custom_default")
+	dispatcher, err := newRiverDispatcher(client, "queue_custom_default")
 	if err != nil {
 		t.Fatalf("failed to build dispatcher: %v", err)
 	}
@@ -326,7 +324,7 @@ func TestRiverDispatcherPassesHeaderScheduledAt(t *testing.T) {
 
 func TestRiverDispatcherOmitsScheduledAtWhenNil(t *testing.T) {
 	client := &riverTestInsertClient{}
-	dispatcher, err := NewRiverDispatcher(client, "queue_custom_default")
+	dispatcher, err := newRiverDispatcher(client, "queue_custom_default")
 	if err != nil {
 		t.Fatalf("failed to build dispatcher: %v", err)
 	}
@@ -352,11 +350,11 @@ func TestRiverDispatcherOmitsScheduledAtWhenNil(t *testing.T) {
 }
 
 func TestRiverDispatchWorkerRequiresRuntimeInstance(t *testing.T) {
-	worker := NewRiverDispatchWorker(func() *Gala {
+	worker := newRiverDispatchWorker(func() *Gala {
 		return nil
 	})
 
-	err := worker.Work(context.Background(), &river.Job[RiverDispatchArgs]{})
+	err := worker.Work(context.Background(), &river.Job[riverDispatchArgs]{})
 	if !errors.Is(err, ErrGalaRequired) {
 		t.Fatalf("expected ErrGalaRequired, got %v", err)
 	}

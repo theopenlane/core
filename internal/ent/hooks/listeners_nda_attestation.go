@@ -18,10 +18,10 @@ import (
 
 // RegisterGalaNDAAttestationListeners registers listeners that process NDA attestation
 // asynchronously after document data creation
-func RegisterGalaNDAAttestationListeners(registry *gala.Registry) ([]gala.ListenerID, error) {
-	return gala.RegisterListeners(registry,
-		gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic:      eventqueue.MutationTopic(eventqueue.MutationConcernDirect, generated.TypeDocumentData),
+func RegisterGalaNDAAttestationListeners(g *gala.Gala) ([]gala.ListenerID, error) {
+	return eventqueue.RegisterMutationListeners(g,
+		eventqueue.MutationListener{
+			Schema:     generated.TypeDocumentData,
 			Name:       "nda.attestation",
 			Operations: []string{ent.OpCreate.String()},
 			Handle:     handleNDAAttestationCreated,
@@ -29,28 +29,19 @@ func RegisterGalaNDAAttestationListeners(registry *gala.Registry) ([]gala.Listen
 	)
 }
 
-func handleNDAAttestationCreated(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	ctx, client, ok := eventqueue.ClientFromHandler(ctx)
-	if !ok {
-		logx.FromContext(ctx.Context).Error().Msg("nda attestation listener: no client in context")
-		return nil
-	}
-
-	docDataID, ok := eventqueue.MutationEntityID(payload, ctx.Envelope.Headers.Properties)
-	if !ok || docDataID == "" {
-		logx.FromContext(ctx.Context).Error().Msg("nda attestation listener: no document data id")
-		return nil
-	}
+func handleNDAAttestationCreated(inv eventqueue.Invocation, payload eventqueue.MutationGalaPayload) error {
+	client := inv.Client
+	docDataID := inv.EntityID
 
 	templateID, _ := eventqueue.MutationStringValue(payload, "template_id")
 	if templateID == "" {
-		logx.FromContext(ctx.Context).Error().Msg("nda attestation listener: no template")
+		logx.FromContext(inv.Context).Error().Msg("nda attestation listener: no template")
 		return nil
 	}
 
-	docTemplate, err := client.Template.Query().Where(template.ID(templateID)).Only(ctx.Context)
+	docTemplate, err := client.Template.Query().Where(template.ID(templateID)).Only(inv.Context)
 	if err != nil {
-		logx.FromContext(ctx.Context).Error().Err(err).Msg("nda attestation listener: cannot get template")
+		logx.FromContext(inv.Context).Error().Err(err).Msg("nda attestation listener: cannot get template")
 		return nil
 	}
 
@@ -58,40 +49,40 @@ func handleNDAAttestationCreated(ctx gala.HandlerContext, payload eventqueue.Mut
 		return nil
 	}
 
-	caller, hasCaller := auth.CallerFromContext(ctx.Context)
+	caller, hasCaller := auth.CallerFromContext(inv.Context)
 	if !hasCaller || caller == nil || caller.SubjectEmail == "" {
-		logx.FromContext(ctx.Context).Error().Msg("nda attestation listener: caller not available in restored context")
+		logx.FromContext(inv.Context).Error().Msg("nda attestation listener: caller not available in restored context")
 
 		return nil
 	}
 
 	// bypass the org context filter when calling from inside the listener
-	allowCtx := auth.WithCaller(ctx.Context, caller.WithCapabilities(auth.CapBypassOrgFilter))
+	allowCtx := auth.WithCaller(inv.Context, caller.WithCapabilities(auth.CapBypassOrgFilter))
 
 	docData, err := client.DocumentData.Get(allowCtx, docDataID)
 	if err != nil {
-		logx.FromContext(ctx.Context).Error().Err(err).Str("document_data_id", docDataID).Msg("nda attestation listener: failed to get document data for nda attestation")
+		logx.FromContext(inv.Context).Error().Err(err).Str("document_data_id", docDataID).Msg("nda attestation listener: failed to get document data for nda attestation")
 
 		return nil
 	}
 
 	var ndaMetadata signedNDADocumentData
 	if err := jsonx.RoundTrip(docData.Data, &ndaMetadata); err != nil {
-		logx.FromContext(ctx.Context).Error().Err(err).Msg("nda attestation listener: failed to unmarshal nda metadata from document data")
+		logx.FromContext(inv.Context).Error().Err(err).Msg("nda attestation listener: failed to unmarshal nda metadata from document data")
 
 		return nil
 	}
 
 	tcID := ndaMetadata.TrustCenterID
 	if tcID == "" {
-		logx.FromContext(ctx.Context).Error().Msg("nda attestation listener: nda attestation listener: trust center id not found in document data")
+		logx.FromContext(inv.Context).Error().Msg("nda attestation listener: nda attestation listener: trust center id not found in document data")
 
 		return nil
 	}
 
 	result, err := attestNDADocument(allowCtx, client, docData, templateID, tcID)
 	if err != nil {
-		logx.FromContext(ctx.Context).Error().Err(err).Msg("nda attestation listener: failed to attest NDA document")
+		logx.FromContext(inv.Context).Error().Err(err).Msg("nda attestation listener: failed to attest NDA document")
 
 		return err
 	}
@@ -101,7 +92,7 @@ func handleNDAAttestationCreated(ctx gala.HandlerContext, payload eventqueue.Mut
 		trustcenterndarequest.EmailEqualFold(caller.SubjectEmail),
 		trustcenterndarequest.TrustCenterID(tcID),
 	).SetFileID(result.TemplateFileID).Exec(allowCtx); err != nil {
-		logx.FromContext(ctx.Context).Error().Err(err).Str("email", caller.SubjectEmail).Str("trust_center_id", tcID).Msg("nda attestation listener: failed to set file ID on nda request")
+		logx.FromContext(inv.Context).Error().Err(err).Str("email", caller.SubjectEmail).Str("trust_center_id", tcID).Msg("nda attestation listener: failed to set file ID on nda request")
 
 		return err
 	}
@@ -112,12 +103,12 @@ func handleNDAAttestationCreated(ctx gala.HandlerContext, payload eventqueue.Mut
 		trustcenterndarequest.StatusEQ(enums.TrustCenterNDARequestStatusSigned),
 	).FirstID(allowCtx)
 	if err != nil {
-		logx.FromContext(ctx.Context).Error().Err(err).Str("email", caller.SubjectEmail).Str("trust_center_id", tcID).Msg("nda attestation listener: failed to resolve nda request id for email")
+		logx.FromContext(inv.Context).Error().Err(err).Str("email", caller.SubjectEmail).Str("trust_center_id", tcID).Msg("nda attestation listener: failed to resolve nda request id for email")
 
 		return err
 	}
 
-	if err := sendSystemEmail(ctx.Context, client, emaildef.TCNDASignedOp.Name(), emaildef.TrustCenterNDASignedEmail{
+	if err := sendSystemEmail(inv.Context, client, emaildef.TCNDASignedOp.Name(), emaildef.TrustCenterNDASignedEmail{
 		RecipientInfo:      emaildef.RecipientInfo{Email: caller.SubjectEmail},
 		OrgName:            result.OrgName,
 		RequestID:          requestID,
@@ -125,7 +116,7 @@ func handleNDAAttestationCreated(ctx gala.HandlerContext, payload eventqueue.Mut
 		AttachmentFilename: "signed_nda_file.pdf",
 		AttachmentData:     result.AttestedPDF,
 	}); err != nil {
-		logx.FromContext(ctx.Context).Error().Err(err).Msg("nda attestation listener: failed to send NDA signed email")
+		logx.FromContext(inv.Context).Error().Err(err).Msg("nda attestation listener: failed to send NDA signed email")
 
 		return err
 	}

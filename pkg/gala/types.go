@@ -7,8 +7,6 @@ import (
 
 // Headers defines operational metadata for an envelope
 type Headers struct {
-	// IdempotencyKey identifies duplicate-safe processing scope
-	IdempotencyKey string `json:"idempotency_key,omitempty"`
 	// Properties stores additional metadata for UI visibility
 	Properties map[string]string `json:"properties,omitempty"`
 	// Tags are low-cardinality labels forwarded to the transport layer (e.g. River job tags)
@@ -23,19 +21,6 @@ type Headers struct {
 	ScheduledAt *time.Time `json:"scheduled_at,omitempty"`
 	// Metadata carries structured operation context as opaque JSON
 	Metadata json.RawMessage `json:"metadata,omitempty"`
-}
-
-// NewHeaders returns Headers with the given tags and the input marshaled as JSON in the "input" property
-func NewHeaders(tags []string, input any) Headers {
-	raw, err := json.Marshal(input)
-	if err != nil {
-		return Headers{Tags: tags}
-	}
-
-	return Headers{
-		Tags:       tags,
-		Properties: map[string]string{"input": string(raw)},
-	}
 }
 
 // Envelope is the durable event envelope
@@ -58,8 +43,6 @@ type Envelope struct {
 type EmitReceipt struct {
 	// EventID is the emitted event identifier
 	EventID EventID
-	// Accepted reports whether the event was accepted for processing
-	Accepted bool
 	// Err contains any terminal emit error
 	Err error
 }

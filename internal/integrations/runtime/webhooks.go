@@ -168,10 +168,9 @@ func (r *Runtime) DispatchWebhookEvent(ctx context.Context, integration *ent.Int
 		Payload:          jsonx.CloneRawMessage(event.Payload),
 		Headers:          maps.Clone(event.Headers),
 	}, gala.Headers{
-		IdempotencyKey: event.DeliveryID,
-		Properties:     oc.Properties(),
-		Tags:           types.GetTagsForOperationContext(oc),
-	})
+		Properties: oc.Properties(),
+		Tags:       types.GetTagsForOperationContext(oc),
+	}, gala.WithEventID(gala.EventID(event.DeliveryID)))
 
 	return receipt.Err
 }

@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"reflect"
-	"sort"
 	"strings"
 	"time"
 
@@ -32,16 +31,12 @@ const (
 type Config struct {
 	// DispatchMode controls whether events are dispatched durably (River) or in-memory.
 	DispatchMode DispatchMode
-	// Enabled toggles Gala worker startup and dispatch support when true
-	Enabled bool
 	// ConnectionURI is the database connection URI used for the dedicated gala river client
 	ConnectionURI string
 	// QueueName is the gala queue used for durable dispatch jobs
 	QueueName string
 	// WorkerCount is the max worker concurrency for the gala queue
 	WorkerCount int
-	// QueueWorkers configures additional queue worker concurrency by queue name.
-	QueueWorkers map[string]int
 	// MaxRetries sets max attempts for gala dispatch jobs when greater than zero
 	MaxRetries int
 	// RunMigrations enables River schema migrations on startup (use for tests only)
@@ -58,11 +53,11 @@ type Config struct {
 // no black tie required, but a riverboat and some confetti wouldn't hurt
 type Gala struct {
 	// registry manages topic and listener registrations
-	registry *Registry
+	registry *registry
 	// injector provides dependency resolution for listeners
 	injector do.Injector
 	// dispatcher handles envelope dispatch to listeners
-	dispatcher Dispatcher
+	dispatcher dispatcher
 	// contextManager handles context capture and restoration
 	contextManager *ContextManager
 	// jobClient is the dedicated River client used for durable dispatch
@@ -88,16 +83,15 @@ func NewGala(ctx context.Context, config Config) (app *Gala, err error) {
 	app = &Gala{}
 
 	workers := river.NewWorkers()
-	if err := river.AddWorkerSafely(workers, NewRiverDispatchWorker(func() *Gala {
+	if err := river.AddWorkerSafely(workers, newRiverDispatchWorker(func() *Gala {
 		return app
 	})); err != nil {
 		return nil, err
 	}
 
-	queueConfig := buildQueueConfig(config.QueueName, config.WorkerCount, config.QueueWorkers)
 	riverConf := river.Config{
 		Workers: workers,
-		Queues:  queueConfig,
+		Queues:  map[string]river.QueueConfig{config.QueueName: {MaxWorkers: config.WorkerCount}},
 	}
 
 	if config.MaxRetries > 0 {
@@ -133,25 +127,25 @@ func NewGala(ctx context.Context, config Config) (app *Gala, err error) {
 		}
 	}()
 
-	dispatcher, err := NewRiverDispatcher(jobClient, config.QueueName)
+	riverDispatch, err := newRiverDispatcher(jobClient, config.QueueName)
 	if err != nil {
 		return nil, err
 	}
 
-	if err := app.initialize(dispatcher, DispatchModeDurable); err != nil {
+	if err := app.initialize(riverDispatch, DispatchModeDurable); err != nil {
 		return nil, err
 	}
 
 	app.jobClient = jobClient
-	app.durableQueues = queueNamesFromConfig(queueConfig)
+	app.durableQueues = []string{config.QueueName}
 
 	return app, nil
 }
 
 // initialize sets Gala core dependencies and default runtime services
 // future expansion / features may necessitate passing in additional dependencies or a more complex runtime config object but avoiding pre-optimization
-func (g *Gala) initialize(dispatcher Dispatcher, dispatchMode DispatchMode) error {
-	contextManager, err := NewContextManager(
+func (g *Gala) initialize(d dispatcher, dispatchMode DispatchMode) error {
+	contextManager, err := newContextManager(
 		NewKeyCodec("caller", auth.CallerKey),
 		logFieldsCodec{},
 	)
@@ -159,9 +153,9 @@ func (g *Gala) initialize(dispatcher Dispatcher, dispatchMode DispatchMode) erro
 		return err
 	}
 
-	g.registry = NewRegistry()
+	g.registry = newRegistry()
 	g.injector = do.New()
-	g.dispatcher = dispatcher
+	g.dispatcher = d
 	g.contextManager = contextManager
 	g.dispatchMode = dispatchMode
 
@@ -195,51 +189,9 @@ func (c *Config) validate() error {
 	return nil
 }
 
-// buildQueueConfig constructs the River queue config with defaults and optional overrides
-func buildQueueConfig(defaultQueueName string, defaultWorkerCount int, queueWorkers map[string]int) map[string]river.QueueConfig {
-	queues := map[string]river.QueueConfig{
-		defaultQueueName: {MaxWorkers: defaultWorkerCount},
-	}
-
-	for queueName, workers := range queueWorkers {
-		queueName = strings.TrimSpace(queueName)
-		if queueName == "" || workers < 1 {
-			continue
-		}
-
-		queues[queueName] = river.QueueConfig{MaxWorkers: workers}
-	}
-
-	return queues
-}
-
-func queueNamesFromConfig(queues map[string]river.QueueConfig) []string {
-	if len(queues) == 0 {
-		return nil
-	}
-
-	names := make([]string, 0, len(queues))
-	for queueName := range queues {
-		queueName = strings.TrimSpace(queueName)
-		if queueName == "" {
-			continue
-		}
-
-		names = append(names, queueName)
-	}
-
-	if len(names) == 0 {
-		return nil
-	}
-
-	sort.Strings(names)
-
-	return names
-}
-
-// Registry returns the Gala topic/listener registry
-func (g *Gala) Registry() *Registry {
-	return g.registry
+// InterestedIn reports whether any registered listener matches the topic and operation
+func (g *Gala) InterestedIn(topic TopicName, operation string) bool {
+	return g.registry.InterestedIn(topic, operation)
 }
 
 // Injector returns the Gala dependency injector
@@ -252,16 +204,56 @@ func (g *Gala) ContextManager() *ContextManager {
 	return g.contextManager
 }
 
+// EmitOption customizes one emitted envelope before dispatch
+type EmitOption func(*Envelope)
+
+// WithEventID sets an explicit event identifier on the emitted envelope,
+// making the caller's identity (e.g. a mutation event id or run id) the
+// durable dedup and traceability key instead of a freshly minted ULID
+func WithEventID(id EventID) EmitOption {
+	return func(e *Envelope) {
+		if id != "" {
+			e.ID = id
+		}
+	}
+}
+
+// WithRawPayload emits pre-encoded payload bytes, bypassing the topic codec.
+// The payload argument passed to EmitWithHeaders is ignored when set; the
+// topic must still be registered so listeners can decode at dispatch time
+func WithRawPayload(raw json.RawMessage) EmitOption {
+	return func(e *Envelope) {
+		if len(raw) > 0 {
+			e.Payload = append(json.RawMessage(nil), raw...)
+		}
+	}
+}
+
 // EmitWithHeaders emits a payload with explicit headers
-func (g *Gala) EmitWithHeaders(ctx context.Context, topic TopicName, payload any, headers Headers) EmitReceipt {
+func (g *Gala) EmitWithHeaders(ctx context.Context, topic TopicName, payload any, headers Headers, opts ...EmitOption) EmitReceipt {
 	registration, err := g.registry.topicRegistration(topic)
 	if err != nil {
 		return EmitReceipt{Err: err}
 	}
 
-	encodedPayload, err := registration.encode(payload)
-	if err != nil {
-		return EmitReceipt{Err: err}
+	envelope := Envelope{
+		ID:         NewEventID(),
+		Topic:      topic,
+		OccurredAt: time.Now().UTC(),
+		Headers:    headers,
+	}
+
+	for _, opt := range opts {
+		opt(&envelope)
+	}
+
+	if len(envelope.Payload) == 0 {
+		encodedPayload, err := registration.encode(payload)
+		if err != nil {
+			return EmitReceipt{Err: err}
+		}
+
+		envelope.Payload = encodedPayload
 	}
 
 	snapshot, err := g.contextManager.Capture(ctx)
@@ -269,14 +261,7 @@ func (g *Gala) EmitWithHeaders(ctx context.Context, topic TopicName, payload any
 		return EmitReceipt{Err: err}
 	}
 
-	envelope := Envelope{
-		ID:              NewEventID(),
-		Topic:           topic,
-		OccurredAt:      time.Now().UTC(),
-		Headers:         headers,
-		Payload:         encodedPayload,
-		ContextSnapshot: snapshot,
-	}
+	envelope.ContextSnapshot = snapshot
 
 	if g.dispatcher == nil {
 		return EmitReceipt{EventID: envelope.ID, Err: ErrDispatcherRequired}
@@ -292,37 +277,11 @@ func (g *Gala) EmitWithHeaders(ctx context.Context, topic TopicName, payload any
 
 	logx.FromContext(ctx).Debug().Str("event_id", string(envelope.ID)).Str("topic", string(topic)).Msg("gala event emitted")
 
-	return EmitReceipt{EventID: envelope.ID, Accepted: true}
+	return EmitReceipt{EventID: envelope.ID}
 }
 
-// EmitEnvelope dispatches a pre-built envelope using its topic registration.
-// When the envelope does not already carry a ContextSnapshot, one is captured
-// from ctx so that durable dispatch can reconstruct auth and other values.
-func (g *Gala) EmitEnvelope(ctx context.Context, envelope Envelope) error {
-	if _, err := g.registry.topicRegistration(envelope.Topic); err != nil {
-		return err
-	}
-
-	if g.dispatcher == nil {
-		return ErrDispatcherRequired
-	}
-
-	if len(envelope.ContextSnapshot.Values) == 0 && len(envelope.ContextSnapshot.Flags) == 0 {
-		snapshot, err := g.contextManager.Capture(ctx)
-		if err != nil {
-			return err
-		}
-
-		envelope.ContextSnapshot = snapshot
-	}
-
-	envelope.Headers.Listeners = g.registry.listenerNamesForTopic(envelope.Topic)
-
-	return g.dispatcher.Dispatch(ctx, envelope)
-}
-
-// DispatchEnvelope dispatches one envelope to all listeners on the topic
-func (g *Gala) DispatchEnvelope(ctx context.Context, envelope Envelope) error {
+// dispatchEnvelope dispatches one envelope to all listeners on the topic
+func (g *Gala) dispatchEnvelope(ctx context.Context, envelope Envelope) error {
 	registration, err := g.registry.topicRegistration(envelope.Topic)
 	if err != nil {
 		return err
@@ -508,18 +467,6 @@ const (
 	durableWaitPollInterval = 50 * time.Millisecond
 	durableIdleThreshold    = 3
 )
-
-// HasActiveJobForTopic reports whether at least one River job for the given topic
-// exists in an active state (available, scheduled, running, or retryable).
-// Returns false without error when Gala is not in durable mode
-func (g *Gala) HasActiveJobForTopic(ctx context.Context, topic TopicName) (bool, error) {
-	fragment, err := json.Marshal(map[string]string{"topic": string(topic)})
-	if err != nil {
-		return false, err
-	}
-
-	return g.HasActiveJobWithMetadata(ctx, string(fragment))
-}
 
 // HasActiveJobWithMetadata reports whether at least one River job whose metadata
 // JSONB contains the given fragment exists in an active state (available, scheduled,

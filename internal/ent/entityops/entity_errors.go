@@ -47,6 +47,10 @@ var (
 	ErrUpsertKeyMissing = errors.New("entityops: upsert key missing")
 	// ErrUpsertUnsupported indicates the schema does not support catalog-driven upserts
 	ErrUpsertUnsupported = errors.New("entityops: upsert unsupported")
+	// ErrFieldNotFound indicates a field name could not be resolved on the schema
+	ErrFieldNotFound = errors.New("entityops: field not found")
+	// ErrValueCoercion indicates a raw value could not be coerced to the field's type
+	ErrValueCoercion = errors.New("entityops: value coercion failed")
 	// ErrListenerRegistrationFailed indicates a gala listener could not be registered
 	ErrListenerRegistrationFailed = errors.New("entityops: listener registration failed")
 	// ErrClientResolveFailed indicates the ent client could not be resolved from the injector

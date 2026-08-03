@@ -6,11 +6,11 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-// DispatchFunc adapts a function to the Dispatcher interface.
-type DispatchFunc func(context.Context, Envelope) error
+// dispatchFunc adapts a function to the dispatcher interface
+type dispatchFunc func(context.Context, Envelope) error
 
-// Dispatch invokes the wrapped function.
-func (f DispatchFunc) Dispatch(ctx context.Context, envelope Envelope) error {
+// Dispatch invokes the wrapped function
+func (f dispatchFunc) Dispatch(ctx context.Context, envelope Envelope) error {
 	return f(ctx, envelope)
 }
 
@@ -39,14 +39,14 @@ func newInMemoryGala(config Config) (*Gala, error) {
 		WithPoolName("gala-in-memory-dispatch"),
 	)
 
-	g.dispatcher = DispatchFunc(func(ctx context.Context, envelope Envelope) error {
+	g.dispatcher = dispatchFunc(func(ctx context.Context, envelope Envelope) error {
 		pool := g.inMemoryPool
 		if pool == nil {
-			return g.DispatchEnvelope(ctx, envelope)
+			return g.dispatchEnvelope(ctx, envelope)
 		}
 
 		pool.Submit(func() {
-			if err := g.DispatchEnvelope(ctx, envelope); err != nil {
+			if err := g.dispatchEnvelope(ctx, envelope); err != nil {
 				logx.FromContext(ctx).Warn().Err(err).Str("event_id", string(envelope.ID)).Str("topic", string(envelope.Topic)).Msg("gala in-memory listener dispatch failed")
 			}
 		})

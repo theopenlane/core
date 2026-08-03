@@ -11,6 +11,7 @@ import (
 
 	"entgo.io/ent"
 	"github.com/google/cel-go/cel"
+	"github.com/samber/lo"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 
@@ -38,26 +39,19 @@ var ErrExpressionNotList = errors.New("entityops: expression did not evaluate to
 
 // RegisterGalaTaskRuleListeners registers one gala listener per eligible schema evaluating each schema's rules on mutation and creates suggested
 // task records
-func RegisterGalaTaskRuleListeners(registry *gala.Registry) ([]gala.ListenerID, error) {
-	var ids []gala.ListenerID
-
-	for _, schema := range entityops.TaskRuleEligibleSchemas() {
-		listenerIDs, err := gala.RegisterListeners(registry, gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic:      eventqueue.MutationTopic(eventqueue.MutationConcernDirect, schema.Name),
+func RegisterGalaTaskRuleListeners(g *gala.Gala) ([]gala.ListenerID, error) {
+	listeners := lo.Map(entityops.TaskRuleEligibleSchemas(), func(schema *entityops.Schema, _ int) eventqueue.MutationListener {
+		return eventqueue.MutationListener{
+			Schema:     schema.Name,
 			Name:       "taskrules." + schema.Snake,
 			Operations: taskRuleOperations(schema),
-			Handle: func(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-				return handleTaskRuleMutation(ctx, schema, payload)
+			Handle: func(inv eventqueue.Invocation, payload eventqueue.MutationGalaPayload) error {
+				return handleTaskRuleMutation(inv, schema, payload)
 			},
-		})
-		if err != nil {
-			return nil, err
 		}
+	})
 
-		ids = append(ids, listenerIDs...)
-	}
-
-	return ids, nil
+	return eventqueue.RegisterMutationListeners(g, listeners...)
 }
 
 // taskRuleOperations returns the mutation operations to subscribe to for schema
@@ -74,18 +68,14 @@ func taskRuleOperations(schema *entityops.Schema) []string {
 	return ops
 }
 
-func handleTaskRuleMutation(ctx gala.HandlerContext, schema *entityops.Schema, payload eventqueue.MutationGalaPayload) error {
-	handlerCtx, client, ok := eventqueue.ClientFromHandler(ctx)
-	if !ok {
+func handleTaskRuleMutation(inv eventqueue.Invocation, schema *entityops.Schema, payload eventqueue.MutationGalaPayload) error {
+	if schema.Load == nil {
 		return nil
 	}
 
-	entityID, ok := eventqueue.MutationEntityID(payload, ctx.Envelope.Headers.Properties)
-	if !ok || entityID == "" || schema.Load == nil {
-		return nil
-	}
+	client, entityID := inv.Client, inv.EntityID
 
-	systemCtx := taskRuleSystemContext(handlerCtx.Context)
+	systemCtx := taskRuleSystemContext(inv.Context)
 
 	raw, err := schema.Load(systemCtx, client, entityID)
 	if err != nil {

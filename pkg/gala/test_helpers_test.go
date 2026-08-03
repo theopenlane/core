@@ -128,7 +128,6 @@ func NewTestGala(t *testing.T, opts ...TestGalaOption) *TestGalaFixture {
 	)
 
 	galaApp, err := NewGala(ctx, Config{
-		Enabled:           true,
 		ConnectionURI:     dbFixture.URI,
 		QueueName:         cfg.queueName,
 		WorkerCount:       cfg.workerCount,
@@ -173,17 +172,17 @@ func (f *TestGalaFixture) Close() {
 }
 
 // Registry returns the gala registry for listener registration
-func (f *TestGalaFixture) Registry() *Registry {
-	return f.Gala.Registry()
+func (f *TestGalaFixture) Registry() *registry {
+	return f.Gala.registry
 }
 
 // newTestGalaInMemory creates a gala instance with a mock dispatcher for unit tests
 // that don't require database backing. Use this for fast unit tests.
-func newTestGalaInMemory(t *testing.T, dispatcher Dispatcher) *Gala {
+func newTestGalaInMemory(t *testing.T, d dispatcher) *Gala {
 	t.Helper()
 
 	g := &Gala{}
-	if err := g.initialize(dispatcher, DispatchModeDurable); err != nil {
+	if err := g.initialize(d, DispatchModeDurable); err != nil {
 		t.Fatalf("failed to build gala: %v", err)
 	}
 
