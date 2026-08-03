@@ -13,6 +13,8 @@ import (
 
 	"github.com/rs/zerolog/log"
 	"golang.org/x/tools/imports"
+
+	"github.com/theopenlane/core/common/models"
 )
 
 const (
@@ -54,6 +56,30 @@ func ParseModuleEntries(schemaPath string) ([]ModuleEntry, error) {
 	}
 
 	return entries, nil
+}
+
+// ParseSchemaModules returns the modules required by each schema, keyed by schema name,
+// resolving the constants parsed off the schema into the modules they hold
+func ParseSchemaModules(schemaPath string) (map[string][]models.OrgModule, error) {
+	entries, err := ParseModuleEntries(schemaPath)
+	if err != nil {
+		return nil, err
+	}
+
+	modules := make(map[string][]models.OrgModule, len(entries))
+
+	for _, entry := range entries {
+		for _, constName := range entry.Modules {
+			module, err := models.OrgModuleFromConstName(constName)
+			if err != nil {
+				return nil, err
+			}
+
+			modules[entry.SchemaName] = append(modules[entry.SchemaName], module)
+		}
+	}
+
+	return modules, nil
 }
 
 // GenerateModulePerSchema walks through the schema files, parses them

@@ -55341,7 +55341,7 @@ enum ControlReportOrderField {
 ControlReport is a custom resolver that is used to show detailed, but selective information about
 an organizations controls vs. the standards
 """
-type ControlReport implements Node {
+type ControlReport implements Node @modules(names: ["compliance_module"]) {
   """
   unique identifier of the control
   """
@@ -55534,7 +55534,7 @@ type ControlReportCategory {
 """
 PolicySummary provides a lightweight summary of an internal policy
 """
-type PolicySummary implements Node {
+type PolicySummary implements Node @modules(names: ["compliance_module"]) {
   """
   unique identifier of the policy
   """

@@ -8,12 +8,28 @@ import (
 	"entgo.io/ent/entc/gen"
 	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
 // Extension is an implementation of entc.Extension
 type Extension struct {
 	entc.DefaultExtension
+
+	// modules are the modules each schema requires, keyed by schema name, used to add the
+	// @modules directive to the object types
+	modules map[string][]models.OrgModule
+}
+
+// WithModules sets the modules each schema requires so the @modules directive can be added
+// to the object types, the modules are passed in rather than parsed here to keep the
+// generator dependencies out of this package
+func WithModules(modules map[string][]models.OrgModule) ExtensionOption {
+	return func(e *Extension) error {
+		e.modules = modules
+
+		return nil
+	}
 }
 
 // ensure Extension implements the entc.Extension interface
@@ -42,7 +58,40 @@ func (e *Extension) SchemaHooks() []entgql.SchemaHook {
 		addInputDirectiveHook(Hidden, ReadOnly, nil),
 		addInputDirectiveHook(ExternalSource, ExternalReadOnly, ast.ArgumentList{
 			argsWithControlSource(enums.ControlSourceFramework),
-		})}
+		}),
+		addModulesDirectiveHook(e.modules),
+	}
+}
+
+// addModulesDirectiveHook adds the @modules directive to every object type whose schema
+// declares modules, so clients can read the module requirements straight off the schema
+// instead of keeping their own copy of the mapping
+func addModulesDirectiveHook(modules map[string][]models.OrgModule) func(_ *gen.Graph, s *ast.Schema) error {
+	return func(_ *gen.Graph, s *ast.Schema) error {
+		for schemaName, schemaModules := range modules {
+			t := s.Types[schemaName]
+
+			// schemas that are not exposed in the graph api have no type to annotate
+			if t == nil || t.Kind != ast.Object {
+				continue
+			}
+
+			names := &ast.Value{Kind: ast.ListValue}
+
+			for _, module := range schemaModules {
+				names.Children = append(names.Children, &ast.ChildValue{
+					Value: &ast.Value{Kind: ast.StringValue, Raw: module.String()},
+				})
+			}
+
+			t.Directives = append(t.Directives, &ast.Directive{
+				Name:      Modules,
+				Arguments: ast.ArgumentList{{Name: "names", Value: names}},
+			})
+		}
+
+		return nil
+	}
 }
 
 // addInputDirectiveHook is used to add the out directive to input fields that are marked with the in
