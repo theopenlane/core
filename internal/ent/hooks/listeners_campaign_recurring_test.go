@@ -30,7 +30,7 @@ func (suite *HookTestSuite) TestCampaignRecurringListenerSchedulesNextRun() {
 		SetIsActive(true).
 		Save(allowCtx)
 	assert.NilError(t, err)
-	assert.Assert(t, camp.NextRunAt == nil)
+	assert.Check(t, camp.NextRunAt == nil)
 
 	envelope := suite.campaignMutationEnvelope(t, userCtx, camp.ID, campaign.FieldIsActive)
 
@@ -40,7 +40,7 @@ func (suite *HookTestSuite) TestCampaignRecurringListenerSchedulesNextRun() {
 	updated, err := suite.client.Campaign.Get(allowCtx, camp.ID)
 	assert.NilError(t, err)
 	assert.Assert(t, updated.NextRunAt != nil)
-	assert.Assert(t, time.Time(*updated.NextRunAt).After(time.Now()))
+	assert.Check(t, time.Time(*updated.NextRunAt).After(time.Now()))
 }
 
 func (suite *HookTestSuite) TestCampaignRecurringListenerClearsNextRunOnDeactivation() {
@@ -61,7 +61,7 @@ func (suite *HookTestSuite) TestCampaignRecurringListenerClearsNextRunOnDeactiva
 
 	updated, err := suite.client.Campaign.Get(allowCtx, camp.ID)
 	assert.NilError(t, err)
-	assert.Assert(t, updated.NextRunAt == nil)
+	assert.Check(t, updated.NextRunAt == nil)
 }
 
 func (suite *HookTestSuite) TestCampaignRecurringListenerSkipsDeletedCampaign() {
