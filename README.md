@@ -1,17 +1,16 @@
 <div align="center">
 
-![](assets/logo.png)
+[![](assets/logo.png)](https://www.theopenlane.io)
 
 [![Build status](https://badge.buildkite.com/b4e79f9d76e5c585fc971ae299106d45e85fd8e7a16241386a.svg)](https://buildkite.com/theopenlane/core?branch=main)
 [![Go Reference](https://pkg.go.dev/badge/github.com/theopenlane/core.svg)](https://pkg.go.dev/github.com/theopenlane/core)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache2.0-brightgreen.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=theopenlane_core&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=theopenlane_core)
-
-📚 [Documentation](https://docs.theopenlane.io) | 🚀 [Openlane Cloud](https://console.theopenlane.io/signup) | 🌎 [Website](https://www.theopenlane.io)
+[![Documentation](https://img.shields.io/badge/docs-orange?logo=bookstack)](https://docs.theopenlane.io)
 
 </div>
 
-[Openlane](https://www.theopenlane.io) is one of the few, truly open-source compliance automation platforms - giving you a system of record for your compliance program including the people, systems, and vendors in scope; the policies and controls that govern them; and the evidence that proves it, and all with the automation to keep it current. This repository contains the core server and orchestration services behind the Openlane cloud service.
+[Openlane](https://console.theopenlane.io/signup) is one of the few, truly open-source compliance automation platforms - giving you a system of record for your compliance program including the people, systems, and vendors in scope; the policies and controls that govern them; and the evidence that proves it, and all with the automation to keep it current. This repository contains the core server and orchestration services behind the Openlane cloud service.
 
 <div align="center">
 
@@ -25,7 +24,7 @@ The platform is organized into a handful of areas that build on each other:
 
 * [Compliance management](https://docs.theopenlane.io/docs/platform/compliance-management/overview): policies, controls, evidence, and programs, with editors, approvals, comments, and full history on every object
 * [Frameworks and standards](https://docs.theopenlane.io/docs/platform/standards/overview): importable control sets for SOC 2, ISO 27001, NIST 800-53, and more; one control can satisfy requirements across multiple frameworks
-* [Registry](https://docs.theopenlane.io/docs/platform/registry/overview): automatically import your personnel and contractor lists from your directory, entities / vendors from your CRM, assets from your CMDB or spreadsheets, define platforms, vendor / 3d party contacts, and more.
+* [Registry](https://docs.theopenlane.io/docs/platform/registry/overview): automatically import your personnel and contractor lists from your directory, entities / vendors from your CRM, assets from your CMDB or spreadsheets, define platforms, vendor / 3d party contacts, and more
 * [Exposure](https://docs.theopenlane.io/docs/platform/exposure/overview): automated domain scanning, vulnerability integrations with GitHub, AWS Security Hub, and GCP Security Command Center (and more to come!) with remediation tracking to document fixes and update your risks
 * [Automation](https://docs.theopenlane.io/docs/platform/automation/overview): integrate with the tools you already use like Google Drive, Github, Entra ID, AWS, GCP (and more!) with configurable workflows and approvals, email campaigns for bulk outreach, questionnaires and assessments for your vendors or employees, and task assignment with reminders and escalation
 * [Trust Center](https://docs.theopenlane.io/docs/platform/trust-center/overview): a customizable, branded portal on your own domain publishing certifications, security documents, and subprocessors - reduce friction pre-sales and give your prospects and vendors one-stop shopping (check out [ours](https://trust.theopenlane.io))
