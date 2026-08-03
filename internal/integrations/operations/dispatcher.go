@@ -109,11 +109,10 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 		Config:             jsonx.CloneRawMessage(req.Config),
 		ForceClientRebuild: req.ForceClientRebuild},
 		gala.Headers{
-			IdempotencyKey: runID,
-			Properties:     oc.Properties(),
-			Tags:           types.GetTagsForOperationContext(oc),
-			ScheduledAt:    req.ScheduledAt,
-		})
+			Properties:  oc.Properties(),
+			Tags:        types.GetTagsForOperationContext(oc),
+			ScheduledAt: req.ScheduledAt,
+		}, gala.WithEventID(gala.EventID(runID)))
 
 	if receipt.Err != nil {
 		if runID != "" {

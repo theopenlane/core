@@ -21,14 +21,20 @@ import (
 
 // RegisterGalaCampaignRecurringListeners registers mutation listeners that
 // manage recurring campaign scheduling when is_active or is_recurring changes
-func RegisterGalaCampaignRecurringListeners(registry *gala.Registry) ([]gala.ListenerID, error) {
-	return gala.RegisterListeners(registry,
-		gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic: eventqueue.MutationTopic(eventqueue.MutationConcernDirect, entgen.TypeCampaign),
-			Name:  "campaign.recurring.schedule_sync",
+func RegisterGalaCampaignRecurringListeners(g *gala.Gala) ([]gala.ListenerID, error) {
+	return eventqueue.RegisterMutationListeners(g,
+		eventqueue.MutationListener{
+			Schema: entgen.TypeCampaign,
+			Name:   "campaign.recurring.schedule_sync",
 			Operations: []string{
 				ent.OpUpdate.String(),
 				ent.OpUpdateOne.String(),
+			},
+			Fields: []string{
+				campaign.FieldIsActive,
+				campaign.FieldIsRecurring,
+				campaign.FieldRecurrenceFrequency,
+				campaign.FieldRecurrenceInterval,
 			},
 			Handle: handleCampaignRecurringMutation,
 		},
@@ -37,40 +43,20 @@ func RegisterGalaCampaignRecurringListeners(registry *gala.Registry) ([]gala.Lis
 
 // handleCampaignRecurringMutation reacts to scheduling-relevant field changes
 // on campaigns to keep next_run_at consistent with the desired state
-func handleCampaignRecurringMutation(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
+func handleCampaignRecurringMutation(inv eventqueue.Invocation, payload eventqueue.MutationGalaPayload) error {
 	activationChanged := eventqueue.MutationFieldChanged(payload, campaign.FieldIsActive) ||
 		eventqueue.MutationFieldChanged(payload, campaign.FieldIsRecurring)
 	scheduleShapeChanged := eventqueue.MutationFieldChanged(payload, campaign.FieldRecurrenceFrequency) ||
 		eventqueue.MutationFieldChanged(payload, campaign.FieldRecurrenceInterval)
 
-	if !activationChanged && !scheduleShapeChanged {
-		return nil
-	}
-
-	ctx, client, ok := eventqueue.ClientFromHandler(ctx)
-	if !ok {
-		return nil
-	}
-
-	campaignID, ok := eventqueue.MutationEntityID(payload, ctx.Envelope.Headers.Properties)
-	if !ok || campaignID == "" {
-		return nil
-	}
-
-	caller, ok := auth.CallerFromContext(ctx.Context)
+	caller, ok := auth.CallerFromContext(inv.Context)
 	if !ok || caller == nil {
 		return nil
 	}
 
-	// set fields in the logger context
-	ctx.Context = withCampaignLogContext(ctx.Context, campaignID, caller.OrganizationID)
-
-	// ensure the caller can retrieve the campaign
-	ctx.Context = campaignScheduleContext(ctx.Context)
-
-	camp, err := client.Campaign.Query().
+	camp, err := inv.Client.Campaign.Query().
 		Where(
-			campaign.ID(campaignID),
+			campaign.ID(inv.EntityID),
 			campaign.OwnerIDEQ(caller.OrganizationID),
 		).
 		Select(
@@ -83,16 +69,9 @@ func handleCampaignRecurringMutation(ctx gala.HandlerContext, payload eventqueue
 			campaign.FieldLastRunAt,
 			campaign.FieldStatus,
 		).
-		Only(ctx.Context)
+		Only(inv.Context)
 	if err != nil {
-		if entgen.IsNotFound(err) {
-			logx.FromContext(ctx.Context).Info().Msg("failed to find campaign, campaign may have been deleted before running")
-
-			// nothing to do if the campaign can no longer be found
-			return nil
-		}
-
-		logx.FromContext(ctx.Context).Error().Err(err).Msg("failed loading campaign for recurring schedule sync")
+		logx.FromContext(inv.Context).Error().Err(err).Str("campaign_id", inv.EntityID).Msg("failed loading campaign for recurring schedule sync")
 
 		return err
 	}
@@ -101,11 +80,11 @@ func handleCampaignRecurringMutation(ctx gala.HandlerContext, payload eventqueue
 
 	switch {
 	case shouldSchedule && (activationChanged || camp.NextRunAt == nil):
-		return recomputeNextRunAt(ctx.Context, client, camp)
+		return recomputeNextRunAt(inv.Context, inv.Client, camp)
 	case shouldSchedule && scheduleShapeChanged:
-		return recomputeNextRunAt(ctx.Context, client, camp)
+		return recomputeNextRunAt(inv.Context, inv.Client, camp)
 	case !shouldSchedule && camp.NextRunAt != nil:
-		return clearNextRunAt(ctx.Context, client, camp.ID)
+		return clearNextRunAt(inv.Context, inv.Client, camp.ID)
 	default:
 		return nil
 	}

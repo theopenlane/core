@@ -41,10 +41,10 @@ type domainScanSaga struct {
 func domainScanListeners() types.GalaListenerRegistration {
 	return types.GalaListenerRegistration{
 		Name: "cloudflare.domainscan",
-		Register: func(registry *gala.Registry, services types.RuntimeServices) ([]gala.ListenerID, error) {
+		Register: func(g *gala.Gala, services types.RuntimeServices) ([]gala.ListenerID, error) {
 			saga := domainScanSaga{services: services}
 
-			pollIDs, err := gala.RegisterListeners(registry, gala.Definition[DomainScanPollEnvelope]{
+			pollIDs, err := gala.Register(g, gala.Definition[DomainScanPollEnvelope]{
 				Topic: gala.Topic[DomainScanPollEnvelope]{Name: DomainScanPollTopic},
 				Name:  DomainScanPollListenerName,
 				Handle: func(hc gala.HandlerContext, envelope DomainScanPollEnvelope) error {

@@ -187,7 +187,7 @@ func mutationDispatchTargets(runtimes []*gala.Gala, topics []gala.TopicName, ope
 				continue
 			}
 
-			if !runtime.Registry().InterestedIn(topic, operation) {
+			if !runtime.InterestedIn(topic, operation) {
 				continue
 			}
 

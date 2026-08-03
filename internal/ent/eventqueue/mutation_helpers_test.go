@@ -45,51 +45,6 @@ func TestMutationStringValueOrProperty(t *testing.T) {
 	})
 }
 
-// TestMutationStringValuePreferPayload verifies strict payload precedence semantics
-func TestMutationStringValuePreferPayload(t *testing.T) {
-	t.Parallel()
-
-	const field = "email"
-
-	t.Run("prefers proposed value when present", func(t *testing.T) {
-		payload := MutationGalaPayload{
-			ProposedChanges: map[string]any{
-				field: " proposed@example.com ",
-			},
-		}
-
-		got := MutationStringValuePreferPayload(payload, map[string]string{field: "header@example.com"}, field)
-		assert.Equal(t, "proposed@example.com", got)
-	})
-
-	t.Run("falls back to properties when proposed value is missing", func(t *testing.T) {
-		got := MutationStringValuePreferPayload(MutationGalaPayload{}, map[string]string{field: "header@example.com"}, field)
-		assert.Equal(t, "header@example.com", got)
-	})
-
-	t.Run("does not fall back when proposed value is blank", func(t *testing.T) {
-		payload := MutationGalaPayload{
-			ProposedChanges: map[string]any{
-				field: "   ",
-			},
-		}
-
-		got := MutationStringValuePreferPayload(payload, map[string]string{field: "header@example.com"}, field)
-		assert.Empty(t, got)
-	})
-
-	t.Run("preserves non-string proposed value conversion semantics", func(t *testing.T) {
-		payload := MutationGalaPayload{
-			ProposedChanges: map[string]any{
-				field: []any{"invalid"},
-			},
-		}
-
-		got := MutationStringValuePreferPayload(payload, map[string]string{field: "header@example.com"}, field)
-		assert.Equal(t, "[invalid]", got)
-	})
-}
-
 // TestClientFromHandler verifies client resolution from handler injectors
 func TestClientFromHandler(t *testing.T) {
 	t.Parallel()

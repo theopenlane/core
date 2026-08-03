@@ -14,43 +14,32 @@ import (
 
 // RegisterGalaDocumentAssociationListeners registers listeners that link
 // referenced controls to documents asynchronously after document creation.
-func RegisterGalaDocumentAssociationListeners(registry *gala.Registry) ([]gala.ListenerID, error) {
-	return gala.RegisterListeners(registry,
-		documentAssociationDefinition(generated.TypeActionPlan),
-		documentAssociationDefinition(generated.TypeInternalPolicy),
-		documentAssociationDefinition(generated.TypeProcedure),
+func RegisterGalaDocumentAssociationListeners(g *gala.Gala) ([]gala.ListenerID, error) {
+	return eventqueue.RegisterMutationListeners(g,
+		documentAssociationListener(generated.TypeActionPlan),
+		documentAssociationListener(generated.TypeInternalPolicy),
+		documentAssociationListener(generated.TypeProcedure),
 	)
 }
 
-func documentAssociationDefinition(schemaType string) gala.Definition[eventqueue.MutationGalaPayload] {
-	topic := eventqueue.MutationTopic(eventqueue.MutationConcernDirect, schemaType)
-
-	return gala.Definition[eventqueue.MutationGalaPayload]{
-		Topic:      topic,
+// documentAssociationListener builds the document association listener for one schema type
+func documentAssociationListener(schemaType string) eventqueue.MutationListener {
+	return eventqueue.MutationListener{
+		Schema:     schemaType,
 		Name:       "document.associations." + schemaType,
 		Operations: []string{ent.OpCreate.String()},
 		Handle:     handleDocumentAssociationCreated,
 	}
 }
 
-func handleDocumentAssociationCreated(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	ctx, client, ok := eventqueue.ClientFromHandler(ctx)
-	if !ok {
-		return nil
-	}
-
-	documentID, ok := eventqueue.MutationEntityID(payload, ctx.Envelope.Headers.Properties)
-	if !ok || documentID == "" {
-		return nil
-	}
-
+func handleDocumentAssociationCreated(inv eventqueue.Invocation, payload eventqueue.MutationGalaPayload) error {
 	switch payload.MutationType {
 	case generated.TypeActionPlan:
-		return parseActionPlanAssociations(ctx.Context, client, documentID)
+		return parseActionPlanAssociations(inv.Context, inv.Client, inv.EntityID)
 	case generated.TypeInternalPolicy:
-		return parseInternalPolicyAssociations(ctx.Context, client, documentID)
+		return parseInternalPolicyAssociations(inv.Context, inv.Client, inv.EntityID)
 	case generated.TypeProcedure:
-		return parseProcedureAssociations(ctx.Context, client, documentID)
+		return parseProcedureAssociations(inv.Context, inv.Client, inv.EntityID)
 	default:
 		return nil
 	}

@@ -7,7 +7,6 @@ import (
 	"slices"
 	"sync"
 
-	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/utils/contextx"
 )
 
@@ -37,11 +36,6 @@ type ContextCodec interface {
 	Restore(context.Context, json.RawMessage) (context.Context, error)
 }
 
-// TypedContextCodec captures/restores context values stored via contextx.With
-type TypedContextCodec[T any] struct {
-	key ContextKey
-}
-
 // ContextManager manages context codecs and snapshot round-trips
 type ContextManager struct {
 	mu     sync.RWMutex
@@ -55,8 +49,8 @@ type contextFlagSet struct {
 
 var contextFlagSetContextKey = contextx.NewKey[contextFlagSet]()
 
-// NewContextManager creates a context manager and registers any initial codecs
-func NewContextManager(codecs ...ContextCodec) (*ContextManager, error) {
+// newContextManager creates a context manager and registers any initial codecs
+func newContextManager(codecs ...ContextCodec) (*ContextManager, error) {
 	manager := &ContextManager{codecs: map[ContextKey]ContextCodec{}}
 
 	for _, codec := range codecs {
@@ -66,42 +60,6 @@ func NewContextManager(codecs ...ContextCodec) (*ContextManager, error) {
 	}
 
 	return manager, nil
-}
-
-// NewTypedContextCodec creates a typed context codec for a specific snapshot key
-func NewTypedContextCodec[T any](key ContextKey) TypedContextCodec[T] {
-	return TypedContextCodec[T]{key: key}
-}
-
-// Key returns the codec snapshot key
-func (c TypedContextCodec[T]) Key() ContextKey {
-	return c.key
-}
-
-// Capture extracts a typed context value and JSON encodes it
-func (c TypedContextCodec[T]) Capture(ctx context.Context) (json.RawMessage, bool, error) {
-	value, ok := contextx.From[T](ctx)
-	if !ok {
-		return nil, false, nil
-	}
-
-	encoded, err := json.Marshal(value)
-	if err != nil {
-		return nil, false, ErrContextSnapshotCaptureFailed
-	}
-
-	return append(json.RawMessage(nil), encoded...), true, nil
-}
-
-// Restore JSON decodes a typed context value and re-attaches it
-func (c TypedContextCodec[T]) Restore(ctx context.Context, raw json.RawMessage) (context.Context, error) {
-	var value T
-
-	if err := jsonx.RoundTrip(raw, &value); err != nil {
-		return ctx, ErrContextSnapshotRestoreFailed
-	}
-
-	return contextx.With(ctx, value), nil
 }
 
 // Register registers a context codec by key

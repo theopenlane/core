@@ -21,7 +21,6 @@ import (
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/entitlements"
-	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/metrics"
 	"github.com/theopenlane/core/pkg/shortlinks"
@@ -76,8 +75,6 @@ type Handler struct {
 	IntegrationsRuntime *integrationsruntime.Runtime
 	// IntegrationsConfig contains environment-backed operator configuration for built-in integrations.
 	IntegrationsConfig catalog.Config
-	// Gala is the shared event runtime for asynchronous dispatch.
-	Gala *gala.Gala
 	// WorkflowEngine orchestrates workflow execution.
 	WorkflowEngine *engine.WorkflowEngine
 	// CloudflareConfig contains the configuration for Cloudflare integration

@@ -646,6 +646,19 @@ var TopicVulnerability = gala.Topic[VulnerabilityIngestRequested]{
 	Name: "entityops.vulnerability.ingest.requested",
 }
 
+// PrepareActionPlanInput stamps integration-scoped values onto a CreateActionPlanInput before
+// persistence. Fields are only overwritten when the input value is already zero or nil
+func PrepareActionPlanInput(input generated.CreateActionPlanInput, integration *generated.Integration) generated.CreateActionPlanInput {
+	if integration == nil {
+		return input
+	}
+	if input.OwnerID == nil && integration.OwnerID != "" {
+		input.OwnerID = &integration.OwnerID
+	}
+
+	return input
+}
+
 // PrepareAssetInput stamps integration-scoped values onto a CreateAssetInput before
 // persistence. Fields are only overwritten when the input value is already zero or nil
 func PrepareAssetInput(input generated.CreateAssetInput, integration *generated.Integration) generated.CreateAssetInput {
@@ -684,6 +697,9 @@ func PrepareContactInput(input generated.CreateContactInput, integration *genera
 	if input.IntegrationID == nil && integration.ID != "" {
 		input.IntegrationID = &integration.ID
 	}
+	if input.OwnerID == nil && integration.OwnerID != "" {
+		input.OwnerID = &integration.OwnerID
+	}
 
 	return input
 }
@@ -719,6 +735,9 @@ func PrepareDirectoryGroupInput(input generated.CreateDirectoryGroupInput, integ
 	if input.PlatformID == nil && integration.PlatformID != "" {
 		input.PlatformID = &integration.PlatformID
 	}
+	if input.OwnerID == nil && integration.OwnerID != "" {
+		input.OwnerID = &integration.OwnerID
+	}
 
 	return input
 }
@@ -731,6 +750,9 @@ func PrepareDirectoryMembershipInput(input generated.CreateDirectoryMembershipIn
 	}
 	if input.IntegrationID == "" {
 		input.IntegrationID = integration.ID
+	}
+	if input.OwnerID == nil && integration.OwnerID != "" {
+		input.OwnerID = &integration.OwnerID
 	}
 
 	return input
@@ -752,6 +774,32 @@ func PrepareEntityInput(input generated.CreateEntityInput, integration *generate
 // PrepareFindingInput stamps integration-scoped values onto a CreateFindingInput before
 // persistence. Fields are only overwritten when the input value is already zero or nil
 func PrepareFindingInput(input generated.CreateFindingInput, integration *generated.Integration) generated.CreateFindingInput {
+	if integration == nil {
+		return input
+	}
+	if input.OwnerID == nil && integration.OwnerID != "" {
+		input.OwnerID = &integration.OwnerID
+	}
+
+	return input
+}
+
+// PrepareInternalPolicyInput stamps integration-scoped values onto a CreateInternalPolicyInput before
+// persistence. Fields are only overwritten when the input value is already zero or nil
+func PrepareInternalPolicyInput(input generated.CreateInternalPolicyInput, integration *generated.Integration) generated.CreateInternalPolicyInput {
+	if integration == nil {
+		return input
+	}
+	if input.OwnerID == nil && integration.OwnerID != "" {
+		input.OwnerID = &integration.OwnerID
+	}
+
+	return input
+}
+
+// PrepareProcedureInput stamps integration-scoped values onto a CreateProcedureInput before
+// persistence. Fields are only overwritten when the input value is already zero or nil
+func PrepareProcedureInput(input generated.CreateProcedureInput, integration *generated.Integration) generated.CreateProcedureInput {
 	if integration == nil {
 		return input
 	}

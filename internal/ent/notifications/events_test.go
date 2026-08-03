@@ -210,22 +210,23 @@ func TestIsExportNotificationAllowsSupportUser(t *testing.T) {
 }
 
 func TestRegisterGalaListeners(t *testing.T) {
-	registry := gala.NewRegistry()
+	runtime, err := gala.NewInMemory()
+	require.NoError(t, err)
 
-	ids, err := RegisterGalaListeners(registry)
+	ids, err := RegisterGalaListeners(runtime)
 	require.NoError(t, err)
 	require.Len(t, ids, 8)
 
-	assert.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeTask), "create"))
-	assert.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeInternalPolicy), "update"))
-	assert.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeRisk), "delete"))
-	assert.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeProcedure), "update_one"))
-	assert.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeNote), "create"))
-	assert.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeExport), "update"))
-	assert.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeStandard), "update"))
-	assert.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeProgram), ent.OpUpdate.String()))
-	assert.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeProgram), ent.OpUpdateOne.String()))
-	assert.False(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeProgram), ent.OpCreate.String()))
+	assert.True(t, runtime.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeTask), "create"))
+	assert.True(t, runtime.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeInternalPolicy), "update"))
+	assert.True(t, runtime.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeRisk), "delete"))
+	assert.True(t, runtime.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeProcedure), "update_one"))
+	assert.True(t, runtime.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeNote), "create"))
+	assert.True(t, runtime.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeExport), "update"))
+	assert.True(t, runtime.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeStandard), "update"))
+	assert.True(t, runtime.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeProgram), ent.OpUpdate.String()))
+	assert.True(t, runtime.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeProgram), ent.OpUpdateOne.String()))
+	assert.False(t, runtime.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeProgram), ent.OpCreate.String()))
 }
 
 func TestErrorConstants(t *testing.T) {

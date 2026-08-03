@@ -5,16 +5,8 @@ import (
 	"sync"
 )
 
-// Registration ties a typed topic to its codec
-type Registration[T any] struct {
-	// Topic defines the typed topic contract
-	Topic Topic[T]
-	// Codec serializes and deserializes payloads for the topic
-	Codec Codec[T]
-}
-
 // Registry stores topic codecs, policies, and listeners
-type Registry struct {
+type registry struct {
 	mu sync.RWMutex
 	// topics stores topic metadata and codec wrappers by topic name
 	topics map[TopicName]topicRegistration
@@ -42,43 +34,45 @@ type registeredListener struct {
 	handle func(HandlerContext, any) error
 }
 
-// NewRegistry creates an empty topic/listener registry
-func NewRegistry() *Registry {
-	return &Registry{
+// newRegistry creates an empty topic/listener registry
+func newRegistry() *registry {
+	return &registry{
 		topics:    map[TopicName]topicRegistration{},
 		listeners: map[TopicName][]registeredListener{},
 	}
 }
 
-// RegisterTopic registers one typed topic in the registry
-func RegisterTopic[T any](registry *Registry, registration Registration[T]) error {
+// registerTopic registers one typed topic and its codec in the registry
+func registerTopic[T any](registry *registry, topic Topic[T], codec Codec[T]) error {
 	if registry == nil {
 		return ErrRegistryRequired
 	}
 
-	if err := validateTopicRegistration(registration); err != nil {
-		return err
+	if topic.Name == "" {
+		return ErrTopicNameRequired
 	}
 
-	topic := registration.Topic.Name
+	if codec == nil {
+		return ErrCodecRequired
+	}
 
 	registry.mu.Lock()
 	defer registry.mu.Unlock()
 
-	if _, exists := registry.topics[topic]; exists {
+	if _, exists := registry.topics[topic.Name]; exists {
 		return ErrTopicAlreadyRegistered
 	}
 
-	registry.topics[topic] = topicRegistration{
-		encode: wrapTopicEncoder(registration),
-		decode: wrapTopicDecoder(registration),
+	registry.topics[topic.Name] = topicRegistration{
+		encode: wrapTopicEncoder(codec),
+		decode: wrapTopicDecoder(codec),
 	}
 
 	return nil
 }
 
-// AttachListener registers one typed listener in the registry
-func AttachListener[T any](registry *Registry, definition Definition[T]) (ListenerID, error) {
+// attachListener registers one typed listener in the registry
+func attachListener[T any](registry *registry, definition Definition[T]) (ListenerID, error) {
 	if registry == nil {
 		return "", ErrRegistryRequired
 	}
@@ -117,33 +111,8 @@ func AttachListener[T any](registry *Registry, definition Definition[T]) (Listen
 	return listenerID, nil
 }
 
-// EncodePayload encodes a payload for a registered topic
-func (r *Registry) EncodePayload(topic TopicName, payload any) ([]byte, error) {
-	registration, err := r.topicRegistration(topic)
-	if err != nil {
-		return nil, err
-	}
-
-	encoded, err := registration.encode(payload)
-	if err != nil {
-		return nil, err
-	}
-
-	return encoded, nil
-}
-
-// DecodePayload decodes payload bytes for a registered topic
-func (r *Registry) DecodePayload(topic TopicName, payload []byte) (any, error) {
-	registration, err := r.topicRegistration(topic)
-	if err != nil {
-		return nil, err
-	}
-
-	return registration.decode(payload)
-}
-
 // listenerNamesForTopic returns the registered listener names for a topic
-func (r *Registry) listenerNamesForTopic(topic TopicName) []string {
+func (r *registry) listenerNamesForTopic(topic TopicName) []string {
 	listeners := r.registeredListeners(topic)
 	if len(listeners) == 0 {
 		return nil
@@ -158,7 +127,7 @@ func (r *Registry) listenerNamesForTopic(topic TopicName) []string {
 }
 
 // registeredListeners returns a snapshot of listeners for one topic.
-func (r *Registry) registeredListeners(topic TopicName) []registeredListener {
+func (r *registry) registeredListeners(topic TopicName) []registeredListener {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
 
@@ -175,7 +144,7 @@ func (r *Registry) registeredListeners(topic TopicName) []registeredListener {
 
 // InterestedIn reports whether any listener is registered for topic+operation
 // Empty operation means topic-level interest only
-func (r *Registry) InterestedIn(topic TopicName, operation string) bool {
+func (r *registry) InterestedIn(topic TopicName, operation string) bool {
 	if topic == "" {
 		return false
 	}
@@ -219,7 +188,7 @@ func listenerInterestedInOperation(listener registeredListener, operation string
 }
 
 // topicRegistration resolves one topic registration by name
-func (r *Registry) topicRegistration(topic TopicName) (topicRegistration, error) {
+func (r *registry) topicRegistration(topic TopicName) (topicRegistration, error) {
 	if topic == "" {
 		return topicRegistration{}, ErrTopicNameRequired
 	}
@@ -233,19 +202,6 @@ func (r *Registry) topicRegistration(topic TopicName) (topicRegistration, error)
 	}
 
 	return registration, nil
-}
-
-// validateTopicRegistration validates topic registration requirements
-func validateTopicRegistration[T any](registration Registration[T]) error {
-	if registration.Topic.Name == "" {
-		return ErrTopicNameRequired
-	}
-
-	if registration.Codec == nil {
-		return ErrCodecRequired
-	}
-
-	return nil
 }
 
 // validateListenerDefinition validates listener definition requirements
@@ -289,14 +245,14 @@ func normalizeOperations(operations []string) map[string]struct{} {
 }
 
 // wrapTopicEncoder coverts a type-specific codec into a common shape for registry storage (any -> T)
-func wrapTopicEncoder[T any](registration Registration[T]) func(any) ([]byte, error) {
+func wrapTopicEncoder[T any](codec Codec[T]) func(any) ([]byte, error) {
 	return func(payload any) ([]byte, error) {
 		typedPayload, ok := payload.(T)
 		if !ok {
 			return nil, ErrPayloadTypeMismatch
 		}
 
-		encoded, err := registration.Codec.Encode(typedPayload)
+		encoded, err := codec.Encode(typedPayload)
 		if err != nil {
 			return nil, ErrPayloadEncodeFailed
 		}
@@ -306,9 +262,9 @@ func wrapTopicEncoder[T any](registration Registration[T]) func(any) ([]byte, er
 }
 
 // wrapTopicDecoder wides the return type on the way out from the encoder (T -> any) for registry storage
-func wrapTopicDecoder[T any](registration Registration[T]) func([]byte) (any, error) {
+func wrapTopicDecoder[T any](codec Codec[T]) func([]byte) (any, error) {
 	return func(payload []byte) (any, error) {
-		decoded, err := registration.Codec.Decode(payload)
+		decoded, err := codec.Decode(payload)
 		if err != nil {
 			return nil, ErrPayloadDecodeFailed
 		}

@@ -11,50 +11,50 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-// Provider resolves the gala instance used by River workers
-type Provider func() *Gala
+// galaProvider resolves the gala instance used by River workers
+type galaProvider func() *Gala
 
-// RiverDispatchWorker processes durable gala dispatch jobs from River
-type RiverDispatchWorker struct {
-	river.WorkerDefaults[RiverDispatchArgs]
+// riverDispatchWorker processes durable gala dispatch jobs from River
+type riverDispatchWorker struct {
+	river.WorkerDefaults[riverDispatchArgs]
 
-	galaProvider Provider
+	galaProvider galaProvider
 }
 
-// RiverDispatchJobKind is the River job kind used for durable gala dispatch
-const RiverDispatchJobKind = "gala_dispatch_v1"
+// riverDispatchJobKind is the River job kind used for durable gala dispatch
+const riverDispatchJobKind = "gala_dispatch_v1"
 
 // DefaultQueueName is the default queue used for gala durable dispatch jobs
 const DefaultQueueName = "events"
 
-// RiverDispatchArgs stores a JSON-encoded gala envelope for durable dispatch
-type RiverDispatchArgs struct {
+// riverDispatchArgs stores a JSON-encoded gala envelope for durable dispatch
+type riverDispatchArgs struct {
 	// Envelope is the encoded gala envelope payload
 	Envelope []byte `json:"envelope"`
 }
 
-// RiverInsertClient represents the minimal insert capability required for durable dispatch
-type RiverInsertClient interface {
+// riverInsertClient represents the minimal insert capability required for durable dispatch
+type riverInsertClient interface {
 	// Insert inserts a River job with optional insert options
 	Insert(context.Context, river.JobArgs, *river.InsertOpts) (*rivertype.JobInsertResult, error)
 }
 
-// RiverDispatcher dispatches envelopes to River
-type RiverDispatcher struct {
+// riverDispatcher dispatches envelopes to River
+type riverDispatcher struct {
 	// jobClient is the River client used to insert dispatch jobs
-	jobClient RiverInsertClient
+	jobClient riverInsertClient
 	// defaultQueue is the default River queue for dispatch jobs
 	defaultQueue string
 }
 
-// Dispatcher dispatches envelopes to the configured transport
-type Dispatcher interface {
+// dispatcher dispatches envelopes to the configured transport
+type dispatcher interface {
 	// Dispatch dispatches an envelope to the configured transport
 	Dispatch(context.Context, Envelope) error
 }
 
-// NewRiverDispatcher creates a River-backed durable dispatcher
-func NewRiverDispatcher(jobClient RiverInsertClient, defaultQueue string) (*RiverDispatcher, error) {
+// newRiverDispatcher creates a River-backed durable dispatcher
+func newRiverDispatcher(jobClient riverInsertClient, defaultQueue string) (*riverDispatcher, error) {
 	if jobClient == nil {
 		return nil, ErrRiverJobClientRequired
 	}
@@ -63,27 +63,27 @@ func NewRiverDispatcher(jobClient RiverInsertClient, defaultQueue string) (*Rive
 		defaultQueue = DefaultQueueName
 	}
 
-	return &RiverDispatcher{
+	return &riverDispatcher{
 		jobClient:    jobClient,
 		defaultQueue: defaultQueue,
 	}, nil
 }
 
-// NewRiverDispatchArgs builds River dispatch args from an envelope
-func NewRiverDispatchArgs(envelope Envelope) (RiverDispatchArgs, error) {
+// newRiverDispatchArgs builds River dispatch args from an envelope
+func newRiverDispatchArgs(envelope Envelope) (riverDispatchArgs, error) {
 	encodedEnvelope, err := json.Marshal(envelope)
 	if err != nil {
-		return RiverDispatchArgs{}, ErrRiverEnvelopeEncodeFailed
+		return riverDispatchArgs{}, ErrRiverEnvelopeEncodeFailed
 	}
 
-	return RiverDispatchArgs{
+	return riverDispatchArgs{
 		Envelope: encodedEnvelope,
 	}, nil
 }
 
-// NewRiverDispatchWorker creates a RiverDispatchWorker
-func NewRiverDispatchWorker(galaProvider Provider) *RiverDispatchWorker {
-	return &RiverDispatchWorker{galaProvider: galaProvider}
+// newRiverDispatchWorker creates a riverDispatchWorker
+func newRiverDispatchWorker(provider galaProvider) *riverDispatchWorker {
+	return &riverDispatchWorker{galaProvider: provider}
 }
 
 // riverJobMetadata is the JSON structure attached to River jobs for UI visibility
@@ -101,8 +101,8 @@ type riverJobMetadata struct {
 }
 
 // Dispatch dispatches an envelope to River for processing by a Worker
-func (d *RiverDispatcher) Dispatch(ctx context.Context, envelope Envelope) error {
-	args, err := NewRiverDispatchArgs(envelope)
+func (d *riverDispatcher) Dispatch(ctx context.Context, envelope Envelope) error {
+	args, err := newRiverDispatchArgs(envelope)
 	if err != nil {
 		return err
 	}
@@ -148,12 +148,12 @@ func (d *RiverDispatcher) Dispatch(ctx context.Context, envelope Envelope) error
 }
 
 // Kind satisfies river.JobArgs
-func (RiverDispatchArgs) Kind() string {
-	return RiverDispatchJobKind
+func (riverDispatchArgs) Kind() string {
+	return riverDispatchJobKind
 }
 
-// DecodeEnvelope decodes the gala envelope from dispatch args
-func (a RiverDispatchArgs) DecodeEnvelope() (Envelope, error) {
+// decodeEnvelope decodes the gala envelope from dispatch args
+func (a riverDispatchArgs) decodeEnvelope() (Envelope, error) {
 	var envelope Envelope
 	if len(a.Envelope) == 0 {
 		return envelope, ErrRiverDispatchJobEnvelopeRequired
@@ -167,7 +167,7 @@ func (a RiverDispatchArgs) DecodeEnvelope() (Envelope, error) {
 }
 
 // Work processes one River dispatch job and invokes Gala dispatch
-func (w *RiverDispatchWorker) Work(ctx context.Context, job *river.Job[RiverDispatchArgs]) error {
+func (w *riverDispatchWorker) Work(ctx context.Context, job *river.Job[riverDispatchArgs]) error {
 	if w.galaProvider == nil {
 		return ErrRiverGalaProviderRequired
 	}
@@ -177,10 +177,10 @@ func (w *RiverDispatchWorker) Work(ctx context.Context, job *river.Job[RiverDisp
 		return ErrGalaRequired
 	}
 
-	envelope, err := job.Args.DecodeEnvelope()
+	envelope, err := job.Args.decodeEnvelope()
 	if err != nil {
 		return err
 	}
 
-	return g.DispatchEnvelope(context.WithoutCancel(ctx), envelope)
+	return g.dispatchEnvelope(context.WithoutCancel(ctx), envelope)
 }

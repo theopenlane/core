@@ -54,20 +54,21 @@ type Definition[T any] struct {
 	Handle Handler[T]
 }
 
-// RegisterListeners registers listeners and ensures their topic contracts are configured
-func RegisterListeners[T any](registry *Registry, definitions ...Definition[T]) ([]ListenerID, error) {
+// Register registers listeners on the gala runtime and ensures their topic contracts are configured
+func Register[T any](g *Gala, definitions ...Definition[T]) ([]ListenerID, error) {
+	if g == nil {
+		return nil, ErrGalaRequired
+	}
+
 	ids := make([]ListenerID, 0, len(definitions))
 
 	for _, definition := range definitions {
-		err := RegisterTopic(registry, Registration[T]{
-			Topic: definition.Topic,
-			Codec: JSONCodec[T]{},
-		})
+		err := registerTopic(g.registry, definition.Topic, JSONCodec[T]{})
 		if err != nil && !errors.Is(err, ErrTopicAlreadyRegistered) {
 			return nil, err
 		}
 
-		id, err := AttachListener(registry, definition)
+		id, err := attachListener(g.registry, definition)
 		if err != nil {
 			return nil, err
 		}

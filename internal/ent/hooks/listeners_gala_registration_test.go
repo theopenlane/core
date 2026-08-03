@@ -15,159 +15,169 @@ import (
 func TestRegisterGalaEntitlementListeners(t *testing.T) {
 	t.Parallel()
 
-	registry := gala.NewRegistry()
+	runtime, err := gala.NewInMemory()
+	require.NoError(t, err)
 
-	ids, err := RegisterGalaEntitlementListeners(registry)
+	ids, err := RegisterGalaEntitlementListeners(runtime)
 	require.NoError(t, err)
 	require.Len(t, ids, 2)
 
-	require.True(t, registry.InterestedIn(gala.TopicName(entgen.TypeOrganization), ent.OpCreate.String()))
-	require.True(t, registry.InterestedIn(gala.TopicName(entgen.TypeOrganization), eventqueue.SoftDeleteOne))
-	require.False(t, registry.InterestedIn(gala.TopicName(entgen.TypeOrganization), ent.OpUpdate.String()))
+	require.True(t, runtime.InterestedIn(gala.TopicName(entgen.TypeOrganization), ent.OpCreate.String()))
+	require.True(t, runtime.InterestedIn(gala.TopicName(entgen.TypeOrganization), eventqueue.SoftDeleteOne))
+	require.False(t, runtime.InterestedIn(gala.TopicName(entgen.TypeOrganization), ent.OpUpdate.String()))
 
-	require.True(t, registry.InterestedIn(gala.TopicName(entgen.TypeOrganizationSetting), ent.OpUpdate.String()))
-	require.False(t, registry.InterestedIn(gala.TopicName(entgen.TypeOrganizationSetting), ent.OpDelete.String()))
+	require.True(t, runtime.InterestedIn(gala.TopicName(entgen.TypeOrganizationSetting), ent.OpUpdate.String()))
+	require.False(t, runtime.InterestedIn(gala.TopicName(entgen.TypeOrganizationSetting), ent.OpDelete.String()))
 }
 
 func TestRegisterGalaOrganizationAvatarListeners(t *testing.T) {
 	t.Parallel()
 
-	registry := gala.NewRegistry()
+	runtime, err := gala.NewInMemory()
+	require.NoError(t, err)
 
-	ids, err := RegisterGalaOrganizationAvatarListeners(registry)
+	ids, err := RegisterGalaOrganizationAvatarListeners(runtime)
 	require.NoError(t, err)
 	require.Len(t, ids, 1)
 
 	topic := eventqueue.MutationTopicName(eventqueue.MutationConcernDirect, entgen.TypeOrganization)
-	require.True(t, registry.InterestedIn(topic, ent.OpCreate.String()))
-	require.False(t, registry.InterestedIn(topic, ent.OpUpdate.String()))
+	require.True(t, runtime.InterestedIn(topic, ent.OpCreate.String()))
+	require.False(t, runtime.InterestedIn(topic, ent.OpUpdate.String()))
 }
 
 func TestRegisterGalaTaskRuleListeners(t *testing.T) {
 	t.Parallel()
 
-	registry := gala.NewRegistry()
+	runtime, err := gala.NewInMemory()
+	require.NoError(t, err)
 
-	ids, err := RegisterGalaTaskRuleListeners(registry)
+	ids, err := RegisterGalaTaskRuleListeners(runtime)
 	require.NoError(t, err)
 	require.NotEmpty(t, ids)
 
 	for _, schemaType := range []string{entgen.TypeOnboarding, entgen.TypeOrganization, entgen.TypeNotification} {
 		topic := eventqueue.MutationTopicName(eventqueue.MutationConcernDirect, schemaType)
-		require.True(t, registry.InterestedIn(topic, ent.OpCreate.String()), "expected %s to subscribe to create", schemaType)
-		require.False(t, registry.InterestedIn(topic, ent.OpUpdate.String()), "expected %s not to subscribe to update", schemaType)
+		require.True(t, runtime.InterestedIn(topic, ent.OpCreate.String()), "expected %s to subscribe to create", schemaType)
+		require.False(t, runtime.InterestedIn(topic, ent.OpUpdate.String()), "expected %s not to subscribe to update", schemaType)
 	}
 }
 
 func TestRegisterGalaTrustCenterCacheListeners(t *testing.T) {
 	t.Parallel()
 
-	registry := gala.NewRegistry()
+	runtime, err := gala.NewInMemory()
+	require.NoError(t, err)
 
-	ids, err := RegisterGalaTrustCenterCacheListeners(registry)
+	ids, err := RegisterGalaTrustCenterCacheListeners(runtime)
 	require.NoError(t, err)
 	require.Len(t, ids, 10)
 
-	require.True(t, registry.InterestedIn(gala.TopicName(entgen.TypeTrustCenterDoc), ent.OpUpdate.String()))
-	require.True(t, registry.InterestedIn(gala.TopicName(entgen.TypeTrustCenterFAQ), ent.OpCreate.String()))
-	require.True(t, registry.InterestedIn(gala.TopicName(entgen.TypeTrustCenter), eventqueue.SoftDeleteOne))
+	require.True(t, runtime.InterestedIn(gala.TopicName(entgen.TypeTrustCenterDoc), ent.OpUpdate.String()))
+	require.True(t, runtime.InterestedIn(gala.TopicName(entgen.TypeTrustCenterFAQ), ent.OpCreate.String()))
+	require.True(t, runtime.InterestedIn(gala.TopicName(entgen.TypeTrustCenter), eventqueue.SoftDeleteOne))
 }
 
 func TestRegisterGalaTrustCenterWatermarkListeners(t *testing.T) {
 	t.Parallel()
 
-	registry := gala.NewRegistry()
+	runtime, err := gala.NewInMemory()
+	require.NoError(t, err)
 
-	ids, err := RegisterGalaTrustCenterWatermarkListeners(registry)
+	ids, err := RegisterGalaTrustCenterWatermarkListeners(runtime)
 	require.NoError(t, err)
 	require.Len(t, ids, 1)
 
 	topic := eventqueue.MutationTopicName(eventqueue.MutationConcernDirect, entgen.TypeTrustCenterDoc)
-	require.True(t, registry.InterestedIn(topic, ent.OpCreate.String()))
-	require.True(t, registry.InterestedIn(topic, ent.OpUpdateOne.String()))
-	require.False(t, registry.InterestedIn(topic, ent.OpDelete.String()))
+	require.True(t, runtime.InterestedIn(topic, ent.OpCreate.String()))
+	require.True(t, runtime.InterestedIn(topic, ent.OpUpdateOne.String()))
+	require.False(t, runtime.InterestedIn(topic, ent.OpDelete.String()))
 }
 
 func TestRegisterGalaWorkflowMutationListeners(t *testing.T) {
 	t.Parallel()
 
-	registry := gala.NewRegistry()
+	runtime, err := gala.NewInMemory()
+	require.NoError(t, err)
 
-	ids, err := RegisterGalaWorkflowMutationListeners(registry)
+	ids, err := RegisterGalaWorkflowMutationListeners(runtime)
 	require.NoError(t, err)
 	require.Len(t, ids, len(enums.WorkflowObjectTypes)+1)
 
 	for _, schemaType := range enums.WorkflowObjectTypes {
 		topic := eventqueue.MutationTopicName(eventqueue.MutationConcernWorkflow, schemaType)
-		require.True(t, registry.InterestedIn(topic, ent.OpCreate.String()))
-		require.True(t, registry.InterestedIn(topic, ent.OpUpdate.String()))
-		require.False(t, registry.InterestedIn(topic, ent.OpDelete.String()))
+		require.True(t, runtime.InterestedIn(topic, ent.OpCreate.String()))
+		require.True(t, runtime.InterestedIn(topic, ent.OpUpdate.String()))
+		require.False(t, runtime.InterestedIn(topic, ent.OpDelete.String()))
 	}
 
 	assignmentTopic := eventqueue.MutationTopicName(eventqueue.MutationConcernWorkflow, entgen.TypeWorkflowAssignment)
-	require.True(t, registry.InterestedIn(assignmentTopic, ent.OpUpdate.String()))
-	require.False(t, registry.InterestedIn(assignmentTopic, ent.OpCreate.String()))
+	require.True(t, runtime.InterestedIn(assignmentTopic, ent.OpUpdate.String()))
+	require.False(t, runtime.InterestedIn(assignmentTopic, ent.OpCreate.String()))
 }
 
 func TestRegisterGalaWorkflowListenersRegistersCommandTopics(t *testing.T) {
 	t.Parallel()
 
-	registry := gala.NewRegistry()
+	runtime, err := gala.NewInMemory()
+	require.NoError(t, err)
 
-	ids, err := RegisterGalaWorkflowListeners(registry)
+	ids, err := RegisterGalaWorkflowListeners(runtime)
 	require.NoError(t, err)
 	require.Len(t, ids, len(enums.WorkflowObjectTypes)+6)
 
-	require.True(t, registry.InterestedIn(gala.TopicWorkflowTriggered, ""))
-	require.True(t, registry.InterestedIn(gala.TopicWorkflowActionStarted, ""))
-	require.True(t, registry.InterestedIn(gala.TopicWorkflowActionCompleted, ""))
-	require.True(t, registry.InterestedIn(gala.TopicWorkflowAssignmentCompleted, ""))
-	require.True(t, registry.InterestedIn(gala.TopicWorkflowInstanceCompleted, ""))
-	require.False(t, registry.InterestedIn(gala.TopicName("workflows.command.triggered"), ""))
+	require.True(t, runtime.InterestedIn(gala.TopicWorkflowTriggered, ""))
+	require.True(t, runtime.InterestedIn(gala.TopicWorkflowActionStarted, ""))
+	require.True(t, runtime.InterestedIn(gala.TopicWorkflowActionCompleted, ""))
+	require.True(t, runtime.InterestedIn(gala.TopicWorkflowAssignmentCompleted, ""))
+	require.True(t, runtime.InterestedIn(gala.TopicWorkflowInstanceCompleted, ""))
+	require.False(t, runtime.InterestedIn(gala.TopicName("workflows.command.triggered"), ""))
 }
 
 func TestRegisterGalaVendorScoringListeners(t *testing.T) {
 	t.Parallel()
 
-	registry := gala.NewRegistry()
+	runtime, err := gala.NewInMemory()
+	require.NoError(t, err)
 
-	ids, err := RegisterGalaVendorScoringListeners(registry)
+	ids, err := RegisterGalaVendorScoringListeners(runtime)
 	require.NoError(t, err)
 	require.Len(t, ids, 1)
 
-	require.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernDirect, entgen.TypeVendorScoringConfig), ent.OpUpdate.String()))
-	require.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernDirect, entgen.TypeVendorScoringConfig), ent.OpUpdateOne.String()))
-	require.False(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernDirect, entgen.TypeVendorScoringConfig), ent.OpCreate.String()))
+	require.True(t, runtime.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernDirect, entgen.TypeVendorScoringConfig), ent.OpUpdate.String()))
+	require.True(t, runtime.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernDirect, entgen.TypeVendorScoringConfig), ent.OpUpdateOne.String()))
+	require.False(t, runtime.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernDirect, entgen.TypeVendorScoringConfig), ent.OpCreate.String()))
 }
 
 func TestRegisterGalaIdentityResolutionListeners(t *testing.T) {
 	t.Parallel()
 
-	registry := gala.NewRegistry()
+	runtime, err := gala.NewInMemory()
+	require.NoError(t, err)
 
-	ids, err := RegisterGalaIdentityResolutionListeners(registry)
+	ids, err := RegisterGalaIdentityResolutionListeners(runtime)
 	require.NoError(t, err)
 	require.Len(t, ids, 2)
 
 	topic := eventqueue.MutationTopicName(eventqueue.MutationConcernDirect, entgen.TypeDirectoryAccount)
-	require.True(t, registry.InterestedIn(topic, ent.OpCreate.String()))
-	require.True(t, registry.InterestedIn(topic, ent.OpUpdateOne.String()))
-	require.False(t, registry.InterestedIn(topic, ent.OpDelete.String()))
+	require.True(t, runtime.InterestedIn(topic, ent.OpCreate.String()))
+	require.True(t, runtime.InterestedIn(topic, ent.OpUpdateOne.String()))
+	require.False(t, runtime.InterestedIn(topic, ent.OpDelete.String()))
 }
 
 func TestRegisterGalaDocumentAssociationListeners(t *testing.T) {
 	t.Parallel()
 
-	registry := gala.NewRegistry()
+	runtime, err := gala.NewInMemory()
+	require.NoError(t, err)
 
-	ids, err := RegisterGalaDocumentAssociationListeners(registry)
+	ids, err := RegisterGalaDocumentAssociationListeners(runtime)
 	require.NoError(t, err)
 	require.Len(t, ids, 3)
 
 	for _, schemaType := range []string{entgen.TypeActionPlan, entgen.TypeInternalPolicy, entgen.TypeProcedure} {
 		topic := eventqueue.MutationTopicName(eventqueue.MutationConcernDirect, schemaType)
-		require.True(t, registry.InterestedIn(topic, ent.OpCreate.String()))
-		require.False(t, registry.InterestedIn(topic, ent.OpUpdate.String()))
+		require.True(t, runtime.InterestedIn(topic, ent.OpCreate.String()))
+		require.False(t, runtime.InterestedIn(topic, ent.OpUpdate.String()))
 	}
 }
 
@@ -190,34 +200,36 @@ func TestRegisterGalaCampaignRecurringListeners(t *testing.T) {
 func TestRegisterGalaQuestionnaireTransformListeners(t *testing.T) {
 	t.Parallel()
 
-	registry := gala.NewRegistry()
+	runtime, err := gala.NewInMemory()
+	require.NoError(t, err)
 
-	ids, err := RegisterGalaQuestionnaireTransformListeners(registry)
+	ids, err := RegisterGalaQuestionnaireTransformListeners(runtime)
 	require.NoError(t, err)
 	require.Len(t, ids, 1)
 
 	topic := eventqueue.MutationTopicName(eventqueue.MutationConcernDirect, entgen.TypeAssessmentResponse)
-	require.True(t, registry.InterestedIn(topic, ent.OpUpdateOne.String()))
-	require.True(t, registry.InterestedIn(topic, ent.OpCreate.String()))
+	require.True(t, runtime.InterestedIn(topic, ent.OpUpdateOne.String()))
+	require.True(t, runtime.InterestedIn(topic, ent.OpCreate.String()))
 }
 
 func TestRegisterGalaNotificationListeners(t *testing.T) {
 	t.Parallel()
 
-	registry := gala.NewRegistry()
+	runtime, err := gala.NewInMemory()
+	require.NoError(t, err)
 
-	ids, err := RegisterGalaNotificationListeners(registry)
+	ids, err := RegisterGalaNotificationListeners(runtime)
 	require.NoError(t, err)
 	require.Len(t, ids, 8)
 
-	require.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeTask), ent.OpCreate.String()))
-	require.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeInternalPolicy), ent.OpUpdate.String()))
-	require.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeRisk), ent.OpDelete.String()))
-	require.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeProcedure), ent.OpUpdateOne.String()))
-	require.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeNote), ent.OpCreate.String()))
-	require.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeExport), ent.OpUpdate.String()))
-	require.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeStandard), ent.OpUpdate.String()))
-	require.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeProgram), ent.OpUpdate.String()))
-	require.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeProgram), ent.OpUpdateOne.String()))
-	require.False(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeProgram), ent.OpCreate.String()))
+	require.True(t, runtime.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeTask), ent.OpCreate.String()))
+	require.True(t, runtime.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeInternalPolicy), ent.OpUpdate.String()))
+	require.True(t, runtime.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeRisk), ent.OpDelete.String()))
+	require.True(t, runtime.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeProcedure), ent.OpUpdateOne.String()))
+	require.True(t, runtime.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeNote), ent.OpCreate.String()))
+	require.True(t, runtime.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeExport), ent.OpUpdate.String()))
+	require.True(t, runtime.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeStandard), ent.OpUpdate.String()))
+	require.True(t, runtime.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeProgram), ent.OpUpdate.String()))
+	require.True(t, runtime.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeProgram), ent.OpUpdateOne.String()))
+	require.False(t, runtime.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeProgram), ent.OpCreate.String()))
 }

@@ -302,10 +302,10 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 
 	do.ProvideValue(galaInstance.Injector(), c.db)
 
-	_, err = hooks.RegisterGalaEntitlementListeners(galaInstance.Registry())
+	_, err = hooks.RegisterGalaEntitlementListeners(galaInstance)
 	requireNoError(t, err)
 
-	_, err = hooks.RegisterGalaNDAAttestationListeners(galaInstance.Registry())
+	_, err = hooks.RegisterGalaNDAAttestationListeners(galaInstance)
 	requireNoError(t, err)
 
 	requireNoError(t, galaInstance.StartWorkers(ctx))
@@ -396,7 +396,6 @@ func (suite *GraphTestSuite) enableGalaForTestSuite(t *testing.T) {
 	}
 
 	runtime, err := gala.NewGala(context.Background(), gala.Config{
-		Enabled:           true,
 		ConnectionURI:     suite.tf.URI,
 		QueueName:         fmt.Sprintf("graphapi_test_%d", time.Now().UnixNano()),
 		WorkerCount:       1,
@@ -409,7 +408,7 @@ func (suite *GraphTestSuite) enableGalaForTestSuite(t *testing.T) {
 	do.ProvideValue(runtime.Injector(), runtime)
 	do.ProvideValue(runtime.Injector(), suite.client.db)
 
-	_, err = hooks.RegisterGalaEntitlementListeners(runtime.Registry())
+	_, err = hooks.RegisterGalaEntitlementListeners(runtime)
 	require.NoError(t, err)
 
 	err = runtime.StartWorkers(context.Background())

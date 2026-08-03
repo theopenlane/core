@@ -57,7 +57,7 @@ func TestMutationDispatchTargetsRoutesConcernTopicsToInterestedRuntimes(t *testi
 	workflowTopic := gala.Topic[eventqueue.MutationGalaPayload]{
 		Name: eventqueue.MutationTopicName(eventqueue.MutationConcernWorkflow, entgen.TypeTask),
 	}
-	if _, err := gala.RegisterListeners(workflowRuntime.Registry(),
+	if _, err := gala.Register(workflowRuntime,
 		gala.Definition[eventqueue.MutationGalaPayload]{
 			Topic:      workflowTopic,
 			Name:       "workflow.listener",
@@ -73,7 +73,7 @@ func TestMutationDispatchTargetsRoutesConcernTopicsToInterestedRuntimes(t *testi
 	notificationTopic := gala.Topic[eventqueue.MutationGalaPayload]{
 		Name: eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeTask),
 	}
-	if _, err := gala.RegisterListeners(notificationRuntime.Registry(),
+	if _, err := gala.Register(notificationRuntime,
 		gala.Definition[eventqueue.MutationGalaPayload]{
 			Topic:      notificationTopic,
 			Name:       "notification.listener",

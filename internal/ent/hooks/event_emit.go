@@ -2,52 +2,30 @@ package hooks
 
 import (
 	"context"
-	"errors"
 	"fmt"
 
 	"github.com/theopenlane/core/internal/ent/eventqueue"
 	"github.com/theopenlane/core/pkg/gala"
 )
 
-// enqueueGalaMutation builds and dispatches a durable gala envelope for a mutation event
+// enqueueGalaMutation dispatches a durable gala envelope for a mutation event.
+// The mutation event id becomes the envelope id so durable dispatch is traceable
+// per mutation; topic registration is guaranteed by the InterestedIn gate in the
+// emit hook (listener registration auto-registers the topic)
 func enqueueGalaMutation(ctx context.Context, g *gala.Gala, topic string, payload eventqueue.MutationGalaPayload, metadata eventqueue.MutationGalaMetadata) error {
 	if g == nil {
 		return ErrGalaRuntimeUnavailable
 	}
 
-	mutationTopic := gala.Topic[eventqueue.MutationGalaPayload]{
-		Name: gala.TopicName(topic),
-	}
-
-	if err := ensureGalaMutationTopicRegistered(g.Registry(), mutationTopic); err != nil {
-		return fmt.Errorf("%w: topic registration: %v", ErrGalaMutationEnqueueFailed, err)
-	}
-
 	// detach cancellation for best-effort dispatch after commit
 	dispatchCtx := context.WithoutCancel(ctx)
 
-	envelope, err := eventqueue.NewMutationGalaEnvelope(dispatchCtx, g, mutationTopic, payload, metadata)
-	if err != nil {
-		return fmt.Errorf("%w: envelope construction: %v", ErrGalaMutationEnqueueFailed, err)
-	}
-
-	if err := g.EmitEnvelope(dispatchCtx, envelope); err != nil {
-		return fmt.Errorf("%w: emit: %v", ErrGalaMutationEnqueueFailed, err)
+	receipt := g.EmitWithHeaders(dispatchCtx, gala.TopicName(topic), payload,
+		eventqueue.NewGalaHeadersFromMutationMetadata(metadata),
+		gala.WithEventID(gala.EventID(metadata.EventID)))
+	if receipt.Err != nil {
+		return fmt.Errorf("%w: emit: %v", ErrGalaMutationEnqueueFailed, receipt.Err)
 	}
 
 	return nil
-}
-
-// ensureGalaMutationTopicRegistered ensures a mutation topic contract is available in the gala registry.
-func ensureGalaMutationTopicRegistered(registry *gala.Registry, topic gala.Topic[eventqueue.MutationGalaPayload]) error {
-	err := gala.RegisterTopic(registry, gala.Registration[eventqueue.MutationGalaPayload]{
-		Topic: topic,
-		Codec: gala.JSONCodec[eventqueue.MutationGalaPayload]{},
-	})
-
-	if errors.Is(err, gala.ErrTopicAlreadyRegistered) {
-		return nil
-	}
-
-	return err
 }

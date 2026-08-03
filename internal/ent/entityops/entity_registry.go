@@ -9,8 +9,10 @@ import (
 	"fmt"
 	"reflect"
 	"slices"
+	"strconv"
 	"strings"
 	"sync"
+	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/stoewer/go-strcase"
@@ -167,6 +169,191 @@ func (s *Schema) AllowedKey(key string) bool {
 	}
 
 	return false
+}
+
+// ResolveInputKey resolves a caller-supplied field name to this schema's canonical create-input
+// key. It accepts the mapping input key, the snake_case field name, or case variants of either;
+// annotation-declared input keys win over raw field names. The returned key matches the create
+// input's snake_case json tags so mapped payloads unmarshal without re-keying
+func (s *Schema) ResolveInputKey(name string) (string, bool) {
+	name = strings.TrimSpace(name)
+	if name == "" {
+		return "", false
+	}
+
+	for _, f := range s.Fields {
+		if f.InputKey != "" && strings.EqualFold(f.InputKey, name) {
+			return f.InputKey, true
+		}
+	}
+
+	snake := strcase.SnakeCase(name)
+
+	for _, f := range s.Fields {
+		if f.Name != snake && !strings.EqualFold(f.Name, name) {
+			continue
+		}
+
+		if f.InputKey != "" {
+			return f.InputKey, true
+		}
+
+		return f.Name, true
+	}
+
+	return "", false
+}
+
+// fieldByInputName returns the field descriptor addressed by a caller-supplied name
+func (s *Schema) fieldByInputName(name string) (FieldDescriptor, bool) {
+	key, ok := s.ResolveInputKey(name)
+	if !ok {
+		return FieldDescriptor{}, false
+	}
+
+	for _, f := range s.Fields {
+		if f.InputKey == key || f.Name == key {
+			return f, true
+		}
+	}
+
+	return FieldDescriptor{}, false
+}
+
+// CoerceValue coerces a raw document value into the Go shape of the named field per its catalog
+// type. Unknown and custom field types pass through unchanged so JSON unmarshalling into the
+// typed create input remains the final arbiter
+func (s *Schema) CoerceValue(name string, value any) (any, error) {
+	field, ok := s.fieldByInputName(name)
+	if !ok {
+		return nil, fmt.Errorf("%w: %s.%s", ErrFieldNotFound, s.Snake, name)
+	}
+
+	switch field.Type {
+	case "string":
+		return coerceString(value), nil
+	case "bool":
+		return coerceBool(value)
+	case "int", "int8", "int16", "int32", "int64", "uint", "uint8", "uint16", "uint32", "uint64", "float32", "float64":
+		return coerceFloat(value)
+	case "[]string":
+		return coerceStringSlice(value), nil
+	case "time.Time":
+		return coerceTime(value)
+	default:
+		return value, nil
+	}
+}
+
+// coerceString renders a scalar value as its string form
+func coerceString(value any) string {
+	switch v := value.(type) {
+	case string:
+		return v
+	case fmt.Stringer:
+		return v.String()
+	case bool:
+		return strconv.FormatBool(v)
+	case float64:
+		return strconv.FormatFloat(v, 'f', -1, 64)
+	case float32:
+		return strconv.FormatFloat(float64(v), 'f', -1, 32)
+	case int:
+		return strconv.Itoa(v)
+	case int64:
+		return strconv.FormatInt(v, 10)
+	default:
+		return fmt.Sprintf("%v", value)
+	}
+}
+
+// coerceBool parses a boolean from native and common string forms
+func coerceBool(value any) (bool, error) {
+	switch v := value.(type) {
+	case bool:
+		return v, nil
+	case string:
+		switch strings.ToLower(strings.TrimSpace(v)) {
+		case "true", "yes", "y", "1":
+			return true, nil
+		case "false", "no", "n", "0":
+			return false, nil
+		}
+	}
+
+	return false, fmt.Errorf("%w: bool from %T", ErrValueCoercion, value)
+}
+
+// coerceFloat parses a numeric value from native numeric types or a string form
+func coerceFloat(value any) (float64, error) {
+	switch v := value.(type) {
+	case float64:
+		return v, nil
+	case float32:
+		return float64(v), nil
+	case int:
+		return float64(v), nil
+	case int64:
+		return float64(v), nil
+	case string:
+		parsed, err := strconv.ParseFloat(strings.TrimSpace(v), 64)
+		if err != nil {
+			return 0, fmt.Errorf("%w: number from %q", ErrValueCoercion, v)
+		}
+
+		return parsed, nil
+	default:
+		return 0, fmt.Errorf("%w: number from %T", ErrValueCoercion, value)
+	}
+}
+
+// coerceStringSlice renders a value as a slice of trimmed non-empty strings
+func coerceStringSlice(value any) []string {
+	switch v := value.(type) {
+	case []string:
+		return v
+	case []any:
+		values := make([]string, 0, len(v))
+		for _, item := range v {
+			s := strings.TrimSpace(coerceString(item))
+			if s != "" {
+				values = append(values, s)
+			}
+		}
+
+		return values
+	default:
+		s := strings.TrimSpace(coerceString(value))
+		if s == "" {
+			return nil
+		}
+
+		return []string{s}
+	}
+}
+
+// coerceTime parses a timestamp from native time or RFC3339/date-only string forms
+func coerceTime(value any) (time.Time, error) {
+	switch v := value.(type) {
+	case time.Time:
+		return v, nil
+	case string:
+		trimmed := strings.TrimSpace(v)
+
+		parsed, err := time.Parse(time.RFC3339, trimmed)
+		if err == nil {
+			return parsed, nil
+		}
+
+		parsed, err = time.Parse(time.DateOnly, trimmed)
+		if err == nil {
+			return parsed, nil
+		}
+
+		return time.Time{}, fmt.Errorf("%w: time from %q", ErrValueCoercion, trimmed)
+	default:
+		return time.Time{}, fmt.Errorf("%w: time from %T", ErrValueCoercion, value)
+	}
 }
 
 // matchKeyIn returns a selector predicate matching the given match-key column against any of values

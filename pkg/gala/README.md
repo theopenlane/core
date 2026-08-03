@@ -52,11 +52,11 @@ var invoiceCreatedTopic = gala.Topic[InvoiceCreated]{
 }
 ```
 
-Register listeners using `RegisterListeners`, which handles topic registration automatically:
+Register listeners using `Register`, which handles topic registration automatically:
 
 ```go
-func RegisterBillingListeners(registry *gala.Registry) ([]gala.ListenerID, error) {
-    return gala.RegisterListeners(registry,
+func RegisterBillingListeners(g *gala.Gala) ([]gala.ListenerID, error) {
+    return gala.Register(g,
         gala.Definition[InvoiceCreated]{
             Topic: invoiceCreatedTopic,
             Name:  "billing.invoice.send-receipt",
@@ -105,14 +105,16 @@ receipt := galaApp.EmitWithHeaders(ctx, invoiceCreatedTopic.Name, InvoiceCreated
     InvoiceID:  "inv_123",
     CustomerID: "cus_456",
     Amount:     9900,
-}, gala.Headers{
-    IdempotencyKey: "inv_123", // Enables replay-safe consumption
-})
+}, gala.Headers{},
+    gala.WithEventID("inv_123"), // caller identity becomes the durable event id
+)
 
 if receipt.Err != nil {
     return receipt.Err
 }
 ```
+
+`WithEventID` makes the caller's identifier the envelope id for traceability; `WithRawPayload` emits pre-encoded bytes, bypassing the topic codec (used for deterministic re-emission of stored payloads).
 
 Most events in the codebase flow through the ent mutation hook (`EmitGalaEventHook`), which automatically builds and emits `MutationGalaPayload` envelopes after successful commits.
 
@@ -127,20 +129,7 @@ type Codec[T any] interface {
 }
 ```
 
-The built-in `JSONCodec[T]` handles standard JSON marshaling and is the default for most use cases. Custom codecs are useful when you need:
-
-- Non-JSON formats (protobuf, msgpack)
-- Encryption at rest for sensitive payloads
-- Schema migration or backwards compatibility handling
-
-```go
-gala.RegisterTopic(registry, gala.Registration[InvoiceCreated]{
-    Topic: invoiceCreatedTopic,
-    Codec: gala.JSONCodec[InvoiceCreated]{}, // Default JSON codec
-})
-```
-
-When using `RegisterListeners`, topics are auto-registered with `JSONCodec`.
+The built-in `JSONCodec[T]` handles standard JSON marshaling; `Register` auto-registers each definition's topic with it.
 
 ## Context Propagation
 
@@ -217,7 +206,7 @@ Gala's durability comes from River, which stores jobs in PostgreSQL. Key charact
 | Aspect | Behavior |
 |--------|----------|
 | **Storage** | Jobs stored in `river_job` table alongside application data |
-| **Delivery** | At-least-once (use `IdempotencyKey` for exactly-once semantics) |
+| **Delivery** | At-least-once; listeners stay idempotent via record-level upserts and domain-object state |
 | **Retries** | Configurable via `Config.MaxRetries`, exponential backoff |
 | **Scaling** | Multiple workers poll the same queue; work distributed automatically |
 | **Ordering** | No ordering guarantees across events; order preserved within single event's listeners |
@@ -242,10 +231,16 @@ if err != nil {
 // Register dependencies for listeners
 do.ProvideValue(galaApp.Injector(), dbClient)
 
-// Register listeners
-hooks.RegisterGalaSlackListeners(galaApp.Registry())
+// Register listeners from the colocated hooks table; registration is activation —
+// the mutation hook only emits to topics with interested listeners
+for _, registration := range hooks.GalaRegistrations {
+    if _, err := registration.Register(galaApp); err != nil {
+        return err
+    }
+}
 
-// Start workers
+// Start workers only after registration: durable jobs left over from a prior
+// deploy are fetched as soon as workers start and need their topics registered
 if err := galaApp.StartWorkers(ctx); err != nil {
     return err
 }
@@ -278,29 +273,26 @@ Every emitted event becomes an `Envelope`:
 
 ```go
 type Envelope struct {
-    ID              EventID         // ULID for tracing and idempotency
+    ID              EventID         // ULID (or caller-supplied via WithEventID) for tracing
     Topic           TopicName       // Routing key for listener dispatch
     OccurredAt      time.Time       // Emit timestamp (UTC)
-    Headers         Headers         // IdempotencyKey + arbitrary properties
+    Headers         Headers         // Properties, tags, queue/scheduling overrides
     Payload         json.RawMessage // Codec-encoded payload bytes
     ContextSnapshot ContextSnapshot // Captured auth context + flags
 }
 ```
 
-The entire envelope is JSON-serialized into `RiverDispatchArgs.Envelope` and stored as the job's arguments. On worker pickup, it's deserialized and dispatched to matching listeners.
+The entire envelope is JSON-serialized and stored as the River job's arguments. On worker pickup, it's deserialized and dispatched to matching listeners.
 
-## Pre-built Envelopes
+## Replaying Stored Payloads
 
-For migration adapters or replay scenarios where you already have a fully constructed envelope:
+For replay scenarios where you already hold the encoded payload and event identity (e.g. the workflow emit reconciler), combine the emit options:
 
 ```go
-err := galaApp.EmitEnvelope(ctx, gala.Envelope{
-    ID:              gala.EventID("evt_replay_123"),
-    Topic:           invoiceCreatedTopic.Name,
-    Payload:         preEncodedPayload,
-    Headers:         gala.Headers{IdempotencyKey: "evt_replay_123"},
-    ContextSnapshot: capturedSnapshot,
-})
+receipt := galaApp.EmitWithHeaders(ctx, invoiceCreatedTopic.Name, nil, gala.Headers{},
+    gala.WithRawPayload(storedPayload),
+    gala.WithEventID("evt_replay_123"),
+)
 ```
 
 ## Error Handling
@@ -351,23 +343,9 @@ func main() {
 	}
 	defer app.Close()
 
-	// Start Gala workers
-	if err := app.StartWorkers(context.Background()); err != nil {
-		log.Fatal(err)
-	}
-
-	// Register event topic and payload codec
-	runtime := app.Runtime()
-	err = gala.RegisterTopic(runtime.Registry(), gala.Registration[UserCreated]{
-		Topic: userCreatedTopic,
-		Codec: gala.JSONCodec[UserCreated]{},
-	})
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// Attach event listener (handler) for the topic
-	_, err = gala.AttachListener(runtime.Registry(), gala.Definition[UserCreated]{
+	// Register listeners before starting workers: leftover durable jobs from a
+	// prior deploy are fetched immediately on start and need their topics present
+	_, err = gala.Register(app, gala.Definition[UserCreated]{
 		Topic: userCreatedTopic,
 		Name:  "welcome-email",
 		Handle: func(ctx gala.HandlerContext, payload UserCreated) error {
@@ -379,8 +357,13 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// Start Gala workers
+	if err := app.StartWorkers(context.Background()); err != nil {
+		log.Fatal(err)
+	}
+
 	// Emit event to the topic (triggers durable dispatch)
-	receipt := runtime.EmitWithHeaders(context.Background(), userCreatedTopic.Name, UserCreated{
+	receipt := app.EmitWithHeaders(context.Background(), userCreatedTopic.Name, UserCreated{
 		UserID: "usr_123",
 		Email:  "user@example.com",
 	}, gala.Headers{})

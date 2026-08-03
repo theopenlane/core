@@ -137,18 +137,3 @@ func MutationStringValueOrProperty(payload MutationGalaPayload, properties map[s
 
 	return MutationStringFromProperties(properties, field)
 }
-
-// MutationStringValuePreferPayload returns property fallback only when the field is absent from proposed changes
-func MutationStringValuePreferPayload(payload MutationGalaPayload, properties map[string]string, field string) string {
-	raw, exists := MutationValue(payload, field)
-	if !exists {
-		return MutationStringFromProperties(properties, field)
-	}
-
-	value, ok := ValueAsString(raw)
-	if !ok {
-		return ""
-	}
-
-	return strings.TrimSpace(value)
-}

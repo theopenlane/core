@@ -5,13 +5,10 @@ import (
 )
 
 func TestRegisterTopicAndAttachListeners(t *testing.T) {
-	registry := NewRegistry()
+	registry := newRegistry()
 	topic := Topic[runtimeTestPayload]{Name: TopicName("listener.registration.topic")}
 
-	if err := RegisterTopic(registry, Registration[runtimeTestPayload]{
-		Topic: topic,
-		Codec: JSONCodec[runtimeTestPayload]{},
-	}); err != nil {
+	if err := registerTopic(registry, topic, JSONCodec[runtimeTestPayload]{}); err != nil {
 		t.Fatalf("unexpected registration error: %v", err)
 	}
 
@@ -32,7 +29,7 @@ func TestRegisterTopicAndAttachListeners(t *testing.T) {
 			},
 		},
 	} {
-		id, err := AttachListener(registry, definition)
+		id, err := attachListener(registry, definition)
 		if err != nil {
 			t.Fatalf("unexpected listener registration error: %v", err)
 		}
@@ -50,17 +47,14 @@ func TestRegisterTopicAndAttachListeners(t *testing.T) {
 }
 
 func TestRegisterTopicWithJSONCodecEncodesAndDecodes(t *testing.T) {
-	registry := NewRegistry()
+	registry := newRegistry()
 	topic := Topic[runtimeTestPayload]{Name: TopicName("listener.registration.json_codec")}
 
-	if err := RegisterTopic(registry, Registration[runtimeTestPayload]{
-		Topic: topic,
-		Codec: JSONCodec[runtimeTestPayload]{},
-	}); err != nil {
+	if err := registerTopic(registry, topic, JSONCodec[runtimeTestPayload]{}); err != nil {
 		t.Fatalf("unexpected registration error: %v", err)
 	}
 
-	if _, err := AttachListener(registry, Definition[runtimeTestPayload]{
+	if _, err := attachListener(registry, Definition[runtimeTestPayload]{
 		Topic: topic,
 		Name:  "listener.registration.json_codec",
 		Handle: func(HandlerContext, runtimeTestPayload) error {
@@ -70,12 +64,17 @@ func TestRegisterTopicWithJSONCodecEncodesAndDecodes(t *testing.T) {
 		t.Fatalf("unexpected listener registration error: %v", err)
 	}
 
-	encoded, err := registry.EncodePayload(topic.Name, runtimeTestPayload{Message: "hello"})
+	registration, err := registry.topicRegistration(topic.Name)
+	if err != nil {
+		t.Fatalf("expected topic registration to resolve: %v", err)
+	}
+
+	encoded, err := registration.encode(runtimeTestPayload{Message: "hello"})
 	if err != nil {
 		t.Fatalf("expected payload to encode with json codec: %v", err)
 	}
 
-	decoded, err := registry.DecodePayload(topic.Name, encoded)
+	decoded, err := registration.decode(encoded)
 	if err != nil {
 		t.Fatalf("expected payload to decode with json codec: %v", err)
 	}
@@ -89,11 +88,11 @@ func TestRegisterTopicWithJSONCodecEncodesAndDecodes(t *testing.T) {
 	}
 }
 
-func TestRegisterListenersRegistersTopicAndListener(t *testing.T) {
-	registry := NewRegistry()
+func TestRegisterRegistersTopicAndListener(t *testing.T) {
+	runtime := newTestGala(t, nil)
 	topic := Topic[runtimeTestPayload]{Name: TopicName("listener.registration.durable")}
 
-	ids, err := RegisterListeners(registry, Definition[runtimeTestPayload]{
+	ids, err := Register(runtime, Definition[runtimeTestPayload]{
 		Topic:  topic,
 		Name:   "listener.registration.durable",
 		Handle: func(HandlerContext, runtimeTestPayload) error { return nil },
@@ -106,11 +105,11 @@ func TestRegisterListenersRegistersTopicAndListener(t *testing.T) {
 		t.Fatalf("expected one listener id, got %d", len(ids))
 	}
 
-	if _, err := registry.EncodePayload(topic.Name, runtimeTestPayload{Message: "registered"}); err != nil {
+	if _, err := runtime.registry.topicRegistration(topic.Name); err != nil {
 		t.Fatalf("expected topic to be registered, got %v", err)
 	}
 
-	if got := len(registry.registeredListeners(topic.Name)); got != 1 {
+	if got := len(runtime.registry.registeredListeners(topic.Name)); got != 1 {
 		t.Fatalf("expected one listener attached, got %d", got)
 	}
 }

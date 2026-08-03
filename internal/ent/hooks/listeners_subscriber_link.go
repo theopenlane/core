@@ -19,10 +19,10 @@ import (
 // RegisterGalaSubscriberLinkListeners registers a listener that links a newly created
 // subscriber to an existing contact and/or user with a matching email asynchronously
 // after the subscriber mutation commits
-func RegisterGalaSubscriberLinkListeners(registry *gala.Registry) ([]gala.ListenerID, error) {
-	return gala.RegisterListeners(registry,
-		gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic:      eventqueue.MutationTopic(eventqueue.MutationConcernDirect, entgen.TypeSubscriber),
+func RegisterGalaSubscriberLinkListeners(g *gala.Gala) ([]gala.ListenerID, error) {
+	return eventqueue.RegisterMutationListeners(g,
+		eventqueue.MutationListener{
+			Schema:     entgen.TypeSubscriber,
 			Name:       "subscriber.link_identity",
 			Operations: []string{ent.OpCreate.String()},
 			Handle:     handleSubscriberCreatedLink,
@@ -35,22 +35,14 @@ func RegisterGalaSubscriberLinkListeners(registry *gala.Registry) ([]gala.Listen
 // association via the contact_id and user_id edges. Matching runs under an internal
 // caller scoped to the subscriber's owner because subscribers can be created anonymously
 // through the trust center, in which case the originating caller cannot read contacts
-func handleSubscriberCreatedLink(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	ctx, client, ok := eventqueue.ClientFromHandler(ctx)
-	if !ok {
-		return nil
-	}
+func handleSubscriberCreatedLink(inv eventqueue.Invocation, _ eventqueue.MutationGalaPayload) error {
+	client := inv.Client
 
-	subscriberID, ok := eventqueue.MutationEntityID(payload, ctx.Envelope.Headers.Properties)
-	if !ok || subscriberID == "" {
-		return nil
-	}
-
-	allowCtx := auth.WithCaller(privacy.DecisionContext(ctx.Context, privacy.Allow), &auth.Caller{
+	allowCtx := auth.WithCaller(privacy.DecisionContext(inv.Context, privacy.Allow), &auth.Caller{
 		Capabilities: auth.CapBypassOrgFilter | auth.CapBypassFGA | auth.CapInternalOperation,
 	})
 
-	sub, err := client.Subscriber.Get(allowCtx, subscriberID)
+	sub, err := client.Subscriber.Get(allowCtx, inv.EntityID)
 	if err != nil {
 		if entgen.IsNotFound(err) {
 			return nil

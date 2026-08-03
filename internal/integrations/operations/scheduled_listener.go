@@ -43,7 +43,7 @@ func RegisterScheduledListener[T any](cfg ScheduledListenerConfig[T]) error {
 		return ErrGalaRequired
 	}
 
-	_, err := gala.RegisterListeners(cfg.Runtime.Registry(), gala.Definition[T]{
+	_, err := gala.Register(cfg.Runtime, gala.Definition[T]{
 		Topic: gala.Topic[T]{Name: cfg.Topic},
 		Name:  cfg.Name,
 		Handle: func(ctx gala.HandlerContext, envelope T) error {

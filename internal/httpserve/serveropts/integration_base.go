@@ -9,12 +9,13 @@ import (
 	runtime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/internal/workflows/engine"
+	"github.com/theopenlane/core/pkg/gala"
 )
 
 // WithIntegrationsRuntime builds the integration runtime from server settings and wires it
 // into the handler. When a workflow engine is present it also injects integration dependencies.
 // Initialization is skipped if the database client or Gala runtime is nil.
-func WithIntegrationsRuntime(ctx context.Context, dbClient *ent.Client) ServerOption {
+func WithIntegrationsRuntime(ctx context.Context, dbClient *ent.Client, galaInstance *gala.Gala) ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
 		s.Config.Handler.IntegrationsConfig = s.Config.Settings.Integrations
 
@@ -22,7 +23,6 @@ func WithIntegrationsRuntime(ctx context.Context, dbClient *ent.Client) ServerOp
 			return
 		}
 
-		galaInstance := s.Config.Handler.Gala
 		if galaInstance == nil {
 			log.Warn().Msg("gala runtime not available; integration runtime will not be initialized")
 			return

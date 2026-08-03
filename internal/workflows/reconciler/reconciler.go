@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"time"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -54,6 +53,10 @@ type Reconciler struct {
 func New(client *generated.Client, runtime *gala.Gala, opts ...Option) (*Reconciler, error) {
 	if client == nil {
 		return nil, workflows.ErrNilClient
+	}
+
+	if runtime == nil {
+		return nil, workflows.ErrEmitNoEmitter
 	}
 
 	r := &Reconciler{
@@ -160,25 +163,14 @@ func (r *Reconciler) processEmitFailure(ctx context.Context, evt *generated.Work
 
 // reemit builds an event from stored details and emits it through the configured emitter
 func (r *Reconciler) reemit(ctx context.Context, details *workflows.EmitFailureDetails) workflows.EmitReceipt {
-	envelope := gala.Envelope{
-		Topic:      gala.TopicName(details.Topic),
-		OccurredAt: time.Now().UTC(),
-		Headers: gala.Headers{
-			IdempotencyKey: details.EventID,
-		},
-		Payload: details.Payload,
-	}
+	receipt := r.gala.EmitWithHeaders(ctx, gala.TopicName(details.Topic), nil, gala.Headers{},
+		gala.WithRawPayload(details.Payload),
+		gala.WithEventID(gala.EventID(details.EventID)))
 
-	if details.EventID != "" {
-		envelope.ID = gala.EventID(details.EventID)
+	return workflows.EmitReceipt{
+		EventID: string(receipt.EventID),
+		Err:     receipt.Err,
 	}
-
-	if envelope.ID == "" {
-		envelope.ID = gala.NewEventID()
-		envelope.Headers.IdempotencyKey = string(envelope.ID)
-	}
-
-	return workflows.EmitWorkflowEnvelope(ctx, r.gala, envelope)
 }
 
 // markTerminal marks a failure event as terminal and updates the workflow instance state

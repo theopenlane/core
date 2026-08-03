@@ -523,8 +523,8 @@ func newNotificationCreation(ctx context.Context, client *generated.Client, user
 }
 
 // RegisterGalaListeners registers mutation listeners for notifications on Gala.
-func RegisterGalaListeners(registry *gala.Registry) ([]gala.ListenerID, error) {
-	return gala.RegisterListeners(registry,
+func RegisterGalaListeners(g *gala.Gala) ([]gala.ListenerID, error) {
+	return gala.Register(g,
 		gala.Definition[eventqueue.MutationGalaPayload]{
 			Topic:  eventqueue.MutationTopic(eventqueue.MutationConcernNotification, generated.TypeTask),
 			Name:   "notifications.task",

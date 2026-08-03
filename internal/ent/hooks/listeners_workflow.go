@@ -12,13 +12,13 @@ import (
 )
 
 // RegisterGalaWorkflowListeners registers workflow mutation and command listeners on Gala
-func RegisterGalaWorkflowListeners(registry *gala.Registry) ([]gala.ListenerID, error) {
-	mutationIDs, err := RegisterGalaWorkflowMutationListeners(registry)
+func RegisterGalaWorkflowListeners(g *gala.Gala) ([]gala.ListenerID, error) {
+	mutationIDs, err := RegisterGalaWorkflowMutationListeners(g)
 	if err != nil {
 		return nil, err
 	}
 
-	commandIDs, err := gala.RegisterListeners(registry,
+	commandIDs, err := gala.Register(g,
 		gala.Definition[gala.WorkflowTriggeredPayload]{
 			Topic:  gala.WorkflowTriggeredEventTopic,
 			Name:   string(gala.TopicWorkflowTriggered),
@@ -29,7 +29,7 @@ func RegisterGalaWorkflowListeners(registry *gala.Registry) ([]gala.ListenerID, 
 		return nil, err
 	}
 
-	ids, err := gala.RegisterListeners(registry,
+	ids, err := gala.Register(g,
 		gala.Definition[gala.WorkflowActionStartedPayload]{
 			Topic:  gala.WorkflowActionStartedEventTopic,
 			Name:   string(gala.TopicWorkflowActionStarted),
@@ -41,7 +41,7 @@ func RegisterGalaWorkflowListeners(registry *gala.Registry) ([]gala.ListenerID, 
 	}
 	commandIDs = append(commandIDs, ids...)
 
-	ids, err = gala.RegisterListeners(registry,
+	ids, err = gala.Register(g,
 		gala.Definition[gala.WorkflowActionCompletedPayload]{
 			Topic:  gala.WorkflowActionCompletedEventTopic,
 			Name:   string(gala.TopicWorkflowActionCompleted),
@@ -53,7 +53,7 @@ func RegisterGalaWorkflowListeners(registry *gala.Registry) ([]gala.ListenerID, 
 	}
 	commandIDs = append(commandIDs, ids...)
 
-	ids, err = gala.RegisterListeners(registry,
+	ids, err = gala.Register(g,
 		gala.Definition[gala.WorkflowAssignmentCompletedPayload]{
 			Topic:  gala.WorkflowAssignmentCompletedEventTopic,
 			Name:   string(gala.TopicWorkflowAssignmentCompleted),
@@ -65,7 +65,7 @@ func RegisterGalaWorkflowListeners(registry *gala.Registry) ([]gala.ListenerID, 
 	}
 	commandIDs = append(commandIDs, ids...)
 
-	ids, err = gala.RegisterListeners(registry,
+	ids, err = gala.Register(g,
 		gala.Definition[gala.WorkflowInstanceCompletedPayload]{
 			Topic:  gala.WorkflowInstanceCompletedEventTopic,
 			Name:   string(gala.TopicWorkflowInstanceCompleted),
@@ -81,7 +81,7 @@ func RegisterGalaWorkflowListeners(registry *gala.Registry) ([]gala.ListenerID, 
 }
 
 // RegisterGalaWorkflowMutationListeners registers workflow mutation listeners on Gala
-func RegisterGalaWorkflowMutationListeners(registry *gala.Registry) ([]gala.ListenerID, error) {
+func RegisterGalaWorkflowMutationListeners(g *gala.Gala) ([]gala.ListenerID, error) {
 	definitions := make([]gala.Definition[eventqueue.MutationGalaPayload], 0, len(enums.WorkflowObjectTypes)+1)
 
 	for _, entity := range enums.WorkflowObjectTypes {
@@ -109,7 +109,7 @@ func RegisterGalaWorkflowMutationListeners(registry *gala.Registry) ([]gala.List
 		Handle: handleWorkflowAssignmentMutationGala,
 	})
 
-	return gala.RegisterListeners(registry, definitions...)
+	return gala.Register(g, definitions...)
 }
 
 // handleWorkflowMutationGala forwards workflow mutation envelopes to workflow listeners
