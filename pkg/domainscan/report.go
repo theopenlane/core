@@ -21,6 +21,11 @@ type Enrichment struct {
 	DNS *DNSVendorInfo `json:"dns,omitempty"`
 }
 
+// IsEmpty reports whether no enrichment lookup produced any data
+func (e Enrichment) IsEmpty() bool {
+	return e.Company == nil && e.Compliance == nil && e.DNS == nil
+}
+
 // EnrichmentErrors holds the per-lookup errors from GatherEnrichment, each nil on success
 type EnrichmentErrors struct {
 	Company    error

@@ -10,3 +10,34 @@ var (
 	// ErrConnectionRefNotFound indicates the requested connection credential ref was not found in the definition
 	ErrConnectionRefNotFound = errors.New("integrations: connection credential ref not found")
 )
+
+// UnhealthyError marks an operation failure as terminal for recurring cycles: the installation
+// cannot recover without user action such as reauthorization or reconfiguration, so the runtime
+// marks the integration unhealthy, notifies the owning organization, and stops the loop instead
+// of retrying with backoff forever
+type UnhealthyError struct {
+	// Reason is the user-facing explanation included in the organization notification
+	Reason string
+	// Err is the underlying failure
+	Err error
+}
+
+// Error returns the reason followed by the underlying failure
+func (e *UnhealthyError) Error() string {
+	return e.Reason + ": " + e.Err.Error()
+}
+
+// Unwrap exposes the underlying failure for errors.Is and errors.As
+func (e *UnhealthyError) Unwrap() error {
+	return e.Err
+}
+
+// Unhealthy wraps err as a terminal integration failure with a user-facing reason
+func Unhealthy(err error, reason string) error {
+	return &UnhealthyError{Reason: reason, Err: err}
+}
+
+// UnhealthyFrom returns the UnhealthyError in err's chain when present
+func UnhealthyFrom(err error) (*UnhealthyError, bool) {
+	return errors.AsType[*UnhealthyError](err)
+}

@@ -54,8 +54,10 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 		return types.DispatchResult{}, err
 	}
 
+	ctx = intobvs.WithOperation(ctx, req.Operation)
+
 	if operation.DisabledForAll {
-		logx.FromContext(ctx).Debug().Str(intobvs.FieldOperation, req.Operation).Msg("operation is disabled, skipping dispatch")
+		logx.FromContext(ctx).Debug().Msg("operation is disabled, skipping dispatch")
 
 		return types.DispatchResult{Status: enums.IntegrationRunStatusCancelled}, nil
 	}

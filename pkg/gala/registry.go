@@ -20,6 +20,8 @@ type topicRegistration struct {
 	encode func(any) ([]byte, error)
 	// decode is a wrapper around the topic codec's Decode method for non-generic payloads
 	decode func([]byte) (any, error)
+	// uniqueKey derives the uniqueness key for non-generic payloads, nil when none declared
+	uniqueKey func(any) string
 }
 
 // registeredListener stores non-generic listener wrappers
@@ -64,8 +66,9 @@ func registerTopic[T any](registry *registry, topic Topic[T], codec Codec[T]) er
 	}
 
 	registry.topics[topic.Name] = topicRegistration{
-		encode: wrapTopicEncoder(codec),
-		decode: wrapTopicDecoder(codec),
+		encode:    wrapTopicEncoder(codec),
+		decode:    wrapTopicDecoder(codec),
+		uniqueKey: wrapTopicUniqueKey(topic),
 	}
 
 	return nil
@@ -270,5 +273,21 @@ func wrapTopicDecoder[T any](codec Codec[T]) func([]byte) (any, error) {
 		}
 
 		return decoded, nil
+	}
+}
+
+// wrapTopicUniqueKey narrows the payload type (any -> T) into the topic's UniqueKey derivation
+func wrapTopicUniqueKey[T any](topic Topic[T]) func(any) string {
+	if topic.UniqueKey == nil {
+		return nil
+	}
+
+	return func(payload any) string {
+		typedPayload, ok := payload.(T)
+		if !ok {
+			return ""
+		}
+
+		return topic.UniqueKey(typedPayload)
 	}
 }
