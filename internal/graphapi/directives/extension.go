@@ -1,6 +1,7 @@
 package directives
 
 import (
+	"slices"
 	"strings"
 
 	"entgo.io/contrib/entgql"
@@ -76,6 +77,12 @@ func addModulesDirectiveHook(modules map[string][]models.OrgModule) func(_ *gen.
 				continue
 			}
 
+			// only one of the modules is required and every organization has the base module,
+			// so anything it satisfies is not gated and is left without the directive
+			if slices.Contains(schemaModules, models.CatalogBaseModule) {
+				continue
+			}
+
 			names := &ast.Value{Kind: ast.ListValue}
 
 			for _, module := range schemaModules {
@@ -85,8 +92,10 @@ func addModulesDirectiveHook(modules map[string][]models.OrgModule) func(_ *gen.
 			}
 
 			t.Directives = append(t.Directives, &ast.Directive{
-				Name:      Modules,
-				Arguments: ast.ArgumentList{{Name: "names", Value: names}},
+				Name: Modules,
+				Arguments: ast.ArgumentList{
+					&ast.Argument{Name: "names", Value: names},
+				},
 			})
 		}
 
