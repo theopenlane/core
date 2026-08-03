@@ -1,0 +1,130 @@
+//go:build test
+
+package hooks_test
+
+import (
+	"context"
+	"testing"
+	"time"
+
+	"entgo.io/ent"
+	"gotest.tools/v3/assert"
+
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/eventqueue"
+	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/campaign"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/pkg/entitlements"
+	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/iam/auth"
+)
+
+func (suite *HookTestSuite) TestCampaignRecurringListenerSchedulesNextRun() {
+	t := suite.T()
+
+	userCtx, allowCtx, orgID := suite.setupCampaignOrg(t)
+
+	camp, err := suite.newRecurringCampaign(orgID, "recurring schedule listener").
+		SetIsActive(true).
+		Save(allowCtx)
+	assert.NilError(t, err)
+	assert.Assert(t, camp.NextRunAt == nil)
+
+	envelope := suite.campaignMutationEnvelope(t, userCtx, camp.ID, campaign.FieldIsActive)
+
+	err = suite.galaRuntime.DispatchEnvelope(context.Background(), envelope)
+	assert.NilError(t, err)
+
+	updated, err := suite.client.Campaign.Get(allowCtx, camp.ID)
+	assert.NilError(t, err)
+	assert.Assert(t, updated.NextRunAt != nil)
+	assert.Assert(t, time.Time(*updated.NextRunAt).After(time.Now()))
+}
+
+func (suite *HookTestSuite) TestCampaignRecurringListenerClearsNextRunOnDeactivation() {
+	t := suite.T()
+
+	userCtx, allowCtx, orgID := suite.setupCampaignOrg(t)
+
+	camp, err := suite.newRecurringCampaign(orgID, "deactivated schedule listener").
+		SetIsActive(false).
+		SetNextRunAt(models.DateTime(time.Now().Add(time.Hour))).
+		Save(allowCtx)
+	assert.NilError(t, err)
+
+	envelope := suite.campaignMutationEnvelope(t, userCtx, camp.ID, campaign.FieldIsActive)
+
+	err = suite.galaRuntime.DispatchEnvelope(context.Background(), envelope)
+	assert.NilError(t, err)
+
+	updated, err := suite.client.Campaign.Get(allowCtx, camp.ID)
+	assert.NilError(t, err)
+	assert.Assert(t, updated.NextRunAt == nil)
+}
+
+func (suite *HookTestSuite) TestCampaignRecurringListenerSkipsDeletedCampaign() {
+	t := suite.T()
+
+	userCtx, allowCtx, orgID := suite.setupCampaignOrg(t)
+
+	camp, err := suite.newRecurringCampaign(orgID, "deleted schedule listener").
+		SetIsActive(true).
+		Save(allowCtx)
+	assert.NilError(t, err)
+
+	envelope := suite.campaignMutationEnvelope(t, userCtx, camp.ID, campaign.FieldIsActive)
+
+	err = suite.client.Campaign.DeleteOneID(camp.ID).Exec(allowCtx)
+	assert.NilError(t, err)
+
+	err = suite.galaRuntime.DispatchEnvelope(context.Background(), envelope)
+	assert.NilError(t, err)
+}
+
+func (suite *HookTestSuite) setupCampaignOrg(t *testing.T) (userCtx, allowCtx context.Context, orgID string) {
+	user := suite.seedUser()
+	orgID = user.Edges.OrgMemberships[0].OrganizationID
+
+	err := entitlements.CreateFeatureTuples(context.Background(), &suite.client.Authz, orgID,
+		[]models.OrgModule{models.CatalogBaseModule, models.CatalogComplianceModule})
+	assert.NilError(t, err)
+
+	userCtx = generated.NewContext(auth.NewTestContextWithOrgID(user.ID, orgID), suite.client)
+
+	return userCtx, privacy.DecisionContext(userCtx, privacy.Allow), orgID
+}
+
+func (suite *HookTestSuite) newRecurringCampaign(orgID, name string) *generated.CampaignCreate {
+	return suite.client.Campaign.Create().
+		SetName(name).
+		SetOwnerID(orgID).
+		SetIsRecurring(true).
+		SetStatus(enums.CampaignStatusActive).
+		SetRecurrenceFrequency(enums.FrequencyMonthly).
+		SetRecurrenceInterval(1)
+}
+
+func (suite *HookTestSuite) campaignMutationEnvelope(t *testing.T, ctx context.Context, campaignID string, changedFields ...string) gala.Envelope {
+	topic := eventqueue.MutationTopicName(eventqueue.MutationConcernDirect, generated.TypeCampaign)
+
+	encoded, err := suite.galaRuntime.Registry().EncodePayload(topic, eventqueue.MutationGalaPayload{
+		MutationType:  generated.TypeCampaign,
+		Operation:     ent.OpUpdateOne.String(),
+		EntityID:      campaignID,
+		ChangedFields: changedFields,
+	})
+	assert.NilError(t, err)
+
+	snapshot, err := suite.galaRuntime.ContextManager().Capture(ctx)
+	assert.NilError(t, err)
+
+	return gala.Envelope{
+		ID:              gala.NewEventID(),
+		Topic:           topic,
+		OccurredAt:      time.Now().UTC(),
+		Payload:         encoded,
+		ContextSnapshot: snapshot,
+	}
+}

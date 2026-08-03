@@ -315,7 +315,7 @@ func updateCampaignTargetFromAssessmentResponse(ctx context.Context, client *gen
 	return update.Exec(ctx)
 }
 
-// updateCampaignCompletionFromTargets marks campaigns complete when all targets are completed.
+// updateCampaignCompletionFromTargets marks campaigns complete when all targets are completed
 func updateCampaignCompletionFromTargets(ctx context.Context, client *generated.Client, campaignID string) error {
 	if campaignID == "" {
 		return nil
