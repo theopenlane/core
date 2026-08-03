@@ -16,9 +16,11 @@ import (
 	"entgo.io/ent/entc"
 	"entgo.io/ent/entc/gen"
 	_ "github.com/jackc/pgx/v5"
+	"github.com/vektah/gqlparser/v2/ast"
 	"gocloud.dev/secrets"
 
 	"github.com/theopenlane/core/common/enums/exportenums"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	"github.com/theopenlane/core/internal/ent/filecategorygen"
 	"github.com/theopenlane/core/internal/ent/historygenerated"
@@ -216,6 +218,45 @@ func getEntfgaExtension(hasChanges bool) *entfga.AuthzExtension {
 	return entfgaExt
 }
 
+// moduleDirectiveHook adds the @modules directive to every object type whose schema declares Modules()
+func moduleDirectiveHook() entgql.SchemaHook {
+	return func(_ *gen.Graph, s *ast.Schema) error {
+		entries, err := genfeatures.ParseModuleEntries(schemaPath)
+		if err != nil {
+			return err
+		}
+
+		for _, entry := range entries {
+			t := s.Types[entry.SchemaName]
+
+			// schemas that are not exposed in the graph api have no type to annotate
+			if t == nil || t.Kind != ast.Object {
+				continue
+			}
+
+			names := &ast.Value{Kind: ast.ListValue}
+
+			for _, constName := range entry.Modules {
+				module, err := models.OrgModuleFromConstName(constName)
+				if err != nil {
+					return err
+				}
+
+				names.Children = append(names.Children, &ast.ChildValue{
+					Value: &ast.Value{Kind: ast.StringValue, Raw: module.String()},
+				})
+			}
+
+			t.Directives = append(t.Directives, &ast.Directive{
+				Name:      directives.Modules,
+				Arguments: ast.ArgumentList{{Name: "names", Value: names}},
+			})
+		}
+
+		return nil
+	}
+}
+
 func getEntGqlExtension() *entgql.Extension {
 	// initialize schema hooks for entgql
 	schemaHooks := []entgql.SchemaHook{}
@@ -235,6 +276,8 @@ func getEntGqlExtension() *entgql.Extension {
 	schemaHooks = append(schemaHooks, dExt.SchemaHooks()...)
 
 	schemaHooks = append(schemaHooks, genhooks.WithStringSliceWhereOps())
+
+	schemaHooks = append(schemaHooks, moduleDirectiveHook())
 
 	gqlExt, err := entgql.NewExtension(
 		entgql.WithSchemaGenerator(),
