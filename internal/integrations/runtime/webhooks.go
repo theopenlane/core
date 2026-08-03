@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/samber/lo"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/keygen"
 
 	"github.com/theopenlane/core/common/enums"
@@ -162,7 +163,7 @@ func (r *Runtime) DispatchWebhookEvent(ctx context.Context, integration *ent.Int
 
 	oc := types.NewOperationContext(ownerID, "", src)
 
-	receipt := r.Gala().EmitWithHeaders(gala.WithOperationContext(ctx, oc), registration.Topic, operations.WebhookEnvelope{
+	receipt := r.Gala().EmitWithHeaders(intobvs.WithContext(ctx, oc), registration.Topic, operations.WebhookEnvelope{
 		OperationContext: oc,
 		Payload:          jsonx.CloneRawMessage(event.Payload),
 		Headers:          maps.Clone(event.Headers),
@@ -191,6 +192,8 @@ func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope operations.We
 		if err != nil {
 			return err
 		}
+
+		ctx = auth.EnsureIntegrationCaller(ctx, integration.OwnerID)
 	}
 
 	registration, err := r.Registry().WebhookEvent(src.DefinitionID, src.Webhook, src.Event)

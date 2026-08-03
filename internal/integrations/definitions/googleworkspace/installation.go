@@ -33,9 +33,9 @@ func resolveInstallationMetadata(ctx context.Context, req types.InstallationRequ
 		return InstallationMetadata{}, false, nil
 	}
 
-	customer, err := svc.Customers.Get("my_customer").Context(ctx).Do()
+	customer, err := svc.Customers.Get(defaultCustomerID).Context(ctx).Do()
 	if err != nil {
-		logx.FromContext(ctx).Err(err).Msg("googleworkspace: failed to fetch customer information")
+		logx.FromContext(ctx).Error().Err(err).Msg("googleworkspace: failed to fetch customer information")
 
 		return InstallationMetadata{}, false, nil
 	}

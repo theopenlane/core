@@ -144,6 +144,12 @@ type AssessmentResponseDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
+// Return response for createAssessmentTemplate mutation
+type AssessmentTemplateCreatePayload struct {
+	// Created template
+	Template *generated.Template `json:"template"`
+}
+
 // Return response for updateAssessment mutation
 type AssessmentUpdatePayload struct {
 	// Updated assessment
@@ -744,6 +750,18 @@ type ControlReportOrder struct {
 type ControlUpdatePayload struct {
 	// Updated control
 	Control *generated.Control `json:"control"`
+}
+
+// Input for creating a questionnaire template from an assessment
+type CreateAssessmentTemplateInput struct {
+	// ID of the assessment to turn into a template
+	AssessmentID string `json:"assessmentID"`
+	// Name for the template. Defaults to the assessment name when omitted.
+	Name *string `json:"name,omitempty"`
+	// Description for the template.
+	Description *string `json:"description,omitempty"`
+	// Tags for the template.
+	Tags []string `json:"tags,omitempty"`
 }
 
 // Input for createCampaignWithTargets mutation

@@ -1,10 +1,17 @@
 package graphapi
 
 import (
+	"bytes"
 	"context"
 	"reflect"
 	"strings"
 	"sync"
+
+	"github.com/microcosm-cc/bluemonday"
+	"github.com/yuin/goldmark"
+	"github.com/yuin/goldmark/extension"
+	goldmarkparser "github.com/yuin/goldmark/parser"
+	goldmarkhtml "github.com/yuin/goldmark/renderer/html"
 
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -14,6 +21,14 @@ import (
 const (
 	maxSnippetLength = 100
 )
+
+var snippetMarkdown = goldmark.New(
+	goldmark.WithExtensions(extension.Table),
+	goldmark.WithParserOptions(goldmarkparser.WithAutoHeadingID()),
+	goldmark.WithRendererOptions(goldmarkhtml.WithUnsafe()),
+)
+
+var searchSanitizer = bluemonday.StrictPolicy()
 
 type searchCtxTracker struct {
 	mu       sync.Mutex
@@ -74,29 +89,7 @@ func (t *searchCtxTracker) extractSnippets(entity any, matchedFields []string) [
 			continue
 		}
 
-		var text string
-
-		switch field.Kind() {
-
-		case reflect.String:
-			text = field.String()
-
-		case reflect.Slice:
-			if field.Type().Elem().Kind() == reflect.String {
-				// handle string slices (tags - a good example here)
-				strs := make([]string, 0, field.Len())
-				for i := 0; i < field.Len(); i++ {
-					strs = append(strs, field.Index(i).String())
-				}
-				text = strings.Join(strs, ", ")
-			}
-
-		case reflect.Pointer:
-			if !field.IsNil() && field.Elem().Kind() == reflect.String {
-				text = field.Elem().String()
-			}
-		}
-
+		text := sanitizeContent(retrieveFieldValue(field))
 		if text == "" {
 			continue
 		}
@@ -110,6 +103,50 @@ func (t *searchCtxTracker) extractSnippets(entity any, matchedFields []string) [
 	}
 
 	return snippets
+}
+
+func retrieveFieldValue(field reflect.Value) string {
+	switch field.Kind() {
+	case reflect.String:
+		return field.String()
+
+	case reflect.Slice:
+		// tags, mapped categories and aliases are []string
+		if field.Type().Elem().Kind() != reflect.String {
+			return ""
+		}
+
+		val := make([]string, 0, field.Len())
+		for i := 0; i < field.Len(); i++ {
+			val = append(val, field.Index(i).String())
+		}
+
+		return strings.Join(val, ", ")
+
+	case reflect.Pointer:
+		// handle nullable string values
+		if !field.IsNil() && field.Elem().Kind() == reflect.String {
+			return field.Elem().String()
+		}
+	}
+
+	return ""
+}
+
+func sanitizeContent(text string) string {
+	text = strings.TrimSpace(text)
+	if text == "" {
+		return ""
+	}
+
+	var b bytes.Buffer
+	if err := snippetMarkdown.Convert([]byte(text), &b); err != nil {
+		return text
+	}
+
+	sanitized := searchSanitizer.Sanitize(b.String())
+
+	return strings.Join(strings.Fields(sanitized), " ")
 }
 
 // createSnippet creates a snippet with highlighted match to improve the surrounding context
@@ -200,22 +237,9 @@ func (c *fieldMatchChecker) check(entity any, fieldNames []string) []string {
 		}
 
 		matched := false
-		switch field.Kind() {
-		case reflect.String:
-			matched = strings.Contains(strings.ToLower(field.String()), queryLower)
-		case reflect.Slice:
-			if field.Type().Elem().Kind() == reflect.String {
-				for i := 0; i < field.Len(); i++ {
-					if strings.Contains(strings.ToLower(field.Index(i).String()), queryLower) {
-						matched = true
-						break
-					}
-				}
-			}
-		case reflect.Pointer:
-			if !field.IsNil() && field.Elem().Kind() == reflect.String {
-				matched = strings.Contains(strings.ToLower(field.Elem().String()), queryLower)
-			}
+		text := sanitizeContent(retrieveFieldValue(field))
+		if text != "" {
+			matched = strings.Contains(strings.ToLower(text), queryLower)
 		}
 
 		if matched {

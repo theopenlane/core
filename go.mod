@@ -78,7 +78,7 @@ require (
 	github.com/microsoft/kiota-authentication-azure-go v1.3.1
 	github.com/microsoftgraph/msgraph-sdk-go v1.100.0
 	github.com/nyaruka/phonenumbers v1.8.1
-	github.com/oklog/ulid/v2 v2.1.1
+	github.com/oklog/ulid/v2 v2.1.2
 	github.com/okta/okta-sdk-golang/v6 v6.1.6
 	github.com/openfga/go-sdk v0.8.2
 	github.com/pdfcpu/pdfcpu v0.13.0
@@ -108,7 +108,7 @@ require (
 	github.com/theopenlane/go-client v0.12.5
 	github.com/theopenlane/gqlgen-plugins v0.14.7
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.35.1
+	github.com/theopenlane/iam v0.35.6
 	github.com/theopenlane/newman v0.4.2
 	github.com/theopenlane/riverboat v0.9.18
 	github.com/theopenlane/utils v0.7.1
@@ -126,7 +126,7 @@ require (
 	golang.org/x/sync v0.22.0
 	golang.org/x/text v0.40.0
 	golang.org/x/tools v0.48.0
-	google.golang.org/api v0.289.0
+	google.golang.org/api v0.290.0
 	gopkg.in/yaml.v3 v3.0.1
 	gotest.tools/v3 v3.5.2
 )
@@ -138,7 +138,7 @@ require (
 	github.com/Masterminds/sprig/v3 v3.3.0 // indirect
 	github.com/andybalholm/cascadia v1.3.4 // indirect
 	github.com/go-resty/resty/v2 v2.7.0 // indirect
-	github.com/google/go-github/v87 v87.0.0 // indirect
+	github.com/google/go-github/v89 v89.0.0 // indirect
 	github.com/hhrutter/lzw v1.0.0 // indirect
 	github.com/hhrutter/pkcs7 v0.2.2 // indirect
 	github.com/hhrutter/tiff v1.0.3 // indirect
@@ -279,7 +279,7 @@ require (
 	github.com/power-devops/perfstat v0.0.0-20240221224432-82ca36839d55 // indirect
 	github.com/shirou/gopsutil/v4 v4.26.5 // indirect
 	github.com/testcontainers/testcontainers-go v0.43.0
-	github.com/testcontainers/testcontainers-go/modules/openfga v0.42.0 // indirect
+	github.com/testcontainers/testcontainers-go/modules/openfga v0.43.0 // indirect
 	github.com/tklauser/go-sysconf v0.3.16 // indirect
 	github.com/tklauser/numcpus v0.11.0 // indirect
 	github.com/vektra/mockery/v3 v3.7.1 // indirect

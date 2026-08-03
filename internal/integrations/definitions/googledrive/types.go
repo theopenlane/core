@@ -47,8 +47,9 @@ type googleDriveCred struct {
 type UserInput struct {
 	// Primary marks this installation as the authoritative Drive source for live document exports
 	Primary bool `json:"primary,omitempty" jsonschema:"title=Primary"`
-	// FolderID is the Google Drive folder ID (or full URL) containing policy documents
-	FolderID string `json:"folderId,omitempty" jsonschema:"title=Folder ID,description=Google Drive folder ID or URL containing policy documents"`
+	// FolderID is the Google Drive folder ID (or full URL) containing policy documents; required so
+	// an install is scoped to one folder rather than the caller's entire Drive
+	FolderID string `json:"folderId,omitempty" jsonschema:"title=Folder ID,description=Google Drive folder ID or URL containing policy documents,required"`
 	// FilterExpr is an optional CEL expression to filter which documents in the folder are eligible
 	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to filter documents before creating policies"`
 }

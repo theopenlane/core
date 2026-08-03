@@ -6,6 +6,8 @@ import (
 	"errors"
 	"time"
 
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
@@ -43,6 +45,8 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 		installation = record
 		definitionID = record.DefinitionID
 		ownerID = record.OwnerID
+
+		ctx = auth.EnsureIntegrationCaller(ctx, record.OwnerID)
 	}
 
 	operation, err := reg.Operation(definitionID, req.Operation)
@@ -99,7 +103,7 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 
 	oc := types.NewOperationContext(ownerID, req.Operation, src)
 
-	emitCtx := gala.WithOperationContext(ctx, oc)
+	emitCtx := intobvs.WithContext(ctx, oc)
 	receipt := runtime.EmitWithHeaders(emitCtx, operation.Topic, Envelope{
 		OperationContext:   oc,
 		Config:             jsonx.CloneRawMessage(req.Config),

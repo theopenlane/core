@@ -26,7 +26,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	access "github.com/theopenlane/core/internal/ent/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
-	"github.com/theopenlane/core/pkg/anon"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/entx/accessmap"
 )
@@ -192,7 +191,7 @@ func (g GroupPermissionsMixin) Interceptors() []ent.Interceptor {
 	// except for blocked groups (e.g. controls)
 	return []ent.Interceptor{intercept.TraverseFunc(func(ctx context.Context, q intercept.Query) error {
 		// anonymous trust center users don't belong to groups, skip group filtering
-		if anon.IsTrustCenter(ctx) {
+		if auth.IsTrustCenterFromContext(ctx) {
 			return nil
 		}
 
