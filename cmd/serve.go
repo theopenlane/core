@@ -72,7 +72,7 @@ func serve(ctx context.Context) error {
 		serveropts.WithObjectStorage(),
 		serveropts.WithEntitlements(),
 		serveropts.WithSummarizer(),
-		serveropts.WithKeyDirOption(),
+		serveropts.WithKeyDirConfig(),
 		serveropts.WithShortlinks(),
 	)
 
@@ -125,6 +125,12 @@ func serve(ctx context.Context) error {
 			gala.WithPoolName("ent_client_pool"),
 		)
 	}
+
+	// watch the key directory once the token manager exists to mutate and redis is
+	// available to archive retired public keys
+	so.AddServerOptions(
+		serveropts.WithKeyDirKeyWatcher(redisClient),
+	)
 
 	// add session manager
 	so.AddServerOptions(
@@ -215,8 +221,6 @@ func serve(ctx context.Context) error {
 
 	so.AddServerOptions(serveropts.WithSupportAccessConfig())
 
-	so.AddServerOptions(serveropts.WithBackfill(ctx, dbClient))
-
 	// closeDB ensures the database client is closed exactly once; both the shutdown
 	// goroutine and the defer call this, and sync.Once guarantees only one executes
 	var closeDBOnce sync.Once
@@ -285,6 +289,9 @@ func serve(ctx context.Context) error {
 		serveropts.WithAuth(),
 		serveropts.WithIntegrationsRuntime(ctx, dbClient),
 	)
+
+	// backfills run after the integrations runtime so they can use it
+	so.AddServerOptions(serveropts.WithBackfill(ctx, dbClient))
 
 	// add session manager
 	so.AddServerOptions(

@@ -107,9 +107,9 @@ func (DomainScanPoll) Run(ctx context.Context, client *CloudflareClient, cfg Dom
 		return DomainScanPollResult{NotReady: true}, nil
 	}
 
-	logx.FromContext(ctx).Error().Err(err).Msg("cloudflare: error fetching domain scan result")
+	logx.FromContext(ctx).Error().Err(err).Str("scan_result_id", cfg.ScanResultID).Str("account_id", client.Config.AccountID).Msg("cloudflare: error fetching domain scan result")
 
-	return DomainScanPollResult{}, ErrDomainScanResultFailed
+	return DomainScanPollResult{}, fmt.Errorf("%w: %w", ErrDomainScanResultFailed, err)
 }
 
 // getScanResultOnce makes a single attempt at retrieving a URL Scanner result by scan ID

@@ -11,6 +11,9 @@ type ServerOptions struct {
 	ConfigProvider serverconfig.Provider
 	// Config is the server configuration settings
 	Config serverconfig.Config
+	// configuredTokenKeys are the operator supplied token keys, kept apart from the kids
+	// scanned out of the key directory so reloads can tell the two sources apart
+	configuredTokenKeys map[string]string
 }
 
 // NewServerOptions creates a new ServerOptions instance with the provided options and configuration location

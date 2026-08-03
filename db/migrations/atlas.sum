@@ -1,4 +1,4 @@
-h1:UIZNn/a5N9u5OWI1xyYn8+EpdhHSQgmin6poHFiLPfY=
+h1:pD+wm3SvgInIKw8kl16b4ug1tCtLepnkP+GSBD7zx+w=
 20251229183159_init.sql h1:3uf/ftr28zW8YUD9qAaY2GESQHC7pYmkhlI6oDWUCKU=
 20251229183201_init_history.sql h1:1tFSeCDWvZgb2Ctw80C/s3tqVPNLADQw9fSDACzL8WA=
 20251231045221_workflow.sql h1:5bLq4cHh2kxUV7xajK5bq5McKKpr88HmufYauTdsgUw=
@@ -172,3 +172,4 @@ h1:UIZNn/a5N9u5OWI1xyYn8+EpdhHSQgmin6poHFiLPfY=
 20260728193948_directorymembershipindex.sql h1:GMmB5LtkGz7WAmqILpbWGoqmZD1e8kq7eRcPyOrFs7Y=
 20260729110623_tfa_enforcement.sql h1:mpWrE6/mlJPkfxaERwoYJ+7UH6k7C82+4jxlE5s1X3s=
 20260729110633_tfa_enforcement_history.sql h1:Z2mg8+y6AQA2IAp39vnbJLCm2ijuxWIVz98IMp++8x0=
+20260730170837_dropassetnameindex.sql h1:mNT8sSH3LrQ99DagnXqIizNpjTtuUO8LIdfqgjQSJYU=

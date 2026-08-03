@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 
+	"github.com/samber/lo"
+
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	intobvs "github.com/theopenlane/core/internal/integrations/observability"
 	"github.com/theopenlane/core/internal/integrations/registry"
@@ -52,8 +54,9 @@ func RegisterReconcileListener(runtime *gala.Gala, reg *registry.Registry, handl
 				Schedule:         s,
 			}
 		},
+		// log fields are snapshotted at emit, so a cycle re-emitted without them stays anonymous
 		PrepareEmit: func(ctx context.Context, e ReconcileEnvelope) (context.Context, gala.Headers) {
-			return gala.WithOperationContext(ctx, e.OperationContext), gala.Headers{
+			return intobvs.WithContext(ctx, e.OperationContext), gala.Headers{
 				Properties: types.GetPropertiesForOperationContext(e.OperationContext),
 				Tags:       types.GetTagsForOperationContext(e.OperationContext),
 			}
@@ -69,7 +72,14 @@ func RegisterReconcileListener(runtime *gala.Gala, reg *registry.Registry, handl
 			}
 
 			if errors.Is(err, registry.ErrDefinitionNotFound) || errors.Is(err, registry.ErrOperationNotFound) {
-				logx.FromContext(ctx).Error().Err(err).Str("definition_id", src.DefinitionID).Str(intobvs.FieldOperation, e.Operation).Msg("operation no longer registered, stopping cycle")
+				// what is registered separates a missing definition from an empty definition id
+				var registered []string
+				if reg != nil {
+					registered = lo.Map(reg.Definitions(), func(d types.Definition, _ int) string { return d.ID })
+				}
+
+				logx.FromContext(ctx).Error().Err(err).Str("definition_id", src.DefinitionID).Strs("registered_definition_ids", registered).Msg("operation no longer registered, stopping cycle")
+
 				return true
 			}
 

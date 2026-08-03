@@ -8,6 +8,7 @@ import (
 	models "github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ssoenforcement"
 	"github.com/theopenlane/core/pkg/logx"
 	sso "github.com/theopenlane/core/pkg/ssoutils"
 	echo "github.com/theopenlane/echox"
@@ -87,7 +88,7 @@ type nonce string
 // route an exempt user through SSO. Provider and discovery URL are reported from the organization
 // setting. TFA enforcement is reported from the organization setting for org-level lookups
 func (h *Handler) fetchSSOStatus(ctx context.Context, orgID, userID string) (models.SSOStatusResponse, error) {
-	in, setting, err := sso.LoadEnforcement(ctx, h.DBClient, orgID, userID, "")
+	in, setting, err := ssoenforcement.LoadEnforcement(ctx, h.DBClient, orgID, userID, "")
 	if err != nil {
 		return models.SSOStatusResponse{}, err
 	}

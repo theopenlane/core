@@ -6,7 +6,6 @@ import (
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/go-webauthn/webauthn/webauthn"
-	"github.com/lestrrat-go/jwx/v3/jwk"
 	"github.com/redis/go-redis/v9"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
@@ -50,8 +49,6 @@ type Handler struct {
 	TokenManager *tokens.TokenManager
 	// ReadyChecks is a set of checkFuncs to determine if the application is "ready" upon startup
 	ReadyChecks Checks
-	// JWTKeys contains the set of valid JWT authentication key
-	JWTKeys jwk.Set
 	// SessionConfig to handle sessions
 	SessionConfig *sessions.SessionConfig
 	// OauthProvider contains the configuration settings for all supported Oauth2 providers (for social login)

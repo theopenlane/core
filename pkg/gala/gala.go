@@ -356,7 +356,8 @@ func (g *Gala) DispatchEnvelope(ctx context.Context, envelope Envelope) error {
 		}
 
 		if err := g.executeListener(handlerContext, listener, decodedPayload); err != nil {
-			logx.FromContext(restoredContext).Warn().Err(err).Str("event_id", string(envelope.ID)).Str("topic", string(envelope.Topic)).Str("operation", operation).Str("listener", listener.name).Msg("gala listener failed")
+			// header properties are the only identity left when the emitting context carried no durable log fields
+			logx.FromContext(restoredContext).Warn().Err(err).Str("event_id", string(envelope.ID)).Str("topic", string(envelope.Topic)).Str("operation", operation).Str("listener", listener.name).Interface("envelope_properties", envelope.Headers.Properties).Msg("gala listener failed")
 
 			return err
 		}

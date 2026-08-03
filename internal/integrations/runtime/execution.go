@@ -31,7 +31,7 @@ func (r *Runtime) reconcileOperations(ctx context.Context, integration *ent.Inte
 		return ErrDefinitionNotFound
 	}
 
-	ctx = intobvs.WithIntegration(ctx, integration.ID, integration.DefinitionID)
+	ctx = intobvs.WithInstallation(ctx, integration)
 
 	var errs []error
 
@@ -52,7 +52,7 @@ func (r *Runtime) reconcileOperations(ctx context.Context, integration *ent.Inte
 			RunType:       enums.IntegrationRunTypeReconcile,
 		})
 
-		receipt := r.Gala().EmitWithHeaders(gala.WithOperationContext(ctx, oc), operations.ReconcileTopic, operations.ReconcileEnvelope{
+		receipt := r.Gala().EmitWithHeaders(intobvs.WithContext(ctx, oc), operations.ReconcileTopic, operations.ReconcileEnvelope{
 			OperationContext: oc,
 		}, gala.Headers{
 			Properties: oc.Properties(),
@@ -249,10 +249,9 @@ func (r *Runtime) ExecuteRuntimeOperation(ctx context.Context, definitionID, ope
 // executeOperationInline runs one integration operation inline without run tracking, if there is no integration ID it runs as an runtime client
 func (r *Runtime) executeOperationInline(ctx context.Context, integration *ent.Integration, definitionID string, operation types.OperationRegistration, credentials types.CredentialBindings, config json.RawMessage) (json.RawMessage, error) {
 	if integration != nil {
-		ctx = intobvs.WithIntegration(ctx, integration.ID, integration.DefinitionID)
+		ctx = intobvs.WithInstallation(ctx, integration)
 	} else {
-		ctx = intobvs.WithIntegration(ctx, "", definitionID)
-		ctx = gala.WithOperationContext(ctx, types.NewOperationContext("", operation.Name, types.IntegrationSource{
+		ctx = intobvs.WithContext(ctx, types.NewOperationContext("", operation.Name, types.IntegrationSource{
 			DefinitionID: definitionID,
 			Runtime:      true,
 		}))
@@ -563,7 +562,7 @@ func (r *Runtime) seedReconcileJobsForInstallation(ctx context.Context, inst *en
 		})
 
 		receipt := r.Gala().EmitWithHeaders(
-			gala.WithOperationContext(ctx, oc),
+			intobvs.WithContext(ctx, oc),
 			operations.ReconcileTopic,
 			operations.ReconcileEnvelope{OperationContext: oc},
 			gala.Headers{Properties: oc.Properties()},
