@@ -11,10 +11,12 @@
 
 </div>
 
-[Openlane](https://www.theopenlane.io) is one of the few, truly open-source compliance automation platforms - giving you a system of record for your compliance program including the people, systems, and vendors in scope; the policies and controls that govern them; and the evidence that proves it, and all with the automation to keep all of it current. This repository contains the core server and orchestration services behind the Openlane cloud service.
+[Openlane](https://www.theopenlane.io) is one of the few, truly open-source compliance automation platforms - giving you a system of record for your compliance program including the people, systems, and vendors in scope; the policies and controls that govern them; and the evidence that proves it, and all with the automation to keep it current. This repository contains the core server and orchestration services behind the Openlane cloud service.
 
 <div align="center">
+
 ![](assets/openlane_overview.png)
+
 </div>
 
 ## Features
