@@ -12,7 +12,6 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/internal/ent/eventqueue"
-	"github.com/theopenlane/core/internal/ent/generated"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/integrations/operations"
@@ -86,7 +85,7 @@ func handleCampaignRecurringMutation(ctx gala.HandlerContext, payload eventqueue
 		).
 		Only(ctx.Context)
 	if err != nil {
-		if generated.IsNotFound(err) {
+		if entgen.IsNotFound(err) {
 			logx.FromContext(ctx.Context).Info().Msg("failed to find campaign, campaign may have been deleted before running")
 
 			// nothing to do if the campaign can no longer be found
