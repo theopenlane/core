@@ -19257,25 +19257,6 @@ func (c *NotificationClient) QueryOwner(_m *Notification) *OrganizationQuery {
 	return query
 }
 
-// QueryUser queries the user edge of a Notification.
-func (c *NotificationClient) QueryUser(_m *Notification) *UserQuery {
-	query := (&UserClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(notification.Table, notification.FieldID, id),
-			sqlgraph.To(user.Table, user.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, notification.UserTable, notification.UserColumn),
-		)
-		schemaConfig := _m.schemaConfig
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.Notification
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // QueryNotificationTemplate queries the notification_template edge of a Notification.
 func (c *NotificationClient) QueryNotificationTemplate(_m *Notification) *NotificationTemplateQuery {
 	query := (&NotificationTemplateClient{config: c.config}).Query()
@@ -35960,25 +35941,6 @@ func (c *UserClient) QueryTargetedImpersonations(_m *User) *ImpersonationEventQu
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.ImpersonationEvent
 		step.Edge.Schema = schemaConfig.ImpersonationEvent
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryNotifications queries the notifications edge of a User.
-func (c *UserClient) QueryNotifications(_m *User) *NotificationQuery {
-	query := (&NotificationClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(user.Table, user.FieldID, id),
-			sqlgraph.To(notification.Table, notification.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, user.NotificationsTable, user.NotificationsColumn),
-		)
-		schemaConfig := _m.schemaConfig
-		step.To.Schema = schemaConfig.Notification
-		step.Edge.Schema = schemaConfig.Notification
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}

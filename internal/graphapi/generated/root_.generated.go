@@ -100338,7 +100338,7 @@ type Notification implements Node {
   """
   the user this notification is for
   """
-  userID: ID
+  userID: String
   """
   the type of notification - organization or user
   """

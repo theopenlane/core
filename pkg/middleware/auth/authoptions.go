@@ -52,6 +52,12 @@ type Options struct {
 	RedisClient *redis.Client
 	// blacklist is consulted by the constructed validator to honor token and user revocation
 	blacklist tokens.TokenBlacklist
+	// supportSubjectID is the configured subject id of the virtual support identity.
+	supportSubjectID string
+	// supportName is the configured display name of the virtual support identity.
+	supportName string
+	// supportEmail is the configured email of the virtual support identity.
+	supportEmail string
 }
 
 // Reauthenticator generates new access and refresh pair given a valid refresh token.
@@ -278,5 +284,14 @@ func WithRedisClient(redisClient *redis.Client) Option {
 func WithBlacklist(blacklist tokens.TokenBlacklist) Option {
 	return func(opts *Options) {
 		opts.blacklist = blacklist
+	}
+}
+
+// WithSupportIdentity sets the support virtual user config for websockets
+func WithSupportIdentity(subjectID, name, email string) Option {
+	return func(opts *Options) {
+		opts.supportSubjectID = subjectID
+		opts.supportName = name
+		opts.supportEmail = email
 	}
 }

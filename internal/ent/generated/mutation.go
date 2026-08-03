@@ -147875,6 +147875,7 @@ type NotificationMutation struct {
 	updated_by_impersonator      *string
 	tags                         *[]string
 	appendtags                   []string
+	user_id                      *string
 	notification_type            *enums.NotificationType
 	object_type                  *string
 	title                        *string
@@ -147887,8 +147888,6 @@ type NotificationMutation struct {
 	clearedFields                map[string]struct{}
 	owner                        *string
 	clearedowner                 bool
-	user                         *string
-	cleareduser                  bool
 	notification_template        *string
 	clearednotification_template bool
 	done                         bool
@@ -148361,12 +148360,12 @@ func (m *NotificationMutation) ResetOwnerID() {
 
 // SetUserID sets the "user_id" field.
 func (m *NotificationMutation) SetUserID(s string) {
-	m.user = &s
+	m.user_id = &s
 }
 
 // UserID returns the value of the "user_id" field in the mutation.
 func (m *NotificationMutation) UserID() (r string, exists bool) {
-	v := m.user
+	v := m.user_id
 	if v == nil {
 		return
 	}
@@ -148392,7 +148391,7 @@ func (m *NotificationMutation) OldUserID(ctx context.Context) (v string, err err
 
 // ClearUserID clears the value of the "user_id" field.
 func (m *NotificationMutation) ClearUserID() {
-	m.user = nil
+	m.user_id = nil
 	m.clearedFields[notification.FieldUserID] = struct{}{}
 }
 
@@ -148404,7 +148403,7 @@ func (m *NotificationMutation) UserIDCleared() bool {
 
 // ResetUserID resets all changes to the "user_id" field.
 func (m *NotificationMutation) ResetUserID() {
-	m.user = nil
+	m.user_id = nil
 	delete(m.clearedFields, notification.FieldUserID)
 }
 
@@ -148840,33 +148839,6 @@ func (m *NotificationMutation) ResetOwner() {
 	m.clearedowner = false
 }
 
-// ClearUser clears the "user" edge to the User entity.
-func (m *NotificationMutation) ClearUser() {
-	m.cleareduser = true
-	m.clearedFields[notification.FieldUserID] = struct{}{}
-}
-
-// UserCleared reports if the "user" edge to the User entity was cleared.
-func (m *NotificationMutation) UserCleared() bool {
-	return m.UserIDCleared() || m.cleareduser
-}
-
-// UserIDs returns the "user" edge IDs in the mutation.
-// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
-// UserID instead. It exists only for internal usage by the builders.
-func (m *NotificationMutation) UserIDs() (ids []string) {
-	if id := m.user; id != nil {
-		ids = append(ids, *id)
-	}
-	return
-}
-
-// ResetUser resets all changes to the "user" edge.
-func (m *NotificationMutation) ResetUser() {
-	m.user = nil
-	m.cleareduser = false
-}
-
 // SetNotificationTemplateID sets the "notification_template" edge to the NotificationTemplate entity by id.
 func (m *NotificationMutation) SetNotificationTemplateID(id string) {
 	m.notification_template = &id
@@ -148963,7 +148935,7 @@ func (m *NotificationMutation) Fields() []string {
 	if m.owner != nil {
 		fields = append(fields, notification.FieldOwnerID)
 	}
-	if m.user != nil {
+	if m.user_id != nil {
 		fields = append(fields, notification.FieldUserID)
 	}
 	if m.notification_type != nil {
@@ -149393,12 +149365,9 @@ func (m *NotificationMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *NotificationMutation) AddedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 2)
 	if m.owner != nil {
 		edges = append(edges, notification.EdgeOwner)
-	}
-	if m.user != nil {
-		edges = append(edges, notification.EdgeUser)
 	}
 	if m.notification_template != nil {
 		edges = append(edges, notification.EdgeNotificationTemplate)
@@ -149414,10 +149383,6 @@ func (m *NotificationMutation) AddedIDs(name string) []ent.Value {
 		if id := m.owner; id != nil {
 			return []ent.Value{*id}
 		}
-	case notification.EdgeUser:
-		if id := m.user; id != nil {
-			return []ent.Value{*id}
-		}
 	case notification.EdgeNotificationTemplate:
 		if id := m.notification_template; id != nil {
 			return []ent.Value{*id}
@@ -149428,7 +149393,7 @@ func (m *NotificationMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *NotificationMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 2)
 	return edges
 }
 
@@ -149440,12 +149405,9 @@ func (m *NotificationMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *NotificationMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 2)
 	if m.clearedowner {
 		edges = append(edges, notification.EdgeOwner)
-	}
-	if m.cleareduser {
-		edges = append(edges, notification.EdgeUser)
 	}
 	if m.clearednotification_template {
 		edges = append(edges, notification.EdgeNotificationTemplate)
@@ -149459,8 +149421,6 @@ func (m *NotificationMutation) EdgeCleared(name string) bool {
 	switch name {
 	case notification.EdgeOwner:
 		return m.clearedowner
-	case notification.EdgeUser:
-		return m.cleareduser
 	case notification.EdgeNotificationTemplate:
 		return m.clearednotification_template
 	}
@@ -149473,9 +149433,6 @@ func (m *NotificationMutation) ClearEdge(name string) error {
 	switch name {
 	case notification.EdgeOwner:
 		m.ClearOwner()
-		return nil
-	case notification.EdgeUser:
-		m.ClearUser()
 		return nil
 	case notification.EdgeNotificationTemplate:
 		m.ClearNotificationTemplate()
@@ -149490,9 +149447,6 @@ func (m *NotificationMutation) ResetEdge(name string) error {
 	switch name {
 	case notification.EdgeOwner:
 		m.ResetOwner()
-		return nil
-	case notification.EdgeUser:
-		m.ResetUser()
 		return nil
 	case notification.EdgeNotificationTemplate:
 		m.ResetNotificationTemplate()
@@ -270378,9 +270332,6 @@ type UserMutation struct {
 	targeted_impersonations          map[string]struct{}
 	removedtargeted_impersonations   map[string]struct{}
 	clearedtargeted_impersonations   bool
-	notifications                    map[string]struct{}
-	removednotifications             map[string]struct{}
-	clearednotifications             bool
 	group_memberships                map[string]struct{}
 	removedgroup_memberships         map[string]struct{}
 	clearedgroup_memberships         bool
@@ -273004,60 +272955,6 @@ func (m *UserMutation) ResetTargetedImpersonations() {
 	m.removedtargeted_impersonations = nil
 }
 
-// AddNotificationIDs adds the "notifications" edge to the Notification entity by ids.
-func (m *UserMutation) AddNotificationIDs(ids ...string) {
-	if m.notifications == nil {
-		m.notifications = make(map[string]struct{})
-	}
-	for i := range ids {
-		m.notifications[ids[i]] = struct{}{}
-	}
-}
-
-// ClearNotifications clears the "notifications" edge to the Notification entity.
-func (m *UserMutation) ClearNotifications() {
-	m.clearednotifications = true
-}
-
-// NotificationsCleared reports if the "notifications" edge to the Notification entity was cleared.
-func (m *UserMutation) NotificationsCleared() bool {
-	return m.clearednotifications
-}
-
-// RemoveNotificationIDs removes the "notifications" edge to the Notification entity by IDs.
-func (m *UserMutation) RemoveNotificationIDs(ids ...string) {
-	if m.removednotifications == nil {
-		m.removednotifications = make(map[string]struct{})
-	}
-	for i := range ids {
-		delete(m.notifications, ids[i])
-		m.removednotifications[ids[i]] = struct{}{}
-	}
-}
-
-// RemovedNotifications returns the removed IDs of the "notifications" edge to the Notification entity.
-func (m *UserMutation) RemovedNotificationsIDs() (ids []string) {
-	for id := range m.removednotifications {
-		ids = append(ids, id)
-	}
-	return
-}
-
-// NotificationsIDs returns the "notifications" edge IDs in the mutation.
-func (m *UserMutation) NotificationsIDs() (ids []string) {
-	for id := range m.notifications {
-		ids = append(ids, id)
-	}
-	return
-}
-
-// ResetNotifications resets all changes to the "notifications" edge.
-func (m *UserMutation) ResetNotifications() {
-	m.notifications = nil
-	m.clearednotifications = false
-	m.removednotifications = nil
-}
-
 // AddGroupMembershipIDs adds the "group_memberships" edge to the GroupMembership entity by ids.
 func (m *UserMutation) AddGroupMembershipIDs(ids ...string) {
 	if m.group_memberships == nil {
@@ -273913,7 +273810,7 @@ func (m *UserMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *UserMutation) AddedEdges() []string {
-	edges := make([]string, 0, 28)
+	edges := make([]string, 0, 27)
 	if m.personal_access_tokens != nil {
 		edges = append(edges, user.EdgePersonalAccessTokens)
 	}
@@ -273985,9 +273882,6 @@ func (m *UserMutation) AddedEdges() []string {
 	}
 	if m.targeted_impersonations != nil {
 		edges = append(edges, user.EdgeTargetedImpersonations)
-	}
-	if m.notifications != nil {
-		edges = append(edges, user.EdgeNotifications)
 	}
 	if m.group_memberships != nil {
 		edges = append(edges, user.EdgeGroupMemberships)
@@ -274145,12 +274039,6 @@ func (m *UserMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case user.EdgeNotifications:
-		ids := make([]ent.Value, 0, len(m.notifications))
-		for id := range m.notifications {
-			ids = append(ids, id)
-		}
-		return ids
 	case user.EdgeGroupMemberships:
 		ids := make([]ent.Value, 0, len(m.group_memberships))
 		for id := range m.group_memberships {
@@ -274175,7 +274063,7 @@ func (m *UserMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *UserMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 28)
+	edges := make([]string, 0, 27)
 	if m.removedpersonal_access_tokens != nil {
 		edges = append(edges, user.EdgePersonalAccessTokens)
 	}
@@ -274241,9 +274129,6 @@ func (m *UserMutation) RemovedEdges() []string {
 	}
 	if m.removedtargeted_impersonations != nil {
 		edges = append(edges, user.EdgeTargetedImpersonations)
-	}
-	if m.removednotifications != nil {
-		edges = append(edges, user.EdgeNotifications)
 	}
 	if m.removedgroup_memberships != nil {
 		edges = append(edges, user.EdgeGroupMemberships)
@@ -274393,12 +274278,6 @@ func (m *UserMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
-	case user.EdgeNotifications:
-		ids := make([]ent.Value, 0, len(m.removednotifications))
-		for id := range m.removednotifications {
-			ids = append(ids, id)
-		}
-		return ids
 	case user.EdgeGroupMemberships:
 		ids := make([]ent.Value, 0, len(m.removedgroup_memberships))
 		for id := range m.removedgroup_memberships {
@@ -274423,7 +274302,7 @@ func (m *UserMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *UserMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 28)
+	edges := make([]string, 0, 27)
 	if m.clearedpersonal_access_tokens {
 		edges = append(edges, user.EdgePersonalAccessTokens)
 	}
@@ -274496,9 +274375,6 @@ func (m *UserMutation) ClearedEdges() []string {
 	if m.clearedtargeted_impersonations {
 		edges = append(edges, user.EdgeTargetedImpersonations)
 	}
-	if m.clearednotifications {
-		edges = append(edges, user.EdgeNotifications)
-	}
 	if m.clearedgroup_memberships {
 		edges = append(edges, user.EdgeGroupMemberships)
 	}
@@ -274563,8 +274439,6 @@ func (m *UserMutation) EdgeCleared(name string) bool {
 		return m.clearedimpersonation_events
 	case user.EdgeTargetedImpersonations:
 		return m.clearedtargeted_impersonations
-	case user.EdgeNotifications:
-		return m.clearednotifications
 	case user.EdgeGroupMemberships:
 		return m.clearedgroup_memberships
 	case user.EdgeOrgMemberships:
@@ -274664,9 +274538,6 @@ func (m *UserMutation) ResetEdge(name string) error {
 		return nil
 	case user.EdgeTargetedImpersonations:
 		m.ResetTargetedImpersonations()
-		return nil
-	case user.EdgeNotifications:
-		m.ResetNotifications()
 		return nil
 	case user.EdgeGroupMemberships:
 		m.ResetGroupMemberships()

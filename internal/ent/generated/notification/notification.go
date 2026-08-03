@@ -54,8 +54,6 @@ const (
 	FieldTopic = "topic"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
-	// EdgeUser holds the string denoting the user edge name in mutations.
-	EdgeUser = "user"
 	// EdgeNotificationTemplate holds the string denoting the notification_template edge name in mutations.
 	EdgeNotificationTemplate = "notification_template"
 	// Table holds the table name of the notification in the database.
@@ -67,13 +65,6 @@ const (
 	OwnerInverseTable = "organizations"
 	// OwnerColumn is the table column denoting the owner relation/edge.
 	OwnerColumn = "owner_id"
-	// UserTable is the table that holds the user relation/edge.
-	UserTable = "notifications"
-	// UserInverseTable is the table name for the User entity.
-	// It exists in this package in order to avoid circular dependency with the "user" package.
-	UserInverseTable = "users"
-	// UserColumn is the table column denoting the user relation/edge.
-	UserColumn = "user_id"
 	// NotificationTemplateTable is the table that holds the notification_template relation/edge.
 	NotificationTemplateTable = "notifications"
 	// NotificationTemplateInverseTable is the table name for the NotificationTemplate entity.
@@ -249,13 +240,6 @@ func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
-// ByUserField orders the results by user field.
-func ByUserField(field string, opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newUserStep(), sql.OrderByField(field, opts...))
-	}
-}
-
 // ByNotificationTemplateField orders the results by notification_template field.
 func ByNotificationTemplateField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -267,13 +251,6 @@ func newOwnerStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(OwnerInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
-	)
-}
-func newUserStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(UserInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, true, UserTable, UserColumn),
 	)
 }
 func newNotificationTemplateStep() *sqlgraph.Step {

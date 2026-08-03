@@ -21,7 +21,7 @@ require (
 	github.com/theopenlane/core/common v1.0.24
 	github.com/theopenlane/go-client v0.12.5
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.35.4
+	github.com/theopenlane/iam v0.35.6
 	github.com/theopenlane/utils v0.7.1
 	golang.org/x/oauth2 v0.36.0
 	golang.org/x/term v0.45.0
@@ -120,7 +120,7 @@ require (
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/natefinch/wrap v0.2.0 // indirect
 	github.com/nyaruka/phonenumbers v1.8.1 // indirect
-	github.com/oklog/ulid/v2 v2.1.1 // indirect
+	github.com/oklog/ulid/v2 v2.1.2 // indirect
 	github.com/olekukonko/cat v0.0.0-20250911104152-50322a0618f6 // indirect
 	github.com/olekukonko/errors v1.2.0 // indirect
 	github.com/olekukonko/ll v0.1.6 // indirect
@@ -216,7 +216,7 @@ require (
 	golang.org/x/tools v0.48.0 // indirect
 	golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da // indirect
 	gonum.org/v1/gonum v0.17.0 // indirect
-	google.golang.org/api v0.289.0 // indirect
+	google.golang.org/api v0.290.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20260720211330-0afa2a65878a // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260720211330-0afa2a65878a // indirect
 	google.golang.org/grpc v1.82.1 // indirect
