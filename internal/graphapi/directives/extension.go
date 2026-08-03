@@ -23,8 +23,7 @@ type Extension struct {
 }
 
 // WithModules sets the modules each schema requires so the @modules directive can be added
-// to the object types, the modules are passed in rather than parsed here to keep the
-// generator dependencies out of this package
+// to the object types
 func WithModules(modules map[string][]models.OrgModule) ExtensionOption {
 	return func(e *Extension) error {
 		e.modules = modules
