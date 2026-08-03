@@ -39,6 +39,9 @@ type TopicName string
 type Topic[T any] struct {
 	// Name is the stable topic identifier
 	Name TopicName
+	// UniqueKey optionally derives Headers.UniqueKey from the payload for every emission on
+	// the topic; opt out per emission via Headers.SkipUniqueKey
+	UniqueKey func(T) string
 }
 
 // Definition defines one listener binding

@@ -36,7 +36,7 @@ func (d DirectorySync) IngestHandle() types.IngestHandler {
 		if meta.CustomerID == "" {
 			logx.FromContext(ctx).Error().Int("attribute_bytes", len(request.Integration.InstallationMetadata.Attributes)).Str("external_id", request.Integration.InstallationMetadata.Display.ExternalID).Str("domain", meta.Domain).Msg("googleworkspace: no customer id in installation metadata, the integration needs to be reauthorized")
 
-			return nil, ErrCustomerIDMissing
+			return nil, types.Unhealthy(ErrCustomerIDMissing, "the Google Workspace connection is missing its customer identifier and needs to be reauthorized")
 		}
 
 		return d.Run(ctx, svc, meta.CustomerID)

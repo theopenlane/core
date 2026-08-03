@@ -19,6 +19,11 @@ type Headers struct {
 	MaxAttempts int `json:"max_attempts,omitempty"`
 	// ScheduledAt defers execution until the specified time; nil means immediate
 	ScheduledAt *time.Time `json:"scheduled_at,omitempty"`
+	// UniqueKey enforces at most one live job per key at insert time; duplicates are skipped
+	UniqueKey string `json:"unique_key,omitempty"`
+	// SkipUniqueKey suppresses the topic's UniqueKey derivation; a running cycle emitting its
+	// successor would otherwise be skipped as a duplicate of itself
+	SkipUniqueKey bool `json:"skip_unique_key,omitempty"`
 	// Metadata carries structured operation context as opaque JSON
 	Metadata json.RawMessage `json:"metadata,omitempty"`
 }

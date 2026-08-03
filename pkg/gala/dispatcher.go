@@ -31,6 +31,8 @@ const DefaultQueueName = "events"
 type riverDispatchArgs struct {
 	// Envelope is the encoded gala envelope payload
 	Envelope []byte `json:"envelope"`
+	// UniqueKey scopes the ByArgs uniqueness hash to this field alone via the river tag
+	UniqueKey string `json:"unique_key,omitempty" river:"unique"`
 }
 
 // riverInsertClient represents the minimal insert capability required for durable dispatch
@@ -77,8 +79,22 @@ func newRiverDispatchArgs(envelope Envelope) (riverDispatchArgs, error) {
 	}
 
 	return riverDispatchArgs{
-		Envelope: encodedEnvelope,
+		Envelope:  encodedEnvelope,
+		UniqueKey: envelope.Headers.UniqueKey,
 	}, nil
+}
+
+// uniqueLiveStates are the job states a Headers.UniqueKey enforces uniqueness across: every
+// live state, excluding terminal ones so a finished job never blocks a fresh insert. River
+// requires available, pending, running, and scheduled in any custom state set
+func uniqueLiveStates() []rivertype.JobState {
+	return []rivertype.JobState{
+		rivertype.JobStateAvailable,
+		rivertype.JobStatePending,
+		rivertype.JobStateRunning,
+		rivertype.JobStateRetryable,
+		rivertype.JobStateScheduled,
+	}
 }
 
 // newRiverDispatchWorker creates a riverDispatchWorker
@@ -125,6 +141,13 @@ func (d *riverDispatcher) Dispatch(ctx context.Context, envelope Envelope) error
 		insertOpts.ScheduledAt = *envelope.Headers.ScheduledAt
 	}
 
+	if envelope.Headers.UniqueKey != "" {
+		insertOpts.UniqueOpts = river.UniqueOpts{
+			ByArgs:  true,
+			ByState: uniqueLiveStates(),
+		}
+	}
+
 	meta, err := json.Marshal(riverJobMetadata{
 		Topic:      string(envelope.Topic),
 		EventID:    string(envelope.ID),
@@ -139,9 +162,14 @@ func (d *riverDispatcher) Dispatch(ctx context.Context, envelope Envelope) error
 
 	insertOpts.Metadata = meta
 
-	if _, err = d.jobClient.Insert(ctx, args, insertOpts); err != nil {
+	result, err := d.jobClient.Insert(ctx, args, insertOpts)
+	if err != nil {
 		logx.FromContext(ctx).Err(err).Msg("gala: error inserting dispatch job")
 		return ErrRiverDispatchInsertFailed
+	}
+
+	if result.UniqueSkippedAsDuplicate {
+		logx.FromContext(ctx).Info().Str("topic", string(envelope.Topic)).Str("unique_key", envelope.Headers.UniqueKey).Msg("gala: dispatch skipped, a live job already holds the unique key")
 	}
 
 	return nil

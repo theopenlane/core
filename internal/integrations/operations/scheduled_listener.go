@@ -16,6 +16,8 @@ type ScheduledListenerConfig[T any] struct {
 	Runtime *gala.Gala
 	// Topic is the Gala topic name
 	Topic gala.TopicName
+	// UniqueKey optionally derives the topic's insert-time uniqueness key from an envelope
+	UniqueKey func(T) string
 	// Name is the stable listener name
 	Name string
 	// Schedule controls adaptive interval computation
@@ -44,7 +46,7 @@ func RegisterScheduledListener[T any](cfg ScheduledListenerConfig[T]) error {
 	}
 
 	_, err := gala.Register(cfg.Runtime, gala.Definition[T]{
-		Topic: gala.Topic[T]{Name: cfg.Topic},
+		Topic: gala.Topic[T]{Name: cfg.Topic, UniqueKey: cfg.UniqueKey},
 		Name:  cfg.Name,
 		Handle: func(ctx gala.HandlerContext, envelope T) error {
 			delta, execErr := cfg.Handle(ctx.Context, envelope)
@@ -75,6 +77,8 @@ func RegisterScheduledListener[T any](cfg ScheduledListenerConfig[T]) error {
 			}
 
 			headers.ScheduledAt = &scheduledAt
+			// the successor of a running unique job would be skipped as its own duplicate
+			headers.SkipUniqueKey = true
 
 			receipt := cfg.Runtime.EmitWithHeaders(emitCtx, cfg.Topic, cfg.Wrap(envelope, next), headers)
 

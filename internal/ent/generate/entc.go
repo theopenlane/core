@@ -355,8 +355,6 @@ func runParallelPostGenHooks(g *gen.Graph) {
 	workflowGenExt := workflowgen.New(
 		workflowgen.WithHooksOutputDir(entGeneratedWorkflowPath),
 		workflowgen.WithHooksPackageName("workflowgenerated"),
-		workflowgen.WithEnumsOutputDir(enumsDir),
-		workflowgen.WithEnumsPackageName("enums"),
 	)
 
 	fileCategoryGen := filecategorygen.New(schemaPath, "internal/objects/store/file_category_generated.go")
@@ -370,6 +368,8 @@ func runParallelPostGenHooks(g *gen.Graph) {
 		entityops.WithLogxPackage("github.com/theopenlane/core/pkg/logx"),
 		entityops.WithContextxPackage("github.com/theopenlane/utils/contextx"),
 		entityops.WithCelxPackage("github.com/theopenlane/core/pkg/celx"),
+		entityops.WithEnumsOutputDir(enumsDir),
+		entityops.WithEnumsPackageName("enums"),
 	)
 
 	hooks := []gen.Hook{

@@ -207,6 +207,13 @@ func (g *Gala) ContextManager() *ContextManager {
 // EmitOption customizes one emitted envelope before dispatch
 type EmitOption func(*Envelope)
 
+// WithHeaders sets the operational headers on the emitted envelope
+func WithHeaders(headers Headers) EmitOption {
+	return func(e *Envelope) {
+		e.Headers = headers
+	}
+}
+
 // WithEventID sets an explicit event identifier on the emitted envelope,
 // making the caller's identity (e.g. a mutation event id or run id) the
 // durable dedup and traceability key instead of a freshly minted ULID
@@ -227,6 +234,14 @@ func WithRawPayload(raw json.RawMessage) EmitOption {
 			e.Payload = append(json.RawMessage(nil), raw...)
 		}
 	}
+}
+
+// Emit emits a payload to the topic, applying any options to the envelope before
+// dispatch, and returns the emitted event identifier
+func (g *Gala) Emit(ctx context.Context, topic TopicName, payload any, opts ...EmitOption) (EventID, error) {
+	receipt := g.EmitWithHeaders(ctx, topic, payload, Headers{}, opts...)
+
+	return receipt.EventID, receipt.Err
 }
 
 // EmitWithHeaders emits a payload with explicit headers
@@ -254,6 +269,10 @@ func (g *Gala) EmitWithHeaders(ctx context.Context, topic TopicName, payload any
 		}
 
 		envelope.Payload = encodedPayload
+	}
+
+	if envelope.Headers.UniqueKey == "" && !envelope.Headers.SkipUniqueKey && registration.uniqueKey != nil {
+		envelope.Headers.UniqueKey = registration.uniqueKey(payload)
 	}
 
 	snapshot, err := g.contextManager.Capture(ctx)
@@ -492,6 +511,69 @@ func (g *Gala) HasActiveJobWithMetadata(ctx context.Context, metadataFragment st
 	}
 
 	return len(result.Jobs) > 0, nil
+}
+
+// activeJobsWithMetadata lists every River job whose metadata JSONB contains the given fragment
+// and is in an active state (available, scheduled, running, or retryable)
+func (g *Gala) activeJobsWithMetadata(ctx context.Context, metadataFragment string) ([]*rivertype.JobRow, error) {
+	result, err := g.jobClient.GetRiverClient().JobList(ctx, river.NewJobListParams().
+		Metadata(metadataFragment).
+		States(
+			rivertype.JobStateAvailable,
+			rivertype.JobStateRunning,
+			rivertype.JobStateScheduled,
+			rivertype.JobStateRetryable,
+		))
+	if err != nil {
+		return nil, err
+	}
+
+	return result.Jobs, nil
+}
+
+// CountActiveJobsWithMetadata returns how many River jobs whose metadata JSONB contains the
+// given fragment are in an active state. Returns zero without error when Gala is not in durable mode
+func (g *Gala) CountActiveJobsWithMetadata(ctx context.Context, metadataFragment string) (int, error) {
+	if g.jobClient == nil {
+		return 0, nil
+	}
+
+	jobs, err := g.activeJobsWithMetadata(ctx, metadataFragment)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(jobs), nil
+}
+
+// CancelActiveJobsWithMetadata cancels every River job whose metadata JSONB contains the given
+// fragment and is in an active state, returning how many were cancelled. Returns zero without
+// error when Gala is not in durable mode
+func (g *Gala) CancelActiveJobsWithMetadata(ctx context.Context, metadataFragment string) (int, error) {
+	if g.jobClient == nil {
+		return 0, nil
+	}
+
+	jobs, err := g.activeJobsWithMetadata(ctx, metadataFragment)
+	if err != nil {
+		return 0, err
+	}
+
+	client := g.jobClient.GetRiverClient()
+
+	var cancelled int
+
+	for _, job := range jobs {
+		if _, err := client.JobCancel(ctx, job.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int64("job_id", job.ID).Msg("gala: failed cancelling job")
+
+			continue
+		}
+
+		cancelled++
+	}
+
+	return cancelled, nil
 }
 
 // Close closes the dedicated Gala queue client

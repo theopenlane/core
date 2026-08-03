@@ -61,17 +61,17 @@ func (r *Runtime) SeedScheduledOperations(ctx context.Context) error {
 				continue
 			}
 
-			if op.DisabledForAll || (op.Disabled != nil && op.Disabled(nil)) {
-				logx.FromContext(ctx).Info().Str("definition_id", def.ID).Str(intobvs.FieldOperation, op.Name).Msg("scheduled operation disabled, skipping seed")
-
-				continue
-			}
-
 			oc := types.NewOperationContext("", op.Name, types.IntegrationSource{
 				DefinitionID: def.ID,
 				RunType:      enums.IntegrationRunTypeScheduled,
 				Runtime:      true,
 			})
+
+			if op.DisabledForAll || (op.Disabled != nil && op.Disabled(nil)) {
+				logx.FromContext(intobvs.WithContext(ctx, oc)).Info().Msg("scheduled operation disabled, skipping seed")
+
+				continue
+			}
 
 			if err := r.seedScheduledOperation(ctx, oc); err != nil {
 				errs = append(errs, err)
@@ -84,7 +84,7 @@ func (r *Runtime) SeedScheduledOperations(ctx context.Context) error {
 
 // seedScheduledOperation emits one scheduled operation cycle envelope when no active job exists for it
 func (r *Runtime) seedScheduledOperation(ctx context.Context, oc gala.OperationContext) error {
-	src := types.IntegrationSourceFrom(oc)
+	ctx = intobvs.WithContext(ctx, oc)
 
 	fragment, err := scheduledMetadataFragment(oc)
 	if err != nil {
@@ -93,21 +93,21 @@ func (r *Runtime) seedScheduledOperation(ctx context.Context, oc gala.OperationC
 
 	active, err := r.Gala().HasActiveJobWithMetadata(ctx, fragment)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("definition_id", src.DefinitionID).Str(intobvs.FieldOperation, oc.Operation).Msg("failed to check for active scheduled operation job")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to check for active scheduled operation job")
 
 		return err
 	}
 
 	if active {
-		logx.FromContext(ctx).Debug().Str("definition_id", src.DefinitionID).Str(intobvs.FieldOperation, oc.Operation).Msg("scheduled operation already active, skipping seed")
+		logx.FromContext(ctx).Debug().Msg("scheduled operation already active, skipping seed")
 
 		return nil
 	}
 
-	logx.FromContext(ctx).Info().Str("definition_id", src.DefinitionID).Str(intobvs.FieldOperation, oc.Operation).Msg("seeding scheduled operation")
+	logx.FromContext(ctx).Info().Msg("seeding scheduled operation")
 
 	receipt := r.Gala().EmitWithHeaders(
-		intobvs.WithContext(ctx, oc),
+		ctx,
 		operations.ReconcileTopic,
 		operations.ReconcileEnvelope{OperationContext: oc},
 		gala.Headers{

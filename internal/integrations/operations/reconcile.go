@@ -38,16 +38,26 @@ var (
 // (used for adaptive scheduling)
 type ReconcileHandler func(context.Context, ReconcileEnvelope) (int, error)
 
+// ReconcileUniqueKey derives the insert-time uniqueness key for one recurring loop, so any
+// emitter of the topic collapses to at most one live loop per installation (or runtime
+// definition) and operation
+func ReconcileUniqueKey(e ReconcileEnvelope) string {
+	src := types.IntegrationSourceFrom(e.OperationContext)
+
+	return "reconcile:" + src.IntegrationID + ":" + src.DefinitionID + ":" + e.Operation
+}
+
 // RegisterReconcileListener registers the Gala listener driving every recurring operation
 // cycle: installation-bound reconciliation and runtime-bound scheduled operations
 func RegisterReconcileListener(runtime *gala.Gala, reg *registry.Registry, handle ReconcileHandler, schedule gala.Schedule) error {
 	return RegisterScheduledListener(ScheduledListenerConfig[ReconcileEnvelope]{
-		Runtime:  runtime,
-		Topic:    ReconcileTopic,
-		Name:     reconcileListenerName,
-		Schedule: schedule,
-		Handle:   handle,
-		State:    func(e ReconcileEnvelope) gala.ScheduleState { return e.Schedule },
+		Runtime:   runtime,
+		Topic:     ReconcileTopic,
+		UniqueKey: ReconcileUniqueKey,
+		Name:      reconcileListenerName,
+		Schedule:  schedule,
+		Handle:    handle,
+		State:     func(e ReconcileEnvelope) gala.ScheduleState { return e.Schedule },
 		Wrap: func(e ReconcileEnvelope, s gala.ScheduleState) ReconcileEnvelope {
 			return ReconcileEnvelope{
 				OperationContext: e.OperationContext,
@@ -62,33 +72,7 @@ func RegisterReconcileListener(runtime *gala.Gala, reg *registry.Registry, handl
 			}
 		},
 		ShouldCancel: func(ctx context.Context, e ReconcileEnvelope, err error) bool {
-			src := types.IntegrationSourceFrom(e.OperationContext)
-
-			// not-found is terminal only for installation-bound cycles; runtime sweeps
-			// surface joined per-item errors that may wrap not-found
-			if src.IntegrationID != "" && ent.IsNotFound(err) {
-				logx.FromContext(ctx).Error().Err(err).Msg("integration not found, not queuing")
-				return true
-			}
-
-			if errors.Is(err, registry.ErrDefinitionNotFound) || errors.Is(err, registry.ErrOperationNotFound) {
-				// what is registered separates a missing definition from an empty definition id
-				var registered []string
-				if reg != nil {
-					registered = lo.Map(reg.Definitions(), func(d types.Definition, _ int) string { return d.ID })
-				}
-
-				logx.FromContext(ctx).Error().Err(err).Str("definition_id", src.DefinitionID).Strs("registered_definition_ids", registered).Msg("operation no longer registered, stopping cycle")
-
-				return true
-			}
-
-			if errors.Is(err, ErrOperationDisabled) {
-				logx.FromContext(ctx).Info().Str("integration_id", src.IntegrationID).Str(intobvs.FieldOperation, e.Operation).Msg("operation disabled, stopping cycle")
-				return true
-			}
-
-			return false
+			return reconcileShouldCancel(ctx, reg, e, err)
 		},
 		ScheduleOverride: func(e ReconcileEnvelope) *gala.Schedule {
 			if reg == nil {
@@ -103,4 +87,45 @@ func RegisterReconcileListener(runtime *gala.Gala, reg *registry.Registry, handl
 			return op.Schedule
 		},
 	})
+}
+
+// reconcileShouldCancel classifies one cycle error, reporting whether the recurring loop should
+// stop instead of scheduling another cycle with backoff
+func reconcileShouldCancel(ctx context.Context, reg *registry.Registry, e ReconcileEnvelope, err error) bool {
+	src := types.IntegrationSourceFrom(e.OperationContext)
+
+	// not-found is terminal only for installation-bound cycles; runtime sweeps
+	// surface joined per-item errors that may wrap not-found
+	if src.IntegrationID != "" && ent.IsNotFound(err) {
+		logx.FromContext(ctx).Error().Err(err).Msg("integration not found, not queuing")
+		return true
+	}
+
+	if errors.Is(err, registry.ErrDefinitionNotFound) || errors.Is(err, registry.ErrOperationNotFound) {
+		// what is registered separates a missing definition from an empty definition id
+		var registered []string
+		if reg != nil {
+			registered = lo.Map(reg.Definitions(), func(d types.Definition, _ int) string {
+				return d.ID
+			})
+		}
+
+		logx.FromContext(ctx).Error().Err(err).Strs("registered_definition_ids", registered).Msg("operation no longer registered, stopping cycle")
+
+		return true
+	}
+
+	if errors.Is(err, ErrOperationDisabled) {
+		logx.FromContext(ctx).Info().Msg("operation disabled, stopping cycle")
+
+		return true
+	}
+
+	if unhealthy, ok := types.UnhealthyFrom(err); ok {
+		logx.FromContext(ctx).Error().Err(err).Str("reason", unhealthy.Reason).Msg("integration unhealthy, stopping cycle")
+
+		return true
+	}
+
+	return false
 }
