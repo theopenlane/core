@@ -8,6 +8,7 @@ import (
 	"encoding/pem"
 	"errors"
 	"fmt"
+	"maps"
 	"net/http"
 	"os"
 	"strings"
@@ -173,13 +174,6 @@ func WithTokenManager() ServerOption {
 			log.Panic().Err(err).Msg("Error creating token manager")
 		}
 
-		keys, err := tm.Keys()
-		if err != nil {
-			log.Panic().Err(err).Msg("Error getting keys from token manager")
-		}
-
-		// pass to the REST handlers
-		s.Config.Handler.JWTKeys = keys
 		s.Config.Handler.TokenManager = tm
 	})
 }
@@ -611,13 +605,49 @@ func WithSummarizer() ServerOption {
 	})
 }
 
-// WithKeyDirOption allows the key directory to be set via server config.
-func WithKeyDirOption() ServerOption {
+// WithKeyDirConfig loads the keys in the configured key directory into the token config
+// so the token manager can be built from them. It must run before WithTokenManager
+func WithKeyDirConfig() ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
-		if s.Config.Settings.Keywatcher.Enabled && s.Config.Settings.Keywatcher.KeyDir != "" {
-			WithKeyDir(s.Config.Settings.Keywatcher.KeyDir).apply(s)
-			WithKeyDirWatcher(s.Config.Settings.Keywatcher.KeyDir).apply(s)
+		if !s.Config.Settings.Keywatcher.Enabled || s.Config.Settings.Keywatcher.KeyDir == "" {
+			return
 		}
+
+		dir := s.Config.Settings.Keywatcher.KeyDir
+		s.configuredTokenKeys = maps.Clone(s.Config.Settings.Auth.Token.Keys)
+
+		conf, err := tokenConfigFromKeyDir(s.Config.Settings.Auth.Token, dir)
+		if err != nil {
+			log.Panic().Err(err).Str("dir", dir).Msg("unable to load signing keys from key directory")
+		}
+
+		s.Config.Settings.Auth.Token = conf
+	})
+}
+
+// WithKeyDirKeyWatcher starts the key directory watcher against the running token manager.
+// It must run after WithTokenManager, and after the redis client exists for the archive to
+// outlive a single pod
+func WithKeyDirKeyWatcher(rc *redis.Client) ServerOption {
+	return newApplyFunc(func(s *ServerOptions) {
+		if !s.Config.Settings.Keywatcher.Enabled || s.Config.Settings.Keywatcher.KeyDir == "" {
+			return
+		}
+
+		base := s.Config.Settings.Auth.Token
+
+		// scanned kids are re-derived from disk on every reload; carrying them in base
+		// would pin a stale kid to a path whose material has since rotated
+		base.Keys = s.configuredTokenKeys
+
+		// without redis the archive keeps nothing, leaving verification to depend on the
+		// keys currently on disk
+		archive := keyArchive(noopKeyArchive{})
+		if rc != nil {
+			archive = newRedisKeyArchive(rc, archiveRetentionFactor*signingMargin(base))
+		}
+
+		WithKeyDirWatcher(s.Config.Settings.Keywatcher.KeyDir, base, archive).apply(s)
 	})
 }
 

@@ -45,7 +45,14 @@ func registerJwksWellKnownHandler(router *Router) (err error) {
 		Middlewares: *publicEndpoint,
 		RateLimit:   publicStaticRateLimit,
 		Handler: func(ctx echo.Context) error {
-			return ctx.JSON(http.StatusOK, router.Handler.JWTKeys)
+			// read through the token manager rather than a snapshot so rotations are
+			// published without a restart
+			keys, err := router.Handler.TokenManager.Keys()
+			if err != nil {
+				return err
+			}
+
+			return ctx.JSON(http.StatusOK, keys)
 		},
 	}
 
