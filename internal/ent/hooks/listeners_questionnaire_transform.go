@@ -316,7 +316,7 @@ func handleEntityTransform(ctx context.Context, client *entgen.Client, req quest
 		return err
 	}
 
-	record, err := persistTransformPayload(ctx, client, req, entityops.SchemaEntity.Name, mapped)
+	record, err := persistTransformPayload(ctx, client, entityops.SchemaEntity.Name, mapped)
 	if err != nil {
 		return err
 	}
@@ -577,7 +577,7 @@ func buildMappedTransformPayload(schemaName string, values map[string]any, req q
 	return mapped, nil
 }
 
-func persistTransformPayload(ctx context.Context, client *entgen.Client, req questionnaireTransformRequest, schema string, mapped mappedTransform) (*entgen.Entity, error) {
+func persistTransformPayload(ctx context.Context, client *entgen.Client, schema string, mapped mappedTransform) (*entgen.Entity, error) {
 	payload, err := json.Marshal(mapped.Payload)
 	if err != nil {
 		return nil, fmt.Errorf("marshal transformed input: %w", err)

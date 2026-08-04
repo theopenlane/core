@@ -6,9 +6,9 @@ import (
 
 	"entgo.io/ent"
 
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/ent/eventqueue"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/mutations"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/gala"
@@ -25,6 +25,8 @@ func EmitGalaEventHook(galaProviders ...func() *gala.Gala) ent.Hook {
 			}
 
 			ctx = workflows.WithSkipEventEmission(ctx)
+
+			oldValues := snapshotOldValues(ctx, mutation, galaProviders)
 
 			retVal, err := next.Mutate(ctx, mutation)
 			if err != nil {
@@ -84,7 +86,7 @@ func EmitGalaEventHook(galaProviders ...func() *gala.Gala) ent.Hook {
 					return
 				}
 
-				payload := newMutationPayloadForDispatch(mutation, op, eventID.ID)
+				payload := newMutationPayloadForDispatch(mutation, op, eventID.ID, oldValues)
 				metadata := eventqueue.NewMutationGalaMetadata(eventID.ID, payload)
 
 				for _, target := range targets {
@@ -244,7 +246,7 @@ func mutationDispatchTargets(runtimes []*gala.Gala, topics []gala.TopicName, ope
 }
 
 // newMutationPayloadForDispatch builds shared mutation payload metadata for asynchronous dispatch hooks.
-func newMutationPayloadForDispatch(mutation ent.Mutation, operation, entityID string) eventqueue.MutationGalaPayload {
+func newMutationPayloadForDispatch(mutation ent.Mutation, operation, entityID string, oldValues map[string]any) eventqueue.MutationGalaPayload {
 	changedFields, clearedFields := mutations.ChangedAndClearedFields(mutation)
 	changedEdges, addedIDs, removedIDs := extractChangedEdges(mutation)
 	proposedChanges := mutations.BuildProposedChanges(mutation, changedFields)
@@ -259,5 +261,30 @@ func newMutationPayloadForDispatch(mutation ent.Mutation, operation, entityID st
 		AddedIDs:        addedIDs,
 		RemovedIDs:      removedIDs,
 		ProposedChanges: proposedChanges,
+		OldValues:       oldValues,
 	}
+}
+
+// snapshotOldValues captures pre-update field values before the mutation applies, while the
+// database still holds the prior row. Capture is limited to single-row updates whose topics
+// have at least one interested gala listener, so unobserved mutations cost nothing; ent
+// caches the loaded old row on the mutation, so hooks that already called OldField share it
+func snapshotOldValues(ctx context.Context, mutation ent.Mutation, galaProviders []func() *gala.Gala) map[string]any {
+	source, ok := mutation.(mutations.OldValueSource)
+	if !ok || !mutation.Op().Is(ent.OpUpdateOne) {
+		return nil
+	}
+
+	runtimes := resolveGalaRuntimes(galaProviders)
+	if len(runtimes) == 0 {
+		return nil
+	}
+
+	if len(mutationDispatchTargets(runtimes, mutationDispatchTopics(mutation.Type()), mutation.Op().String())) == 0 {
+		return nil
+	}
+
+	changedFields, _ := mutations.ChangedAndClearedFields(mutation)
+
+	return mutations.BuildOldValues(ctx, source, changedFields)
 }

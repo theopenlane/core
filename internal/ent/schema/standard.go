@@ -197,6 +197,7 @@ func (Standard) Hooks() []ent.Hook {
 func (Standard) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.FileCategory(SchemaStandard),
+		entx.ConsoleRoute(),
 	}
 }
 

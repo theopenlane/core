@@ -90,6 +90,41 @@ func MutationStringValue(payload MutationGalaPayload, field string) (string, boo
 	return value, true
 }
 
+// MutationOldValue returns the pre-mutation value for a field on single-row updates
+func MutationOldValue(payload MutationGalaPayload, field string) (any, bool) {
+	field = strings.TrimSpace(field)
+	if field == "" || payload.OldValues == nil {
+		return nil, false
+	}
+
+	value, ok := payload.OldValues[field]
+	if !ok {
+		return nil, false
+	}
+
+	return value, true
+}
+
+// MutationOldStringValue returns the pre-mutation string value for a field on single-row updates
+func MutationOldStringValue(payload MutationGalaPayload, field string) (string, bool) {
+	raw, ok := MutationOldValue(payload, field)
+	if !ok {
+		return "", false
+	}
+
+	value, ok := ValueAsString(raw)
+	if !ok {
+		return "", false
+	}
+
+	value = strings.TrimSpace(value)
+	if value == "" {
+		return "", false
+	}
+
+	return value, true
+}
+
 // MutationStringSliceValue returns a proposed string-slice mutation value for a field
 func MutationStringSliceValue(payload MutationGalaPayload, field string) []string {
 	raw, ok := MutationValue(payload, field)

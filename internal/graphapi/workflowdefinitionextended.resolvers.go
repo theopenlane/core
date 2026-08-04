@@ -8,8 +8,8 @@ package graphapi
 import (
 	"context"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/entityops"
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/internal/workflows/resolvers"
 )

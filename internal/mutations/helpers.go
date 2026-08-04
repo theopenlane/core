@@ -1,6 +1,7 @@
 package mutations
 
 import (
+	"context"
 	"strings"
 
 	"entgo.io/ent"
@@ -21,22 +22,60 @@ type ChangeSet struct {
 	RemovedIDs map[string][]string
 	// ProposedChanges captures field-level proposed values
 	ProposedChanges map[string]any
+	// OldValues captures pre-mutation values for changed fields on update operations
+	OldValues map[string]any
 }
 
 // NewChangeSet builds a cloned change set from raw change payload values
-func NewChangeSet(changedFields, changedEdges []string, addedIDs, removedIDs map[string][]string, proposedChanges map[string]any) ChangeSet {
+func NewChangeSet(changedFields, changedEdges []string, addedIDs, removedIDs map[string][]string, proposedChanges, oldValues map[string]any) ChangeSet {
 	return ChangeSet{
 		ChangedFields:   append([]string(nil), changedFields...),
 		ChangedEdges:    append([]string(nil), changedEdges...),
 		AddedIDs:        mapx.CloneMapStringSlice(addedIDs),
 		RemovedIDs:      mapx.CloneMapStringSlice(removedIDs),
 		ProposedChanges: mapx.DeepCloneMapAny(proposedChanges),
+		OldValues:       mapx.DeepCloneMapAny(oldValues),
 	}
 }
 
 // Clone returns a copy of the change set and its map-backed values
 func (set ChangeSet) Clone() ChangeSet {
-	return NewChangeSet(set.ChangedFields, set.ChangedEdges, set.AddedIDs, set.RemovedIDs, set.ProposedChanges)
+	return NewChangeSet(set.ChangedFields, set.ChangedEdges, set.AddedIDs, set.RemovedIDs, set.ProposedChanges, set.OldValues)
+}
+
+// OldValueSource captures the mutation accessors needed to snapshot pre-update field values
+type OldValueSource interface {
+	Op() ent.Op
+	OldField(ctx context.Context, name string) (ent.Value, error)
+}
+
+// BuildOldValues snapshots pre-mutation values for the given fields; it must be called
+// before the mutation applies, while the database still holds the prior row. Only
+// single-row updates carry old values — ent cannot resolve OldField for creates or
+// bulk updates — and fields that fail to resolve are skipped
+func BuildOldValues(ctx context.Context, source OldValueSource, fields []string) map[string]any {
+	if source == nil || !source.Op().Is(ent.OpUpdateOne) || len(fields) == 0 {
+		return nil
+	}
+
+	oldValues := make(map[string]any, len(fields))
+
+	for _, field := range fields {
+		field = strings.TrimSpace(field)
+		if field == "" {
+			continue
+		}
+
+		if value, err := source.OldField(ctx, field); err == nil {
+			oldValues[field] = value
+		}
+	}
+
+	if len(oldValues) == 0 {
+		return nil
+	}
+
+	return oldValues
 }
 
 // FieldChangeSource captures the mutation accessors needed to derive changed and cleared field lists

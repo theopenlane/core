@@ -23,16 +23,21 @@ func TestTriggerChangeSet(t *testing.T) {
 		TriggerProposedChanges: map[string]any{
 			"status": "approved",
 		},
+		TriggerOldValues: map[string]any{
+			"status": "draft",
+		},
 	}
 
 	changeSet := TriggerChangeSet(contextData)
 	changeSet.ChangedFields[0] = "mutated"
 	changeSet.AddedIDs["controls"][0] = "mutated"
 	changeSet.ProposedChanges["status"] = "mutated"
+	changeSet.OldValues["status"] = "mutated"
 
 	require.Equal(t, "status", contextData.TriggerChangedFields[0])
 	require.Equal(t, "one", contextData.TriggerAddedIDs["controls"][0])
 	require.Equal(t, "approved", contextData.TriggerProposedChanges["status"])
+	require.Equal(t, "draft", contextData.TriggerOldValues["status"])
 }
 
 // TestSetTriggerChangeSet verifies applying a change-set updates trigger context fields
@@ -49,6 +54,9 @@ func TestSetTriggerChangeSet(t *testing.T) {
 		ProposedChanges: map[string]any{
 			"status": "approved",
 		},
+		OldValues: map[string]any{
+			"status": "draft",
+		},
 	}
 
 	var contextData models.WorkflowInstanceContext
@@ -59,4 +67,5 @@ func TestSetTriggerChangeSet(t *testing.T) {
 	require.Equal(t, changeSet.AddedIDs, contextData.TriggerAddedIDs)
 	require.Equal(t, changeSet.RemovedIDs, contextData.TriggerRemovedIDs)
 	require.Equal(t, changeSet.ProposedChanges, contextData.TriggerProposedChanges)
+	require.Equal(t, changeSet.OldValues, contextData.TriggerOldValues)
 }

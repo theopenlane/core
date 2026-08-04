@@ -447,6 +447,8 @@ func (r Risk) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
 		entx.NewExportable(),
+		entx.ConsoleRoute(entx.WithConsoleBase("exposure/risks")),
+		entx.Mentionable(),
 		oscalgen.NewOSCALModel(
 			oscalgen.WithOSCALModels(oscalgen.OSCALModelPOAM, oscalgen.OSCALModelSSP),
 			oscalgen.WithOSCALAssembly("risk"),

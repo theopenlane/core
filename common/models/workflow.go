@@ -124,6 +124,8 @@ type WorkflowInstanceContext struct {
 	TriggerUserID string `json:"triggerUserId,omitempty"`
 	// TriggerProposedChanges contains normalized proposed field values from the triggering mutation
 	TriggerProposedChanges map[string]any `json:"triggerProposedChanges,omitempty"`
+	// TriggerOldValues contains pre-mutation values for changed fields from the triggering mutation
+	TriggerOldValues map[string]any `json:"triggerOldValues,omitempty"`
 	// ParallelApprovalKeys tracks approval action keys that can execute concurrently
 	ParallelApprovalKeys []string `json:"parallelApprovalKeys,omitempty"`
 	// ExecutedNotifications tracks conditional notification action keys that have already fired

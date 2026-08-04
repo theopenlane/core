@@ -7,7 +7,7 @@ import (
 
 // TriggerChangeSet returns the trigger mutation change-set carried by workflow instance context
 func TriggerChangeSet(ctx models.WorkflowInstanceContext) mutations.ChangeSet {
-	return mutations.NewChangeSet(ctx.TriggerChangedFields, ctx.TriggerChangedEdges, ctx.TriggerAddedIDs, ctx.TriggerRemovedIDs, ctx.TriggerProposedChanges)
+	return mutations.NewChangeSet(ctx.TriggerChangedFields, ctx.TriggerChangedEdges, ctx.TriggerAddedIDs, ctx.TriggerRemovedIDs, ctx.TriggerProposedChanges, ctx.TriggerOldValues)
 }
 
 // SetTriggerChangeSet applies a mutation change-set to workflow instance trigger context fields
@@ -22,4 +22,5 @@ func SetTriggerChangeSet(ctx *models.WorkflowInstanceContext, changeSet mutation
 	ctx.TriggerAddedIDs = cloned.AddedIDs
 	ctx.TriggerRemovedIDs = cloned.RemovedIDs
 	ctx.TriggerProposedChanges = cloned.ProposedChanges
+	ctx.TriggerOldValues = cloned.OldValues
 }

@@ -50,13 +50,7 @@ func handleStandardMutation(ctx gala.HandlerContext, payload eventqueue.Mutation
 		return ErrFailedToGetClient
 	}
 
-	props := ctx.Envelope.Headers.Properties
-
-	standardID, ok := eventqueue.MutationEntityID(payload, props)
-	if !ok {
-		return ErrEntityIDNotFound
-	}
-
+	standardID := payload.EntityID
 	allowCtx := ctx.Context
 
 	std, err := client.Standard.Get(allowCtx, standardID)

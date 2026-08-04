@@ -176,6 +176,8 @@ func (p Procedure) Annotations() []schema.Annotation {
 		entx.FileCategory(SchemaProcedure),
 		entfga.SelfAccessChecks(),
 		entx.NewExportable(),
+		entx.ConsoleRoute(entx.WithConsoleSuffix("view")),
+		entx.Mentionable(),
 	}
 }
 
