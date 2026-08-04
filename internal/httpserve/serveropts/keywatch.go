@@ -1,59 +1,79 @@
 package serveropts
 
 import (
+	"context"
 	"os"
-	"sync"
 	"time"
 
 	"github.com/fsnotify/fsnotify"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/iam/tokens"
+
+	"github.com/theopenlane/core/pkg/logx"
 )
 
-// WithKeyDirWatcher watches dir for changes to PEM files and reloads the
-// TokenManager when keys are added or removed.
-func WithKeyDirWatcher(dir string) ServerOption {
+const (
+	// keyReloadDebounce coalesces the burst of events a projected volume swap produces
+	keyReloadDebounce = time.Second
+
+	// keyReloadInterval re-evaluates key selection even when no event arrives, since
+	// fsnotify on a projected volume watches a symlink swap rather than the key files
+	keyReloadInterval = time.Hour
+
+	// keyReloadRetry is the initial delay before retrying a failed reload, so a transient
+	// archive outage does not leave the manager without retired keys until the next event
+	keyReloadRetry = 5 * time.Second
+
+	// keyReloadMaxRetry caps the backoff between retries of a persistently failing reload
+	keyReloadMaxRetry = 5 * time.Minute
+)
+
+// WithKeyDirWatcher watches dir and applies key changes to the existing TokenManager.
+// The manager is mutated rather than replaced so consumers holding the pointer, notably
+// the ent client, keep signing and verifying with current keys
+func WithKeyDirWatcher(dir string, base tokens.Config, archive keyArchive) ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
-		var mu sync.Mutex
+		configured, err := configuredVerificationKeys(base.Keys)
+		if err != nil {
+			log.Panic().Err(err).Msg("unable to load configured verification keys")
+		}
 
-		reload := func() {
-			mu.Lock()
-			defer mu.Unlock()
+		reload := func() bool {
+			ctx := context.Background()
 
-			// use the error-returning loader so a transient failure (e.g. the key
-			// directory being removed) logs and skips the reload instead of
-			// panicking the whole process from this long-lived goroutine
-			if err := loadKeyDir(s, dir); err != nil {
-				log.Error().Err(err).Msg("unable to reload key directory")
-
-				return
-			}
-
-			tm, err := tokens.New(s.Config.Settings.Auth.Token)
+			keySet, healthy, err := keySetFromKeyDir(ctx, base, dir, configured, archive)
 			if err != nil {
-				log.Error().Err(err).Msg("unable to reload token manager")
+				logx.FromContext(ctx).Error().Err(err).Str("dir", dir).Msg("unable to reload signing keys from key directory")
 
-				return
+				return false
 			}
 
-			keys, err := tm.Keys()
-			if err != nil {
-				log.Error().Err(err).Msg("unable to reload jwt keys")
+			previous := s.Config.Handler.TokenManager.CurrentKeyID()
 
-				return
+			if err := s.Config.Handler.TokenManager.SetKeySet(keySet); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("dir", dir).Msg("unable to apply signing keys to token manager")
+
+				return false
 			}
 
-			s.Config.Handler.JWTKeys = keys
+			if !healthy {
+				logx.FromContext(ctx).Warn().Str("kid", keySet.KID).Msg("no signing key has enough certificate headroom; signing with the longest lived key available")
+			}
 
-			s.Config.Handler.TokenManager = tm
+			if keySet.KID != previous {
+				logx.FromContext(ctx).Info().Str("kid", keySet.KID).Str("previous", previous).Msg("signing key changed")
+			}
+
+			return true
 		}
 
 		if _, err := os.Stat(dir); err != nil {
 			log.Error().Str("dir", dir).Err(err).Msg("key directory not found")
+
 			return
 		}
 
-		reload()
+		loaded := reload()
 
 		watcher, err := fsnotify.NewWatcher()
 		if err != nil {
@@ -71,7 +91,17 @@ func WithKeyDirWatcher(dir string) ServerOption {
 		go func() {
 			defer watcher.Close()
 
-			debounce := time.NewTimer(time.Second)
+			// one timer drives everything: debounce after events, backoff after a failed
+			// reload, and the periodic re-evaluation after a successful one
+			delay := keyReloadInterval
+			if !loaded {
+				delay = keyReloadRetry
+			}
+
+			timer := time.NewTimer(delay)
+			defer timer.Stop()
+
+			retry := keyReloadRetry
 
 			for {
 				select {
@@ -81,15 +111,18 @@ func WithKeyDirWatcher(dir string) ServerOption {
 					}
 
 					if event.Has(fsnotify.Create | fsnotify.Write | fsnotify.Remove | fsnotify.Rename) {
-						if !debounce.Stop() {
-							<-debounce.C
-						}
-
-						debounce.Reset(time.Second)
+						timer.Reset(keyReloadDebounce)
 					}
-				case <-debounce.C:
-					reload()
-					debounce.Reset(time.Second)
+				case <-timer.C:
+					if reload() {
+						retry = keyReloadRetry
+						timer.Reset(keyReloadInterval)
+
+						continue
+					}
+
+					timer.Reset(retry)
+					retry = min(retry*2, keyReloadMaxRetry) //nolint:mnd
 				case err, ok := <-watcher.Errors:
 					if !ok {
 						return

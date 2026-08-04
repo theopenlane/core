@@ -33,7 +33,7 @@ func TestValidateConfiguredStorageProvidersDevModeDisk(t *testing.T) {
 		},
 	}
 
-	errs := ValidateAvailabilityByProvider(context.Background(), cfg)
+	errs := ValidateAvailabilityByProvider(context.Background(), cfg, true)
 	assert.Empty(t, errs)
 
 	// devMode uses the defaultDevStorageBucket - so even if Disk provider is created, this is the directory we want to ensure exists
@@ -54,7 +54,7 @@ func TestValidateAvailabilityByProviderDevMode(t *testing.T) {
 		},
 	}
 
-	errs := ValidateAvailabilityByProvider(context.Background(), cfg)
+	errs := ValidateAvailabilityByProvider(context.Background(), cfg, true)
 	assert.Empty(t, errs)
 }
 
@@ -75,26 +75,26 @@ func TestValidateAvailabilityByProviderDisk(t *testing.T) {
 		},
 	}
 
-	errs := ValidateAvailabilityByProvider(context.Background(), cfg)
+	errs := ValidateAvailabilityByProvider(context.Background(), cfg, true)
 	assert.Empty(t, errs)
 }
 
 func TestValidateBuckets(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		provider := &stubProvider{buckets: []string{"primary"}}
-		assert.NoError(t, validateBuckets("disk", provider, "primary"))
+		assert.NoError(t, validateBuckets(context.Background(), "disk", provider, "primary", true))
 	})
 
 	t.Run("missing bucket", func(t *testing.T) {
 		provider := &stubProvider{buckets: []string{"secondary"}}
-		err := validateBuckets("disk", provider, "primary")
+		err := validateBuckets(context.Background(), "disk", provider, "primary", false)
 		assert.Error(t, err)
 		assert.ErrorIs(t, err, ErrBucketNotFound)
 	})
 
 	t.Run("list error", func(t *testing.T) {
 		provider := &stubProvider{listErr: errors.New("boom")}
-		err := validateBuckets("disk", provider, "")
+		err := validateBuckets(context.Background(), "disk", provider, "", false)
 		assert.Error(t, err)
 	})
 }
@@ -115,6 +115,18 @@ func TestStorageAvailabilityCheck(t *testing.T) {
 	})
 
 	assert.NoError(t, check(context.Background()))
+}
+
+func TestStorageAvailabilityCheckCachesResult(t *testing.T) {
+	calls := 0
+	check := StorageAvailabilityCheck(func() storage.ProviderConfig {
+		calls++
+		return storage.ProviderConfig{Enabled: false}
+	})
+
+	assert.NoError(t, check(context.Background()))
+	assert.NoError(t, check(context.Background()))
+	assert.Equal(t, 1, calls, "second check within StorageCheckCacheTTL should return the cached result")
 }
 
 type stubProvider struct {
