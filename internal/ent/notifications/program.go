@@ -18,8 +18,7 @@ import (
 )
 
 func handleProgramMutation(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	props := ctx.Envelope.Headers.Properties
-	if !isProgramReady(payload, props) {
+	if !isProgramReady(payload) {
 		return nil
 	}
 
@@ -28,22 +27,9 @@ func handleProgramMutation(ctx gala.HandlerContext, payload eventqueue.MutationG
 		return ErrFailedToGetClient
 	}
 
-	if client == nil {
-		return ErrFailedToGetClient
-	}
-
-	programID, ok := eventqueue.MutationEntityID(payload, props)
-	if !ok {
-		return ErrEntityIDNotFound
-	}
-
-	if programID == "" {
-		return ErrEntityIDNotFound
-	}
-
-	if err := addNotificationForAuditor(ctx.Context, client, programID); err != nil {
+	if err := addNotificationForAuditor(ctx.Context, client, payload.EntityID); err != nil {
 		logx.FromContext(ctx.Context).Error().Err(err).
-			Str("program_id", programID).
+			Str("program_id", payload.EntityID).
 			Msg("failed to send program ready for auditor notification")
 		return err
 	}
@@ -150,18 +136,9 @@ func getOrgAuditorUserIDs(ctx context.Context, client *generated.Client, orgID s
 	return userIDs, nil
 }
 
-func isProgramReady(payload eventqueue.MutationGalaPayload, props map[string]string) bool {
-	status, ok := eventqueue.MutationValue(payload, program.FieldStatus)
-	if !ok {
-		if value := eventqueue.MutationStringFromProperties(props, program.FieldStatus); value != "" {
-			status = value
-			ok = true
-		}
-	}
-
-	if ok {
-		status, ok := eventqueue.ParseEnum(status, enums.ToProgramStatus, enums.ProgramStatusInvalid)
-		if ok && status == enums.ProgramStatusReadyForAuditor {
+func isProgramReady(payload eventqueue.MutationGalaPayload) bool {
+	if raw, ok := eventqueue.MutationValue(payload, program.FieldStatus); ok {
+		if status, ok := eventqueue.ParseEnum(raw, enums.ToProgramStatus, enums.ProgramStatusInvalid); ok && status == enums.ProgramStatusReadyForAuditor {
 			return true
 		}
 	}

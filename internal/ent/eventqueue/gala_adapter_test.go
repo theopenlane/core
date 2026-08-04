@@ -40,16 +40,21 @@ func TestMutationGalaPayloadChangeSetRoundTrip(t *testing.T) {
 		ProposedChanges: map[string]any{
 			"status": "approved",
 		},
+		OldValues: map[string]any{
+			"status": "draft",
+		},
 	}
 
 	changeSet := payload.ChangeSet()
 	changeSet.ChangedFields[0] = "mutated"
 	changeSet.AddedIDs["controls"][0] = "mutated"
 	changeSet.ProposedChanges["status"] = "mutated"
+	changeSet.OldValues["status"] = "mutated"
 
 	assert.Equal(t, "status", payload.ChangedFields[0])
 	assert.Equal(t, "one", payload.AddedIDs["controls"][0])
 	assert.Equal(t, "approved", payload.ProposedChanges["status"])
+	assert.Equal(t, "draft", payload.OldValues["status"])
 
 	var roundTrip MutationGalaPayload
 	roundTrip.SetChangeSet(payload.ChangeSet())
@@ -58,4 +63,5 @@ func TestMutationGalaPayloadChangeSetRoundTrip(t *testing.T) {
 	assert.Equal(t, payload.AddedIDs, roundTrip.AddedIDs)
 	assert.Equal(t, payload.RemovedIDs, roundTrip.RemovedIDs)
 	assert.Equal(t, payload.ProposedChanges, roundTrip.ProposedChanges)
+	assert.Equal(t, payload.OldValues, roundTrip.OldValues)
 }

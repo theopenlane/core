@@ -28,11 +28,13 @@ type MutationGalaPayload struct {
 	RemovedIDs map[string][]string `json:"removed_ids,omitempty"`
 	// ProposedChanges captures field-level proposed values
 	ProposedChanges map[string]any `json:"proposed_changes,omitempty"`
+	// OldValues captures pre-mutation values for changed fields on single-row updates
+	OldValues map[string]any `json:"old_values,omitempty"`
 }
 
 // ChangeSet returns the payload mutation deltas as a shared change-set contract
 func (payload MutationGalaPayload) ChangeSet() mutations.ChangeSet {
-	return mutations.NewChangeSet(payload.ChangedFields, payload.ChangedEdges, payload.AddedIDs, payload.RemovedIDs, payload.ProposedChanges)
+	return mutations.NewChangeSet(payload.ChangedFields, payload.ChangedEdges, payload.AddedIDs, payload.RemovedIDs, payload.ProposedChanges, payload.OldValues)
 }
 
 // SetChangeSet applies a shared change-set contract onto this payload
@@ -47,6 +49,7 @@ func (payload *MutationGalaPayload) SetChangeSet(changeSet mutations.ChangeSet) 
 	payload.AddedIDs = cloned.AddedIDs
 	payload.RemovedIDs = cloned.RemovedIDs
 	payload.ProposedChanges = cloned.ProposedChanges
+	payload.OldValues = cloned.OldValues
 }
 
 // MutationGalaMetadata captures envelope metadata for Gala mutation dispatch

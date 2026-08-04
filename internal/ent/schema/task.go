@@ -384,6 +384,8 @@ func (Task) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
 		entx.NewExportable(),
+		entx.ConsoleRoute(entx.WithConsoleBase("automation/tasks"), entx.WithConsoleIDParam("id")),
+		entx.Mentionable(),
 		oscalgen.NewOSCALModel(
 			oscalgen.WithOSCALModels(oscalgen.OSCALModelSSP, oscalgen.OSCALModelPOAM),
 			oscalgen.WithOSCALAssembly("poam-item"),

@@ -7,202 +7,52 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/theopenlane/iam/auth"
-
-	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/eventqueue"
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/export"
-	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/iam/auth"
 )
 
-func TestNeedsTaskDBQuery(t *testing.T) {
-	tests := []struct {
-		name     string
-		fields   *taskFields
-		expected bool
-	}{
-		{name: "all fields empty", fields: &taskFields{}, expected: true},
-		{
-			name: "missing title",
-			fields: &taskFields{
-				entityID: "task-1",
-				ownerID:  "owner-1",
-			},
-			expected: true,
-		},
-		{
-			name: "missing entity ID",
-			fields: &taskFields{
-				title:   "Task",
-				ownerID: "owner-1",
-			},
-			expected: true,
-		},
-		{
-			name: "missing owner ID",
-			fields: &taskFields{
-				title:    "Task",
-				entityID: "task-1",
-			},
-			expected: true,
-		},
-		{
-			name: "all fields present",
-			fields: &taskFields{
-				title:    "Task",
-				entityID: "task-1",
-				ownerID:  "owner-1",
-			},
-			expected: false,
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			assert.Equal(t, tt.expected, needsTaskDBQuery(tt.fields))
-		})
-	}
-}
-
-func TestNeedsDocumentDBQuery(t *testing.T) {
-	tests := []struct {
-		name     string
-		fields   *documentFields
-		expected bool
-	}{
-		{name: "all fields empty", fields: &documentFields{}, expected: true},
-		{
-			name: "missing name",
-			fields: &documentFields{
-				entityID:   "policy-1",
-				ownerID:    "owner-1",
-				approverID: "approver-1",
-			},
-			expected: true,
-		},
-		{
-			name: "missing approver ID",
-			fields: &documentFields{
-				name:     "Policy",
-				entityID: "policy-1",
-				ownerID:  "owner-1",
-			},
-			expected: true,
-		},
-		{
-			name: "all fields present",
-			fields: &documentFields{
-				name:       "Policy",
-				entityID:   "policy-1",
-				ownerID:    "owner-1",
-				approverID: "approver-1",
-			},
-			expected: false,
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			assert.Equal(t, tt.expected, needsDocumentDBQuery(tt.fields))
-		})
-	}
-}
-
-func TestExtractTaskFromPayloadAndProps(t *testing.T) {
-	fields := &taskFields{}
+func TestExtractMentionDetails(t *testing.T) {
 	payload := eventqueue.MutationGalaPayload{
-		EntityID: "task-1",
+		MutationType: generated.TypeTask,
+		Operation:    ent.OpUpdateOne.String(),
+		EntityID:     "task-1",
 		ProposedChanges: map[string]any{
 			task.FieldTitle:   "Task One",
+			task.FieldDetails: "details text",
 			task.FieldOwnerID: "owner-1",
 		},
-	}
-
-	extractTaskFromPayload(payload, fields)
-	assert.Equal(t, "task-1", fields.entityID)
-	assert.Equal(t, "Task One", fields.title)
-	assert.Equal(t, "owner-1", fields.ownerID)
-
-	props := map[string]string{
-		task.FieldTitle:   "Task From Props",
-		task.FieldID:      "task-prop",
-		task.FieldOwnerID: "owner-prop",
-	}
-	extractTaskFromProps(props, fields)
-	assert.Equal(t, "task-1", fields.entityID)
-	assert.Equal(t, "Task One", fields.title)
-	assert.Equal(t, "owner-1", fields.ownerID)
-}
-
-func TestExtractDocumentFromPayloadAndProps(t *testing.T) {
-	fields := &documentFields{}
-	payload := eventqueue.MutationGalaPayload{
-		EntityID: "policy-1",
-		ProposedChanges: map[string]any{
-			internalpolicy.FieldName:       "Policy One",
-			internalpolicy.FieldOwnerID:    "owner-1",
-			internalpolicy.FieldApproverID: "approver-1",
+		OldValues: map[string]any{
+			task.FieldDetails: "old details text",
 		},
 	}
 
-	extractDocumentFromPayload(payload, fields)
-	assert.Equal(t, "policy-1", fields.entityID)
-	assert.Equal(t, "Policy One", fields.name)
-	assert.Equal(t, "owner-1", fields.ownerID)
-	assert.Equal(t, "approver-1", fields.approverID)
+	details := extractMentionDetails(payload, task.FieldTitle, task.FieldDetails, task.FieldDetailsJSON, task.FieldOwnerID)
 
-	props := map[string]string{
-		internalpolicy.FieldName:       "Policy From Props",
-		internalpolicy.FieldID:         "policy-prop",
-		internalpolicy.FieldOwnerID:    "owner-prop",
-		internalpolicy.FieldApproverID: "approver-prop",
-	}
-	extractDocumentFromProps(props, fields)
-	assert.Equal(t, "policy-1", fields.entityID)
-	assert.Equal(t, "Policy One", fields.name)
-	assert.Equal(t, "owner-1", fields.ownerID)
-	assert.Equal(t, "approver-1", fields.approverID)
+	assert.Equal(t, "task-1", details.objectID)
+	assert.Equal(t, generated.TypeTask, details.objectType)
+	assert.Equal(t, "Task One", details.objectName)
+	assert.Equal(t, "details text", details.newDetails)
+	assert.Equal(t, "old details text", details.oldDetails)
+	assert.Equal(t, "owner-1", details.ownerID)
+	assert.Empty(t, details.newDetailsJSON)
+	assert.Empty(t, details.oldDetailsJSON)
 }
 
-func TestExtractExportFromPayloadAndProps(t *testing.T) {
-	fields := &exportFields{}
-	payload := eventqueue.MutationGalaPayload{
-		EntityID: "export-1",
-		ProposedChanges: map[string]any{
-			export.FieldOwnerID:      "owner-1",
-			export.FieldRequestorID:  "requestor-1",
-			export.FieldExportType:   enums.ExportTypeTask.String(),
-			export.FieldStatus:       enums.ExportStatusReady.String(),
-			export.FieldErrorMessage: "none",
-		},
-	}
+func TestNoteParent(t *testing.T) {
+	noteEntity := &generated.Note{ID: "note-1"}
+	parentType, parentID, parentName := noteParent(noteEntity)
+	assert.Equal(t, generated.TypeNote, parentType)
+	assert.Equal(t, "note-1", parentID)
+	assert.Equal(t, "Comment", parentName)
 
-	extractExportFromPayload(payload, fields)
-	assert.Equal(t, "export-1", fields.entityID)
-	assert.Equal(t, "owner-1", fields.ownerID)
-	assert.Equal(t, "requestor-1", fields.requestorID)
-	assert.Equal(t, enums.ExportTypeTask, fields.exportType)
-	assert.Equal(t, enums.ExportStatusReady, fields.status)
-	assert.Equal(t, "none", fields.errorMessage)
-
-	props := map[string]string{
-		export.FieldOwnerID:      "owner-prop",
-		export.FieldRequestorID:  "requestor-prop",
-		export.FieldExportType:   enums.ExportTypeRisk.String(),
-		export.FieldStatus:       enums.ExportStatusFailed.String(),
-		export.FieldErrorMessage: "error",
-		export.FieldID:           "export-prop",
-	}
-	extractExportFromProps(props, fields)
-	assert.Equal(t, "export-1", fields.entityID)
-	assert.Equal(t, "owner-1", fields.ownerID)
-	assert.Equal(t, "requestor-1", fields.requestorID)
-	assert.Equal(t, enums.ExportTypeTask, fields.exportType)
-	assert.Equal(t, enums.ExportStatusReady, fields.status)
-	assert.Equal(t, "none", fields.errorMessage)
+	noteEntity.Edges.Task = &generated.Task{ID: "task-1", Title: "Task One"}
+	parentType, parentID, parentName = noteParent(noteEntity)
+	assert.Equal(t, generated.TypeTask, parentType)
+	assert.Equal(t, "task-1", parentID)
+	assert.Equal(t, "Task One", parentName)
 }
 
 func TestIsExportNotificationAllowsSupportUser(t *testing.T) {
@@ -227,9 +77,4 @@ func TestRegisterGalaListeners(t *testing.T) {
 	assert.True(t, runtime.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeProgram), ent.OpUpdate.String()))
 	assert.True(t, runtime.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeProgram), ent.OpUpdateOne.String()))
 	assert.False(t, runtime.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeProgram), ent.OpCreate.String()))
-}
-
-func TestErrorConstants(t *testing.T) {
-	assert.Equal(t, "failed to get client from context", ErrFailedToGetClient.Error())
-	assert.Equal(t, "entity ID not found in payload metadata", ErrEntityIDNotFound.Error())
 }

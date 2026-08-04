@@ -214,5 +214,6 @@ func (TrustCenterNDARequest) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.FileCategory(SchemaTrustCenterNDARequest),
 		entfga.SelfAccessChecks(),
+		entx.ConsoleRoute(entx.WithConsoleBase("trust-center/NDAs")),
 	}
 }

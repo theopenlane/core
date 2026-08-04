@@ -79,6 +79,8 @@ type FieldDescriptor struct {
 	InputKey string `json:"inputKey,omitempty"`
 	// LookupKey reports whether the field is the ingest upsert lookup column for its schema
 	LookupKey bool `json:"lookupKey,omitempty"`
+	// DisplayKey reports whether the field is the schema's display-name source
+	DisplayKey bool `json:"displayKey,omitempty"`
 	// TaskRules are suggested-task rules declared on this field via entx.FieldTaskRule
 	TaskRules []TaskRuleDescriptor `json:"taskRules,omitempty"`
 }
