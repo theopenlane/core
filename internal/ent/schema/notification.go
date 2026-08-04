@@ -48,7 +48,7 @@ func (Notification) Fields() []ent.Field {
 			Comment("the user this notification is for").
 			Optional().
 			Immutable().
-			Annotations(entgql.Skip(entgql.SkipMutationUpdateInput)),
+			Annotations(entgql.Skip(entgql.SkipMutationCreateInput | entgql.SkipMutationUpdateInput)),
 
 		field.Enum("notification_type").
 			Comment("the type of notification - organization or user").
@@ -132,15 +132,6 @@ func (n Notification) Mixin() []ent.Mixin {
 // Edges of the Notification
 func (n Notification) Edges() []ent.Edge {
 	return []ent.Edge{
-		uniqueEdgeFrom(&edgeDefinition{
-			fromSchema: n,
-			edgeSchema: User{},
-			field:      "user_id",
-			immutable:  true,
-			annotations: []schema.Annotation{
-				entgql.Skip(entgql.SkipAll),
-			},
-		}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: n,
 			edgeSchema: NotificationTemplate{},

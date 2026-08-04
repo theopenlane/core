@@ -16,7 +16,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/pkg/logx"
@@ -30,7 +29,6 @@ type NotificationQuery struct {
 	inters                   []Interceptor
 	predicates               []predicate.Notification
 	withOwner                *OrganizationQuery
-	withUser                 *UserQuery
 	withNotificationTemplate *NotificationTemplateQuery
 	loadTotal                []func(context.Context, []*Notification) error
 	modifiers                []func(*sql.Selector)
@@ -88,31 +86,6 @@ func (_q *NotificationQuery) QueryOwner() *OrganizationQuery {
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.Notification
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryUser chains the current query on the "user" edge.
-func (_q *NotificationQuery) QueryUser() *UserQuery {
-	query := (&UserClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(notification.Table, notification.FieldID, selector),
-			sqlgraph.To(user.Table, user.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, notification.UserTable, notification.UserColumn),
-		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.User
 		step.Edge.Schema = schemaConfig.Notification
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -338,7 +311,6 @@ func (_q *NotificationQuery) Clone() *NotificationQuery {
 		inters:                   append([]Interceptor{}, _q.inters...),
 		predicates:               append([]predicate.Notification{}, _q.predicates...),
 		withOwner:                _q.withOwner.Clone(),
-		withUser:                 _q.withUser.Clone(),
 		withNotificationTemplate: _q.withNotificationTemplate.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
@@ -355,17 +327,6 @@ func (_q *NotificationQuery) WithOwner(opts ...func(*OrganizationQuery)) *Notifi
 		opt(query)
 	}
 	_q.withOwner = query
-	return _q
-}
-
-// WithUser tells the query-builder to eager-load the nodes that are connected to
-// the "user" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *NotificationQuery) WithUser(opts ...func(*UserQuery)) *NotificationQuery {
-	query := (&UserClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withUser = query
 	return _q
 }
 
@@ -464,9 +425,8 @@ func (_q *NotificationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Notification{}
 		_spec       = _q.querySpec()
-		loadedTypes = [3]bool{
+		loadedTypes = [2]bool{
 			_q.withOwner != nil,
-			_q.withUser != nil,
 			_q.withNotificationTemplate != nil,
 		}
 	)
@@ -496,12 +456,6 @@ func (_q *NotificationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	if query := _q.withOwner; query != nil {
 		if err := _q.loadOwner(ctx, query, nodes, nil,
 			func(n *Notification, e *Organization) { n.Edges.Owner = e }); err != nil {
-			return nil, err
-		}
-	}
-	if query := _q.withUser; query != nil {
-		if err := _q.loadUser(ctx, query, nodes, nil,
-			func(n *Notification, e *User) { n.Edges.User = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -541,35 +495,6 @@ func (_q *NotificationQuery) loadOwner(ctx context.Context, query *OrganizationQ
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "owner_id" returned %v`, n.ID)
-		}
-		for i := range nodes {
-			assign(nodes[i], n)
-		}
-	}
-	return nil
-}
-func (_q *NotificationQuery) loadUser(ctx context.Context, query *UserQuery, nodes []*Notification, init func(*Notification), assign func(*Notification, *User)) error {
-	ids := make([]string, 0, len(nodes))
-	nodeids := make(map[string][]*Notification)
-	for i := range nodes {
-		fk := nodes[i].UserID
-		if _, ok := nodeids[fk]; !ok {
-			ids = append(ids, fk)
-		}
-		nodeids[fk] = append(nodeids[fk], nodes[i])
-	}
-	if len(ids) == 0 {
-		return nil
-	}
-	query.Where(user.IDIn(ids...))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nodeids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "user_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -639,9 +564,6 @@ func (_q *NotificationQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(notification.FieldOwnerID)
-		}
-		if _q.withUser != nil {
-			_spec.Node.AddColumnOnce(notification.FieldUserID)
 		}
 		if _q.withNotificationTemplate != nil {
 			_spec.Node.AddColumnOnce(notification.FieldTemplateID)

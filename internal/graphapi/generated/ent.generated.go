@@ -110680,14 +110680,14 @@ func (ec *executionContext) _Notification_userID(ctx context.Context, field grap
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
-			return ec.marshalOID2string(ctx, selections, v)
+			return ec.marshalOString2string(ctx, selections, v)
 		},
 		true,
 		false,
 	)
 }
 func (ec *executionContext) fieldContext_Notification_userID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("Notification", field, false, false, errors.New("field of type ID does not have child fields"))
+	return graphql.NewScalarFieldContext("Notification", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _Notification_notificationType(ctx context.Context, field graphql.CollectedField, obj *generated.Notification) (ret graphql.Marshaler) {
