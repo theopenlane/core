@@ -20783,7 +20783,12 @@ directive @externalReadOnly(source: ControlControlSource) on INPUT_FIELD_DEFINIT
 Indicates that this field cannot be set on the input, and comes from an external source
 This does not prevent the viewing of the field
 """
-directive @externalSource(source: ControlControlSource) on OBJECT | FIELD_DEFINITION`, BuiltIn: false},
+directive @externalSource(source: ControlControlSource) on OBJECT | FIELD_DEFINITION
+"""
+Indicates the modules an organization must have enabled to access this object,
+at least one of the listed modules is required
+"""
+directive @modules(names: [String!]!) on OBJECT`, BuiltIn: false},
 	{Name: "../schema/common/scalars.graphql", Input: `"""
 The ` + "`" + `Upload` + "`" + ` scalar type represents a file upload.
 This scalar is typically used to handle file uploads in GraphQL mutations.

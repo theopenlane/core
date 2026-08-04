@@ -227,7 +227,14 @@ func getEntGqlExtension() *entgql.Extension {
 
 	schemaHooks = append(schemaHooks, xExt.GQLSchemaHooks()...)
 
-	dExt, err := directives.NewExtension()
+	// the modules are parsed from the schema files on each run rather than read from the
+	// generated feature map, which is compiled into this binary and would be a run behind
+	modules, err := genfeatures.ParseSchemaModules(schemaPath)
+	if err != nil {
+		log.Fatal().Err(err).Msg("parsing schema modules")
+	}
+
+	dExt, err := directives.NewExtension(directives.WithModules(modules))
 	if err != nil {
 		log.Fatal().Err(err).Msg("creating directives extension")
 	}

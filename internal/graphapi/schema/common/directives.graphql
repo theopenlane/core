@@ -20,3 +20,8 @@ Indicates that this field cannot be set on the input, and comes from an external
 This does not prevent the viewing of the field
 """
 directive @externalSource(source: ControlControlSource) on OBJECT | FIELD_DEFINITION
+"""
+Indicates the modules an organization must have enabled to access this object,
+at least one of the listed modules is required
+"""
+directive @modules(names: [String!]!) on OBJECT
