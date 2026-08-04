@@ -19,11 +19,12 @@ func emitTyped[T any](ctx context.Context, observer *Observer, runtime *gala.Gal
 	}
 
 	fields = lo.Assign(Fields{FieldPayload: payload}, fields)
-	receipt := runtime.EmitWithHeaders(ctx, topic, payload, gala.Headers{})
 
-	if receipt.Err != nil {
-		observer.handleEmitError(ctx, op, fields, string(topic), receipt.Err)
+	if _, err := runtime.Emit(ctx, topic, payload); err != nil {
+		observer.handleEmitError(ctx, op, fields, string(topic), err)
+
+		return err
 	}
 
-	return receipt.Err
+	return nil
 }

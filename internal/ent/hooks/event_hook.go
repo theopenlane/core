@@ -8,7 +8,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/eventqueue"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/workflowgenerated"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/mutations"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/gala"
@@ -114,6 +114,41 @@ func EmitGalaEventHook(galaProviders ...func() *gala.Gala) ent.Hook {
 	}
 }
 
+// extractChangedEdges flattens the entityops edge-change catalog into the mutation payload shape:
+// the changed edge names plus added/removed IDs keyed by edge
+func extractChangedEdges(mutation ent.Mutation) ([]string, map[string][]string, map[string][]string) {
+	changes := entityops.ExtractChangedEdges(mutation)
+	if len(changes) == 0 {
+		return nil, nil, nil
+	}
+
+	edges := make([]string, 0, len(changes))
+	added := map[string][]string{}
+	removed := map[string][]string{}
+
+	for _, change := range changes {
+		edges = append(edges, change.Edge)
+
+		if len(change.AddedIDs) > 0 {
+			added[change.Edge] = change.AddedIDs
+		}
+
+		if change.RemovedIDs != nil {
+			removed[change.Edge] = change.RemovedIDs
+		}
+	}
+
+	if len(added) == 0 {
+		added = nil
+	}
+
+	if len(removed) == 0 {
+		removed = nil
+	}
+
+	return edges, added, removed
+}
+
 func resolveGalaRuntimes(providers []func() *gala.Gala) []*gala.Gala {
 	if len(providers) == 0 {
 		return nil
@@ -211,7 +246,7 @@ func mutationDispatchTargets(runtimes []*gala.Gala, topics []gala.TopicName, ope
 // newMutationPayloadForDispatch builds shared mutation payload metadata for asynchronous dispatch hooks.
 func newMutationPayloadForDispatch(mutation ent.Mutation, operation, entityID string) eventqueue.MutationGalaPayload {
 	changedFields, clearedFields := mutations.ChangedAndClearedFields(mutation)
-	changedEdges, addedIDs, removedIDs := workflowgenerated.ExtractChangedEdges(mutation)
+	changedEdges, addedIDs, removedIDs := extractChangedEdges(mutation)
 	proposedChanges := mutations.BuildProposedChanges(mutation, changedFields)
 
 	return eventqueue.MutationGalaPayload{

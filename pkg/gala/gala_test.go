@@ -116,7 +116,7 @@ func TestRuntimeDispatchEnvelopeWithDependencyInjectionAndContextRehydration(t *
 		t.Fatalf("failed to encode payload: %v", err)
 	}
 
-	snapshot, err := runtime.ContextManager().Capture(emitContext)
+	snapshot, err := runtime.contextManager.Capture(emitContext)
 	if err != nil {
 		t.Fatalf("failed to capture context snapshot: %v", err)
 	}
@@ -196,7 +196,7 @@ func TestRuntimeDispatchEnvelopeWithCallerContext(t *testing.T) {
 		t.Fatalf("failed to encode payload: %v", err)
 	}
 
-	snapshot, err := runtime.ContextManager().Capture(emitContext)
+	snapshot, err := runtime.contextManager.Capture(emitContext)
 	if err != nil {
 		t.Fatalf("failed to capture context snapshot: %v", err)
 	}
@@ -300,9 +300,13 @@ func TestRuntimeEmitUsesDispatcher(t *testing.T) {
 		t.Fatalf("failed to register listener: %v", err)
 	}
 
-	receipt := runtime.EmitWithHeaders(context.Background(), topic.Name, runtimeTestPayload{Message: "durable"}, Headers{})
-	if receipt.Err != nil {
-		t.Fatalf("unexpected emit error: %v", receipt.Err)
+	id, err := runtime.Emit(context.Background(), topic.Name, runtimeTestPayload{Message: "durable"})
+	if err != nil {
+		t.Fatalf("unexpected emit error: %v", err)
+	}
+
+	if id == "" {
+		t.Fatalf("expected non-empty event id from emit")
 	}
 
 	if dispatcher.calls != 1 {
@@ -324,9 +328,8 @@ func TestRuntimeEmitRequiresDispatcher(t *testing.T) {
 		t.Fatalf("failed to register topic: %v", err)
 	}
 
-	receipt := runtime.EmitWithHeaders(context.Background(), topic.Name, runtimeTestPayload{Message: "durable"}, Headers{})
-	if !errors.Is(receipt.Err, ErrDispatcherRequired) {
-		t.Fatalf("expected ErrDispatcherRequired, got %v", receipt.Err)
+	if _, err := runtime.Emit(context.Background(), topic.Name, runtimeTestPayload{Message: "durable"}); !errors.Is(err, ErrDispatcherRequired) {
+		t.Fatalf("expected ErrDispatcherRequired, got %v", err)
 	}
 }
 
@@ -347,9 +350,13 @@ func TestRuntimeEmitWithEventIDUsesPrebuiltEventID(t *testing.T) {
 	}
 
 	prebuiltID := EventID("evt_prebuilt_123")
-	receipt := runtime.EmitWithHeaders(context.Background(), topic.Name, nil, Headers{}, WithEventID(prebuiltID), WithRawPayload(encodedPayload))
-	if receipt.Err != nil {
-		t.Fatalf("unexpected emit error: %v", receipt.Err)
+	id, err := runtime.Emit(context.Background(), topic.Name, nil, WithEventID(prebuiltID), WithRawPayload(encodedPayload))
+	if err != nil {
+		t.Fatalf("unexpected emit error: %v", err)
+	}
+
+	if id != prebuiltID {
+		t.Fatalf("expected emit to return prebuilt event id %q, got %q", prebuiltID, id)
 	}
 
 	if dispatcher.calls != 1 {
@@ -397,27 +404,6 @@ type runtimeOperationPayload struct {
 	Message   string `json:"message"`
 }
 
-func TestRuntimeAccessorsReturnConfiguredDependencies(t *testing.T) {
-	injector := do.New()
-	contextManager, err := newContextManager()
-	if err != nil {
-		t.Fatalf("failed to build context manager: %v", err)
-	}
-
-	dispatcher := &runtimeTestDispatcher{}
-	runtime := newTestGala(t, dispatcher)
-	runtime.injector = injector
-	runtime.contextManager = contextManager
-
-	if runtime.Injector() != injector {
-		t.Fatalf("unexpected injector accessor result")
-	}
-
-	if runtime.ContextManager() != contextManager {
-		t.Fatalf("unexpected context manager accessor result")
-	}
-}
-
 func TestJSONCodecErrorPaths(t *testing.T) {
 	codec := JSONCodec[codecTestUnsupportedPayload]{}
 
@@ -433,26 +419,6 @@ func TestJSONCodecErrorPaths(t *testing.T) {
 	if !errors.Is(err, ErrEnvelopePayloadRequired) {
 		t.Fatalf("expected ErrEnvelopePayloadRequired, got %v", err)
 	}
-}
-
-func TestRuntimeAccessorsRequireRuntimeInstance(t *testing.T) {
-	var runtime *Gala
-
-	assertPanics(t, func() { _ = runtime.registry })
-	assertPanics(t, func() { _ = runtime.Injector() })
-	assertPanics(t, func() { _ = runtime.ContextManager() })
-}
-
-func assertPanics(t *testing.T, fn func()) {
-	t.Helper()
-
-	defer func() {
-		if recover() == nil {
-			t.Fatalf("expected panic")
-		}
-	}()
-
-	fn()
 }
 
 func TestRuntimeDispatchEnvelopeWrapsListenerErrors(t *testing.T) {
@@ -636,13 +602,8 @@ func TestRuntimeEmitReturnsDurableDispatchError(t *testing.T) {
 		t.Fatalf("failed to register listener: %v", err)
 	}
 
-	receipt := runtime.EmitWithHeaders(context.Background(), topic.Name, runtimeTestPayload{Message: "test"}, Headers{})
-	if receipt.Err == nil {
-		t.Fatalf("expected error from durable dispatch")
-	}
-
-	if !errors.Is(receipt.Err, ErrDispatchFailed) {
-		t.Fatalf("expected ErrDispatchFailed, got %v", receipt.Err)
+	if _, err := runtime.Emit(context.Background(), topic.Name, runtimeTestPayload{Message: "test"}); !errors.Is(err, ErrDispatchFailed) {
+		t.Fatalf("expected ErrDispatchFailed, got %v", err)
 	}
 }
 
@@ -1096,15 +1057,15 @@ func TestInMemoryDispatchUsesPoolWorkerLimit(t *testing.T) {
 
 	errs := make(chan error, 2)
 	go func() {
-		receipt := runtime.EmitWithHeaders(context.Background(), topic.Name, runtimeTestPayload{Message: "one"}, Headers{})
-		errs <- receipt.Err
+		_, emitErr := runtime.Emit(context.Background(), topic.Name, runtimeTestPayload{Message: "one"})
+		errs <- emitErr
 	}()
 
 	<-firstStarted
 
 	go func() {
-		receipt := runtime.EmitWithHeaders(context.Background(), topic.Name, runtimeTestPayload{Message: "two"}, Headers{})
-		errs <- receipt.Err
+		_, emitErr := runtime.Emit(context.Background(), topic.Name, runtimeTestPayload{Message: "two"})
+		errs <- emitErr
 	}()
 
 	select {
@@ -1163,9 +1124,10 @@ func TestInMemoryEmitReturnsBeforeListenerCompletes(t *testing.T) {
 		t.Fatalf("failed to register listener: %v", err)
 	}
 
-	receiptCh := make(chan EmitReceipt, 1)
+	emitErrCh := make(chan error, 1)
 	go func() {
-		receiptCh <- runtime.EmitWithHeaders(context.Background(), topic.Name, runtimeTestPayload{Message: "async"}, Headers{})
+		_, emitErr := runtime.Emit(context.Background(), topic.Name, runtimeTestPayload{Message: "async"})
+		emitErrCh <- emitErr
 	}()
 
 	select {
@@ -1175,9 +1137,9 @@ func TestInMemoryEmitReturnsBeforeListenerCompletes(t *testing.T) {
 	}
 
 	select {
-	case receipt := <-receiptCh:
-		if receipt.Err != nil {
-			t.Fatalf("unexpected emit error: %v", receipt.Err)
+	case emitErr := <-emitErrCh:
+		if emitErr != nil {
+			t.Fatalf("unexpected emit error: %v", emitErr)
 		}
 	case <-time.After(200 * time.Millisecond): //nolint:mnd
 		t.Fatalf("expected emit to return before listener completion")
@@ -1206,7 +1168,7 @@ func TestGalaCloseWithoutJobClient(t *testing.T) {
 	}
 }
 
-func TestEmitWithHeadersReturnsEncodeError(t *testing.T) {
+func TestEmitReturnsEncodeError(t *testing.T) {
 	dispatcher := &runtimeTestDispatcher{}
 	runtime := newTestGala(t, dispatcher)
 
@@ -1215,18 +1177,16 @@ func TestEmitWithHeadersReturnsEncodeError(t *testing.T) {
 		t.Fatalf("failed to register topic: %v", err)
 	}
 
-	receipt := runtime.EmitWithHeaders(context.Background(), topic.Name, "wrong type", Headers{})
-	if !errors.Is(receipt.Err, ErrPayloadTypeMismatch) {
-		t.Fatalf("expected ErrPayloadTypeMismatch, got %v", receipt.Err)
+	if _, err := runtime.Emit(context.Background(), topic.Name, "wrong type"); !errors.Is(err, ErrPayloadTypeMismatch) {
+		t.Fatalf("expected ErrPayloadTypeMismatch, got %v", err)
 	}
 }
 
-func TestEmitWithHeadersReturnsTopicNotFoundError(t *testing.T) {
+func TestEmitReturnsTopicNotFoundError(t *testing.T) {
 	runtime := newTestGala(t, nil)
 
-	receipt := runtime.EmitWithHeaders(context.Background(), TopicName("missing.topic"), runtimeTestPayload{Message: "test"}, Headers{})
-	if !errors.Is(receipt.Err, ErrTopicNotRegistered) {
-		t.Fatalf("expected ErrTopicNotRegistered, got %v", receipt.Err)
+	if _, err := runtime.Emit(context.Background(), TopicName("missing.topic"), runtimeTestPayload{Message: "test"}); !errors.Is(err, ErrTopicNotRegistered) {
+		t.Fatalf("expected ErrTopicNotRegistered, got %v", err)
 	}
 }
 

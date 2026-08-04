@@ -24,11 +24,10 @@ func (r *Runtime) emitReconcileLoop(ctx context.Context, installation *ent.Integ
 
 	ctx = intobvs.WithContext(ctx, oc)
 
-	receipt := r.Gala().EmitWithHeaders(ctx, operations.ReconcileTopic, operations.ReconcileEnvelope{OperationContext: oc}, gala.Headers{
+	if _, err := r.Gala().Emit(ctx, operations.ReconcileTopic, operations.ReconcileEnvelope{OperationContext: oc}, gala.WithHeaders(gala.Headers{
 		Properties: oc.Properties(),
-	})
-	if receipt.Err != nil {
-		return receipt.Err
+	})); err != nil {
+		return err
 	}
 
 	logx.FromContext(ctx).Info().Msg("reconcile loop emitted")

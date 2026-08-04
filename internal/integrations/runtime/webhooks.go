@@ -163,16 +163,16 @@ func (r *Runtime) DispatchWebhookEvent(ctx context.Context, integration *ent.Int
 
 	oc := types.NewOperationContext(ownerID, "", src)
 
-	receipt := r.Gala().EmitWithHeaders(intobvs.WithContext(ctx, oc), registration.Topic, operations.WebhookEnvelope{
+	_, err = r.Gala().Emit(intobvs.WithContext(ctx, oc), registration.Topic, operations.WebhookEnvelope{
 		OperationContext: oc,
 		Payload:          jsonx.CloneRawMessage(event.Payload),
 		Headers:          maps.Clone(event.Headers),
-	}, gala.Headers{
+	}, gala.WithHeaders(gala.Headers{
 		Properties: oc.Properties(),
 		Tags:       types.GetTagsForOperationContext(oc),
-	}, gala.WithEventID(gala.EventID(event.DeliveryID)))
+	}), gala.WithEventID(gala.EventID(event.DeliveryID)))
 
-	return receipt.Err
+	return err
 }
 
 // HandleWebhookEvent processes one emitted integration webhook envelope

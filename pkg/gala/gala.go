@@ -194,14 +194,51 @@ func (g *Gala) InterestedIn(topic TopicName, operation string) bool {
 	return g.registry.InterestedIn(topic, operation)
 }
 
-// Injector returns the Gala dependency injector
-func (g *Gala) Injector() do.Injector {
-	return g.injector
+// AttachOption provisions one dependency or durable context codec onto a gala runtime
+type AttachOption func(*Gala) error
+
+// WithValue provides a typed dependency that listeners resolve via HandlerContext.Injector
+func WithValue[T any](value T) AttachOption {
+	return func(g *Gala) error {
+		do.ProvideValue(g.injector, value)
+
+		return nil
+	}
 }
 
-// ContextManager returns the Gala context manager
-func (g *Gala) ContextManager() *ContextManager {
-	return g.contextManager
+// WithContextCodecs registers durable context codecs used to capture and restore
+// context values across dispatch hops
+func WithContextCodecs(codecs ...ContextCodec) AttachOption {
+	return func(g *Gala) error {
+		for _, codec := range codecs {
+			if err := g.contextManager.Register(codec); err != nil && !errors.Is(err, ErrContextCodecAlreadyRegistered) {
+				return err
+			}
+		}
+
+		return nil
+	}
+}
+
+// WithRestoredValue registers a durable context codec that re-resolves a live dependency
+// from the runtime's injector on the handler side and attaches it to the restored context
+func WithRestoredValue[T any](id ContextKey, setter func(context.Context, T) context.Context) AttachOption {
+	return func(g *Gala) error {
+		return g.contextManager.Register(newInjectorCodec(id, g.injector, setter))
+	}
+}
+
+// Attach provisions dependencies and durable context codecs onto the runtime. It is
+// called during wiring, after construction and before the first emit that relies on
+// the provisioned values; registration failures are wiring errors
+func (g *Gala) Attach(opts ...AttachOption) error {
+	for _, opt := range opts {
+		if err := opt(g); err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 // EmitOption customizes one emitted envelope before dispatch
@@ -226,8 +263,8 @@ func WithEventID(id EventID) EmitOption {
 }
 
 // WithRawPayload emits pre-encoded payload bytes, bypassing the topic codec.
-// The payload argument passed to EmitWithHeaders is ignored when set; the
-// topic must still be registered so listeners can decode at dispatch time
+// The payload argument passed to Emit is ignored when set; the topic must
+// still be registered so listeners can decode at dispatch time
 func WithRawPayload(raw json.RawMessage) EmitOption {
 	return func(e *Envelope) {
 		if len(raw) > 0 {
@@ -239,23 +276,15 @@ func WithRawPayload(raw json.RawMessage) EmitOption {
 // Emit emits a payload to the topic, applying any options to the envelope before
 // dispatch, and returns the emitted event identifier
 func (g *Gala) Emit(ctx context.Context, topic TopicName, payload any, opts ...EmitOption) (EventID, error) {
-	receipt := g.EmitWithHeaders(ctx, topic, payload, Headers{}, opts...)
-
-	return receipt.EventID, receipt.Err
-}
-
-// EmitWithHeaders emits a payload with explicit headers
-func (g *Gala) EmitWithHeaders(ctx context.Context, topic TopicName, payload any, headers Headers, opts ...EmitOption) EmitReceipt {
 	registration, err := g.registry.topicRegistration(topic)
 	if err != nil {
-		return EmitReceipt{Err: err}
+		return "", err
 	}
 
 	envelope := Envelope{
 		ID:         NewEventID(),
 		Topic:      topic,
 		OccurredAt: time.Now().UTC(),
-		Headers:    headers,
 	}
 
 	for _, opt := range opts {
@@ -265,7 +294,7 @@ func (g *Gala) EmitWithHeaders(ctx context.Context, topic TopicName, payload any
 	if len(envelope.Payload) == 0 {
 		encodedPayload, err := registration.encode(payload)
 		if err != nil {
-			return EmitReceipt{Err: err}
+			return "", err
 		}
 
 		envelope.Payload = encodedPayload
@@ -277,13 +306,13 @@ func (g *Gala) EmitWithHeaders(ctx context.Context, topic TopicName, payload any
 
 	snapshot, err := g.contextManager.Capture(ctx)
 	if err != nil {
-		return EmitReceipt{Err: err}
+		return "", err
 	}
 
 	envelope.ContextSnapshot = snapshot
 
 	if g.dispatcher == nil {
-		return EmitReceipt{EventID: envelope.ID, Err: ErrDispatcherRequired}
+		return envelope.ID, ErrDispatcherRequired
 	}
 
 	envelope.Headers.Listeners = g.registry.listenerNamesForTopic(topic)
@@ -291,12 +320,12 @@ func (g *Gala) EmitWithHeaders(ctx context.Context, topic TopicName, payload any
 	if err := g.dispatcher.Dispatch(ctx, envelope); err != nil {
 		logx.FromContext(ctx).Debug().Err(err).Str("event_id", string(envelope.ID)).Str("topic", string(topic)).Msg("gala event dispatch failed")
 
-		return EmitReceipt{EventID: envelope.ID, Err: errors.Join(ErrDispatchFailed, err)}
+		return envelope.ID, errors.Join(ErrDispatchFailed, err)
 	}
 
 	logx.FromContext(ctx).Debug().Str("event_id", string(envelope.ID)).Str("topic", string(topic)).Msg("gala event emitted")
 
-	return EmitReceipt{EventID: envelope.ID}
+	return envelope.ID, nil
 }
 
 // dispatchEnvelope dispatches one envelope to all listeners on the topic

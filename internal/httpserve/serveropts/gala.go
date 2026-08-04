@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/rs/zerolog/log"
-	"github.com/samber/do/v2"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
@@ -114,12 +113,9 @@ func ConfigureGala(ctx context.Context, galaApp, notificationGala *gala.Gala, db
 // and the durable context codec that restores the ent client onto handler contexts; codec
 // registration failure is a wiring error and fails startup
 func provideGalaDependencies(galaApp *gala.Gala, dbClient *ent.Client) error {
-	injector := galaApp.Injector()
-
-	do.ProvideValue(injector, galaApp)
-	do.ProvideValue(injector, dbClient)
-
-	return galaApp.ContextManager().Register(
-		gala.NewInjectorCodec("ent_client", injector, ent.NewContext),
+	return galaApp.Attach(
+		gala.WithValue(galaApp),
+		gala.WithValue(dbClient),
+		gala.WithRestoredValue("ent_client", ent.NewContext),
 	)
 }

@@ -11,7 +11,6 @@ import (
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog"
-	"github.com/samber/do/v2"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 	"github.com/stripe/stripe-go/v86"
@@ -41,7 +40,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
-	workflowgenerated "github.com/theopenlane/core/internal/ent/workflowgenerated"
 	"github.com/theopenlane/core/internal/entdb"
 	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 	slackdef "github.com/theopenlane/core/internal/integrations/definitions/slack"
@@ -172,8 +170,6 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 
 	jobOpts := []riverqueue.Option{riverqueue.WithConnectionURI(s.tf.URI)}
 
-	workflows.RegisterEligibleFields(workflowgenerated.WorkflowEligibleFields)
-
 	runtime, err := gala.NewGala(s.ctx, gala.Config{
 		DispatchMode:      gala.DispatchModeDurable,
 		ConnectionURI:     s.tf.URI,
@@ -204,9 +200,11 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 	s.Require().True(ok, "workflow engine not initialized")
 	s.Require().NotNil(wfEngine, "workflow engine not initialized")
 
-	do.ProvideValue(runtime.Injector(), runtime)
-	do.ProvideValue(runtime.Injector(), db)
-	do.ProvideValue(runtime.Injector(), wfEngine)
+	s.Require().NoError(runtime.Attach(
+		gala.WithValue(runtime),
+		gala.WithValue(db),
+		gala.WithValue(wfEngine),
+	))
 
 	s.Require().NoError(runtime.StartWorkers(s.ctx))
 

@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -172,6 +173,9 @@ func handleAssessmentResponse(inv eventqueue.Invocation, payload eventqueue.Muta
 	return err
 }
 
+// createQuestionnaireTransformRun claims the transform run for one assessment response: the
+// unique index admits a single run per response, a successful or in-flight run skips the
+// event, and a previously failed run is reclaimed so River's retry re-attempts the transform
 func createQuestionnaireTransformRun(ctx context.Context, client *entgen.Client, req questionnaireTransformRequest) (*entgen.IntegrationRun, time.Time, bool, error) {
 	currTime := time.Now()
 
@@ -183,15 +187,33 @@ func createQuestionnaireTransformRun(ctx context.Context, client *entgen.Client,
 		SetStartedAt(currTime).
 		SetAssessmentResponseID(req.AssessmentResponseID).
 		Save(ctx)
-	if err != nil {
-		if entgen.IsConstraintError(err) {
-			return nil, time.Time{}, false, nil
-		}
+	if err == nil {
+		return run, currTime, true, nil
+	}
 
+	if !entgen.IsConstraintError(err) {
 		return nil, time.Time{}, false, fmt.Errorf("questionnaire transform integration run: %w", err)
 	}
 
-	return run, currTime, true, nil
+	existing, err := client.IntegrationRun.Query().
+		Where(
+			integrationrun.AssessmentResponseIDEQ(req.AssessmentResponseID),
+			integrationrun.OperationNameEQ(operations.QuestionnaireTransformOperationName),
+		).
+		Only(ctx)
+	if err != nil {
+		return nil, time.Time{}, false, fmt.Errorf("questionnaire transform run lookup: %w", err)
+	}
+
+	if existing.Status != enums.IntegrationRunStatusFailed {
+		return nil, time.Time{}, false, nil
+	}
+
+	if err := operations.MarkRunRunning(ctx, client, existing.ID); err != nil {
+		return nil, time.Time{}, false, fmt.Errorf("questionnaire transform run reclaim: %w", err)
+	}
+
+	return existing, currTime, true, nil
 }
 
 func validateQuestionnaire(response *entgen.AssessmentResponse) (*entgen.Assessment, *entgen.DocumentData, models.TemplateProjectionConfig, bool) {

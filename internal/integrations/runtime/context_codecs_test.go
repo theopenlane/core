@@ -11,6 +11,11 @@ import (
 	"github.com/theopenlane/core/pkg/gala"
 )
 
+// codecRoundTripPayload is the fixture payload dispatched through the in-memory runtime
+type codecRoundTripPayload struct {
+	Message string `json:"message"`
+}
+
 func TestRegisterContextCodecsRoundTripOperationContext(t *testing.T) {
 	t.Parallel()
 
@@ -41,21 +46,46 @@ func TestRegisterContextCodecsRoundTripOperationContext(t *testing.T) {
 		},
 	})
 
-	snapshot, err := g.ContextManager().Capture(gala.WithOperationContext(context.Background(), oc))
-	if err != nil {
-		t.Fatalf("failed to capture snapshot: %v", err)
+	type observedContext struct {
+		oc gala.OperationContext
+		ok bool
 	}
 
-	restored, err := g.ContextManager().Restore(context.Background(), snapshot)
-	if err != nil {
-		t.Fatalf("failed to restore snapshot: %v", err)
+	observedCh := make(chan observedContext, 1)
+
+	if _, err := gala.Register(g, gala.Definition[codecRoundTripPayload]{
+		Topic: gala.Topic[codecRoundTripPayload]{Name: gala.TopicName("runtime.test.codec.roundtrip")},
+		Name:  "runtime.test.codec.roundtrip.listener",
+		Handle: func(hc gala.HandlerContext, _ codecRoundTripPayload) error {
+			restoredOC, ok := gala.OperationContextFromContext(hc.Context)
+			observedCh <- observedContext{oc: restoredOC, ok: ok}
+
+			return nil
+		},
+	}); err != nil {
+		t.Fatalf("failed to register listener: %v", err)
 	}
 
-	restoredOC, ok := gala.OperationContextFromContext(restored)
-	if !ok {
+	emitCtx := gala.WithOperationContext(context.Background(), oc)
+	if _, err := g.Emit(emitCtx, gala.TopicName("runtime.test.codec.roundtrip"), codecRoundTripPayload{Message: "roundtrip"}); err != nil {
+		t.Fatalf("failed to emit: %v", err)
+	}
+
+	g.WaitIdle()
+
+	var observed observedContext
+
+	select {
+	case observed = <-observedCh:
+	default:
+		t.Fatal("expected listener to run")
+	}
+
+	if !observed.ok {
 		t.Fatal("expected operation context to be restored")
 	}
 
+	restoredOC := observed.oc
 	if restoredOC.OwnerID != oc.OwnerID {
 		t.Fatalf("expected owner %q, got %q", oc.OwnerID, restoredOC.OwnerID)
 	}

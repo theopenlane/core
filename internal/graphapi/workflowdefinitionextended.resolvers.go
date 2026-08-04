@@ -9,7 +9,7 @@ import (
 	"context"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/workflowgenerated"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/internal/workflows/resolvers"
 )
@@ -34,7 +34,11 @@ func (r *queryResolver) WorkflowMetadata(ctx context.Context) (*model.WorkflowMe
 			})
 		}
 
-		edges := workflowgenerated.WorkflowEligibleEdges[m.Type.String()]
+		var edges []string
+		if schema, ok := entityops.LookupSchema(m.Type.String()); ok {
+			edges = schema.WorkflowEdgeNames()
+		}
+
 		if edges == nil {
 			edges = []string{}
 		} else {

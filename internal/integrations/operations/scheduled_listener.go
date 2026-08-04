@@ -80,17 +80,17 @@ func RegisterScheduledListener[T any](cfg ScheduledListenerConfig[T]) error {
 			// the successor of a running unique job would be skipped as its own duplicate
 			headers.SkipUniqueKey = true
 
-			receipt := cfg.Runtime.EmitWithHeaders(emitCtx, cfg.Topic, cfg.Wrap(envelope, next), headers)
+			_, emitErr := cfg.Runtime.Emit(emitCtx, cfg.Topic, cfg.Wrap(envelope, next), gala.WithHeaders(headers))
 
 			if execErr != nil {
-				if receipt.Err != nil {
-					logx.FromContext(ctx.Context).Error().Err(receipt.Err).Msg("scheduled listener re-emit failed, loop will not continue")
+				if emitErr != nil {
+					logx.FromContext(ctx.Context).Error().Err(emitErr).Msg("scheduled listener re-emit failed, loop will not continue")
 				}
 
 				return river.JobCancel(execErr)
 			}
 
-			return receipt.Err
+			return emitErr
 		},
 	})
 

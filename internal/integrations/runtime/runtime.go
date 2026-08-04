@@ -163,13 +163,7 @@ func (r *Runtime) Dispatch(ctx context.Context, req types.DispatchRequest) (type
 
 // registerContextCodecs registers the durable context codecs required by integration dispatch and ingest listeners
 func (r *Runtime) registerContextCodecs() error {
-	for _, codec := range operations.ContextCodecs() {
-		if err := r.Gala().ContextManager().Register(codec); err != nil && !errors.Is(err, gala.ErrContextCodecAlreadyRegistered) {
-			return err
-		}
-	}
-
-	return nil
+	return r.Gala().Attach(gala.WithContextCodecs(operations.ContextCodecs()...))
 }
 
 // normalizeDispatchError translates registry-level dispatch errors into runtime sentinel errors

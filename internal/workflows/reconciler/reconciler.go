@@ -163,13 +163,13 @@ func (r *Reconciler) processEmitFailure(ctx context.Context, evt *generated.Work
 
 // reemit builds an event from stored details and emits it through the configured emitter
 func (r *Reconciler) reemit(ctx context.Context, details *workflows.EmitFailureDetails) workflows.EmitReceipt {
-	receipt := r.gala.EmitWithHeaders(ctx, gala.TopicName(details.Topic), nil, gala.Headers{},
+	id, err := r.gala.Emit(ctx, gala.TopicName(details.Topic), nil,
 		gala.WithRawPayload(details.Payload),
 		gala.WithEventID(gala.EventID(details.EventID)))
 
 	return workflows.EmitReceipt{
-		EventID: string(receipt.EventID),
-		Err:     receipt.Err,
+		EventID: string(id),
+		Err:     err,
 	}
 }
 

@@ -43,11 +43,3 @@ type Envelope struct {
 	// ContextSnapshot holds restorable context metadata
 	ContextSnapshot ContextSnapshot `json:"context_snapshot"`
 }
-
-// EmitReceipt captures synchronous dispatch results
-type EmitReceipt struct {
-	// EventID is the emitted event identifier
-	EventID EventID
-	// Err contains any terminal emit error
-	Err error
-}

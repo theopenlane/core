@@ -22,14 +22,14 @@ func testServiceSetter(ctx context.Context, svc *testService) context.Context {
 
 func TestInjectorCodecKey(t *testing.T) {
 	injector := do.New()
-	codec := NewInjectorCodec("test_service", injector, testServiceSetter)
+	codec := newInjectorCodec("test_service", injector, testServiceSetter)
 
 	assert.Equal(t, ContextKey("test_service"), codec.Key())
 }
 
 func TestInjectorCodecCaptureReturnsSentinel(t *testing.T) {
 	injector := do.New()
-	codec := NewInjectorCodec("test_service", injector, testServiceSetter)
+	codec := newInjectorCodec("test_service", injector, testServiceSetter)
 
 	raw, present, err := codec.Capture(context.Background())
 
@@ -43,7 +43,7 @@ func TestInjectorCodecRestoreResolvesFromInjector(t *testing.T) {
 	svc := &testService{Name: "resolved"}
 	do.ProvideValue(injector, svc)
 
-	codec := NewInjectorCodec("test_service", injector, testServiceSetter)
+	codec := newInjectorCodec("test_service", injector, testServiceSetter)
 
 	ctx, err := codec.Restore(context.Background(), nil)
 
@@ -56,7 +56,7 @@ func TestInjectorCodecRestoreResolvesFromInjector(t *testing.T) {
 
 func TestInjectorCodecRestoreFailsWhenNotProvided(t *testing.T) {
 	injector := do.New()
-	codec := NewInjectorCodec("test_service", injector, testServiceSetter)
+	codec := newInjectorCodec("test_service", injector, testServiceSetter)
 
 	ctx := context.Background()
 	restored, err := codec.Restore(ctx, nil)
@@ -72,7 +72,7 @@ func TestInjectorCodecRoundTripViaContextManager(t *testing.T) {
 	svc := &testService{Name: "round-tripped"}
 	do.ProvideValue(injector, svc)
 
-	codec := NewInjectorCodec("test_service", injector, testServiceSetter)
+	codec := newInjectorCodec("test_service", injector, testServiceSetter)
 
 	manager, err := newContextManager(codec)
 	require.NoError(t, err)

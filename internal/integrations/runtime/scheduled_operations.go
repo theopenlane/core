@@ -106,17 +106,17 @@ func (r *Runtime) seedScheduledOperation(ctx context.Context, oc gala.OperationC
 
 	logx.FromContext(ctx).Info().Msg("seeding scheduled operation")
 
-	receipt := r.Gala().EmitWithHeaders(
+	_, err = r.Gala().Emit(
 		ctx,
 		operations.ReconcileTopic,
 		operations.ReconcileEnvelope{OperationContext: oc},
-		gala.Headers{
+		gala.WithHeaders(gala.Headers{
 			Properties: types.GetPropertiesForOperationContext(oc),
 			Tags:       types.GetTagsForOperationContext(oc),
-		},
+		}),
 	)
 
-	return receipt.Err
+	return err
 }
 
 // scheduledMetadataFragment builds the JSONB fragment for active-job checks; the run type

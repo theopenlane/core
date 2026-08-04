@@ -7,7 +7,6 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/samber/do/v2"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
@@ -130,9 +129,13 @@ func SetupWorkflowEngine(ctx context.Context, client *generated.Client, connecti
 		return nil, err
 	}
 
-	do.ProvideValue(runtime.Injector(), runtime)
-	do.ProvideValue(runtime.Injector(), client)
-	do.ProvideValue(runtime.Injector(), wfEngine)
+	if err := runtime.Attach(
+		gala.WithValue(runtime),
+		gala.WithValue(client),
+		gala.WithValue(wfEngine),
+	); err != nil {
+		return nil, err
+	}
 
 	if err := runtime.StartWorkers(ctx); err != nil {
 		return nil, err

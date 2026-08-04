@@ -178,14 +178,13 @@ func (s domainScanSaga) submitAndScheduleDomainScans(ctx context.Context, organi
 			continue
 		}
 
-		receipt := s.services.Gala().EmitWithHeaders(ctx, DomainScanPollTopic, DomainScanPollEnvelope{
+		if _, err := s.services.Gala().Emit(ctx, DomainScanPollTopic, DomainScanPollEnvelope{
 			OrganizationID: organizationID,
 			ScanResultID:   scan.UUID,
 			InternalScanID: internalScanID,
 			SiblingScanIDs: siblingScanIDs,
-		}, gala.Headers{})
-		if receipt.Err != nil {
-			logx.FromContext(ctx).Error().Err(receipt.Err).Str("scan_id", scan.UUID).Msg("domain scan: failed scheduling poll cycle")
+		}); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("scan_id", scan.UUID).Msg("domain scan: failed scheduling poll cycle")
 			s.markDomainScanFailed(ctx, organizationID, internalScanID)
 
 			if notifyErr := s.maybeNotifyDomainScanGroup(ctx, organizationID, siblingScanIDs); notifyErr != nil {
@@ -364,17 +363,16 @@ func (s domainScanSaga) handlePoll(ctx context.Context, envelope DomainScanPollE
 
 		scheduledAt := time.Now().Add(DomainScanPollBackoff(envelope.Attempt))
 
-		receipt := s.services.Gala().EmitWithHeaders(ctx, DomainScanPollTopic, DomainScanPollEnvelope{
+		if _, err := s.services.Gala().Emit(ctx, DomainScanPollTopic, DomainScanPollEnvelope{
 			OrganizationID: envelope.OrganizationID,
 			ScanResultID:   envelope.ScanResultID,
 			InternalScanID: envelope.InternalScanID,
 			Attempt:        envelope.Attempt + 1,
 			SiblingScanIDs: envelope.SiblingScanIDs,
-		}, gala.Headers{ScheduledAt: &scheduledAt})
-		if receipt.Err != nil {
-			logx.FromContext(ctx).Error().Err(receipt.Err).Msg("domain scan: failed scheduling next poll cycle")
+		}, gala.WithHeaders(gala.Headers{ScheduledAt: &scheduledAt})); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("domain scan: failed scheduling next poll cycle")
 
-			return true, receipt.Err
+			return true, err
 		}
 
 		logx.FromContext(ctx).Info().Msg("domain scan: result not ready, poll cycle scheduled")
