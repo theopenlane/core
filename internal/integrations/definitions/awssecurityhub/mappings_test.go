@@ -12,9 +12,10 @@ import (
 )
 
 func TestMappingExpressionsValid(t *testing.T) {
-	all := append(awsSecurityHubMappings(), awsIamMappings()...)
+	def, err := Builder(Config{})()
+	assert.NilError(t, err)
 
-	for _, m := range all {
+	for _, m := range def.Mappings {
 		name := m.Schema
 		if m.Variant != "" {
 			name += "/" + m.Variant
@@ -34,7 +35,10 @@ func TestMappingExpressionsValid(t *testing.T) {
 // when array fields like Resources, Types, or Vulnerabilities are present in the payload
 // but carry an explicit null value rather than being absent.
 func TestNullArrayPayloads(t *testing.T) {
-	mappings := awsSecurityHubMappings()
+	def, err := Builder(Config{})()
+	assert.NilError(t, err)
+
+	mappings := def.Mappings
 	findingSpec := mappingtest.MappingSpec(t, mappings, "Finding")
 	vulnSpec := mappingtest.MappingSpec(t, mappings, "Vulnerability")
 
@@ -81,7 +85,10 @@ func TestNullArrayPayloads(t *testing.T) {
 }
 
 func TestExamplePayloads(t *testing.T) {
-	mappings := awsSecurityHubMappings()
+	def, err := Builder(Config{})()
+	assert.NilError(t, err)
+
+	mappings := def.Mappings
 	findingSpec := mappingtest.MappingSpec(t, mappings, "Finding")
 	vulnSpec := mappingtest.MappingSpec(t, mappings, "Vulnerability")
 

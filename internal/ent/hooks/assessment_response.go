@@ -134,7 +134,7 @@ func handleExistingAssessmentResponse(ctx context.Context, m *generated.Assessme
 	}
 
 	if campaignID == "" {
-		if err := sendResponseEmail(ctx, m.Client(), existingResponse.AssessmentID, existingResponse.OwnerID, existingResponse.Email); err != nil {
+		if err := sendResponseEmail(ctx, m.Client(), existingResponse.AssessmentID, existingResponse.OwnerID, existingResponse.Email, existingResponse.IsTest); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("failed to resend assessment response email")
 			return nil, err
 		}
@@ -181,8 +181,9 @@ func createNewAssessmentResponse(ctx context.Context, m *generated.AssessmentRes
 	if !isDraft && campaignID == "" {
 		assessmentID, _ := m.AssessmentID()
 		ownerID, _ := m.OwnerID()
+		isTest, _ := m.IsTest()
 
-		if err := sendResponseEmail(ctx, m.Client(), assessmentID, ownerID, email); err != nil {
+		if err := sendResponseEmail(ctx, m.Client(), assessmentID, ownerID, email, isTest); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("failed to send assessment response email")
 			return nil, err
 		}
@@ -369,7 +370,7 @@ func updateCampaignCompletionFromTargets(ctx context.Context, client *generated.
 }
 
 // sendResponseEmail builds the questionnaire auth URL and dispatches the questionnaire access email
-func sendResponseEmail(ctx context.Context, client *generated.Client, assessmentID, ownerID, email string) error {
+func sendResponseEmail(ctx context.Context, client *generated.Client, assessmentID, ownerID, email string, isTest bool) error {
 	assessmentObj, err := client.Assessment.Query().
 		Where(assessment.IDEQ(assessmentID)).
 		Select(assessment.FieldName).
@@ -378,7 +379,7 @@ func sendResponseEmail(ctx context.Context, client *generated.Client, assessment
 		return err
 	}
 
-	authURL, err := emaildef.QuestionnaireAuthURL(ctx, client, assessmentID, ownerID, email)
+	authURL, err := emaildef.QuestionnaireAuthURL(ctx, client, assessmentID, ownerID, email, isTest)
 	if err != nil {
 		return err
 	}

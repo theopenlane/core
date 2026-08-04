@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	echo "github.com/theopenlane/echox"
@@ -10,8 +11,11 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 )
@@ -82,6 +86,18 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context) error {
 		return h.BadRequest(ctx, operations.ErrDispatchInputInvalid)
 	}
 
+	if operation.Internal {
+		logx.FromContext(requestCtx).Error().Interface("request", req).Msg("operation is internal and cannot be invoked directly")
+
+		return h.BadRequest(ctx, operations.ErrDispatchInputInvalid)
+	}
+
+	if operation.RequiresPaymentMethod {
+		if err := rule.RequirePaymentMethod()(requestCtx, nil); err != nil && !errors.Is(err, privacy.Skip) {
+			return h.Forbidden(ctx, err)
+		}
+	}
+
 	inlineExecution := operation.Policy.Inline
 
 	queueCtx := context.WithoutCancel(requestCtx)
@@ -99,6 +115,10 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context) error {
 		output, err := h.IntegrationsRuntime.ExecuteOperation(queueCtx, integrationRef, operation, nil, configDoc)
 		if err != nil {
 			logx.FromContext(requestCtx).Error().Err(err).Interface("request", req).Msg("operation execution failed")
+
+			if errors.Is(err, integrationsruntime.ErrOperationRateLimited) {
+				return h.TooManyRequests(ctx, err)
+			}
 
 			return h.BadRequest(ctx, err)
 		}
@@ -130,7 +150,7 @@ func (h *Handler) RunIntegrationOperation(ctx echo.Context) error {
 		})
 	}
 
-	result, err := h.IntegrationsRuntime.Dispatch(queueCtx, operations.DispatchRequest{
+	result, err := h.IntegrationsRuntime.Dispatch(queueCtx, types.DispatchRequest{
 		IntegrationID: integrationRef.ID,
 		Operation:     operationName,
 		Config:        configDoc,

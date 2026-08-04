@@ -156,6 +156,48 @@ func (_c *ScanCreate) SetNillableOwnerID(v *string) *ScanCreate {
 	return _c
 }
 
+// SetSystemOwned sets the "system_owned" field.
+func (_c *ScanCreate) SetSystemOwned(v bool) *ScanCreate {
+	_c.mutation.SetSystemOwned(v)
+	return _c
+}
+
+// SetNillableSystemOwned sets the "system_owned" field if the given value is not nil.
+func (_c *ScanCreate) SetNillableSystemOwned(v *bool) *ScanCreate {
+	if v != nil {
+		_c.SetSystemOwned(*v)
+	}
+	return _c
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_c *ScanCreate) SetInternalNotes(v string) *ScanCreate {
+	_c.mutation.SetInternalNotes(v)
+	return _c
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_c *ScanCreate) SetNillableInternalNotes(v *string) *ScanCreate {
+	if v != nil {
+		_c.SetInternalNotes(*v)
+	}
+	return _c
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_c *ScanCreate) SetSystemInternalID(v string) *ScanCreate {
+	_c.mutation.SetSystemInternalID(v)
+	return _c
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_c *ScanCreate) SetNillableSystemInternalID(v *string) *ScanCreate {
+	if v != nil {
+		_c.SetSystemInternalID(*v)
+	}
+	return _c
+}
+
 // SetReviewedBy sets the "reviewed_by" field.
 func (_c *ScanCreate) SetReviewedBy(v string) *ScanCreate {
 	_c.mutation.SetReviewedBy(v)
@@ -769,6 +811,10 @@ func (_c *ScanCreate) defaults() error {
 		v := scan.DefaultTags
 		_c.mutation.SetTags(v)
 	}
+	if _, ok := _c.mutation.SystemOwned(); !ok {
+		v := scan.DefaultSystemOwned
+		_c.mutation.SetSystemOwned(v)
+	}
 	if _, ok := _c.mutation.ScanType(); !ok {
 		v := scan.DefaultScanType
 		_c.mutation.SetScanType(v)
@@ -894,6 +940,18 @@ func (_c *ScanCreate) createSpec() (*Scan, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(scan.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
+	}
+	if value, ok := _c.mutation.SystemOwned(); ok {
+		_spec.SetField(scan.FieldSystemOwned, field.TypeBool, value)
+		_node.SystemOwned = value
+	}
+	if value, ok := _c.mutation.InternalNotes(); ok {
+		_spec.SetField(scan.FieldInternalNotes, field.TypeString, value)
+		_node.InternalNotes = &value
+	}
+	if value, ok := _c.mutation.SystemInternalID(); ok {
+		_spec.SetField(scan.FieldSystemInternalID, field.TypeString, value)
+		_node.SystemInternalID = &value
 	}
 	if value, ok := _c.mutation.ReviewedBy(); ok {
 		_spec.SetField(scan.FieldReviewedBy, field.TypeString, value)

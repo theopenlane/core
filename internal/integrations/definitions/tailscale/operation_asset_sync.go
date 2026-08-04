@@ -6,7 +6,7 @@ import (
 
 	tsclient "github.com/tailscale/tailscale-client-go/v2"
 
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/logx"
@@ -45,7 +45,7 @@ func (AssetSync) Run(ctx context.Context, client *tsclient.Client) ([]types.Inge
 
 	return []types.IngestPayloadSet{
 		{
-			Schema:    integrationgenerated.IntegrationMappingSchemaAsset,
+			Schema:    entityops.SchemaAsset.Name,
 			Envelopes: envelopes,
 		},
 	}, nil

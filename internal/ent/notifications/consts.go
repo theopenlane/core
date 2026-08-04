@@ -12,6 +12,7 @@ const (
 	riskURLPath      = "risks/%s"
 	taskURLPath      = "tasks?id=%s"
 	controlURLPath   = "controls/%s"
+	programURLPath   = "programs/%s"
 	standardURLPath  = "standards/%s"
 	evidenceURLPath  = "evidence?id=%s"
 	trustCenterNDA   = "trust-center/NDAs"
@@ -30,6 +31,8 @@ func getURLPathForObject(objectID, objectType string) string {
 		return fmt.Sprintf(taskURLPath, objectID)
 	case generated.TypeControl:
 		return fmt.Sprintf(controlURLPath, objectID)
+	case generated.TypeProgram:
+		return fmt.Sprintf(programURLPath, objectID)
 	case generated.TypeStandard:
 		return fmt.Sprintf(standardURLPath, objectID)
 	case generated.TypeEvidence:

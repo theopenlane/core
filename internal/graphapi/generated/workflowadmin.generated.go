@@ -343,8 +343,7 @@ func (ec *executionContext) marshalNWorkflowAssignmentReassignPayload2ᚖgithub�
 }
 
 func (ec *executionContext) unmarshalNWorkflowAssignmentTargetInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowAssignmentTargetInputᚄ(ctx context.Context, v any) ([]*model.WorkflowAssignmentTargetInput, error) {
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*model.WorkflowAssignmentTargetInput, len(vSlice))
 	for i := range vSlice {

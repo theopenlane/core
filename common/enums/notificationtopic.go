@@ -18,6 +18,12 @@ var (
 	NotificationTopicStandardUpdate NotificationTopic = "STANDARD_UPDATE"
 	// NotificationTopicDomainScan indicates the domain scan.
 	NotificationTopicDomainScan NotificationTopic = "DOMAIN_SCAN"
+	// NotificationTopicImportComplete indicates an accepted import finished creating its records.
+	NotificationTopicImportComplete NotificationTopic = "IMPORT_COMPLETE"
+	// NotificationTopicOrganizationReady indicates an organization is ready to be viewed
+	NotificationTopicOrganizationReady NotificationTopic = "ORGANIZATION_READY"
+	// NotificationTopicIntegration indicates an installed integration needs the owner's attention
+	NotificationTopicIntegration NotificationTopic = "INTEGRATION"
 	// NotificationTopicInvalid is used when an unknown or unsupported value is provided.
 	NotificationTopicInvalid NotificationTopic = "NOTIFICATIONTOPIC_INVALID"
 )
@@ -29,6 +35,9 @@ var notificationTopicValues = []NotificationTopic{
 	NotificationTopicExport,
 	NotificationTopicStandardUpdate,
 	NotificationTopicDomainScan,
+	NotificationTopicImportComplete,
+	NotificationTopicOrganizationReady,
+	NotificationTopicIntegration,
 }
 
 // Values returns a slice of strings representing all valid NotificationTopic values.
@@ -38,7 +47,9 @@ func (NotificationTopic) Values() []string { return stringValues(notificationTop
 func (r NotificationTopic) String() string { return string(r) }
 
 // ToNotificationTopic converts a string to its corresponding NotificationTopic enum value.
-func ToNotificationTopic(r string) *NotificationTopic { return parse(r, notificationTopicValues, &NotificationTopicInvalid) }
+func ToNotificationTopic(r string) *NotificationTopic {
+	return parse(r, notificationTopicValues, &NotificationTopicInvalid)
+}
 
 // MarshalGQL implements the gqlgen Marshaler interface.
 func (r NotificationTopic) MarshalGQL(w io.Writer) { marshalGQL(r, w) }

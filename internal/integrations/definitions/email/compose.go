@@ -164,10 +164,9 @@ func splitFullName(fullName string) (string, string) {
 // TargetSendFunc is per-target callback invoked by dispatchCampaignTargets for each dispatchable target
 type TargetSendFunc func(ctx context.Context, target *generated.CampaignTarget) error
 
-// loadCampaignWithTargets loads a campaign by ID, queries its targets, and filters them
-// by dispatch eligibility. The optional queryOpts are applied to the campaign query for edge-loading
-func loadCampaignWithTargets(ctx context.Context, db *generated.Client, input CampaignDispatchInput, queryOpts ...func(*generated.CampaignQuery)) (*generated.Campaign, []*generated.CampaignTarget, int, error) {
-	q := db.Campaign.Query().Where(campaign.IDEQ(input.CampaignID))
+// loadCampaign loads a campaign by ID, applying the optional queryOpts for edge-loading
+func loadCampaign(ctx context.Context, db *generated.Client, campaignID string, queryOpts ...func(*generated.CampaignQuery)) (*generated.Campaign, error) {
+	q := db.Campaign.Query().Where(campaign.IDEQ(campaignID))
 
 	for _, opt := range queryOpts {
 		opt(q)
@@ -176,12 +175,23 @@ func loadCampaignWithTargets(ctx context.Context, db *generated.Client, input Ca
 	camp, err := q.Only(ctx)
 	if err != nil {
 		if generated.IsNotFound(err) {
-			return nil, nil, 0, ErrCampaignNotFound
+			return nil, ErrCampaignNotFound
 		}
 
-		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", input.CampaignID).Msg("failed loading campaign")
+		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", campaignID).Msg("failed loading campaign")
 
-		return nil, nil, 0, ErrCampaignNotFound
+		return nil, ErrCampaignNotFound
+	}
+
+	return camp, nil
+}
+
+// loadCampaignWithTargets loads a campaign by ID, queries its targets, and filters them
+// by dispatch eligibility. The optional queryOpts are applied to the campaign query for edge-loading
+func loadCampaignWithTargets(ctx context.Context, db *generated.Client, input CampaignDispatchInput, queryOpts ...func(*generated.CampaignQuery)) (*generated.Campaign, []*generated.CampaignTarget, int, error) {
+	camp, err := loadCampaign(ctx, db, input.CampaignID, queryOpts...)
+	if err != nil {
+		return nil, nil, 0, err
 	}
 
 	// trust center update campaigns derive their targets from the trust center's active subscribers;

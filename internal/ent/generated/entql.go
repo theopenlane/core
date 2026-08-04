@@ -1394,6 +1394,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			findingcontrol.FieldCreatedBy:               {Type: field.TypeString, Column: findingcontrol.FieldCreatedBy},
 			findingcontrol.FieldUpdatedBy:               {Type: field.TypeString, Column: findingcontrol.FieldUpdatedBy},
 			findingcontrol.FieldUpdatedByImpersonator:   {Type: field.TypeString, Column: findingcontrol.FieldUpdatedByImpersonator},
+			findingcontrol.FieldOwnerID:                 {Type: field.TypeString, Column: findingcontrol.FieldOwnerID},
 			findingcontrol.FieldFindingID:               {Type: field.TypeString, Column: findingcontrol.FieldFindingID},
 			findingcontrol.FieldControlID:               {Type: field.TypeString, Column: findingcontrol.FieldControlID},
 			findingcontrol.FieldStandardID:              {Type: field.TypeString, Column: findingcontrol.FieldStandardID},
@@ -2627,32 +2628,36 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "Program",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			program.FieldCreatedAt:             {Type: field.TypeTime, Column: program.FieldCreatedAt},
-			program.FieldUpdatedAt:             {Type: field.TypeTime, Column: program.FieldUpdatedAt},
-			program.FieldCreatedBy:             {Type: field.TypeString, Column: program.FieldCreatedBy},
-			program.FieldUpdatedBy:             {Type: field.TypeString, Column: program.FieldUpdatedBy},
-			program.FieldUpdatedByImpersonator: {Type: field.TypeString, Column: program.FieldUpdatedByImpersonator},
-			program.FieldDeletedAt:             {Type: field.TypeTime, Column: program.FieldDeletedAt},
-			program.FieldDeletedBy:             {Type: field.TypeString, Column: program.FieldDeletedBy},
-			program.FieldDisplayID:             {Type: field.TypeString, Column: program.FieldDisplayID},
-			program.FieldTags:                  {Type: field.TypeJSON, Column: program.FieldTags},
-			program.FieldOwnerID:               {Type: field.TypeString, Column: program.FieldOwnerID},
-			program.FieldProgramKindName:       {Type: field.TypeString, Column: program.FieldProgramKindName},
-			program.FieldProgramKindID:         {Type: field.TypeString, Column: program.FieldProgramKindID},
-			program.FieldExternalUUID:          {Type: field.TypeString, Column: program.FieldExternalUUID},
-			program.FieldName:                  {Type: field.TypeString, Column: program.FieldName},
-			program.FieldDescription:           {Type: field.TypeString, Column: program.FieldDescription},
-			program.FieldStatus:                {Type: field.TypeEnum, Column: program.FieldStatus},
-			program.FieldFrameworkName:         {Type: field.TypeString, Column: program.FieldFrameworkName},
-			program.FieldStartDate:             {Type: field.TypeTime, Column: program.FieldStartDate},
-			program.FieldEndDate:               {Type: field.TypeTime, Column: program.FieldEndDate},
-			program.FieldAuditorReady:          {Type: field.TypeBool, Column: program.FieldAuditorReady},
-			program.FieldAuditorWriteComments:  {Type: field.TypeBool, Column: program.FieldAuditorWriteComments},
-			program.FieldAuditorReadComments:   {Type: field.TypeBool, Column: program.FieldAuditorReadComments},
-			program.FieldAuditFirm:             {Type: field.TypeString, Column: program.FieldAuditFirm},
-			program.FieldAuditor:               {Type: field.TypeString, Column: program.FieldAuditor},
-			program.FieldAuditorEmail:          {Type: field.TypeString, Column: program.FieldAuditorEmail},
-			program.FieldProgramOwnerID:        {Type: field.TypeString, Column: program.FieldProgramOwnerID},
+			program.FieldCreatedAt:                  {Type: field.TypeTime, Column: program.FieldCreatedAt},
+			program.FieldUpdatedAt:                  {Type: field.TypeTime, Column: program.FieldUpdatedAt},
+			program.FieldCreatedBy:                  {Type: field.TypeString, Column: program.FieldCreatedBy},
+			program.FieldUpdatedBy:                  {Type: field.TypeString, Column: program.FieldUpdatedBy},
+			program.FieldUpdatedByImpersonator:      {Type: field.TypeString, Column: program.FieldUpdatedByImpersonator},
+			program.FieldDeletedAt:                  {Type: field.TypeTime, Column: program.FieldDeletedAt},
+			program.FieldDeletedBy:                  {Type: field.TypeString, Column: program.FieldDeletedBy},
+			program.FieldDisplayID:                  {Type: field.TypeString, Column: program.FieldDisplayID},
+			program.FieldTags:                       {Type: field.TypeJSON, Column: program.FieldTags},
+			program.FieldOwnerID:                    {Type: field.TypeString, Column: program.FieldOwnerID},
+			program.FieldProgramKindName:            {Type: field.TypeString, Column: program.FieldProgramKindName},
+			program.FieldProgramKindID:              {Type: field.TypeString, Column: program.FieldProgramKindID},
+			program.FieldExternalUUID:               {Type: field.TypeString, Column: program.FieldExternalUUID},
+			program.FieldName:                       {Type: field.TypeString, Column: program.FieldName},
+			program.FieldDescription:                {Type: field.TypeString, Column: program.FieldDescription},
+			program.FieldStatus:                     {Type: field.TypeEnum, Column: program.FieldStatus},
+			program.FieldFrameworkName:              {Type: field.TypeString, Column: program.FieldFrameworkName},
+			program.FieldStartDate:                  {Type: field.TypeTime, Column: program.FieldStartDate},
+			program.FieldEndDate:                    {Type: field.TypeTime, Column: program.FieldEndDate},
+			program.FieldObservationPeriodStartDate: {Type: field.TypeTime, Column: program.FieldObservationPeriodStartDate},
+			program.FieldObservationPeriodEndDate:   {Type: field.TypeTime, Column: program.FieldObservationPeriodEndDate},
+			program.FieldFieldworkStartDate:         {Type: field.TypeTime, Column: program.FieldFieldworkStartDate},
+			program.FieldFieldworkEndDate:           {Type: field.TypeTime, Column: program.FieldFieldworkEndDate},
+			program.FieldAuditorReady:               {Type: field.TypeBool, Column: program.FieldAuditorReady},
+			program.FieldAuditorWriteComments:       {Type: field.TypeBool, Column: program.FieldAuditorWriteComments},
+			program.FieldAuditorReadComments:        {Type: field.TypeBool, Column: program.FieldAuditorReadComments},
+			program.FieldAuditFirm:                  {Type: field.TypeString, Column: program.FieldAuditFirm},
+			program.FieldAuditor:                    {Type: field.TypeString, Column: program.FieldAuditor},
+			program.FieldAuditorEmail:               {Type: field.TypeString, Column: program.FieldAuditorEmail},
+			program.FieldProgramOwnerID:             {Type: field.TypeString, Column: program.FieldProgramOwnerID},
 		},
 	}
 	graph.Nodes[68] = &sqlgraph.Node{
@@ -2877,6 +2882,9 @@ var schemaGraph = func() *sqlgraph.Schema {
 			scan.FieldDeletedBy:                  {Type: field.TypeString, Column: scan.FieldDeletedBy},
 			scan.FieldTags:                       {Type: field.TypeJSON, Column: scan.FieldTags},
 			scan.FieldOwnerID:                    {Type: field.TypeString, Column: scan.FieldOwnerID},
+			scan.FieldSystemOwned:                {Type: field.TypeBool, Column: scan.FieldSystemOwned},
+			scan.FieldInternalNotes:              {Type: field.TypeString, Column: scan.FieldInternalNotes},
+			scan.FieldSystemInternalID:           {Type: field.TypeString, Column: scan.FieldSystemInternalID},
 			scan.FieldReviewedBy:                 {Type: field.TypeString, Column: scan.FieldReviewedBy},
 			scan.FieldReviewedByUserID:           {Type: field.TypeString, Column: scan.FieldReviewedByUserID},
 			scan.FieldReviewedByGroupID:          {Type: field.TypeString, Column: scan.FieldReviewedByGroupID},
@@ -3238,6 +3246,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			task.FieldTitle:                  {Type: field.TypeString, Column: task.FieldTitle},
 			task.FieldDetails:                {Type: field.TypeString, Column: task.FieldDetails},
 			task.FieldDetailsJSON:            {Type: field.TypeJSON, Column: task.FieldDetailsJSON},
+			task.FieldMetadata:               {Type: field.TypeJSON, Column: task.FieldMetadata},
 			task.FieldStatus:                 {Type: field.TypeEnum, Column: task.FieldStatus},
 			task.FieldDue:                    {Type: field.TypeTime, Column: task.FieldDue},
 			task.FieldCompleted:              {Type: field.TypeTime, Column: task.FieldCompleted},
@@ -3245,6 +3254,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 			task.FieldAssignerID:             {Type: field.TypeString, Column: task.FieldAssignerID},
 			task.FieldSystemGenerated:        {Type: field.TypeBool, Column: task.FieldSystemGenerated},
 			task.FieldIsTemplate:             {Type: field.TypeBool, Column: task.FieldIsTemplate},
+			task.FieldIsSuggested:            {Type: field.TypeBool, Column: task.FieldIsSuggested},
+			task.FieldPriority:               {Type: field.TypeInt, Column: task.FieldPriority},
+			task.FieldSource:                 {Type: field.TypeString, Column: task.FieldSource},
+			task.FieldSourceKey:              {Type: field.TypeString, Column: task.FieldSourceKey},
 			task.FieldIdempotencyKey:         {Type: field.TypeString, Column: task.FieldIdempotencyKey},
 			task.FieldExternalReferenceURL:   {Type: field.TypeJSON, Column: task.FieldExternalReferenceURL},
 			task.FieldParentTaskID:           {Type: field.TypeString, Column: task.FieldParentTaskID},
@@ -4789,6 +4802,54 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"InternalPolicy",
 	)
 	graph.MustAddE(
+		"findings",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.FindingsTable,
+			Columns: asset.FindingsPrimaryKey,
+			Bidi:    false,
+		},
+		"Asset",
+		"Finding",
+	)
+	graph.MustAddE(
+		"vulnerabilities",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.VulnerabilitiesTable,
+			Columns: asset.VulnerabilitiesPrimaryKey,
+			Bidi:    false,
+		},
+		"Asset",
+		"Vulnerability",
+	)
+	graph.MustAddE(
+		"reviews",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.ReviewsTable,
+			Columns: asset.ReviewsPrimaryKey,
+			Bidi:    false,
+		},
+		"Asset",
+		"Review",
+	)
+	graph.MustAddE(
+		"remediations",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   asset.RemediationsTable,
+			Columns: asset.RemediationsPrimaryKey,
+			Bidi:    false,
+		},
+		"Asset",
+		"Remediation",
+	)
+	graph.MustAddE(
 		"source_platform",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -5615,6 +5676,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Control",
 		"Platform",
+	)
+	graph.MustAddE(
+		"vulnerabilities",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.VulnerabilitiesTable,
+			Columns: control.VulnerabilitiesPrimaryKey,
+			Bidi:    false,
+		},
+		"Control",
+		"Vulnerability",
 	)
 	graph.MustAddE(
 		"assets",
@@ -7309,6 +7382,54 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Subcontrol",
 	)
 	graph.MustAddE(
+		"findings",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.FindingsTable,
+			Columns: entity.FindingsPrimaryKey,
+			Bidi:    false,
+		},
+		"Entity",
+		"Finding",
+	)
+	graph.MustAddE(
+		"vulnerabilities",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.VulnerabilitiesTable,
+			Columns: entity.VulnerabilitiesPrimaryKey,
+			Bidi:    false,
+		},
+		"Entity",
+		"Vulnerability",
+	)
+	graph.MustAddE(
+		"reviews",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.ReviewsTable,
+			Columns: entity.ReviewsPrimaryKey,
+			Bidi:    false,
+		},
+		"Entity",
+		"Review",
+	)
+	graph.MustAddE(
+		"remediations",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   entity.RemediationsTable,
+			Columns: entity.RemediationsPrimaryKey,
+			Bidi:    false,
+		},
+		"Entity",
+		"Remediation",
+	)
+	graph.MustAddE(
 		"platforms",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -8187,10 +8308,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"subcontrols",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   finding.SubcontrolsTable,
-			Columns: []string{finding.SubcontrolsColumn},
+			Columns: finding.SubcontrolsPrimaryKey,
 			Bidi:    false,
 		},
 		"Finding",
@@ -8199,10 +8320,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"risks",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   finding.RisksTable,
-			Columns: []string{finding.RisksColumn},
+			Columns: finding.RisksPrimaryKey,
 			Bidi:    false,
 		},
 		"Finding",
@@ -8211,10 +8332,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"programs",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   finding.ProgramsTable,
-			Columns: []string{finding.ProgramsColumn},
+			Columns: finding.ProgramsPrimaryKey,
 			Bidi:    false,
 		},
 		"Finding",
@@ -8223,10 +8344,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"assets",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   finding.AssetsTable,
-			Columns: []string{finding.AssetsColumn},
+			Columns: finding.AssetsPrimaryKey,
 			Bidi:    false,
 		},
 		"Finding",
@@ -8235,10 +8356,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"entities",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   finding.EntitiesTable,
-			Columns: []string{finding.EntitiesColumn},
+			Columns: finding.EntitiesPrimaryKey,
 			Bidi:    false,
 		},
 		"Finding",
@@ -8375,6 +8496,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Finding",
 		"FindingControl",
+	)
+	graph.MustAddE(
+		"owner",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   findingcontrol.OwnerTable,
+			Columns: []string{findingcontrol.OwnerColumn},
+			Bidi:    false,
+		},
+		"FindingControl",
+		"Organization",
 	)
 	graph.MustAddE(
 		"finding",
@@ -12961,6 +13094,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Finding",
 	)
 	graph.MustAddE(
+		"finding_controls",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.FindingControlsTable,
+			Columns: []string{organization.FindingControlsColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"FindingControl",
+	)
+	graph.MustAddE(
 		"reviews",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -14257,6 +14402,54 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"SystemDetail",
 	)
 	graph.MustAddE(
+		"findings",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   program.FindingsTable,
+			Columns: program.FindingsPrimaryKey,
+			Bidi:    false,
+		},
+		"Program",
+		"Finding",
+	)
+	graph.MustAddE(
+		"vulnerabilities",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   program.VulnerabilitiesTable,
+			Columns: program.VulnerabilitiesPrimaryKey,
+			Bidi:    false,
+		},
+		"Program",
+		"Vulnerability",
+	)
+	graph.MustAddE(
+		"reviews",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   program.ReviewsTable,
+			Columns: program.ReviewsPrimaryKey,
+			Bidi:    false,
+		},
+		"Program",
+		"Review",
+	)
+	graph.MustAddE(
+		"remediations",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   program.RemediationsTable,
+			Columns: program.RemediationsPrimaryKey,
+			Bidi:    false,
+		},
+		"Program",
+		"Remediation",
+	)
+	graph.MustAddE(
 		"users",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -14499,10 +14692,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"programs",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   remediation.ProgramsTable,
-			Columns: []string{remediation.ProgramsColumn},
+			Columns: remediation.ProgramsPrimaryKey,
 			Bidi:    false,
 		},
 		"Remediation",
@@ -14511,10 +14704,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"assets",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   remediation.AssetsTable,
-			Columns: []string{remediation.AssetsColumn},
+			Columns: remediation.AssetsPrimaryKey,
 			Bidi:    false,
 		},
 		"Remediation",
@@ -14523,10 +14716,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"entities",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   remediation.EntitiesTable,
-			Columns: []string{remediation.EntitiesColumn},
+			Columns: remediation.EntitiesPrimaryKey,
 			Bidi:    false,
 		},
 		"Remediation",
@@ -14739,10 +14932,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"programs",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   review.ProgramsTable,
-			Columns: []string{review.ProgramsColumn},
+			Columns: review.ProgramsPrimaryKey,
 			Bidi:    false,
 		},
 		"Review",
@@ -14751,10 +14944,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"assets",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   review.AssetsTable,
-			Columns: []string{review.AssetsColumn},
+			Columns: review.AssetsPrimaryKey,
 			Bidi:    false,
 		},
 		"Review",
@@ -14763,10 +14956,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"entities",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   review.EntitiesTable,
-			Columns: []string{review.EntitiesColumn},
+			Columns: review.EntitiesPrimaryKey,
 			Bidi:    false,
 		},
 		"Review",
@@ -15131,6 +15324,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Risk",
 		"Remediation",
+	)
+	graph.MustAddE(
+		"vulnerabilities",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   risk.VulnerabilitiesTable,
+			Columns: risk.VulnerabilitiesPrimaryKey,
+			Bidi:    false,
+		},
+		"Risk",
+		"Vulnerability",
+	)
+	graph.MustAddE(
+		"findings",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   risk.FindingsTable,
+			Columns: risk.FindingsPrimaryKey,
+			Bidi:    false,
+		},
+		"Risk",
+		"Finding",
 	)
 	graph.MustAddE(
 		"workflow_object_refs",
@@ -15959,6 +16176,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Subcontrol",
 		"IdentityHolder",
+	)
+	graph.MustAddE(
+		"vulnerabilities",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.VulnerabilitiesTable,
+			Columns: subcontrol.VulnerabilitiesPrimaryKey,
+			Bidi:    false,
+		},
+		"Subcontrol",
+		"Vulnerability",
+	)
+	graph.MustAddE(
+		"findings",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   subcontrol.FindingsTable,
+			Columns: subcontrol.FindingsPrimaryKey,
+			Bidi:    false,
+		},
+		"Subcontrol",
+		"Finding",
 	)
 	graph.MustAddE(
 		"owner",
@@ -17137,6 +17378,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"File",
 	)
 	graph.MustAddE(
+		"approved_by_user",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterndarequest.ApprovedByUserTable,
+			Columns: []string{trustcenterndarequest.ApprovedByUserColumn},
+			Bidi:    false,
+		},
+		"TrustCenterNDARequest",
+		"User",
+	)
+	graph.MustAddE(
 		"blocked_groups",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -17931,10 +18184,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"controls",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   vulnerability.ControlsTable,
-			Columns: []string{vulnerability.ControlsColumn},
+			Columns: vulnerability.ControlsPrimaryKey,
 			Bidi:    false,
 		},
 		"Vulnerability",
@@ -17943,10 +18196,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"subcontrols",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   vulnerability.SubcontrolsTable,
-			Columns: []string{vulnerability.SubcontrolsColumn},
+			Columns: vulnerability.SubcontrolsPrimaryKey,
 			Bidi:    false,
 		},
 		"Vulnerability",
@@ -17955,10 +18208,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"risks",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   vulnerability.RisksTable,
-			Columns: []string{vulnerability.RisksColumn},
+			Columns: vulnerability.RisksPrimaryKey,
 			Bidi:    false,
 		},
 		"Vulnerability",
@@ -17967,10 +18220,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"programs",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   vulnerability.ProgramsTable,
-			Columns: []string{vulnerability.ProgramsColumn},
+			Columns: vulnerability.ProgramsPrimaryKey,
 			Bidi:    false,
 		},
 		"Vulnerability",
@@ -17979,10 +18232,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"assets",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   vulnerability.AssetsTable,
-			Columns: []string{vulnerability.AssetsColumn},
+			Columns: vulnerability.AssetsPrimaryKey,
 			Bidi:    false,
 		},
 		"Vulnerability",
@@ -17991,10 +18244,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 	graph.MustAddE(
 		"entities",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
+			Rel:     sqlgraph.M2M,
 			Inverse: false,
 			Table:   vulnerability.EntitiesTable,
-			Columns: []string{vulnerability.EntitiesColumn},
+			Columns: vulnerability.EntitiesPrimaryKey,
 			Bidi:    false,
 		},
 		"Vulnerability",
@@ -20863,6 +21116,62 @@ func (f *AssetFilter) WhereHasInternalPoliciesWith(preds ...predicate.InternalPo
 	})))
 }
 
+// WhereHasFindings applies a predicate to check if query has an edge findings.
+func (f *AssetFilter) WhereHasFindings() {
+	f.Where(entql.HasEdge("findings"))
+}
+
+// WhereHasFindingsWith applies a predicate to check if query has an edge findings with a given conditions (other predicates).
+func (f *AssetFilter) WhereHasFindingsWith(preds ...predicate.Finding) {
+	f.Where(entql.HasEdgeWith("findings", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasVulnerabilities applies a predicate to check if query has an edge vulnerabilities.
+func (f *AssetFilter) WhereHasVulnerabilities() {
+	f.Where(entql.HasEdge("vulnerabilities"))
+}
+
+// WhereHasVulnerabilitiesWith applies a predicate to check if query has an edge vulnerabilities with a given conditions (other predicates).
+func (f *AssetFilter) WhereHasVulnerabilitiesWith(preds ...predicate.Vulnerability) {
+	f.Where(entql.HasEdgeWith("vulnerabilities", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasReviews applies a predicate to check if query has an edge reviews.
+func (f *AssetFilter) WhereHasReviews() {
+	f.Where(entql.HasEdge("reviews"))
+}
+
+// WhereHasReviewsWith applies a predicate to check if query has an edge reviews with a given conditions (other predicates).
+func (f *AssetFilter) WhereHasReviewsWith(preds ...predicate.Review) {
+	f.Where(entql.HasEdgeWith("reviews", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasRemediations applies a predicate to check if query has an edge remediations.
+func (f *AssetFilter) WhereHasRemediations() {
+	f.Where(entql.HasEdge("remediations"))
+}
+
+// WhereHasRemediationsWith applies a predicate to check if query has an edge remediations with a given conditions (other predicates).
+func (f *AssetFilter) WhereHasRemediationsWith(preds ...predicate.Remediation) {
+	f.Where(entql.HasEdgeWith("remediations", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasSourcePlatform applies a predicate to check if query has an edge source_platform.
 func (f *AssetFilter) WhereHasSourcePlatform() {
 	f.Where(entql.HasEdge("source_platform"))
@@ -22773,6 +23082,20 @@ func (f *ControlFilter) WhereHasPlatforms() {
 // WhereHasPlatformsWith applies a predicate to check if query has an edge platforms with a given conditions (other predicates).
 func (f *ControlFilter) WhereHasPlatformsWith(preds ...predicate.Platform) {
 	f.Where(entql.HasEdgeWith("platforms", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasVulnerabilities applies a predicate to check if query has an edge vulnerabilities.
+func (f *ControlFilter) WhereHasVulnerabilities() {
+	f.Where(entql.HasEdge("vulnerabilities"))
+}
+
+// WhereHasVulnerabilitiesWith applies a predicate to check if query has an edge vulnerabilities with a given conditions (other predicates).
+func (f *ControlFilter) WhereHasVulnerabilitiesWith(preds ...predicate.Vulnerability) {
+	f.Where(entql.HasEdgeWith("vulnerabilities", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -27108,6 +27431,62 @@ func (f *EntityFilter) WhereHasSubcontrolsWith(preds ...predicate.Subcontrol) {
 	})))
 }
 
+// WhereHasFindings applies a predicate to check if query has an edge findings.
+func (f *EntityFilter) WhereHasFindings() {
+	f.Where(entql.HasEdge("findings"))
+}
+
+// WhereHasFindingsWith applies a predicate to check if query has an edge findings with a given conditions (other predicates).
+func (f *EntityFilter) WhereHasFindingsWith(preds ...predicate.Finding) {
+	f.Where(entql.HasEdgeWith("findings", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasVulnerabilities applies a predicate to check if query has an edge vulnerabilities.
+func (f *EntityFilter) WhereHasVulnerabilities() {
+	f.Where(entql.HasEdge("vulnerabilities"))
+}
+
+// WhereHasVulnerabilitiesWith applies a predicate to check if query has an edge vulnerabilities with a given conditions (other predicates).
+func (f *EntityFilter) WhereHasVulnerabilitiesWith(preds ...predicate.Vulnerability) {
+	f.Where(entql.HasEdgeWith("vulnerabilities", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasReviews applies a predicate to check if query has an edge reviews.
+func (f *EntityFilter) WhereHasReviews() {
+	f.Where(entql.HasEdge("reviews"))
+}
+
+// WhereHasReviewsWith applies a predicate to check if query has an edge reviews with a given conditions (other predicates).
+func (f *EntityFilter) WhereHasReviewsWith(preds ...predicate.Review) {
+	f.Where(entql.HasEdgeWith("reviews", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasRemediations applies a predicate to check if query has an edge remediations.
+func (f *EntityFilter) WhereHasRemediations() {
+	f.Where(entql.HasEdge("remediations"))
+}
+
+// WhereHasRemediationsWith applies a predicate to check if query has an edge remediations with a given conditions (other predicates).
+func (f *EntityFilter) WhereHasRemediationsWith(preds ...predicate.Remediation) {
+	f.Where(entql.HasEdgeWith("remediations", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasPlatforms applies a predicate to check if query has an edge platforms.
 func (f *EntityFilter) WhereHasPlatforms() {
 	f.Where(entql.HasEdge("platforms"))
@@ -29584,6 +29963,11 @@ func (f *FindingControlFilter) WhereUpdatedByImpersonator(p entql.StringP) {
 	f.Where(p.Field(findingcontrol.FieldUpdatedByImpersonator))
 }
 
+// WhereOwnerID applies the entql string predicate on the owner_id field.
+func (f *FindingControlFilter) WhereOwnerID(p entql.StringP) {
+	f.Where(p.Field(findingcontrol.FieldOwnerID))
+}
+
 // WhereFindingID applies the entql string predicate on the finding_id field.
 func (f *FindingControlFilter) WhereFindingID(p entql.StringP) {
 	f.Where(p.Field(findingcontrol.FieldFindingID))
@@ -29627,6 +30011,20 @@ func (f *FindingControlFilter) WhereMetadata(p entql.BytesP) {
 // WhereDiscoveredAt applies the entql time.Time predicate on the discovered_at field.
 func (f *FindingControlFilter) WhereDiscoveredAt(p entql.TimeP) {
 	f.Where(p.Field(findingcontrol.FieldDiscoveredAt))
+}
+
+// WhereHasOwner applies a predicate to check if query has an edge owner.
+func (f *FindingControlFilter) WhereHasOwner() {
+	f.Where(entql.HasEdge("owner"))
+}
+
+// WhereHasOwnerWith applies a predicate to check if query has an edge owner with a given conditions (other predicates).
+func (f *FindingControlFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
+	f.Where(entql.HasEdgeWith("owner", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
 }
 
 // WhereHasFinding applies a predicate to check if query has an edge finding.
@@ -39112,6 +39510,20 @@ func (f *OrganizationFilter) WhereHasFindingsWith(preds ...predicate.Finding) {
 	})))
 }
 
+// WhereHasFindingControls applies a predicate to check if query has an edge finding_controls.
+func (f *OrganizationFilter) WhereHasFindingControls() {
+	f.Where(entql.HasEdge("finding_controls"))
+}
+
+// WhereHasFindingControlsWith applies a predicate to check if query has an edge finding_controls with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasFindingControlsWith(preds ...predicate.FindingControl) {
+	f.Where(entql.HasEdgeWith("finding_controls", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasReviews applies a predicate to check if query has an edge reviews.
 func (f *OrganizationFilter) WhereHasReviews() {
 	f.Where(entql.HasEdge("reviews"))
@@ -41552,6 +41964,26 @@ func (f *ProgramFilter) WhereEndDate(p entql.TimeP) {
 	f.Where(p.Field(program.FieldEndDate))
 }
 
+// WhereObservationPeriodStartDate applies the entql time.Time predicate on the observation_period_start_date field.
+func (f *ProgramFilter) WhereObservationPeriodStartDate(p entql.TimeP) {
+	f.Where(p.Field(program.FieldObservationPeriodStartDate))
+}
+
+// WhereObservationPeriodEndDate applies the entql time.Time predicate on the observation_period_end_date field.
+func (f *ProgramFilter) WhereObservationPeriodEndDate(p entql.TimeP) {
+	f.Where(p.Field(program.FieldObservationPeriodEndDate))
+}
+
+// WhereFieldworkStartDate applies the entql time.Time predicate on the fieldwork_start_date field.
+func (f *ProgramFilter) WhereFieldworkStartDate(p entql.TimeP) {
+	f.Where(p.Field(program.FieldFieldworkStartDate))
+}
+
+// WhereFieldworkEndDate applies the entql time.Time predicate on the fieldwork_end_date field.
+func (f *ProgramFilter) WhereFieldworkEndDate(p entql.TimeP) {
+	f.Where(p.Field(program.FieldFieldworkEndDate))
+}
+
 // WhereAuditorReady applies the entql bool predicate on the auditor_ready field.
 func (f *ProgramFilter) WhereAuditorReady(p entql.BoolP) {
 	f.Where(p.Field(program.FieldAuditorReady))
@@ -41833,6 +42265,62 @@ func (f *ProgramFilter) WhereHasSystemDetails() {
 // WhereHasSystemDetailsWith applies a predicate to check if query has an edge system_details with a given conditions (other predicates).
 func (f *ProgramFilter) WhereHasSystemDetailsWith(preds ...predicate.SystemDetail) {
 	f.Where(entql.HasEdgeWith("system_details", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFindings applies a predicate to check if query has an edge findings.
+func (f *ProgramFilter) WhereHasFindings() {
+	f.Where(entql.HasEdge("findings"))
+}
+
+// WhereHasFindingsWith applies a predicate to check if query has an edge findings with a given conditions (other predicates).
+func (f *ProgramFilter) WhereHasFindingsWith(preds ...predicate.Finding) {
+	f.Where(entql.HasEdgeWith("findings", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasVulnerabilities applies a predicate to check if query has an edge vulnerabilities.
+func (f *ProgramFilter) WhereHasVulnerabilities() {
+	f.Where(entql.HasEdge("vulnerabilities"))
+}
+
+// WhereHasVulnerabilitiesWith applies a predicate to check if query has an edge vulnerabilities with a given conditions (other predicates).
+func (f *ProgramFilter) WhereHasVulnerabilitiesWith(preds ...predicate.Vulnerability) {
+	f.Where(entql.HasEdgeWith("vulnerabilities", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasReviews applies a predicate to check if query has an edge reviews.
+func (f *ProgramFilter) WhereHasReviews() {
+	f.Where(entql.HasEdge("reviews"))
+}
+
+// WhereHasReviewsWith applies a predicate to check if query has an edge reviews with a given conditions (other predicates).
+func (f *ProgramFilter) WhereHasReviewsWith(preds ...predicate.Review) {
+	f.Where(entql.HasEdgeWith("reviews", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasRemediations applies a predicate to check if query has an edge remediations.
+func (f *ProgramFilter) WhereHasRemediations() {
+	f.Where(entql.HasEdge("remediations"))
+}
+
+// WhereHasRemediationsWith applies a predicate to check if query has an edge remediations with a given conditions (other predicates).
+func (f *ProgramFilter) WhereHasRemediationsWith(preds ...predicate.Remediation) {
+	f.Where(entql.HasEdgeWith("remediations", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -43646,6 +44134,34 @@ func (f *RiskFilter) WhereHasRemediationsWith(preds ...predicate.Remediation) {
 	})))
 }
 
+// WhereHasVulnerabilities applies a predicate to check if query has an edge vulnerabilities.
+func (f *RiskFilter) WhereHasVulnerabilities() {
+	f.Where(entql.HasEdge("vulnerabilities"))
+}
+
+// WhereHasVulnerabilitiesWith applies a predicate to check if query has an edge vulnerabilities with a given conditions (other predicates).
+func (f *RiskFilter) WhereHasVulnerabilitiesWith(preds ...predicate.Vulnerability) {
+	f.Where(entql.HasEdgeWith("vulnerabilities", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFindings applies a predicate to check if query has an edge findings.
+func (f *RiskFilter) WhereHasFindings() {
+	f.Where(entql.HasEdge("findings"))
+}
+
+// WhereHasFindingsWith applies a predicate to check if query has an edge findings with a given conditions (other predicates).
+func (f *RiskFilter) WhereHasFindingsWith(preds ...predicate.Finding) {
+	f.Where(entql.HasEdgeWith("findings", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasWorkflowObjectRefs applies a predicate to check if query has an edge workflow_object_refs.
 func (f *RiskFilter) WhereHasWorkflowObjectRefs() {
 	f.Where(entql.HasEdge("workflow_object_refs"))
@@ -43885,6 +44401,21 @@ func (f *ScanFilter) WhereTags(p entql.BytesP) {
 // WhereOwnerID applies the entql string predicate on the owner_id field.
 func (f *ScanFilter) WhereOwnerID(p entql.StringP) {
 	f.Where(p.Field(scan.FieldOwnerID))
+}
+
+// WhereSystemOwned applies the entql bool predicate on the system_owned field.
+func (f *ScanFilter) WhereSystemOwned(p entql.BoolP) {
+	f.Where(p.Field(scan.FieldSystemOwned))
+}
+
+// WhereInternalNotes applies the entql string predicate on the internal_notes field.
+func (f *ScanFilter) WhereInternalNotes(p entql.StringP) {
+	f.Where(p.Field(scan.FieldInternalNotes))
+}
+
+// WhereSystemInternalID applies the entql string predicate on the system_internal_id field.
+func (f *ScanFilter) WhereSystemInternalID(p entql.StringP) {
+	f.Where(p.Field(scan.FieldSystemInternalID))
 }
 
 // WhereReviewedBy applies the entql string predicate on the reviewed_by field.
@@ -45577,6 +46108,34 @@ func (f *SubcontrolFilter) WhereHasIdentityHoldersWith(preds ...predicate.Identi
 	})))
 }
 
+// WhereHasVulnerabilities applies a predicate to check if query has an edge vulnerabilities.
+func (f *SubcontrolFilter) WhereHasVulnerabilities() {
+	f.Where(entql.HasEdge("vulnerabilities"))
+}
+
+// WhereHasVulnerabilitiesWith applies a predicate to check if query has an edge vulnerabilities with a given conditions (other predicates).
+func (f *SubcontrolFilter) WhereHasVulnerabilitiesWith(preds ...predicate.Vulnerability) {
+	f.Where(entql.HasEdgeWith("vulnerabilities", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFindings applies a predicate to check if query has an edge findings.
+func (f *SubcontrolFilter) WhereHasFindings() {
+	f.Where(entql.HasEdge("findings"))
+}
+
+// WhereHasFindingsWith applies a predicate to check if query has an edge findings with a given conditions (other predicates).
+func (f *SubcontrolFilter) WhereHasFindingsWith(preds ...predicate.Finding) {
+	f.Where(entql.HasEdgeWith("findings", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // addPredicate implements the predicateAdder interface.
 func (_q *SubprocessorQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
@@ -46590,6 +47149,11 @@ func (f *TaskFilter) WhereDetailsJSON(p entql.BytesP) {
 	f.Where(p.Field(task.FieldDetailsJSON))
 }
 
+// WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
+func (f *TaskFilter) WhereMetadata(p entql.BytesP) {
+	f.Where(p.Field(task.FieldMetadata))
+}
+
 // WhereStatus applies the entql string predicate on the status field.
 func (f *TaskFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(task.FieldStatus))
@@ -46623,6 +47187,26 @@ func (f *TaskFilter) WhereSystemGenerated(p entql.BoolP) {
 // WhereIsTemplate applies the entql bool predicate on the is_template field.
 func (f *TaskFilter) WhereIsTemplate(p entql.BoolP) {
 	f.Where(p.Field(task.FieldIsTemplate))
+}
+
+// WhereIsSuggested applies the entql bool predicate on the is_suggested field.
+func (f *TaskFilter) WhereIsSuggested(p entql.BoolP) {
+	f.Where(p.Field(task.FieldIsSuggested))
+}
+
+// WherePriority applies the entql int predicate on the priority field.
+func (f *TaskFilter) WherePriority(p entql.IntP) {
+	f.Where(p.Field(task.FieldPriority))
+}
+
+// WhereSource applies the entql string predicate on the source field.
+func (f *TaskFilter) WhereSource(p entql.StringP) {
+	f.Where(p.Field(task.FieldSource))
+}
+
+// WhereSourceKey applies the entql string predicate on the source_key field.
+func (f *TaskFilter) WhereSourceKey(p entql.StringP) {
+	f.Where(p.Field(task.FieldSourceKey))
 }
 
 // WhereIdempotencyKey applies the entql string predicate on the idempotency_key field.
@@ -48623,6 +49207,20 @@ func (f *TrustCenterNDARequestFilter) WhereHasFile() {
 // WhereHasFileWith applies a predicate to check if query has an edge file with a given conditions (other predicates).
 func (f *TrustCenterNDARequestFilter) WhereHasFileWith(preds ...predicate.File) {
 	f.Where(entql.HasEdgeWith("file", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasApprovedByUser applies a predicate to check if query has an edge approved_by_user.
+func (f *TrustCenterNDARequestFilter) WhereHasApprovedByUser() {
+	f.Where(entql.HasEdge("approved_by_user"))
+}
+
+// WhereHasApprovedByUserWith applies a predicate to check if query has an edge approved_by_user with a given conditions (other predicates).
+func (f *TrustCenterNDARequestFilter) WhereHasApprovedByUserWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("approved_by_user", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

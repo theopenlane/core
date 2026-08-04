@@ -2,9 +2,7 @@ package tailscale
 
 import (
 	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
-	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // mapExprDirectoryAccount is the CEL mapping expression for Tailscale user payloads mapped to DirectoryAccount
@@ -43,38 +41,3 @@ var mapExprAsset = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 	{Key: entityops.InputKeyAssetAssetType, Expr: `"DEVICE"`},
 	{Key: entityops.InputKeyAssetInternalOwner, Expr: `'user' in payload && payload.user != "" ? payload.user : 'creator' in payload && payload.creator != "" ? payload.creator : null`},
 })
-
-// tailscaleMappings returns the built-in Tailscale ingest mappings
-func tailscaleMappings() []types.MappingRegistration {
-	return []types.MappingRegistration{
-		{
-			Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
-			Spec: types.MappingOverride{
-				FilterExpr: "true",
-				MapExpr:    mapExprDirectoryAccount,
-			},
-		},
-		{
-			Schema: integrationgenerated.IntegrationMappingSchemaDirectoryGroup,
-			Spec: types.MappingOverride{
-				FilterExpr: "true",
-				MapExpr:    mapExprDirectoryGroup,
-			},
-		},
-		{
-			Schema: integrationgenerated.IntegrationMappingSchemaDirectoryMembership,
-			Spec: types.MappingOverride{
-				FilterExpr: "true",
-				MapExpr:    mapExprDirectoryMembership,
-			},
-		},
-		{
-			Schema:  integrationgenerated.IntegrationMappingSchemaAsset,
-			Variant: deviceAssetVariant,
-			Spec: types.MappingOverride{
-				FilterExpr: "true",
-				MapExpr:    mapExprAsset,
-			},
-		},
-	}
-}

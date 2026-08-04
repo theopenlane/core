@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/samber/lo"
-
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/ent/entityops"
+	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -27,7 +27,7 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 				DisplayName: "Cloudflare",
 				Description: "Perform directory sync and asset collection from Cloudflare.",
 				Category:    "security-posture",
-				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/cloudflare/overview",
+				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/cloudflare",
 				Tags:        []string{"directory", "assets"},
 				Active:      true,
 				Visible:     true,
@@ -90,19 +90,19 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 					ConfigResolver: providerkit.ConfigFrom(func(u UserInput) DirectorySync { return u.DirectorySync }),
 					Ingest: []types.IngestContract{
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
+							Schema: entityops.SchemaDirectoryAccount.Name,
 						},
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryGroup,
+							Schema: entityops.SchemaDirectoryGroup.Name,
 						},
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryMembership,
+							Schema: entityops.SchemaDirectoryMembership.Name,
 						},
 					},
 					IngestHandle:        DirectorySync{}.IngestHandle(),
 					SkipDefaultLookback: true,
 					RequiredPermissions: []string{"Account Settings Read", "Access: Users Read", "Access: Groups Read", "Access: Organizations, Identity Providers, and Groups Read"},
-					ReconcileSchedule:   gala.NewFullFetchSchedule(),
+					Schedule:            gala.NewFullFetchSchedule(),
 				},
 				{
 					Name:           findingsSyncOperation.Name(),
@@ -115,7 +115,7 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 					ConfigResolver: providerkit.ConfigFrom(func(u UserInput) FindingsSync { return u.FindingsSync }),
 					Ingest: []types.IngestContract{
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaFinding,
+							Schema: entityops.SchemaFinding.Name,
 						},
 					},
 					IngestHandle:        FindingsCollect{}.IngestHandle(),
@@ -132,13 +132,13 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 					ConfigResolver: providerkit.ConfigFrom(func(u UserInput) AssetSync { return u.AssetSync }),
 					Ingest: []types.IngestContract{
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaAsset,
+							Schema: entityops.SchemaAsset.Name,
 						},
 					},
 					IngestHandle:        AssetCollect{}.IngestHandle(),
 					SkipDefaultLookback: true,
 					RequiredPermissions: []string{"Registrar Domains Read"},
-					ReconcileSchedule: gala.NewFullFetchSchedule(
+					Schedule: gala.NewFullFetchSchedule(
 						gala.WithMinInterval(assetSyncMinIntervalHours*time.Hour),
 						gala.WithMaxInterval(assetSyncMaxIntervalDays*assetSyncMinIntervalHours*time.Hour),
 					),
@@ -152,6 +152,7 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 					Policy:             types.ExecutionPolicy{SkipRunRecord: true},
 					Handle:             DomainScanSubmit{}.Handle(),
 					CustomerSelectable: lo.ToPtr(false),
+					Internal:           true,
 				},
 				{
 					Name:               DomainScanPollOp.Name(),
@@ -162,16 +163,18 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 					Policy:             types.ExecutionPolicy{SkipRunRecord: true},
 					Handle:             DomainScanPoll{}.Handle(),
 					CustomerSelectable: lo.ToPtr(false),
+					Internal:           true,
 				},
 				{
-					Name:               DomainScanGatherEnrichmentOp.Name(),
+					Name:               DomainScanEnrichmentOp.Name(),
 					Description:        "Gather company profile, compliance, and DNS vendor data for a domain",
-					Topic:              DefinitionID.OperationTopic(DomainScanGatherEnrichmentOp.Name()),
+					Topic:              DefinitionID.OperationTopic(DomainScanEnrichmentOp.Name()),
 					ClientRef:          cloudflareClient.ID(),
 					ConfigSchema:       domainScanGatherEnrichmentSchema,
 					Policy:             types.ExecutionPolicy{SkipRunRecord: true},
 					Handle:             DomainScanGatherEnrichment{}.Handle(),
 					CustomerSelectable: lo.ToPtr(false),
+					Internal:           true,
 				},
 				{
 					Name:               DomainScanBuildReportOp.Name(),
@@ -182,9 +185,81 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 					Policy:             types.ExecutionPolicy{SkipRunRecord: true},
 					Handle:             DomainScanBuildReport{}.Handle(),
 					CustomerSelectable: lo.ToPtr(false),
+					Internal:           true,
+				},
+				{
+					Name:         DomainScanRequestOp.Name(),
+					Description:  "Request a domain scan for a single domain",
+					Topic:        DefinitionID.OperationTopic(DomainScanRequestOp.Name()),
+					ConfigSchema: domainScanRequestSchema,
+					Policy:       types.ExecutionPolicy{Inline: true, SkipRunRecord: true},
+					// Disable if the runtime is not provisioned
+					DisabledForAll: !runtime.Provisioned(),
+					// only applied to user created scans, not onboarding scans
+					RateLimit:             &types.RateLimitPolicy{Window: time.Hour},
+					Handle:                DomainScanRequest{}.Handle(),
+					CustomerSelectable:    lo.ToPtr(false),
+					RequiresPaymentMethod: true,
+				},
+				{
+					Name:               DomainScanImportOp.Name(),
+					Description:        "Import a reviewer-accepted domain scan report into real records",
+					Topic:              DefinitionID.OperationTopic(DomainScanImportOp.Name()),
+					ConfigSchema:       domainScanImportSchema,
+					Policy:             types.ExecutionPolicy{SkipRunRecord: true},
+					Handle:             DomainScanImport{}.Handle(),
+					CustomerSelectable: lo.ToPtr(false),
+					Internal:           true,
 				},
 			},
-			Mappings: cloudflareMappings(),
+			GalaListeners: []types.GalaListenerRegistration{
+				domainScanListeners(),
+			},
+			Mappings: []types.MappingRegistration{
+				{
+					Schema: entityops.SchemaDirectoryAccount.Name,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprDirectoryAccount,
+					},
+				},
+				{
+					Schema: entityops.SchemaDirectoryGroup.Name,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprDirectoryGroup,
+					},
+				},
+				{
+					Schema: entityops.SchemaDirectoryMembership.Name,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprDirectoryMembership,
+					},
+				},
+				{
+					Schema: entityops.SchemaFinding.Name,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprFinding,
+						Links: []types.LinkRule{
+							{
+								TargetSchema: entityops.SchemaControl.Name,
+								TargetField:  control.FieldRefCode,
+								SourceField:  entityops.InputKeyFindingCategory,
+								SourceList:   entityops.InputKeyFindingCategories,
+							},
+						},
+					},
+				},
+				{
+					Schema: entityops.SchemaAsset.Name,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprAsset,
+					},
+				},
+			},
 		}
 
 		if runtime.Provisioned() {

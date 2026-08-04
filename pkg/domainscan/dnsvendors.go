@@ -280,10 +280,8 @@ func spfIncludeHosts(record string) []string {
 	return hosts
 }
 
-// vendorNameFromHostname derives a display name from a hostname's
-// registrable domain by capitalizing its first label, e.g.
-// "aspmx.l.google.com" -> "Google", "google.com", also returning that
-// registrable domain so callers can use it as the vendor's URL
+// vendorNameFromHostname derives a display name from a hostname's registrable domain by
+// capitalizing its first label, e.g. "aspmx.l.google.com" -> "Google", "google.com"
 func vendorNameFromHostname(host string) (name, domain string) {
 	host = strings.TrimSuffix(host, ".")
 
@@ -293,23 +291,27 @@ func vendorNameFromHostname(host string) (name, domain string) {
 	}
 
 	if override, ok := vendorHostNames[strings.ToLower(host)]; ok {
-		return override, domain
+		name = override
+	} else if override, ok := vendorDomainNames[domain]; ok {
+		name = override
+	} else {
+		label := strings.SplitN(domain, ".", 2)[0] //nolint:mnd
+		if label == "" {
+			return domain, domain
+		}
+
+		if canonical, ok := vendorCanonicalNames[strings.ToLower(label)]; ok {
+			name = canonical
+		} else {
+			return titleCaseLabel(label), domain
+		}
 	}
 
-	if override, ok := vendorDomainNames[domain]; ok {
-		return override, domain
+	if canonical, ok := vendorNameDomains[strings.ToLower(name)]; ok {
+		domain = canonical
 	}
 
-	label := strings.SplitN(domain, ".", 2)[0] //nolint:mnd
-	if label == "" {
-		return domain, domain
-	}
-
-	if canonical, ok := vendorCanonicalNames[strings.ToLower(label)]; ok {
-		return canonical, domain
-	}
-
-	return titleCaseLabel(label), domain
+	return name, domain
 }
 
 // titleCaseLabel capitalizes the first letter of a string

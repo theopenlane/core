@@ -8,7 +8,7 @@ import (
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -16,7 +16,7 @@ import (
 
 // TestGitHubDirectoryMembershipMapping verifies team membership payloads carry the provider role through to the mapped document
 func TestGitHubDirectoryMembershipMapping(t *testing.T) {
-	spec := githubMappingSpecForSchema(t, integrationgenerated.IntegrationMappingSchemaDirectoryMembership)
+	spec := githubMappingSpecForSchema(t, entityops.SchemaDirectoryMembership.Name)
 
 	maintainerRaw, err := providerkit.EvalMap(context.Background(), spec.MapExpr, types.MappingEnvelope{
 		Resource: "acme/security",
@@ -41,11 +41,23 @@ func TestGitHubDirectoryMembershipMapping(t *testing.T) {
 	assert.NilError(t, err)
 
 	assert.Check(t, is.Equal("MEMBER", noRoleMapped["role"]))
+
+	largeIDRaw, err := providerkit.EvalMap(context.Background(), spec.MapExpr, types.MappingEnvelope{
+		Resource: "acme/security",
+		Payload:  json.RawMessage(`{"Org":"acme","Team":{"DatabaseID":17146926,"Slug":"security"},"Member":{"DatabaseID":147884153,"Login":"bigid"},"Role":"MEMBER"}`),
+	})
+	assert.NilError(t, err)
+
+	largeIDMapped, err := jsonx.ToMap(largeIDRaw)
+	assert.NilError(t, err)
+
+	assert.Check(t, is.Equal("147884153", largeIDMapped["directory_account_id"]), "large ids must not render in scientific notation")
+	assert.Check(t, is.Equal("17146926", largeIDMapped["directory_group_id"]))
 }
 
 // TestGitHubDirectoryAccountMapping verifies confirmed email aliases flow into the mapped account document
 func TestGitHubDirectoryAccountMapping(t *testing.T) {
-	spec := githubMappingSpecForSchema(t, integrationgenerated.IntegrationMappingSchemaDirectoryAccount)
+	spec := githubMappingSpecForSchema(t, entityops.SchemaDirectoryAccount.Name)
 
 	withAliasesRaw, err := providerkit.EvalMap(context.Background(), spec.MapExpr, types.MappingEnvelope{
 		Resource: "acme",
@@ -112,7 +124,7 @@ func TestResolveCanonicalEmail(t *testing.T) {
 func githubMappingSpecForSchema(t *testing.T, schema string) types.MappingOverride {
 	t.Helper()
 
-	for _, mapping := range githubAppMappings() {
+	for _, mapping := range testMappings(t) {
 		if mapping.Schema == schema {
 			return mapping.Spec
 		}

@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
+	"github.com/theopenlane/core/internal/ent/taskrules"
 	"github.com/theopenlane/core/internal/ent/validator"
 )
 
@@ -519,6 +520,11 @@ func (o Organization) Edges() []ent.Edge {
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema:         o,
+			edgeSchema:         FindingControl{},
+			cascadeDeleteOwner: true,
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
 			edgeSchema:         Review{},
 			cascadeDeleteOwner: true,
 		}),
@@ -636,6 +642,7 @@ func (o Organization) Annotations() []schema.Annotation {
 		entx.FileCategory(SchemaOrganization),
 		entfga.SelfAccessChecks(),
 		entx.FGACrudSkip(entx.SkipDelete | entx.SkipCreate),
+		entx.SchemaTaskRule(taskrules.OrganizationSuggestedRules...),
 	}
 }
 

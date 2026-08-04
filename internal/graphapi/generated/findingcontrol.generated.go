@@ -57,6 +57,75 @@ func (ec *executionContext) fieldContext_FindingControlBulkCreatePayload_finding
 	return fc, nil
 }
 
+func (ec *executionContext) _FindingControlBulkDeletePayload_deletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.FindingControlBulkDeletePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_FindingControlBulkDeletePayload_deletedIDs(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.DeletedIDs, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_FindingControlBulkDeletePayload_deletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("FindingControlBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+}
+
+func (ec *executionContext) _FindingControlBulkDeletePayload_notDeletedIDs(ctx context.Context, field graphql.CollectedField, obj *model.FindingControlBulkDeletePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_FindingControlBulkDeletePayload_notDeletedIDs(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.NotDeletedIDs, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_FindingControlBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("FindingControlBulkDeletePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+}
+
+func (ec *executionContext) _FindingControlBulkDeletePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.FindingControlBulkDeletePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_FindingControlBulkDeletePayload_error(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Error, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_FindingControlBulkDeletePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("FindingControlBulkDeletePayload", field, false, false, errors.New("field of type String does not have child fields"))
+}
+
 func (ec *executionContext) _FindingControlCreatePayload_findingControl(ctx context.Context, field graphql.CollectedField, obj *model.FindingControlCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -170,6 +239,54 @@ func (ec *executionContext) _FindingControlBulkCreatePayload(ctx context.Context
 			out.Values[i] = graphql.MarshalString("FindingControlBulkCreatePayload")
 		case "findingControls":
 			out.Values[i] = ec._FindingControlBulkCreatePayload_findingControls(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch(ctx)
+	if out.Invalids > 0 {
+		return graphql.Null
+	}
+
+	atomic.AddInt32(&ec.Deferred, int32(min(len(deferLabelToView), math.MaxInt32)))
+
+	ec.ProcessDeferredGroup(graphql.DeferredGroup{
+		Defers:   deferLabelToView,
+		Path:     graphql.GetPath(ctx),
+		FieldSet: deferredFieldSet,
+		Context:  ctx,
+	})
+
+	return out
+}
+
+var findingControlBulkDeletePayloadImplementors = []string{"FindingControlBulkDeletePayload"}
+
+func (ec *executionContext) _FindingControlBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, obj *model.FindingControlBulkDeletePayload) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, findingControlBulkDeletePayloadImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	deferredFieldSet := graphql.NewFieldSet(nil)
+	deferLabelToView := make(map[string]*graphql.FieldSetView)
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("FindingControlBulkDeletePayload")
+		case "deletedIDs":
+			out.Values[i] = ec._FindingControlBulkDeletePayload_deletedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "notDeletedIDs":
+			out.Values[i] = ec._FindingControlBulkDeletePayload_notDeletedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "error":
+			out.Values[i] = ec._FindingControlBulkDeletePayload_error(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
@@ -324,6 +441,20 @@ func (ec *executionContext) marshalNFindingControlBulkCreatePayload2ᚖgithubᚗ
 		return graphql.Null
 	}
 	return ec._FindingControlBulkCreatePayload(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNFindingControlBulkDeletePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFindingControlBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v model.FindingControlBulkDeletePayload) graphql.Marshaler {
+	return ec._FindingControlBulkDeletePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNFindingControlBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFindingControlBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.FindingControlBulkDeletePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._FindingControlBulkDeletePayload(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalNFindingControlCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFindingControlCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.FindingControlCreatePayload) graphql.Marshaler {

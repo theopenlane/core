@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect"
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/rs/zerolog"
+	"github.com/samber/do/v2"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 	"github.com/theopenlane/core/fga/fgaversion"
@@ -19,9 +20,11 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/enttest"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/user"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/entdb"
 	coreutils "github.com/theopenlane/core/internal/testutils"
 	"github.com/theopenlane/core/pkg/entitlements"
+	"github.com/theopenlane/core/pkg/gala"
 	authmw "github.com/theopenlane/core/pkg/middleware/auth"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
@@ -42,9 +45,10 @@ func TestHookTestSuite(t *testing.T) {
 // HookTestSuite handles the setup and teardown between tests
 type HookTestSuite struct {
 	suite.Suite
-	client *generated.Client
-	tf     *testutils.TestFixture
-	ofgaTF *fgatest.OpenFGATestFixture
+	client      *generated.Client
+	tf          *testutils.TestFixture
+	ofgaTF      *fgatest.OpenFGATestFixture
+	galaRuntime *gala.Gala
 }
 
 // SetupSuite runs before the test suite
@@ -62,8 +66,12 @@ func (suite *HookTestSuite) SetupSuite() {
 func (suite *HookTestSuite) TearDownSuite() {
 	t := suite.T()
 
+	// close the gala runtime
+	err := suite.galaRuntime.Close()
+	require.NoError(t, err)
+
 	// close the database connection
-	err := suite.client.Close()
+	err = suite.client.Close()
 	require.NoError(t, err)
 
 	// close the database container
@@ -131,6 +139,20 @@ func (suite *HookTestSuite) setupClient() *generated.Client {
 	client := enttest.Open(t, dialect.Postgres, suite.tf.URI,
 		enttest.WithMigrateOptions(entdb.EnablePostgresOption(db)),
 		enttest.WithOptions(opts...))
+
+	galaRuntime, err := gala.NewInMemory()
+	require.NoError(t, err)
+
+	_, err = hooks.RegisterGalaTaskRuleListeners(galaRuntime.Registry())
+	require.NoError(t, err)
+
+	do.ProvideValue(galaRuntime.Injector(), client)
+
+	client.Use(hooks.EmitGalaEventHook(func() *gala.Gala {
+		return galaRuntime
+	}))
+
+	suite.galaRuntime = galaRuntime
 
 	return client
 }

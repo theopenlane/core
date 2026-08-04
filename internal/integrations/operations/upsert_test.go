@@ -61,24 +61,25 @@ func TestPersistUpsert_CreatePath(t *testing.T) {
 
 	created := false
 
-	err := persistUpsert(
+	id, err := persistUpsert(
 		context.Background(),
 		input{Name: "new"},
 		func(in input) (input, error) { return in, nil },
 		func(context.Context) (any, error) {
 			return nil, &ent.NotFoundError{}
 		},
-		func(_ context.Context, in input) error {
+		func(_ context.Context, in input) (string, error) {
 			created = true
 			if in.Name != "new" {
 				t.Fatalf("create input Name=%q, want %q", in.Name, "new")
 			}
-			return nil
+			return "new-id", nil
 		},
 		func(context.Context, any, input) error {
 			t.Fatal("update should not be called on create path")
 			return nil
 		},
+		func(a any) string { return "" },
 	)
 
 	if err != nil {
@@ -86,6 +87,9 @@ func TestPersistUpsert_CreatePath(t *testing.T) {
 	}
 	if !created {
 		t.Fatal("expected create to be called")
+	}
+	if id != "new-id" {
+		t.Fatalf("expected id=%q, got %q", "new-id", id)
 	}
 }
 
@@ -98,16 +102,16 @@ func TestPersistUpsert_UpdatePath(t *testing.T) {
 
 	updated := false
 
-	err := persistUpsert(
+	id, err := persistUpsert(
 		context.Background(),
 		input{Name: "existing"},
 		func(in input) (input, error) { return in, nil },
 		func(context.Context) (string, error) {
 			return "existing-id", nil
 		},
-		func(context.Context, input) error {
+		func(context.Context, input) (string, error) {
 			t.Fatal("create should not be called on update path")
-			return nil
+			return "", nil
 		},
 		func(_ context.Context, existing string, in input) error {
 			updated = true
@@ -119,6 +123,7 @@ func TestPersistUpsert_UpdatePath(t *testing.T) {
 			}
 			return nil
 		},
+		func(s string) string { return s },
 	)
 
 	if err != nil {
@@ -126,6 +131,9 @@ func TestPersistUpsert_UpdatePath(t *testing.T) {
 	}
 	if !updated {
 		t.Fatal("expected update to be called")
+	}
+	if id != "existing-id" {
+		t.Fatalf("expected id=%q, got %q", "existing-id", id)
 	}
 }
 
@@ -136,21 +144,22 @@ func TestPersistUpsert_FindExistingError(t *testing.T) {
 
 	dbErr := errors.New("database connection lost")
 
-	err := persistUpsert(
+	_, err := persistUpsert(
 		context.Background(),
 		input{Name: "test"},
 		func(in input) (input, error) { return in, nil },
 		func(context.Context) (any, error) {
 			return nil, dbErr
 		},
-		func(context.Context, input) error {
+		func(context.Context, input) (string, error) {
 			t.Fatal("create should not be called")
-			return nil
+			return "", nil
 		},
 		func(context.Context, any, input) error {
 			t.Fatal("update should not be called")
 			return nil
 		},
+		func(a any) string { return "" },
 	)
 
 	if !errors.Is(err, ErrIngestPersistFailed) {
@@ -165,21 +174,22 @@ func TestPersistUpsert_ToUpdateError(t *testing.T) {
 
 	toUpdateErr := errors.New("conversion failed")
 
-	err := persistUpsert(
+	_, err := persistUpsert(
 		context.Background(),
 		input{Name: "test"},
 		func(input) (input, error) { return input{}, toUpdateErr },
 		func(context.Context) (string, error) {
 			return "exists", nil
 		},
-		func(context.Context, input) error {
+		func(context.Context, input) (string, error) {
 			t.Fatal("create should not be called")
-			return nil
+			return "", nil
 		},
 		func(context.Context, string, input) error {
 			t.Fatal("update should not be called")
 			return nil
 		},
+		func(s string) string { return s },
 	)
 
 	if !errors.Is(err, toUpdateErr) {
@@ -192,20 +202,21 @@ func TestPersistUpsert_CreateError(t *testing.T) {
 
 	type input struct{ Name string }
 
-	err := persistUpsert(
+	_, err := persistUpsert(
 		context.Background(),
 		input{Name: "test"},
 		func(in input) (input, error) { return in, nil },
 		func(context.Context) (any, error) {
 			return nil, &ent.NotFoundError{}
 		},
-		func(context.Context, input) error {
-			return &ent.ValidationError{Name: "name"}
+		func(context.Context, input) (string, error) {
+			return "", &ent.ValidationError{Name: "name"}
 		},
 		func(context.Context, any, input) error {
 			t.Fatal("update should not be called")
 			return nil
 		},
+		func(a any) string { return "" },
 	)
 
 	if !errors.Is(err, ErrIngestMappedDocumentInvalid) {
@@ -225,23 +236,24 @@ func TestPersistRoundTripUpsert_CreatePath(t *testing.T) {
 
 	created := false
 
-	err := persistRoundTripUpsert(
+	id, err := persistRoundTripUpsert(
 		context.Background(),
 		createInput{Name: "new"},
 		func(context.Context) (any, error) {
 			return nil, &ent.NotFoundError{}
 		},
-		func(_ context.Context, in createInput) error {
+		func(_ context.Context, in createInput) (string, error) {
 			created = true
 			if in.Name != "new" {
 				t.Fatalf("input Name=%q, want %q", in.Name, "new")
 			}
-			return nil
+			return "new-id", nil
 		},
 		func(context.Context, any, updateInput) error {
 			t.Fatal("update should not be called")
 			return nil
 		},
+		func(a any) string { return "" },
 	)
 
 	if err != nil {
@@ -249,6 +261,9 @@ func TestPersistRoundTripUpsert_CreatePath(t *testing.T) {
 	}
 	if !created {
 		t.Fatal("expected create to be called")
+	}
+	if id != "new-id" {
+		t.Fatalf("expected id=%q, got %q", "new-id", id)
 	}
 }
 
@@ -264,15 +279,15 @@ func TestPersistRoundTripUpsert_UpdatePath(t *testing.T) {
 
 	updated := false
 
-	err := persistRoundTripUpsert(
+	id, err := persistRoundTripUpsert(
 		context.Background(),
 		createInput{Name: "existing"},
 		func(context.Context) (string, error) {
 			return "existing-id", nil
 		},
-		func(context.Context, createInput) error {
+		func(context.Context, createInput) (string, error) {
 			t.Fatal("create should not be called")
-			return nil
+			return "", nil
 		},
 		func(_ context.Context, existing string, in updateInput) error {
 			updated = true
@@ -281,6 +296,7 @@ func TestPersistRoundTripUpsert_UpdatePath(t *testing.T) {
 			}
 			return nil
 		},
+		func(s string) string { return s },
 	)
 
 	if err != nil {
@@ -289,6 +305,9 @@ func TestPersistRoundTripUpsert_UpdatePath(t *testing.T) {
 	if !updated {
 		t.Fatal("expected update to be called")
 	}
+	if id != "existing-id" {
+		t.Fatalf("expected id=%q, got %q", "existing-id", id)
+	}
 }
 
 func TestPersistUpsert_UpdateError(t *testing.T) {
@@ -296,20 +315,21 @@ func TestPersistUpsert_UpdateError(t *testing.T) {
 
 	type input struct{ Name string }
 
-	err := persistUpsert(
+	_, err := persistUpsert(
 		context.Background(),
 		input{Name: "test"},
 		func(in input) (input, error) { return in, nil },
 		func(context.Context) (string, error) {
 			return "exists", nil
 		},
-		func(context.Context, input) error {
+		func(context.Context, input) (string, error) {
 			t.Fatal("create should not be called")
-			return nil
+			return "", nil
 		},
 		func(_ context.Context, _ string, _ input) error {
 			return &ent.ConstraintError{}
 		},
+		func(s string) string { return s },
 	)
 
 	if !errors.Is(err, ErrIngestUpsertConflict) {

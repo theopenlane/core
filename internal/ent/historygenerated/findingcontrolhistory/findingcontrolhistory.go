@@ -35,6 +35,8 @@ const (
 	FieldUpdatedBy = "updated_by"
 	// FieldUpdatedByImpersonator holds the string denoting the updated_by_impersonator field in the database.
 	FieldUpdatedByImpersonator = "updated_by_impersonator"
+	// FieldOwnerID holds the string denoting the owner_id field in the database.
+	FieldOwnerID = "owner_id"
 	// FieldFindingID holds the string denoting the finding_id field in the database.
 	FieldFindingID = "finding_id"
 	// FieldControlID holds the string denoting the control_id field in the database.
@@ -68,6 +70,7 @@ var Columns = []string{
 	FieldCreatedBy,
 	FieldUpdatedBy,
 	FieldUpdatedByImpersonator,
+	FieldOwnerID,
 	FieldFindingID,
 	FieldControlID,
 	FieldStandardID,
@@ -166,6 +169,11 @@ func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
 // ByUpdatedByImpersonator orders the results by the updated_by_impersonator field.
 func ByUpdatedByImpersonator(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedByImpersonator, opts...).ToFunc()
+}
+
+// ByOwnerID orders the results by the owner_id field.
+func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
 }
 
 // ByFindingID orders the results by the finding_id field.

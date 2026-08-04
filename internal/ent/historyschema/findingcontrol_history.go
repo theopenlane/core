@@ -16,7 +16,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/schema"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
-	"github.com/theopenlane/iam/entfga"
 )
 
 // FindingControlHistory holds the schema definition for the FindingControlHistory entity.
@@ -37,11 +36,6 @@ func (FindingControlHistory) Annotations() []entschema.Annotation {
 		},
 		entgql.QueryField(),
 		entgql.RelayConnection(),
-		entfga.Annotations{
-			ObjectType:   "finding_control",
-			IDField:      "Ref",
-			IncludeHooks: false,
-		},
 	}
 }
 
@@ -114,6 +108,6 @@ func (FindingControlHistory) Policy() ent.Policy {
 // Interceptors of the FindingControlHistory
 func (FindingControlHistory) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.FilterListQuery(),
+		interceptors.HistoryAccess("audit_log_viewer", false, false, ""),
 	}
 }

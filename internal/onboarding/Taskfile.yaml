@@ -1,0 +1,17 @@
+version: "3"
+
+tasks:
+  default:
+    silent: false
+    cmds:
+      - task --list
+
+  genyaml:
+    desc: generates the go code output from the onboarding yaml
+    cmds:
+      - go run genyaml/yamlgen.go
+
+  all:
+    desc: runs all onboarding generation tasks
+    cmds:
+      - task: genyaml

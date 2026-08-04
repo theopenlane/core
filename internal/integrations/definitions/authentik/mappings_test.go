@@ -12,7 +12,10 @@ import (
 )
 
 func TestMappingExpressionsValid(t *testing.T) {
-	for _, m := range authentikMappings() {
+	def, err := Builder()()
+	assert.NilError(t, err)
+
+	for _, m := range def.Mappings {
 		name := m.Schema
 		if m.Variant != "" {
 			name += "/" + m.Variant
@@ -29,7 +32,10 @@ func TestMappingExpressionsValid(t *testing.T) {
 }
 
 func TestExamplePayloads(t *testing.T) {
-	mappings := authentikMappings()
+	def, err := Builder()()
+	assert.NilError(t, err)
+
+	mappings := def.Mappings
 	accountSpec := mappingtest.MappingSpec(t, mappings, "DirectoryAccount")
 	groupSpec := mappingtest.MappingSpec(t, mappings, "DirectoryGroup")
 	membershipSpec := mappingtest.MappingSpec(t, mappings, "DirectoryMembership")

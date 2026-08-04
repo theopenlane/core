@@ -7,8 +7,8 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	generated "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/integrations/definitions/slack"
-	"github.com/theopenlane/core/internal/integrations/operations"
 	intruntime "github.com/theopenlane/core/internal/integrations/runtime"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // sendSystemSlack marshals the input and executes a system Slack operation via
@@ -24,7 +24,7 @@ func sendSystemSlack(ctx context.Context, client *generated.Client, operationNam
 		return err
 	}
 
-	_, err = rt.Dispatch(ctx, operations.DispatchRequest{
+	_, err = rt.Dispatch(ctx, types.DispatchRequest{
 		DefinitionID: slack.DefinitionID.ID(),
 		Operation:    operationName,
 		Config:       config,

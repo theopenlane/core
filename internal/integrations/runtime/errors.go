@@ -29,4 +29,6 @@ var (
 	ErrCredentialNotDeclared = errors.New("integrations/runtime: credential not declared on connection")
 	// ErrRuntimeClientNotFound indicates no pre-built runtime client exists for the requested definition
 	ErrRuntimeClientNotFound = errors.New("integrations/runtime: runtime client not found")
+	// ErrOperationRateLimited indicates the operation's RateLimit policy rejected this run for the organization
+	ErrOperationRateLimited = errors.New("integrations/runtime: operation rate limited")
 )

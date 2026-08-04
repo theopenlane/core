@@ -2135,8 +2135,7 @@ func (ec *executionContext) unmarshalOControlReportOrder2ᚕᚖgithubᚗcomᚋth
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*model.ControlReportOrder, len(vSlice))
 	for i := range vSlice {

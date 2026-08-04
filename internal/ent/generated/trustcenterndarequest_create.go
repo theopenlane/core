@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
+	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // TrustCenterNDARequestCreate is the builder for creating a TrustCenterNDARequest entity.
@@ -377,6 +378,11 @@ func (_c *TrustCenterNDARequestCreate) SetFile(v *File) *TrustCenterNDARequestCr
 	return _c.SetFileID(v.ID)
 }
 
+// SetApprovedByUser sets the "approved_by_user" edge to the User entity.
+func (_c *TrustCenterNDARequestCreate) SetApprovedByUser(v *User) *TrustCenterNDARequestCreate {
+	return _c.SetApprovedByUserID(v.ID)
+}
+
 // Mutation returns the TrustCenterNDARequestMutation object of the builder.
 func (_c *TrustCenterNDARequestCreate) Mutation() *TrustCenterNDARequestMutation {
 	return _c.mutation
@@ -591,10 +597,6 @@ func (_c *TrustCenterNDARequestCreate) createSpec() (*TrustCenterNDARequest, *sq
 		_spec.SetField(trustcenterndarequest.FieldApprovedAt, field.TypeTime, value)
 		_node.ApprovedAt = &value
 	}
-	if value, ok := _c.mutation.ApprovedByUserID(); ok {
-		_spec.SetField(trustcenterndarequest.FieldApprovedByUserID, field.TypeString, value)
-		_node.ApprovedByUserID = &value
-	}
 	if value, ok := _c.mutation.SignedAt(); ok {
 		_spec.SetField(trustcenterndarequest.FieldSignedAt, field.TypeTime, value)
 		_node.SignedAt = &value
@@ -702,6 +704,24 @@ func (_c *TrustCenterNDARequestCreate) createSpec() (*TrustCenterNDARequest, *sq
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.FileID = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ApprovedByUserIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenterndarequest.ApprovedByUserTable,
+			Columns: []string{trustcenterndarequest.ApprovedByUserColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.TrustCenterNDARequest
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.ApprovedByUserID = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

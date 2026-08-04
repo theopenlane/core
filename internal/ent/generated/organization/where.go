@@ -5670,6 +5670,35 @@ func HasFindingsWith(preds ...predicate.Finding) predicate.Organization {
 	})
 }
 
+// HasFindingControls applies the HasEdge predicate on the "finding_controls" edge.
+func HasFindingControls() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, FindingControlsTable, FindingControlsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.FindingControl
+		step.Edge.Schema = schemaConfig.FindingControl
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasFindingControlsWith applies the HasEdge predicate on the "finding_controls" edge with a given conditions (other predicates).
+func HasFindingControlsWith(preds ...predicate.FindingControl) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newFindingControlsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.FindingControl
+		step.Edge.Schema = schemaConfig.FindingControl
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasReviews applies the HasEdge predicate on the "reviews" edge.
 func HasReviews() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {

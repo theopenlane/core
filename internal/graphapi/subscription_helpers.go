@@ -28,16 +28,27 @@ func (r *subscriptionResolver) handleNotificationSubscription(ctx context.Contex
 	if !ok || caller == nil {
 		return nil, fmt.Errorf("failed to get user ID from context: %w", auth.ErrNoAuthUser)
 	}
+
+	// exit early for anonymous users
+	if caller.IsAnonymous() {
+		return nil, fmt.Errorf("notifications are not available to anonymous callers: %w", auth.ErrNoAuthUser)
+	}
+
 	userID := caller.SubjectID
 	if userID == "" {
 		return nil, fmt.Errorf("failed to get user ID from context: %w", auth.ErrNoAuthUser)
 	}
 
-	logx.FromContext(ctx).Debug().Str("user_id", userID).Bool("redis_enabled", r.subscriptionManager.HasRedis()).Msg("notification subscription: subscribing")
+	orgID, _ := caller.ActiveOrg()
+	if orgID == "" {
+		logx.FromContext(ctx).Warn().Str("user_id", userID).Msg("notification subscription: no active organization, org-wide notifications will not be delivered")
+	}
+
+	logx.FromContext(ctx).Debug().Str("user_id", userID).Str("org_id", orgID).Bool("redis_enabled", r.subscriptionManager.HasRedis()).Msg("notification subscription: subscribing")
 
 	// Create a channel with the interface type for the subscription manager
 	internalChan := make(chan graphsubscriptions.Notification, graphsubscriptions.NotificationChannelBufferSize)
-	r.subscriptionManager.Subscribe(userID, internalChan)
+	r.subscriptionManager.Subscribe(userID, orgID, internalChan)
 
 	// Create a channel with the concrete type for the GraphQL response
 	notifChan := make(chan *generated.Notification, graphsubscriptions.NotificationChannelBufferSize)
@@ -85,7 +96,7 @@ func (r *subscriptionResolver) handleNotificationSubscription(ctx context.Contex
 			select {
 			case notifChan <- existingNotif:
 			case <-ctx.Done():
-				r.subscriptionManager.Unsubscribe(userID, internalChan)
+				r.subscriptionManager.Unsubscribe(userID, orgID, internalChan)
 				return
 			}
 		}
@@ -94,7 +105,7 @@ func (r *subscriptionResolver) handleNotificationSubscription(ctx context.Contex
 		for {
 			select {
 			case <-ctx.Done():
-				r.subscriptionManager.Unsubscribe(userID, internalChan)
+				r.subscriptionManager.Unsubscribe(userID, orgID, internalChan)
 				return
 			case notif, ok := <-internalChan:
 				if !ok {
@@ -123,7 +134,7 @@ func (r *subscriptionResolver) handleNotificationSubscription(ctx context.Contex
 				select {
 				case notifChan <- concreteNotif:
 				case <-ctx.Done():
-					r.subscriptionManager.Unsubscribe(userID, internalChan)
+					r.subscriptionManager.Unsubscribe(userID, orgID, internalChan)
 					return
 				}
 			}

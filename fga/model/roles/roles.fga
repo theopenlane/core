@@ -13,9 +13,9 @@ extend type organization
     # owner should be able to have full access to all objects in the system that are organization owned. The only exception would be user specific objects like their own user object or personal access tokens.
     define owner: [user] or owner from parent
 
-    # @create: comment, discussion, task
+    # @create: comment, discussion, task, finding_control
     # @view: control, subcontrol, program, evidence, internal_policy, procedure, review, platform
-    # @crud: evidence, review
+    # @crud: evidence, review, finding
     define auditor: [user] or auditor from parent
 
     # @inherit: can_manage_compliance, can_manage_policies, can_manage_registry, can_manage_risk

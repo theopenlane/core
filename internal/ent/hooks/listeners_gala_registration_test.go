@@ -43,6 +43,22 @@ func TestRegisterGalaOrganizationAvatarListeners(t *testing.T) {
 	require.False(t, registry.InterestedIn(topic, ent.OpUpdate.String()))
 }
 
+func TestRegisterGalaTaskRuleListeners(t *testing.T) {
+	t.Parallel()
+
+	registry := gala.NewRegistry()
+
+	ids, err := RegisterGalaTaskRuleListeners(registry)
+	require.NoError(t, err)
+	require.NotEmpty(t, ids)
+
+	for _, schemaType := range []string{entgen.TypeOnboarding, entgen.TypeOrganization, entgen.TypeNotification} {
+		topic := eventqueue.MutationTopicName(eventqueue.MutationConcernDirect, schemaType)
+		require.True(t, registry.InterestedIn(topic, ent.OpCreate.String()), "expected %s to subscribe to create", schemaType)
+		require.False(t, registry.InterestedIn(topic, ent.OpUpdate.String()), "expected %s not to subscribe to update", schemaType)
+	}
+}
+
 func TestRegisterGalaTrustCenterCacheListeners(t *testing.T) {
 	t.Parallel()
 
@@ -176,7 +192,7 @@ func TestRegisterGalaNotificationListeners(t *testing.T) {
 
 	ids, err := RegisterGalaNotificationListeners(registry)
 	require.NoError(t, err)
-	require.Len(t, ids, 7)
+	require.Len(t, ids, 8)
 
 	require.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeTask), ent.OpCreate.String()))
 	require.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeInternalPolicy), ent.OpUpdate.String()))
@@ -185,4 +201,7 @@ func TestRegisterGalaNotificationListeners(t *testing.T) {
 	require.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeNote), ent.OpCreate.String()))
 	require.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeExport), ent.OpUpdate.String()))
 	require.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeStandard), ent.OpUpdate.String()))
+	require.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeProgram), ent.OpUpdate.String()))
+	require.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeProgram), ent.OpUpdateOne.String()))
+	require.False(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeProgram), ent.OpCreate.String()))
 }

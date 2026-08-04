@@ -60467,6 +60467,7 @@ type FindingControlHistoryMutation struct {
 	created_by                *string
 	updated_by                *string
 	updated_by_impersonator   *string
+	owner_id                  *string
 	finding_id                *string
 	control_id                *string
 	standard_id               *string
@@ -60952,6 +60953,55 @@ func (m *FindingControlHistoryMutation) ResetUpdatedByImpersonator() {
 	delete(m.clearedFields, findingcontrolhistory.FieldUpdatedByImpersonator)
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (m *FindingControlHistoryMutation) SetOwnerID(s string) {
+	m.owner_id = &s
+}
+
+// OwnerID returns the value of the "owner_id" field in the mutation.
+func (m *FindingControlHistoryMutation) OwnerID() (r string, exists bool) {
+	v := m.owner_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOwnerID returns the old "owner_id" field's value of the FindingControlHistory entity.
+// If the FindingControlHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FindingControlHistoryMutation) OldOwnerID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOwnerID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOwnerID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOwnerID: %w", err)
+	}
+	return oldValue.OwnerID, nil
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (m *FindingControlHistoryMutation) ClearOwnerID() {
+	m.owner_id = nil
+	m.clearedFields[findingcontrolhistory.FieldOwnerID] = struct{}{}
+}
+
+// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
+func (m *FindingControlHistoryMutation) OwnerIDCleared() bool {
+	_, ok := m.clearedFields[findingcontrolhistory.FieldOwnerID]
+	return ok
+}
+
+// ResetOwnerID resets all changes to the "owner_id" field.
+func (m *FindingControlHistoryMutation) ResetOwnerID() {
+	m.owner_id = nil
+	delete(m.clearedFields, findingcontrolhistory.FieldOwnerID)
+}
+
 // SetFindingID sets the "finding_id" field.
 func (m *FindingControlHistoryMutation) SetFindingID(s string) {
 	m.finding_id = &s
@@ -61401,7 +61451,7 @@ func (m *FindingControlHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *FindingControlHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 17)
+	fields := make([]string, 0, 18)
 	if m.history_time != nil {
 		fields = append(fields, findingcontrolhistory.FieldHistoryTime)
 	}
@@ -61425,6 +61475,9 @@ func (m *FindingControlHistoryMutation) Fields() []string {
 	}
 	if m.updated_by_impersonator != nil {
 		fields = append(fields, findingcontrolhistory.FieldUpdatedByImpersonator)
+	}
+	if m.owner_id != nil {
+		fields = append(fields, findingcontrolhistory.FieldOwnerID)
 	}
 	if m.finding_id != nil {
 		fields = append(fields, findingcontrolhistory.FieldFindingID)
@@ -61477,6 +61530,8 @@ func (m *FindingControlHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedBy()
 	case findingcontrolhistory.FieldUpdatedByImpersonator:
 		return m.UpdatedByImpersonator()
+	case findingcontrolhistory.FieldOwnerID:
+		return m.OwnerID()
 	case findingcontrolhistory.FieldFindingID:
 		return m.FindingID()
 	case findingcontrolhistory.FieldControlID:
@@ -61520,6 +61575,8 @@ func (m *FindingControlHistoryMutation) OldField(ctx context.Context, name strin
 		return m.OldUpdatedBy(ctx)
 	case findingcontrolhistory.FieldUpdatedByImpersonator:
 		return m.OldUpdatedByImpersonator(ctx)
+	case findingcontrolhistory.FieldOwnerID:
+		return m.OldOwnerID(ctx)
 	case findingcontrolhistory.FieldFindingID:
 		return m.OldFindingID(ctx)
 	case findingcontrolhistory.FieldControlID:
@@ -61602,6 +61659,13 @@ func (m *FindingControlHistoryMutation) SetField(name string, value ent.Value) e
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedByImpersonator(v)
+		return nil
+	case findingcontrolhistory.FieldOwnerID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOwnerID(v)
 		return nil
 	case findingcontrolhistory.FieldFindingID:
 		v, ok := value.(string)
@@ -61714,6 +61778,9 @@ func (m *FindingControlHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(findingcontrolhistory.FieldUpdatedByImpersonator) {
 		fields = append(fields, findingcontrolhistory.FieldUpdatedByImpersonator)
 	}
+	if m.FieldCleared(findingcontrolhistory.FieldOwnerID) {
+		fields = append(fields, findingcontrolhistory.FieldOwnerID)
+	}
 	if m.FieldCleared(findingcontrolhistory.FieldStandardID) {
 		fields = append(fields, findingcontrolhistory.FieldStandardID)
 	}
@@ -61767,6 +61834,9 @@ func (m *FindingControlHistoryMutation) ClearField(name string) error {
 	case findingcontrolhistory.FieldUpdatedByImpersonator:
 		m.ClearUpdatedByImpersonator()
 		return nil
+	case findingcontrolhistory.FieldOwnerID:
+		m.ClearOwnerID()
+		return nil
 	case findingcontrolhistory.FieldStandardID:
 		m.ClearStandardID()
 		return nil
@@ -61819,6 +61889,9 @@ func (m *FindingControlHistoryMutation) ResetField(name string) error {
 		return nil
 	case findingcontrolhistory.FieldUpdatedByImpersonator:
 		m.ResetUpdatedByImpersonator()
+		return nil
+	case findingcontrolhistory.FieldOwnerID:
+		m.ResetOwnerID()
 		return nil
 	case findingcontrolhistory.FieldFindingID:
 		m.ResetFindingID()
@@ -112922,43 +112995,47 @@ func (m *ProcedureHistoryMutation) ResetEdge(name string) error {
 // ProgramHistoryMutation represents an operation that mutates the ProgramHistory nodes in the graph.
 type ProgramHistoryMutation struct {
 	config
-	op                      Op
-	typ                     string
-	id                      *string
-	history_time            *time.Time
-	ref                     *string
-	operation               *history.OpType
-	created_at              *time.Time
-	updated_at              *time.Time
-	created_by              *string
-	updated_by              *string
-	updated_by_impersonator *string
-	deleted_at              *time.Time
-	deleted_by              *string
-	display_id              *string
-	tags                    *[]string
-	appendtags              []string
-	owner_id                *string
-	program_kind_name       *string
-	program_kind_id         *string
-	external_uuid           *string
-	name                    *string
-	description             *string
-	status                  *enums.ProgramStatus
-	framework_name          *string
-	start_date              *time.Time
-	end_date                *time.Time
-	auditor_ready           *bool
-	auditor_write_comments  *bool
-	auditor_read_comments   *bool
-	audit_firm              *string
-	auditor                 *string
-	auditor_email           *string
-	program_owner_id        *string
-	clearedFields           map[string]struct{}
-	done                    bool
-	oldValue                func(context.Context) (*ProgramHistory, error)
-	predicates              []predicate.ProgramHistory
+	op                            Op
+	typ                           string
+	id                            *string
+	history_time                  *time.Time
+	ref                           *string
+	operation                     *history.OpType
+	created_at                    *time.Time
+	updated_at                    *time.Time
+	created_by                    *string
+	updated_by                    *string
+	updated_by_impersonator       *string
+	deleted_at                    *time.Time
+	deleted_by                    *string
+	display_id                    *string
+	tags                          *[]string
+	appendtags                    []string
+	owner_id                      *string
+	program_kind_name             *string
+	program_kind_id               *string
+	external_uuid                 *string
+	name                          *string
+	description                   *string
+	status                        *enums.ProgramStatus
+	framework_name                *string
+	start_date                    *time.Time
+	end_date                      *time.Time
+	observation_period_start_date *time.Time
+	observation_period_end_date   *time.Time
+	fieldwork_start_date          *time.Time
+	fieldwork_end_date            *time.Time
+	auditor_ready                 *bool
+	auditor_write_comments        *bool
+	auditor_read_comments         *bool
+	audit_firm                    *string
+	auditor                       *string
+	auditor_email                 *string
+	program_owner_id              *string
+	clearedFields                 map[string]struct{}
+	done                          bool
+	oldValue                      func(context.Context) (*ProgramHistory, error)
+	predicates                    []predicate.ProgramHistory
 }
 
 var _ ent.Mutation = (*ProgramHistoryMutation)(nil)
@@ -114094,6 +114171,202 @@ func (m *ProgramHistoryMutation) ResetEndDate() {
 	delete(m.clearedFields, programhistory.FieldEndDate)
 }
 
+// SetObservationPeriodStartDate sets the "observation_period_start_date" field.
+func (m *ProgramHistoryMutation) SetObservationPeriodStartDate(t time.Time) {
+	m.observation_period_start_date = &t
+}
+
+// ObservationPeriodStartDate returns the value of the "observation_period_start_date" field in the mutation.
+func (m *ProgramHistoryMutation) ObservationPeriodStartDate() (r time.Time, exists bool) {
+	v := m.observation_period_start_date
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldObservationPeriodStartDate returns the old "observation_period_start_date" field's value of the ProgramHistory entity.
+// If the ProgramHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramHistoryMutation) OldObservationPeriodStartDate(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldObservationPeriodStartDate is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldObservationPeriodStartDate requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldObservationPeriodStartDate: %w", err)
+	}
+	return oldValue.ObservationPeriodStartDate, nil
+}
+
+// ClearObservationPeriodStartDate clears the value of the "observation_period_start_date" field.
+func (m *ProgramHistoryMutation) ClearObservationPeriodStartDate() {
+	m.observation_period_start_date = nil
+	m.clearedFields[programhistory.FieldObservationPeriodStartDate] = struct{}{}
+}
+
+// ObservationPeriodStartDateCleared returns if the "observation_period_start_date" field was cleared in this mutation.
+func (m *ProgramHistoryMutation) ObservationPeriodStartDateCleared() bool {
+	_, ok := m.clearedFields[programhistory.FieldObservationPeriodStartDate]
+	return ok
+}
+
+// ResetObservationPeriodStartDate resets all changes to the "observation_period_start_date" field.
+func (m *ProgramHistoryMutation) ResetObservationPeriodStartDate() {
+	m.observation_period_start_date = nil
+	delete(m.clearedFields, programhistory.FieldObservationPeriodStartDate)
+}
+
+// SetObservationPeriodEndDate sets the "observation_period_end_date" field.
+func (m *ProgramHistoryMutation) SetObservationPeriodEndDate(t time.Time) {
+	m.observation_period_end_date = &t
+}
+
+// ObservationPeriodEndDate returns the value of the "observation_period_end_date" field in the mutation.
+func (m *ProgramHistoryMutation) ObservationPeriodEndDate() (r time.Time, exists bool) {
+	v := m.observation_period_end_date
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldObservationPeriodEndDate returns the old "observation_period_end_date" field's value of the ProgramHistory entity.
+// If the ProgramHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramHistoryMutation) OldObservationPeriodEndDate(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldObservationPeriodEndDate is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldObservationPeriodEndDate requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldObservationPeriodEndDate: %w", err)
+	}
+	return oldValue.ObservationPeriodEndDate, nil
+}
+
+// ClearObservationPeriodEndDate clears the value of the "observation_period_end_date" field.
+func (m *ProgramHistoryMutation) ClearObservationPeriodEndDate() {
+	m.observation_period_end_date = nil
+	m.clearedFields[programhistory.FieldObservationPeriodEndDate] = struct{}{}
+}
+
+// ObservationPeriodEndDateCleared returns if the "observation_period_end_date" field was cleared in this mutation.
+func (m *ProgramHistoryMutation) ObservationPeriodEndDateCleared() bool {
+	_, ok := m.clearedFields[programhistory.FieldObservationPeriodEndDate]
+	return ok
+}
+
+// ResetObservationPeriodEndDate resets all changes to the "observation_period_end_date" field.
+func (m *ProgramHistoryMutation) ResetObservationPeriodEndDate() {
+	m.observation_period_end_date = nil
+	delete(m.clearedFields, programhistory.FieldObservationPeriodEndDate)
+}
+
+// SetFieldworkStartDate sets the "fieldwork_start_date" field.
+func (m *ProgramHistoryMutation) SetFieldworkStartDate(t time.Time) {
+	m.fieldwork_start_date = &t
+}
+
+// FieldworkStartDate returns the value of the "fieldwork_start_date" field in the mutation.
+func (m *ProgramHistoryMutation) FieldworkStartDate() (r time.Time, exists bool) {
+	v := m.fieldwork_start_date
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFieldworkStartDate returns the old "fieldwork_start_date" field's value of the ProgramHistory entity.
+// If the ProgramHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramHistoryMutation) OldFieldworkStartDate(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFieldworkStartDate is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFieldworkStartDate requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFieldworkStartDate: %w", err)
+	}
+	return oldValue.FieldworkStartDate, nil
+}
+
+// ClearFieldworkStartDate clears the value of the "fieldwork_start_date" field.
+func (m *ProgramHistoryMutation) ClearFieldworkStartDate() {
+	m.fieldwork_start_date = nil
+	m.clearedFields[programhistory.FieldFieldworkStartDate] = struct{}{}
+}
+
+// FieldworkStartDateCleared returns if the "fieldwork_start_date" field was cleared in this mutation.
+func (m *ProgramHistoryMutation) FieldworkStartDateCleared() bool {
+	_, ok := m.clearedFields[programhistory.FieldFieldworkStartDate]
+	return ok
+}
+
+// ResetFieldworkStartDate resets all changes to the "fieldwork_start_date" field.
+func (m *ProgramHistoryMutation) ResetFieldworkStartDate() {
+	m.fieldwork_start_date = nil
+	delete(m.clearedFields, programhistory.FieldFieldworkStartDate)
+}
+
+// SetFieldworkEndDate sets the "fieldwork_end_date" field.
+func (m *ProgramHistoryMutation) SetFieldworkEndDate(t time.Time) {
+	m.fieldwork_end_date = &t
+}
+
+// FieldworkEndDate returns the value of the "fieldwork_end_date" field in the mutation.
+func (m *ProgramHistoryMutation) FieldworkEndDate() (r time.Time, exists bool) {
+	v := m.fieldwork_end_date
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFieldworkEndDate returns the old "fieldwork_end_date" field's value of the ProgramHistory entity.
+// If the ProgramHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramHistoryMutation) OldFieldworkEndDate(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFieldworkEndDate is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFieldworkEndDate requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFieldworkEndDate: %w", err)
+	}
+	return oldValue.FieldworkEndDate, nil
+}
+
+// ClearFieldworkEndDate clears the value of the "fieldwork_end_date" field.
+func (m *ProgramHistoryMutation) ClearFieldworkEndDate() {
+	m.fieldwork_end_date = nil
+	m.clearedFields[programhistory.FieldFieldworkEndDate] = struct{}{}
+}
+
+// FieldworkEndDateCleared returns if the "fieldwork_end_date" field was cleared in this mutation.
+func (m *ProgramHistoryMutation) FieldworkEndDateCleared() bool {
+	_, ok := m.clearedFields[programhistory.FieldFieldworkEndDate]
+	return ok
+}
+
+// ResetFieldworkEndDate resets all changes to the "fieldwork_end_date" field.
+func (m *ProgramHistoryMutation) ResetFieldworkEndDate() {
+	m.fieldwork_end_date = nil
+	delete(m.clearedFields, programhistory.FieldFieldworkEndDate)
+}
+
 // SetAuditorReady sets the "auditor_ready" field.
 func (m *ProgramHistoryMutation) SetAuditorReady(b bool) {
 	m.auditor_ready = &b
@@ -114432,7 +114705,7 @@ func (m *ProgramHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProgramHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 29)
+	fields := make([]string, 0, 33)
 	if m.history_time != nil {
 		fields = append(fields, programhistory.FieldHistoryTime)
 	}
@@ -114498,6 +114771,18 @@ func (m *ProgramHistoryMutation) Fields() []string {
 	}
 	if m.end_date != nil {
 		fields = append(fields, programhistory.FieldEndDate)
+	}
+	if m.observation_period_start_date != nil {
+		fields = append(fields, programhistory.FieldObservationPeriodStartDate)
+	}
+	if m.observation_period_end_date != nil {
+		fields = append(fields, programhistory.FieldObservationPeriodEndDate)
+	}
+	if m.fieldwork_start_date != nil {
+		fields = append(fields, programhistory.FieldFieldworkStartDate)
+	}
+	if m.fieldwork_end_date != nil {
+		fields = append(fields, programhistory.FieldFieldworkEndDate)
 	}
 	if m.auditor_ready != nil {
 		fields = append(fields, programhistory.FieldAuditorReady)
@@ -114572,6 +114857,14 @@ func (m *ProgramHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.StartDate()
 	case programhistory.FieldEndDate:
 		return m.EndDate()
+	case programhistory.FieldObservationPeriodStartDate:
+		return m.ObservationPeriodStartDate()
+	case programhistory.FieldObservationPeriodEndDate:
+		return m.ObservationPeriodEndDate()
+	case programhistory.FieldFieldworkStartDate:
+		return m.FieldworkStartDate()
+	case programhistory.FieldFieldworkEndDate:
+		return m.FieldworkEndDate()
 	case programhistory.FieldAuditorReady:
 		return m.AuditorReady()
 	case programhistory.FieldAuditorWriteComments:
@@ -114639,6 +114932,14 @@ func (m *ProgramHistoryMutation) OldField(ctx context.Context, name string) (ent
 		return m.OldStartDate(ctx)
 	case programhistory.FieldEndDate:
 		return m.OldEndDate(ctx)
+	case programhistory.FieldObservationPeriodStartDate:
+		return m.OldObservationPeriodStartDate(ctx)
+	case programhistory.FieldObservationPeriodEndDate:
+		return m.OldObservationPeriodEndDate(ctx)
+	case programhistory.FieldFieldworkStartDate:
+		return m.OldFieldworkStartDate(ctx)
+	case programhistory.FieldFieldworkEndDate:
+		return m.OldFieldworkEndDate(ctx)
 	case programhistory.FieldAuditorReady:
 		return m.OldAuditorReady(ctx)
 	case programhistory.FieldAuditorWriteComments:
@@ -114816,6 +115117,34 @@ func (m *ProgramHistoryMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetEndDate(v)
 		return nil
+	case programhistory.FieldObservationPeriodStartDate:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetObservationPeriodStartDate(v)
+		return nil
+	case programhistory.FieldObservationPeriodEndDate:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetObservationPeriodEndDate(v)
+		return nil
+	case programhistory.FieldFieldworkStartDate:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFieldworkStartDate(v)
+		return nil
+	case programhistory.FieldFieldworkEndDate:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFieldworkEndDate(v)
+		return nil
 	case programhistory.FieldAuditorReady:
 		v, ok := value.(bool)
 		if !ok {
@@ -114946,6 +115275,18 @@ func (m *ProgramHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(programhistory.FieldEndDate) {
 		fields = append(fields, programhistory.FieldEndDate)
 	}
+	if m.FieldCleared(programhistory.FieldObservationPeriodStartDate) {
+		fields = append(fields, programhistory.FieldObservationPeriodStartDate)
+	}
+	if m.FieldCleared(programhistory.FieldObservationPeriodEndDate) {
+		fields = append(fields, programhistory.FieldObservationPeriodEndDate)
+	}
+	if m.FieldCleared(programhistory.FieldFieldworkStartDate) {
+		fields = append(fields, programhistory.FieldFieldworkStartDate)
+	}
+	if m.FieldCleared(programhistory.FieldFieldworkEndDate) {
+		fields = append(fields, programhistory.FieldFieldworkEndDate)
+	}
 	if m.FieldCleared(programhistory.FieldAuditFirm) {
 		fields = append(fields, programhistory.FieldAuditFirm)
 	}
@@ -115022,6 +115363,18 @@ func (m *ProgramHistoryMutation) ClearField(name string) error {
 		return nil
 	case programhistory.FieldEndDate:
 		m.ClearEndDate()
+		return nil
+	case programhistory.FieldObservationPeriodStartDate:
+		m.ClearObservationPeriodStartDate()
+		return nil
+	case programhistory.FieldObservationPeriodEndDate:
+		m.ClearObservationPeriodEndDate()
+		return nil
+	case programhistory.FieldFieldworkStartDate:
+		m.ClearFieldworkStartDate()
+		return nil
+	case programhistory.FieldFieldworkEndDate:
+		m.ClearFieldworkEndDate()
 		return nil
 	case programhistory.FieldAuditFirm:
 		m.ClearAuditFirm()
@@ -115108,6 +115461,18 @@ func (m *ProgramHistoryMutation) ResetField(name string) error {
 		return nil
 	case programhistory.FieldEndDate:
 		m.ResetEndDate()
+		return nil
+	case programhistory.FieldObservationPeriodStartDate:
+		m.ResetObservationPeriodStartDate()
+		return nil
+	case programhistory.FieldObservationPeriodEndDate:
+		m.ResetObservationPeriodEndDate()
+		return nil
+	case programhistory.FieldFieldworkStartDate:
+		m.ResetFieldworkStartDate()
+		return nil
+	case programhistory.FieldFieldworkEndDate:
+		m.ResetFieldworkEndDate()
 		return nil
 	case programhistory.FieldAuditorReady:
 		m.ResetAuditorReady()
@@ -127548,6 +127913,9 @@ type ScanHistoryMutation struct {
 	tags                               *[]string
 	appendtags                         []string
 	owner_id                           *string
+	system_owned                       *bool
+	internal_notes                     *string
+	system_internal_id                 *string
 	reviewed_by                        *string
 	reviewed_by_user_id                *string
 	reviewed_by_group_id               *string
@@ -128257,6 +128625,153 @@ func (m *ScanHistoryMutation) OwnerIDCleared() bool {
 func (m *ScanHistoryMutation) ResetOwnerID() {
 	m.owner_id = nil
 	delete(m.clearedFields, scanhistory.FieldOwnerID)
+}
+
+// SetSystemOwned sets the "system_owned" field.
+func (m *ScanHistoryMutation) SetSystemOwned(b bool) {
+	m.system_owned = &b
+}
+
+// SystemOwned returns the value of the "system_owned" field in the mutation.
+func (m *ScanHistoryMutation) SystemOwned() (r bool, exists bool) {
+	v := m.system_owned
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSystemOwned returns the old "system_owned" field's value of the ScanHistory entity.
+// If the ScanHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ScanHistoryMutation) OldSystemOwned(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSystemOwned is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSystemOwned requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSystemOwned: %w", err)
+	}
+	return oldValue.SystemOwned, nil
+}
+
+// ClearSystemOwned clears the value of the "system_owned" field.
+func (m *ScanHistoryMutation) ClearSystemOwned() {
+	m.system_owned = nil
+	m.clearedFields[scanhistory.FieldSystemOwned] = struct{}{}
+}
+
+// SystemOwnedCleared returns if the "system_owned" field was cleared in this mutation.
+func (m *ScanHistoryMutation) SystemOwnedCleared() bool {
+	_, ok := m.clearedFields[scanhistory.FieldSystemOwned]
+	return ok
+}
+
+// ResetSystemOwned resets all changes to the "system_owned" field.
+func (m *ScanHistoryMutation) ResetSystemOwned() {
+	m.system_owned = nil
+	delete(m.clearedFields, scanhistory.FieldSystemOwned)
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (m *ScanHistoryMutation) SetInternalNotes(s string) {
+	m.internal_notes = &s
+}
+
+// InternalNotes returns the value of the "internal_notes" field in the mutation.
+func (m *ScanHistoryMutation) InternalNotes() (r string, exists bool) {
+	v := m.internal_notes
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldInternalNotes returns the old "internal_notes" field's value of the ScanHistory entity.
+// If the ScanHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ScanHistoryMutation) OldInternalNotes(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldInternalNotes is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldInternalNotes requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldInternalNotes: %w", err)
+	}
+	return oldValue.InternalNotes, nil
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (m *ScanHistoryMutation) ClearInternalNotes() {
+	m.internal_notes = nil
+	m.clearedFields[scanhistory.FieldInternalNotes] = struct{}{}
+}
+
+// InternalNotesCleared returns if the "internal_notes" field was cleared in this mutation.
+func (m *ScanHistoryMutation) InternalNotesCleared() bool {
+	_, ok := m.clearedFields[scanhistory.FieldInternalNotes]
+	return ok
+}
+
+// ResetInternalNotes resets all changes to the "internal_notes" field.
+func (m *ScanHistoryMutation) ResetInternalNotes() {
+	m.internal_notes = nil
+	delete(m.clearedFields, scanhistory.FieldInternalNotes)
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (m *ScanHistoryMutation) SetSystemInternalID(s string) {
+	m.system_internal_id = &s
+}
+
+// SystemInternalID returns the value of the "system_internal_id" field in the mutation.
+func (m *ScanHistoryMutation) SystemInternalID() (r string, exists bool) {
+	v := m.system_internal_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSystemInternalID returns the old "system_internal_id" field's value of the ScanHistory entity.
+// If the ScanHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ScanHistoryMutation) OldSystemInternalID(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSystemInternalID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSystemInternalID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSystemInternalID: %w", err)
+	}
+	return oldValue.SystemInternalID, nil
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (m *ScanHistoryMutation) ClearSystemInternalID() {
+	m.system_internal_id = nil
+	m.clearedFields[scanhistory.FieldSystemInternalID] = struct{}{}
+}
+
+// SystemInternalIDCleared returns if the "system_internal_id" field was cleared in this mutation.
+func (m *ScanHistoryMutation) SystemInternalIDCleared() bool {
+	_, ok := m.clearedFields[scanhistory.FieldSystemInternalID]
+	return ok
+}
+
+// ResetSystemInternalID resets all changes to the "system_internal_id" field.
+func (m *ScanHistoryMutation) ResetSystemInternalID() {
+	m.system_internal_id = nil
+	delete(m.clearedFields, scanhistory.FieldSystemInternalID)
 }
 
 // SetReviewedBy sets the "reviewed_by" field.
@@ -129348,7 +129863,7 @@ func (m *ScanHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ScanHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 34)
+	fields := make([]string, 0, 37)
 	if m.history_time != nil {
 		fields = append(fields, scanhistory.FieldHistoryTime)
 	}
@@ -129384,6 +129899,15 @@ func (m *ScanHistoryMutation) Fields() []string {
 	}
 	if m.owner_id != nil {
 		fields = append(fields, scanhistory.FieldOwnerID)
+	}
+	if m.system_owned != nil {
+		fields = append(fields, scanhistory.FieldSystemOwned)
+	}
+	if m.internal_notes != nil {
+		fields = append(fields, scanhistory.FieldInternalNotes)
+	}
+	if m.system_internal_id != nil {
+		fields = append(fields, scanhistory.FieldSystemInternalID)
 	}
 	if m.reviewed_by != nil {
 		fields = append(fields, scanhistory.FieldReviewedBy)
@@ -129483,6 +130007,12 @@ func (m *ScanHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.Tags()
 	case scanhistory.FieldOwnerID:
 		return m.OwnerID()
+	case scanhistory.FieldSystemOwned:
+		return m.SystemOwned()
+	case scanhistory.FieldInternalNotes:
+		return m.InternalNotes()
+	case scanhistory.FieldSystemInternalID:
+		return m.SystemInternalID()
 	case scanhistory.FieldReviewedBy:
 		return m.ReviewedBy()
 	case scanhistory.FieldReviewedByUserID:
@@ -129560,6 +130090,12 @@ func (m *ScanHistoryMutation) OldField(ctx context.Context, name string) (ent.Va
 		return m.OldTags(ctx)
 	case scanhistory.FieldOwnerID:
 		return m.OldOwnerID(ctx)
+	case scanhistory.FieldSystemOwned:
+		return m.OldSystemOwned(ctx)
+	case scanhistory.FieldInternalNotes:
+		return m.OldInternalNotes(ctx)
+	case scanhistory.FieldSystemInternalID:
+		return m.OldSystemInternalID(ctx)
 	case scanhistory.FieldReviewedBy:
 		return m.OldReviewedBy(ctx)
 	case scanhistory.FieldReviewedByUserID:
@@ -129696,6 +130232,27 @@ func (m *ScanHistoryMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetOwnerID(v)
+		return nil
+	case scanhistory.FieldSystemOwned:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSystemOwned(v)
+		return nil
+	case scanhistory.FieldInternalNotes:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetInternalNotes(v)
+		return nil
+	case scanhistory.FieldSystemInternalID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSystemInternalID(v)
 		return nil
 	case scanhistory.FieldReviewedBy:
 		v, ok := value.(string)
@@ -129911,6 +130468,15 @@ func (m *ScanHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(scanhistory.FieldOwnerID) {
 		fields = append(fields, scanhistory.FieldOwnerID)
 	}
+	if m.FieldCleared(scanhistory.FieldSystemOwned) {
+		fields = append(fields, scanhistory.FieldSystemOwned)
+	}
+	if m.FieldCleared(scanhistory.FieldInternalNotes) {
+		fields = append(fields, scanhistory.FieldInternalNotes)
+	}
+	if m.FieldCleared(scanhistory.FieldSystemInternalID) {
+		fields = append(fields, scanhistory.FieldSystemInternalID)
+	}
 	if m.FieldCleared(scanhistory.FieldReviewedBy) {
 		fields = append(fields, scanhistory.FieldReviewedBy)
 	}
@@ -130012,6 +130578,15 @@ func (m *ScanHistoryMutation) ClearField(name string) error {
 	case scanhistory.FieldOwnerID:
 		m.ClearOwnerID()
 		return nil
+	case scanhistory.FieldSystemOwned:
+		m.ClearSystemOwned()
+		return nil
+	case scanhistory.FieldInternalNotes:
+		m.ClearInternalNotes()
+		return nil
+	case scanhistory.FieldSystemInternalID:
+		m.ClearSystemInternalID()
+		return nil
 	case scanhistory.FieldReviewedBy:
 		m.ClearReviewedBy()
 		return nil
@@ -130112,6 +130687,15 @@ func (m *ScanHistoryMutation) ResetField(name string) error {
 		return nil
 	case scanhistory.FieldOwnerID:
 		m.ResetOwnerID()
+		return nil
+	case scanhistory.FieldSystemOwned:
+		m.ResetSystemOwned()
+		return nil
+	case scanhistory.FieldInternalNotes:
+		m.ResetInternalNotes()
+		return nil
+	case scanhistory.FieldSystemInternalID:
+		m.ResetSystemInternalID()
 		return nil
 	case scanhistory.FieldReviewedBy:
 		m.ResetReviewedBy()
@@ -141668,6 +142252,7 @@ type TaskHistoryMutation struct {
 	details                      *string
 	details_json                 *[]interface{}
 	appenddetails_json           []interface{}
+	metadata                     *map[string]interface{}
 	status                       *enums.TaskStatus
 	due                          *models.DateTime
 	completed                    *models.DateTime
@@ -141675,6 +142260,11 @@ type TaskHistoryMutation struct {
 	assigner_id                  *string
 	system_generated             *bool
 	is_template                  *bool
+	is_suggested                 *bool
+	priority                     *int
+	addpriority                  *int
+	source                       *string
+	source_key                   *string
 	idempotency_key              *string
 	external_reference_url       *[]string
 	appendexternal_reference_url []string
@@ -142945,6 +143535,55 @@ func (m *TaskHistoryMutation) ResetDetailsJSON() {
 	delete(m.clearedFields, taskhistory.FieldDetailsJSON)
 }
 
+// SetMetadata sets the "metadata" field.
+func (m *TaskHistoryMutation) SetMetadata(value map[string]interface{}) {
+	m.metadata = &value
+}
+
+// Metadata returns the value of the "metadata" field in the mutation.
+func (m *TaskHistoryMutation) Metadata() (r map[string]interface{}, exists bool) {
+	v := m.metadata
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMetadata returns the old "metadata" field's value of the TaskHistory entity.
+// If the TaskHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskHistoryMutation) OldMetadata(ctx context.Context) (v map[string]interface{}, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMetadata is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMetadata requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMetadata: %w", err)
+	}
+	return oldValue.Metadata, nil
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (m *TaskHistoryMutation) ClearMetadata() {
+	m.metadata = nil
+	m.clearedFields[taskhistory.FieldMetadata] = struct{}{}
+}
+
+// MetadataCleared returns if the "metadata" field was cleared in this mutation.
+func (m *TaskHistoryMutation) MetadataCleared() bool {
+	_, ok := m.clearedFields[taskhistory.FieldMetadata]
+	return ok
+}
+
+// ResetMetadata resets all changes to the "metadata" field.
+func (m *TaskHistoryMutation) ResetMetadata() {
+	m.metadata = nil
+	delete(m.clearedFields, taskhistory.FieldMetadata)
+}
+
 // SetStatus sets the "status" field.
 func (m *TaskHistoryMutation) SetStatus(es enums.TaskStatus) {
 	m.status = &es
@@ -143249,6 +143888,196 @@ func (m *TaskHistoryMutation) ResetIsTemplate() {
 	m.is_template = nil
 }
 
+// SetIsSuggested sets the "is_suggested" field.
+func (m *TaskHistoryMutation) SetIsSuggested(b bool) {
+	m.is_suggested = &b
+}
+
+// IsSuggested returns the value of the "is_suggested" field in the mutation.
+func (m *TaskHistoryMutation) IsSuggested() (r bool, exists bool) {
+	v := m.is_suggested
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsSuggested returns the old "is_suggested" field's value of the TaskHistory entity.
+// If the TaskHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskHistoryMutation) OldIsSuggested(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsSuggested is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsSuggested requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsSuggested: %w", err)
+	}
+	return oldValue.IsSuggested, nil
+}
+
+// ResetIsSuggested resets all changes to the "is_suggested" field.
+func (m *TaskHistoryMutation) ResetIsSuggested() {
+	m.is_suggested = nil
+}
+
+// SetPriority sets the "priority" field.
+func (m *TaskHistoryMutation) SetPriority(i int) {
+	m.priority = &i
+	m.addpriority = nil
+}
+
+// Priority returns the value of the "priority" field in the mutation.
+func (m *TaskHistoryMutation) Priority() (r int, exists bool) {
+	v := m.priority
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPriority returns the old "priority" field's value of the TaskHistory entity.
+// If the TaskHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskHistoryMutation) OldPriority(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPriority is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPriority requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPriority: %w", err)
+	}
+	return oldValue.Priority, nil
+}
+
+// AddPriority adds i to the "priority" field.
+func (m *TaskHistoryMutation) AddPriority(i int) {
+	if m.addpriority != nil {
+		*m.addpriority += i
+	} else {
+		m.addpriority = &i
+	}
+}
+
+// AddedPriority returns the value that was added to the "priority" field in this mutation.
+func (m *TaskHistoryMutation) AddedPriority() (r int, exists bool) {
+	v := m.addpriority
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetPriority resets all changes to the "priority" field.
+func (m *TaskHistoryMutation) ResetPriority() {
+	m.priority = nil
+	m.addpriority = nil
+}
+
+// SetSource sets the "source" field.
+func (m *TaskHistoryMutation) SetSource(s string) {
+	m.source = &s
+}
+
+// Source returns the value of the "source" field in the mutation.
+func (m *TaskHistoryMutation) Source() (r string, exists bool) {
+	v := m.source
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSource returns the old "source" field's value of the TaskHistory entity.
+// If the TaskHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskHistoryMutation) OldSource(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSource is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSource requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSource: %w", err)
+	}
+	return oldValue.Source, nil
+}
+
+// ClearSource clears the value of the "source" field.
+func (m *TaskHistoryMutation) ClearSource() {
+	m.source = nil
+	m.clearedFields[taskhistory.FieldSource] = struct{}{}
+}
+
+// SourceCleared returns if the "source" field was cleared in this mutation.
+func (m *TaskHistoryMutation) SourceCleared() bool {
+	_, ok := m.clearedFields[taskhistory.FieldSource]
+	return ok
+}
+
+// ResetSource resets all changes to the "source" field.
+func (m *TaskHistoryMutation) ResetSource() {
+	m.source = nil
+	delete(m.clearedFields, taskhistory.FieldSource)
+}
+
+// SetSourceKey sets the "source_key" field.
+func (m *TaskHistoryMutation) SetSourceKey(s string) {
+	m.source_key = &s
+}
+
+// SourceKey returns the value of the "source_key" field in the mutation.
+func (m *TaskHistoryMutation) SourceKey() (r string, exists bool) {
+	v := m.source_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceKey returns the old "source_key" field's value of the TaskHistory entity.
+// If the TaskHistory object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskHistoryMutation) OldSourceKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceKey: %w", err)
+	}
+	return oldValue.SourceKey, nil
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (m *TaskHistoryMutation) ClearSourceKey() {
+	m.source_key = nil
+	m.clearedFields[taskhistory.FieldSourceKey] = struct{}{}
+}
+
+// SourceKeyCleared returns if the "source_key" field was cleared in this mutation.
+func (m *TaskHistoryMutation) SourceKeyCleared() bool {
+	_, ok := m.clearedFields[taskhistory.FieldSourceKey]
+	return ok
+}
+
+// ResetSourceKey resets all changes to the "source_key" field.
+func (m *TaskHistoryMutation) ResetSourceKey() {
+	m.source_key = nil
+	delete(m.clearedFields, taskhistory.FieldSourceKey)
+}
+
 // SetIdempotencyKey sets the "idempotency_key" field.
 func (m *TaskHistoryMutation) SetIdempotencyKey(s string) {
 	m.idempotency_key = &s
@@ -143446,7 +144275,7 @@ func (m *TaskHistoryMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TaskHistoryMutation) Fields() []string {
-	fields := make([]string, 0, 34)
+	fields := make([]string, 0, 39)
 	if m.history_time != nil {
 		fields = append(fields, taskhistory.FieldHistoryTime)
 	}
@@ -143519,6 +144348,9 @@ func (m *TaskHistoryMutation) Fields() []string {
 	if m.details_json != nil {
 		fields = append(fields, taskhistory.FieldDetailsJSON)
 	}
+	if m.metadata != nil {
+		fields = append(fields, taskhistory.FieldMetadata)
+	}
 	if m.status != nil {
 		fields = append(fields, taskhistory.FieldStatus)
 	}
@@ -143539,6 +144371,18 @@ func (m *TaskHistoryMutation) Fields() []string {
 	}
 	if m.is_template != nil {
 		fields = append(fields, taskhistory.FieldIsTemplate)
+	}
+	if m.is_suggested != nil {
+		fields = append(fields, taskhistory.FieldIsSuggested)
+	}
+	if m.priority != nil {
+		fields = append(fields, taskhistory.FieldPriority)
+	}
+	if m.source != nil {
+		fields = append(fields, taskhistory.FieldSource)
+	}
+	if m.source_key != nil {
+		fields = append(fields, taskhistory.FieldSourceKey)
 	}
 	if m.idempotency_key != nil {
 		fields = append(fields, taskhistory.FieldIdempotencyKey)
@@ -143605,6 +144449,8 @@ func (m *TaskHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.Details()
 	case taskhistory.FieldDetailsJSON:
 		return m.DetailsJSON()
+	case taskhistory.FieldMetadata:
+		return m.Metadata()
 	case taskhistory.FieldStatus:
 		return m.Status()
 	case taskhistory.FieldDue:
@@ -143619,6 +144465,14 @@ func (m *TaskHistoryMutation) Field(name string) (ent.Value, bool) {
 		return m.SystemGenerated()
 	case taskhistory.FieldIsTemplate:
 		return m.IsTemplate()
+	case taskhistory.FieldIsSuggested:
+		return m.IsSuggested()
+	case taskhistory.FieldPriority:
+		return m.Priority()
+	case taskhistory.FieldSource:
+		return m.Source()
+	case taskhistory.FieldSourceKey:
+		return m.SourceKey()
 	case taskhistory.FieldIdempotencyKey:
 		return m.IdempotencyKey()
 	case taskhistory.FieldExternalReferenceURL:
@@ -143682,6 +144536,8 @@ func (m *TaskHistoryMutation) OldField(ctx context.Context, name string) (ent.Va
 		return m.OldDetails(ctx)
 	case taskhistory.FieldDetailsJSON:
 		return m.OldDetailsJSON(ctx)
+	case taskhistory.FieldMetadata:
+		return m.OldMetadata(ctx)
 	case taskhistory.FieldStatus:
 		return m.OldStatus(ctx)
 	case taskhistory.FieldDue:
@@ -143696,6 +144552,14 @@ func (m *TaskHistoryMutation) OldField(ctx context.Context, name string) (ent.Va
 		return m.OldSystemGenerated(ctx)
 	case taskhistory.FieldIsTemplate:
 		return m.OldIsTemplate(ctx)
+	case taskhistory.FieldIsSuggested:
+		return m.OldIsSuggested(ctx)
+	case taskhistory.FieldPriority:
+		return m.OldPriority(ctx)
+	case taskhistory.FieldSource:
+		return m.OldSource(ctx)
+	case taskhistory.FieldSourceKey:
+		return m.OldSourceKey(ctx)
 	case taskhistory.FieldIdempotencyKey:
 		return m.OldIdempotencyKey(ctx)
 	case taskhistory.FieldExternalReferenceURL:
@@ -143879,6 +144743,13 @@ func (m *TaskHistoryMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDetailsJSON(v)
 		return nil
+	case taskhistory.FieldMetadata:
+		v, ok := value.(map[string]interface{})
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMetadata(v)
+		return nil
 	case taskhistory.FieldStatus:
 		v, ok := value.(enums.TaskStatus)
 		if !ok {
@@ -143928,6 +144799,34 @@ func (m *TaskHistoryMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetIsTemplate(v)
 		return nil
+	case taskhistory.FieldIsSuggested:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsSuggested(v)
+		return nil
+	case taskhistory.FieldPriority:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPriority(v)
+		return nil
+	case taskhistory.FieldSource:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSource(v)
+		return nil
+	case taskhistory.FieldSourceKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceKey(v)
+		return nil
 	case taskhistory.FieldIdempotencyKey:
 		v, ok := value.(string)
 		if !ok {
@@ -143956,13 +144855,21 @@ func (m *TaskHistoryMutation) SetField(name string, value ent.Value) error {
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
 func (m *TaskHistoryMutation) AddedFields() []string {
-	return nil
+	var fields []string
+	if m.addpriority != nil {
+		fields = append(fields, taskhistory.FieldPriority)
+	}
+	return fields
 }
 
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
 func (m *TaskHistoryMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case taskhistory.FieldPriority:
+		return m.AddedPriority()
+	}
 	return nil, false
 }
 
@@ -143971,6 +144878,13 @@ func (m *TaskHistoryMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *TaskHistoryMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case taskhistory.FieldPriority:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddPriority(v)
+		return nil
 	}
 	return fmt.Errorf("unknown TaskHistory numeric field %s", name)
 }
@@ -144039,6 +144953,9 @@ func (m *TaskHistoryMutation) ClearedFields() []string {
 	if m.FieldCleared(taskhistory.FieldDetailsJSON) {
 		fields = append(fields, taskhistory.FieldDetailsJSON)
 	}
+	if m.FieldCleared(taskhistory.FieldMetadata) {
+		fields = append(fields, taskhistory.FieldMetadata)
+	}
 	if m.FieldCleared(taskhistory.FieldDue) {
 		fields = append(fields, taskhistory.FieldDue)
 	}
@@ -144050,6 +144967,12 @@ func (m *TaskHistoryMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(taskhistory.FieldAssignerID) {
 		fields = append(fields, taskhistory.FieldAssignerID)
+	}
+	if m.FieldCleared(taskhistory.FieldSource) {
+		fields = append(fields, taskhistory.FieldSource)
+	}
+	if m.FieldCleared(taskhistory.FieldSourceKey) {
+		fields = append(fields, taskhistory.FieldSourceKey)
 	}
 	if m.FieldCleared(taskhistory.FieldIdempotencyKey) {
 		fields = append(fields, taskhistory.FieldIdempotencyKey)
@@ -144134,6 +145057,9 @@ func (m *TaskHistoryMutation) ClearField(name string) error {
 	case taskhistory.FieldDetailsJSON:
 		m.ClearDetailsJSON()
 		return nil
+	case taskhistory.FieldMetadata:
+		m.ClearMetadata()
+		return nil
 	case taskhistory.FieldDue:
 		m.ClearDue()
 		return nil
@@ -144145,6 +145071,12 @@ func (m *TaskHistoryMutation) ClearField(name string) error {
 		return nil
 	case taskhistory.FieldAssignerID:
 		m.ClearAssignerID()
+		return nil
+	case taskhistory.FieldSource:
+		m.ClearSource()
+		return nil
+	case taskhistory.FieldSourceKey:
+		m.ClearSourceKey()
 		return nil
 	case taskhistory.FieldIdempotencyKey:
 		m.ClearIdempotencyKey()
@@ -144235,6 +145167,9 @@ func (m *TaskHistoryMutation) ResetField(name string) error {
 	case taskhistory.FieldDetailsJSON:
 		m.ResetDetailsJSON()
 		return nil
+	case taskhistory.FieldMetadata:
+		m.ResetMetadata()
+		return nil
 	case taskhistory.FieldStatus:
 		m.ResetStatus()
 		return nil
@@ -144255,6 +145190,18 @@ func (m *TaskHistoryMutation) ResetField(name string) error {
 		return nil
 	case taskhistory.FieldIsTemplate:
 		m.ResetIsTemplate()
+		return nil
+	case taskhistory.FieldIsSuggested:
+		m.ResetIsSuggested()
+		return nil
+	case taskhistory.FieldPriority:
+		m.ResetPriority()
+		return nil
+	case taskhistory.FieldSource:
+		m.ResetSource()
+		return nil
+	case taskhistory.FieldSourceKey:
+		m.ResetSourceKey()
 		return nil
 	case taskhistory.FieldIdempotencyKey:
 		m.ResetIdempotencyKey()

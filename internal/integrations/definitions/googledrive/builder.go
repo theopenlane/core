@@ -1,7 +1,7 @@
 package googledrive
 
 import (
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/integrations/auth"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -19,7 +19,7 @@ func Builder(cfg Config) registry.Builder {
 				DisplayName: "Google Drive",
 				Description: "Live, read-only integration with Google Drive for on-the-fly HTML export of Google Docs.",
 				Category:    "document",
-				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/google_drive/overview",
+				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/google_drive",
 				Tags:        []string{"document"},
 				Active:      true,
 				Visible:     true,
@@ -110,15 +110,23 @@ func Builder(cfg Config) registry.Builder {
 					Policy:      types.ExecutionPolicy{Reconcile: true},
 					Ingest: []types.IngestContract{
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaInternalPolicy,
+							Schema: entityops.SchemaInternalPolicy.Name,
 						},
 					},
-					IngestHandle:      FolderSync{}.IngestHandle(),
-					ConfigSchema:      folderSyncSchema,
-					ReconcileSchedule: gala.NewFullFetchSchedule(),
+					IngestHandle: FolderSync{}.IngestHandle(),
+					ConfigSchema: folderSyncSchema,
+					Schedule:     gala.NewFullFetchSchedule(),
 				},
 			},
-			Mappings: googleDriveMappings(),
+			Mappings: []types.MappingRegistration{
+				{
+					Schema: entityops.SchemaInternalPolicy.Name,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprInternalPolicy,
+					},
+				},
+			},
 		}, nil
 	})
 }

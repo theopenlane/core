@@ -29,6 +29,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ssoenforcement"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/metrics"
 	"github.com/theopenlane/core/pkg/permissioncache"
@@ -152,6 +153,7 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 					case claims.AssessmentID != "" && claims.TrustCenterID == "":
 						ctx := auth.WithCaller(c.Request().Context(), auth.NewQuestionnaireCaller(claims.OrgID, claims.UserID, "Anonymous User", claims.Email))
 						ctx = auth.ActiveAssessmentIDKey.Set(ctx, claims.AssessmentID)
+						ctx = auth.ActiveAssessmentPreviewKey.Set(ctx, claims.AssessmentPreview)
 						c.SetRequest(c.Request().WithContext(ctx))
 					default:
 						// a token with neither or both scope claims is malformed and must not
@@ -616,7 +618,7 @@ func isSSOEnforced(ctx context.Context, db *ent.Client, orgID string) (bool, err
 // flow, taking owner, per-user, and per-domain exemptions into account. TFA enforcement is
 // evaluated separately and is not affected by SSO exemption
 func userMustSSO(ctx context.Context, db *ent.Client, orgID, userID string) (bool, error) {
-	in, _, err := sso.LoadEnforcement(ctx, db, orgID, userID, "")
+	in, _, err := ssoenforcement.LoadEnforcement(ctx, db, orgID, userID, "")
 	if err != nil {
 		if ent.IsNotFound(err) {
 			return false, nil

@@ -99,6 +99,15 @@ func (r *mutationResolver) DeleteFindingControl(ctx context.Context, id string) 
 	}, nil
 }
 
+// DeleteBulkFindingControl is the resolver for the deleteBulkFindingControl field.
+func (r *mutationResolver) DeleteBulkFindingControl(ctx context.Context, ids []string) (*model.FindingControlBulkDeletePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkDeleteFindingControl(ctx, ids)
+}
+
 // FindingControl is the resolver for the findingControl field.
 func (r *queryResolver) FindingControl(ctx context.Context, id string) (*generated.FindingControl, error) {
 	query, err := withTransactionalMutation(ctx).FindingControl.Query().Where(findingcontrol.ID(id)).CollectFields(ctx)

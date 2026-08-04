@@ -1618,6 +1618,35 @@ func HasFileWith(preds ...predicate.File) predicate.TrustCenterNDARequest {
 	})
 }
 
+// HasApprovedByUser applies the HasEdge predicate on the "approved_by_user" edge.
+func HasApprovedByUser() predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, ApprovedByUserTable, ApprovedByUserColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.TrustCenterNDARequest
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasApprovedByUserWith applies the HasEdge predicate on the "approved_by_user" edge with a given conditions (other predicates).
+func HasApprovedByUserWith(preds ...predicate.User) predicate.TrustCenterNDARequest {
+	return predicate.TrustCenterNDARequest(func(s *sql.Selector) {
+		step := newApprovedByUserStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.TrustCenterNDARequest
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.TrustCenterNDARequest) predicate.TrustCenterNDARequest {
 	return predicate.TrustCenterNDARequest(sql.AndPredicates(predicates...))

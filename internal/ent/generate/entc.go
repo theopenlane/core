@@ -36,7 +36,6 @@ import (
 	"github.com/theopenlane/entx/entityops"
 	"github.com/theopenlane/entx/genhooks"
 	"github.com/theopenlane/entx/history"
-	"github.com/theopenlane/entx/integrationmapping"
 	"github.com/theopenlane/entx/oscalgen"
 	"github.com/theopenlane/entx/workflowgen"
 	"github.com/theopenlane/iam/entfga"
@@ -77,7 +76,6 @@ const (
 	entGeneratedWorkflowPath = "internal/ent/workflowgenerated"
 	csvGeneratedPath         = "internal/ent/csvgenerated"
 	oscalGeneratedPath       = "internal/ent/oscalgenerated"
-	integrationGeneratedPath = "internal/ent/integrationgenerated"
 	entityOpsGeneratedPath   = "internal/ent/entityops"
 
 	schemaInputChecksumFile  = "./internal/ent/checksum/.schema_checksum"
@@ -359,21 +357,6 @@ func runParallelPostGenHooks(g *gen.Graph) {
 			genhooks.WithCSVPackageName("csvgenerated"),
 			genhooks.WithCSVEntPackage("github.com/theopenlane/core/"+entGeneratedPath),
 			genhooks.WithCSVGenerateAllWrappers(true)),
-		integrationmapping.New(
-			integrationmapping.WithOutputDir(integrationGeneratedPath),
-			integrationmapping.WithPackageName("integrationgenerated"),
-			integrationmapping.WithEntPackage("github.com/theopenlane/core/"+entGeneratedPath),
-			integrationmapping.WithGalaPackage("github.com/theopenlane/core/pkg/gala"),
-			integrationmapping.WithIngestOutputDir("internal/integrations/operations"),
-			integrationmapping.WithIngestPackageName("operations"),
-			integrationmapping.WithIntegrationGeneratedPackage("github.com/theopenlane/core/internal/ent/integrationgenerated"),
-			integrationmapping.WithContextxPackage("github.com/theopenlane/utils/contextx"),
-			integrationmapping.WithLogxPackage("github.com/theopenlane/core/pkg/logx"),
-			integrationmapping.WithDoPackage("github.com/samber/do/v2"),
-			integrationmapping.WithLoPackage("github.com/samber/lo"),
-			integrationmapping.WithJsonxPackage("github.com/theopenlane/core/pkg/jsonx"),
-			integrationmapping.WithLogxPackage("github.com/theopenlane/core/pkg/logx"),
-		).Hook(),
 		accessMapExt.Hook(),
 		fileCategoryGen.Hook(),
 		exportenums.New().Hook(),

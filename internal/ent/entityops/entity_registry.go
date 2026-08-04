@@ -8,13 +8,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"reflect"
+	"slices"
 	"strings"
 	"sync"
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/stoewer/go-strcase"
 
-	"github.com/theopenlane/core/internal/ent/generated"
+	generated "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
@@ -37,6 +38,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
+	"github.com/theopenlane/core/internal/ent/generated/notification"
 	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -93,14 +95,8 @@ type Schema struct {
 	Fields []FieldDescriptor
 	// Edges lists every edge to an entityops schema (and workflow group edges) for this schema
 	Edges []EdgeDescriptor
-	// SourceContext re-keys an ingest create-input payload into the snake_case source context that a
-	// cross-link rule's key-match and CEL expression read; set for every schema with a create input
-	SourceContext func(payload json.RawMessage) json.RawMessage
-	// AllowedKeys is the set of integration mapping input keys accepted for this schema, derived at
-	// init from the unified field catalog; empty for schemas that do not participate in ingest mapping
-	AllowedKeys map[string]struct{}
-	// StockPersist reports whether the schema opts into the generated stock ingest persistence path
-	StockPersist bool
+	// TaskRules are schema-level (unconditional) suggested-task rules declared via entx.SchemaTaskRule
+	TaskRules []TaskRuleDescriptor
 	// ProjectionType is the reflect.Type of this schema's flat CEL/jsonschema projection struct
 	// ({Name}Projection); the registerable native-type view of the entity used for typed expressions
 	ProjectionType reflect.Type
@@ -151,6 +147,28 @@ func (s *Schema) MatchKeyField(field string) bool {
 	return false
 }
 
+// EdgeByName returns the edge with the given name
+func (s *Schema) EdgeByName(name string) (EdgeDescriptor, bool) {
+	for _, e := range s.Edges {
+		if e.Name == name {
+			return e, true
+		}
+	}
+
+	return EdgeDescriptor{}, false
+}
+
+// AllowedKey reports whether key is an integration mapping input key accepted for this schema
+func (s *Schema) AllowedKey(key string) bool {
+	for _, f := range s.Fields {
+		if f.InputKey != "" && f.InputKey == key {
+			return true
+		}
+	}
+
+	return false
+}
+
 // matchKeyIn returns a selector predicate matching the given match-key column against any of values
 func matchKeyIn(field string, values []string) func(*sql.Selector) {
 	return func(s *sql.Selector) {
@@ -163,18 +181,149 @@ func matchKeyIn(field string, values []string) func(*sql.Selector) {
 	}
 }
 
+// LookupField returns the schema's single ingest upsert lookup field. It returns false when the
+// schema declares no lookup key or more than one, since priority between multiple lookup keys is
+// schema-specific and stays with hand-written persistence
+func (s *Schema) LookupField() (FieldDescriptor, bool) {
+	var (
+		found FieldDescriptor
+		count int
+	)
+
+	for _, f := range s.Fields {
+		if f.LookupKey {
+			found = f
+			count++
+		}
+	}
+
+	return found, count == 1
+}
+
+// Upsert persists one create-input payload by the schema's lookup key: the payload's lookup value
+// is matched against existing org-scoped records via the indexed key query, updating the single
+// match or creating the record when none exists, and returns the entity id. Matching more than one
+// record fails with ErrUpsertConflict rather than guessing. It composes the schema's catalog
+// closures, so unlike Create/Update/QueryByKey it needs no per-schema wiring. Schemas whose lookup
+// predicates are not a single org-scoped key column (integration-scoped lookups, multi-key
+// priority) keep hand-written persistence instead
+func (s *Schema) Upsert(ctx context.Context, client *generated.Client, ownerID string, payload json.RawMessage) (string, error) {
+	ref := SchemaRef{Schema: s.Snake, Operation: OpUpsert}
+
+	field, ok := s.LookupField()
+	if !ok {
+		return "", logError(ctx, ref, ErrUpsertUnsupported, fmt.Errorf("%s does not define exactly one lookup key", s.Name))
+	}
+
+	if s.Create == nil || s.Update == nil || s.QueryByKey == nil {
+		return "", logError(ctx, ref, ErrUpsertUnsupported, fmt.Errorf("%s does not support catalog create, update, and key queries", s.Name))
+	}
+
+	value := lookupValue(payload, field.InputKey)
+	if value == "" {
+		return "", ErrUpsertKeyMissing
+	}
+
+	rows, err := s.QueryByKey(ctx, client, ownerID, field.Name, []string{value})
+	if err != nil {
+		return "", err
+	}
+
+	switch len(rows) {
+	case 0:
+		return s.Create(ctx, client, payload)
+	case 1:
+		id := entityID(rows[0])
+		if id == "" {
+			return "", logError(ctx, ref, ErrDecodeFailed, fmt.Errorf("%s row matching %s=%s has no id", s.Name, field.Name, value))
+		}
+
+		return id, s.Update(ctx, client, id, s.rekeyEdgesForUpdate(payload))
+	default:
+		return "", logError(ctx, ref, ErrUpsertConflict, fmt.Errorf("%s lookup %s=%s matched %d records", s.Name, field.Name, value, len(rows)))
+	}
+}
+
+// rekeyEdgesForUpdate renames to-many edge keys in a create-input payload to their update-input add
+// keys, so cross-object links injected at map time also apply on the re-ingest update path. Links
+// are additive on update: edges carry no provenance, so targets no longer matched are never removed.
+// Unique edge keys are shared between create and update inputs and pass through unchanged; keys for
+// immutable edges have no update setter and are dropped by decode
+func (s *Schema) rekeyEdgesForUpdate(payload json.RawMessage) json.RawMessage {
+	var doc map[string]json.RawMessage
+	if err := json.Unmarshal(payload, &doc); err != nil {
+		return payload
+	}
+
+	changed := false
+
+	for _, edge := range s.Edges {
+		if edge.AddField == "" {
+			continue
+		}
+
+		raw, ok := doc[edge.CreateField]
+		if !ok {
+			continue
+		}
+
+		doc[edge.AddField] = raw
+		delete(doc, edge.CreateField)
+		changed = true
+	}
+
+	if !changed {
+		return payload
+	}
+
+	rekeyed, err := json.Marshal(doc)
+	if err != nil {
+		return payload
+	}
+
+	return rekeyed
+}
+
+// lookupValue extracts the string value of one create-input key from the payload
+func lookupValue(payload json.RawMessage, key string) string {
+	var doc map[string]json.RawMessage
+	if err := json.Unmarshal(payload, &doc); err != nil {
+		return ""
+	}
+
+	raw, ok := doc[key]
+	if !ok {
+		return ""
+	}
+
+	var value string
+	if err := json.Unmarshal(raw, &value); err != nil {
+		return ""
+	}
+
+	return strings.TrimSpace(value)
+}
+
+// entityID extracts the id column from one marshaled entity row
+func entityID(row json.RawMessage) string {
+	var decoded struct {
+		ID string `json:"id"`
+	}
+
+	_ = json.Unmarshal(row, &decoded)
+
+	return decoded.ID
+}
+
 // --- Per-schema registrations ---
 
 var (
 	SchemaActionPlan = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "ActionPlan",
-			Snake:  "action_plan",
-			Camel:  "actionPlan",
-			Lower:  "actionplan",
-			Plural: "ActionPlans",
-			Table:  "action_plans",
-			Label:  "Action plan",
+			Name:  "ActionPlan",
+			Snake: "action_plan",
+			Camel: "actionPlan",
+			Lower: "actionplan",
 		},
 		ProjectionType: reflect.TypeFor[ActionPlanProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
@@ -247,13 +396,10 @@ var (
 	}
 	SchemaAssessment = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "Assessment",
-			Snake:  "assessment",
-			Camel:  "assessment",
-			Lower:  "assessment",
-			Plural: "Assessments",
-			Table:  "assessments",
-			Label:  "Assessment",
+			Name:  "Assessment",
+			Snake: "assessment",
+			Camel: "assessment",
+			Lower: "assessment",
 		},
 		ProjectionType: reflect.TypeFor[AssessmentProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
@@ -326,13 +472,10 @@ var (
 	}
 	SchemaAssessmentResponse = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "AssessmentResponse",
-			Snake:  "assessment_response",
-			Camel:  "assessmentResponse",
-			Lower:  "assessmentresponse",
-			Plural: "AssessmentResponses",
-			Table:  "assessment_responses",
-			Label:  "Assessment response",
+			Name:  "AssessmentResponse",
+			Snake: "assessment_response",
+			Camel: "assessmentResponse",
+			Lower: "assessmentresponse",
 		},
 		ProjectionType: reflect.TypeFor[AssessmentResponseProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
@@ -391,16 +534,12 @@ var (
 	}
 	SchemaAsset = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "Asset",
-			Snake:  "asset",
-			Camel:  "asset",
-			Lower:  "asset",
-			Plural: "Assets",
-			Table:  "assets",
-			Label:  "Asset",
+			Name:  "Asset",
+			Snake: "asset",
+			Camel: "asset",
+			Lower: "asset",
 		},
 		ProjectionType: reflect.TypeFor[AssetProjection](),
-		StockPersist:   true,
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "asset", Operation: OpCreate}
 
@@ -471,13 +610,10 @@ var (
 	}
 	SchemaCampaign = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "Campaign",
-			Snake:  "campaign",
-			Camel:  "campaign",
-			Lower:  "campaign",
-			Plural: "Campaigns",
-			Table:  "campaigns",
-			Label:  "Campaign",
+			Name:  "Campaign",
+			Snake: "campaign",
+			Camel: "campaign",
+			Lower: "campaign",
 		},
 		ProjectionType: reflect.TypeFor[CampaignProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
@@ -550,13 +686,10 @@ var (
 	}
 	SchemaCampaignTarget = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "CampaignTarget",
-			Snake:  "campaign_target",
-			Camel:  "campaignTarget",
-			Lower:  "campaigntarget",
-			Plural: "CampaignTargets",
-			Table:  "campaign_targets",
-			Label:  "Campaign target",
+			Name:  "CampaignTarget",
+			Snake: "campaign_target",
+			Camel: "campaignTarget",
+			Lower: "campaigntarget",
 		},
 		ProjectionType: reflect.TypeFor[CampaignTargetProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
@@ -629,16 +762,12 @@ var (
 	}
 	SchemaCheckResult = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "CheckResult",
-			Snake:  "check_result",
-			Camel:  "checkResult",
-			Lower:  "checkresult",
-			Plural: "CheckResults",
-			Table:  "check_results",
-			Label:  "Check result",
+			Name:  "CheckResult",
+			Snake: "check_result",
+			Camel: "checkResult",
+			Lower: "checkresult",
 		},
 		ProjectionType: reflect.TypeFor[CheckResultProjection](),
-		StockPersist:   true,
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "check_result", Operation: OpCreate}
 
@@ -686,16 +815,12 @@ var (
 	}
 	SchemaContact = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "Contact",
-			Snake:  "contact",
-			Camel:  "contact",
-			Lower:  "contact",
-			Plural: "Contacts",
-			Table:  "contacts",
-			Label:  "Contact",
+			Name:  "Contact",
+			Snake: "contact",
+			Camel: "contact",
+			Lower: "contact",
 		},
 		ProjectionType: reflect.TypeFor[ContactProjection](),
-		StockPersist:   true,
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "contact", Operation: OpCreate}
 
@@ -766,13 +891,10 @@ var (
 	}
 	SchemaControl = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "Control",
-			Snake:  "control",
-			Camel:  "control",
-			Lower:  "control",
-			Plural: "Controls",
-			Table:  "controls",
-			Label:  "Control",
+			Name:  "Control",
+			Snake: "control",
+			Camel: "control",
+			Lower: "control",
 		},
 		ProjectionType: reflect.TypeFor[ControlProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
@@ -845,13 +967,10 @@ var (
 	}
 	SchemaControlImplementation = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "ControlImplementation",
-			Snake:  "control_implementation",
-			Camel:  "controlImplementation",
-			Lower:  "controlimplementation",
-			Plural: "ControlImplementations",
-			Table:  "control_implementations",
-			Label:  "Control implementation",
+			Name:  "ControlImplementation",
+			Snake: "control_implementation",
+			Camel: "controlImplementation",
+			Lower: "controlimplementation",
 		},
 		ProjectionType: reflect.TypeFor[ControlImplementationProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
@@ -924,13 +1043,10 @@ var (
 	}
 	SchemaControlObjective = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "ControlObjective",
-			Snake:  "control_objective",
-			Camel:  "controlObjective",
-			Lower:  "controlobjective",
-			Plural: "ControlObjectives",
-			Table:  "control_objectives",
-			Label:  "Control objective",
+			Name:  "ControlObjective",
+			Snake: "control_objective",
+			Camel: "controlObjective",
+			Lower: "controlobjective",
 		},
 		ProjectionType: reflect.TypeFor[ControlObjectiveProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
@@ -1003,16 +1119,12 @@ var (
 	}
 	SchemaDirectoryAccount = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "DirectoryAccount",
-			Snake:  "directory_account",
-			Camel:  "directoryAccount",
-			Lower:  "directoryaccount",
-			Plural: "DirectoryAccounts",
-			Table:  "directory_accounts",
-			Label:  "Directory account",
+			Name:  "DirectoryAccount",
+			Snake: "directory_account",
+			Camel: "directoryAccount",
+			Lower: "directoryaccount",
 		},
 		ProjectionType: reflect.TypeFor[DirectoryAccountProjection](),
-		StockPersist:   true,
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "directory_account", Operation: OpCreate}
 
@@ -1083,16 +1195,12 @@ var (
 	}
 	SchemaDirectoryGroup = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "DirectoryGroup",
-			Snake:  "directory_group",
-			Camel:  "directoryGroup",
-			Lower:  "directorygroup",
-			Plural: "DirectoryGroups",
-			Table:  "directory_groups",
-			Label:  "Directory group",
+			Name:  "DirectoryGroup",
+			Snake: "directory_group",
+			Camel: "directoryGroup",
+			Lower: "directorygroup",
 		},
 		ProjectionType: reflect.TypeFor[DirectoryGroupProjection](),
-		StockPersist:   true,
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "directory_group", Operation: OpCreate}
 
@@ -1163,16 +1271,12 @@ var (
 	}
 	SchemaDirectoryMembership = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "DirectoryMembership",
-			Snake:  "directory_membership",
-			Camel:  "directoryMembership",
-			Lower:  "directorymembership",
-			Plural: "DirectoryMemberships",
-			Table:  "directory_memberships",
-			Label:  "Directory membership",
+			Name:  "DirectoryMembership",
+			Snake: "directory_membership",
+			Camel: "directoryMembership",
+			Lower: "directorymembership",
 		},
 		ProjectionType: reflect.TypeFor[DirectoryMembershipProjection](),
-		StockPersist:   true,
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "directory_membership", Operation: OpCreate}
 
@@ -1243,13 +1347,10 @@ var (
 	}
 	SchemaDiscussion = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "Discussion",
-			Snake:  "discussion",
-			Camel:  "discussion",
-			Lower:  "discussion",
-			Plural: "Discussions",
-			Table:  "discussions",
-			Label:  "Discussion",
+			Name:  "Discussion",
+			Snake: "discussion",
+			Camel: "discussion",
+			Lower: "discussion",
 		},
 		ProjectionType: reflect.TypeFor[DiscussionProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
@@ -1322,13 +1423,10 @@ var (
 	}
 	SchemaDocumentData = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "DocumentData",
-			Snake:  "document_data",
-			Camel:  "documentData",
-			Lower:  "documentdata",
-			Plural: "DocumentData",
-			Table:  "document_data",
-			Label:  "Document data",
+			Name:  "DocumentData",
+			Snake: "document_data",
+			Camel: "documentData",
+			Lower: "documentdata",
 		},
 		ProjectionType: reflect.TypeFor[DocumentDataProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
@@ -1401,13 +1499,10 @@ var (
 	}
 	SchemaEmailTemplate = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "EmailTemplate",
-			Snake:  "email_template",
-			Camel:  "emailTemplate",
-			Lower:  "emailtemplate",
-			Plural: "EmailTemplates",
-			Table:  "email_templates",
-			Label:  "Email template",
+			Name:  "EmailTemplate",
+			Snake: "email_template",
+			Camel: "emailTemplate",
+			Lower: "emailtemplate",
 		},
 		ProjectionType: reflect.TypeFor[EmailTemplateProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
@@ -1480,16 +1575,12 @@ var (
 	}
 	SchemaEntity = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "Entity",
-			Snake:  "entity",
-			Camel:  "entity",
-			Lower:  "entity",
-			Plural: "Entities",
-			Table:  "entities",
-			Label:  "Entity",
+			Name:  "Entity",
+			Snake: "entity",
+			Camel: "entity",
+			Lower: "entity",
 		},
 		ProjectionType: reflect.TypeFor[EntityProjection](),
-		StockPersist:   true,
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "entity", Operation: OpCreate}
 
@@ -1560,13 +1651,10 @@ var (
 	}
 	SchemaEvidence = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "Evidence",
-			Snake:  "evidence",
-			Camel:  "evidence",
-			Lower:  "evidence",
-			Plural: "Evidences",
-			Table:  "evidences",
-			Label:  "Evidence",
+			Name:  "Evidence",
+			Snake: "evidence",
+			Camel: "evidence",
+			Lower: "evidence",
 		},
 		ProjectionType: reflect.TypeFor[EvidenceProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
@@ -1639,16 +1727,12 @@ var (
 	}
 	SchemaFinding = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "Finding",
-			Snake:  "finding",
-			Camel:  "finding",
-			Lower:  "finding",
-			Plural: "Findings",
-			Table:  "findings",
-			Label:  "Finding",
+			Name:  "Finding",
+			Snake: "finding",
+			Camel: "finding",
+			Lower: "finding",
 		},
 		ProjectionType: reflect.TypeFor[FindingProjection](),
-		StockPersist:   true,
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "finding", Operation: OpCreate}
 
@@ -1719,13 +1803,10 @@ var (
 	}
 	SchemaIdentityHolder = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "IdentityHolder",
-			Snake:  "identity_holder",
-			Camel:  "identityHolder",
-			Lower:  "identityholder",
-			Plural: "IdentityHolders",
-			Table:  "identity_holders",
-			Label:  "Identity holder",
+			Name:  "IdentityHolder",
+			Snake: "identity_holder",
+			Camel: "identityHolder",
+			Lower: "identityholder",
 		},
 		ProjectionType: reflect.TypeFor[IdentityHolderProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
@@ -1798,16 +1879,12 @@ var (
 	}
 	SchemaInternalPolicy = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "InternalPolicy",
-			Snake:  "internal_policy",
-			Camel:  "internalPolicy",
-			Lower:  "internalpolicy",
-			Plural: "InternalPolicies",
-			Table:  "internal_policies",
-			Label:  "Internal policy",
+			Name:  "InternalPolicy",
+			Snake: "internal_policy",
+			Camel: "internalPolicy",
+			Lower: "internalpolicy",
 		},
 		ProjectionType: reflect.TypeFor[InternalPolicyProjection](),
-		StockPersist:   true,
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "internal_policy", Operation: OpCreate}
 
@@ -1878,13 +1955,10 @@ var (
 	}
 	SchemaNarrative = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "Narrative",
-			Snake:  "narrative",
-			Camel:  "narrative",
-			Lower:  "narrative",
-			Plural: "Narratives",
-			Table:  "narratives",
-			Label:  "Narrative",
+			Name:  "Narrative",
+			Snake: "narrative",
+			Camel: "narrative",
+			Lower: "narrative",
 		},
 		ProjectionType: reflect.TypeFor[NarrativeProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
@@ -1955,15 +2029,88 @@ var (
 			return data, nil
 		},
 	}
+	SchemaNotification = &Schema{
+		SchemaDescriptor: SchemaDescriptor{
+			Name:  "Notification",
+			Snake: "notification",
+			Camel: "notification",
+			Lower: "notification",
+		},
+		ProjectionType: reflect.TypeFor[NotificationProjection](),
+		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
+			ref := SchemaRef{Schema: "notification", Operation: OpCreate}
+
+			decoded, err := jsonx.Decode[generated.CreateNotificationInput](input)
+			if err != nil {
+				return "", logError(ctx, ref, ErrDecodeFailed, err)
+			}
+
+			entity, err := client.Notification.Create().SetInput(decoded).Save(ctx)
+			if err != nil {
+				return "", logPersistError(ctx, ref, ErrCreateFailed, err)
+			}
+
+			return entity.ID, nil
+		},
+		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
+			ref := SchemaRef{Schema: "notification", Operation: OpUpdate, EntityID: entityID}
+
+			decoded, err := jsonx.Decode[generated.UpdateNotificationInput](applyClears(input))
+			if err != nil {
+				return logError(ctx, ref, ErrDecodeFailed, err)
+			}
+
+			if err := client.Notification.UpdateOneID(entityID).SetInput(decoded).Exec(ctx); err != nil {
+				return logPersistError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			return nil
+		},
+		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
+			ref := SchemaRef{Schema: "notification", Operation: OpQuery}
+
+			entities, err := client.Notification.Query().
+				Where(notification.OwnerID(orgID)).
+				All(ctx)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrQueryFailed, err)
+			}
+
+			results := make([]json.RawMessage, 0, len(entities))
+			for _, e := range entities {
+				data, err := json.Marshal(e)
+				if err != nil {
+					logError(ctx, ref, ErrMarshalFailed, err)
+					continue
+				}
+
+				results = append(results, data)
+			}
+
+			return results, nil
+		},
+		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
+			ref := SchemaRef{Schema: "notification", Operation: OpLoad, EntityID: entityID}
+
+			entity, err := client.Notification.Get(ctx, entityID)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrLoadFailed, err)
+			}
+
+			data, err := json.Marshal(entity)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrMarshalFailed, err)
+			}
+
+			return data, nil
+		},
+	}
 	SchemaNotificationTemplate = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "NotificationTemplate",
-			Snake:  "notification_template",
-			Camel:  "notificationTemplate",
-			Lower:  "notificationtemplate",
-			Plural: "NotificationTemplates",
-			Table:  "notification_templates",
-			Label:  "Notification template",
+			Name:  "NotificationTemplate",
+			Snake: "notification_template",
+			Camel: "notificationTemplate",
+			Lower: "notificationtemplate",
 		},
 		ProjectionType: reflect.TypeFor[NotificationTemplateProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
@@ -2034,15 +2181,104 @@ var (
 			return data, nil
 		},
 	}
+	SchemaOnboarding = &Schema{
+		SchemaDescriptor: SchemaDescriptor{
+			Name:  "Onboarding",
+			Snake: "onboarding",
+			Camel: "onboarding",
+			Lower: "onboarding",
+		},
+		ProjectionType: reflect.TypeFor[OnboardingProjection](),
+		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
+			ref := SchemaRef{Schema: "onboarding", Operation: OpCreate}
+
+			decoded, err := jsonx.Decode[generated.CreateOnboardingInput](input)
+			if err != nil {
+				return "", logError(ctx, ref, ErrDecodeFailed, err)
+			}
+
+			entity, err := client.Onboarding.Create().SetInput(decoded).Save(ctx)
+			if err != nil {
+				return "", logPersistError(ctx, ref, ErrCreateFailed, err)
+			}
+
+			return entity.ID, nil
+		},
+		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
+			ref := SchemaRef{Schema: "onboarding", Operation: OpLoad, EntityID: entityID}
+
+			entity, err := client.Onboarding.Get(ctx, entityID)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrLoadFailed, err)
+			}
+
+			data, err := json.Marshal(entity)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrMarshalFailed, err)
+			}
+
+			return data, nil
+		},
+	}
+	SchemaOrganization = &Schema{
+		SchemaDescriptor: SchemaDescriptor{
+			Name:  "Organization",
+			Snake: "organization",
+			Camel: "organization",
+			Lower: "organization",
+		},
+		ProjectionType: reflect.TypeFor[OrganizationProjection](),
+		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
+			ref := SchemaRef{Schema: "organization", Operation: OpCreate}
+
+			decoded, err := jsonx.Decode[generated.CreateOrganizationInput](input)
+			if err != nil {
+				return "", logError(ctx, ref, ErrDecodeFailed, err)
+			}
+
+			entity, err := client.Organization.Create().SetInput(decoded).Save(ctx)
+			if err != nil {
+				return "", logPersistError(ctx, ref, ErrCreateFailed, err)
+			}
+
+			return entity.ID, nil
+		},
+		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
+			ref := SchemaRef{Schema: "organization", Operation: OpUpdate, EntityID: entityID}
+
+			decoded, err := jsonx.Decode[generated.UpdateOrganizationInput](applyClears(input))
+			if err != nil {
+				return logError(ctx, ref, ErrDecodeFailed, err)
+			}
+
+			if err := client.Organization.UpdateOneID(entityID).SetInput(decoded).Exec(ctx); err != nil {
+				return logPersistError(ctx, ref, ErrUpdateFailed, err)
+			}
+
+			return nil
+		},
+		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
+			ref := SchemaRef{Schema: "organization", Operation: OpLoad, EntityID: entityID}
+
+			entity, err := client.Organization.Get(ctx, entityID)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrLoadFailed, err)
+			}
+
+			data, err := json.Marshal(entity)
+			if err != nil {
+				return nil, logError(ctx, ref, ErrMarshalFailed, err)
+			}
+
+			return data, nil
+		},
+	}
 	SchemaPlatform = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "Platform",
-			Snake:  "platform",
-			Camel:  "platform",
-			Lower:  "platform",
-			Plural: "Platforms",
-			Table:  "platforms",
-			Label:  "Platform",
+			Name:  "Platform",
+			Snake: "platform",
+			Camel: "platform",
+			Lower: "platform",
 		},
 		ProjectionType: reflect.TypeFor[PlatformProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
@@ -2115,13 +2351,10 @@ var (
 	}
 	SchemaProcedure = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "Procedure",
-			Snake:  "procedure",
-			Camel:  "procedure",
-			Lower:  "procedure",
-			Plural: "Procedures",
-			Table:  "procedures",
-			Label:  "Procedure",
+			Name:  "Procedure",
+			Snake: "procedure",
+			Camel: "procedure",
+			Lower: "procedure",
 		},
 		ProjectionType: reflect.TypeFor[ProcedureProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
@@ -2194,13 +2427,10 @@ var (
 	}
 	SchemaRemediation = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "Remediation",
-			Snake:  "remediation",
-			Camel:  "remediation",
-			Lower:  "remediation",
-			Plural: "Remediations",
-			Table:  "remediations",
-			Label:  "Remediation",
+			Name:  "Remediation",
+			Snake: "remediation",
+			Camel: "remediation",
+			Lower: "remediation",
 		},
 		ProjectionType: reflect.TypeFor[RemediationProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
@@ -2273,13 +2503,10 @@ var (
 	}
 	SchemaReview = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "Review",
-			Snake:  "review",
-			Camel:  "review",
-			Lower:  "review",
-			Plural: "Reviews",
-			Table:  "reviews",
-			Label:  "Review",
+			Name:  "Review",
+			Snake: "review",
+			Camel: "review",
+			Lower: "review",
 		},
 		ProjectionType: reflect.TypeFor[ReviewProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
@@ -2352,16 +2579,12 @@ var (
 	}
 	SchemaRisk = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "Risk",
-			Snake:  "risk",
-			Camel:  "risk",
-			Lower:  "risk",
-			Plural: "Risks",
-			Table:  "risks",
-			Label:  "Risk",
+			Name:  "Risk",
+			Snake: "risk",
+			Camel: "risk",
+			Lower: "risk",
 		},
 		ProjectionType: reflect.TypeFor[RiskProjection](),
-		StockPersist:   true,
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "risk", Operation: OpCreate}
 
@@ -2432,13 +2655,10 @@ var (
 	}
 	SchemaScan = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "Scan",
-			Snake:  "scan",
-			Camel:  "scan",
-			Lower:  "scan",
-			Plural: "Scans",
-			Table:  "scans",
-			Label:  "Scan",
+			Name:  "Scan",
+			Snake: "scan",
+			Camel: "scan",
+			Lower: "scan",
 		},
 		ProjectionType: reflect.TypeFor[ScanProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
@@ -2511,13 +2731,10 @@ var (
 	}
 	SchemaScheduledJob = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "ScheduledJob",
-			Snake:  "scheduled_job",
-			Camel:  "scheduledJob",
-			Lower:  "scheduledjob",
-			Plural: "ScheduledJobs",
-			Table:  "scheduled_jobs",
-			Label:  "Scheduled job",
+			Name:  "ScheduledJob",
+			Snake: "scheduled_job",
+			Camel: "scheduledJob",
+			Lower: "scheduledjob",
 		},
 		ProjectionType: reflect.TypeFor[ScheduledJobProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
@@ -2590,13 +2807,10 @@ var (
 	}
 	SchemaSubcontrol = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "Subcontrol",
-			Snake:  "subcontrol",
-			Camel:  "subcontrol",
-			Lower:  "subcontrol",
-			Plural: "Subcontrols",
-			Table:  "subcontrols",
-			Label:  "Subcontrol",
+			Name:  "Subcontrol",
+			Snake: "subcontrol",
+			Camel: "subcontrol",
+			Lower: "subcontrol",
 		},
 		ProjectionType: reflect.TypeFor[SubcontrolProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
@@ -2669,13 +2883,10 @@ var (
 	}
 	SchemaSubprocessor = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "Subprocessor",
-			Snake:  "subprocessor",
-			Camel:  "subprocessor",
-			Lower:  "subprocessor",
-			Plural: "Subprocessors",
-			Table:  "subprocessors",
-			Label:  "Subprocessor",
+			Name:  "Subprocessor",
+			Snake: "subprocessor",
+			Camel: "subprocessor",
+			Lower: "subprocessor",
 		},
 		ProjectionType: reflect.TypeFor[SubprocessorProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
@@ -2748,13 +2959,10 @@ var (
 	}
 	SchemaSystemDetail = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "SystemDetail",
-			Snake:  "system_detail",
-			Camel:  "systemDetail",
-			Lower:  "systemdetail",
-			Plural: "SystemDetails",
-			Table:  "system_details",
-			Label:  "System detail",
+			Name:  "SystemDetail",
+			Snake: "system_detail",
+			Camel: "systemDetail",
+			Lower: "systemdetail",
 		},
 		ProjectionType: reflect.TypeFor[SystemDetailProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
@@ -2827,13 +3035,10 @@ var (
 	}
 	SchemaTask = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "Task",
-			Snake:  "task",
-			Camel:  "task",
-			Lower:  "task",
-			Plural: "Tasks",
-			Table:  "tasks",
-			Label:  "Task",
+			Name:  "Task",
+			Snake: "task",
+			Camel: "task",
+			Lower: "task",
 		},
 		ProjectionType: reflect.TypeFor[TaskProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
@@ -2906,13 +3111,10 @@ var (
 	}
 	SchemaTemplate = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "Template",
-			Snake:  "template",
-			Camel:  "template",
-			Lower:  "template",
-			Plural: "Templates",
-			Table:  "templates",
-			Label:  "Template",
+			Name:  "Template",
+			Snake: "template",
+			Camel: "template",
+			Lower: "template",
 		},
 		ProjectionType: reflect.TypeFor[TemplateProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
@@ -2985,13 +3187,10 @@ var (
 	}
 	SchemaTrustCenterWatermarkConfig = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "TrustCenterWatermarkConfig",
-			Snake:  "trust_center_watermark_config",
-			Camel:  "trustCenterWatermarkConfig",
-			Lower:  "trustcenterwatermarkconfig",
-			Plural: "TrustCenterWatermarkConfigs",
-			Table:  "trust_center_watermark_configs",
-			Label:  "Trust center watermark config",
+			Name:  "TrustCenterWatermarkConfig",
+			Snake: "trust_center_watermark_config",
+			Camel: "trustCenterWatermarkConfig",
+			Lower: "trustcenterwatermarkconfig",
 		},
 		ProjectionType: reflect.TypeFor[TrustCenterWatermarkConfigProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
@@ -3064,13 +3263,10 @@ var (
 	}
 	SchemaVendorRiskScore = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "VendorRiskScore",
-			Snake:  "vendor_risk_score",
-			Camel:  "vendorRiskScore",
-			Lower:  "vendorriskscore",
-			Plural: "VendorRiskScores",
-			Table:  "vendor_risk_scores",
-			Label:  "Vendor risk score",
+			Name:  "VendorRiskScore",
+			Snake: "vendor_risk_score",
+			Camel: "vendorRiskScore",
+			Lower: "vendorriskscore",
 		},
 		ProjectionType: reflect.TypeFor[VendorRiskScoreProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
@@ -3143,16 +3339,12 @@ var (
 	}
 	SchemaVulnerability = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "Vulnerability",
-			Snake:  "vulnerability",
-			Camel:  "vulnerability",
-			Lower:  "vulnerability",
-			Plural: "Vulnerabilities",
-			Table:  "vulnerabilities",
-			Label:  "Vulnerability",
+			Name:  "Vulnerability",
+			Snake: "vulnerability",
+			Camel: "vulnerability",
+			Lower: "vulnerability",
 		},
 		ProjectionType: reflect.TypeFor[VulnerabilityProjection](),
-		StockPersist:   true,
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
 			ref := SchemaRef{Schema: "vulnerability", Operation: OpCreate}
 
@@ -3223,13 +3415,10 @@ var (
 	}
 	SchemaWorkflowAssignment = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "WorkflowAssignment",
-			Snake:  "workflow_assignment",
-			Camel:  "workflowAssignment",
-			Lower:  "workflowassignment",
-			Plural: "WorkflowAssignments",
-			Table:  "workflow_assignments",
-			Label:  "Workflow assignment",
+			Name:  "WorkflowAssignment",
+			Snake: "workflow_assignment",
+			Camel: "workflowAssignment",
+			Lower: "workflowassignment",
 		},
 		ProjectionType: reflect.TypeFor[WorkflowAssignmentProjection](),
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
@@ -3273,13 +3462,10 @@ var (
 	}
 	SchemaWorkflowAssignmentTarget = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "WorkflowAssignmentTarget",
-			Snake:  "workflow_assignment_target",
-			Camel:  "workflowAssignmentTarget",
-			Lower:  "workflowassignmenttarget",
-			Plural: "WorkflowAssignmentTargets",
-			Table:  "workflow_assignment_targets",
-			Label:  "Workflow assignment target",
+			Name:  "WorkflowAssignmentTarget",
+			Snake: "workflow_assignment_target",
+			Camel: "workflowAssignmentTarget",
+			Lower: "workflowassignmenttarget",
 		},
 		ProjectionType: reflect.TypeFor[WorkflowAssignmentTargetProjection](),
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
@@ -3323,13 +3509,10 @@ var (
 	}
 	SchemaWorkflowDefinition = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "WorkflowDefinition",
-			Snake:  "workflow_definition",
-			Camel:  "workflowDefinition",
-			Lower:  "workflowdefinition",
-			Plural: "WorkflowDefinitions",
-			Table:  "workflow_definitions",
-			Label:  "Workflow definition",
+			Name:  "WorkflowDefinition",
+			Snake: "workflow_definition",
+			Camel: "workflowDefinition",
+			Lower: "workflowdefinition",
 		},
 		ProjectionType: reflect.TypeFor[WorkflowDefinitionProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
@@ -3402,13 +3585,10 @@ var (
 	}
 	SchemaWorkflowEvent = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "WorkflowEvent",
-			Snake:  "workflow_event",
-			Camel:  "workflowEvent",
-			Lower:  "workflowevent",
-			Plural: "WorkflowEvents",
-			Table:  "workflow_events",
-			Label:  "Workflow event",
+			Name:  "WorkflowEvent",
+			Snake: "workflow_event",
+			Camel: "workflowEvent",
+			Lower: "workflowevent",
 		},
 		ProjectionType: reflect.TypeFor[WorkflowEventProjection](),
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
@@ -3452,13 +3632,10 @@ var (
 	}
 	SchemaWorkflowInstance = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "WorkflowInstance",
-			Snake:  "workflow_instance",
-			Camel:  "workflowInstance",
-			Lower:  "workflowinstance",
-			Plural: "WorkflowInstances",
-			Table:  "workflow_instances",
-			Label:  "Workflow instance",
+			Name:  "WorkflowInstance",
+			Snake: "workflow_instance",
+			Camel: "workflowInstance",
+			Lower: "workflowinstance",
 		},
 		ProjectionType: reflect.TypeFor[WorkflowInstanceProjection](),
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
@@ -3502,13 +3679,10 @@ var (
 	}
 	SchemaWorkflowObjectRef = &Schema{
 		SchemaDescriptor: SchemaDescriptor{
-			Name:   "WorkflowObjectRef",
-			Snake:  "workflow_object_ref",
-			Camel:  "workflowObjectRef",
-			Lower:  "workflowobjectref",
-			Plural: "WorkflowObjectRefs",
-			Table:  "workflow_object_refs",
-			Label:  "Workflow object ref",
+			Name:  "WorkflowObjectRef",
+			Snake: "workflow_object_ref",
+			Camel: "workflowObjectRef",
+			Lower: "workflowobjectref",
 		},
 		ProjectionType: reflect.TypeFor[WorkflowObjectRefProjection](),
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
@@ -3576,7 +3750,7 @@ func init() {
 		{Name: "dismissed_tag_suggestions", Label: "DismissedTagSuggestions", Type: "[]string"},
 		{Name: "due_date", Label: "DueDate", Type: "time.Time"},
 		{Name: "external_contents", Label: "ExternalContents", Type: "string", MatchKey: true, InputKey: "external_contents"},
-		{Name: "external_file_id", Label: "ExternalFileID", Type: "string", MatchKey: true, InputKey: "external_file_id"},
+		{Name: "external_file_id", Label: "ExternalFileID", Type: "string", MatchKey: true, InputKey: "external_file_id", LookupKey: true},
 		{Name: "file_id", Label: "FileID", Type: "string", MatchKey: true},
 		{Name: "improvement_suggestions", Label: "ImprovementSuggestions", Type: "[]string"},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true},
@@ -3699,7 +3873,7 @@ func init() {
 		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true, InputKey: "scope_name"},
 		{Name: "security_tier_id", Label: "SecurityTierID", Type: "string", MatchKey: true, InputKey: "security_tier_id"},
 		{Name: "security_tier_name", Label: "SecurityTierName", Type: "string", MatchKey: true, InputKey: "security_tier_name"},
-		{Name: "source_identifier", Label: "SourceIdentifier", Type: "string", MatchKey: true, InputKey: "source_identifier"},
+		{Name: "source_identifier", Label: "SourceIdentifier", Type: "string", MatchKey: true, InputKey: "source_identifier", LookupKey: true},
 		{Name: "source_platform_id", Label: "SourcePlatformID", Type: "string", MatchKey: true},
 		{Name: "source_type", Label: "SourceType", Type: "enums.SourceType", InputKey: "source_type"},
 		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true, InputKey: "system_internal_id"},
@@ -3785,7 +3959,7 @@ func init() {
 		{Name: "external_uri", Label: "ExternalURI", Type: "string", MatchKey: true, InputKey: "external_uri"},
 		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, InputKey: "integration_id"},
 		{Name: "last_observed_at", Label: "LastObservedAt", Type: "models.DateTime", InputKey: "last_observed_at"},
-		{Name: "parent_external_id", Label: "ParentExternalID", Type: "string", MatchKey: true, InputKey: "parent_external_id"},
+		{Name: "parent_external_id", Label: "ParentExternalID", Type: "string", MatchKey: true, InputKey: "parent_external_id", LookupKey: true},
 		{Name: "source", Label: "Source", Type: "string", MatchKey: true, InputKey: "source"},
 		{Name: "status", Label: "Status", Type: "enums.CheckStatus", InputKey: "status"},
 		{Name: "tags", Label: "Tags", Type: "[]string", InputKey: "tags"},
@@ -3800,8 +3974,8 @@ func init() {
 		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
 		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
 		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
-		{Name: "email", Label: "Email", Type: "string", MatchKey: true, InputKey: "email"},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id"},
+		{Name: "email", Label: "Email", Type: "string", MatchKey: true, InputKey: "email", LookupKey: true},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true},
 		{Name: "full_name", Label: "FullName", Type: "string", MatchKey: true, InputKey: "full_name"},
 		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, InputKey: "integration_id"},
 		{Name: "observed_at", Label: "ObservedAt", Type: "models.DateTime", InputKey: "observed_at"},
@@ -3932,7 +4106,7 @@ func init() {
 		{Name: "email_aliases", Label: "EmailAliases", Type: "[]string", InputKey: "email_aliases"},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id"},
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name"},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id"},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true},
 		{Name: "family_name", Label: "FamilyName", Type: "string", MatchKey: true, InputKey: "family_name"},
 		{Name: "first_seen_at", Label: "FirstSeenAt", Type: "time.Time", InputKey: "first_seen_at"},
 		{Name: "given_name", Label: "GivenName", Type: "string", MatchKey: true, InputKey: "given_name"},
@@ -3978,7 +4152,7 @@ func init() {
 		{Name: "email", Label: "Email", Type: "string", MatchKey: true, InputKey: "email"},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id"},
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name"},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id"},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true},
 		{Name: "external_sharing_allowed", Label: "ExternalSharingAllowed", Type: "bool", InputKey: "external_sharing_allowed"},
 		{Name: "first_seen_at", Label: "FirstSeenAt", Type: "time.Time", InputKey: "first_seen_at"},
 		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, InputKey: "integration_id"},
@@ -4005,8 +4179,8 @@ func init() {
 		{Name: "added_at", Label: "AddedAt", Type: "time.Time", InputKey: "added_at"},
 		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
 		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
-		{Name: "directory_account_id", Label: "DirectoryAccountID", Type: "string", MatchKey: true, InputKey: "directory_account_id"},
-		{Name: "directory_group_id", Label: "DirectoryGroupID", Type: "string", MatchKey: true, InputKey: "directory_group_id"},
+		{Name: "directory_account_id", Label: "DirectoryAccountID", Type: "string", MatchKey: true, InputKey: "directory_account_id", LookupKey: true},
+		{Name: "directory_group_id", Label: "DirectoryGroupID", Type: "string", MatchKey: true, InputKey: "directory_group_id", LookupKey: true},
 		{Name: "directory_instance_id", Label: "DirectoryInstanceID", Type: "string", MatchKey: true, InputKey: "directory_instance_id"},
 		{Name: "directory_name", Label: "DirectoryName", Type: "string", MatchKey: true, InputKey: "directory_name"},
 		{Name: "directory_sync_run_id", Label: "DirectorySyncRunID", Type: "string", MatchKey: true, InputKey: "directory_sync_run_id"},
@@ -4118,7 +4292,7 @@ func init() {
 		{Name: "entity_type_id", Label: "EntityTypeID", Type: "string", MatchKey: true},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id"},
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name"},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id"},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true},
 		{Name: "has_soc2", Label: "HasSoc2", Type: "bool", InputKey: "has_soc2"},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true, InputKey: "internal_notes"},
 		{Name: "internal_owner", Label: "InternalOwner", Type: "string", MatchKey: true, InputKey: "internal_owner"},
@@ -4208,7 +4382,7 @@ func init() {
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name"},
 		{Name: "event_time", Label: "EventTime", Type: "models.DateTime", WorkflowEligible: true, InputKey: "event_time"},
 		{Name: "exploitability", Label: "Exploitability", Type: "float64", InputKey: "exploitability"},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id"},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true},
 		{Name: "external_owner_id", Label: "ExternalOwnerID", Type: "string", MatchKey: true, InputKey: "external_owner_id"},
 		{Name: "external_uri", Label: "ExternalURI", Type: "string", MatchKey: true, InputKey: "external_uri"},
 		{Name: "finding_class", Label: "FindingClass", Type: "string", MatchKey: true, InputKey: "finding_class"},
@@ -4313,7 +4487,7 @@ func init() {
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id"},
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name"},
 		{Name: "external_contents", Label: "ExternalContents", Type: "string", MatchKey: true, InputKey: "external_contents"},
-		{Name: "external_file_id", Label: "ExternalFileID", Type: "string", MatchKey: true, InputKey: "external_file_id"},
+		{Name: "external_file_id", Label: "ExternalFileID", Type: "string", MatchKey: true, InputKey: "external_file_id", LookupKey: true},
 		{Name: "external_uuid", Label: "ExternalUUID", Type: "string", MatchKey: true, InputKey: "external_uuid"},
 		{Name: "file_id", Label: "FileID", Type: "string", MatchKey: true},
 		{Name: "improvement_suggestions", Label: "ImprovementSuggestions", Type: "[]string", InputKey: "improvement_suggestions"},
@@ -4358,6 +4532,25 @@ func init() {
 		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true},
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true},
 	}
+	SchemaNotification.Fields = []FieldDescriptor{
+		{Name: "body", Label: "Body", Type: "string", MatchKey: true},
+		{Name: "channels", Label: "Channels", Type: "[]enums.Channel"},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
+		{Name: "data", Label: "Data", Type: "map[string]interface {}"},
+		{Name: "notification_type", Label: "NotificationType", Type: "enums.NotificationType"},
+		{Name: "object_type", Label: "ObjectType", Type: "string", MatchKey: true},
+		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
+		{Name: "read_at", Label: "ReadAt", Type: "models.DateTime"},
+		{Name: "tags", Label: "Tags", Type: "[]string"},
+		{Name: "template_id", Label: "TemplateID", Type: "string", MatchKey: true},
+		{Name: "title", Label: "Title", Type: "string", MatchKey: true},
+		{Name: "topic", Label: "Topic", Type: "enums.NotificationTopic", TaskRules: []TaskRuleDescriptor{{RuleID: "review-domain-scan", Expression: "value == \"DOMAIN_SCAN\"", Trigger: "createOnly"}}},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time"},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true},
+		{Name: "user_id", Label: "UserID", Type: "string", MatchKey: true},
+	}
 	SchemaNotificationTemplate.Fields = []FieldDescriptor{
 		{Name: "active", Label: "Active", Type: "bool"},
 		{Name: "blocks", Label: "Blocks", Type: "map[string]interface {}"},
@@ -4393,6 +4586,37 @@ func init() {
 		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true},
 		{Name: "version", Label: "Version", Type: "int"},
 		{Name: "workflow_definition_id", Label: "WorkflowDefinitionID", Type: "string", MatchKey: true},
+	}
+	SchemaOnboarding.Fields = []FieldDescriptor{
+		{Name: "company_details", Label: "CompanyDetails", Type: "map[string]interface {}"},
+		{Name: "company_name", Label: "CompanyName", Type: "string", MatchKey: true},
+		{Name: "compliance", Label: "Compliance", Type: "map[string]interface {}", TaskRules: []TaskRuleDescriptor{{RuleID: "framework", EachElement: "value.frameworks", Trigger: "createOnly"}, {RuleID: "framework-generic", Expression: "!(has(value.frameworks) && size(value.frameworks) > 0)", Trigger: "createOnly"}, {RuleID: "import-existing-controls", Expression: "value.existing_controls == true", Trigger: "createOnly"}, {RuleID: "import-template-controls", Expression: "!(has(value.existing_controls) && value.existing_controls == true)", Trigger: "createOnly"}, {RuleID: "import-existing-policies", Expression: "value.existing_policies_procedures == true", Trigger: "createOnly"}, {RuleID: "import-policy-templates", Expression: "!(has(value.existing_policies_procedures) && value.existing_policies_procedures == true)", Trigger: "createOnly"}, {RuleID: "has-auditor-at-onboarding", Expression: "value.has_auditor == true", Trigger: "createOnly"}, {RuleID: "wants-auditor-recommendation", Expression: "value.recommend_auditors == true", Trigger: "createOnly"}, {RuleID: "wants-partner-recommendation", Expression: "value.recommend_vciso_partner == true", Trigger: "createOnly"}}},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
+		{Name: "demo_requested", Label: "DemoRequested", Type: "bool", TaskRules: []TaskRuleDescriptor{{RuleID: "demo-requested", Expression: "value == true", Trigger: "createOnly"}}},
+		{Name: "domains", Label: "Domains", Type: "[]string"},
+		{Name: "organization_id", Label: "OrganizationID", Type: "string", MatchKey: true},
+		{Name: "user_details", Label: "UserDetails", Type: "map[string]interface {}"},
+	}
+	SchemaOrganization.Fields = []FieldDescriptor{
+		{Name: "avatar_local_file_id", Label: "AvatarLocalFileID", Type: "string", MatchKey: true},
+		{Name: "avatar_remote_url", Label: "AvatarRemoteURL", Type: "string", MatchKey: true},
+		{Name: "avatar_updated_at", Label: "AvatarUpdatedAt", Type: "time.Time"},
+		{Name: "created_at", Label: "CreatedAt", Type: "time.Time"},
+		{Name: "created_by", Label: "CreatedBy", Type: "string", MatchKey: true},
+		{Name: "deleted_at", Label: "DeletedAt", Type: "time.Time"},
+		{Name: "deleted_by", Label: "DeletedBy", Type: "string", MatchKey: true},
+		{Name: "description", Label: "Description", Type: "string", MatchKey: true},
+		{Name: "display_name", Label: "DisplayName", Type: "string", MatchKey: true},
+		{Name: "name", Label: "Name", Type: "string", MatchKey: true},
+		{Name: "parent_organization_id", Label: "ParentOrganizationID", Type: "string", MatchKey: true},
+		{Name: "personal_org", Label: "PersonalOrg", Type: "bool"},
+		{Name: "slug_name", Label: "SlugName", Type: "string", MatchKey: true},
+		{Name: "stripe_customer_id", Label: "StripeCustomerID", Type: "string", MatchKey: true},
+		{Name: "tags", Label: "Tags", Type: "[]string"},
+		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time"},
+		{Name: "updated_by", Label: "UpdatedBy", Type: "string", MatchKey: true},
+		{Name: "updated_by_impersonator", Label: "UpdatedByImpersonator", Type: "string", MatchKey: true},
 	}
 	SchemaPlatform.Fields = []FieldDescriptor{
 		{Name: "access_model_id", Label: "AccessModelID", Type: "string", MatchKey: true},
@@ -4472,7 +4696,7 @@ func init() {
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true},
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true},
 		{Name: "external_contents", Label: "ExternalContents", Type: "string", MatchKey: true, InputKey: "external_contents"},
-		{Name: "external_file_id", Label: "ExternalFileID", Type: "string", MatchKey: true, InputKey: "external_file_id"},
+		{Name: "external_file_id", Label: "ExternalFileID", Type: "string", MatchKey: true, InputKey: "external_file_id", LookupKey: true},
 		{Name: "file_id", Label: "FileID", Type: "string", MatchKey: true},
 		{Name: "improvement_suggestions", Label: "ImprovementSuggestions", Type: "[]string"},
 		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true},
@@ -4589,7 +4813,7 @@ func init() {
 		{Name: "due_date", Label: "DueDate", Type: "models.DateTime", WorkflowEligible: true, InputKey: "due_date"},
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id"},
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name"},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id"},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true},
 		{Name: "external_uuid", Label: "ExternalUUID", Type: "string", MatchKey: true, InputKey: "external_uuid"},
 		{Name: "impact", Label: "Impact", Type: "enums.RiskImpact", WorkflowEligible: true, InputKey: "impact"},
 		{Name: "integration_id", Label: "IntegrationID", Type: "string", MatchKey: true, InputKey: "integration_id"},
@@ -4633,6 +4857,7 @@ func init() {
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true},
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true},
 		{Name: "generated_by_platform_id", Label: "GeneratedByPlatformID", Type: "string", MatchKey: true},
+		{Name: "internal_notes", Label: "InternalNotes", Type: "string", MatchKey: true},
 		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}"},
 		{Name: "next_scan_run_at", Label: "NextScanRunAt", Type: "models.DateTime"},
 		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
@@ -4648,6 +4873,8 @@ func init() {
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true},
 		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true},
 		{Name: "status", Label: "Status", Type: "enums.ScanStatus"},
+		{Name: "system_internal_id", Label: "SystemInternalID", Type: "string", MatchKey: true},
+		{Name: "system_owned", Label: "SystemOwned", Type: "bool"},
 		{Name: "tags", Label: "Tags", Type: "[]string"},
 		{Name: "target", Label: "Target", Type: "string", MatchKey: true},
 		{Name: "updated_at", Label: "UpdatedAt", Type: "time.Time"},
@@ -4775,11 +5002,16 @@ func init() {
 		{Name: "external_reference_url", Label: "ExternalReferenceURL", Type: "[]string"},
 		{Name: "external_uuid", Label: "ExternalUUID", Type: "string", MatchKey: true},
 		{Name: "idempotency_key", Label: "IdempotencyKey", Type: "string", MatchKey: true},
+		{Name: "is_suggested", Label: "IsSuggested", Type: "bool"},
 		{Name: "is_template", Label: "IsTemplate", Type: "bool"},
+		{Name: "metadata", Label: "Metadata", Type: "map[string]interface {}"},
 		{Name: "owner_id", Label: "OwnerID", Type: "string", MatchKey: true},
 		{Name: "parent_task_id", Label: "ParentTaskID", Type: "string", MatchKey: true},
+		{Name: "priority", Label: "Priority", Type: "int"},
 		{Name: "scope_id", Label: "ScopeID", Type: "string", MatchKey: true},
 		{Name: "scope_name", Label: "ScopeName", Type: "string", MatchKey: true},
+		{Name: "source", Label: "Source", Type: "string", MatchKey: true},
+		{Name: "source_key", Label: "SourceKey", Type: "string", MatchKey: true},
 		{Name: "status", Label: "Status", Type: "enums.TaskStatus", WorkflowEligible: true},
 		{Name: "system_generated", Label: "SystemGenerated", Type: "bool", WorkflowEligible: true},
 		{Name: "tags", Label: "Tags", Type: "[]string"},
@@ -4884,7 +5116,7 @@ func init() {
 		{Name: "environment_id", Label: "EnvironmentID", Type: "string", MatchKey: true, InputKey: "environment_id"},
 		{Name: "environment_name", Label: "EnvironmentName", Type: "string", MatchKey: true, InputKey: "environment_name"},
 		{Name: "exploitability", Label: "Exploitability", Type: "float64", InputKey: "exploitability"},
-		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id"},
+		{Name: "external_id", Label: "ExternalID", Type: "string", MatchKey: true, InputKey: "external_id", LookupKey: true},
 		{Name: "external_owner_id", Label: "ExternalOwnerID", Type: "string", MatchKey: true, InputKey: "external_owner_id"},
 		{Name: "external_uri", Label: "ExternalURI", Type: "string", MatchKey: true, InputKey: "external_uri"},
 		{Name: "first_patched_version", Label: "FirstPatchedVersion", Type: "string", MatchKey: true, InputKey: "first_patched_version"},
@@ -5089,87 +5321,106 @@ func init() {
 		{Name: "vulnerability_id", Label: "VulnerabilityID", Type: "string", MatchKey: true},
 		{Name: "workflow_instance_id", Label: "WorkflowInstanceID", Type: "string", MatchKey: true},
 	}
+	SchemaOrganization.TaskRules = []TaskRuleDescriptor{
+		{RuleID: "suggested-secure-organization", Expression: "!has(value.personal_org) || value.personal_org == false", Trigger: "createOnly"},
+		{RuleID: "suggested-create-groups", Expression: "!has(value.personal_org) || value.personal_org == false", Trigger: "createOnly"},
+		{RuleID: "suggested-invite-team", Expression: "!has(value.personal_org) || value.personal_org == false", Trigger: "createOnly"},
+		{RuleID: "suggested-setup-integrations", Expression: "!has(value.personal_org) || value.personal_org == false", Trigger: "createOnly"},
+		{RuleID: "suggested-add-payment-method", Expression: "!has(value.personal_org) || value.personal_org == false", Trigger: "createOnly"},
+		{RuleID: "suggested-complete-registry", Expression: "!has(value.personal_org) || value.personal_org == false", Trigger: "createOnly"},
+		{RuleID: "suggested-configure-trust-center", Expression: "!has(value.personal_org) || value.personal_org == false", Trigger: "createOnly"},
+	}
 	SchemaActionPlan.Edges = []EdgeDescriptor{
 		{
 			Name:        "controls",
 			Label:       "Controls",
 			Target:      SchemaControl,
 			TargetType:  "Control",
-			CreateField: "controlIDs",
-			AddField:    "addControlIDs",
-			RemoveField: "removeControlIDs",
+			CreateField: "control_ids",
+			AddField:    "add_control_ids",
+			RemoveField: "remove_control_ids",
 		},
 		{
 			Name:        "findings",
 			Label:       "Findings",
 			Target:      SchemaFinding,
 			TargetType:  "Finding",
-			CreateField: "findingIDs",
-			AddField:    "addFindingIDs",
-			RemoveField: "removeFindingIDs",
+			CreateField: "finding_ids",
+			AddField:    "add_finding_ids",
+			RemoveField: "remove_finding_ids",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
 		},
 		{
 			Name:        "remediations",
 			Label:       "Remediations",
 			Target:      SchemaRemediation,
 			TargetType:  "Remediation",
-			CreateField: "remediationIDs",
-			AddField:    "addRemediationIDs",
-			RemoveField: "removeRemediationIDs",
+			CreateField: "remediation_ids",
+			AddField:    "add_remediation_ids",
+			RemoveField: "remove_remediation_ids",
 		},
 		{
 			Name:        "reviews",
 			Label:       "Reviews",
 			Target:      SchemaReview,
 			TargetType:  "Review",
-			CreateField: "reviewIDs",
-			AddField:    "addReviewIDs",
-			RemoveField: "removeReviewIDs",
+			CreateField: "review_ids",
+			AddField:    "add_review_ids",
+			RemoveField: "remove_review_ids",
 		},
 		{
 			Name:        "risks",
 			Label:       "Risks",
 			Target:      SchemaRisk,
 			TargetType:  "Risk",
-			CreateField: "riskIDs",
-			AddField:    "addRiskIDs",
-			RemoveField: "removeRiskIDs",
+			CreateField: "risk_ids",
+			AddField:    "add_risk_ids",
+			RemoveField: "remove_risk_ids",
 		},
 		{
 			Name:        "scans",
 			Label:       "Scans",
 			Target:      SchemaScan,
 			TargetType:  "Scan",
-			CreateField: "scanIDs",
-			AddField:    "addScanIDs",
-			RemoveField: "removeScanIDs",
+			CreateField: "scan_ids",
+			AddField:    "add_scan_ids",
+			RemoveField: "remove_scan_ids",
 		},
 		{
 			Name:        "tasks",
 			Label:       "Tasks",
 			Target:      SchemaTask,
 			TargetType:  "Task",
-			CreateField: "taskIDs",
-			AddField:    "addTaskIDs",
-			RemoveField: "removeTaskIDs",
+			CreateField: "task_ids",
+			AddField:    "add_task_ids",
+			RemoveField: "remove_task_ids",
 		},
 		{
 			Name:        "vulnerabilities",
 			Label:       "Vulnerabilities",
 			Target:      SchemaVulnerability,
 			TargetType:  "Vulnerability",
-			CreateField: "vulnerabilityIDs",
-			AddField:    "addVulnerabilityIDs",
-			RemoveField: "removeVulnerabilityIDs",
+			CreateField: "vulnerability_ids",
+			AddField:    "add_vulnerability_ids",
+			RemoveField: "remove_vulnerability_ids",
 		},
 		{
 			Name:             "workflow_object_refs",
 			Label:            "WorkflowObjectRefs",
 			Target:           SchemaWorkflowObjectRef,
 			TargetType:       "WorkflowObjectRef",
-			CreateField:      "workflowobjectrefIDs",
-			AddField:         "addWorkflowObjectRefIDs",
-			RemoveField:      "removeWorkflowObjectRefIDs",
+			CreateField:      "workflow_object_ref_ids",
+			AddField:         "add_workflow_object_ref_ids",
+			RemoveField:      "remove_workflow_object_ref_ids",
 			WorkflowEligible: true,
 		},
 	}
@@ -5179,36 +5430,46 @@ func init() {
 			Label:       "AssessmentResponses",
 			Target:      SchemaAssessmentResponse,
 			TargetType:  "AssessmentResponse",
-			CreateField: "assessmentresponseIDs",
-			AddField:    "addAssessmentResponseIDs",
-			RemoveField: "removeAssessmentResponseIDs",
+			CreateField: "assessment_response_ids",
+			AddField:    "add_assessment_response_ids",
+			RemoveField: "remove_assessment_response_ids",
 		},
 		{
 			Name:        "campaigns",
 			Label:       "Campaigns",
 			Target:      SchemaCampaign,
 			TargetType:  "Campaign",
-			CreateField: "campaignIDs",
-			AddField:    "addCampaignIDs",
-			RemoveField: "removeCampaignIDs",
+			CreateField: "campaign_ids",
+			AddField:    "add_campaign_ids",
+			RemoveField: "remove_campaign_ids",
 		},
 		{
 			Name:        "identity_holders",
 			Label:       "IdentityHolders",
 			Target:      SchemaIdentityHolder,
 			TargetType:  "IdentityHolder",
-			CreateField: "identityholderIDs",
-			AddField:    "addIdentityHolderIDs",
-			RemoveField: "removeIdentityHolderIDs",
+			CreateField: "identity_holder_ids",
+			AddField:    "add_identity_holder_ids",
+			RemoveField: "remove_identity_holder_ids",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
 		},
 		{
 			Name:        "platforms",
 			Label:       "Platforms",
 			Target:      SchemaPlatform,
 			TargetType:  "Platform",
-			CreateField: "platformIDs",
-			AddField:    "addPlatformIDs",
-			RemoveField: "removePlatformIDs",
+			CreateField: "platform_ids",
+			AddField:    "add_platform_ids",
+			RemoveField: "remove_platform_ids",
 		},
 		{
 			Name:        "template",
@@ -5216,7 +5477,7 @@ func init() {
 			Target:      SchemaTemplate,
 			TargetType:  "Template",
 			Unique:      true,
-			CreateField: "templateID",
+			CreateField: "template_id",
 			ClearField:  "clearTemplate",
 			Field:       "template_id",
 		},
@@ -5225,9 +5486,9 @@ func init() {
 			Label:       "WorkflowObjectRefs",
 			Target:      SchemaWorkflowObjectRef,
 			TargetType:  "WorkflowObjectRef",
-			CreateField: "workflowobjectrefIDs",
-			AddField:    "addWorkflowObjectRefIDs",
-			RemoveField: "removeWorkflowObjectRefIDs",
+			CreateField: "workflow_object_ref_ids",
+			AddField:    "add_workflow_object_ref_ids",
+			RemoveField: "remove_workflow_object_ref_ids",
 		},
 	}
 	SchemaAssessmentResponse.Edges = []EdgeDescriptor{
@@ -5237,7 +5498,7 @@ func init() {
 			Target:      SchemaAssessment,
 			TargetType:  "Assessment",
 			Unique:      true,
-			CreateField: "assessmentID",
+			CreateField: "assessment_id",
 			Field:       "assessment_id",
 		},
 		{
@@ -5246,7 +5507,7 @@ func init() {
 			Target:      SchemaCampaign,
 			TargetType:  "Campaign",
 			Unique:      true,
-			CreateField: "campaignID",
+			CreateField: "campaign_id",
 			ClearField:  "clearCampaign",
 			Field:       "campaign_id",
 		},
@@ -5256,7 +5517,7 @@ func init() {
 			Target:      SchemaDocumentData,
 			TargetType:  "DocumentData",
 			Unique:      true,
-			CreateField: "documentID",
+			CreateField: "document_id",
 			ClearField:  "clearDocument",
 			Field:       "document_data_id",
 		},
@@ -5266,7 +5527,7 @@ func init() {
 			Target:      SchemaEntity,
 			TargetType:  "Entity",
 			Unique:      true,
-			CreateField: "entityID",
+			CreateField: "entity_id",
 			ClearField:  "clearEntity",
 			Field:       "entity_id",
 		},
@@ -5276,27 +5537,37 @@ func init() {
 			Target:      SchemaIdentityHolder,
 			TargetType:  "IdentityHolder",
 			Unique:      true,
-			CreateField: "identityHolderID",
+			CreateField: "identity_holder_id",
 			ClearField:  "clearIdentityHolder",
 			Field:       "identity_holder_id",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
 		},
 		{
 			Name:        "vendor_risk_scores",
 			Label:       "VendorRiskScores",
 			Target:      SchemaVendorRiskScore,
 			TargetType:  "VendorRiskScore",
-			CreateField: "vendorriskscoreIDs",
-			AddField:    "addVendorRiskScoreIDs",
-			RemoveField: "removeVendorRiskScoreIDs",
+			CreateField: "vendor_risk_score_ids",
+			AddField:    "add_vendor_risk_score_ids",
+			RemoveField: "remove_vendor_risk_score_ids",
 		},
 		{
 			Name:        "workflow_object_refs",
 			Label:       "WorkflowObjectRefs",
 			Target:      SchemaWorkflowObjectRef,
 			TargetType:  "WorkflowObjectRef",
-			CreateField: "workflowobjectrefIDs",
-			AddField:    "addWorkflowObjectRefIDs",
-			RemoveField: "removeWorkflowObjectRefIDs",
+			CreateField: "workflow_object_ref_ids",
+			AddField:    "add_workflow_object_ref_ids",
+			RemoveField: "remove_workflow_object_ref_ids",
 		},
 	}
 	SchemaAsset.Edges = []EdgeDescriptor{
@@ -5305,81 +5576,118 @@ func init() {
 			Label:       "ConnectedAssets",
 			Target:      SchemaAsset,
 			TargetType:  "Asset",
-			CreateField: "connectedassetIDs",
-			AddField:    "addConnectedAssetIDs",
-			RemoveField: "removeConnectedAssetIDs",
+			CreateField: "connected_asset_ids",
+			AddField:    "add_connected_asset_ids",
+			RemoveField: "remove_connected_asset_ids",
 		},
 		{
 			Name:        "connected_from",
 			Label:       "ConnectedFrom",
 			Target:      SchemaAsset,
 			TargetType:  "Asset",
-			CreateField: "connectedfromIDs",
-			AddField:    "addConnectedFromIDs",
-			RemoveField: "removeConnectedFromIDs",
+			CreateField: "connected_from_ids",
+			AddField:    "add_connected_from_ids",
+			RemoveField: "remove_connected_from_ids",
 		},
 		{
 			Name:        "controls",
 			Label:       "Controls",
 			Target:      SchemaControl,
 			TargetType:  "Control",
-			CreateField: "controlIDs",
-			AddField:    "addControlIDs",
-			RemoveField: "removeControlIDs",
+			CreateField: "control_ids",
+			AddField:    "add_control_ids",
+			RemoveField: "remove_control_ids",
 		},
 		{
 			Name:        "entities",
 			Label:       "Entities",
 			Target:      SchemaEntity,
 			TargetType:  "Entity",
-			CreateField: "entityIDs",
-			AddField:    "addEntityIDs",
-			RemoveField: "removeEntityIDs",
+			CreateField: "entity_ids",
+			AddField:    "add_entity_ids",
+			RemoveField: "remove_entity_ids",
+		},
+		{
+			Name:        "findings",
+			Label:       "Findings",
+			Target:      SchemaFinding,
+			TargetType:  "Finding",
+			CreateField: "finding_ids",
+			AddField:    "add_finding_ids",
+			RemoveField: "remove_finding_ids",
 		},
 		{
 			Name:        "identity_holders",
 			Label:       "IdentityHolders",
 			Target:      SchemaIdentityHolder,
 			TargetType:  "IdentityHolder",
-			CreateField: "identityholderIDs",
-			AddField:    "addIdentityHolderIDs",
-			RemoveField: "removeIdentityHolderIDs",
+			CreateField: "identity_holder_ids",
+			AddField:    "add_identity_holder_ids",
+			RemoveField: "remove_identity_holder_ids",
 		},
 		{
 			Name:        "internal_policies",
 			Label:       "InternalPolicies",
 			Target:      SchemaInternalPolicy,
 			TargetType:  "InternalPolicy",
-			CreateField: "internalpolicyIDs",
-			AddField:    "addInternalPolicyIDs",
-			RemoveField: "removeInternalPolicyIDs",
+			CreateField: "internal_policy_ids",
+			AddField:    "add_internal_policy_ids",
+			RemoveField: "remove_internal_policy_ids",
 		},
 		{
 			Name:        "out_of_scope_platforms",
 			Label:       "OutOfScopePlatforms",
 			Target:      SchemaPlatform,
 			TargetType:  "Platform",
-			CreateField: "outofscopeplatformIDs",
-			AddField:    "addOutOfScopePlatformIDs",
-			RemoveField: "removeOutOfScopePlatformIDs",
+			CreateField: "out_of_scope_platform_ids",
+			AddField:    "add_out_of_scope_platform_ids",
+			RemoveField: "remove_out_of_scope_platform_ids",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
 		},
 		{
 			Name:        "platforms",
 			Label:       "Platforms",
 			Target:      SchemaPlatform,
 			TargetType:  "Platform",
-			CreateField: "platformIDs",
-			AddField:    "addPlatformIDs",
-			RemoveField: "removePlatformIDs",
+			CreateField: "platform_ids",
+			AddField:    "add_platform_ids",
+			RemoveField: "remove_platform_ids",
+		},
+		{
+			Name:        "remediations",
+			Label:       "Remediations",
+			Target:      SchemaRemediation,
+			TargetType:  "Remediation",
+			CreateField: "remediation_ids",
+			AddField:    "add_remediation_ids",
+			RemoveField: "remove_remediation_ids",
+		},
+		{
+			Name:        "reviews",
+			Label:       "Reviews",
+			Target:      SchemaReview,
+			TargetType:  "Review",
+			CreateField: "review_ids",
+			AddField:    "add_review_ids",
+			RemoveField: "remove_review_ids",
 		},
 		{
 			Name:        "scans",
 			Label:       "Scans",
 			Target:      SchemaScan,
 			TargetType:  "Scan",
-			CreateField: "scanIDs",
-			AddField:    "addScanIDs",
-			RemoveField: "removeScanIDs",
+			CreateField: "scan_ids",
+			AddField:    "add_scan_ids",
+			RemoveField: "remove_scan_ids",
 		},
 		{
 			Name:        "source_platform",
@@ -5387,7 +5695,7 @@ func init() {
 			Target:      SchemaPlatform,
 			TargetType:  "Platform",
 			Unique:      true,
-			CreateField: "sourcePlatformID",
+			CreateField: "source_platform_id",
 			ClearField:  "clearSourcePlatform",
 			Field:       "source_platform_id",
 		},
@@ -5396,18 +5704,27 @@ func init() {
 			Label:       "Subcontrols",
 			Target:      SchemaSubcontrol,
 			TargetType:  "Subcontrol",
-			CreateField: "subcontrolIDs",
-			AddField:    "addSubcontrolIDs",
-			RemoveField: "removeSubcontrolIDs",
+			CreateField: "subcontrol_ids",
+			AddField:    "add_subcontrol_ids",
+			RemoveField: "remove_subcontrol_ids",
 		},
 		{
 			Name:        "system_details",
 			Label:       "SystemDetails",
 			Target:      SchemaSystemDetail,
 			TargetType:  "SystemDetail",
-			CreateField: "systemdetailIDs",
-			AddField:    "addSystemDetailIDs",
-			RemoveField: "removeSystemDetailIDs",
+			CreateField: "system_detail_ids",
+			AddField:    "add_system_detail_ids",
+			RemoveField: "remove_system_detail_ids",
+		},
+		{
+			Name:        "vulnerabilities",
+			Label:       "Vulnerabilities",
+			Target:      SchemaVulnerability,
+			TargetType:  "Vulnerability",
+			CreateField: "vulnerability_ids",
+			AddField:    "add_vulnerability_ids",
+			RemoveField: "remove_vulnerability_ids",
 		},
 	}
 	SchemaCampaign.Edges = []EdgeDescriptor{
@@ -5417,7 +5734,7 @@ func init() {
 			Target:      SchemaAssessment,
 			TargetType:  "Assessment",
 			Unique:      true,
-			CreateField: "assessmentID",
+			CreateField: "assessment_id",
 			ClearField:  "clearAssessment",
 			Field:       "assessment_id",
 		},
@@ -5426,36 +5743,36 @@ func init() {
 			Label:       "AssessmentResponses",
 			Target:      SchemaAssessmentResponse,
 			TargetType:  "AssessmentResponse",
-			CreateField: "assessmentresponseIDs",
-			AddField:    "addAssessmentResponseIDs",
-			RemoveField: "removeAssessmentResponseIDs",
+			CreateField: "assessment_response_ids",
+			AddField:    "add_assessment_response_ids",
+			RemoveField: "remove_assessment_response_ids",
 		},
 		{
 			Name:        "campaign_targets",
 			Label:       "CampaignTargets",
 			Target:      SchemaCampaignTarget,
 			TargetType:  "CampaignTarget",
-			CreateField: "campaigntargetIDs",
-			AddField:    "addCampaignTargetIDs",
-			RemoveField: "removeCampaignTargetIDs",
+			CreateField: "campaign_target_ids",
+			AddField:    "add_campaign_target_ids",
+			RemoveField: "remove_campaign_target_ids",
 		},
 		{
 			Name:        "contacts",
 			Label:       "Contacts",
 			Target:      SchemaContact,
 			TargetType:  "Contact",
-			CreateField: "contactIDs",
-			AddField:    "addContactIDs",
-			RemoveField: "removeContactIDs",
+			CreateField: "contact_ids",
+			AddField:    "add_contact_ids",
+			RemoveField: "remove_contact_ids",
 		},
 		{
 			Name:        "controls",
 			Label:       "Controls",
 			Target:      SchemaControl,
 			TargetType:  "Control",
-			CreateField: "controlIDs",
-			AddField:    "addControlIDs",
-			RemoveField: "removeControlIDs",
+			CreateField: "control_ids",
+			AddField:    "add_control_ids",
+			RemoveField: "remove_control_ids",
 		},
 		{
 			Name:        "email_template",
@@ -5463,7 +5780,7 @@ func init() {
 			Target:      SchemaEmailTemplate,
 			TargetType:  "EmailTemplate",
 			Unique:      true,
-			CreateField: "emailTemplateID",
+			CreateField: "email_template_id",
 			ClearField:  "clearEmailTemplate",
 			Field:       "email_template_id",
 		},
@@ -5473,7 +5790,7 @@ func init() {
 			Target:      SchemaEntity,
 			TargetType:  "Entity",
 			Unique:      true,
-			CreateField: "entityID",
+			CreateField: "entity_id",
 			ClearField:  "clearEntity",
 			Field:       "entity_id",
 		},
@@ -5482,9 +5799,19 @@ func init() {
 			Label:       "IdentityHolders",
 			Target:      SchemaIdentityHolder,
 			TargetType:  "IdentityHolder",
-			CreateField: "identityholderIDs",
-			AddField:    "addIdentityHolderIDs",
-			RemoveField: "removeIdentityHolderIDs",
+			CreateField: "identity_holder_ids",
+			AddField:    "add_identity_holder_ids",
+			RemoveField: "remove_identity_holder_ids",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
 		},
 		{
 			Name:        "template",
@@ -5492,7 +5819,7 @@ func init() {
 			Target:      SchemaTemplate,
 			TargetType:  "Template",
 			Unique:      true,
-			CreateField: "templateID",
+			CreateField: "template_id",
 			ClearField:  "clearTemplate",
 			Field:       "template_id",
 		},
@@ -5501,9 +5828,9 @@ func init() {
 			Label:       "WorkflowObjectRefs",
 			Target:      SchemaWorkflowObjectRef,
 			TargetType:  "WorkflowObjectRef",
-			CreateField: "workflowobjectrefIDs",
-			AddField:    "addWorkflowObjectRefIDs",
-			RemoveField: "removeWorkflowObjectRefIDs",
+			CreateField: "workflow_object_ref_ids",
+			AddField:    "add_workflow_object_ref_ids",
+			RemoveField: "remove_workflow_object_ref_ids",
 		},
 	}
 	SchemaCampaignTarget.Edges = []EdgeDescriptor{
@@ -5514,7 +5841,7 @@ func init() {
 			TargetType:  "Campaign",
 			Immutable:   true,
 			Unique:      true,
-			CreateField: "campaignID",
+			CreateField: "campaign_id",
 			Field:       "campaign_id",
 		},
 		{
@@ -5523,18 +5850,28 @@ func init() {
 			Target:      SchemaContact,
 			TargetType:  "Contact",
 			Unique:      true,
-			CreateField: "contactID",
+			CreateField: "contact_id",
 			ClearField:  "clearContact",
 			Field:       "contact_id",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
 		},
 		{
 			Name:        "workflow_object_refs",
 			Label:       "WorkflowObjectRefs",
 			Target:      SchemaWorkflowObjectRef,
 			TargetType:  "WorkflowObjectRef",
-			CreateField: "workflowobjectrefIDs",
-			AddField:    "addWorkflowObjectRefIDs",
-			RemoveField: "removeWorkflowObjectRefIDs",
+			CreateField: "workflow_object_ref_ids",
+			AddField:    "add_workflow_object_ref_ids",
+			RemoveField: "remove_workflow_object_ref_ids",
 		},
 	}
 	SchemaCheckResult.Edges = []EdgeDescriptor{
@@ -5543,18 +5880,18 @@ func init() {
 			Label:       "Controls",
 			Target:      SchemaControl,
 			TargetType:  "Control",
-			CreateField: "controlIDs",
-			AddField:    "addControlIDs",
-			RemoveField: "removeControlIDs",
+			CreateField: "control_ids",
+			AddField:    "add_control_ids",
+			RemoveField: "remove_control_ids",
 		},
 		{
 			Name:        "findings",
 			Label:       "Findings",
 			Target:      SchemaFinding,
 			TargetType:  "Finding",
-			CreateField: "findingIDs",
-			AddField:    "addFindingIDs",
-			RemoveField: "removeFindingIDs",
+			CreateField: "finding_ids",
+			AddField:    "add_finding_ids",
+			RemoveField: "remove_finding_ids",
 		},
 	}
 	SchemaContact.Edges = []EdgeDescriptor{
@@ -5563,27 +5900,37 @@ func init() {
 			Label:       "CampaignTargets",
 			Target:      SchemaCampaignTarget,
 			TargetType:  "CampaignTarget",
-			CreateField: "campaigntargetIDs",
-			AddField:    "addCampaignTargetIDs",
-			RemoveField: "removeCampaignTargetIDs",
+			CreateField: "campaign_target_ids",
+			AddField:    "add_campaign_target_ids",
+			RemoveField: "remove_campaign_target_ids",
 		},
 		{
 			Name:        "campaigns",
 			Label:       "Campaigns",
 			Target:      SchemaCampaign,
 			TargetType:  "Campaign",
-			CreateField: "campaignIDs",
-			AddField:    "addCampaignIDs",
-			RemoveField: "removeCampaignIDs",
+			CreateField: "campaign_ids",
+			AddField:    "add_campaign_ids",
+			RemoveField: "remove_campaign_ids",
 		},
 		{
 			Name:        "entities",
 			Label:       "Entities",
 			Target:      SchemaEntity,
 			TargetType:  "Entity",
-			CreateField: "entityIDs",
-			AddField:    "addEntityIDs",
-			RemoveField: "removeEntityIDs",
+			CreateField: "entity_ids",
+			AddField:    "add_entity_ids",
+			RemoveField: "remove_entity_ids",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Unique:      true,
+			CreateField: "owner_id",
+			ClearField:  "clearOwner",
+			Field:       "owner_id",
 		},
 	}
 	SchemaControl.Edges = []EdgeDescriptor{
@@ -5592,9 +5939,9 @@ func init() {
 			Label:            "ActionPlans",
 			Target:           SchemaActionPlan,
 			TargetType:       "ActionPlan",
-			CreateField:      "actionplanIDs",
-			AddField:         "addActionPlanIDs",
-			RemoveField:      "removeActionPlanIDs",
+			CreateField:      "action_plan_ids",
+			AddField:         "add_action_plan_ids",
+			RemoveField:      "remove_action_plan_ids",
 			WorkflowEligible: true,
 		},
 		{
@@ -5602,45 +5949,45 @@ func init() {
 			Label:       "Assets",
 			Target:      SchemaAsset,
 			TargetType:  "Asset",
-			CreateField: "assetIDs",
-			AddField:    "addAssetIDs",
-			RemoveField: "removeAssetIDs",
+			CreateField: "asset_ids",
+			AddField:    "add_asset_ids",
+			RemoveField: "remove_asset_ids",
 		},
 		{
 			Name:        "campaigns",
 			Label:       "Campaigns",
 			Target:      SchemaCampaign,
 			TargetType:  "Campaign",
-			CreateField: "campaignIDs",
-			AddField:    "addCampaignIDs",
-			RemoveField: "removeCampaignIDs",
+			CreateField: "campaign_ids",
+			AddField:    "add_campaign_ids",
+			RemoveField: "remove_campaign_ids",
 		},
 		{
 			Name:        "check_results",
 			Label:       "CheckResults",
 			Target:      SchemaCheckResult,
 			TargetType:  "CheckResult",
-			CreateField: "checkresultIDs",
-			AddField:    "addCheckResultIDs",
-			RemoveField: "removeCheckResultIDs",
+			CreateField: "check_result_ids",
+			AddField:    "add_check_result_ids",
+			RemoveField: "remove_check_result_ids",
 		},
 		{
 			Name:        "control_implementations",
 			Label:       "ControlImplementations",
 			Target:      SchemaControlImplementation,
 			TargetType:  "ControlImplementation",
-			CreateField: "controlimplementationIDs",
-			AddField:    "addControlImplementationIDs",
-			RemoveField: "removeControlImplementationIDs",
+			CreateField: "control_implementation_ids",
+			AddField:    "add_control_implementation_ids",
+			RemoveField: "remove_control_implementation_ids",
 		},
 		{
 			Name:             "control_objectives",
 			Label:            "ControlObjectives",
 			Target:           SchemaControlObjective,
 			TargetType:       "ControlObjective",
-			CreateField:      "controlobjectiveIDs",
-			AddField:         "addControlObjectiveIDs",
-			RemoveField:      "removeControlObjectiveIDs",
+			CreateField:      "control_objective_ids",
+			AddField:         "add_control_objective_ids",
+			RemoveField:      "remove_control_objective_ids",
 			WorkflowEligible: true,
 		},
 		{
@@ -5648,9 +5995,9 @@ func init() {
 			Label:            "Discussions",
 			Target:           SchemaDiscussion,
 			TargetType:       "Discussion",
-			CreateField:      "discussionIDs",
-			AddField:         "addDiscussionIDs",
-			RemoveField:      "removeDiscussionIDs",
+			CreateField:      "discussion_ids",
+			AddField:         "add_discussion_ids",
+			RemoveField:      "remove_discussion_ids",
 			WorkflowEligible: true,
 		},
 		{
@@ -5658,18 +6005,18 @@ func init() {
 			Label:       "Entities",
 			Target:      SchemaEntity,
 			TargetType:  "Entity",
-			CreateField: "entityIDs",
-			AddField:    "addEntityIDs",
-			RemoveField: "removeEntityIDs",
+			CreateField: "entity_ids",
+			AddField:    "add_entity_ids",
+			RemoveField: "remove_entity_ids",
 		},
 		{
 			Name:             "evidence",
 			Label:            "Evidence",
 			Target:           SchemaEvidence,
 			TargetType:       "Evidence",
-			CreateField:      "evidenceIDs",
-			AddField:         "addEvidenceIDs",
-			RemoveField:      "removeEvidenceIDs",
+			CreateField:      "evidence_ids",
+			AddField:         "add_evidence_ids",
+			RemoveField:      "remove_evidence_ids",
 			WorkflowEligible: true,
 		},
 		{
@@ -5677,27 +6024,36 @@ func init() {
 			Label:       "Findings",
 			Target:      SchemaFinding,
 			TargetType:  "Finding",
-			CreateField: "findingIDs",
-			AddField:    "addFindingIDs",
-			RemoveField: "removeFindingIDs",
+			CreateField: "finding_ids",
+			Through:     true,
+			LinkThrough: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) error {
+				for _, targetID := range targetIDs {
+					err := client.FindingControl.Create().SetControlID(sourceID).SetFindingID(targetID).Exec(ctx)
+					if err != nil && !generated.IsConstraintError(err) {
+						return err
+					}
+				}
+
+				return nil
+			},
 		},
 		{
 			Name:        "identity_holders",
 			Label:       "IdentityHolders",
 			Target:      SchemaIdentityHolder,
 			TargetType:  "IdentityHolder",
-			CreateField: "identityholderIDs",
-			AddField:    "addIdentityHolderIDs",
-			RemoveField: "removeIdentityHolderIDs",
+			CreateField: "identity_holder_ids",
+			AddField:    "add_identity_holder_ids",
+			RemoveField: "remove_identity_holder_ids",
 		},
 		{
 			Name:             "internal_policies",
 			Label:            "InternalPolicies",
 			Target:           SchemaInternalPolicy,
 			TargetType:       "InternalPolicy",
-			CreateField:      "internalpolicyIDs",
-			AddField:         "addInternalPolicyIDs",
-			RemoveField:      "removeInternalPolicyIDs",
+			CreateField:      "internal_policy_ids",
+			AddField:         "add_internal_policy_ids",
+			RemoveField:      "remove_internal_policy_ids",
 			WorkflowEligible: true,
 		},
 		{
@@ -5705,28 +6061,38 @@ func init() {
 			Label:            "Narratives",
 			Target:           SchemaNarrative,
 			TargetType:       "Narrative",
-			CreateField:      "narrativeIDs",
-			AddField:         "addNarrativeIDs",
-			RemoveField:      "removeNarrativeIDs",
+			CreateField:      "narrative_ids",
+			AddField:         "add_narrative_ids",
+			RemoveField:      "remove_narrative_ids",
 			WorkflowEligible: true,
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
 		},
 		{
 			Name:        "platforms",
 			Label:       "Platforms",
 			Target:      SchemaPlatform,
 			TargetType:  "Platform",
-			CreateField: "platformIDs",
-			AddField:    "addPlatformIDs",
-			RemoveField: "removePlatformIDs",
+			CreateField: "platform_ids",
+			AddField:    "add_platform_ids",
+			RemoveField: "remove_platform_ids",
 		},
 		{
 			Name:             "procedures",
 			Label:            "Procedures",
 			Target:           SchemaProcedure,
 			TargetType:       "Procedure",
-			CreateField:      "procedureIDs",
-			AddField:         "addProcedureIDs",
-			RemoveField:      "removeProcedureIDs",
+			CreateField:      "procedure_ids",
+			AddField:         "add_procedure_ids",
+			RemoveField:      "remove_procedure_ids",
 			WorkflowEligible: true,
 		},
 		{
@@ -5734,9 +6100,9 @@ func init() {
 			Label:       "Remediations",
 			Target:      SchemaRemediation,
 			TargetType:  "Remediation",
-			CreateField: "remediationIDs",
-			AddField:    "addRemediationIDs",
-			RemoveField: "removeRemediationIDs",
+			CreateField: "remediation_ids",
+			AddField:    "add_remediation_ids",
+			RemoveField: "remove_remediation_ids",
 		},
 		{
 			Name:             "responsible_party",
@@ -5744,7 +6110,7 @@ func init() {
 			Target:           SchemaEntity,
 			TargetType:       "Entity",
 			Unique:           true,
-			CreateField:      "responsiblePartyID",
+			CreateField:      "responsible_party_id",
 			ClearField:       "clearResponsibleParty",
 			Field:            "responsible_party_id",
 			WorkflowEligible: true,
@@ -5754,18 +6120,18 @@ func init() {
 			Label:       "Reviews",
 			Target:      SchemaReview,
 			TargetType:  "Review",
-			CreateField: "reviewIDs",
-			AddField:    "addReviewIDs",
-			RemoveField: "removeReviewIDs",
+			CreateField: "review_ids",
+			AddField:    "add_review_ids",
+			RemoveField: "remove_review_ids",
 		},
 		{
 			Name:             "risks",
 			Label:            "Risks",
 			Target:           SchemaRisk,
 			TargetType:       "Risk",
-			CreateField:      "riskIDs",
-			AddField:         "addRiskIDs",
-			RemoveField:      "removeRiskIDs",
+			CreateField:      "risk_ids",
+			AddField:         "add_risk_ids",
+			RemoveField:      "remove_risk_ids",
 			WorkflowEligible: true,
 		},
 		{
@@ -5773,46 +6139,55 @@ func init() {
 			Label:       "Scans",
 			Target:      SchemaScan,
 			TargetType:  "Scan",
-			CreateField: "scanIDs",
-			AddField:    "addScanIDs",
-			RemoveField: "removeScanIDs",
+			CreateField: "scan_ids",
+			AddField:    "add_scan_ids",
+			RemoveField: "remove_scan_ids",
 		},
 		{
 			Name:        "scheduled_jobs",
 			Label:       "ScheduledJobs",
 			Target:      SchemaScheduledJob,
 			TargetType:  "ScheduledJob",
-			CreateField: "scheduledjobIDs",
-			AddField:    "addScheduledJobIDs",
-			RemoveField: "removeScheduledJobIDs",
+			CreateField: "scheduled_job_ids",
+			AddField:    "add_scheduled_job_ids",
+			RemoveField: "remove_scheduled_job_ids",
 		},
 		{
 			Name:        "subcontrols",
 			Label:       "Subcontrols",
 			Target:      SchemaSubcontrol,
 			TargetType:  "Subcontrol",
-			CreateField: "subcontrolIDs",
-			AddField:    "addSubcontrolIDs",
-			RemoveField: "removeSubcontrolIDs",
+			CreateField: "subcontrol_ids",
+			AddField:    "add_subcontrol_ids",
+			RemoveField: "remove_subcontrol_ids",
 		},
 		{
 			Name:             "tasks",
 			Label:            "Tasks",
 			Target:           SchemaTask,
 			TargetType:       "Task",
-			CreateField:      "taskIDs",
-			AddField:         "addTaskIDs",
-			RemoveField:      "removeTaskIDs",
+			CreateField:      "task_ids",
+			AddField:         "add_task_ids",
+			RemoveField:      "remove_task_ids",
 			WorkflowEligible: true,
+		},
+		{
+			Name:        "vulnerabilities",
+			Label:       "Vulnerabilities",
+			Target:      SchemaVulnerability,
+			TargetType:  "Vulnerability",
+			CreateField: "vulnerability_ids",
+			AddField:    "add_vulnerability_ids",
+			RemoveField: "remove_vulnerability_ids",
 		},
 		{
 			Name:             "workflow_object_refs",
 			Label:            "WorkflowObjectRefs",
 			Target:           SchemaWorkflowObjectRef,
 			TargetType:       "WorkflowObjectRef",
-			CreateField:      "workflowobjectrefIDs",
-			AddField:         "addWorkflowObjectRefIDs",
-			RemoveField:      "removeWorkflowObjectRefIDs",
+			CreateField:      "workflow_object_ref_ids",
+			AddField:         "add_workflow_object_ref_ids",
+			RemoveField:      "remove_workflow_object_ref_ids",
 			WorkflowEligible: true,
 		},
 	}
@@ -5822,27 +6197,37 @@ func init() {
 			Label:       "Controls",
 			Target:      SchemaControl,
 			TargetType:  "Control",
-			CreateField: "controlIDs",
-			AddField:    "addControlIDs",
-			RemoveField: "removeControlIDs",
+			CreateField: "control_ids",
+			AddField:    "add_control_ids",
+			RemoveField: "remove_control_ids",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
 		},
 		{
 			Name:        "subcontrols",
 			Label:       "Subcontrols",
 			Target:      SchemaSubcontrol,
 			TargetType:  "Subcontrol",
-			CreateField: "subcontrolIDs",
-			AddField:    "addSubcontrolIDs",
-			RemoveField: "removeSubcontrolIDs",
+			CreateField: "subcontrol_ids",
+			AddField:    "add_subcontrol_ids",
+			RemoveField: "remove_subcontrol_ids",
 		},
 		{
 			Name:        "tasks",
 			Label:       "Tasks",
 			Target:      SchemaTask,
 			TargetType:  "Task",
-			CreateField: "taskIDs",
-			AddField:    "addTaskIDs",
-			RemoveField: "removeTaskIDs",
+			CreateField: "task_ids",
+			AddField:    "add_task_ids",
+			RemoveField: "remove_task_ids",
 		},
 	}
 	SchemaControlObjective.Edges = []EdgeDescriptor{
@@ -5851,72 +6236,82 @@ func init() {
 			Label:       "Controls",
 			Target:      SchemaControl,
 			TargetType:  "Control",
-			CreateField: "controlIDs",
-			AddField:    "addControlIDs",
-			RemoveField: "removeControlIDs",
+			CreateField: "control_ids",
+			AddField:    "add_control_ids",
+			RemoveField: "remove_control_ids",
 		},
 		{
 			Name:        "evidence",
 			Label:       "Evidence",
 			Target:      SchemaEvidence,
 			TargetType:  "Evidence",
-			CreateField: "evidenceIDs",
-			AddField:    "addEvidenceIDs",
-			RemoveField: "removeEvidenceIDs",
+			CreateField: "evidence_ids",
+			AddField:    "add_evidence_ids",
+			RemoveField: "remove_evidence_ids",
 		},
 		{
 			Name:        "internal_policies",
 			Label:       "InternalPolicies",
 			Target:      SchemaInternalPolicy,
 			TargetType:  "InternalPolicy",
-			CreateField: "internalpolicyIDs",
-			AddField:    "addInternalPolicyIDs",
-			RemoveField: "removeInternalPolicyIDs",
+			CreateField: "internal_policy_ids",
+			AddField:    "add_internal_policy_ids",
+			RemoveField: "remove_internal_policy_ids",
 		},
 		{
 			Name:        "narratives",
 			Label:       "Narratives",
 			Target:      SchemaNarrative,
 			TargetType:  "Narrative",
-			CreateField: "narrativeIDs",
-			AddField:    "addNarrativeIDs",
-			RemoveField: "removeNarrativeIDs",
+			CreateField: "narrative_ids",
+			AddField:    "add_narrative_ids",
+			RemoveField: "remove_narrative_ids",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
 		},
 		{
 			Name:        "procedures",
 			Label:       "Procedures",
 			Target:      SchemaProcedure,
 			TargetType:  "Procedure",
-			CreateField: "procedureIDs",
-			AddField:    "addProcedureIDs",
-			RemoveField: "removeProcedureIDs",
+			CreateField: "procedure_ids",
+			AddField:    "add_procedure_ids",
+			RemoveField: "remove_procedure_ids",
 		},
 		{
 			Name:        "risks",
 			Label:       "Risks",
 			Target:      SchemaRisk,
 			TargetType:  "Risk",
-			CreateField: "riskIDs",
-			AddField:    "addRiskIDs",
-			RemoveField: "removeRiskIDs",
+			CreateField: "risk_ids",
+			AddField:    "add_risk_ids",
+			RemoveField: "remove_risk_ids",
 		},
 		{
 			Name:        "subcontrols",
 			Label:       "Subcontrols",
 			Target:      SchemaSubcontrol,
 			TargetType:  "Subcontrol",
-			CreateField: "subcontrolIDs",
-			AddField:    "addSubcontrolIDs",
-			RemoveField: "removeSubcontrolIDs",
+			CreateField: "subcontrol_ids",
+			AddField:    "add_subcontrol_ids",
+			RemoveField: "remove_subcontrol_ids",
 		},
 		{
 			Name:        "tasks",
 			Label:       "Tasks",
 			Target:      SchemaTask,
 			TargetType:  "Task",
-			CreateField: "taskIDs",
-			AddField:    "addTaskIDs",
-			RemoveField: "removeTaskIDs",
+			CreateField: "task_ids",
+			AddField:    "add_task_ids",
+			RemoveField: "remove_task_ids",
 		},
 	}
 	SchemaDirectoryAccount.Edges = []EdgeDescriptor{
@@ -5925,18 +6320,27 @@ func init() {
 			Label:       "Findings",
 			Target:      SchemaFinding,
 			TargetType:  "Finding",
-			CreateField: "findingIDs",
-			AddField:    "addFindingIDs",
-			RemoveField: "removeFindingIDs",
+			CreateField: "finding_ids",
+			AddField:    "add_finding_ids",
+			RemoveField: "remove_finding_ids",
 		},
 		{
 			Name:        "groups",
 			Label:       "Groups",
 			Target:      SchemaDirectoryGroup,
 			TargetType:  "DirectoryGroup",
-			CreateField: "groupIDs",
-			AddField:    "addGroupIDs",
-			RemoveField: "removeGroupIDs",
+			CreateField: "group_ids",
+			Through:     true,
+			LinkThrough: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) error {
+				for _, targetID := range targetIDs {
+					err := client.DirectoryMembership.Create().SetDirectoryAccountID(sourceID).SetDirectoryGroupID(targetID).Exec(ctx)
+					if err != nil && !generated.IsConstraintError(err) {
+						return err
+					}
+				}
+
+				return nil
+			},
 		},
 		{
 			Name:        "identity_holder",
@@ -5944,7 +6348,7 @@ func init() {
 			Target:      SchemaIdentityHolder,
 			TargetType:  "IdentityHolder",
 			Unique:      true,
-			CreateField: "identityHolderID",
+			CreateField: "identity_holder_id",
 			ClearField:  "clearIdentityHolder",
 			Field:       "identity_holder_id",
 		},
@@ -5953,9 +6357,19 @@ func init() {
 			Label:       "Memberships",
 			Target:      SchemaDirectoryMembership,
 			TargetType:  "DirectoryMembership",
-			CreateField: "membershipIDs",
-			AddField:    "addMembershipIDs",
-			RemoveField: "removeMembershipIDs",
+			CreateField: "membership_ids",
+			AddField:    "add_membership_ids",
+			RemoveField: "remove_membership_ids",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
 		},
 		{
 			Name:        "platform",
@@ -5964,7 +6378,7 @@ func init() {
 			TargetType:  "Platform",
 			Immutable:   true,
 			Unique:      true,
-			CreateField: "platformID",
+			CreateField: "platform_id",
 			Field:       "platform_id",
 		},
 		{
@@ -5972,9 +6386,9 @@ func init() {
 			Label:       "WorkflowObjectRefs",
 			Target:      SchemaWorkflowObjectRef,
 			TargetType:  "WorkflowObjectRef",
-			CreateField: "workflowobjectrefIDs",
-			AddField:    "addWorkflowObjectRefIDs",
-			RemoveField: "removeWorkflowObjectRefIDs",
+			CreateField: "workflow_object_ref_ids",
+			AddField:    "add_workflow_object_ref_ids",
+			RemoveField: "remove_workflow_object_ref_ids",
 		},
 	}
 	SchemaDirectoryGroup.Edges = []EdgeDescriptor{
@@ -5983,18 +6397,37 @@ func init() {
 			Label:       "Accounts",
 			Target:      SchemaDirectoryAccount,
 			TargetType:  "DirectoryAccount",
-			CreateField: "accountIDs",
-			AddField:    "addAccountIDs",
-			RemoveField: "removeAccountIDs",
+			CreateField: "account_ids",
+			Through:     true,
+			LinkThrough: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) error {
+				for _, targetID := range targetIDs {
+					err := client.DirectoryMembership.Create().SetDirectoryGroupID(sourceID).SetDirectoryAccountID(targetID).Exec(ctx)
+					if err != nil && !generated.IsConstraintError(err) {
+						return err
+					}
+				}
+
+				return nil
+			},
 		},
 		{
 			Name:        "members",
 			Label:       "Members",
 			Target:      SchemaDirectoryMembership,
 			TargetType:  "DirectoryMembership",
-			CreateField: "memberIDs",
-			AddField:    "addMemberIDs",
-			RemoveField: "removeMemberIDs",
+			CreateField: "member_ids",
+			AddField:    "add_member_ids",
+			RemoveField: "remove_member_ids",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Unique:      true,
+			CreateField: "owner_id",
+			ClearField:  "clearOwner",
+			Field:       "owner_id",
 		},
 		{
 			Name:        "platform",
@@ -6003,7 +6436,7 @@ func init() {
 			TargetType:  "Platform",
 			Immutable:   true,
 			Unique:      true,
-			CreateField: "platformID",
+			CreateField: "platform_id",
 			Field:       "platform_id",
 		},
 		{
@@ -6011,9 +6444,9 @@ func init() {
 			Label:       "WorkflowObjectRefs",
 			Target:      SchemaWorkflowObjectRef,
 			TargetType:  "WorkflowObjectRef",
-			CreateField: "workflowobjectrefIDs",
-			AddField:    "addWorkflowObjectRefIDs",
-			RemoveField: "removeWorkflowObjectRefIDs",
+			CreateField: "workflow_object_ref_ids",
+			AddField:    "add_workflow_object_ref_ids",
+			RemoveField: "remove_workflow_object_ref_ids",
 		},
 	}
 	SchemaDirectoryMembership.Edges = []EdgeDescriptor{
@@ -6024,7 +6457,7 @@ func init() {
 			TargetType:  "DirectoryAccount",
 			Immutable:   true,
 			Unique:      true,
-			CreateField: "directoryAccountID",
+			CreateField: "directory_account_id",
 			Field:       "directory_account_id",
 		},
 		{
@@ -6034,8 +6467,18 @@ func init() {
 			TargetType:  "DirectoryGroup",
 			Immutable:   true,
 			Unique:      true,
-			CreateField: "directoryGroupID",
+			CreateField: "directory_group_id",
 			Field:       "directory_group_id",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Unique:      true,
+			CreateField: "owner_id",
+			ClearField:  "clearOwner",
+			Field:       "owner_id",
 		},
 		{
 			Name:        "platform",
@@ -6044,7 +6487,7 @@ func init() {
 			TargetType:  "Platform",
 			Immutable:   true,
 			Unique:      true,
-			CreateField: "platformID",
+			CreateField: "platform_id",
 			Field:       "platform_id",
 		},
 		{
@@ -6052,9 +6495,9 @@ func init() {
 			Label:       "WorkflowObjectRefs",
 			Target:      SchemaWorkflowObjectRef,
 			TargetType:  "WorkflowObjectRef",
-			CreateField: "workflowobjectrefIDs",
-			AddField:    "addWorkflowObjectRefIDs",
-			RemoveField: "removeWorkflowObjectRefIDs",
+			CreateField: "workflow_object_ref_ids",
+			AddField:    "add_workflow_object_ref_ids",
+			RemoveField: "remove_workflow_object_ref_ids",
 		},
 	}
 	SchemaDiscussion.Edges = []EdgeDescriptor{
@@ -6064,7 +6507,7 @@ func init() {
 			Target:      SchemaControl,
 			TargetType:  "Control",
 			Unique:      true,
-			CreateField: "controlID",
+			CreateField: "control_id",
 			ClearField:  "clearControl",
 			Field:       "control_discussions",
 		},
@@ -6074,9 +6517,19 @@ func init() {
 			Target:      SchemaInternalPolicy,
 			TargetType:  "InternalPolicy",
 			Unique:      true,
-			CreateField: "internalPolicyID",
+			CreateField: "internal_policy_id",
 			ClearField:  "clearInternalPolicy",
 			Field:       "internal_policy_discussions",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
 		},
 		{
 			Name:        "procedure",
@@ -6084,7 +6537,7 @@ func init() {
 			Target:      SchemaProcedure,
 			TargetType:  "Procedure",
 			Unique:      true,
-			CreateField: "procedureID",
+			CreateField: "procedure_id",
 			ClearField:  "clearProcedure",
 			Field:       "procedure_discussions",
 		},
@@ -6094,7 +6547,7 @@ func init() {
 			Target:      SchemaRisk,
 			TargetType:  "Risk",
 			Unique:      true,
-			CreateField: "riskID",
+			CreateField: "risk_id",
 			ClearField:  "clearRisk",
 			Field:       "risk_discussions",
 		},
@@ -6104,7 +6557,7 @@ func init() {
 			Target:      SchemaSubcontrol,
 			TargetType:  "Subcontrol",
 			Unique:      true,
-			CreateField: "subcontrolID",
+			CreateField: "subcontrol_id",
 			ClearField:  "clearSubcontrol",
 			Field:       "subcontrol_discussions",
 		},
@@ -6115,9 +6568,19 @@ func init() {
 			Label:       "Entities",
 			Target:      SchemaEntity,
 			TargetType:  "Entity",
-			CreateField: "entityIDs",
-			AddField:    "addEntityIDs",
-			RemoveField: "removeEntityIDs",
+			CreateField: "entity_ids",
+			AddField:    "add_entity_ids",
+			RemoveField: "remove_entity_ids",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
 		},
 		{
 			Name:        "template",
@@ -6125,7 +6588,7 @@ func init() {
 			Target:      SchemaTemplate,
 			TargetType:  "Template",
 			Unique:      true,
-			CreateField: "templateID",
+			CreateField: "template_id",
 			ClearField:  "clearTemplate",
 			Field:       "template_id",
 		},
@@ -6136,18 +6599,28 @@ func init() {
 			Label:       "Campaigns",
 			Target:      SchemaCampaign,
 			TargetType:  "Campaign",
-			CreateField: "campaignIDs",
-			AddField:    "addCampaignIDs",
-			RemoveField: "removeCampaignIDs",
+			CreateField: "campaign_ids",
+			AddField:    "add_campaign_ids",
+			RemoveField: "remove_campaign_ids",
 		},
 		{
 			Name:        "notification_templates",
 			Label:       "NotificationTemplates",
 			Target:      SchemaNotificationTemplate,
 			TargetType:  "NotificationTemplate",
-			CreateField: "notificationtemplateIDs",
-			AddField:    "addNotificationTemplateIDs",
-			RemoveField: "removeNotificationTemplateIDs",
+			CreateField: "notification_template_ids",
+			AddField:    "add_notification_template_ids",
+			RemoveField: "remove_notification_template_ids",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
 		},
 		{
 			Name:        "workflow_definition",
@@ -6155,7 +6628,7 @@ func init() {
 			Target:      SchemaWorkflowDefinition,
 			TargetType:  "WorkflowDefinition",
 			Unique:      true,
-			CreateField: "workflowDefinitionID",
+			CreateField: "workflow_definition_id",
 			ClearField:  "clearWorkflowDefinition",
 			Field:       "workflow_definition_id",
 		},
@@ -6165,7 +6638,7 @@ func init() {
 			Target:      SchemaWorkflowInstance,
 			TargetType:  "WorkflowInstance",
 			Unique:      true,
-			CreateField: "workflowInstanceID",
+			CreateField: "workflow_instance_id",
 			ClearField:  "clearWorkflowInstance",
 			Field:       "workflow_instance_id",
 		},
@@ -6176,153 +6649,199 @@ func init() {
 			Label:       "AssessmentResponses",
 			Target:      SchemaAssessmentResponse,
 			TargetType:  "AssessmentResponse",
-			CreateField: "assessmentresponseIDs",
-			AddField:    "addAssessmentResponseIDs",
-			RemoveField: "removeAssessmentResponseIDs",
+			CreateField: "assessment_response_ids",
+			AddField:    "add_assessment_response_ids",
+			RemoveField: "remove_assessment_response_ids",
 		},
 		{
 			Name:        "assets",
 			Label:       "Assets",
 			Target:      SchemaAsset,
 			TargetType:  "Asset",
-			CreateField: "assetIDs",
-			AddField:    "addAssetIDs",
-			RemoveField: "removeAssetIDs",
+			CreateField: "asset_ids",
+			AddField:    "add_asset_ids",
+			RemoveField: "remove_asset_ids",
 		},
 		{
 			Name:        "campaigns",
 			Label:       "Campaigns",
 			Target:      SchemaCampaign,
 			TargetType:  "Campaign",
-			CreateField: "campaignIDs",
-			AddField:    "addCampaignIDs",
-			RemoveField: "removeCampaignIDs",
+			CreateField: "campaign_ids",
+			AddField:    "add_campaign_ids",
+			RemoveField: "remove_campaign_ids",
 		},
 		{
 			Name:        "contacts",
 			Label:       "Contacts",
 			Target:      SchemaContact,
 			TargetType:  "Contact",
-			CreateField: "contactIDs",
-			AddField:    "addContactIDs",
-			RemoveField: "removeContactIDs",
+			CreateField: "contact_ids",
+			AddField:    "add_contact_ids",
+			RemoveField: "remove_contact_ids",
 		},
 		{
 			Name:        "controls",
 			Label:       "Controls",
 			Target:      SchemaControl,
 			TargetType:  "Control",
-			CreateField: "controlIDs",
-			AddField:    "addControlIDs",
-			RemoveField: "removeControlIDs",
+			CreateField: "control_ids",
+			AddField:    "add_control_ids",
+			RemoveField: "remove_control_ids",
 		},
 		{
 			Name:        "documents",
 			Label:       "Documents",
 			Target:      SchemaDocumentData,
 			TargetType:  "DocumentData",
-			CreateField: "documentIDs",
-			AddField:    "addDocumentIDs",
-			RemoveField: "removeDocumentIDs",
+			CreateField: "document_ids",
+			AddField:    "add_document_ids",
+			RemoveField: "remove_document_ids",
 		},
 		{
 			Name:        "employer_identity_holders",
 			Label:       "EmployerIdentityHolders",
 			Target:      SchemaIdentityHolder,
 			TargetType:  "IdentityHolder",
-			CreateField: "employeridentityholderIDs",
-			AddField:    "addEmployerIdentityHolderIDs",
-			RemoveField: "removeEmployerIdentityHolderIDs",
+			CreateField: "employer_identity_holder_ids",
+			AddField:    "add_employer_identity_holder_ids",
+			RemoveField: "remove_employer_identity_holder_ids",
+		},
+		{
+			Name:        "findings",
+			Label:       "Findings",
+			Target:      SchemaFinding,
+			TargetType:  "Finding",
+			CreateField: "finding_ids",
+			AddField:    "add_finding_ids",
+			RemoveField: "remove_finding_ids",
 		},
 		{
 			Name:        "identity_holders",
 			Label:       "IdentityHolders",
 			Target:      SchemaIdentityHolder,
 			TargetType:  "IdentityHolder",
-			CreateField: "identityholderIDs",
-			AddField:    "addIdentityHolderIDs",
-			RemoveField: "removeIdentityHolderIDs",
+			CreateField: "identity_holder_ids",
+			AddField:    "add_identity_holder_ids",
+			RemoveField: "remove_identity_holder_ids",
 		},
 		{
 			Name:        "internal_policies",
 			Label:       "InternalPolicies",
 			Target:      SchemaInternalPolicy,
 			TargetType:  "InternalPolicy",
-			CreateField: "internalpolicyIDs",
-			AddField:    "addInternalPolicyIDs",
-			RemoveField: "removeInternalPolicyIDs",
+			CreateField: "internal_policy_ids",
+			AddField:    "add_internal_policy_ids",
+			RemoveField: "remove_internal_policy_ids",
 		},
 		{
 			Name:        "out_of_scope_platforms",
 			Label:       "OutOfScopePlatforms",
 			Target:      SchemaPlatform,
 			TargetType:  "Platform",
-			CreateField: "outofscopeplatformIDs",
-			AddField:    "addOutOfScopePlatformIDs",
-			RemoveField: "removeOutOfScopePlatformIDs",
+			CreateField: "out_of_scope_platform_ids",
+			AddField:    "add_out_of_scope_platform_ids",
+			RemoveField: "remove_out_of_scope_platform_ids",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
 		},
 		{
 			Name:        "platforms",
 			Label:       "Platforms",
 			Target:      SchemaPlatform,
 			TargetType:  "Platform",
-			CreateField: "platformIDs",
-			AddField:    "addPlatformIDs",
-			RemoveField: "removePlatformIDs",
+			CreateField: "platform_ids",
+			AddField:    "add_platform_ids",
+			RemoveField: "remove_platform_ids",
+		},
+		{
+			Name:        "remediations",
+			Label:       "Remediations",
+			Target:      SchemaRemediation,
+			TargetType:  "Remediation",
+			CreateField: "remediation_ids",
+			AddField:    "add_remediation_ids",
+			RemoveField: "remove_remediation_ids",
+		},
+		{
+			Name:        "reviews",
+			Label:       "Reviews",
+			Target:      SchemaReview,
+			TargetType:  "Review",
+			CreateField: "review_ids",
+			AddField:    "add_review_ids",
+			RemoveField: "remove_review_ids",
 		},
 		{
 			Name:        "scans",
 			Label:       "Scans",
 			Target:      SchemaScan,
 			TargetType:  "Scan",
-			CreateField: "scanIDs",
-			AddField:    "addScanIDs",
-			RemoveField: "removeScanIDs",
+			CreateField: "scan_ids",
+			AddField:    "add_scan_ids",
+			RemoveField: "remove_scan_ids",
 		},
 		{
 			Name:        "source_platforms",
 			Label:       "SourcePlatforms",
 			Target:      SchemaPlatform,
 			TargetType:  "Platform",
-			CreateField: "sourceplatformIDs",
-			AddField:    "addSourcePlatformIDs",
-			RemoveField: "removeSourcePlatformIDs",
+			CreateField: "source_platform_ids",
+			AddField:    "add_source_platform_ids",
+			RemoveField: "remove_source_platform_ids",
 		},
 		{
 			Name:        "subcontrols",
 			Label:       "Subcontrols",
 			Target:      SchemaSubcontrol,
 			TargetType:  "Subcontrol",
-			CreateField: "subcontrolIDs",
-			AddField:    "addSubcontrolIDs",
-			RemoveField: "removeSubcontrolIDs",
+			CreateField: "subcontrol_ids",
+			AddField:    "add_subcontrol_ids",
+			RemoveField: "remove_subcontrol_ids",
 		},
 		{
 			Name:        "subprocessors",
 			Label:       "Subprocessors",
 			Target:      SchemaSubprocessor,
 			TargetType:  "Subprocessor",
-			CreateField: "subprocessorIDs",
-			AddField:    "addSubprocessorIDs",
-			RemoveField: "removeSubprocessorIDs",
+			CreateField: "subprocessor_ids",
+			AddField:    "add_subprocessor_ids",
+			RemoveField: "remove_subprocessor_ids",
 		},
 		{
 			Name:        "system_details",
 			Label:       "SystemDetails",
 			Target:      SchemaSystemDetail,
 			TargetType:  "SystemDetail",
-			CreateField: "systemdetailIDs",
-			AddField:    "addSystemDetailIDs",
-			RemoveField: "removeSystemDetailIDs",
+			CreateField: "system_detail_ids",
+			AddField:    "add_system_detail_ids",
+			RemoveField: "remove_system_detail_ids",
 		},
 		{
 			Name:        "vendor_risk_scores",
 			Label:       "VendorRiskScores",
 			Target:      SchemaVendorRiskScore,
 			TargetType:  "VendorRiskScore",
-			CreateField: "vendorriskscoreIDs",
-			AddField:    "addVendorRiskScoreIDs",
-			RemoveField: "removeVendorRiskScoreIDs",
+			CreateField: "vendor_risk_score_ids",
+			AddField:    "add_vendor_risk_score_ids",
+			RemoveField: "remove_vendor_risk_score_ids",
+		},
+		{
+			Name:        "vulnerabilities",
+			Label:       "Vulnerabilities",
+			Target:      SchemaVulnerability,
+			TargetType:  "Vulnerability",
+			CreateField: "vulnerability_ids",
+			AddField:    "add_vulnerability_ids",
+			RemoveField: "remove_vulnerability_ids",
 		},
 	}
 	SchemaEvidence.Edges = []EdgeDescriptor{
@@ -6331,72 +6850,82 @@ func init() {
 			Label:       "ControlImplementations",
 			Target:      SchemaControlImplementation,
 			TargetType:  "ControlImplementation",
-			CreateField: "controlimplementationIDs",
-			AddField:    "addControlImplementationIDs",
-			RemoveField: "removeControlImplementationIDs",
+			CreateField: "control_implementation_ids",
+			AddField:    "add_control_implementation_ids",
+			RemoveField: "remove_control_implementation_ids",
 		},
 		{
 			Name:        "control_objectives",
 			Label:       "ControlObjectives",
 			Target:      SchemaControlObjective,
 			TargetType:  "ControlObjective",
-			CreateField: "controlobjectiveIDs",
-			AddField:    "addControlObjectiveIDs",
-			RemoveField: "removeControlObjectiveIDs",
+			CreateField: "control_objective_ids",
+			AddField:    "add_control_objective_ids",
+			RemoveField: "remove_control_objective_ids",
 		},
 		{
 			Name:        "controls",
 			Label:       "Controls",
 			Target:      SchemaControl,
 			TargetType:  "Control",
-			CreateField: "controlIDs",
-			AddField:    "addControlIDs",
-			RemoveField: "removeControlIDs",
+			CreateField: "control_ids",
+			AddField:    "add_control_ids",
+			RemoveField: "remove_control_ids",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
 		},
 		{
 			Name:        "platforms",
 			Label:       "Platforms",
 			Target:      SchemaPlatform,
 			TargetType:  "Platform",
-			CreateField: "platformIDs",
-			AddField:    "addPlatformIDs",
-			RemoveField: "removePlatformIDs",
+			CreateField: "platform_ids",
+			AddField:    "add_platform_ids",
+			RemoveField: "remove_platform_ids",
 		},
 		{
 			Name:        "scans",
 			Label:       "Scans",
 			Target:      SchemaScan,
 			TargetType:  "Scan",
-			CreateField: "scanIDs",
-			AddField:    "addScanIDs",
-			RemoveField: "removeScanIDs",
+			CreateField: "scan_ids",
+			AddField:    "add_scan_ids",
+			RemoveField: "remove_scan_ids",
 		},
 		{
 			Name:        "subcontrols",
 			Label:       "Subcontrols",
 			Target:      SchemaSubcontrol,
 			TargetType:  "Subcontrol",
-			CreateField: "subcontrolIDs",
-			AddField:    "addSubcontrolIDs",
-			RemoveField: "removeSubcontrolIDs",
+			CreateField: "subcontrol_ids",
+			AddField:    "add_subcontrol_ids",
+			RemoveField: "remove_subcontrol_ids",
 		},
 		{
 			Name:        "tasks",
 			Label:       "Tasks",
 			Target:      SchemaTask,
 			TargetType:  "Task",
-			CreateField: "taskIDs",
-			AddField:    "addTaskIDs",
-			RemoveField: "removeTaskIDs",
+			CreateField: "task_ids",
+			AddField:    "add_task_ids",
+			RemoveField: "remove_task_ids",
 		},
 		{
 			Name:             "workflow_object_refs",
 			Label:            "WorkflowObjectRefs",
 			Target:           SchemaWorkflowObjectRef,
 			TargetType:       "WorkflowObjectRef",
-			CreateField:      "workflowobjectrefIDs",
-			AddField:         "addWorkflowObjectRefIDs",
-			RemoveField:      "removeWorkflowObjectRefIDs",
+			CreateField:      "workflow_object_ref_ids",
+			AddField:         "add_workflow_object_ref_ids",
+			RemoveField:      "remove_workflow_object_ref_ids",
 			WorkflowEligible: true,
 		},
 	}
@@ -6406,135 +6935,154 @@ func init() {
 			Label:       "ActionPlans",
 			Target:      SchemaActionPlan,
 			TargetType:  "ActionPlan",
-			CreateField: "actionplanIDs",
-			AddField:    "addActionPlanIDs",
-			RemoveField: "removeActionPlanIDs",
+			CreateField: "action_plan_ids",
+			AddField:    "add_action_plan_ids",
+			RemoveField: "remove_action_plan_ids",
 		},
 		{
 			Name:        "assets",
 			Label:       "Assets",
 			Target:      SchemaAsset,
 			TargetType:  "Asset",
-			CreateField: "assetIDs",
-			AddField:    "addAssetIDs",
-			RemoveField: "removeAssetIDs",
+			CreateField: "asset_ids",
+			AddField:    "add_asset_ids",
+			RemoveField: "remove_asset_ids",
 		},
 		{
 			Name:        "check_results",
 			Label:       "CheckResults",
 			Target:      SchemaCheckResult,
 			TargetType:  "CheckResult",
-			CreateField: "checkresultIDs",
-			AddField:    "addCheckResultIDs",
-			RemoveField: "removeCheckResultIDs",
+			CreateField: "check_result_ids",
+			AddField:    "add_check_result_ids",
+			RemoveField: "remove_check_result_ids",
 		},
 		{
 			Name:        "controls",
 			Label:       "Controls",
 			Target:      SchemaControl,
 			TargetType:  "Control",
-			CreateField: "controlIDs",
-			AddField:    "addControlIDs",
-			RemoveField: "removeControlIDs",
+			CreateField: "control_ids",
+			Through:     true,
+			LinkThrough: func(ctx context.Context, client *generated.Client, sourceID string, targetIDs []string) error {
+				for _, targetID := range targetIDs {
+					err := client.FindingControl.Create().SetFindingID(sourceID).SetControlID(targetID).Exec(ctx)
+					if err != nil && !generated.IsConstraintError(err) {
+						return err
+					}
+				}
+
+				return nil
+			},
 		},
 		{
 			Name:        "directory_accounts",
 			Label:       "DirectoryAccounts",
 			Target:      SchemaDirectoryAccount,
 			TargetType:  "DirectoryAccount",
-			CreateField: "directoryaccountIDs",
-			AddField:    "addDirectoryAccountIDs",
-			RemoveField: "removeDirectoryAccountIDs",
+			CreateField: "directory_account_ids",
+			AddField:    "add_directory_account_ids",
+			RemoveField: "remove_directory_account_ids",
 		},
 		{
 			Name:        "entities",
 			Label:       "Entities",
 			Target:      SchemaEntity,
 			TargetType:  "Entity",
-			CreateField: "entityIDs",
-			AddField:    "addEntityIDs",
-			RemoveField: "removeEntityIDs",
+			CreateField: "entity_ids",
+			AddField:    "add_entity_ids",
+			RemoveField: "remove_entity_ids",
 		},
 		{
 			Name:        "identity_holders",
 			Label:       "IdentityHolders",
 			Target:      SchemaIdentityHolder,
 			TargetType:  "IdentityHolder",
-			CreateField: "identityholderIDs",
-			AddField:    "addIdentityHolderIDs",
-			RemoveField: "removeIdentityHolderIDs",
+			CreateField: "identity_holder_ids",
+			AddField:    "add_identity_holder_ids",
+			RemoveField: "remove_identity_holder_ids",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
 		},
 		{
 			Name:        "remediations",
 			Label:       "Remediations",
 			Target:      SchemaRemediation,
 			TargetType:  "Remediation",
-			CreateField: "remediationIDs",
-			AddField:    "addRemediationIDs",
-			RemoveField: "removeRemediationIDs",
+			CreateField: "remediation_ids",
+			AddField:    "add_remediation_ids",
+			RemoveField: "remove_remediation_ids",
 		},
 		{
 			Name:        "reviews",
 			Label:       "Reviews",
 			Target:      SchemaReview,
 			TargetType:  "Review",
-			CreateField: "reviewIDs",
-			AddField:    "addReviewIDs",
-			RemoveField: "removeReviewIDs",
+			CreateField: "review_ids",
+			AddField:    "add_review_ids",
+			RemoveField: "remove_review_ids",
 		},
 		{
 			Name:        "risks",
 			Label:       "Risks",
 			Target:      SchemaRisk,
 			TargetType:  "Risk",
-			CreateField: "riskIDs",
-			AddField:    "addRiskIDs",
-			RemoveField: "removeRiskIDs",
+			CreateField: "risk_ids",
+			AddField:    "add_risk_ids",
+			RemoveField: "remove_risk_ids",
 		},
 		{
 			Name:        "scans",
 			Label:       "Scans",
 			Target:      SchemaScan,
 			TargetType:  "Scan",
-			CreateField: "scanIDs",
-			AddField:    "addScanIDs",
-			RemoveField: "removeScanIDs",
+			CreateField: "scan_ids",
+			AddField:    "add_scan_ids",
+			RemoveField: "remove_scan_ids",
 		},
 		{
 			Name:        "subcontrols",
 			Label:       "Subcontrols",
 			Target:      SchemaSubcontrol,
 			TargetType:  "Subcontrol",
-			CreateField: "subcontrolIDs",
-			AddField:    "addSubcontrolIDs",
-			RemoveField: "removeSubcontrolIDs",
+			CreateField: "subcontrol_ids",
+			AddField:    "add_subcontrol_ids",
+			RemoveField: "remove_subcontrol_ids",
 		},
 		{
 			Name:        "tasks",
 			Label:       "Tasks",
 			Target:      SchemaTask,
 			TargetType:  "Task",
-			CreateField: "taskIDs",
-			AddField:    "addTaskIDs",
-			RemoveField: "removeTaskIDs",
+			CreateField: "task_ids",
+			AddField:    "add_task_ids",
+			RemoveField: "remove_task_ids",
 		},
 		{
 			Name:        "vulnerabilities",
 			Label:       "Vulnerabilities",
 			Target:      SchemaVulnerability,
 			TargetType:  "Vulnerability",
-			CreateField: "vulnerabilityIDs",
-			AddField:    "addVulnerabilityIDs",
-			RemoveField: "removeVulnerabilityIDs",
+			CreateField: "vulnerability_ids",
+			AddField:    "add_vulnerability_ids",
+			RemoveField: "remove_vulnerability_ids",
 		},
 		{
 			Name:        "workflow_object_refs",
 			Label:       "WorkflowObjectRefs",
 			Target:      SchemaWorkflowObjectRef,
 			TargetType:  "WorkflowObjectRef",
-			CreateField: "workflowobjectrefIDs",
-			AddField:    "addWorkflowObjectRefIDs",
-			RemoveField: "removeWorkflowObjectRefIDs",
+			CreateField: "workflow_object_ref_ids",
+			AddField:    "add_workflow_object_ref_ids",
+			RemoveField: "remove_workflow_object_ref_ids",
 		},
 	}
 	SchemaIdentityHolder.Edges = []EdgeDescriptor{
@@ -6543,63 +7091,63 @@ func init() {
 			Label:       "AccessPlatforms",
 			Target:      SchemaPlatform,
 			TargetType:  "Platform",
-			CreateField: "accessplatformIDs",
-			AddField:    "addAccessPlatformIDs",
-			RemoveField: "removeAccessPlatformIDs",
+			CreateField: "access_platform_ids",
+			AddField:    "add_access_platform_ids",
+			RemoveField: "remove_access_platform_ids",
 		},
 		{
 			Name:        "assessment_responses",
 			Label:       "AssessmentResponses",
 			Target:      SchemaAssessmentResponse,
 			TargetType:  "AssessmentResponse",
-			CreateField: "assessmentresponseIDs",
-			AddField:    "addAssessmentResponseIDs",
-			RemoveField: "removeAssessmentResponseIDs",
+			CreateField: "assessment_response_ids",
+			AddField:    "add_assessment_response_ids",
+			RemoveField: "remove_assessment_response_ids",
 		},
 		{
 			Name:        "assessments",
 			Label:       "Assessments",
 			Target:      SchemaAssessment,
 			TargetType:  "Assessment",
-			CreateField: "assessmentIDs",
-			AddField:    "addAssessmentIDs",
-			RemoveField: "removeAssessmentIDs",
+			CreateField: "assessment_ids",
+			AddField:    "add_assessment_ids",
+			RemoveField: "remove_assessment_ids",
 		},
 		{
 			Name:        "assets",
 			Label:       "Assets",
 			Target:      SchemaAsset,
 			TargetType:  "Asset",
-			CreateField: "assetIDs",
-			AddField:    "addAssetIDs",
-			RemoveField: "removeAssetIDs",
+			CreateField: "asset_ids",
+			AddField:    "add_asset_ids",
+			RemoveField: "remove_asset_ids",
 		},
 		{
 			Name:        "campaigns",
 			Label:       "Campaigns",
 			Target:      SchemaCampaign,
 			TargetType:  "Campaign",
-			CreateField: "campaignIDs",
-			AddField:    "addCampaignIDs",
-			RemoveField: "removeCampaignIDs",
+			CreateField: "campaign_ids",
+			AddField:    "add_campaign_ids",
+			RemoveField: "remove_campaign_ids",
 		},
 		{
 			Name:        "controls",
 			Label:       "Controls",
 			Target:      SchemaControl,
 			TargetType:  "Control",
-			CreateField: "controlIDs",
-			AddField:    "addControlIDs",
-			RemoveField: "removeControlIDs",
+			CreateField: "control_ids",
+			AddField:    "add_control_ids",
+			RemoveField: "remove_control_ids",
 		},
 		{
 			Name:        "directory_accounts",
 			Label:       "DirectoryAccounts",
 			Target:      SchemaDirectoryAccount,
 			TargetType:  "DirectoryAccount",
-			CreateField: "directoryaccountIDs",
-			AddField:    "addDirectoryAccountIDs",
-			RemoveField: "removeDirectoryAccountIDs",
+			CreateField: "directory_account_ids",
+			AddField:    "add_directory_account_ids",
+			RemoveField: "remove_directory_account_ids",
 		},
 		{
 			Name:        "employer",
@@ -6607,7 +7155,7 @@ func init() {
 			Target:      SchemaEntity,
 			TargetType:  "Entity",
 			Unique:      true,
-			CreateField: "employerID",
+			CreateField: "employer_id",
 			ClearField:  "clearEmployer",
 			Field:       "employer_entity_id",
 		},
@@ -6616,72 +7164,82 @@ func init() {
 			Label:       "Entities",
 			Target:      SchemaEntity,
 			TargetType:  "Entity",
-			CreateField: "entityIDs",
-			AddField:    "addEntityIDs",
-			RemoveField: "removeEntityIDs",
+			CreateField: "entity_ids",
+			AddField:    "add_entity_ids",
+			RemoveField: "remove_entity_ids",
 		},
 		{
 			Name:        "findings",
 			Label:       "Findings",
 			Target:      SchemaFinding,
 			TargetType:  "Finding",
-			CreateField: "findingIDs",
-			AddField:    "addFindingIDs",
-			RemoveField: "removeFindingIDs",
+			CreateField: "finding_ids",
+			AddField:    "add_finding_ids",
+			RemoveField: "remove_finding_ids",
 		},
 		{
 			Name:        "internal_policies",
 			Label:       "InternalPolicies",
 			Target:      SchemaInternalPolicy,
 			TargetType:  "InternalPolicy",
-			CreateField: "internalpolicyIDs",
-			AddField:    "addInternalPolicyIDs",
-			RemoveField: "removeInternalPolicyIDs",
+			CreateField: "internal_policy_ids",
+			AddField:    "add_internal_policy_ids",
+			RemoveField: "remove_internal_policy_ids",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
 		},
 		{
 			Name:        "platforms",
 			Label:       "Platforms",
 			Target:      SchemaPlatform,
 			TargetType:  "Platform",
-			CreateField: "platformIDs",
-			AddField:    "addPlatformIDs",
-			RemoveField: "removePlatformIDs",
+			CreateField: "platform_ids",
+			AddField:    "add_platform_ids",
+			RemoveField: "remove_platform_ids",
 		},
 		{
 			Name:        "subcontrols",
 			Label:       "Subcontrols",
 			Target:      SchemaSubcontrol,
 			TargetType:  "Subcontrol",
-			CreateField: "subcontrolIDs",
-			AddField:    "addSubcontrolIDs",
-			RemoveField: "removeSubcontrolIDs",
+			CreateField: "subcontrol_ids",
+			AddField:    "add_subcontrol_ids",
+			RemoveField: "remove_subcontrol_ids",
 		},
 		{
 			Name:        "tasks",
 			Label:       "Tasks",
 			Target:      SchemaTask,
 			TargetType:  "Task",
-			CreateField: "taskIDs",
-			AddField:    "addTaskIDs",
-			RemoveField: "removeTaskIDs",
+			CreateField: "task_ids",
+			AddField:    "add_task_ids",
+			RemoveField: "remove_task_ids",
 		},
 		{
 			Name:        "templates",
 			Label:       "Templates",
 			Target:      SchemaTemplate,
 			TargetType:  "Template",
-			CreateField: "templateIDs",
-			AddField:    "addTemplateIDs",
-			RemoveField: "removeTemplateIDs",
+			CreateField: "template_ids",
+			AddField:    "add_template_ids",
+			RemoveField: "remove_template_ids",
 		},
 		{
 			Name:        "workflow_object_refs",
 			Label:       "WorkflowObjectRefs",
 			Target:      SchemaWorkflowObjectRef,
 			TargetType:  "WorkflowObjectRef",
-			CreateField: "workflowobjectrefIDs",
-			AddField:    "addWorkflowObjectRefIDs",
-			RemoveField: "removeWorkflowObjectRefIDs",
+			CreateField: "workflow_object_ref_ids",
+			AddField:    "add_workflow_object_ref_ids",
+			RemoveField: "remove_workflow_object_ref_ids",
 		},
 	}
 	SchemaInternalPolicy.Edges = []EdgeDescriptor{
@@ -6690,45 +7248,45 @@ func init() {
 			Label:       "Assets",
 			Target:      SchemaAsset,
 			TargetType:  "Asset",
-			CreateField: "assetIDs",
-			AddField:    "addAssetIDs",
-			RemoveField: "removeAssetIDs",
+			CreateField: "asset_ids",
+			AddField:    "add_asset_ids",
+			RemoveField: "remove_asset_ids",
 		},
 		{
 			Name:        "control_implementations",
 			Label:       "ControlImplementations",
 			Target:      SchemaControlImplementation,
 			TargetType:  "ControlImplementation",
-			CreateField: "controlimplementationIDs",
-			AddField:    "addControlImplementationIDs",
-			RemoveField: "removeControlImplementationIDs",
+			CreateField: "control_implementation_ids",
+			AddField:    "add_control_implementation_ids",
+			RemoveField: "remove_control_implementation_ids",
 		},
 		{
 			Name:        "control_objectives",
 			Label:       "ControlObjectives",
 			Target:      SchemaControlObjective,
 			TargetType:  "ControlObjective",
-			CreateField: "controlobjectiveIDs",
-			AddField:    "addControlObjectiveIDs",
-			RemoveField: "removeControlObjectiveIDs",
+			CreateField: "control_objective_ids",
+			AddField:    "add_control_objective_ids",
+			RemoveField: "remove_control_objective_ids",
 		},
 		{
 			Name:        "controls",
 			Label:       "Controls",
 			Target:      SchemaControl,
 			TargetType:  "Control",
-			CreateField: "controlIDs",
-			AddField:    "addControlIDs",
-			RemoveField: "removeControlIDs",
+			CreateField: "control_ids",
+			AddField:    "add_control_ids",
+			RemoveField: "remove_control_ids",
 		},
 		{
 			Name:             "discussions",
 			Label:            "Discussions",
 			Target:           SchemaDiscussion,
 			TargetType:       "Discussion",
-			CreateField:      "discussionIDs",
-			AddField:         "addDiscussionIDs",
-			RemoveField:      "removeDiscussionIDs",
+			CreateField:      "discussion_ids",
+			AddField:         "add_discussion_ids",
+			RemoveField:      "remove_discussion_ids",
 			WorkflowEligible: true,
 		},
 		{
@@ -6736,81 +7294,91 @@ func init() {
 			Label:       "Entities",
 			Target:      SchemaEntity,
 			TargetType:  "Entity",
-			CreateField: "entityIDs",
-			AddField:    "addEntityIDs",
-			RemoveField: "removeEntityIDs",
+			CreateField: "entity_ids",
+			AddField:    "add_entity_ids",
+			RemoveField: "remove_entity_ids",
 		},
 		{
 			Name:        "identity_holders",
 			Label:       "IdentityHolders",
 			Target:      SchemaIdentityHolder,
 			TargetType:  "IdentityHolder",
-			CreateField: "identityholderIDs",
-			AddField:    "addIdentityHolderIDs",
-			RemoveField: "removeIdentityHolderIDs",
+			CreateField: "identity_holder_ids",
+			AddField:    "add_identity_holder_ids",
+			RemoveField: "remove_identity_holder_ids",
 		},
 		{
 			Name:        "narratives",
 			Label:       "Narratives",
 			Target:      SchemaNarrative,
 			TargetType:  "Narrative",
-			CreateField: "narrativeIDs",
-			AddField:    "addNarrativeIDs",
-			RemoveField: "removeNarrativeIDs",
+			CreateField: "narrative_ids",
+			AddField:    "add_narrative_ids",
+			RemoveField: "remove_narrative_ids",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Unique:      true,
+			CreateField: "owner_id",
+			ClearField:  "clearOwner",
+			Field:       "owner_id",
 		},
 		{
 			Name:        "procedures",
 			Label:       "Procedures",
 			Target:      SchemaProcedure,
 			TargetType:  "Procedure",
-			CreateField: "procedureIDs",
-			AddField:    "addProcedureIDs",
-			RemoveField: "removeProcedureIDs",
+			CreateField: "procedure_ids",
+			AddField:    "add_procedure_ids",
+			RemoveField: "remove_procedure_ids",
 		},
 		{
 			Name:        "reviews",
 			Label:       "Reviews",
 			Target:      SchemaReview,
 			TargetType:  "Review",
-			CreateField: "reviewIDs",
-			AddField:    "addReviewIDs",
-			RemoveField: "removeReviewIDs",
+			CreateField: "review_ids",
+			AddField:    "add_review_ids",
+			RemoveField: "remove_review_ids",
 		},
 		{
 			Name:        "risks",
 			Label:       "Risks",
 			Target:      SchemaRisk,
 			TargetType:  "Risk",
-			CreateField: "riskIDs",
-			AddField:    "addRiskIDs",
-			RemoveField: "removeRiskIDs",
+			CreateField: "risk_ids",
+			AddField:    "add_risk_ids",
+			RemoveField: "remove_risk_ids",
 		},
 		{
 			Name:        "subcontrols",
 			Label:       "Subcontrols",
 			Target:      SchemaSubcontrol,
 			TargetType:  "Subcontrol",
-			CreateField: "subcontrolIDs",
-			AddField:    "addSubcontrolIDs",
-			RemoveField: "removeSubcontrolIDs",
+			CreateField: "subcontrol_ids",
+			AddField:    "add_subcontrol_ids",
+			RemoveField: "remove_subcontrol_ids",
 		},
 		{
 			Name:        "tasks",
 			Label:       "Tasks",
 			Target:      SchemaTask,
 			TargetType:  "Task",
-			CreateField: "taskIDs",
-			AddField:    "addTaskIDs",
-			RemoveField: "removeTaskIDs",
+			CreateField: "task_ids",
+			AddField:    "add_task_ids",
+			RemoveField: "remove_task_ids",
 		},
 		{
 			Name:             "workflow_object_refs",
 			Label:            "WorkflowObjectRefs",
 			Target:           SchemaWorkflowObjectRef,
 			TargetType:       "WorkflowObjectRef",
-			CreateField:      "workflowobjectrefIDs",
-			AddField:         "addWorkflowObjectRefIDs",
-			RemoveField:      "removeWorkflowObjectRefIDs",
+			CreateField:      "workflow_object_ref_ids",
+			AddField:         "add_workflow_object_ref_ids",
+			RemoveField:      "remove_workflow_object_ref_ids",
 			WorkflowEligible: true,
 		},
 	}
@@ -6820,27 +7388,59 @@ func init() {
 			Label:       "InternalPolicies",
 			Target:      SchemaInternalPolicy,
 			TargetType:  "InternalPolicy",
-			CreateField: "internalpolicyIDs",
-			AddField:    "addInternalPolicyIDs",
-			RemoveField: "removeInternalPolicyIDs",
+			CreateField: "internal_policy_ids",
+			AddField:    "add_internal_policy_ids",
+			RemoveField: "remove_internal_policy_ids",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
 		},
 		{
 			Name:        "procedures",
 			Label:       "Procedures",
 			Target:      SchemaProcedure,
 			TargetType:  "Procedure",
-			CreateField: "procedureIDs",
-			AddField:    "addProcedureIDs",
-			RemoveField: "removeProcedureIDs",
+			CreateField: "procedure_ids",
+			AddField:    "add_procedure_ids",
+			RemoveField: "remove_procedure_ids",
 		},
 		{
 			Name:        "satisfies",
 			Label:       "Satisfies",
 			Target:      SchemaControl,
 			TargetType:  "Control",
-			CreateField: "satisfyIDs",
-			AddField:    "addSatisfyIDs",
-			RemoveField: "removeSatisfyIDs",
+			CreateField: "satisfy_ids",
+			AddField:    "add_satisfy_ids",
+			RemoveField: "remove_satisfy_ids",
+		},
+	}
+	SchemaNotification.Edges = []EdgeDescriptor{
+		{
+			Name:        "notification_template",
+			Label:       "NotificationTemplate",
+			Target:      SchemaNotificationTemplate,
+			TargetType:  "NotificationTemplate",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "notification_template_id",
+			Field:       "template_id",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Unique:      true,
+			CreateField: "owner_id",
+			ClearField:  "clearOwner",
+			Field:       "owner_id",
 		},
 	}
 	SchemaNotificationTemplate.Edges = []EdgeDescriptor{
@@ -6850,9 +7450,28 @@ func init() {
 			Target:      SchemaEmailTemplate,
 			TargetType:  "EmailTemplate",
 			Unique:      true,
-			CreateField: "emailTemplateID",
+			CreateField: "email_template_id",
 			ClearField:  "clearEmailTemplate",
 			Field:       "email_template_id",
+		},
+		{
+			Name:        "notifications",
+			Label:       "Notifications",
+			Target:      SchemaNotification,
+			TargetType:  "Notification",
+			CreateField: "notification_ids",
+			AddField:    "add_notification_ids",
+			RemoveField: "remove_notification_ids",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
 		},
 		{
 			Name:        "workflow_definition",
@@ -6860,9 +7479,447 @@ func init() {
 			Target:      SchemaWorkflowDefinition,
 			TargetType:  "WorkflowDefinition",
 			Unique:      true,
-			CreateField: "workflowDefinitionID",
+			CreateField: "workflow_definition_id",
 			ClearField:  "clearWorkflowDefinition",
 			Field:       "workflow_definition_id",
+		},
+	}
+	SchemaOnboarding.Edges = []EdgeDescriptor{
+		{
+			Name:        "organization",
+			Label:       "Organization",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "organization_id",
+			Field:       "organization_id",
+		},
+	}
+	SchemaOrganization.Edges = []EdgeDescriptor{
+		{
+			Name:        "action_plans",
+			Label:       "ActionPlans",
+			Target:      SchemaActionPlan,
+			TargetType:  "ActionPlan",
+			CreateField: "action_plan_ids",
+			AddField:    "add_action_plan_ids",
+			RemoveField: "remove_action_plan_ids",
+		},
+		{
+			Name:        "assessment_responses",
+			Label:       "AssessmentResponses",
+			Target:      SchemaAssessmentResponse,
+			TargetType:  "AssessmentResponse",
+			CreateField: "assessment_response_ids",
+			AddField:    "add_assessment_response_ids",
+			RemoveField: "remove_assessment_response_ids",
+		},
+		{
+			Name:        "assessments",
+			Label:       "Assessments",
+			Target:      SchemaAssessment,
+			TargetType:  "Assessment",
+			CreateField: "assessment_ids",
+			AddField:    "add_assessment_ids",
+			RemoveField: "remove_assessment_ids",
+		},
+		{
+			Name:        "assets",
+			Label:       "Assets",
+			Target:      SchemaAsset,
+			TargetType:  "Asset",
+			CreateField: "asset_ids",
+			AddField:    "add_asset_ids",
+			RemoveField: "remove_asset_ids",
+		},
+		{
+			Name:        "campaign_targets",
+			Label:       "CampaignTargets",
+			Target:      SchemaCampaignTarget,
+			TargetType:  "CampaignTarget",
+			CreateField: "campaign_target_ids",
+			AddField:    "add_campaign_target_ids",
+			RemoveField: "remove_campaign_target_ids",
+		},
+		{
+			Name:        "campaigns",
+			Label:       "Campaigns",
+			Target:      SchemaCampaign,
+			TargetType:  "Campaign",
+			CreateField: "campaign_ids",
+			AddField:    "add_campaign_ids",
+			RemoveField: "remove_campaign_ids",
+		},
+		{
+			Name:        "children",
+			Label:       "Children",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			CreateField: "children_ids",
+			AddField:    "add_children_ids",
+			RemoveField: "remove_children_ids",
+		},
+		{
+			Name:        "contacts",
+			Label:       "Contacts",
+			Target:      SchemaContact,
+			TargetType:  "Contact",
+			CreateField: "contact_ids",
+			AddField:    "add_contact_ids",
+			RemoveField: "remove_contact_ids",
+		},
+		{
+			Name:        "control_implementations",
+			Label:       "ControlImplementations",
+			Target:      SchemaControlImplementation,
+			TargetType:  "ControlImplementation",
+			CreateField: "control_implementation_ids",
+			AddField:    "add_control_implementation_ids",
+			RemoveField: "remove_control_implementation_ids",
+		},
+		{
+			Name:        "control_objectives",
+			Label:       "ControlObjectives",
+			Target:      SchemaControlObjective,
+			TargetType:  "ControlObjective",
+			CreateField: "control_objective_ids",
+			AddField:    "add_control_objective_ids",
+			RemoveField: "remove_control_objective_ids",
+		},
+		{
+			Name:        "controls",
+			Label:       "Controls",
+			Target:      SchemaControl,
+			TargetType:  "Control",
+			CreateField: "control_ids",
+			AddField:    "add_control_ids",
+			RemoveField: "remove_control_ids",
+		},
+		{
+			Name:        "directory_accounts",
+			Label:       "DirectoryAccounts",
+			Target:      SchemaDirectoryAccount,
+			TargetType:  "DirectoryAccount",
+			CreateField: "directory_account_ids",
+			AddField:    "add_directory_account_ids",
+			RemoveField: "remove_directory_account_ids",
+		},
+		{
+			Name:        "directory_groups",
+			Label:       "DirectoryGroups",
+			Target:      SchemaDirectoryGroup,
+			TargetType:  "DirectoryGroup",
+			CreateField: "directory_group_ids",
+			AddField:    "add_directory_group_ids",
+			RemoveField: "remove_directory_group_ids",
+		},
+		{
+			Name:        "directory_memberships",
+			Label:       "DirectoryMemberships",
+			Target:      SchemaDirectoryMembership,
+			TargetType:  "DirectoryMembership",
+			CreateField: "directory_membership_ids",
+			AddField:    "add_directory_membership_ids",
+			RemoveField: "remove_directory_membership_ids",
+		},
+		{
+			Name:        "discussions",
+			Label:       "Discussions",
+			Target:      SchemaDiscussion,
+			TargetType:  "Discussion",
+			CreateField: "discussion_ids",
+			AddField:    "add_discussion_ids",
+			RemoveField: "remove_discussion_ids",
+		},
+		{
+			Name:        "documents",
+			Label:       "Documents",
+			Target:      SchemaDocumentData,
+			TargetType:  "DocumentData",
+			CreateField: "document_ids",
+			AddField:    "add_document_ids",
+			RemoveField: "remove_document_ids",
+		},
+		{
+			Name:        "email_templates",
+			Label:       "EmailTemplates",
+			Target:      SchemaEmailTemplate,
+			TargetType:  "EmailTemplate",
+			CreateField: "email_template_ids",
+			AddField:    "add_email_template_ids",
+			RemoveField: "remove_email_template_ids",
+		},
+		{
+			Name:        "entities",
+			Label:       "Entities",
+			Target:      SchemaEntity,
+			TargetType:  "Entity",
+			CreateField: "entity_ids",
+			AddField:    "add_entity_ids",
+			RemoveField: "remove_entity_ids",
+		},
+		{
+			Name:        "evidence",
+			Label:       "Evidence",
+			Target:      SchemaEvidence,
+			TargetType:  "Evidence",
+			CreateField: "evidence_ids",
+			AddField:    "add_evidence_ids",
+			RemoveField: "remove_evidence_ids",
+		},
+		{
+			Name:        "findings",
+			Label:       "Findings",
+			Target:      SchemaFinding,
+			TargetType:  "Finding",
+			CreateField: "finding_ids",
+			AddField:    "add_finding_ids",
+			RemoveField: "remove_finding_ids",
+		},
+		{
+			Name:        "identity_holders",
+			Label:       "IdentityHolders",
+			Target:      SchemaIdentityHolder,
+			TargetType:  "IdentityHolder",
+			CreateField: "identity_holder_ids",
+			AddField:    "add_identity_holder_ids",
+			RemoveField: "remove_identity_holder_ids",
+		},
+		{
+			Name:        "internal_policies",
+			Label:       "InternalPolicies",
+			Target:      SchemaInternalPolicy,
+			TargetType:  "InternalPolicy",
+			CreateField: "internal_policy_ids",
+			AddField:    "add_internal_policy_ids",
+			RemoveField: "remove_internal_policy_ids",
+		},
+		{
+			Name:        "narratives",
+			Label:       "Narratives",
+			Target:      SchemaNarrative,
+			TargetType:  "Narrative",
+			CreateField: "narrative_ids",
+			AddField:    "add_narrative_ids",
+			RemoveField: "remove_narrative_ids",
+		},
+		{
+			Name:        "notification_templates",
+			Label:       "NotificationTemplates",
+			Target:      SchemaNotificationTemplate,
+			TargetType:  "NotificationTemplate",
+			CreateField: "notification_template_ids",
+			AddField:    "add_notification_template_ids",
+			RemoveField: "remove_notification_template_ids",
+		},
+		{
+			Name:        "notifications",
+			Label:       "Notifications",
+			Target:      SchemaNotification,
+			TargetType:  "Notification",
+			CreateField: "notification_ids",
+			AddField:    "add_notification_ids",
+			RemoveField: "remove_notification_ids",
+		},
+		{
+			Name:        "parent",
+			Label:       "Parent",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "parent_id",
+			Field:       "parent_organization_id",
+		},
+		{
+			Name:        "platforms",
+			Label:       "Platforms",
+			Target:      SchemaPlatform,
+			TargetType:  "Platform",
+			CreateField: "platform_ids",
+			AddField:    "add_platform_ids",
+			RemoveField: "remove_platform_ids",
+		},
+		{
+			Name:        "procedures",
+			Label:       "Procedures",
+			Target:      SchemaProcedure,
+			TargetType:  "Procedure",
+			CreateField: "procedure_ids",
+			AddField:    "add_procedure_ids",
+			RemoveField: "remove_procedure_ids",
+		},
+		{
+			Name:        "remediations",
+			Label:       "Remediations",
+			Target:      SchemaRemediation,
+			TargetType:  "Remediation",
+			CreateField: "remediation_ids",
+			AddField:    "add_remediation_ids",
+			RemoveField: "remove_remediation_ids",
+		},
+		{
+			Name:        "reviews",
+			Label:       "Reviews",
+			Target:      SchemaReview,
+			TargetType:  "Review",
+			CreateField: "review_ids",
+			AddField:    "add_review_ids",
+			RemoveField: "remove_review_ids",
+		},
+		{
+			Name:        "risks",
+			Label:       "Risks",
+			Target:      SchemaRisk,
+			TargetType:  "Risk",
+			CreateField: "risk_ids",
+			AddField:    "add_risk_ids",
+			RemoveField: "remove_risk_ids",
+		},
+		{
+			Name:        "scans",
+			Label:       "Scans",
+			Target:      SchemaScan,
+			TargetType:  "Scan",
+			CreateField: "scan_ids",
+			AddField:    "add_scan_ids",
+			RemoveField: "remove_scan_ids",
+		},
+		{
+			Name:        "scheduled_jobs",
+			Label:       "ScheduledJobs",
+			Target:      SchemaScheduledJob,
+			TargetType:  "ScheduledJob",
+			CreateField: "scheduled_job_ids",
+			AddField:    "add_scheduled_job_ids",
+			RemoveField: "remove_scheduled_job_ids",
+		},
+		{
+			Name:        "subcontrols",
+			Label:       "Subcontrols",
+			Target:      SchemaSubcontrol,
+			TargetType:  "Subcontrol",
+			CreateField: "subcontrol_ids",
+			AddField:    "add_subcontrol_ids",
+			RemoveField: "remove_subcontrol_ids",
+		},
+		{
+			Name:        "subprocessors",
+			Label:       "Subprocessors",
+			Target:      SchemaSubprocessor,
+			TargetType:  "Subprocessor",
+			CreateField: "subprocessor_ids",
+			AddField:    "add_subprocessor_ids",
+			RemoveField: "remove_subprocessor_ids",
+		},
+		{
+			Name:        "system_details",
+			Label:       "SystemDetails",
+			Target:      SchemaSystemDetail,
+			TargetType:  "SystemDetail",
+			CreateField: "system_detail_ids",
+			AddField:    "add_system_detail_ids",
+			RemoveField: "remove_system_detail_ids",
+		},
+		{
+			Name:        "tasks",
+			Label:       "Tasks",
+			Target:      SchemaTask,
+			TargetType:  "Task",
+			CreateField: "task_ids",
+			AddField:    "add_task_ids",
+			RemoveField: "remove_task_ids",
+		},
+		{
+			Name:        "templates",
+			Label:       "Templates",
+			Target:      SchemaTemplate,
+			TargetType:  "Template",
+			CreateField: "template_ids",
+			AddField:    "add_template_ids",
+			RemoveField: "remove_template_ids",
+		},
+		{
+			Name:        "trust_center_watermark_configs",
+			Label:       "TrustCenterWatermarkConfigs",
+			Target:      SchemaTrustCenterWatermarkConfig,
+			TargetType:  "TrustCenterWatermarkConfig",
+			CreateField: "trust_center_watermark_config_ids",
+			AddField:    "add_trust_center_watermark_config_ids",
+			RemoveField: "remove_trust_center_watermark_config_ids",
+		},
+		{
+			Name:        "vendor_risk_scores",
+			Label:       "VendorRiskScores",
+			Target:      SchemaVendorRiskScore,
+			TargetType:  "VendorRiskScore",
+			CreateField: "vendor_risk_score_ids",
+			AddField:    "add_vendor_risk_score_ids",
+			RemoveField: "remove_vendor_risk_score_ids",
+		},
+		{
+			Name:        "vulnerabilities",
+			Label:       "Vulnerabilities",
+			Target:      SchemaVulnerability,
+			TargetType:  "Vulnerability",
+			CreateField: "vulnerability_ids",
+			AddField:    "add_vulnerability_ids",
+			RemoveField: "remove_vulnerability_ids",
+		},
+		{
+			Name:        "workflow_assignment_targets",
+			Label:       "WorkflowAssignmentTargets",
+			Target:      SchemaWorkflowAssignmentTarget,
+			TargetType:  "WorkflowAssignmentTarget",
+			CreateField: "workflow_assignment_target_ids",
+			AddField:    "add_workflow_assignment_target_ids",
+			RemoveField: "remove_workflow_assignment_target_ids",
+		},
+		{
+			Name:        "workflow_assignments",
+			Label:       "WorkflowAssignments",
+			Target:      SchemaWorkflowAssignment,
+			TargetType:  "WorkflowAssignment",
+			CreateField: "workflow_assignment_ids",
+			AddField:    "add_workflow_assignment_ids",
+			RemoveField: "remove_workflow_assignment_ids",
+		},
+		{
+			Name:        "workflow_definitions",
+			Label:       "WorkflowDefinitions",
+			Target:      SchemaWorkflowDefinition,
+			TargetType:  "WorkflowDefinition",
+			CreateField: "workflow_definition_ids",
+			AddField:    "add_workflow_definition_ids",
+			RemoveField: "remove_workflow_definition_ids",
+		},
+		{
+			Name:        "workflow_events",
+			Label:       "WorkflowEvents",
+			Target:      SchemaWorkflowEvent,
+			TargetType:  "WorkflowEvent",
+			CreateField: "workflow_event_ids",
+			AddField:    "add_workflow_event_ids",
+			RemoveField: "remove_workflow_event_ids",
+		},
+		{
+			Name:        "workflow_instances",
+			Label:       "WorkflowInstances",
+			Target:      SchemaWorkflowInstance,
+			TargetType:  "WorkflowInstance",
+			CreateField: "workflow_instance_ids",
+			AddField:    "add_workflow_instance_ids",
+			RemoveField: "remove_workflow_instance_ids",
+		},
+		{
+			Name:        "workflow_object_refs",
+			Label:       "WorkflowObjectRefs",
+			Target:      SchemaWorkflowObjectRef,
+			TargetType:  "WorkflowObjectRef",
+			CreateField: "workflow_object_ref_ids",
+			AddField:    "add_workflow_object_ref_ids",
+			RemoveField: "remove_workflow_object_ref_ids",
 		},
 	}
 	SchemaPlatform.Edges = []EdgeDescriptor{
@@ -6871,171 +7928,181 @@ func init() {
 			Label:       "Assessments",
 			Target:      SchemaAssessment,
 			TargetType:  "Assessment",
-			CreateField: "assessmentIDs",
-			AddField:    "addAssessmentIDs",
-			RemoveField: "removeAssessmentIDs",
+			CreateField: "assessment_ids",
+			AddField:    "add_assessment_ids",
+			RemoveField: "remove_assessment_ids",
 		},
 		{
 			Name:        "assets",
 			Label:       "Assets",
 			Target:      SchemaAsset,
 			TargetType:  "Asset",
-			CreateField: "assetIDs",
-			AddField:    "addAssetIDs",
-			RemoveField: "removeAssetIDs",
+			CreateField: "asset_ids",
+			AddField:    "add_asset_ids",
+			RemoveField: "remove_asset_ids",
 		},
 		{
 			Name:        "controls",
 			Label:       "Controls",
 			Target:      SchemaControl,
 			TargetType:  "Control",
-			CreateField: "controlIDs",
-			AddField:    "addControlIDs",
-			RemoveField: "removeControlIDs",
+			CreateField: "control_ids",
+			AddField:    "add_control_ids",
+			RemoveField: "remove_control_ids",
 		},
 		{
 			Name:        "directory_accounts",
 			Label:       "DirectoryAccounts",
 			Target:      SchemaDirectoryAccount,
 			TargetType:  "DirectoryAccount",
-			CreateField: "directoryaccountIDs",
-			AddField:    "addDirectoryAccountIDs",
-			RemoveField: "removeDirectoryAccountIDs",
+			CreateField: "directory_account_ids",
+			AddField:    "add_directory_account_ids",
+			RemoveField: "remove_directory_account_ids",
 		},
 		{
 			Name:        "directory_groups",
 			Label:       "DirectoryGroups",
 			Target:      SchemaDirectoryGroup,
 			TargetType:  "DirectoryGroup",
-			CreateField: "directorygroupIDs",
-			AddField:    "addDirectoryGroupIDs",
-			RemoveField: "removeDirectoryGroupIDs",
+			CreateField: "directory_group_ids",
+			AddField:    "add_directory_group_ids",
+			RemoveField: "remove_directory_group_ids",
 		},
 		{
 			Name:        "directory_memberships",
 			Label:       "DirectoryMemberships",
 			Target:      SchemaDirectoryMembership,
 			TargetType:  "DirectoryMembership",
-			CreateField: "directorymembershipIDs",
-			AddField:    "addDirectoryMembershipIDs",
-			RemoveField: "removeDirectoryMembershipIDs",
+			CreateField: "directory_membership_ids",
+			AddField:    "add_directory_membership_ids",
+			RemoveField: "remove_directory_membership_ids",
 		},
 		{
 			Name:        "entities",
 			Label:       "Entities",
 			Target:      SchemaEntity,
 			TargetType:  "Entity",
-			CreateField: "entityIDs",
-			AddField:    "addEntityIDs",
-			RemoveField: "removeEntityIDs",
+			CreateField: "entity_ids",
+			AddField:    "add_entity_ids",
+			RemoveField: "remove_entity_ids",
 		},
 		{
 			Name:        "evidence",
 			Label:       "Evidence",
 			Target:      SchemaEvidence,
 			TargetType:  "Evidence",
-			CreateField: "evidenceIDs",
-			AddField:    "addEvidenceIDs",
-			RemoveField: "removeEvidenceIDs",
+			CreateField: "evidence_ids",
+			AddField:    "add_evidence_ids",
+			RemoveField: "remove_evidence_ids",
 		},
 		{
 			Name:        "generated_scans",
 			Label:       "GeneratedScans",
 			Target:      SchemaScan,
 			TargetType:  "Scan",
-			CreateField: "generatedscanIDs",
-			AddField:    "addGeneratedScanIDs",
-			RemoveField: "removeGeneratedScanIDs",
+			CreateField: "generated_scan_ids",
+			AddField:    "add_generated_scan_ids",
+			RemoveField: "remove_generated_scan_ids",
 		},
 		{
 			Name:        "identity_holders",
 			Label:       "IdentityHolders",
 			Target:      SchemaIdentityHolder,
 			TargetType:  "IdentityHolder",
-			CreateField: "identityholderIDs",
-			AddField:    "addIdentityHolderIDs",
-			RemoveField: "removeIdentityHolderIDs",
+			CreateField: "identity_holder_ids",
+			AddField:    "add_identity_holder_ids",
+			RemoveField: "remove_identity_holder_ids",
 		},
 		{
 			Name:        "out_of_scope_assets",
 			Label:       "OutOfScopeAssets",
 			Target:      SchemaAsset,
 			TargetType:  "Asset",
-			CreateField: "outofscopeassetIDs",
-			AddField:    "addOutOfScopeAssetIDs",
-			RemoveField: "removeOutOfScopeAssetIDs",
+			CreateField: "out_of_scope_asset_ids",
+			AddField:    "add_out_of_scope_asset_ids",
+			RemoveField: "remove_out_of_scope_asset_ids",
 		},
 		{
 			Name:        "out_of_scope_vendors",
 			Label:       "OutOfScopeVendors",
 			Target:      SchemaEntity,
 			TargetType:  "Entity",
-			CreateField: "outofscopevendorIDs",
-			AddField:    "addOutOfScopeVendorIDs",
-			RemoveField: "removeOutOfScopeVendorIDs",
+			CreateField: "out_of_scope_vendor_ids",
+			AddField:    "add_out_of_scope_vendor_ids",
+			RemoveField: "remove_out_of_scope_vendor_ids",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
 		},
 		{
 			Name:        "risks",
 			Label:       "Risks",
 			Target:      SchemaRisk,
 			TargetType:  "Risk",
-			CreateField: "riskIDs",
-			AddField:    "addRiskIDs",
-			RemoveField: "removeRiskIDs",
+			CreateField: "risk_ids",
+			AddField:    "add_risk_ids",
+			RemoveField: "remove_risk_ids",
 		},
 		{
 			Name:        "scans",
 			Label:       "Scans",
 			Target:      SchemaScan,
 			TargetType:  "Scan",
-			CreateField: "scanIDs",
-			AddField:    "addScanIDs",
-			RemoveField: "removeScanIDs",
+			CreateField: "scan_ids",
+			AddField:    "add_scan_ids",
+			RemoveField: "remove_scan_ids",
 		},
 		{
 			Name:        "source_assets",
 			Label:       "SourceAssets",
 			Target:      SchemaAsset,
 			TargetType:  "Asset",
-			CreateField: "sourceassetIDs",
-			AddField:    "addSourceAssetIDs",
-			RemoveField: "removeSourceAssetIDs",
+			CreateField: "source_asset_ids",
+			AddField:    "add_source_asset_ids",
+			RemoveField: "remove_source_asset_ids",
 		},
 		{
 			Name:        "source_entities",
 			Label:       "SourceEntities",
 			Target:      SchemaEntity,
 			TargetType:  "Entity",
-			CreateField: "sourceentityIDs",
-			AddField:    "addSourceEntityIDs",
-			RemoveField: "removeSourceEntityIDs",
+			CreateField: "source_entity_ids",
+			AddField:    "add_source_entity_ids",
+			RemoveField: "remove_source_entity_ids",
 		},
 		{
 			Name:        "system_details",
 			Label:       "SystemDetails",
 			Target:      SchemaSystemDetail,
 			TargetType:  "SystemDetail",
-			CreateField: "systemdetailIDs",
-			AddField:    "addSystemDetailIDs",
-			RemoveField: "removeSystemDetailIDs",
+			CreateField: "system_detail_ids",
+			AddField:    "add_system_detail_ids",
+			RemoveField: "remove_system_detail_ids",
 		},
 		{
 			Name:        "tasks",
 			Label:       "Tasks",
 			Target:      SchemaTask,
 			TargetType:  "Task",
-			CreateField: "taskIDs",
-			AddField:    "addTaskIDs",
-			RemoveField: "removeTaskIDs",
+			CreateField: "task_ids",
+			AddField:    "add_task_ids",
+			RemoveField: "remove_task_ids",
 		},
 		{
 			Name:        "workflow_object_refs",
 			Label:       "WorkflowObjectRefs",
 			Target:      SchemaWorkflowObjectRef,
 			TargetType:  "WorkflowObjectRef",
-			CreateField: "workflowobjectrefIDs",
-			AddField:    "addWorkflowObjectRefIDs",
-			RemoveField: "removeWorkflowObjectRefIDs",
+			CreateField: "workflow_object_ref_ids",
+			AddField:    "add_workflow_object_ref_ids",
+			RemoveField: "remove_workflow_object_ref_ids",
 		},
 	}
 	SchemaProcedure.Edges = []EdgeDescriptor{
@@ -7044,9 +8111,9 @@ func init() {
 			Label:            "Controls",
 			Target:           SchemaControl,
 			TargetType:       "Control",
-			CreateField:      "controlIDs",
-			AddField:         "addControlIDs",
-			RemoveField:      "removeControlIDs",
+			CreateField:      "control_ids",
+			AddField:         "add_control_ids",
+			RemoveField:      "remove_control_ids",
 			WorkflowEligible: true,
 		},
 		{
@@ -7054,9 +8121,9 @@ func init() {
 			Label:            "Discussions",
 			Target:           SchemaDiscussion,
 			TargetType:       "Discussion",
-			CreateField:      "discussionIDs",
-			AddField:         "addDiscussionIDs",
-			RemoveField:      "removeDiscussionIDs",
+			CreateField:      "discussion_ids",
+			AddField:         "add_discussion_ids",
+			RemoveField:      "remove_discussion_ids",
 			WorkflowEligible: true,
 		},
 		{
@@ -7064,9 +8131,9 @@ func init() {
 			Label:            "InternalPolicies",
 			Target:           SchemaInternalPolicy,
 			TargetType:       "InternalPolicy",
-			CreateField:      "internalpolicyIDs",
-			AddField:         "addInternalPolicyIDs",
-			RemoveField:      "removeInternalPolicyIDs",
+			CreateField:      "internal_policy_ids",
+			AddField:         "add_internal_policy_ids",
+			RemoveField:      "remove_internal_policy_ids",
 			WorkflowEligible: true,
 		},
 		{
@@ -7074,19 +8141,29 @@ func init() {
 			Label:            "Narratives",
 			Target:           SchemaNarrative,
 			TargetType:       "Narrative",
-			CreateField:      "narrativeIDs",
-			AddField:         "addNarrativeIDs",
-			RemoveField:      "removeNarrativeIDs",
+			CreateField:      "narrative_ids",
+			AddField:         "add_narrative_ids",
+			RemoveField:      "remove_narrative_ids",
 			WorkflowEligible: true,
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Unique:      true,
+			CreateField: "owner_id",
+			ClearField:  "clearOwner",
+			Field:       "owner_id",
 		},
 		{
 			Name:             "risks",
 			Label:            "Risks",
 			Target:           SchemaRisk,
 			TargetType:       "Risk",
-			CreateField:      "riskIDs",
-			AddField:         "addRiskIDs",
-			RemoveField:      "removeRiskIDs",
+			CreateField:      "risk_ids",
+			AddField:         "add_risk_ids",
+			RemoveField:      "remove_risk_ids",
 			WorkflowEligible: true,
 		},
 		{
@@ -7094,9 +8171,9 @@ func init() {
 			Label:            "Subcontrols",
 			Target:           SchemaSubcontrol,
 			TargetType:       "Subcontrol",
-			CreateField:      "subcontrolIDs",
-			AddField:         "addSubcontrolIDs",
-			RemoveField:      "removeSubcontrolIDs",
+			CreateField:      "subcontrol_ids",
+			AddField:         "add_subcontrol_ids",
+			RemoveField:      "remove_subcontrol_ids",
 			WorkflowEligible: true,
 		},
 		{
@@ -7104,9 +8181,9 @@ func init() {
 			Label:            "Tasks",
 			Target:           SchemaTask,
 			TargetType:       "Task",
-			CreateField:      "taskIDs",
-			AddField:         "addTaskIDs",
-			RemoveField:      "removeTaskIDs",
+			CreateField:      "task_ids",
+			AddField:         "add_task_ids",
+			RemoveField:      "remove_task_ids",
 			WorkflowEligible: true,
 		},
 		{
@@ -7114,9 +8191,9 @@ func init() {
 			Label:            "WorkflowObjectRefs",
 			Target:           SchemaWorkflowObjectRef,
 			TargetType:       "WorkflowObjectRef",
-			CreateField:      "workflowobjectrefIDs",
-			AddField:         "addWorkflowObjectRefIDs",
-			RemoveField:      "removeWorkflowObjectRefIDs",
+			CreateField:      "workflow_object_ref_ids",
+			AddField:         "add_workflow_object_ref_ids",
+			RemoveField:      "remove_workflow_object_ref_ids",
 			WorkflowEligible: true,
 		},
 	}
@@ -7126,108 +8203,118 @@ func init() {
 			Label:       "ActionPlans",
 			Target:      SchemaActionPlan,
 			TargetType:  "ActionPlan",
-			CreateField: "actionplanIDs",
-			AddField:    "addActionPlanIDs",
-			RemoveField: "removeActionPlanIDs",
+			CreateField: "action_plan_ids",
+			AddField:    "add_action_plan_ids",
+			RemoveField: "remove_action_plan_ids",
 		},
 		{
 			Name:        "assets",
 			Label:       "Assets",
 			Target:      SchemaAsset,
 			TargetType:  "Asset",
-			CreateField: "assetIDs",
-			AddField:    "addAssetIDs",
-			RemoveField: "removeAssetIDs",
+			CreateField: "asset_ids",
+			AddField:    "add_asset_ids",
+			RemoveField: "remove_asset_ids",
 		},
 		{
 			Name:        "controls",
 			Label:       "Controls",
 			Target:      SchemaControl,
 			TargetType:  "Control",
-			CreateField: "controlIDs",
-			AddField:    "addControlIDs",
-			RemoveField: "removeControlIDs",
+			CreateField: "control_ids",
+			AddField:    "add_control_ids",
+			RemoveField: "remove_control_ids",
 		},
 		{
 			Name:        "entities",
 			Label:       "Entities",
 			Target:      SchemaEntity,
 			TargetType:  "Entity",
-			CreateField: "entityIDs",
-			AddField:    "addEntityIDs",
-			RemoveField: "removeEntityIDs",
+			CreateField: "entity_ids",
+			AddField:    "add_entity_ids",
+			RemoveField: "remove_entity_ids",
 		},
 		{
 			Name:        "findings",
 			Label:       "Findings",
 			Target:      SchemaFinding,
 			TargetType:  "Finding",
-			CreateField: "findingIDs",
-			AddField:    "addFindingIDs",
-			RemoveField: "removeFindingIDs",
+			CreateField: "finding_ids",
+			AddField:    "add_finding_ids",
+			RemoveField: "remove_finding_ids",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
 		},
 		{
 			Name:        "reviews",
 			Label:       "Reviews",
 			Target:      SchemaReview,
 			TargetType:  "Review",
-			CreateField: "reviewIDs",
-			AddField:    "addReviewIDs",
-			RemoveField: "removeReviewIDs",
+			CreateField: "review_ids",
+			AddField:    "add_review_ids",
+			RemoveField: "remove_review_ids",
 		},
 		{
 			Name:        "risks",
 			Label:       "Risks",
 			Target:      SchemaRisk,
 			TargetType:  "Risk",
-			CreateField: "riskIDs",
-			AddField:    "addRiskIDs",
-			RemoveField: "removeRiskIDs",
+			CreateField: "risk_ids",
+			AddField:    "add_risk_ids",
+			RemoveField: "remove_risk_ids",
 		},
 		{
 			Name:        "scans",
 			Label:       "Scans",
 			Target:      SchemaScan,
 			TargetType:  "Scan",
-			CreateField: "scanIDs",
-			AddField:    "addScanIDs",
-			RemoveField: "removeScanIDs",
+			CreateField: "scan_ids",
+			AddField:    "add_scan_ids",
+			RemoveField: "remove_scan_ids",
 		},
 		{
 			Name:        "subcontrols",
 			Label:       "Subcontrols",
 			Target:      SchemaSubcontrol,
 			TargetType:  "Subcontrol",
-			CreateField: "subcontrolIDs",
-			AddField:    "addSubcontrolIDs",
-			RemoveField: "removeSubcontrolIDs",
+			CreateField: "subcontrol_ids",
+			AddField:    "add_subcontrol_ids",
+			RemoveField: "remove_subcontrol_ids",
 		},
 		{
 			Name:        "tasks",
 			Label:       "Tasks",
 			Target:      SchemaTask,
 			TargetType:  "Task",
-			CreateField: "taskIDs",
-			AddField:    "addTaskIDs",
-			RemoveField: "removeTaskIDs",
+			CreateField: "task_ids",
+			AddField:    "add_task_ids",
+			RemoveField: "remove_task_ids",
 		},
 		{
 			Name:        "vulnerabilities",
 			Label:       "Vulnerabilities",
 			Target:      SchemaVulnerability,
 			TargetType:  "Vulnerability",
-			CreateField: "vulnerabilityIDs",
-			AddField:    "addVulnerabilityIDs",
-			RemoveField: "removeVulnerabilityIDs",
+			CreateField: "vulnerability_ids",
+			AddField:    "add_vulnerability_ids",
+			RemoveField: "remove_vulnerability_ids",
 		},
 		{
 			Name:        "workflow_object_refs",
 			Label:       "WorkflowObjectRefs",
 			Target:      SchemaWorkflowObjectRef,
 			TargetType:  "WorkflowObjectRef",
-			CreateField: "workflowobjectrefIDs",
-			AddField:    "addWorkflowObjectRefIDs",
-			RemoveField: "removeWorkflowObjectRefIDs",
+			CreateField: "workflow_object_ref_ids",
+			AddField:    "add_workflow_object_ref_ids",
+			RemoveField: "remove_workflow_object_ref_ids",
 		},
 	}
 	SchemaReview.Edges = []EdgeDescriptor{
@@ -7236,99 +8323,109 @@ func init() {
 			Label:       "ActionPlans",
 			Target:      SchemaActionPlan,
 			TargetType:  "ActionPlan",
-			CreateField: "actionplanIDs",
-			AddField:    "addActionPlanIDs",
-			RemoveField: "removeActionPlanIDs",
+			CreateField: "action_plan_ids",
+			AddField:    "add_action_plan_ids",
+			RemoveField: "remove_action_plan_ids",
 		},
 		{
 			Name:        "assets",
 			Label:       "Assets",
 			Target:      SchemaAsset,
 			TargetType:  "Asset",
-			CreateField: "assetIDs",
-			AddField:    "addAssetIDs",
-			RemoveField: "removeAssetIDs",
+			CreateField: "asset_ids",
+			AddField:    "add_asset_ids",
+			RemoveField: "remove_asset_ids",
 		},
 		{
 			Name:        "controls",
 			Label:       "Controls",
 			Target:      SchemaControl,
 			TargetType:  "Control",
-			CreateField: "controlIDs",
-			AddField:    "addControlIDs",
-			RemoveField: "removeControlIDs",
+			CreateField: "control_ids",
+			AddField:    "add_control_ids",
+			RemoveField: "remove_control_ids",
 		},
 		{
 			Name:        "entities",
 			Label:       "Entities",
 			Target:      SchemaEntity,
 			TargetType:  "Entity",
-			CreateField: "entityIDs",
-			AddField:    "addEntityIDs",
-			RemoveField: "removeEntityIDs",
+			CreateField: "entity_ids",
+			AddField:    "add_entity_ids",
+			RemoveField: "remove_entity_ids",
 		},
 		{
 			Name:        "findings",
 			Label:       "Findings",
 			Target:      SchemaFinding,
 			TargetType:  "Finding",
-			CreateField: "findingIDs",
-			AddField:    "addFindingIDs",
-			RemoveField: "removeFindingIDs",
+			CreateField: "finding_ids",
+			AddField:    "add_finding_ids",
+			RemoveField: "remove_finding_ids",
 		},
 		{
 			Name:        "internal_policies",
 			Label:       "InternalPolicies",
 			Target:      SchemaInternalPolicy,
 			TargetType:  "InternalPolicy",
-			CreateField: "internalpolicyIDs",
-			AddField:    "addInternalPolicyIDs",
-			RemoveField: "removeInternalPolicyIDs",
+			CreateField: "internal_policy_ids",
+			AddField:    "add_internal_policy_ids",
+			RemoveField: "remove_internal_policy_ids",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
 		},
 		{
 			Name:        "remediations",
 			Label:       "Remediations",
 			Target:      SchemaRemediation,
 			TargetType:  "Remediation",
-			CreateField: "remediationIDs",
-			AddField:    "addRemediationIDs",
-			RemoveField: "removeRemediationIDs",
+			CreateField: "remediation_ids",
+			AddField:    "add_remediation_ids",
+			RemoveField: "remove_remediation_ids",
 		},
 		{
 			Name:        "risks",
 			Label:       "Risks",
 			Target:      SchemaRisk,
 			TargetType:  "Risk",
-			CreateField: "riskIDs",
-			AddField:    "addRiskIDs",
-			RemoveField: "removeRiskIDs",
+			CreateField: "risk_ids",
+			AddField:    "add_risk_ids",
+			RemoveField: "remove_risk_ids",
 		},
 		{
 			Name:        "subcontrols",
 			Label:       "Subcontrols",
 			Target:      SchemaSubcontrol,
 			TargetType:  "Subcontrol",
-			CreateField: "subcontrolIDs",
-			AddField:    "addSubcontrolIDs",
-			RemoveField: "removeSubcontrolIDs",
+			CreateField: "subcontrol_ids",
+			AddField:    "add_subcontrol_ids",
+			RemoveField: "remove_subcontrol_ids",
 		},
 		{
 			Name:        "tasks",
 			Label:       "Tasks",
 			Target:      SchemaTask,
 			TargetType:  "Task",
-			CreateField: "taskIDs",
-			AddField:    "addTaskIDs",
-			RemoveField: "removeTaskIDs",
+			CreateField: "task_ids",
+			AddField:    "add_task_ids",
+			RemoveField: "remove_task_ids",
 		},
 		{
 			Name:        "vulnerabilities",
 			Label:       "Vulnerabilities",
 			Target:      SchemaVulnerability,
 			TargetType:  "Vulnerability",
-			CreateField: "vulnerabilityIDs",
-			AddField:    "addVulnerabilityIDs",
-			RemoveField: "removeVulnerabilityIDs",
+			CreateField: "vulnerability_ids",
+			AddField:    "add_vulnerability_ids",
+			RemoveField: "remove_vulnerability_ids",
 		},
 	}
 	SchemaRisk.Edges = []EdgeDescriptor{
@@ -7337,126 +8434,154 @@ func init() {
 			Label:       "ActionPlans",
 			Target:      SchemaActionPlan,
 			TargetType:  "ActionPlan",
-			CreateField: "actionplanIDs",
-			AddField:    "addActionPlanIDs",
-			RemoveField: "removeActionPlanIDs",
+			CreateField: "action_plan_ids",
+			AddField:    "add_action_plan_ids",
+			RemoveField: "remove_action_plan_ids",
 		},
 		{
 			Name:        "assets",
 			Label:       "Assets",
 			Target:      SchemaAsset,
 			TargetType:  "Asset",
-			CreateField: "assetIDs",
-			AddField:    "addAssetIDs",
-			RemoveField: "removeAssetIDs",
+			CreateField: "asset_ids",
+			AddField:    "add_asset_ids",
+			RemoveField: "remove_asset_ids",
 		},
 		{
 			Name:        "controls",
 			Label:       "Controls",
 			Target:      SchemaControl,
 			TargetType:  "Control",
-			CreateField: "controlIDs",
-			AddField:    "addControlIDs",
-			RemoveField: "removeControlIDs",
+			CreateField: "control_ids",
+			AddField:    "add_control_ids",
+			RemoveField: "remove_control_ids",
 		},
 		{
 			Name:        "discussions",
 			Label:       "Discussions",
 			Target:      SchemaDiscussion,
 			TargetType:  "Discussion",
-			CreateField: "discussionIDs",
-			AddField:    "addDiscussionIDs",
-			RemoveField: "removeDiscussionIDs",
+			CreateField: "discussion_ids",
+			AddField:    "add_discussion_ids",
+			RemoveField: "remove_discussion_ids",
 		},
 		{
 			Name:        "entities",
 			Label:       "Entities",
 			Target:      SchemaEntity,
 			TargetType:  "Entity",
-			CreateField: "entityIDs",
-			AddField:    "addEntityIDs",
-			RemoveField: "removeEntityIDs",
+			CreateField: "entity_ids",
+			AddField:    "add_entity_ids",
+			RemoveField: "remove_entity_ids",
+		},
+		{
+			Name:        "findings",
+			Label:       "Findings",
+			Target:      SchemaFinding,
+			TargetType:  "Finding",
+			CreateField: "finding_ids",
+			AddField:    "add_finding_ids",
+			RemoveField: "remove_finding_ids",
 		},
 		{
 			Name:        "internal_policies",
 			Label:       "InternalPolicies",
 			Target:      SchemaInternalPolicy,
 			TargetType:  "InternalPolicy",
-			CreateField: "internalpolicyIDs",
-			AddField:    "addInternalPolicyIDs",
-			RemoveField: "removeInternalPolicyIDs",
+			CreateField: "internal_policy_ids",
+			AddField:    "add_internal_policy_ids",
+			RemoveField: "remove_internal_policy_ids",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
 		},
 		{
 			Name:        "platforms",
 			Label:       "Platforms",
 			Target:      SchemaPlatform,
 			TargetType:  "Platform",
-			CreateField: "platformIDs",
-			AddField:    "addPlatformIDs",
-			RemoveField: "removePlatformIDs",
+			CreateField: "platform_ids",
+			AddField:    "add_platform_ids",
+			RemoveField: "remove_platform_ids",
 		},
 		{
 			Name:        "procedures",
 			Label:       "Procedures",
 			Target:      SchemaProcedure,
 			TargetType:  "Procedure",
-			CreateField: "procedureIDs",
-			AddField:    "addProcedureIDs",
-			RemoveField: "removeProcedureIDs",
+			CreateField: "procedure_ids",
+			AddField:    "add_procedure_ids",
+			RemoveField: "remove_procedure_ids",
 		},
 		{
 			Name:        "remediations",
 			Label:       "Remediations",
 			Target:      SchemaRemediation,
 			TargetType:  "Remediation",
-			CreateField: "remediationIDs",
-			AddField:    "addRemediationIDs",
-			RemoveField: "removeRemediationIDs",
+			CreateField: "remediation_ids",
+			AddField:    "add_remediation_ids",
+			RemoveField: "remove_remediation_ids",
 		},
 		{
 			Name:        "reviews",
 			Label:       "Reviews",
 			Target:      SchemaReview,
 			TargetType:  "Review",
-			CreateField: "reviewIDs",
-			AddField:    "addReviewIDs",
-			RemoveField: "removeReviewIDs",
+			CreateField: "review_ids",
+			AddField:    "add_review_ids",
+			RemoveField: "remove_review_ids",
 		},
 		{
 			Name:        "scans",
 			Label:       "Scans",
 			Target:      SchemaScan,
 			TargetType:  "Scan",
-			CreateField: "scanIDs",
-			AddField:    "addScanIDs",
-			RemoveField: "removeScanIDs",
+			CreateField: "scan_ids",
+			AddField:    "add_scan_ids",
+			RemoveField: "remove_scan_ids",
 		},
 		{
 			Name:        "subcontrols",
 			Label:       "Subcontrols",
 			Target:      SchemaSubcontrol,
 			TargetType:  "Subcontrol",
-			CreateField: "subcontrolIDs",
-			AddField:    "addSubcontrolIDs",
-			RemoveField: "removeSubcontrolIDs",
+			CreateField: "subcontrol_ids",
+			AddField:    "add_subcontrol_ids",
+			RemoveField: "remove_subcontrol_ids",
 		},
 		{
 			Name:        "tasks",
 			Label:       "Tasks",
 			Target:      SchemaTask,
 			TargetType:  "Task",
-			CreateField: "taskIDs",
-			AddField:    "addTaskIDs",
-			RemoveField: "removeTaskIDs",
+			CreateField: "task_ids",
+			AddField:    "add_task_ids",
+			RemoveField: "remove_task_ids",
+		},
+		{
+			Name:        "vulnerabilities",
+			Label:       "Vulnerabilities",
+			Target:      SchemaVulnerability,
+			TargetType:  "Vulnerability",
+			CreateField: "vulnerability_ids",
+			AddField:    "add_vulnerability_ids",
+			RemoveField: "remove_vulnerability_ids",
 		},
 		{
 			Name:        "workflow_object_refs",
 			Label:       "WorkflowObjectRefs",
 			Target:      SchemaWorkflowObjectRef,
 			TargetType:  "WorkflowObjectRef",
-			CreateField: "workflowobjectrefIDs",
-			AddField:    "addWorkflowObjectRefIDs",
-			RemoveField: "removeWorkflowObjectRefIDs",
+			CreateField: "workflow_object_ref_ids",
+			AddField:    "add_workflow_object_ref_ids",
+			RemoveField: "remove_workflow_object_ref_ids",
 		},
 	}
 	SchemaScan.Edges = []EdgeDescriptor{
@@ -7465,54 +8590,54 @@ func init() {
 			Label:       "ActionPlans",
 			Target:      SchemaActionPlan,
 			TargetType:  "ActionPlan",
-			CreateField: "actionplanIDs",
-			AddField:    "addActionPlanIDs",
-			RemoveField: "removeActionPlanIDs",
+			CreateField: "action_plan_ids",
+			AddField:    "add_action_plan_ids",
+			RemoveField: "remove_action_plan_ids",
 		},
 		{
 			Name:        "assets",
 			Label:       "Assets",
 			Target:      SchemaAsset,
 			TargetType:  "Asset",
-			CreateField: "assetIDs",
-			AddField:    "addAssetIDs",
-			RemoveField: "removeAssetIDs",
+			CreateField: "asset_ids",
+			AddField:    "add_asset_ids",
+			RemoveField: "remove_asset_ids",
 		},
 		{
 			Name:        "controls",
 			Label:       "Controls",
 			Target:      SchemaControl,
 			TargetType:  "Control",
-			CreateField: "controlIDs",
-			AddField:    "addControlIDs",
-			RemoveField: "removeControlIDs",
+			CreateField: "control_ids",
+			AddField:    "add_control_ids",
+			RemoveField: "remove_control_ids",
 		},
 		{
 			Name:        "entities",
 			Label:       "Entities",
 			Target:      SchemaEntity,
 			TargetType:  "Entity",
-			CreateField: "entityIDs",
-			AddField:    "addEntityIDs",
-			RemoveField: "removeEntityIDs",
+			CreateField: "entity_ids",
+			AddField:    "add_entity_ids",
+			RemoveField: "remove_entity_ids",
 		},
 		{
 			Name:        "evidence",
 			Label:       "Evidence",
 			Target:      SchemaEvidence,
 			TargetType:  "Evidence",
-			CreateField: "evidenceIDs",
-			AddField:    "addEvidenceIDs",
-			RemoveField: "removeEvidenceIDs",
+			CreateField: "evidence_ids",
+			AddField:    "add_evidence_ids",
+			RemoveField: "remove_evidence_ids",
 		},
 		{
 			Name:        "findings",
 			Label:       "Findings",
 			Target:      SchemaFinding,
 			TargetType:  "Finding",
-			CreateField: "findingIDs",
-			AddField:    "addFindingIDs",
-			RemoveField: "removeFindingIDs",
+			CreateField: "finding_ids",
+			AddField:    "add_finding_ids",
+			RemoveField: "remove_finding_ids",
 		},
 		{
 			Name:        "generated_by_platform",
@@ -7520,54 +8645,64 @@ func init() {
 			Target:      SchemaPlatform,
 			TargetType:  "Platform",
 			Unique:      true,
-			CreateField: "generatedByPlatformID",
+			CreateField: "generated_by_platform_id",
 			ClearField:  "clearGeneratedByPlatform",
 			Field:       "generated_by_platform_id",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
 		},
 		{
 			Name:        "platforms",
 			Label:       "Platforms",
 			Target:      SchemaPlatform,
 			TargetType:  "Platform",
-			CreateField: "platformIDs",
-			AddField:    "addPlatformIDs",
-			RemoveField: "removePlatformIDs",
+			CreateField: "platform_ids",
+			AddField:    "add_platform_ids",
+			RemoveField: "remove_platform_ids",
 		},
 		{
 			Name:        "remediations",
 			Label:       "Remediations",
 			Target:      SchemaRemediation,
 			TargetType:  "Remediation",
-			CreateField: "remediationIDs",
-			AddField:    "addRemediationIDs",
-			RemoveField: "removeRemediationIDs",
+			CreateField: "remediation_ids",
+			AddField:    "add_remediation_ids",
+			RemoveField: "remove_remediation_ids",
 		},
 		{
 			Name:        "subcontrols",
 			Label:       "Subcontrols",
 			Target:      SchemaSubcontrol,
 			TargetType:  "Subcontrol",
-			CreateField: "subcontrolIDs",
-			AddField:    "addSubcontrolIDs",
-			RemoveField: "removeSubcontrolIDs",
+			CreateField: "subcontrol_ids",
+			AddField:    "add_subcontrol_ids",
+			RemoveField: "remove_subcontrol_ids",
 		},
 		{
 			Name:        "tasks",
 			Label:       "Tasks",
 			Target:      SchemaTask,
 			TargetType:  "Task",
-			CreateField: "taskIDs",
-			AddField:    "addTaskIDs",
-			RemoveField: "removeTaskIDs",
+			CreateField: "task_ids",
+			AddField:    "add_task_ids",
+			RemoveField: "remove_task_ids",
 		},
 		{
 			Name:        "vulnerabilities",
 			Label:       "Vulnerabilities",
 			Target:      SchemaVulnerability,
 			TargetType:  "Vulnerability",
-			CreateField: "vulnerabilityIDs",
-			AddField:    "addVulnerabilityIDs",
-			RemoveField: "removeVulnerabilityIDs",
+			CreateField: "vulnerability_ids",
+			AddField:    "add_vulnerability_ids",
+			RemoveField: "remove_vulnerability_ids",
 		},
 	}
 	SchemaScheduledJob.Edges = []EdgeDescriptor{
@@ -7576,18 +8711,28 @@ func init() {
 			Label:       "Controls",
 			Target:      SchemaControl,
 			TargetType:  "Control",
-			CreateField: "controlIDs",
-			AddField:    "addControlIDs",
-			RemoveField: "removeControlIDs",
+			CreateField: "control_ids",
+			AddField:    "add_control_ids",
+			RemoveField: "remove_control_ids",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
 		},
 		{
 			Name:        "subcontrols",
 			Label:       "Subcontrols",
 			Target:      SchemaSubcontrol,
 			TargetType:  "Subcontrol",
-			CreateField: "subcontrolIDs",
-			AddField:    "addSubcontrolIDs",
-			RemoveField: "removeSubcontrolIDs",
+			CreateField: "subcontrol_ids",
+			AddField:    "add_subcontrol_ids",
+			RemoveField: "remove_subcontrol_ids",
 		},
 	}
 	SchemaSubcontrol.Edges = []EdgeDescriptor{
@@ -7596,9 +8741,9 @@ func init() {
 			Label:            "ActionPlans",
 			Target:           SchemaActionPlan,
 			TargetType:       "ActionPlan",
-			CreateField:      "actionplanIDs",
-			AddField:         "addActionPlanIDs",
-			RemoveField:      "removeActionPlanIDs",
+			CreateField:      "action_plan_ids",
+			AddField:         "add_action_plan_ids",
+			RemoveField:      "remove_action_plan_ids",
 			WorkflowEligible: true,
 		},
 		{
@@ -7606,9 +8751,9 @@ func init() {
 			Label:       "Assets",
 			Target:      SchemaAsset,
 			TargetType:  "Asset",
-			CreateField: "assetIDs",
-			AddField:    "addAssetIDs",
-			RemoveField: "removeAssetIDs",
+			CreateField: "asset_ids",
+			AddField:    "add_asset_ids",
+			RemoveField: "remove_asset_ids",
 		},
 		{
 			Name:             "control",
@@ -7616,7 +8761,7 @@ func init() {
 			Target:           SchemaControl,
 			TargetType:       "Control",
 			Unique:           true,
-			CreateField:      "controlID",
+			CreateField:      "control_id",
 			Field:            "control_id",
 			WorkflowEligible: true,
 		},
@@ -7625,9 +8770,9 @@ func init() {
 			Label:            "ControlImplementations",
 			Target:           SchemaControlImplementation,
 			TargetType:       "ControlImplementation",
-			CreateField:      "controlimplementationIDs",
-			AddField:         "addControlImplementationIDs",
-			RemoveField:      "removeControlImplementationIDs",
+			CreateField:      "control_implementation_ids",
+			AddField:         "add_control_implementation_ids",
+			RemoveField:      "remove_control_implementation_ids",
 			WorkflowEligible: true,
 		},
 		{
@@ -7635,9 +8780,9 @@ func init() {
 			Label:            "ControlObjectives",
 			Target:           SchemaControlObjective,
 			TargetType:       "ControlObjective",
-			CreateField:      "controlobjectiveIDs",
-			AddField:         "addControlObjectiveIDs",
-			RemoveField:      "removeControlObjectiveIDs",
+			CreateField:      "control_objective_ids",
+			AddField:         "add_control_objective_ids",
+			RemoveField:      "remove_control_objective_ids",
 			WorkflowEligible: true,
 		},
 		{
@@ -7645,9 +8790,9 @@ func init() {
 			Label:            "Discussions",
 			Target:           SchemaDiscussion,
 			TargetType:       "Discussion",
-			CreateField:      "discussionIDs",
-			AddField:         "addDiscussionIDs",
-			RemoveField:      "removeDiscussionIDs",
+			CreateField:      "discussion_ids",
+			AddField:         "add_discussion_ids",
+			RemoveField:      "remove_discussion_ids",
 			WorkflowEligible: true,
 		},
 		{
@@ -7655,37 +8800,46 @@ func init() {
 			Label:       "Entities",
 			Target:      SchemaEntity,
 			TargetType:  "Entity",
-			CreateField: "entityIDs",
-			AddField:    "addEntityIDs",
-			RemoveField: "removeEntityIDs",
+			CreateField: "entity_ids",
+			AddField:    "add_entity_ids",
+			RemoveField: "remove_entity_ids",
 		},
 		{
 			Name:             "evidence",
 			Label:            "Evidence",
 			Target:           SchemaEvidence,
 			TargetType:       "Evidence",
-			CreateField:      "evidenceIDs",
-			AddField:         "addEvidenceIDs",
-			RemoveField:      "removeEvidenceIDs",
+			CreateField:      "evidence_ids",
+			AddField:         "add_evidence_ids",
+			RemoveField:      "remove_evidence_ids",
 			WorkflowEligible: true,
+		},
+		{
+			Name:        "findings",
+			Label:       "Findings",
+			Target:      SchemaFinding,
+			TargetType:  "Finding",
+			CreateField: "finding_ids",
+			AddField:    "add_finding_ids",
+			RemoveField: "remove_finding_ids",
 		},
 		{
 			Name:        "identity_holders",
 			Label:       "IdentityHolders",
 			Target:      SchemaIdentityHolder,
 			TargetType:  "IdentityHolder",
-			CreateField: "identityholderIDs",
-			AddField:    "addIdentityHolderIDs",
-			RemoveField: "removeIdentityHolderIDs",
+			CreateField: "identity_holder_ids",
+			AddField:    "add_identity_holder_ids",
+			RemoveField: "remove_identity_holder_ids",
 		},
 		{
 			Name:             "internal_policies",
 			Label:            "InternalPolicies",
 			Target:           SchemaInternalPolicy,
 			TargetType:       "InternalPolicy",
-			CreateField:      "internalpolicyIDs",
-			AddField:         "addInternalPolicyIDs",
-			RemoveField:      "removeInternalPolicyIDs",
+			CreateField:      "internal_policy_ids",
+			AddField:         "add_internal_policy_ids",
+			RemoveField:      "remove_internal_policy_ids",
 			WorkflowEligible: true,
 		},
 		{
@@ -7693,19 +8847,29 @@ func init() {
 			Label:            "Narratives",
 			Target:           SchemaNarrative,
 			TargetType:       "Narrative",
-			CreateField:      "narrativeIDs",
-			AddField:         "addNarrativeIDs",
-			RemoveField:      "removeNarrativeIDs",
+			CreateField:      "narrative_ids",
+			AddField:         "add_narrative_ids",
+			RemoveField:      "remove_narrative_ids",
 			WorkflowEligible: true,
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
 		},
 		{
 			Name:             "procedures",
 			Label:            "Procedures",
 			Target:           SchemaProcedure,
 			TargetType:       "Procedure",
-			CreateField:      "procedureIDs",
-			AddField:         "addProcedureIDs",
-			RemoveField:      "removeProcedureIDs",
+			CreateField:      "procedure_ids",
+			AddField:         "add_procedure_ids",
+			RemoveField:      "remove_procedure_ids",
 			WorkflowEligible: true,
 		},
 		{
@@ -7713,9 +8877,9 @@ func init() {
 			Label:       "Remediations",
 			Target:      SchemaRemediation,
 			TargetType:  "Remediation",
-			CreateField: "remediationIDs",
-			AddField:    "addRemediationIDs",
-			RemoveField: "removeRemediationIDs",
+			CreateField: "remediation_ids",
+			AddField:    "add_remediation_ids",
+			RemoveField: "remove_remediation_ids",
 		},
 		{
 			Name:             "responsible_party",
@@ -7723,7 +8887,7 @@ func init() {
 			Target:           SchemaEntity,
 			TargetType:       "Entity",
 			Unique:           true,
-			CreateField:      "responsiblePartyID",
+			CreateField:      "responsible_party_id",
 			ClearField:       "clearResponsibleParty",
 			Field:            "responsible_party_id",
 			WorkflowEligible: true,
@@ -7733,18 +8897,18 @@ func init() {
 			Label:       "Reviews",
 			Target:      SchemaReview,
 			TargetType:  "Review",
-			CreateField: "reviewIDs",
-			AddField:    "addReviewIDs",
-			RemoveField: "removeReviewIDs",
+			CreateField: "review_ids",
+			AddField:    "add_review_ids",
+			RemoveField: "remove_review_ids",
 		},
 		{
 			Name:             "risks",
 			Label:            "Risks",
 			Target:           SchemaRisk,
 			TargetType:       "Risk",
-			CreateField:      "riskIDs",
-			AddField:         "addRiskIDs",
-			RemoveField:      "removeRiskIDs",
+			CreateField:      "risk_ids",
+			AddField:         "add_risk_ids",
+			RemoveField:      "remove_risk_ids",
 			WorkflowEligible: true,
 		},
 		{
@@ -7752,37 +8916,46 @@ func init() {
 			Label:       "Scans",
 			Target:      SchemaScan,
 			TargetType:  "Scan",
-			CreateField: "scanIDs",
-			AddField:    "addScanIDs",
-			RemoveField: "removeScanIDs",
+			CreateField: "scan_ids",
+			AddField:    "add_scan_ids",
+			RemoveField: "remove_scan_ids",
 		},
 		{
 			Name:        "scheduled_jobs",
 			Label:       "ScheduledJobs",
 			Target:      SchemaScheduledJob,
 			TargetType:  "ScheduledJob",
-			CreateField: "scheduledjobIDs",
-			AddField:    "addScheduledJobIDs",
-			RemoveField: "removeScheduledJobIDs",
+			CreateField: "scheduled_job_ids",
+			AddField:    "add_scheduled_job_ids",
+			RemoveField: "remove_scheduled_job_ids",
 		},
 		{
 			Name:             "tasks",
 			Label:            "Tasks",
 			Target:           SchemaTask,
 			TargetType:       "Task",
-			CreateField:      "taskIDs",
-			AddField:         "addTaskIDs",
-			RemoveField:      "removeTaskIDs",
+			CreateField:      "task_ids",
+			AddField:         "add_task_ids",
+			RemoveField:      "remove_task_ids",
 			WorkflowEligible: true,
+		},
+		{
+			Name:        "vulnerabilities",
+			Label:       "Vulnerabilities",
+			Target:      SchemaVulnerability,
+			TargetType:  "Vulnerability",
+			CreateField: "vulnerability_ids",
+			AddField:    "add_vulnerability_ids",
+			RemoveField: "remove_vulnerability_ids",
 		},
 		{
 			Name:             "workflow_object_refs",
 			Label:            "WorkflowObjectRefs",
 			Target:           SchemaWorkflowObjectRef,
 			TargetType:       "WorkflowObjectRef",
-			CreateField:      "workflowobjectrefIDs",
-			AddField:         "addWorkflowObjectRefIDs",
-			RemoveField:      "removeWorkflowObjectRefIDs",
+			CreateField:      "workflow_object_ref_ids",
+			AddField:         "add_workflow_object_ref_ids",
+			RemoveField:      "remove_workflow_object_ref_ids",
 			WorkflowEligible: true,
 		},
 	}
@@ -7792,9 +8965,19 @@ func init() {
 			Label:       "Entities",
 			Target:      SchemaEntity,
 			TargetType:  "Entity",
-			CreateField: "entityIDs",
-			AddField:    "addEntityIDs",
-			RemoveField: "removeEntityIDs",
+			CreateField: "entity_ids",
+			AddField:    "add_entity_ids",
+			RemoveField: "remove_entity_ids",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
 		},
 	}
 	SchemaSystemDetail.Edges = []EdgeDescriptor{
@@ -7803,27 +8986,37 @@ func init() {
 			Label:       "Assets",
 			Target:      SchemaAsset,
 			TargetType:  "Asset",
-			CreateField: "assetIDs",
-			AddField:    "addAssetIDs",
-			RemoveField: "removeAssetIDs",
+			CreateField: "asset_ids",
+			AddField:    "add_asset_ids",
+			RemoveField: "remove_asset_ids",
 		},
 		{
 			Name:        "entities",
 			Label:       "Entities",
 			Target:      SchemaEntity,
 			TargetType:  "Entity",
-			CreateField: "entityIDs",
-			AddField:    "addEntityIDs",
-			RemoveField: "removeEntityIDs",
+			CreateField: "entity_ids",
+			AddField:    "add_entity_ids",
+			RemoveField: "remove_entity_ids",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
 		},
 		{
 			Name:        "platforms",
 			Label:       "Platforms",
 			Target:      SchemaPlatform,
 			TargetType:  "Platform",
-			CreateField: "platformIDs",
-			AddField:    "addPlatformIDs",
-			RemoveField: "removePlatformIDs",
+			CreateField: "platform_ids",
+			AddField:    "add_platform_ids",
+			RemoveField: "remove_platform_ids",
 		},
 	}
 	SchemaTask.Edges = []EdgeDescriptor{
@@ -7832,72 +9025,82 @@ func init() {
 			Label:       "ActionPlans",
 			Target:      SchemaActionPlan,
 			TargetType:  "ActionPlan",
-			CreateField: "actionplanIDs",
-			AddField:    "addActionPlanIDs",
-			RemoveField: "removeActionPlanIDs",
+			CreateField: "action_plan_ids",
+			AddField:    "add_action_plan_ids",
+			RemoveField: "remove_action_plan_ids",
 		},
 		{
 			Name:        "control_implementations",
 			Label:       "ControlImplementations",
 			Target:      SchemaControlImplementation,
 			TargetType:  "ControlImplementation",
-			CreateField: "controlimplementationIDs",
-			AddField:    "addControlImplementationIDs",
-			RemoveField: "removeControlImplementationIDs",
+			CreateField: "control_implementation_ids",
+			AddField:    "add_control_implementation_ids",
+			RemoveField: "remove_control_implementation_ids",
 		},
 		{
 			Name:        "control_objectives",
 			Label:       "ControlObjectives",
 			Target:      SchemaControlObjective,
 			TargetType:  "ControlObjective",
-			CreateField: "controlobjectiveIDs",
-			AddField:    "addControlObjectiveIDs",
-			RemoveField: "removeControlObjectiveIDs",
+			CreateField: "control_objective_ids",
+			AddField:    "add_control_objective_ids",
+			RemoveField: "remove_control_objective_ids",
 		},
 		{
 			Name:        "controls",
 			Label:       "Controls",
 			Target:      SchemaControl,
 			TargetType:  "Control",
-			CreateField: "controlIDs",
-			AddField:    "addControlIDs",
-			RemoveField: "removeControlIDs",
+			CreateField: "control_ids",
+			AddField:    "add_control_ids",
+			RemoveField: "remove_control_ids",
 		},
 		{
 			Name:        "evidence",
 			Label:       "Evidence",
 			Target:      SchemaEvidence,
 			TargetType:  "Evidence",
-			CreateField: "evidenceIDs",
-			AddField:    "addEvidenceIDs",
-			RemoveField: "removeEvidenceIDs",
+			CreateField: "evidence_ids",
+			AddField:    "add_evidence_ids",
+			RemoveField: "remove_evidence_ids",
 		},
 		{
 			Name:        "findings",
 			Label:       "Findings",
 			Target:      SchemaFinding,
 			TargetType:  "Finding",
-			CreateField: "findingIDs",
-			AddField:    "addFindingIDs",
-			RemoveField: "removeFindingIDs",
+			CreateField: "finding_ids",
+			AddField:    "add_finding_ids",
+			RemoveField: "remove_finding_ids",
 		},
 		{
 			Name:        "identity_holders",
 			Label:       "IdentityHolders",
 			Target:      SchemaIdentityHolder,
 			TargetType:  "IdentityHolder",
-			CreateField: "identityholderIDs",
-			AddField:    "addIdentityHolderIDs",
-			RemoveField: "removeIdentityHolderIDs",
+			CreateField: "identity_holder_ids",
+			AddField:    "add_identity_holder_ids",
+			RemoveField: "remove_identity_holder_ids",
 		},
 		{
 			Name:        "internal_policies",
 			Label:       "InternalPolicies",
 			Target:      SchemaInternalPolicy,
 			TargetType:  "InternalPolicy",
-			CreateField: "internalpolicyIDs",
-			AddField:    "addInternalPolicyIDs",
-			RemoveField: "removeInternalPolicyIDs",
+			CreateField: "internal_policy_ids",
+			AddField:    "add_internal_policy_ids",
+			RemoveField: "remove_internal_policy_ids",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
 		},
 		{
 			Name:        "parent",
@@ -7905,7 +9108,7 @@ func init() {
 			Target:      SchemaTask,
 			TargetType:  "Task",
 			Unique:      true,
-			CreateField: "parentID",
+			CreateField: "parent_id",
 			ClearField:  "clearParent",
 			Field:       "parent_task_id",
 		},
@@ -7914,72 +9117,72 @@ func init() {
 			Label:       "Platforms",
 			Target:      SchemaPlatform,
 			TargetType:  "Platform",
-			CreateField: "platformIDs",
-			AddField:    "addPlatformIDs",
-			RemoveField: "removePlatformIDs",
+			CreateField: "platform_ids",
+			AddField:    "add_platform_ids",
+			RemoveField: "remove_platform_ids",
 		},
 		{
 			Name:        "procedures",
 			Label:       "Procedures",
 			Target:      SchemaProcedure,
 			TargetType:  "Procedure",
-			CreateField: "procedureIDs",
-			AddField:    "addProcedureIDs",
-			RemoveField: "removeProcedureIDs",
+			CreateField: "procedure_ids",
+			AddField:    "add_procedure_ids",
+			RemoveField: "remove_procedure_ids",
 		},
 		{
 			Name:        "risks",
 			Label:       "Risks",
 			Target:      SchemaRisk,
 			TargetType:  "Risk",
-			CreateField: "riskIDs",
-			AddField:    "addRiskIDs",
-			RemoveField: "removeRiskIDs",
+			CreateField: "risk_ids",
+			AddField:    "add_risk_ids",
+			RemoveField: "remove_risk_ids",
 		},
 		{
 			Name:        "scans",
 			Label:       "Scans",
 			Target:      SchemaScan,
 			TargetType:  "Scan",
-			CreateField: "scanIDs",
-			AddField:    "addScanIDs",
-			RemoveField: "removeScanIDs",
+			CreateField: "scan_ids",
+			AddField:    "add_scan_ids",
+			RemoveField: "remove_scan_ids",
 		},
 		{
 			Name:        "subcontrols",
 			Label:       "Subcontrols",
 			Target:      SchemaSubcontrol,
 			TargetType:  "Subcontrol",
-			CreateField: "subcontrolIDs",
-			AddField:    "addSubcontrolIDs",
-			RemoveField: "removeSubcontrolIDs",
+			CreateField: "subcontrol_ids",
+			AddField:    "add_subcontrol_ids",
+			RemoveField: "remove_subcontrol_ids",
 		},
 		{
 			Name:        "tasks",
 			Label:       "Tasks",
 			Target:      SchemaTask,
 			TargetType:  "Task",
-			CreateField: "taskIDs",
-			AddField:    "addTaskIDs",
-			RemoveField: "removeTaskIDs",
+			CreateField: "task_ids",
+			AddField:    "add_task_ids",
+			RemoveField: "remove_task_ids",
 		},
 		{
 			Name:        "vulnerabilities",
 			Label:       "Vulnerabilities",
 			Target:      SchemaVulnerability,
 			TargetType:  "Vulnerability",
-			CreateField: "vulnerabilityIDs",
-			AddField:    "addVulnerabilityIDs",
-			RemoveField: "removeVulnerabilityIDs",
+			CreateField: "vulnerability_ids",
+			AddField:    "add_vulnerability_ids",
+			RemoveField: "remove_vulnerability_ids",
 		},
 		{
 			Name:        "workflow_object_refs",
 			Label:       "WorkflowObjectRefs",
 			Target:      SchemaWorkflowObjectRef,
 			TargetType:  "WorkflowObjectRef",
-			CreateField: "workflowobjectrefIDs",
-			AddField:    "addWorkflowObjectRefIDs",
-			RemoveField: "removeWorkflowObjectRefIDs",
+			CreateField: "workflow_object_ref_ids",
+			AddField:    "add_workflow_object_ref_ids",
+			RemoveField: "remove_workflow_object_ref_ids",
 		},
 	}
 	SchemaTemplate.Edges = []EdgeDescriptor{
@@ -7988,36 +9191,58 @@ func init() {
 			Label:       "Assessments",
 			Target:      SchemaAssessment,
 			TargetType:  "Assessment",
-			CreateField: "assessmentIDs",
-			AddField:    "addAssessmentIDs",
-			RemoveField: "removeAssessmentIDs",
+			CreateField: "assessment_ids",
+			AddField:    "add_assessment_ids",
+			RemoveField: "remove_assessment_ids",
 		},
 		{
 			Name:        "campaigns",
 			Label:       "Campaigns",
 			Target:      SchemaCampaign,
 			TargetType:  "Campaign",
-			CreateField: "campaignIDs",
-			AddField:    "addCampaignIDs",
-			RemoveField: "removeCampaignIDs",
+			CreateField: "campaign_ids",
+			AddField:    "add_campaign_ids",
+			RemoveField: "remove_campaign_ids",
 		},
 		{
 			Name:        "documents",
 			Label:       "Documents",
 			Target:      SchemaDocumentData,
 			TargetType:  "DocumentData",
-			CreateField: "documentIDs",
-			AddField:    "addDocumentIDs",
-			RemoveField: "removeDocumentIDs",
+			CreateField: "document_ids",
+			AddField:    "add_document_ids",
+			RemoveField: "remove_document_ids",
 		},
 		{
 			Name:        "identity_holders",
 			Label:       "IdentityHolders",
 			Target:      SchemaIdentityHolder,
 			TargetType:  "IdentityHolder",
-			CreateField: "identityholderIDs",
-			AddField:    "addIdentityHolderIDs",
-			RemoveField: "removeIdentityHolderIDs",
+			CreateField: "identity_holder_ids",
+			AddField:    "add_identity_holder_ids",
+			RemoveField: "remove_identity_holder_ids",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
+		},
+	}
+	SchemaTrustCenterWatermarkConfig.Edges = []EdgeDescriptor{
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
 		},
 	}
 	SchemaVendorRiskScore.Edges = []EdgeDescriptor{
@@ -8027,7 +9252,7 @@ func init() {
 			Target:      SchemaAssessmentResponse,
 			TargetType:  "AssessmentResponse",
 			Unique:      true,
-			CreateField: "assessmentResponseID",
+			CreateField: "assessment_response_id",
 			ClearField:  "clearAssessmentResponse",
 			Field:       "assessment_response_id",
 		},
@@ -8037,8 +9262,18 @@ func init() {
 			Target:      SchemaEntity,
 			TargetType:  "Entity",
 			Unique:      true,
-			CreateField: "entityID",
+			CreateField: "entity_id",
 			Field:       "entity_id",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
 		},
 	}
 	SchemaVulnerability.Edges = []EdgeDescriptor{
@@ -8047,119 +9282,139 @@ func init() {
 			Label:       "ActionPlans",
 			Target:      SchemaActionPlan,
 			TargetType:  "ActionPlan",
-			CreateField: "actionplanIDs",
-			AddField:    "addActionPlanIDs",
-			RemoveField: "removeActionPlanIDs",
+			CreateField: "action_plan_ids",
+			AddField:    "add_action_plan_ids",
+			RemoveField: "remove_action_plan_ids",
 		},
 		{
 			Name:        "assets",
 			Label:       "Assets",
 			Target:      SchemaAsset,
 			TargetType:  "Asset",
-			CreateField: "assetIDs",
-			AddField:    "addAssetIDs",
-			RemoveField: "removeAssetIDs",
+			CreateField: "asset_ids",
+			AddField:    "add_asset_ids",
+			RemoveField: "remove_asset_ids",
 		},
 		{
 			Name:        "controls",
 			Label:       "Controls",
 			Target:      SchemaControl,
 			TargetType:  "Control",
-			CreateField: "controlIDs",
-			AddField:    "addControlIDs",
-			RemoveField: "removeControlIDs",
+			CreateField: "control_ids",
+			AddField:    "add_control_ids",
+			RemoveField: "remove_control_ids",
 		},
 		{
 			Name:        "entities",
 			Label:       "Entities",
 			Target:      SchemaEntity,
 			TargetType:  "Entity",
-			CreateField: "entityIDs",
-			AddField:    "addEntityIDs",
-			RemoveField: "removeEntityIDs",
+			CreateField: "entity_ids",
+			AddField:    "add_entity_ids",
+			RemoveField: "remove_entity_ids",
 		},
 		{
 			Name:        "findings",
 			Label:       "Findings",
 			Target:      SchemaFinding,
 			TargetType:  "Finding",
-			CreateField: "findingIDs",
-			AddField:    "addFindingIDs",
-			RemoveField: "removeFindingIDs",
+			CreateField: "finding_ids",
+			AddField:    "add_finding_ids",
+			RemoveField: "remove_finding_ids",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
 		},
 		{
 			Name:        "remediations",
 			Label:       "Remediations",
 			Target:      SchemaRemediation,
 			TargetType:  "Remediation",
-			CreateField: "remediationIDs",
-			AddField:    "addRemediationIDs",
-			RemoveField: "removeRemediationIDs",
+			CreateField: "remediation_ids",
+			AddField:    "add_remediation_ids",
+			RemoveField: "remove_remediation_ids",
 		},
 		{
 			Name:        "reviews",
 			Label:       "Reviews",
 			Target:      SchemaReview,
 			TargetType:  "Review",
-			CreateField: "reviewIDs",
-			AddField:    "addReviewIDs",
-			RemoveField: "removeReviewIDs",
+			CreateField: "review_ids",
+			AddField:    "add_review_ids",
+			RemoveField: "remove_review_ids",
 		},
 		{
 			Name:        "risks",
 			Label:       "Risks",
 			Target:      SchemaRisk,
 			TargetType:  "Risk",
-			CreateField: "riskIDs",
-			AddField:    "addRiskIDs",
-			RemoveField: "removeRiskIDs",
+			CreateField: "risk_ids",
+			AddField:    "add_risk_ids",
+			RemoveField: "remove_risk_ids",
 		},
 		{
 			Name:        "scans",
 			Label:       "Scans",
 			Target:      SchemaScan,
 			TargetType:  "Scan",
-			CreateField: "scanIDs",
-			AddField:    "addScanIDs",
-			RemoveField: "removeScanIDs",
+			CreateField: "scan_ids",
+			AddField:    "add_scan_ids",
+			RemoveField: "remove_scan_ids",
 		},
 		{
 			Name:        "subcontrols",
 			Label:       "Subcontrols",
 			Target:      SchemaSubcontrol,
 			TargetType:  "Subcontrol",
-			CreateField: "subcontrolIDs",
-			AddField:    "addSubcontrolIDs",
-			RemoveField: "removeSubcontrolIDs",
+			CreateField: "subcontrol_ids",
+			AddField:    "add_subcontrol_ids",
+			RemoveField: "remove_subcontrol_ids",
 		},
 		{
 			Name:        "tasks",
 			Label:       "Tasks",
 			Target:      SchemaTask,
 			TargetType:  "Task",
-			CreateField: "taskIDs",
-			AddField:    "addTaskIDs",
-			RemoveField: "removeTaskIDs",
+			CreateField: "task_ids",
+			AddField:    "add_task_ids",
+			RemoveField: "remove_task_ids",
 		},
 		{
 			Name:        "workflow_object_refs",
 			Label:       "WorkflowObjectRefs",
 			Target:      SchemaWorkflowObjectRef,
 			TargetType:  "WorkflowObjectRef",
-			CreateField: "workflowobjectrefIDs",
-			AddField:    "addWorkflowObjectRefIDs",
-			RemoveField: "removeWorkflowObjectRefIDs",
+			CreateField: "workflow_object_ref_ids",
+			AddField:    "add_workflow_object_ref_ids",
+			RemoveField: "remove_workflow_object_ref_ids",
 		},
 	}
 	SchemaWorkflowAssignment.Edges = []EdgeDescriptor{
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
+		},
 		{
 			Name:        "workflow_assignment_targets",
 			Label:       "WorkflowAssignmentTargets",
 			Target:      SchemaWorkflowAssignmentTarget,
 			TargetType:  "WorkflowAssignmentTarget",
-			CreateField: "workflowassignmenttargetIDs",
-			AddField:    "addWorkflowAssignmentTargetIDs",
-			RemoveField: "removeWorkflowAssignmentTargetIDs",
+			CreateField: "workflow_assignment_target_ids",
+			AddField:    "add_workflow_assignment_target_ids",
+			RemoveField: "remove_workflow_assignment_target_ids",
 		},
 		{
 			Name:        "workflow_instance",
@@ -8167,18 +9422,28 @@ func init() {
 			Target:      SchemaWorkflowInstance,
 			TargetType:  "WorkflowInstance",
 			Unique:      true,
-			CreateField: "workflowInstanceID",
+			CreateField: "workflow_instance_id",
 			Field:       "workflow_instance_id",
 		},
 	}
 	SchemaWorkflowAssignmentTarget.Edges = []EdgeDescriptor{
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
+		},
 		{
 			Name:        "workflow_assignment",
 			Label:       "WorkflowAssignment",
 			Target:      SchemaWorkflowAssignment,
 			TargetType:  "WorkflowAssignment",
 			Unique:      true,
-			CreateField: "workflowAssignmentID",
+			CreateField: "workflow_assignment_id",
 			Field:       "workflow_assignment_id",
 		},
 	}
@@ -8188,37 +9453,57 @@ func init() {
 			Label:       "EmailTemplates",
 			Target:      SchemaEmailTemplate,
 			TargetType:  "EmailTemplate",
-			CreateField: "emailtemplateIDs",
-			AddField:    "addEmailTemplateIDs",
-			RemoveField: "removeEmailTemplateIDs",
+			CreateField: "email_template_ids",
+			AddField:    "add_email_template_ids",
+			RemoveField: "remove_email_template_ids",
 		},
 		{
 			Name:        "notification_templates",
 			Label:       "NotificationTemplates",
 			Target:      SchemaNotificationTemplate,
 			TargetType:  "NotificationTemplate",
-			CreateField: "notificationtemplateIDs",
-			AddField:    "addNotificationTemplateIDs",
-			RemoveField: "removeNotificationTemplateIDs",
+			CreateField: "notification_template_ids",
+			AddField:    "add_notification_template_ids",
+			RemoveField: "remove_notification_template_ids",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
 		},
 		{
 			Name:        "workflow_instances",
 			Label:       "WorkflowInstances",
 			Target:      SchemaWorkflowInstance,
 			TargetType:  "WorkflowInstance",
-			CreateField: "workflowinstanceIDs",
-			AddField:    "addWorkflowInstanceIDs",
-			RemoveField: "removeWorkflowInstanceIDs",
+			CreateField: "workflow_instance_ids",
+			AddField:    "add_workflow_instance_ids",
+			RemoveField: "remove_workflow_instance_ids",
 		},
 	}
 	SchemaWorkflowEvent.Edges = []EdgeDescriptor{
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
+		},
 		{
 			Name:        "workflow_instance",
 			Label:       "WorkflowInstance",
 			Target:      SchemaWorkflowInstance,
 			TargetType:  "WorkflowInstance",
 			Unique:      true,
-			CreateField: "workflowInstanceID",
+			CreateField: "workflow_instance_id",
 			Field:       "workflow_instance_id",
 		},
 	}
@@ -8229,7 +9514,7 @@ func init() {
 			Target:      SchemaActionPlan,
 			TargetType:  "ActionPlan",
 			Unique:      true,
-			CreateField: "actionPlanID",
+			CreateField: "action_plan_id",
 			ClearField:  "clearActionPlan",
 			Field:       "action_plan_id",
 		},
@@ -8239,7 +9524,7 @@ func init() {
 			Target:      SchemaAssessment,
 			TargetType:  "Assessment",
 			Unique:      true,
-			CreateField: "assessmentID",
+			CreateField: "assessment_id",
 			ClearField:  "clearAssessment",
 			Field:       "assessment_id",
 		},
@@ -8249,7 +9534,7 @@ func init() {
 			Target:      SchemaAssessmentResponse,
 			TargetType:  "AssessmentResponse",
 			Unique:      true,
-			CreateField: "assessmentResponseID",
+			CreateField: "assessment_response_id",
 			ClearField:  "clearAssessmentResponse",
 			Field:       "assessment_response_id",
 		},
@@ -8259,7 +9544,7 @@ func init() {
 			Target:      SchemaCampaign,
 			TargetType:  "Campaign",
 			Unique:      true,
-			CreateField: "campaignID",
+			CreateField: "campaign_id",
 			ClearField:  "clearCampaign",
 			Field:       "campaign_id",
 		},
@@ -8269,7 +9554,7 @@ func init() {
 			Target:      SchemaCampaignTarget,
 			TargetType:  "CampaignTarget",
 			Unique:      true,
-			CreateField: "campaignTargetID",
+			CreateField: "campaign_target_id",
 			ClearField:  "clearCampaignTarget",
 			Field:       "campaign_target_id",
 		},
@@ -8279,7 +9564,7 @@ func init() {
 			Target:      SchemaControl,
 			TargetType:  "Control",
 			Unique:      true,
-			CreateField: "controlID",
+			CreateField: "control_id",
 			ClearField:  "clearControl",
 			Field:       "control_id",
 		},
@@ -8288,9 +9573,9 @@ func init() {
 			Label:       "EmailTemplates",
 			Target:      SchemaEmailTemplate,
 			TargetType:  "EmailTemplate",
-			CreateField: "emailtemplateIDs",
-			AddField:    "addEmailTemplateIDs",
-			RemoveField: "removeEmailTemplateIDs",
+			CreateField: "email_template_ids",
+			AddField:    "add_email_template_ids",
+			RemoveField: "remove_email_template_ids",
 		},
 		{
 			Name:        "evidence",
@@ -8298,7 +9583,7 @@ func init() {
 			Target:      SchemaEvidence,
 			TargetType:  "Evidence",
 			Unique:      true,
-			CreateField: "evidenceID",
+			CreateField: "evidence_id",
 			ClearField:  "clearEvidence",
 			Field:       "evidence_id",
 		},
@@ -8308,7 +9593,7 @@ func init() {
 			Target:      SchemaFinding,
 			TargetType:  "Finding",
 			Unique:      true,
-			CreateField: "findingID",
+			CreateField: "finding_id",
 			ClearField:  "clearFinding",
 			Field:       "finding_id",
 		},
@@ -8318,7 +9603,7 @@ func init() {
 			Target:      SchemaIdentityHolder,
 			TargetType:  "IdentityHolder",
 			Unique:      true,
-			CreateField: "identityHolderID",
+			CreateField: "identity_holder_id",
 			ClearField:  "clearIdentityHolder",
 			Field:       "identity_holder_id",
 		},
@@ -8328,9 +9613,19 @@ func init() {
 			Target:      SchemaInternalPolicy,
 			TargetType:  "InternalPolicy",
 			Unique:      true,
-			CreateField: "internalPolicyID",
+			CreateField: "internal_policy_id",
 			ClearField:  "clearInternalPolicy",
 			Field:       "internal_policy_id",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
 		},
 		{
 			Name:        "platform",
@@ -8338,7 +9633,7 @@ func init() {
 			Target:      SchemaPlatform,
 			TargetType:  "Platform",
 			Unique:      true,
-			CreateField: "platformID",
+			CreateField: "platform_id",
 			ClearField:  "clearPlatform",
 			Field:       "platform_id",
 		},
@@ -8348,7 +9643,7 @@ func init() {
 			Target:      SchemaProcedure,
 			TargetType:  "Procedure",
 			Unique:      true,
-			CreateField: "procedureID",
+			CreateField: "procedure_id",
 			ClearField:  "clearProcedure",
 			Field:       "procedure_id",
 		},
@@ -8358,7 +9653,7 @@ func init() {
 			Target:      SchemaRemediation,
 			TargetType:  "Remediation",
 			Unique:      true,
-			CreateField: "remediationID",
+			CreateField: "remediation_id",
 			ClearField:  "clearRemediation",
 			Field:       "remediation_id",
 		},
@@ -8368,7 +9663,7 @@ func init() {
 			Target:      SchemaRisk,
 			TargetType:  "Risk",
 			Unique:      true,
-			CreateField: "riskID",
+			CreateField: "risk_id",
 			ClearField:  "clearRisk",
 			Field:       "risk_id",
 		},
@@ -8378,7 +9673,7 @@ func init() {
 			Target:      SchemaSubcontrol,
 			TargetType:  "Subcontrol",
 			Unique:      true,
-			CreateField: "subcontrolID",
+			CreateField: "subcontrol_id",
 			ClearField:  "clearSubcontrol",
 			Field:       "subcontrol_id",
 		},
@@ -8388,7 +9683,7 @@ func init() {
 			Target:      SchemaTask,
 			TargetType:  "Task",
 			Unique:      true,
-			CreateField: "taskID",
+			CreateField: "task_id",
 			ClearField:  "clearTask",
 			Field:       "task_id",
 		},
@@ -8398,7 +9693,7 @@ func init() {
 			Target:      SchemaVulnerability,
 			TargetType:  "Vulnerability",
 			Unique:      true,
-			CreateField: "vulnerabilityID",
+			CreateField: "vulnerability_id",
 			ClearField:  "clearVulnerability",
 			Field:       "vulnerability_id",
 		},
@@ -8407,9 +9702,9 @@ func init() {
 			Label:       "WorkflowAssignments",
 			Target:      SchemaWorkflowAssignment,
 			TargetType:  "WorkflowAssignment",
-			CreateField: "workflowassignmentIDs",
-			AddField:    "addWorkflowAssignmentIDs",
-			RemoveField: "removeWorkflowAssignmentIDs",
+			CreateField: "workflow_assignment_ids",
+			AddField:    "add_workflow_assignment_ids",
+			RemoveField: "remove_workflow_assignment_ids",
 		},
 		{
 			Name:        "workflow_definition",
@@ -8417,7 +9712,7 @@ func init() {
 			Target:      SchemaWorkflowDefinition,
 			TargetType:  "WorkflowDefinition",
 			Unique:      true,
-			CreateField: "workflowDefinitionID",
+			CreateField: "workflow_definition_id",
 			Field:       "workflow_definition_id",
 		},
 		{
@@ -8425,18 +9720,18 @@ func init() {
 			Label:       "WorkflowEvents",
 			Target:      SchemaWorkflowEvent,
 			TargetType:  "WorkflowEvent",
-			CreateField: "workfloweventIDs",
-			AddField:    "addWorkflowEventIDs",
-			RemoveField: "removeWorkflowEventIDs",
+			CreateField: "workflow_event_ids",
+			AddField:    "add_workflow_event_ids",
+			RemoveField: "remove_workflow_event_ids",
 		},
 		{
 			Name:        "workflow_object_refs",
 			Label:       "WorkflowObjectRefs",
 			Target:      SchemaWorkflowObjectRef,
 			TargetType:  "WorkflowObjectRef",
-			CreateField: "workflowobjectrefIDs",
-			AddField:    "addWorkflowObjectRefIDs",
-			RemoveField: "removeWorkflowObjectRefIDs",
+			CreateField: "workflow_object_ref_ids",
+			AddField:    "add_workflow_object_ref_ids",
+			RemoveField: "remove_workflow_object_ref_ids",
 		},
 	}
 	SchemaWorkflowObjectRef.Edges = []EdgeDescriptor{
@@ -8447,7 +9742,7 @@ func init() {
 			TargetType:  "ActionPlan",
 			Immutable:   true,
 			Unique:      true,
-			CreateField: "actionPlanID",
+			CreateField: "action_plan_id",
 			Field:       "action_plan_id",
 		},
 		{
@@ -8457,7 +9752,7 @@ func init() {
 			TargetType:  "Assessment",
 			Immutable:   true,
 			Unique:      true,
-			CreateField: "assessmentID",
+			CreateField: "assessment_id",
 			Field:       "assessment_id",
 		},
 		{
@@ -8467,7 +9762,7 @@ func init() {
 			TargetType:  "AssessmentResponse",
 			Immutable:   true,
 			Unique:      true,
-			CreateField: "assessmentResponseID",
+			CreateField: "assessment_response_id",
 			Field:       "assessment_response_id",
 		},
 		{
@@ -8477,7 +9772,7 @@ func init() {
 			TargetType:  "Campaign",
 			Immutable:   true,
 			Unique:      true,
-			CreateField: "campaignID",
+			CreateField: "campaign_id",
 			Field:       "campaign_id",
 		},
 		{
@@ -8487,7 +9782,7 @@ func init() {
 			TargetType:  "CampaignTarget",
 			Immutable:   true,
 			Unique:      true,
-			CreateField: "campaignTargetID",
+			CreateField: "campaign_target_id",
 			Field:       "campaign_target_id",
 		},
 		{
@@ -8497,7 +9792,7 @@ func init() {
 			TargetType:  "Control",
 			Immutable:   true,
 			Unique:      true,
-			CreateField: "controlID",
+			CreateField: "control_id",
 			Field:       "control_id",
 		},
 		{
@@ -8507,7 +9802,7 @@ func init() {
 			TargetType:  "DirectoryAccount",
 			Immutable:   true,
 			Unique:      true,
-			CreateField: "directoryAccountID",
+			CreateField: "directory_account_id",
 			Field:       "directory_account_id",
 		},
 		{
@@ -8517,7 +9812,7 @@ func init() {
 			TargetType:  "DirectoryGroup",
 			Immutable:   true,
 			Unique:      true,
-			CreateField: "directoryGroupID",
+			CreateField: "directory_group_id",
 			Field:       "directory_group_id",
 		},
 		{
@@ -8527,7 +9822,7 @@ func init() {
 			TargetType:  "DirectoryMembership",
 			Immutable:   true,
 			Unique:      true,
-			CreateField: "directoryMembershipID",
+			CreateField: "directory_membership_id",
 			Field:       "directory_membership_id",
 		},
 		{
@@ -8537,7 +9832,7 @@ func init() {
 			TargetType:  "Evidence",
 			Immutable:   true,
 			Unique:      true,
-			CreateField: "evidenceID",
+			CreateField: "evidence_id",
 			Field:       "evidence_id",
 		},
 		{
@@ -8547,7 +9842,7 @@ func init() {
 			TargetType:  "Finding",
 			Immutable:   true,
 			Unique:      true,
-			CreateField: "findingID",
+			CreateField: "finding_id",
 			Field:       "finding_id",
 		},
 		{
@@ -8557,7 +9852,7 @@ func init() {
 			TargetType:  "IdentityHolder",
 			Immutable:   true,
 			Unique:      true,
-			CreateField: "identityHolderID",
+			CreateField: "identity_holder_id",
 			Field:       "identity_holder_id",
 		},
 		{
@@ -8567,8 +9862,18 @@ func init() {
 			TargetType:  "InternalPolicy",
 			Immutable:   true,
 			Unique:      true,
-			CreateField: "internalPolicyID",
+			CreateField: "internal_policy_id",
 			Field:       "internal_policy_id",
+		},
+		{
+			Name:        "owner",
+			Label:       "Owner",
+			Target:      SchemaOrganization,
+			TargetType:  "Organization",
+			Immutable:   true,
+			Unique:      true,
+			CreateField: "owner_id",
+			Field:       "owner_id",
 		},
 		{
 			Name:        "platform",
@@ -8577,7 +9882,7 @@ func init() {
 			TargetType:  "Platform",
 			Immutable:   true,
 			Unique:      true,
-			CreateField: "platformID",
+			CreateField: "platform_id",
 			Field:       "platform_id",
 		},
 		{
@@ -8587,7 +9892,7 @@ func init() {
 			TargetType:  "Procedure",
 			Immutable:   true,
 			Unique:      true,
-			CreateField: "procedureID",
+			CreateField: "procedure_id",
 			Field:       "procedure_id",
 		},
 		{
@@ -8597,7 +9902,7 @@ func init() {
 			TargetType:  "Remediation",
 			Immutable:   true,
 			Unique:      true,
-			CreateField: "remediationID",
+			CreateField: "remediation_id",
 			Field:       "remediation_id",
 		},
 		{
@@ -8607,7 +9912,7 @@ func init() {
 			TargetType:  "Risk",
 			Immutable:   true,
 			Unique:      true,
-			CreateField: "riskID",
+			CreateField: "risk_id",
 			Field:       "risk_id",
 		},
 		{
@@ -8617,7 +9922,7 @@ func init() {
 			TargetType:  "Subcontrol",
 			Immutable:   true,
 			Unique:      true,
-			CreateField: "subcontrolID",
+			CreateField: "subcontrol_id",
 			Field:       "subcontrol_id",
 		},
 		{
@@ -8627,7 +9932,7 @@ func init() {
 			TargetType:  "Task",
 			Immutable:   true,
 			Unique:      true,
-			CreateField: "taskID",
+			CreateField: "task_id",
 			Field:       "task_id",
 		},
 		{
@@ -8637,7 +9942,7 @@ func init() {
 			TargetType:  "Vulnerability",
 			Immutable:   true,
 			Unique:      true,
-			CreateField: "vulnerabilityID",
+			CreateField: "vulnerability_id",
 			Field:       "vulnerability_id",
 		},
 		{
@@ -8647,129 +9952,9 @@ func init() {
 			TargetType:  "WorkflowInstance",
 			Immutable:   true,
 			Unique:      true,
-			CreateField: "workflowInstanceID",
+			CreateField: "workflow_instance_id",
 			Field:       "workflow_instance_id",
 		},
-	}
-	SchemaActionPlan.SourceContext = func(payload json.RawMessage) json.RawMessage {
-		return payload
-	}
-	SchemaAssessment.SourceContext = func(payload json.RawMessage) json.RawMessage {
-		return payload
-	}
-	SchemaAssessmentResponse.SourceContext = func(payload json.RawMessage) json.RawMessage {
-		return payload
-	}
-	SchemaAsset.SourceContext = func(payload json.RawMessage) json.RawMessage {
-		return payload
-	}
-	SchemaCampaign.SourceContext = func(payload json.RawMessage) json.RawMessage {
-		return payload
-	}
-	SchemaCampaignTarget.SourceContext = func(payload json.RawMessage) json.RawMessage {
-		return payload
-	}
-	SchemaCheckResult.SourceContext = func(payload json.RawMessage) json.RawMessage {
-		return payload
-	}
-	SchemaContact.SourceContext = func(payload json.RawMessage) json.RawMessage {
-		return payload
-	}
-	SchemaControl.SourceContext = func(payload json.RawMessage) json.RawMessage {
-		return payload
-	}
-	SchemaControlImplementation.SourceContext = func(payload json.RawMessage) json.RawMessage {
-		return payload
-	}
-	SchemaControlObjective.SourceContext = func(payload json.RawMessage) json.RawMessage {
-		return payload
-	}
-	SchemaDirectoryAccount.SourceContext = func(payload json.RawMessage) json.RawMessage {
-		return payload
-	}
-	SchemaDirectoryGroup.SourceContext = func(payload json.RawMessage) json.RawMessage {
-		return payload
-	}
-	SchemaDirectoryMembership.SourceContext = func(payload json.RawMessage) json.RawMessage {
-		return payload
-	}
-	SchemaDiscussion.SourceContext = func(payload json.RawMessage) json.RawMessage {
-		return payload
-	}
-	SchemaDocumentData.SourceContext = func(payload json.RawMessage) json.RawMessage {
-		return payload
-	}
-	SchemaEmailTemplate.SourceContext = func(payload json.RawMessage) json.RawMessage {
-		return payload
-	}
-	SchemaEntity.SourceContext = func(payload json.RawMessage) json.RawMessage {
-		return payload
-	}
-	SchemaEvidence.SourceContext = func(payload json.RawMessage) json.RawMessage {
-		return payload
-	}
-	SchemaFinding.SourceContext = func(payload json.RawMessage) json.RawMessage {
-		return payload
-	}
-	SchemaIdentityHolder.SourceContext = func(payload json.RawMessage) json.RawMessage {
-		return payload
-	}
-	SchemaInternalPolicy.SourceContext = func(payload json.RawMessage) json.RawMessage {
-		return payload
-	}
-	SchemaNarrative.SourceContext = func(payload json.RawMessage) json.RawMessage {
-		return payload
-	}
-	SchemaNotificationTemplate.SourceContext = func(payload json.RawMessage) json.RawMessage {
-		return payload
-	}
-	SchemaPlatform.SourceContext = func(payload json.RawMessage) json.RawMessage {
-		return payload
-	}
-	SchemaProcedure.SourceContext = func(payload json.RawMessage) json.RawMessage {
-		return payload
-	}
-	SchemaRemediation.SourceContext = func(payload json.RawMessage) json.RawMessage {
-		return payload
-	}
-	SchemaReview.SourceContext = func(payload json.RawMessage) json.RawMessage {
-		return payload
-	}
-	SchemaRisk.SourceContext = func(payload json.RawMessage) json.RawMessage {
-		return payload
-	}
-	SchemaScan.SourceContext = func(payload json.RawMessage) json.RawMessage {
-		return payload
-	}
-	SchemaScheduledJob.SourceContext = func(payload json.RawMessage) json.RawMessage {
-		return payload
-	}
-	SchemaSubcontrol.SourceContext = func(payload json.RawMessage) json.RawMessage {
-		return payload
-	}
-	SchemaSubprocessor.SourceContext = func(payload json.RawMessage) json.RawMessage {
-		return payload
-	}
-	SchemaSystemDetail.SourceContext = func(payload json.RawMessage) json.RawMessage {
-		return payload
-	}
-	SchemaTask.SourceContext = func(payload json.RawMessage) json.RawMessage {
-		return payload
-	}
-	SchemaTemplate.SourceContext = func(payload json.RawMessage) json.RawMessage {
-		return payload
-	}
-	SchemaTrustCenterWatermarkConfig.SourceContext = func(payload json.RawMessage) json.RawMessage {
-		return payload
-	}
-	SchemaVendorRiskScore.SourceContext = func(payload json.RawMessage) json.RawMessage {
-		return payload
-	}
-	SchemaVulnerability.SourceContext = func(payload json.RawMessage) json.RawMessage {
-		return payload
-	}
-	SchemaWorkflowDefinition.SourceContext = func(payload json.RawMessage) json.RawMessage {
-		return payload
 	}
 	SchemaActionPlan.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
 		ref := SchemaRef{Schema: "action_plan", Operation: OpQuery}
@@ -9369,6 +10554,34 @@ func init() {
 		entities, err := client.Narrative.Query().
 			Where(narrative.OwnerID(orgID)).
 			Where(predicate.Narrative(matchKeyIn(field, values))).
+			All(ctx)
+		if err != nil {
+			return nil, logError(ctx, ref, ErrQueryFailed, err)
+		}
+
+		results := make([]json.RawMessage, 0, len(entities))
+		for _, e := range entities {
+			data, err := json.Marshal(e)
+			if err != nil {
+				logError(ctx, ref, ErrMarshalFailed, err)
+				continue
+			}
+
+			results = append(results, data)
+		}
+
+		return results, nil
+	}
+	SchemaNotification.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
+		ref := SchemaRef{Schema: "notification", Operation: OpQuery}
+
+		if !SchemaNotification.MatchKeyField(field) {
+			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "notification"))
+		}
+
+		entities, err := client.Notification.Query().
+			Where(notification.OwnerID(orgID)).
+			Where(predicate.Notification(matchKeyIn(field, values))).
 			All(ctx)
 		if err != nil {
 			return nil, logError(ctx, ref, ErrQueryFailed, err)
@@ -10004,21 +11217,111 @@ func init() {
 		return results, nil
 	}
 
-	// AllowedKeys is derived from the unified field catalog: every integration-mapped field's
-	// input key is accepted for that schema
-	for _, schema := range allSchemas {
-		for _, field := range schema.Fields {
-			if field.InputKey == "" {
-				continue
-			}
+	// through edges are linked by creating join entity rows — one per target, each with its own
+	// generated id — so wrap the create and update closures of schemas that have them: through-edge
+	// id lists are split out of the payload and applied as rows after the mutation succeeds
+	for _, s := range allSchemas {
+		if !slices.ContainsFunc(s.Edges, func(e EdgeDescriptor) bool { return e.Through }) {
+			continue
+		}
 
-			if schema.AllowedKeys == nil {
-				schema.AllowedKeys = make(map[string]struct{})
-			}
+		schema := s
 
-			schema.AllowedKeys[field.InputKey] = struct{}{}
+		if create := schema.Create; create != nil {
+			schema.Create = func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
+				input, throughIDs := splitThroughEdgeIDs(schema, input)
+
+				id, err := create(ctx, client, input)
+				if err != nil {
+					return id, err
+				}
+
+				return id, applyThroughEdgeIDs(ctx, client, schema, id, throughIDs)
+			}
+		}
+
+		if update := schema.Update; update != nil {
+			schema.Update = func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
+				input, throughIDs := splitThroughEdgeIDs(schema, input)
+
+				if err := update(ctx, client, entityID, input); err != nil {
+					return err
+				}
+
+				return applyThroughEdgeIDs(ctx, client, schema, entityID, throughIDs)
+			}
 		}
 	}
+}
+
+// splitThroughEdgeIDs removes through-edge id lists from a create or update payload, returning the
+// cleaned payload and the target ids per edge name. Malformed values are left in place so input
+// validation rejects them instead of being silently discarded
+func splitThroughEdgeIDs(s *Schema, payload json.RawMessage) (json.RawMessage, map[string][]string) {
+	if s == nil {
+		return payload, nil
+	}
+
+	var doc map[string]json.RawMessage
+	if err := json.Unmarshal(payload, &doc); err != nil {
+		return payload, nil
+	}
+
+	var ids map[string][]string
+
+	for _, edge := range s.Edges {
+		if !edge.Through {
+			continue
+		}
+
+		raw, ok := doc[edge.CreateField]
+		if !ok {
+			continue
+		}
+
+		var targetIDs []string
+		if err := json.Unmarshal(raw, &targetIDs); err != nil {
+			continue
+		}
+
+		if ids == nil {
+			ids = map[string][]string{}
+		}
+
+		ids[edge.Name] = targetIDs
+		delete(doc, edge.CreateField)
+	}
+
+	if ids == nil {
+		return payload, nil
+	}
+
+	cleaned, err := json.Marshal(doc)
+	if err != nil {
+		return payload, nil
+	}
+
+	return cleaned, ids
+}
+
+// applyThroughEdgeIDs creates the join entity rows for each split through edge
+func applyThroughEdgeIDs(ctx context.Context, client *generated.Client, s *Schema, sourceID string, ids map[string][]string) error {
+	if s == nil || len(ids) == 0 {
+		return nil
+	}
+
+	for name, targetIDs := range ids {
+		edge, ok := s.EdgeByName(name)
+		if !ok || edge.LinkThrough == nil || len(targetIDs) == 0 {
+			continue
+		}
+
+		if err := edge.LinkThrough(ctx, client, sourceID, targetIDs); err != nil {
+			return logError(ctx, SchemaRef{Schema: s.Snake, Operation: OpLink, EntityID: sourceID, Edge: name}, ErrLinkFailed, err)
+		}
+	}
+
+	return nil
 }
 
 // --- Lookup registry ---
@@ -10047,7 +11350,10 @@ var allSchemas = []*Schema{
 	SchemaIdentityHolder,
 	SchemaInternalPolicy,
 	SchemaNarrative,
+	SchemaNotification,
 	SchemaNotificationTemplate,
+	SchemaOnboarding,
+	SchemaOrganization,
 	SchemaPlatform,
 	SchemaProcedure,
 	SchemaRemediation,

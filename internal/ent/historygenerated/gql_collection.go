@@ -5598,6 +5598,11 @@ func (_q *FindingControlHistoryQuery) collectField(ctx context.Context, oneNode 
 				selectedFields = append(selectedFields, findingcontrolhistory.FieldUpdatedByImpersonator)
 				fieldSeen[findingcontrolhistory.FieldUpdatedByImpersonator] = struct{}{}
 			}
+		case "ownerID":
+			if _, ok := fieldSeen[findingcontrolhistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, findingcontrolhistory.FieldOwnerID)
+				fieldSeen[findingcontrolhistory.FieldOwnerID] = struct{}{}
+			}
 		case "findingID":
 			if _, ok := fieldSeen[findingcontrolhistory.FieldFindingID]; !ok {
 				selectedFields = append(selectedFields, findingcontrolhistory.FieldFindingID)
@@ -10526,6 +10531,26 @@ func (_q *ProgramHistoryQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, programhistory.FieldEndDate)
 				fieldSeen[programhistory.FieldEndDate] = struct{}{}
 			}
+		case "observationPeriodStartDate":
+			if _, ok := fieldSeen[programhistory.FieldObservationPeriodStartDate]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldObservationPeriodStartDate)
+				fieldSeen[programhistory.FieldObservationPeriodStartDate] = struct{}{}
+			}
+		case "observationPeriodEndDate":
+			if _, ok := fieldSeen[programhistory.FieldObservationPeriodEndDate]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldObservationPeriodEndDate)
+				fieldSeen[programhistory.FieldObservationPeriodEndDate] = struct{}{}
+			}
+		case "fieldworkStartDate":
+			if _, ok := fieldSeen[programhistory.FieldFieldworkStartDate]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldFieldworkStartDate)
+				fieldSeen[programhistory.FieldFieldworkStartDate] = struct{}{}
+			}
+		case "fieldworkEndDate":
+			if _, ok := fieldSeen[programhistory.FieldFieldworkEndDate]; !ok {
+				selectedFields = append(selectedFields, programhistory.FieldFieldworkEndDate)
+				fieldSeen[programhistory.FieldFieldworkEndDate] = struct{}{}
+			}
 		case "auditorReady":
 			if _, ok := fieldSeen[programhistory.FieldAuditorReady]; !ok {
 				selectedFields = append(selectedFields, programhistory.FieldAuditorReady)
@@ -11834,6 +11859,21 @@ func (_q *ScanHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[scanhistory.FieldOwnerID]; !ok {
 				selectedFields = append(selectedFields, scanhistory.FieldOwnerID)
 				fieldSeen[scanhistory.FieldOwnerID] = struct{}{}
+			}
+		case "systemOwned":
+			if _, ok := fieldSeen[scanhistory.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, scanhistory.FieldSystemOwned)
+				fieldSeen[scanhistory.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[scanhistory.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, scanhistory.FieldInternalNotes)
+				fieldSeen[scanhistory.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[scanhistory.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, scanhistory.FieldSystemInternalID)
+				fieldSeen[scanhistory.FieldSystemInternalID] = struct{}{}
 			}
 		case "reviewedBy":
 			if _, ok := fieldSeen[scanhistory.FieldReviewedBy]; !ok {
@@ -13199,6 +13239,11 @@ func (_q *TaskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, taskhistory.FieldDetailsJSON)
 				fieldSeen[taskhistory.FieldDetailsJSON] = struct{}{}
 			}
+		case "metadata":
+			if _, ok := fieldSeen[taskhistory.FieldMetadata]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldMetadata)
+				fieldSeen[taskhistory.FieldMetadata] = struct{}{}
+			}
 		case "status":
 			if _, ok := fieldSeen[taskhistory.FieldStatus]; !ok {
 				selectedFields = append(selectedFields, taskhistory.FieldStatus)
@@ -13233,6 +13278,26 @@ func (_q *TaskHistoryQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[taskhistory.FieldIsTemplate]; !ok {
 				selectedFields = append(selectedFields, taskhistory.FieldIsTemplate)
 				fieldSeen[taskhistory.FieldIsTemplate] = struct{}{}
+			}
+		case "isSuggested":
+			if _, ok := fieldSeen[taskhistory.FieldIsSuggested]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldIsSuggested)
+				fieldSeen[taskhistory.FieldIsSuggested] = struct{}{}
+			}
+		case "priority":
+			if _, ok := fieldSeen[taskhistory.FieldPriority]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldPriority)
+				fieldSeen[taskhistory.FieldPriority] = struct{}{}
+			}
+		case "source":
+			if _, ok := fieldSeen[taskhistory.FieldSource]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldSource)
+				fieldSeen[taskhistory.FieldSource] = struct{}{}
+			}
+		case "sourceKey":
+			if _, ok := fieldSeen[taskhistory.FieldSourceKey]; !ok {
+				selectedFields = append(selectedFields, taskhistory.FieldSourceKey)
+				fieldSeen[taskhistory.FieldSourceKey] = struct{}{}
 			}
 		case "idempotencyKey":
 			if _, ok := fieldSeen[taskhistory.FieldIdempotencyKey]; !ok {

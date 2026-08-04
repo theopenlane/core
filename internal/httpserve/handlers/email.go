@@ -6,7 +6,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/integrations/definitions/email"
-	"github.com/theopenlane/core/internal/integrations/operations"
+	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // sendEmail dispatches a system email operation via the integrations runtime,
@@ -21,7 +21,7 @@ func (h *Handler) sendEmail(ctx context.Context, operationName string, input any
 		return err
 	}
 
-	_, err = h.IntegrationsRuntime.Dispatch(ctx, operations.DispatchRequest{
+	_, err = h.IntegrationsRuntime.Dispatch(ctx, types.DispatchRequest{
 		DefinitionID: email.DefinitionID.ID(),
 		Operation:    operationName,
 		Config:       config,

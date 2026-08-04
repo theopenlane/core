@@ -23,10 +23,17 @@ var (
 	globalMu      sync.RWMutex
 )
 
+// subscriberKey identifies a session by the user it belongs to and the org that user is currently
+// in, so a session only receives notifications belonging to the org it is viewing
+type subscriberKey struct {
+	userID string
+	orgID  string
+}
+
 // Manager manages all active subscriptions for real-time updates
 type Manager struct {
 	mu          sync.RWMutex
-	subscribers map[string][]chan Notification // map of userID to list of notification channels
+	subscribers map[subscriberKey][]chan Notification // map of session to list of notification channels
 
 	// redisClient, when set via WithRedis, distributes published notifications to other processes over Redis
 	redisClient *redis.Client
@@ -39,13 +46,14 @@ type Manager struct {
 type redisEnvelope struct {
 	OriginID string          `json:"origin_id"`
 	UserID   string          `json:"user_id"`
+	OrgID    string          `json:"org_id"`
 	Payload  json.RawMessage `json:"payload"`
 }
 
 // NewManager creates a new subscription manager
 func NewManager() *Manager {
 	m := &Manager{
-		subscribers: make(map[string][]chan Notification),
+		subscribers: make(map[subscriberKey][]chan Notification),
 		instanceID:  uuid.NewString(),
 	}
 
@@ -95,11 +103,16 @@ func (sm *Manager) subscribeRedis(ctx context.Context) {
 			}
 
 			if env.OriginID == sm.instanceID {
-				log.Debug().Str("user_id", env.UserID).Msg("graphsubscriptions: skipping self-originated redis message, already delivered locally")
+				log.Debug().Str("user_id", env.UserID).Str("org_id", env.OrgID).Msg("graphsubscriptions: skipping self-originated redis message, already delivered locally")
 				continue
 			}
 
-			sm.dispatchLocal(env.UserID, RawNotification{Payload: env.Payload})
+			if env.UserID == "" && env.OrgID == "" {
+				log.Warn().Msg("graphsubscriptions: redis envelope carried no routing target, dropping")
+				continue
+			}
+
+			sm.dispatchLocal(env.UserID, env.OrgID, RawNotification{Payload: env.Payload})
 		}
 	}
 }
@@ -116,103 +129,121 @@ func GetGlobalManager() *Manager {
 	return globalManager
 }
 
-// Subscribe adds a new subscriber for a user's notification creations
-func (sm *Manager) Subscribe(userID string, ch chan Notification) {
+// Subscribe adds a new subscriber for notifications addressed to the user directly as well as
+// those addressed to the whole org the user is currently in
+func (sm *Manager) Subscribe(userID, orgID string, ch chan Notification) {
 	sm.mu.Lock()
 	defer sm.mu.Unlock()
 
-	sm.subscribers[userID] = append(sm.subscribers[userID], ch)
-	log.Debug().Str("instance_id", sm.instanceID).Str("user_id", userID).Int("subscriber_count", len(sm.subscribers[userID])).Msg("graphsubscriptions: user subscribed to notifications")
+	key := subscriberKey{userID: userID, orgID: orgID}
+
+	sm.subscribers[key] = append(sm.subscribers[key], ch)
+	log.Debug().Str("instance_id", sm.instanceID).Str("user_id", userID).Str("org_id", orgID).Int("subscriber_count", len(sm.subscribers[key])).Msg("graphsubscriptions: user subscribed to notifications")
 }
 
 // Unsubscribe removes a subscriber
-func (sm *Manager) Unsubscribe(userID string, ch chan Notification) {
+func (sm *Manager) Unsubscribe(userID, orgID string, ch chan Notification) {
 	sm.mu.Lock()
 	defer sm.mu.Unlock()
 
-	channels, ok := sm.subscribers[userID]
+	key := subscriberKey{userID: userID, orgID: orgID}
+
+	channels, ok := sm.subscribers[key]
 	if !ok {
-		log.Info().Str("user_id", userID).Msg("attempted to unsubscribe but no subscribers found")
+		log.Info().Str("user_id", userID).Str("org_id", orgID).Msg("attempted to unsubscribe but no subscribers found")
 		return
 	}
 
 	// Remove the channel from the list using slices.Delete
 	for i, c := range channels {
 		if c == ch {
-			sm.subscribers[userID] = slices.Delete(channels, i, i+1)
+			sm.subscribers[key] = slices.Delete(channels, i, i+1)
 			close(ch)
-			log.Debug().Str("user_id", userID).Int("remaining_subscribers", len(sm.subscribers[userID])).Msg("user unsubscribed from notifications")
+			log.Debug().Str("user_id", userID).Str("org_id", orgID).Int("remaining_subscribers", len(sm.subscribers[key])).Msg("user unsubscribed from notifications")
 			break
 		}
 	}
 
 	// Clean up empty lists
-	if len(sm.subscribers[userID]) == 0 {
-		delete(sm.subscribers, userID)
-		log.Debug().Str("user_id", userID).Msg("no more subscribers for user, removed from map")
+	if len(sm.subscribers[key]) == 0 {
+		delete(sm.subscribers, key)
+		log.Debug().Str("user_id", userID).Str("org_id", orgID).Msg("no more subscribers for session, removed from map")
 	}
 }
 
-// Publish sends a notification to all subscribers for that user in this process, and, when
+// Publish sends a notification to the subscribers it is addressed to in this process, and, when
 // Redis is configured, to subscribers of other processes as well
-func (sm *Manager) Publish(userID string, notification Notification) error {
-	sm.dispatchLocal(userID, notification)
+func (sm *Manager) Publish(userID, orgID string, notification Notification) error {
+	if userID == "" && orgID == "" {
+		log.Debug().Msg("graphsubscriptions: notification has neither user nor owner, nothing to route to")
+		return nil
+	}
+
+	sm.dispatchLocal(userID, orgID, notification)
 
 	if sm.redisClient == nil {
-		log.Debug().Str("user_id", userID).Msg("graphsubscriptions: redis not configured on this manager, notification only delivered to subscribers in this process")
+		log.Debug().Str("user_id", userID).Str("org_id", orgID).Msg("graphsubscriptions: redis not configured on this manager, notification only delivered to subscribers in this process")
 		return nil
 	}
 
 	payload, err := json.Marshal(notification)
 	if err != nil {
-		log.Error().Err(err).Str("user_id", userID).Msg("graphsubscriptions: failed to marshal notification for redis publish")
+		log.Error().Err(err).Str("user_id", userID).Str("org_id", orgID).Msg("graphsubscriptions: failed to marshal notification for redis publish")
 		return nil
 	}
 
 	envelope, err := json.Marshal(redisEnvelope{
 		OriginID: sm.instanceID,
 		UserID:   userID,
+		OrgID:    orgID,
 		Payload:  payload,
 	})
 	if err != nil {
-		log.Error().Err(err).Str("user_id", userID).Msg("graphsubscriptions: failed to marshal redis notification envelope")
+		log.Error().Err(err).Str("user_id", userID).Str("org_id", orgID).Msg("graphsubscriptions: failed to marshal redis notification envelope")
 		return nil
 	}
 
 	_, err = sm.redisClient.Publish(context.Background(), redisChannelName, envelope).Result()
 	if err != nil {
-		log.Error().Err(err).Str("user_id", userID).Msg("graphsubscriptions: failed to publish notification to redis")
+		log.Error().Err(err).Str("user_id", userID).Str("org_id", orgID).Msg("graphsubscriptions: failed to publish notification to redis")
 		return nil
 	}
 
 	return nil
 }
 
-// dispatchLocal sends a notification to all subscribers for that user within this process
-func (sm *Manager) dispatchLocal(userID string, notification Notification) {
+// dispatchLocal sends a notification to the subscribers it is addressed to within this process.
+// A notification naming a user goes only to that user's sessions in the owning org, otherwise it
+// fans out to every session currently in the org
+func (sm *Manager) dispatchLocal(userID, orgID string, notification Notification) {
 	sm.mu.RLock()
 	defer sm.mu.RUnlock()
 
-	log.Debug().Str("instance_id", sm.instanceID).Str("user_id", userID).Int("total_subscribed_users", len(sm.subscribers)).Msg("graphsubscriptions: dispatchLocal called")
+	log.Debug().Str("instance_id", sm.instanceID).Str("user_id", userID).Str("org_id", orgID).Int("total_sessions", len(sm.subscribers)).Msg("graphsubscriptions: dispatchLocal called")
 
-	channels, ok := sm.subscribers[userID]
-	if !ok {
-		// No subscribers for this user in this process, which is fine
-		log.Debug().Str("instance_id", sm.instanceID).Str("user_id", userID).Msg("graphsubscriptions: no local subscribers found for user")
+	if userID != "" {
+		sm.send(sm.subscribers[subscriberKey{userID: userID, orgID: orgID}], notification)
 		return
 	}
 
-	log.Debug().Str("instance_id", sm.instanceID).Str("user_id", userID).Int("subscriber_count", len(channels)).Msg("graphsubscriptions: found local subscribers for user, sending notification")
+	// org-wide notifications name no user, so every session in the org receives it. This scan is
+	// bounded by the sessions open on this process and only runs for org-wide notifications
+	for key, channels := range sm.subscribers {
+		if key.orgID == orgID {
+			sm.send(channels, notification)
+		}
+	}
+}
 
-	// Send to all subscribers
+// send delivers to each channel without blocking, dropping when a subscriber's buffer is full
+func (sm *Manager) send(channels []chan Notification, notification Notification) {
 	for i, ch := range channels {
 		select {
 		case ch <- notification:
 			// Successfully sent
-			log.Debug().Str("user_id", userID).Int("subscriber_index", i).Msg("notification successfully sent to subscriber")
 		default:
-			// Channel is full or closed, skip
-			log.Info().Str("user_id", userID).Int("subscriber_index", i).Msg("channel closed or full, unable to send notification to subscriber for user")
+			// buffer is full, skip rather than block the publisher
+			log.Info().Int("subscriber_index", i).Msg("channel full, unable to send notification to subscriber")
 		}
 	}
 }

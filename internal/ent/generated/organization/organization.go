@@ -355,6 +355,8 @@ const (
 	EdgeRemediations = "remediations"
 	// EdgeFindings holds the string denoting the findings edge name in mutations.
 	EdgeFindings = "findings"
+	// EdgeFindingControls holds the string denoting the finding_controls edge name in mutations.
+	EdgeFindingControls = "finding_controls"
 	// EdgeReviews holds the string denoting the reviews edge name in mutations.
 	EdgeReviews = "reviews"
 	// EdgeVulnerabilities holds the string denoting the vulnerabilities edge name in mutations.
@@ -1443,6 +1445,13 @@ const (
 	FindingsInverseTable = "findings"
 	// FindingsColumn is the table column denoting the findings relation/edge.
 	FindingsColumn = "owner_id"
+	// FindingControlsTable is the table that holds the finding_controls relation/edge.
+	FindingControlsTable = "finding_controls"
+	// FindingControlsInverseTable is the table name for the FindingControl entity.
+	// It exists in this package in order to avoid circular dependency with the "findingcontrol" package.
+	FindingControlsInverseTable = "finding_controls"
+	// FindingControlsColumn is the table column denoting the finding_controls relation/edge.
+	FindingControlsColumn = "owner_id"
 	// ReviewsTable is the table that holds the reviews relation/edge.
 	ReviewsTable = "reviews"
 	// ReviewsInverseTable is the table name for the Review entity.
@@ -3854,6 +3863,20 @@ func ByFindings(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByFindingControlsCount orders the results by finding_controls count.
+func ByFindingControlsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newFindingControlsStep(), opts...)
+	}
+}
+
+// ByFindingControls orders the results by finding_controls terms.
+func ByFindingControls(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFindingControlsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByReviewsCount orders the results by reviews count.
 func ByReviewsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -5167,6 +5190,13 @@ func newFindingsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(FindingsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, FindingsTable, FindingsColumn),
+	)
+}
+func newFindingControlsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FindingControlsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, FindingControlsTable, FindingControlsColumn),
 	)
 }
 func newReviewsStep() *sqlgraph.Step {

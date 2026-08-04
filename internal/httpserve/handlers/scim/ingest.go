@@ -8,7 +8,6 @@ import (
 	scimerrors "github.com/elimity-com/scim/errors"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
 	definitionscim "github.com/theopenlane/core/internal/integrations/definitions/scim"
 	integrationops "github.com/theopenlane/core/internal/integrations/operations"
 	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
@@ -38,9 +37,7 @@ func ingestPayloadSets(ctx context.Context, client *generated.Client, rt *integr
 		"",
 		contracts,
 		payloadSets,
-		integrationops.IngestOptions{
-			Source: integrationgenerated.IntegrationIngestSourceDirect,
-		},
+		integrationops.IngestOptions{},
 	)
 }
 

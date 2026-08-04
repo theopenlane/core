@@ -333,6 +333,7 @@ func (d DirectoryAccount) Edges() []ent.Edge {
 				entgql.QueryField(),
 				entgql.MultiOrder(),
 				accessmap.EdgeNoAuthCheck(),
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
 			).
 			Through("memberships", DirectoryMembership.Type),
 		defaultEdgeFromWithPagination(d, Finding{}),

@@ -2332,6 +2332,60 @@ func (ec *executionContext) field_Asset_entities_args(ctx context.Context, rawAr
 	return args, nil
 }
 
+func (ec *executionContext) field_Asset_findings_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) ([]*generated.FindingOrder, error) {
+			return ec.unmarshalOFindingOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFindingOrderᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
+		func(ctx context.Context, v any) (*generated.FindingWhereInput, error) {
+			return ec.unmarshalOFindingWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFindingWhereInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg5
+	return args, nil
+}
+
 func (ec *executionContext) field_Asset_identityHolders_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -2548,6 +2602,114 @@ func (ec *executionContext) field_Asset_platforms_args(ctx context.Context, rawA
 	return args, nil
 }
 
+func (ec *executionContext) field_Asset_remediations_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) ([]*generated.RemediationOrder, error) {
+			return ec.unmarshalORemediationOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRemediationOrderᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
+		func(ctx context.Context, v any) (*generated.RemediationWhereInput, error) {
+			return ec.unmarshalORemediationWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRemediationWhereInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg5
+	return args, nil
+}
+
+func (ec *executionContext) field_Asset_reviews_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) ([]*generated.ReviewOrder, error) {
+			return ec.unmarshalOReviewOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐReviewOrderᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
+		func(ctx context.Context, v any) (*generated.ReviewWhereInput, error) {
+			return ec.unmarshalOReviewWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐReviewWhereInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg5
+	return args, nil
+}
+
 func (ec *executionContext) field_Asset_scans_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -2756,6 +2918,60 @@ func (ec *executionContext) field_Asset_viewers_args(ctx context.Context, rawArg
 	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
 		func(ctx context.Context, v any) (*generated.GroupWhereInput, error) {
 			return ec.unmarshalOGroupWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupWhereInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg5
+	return args, nil
+}
+
+func (ec *executionContext) field_Asset_vulnerabilities_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) ([]*generated.VulnerabilityOrder, error) {
+			return ec.unmarshalOVulnerabilityOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐVulnerabilityOrderᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
+		func(ctx context.Context, v any) (*generated.VulnerabilityWhereInput, error) {
+			return ec.unmarshalOVulnerabilityWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐVulnerabilityWhereInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -6506,6 +6722,60 @@ func (ec *executionContext) field_Control_tasks_args(ctx context.Context, rawArg
 	return args, nil
 }
 
+func (ec *executionContext) field_Control_vulnerabilities_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) ([]*generated.VulnerabilityOrder, error) {
+			return ec.unmarshalOVulnerabilityOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐVulnerabilityOrderᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
+		func(ctx context.Context, v any) (*generated.VulnerabilityWhereInput, error) {
+			return ec.unmarshalOVulnerabilityWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐVulnerabilityWhereInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg5
+	return args, nil
+}
+
 func (ec *executionContext) field_Control_workflowObjectRefs_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -8998,6 +9268,60 @@ func (ec *executionContext) field_Entity_files_args(ctx context.Context, rawArgs
 	return args, nil
 }
 
+func (ec *executionContext) field_Entity_findings_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) ([]*generated.FindingOrder, error) {
+			return ec.unmarshalOFindingOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFindingOrderᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
+		func(ctx context.Context, v any) (*generated.FindingWhereInput, error) {
+			return ec.unmarshalOFindingWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFindingWhereInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg5
+	return args, nil
+}
+
 func (ec *executionContext) field_Entity_identityHolders_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -9322,6 +9646,114 @@ func (ec *executionContext) field_Entity_platforms_args(ctx context.Context, raw
 	return args, nil
 }
 
+func (ec *executionContext) field_Entity_remediations_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) ([]*generated.RemediationOrder, error) {
+			return ec.unmarshalORemediationOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRemediationOrderᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
+		func(ctx context.Context, v any) (*generated.RemediationWhereInput, error) {
+			return ec.unmarshalORemediationWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRemediationWhereInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg5
+	return args, nil
+}
+
+func (ec *executionContext) field_Entity_reviews_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) ([]*generated.ReviewOrder, error) {
+			return ec.unmarshalOReviewOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐReviewOrderᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
+		func(ctx context.Context, v any) (*generated.ReviewWhereInput, error) {
+			return ec.unmarshalOReviewWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐReviewWhereInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg5
+	return args, nil
+}
+
 func (ec *executionContext) field_Entity_scans_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -9638,6 +10070,60 @@ func (ec *executionContext) field_Entity_vendorRiskScores_args(ctx context.Conte
 	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
 		func(ctx context.Context, v any) (*generated.VendorRiskScoreWhereInput, error) {
 			return ec.unmarshalOVendorRiskScoreWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐVendorRiskScoreWhereInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg5
+	return args, nil
+}
+
+func (ec *executionContext) field_Entity_vulnerabilities_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) ([]*generated.VulnerabilityOrder, error) {
+			return ec.unmarshalOVulnerabilityOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐVulnerabilityOrderᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
+		func(ctx context.Context, v any) (*generated.VulnerabilityWhereInput, error) {
+			return ec.unmarshalOVulnerabilityWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐVulnerabilityWhereInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -23100,6 +23586,60 @@ func (ec *executionContext) field_Organization_findingControlCreators_args(ctx c
 	return args, nil
 }
 
+func (ec *executionContext) field_Organization_findingControls_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) ([]*generated.FindingControlOrder, error) {
+			return ec.unmarshalOFindingControlOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFindingControlOrderᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
+		func(ctx context.Context, v any) (*generated.FindingControlWhereInput, error) {
+			return ec.unmarshalOFindingControlWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFindingControlWhereInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg5
+	return args, nil
+}
+
 func (ec *executionContext) field_Organization_findingCreators_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -31486,6 +32026,60 @@ func (ec *executionContext) field_Program_files_args(ctx context.Context, rawArg
 	return args, nil
 }
 
+func (ec *executionContext) field_Program_findings_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) ([]*generated.FindingOrder, error) {
+			return ec.unmarshalOFindingOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFindingOrderᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
+		func(ctx context.Context, v any) (*generated.FindingWhereInput, error) {
+			return ec.unmarshalOFindingWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFindingWhereInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg5
+	return args, nil
+}
+
 func (ec *executionContext) field_Program_internalPolicies_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -31748,6 +32342,114 @@ func (ec *executionContext) field_Program_procedures_args(ctx context.Context, r
 	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
 		func(ctx context.Context, v any) (*generated.ProcedureWhereInput, error) {
 			return ec.unmarshalOProcedureWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProcedureWhereInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg5
+	return args, nil
+}
+
+func (ec *executionContext) field_Program_remediations_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) ([]*generated.RemediationOrder, error) {
+			return ec.unmarshalORemediationOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRemediationOrderᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
+		func(ctx context.Context, v any) (*generated.RemediationWhereInput, error) {
+			return ec.unmarshalORemediationWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRemediationWhereInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg5
+	return args, nil
+}
+
+func (ec *executionContext) field_Program_reviews_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) ([]*generated.ReviewOrder, error) {
+			return ec.unmarshalOReviewOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐReviewOrderᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
+		func(ctx context.Context, v any) (*generated.ReviewWhereInput, error) {
+			return ec.unmarshalOReviewWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐReviewWhereInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -32072,6 +32774,60 @@ func (ec *executionContext) field_Program_viewers_args(ctx context.Context, rawA
 	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
 		func(ctx context.Context, v any) (*generated.GroupWhereInput, error) {
 			return ec.unmarshalOGroupWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupWhereInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg5
+	return args, nil
+}
+
+func (ec *executionContext) field_Program_vulnerabilities_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) ([]*generated.VulnerabilityOrder, error) {
+			return ec.unmarshalOVulnerabilityOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐVulnerabilityOrderᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
+		func(ctx context.Context, v any) (*generated.VulnerabilityWhereInput, error) {
+			return ec.unmarshalOVulnerabilityWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐVulnerabilityWhereInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -43276,6 +44032,60 @@ func (ec *executionContext) field_Risk_entities_args(ctx context.Context, rawArg
 	return args, nil
 }
 
+func (ec *executionContext) field_Risk_findings_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) ([]*generated.FindingOrder, error) {
+			return ec.unmarshalOFindingOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFindingOrderᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
+		func(ctx context.Context, v any) (*generated.FindingWhereInput, error) {
+			return ec.unmarshalOFindingWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFindingWhereInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg5
+	return args, nil
+}
+
 func (ec *executionContext) field_Risk_internalPolicies_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -43808,6 +44618,60 @@ func (ec *executionContext) field_Risk_viewers_args(ctx context.Context, rawArgs
 	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
 		func(ctx context.Context, v any) (*generated.GroupWhereInput, error) {
 			return ec.unmarshalOGroupWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupWhereInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg5
+	return args, nil
+}
+
+func (ec *executionContext) field_Risk_vulnerabilities_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) ([]*generated.VulnerabilityOrder, error) {
+			return ec.unmarshalOVulnerabilityOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐVulnerabilityOrderᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
+		func(ctx context.Context, v any) (*generated.VulnerabilityWhereInput, error) {
+			return ec.unmarshalOVulnerabilityWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐVulnerabilityWhereInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -45552,6 +46416,60 @@ func (ec *executionContext) field_Subcontrol_evidence_args(ctx context.Context, 
 	return args, nil
 }
 
+func (ec *executionContext) field_Subcontrol_findings_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) ([]*generated.FindingOrder, error) {
+			return ec.unmarshalOFindingOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFindingOrderᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
+		func(ctx context.Context, v any) (*generated.FindingWhereInput, error) {
+			return ec.unmarshalOFindingWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFindingWhereInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg5
+	return args, nil
+}
+
 func (ec *executionContext) field_Subcontrol_identityHolders_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -46084,6 +47002,60 @@ func (ec *executionContext) field_Subcontrol_tasks_args(ctx context.Context, raw
 	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
 		func(ctx context.Context, v any) (*generated.TaskWhereInput, error) {
 			return ec.unmarshalOTaskWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTaskWhereInput(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["where"] = arg5
+	return args, nil
+}
+
+func (ec *executionContext) field_Subcontrol_vulnerabilities_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "after",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["after"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "first",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["first"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "before",
+		func(ctx context.Context, v any) (*entgql.Cursor[string], error) {
+			return ec.unmarshalOCursor2ᚖentgoᚗioᚋcontribᚋentgqlᚐCursor(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["before"] = arg2
+	arg3, err := graphql.ProcessArgField(ctx, rawArgs, "last",
+		func(ctx context.Context, v any) (*int, error) {
+			return ec.unmarshalOInt2ᚖint(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["last"] = arg3
+	arg4, err := graphql.ProcessArgField(ctx, rawArgs, "orderBy",
+		func(ctx context.Context, v any) ([]*generated.VulnerabilityOrder, error) {
+			return ec.unmarshalOVulnerabilityOrder2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐVulnerabilityOrderᚄ(ctx, v)
+		})
+	if err != nil {
+		return nil, err
+	}
+	args["orderBy"] = arg4
+	arg5, err := graphql.ProcessArgField(ctx, rawArgs, "where",
+		func(ctx context.Context, v any) (*generated.VulnerabilityWhereInput, error) {
+			return ec.unmarshalOVulnerabilityWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐVulnerabilityWhereInput(ctx, v)
 		})
 	if err != nil {
 		return nil, err
@@ -59659,6 +60631,182 @@ func (ec *executionContext) fieldContext_Asset_internalPolicies(ctx context.Cont
 	return fc, nil
 }
 
+func (ec *executionContext) _Asset_findings(ctx context.Context, field graphql.CollectedField, obj *generated.Asset) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Asset_findings(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return obj.Findings(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.FindingOrder), fc.Args["where"].(*generated.FindingWhereInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.FindingConnection) graphql.Marshaler {
+			return ec.marshalNFindingConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFindingConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Asset_findings(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Asset",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_FindingConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Asset_findings_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Asset_vulnerabilities(ctx context.Context, field graphql.CollectedField, obj *generated.Asset) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Asset_vulnerabilities(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return obj.Vulnerabilities(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.VulnerabilityOrder), fc.Args["where"].(*generated.VulnerabilityWhereInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.VulnerabilityConnection) graphql.Marshaler {
+			return ec.marshalNVulnerabilityConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐVulnerabilityConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Asset_vulnerabilities(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Asset",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_VulnerabilityConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Asset_vulnerabilities_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Asset_reviews(ctx context.Context, field graphql.CollectedField, obj *generated.Asset) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Asset_reviews(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return obj.Reviews(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.ReviewOrder), fc.Args["where"].(*generated.ReviewWhereInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.ReviewConnection) graphql.Marshaler {
+			return ec.marshalNReviewConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐReviewConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Asset_reviews(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Asset",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_ReviewConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Asset_reviews_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Asset_remediations(ctx context.Context, field graphql.CollectedField, obj *generated.Asset) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Asset_remediations(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return obj.Remediations(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.RemediationOrder), fc.Args["where"].(*generated.RemediationWhereInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.RemediationConnection) graphql.Marshaler {
+			return ec.marshalNRemediationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRemediationConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Asset_remediations(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Asset",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_RemediationConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Asset_remediations_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Asset_sourcePlatform(ctx context.Context, field graphql.CollectedField, obj *generated.Asset) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -66852,6 +68000,50 @@ func (ec *executionContext) fieldContext_Control_platforms(ctx context.Context, 
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Control_platforms_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Control_vulnerabilities(ctx context.Context, field graphql.CollectedField, obj *generated.Control) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Control_vulnerabilities(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return obj.Vulnerabilities(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.VulnerabilityOrder), fc.Args["where"].(*generated.VulnerabilityWhereInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.VulnerabilityConnection) graphql.Marshaler {
+			return ec.marshalNVulnerabilityConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐVulnerabilityConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Control_vulnerabilities(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Control",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_VulnerabilityConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Control_vulnerabilities_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -82189,6 +83381,182 @@ func (ec *executionContext) fieldContext_Entity_subcontrols(ctx context.Context,
 	return fc, nil
 }
 
+func (ec *executionContext) _Entity_findings(ctx context.Context, field graphql.CollectedField, obj *generated.Entity) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Entity_findings(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return obj.Findings(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.FindingOrder), fc.Args["where"].(*generated.FindingWhereInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.FindingConnection) graphql.Marshaler {
+			return ec.marshalNFindingConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFindingConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Entity_findings(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Entity",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_FindingConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Entity_findings_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Entity_vulnerabilities(ctx context.Context, field graphql.CollectedField, obj *generated.Entity) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Entity_vulnerabilities(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return obj.Vulnerabilities(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.VulnerabilityOrder), fc.Args["where"].(*generated.VulnerabilityWhereInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.VulnerabilityConnection) graphql.Marshaler {
+			return ec.marshalNVulnerabilityConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐVulnerabilityConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Entity_vulnerabilities(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Entity",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_VulnerabilityConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Entity_vulnerabilities_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Entity_reviews(ctx context.Context, field graphql.CollectedField, obj *generated.Entity) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Entity_reviews(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return obj.Reviews(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.ReviewOrder), fc.Args["where"].(*generated.ReviewWhereInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.ReviewConnection) graphql.Marshaler {
+			return ec.marshalNReviewConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐReviewConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Entity_reviews(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Entity",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_ReviewConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Entity_reviews_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Entity_remediations(ctx context.Context, field graphql.CollectedField, obj *generated.Entity) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Entity_remediations(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return obj.Remediations(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.RemediationOrder), fc.Args["where"].(*generated.RemediationWhereInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.RemediationConnection) graphql.Marshaler {
+			return ec.marshalNRemediationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRemediationConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Entity_remediations(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Entity",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_RemediationConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Entity_remediations_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Entity_platforms(ctx context.Context, field graphql.CollectedField, obj *generated.Entity) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -90821,6 +92189,29 @@ func (ec *executionContext) fieldContext_FindingControl_updatedByImpersonator(_ 
 	return graphql.NewScalarFieldContext("FindingControl", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
+func (ec *executionContext) _FindingControl_ownerID(ctx context.Context, field graphql.CollectedField, obj *generated.FindingControl) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_FindingControl_ownerID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.OwnerID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOID2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_FindingControl_ownerID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("FindingControl", field, false, false, errors.New("field of type ID does not have child fields"))
+}
+
 func (ec *executionContext) _FindingControl_findingID(ctx context.Context, field graphql.CollectedField, obj *generated.FindingControl) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -91026,6 +92417,38 @@ func (ec *executionContext) _FindingControl_discoveredAt(ctx context.Context, fi
 }
 func (ec *executionContext) fieldContext_FindingControl_discoveredAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("FindingControl", field, false, false, errors.New("field of type DateTime does not have child fields"))
+}
+
+func (ec *executionContext) _FindingControl_owner(ctx context.Context, field graphql.CollectedField, obj *generated.FindingControl) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_FindingControl_owner(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Owner(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.Organization) graphql.Marshaler {
+			return ec.marshalOOrganization2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrganization(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_FindingControl_owner(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "FindingControl",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_Organization(ctx, field)
+		},
+	}
+	return fc, nil
 }
 
 func (ec *executionContext) _FindingControl_finding(ctx context.Context, field graphql.CollectedField, obj *generated.FindingControl) (ret graphql.Marshaler) {
@@ -119766,6 +121189,50 @@ func (ec *executionContext) fieldContext_Organization_findings(ctx context.Conte
 	return fc, nil
 }
 
+func (ec *executionContext) _Organization_findingControls(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Organization_findingControls(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return obj.FindingControls(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.FindingControlOrder), fc.Args["where"].(*generated.FindingControlWhereInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.FindingControlConnection) graphql.Marshaler {
+			return ec.marshalNFindingControlConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFindingControlConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Organization_findingControls(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Organization",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_FindingControlConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Organization_findingControls_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Organization_reviews(ctx context.Context, field graphql.CollectedField, obj *generated.Organization) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -128285,6 +129752,98 @@ func (ec *executionContext) fieldContext_Program_endDate(_ context.Context, fiel
 	return graphql.NewScalarFieldContext("Program", field, false, false, errors.New("field of type Time does not have child fields"))
 }
 
+func (ec *executionContext) _Program_observationPeriodStartDate(ctx context.Context, field graphql.CollectedField, obj *generated.Program) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Program_observationPeriodStartDate(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ObservationPeriodStartDate, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v time.Time) graphql.Marshaler {
+			return ec.marshalOTime2timeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Program_observationPeriodStartDate(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Program", field, false, false, errors.New("field of type Time does not have child fields"))
+}
+
+func (ec *executionContext) _Program_observationPeriodEndDate(ctx context.Context, field graphql.CollectedField, obj *generated.Program) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Program_observationPeriodEndDate(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ObservationPeriodEndDate, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v time.Time) graphql.Marshaler {
+			return ec.marshalOTime2timeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Program_observationPeriodEndDate(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Program", field, false, false, errors.New("field of type Time does not have child fields"))
+}
+
+func (ec *executionContext) _Program_fieldworkStartDate(ctx context.Context, field graphql.CollectedField, obj *generated.Program) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Program_fieldworkStartDate(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.FieldworkStartDate, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v time.Time) graphql.Marshaler {
+			return ec.marshalOTime2timeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Program_fieldworkStartDate(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Program", field, false, false, errors.New("field of type Time does not have child fields"))
+}
+
+func (ec *executionContext) _Program_fieldworkEndDate(ctx context.Context, field graphql.CollectedField, obj *generated.Program) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Program_fieldworkEndDate(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.FieldworkEndDate, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v time.Time) graphql.Marshaler {
+			return ec.marshalOTime2timeᚐTime(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Program_fieldworkEndDate(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Program", field, false, false, errors.New("field of type Time does not have child fields"))
+}
+
 func (ec *executionContext) _Program_auditorReady(ctx context.Context, field graphql.CollectedField, obj *generated.Program) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -129208,6 +130767,182 @@ func (ec *executionContext) fieldContext_Program_systemDetails(ctx context.Conte
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Program_systemDetails_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Program_findings(ctx context.Context, field graphql.CollectedField, obj *generated.Program) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Program_findings(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return obj.Findings(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.FindingOrder), fc.Args["where"].(*generated.FindingWhereInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.FindingConnection) graphql.Marshaler {
+			return ec.marshalNFindingConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFindingConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Program_findings(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Program",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_FindingConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Program_findings_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Program_vulnerabilities(ctx context.Context, field graphql.CollectedField, obj *generated.Program) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Program_vulnerabilities(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return obj.Vulnerabilities(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.VulnerabilityOrder), fc.Args["where"].(*generated.VulnerabilityWhereInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.VulnerabilityConnection) graphql.Marshaler {
+			return ec.marshalNVulnerabilityConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐVulnerabilityConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Program_vulnerabilities(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Program",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_VulnerabilityConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Program_vulnerabilities_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Program_reviews(ctx context.Context, field graphql.CollectedField, obj *generated.Program) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Program_reviews(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return obj.Reviews(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.ReviewOrder), fc.Args["where"].(*generated.ReviewWhereInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.ReviewConnection) graphql.Marshaler {
+			return ec.marshalNReviewConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐReviewConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Program_reviews(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Program",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_ReviewConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Program_reviews_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Program_remediations(ctx context.Context, field graphql.CollectedField, obj *generated.Program) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Program_remediations(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return obj.Remediations(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.RemediationOrder), fc.Args["where"].(*generated.RemediationWhereInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.RemediationConnection) graphql.Marshaler {
+			return ec.marshalNRemediationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRemediationConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Program_remediations(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Program",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_RemediationConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Program_remediations_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -146799,6 +148534,94 @@ func (ec *executionContext) fieldContext_Risk_remediations(ctx context.Context, 
 	return fc, nil
 }
 
+func (ec *executionContext) _Risk_vulnerabilities(ctx context.Context, field graphql.CollectedField, obj *generated.Risk) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Risk_vulnerabilities(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return obj.Vulnerabilities(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.VulnerabilityOrder), fc.Args["where"].(*generated.VulnerabilityWhereInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.VulnerabilityConnection) graphql.Marshaler {
+			return ec.marshalNVulnerabilityConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐVulnerabilityConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Risk_vulnerabilities(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Risk",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_VulnerabilityConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Risk_vulnerabilities_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Risk_findings(ctx context.Context, field graphql.CollectedField, obj *generated.Risk) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Risk_findings(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return obj.Findings(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.FindingOrder), fc.Args["where"].(*generated.FindingWhereInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.FindingConnection) graphql.Marshaler {
+			return ec.marshalNFindingConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFindingConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Risk_findings(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Risk",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_FindingConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Risk_findings_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Risk_workflowObjectRefs(ctx context.Context, field graphql.CollectedField, obj *generated.Risk) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -147804,6 +149627,111 @@ func (ec *executionContext) _Scan_ownerID(ctx context.Context, field graphql.Col
 }
 func (ec *executionContext) fieldContext_Scan_ownerID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("Scan", field, false, false, errors.New("field of type ID does not have child fields"))
+}
+
+func (ec *executionContext) _Scan_systemOwned(ctx context.Context, field graphql.CollectedField, obj *generated.Scan) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Scan_systemOwned(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SystemOwned, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalOBoolean2bool(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Scan_systemOwned(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Scan", field, false, false, errors.New("field of type Boolean does not have child fields"))
+}
+
+func (ec *executionContext) _Scan_internalNotes(ctx context.Context, field graphql.CollectedField, obj *generated.Scan) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Scan_internalNotes(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.InternalNotes, nil
+		},
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
+
+			directive1 := func(ctx context.Context) (any, error) {
+				ifArg, err := ec.unmarshalOBoolean2ᚖbool(ctx, true)
+				if err != nil {
+					var zeroVal *string
+					return zeroVal, err
+				}
+				if ec.Directives.Hidden == nil {
+					var zeroVal *string
+					return zeroVal, errors.New("directive hidden is not implemented")
+				}
+				return ec.Directives.Hidden(ctx, obj, directive0, ifArg)
+			}
+
+			next = directive1
+			return next
+		},
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Scan_internalNotes(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Scan", field, false, false, errors.New("field of type String does not have child fields"))
+}
+
+func (ec *executionContext) _Scan_systemInternalID(ctx context.Context, field graphql.CollectedField, obj *generated.Scan) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Scan_systemInternalID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SystemInternalID, nil
+		},
+		func(ctx context.Context, next graphql.Resolver) graphql.Resolver {
+			directive0 := next
+
+			directive1 := func(ctx context.Context) (any, error) {
+				ifArg, err := ec.unmarshalOBoolean2ᚖbool(ctx, true)
+				if err != nil {
+					var zeroVal *string
+					return zeroVal, err
+				}
+				if ec.Directives.Hidden == nil {
+					var zeroVal *string
+					return zeroVal, errors.New("directive hidden is not implemented")
+				}
+				return ec.Directives.Hidden(ctx, obj, directive0, ifArg)
+			}
+
+			next = directive1
+			return next
+		},
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Scan_systemInternalID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Scan", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _Scan_reviewedBy(ctx context.Context, field graphql.CollectedField, obj *generated.Scan) (ret graphql.Marshaler) {
@@ -153888,6 +155816,94 @@ func (ec *executionContext) fieldContext_Subcontrol_identityHolders(ctx context.
 	return fc, nil
 }
 
+func (ec *executionContext) _Subcontrol_vulnerabilities(ctx context.Context, field graphql.CollectedField, obj *generated.Subcontrol) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Subcontrol_vulnerabilities(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return obj.Vulnerabilities(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.VulnerabilityOrder), fc.Args["where"].(*generated.VulnerabilityWhereInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.VulnerabilityConnection) graphql.Marshaler {
+			return ec.marshalNVulnerabilityConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐVulnerabilityConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Subcontrol_vulnerabilities(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Subcontrol",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_VulnerabilityConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Subcontrol_vulnerabilities_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Subcontrol_findings(ctx context.Context, field graphql.CollectedField, obj *generated.Subcontrol) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Subcontrol_findings(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return obj.Findings(ctx, fc.Args["after"].(*entgql.Cursor[string]), fc.Args["first"].(*int), fc.Args["before"].(*entgql.Cursor[string]), fc.Args["last"].(*int), fc.Args["orderBy"].([]*generated.FindingOrder), fc.Args["where"].(*generated.FindingWhereInput))
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.FindingConnection) graphql.Marshaler {
+			return ec.marshalNFindingConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFindingConnection(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Subcontrol_findings(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Subcontrol",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_FindingConnection(ctx, field)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Subcontrol_findings_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Subcontrol_relatedControls(ctx context.Context, field graphql.CollectedField, obj *generated.Subcontrol) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -157745,6 +159761,29 @@ func (ec *executionContext) fieldContext_Task_detailsJSON(_ context.Context, fie
 	return graphql.NewScalarFieldContext("Task", field, false, false, errors.New("field of type Any does not have child fields"))
 }
 
+func (ec *executionContext) _Task_metadata(ctx context.Context, field graphql.CollectedField, obj *generated.Task) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Task_metadata(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Metadata, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v map[string]any) graphql.Marshaler {
+			return ec.marshalOMap2map(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Task_metadata(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Task", field, false, false, errors.New("field of type Map does not have child fields"))
+}
+
 func (ec *executionContext) _Task_status(ctx context.Context, field graphql.CollectedField, obj *generated.Task) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -157922,6 +159961,98 @@ func (ec *executionContext) _Task_isTemplate(ctx context.Context, field graphql.
 }
 func (ec *executionContext) fieldContext_Task_isTemplate(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("Task", field, false, false, errors.New("field of type Boolean does not have child fields"))
+}
+
+func (ec *executionContext) _Task_isSuggested(ctx context.Context, field graphql.CollectedField, obj *generated.Task) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Task_isSuggested(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.IsSuggested, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v bool) graphql.Marshaler {
+			return ec.marshalNBoolean2bool(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Task_isSuggested(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Task", field, false, false, errors.New("field of type Boolean does not have child fields"))
+}
+
+func (ec *executionContext) _Task_priority(ctx context.Context, field graphql.CollectedField, obj *generated.Task) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Task_priority(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Priority, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
+			return ec.marshalNInt2int(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Task_priority(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Task", field, false, false, errors.New("field of type Int does not have child fields"))
+}
+
+func (ec *executionContext) _Task_source(ctx context.Context, field graphql.CollectedField, obj *generated.Task) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Task_source(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Source, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Task_source(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Task", field, false, false, errors.New("field of type String does not have child fields"))
+}
+
+func (ec *executionContext) _Task_sourceKey(ctx context.Context, field graphql.CollectedField, obj *generated.Task) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Task_sourceKey(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.SourceKey, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_Task_sourceKey(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("Task", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _Task_idempotencyKey(ctx context.Context, field graphql.CollectedField, obj *generated.Task) (ret graphql.Marshaler) {
@@ -164478,14 +166609,14 @@ func (ec *executionContext) _TrustCenterNDARequest_approvedByUserID(ctx context.
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
-			return ec.marshalOString2ᚖstring(ctx, selections, v)
+			return ec.marshalOID2ᚖstring(ctx, selections, v)
 		},
 		true,
 		false,
 	)
 }
 func (ec *executionContext) fieldContext_TrustCenterNDARequest_approvedByUserID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("TrustCenterNDARequest", field, false, false, errors.New("field of type String does not have child fields"))
+	return graphql.NewScalarFieldContext("TrustCenterNDARequest", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
 func (ec *executionContext) _TrustCenterNDARequest_signedAt(ctx context.Context, field graphql.CollectedField, obj *generated.TrustCenterNDARequest) (ret graphql.Marshaler) {
@@ -164780,6 +166911,38 @@ func (ec *executionContext) fieldContext_TrustCenterNDARequest_file(_ context.Co
 		IsResolver: false,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			return ec.childFields_File(ctx, field)
+		},
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _TrustCenterNDARequest_approvedByUser(ctx context.Context, field graphql.CollectedField, obj *generated.TrustCenterNDARequest) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_TrustCenterNDARequest_approvedByUser(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.ApprovedByUser(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *generated.User) graphql.Marshaler {
+			return ec.marshalOUser2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUser(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_TrustCenterNDARequest_approvedByUser(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "TrustCenterNDARequest",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: false,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_User(ctx, field)
 		},
 	}
 	return fc, nil
@@ -189224,7 +191387,7 @@ func (ec *executionContext) unmarshalInputAssetWhereInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "idEqualFold", "idContainsFold", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorGT", "updatedByImpersonatorGTE", "updatedByImpersonatorLT", "updatedByImpersonatorLTE", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDGT", "ownerIDGTE", "ownerIDLT", "ownerIDLTE", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "internalOwner", "internalOwnerNEQ", "internalOwnerIn", "internalOwnerNotIn", "internalOwnerGT", "internalOwnerGTE", "internalOwnerLT", "internalOwnerLTE", "internalOwnerContains", "internalOwnerHasPrefix", "internalOwnerHasSuffix", "internalOwnerIsNil", "internalOwnerNotNil", "internalOwnerEqualFold", "internalOwnerContainsFold", "internalOwnerUserID", "internalOwnerUserIDNEQ", "internalOwnerUserIDIn", "internalOwnerUserIDNotIn", "internalOwnerUserIDGT", "internalOwnerUserIDGTE", "internalOwnerUserIDLT", "internalOwnerUserIDLTE", "internalOwnerUserIDContains", "internalOwnerUserIDHasPrefix", "internalOwnerUserIDHasSuffix", "internalOwnerUserIDIsNil", "internalOwnerUserIDNotNil", "internalOwnerUserIDEqualFold", "internalOwnerUserIDContainsFold", "internalOwnerGroupID", "internalOwnerGroupIDNEQ", "internalOwnerGroupIDIn", "internalOwnerGroupIDNotIn", "internalOwnerGroupIDGT", "internalOwnerGroupIDGTE", "internalOwnerGroupIDLT", "internalOwnerGroupIDLTE", "internalOwnerGroupIDContains", "internalOwnerGroupIDHasPrefix", "internalOwnerGroupIDHasSuffix", "internalOwnerGroupIDIsNil", "internalOwnerGroupIDNotNil", "internalOwnerGroupIDEqualFold", "internalOwnerGroupIDContainsFold", "assetSubtypeName", "assetSubtypeNameNEQ", "assetSubtypeNameIn", "assetSubtypeNameNotIn", "assetSubtypeNameGT", "assetSubtypeNameGTE", "assetSubtypeNameLT", "assetSubtypeNameLTE", "assetSubtypeNameContains", "assetSubtypeNameHasPrefix", "assetSubtypeNameHasSuffix", "assetSubtypeNameIsNil", "assetSubtypeNameNotNil", "assetSubtypeNameEqualFold", "assetSubtypeNameContainsFold", "assetSubtypeID", "assetSubtypeIDNEQ", "assetSubtypeIDIn", "assetSubtypeIDNotIn", "assetSubtypeIDGT", "assetSubtypeIDGTE", "assetSubtypeIDLT", "assetSubtypeIDLTE", "assetSubtypeIDContains", "assetSubtypeIDHasPrefix", "assetSubtypeIDHasSuffix", "assetSubtypeIDIsNil", "assetSubtypeIDNotNil", "assetSubtypeIDEqualFold", "assetSubtypeIDContainsFold", "assetDataClassificationName", "assetDataClassificationNameNEQ", "assetDataClassificationNameIn", "assetDataClassificationNameNotIn", "assetDataClassificationNameGT", "assetDataClassificationNameGTE", "assetDataClassificationNameLT", "assetDataClassificationNameLTE", "assetDataClassificationNameContains", "assetDataClassificationNameHasPrefix", "assetDataClassificationNameHasSuffix", "assetDataClassificationNameIsNil", "assetDataClassificationNameNotNil", "assetDataClassificationNameEqualFold", "assetDataClassificationNameContainsFold", "assetDataClassificationID", "assetDataClassificationIDNEQ", "assetDataClassificationIDIn", "assetDataClassificationIDNotIn", "assetDataClassificationIDGT", "assetDataClassificationIDGTE", "assetDataClassificationIDLT", "assetDataClassificationIDLTE", "assetDataClassificationIDContains", "assetDataClassificationIDHasPrefix", "assetDataClassificationIDHasSuffix", "assetDataClassificationIDIsNil", "assetDataClassificationIDNotNil", "assetDataClassificationIDEqualFold", "assetDataClassificationIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameGT", "environmentNameGTE", "environmentNameLT", "environmentNameLTE", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDGT", "environmentIDGTE", "environmentIDLT", "environmentIDLTE", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameGT", "scopeNameGTE", "scopeNameLT", "scopeNameLTE", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDGT", "scopeIDGTE", "scopeIDLT", "scopeIDLTE", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "accessModelName", "accessModelNameNEQ", "accessModelNameIn", "accessModelNameNotIn", "accessModelNameGT", "accessModelNameGTE", "accessModelNameLT", "accessModelNameLTE", "accessModelNameContains", "accessModelNameHasPrefix", "accessModelNameHasSuffix", "accessModelNameIsNil", "accessModelNameNotNil", "accessModelNameEqualFold", "accessModelNameContainsFold", "accessModelID", "accessModelIDNEQ", "accessModelIDIn", "accessModelIDNotIn", "accessModelIDGT", "accessModelIDGTE", "accessModelIDLT", "accessModelIDLTE", "accessModelIDContains", "accessModelIDHasPrefix", "accessModelIDHasSuffix", "accessModelIDIsNil", "accessModelIDNotNil", "accessModelIDEqualFold", "accessModelIDContainsFold", "encryptionStatusName", "encryptionStatusNameNEQ", "encryptionStatusNameIn", "encryptionStatusNameNotIn", "encryptionStatusNameGT", "encryptionStatusNameGTE", "encryptionStatusNameLT", "encryptionStatusNameLTE", "encryptionStatusNameContains", "encryptionStatusNameHasPrefix", "encryptionStatusNameHasSuffix", "encryptionStatusNameIsNil", "encryptionStatusNameNotNil", "encryptionStatusNameEqualFold", "encryptionStatusNameContainsFold", "encryptionStatusID", "encryptionStatusIDNEQ", "encryptionStatusIDIn", "encryptionStatusIDNotIn", "encryptionStatusIDGT", "encryptionStatusIDGTE", "encryptionStatusIDLT", "encryptionStatusIDLTE", "encryptionStatusIDContains", "encryptionStatusIDHasPrefix", "encryptionStatusIDHasSuffix", "encryptionStatusIDIsNil", "encryptionStatusIDNotNil", "encryptionStatusIDEqualFold", "encryptionStatusIDContainsFold", "securityTierName", "securityTierNameNEQ", "securityTierNameIn", "securityTierNameNotIn", "securityTierNameGT", "securityTierNameGTE", "securityTierNameLT", "securityTierNameLTE", "securityTierNameContains", "securityTierNameHasPrefix", "securityTierNameHasSuffix", "securityTierNameIsNil", "securityTierNameNotNil", "securityTierNameEqualFold", "securityTierNameContainsFold", "securityTierID", "securityTierIDNEQ", "securityTierIDIn", "securityTierIDNotIn", "securityTierIDGT", "securityTierIDGTE", "securityTierIDLT", "securityTierIDLTE", "securityTierIDContains", "securityTierIDHasPrefix", "securityTierIDHasSuffix", "securityTierIDIsNil", "securityTierIDNotNil", "securityTierIDEqualFold", "securityTierIDContainsFold", "criticalityName", "criticalityNameNEQ", "criticalityNameIn", "criticalityNameNotIn", "criticalityNameGT", "criticalityNameGTE", "criticalityNameLT", "criticalityNameLTE", "criticalityNameContains", "criticalityNameHasPrefix", "criticalityNameHasSuffix", "criticalityNameIsNil", "criticalityNameNotNil", "criticalityNameEqualFold", "criticalityNameContainsFold", "criticalityID", "criticalityIDNEQ", "criticalityIDIn", "criticalityIDNotIn", "criticalityIDGT", "criticalityIDGTE", "criticalityIDLT", "criticalityIDLTE", "criticalityIDContains", "criticalityIDHasPrefix", "criticalityIDHasSuffix", "criticalityIDIsNil", "criticalityIDNotNil", "criticalityIDEqualFold", "criticalityIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesGT", "internalNotesGTE", "internalNotesLT", "internalNotesLTE", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDGT", "systemInternalIDGTE", "systemInternalIDLT", "systemInternalIDLTE", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "assetType", "assetTypeNEQ", "assetTypeIn", "assetTypeNotIn", "name", "nameNEQ", "nameIn", "nameNotIn", "nameGT", "nameGTE", "nameLT", "nameLTE", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "identifier", "identifierNEQ", "identifierIn", "identifierNotIn", "identifierGT", "identifierGTE", "identifierLT", "identifierLTE", "identifierContains", "identifierHasPrefix", "identifierHasSuffix", "identifierIsNil", "identifierNotNil", "identifierEqualFold", "identifierContainsFold", "website", "websiteNEQ", "websiteIn", "websiteNotIn", "websiteGT", "websiteGTE", "websiteLT", "websiteLTE", "websiteContains", "websiteHasPrefix", "websiteHasSuffix", "websiteIsNil", "websiteNotNil", "websiteEqualFold", "websiteContainsFold", "physicalLocation", "physicalLocationNEQ", "physicalLocationIn", "physicalLocationNotIn", "physicalLocationGT", "physicalLocationGTE", "physicalLocationLT", "physicalLocationLTE", "physicalLocationContains", "physicalLocationHasPrefix", "physicalLocationHasSuffix", "physicalLocationIsNil", "physicalLocationNotNil", "physicalLocationEqualFold", "physicalLocationContainsFold", "region", "regionNEQ", "regionIn", "regionNotIn", "regionGT", "regionGTE", "regionLT", "regionLTE", "regionContains", "regionHasPrefix", "regionHasSuffix", "regionIsNil", "regionNotNil", "regionEqualFold", "regionContainsFold", "containsPii", "containsPiiNEQ", "containsPiiIsNil", "containsPiiNotNil", "sourceType", "sourceTypeNEQ", "sourceTypeIn", "sourceTypeNotIn", "sourcePlatformID", "sourcePlatformIDNEQ", "sourcePlatformIDIn", "sourcePlatformIDNotIn", "sourcePlatformIDGT", "sourcePlatformIDGTE", "sourcePlatformIDLT", "sourcePlatformIDLTE", "sourcePlatformIDContains", "sourcePlatformIDHasPrefix", "sourcePlatformIDHasSuffix", "sourcePlatformIDIsNil", "sourcePlatformIDNotNil", "sourcePlatformIDEqualFold", "sourcePlatformIDContainsFold", "sourceIdentifier", "sourceIdentifierNEQ", "sourceIdentifierIn", "sourceIdentifierNotIn", "sourceIdentifierGT", "sourceIdentifierGTE", "sourceIdentifierLT", "sourceIdentifierLTE", "sourceIdentifierContains", "sourceIdentifierHasPrefix", "sourceIdentifierHasSuffix", "sourceIdentifierIsNil", "sourceIdentifierNotNil", "sourceIdentifierEqualFold", "sourceIdentifierContainsFold", "costCenter", "costCenterNEQ", "costCenterIn", "costCenterNotIn", "costCenterGT", "costCenterGTE", "costCenterLT", "costCenterLTE", "costCenterContains", "costCenterHasPrefix", "costCenterHasSuffix", "costCenterIsNil", "costCenterNotNil", "costCenterEqualFold", "costCenterContainsFold", "estimatedMonthlyCost", "estimatedMonthlyCostNEQ", "estimatedMonthlyCostIn", "estimatedMonthlyCostNotIn", "estimatedMonthlyCostGT", "estimatedMonthlyCostGTE", "estimatedMonthlyCostLT", "estimatedMonthlyCostLTE", "estimatedMonthlyCostIsNil", "estimatedMonthlyCostNotNil", "purchaseDate", "purchaseDateNEQ", "purchaseDateIn", "purchaseDateNotIn", "purchaseDateGT", "purchaseDateGTE", "purchaseDateLT", "purchaseDateLTE", "purchaseDateIsNil", "purchaseDateNotNil", "integrationID", "integrationIDNEQ", "integrationIDIn", "integrationIDNotIn", "integrationIDGT", "integrationIDGTE", "integrationIDLT", "integrationIDLTE", "integrationIDContains", "integrationIDHasPrefix", "integrationIDHasSuffix", "integrationIDIsNil", "integrationIDNotNil", "integrationIDEqualFold", "integrationIDContainsFold", "observedAt", "observedAtNEQ", "observedAtIn", "observedAtNotIn", "observedAtGT", "observedAtGTE", "observedAtLT", "observedAtLTE", "observedAtIsNil", "observedAtNotNil", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasInternalOwnerUser", "hasInternalOwnerUserWith", "hasInternalOwnerGroup", "hasInternalOwnerGroupWith", "hasAssetSubtype", "hasAssetSubtypeWith", "hasAssetDataClassification", "hasAssetDataClassificationWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasAccessModel", "hasAccessModelWith", "hasEncryptionStatus", "hasEncryptionStatusWith", "hasSecurityTier", "hasSecurityTierWith", "hasCriticality", "hasCriticalityWith", "hasScans", "hasScansWith", "hasEntities", "hasEntitiesWith", "hasPlatforms", "hasPlatformsWith", "hasSystemDetails", "hasSystemDetailsWith", "hasOutOfScopePlatforms", "hasOutOfScopePlatformsWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasSourcePlatform", "hasSourcePlatformWith", "hasIntegration", "hasIntegrationWith", "hasConnectedAssets", "hasConnectedAssetsWith", "hasConnectedFrom", "hasConnectedFromWith", "tagsHas", "categoriesHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "idEqualFold", "idContainsFold", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorGT", "updatedByImpersonatorGTE", "updatedByImpersonatorLT", "updatedByImpersonatorLTE", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDGT", "ownerIDGTE", "ownerIDLT", "ownerIDLTE", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "internalOwner", "internalOwnerNEQ", "internalOwnerIn", "internalOwnerNotIn", "internalOwnerGT", "internalOwnerGTE", "internalOwnerLT", "internalOwnerLTE", "internalOwnerContains", "internalOwnerHasPrefix", "internalOwnerHasSuffix", "internalOwnerIsNil", "internalOwnerNotNil", "internalOwnerEqualFold", "internalOwnerContainsFold", "internalOwnerUserID", "internalOwnerUserIDNEQ", "internalOwnerUserIDIn", "internalOwnerUserIDNotIn", "internalOwnerUserIDGT", "internalOwnerUserIDGTE", "internalOwnerUserIDLT", "internalOwnerUserIDLTE", "internalOwnerUserIDContains", "internalOwnerUserIDHasPrefix", "internalOwnerUserIDHasSuffix", "internalOwnerUserIDIsNil", "internalOwnerUserIDNotNil", "internalOwnerUserIDEqualFold", "internalOwnerUserIDContainsFold", "internalOwnerGroupID", "internalOwnerGroupIDNEQ", "internalOwnerGroupIDIn", "internalOwnerGroupIDNotIn", "internalOwnerGroupIDGT", "internalOwnerGroupIDGTE", "internalOwnerGroupIDLT", "internalOwnerGroupIDLTE", "internalOwnerGroupIDContains", "internalOwnerGroupIDHasPrefix", "internalOwnerGroupIDHasSuffix", "internalOwnerGroupIDIsNil", "internalOwnerGroupIDNotNil", "internalOwnerGroupIDEqualFold", "internalOwnerGroupIDContainsFold", "assetSubtypeName", "assetSubtypeNameNEQ", "assetSubtypeNameIn", "assetSubtypeNameNotIn", "assetSubtypeNameGT", "assetSubtypeNameGTE", "assetSubtypeNameLT", "assetSubtypeNameLTE", "assetSubtypeNameContains", "assetSubtypeNameHasPrefix", "assetSubtypeNameHasSuffix", "assetSubtypeNameIsNil", "assetSubtypeNameNotNil", "assetSubtypeNameEqualFold", "assetSubtypeNameContainsFold", "assetSubtypeID", "assetSubtypeIDNEQ", "assetSubtypeIDIn", "assetSubtypeIDNotIn", "assetSubtypeIDGT", "assetSubtypeIDGTE", "assetSubtypeIDLT", "assetSubtypeIDLTE", "assetSubtypeIDContains", "assetSubtypeIDHasPrefix", "assetSubtypeIDHasSuffix", "assetSubtypeIDIsNil", "assetSubtypeIDNotNil", "assetSubtypeIDEqualFold", "assetSubtypeIDContainsFold", "assetDataClassificationName", "assetDataClassificationNameNEQ", "assetDataClassificationNameIn", "assetDataClassificationNameNotIn", "assetDataClassificationNameGT", "assetDataClassificationNameGTE", "assetDataClassificationNameLT", "assetDataClassificationNameLTE", "assetDataClassificationNameContains", "assetDataClassificationNameHasPrefix", "assetDataClassificationNameHasSuffix", "assetDataClassificationNameIsNil", "assetDataClassificationNameNotNil", "assetDataClassificationNameEqualFold", "assetDataClassificationNameContainsFold", "assetDataClassificationID", "assetDataClassificationIDNEQ", "assetDataClassificationIDIn", "assetDataClassificationIDNotIn", "assetDataClassificationIDGT", "assetDataClassificationIDGTE", "assetDataClassificationIDLT", "assetDataClassificationIDLTE", "assetDataClassificationIDContains", "assetDataClassificationIDHasPrefix", "assetDataClassificationIDHasSuffix", "assetDataClassificationIDIsNil", "assetDataClassificationIDNotNil", "assetDataClassificationIDEqualFold", "assetDataClassificationIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameGT", "environmentNameGTE", "environmentNameLT", "environmentNameLTE", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDGT", "environmentIDGTE", "environmentIDLT", "environmentIDLTE", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameGT", "scopeNameGTE", "scopeNameLT", "scopeNameLTE", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDGT", "scopeIDGTE", "scopeIDLT", "scopeIDLTE", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "accessModelName", "accessModelNameNEQ", "accessModelNameIn", "accessModelNameNotIn", "accessModelNameGT", "accessModelNameGTE", "accessModelNameLT", "accessModelNameLTE", "accessModelNameContains", "accessModelNameHasPrefix", "accessModelNameHasSuffix", "accessModelNameIsNil", "accessModelNameNotNil", "accessModelNameEqualFold", "accessModelNameContainsFold", "accessModelID", "accessModelIDNEQ", "accessModelIDIn", "accessModelIDNotIn", "accessModelIDGT", "accessModelIDGTE", "accessModelIDLT", "accessModelIDLTE", "accessModelIDContains", "accessModelIDHasPrefix", "accessModelIDHasSuffix", "accessModelIDIsNil", "accessModelIDNotNil", "accessModelIDEqualFold", "accessModelIDContainsFold", "encryptionStatusName", "encryptionStatusNameNEQ", "encryptionStatusNameIn", "encryptionStatusNameNotIn", "encryptionStatusNameGT", "encryptionStatusNameGTE", "encryptionStatusNameLT", "encryptionStatusNameLTE", "encryptionStatusNameContains", "encryptionStatusNameHasPrefix", "encryptionStatusNameHasSuffix", "encryptionStatusNameIsNil", "encryptionStatusNameNotNil", "encryptionStatusNameEqualFold", "encryptionStatusNameContainsFold", "encryptionStatusID", "encryptionStatusIDNEQ", "encryptionStatusIDIn", "encryptionStatusIDNotIn", "encryptionStatusIDGT", "encryptionStatusIDGTE", "encryptionStatusIDLT", "encryptionStatusIDLTE", "encryptionStatusIDContains", "encryptionStatusIDHasPrefix", "encryptionStatusIDHasSuffix", "encryptionStatusIDIsNil", "encryptionStatusIDNotNil", "encryptionStatusIDEqualFold", "encryptionStatusIDContainsFold", "securityTierName", "securityTierNameNEQ", "securityTierNameIn", "securityTierNameNotIn", "securityTierNameGT", "securityTierNameGTE", "securityTierNameLT", "securityTierNameLTE", "securityTierNameContains", "securityTierNameHasPrefix", "securityTierNameHasSuffix", "securityTierNameIsNil", "securityTierNameNotNil", "securityTierNameEqualFold", "securityTierNameContainsFold", "securityTierID", "securityTierIDNEQ", "securityTierIDIn", "securityTierIDNotIn", "securityTierIDGT", "securityTierIDGTE", "securityTierIDLT", "securityTierIDLTE", "securityTierIDContains", "securityTierIDHasPrefix", "securityTierIDHasSuffix", "securityTierIDIsNil", "securityTierIDNotNil", "securityTierIDEqualFold", "securityTierIDContainsFold", "criticalityName", "criticalityNameNEQ", "criticalityNameIn", "criticalityNameNotIn", "criticalityNameGT", "criticalityNameGTE", "criticalityNameLT", "criticalityNameLTE", "criticalityNameContains", "criticalityNameHasPrefix", "criticalityNameHasSuffix", "criticalityNameIsNil", "criticalityNameNotNil", "criticalityNameEqualFold", "criticalityNameContainsFold", "criticalityID", "criticalityIDNEQ", "criticalityIDIn", "criticalityIDNotIn", "criticalityIDGT", "criticalityIDGTE", "criticalityIDLT", "criticalityIDLTE", "criticalityIDContains", "criticalityIDHasPrefix", "criticalityIDHasSuffix", "criticalityIDIsNil", "criticalityIDNotNil", "criticalityIDEqualFold", "criticalityIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesGT", "internalNotesGTE", "internalNotesLT", "internalNotesLTE", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDGT", "systemInternalIDGTE", "systemInternalIDLT", "systemInternalIDLTE", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "assetType", "assetTypeNEQ", "assetTypeIn", "assetTypeNotIn", "name", "nameNEQ", "nameIn", "nameNotIn", "nameGT", "nameGTE", "nameLT", "nameLTE", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "identifier", "identifierNEQ", "identifierIn", "identifierNotIn", "identifierGT", "identifierGTE", "identifierLT", "identifierLTE", "identifierContains", "identifierHasPrefix", "identifierHasSuffix", "identifierIsNil", "identifierNotNil", "identifierEqualFold", "identifierContainsFold", "website", "websiteNEQ", "websiteIn", "websiteNotIn", "websiteGT", "websiteGTE", "websiteLT", "websiteLTE", "websiteContains", "websiteHasPrefix", "websiteHasSuffix", "websiteIsNil", "websiteNotNil", "websiteEqualFold", "websiteContainsFold", "physicalLocation", "physicalLocationNEQ", "physicalLocationIn", "physicalLocationNotIn", "physicalLocationGT", "physicalLocationGTE", "physicalLocationLT", "physicalLocationLTE", "physicalLocationContains", "physicalLocationHasPrefix", "physicalLocationHasSuffix", "physicalLocationIsNil", "physicalLocationNotNil", "physicalLocationEqualFold", "physicalLocationContainsFold", "region", "regionNEQ", "regionIn", "regionNotIn", "regionGT", "regionGTE", "regionLT", "regionLTE", "regionContains", "regionHasPrefix", "regionHasSuffix", "regionIsNil", "regionNotNil", "regionEqualFold", "regionContainsFold", "containsPii", "containsPiiNEQ", "containsPiiIsNil", "containsPiiNotNil", "sourceType", "sourceTypeNEQ", "sourceTypeIn", "sourceTypeNotIn", "sourcePlatformID", "sourcePlatformIDNEQ", "sourcePlatformIDIn", "sourcePlatformIDNotIn", "sourcePlatformIDGT", "sourcePlatformIDGTE", "sourcePlatformIDLT", "sourcePlatformIDLTE", "sourcePlatformIDContains", "sourcePlatformIDHasPrefix", "sourcePlatformIDHasSuffix", "sourcePlatformIDIsNil", "sourcePlatformIDNotNil", "sourcePlatformIDEqualFold", "sourcePlatformIDContainsFold", "sourceIdentifier", "sourceIdentifierNEQ", "sourceIdentifierIn", "sourceIdentifierNotIn", "sourceIdentifierGT", "sourceIdentifierGTE", "sourceIdentifierLT", "sourceIdentifierLTE", "sourceIdentifierContains", "sourceIdentifierHasPrefix", "sourceIdentifierHasSuffix", "sourceIdentifierIsNil", "sourceIdentifierNotNil", "sourceIdentifierEqualFold", "sourceIdentifierContainsFold", "costCenter", "costCenterNEQ", "costCenterIn", "costCenterNotIn", "costCenterGT", "costCenterGTE", "costCenterLT", "costCenterLTE", "costCenterContains", "costCenterHasPrefix", "costCenterHasSuffix", "costCenterIsNil", "costCenterNotNil", "costCenterEqualFold", "costCenterContainsFold", "estimatedMonthlyCost", "estimatedMonthlyCostNEQ", "estimatedMonthlyCostIn", "estimatedMonthlyCostNotIn", "estimatedMonthlyCostGT", "estimatedMonthlyCostGTE", "estimatedMonthlyCostLT", "estimatedMonthlyCostLTE", "estimatedMonthlyCostIsNil", "estimatedMonthlyCostNotNil", "purchaseDate", "purchaseDateNEQ", "purchaseDateIn", "purchaseDateNotIn", "purchaseDateGT", "purchaseDateGTE", "purchaseDateLT", "purchaseDateLTE", "purchaseDateIsNil", "purchaseDateNotNil", "integrationID", "integrationIDNEQ", "integrationIDIn", "integrationIDNotIn", "integrationIDGT", "integrationIDGTE", "integrationIDLT", "integrationIDLTE", "integrationIDContains", "integrationIDHasPrefix", "integrationIDHasSuffix", "integrationIDIsNil", "integrationIDNotNil", "integrationIDEqualFold", "integrationIDContainsFold", "observedAt", "observedAtNEQ", "observedAtIn", "observedAtNotIn", "observedAtGT", "observedAtGTE", "observedAtLT", "observedAtLTE", "observedAtIsNil", "observedAtNotNil", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasInternalOwnerUser", "hasInternalOwnerUserWith", "hasInternalOwnerGroup", "hasInternalOwnerGroupWith", "hasAssetSubtype", "hasAssetSubtypeWith", "hasAssetDataClassification", "hasAssetDataClassificationWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasAccessModel", "hasAccessModelWith", "hasEncryptionStatus", "hasEncryptionStatusWith", "hasSecurityTier", "hasSecurityTierWith", "hasCriticality", "hasCriticalityWith", "hasScans", "hasScansWith", "hasEntities", "hasEntitiesWith", "hasPlatforms", "hasPlatformsWith", "hasSystemDetails", "hasSystemDetailsWith", "hasOutOfScopePlatforms", "hasOutOfScopePlatformsWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasFindings", "hasFindingsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasReviews", "hasReviewsWith", "hasRemediations", "hasRemediationsWith", "hasSourcePlatform", "hasSourcePlatformWith", "hasIntegration", "hasIntegrationWith", "hasConnectedAssets", "hasConnectedAssetsWith", "hasConnectedFrom", "hasConnectedFromWith", "tagsHas", "categoriesHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -193872,6 +196035,62 @@ func (ec *executionContext) unmarshalInputAssetWhereInput(ctx context.Context, o
 				return it, err
 			}
 			it.HasInternalPoliciesWith = data
+		case "hasFindings":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasFindings"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasFindings = data
+		case "hasFindingsWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasFindingsWith"))
+			data, err := ec.unmarshalOFindingWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFindingWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasFindingsWith = data
+		case "hasVulnerabilities":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasVulnerabilities"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasVulnerabilities = data
+		case "hasVulnerabilitiesWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasVulnerabilitiesWith"))
+			data, err := ec.unmarshalOVulnerabilityWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐVulnerabilityWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasVulnerabilitiesWith = data
+		case "hasReviews":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasReviews"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasReviews = data
+		case "hasReviewsWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasReviewsWith"))
+			data, err := ec.unmarshalOReviewWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐReviewWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasReviewsWith = data
+		case "hasRemediations":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasRemediations"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasRemediations = data
+		case "hasRemediationsWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasRemediationsWith"))
+			data, err := ec.unmarshalORemediationWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRemediationWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasRemediationsWith = data
 		case "hasSourcePlatform":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasSourcePlatform"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -205457,7 +207676,7 @@ func (ec *executionContext) unmarshalInputControlWhereInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "idEqualFold", "idContainsFold", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorGT", "updatedByImpersonatorGTE", "updatedByImpersonatorLT", "updatedByImpersonatorLTE", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDGT", "displayIDGTE", "displayIDLT", "displayIDLTE", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "externalUUID", "externalUUIDNEQ", "externalUUIDIn", "externalUUIDNotIn", "externalUUIDGT", "externalUUIDGTE", "externalUUIDLT", "externalUUIDLTE", "externalUUIDContains", "externalUUIDHasPrefix", "externalUUIDHasSuffix", "externalUUIDIsNil", "externalUUIDNotNil", "externalUUIDEqualFold", "externalUUIDContainsFold", "title", "titleNEQ", "titleIn", "titleNotIn", "titleGT", "titleGTE", "titleLT", "titleLTE", "titleContains", "titleHasPrefix", "titleHasSuffix", "titleIsNil", "titleNotNil", "titleEqualFold", "titleContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "referenceID", "referenceIDNEQ", "referenceIDIn", "referenceIDNotIn", "referenceIDGT", "referenceIDGTE", "referenceIDLT", "referenceIDLTE", "referenceIDContains", "referenceIDHasPrefix", "referenceIDHasSuffix", "referenceIDIsNil", "referenceIDNotNil", "referenceIDEqualFold", "referenceIDContainsFold", "auditorReferenceID", "auditorReferenceIDNEQ", "auditorReferenceIDIn", "auditorReferenceIDNotIn", "auditorReferenceIDGT", "auditorReferenceIDGTE", "auditorReferenceIDLT", "auditorReferenceIDLTE", "auditorReferenceIDContains", "auditorReferenceIDHasPrefix", "auditorReferenceIDHasSuffix", "auditorReferenceIDIsNil", "auditorReferenceIDNotNil", "auditorReferenceIDEqualFold", "auditorReferenceIDContainsFold", "responsiblePartyID", "responsiblePartyIDNEQ", "responsiblePartyIDIn", "responsiblePartyIDNotIn", "responsiblePartyIDGT", "responsiblePartyIDGTE", "responsiblePartyIDLT", "responsiblePartyIDLTE", "responsiblePartyIDContains", "responsiblePartyIDHasPrefix", "responsiblePartyIDHasSuffix", "responsiblePartyIDIsNil", "responsiblePartyIDNotNil", "responsiblePartyIDEqualFold", "responsiblePartyIDContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "implementationStatus", "implementationStatusNEQ", "implementationStatusIn", "implementationStatusNotIn", "implementationStatusIsNil", "implementationStatusNotNil", "implementationDescription", "implementationDescriptionNEQ", "implementationDescriptionIn", "implementationDescriptionNotIn", "implementationDescriptionGT", "implementationDescriptionGTE", "implementationDescriptionLT", "implementationDescriptionLTE", "implementationDescriptionContains", "implementationDescriptionHasPrefix", "implementationDescriptionHasSuffix", "implementationDescriptionIsNil", "implementationDescriptionNotNil", "implementationDescriptionEqualFold", "implementationDescriptionContainsFold", "publicRepresentation", "publicRepresentationNEQ", "publicRepresentationIn", "publicRepresentationNotIn", "publicRepresentationGT", "publicRepresentationGTE", "publicRepresentationLT", "publicRepresentationLTE", "publicRepresentationContains", "publicRepresentationHasPrefix", "publicRepresentationHasSuffix", "publicRepresentationIsNil", "publicRepresentationNotNil", "publicRepresentationEqualFold", "publicRepresentationContainsFold", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceIsNil", "sourceNotNil", "sourceName", "sourceNameNEQ", "sourceNameIn", "sourceNameNotIn", "sourceNameGT", "sourceNameGTE", "sourceNameLT", "sourceNameLTE", "sourceNameContains", "sourceNameHasPrefix", "sourceNameHasSuffix", "sourceNameIsNil", "sourceNameNotNil", "sourceNameEqualFold", "sourceNameContainsFold", "referenceFramework", "referenceFrameworkNEQ", "referenceFrameworkIn", "referenceFrameworkNotIn", "referenceFrameworkGT", "referenceFrameworkGTE", "referenceFrameworkLT", "referenceFrameworkLTE", "referenceFrameworkContains", "referenceFrameworkHasPrefix", "referenceFrameworkHasSuffix", "referenceFrameworkIsNil", "referenceFrameworkNotNil", "referenceFrameworkEqualFold", "referenceFrameworkContainsFold", "referenceFrameworkRevision", "referenceFrameworkRevisionNEQ", "referenceFrameworkRevisionIn", "referenceFrameworkRevisionNotIn", "referenceFrameworkRevisionGT", "referenceFrameworkRevisionGTE", "referenceFrameworkRevisionLT", "referenceFrameworkRevisionLTE", "referenceFrameworkRevisionContains", "referenceFrameworkRevisionHasPrefix", "referenceFrameworkRevisionHasSuffix", "referenceFrameworkRevisionIsNil", "referenceFrameworkRevisionNotNil", "referenceFrameworkRevisionEqualFold", "referenceFrameworkRevisionContainsFold", "category", "categoryNEQ", "categoryIn", "categoryNotIn", "categoryGT", "categoryGTE", "categoryLT", "categoryLTE", "categoryContains", "categoryHasPrefix", "categoryHasSuffix", "categoryIsNil", "categoryNotNil", "categoryEqualFold", "categoryContainsFold", "categoryID", "categoryIDNEQ", "categoryIDIn", "categoryIDNotIn", "categoryIDGT", "categoryIDGTE", "categoryIDLT", "categoryIDLTE", "categoryIDContains", "categoryIDHasPrefix", "categoryIDHasSuffix", "categoryIDIsNil", "categoryIDNotNil", "categoryIDEqualFold", "categoryIDContainsFold", "subcategory", "subcategoryNEQ", "subcategoryIn", "subcategoryNotIn", "subcategoryGT", "subcategoryGTE", "subcategoryLT", "subcategoryLTE", "subcategoryContains", "subcategoryHasPrefix", "subcategoryHasSuffix", "subcategoryIsNil", "subcategoryNotNil", "subcategoryEqualFold", "subcategoryContainsFold", "controlOwnerID", "controlOwnerIDNEQ", "controlOwnerIDIn", "controlOwnerIDNotIn", "controlOwnerIDGT", "controlOwnerIDGTE", "controlOwnerIDLT", "controlOwnerIDLTE", "controlOwnerIDContains", "controlOwnerIDHasPrefix", "controlOwnerIDHasSuffix", "controlOwnerIDIsNil", "controlOwnerIDNotNil", "controlOwnerIDEqualFold", "controlOwnerIDContainsFold", "delegateID", "delegateIDNEQ", "delegateIDIn", "delegateIDNotIn", "delegateIDGT", "delegateIDGTE", "delegateIDLT", "delegateIDLTE", "delegateIDContains", "delegateIDHasPrefix", "delegateIDHasSuffix", "delegateIDIsNil", "delegateIDNotNil", "delegateIDEqualFold", "delegateIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDGT", "ownerIDGTE", "ownerIDLT", "ownerIDLTE", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesGT", "internalNotesGTE", "internalNotesLT", "internalNotesLTE", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDGT", "systemInternalIDGTE", "systemInternalIDLT", "systemInternalIDLTE", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "controlKindName", "controlKindNameNEQ", "controlKindNameIn", "controlKindNameNotIn", "controlKindNameGT", "controlKindNameGTE", "controlKindNameLT", "controlKindNameLTE", "controlKindNameContains", "controlKindNameHasPrefix", "controlKindNameHasSuffix", "controlKindNameIsNil", "controlKindNameNotNil", "controlKindNameEqualFold", "controlKindNameContainsFold", "controlKindID", "controlKindIDNEQ", "controlKindIDIn", "controlKindIDNotIn", "controlKindIDGT", "controlKindIDGTE", "controlKindIDLT", "controlKindIDLTE", "controlKindIDContains", "controlKindIDHasPrefix", "controlKindIDHasSuffix", "controlKindIDIsNil", "controlKindIDNotNil", "controlKindIDEqualFold", "controlKindIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameGT", "environmentNameGTE", "environmentNameLT", "environmentNameLTE", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDGT", "environmentIDGTE", "environmentIDLT", "environmentIDLTE", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameGT", "scopeNameGTE", "scopeNameLT", "scopeNameLTE", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDGT", "scopeIDGTE", "scopeIDLT", "scopeIDLTE", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "refCode", "refCodeNEQ", "refCodeIn", "refCodeNotIn", "refCodeGT", "refCodeGTE", "refCodeLT", "refCodeLTE", "refCodeContains", "refCodeHasPrefix", "refCodeHasSuffix", "refCodeEqualFold", "refCodeContainsFold", "standardID", "standardIDNEQ", "standardIDIn", "standardIDNotIn", "standardIDGT", "standardIDGTE", "standardIDLT", "standardIDLTE", "standardIDContains", "standardIDHasPrefix", "standardIDHasSuffix", "standardIDIsNil", "standardIDNotNil", "standardIDEqualFold", "standardIDContainsFold", "trustCenterVisibility", "trustCenterVisibilityNEQ", "trustCenterVisibilityIn", "trustCenterVisibilityNotIn", "trustCenterVisibilityIsNil", "trustCenterVisibilityNotNil", "isTrustCenterControl", "isTrustCenterControlNEQ", "isTrustCenterControlIsNil", "isTrustCenterControlNotNil", "hasEvidence", "hasEvidenceWith", "hasControlObjectives", "hasControlObjectivesWith", "hasTasks", "hasTasksWith", "hasNarratives", "hasNarrativesWith", "hasRisks", "hasRisksWith", "hasActionPlans", "hasActionPlansWith", "hasProcedures", "hasProceduresWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasComments", "hasCommentsWith", "hasDiscussions", "hasDiscussionsWith", "hasControlOwner", "hasControlOwnerWith", "hasDelegate", "hasDelegateWith", "hasResponsibleParty", "hasResponsiblePartyWith", "hasReviews", "hasReviewsWith", "hasRemediations", "hasRemediationsWith", "hasScans", "hasScansWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasControlKind", "hasControlKindWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasStandard", "hasStandardWith", "hasCheckResults", "hasCheckResultsWith", "hasPrograms", "hasProgramsWith", "hasPlatforms", "hasPlatformsWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasCampaigns", "hasCampaignsWith", "hasFindings", "hasFindingsWith", "hasControlImplementations", "hasControlImplementationsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasScheduledJobs", "hasScheduledJobsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasControlMappings", "hasControlMappingsWith", "tagsHas", "aliasesHas", "mappedCategoriesHas", "controlQuestionsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "idEqualFold", "idContainsFold", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorGT", "updatedByImpersonatorGTE", "updatedByImpersonatorLT", "updatedByImpersonatorLTE", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDGT", "displayIDGTE", "displayIDLT", "displayIDLTE", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "externalUUID", "externalUUIDNEQ", "externalUUIDIn", "externalUUIDNotIn", "externalUUIDGT", "externalUUIDGTE", "externalUUIDLT", "externalUUIDLTE", "externalUUIDContains", "externalUUIDHasPrefix", "externalUUIDHasSuffix", "externalUUIDIsNil", "externalUUIDNotNil", "externalUUIDEqualFold", "externalUUIDContainsFold", "title", "titleNEQ", "titleIn", "titleNotIn", "titleGT", "titleGTE", "titleLT", "titleLTE", "titleContains", "titleHasPrefix", "titleHasSuffix", "titleIsNil", "titleNotNil", "titleEqualFold", "titleContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "referenceID", "referenceIDNEQ", "referenceIDIn", "referenceIDNotIn", "referenceIDGT", "referenceIDGTE", "referenceIDLT", "referenceIDLTE", "referenceIDContains", "referenceIDHasPrefix", "referenceIDHasSuffix", "referenceIDIsNil", "referenceIDNotNil", "referenceIDEqualFold", "referenceIDContainsFold", "auditorReferenceID", "auditorReferenceIDNEQ", "auditorReferenceIDIn", "auditorReferenceIDNotIn", "auditorReferenceIDGT", "auditorReferenceIDGTE", "auditorReferenceIDLT", "auditorReferenceIDLTE", "auditorReferenceIDContains", "auditorReferenceIDHasPrefix", "auditorReferenceIDHasSuffix", "auditorReferenceIDIsNil", "auditorReferenceIDNotNil", "auditorReferenceIDEqualFold", "auditorReferenceIDContainsFold", "responsiblePartyID", "responsiblePartyIDNEQ", "responsiblePartyIDIn", "responsiblePartyIDNotIn", "responsiblePartyIDGT", "responsiblePartyIDGTE", "responsiblePartyIDLT", "responsiblePartyIDLTE", "responsiblePartyIDContains", "responsiblePartyIDHasPrefix", "responsiblePartyIDHasSuffix", "responsiblePartyIDIsNil", "responsiblePartyIDNotNil", "responsiblePartyIDEqualFold", "responsiblePartyIDContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "implementationStatus", "implementationStatusNEQ", "implementationStatusIn", "implementationStatusNotIn", "implementationStatusIsNil", "implementationStatusNotNil", "implementationDescription", "implementationDescriptionNEQ", "implementationDescriptionIn", "implementationDescriptionNotIn", "implementationDescriptionGT", "implementationDescriptionGTE", "implementationDescriptionLT", "implementationDescriptionLTE", "implementationDescriptionContains", "implementationDescriptionHasPrefix", "implementationDescriptionHasSuffix", "implementationDescriptionIsNil", "implementationDescriptionNotNil", "implementationDescriptionEqualFold", "implementationDescriptionContainsFold", "publicRepresentation", "publicRepresentationNEQ", "publicRepresentationIn", "publicRepresentationNotIn", "publicRepresentationGT", "publicRepresentationGTE", "publicRepresentationLT", "publicRepresentationLTE", "publicRepresentationContains", "publicRepresentationHasPrefix", "publicRepresentationHasSuffix", "publicRepresentationIsNil", "publicRepresentationNotNil", "publicRepresentationEqualFold", "publicRepresentationContainsFold", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceIsNil", "sourceNotNil", "sourceName", "sourceNameNEQ", "sourceNameIn", "sourceNameNotIn", "sourceNameGT", "sourceNameGTE", "sourceNameLT", "sourceNameLTE", "sourceNameContains", "sourceNameHasPrefix", "sourceNameHasSuffix", "sourceNameIsNil", "sourceNameNotNil", "sourceNameEqualFold", "sourceNameContainsFold", "referenceFramework", "referenceFrameworkNEQ", "referenceFrameworkIn", "referenceFrameworkNotIn", "referenceFrameworkGT", "referenceFrameworkGTE", "referenceFrameworkLT", "referenceFrameworkLTE", "referenceFrameworkContains", "referenceFrameworkHasPrefix", "referenceFrameworkHasSuffix", "referenceFrameworkIsNil", "referenceFrameworkNotNil", "referenceFrameworkEqualFold", "referenceFrameworkContainsFold", "referenceFrameworkRevision", "referenceFrameworkRevisionNEQ", "referenceFrameworkRevisionIn", "referenceFrameworkRevisionNotIn", "referenceFrameworkRevisionGT", "referenceFrameworkRevisionGTE", "referenceFrameworkRevisionLT", "referenceFrameworkRevisionLTE", "referenceFrameworkRevisionContains", "referenceFrameworkRevisionHasPrefix", "referenceFrameworkRevisionHasSuffix", "referenceFrameworkRevisionIsNil", "referenceFrameworkRevisionNotNil", "referenceFrameworkRevisionEqualFold", "referenceFrameworkRevisionContainsFold", "category", "categoryNEQ", "categoryIn", "categoryNotIn", "categoryGT", "categoryGTE", "categoryLT", "categoryLTE", "categoryContains", "categoryHasPrefix", "categoryHasSuffix", "categoryIsNil", "categoryNotNil", "categoryEqualFold", "categoryContainsFold", "categoryID", "categoryIDNEQ", "categoryIDIn", "categoryIDNotIn", "categoryIDGT", "categoryIDGTE", "categoryIDLT", "categoryIDLTE", "categoryIDContains", "categoryIDHasPrefix", "categoryIDHasSuffix", "categoryIDIsNil", "categoryIDNotNil", "categoryIDEqualFold", "categoryIDContainsFold", "subcategory", "subcategoryNEQ", "subcategoryIn", "subcategoryNotIn", "subcategoryGT", "subcategoryGTE", "subcategoryLT", "subcategoryLTE", "subcategoryContains", "subcategoryHasPrefix", "subcategoryHasSuffix", "subcategoryIsNil", "subcategoryNotNil", "subcategoryEqualFold", "subcategoryContainsFold", "controlOwnerID", "controlOwnerIDNEQ", "controlOwnerIDIn", "controlOwnerIDNotIn", "controlOwnerIDGT", "controlOwnerIDGTE", "controlOwnerIDLT", "controlOwnerIDLTE", "controlOwnerIDContains", "controlOwnerIDHasPrefix", "controlOwnerIDHasSuffix", "controlOwnerIDIsNil", "controlOwnerIDNotNil", "controlOwnerIDEqualFold", "controlOwnerIDContainsFold", "delegateID", "delegateIDNEQ", "delegateIDIn", "delegateIDNotIn", "delegateIDGT", "delegateIDGTE", "delegateIDLT", "delegateIDLTE", "delegateIDContains", "delegateIDHasPrefix", "delegateIDHasSuffix", "delegateIDIsNil", "delegateIDNotNil", "delegateIDEqualFold", "delegateIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDGT", "ownerIDGTE", "ownerIDLT", "ownerIDLTE", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesGT", "internalNotesGTE", "internalNotesLT", "internalNotesLTE", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDGT", "systemInternalIDGTE", "systemInternalIDLT", "systemInternalIDLTE", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "controlKindName", "controlKindNameNEQ", "controlKindNameIn", "controlKindNameNotIn", "controlKindNameGT", "controlKindNameGTE", "controlKindNameLT", "controlKindNameLTE", "controlKindNameContains", "controlKindNameHasPrefix", "controlKindNameHasSuffix", "controlKindNameIsNil", "controlKindNameNotNil", "controlKindNameEqualFold", "controlKindNameContainsFold", "controlKindID", "controlKindIDNEQ", "controlKindIDIn", "controlKindIDNotIn", "controlKindIDGT", "controlKindIDGTE", "controlKindIDLT", "controlKindIDLTE", "controlKindIDContains", "controlKindIDHasPrefix", "controlKindIDHasSuffix", "controlKindIDIsNil", "controlKindIDNotNil", "controlKindIDEqualFold", "controlKindIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameGT", "environmentNameGTE", "environmentNameLT", "environmentNameLTE", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDGT", "environmentIDGTE", "environmentIDLT", "environmentIDLTE", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameGT", "scopeNameGTE", "scopeNameLT", "scopeNameLTE", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDGT", "scopeIDGTE", "scopeIDLT", "scopeIDLTE", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "refCode", "refCodeNEQ", "refCodeIn", "refCodeNotIn", "refCodeGT", "refCodeGTE", "refCodeLT", "refCodeLTE", "refCodeContains", "refCodeHasPrefix", "refCodeHasSuffix", "refCodeEqualFold", "refCodeContainsFold", "standardID", "standardIDNEQ", "standardIDIn", "standardIDNotIn", "standardIDGT", "standardIDGTE", "standardIDLT", "standardIDLTE", "standardIDContains", "standardIDHasPrefix", "standardIDHasSuffix", "standardIDIsNil", "standardIDNotNil", "standardIDEqualFold", "standardIDContainsFold", "trustCenterVisibility", "trustCenterVisibilityNEQ", "trustCenterVisibilityIn", "trustCenterVisibilityNotIn", "trustCenterVisibilityIsNil", "trustCenterVisibilityNotNil", "isTrustCenterControl", "isTrustCenterControlNEQ", "isTrustCenterControlIsNil", "isTrustCenterControlNotNil", "hasEvidence", "hasEvidenceWith", "hasControlObjectives", "hasControlObjectivesWith", "hasTasks", "hasTasksWith", "hasNarratives", "hasNarrativesWith", "hasRisks", "hasRisksWith", "hasActionPlans", "hasActionPlansWith", "hasProcedures", "hasProceduresWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasComments", "hasCommentsWith", "hasDiscussions", "hasDiscussionsWith", "hasControlOwner", "hasControlOwnerWith", "hasDelegate", "hasDelegateWith", "hasResponsibleParty", "hasResponsiblePartyWith", "hasReviews", "hasReviewsWith", "hasRemediations", "hasRemediationsWith", "hasScans", "hasScansWith", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasControlKind", "hasControlKindWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasStandard", "hasStandardWith", "hasCheckResults", "hasCheckResultsWith", "hasPrograms", "hasProgramsWith", "hasPlatforms", "hasPlatformsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasCampaigns", "hasCampaignsWith", "hasFindings", "hasFindingsWith", "hasControlImplementations", "hasControlImplementationsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasScheduledJobs", "hasScheduledJobsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasControlMappings", "hasControlMappingsWith", "tagsHas", "aliasesHas", "mappedCategoriesHas", "controlQuestionsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -209538,6 +211757,20 @@ func (ec *executionContext) unmarshalInputControlWhereInput(ctx context.Context,
 				return it, err
 			}
 			it.HasPlatformsWith = data
+		case "hasVulnerabilities":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasVulnerabilities"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasVulnerabilities = data
+		case "hasVulnerabilitiesWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasVulnerabilitiesWith"))
+			data, err := ec.unmarshalOVulnerabilityWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐVulnerabilityWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasVulnerabilitiesWith = data
 		case "hasAssets":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasAssets"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -210596,7 +212829,7 @@ func (ec *executionContext) unmarshalInputCreateAssetInput(ctx context.Context, 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "internalOwner", "assetSubtypeName", "assetDataClassificationName", "environmentName", "scopeName", "accessModelName", "encryptionStatusName", "securityTierName", "criticalityName", "internalNotes", "systemInternalID", "assetType", "name", "displayName", "description", "identifier", "website", "physicalLocation", "region", "containsPii", "sourceType", "sourceIdentifier", "costCenter", "estimatedMonthlyCost", "purchaseDate", "cpe", "categories", "observedAt", "ownerID", "blockedGroupIDs", "editorIDs", "viewerIDs", "internalOwnerUserID", "internalOwnerGroupID", "assetSubtypeID", "assetDataClassificationID", "environmentID", "scopeID", "accessModelID", "encryptionStatusID", "securityTierID", "criticalityID", "scanIDs", "entityIDs", "platformIDs", "systemDetailIDs", "outOfScopePlatformIDs", "identityHolderIDs", "controlIDs", "subcontrolIDs", "internalPolicyIDs", "sourcePlatformID", "integrationID", "connectedAssetIDs", "connectedFromIDs"}
+	fieldsInOrder := [...]string{"tags", "internalOwner", "assetSubtypeName", "assetDataClassificationName", "environmentName", "scopeName", "accessModelName", "encryptionStatusName", "securityTierName", "criticalityName", "internalNotes", "systemInternalID", "assetType", "name", "displayName", "description", "identifier", "website", "physicalLocation", "region", "containsPii", "sourceType", "sourceIdentifier", "costCenter", "estimatedMonthlyCost", "purchaseDate", "cpe", "categories", "observedAt", "ownerID", "blockedGroupIDs", "editorIDs", "viewerIDs", "internalOwnerUserID", "internalOwnerGroupID", "assetSubtypeID", "assetDataClassificationID", "environmentID", "scopeID", "accessModelID", "encryptionStatusID", "securityTierID", "criticalityID", "scanIDs", "entityIDs", "platformIDs", "systemDetailIDs", "outOfScopePlatformIDs", "identityHolderIDs", "controlIDs", "subcontrolIDs", "internalPolicyIDs", "findingIDs", "vulnerabilityIDs", "reviewIDs", "remediationIDs", "sourcePlatformID", "integrationID", "connectedAssetIDs", "connectedFromIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -211001,6 +213234,34 @@ func (ec *executionContext) unmarshalInputCreateAssetInput(ctx context.Context, 
 				return it, err
 			}
 			it.InternalPolicyIDs = data
+		case "findingIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("findingIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FindingIDs = data
+		case "vulnerabilityIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("vulnerabilityIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.VulnerabilityIDs = data
+		case "reviewIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewIDs = data
+		case "remediationIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("remediationIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemediationIDs = data
 		case "sourcePlatformID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourcePlatformID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -211929,7 +214190,7 @@ func (ec *executionContext) unmarshalInputCreateControlInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "externalUUID", "title", "description", "descriptionJSON", "aliases", "referenceID", "auditorReferenceID", "status", "implementationStatus", "implementationDescription", "publicRepresentation", "source", "sourceName", "referenceFramework", "referenceFrameworkRevision", "category", "categoryID", "subcategory", "mappedCategories", "assessmentObjectives", "assessmentMethods", "controlQuestions", "implementationGuidance", "exampleEvidence", "references", "testingProcedures", "evidenceRequests", "internalNotes", "systemInternalID", "controlKindName", "environmentName", "scopeName", "workflowEligibleMarker", "refCode", "trustCenterVisibility", "evidenceIDs", "controlObjectiveIDs", "taskIDs", "narrativeIDs", "riskIDs", "actionPlanIDs", "procedureIDs", "internalPolicyIDs", "commentIDs", "discussionIDs", "controlOwnerID", "delegateID", "responsiblePartyID", "reviewIDs", "remediationIDs", "scanIDs", "ownerID", "blockedGroupIDs", "editorIDs", "controlKindID", "environmentID", "scopeID", "standardID", "checkResultIDs", "programIDs", "platformIDs", "assetIDs", "entityIDs", "identityHolderIDs", "campaignIDs", "findingIDs", "controlImplementationIDs", "subcontrolIDs", "scheduledJobIDs", "workflowObjectRefIDs"}
+	fieldsInOrder := [...]string{"tags", "externalUUID", "title", "description", "descriptionJSON", "aliases", "referenceID", "auditorReferenceID", "status", "implementationStatus", "implementationDescription", "publicRepresentation", "source", "sourceName", "referenceFramework", "referenceFrameworkRevision", "category", "categoryID", "subcategory", "mappedCategories", "assessmentObjectives", "assessmentMethods", "controlQuestions", "implementationGuidance", "exampleEvidence", "references", "testingProcedures", "evidenceRequests", "internalNotes", "systemInternalID", "controlKindName", "environmentName", "scopeName", "workflowEligibleMarker", "refCode", "trustCenterVisibility", "evidenceIDs", "controlObjectiveIDs", "taskIDs", "narrativeIDs", "riskIDs", "actionPlanIDs", "procedureIDs", "internalPolicyIDs", "commentIDs", "discussionIDs", "controlOwnerID", "delegateID", "responsiblePartyID", "reviewIDs", "remediationIDs", "scanIDs", "ownerID", "blockedGroupIDs", "editorIDs", "controlKindID", "environmentID", "scopeID", "standardID", "checkResultIDs", "programIDs", "platformIDs", "vulnerabilityIDs", "assetIDs", "entityIDs", "identityHolderIDs", "campaignIDs", "controlImplementationIDs", "subcontrolIDs", "scheduledJobIDs", "workflowObjectRefIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -212602,6 +214863,13 @@ func (ec *executionContext) unmarshalInputCreateControlInput(ctx context.Context
 				return it, err
 			}
 			it.PlatformIDs = data
+		case "vulnerabilityIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("vulnerabilityIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.VulnerabilityIDs = data
 		case "assetIDs":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assetIDs"))
 			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
@@ -212630,13 +214898,6 @@ func (ec *executionContext) unmarshalInputCreateControlInput(ctx context.Context
 				return it, err
 			}
 			it.CampaignIDs = data
-		case "findingIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("findingIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.FindingIDs = data
 		case "controlImplementationIDs":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlImplementationIDs"))
 			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
@@ -213323,7 +215584,7 @@ func (ec *executionContext) unmarshalInputCreateDirectoryAccountInput(ctx contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "environmentName", "scopeName", "directoryInstanceID", "directoryName", "externalID", "secondaryKey", "canonicalEmail", "emailAliases", "phoneNumber", "displayName", "avatarRemoteURL", "avatarUpdatedAt", "givenName", "familyName", "jobTitle", "department", "organizationUnit", "accountType", "status", "mfaState", "lastSeenIP", "lastLoginAt", "firstSeenAt", "lastSeenAt", "addedAt", "removedAt", "observedAt", "profileHash", "profile", "metadata", "sourceVersion", "primarySource", "ownerID", "environmentID", "scopeID", "integrationID", "directorySyncRunID", "platformID", "identityHolderID", "avatarFileID", "groupIDs", "findingIDs", "workflowObjectRefIDs"}
+	fieldsInOrder := [...]string{"tags", "environmentName", "scopeName", "directoryInstanceID", "directoryName", "externalID", "secondaryKey", "canonicalEmail", "emailAliases", "phoneNumber", "displayName", "avatarRemoteURL", "avatarUpdatedAt", "givenName", "familyName", "jobTitle", "department", "organizationUnit", "accountType", "status", "mfaState", "lastSeenIP", "lastLoginAt", "firstSeenAt", "lastSeenAt", "addedAt", "removedAt", "observedAt", "profileHash", "profile", "metadata", "sourceVersion", "primarySource", "ownerID", "environmentID", "scopeID", "integrationID", "directorySyncRunID", "platformID", "identityHolderID", "avatarFileID", "findingIDs", "workflowObjectRefIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -213617,13 +215878,6 @@ func (ec *executionContext) unmarshalInputCreateDirectoryAccountInput(ctx contex
 				return it, err
 			}
 			it.AvatarFileID = data
-		case "groupIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("groupIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.GroupIDs = data
 		case "findingIDs":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("findingIDs"))
 			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
@@ -214675,7 +216929,7 @@ func (ec *executionContext) unmarshalInputCreateEntityInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "internalOwner", "reviewedBy", "lastReviewedAt", "internalNotes", "systemInternalID", "entityRelationshipStateName", "entitySecurityQuestionnaireStatusName", "entitySourceTypeName", "environmentName", "scopeName", "name", "displayName", "description", "domains", "aliases", "status", "approvedForUse", "linkedAssetIds", "hasSoc2", "soc2PeriodEnd", "contractStartDate", "contractEndDate", "autoRenews", "terminationNoticeDays", "annualSpend", "spendCurrency", "billingModel", "renewalRisk", "ssoEnforced", "mfaSupported", "mfaEnforced", "statusPageURL", "providedServices", "links", "riskRating", "riskScore", "tier", "reviewFrequency", "nextReviewAt", "contractRenewalAt", "vendorMetadata", "logoRemoteURL", "externalID", "observedAt", "ownerID", "blockedGroupIDs", "editorIDs", "internalOwnerUserID", "internalOwnerGroupID", "reviewedByUserID", "reviewedByGroupID", "entityRelationshipStateID", "entitySecurityQuestionnaireStatusID", "entitySourceTypeID", "environmentID", "scopeID", "contactIDs", "documentIDs", "noteIDs", "fileIDs", "assetIDs", "systemDetailIDs", "scanIDs", "campaignIDs", "assessmentResponseIDs", "vendorRiskScoreIDs", "integrationIDs", "subprocessorIDs", "authMethodIDs", "employerIdentityHolderIDs", "identityHolderIDs", "controlIDs", "subcontrolIDs", "platformIDs", "outOfScopePlatformIDs", "sourcePlatformIDs", "entityTypeID", "logoFileID", "internalPolicyIDs", "note"}
+	fieldsInOrder := [...]string{"tags", "internalOwner", "reviewedBy", "lastReviewedAt", "internalNotes", "systemInternalID", "entityRelationshipStateName", "entitySecurityQuestionnaireStatusName", "entitySourceTypeName", "environmentName", "scopeName", "name", "displayName", "description", "domains", "aliases", "status", "approvedForUse", "linkedAssetIds", "hasSoc2", "soc2PeriodEnd", "contractStartDate", "contractEndDate", "autoRenews", "terminationNoticeDays", "annualSpend", "spendCurrency", "billingModel", "renewalRisk", "ssoEnforced", "mfaSupported", "mfaEnforced", "statusPageURL", "providedServices", "links", "riskRating", "riskScore", "tier", "reviewFrequency", "nextReviewAt", "contractRenewalAt", "vendorMetadata", "logoRemoteURL", "externalID", "observedAt", "ownerID", "blockedGroupIDs", "editorIDs", "internalOwnerUserID", "internalOwnerGroupID", "reviewedByUserID", "reviewedByGroupID", "entityRelationshipStateID", "entitySecurityQuestionnaireStatusID", "entitySourceTypeID", "environmentID", "scopeID", "contactIDs", "documentIDs", "noteIDs", "fileIDs", "assetIDs", "systemDetailIDs", "scanIDs", "campaignIDs", "assessmentResponseIDs", "vendorRiskScoreIDs", "integrationIDs", "subprocessorIDs", "authMethodIDs", "employerIdentityHolderIDs", "identityHolderIDs", "controlIDs", "subcontrolIDs", "findingIDs", "vulnerabilityIDs", "reviewIDs", "remediationIDs", "platformIDs", "outOfScopePlatformIDs", "sourcePlatformIDs", "entityTypeID", "logoFileID", "internalPolicyIDs", "note"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -215234,6 +217488,34 @@ func (ec *executionContext) unmarshalInputCreateEntityInput(ctx context.Context,
 				return it, err
 			}
 			it.SubcontrolIDs = data
+		case "findingIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("findingIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FindingIDs = data
+		case "vulnerabilityIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("vulnerabilityIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.VulnerabilityIDs = data
+		case "reviewIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewIDs = data
+		case "remediationIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("remediationIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemediationIDs = data
 		case "platformIDs":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("platformIDs"))
 			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
@@ -216212,7 +218494,7 @@ func (ec *executionContext) unmarshalInputCreateFindingControlInput(ctx context.
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"externalStandard", "externalStandardVersion", "externalControlID", "source", "metadata", "discoveredAt", "findingID", "controlID", "standardID"}
+	fieldsInOrder := [...]string{"externalStandard", "externalStandardVersion", "externalControlID", "source", "metadata", "discoveredAt", "ownerID", "findingID", "controlID", "standardID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -216261,6 +218543,13 @@ func (ec *executionContext) unmarshalInputCreateFindingControlInput(ctx context.
 				return it, err
 			}
 			it.DiscoveredAt = data
+		case "ownerID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerID = data
 		case "findingID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("findingID"))
 			data, err := ec.unmarshalNID2string(ctx, v)
@@ -216298,7 +218587,7 @@ func (ec *executionContext) unmarshalInputCreateFindingInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "reviewedBy", "assignedTo", "internalNotes", "systemInternalID", "environmentName", "scopeName", "findingStatusName", "workflowEligibleMarker", "externalID", "externalOwnerID", "source", "resourceName", "displayName", "state", "category", "categories", "findingClass", "severity", "numericSeverity", "score", "impact", "exploitability", "priority", "open", "blocksProduction", "production", "public", "validated", "assessmentID", "description", "recommendation", "recommendedActions", "references", "stepsToReproduce", "targets", "targetDetails", "vector", "remediationSLA", "eventTime", "reportedAt", "sourceUpdatedAt", "externalURI", "metadata", "rawPayload", "ownerID", "blockedGroupIDs", "editorIDs", "reviewedByUserID", "reviewedByGroupID", "assignedToUserID", "assignedToGroupID", "environmentID", "scopeID", "findingStatusID", "integrationIDs", "vulnerabilityIDs", "actionPlanIDs", "controlIDs", "subcontrolIDs", "riskIDs", "programIDs", "assetIDs", "entityIDs", "scanIDs", "taskIDs", "directoryAccountIDs", "identityHolderIDs", "remediationIDs", "reviewIDs", "commentIDs", "fileIDs", "workflowObjectRefIDs", "checkResultIDs"}
+	fieldsInOrder := [...]string{"tags", "reviewedBy", "assignedTo", "internalNotes", "systemInternalID", "environmentName", "scopeName", "findingStatusName", "workflowEligibleMarker", "externalID", "externalOwnerID", "source", "resourceName", "displayName", "state", "category", "categories", "findingClass", "severity", "numericSeverity", "score", "impact", "exploitability", "priority", "open", "blocksProduction", "production", "public", "validated", "assessmentID", "description", "recommendation", "recommendedActions", "references", "stepsToReproduce", "targets", "targetDetails", "vector", "remediationSLA", "eventTime", "reportedAt", "sourceUpdatedAt", "externalURI", "metadata", "rawPayload", "ownerID", "blockedGroupIDs", "editorIDs", "reviewedByUserID", "reviewedByGroupID", "assignedToUserID", "assignedToGroupID", "environmentID", "scopeID", "findingStatusID", "integrationIDs", "vulnerabilityIDs", "actionPlanIDs", "subcontrolIDs", "riskIDs", "programIDs", "assetIDs", "entityIDs", "scanIDs", "taskIDs", "directoryAccountIDs", "identityHolderIDs", "remediationIDs", "reviewIDs", "commentIDs", "fileIDs", "workflowObjectRefIDs", "checkResultIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -216745,13 +219034,6 @@ func (ec *executionContext) unmarshalInputCreateFindingInput(ctx context.Context
 				return it, err
 			}
 			it.ActionPlanIDs = data
-		case "controlIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ControlIDs = data
 		case "subcontrolIDs":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("subcontrolIDs"))
 			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
@@ -222622,7 +224904,7 @@ func (ec *executionContext) unmarshalInputCreateProgramInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "programKindName", "externalUUID", "name", "description", "status", "frameworkName", "startDate", "endDate", "auditorReady", "auditorWriteComments", "auditorReadComments", "auditFirm", "auditor", "auditorEmail", "ownerID", "blockedGroupIDs", "editorIDs", "viewerIDs", "programKindID", "controlIDs", "subcontrolIDs", "controlObjectiveIDs", "internalPolicyIDs", "procedureIDs", "riskIDs", "taskIDs", "noteIDs", "fileIDs", "evidenceIDs", "narrativeIDs", "actionPlanIDs", "systemDetailIDs", "programOwnerID"}
+	fieldsInOrder := [...]string{"tags", "programKindName", "externalUUID", "name", "description", "status", "frameworkName", "startDate", "endDate", "observationPeriodStartDate", "observationPeriodEndDate", "fieldworkStartDate", "fieldworkEndDate", "auditorReady", "auditorWriteComments", "auditorReadComments", "auditFirm", "auditor", "auditorEmail", "ownerID", "blockedGroupIDs", "editorIDs", "viewerIDs", "programKindID", "controlIDs", "subcontrolIDs", "controlObjectiveIDs", "internalPolicyIDs", "procedureIDs", "riskIDs", "taskIDs", "noteIDs", "fileIDs", "evidenceIDs", "narrativeIDs", "actionPlanIDs", "systemDetailIDs", "findingIDs", "vulnerabilityIDs", "reviewIDs", "remediationIDs", "programOwnerID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -222692,6 +224974,34 @@ func (ec *executionContext) unmarshalInputCreateProgramInput(ctx context.Context
 				return it, err
 			}
 			it.EndDate = data
+		case "observationPeriodStartDate":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("observationPeriodStartDate"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ObservationPeriodStartDate = data
+		case "observationPeriodEndDate":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("observationPeriodEndDate"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ObservationPeriodEndDate = data
+		case "fieldworkStartDate":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fieldworkStartDate"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FieldworkStartDate = data
+		case "fieldworkEndDate":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fieldworkEndDate"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FieldworkEndDate = data
 		case "auditorReady":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("auditorReady"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -222860,6 +225170,34 @@ func (ec *executionContext) unmarshalInputCreateProgramInput(ctx context.Context
 				return it, err
 			}
 			it.SystemDetailIDs = data
+		case "findingIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("findingIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FindingIDs = data
+		case "vulnerabilityIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("vulnerabilityIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.VulnerabilityIDs = data
+		case "reviewIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ReviewIDs = data
+		case "remediationIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("remediationIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemediationIDs = data
 		case "programOwnerID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("programOwnerID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -223678,7 +226016,7 @@ func (ec *executionContext) unmarshalInputCreateRiskInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "riskKindName", "riskCategoryName", "environmentName", "scopeName", "workflowEligibleMarker", "externalID", "integrationID", "observedAt", "externalUUID", "name", "status", "impact", "likelihood", "score", "mitigation", "mitigationJSON", "details", "detailsJSON", "businessCosts", "businessCostsJSON", "mitigatedAt", "reviewRequired", "lastReviewedAt", "reviewFrequency", "dueDate", "nextReviewDueAt", "residualScore", "riskDecision", "ownerID", "blockedGroupIDs", "editorIDs", "viewerIDs", "riskKindID", "riskCategoryID", "environmentID", "scopeID", "controlIDs", "subcontrolIDs", "procedureIDs", "internalPolicyIDs", "programIDs", "platformIDs", "actionPlanIDs", "taskIDs", "assetIDs", "entityIDs", "scanIDs", "stakeholderID", "delegateID", "commentIDs", "discussionIDs", "reviewIDs", "remediationIDs", "workflowObjectRefIDs"}
+	fieldsInOrder := [...]string{"tags", "riskKindName", "riskCategoryName", "environmentName", "scopeName", "workflowEligibleMarker", "externalID", "integrationID", "observedAt", "externalUUID", "name", "status", "impact", "likelihood", "score", "mitigation", "mitigationJSON", "details", "detailsJSON", "businessCosts", "businessCostsJSON", "mitigatedAt", "reviewRequired", "lastReviewedAt", "reviewFrequency", "dueDate", "nextReviewDueAt", "residualScore", "riskDecision", "ownerID", "blockedGroupIDs", "editorIDs", "viewerIDs", "riskKindID", "riskCategoryID", "environmentID", "scopeID", "controlIDs", "subcontrolIDs", "procedureIDs", "internalPolicyIDs", "programIDs", "platformIDs", "actionPlanIDs", "taskIDs", "assetIDs", "entityIDs", "scanIDs", "stakeholderID", "delegateID", "commentIDs", "discussionIDs", "reviewIDs", "remediationIDs", "vulnerabilityIDs", "findingIDs", "workflowObjectRefIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -224063,6 +226401,20 @@ func (ec *executionContext) unmarshalInputCreateRiskInput(ctx context.Context, o
 				return it, err
 			}
 			it.RemediationIDs = data
+		case "vulnerabilityIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("vulnerabilityIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.VulnerabilityIDs = data
+		case "findingIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("findingIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FindingIDs = data
 		case "workflowObjectRefIDs":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("workflowObjectRefIDs"))
 			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
@@ -224144,7 +226496,7 @@ func (ec *executionContext) unmarshalInputCreateScanInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "reviewedBy", "assignedTo", "environmentName", "scopeName", "target", "scanType", "metadata", "scanDate", "scanSchedule", "nextScanRunAt", "performedBy", "discoveredVulnerabilityIds", "status", "ownerID", "blockedGroupIDs", "editorIDs", "reviewedByUserID", "reviewedByGroupID", "assignedToUserID", "assignedToGroupID", "environmentID", "scopeID", "assetIDs", "entityIDs", "evidenceIDs", "fileIDs", "remediationIDs", "actionPlanIDs", "taskIDs", "platformIDs", "vulnerabilityIDs", "controlIDs", "subcontrolIDs", "findingIDs", "generatedByPlatformID", "performedByUserID", "performedByGroupID"}
+	fieldsInOrder := [...]string{"tags", "internalNotes", "systemInternalID", "reviewedBy", "assignedTo", "environmentName", "scopeName", "target", "scanType", "metadata", "scanDate", "scanSchedule", "nextScanRunAt", "performedBy", "discoveredVulnerabilityIds", "status", "ownerID", "blockedGroupIDs", "editorIDs", "reviewedByUserID", "reviewedByGroupID", "assignedToUserID", "assignedToGroupID", "environmentID", "scopeID", "assetIDs", "entityIDs", "evidenceIDs", "fileIDs", "remediationIDs", "actionPlanIDs", "taskIDs", "platformIDs", "vulnerabilityIDs", "controlIDs", "subcontrolIDs", "findingIDs", "generatedByPlatformID", "performedByUserID", "performedByGroupID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -224158,6 +226510,54 @@ func (ec *executionContext) unmarshalInputCreateScanInput(ctx context.Context, o
 				return it, err
 			}
 			it.Tags = data
+		case "internalNotes":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalNotes"))
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOString2ᚖstring(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal *string
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
+			}
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(*string); ok {
+				it.InternalNotes = data
+			} else if tmp == nil {
+				it.InternalNotes = nil
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be *string`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+		case "systemInternalID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("systemInternalID"))
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOString2ᚖstring(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal *string
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
+			}
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(*string); ok {
+				it.SystemInternalID = data
+			} else if tmp == nil {
+				it.SystemInternalID = nil
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be *string`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
 		case "reviewedBy":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedBy"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -224829,7 +227229,7 @@ func (ec *executionContext) unmarshalInputCreateSubcontrolInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "externalUUID", "title", "description", "descriptionJSON", "aliases", "referenceID", "auditorReferenceID", "status", "implementationStatus", "implementationDescription", "publicRepresentation", "source", "sourceName", "referenceFramework", "referenceFrameworkRevision", "category", "categoryID", "subcategory", "mappedCategories", "assessmentObjectives", "assessmentMethods", "controlQuestions", "implementationGuidance", "exampleEvidence", "references", "testingProcedures", "evidenceRequests", "internalNotes", "systemInternalID", "subcontrolKindName", "workflowEligibleMarker", "refCode", "evidenceIDs", "controlObjectiveIDs", "taskIDs", "narrativeIDs", "riskIDs", "actionPlanIDs", "procedureIDs", "internalPolicyIDs", "commentIDs", "discussionIDs", "controlOwnerID", "delegateID", "responsiblePartyID", "reviewIDs", "remediationIDs", "scanIDs", "ownerID", "subcontrolKindID", "controlID", "controlImplementationIDs", "scheduledJobIDs", "workflowObjectRefIDs", "assetIDs", "entityIDs", "identityHolderIDs"}
+	fieldsInOrder := [...]string{"tags", "externalUUID", "title", "description", "descriptionJSON", "aliases", "referenceID", "auditorReferenceID", "status", "implementationStatus", "implementationDescription", "publicRepresentation", "source", "sourceName", "referenceFramework", "referenceFrameworkRevision", "category", "categoryID", "subcategory", "mappedCategories", "assessmentObjectives", "assessmentMethods", "controlQuestions", "implementationGuidance", "exampleEvidence", "references", "testingProcedures", "evidenceRequests", "internalNotes", "systemInternalID", "subcontrolKindName", "workflowEligibleMarker", "refCode", "evidenceIDs", "controlObjectiveIDs", "taskIDs", "narrativeIDs", "riskIDs", "actionPlanIDs", "procedureIDs", "internalPolicyIDs", "commentIDs", "discussionIDs", "controlOwnerID", "delegateID", "responsiblePartyID", "reviewIDs", "remediationIDs", "scanIDs", "ownerID", "subcontrolKindID", "controlID", "controlImplementationIDs", "scheduledJobIDs", "workflowObjectRefIDs", "assetIDs", "entityIDs", "identityHolderIDs", "vulnerabilityIDs", "findingIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -225474,6 +227874,20 @@ func (ec *executionContext) unmarshalInputCreateSubcontrolInput(ctx context.Cont
 				return it, err
 			}
 			it.IdentityHolderIDs = data
+		case "vulnerabilityIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("vulnerabilityIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.VulnerabilityIDs = data
+		case "findingIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("findingIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FindingIDs = data
 		}
 	}
 	return it, nil
@@ -225960,7 +228374,7 @@ func (ec *executionContext) unmarshalInputCreateTaskInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "taskKindName", "environmentName", "scopeName", "workflowEligibleMarker", "externalUUID", "title", "details", "detailsJSON", "status", "due", "completed", "systemGenerated", "isTemplate", "externalReferenceURL", "ownerID", "taskKindID", "environmentID", "scopeID", "assignerID", "assigneeID", "commentIDs", "groupIDs", "internalPolicyIDs", "procedureIDs", "controlIDs", "subcontrolIDs", "controlObjectiveIDs", "programIDs", "riskIDs", "platformIDs", "scanIDs", "identityHolderIDs", "controlImplementationIDs", "actionPlanIDs", "evidenceIDs", "workflowObjectRefIDs", "vulnerabilityIDs", "findingIDs", "parentID", "taskIDs"}
+	fieldsInOrder := [...]string{"tags", "taskKindName", "environmentName", "scopeName", "workflowEligibleMarker", "externalUUID", "title", "details", "detailsJSON", "metadata", "status", "due", "completed", "systemGenerated", "isTemplate", "isSuggested", "priority", "source", "sourceKey", "externalReferenceURL", "ownerID", "taskKindID", "environmentID", "scopeID", "assignerID", "assigneeID", "commentIDs", "groupIDs", "internalPolicyIDs", "procedureIDs", "controlIDs", "subcontrolIDs", "controlObjectiveIDs", "programIDs", "riskIDs", "platformIDs", "scanIDs", "identityHolderIDs", "controlImplementationIDs", "actionPlanIDs", "evidenceIDs", "workflowObjectRefIDs", "vulnerabilityIDs", "findingIDs", "parentID", "taskIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -226030,6 +228444,13 @@ func (ec *executionContext) unmarshalInputCreateTaskInput(ctx context.Context, o
 				return it, err
 			}
 			it.DetailsJSON = data
+		case "metadata":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("metadata"))
+			data, err := ec.unmarshalOMap2map(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Metadata = data
 		case "status":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
 			data, err := ec.unmarshalOTaskTaskStatus2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐTaskStatus(ctx, v)
@@ -226087,6 +228508,34 @@ func (ec *executionContext) unmarshalInputCreateTaskInput(ctx context.Context, o
 				return it, err
 			}
 			it.IsTemplate = data
+		case "isSuggested":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isSuggested"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IsSuggested = data
+		case "priority":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("priority"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Priority = data
+		case "source":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("source"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Source = data
+		case "sourceKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKey = data
 		case "externalReferenceURL":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalReferenceURL"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
@@ -227035,7 +229484,7 @@ func (ec *executionContext) unmarshalInputCreateTrustCenterNDARequestInput(ctx c
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "firstName", "lastName", "email", "companyName", "reason", "accessLevel", "approvedAt", "approvedByUserID", "signedAt", "blockedGroupIDs", "editorIDs", "trustCenterID", "trustCenterDocIDs", "documentID", "fileID"}
+	fieldsInOrder := [...]string{"tags", "firstName", "lastName", "email", "companyName", "reason", "accessLevel", "approvedAt", "signedAt", "blockedGroupIDs", "editorIDs", "trustCenterID", "trustCenterDocIDs", "documentID", "fileID", "approvedByUserID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -227098,13 +229547,6 @@ func (ec *executionContext) unmarshalInputCreateTrustCenterNDARequestInput(ctx c
 				return it, err
 			}
 			it.ApprovedAt = data
-		case "approvedByUserID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approvedByUserID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ApprovedByUserID = data
 		case "signedAt":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("signedAt"))
 			data, err := ec.unmarshalODateTime2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐDateTime(ctx, v)
@@ -227154,6 +229596,13 @@ func (ec *executionContext) unmarshalInputCreateTrustCenterNDARequestInput(ctx c
 				return it, err
 			}
 			it.FileID = data
+		case "approvedByUserID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approvedByUserID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApprovedByUserID = data
 		}
 	}
 	return it, nil
@@ -250499,7 +252948,7 @@ func (ec *executionContext) unmarshalInputEntityWhereInput(ctx context.Context, 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "idEqualFold", "idContainsFold", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorGT", "updatedByImpersonatorGTE", "updatedByImpersonatorLT", "updatedByImpersonatorLTE", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDGT", "ownerIDGTE", "ownerIDLT", "ownerIDLTE", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "internalOwner", "internalOwnerNEQ", "internalOwnerIn", "internalOwnerNotIn", "internalOwnerGT", "internalOwnerGTE", "internalOwnerLT", "internalOwnerLTE", "internalOwnerContains", "internalOwnerHasPrefix", "internalOwnerHasSuffix", "internalOwnerIsNil", "internalOwnerNotNil", "internalOwnerEqualFold", "internalOwnerContainsFold", "internalOwnerUserID", "internalOwnerUserIDNEQ", "internalOwnerUserIDIn", "internalOwnerUserIDNotIn", "internalOwnerUserIDGT", "internalOwnerUserIDGTE", "internalOwnerUserIDLT", "internalOwnerUserIDLTE", "internalOwnerUserIDContains", "internalOwnerUserIDHasPrefix", "internalOwnerUserIDHasSuffix", "internalOwnerUserIDIsNil", "internalOwnerUserIDNotNil", "internalOwnerUserIDEqualFold", "internalOwnerUserIDContainsFold", "internalOwnerGroupID", "internalOwnerGroupIDNEQ", "internalOwnerGroupIDIn", "internalOwnerGroupIDNotIn", "internalOwnerGroupIDGT", "internalOwnerGroupIDGTE", "internalOwnerGroupIDLT", "internalOwnerGroupIDLTE", "internalOwnerGroupIDContains", "internalOwnerGroupIDHasPrefix", "internalOwnerGroupIDHasSuffix", "internalOwnerGroupIDIsNil", "internalOwnerGroupIDNotNil", "internalOwnerGroupIDEqualFold", "internalOwnerGroupIDContainsFold", "reviewedBy", "reviewedByNEQ", "reviewedByIn", "reviewedByNotIn", "reviewedByGT", "reviewedByGTE", "reviewedByLT", "reviewedByLTE", "reviewedByContains", "reviewedByHasPrefix", "reviewedByHasSuffix", "reviewedByIsNil", "reviewedByNotNil", "reviewedByEqualFold", "reviewedByContainsFold", "reviewedByUserID", "reviewedByUserIDNEQ", "reviewedByUserIDIn", "reviewedByUserIDNotIn", "reviewedByUserIDGT", "reviewedByUserIDGTE", "reviewedByUserIDLT", "reviewedByUserIDLTE", "reviewedByUserIDContains", "reviewedByUserIDHasPrefix", "reviewedByUserIDHasSuffix", "reviewedByUserIDIsNil", "reviewedByUserIDNotNil", "reviewedByUserIDEqualFold", "reviewedByUserIDContainsFold", "reviewedByGroupID", "reviewedByGroupIDNEQ", "reviewedByGroupIDIn", "reviewedByGroupIDNotIn", "reviewedByGroupIDGT", "reviewedByGroupIDGTE", "reviewedByGroupIDLT", "reviewedByGroupIDLTE", "reviewedByGroupIDContains", "reviewedByGroupIDHasPrefix", "reviewedByGroupIDHasSuffix", "reviewedByGroupIDIsNil", "reviewedByGroupIDNotNil", "reviewedByGroupIDEqualFold", "reviewedByGroupIDContainsFold", "lastReviewedAt", "lastReviewedAtNEQ", "lastReviewedAtIn", "lastReviewedAtNotIn", "lastReviewedAtGT", "lastReviewedAtGTE", "lastReviewedAtLT", "lastReviewedAtLTE", "lastReviewedAtIsNil", "lastReviewedAtNotNil", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesGT", "internalNotesGTE", "internalNotesLT", "internalNotesLTE", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDGT", "systemInternalIDGTE", "systemInternalIDLT", "systemInternalIDLTE", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "entityRelationshipStateName", "entityRelationshipStateNameNEQ", "entityRelationshipStateNameIn", "entityRelationshipStateNameNotIn", "entityRelationshipStateNameGT", "entityRelationshipStateNameGTE", "entityRelationshipStateNameLT", "entityRelationshipStateNameLTE", "entityRelationshipStateNameContains", "entityRelationshipStateNameHasPrefix", "entityRelationshipStateNameHasSuffix", "entityRelationshipStateNameIsNil", "entityRelationshipStateNameNotNil", "entityRelationshipStateNameEqualFold", "entityRelationshipStateNameContainsFold", "entityRelationshipStateID", "entityRelationshipStateIDNEQ", "entityRelationshipStateIDIn", "entityRelationshipStateIDNotIn", "entityRelationshipStateIDGT", "entityRelationshipStateIDGTE", "entityRelationshipStateIDLT", "entityRelationshipStateIDLTE", "entityRelationshipStateIDContains", "entityRelationshipStateIDHasPrefix", "entityRelationshipStateIDHasSuffix", "entityRelationshipStateIDIsNil", "entityRelationshipStateIDNotNil", "entityRelationshipStateIDEqualFold", "entityRelationshipStateIDContainsFold", "entitySecurityQuestionnaireStatusName", "entitySecurityQuestionnaireStatusNameNEQ", "entitySecurityQuestionnaireStatusNameIn", "entitySecurityQuestionnaireStatusNameNotIn", "entitySecurityQuestionnaireStatusNameGT", "entitySecurityQuestionnaireStatusNameGTE", "entitySecurityQuestionnaireStatusNameLT", "entitySecurityQuestionnaireStatusNameLTE", "entitySecurityQuestionnaireStatusNameContains", "entitySecurityQuestionnaireStatusNameHasPrefix", "entitySecurityQuestionnaireStatusNameHasSuffix", "entitySecurityQuestionnaireStatusNameIsNil", "entitySecurityQuestionnaireStatusNameNotNil", "entitySecurityQuestionnaireStatusNameEqualFold", "entitySecurityQuestionnaireStatusNameContainsFold", "entitySecurityQuestionnaireStatusID", "entitySecurityQuestionnaireStatusIDNEQ", "entitySecurityQuestionnaireStatusIDIn", "entitySecurityQuestionnaireStatusIDNotIn", "entitySecurityQuestionnaireStatusIDGT", "entitySecurityQuestionnaireStatusIDGTE", "entitySecurityQuestionnaireStatusIDLT", "entitySecurityQuestionnaireStatusIDLTE", "entitySecurityQuestionnaireStatusIDContains", "entitySecurityQuestionnaireStatusIDHasPrefix", "entitySecurityQuestionnaireStatusIDHasSuffix", "entitySecurityQuestionnaireStatusIDIsNil", "entitySecurityQuestionnaireStatusIDNotNil", "entitySecurityQuestionnaireStatusIDEqualFold", "entitySecurityQuestionnaireStatusIDContainsFold", "entitySourceTypeName", "entitySourceTypeNameNEQ", "entitySourceTypeNameIn", "entitySourceTypeNameNotIn", "entitySourceTypeNameGT", "entitySourceTypeNameGTE", "entitySourceTypeNameLT", "entitySourceTypeNameLTE", "entitySourceTypeNameContains", "entitySourceTypeNameHasPrefix", "entitySourceTypeNameHasSuffix", "entitySourceTypeNameIsNil", "entitySourceTypeNameNotNil", "entitySourceTypeNameEqualFold", "entitySourceTypeNameContainsFold", "entitySourceTypeID", "entitySourceTypeIDNEQ", "entitySourceTypeIDIn", "entitySourceTypeIDNotIn", "entitySourceTypeIDGT", "entitySourceTypeIDGTE", "entitySourceTypeIDLT", "entitySourceTypeIDLTE", "entitySourceTypeIDContains", "entitySourceTypeIDHasPrefix", "entitySourceTypeIDHasSuffix", "entitySourceTypeIDIsNil", "entitySourceTypeIDNotNil", "entitySourceTypeIDEqualFold", "entitySourceTypeIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameGT", "environmentNameGTE", "environmentNameLT", "environmentNameLTE", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDGT", "environmentIDGTE", "environmentIDLT", "environmentIDLTE", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameGT", "scopeNameGTE", "scopeNameLT", "scopeNameLTE", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDGT", "scopeIDGTE", "scopeIDLT", "scopeIDLTE", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameGT", "nameGTE", "nameLT", "nameLTE", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameIsNil", "nameNotNil", "nameEqualFold", "nameContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "entityTypeID", "entityTypeIDNEQ", "entityTypeIDIn", "entityTypeIDNotIn", "entityTypeIDGT", "entityTypeIDGTE", "entityTypeIDLT", "entityTypeIDLTE", "entityTypeIDContains", "entityTypeIDHasPrefix", "entityTypeIDHasSuffix", "entityTypeIDIsNil", "entityTypeIDNotNil", "entityTypeIDEqualFold", "entityTypeIDContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "approvedForUse", "approvedForUseNEQ", "approvedForUseIsNil", "approvedForUseNotNil", "hasSoc2", "hasSoc2NEQ", "hasSoc2IsNil", "hasSoc2NotNil", "soc2PeriodEnd", "soc2PeriodEndNEQ", "soc2PeriodEndIn", "soc2PeriodEndNotIn", "soc2PeriodEndGT", "soc2PeriodEndGTE", "soc2PeriodEndLT", "soc2PeriodEndLTE", "soc2PeriodEndIsNil", "soc2PeriodEndNotNil", "contractStartDate", "contractStartDateNEQ", "contractStartDateIn", "contractStartDateNotIn", "contractStartDateGT", "contractStartDateGTE", "contractStartDateLT", "contractStartDateLTE", "contractStartDateIsNil", "contractStartDateNotNil", "contractEndDate", "contractEndDateNEQ", "contractEndDateIn", "contractEndDateNotIn", "contractEndDateGT", "contractEndDateGTE", "contractEndDateLT", "contractEndDateLTE", "contractEndDateIsNil", "contractEndDateNotNil", "autoRenews", "autoRenewsNEQ", "autoRenewsIsNil", "autoRenewsNotNil", "terminationNoticeDays", "terminationNoticeDaysNEQ", "terminationNoticeDaysIn", "terminationNoticeDaysNotIn", "terminationNoticeDaysGT", "terminationNoticeDaysGTE", "terminationNoticeDaysLT", "terminationNoticeDaysLTE", "terminationNoticeDaysIsNil", "terminationNoticeDaysNotNil", "annualSpend", "annualSpendNEQ", "annualSpendIn", "annualSpendNotIn", "annualSpendGT", "annualSpendGTE", "annualSpendLT", "annualSpendLTE", "annualSpendIsNil", "annualSpendNotNil", "spendCurrency", "spendCurrencyNEQ", "spendCurrencyIn", "spendCurrencyNotIn", "spendCurrencyGT", "spendCurrencyGTE", "spendCurrencyLT", "spendCurrencyLTE", "spendCurrencyContains", "spendCurrencyHasPrefix", "spendCurrencyHasSuffix", "spendCurrencyIsNil", "spendCurrencyNotNil", "spendCurrencyEqualFold", "spendCurrencyContainsFold", "billingModel", "billingModelNEQ", "billingModelIn", "billingModelNotIn", "billingModelGT", "billingModelGTE", "billingModelLT", "billingModelLTE", "billingModelContains", "billingModelHasPrefix", "billingModelHasSuffix", "billingModelIsNil", "billingModelNotNil", "billingModelEqualFold", "billingModelContainsFold", "renewalRisk", "renewalRiskNEQ", "renewalRiskIn", "renewalRiskNotIn", "renewalRiskGT", "renewalRiskGTE", "renewalRiskLT", "renewalRiskLTE", "renewalRiskContains", "renewalRiskHasPrefix", "renewalRiskHasSuffix", "renewalRiskIsNil", "renewalRiskNotNil", "renewalRiskEqualFold", "renewalRiskContainsFold", "ssoEnforced", "ssoEnforcedNEQ", "ssoEnforcedIsNil", "ssoEnforcedNotNil", "mfaSupported", "mfaSupportedNEQ", "mfaSupportedIsNil", "mfaSupportedNotNil", "mfaEnforced", "mfaEnforcedNEQ", "mfaEnforcedIsNil", "mfaEnforcedNotNil", "statusPageURL", "statusPageURLNEQ", "statusPageURLIn", "statusPageURLNotIn", "statusPageURLGT", "statusPageURLGTE", "statusPageURLLT", "statusPageURLLTE", "statusPageURLContains", "statusPageURLHasPrefix", "statusPageURLHasSuffix", "statusPageURLIsNil", "statusPageURLNotNil", "statusPageURLEqualFold", "statusPageURLContainsFold", "riskRating", "riskRatingNEQ", "riskRatingIn", "riskRatingNotIn", "riskRatingGT", "riskRatingGTE", "riskRatingLT", "riskRatingLTE", "riskRatingContains", "riskRatingHasPrefix", "riskRatingHasSuffix", "riskRatingIsNil", "riskRatingNotNil", "riskRatingEqualFold", "riskRatingContainsFold", "riskScore", "riskScoreNEQ", "riskScoreIn", "riskScoreNotIn", "riskScoreGT", "riskScoreGTE", "riskScoreLT", "riskScoreLTE", "riskScoreIsNil", "riskScoreNotNil", "riskScoreCoverage", "riskScoreCoverageNEQ", "riskScoreCoverageIn", "riskScoreCoverageNotIn", "riskScoreCoverageGT", "riskScoreCoverageGTE", "riskScoreCoverageLT", "riskScoreCoverageLTE", "riskScoreCoverageIsNil", "riskScoreCoverageNotNil", "tier", "tierNEQ", "tierIn", "tierNotIn", "tierIsNil", "tierNotNil", "reviewFrequency", "reviewFrequencyNEQ", "reviewFrequencyIn", "reviewFrequencyNotIn", "reviewFrequencyIsNil", "reviewFrequencyNotNil", "nextReviewAt", "nextReviewAtNEQ", "nextReviewAtIn", "nextReviewAtNotIn", "nextReviewAtGT", "nextReviewAtGTE", "nextReviewAtLT", "nextReviewAtLTE", "nextReviewAtIsNil", "nextReviewAtNotNil", "contractRenewalAt", "contractRenewalAtNEQ", "contractRenewalAtIn", "contractRenewalAtNotIn", "contractRenewalAtGT", "contractRenewalAtGTE", "contractRenewalAtLT", "contractRenewalAtLTE", "contractRenewalAtIsNil", "contractRenewalAtNotNil", "logoRemoteURL", "logoRemoteURLNEQ", "logoRemoteURLIn", "logoRemoteURLNotIn", "logoRemoteURLGT", "logoRemoteURLGTE", "logoRemoteURLLT", "logoRemoteURLLTE", "logoRemoteURLContains", "logoRemoteURLHasPrefix", "logoRemoteURLHasSuffix", "logoRemoteURLIsNil", "logoRemoteURLNotNil", "logoRemoteURLEqualFold", "logoRemoteURLContainsFold", "logoFileID", "logoFileIDNEQ", "logoFileIDIn", "logoFileIDNotIn", "logoFileIDGT", "logoFileIDGTE", "logoFileIDLT", "logoFileIDLTE", "logoFileIDContains", "logoFileIDHasPrefix", "logoFileIDHasSuffix", "logoFileIDIsNil", "logoFileIDNotNil", "logoFileIDEqualFold", "logoFileIDContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDGT", "externalIDGTE", "externalIDLT", "externalIDLTE", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "observedAt", "observedAtNEQ", "observedAtIn", "observedAtNotIn", "observedAtGT", "observedAtGTE", "observedAtLT", "observedAtLTE", "observedAtIsNil", "observedAtNotNil", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasInternalOwnerUser", "hasInternalOwnerUserWith", "hasInternalOwnerGroup", "hasInternalOwnerGroupWith", "hasReviewedByUser", "hasReviewedByUserWith", "hasReviewedByGroup", "hasReviewedByGroupWith", "hasEntityRelationshipState", "hasEntityRelationshipStateWith", "hasEntitySecurityQuestionnaireStatus", "hasEntitySecurityQuestionnaireStatusWith", "hasEntitySourceType", "hasEntitySourceTypeWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasContacts", "hasContactsWith", "hasDocuments", "hasDocumentsWith", "hasNotes", "hasNotesWith", "hasFiles", "hasFilesWith", "hasAssets", "hasAssetsWith", "hasSystemDetails", "hasSystemDetailsWith", "hasScans", "hasScansWith", "hasCampaigns", "hasCampaignsWith", "hasAssessmentResponses", "hasAssessmentResponsesWith", "hasVendorRiskScores", "hasVendorRiskScoresWith", "hasIntegrations", "hasIntegrationsWith", "hasSubprocessors", "hasSubprocessorsWith", "hasAuthMethods", "hasAuthMethodsWith", "hasEmployerIdentityHolders", "hasEmployerIdentityHoldersWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasPlatforms", "hasPlatformsWith", "hasOutOfScopePlatforms", "hasOutOfScopePlatformsWith", "hasSourcePlatforms", "hasSourcePlatformsWith", "hasEntityType", "hasEntityTypeWith", "hasLogoFile", "hasLogoFileWith", "hasInternalPolicies", "hasInternalPoliciesWith", "tagsHas", "domainsHas", "aliasesHas", "linkedAssetIdsHas", "providedServicesHas", "linksHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "idEqualFold", "idContainsFold", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorGT", "updatedByImpersonatorGTE", "updatedByImpersonatorLT", "updatedByImpersonatorLTE", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDGT", "ownerIDGTE", "ownerIDLT", "ownerIDLTE", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "internalOwner", "internalOwnerNEQ", "internalOwnerIn", "internalOwnerNotIn", "internalOwnerGT", "internalOwnerGTE", "internalOwnerLT", "internalOwnerLTE", "internalOwnerContains", "internalOwnerHasPrefix", "internalOwnerHasSuffix", "internalOwnerIsNil", "internalOwnerNotNil", "internalOwnerEqualFold", "internalOwnerContainsFold", "internalOwnerUserID", "internalOwnerUserIDNEQ", "internalOwnerUserIDIn", "internalOwnerUserIDNotIn", "internalOwnerUserIDGT", "internalOwnerUserIDGTE", "internalOwnerUserIDLT", "internalOwnerUserIDLTE", "internalOwnerUserIDContains", "internalOwnerUserIDHasPrefix", "internalOwnerUserIDHasSuffix", "internalOwnerUserIDIsNil", "internalOwnerUserIDNotNil", "internalOwnerUserIDEqualFold", "internalOwnerUserIDContainsFold", "internalOwnerGroupID", "internalOwnerGroupIDNEQ", "internalOwnerGroupIDIn", "internalOwnerGroupIDNotIn", "internalOwnerGroupIDGT", "internalOwnerGroupIDGTE", "internalOwnerGroupIDLT", "internalOwnerGroupIDLTE", "internalOwnerGroupIDContains", "internalOwnerGroupIDHasPrefix", "internalOwnerGroupIDHasSuffix", "internalOwnerGroupIDIsNil", "internalOwnerGroupIDNotNil", "internalOwnerGroupIDEqualFold", "internalOwnerGroupIDContainsFold", "reviewedBy", "reviewedByNEQ", "reviewedByIn", "reviewedByNotIn", "reviewedByGT", "reviewedByGTE", "reviewedByLT", "reviewedByLTE", "reviewedByContains", "reviewedByHasPrefix", "reviewedByHasSuffix", "reviewedByIsNil", "reviewedByNotNil", "reviewedByEqualFold", "reviewedByContainsFold", "reviewedByUserID", "reviewedByUserIDNEQ", "reviewedByUserIDIn", "reviewedByUserIDNotIn", "reviewedByUserIDGT", "reviewedByUserIDGTE", "reviewedByUserIDLT", "reviewedByUserIDLTE", "reviewedByUserIDContains", "reviewedByUserIDHasPrefix", "reviewedByUserIDHasSuffix", "reviewedByUserIDIsNil", "reviewedByUserIDNotNil", "reviewedByUserIDEqualFold", "reviewedByUserIDContainsFold", "reviewedByGroupID", "reviewedByGroupIDNEQ", "reviewedByGroupIDIn", "reviewedByGroupIDNotIn", "reviewedByGroupIDGT", "reviewedByGroupIDGTE", "reviewedByGroupIDLT", "reviewedByGroupIDLTE", "reviewedByGroupIDContains", "reviewedByGroupIDHasPrefix", "reviewedByGroupIDHasSuffix", "reviewedByGroupIDIsNil", "reviewedByGroupIDNotNil", "reviewedByGroupIDEqualFold", "reviewedByGroupIDContainsFold", "lastReviewedAt", "lastReviewedAtNEQ", "lastReviewedAtIn", "lastReviewedAtNotIn", "lastReviewedAtGT", "lastReviewedAtGTE", "lastReviewedAtLT", "lastReviewedAtLTE", "lastReviewedAtIsNil", "lastReviewedAtNotNil", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesGT", "internalNotesGTE", "internalNotesLT", "internalNotesLTE", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDGT", "systemInternalIDGTE", "systemInternalIDLT", "systemInternalIDLTE", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "entityRelationshipStateName", "entityRelationshipStateNameNEQ", "entityRelationshipStateNameIn", "entityRelationshipStateNameNotIn", "entityRelationshipStateNameGT", "entityRelationshipStateNameGTE", "entityRelationshipStateNameLT", "entityRelationshipStateNameLTE", "entityRelationshipStateNameContains", "entityRelationshipStateNameHasPrefix", "entityRelationshipStateNameHasSuffix", "entityRelationshipStateNameIsNil", "entityRelationshipStateNameNotNil", "entityRelationshipStateNameEqualFold", "entityRelationshipStateNameContainsFold", "entityRelationshipStateID", "entityRelationshipStateIDNEQ", "entityRelationshipStateIDIn", "entityRelationshipStateIDNotIn", "entityRelationshipStateIDGT", "entityRelationshipStateIDGTE", "entityRelationshipStateIDLT", "entityRelationshipStateIDLTE", "entityRelationshipStateIDContains", "entityRelationshipStateIDHasPrefix", "entityRelationshipStateIDHasSuffix", "entityRelationshipStateIDIsNil", "entityRelationshipStateIDNotNil", "entityRelationshipStateIDEqualFold", "entityRelationshipStateIDContainsFold", "entitySecurityQuestionnaireStatusName", "entitySecurityQuestionnaireStatusNameNEQ", "entitySecurityQuestionnaireStatusNameIn", "entitySecurityQuestionnaireStatusNameNotIn", "entitySecurityQuestionnaireStatusNameGT", "entitySecurityQuestionnaireStatusNameGTE", "entitySecurityQuestionnaireStatusNameLT", "entitySecurityQuestionnaireStatusNameLTE", "entitySecurityQuestionnaireStatusNameContains", "entitySecurityQuestionnaireStatusNameHasPrefix", "entitySecurityQuestionnaireStatusNameHasSuffix", "entitySecurityQuestionnaireStatusNameIsNil", "entitySecurityQuestionnaireStatusNameNotNil", "entitySecurityQuestionnaireStatusNameEqualFold", "entitySecurityQuestionnaireStatusNameContainsFold", "entitySecurityQuestionnaireStatusID", "entitySecurityQuestionnaireStatusIDNEQ", "entitySecurityQuestionnaireStatusIDIn", "entitySecurityQuestionnaireStatusIDNotIn", "entitySecurityQuestionnaireStatusIDGT", "entitySecurityQuestionnaireStatusIDGTE", "entitySecurityQuestionnaireStatusIDLT", "entitySecurityQuestionnaireStatusIDLTE", "entitySecurityQuestionnaireStatusIDContains", "entitySecurityQuestionnaireStatusIDHasPrefix", "entitySecurityQuestionnaireStatusIDHasSuffix", "entitySecurityQuestionnaireStatusIDIsNil", "entitySecurityQuestionnaireStatusIDNotNil", "entitySecurityQuestionnaireStatusIDEqualFold", "entitySecurityQuestionnaireStatusIDContainsFold", "entitySourceTypeName", "entitySourceTypeNameNEQ", "entitySourceTypeNameIn", "entitySourceTypeNameNotIn", "entitySourceTypeNameGT", "entitySourceTypeNameGTE", "entitySourceTypeNameLT", "entitySourceTypeNameLTE", "entitySourceTypeNameContains", "entitySourceTypeNameHasPrefix", "entitySourceTypeNameHasSuffix", "entitySourceTypeNameIsNil", "entitySourceTypeNameNotNil", "entitySourceTypeNameEqualFold", "entitySourceTypeNameContainsFold", "entitySourceTypeID", "entitySourceTypeIDNEQ", "entitySourceTypeIDIn", "entitySourceTypeIDNotIn", "entitySourceTypeIDGT", "entitySourceTypeIDGTE", "entitySourceTypeIDLT", "entitySourceTypeIDLTE", "entitySourceTypeIDContains", "entitySourceTypeIDHasPrefix", "entitySourceTypeIDHasSuffix", "entitySourceTypeIDIsNil", "entitySourceTypeIDNotNil", "entitySourceTypeIDEqualFold", "entitySourceTypeIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameGT", "environmentNameGTE", "environmentNameLT", "environmentNameLTE", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDGT", "environmentIDGTE", "environmentIDLT", "environmentIDLTE", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameGT", "scopeNameGTE", "scopeNameLT", "scopeNameLTE", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDGT", "scopeIDGTE", "scopeIDLT", "scopeIDLTE", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameGT", "nameGTE", "nameLT", "nameLTE", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameIsNil", "nameNotNil", "nameEqualFold", "nameContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameIsNil", "displayNameNotNil", "displayNameEqualFold", "displayNameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "entityTypeID", "entityTypeIDNEQ", "entityTypeIDIn", "entityTypeIDNotIn", "entityTypeIDGT", "entityTypeIDGTE", "entityTypeIDLT", "entityTypeIDLTE", "entityTypeIDContains", "entityTypeIDHasPrefix", "entityTypeIDHasSuffix", "entityTypeIDIsNil", "entityTypeIDNotNil", "entityTypeIDEqualFold", "entityTypeIDContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "approvedForUse", "approvedForUseNEQ", "approvedForUseIsNil", "approvedForUseNotNil", "hasSoc2", "hasSoc2NEQ", "hasSoc2IsNil", "hasSoc2NotNil", "soc2PeriodEnd", "soc2PeriodEndNEQ", "soc2PeriodEndIn", "soc2PeriodEndNotIn", "soc2PeriodEndGT", "soc2PeriodEndGTE", "soc2PeriodEndLT", "soc2PeriodEndLTE", "soc2PeriodEndIsNil", "soc2PeriodEndNotNil", "contractStartDate", "contractStartDateNEQ", "contractStartDateIn", "contractStartDateNotIn", "contractStartDateGT", "contractStartDateGTE", "contractStartDateLT", "contractStartDateLTE", "contractStartDateIsNil", "contractStartDateNotNil", "contractEndDate", "contractEndDateNEQ", "contractEndDateIn", "contractEndDateNotIn", "contractEndDateGT", "contractEndDateGTE", "contractEndDateLT", "contractEndDateLTE", "contractEndDateIsNil", "contractEndDateNotNil", "autoRenews", "autoRenewsNEQ", "autoRenewsIsNil", "autoRenewsNotNil", "terminationNoticeDays", "terminationNoticeDaysNEQ", "terminationNoticeDaysIn", "terminationNoticeDaysNotIn", "terminationNoticeDaysGT", "terminationNoticeDaysGTE", "terminationNoticeDaysLT", "terminationNoticeDaysLTE", "terminationNoticeDaysIsNil", "terminationNoticeDaysNotNil", "annualSpend", "annualSpendNEQ", "annualSpendIn", "annualSpendNotIn", "annualSpendGT", "annualSpendGTE", "annualSpendLT", "annualSpendLTE", "annualSpendIsNil", "annualSpendNotNil", "spendCurrency", "spendCurrencyNEQ", "spendCurrencyIn", "spendCurrencyNotIn", "spendCurrencyGT", "spendCurrencyGTE", "spendCurrencyLT", "spendCurrencyLTE", "spendCurrencyContains", "spendCurrencyHasPrefix", "spendCurrencyHasSuffix", "spendCurrencyIsNil", "spendCurrencyNotNil", "spendCurrencyEqualFold", "spendCurrencyContainsFold", "billingModel", "billingModelNEQ", "billingModelIn", "billingModelNotIn", "billingModelGT", "billingModelGTE", "billingModelLT", "billingModelLTE", "billingModelContains", "billingModelHasPrefix", "billingModelHasSuffix", "billingModelIsNil", "billingModelNotNil", "billingModelEqualFold", "billingModelContainsFold", "renewalRisk", "renewalRiskNEQ", "renewalRiskIn", "renewalRiskNotIn", "renewalRiskGT", "renewalRiskGTE", "renewalRiskLT", "renewalRiskLTE", "renewalRiskContains", "renewalRiskHasPrefix", "renewalRiskHasSuffix", "renewalRiskIsNil", "renewalRiskNotNil", "renewalRiskEqualFold", "renewalRiskContainsFold", "ssoEnforced", "ssoEnforcedNEQ", "ssoEnforcedIsNil", "ssoEnforcedNotNil", "mfaSupported", "mfaSupportedNEQ", "mfaSupportedIsNil", "mfaSupportedNotNil", "mfaEnforced", "mfaEnforcedNEQ", "mfaEnforcedIsNil", "mfaEnforcedNotNil", "statusPageURL", "statusPageURLNEQ", "statusPageURLIn", "statusPageURLNotIn", "statusPageURLGT", "statusPageURLGTE", "statusPageURLLT", "statusPageURLLTE", "statusPageURLContains", "statusPageURLHasPrefix", "statusPageURLHasSuffix", "statusPageURLIsNil", "statusPageURLNotNil", "statusPageURLEqualFold", "statusPageURLContainsFold", "riskRating", "riskRatingNEQ", "riskRatingIn", "riskRatingNotIn", "riskRatingGT", "riskRatingGTE", "riskRatingLT", "riskRatingLTE", "riskRatingContains", "riskRatingHasPrefix", "riskRatingHasSuffix", "riskRatingIsNil", "riskRatingNotNil", "riskRatingEqualFold", "riskRatingContainsFold", "riskScore", "riskScoreNEQ", "riskScoreIn", "riskScoreNotIn", "riskScoreGT", "riskScoreGTE", "riskScoreLT", "riskScoreLTE", "riskScoreIsNil", "riskScoreNotNil", "riskScoreCoverage", "riskScoreCoverageNEQ", "riskScoreCoverageIn", "riskScoreCoverageNotIn", "riskScoreCoverageGT", "riskScoreCoverageGTE", "riskScoreCoverageLT", "riskScoreCoverageLTE", "riskScoreCoverageIsNil", "riskScoreCoverageNotNil", "tier", "tierNEQ", "tierIn", "tierNotIn", "tierIsNil", "tierNotNil", "reviewFrequency", "reviewFrequencyNEQ", "reviewFrequencyIn", "reviewFrequencyNotIn", "reviewFrequencyIsNil", "reviewFrequencyNotNil", "nextReviewAt", "nextReviewAtNEQ", "nextReviewAtIn", "nextReviewAtNotIn", "nextReviewAtGT", "nextReviewAtGTE", "nextReviewAtLT", "nextReviewAtLTE", "nextReviewAtIsNil", "nextReviewAtNotNil", "contractRenewalAt", "contractRenewalAtNEQ", "contractRenewalAtIn", "contractRenewalAtNotIn", "contractRenewalAtGT", "contractRenewalAtGTE", "contractRenewalAtLT", "contractRenewalAtLTE", "contractRenewalAtIsNil", "contractRenewalAtNotNil", "logoRemoteURL", "logoRemoteURLNEQ", "logoRemoteURLIn", "logoRemoteURLNotIn", "logoRemoteURLGT", "logoRemoteURLGTE", "logoRemoteURLLT", "logoRemoteURLLTE", "logoRemoteURLContains", "logoRemoteURLHasPrefix", "logoRemoteURLHasSuffix", "logoRemoteURLIsNil", "logoRemoteURLNotNil", "logoRemoteURLEqualFold", "logoRemoteURLContainsFold", "logoFileID", "logoFileIDNEQ", "logoFileIDIn", "logoFileIDNotIn", "logoFileIDGT", "logoFileIDGTE", "logoFileIDLT", "logoFileIDLTE", "logoFileIDContains", "logoFileIDHasPrefix", "logoFileIDHasSuffix", "logoFileIDIsNil", "logoFileIDNotNil", "logoFileIDEqualFold", "logoFileIDContainsFold", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDGT", "externalIDGTE", "externalIDLT", "externalIDLTE", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "observedAt", "observedAtNEQ", "observedAtIn", "observedAtNotIn", "observedAtGT", "observedAtGTE", "observedAtLT", "observedAtLTE", "observedAtIsNil", "observedAtNotNil", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasInternalOwnerUser", "hasInternalOwnerUserWith", "hasInternalOwnerGroup", "hasInternalOwnerGroupWith", "hasReviewedByUser", "hasReviewedByUserWith", "hasReviewedByGroup", "hasReviewedByGroupWith", "hasEntityRelationshipState", "hasEntityRelationshipStateWith", "hasEntitySecurityQuestionnaireStatus", "hasEntitySecurityQuestionnaireStatusWith", "hasEntitySourceType", "hasEntitySourceTypeWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasContacts", "hasContactsWith", "hasDocuments", "hasDocumentsWith", "hasNotes", "hasNotesWith", "hasFiles", "hasFilesWith", "hasAssets", "hasAssetsWith", "hasSystemDetails", "hasSystemDetailsWith", "hasScans", "hasScansWith", "hasCampaigns", "hasCampaignsWith", "hasAssessmentResponses", "hasAssessmentResponsesWith", "hasVendorRiskScores", "hasVendorRiskScoresWith", "hasIntegrations", "hasIntegrationsWith", "hasSubprocessors", "hasSubprocessorsWith", "hasAuthMethods", "hasAuthMethodsWith", "hasEmployerIdentityHolders", "hasEmployerIdentityHoldersWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasFindings", "hasFindingsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasReviews", "hasReviewsWith", "hasRemediations", "hasRemediationsWith", "hasPlatforms", "hasPlatformsWith", "hasOutOfScopePlatforms", "hasOutOfScopePlatformsWith", "hasSourcePlatforms", "hasSourcePlatformsWith", "hasEntityType", "hasEntityTypeWith", "hasLogoFile", "hasLogoFileWith", "hasInternalPolicies", "hasInternalPoliciesWith", "tagsHas", "domainsHas", "aliasesHas", "linkedAssetIdsHas", "providedServicesHas", "linksHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -255805,6 +258254,62 @@ func (ec *executionContext) unmarshalInputEntityWhereInput(ctx context.Context, 
 				return it, err
 			}
 			it.HasSubcontrolsWith = data
+		case "hasFindings":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasFindings"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasFindings = data
+		case "hasFindingsWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasFindingsWith"))
+			data, err := ec.unmarshalOFindingWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFindingWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasFindingsWith = data
+		case "hasVulnerabilities":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasVulnerabilities"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasVulnerabilities = data
+		case "hasVulnerabilitiesWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasVulnerabilitiesWith"))
+			data, err := ec.unmarshalOVulnerabilityWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐVulnerabilityWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasVulnerabilitiesWith = data
+		case "hasReviews":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasReviews"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasReviews = data
+		case "hasReviewsWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasReviewsWith"))
+			data, err := ec.unmarshalOReviewWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐReviewWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasReviewsWith = data
+		case "hasRemediations":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasRemediations"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasRemediations = data
+		case "hasRemediationsWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasRemediationsWith"))
+			data, err := ec.unmarshalORemediationWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRemediationWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasRemediationsWith = data
 		case "hasPlatforms":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasPlatforms"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -307082,7 +309587,7 @@ func (ec *executionContext) unmarshalInputOrganizationWhereInput(ctx context.Con
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "idEqualFold", "idContainsFold", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorGT", "updatedByImpersonatorGTE", "updatedByImpersonatorLT", "updatedByImpersonatorLTE", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameEqualFold", "displayNameContainsFold", "parentOrganizationID", "parentOrganizationIDNEQ", "parentOrganizationIDIn", "parentOrganizationIDNotIn", "parentOrganizationIDGT", "parentOrganizationIDGTE", "parentOrganizationIDLT", "parentOrganizationIDLTE", "parentOrganizationIDContains", "parentOrganizationIDHasPrefix", "parentOrganizationIDHasSuffix", "parentOrganizationIDIsNil", "parentOrganizationIDNotNil", "parentOrganizationIDEqualFold", "parentOrganizationIDContainsFold", "personalOrg", "personalOrgNEQ", "personalOrgIsNil", "personalOrgNotNil", "avatarRemoteURL", "avatarRemoteURLNEQ", "avatarRemoteURLIn", "avatarRemoteURLNotIn", "avatarRemoteURLGT", "avatarRemoteURLGTE", "avatarRemoteURLLT", "avatarRemoteURLLTE", "avatarRemoteURLContains", "avatarRemoteURLHasPrefix", "avatarRemoteURLHasSuffix", "avatarRemoteURLIsNil", "avatarRemoteURLNotNil", "avatarRemoteURLEqualFold", "avatarRemoteURLContainsFold", "avatarLocalFileID", "avatarLocalFileIDNEQ", "avatarLocalFileIDIn", "avatarLocalFileIDNotIn", "avatarLocalFileIDGT", "avatarLocalFileIDGTE", "avatarLocalFileIDLT", "avatarLocalFileIDLTE", "avatarLocalFileIDContains", "avatarLocalFileIDHasPrefix", "avatarLocalFileIDHasSuffix", "avatarLocalFileIDIsNil", "avatarLocalFileIDNotNil", "avatarLocalFileIDEqualFold", "avatarLocalFileIDContainsFold", "avatarUpdatedAt", "avatarUpdatedAtNEQ", "avatarUpdatedAtIn", "avatarUpdatedAtNotIn", "avatarUpdatedAtGT", "avatarUpdatedAtGTE", "avatarUpdatedAtLT", "avatarUpdatedAtLTE", "avatarUpdatedAtIsNil", "avatarUpdatedAtNotNil", "slugName", "slugNameNEQ", "slugNameIn", "slugNameNotIn", "slugNameGT", "slugNameGTE", "slugNameLT", "slugNameLTE", "slugNameContains", "slugNameHasPrefix", "slugNameHasSuffix", "slugNameIsNil", "slugNameNotNil", "slugNameEqualFold", "slugNameContainsFold", "hasActionPlanCreators", "hasActionPlanCreatorsWith", "hasAPITokenCreators", "hasAPITokenCreatorsWith", "hasAssessmentCreators", "hasAssessmentCreatorsWith", "hasAssetCreators", "hasAssetCreatorsWith", "hasCampaignCreators", "hasCampaignCreatorsWith", "hasCampaignTargetCreators", "hasCampaignTargetCreatorsWith", "hasCheckResultCreators", "hasCheckResultCreatorsWith", "hasContactCreators", "hasContactCreatorsWith", "hasControlCreators", "hasControlCreatorsWith", "hasControlImplementationCreators", "hasControlImplementationCreatorsWith", "hasControlObjectiveCreators", "hasControlObjectiveCreatorsWith", "hasCustomDomainCreators", "hasCustomDomainCreatorsWith", "hasCustomTypeEnumCreators", "hasCustomTypeEnumCreatorsWith", "hasDirectoryAccountCreators", "hasDirectoryAccountCreatorsWith", "hasDirectoryGroupCreators", "hasDirectoryGroupCreatorsWith", "hasDirectoryMembershipCreators", "hasDirectoryMembershipCreatorsWith", "hasDirectorySyncRunCreators", "hasDirectorySyncRunCreatorsWith", "hasDiscussionCreators", "hasDiscussionCreatorsWith", "hasDocumentDataCreators", "hasDocumentDataCreatorsWith", "hasEmailTemplateCreators", "hasEmailTemplateCreatorsWith", "hasEntityCreators", "hasEntityCreatorsWith", "hasEntityTypeCreators", "hasEntityTypeCreatorsWith", "hasEvidenceCreators", "hasEvidenceCreatorsWith", "hasFileCreators", "hasFileCreatorsWith", "hasFindingCreators", "hasFindingCreatorsWith", "hasFindingControlCreators", "hasFindingControlCreatorsWith", "hasGroupCreators", "hasGroupCreatorsWith", "hasGroupMembershipCreators", "hasGroupMembershipCreatorsWith", "hasGroupSettingCreators", "hasGroupSettingCreatorsWith", "hasHushCreators", "hasHushCreatorsWith", "hasIdentityHolderCreators", "hasIdentityHolderCreatorsWith", "hasInternalPolicyCreators", "hasInternalPolicyCreatorsWith", "hasInviteCreators", "hasInviteCreatorsWith", "hasJobRunnerCreators", "hasJobRunnerCreatorsWith", "hasJobRunnerRegistrationTokenCreators", "hasJobRunnerRegistrationTokenCreatorsWith", "hasJobRunnerTokenCreators", "hasJobRunnerTokenCreatorsWith", "hasJobTemplateCreators", "hasJobTemplateCreatorsWith", "hasMappedControlCreators", "hasMappedControlCreatorsWith", "hasNarrativeCreators", "hasNarrativeCreatorsWith", "hasNoteCreators", "hasNoteCreatorsWith", "hasNotificationTemplateCreators", "hasNotificationTemplateCreatorsWith", "hasOrgMembershipCreators", "hasOrgMembershipCreatorsWith", "hasPlatformCreators", "hasPlatformCreatorsWith", "hasProcedureCreators", "hasProcedureCreatorsWith", "hasProgramCreators", "hasProgramCreatorsWith", "hasProgramMembershipCreators", "hasProgramMembershipCreatorsWith", "hasRemediationCreators", "hasRemediationCreatorsWith", "hasReviewCreators", "hasReviewCreatorsWith", "hasRiskCreators", "hasRiskCreatorsWith", "hasScanCreators", "hasScanCreatorsWith", "hasScheduledJobCreators", "hasScheduledJobCreatorsWith", "hasScheduledJobRunCreators", "hasScheduledJobRunCreatorsWith", "hasSLADefinitionCreators", "hasSLADefinitionCreatorsWith", "hasStandardCreators", "hasStandardCreatorsWith", "hasSubcontrolCreators", "hasSubcontrolCreatorsWith", "hasSubprocessorCreators", "hasSubprocessorCreatorsWith", "hasSubscriberCreators", "hasSubscriberCreatorsWith", "hasSystemDetailCreators", "hasSystemDetailCreatorsWith", "hasTagDefinitionCreators", "hasTagDefinitionCreatorsWith", "hasTaskCreators", "hasTaskCreatorsWith", "hasTemplateCreators", "hasTemplateCreatorsWith", "hasTrustCenterCreators", "hasTrustCenterCreatorsWith", "hasTrustCenterComplianceCreators", "hasTrustCenterComplianceCreatorsWith", "hasTrustCenterDocCreators", "hasTrustCenterDocCreatorsWith", "hasTrustCenterEntityCreators", "hasTrustCenterEntityCreatorsWith", "hasTrustCenterFaqCreators", "hasTrustCenterFaqCreatorsWith", "hasTrustCenterNdaRequestCreators", "hasTrustCenterNdaRequestCreatorsWith", "hasTrustCenterSubprocessorCreators", "hasTrustCenterSubprocessorCreatorsWith", "hasTrustCenterWatermarkConfigCreators", "hasTrustCenterWatermarkConfigCreatorsWith", "hasVendorRiskScoreCreators", "hasVendorRiskScoreCreatorsWith", "hasVendorScoringConfigCreators", "hasVendorScoringConfigCreatorsWith", "hasVulnerabilityCreators", "hasVulnerabilityCreatorsWith", "hasWorkflowDefinitionCreators", "hasWorkflowDefinitionCreatorsWith", "hasCampaignsManager", "hasCampaignsManagerWith", "hasComplianceManager", "hasComplianceManagerWith", "hasGroupManager", "hasGroupManagerWith", "hasPoliciesManager", "hasPoliciesManagerWith", "hasRegistryManager", "hasRegistryManagerWith", "hasRiskManager", "hasRiskManagerWith", "hasTrustCenterManager", "hasTrustCenterManagerWith", "hasWorkflowsManager", "hasWorkflowsManagerWith", "hasParent", "hasParentWith", "hasChildren", "hasChildrenWith", "hasSetting", "hasSettingWith", "hasPersonalAccessTokens", "hasPersonalAccessTokensWith", "hasAPITokens", "hasAPITokensWith", "hasEmailTemplates", "hasEmailTemplatesWith", "hasNotificationPreferences", "hasNotificationPreferencesWith", "hasNotificationTemplates", "hasNotificationTemplatesWith", "hasUsers", "hasUsersWith", "hasFiles", "hasFilesWith", "hasEvents", "hasEventsWith", "hasSecrets", "hasSecretsWith", "hasAvatarFile", "hasAvatarFileWith", "hasGroups", "hasGroupsWith", "hasTemplates", "hasTemplatesWith", "hasIntegrations", "hasIntegrationsWith", "hasDocuments", "hasDocumentsWith", "hasOrgSubscriptions", "hasOrgSubscriptionsWith", "hasInvites", "hasInvitesWith", "hasSubscribers", "hasSubscribersWith", "hasEntities", "hasEntitiesWith", "hasPlatforms", "hasPlatformsWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasCampaigns", "hasCampaignsWith", "hasCampaignTargets", "hasCampaignTargetsWith", "hasEntityTypes", "hasEntityTypesWith", "hasContacts", "hasContactsWith", "hasNotes", "hasNotesWith", "hasTasks", "hasTasksWith", "hasPrograms", "hasProgramsWith", "hasSystemDetails", "hasSystemDetailsWith", "hasProcedures", "hasProceduresWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasRisks", "hasRisksWith", "hasControlObjectives", "hasControlObjectivesWith", "hasNarratives", "hasNarrativesWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasControlImplementations", "hasControlImplementationsWith", "hasMappedControls", "hasMappedControlsWith", "hasEvidence", "hasEvidenceWith", "hasStandards", "hasStandardsWith", "hasActionPlans", "hasActionPlansWith", "hasCustomDomains", "hasCustomDomainsWith", "hasJobRunners", "hasJobRunnersWith", "hasJobRunnerTokens", "hasJobRunnerTokensWith", "hasJobRunnerRegistrationTokens", "hasJobRunnerRegistrationTokensWith", "hasDNSVerifications", "hasDNSVerificationsWith", "hasJobTemplates", "hasJobTemplatesWith", "hasScheduledJobs", "hasScheduledJobsWith", "hasJobResults", "hasJobResultsWith", "hasScheduledJobRuns", "hasScheduledJobRunsWith", "hasTrustCenters", "hasTrustCentersWith", "hasAssets", "hasAssetsWith", "hasScans", "hasScansWith", "hasSLADefinitions", "hasSLADefinitionsWith", "hasSubprocessors", "hasSubprocessorsWith", "hasExports", "hasExportsWith", "hasTrustCenterWatermarkConfigs", "hasTrustCenterWatermarkConfigsWith", "hasAssessments", "hasAssessmentsWith", "hasAssessmentResponses", "hasAssessmentResponsesWith", "hasCustomTypeEnums", "hasCustomTypeEnumsWith", "hasTagDefinitions", "hasTagDefinitionsWith", "hasRemediations", "hasRemediationsWith", "hasFindings", "hasFindingsWith", "hasReviews", "hasReviewsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasWorkflowDefinitions", "hasWorkflowDefinitionsWith", "hasWorkflowInstances", "hasWorkflowInstancesWith", "hasWorkflowEvents", "hasWorkflowEventsWith", "hasWorkflowAssignments", "hasWorkflowAssignmentsWith", "hasWorkflowAssignmentTargets", "hasWorkflowAssignmentTargetsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasDirectoryAccounts", "hasDirectoryAccountsWith", "hasDirectoryGroups", "hasDirectoryGroupsWith", "hasDirectoryMemberships", "hasDirectoryMembershipsWith", "hasDirectorySyncRuns", "hasDirectorySyncRunsWith", "hasDiscussions", "hasDiscussionsWith", "hasVendorScoringConfigs", "hasVendorScoringConfigsWith", "hasVendorRiskScores", "hasVendorRiskScoresWith", "hasMembers", "hasMembersWith", "tagsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "idEqualFold", "idContainsFold", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorGT", "updatedByImpersonatorGTE", "updatedByImpersonatorLT", "updatedByImpersonatorLTE", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayName", "displayNameNEQ", "displayNameIn", "displayNameNotIn", "displayNameGT", "displayNameGTE", "displayNameLT", "displayNameLTE", "displayNameContains", "displayNameHasPrefix", "displayNameHasSuffix", "displayNameEqualFold", "displayNameContainsFold", "parentOrganizationID", "parentOrganizationIDNEQ", "parentOrganizationIDIn", "parentOrganizationIDNotIn", "parentOrganizationIDGT", "parentOrganizationIDGTE", "parentOrganizationIDLT", "parentOrganizationIDLTE", "parentOrganizationIDContains", "parentOrganizationIDHasPrefix", "parentOrganizationIDHasSuffix", "parentOrganizationIDIsNil", "parentOrganizationIDNotNil", "parentOrganizationIDEqualFold", "parentOrganizationIDContainsFold", "personalOrg", "personalOrgNEQ", "personalOrgIsNil", "personalOrgNotNil", "avatarRemoteURL", "avatarRemoteURLNEQ", "avatarRemoteURLIn", "avatarRemoteURLNotIn", "avatarRemoteURLGT", "avatarRemoteURLGTE", "avatarRemoteURLLT", "avatarRemoteURLLTE", "avatarRemoteURLContains", "avatarRemoteURLHasPrefix", "avatarRemoteURLHasSuffix", "avatarRemoteURLIsNil", "avatarRemoteURLNotNil", "avatarRemoteURLEqualFold", "avatarRemoteURLContainsFold", "avatarLocalFileID", "avatarLocalFileIDNEQ", "avatarLocalFileIDIn", "avatarLocalFileIDNotIn", "avatarLocalFileIDGT", "avatarLocalFileIDGTE", "avatarLocalFileIDLT", "avatarLocalFileIDLTE", "avatarLocalFileIDContains", "avatarLocalFileIDHasPrefix", "avatarLocalFileIDHasSuffix", "avatarLocalFileIDIsNil", "avatarLocalFileIDNotNil", "avatarLocalFileIDEqualFold", "avatarLocalFileIDContainsFold", "avatarUpdatedAt", "avatarUpdatedAtNEQ", "avatarUpdatedAtIn", "avatarUpdatedAtNotIn", "avatarUpdatedAtGT", "avatarUpdatedAtGTE", "avatarUpdatedAtLT", "avatarUpdatedAtLTE", "avatarUpdatedAtIsNil", "avatarUpdatedAtNotNil", "slugName", "slugNameNEQ", "slugNameIn", "slugNameNotIn", "slugNameGT", "slugNameGTE", "slugNameLT", "slugNameLTE", "slugNameContains", "slugNameHasPrefix", "slugNameHasSuffix", "slugNameIsNil", "slugNameNotNil", "slugNameEqualFold", "slugNameContainsFold", "hasActionPlanCreators", "hasActionPlanCreatorsWith", "hasAPITokenCreators", "hasAPITokenCreatorsWith", "hasAssessmentCreators", "hasAssessmentCreatorsWith", "hasAssetCreators", "hasAssetCreatorsWith", "hasCampaignCreators", "hasCampaignCreatorsWith", "hasCampaignTargetCreators", "hasCampaignTargetCreatorsWith", "hasCheckResultCreators", "hasCheckResultCreatorsWith", "hasContactCreators", "hasContactCreatorsWith", "hasControlCreators", "hasControlCreatorsWith", "hasControlImplementationCreators", "hasControlImplementationCreatorsWith", "hasControlObjectiveCreators", "hasControlObjectiveCreatorsWith", "hasCustomDomainCreators", "hasCustomDomainCreatorsWith", "hasCustomTypeEnumCreators", "hasCustomTypeEnumCreatorsWith", "hasDirectoryAccountCreators", "hasDirectoryAccountCreatorsWith", "hasDirectoryGroupCreators", "hasDirectoryGroupCreatorsWith", "hasDirectoryMembershipCreators", "hasDirectoryMembershipCreatorsWith", "hasDirectorySyncRunCreators", "hasDirectorySyncRunCreatorsWith", "hasDiscussionCreators", "hasDiscussionCreatorsWith", "hasDocumentDataCreators", "hasDocumentDataCreatorsWith", "hasEmailTemplateCreators", "hasEmailTemplateCreatorsWith", "hasEntityCreators", "hasEntityCreatorsWith", "hasEntityTypeCreators", "hasEntityTypeCreatorsWith", "hasEvidenceCreators", "hasEvidenceCreatorsWith", "hasFileCreators", "hasFileCreatorsWith", "hasFindingCreators", "hasFindingCreatorsWith", "hasFindingControlCreators", "hasFindingControlCreatorsWith", "hasGroupCreators", "hasGroupCreatorsWith", "hasGroupMembershipCreators", "hasGroupMembershipCreatorsWith", "hasGroupSettingCreators", "hasGroupSettingCreatorsWith", "hasHushCreators", "hasHushCreatorsWith", "hasIdentityHolderCreators", "hasIdentityHolderCreatorsWith", "hasInternalPolicyCreators", "hasInternalPolicyCreatorsWith", "hasInviteCreators", "hasInviteCreatorsWith", "hasJobRunnerCreators", "hasJobRunnerCreatorsWith", "hasJobRunnerRegistrationTokenCreators", "hasJobRunnerRegistrationTokenCreatorsWith", "hasJobRunnerTokenCreators", "hasJobRunnerTokenCreatorsWith", "hasJobTemplateCreators", "hasJobTemplateCreatorsWith", "hasMappedControlCreators", "hasMappedControlCreatorsWith", "hasNarrativeCreators", "hasNarrativeCreatorsWith", "hasNoteCreators", "hasNoteCreatorsWith", "hasNotificationTemplateCreators", "hasNotificationTemplateCreatorsWith", "hasOrgMembershipCreators", "hasOrgMembershipCreatorsWith", "hasPlatformCreators", "hasPlatformCreatorsWith", "hasProcedureCreators", "hasProcedureCreatorsWith", "hasProgramCreators", "hasProgramCreatorsWith", "hasProgramMembershipCreators", "hasProgramMembershipCreatorsWith", "hasRemediationCreators", "hasRemediationCreatorsWith", "hasReviewCreators", "hasReviewCreatorsWith", "hasRiskCreators", "hasRiskCreatorsWith", "hasScanCreators", "hasScanCreatorsWith", "hasScheduledJobCreators", "hasScheduledJobCreatorsWith", "hasScheduledJobRunCreators", "hasScheduledJobRunCreatorsWith", "hasSLADefinitionCreators", "hasSLADefinitionCreatorsWith", "hasStandardCreators", "hasStandardCreatorsWith", "hasSubcontrolCreators", "hasSubcontrolCreatorsWith", "hasSubprocessorCreators", "hasSubprocessorCreatorsWith", "hasSubscriberCreators", "hasSubscriberCreatorsWith", "hasSystemDetailCreators", "hasSystemDetailCreatorsWith", "hasTagDefinitionCreators", "hasTagDefinitionCreatorsWith", "hasTaskCreators", "hasTaskCreatorsWith", "hasTemplateCreators", "hasTemplateCreatorsWith", "hasTrustCenterCreators", "hasTrustCenterCreatorsWith", "hasTrustCenterComplianceCreators", "hasTrustCenterComplianceCreatorsWith", "hasTrustCenterDocCreators", "hasTrustCenterDocCreatorsWith", "hasTrustCenterEntityCreators", "hasTrustCenterEntityCreatorsWith", "hasTrustCenterFaqCreators", "hasTrustCenterFaqCreatorsWith", "hasTrustCenterNdaRequestCreators", "hasTrustCenterNdaRequestCreatorsWith", "hasTrustCenterSubprocessorCreators", "hasTrustCenterSubprocessorCreatorsWith", "hasTrustCenterWatermarkConfigCreators", "hasTrustCenterWatermarkConfigCreatorsWith", "hasVendorRiskScoreCreators", "hasVendorRiskScoreCreatorsWith", "hasVendorScoringConfigCreators", "hasVendorScoringConfigCreatorsWith", "hasVulnerabilityCreators", "hasVulnerabilityCreatorsWith", "hasWorkflowDefinitionCreators", "hasWorkflowDefinitionCreatorsWith", "hasCampaignsManager", "hasCampaignsManagerWith", "hasComplianceManager", "hasComplianceManagerWith", "hasGroupManager", "hasGroupManagerWith", "hasPoliciesManager", "hasPoliciesManagerWith", "hasRegistryManager", "hasRegistryManagerWith", "hasRiskManager", "hasRiskManagerWith", "hasTrustCenterManager", "hasTrustCenterManagerWith", "hasWorkflowsManager", "hasWorkflowsManagerWith", "hasParent", "hasParentWith", "hasChildren", "hasChildrenWith", "hasSetting", "hasSettingWith", "hasPersonalAccessTokens", "hasPersonalAccessTokensWith", "hasAPITokens", "hasAPITokensWith", "hasEmailTemplates", "hasEmailTemplatesWith", "hasNotificationPreferences", "hasNotificationPreferencesWith", "hasNotificationTemplates", "hasNotificationTemplatesWith", "hasUsers", "hasUsersWith", "hasFiles", "hasFilesWith", "hasEvents", "hasEventsWith", "hasSecrets", "hasSecretsWith", "hasAvatarFile", "hasAvatarFileWith", "hasGroups", "hasGroupsWith", "hasTemplates", "hasTemplatesWith", "hasIntegrations", "hasIntegrationsWith", "hasDocuments", "hasDocumentsWith", "hasOrgSubscriptions", "hasOrgSubscriptionsWith", "hasInvites", "hasInvitesWith", "hasSubscribers", "hasSubscribersWith", "hasEntities", "hasEntitiesWith", "hasPlatforms", "hasPlatformsWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasCampaigns", "hasCampaignsWith", "hasCampaignTargets", "hasCampaignTargetsWith", "hasEntityTypes", "hasEntityTypesWith", "hasContacts", "hasContactsWith", "hasNotes", "hasNotesWith", "hasTasks", "hasTasksWith", "hasPrograms", "hasProgramsWith", "hasSystemDetails", "hasSystemDetailsWith", "hasProcedures", "hasProceduresWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasRisks", "hasRisksWith", "hasControlObjectives", "hasControlObjectivesWith", "hasNarratives", "hasNarrativesWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasControlImplementations", "hasControlImplementationsWith", "hasMappedControls", "hasMappedControlsWith", "hasEvidence", "hasEvidenceWith", "hasStandards", "hasStandardsWith", "hasActionPlans", "hasActionPlansWith", "hasCustomDomains", "hasCustomDomainsWith", "hasJobRunners", "hasJobRunnersWith", "hasJobRunnerTokens", "hasJobRunnerTokensWith", "hasJobRunnerRegistrationTokens", "hasJobRunnerRegistrationTokensWith", "hasDNSVerifications", "hasDNSVerificationsWith", "hasJobTemplates", "hasJobTemplatesWith", "hasScheduledJobs", "hasScheduledJobsWith", "hasJobResults", "hasJobResultsWith", "hasScheduledJobRuns", "hasScheduledJobRunsWith", "hasTrustCenters", "hasTrustCentersWith", "hasAssets", "hasAssetsWith", "hasScans", "hasScansWith", "hasSLADefinitions", "hasSLADefinitionsWith", "hasSubprocessors", "hasSubprocessorsWith", "hasExports", "hasExportsWith", "hasTrustCenterWatermarkConfigs", "hasTrustCenterWatermarkConfigsWith", "hasAssessments", "hasAssessmentsWith", "hasAssessmentResponses", "hasAssessmentResponsesWith", "hasCustomTypeEnums", "hasCustomTypeEnumsWith", "hasTagDefinitions", "hasTagDefinitionsWith", "hasRemediations", "hasRemediationsWith", "hasFindings", "hasFindingsWith", "hasFindingControls", "hasFindingControlsWith", "hasReviews", "hasReviewsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasWorkflowDefinitions", "hasWorkflowDefinitionsWith", "hasWorkflowInstances", "hasWorkflowInstancesWith", "hasWorkflowEvents", "hasWorkflowEventsWith", "hasWorkflowAssignments", "hasWorkflowAssignmentsWith", "hasWorkflowAssignmentTargets", "hasWorkflowAssignmentTargetsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasDirectoryAccounts", "hasDirectoryAccountsWith", "hasDirectoryGroups", "hasDirectoryGroupsWith", "hasDirectoryMemberships", "hasDirectoryMembershipsWith", "hasDirectorySyncRuns", "hasDirectorySyncRunsWith", "hasDiscussions", "hasDiscussionsWith", "hasVendorScoringConfigs", "hasVendorScoringConfigsWith", "hasVendorRiskScores", "hasVendorRiskScoresWith", "hasMembers", "hasMembersWith", "tagsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -310288,6 +312793,20 @@ func (ec *executionContext) unmarshalInputOrganizationWhereInput(ctx context.Con
 				return it, err
 			}
 			it.HasFindingsWith = data
+		case "hasFindingControls":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasFindingControls"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasFindingControls = data
+		case "hasFindingControlsWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasFindingControlsWith"))
+			data, err := ec.unmarshalOFindingControlWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFindingControlWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasFindingControlsWith = data
 		case "hasReviews":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasReviews"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -321304,7 +323823,7 @@ func (ec *executionContext) unmarshalInputProgramWhereInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "idEqualFold", "idContainsFold", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorGT", "updatedByImpersonatorGTE", "updatedByImpersonatorLT", "updatedByImpersonatorLTE", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDGT", "displayIDGTE", "displayIDLT", "displayIDLTE", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDGT", "ownerIDGTE", "ownerIDLT", "ownerIDLTE", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "programKindName", "programKindNameNEQ", "programKindNameIn", "programKindNameNotIn", "programKindNameGT", "programKindNameGTE", "programKindNameLT", "programKindNameLTE", "programKindNameContains", "programKindNameHasPrefix", "programKindNameHasSuffix", "programKindNameIsNil", "programKindNameNotNil", "programKindNameEqualFold", "programKindNameContainsFold", "programKindID", "programKindIDNEQ", "programKindIDIn", "programKindIDNotIn", "programKindIDGT", "programKindIDGTE", "programKindIDLT", "programKindIDLTE", "programKindIDContains", "programKindIDHasPrefix", "programKindIDHasSuffix", "programKindIDIsNil", "programKindIDNotNil", "programKindIDEqualFold", "programKindIDContainsFold", "externalUUID", "externalUUIDNEQ", "externalUUIDIn", "externalUUIDNotIn", "externalUUIDGT", "externalUUIDGTE", "externalUUIDLT", "externalUUIDLTE", "externalUUIDContains", "externalUUIDHasPrefix", "externalUUIDHasSuffix", "externalUUIDIsNil", "externalUUIDNotNil", "externalUUIDEqualFold", "externalUUIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameGT", "nameGTE", "nameLT", "nameLTE", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "frameworkName", "frameworkNameNEQ", "frameworkNameIn", "frameworkNameNotIn", "frameworkNameGT", "frameworkNameGTE", "frameworkNameLT", "frameworkNameLTE", "frameworkNameContains", "frameworkNameHasPrefix", "frameworkNameHasSuffix", "frameworkNameIsNil", "frameworkNameNotNil", "frameworkNameEqualFold", "frameworkNameContainsFold", "startDate", "startDateNEQ", "startDateIn", "startDateNotIn", "startDateGT", "startDateGTE", "startDateLT", "startDateLTE", "startDateIsNil", "startDateNotNil", "endDate", "endDateNEQ", "endDateIn", "endDateNotIn", "endDateGT", "endDateGTE", "endDateLT", "endDateLTE", "endDateIsNil", "endDateNotNil", "auditorReady", "auditorReadyNEQ", "auditorWriteComments", "auditorWriteCommentsNEQ", "auditorReadComments", "auditorReadCommentsNEQ", "auditFirm", "auditFirmNEQ", "auditFirmIn", "auditFirmNotIn", "auditFirmGT", "auditFirmGTE", "auditFirmLT", "auditFirmLTE", "auditFirmContains", "auditFirmHasPrefix", "auditFirmHasSuffix", "auditFirmIsNil", "auditFirmNotNil", "auditFirmEqualFold", "auditFirmContainsFold", "auditor", "auditorNEQ", "auditorIn", "auditorNotIn", "auditorGT", "auditorGTE", "auditorLT", "auditorLTE", "auditorContains", "auditorHasPrefix", "auditorHasSuffix", "auditorIsNil", "auditorNotNil", "auditorEqualFold", "auditorContainsFold", "auditorEmail", "auditorEmailNEQ", "auditorEmailIn", "auditorEmailNotIn", "auditorEmailGT", "auditorEmailGTE", "auditorEmailLT", "auditorEmailLTE", "auditorEmailContains", "auditorEmailHasPrefix", "auditorEmailHasSuffix", "auditorEmailIsNil", "auditorEmailNotNil", "auditorEmailEqualFold", "auditorEmailContainsFold", "programOwnerID", "programOwnerIDNEQ", "programOwnerIDIn", "programOwnerIDNotIn", "programOwnerIDGT", "programOwnerIDGTE", "programOwnerIDLT", "programOwnerIDLTE", "programOwnerIDContains", "programOwnerIDHasPrefix", "programOwnerIDHasSuffix", "programOwnerIDIsNil", "programOwnerIDNotNil", "programOwnerIDEqualFold", "programOwnerIDContainsFold", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasProgramKind", "hasProgramKindWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasControlObjectives", "hasControlObjectivesWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasProcedures", "hasProceduresWith", "hasRisks", "hasRisksWith", "hasTasks", "hasTasksWith", "hasNotes", "hasNotesWith", "hasFiles", "hasFilesWith", "hasEvidence", "hasEvidenceWith", "hasNarratives", "hasNarrativesWith", "hasActionPlans", "hasActionPlansWith", "hasSystemDetails", "hasSystemDetailsWith", "hasUsers", "hasUsersWith", "hasProgramOwner", "hasProgramOwnerWith", "hasMembers", "hasMembersWith", "tagsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "idEqualFold", "idContainsFold", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorGT", "updatedByImpersonatorGTE", "updatedByImpersonatorLT", "updatedByImpersonatorLTE", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDGT", "displayIDGTE", "displayIDLT", "displayIDLTE", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDGT", "ownerIDGTE", "ownerIDLT", "ownerIDLTE", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "programKindName", "programKindNameNEQ", "programKindNameIn", "programKindNameNotIn", "programKindNameGT", "programKindNameGTE", "programKindNameLT", "programKindNameLTE", "programKindNameContains", "programKindNameHasPrefix", "programKindNameHasSuffix", "programKindNameIsNil", "programKindNameNotNil", "programKindNameEqualFold", "programKindNameContainsFold", "programKindID", "programKindIDNEQ", "programKindIDIn", "programKindIDNotIn", "programKindIDGT", "programKindIDGTE", "programKindIDLT", "programKindIDLTE", "programKindIDContains", "programKindIDHasPrefix", "programKindIDHasSuffix", "programKindIDIsNil", "programKindIDNotNil", "programKindIDEqualFold", "programKindIDContainsFold", "externalUUID", "externalUUIDNEQ", "externalUUIDIn", "externalUUIDNotIn", "externalUUIDGT", "externalUUIDGTE", "externalUUIDLT", "externalUUIDLTE", "externalUUIDContains", "externalUUIDHasPrefix", "externalUUIDHasSuffix", "externalUUIDIsNil", "externalUUIDNotNil", "externalUUIDEqualFold", "externalUUIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameGT", "nameGTE", "nameLT", "nameLTE", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "frameworkName", "frameworkNameNEQ", "frameworkNameIn", "frameworkNameNotIn", "frameworkNameGT", "frameworkNameGTE", "frameworkNameLT", "frameworkNameLTE", "frameworkNameContains", "frameworkNameHasPrefix", "frameworkNameHasSuffix", "frameworkNameIsNil", "frameworkNameNotNil", "frameworkNameEqualFold", "frameworkNameContainsFold", "startDate", "startDateNEQ", "startDateIn", "startDateNotIn", "startDateGT", "startDateGTE", "startDateLT", "startDateLTE", "startDateIsNil", "startDateNotNil", "endDate", "endDateNEQ", "endDateIn", "endDateNotIn", "endDateGT", "endDateGTE", "endDateLT", "endDateLTE", "endDateIsNil", "endDateNotNil", "observationPeriodStartDate", "observationPeriodStartDateNEQ", "observationPeriodStartDateIn", "observationPeriodStartDateNotIn", "observationPeriodStartDateGT", "observationPeriodStartDateGTE", "observationPeriodStartDateLT", "observationPeriodStartDateLTE", "observationPeriodStartDateIsNil", "observationPeriodStartDateNotNil", "observationPeriodEndDate", "observationPeriodEndDateNEQ", "observationPeriodEndDateIn", "observationPeriodEndDateNotIn", "observationPeriodEndDateGT", "observationPeriodEndDateGTE", "observationPeriodEndDateLT", "observationPeriodEndDateLTE", "observationPeriodEndDateIsNil", "observationPeriodEndDateNotNil", "fieldworkStartDate", "fieldworkStartDateNEQ", "fieldworkStartDateIn", "fieldworkStartDateNotIn", "fieldworkStartDateGT", "fieldworkStartDateGTE", "fieldworkStartDateLT", "fieldworkStartDateLTE", "fieldworkStartDateIsNil", "fieldworkStartDateNotNil", "fieldworkEndDate", "fieldworkEndDateNEQ", "fieldworkEndDateIn", "fieldworkEndDateNotIn", "fieldworkEndDateGT", "fieldworkEndDateGTE", "fieldworkEndDateLT", "fieldworkEndDateLTE", "fieldworkEndDateIsNil", "fieldworkEndDateNotNil", "auditorReady", "auditorReadyNEQ", "auditorWriteComments", "auditorWriteCommentsNEQ", "auditorReadComments", "auditorReadCommentsNEQ", "auditFirm", "auditFirmNEQ", "auditFirmIn", "auditFirmNotIn", "auditFirmGT", "auditFirmGTE", "auditFirmLT", "auditFirmLTE", "auditFirmContains", "auditFirmHasPrefix", "auditFirmHasSuffix", "auditFirmIsNil", "auditFirmNotNil", "auditFirmEqualFold", "auditFirmContainsFold", "auditor", "auditorNEQ", "auditorIn", "auditorNotIn", "auditorGT", "auditorGTE", "auditorLT", "auditorLTE", "auditorContains", "auditorHasPrefix", "auditorHasSuffix", "auditorIsNil", "auditorNotNil", "auditorEqualFold", "auditorContainsFold", "auditorEmail", "auditorEmailNEQ", "auditorEmailIn", "auditorEmailNotIn", "auditorEmailGT", "auditorEmailGTE", "auditorEmailLT", "auditorEmailLTE", "auditorEmailContains", "auditorEmailHasPrefix", "auditorEmailHasSuffix", "auditorEmailIsNil", "auditorEmailNotNil", "auditorEmailEqualFold", "auditorEmailContainsFold", "programOwnerID", "programOwnerIDNEQ", "programOwnerIDIn", "programOwnerIDNotIn", "programOwnerIDGT", "programOwnerIDGTE", "programOwnerIDLT", "programOwnerIDLTE", "programOwnerIDContains", "programOwnerIDHasPrefix", "programOwnerIDHasSuffix", "programOwnerIDIsNil", "programOwnerIDNotNil", "programOwnerIDEqualFold", "programOwnerIDContainsFold", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasProgramKind", "hasProgramKindWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasControlObjectives", "hasControlObjectivesWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasProcedures", "hasProceduresWith", "hasRisks", "hasRisksWith", "hasTasks", "hasTasksWith", "hasNotes", "hasNotesWith", "hasFiles", "hasFilesWith", "hasEvidence", "hasEvidenceWith", "hasNarratives", "hasNarrativesWith", "hasActionPlans", "hasActionPlansWith", "hasSystemDetails", "hasSystemDetailsWith", "hasFindings", "hasFindingsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasReviews", "hasReviewsWith", "hasRemediations", "hasRemediationsWith", "hasUsers", "hasUsersWith", "hasProgramOwner", "hasProgramOwnerWith", "hasMembers", "hasMembersWith", "tagsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -322837,6 +325356,286 @@ func (ec *executionContext) unmarshalInputProgramWhereInput(ctx context.Context,
 				return it, err
 			}
 			it.EndDateNotNil = data
+		case "observationPeriodStartDate":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("observationPeriodStartDate"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ObservationPeriodStartDate = data
+		case "observationPeriodStartDateNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("observationPeriodStartDateNEQ"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ObservationPeriodStartDateNEQ = data
+		case "observationPeriodStartDateIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("observationPeriodStartDateIn"))
+			data, err := ec.unmarshalOTime2ᚕtimeᚐTimeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ObservationPeriodStartDateIn = data
+		case "observationPeriodStartDateNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("observationPeriodStartDateNotIn"))
+			data, err := ec.unmarshalOTime2ᚕtimeᚐTimeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ObservationPeriodStartDateNotIn = data
+		case "observationPeriodStartDateGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("observationPeriodStartDateGT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ObservationPeriodStartDateGT = data
+		case "observationPeriodStartDateGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("observationPeriodStartDateGTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ObservationPeriodStartDateGTE = data
+		case "observationPeriodStartDateLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("observationPeriodStartDateLT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ObservationPeriodStartDateLT = data
+		case "observationPeriodStartDateLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("observationPeriodStartDateLTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ObservationPeriodStartDateLTE = data
+		case "observationPeriodStartDateIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("observationPeriodStartDateIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ObservationPeriodStartDateIsNil = data
+		case "observationPeriodStartDateNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("observationPeriodStartDateNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ObservationPeriodStartDateNotNil = data
+		case "observationPeriodEndDate":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("observationPeriodEndDate"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ObservationPeriodEndDate = data
+		case "observationPeriodEndDateNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("observationPeriodEndDateNEQ"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ObservationPeriodEndDateNEQ = data
+		case "observationPeriodEndDateIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("observationPeriodEndDateIn"))
+			data, err := ec.unmarshalOTime2ᚕtimeᚐTimeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ObservationPeriodEndDateIn = data
+		case "observationPeriodEndDateNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("observationPeriodEndDateNotIn"))
+			data, err := ec.unmarshalOTime2ᚕtimeᚐTimeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ObservationPeriodEndDateNotIn = data
+		case "observationPeriodEndDateGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("observationPeriodEndDateGT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ObservationPeriodEndDateGT = data
+		case "observationPeriodEndDateGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("observationPeriodEndDateGTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ObservationPeriodEndDateGTE = data
+		case "observationPeriodEndDateLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("observationPeriodEndDateLT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ObservationPeriodEndDateLT = data
+		case "observationPeriodEndDateLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("observationPeriodEndDateLTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ObservationPeriodEndDateLTE = data
+		case "observationPeriodEndDateIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("observationPeriodEndDateIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ObservationPeriodEndDateIsNil = data
+		case "observationPeriodEndDateNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("observationPeriodEndDateNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ObservationPeriodEndDateNotNil = data
+		case "fieldworkStartDate":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fieldworkStartDate"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FieldworkStartDate = data
+		case "fieldworkStartDateNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fieldworkStartDateNEQ"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FieldworkStartDateNEQ = data
+		case "fieldworkStartDateIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fieldworkStartDateIn"))
+			data, err := ec.unmarshalOTime2ᚕtimeᚐTimeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FieldworkStartDateIn = data
+		case "fieldworkStartDateNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fieldworkStartDateNotIn"))
+			data, err := ec.unmarshalOTime2ᚕtimeᚐTimeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FieldworkStartDateNotIn = data
+		case "fieldworkStartDateGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fieldworkStartDateGT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FieldworkStartDateGT = data
+		case "fieldworkStartDateGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fieldworkStartDateGTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FieldworkStartDateGTE = data
+		case "fieldworkStartDateLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fieldworkStartDateLT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FieldworkStartDateLT = data
+		case "fieldworkStartDateLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fieldworkStartDateLTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FieldworkStartDateLTE = data
+		case "fieldworkStartDateIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fieldworkStartDateIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FieldworkStartDateIsNil = data
+		case "fieldworkStartDateNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fieldworkStartDateNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FieldworkStartDateNotNil = data
+		case "fieldworkEndDate":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fieldworkEndDate"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FieldworkEndDate = data
+		case "fieldworkEndDateNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fieldworkEndDateNEQ"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FieldworkEndDateNEQ = data
+		case "fieldworkEndDateIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fieldworkEndDateIn"))
+			data, err := ec.unmarshalOTime2ᚕtimeᚐTimeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FieldworkEndDateIn = data
+		case "fieldworkEndDateNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fieldworkEndDateNotIn"))
+			data, err := ec.unmarshalOTime2ᚕtimeᚐTimeᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FieldworkEndDateNotIn = data
+		case "fieldworkEndDateGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fieldworkEndDateGT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FieldworkEndDateGT = data
+		case "fieldworkEndDateGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fieldworkEndDateGTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FieldworkEndDateGTE = data
+		case "fieldworkEndDateLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fieldworkEndDateLT"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FieldworkEndDateLT = data
+		case "fieldworkEndDateLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fieldworkEndDateLTE"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FieldworkEndDateLTE = data
+		case "fieldworkEndDateIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fieldworkEndDateIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FieldworkEndDateIsNil = data
+		case "fieldworkEndDateNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fieldworkEndDateNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FieldworkEndDateNotNil = data
 		case "auditorReady":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("auditorReady"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -323551,6 +326350,62 @@ func (ec *executionContext) unmarshalInputProgramWhereInput(ctx context.Context,
 				return it, err
 			}
 			it.HasSystemDetailsWith = data
+		case "hasFindings":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasFindings"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasFindings = data
+		case "hasFindingsWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasFindingsWith"))
+			data, err := ec.unmarshalOFindingWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFindingWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasFindingsWith = data
+		case "hasVulnerabilities":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasVulnerabilities"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasVulnerabilities = data
+		case "hasVulnerabilitiesWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasVulnerabilitiesWith"))
+			data, err := ec.unmarshalOVulnerabilityWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐVulnerabilityWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasVulnerabilitiesWith = data
+		case "hasReviews":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasReviews"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasReviews = data
+		case "hasReviewsWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasReviewsWith"))
+			data, err := ec.unmarshalOReviewWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐReviewWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasReviewsWith = data
+		case "hasRemediations":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasRemediations"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasRemediations = data
+		case "hasRemediationsWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasRemediationsWith"))
+			data, err := ec.unmarshalORemediationWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRemediationWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasRemediationsWith = data
 		case "hasUsers":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasUsers"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -330477,7 +333332,7 @@ func (ec *executionContext) unmarshalInputRiskWhereInput(ctx context.Context, ob
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "idEqualFold", "idContainsFold", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorGT", "updatedByImpersonatorGTE", "updatedByImpersonatorLT", "updatedByImpersonatorLTE", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDGT", "displayIDGTE", "displayIDLT", "displayIDLTE", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDGT", "ownerIDGTE", "ownerIDLT", "ownerIDLTE", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "riskKindName", "riskKindNameNEQ", "riskKindNameIn", "riskKindNameNotIn", "riskKindNameGT", "riskKindNameGTE", "riskKindNameLT", "riskKindNameLTE", "riskKindNameContains", "riskKindNameHasPrefix", "riskKindNameHasSuffix", "riskKindNameIsNil", "riskKindNameNotNil", "riskKindNameEqualFold", "riskKindNameContainsFold", "riskKindID", "riskKindIDNEQ", "riskKindIDIn", "riskKindIDNotIn", "riskKindIDGT", "riskKindIDGTE", "riskKindIDLT", "riskKindIDLTE", "riskKindIDContains", "riskKindIDHasPrefix", "riskKindIDHasSuffix", "riskKindIDIsNil", "riskKindIDNotNil", "riskKindIDEqualFold", "riskKindIDContainsFold", "riskCategoryName", "riskCategoryNameNEQ", "riskCategoryNameIn", "riskCategoryNameNotIn", "riskCategoryNameGT", "riskCategoryNameGTE", "riskCategoryNameLT", "riskCategoryNameLTE", "riskCategoryNameContains", "riskCategoryNameHasPrefix", "riskCategoryNameHasSuffix", "riskCategoryNameIsNil", "riskCategoryNameNotNil", "riskCategoryNameEqualFold", "riskCategoryNameContainsFold", "riskCategoryID", "riskCategoryIDNEQ", "riskCategoryIDIn", "riskCategoryIDNotIn", "riskCategoryIDGT", "riskCategoryIDGTE", "riskCategoryIDLT", "riskCategoryIDLTE", "riskCategoryIDContains", "riskCategoryIDHasPrefix", "riskCategoryIDHasSuffix", "riskCategoryIDIsNil", "riskCategoryIDNotNil", "riskCategoryIDEqualFold", "riskCategoryIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameGT", "environmentNameGTE", "environmentNameLT", "environmentNameLTE", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDGT", "environmentIDGTE", "environmentIDLT", "environmentIDLTE", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameGT", "scopeNameGTE", "scopeNameLT", "scopeNameLTE", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDGT", "scopeIDGTE", "scopeIDLT", "scopeIDLTE", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDGT", "externalIDGTE", "externalIDLT", "externalIDLTE", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "integrationID", "integrationIDNEQ", "integrationIDIn", "integrationIDNotIn", "integrationIDGT", "integrationIDGTE", "integrationIDLT", "integrationIDLTE", "integrationIDContains", "integrationIDHasPrefix", "integrationIDHasSuffix", "integrationIDIsNil", "integrationIDNotNil", "integrationIDEqualFold", "integrationIDContainsFold", "observedAt", "observedAtNEQ", "observedAtIn", "observedAtNotIn", "observedAtGT", "observedAtGTE", "observedAtLT", "observedAtLTE", "observedAtIsNil", "observedAtNotNil", "externalUUID", "externalUUIDNEQ", "externalUUIDIn", "externalUUIDNotIn", "externalUUIDGT", "externalUUIDGTE", "externalUUIDLT", "externalUUIDLTE", "externalUUIDContains", "externalUUIDHasPrefix", "externalUUIDHasSuffix", "externalUUIDIsNil", "externalUUIDNotNil", "externalUUIDEqualFold", "externalUUIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameGT", "nameGTE", "nameLT", "nameLTE", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "impact", "impactNEQ", "impactIn", "impactNotIn", "impactIsNil", "impactNotNil", "likelihood", "likelihoodNEQ", "likelihoodIn", "likelihoodNotIn", "likelihoodIsNil", "likelihoodNotNil", "score", "scoreNEQ", "scoreIn", "scoreNotIn", "scoreGT", "scoreGTE", "scoreLT", "scoreLTE", "scoreIsNil", "scoreNotNil", "mitigation", "mitigationNEQ", "mitigationIn", "mitigationNotIn", "mitigationGT", "mitigationGTE", "mitigationLT", "mitigationLTE", "mitigationContains", "mitigationHasPrefix", "mitigationHasSuffix", "mitigationIsNil", "mitigationNotNil", "mitigationEqualFold", "mitigationContainsFold", "details", "detailsNEQ", "detailsIn", "detailsNotIn", "detailsGT", "detailsGTE", "detailsLT", "detailsLTE", "detailsContains", "detailsHasPrefix", "detailsHasSuffix", "detailsIsNil", "detailsNotNil", "detailsEqualFold", "detailsContainsFold", "businessCosts", "businessCostsNEQ", "businessCostsIn", "businessCostsNotIn", "businessCostsGT", "businessCostsGTE", "businessCostsLT", "businessCostsLTE", "businessCostsContains", "businessCostsHasPrefix", "businessCostsHasSuffix", "businessCostsIsNil", "businessCostsNotNil", "businessCostsEqualFold", "businessCostsContainsFold", "stakeholderID", "stakeholderIDNEQ", "stakeholderIDIn", "stakeholderIDNotIn", "stakeholderIDGT", "stakeholderIDGTE", "stakeholderIDLT", "stakeholderIDLTE", "stakeholderIDContains", "stakeholderIDHasPrefix", "stakeholderIDHasSuffix", "stakeholderIDIsNil", "stakeholderIDNotNil", "stakeholderIDEqualFold", "stakeholderIDContainsFold", "delegateID", "delegateIDNEQ", "delegateIDIn", "delegateIDNotIn", "delegateIDGT", "delegateIDGTE", "delegateIDLT", "delegateIDLTE", "delegateIDContains", "delegateIDHasPrefix", "delegateIDHasSuffix", "delegateIDIsNil", "delegateIDNotNil", "delegateIDEqualFold", "delegateIDContainsFold", "mitigatedAt", "mitigatedAtNEQ", "mitigatedAtIn", "mitigatedAtNotIn", "mitigatedAtGT", "mitigatedAtGTE", "mitigatedAtLT", "mitigatedAtLTE", "mitigatedAtIsNil", "mitigatedAtNotNil", "reviewRequired", "reviewRequiredNEQ", "reviewRequiredIsNil", "reviewRequiredNotNil", "lastReviewedAt", "lastReviewedAtNEQ", "lastReviewedAtIn", "lastReviewedAtNotIn", "lastReviewedAtGT", "lastReviewedAtGTE", "lastReviewedAtLT", "lastReviewedAtLTE", "lastReviewedAtIsNil", "lastReviewedAtNotNil", "reviewFrequency", "reviewFrequencyNEQ", "reviewFrequencyIn", "reviewFrequencyNotIn", "reviewFrequencyIsNil", "reviewFrequencyNotNil", "dueDate", "dueDateNEQ", "dueDateIn", "dueDateNotIn", "dueDateGT", "dueDateGTE", "dueDateLT", "dueDateLTE", "dueDateIsNil", "dueDateNotNil", "nextReviewDueAt", "nextReviewDueAtNEQ", "nextReviewDueAtIn", "nextReviewDueAtNotIn", "nextReviewDueAtGT", "nextReviewDueAtGTE", "nextReviewDueAtLT", "nextReviewDueAtLTE", "nextReviewDueAtIsNil", "nextReviewDueAtNotNil", "residualScore", "residualScoreNEQ", "residualScoreIn", "residualScoreNotIn", "residualScoreGT", "residualScoreGTE", "residualScoreLT", "residualScoreLTE", "residualScoreIsNil", "residualScoreNotNil", "riskDecision", "riskDecisionNEQ", "riskDecisionIn", "riskDecisionNotIn", "riskDecisionIsNil", "riskDecisionNotNil", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasRiskKind", "hasRiskKindWith", "hasRiskCategory", "hasRiskCategoryWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasProcedures", "hasProceduresWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasPrograms", "hasProgramsWith", "hasPlatforms", "hasPlatformsWith", "hasActionPlans", "hasActionPlansWith", "hasTasks", "hasTasksWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasScans", "hasScansWith", "hasStakeholder", "hasStakeholderWith", "hasDelegate", "hasDelegateWith", "hasComments", "hasCommentsWith", "hasDiscussions", "hasDiscussionsWith", "hasReviews", "hasReviewsWith", "hasRemediations", "hasRemediationsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "tagsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "idEqualFold", "idContainsFold", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorGT", "updatedByImpersonatorGTE", "updatedByImpersonatorLT", "updatedByImpersonatorLTE", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDGT", "displayIDGTE", "displayIDLT", "displayIDLTE", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDGT", "ownerIDGTE", "ownerIDLT", "ownerIDLTE", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "riskKindName", "riskKindNameNEQ", "riskKindNameIn", "riskKindNameNotIn", "riskKindNameGT", "riskKindNameGTE", "riskKindNameLT", "riskKindNameLTE", "riskKindNameContains", "riskKindNameHasPrefix", "riskKindNameHasSuffix", "riskKindNameIsNil", "riskKindNameNotNil", "riskKindNameEqualFold", "riskKindNameContainsFold", "riskKindID", "riskKindIDNEQ", "riskKindIDIn", "riskKindIDNotIn", "riskKindIDGT", "riskKindIDGTE", "riskKindIDLT", "riskKindIDLTE", "riskKindIDContains", "riskKindIDHasPrefix", "riskKindIDHasSuffix", "riskKindIDIsNil", "riskKindIDNotNil", "riskKindIDEqualFold", "riskKindIDContainsFold", "riskCategoryName", "riskCategoryNameNEQ", "riskCategoryNameIn", "riskCategoryNameNotIn", "riskCategoryNameGT", "riskCategoryNameGTE", "riskCategoryNameLT", "riskCategoryNameLTE", "riskCategoryNameContains", "riskCategoryNameHasPrefix", "riskCategoryNameHasSuffix", "riskCategoryNameIsNil", "riskCategoryNameNotNil", "riskCategoryNameEqualFold", "riskCategoryNameContainsFold", "riskCategoryID", "riskCategoryIDNEQ", "riskCategoryIDIn", "riskCategoryIDNotIn", "riskCategoryIDGT", "riskCategoryIDGTE", "riskCategoryIDLT", "riskCategoryIDLTE", "riskCategoryIDContains", "riskCategoryIDHasPrefix", "riskCategoryIDHasSuffix", "riskCategoryIDIsNil", "riskCategoryIDNotNil", "riskCategoryIDEqualFold", "riskCategoryIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameGT", "environmentNameGTE", "environmentNameLT", "environmentNameLTE", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDGT", "environmentIDGTE", "environmentIDLT", "environmentIDLTE", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameGT", "scopeNameGTE", "scopeNameLT", "scopeNameLTE", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDGT", "scopeIDGTE", "scopeIDLT", "scopeIDLTE", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "externalID", "externalIDNEQ", "externalIDIn", "externalIDNotIn", "externalIDGT", "externalIDGTE", "externalIDLT", "externalIDLTE", "externalIDContains", "externalIDHasPrefix", "externalIDHasSuffix", "externalIDIsNil", "externalIDNotNil", "externalIDEqualFold", "externalIDContainsFold", "integrationID", "integrationIDNEQ", "integrationIDIn", "integrationIDNotIn", "integrationIDGT", "integrationIDGTE", "integrationIDLT", "integrationIDLTE", "integrationIDContains", "integrationIDHasPrefix", "integrationIDHasSuffix", "integrationIDIsNil", "integrationIDNotNil", "integrationIDEqualFold", "integrationIDContainsFold", "observedAt", "observedAtNEQ", "observedAtIn", "observedAtNotIn", "observedAtGT", "observedAtGTE", "observedAtLT", "observedAtLTE", "observedAtIsNil", "observedAtNotNil", "externalUUID", "externalUUIDNEQ", "externalUUIDIn", "externalUUIDNotIn", "externalUUIDGT", "externalUUIDGTE", "externalUUIDLT", "externalUUIDLTE", "externalUUIDContains", "externalUUIDHasPrefix", "externalUUIDHasSuffix", "externalUUIDIsNil", "externalUUIDNotNil", "externalUUIDEqualFold", "externalUUIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameGT", "nameGTE", "nameLT", "nameLTE", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "impact", "impactNEQ", "impactIn", "impactNotIn", "impactIsNil", "impactNotNil", "likelihood", "likelihoodNEQ", "likelihoodIn", "likelihoodNotIn", "likelihoodIsNil", "likelihoodNotNil", "score", "scoreNEQ", "scoreIn", "scoreNotIn", "scoreGT", "scoreGTE", "scoreLT", "scoreLTE", "scoreIsNil", "scoreNotNil", "mitigation", "mitigationNEQ", "mitigationIn", "mitigationNotIn", "mitigationGT", "mitigationGTE", "mitigationLT", "mitigationLTE", "mitigationContains", "mitigationHasPrefix", "mitigationHasSuffix", "mitigationIsNil", "mitigationNotNil", "mitigationEqualFold", "mitigationContainsFold", "details", "detailsNEQ", "detailsIn", "detailsNotIn", "detailsGT", "detailsGTE", "detailsLT", "detailsLTE", "detailsContains", "detailsHasPrefix", "detailsHasSuffix", "detailsIsNil", "detailsNotNil", "detailsEqualFold", "detailsContainsFold", "businessCosts", "businessCostsNEQ", "businessCostsIn", "businessCostsNotIn", "businessCostsGT", "businessCostsGTE", "businessCostsLT", "businessCostsLTE", "businessCostsContains", "businessCostsHasPrefix", "businessCostsHasSuffix", "businessCostsIsNil", "businessCostsNotNil", "businessCostsEqualFold", "businessCostsContainsFold", "stakeholderID", "stakeholderIDNEQ", "stakeholderIDIn", "stakeholderIDNotIn", "stakeholderIDGT", "stakeholderIDGTE", "stakeholderIDLT", "stakeholderIDLTE", "stakeholderIDContains", "stakeholderIDHasPrefix", "stakeholderIDHasSuffix", "stakeholderIDIsNil", "stakeholderIDNotNil", "stakeholderIDEqualFold", "stakeholderIDContainsFold", "delegateID", "delegateIDNEQ", "delegateIDIn", "delegateIDNotIn", "delegateIDGT", "delegateIDGTE", "delegateIDLT", "delegateIDLTE", "delegateIDContains", "delegateIDHasPrefix", "delegateIDHasSuffix", "delegateIDIsNil", "delegateIDNotNil", "delegateIDEqualFold", "delegateIDContainsFold", "mitigatedAt", "mitigatedAtNEQ", "mitigatedAtIn", "mitigatedAtNotIn", "mitigatedAtGT", "mitigatedAtGTE", "mitigatedAtLT", "mitigatedAtLTE", "mitigatedAtIsNil", "mitigatedAtNotNil", "reviewRequired", "reviewRequiredNEQ", "reviewRequiredIsNil", "reviewRequiredNotNil", "lastReviewedAt", "lastReviewedAtNEQ", "lastReviewedAtIn", "lastReviewedAtNotIn", "lastReviewedAtGT", "lastReviewedAtGTE", "lastReviewedAtLT", "lastReviewedAtLTE", "lastReviewedAtIsNil", "lastReviewedAtNotNil", "reviewFrequency", "reviewFrequencyNEQ", "reviewFrequencyIn", "reviewFrequencyNotIn", "reviewFrequencyIsNil", "reviewFrequencyNotNil", "dueDate", "dueDateNEQ", "dueDateIn", "dueDateNotIn", "dueDateGT", "dueDateGTE", "dueDateLT", "dueDateLTE", "dueDateIsNil", "dueDateNotNil", "nextReviewDueAt", "nextReviewDueAtNEQ", "nextReviewDueAtIn", "nextReviewDueAtNotIn", "nextReviewDueAtGT", "nextReviewDueAtGTE", "nextReviewDueAtLT", "nextReviewDueAtLTE", "nextReviewDueAtIsNil", "nextReviewDueAtNotNil", "residualScore", "residualScoreNEQ", "residualScoreIn", "residualScoreNotIn", "residualScoreGT", "residualScoreGTE", "residualScoreLT", "residualScoreLTE", "residualScoreIsNil", "residualScoreNotNil", "riskDecision", "riskDecisionNEQ", "riskDecisionIn", "riskDecisionNotIn", "riskDecisionIsNil", "riskDecisionNotNil", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasViewers", "hasViewersWith", "hasRiskKind", "hasRiskKindWith", "hasRiskCategory", "hasRiskCategoryWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasProcedures", "hasProceduresWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasPrograms", "hasProgramsWith", "hasPlatforms", "hasPlatformsWith", "hasActionPlans", "hasActionPlansWith", "hasTasks", "hasTasksWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasScans", "hasScansWith", "hasStakeholder", "hasStakeholderWith", "hasDelegate", "hasDelegateWith", "hasComments", "hasCommentsWith", "hasDiscussions", "hasDiscussionsWith", "hasReviews", "hasReviewsWith", "hasRemediations", "hasRemediationsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasFindings", "hasFindingsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "tagsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -334103,6 +336958,34 @@ func (ec *executionContext) unmarshalInputRiskWhereInput(ctx context.Context, ob
 				return it, err
 			}
 			it.HasRemediationsWith = data
+		case "hasVulnerabilities":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasVulnerabilities"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasVulnerabilities = data
+		case "hasVulnerabilitiesWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasVulnerabilitiesWith"))
+			data, err := ec.unmarshalOVulnerabilityWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐVulnerabilityWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasVulnerabilitiesWith = data
+		case "hasFindings":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasFindings"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasFindings = data
+		case "hasFindingsWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasFindingsWith"))
+			data, err := ec.unmarshalOFindingWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFindingWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasFindingsWith = data
 		case "hasWorkflowObjectRefs":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasWorkflowObjectRefs"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -335120,7 +338003,7 @@ func (ec *executionContext) unmarshalInputScanWhereInput(ctx context.Context, ob
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "idEqualFold", "idContainsFold", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorGT", "updatedByImpersonatorGTE", "updatedByImpersonatorLT", "updatedByImpersonatorLTE", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDGT", "ownerIDGTE", "ownerIDLT", "ownerIDLTE", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "reviewedBy", "reviewedByNEQ", "reviewedByIn", "reviewedByNotIn", "reviewedByGT", "reviewedByGTE", "reviewedByLT", "reviewedByLTE", "reviewedByContains", "reviewedByHasPrefix", "reviewedByHasSuffix", "reviewedByIsNil", "reviewedByNotNil", "reviewedByEqualFold", "reviewedByContainsFold", "reviewedByUserID", "reviewedByUserIDNEQ", "reviewedByUserIDIn", "reviewedByUserIDNotIn", "reviewedByUserIDGT", "reviewedByUserIDGTE", "reviewedByUserIDLT", "reviewedByUserIDLTE", "reviewedByUserIDContains", "reviewedByUserIDHasPrefix", "reviewedByUserIDHasSuffix", "reviewedByUserIDIsNil", "reviewedByUserIDNotNil", "reviewedByUserIDEqualFold", "reviewedByUserIDContainsFold", "reviewedByGroupID", "reviewedByGroupIDNEQ", "reviewedByGroupIDIn", "reviewedByGroupIDNotIn", "reviewedByGroupIDGT", "reviewedByGroupIDGTE", "reviewedByGroupIDLT", "reviewedByGroupIDLTE", "reviewedByGroupIDContains", "reviewedByGroupIDHasPrefix", "reviewedByGroupIDHasSuffix", "reviewedByGroupIDIsNil", "reviewedByGroupIDNotNil", "reviewedByGroupIDEqualFold", "reviewedByGroupIDContainsFold", "assignedTo", "assignedToNEQ", "assignedToIn", "assignedToNotIn", "assignedToGT", "assignedToGTE", "assignedToLT", "assignedToLTE", "assignedToContains", "assignedToHasPrefix", "assignedToHasSuffix", "assignedToIsNil", "assignedToNotNil", "assignedToEqualFold", "assignedToContainsFold", "assignedToUserID", "assignedToUserIDNEQ", "assignedToUserIDIn", "assignedToUserIDNotIn", "assignedToUserIDGT", "assignedToUserIDGTE", "assignedToUserIDLT", "assignedToUserIDLTE", "assignedToUserIDContains", "assignedToUserIDHasPrefix", "assignedToUserIDHasSuffix", "assignedToUserIDIsNil", "assignedToUserIDNotNil", "assignedToUserIDEqualFold", "assignedToUserIDContainsFold", "assignedToGroupID", "assignedToGroupIDNEQ", "assignedToGroupIDIn", "assignedToGroupIDNotIn", "assignedToGroupIDGT", "assignedToGroupIDGTE", "assignedToGroupIDLT", "assignedToGroupIDLTE", "assignedToGroupIDContains", "assignedToGroupIDHasPrefix", "assignedToGroupIDHasSuffix", "assignedToGroupIDIsNil", "assignedToGroupIDNotNil", "assignedToGroupIDEqualFold", "assignedToGroupIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameGT", "environmentNameGTE", "environmentNameLT", "environmentNameLTE", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDGT", "environmentIDGTE", "environmentIDLT", "environmentIDLTE", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameGT", "scopeNameGTE", "scopeNameLT", "scopeNameLTE", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDGT", "scopeIDGTE", "scopeIDLT", "scopeIDLTE", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "target", "targetNEQ", "targetIn", "targetNotIn", "targetGT", "targetGTE", "targetLT", "targetLTE", "targetContains", "targetHasPrefix", "targetHasSuffix", "targetEqualFold", "targetContainsFold", "scanType", "scanTypeNEQ", "scanTypeIn", "scanTypeNotIn", "scanDate", "scanDateNEQ", "scanDateIn", "scanDateNotIn", "scanDateGT", "scanDateGTE", "scanDateLT", "scanDateLTE", "scanDateIsNil", "scanDateNotNil", "nextScanRunAt", "nextScanRunAtNEQ", "nextScanRunAtIn", "nextScanRunAtNotIn", "nextScanRunAtGT", "nextScanRunAtGTE", "nextScanRunAtLT", "nextScanRunAtLTE", "nextScanRunAtIsNil", "nextScanRunAtNotNil", "performedBy", "performedByNEQ", "performedByIn", "performedByNotIn", "performedByGT", "performedByGTE", "performedByLT", "performedByLTE", "performedByContains", "performedByHasPrefix", "performedByHasSuffix", "performedByIsNil", "performedByNotNil", "performedByEqualFold", "performedByContainsFold", "performedByUserID", "performedByUserIDNEQ", "performedByUserIDIn", "performedByUserIDNotIn", "performedByUserIDGT", "performedByUserIDGTE", "performedByUserIDLT", "performedByUserIDLTE", "performedByUserIDContains", "performedByUserIDHasPrefix", "performedByUserIDHasSuffix", "performedByUserIDIsNil", "performedByUserIDNotNil", "performedByUserIDEqualFold", "performedByUserIDContainsFold", "performedByGroupID", "performedByGroupIDNEQ", "performedByGroupIDIn", "performedByGroupIDNotIn", "performedByGroupIDGT", "performedByGroupIDGTE", "performedByGroupIDLT", "performedByGroupIDLTE", "performedByGroupIDContains", "performedByGroupIDHasPrefix", "performedByGroupIDHasSuffix", "performedByGroupIDIsNil", "performedByGroupIDNotNil", "performedByGroupIDEqualFold", "performedByGroupIDContainsFold", "generatedByPlatformID", "generatedByPlatformIDNEQ", "generatedByPlatformIDIn", "generatedByPlatformIDNotIn", "generatedByPlatformIDGT", "generatedByPlatformIDGTE", "generatedByPlatformIDLT", "generatedByPlatformIDLTE", "generatedByPlatformIDContains", "generatedByPlatformIDHasPrefix", "generatedByPlatformIDHasSuffix", "generatedByPlatformIDIsNil", "generatedByPlatformIDNotNil", "generatedByPlatformIDEqualFold", "generatedByPlatformIDContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasReviewedByUser", "hasReviewedByUserWith", "hasReviewedByGroup", "hasReviewedByGroupWith", "hasAssignedToUser", "hasAssignedToUserWith", "hasAssignedToGroup", "hasAssignedToGroupWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasEvidence", "hasEvidenceWith", "hasFiles", "hasFilesWith", "hasRemediations", "hasRemediationsWith", "hasActionPlans", "hasActionPlansWith", "hasTasks", "hasTasksWith", "hasPlatforms", "hasPlatformsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasFindings", "hasFindingsWith", "hasGeneratedByPlatform", "hasGeneratedByPlatformWith", "hasPerformedByUser", "hasPerformedByUserWith", "hasPerformedByGroup", "hasPerformedByGroupWith", "tagsHas", "discoveredVulnerabilityIdsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "idEqualFold", "idContainsFold", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorGT", "updatedByImpersonatorGTE", "updatedByImpersonatorLT", "updatedByImpersonatorLTE", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDGT", "ownerIDGTE", "ownerIDLT", "ownerIDLTE", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesGT", "internalNotesGTE", "internalNotesLT", "internalNotesLTE", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDGT", "systemInternalIDGTE", "systemInternalIDLT", "systemInternalIDLTE", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "reviewedBy", "reviewedByNEQ", "reviewedByIn", "reviewedByNotIn", "reviewedByGT", "reviewedByGTE", "reviewedByLT", "reviewedByLTE", "reviewedByContains", "reviewedByHasPrefix", "reviewedByHasSuffix", "reviewedByIsNil", "reviewedByNotNil", "reviewedByEqualFold", "reviewedByContainsFold", "reviewedByUserID", "reviewedByUserIDNEQ", "reviewedByUserIDIn", "reviewedByUserIDNotIn", "reviewedByUserIDGT", "reviewedByUserIDGTE", "reviewedByUserIDLT", "reviewedByUserIDLTE", "reviewedByUserIDContains", "reviewedByUserIDHasPrefix", "reviewedByUserIDHasSuffix", "reviewedByUserIDIsNil", "reviewedByUserIDNotNil", "reviewedByUserIDEqualFold", "reviewedByUserIDContainsFold", "reviewedByGroupID", "reviewedByGroupIDNEQ", "reviewedByGroupIDIn", "reviewedByGroupIDNotIn", "reviewedByGroupIDGT", "reviewedByGroupIDGTE", "reviewedByGroupIDLT", "reviewedByGroupIDLTE", "reviewedByGroupIDContains", "reviewedByGroupIDHasPrefix", "reviewedByGroupIDHasSuffix", "reviewedByGroupIDIsNil", "reviewedByGroupIDNotNil", "reviewedByGroupIDEqualFold", "reviewedByGroupIDContainsFold", "assignedTo", "assignedToNEQ", "assignedToIn", "assignedToNotIn", "assignedToGT", "assignedToGTE", "assignedToLT", "assignedToLTE", "assignedToContains", "assignedToHasPrefix", "assignedToHasSuffix", "assignedToIsNil", "assignedToNotNil", "assignedToEqualFold", "assignedToContainsFold", "assignedToUserID", "assignedToUserIDNEQ", "assignedToUserIDIn", "assignedToUserIDNotIn", "assignedToUserIDGT", "assignedToUserIDGTE", "assignedToUserIDLT", "assignedToUserIDLTE", "assignedToUserIDContains", "assignedToUserIDHasPrefix", "assignedToUserIDHasSuffix", "assignedToUserIDIsNil", "assignedToUserIDNotNil", "assignedToUserIDEqualFold", "assignedToUserIDContainsFold", "assignedToGroupID", "assignedToGroupIDNEQ", "assignedToGroupIDIn", "assignedToGroupIDNotIn", "assignedToGroupIDGT", "assignedToGroupIDGTE", "assignedToGroupIDLT", "assignedToGroupIDLTE", "assignedToGroupIDContains", "assignedToGroupIDHasPrefix", "assignedToGroupIDHasSuffix", "assignedToGroupIDIsNil", "assignedToGroupIDNotNil", "assignedToGroupIDEqualFold", "assignedToGroupIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameGT", "environmentNameGTE", "environmentNameLT", "environmentNameLTE", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDGT", "environmentIDGTE", "environmentIDLT", "environmentIDLTE", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameGT", "scopeNameGTE", "scopeNameLT", "scopeNameLTE", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDGT", "scopeIDGTE", "scopeIDLT", "scopeIDLTE", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "target", "targetNEQ", "targetIn", "targetNotIn", "targetGT", "targetGTE", "targetLT", "targetLTE", "targetContains", "targetHasPrefix", "targetHasSuffix", "targetEqualFold", "targetContainsFold", "scanType", "scanTypeNEQ", "scanTypeIn", "scanTypeNotIn", "scanDate", "scanDateNEQ", "scanDateIn", "scanDateNotIn", "scanDateGT", "scanDateGTE", "scanDateLT", "scanDateLTE", "scanDateIsNil", "scanDateNotNil", "nextScanRunAt", "nextScanRunAtNEQ", "nextScanRunAtIn", "nextScanRunAtNotIn", "nextScanRunAtGT", "nextScanRunAtGTE", "nextScanRunAtLT", "nextScanRunAtLTE", "nextScanRunAtIsNil", "nextScanRunAtNotNil", "performedBy", "performedByNEQ", "performedByIn", "performedByNotIn", "performedByGT", "performedByGTE", "performedByLT", "performedByLTE", "performedByContains", "performedByHasPrefix", "performedByHasSuffix", "performedByIsNil", "performedByNotNil", "performedByEqualFold", "performedByContainsFold", "performedByUserID", "performedByUserIDNEQ", "performedByUserIDIn", "performedByUserIDNotIn", "performedByUserIDGT", "performedByUserIDGTE", "performedByUserIDLT", "performedByUserIDLTE", "performedByUserIDContains", "performedByUserIDHasPrefix", "performedByUserIDHasSuffix", "performedByUserIDIsNil", "performedByUserIDNotNil", "performedByUserIDEqualFold", "performedByUserIDContainsFold", "performedByGroupID", "performedByGroupIDNEQ", "performedByGroupIDIn", "performedByGroupIDNotIn", "performedByGroupIDGT", "performedByGroupIDGTE", "performedByGroupIDLT", "performedByGroupIDLTE", "performedByGroupIDContains", "performedByGroupIDHasPrefix", "performedByGroupIDHasSuffix", "performedByGroupIDIsNil", "performedByGroupIDNotNil", "performedByGroupIDEqualFold", "performedByGroupIDContainsFold", "generatedByPlatformID", "generatedByPlatformIDNEQ", "generatedByPlatformIDIn", "generatedByPlatformIDNotIn", "generatedByPlatformIDGT", "generatedByPlatformIDGTE", "generatedByPlatformIDLT", "generatedByPlatformIDLTE", "generatedByPlatformIDContains", "generatedByPlatformIDHasPrefix", "generatedByPlatformIDHasSuffix", "generatedByPlatformIDIsNil", "generatedByPlatformIDNotNil", "generatedByPlatformIDEqualFold", "generatedByPlatformIDContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "hasOwner", "hasOwnerWith", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasReviewedByUser", "hasReviewedByUserWith", "hasReviewedByGroup", "hasReviewedByGroupWith", "hasAssignedToUser", "hasAssignedToUserWith", "hasAssignedToGroup", "hasAssignedToGroupWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasEvidence", "hasEvidenceWith", "hasFiles", "hasFilesWith", "hasRemediations", "hasRemediationsWith", "hasActionPlans", "hasActionPlansWith", "hasTasks", "hasTasksWith", "hasPlatforms", "hasPlatformsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasFindings", "hasFindingsWith", "hasGeneratedByPlatform", "hasGeneratedByPlatformWith", "hasPerformedByUser", "hasPerformedByUserWith", "hasPerformedByGroup", "hasPerformedByGroupWith", "tagsHas", "discoveredVulnerabilityIdsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -335778,6 +338661,244 @@ func (ec *executionContext) unmarshalInputScanWhereInput(ctx context.Context, ob
 				return it, err
 			}
 			it.OwnerIDContainsFold = data
+		case "systemOwned":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("systemOwned"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SystemOwned = data
+		case "systemOwnedNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("systemOwnedNEQ"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SystemOwnedNEQ = data
+		case "systemOwnedIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("systemOwnedIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SystemOwnedIsNil = data
+		case "systemOwnedNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("systemOwnedNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SystemOwnedNotNil = data
+		case "internalNotes":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalNotes"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalNotes = data
+		case "internalNotesNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalNotesNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalNotesNEQ = data
+		case "internalNotesIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalNotesIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalNotesIn = data
+		case "internalNotesNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalNotesNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalNotesNotIn = data
+		case "internalNotesGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalNotesGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalNotesGT = data
+		case "internalNotesGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalNotesGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalNotesGTE = data
+		case "internalNotesLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalNotesLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalNotesLT = data
+		case "internalNotesLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalNotesLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalNotesLTE = data
+		case "internalNotesContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalNotesContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalNotesContains = data
+		case "internalNotesHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalNotesHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalNotesHasPrefix = data
+		case "internalNotesHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalNotesHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalNotesHasSuffix = data
+		case "internalNotesIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalNotesIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalNotesIsNil = data
+		case "internalNotesNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalNotesNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalNotesNotNil = data
+		case "internalNotesEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalNotesEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalNotesEqualFold = data
+		case "internalNotesContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalNotesContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.InternalNotesContainsFold = data
+		case "systemInternalID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("systemInternalID"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SystemInternalID = data
+		case "systemInternalIDNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("systemInternalIDNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SystemInternalIDNEQ = data
+		case "systemInternalIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("systemInternalIDIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SystemInternalIDIn = data
+		case "systemInternalIDNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("systemInternalIDNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SystemInternalIDNotIn = data
+		case "systemInternalIDGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("systemInternalIDGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SystemInternalIDGT = data
+		case "systemInternalIDGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("systemInternalIDGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SystemInternalIDGTE = data
+		case "systemInternalIDLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("systemInternalIDLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SystemInternalIDLT = data
+		case "systemInternalIDLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("systemInternalIDLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SystemInternalIDLTE = data
+		case "systemInternalIDContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("systemInternalIDContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SystemInternalIDContains = data
+		case "systemInternalIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("systemInternalIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SystemInternalIDHasPrefix = data
+		case "systemInternalIDHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("systemInternalIDHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SystemInternalIDHasSuffix = data
+		case "systemInternalIDIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("systemInternalIDIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SystemInternalIDIsNil = data
+		case "systemInternalIDNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("systemInternalIDNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SystemInternalIDNotNil = data
+		case "systemInternalIDEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("systemInternalIDEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SystemInternalIDEqualFold = data
+		case "systemInternalIDContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("systemInternalIDContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SystemInternalIDContainsFold = data
 		case "reviewedBy":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedBy"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -342432,7 +345553,7 @@ func (ec *executionContext) unmarshalInputSubcontrolWhereInput(ctx context.Conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "idEqualFold", "idContainsFold", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorGT", "updatedByImpersonatorGTE", "updatedByImpersonatorLT", "updatedByImpersonatorLTE", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDGT", "displayIDGTE", "displayIDLT", "displayIDLTE", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "externalUUID", "externalUUIDNEQ", "externalUUIDIn", "externalUUIDNotIn", "externalUUIDGT", "externalUUIDGTE", "externalUUIDLT", "externalUUIDLTE", "externalUUIDContains", "externalUUIDHasPrefix", "externalUUIDHasSuffix", "externalUUIDIsNil", "externalUUIDNotNil", "externalUUIDEqualFold", "externalUUIDContainsFold", "title", "titleNEQ", "titleIn", "titleNotIn", "titleGT", "titleGTE", "titleLT", "titleLTE", "titleContains", "titleHasPrefix", "titleHasSuffix", "titleIsNil", "titleNotNil", "titleEqualFold", "titleContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "referenceID", "referenceIDNEQ", "referenceIDIn", "referenceIDNotIn", "referenceIDGT", "referenceIDGTE", "referenceIDLT", "referenceIDLTE", "referenceIDContains", "referenceIDHasPrefix", "referenceIDHasSuffix", "referenceIDIsNil", "referenceIDNotNil", "referenceIDEqualFold", "referenceIDContainsFold", "auditorReferenceID", "auditorReferenceIDNEQ", "auditorReferenceIDIn", "auditorReferenceIDNotIn", "auditorReferenceIDGT", "auditorReferenceIDGTE", "auditorReferenceIDLT", "auditorReferenceIDLTE", "auditorReferenceIDContains", "auditorReferenceIDHasPrefix", "auditorReferenceIDHasSuffix", "auditorReferenceIDIsNil", "auditorReferenceIDNotNil", "auditorReferenceIDEqualFold", "auditorReferenceIDContainsFold", "responsiblePartyID", "responsiblePartyIDNEQ", "responsiblePartyIDIn", "responsiblePartyIDNotIn", "responsiblePartyIDGT", "responsiblePartyIDGTE", "responsiblePartyIDLT", "responsiblePartyIDLTE", "responsiblePartyIDContains", "responsiblePartyIDHasPrefix", "responsiblePartyIDHasSuffix", "responsiblePartyIDIsNil", "responsiblePartyIDNotNil", "responsiblePartyIDEqualFold", "responsiblePartyIDContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "implementationStatus", "implementationStatusNEQ", "implementationStatusIn", "implementationStatusNotIn", "implementationStatusIsNil", "implementationStatusNotNil", "implementationDescription", "implementationDescriptionNEQ", "implementationDescriptionIn", "implementationDescriptionNotIn", "implementationDescriptionGT", "implementationDescriptionGTE", "implementationDescriptionLT", "implementationDescriptionLTE", "implementationDescriptionContains", "implementationDescriptionHasPrefix", "implementationDescriptionHasSuffix", "implementationDescriptionIsNil", "implementationDescriptionNotNil", "implementationDescriptionEqualFold", "implementationDescriptionContainsFold", "publicRepresentation", "publicRepresentationNEQ", "publicRepresentationIn", "publicRepresentationNotIn", "publicRepresentationGT", "publicRepresentationGTE", "publicRepresentationLT", "publicRepresentationLTE", "publicRepresentationContains", "publicRepresentationHasPrefix", "publicRepresentationHasSuffix", "publicRepresentationIsNil", "publicRepresentationNotNil", "publicRepresentationEqualFold", "publicRepresentationContainsFold", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceIsNil", "sourceNotNil", "sourceName", "sourceNameNEQ", "sourceNameIn", "sourceNameNotIn", "sourceNameGT", "sourceNameGTE", "sourceNameLT", "sourceNameLTE", "sourceNameContains", "sourceNameHasPrefix", "sourceNameHasSuffix", "sourceNameIsNil", "sourceNameNotNil", "sourceNameEqualFold", "sourceNameContainsFold", "referenceFramework", "referenceFrameworkNEQ", "referenceFrameworkIn", "referenceFrameworkNotIn", "referenceFrameworkGT", "referenceFrameworkGTE", "referenceFrameworkLT", "referenceFrameworkLTE", "referenceFrameworkContains", "referenceFrameworkHasPrefix", "referenceFrameworkHasSuffix", "referenceFrameworkIsNil", "referenceFrameworkNotNil", "referenceFrameworkEqualFold", "referenceFrameworkContainsFold", "referenceFrameworkRevision", "referenceFrameworkRevisionNEQ", "referenceFrameworkRevisionIn", "referenceFrameworkRevisionNotIn", "referenceFrameworkRevisionGT", "referenceFrameworkRevisionGTE", "referenceFrameworkRevisionLT", "referenceFrameworkRevisionLTE", "referenceFrameworkRevisionContains", "referenceFrameworkRevisionHasPrefix", "referenceFrameworkRevisionHasSuffix", "referenceFrameworkRevisionIsNil", "referenceFrameworkRevisionNotNil", "referenceFrameworkRevisionEqualFold", "referenceFrameworkRevisionContainsFold", "category", "categoryNEQ", "categoryIn", "categoryNotIn", "categoryGT", "categoryGTE", "categoryLT", "categoryLTE", "categoryContains", "categoryHasPrefix", "categoryHasSuffix", "categoryIsNil", "categoryNotNil", "categoryEqualFold", "categoryContainsFold", "categoryID", "categoryIDNEQ", "categoryIDIn", "categoryIDNotIn", "categoryIDGT", "categoryIDGTE", "categoryIDLT", "categoryIDLTE", "categoryIDContains", "categoryIDHasPrefix", "categoryIDHasSuffix", "categoryIDIsNil", "categoryIDNotNil", "categoryIDEqualFold", "categoryIDContainsFold", "subcategory", "subcategoryNEQ", "subcategoryIn", "subcategoryNotIn", "subcategoryGT", "subcategoryGTE", "subcategoryLT", "subcategoryLTE", "subcategoryContains", "subcategoryHasPrefix", "subcategoryHasSuffix", "subcategoryIsNil", "subcategoryNotNil", "subcategoryEqualFold", "subcategoryContainsFold", "controlOwnerID", "controlOwnerIDNEQ", "controlOwnerIDIn", "controlOwnerIDNotIn", "controlOwnerIDGT", "controlOwnerIDGTE", "controlOwnerIDLT", "controlOwnerIDLTE", "controlOwnerIDContains", "controlOwnerIDHasPrefix", "controlOwnerIDHasSuffix", "controlOwnerIDIsNil", "controlOwnerIDNotNil", "controlOwnerIDEqualFold", "controlOwnerIDContainsFold", "delegateID", "delegateIDNEQ", "delegateIDIn", "delegateIDNotIn", "delegateIDGT", "delegateIDGTE", "delegateIDLT", "delegateIDLTE", "delegateIDContains", "delegateIDHasPrefix", "delegateIDHasSuffix", "delegateIDIsNil", "delegateIDNotNil", "delegateIDEqualFold", "delegateIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDGT", "ownerIDGTE", "ownerIDLT", "ownerIDLTE", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesGT", "internalNotesGTE", "internalNotesLT", "internalNotesLTE", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDGT", "systemInternalIDGTE", "systemInternalIDLT", "systemInternalIDLTE", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "subcontrolKindName", "subcontrolKindNameNEQ", "subcontrolKindNameIn", "subcontrolKindNameNotIn", "subcontrolKindNameGT", "subcontrolKindNameGTE", "subcontrolKindNameLT", "subcontrolKindNameLTE", "subcontrolKindNameContains", "subcontrolKindNameHasPrefix", "subcontrolKindNameHasSuffix", "subcontrolKindNameIsNil", "subcontrolKindNameNotNil", "subcontrolKindNameEqualFold", "subcontrolKindNameContainsFold", "subcontrolKindID", "subcontrolKindIDNEQ", "subcontrolKindIDIn", "subcontrolKindIDNotIn", "subcontrolKindIDGT", "subcontrolKindIDGTE", "subcontrolKindIDLT", "subcontrolKindIDLTE", "subcontrolKindIDContains", "subcontrolKindIDHasPrefix", "subcontrolKindIDHasSuffix", "subcontrolKindIDIsNil", "subcontrolKindIDNotNil", "subcontrolKindIDEqualFold", "subcontrolKindIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "refCode", "refCodeNEQ", "refCodeIn", "refCodeNotIn", "refCodeGT", "refCodeGTE", "refCodeLT", "refCodeLTE", "refCodeContains", "refCodeHasPrefix", "refCodeHasSuffix", "refCodeEqualFold", "refCodeContainsFold", "controlID", "controlIDNEQ", "controlIDIn", "controlIDNotIn", "controlIDGT", "controlIDGTE", "controlIDLT", "controlIDLTE", "controlIDContains", "controlIDHasPrefix", "controlIDHasSuffix", "controlIDEqualFold", "controlIDContainsFold", "hasEvidence", "hasEvidenceWith", "hasControlObjectives", "hasControlObjectivesWith", "hasTasks", "hasTasksWith", "hasNarratives", "hasNarrativesWith", "hasRisks", "hasRisksWith", "hasActionPlans", "hasActionPlansWith", "hasProcedures", "hasProceduresWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasComments", "hasCommentsWith", "hasDiscussions", "hasDiscussionsWith", "hasControlOwner", "hasControlOwnerWith", "hasDelegate", "hasDelegateWith", "hasResponsibleParty", "hasResponsiblePartyWith", "hasReviews", "hasReviewsWith", "hasRemediations", "hasRemediationsWith", "hasScans", "hasScansWith", "hasOwner", "hasOwnerWith", "hasSubcontrolKind", "hasSubcontrolKindWith", "hasControl", "hasControlWith", "hasControlImplementations", "hasControlImplementationsWith", "hasScheduledJobs", "hasScheduledJobsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasIdentityHolders", "hasIdentityHoldersWith", "tagsHas", "aliasesHas", "mappedCategoriesHas", "controlQuestionsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "idEqualFold", "idContainsFold", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorGT", "updatedByImpersonatorGTE", "updatedByImpersonatorLT", "updatedByImpersonatorLTE", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDGT", "displayIDGTE", "displayIDLT", "displayIDLTE", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "externalUUID", "externalUUIDNEQ", "externalUUIDIn", "externalUUIDNotIn", "externalUUIDGT", "externalUUIDGTE", "externalUUIDLT", "externalUUIDLTE", "externalUUIDContains", "externalUUIDHasPrefix", "externalUUIDHasSuffix", "externalUUIDIsNil", "externalUUIDNotNil", "externalUUIDEqualFold", "externalUUIDContainsFold", "title", "titleNEQ", "titleIn", "titleNotIn", "titleGT", "titleGTE", "titleLT", "titleLTE", "titleContains", "titleHasPrefix", "titleHasSuffix", "titleIsNil", "titleNotNil", "titleEqualFold", "titleContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionGT", "descriptionGTE", "descriptionLT", "descriptionLTE", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "referenceID", "referenceIDNEQ", "referenceIDIn", "referenceIDNotIn", "referenceIDGT", "referenceIDGTE", "referenceIDLT", "referenceIDLTE", "referenceIDContains", "referenceIDHasPrefix", "referenceIDHasSuffix", "referenceIDIsNil", "referenceIDNotNil", "referenceIDEqualFold", "referenceIDContainsFold", "auditorReferenceID", "auditorReferenceIDNEQ", "auditorReferenceIDIn", "auditorReferenceIDNotIn", "auditorReferenceIDGT", "auditorReferenceIDGTE", "auditorReferenceIDLT", "auditorReferenceIDLTE", "auditorReferenceIDContains", "auditorReferenceIDHasPrefix", "auditorReferenceIDHasSuffix", "auditorReferenceIDIsNil", "auditorReferenceIDNotNil", "auditorReferenceIDEqualFold", "auditorReferenceIDContainsFold", "responsiblePartyID", "responsiblePartyIDNEQ", "responsiblePartyIDIn", "responsiblePartyIDNotIn", "responsiblePartyIDGT", "responsiblePartyIDGTE", "responsiblePartyIDLT", "responsiblePartyIDLTE", "responsiblePartyIDContains", "responsiblePartyIDHasPrefix", "responsiblePartyIDHasSuffix", "responsiblePartyIDIsNil", "responsiblePartyIDNotNil", "responsiblePartyIDEqualFold", "responsiblePartyIDContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "implementationStatus", "implementationStatusNEQ", "implementationStatusIn", "implementationStatusNotIn", "implementationStatusIsNil", "implementationStatusNotNil", "implementationDescription", "implementationDescriptionNEQ", "implementationDescriptionIn", "implementationDescriptionNotIn", "implementationDescriptionGT", "implementationDescriptionGTE", "implementationDescriptionLT", "implementationDescriptionLTE", "implementationDescriptionContains", "implementationDescriptionHasPrefix", "implementationDescriptionHasSuffix", "implementationDescriptionIsNil", "implementationDescriptionNotNil", "implementationDescriptionEqualFold", "implementationDescriptionContainsFold", "publicRepresentation", "publicRepresentationNEQ", "publicRepresentationIn", "publicRepresentationNotIn", "publicRepresentationGT", "publicRepresentationGTE", "publicRepresentationLT", "publicRepresentationLTE", "publicRepresentationContains", "publicRepresentationHasPrefix", "publicRepresentationHasSuffix", "publicRepresentationIsNil", "publicRepresentationNotNil", "publicRepresentationEqualFold", "publicRepresentationContainsFold", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceIsNil", "sourceNotNil", "sourceName", "sourceNameNEQ", "sourceNameIn", "sourceNameNotIn", "sourceNameGT", "sourceNameGTE", "sourceNameLT", "sourceNameLTE", "sourceNameContains", "sourceNameHasPrefix", "sourceNameHasSuffix", "sourceNameIsNil", "sourceNameNotNil", "sourceNameEqualFold", "sourceNameContainsFold", "referenceFramework", "referenceFrameworkNEQ", "referenceFrameworkIn", "referenceFrameworkNotIn", "referenceFrameworkGT", "referenceFrameworkGTE", "referenceFrameworkLT", "referenceFrameworkLTE", "referenceFrameworkContains", "referenceFrameworkHasPrefix", "referenceFrameworkHasSuffix", "referenceFrameworkIsNil", "referenceFrameworkNotNil", "referenceFrameworkEqualFold", "referenceFrameworkContainsFold", "referenceFrameworkRevision", "referenceFrameworkRevisionNEQ", "referenceFrameworkRevisionIn", "referenceFrameworkRevisionNotIn", "referenceFrameworkRevisionGT", "referenceFrameworkRevisionGTE", "referenceFrameworkRevisionLT", "referenceFrameworkRevisionLTE", "referenceFrameworkRevisionContains", "referenceFrameworkRevisionHasPrefix", "referenceFrameworkRevisionHasSuffix", "referenceFrameworkRevisionIsNil", "referenceFrameworkRevisionNotNil", "referenceFrameworkRevisionEqualFold", "referenceFrameworkRevisionContainsFold", "category", "categoryNEQ", "categoryIn", "categoryNotIn", "categoryGT", "categoryGTE", "categoryLT", "categoryLTE", "categoryContains", "categoryHasPrefix", "categoryHasSuffix", "categoryIsNil", "categoryNotNil", "categoryEqualFold", "categoryContainsFold", "categoryID", "categoryIDNEQ", "categoryIDIn", "categoryIDNotIn", "categoryIDGT", "categoryIDGTE", "categoryIDLT", "categoryIDLTE", "categoryIDContains", "categoryIDHasPrefix", "categoryIDHasSuffix", "categoryIDIsNil", "categoryIDNotNil", "categoryIDEqualFold", "categoryIDContainsFold", "subcategory", "subcategoryNEQ", "subcategoryIn", "subcategoryNotIn", "subcategoryGT", "subcategoryGTE", "subcategoryLT", "subcategoryLTE", "subcategoryContains", "subcategoryHasPrefix", "subcategoryHasSuffix", "subcategoryIsNil", "subcategoryNotNil", "subcategoryEqualFold", "subcategoryContainsFold", "controlOwnerID", "controlOwnerIDNEQ", "controlOwnerIDIn", "controlOwnerIDNotIn", "controlOwnerIDGT", "controlOwnerIDGTE", "controlOwnerIDLT", "controlOwnerIDLTE", "controlOwnerIDContains", "controlOwnerIDHasPrefix", "controlOwnerIDHasSuffix", "controlOwnerIDIsNil", "controlOwnerIDNotNil", "controlOwnerIDEqualFold", "controlOwnerIDContainsFold", "delegateID", "delegateIDNEQ", "delegateIDIn", "delegateIDNotIn", "delegateIDGT", "delegateIDGTE", "delegateIDLT", "delegateIDLTE", "delegateIDContains", "delegateIDHasPrefix", "delegateIDHasSuffix", "delegateIDIsNil", "delegateIDNotNil", "delegateIDEqualFold", "delegateIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDGT", "ownerIDGTE", "ownerIDLT", "ownerIDLTE", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "systemOwned", "systemOwnedNEQ", "systemOwnedIsNil", "systemOwnedNotNil", "internalNotes", "internalNotesNEQ", "internalNotesIn", "internalNotesNotIn", "internalNotesGT", "internalNotesGTE", "internalNotesLT", "internalNotesLTE", "internalNotesContains", "internalNotesHasPrefix", "internalNotesHasSuffix", "internalNotesIsNil", "internalNotesNotNil", "internalNotesEqualFold", "internalNotesContainsFold", "systemInternalID", "systemInternalIDNEQ", "systemInternalIDIn", "systemInternalIDNotIn", "systemInternalIDGT", "systemInternalIDGTE", "systemInternalIDLT", "systemInternalIDLTE", "systemInternalIDContains", "systemInternalIDHasPrefix", "systemInternalIDHasSuffix", "systemInternalIDIsNil", "systemInternalIDNotNil", "systemInternalIDEqualFold", "systemInternalIDContainsFold", "subcontrolKindName", "subcontrolKindNameNEQ", "subcontrolKindNameIn", "subcontrolKindNameNotIn", "subcontrolKindNameGT", "subcontrolKindNameGTE", "subcontrolKindNameLT", "subcontrolKindNameLTE", "subcontrolKindNameContains", "subcontrolKindNameHasPrefix", "subcontrolKindNameHasSuffix", "subcontrolKindNameIsNil", "subcontrolKindNameNotNil", "subcontrolKindNameEqualFold", "subcontrolKindNameContainsFold", "subcontrolKindID", "subcontrolKindIDNEQ", "subcontrolKindIDIn", "subcontrolKindIDNotIn", "subcontrolKindIDGT", "subcontrolKindIDGTE", "subcontrolKindIDLT", "subcontrolKindIDLTE", "subcontrolKindIDContains", "subcontrolKindIDHasPrefix", "subcontrolKindIDHasSuffix", "subcontrolKindIDIsNil", "subcontrolKindIDNotNil", "subcontrolKindIDEqualFold", "subcontrolKindIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "refCode", "refCodeNEQ", "refCodeIn", "refCodeNotIn", "refCodeGT", "refCodeGTE", "refCodeLT", "refCodeLTE", "refCodeContains", "refCodeHasPrefix", "refCodeHasSuffix", "refCodeEqualFold", "refCodeContainsFold", "controlID", "controlIDNEQ", "controlIDIn", "controlIDNotIn", "controlIDGT", "controlIDGTE", "controlIDLT", "controlIDLTE", "controlIDContains", "controlIDHasPrefix", "controlIDHasSuffix", "controlIDEqualFold", "controlIDContainsFold", "hasEvidence", "hasEvidenceWith", "hasControlObjectives", "hasControlObjectivesWith", "hasTasks", "hasTasksWith", "hasNarratives", "hasNarrativesWith", "hasRisks", "hasRisksWith", "hasActionPlans", "hasActionPlansWith", "hasProcedures", "hasProceduresWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasComments", "hasCommentsWith", "hasDiscussions", "hasDiscussionsWith", "hasControlOwner", "hasControlOwnerWith", "hasDelegate", "hasDelegateWith", "hasResponsibleParty", "hasResponsiblePartyWith", "hasReviews", "hasReviewsWith", "hasRemediations", "hasRemediationsWith", "hasScans", "hasScansWith", "hasOwner", "hasOwnerWith", "hasSubcontrolKind", "hasSubcontrolKindWith", "hasControl", "hasControlWith", "hasControlImplementations", "hasControlImplementationsWith", "hasScheduledJobs", "hasScheduledJobsWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasAssets", "hasAssetsWith", "hasEntities", "hasEntitiesWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasFindings", "hasFindingsWith", "tagsHas", "aliasesHas", "mappedCategoriesHas", "controlQuestionsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -345995,6 +349116,34 @@ func (ec *executionContext) unmarshalInputSubcontrolWhereInput(ctx context.Conte
 				return it, err
 			}
 			it.HasIdentityHoldersWith = data
+		case "hasVulnerabilities":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasVulnerabilities"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasVulnerabilities = data
+		case "hasVulnerabilitiesWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasVulnerabilitiesWith"))
+			data, err := ec.unmarshalOVulnerabilityWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐVulnerabilityWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasVulnerabilitiesWith = data
+		case "hasFindings":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasFindings"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasFindings = data
+		case "hasFindingsWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasFindingsWith"))
+			data, err := ec.unmarshalOFindingWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFindingWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasFindingsWith = data
 		case "tagsHas":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tagsHas"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -352378,7 +355527,7 @@ func (ec *executionContext) unmarshalInputTaskWhereInput(ctx context.Context, ob
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "idEqualFold", "idContainsFold", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorGT", "updatedByImpersonatorGTE", "updatedByImpersonatorLT", "updatedByImpersonatorLTE", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDGT", "displayIDGTE", "displayIDLT", "displayIDLTE", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDGT", "ownerIDGTE", "ownerIDLT", "ownerIDLTE", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "taskKindName", "taskKindNameNEQ", "taskKindNameIn", "taskKindNameNotIn", "taskKindNameGT", "taskKindNameGTE", "taskKindNameLT", "taskKindNameLTE", "taskKindNameContains", "taskKindNameHasPrefix", "taskKindNameHasSuffix", "taskKindNameIsNil", "taskKindNameNotNil", "taskKindNameEqualFold", "taskKindNameContainsFold", "taskKindID", "taskKindIDNEQ", "taskKindIDIn", "taskKindIDNotIn", "taskKindIDGT", "taskKindIDGTE", "taskKindIDLT", "taskKindIDLTE", "taskKindIDContains", "taskKindIDHasPrefix", "taskKindIDHasSuffix", "taskKindIDIsNil", "taskKindIDNotNil", "taskKindIDEqualFold", "taskKindIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameGT", "environmentNameGTE", "environmentNameLT", "environmentNameLTE", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDGT", "environmentIDGTE", "environmentIDLT", "environmentIDLTE", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameGT", "scopeNameGTE", "scopeNameLT", "scopeNameLTE", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDGT", "scopeIDGTE", "scopeIDLT", "scopeIDLTE", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "externalUUID", "externalUUIDNEQ", "externalUUIDIn", "externalUUIDNotIn", "externalUUIDGT", "externalUUIDGTE", "externalUUIDLT", "externalUUIDLTE", "externalUUIDContains", "externalUUIDHasPrefix", "externalUUIDHasSuffix", "externalUUIDIsNil", "externalUUIDNotNil", "externalUUIDEqualFold", "externalUUIDContainsFold", "title", "titleNEQ", "titleIn", "titleNotIn", "titleGT", "titleGTE", "titleLT", "titleLTE", "titleContains", "titleHasPrefix", "titleHasSuffix", "titleEqualFold", "titleContainsFold", "details", "detailsNEQ", "detailsIn", "detailsNotIn", "detailsGT", "detailsGTE", "detailsLT", "detailsLTE", "detailsContains", "detailsHasPrefix", "detailsHasSuffix", "detailsIsNil", "detailsNotNil", "detailsEqualFold", "detailsContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "due", "dueNEQ", "dueIn", "dueNotIn", "dueGT", "dueGTE", "dueLT", "dueLTE", "dueIsNil", "dueNotNil", "completed", "completedNEQ", "completedIn", "completedNotIn", "completedGT", "completedGTE", "completedLT", "completedLTE", "completedIsNil", "completedNotNil", "assigneeID", "assigneeIDNEQ", "assigneeIDIn", "assigneeIDNotIn", "assigneeIDGT", "assigneeIDGTE", "assigneeIDLT", "assigneeIDLTE", "assigneeIDContains", "assigneeIDHasPrefix", "assigneeIDHasSuffix", "assigneeIDIsNil", "assigneeIDNotNil", "assigneeIDEqualFold", "assigneeIDContainsFold", "assignerID", "assignerIDNEQ", "assignerIDIn", "assignerIDNotIn", "assignerIDGT", "assignerIDGTE", "assignerIDLT", "assignerIDLTE", "assignerIDContains", "assignerIDHasPrefix", "assignerIDHasSuffix", "assignerIDIsNil", "assignerIDNotNil", "assignerIDEqualFold", "assignerIDContainsFold", "systemGenerated", "systemGeneratedNEQ", "isTemplate", "isTemplateNEQ", "idempotencyKey", "idempotencyKeyNEQ", "idempotencyKeyIn", "idempotencyKeyNotIn", "idempotencyKeyGT", "idempotencyKeyGTE", "idempotencyKeyLT", "idempotencyKeyLTE", "idempotencyKeyContains", "idempotencyKeyHasPrefix", "idempotencyKeyHasSuffix", "idempotencyKeyIsNil", "idempotencyKeyNotNil", "idempotencyKeyEqualFold", "idempotencyKeyContainsFold", "parentTaskID", "parentTaskIDNEQ", "parentTaskIDIn", "parentTaskIDNotIn", "parentTaskIDGT", "parentTaskIDGTE", "parentTaskIDLT", "parentTaskIDLTE", "parentTaskIDContains", "parentTaskIDHasPrefix", "parentTaskIDHasSuffix", "parentTaskIDIsNil", "parentTaskIDNotNil", "parentTaskIDEqualFold", "parentTaskIDContainsFold", "hasOwner", "hasOwnerWith", "hasTaskKind", "hasTaskKindWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasAssigner", "hasAssignerWith", "hasAssignee", "hasAssigneeWith", "hasComments", "hasCommentsWith", "hasGroups", "hasGroupsWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasProcedures", "hasProceduresWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasControlObjectives", "hasControlObjectivesWith", "hasPrograms", "hasProgramsWith", "hasRisks", "hasRisksWith", "hasPlatforms", "hasPlatformsWith", "hasScans", "hasScansWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasControlImplementations", "hasControlImplementationsWith", "hasActionPlans", "hasActionPlansWith", "hasEvidence", "hasEvidenceWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasFindings", "hasFindingsWith", "hasParent", "hasParentWith", "hasTasks", "hasTasksWith", "tagsHas", "externalReferenceUrlHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "idEqualFold", "idContainsFold", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorGT", "updatedByImpersonatorGTE", "updatedByImpersonatorLT", "updatedByImpersonatorLTE", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDGT", "displayIDGTE", "displayIDLT", "displayIDLTE", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDGT", "ownerIDGTE", "ownerIDLT", "ownerIDLTE", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "taskKindName", "taskKindNameNEQ", "taskKindNameIn", "taskKindNameNotIn", "taskKindNameGT", "taskKindNameGTE", "taskKindNameLT", "taskKindNameLTE", "taskKindNameContains", "taskKindNameHasPrefix", "taskKindNameHasSuffix", "taskKindNameIsNil", "taskKindNameNotNil", "taskKindNameEqualFold", "taskKindNameContainsFold", "taskKindID", "taskKindIDNEQ", "taskKindIDIn", "taskKindIDNotIn", "taskKindIDGT", "taskKindIDGTE", "taskKindIDLT", "taskKindIDLTE", "taskKindIDContains", "taskKindIDHasPrefix", "taskKindIDHasSuffix", "taskKindIDIsNil", "taskKindIDNotNil", "taskKindIDEqualFold", "taskKindIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameGT", "environmentNameGTE", "environmentNameLT", "environmentNameLTE", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDGT", "environmentIDGTE", "environmentIDLT", "environmentIDLTE", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameGT", "scopeNameGTE", "scopeNameLT", "scopeNameLTE", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDGT", "scopeIDGTE", "scopeIDLT", "scopeIDLTE", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "externalUUID", "externalUUIDNEQ", "externalUUIDIn", "externalUUIDNotIn", "externalUUIDGT", "externalUUIDGTE", "externalUUIDLT", "externalUUIDLTE", "externalUUIDContains", "externalUUIDHasPrefix", "externalUUIDHasSuffix", "externalUUIDIsNil", "externalUUIDNotNil", "externalUUIDEqualFold", "externalUUIDContainsFold", "title", "titleNEQ", "titleIn", "titleNotIn", "titleGT", "titleGTE", "titleLT", "titleLTE", "titleContains", "titleHasPrefix", "titleHasSuffix", "titleEqualFold", "titleContainsFold", "details", "detailsNEQ", "detailsIn", "detailsNotIn", "detailsGT", "detailsGTE", "detailsLT", "detailsLTE", "detailsContains", "detailsHasPrefix", "detailsHasSuffix", "detailsIsNil", "detailsNotNil", "detailsEqualFold", "detailsContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "due", "dueNEQ", "dueIn", "dueNotIn", "dueGT", "dueGTE", "dueLT", "dueLTE", "dueIsNil", "dueNotNil", "completed", "completedNEQ", "completedIn", "completedNotIn", "completedGT", "completedGTE", "completedLT", "completedLTE", "completedIsNil", "completedNotNil", "assigneeID", "assigneeIDNEQ", "assigneeIDIn", "assigneeIDNotIn", "assigneeIDGT", "assigneeIDGTE", "assigneeIDLT", "assigneeIDLTE", "assigneeIDContains", "assigneeIDHasPrefix", "assigneeIDHasSuffix", "assigneeIDIsNil", "assigneeIDNotNil", "assigneeIDEqualFold", "assigneeIDContainsFold", "assignerID", "assignerIDNEQ", "assignerIDIn", "assignerIDNotIn", "assignerIDGT", "assignerIDGTE", "assignerIDLT", "assignerIDLTE", "assignerIDContains", "assignerIDHasPrefix", "assignerIDHasSuffix", "assignerIDIsNil", "assignerIDNotNil", "assignerIDEqualFold", "assignerIDContainsFold", "systemGenerated", "systemGeneratedNEQ", "isTemplate", "isTemplateNEQ", "isSuggested", "isSuggestedNEQ", "priority", "priorityNEQ", "priorityIn", "priorityNotIn", "priorityGT", "priorityGTE", "priorityLT", "priorityLTE", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceGT", "sourceGTE", "sourceLT", "sourceLTE", "sourceContains", "sourceHasPrefix", "sourceHasSuffix", "sourceIsNil", "sourceNotNil", "sourceEqualFold", "sourceContainsFold", "sourceKey", "sourceKeyNEQ", "sourceKeyIn", "sourceKeyNotIn", "sourceKeyGT", "sourceKeyGTE", "sourceKeyLT", "sourceKeyLTE", "sourceKeyContains", "sourceKeyHasPrefix", "sourceKeyHasSuffix", "sourceKeyIsNil", "sourceKeyNotNil", "sourceKeyEqualFold", "sourceKeyContainsFold", "idempotencyKey", "idempotencyKeyNEQ", "idempotencyKeyIn", "idempotencyKeyNotIn", "idempotencyKeyGT", "idempotencyKeyGTE", "idempotencyKeyLT", "idempotencyKeyLTE", "idempotencyKeyContains", "idempotencyKeyHasPrefix", "idempotencyKeyHasSuffix", "idempotencyKeyIsNil", "idempotencyKeyNotNil", "idempotencyKeyEqualFold", "idempotencyKeyContainsFold", "parentTaskID", "parentTaskIDNEQ", "parentTaskIDIn", "parentTaskIDNotIn", "parentTaskIDGT", "parentTaskIDGTE", "parentTaskIDLT", "parentTaskIDLTE", "parentTaskIDContains", "parentTaskIDHasPrefix", "parentTaskIDHasSuffix", "parentTaskIDIsNil", "parentTaskIDNotNil", "parentTaskIDEqualFold", "parentTaskIDContainsFold", "hasOwner", "hasOwnerWith", "hasTaskKind", "hasTaskKindWith", "hasEnvironment", "hasEnvironmentWith", "hasScope", "hasScopeWith", "hasAssigner", "hasAssignerWith", "hasAssignee", "hasAssigneeWith", "hasComments", "hasCommentsWith", "hasGroups", "hasGroupsWith", "hasInternalPolicies", "hasInternalPoliciesWith", "hasProcedures", "hasProceduresWith", "hasControls", "hasControlsWith", "hasSubcontrols", "hasSubcontrolsWith", "hasControlObjectives", "hasControlObjectivesWith", "hasPrograms", "hasProgramsWith", "hasRisks", "hasRisksWith", "hasPlatforms", "hasPlatformsWith", "hasScans", "hasScansWith", "hasIdentityHolders", "hasIdentityHoldersWith", "hasControlImplementations", "hasControlImplementationsWith", "hasActionPlans", "hasActionPlansWith", "hasEvidence", "hasEvidenceWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith", "hasVulnerabilities", "hasVulnerabilitiesWith", "hasFindings", "hasFindingsWith", "hasParent", "hasParentWith", "hasTasks", "hasTasksWith", "tagsHas", "externalReferenceUrlHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -354492,6 +357641,286 @@ func (ec *executionContext) unmarshalInputTaskWhereInput(ctx context.Context, ob
 				return it, err
 			}
 			it.IsTemplateNEQ = data
+		case "isSuggested":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isSuggested"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IsSuggested = data
+		case "isSuggestedNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isSuggestedNEQ"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IsSuggestedNEQ = data
+		case "priority":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("priority"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Priority = data
+		case "priorityNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("priorityNEQ"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PriorityNEQ = data
+		case "priorityIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("priorityIn"))
+			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PriorityIn = data
+		case "priorityNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("priorityNotIn"))
+			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PriorityNotIn = data
+		case "priorityGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("priorityGT"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PriorityGT = data
+		case "priorityGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("priorityGTE"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PriorityGTE = data
+		case "priorityLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("priorityLT"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PriorityLT = data
+		case "priorityLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("priorityLTE"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.PriorityLTE = data
+		case "source":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("source"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Source = data
+		case "sourceNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceNEQ = data
+		case "sourceIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceIn = data
+		case "sourceNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceNotIn = data
+		case "sourceGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceGT = data
+		case "sourceGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceGTE = data
+		case "sourceLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceLT = data
+		case "sourceLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceLTE = data
+		case "sourceContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceContains = data
+		case "sourceHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceHasPrefix = data
+		case "sourceHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceHasSuffix = data
+		case "sourceIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceIsNil = data
+		case "sourceNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceNotNil = data
+		case "sourceEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceEqualFold = data
+		case "sourceContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceContainsFold = data
+		case "sourceKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKey = data
+		case "sourceKeyNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNEQ = data
+		case "sourceKeyIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIn = data
+		case "sourceKeyNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotIn = data
+		case "sourceKeyGT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyGT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyGT = data
+		case "sourceKeyGTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyGTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyGTE = data
+		case "sourceKeyLT":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyLT"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyLT = data
+		case "sourceKeyLTE":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyLTE"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyLTE = data
+		case "sourceKeyContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContains = data
+		case "sourceKeyHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasPrefix = data
+		case "sourceKeyHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyHasSuffix = data
+		case "sourceKeyIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyIsNil = data
+		case "sourceKeyNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyNotNil = data
+		case "sourceKeyEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyEqualFold = data
+		case "sourceKeyContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKeyContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKeyContainsFold = data
 		case "idempotencyKey":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("idempotencyKey"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -361778,7 +365207,7 @@ func (ec *executionContext) unmarshalInputTrustCenterNDARequestWhereInput(ctx co
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "idEqualFold", "idContainsFold", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorGT", "updatedByImpersonatorGTE", "updatedByImpersonatorLT", "updatedByImpersonatorLTE", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "trustCenterID", "trustCenterIDNEQ", "trustCenterIDIn", "trustCenterIDNotIn", "trustCenterIDGT", "trustCenterIDGTE", "trustCenterIDLT", "trustCenterIDLTE", "trustCenterIDContains", "trustCenterIDHasPrefix", "trustCenterIDHasSuffix", "trustCenterIDIsNil", "trustCenterIDNotNil", "trustCenterIDEqualFold", "trustCenterIDContainsFold", "firstName", "firstNameNEQ", "firstNameIn", "firstNameNotIn", "firstNameGT", "firstNameGTE", "firstNameLT", "firstNameLTE", "firstNameContains", "firstNameHasPrefix", "firstNameHasSuffix", "firstNameEqualFold", "firstNameContainsFold", "lastName", "lastNameNEQ", "lastNameIn", "lastNameNotIn", "lastNameGT", "lastNameGTE", "lastNameLT", "lastNameLTE", "lastNameContains", "lastNameHasPrefix", "lastNameHasSuffix", "lastNameEqualFold", "lastNameContainsFold", "email", "emailNEQ", "emailIn", "emailNotIn", "emailGT", "emailGTE", "emailLT", "emailLTE", "emailContains", "emailHasPrefix", "emailHasSuffix", "emailEqualFold", "emailContainsFold", "companyName", "companyNameNEQ", "companyNameIn", "companyNameNotIn", "companyNameGT", "companyNameGTE", "companyNameLT", "companyNameLTE", "companyNameContains", "companyNameHasPrefix", "companyNameHasSuffix", "companyNameIsNil", "companyNameNotNil", "companyNameEqualFold", "companyNameContainsFold", "reason", "reasonNEQ", "reasonIn", "reasonNotIn", "reasonGT", "reasonGTE", "reasonLT", "reasonLTE", "reasonContains", "reasonHasPrefix", "reasonHasSuffix", "reasonIsNil", "reasonNotNil", "reasonEqualFold", "reasonContainsFold", "accessLevel", "accessLevelNEQ", "accessLevelIn", "accessLevelNotIn", "accessLevelIsNil", "accessLevelNotNil", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "approvedAt", "approvedAtNEQ", "approvedAtIn", "approvedAtNotIn", "approvedAtGT", "approvedAtGTE", "approvedAtLT", "approvedAtLTE", "approvedAtIsNil", "approvedAtNotNil", "approvedByUserID", "approvedByUserIDNEQ", "approvedByUserIDIn", "approvedByUserIDNotIn", "approvedByUserIDGT", "approvedByUserIDGTE", "approvedByUserIDLT", "approvedByUserIDLTE", "approvedByUserIDContains", "approvedByUserIDHasPrefix", "approvedByUserIDHasSuffix", "approvedByUserIDIsNil", "approvedByUserIDNotNil", "approvedByUserIDEqualFold", "approvedByUserIDContainsFold", "signedAt", "signedAtNEQ", "signedAtIn", "signedAtNotIn", "signedAtGT", "signedAtGTE", "signedAtLT", "signedAtLTE", "signedAtIsNil", "signedAtNotNil", "documentDataID", "documentDataIDNEQ", "documentDataIDIn", "documentDataIDNotIn", "documentDataIDGT", "documentDataIDGTE", "documentDataIDLT", "documentDataIDLTE", "documentDataIDContains", "documentDataIDHasPrefix", "documentDataIDHasSuffix", "documentDataIDIsNil", "documentDataIDNotNil", "documentDataIDEqualFold", "documentDataIDContainsFold", "fileID", "fileIDNEQ", "fileIDIn", "fileIDNotIn", "fileIDGT", "fileIDGTE", "fileIDLT", "fileIDLTE", "fileIDContains", "fileIDHasPrefix", "fileIDHasSuffix", "fileIDIsNil", "fileIDNotNil", "fileIDEqualFold", "fileIDContainsFold", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasTrustCenter", "hasTrustCenterWith", "hasTrustCenterDocs", "hasTrustCenterDocsWith", "hasDocument", "hasDocumentWith", "hasFile", "hasFileWith", "tagsHas"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "idEqualFold", "idContainsFold", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorGT", "updatedByImpersonatorGTE", "updatedByImpersonatorLT", "updatedByImpersonatorLTE", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "trustCenterID", "trustCenterIDNEQ", "trustCenterIDIn", "trustCenterIDNotIn", "trustCenterIDGT", "trustCenterIDGTE", "trustCenterIDLT", "trustCenterIDLTE", "trustCenterIDContains", "trustCenterIDHasPrefix", "trustCenterIDHasSuffix", "trustCenterIDIsNil", "trustCenterIDNotNil", "trustCenterIDEqualFold", "trustCenterIDContainsFold", "firstName", "firstNameNEQ", "firstNameIn", "firstNameNotIn", "firstNameGT", "firstNameGTE", "firstNameLT", "firstNameLTE", "firstNameContains", "firstNameHasPrefix", "firstNameHasSuffix", "firstNameEqualFold", "firstNameContainsFold", "lastName", "lastNameNEQ", "lastNameIn", "lastNameNotIn", "lastNameGT", "lastNameGTE", "lastNameLT", "lastNameLTE", "lastNameContains", "lastNameHasPrefix", "lastNameHasSuffix", "lastNameEqualFold", "lastNameContainsFold", "email", "emailNEQ", "emailIn", "emailNotIn", "emailGT", "emailGTE", "emailLT", "emailLTE", "emailContains", "emailHasPrefix", "emailHasSuffix", "emailEqualFold", "emailContainsFold", "companyName", "companyNameNEQ", "companyNameIn", "companyNameNotIn", "companyNameGT", "companyNameGTE", "companyNameLT", "companyNameLTE", "companyNameContains", "companyNameHasPrefix", "companyNameHasSuffix", "companyNameIsNil", "companyNameNotNil", "companyNameEqualFold", "companyNameContainsFold", "reason", "reasonNEQ", "reasonIn", "reasonNotIn", "reasonGT", "reasonGTE", "reasonLT", "reasonLTE", "reasonContains", "reasonHasPrefix", "reasonHasSuffix", "reasonIsNil", "reasonNotNil", "reasonEqualFold", "reasonContainsFold", "accessLevel", "accessLevelNEQ", "accessLevelIn", "accessLevelNotIn", "accessLevelIsNil", "accessLevelNotNil", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "approvedAt", "approvedAtNEQ", "approvedAtIn", "approvedAtNotIn", "approvedAtGT", "approvedAtGTE", "approvedAtLT", "approvedAtLTE", "approvedAtIsNil", "approvedAtNotNil", "approvedByUserID", "approvedByUserIDNEQ", "approvedByUserIDIn", "approvedByUserIDNotIn", "approvedByUserIDGT", "approvedByUserIDGTE", "approvedByUserIDLT", "approvedByUserIDLTE", "approvedByUserIDContains", "approvedByUserIDHasPrefix", "approvedByUserIDHasSuffix", "approvedByUserIDIsNil", "approvedByUserIDNotNil", "approvedByUserIDEqualFold", "approvedByUserIDContainsFold", "signedAt", "signedAtNEQ", "signedAtIn", "signedAtNotIn", "signedAtGT", "signedAtGTE", "signedAtLT", "signedAtLTE", "signedAtIsNil", "signedAtNotNil", "documentDataID", "documentDataIDNEQ", "documentDataIDIn", "documentDataIDNotIn", "documentDataIDGT", "documentDataIDGTE", "documentDataIDLT", "documentDataIDLTE", "documentDataIDContains", "documentDataIDHasPrefix", "documentDataIDHasSuffix", "documentDataIDIsNil", "documentDataIDNotNil", "documentDataIDEqualFold", "documentDataIDContainsFold", "fileID", "fileIDNEQ", "fileIDIn", "fileIDNotIn", "fileIDGT", "fileIDGTE", "fileIDLT", "fileIDLTE", "fileIDContains", "fileIDHasPrefix", "fileIDHasSuffix", "fileIDIsNil", "fileIDNotNil", "fileIDEqualFold", "fileIDContainsFold", "hasBlockedGroups", "hasBlockedGroupsWith", "hasEditors", "hasEditorsWith", "hasTrustCenter", "hasTrustCenterWith", "hasTrustCenterDocs", "hasTrustCenterDocsWith", "hasDocument", "hasDocumentWith", "hasFile", "hasFileWith", "hasApprovedByUser", "hasApprovedByUserWith", "tagsHas"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -363075,77 +366504,77 @@ func (ec *executionContext) unmarshalInputTrustCenterNDARequestWhereInput(ctx co
 			it.ApprovedAtNotNil = data
 		case "approvedByUserID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approvedByUserID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.ApprovedByUserID = data
 		case "approvedByUserIDNEQ":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approvedByUserIDNEQ"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.ApprovedByUserIDNEQ = data
 		case "approvedByUserIDIn":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approvedByUserIDIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.ApprovedByUserIDIn = data
 		case "approvedByUserIDNotIn":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approvedByUserIDNotIn"))
-			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.ApprovedByUserIDNotIn = data
 		case "approvedByUserIDGT":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approvedByUserIDGT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.ApprovedByUserIDGT = data
 		case "approvedByUserIDGTE":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approvedByUserIDGTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.ApprovedByUserIDGTE = data
 		case "approvedByUserIDLT":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approvedByUserIDLT"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.ApprovedByUserIDLT = data
 		case "approvedByUserIDLTE":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approvedByUserIDLTE"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.ApprovedByUserIDLTE = data
 		case "approvedByUserIDContains":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approvedByUserIDContains"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.ApprovedByUserIDContains = data
 		case "approvedByUserIDHasPrefix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approvedByUserIDHasPrefix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.ApprovedByUserIDHasPrefix = data
 		case "approvedByUserIDHasSuffix":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approvedByUserIDHasSuffix"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -363166,14 +366595,14 @@ func (ec *executionContext) unmarshalInputTrustCenterNDARequestWhereInput(ctx co
 			it.ApprovedByUserIDNotNil = data
 		case "approvedByUserIDEqualFold":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approvedByUserIDEqualFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.ApprovedByUserIDEqualFold = data
 		case "approvedByUserIDContainsFold":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approvedByUserIDContainsFold"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -363542,6 +366971,20 @@ func (ec *executionContext) unmarshalInputTrustCenterNDARequestWhereInput(ctx co
 				return it, err
 			}
 			it.HasFileWith = data
+		case "hasApprovedByUser":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasApprovedByUser"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasApprovedByUser = data
+		case "hasApprovedByUserWith":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("hasApprovedByUserWith"))
+			data, err := ec.unmarshalOUserWhereInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUserWhereInputᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.HasApprovedByUserWith = data
 		case "tagsHas":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("tagsHas"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -372192,7 +375635,7 @@ func (ec *executionContext) unmarshalInputUpdateAssessmentInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "name", "jsonconfig", "clearJsonconfig", "uischema", "clearUischema", "responseDueDuration", "clearResponseDueDuration", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "addViewerIDs", "removeViewerIDs", "clearViewers", "templateID", "clearTemplate", "addPlatformIDs", "removePlatformIDs", "clearPlatforms", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addAssessmentResponseIDs", "removeAssessmentResponseIDs", "clearAssessmentResponses", "addCampaignIDs", "removeCampaignIDs", "clearCampaigns", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "name", "assessmentType", "jsonconfig", "clearJsonconfig", "uischema", "clearUischema", "responseDueDuration", "clearResponseDueDuration", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "addViewerIDs", "removeViewerIDs", "clearViewers", "templateID", "clearTemplate", "addPlatformIDs", "removePlatformIDs", "clearPlatforms", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addAssessmentResponseIDs", "removeAssessmentResponseIDs", "clearAssessmentResponses", "addCampaignIDs", "removeCampaignIDs", "clearCampaigns", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -372318,6 +375761,13 @@ func (ec *executionContext) unmarshalInputUpdateAssessmentInput(ctx context.Cont
 				return it, err
 			}
 			it.Name = data
+		case "assessmentType":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("assessmentType"))
+			data, err := ec.unmarshalOAssessmentAssessmentType2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐAssessmentType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AssessmentType = data
 		case "jsonconfig":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("jsonconfig"))
 			data, err := ec.unmarshalOMap2map(ctx, v)
@@ -372558,7 +376008,7 @@ func (ec *executionContext) unmarshalInputUpdateAssetInput(ctx context.Context, 
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "internalOwner", "clearInternalOwner", "assetSubtypeName", "clearAssetSubtypeName", "assetDataClassificationName", "clearAssetDataClassificationName", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "accessModelName", "clearAccessModelName", "encryptionStatusName", "clearEncryptionStatusName", "securityTierName", "clearSecurityTierName", "criticalityName", "clearCriticalityName", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "assetType", "name", "displayName", "clearDisplayName", "description", "clearDescription", "identifier", "clearIdentifier", "website", "clearWebsite", "physicalLocation", "clearPhysicalLocation", "region", "clearRegion", "containsPii", "clearContainsPii", "sourceType", "sourceIdentifier", "clearSourceIdentifier", "costCenter", "clearCostCenter", "estimatedMonthlyCost", "clearEstimatedMonthlyCost", "purchaseDate", "clearPurchaseDate", "cpe", "clearCpe", "categories", "appendCategories", "clearCategories", "observedAt", "clearObservedAt", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "addViewerIDs", "removeViewerIDs", "clearViewers", "internalOwnerUserID", "clearInternalOwnerUser", "internalOwnerGroupID", "clearInternalOwnerGroup", "assetSubtypeID", "clearAssetSubtype", "assetDataClassificationID", "clearAssetDataClassification", "environmentID", "clearEnvironment", "scopeID", "clearScope", "accessModelID", "clearAccessModel", "encryptionStatusID", "clearEncryptionStatus", "securityTierID", "clearSecurityTier", "criticalityID", "clearCriticality", "addScanIDs", "removeScanIDs", "clearScans", "addEntityIDs", "removeEntityIDs", "clearEntities", "addPlatformIDs", "removePlatformIDs", "clearPlatforms", "addSystemDetailIDs", "removeSystemDetailIDs", "clearSystemDetails", "addOutOfScopePlatformIDs", "removeOutOfScopePlatformIDs", "clearOutOfScopePlatforms", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addControlIDs", "removeControlIDs", "clearControls", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addInternalPolicyIDs", "removeInternalPolicyIDs", "clearInternalPolicies", "sourcePlatformID", "clearSourcePlatform", "addConnectedAssetIDs", "removeConnectedAssetIDs", "clearConnectedAssets", "addConnectedFromIDs", "removeConnectedFromIDs", "clearConnectedFrom"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "internalOwner", "clearInternalOwner", "assetSubtypeName", "clearAssetSubtypeName", "assetDataClassificationName", "clearAssetDataClassificationName", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "accessModelName", "clearAccessModelName", "encryptionStatusName", "clearEncryptionStatusName", "securityTierName", "clearSecurityTierName", "criticalityName", "clearCriticalityName", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "assetType", "name", "displayName", "clearDisplayName", "description", "clearDescription", "identifier", "clearIdentifier", "website", "clearWebsite", "physicalLocation", "clearPhysicalLocation", "region", "clearRegion", "containsPii", "clearContainsPii", "sourceType", "sourceIdentifier", "clearSourceIdentifier", "costCenter", "clearCostCenter", "estimatedMonthlyCost", "clearEstimatedMonthlyCost", "purchaseDate", "clearPurchaseDate", "cpe", "clearCpe", "categories", "appendCategories", "clearCategories", "observedAt", "clearObservedAt", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "addViewerIDs", "removeViewerIDs", "clearViewers", "internalOwnerUserID", "clearInternalOwnerUser", "internalOwnerGroupID", "clearInternalOwnerGroup", "assetSubtypeID", "clearAssetSubtype", "assetDataClassificationID", "clearAssetDataClassification", "environmentID", "clearEnvironment", "scopeID", "clearScope", "accessModelID", "clearAccessModel", "encryptionStatusID", "clearEncryptionStatus", "securityTierID", "clearSecurityTier", "criticalityID", "clearCriticality", "addScanIDs", "removeScanIDs", "clearScans", "addEntityIDs", "removeEntityIDs", "clearEntities", "addPlatformIDs", "removePlatformIDs", "clearPlatforms", "addSystemDetailIDs", "removeSystemDetailIDs", "clearSystemDetails", "addOutOfScopePlatformIDs", "removeOutOfScopePlatformIDs", "clearOutOfScopePlatforms", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addControlIDs", "removeControlIDs", "clearControls", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addInternalPolicyIDs", "removeInternalPolicyIDs", "clearInternalPolicies", "addFindingIDs", "removeFindingIDs", "clearFindings", "addVulnerabilityIDs", "removeVulnerabilityIDs", "clearVulnerabilities", "addReviewIDs", "removeReviewIDs", "clearReviews", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "sourcePlatformID", "clearSourcePlatform", "addConnectedAssetIDs", "removeConnectedAssetIDs", "clearConnectedAssets", "addConnectedFromIDs", "removeConnectedFromIDs", "clearConnectedFrom"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -373405,6 +376855,90 @@ func (ec *executionContext) unmarshalInputUpdateAssetInput(ctx context.Context, 
 				return it, err
 			}
 			it.ClearInternalPolicies = data
+		case "addFindingIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addFindingIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddFindingIDs = data
+		case "removeFindingIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeFindingIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveFindingIDs = data
+		case "clearFindings":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearFindings"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearFindings = data
+		case "addVulnerabilityIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addVulnerabilityIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddVulnerabilityIDs = data
+		case "removeVulnerabilityIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeVulnerabilityIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveVulnerabilityIDs = data
+		case "clearVulnerabilities":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearVulnerabilities"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearVulnerabilities = data
+		case "addReviewIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addReviewIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddReviewIDs = data
+		case "removeReviewIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeReviewIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveReviewIDs = data
+		case "clearReviews":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearReviews"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearReviews = data
+		case "addRemediationIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addRemediationIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddRemediationIDs = data
+		case "removeRemediationIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeRemediationIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveRemediationIDs = data
+		case "clearRemediations":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearRemediations"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearRemediations = data
 		case "sourcePlatformID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourcePlatformID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -375202,7 +378736,7 @@ func (ec *executionContext) unmarshalInputUpdateControlInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "externalUUID", "clearExternalUUID", "title", "clearTitle", "description", "clearDescription", "descriptionJSON", "appendDescriptionJSON", "clearDescriptionJSON", "aliases", "appendAliases", "clearAliases", "referenceID", "clearReferenceID", "auditorReferenceID", "clearAuditorReferenceID", "status", "clearStatus", "implementationStatus", "clearImplementationStatus", "implementationDescription", "clearImplementationDescription", "publicRepresentation", "clearPublicRepresentation", "source", "clearSource", "sourceName", "clearSourceName", "referenceFrameworkRevision", "clearReferenceFrameworkRevision", "category", "clearCategory", "categoryID", "clearCategoryID", "subcategory", "clearSubcategory", "mappedCategories", "appendMappedCategories", "clearMappedCategories", "assessmentObjectives", "appendAssessmentObjectives", "clearAssessmentObjectives", "assessmentMethods", "appendAssessmentMethods", "clearAssessmentMethods", "controlQuestions", "appendControlQuestions", "clearControlQuestions", "implementationGuidance", "appendImplementationGuidance", "clearImplementationGuidance", "exampleEvidence", "appendExampleEvidence", "clearExampleEvidence", "references", "appendReferences", "clearReferences", "testingProcedures", "appendTestingProcedures", "clearTestingProcedures", "evidenceRequests", "appendEvidenceRequests", "clearEvidenceRequests", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "controlKindName", "clearControlKindName", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "refCode", "trustCenterVisibility", "clearTrustCenterVisibility", "addEvidenceIDs", "removeEvidenceIDs", "clearEvidence", "addControlObjectiveIDs", "removeControlObjectiveIDs", "clearControlObjectives", "addTaskIDs", "removeTaskIDs", "clearTasks", "addNarrativeIDs", "removeNarrativeIDs", "clearNarratives", "addRiskIDs", "removeRiskIDs", "clearRisks", "addActionPlanIDs", "removeActionPlanIDs", "clearActionPlans", "addProcedureIDs", "removeProcedureIDs", "clearProcedures", "addInternalPolicyIDs", "removeInternalPolicyIDs", "clearInternalPolicies", "addCommentIDs", "removeCommentIDs", "clearComments", "addDiscussionIDs", "removeDiscussionIDs", "clearDiscussions", "controlOwnerID", "clearControlOwner", "delegateID", "clearDelegate", "responsiblePartyID", "clearResponsibleParty", "addReviewIDs", "removeReviewIDs", "clearReviews", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "addScanIDs", "removeScanIDs", "clearScans", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "controlKindID", "clearControlKind", "environmentID", "clearEnvironment", "scopeID", "clearScope", "standardID", "clearStandard", "addCheckResultIDs", "removeCheckResultIDs", "clearCheckResults", "addProgramIDs", "removeProgramIDs", "clearPrograms", "addPlatformIDs", "removePlatformIDs", "clearPlatforms", "addAssetIDs", "removeAssetIDs", "clearAssets", "addEntityIDs", "removeEntityIDs", "clearEntities", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addCampaignIDs", "removeCampaignIDs", "clearCampaigns", "addFindingIDs", "removeFindingIDs", "clearFindings", "addControlImplementationIDs", "removeControlImplementationIDs", "clearControlImplementations", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addScheduledJobIDs", "removeScheduledJobIDs", "clearScheduledJobs", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs", "addDiscussion", "updateDiscussion", "deleteDiscussion", "addComment", "deleteComment"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "externalUUID", "clearExternalUUID", "title", "clearTitle", "description", "clearDescription", "descriptionJSON", "appendDescriptionJSON", "clearDescriptionJSON", "aliases", "appendAliases", "clearAliases", "referenceID", "clearReferenceID", "auditorReferenceID", "clearAuditorReferenceID", "status", "clearStatus", "implementationStatus", "clearImplementationStatus", "implementationDescription", "clearImplementationDescription", "publicRepresentation", "clearPublicRepresentation", "source", "clearSource", "sourceName", "clearSourceName", "referenceFrameworkRevision", "clearReferenceFrameworkRevision", "category", "clearCategory", "categoryID", "clearCategoryID", "subcategory", "clearSubcategory", "mappedCategories", "appendMappedCategories", "clearMappedCategories", "assessmentObjectives", "appendAssessmentObjectives", "clearAssessmentObjectives", "assessmentMethods", "appendAssessmentMethods", "clearAssessmentMethods", "controlQuestions", "appendControlQuestions", "clearControlQuestions", "implementationGuidance", "appendImplementationGuidance", "clearImplementationGuidance", "exampleEvidence", "appendExampleEvidence", "clearExampleEvidence", "references", "appendReferences", "clearReferences", "testingProcedures", "appendTestingProcedures", "clearTestingProcedures", "evidenceRequests", "appendEvidenceRequests", "clearEvidenceRequests", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "controlKindName", "clearControlKindName", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "refCode", "trustCenterVisibility", "clearTrustCenterVisibility", "addEvidenceIDs", "removeEvidenceIDs", "clearEvidence", "addControlObjectiveIDs", "removeControlObjectiveIDs", "clearControlObjectives", "addTaskIDs", "removeTaskIDs", "clearTasks", "addNarrativeIDs", "removeNarrativeIDs", "clearNarratives", "addRiskIDs", "removeRiskIDs", "clearRisks", "addActionPlanIDs", "removeActionPlanIDs", "clearActionPlans", "addProcedureIDs", "removeProcedureIDs", "clearProcedures", "addInternalPolicyIDs", "removeInternalPolicyIDs", "clearInternalPolicies", "addCommentIDs", "removeCommentIDs", "clearComments", "addDiscussionIDs", "removeDiscussionIDs", "clearDiscussions", "controlOwnerID", "clearControlOwner", "delegateID", "clearDelegate", "responsiblePartyID", "clearResponsibleParty", "addReviewIDs", "removeReviewIDs", "clearReviews", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "addScanIDs", "removeScanIDs", "clearScans", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "controlKindID", "clearControlKind", "environmentID", "clearEnvironment", "scopeID", "clearScope", "standardID", "clearStandard", "addCheckResultIDs", "removeCheckResultIDs", "clearCheckResults", "addProgramIDs", "removeProgramIDs", "clearPrograms", "addPlatformIDs", "removePlatformIDs", "clearPlatforms", "addVulnerabilityIDs", "removeVulnerabilityIDs", "clearVulnerabilities", "addAssetIDs", "removeAssetIDs", "clearAssets", "addEntityIDs", "removeEntityIDs", "clearEntities", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addCampaignIDs", "removeCampaignIDs", "clearCampaigns", "addControlImplementationIDs", "removeControlImplementationIDs", "clearControlImplementations", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addScheduledJobIDs", "removeScheduledJobIDs", "clearScheduledJobs", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs", "addDiscussion", "updateDiscussion", "deleteDiscussion", "addComment", "deleteComment"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -376599,6 +380133,27 @@ func (ec *executionContext) unmarshalInputUpdateControlInput(ctx context.Context
 				return it, err
 			}
 			it.ClearPlatforms = data
+		case "addVulnerabilityIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addVulnerabilityIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddVulnerabilityIDs = data
+		case "removeVulnerabilityIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeVulnerabilityIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveVulnerabilityIDs = data
+		case "clearVulnerabilities":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearVulnerabilities"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearVulnerabilities = data
 		case "addAssetIDs":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addAssetIDs"))
 			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
@@ -376683,27 +380238,6 @@ func (ec *executionContext) unmarshalInputUpdateControlInput(ctx context.Context
 				return it, err
 			}
 			it.ClearCampaigns = data
-		case "addFindingIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addFindingIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddFindingIDs = data
-		case "removeFindingIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeFindingIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveFindingIDs = data
-		case "clearFindings":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearFindings"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearFindings = data
 		case "addControlImplementationIDs":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addControlImplementationIDs"))
 			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
@@ -378049,7 +381583,7 @@ func (ec *executionContext) unmarshalInputUpdateDirectoryAccountInput(ctx contex
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "directoryInstanceID", "clearDirectoryInstanceID", "directoryName", "clearDirectoryName", "secondaryKey", "clearSecondaryKey", "canonicalEmail", "clearCanonicalEmail", "emailAliases", "appendEmailAliases", "clearEmailAliases", "phoneNumber", "clearPhoneNumber", "displayName", "clearDisplayName", "avatarRemoteURL", "clearAvatarRemoteURL", "avatarUpdatedAt", "clearAvatarUpdatedAt", "givenName", "clearGivenName", "familyName", "clearFamilyName", "jobTitle", "clearJobTitle", "department", "clearDepartment", "organizationUnit", "clearOrganizationUnit", "accountType", "clearAccountType", "status", "mfaState", "lastSeenIP", "clearLastSeenIP", "lastLoginAt", "clearLastLoginAt", "firstSeenAt", "clearFirstSeenAt", "lastSeenAt", "clearLastSeenAt", "addedAt", "clearAddedAt", "removedAt", "clearRemovedAt", "profileHash", "profile", "clearProfile", "metadata", "clearMetadata", "sourceVersion", "clearSourceVersion", "primarySource", "environmentID", "clearEnvironment", "scopeID", "clearScope", "identityHolderID", "clearIdentityHolder", "avatarFileID", "clearAvatarFile", "addGroupIDs", "removeGroupIDs", "clearGroups", "addFindingIDs", "removeFindingIDs", "clearFindings", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "directoryInstanceID", "clearDirectoryInstanceID", "directoryName", "clearDirectoryName", "secondaryKey", "clearSecondaryKey", "canonicalEmail", "clearCanonicalEmail", "emailAliases", "appendEmailAliases", "clearEmailAliases", "phoneNumber", "clearPhoneNumber", "displayName", "clearDisplayName", "avatarRemoteURL", "clearAvatarRemoteURL", "avatarUpdatedAt", "clearAvatarUpdatedAt", "givenName", "clearGivenName", "familyName", "clearFamilyName", "jobTitle", "clearJobTitle", "department", "clearDepartment", "organizationUnit", "clearOrganizationUnit", "accountType", "clearAccountType", "status", "mfaState", "lastSeenIP", "clearLastSeenIP", "lastLoginAt", "clearLastLoginAt", "firstSeenAt", "clearFirstSeenAt", "lastSeenAt", "clearLastSeenAt", "addedAt", "clearAddedAt", "removedAt", "clearRemovedAt", "profileHash", "profile", "clearProfile", "metadata", "clearMetadata", "sourceVersion", "clearSourceVersion", "primarySource", "environmentID", "clearEnvironment", "scopeID", "clearScope", "identityHolderID", "clearIdentityHolder", "avatarFileID", "clearAvatarFile", "addFindingIDs", "removeFindingIDs", "clearFindings", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -378532,27 +382066,6 @@ func (ec *executionContext) unmarshalInputUpdateDirectoryAccountInput(ctx contex
 				return it, err
 			}
 			it.ClearAvatarFile = data
-		case "addGroupIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addGroupIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddGroupIDs = data
-		case "removeGroupIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeGroupIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveGroupIDs = data
-		case "clearGroups":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearGroups"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearGroups = data
 		case "addFindingIDs":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addFindingIDs"))
 			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
@@ -380286,7 +383799,7 @@ func (ec *executionContext) unmarshalInputUpdateEntityInput(ctx context.Context,
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "internalOwner", "clearInternalOwner", "reviewedBy", "clearReviewedBy", "lastReviewedAt", "clearLastReviewedAt", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "entityRelationshipStateName", "clearEntityRelationshipStateName", "entitySecurityQuestionnaireStatusName", "clearEntitySecurityQuestionnaireStatusName", "entitySourceTypeName", "clearEntitySourceTypeName", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "name", "clearName", "displayName", "clearDisplayName", "description", "clearDescription", "domains", "appendDomains", "clearDomains", "aliases", "appendAliases", "clearAliases", "status", "clearStatus", "approvedForUse", "clearApprovedForUse", "linkedAssetIds", "appendLinkedAssetIds", "clearLinkedAssetIds", "hasSoc2", "clearHasSoc2", "soc2PeriodEnd", "clearSoc2PeriodEnd", "contractStartDate", "clearContractStartDate", "contractEndDate", "clearContractEndDate", "autoRenews", "clearAutoRenews", "terminationNoticeDays", "clearTerminationNoticeDays", "annualSpend", "clearAnnualSpend", "spendCurrency", "clearSpendCurrency", "billingModel", "clearBillingModel", "renewalRisk", "clearRenewalRisk", "ssoEnforced", "clearSSOEnforced", "mfaSupported", "clearMfaSupported", "mfaEnforced", "clearMfaEnforced", "statusPageURL", "clearStatusPageURL", "providedServices", "appendProvidedServices", "clearProvidedServices", "links", "appendLinks", "clearLinks", "riskRating", "clearRiskRating", "riskScore", "clearRiskScore", "tier", "clearTier", "reviewFrequency", "clearReviewFrequency", "nextReviewAt", "clearNextReviewAt", "contractRenewalAt", "clearContractRenewalAt", "vendorMetadata", "clearVendorMetadata", "logoRemoteURL", "clearLogoRemoteURL", "externalID", "clearExternalID", "observedAt", "clearObservedAt", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "internalOwnerUserID", "clearInternalOwnerUser", "internalOwnerGroupID", "clearInternalOwnerGroup", "reviewedByUserID", "clearReviewedByUser", "reviewedByGroupID", "clearReviewedByGroup", "entityRelationshipStateID", "clearEntityRelationshipState", "entitySecurityQuestionnaireStatusID", "clearEntitySecurityQuestionnaireStatus", "entitySourceTypeID", "clearEntitySourceType", "environmentID", "clearEnvironment", "scopeID", "clearScope", "addContactIDs", "removeContactIDs", "clearContacts", "addDocumentIDs", "removeDocumentIDs", "clearDocuments", "addNoteIDs", "removeNoteIDs", "clearNotes", "addFileIDs", "removeFileIDs", "clearFiles", "addAssetIDs", "removeAssetIDs", "clearAssets", "addSystemDetailIDs", "removeSystemDetailIDs", "clearSystemDetails", "addScanIDs", "removeScanIDs", "clearScans", "addCampaignIDs", "removeCampaignIDs", "clearCampaigns", "addAssessmentResponseIDs", "removeAssessmentResponseIDs", "clearAssessmentResponses", "addVendorRiskScoreIDs", "removeVendorRiskScoreIDs", "clearVendorRiskScores", "addIntegrationIDs", "removeIntegrationIDs", "clearIntegrations", "addSubprocessorIDs", "removeSubprocessorIDs", "clearSubprocessors", "addAuthMethodIDs", "removeAuthMethodIDs", "clearAuthMethods", "addEmployerIdentityHolderIDs", "removeEmployerIdentityHolderIDs", "clearEmployerIdentityHolders", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addControlIDs", "removeControlIDs", "clearControls", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addPlatformIDs", "removePlatformIDs", "clearPlatforms", "addOutOfScopePlatformIDs", "removeOutOfScopePlatformIDs", "clearOutOfScopePlatforms", "addSourcePlatformIDs", "removeSourcePlatformIDs", "clearSourcePlatforms", "entityTypeID", "clearEntityType", "logoFileID", "clearLogoFile", "addInternalPolicyIDs", "removeInternalPolicyIDs", "clearInternalPolicies", "note"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "internalOwner", "clearInternalOwner", "reviewedBy", "clearReviewedBy", "lastReviewedAt", "clearLastReviewedAt", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "entityRelationshipStateName", "clearEntityRelationshipStateName", "entitySecurityQuestionnaireStatusName", "clearEntitySecurityQuestionnaireStatusName", "entitySourceTypeName", "clearEntitySourceTypeName", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "name", "clearName", "displayName", "clearDisplayName", "description", "clearDescription", "domains", "appendDomains", "clearDomains", "aliases", "appendAliases", "clearAliases", "status", "clearStatus", "approvedForUse", "clearApprovedForUse", "linkedAssetIds", "appendLinkedAssetIds", "clearLinkedAssetIds", "hasSoc2", "clearHasSoc2", "soc2PeriodEnd", "clearSoc2PeriodEnd", "contractStartDate", "clearContractStartDate", "contractEndDate", "clearContractEndDate", "autoRenews", "clearAutoRenews", "terminationNoticeDays", "clearTerminationNoticeDays", "annualSpend", "clearAnnualSpend", "spendCurrency", "clearSpendCurrency", "billingModel", "clearBillingModel", "renewalRisk", "clearRenewalRisk", "ssoEnforced", "clearSSOEnforced", "mfaSupported", "clearMfaSupported", "mfaEnforced", "clearMfaEnforced", "statusPageURL", "clearStatusPageURL", "providedServices", "appendProvidedServices", "clearProvidedServices", "links", "appendLinks", "clearLinks", "riskRating", "clearRiskRating", "riskScore", "clearRiskScore", "tier", "clearTier", "reviewFrequency", "clearReviewFrequency", "nextReviewAt", "clearNextReviewAt", "contractRenewalAt", "clearContractRenewalAt", "vendorMetadata", "clearVendorMetadata", "logoRemoteURL", "clearLogoRemoteURL", "externalID", "clearExternalID", "observedAt", "clearObservedAt", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "internalOwnerUserID", "clearInternalOwnerUser", "internalOwnerGroupID", "clearInternalOwnerGroup", "reviewedByUserID", "clearReviewedByUser", "reviewedByGroupID", "clearReviewedByGroup", "entityRelationshipStateID", "clearEntityRelationshipState", "entitySecurityQuestionnaireStatusID", "clearEntitySecurityQuestionnaireStatus", "entitySourceTypeID", "clearEntitySourceType", "environmentID", "clearEnvironment", "scopeID", "clearScope", "addContactIDs", "removeContactIDs", "clearContacts", "addDocumentIDs", "removeDocumentIDs", "clearDocuments", "addNoteIDs", "removeNoteIDs", "clearNotes", "addFileIDs", "removeFileIDs", "clearFiles", "addAssetIDs", "removeAssetIDs", "clearAssets", "addSystemDetailIDs", "removeSystemDetailIDs", "clearSystemDetails", "addScanIDs", "removeScanIDs", "clearScans", "addCampaignIDs", "removeCampaignIDs", "clearCampaigns", "addAssessmentResponseIDs", "removeAssessmentResponseIDs", "clearAssessmentResponses", "addVendorRiskScoreIDs", "removeVendorRiskScoreIDs", "clearVendorRiskScores", "addIntegrationIDs", "removeIntegrationIDs", "clearIntegrations", "addSubprocessorIDs", "removeSubprocessorIDs", "clearSubprocessors", "addAuthMethodIDs", "removeAuthMethodIDs", "clearAuthMethods", "addEmployerIdentityHolderIDs", "removeEmployerIdentityHolderIDs", "clearEmployerIdentityHolders", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addControlIDs", "removeControlIDs", "clearControls", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addFindingIDs", "removeFindingIDs", "clearFindings", "addVulnerabilityIDs", "removeVulnerabilityIDs", "clearVulnerabilities", "addReviewIDs", "removeReviewIDs", "clearReviews", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "addPlatformIDs", "removePlatformIDs", "clearPlatforms", "addOutOfScopePlatformIDs", "removeOutOfScopePlatformIDs", "clearOutOfScopePlatforms", "addSourcePlatformIDs", "removeSourcePlatformIDs", "clearSourcePlatforms", "entityTypeID", "clearEntityType", "logoFileID", "clearLogoFile", "addInternalPolicyIDs", "removeInternalPolicyIDs", "clearInternalPolicies", "note"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -381539,6 +385052,90 @@ func (ec *executionContext) unmarshalInputUpdateEntityInput(ctx context.Context,
 				return it, err
 			}
 			it.ClearSubcontrols = data
+		case "addFindingIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addFindingIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddFindingIDs = data
+		case "removeFindingIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeFindingIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveFindingIDs = data
+		case "clearFindings":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearFindings"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearFindings = data
+		case "addVulnerabilityIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addVulnerabilityIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddVulnerabilityIDs = data
+		case "removeVulnerabilityIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeVulnerabilityIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveVulnerabilityIDs = data
+		case "clearVulnerabilities":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearVulnerabilities"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearVulnerabilities = data
+		case "addReviewIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addReviewIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddReviewIDs = data
+		case "removeReviewIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeReviewIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveReviewIDs = data
+		case "clearReviews":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearReviews"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearReviews = data
+		case "addRemediationIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addRemediationIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddRemediationIDs = data
+		case "removeRemediationIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeRemediationIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveRemediationIDs = data
+		case "clearRemediations":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearRemediations"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearRemediations = data
 		case "addPlatformIDs":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addPlatformIDs"))
 			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
@@ -383573,7 +387170,7 @@ func (ec *executionContext) unmarshalInputUpdateFindingControlInput(ctx context.
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"externalStandard", "clearExternalStandard", "externalStandardVersion", "clearExternalStandardVersion", "externalControlID", "clearExternalControlID", "source", "clearSource", "metadata", "clearMetadata", "discoveredAt", "clearDiscoveredAt"}
+	fieldsInOrder := [...]string{"externalStandard", "clearExternalStandard", "externalStandardVersion", "clearExternalStandardVersion", "externalControlID", "clearExternalControlID", "source", "clearSource", "metadata", "clearMetadata", "discoveredAt", "clearDiscoveredAt", "ownerID", "clearOwner"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -383664,6 +387261,20 @@ func (ec *executionContext) unmarshalInputUpdateFindingControlInput(ctx context.
 				return it, err
 			}
 			it.ClearDiscoveredAt = data
+		case "ownerID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("ownerID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.OwnerID = data
+		case "clearOwner":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearOwner"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearOwner = data
 		}
 	}
 	return it, nil
@@ -383680,7 +387291,7 @@ func (ec *executionContext) unmarshalInputUpdateFindingInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "reviewedBy", "clearReviewedBy", "assignedTo", "clearAssignedTo", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "findingStatusName", "clearFindingStatusName", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "externalID", "clearExternalID", "externalOwnerID", "clearExternalOwnerID", "source", "clearSource", "resourceName", "clearResourceName", "displayName", "clearDisplayName", "state", "clearState", "category", "clearCategory", "categories", "appendCategories", "clearCategories", "findingClass", "clearFindingClass", "severity", "clearSeverity", "numericSeverity", "clearNumericSeverity", "score", "clearScore", "impact", "clearImpact", "exploitability", "clearExploitability", "priority", "clearPriority", "open", "clearOpen", "blocksProduction", "clearBlocksProduction", "production", "clearProduction", "public", "clearPublic", "validated", "clearValidated", "assessmentID", "clearAssessmentID", "description", "clearDescription", "recommendation", "clearRecommendation", "recommendedActions", "clearRecommendedActions", "references", "appendReferences", "clearReferences", "stepsToReproduce", "appendStepsToReproduce", "clearStepsToReproduce", "targets", "appendTargets", "clearTargets", "targetDetails", "clearTargetDetails", "vector", "clearVector", "remediationSLA", "clearRemediationSLA", "eventTime", "clearEventTime", "reportedAt", "clearReportedAt", "sourceUpdatedAt", "clearSourceUpdatedAt", "externalURI", "clearExternalURI", "metadata", "clearMetadata", "rawPayload", "clearRawPayload", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "reviewedByUserID", "clearReviewedByUser", "reviewedByGroupID", "clearReviewedByGroup", "assignedToUserID", "clearAssignedToUser", "assignedToGroupID", "clearAssignedToGroup", "environmentID", "clearEnvironment", "scopeID", "clearScope", "findingStatusID", "clearFindingStatus", "addIntegrationIDs", "removeIntegrationIDs", "clearIntegrations", "addVulnerabilityIDs", "removeVulnerabilityIDs", "clearVulnerabilities", "addActionPlanIDs", "removeActionPlanIDs", "clearActionPlans", "addControlIDs", "removeControlIDs", "clearControls", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addRiskIDs", "removeRiskIDs", "clearRisks", "addProgramIDs", "removeProgramIDs", "clearPrograms", "addAssetIDs", "removeAssetIDs", "clearAssets", "addEntityIDs", "removeEntityIDs", "clearEntities", "addScanIDs", "removeScanIDs", "clearScans", "addTaskIDs", "removeTaskIDs", "clearTasks", "addDirectoryAccountIDs", "removeDirectoryAccountIDs", "clearDirectoryAccounts", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "addReviewIDs", "removeReviewIDs", "clearReviews", "addCommentIDs", "removeCommentIDs", "clearComments", "addFileIDs", "removeFileIDs", "clearFiles", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs", "addCheckResultIDs", "removeCheckResultIDs", "clearCheckResults"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "reviewedBy", "clearReviewedBy", "assignedTo", "clearAssignedTo", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "findingStatusName", "clearFindingStatusName", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "externalID", "clearExternalID", "externalOwnerID", "clearExternalOwnerID", "source", "clearSource", "resourceName", "clearResourceName", "displayName", "clearDisplayName", "state", "clearState", "category", "clearCategory", "categories", "appendCategories", "clearCategories", "findingClass", "clearFindingClass", "severity", "clearSeverity", "numericSeverity", "clearNumericSeverity", "score", "clearScore", "impact", "clearImpact", "exploitability", "clearExploitability", "priority", "clearPriority", "open", "clearOpen", "blocksProduction", "clearBlocksProduction", "production", "clearProduction", "public", "clearPublic", "validated", "clearValidated", "assessmentID", "clearAssessmentID", "description", "clearDescription", "recommendation", "clearRecommendation", "recommendedActions", "clearRecommendedActions", "references", "appendReferences", "clearReferences", "stepsToReproduce", "appendStepsToReproduce", "clearStepsToReproduce", "targets", "appendTargets", "clearTargets", "targetDetails", "clearTargetDetails", "vector", "clearVector", "remediationSLA", "clearRemediationSLA", "eventTime", "clearEventTime", "reportedAt", "clearReportedAt", "sourceUpdatedAt", "clearSourceUpdatedAt", "externalURI", "clearExternalURI", "metadata", "clearMetadata", "rawPayload", "clearRawPayload", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "reviewedByUserID", "clearReviewedByUser", "reviewedByGroupID", "clearReviewedByGroup", "assignedToUserID", "clearAssignedToUser", "assignedToGroupID", "clearAssignedToGroup", "environmentID", "clearEnvironment", "scopeID", "clearScope", "findingStatusID", "clearFindingStatus", "addIntegrationIDs", "removeIntegrationIDs", "clearIntegrations", "addVulnerabilityIDs", "removeVulnerabilityIDs", "clearVulnerabilities", "addActionPlanIDs", "removeActionPlanIDs", "clearActionPlans", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addRiskIDs", "removeRiskIDs", "clearRisks", "addProgramIDs", "removeProgramIDs", "clearPrograms", "addAssetIDs", "removeAssetIDs", "clearAssets", "addEntityIDs", "removeEntityIDs", "clearEntities", "addScanIDs", "removeScanIDs", "clearScans", "addTaskIDs", "removeTaskIDs", "clearTasks", "addDirectoryAccountIDs", "removeDirectoryAccountIDs", "clearDirectoryAccounts", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "addReviewIDs", "removeReviewIDs", "clearReviews", "addCommentIDs", "removeCommentIDs", "clearComments", "addFileIDs", "removeFileIDs", "clearFiles", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs", "addCheckResultIDs", "removeCheckResultIDs", "clearCheckResults"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -384604,27 +388215,6 @@ func (ec *executionContext) unmarshalInputUpdateFindingInput(ctx context.Context
 				return it, err
 			}
 			it.ClearActionPlans = data
-		case "addControlIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addControlIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.AddControlIDs = data
-		case "removeControlIDs":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeControlIDs"))
-			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.RemoveControlIDs = data
-		case "clearControls":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearControls"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearControls = data
 		case "addSubcontrolIDs":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addSubcontrolIDs"))
 			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
@@ -397378,7 +400968,7 @@ func (ec *executionContext) unmarshalInputUpdateProgramInput(ctx context.Context
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "programKindName", "clearProgramKindName", "externalUUID", "clearExternalUUID", "name", "description", "clearDescription", "status", "frameworkName", "clearFrameworkName", "startDate", "clearStartDate", "endDate", "clearEndDate", "auditorReady", "auditorWriteComments", "auditorReadComments", "auditFirm", "clearAuditFirm", "auditor", "clearAuditor", "auditorEmail", "clearAuditorEmail", "ownerID", "clearOwner", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "addViewerIDs", "removeViewerIDs", "clearViewers", "programKindID", "clearProgramKind", "addControlIDs", "removeControlIDs", "clearControls", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addControlObjectiveIDs", "removeControlObjectiveIDs", "clearControlObjectives", "addInternalPolicyIDs", "removeInternalPolicyIDs", "clearInternalPolicies", "addProcedureIDs", "removeProcedureIDs", "clearProcedures", "addRiskIDs", "removeRiskIDs", "clearRisks", "addTaskIDs", "removeTaskIDs", "clearTasks", "addNoteIDs", "removeNoteIDs", "clearNotes", "addFileIDs", "removeFileIDs", "clearFiles", "addEvidenceIDs", "removeEvidenceIDs", "clearEvidence", "addNarrativeIDs", "removeNarrativeIDs", "clearNarratives", "addActionPlanIDs", "removeActionPlanIDs", "clearActionPlans", "addSystemDetailIDs", "removeSystemDetailIDs", "clearSystemDetails", "programOwnerID", "clearProgramOwner", "addProgramMembers", "removeProgramMembers"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "programKindName", "clearProgramKindName", "externalUUID", "clearExternalUUID", "name", "description", "clearDescription", "status", "frameworkName", "clearFrameworkName", "startDate", "clearStartDate", "endDate", "clearEndDate", "observationPeriodStartDate", "clearObservationPeriodStartDate", "observationPeriodEndDate", "clearObservationPeriodEndDate", "fieldworkStartDate", "clearFieldworkStartDate", "fieldworkEndDate", "clearFieldworkEndDate", "auditorReady", "auditorWriteComments", "auditorReadComments", "auditFirm", "clearAuditFirm", "auditor", "clearAuditor", "auditorEmail", "clearAuditorEmail", "ownerID", "clearOwner", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "addViewerIDs", "removeViewerIDs", "clearViewers", "programKindID", "clearProgramKind", "addControlIDs", "removeControlIDs", "clearControls", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addControlObjectiveIDs", "removeControlObjectiveIDs", "clearControlObjectives", "addInternalPolicyIDs", "removeInternalPolicyIDs", "clearInternalPolicies", "addProcedureIDs", "removeProcedureIDs", "clearProcedures", "addRiskIDs", "removeRiskIDs", "clearRisks", "addTaskIDs", "removeTaskIDs", "clearTasks", "addNoteIDs", "removeNoteIDs", "clearNotes", "addFileIDs", "removeFileIDs", "clearFiles", "addEvidenceIDs", "removeEvidenceIDs", "clearEvidence", "addNarrativeIDs", "removeNarrativeIDs", "clearNarratives", "addActionPlanIDs", "removeActionPlanIDs", "clearActionPlans", "addSystemDetailIDs", "removeSystemDetailIDs", "clearSystemDetails", "addFindingIDs", "removeFindingIDs", "clearFindings", "addVulnerabilityIDs", "removeVulnerabilityIDs", "clearVulnerabilities", "addReviewIDs", "removeReviewIDs", "clearReviews", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "programOwnerID", "clearProgramOwner", "addProgramMembers", "removeProgramMembers"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -397504,6 +401094,62 @@ func (ec *executionContext) unmarshalInputUpdateProgramInput(ctx context.Context
 				return it, err
 			}
 			it.ClearEndDate = data
+		case "observationPeriodStartDate":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("observationPeriodStartDate"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ObservationPeriodStartDate = data
+		case "clearObservationPeriodStartDate":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearObservationPeriodStartDate"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearObservationPeriodStartDate = data
+		case "observationPeriodEndDate":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("observationPeriodEndDate"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ObservationPeriodEndDate = data
+		case "clearObservationPeriodEndDate":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearObservationPeriodEndDate"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearObservationPeriodEndDate = data
+		case "fieldworkStartDate":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fieldworkStartDate"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FieldworkStartDate = data
+		case "clearFieldworkStartDate":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearFieldworkStartDate"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearFieldworkStartDate = data
+		case "fieldworkEndDate":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("fieldworkEndDate"))
+			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.FieldworkEndDate = data
+		case "clearFieldworkEndDate":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearFieldworkEndDate"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearFieldworkEndDate = data
 		case "auditorReady":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("auditorReady"))
 			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
@@ -397931,6 +401577,90 @@ func (ec *executionContext) unmarshalInputUpdateProgramInput(ctx context.Context
 				return it, err
 			}
 			it.ClearSystemDetails = data
+		case "addFindingIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addFindingIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddFindingIDs = data
+		case "removeFindingIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeFindingIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveFindingIDs = data
+		case "clearFindings":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearFindings"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearFindings = data
+		case "addVulnerabilityIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addVulnerabilityIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddVulnerabilityIDs = data
+		case "removeVulnerabilityIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeVulnerabilityIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveVulnerabilityIDs = data
+		case "clearVulnerabilities":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearVulnerabilities"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearVulnerabilities = data
+		case "addReviewIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addReviewIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddReviewIDs = data
+		case "removeReviewIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeReviewIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveReviewIDs = data
+		case "clearReviews":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearReviews"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearReviews = data
+		case "addRemediationIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addRemediationIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddRemediationIDs = data
+		case "removeRemediationIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeRemediationIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveRemediationIDs = data
+		case "clearRemediations":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearRemediations"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearRemediations = data
 		case "programOwnerID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("programOwnerID"))
 			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
@@ -399669,7 +403399,7 @@ func (ec *executionContext) unmarshalInputUpdateRiskInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "riskKindName", "clearRiskKindName", "riskCategoryName", "clearRiskCategoryName", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "externalID", "clearExternalID", "integrationID", "clearIntegrationID", "observedAt", "clearObservedAt", "externalUUID", "clearExternalUUID", "name", "status", "clearStatus", "impact", "clearImpact", "likelihood", "clearLikelihood", "score", "clearScore", "mitigation", "clearMitigation", "mitigationJSON", "appendMitigationJSON", "clearMitigationJSON", "details", "clearDetails", "detailsJSON", "appendDetailsJSON", "clearDetailsJSON", "businessCosts", "clearBusinessCosts", "businessCostsJSON", "appendBusinessCostsJSON", "clearBusinessCostsJSON", "mitigatedAt", "clearMitigatedAt", "reviewRequired", "clearReviewRequired", "lastReviewedAt", "clearLastReviewedAt", "reviewFrequency", "clearReviewFrequency", "dueDate", "clearDueDate", "nextReviewDueAt", "clearNextReviewDueAt", "residualScore", "clearResidualScore", "riskDecision", "clearRiskDecision", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "addViewerIDs", "removeViewerIDs", "clearViewers", "riskKindID", "clearRiskKind", "riskCategoryID", "clearRiskCategory", "environmentID", "clearEnvironment", "scopeID", "clearScope", "addControlIDs", "removeControlIDs", "clearControls", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addProcedureIDs", "removeProcedureIDs", "clearProcedures", "addInternalPolicyIDs", "removeInternalPolicyIDs", "clearInternalPolicies", "addProgramIDs", "removeProgramIDs", "clearPrograms", "addPlatformIDs", "removePlatformIDs", "clearPlatforms", "addActionPlanIDs", "removeActionPlanIDs", "clearActionPlans", "addTaskIDs", "removeTaskIDs", "clearTasks", "addAssetIDs", "removeAssetIDs", "clearAssets", "addEntityIDs", "removeEntityIDs", "clearEntities", "addScanIDs", "removeScanIDs", "clearScans", "stakeholderID", "clearStakeholder", "delegateID", "clearDelegate", "addCommentIDs", "removeCommentIDs", "clearComments", "addDiscussionIDs", "removeDiscussionIDs", "clearDiscussions", "addReviewIDs", "removeReviewIDs", "clearReviews", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs", "addDiscussion", "updateDiscussion", "deleteDiscussion", "addComment", "deleteComment"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "riskKindName", "clearRiskKindName", "riskCategoryName", "clearRiskCategoryName", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "externalID", "clearExternalID", "integrationID", "clearIntegrationID", "observedAt", "clearObservedAt", "externalUUID", "clearExternalUUID", "name", "status", "clearStatus", "impact", "clearImpact", "likelihood", "clearLikelihood", "score", "clearScore", "mitigation", "clearMitigation", "mitigationJSON", "appendMitigationJSON", "clearMitigationJSON", "details", "clearDetails", "detailsJSON", "appendDetailsJSON", "clearDetailsJSON", "businessCosts", "clearBusinessCosts", "businessCostsJSON", "appendBusinessCostsJSON", "clearBusinessCostsJSON", "mitigatedAt", "clearMitigatedAt", "reviewRequired", "clearReviewRequired", "lastReviewedAt", "clearLastReviewedAt", "reviewFrequency", "clearReviewFrequency", "dueDate", "clearDueDate", "nextReviewDueAt", "clearNextReviewDueAt", "residualScore", "clearResidualScore", "riskDecision", "clearRiskDecision", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "addViewerIDs", "removeViewerIDs", "clearViewers", "riskKindID", "clearRiskKind", "riskCategoryID", "clearRiskCategory", "environmentID", "clearEnvironment", "scopeID", "clearScope", "addControlIDs", "removeControlIDs", "clearControls", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addProcedureIDs", "removeProcedureIDs", "clearProcedures", "addInternalPolicyIDs", "removeInternalPolicyIDs", "clearInternalPolicies", "addProgramIDs", "removeProgramIDs", "clearPrograms", "addPlatformIDs", "removePlatformIDs", "clearPlatforms", "addActionPlanIDs", "removeActionPlanIDs", "clearActionPlans", "addTaskIDs", "removeTaskIDs", "clearTasks", "addAssetIDs", "removeAssetIDs", "clearAssets", "addEntityIDs", "removeEntityIDs", "clearEntities", "addScanIDs", "removeScanIDs", "clearScans", "stakeholderID", "clearStakeholder", "delegateID", "clearDelegate", "addCommentIDs", "removeCommentIDs", "clearComments", "addDiscussionIDs", "removeDiscussionIDs", "clearDiscussions", "addReviewIDs", "removeReviewIDs", "clearReviews", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "addVulnerabilityIDs", "removeVulnerabilityIDs", "clearVulnerabilities", "addFindingIDs", "removeFindingIDs", "clearFindings", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs", "addDiscussion", "updateDiscussion", "deleteDiscussion", "addComment", "deleteComment"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -400565,6 +404295,48 @@ func (ec *executionContext) unmarshalInputUpdateRiskInput(ctx context.Context, o
 				return it, err
 			}
 			it.ClearRemediations = data
+		case "addVulnerabilityIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addVulnerabilityIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddVulnerabilityIDs = data
+		case "removeVulnerabilityIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeVulnerabilityIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveVulnerabilityIDs = data
+		case "clearVulnerabilities":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearVulnerabilities"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearVulnerabilities = data
+		case "addFindingIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addFindingIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddFindingIDs = data
+		case "removeFindingIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeFindingIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveFindingIDs = data
+		case "clearFindings":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearFindings"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearFindings = data
 		case "addWorkflowObjectRefIDs":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addWorkflowObjectRefIDs"))
 			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
@@ -400754,7 +404526,7 @@ func (ec *executionContext) unmarshalInputUpdateScanInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "reviewedBy", "clearReviewedBy", "assignedTo", "clearAssignedTo", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "target", "scanType", "metadata", "clearMetadata", "scanDate", "clearScanDate", "scanSchedule", "clearScanSchedule", "nextScanRunAt", "clearNextScanRunAt", "performedBy", "clearPerformedBy", "discoveredVulnerabilityIds", "appendDiscoveredVulnerabilityIds", "clearDiscoveredVulnerabilityIds", "status", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "reviewedByUserID", "clearReviewedByUser", "reviewedByGroupID", "clearReviewedByGroup", "assignedToUserID", "clearAssignedToUser", "assignedToGroupID", "clearAssignedToGroup", "environmentID", "clearEnvironment", "scopeID", "clearScope", "addAssetIDs", "removeAssetIDs", "clearAssets", "addEntityIDs", "removeEntityIDs", "clearEntities", "addEvidenceIDs", "removeEvidenceIDs", "clearEvidence", "addFileIDs", "removeFileIDs", "clearFiles", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "addActionPlanIDs", "removeActionPlanIDs", "clearActionPlans", "addTaskIDs", "removeTaskIDs", "clearTasks", "addPlatformIDs", "removePlatformIDs", "clearPlatforms", "addVulnerabilityIDs", "removeVulnerabilityIDs", "clearVulnerabilities", "addControlIDs", "removeControlIDs", "clearControls", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addFindingIDs", "removeFindingIDs", "clearFindings", "generatedByPlatformID", "clearGeneratedByPlatform", "performedByUserID", "clearPerformedByUser", "performedByGroupID", "clearPerformedByGroup"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "reviewedBy", "clearReviewedBy", "assignedTo", "clearAssignedTo", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "target", "scanType", "metadata", "clearMetadata", "scanDate", "clearScanDate", "scanSchedule", "clearScanSchedule", "nextScanRunAt", "clearNextScanRunAt", "performedBy", "clearPerformedBy", "discoveredVulnerabilityIds", "appendDiscoveredVulnerabilityIds", "clearDiscoveredVulnerabilityIds", "status", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "reviewedByUserID", "clearReviewedByUser", "reviewedByGroupID", "clearReviewedByGroup", "assignedToUserID", "clearAssignedToUser", "assignedToGroupID", "clearAssignedToGroup", "environmentID", "clearEnvironment", "scopeID", "clearScope", "addAssetIDs", "removeAssetIDs", "clearAssets", "addEntityIDs", "removeEntityIDs", "clearEntities", "addEvidenceIDs", "removeEvidenceIDs", "clearEvidence", "addFileIDs", "removeFileIDs", "clearFiles", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "addActionPlanIDs", "removeActionPlanIDs", "clearActionPlans", "addTaskIDs", "removeTaskIDs", "clearTasks", "addPlatformIDs", "removePlatformIDs", "clearPlatforms", "addVulnerabilityIDs", "removeVulnerabilityIDs", "clearVulnerabilities", "addControlIDs", "removeControlIDs", "clearControls", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addFindingIDs", "removeFindingIDs", "clearFindings", "generatedByPlatformID", "clearGeneratedByPlatform", "performedByUserID", "clearPerformedByUser", "performedByGroupID", "clearPerformedByGroup"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -400782,6 +404554,83 @@ func (ec *executionContext) unmarshalInputUpdateScanInput(ctx context.Context, o
 				return it, err
 			}
 			it.ClearTags = data
+		case "internalNotes":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalNotes"))
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOString2ᚖstring(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal *string
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
+			}
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(*string); ok {
+				it.InternalNotes = data
+			} else if tmp == nil {
+				it.InternalNotes = nil
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be *string`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+		case "clearInternalNotes":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearInternalNotes"))
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOBoolean2bool(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal bool
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
+			}
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(bool); ok {
+				it.ClearInternalNotes = data
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be bool`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+		case "systemInternalID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("systemInternalID"))
+			directive0 := func(ctx context.Context) (any, error) { return ec.unmarshalOString2ᚖstring(ctx, v) }
+
+			directive1 := func(ctx context.Context) (any, error) {
+				if ec.Directives.ReadOnly == nil {
+					var zeroVal *string
+					return zeroVal, errors.New("directive readOnly is not implemented")
+				}
+				return ec.Directives.ReadOnly(ctx, obj, directive0)
+			}
+
+			tmp, err := directive1(ctx)
+			if err != nil {
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+			if data, ok := tmp.(*string); ok {
+				it.SystemInternalID = data
+			} else if tmp == nil {
+				it.SystemInternalID = nil
+			} else {
+				err := fmt.Errorf(`unexpected type %T from directive, should be *string`, tmp)
+				return it, graphql.ErrorOnPath(ctx, err)
+			}
+		case "clearSystemInternalID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSystemInternalID"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearSystemInternalID = data
 		case "reviewedBy":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("reviewedBy"))
 			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
@@ -402074,7 +405923,7 @@ func (ec *executionContext) unmarshalInputUpdateSubcontrolInput(ctx context.Cont
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "externalUUID", "clearExternalUUID", "title", "clearTitle", "description", "clearDescription", "descriptionJSON", "appendDescriptionJSON", "clearDescriptionJSON", "aliases", "appendAliases", "clearAliases", "referenceID", "clearReferenceID", "auditorReferenceID", "clearAuditorReferenceID", "status", "clearStatus", "implementationStatus", "clearImplementationStatus", "implementationDescription", "clearImplementationDescription", "publicRepresentation", "clearPublicRepresentation", "source", "clearSource", "sourceName", "clearSourceName", "referenceFrameworkRevision", "clearReferenceFrameworkRevision", "category", "clearCategory", "categoryID", "clearCategoryID", "subcategory", "clearSubcategory", "mappedCategories", "appendMappedCategories", "clearMappedCategories", "assessmentObjectives", "appendAssessmentObjectives", "clearAssessmentObjectives", "assessmentMethods", "appendAssessmentMethods", "clearAssessmentMethods", "controlQuestions", "appendControlQuestions", "clearControlQuestions", "implementationGuidance", "appendImplementationGuidance", "clearImplementationGuidance", "exampleEvidence", "appendExampleEvidence", "clearExampleEvidence", "references", "appendReferences", "clearReferences", "testingProcedures", "appendTestingProcedures", "clearTestingProcedures", "evidenceRequests", "appendEvidenceRequests", "clearEvidenceRequests", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "subcontrolKindName", "clearSubcontrolKindName", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "refCode", "addEvidenceIDs", "removeEvidenceIDs", "clearEvidence", "addControlObjectiveIDs", "removeControlObjectiveIDs", "clearControlObjectives", "addTaskIDs", "removeTaskIDs", "clearTasks", "addNarrativeIDs", "removeNarrativeIDs", "clearNarratives", "addRiskIDs", "removeRiskIDs", "clearRisks", "addActionPlanIDs", "removeActionPlanIDs", "clearActionPlans", "addProcedureIDs", "removeProcedureIDs", "clearProcedures", "addInternalPolicyIDs", "removeInternalPolicyIDs", "clearInternalPolicies", "addCommentIDs", "removeCommentIDs", "clearComments", "addDiscussionIDs", "removeDiscussionIDs", "clearDiscussions", "controlOwnerID", "clearControlOwner", "delegateID", "clearDelegate", "responsiblePartyID", "clearResponsibleParty", "addReviewIDs", "removeReviewIDs", "clearReviews", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "addScanIDs", "removeScanIDs", "clearScans", "subcontrolKindID", "clearSubcontrolKind", "controlID", "addControlImplementationIDs", "removeControlImplementationIDs", "clearControlImplementations", "addScheduledJobIDs", "removeScheduledJobIDs", "clearScheduledJobs", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs", "addAssetIDs", "removeAssetIDs", "clearAssets", "addEntityIDs", "removeEntityIDs", "clearEntities", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addDiscussion", "updateDiscussion", "deleteDiscussion", "addComment", "deleteComment"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "externalUUID", "clearExternalUUID", "title", "clearTitle", "description", "clearDescription", "descriptionJSON", "appendDescriptionJSON", "clearDescriptionJSON", "aliases", "appendAliases", "clearAliases", "referenceID", "clearReferenceID", "auditorReferenceID", "clearAuditorReferenceID", "status", "clearStatus", "implementationStatus", "clearImplementationStatus", "implementationDescription", "clearImplementationDescription", "publicRepresentation", "clearPublicRepresentation", "source", "clearSource", "sourceName", "clearSourceName", "referenceFrameworkRevision", "clearReferenceFrameworkRevision", "category", "clearCategory", "categoryID", "clearCategoryID", "subcategory", "clearSubcategory", "mappedCategories", "appendMappedCategories", "clearMappedCategories", "assessmentObjectives", "appendAssessmentObjectives", "clearAssessmentObjectives", "assessmentMethods", "appendAssessmentMethods", "clearAssessmentMethods", "controlQuestions", "appendControlQuestions", "clearControlQuestions", "implementationGuidance", "appendImplementationGuidance", "clearImplementationGuidance", "exampleEvidence", "appendExampleEvidence", "clearExampleEvidence", "references", "appendReferences", "clearReferences", "testingProcedures", "appendTestingProcedures", "clearTestingProcedures", "evidenceRequests", "appendEvidenceRequests", "clearEvidenceRequests", "internalNotes", "clearInternalNotes", "systemInternalID", "clearSystemInternalID", "subcontrolKindName", "clearSubcontrolKindName", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "refCode", "addEvidenceIDs", "removeEvidenceIDs", "clearEvidence", "addControlObjectiveIDs", "removeControlObjectiveIDs", "clearControlObjectives", "addTaskIDs", "removeTaskIDs", "clearTasks", "addNarrativeIDs", "removeNarrativeIDs", "clearNarratives", "addRiskIDs", "removeRiskIDs", "clearRisks", "addActionPlanIDs", "removeActionPlanIDs", "clearActionPlans", "addProcedureIDs", "removeProcedureIDs", "clearProcedures", "addInternalPolicyIDs", "removeInternalPolicyIDs", "clearInternalPolicies", "addCommentIDs", "removeCommentIDs", "clearComments", "addDiscussionIDs", "removeDiscussionIDs", "clearDiscussions", "controlOwnerID", "clearControlOwner", "delegateID", "clearDelegate", "responsiblePartyID", "clearResponsibleParty", "addReviewIDs", "removeReviewIDs", "clearReviews", "addRemediationIDs", "removeRemediationIDs", "clearRemediations", "addScanIDs", "removeScanIDs", "clearScans", "subcontrolKindID", "clearSubcontrolKind", "controlID", "addControlImplementationIDs", "removeControlImplementationIDs", "clearControlImplementations", "addScheduledJobIDs", "removeScheduledJobIDs", "clearScheduledJobs", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs", "addAssetIDs", "removeAssetIDs", "clearAssets", "addEntityIDs", "removeEntityIDs", "clearEntities", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addVulnerabilityIDs", "removeVulnerabilityIDs", "clearVulnerabilities", "addFindingIDs", "removeFindingIDs", "clearFindings", "addDiscussion", "updateDiscussion", "deleteDiscussion", "addComment", "deleteComment"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -403415,6 +407264,48 @@ func (ec *executionContext) unmarshalInputUpdateSubcontrolInput(ctx context.Cont
 				return it, err
 			}
 			it.ClearIdentityHolders = data
+		case "addVulnerabilityIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addVulnerabilityIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddVulnerabilityIDs = data
+		case "removeVulnerabilityIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeVulnerabilityIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveVulnerabilityIDs = data
+		case "clearVulnerabilities":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearVulnerabilities"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearVulnerabilities = data
+		case "addFindingIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addFindingIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AddFindingIDs = data
+		case "removeFindingIDs":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("removeFindingIDs"))
+			data, err := ec.unmarshalOID2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.RemoveFindingIDs = data
+		case "clearFindings":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearFindings"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearFindings = data
 		case "addDiscussion":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("addDiscussion"))
 			data, err := ec.unmarshalOCreateDiscussionInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateDiscussionInput(ctx, v)
@@ -404300,7 +408191,7 @@ func (ec *executionContext) unmarshalInputUpdateTaskInput(ctx context.Context, o
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "taskKindName", "clearTaskKindName", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "externalUUID", "clearExternalUUID", "title", "details", "clearDetails", "detailsJSON", "appendDetailsJSON", "clearDetailsJSON", "status", "due", "clearDue", "completed", "clearCompleted", "systemGenerated", "isTemplate", "externalReferenceURL", "appendExternalReferenceURL", "clearExternalReferenceURL", "taskKindID", "clearTaskKind", "environmentID", "clearEnvironment", "scopeID", "clearScope", "assignerID", "clearAssigner", "assigneeID", "clearAssignee", "addCommentIDs", "removeCommentIDs", "clearComments", "addGroupIDs", "removeGroupIDs", "clearGroups", "addInternalPolicyIDs", "removeInternalPolicyIDs", "clearInternalPolicies", "addProcedureIDs", "removeProcedureIDs", "clearProcedures", "addControlIDs", "removeControlIDs", "clearControls", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addControlObjectiveIDs", "removeControlObjectiveIDs", "clearControlObjectives", "addProgramIDs", "removeProgramIDs", "clearPrograms", "addRiskIDs", "removeRiskIDs", "clearRisks", "addPlatformIDs", "removePlatformIDs", "clearPlatforms", "addScanIDs", "removeScanIDs", "clearScans", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addControlImplementationIDs", "removeControlImplementationIDs", "clearControlImplementations", "addActionPlanIDs", "removeActionPlanIDs", "clearActionPlans", "addEvidenceIDs", "removeEvidenceIDs", "clearEvidence", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs", "addVulnerabilityIDs", "removeVulnerabilityIDs", "clearVulnerabilities", "addFindingIDs", "removeFindingIDs", "clearFindings", "parentID", "clearParent", "addTaskIDs", "removeTaskIDs", "clearTasks", "addComment", "deleteComment"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "taskKindName", "clearTaskKindName", "environmentName", "clearEnvironmentName", "scopeName", "clearScopeName", "workflowEligibleMarker", "clearWorkflowEligibleMarker", "externalUUID", "clearExternalUUID", "title", "details", "clearDetails", "detailsJSON", "appendDetailsJSON", "clearDetailsJSON", "metadata", "clearMetadata", "status", "due", "clearDue", "completed", "clearCompleted", "systemGenerated", "isTemplate", "isSuggested", "priority", "source", "clearSource", "sourceKey", "clearSourceKey", "externalReferenceURL", "appendExternalReferenceURL", "clearExternalReferenceURL", "taskKindID", "clearTaskKind", "environmentID", "clearEnvironment", "scopeID", "clearScope", "assignerID", "clearAssigner", "assigneeID", "clearAssignee", "addCommentIDs", "removeCommentIDs", "clearComments", "addGroupIDs", "removeGroupIDs", "clearGroups", "addInternalPolicyIDs", "removeInternalPolicyIDs", "clearInternalPolicies", "addProcedureIDs", "removeProcedureIDs", "clearProcedures", "addControlIDs", "removeControlIDs", "clearControls", "addSubcontrolIDs", "removeSubcontrolIDs", "clearSubcontrols", "addControlObjectiveIDs", "removeControlObjectiveIDs", "clearControlObjectives", "addProgramIDs", "removeProgramIDs", "clearPrograms", "addRiskIDs", "removeRiskIDs", "clearRisks", "addPlatformIDs", "removePlatformIDs", "clearPlatforms", "addScanIDs", "removeScanIDs", "clearScans", "addIdentityHolderIDs", "removeIdentityHolderIDs", "clearIdentityHolders", "addControlImplementationIDs", "removeControlImplementationIDs", "clearControlImplementations", "addActionPlanIDs", "removeActionPlanIDs", "clearActionPlans", "addEvidenceIDs", "removeEvidenceIDs", "clearEvidence", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs", "addVulnerabilityIDs", "removeVulnerabilityIDs", "clearVulnerabilities", "addFindingIDs", "removeFindingIDs", "clearFindings", "parentID", "clearParent", "addTaskIDs", "removeTaskIDs", "clearTasks", "addComment", "deleteComment"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -404440,6 +408331,20 @@ func (ec *executionContext) unmarshalInputUpdateTaskInput(ctx context.Context, o
 				return it, err
 			}
 			it.ClearDetailsJSON = data
+		case "metadata":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("metadata"))
+			data, err := ec.unmarshalOMap2map(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Metadata = data
+		case "clearMetadata":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearMetadata"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearMetadata = data
 		case "status":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("status"))
 			data, err := ec.unmarshalOTaskTaskStatus2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐTaskStatus(ctx, v)
@@ -404511,6 +408416,48 @@ func (ec *executionContext) unmarshalInputUpdateTaskInput(ctx context.Context, o
 				return it, err
 			}
 			it.IsTemplate = data
+		case "isSuggested":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("isSuggested"))
+			data, err := ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.IsSuggested = data
+		case "priority":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("priority"))
+			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Priority = data
+		case "source":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("source"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.Source = data
+		case "clearSource":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSource"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearSource = data
+		case "sourceKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sourceKey"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.SourceKey = data
+		case "clearSourceKey":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearSourceKey"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearSourceKey = data
 		case "externalReferenceURL":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("externalReferenceURL"))
 			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
@@ -406450,7 +410397,7 @@ func (ec *executionContext) unmarshalInputUpdateTrustCenterNDARequestInput(ctx c
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "firstName", "lastName", "email", "companyName", "clearCompanyName", "reason", "clearReason", "accessLevel", "clearAccessLevel", "status", "clearStatus", "approvedAt", "clearApprovedAt", "approvedByUserID", "clearApprovedByUserID", "signedAt", "clearSignedAt", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "addTrustCenterDocIDs", "removeTrustCenterDocIDs", "clearTrustCenterDocs", "documentID", "clearDocument", "fileID", "clearFile"}
+	fieldsInOrder := [...]string{"tags", "appendTags", "clearTags", "firstName", "lastName", "email", "companyName", "clearCompanyName", "reason", "clearReason", "accessLevel", "clearAccessLevel", "status", "clearStatus", "approvedAt", "clearApprovedAt", "signedAt", "clearSignedAt", "addBlockedGroupIDs", "removeBlockedGroupIDs", "clearBlockedGroups", "addEditorIDs", "removeEditorIDs", "clearEditors", "addTrustCenterDocIDs", "removeTrustCenterDocIDs", "clearTrustCenterDocs", "documentID", "clearDocument", "fileID", "clearFile", "approvedByUserID", "clearApprovedByUser"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -406569,20 +410516,6 @@ func (ec *executionContext) unmarshalInputUpdateTrustCenterNDARequestInput(ctx c
 				return it, err
 			}
 			it.ClearApprovedAt = data
-		case "approvedByUserID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approvedByUserID"))
-			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ApprovedByUserID = data
-		case "clearApprovedByUserID":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearApprovedByUserID"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearApprovedByUserID = data
 		case "signedAt":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("signedAt"))
 			data, err := ec.unmarshalODateTime2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐDateTime(ctx, v)
@@ -406688,6 +410621,20 @@ func (ec *executionContext) unmarshalInputUpdateTrustCenterNDARequestInput(ctx c
 				return it, err
 			}
 			it.ClearFile = data
+		case "approvedByUserID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("approvedByUserID"))
+			data, err := ec.unmarshalOID2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ApprovedByUserID = data
+		case "clearApprovedByUser":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearApprovedByUser"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.ClearApprovedByUser = data
 		}
 	}
 	return it, nil
@@ -439593,6 +443540,158 @@ func (ec *executionContext) _Asset(ctx context.Context, sel ast.SelectionSet, ob
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "findings":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Asset_findings(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "vulnerabilities":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Asset_vulnerabilities(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "reviews":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Asset_reviews(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "remediations":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Asset_remediations(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		case "sourcePlatform":
 			field := field
 
@@ -443836,6 +447935,44 @@ func (ec *executionContext) _Control(ctx context.Context, sel ast.SelectionSet, 
 					}
 				}()
 				res = ec._Control_platforms(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "vulnerabilities":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Control_vulnerabilities(ctx, field, obj)
 				if res == graphql.Null {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}
@@ -452595,6 +456732,158 @@ func (ec *executionContext) _Entity(ctx context.Context, sel ast.SelectionSet, o
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "findings":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Entity_findings(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "vulnerabilities":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Entity_vulnerabilities(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "reviews":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Entity_reviews(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "remediations":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Entity_remediations(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		case "platforms":
 			field := field
 
@@ -457903,6 +462192,11 @@ func (ec *executionContext) _FindingControl(ctx context.Context, sel ast.Selecti
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "ownerID":
+			out.Values[i] = ec._FindingControl_ownerID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
 		case "findingID":
 			out.Values[i] = ec._FindingControl_findingID(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -457948,6 +462242,44 @@ func (ec *executionContext) _FindingControl(ctx context.Context, sel ast.Selecti
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "owner":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._FindingControl_owner(ctx, field, obj)
+				if res == graphql.RequiredNull {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		case "finding":
 			field := field
 
@@ -476801,6 +481133,44 @@ func (ec *executionContext) _Organization(ctx context.Context, sel ast.Selection
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "findingControls":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Organization_findingControls(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		case "reviews":
 			field := field
 
@@ -481939,6 +486309,26 @@ func (ec *executionContext) _Program(ctx context.Context, sel ast.SelectionSet, 
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "observationPeriodStartDate":
+			out.Values[i] = ec._Program_observationPeriodStartDate(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "observationPeriodEndDate":
+			out.Values[i] = ec._Program_observationPeriodEndDate(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "fieldworkStartDate":
+			out.Values[i] = ec._Program_fieldworkStartDate(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "fieldworkEndDate":
+			out.Values[i] = ec._Program_fieldworkEndDate(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
 		case "auditorReady":
 			out.Values[i] = ec._Program_auditorReady(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -482630,6 +487020,158 @@ func (ec *executionContext) _Program(ctx context.Context, sel ast.SelectionSet, 
 					}
 				}()
 				res = ec._Program_systemDetails(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "findings":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Program_findings(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "vulnerabilities":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Program_vulnerabilities(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "reviews":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Program_reviews(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "remediations":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Program_remediations(ctx, field, obj)
 				if res == graphql.Null {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}
@@ -492234,6 +496776,82 @@ func (ec *executionContext) _Risk(ctx context.Context, sel ast.SelectionSet, obj
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "vulnerabilities":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Risk_vulnerabilities(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "findings":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Risk_findings(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		case "workflowObjectRefs":
 			field := field
 
@@ -492878,6 +497496,21 @@ func (ec *executionContext) _Scan(ctx context.Context, sel ast.SelectionSet, obj
 			}
 		case "ownerID":
 			out.Values[i] = ec._Scan_ownerID(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "systemOwned":
+			out.Values[i] = ec._Scan_systemOwned(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "internalNotes":
+			out.Values[i] = ec._Scan_internalNotes(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "systemInternalID":
+			out.Values[i] = ec._Scan_systemInternalID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
@@ -496371,6 +501004,82 @@ func (ec *executionContext) _Subcontrol(ctx context.Context, sel ast.SelectionSe
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "vulnerabilities":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Subcontrol_vulnerabilities(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "findings":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Subcontrol_findings(ctx, field, obj)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
 		case "relatedControls":
 			field := field
 
@@ -498416,6 +503125,11 @@ func (ec *executionContext) _Task(ctx context.Context, sel ast.SelectionSet, obj
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
+		case "metadata":
+			out.Values[i] = ec._Task_metadata(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
 		case "status":
 			out.Values[i] = ec._Task_status(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -498449,6 +503163,26 @@ func (ec *executionContext) _Task(ctx context.Context, sel ast.SelectionSet, obj
 		case "isTemplate":
 			out.Values[i] = ec._Task_isTemplate(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "isSuggested":
+			out.Values[i] = ec._Task_isSuggested(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "priority":
+			out.Values[i] = ec._Task_priority(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "source":
+			out.Values[i] = ec._Task_source(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				atomic.AddUint32(&out.Invalids, 1)
+			}
+		case "sourceKey":
+			out.Values[i] = ec._Task_sourceKey(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}
 		case "idempotencyKey":
@@ -503076,6 +507810,44 @@ func (ec *executionContext) _TrustCenterNDARequest(ctx context.Context, sel ast.
 					}
 				}()
 				res = ec._TrustCenterNDARequest_file(ctx, field, obj)
+				if res == graphql.RequiredNull {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			if field.IsDeferred() {
+				deferredFieldSet.AddField(field)
+				fieldIndex := len(deferredFieldSet.Values) - 1
+				deferredFieldSet.Concurrently(fieldIndex, func(ctx context.Context) graphql.Marshaler {
+					return innerFunc(ctx, deferredFieldSet)
+				})
+
+				for _, deferrable := range field.Deferrables {
+					view, ok := deferLabelToView[deferrable.Label]
+					if !ok {
+						view = deferredFieldSet.NewView()
+						deferLabelToView[deferrable.Label] = view
+					}
+					view.AddIndices(fieldIndex)
+				}
+
+				// don't run the out.Concurrently() call below
+				out.Values[i] = graphql.Null
+				continue
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+		case "approvedByUser":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._TrustCenterNDARequest_approvedByUser(ctx, field, obj)
 				if res == graphql.RequiredNull {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}
@@ -520230,8 +525002,7 @@ func (ec *executionContext) unmarshalOAPITokenOrder2ᚕᚖgithubᚗcomᚋtheopen
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.APITokenOrder, len(vSlice))
 	for i := range vSlice {
@@ -520248,8 +525019,7 @@ func (ec *executionContext) unmarshalOAPITokenWhereInput2ᚕᚖgithubᚗcomᚋth
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.APITokenWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -520317,8 +525087,7 @@ func (ec *executionContext) unmarshalOActionPlanDocumentManagementMode2ᚕgithub
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.DocumentManagementMode, len(vSlice))
 	for i := range vSlice {
@@ -520380,8 +525149,7 @@ func (ec *executionContext) unmarshalOActionPlanDocumentStatus2ᚕgithubᚗcom�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.DocumentStatus, len(vSlice))
 	for i := range vSlice {
@@ -520463,8 +525231,7 @@ func (ec *executionContext) unmarshalOActionPlanFrequency2ᚕgithubᚗcomᚋtheo
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.Frequency, len(vSlice))
 	for i := range vSlice {
@@ -520516,8 +525283,7 @@ func (ec *executionContext) unmarshalOActionPlanOrder2ᚕᚖgithubᚗcomᚋtheop
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.ActionPlanOrder, len(vSlice))
 	for i := range vSlice {
@@ -520544,8 +525310,7 @@ func (ec *executionContext) unmarshalOActionPlanPriority2ᚕgithubᚗcomᚋtheop
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.Priority, len(vSlice))
 	for i := range vSlice {
@@ -520597,8 +525362,7 @@ func (ec *executionContext) unmarshalOActionPlanWhereInput2ᚕᚖgithubᚗcomᚋ
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.ActionPlanWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -520630,8 +525394,7 @@ func (ec *executionContext) unmarshalOAssessmentAssessmentType2ᚕgithubᚗcom�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.AssessmentType, len(vSlice))
 	for i := range vSlice {
@@ -520710,8 +525473,7 @@ func (ec *executionContext) unmarshalOAssessmentOrder2ᚕᚖgithubᚗcomᚋtheop
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.AssessmentOrder, len(vSlice))
 	for i := range vSlice {
@@ -520735,8 +525497,7 @@ func (ec *executionContext) unmarshalOAssessmentResponseAssessmentResponseStatus
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.AssessmentResponseStatus, len(vSlice))
 	for i := range vSlice {
@@ -520815,8 +525576,7 @@ func (ec *executionContext) unmarshalOAssessmentResponseOrder2ᚕᚖgithubᚗcom
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.AssessmentResponseOrder, len(vSlice))
 	for i := range vSlice {
@@ -520833,8 +525593,7 @@ func (ec *executionContext) unmarshalOAssessmentResponseWhereInput2ᚕᚖgithub�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.AssessmentResponseWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -520859,8 +525618,7 @@ func (ec *executionContext) unmarshalOAssessmentWhereInput2ᚕᚖgithubᚗcomᚋ
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.AssessmentWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -520911,8 +525669,7 @@ func (ec *executionContext) unmarshalOAssetAssetType2ᚕgithubᚗcomᚋtheopenla
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.AssetType, len(vSlice))
 	for i := range vSlice {
@@ -520991,8 +525748,7 @@ func (ec *executionContext) unmarshalOAssetOrder2ᚕᚖgithubᚗcomᚋtheopenlan
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.AssetOrder, len(vSlice))
 	for i := range vSlice {
@@ -521009,8 +525765,7 @@ func (ec *executionContext) unmarshalOAssetSourceType2ᚕgithubᚗcomᚋtheopenl
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.SourceType, len(vSlice))
 	for i := range vSlice {
@@ -521062,8 +525817,7 @@ func (ec *executionContext) unmarshalOAssetWhereInput2ᚕᚖgithubᚗcomᚋtheop
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.AssetWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -521114,8 +525868,7 @@ func (ec *executionContext) unmarshalOCampaignCampaignStatus2ᚕgithubᚗcomᚋt
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.CampaignStatus, len(vSlice))
 	for i := range vSlice {
@@ -521167,8 +525920,7 @@ func (ec *executionContext) unmarshalOCampaignCampaignType2ᚕgithubᚗcomᚋthe
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.CampaignType, len(vSlice))
 	for i := range vSlice {
@@ -521257,8 +526009,7 @@ func (ec *executionContext) unmarshalOCampaignFrequency2ᚕgithubᚗcomᚋtheope
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.Frequency, len(vSlice))
 	for i := range vSlice {
@@ -521310,8 +526061,7 @@ func (ec *executionContext) unmarshalOCampaignOrder2ᚕᚖgithubᚗcomᚋtheopen
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CampaignOrder, len(vSlice))
 	for i := range vSlice {
@@ -521354,8 +526104,7 @@ func (ec *executionContext) unmarshalOCampaignTargetAssessmentResponseStatus2ᚕ
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.AssessmentResponseStatus, len(vSlice))
 	for i := range vSlice {
@@ -521434,8 +526183,7 @@ func (ec *executionContext) unmarshalOCampaignTargetOrder2ᚕᚖgithubᚗcomᚋt
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CampaignTargetOrder, len(vSlice))
 	for i := range vSlice {
@@ -521452,8 +526200,7 @@ func (ec *executionContext) unmarshalOCampaignTargetWhereInput2ᚕᚖgithubᚗco
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CampaignTargetWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -521478,8 +526225,7 @@ func (ec *executionContext) unmarshalOCampaignWhereInput2ᚕᚖgithubᚗcomᚋth
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CampaignWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -521530,8 +526276,7 @@ func (ec *executionContext) unmarshalOCheckResultCheckStatus2ᚕgithubᚗcomᚋt
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.CheckStatus, len(vSlice))
 	for i := range vSlice {
@@ -521603,8 +526348,7 @@ func (ec *executionContext) unmarshalOCheckResultOrder2ᚕᚖgithubᚗcomᚋtheo
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CheckResultOrder, len(vSlice))
 	for i := range vSlice {
@@ -521621,8 +526365,7 @@ func (ec *executionContext) unmarshalOCheckResultWhereInput2ᚕᚖgithubᚗcom�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CheckResultWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -521700,8 +526443,7 @@ func (ec *executionContext) unmarshalOContactOrder2ᚕᚖgithubᚗcomᚋtheopenl
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.ContactOrder, len(vSlice))
 	for i := range vSlice {
@@ -521718,8 +526460,7 @@ func (ec *executionContext) unmarshalOContactUserStatus2ᚕgithubᚗcomᚋtheope
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.UserStatus, len(vSlice))
 	for i := range vSlice {
@@ -521771,8 +526512,7 @@ func (ec *executionContext) unmarshalOContactWhereInput2ᚕᚖgithubᚗcomᚋthe
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.ContactWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -521840,8 +526580,7 @@ func (ec *executionContext) unmarshalOControlControlImplementationStatus2ᚕgith
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.ControlImplementationStatus, len(vSlice))
 	for i := range vSlice {
@@ -521903,8 +526642,7 @@ func (ec *executionContext) unmarshalOControlControlSource2ᚕgithubᚗcomᚋthe
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.ControlSource, len(vSlice))
 	for i := range vSlice {
@@ -521966,8 +526704,7 @@ func (ec *executionContext) unmarshalOControlControlStatus2ᚕgithubᚗcomᚋthe
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.ControlStatus, len(vSlice))
 	for i := range vSlice {
@@ -522075,8 +526812,7 @@ func (ec *executionContext) unmarshalOControlImplementationDocumentStatus2ᚕgit
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.DocumentStatus, len(vSlice))
 	for i := range vSlice {
@@ -522148,8 +526884,7 @@ func (ec *executionContext) unmarshalOControlImplementationOrder2ᚕᚖgithubᚗ
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.ControlImplementationOrder, len(vSlice))
 	for i := range vSlice {
@@ -522166,8 +526901,7 @@ func (ec *executionContext) unmarshalOControlImplementationWhereInput2ᚕᚖgith
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.ControlImplementationWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -522235,8 +526969,7 @@ func (ec *executionContext) unmarshalOControlObjectiveControlSource2ᚕgithubᚗ
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.ControlSource, len(vSlice))
 	for i := range vSlice {
@@ -522318,8 +527051,7 @@ func (ec *executionContext) unmarshalOControlObjectiveObjectiveStatus2ᚕgithub�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.ObjectiveStatus, len(vSlice))
 	for i := range vSlice {
@@ -522371,8 +527103,7 @@ func (ec *executionContext) unmarshalOControlObjectiveOrder2ᚕᚖgithubᚗcom�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.ControlObjectiveOrder, len(vSlice))
 	for i := range vSlice {
@@ -522389,8 +527120,7 @@ func (ec *executionContext) unmarshalOControlObjectiveWhereInput2ᚕᚖgithubᚗ
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.ControlObjectiveWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -522415,8 +527145,7 @@ func (ec *executionContext) unmarshalOControlOrder2ᚕᚖgithubᚗcomᚋtheopenl
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.ControlOrder, len(vSlice))
 	for i := range vSlice {
@@ -522443,8 +527172,7 @@ func (ec *executionContext) unmarshalOControlTrustCenterControlVisibility2ᚕgit
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.TrustCenterControlVisibility, len(vSlice))
 	for i := range vSlice {
@@ -522496,8 +527224,7 @@ func (ec *executionContext) unmarshalOControlWhereInput2ᚕᚖgithubᚗcomᚋthe
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.ControlWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -522522,8 +527249,7 @@ func (ec *executionContext) unmarshalOCreateAPITokenInput2ᚕᚖgithubᚗcomᚋt
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateAPITokenInput, len(vSlice))
 	for i := range vSlice {
@@ -522540,8 +527266,7 @@ func (ec *executionContext) unmarshalOCreateActionPlanInput2ᚕᚖgithubᚗcom�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateActionPlanInput, len(vSlice))
 	for i := range vSlice {
@@ -522558,8 +527283,7 @@ func (ec *executionContext) unmarshalOCreateAssetInput2ᚕᚖgithubᚗcomᚋtheo
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateAssetInput, len(vSlice))
 	for i := range vSlice {
@@ -522576,8 +527300,7 @@ func (ec *executionContext) unmarshalOCreateCampaignInput2ᚕᚖgithubᚗcomᚋt
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateCampaignInput, len(vSlice))
 	for i := range vSlice {
@@ -522594,8 +527317,7 @@ func (ec *executionContext) unmarshalOCreateCampaignTargetInput2ᚕᚖgithubᚗc
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateCampaignTargetInput, len(vSlice))
 	for i := range vSlice {
@@ -522612,8 +527334,7 @@ func (ec *executionContext) unmarshalOCreateCampaignTargetInput2ᚕᚖgithubᚗc
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateCampaignTargetInput, len(vSlice))
 	for i := range vSlice {
@@ -522638,8 +527359,7 @@ func (ec *executionContext) unmarshalOCreateCheckResultInput2ᚕᚖgithubᚗcom�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateCheckResultInput, len(vSlice))
 	for i := range vSlice {
@@ -522656,8 +527376,7 @@ func (ec *executionContext) unmarshalOCreateContactInput2ᚕᚖgithubᚗcomᚋth
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateContactInput, len(vSlice))
 	for i := range vSlice {
@@ -522674,8 +527393,7 @@ func (ec *executionContext) unmarshalOCreateControlImplementationInput2ᚕᚖgit
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateControlImplementationInput, len(vSlice))
 	for i := range vSlice {
@@ -522692,8 +527410,7 @@ func (ec *executionContext) unmarshalOCreateControlInput2ᚕᚖgithubᚗcomᚋth
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateControlInput, len(vSlice))
 	for i := range vSlice {
@@ -522718,8 +527435,7 @@ func (ec *executionContext) unmarshalOCreateControlObjectiveInput2ᚕᚖgithub�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateControlObjectiveInput, len(vSlice))
 	for i := range vSlice {
@@ -522736,8 +527452,7 @@ func (ec *executionContext) unmarshalOCreateCustomDomainInput2ᚕᚖgithubᚗcom
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateCustomDomainInput, len(vSlice))
 	for i := range vSlice {
@@ -522754,8 +527469,7 @@ func (ec *executionContext) unmarshalOCreateCustomTypeEnumInput2ᚕᚖgithubᚗc
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateCustomTypeEnumInput, len(vSlice))
 	for i := range vSlice {
@@ -522772,8 +527486,7 @@ func (ec *executionContext) unmarshalOCreateDNSVerificationInput2ᚕᚖgithubᚗ
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateDNSVerificationInput, len(vSlice))
 	for i := range vSlice {
@@ -522790,8 +527503,7 @@ func (ec *executionContext) unmarshalOCreateDirectoryAccountInput2ᚕᚖgithub�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateDirectoryAccountInput, len(vSlice))
 	for i := range vSlice {
@@ -522808,8 +527520,7 @@ func (ec *executionContext) unmarshalOCreateDirectoryGroupInput2ᚕᚖgithubᚗc
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateDirectoryGroupInput, len(vSlice))
 	for i := range vSlice {
@@ -522826,8 +527537,7 @@ func (ec *executionContext) unmarshalOCreateDirectoryMembershipInput2ᚕᚖgithu
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateDirectoryMembershipInput, len(vSlice))
 	for i := range vSlice {
@@ -522844,8 +527554,7 @@ func (ec *executionContext) unmarshalOCreateDirectorySyncRunInput2ᚕᚖgithub�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateDirectorySyncRunInput, len(vSlice))
 	for i := range vSlice {
@@ -522862,8 +527571,7 @@ func (ec *executionContext) unmarshalOCreateDiscussionInput2ᚕᚖgithubᚗcom�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateDiscussionInput, len(vSlice))
 	for i := range vSlice {
@@ -522888,8 +527596,7 @@ func (ec *executionContext) unmarshalOCreateDocumentDataInput2ᚕᚖgithubᚗcom
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateDocumentDataInput, len(vSlice))
 	for i := range vSlice {
@@ -522906,8 +527613,7 @@ func (ec *executionContext) unmarshalOCreateEmailTemplateInput2ᚕᚖgithubᚗco
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateEmailTemplateInput, len(vSlice))
 	for i := range vSlice {
@@ -522924,8 +527630,7 @@ func (ec *executionContext) unmarshalOCreateEntityInput2ᚕᚖgithubᚗcomᚋthe
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateEntityInput, len(vSlice))
 	for i := range vSlice {
@@ -522942,8 +527647,7 @@ func (ec *executionContext) unmarshalOCreateEntityTypeInput2ᚕᚖgithubᚗcom�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateEntityTypeInput, len(vSlice))
 	for i := range vSlice {
@@ -522960,8 +527664,7 @@ func (ec *executionContext) unmarshalOCreateEventInput2ᚕᚖgithubᚗcomᚋtheo
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateEventInput, len(vSlice))
 	for i := range vSlice {
@@ -522978,8 +527681,7 @@ func (ec *executionContext) unmarshalOCreateEvidenceInput2ᚕᚖgithubᚗcomᚋt
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateEvidenceInput, len(vSlice))
 	for i := range vSlice {
@@ -522996,8 +527698,7 @@ func (ec *executionContext) unmarshalOCreateFindingControlInput2ᚕᚖgithubᚗc
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateFindingControlInput, len(vSlice))
 	for i := range vSlice {
@@ -523014,8 +527715,7 @@ func (ec *executionContext) unmarshalOCreateFindingInput2ᚕᚖgithubᚗcomᚋth
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateFindingInput, len(vSlice))
 	for i := range vSlice {
@@ -523032,8 +527732,7 @@ func (ec *executionContext) unmarshalOCreateGroupInput2ᚕᚖgithubᚗcomᚋtheo
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateGroupInput, len(vSlice))
 	for i := range vSlice {
@@ -523050,8 +527749,7 @@ func (ec *executionContext) unmarshalOCreateGroupMembershipInput2ᚕᚖgithubᚗ
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateGroupMembershipInput, len(vSlice))
 	for i := range vSlice {
@@ -523068,8 +527766,7 @@ func (ec *executionContext) unmarshalOCreateGroupSettingInput2ᚕᚖgithubᚗcom
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateGroupSettingInput, len(vSlice))
 	for i := range vSlice {
@@ -523094,8 +527791,7 @@ func (ec *executionContext) unmarshalOCreateHushInput2ᚕᚖgithubᚗcomᚋtheop
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateHushInput, len(vSlice))
 	for i := range vSlice {
@@ -523112,8 +527808,7 @@ func (ec *executionContext) unmarshalOCreateIdentityHolderInput2ᚕᚖgithubᚗc
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateIdentityHolderInput, len(vSlice))
 	for i := range vSlice {
@@ -523130,8 +527825,7 @@ func (ec *executionContext) unmarshalOCreateInternalPolicyInput2ᚕᚖgithubᚗc
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateInternalPolicyInput, len(vSlice))
 	for i := range vSlice {
@@ -523148,8 +527842,7 @@ func (ec *executionContext) unmarshalOCreateInviteInput2ᚕᚖgithubᚗcomᚋthe
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateInviteInput, len(vSlice))
 	for i := range vSlice {
@@ -523166,8 +527859,7 @@ func (ec *executionContext) unmarshalOCreateJobTemplateInput2ᚕᚖgithubᚗcom�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateJobTemplateInput, len(vSlice))
 	for i := range vSlice {
@@ -523184,8 +527876,7 @@ func (ec *executionContext) unmarshalOCreateMappableDomainInput2ᚕᚖgithubᚗc
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateMappableDomainInput, len(vSlice))
 	for i := range vSlice {
@@ -523202,8 +527893,7 @@ func (ec *executionContext) unmarshalOCreateMappedControlInput2ᚕᚖgithubᚗco
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateMappedControlInput, len(vSlice))
 	for i := range vSlice {
@@ -523220,8 +527910,7 @@ func (ec *executionContext) unmarshalOCreateNarrativeInput2ᚕᚖgithubᚗcomᚋ
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateNarrativeInput, len(vSlice))
 	for i := range vSlice {
@@ -523246,8 +527935,7 @@ func (ec *executionContext) unmarshalOCreateNotificationPreferenceInput2ᚕᚖgi
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateNotificationPreferenceInput, len(vSlice))
 	for i := range vSlice {
@@ -523264,8 +527952,7 @@ func (ec *executionContext) unmarshalOCreateNotificationTemplateInput2ᚕᚖgith
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateNotificationTemplateInput, len(vSlice))
 	for i := range vSlice {
@@ -523282,8 +527969,7 @@ func (ec *executionContext) unmarshalOCreateOrgMembershipInput2ᚕᚖgithubᚗco
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateOrgMembershipInput, len(vSlice))
 	for i := range vSlice {
@@ -523300,8 +527986,7 @@ func (ec *executionContext) unmarshalOCreateOrganizationSettingInput2ᚕᚖgithu
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateOrganizationSettingInput, len(vSlice))
 	for i := range vSlice {
@@ -523326,8 +528011,7 @@ func (ec *executionContext) unmarshalOCreatePlatformInput2ᚕᚖgithubᚗcomᚋt
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreatePlatformInput, len(vSlice))
 	for i := range vSlice {
@@ -523344,8 +528028,7 @@ func (ec *executionContext) unmarshalOCreateProcedureInput2ᚕᚖgithubᚗcomᚋ
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateProcedureInput, len(vSlice))
 	for i := range vSlice {
@@ -523362,8 +528045,7 @@ func (ec *executionContext) unmarshalOCreateProgramInput2ᚕᚖgithubᚗcomᚋth
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateProgramInput, len(vSlice))
 	for i := range vSlice {
@@ -523380,8 +528062,7 @@ func (ec *executionContext) unmarshalOCreateProgramMembershipInput2ᚕᚖgithub�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateProgramMembershipInput, len(vSlice))
 	for i := range vSlice {
@@ -523398,8 +528079,7 @@ func (ec *executionContext) unmarshalOCreateRemediationInput2ᚕᚖgithubᚗcom�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateRemediationInput, len(vSlice))
 	for i := range vSlice {
@@ -523416,8 +528096,7 @@ func (ec *executionContext) unmarshalOCreateReviewInput2ᚕᚖgithubᚗcomᚋthe
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateReviewInput, len(vSlice))
 	for i := range vSlice {
@@ -523434,8 +528113,7 @@ func (ec *executionContext) unmarshalOCreateRiskInput2ᚕᚖgithubᚗcomᚋtheop
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateRiskInput, len(vSlice))
 	for i := range vSlice {
@@ -523452,8 +528130,7 @@ func (ec *executionContext) unmarshalOCreateSLADefinitionInput2ᚕᚖgithubᚗco
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateSLADefinitionInput, len(vSlice))
 	for i := range vSlice {
@@ -523470,8 +528147,7 @@ func (ec *executionContext) unmarshalOCreateScanInput2ᚕᚖgithubᚗcomᚋtheop
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateScanInput, len(vSlice))
 	for i := range vSlice {
@@ -523488,8 +528164,7 @@ func (ec *executionContext) unmarshalOCreateScheduledJobInput2ᚕᚖgithubᚗcom
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateScheduledJobInput, len(vSlice))
 	for i := range vSlice {
@@ -523506,8 +528181,7 @@ func (ec *executionContext) unmarshalOCreateSubcontrolInput2ᚕᚖgithubᚗcom�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateSubcontrolInput, len(vSlice))
 	for i := range vSlice {
@@ -523524,8 +528198,7 @@ func (ec *executionContext) unmarshalOCreateSubprocessorInput2ᚕᚖgithubᚗcom
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateSubprocessorInput, len(vSlice))
 	for i := range vSlice {
@@ -523542,8 +528215,7 @@ func (ec *executionContext) unmarshalOCreateSubscriberInput2ᚕᚖgithubᚗcom�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateSubscriberInput, len(vSlice))
 	for i := range vSlice {
@@ -523560,8 +528232,7 @@ func (ec *executionContext) unmarshalOCreateSystemDetailInput2ᚕᚖgithubᚗcom
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateSystemDetailInput, len(vSlice))
 	for i := range vSlice {
@@ -523578,8 +528249,7 @@ func (ec *executionContext) unmarshalOCreateTagDefinitionInput2ᚕᚖgithubᚗco
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateTagDefinitionInput, len(vSlice))
 	for i := range vSlice {
@@ -523596,8 +528266,7 @@ func (ec *executionContext) unmarshalOCreateTaskInput2ᚕᚖgithubᚗcomᚋtheop
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateTaskInput, len(vSlice))
 	for i := range vSlice {
@@ -523614,8 +528283,7 @@ func (ec *executionContext) unmarshalOCreateTemplateInput2ᚕᚖgithubᚗcomᚋt
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateTemplateInput, len(vSlice))
 	for i := range vSlice {
@@ -523632,8 +528300,7 @@ func (ec *executionContext) unmarshalOCreateTrustCenterComplianceInput2ᚕᚖgit
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateTrustCenterComplianceInput, len(vSlice))
 	for i := range vSlice {
@@ -523650,8 +528317,7 @@ func (ec *executionContext) unmarshalOCreateTrustCenterDocInput2ᚕᚖgithubᚗc
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateTrustCenterDocInput, len(vSlice))
 	for i := range vSlice {
@@ -523668,8 +528334,7 @@ func (ec *executionContext) unmarshalOCreateTrustCenterEntityInput2ᚕᚖgithub�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateTrustCenterEntityInput, len(vSlice))
 	for i := range vSlice {
@@ -523686,8 +528351,7 @@ func (ec *executionContext) unmarshalOCreateTrustCenterFAQInput2ᚕᚖgithubᚗc
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateTrustCenterFAQInput, len(vSlice))
 	for i := range vSlice {
@@ -523704,8 +528368,7 @@ func (ec *executionContext) unmarshalOCreateTrustCenterNDARequestInput2ᚕᚖgit
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateTrustCenterNDARequestInput, len(vSlice))
 	for i := range vSlice {
@@ -523730,8 +528393,7 @@ func (ec *executionContext) unmarshalOCreateTrustCenterSubprocessorInput2ᚕᚖg
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateTrustCenterSubprocessorInput, len(vSlice))
 	for i := range vSlice {
@@ -523748,8 +528410,7 @@ func (ec *executionContext) unmarshalOCreateUserSettingInput2ᚕᚖgithubᚗcom�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateUserSettingInput, len(vSlice))
 	for i := range vSlice {
@@ -523766,8 +528427,7 @@ func (ec *executionContext) unmarshalOCreateVendorRiskScoreInput2ᚕᚖgithubᚗ
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateVendorRiskScoreInput, len(vSlice))
 	for i := range vSlice {
@@ -523784,8 +528444,7 @@ func (ec *executionContext) unmarshalOCreateVendorScoringConfigInput2ᚕᚖgithu
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateVendorScoringConfigInput, len(vSlice))
 	for i := range vSlice {
@@ -523802,8 +528461,7 @@ func (ec *executionContext) unmarshalOCreateVulnerabilityInput2ᚕᚖgithubᚗco
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateVulnerabilityInput, len(vSlice))
 	for i := range vSlice {
@@ -523820,8 +528478,7 @@ func (ec *executionContext) unmarshalOCreateWorkflowDefinitionInput2ᚕᚖgithub
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CreateWorkflowDefinitionInput, len(vSlice))
 	for i := range vSlice {
@@ -523880,8 +528537,7 @@ func (ec *executionContext) unmarshalOCustomDomainCustomDomainType2ᚕgithubᚗc
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.CustomDomainType, len(vSlice))
 	for i := range vSlice {
@@ -523953,8 +528609,7 @@ func (ec *executionContext) unmarshalOCustomDomainOrder2ᚕᚖgithubᚗcomᚋthe
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CustomDomainOrder, len(vSlice))
 	for i := range vSlice {
@@ -523971,8 +528626,7 @@ func (ec *executionContext) unmarshalOCustomDomainWhereInput2ᚕᚖgithubᚗcom�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CustomDomainWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -524050,8 +528704,7 @@ func (ec *executionContext) unmarshalOCustomTypeEnumOrder2ᚕᚖgithubᚗcomᚋt
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CustomTypeEnumOrder, len(vSlice))
 	for i := range vSlice {
@@ -524068,8 +528721,7 @@ func (ec *executionContext) unmarshalOCustomTypeEnumWhereInput2ᚕᚖgithubᚗco
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.CustomTypeEnumWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -524120,8 +528772,7 @@ func (ec *executionContext) unmarshalODNSVerificationDNSVerificationStatus2ᚕgi
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.DNSVerificationStatus, len(vSlice))
 	for i := range vSlice {
@@ -524193,8 +528844,7 @@ func (ec *executionContext) unmarshalODNSVerificationOrder2ᚕᚖgithubᚗcomᚋ
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.DNSVerificationOrder, len(vSlice))
 	for i := range vSlice {
@@ -524211,8 +528861,7 @@ func (ec *executionContext) unmarshalODNSVerificationSSLVerificationStatus2ᚕgi
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.SSLVerificationStatus, len(vSlice))
 	for i := range vSlice {
@@ -524264,8 +528913,7 @@ func (ec *executionContext) unmarshalODNSVerificationWhereInput2ᚕᚖgithubᚗc
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.DNSVerificationWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -524316,8 +528964,7 @@ func (ec *executionContext) unmarshalODirectoryAccountDirectoryAccountMFAState2�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.DirectoryAccountMFAState, len(vSlice))
 	for i := range vSlice {
@@ -524369,8 +529016,7 @@ func (ec *executionContext) unmarshalODirectoryAccountDirectoryAccountStatus2ᚕ
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.DirectoryAccountStatus, len(vSlice))
 	for i := range vSlice {
@@ -524432,8 +529078,7 @@ func (ec *executionContext) unmarshalODirectoryAccountDirectoryAccountType2ᚕgi
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.DirectoryAccountType, len(vSlice))
 	for i := range vSlice {
@@ -524505,8 +529150,7 @@ func (ec *executionContext) unmarshalODirectoryAccountOrder2ᚕᚖgithubᚗcom�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.DirectoryAccountOrder, len(vSlice))
 	for i := range vSlice {
@@ -524523,8 +529167,7 @@ func (ec *executionContext) unmarshalODirectoryAccountWhereInput2ᚕᚖgithubᚗ
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.DirectoryAccountWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -524575,8 +529218,7 @@ func (ec *executionContext) unmarshalODirectoryGroupDirectoryGroupClassification
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.DirectoryGroupClassification, len(vSlice))
 	for i := range vSlice {
@@ -524628,8 +529270,7 @@ func (ec *executionContext) unmarshalODirectoryGroupDirectoryGroupStatus2ᚕgith
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.DirectoryGroupStatus, len(vSlice))
 	for i := range vSlice {
@@ -524701,8 +529342,7 @@ func (ec *executionContext) unmarshalODirectoryGroupOrder2ᚕᚖgithubᚗcomᚋt
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.DirectoryGroupOrder, len(vSlice))
 	for i := range vSlice {
@@ -524719,8 +529359,7 @@ func (ec *executionContext) unmarshalODirectoryGroupWhereInput2ᚕᚖgithubᚗco
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.DirectoryGroupWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -524781,8 +529420,7 @@ func (ec *executionContext) unmarshalODirectoryMembershipDirectoryMembershipRole
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.DirectoryMembershipRole, len(vSlice))
 	for i := range vSlice {
@@ -524854,8 +529492,7 @@ func (ec *executionContext) unmarshalODirectoryMembershipOrder2ᚕᚖgithubᚗco
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.DirectoryMembershipOrder, len(vSlice))
 	for i := range vSlice {
@@ -524872,8 +529509,7 @@ func (ec *executionContext) unmarshalODirectoryMembershipWhereInput2ᚕᚖgithub
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.DirectoryMembershipWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -524924,8 +529560,7 @@ func (ec *executionContext) unmarshalODirectorySyncRunDirectorySyncRunStatus2ᚕ
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.DirectorySyncRunStatus, len(vSlice))
 	for i := range vSlice {
@@ -524997,8 +529632,7 @@ func (ec *executionContext) unmarshalODirectorySyncRunOrder2ᚕᚖgithubᚗcom�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.DirectorySyncRunOrder, len(vSlice))
 	for i := range vSlice {
@@ -525015,8 +529649,7 @@ func (ec *executionContext) unmarshalODirectorySyncRunWhereInput2ᚕᚖgithubᚗ
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.DirectorySyncRunWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -525087,8 +529720,7 @@ func (ec *executionContext) unmarshalODiscussionOrder2ᚕᚖgithubᚗcomᚋtheop
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.DiscussionOrder, len(vSlice))
 	for i := range vSlice {
@@ -525105,8 +529737,7 @@ func (ec *executionContext) unmarshalODiscussionWhereInput2ᚕᚖgithubᚗcomᚋ
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.DiscussionWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -525177,8 +529808,7 @@ func (ec *executionContext) unmarshalODocumentDataOrder2ᚕᚖgithubᚗcomᚋthe
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.DocumentDataOrder, len(vSlice))
 	for i := range vSlice {
@@ -525195,8 +529825,7 @@ func (ec *executionContext) unmarshalODocumentDataWhereInput2ᚕᚖgithubᚗcom�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.DocumentDataWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -525284,8 +529913,7 @@ func (ec *executionContext) unmarshalOEmailTemplateNotificationTemplateFormat2�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.NotificationTemplateFormat, len(vSlice))
 	for i := range vSlice {
@@ -525337,8 +529965,7 @@ func (ec *executionContext) unmarshalOEmailTemplateOrder2ᚕᚖgithubᚗcomᚋth
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.EmailTemplateOrder, len(vSlice))
 	for i := range vSlice {
@@ -525365,8 +529992,7 @@ func (ec *executionContext) unmarshalOEmailTemplateTemplateContext2ᚕgithubᚗc
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.TemplateContext, len(vSlice))
 	for i := range vSlice {
@@ -525418,8 +530044,7 @@ func (ec *executionContext) unmarshalOEmailTemplateWhereInput2ᚕᚖgithubᚗcom
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.EmailTemplateWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -525507,8 +530132,7 @@ func (ec *executionContext) unmarshalOEntityEntityStatus2ᚕgithubᚗcomᚋtheop
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.EntityStatus, len(vSlice))
 	for i := range vSlice {
@@ -525570,8 +530194,7 @@ func (ec *executionContext) unmarshalOEntityFrequency2ᚕgithubᚗcomᚋtheopenl
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.Frequency, len(vSlice))
 	for i := range vSlice {
@@ -525623,8 +530246,7 @@ func (ec *executionContext) unmarshalOEntityOrder2ᚕᚖgithubᚗcomᚋtheopenla
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.EntityOrder, len(vSlice))
 	for i := range vSlice {
@@ -525687,8 +530309,7 @@ func (ec *executionContext) unmarshalOEntityTypeOrder2ᚕᚖgithubᚗcomᚋtheop
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.EntityTypeOrder, len(vSlice))
 	for i := range vSlice {
@@ -525705,8 +530326,7 @@ func (ec *executionContext) unmarshalOEntityTypeWhereInput2ᚕᚖgithubᚗcomᚋ
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.EntityTypeWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -525741,8 +530361,7 @@ func (ec *executionContext) unmarshalOEntityVendorTier2ᚕgithubᚗcomᚋtheopen
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.VendorTier, len(vSlice))
 	for i := range vSlice {
@@ -525794,8 +530413,7 @@ func (ec *executionContext) unmarshalOEntityWhereInput2ᚕᚖgithubᚗcomᚋtheo
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.EntityWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -525866,8 +530484,7 @@ func (ec *executionContext) unmarshalOEventOrder2ᚕᚖgithubᚗcomᚋtheopenlan
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.EventOrder, len(vSlice))
 	for i := range vSlice {
@@ -525884,8 +530501,7 @@ func (ec *executionContext) unmarshalOEventWhereInput2ᚕᚖgithubᚗcomᚋtheop
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.EventWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -525973,8 +530589,7 @@ func (ec *executionContext) unmarshalOEvidenceEvidenceStatus2ᚕgithubᚗcomᚋt
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.EvidenceStatus, len(vSlice))
 	for i := range vSlice {
@@ -526036,8 +530651,7 @@ func (ec *executionContext) unmarshalOEvidenceFrequency2ᚕgithubᚗcomᚋtheope
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.Frequency, len(vSlice))
 	for i := range vSlice {
@@ -526089,8 +530703,7 @@ func (ec *executionContext) unmarshalOEvidenceOrder2ᚕᚖgithubᚗcomᚋtheopen
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.EvidenceOrder, len(vSlice))
 	for i := range vSlice {
@@ -526107,8 +530720,7 @@ func (ec *executionContext) unmarshalOEvidenceWhereInput2ᚕᚖgithubᚗcomᚋth
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.EvidenceWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -526179,8 +530791,7 @@ func (ec *executionContext) unmarshalOExportExportFormat2ᚕgithubᚗcomᚋtheop
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.ExportFormat, len(vSlice))
 	for i := range vSlice {
@@ -526232,8 +530843,7 @@ func (ec *executionContext) unmarshalOExportExportMode2ᚕgithubᚗcomᚋtheopen
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.ExportMode, len(vSlice))
 	for i := range vSlice {
@@ -526285,8 +530895,7 @@ func (ec *executionContext) unmarshalOExportExportStatus2ᚕgithubᚗcomᚋtheop
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.ExportStatus, len(vSlice))
 	for i := range vSlice {
@@ -526338,8 +530947,7 @@ func (ec *executionContext) unmarshalOExportExportType2ᚕgithubᚗcomᚋtheopen
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.ExportType, len(vSlice))
 	for i := range vSlice {
@@ -526391,8 +530999,7 @@ func (ec *executionContext) unmarshalOExportOrder2ᚕᚖgithubᚗcomᚋtheopenla
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.ExportOrder, len(vSlice))
 	for i := range vSlice {
@@ -526409,8 +531016,7 @@ func (ec *executionContext) unmarshalOExportWhereInput2ᚕᚖgithubᚗcomᚋtheo
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.ExportWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -526462,8 +531068,7 @@ func (ec *executionContext) unmarshalOFileOrder2ᚕᚖgithubᚗcomᚋtheopenlane
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.FileOrder, len(vSlice))
 	for i := range vSlice {
@@ -526480,8 +531085,7 @@ func (ec *executionContext) unmarshalOFileWhereInput2ᚕᚖgithubᚗcomᚋtheope
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.FileWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -526585,8 +531189,7 @@ func (ec *executionContext) unmarshalOFindingControlOrder2ᚕᚖgithubᚗcomᚋt
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.FindingControlOrder, len(vSlice))
 	for i := range vSlice {
@@ -526603,8 +531206,7 @@ func (ec *executionContext) unmarshalOFindingControlWhereInput2ᚕᚖgithubᚗco
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.FindingControlWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -526649,8 +531251,7 @@ func (ec *executionContext) unmarshalOFindingOrder2ᚕᚖgithubᚗcomᚋtheopenl
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.FindingOrder, len(vSlice))
 	for i := range vSlice {
@@ -526677,8 +531278,7 @@ func (ec *executionContext) unmarshalOFindingSecurityLevel2ᚕgithubᚗcomᚋthe
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.SecurityLevel, len(vSlice))
 	for i := range vSlice {
@@ -526730,8 +531330,7 @@ func (ec *executionContext) unmarshalOFindingWhereInput2ᚕᚖgithubᚗcomᚋthe
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.FindingWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -526855,8 +531454,7 @@ func (ec *executionContext) unmarshalOGroupMembershipOrder2ᚕᚖgithubᚗcomᚋ
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.GroupMembershipOrder, len(vSlice))
 	for i := range vSlice {
@@ -526873,8 +531471,7 @@ func (ec *executionContext) unmarshalOGroupMembershipRole2ᚕgithubᚗcomᚋtheo
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.Role, len(vSlice))
 	for i := range vSlice {
@@ -526926,8 +531523,7 @@ func (ec *executionContext) unmarshalOGroupMembershipWhereInput2ᚕᚖgithubᚗc
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.GroupMembershipWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -526952,8 +531548,7 @@ func (ec *executionContext) unmarshalOGroupOrder2ᚕᚖgithubᚗcomᚋtheopenlan
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.GroupOrder, len(vSlice))
 	for i := range vSlice {
@@ -527016,8 +531611,7 @@ func (ec *executionContext) unmarshalOGroupSettingJoinPolicy2ᚕgithubᚗcomᚋt
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.JoinPolicy, len(vSlice))
 	for i := range vSlice {
@@ -527069,8 +531663,7 @@ func (ec *executionContext) unmarshalOGroupSettingOrder2ᚕᚖgithubᚗcomᚋthe
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.GroupSettingOrder, len(vSlice))
 	for i := range vSlice {
@@ -527087,8 +531680,7 @@ func (ec *executionContext) unmarshalOGroupSettingVisibility2ᚕgithubᚗcomᚋt
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.Visibility, len(vSlice))
 	for i := range vSlice {
@@ -527140,8 +531732,7 @@ func (ec *executionContext) unmarshalOGroupSettingWhereInput2ᚕᚖgithubᚗcom�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.GroupSettingWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -527166,8 +531757,7 @@ func (ec *executionContext) unmarshalOGroupWhereInput2ᚕᚖgithubᚗcomᚋtheop
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.GroupWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -527238,8 +531828,7 @@ func (ec *executionContext) unmarshalOHushOrder2ᚕᚖgithubᚗcomᚋtheopenlane
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.HushOrder, len(vSlice))
 	for i := range vSlice {
@@ -527256,8 +531845,7 @@ func (ec *executionContext) unmarshalOHushWhereInput2ᚕᚖgithubᚗcomᚋtheope
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.HushWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -527335,8 +531923,7 @@ func (ec *executionContext) unmarshalOIdentityHolderIdentityHolderType2ᚕgithub
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.IdentityHolderType, len(vSlice))
 	for i := range vSlice {
@@ -527388,8 +531975,7 @@ func (ec *executionContext) unmarshalOIdentityHolderOrder2ᚕᚖgithubᚗcomᚋt
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.IdentityHolderOrder, len(vSlice))
 	for i := range vSlice {
@@ -527406,8 +531992,7 @@ func (ec *executionContext) unmarshalOIdentityHolderUserStatus2ᚕgithubᚗcom�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.UserStatus, len(vSlice))
 	for i := range vSlice {
@@ -527459,8 +532044,7 @@ func (ec *executionContext) unmarshalOIdentityHolderWhereInput2ᚕᚖgithubᚗco
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.IdentityHolderWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -527519,8 +532103,7 @@ func (ec *executionContext) unmarshalOIntegrationIntegrationStatus2ᚕgithubᚗc
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.IntegrationStatus, len(vSlice))
 	for i := range vSlice {
@@ -527572,8 +532155,7 @@ func (ec *executionContext) unmarshalOIntegrationOrder2ᚕᚖgithubᚗcomᚋtheo
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.IntegrationOrder, len(vSlice))
 	for i := range vSlice {
@@ -527590,8 +532172,7 @@ func (ec *executionContext) unmarshalOIntegrationWhereInput2ᚕᚖgithubᚗcom�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.IntegrationWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -527659,8 +532240,7 @@ func (ec *executionContext) unmarshalOInternalPolicyDocumentManagementMode2ᚕgi
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.DocumentManagementMode, len(vSlice))
 	for i := range vSlice {
@@ -527722,8 +532302,7 @@ func (ec *executionContext) unmarshalOInternalPolicyDocumentStatus2ᚕgithubᚗc
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.DocumentStatus, len(vSlice))
 	for i := range vSlice {
@@ -527805,8 +532384,7 @@ func (ec *executionContext) unmarshalOInternalPolicyFrequency2ᚕgithubᚗcomᚋ
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.Frequency, len(vSlice))
 	for i := range vSlice {
@@ -527858,8 +532436,7 @@ func (ec *executionContext) unmarshalOInternalPolicyOrder2ᚕᚖgithubᚗcomᚋt
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.InternalPolicyOrder, len(vSlice))
 	for i := range vSlice {
@@ -527876,8 +532453,7 @@ func (ec *executionContext) unmarshalOInternalPolicyWhereInput2ᚕᚖgithubᚗco
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.InternalPolicyWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -527955,8 +532531,7 @@ func (ec *executionContext) unmarshalOInviteInviteStatus2ᚕgithubᚗcomᚋtheop
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.InviteStatus, len(vSlice))
 	for i := range vSlice {
@@ -528008,8 +532583,7 @@ func (ec *executionContext) unmarshalOInviteOrder2ᚕᚖgithubᚗcomᚋtheopenla
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.InviteOrder, len(vSlice))
 	for i := range vSlice {
@@ -528026,8 +532600,7 @@ func (ec *executionContext) unmarshalOInviteRole2ᚕgithubᚗcomᚋtheopenlane�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.Role, len(vSlice))
 	for i := range vSlice {
@@ -528079,8 +532652,7 @@ func (ec *executionContext) unmarshalOInviteWhereInput2ᚕᚖgithubᚗcomᚋtheo
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.InviteWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -528150,8 +532722,7 @@ func (ec *executionContext) unmarshalOJobResultJobExecutionStatus2ᚕgithubᚗco
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.JobExecutionStatus, len(vSlice))
 	for i := range vSlice {
@@ -528203,8 +532774,7 @@ func (ec *executionContext) unmarshalOJobResultOrder2ᚕᚖgithubᚗcomᚋtheope
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.JobResultOrder, len(vSlice))
 	for i := range vSlice {
@@ -528221,8 +532791,7 @@ func (ec *executionContext) unmarshalOJobResultWhereInput2ᚕᚖgithubᚗcomᚋt
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.JobResultWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -528281,8 +532850,7 @@ func (ec *executionContext) unmarshalOJobRunnerJobRunnerStatus2ᚕgithubᚗcom�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.JobRunnerStatus, len(vSlice))
 	for i := range vSlice {
@@ -528334,8 +532902,7 @@ func (ec *executionContext) unmarshalOJobRunnerOrder2ᚕᚖgithubᚗcomᚋtheope
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.JobRunnerOrder, len(vSlice))
 	for i := range vSlice {
@@ -528398,8 +532965,7 @@ func (ec *executionContext) unmarshalOJobRunnerRegistrationTokenOrder2ᚕᚖgith
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.JobRunnerRegistrationTokenOrder, len(vSlice))
 	for i := range vSlice {
@@ -528416,8 +532982,7 @@ func (ec *executionContext) unmarshalOJobRunnerRegistrationTokenWhereInput2ᚕ�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.JobRunnerRegistrationTokenWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -528469,8 +533034,7 @@ func (ec *executionContext) unmarshalOJobRunnerTokenOrder2ᚕᚖgithubᚗcomᚋt
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.JobRunnerTokenOrder, len(vSlice))
 	for i := range vSlice {
@@ -528487,8 +533051,7 @@ func (ec *executionContext) unmarshalOJobRunnerTokenWhereInput2ᚕᚖgithubᚗco
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.JobRunnerTokenWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -528513,8 +533076,7 @@ func (ec *executionContext) unmarshalOJobRunnerWhereInput2ᚕᚖgithubᚗcomᚋt
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.JobRunnerWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -528592,8 +533154,7 @@ func (ec *executionContext) unmarshalOJobTemplateJobPlatformType2ᚕgithubᚗcom
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.JobPlatformType, len(vSlice))
 	for i := range vSlice {
@@ -528645,8 +533206,7 @@ func (ec *executionContext) unmarshalOJobTemplateOrder2ᚕᚖgithubᚗcomᚋtheo
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.JobTemplateOrder, len(vSlice))
 	for i := range vSlice {
@@ -528663,8 +533223,7 @@ func (ec *executionContext) unmarshalOJobTemplateWhereInput2ᚕᚖgithubᚗcom�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.JobTemplateWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -528753,8 +533312,7 @@ func (ec *executionContext) unmarshalOMappableDomainOrder2ᚕᚖgithubᚗcomᚋt
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.MappableDomainOrder, len(vSlice))
 	for i := range vSlice {
@@ -528771,8 +533329,7 @@ func (ec *executionContext) unmarshalOMappableDomainWhereInput2ᚕᚖgithubᚗco
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.MappableDomainWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -528853,8 +533410,7 @@ func (ec *executionContext) unmarshalOMappedControlMappingSource2ᚕgithubᚗcom
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.MappingSource, len(vSlice))
 	for i := range vSlice {
@@ -528906,8 +533462,7 @@ func (ec *executionContext) unmarshalOMappedControlMappingType2ᚕgithubᚗcom�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.MappingType, len(vSlice))
 	for i := range vSlice {
@@ -528959,8 +533514,7 @@ func (ec *executionContext) unmarshalOMappedControlOrder2ᚕᚖgithubᚗcomᚋth
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.MappedControlOrder, len(vSlice))
 	for i := range vSlice {
@@ -528977,8 +533531,7 @@ func (ec *executionContext) unmarshalOMappedControlWhereInput2ᚕᚖgithubᚗcom
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.MappedControlWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -529056,8 +533609,7 @@ func (ec *executionContext) unmarshalONarrativeOrder2ᚕᚖgithubᚗcomᚋtheope
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.NarrativeOrder, len(vSlice))
 	for i := range vSlice {
@@ -529074,8 +533626,7 @@ func (ec *executionContext) unmarshalONarrativeWhereInput2ᚕᚖgithubᚗcomᚋt
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.NarrativeWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -529134,8 +533685,7 @@ func (ec *executionContext) unmarshalONoteOrder2ᚕᚖgithubᚗcomᚋtheopenlane
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.NoteOrder, len(vSlice))
 	for i := range vSlice {
@@ -529152,8 +533702,7 @@ func (ec *executionContext) unmarshalONoteWhereInput2ᚕᚖgithubᚗcomᚋtheope
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.NoteWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -529265,8 +533814,7 @@ func (ec *executionContext) unmarshalONotificationPreferenceChannel2ᚕgithubᚗ
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.Channel, len(vSlice))
 	for i := range vSlice {
@@ -529338,8 +533886,7 @@ func (ec *executionContext) unmarshalONotificationPreferenceNotificationCadence2
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.NotificationCadence, len(vSlice))
 	for i := range vSlice {
@@ -529391,8 +533938,7 @@ func (ec *executionContext) unmarshalONotificationPreferenceNotificationChannelS
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.NotificationChannelStatus, len(vSlice))
 	for i := range vSlice {
@@ -529444,8 +533990,7 @@ func (ec *executionContext) unmarshalONotificationPreferenceOrder2ᚕᚖgithub�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.NotificationPreferenceOrder, len(vSlice))
 	for i := range vSlice {
@@ -529472,8 +534017,7 @@ func (ec *executionContext) unmarshalONotificationPreferencePriority2ᚕgithub�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.Priority, len(vSlice))
 	for i := range vSlice {
@@ -529525,8 +534069,7 @@ func (ec *executionContext) unmarshalONotificationPreferenceWhereInput2ᚕᚖgit
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.NotificationPreferenceWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -529587,8 +534130,7 @@ func (ec *executionContext) unmarshalONotificationTemplateChannel2ᚕgithubᚗco
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.Channel, len(vSlice))
 	for i := range vSlice {
@@ -529667,8 +534209,7 @@ func (ec *executionContext) unmarshalONotificationTemplateNotificationTemplateFo
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.NotificationTemplateFormat, len(vSlice))
 	for i := range vSlice {
@@ -529720,8 +534261,7 @@ func (ec *executionContext) unmarshalONotificationTemplateOrder2ᚕᚖgithubᚗc
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.NotificationTemplateOrder, len(vSlice))
 	for i := range vSlice {
@@ -529748,8 +534288,7 @@ func (ec *executionContext) unmarshalONotificationTemplateTemplateContext2ᚕgit
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.TemplateContext, len(vSlice))
 	for i := range vSlice {
@@ -529801,8 +534340,7 @@ func (ec *executionContext) unmarshalONotificationTemplateWhereInput2ᚕᚖgithu
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.NotificationTemplateWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -529827,8 +534365,7 @@ func (ec *executionContext) unmarshalOOnboardingWhereInput2ᚕᚖgithubᚗcomᚋ
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.OnboardingWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -529899,8 +534436,7 @@ func (ec *executionContext) unmarshalOOrgMembershipOrder2ᚕᚖgithubᚗcomᚋth
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.OrgMembershipOrder, len(vSlice))
 	for i := range vSlice {
@@ -529917,8 +534453,7 @@ func (ec *executionContext) unmarshalOOrgMembershipRole2ᚕgithubᚗcomᚋtheope
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.Role, len(vSlice))
 	for i := range vSlice {
@@ -529970,8 +534505,7 @@ func (ec *executionContext) unmarshalOOrgMembershipWhereInput2ᚕᚖgithubᚗcom
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.OrgMembershipWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -530050,8 +534584,7 @@ func (ec *executionContext) unmarshalOOrgSubscriptionWhereInput2ᚕᚖgithubᚗc
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.OrgSubscriptionWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -530129,8 +534662,7 @@ func (ec *executionContext) unmarshalOOrganizationOrder2ᚕᚖgithubᚗcomᚋthe
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.OrganizationOrder, len(vSlice))
 	for i := range vSlice {
@@ -530193,8 +534725,7 @@ func (ec *executionContext) unmarshalOOrganizationSettingOrder2ᚕᚖgithubᚗco
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.OrganizationSettingOrder, len(vSlice))
 	for i := range vSlice {
@@ -530221,8 +534752,7 @@ func (ec *executionContext) unmarshalOOrganizationSettingRegion2ᚕgithubᚗcom�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.Region, len(vSlice))
 	for i := range vSlice {
@@ -530284,8 +534814,7 @@ func (ec *executionContext) unmarshalOOrganizationSettingSSOProvider2ᚕgithub�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.SSOProvider, len(vSlice))
 	for i := range vSlice {
@@ -530337,8 +534866,7 @@ func (ec *executionContext) unmarshalOOrganizationSettingWhereInput2ᚕᚖgithub
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.OrganizationSettingWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -530363,8 +534891,7 @@ func (ec *executionContext) unmarshalOOrganizationWhereInput2ᚕᚖgithubᚗcom�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.OrganizationWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -530435,8 +534962,7 @@ func (ec *executionContext) unmarshalOPersonalAccessTokenOrder2ᚕᚖgithubᚗco
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.PersonalAccessTokenOrder, len(vSlice))
 	for i := range vSlice {
@@ -530453,8 +534979,7 @@ func (ec *executionContext) unmarshalOPersonalAccessTokenWhereInput2ᚕᚖgithub
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.PersonalAccessTokenWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -530532,8 +535057,7 @@ func (ec *executionContext) unmarshalOPlatformOrder2ᚕᚖgithubᚗcomᚋtheopen
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.PlatformOrder, len(vSlice))
 	for i := range vSlice {
@@ -530550,8 +535074,7 @@ func (ec *executionContext) unmarshalOPlatformPlatformStatus2ᚕgithubᚗcomᚋt
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.PlatformStatus, len(vSlice))
 	for i := range vSlice {
@@ -530603,8 +535126,7 @@ func (ec *executionContext) unmarshalOPlatformSourceType2ᚕgithubᚗcomᚋtheop
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.SourceType, len(vSlice))
 	for i := range vSlice {
@@ -530656,8 +535178,7 @@ func (ec *executionContext) unmarshalOPlatformWhereInput2ᚕᚖgithubᚗcomᚋth
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.PlatformWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -530725,8 +535246,7 @@ func (ec *executionContext) unmarshalOProcedureDocumentManagementMode2ᚕgithub�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.DocumentManagementMode, len(vSlice))
 	for i := range vSlice {
@@ -530788,8 +535308,7 @@ func (ec *executionContext) unmarshalOProcedureDocumentStatus2ᚕgithubᚗcomᚋ
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.DocumentStatus, len(vSlice))
 	for i := range vSlice {
@@ -530871,8 +535390,7 @@ func (ec *executionContext) unmarshalOProcedureFrequency2ᚕgithubᚗcomᚋtheop
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.Frequency, len(vSlice))
 	for i := range vSlice {
@@ -530924,8 +535442,7 @@ func (ec *executionContext) unmarshalOProcedureOrder2ᚕᚖgithubᚗcomᚋtheope
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.ProcedureOrder, len(vSlice))
 	for i := range vSlice {
@@ -530942,8 +535459,7 @@ func (ec *executionContext) unmarshalOProcedureWhereInput2ᚕᚖgithubᚗcomᚋt
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.ProcedureWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -531067,8 +535583,7 @@ func (ec *executionContext) unmarshalOProgramMembershipOrder2ᚕᚖgithubᚗcom�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.ProgramMembershipOrder, len(vSlice))
 	for i := range vSlice {
@@ -531085,8 +535600,7 @@ func (ec *executionContext) unmarshalOProgramMembershipRole2ᚕgithubᚗcomᚋth
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.Role, len(vSlice))
 	for i := range vSlice {
@@ -531138,8 +535652,7 @@ func (ec *executionContext) unmarshalOProgramMembershipWhereInput2ᚕᚖgithub�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.ProgramMembershipWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -531164,8 +535677,7 @@ func (ec *executionContext) unmarshalOProgramOrder2ᚕᚖgithubᚗcomᚋtheopenl
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.ProgramOrder, len(vSlice))
 	for i := range vSlice {
@@ -531182,8 +535694,7 @@ func (ec *executionContext) unmarshalOProgramProgramStatus2ᚕgithubᚗcomᚋthe
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.ProgramStatus, len(vSlice))
 	for i := range vSlice {
@@ -531235,8 +535746,7 @@ func (ec *executionContext) unmarshalOProgramWhereInput2ᚕᚖgithubᚗcomᚋthe
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.ProgramWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -531314,8 +535824,7 @@ func (ec *executionContext) unmarshalORemediationOrder2ᚕᚖgithubᚗcomᚋtheo
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.RemediationOrder, len(vSlice))
 	for i := range vSlice {
@@ -531342,8 +535851,7 @@ func (ec *executionContext) unmarshalORemediationRemediationStatus2ᚕgithubᚗc
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.RemediationStatus, len(vSlice))
 	for i := range vSlice {
@@ -531395,8 +535903,7 @@ func (ec *executionContext) unmarshalORemediationWhereInput2ᚕᚖgithubᚗcom�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.RemediationWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -531474,8 +535981,7 @@ func (ec *executionContext) unmarshalOReviewOrder2ᚕᚖgithubᚗcomᚋtheopenla
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.ReviewOrder, len(vSlice))
 	for i := range vSlice {
@@ -531502,8 +536008,7 @@ func (ec *executionContext) unmarshalOReviewReviewStatus2ᚕgithubᚗcomᚋtheop
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.ReviewStatus, len(vSlice))
 	for i := range vSlice {
@@ -531555,8 +536060,7 @@ func (ec *executionContext) unmarshalOReviewWhereInput2ᚕᚖgithubᚗcomᚋtheo
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.ReviewWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -531644,8 +536148,7 @@ func (ec *executionContext) unmarshalORiskFrequency2ᚕgithubᚗcomᚋtheopenlan
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.Frequency, len(vSlice))
 	for i := range vSlice {
@@ -531697,8 +536200,7 @@ func (ec *executionContext) unmarshalORiskOrder2ᚕᚖgithubᚗcomᚋtheopenlane
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.RiskOrder, len(vSlice))
 	for i := range vSlice {
@@ -531725,8 +536227,7 @@ func (ec *executionContext) unmarshalORiskRiskDecision2ᚕgithubᚗcomᚋtheopen
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.RiskDecision, len(vSlice))
 	for i := range vSlice {
@@ -531788,8 +536289,7 @@ func (ec *executionContext) unmarshalORiskRiskImpact2ᚕgithubᚗcomᚋtheopenla
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.RiskImpact, len(vSlice))
 	for i := range vSlice {
@@ -531851,8 +536351,7 @@ func (ec *executionContext) unmarshalORiskRiskLikelihood2ᚕgithubᚗcomᚋtheop
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.RiskLikelihood, len(vSlice))
 	for i := range vSlice {
@@ -531914,8 +536413,7 @@ func (ec *executionContext) unmarshalORiskRiskStatus2ᚕgithubᚗcomᚋtheopenla
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.RiskStatus, len(vSlice))
 	for i := range vSlice {
@@ -531967,8 +536465,7 @@ func (ec *executionContext) unmarshalORiskWhereInput2ᚕᚖgithubᚗcomᚋtheope
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.RiskWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -532039,8 +536536,7 @@ func (ec *executionContext) unmarshalOSLADefinitionOrder2ᚕᚖgithubᚗcomᚋth
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.SLADefinitionOrder, len(vSlice))
 	for i := range vSlice {
@@ -532057,8 +536553,7 @@ func (ec *executionContext) unmarshalOSLADefinitionSecurityLevel2ᚕgithubᚗcom
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.SecurityLevel, len(vSlice))
 	for i := range vSlice {
@@ -532110,8 +536605,7 @@ func (ec *executionContext) unmarshalOSLADefinitionWhereInput2ᚕᚖgithubᚗcom
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.SLADefinitionWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -532189,8 +536683,7 @@ func (ec *executionContext) unmarshalOScanOrder2ᚕᚖgithubᚗcomᚋtheopenlane
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.ScanOrder, len(vSlice))
 	for i := range vSlice {
@@ -532207,8 +536700,7 @@ func (ec *executionContext) unmarshalOScanScanStatus2ᚕgithubᚗcomᚋtheopenla
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.ScanStatus, len(vSlice))
 	for i := range vSlice {
@@ -532260,8 +536752,7 @@ func (ec *executionContext) unmarshalOScanScanType2ᚕgithubᚗcomᚋtheopenlane
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.ScanType, len(vSlice))
 	for i := range vSlice {
@@ -532313,8 +536804,7 @@ func (ec *executionContext) unmarshalOScanWhereInput2ᚕᚖgithubᚗcomᚋtheope
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.ScanWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -532385,8 +536875,7 @@ func (ec *executionContext) unmarshalOScheduledJobOrder2ᚕᚖgithubᚗcomᚋthe
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.ScheduledJobOrder, len(vSlice))
 	for i := range vSlice {
@@ -532430,8 +536919,7 @@ func (ec *executionContext) unmarshalOScheduledJobRunOrder2ᚕᚖgithubᚗcomᚋ
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.ScheduledJobRunOrder, len(vSlice))
 	for i := range vSlice {
@@ -532448,8 +536936,7 @@ func (ec *executionContext) unmarshalOScheduledJobRunScheduledJobRunStatus2ᚕgi
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.ScheduledJobRunStatus, len(vSlice))
 	for i := range vSlice {
@@ -532501,8 +536988,7 @@ func (ec *executionContext) unmarshalOScheduledJobRunWhereInput2ᚕᚖgithubᚗc
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.ScheduledJobRunWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -532527,8 +537013,7 @@ func (ec *executionContext) unmarshalOScheduledJobWhereInput2ᚕᚖgithubᚗcom�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.ScheduledJobWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -532606,8 +537091,7 @@ func (ec *executionContext) unmarshalOStandardOrder2ᚕᚖgithubᚗcomᚋtheopen
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.StandardOrder, len(vSlice))
 	for i := range vSlice {
@@ -532634,8 +537118,7 @@ func (ec *executionContext) unmarshalOStandardStandardStatus2ᚕgithubᚗcomᚋt
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.StandardStatus, len(vSlice))
 	for i := range vSlice {
@@ -532687,8 +537170,7 @@ func (ec *executionContext) unmarshalOStandardWhereInput2ᚕᚖgithubᚗcomᚋth
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.StandardWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -532756,8 +537238,7 @@ func (ec *executionContext) unmarshalOSubcontrolControlImplementationStatus2ᚕg
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.ControlImplementationStatus, len(vSlice))
 	for i := range vSlice {
@@ -532819,8 +537300,7 @@ func (ec *executionContext) unmarshalOSubcontrolControlSource2ᚕgithubᚗcomᚋ
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.ControlSource, len(vSlice))
 	for i := range vSlice {
@@ -532882,8 +537362,7 @@ func (ec *executionContext) unmarshalOSubcontrolControlStatus2ᚕgithubᚗcomᚋ
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.ControlStatus, len(vSlice))
 	for i := range vSlice {
@@ -532955,8 +537434,7 @@ func (ec *executionContext) unmarshalOSubcontrolOrder2ᚕᚖgithubᚗcomᚋtheop
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.SubcontrolOrder, len(vSlice))
 	for i := range vSlice {
@@ -532973,8 +537451,7 @@ func (ec *executionContext) unmarshalOSubcontrolWhereInput2ᚕᚖgithubᚗcomᚋ
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.SubcontrolWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -533052,8 +537529,7 @@ func (ec *executionContext) unmarshalOSubprocessorOrder2ᚕᚖgithubᚗcomᚋthe
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.SubprocessorOrder, len(vSlice))
 	for i := range vSlice {
@@ -533070,8 +537546,7 @@ func (ec *executionContext) unmarshalOSubprocessorWhereInput2ᚕᚖgithubᚗcom�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.SubprocessorWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -533149,8 +537624,7 @@ func (ec *executionContext) unmarshalOSubscriberOrder2ᚕᚖgithubᚗcomᚋtheop
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.SubscriberOrder, len(vSlice))
 	for i := range vSlice {
@@ -533167,8 +537641,7 @@ func (ec *executionContext) unmarshalOSubscriberWhereInput2ᚕᚖgithubᚗcomᚋ
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.SubscriberWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -533246,8 +537719,7 @@ func (ec *executionContext) unmarshalOSystemDetailOrder2ᚕᚖgithubᚗcomᚋthe
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.SystemDetailOrder, len(vSlice))
 	for i := range vSlice {
@@ -533274,8 +537746,7 @@ func (ec *executionContext) unmarshalOSystemDetailSystemSensitivityLevel2ᚕgith
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.SystemSensitivityLevel, len(vSlice))
 	for i := range vSlice {
@@ -533327,8 +537798,7 @@ func (ec *executionContext) unmarshalOSystemDetailWhereInput2ᚕᚖgithubᚗcom�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.SystemDetailWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -533380,8 +537850,7 @@ func (ec *executionContext) unmarshalOTFASettingOrder2ᚕᚖgithubᚗcomᚋtheop
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.TFASettingOrder, len(vSlice))
 	for i := range vSlice {
@@ -533398,8 +537867,7 @@ func (ec *executionContext) unmarshalOTFASettingWhereInput2ᚕᚖgithubᚗcomᚋ
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.TFASettingWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -533477,8 +537945,7 @@ func (ec *executionContext) unmarshalOTagDefinitionOrder2ᚕᚖgithubᚗcomᚋth
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.TagDefinitionOrder, len(vSlice))
 	for i := range vSlice {
@@ -533495,8 +537962,7 @@ func (ec *executionContext) unmarshalOTagDefinitionWhereInput2ᚕᚖgithubᚗcom
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.TagDefinitionWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -533574,8 +538040,7 @@ func (ec *executionContext) unmarshalOTaskOrder2ᚕᚖgithubᚗcomᚋtheopenlane
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.TaskOrder, len(vSlice))
 	for i := range vSlice {
@@ -533592,8 +538057,7 @@ func (ec *executionContext) unmarshalOTaskTaskStatus2ᚕgithubᚗcomᚋtheopenla
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.TaskStatus, len(vSlice))
 	for i := range vSlice {
@@ -533645,8 +538109,7 @@ func (ec *executionContext) unmarshalOTaskWhereInput2ᚕᚖgithubᚗcomᚋtheope
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.TaskWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -533704,8 +538167,7 @@ func (ec *executionContext) unmarshalOTemplateDocumentType2ᚕgithubᚗcomᚋthe
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.DocumentType, len(vSlice))
 	for i := range vSlice {
@@ -533777,8 +538239,7 @@ func (ec *executionContext) unmarshalOTemplateOrder2ᚕᚖgithubᚗcomᚋtheopen
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.TemplateOrder, len(vSlice))
 	for i := range vSlice {
@@ -533805,8 +538266,7 @@ func (ec *executionContext) unmarshalOTemplateTemplateKind2ᚕgithubᚗcomᚋthe
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.TemplateKind, len(vSlice))
 	for i := range vSlice {
@@ -533858,8 +538318,7 @@ func (ec *executionContext) unmarshalOTemplateWhereInput2ᚕᚖgithubᚗcomᚋth
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.TemplateWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -533896,8 +538355,7 @@ func (ec *executionContext) unmarshalOTime2ᚕtimeᚐTimeᚄ(ctx context.Context
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]time.Time, len(vSlice))
 	for i := range vSlice {
@@ -534022,8 +538480,7 @@ func (ec *executionContext) unmarshalOTrustCenterComplianceOrder2ᚕᚖgithubᚗ
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.TrustCenterComplianceOrder, len(vSlice))
 	for i := range vSlice {
@@ -534040,8 +538497,7 @@ func (ec *executionContext) unmarshalOTrustCenterComplianceWhereInput2ᚕᚖgith
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.TrustCenterComplianceWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -534112,8 +538568,7 @@ func (ec *executionContext) unmarshalOTrustCenterDocOrder2ᚕᚖgithubᚗcomᚋt
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.TrustCenterDocOrder, len(vSlice))
 	for i := range vSlice {
@@ -534140,8 +538595,7 @@ func (ec *executionContext) unmarshalOTrustCenterDocTrustCenterDocumentVisibilit
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.TrustCenterDocumentVisibility, len(vSlice))
 	for i := range vSlice {
@@ -534203,8 +538657,7 @@ func (ec *executionContext) unmarshalOTrustCenterDocWatermarkStatus2ᚕgithubᚗ
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.WatermarkStatus, len(vSlice))
 	for i := range vSlice {
@@ -534256,8 +538709,7 @@ func (ec *executionContext) unmarshalOTrustCenterDocWhereInput2ᚕᚖgithubᚗco
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.TrustCenterDocWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -534355,8 +538807,7 @@ func (ec *executionContext) unmarshalOTrustCenterEntityOrder2ᚕᚖgithubᚗcom�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.TrustCenterEntityOrder, len(vSlice))
 	for i := range vSlice {
@@ -534373,8 +538824,7 @@ func (ec *executionContext) unmarshalOTrustCenterEntityWhereInput2ᚕᚖgithub�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.TrustCenterEntityWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -534445,8 +538895,7 @@ func (ec *executionContext) unmarshalOTrustCenterFAQOrder2ᚕᚖgithubᚗcomᚋt
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.TrustCenterFAQOrder, len(vSlice))
 	for i := range vSlice {
@@ -534463,8 +538912,7 @@ func (ec *executionContext) unmarshalOTrustCenterFAQWhereInput2ᚕᚖgithubᚗco
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.TrustCenterFAQWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -534535,8 +538983,7 @@ func (ec *executionContext) unmarshalOTrustCenterNDARequestOrder2ᚕᚖgithubᚗ
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.TrustCenterNDARequestOrder, len(vSlice))
 	for i := range vSlice {
@@ -534563,8 +539010,7 @@ func (ec *executionContext) unmarshalOTrustCenterNDARequestTrustCenterNDARequest
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.TrustCenterNDARequestAccessLevel, len(vSlice))
 	for i := range vSlice {
@@ -534626,8 +539072,7 @@ func (ec *executionContext) unmarshalOTrustCenterNDARequestTrustCenterNDARequest
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.TrustCenterNDARequestStatus, len(vSlice))
 	for i := range vSlice {
@@ -534679,8 +539124,7 @@ func (ec *executionContext) unmarshalOTrustCenterNDARequestWhereInput2ᚕᚖgith
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.TrustCenterNDARequestWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -534705,8 +539149,7 @@ func (ec *executionContext) unmarshalOTrustCenterOrder2ᚕᚖgithubᚗcomᚋtheo
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.TrustCenterOrder, len(vSlice))
 	for i := range vSlice {
@@ -534769,8 +539212,7 @@ func (ec *executionContext) unmarshalOTrustCenterSettingOrder2ᚕᚖgithubᚗcom
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.TrustCenterSettingOrder, len(vSlice))
 	for i := range vSlice {
@@ -534797,8 +539239,7 @@ func (ec *executionContext) unmarshalOTrustCenterSettingTrustCenterEnvironment2�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.TrustCenterEnvironment, len(vSlice))
 	for i := range vSlice {
@@ -534860,8 +539301,7 @@ func (ec *executionContext) unmarshalOTrustCenterSettingTrustCenterThemeMode2ᚕ
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.TrustCenterThemeMode, len(vSlice))
 	for i := range vSlice {
@@ -534913,8 +539353,7 @@ func (ec *executionContext) unmarshalOTrustCenterSettingWhereInput2ᚕᚖgithub�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.TrustCenterSettingWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -534985,8 +539424,7 @@ func (ec *executionContext) unmarshalOTrustCenterSubprocessorOrder2ᚕᚖgithub�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.TrustCenterSubprocessorOrder, len(vSlice))
 	for i := range vSlice {
@@ -535003,8 +539441,7 @@ func (ec *executionContext) unmarshalOTrustCenterSubprocessorWhereInput2ᚕᚖgi
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.TrustCenterSubprocessorWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -535039,8 +539476,7 @@ func (ec *executionContext) unmarshalOTrustCenterTrustCenterPreviewStatus2ᚕgit
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.TrustCenterPreviewStatus, len(vSlice))
 	for i := range vSlice {
@@ -535148,8 +539584,7 @@ func (ec *executionContext) unmarshalOTrustCenterWatermarkConfigFont2ᚕgithub�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.Font, len(vSlice))
 	for i := range vSlice {
@@ -535201,8 +539636,7 @@ func (ec *executionContext) unmarshalOTrustCenterWatermarkConfigOrder2ᚕᚖgith
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.TrustCenterWatermarkConfigOrder, len(vSlice))
 	for i := range vSlice {
@@ -535219,8 +539653,7 @@ func (ec *executionContext) unmarshalOTrustCenterWatermarkConfigWhereInput2ᚕ�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.TrustCenterWatermarkConfigWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -535245,8 +539678,7 @@ func (ec *executionContext) unmarshalOTrustCenterWhereInput2ᚕᚖgithubᚗcom�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.TrustCenterWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -535331,8 +539763,7 @@ func (ec *executionContext) unmarshalOUserAuthProvider2ᚕgithubᚗcomᚋtheopen
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.AuthProvider, len(vSlice))
 	for i := range vSlice {
@@ -535404,8 +539835,7 @@ func (ec *executionContext) unmarshalOUserOrder2ᚕᚖgithubᚗcomᚋtheopenlane
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.UserOrder, len(vSlice))
 	for i := range vSlice {
@@ -535432,8 +539862,7 @@ func (ec *executionContext) unmarshalOUserRole2ᚕgithubᚗcomᚋtheopenlaneᚋc
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.Role, len(vSlice))
 	for i := range vSlice {
@@ -535531,8 +539960,7 @@ func (ec *executionContext) unmarshalOUserSettingOrder2ᚕᚖgithubᚗcomᚋtheo
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.UserSettingOrder, len(vSlice))
 	for i := range vSlice {
@@ -535549,8 +539977,7 @@ func (ec *executionContext) unmarshalOUserSettingUserStatus2ᚕgithubᚗcomᚋth
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.UserStatus, len(vSlice))
 	for i := range vSlice {
@@ -535602,8 +540029,7 @@ func (ec *executionContext) unmarshalOUserSettingWhereInput2ᚕᚖgithubᚗcom�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.UserSettingWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -535628,8 +540054,7 @@ func (ec *executionContext) unmarshalOUserWhereInput2ᚕᚖgithubᚗcomᚋtheope
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.UserWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -535700,8 +540125,7 @@ func (ec *executionContext) unmarshalOVendorRiskScoreOrder2ᚕᚖgithubᚗcomᚋ
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.VendorRiskScoreOrder, len(vSlice))
 	for i := range vSlice {
@@ -535718,8 +540142,7 @@ func (ec *executionContext) unmarshalOVendorRiskScoreVendorRiskImpact2ᚕgithub�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.VendorRiskImpact, len(vSlice))
 	for i := range vSlice {
@@ -535771,8 +540194,7 @@ func (ec *executionContext) unmarshalOVendorRiskScoreVendorRiskLikelihood2ᚕgit
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.VendorRiskLikelihood, len(vSlice))
 	for i := range vSlice {
@@ -535824,8 +540246,7 @@ func (ec *executionContext) unmarshalOVendorRiskScoreVendorScoringAnswerType2ᚕ
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.VendorScoringAnswerType, len(vSlice))
 	for i := range vSlice {
@@ -535877,8 +540298,7 @@ func (ec *executionContext) unmarshalOVendorRiskScoreVendorScoringCategory2ᚕgi
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.VendorScoringCategory, len(vSlice))
 	for i := range vSlice {
@@ -535930,8 +540350,7 @@ func (ec *executionContext) unmarshalOVendorRiskScoreWhereInput2ᚕᚖgithubᚗc
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.VendorRiskScoreWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -536002,8 +540421,7 @@ func (ec *executionContext) unmarshalOVendorScoringConfigOrder2ᚕᚖgithubᚗco
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.VendorScoringConfigOrder, len(vSlice))
 	for i := range vSlice {
@@ -536020,8 +540438,7 @@ func (ec *executionContext) unmarshalOVendorScoringConfigVendorScoringMode2ᚕgi
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.VendorScoringMode, len(vSlice))
 	for i := range vSlice {
@@ -536073,8 +540490,7 @@ func (ec *executionContext) unmarshalOVendorScoringConfigWhereInput2ᚕᚖgithub
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.VendorScoringConfigWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -536152,8 +540568,7 @@ func (ec *executionContext) unmarshalOVulnerabilityOrder2ᚕᚖgithubᚗcomᚋth
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.VulnerabilityOrder, len(vSlice))
 	for i := range vSlice {
@@ -536180,8 +540595,7 @@ func (ec *executionContext) unmarshalOVulnerabilitySecurityLevel2ᚕgithubᚗcom
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.SecurityLevel, len(vSlice))
 	for i := range vSlice {
@@ -536233,8 +540647,7 @@ func (ec *executionContext) unmarshalOVulnerabilityWhereInput2ᚕᚖgithubᚗcom
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.VulnerabilityWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -536294,8 +540707,7 @@ func (ec *executionContext) unmarshalOWebauthnWhereInput2ᚕᚖgithubᚗcomᚋth
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.WebauthnWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -536347,8 +540759,7 @@ func (ec *executionContext) unmarshalOWorkflowAssignmentOrder2ᚕᚖgithubᚗcom
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.WorkflowAssignmentOrder, len(vSlice))
 	for i := range vSlice {
@@ -536392,8 +540803,7 @@ func (ec *executionContext) unmarshalOWorkflowAssignmentTargetOrder2ᚕᚖgithub
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.WorkflowAssignmentTargetOrder, len(vSlice))
 	for i := range vSlice {
@@ -536410,8 +540820,7 @@ func (ec *executionContext) unmarshalOWorkflowAssignmentTargetWhereInput2ᚕᚖg
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.WorkflowAssignmentTargetWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -536436,8 +540845,7 @@ func (ec *executionContext) unmarshalOWorkflowAssignmentTargetWorkflowTargetType
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.WorkflowTargetType, len(vSlice))
 	for i := range vSlice {
@@ -536489,8 +540897,7 @@ func (ec *executionContext) unmarshalOWorkflowAssignmentWhereInput2ᚕᚖgithub�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.WorkflowAssignmentWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -536515,8 +540922,7 @@ func (ec *executionContext) unmarshalOWorkflowAssignmentWorkflowAssignmentStatus
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.WorkflowAssignmentStatus, len(vSlice))
 	for i := range vSlice {
@@ -536614,8 +541020,7 @@ func (ec *executionContext) unmarshalOWorkflowDefinitionOrder2ᚕᚖgithubᚗcom
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.WorkflowDefinitionOrder, len(vSlice))
 	for i := range vSlice {
@@ -536632,8 +541037,7 @@ func (ec *executionContext) unmarshalOWorkflowDefinitionWhereInput2ᚕᚖgithub�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.WorkflowDefinitionWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -536658,8 +541062,7 @@ func (ec *executionContext) unmarshalOWorkflowDefinitionWorkflowKind2ᚕgithub�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.WorkflowKind, len(vSlice))
 	for i := range vSlice {
@@ -536738,8 +541141,7 @@ func (ec *executionContext) unmarshalOWorkflowEventOrder2ᚕᚖgithubᚗcomᚋth
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.WorkflowEventOrder, len(vSlice))
 	for i := range vSlice {
@@ -536756,8 +541158,7 @@ func (ec *executionContext) unmarshalOWorkflowEventWhereInput2ᚕᚖgithubᚗcom
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.WorkflowEventWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -536782,8 +541183,7 @@ func (ec *executionContext) unmarshalOWorkflowEventWorkflowEventType2ᚕgithub�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.WorkflowEventType, len(vSlice))
 	for i := range vSlice {
@@ -536862,8 +541262,7 @@ func (ec *executionContext) unmarshalOWorkflowInstanceOrder2ᚕᚖgithubᚗcom�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.WorkflowInstanceOrder, len(vSlice))
 	for i := range vSlice {
@@ -536880,8 +541279,7 @@ func (ec *executionContext) unmarshalOWorkflowInstanceWhereInput2ᚕᚖgithubᚗ
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.WorkflowInstanceWhereInput, len(vSlice))
 	for i := range vSlice {
@@ -536906,8 +541304,7 @@ func (ec *executionContext) unmarshalOWorkflowInstanceWorkflowInstanceState2ᚕg
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]enums.WorkflowInstanceState, len(vSlice))
 	for i := range vSlice {
@@ -536986,8 +541383,7 @@ func (ec *executionContext) unmarshalOWorkflowObjectRefOrder2ᚕᚖgithubᚗcom�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.WorkflowObjectRefOrder, len(vSlice))
 	for i := range vSlice {
@@ -537004,8 +541400,7 @@ func (ec *executionContext) unmarshalOWorkflowObjectRefWhereInput2ᚕᚖgithub�
 	if v == nil {
 		return nil, nil
 	}
-	var vSlice []any
-	vSlice = graphql.CoerceList(v)
+	vSlice := graphql.CoerceList(v)
 	var err error
 	res := make([]*generated.WorkflowObjectRefWhereInput, len(vSlice))
 	for i := range vSlice {

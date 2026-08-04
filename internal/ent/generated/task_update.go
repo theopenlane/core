@@ -376,6 +376,18 @@ func (_u *TaskUpdate) ClearDetailsJSON() *TaskUpdate {
 	return _u
 }
 
+// SetMetadata sets the "metadata" field.
+func (_u *TaskUpdate) SetMetadata(v map[string]interface{}) *TaskUpdate {
+	_u.mutation.SetMetadata(v)
+	return _u
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (_u *TaskUpdate) ClearMetadata() *TaskUpdate {
+	_u.mutation.ClearMetadata()
+	return _u
+}
+
 // SetStatus sets the "status" field.
 func (_u *TaskUpdate) SetStatus(v enums.TaskStatus) *TaskUpdate {
 	_u.mutation.SetStatus(v)
@@ -495,6 +507,81 @@ func (_u *TaskUpdate) SetNillableIsTemplate(v *bool) *TaskUpdate {
 	if v != nil {
 		_u.SetIsTemplate(*v)
 	}
+	return _u
+}
+
+// SetIsSuggested sets the "is_suggested" field.
+func (_u *TaskUpdate) SetIsSuggested(v bool) *TaskUpdate {
+	_u.mutation.SetIsSuggested(v)
+	return _u
+}
+
+// SetNillableIsSuggested sets the "is_suggested" field if the given value is not nil.
+func (_u *TaskUpdate) SetNillableIsSuggested(v *bool) *TaskUpdate {
+	if v != nil {
+		_u.SetIsSuggested(*v)
+	}
+	return _u
+}
+
+// SetPriority sets the "priority" field.
+func (_u *TaskUpdate) SetPriority(v int) *TaskUpdate {
+	_u.mutation.ResetPriority()
+	_u.mutation.SetPriority(v)
+	return _u
+}
+
+// SetNillablePriority sets the "priority" field if the given value is not nil.
+func (_u *TaskUpdate) SetNillablePriority(v *int) *TaskUpdate {
+	if v != nil {
+		_u.SetPriority(*v)
+	}
+	return _u
+}
+
+// AddPriority adds value to the "priority" field.
+func (_u *TaskUpdate) AddPriority(v int) *TaskUpdate {
+	_u.mutation.AddPriority(v)
+	return _u
+}
+
+// SetSource sets the "source" field.
+func (_u *TaskUpdate) SetSource(v string) *TaskUpdate {
+	_u.mutation.SetSource(v)
+	return _u
+}
+
+// SetNillableSource sets the "source" field if the given value is not nil.
+func (_u *TaskUpdate) SetNillableSource(v *string) *TaskUpdate {
+	if v != nil {
+		_u.SetSource(*v)
+	}
+	return _u
+}
+
+// ClearSource clears the value of the "source" field.
+func (_u *TaskUpdate) ClearSource() *TaskUpdate {
+	_u.mutation.ClearSource()
+	return _u
+}
+
+// SetSourceKey sets the "source_key" field.
+func (_u *TaskUpdate) SetSourceKey(v string) *TaskUpdate {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *TaskUpdate) SetNillableSourceKey(v *string) *TaskUpdate {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *TaskUpdate) ClearSourceKey() *TaskUpdate {
+	_u.mutation.ClearSourceKey()
 	return _u
 }
 
@@ -1502,6 +1589,12 @@ func (_u *TaskUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.DetailsJSONCleared() {
 		_spec.ClearField(task.FieldDetailsJSON, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.Metadata(); ok {
+		_spec.SetField(task.FieldMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.MetadataCleared() {
+		_spec.ClearField(task.FieldMetadata, field.TypeJSON)
+	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(task.FieldStatus, field.TypeEnum, value)
 	}
@@ -1522,6 +1615,27 @@ func (_u *TaskUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.IsTemplate(); ok {
 		_spec.SetField(task.FieldIsTemplate, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.IsSuggested(); ok {
+		_spec.SetField(task.FieldIsSuggested, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.Priority(); ok {
+		_spec.SetField(task.FieldPriority, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedPriority(); ok {
+		_spec.AddField(task.FieldPriority, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.Source(); ok {
+		_spec.SetField(task.FieldSource, field.TypeString, value)
+	}
+	if _u.mutation.SourceCleared() {
+		_spec.ClearField(task.FieldSource, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(task.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(task.FieldSourceKey, field.TypeString)
 	}
 	if value, ok := _u.mutation.IdempotencyKey(); ok {
 		_spec.SetField(task.FieldIdempotencyKey, field.TypeString, value)
@@ -2984,6 +3098,18 @@ func (_u *TaskUpdateOne) ClearDetailsJSON() *TaskUpdateOne {
 	return _u
 }
 
+// SetMetadata sets the "metadata" field.
+func (_u *TaskUpdateOne) SetMetadata(v map[string]interface{}) *TaskUpdateOne {
+	_u.mutation.SetMetadata(v)
+	return _u
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (_u *TaskUpdateOne) ClearMetadata() *TaskUpdateOne {
+	_u.mutation.ClearMetadata()
+	return _u
+}
+
 // SetStatus sets the "status" field.
 func (_u *TaskUpdateOne) SetStatus(v enums.TaskStatus) *TaskUpdateOne {
 	_u.mutation.SetStatus(v)
@@ -3103,6 +3229,81 @@ func (_u *TaskUpdateOne) SetNillableIsTemplate(v *bool) *TaskUpdateOne {
 	if v != nil {
 		_u.SetIsTemplate(*v)
 	}
+	return _u
+}
+
+// SetIsSuggested sets the "is_suggested" field.
+func (_u *TaskUpdateOne) SetIsSuggested(v bool) *TaskUpdateOne {
+	_u.mutation.SetIsSuggested(v)
+	return _u
+}
+
+// SetNillableIsSuggested sets the "is_suggested" field if the given value is not nil.
+func (_u *TaskUpdateOne) SetNillableIsSuggested(v *bool) *TaskUpdateOne {
+	if v != nil {
+		_u.SetIsSuggested(*v)
+	}
+	return _u
+}
+
+// SetPriority sets the "priority" field.
+func (_u *TaskUpdateOne) SetPriority(v int) *TaskUpdateOne {
+	_u.mutation.ResetPriority()
+	_u.mutation.SetPriority(v)
+	return _u
+}
+
+// SetNillablePriority sets the "priority" field if the given value is not nil.
+func (_u *TaskUpdateOne) SetNillablePriority(v *int) *TaskUpdateOne {
+	if v != nil {
+		_u.SetPriority(*v)
+	}
+	return _u
+}
+
+// AddPriority adds value to the "priority" field.
+func (_u *TaskUpdateOne) AddPriority(v int) *TaskUpdateOne {
+	_u.mutation.AddPriority(v)
+	return _u
+}
+
+// SetSource sets the "source" field.
+func (_u *TaskUpdateOne) SetSource(v string) *TaskUpdateOne {
+	_u.mutation.SetSource(v)
+	return _u
+}
+
+// SetNillableSource sets the "source" field if the given value is not nil.
+func (_u *TaskUpdateOne) SetNillableSource(v *string) *TaskUpdateOne {
+	if v != nil {
+		_u.SetSource(*v)
+	}
+	return _u
+}
+
+// ClearSource clears the value of the "source" field.
+func (_u *TaskUpdateOne) ClearSource() *TaskUpdateOne {
+	_u.mutation.ClearSource()
+	return _u
+}
+
+// SetSourceKey sets the "source_key" field.
+func (_u *TaskUpdateOne) SetSourceKey(v string) *TaskUpdateOne {
+	_u.mutation.SetSourceKey(v)
+	return _u
+}
+
+// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
+func (_u *TaskUpdateOne) SetNillableSourceKey(v *string) *TaskUpdateOne {
+	if v != nil {
+		_u.SetSourceKey(*v)
+	}
+	return _u
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (_u *TaskUpdateOne) ClearSourceKey() *TaskUpdateOne {
+	_u.mutation.ClearSourceKey()
 	return _u
 }
 
@@ -4140,6 +4341,12 @@ func (_u *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) {
 	if _u.mutation.DetailsJSONCleared() {
 		_spec.ClearField(task.FieldDetailsJSON, field.TypeJSON)
 	}
+	if value, ok := _u.mutation.Metadata(); ok {
+		_spec.SetField(task.FieldMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.MetadataCleared() {
+		_spec.ClearField(task.FieldMetadata, field.TypeJSON)
+	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(task.FieldStatus, field.TypeEnum, value)
 	}
@@ -4160,6 +4367,27 @@ func (_u *TaskUpdateOne) sqlSave(ctx context.Context) (_node *Task, err error) {
 	}
 	if value, ok := _u.mutation.IsTemplate(); ok {
 		_spec.SetField(task.FieldIsTemplate, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.IsSuggested(); ok {
+		_spec.SetField(task.FieldIsSuggested, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.Priority(); ok {
+		_spec.SetField(task.FieldPriority, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.AddedPriority(); ok {
+		_spec.AddField(task.FieldPriority, field.TypeInt, value)
+	}
+	if value, ok := _u.mutation.Source(); ok {
+		_spec.SetField(task.FieldSource, field.TypeString, value)
+	}
+	if _u.mutation.SourceCleared() {
+		_spec.ClearField(task.FieldSource, field.TypeString)
+	}
+	if value, ok := _u.mutation.SourceKey(); ok {
+		_spec.SetField(task.FieldSourceKey, field.TypeString, value)
+	}
+	if _u.mutation.SourceKeyCleared() {
+		_spec.ClearField(task.FieldSourceKey, field.TypeString)
 	}
 	if value, ok := _u.mutation.IdempotencyKey(); ok {
 		_spec.SetField(task.FieldIdempotencyKey, field.TypeString, value)

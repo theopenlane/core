@@ -7,6 +7,7 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -15,10 +16,14 @@ const (
 	FieldIntegrationID = "integration_id"
 	// FieldDefinitionID is the log field key for the integration definition identifier
 	FieldDefinitionID = "definition_id"
-	// FieldOperation is the log field key for the operation name
-	FieldOperation = "operation"
+	// FieldOperation is the log field key for the integration operation name (DirectorySync,
+	// HealthCheck, etc); named integration_operation so it can't collide with entityops' generic
+	// "operation" key on the same log line
+	FieldOperation = "integration_operation"
 	// FieldRunID is the log field key for the run identifier
 	FieldRunID = "run_id"
+	// FieldOwnerID is the log field key for the organization owning the integration
+	FieldOwnerID = "owner_id"
 )
 
 // IntegrationRef carries integration identity for structured log embedding
@@ -52,18 +57,33 @@ func WithIntegration(ctx context.Context, integrationID, definitionID string) co
 	})
 }
 
-// WithContext stores execution metadata on context and enriches the logger
-// with all non-empty execution fields
-func WithContext(ctx context.Context, metadata types.ExecutionMetadata) context.Context {
-	ctx = types.WithExecutionMetadata(ctx, metadata)
-	ctx = WithIntegration(ctx, metadata.IntegrationID, metadata.DefinitionID)
+// WithInstallation enriches the context logger with one installation's identity fields
+func WithInstallation(ctx context.Context, integration *ent.Integration) context.Context {
+	return logx.WithFields(ctx, map[string]any{
+		FieldIntegrationID: integration.ID,
+		FieldDefinitionID:  integration.DefinitionID,
+		FieldOwnerID:       integration.OwnerID,
+	})
+}
 
-	if metadata.Operation != "" {
-		ctx = WithOperation(ctx, metadata.Operation)
+// WithContext stores the operation context on context and enriches the logger
+// with all non-empty execution fields
+func WithContext(ctx context.Context, oc gala.OperationContext) context.Context {
+	src := types.IntegrationSourceFrom(oc)
+
+	ctx = gala.WithOperationContext(ctx, oc)
+	ctx = WithIntegration(ctx, src.IntegrationID, src.DefinitionID)
+
+	if oc.OwnerID != "" {
+		ctx = logx.WithField(ctx, FieldOwnerID, oc.OwnerID)
 	}
 
-	if metadata.RunID != "" {
-		ctx = WithRunID(ctx, metadata.RunID)
+	if oc.Operation != "" {
+		ctx = WithOperation(ctx, oc.Operation)
+	}
+
+	if src.RunID != "" {
+		ctx = WithRunID(ctx, src.RunID)
 	}
 
 	return ctx

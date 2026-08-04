@@ -9,6 +9,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/gala"
 )
 
 func TestBuildDispatchPayload_EmptyDefaultsSingleOverlay(t *testing.T) {
@@ -122,10 +123,10 @@ func TestOperationOwnerID_FromRequestIntegration(t *testing.T) {
 	require.Equal(t, "org-request", ownerID)
 }
 
-func TestOperationOwnerID_FromExecutionMetadata(t *testing.T) {
+func TestOperationOwnerID_FromOperationContext(t *testing.T) {
 	t.Parallel()
 
-	ctx := types.WithExecutionMetadata(context.Background(), types.ExecutionMetadata{OwnerID: "org-meta"})
+	ctx := gala.WithOperationContext(context.Background(), gala.OperationContext{OwnerID: "org-meta"})
 	ownerID := operationOwnerID(ctx, types.OperationRequest{})
 	require.Equal(t, "org-meta", ownerID)
 }

@@ -3,6 +3,7 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 
 	cf "github.com/cloudflare/cloudflare-go/v7"
 	"github.com/cloudflare/cloudflare-go/v7/url_scanner"
@@ -12,10 +13,8 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-// domainScanMaxBatchSize is the largest batch Cloudflare's URL Scanner bulk
-// endpoint accepts in a single request; larger domain lists are split into
-// batches of this size
-const domainScanMaxBatchSize = 100
+// maxDomainsAllowed is the max domains a single domain scan request should contain
+const maxDomainsAllowed = 10
 
 // DomainScanSubmit submits domains to Cloudflare's URL Scanner for scanning
 type DomainScanSubmit struct {
@@ -41,41 +40,39 @@ func (s DomainScanSubmit) Handle() types.OperationHandler {
 	})
 }
 
-// Run submits the domains to Cloudflare's URL Scanner, batching requests as needed
+// Run submits the domains to Cloudflare's URL Scanner, with a max of 10 domains in any scan request
+// Cloudflare bulk scan allows up to 100 in a single request, so we do not need to batch these request
 func (DomainScanSubmit) Run(ctx context.Context, client *CloudflareClient, cfg DomainScanSubmit) (DomainScanSubmitResult, error) {
+	if len(cfg.Domains) > maxDomainsAllowed {
+		logx.FromContext(ctx).Warn().Strs("domains", cfg.Domains).Msg("cloudflare: max domains surpassed, only running on first 10")
+
+		cfg.Domains = cfg.Domains[:maxDomainsAllowed]
+	}
+
 	scans := make([]url_scanner.ScanBulkNewResponse, 0, len(cfg.Domains))
 
-	for i := 0; i < len(cfg.Domains); i += domainScanMaxBatchSize {
-		end := i + domainScanMaxBatchSize
-		if end > len(cfg.Domains) {
-			end = len(cfg.Domains)
+	body := make([]url_scanner.ScanBulkNewParamsBody, len(cfg.Domains))
+	for j, d := range cfg.Domains {
+		body[j] = url_scanner.ScanBulkNewParamsBody{
+			URL:            cf.F(d),
+			AgentReadiness: cf.F(true),
+			Visibility:     cf.F(url_scanner.ScanBulkNewParamsBodyVisibilityUnlisted),
 		}
-
-		batch := cfg.Domains[i:end]
-
-		body := make([]url_scanner.ScanBulkNewParamsBody, len(batch))
-		for j, d := range batch {
-			body[j] = url_scanner.ScanBulkNewParamsBody{
-				URL:            cf.F(d),
-				AgentReadiness: cf.F(true),
-				Visibility:     cf.F(url_scanner.ScanBulkNewParamsBodyVisibilityUnlisted),
-			}
-		}
-
-		params := url_scanner.ScanBulkNewParams{
-			AccountID: cf.F(client.Config.AccountID),
-			Body:      body,
-		}
-
-		result, err := client.URLScanner.Scans.BulkNew(ctx, params)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("cloudflare: error submitting domain scan batch")
-
-			return DomainScanSubmitResult{Scans: scans}, ErrDomainScanSubmitFailed
-		}
-
-		scans = append(scans, *result...)
 	}
+
+	params := url_scanner.ScanBulkNewParams{
+		AccountID: cf.F(client.Config.AccountID),
+		Body:      body,
+	}
+
+	result, err := client.URLScanner.Scans.BulkNew(ctx, params)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Strs("domains", cfg.Domains).Str("account_id", client.Config.AccountID).Msg("cloudflare: error submitting domain scan batch")
+
+		return DomainScanSubmitResult{Scans: scans}, fmt.Errorf("%w: %w", ErrDomainScanSubmitFailed, err)
+	}
+
+	scans = append(scans, *result...)
 
 	return DomainScanSubmitResult{Scans: scans}, nil
 }

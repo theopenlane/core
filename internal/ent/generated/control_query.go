@@ -45,6 +45,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -84,6 +85,7 @@ type ControlQuery struct {
 	withCheckResults                *CheckResultQuery
 	withPrograms                    *ProgramQuery
 	withPlatforms                   *PlatformQuery
+	withVulnerabilities             *VulnerabilityQuery
 	withAssets                      *AssetQuery
 	withEntities                    *EntityQuery
 	withIdentityHolders             *IdentityHolderQuery
@@ -117,6 +119,7 @@ type ControlQuery struct {
 	withNamedCheckResults           map[string]*CheckResultQuery
 	withNamedPrograms               map[string]*ProgramQuery
 	withNamedPlatforms              map[string]*PlatformQuery
+	withNamedVulnerabilities        map[string]*VulnerabilityQuery
 	withNamedAssets                 map[string]*AssetQuery
 	withNamedEntities               map[string]*EntityQuery
 	withNamedIdentityHolders        map[string]*IdentityHolderQuery
@@ -815,6 +818,31 @@ func (_q *ControlQuery) QueryPlatforms() *PlatformQuery {
 	return query
 }
 
+// QueryVulnerabilities chains the current query on the "vulnerabilities" edge.
+func (_q *ControlQuery) QueryVulnerabilities() *VulnerabilityQuery {
+	query := (&VulnerabilityClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, selector),
+			sqlgraph.To(vulnerability.Table, vulnerability.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, control.VulnerabilitiesTable, control.VulnerabilitiesPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Vulnerability
+		step.Edge.Schema = schemaConfig.VulnerabilityControls
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryAssets chains the current query on the "assets" edge.
 func (_q *ControlQuery) QueryAssets() *AssetQuery {
 	query := (&AssetClient{config: _q.config}).Query()
@@ -1333,6 +1361,7 @@ func (_q *ControlQuery) Clone() *ControlQuery {
 		withCheckResults:           _q.withCheckResults.Clone(),
 		withPrograms:               _q.withPrograms.Clone(),
 		withPlatforms:              _q.withPlatforms.Clone(),
+		withVulnerabilities:        _q.withVulnerabilities.Clone(),
 		withAssets:                 _q.withAssets.Clone(),
 		withEntities:               _q.withEntities.Clone(),
 		withIdentityHolders:        _q.withIdentityHolders.Clone(),
@@ -1638,6 +1667,17 @@ func (_q *ControlQuery) WithPlatforms(opts ...func(*PlatformQuery)) *ControlQuer
 	return _q
 }
 
+// WithVulnerabilities tells the query-builder to eager-load the nodes that are connected to
+// the "vulnerabilities" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ControlQuery) WithVulnerabilities(opts ...func(*VulnerabilityQuery)) *ControlQuery {
+	query := (&VulnerabilityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withVulnerabilities = query
+	return _q
+}
+
 // WithAssets tells the query-builder to eager-load the nodes that are connected to
 // the "assets" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *ControlQuery) WithAssets(opts ...func(*AssetQuery)) *ControlQuery {
@@ -1855,7 +1895,7 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 		nodes       = []*Control{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [38]bool{
+		loadedTypes = [39]bool{
 			_q.withEvidence != nil,
 			_q.withControlObjectives != nil,
 			_q.withTasks != nil,
@@ -1882,6 +1922,7 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			_q.withCheckResults != nil,
 			_q.withPrograms != nil,
 			_q.withPlatforms != nil,
+			_q.withVulnerabilities != nil,
 			_q.withAssets != nil,
 			_q.withEntities != nil,
 			_q.withIdentityHolders != nil,
@@ -2098,6 +2139,13 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			return nil, err
 		}
 	}
+	if query := _q.withVulnerabilities; query != nil {
+		if err := _q.loadVulnerabilities(ctx, query, nodes,
+			func(n *Control) { n.Edges.Vulnerabilities = []*Vulnerability{} },
+			func(n *Control, e *Vulnerability) { n.Edges.Vulnerabilities = append(n.Edges.Vulnerabilities, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withAssets; query != nil {
 		if err := _q.loadAssets(ctx, query, nodes,
 			func(n *Control) { n.Edges.Assets = []*Asset{} },
@@ -2309,6 +2357,13 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 		if err := _q.loadPlatforms(ctx, query, nodes,
 			func(n *Control) { n.appendNamedPlatforms(name) },
 			func(n *Control, e *Platform) { n.appendNamedPlatforms(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedVulnerabilities {
+		if err := _q.loadVulnerabilities(ctx, query, nodes,
+			func(n *Control) { n.appendNamedVulnerabilities(name) },
+			func(n *Control, e *Vulnerability) { n.appendNamedVulnerabilities(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -3693,6 +3748,68 @@ func (_q *ControlQuery) loadPlatforms(ctx context.Context, query *PlatformQuery,
 	}
 	return nil
 }
+func (_q *ControlQuery) loadVulnerabilities(ctx context.Context, query *VulnerabilityQuery, nodes []*Control, init func(*Control), assign func(*Control, *Vulnerability)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Control)
+	nids := make(map[string]map[*Control]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(control.VulnerabilitiesTable)
+		joinT.Schema(_q.schemaConfig.VulnerabilityControls)
+		s.Join(joinT).On(s.C(vulnerability.FieldID), joinT.C(control.VulnerabilitiesPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(control.VulnerabilitiesPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(control.VulnerabilitiesPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Control]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Vulnerability](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "vulnerabilities" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (_q *ControlQuery) loadAssets(ctx context.Context, query *AssetQuery, nodes []*Control, init func(*Control), assign func(*Control, *Asset)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Control)
@@ -4715,6 +4832,20 @@ func (_q *ControlQuery) WithNamedPlatforms(name string, opts ...func(*PlatformQu
 		_q.withNamedPlatforms = make(map[string]*PlatformQuery)
 	}
 	_q.withNamedPlatforms[name] = query
+	return _q
+}
+
+// WithNamedVulnerabilities tells the query-builder to eager-load the nodes that are connected to the "vulnerabilities"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ControlQuery) WithNamedVulnerabilities(name string, opts ...func(*VulnerabilityQuery)) *ControlQuery {
+	query := (&VulnerabilityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedVulnerabilities == nil {
+		_q.withNamedVulnerabilities = make(map[string]*VulnerabilityQuery)
+	}
+	_q.withNamedVulnerabilities[name] = query
 	return _q
 }
 

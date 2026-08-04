@@ -1,7 +1,7 @@
 package keycloak
 
 import (
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -17,7 +17,7 @@ func Builder() registry.Builder {
 				DisplayName: "Keycloak",
 				Description: "Collect Keycloak realm users, groups, and memberships for identity posture and access governance.",
 				Category:    "identity",
-				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/keycloak/overview",
+				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/keycloak",
 				Tags:        []string{"directory"},
 				Active:      false,
 				Visible:     true,
@@ -78,19 +78,41 @@ func Builder() registry.Builder {
 					RequiredPermissions: []string{"view-realm", "view-users", "query-groups", "view-events"},
 					Ingest: []types.IngestContract{
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
+							Schema: entityops.SchemaDirectoryAccount.Name,
 						},
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryGroup,
+							Schema: entityops.SchemaDirectoryGroup.Name,
 						},
 						{
-							Schema: integrationgenerated.IntegrationMappingSchemaDirectoryMembership,
+							Schema: entityops.SchemaDirectoryMembership.Name,
 						},
 					},
 					IngestHandle: DirectorySync{}.IngestHandle(),
 				},
 			},
-			Mappings: keycloakMappings(),
+			Mappings: []types.MappingRegistration{
+				{
+					Schema: entityops.SchemaDirectoryAccount.Name,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprDirectoryAccount,
+					},
+				},
+				{
+					Schema: entityops.SchemaDirectoryGroup.Name,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprDirectoryGroup,
+					},
+				},
+				{
+					Schema: entityops.SchemaDirectoryMembership.Name,
+					Spec: types.MappingOverride{
+						FilterExpr: "true",
+						MapExpr:    mapExprDirectoryMembership,
+					},
+				},
+			},
 		}, nil
 	})
 }

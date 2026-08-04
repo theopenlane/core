@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/internal/ent/taskrules"
 	"github.com/theopenlane/entx/accessmap"
 )
 
@@ -66,10 +67,12 @@ func (Onboarding) Fields() []ent.Field {
 			Optional(),
 		field.JSON("compliance", map[string]any{}).
 			Comment("details given about the compliance requirements during the onboarding process, such as coming with existing policies, controls, risk assessments, etc").
-			Optional(),
+			Optional().
+			Annotations(entx.FieldTaskRule(taskrules.OnboardingComplianceRules...)),
 		field.Bool("demo_requested").
 			Default(false).
-			Optional(),
+			Optional().
+			Annotations(entx.FieldTaskRule(taskrules.OnboardingDemoRequestedRule...)),
 	}
 }
 

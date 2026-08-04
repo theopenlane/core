@@ -35,4 +35,6 @@ var (
 	ErrWebhookMissingID = errors.New("email: webhook missing svix-id header")
 	// ErrMissingURLResolutionFields indicates a PreHook cannot resolve a URL because required fields are empty
 	ErrMissingURLResolutionFields = errors.New("email: missing required fields for URL resolution")
+	// ErrResultEncode indicates an operation result payload could not be encoded
+	ErrResultEncode = errors.New("email: failed to encode operation result")
 )

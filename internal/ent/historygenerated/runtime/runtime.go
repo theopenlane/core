@@ -2206,15 +2206,15 @@ func init() {
 	// programhistory.DefaultTags holds the default value on creation for the tags field.
 	programhistory.DefaultTags = programhistoryDescTags.Default.([]string)
 	// programhistoryDescAuditorReady is the schema descriptor for auditor_ready field.
-	programhistoryDescAuditorReady := programhistoryFields[23].Descriptor()
+	programhistoryDescAuditorReady := programhistoryFields[27].Descriptor()
 	// programhistory.DefaultAuditorReady holds the default value on creation for the auditor_ready field.
 	programhistory.DefaultAuditorReady = programhistoryDescAuditorReady.Default.(bool)
 	// programhistoryDescAuditorWriteComments is the schema descriptor for auditor_write_comments field.
-	programhistoryDescAuditorWriteComments := programhistoryFields[24].Descriptor()
+	programhistoryDescAuditorWriteComments := programhistoryFields[28].Descriptor()
 	// programhistory.DefaultAuditorWriteComments holds the default value on creation for the auditor_write_comments field.
 	programhistory.DefaultAuditorWriteComments = programhistoryDescAuditorWriteComments.Default.(bool)
 	// programhistoryDescAuditorReadComments is the schema descriptor for auditor_read_comments field.
-	programhistoryDescAuditorReadComments := programhistoryFields[25].Descriptor()
+	programhistoryDescAuditorReadComments := programhistoryFields[29].Descriptor()
 	// programhistory.DefaultAuditorReadComments holds the default value on creation for the auditor_read_comments field.
 	programhistory.DefaultAuditorReadComments = programhistoryDescAuditorReadComments.Default.(bool)
 	// programhistoryDescID is the schema descriptor for id field.
@@ -2447,8 +2447,12 @@ func init() {
 	scanhistoryDescTags := scanhistoryFields[11].Descriptor()
 	// scanhistory.DefaultTags holds the default value on creation for the tags field.
 	scanhistory.DefaultTags = scanhistoryDescTags.Default.([]string)
+	// scanhistoryDescSystemOwned is the schema descriptor for system_owned field.
+	scanhistoryDescSystemOwned := scanhistoryFields[13].Descriptor()
+	// scanhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
+	scanhistory.DefaultSystemOwned = scanhistoryDescSystemOwned.Default.(bool)
 	// scanhistoryDescDiscoveredVulnerabilityIds is the schema descriptor for discovered_vulnerability_ids field.
-	scanhistoryDescDiscoveredVulnerabilityIds := scanhistoryFields[33].Descriptor()
+	scanhistoryDescDiscoveredVulnerabilityIds := scanhistoryFields[36].Descriptor()
 	// scanhistory.DefaultDiscoveredVulnerabilityIds holds the default value on creation for the discovered_vulnerability_ids field.
 	scanhistory.DefaultDiscoveredVulnerabilityIds = scanhistoryDescDiscoveredVulnerabilityIds.Default.([]string)
 	// scanhistoryDescID is the schema descriptor for id field.
@@ -2694,13 +2698,21 @@ func init() {
 	// taskhistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	taskhistory.DefaultWorkflowEligibleMarker = taskhistoryDescWorkflowEligibleMarker.Default.(bool)
 	// taskhistoryDescSystemGenerated is the schema descriptor for system_generated field.
-	taskhistoryDescSystemGenerated := taskhistoryFields[30].Descriptor()
+	taskhistoryDescSystemGenerated := taskhistoryFields[31].Descriptor()
 	// taskhistory.DefaultSystemGenerated holds the default value on creation for the system_generated field.
 	taskhistory.DefaultSystemGenerated = taskhistoryDescSystemGenerated.Default.(bool)
 	// taskhistoryDescIsTemplate is the schema descriptor for is_template field.
-	taskhistoryDescIsTemplate := taskhistoryFields[31].Descriptor()
+	taskhistoryDescIsTemplate := taskhistoryFields[32].Descriptor()
 	// taskhistory.DefaultIsTemplate holds the default value on creation for the is_template field.
 	taskhistory.DefaultIsTemplate = taskhistoryDescIsTemplate.Default.(bool)
+	// taskhistoryDescIsSuggested is the schema descriptor for is_suggested field.
+	taskhistoryDescIsSuggested := taskhistoryFields[33].Descriptor()
+	// taskhistory.DefaultIsSuggested holds the default value on creation for the is_suggested field.
+	taskhistory.DefaultIsSuggested = taskhistoryDescIsSuggested.Default.(bool)
+	// taskhistoryDescPriority is the schema descriptor for priority field.
+	taskhistoryDescPriority := taskhistoryFields[34].Descriptor()
+	// taskhistory.DefaultPriority holds the default value on creation for the priority field.
+	taskhistory.DefaultPriority = taskhistoryDescPriority.Default.(int)
 	// taskhistoryDescID is the schema descriptor for id field.
 	taskhistoryDescID := taskhistoryFields[10].Descriptor()
 	// taskhistory.DefaultID holds the default value on creation for the id field.

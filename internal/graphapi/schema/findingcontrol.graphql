@@ -60,6 +60,15 @@ extend type Mutation{
         """
         id: ID!
     ): FindingControlDeletePayload!
+    """
+    Delete multiple findingControls
+    """
+    deleteBulkFindingControl(
+        """
+        IDs of the findingControls to delete
+        """
+        ids: [ID!]!
+    ): FindingControlBulkDeletePayload!
 }
 
 """
@@ -100,4 +109,22 @@ type FindingControlBulkCreatePayload {
     Created findingControls
     """
     findingControls: [FindingControl!]
+}
+
+"""
+Return response for deleteBulkFindingControl mutation
+"""
+type FindingControlBulkDeletePayload {
+    """
+    Deleted findingControl IDs
+    """
+    deletedIDs: [ID!]!
+    """
+    IDs that were not deleted
+    """
+    notDeletedIDs: [ID!]!
+    """
+    Error message when the bulk delete did not apply to every requested ID
+    """
+    error: String
 }

@@ -55,12 +55,15 @@ func TestMergeCompanyProfiles(t *testing.T) {
 	}
 
 	pricing := &CompanyProfile{
-		Name:         "Acme should not override",
-		SSOSupported: true,
-		MFASupported: true,
-		Systems:      []System{{Name: "Console", Summary: "duplicate, should be dropped"}, {Name: "API", Summary: "The public API"}},
-		Customers:    []string{"Initech"},
-		SocialLinks:  SocialLinks{LinkedIn: "https://linkedin.com/company/other", Twitter: "https://twitter.com/acme"},
+		Name:                 "Acme should not override",
+		SSOSupported:         true,
+		MFASupported:         true,
+		SocialLoginSupported: true,
+		CredentialsSupported: true,
+		PasskeySupported:     true,
+		Systems:              []System{{Name: "Console", Summary: "duplicate, should be dropped"}, {Name: "API", Summary: "The public API"}},
+		Customers:            []string{"Initech"},
+		SocialLinks:          SocialLinks{LinkedIn: "https://linkedin.com/company/other", Twitter: "https://twitter.com/acme"},
 	}
 
 	got := mergeCompanyProfiles(homepage, nil, pricing)
@@ -69,6 +72,9 @@ func TestMergeCompanyProfiles(t *testing.T) {
 	assert.Check(t, is.Equal("Acme does things", got.Description))
 	assert.Check(t, is.Equal(true, got.SSOSupported), "sso true on any page should carry through")
 	assert.Check(t, is.Equal(true, got.MFASupported))
+	assert.Check(t, is.Equal(true, got.SocialLoginSupported))
+	assert.Check(t, is.Equal(true, got.CredentialsSupported))
+	assert.Check(t, is.Equal(true, got.PasskeySupported))
 	assert.Check(t, is.DeepEqual([]System{{Name: "Console", Summary: "The web console"}, {Name: "API", Summary: "The public API"}}, got.Systems))
 	assert.Check(t, is.DeepEqual([]string{"Globex", "Initech"}, got.Customers))
 	assert.Check(t, is.Equal("https://linkedin.com/company/acme", got.SocialLinks.LinkedIn), "existing social link should not be overwritten")

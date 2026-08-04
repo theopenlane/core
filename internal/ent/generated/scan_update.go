@@ -159,6 +159,46 @@ func (_u *ScanUpdate) ClearTags() *ScanUpdate {
 	return _u
 }
 
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *ScanUpdate) SetInternalNotes(v string) *ScanUpdate {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *ScanUpdate) SetNillableInternalNotes(v *string) *ScanUpdate {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *ScanUpdate) ClearInternalNotes() *ScanUpdate {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *ScanUpdate) SetSystemInternalID(v string) *ScanUpdate {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *ScanUpdate) SetNillableSystemInternalID(v *string) *ScanUpdate {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *ScanUpdate) ClearSystemInternalID() *ScanUpdate {
+	_u.mutation.ClearSystemInternalID()
+	return _u
+}
+
 // SetReviewedBy sets the "reviewed_by" field.
 func (_u *ScanUpdate) SetReviewedBy(v string) *ScanUpdate {
 	_u.mutation.SetReviewedBy(v)
@@ -1310,6 +1350,21 @@ func (_u *ScanUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(scan.FieldTags, field.TypeJSON)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(scan.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(scan.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(scan.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(scan.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(scan.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.ReviewedBy(); ok {
 		_spec.SetField(scan.FieldReviewedBy, field.TypeString, value)
@@ -2467,6 +2522,46 @@ func (_u *ScanUpdateOne) AppendTags(v []string) *ScanUpdateOne {
 // ClearTags clears the value of the "tags" field.
 func (_u *ScanUpdateOne) ClearTags() *ScanUpdateOne {
 	_u.mutation.ClearTags()
+	return _u
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (_u *ScanUpdateOne) SetInternalNotes(v string) *ScanUpdateOne {
+	_u.mutation.SetInternalNotes(v)
+	return _u
+}
+
+// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
+func (_u *ScanUpdateOne) SetNillableInternalNotes(v *string) *ScanUpdateOne {
+	if v != nil {
+		_u.SetInternalNotes(*v)
+	}
+	return _u
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (_u *ScanUpdateOne) ClearInternalNotes() *ScanUpdateOne {
+	_u.mutation.ClearInternalNotes()
+	return _u
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (_u *ScanUpdateOne) SetSystemInternalID(v string) *ScanUpdateOne {
+	_u.mutation.SetSystemInternalID(v)
+	return _u
+}
+
+// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
+func (_u *ScanUpdateOne) SetNillableSystemInternalID(v *string) *ScanUpdateOne {
+	if v != nil {
+		_u.SetSystemInternalID(*v)
+	}
+	return _u
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (_u *ScanUpdateOne) ClearSystemInternalID() *ScanUpdateOne {
+	_u.mutation.ClearSystemInternalID()
 	return _u
 }
 
@@ -3651,6 +3746,21 @@ func (_u *ScanUpdateOne) sqlSave(ctx context.Context) (_node *Scan, err error) {
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(scan.FieldTags, field.TypeJSON)
+	}
+	if _u.mutation.SystemOwnedCleared() {
+		_spec.ClearField(scan.FieldSystemOwned, field.TypeBool)
+	}
+	if value, ok := _u.mutation.InternalNotes(); ok {
+		_spec.SetField(scan.FieldInternalNotes, field.TypeString, value)
+	}
+	if _u.mutation.InternalNotesCleared() {
+		_spec.ClearField(scan.FieldInternalNotes, field.TypeString)
+	}
+	if value, ok := _u.mutation.SystemInternalID(); ok {
+		_spec.SetField(scan.FieldSystemInternalID, field.TypeString, value)
+	}
+	if _u.mutation.SystemInternalIDCleared() {
+		_spec.ClearField(scan.FieldSystemInternalID, field.TypeString)
 	}
 	if value, ok := _u.mutation.ReviewedBy(); ok {
 		_spec.SetField(scan.FieldReviewedBy, field.TypeString, value)

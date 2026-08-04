@@ -66,6 +66,14 @@ type ProgramHistory struct {
 	StartDate time.Time `json:"start_date,omitempty"`
 	// the end date of the period
 	EndDate time.Time `json:"end_date,omitempty"`
+	// the start date of the observation period
+	ObservationPeriodStartDate time.Time `json:"observation_period_start_date,omitempty"`
+	// the end date of the observation period
+	ObservationPeriodEndDate time.Time `json:"observation_period_end_date,omitempty"`
+	// the start date of fieldwork
+	FieldworkStartDate time.Time `json:"fieldwork_start_date,omitempty"`
+	// the end date of fieldwork
+	FieldworkEndDate time.Time `json:"fieldwork_end_date,omitempty"`
 	// is the program ready for the auditor
 	AuditorReady bool `json:"auditor_ready,omitempty"`
 	// can the auditor write comments
@@ -96,7 +104,7 @@ func (*ProgramHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case programhistory.FieldID, programhistory.FieldRef, programhistory.FieldCreatedBy, programhistory.FieldUpdatedBy, programhistory.FieldUpdatedByImpersonator, programhistory.FieldDeletedBy, programhistory.FieldDisplayID, programhistory.FieldOwnerID, programhistory.FieldProgramKindName, programhistory.FieldProgramKindID, programhistory.FieldExternalUUID, programhistory.FieldName, programhistory.FieldDescription, programhistory.FieldStatus, programhistory.FieldFrameworkName, programhistory.FieldAuditFirm, programhistory.FieldAuditor, programhistory.FieldAuditorEmail, programhistory.FieldProgramOwnerID:
 			values[i] = new(sql.NullString)
-		case programhistory.FieldHistoryTime, programhistory.FieldCreatedAt, programhistory.FieldUpdatedAt, programhistory.FieldDeletedAt, programhistory.FieldStartDate, programhistory.FieldEndDate:
+		case programhistory.FieldHistoryTime, programhistory.FieldCreatedAt, programhistory.FieldUpdatedAt, programhistory.FieldDeletedAt, programhistory.FieldStartDate, programhistory.FieldEndDate, programhistory.FieldObservationPeriodStartDate, programhistory.FieldObservationPeriodEndDate, programhistory.FieldFieldworkStartDate, programhistory.FieldFieldworkEndDate:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -255,6 +263,30 @@ func (_m *ProgramHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.EndDate = value.Time
 			}
+		case programhistory.FieldObservationPeriodStartDate:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field observation_period_start_date", values[i])
+			} else if value.Valid {
+				_m.ObservationPeriodStartDate = value.Time
+			}
+		case programhistory.FieldObservationPeriodEndDate:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field observation_period_end_date", values[i])
+			} else if value.Valid {
+				_m.ObservationPeriodEndDate = value.Time
+			}
+		case programhistory.FieldFieldworkStartDate:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field fieldwork_start_date", values[i])
+			} else if value.Valid {
+				_m.FieldworkStartDate = value.Time
+			}
+		case programhistory.FieldFieldworkEndDate:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field fieldwork_end_date", values[i])
+			} else if value.Valid {
+				_m.FieldworkEndDate = value.Time
+			}
 		case programhistory.FieldAuditorReady:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field auditor_ready", values[i])
@@ -402,6 +434,18 @@ func (_m *ProgramHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("end_date=")
 	builder.WriteString(_m.EndDate.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("observation_period_start_date=")
+	builder.WriteString(_m.ObservationPeriodStartDate.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("observation_period_end_date=")
+	builder.WriteString(_m.ObservationPeriodEndDate.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("fieldwork_start_date=")
+	builder.WriteString(_m.FieldworkStartDate.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("fieldwork_end_date=")
+	builder.WriteString(_m.FieldworkEndDate.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("auditor_ready=")
 	builder.WriteString(fmt.Sprintf("%v", _m.AuditorReady))

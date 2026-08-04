@@ -60,6 +60,14 @@ type Program struct {
 	StartDate time.Time `json:"start_date,omitempty"`
 	// the end date of the period
 	EndDate time.Time `json:"end_date,omitempty"`
+	// the start date of the observation period
+	ObservationPeriodStartDate time.Time `json:"observation_period_start_date,omitempty"`
+	// the end date of the observation period
+	ObservationPeriodEndDate time.Time `json:"observation_period_end_date,omitempty"`
+	// the start date of fieldwork
+	FieldworkStartDate time.Time `json:"fieldwork_start_date,omitempty"`
+	// the end date of fieldwork
+	FieldworkEndDate time.Time `json:"fieldwork_end_date,omitempty"`
 	// is the program ready for the auditor
 	AuditorReady bool `json:"auditor_ready,omitempty"`
 	// can the auditor write comments
@@ -78,10 +86,6 @@ type Program struct {
 	// The values are being populated by the ProgramQuery when eager-loading is set.
 	Edges                     ProgramEdges `json:"edges"`
 	custom_type_enum_programs *string
-	finding_programs          *string
-	remediation_programs      *string
-	review_programs           *string
-	vulnerability_programs    *string
 	selectValues              sql.SelectValues
 }
 
@@ -123,6 +127,14 @@ type ProgramEdges struct {
 	ActionPlans []*ActionPlan `json:"action_plans,omitempty"`
 	// SystemDetails holds the value of the system_details edge.
 	SystemDetails []*SystemDetail `json:"system_details,omitempty"`
+	// Findings holds the value of the findings edge.
+	Findings []*Finding `json:"findings,omitempty"`
+	// Vulnerabilities holds the value of the vulnerabilities edge.
+	Vulnerabilities []*Vulnerability `json:"vulnerabilities,omitempty"`
+	// Reviews holds the value of the reviews edge.
+	Reviews []*Review `json:"reviews,omitempty"`
+	// Remediations holds the value of the remediations edge.
+	Remediations []*Remediation `json:"remediations,omitempty"`
 	// Users holds the value of the users edge.
 	Users []*User `json:"users,omitempty"`
 	// ProgramOwner holds the value of the program_owner edge.
@@ -131,9 +143,9 @@ type ProgramEdges struct {
 	Members []*ProgramMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [21]bool
+	loadedTypes [25]bool
 	// totalCount holds the count of the edges above.
-	totalCount [21]map[string]int
+	totalCount [25]map[string]int
 
 	namedBlockedGroups     map[string][]*Group
 	namedEditors           map[string][]*Group
@@ -151,6 +163,10 @@ type ProgramEdges struct {
 	namedNarratives        map[string][]*Narrative
 	namedActionPlans       map[string][]*ActionPlan
 	namedSystemDetails     map[string][]*SystemDetail
+	namedFindings          map[string][]*Finding
+	namedVulnerabilities   map[string][]*Vulnerability
+	namedReviews           map[string][]*Review
+	namedRemediations      map[string][]*Remediation
 	namedUsers             map[string][]*User
 	namedMembers           map[string][]*ProgramMembership
 }
@@ -321,10 +337,46 @@ func (e ProgramEdges) SystemDetailsOrErr() ([]*SystemDetail, error) {
 	return nil, &NotLoadedError{edge: "system_details"}
 }
 
+// FindingsOrErr returns the Findings value or an error if the edge
+// was not loaded in eager-loading.
+func (e ProgramEdges) FindingsOrErr() ([]*Finding, error) {
+	if e.loadedTypes[18] {
+		return e.Findings, nil
+	}
+	return nil, &NotLoadedError{edge: "findings"}
+}
+
+// VulnerabilitiesOrErr returns the Vulnerabilities value or an error if the edge
+// was not loaded in eager-loading.
+func (e ProgramEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
+	if e.loadedTypes[19] {
+		return e.Vulnerabilities, nil
+	}
+	return nil, &NotLoadedError{edge: "vulnerabilities"}
+}
+
+// ReviewsOrErr returns the Reviews value or an error if the edge
+// was not loaded in eager-loading.
+func (e ProgramEdges) ReviewsOrErr() ([]*Review, error) {
+	if e.loadedTypes[20] {
+		return e.Reviews, nil
+	}
+	return nil, &NotLoadedError{edge: "reviews"}
+}
+
+// RemediationsOrErr returns the Remediations value or an error if the edge
+// was not loaded in eager-loading.
+func (e ProgramEdges) RemediationsOrErr() ([]*Remediation, error) {
+	if e.loadedTypes[21] {
+		return e.Remediations, nil
+	}
+	return nil, &NotLoadedError{edge: "remediations"}
+}
+
 // UsersOrErr returns the Users value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) UsersOrErr() ([]*User, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[22] {
 		return e.Users, nil
 	}
 	return nil, &NotLoadedError{edge: "users"}
@@ -335,7 +387,7 @@ func (e ProgramEdges) UsersOrErr() ([]*User, error) {
 func (e ProgramEdges) ProgramOwnerOrErr() (*User, error) {
 	if e.ProgramOwner != nil {
 		return e.ProgramOwner, nil
-	} else if e.loadedTypes[19] {
+	} else if e.loadedTypes[23] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "program_owner"}
@@ -344,7 +396,7 @@ func (e ProgramEdges) ProgramOwnerOrErr() (*User, error) {
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e ProgramEdges) MembersOrErr() ([]*ProgramMembership, error) {
-	if e.loadedTypes[20] {
+	if e.loadedTypes[24] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -361,17 +413,9 @@ func (*Program) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullBool)
 		case program.FieldID, program.FieldCreatedBy, program.FieldUpdatedBy, program.FieldUpdatedByImpersonator, program.FieldDeletedBy, program.FieldDisplayID, program.FieldOwnerID, program.FieldProgramKindName, program.FieldProgramKindID, program.FieldExternalUUID, program.FieldName, program.FieldDescription, program.FieldStatus, program.FieldFrameworkName, program.FieldAuditFirm, program.FieldAuditor, program.FieldAuditorEmail, program.FieldProgramOwnerID:
 			values[i] = new(sql.NullString)
-		case program.FieldCreatedAt, program.FieldUpdatedAt, program.FieldDeletedAt, program.FieldStartDate, program.FieldEndDate:
+		case program.FieldCreatedAt, program.FieldUpdatedAt, program.FieldDeletedAt, program.FieldStartDate, program.FieldEndDate, program.FieldObservationPeriodStartDate, program.FieldObservationPeriodEndDate, program.FieldFieldworkStartDate, program.FieldFieldworkEndDate:
 			values[i] = new(sql.NullTime)
 		case program.ForeignKeys[0]: // custom_type_enum_programs
-			values[i] = new(sql.NullString)
-		case program.ForeignKeys[1]: // finding_programs
-			values[i] = new(sql.NullString)
-		case program.ForeignKeys[2]: // remediation_programs
-			values[i] = new(sql.NullString)
-		case program.ForeignKeys[3]: // review_programs
-			values[i] = new(sql.NullString)
-		case program.ForeignKeys[4]: // vulnerability_programs
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -512,6 +556,30 @@ func (_m *Program) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.EndDate = value.Time
 			}
+		case program.FieldObservationPeriodStartDate:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field observation_period_start_date", values[i])
+			} else if value.Valid {
+				_m.ObservationPeriodStartDate = value.Time
+			}
+		case program.FieldObservationPeriodEndDate:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field observation_period_end_date", values[i])
+			} else if value.Valid {
+				_m.ObservationPeriodEndDate = value.Time
+			}
+		case program.FieldFieldworkStartDate:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field fieldwork_start_date", values[i])
+			} else if value.Valid {
+				_m.FieldworkStartDate = value.Time
+			}
+		case program.FieldFieldworkEndDate:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field fieldwork_end_date", values[i])
+			} else if value.Valid {
+				_m.FieldworkEndDate = value.Time
+			}
 		case program.FieldAuditorReady:
 			if value, ok := values[i].(*sql.NullBool); !ok {
 				return fmt.Errorf("unexpected type %T for field auditor_ready", values[i])
@@ -560,34 +628,6 @@ func (_m *Program) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.custom_type_enum_programs = new(string)
 				*_m.custom_type_enum_programs = value.String
-			}
-		case program.ForeignKeys[1]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field finding_programs", values[i])
-			} else if value.Valid {
-				_m.finding_programs = new(string)
-				*_m.finding_programs = value.String
-			}
-		case program.ForeignKeys[2]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field remediation_programs", values[i])
-			} else if value.Valid {
-				_m.remediation_programs = new(string)
-				*_m.remediation_programs = value.String
-			}
-		case program.ForeignKeys[3]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field review_programs", values[i])
-			} else if value.Valid {
-				_m.review_programs = new(string)
-				*_m.review_programs = value.String
-			}
-		case program.ForeignKeys[4]:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field vulnerability_programs", values[i])
-			} else if value.Valid {
-				_m.vulnerability_programs = new(string)
-				*_m.vulnerability_programs = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -692,6 +732,26 @@ func (_m *Program) QuerySystemDetails() *SystemDetailQuery {
 	return NewProgramClient(_m.config).QuerySystemDetails(_m)
 }
 
+// QueryFindings queries the "findings" edge of the Program entity.
+func (_m *Program) QueryFindings() *FindingQuery {
+	return NewProgramClient(_m.config).QueryFindings(_m)
+}
+
+// QueryVulnerabilities queries the "vulnerabilities" edge of the Program entity.
+func (_m *Program) QueryVulnerabilities() *VulnerabilityQuery {
+	return NewProgramClient(_m.config).QueryVulnerabilities(_m)
+}
+
+// QueryReviews queries the "reviews" edge of the Program entity.
+func (_m *Program) QueryReviews() *ReviewQuery {
+	return NewProgramClient(_m.config).QueryReviews(_m)
+}
+
+// QueryRemediations queries the "remediations" edge of the Program entity.
+func (_m *Program) QueryRemediations() *RemediationQuery {
+	return NewProgramClient(_m.config).QueryRemediations(_m)
+}
+
 // QueryUsers queries the "users" edge of the Program entity.
 func (_m *Program) QueryUsers() *UserQuery {
 	return NewProgramClient(_m.config).QueryUsers(_m)
@@ -790,6 +850,18 @@ func (_m *Program) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("end_date=")
 	builder.WriteString(_m.EndDate.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("observation_period_start_date=")
+	builder.WriteString(_m.ObservationPeriodStartDate.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("observation_period_end_date=")
+	builder.WriteString(_m.ObservationPeriodEndDate.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("fieldwork_start_date=")
+	builder.WriteString(_m.FieldworkStartDate.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("fieldwork_end_date=")
+	builder.WriteString(_m.FieldworkEndDate.Format(time.ANSIC))
 	builder.WriteString(", ")
 	builder.WriteString("auditor_ready=")
 	builder.WriteString(fmt.Sprintf("%v", _m.AuditorReady))
@@ -1196,6 +1268,102 @@ func (_m *Program) appendNamedSystemDetails(name string, edges ...*SystemDetail)
 		_m.Edges.namedSystemDetails[name] = []*SystemDetail{}
 	} else {
 		_m.Edges.namedSystemDetails[name] = append(_m.Edges.namedSystemDetails[name], edges...)
+	}
+}
+
+// NamedFindings returns the Findings named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Program) NamedFindings(name string) ([]*Finding, error) {
+	if _m.Edges.namedFindings == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedFindings[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Program) appendNamedFindings(name string, edges ...*Finding) {
+	if _m.Edges.namedFindings == nil {
+		_m.Edges.namedFindings = make(map[string][]*Finding)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedFindings[name] = []*Finding{}
+	} else {
+		_m.Edges.namedFindings[name] = append(_m.Edges.namedFindings[name], edges...)
+	}
+}
+
+// NamedVulnerabilities returns the Vulnerabilities named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Program) NamedVulnerabilities(name string) ([]*Vulnerability, error) {
+	if _m.Edges.namedVulnerabilities == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedVulnerabilities[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Program) appendNamedVulnerabilities(name string, edges ...*Vulnerability) {
+	if _m.Edges.namedVulnerabilities == nil {
+		_m.Edges.namedVulnerabilities = make(map[string][]*Vulnerability)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedVulnerabilities[name] = []*Vulnerability{}
+	} else {
+		_m.Edges.namedVulnerabilities[name] = append(_m.Edges.namedVulnerabilities[name], edges...)
+	}
+}
+
+// NamedReviews returns the Reviews named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Program) NamedReviews(name string) ([]*Review, error) {
+	if _m.Edges.namedReviews == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedReviews[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Program) appendNamedReviews(name string, edges ...*Review) {
+	if _m.Edges.namedReviews == nil {
+		_m.Edges.namedReviews = make(map[string][]*Review)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedReviews[name] = []*Review{}
+	} else {
+		_m.Edges.namedReviews[name] = append(_m.Edges.namedReviews[name], edges...)
+	}
+}
+
+// NamedRemediations returns the Remediations named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Program) NamedRemediations(name string) ([]*Remediation, error) {
+	if _m.Edges.namedRemediations == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedRemediations[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Program) appendNamedRemediations(name string, edges ...*Remediation) {
+	if _m.Edges.namedRemediations == nil {
+		_m.Edges.namedRemediations = make(map[string][]*Remediation)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedRemediations[name] = []*Remediation{}
+	} else {
+		_m.Edges.namedRemediations[name] = append(_m.Edges.namedRemediations[name], edges...)
 	}
 }
 

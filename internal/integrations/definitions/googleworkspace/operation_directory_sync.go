@@ -2,17 +2,22 @@ package googleworkspace
 
 import (
 	"context"
+	"fmt"
 
 	admin "google.golang.org/api/admin/directory/v1"
 
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // directoryDefaultPageSize is the number of records to request per page when listing users, groups, and members
 const directoryDefaultPageSize = int64(200)
+
+// defaultCustomerID is Google's alias for the authorized account's own customer
+const defaultCustomerID = "my_customer"
 
 // DirectorySync collects Google Workspace directory users for ingest
 type DirectorySync struct{}
@@ -22,11 +27,15 @@ func (d DirectorySync) IngestHandle() types.IngestHandler {
 	return providerkit.WithClientRequest(workspaceClient, func(ctx context.Context, request types.OperationRequest, svc *admin.Service) ([]types.IngestPayloadSet, error) {
 		var meta InstallationMetadata
 
-		if request.Integration != nil {
-			_ = jsonx.UnmarshalIfPresent(request.Integration.InstallationMetadata.Attributes, &meta)
+		if err := jsonx.UnmarshalIfPresent(request.Integration.InstallationMetadata.Attributes, &meta); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("attribute_bytes", len(request.Integration.InstallationMetadata.Attributes)).Msg("googleworkspace: installation metadata could not be decoded")
+
+			return nil, fmt.Errorf("%w: %w", ErrInstallationMetadataInvalid, err)
 		}
 
 		if meta.CustomerID == "" {
+			logx.FromContext(ctx).Error().Int("attribute_bytes", len(request.Integration.InstallationMetadata.Attributes)).Str("external_id", request.Integration.InstallationMetadata.Display.ExternalID).Str("domain", meta.Domain).Msg("googleworkspace: no customer id in installation metadata, the integration needs to be reauthorized")
+
 			return nil, ErrCustomerIDMissing
 		}
 
@@ -94,15 +103,15 @@ func (DirectorySync) Run(ctx context.Context, svc *admin.Service, customerID str
 
 	return []types.IngestPayloadSet{
 		{
-			Schema:    integrationgenerated.IntegrationMappingSchemaDirectoryAccount,
+			Schema:    entityops.SchemaDirectoryAccount.Name,
 			Envelopes: accountEnvelopes,
 		},
 		{
-			Schema:    integrationgenerated.IntegrationMappingSchemaDirectoryGroup,
+			Schema:    entityops.SchemaDirectoryGroup.Name,
 			Envelopes: groupEnvelopes,
 		},
 		{
-			Schema:    integrationgenerated.IntegrationMappingSchemaDirectoryMembership,
+			Schema:    entityops.SchemaDirectoryMembership.Name,
 			Envelopes: membershipEnvelopes,
 		},
 	}, nil

@@ -11,7 +11,7 @@ import (
 	"github.com/theopenlane/core/pkg/gala"
 )
 
-func TestRegisterContextCodecsRoundTripExecutionMetadata(t *testing.T) {
+func TestRegisterContextCodecsRoundTripOperationContext(t *testing.T) {
 	t.Parallel()
 
 	g, err := gala.NewGala(context.Background(), gala.Config{
@@ -30,20 +30,18 @@ func TestRegisterContextCodecsRoundTripExecutionMetadata(t *testing.T) {
 		t.Fatalf("failed to register codecs: %v", err)
 	}
 
-	metadata := types.ExecutionMetadata{
-		OwnerID:       "org_123",
+	oc := types.NewOperationContext("org_123", "health.check", types.IntegrationSource{
 		IntegrationID: "int_123",
 		DefinitionID:  "def_123",
-		Operation:     "health.check",
 		RunType:       enums.IntegrationRunTypeEvent,
 		Workflow: &types.WorkflowMeta{
 			InstanceID:  "wf_123",
 			ActionKey:   "sync",
 			ActionIndex: 2,
 		},
-	}
+	})
 
-	snapshot, err := g.ContextManager().Capture(types.WithExecutionMetadata(context.Background(), metadata))
+	snapshot, err := g.ContextManager().Capture(gala.WithOperationContext(context.Background(), oc))
 	if err != nil {
 		t.Fatalf("failed to capture snapshot: %v", err)
 	}
@@ -53,15 +51,20 @@ func TestRegisterContextCodecsRoundTripExecutionMetadata(t *testing.T) {
 		t.Fatalf("failed to restore snapshot: %v", err)
 	}
 
-	restoredMetadata, ok := types.ExecutionMetadataFromContext(restored)
+	restoredOC, ok := gala.OperationContextFromContext(restored)
 	if !ok {
-		t.Fatal("expected execution metadata to be restored")
+		t.Fatal("expected operation context to be restored")
 	}
 
-	if restoredMetadata.OwnerID != metadata.OwnerID {
-		t.Fatalf("expected owner %q, got %q", metadata.OwnerID, restoredMetadata.OwnerID)
+	if restoredOC.OwnerID != oc.OwnerID {
+		t.Fatalf("expected owner %q, got %q", oc.OwnerID, restoredOC.OwnerID)
 	}
-	if restoredMetadata.Workflow == nil || restoredMetadata.Workflow.InstanceID != metadata.Workflow.InstanceID {
-		t.Fatalf("expected workflow metadata to round-trip, got %#v", restoredMetadata.Workflow)
+	if restoredOC.EntityID != "int_123" {
+		t.Fatalf("expected entity id to round-trip, got %q", restoredOC.EntityID)
+	}
+
+	restoredSrc := types.IntegrationSourceFrom(restoredOC)
+	if restoredSrc.Workflow == nil || restoredSrc.Workflow.InstanceID != "wf_123" {
+		t.Fatalf("expected workflow metadata to round-trip, got %#v", restoredSrc.Workflow)
 	}
 }

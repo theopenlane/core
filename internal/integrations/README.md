@@ -140,6 +140,7 @@ Provider operations and webhook handlers usually stop at provider-shaped payload
 1. Resolve the mapping for that schema and variant
 1. Apply integration-level and definition-shipped CEL filters
 1. Apply the CEL map expression
+1. Resolve the mapping's cross-object link rules and write the matched target ids into the payload
 1. Decode and persist the result into our internal data model
 
 ## Stable Names and Schema-Derived IDs
@@ -189,7 +190,7 @@ Use CEL for filtering and projection, not heavy normalization. If the expression
 - Empty filter means allow the payload through
 - Empty map means use the raw payload as-is
 - Prefer small, explicit object construction over large ad hoc expressions
-- Preserve the fields the target model needs for required, upsert, and lookup fields
+- Preserve the fields the target model needs — its lookup key for dedup, required fields, and any fields link rules match on
 - Use integration-level filters for tenant scoping and definition-shipped filters for payload semantics
 
 ### Builder gotchas
@@ -204,37 +205,62 @@ Use CEL for filtering and projection, not heavy normalization. If the expression
 - Integration metadata should represent the external system being connected, not transient setup details
 - The first successful connection can activate recurring behavior such as reconciliation, not just mark the row connected
 
-## `integrationgenerated` and Ent Annotations
+## `entityops` and Ent Annotations
 
-The integration ingest layer is partly handwritten and partly generated during `entc` post-generation. We use generation so provider definitions can target internal models without hand-maintaining the same metadata, topic shapes, and baseline persistence wiring in multiple places.
+The ingest layer targets internal models through `entityops` (`internal/ent/entityops`), a single catalog generated during `entc` post-generation from annotations on the ent schemas. The same catalog serves the workflow engine, so integrations and workflows share one authoritative description of every eligible model: its mapped fields and their roles, its edges and how they're set, typed ingest events and topics, and a flat projection per model for CEL evaluation.
 
 ```text
-Ent integration-mapping annotations
+Ent annotations (integration mapping + workflow eligibility)
 └── entc post-generation hook
-    ├── internal/ent/integrationgenerated
-    │   ├── generated schema metadata
-    │   └── generated typed ingest types and topics
-    └── internal/integrations/operations
-        ├── generated ingest routing
-        └── per-schema persistence stubs
+    └── internal/ent/entityops — one generated catalog, consumed by
+        ├── internal/integrations (ingest, linking, persistence)
+        └── internal/workflows   (conditions, triggers, object actions)
 ```
 
-The annotations do three jobs:
+The annotations do two jobs:
 
 - Schema-level opt-in marks an internal model as part of the integration mapping surface
-- Schema-level options can request stock persistence scaffolding or exclude fields from that surface
-- Field-level flags mark allowed mapped fields and distinguish general fields, upsert keys, lookup keys, and fields sourced from integration context
+- Field-level flags mark which fields may be mapped from provider data, which column deduplicates re-ingested records (the lookup key), and which values are stamped from the integration itself rather than the payload
 
-Generation produces three things the runtime actually uses:
+What the catalog buys at runtime:
 
-- Shared metadata describing supported models and their allowed, required, upsert, and lookup keys
-- Typed second-stage ingest types and topics for each supported model
-- Ingest routing plus per-schema persistence stubs
+- **Typed identifiers everywhere.** Definitions reference generated schema names and input-key constants instead of hand-typed strings, so a wrong field name is a compile error or a registration failure — never silently dropped data
+- **Dedup by lookup key.** Records are upserted against their schema's declared lookup column: re-ingesting the same external record updates it in place, and a lookup that matches more than one row fails rather than guessing
+- **No generated tier inside `operations`.** Everything under `internal/integrations` is handwritten and safe to edit; everything under `internal/ent/entityops` is generated and must be regenerated. The old "generated starting point" persistence stubs are gone — most models persist through the catalog directly, and the handful of models whose semantics genuinely differ (multi-key lookup priority, integration-scoped rather than organization-scoped dedup, membership episode tracking) keep ordinary handwritten persistence
 
-"Stock persistence" means generated starting point, not final implementation. Straightforward upserts may work unchanged; anything that needs extra lookup resolution, edge resolution, or conflict handling usually needs custom persistence logic.
+## Cross-Object Linking
 
-Inside `operations`, the safe rule is:
+Ingested records can be created already linked to existing records — an ingested finding arrives connected to the controls whose reference codes appear in its categories, in the same mutation that creates it. Because the matched ids ride the create input, linking is atomic (no orphaned record when a link fails), works for edges that can only be set at creation, and behaves identically on the synchronous and queued ingest paths. On re-ingest, links are re-applied additively: newly matched targets are added, and existing links are never removed, since an edge carries no record of whether a person or an integration created it.
 
-- Anything marked generated and `DO NOT EDIT` should be regenerated, not hand-edited
-- Anything marked as a starting point is intended to be customized
-- Handwritten cross-cutting orchestration is also safe to change, but those edits affect every provider rather than one model
+Link rules are declared on the definition's mappings and are not installation-configurable. Every rule is validated against the catalog when the definition registers, so a bad field reference, a mismatched match shape, or a target type the source reaches through more than one edge (which must name the edge explicitly) fails at startup rather than misbehaving during a sync. The definition payload surfaces a per-edge inventory of linkable targets and usable fields for display purposes.
+
+The workflow engine's object-creation action shares this machinery, so a workflow definition can set edges with the same semantics as an ingest mapping.
+
+### How a link is configured
+
+A mapping declares `Links []types.LinkRule`. Each rule names the target object type and how to match candidates — either a **field match** (indexed query push-down) or a **CEL expression**:
+
+```go
+// internal/integrations/definitions/cloudflare/mappings.go
+// Field names are typed references, never hand-typed strings: the target side uses the ent
+// field constants, the source side uses the generated entityops input-key constants.
+Spec: types.MappingOverride{
+    MapExpr: mapExprFinding,
+    Links: []types.LinkRule{
+        // field match: Control.ref_code IN (finding.category, finding.categories[*])
+        {
+            TargetSchema: entityops.SchemaControl.Name,
+            TargetField:  control.FieldRefCode,
+            SourceField:  entityops.InputKeyFindingCategory,
+            SourceList:   entityops.InputKeyFindingCategories,
+        },
+    },
+},
+```
+
+```go
+// CEL expression: non-equality / multi-field conditions. "target" is the candidate, "source" is the ingested record.
+{TargetSchema: entityops.SchemaAsset.Name, Edge: "child_assets", Expression: `target.name == source.resource_name || source.resource_name.startsWith(target.name + "/")`},
+```
+
+A rule uses a field match **or** an expression. Field match is the fast path — it compiles to an indexed `IN` query scoped to the organization — so reach for an expression only when the match isn't a single-field equality.

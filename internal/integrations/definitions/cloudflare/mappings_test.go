@@ -12,7 +12,10 @@ import (
 )
 
 func TestMappingExpressionsValid(t *testing.T) {
-	for _, m := range cloudflareMappings() {
+	def, err := Builder(&RuntimeConfig{})()
+	assert.NilError(t, err)
+
+	for _, m := range def.Mappings {
 		name := m.Schema
 		if m.Variant != "" {
 			name += "/" + m.Variant
@@ -29,7 +32,10 @@ func TestMappingExpressionsValid(t *testing.T) {
 }
 
 func TestSecurityCenterInsightsMapping(t *testing.T) {
-	spec := mappingtest.MappingSpec(t, cloudflareMappings(), "Finding")
+	def, err := Builder(&RuntimeConfig{})()
+	assert.NilError(t, err)
+
+	spec := mappingtest.MappingSpec(t, def.Mappings, "Finding")
 
 	sampleInsights := mappingtest.LoadExample(t, "examples", "security_center_insights.json")
 
@@ -70,7 +76,10 @@ func TestSecurityCenterInsightsMapping(t *testing.T) {
 }
 
 func TestDomainRegistrationsAssetMapping(t *testing.T) {
-	spec := mappingtest.MappingSpec(t, cloudflareMappings(), "Asset")
+	def, err := Builder(&RuntimeConfig{})()
+	assert.NilError(t, err)
+
+	spec := mappingtest.MappingSpec(t, def.Mappings, "Asset")
 	sampleRegistrations := mappingtest.LoadExample(t, "examples", "registrar_registrations.json")
 
 	var response struct {

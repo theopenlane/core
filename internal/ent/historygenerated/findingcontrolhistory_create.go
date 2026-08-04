@@ -128,6 +128,20 @@ func (_c *FindingControlHistoryCreate) SetNillableUpdatedByImpersonator(v *strin
 	return _c
 }
 
+// SetOwnerID sets the "owner_id" field.
+func (_c *FindingControlHistoryCreate) SetOwnerID(v string) *FindingControlHistoryCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (_c *FindingControlHistoryCreate) SetNillableOwnerID(v *string) *FindingControlHistoryCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
+	}
+	return _c
+}
+
 // SetFindingID sets the "finding_id" field.
 func (_c *FindingControlHistoryCreate) SetFindingID(v string) *FindingControlHistoryCreate {
 	_c.mutation.SetFindingID(v)
@@ -398,6 +412,10 @@ func (_c *FindingControlHistoryCreate) createSpec() (*FindingControlHistory, *sq
 	if value, ok := _c.mutation.UpdatedByImpersonator(); ok {
 		_spec.SetField(findingcontrolhistory.FieldUpdatedByImpersonator, field.TypeString, value)
 		_node.UpdatedByImpersonator = &value
+	}
+	if value, ok := _c.mutation.OwnerID(); ok {
+		_spec.SetField(findingcontrolhistory.FieldOwnerID, field.TypeString, value)
+		_node.OwnerID = value
 	}
 	if value, ok := _c.mutation.FindingID(); ok {
 		_spec.SetField(findingcontrolhistory.FieldFindingID, field.TypeString, value)

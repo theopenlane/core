@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/findingcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 )
 
@@ -90,6 +91,20 @@ func (_c *FindingControlCreate) SetUpdatedByImpersonator(v string) *FindingContr
 func (_c *FindingControlCreate) SetNillableUpdatedByImpersonator(v *string) *FindingControlCreate {
 	if v != nil {
 		_c.SetUpdatedByImpersonator(*v)
+	}
+	return _c
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (_c *FindingControlCreate) SetOwnerID(v string) *FindingControlCreate {
+	_c.mutation.SetOwnerID(v)
+	return _c
+}
+
+// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
+func (_c *FindingControlCreate) SetNillableOwnerID(v *string) *FindingControlCreate {
+	if v != nil {
+		_c.SetOwnerID(*v)
 	}
 	return _c
 }
@@ -210,6 +225,11 @@ func (_c *FindingControlCreate) SetNillableID(v *string) *FindingControlCreate {
 	return _c
 }
 
+// SetOwner sets the "owner" edge to the Organization entity.
+func (_c *FindingControlCreate) SetOwner(v *Organization) *FindingControlCreate {
+	return _c.SetOwnerID(v.ID)
+}
+
 // SetFinding sets the "finding" edge to the Finding entity.
 func (_c *FindingControlCreate) SetFinding(v *Finding) *FindingControlCreate {
 	return _c.SetFindingID(v.ID)
@@ -288,6 +308,11 @@ func (_c *FindingControlCreate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_c *FindingControlCreate) check() error {
+	if v, ok := _c.mutation.OwnerID(); ok {
+		if err := findingcontrol.OwnerIDValidator(v); err != nil {
+			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "FindingControl.owner_id": %w`, err)}
+		}
+	}
 	if _, ok := _c.mutation.FindingID(); !ok {
 		return &ValidationError{Name: "finding_id", err: errors.New(`generated: missing required field "FindingControl.finding_id"`)}
 	}
@@ -379,6 +404,24 @@ func (_c *FindingControlCreate) createSpec() (*FindingControl, *sqlgraph.CreateS
 	if value, ok := _c.mutation.DiscoveredAt(); ok {
 		_spec.SetField(findingcontrol.FieldDiscoveredAt, field.TypeTime, value)
 		_node.DiscoveredAt = &value
+	}
+	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   findingcontrol.OwnerTable,
+			Columns: []string{findingcontrol.OwnerColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.FindingControl
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.OwnerID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.FindingIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

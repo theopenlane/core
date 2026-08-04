@@ -38,6 +38,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/export"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/finding"
+	"github.com/theopenlane/core/internal/ent/generated/findingcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
@@ -2646,6 +2647,21 @@ func (_c *OrganizationCreate) AddFindings(v ...*Finding) *OrganizationCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddFindingIDs(ids...)
+}
+
+// AddFindingControlIDs adds the "finding_controls" edge to the FindingControl entity by IDs.
+func (_c *OrganizationCreate) AddFindingControlIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddFindingControlIDs(ids...)
+	return _c
+}
+
+// AddFindingControls adds the "finding_controls" edges to the FindingControl entity.
+func (_c *OrganizationCreate) AddFindingControls(v ...*FindingControl) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddFindingControlIDs(ids...)
 }
 
 // AddReviewIDs adds the "reviews" edge to the Review entity by IDs.
@@ -5714,6 +5730,23 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			},
 		}
 		edge.Schema = _c.schemaConfig.Finding
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.FindingControlsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.FindingControlsTable,
+			Columns: []string{organization.FindingControlsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(findingcontrol.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.FindingControl
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

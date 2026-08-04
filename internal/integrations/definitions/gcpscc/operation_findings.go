@@ -14,7 +14,7 @@ import (
 	"google.golang.org/api/iterator"
 	"google.golang.org/protobuf/encoding/protojson"
 
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/logx"
@@ -105,15 +105,15 @@ func (FindingsCollect) Run(ctx context.Context, credentials types.CredentialBind
 
 	return []types.IngestPayloadSet{
 		{
-			Schema:    integrationgenerated.IntegrationMappingSchemaFinding,
+			Schema:    entityops.SchemaFinding.Name,
 			Envelopes: findingEnvelopes,
 		},
 		{
-			Schema:    integrationgenerated.IntegrationMappingSchemaRisk,
+			Schema:    entityops.SchemaRisk.Name,
 			Envelopes: riskEnvelopes,
 		},
 		{
-			Schema:    integrationgenerated.IntegrationMappingSchemaVulnerability,
+			Schema:    entityops.SchemaVulnerability.Name,
 			Envelopes: vulnEnvelopes,
 		},
 	}, nil

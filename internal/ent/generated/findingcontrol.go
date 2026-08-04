@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/findingcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 )
 
@@ -32,6 +33,8 @@ type FindingControl struct {
 	UpdatedBy string `json:"updated_by,omitempty"`
 	// the real user acting through an impersonation session when the record was last mutated, if any
 	UpdatedByImpersonator *string `json:"updated_by_impersonator,omitempty"`
+	// the organization id that owns the object
+	OwnerID string `json:"owner_id,omitempty"`
 	// the id of the finding associated with the control
 	FindingID string `json:"finding_id,omitempty"`
 	// the id of the control mapped to the finding when it exists in the catalog
@@ -58,6 +61,8 @@ type FindingControl struct {
 
 // FindingControlEdges holds the relations/edges for other nodes in the graph.
 type FindingControlEdges struct {
+	// Owner holds the value of the owner edge.
+	Owner *Organization `json:"owner,omitempty"`
 	// Finding holds the value of the finding edge.
 	Finding *Finding `json:"finding,omitempty"`
 	// Control holds the value of the control edge.
@@ -66,9 +71,20 @@ type FindingControlEdges struct {
 	Standard *Standard `json:"standard,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [4]bool
 	// totalCount holds the count of the edges above.
-	totalCount [3]map[string]int
+	totalCount [4]map[string]int
+}
+
+// OwnerOrErr returns the Owner value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e FindingControlEdges) OwnerOrErr() (*Organization, error) {
+	if e.Owner != nil {
+		return e.Owner, nil
+	} else if e.loadedTypes[0] {
+		return nil, &NotFoundError{label: organization.Label}
+	}
+	return nil, &NotLoadedError{edge: "owner"}
 }
 
 // FindingOrErr returns the Finding value or an error if the edge
@@ -76,7 +92,7 @@ type FindingControlEdges struct {
 func (e FindingControlEdges) FindingOrErr() (*Finding, error) {
 	if e.Finding != nil {
 		return e.Finding, nil
-	} else if e.loadedTypes[0] {
+	} else if e.loadedTypes[1] {
 		return nil, &NotFoundError{label: finding.Label}
 	}
 	return nil, &NotLoadedError{edge: "finding"}
@@ -87,7 +103,7 @@ func (e FindingControlEdges) FindingOrErr() (*Finding, error) {
 func (e FindingControlEdges) ControlOrErr() (*Control, error) {
 	if e.Control != nil {
 		return e.Control, nil
-	} else if e.loadedTypes[1] {
+	} else if e.loadedTypes[2] {
 		return nil, &NotFoundError{label: control.Label}
 	}
 	return nil, &NotLoadedError{edge: "control"}
@@ -98,7 +114,7 @@ func (e FindingControlEdges) ControlOrErr() (*Control, error) {
 func (e FindingControlEdges) StandardOrErr() (*Standard, error) {
 	if e.Standard != nil {
 		return e.Standard, nil
-	} else if e.loadedTypes[2] {
+	} else if e.loadedTypes[3] {
 		return nil, &NotFoundError{label: standard.Label}
 	}
 	return nil, &NotLoadedError{edge: "standard"}
@@ -113,7 +129,7 @@ func (*FindingControl) scanValues(columns []string) ([]any, error) {
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
 		case findingcontrol.FieldMetadata:
 			values[i] = new([]byte)
-		case findingcontrol.FieldID, findingcontrol.FieldCreatedBy, findingcontrol.FieldUpdatedBy, findingcontrol.FieldUpdatedByImpersonator, findingcontrol.FieldFindingID, findingcontrol.FieldControlID, findingcontrol.FieldStandardID, findingcontrol.FieldExternalStandard, findingcontrol.FieldExternalStandardVersion, findingcontrol.FieldExternalControlID, findingcontrol.FieldSource:
+		case findingcontrol.FieldID, findingcontrol.FieldCreatedBy, findingcontrol.FieldUpdatedBy, findingcontrol.FieldUpdatedByImpersonator, findingcontrol.FieldOwnerID, findingcontrol.FieldFindingID, findingcontrol.FieldControlID, findingcontrol.FieldStandardID, findingcontrol.FieldExternalStandard, findingcontrol.FieldExternalStandardVersion, findingcontrol.FieldExternalControlID, findingcontrol.FieldSource:
 			values[i] = new(sql.NullString)
 		case findingcontrol.FieldCreatedAt, findingcontrol.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -168,6 +184,12 @@ func (_m *FindingControl) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.UpdatedByImpersonator = new(string)
 				*_m.UpdatedByImpersonator = value.String
+			}
+		case findingcontrol.FieldOwnerID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field owner_id", values[i])
+			} else if value.Valid {
+				_m.OwnerID = value.String
 			}
 		case findingcontrol.FieldFindingID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -239,6 +261,11 @@ func (_m *FindingControl) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
 }
 
+// QueryOwner queries the "owner" edge of the FindingControl entity.
+func (_m *FindingControl) QueryOwner() *OrganizationQuery {
+	return NewFindingControlClient(_m.config).QueryOwner(_m)
+}
+
 // QueryFinding queries the "finding" edge of the FindingControl entity.
 func (_m *FindingControl) QueryFinding() *FindingQuery {
 	return NewFindingControlClient(_m.config).QueryFinding(_m)
@@ -293,6 +320,9 @@ func (_m *FindingControl) String() string {
 		builder.WriteString("updated_by_impersonator=")
 		builder.WriteString(*v)
 	}
+	builder.WriteString(", ")
+	builder.WriteString("owner_id=")
+	builder.WriteString(_m.OwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("finding_id=")
 	builder.WriteString(_m.FindingID)

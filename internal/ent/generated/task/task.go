@@ -60,6 +60,8 @@ const (
 	FieldDetails = "details"
 	// FieldDetailsJSON holds the string denoting the details_json field in the database.
 	FieldDetailsJSON = "details_json"
+	// FieldMetadata holds the string denoting the metadata field in the database.
+	FieldMetadata = "metadata"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
 	// FieldDue holds the string denoting the due field in the database.
@@ -74,6 +76,14 @@ const (
 	FieldSystemGenerated = "system_generated"
 	// FieldIsTemplate holds the string denoting the is_template field in the database.
 	FieldIsTemplate = "is_template"
+	// FieldIsSuggested holds the string denoting the is_suggested field in the database.
+	FieldIsSuggested = "is_suggested"
+	// FieldPriority holds the string denoting the priority field in the database.
+	FieldPriority = "priority"
+	// FieldSource holds the string denoting the source field in the database.
+	FieldSource = "source"
+	// FieldSourceKey holds the string denoting the source_key field in the database.
+	FieldSourceKey = "source_key"
 	// FieldIdempotencyKey holds the string denoting the idempotency_key field in the database.
 	FieldIdempotencyKey = "idempotency_key"
 	// FieldExternalReferenceURL holds the string denoting the external_reference_url field in the database.
@@ -304,6 +314,7 @@ var Columns = []string{
 	FieldTitle,
 	FieldDetails,
 	FieldDetailsJSON,
+	FieldMetadata,
 	FieldStatus,
 	FieldDue,
 	FieldCompleted,
@@ -311,6 +322,10 @@ var Columns = []string{
 	FieldAssignerID,
 	FieldSystemGenerated,
 	FieldIsTemplate,
+	FieldIsSuggested,
+	FieldPriority,
+	FieldSource,
+	FieldSourceKey,
 	FieldIdempotencyKey,
 	FieldExternalReferenceURL,
 	FieldParentTaskID,
@@ -420,6 +435,10 @@ var (
 	DefaultSystemGenerated bool
 	// DefaultIsTemplate holds the default value on creation for the "is_template" field.
 	DefaultIsTemplate bool
+	// DefaultIsSuggested holds the default value on creation for the "is_suggested" field.
+	DefaultIsSuggested bool
+	// DefaultPriority holds the default value on creation for the "priority" field.
+	DefaultPriority int
 	// ExternalReferenceURLValidator is a validator for the "external_reference_url" field. It is called by the builders before save.
 	ExternalReferenceURLValidator func([]string) error
 	// DefaultID holds the default value on creation for the "id" field.
@@ -574,6 +593,26 @@ func BySystemGenerated(opts ...sql.OrderTermOption) OrderOption {
 // ByIsTemplate orders the results by the is_template field.
 func ByIsTemplate(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldIsTemplate, opts...).ToFunc()
+}
+
+// ByIsSuggested orders the results by the is_suggested field.
+func ByIsSuggested(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsSuggested, opts...).ToFunc()
+}
+
+// ByPriority orders the results by the priority field.
+func ByPriority(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPriority, opts...).ToFunc()
+}
+
+// BySource orders the results by the source field.
+func BySource(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSource, opts...).ToFunc()
+}
+
+// BySourceKey orders the results by the source_key field.
+func BySourceKey(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldSourceKey, opts...).ToFunc()
 }
 
 // ByIdempotencyKey orders the results by the idempotency_key field.

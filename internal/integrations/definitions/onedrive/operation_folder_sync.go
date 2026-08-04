@@ -11,7 +11,7 @@ import (
 	"github.com/microsoftgraph/msgraph-sdk-go/models"
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/internal/ent/integrationgenerated"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -83,7 +83,7 @@ func (FolderSync) Run(ctx context.Context, c *DriveClient, folderID string) ([]t
 
 	return []types.IngestPayloadSet{
 		{
-			Schema:    integrationgenerated.IntegrationMappingSchemaInternalPolicy,
+			Schema:    entityops.SchemaInternalPolicy.Name,
 			Envelopes: envelopes,
 		},
 	}, nil

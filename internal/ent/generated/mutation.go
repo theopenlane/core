@@ -12815,6 +12815,18 @@ type AssetMutation struct {
 	internal_policies                map[string]struct{}
 	removedinternal_policies         map[string]struct{}
 	clearedinternal_policies         bool
+	findings                         map[string]struct{}
+	removedfindings                  map[string]struct{}
+	clearedfindings                  bool
+	vulnerabilities                  map[string]struct{}
+	removedvulnerabilities           map[string]struct{}
+	clearedvulnerabilities           bool
+	reviews                          map[string]struct{}
+	removedreviews                   map[string]struct{}
+	clearedreviews                   bool
+	remediations                     map[string]struct{}
+	removedremediations              map[string]struct{}
+	clearedremediations              bool
 	source_platform                  *string
 	clearedsource_platform           bool
 	integration                      *string
@@ -16343,6 +16355,222 @@ func (m *AssetMutation) ResetInternalPolicies() {
 	m.removedinternal_policies = nil
 }
 
+// AddFindingIDs adds the "findings" edge to the Finding entity by ids.
+func (m *AssetMutation) AddFindingIDs(ids ...string) {
+	if m.findings == nil {
+		m.findings = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.findings[ids[i]] = struct{}{}
+	}
+}
+
+// ClearFindings clears the "findings" edge to the Finding entity.
+func (m *AssetMutation) ClearFindings() {
+	m.clearedfindings = true
+}
+
+// FindingsCleared reports if the "findings" edge to the Finding entity was cleared.
+func (m *AssetMutation) FindingsCleared() bool {
+	return m.clearedfindings
+}
+
+// RemoveFindingIDs removes the "findings" edge to the Finding entity by IDs.
+func (m *AssetMutation) RemoveFindingIDs(ids ...string) {
+	if m.removedfindings == nil {
+		m.removedfindings = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.findings, ids[i])
+		m.removedfindings[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedFindings returns the removed IDs of the "findings" edge to the Finding entity.
+func (m *AssetMutation) RemovedFindingsIDs() (ids []string) {
+	for id := range m.removedfindings {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// FindingsIDs returns the "findings" edge IDs in the mutation.
+func (m *AssetMutation) FindingsIDs() (ids []string) {
+	for id := range m.findings {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetFindings resets all changes to the "findings" edge.
+func (m *AssetMutation) ResetFindings() {
+	m.findings = nil
+	m.clearedfindings = false
+	m.removedfindings = nil
+}
+
+// AddVulnerabilityIDs adds the "vulnerabilities" edge to the Vulnerability entity by ids.
+func (m *AssetMutation) AddVulnerabilityIDs(ids ...string) {
+	if m.vulnerabilities == nil {
+		m.vulnerabilities = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.vulnerabilities[ids[i]] = struct{}{}
+	}
+}
+
+// ClearVulnerabilities clears the "vulnerabilities" edge to the Vulnerability entity.
+func (m *AssetMutation) ClearVulnerabilities() {
+	m.clearedvulnerabilities = true
+}
+
+// VulnerabilitiesCleared reports if the "vulnerabilities" edge to the Vulnerability entity was cleared.
+func (m *AssetMutation) VulnerabilitiesCleared() bool {
+	return m.clearedvulnerabilities
+}
+
+// RemoveVulnerabilityIDs removes the "vulnerabilities" edge to the Vulnerability entity by IDs.
+func (m *AssetMutation) RemoveVulnerabilityIDs(ids ...string) {
+	if m.removedvulnerabilities == nil {
+		m.removedvulnerabilities = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.vulnerabilities, ids[i])
+		m.removedvulnerabilities[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedVulnerabilities returns the removed IDs of the "vulnerabilities" edge to the Vulnerability entity.
+func (m *AssetMutation) RemovedVulnerabilitiesIDs() (ids []string) {
+	for id := range m.removedvulnerabilities {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// VulnerabilitiesIDs returns the "vulnerabilities" edge IDs in the mutation.
+func (m *AssetMutation) VulnerabilitiesIDs() (ids []string) {
+	for id := range m.vulnerabilities {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetVulnerabilities resets all changes to the "vulnerabilities" edge.
+func (m *AssetMutation) ResetVulnerabilities() {
+	m.vulnerabilities = nil
+	m.clearedvulnerabilities = false
+	m.removedvulnerabilities = nil
+}
+
+// AddReviewIDs adds the "reviews" edge to the Review entity by ids.
+func (m *AssetMutation) AddReviewIDs(ids ...string) {
+	if m.reviews == nil {
+		m.reviews = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.reviews[ids[i]] = struct{}{}
+	}
+}
+
+// ClearReviews clears the "reviews" edge to the Review entity.
+func (m *AssetMutation) ClearReviews() {
+	m.clearedreviews = true
+}
+
+// ReviewsCleared reports if the "reviews" edge to the Review entity was cleared.
+func (m *AssetMutation) ReviewsCleared() bool {
+	return m.clearedreviews
+}
+
+// RemoveReviewIDs removes the "reviews" edge to the Review entity by IDs.
+func (m *AssetMutation) RemoveReviewIDs(ids ...string) {
+	if m.removedreviews == nil {
+		m.removedreviews = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.reviews, ids[i])
+		m.removedreviews[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedReviews returns the removed IDs of the "reviews" edge to the Review entity.
+func (m *AssetMutation) RemovedReviewsIDs() (ids []string) {
+	for id := range m.removedreviews {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ReviewsIDs returns the "reviews" edge IDs in the mutation.
+func (m *AssetMutation) ReviewsIDs() (ids []string) {
+	for id := range m.reviews {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetReviews resets all changes to the "reviews" edge.
+func (m *AssetMutation) ResetReviews() {
+	m.reviews = nil
+	m.clearedreviews = false
+	m.removedreviews = nil
+}
+
+// AddRemediationIDs adds the "remediations" edge to the Remediation entity by ids.
+func (m *AssetMutation) AddRemediationIDs(ids ...string) {
+	if m.remediations == nil {
+		m.remediations = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.remediations[ids[i]] = struct{}{}
+	}
+}
+
+// ClearRemediations clears the "remediations" edge to the Remediation entity.
+func (m *AssetMutation) ClearRemediations() {
+	m.clearedremediations = true
+}
+
+// RemediationsCleared reports if the "remediations" edge to the Remediation entity was cleared.
+func (m *AssetMutation) RemediationsCleared() bool {
+	return m.clearedremediations
+}
+
+// RemoveRemediationIDs removes the "remediations" edge to the Remediation entity by IDs.
+func (m *AssetMutation) RemoveRemediationIDs(ids ...string) {
+	if m.removedremediations == nil {
+		m.removedremediations = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.remediations, ids[i])
+		m.removedremediations[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedRemediations returns the removed IDs of the "remediations" edge to the Remediation entity.
+func (m *AssetMutation) RemovedRemediationsIDs() (ids []string) {
+	for id := range m.removedremediations {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// RemediationsIDs returns the "remediations" edge IDs in the mutation.
+func (m *AssetMutation) RemediationsIDs() (ids []string) {
+	for id := range m.remediations {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetRemediations resets all changes to the "remediations" edge.
+func (m *AssetMutation) ResetRemediations() {
+	m.remediations = nil
+	m.clearedremediations = false
+	m.removedremediations = nil
+}
+
 // ClearSourcePlatform clears the "source_platform" edge to the Platform entity.
 func (m *AssetMutation) ClearSourcePlatform() {
 	m.clearedsource_platform = true
@@ -17771,7 +17999,7 @@ func (m *AssetMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *AssetMutation) AddedEdges() []string {
-	edges := make([]string, 0, 27)
+	edges := make([]string, 0, 31)
 	if m.owner != nil {
 		edges = append(edges, asset.EdgeOwner)
 	}
@@ -17840,6 +18068,18 @@ func (m *AssetMutation) AddedEdges() []string {
 	}
 	if m.internal_policies != nil {
 		edges = append(edges, asset.EdgeInternalPolicies)
+	}
+	if m.findings != nil {
+		edges = append(edges, asset.EdgeFindings)
+	}
+	if m.vulnerabilities != nil {
+		edges = append(edges, asset.EdgeVulnerabilities)
+	}
+	if m.reviews != nil {
+		edges = append(edges, asset.EdgeReviews)
+	}
+	if m.remediations != nil {
+		edges = append(edges, asset.EdgeRemediations)
 	}
 	if m.source_platform != nil {
 		edges = append(edges, asset.EdgeSourcePlatform)
@@ -17976,6 +18216,30 @@ func (m *AssetMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case asset.EdgeFindings:
+		ids := make([]ent.Value, 0, len(m.findings))
+		for id := range m.findings {
+			ids = append(ids, id)
+		}
+		return ids
+	case asset.EdgeVulnerabilities:
+		ids := make([]ent.Value, 0, len(m.vulnerabilities))
+		for id := range m.vulnerabilities {
+			ids = append(ids, id)
+		}
+		return ids
+	case asset.EdgeReviews:
+		ids := make([]ent.Value, 0, len(m.reviews))
+		for id := range m.reviews {
+			ids = append(ids, id)
+		}
+		return ids
+	case asset.EdgeRemediations:
+		ids := make([]ent.Value, 0, len(m.remediations))
+		for id := range m.remediations {
+			ids = append(ids, id)
+		}
+		return ids
 	case asset.EdgeSourcePlatform:
 		if id := m.source_platform; id != nil {
 			return []ent.Value{*id}
@@ -18002,7 +18266,7 @@ func (m *AssetMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *AssetMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 27)
+	edges := make([]string, 0, 31)
 	if m.removedblocked_groups != nil {
 		edges = append(edges, asset.EdgeBlockedGroups)
 	}
@@ -18038,6 +18302,18 @@ func (m *AssetMutation) RemovedEdges() []string {
 	}
 	if m.removedinternal_policies != nil {
 		edges = append(edges, asset.EdgeInternalPolicies)
+	}
+	if m.removedfindings != nil {
+		edges = append(edges, asset.EdgeFindings)
+	}
+	if m.removedvulnerabilities != nil {
+		edges = append(edges, asset.EdgeVulnerabilities)
+	}
+	if m.removedreviews != nil {
+		edges = append(edges, asset.EdgeReviews)
+	}
+	if m.removedremediations != nil {
+		edges = append(edges, asset.EdgeRemediations)
 	}
 	if m.removedconnected_assets != nil {
 		edges = append(edges, asset.EdgeConnectedAssets)
@@ -18124,6 +18400,30 @@ func (m *AssetMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case asset.EdgeFindings:
+		ids := make([]ent.Value, 0, len(m.removedfindings))
+		for id := range m.removedfindings {
+			ids = append(ids, id)
+		}
+		return ids
+	case asset.EdgeVulnerabilities:
+		ids := make([]ent.Value, 0, len(m.removedvulnerabilities))
+		for id := range m.removedvulnerabilities {
+			ids = append(ids, id)
+		}
+		return ids
+	case asset.EdgeReviews:
+		ids := make([]ent.Value, 0, len(m.removedreviews))
+		for id := range m.removedreviews {
+			ids = append(ids, id)
+		}
+		return ids
+	case asset.EdgeRemediations:
+		ids := make([]ent.Value, 0, len(m.removedremediations))
+		for id := range m.removedremediations {
+			ids = append(ids, id)
+		}
+		return ids
 	case asset.EdgeConnectedAssets:
 		ids := make([]ent.Value, 0, len(m.removedconnected_assets))
 		for id := range m.removedconnected_assets {
@@ -18142,7 +18442,7 @@ func (m *AssetMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *AssetMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 27)
+	edges := make([]string, 0, 31)
 	if m.clearedowner {
 		edges = append(edges, asset.EdgeOwner)
 	}
@@ -18212,6 +18512,18 @@ func (m *AssetMutation) ClearedEdges() []string {
 	if m.clearedinternal_policies {
 		edges = append(edges, asset.EdgeInternalPolicies)
 	}
+	if m.clearedfindings {
+		edges = append(edges, asset.EdgeFindings)
+	}
+	if m.clearedvulnerabilities {
+		edges = append(edges, asset.EdgeVulnerabilities)
+	}
+	if m.clearedreviews {
+		edges = append(edges, asset.EdgeReviews)
+	}
+	if m.clearedremediations {
+		edges = append(edges, asset.EdgeRemediations)
+	}
 	if m.clearedsource_platform {
 		edges = append(edges, asset.EdgeSourcePlatform)
 	}
@@ -18277,6 +18589,14 @@ func (m *AssetMutation) EdgeCleared(name string) bool {
 		return m.clearedsubcontrols
 	case asset.EdgeInternalPolicies:
 		return m.clearedinternal_policies
+	case asset.EdgeFindings:
+		return m.clearedfindings
+	case asset.EdgeVulnerabilities:
+		return m.clearedvulnerabilities
+	case asset.EdgeReviews:
+		return m.clearedreviews
+	case asset.EdgeRemediations:
+		return m.clearedremediations
 	case asset.EdgeSourcePlatform:
 		return m.clearedsource_platform
 	case asset.EdgeIntegration:
@@ -18408,6 +18728,18 @@ func (m *AssetMutation) ResetEdge(name string) error {
 		return nil
 	case asset.EdgeInternalPolicies:
 		m.ResetInternalPolicies()
+		return nil
+	case asset.EdgeFindings:
+		m.ResetFindings()
+		return nil
+	case asset.EdgeVulnerabilities:
+		m.ResetVulnerabilities()
+		return nil
+	case asset.EdgeReviews:
+		m.ResetReviews()
+		return nil
+	case asset.EdgeRemediations:
+		m.ResetRemediations()
 		return nil
 	case asset.EdgeSourcePlatform:
 		m.ResetSourcePlatform()
@@ -29287,6 +29619,9 @@ type ControlMutation struct {
 	platforms                      map[string]struct{}
 	removedplatforms               map[string]struct{}
 	clearedplatforms               bool
+	vulnerabilities                map[string]struct{}
+	removedvulnerabilities         map[string]struct{}
+	clearedvulnerabilities         bool
 	assets                         map[string]struct{}
 	removedassets                  map[string]struct{}
 	clearedassets                  bool
@@ -33432,6 +33767,60 @@ func (m *ControlMutation) ResetPlatforms() {
 	m.removedplatforms = nil
 }
 
+// AddVulnerabilityIDs adds the "vulnerabilities" edge to the Vulnerability entity by ids.
+func (m *ControlMutation) AddVulnerabilityIDs(ids ...string) {
+	if m.vulnerabilities == nil {
+		m.vulnerabilities = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.vulnerabilities[ids[i]] = struct{}{}
+	}
+}
+
+// ClearVulnerabilities clears the "vulnerabilities" edge to the Vulnerability entity.
+func (m *ControlMutation) ClearVulnerabilities() {
+	m.clearedvulnerabilities = true
+}
+
+// VulnerabilitiesCleared reports if the "vulnerabilities" edge to the Vulnerability entity was cleared.
+func (m *ControlMutation) VulnerabilitiesCleared() bool {
+	return m.clearedvulnerabilities
+}
+
+// RemoveVulnerabilityIDs removes the "vulnerabilities" edge to the Vulnerability entity by IDs.
+func (m *ControlMutation) RemoveVulnerabilityIDs(ids ...string) {
+	if m.removedvulnerabilities == nil {
+		m.removedvulnerabilities = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.vulnerabilities, ids[i])
+		m.removedvulnerabilities[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedVulnerabilities returns the removed IDs of the "vulnerabilities" edge to the Vulnerability entity.
+func (m *ControlMutation) RemovedVulnerabilitiesIDs() (ids []string) {
+	for id := range m.removedvulnerabilities {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// VulnerabilitiesIDs returns the "vulnerabilities" edge IDs in the mutation.
+func (m *ControlMutation) VulnerabilitiesIDs() (ids []string) {
+	for id := range m.vulnerabilities {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetVulnerabilities resets all changes to the "vulnerabilities" edge.
+func (m *ControlMutation) ResetVulnerabilities() {
+	m.vulnerabilities = nil
+	m.clearedvulnerabilities = false
+	m.removedvulnerabilities = nil
+}
+
 // AddAssetIDs adds the "assets" edge to the Asset entity by ids.
 func (m *ControlMutation) AddAssetIDs(ids ...string) {
 	if m.assets == nil {
@@ -35429,7 +35818,7 @@ func (m *ControlMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ControlMutation) AddedEdges() []string {
-	edges := make([]string, 0, 38)
+	edges := make([]string, 0, 39)
 	if m.evidence != nil {
 		edges = append(edges, control.EdgeEvidence)
 	}
@@ -35507,6 +35896,9 @@ func (m *ControlMutation) AddedEdges() []string {
 	}
 	if m.platforms != nil {
 		edges = append(edges, control.EdgePlatforms)
+	}
+	if m.vulnerabilities != nil {
+		edges = append(edges, control.EdgeVulnerabilities)
 	}
 	if m.assets != nil {
 		edges = append(edges, control.EdgeAssets)
@@ -35691,6 +36083,12 @@ func (m *ControlMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case control.EdgeVulnerabilities:
+		ids := make([]ent.Value, 0, len(m.vulnerabilities))
+		for id := range m.vulnerabilities {
+			ids = append(ids, id)
+		}
+		return ids
 	case control.EdgeAssets:
 		ids := make([]ent.Value, 0, len(m.assets))
 		for id := range m.assets {
@@ -35769,7 +36167,7 @@ func (m *ControlMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ControlMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 38)
+	edges := make([]string, 0, 39)
 	if m.removedevidence != nil {
 		edges = append(edges, control.EdgeEvidence)
 	}
@@ -35823,6 +36221,9 @@ func (m *ControlMutation) RemovedEdges() []string {
 	}
 	if m.removedplatforms != nil {
 		edges = append(edges, control.EdgePlatforms)
+	}
+	if m.removedvulnerabilities != nil {
+		edges = append(edges, control.EdgeVulnerabilities)
 	}
 	if m.removedassets != nil {
 		edges = append(edges, control.EdgeAssets)
@@ -35975,6 +36376,12 @@ func (m *ControlMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case control.EdgeVulnerabilities:
+		ids := make([]ent.Value, 0, len(m.removedvulnerabilities))
+		for id := range m.removedvulnerabilities {
+			ids = append(ids, id)
+		}
+		return ids
 	case control.EdgeAssets:
 		ids := make([]ent.Value, 0, len(m.removedassets))
 		for id := range m.removedassets {
@@ -36053,7 +36460,7 @@ func (m *ControlMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ControlMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 38)
+	edges := make([]string, 0, 39)
 	if m.clearedevidence {
 		edges = append(edges, control.EdgeEvidence)
 	}
@@ -36131,6 +36538,9 @@ func (m *ControlMutation) ClearedEdges() []string {
 	}
 	if m.clearedplatforms {
 		edges = append(edges, control.EdgePlatforms)
+	}
+	if m.clearedvulnerabilities {
+		edges = append(edges, control.EdgeVulnerabilities)
 	}
 	if m.clearedassets {
 		edges = append(edges, control.EdgeAssets)
@@ -36227,6 +36637,8 @@ func (m *ControlMutation) EdgeCleared(name string) bool {
 		return m.clearedprograms
 	case control.EdgePlatforms:
 		return m.clearedplatforms
+	case control.EdgeVulnerabilities:
+		return m.clearedvulnerabilities
 	case control.EdgeAssets:
 		return m.clearedassets
 	case control.EdgeEntities:
@@ -36368,6 +36780,9 @@ func (m *ControlMutation) ResetEdge(name string) error {
 		return nil
 	case control.EdgePlatforms:
 		m.ResetPlatforms()
+		return nil
+	case control.EdgeVulnerabilities:
+		m.ResetVulnerabilities()
 		return nil
 	case control.EdgeAssets:
 		m.ResetAssets()
@@ -67577,6 +67992,18 @@ type EntityMutation struct {
 	subcontrols                                 map[string]struct{}
 	removedsubcontrols                          map[string]struct{}
 	clearedsubcontrols                          bool
+	findings                                    map[string]struct{}
+	removedfindings                             map[string]struct{}
+	clearedfindings                             bool
+	vulnerabilities                             map[string]struct{}
+	removedvulnerabilities                      map[string]struct{}
+	clearedvulnerabilities                      bool
+	reviews                                     map[string]struct{}
+	removedreviews                              map[string]struct{}
+	clearedreviews                              bool
+	remediations                                map[string]struct{}
+	removedremediations                         map[string]struct{}
+	clearedremediations                         bool
 	platforms                                   map[string]struct{}
 	removedplatforms                            map[string]struct{}
 	clearedplatforms                            bool
@@ -72412,6 +72839,222 @@ func (m *EntityMutation) ResetSubcontrols() {
 	m.removedsubcontrols = nil
 }
 
+// AddFindingIDs adds the "findings" edge to the Finding entity by ids.
+func (m *EntityMutation) AddFindingIDs(ids ...string) {
+	if m.findings == nil {
+		m.findings = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.findings[ids[i]] = struct{}{}
+	}
+}
+
+// ClearFindings clears the "findings" edge to the Finding entity.
+func (m *EntityMutation) ClearFindings() {
+	m.clearedfindings = true
+}
+
+// FindingsCleared reports if the "findings" edge to the Finding entity was cleared.
+func (m *EntityMutation) FindingsCleared() bool {
+	return m.clearedfindings
+}
+
+// RemoveFindingIDs removes the "findings" edge to the Finding entity by IDs.
+func (m *EntityMutation) RemoveFindingIDs(ids ...string) {
+	if m.removedfindings == nil {
+		m.removedfindings = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.findings, ids[i])
+		m.removedfindings[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedFindings returns the removed IDs of the "findings" edge to the Finding entity.
+func (m *EntityMutation) RemovedFindingsIDs() (ids []string) {
+	for id := range m.removedfindings {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// FindingsIDs returns the "findings" edge IDs in the mutation.
+func (m *EntityMutation) FindingsIDs() (ids []string) {
+	for id := range m.findings {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetFindings resets all changes to the "findings" edge.
+func (m *EntityMutation) ResetFindings() {
+	m.findings = nil
+	m.clearedfindings = false
+	m.removedfindings = nil
+}
+
+// AddVulnerabilityIDs adds the "vulnerabilities" edge to the Vulnerability entity by ids.
+func (m *EntityMutation) AddVulnerabilityIDs(ids ...string) {
+	if m.vulnerabilities == nil {
+		m.vulnerabilities = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.vulnerabilities[ids[i]] = struct{}{}
+	}
+}
+
+// ClearVulnerabilities clears the "vulnerabilities" edge to the Vulnerability entity.
+func (m *EntityMutation) ClearVulnerabilities() {
+	m.clearedvulnerabilities = true
+}
+
+// VulnerabilitiesCleared reports if the "vulnerabilities" edge to the Vulnerability entity was cleared.
+func (m *EntityMutation) VulnerabilitiesCleared() bool {
+	return m.clearedvulnerabilities
+}
+
+// RemoveVulnerabilityIDs removes the "vulnerabilities" edge to the Vulnerability entity by IDs.
+func (m *EntityMutation) RemoveVulnerabilityIDs(ids ...string) {
+	if m.removedvulnerabilities == nil {
+		m.removedvulnerabilities = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.vulnerabilities, ids[i])
+		m.removedvulnerabilities[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedVulnerabilities returns the removed IDs of the "vulnerabilities" edge to the Vulnerability entity.
+func (m *EntityMutation) RemovedVulnerabilitiesIDs() (ids []string) {
+	for id := range m.removedvulnerabilities {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// VulnerabilitiesIDs returns the "vulnerabilities" edge IDs in the mutation.
+func (m *EntityMutation) VulnerabilitiesIDs() (ids []string) {
+	for id := range m.vulnerabilities {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetVulnerabilities resets all changes to the "vulnerabilities" edge.
+func (m *EntityMutation) ResetVulnerabilities() {
+	m.vulnerabilities = nil
+	m.clearedvulnerabilities = false
+	m.removedvulnerabilities = nil
+}
+
+// AddReviewIDs adds the "reviews" edge to the Review entity by ids.
+func (m *EntityMutation) AddReviewIDs(ids ...string) {
+	if m.reviews == nil {
+		m.reviews = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.reviews[ids[i]] = struct{}{}
+	}
+}
+
+// ClearReviews clears the "reviews" edge to the Review entity.
+func (m *EntityMutation) ClearReviews() {
+	m.clearedreviews = true
+}
+
+// ReviewsCleared reports if the "reviews" edge to the Review entity was cleared.
+func (m *EntityMutation) ReviewsCleared() bool {
+	return m.clearedreviews
+}
+
+// RemoveReviewIDs removes the "reviews" edge to the Review entity by IDs.
+func (m *EntityMutation) RemoveReviewIDs(ids ...string) {
+	if m.removedreviews == nil {
+		m.removedreviews = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.reviews, ids[i])
+		m.removedreviews[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedReviews returns the removed IDs of the "reviews" edge to the Review entity.
+func (m *EntityMutation) RemovedReviewsIDs() (ids []string) {
+	for id := range m.removedreviews {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ReviewsIDs returns the "reviews" edge IDs in the mutation.
+func (m *EntityMutation) ReviewsIDs() (ids []string) {
+	for id := range m.reviews {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetReviews resets all changes to the "reviews" edge.
+func (m *EntityMutation) ResetReviews() {
+	m.reviews = nil
+	m.clearedreviews = false
+	m.removedreviews = nil
+}
+
+// AddRemediationIDs adds the "remediations" edge to the Remediation entity by ids.
+func (m *EntityMutation) AddRemediationIDs(ids ...string) {
+	if m.remediations == nil {
+		m.remediations = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.remediations[ids[i]] = struct{}{}
+	}
+}
+
+// ClearRemediations clears the "remediations" edge to the Remediation entity.
+func (m *EntityMutation) ClearRemediations() {
+	m.clearedremediations = true
+}
+
+// RemediationsCleared reports if the "remediations" edge to the Remediation entity was cleared.
+func (m *EntityMutation) RemediationsCleared() bool {
+	return m.clearedremediations
+}
+
+// RemoveRemediationIDs removes the "remediations" edge to the Remediation entity by IDs.
+func (m *EntityMutation) RemoveRemediationIDs(ids ...string) {
+	if m.removedremediations == nil {
+		m.removedremediations = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.remediations, ids[i])
+		m.removedremediations[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedRemediations returns the removed IDs of the "remediations" edge to the Remediation entity.
+func (m *EntityMutation) RemovedRemediationsIDs() (ids []string) {
+	for id := range m.removedremediations {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// RemediationsIDs returns the "remediations" edge IDs in the mutation.
+func (m *EntityMutation) RemediationsIDs() (ids []string) {
+	for id := range m.remediations {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetRemediations resets all changes to the "remediations" edge.
+func (m *EntityMutation) ResetRemediations() {
+	m.remediations = nil
+	m.clearedremediations = false
+	m.removedremediations = nil
+}
+
 // AddPlatformIDs adds the "platforms" edge to the Platform entity by ids.
 func (m *EntityMutation) AddPlatformIDs(ids ...string) {
 	if m.platforms == nil {
@@ -74370,7 +75013,7 @@ func (m *EntityMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *EntityMutation) AddedEdges() []string {
-	edges := make([]string, 0, 35)
+	edges := make([]string, 0, 39)
 	if m.owner != nil {
 		edges = append(edges, entity.EdgeOwner)
 	}
@@ -74457,6 +75100,18 @@ func (m *EntityMutation) AddedEdges() []string {
 	}
 	if m.subcontrols != nil {
 		edges = append(edges, entity.EdgeSubcontrols)
+	}
+	if m.findings != nil {
+		edges = append(edges, entity.EdgeFindings)
+	}
+	if m.vulnerabilities != nil {
+		edges = append(edges, entity.EdgeVulnerabilities)
+	}
+	if m.reviews != nil {
+		edges = append(edges, entity.EdgeReviews)
+	}
+	if m.remediations != nil {
+		edges = append(edges, entity.EdgeRemediations)
 	}
 	if m.platforms != nil {
 		edges = append(edges, entity.EdgePlatforms)
@@ -74637,6 +75292,30 @@ func (m *EntityMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case entity.EdgeFindings:
+		ids := make([]ent.Value, 0, len(m.findings))
+		for id := range m.findings {
+			ids = append(ids, id)
+		}
+		return ids
+	case entity.EdgeVulnerabilities:
+		ids := make([]ent.Value, 0, len(m.vulnerabilities))
+		for id := range m.vulnerabilities {
+			ids = append(ids, id)
+		}
+		return ids
+	case entity.EdgeReviews:
+		ids := make([]ent.Value, 0, len(m.reviews))
+		for id := range m.reviews {
+			ids = append(ids, id)
+		}
+		return ids
+	case entity.EdgeRemediations:
+		ids := make([]ent.Value, 0, len(m.remediations))
+		for id := range m.remediations {
+			ids = append(ids, id)
+		}
+		return ids
 	case entity.EdgePlatforms:
 		ids := make([]ent.Value, 0, len(m.platforms))
 		for id := range m.platforms {
@@ -74675,7 +75354,7 @@ func (m *EntityMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *EntityMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 35)
+	edges := make([]string, 0, 39)
 	if m.removedblocked_groups != nil {
 		edges = append(edges, entity.EdgeBlockedGroups)
 	}
@@ -74732,6 +75411,18 @@ func (m *EntityMutation) RemovedEdges() []string {
 	}
 	if m.removedsubcontrols != nil {
 		edges = append(edges, entity.EdgeSubcontrols)
+	}
+	if m.removedfindings != nil {
+		edges = append(edges, entity.EdgeFindings)
+	}
+	if m.removedvulnerabilities != nil {
+		edges = append(edges, entity.EdgeVulnerabilities)
+	}
+	if m.removedreviews != nil {
+		edges = append(edges, entity.EdgeReviews)
+	}
+	if m.removedremediations != nil {
+		edges = append(edges, entity.EdgeRemediations)
 	}
 	if m.removedplatforms != nil {
 		edges = append(edges, entity.EdgePlatforms)
@@ -74866,6 +75557,30 @@ func (m *EntityMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case entity.EdgeFindings:
+		ids := make([]ent.Value, 0, len(m.removedfindings))
+		for id := range m.removedfindings {
+			ids = append(ids, id)
+		}
+		return ids
+	case entity.EdgeVulnerabilities:
+		ids := make([]ent.Value, 0, len(m.removedvulnerabilities))
+		for id := range m.removedvulnerabilities {
+			ids = append(ids, id)
+		}
+		return ids
+	case entity.EdgeReviews:
+		ids := make([]ent.Value, 0, len(m.removedreviews))
+		for id := range m.removedreviews {
+			ids = append(ids, id)
+		}
+		return ids
+	case entity.EdgeRemediations:
+		ids := make([]ent.Value, 0, len(m.removedremediations))
+		for id := range m.removedremediations {
+			ids = append(ids, id)
+		}
+		return ids
 	case entity.EdgePlatforms:
 		ids := make([]ent.Value, 0, len(m.removedplatforms))
 		for id := range m.removedplatforms {
@@ -74896,7 +75611,7 @@ func (m *EntityMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *EntityMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 35)
+	edges := make([]string, 0, 39)
 	if m.clearedowner {
 		edges = append(edges, entity.EdgeOwner)
 	}
@@ -74984,6 +75699,18 @@ func (m *EntityMutation) ClearedEdges() []string {
 	if m.clearedsubcontrols {
 		edges = append(edges, entity.EdgeSubcontrols)
 	}
+	if m.clearedfindings {
+		edges = append(edges, entity.EdgeFindings)
+	}
+	if m.clearedvulnerabilities {
+		edges = append(edges, entity.EdgeVulnerabilities)
+	}
+	if m.clearedreviews {
+		edges = append(edges, entity.EdgeReviews)
+	}
+	if m.clearedremediations {
+		edges = append(edges, entity.EdgeRemediations)
+	}
 	if m.clearedplatforms {
 		edges = append(edges, entity.EdgePlatforms)
 	}
@@ -75067,6 +75794,14 @@ func (m *EntityMutation) EdgeCleared(name string) bool {
 		return m.clearedcontrols
 	case entity.EdgeSubcontrols:
 		return m.clearedsubcontrols
+	case entity.EdgeFindings:
+		return m.clearedfindings
+	case entity.EdgeVulnerabilities:
+		return m.clearedvulnerabilities
+	case entity.EdgeReviews:
+		return m.clearedreviews
+	case entity.EdgeRemediations:
+		return m.clearedremediations
 	case entity.EdgePlatforms:
 		return m.clearedplatforms
 	case entity.EdgeOutOfScopePlatforms:
@@ -75217,6 +75952,18 @@ func (m *EntityMutation) ResetEdge(name string) error {
 		return nil
 	case entity.EdgeSubcontrols:
 		m.ResetSubcontrols()
+		return nil
+	case entity.EdgeFindings:
+		m.ResetFindings()
+		return nil
+	case entity.EdgeVulnerabilities:
+		m.ResetVulnerabilities()
+		return nil
+	case entity.EdgeReviews:
+		m.ResetReviews()
+		return nil
+	case entity.EdgeRemediations:
+		m.ResetRemediations()
 		return nil
 	case entity.EdgePlatforms:
 		m.ResetPlatforms()
@@ -96622,6 +97369,8 @@ type FindingControlMutation struct {
 	metadata                  *map[string]interface{}
 	discovered_at             *models.DateTime
 	clearedFields             map[string]struct{}
+	owner                     *string
+	clearedowner              bool
 	finding                   *string
 	clearedfinding            bool
 	control                   *string
@@ -96980,6 +97729,55 @@ func (m *FindingControlMutation) UpdatedByImpersonatorCleared() bool {
 func (m *FindingControlMutation) ResetUpdatedByImpersonator() {
 	m.updated_by_impersonator = nil
 	delete(m.clearedFields, findingcontrol.FieldUpdatedByImpersonator)
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (m *FindingControlMutation) SetOwnerID(s string) {
+	m.owner = &s
+}
+
+// OwnerID returns the value of the "owner_id" field in the mutation.
+func (m *FindingControlMutation) OwnerID() (r string, exists bool) {
+	v := m.owner
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOwnerID returns the old "owner_id" field's value of the FindingControl entity.
+// If the FindingControl object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *FindingControlMutation) OldOwnerID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOwnerID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOwnerID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOwnerID: %w", err)
+	}
+	return oldValue.OwnerID, nil
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (m *FindingControlMutation) ClearOwnerID() {
+	m.owner = nil
+	m.clearedFields[findingcontrol.FieldOwnerID] = struct{}{}
+}
+
+// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
+func (m *FindingControlMutation) OwnerIDCleared() bool {
+	_, ok := m.clearedFields[findingcontrol.FieldOwnerID]
+	return ok
+}
+
+// ResetOwnerID resets all changes to the "owner_id" field.
+func (m *FindingControlMutation) ResetOwnerID() {
+	m.owner = nil
+	delete(m.clearedFields, findingcontrol.FieldOwnerID)
 }
 
 // SetFindingID sets the "finding_id" field.
@@ -97397,6 +98195,33 @@ func (m *FindingControlMutation) ResetDiscoveredAt() {
 	delete(m.clearedFields, findingcontrol.FieldDiscoveredAt)
 }
 
+// ClearOwner clears the "owner" edge to the Organization entity.
+func (m *FindingControlMutation) ClearOwner() {
+	m.clearedowner = true
+	m.clearedFields[findingcontrol.FieldOwnerID] = struct{}{}
+}
+
+// OwnerCleared reports if the "owner" edge to the Organization entity was cleared.
+func (m *FindingControlMutation) OwnerCleared() bool {
+	return m.OwnerIDCleared() || m.clearedowner
+}
+
+// OwnerIDs returns the "owner" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// OwnerID instead. It exists only for internal usage by the builders.
+func (m *FindingControlMutation) OwnerIDs() (ids []string) {
+	if id := m.owner; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetOwner resets all changes to the "owner" edge.
+func (m *FindingControlMutation) ResetOwner() {
+	m.owner = nil
+	m.clearedowner = false
+}
+
 // ClearFinding clears the "finding" edge to the Finding entity.
 func (m *FindingControlMutation) ClearFinding() {
 	m.clearedfinding = true
@@ -97512,7 +98337,7 @@ func (m *FindingControlMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *FindingControlMutation) Fields() []string {
-	fields := make([]string, 0, 14)
+	fields := make([]string, 0, 15)
 	if m.created_at != nil {
 		fields = append(fields, findingcontrol.FieldCreatedAt)
 	}
@@ -97527,6 +98352,9 @@ func (m *FindingControlMutation) Fields() []string {
 	}
 	if m.updated_by_impersonator != nil {
 		fields = append(fields, findingcontrol.FieldUpdatedByImpersonator)
+	}
+	if m.owner != nil {
+		fields = append(fields, findingcontrol.FieldOwnerID)
 	}
 	if m.finding != nil {
 		fields = append(fields, findingcontrol.FieldFindingID)
@@ -97573,6 +98401,8 @@ func (m *FindingControlMutation) Field(name string) (ent.Value, bool) {
 		return m.UpdatedBy()
 	case findingcontrol.FieldUpdatedByImpersonator:
 		return m.UpdatedByImpersonator()
+	case findingcontrol.FieldOwnerID:
+		return m.OwnerID()
 	case findingcontrol.FieldFindingID:
 		return m.FindingID()
 	case findingcontrol.FieldControlID:
@@ -97610,6 +98440,8 @@ func (m *FindingControlMutation) OldField(ctx context.Context, name string) (ent
 		return m.OldUpdatedBy(ctx)
 	case findingcontrol.FieldUpdatedByImpersonator:
 		return m.OldUpdatedByImpersonator(ctx)
+	case findingcontrol.FieldOwnerID:
+		return m.OldOwnerID(ctx)
 	case findingcontrol.FieldFindingID:
 		return m.OldFindingID(ctx)
 	case findingcontrol.FieldControlID:
@@ -97671,6 +98503,13 @@ func (m *FindingControlMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedByImpersonator(v)
+		return nil
+	case findingcontrol.FieldOwnerID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOwnerID(v)
 		return nil
 	case findingcontrol.FieldFindingID:
 		v, ok := value.(string)
@@ -97780,6 +98619,9 @@ func (m *FindingControlMutation) ClearedFields() []string {
 	if m.FieldCleared(findingcontrol.FieldUpdatedByImpersonator) {
 		fields = append(fields, findingcontrol.FieldUpdatedByImpersonator)
 	}
+	if m.FieldCleared(findingcontrol.FieldOwnerID) {
+		fields = append(fields, findingcontrol.FieldOwnerID)
+	}
 	if m.FieldCleared(findingcontrol.FieldStandardID) {
 		fields = append(fields, findingcontrol.FieldStandardID)
 	}
@@ -97830,6 +98672,9 @@ func (m *FindingControlMutation) ClearField(name string) error {
 	case findingcontrol.FieldUpdatedByImpersonator:
 		m.ClearUpdatedByImpersonator()
 		return nil
+	case findingcontrol.FieldOwnerID:
+		m.ClearOwnerID()
+		return nil
 	case findingcontrol.FieldStandardID:
 		m.ClearStandardID()
 		return nil
@@ -97874,6 +98719,9 @@ func (m *FindingControlMutation) ResetField(name string) error {
 	case findingcontrol.FieldUpdatedByImpersonator:
 		m.ResetUpdatedByImpersonator()
 		return nil
+	case findingcontrol.FieldOwnerID:
+		m.ResetOwnerID()
+		return nil
 	case findingcontrol.FieldFindingID:
 		m.ResetFindingID()
 		return nil
@@ -97907,7 +98755,10 @@ func (m *FindingControlMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *FindingControlMutation) AddedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 4)
+	if m.owner != nil {
+		edges = append(edges, findingcontrol.EdgeOwner)
+	}
 	if m.finding != nil {
 		edges = append(edges, findingcontrol.EdgeFinding)
 	}
@@ -97924,6 +98775,10 @@ func (m *FindingControlMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *FindingControlMutation) AddedIDs(name string) []ent.Value {
 	switch name {
+	case findingcontrol.EdgeOwner:
+		if id := m.owner; id != nil {
+			return []ent.Value{*id}
+		}
 	case findingcontrol.EdgeFinding:
 		if id := m.finding; id != nil {
 			return []ent.Value{*id}
@@ -97942,7 +98797,7 @@ func (m *FindingControlMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *FindingControlMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 4)
 	return edges
 }
 
@@ -97954,7 +98809,10 @@ func (m *FindingControlMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *FindingControlMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 3)
+	edges := make([]string, 0, 4)
+	if m.clearedowner {
+		edges = append(edges, findingcontrol.EdgeOwner)
+	}
 	if m.clearedfinding {
 		edges = append(edges, findingcontrol.EdgeFinding)
 	}
@@ -97971,6 +98829,8 @@ func (m *FindingControlMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *FindingControlMutation) EdgeCleared(name string) bool {
 	switch name {
+	case findingcontrol.EdgeOwner:
+		return m.clearedowner
 	case findingcontrol.EdgeFinding:
 		return m.clearedfinding
 	case findingcontrol.EdgeControl:
@@ -97985,6 +98845,9 @@ func (m *FindingControlMutation) EdgeCleared(name string) bool {
 // if that edge is not defined in the schema.
 func (m *FindingControlMutation) ClearEdge(name string) error {
 	switch name {
+	case findingcontrol.EdgeOwner:
+		m.ClearOwner()
+		return nil
 	case findingcontrol.EdgeFinding:
 		m.ClearFinding()
 		return nil
@@ -98002,6 +98865,9 @@ func (m *FindingControlMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *FindingControlMutation) ResetEdge(name string) error {
 	switch name {
+	case findingcontrol.EdgeOwner:
+		m.ResetOwner()
+		return nil
 	case findingcontrol.EdgeFinding:
 		m.ResetFinding()
 		return nil
@@ -163715,6 +164581,9 @@ type OrganizationMutation struct {
 	findings                                      map[string]struct{}
 	removedfindings                               map[string]struct{}
 	clearedfindings                               bool
+	finding_controls                              map[string]struct{}
+	removedfinding_controls                       map[string]struct{}
+	clearedfinding_controls                       bool
 	reviews                                       map[string]struct{}
 	removedreviews                                map[string]struct{}
 	clearedreviews                                bool
@@ -172915,6 +173784,60 @@ func (m *OrganizationMutation) ResetFindings() {
 	m.removedfindings = nil
 }
 
+// AddFindingControlIDs adds the "finding_controls" edge to the FindingControl entity by ids.
+func (m *OrganizationMutation) AddFindingControlIDs(ids ...string) {
+	if m.finding_controls == nil {
+		m.finding_controls = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.finding_controls[ids[i]] = struct{}{}
+	}
+}
+
+// ClearFindingControls clears the "finding_controls" edge to the FindingControl entity.
+func (m *OrganizationMutation) ClearFindingControls() {
+	m.clearedfinding_controls = true
+}
+
+// FindingControlsCleared reports if the "finding_controls" edge to the FindingControl entity was cleared.
+func (m *OrganizationMutation) FindingControlsCleared() bool {
+	return m.clearedfinding_controls
+}
+
+// RemoveFindingControlIDs removes the "finding_controls" edge to the FindingControl entity by IDs.
+func (m *OrganizationMutation) RemoveFindingControlIDs(ids ...string) {
+	if m.removedfinding_controls == nil {
+		m.removedfinding_controls = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.finding_controls, ids[i])
+		m.removedfinding_controls[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedFindingControls returns the removed IDs of the "finding_controls" edge to the FindingControl entity.
+func (m *OrganizationMutation) RemovedFindingControlsIDs() (ids []string) {
+	for id := range m.removedfinding_controls {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// FindingControlsIDs returns the "finding_controls" edge IDs in the mutation.
+func (m *OrganizationMutation) FindingControlsIDs() (ids []string) {
+	for id := range m.finding_controls {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetFindingControls resets all changes to the "finding_controls" edge.
+func (m *OrganizationMutation) ResetFindingControls() {
+	m.finding_controls = nil
+	m.clearedfinding_controls = false
+	m.removedfinding_controls = nil
+}
+
 // AddReviewIDs adds the "reviews" edge to the Review entity by ids.
 func (m *OrganizationMutation) AddReviewIDs(ids ...string) {
 	if m.reviews == nil {
@@ -174408,7 +175331,7 @@ func (m *OrganizationMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *OrganizationMutation) AddedEdges() []string {
-	edges := make([]string, 0, 170)
+	edges := make([]string, 0, 171)
 	if m.action_plan_creators != nil {
 		edges = append(edges, organization.EdgeActionPlanCreators)
 	}
@@ -174864,6 +175787,9 @@ func (m *OrganizationMutation) AddedEdges() []string {
 	}
 	if m.findings != nil {
 		edges = append(edges, organization.EdgeFindings)
+	}
+	if m.finding_controls != nil {
+		edges = append(edges, organization.EdgeFindingControls)
 	}
 	if m.reviews != nil {
 		edges = append(edges, organization.EdgeReviews)
@@ -175832,6 +176758,12 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case organization.EdgeFindingControls:
+		ids := make([]ent.Value, 0, len(m.finding_controls))
+		for id := range m.finding_controls {
+			ids = append(ids, id)
+		}
+		return ids
 	case organization.EdgeReviews:
 		ids := make([]ent.Value, 0, len(m.reviews))
 		for id := range m.reviews {
@@ -175946,7 +176878,7 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *OrganizationMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 170)
+	edges := make([]string, 0, 171)
 	if m.removedaction_plan_creators != nil {
 		edges = append(edges, organization.EdgeActionPlanCreators)
 	}
@@ -176393,6 +177325,9 @@ func (m *OrganizationMutation) RemovedEdges() []string {
 	}
 	if m.removedfindings != nil {
 		edges = append(edges, organization.EdgeFindings)
+	}
+	if m.removedfinding_controls != nil {
+		edges = append(edges, organization.EdgeFindingControls)
 	}
 	if m.removedreviews != nil {
 		edges = append(edges, organization.EdgeReviews)
@@ -177349,6 +178284,12 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case organization.EdgeFindingControls:
+		ids := make([]ent.Value, 0, len(m.removedfinding_controls))
+		for id := range m.removedfinding_controls {
+			ids = append(ids, id)
+		}
+		return ids
 	case organization.EdgeReviews:
 		ids := make([]ent.Value, 0, len(m.removedreviews))
 		for id := range m.removedreviews {
@@ -177463,7 +178404,7 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *OrganizationMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 170)
+	edges := make([]string, 0, 171)
 	if m.clearedaction_plan_creators {
 		edges = append(edges, organization.EdgeActionPlanCreators)
 	}
@@ -177920,6 +178861,9 @@ func (m *OrganizationMutation) ClearedEdges() []string {
 	if m.clearedfindings {
 		edges = append(edges, organization.EdgeFindings)
 	}
+	if m.clearedfinding_controls {
+		edges = append(edges, organization.EdgeFindingControls)
+	}
 	if m.clearedreviews {
 		edges = append(edges, organization.EdgeReviews)
 	}
@@ -178285,6 +179229,8 @@ func (m *OrganizationMutation) EdgeCleared(name string) bool {
 		return m.clearedremediations
 	case organization.EdgeFindings:
 		return m.clearedfindings
+	case organization.EdgeFindingControls:
+		return m.clearedfinding_controls
 	case organization.EdgeReviews:
 		return m.clearedreviews
 	case organization.EdgeVulnerabilities:
@@ -178801,6 +179747,9 @@ func (m *OrganizationMutation) ResetEdge(name string) error {
 		return nil
 	case organization.EdgeFindings:
 		m.ResetFindings()
+		return nil
+	case organization.EdgeFindingControls:
+		m.ResetFindingControls()
 		return nil
 	case organization.EdgeReviews:
 		m.ResetReviews()
@@ -197541,97 +198490,113 @@ func (m *ProcedureMutation) ResetEdge(name string) error {
 // ProgramMutation represents an operation that mutates the Program nodes in the graph.
 type ProgramMutation struct {
 	config
-	op                        Op
-	typ                       string
-	id                        *string
-	created_at                *time.Time
-	updated_at                *time.Time
-	created_by                *string
-	updated_by                *string
-	updated_by_impersonator   *string
-	deleted_at                *time.Time
-	deleted_by                *string
-	display_id                *string
-	tags                      *[]string
-	appendtags                []string
-	program_kind_name         *string
-	external_uuid             *string
-	name                      *string
-	description               *string
-	status                    *enums.ProgramStatus
-	framework_name            *string
-	start_date                *time.Time
-	end_date                  *time.Time
-	auditor_ready             *bool
-	auditor_write_comments    *bool
-	auditor_read_comments     *bool
-	audit_firm                *string
-	auditor                   *string
-	auditor_email             *string
-	clearedFields             map[string]struct{}
-	owner                     *string
-	clearedowner              bool
-	blocked_groups            map[string]struct{}
-	removedblocked_groups     map[string]struct{}
-	clearedblocked_groups     bool
-	editors                   map[string]struct{}
-	removededitors            map[string]struct{}
-	clearededitors            bool
-	viewers                   map[string]struct{}
-	removedviewers            map[string]struct{}
-	clearedviewers            bool
-	program_kind              *string
-	clearedprogram_kind       bool
-	controls                  map[string]struct{}
-	removedcontrols           map[string]struct{}
-	clearedcontrols           bool
-	subcontrols               map[string]struct{}
-	removedsubcontrols        map[string]struct{}
-	clearedsubcontrols        bool
-	control_objectives        map[string]struct{}
-	removedcontrol_objectives map[string]struct{}
-	clearedcontrol_objectives bool
-	internal_policies         map[string]struct{}
-	removedinternal_policies  map[string]struct{}
-	clearedinternal_policies  bool
-	procedures                map[string]struct{}
-	removedprocedures         map[string]struct{}
-	clearedprocedures         bool
-	risks                     map[string]struct{}
-	removedrisks              map[string]struct{}
-	clearedrisks              bool
-	tasks                     map[string]struct{}
-	removedtasks              map[string]struct{}
-	clearedtasks              bool
-	notes                     map[string]struct{}
-	removednotes              map[string]struct{}
-	clearednotes              bool
-	files                     map[string]struct{}
-	removedfiles              map[string]struct{}
-	clearedfiles              bool
-	evidence                  map[string]struct{}
-	removedevidence           map[string]struct{}
-	clearedevidence           bool
-	narratives                map[string]struct{}
-	removednarratives         map[string]struct{}
-	clearednarratives         bool
-	action_plans              map[string]struct{}
-	removedaction_plans       map[string]struct{}
-	clearedaction_plans       bool
-	system_details            map[string]struct{}
-	removedsystem_details     map[string]struct{}
-	clearedsystem_details     bool
-	users                     map[string]struct{}
-	removedusers              map[string]struct{}
-	clearedusers              bool
-	program_owner             *string
-	clearedprogram_owner      bool
-	members                   map[string]struct{}
-	removedmembers            map[string]struct{}
-	clearedmembers            bool
-	done                      bool
-	oldValue                  func(context.Context) (*Program, error)
-	predicates                []predicate.Program
+	op                            Op
+	typ                           string
+	id                            *string
+	created_at                    *time.Time
+	updated_at                    *time.Time
+	created_by                    *string
+	updated_by                    *string
+	updated_by_impersonator       *string
+	deleted_at                    *time.Time
+	deleted_by                    *string
+	display_id                    *string
+	tags                          *[]string
+	appendtags                    []string
+	program_kind_name             *string
+	external_uuid                 *string
+	name                          *string
+	description                   *string
+	status                        *enums.ProgramStatus
+	framework_name                *string
+	start_date                    *time.Time
+	end_date                      *time.Time
+	observation_period_start_date *time.Time
+	observation_period_end_date   *time.Time
+	fieldwork_start_date          *time.Time
+	fieldwork_end_date            *time.Time
+	auditor_ready                 *bool
+	auditor_write_comments        *bool
+	auditor_read_comments         *bool
+	audit_firm                    *string
+	auditor                       *string
+	auditor_email                 *string
+	clearedFields                 map[string]struct{}
+	owner                         *string
+	clearedowner                  bool
+	blocked_groups                map[string]struct{}
+	removedblocked_groups         map[string]struct{}
+	clearedblocked_groups         bool
+	editors                       map[string]struct{}
+	removededitors                map[string]struct{}
+	clearededitors                bool
+	viewers                       map[string]struct{}
+	removedviewers                map[string]struct{}
+	clearedviewers                bool
+	program_kind                  *string
+	clearedprogram_kind           bool
+	controls                      map[string]struct{}
+	removedcontrols               map[string]struct{}
+	clearedcontrols               bool
+	subcontrols                   map[string]struct{}
+	removedsubcontrols            map[string]struct{}
+	clearedsubcontrols            bool
+	control_objectives            map[string]struct{}
+	removedcontrol_objectives     map[string]struct{}
+	clearedcontrol_objectives     bool
+	internal_policies             map[string]struct{}
+	removedinternal_policies      map[string]struct{}
+	clearedinternal_policies      bool
+	procedures                    map[string]struct{}
+	removedprocedures             map[string]struct{}
+	clearedprocedures             bool
+	risks                         map[string]struct{}
+	removedrisks                  map[string]struct{}
+	clearedrisks                  bool
+	tasks                         map[string]struct{}
+	removedtasks                  map[string]struct{}
+	clearedtasks                  bool
+	notes                         map[string]struct{}
+	removednotes                  map[string]struct{}
+	clearednotes                  bool
+	files                         map[string]struct{}
+	removedfiles                  map[string]struct{}
+	clearedfiles                  bool
+	evidence                      map[string]struct{}
+	removedevidence               map[string]struct{}
+	clearedevidence               bool
+	narratives                    map[string]struct{}
+	removednarratives             map[string]struct{}
+	clearednarratives             bool
+	action_plans                  map[string]struct{}
+	removedaction_plans           map[string]struct{}
+	clearedaction_plans           bool
+	system_details                map[string]struct{}
+	removedsystem_details         map[string]struct{}
+	clearedsystem_details         bool
+	findings                      map[string]struct{}
+	removedfindings               map[string]struct{}
+	clearedfindings               bool
+	vulnerabilities               map[string]struct{}
+	removedvulnerabilities        map[string]struct{}
+	clearedvulnerabilities        bool
+	reviews                       map[string]struct{}
+	removedreviews                map[string]struct{}
+	clearedreviews                bool
+	remediations                  map[string]struct{}
+	removedremediations           map[string]struct{}
+	clearedremediations           bool
+	users                         map[string]struct{}
+	removedusers                  map[string]struct{}
+	clearedusers                  bool
+	program_owner                 *string
+	clearedprogram_owner          bool
+	members                       map[string]struct{}
+	removedmembers                map[string]struct{}
+	clearedmembers                bool
+	done                          bool
+	oldValue                      func(context.Context) (*Program, error)
+	predicates                    []predicate.Program
 }
 
 var _ ent.Mutation = (*ProgramMutation)(nil)
@@ -198644,6 +199609,202 @@ func (m *ProgramMutation) EndDateCleared() bool {
 func (m *ProgramMutation) ResetEndDate() {
 	m.end_date = nil
 	delete(m.clearedFields, program.FieldEndDate)
+}
+
+// SetObservationPeriodStartDate sets the "observation_period_start_date" field.
+func (m *ProgramMutation) SetObservationPeriodStartDate(t time.Time) {
+	m.observation_period_start_date = &t
+}
+
+// ObservationPeriodStartDate returns the value of the "observation_period_start_date" field in the mutation.
+func (m *ProgramMutation) ObservationPeriodStartDate() (r time.Time, exists bool) {
+	v := m.observation_period_start_date
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldObservationPeriodStartDate returns the old "observation_period_start_date" field's value of the Program entity.
+// If the Program object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramMutation) OldObservationPeriodStartDate(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldObservationPeriodStartDate is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldObservationPeriodStartDate requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldObservationPeriodStartDate: %w", err)
+	}
+	return oldValue.ObservationPeriodStartDate, nil
+}
+
+// ClearObservationPeriodStartDate clears the value of the "observation_period_start_date" field.
+func (m *ProgramMutation) ClearObservationPeriodStartDate() {
+	m.observation_period_start_date = nil
+	m.clearedFields[program.FieldObservationPeriodStartDate] = struct{}{}
+}
+
+// ObservationPeriodStartDateCleared returns if the "observation_period_start_date" field was cleared in this mutation.
+func (m *ProgramMutation) ObservationPeriodStartDateCleared() bool {
+	_, ok := m.clearedFields[program.FieldObservationPeriodStartDate]
+	return ok
+}
+
+// ResetObservationPeriodStartDate resets all changes to the "observation_period_start_date" field.
+func (m *ProgramMutation) ResetObservationPeriodStartDate() {
+	m.observation_period_start_date = nil
+	delete(m.clearedFields, program.FieldObservationPeriodStartDate)
+}
+
+// SetObservationPeriodEndDate sets the "observation_period_end_date" field.
+func (m *ProgramMutation) SetObservationPeriodEndDate(t time.Time) {
+	m.observation_period_end_date = &t
+}
+
+// ObservationPeriodEndDate returns the value of the "observation_period_end_date" field in the mutation.
+func (m *ProgramMutation) ObservationPeriodEndDate() (r time.Time, exists bool) {
+	v := m.observation_period_end_date
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldObservationPeriodEndDate returns the old "observation_period_end_date" field's value of the Program entity.
+// If the Program object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramMutation) OldObservationPeriodEndDate(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldObservationPeriodEndDate is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldObservationPeriodEndDate requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldObservationPeriodEndDate: %w", err)
+	}
+	return oldValue.ObservationPeriodEndDate, nil
+}
+
+// ClearObservationPeriodEndDate clears the value of the "observation_period_end_date" field.
+func (m *ProgramMutation) ClearObservationPeriodEndDate() {
+	m.observation_period_end_date = nil
+	m.clearedFields[program.FieldObservationPeriodEndDate] = struct{}{}
+}
+
+// ObservationPeriodEndDateCleared returns if the "observation_period_end_date" field was cleared in this mutation.
+func (m *ProgramMutation) ObservationPeriodEndDateCleared() bool {
+	_, ok := m.clearedFields[program.FieldObservationPeriodEndDate]
+	return ok
+}
+
+// ResetObservationPeriodEndDate resets all changes to the "observation_period_end_date" field.
+func (m *ProgramMutation) ResetObservationPeriodEndDate() {
+	m.observation_period_end_date = nil
+	delete(m.clearedFields, program.FieldObservationPeriodEndDate)
+}
+
+// SetFieldworkStartDate sets the "fieldwork_start_date" field.
+func (m *ProgramMutation) SetFieldworkStartDate(t time.Time) {
+	m.fieldwork_start_date = &t
+}
+
+// FieldworkStartDate returns the value of the "fieldwork_start_date" field in the mutation.
+func (m *ProgramMutation) FieldworkStartDate() (r time.Time, exists bool) {
+	v := m.fieldwork_start_date
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFieldworkStartDate returns the old "fieldwork_start_date" field's value of the Program entity.
+// If the Program object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramMutation) OldFieldworkStartDate(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFieldworkStartDate is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFieldworkStartDate requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFieldworkStartDate: %w", err)
+	}
+	return oldValue.FieldworkStartDate, nil
+}
+
+// ClearFieldworkStartDate clears the value of the "fieldwork_start_date" field.
+func (m *ProgramMutation) ClearFieldworkStartDate() {
+	m.fieldwork_start_date = nil
+	m.clearedFields[program.FieldFieldworkStartDate] = struct{}{}
+}
+
+// FieldworkStartDateCleared returns if the "fieldwork_start_date" field was cleared in this mutation.
+func (m *ProgramMutation) FieldworkStartDateCleared() bool {
+	_, ok := m.clearedFields[program.FieldFieldworkStartDate]
+	return ok
+}
+
+// ResetFieldworkStartDate resets all changes to the "fieldwork_start_date" field.
+func (m *ProgramMutation) ResetFieldworkStartDate() {
+	m.fieldwork_start_date = nil
+	delete(m.clearedFields, program.FieldFieldworkStartDate)
+}
+
+// SetFieldworkEndDate sets the "fieldwork_end_date" field.
+func (m *ProgramMutation) SetFieldworkEndDate(t time.Time) {
+	m.fieldwork_end_date = &t
+}
+
+// FieldworkEndDate returns the value of the "fieldwork_end_date" field in the mutation.
+func (m *ProgramMutation) FieldworkEndDate() (r time.Time, exists bool) {
+	v := m.fieldwork_end_date
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldFieldworkEndDate returns the old "fieldwork_end_date" field's value of the Program entity.
+// If the Program object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ProgramMutation) OldFieldworkEndDate(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldFieldworkEndDate is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldFieldworkEndDate requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldFieldworkEndDate: %w", err)
+	}
+	return oldValue.FieldworkEndDate, nil
+}
+
+// ClearFieldworkEndDate clears the value of the "fieldwork_end_date" field.
+func (m *ProgramMutation) ClearFieldworkEndDate() {
+	m.fieldwork_end_date = nil
+	m.clearedFields[program.FieldFieldworkEndDate] = struct{}{}
+}
+
+// FieldworkEndDateCleared returns if the "fieldwork_end_date" field was cleared in this mutation.
+func (m *ProgramMutation) FieldworkEndDateCleared() bool {
+	_, ok := m.clearedFields[program.FieldFieldworkEndDate]
+	return ok
+}
+
+// ResetFieldworkEndDate resets all changes to the "fieldwork_end_date" field.
+func (m *ProgramMutation) ResetFieldworkEndDate() {
+	m.fieldwork_end_date = nil
+	delete(m.clearedFields, program.FieldFieldworkEndDate)
 }
 
 // SetAuditorReady sets the "auditor_ready" field.
@@ -199868,6 +201029,222 @@ func (m *ProgramMutation) ResetSystemDetails() {
 	m.removedsystem_details = nil
 }
 
+// AddFindingIDs adds the "findings" edge to the Finding entity by ids.
+func (m *ProgramMutation) AddFindingIDs(ids ...string) {
+	if m.findings == nil {
+		m.findings = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.findings[ids[i]] = struct{}{}
+	}
+}
+
+// ClearFindings clears the "findings" edge to the Finding entity.
+func (m *ProgramMutation) ClearFindings() {
+	m.clearedfindings = true
+}
+
+// FindingsCleared reports if the "findings" edge to the Finding entity was cleared.
+func (m *ProgramMutation) FindingsCleared() bool {
+	return m.clearedfindings
+}
+
+// RemoveFindingIDs removes the "findings" edge to the Finding entity by IDs.
+func (m *ProgramMutation) RemoveFindingIDs(ids ...string) {
+	if m.removedfindings == nil {
+		m.removedfindings = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.findings, ids[i])
+		m.removedfindings[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedFindings returns the removed IDs of the "findings" edge to the Finding entity.
+func (m *ProgramMutation) RemovedFindingsIDs() (ids []string) {
+	for id := range m.removedfindings {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// FindingsIDs returns the "findings" edge IDs in the mutation.
+func (m *ProgramMutation) FindingsIDs() (ids []string) {
+	for id := range m.findings {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetFindings resets all changes to the "findings" edge.
+func (m *ProgramMutation) ResetFindings() {
+	m.findings = nil
+	m.clearedfindings = false
+	m.removedfindings = nil
+}
+
+// AddVulnerabilityIDs adds the "vulnerabilities" edge to the Vulnerability entity by ids.
+func (m *ProgramMutation) AddVulnerabilityIDs(ids ...string) {
+	if m.vulnerabilities == nil {
+		m.vulnerabilities = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.vulnerabilities[ids[i]] = struct{}{}
+	}
+}
+
+// ClearVulnerabilities clears the "vulnerabilities" edge to the Vulnerability entity.
+func (m *ProgramMutation) ClearVulnerabilities() {
+	m.clearedvulnerabilities = true
+}
+
+// VulnerabilitiesCleared reports if the "vulnerabilities" edge to the Vulnerability entity was cleared.
+func (m *ProgramMutation) VulnerabilitiesCleared() bool {
+	return m.clearedvulnerabilities
+}
+
+// RemoveVulnerabilityIDs removes the "vulnerabilities" edge to the Vulnerability entity by IDs.
+func (m *ProgramMutation) RemoveVulnerabilityIDs(ids ...string) {
+	if m.removedvulnerabilities == nil {
+		m.removedvulnerabilities = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.vulnerabilities, ids[i])
+		m.removedvulnerabilities[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedVulnerabilities returns the removed IDs of the "vulnerabilities" edge to the Vulnerability entity.
+func (m *ProgramMutation) RemovedVulnerabilitiesIDs() (ids []string) {
+	for id := range m.removedvulnerabilities {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// VulnerabilitiesIDs returns the "vulnerabilities" edge IDs in the mutation.
+func (m *ProgramMutation) VulnerabilitiesIDs() (ids []string) {
+	for id := range m.vulnerabilities {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetVulnerabilities resets all changes to the "vulnerabilities" edge.
+func (m *ProgramMutation) ResetVulnerabilities() {
+	m.vulnerabilities = nil
+	m.clearedvulnerabilities = false
+	m.removedvulnerabilities = nil
+}
+
+// AddReviewIDs adds the "reviews" edge to the Review entity by ids.
+func (m *ProgramMutation) AddReviewIDs(ids ...string) {
+	if m.reviews == nil {
+		m.reviews = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.reviews[ids[i]] = struct{}{}
+	}
+}
+
+// ClearReviews clears the "reviews" edge to the Review entity.
+func (m *ProgramMutation) ClearReviews() {
+	m.clearedreviews = true
+}
+
+// ReviewsCleared reports if the "reviews" edge to the Review entity was cleared.
+func (m *ProgramMutation) ReviewsCleared() bool {
+	return m.clearedreviews
+}
+
+// RemoveReviewIDs removes the "reviews" edge to the Review entity by IDs.
+func (m *ProgramMutation) RemoveReviewIDs(ids ...string) {
+	if m.removedreviews == nil {
+		m.removedreviews = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.reviews, ids[i])
+		m.removedreviews[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedReviews returns the removed IDs of the "reviews" edge to the Review entity.
+func (m *ProgramMutation) RemovedReviewsIDs() (ids []string) {
+	for id := range m.removedreviews {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ReviewsIDs returns the "reviews" edge IDs in the mutation.
+func (m *ProgramMutation) ReviewsIDs() (ids []string) {
+	for id := range m.reviews {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetReviews resets all changes to the "reviews" edge.
+func (m *ProgramMutation) ResetReviews() {
+	m.reviews = nil
+	m.clearedreviews = false
+	m.removedreviews = nil
+}
+
+// AddRemediationIDs adds the "remediations" edge to the Remediation entity by ids.
+func (m *ProgramMutation) AddRemediationIDs(ids ...string) {
+	if m.remediations == nil {
+		m.remediations = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.remediations[ids[i]] = struct{}{}
+	}
+}
+
+// ClearRemediations clears the "remediations" edge to the Remediation entity.
+func (m *ProgramMutation) ClearRemediations() {
+	m.clearedremediations = true
+}
+
+// RemediationsCleared reports if the "remediations" edge to the Remediation entity was cleared.
+func (m *ProgramMutation) RemediationsCleared() bool {
+	return m.clearedremediations
+}
+
+// RemoveRemediationIDs removes the "remediations" edge to the Remediation entity by IDs.
+func (m *ProgramMutation) RemoveRemediationIDs(ids ...string) {
+	if m.removedremediations == nil {
+		m.removedremediations = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.remediations, ids[i])
+		m.removedremediations[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedRemediations returns the removed IDs of the "remediations" edge to the Remediation entity.
+func (m *ProgramMutation) RemovedRemediationsIDs() (ids []string) {
+	for id := range m.removedremediations {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// RemediationsIDs returns the "remediations" edge IDs in the mutation.
+func (m *ProgramMutation) RemediationsIDs() (ids []string) {
+	for id := range m.remediations {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetRemediations resets all changes to the "remediations" edge.
+func (m *ProgramMutation) ResetRemediations() {
+	m.remediations = nil
+	m.clearedremediations = false
+	m.removedremediations = nil
+}
+
 // AddUserIDs adds the "users" edge to the User entity by ids.
 func (m *ProgramMutation) AddUserIDs(ids ...string) {
 	if m.users == nil {
@@ -200037,7 +201414,7 @@ func (m *ProgramMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ProgramMutation) Fields() []string {
-	fields := make([]string, 0, 26)
+	fields := make([]string, 0, 30)
 	if m.created_at != nil {
 		fields = append(fields, program.FieldCreatedAt)
 	}
@@ -200094,6 +201471,18 @@ func (m *ProgramMutation) Fields() []string {
 	}
 	if m.end_date != nil {
 		fields = append(fields, program.FieldEndDate)
+	}
+	if m.observation_period_start_date != nil {
+		fields = append(fields, program.FieldObservationPeriodStartDate)
+	}
+	if m.observation_period_end_date != nil {
+		fields = append(fields, program.FieldObservationPeriodEndDate)
+	}
+	if m.fieldwork_start_date != nil {
+		fields = append(fields, program.FieldFieldworkStartDate)
+	}
+	if m.fieldwork_end_date != nil {
+		fields = append(fields, program.FieldFieldworkEndDate)
 	}
 	if m.auditor_ready != nil {
 		fields = append(fields, program.FieldAuditorReady)
@@ -200162,6 +201551,14 @@ func (m *ProgramMutation) Field(name string) (ent.Value, bool) {
 		return m.StartDate()
 	case program.FieldEndDate:
 		return m.EndDate()
+	case program.FieldObservationPeriodStartDate:
+		return m.ObservationPeriodStartDate()
+	case program.FieldObservationPeriodEndDate:
+		return m.ObservationPeriodEndDate()
+	case program.FieldFieldworkStartDate:
+		return m.FieldworkStartDate()
+	case program.FieldFieldworkEndDate:
+		return m.FieldworkEndDate()
 	case program.FieldAuditorReady:
 		return m.AuditorReady()
 	case program.FieldAuditorWriteComments:
@@ -200223,6 +201620,14 @@ func (m *ProgramMutation) OldField(ctx context.Context, name string) (ent.Value,
 		return m.OldStartDate(ctx)
 	case program.FieldEndDate:
 		return m.OldEndDate(ctx)
+	case program.FieldObservationPeriodStartDate:
+		return m.OldObservationPeriodStartDate(ctx)
+	case program.FieldObservationPeriodEndDate:
+		return m.OldObservationPeriodEndDate(ctx)
+	case program.FieldFieldworkStartDate:
+		return m.OldFieldworkStartDate(ctx)
+	case program.FieldFieldworkEndDate:
+		return m.OldFieldworkEndDate(ctx)
 	case program.FieldAuditorReady:
 		return m.OldAuditorReady(ctx)
 	case program.FieldAuditorWriteComments:
@@ -200379,6 +201784,34 @@ func (m *ProgramMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetEndDate(v)
 		return nil
+	case program.FieldObservationPeriodStartDate:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetObservationPeriodStartDate(v)
+		return nil
+	case program.FieldObservationPeriodEndDate:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetObservationPeriodEndDate(v)
+		return nil
+	case program.FieldFieldworkStartDate:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFieldworkStartDate(v)
+		return nil
+	case program.FieldFieldworkEndDate:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetFieldworkEndDate(v)
+		return nil
 	case program.FieldAuditorReady:
 		v, ok := value.(bool)
 		if !ok {
@@ -200506,6 +201939,18 @@ func (m *ProgramMutation) ClearedFields() []string {
 	if m.FieldCleared(program.FieldEndDate) {
 		fields = append(fields, program.FieldEndDate)
 	}
+	if m.FieldCleared(program.FieldObservationPeriodStartDate) {
+		fields = append(fields, program.FieldObservationPeriodStartDate)
+	}
+	if m.FieldCleared(program.FieldObservationPeriodEndDate) {
+		fields = append(fields, program.FieldObservationPeriodEndDate)
+	}
+	if m.FieldCleared(program.FieldFieldworkStartDate) {
+		fields = append(fields, program.FieldFieldworkStartDate)
+	}
+	if m.FieldCleared(program.FieldFieldworkEndDate) {
+		fields = append(fields, program.FieldFieldworkEndDate)
+	}
 	if m.FieldCleared(program.FieldAuditFirm) {
 		fields = append(fields, program.FieldAuditFirm)
 	}
@@ -200579,6 +202024,18 @@ func (m *ProgramMutation) ClearField(name string) error {
 		return nil
 	case program.FieldEndDate:
 		m.ClearEndDate()
+		return nil
+	case program.FieldObservationPeriodStartDate:
+		m.ClearObservationPeriodStartDate()
+		return nil
+	case program.FieldObservationPeriodEndDate:
+		m.ClearObservationPeriodEndDate()
+		return nil
+	case program.FieldFieldworkStartDate:
+		m.ClearFieldworkStartDate()
+		return nil
+	case program.FieldFieldworkEndDate:
+		m.ClearFieldworkEndDate()
 		return nil
 	case program.FieldAuditFirm:
 		m.ClearAuditFirm()
@@ -200657,6 +202114,18 @@ func (m *ProgramMutation) ResetField(name string) error {
 	case program.FieldEndDate:
 		m.ResetEndDate()
 		return nil
+	case program.FieldObservationPeriodStartDate:
+		m.ResetObservationPeriodStartDate()
+		return nil
+	case program.FieldObservationPeriodEndDate:
+		m.ResetObservationPeriodEndDate()
+		return nil
+	case program.FieldFieldworkStartDate:
+		m.ResetFieldworkStartDate()
+		return nil
+	case program.FieldFieldworkEndDate:
+		m.ResetFieldworkEndDate()
+		return nil
 	case program.FieldAuditorReady:
 		m.ResetAuditorReady()
 		return nil
@@ -200684,7 +202153,7 @@ func (m *ProgramMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *ProgramMutation) AddedEdges() []string {
-	edges := make([]string, 0, 21)
+	edges := make([]string, 0, 25)
 	if m.owner != nil {
 		edges = append(edges, program.EdgeOwner)
 	}
@@ -200738,6 +202207,18 @@ func (m *ProgramMutation) AddedEdges() []string {
 	}
 	if m.system_details != nil {
 		edges = append(edges, program.EdgeSystemDetails)
+	}
+	if m.findings != nil {
+		edges = append(edges, program.EdgeFindings)
+	}
+	if m.vulnerabilities != nil {
+		edges = append(edges, program.EdgeVulnerabilities)
+	}
+	if m.reviews != nil {
+		edges = append(edges, program.EdgeReviews)
+	}
+	if m.remediations != nil {
+		edges = append(edges, program.EdgeRemediations)
 	}
 	if m.users != nil {
 		edges = append(edges, program.EdgeUsers)
@@ -200859,6 +202340,30 @@ func (m *ProgramMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case program.EdgeFindings:
+		ids := make([]ent.Value, 0, len(m.findings))
+		for id := range m.findings {
+			ids = append(ids, id)
+		}
+		return ids
+	case program.EdgeVulnerabilities:
+		ids := make([]ent.Value, 0, len(m.vulnerabilities))
+		for id := range m.vulnerabilities {
+			ids = append(ids, id)
+		}
+		return ids
+	case program.EdgeReviews:
+		ids := make([]ent.Value, 0, len(m.reviews))
+		for id := range m.reviews {
+			ids = append(ids, id)
+		}
+		return ids
+	case program.EdgeRemediations:
+		ids := make([]ent.Value, 0, len(m.remediations))
+		for id := range m.remediations {
+			ids = append(ids, id)
+		}
+		return ids
 	case program.EdgeUsers:
 		ids := make([]ent.Value, 0, len(m.users))
 		for id := range m.users {
@@ -200881,7 +202386,7 @@ func (m *ProgramMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *ProgramMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 21)
+	edges := make([]string, 0, 25)
 	if m.removedblocked_groups != nil {
 		edges = append(edges, program.EdgeBlockedGroups)
 	}
@@ -200929,6 +202434,18 @@ func (m *ProgramMutation) RemovedEdges() []string {
 	}
 	if m.removedsystem_details != nil {
 		edges = append(edges, program.EdgeSystemDetails)
+	}
+	if m.removedfindings != nil {
+		edges = append(edges, program.EdgeFindings)
+	}
+	if m.removedvulnerabilities != nil {
+		edges = append(edges, program.EdgeVulnerabilities)
+	}
+	if m.removedreviews != nil {
+		edges = append(edges, program.EdgeReviews)
+	}
+	if m.removedremediations != nil {
+		edges = append(edges, program.EdgeRemediations)
 	}
 	if m.removedusers != nil {
 		edges = append(edges, program.EdgeUsers)
@@ -201039,6 +202556,30 @@ func (m *ProgramMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case program.EdgeFindings:
+		ids := make([]ent.Value, 0, len(m.removedfindings))
+		for id := range m.removedfindings {
+			ids = append(ids, id)
+		}
+		return ids
+	case program.EdgeVulnerabilities:
+		ids := make([]ent.Value, 0, len(m.removedvulnerabilities))
+		for id := range m.removedvulnerabilities {
+			ids = append(ids, id)
+		}
+		return ids
+	case program.EdgeReviews:
+		ids := make([]ent.Value, 0, len(m.removedreviews))
+		for id := range m.removedreviews {
+			ids = append(ids, id)
+		}
+		return ids
+	case program.EdgeRemediations:
+		ids := make([]ent.Value, 0, len(m.removedremediations))
+		for id := range m.removedremediations {
+			ids = append(ids, id)
+		}
+		return ids
 	case program.EdgeUsers:
 		ids := make([]ent.Value, 0, len(m.removedusers))
 		for id := range m.removedusers {
@@ -201057,7 +202598,7 @@ func (m *ProgramMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *ProgramMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 21)
+	edges := make([]string, 0, 25)
 	if m.clearedowner {
 		edges = append(edges, program.EdgeOwner)
 	}
@@ -201112,6 +202653,18 @@ func (m *ProgramMutation) ClearedEdges() []string {
 	if m.clearedsystem_details {
 		edges = append(edges, program.EdgeSystemDetails)
 	}
+	if m.clearedfindings {
+		edges = append(edges, program.EdgeFindings)
+	}
+	if m.clearedvulnerabilities {
+		edges = append(edges, program.EdgeVulnerabilities)
+	}
+	if m.clearedreviews {
+		edges = append(edges, program.EdgeReviews)
+	}
+	if m.clearedremediations {
+		edges = append(edges, program.EdgeRemediations)
+	}
 	if m.clearedusers {
 		edges = append(edges, program.EdgeUsers)
 	}
@@ -201164,6 +202717,14 @@ func (m *ProgramMutation) EdgeCleared(name string) bool {
 		return m.clearedaction_plans
 	case program.EdgeSystemDetails:
 		return m.clearedsystem_details
+	case program.EdgeFindings:
+		return m.clearedfindings
+	case program.EdgeVulnerabilities:
+		return m.clearedvulnerabilities
+	case program.EdgeReviews:
+		return m.clearedreviews
+	case program.EdgeRemediations:
+		return m.clearedremediations
 	case program.EdgeUsers:
 		return m.clearedusers
 	case program.EdgeProgramOwner:
@@ -201248,6 +202809,18 @@ func (m *ProgramMutation) ResetEdge(name string) error {
 		return nil
 	case program.EdgeSystemDetails:
 		m.ResetSystemDetails()
+		return nil
+	case program.EdgeFindings:
+		m.ResetFindings()
+		return nil
+	case program.EdgeVulnerabilities:
+		m.ResetVulnerabilities()
+		return nil
+	case program.EdgeReviews:
+		m.ResetReviews()
+		return nil
+	case program.EdgeRemediations:
+		m.ResetRemediations()
 		return nil
 	case program.EdgeUsers:
 		m.ResetUsers()
@@ -211481,6 +213054,12 @@ type RiskMutation struct {
 	remediations                map[string]struct{}
 	removedremediations         map[string]struct{}
 	clearedremediations         bool
+	vulnerabilities             map[string]struct{}
+	removedvulnerabilities      map[string]struct{}
+	clearedvulnerabilities      bool
+	findings                    map[string]struct{}
+	removedfindings             map[string]struct{}
+	clearedfindings             bool
 	workflow_object_refs        map[string]struct{}
 	removedworkflow_object_refs map[string]struct{}
 	clearedworkflow_object_refs bool
@@ -214990,6 +216569,114 @@ func (m *RiskMutation) ResetRemediations() {
 	m.removedremediations = nil
 }
 
+// AddVulnerabilityIDs adds the "vulnerabilities" edge to the Vulnerability entity by ids.
+func (m *RiskMutation) AddVulnerabilityIDs(ids ...string) {
+	if m.vulnerabilities == nil {
+		m.vulnerabilities = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.vulnerabilities[ids[i]] = struct{}{}
+	}
+}
+
+// ClearVulnerabilities clears the "vulnerabilities" edge to the Vulnerability entity.
+func (m *RiskMutation) ClearVulnerabilities() {
+	m.clearedvulnerabilities = true
+}
+
+// VulnerabilitiesCleared reports if the "vulnerabilities" edge to the Vulnerability entity was cleared.
+func (m *RiskMutation) VulnerabilitiesCleared() bool {
+	return m.clearedvulnerabilities
+}
+
+// RemoveVulnerabilityIDs removes the "vulnerabilities" edge to the Vulnerability entity by IDs.
+func (m *RiskMutation) RemoveVulnerabilityIDs(ids ...string) {
+	if m.removedvulnerabilities == nil {
+		m.removedvulnerabilities = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.vulnerabilities, ids[i])
+		m.removedvulnerabilities[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedVulnerabilities returns the removed IDs of the "vulnerabilities" edge to the Vulnerability entity.
+func (m *RiskMutation) RemovedVulnerabilitiesIDs() (ids []string) {
+	for id := range m.removedvulnerabilities {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// VulnerabilitiesIDs returns the "vulnerabilities" edge IDs in the mutation.
+func (m *RiskMutation) VulnerabilitiesIDs() (ids []string) {
+	for id := range m.vulnerabilities {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetVulnerabilities resets all changes to the "vulnerabilities" edge.
+func (m *RiskMutation) ResetVulnerabilities() {
+	m.vulnerabilities = nil
+	m.clearedvulnerabilities = false
+	m.removedvulnerabilities = nil
+}
+
+// AddFindingIDs adds the "findings" edge to the Finding entity by ids.
+func (m *RiskMutation) AddFindingIDs(ids ...string) {
+	if m.findings == nil {
+		m.findings = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.findings[ids[i]] = struct{}{}
+	}
+}
+
+// ClearFindings clears the "findings" edge to the Finding entity.
+func (m *RiskMutation) ClearFindings() {
+	m.clearedfindings = true
+}
+
+// FindingsCleared reports if the "findings" edge to the Finding entity was cleared.
+func (m *RiskMutation) FindingsCleared() bool {
+	return m.clearedfindings
+}
+
+// RemoveFindingIDs removes the "findings" edge to the Finding entity by IDs.
+func (m *RiskMutation) RemoveFindingIDs(ids ...string) {
+	if m.removedfindings == nil {
+		m.removedfindings = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.findings, ids[i])
+		m.removedfindings[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedFindings returns the removed IDs of the "findings" edge to the Finding entity.
+func (m *RiskMutation) RemovedFindingsIDs() (ids []string) {
+	for id := range m.removedfindings {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// FindingsIDs returns the "findings" edge IDs in the mutation.
+func (m *RiskMutation) FindingsIDs() (ids []string) {
+	for id := range m.findings {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetFindings resets all changes to the "findings" edge.
+func (m *RiskMutation) ResetFindings() {
+	m.findings = nil
+	m.clearedfindings = false
+	m.removedfindings = nil
+}
+
 // AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by ids.
 func (m *RiskMutation) AddWorkflowObjectRefIDs(ids ...string) {
 	if m.workflow_object_refs == nil {
@@ -216190,7 +217877,7 @@ func (m *RiskMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *RiskMutation) AddedEdges() []string {
-	edges := make([]string, 0, 26)
+	edges := make([]string, 0, 28)
 	if m.owner != nil {
 		edges = append(edges, risk.EdgeOwner)
 	}
@@ -216265,6 +217952,12 @@ func (m *RiskMutation) AddedEdges() []string {
 	}
 	if m.remediations != nil {
 		edges = append(edges, risk.EdgeRemediations)
+	}
+	if m.vulnerabilities != nil {
+		edges = append(edges, risk.EdgeVulnerabilities)
+	}
+	if m.findings != nil {
+		edges = append(edges, risk.EdgeFindings)
 	}
 	if m.workflow_object_refs != nil {
 		edges = append(edges, risk.EdgeWorkflowObjectRefs)
@@ -216412,6 +218105,18 @@ func (m *RiskMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case risk.EdgeVulnerabilities:
+		ids := make([]ent.Value, 0, len(m.vulnerabilities))
+		for id := range m.vulnerabilities {
+			ids = append(ids, id)
+		}
+		return ids
+	case risk.EdgeFindings:
+		ids := make([]ent.Value, 0, len(m.findings))
+		for id := range m.findings {
+			ids = append(ids, id)
+		}
+		return ids
 	case risk.EdgeWorkflowObjectRefs:
 		ids := make([]ent.Value, 0, len(m.workflow_object_refs))
 		for id := range m.workflow_object_refs {
@@ -216424,7 +218129,7 @@ func (m *RiskMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *RiskMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 26)
+	edges := make([]string, 0, 28)
 	if m.removedblocked_groups != nil {
 		edges = append(edges, risk.EdgeBlockedGroups)
 	}
@@ -216478,6 +218183,12 @@ func (m *RiskMutation) RemovedEdges() []string {
 	}
 	if m.removedremediations != nil {
 		edges = append(edges, risk.EdgeRemediations)
+	}
+	if m.removedvulnerabilities != nil {
+		edges = append(edges, risk.EdgeVulnerabilities)
+	}
+	if m.removedfindings != nil {
+		edges = append(edges, risk.EdgeFindings)
 	}
 	if m.removedworkflow_object_refs != nil {
 		edges = append(edges, risk.EdgeWorkflowObjectRefs)
@@ -216597,6 +218308,18 @@ func (m *RiskMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case risk.EdgeVulnerabilities:
+		ids := make([]ent.Value, 0, len(m.removedvulnerabilities))
+		for id := range m.removedvulnerabilities {
+			ids = append(ids, id)
+		}
+		return ids
+	case risk.EdgeFindings:
+		ids := make([]ent.Value, 0, len(m.removedfindings))
+		for id := range m.removedfindings {
+			ids = append(ids, id)
+		}
+		return ids
 	case risk.EdgeWorkflowObjectRefs:
 		ids := make([]ent.Value, 0, len(m.removedworkflow_object_refs))
 		for id := range m.removedworkflow_object_refs {
@@ -216609,7 +218332,7 @@ func (m *RiskMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *RiskMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 26)
+	edges := make([]string, 0, 28)
 	if m.clearedowner {
 		edges = append(edges, risk.EdgeOwner)
 	}
@@ -216685,6 +218408,12 @@ func (m *RiskMutation) ClearedEdges() []string {
 	if m.clearedremediations {
 		edges = append(edges, risk.EdgeRemediations)
 	}
+	if m.clearedvulnerabilities {
+		edges = append(edges, risk.EdgeVulnerabilities)
+	}
+	if m.clearedfindings {
+		edges = append(edges, risk.EdgeFindings)
+	}
 	if m.clearedworkflow_object_refs {
 		edges = append(edges, risk.EdgeWorkflowObjectRefs)
 	}
@@ -216745,6 +218474,10 @@ func (m *RiskMutation) EdgeCleared(name string) bool {
 		return m.clearedreviews
 	case risk.EdgeRemediations:
 		return m.clearedremediations
+	case risk.EdgeVulnerabilities:
+		return m.clearedvulnerabilities
+	case risk.EdgeFindings:
+		return m.clearedfindings
 	case risk.EdgeWorkflowObjectRefs:
 		return m.clearedworkflow_object_refs
 	}
@@ -216858,6 +218591,12 @@ func (m *RiskMutation) ResetEdge(name string) error {
 		return nil
 	case risk.EdgeRemediations:
 		m.ResetRemediations()
+		return nil
+	case risk.EdgeVulnerabilities:
+		m.ResetVulnerabilities()
+		return nil
+	case risk.EdgeFindings:
+		m.ResetFindings()
 		return nil
 	case risk.EdgeWorkflowObjectRefs:
 		m.ResetWorkflowObjectRefs()
@@ -218256,6 +219995,9 @@ type ScanMutation struct {
 	deleted_by                         *string
 	tags                               *[]string
 	appendtags                         []string
+	system_owned                       *bool
+	internal_notes                     *string
+	system_internal_id                 *string
 	reviewed_by                        *string
 	assigned_to                        *string
 	environment_name                   *string
@@ -218897,6 +220639,153 @@ func (m *ScanMutation) OwnerIDCleared() bool {
 func (m *ScanMutation) ResetOwnerID() {
 	m.owner = nil
 	delete(m.clearedFields, scan.FieldOwnerID)
+}
+
+// SetSystemOwned sets the "system_owned" field.
+func (m *ScanMutation) SetSystemOwned(b bool) {
+	m.system_owned = &b
+}
+
+// SystemOwned returns the value of the "system_owned" field in the mutation.
+func (m *ScanMutation) SystemOwned() (r bool, exists bool) {
+	v := m.system_owned
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSystemOwned returns the old "system_owned" field's value of the Scan entity.
+// If the Scan object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ScanMutation) OldSystemOwned(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSystemOwned is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSystemOwned requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSystemOwned: %w", err)
+	}
+	return oldValue.SystemOwned, nil
+}
+
+// ClearSystemOwned clears the value of the "system_owned" field.
+func (m *ScanMutation) ClearSystemOwned() {
+	m.system_owned = nil
+	m.clearedFields[scan.FieldSystemOwned] = struct{}{}
+}
+
+// SystemOwnedCleared returns if the "system_owned" field was cleared in this mutation.
+func (m *ScanMutation) SystemOwnedCleared() bool {
+	_, ok := m.clearedFields[scan.FieldSystemOwned]
+	return ok
+}
+
+// ResetSystemOwned resets all changes to the "system_owned" field.
+func (m *ScanMutation) ResetSystemOwned() {
+	m.system_owned = nil
+	delete(m.clearedFields, scan.FieldSystemOwned)
+}
+
+// SetInternalNotes sets the "internal_notes" field.
+func (m *ScanMutation) SetInternalNotes(s string) {
+	m.internal_notes = &s
+}
+
+// InternalNotes returns the value of the "internal_notes" field in the mutation.
+func (m *ScanMutation) InternalNotes() (r string, exists bool) {
+	v := m.internal_notes
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldInternalNotes returns the old "internal_notes" field's value of the Scan entity.
+// If the Scan object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ScanMutation) OldInternalNotes(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldInternalNotes is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldInternalNotes requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldInternalNotes: %w", err)
+	}
+	return oldValue.InternalNotes, nil
+}
+
+// ClearInternalNotes clears the value of the "internal_notes" field.
+func (m *ScanMutation) ClearInternalNotes() {
+	m.internal_notes = nil
+	m.clearedFields[scan.FieldInternalNotes] = struct{}{}
+}
+
+// InternalNotesCleared returns if the "internal_notes" field was cleared in this mutation.
+func (m *ScanMutation) InternalNotesCleared() bool {
+	_, ok := m.clearedFields[scan.FieldInternalNotes]
+	return ok
+}
+
+// ResetInternalNotes resets all changes to the "internal_notes" field.
+func (m *ScanMutation) ResetInternalNotes() {
+	m.internal_notes = nil
+	delete(m.clearedFields, scan.FieldInternalNotes)
+}
+
+// SetSystemInternalID sets the "system_internal_id" field.
+func (m *ScanMutation) SetSystemInternalID(s string) {
+	m.system_internal_id = &s
+}
+
+// SystemInternalID returns the value of the "system_internal_id" field in the mutation.
+func (m *ScanMutation) SystemInternalID() (r string, exists bool) {
+	v := m.system_internal_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSystemInternalID returns the old "system_internal_id" field's value of the Scan entity.
+// If the Scan object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ScanMutation) OldSystemInternalID(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSystemInternalID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSystemInternalID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSystemInternalID: %w", err)
+	}
+	return oldValue.SystemInternalID, nil
+}
+
+// ClearSystemInternalID clears the value of the "system_internal_id" field.
+func (m *ScanMutation) ClearSystemInternalID() {
+	m.system_internal_id = nil
+	m.clearedFields[scan.FieldSystemInternalID] = struct{}{}
+}
+
+// SystemInternalIDCleared returns if the "system_internal_id" field was cleared in this mutation.
+func (m *ScanMutation) SystemInternalIDCleared() bool {
+	_, ok := m.clearedFields[scan.FieldSystemInternalID]
+	return ok
+}
+
+// ResetSystemInternalID resets all changes to the "system_internal_id" field.
+func (m *ScanMutation) ResetSystemInternalID() {
+	m.system_internal_id = nil
+	delete(m.clearedFields, scan.FieldSystemInternalID)
 }
 
 // SetReviewedBy sets the "reviewed_by" field.
@@ -221014,7 +222903,7 @@ func (m *ScanMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *ScanMutation) Fields() []string {
-	fields := make([]string, 0, 31)
+	fields := make([]string, 0, 34)
 	if m.created_at != nil {
 		fields = append(fields, scan.FieldCreatedAt)
 	}
@@ -221041,6 +222930,15 @@ func (m *ScanMutation) Fields() []string {
 	}
 	if m.owner != nil {
 		fields = append(fields, scan.FieldOwnerID)
+	}
+	if m.system_owned != nil {
+		fields = append(fields, scan.FieldSystemOwned)
+	}
+	if m.internal_notes != nil {
+		fields = append(fields, scan.FieldInternalNotes)
+	}
+	if m.system_internal_id != nil {
+		fields = append(fields, scan.FieldSystemInternalID)
 	}
 	if m.reviewed_by != nil {
 		fields = append(fields, scan.FieldReviewedBy)
@@ -221134,6 +223032,12 @@ func (m *ScanMutation) Field(name string) (ent.Value, bool) {
 		return m.Tags()
 	case scan.FieldOwnerID:
 		return m.OwnerID()
+	case scan.FieldSystemOwned:
+		return m.SystemOwned()
+	case scan.FieldInternalNotes:
+		return m.InternalNotes()
+	case scan.FieldSystemInternalID:
+		return m.SystemInternalID()
 	case scan.FieldReviewedBy:
 		return m.ReviewedBy()
 	case scan.FieldReviewedByUserID:
@@ -221205,6 +223109,12 @@ func (m *ScanMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldTags(ctx)
 	case scan.FieldOwnerID:
 		return m.OldOwnerID(ctx)
+	case scan.FieldSystemOwned:
+		return m.OldSystemOwned(ctx)
+	case scan.FieldInternalNotes:
+		return m.OldInternalNotes(ctx)
+	case scan.FieldSystemInternalID:
+		return m.OldSystemInternalID(ctx)
 	case scan.FieldReviewedBy:
 		return m.OldReviewedBy(ctx)
 	case scan.FieldReviewedByUserID:
@@ -221320,6 +223230,27 @@ func (m *ScanMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetOwnerID(v)
+		return nil
+	case scan.FieldSystemOwned:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSystemOwned(v)
+		return nil
+	case scan.FieldInternalNotes:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetInternalNotes(v)
+		return nil
+	case scan.FieldSystemInternalID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSystemInternalID(v)
 		return nil
 	case scan.FieldReviewedBy:
 		v, ok := value.(string)
@@ -221532,6 +223463,15 @@ func (m *ScanMutation) ClearedFields() []string {
 	if m.FieldCleared(scan.FieldOwnerID) {
 		fields = append(fields, scan.FieldOwnerID)
 	}
+	if m.FieldCleared(scan.FieldSystemOwned) {
+		fields = append(fields, scan.FieldSystemOwned)
+	}
+	if m.FieldCleared(scan.FieldInternalNotes) {
+		fields = append(fields, scan.FieldInternalNotes)
+	}
+	if m.FieldCleared(scan.FieldSystemInternalID) {
+		fields = append(fields, scan.FieldSystemInternalID)
+	}
 	if m.FieldCleared(scan.FieldReviewedBy) {
 		fields = append(fields, scan.FieldReviewedBy)
 	}
@@ -221630,6 +223570,15 @@ func (m *ScanMutation) ClearField(name string) error {
 	case scan.FieldOwnerID:
 		m.ClearOwnerID()
 		return nil
+	case scan.FieldSystemOwned:
+		m.ClearSystemOwned()
+		return nil
+	case scan.FieldInternalNotes:
+		m.ClearInternalNotes()
+		return nil
+	case scan.FieldSystemInternalID:
+		m.ClearSystemInternalID()
+		return nil
 	case scan.FieldReviewedBy:
 		m.ClearReviewedBy()
 		return nil
@@ -221721,6 +223670,15 @@ func (m *ScanMutation) ResetField(name string) error {
 		return nil
 	case scan.FieldOwnerID:
 		m.ResetOwnerID()
+		return nil
+	case scan.FieldSystemOwned:
+		m.ResetSystemOwned()
+		return nil
+	case scan.FieldInternalNotes:
+		m.ResetInternalNotes()
+		return nil
+	case scan.FieldSystemInternalID:
+		m.ResetSystemInternalID()
 		return nil
 	case scan.FieldReviewedBy:
 		m.ResetReviewedBy()
@@ -228102,6 +230060,12 @@ type SubcontrolMutation struct {
 	identity_holders               map[string]struct{}
 	removedidentity_holders        map[string]struct{}
 	clearedidentity_holders        bool
+	vulnerabilities                map[string]struct{}
+	removedvulnerabilities         map[string]struct{}
+	clearedvulnerabilities         bool
+	findings                       map[string]struct{}
+	removedfindings                map[string]struct{}
+	clearedfindings                bool
 	done                           bool
 	oldValue                       func(context.Context) (*Subcontrol, error)
 	predicates                     []predicate.Subcontrol
@@ -232012,6 +233976,114 @@ func (m *SubcontrolMutation) ResetIdentityHolders() {
 	m.removedidentity_holders = nil
 }
 
+// AddVulnerabilityIDs adds the "vulnerabilities" edge to the Vulnerability entity by ids.
+func (m *SubcontrolMutation) AddVulnerabilityIDs(ids ...string) {
+	if m.vulnerabilities == nil {
+		m.vulnerabilities = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.vulnerabilities[ids[i]] = struct{}{}
+	}
+}
+
+// ClearVulnerabilities clears the "vulnerabilities" edge to the Vulnerability entity.
+func (m *SubcontrolMutation) ClearVulnerabilities() {
+	m.clearedvulnerabilities = true
+}
+
+// VulnerabilitiesCleared reports if the "vulnerabilities" edge to the Vulnerability entity was cleared.
+func (m *SubcontrolMutation) VulnerabilitiesCleared() bool {
+	return m.clearedvulnerabilities
+}
+
+// RemoveVulnerabilityIDs removes the "vulnerabilities" edge to the Vulnerability entity by IDs.
+func (m *SubcontrolMutation) RemoveVulnerabilityIDs(ids ...string) {
+	if m.removedvulnerabilities == nil {
+		m.removedvulnerabilities = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.vulnerabilities, ids[i])
+		m.removedvulnerabilities[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedVulnerabilities returns the removed IDs of the "vulnerabilities" edge to the Vulnerability entity.
+func (m *SubcontrolMutation) RemovedVulnerabilitiesIDs() (ids []string) {
+	for id := range m.removedvulnerabilities {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// VulnerabilitiesIDs returns the "vulnerabilities" edge IDs in the mutation.
+func (m *SubcontrolMutation) VulnerabilitiesIDs() (ids []string) {
+	for id := range m.vulnerabilities {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetVulnerabilities resets all changes to the "vulnerabilities" edge.
+func (m *SubcontrolMutation) ResetVulnerabilities() {
+	m.vulnerabilities = nil
+	m.clearedvulnerabilities = false
+	m.removedvulnerabilities = nil
+}
+
+// AddFindingIDs adds the "findings" edge to the Finding entity by ids.
+func (m *SubcontrolMutation) AddFindingIDs(ids ...string) {
+	if m.findings == nil {
+		m.findings = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.findings[ids[i]] = struct{}{}
+	}
+}
+
+// ClearFindings clears the "findings" edge to the Finding entity.
+func (m *SubcontrolMutation) ClearFindings() {
+	m.clearedfindings = true
+}
+
+// FindingsCleared reports if the "findings" edge to the Finding entity was cleared.
+func (m *SubcontrolMutation) FindingsCleared() bool {
+	return m.clearedfindings
+}
+
+// RemoveFindingIDs removes the "findings" edge to the Finding entity by IDs.
+func (m *SubcontrolMutation) RemoveFindingIDs(ids ...string) {
+	if m.removedfindings == nil {
+		m.removedfindings = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.findings, ids[i])
+		m.removedfindings[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedFindings returns the removed IDs of the "findings" edge to the Finding entity.
+func (m *SubcontrolMutation) RemovedFindingsIDs() (ids []string) {
+	for id := range m.removedfindings {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// FindingsIDs returns the "findings" edge IDs in the mutation.
+func (m *SubcontrolMutation) FindingsIDs() (ids []string) {
+	for id := range m.findings {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetFindings resets all changes to the "findings" edge.
+func (m *SubcontrolMutation) ResetFindings() {
+	m.findings = nil
+	m.clearedfindings = false
+	m.removedfindings = nil
+}
+
 // Where appends a list predicates to the SubcontrolMutation builder.
 func (m *SubcontrolMutation) Where(ps ...predicate.Subcontrol) {
 	m.predicates = append(m.predicates, ps...)
@@ -233217,7 +235289,7 @@ func (m *SubcontrolMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *SubcontrolMutation) AddedEdges() []string {
-	edges := make([]string, 0, 27)
+	edges := make([]string, 0, 29)
 	if m.evidence != nil {
 		edges = append(edges, subcontrol.EdgeEvidence)
 	}
@@ -233298,6 +235370,12 @@ func (m *SubcontrolMutation) AddedEdges() []string {
 	}
 	if m.identity_holders != nil {
 		edges = append(edges, subcontrol.EdgeIdentityHolders)
+	}
+	if m.vulnerabilities != nil {
+		edges = append(edges, subcontrol.EdgeVulnerabilities)
+	}
+	if m.findings != nil {
+		edges = append(edges, subcontrol.EdgeFindings)
 	}
 	return edges
 }
@@ -233456,13 +235534,25 @@ func (m *SubcontrolMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case subcontrol.EdgeVulnerabilities:
+		ids := make([]ent.Value, 0, len(m.vulnerabilities))
+		for id := range m.vulnerabilities {
+			ids = append(ids, id)
+		}
+		return ids
+	case subcontrol.EdgeFindings:
+		ids := make([]ent.Value, 0, len(m.findings))
+		for id := range m.findings {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *SubcontrolMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 27)
+	edges := make([]string, 0, 29)
 	if m.removedevidence != nil {
 		edges = append(edges, subcontrol.EdgeEvidence)
 	}
@@ -233525,6 +235615,12 @@ func (m *SubcontrolMutation) RemovedEdges() []string {
 	}
 	if m.removedidentity_holders != nil {
 		edges = append(edges, subcontrol.EdgeIdentityHolders)
+	}
+	if m.removedvulnerabilities != nil {
+		edges = append(edges, subcontrol.EdgeVulnerabilities)
+	}
+	if m.removedfindings != nil {
+		edges = append(edges, subcontrol.EdgeFindings)
 	}
 	return edges
 }
@@ -233659,13 +235755,25 @@ func (m *SubcontrolMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case subcontrol.EdgeVulnerabilities:
+		ids := make([]ent.Value, 0, len(m.removedvulnerabilities))
+		for id := range m.removedvulnerabilities {
+			ids = append(ids, id)
+		}
+		return ids
+	case subcontrol.EdgeFindings:
+		ids := make([]ent.Value, 0, len(m.removedfindings))
+		for id := range m.removedfindings {
+			ids = append(ids, id)
+		}
+		return ids
 	}
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *SubcontrolMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 27)
+	edges := make([]string, 0, 29)
 	if m.clearedevidence {
 		edges = append(edges, subcontrol.EdgeEvidence)
 	}
@@ -233747,6 +235855,12 @@ func (m *SubcontrolMutation) ClearedEdges() []string {
 	if m.clearedidentity_holders {
 		edges = append(edges, subcontrol.EdgeIdentityHolders)
 	}
+	if m.clearedvulnerabilities {
+		edges = append(edges, subcontrol.EdgeVulnerabilities)
+	}
+	if m.clearedfindings {
+		edges = append(edges, subcontrol.EdgeFindings)
+	}
 	return edges
 }
 
@@ -233808,6 +235922,10 @@ func (m *SubcontrolMutation) EdgeCleared(name string) bool {
 		return m.clearedentities
 	case subcontrol.EdgeIdentityHolders:
 		return m.clearedidentity_holders
+	case subcontrol.EdgeVulnerabilities:
+		return m.clearedvulnerabilities
+	case subcontrol.EdgeFindings:
+		return m.clearedfindings
 	}
 	return false
 }
@@ -233922,6 +236040,12 @@ func (m *SubcontrolMutation) ResetEdge(name string) error {
 		return nil
 	case subcontrol.EdgeIdentityHolders:
 		m.ResetIdentityHolders()
+		return nil
+	case subcontrol.EdgeVulnerabilities:
+		m.ResetVulnerabilities()
+		return nil
+	case subcontrol.EdgeFindings:
+		m.ResetFindings()
 		return nil
 	}
 	return fmt.Errorf("unknown Subcontrol edge %s", name)
@@ -242631,11 +244755,17 @@ type TaskMutation struct {
 	details                        *string
 	details_json                   *[]interface{}
 	appenddetails_json             []interface{}
+	metadata                       *map[string]interface{}
 	status                         *enums.TaskStatus
 	due                            *models.DateTime
 	completed                      *models.DateTime
 	system_generated               *bool
 	is_template                    *bool
+	is_suggested                   *bool
+	priority                       *int
+	addpriority                    *int
+	source                         *string
+	source_key                     *string
 	idempotency_key                *string
 	external_reference_url         *[]string
 	appendexternal_reference_url   []string
@@ -243855,6 +245985,55 @@ func (m *TaskMutation) ResetDetailsJSON() {
 	delete(m.clearedFields, task.FieldDetailsJSON)
 }
 
+// SetMetadata sets the "metadata" field.
+func (m *TaskMutation) SetMetadata(value map[string]interface{}) {
+	m.metadata = &value
+}
+
+// Metadata returns the value of the "metadata" field in the mutation.
+func (m *TaskMutation) Metadata() (r map[string]interface{}, exists bool) {
+	v := m.metadata
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMetadata returns the old "metadata" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldMetadata(ctx context.Context) (v map[string]interface{}, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMetadata is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMetadata requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMetadata: %w", err)
+	}
+	return oldValue.Metadata, nil
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (m *TaskMutation) ClearMetadata() {
+	m.metadata = nil
+	m.clearedFields[task.FieldMetadata] = struct{}{}
+}
+
+// MetadataCleared returns if the "metadata" field was cleared in this mutation.
+func (m *TaskMutation) MetadataCleared() bool {
+	_, ok := m.clearedFields[task.FieldMetadata]
+	return ok
+}
+
+// ResetMetadata resets all changes to the "metadata" field.
+func (m *TaskMutation) ResetMetadata() {
+	m.metadata = nil
+	delete(m.clearedFields, task.FieldMetadata)
+}
+
 // SetStatus sets the "status" field.
 func (m *TaskMutation) SetStatus(es enums.TaskStatus) {
 	m.status = &es
@@ -244157,6 +246336,196 @@ func (m *TaskMutation) OldIsTemplate(ctx context.Context) (v bool, err error) {
 // ResetIsTemplate resets all changes to the "is_template" field.
 func (m *TaskMutation) ResetIsTemplate() {
 	m.is_template = nil
+}
+
+// SetIsSuggested sets the "is_suggested" field.
+func (m *TaskMutation) SetIsSuggested(b bool) {
+	m.is_suggested = &b
+}
+
+// IsSuggested returns the value of the "is_suggested" field in the mutation.
+func (m *TaskMutation) IsSuggested() (r bool, exists bool) {
+	v := m.is_suggested
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldIsSuggested returns the old "is_suggested" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldIsSuggested(ctx context.Context) (v bool, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldIsSuggested is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldIsSuggested requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldIsSuggested: %w", err)
+	}
+	return oldValue.IsSuggested, nil
+}
+
+// ResetIsSuggested resets all changes to the "is_suggested" field.
+func (m *TaskMutation) ResetIsSuggested() {
+	m.is_suggested = nil
+}
+
+// SetPriority sets the "priority" field.
+func (m *TaskMutation) SetPriority(i int) {
+	m.priority = &i
+	m.addpriority = nil
+}
+
+// Priority returns the value of the "priority" field in the mutation.
+func (m *TaskMutation) Priority() (r int, exists bool) {
+	v := m.priority
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPriority returns the old "priority" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldPriority(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPriority is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPriority requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPriority: %w", err)
+	}
+	return oldValue.Priority, nil
+}
+
+// AddPriority adds i to the "priority" field.
+func (m *TaskMutation) AddPriority(i int) {
+	if m.addpriority != nil {
+		*m.addpriority += i
+	} else {
+		m.addpriority = &i
+	}
+}
+
+// AddedPriority returns the value that was added to the "priority" field in this mutation.
+func (m *TaskMutation) AddedPriority() (r int, exists bool) {
+	v := m.addpriority
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetPriority resets all changes to the "priority" field.
+func (m *TaskMutation) ResetPriority() {
+	m.priority = nil
+	m.addpriority = nil
+}
+
+// SetSource sets the "source" field.
+func (m *TaskMutation) SetSource(s string) {
+	m.source = &s
+}
+
+// Source returns the value of the "source" field in the mutation.
+func (m *TaskMutation) Source() (r string, exists bool) {
+	v := m.source
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSource returns the old "source" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldSource(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSource is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSource requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSource: %w", err)
+	}
+	return oldValue.Source, nil
+}
+
+// ClearSource clears the value of the "source" field.
+func (m *TaskMutation) ClearSource() {
+	m.source = nil
+	m.clearedFields[task.FieldSource] = struct{}{}
+}
+
+// SourceCleared returns if the "source" field was cleared in this mutation.
+func (m *TaskMutation) SourceCleared() bool {
+	_, ok := m.clearedFields[task.FieldSource]
+	return ok
+}
+
+// ResetSource resets all changes to the "source" field.
+func (m *TaskMutation) ResetSource() {
+	m.source = nil
+	delete(m.clearedFields, task.FieldSource)
+}
+
+// SetSourceKey sets the "source_key" field.
+func (m *TaskMutation) SetSourceKey(s string) {
+	m.source_key = &s
+}
+
+// SourceKey returns the value of the "source_key" field in the mutation.
+func (m *TaskMutation) SourceKey() (r string, exists bool) {
+	v := m.source_key
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldSourceKey returns the old "source_key" field's value of the Task entity.
+// If the Task object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *TaskMutation) OldSourceKey(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldSourceKey is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldSourceKey requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldSourceKey: %w", err)
+	}
+	return oldValue.SourceKey, nil
+}
+
+// ClearSourceKey clears the value of the "source_key" field.
+func (m *TaskMutation) ClearSourceKey() {
+	m.source_key = nil
+	m.clearedFields[task.FieldSourceKey] = struct{}{}
+}
+
+// SourceKeyCleared returns if the "source_key" field was cleared in this mutation.
+func (m *TaskMutation) SourceKeyCleared() bool {
+	_, ok := m.clearedFields[task.FieldSourceKey]
+	return ok
+}
+
+// ResetSourceKey resets all changes to the "source_key" field.
+func (m *TaskMutation) ResetSourceKey() {
+	m.source_key = nil
+	delete(m.clearedFields, task.FieldSourceKey)
 }
 
 // SetIdempotencyKey sets the "idempotency_key" field.
@@ -245584,7 +247953,7 @@ func (m *TaskMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *TaskMutation) Fields() []string {
-	fields := make([]string, 0, 31)
+	fields := make([]string, 0, 36)
 	if m.created_at != nil {
 		fields = append(fields, task.FieldCreatedAt)
 	}
@@ -245648,6 +248017,9 @@ func (m *TaskMutation) Fields() []string {
 	if m.details_json != nil {
 		fields = append(fields, task.FieldDetailsJSON)
 	}
+	if m.metadata != nil {
+		fields = append(fields, task.FieldMetadata)
+	}
 	if m.status != nil {
 		fields = append(fields, task.FieldStatus)
 	}
@@ -245668,6 +248040,18 @@ func (m *TaskMutation) Fields() []string {
 	}
 	if m.is_template != nil {
 		fields = append(fields, task.FieldIsTemplate)
+	}
+	if m.is_suggested != nil {
+		fields = append(fields, task.FieldIsSuggested)
+	}
+	if m.priority != nil {
+		fields = append(fields, task.FieldPriority)
+	}
+	if m.source != nil {
+		fields = append(fields, task.FieldSource)
+	}
+	if m.source_key != nil {
+		fields = append(fields, task.FieldSourceKey)
 	}
 	if m.idempotency_key != nil {
 		fields = append(fields, task.FieldIdempotencyKey)
@@ -245728,6 +248112,8 @@ func (m *TaskMutation) Field(name string) (ent.Value, bool) {
 		return m.Details()
 	case task.FieldDetailsJSON:
 		return m.DetailsJSON()
+	case task.FieldMetadata:
+		return m.Metadata()
 	case task.FieldStatus:
 		return m.Status()
 	case task.FieldDue:
@@ -245742,6 +248128,14 @@ func (m *TaskMutation) Field(name string) (ent.Value, bool) {
 		return m.SystemGenerated()
 	case task.FieldIsTemplate:
 		return m.IsTemplate()
+	case task.FieldIsSuggested:
+		return m.IsSuggested()
+	case task.FieldPriority:
+		return m.Priority()
+	case task.FieldSource:
+		return m.Source()
+	case task.FieldSourceKey:
+		return m.SourceKey()
 	case task.FieldIdempotencyKey:
 		return m.IdempotencyKey()
 	case task.FieldExternalReferenceURL:
@@ -245799,6 +248193,8 @@ func (m *TaskMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldDetails(ctx)
 	case task.FieldDetailsJSON:
 		return m.OldDetailsJSON(ctx)
+	case task.FieldMetadata:
+		return m.OldMetadata(ctx)
 	case task.FieldStatus:
 		return m.OldStatus(ctx)
 	case task.FieldDue:
@@ -245813,6 +248209,14 @@ func (m *TaskMutation) OldField(ctx context.Context, name string) (ent.Value, er
 		return m.OldSystemGenerated(ctx)
 	case task.FieldIsTemplate:
 		return m.OldIsTemplate(ctx)
+	case task.FieldIsSuggested:
+		return m.OldIsSuggested(ctx)
+	case task.FieldPriority:
+		return m.OldPriority(ctx)
+	case task.FieldSource:
+		return m.OldSource(ctx)
+	case task.FieldSourceKey:
+		return m.OldSourceKey(ctx)
 	case task.FieldIdempotencyKey:
 		return m.OldIdempotencyKey(ctx)
 	case task.FieldExternalReferenceURL:
@@ -245975,6 +248379,13 @@ func (m *TaskMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetDetailsJSON(v)
 		return nil
+	case task.FieldMetadata:
+		v, ok := value.(map[string]interface{})
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMetadata(v)
+		return nil
 	case task.FieldStatus:
 		v, ok := value.(enums.TaskStatus)
 		if !ok {
@@ -246024,6 +248435,34 @@ func (m *TaskMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetIsTemplate(v)
 		return nil
+	case task.FieldIsSuggested:
+		v, ok := value.(bool)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetIsSuggested(v)
+		return nil
+	case task.FieldPriority:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPriority(v)
+		return nil
+	case task.FieldSource:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSource(v)
+		return nil
+	case task.FieldSourceKey:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetSourceKey(v)
+		return nil
 	case task.FieldIdempotencyKey:
 		v, ok := value.(string)
 		if !ok {
@@ -246052,13 +248491,21 @@ func (m *TaskMutation) SetField(name string, value ent.Value) error {
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
 func (m *TaskMutation) AddedFields() []string {
-	return nil
+	var fields []string
+	if m.addpriority != nil {
+		fields = append(fields, task.FieldPriority)
+	}
+	return fields
 }
 
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
 func (m *TaskMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case task.FieldPriority:
+		return m.AddedPriority()
+	}
 	return nil, false
 }
 
@@ -246067,6 +248514,13 @@ func (m *TaskMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *TaskMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case task.FieldPriority:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddPriority(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Task numeric field %s", name)
 }
@@ -246132,6 +248586,9 @@ func (m *TaskMutation) ClearedFields() []string {
 	if m.FieldCleared(task.FieldDetailsJSON) {
 		fields = append(fields, task.FieldDetailsJSON)
 	}
+	if m.FieldCleared(task.FieldMetadata) {
+		fields = append(fields, task.FieldMetadata)
+	}
 	if m.FieldCleared(task.FieldDue) {
 		fields = append(fields, task.FieldDue)
 	}
@@ -246143,6 +248600,12 @@ func (m *TaskMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(task.FieldAssignerID) {
 		fields = append(fields, task.FieldAssignerID)
+	}
+	if m.FieldCleared(task.FieldSource) {
+		fields = append(fields, task.FieldSource)
+	}
+	if m.FieldCleared(task.FieldSourceKey) {
+		fields = append(fields, task.FieldSourceKey)
 	}
 	if m.FieldCleared(task.FieldIdempotencyKey) {
 		fields = append(fields, task.FieldIdempotencyKey)
@@ -246224,6 +248687,9 @@ func (m *TaskMutation) ClearField(name string) error {
 	case task.FieldDetailsJSON:
 		m.ClearDetailsJSON()
 		return nil
+	case task.FieldMetadata:
+		m.ClearMetadata()
+		return nil
 	case task.FieldDue:
 		m.ClearDue()
 		return nil
@@ -246235,6 +248701,12 @@ func (m *TaskMutation) ClearField(name string) error {
 		return nil
 	case task.FieldAssignerID:
 		m.ClearAssignerID()
+		return nil
+	case task.FieldSource:
+		m.ClearSource()
+		return nil
+	case task.FieldSourceKey:
+		m.ClearSourceKey()
 		return nil
 	case task.FieldIdempotencyKey:
 		m.ClearIdempotencyKey()
@@ -246316,6 +248788,9 @@ func (m *TaskMutation) ResetField(name string) error {
 	case task.FieldDetailsJSON:
 		m.ResetDetailsJSON()
 		return nil
+	case task.FieldMetadata:
+		m.ResetMetadata()
+		return nil
 	case task.FieldStatus:
 		m.ResetStatus()
 		return nil
@@ -246336,6 +248811,18 @@ func (m *TaskMutation) ResetField(name string) error {
 		return nil
 	case task.FieldIsTemplate:
 		m.ResetIsTemplate()
+		return nil
+	case task.FieldIsSuggested:
+		m.ResetIsSuggested()
+		return nil
+	case task.FieldPriority:
+		m.ResetPriority()
+		return nil
+	case task.FieldSource:
+		m.ResetSource()
+		return nil
+	case task.FieldSourceKey:
+		m.ResetSourceKey()
 		return nil
 	case task.FieldIdempotencyKey:
 		m.ResetIdempotencyKey()
@@ -258886,7 +261373,6 @@ type TrustCenterNDARequestMutation struct {
 	access_level             *enums.TrustCenterNDARequestAccessLevel
 	status                   *enums.TrustCenterNDARequestStatus
 	approved_at              *models.DateTime
-	approved_by_user_id      *string
 	signed_at                *models.DateTime
 	clearedFields            map[string]struct{}
 	blocked_groups           map[string]struct{}
@@ -258904,6 +261390,8 @@ type TrustCenterNDARequestMutation struct {
 	cleareddocument          bool
 	file                     *string
 	clearedfile              bool
+	approved_by_user         *string
+	clearedapproved_by_user  bool
 	done                     bool
 	oldValue                 func(context.Context) (*TrustCenterNDARequest, error)
 	predicates               []predicate.TrustCenterNDARequest
@@ -259825,12 +262313,12 @@ func (m *TrustCenterNDARequestMutation) ResetApprovedAt() {
 
 // SetApprovedByUserID sets the "approved_by_user_id" field.
 func (m *TrustCenterNDARequestMutation) SetApprovedByUserID(s string) {
-	m.approved_by_user_id = &s
+	m.approved_by_user = &s
 }
 
 // ApprovedByUserID returns the value of the "approved_by_user_id" field in the mutation.
 func (m *TrustCenterNDARequestMutation) ApprovedByUserID() (r string, exists bool) {
-	v := m.approved_by_user_id
+	v := m.approved_by_user
 	if v == nil {
 		return
 	}
@@ -259856,7 +262344,7 @@ func (m *TrustCenterNDARequestMutation) OldApprovedByUserID(ctx context.Context)
 
 // ClearApprovedByUserID clears the value of the "approved_by_user_id" field.
 func (m *TrustCenterNDARequestMutation) ClearApprovedByUserID() {
-	m.approved_by_user_id = nil
+	m.approved_by_user = nil
 	m.clearedFields[trustcenterndarequest.FieldApprovedByUserID] = struct{}{}
 }
 
@@ -259868,7 +262356,7 @@ func (m *TrustCenterNDARequestMutation) ApprovedByUserIDCleared() bool {
 
 // ResetApprovedByUserID resets all changes to the "approved_by_user_id" field.
 func (m *TrustCenterNDARequestMutation) ResetApprovedByUserID() {
-	m.approved_by_user_id = nil
+	m.approved_by_user = nil
 	delete(m.clearedFields, trustcenterndarequest.FieldApprovedByUserID)
 }
 
@@ -260275,6 +262763,33 @@ func (m *TrustCenterNDARequestMutation) ResetFile() {
 	m.clearedfile = false
 }
 
+// ClearApprovedByUser clears the "approved_by_user" edge to the User entity.
+func (m *TrustCenterNDARequestMutation) ClearApprovedByUser() {
+	m.clearedapproved_by_user = true
+	m.clearedFields[trustcenterndarequest.FieldApprovedByUserID] = struct{}{}
+}
+
+// ApprovedByUserCleared reports if the "approved_by_user" edge to the User entity was cleared.
+func (m *TrustCenterNDARequestMutation) ApprovedByUserCleared() bool {
+	return m.ApprovedByUserIDCleared() || m.clearedapproved_by_user
+}
+
+// ApprovedByUserIDs returns the "approved_by_user" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// ApprovedByUserID instead. It exists only for internal usage by the builders.
+func (m *TrustCenterNDARequestMutation) ApprovedByUserIDs() (ids []string) {
+	if id := m.approved_by_user; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetApprovedByUser resets all changes to the "approved_by_user" edge.
+func (m *TrustCenterNDARequestMutation) ResetApprovedByUser() {
+	m.approved_by_user = nil
+	m.clearedapproved_by_user = false
+}
+
 // Where appends a list predicates to the TrustCenterNDARequestMutation builder.
 func (m *TrustCenterNDARequestMutation) Where(ps ...predicate.TrustCenterNDARequest) {
 	m.predicates = append(m.predicates, ps...)
@@ -260361,7 +262876,7 @@ func (m *TrustCenterNDARequestMutation) Fields() []string {
 	if m.approved_at != nil {
 		fields = append(fields, trustcenterndarequest.FieldApprovedAt)
 	}
-	if m.approved_by_user_id != nil {
+	if m.approved_by_user != nil {
 		fields = append(fields, trustcenterndarequest.FieldApprovedByUserID)
 	}
 	if m.signed_at != nil {
@@ -260859,7 +263374,7 @@ func (m *TrustCenterNDARequestMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *TrustCenterNDARequestMutation) AddedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.blocked_groups != nil {
 		edges = append(edges, trustcenterndarequest.EdgeBlockedGroups)
 	}
@@ -260877,6 +263392,9 @@ func (m *TrustCenterNDARequestMutation) AddedEdges() []string {
 	}
 	if m.file != nil {
 		edges = append(edges, trustcenterndarequest.EdgeFile)
+	}
+	if m.approved_by_user != nil {
+		edges = append(edges, trustcenterndarequest.EdgeApprovedByUser)
 	}
 	return edges
 }
@@ -260915,13 +263433,17 @@ func (m *TrustCenterNDARequestMutation) AddedIDs(name string) []ent.Value {
 		if id := m.file; id != nil {
 			return []ent.Value{*id}
 		}
+	case trustcenterndarequest.EdgeApprovedByUser:
+		if id := m.approved_by_user; id != nil {
+			return []ent.Value{*id}
+		}
 	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *TrustCenterNDARequestMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.removedblocked_groups != nil {
 		edges = append(edges, trustcenterndarequest.EdgeBlockedGroups)
 	}
@@ -260962,7 +263484,7 @@ func (m *TrustCenterNDARequestMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *TrustCenterNDARequestMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 6)
+	edges := make([]string, 0, 7)
 	if m.clearedblocked_groups {
 		edges = append(edges, trustcenterndarequest.EdgeBlockedGroups)
 	}
@@ -260980,6 +263502,9 @@ func (m *TrustCenterNDARequestMutation) ClearedEdges() []string {
 	}
 	if m.clearedfile {
 		edges = append(edges, trustcenterndarequest.EdgeFile)
+	}
+	if m.clearedapproved_by_user {
+		edges = append(edges, trustcenterndarequest.EdgeApprovedByUser)
 	}
 	return edges
 }
@@ -261000,6 +263525,8 @@ func (m *TrustCenterNDARequestMutation) EdgeCleared(name string) bool {
 		return m.cleareddocument
 	case trustcenterndarequest.EdgeFile:
 		return m.clearedfile
+	case trustcenterndarequest.EdgeApprovedByUser:
+		return m.clearedapproved_by_user
 	}
 	return false
 }
@@ -261016,6 +263543,9 @@ func (m *TrustCenterNDARequestMutation) ClearEdge(name string) error {
 		return nil
 	case trustcenterndarequest.EdgeFile:
 		m.ClearFile()
+		return nil
+	case trustcenterndarequest.EdgeApprovedByUser:
+		m.ClearApprovedByUser()
 		return nil
 	}
 	return fmt.Errorf("unknown TrustCenterNDARequest unique edge %s", name)
@@ -261042,6 +263572,9 @@ func (m *TrustCenterNDARequestMutation) ResetEdge(name string) error {
 		return nil
 	case trustcenterndarequest.EdgeFile:
 		m.ResetFile()
+		return nil
+	case trustcenterndarequest.EdgeApprovedByUser:
+		m.ResetApprovedByUser()
 		return nil
 	}
 	return fmt.Errorf("unknown TrustCenterNDARequest edge %s", name)

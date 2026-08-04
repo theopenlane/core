@@ -91,10 +91,10 @@ func handleExportCreate(ctx context.Context, m *generated.ExportMutation, next e
 	if exportType == enums.ExportTypeEvidence {
 		mode, _ := m.Mode()
 		args.Mode = mode
+	}
 
-		if metadata, ok := m.ExportMetadata(); ok {
-			args.ExportMetadata = &metadata
-		}
+	if metadata, ok := m.ExportMetadata(); ok {
+		args.ExportMetadata = &metadata
 	}
 
 	err = enqueueJob(ctx, m.Job, args, nil)

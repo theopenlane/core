@@ -93,6 +93,11 @@ func UpdatedByImpersonator(v string) predicate.FindingControl {
 	return predicate.FindingControl(sql.FieldEQ(FieldUpdatedByImpersonator, v))
 }
 
+// OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
+func OwnerID(v string) predicate.FindingControl {
+	return predicate.FindingControl(sql.FieldEQ(FieldOwnerID, v))
+}
+
 // FindingID applies equality check predicate on the "finding_id" field. It's identical to FindingIDEQ.
 func FindingID(v string) predicate.FindingControl {
 	return predicate.FindingControl(sql.FieldEQ(FieldFindingID, v))
@@ -456,6 +461,81 @@ func UpdatedByImpersonatorEqualFold(v string) predicate.FindingControl {
 // UpdatedByImpersonatorContainsFold applies the ContainsFold predicate on the "updated_by_impersonator" field.
 func UpdatedByImpersonatorContainsFold(v string) predicate.FindingControl {
 	return predicate.FindingControl(sql.FieldContainsFold(FieldUpdatedByImpersonator, v))
+}
+
+// OwnerIDEQ applies the EQ predicate on the "owner_id" field.
+func OwnerIDEQ(v string) predicate.FindingControl {
+	return predicate.FindingControl(sql.FieldEQ(FieldOwnerID, v))
+}
+
+// OwnerIDNEQ applies the NEQ predicate on the "owner_id" field.
+func OwnerIDNEQ(v string) predicate.FindingControl {
+	return predicate.FindingControl(sql.FieldNEQ(FieldOwnerID, v))
+}
+
+// OwnerIDIn applies the In predicate on the "owner_id" field.
+func OwnerIDIn(vs ...string) predicate.FindingControl {
+	return predicate.FindingControl(sql.FieldIn(FieldOwnerID, vs...))
+}
+
+// OwnerIDNotIn applies the NotIn predicate on the "owner_id" field.
+func OwnerIDNotIn(vs ...string) predicate.FindingControl {
+	return predicate.FindingControl(sql.FieldNotIn(FieldOwnerID, vs...))
+}
+
+// OwnerIDGT applies the GT predicate on the "owner_id" field.
+func OwnerIDGT(v string) predicate.FindingControl {
+	return predicate.FindingControl(sql.FieldGT(FieldOwnerID, v))
+}
+
+// OwnerIDGTE applies the GTE predicate on the "owner_id" field.
+func OwnerIDGTE(v string) predicate.FindingControl {
+	return predicate.FindingControl(sql.FieldGTE(FieldOwnerID, v))
+}
+
+// OwnerIDLT applies the LT predicate on the "owner_id" field.
+func OwnerIDLT(v string) predicate.FindingControl {
+	return predicate.FindingControl(sql.FieldLT(FieldOwnerID, v))
+}
+
+// OwnerIDLTE applies the LTE predicate on the "owner_id" field.
+func OwnerIDLTE(v string) predicate.FindingControl {
+	return predicate.FindingControl(sql.FieldLTE(FieldOwnerID, v))
+}
+
+// OwnerIDContains applies the Contains predicate on the "owner_id" field.
+func OwnerIDContains(v string) predicate.FindingControl {
+	return predicate.FindingControl(sql.FieldContains(FieldOwnerID, v))
+}
+
+// OwnerIDHasPrefix applies the HasPrefix predicate on the "owner_id" field.
+func OwnerIDHasPrefix(v string) predicate.FindingControl {
+	return predicate.FindingControl(sql.FieldHasPrefix(FieldOwnerID, v))
+}
+
+// OwnerIDHasSuffix applies the HasSuffix predicate on the "owner_id" field.
+func OwnerIDHasSuffix(v string) predicate.FindingControl {
+	return predicate.FindingControl(sql.FieldHasSuffix(FieldOwnerID, v))
+}
+
+// OwnerIDIsNil applies the IsNil predicate on the "owner_id" field.
+func OwnerIDIsNil() predicate.FindingControl {
+	return predicate.FindingControl(sql.FieldIsNull(FieldOwnerID))
+}
+
+// OwnerIDNotNil applies the NotNil predicate on the "owner_id" field.
+func OwnerIDNotNil() predicate.FindingControl {
+	return predicate.FindingControl(sql.FieldNotNull(FieldOwnerID))
+}
+
+// OwnerIDEqualFold applies the EqualFold predicate on the "owner_id" field.
+func OwnerIDEqualFold(v string) predicate.FindingControl {
+	return predicate.FindingControl(sql.FieldEqualFold(FieldOwnerID, v))
+}
+
+// OwnerIDContainsFold applies the ContainsFold predicate on the "owner_id" field.
+func OwnerIDContainsFold(v string) predicate.FindingControl {
+	return predicate.FindingControl(sql.FieldContainsFold(FieldOwnerID, v))
 }
 
 // FindingIDEQ applies the EQ predicate on the "finding_id" field.
@@ -1021,6 +1101,35 @@ func DiscoveredAtIsNil() predicate.FindingControl {
 // DiscoveredAtNotNil applies the NotNil predicate on the "discovered_at" field.
 func DiscoveredAtNotNil() predicate.FindingControl {
 	return predicate.FindingControl(sql.FieldNotNull(FieldDiscoveredAt))
+}
+
+// HasOwner applies the HasEdge predicate on the "owner" edge.
+func HasOwner() predicate.FindingControl {
+	return predicate.FindingControl(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.FindingControl
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasOwnerWith applies the HasEdge predicate on the "owner" edge with a given conditions (other predicates).
+func HasOwnerWith(preds ...predicate.Organization) predicate.FindingControl {
+	return predicate.FindingControl(func(s *sql.Selector) {
+		step := newOwnerStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.FindingControl
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // HasFinding applies the HasEdge predicate on the "finding" edge.

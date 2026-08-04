@@ -35547,6 +35547,23 @@ type FindingControlHistoryWhereInput struct {
 	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
 	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
 
+	// "owner_id" field predicates.
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIDNEQ          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIDGT           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIDGTE          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIDLT           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIDLTE          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        bool     `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       bool     `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+
 	// "finding_id" field predicates.
 	FindingID             *string  `json:"findingID,omitempty"`
 	FindingIDNEQ          *string  `json:"findingIDNEQ,omitempty"`
@@ -36051,6 +36068,51 @@ func (i *FindingControlHistoryWhereInput) P() (predicate.FindingControlHistory, 
 	}
 	if i.UpdatedByImpersonatorContainsFold != nil {
 		predicates = append(predicates, findingcontrolhistory.UpdatedByImpersonatorContainsFold(*i.UpdatedByImpersonatorContainsFold))
+	}
+	if i.OwnerID != nil {
+		predicates = append(predicates, findingcontrolhistory.OwnerIDEQ(*i.OwnerID))
+	}
+	if i.OwnerIDNEQ != nil {
+		predicates = append(predicates, findingcontrolhistory.OwnerIDNEQ(*i.OwnerIDNEQ))
+	}
+	if len(i.OwnerIDIn) > 0 {
+		predicates = append(predicates, findingcontrolhistory.OwnerIDIn(i.OwnerIDIn...))
+	}
+	if len(i.OwnerIDNotIn) > 0 {
+		predicates = append(predicates, findingcontrolhistory.OwnerIDNotIn(i.OwnerIDNotIn...))
+	}
+	if i.OwnerIDGT != nil {
+		predicates = append(predicates, findingcontrolhistory.OwnerIDGT(*i.OwnerIDGT))
+	}
+	if i.OwnerIDGTE != nil {
+		predicates = append(predicates, findingcontrolhistory.OwnerIDGTE(*i.OwnerIDGTE))
+	}
+	if i.OwnerIDLT != nil {
+		predicates = append(predicates, findingcontrolhistory.OwnerIDLT(*i.OwnerIDLT))
+	}
+	if i.OwnerIDLTE != nil {
+		predicates = append(predicates, findingcontrolhistory.OwnerIDLTE(*i.OwnerIDLTE))
+	}
+	if i.OwnerIDContains != nil {
+		predicates = append(predicates, findingcontrolhistory.OwnerIDContains(*i.OwnerIDContains))
+	}
+	if i.OwnerIDHasPrefix != nil {
+		predicates = append(predicates, findingcontrolhistory.OwnerIDHasPrefix(*i.OwnerIDHasPrefix))
+	}
+	if i.OwnerIDHasSuffix != nil {
+		predicates = append(predicates, findingcontrolhistory.OwnerIDHasSuffix(*i.OwnerIDHasSuffix))
+	}
+	if i.OwnerIDIsNil {
+		predicates = append(predicates, findingcontrolhistory.OwnerIDIsNil())
+	}
+	if i.OwnerIDNotNil {
+		predicates = append(predicates, findingcontrolhistory.OwnerIDNotNil())
+	}
+	if i.OwnerIDEqualFold != nil {
+		predicates = append(predicates, findingcontrolhistory.OwnerIDEqualFold(*i.OwnerIDEqualFold))
+	}
+	if i.OwnerIDContainsFold != nil {
+		predicates = append(predicates, findingcontrolhistory.OwnerIDContainsFold(*i.OwnerIDContainsFold))
 	}
 	if i.FindingID != nil {
 		predicates = append(predicates, findingcontrolhistory.FindingIDEQ(*i.FindingID))
@@ -65213,6 +65275,54 @@ type ProgramHistoryWhereInput struct {
 	EndDateIsNil  bool        `json:"endDateIsNil,omitempty"`
 	EndDateNotNil bool        `json:"endDateNotNil,omitempty"`
 
+	// "observation_period_start_date" field predicates.
+	ObservationPeriodStartDate       *time.Time  `json:"observationPeriodStartDate,omitempty"`
+	ObservationPeriodStartDateNEQ    *time.Time  `json:"observationPeriodStartDateNEQ,omitempty"`
+	ObservationPeriodStartDateIn     []time.Time `json:"observationPeriodStartDateIn,omitempty"`
+	ObservationPeriodStartDateNotIn  []time.Time `json:"observationPeriodStartDateNotIn,omitempty"`
+	ObservationPeriodStartDateGT     *time.Time  `json:"observationPeriodStartDateGT,omitempty"`
+	ObservationPeriodStartDateGTE    *time.Time  `json:"observationPeriodStartDateGTE,omitempty"`
+	ObservationPeriodStartDateLT     *time.Time  `json:"observationPeriodStartDateLT,omitempty"`
+	ObservationPeriodStartDateLTE    *time.Time  `json:"observationPeriodStartDateLTE,omitempty"`
+	ObservationPeriodStartDateIsNil  bool        `json:"observationPeriodStartDateIsNil,omitempty"`
+	ObservationPeriodStartDateNotNil bool        `json:"observationPeriodStartDateNotNil,omitempty"`
+
+	// "observation_period_end_date" field predicates.
+	ObservationPeriodEndDate       *time.Time  `json:"observationPeriodEndDate,omitempty"`
+	ObservationPeriodEndDateNEQ    *time.Time  `json:"observationPeriodEndDateNEQ,omitempty"`
+	ObservationPeriodEndDateIn     []time.Time `json:"observationPeriodEndDateIn,omitempty"`
+	ObservationPeriodEndDateNotIn  []time.Time `json:"observationPeriodEndDateNotIn,omitempty"`
+	ObservationPeriodEndDateGT     *time.Time  `json:"observationPeriodEndDateGT,omitempty"`
+	ObservationPeriodEndDateGTE    *time.Time  `json:"observationPeriodEndDateGTE,omitempty"`
+	ObservationPeriodEndDateLT     *time.Time  `json:"observationPeriodEndDateLT,omitempty"`
+	ObservationPeriodEndDateLTE    *time.Time  `json:"observationPeriodEndDateLTE,omitempty"`
+	ObservationPeriodEndDateIsNil  bool        `json:"observationPeriodEndDateIsNil,omitempty"`
+	ObservationPeriodEndDateNotNil bool        `json:"observationPeriodEndDateNotNil,omitempty"`
+
+	// "fieldwork_start_date" field predicates.
+	FieldworkStartDate       *time.Time  `json:"fieldworkStartDate,omitempty"`
+	FieldworkStartDateNEQ    *time.Time  `json:"fieldworkStartDateNEQ,omitempty"`
+	FieldworkStartDateIn     []time.Time `json:"fieldworkStartDateIn,omitempty"`
+	FieldworkStartDateNotIn  []time.Time `json:"fieldworkStartDateNotIn,omitempty"`
+	FieldworkStartDateGT     *time.Time  `json:"fieldworkStartDateGT,omitempty"`
+	FieldworkStartDateGTE    *time.Time  `json:"fieldworkStartDateGTE,omitempty"`
+	FieldworkStartDateLT     *time.Time  `json:"fieldworkStartDateLT,omitempty"`
+	FieldworkStartDateLTE    *time.Time  `json:"fieldworkStartDateLTE,omitempty"`
+	FieldworkStartDateIsNil  bool        `json:"fieldworkStartDateIsNil,omitempty"`
+	FieldworkStartDateNotNil bool        `json:"fieldworkStartDateNotNil,omitempty"`
+
+	// "fieldwork_end_date" field predicates.
+	FieldworkEndDate       *time.Time  `json:"fieldworkEndDate,omitempty"`
+	FieldworkEndDateNEQ    *time.Time  `json:"fieldworkEndDateNEQ,omitempty"`
+	FieldworkEndDateIn     []time.Time `json:"fieldworkEndDateIn,omitempty"`
+	FieldworkEndDateNotIn  []time.Time `json:"fieldworkEndDateNotIn,omitempty"`
+	FieldworkEndDateGT     *time.Time  `json:"fieldworkEndDateGT,omitempty"`
+	FieldworkEndDateGTE    *time.Time  `json:"fieldworkEndDateGTE,omitempty"`
+	FieldworkEndDateLT     *time.Time  `json:"fieldworkEndDateLT,omitempty"`
+	FieldworkEndDateLTE    *time.Time  `json:"fieldworkEndDateLTE,omitempty"`
+	FieldworkEndDateIsNil  bool        `json:"fieldworkEndDateIsNil,omitempty"`
+	FieldworkEndDateNotNil bool        `json:"fieldworkEndDateNotNil,omitempty"`
+
 	// "auditor_ready" field predicates.
 	AuditorReady    *bool `json:"auditorReady,omitempty"`
 	AuditorReadyNEQ *bool `json:"auditorReadyNEQ,omitempty"`
@@ -66093,6 +66203,126 @@ func (i *ProgramHistoryWhereInput) P() (predicate.ProgramHistory, error) {
 	}
 	if i.EndDateNotNil {
 		predicates = append(predicates, programhistory.EndDateNotNil())
+	}
+	if i.ObservationPeriodStartDate != nil {
+		predicates = append(predicates, programhistory.ObservationPeriodStartDateEQ(*i.ObservationPeriodStartDate))
+	}
+	if i.ObservationPeriodStartDateNEQ != nil {
+		predicates = append(predicates, programhistory.ObservationPeriodStartDateNEQ(*i.ObservationPeriodStartDateNEQ))
+	}
+	if len(i.ObservationPeriodStartDateIn) > 0 {
+		predicates = append(predicates, programhistory.ObservationPeriodStartDateIn(i.ObservationPeriodStartDateIn...))
+	}
+	if len(i.ObservationPeriodStartDateNotIn) > 0 {
+		predicates = append(predicates, programhistory.ObservationPeriodStartDateNotIn(i.ObservationPeriodStartDateNotIn...))
+	}
+	if i.ObservationPeriodStartDateGT != nil {
+		predicates = append(predicates, programhistory.ObservationPeriodStartDateGT(*i.ObservationPeriodStartDateGT))
+	}
+	if i.ObservationPeriodStartDateGTE != nil {
+		predicates = append(predicates, programhistory.ObservationPeriodStartDateGTE(*i.ObservationPeriodStartDateGTE))
+	}
+	if i.ObservationPeriodStartDateLT != nil {
+		predicates = append(predicates, programhistory.ObservationPeriodStartDateLT(*i.ObservationPeriodStartDateLT))
+	}
+	if i.ObservationPeriodStartDateLTE != nil {
+		predicates = append(predicates, programhistory.ObservationPeriodStartDateLTE(*i.ObservationPeriodStartDateLTE))
+	}
+	if i.ObservationPeriodStartDateIsNil {
+		predicates = append(predicates, programhistory.ObservationPeriodStartDateIsNil())
+	}
+	if i.ObservationPeriodStartDateNotNil {
+		predicates = append(predicates, programhistory.ObservationPeriodStartDateNotNil())
+	}
+	if i.ObservationPeriodEndDate != nil {
+		predicates = append(predicates, programhistory.ObservationPeriodEndDateEQ(*i.ObservationPeriodEndDate))
+	}
+	if i.ObservationPeriodEndDateNEQ != nil {
+		predicates = append(predicates, programhistory.ObservationPeriodEndDateNEQ(*i.ObservationPeriodEndDateNEQ))
+	}
+	if len(i.ObservationPeriodEndDateIn) > 0 {
+		predicates = append(predicates, programhistory.ObservationPeriodEndDateIn(i.ObservationPeriodEndDateIn...))
+	}
+	if len(i.ObservationPeriodEndDateNotIn) > 0 {
+		predicates = append(predicates, programhistory.ObservationPeriodEndDateNotIn(i.ObservationPeriodEndDateNotIn...))
+	}
+	if i.ObservationPeriodEndDateGT != nil {
+		predicates = append(predicates, programhistory.ObservationPeriodEndDateGT(*i.ObservationPeriodEndDateGT))
+	}
+	if i.ObservationPeriodEndDateGTE != nil {
+		predicates = append(predicates, programhistory.ObservationPeriodEndDateGTE(*i.ObservationPeriodEndDateGTE))
+	}
+	if i.ObservationPeriodEndDateLT != nil {
+		predicates = append(predicates, programhistory.ObservationPeriodEndDateLT(*i.ObservationPeriodEndDateLT))
+	}
+	if i.ObservationPeriodEndDateLTE != nil {
+		predicates = append(predicates, programhistory.ObservationPeriodEndDateLTE(*i.ObservationPeriodEndDateLTE))
+	}
+	if i.ObservationPeriodEndDateIsNil {
+		predicates = append(predicates, programhistory.ObservationPeriodEndDateIsNil())
+	}
+	if i.ObservationPeriodEndDateNotNil {
+		predicates = append(predicates, programhistory.ObservationPeriodEndDateNotNil())
+	}
+	if i.FieldworkStartDate != nil {
+		predicates = append(predicates, programhistory.FieldworkStartDateEQ(*i.FieldworkStartDate))
+	}
+	if i.FieldworkStartDateNEQ != nil {
+		predicates = append(predicates, programhistory.FieldworkStartDateNEQ(*i.FieldworkStartDateNEQ))
+	}
+	if len(i.FieldworkStartDateIn) > 0 {
+		predicates = append(predicates, programhistory.FieldworkStartDateIn(i.FieldworkStartDateIn...))
+	}
+	if len(i.FieldworkStartDateNotIn) > 0 {
+		predicates = append(predicates, programhistory.FieldworkStartDateNotIn(i.FieldworkStartDateNotIn...))
+	}
+	if i.FieldworkStartDateGT != nil {
+		predicates = append(predicates, programhistory.FieldworkStartDateGT(*i.FieldworkStartDateGT))
+	}
+	if i.FieldworkStartDateGTE != nil {
+		predicates = append(predicates, programhistory.FieldworkStartDateGTE(*i.FieldworkStartDateGTE))
+	}
+	if i.FieldworkStartDateLT != nil {
+		predicates = append(predicates, programhistory.FieldworkStartDateLT(*i.FieldworkStartDateLT))
+	}
+	if i.FieldworkStartDateLTE != nil {
+		predicates = append(predicates, programhistory.FieldworkStartDateLTE(*i.FieldworkStartDateLTE))
+	}
+	if i.FieldworkStartDateIsNil {
+		predicates = append(predicates, programhistory.FieldworkStartDateIsNil())
+	}
+	if i.FieldworkStartDateNotNil {
+		predicates = append(predicates, programhistory.FieldworkStartDateNotNil())
+	}
+	if i.FieldworkEndDate != nil {
+		predicates = append(predicates, programhistory.FieldworkEndDateEQ(*i.FieldworkEndDate))
+	}
+	if i.FieldworkEndDateNEQ != nil {
+		predicates = append(predicates, programhistory.FieldworkEndDateNEQ(*i.FieldworkEndDateNEQ))
+	}
+	if len(i.FieldworkEndDateIn) > 0 {
+		predicates = append(predicates, programhistory.FieldworkEndDateIn(i.FieldworkEndDateIn...))
+	}
+	if len(i.FieldworkEndDateNotIn) > 0 {
+		predicates = append(predicates, programhistory.FieldworkEndDateNotIn(i.FieldworkEndDateNotIn...))
+	}
+	if i.FieldworkEndDateGT != nil {
+		predicates = append(predicates, programhistory.FieldworkEndDateGT(*i.FieldworkEndDateGT))
+	}
+	if i.FieldworkEndDateGTE != nil {
+		predicates = append(predicates, programhistory.FieldworkEndDateGTE(*i.FieldworkEndDateGTE))
+	}
+	if i.FieldworkEndDateLT != nil {
+		predicates = append(predicates, programhistory.FieldworkEndDateLT(*i.FieldworkEndDateLT))
+	}
+	if i.FieldworkEndDateLTE != nil {
+		predicates = append(predicates, programhistory.FieldworkEndDateLTE(*i.FieldworkEndDateLTE))
+	}
+	if i.FieldworkEndDateIsNil {
+		predicates = append(predicates, programhistory.FieldworkEndDateIsNil())
+	}
+	if i.FieldworkEndDateNotNil {
+		predicates = append(predicates, programhistory.FieldworkEndDateNotNil())
 	}
 	if i.AuditorReady != nil {
 		predicates = append(predicates, programhistory.AuditorReadyEQ(*i.AuditorReady))
@@ -73954,6 +74184,46 @@ type ScanHistoryWhereInput struct {
 	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
 	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
 
+	// "system_owned" field predicates.
+	SystemOwned       *bool `json:"systemOwned,omitempty"`
+	SystemOwnedNEQ    *bool `json:"systemOwnedNEQ,omitempty"`
+	SystemOwnedIsNil  bool  `json:"systemOwnedIsNil,omitempty"`
+	SystemOwnedNotNil bool  `json:"systemOwnedNotNil,omitempty"`
+
+	// "internal_notes" field predicates.
+	InternalNotes             *string  `json:"internalNotes,omitempty"`
+	InternalNotesNEQ          *string  `json:"internalNotesNEQ,omitempty"`
+	InternalNotesIn           []string `json:"internalNotesIn,omitempty"`
+	InternalNotesNotIn        []string `json:"internalNotesNotIn,omitempty"`
+	InternalNotesGT           *string  `json:"internalNotesGT,omitempty"`
+	InternalNotesGTE          *string  `json:"internalNotesGTE,omitempty"`
+	InternalNotesLT           *string  `json:"internalNotesLT,omitempty"`
+	InternalNotesLTE          *string  `json:"internalNotesLTE,omitempty"`
+	InternalNotesContains     *string  `json:"internalNotesContains,omitempty"`
+	InternalNotesHasPrefix    *string  `json:"internalNotesHasPrefix,omitempty"`
+	InternalNotesHasSuffix    *string  `json:"internalNotesHasSuffix,omitempty"`
+	InternalNotesIsNil        bool     `json:"internalNotesIsNil,omitempty"`
+	InternalNotesNotNil       bool     `json:"internalNotesNotNil,omitempty"`
+	InternalNotesEqualFold    *string  `json:"internalNotesEqualFold,omitempty"`
+	InternalNotesContainsFold *string  `json:"internalNotesContainsFold,omitempty"`
+
+	// "system_internal_id" field predicates.
+	SystemInternalID             *string  `json:"systemInternalID,omitempty"`
+	SystemInternalIDNEQ          *string  `json:"systemInternalIDNEQ,omitempty"`
+	SystemInternalIDIn           []string `json:"systemInternalIDIn,omitempty"`
+	SystemInternalIDNotIn        []string `json:"systemInternalIDNotIn,omitempty"`
+	SystemInternalIDGT           *string  `json:"systemInternalIDGT,omitempty"`
+	SystemInternalIDGTE          *string  `json:"systemInternalIDGTE,omitempty"`
+	SystemInternalIDLT           *string  `json:"systemInternalIDLT,omitempty"`
+	SystemInternalIDLTE          *string  `json:"systemInternalIDLTE,omitempty"`
+	SystemInternalIDContains     *string  `json:"systemInternalIDContains,omitempty"`
+	SystemInternalIDHasPrefix    *string  `json:"systemInternalIDHasPrefix,omitempty"`
+	SystemInternalIDHasSuffix    *string  `json:"systemInternalIDHasSuffix,omitempty"`
+	SystemInternalIDIsNil        bool     `json:"systemInternalIDIsNil,omitempty"`
+	SystemInternalIDNotNil       bool     `json:"systemInternalIDNotNil,omitempty"`
+	SystemInternalIDEqualFold    *string  `json:"systemInternalIDEqualFold,omitempty"`
+	SystemInternalIDContainsFold *string  `json:"systemInternalIDContainsFold,omitempty"`
+
 	// "reviewed_by" field predicates.
 	ReviewedBy             *string  `json:"reviewedBy,omitempty"`
 	ReviewedByNEQ          *string  `json:"reviewedByNEQ,omitempty"`
@@ -74671,6 +74941,108 @@ func (i *ScanHistoryWhereInput) P() (predicate.ScanHistory, error) {
 	}
 	if i.OwnerIDContainsFold != nil {
 		predicates = append(predicates, scanhistory.OwnerIDContainsFold(*i.OwnerIDContainsFold))
+	}
+	if i.SystemOwned != nil {
+		predicates = append(predicates, scanhistory.SystemOwnedEQ(*i.SystemOwned))
+	}
+	if i.SystemOwnedNEQ != nil {
+		predicates = append(predicates, scanhistory.SystemOwnedNEQ(*i.SystemOwnedNEQ))
+	}
+	if i.SystemOwnedIsNil {
+		predicates = append(predicates, scanhistory.SystemOwnedIsNil())
+	}
+	if i.SystemOwnedNotNil {
+		predicates = append(predicates, scanhistory.SystemOwnedNotNil())
+	}
+	if i.InternalNotes != nil {
+		predicates = append(predicates, scanhistory.InternalNotesEQ(*i.InternalNotes))
+	}
+	if i.InternalNotesNEQ != nil {
+		predicates = append(predicates, scanhistory.InternalNotesNEQ(*i.InternalNotesNEQ))
+	}
+	if len(i.InternalNotesIn) > 0 {
+		predicates = append(predicates, scanhistory.InternalNotesIn(i.InternalNotesIn...))
+	}
+	if len(i.InternalNotesNotIn) > 0 {
+		predicates = append(predicates, scanhistory.InternalNotesNotIn(i.InternalNotesNotIn...))
+	}
+	if i.InternalNotesGT != nil {
+		predicates = append(predicates, scanhistory.InternalNotesGT(*i.InternalNotesGT))
+	}
+	if i.InternalNotesGTE != nil {
+		predicates = append(predicates, scanhistory.InternalNotesGTE(*i.InternalNotesGTE))
+	}
+	if i.InternalNotesLT != nil {
+		predicates = append(predicates, scanhistory.InternalNotesLT(*i.InternalNotesLT))
+	}
+	if i.InternalNotesLTE != nil {
+		predicates = append(predicates, scanhistory.InternalNotesLTE(*i.InternalNotesLTE))
+	}
+	if i.InternalNotesContains != nil {
+		predicates = append(predicates, scanhistory.InternalNotesContains(*i.InternalNotesContains))
+	}
+	if i.InternalNotesHasPrefix != nil {
+		predicates = append(predicates, scanhistory.InternalNotesHasPrefix(*i.InternalNotesHasPrefix))
+	}
+	if i.InternalNotesHasSuffix != nil {
+		predicates = append(predicates, scanhistory.InternalNotesHasSuffix(*i.InternalNotesHasSuffix))
+	}
+	if i.InternalNotesIsNil {
+		predicates = append(predicates, scanhistory.InternalNotesIsNil())
+	}
+	if i.InternalNotesNotNil {
+		predicates = append(predicates, scanhistory.InternalNotesNotNil())
+	}
+	if i.InternalNotesEqualFold != nil {
+		predicates = append(predicates, scanhistory.InternalNotesEqualFold(*i.InternalNotesEqualFold))
+	}
+	if i.InternalNotesContainsFold != nil {
+		predicates = append(predicates, scanhistory.InternalNotesContainsFold(*i.InternalNotesContainsFold))
+	}
+	if i.SystemInternalID != nil {
+		predicates = append(predicates, scanhistory.SystemInternalIDEQ(*i.SystemInternalID))
+	}
+	if i.SystemInternalIDNEQ != nil {
+		predicates = append(predicates, scanhistory.SystemInternalIDNEQ(*i.SystemInternalIDNEQ))
+	}
+	if len(i.SystemInternalIDIn) > 0 {
+		predicates = append(predicates, scanhistory.SystemInternalIDIn(i.SystemInternalIDIn...))
+	}
+	if len(i.SystemInternalIDNotIn) > 0 {
+		predicates = append(predicates, scanhistory.SystemInternalIDNotIn(i.SystemInternalIDNotIn...))
+	}
+	if i.SystemInternalIDGT != nil {
+		predicates = append(predicates, scanhistory.SystemInternalIDGT(*i.SystemInternalIDGT))
+	}
+	if i.SystemInternalIDGTE != nil {
+		predicates = append(predicates, scanhistory.SystemInternalIDGTE(*i.SystemInternalIDGTE))
+	}
+	if i.SystemInternalIDLT != nil {
+		predicates = append(predicates, scanhistory.SystemInternalIDLT(*i.SystemInternalIDLT))
+	}
+	if i.SystemInternalIDLTE != nil {
+		predicates = append(predicates, scanhistory.SystemInternalIDLTE(*i.SystemInternalIDLTE))
+	}
+	if i.SystemInternalIDContains != nil {
+		predicates = append(predicates, scanhistory.SystemInternalIDContains(*i.SystemInternalIDContains))
+	}
+	if i.SystemInternalIDHasPrefix != nil {
+		predicates = append(predicates, scanhistory.SystemInternalIDHasPrefix(*i.SystemInternalIDHasPrefix))
+	}
+	if i.SystemInternalIDHasSuffix != nil {
+		predicates = append(predicates, scanhistory.SystemInternalIDHasSuffix(*i.SystemInternalIDHasSuffix))
+	}
+	if i.SystemInternalIDIsNil {
+		predicates = append(predicates, scanhistory.SystemInternalIDIsNil())
+	}
+	if i.SystemInternalIDNotNil {
+		predicates = append(predicates, scanhistory.SystemInternalIDNotNil())
+	}
+	if i.SystemInternalIDEqualFold != nil {
+		predicates = append(predicates, scanhistory.SystemInternalIDEqualFold(*i.SystemInternalIDEqualFold))
+	}
+	if i.SystemInternalIDContainsFold != nil {
+		predicates = append(predicates, scanhistory.SystemInternalIDContainsFold(*i.SystemInternalIDContainsFold))
 	}
 	if i.ReviewedBy != nil {
 		predicates = append(predicates, scanhistory.ReviewedByEQ(*i.ReviewedBy))
@@ -82126,6 +82498,54 @@ type TaskHistoryWhereInput struct {
 	IsTemplate    *bool `json:"isTemplate,omitempty"`
 	IsTemplateNEQ *bool `json:"isTemplateNEQ,omitempty"`
 
+	// "is_suggested" field predicates.
+	IsSuggested    *bool `json:"isSuggested,omitempty"`
+	IsSuggestedNEQ *bool `json:"isSuggestedNEQ,omitempty"`
+
+	// "priority" field predicates.
+	Priority      *int  `json:"priority,omitempty"`
+	PriorityNEQ   *int  `json:"priorityNEQ,omitempty"`
+	PriorityIn    []int `json:"priorityIn,omitempty"`
+	PriorityNotIn []int `json:"priorityNotIn,omitempty"`
+	PriorityGT    *int  `json:"priorityGT,omitempty"`
+	PriorityGTE   *int  `json:"priorityGTE,omitempty"`
+	PriorityLT    *int  `json:"priorityLT,omitempty"`
+	PriorityLTE   *int  `json:"priorityLTE,omitempty"`
+
+	// "source" field predicates.
+	Source             *string  `json:"source,omitempty"`
+	SourceNEQ          *string  `json:"sourceNEQ,omitempty"`
+	SourceIn           []string `json:"sourceIn,omitempty"`
+	SourceNotIn        []string `json:"sourceNotIn,omitempty"`
+	SourceGT           *string  `json:"sourceGT,omitempty"`
+	SourceGTE          *string  `json:"sourceGTE,omitempty"`
+	SourceLT           *string  `json:"sourceLT,omitempty"`
+	SourceLTE          *string  `json:"sourceLTE,omitempty"`
+	SourceContains     *string  `json:"sourceContains,omitempty"`
+	SourceHasPrefix    *string  `json:"sourceHasPrefix,omitempty"`
+	SourceHasSuffix    *string  `json:"sourceHasSuffix,omitempty"`
+	SourceIsNil        bool     `json:"sourceIsNil,omitempty"`
+	SourceNotNil       bool     `json:"sourceNotNil,omitempty"`
+	SourceEqualFold    *string  `json:"sourceEqualFold,omitempty"`
+	SourceContainsFold *string  `json:"sourceContainsFold,omitempty"`
+
+	// "source_key" field predicates.
+	SourceKey             *string  `json:"sourceKey,omitempty"`
+	SourceKeyNEQ          *string  `json:"sourceKeyNEQ,omitempty"`
+	SourceKeyIn           []string `json:"sourceKeyIn,omitempty"`
+	SourceKeyNotIn        []string `json:"sourceKeyNotIn,omitempty"`
+	SourceKeyGT           *string  `json:"sourceKeyGT,omitempty"`
+	SourceKeyGTE          *string  `json:"sourceKeyGTE,omitempty"`
+	SourceKeyLT           *string  `json:"sourceKeyLT,omitempty"`
+	SourceKeyLTE          *string  `json:"sourceKeyLTE,omitempty"`
+	SourceKeyContains     *string  `json:"sourceKeyContains,omitempty"`
+	SourceKeyHasPrefix    *string  `json:"sourceKeyHasPrefix,omitempty"`
+	SourceKeyHasSuffix    *string  `json:"sourceKeyHasSuffix,omitempty"`
+	SourceKeyIsNil        bool     `json:"sourceKeyIsNil,omitempty"`
+	SourceKeyNotNil       bool     `json:"sourceKeyNotNil,omitempty"`
+	SourceKeyEqualFold    *string  `json:"sourceKeyEqualFold,omitempty"`
+	SourceKeyContainsFold *string  `json:"sourceKeyContainsFold,omitempty"`
+
 	// "idempotency_key" field predicates.
 	IdempotencyKey             *string  `json:"idempotencyKey,omitempty"`
 	IdempotencyKeyNEQ          *string  `json:"idempotencyKeyNEQ,omitempty"`
@@ -83212,6 +83632,126 @@ func (i *TaskHistoryWhereInput) P() (predicate.TaskHistory, error) {
 	}
 	if i.IsTemplateNEQ != nil {
 		predicates = append(predicates, taskhistory.IsTemplateNEQ(*i.IsTemplateNEQ))
+	}
+	if i.IsSuggested != nil {
+		predicates = append(predicates, taskhistory.IsSuggestedEQ(*i.IsSuggested))
+	}
+	if i.IsSuggestedNEQ != nil {
+		predicates = append(predicates, taskhistory.IsSuggestedNEQ(*i.IsSuggestedNEQ))
+	}
+	if i.Priority != nil {
+		predicates = append(predicates, taskhistory.PriorityEQ(*i.Priority))
+	}
+	if i.PriorityNEQ != nil {
+		predicates = append(predicates, taskhistory.PriorityNEQ(*i.PriorityNEQ))
+	}
+	if len(i.PriorityIn) > 0 {
+		predicates = append(predicates, taskhistory.PriorityIn(i.PriorityIn...))
+	}
+	if len(i.PriorityNotIn) > 0 {
+		predicates = append(predicates, taskhistory.PriorityNotIn(i.PriorityNotIn...))
+	}
+	if i.PriorityGT != nil {
+		predicates = append(predicates, taskhistory.PriorityGT(*i.PriorityGT))
+	}
+	if i.PriorityGTE != nil {
+		predicates = append(predicates, taskhistory.PriorityGTE(*i.PriorityGTE))
+	}
+	if i.PriorityLT != nil {
+		predicates = append(predicates, taskhistory.PriorityLT(*i.PriorityLT))
+	}
+	if i.PriorityLTE != nil {
+		predicates = append(predicates, taskhistory.PriorityLTE(*i.PriorityLTE))
+	}
+	if i.Source != nil {
+		predicates = append(predicates, taskhistory.SourceEQ(*i.Source))
+	}
+	if i.SourceNEQ != nil {
+		predicates = append(predicates, taskhistory.SourceNEQ(*i.SourceNEQ))
+	}
+	if len(i.SourceIn) > 0 {
+		predicates = append(predicates, taskhistory.SourceIn(i.SourceIn...))
+	}
+	if len(i.SourceNotIn) > 0 {
+		predicates = append(predicates, taskhistory.SourceNotIn(i.SourceNotIn...))
+	}
+	if i.SourceGT != nil {
+		predicates = append(predicates, taskhistory.SourceGT(*i.SourceGT))
+	}
+	if i.SourceGTE != nil {
+		predicates = append(predicates, taskhistory.SourceGTE(*i.SourceGTE))
+	}
+	if i.SourceLT != nil {
+		predicates = append(predicates, taskhistory.SourceLT(*i.SourceLT))
+	}
+	if i.SourceLTE != nil {
+		predicates = append(predicates, taskhistory.SourceLTE(*i.SourceLTE))
+	}
+	if i.SourceContains != nil {
+		predicates = append(predicates, taskhistory.SourceContains(*i.SourceContains))
+	}
+	if i.SourceHasPrefix != nil {
+		predicates = append(predicates, taskhistory.SourceHasPrefix(*i.SourceHasPrefix))
+	}
+	if i.SourceHasSuffix != nil {
+		predicates = append(predicates, taskhistory.SourceHasSuffix(*i.SourceHasSuffix))
+	}
+	if i.SourceIsNil {
+		predicates = append(predicates, taskhistory.SourceIsNil())
+	}
+	if i.SourceNotNil {
+		predicates = append(predicates, taskhistory.SourceNotNil())
+	}
+	if i.SourceEqualFold != nil {
+		predicates = append(predicates, taskhistory.SourceEqualFold(*i.SourceEqualFold))
+	}
+	if i.SourceContainsFold != nil {
+		predicates = append(predicates, taskhistory.SourceContainsFold(*i.SourceContainsFold))
+	}
+	if i.SourceKey != nil {
+		predicates = append(predicates, taskhistory.SourceKeyEQ(*i.SourceKey))
+	}
+	if i.SourceKeyNEQ != nil {
+		predicates = append(predicates, taskhistory.SourceKeyNEQ(*i.SourceKeyNEQ))
+	}
+	if len(i.SourceKeyIn) > 0 {
+		predicates = append(predicates, taskhistory.SourceKeyIn(i.SourceKeyIn...))
+	}
+	if len(i.SourceKeyNotIn) > 0 {
+		predicates = append(predicates, taskhistory.SourceKeyNotIn(i.SourceKeyNotIn...))
+	}
+	if i.SourceKeyGT != nil {
+		predicates = append(predicates, taskhistory.SourceKeyGT(*i.SourceKeyGT))
+	}
+	if i.SourceKeyGTE != nil {
+		predicates = append(predicates, taskhistory.SourceKeyGTE(*i.SourceKeyGTE))
+	}
+	if i.SourceKeyLT != nil {
+		predicates = append(predicates, taskhistory.SourceKeyLT(*i.SourceKeyLT))
+	}
+	if i.SourceKeyLTE != nil {
+		predicates = append(predicates, taskhistory.SourceKeyLTE(*i.SourceKeyLTE))
+	}
+	if i.SourceKeyContains != nil {
+		predicates = append(predicates, taskhistory.SourceKeyContains(*i.SourceKeyContains))
+	}
+	if i.SourceKeyHasPrefix != nil {
+		predicates = append(predicates, taskhistory.SourceKeyHasPrefix(*i.SourceKeyHasPrefix))
+	}
+	if i.SourceKeyHasSuffix != nil {
+		predicates = append(predicates, taskhistory.SourceKeyHasSuffix(*i.SourceKeyHasSuffix))
+	}
+	if i.SourceKeyIsNil {
+		predicates = append(predicates, taskhistory.SourceKeyIsNil())
+	}
+	if i.SourceKeyNotNil {
+		predicates = append(predicates, taskhistory.SourceKeyNotNil())
+	}
+	if i.SourceKeyEqualFold != nil {
+		predicates = append(predicates, taskhistory.SourceKeyEqualFold(*i.SourceKeyEqualFold))
+	}
+	if i.SourceKeyContainsFold != nil {
+		predicates = append(predicates, taskhistory.SourceKeyContainsFold(*i.SourceKeyContainsFold))
 	}
 	if i.IdempotencyKey != nil {
 		predicates = append(predicates, taskhistory.IdempotencyKeyEQ(*i.IdempotencyKey))

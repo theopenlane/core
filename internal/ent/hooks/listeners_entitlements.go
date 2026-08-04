@@ -208,7 +208,7 @@ func softDeleteAllowContext(ctx context.Context) context.Context {
 // newEntitlementInvocation gathers prerequisites for entitlement mutation handling.
 func newEntitlementInvocation(handlerCtx gala.HandlerContext, payload eventqueue.MutationGalaPayload, allow func(context.Context) context.Context) (*entitlementInvocation, bool) {
 	handlerCtx, client, ok := eventqueue.ClientFromHandler(handlerCtx)
-	if !ok || client.EntitlementManager == nil {
+	if !ok || client.EntitlementManager == nil || !client.EntitlementManager.Config.IsEnabled() {
 		return nil, false
 	}
 
@@ -293,7 +293,7 @@ func fetchOrganizationCustomerByOrgSettingID(inv *entitlementInvocation, orgSett
 
 // reconcile runs entitlement reconciliation for the invocation's organization.
 func (inv *entitlementInvocation) reconcile() error {
-	if inv == nil || inv.client == nil || inv.client.EntitlementManager == nil {
+	if inv == nil || inv.client == nil || inv.client.EntitlementManager == nil || !inv.client.EntitlementManager.Config.IsEnabled() {
 		return nil
 	}
 

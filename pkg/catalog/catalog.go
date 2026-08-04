@@ -31,6 +31,15 @@ const ManagedByKey = "managed_by"
 // ManagedByValue identifies objects managed by the catalog automation
 const ManagedByValue = "module-manager"
 
+const (
+	// privateAudience defines a product not publicly available.
+	privateAudience = "private"
+	// betaAudience defines a product available to beta users.
+	betaAudience = "beta"
+	// publicAudience defines a product available to all users.
+	publicAudience = "public"
+)
+
 // Catalog wraps models.Catalog
 type Catalog struct {
 	// embed the base catalog model
@@ -93,6 +102,43 @@ func (c *Catalog) Visible(audience string) *Catalog {
 	visible.Addons = filter(c.Addons)
 
 	return visible
+}
+
+// FilterByAudience returns a catalog with the available features plus beta or private ones if requested.
+func FilterByAudience(withBeta, withPrivate bool, cat models.Catalog) models.Catalog {
+	if withBeta && withPrivate {
+		return cat
+	}
+
+	includeFn := func(audience string) bool {
+		switch audience {
+		case publicAudience:
+			return true
+		case betaAudience:
+			return withBeta
+		case privateAudience:
+			return withPrivate
+		default:
+			return false
+		}
+	}
+
+	filterFn := func(in FeatureSet) FeatureSet {
+		out := FeatureSet{}
+		for k, v := range in {
+			if includeFn(v.Audience) {
+				out[k] = v
+			}
+		}
+
+		return out
+	}
+
+	filtered := cat
+	filtered.Modules = filterFn(cat.Modules)
+	filtered.Addons = filterFn(cat.Addons)
+
+	return filtered
 }
 
 // LoadCatalog reads and parses a Catalog definition from disk.

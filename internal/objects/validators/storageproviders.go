@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"os"
 	"slices"
+	"sync"
 	"time"
 
-	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/common/storagetypes"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -24,6 +24,8 @@ import (
 const (
 	StorageValidationTimeout     = 10 * time.Second
 	StorageCredentialSyncTimeout = 10 * time.Second
+	// StorageCheckCacheTTL is how long a readiness check result is reused before revalidating providers
+	StorageCheckCacheTTL = 5 * time.Minute
 )
 
 var (
@@ -37,7 +39,9 @@ var (
 
 // ValidateAvailabilityByProvider validates only providers that have EnsureAvailable enabled.
 // This allows per-provider strict availability enforcement instead of a global setting.
-func ValidateAvailabilityByProvider(ctx context.Context, cfg storage.ProviderConfig) []error {
+// logSuccess controls whether successful connectivity is logged; pass true on the startup
+// path and false on recurring paths such as readiness probes
+func ValidateAvailabilityByProvider(ctx context.Context, cfg storage.ProviderConfig, logSuccess bool) []error {
 	if !cfg.Enabled {
 		return nil
 	}
@@ -62,19 +66,19 @@ func ValidateAvailabilityByProvider(ctx context.Context, cfg storage.ProviderCon
 	}
 
 	if cfg.Providers.Disk.Enabled && cfg.Providers.Disk.EnsureAvailable {
-		if err := validateDiskProvider(ctx, cfg.Providers.Disk); err != nil {
+		if err := validateDiskProvider(ctx, cfg.Providers.Disk, logSuccess); err != nil {
 			errs = append(errs, err)
 		}
 	}
 
 	if cfg.Providers.S3.Enabled && cfg.Providers.S3.EnsureAvailable {
-		if err := validateS3Provider(ctx, cfg.Providers.S3); err != nil {
+		if err := validateS3Provider(ctx, cfg.Providers.S3, logSuccess); err != nil {
 			errs = append(errs, err)
 		}
 	}
 
 	if cfg.Providers.R2.Enabled && cfg.Providers.R2.EnsureAvailable {
-		if err := validateR2Provider(ctx, cfg.Providers.R2); err != nil {
+		if err := validateR2Provider(ctx, cfg.Providers.R2, logSuccess); err != nil {
 			errs = append(errs, err)
 		}
 	}
@@ -89,7 +93,7 @@ func ValidateAvailabilityByProvider(ctx context.Context, cfg storage.ProviderCon
 }
 
 // validateDiskProvider checks connectivity to the disk provider and the existence of the specified bucket (directory)
-func validateDiskProvider(ctx context.Context, cfg storage.ProviderConfigs) error {
+func validateDiskProvider(ctx context.Context, cfg storage.ProviderConfigs, logSuccess bool) error {
 	if !cfg.Enabled {
 		return nil
 	}
@@ -117,11 +121,11 @@ func validateDiskProvider(ctx context.Context, cfg storage.ProviderConfigs) erro
 		return err
 	}
 
-	return validateBuckets("disk", provider, bucket)
+	return validateBuckets(ctx, "disk", provider, bucket, logSuccess)
 }
 
 // validateS3Provider checks connectivity to the S3 provider and the existence of the specified bucket
-func validateS3Provider(ctx context.Context, cfg storage.ProviderConfigs) error {
+func validateS3Provider(ctx context.Context, cfg storage.ProviderConfigs, logSuccess bool) error {
 	if !cfg.Enabled {
 		return nil
 	}
@@ -152,11 +156,11 @@ func validateS3Provider(ctx context.Context, cfg storage.ProviderConfigs) error 
 		return err
 	}
 
-	return validateBuckets("s3", provider, cfg.Bucket)
+	return validateBuckets(ctx, "s3", provider, cfg.Bucket, logSuccess)
 }
 
 // validateR2Provider checks connectivity to Cloudflare R2 and the existence of the specified bucket
-func validateR2Provider(ctx context.Context, cfg storage.ProviderConfigs) error {
+func validateR2Provider(ctx context.Context, cfg storage.ProviderConfigs, logSuccess bool) error {
 	if !cfg.Enabled {
 		return nil
 	}
@@ -181,7 +185,7 @@ func validateR2Provider(ctx context.Context, cfg storage.ProviderConfigs) error 
 		return err
 	}
 
-	return validateBuckets("r2", provider, cfg.Bucket)
+	return validateBuckets(ctx, "r2", provider, cfg.Bucket, logSuccess)
 }
 
 // validateDatabaseProvider checks that the database provider can access the File table
@@ -214,13 +218,15 @@ func validateProviderType(expected storagetypes.ProviderType, provider storagety
 }
 
 // validateBuckets checks that the expected bucket exists in the provider's list of buckets
-func validateBuckets(providerName string, provider storagetypes.Provider, expectedBucket string) error {
+func validateBuckets(ctx context.Context, providerName string, provider storagetypes.Provider, expectedBucket string, logSuccess bool) error {
 	buckets, err := provider.ListBuckets()
 	if err != nil {
 		return fmt.Errorf("%s list buckets: %w", providerName, err)
 	}
 
-	log.Info().Str("provider", providerName).Strs("available_buckets", buckets).Msg("storage provider connectivity verified")
+	if logSuccess {
+		logx.FromContext(ctx).Info().Str("provider", providerName).Strs("available_buckets", buckets).Msg("storage provider connectivity verified")
+	}
 
 	if expectedBucket != "" && !slices.Contains(buckets, expectedBucket) {
 		return fmt.Errorf("%w: provider %s bucket %s", ErrBucketNotFound, providerName, expectedBucket)
@@ -238,14 +244,26 @@ func ensureDirectoryExists(path string) error {
 	return os.MkdirAll(path, os.ModePerm)
 }
 
-// StorageAvailabilityCheck returns a handlers.CheckFunc that validates storage provider availability
+// StorageAvailabilityCheck returns a handlers.CheckFunc that validates storage provider availability,
+// caching the result for StorageCheckCacheTTL so readiness probes do not hit provider APIs on every cycle
 func StorageAvailabilityCheck(cfgProvider func() storage.ProviderConfig) handlers.CheckFunc {
+	var (
+		mu          sync.Mutex
+		lastChecked time.Time
+		lastResult  error
+	)
+
 	return func(ctx context.Context) error {
-		errs := ValidateAvailabilityByProvider(ctx, cfgProvider())
-		if len(errs) == 0 {
-			return nil
+		mu.Lock()
+		defer mu.Unlock()
+
+		if !lastChecked.IsZero() && time.Since(lastChecked) < StorageCheckCacheTTL {
+			return lastResult
 		}
 
-		return errors.Join(errs...)
+		lastResult = errors.Join(ValidateAvailabilityByProvider(ctx, cfgProvider(), false)...)
+		lastChecked = time.Now()
+
+		return lastResult
 	}
 }

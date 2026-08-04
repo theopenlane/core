@@ -1919,6 +1919,26 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 	}
 
 	{
+		ids, err := FromContext(ctx).FindingControl.Query().Where(findingcontrol.HasOwnerWith(organization.ID(id))).IDs(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("error querying findingcontrol ids for cleanup")
+			return err
+		}
+		for _, edgeID := range ids {
+			if err := FindingControlEdgeCleanup(ctx, edgeID); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up findingcontrol edges")
+				return err
+			}
+		}
+	}
+	if exists, err := FromContext(ctx).FindingControl.Query().Where((findingcontrol.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if findingcontrolCount, err := FromContext(ctx).FindingControl.Delete().Where(findingcontrol.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", findingcontrolCount).Msg("error deleting findingcontrol")
+			return err
+		}
+	}
+
+	{
 		ids, err := FromContext(ctx).Review.Query().Where(review.HasOwnerWith(organization.ID(id))).IDs(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("error querying review ids for cleanup")

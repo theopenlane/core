@@ -48,7 +48,6 @@ func (Assessment) Fields() []ent.Field {
 		field.Enum("assessment_type").
 			GoType(enums.AssessmentType("")).
 			Default(enums.AssessmentTypeInternal.String()).
-			Immutable().
 			Annotations(
 				entgql.OrderField("assessment_type"),
 			),
@@ -142,7 +141,7 @@ func (Assessment) Annotations() []schema.Annotation {
 func (Assessment) Indexes() []ent.Index {
 	return []ent.Index{
 		index.Fields("name", ownerFieldName).
-			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
+			Annotations(entsql.IndexWhere("deleted_at is NULL")),
 	}
 }
 

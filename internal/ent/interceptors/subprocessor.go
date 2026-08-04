@@ -9,7 +9,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
-	"github.com/theopenlane/core/pkg/anon"
 	"github.com/theopenlane/iam/auth"
 )
 
@@ -18,7 +17,7 @@ func TraverseSubprocessor() ent.Interceptor {
 	return intercept.TraverseSubprocessor(func(ctx context.Context, q *generated.SubprocessorQuery) error {
 		// allow anonymous access to subprocessors this will only allow view
 		// access to the trust center-owned subprocessors
-		if tcID, _, ok := anon.TrustCenterScope(ctx); ok {
+		if tcID, _, ok := auth.TrustCenterScopeFromContext(ctx); ok {
 			q.Where(
 				subprocessor.Or(
 					subprocessor.And(
