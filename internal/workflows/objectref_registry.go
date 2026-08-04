@@ -1,0 +1,135 @@
+package workflows
+
+import (
+	"context"
+
+	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/entityops"
+	generated "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/workflowgenerated"
+	"github.com/theopenlane/core/pkg/jsonx"
+)
+
+// init wires the entityops catalog into the workflow registries: object-ref resolution, query
+// narrowing, and observability fields come from the generated object-ref edge catalog, eligible
+// fields from the generated workflow domain, and CEL activation contexts from one shape-agnostic
+// builder since every entity round-trips through JSON identically
+func init() {
+	RegisterObjectRefResolver(func(ref *generated.WorkflowObjectRef) (*Object, bool) {
+		typeName, objectID, ok := entityops.ObjectFromWorkflowRef(context.Background(), ref)
+		if !ok {
+			return nil, false
+		}
+
+		objectType := enums.ToWorkflowObjectType(typeName)
+		if objectType == nil {
+			return nil, false
+		}
+
+		return &Object{ID: objectID, Type: *objectType}, true
+	})
+
+	RegisterObjectRefQueryBuilder(func(query *generated.WorkflowObjectRefQuery, obj *Object) (*generated.WorkflowObjectRefQuery, bool) {
+		if obj == nil {
+			return nil, false
+		}
+
+		schema, ok := entityops.LookupSchema(obj.Type.String())
+		if !ok {
+			return nil, false
+		}
+
+		return entityops.RefsByObject(query, schema, obj.ID)
+	})
+
+	RegisterCELContextBuilder(buildCELContext)
+	RegisterAssignmentContextBuilder(buildAssignmentContext)
+	RegisterObservabilityFieldsBuilder(buildObservabilityFields)
+	RegisterEligibleFields(workflowgenerated.WorkflowEligibleFields)
+}
+
+// buildCELContext builds the CEL activation variables for any workflow object: the ent entity is
+// JSON round-tripped so field names match JSON tags and enums become strings, which is
+// type-agnostic by construction
+func buildCELContext(obj *Object, changedFields []string, changedEdges []string, addedIDs, removedIDs map[string][]string, eventType, userID string, proposedChanges map[string]any) map[string]any {
+	if obj == nil || obj.Node == nil {
+		return nil
+	}
+
+	objectMap, err := jsonx.ToMap(obj.Node)
+	if err != nil {
+		return nil
+	}
+
+	return map[string]any{
+		"object":           objectMap,
+		"changed_fields":   changedFields,
+		"changed_edges":    changedEdges,
+		"added_ids":        addedIDs,
+		"removed_ids":      removedIDs,
+		"event_type":       eventType,
+		"user_id":          userID,
+		"proposed_changes": proposedChanges,
+	}
+}
+
+// buildObservabilityFields returns standard log fields for a workflow object, resolving the
+// object-ref foreign-key column for the object's type from the entityops edge catalog
+func buildObservabilityFields(obj *Object) map[string]any {
+	if obj == nil {
+		return nil
+	}
+
+	fields := map[string]any{
+		"object_type": obj.Type.String(),
+	}
+
+	for _, edge := range entityops.SchemaWorkflowObjectRef.Edges {
+		if edge.Unique && edge.Field != "" && edge.TargetType == obj.Type.String() {
+			fields[edge.Field] = obj.ID
+			break
+		}
+	}
+
+	return fields
+}
+
+// buildAssignmentContext builds workflow runtime context (assignments, instance, initiator) for
+// CEL evaluation; the summary is JSON round-tripped because CEL traverses maps, not Go structs
+func buildAssignmentContext(ctx context.Context, client *generated.Client, instanceID string) (map[string]any, error) {
+	if client == nil || instanceID == "" {
+		return nil, nil
+	}
+
+	summary, err := client.BuildAssignmentSummary(ctx, instanceID)
+	if err != nil {
+		return nil, err
+	}
+
+	summaryMap, err := jsonx.ToMap(summary)
+	if err != nil {
+		return nil, err
+	}
+
+	instance, err := client.WorkflowInstance.Get(ctx, instanceID)
+	if err != nil {
+		return nil, err
+	}
+
+	instanceContext := map[string]any{
+		"id":                   instance.ID,
+		"state":                instance.State.String(),
+		"current_action_index": instance.CurrentActionIndex,
+	}
+
+	initiator := ""
+	if instance.Context.TriggerUserID != "" {
+		initiator = instance.Context.TriggerUserID
+	}
+
+	return map[string]any{
+		"assignments": summaryMap,
+		"instance":    instanceContext,
+		"initiator":   initiator,
+	}, nil
+}

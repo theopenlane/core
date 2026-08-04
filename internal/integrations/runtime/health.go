@@ -6,6 +6,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -33,10 +34,14 @@ func (r *Runtime) MarkIntegrationUnhealthy(ctx context.Context, installation *en
 
 	metadata[unhealthyReasonMetadataKey] = reason
 
+	// health marking runs from worker contexts without a privileged caller; both writes are
+	// server-internal and require the allow decision per the notification mutation policy
+	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
 	if err := r.DB().Integration.UpdateOneID(installation.ID).
 		SetStatus(enums.IntegrationStatusErrored).
 		SetMetadata(metadata).
-		Exec(ctx); err != nil {
+		Exec(systemCtx); err != nil {
 		return err
 	}
 
@@ -56,7 +61,7 @@ func (r *Runtime) MarkIntegrationUnhealthy(ctx context.Context, installation *en
 			"reason":         reason,
 		}).
 		SetTopic(enums.NotificationTopicIntegration).
-		Save(ctx)
+		Save(systemCtx)
 
 	return err
 }
@@ -74,7 +79,7 @@ func (r *Runtime) ClearIntegrationUnhealthy(ctx context.Context, installation *e
 	if err := r.DB().Integration.UpdateOneID(installation.ID).
 		SetStatus(enums.IntegrationStatusConnected).
 		SetMetadata(metadata).
-		Exec(ctx); err != nil {
+		Exec(privacy.DecisionContext(ctx, privacy.Allow)); err != nil {
 		return err
 	}
 

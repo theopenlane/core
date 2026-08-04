@@ -17,7 +17,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
-	"github.com/theopenlane/core/internal/ent/workflowgenerated"
 	"github.com/theopenlane/core/internal/mutations"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/engine"
@@ -50,7 +49,7 @@ func HookWorkflowApprovalRouting() ent.Hook {
 
 			allChangedFields := workflows.CollectAllChangedFields(mut)
 			changedFields := workflows.CollectChangedFields(mut)
-			changedEdges, addedIDs, removedIDs := workflowgenerated.ExtractChangedEdges(m)
+			changedEdges, addedIDs, removedIDs := extractChangedEdges(m)
 			if len(allChangedFields) == 0 && len(changedEdges) == 0 {
 				return next.Mutate(ctx, m)
 			}

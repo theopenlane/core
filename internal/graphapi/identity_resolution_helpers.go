@@ -6,8 +6,6 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/samber/do/v2"
-
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/hooks"
@@ -68,7 +66,11 @@ func SetupIdentityResolution(ctx context.Context, client *generated.Client, conn
 		return nil, err
 	}
 
-	do.ProvideValue(runtime.Injector(), client)
+	if err := runtime.Attach(gala.WithValue(client)); err != nil {
+		_ = runtime.Close()
+
+		return nil, err
+	}
 
 	if err := runtime.StartWorkers(ctx); err != nil {
 		_ = runtime.Close()

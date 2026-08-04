@@ -20,11 +20,10 @@ func enqueueGalaMutation(ctx context.Context, g *gala.Gala, topic string, payloa
 	// detach cancellation for best-effort dispatch after commit
 	dispatchCtx := context.WithoutCancel(ctx)
 
-	receipt := g.EmitWithHeaders(dispatchCtx, gala.TopicName(topic), payload,
-		eventqueue.NewGalaHeadersFromMutationMetadata(metadata),
-		gala.WithEventID(gala.EventID(metadata.EventID)))
-	if receipt.Err != nil {
-		return fmt.Errorf("%w: emit: %v", ErrGalaMutationEnqueueFailed, receipt.Err)
+	if _, err := g.Emit(dispatchCtx, gala.TopicName(topic), payload,
+		gala.WithHeaders(eventqueue.NewGalaHeadersFromMutationMetadata(metadata)),
+		gala.WithEventID(gala.EventID(metadata.EventID))); err != nil {
+		return fmt.Errorf("%w: emit: %v", ErrGalaMutationEnqueueFailed, err)
 	}
 
 	return nil

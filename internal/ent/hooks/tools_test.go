@@ -11,7 +11,6 @@ import (
 	"entgo.io/ent/dialect"
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/rs/zerolog"
-	"github.com/samber/do/v2"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 	"github.com/theopenlane/core/fga/fgaversion"
@@ -146,10 +145,7 @@ func (suite *HookTestSuite) setupClient() *generated.Client {
 	_, err = hooks.RegisterGalaTaskRuleListeners(galaRuntime)
 	require.NoError(t, err)
 
-	_, err = hooks.RegisterGalaCampaignRecurringListeners(galaRuntime.Registry())
-	require.NoError(t, err)
-
-	do.ProvideValue(galaRuntime.Injector(), client)
+	require.NoError(t, galaRuntime.Attach(gala.WithValue(client)))
 
 	client.Use(hooks.EmitGalaEventHook(func() *gala.Gala {
 		return galaRuntime

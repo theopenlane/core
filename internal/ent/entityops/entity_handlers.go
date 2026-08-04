@@ -103,9 +103,8 @@ func BuildSchemaHandler[TInput any, TEvent any](cfg SchemaHandlerConfig[TInput, 
 
 			ctx = gala.WithOperationContext(ctx, oc)
 
-			receipt := runtime.EmitWithHeaders(ctx, cfg.Topic.Name, event, headers)
-			if receipt.Err != nil {
-				return logError(ctx, ref, ErrEmitFailed, receipt.Err)
+			if _, err := runtime.Emit(ctx, cfg.Topic.Name, event, gala.WithHeaders(headers)); err != nil {
+				return logError(ctx, ref, ErrEmitFailed, err)
 			}
 
 			return nil

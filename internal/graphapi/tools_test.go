@@ -20,7 +20,6 @@ import (
 	"github.com/pdfcpu/pdfcpu/pkg/api"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"github.com/samber/do/v2"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 	"github.com/stripe/stripe-go/v84"
@@ -300,7 +299,7 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	})
 	requireNoError(t, err)
 
-	do.ProvideValue(galaInstance.Injector(), c.db)
+	requireNoError(t, galaInstance.Attach(gala.WithValue(c.db)))
 
 	_, err = hooks.RegisterGalaEntitlementListeners(galaInstance)
 	requireNoError(t, err)
@@ -405,8 +404,10 @@ func (suite *GraphTestSuite) enableGalaForTestSuite(t *testing.T) {
 	})
 	require.NoError(t, err)
 
-	do.ProvideValue(runtime.Injector(), runtime)
-	do.ProvideValue(runtime.Injector(), suite.client.db)
+	require.NoError(t, runtime.Attach(
+		gala.WithValue(runtime),
+		gala.WithValue(suite.client.db),
+	))
 
 	_, err = hooks.RegisterGalaEntitlementListeners(runtime)
 	require.NoError(t, err)

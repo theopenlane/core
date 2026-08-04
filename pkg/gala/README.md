@@ -101,20 +101,20 @@ gala.Definition[eventqueue.MutationGalaPayload]{
 For direct emission (outside the mutation hook flow):
 
 ```go
-receipt := galaApp.EmitWithHeaders(ctx, invoiceCreatedTopic.Name, InvoiceCreated{
+id, err := galaApp.Emit(ctx, invoiceCreatedTopic.Name, InvoiceCreated{
     InvoiceID:  "inv_123",
     CustomerID: "cus_456",
     Amount:     9900,
-}, gala.Headers{},
+},
     gala.WithEventID("inv_123"), // caller identity becomes the durable event id
 )
 
-if receipt.Err != nil {
-    return receipt.Err
+if err != nil {
+    return err
 }
 ```
 
-`WithEventID` makes the caller's identifier the envelope id for traceability; `WithRawPayload` emits pre-encoded bytes, bypassing the topic codec (used for deterministic re-emission of stored payloads).
+`WithHeaders` sets operational headers (properties, tags, scheduling overrides); `WithEventID` makes the caller's identifier the envelope id for traceability; `WithRawPayload` emits pre-encoded bytes, bypassing the topic codec (used for deterministic re-emission of stored payloads).
 
 Most events in the codebase flow through the ent mutation hook (`EmitGalaEventHook`), which automatically builds and emits `MutationGalaPayload` envelopes after successful commits.
 
@@ -172,20 +172,16 @@ Listeners receive a `HandlerContext` with a `do.Injector` for resolving dependen
 
 ```go
 // During server initialization
-do.ProvideValue(runtime.Injector(), dbClient)                    // *generated.Client
-do.ProvideValue(runtime.Injector(), dbClient.EntitlementManager) // you could access via the dbclient -> *entitlements.StripeClient
-do.ProvideNamedValue(runtime.Injector(), "stripe_client", stripeClient) // you can also access the client directly
-do.ProvideValue(runtime.Injector(), dbClient.TokenManager)       // *tokens.TokenManager
-do.ProvideValue(runtime.Injector(), wfEngine)                    // *engine.WorkflowEngine
+err := runtime.Attach(
+    gala.WithValue(dbClient),                    // *generated.Client
+    gala.WithValue(dbClient.EntitlementManager), // you could access via the dbclient -> *entitlements.StripeClient
+    gala.WithValue(dbClient.TokenManager),       // *tokens.TokenManager
+    gala.WithValue(wfEngine),                    // *engine.WorkflowEngine
+)
 
 // In listener
 func handle(ctx gala.HandlerContext, payload MyPayload) error {
 	// now you can profit from the injected type
-	stripeClient, err := do.InvokeNamed[*stripe.Client](ctx.Injector, "stripe_client")
-	if err != nil {
-		return err
-	}
-
 	client, err := do.Invoke[*generated.Client](ctx.Injector)
 	if err != nil {
 		return err
@@ -229,7 +225,9 @@ if err != nil {
 }
 
 // Register dependencies for listeners
-do.ProvideValue(galaApp.Injector(), dbClient)
+if err := galaApp.Attach(gala.WithValue(dbClient)); err != nil {
+    return err
+}
 
 // Register listeners from the colocated hooks table; registration is activation —
 // the mutation hook only emits to topics with interested listeners
@@ -289,7 +287,7 @@ The entire envelope is JSON-serialized and stored as the River job's arguments. 
 For replay scenarios where you already hold the encoded payload and event identity (e.g. the workflow emit reconciler), combine the emit options:
 
 ```go
-receipt := galaApp.EmitWithHeaders(ctx, invoiceCreatedTopic.Name, nil, gala.Headers{},
+id, err := galaApp.Emit(ctx, invoiceCreatedTopic.Name, nil,
     gala.WithRawPayload(storedPayload),
     gala.WithEventID("evt_replay_123"),
 )
@@ -299,9 +297,9 @@ receipt := galaApp.EmitWithHeaders(ctx, invoiceCreatedTopic.Name, nil, gala.Head
 
 | Scenario | Behavior |
 |----------|----------|
-| Unregistered topic | `EmitWithHeaders` returns error immediately |
-| Codec encode failure | `EmitWithHeaders` returns error immediately |
-| River insert failure | `EmitWithHeaders` returns error (event not queued) |
+| Unregistered topic | `Emit` returns error immediately |
+| Codec encode failure | `Emit` returns error immediately |
+| River insert failure | `Emit` returns error (event not queued) |
 | Listener returns error | Job scheduled for retry |
 | Listener panics | Recovered, wrapped as error, job scheduled for retry |
 | Max retries exhausted | Job marked as discarded in River |
@@ -363,14 +361,14 @@ func main() {
 	}
 
 	// Emit event to the topic (triggers durable dispatch)
-	receipt := app.EmitWithHeaders(context.Background(), userCreatedTopic.Name, UserCreated{
+	id, err := app.Emit(context.Background(), userCreatedTopic.Name, UserCreated{
 		UserID: "usr_123",
 		Email:  "user@example.com",
-	}, gala.Headers{})
-	if receipt.Err != nil {
-		log.Fatal(receipt.Err)
+	})
+	if err != nil {
+		log.Fatal(err)
 	}
-	log.Printf("event accepted: id=%s", receipt.EventID)
+	log.Printf("event accepted: id=%s", id)
 }
 ```
 ## Performance Comparisons
