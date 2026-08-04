@@ -60,7 +60,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
-        - BearerAuth: []
+        - bearer: []
 
     post:
       tags:
@@ -84,7 +84,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
-        - BearerAuth: []
+        - bearer: []
 
   /Users/{id}:
     get:
@@ -109,7 +109,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
-        - BearerAuth: []
+        - bearer: []
 
     put:
       tags:
@@ -135,7 +135,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
-        - BearerAuth: []
+        - bearer: []
 
     patch:
       tags:
@@ -161,7 +161,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
-        - BearerAuth: []
+        - bearer: []
 
     delete:
       tags:
@@ -183,7 +183,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
-        - BearerAuth: []
+        - bearer: []
 
   /Groups:
     get:
@@ -210,7 +210,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
-        - BearerAuth: []
+        - bearer: []
 
     post:
       tags:
@@ -234,7 +234,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
-        - BearerAuth: []
+        - bearer: []
 
   /Groups/{id}:
     get:
@@ -259,7 +259,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
-        - BearerAuth: []
+        - bearer: []
 
     put:
       tags:
@@ -285,7 +285,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
-        - BearerAuth: []
+        - bearer: []
 
     patch:
       tags:
@@ -311,7 +311,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
-        - BearerAuth: []
+        - bearer: []
 
     delete:
       tags:
@@ -333,7 +333,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
-        - BearerAuth: []
+        - bearer: []
 
   /ServiceProviderConfig:
     get:
@@ -354,7 +354,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
-        - BearerAuth: []
+        - bearer: []
 
   /ResourceTypes:
     get:
@@ -388,7 +388,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
-        - BearerAuth: []
+        - bearer: []
 
   /ResourceTypes/{name}:
     get:
@@ -419,7 +419,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
-        - BearerAuth: []
+        - bearer: []
 
   /Schemas:
     get:
@@ -453,7 +453,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
-        - BearerAuth: []
+        - bearer: []
 
   /Schemas/{uri}:
     get:
@@ -483,7 +483,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
       security:
-        - BearerAuth: []
+        - bearer: []
 
 components:
   parameters:
@@ -1335,7 +1335,7 @@ components:
       minimum: 0
 
   securitySchemes:
-    BearerAuth:
+    bearer:
       type: http
       scheme: bearer
       description: |
