@@ -142389,6 +142389,7 @@ type UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting struct
 	LogoRemoteURL      *string                                                                           "json:\"logoRemoteURL,omitempty\" graphql:\"logoRemoteURL\""
 	Overview           *string                                                                           "json:\"overview,omitempty\" graphql:\"overview\""
 	PrimaryColor       *string                                                                           "json:\"primaryColor,omitempty\" graphql:\"primaryColor\""
+	SecurityContact    *string                                                                           "json:\"securityContact,omitempty\" graphql:\"securityContact\""
 	ThemeMode          *enums.TrustCenterThemeMode                                                       "json:\"themeMode,omitempty\" graphql:\"themeMode\""
 	Title              *string                                                                           "json:\"title,omitempty\" graphql:\"title\""
 	TrustCenterID      *string                                                                           "json:\"trustCenterID,omitempty\" graphql:\"trustCenterID\""
@@ -142491,6 +142492,12 @@ func (t *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting) G
 		t = &UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting{}
 	}
 	return t.PrimaryColor
+}
+func (t *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting) GetSecurityContact() *string {
+	if t == nil {
+		t = &UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting{}
+	}
+	return t.SecurityContact
 }
 func (t *UpdateTrustCenterSetting_UpdateTrustCenterSetting_TrustCenterSetting) GetThemeMode() *enums.TrustCenterThemeMode {
 	if t == nil {
@@ -212243,6 +212250,7 @@ const UpdateTrustCenterSettingDocument = `mutation UpdateTrustCenterSetting ($up
 			backgroundColor
 			accentColor
 			environment
+			securityContact
 		}
 	}
 }

@@ -15,7 +15,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/notification"
 	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // Notification is the model entity for the Notification schema.
@@ -67,13 +66,11 @@ type Notification struct {
 type NotificationEdges struct {
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
-	// User holds the value of the user edge.
-	User *User `json:"user,omitempty"`
 	// NotificationTemplate holds the value of the notification_template edge.
 	NotificationTemplate *NotificationTemplate `json:"notification_template,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [2]bool
 	// totalCount holds the count of the edges above.
 	totalCount [2]map[string]int
 }
@@ -89,23 +86,12 @@ func (e NotificationEdges) OwnerOrErr() (*Organization, error) {
 	return nil, &NotLoadedError{edge: "owner"}
 }
 
-// UserOrErr returns the User value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e NotificationEdges) UserOrErr() (*User, error) {
-	if e.User != nil {
-		return e.User, nil
-	} else if e.loadedTypes[1] {
-		return nil, &NotFoundError{label: user.Label}
-	}
-	return nil, &NotLoadedError{edge: "user"}
-}
-
 // NotificationTemplateOrErr returns the NotificationTemplate value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e NotificationEdges) NotificationTemplateOrErr() (*NotificationTemplate, error) {
 	if e.NotificationTemplate != nil {
 		return e.NotificationTemplate, nil
-	} else if e.loadedTypes[2] {
+	} else if e.loadedTypes[1] {
 		return nil, &NotFoundError{label: notificationtemplate.Label}
 	}
 	return nil, &NotLoadedError{edge: "notification_template"}
@@ -271,11 +257,6 @@ func (_m *Notification) Value(name string) (ent.Value, error) {
 // QueryOwner queries the "owner" edge of the Notification entity.
 func (_m *Notification) QueryOwner() *OrganizationQuery {
 	return NewNotificationClient(_m.config).QueryOwner(_m)
-}
-
-// QueryUser queries the "user" edge of the Notification entity.
-func (_m *Notification) QueryUser() *UserQuery {
-	return NewNotificationClient(_m.config).QueryUser(_m)
 }
 
 // QueryNotificationTemplate queries the "notification_template" edge of the Notification entity.

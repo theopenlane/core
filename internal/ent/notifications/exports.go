@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/eventqueue"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -22,6 +24,21 @@ type exportFields struct {
 	exportType   enums.ExportType
 	status       enums.ExportStatus
 	errorMessage string
+}
+
+// canProcessNotification checks if we can process a notification for a user or a virtual support user
+func canProcessNotification(ctx context.Context, client *generated.Client, requestorID string) bool {
+	if requestorID == auth.SupportSubjectID {
+		return true
+	}
+
+	ok, err := client.User.Query().Where(user.ID(requestorID)).Exist(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Warn().Err(err).Msg("failed to check if requestor is a user")
+		return false
+	}
+
+	return ok
 }
 
 // handleExportMutation processes export mutations and creates notifications when status changes to READY or FAILED.
@@ -193,14 +210,7 @@ func addExportNotification(ctx context.Context, client *generated.Client, input 
 
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
-	// Verify the requestor is a user (not service account) before notifying.
-	userOK, err := client.User.Query().Where(user.ID(input.requestorID)).Exist(allowCtx)
-	if err != nil {
-		logx.FromContext(ctx).Warn().Err(err).Msg("failed to check if requestor is a user")
-		return nil
-	}
-
-	if !userOK {
+	if !canProcessNotification(allowCtx, client, input.requestorID) {
 		logx.FromContext(ctx).Debug().Msg("export requestor is not a user, skipping notification")
 		return nil
 	}

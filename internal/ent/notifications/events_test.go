@@ -7,6 +7,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/eventqueue"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -201,6 +203,10 @@ func TestExtractExportFromPayloadAndProps(t *testing.T) {
 	assert.Equal(t, enums.ExportTypeTask, fields.exportType)
 	assert.Equal(t, enums.ExportStatusReady, fields.status)
 	assert.Equal(t, "none", fields.errorMessage)
+}
+
+func TestIsExportNotificationAllowsSupportUser(t *testing.T) {
+	assert.True(t, canProcessNotification(t.Context(), nil, auth.SupportSubjectID))
 }
 
 func TestRegisterGalaListeners(t *testing.T) {

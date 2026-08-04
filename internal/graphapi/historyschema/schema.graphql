@@ -17,6 +17,11 @@ can retrieve the value
 """
 directive @hidden(if: Boolean) on OBJECT | FIELD_DEFINITION
 """
+Indicates the modules an organization must have enabled to access this object,
+at least one of the listed modules is required
+"""
+directive @modules(names: [String!]!) on OBJECT
+"""
 Indicates is the input field is read-only by non-system admin users.
 If an input is marked as @readOnly, only system-admin users
 can set the field

@@ -5180,6 +5180,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by_impersonator", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "user_id", Type: field.TypeString, Nullable: true},
 		{Name: "notification_type", Type: field.TypeEnum, Enums: []string{"ORGANIZATION", "USER"}},
 		{Name: "object_type", Type: field.TypeString},
 		{Name: "title", Type: field.TypeString},
@@ -5190,7 +5191,6 @@ var (
 		{Name: "topic", Type: field.TypeEnum, Nullable: true, Enums: []string{"TASK_ASSIGNMENT", "APPROVAL", "MENTION", "EXPORT", "STANDARD_UPDATE", "DOMAIN_SCAN", "IMPORT_COMPLETE", "ORGANIZATION_READY", "INTEGRATION"}},
 		{Name: "template_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "user_id", Type: field.TypeString, Nullable: true},
 	}
 	// NotificationsTable holds the schema information for the "notifications" table.
 	NotificationsTable = &schema.Table{
@@ -5200,20 +5200,14 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "notifications_notification_templates_notifications",
-				Columns:    []*schema.Column{NotificationsColumns[15]},
+				Columns:    []*schema.Column{NotificationsColumns[16]},
 				RefColumns: []*schema.Column{NotificationTemplatesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notifications_organizations_notifications",
-				Columns:    []*schema.Column{NotificationsColumns[16]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "notifications_users_notifications",
 				Columns:    []*schema.Column{NotificationsColumns[17]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -5221,7 +5215,7 @@ var (
 			{
 				Name:    "notification_user_id_read_at_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{NotificationsColumns[17], NotificationsColumns[12], NotificationsColumns[16]},
+				Columns: []*schema.Column{NotificationsColumns[7], NotificationsColumns[13], NotificationsColumns[17]},
 			},
 		},
 	}
@@ -15679,7 +15673,6 @@ func init() {
 	NotesTable.ForeignKeys[15].RefTable = VulnerabilitiesTable
 	NotificationsTable.ForeignKeys[0].RefTable = NotificationTemplatesTable
 	NotificationsTable.ForeignKeys[1].RefTable = OrganizationsTable
-	NotificationsTable.ForeignKeys[2].RefTable = UsersTable
 	NotificationPreferencesTable.ForeignKeys[0].RefTable = UsersTable
 	NotificationPreferencesTable.ForeignKeys[1].RefTable = NotificationTemplatesTable
 	NotificationPreferencesTable.ForeignKeys[2].RefTable = OrganizationsTable

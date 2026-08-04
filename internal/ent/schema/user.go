@@ -297,14 +297,6 @@ func (u User) Edges() []ent.Edge {
 			name:       "targeted_impersonations",
 			t:          ImpersonationEvent.Type,
 		}),
-		edgeToWithPagination(&edgeDefinition{
-			fromSchema:    u,
-			edgeSchema:    Notification{},
-			cascadeDelete: "User",
-			annotations: []schema.Annotation{
-				entgql.Skip(entgql.SkipAll),
-			},
-		}),
 	}
 }
 

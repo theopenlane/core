@@ -113,14 +113,16 @@ func getFinalFilters(filters string, m *generated.ExportMutation, ownerID string
 		return filters, nil
 	}
 
-	if filters == "" {
-		filters = "{}"
-	}
-
 	var filterMap map[string]any
 
-	if err := json.Unmarshal([]byte(filters), &filterMap); err != nil {
-		return "", err
+	if filters != "" {
+		if err := json.Unmarshal([]byte(filters), &filterMap); err != nil {
+			return "", err
+		}
+	}
+
+	if filterMap == nil {
+		filterMap = map[string]any{}
 	}
 
 	// filter by owner ID

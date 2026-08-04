@@ -15,7 +15,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/notification"
 	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/user"
 )
 
 // NotificationCreate is the builder for creating a Notification entity.
@@ -226,11 +225,6 @@ func (_c *NotificationCreate) SetOwner(v *Organization) *NotificationCreate {
 	return _c.SetOwnerID(v.ID)
 }
 
-// SetUser sets the "user" edge to the User entity.
-func (_c *NotificationCreate) SetUser(v *User) *NotificationCreate {
-	return _c.SetUserID(v.ID)
-}
-
 // SetNotificationTemplateID sets the "notification_template" edge to the NotificationTemplate entity by ID.
 func (_c *NotificationCreate) SetNotificationTemplateID(id string) *NotificationCreate {
 	_c.mutation.SetNotificationTemplateID(id)
@@ -419,6 +413,10 @@ func (_c *NotificationCreate) createSpec() (*Notification, *sqlgraph.CreateSpec)
 		_spec.SetField(notification.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
 	}
+	if value, ok := _c.mutation.UserID(); ok {
+		_spec.SetField(notification.FieldUserID, field.TypeString, value)
+		_node.UserID = value
+	}
 	if value, ok := _c.mutation.NotificationType(); ok {
 		_spec.SetField(notification.FieldNotificationType, field.TypeEnum, value)
 		_node.NotificationType = value
@@ -467,24 +465,6 @@ func (_c *NotificationCreate) createSpec() (*Notification, *sqlgraph.CreateSpec)
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.UserIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   notification.UserTable,
-			Columns: []string{notification.UserColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _c.schemaConfig.Notification
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_node.UserID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.NotificationTemplateIDs(); len(nodes) > 0 {

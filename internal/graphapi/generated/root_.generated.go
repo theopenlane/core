@@ -52629,7 +52629,12 @@ directive @externalReadOnly(source: ControlControlSource) on INPUT_FIELD_DEFINIT
 Indicates that this field cannot be set on the input, and comes from an external source
 This does not prevent the viewing of the field
 """
-directive @externalSource(source: ControlControlSource) on OBJECT | FIELD_DEFINITION`, BuiltIn: false},
+directive @externalSource(source: ControlControlSource) on OBJECT | FIELD_DEFINITION
+"""
+Indicates the modules an organization must have enabled to access this object,
+at least one of the listed modules is required
+"""
+directive @modules(names: [String!]!) on OBJECT`, BuiltIn: false},
 	{Name: "../schema/common/scalars.graphql", Input: `"""
 The ` + "`" + `Upload` + "`" + ` scalar type represents a file upload.
 This scalar is typically used to handle file uploads in GraphQL mutations.
@@ -55364,7 +55369,7 @@ enum ControlReportOrderField {
 ControlReport is a custom resolver that is used to show detailed, but selective information about
 an organizations controls vs. the standards
 """
-type ControlReport implements Node {
+type ControlReport implements Node @modules(names: ["compliance_module"]) {
   """
   unique identifier of the control
   """
@@ -55557,7 +55562,7 @@ type ControlReportCategory {
 """
 PolicySummary provides a lightweight summary of an internal policy
 """
-type PolicySummary implements Node {
+type PolicySummary implements Node @modules(names: ["compliance_module"]) {
   """
   unique identifier of the policy
   """
@@ -57504,7 +57509,7 @@ input APITokenWhereInput {
   """
   scopesHas: String
 }
-type ActionPlan implements Node {
+type ActionPlan implements Node @modules(names: ["compliance_module","policy_management_addon","risk_management_addon","entity_management_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -58872,7 +58877,7 @@ input ActionPlanWhereInput {
   """
   dismissedImprovementSuggestionsHas: String
 }
-type Assessment implements Node {
+type Assessment implements Node @modules(names: ["compliance_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -59238,7 +59243,7 @@ enum AssessmentOrderField {
   assessment_type
   response_due_duration
 }
-type AssessmentResponse implements Node {
+type AssessmentResponse implements Node @modules(names: ["compliance_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -60193,7 +60198,7 @@ input AssessmentWhereInput {
   """
   tagsHas: String
 }
-type Asset implements Node {
+type Asset implements Node @modules(names: ["entity_management_module","compliance_module","registry_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -61953,7 +61958,7 @@ input AssetWhereInput {
   """
   categoriesHas: String
 }
-type Campaign implements Node {
+type Campaign implements Node @modules(names: ["compliance_module","trust_center_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -62556,7 +62561,7 @@ enum CampaignOrderField {
   resend_count
   last_resent_at
 }
-type CampaignTarget implements Node {
+type CampaignTarget implements Node @modules(names: ["compliance_module","trust_center_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -64202,7 +64207,7 @@ input CheckResultWhereInput {
   """
   tagsHas: String
 }
-type Contact implements Node {
+type Contact implements Node @modules(names: ["entity_management_module","compliance_module","registry_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -64803,7 +64808,7 @@ input ContactWhereInput {
   """
   tagsHas: String
 }
-type Control implements Node {
+type Control implements Node @modules(names: ["compliance_module","trust_center_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -65980,7 +65985,7 @@ type ControlEdge {
   """
   cursor: Cursor!
 }
-type ControlImplementation implements Node {
+type ControlImplementation implements Node @modules(names: ["compliance_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -66549,7 +66554,7 @@ input ControlImplementationWhereInput {
   """
   tagsHas: String
 }
-type ControlObjective implements Node {
+type ControlObjective implements Node @modules(names: ["compliance_module","policy_management_addon"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -74571,7 +74576,7 @@ Define a Relay Cursor type:
 https://relay.dev/graphql/connections.htm#sec-Cursor
 """
 scalar Cursor
-type CustomDomain implements Node {
+type CustomDomain implements Node @modules(names: ["trust_center_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -75676,7 +75681,7 @@ input CustomTypeEnumWhereInput {
   hasPlatforms: Boolean
   hasPlatformsWith: [PlatformWhereInput!]
 }
-type DNSVerification implements Node {
+type DNSVerification implements Node @modules(names: ["trust_center_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -79622,7 +79627,7 @@ input DiscussionWhereInput {
   hasInternalPolicy: Boolean
   hasInternalPolicyWith: [InternalPolicyWhereInput!]
 }
-type DocumentData implements Node {
+type DocumentData implements Node @modules(names: ["compliance_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -80858,7 +80863,7 @@ input EmailTemplateWhereInput {
   hasFiles: Boolean
   hasFilesWith: [FileWhereInput!]
 }
-type Entity implements Node {
+type Entity implements Node @modules(names: ["entity_management_module","compliance_module","registry_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -84115,7 +84120,7 @@ input EventWhereInput {
   """
   tagsHas: String
 }
-type Evidence implements Node {
+type Evidence implements Node @modules(names: ["compliance_module","policy_management_addon"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -86501,7 +86506,7 @@ input FileWhereInput {
   """
   tagsHas: String
 }
-type Finding implements Node {
+type Finding implements Node @modules(names: ["vulnerability_management_module","compliance_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -87443,7 +87448,7 @@ type FindingConnection {
   """
   totalCount: Int!
 }
-type FindingControl implements Node {
+type FindingControl implements Node @modules(names: ["vulnerability_management_module","compliance_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -91970,7 +91975,7 @@ input HushWhereInput {
   hasEvents: Boolean
   hasEventsWith: [EventWhereInput!]
 }
-type IdentityHolder implements Node {
+type IdentityHolder implements Node @modules(names: ["compliance_module","registry_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -94798,7 +94803,7 @@ input IntegrationWhereInput {
   """
   tagsHas: String
 }
-type InternalPolicy implements Node {
+type InternalPolicy implements Node @modules(names: ["compliance_module","policy_management_addon"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -96720,7 +96725,7 @@ input InviteWhereInput {
 A valid JSON string.
 """
 scalar JSON
-type JobResult implements Node {
+type JobResult implements Node @modules(names: ["compliance_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -97051,7 +97056,7 @@ input JobResultWhereInput {
   hasFile: Boolean
   hasFileWith: [FileWhereInput!]
 }
-type JobRunner implements Node {
+type JobRunner implements Node @modules(names: ["compliance_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -97200,7 +97205,7 @@ enum JobRunnerOrderField {
   updated_at
   name
 }
-type JobRunnerRegistrationToken implements Node {
+type JobRunnerRegistrationToken implements Node @modules(names: ["compliance_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -97447,7 +97452,7 @@ input JobRunnerRegistrationTokenWhereInput {
   """
   tagsHas: String
 }
-type JobRunnerToken implements Node {
+type JobRunnerToken implements Node @modules(names: ["compliance_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -98071,7 +98076,7 @@ input JobRunnerWhereInput {
   """
   tagsHas: String
 }
-type JobTemplate implements Node {
+type JobTemplate implements Node @modules(names: ["compliance_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -98459,7 +98464,7 @@ input JobTemplateWhereInput {
 The builtin Map type
 """
 scalar Map
-type MappableDomain implements Node {
+type MappableDomain implements Node @modules(names: ["trust_center_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -98707,7 +98712,7 @@ input MappableDomainWhereInput {
   """
   tagsHas: String
 }
-type MappedControl implements Node {
+type MappedControl implements Node @modules(names: ["compliance_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -99260,7 +99265,7 @@ input MappedControlWhereInput {
   """
   tagsHas: String
 }
-type Narrative implements Node {
+type Narrative implements Node @modules(names: ["compliance_module","policy_management_addon"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -100374,7 +100379,7 @@ type Notification implements Node {
   """
   the user this notification is for
   """
-  userID: ID
+  userID: String
   """
   the type of notification - organization or user
   """
@@ -109702,7 +109707,7 @@ input PersonalAccessTokenWhereInput {
   """
   scopesHas: String
 }
-type Platform implements Node {
+type Platform implements Node @modules(names: ["compliance_module","entity_management_module","registry_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -112028,7 +112033,7 @@ input PlatformWhereInput {
   """
   tagsHas: String
 }
-type Procedure implements Node {
+type Procedure implements Node @modules(names: ["compliance_module","policy_management_addon","risk_management_addon","entity_management_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -113272,7 +113277,7 @@ input ProcedureWhereInput {
   """
   dismissedImprovementSuggestionsHas: String
 }
-type Program implements Node {
+type Program implements Node @modules(names: ["compliance_module","entity_management_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -114090,7 +114095,7 @@ type ProgramEdge {
   """
   cursor: Cursor!
 }
-type ProgramMembership implements Node {
+type ProgramMembership implements Node @modules(names: ["compliance_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -117822,7 +117827,7 @@ type Query {
     where: WorkflowObjectRefWhereInput
   ): WorkflowObjectRefConnection!
 }
-type Remediation implements Node {
+type Remediation implements Node @modules(names: ["vulnerability_management_module","risk_management_addon","compliance_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -119268,7 +119273,7 @@ input RemediationWhereInput {
   """
   tagsHas: String
 }
-type Review implements Node {
+type Review implements Node @modules(names: ["compliance_module","vulnerability_management_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -120602,7 +120607,7 @@ input ReviewWhereInput {
   """
   tagsHas: String
 }
-type Risk implements Node {
+type Risk implements Node @modules(names: ["compliance_module","risk_management_addon"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -122275,7 +122280,7 @@ input RiskWhereInput {
   """
   tagsHas: String
 }
-type SLADefinition implements Node {
+type SLADefinition implements Node @modules(names: ["vulnerability_management_module","compliance_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -122604,7 +122609,7 @@ input SLADefinitionWhereInput {
   """
   tagsHas: String
 }
-type Scan implements Node {
+type Scan implements Node @modules(names: ["vulnerability_management_module","compliance_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -123838,7 +123843,7 @@ input ScanWhereInput {
   """
   discoveredVulnerabilityIdsHas: String
 }
-type ScheduledJob implements Node {
+type ScheduledJob implements Node @modules(names: ["compliance_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -123992,7 +123997,7 @@ enum ScheduledJobOrderField {
   created_at
   updated_at
 }
-type ScheduledJobRun implements Node {
+type ScheduledJobRun implements Node @modules(names: ["compliance_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -124490,7 +124495,7 @@ input ScheduledJobWhereInput {
   hasJobRunner: Boolean
   hasJobRunnerWith: [JobRunnerWhereInput!]
 }
-type Standard implements Node {
+type Standard implements Node @modules(names: ["compliance_module","policy_management_addon","risk_management_addon","entity_management_module","trust_center_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -125192,7 +125197,7 @@ input StandardWhereInput {
   """
   domainsHas: String
 }
-type Subcontrol implements Node {
+type Subcontrol implements Node @modules(names: ["compliance_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -126845,7 +126850,7 @@ input SubcontrolWhereInput {
   """
   controlQuestionsHas: String
 }
-type Subprocessor implements Node {
+type Subprocessor implements Node @modules(names: ["trust_center_module","entity_management_module","compliance_module","registry_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -127716,7 +127721,7 @@ input SubscriberWhereInput {
   """
   tagsHas: String
 }
-type SystemDetail implements Node {
+type SystemDetail implements Node @modules(names: ["compliance_module","registry_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -130774,7 +130779,7 @@ input TemplateWhereInput {
 The builtin Time type
 """
 scalar Time
-type TrustCenter implements Node {
+type TrustCenter implements Node @modules(names: ["trust_center_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -131234,7 +131239,7 @@ type TrustCenter implements Node {
     where: CampaignWhereInput
   ): CampaignConnection!
 }
-type TrustCenterCompliance implements Node {
+type TrustCenterCompliance implements Node @modules(names: ["trust_center_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -131548,7 +131553,7 @@ type TrustCenterConnection {
   """
   totalCount: Int!
 }
-type TrustCenterDoc implements Node {
+type TrustCenterDoc implements Node @modules(names: ["trust_center_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -132047,7 +132052,7 @@ type TrustCenterEdge {
   """
   cursor: Cursor!
 }
-type TrustCenterEntity implements Node {
+type TrustCenterEntity implements Node @modules(names: ["trust_center_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -132391,7 +132396,7 @@ input TrustCenterEntityWhereInput {
   hasEntityType: Boolean
   hasEntityTypeWith: [EntityTypeWhereInput!]
 }
-type TrustCenterFAQ implements Node {
+type TrustCenterFAQ implements Node @modules(names: ["trust_center_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -132770,7 +132775,7 @@ input TrustCenterFAQWhereInput {
   hasNote: Boolean
   hasNoteWith: [NoteWhereInput!]
 }
-type TrustCenterNDARequest implements Node {
+type TrustCenterNDARequest implements Node @modules(names: ["trust_center_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -133368,7 +133373,7 @@ enum TrustCenterOrderField {
   created_at
   updated_at
 }
-type TrustCenterSetting implements Node {
+type TrustCenterSetting implements Node @modules(names: ["trust_center_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -134190,7 +134195,7 @@ input TrustCenterSettingWhereInput {
   hasNdaApproverGroup: Boolean
   hasNdaApproverGroupWith: [GroupWhereInput!]
 }
-type TrustCenterSubprocessor implements Node {
+type TrustCenterSubprocessor implements Node @modules(names: ["trust_center_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -134547,7 +134552,7 @@ enum TrustCenterTrustCenterPreviewStatus @goModel(model: "github.com/theopenlane
   DEPROVISIONING
   NONE
 }
-type TrustCenterWatermarkConfig implements Node {
+type TrustCenterWatermarkConfig implements Node @modules(names: ["trust_center_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -145741,7 +145746,7 @@ input UserWhereInput {
   """
   tagsHas: String
 }
-type VendorRiskScore implements Node {
+type VendorRiskScore implements Node @modules(names: ["entity_management_module","compliance_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -146235,7 +146240,7 @@ input VendorRiskScoreWhereInput {
   """
   tagsHas: String
 }
-type VendorScoringConfig implements Node {
+type VendorScoringConfig implements Node @modules(names: ["entity_management_module","compliance_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time
@@ -146498,7 +146503,7 @@ input VendorScoringConfigWhereInput {
   """
   tagsHas: String
 }
-type Vulnerability implements Node {
+type Vulnerability implements Node @modules(names: ["vulnerability_management_module","compliance_module"]) {
   id: ID!
   createdAt: Time
   updatedAt: Time

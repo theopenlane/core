@@ -2978,26 +2978,6 @@ func UserEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
-	{
-		ids, err := FromContext(ctx).Notification.Query().Where(notification.HasUserWith(user.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying notification ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := NotificationEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up notification edges")
-				return err
-			}
-		}
-	}
-	if exists, err := FromContext(ctx).Notification.Query().Where((notification.HasUserWith(user.ID(id)))).Exist(ctx); err == nil && exists {
-		if notificationCount, err := FromContext(ctx).Notification.Delete().Where(notification.HasUserWith(user.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", notificationCount).Msg("error deleting notification")
-			return err
-		}
-	}
-
 	if exists, err := FromContext(ctx).OrgMembership.Query().Where((orgmembership.HasUserWith(user.ID(id)))).Exist(ctx); err == nil && exists {
 		if orgmembershipCount, err := FromContext(ctx).OrgMembership.Delete().Where(orgmembership.HasUserWith(user.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", orgmembershipCount).Msg("error deleting orgmembership")
