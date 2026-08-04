@@ -75,6 +75,56 @@ func markCampaignTargetSent(ctx context.Context, db *generated.Client, targetID 
 	return nil
 }
 
+// completeCampaignWhenAllSent marks custom campaigns with nothing to respond to complete once every target has been sent a message.
+// Campaigns with a linked assessment (which include training, vendor intake, etc) complete when all responses are submitted, and recurring campaigns complete when their
+// recurrence is exhausted, so both are skipped here
+func completeCampaignWhenAllSent(ctx context.Context, db *generated.Client, camp *generated.Campaign) error {
+	if camp == nil || camp.CampaignType != enums.CampaignTypeCustom || camp.IsRecurring || camp.AssessmentID != "" {
+		return nil
+	}
+
+	if camp.Status == enums.CampaignStatusCompleted || camp.Status == enums.CampaignStatusCanceled {
+		return nil
+	}
+
+	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+	total, err := db.CampaignTarget.Query().
+		Where(campaigntarget.CampaignIDEQ(camp.ID)).
+		Count(systemCtx)
+	if err != nil {
+		return err
+	}
+
+	if total == 0 {
+		return nil
+	}
+
+	pending, err := db.CampaignTarget.Query().
+		Where(
+			campaigntarget.CampaignIDEQ(camp.ID),
+			campaigntarget.SentAtIsNil(),
+		).
+		Count(systemCtx)
+	if err != nil {
+		return err
+	}
+
+	if pending > 0 {
+		return nil
+	}
+
+	update := db.Campaign.UpdateOneID(camp.ID).
+		SetStatus(enums.CampaignStatusCompleted).
+		SetIsActive(false)
+
+	if camp.CompletedAt == nil || camp.CompletedAt.IsZero() {
+		update.SetCompletedAt(models.DateTime(time.Now()))
+	}
+
+	return update.Exec(systemCtx)
+}
+
 // createAssessmentResponseForRecipient creates a new assessment response record for the campaign and recipient email
 func createAssessmentResponseForRecipient(ctx context.Context, db *generated.Client, camp *generated.Campaign, assessmentID string, email string, isTest bool) (*generated.AssessmentResponse, error) {
 	if strings.TrimSpace(email) == "" {

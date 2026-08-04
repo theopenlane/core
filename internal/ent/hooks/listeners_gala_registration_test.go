@@ -171,6 +171,22 @@ func TestRegisterGalaDocumentAssociationListeners(t *testing.T) {
 	}
 }
 
+func TestRegisterGalaCampaignRecurringListeners(t *testing.T) {
+	t.Parallel()
+
+	registry := gala.NewRegistry()
+
+	ids, err := RegisterGalaCampaignRecurringListeners(registry)
+	require.NoError(t, err)
+	require.Len(t, ids, 1)
+
+	topic := eventqueue.MutationTopicName(eventqueue.MutationConcernDirect, entgen.TypeCampaign)
+	require.True(t, registry.InterestedIn(topic, ent.OpUpdate.String()))
+	require.True(t, registry.InterestedIn(topic, ent.OpUpdateOne.String()))
+	require.False(t, registry.InterestedIn(topic, ent.OpCreate.String()))
+	require.False(t, registry.InterestedIn(topic, ent.OpDelete.String()))
+}
+
 func TestRegisterGalaQuestionnaireTransformListeners(t *testing.T) {
 	t.Parallel()
 

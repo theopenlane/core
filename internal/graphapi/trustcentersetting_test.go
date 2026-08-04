@@ -2,6 +2,7 @@ package graphapi_test
 
 import (
 	"context"
+	"strings"
 	"testing"
 	"time"
 
@@ -224,6 +225,7 @@ func TestUpdateTrustCenterSetting(t *testing.T) {
 				Overview:        lo.ToPtr("New Overview"),
 				PrimaryColor:    lo.ToPtr("#00FF00"),
 				ForegroundColor: lo.ToPtr("#111111"),
+				SecurityContact: lo.ToPtr("Security@example.com"),
 			},
 			client: suite.client.api,
 			ctx:    tcOrg.owner.UserCtx,
@@ -296,6 +298,10 @@ func TestUpdateTrustCenterSetting(t *testing.T) {
 
 			if tc.input.ThemeMode != nil {
 				assert.Check(t, is.Equal(*tc.input.ThemeMode, *resp.UpdateTrustCenterSetting.TrustCenterSetting.ThemeMode))
+			}
+
+			if tc.input.SecurityContact != nil {
+				assert.Check(t, is.Equal(strings.ToLower(*tc.input.SecurityContact), *resp.UpdateTrustCenterSetting.TrustCenterSetting.SecurityContact))
 			}
 
 			if tc.expectJob {

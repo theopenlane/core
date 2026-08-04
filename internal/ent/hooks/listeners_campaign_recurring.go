@@ -62,6 +62,12 @@ func handleCampaignRecurringMutation(ctx gala.HandlerContext, payload eventqueue
 		return nil
 	}
 
+	// set fields in the logger context
+	ctx.Context = withCampaignLogContext(ctx.Context, campaignID, caller.OrganizationID)
+
+	// ensure the caller can retrieve the campaign
+	ctx.Context = campaignScheduleContext(ctx.Context)
+
 	camp, err := client.Campaign.Query().
 		Where(
 			campaign.ID(campaignID),
@@ -74,11 +80,19 @@ func handleCampaignRecurringMutation(ctx gala.HandlerContext, payload eventqueue
 			campaign.FieldRecurrenceInterval,
 			campaign.FieldRecurrenceTimezone,
 			campaign.FieldNextRunAt,
+			campaign.FieldLastRunAt,
 			campaign.FieldStatus,
 		).
 		Only(ctx.Context)
 	if err != nil {
-		logx.FromContext(ctx.Context).Error().Err(err).Str("campaign_id", campaignID).Msg("failed loading campaign for recurring schedule sync")
+		if entgen.IsNotFound(err) {
+			logx.FromContext(ctx.Context).Info().Msg("failed to find campaign, campaign may have been deleted before running")
+
+			// nothing to do if the campaign can no longer be found
+			return nil
+		}
+
+		logx.FromContext(ctx.Context).Error().Err(err).Msg("failed loading campaign for recurring schedule sync")
 
 		return err
 	}
@@ -113,11 +127,11 @@ func recomputeNextRunAt(ctx context.Context, client *entgen.Client, camp *entgen
 	if err := client.Campaign.UpdateOneID(camp.ID).
 		SetNextRunAt(models.DateTime(nextRun)).
 		Exec(ctx); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", camp.ID).Msg("failed setting next_run_at on reactivation")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed setting next_run_at on reactivation")
 		return err
 	}
 
-	logx.FromContext(ctx).Debug().Str("campaign_id", camp.ID).Time("next_run_at", nextRun).Msg("recurring campaign schedule recomputed")
+	logx.FromContext(ctx).Debug().Time("next_run_at", nextRun).Msg("recurring campaign schedule recomputed")
 
 	return nil
 }
@@ -127,11 +141,11 @@ func clearNextRunAt(ctx context.Context, client *entgen.Client, campaignID strin
 	if err := client.Campaign.UpdateOneID(campaignID).
 		ClearNextRunAt().
 		Exec(ctx); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", campaignID).Msg("failed clearing next_run_at on deactivation")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed clearing next_run_at on deactivation")
 		return err
 	}
 
-	logx.FromContext(ctx).Debug().Str("campaign_id", campaignID).Msg("recurring campaign schedule cleared")
+	logx.FromContext(ctx).Debug().Msg("recurring campaign schedule cleared")
 
 	return nil
 }
@@ -142,4 +156,23 @@ func isTerminalStatus(status enums.CampaignStatus) bool {
 		enums.CampaignStatusCompleted,
 		enums.CampaignStatusCanceled,
 	}, status)
+}
+
+// campaignScheduleContext grants the internal operation capability to the restored caller so the
+// recurrence schedule can be read and written without the caller's own object permissions
+func campaignScheduleContext(ctx context.Context) context.Context {
+	caller, ok := auth.CallerFromContext(ctx)
+	if !ok || caller == nil {
+		caller = &auth.Caller{}
+	}
+
+	return auth.WithCaller(ctx, caller.WithCapabilities(auth.CapInternalOperation))
+}
+
+// withCampaignLogContext sets the campaign and organization ID in the log context
+func withCampaignLogContext(ctx context.Context, campaignID, orgID string) context.Context {
+	return logx.WithFields(ctx, map[string]any{
+		"campaign_id":     campaignID,
+		"organization_id": orgID,
+	})
 }

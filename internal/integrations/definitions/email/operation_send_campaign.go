@@ -112,6 +112,11 @@ func (SendBrandedCampaign) Run(ctx context.Context, req types.OperationRequest, 
 
 	sentCount, sendFailed := sendCampaignMessages(ctx, req.DB, client, messages, targetIDs, attachments)
 
+	// custom campaigns have no responses to wait on, they are done once every target has been emailed
+	if err := completeCampaignWhenAllSent(ctx, req.DB, camp); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", camp.ID).Msg("failed updating campaign completion status")
+	}
+
 	result := CampaignDispatchResult{
 		SentCount:    sentCount,
 		SkippedCount: skipped,
