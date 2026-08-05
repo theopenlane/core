@@ -2002,13 +2002,6 @@ components:
             minimum: 0
             type: integer
     securitySchemes:
-        BearerAuth:
-            description: |
-                Bearer token authentication using API tokens.
-                The token identifies the organization and grants permissions to manage
-                users and groups within that organization's scope.
-            scheme: bearer
-            type: http
         apiKey:
             description: API Key authentication, the key must be a valid API key
             in: header
@@ -2359,7 +2352,7 @@ paths:
                 "500":
                     $ref: '#/components/responses/InternalServerError'
             security:
-                - BearerAuth: []
+                - bearer: []
             summary: List groups
             tags:
                 - SCIM Groups
@@ -2382,7 +2375,7 @@ paths:
                 "500":
                     $ref: '#/components/responses/InternalServerError'
             security:
-                - BearerAuth: []
+                - bearer: []
             summary: Create a new group
             tags:
                 - SCIM Groups
@@ -2404,7 +2397,7 @@ paths:
                 "500":
                     $ref: '#/components/responses/InternalServerError'
             security:
-                - BearerAuth: []
+                - bearer: []
             summary: Delete group
             tags:
                 - SCIM Groups
@@ -2427,7 +2420,7 @@ paths:
                 "500":
                     $ref: '#/components/responses/InternalServerError'
             security:
-                - BearerAuth: []
+                - bearer: []
             summary: Get group by ID
             tags:
                 - SCIM Groups
@@ -2452,7 +2445,7 @@ paths:
                 "500":
                     $ref: '#/components/responses/InternalServerError'
             security:
-                - BearerAuth: []
+                - bearer: []
             summary: Update group
             tags:
                 - SCIM Groups
@@ -2477,7 +2470,7 @@ paths:
                 "500":
                     $ref: '#/components/responses/InternalServerError'
             security:
-                - BearerAuth: []
+                - bearer: []
             summary: Replace group
             tags:
                 - SCIM Groups
@@ -2510,7 +2503,7 @@ paths:
                 "500":
                     $ref: '#/components/responses/InternalServerError'
             security:
-                - BearerAuth: []
+                - bearer: []
             summary: Get resource types
             tags:
                 - SCIM Discovery
@@ -2542,7 +2535,7 @@ paths:
                 "500":
                     $ref: '#/components/responses/InternalServerError'
             security:
-                - BearerAuth: []
+                - bearer: []
             summary: Get resource type by name
             tags:
                 - SCIM Discovery
@@ -2575,7 +2568,7 @@ paths:
                 "500":
                     $ref: '#/components/responses/InternalServerError'
             security:
-                - BearerAuth: []
+                - bearer: []
             summary: Get schemas
             tags:
                 - SCIM Discovery
@@ -2604,7 +2597,7 @@ paths:
                 "500":
                     $ref: '#/components/responses/InternalServerError'
             security:
-                - BearerAuth: []
+                - bearer: []
             summary: Get schema by URI
             tags:
                 - SCIM Discovery
@@ -2624,7 +2617,7 @@ paths:
                 "500":
                     $ref: '#/components/responses/InternalServerError'
             security:
-                - BearerAuth: []
+                - bearer: []
             summary: Get service provider configuration
             tags:
                 - SCIM Discovery
@@ -2650,7 +2643,7 @@ paths:
                 "500":
                     $ref: '#/components/responses/InternalServerError'
             security:
-                - BearerAuth: []
+                - bearer: []
             summary: List users
             tags:
                 - SCIM Users
@@ -2673,7 +2666,7 @@ paths:
                 "500":
                     $ref: '#/components/responses/InternalServerError'
             security:
-                - BearerAuth: []
+                - bearer: []
             summary: Create a new user
             tags:
                 - SCIM Users
@@ -2695,7 +2688,7 @@ paths:
                 "500":
                     $ref: '#/components/responses/InternalServerError'
             security:
-                - BearerAuth: []
+                - bearer: []
             summary: Delete user
             tags:
                 - SCIM Users
@@ -2718,7 +2711,7 @@ paths:
                 "500":
                     $ref: '#/components/responses/InternalServerError'
             security:
-                - BearerAuth: []
+                - bearer: []
             summary: Get user by ID
             tags:
                 - SCIM Users
@@ -2743,7 +2736,7 @@ paths:
                 "500":
                     $ref: '#/components/responses/InternalServerError'
             security:
-                - BearerAuth: []
+                - bearer: []
             summary: Update user
             tags:
                 - SCIM Users
@@ -2768,7 +2761,7 @@ paths:
                 "500":
                     $ref: '#/components/responses/InternalServerError'
             security:
-                - BearerAuth: []
+                - bearer: []
             summary: Replace user
             tags:
                 - SCIM Users
