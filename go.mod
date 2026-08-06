@@ -39,7 +39,7 @@ require (
 	github.com/cloudflare/cloudflare-go/v7 v7.6.0
 	github.com/coder/websocket v1.8.15
 	github.com/didasy/tldr v0.7.0
-	github.com/elimity-com/scim v0.0.0-20260506142751-830e1caafcc3
+	github.com/elimity-com/scim v0.0.0-20260728105928-2641426a1539
 	github.com/fatih/camelcase v1.0.0
 	github.com/fatih/color v1.19.0
 	github.com/fsnotify/fsnotify v1.10.1
@@ -159,6 +159,8 @@ require (
 	github.com/pb33f/ordered-map/v2 v2.3.1 // indirect
 	github.com/philhofer/fwd v1.2.0 // indirect
 	github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c // indirect
+	github.com/q-uint/parser v0.3.1 // indirect
+	github.com/q-uint/xsd-datetime v1.0.0 // indirect
 	github.com/riverqueue/rivercontrib/otelriver v0.12.0 // indirect
 	github.com/santhosh-tekuri/jsonschema/v6 v6.0.2 // indirect
 	github.com/segmentio/ksuid v1.0.4 // indirect
@@ -182,12 +184,10 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/signin v1.5.2 // indirect
 	github.com/clipperhouse/displaywidth v0.10.0 // indirect
 	github.com/clipperhouse/uax29/v2 v2.7.0 // indirect
-	github.com/di-wu/parser v0.3.0 // indirect
-	github.com/di-wu/xsd-datetime v1.0.0 // indirect
 	github.com/fumiama/imgsz v0.0.4 // indirect
 	github.com/robfig/cron/v3 v3.0.1 // indirect
 	github.com/samber/go-type-to-string v1.8.0 // indirect
-	github.com/scim2/filter-parser/v2 v2.2.0 // indirect
+	github.com/scim2/filter-parser/v2 v2.3.1 // indirect
 	github.com/shurcooL/graphql v0.0.0-20240915155400-7ee5256398cf
 	github.com/spf13/cast v1.10.0 // indirect
 	github.com/theopenlane/oscalot v0.1.0 // indirect
