@@ -30,45 +30,37 @@ func RegisterGalaIdentityResolutionListeners(g *gala.Gala) ([]gala.ListenerID, e
 			Schema:     entgen.TypeDirectoryAccount,
 			Name:       "identityresolution.directory_account_created",
 			Operations: []string{ent.OpCreate.String()},
-			Handle:     handleDirectoryAccountCreated,
+			Handle:     handleDirectoryAccountMutation,
 		},
 		eventqueue.MutationListener{
 			Schema:     entgen.TypeDirectoryAccount,
 			Name:       "identityresolution.directory_account_updated",
 			Operations: []string{ent.OpUpdateOne.String()},
-			Handle:     handleDirectoryAccountUpdated,
+			Handle:     handleDirectoryAccountMutation,
 		},
 	)
 }
 
-// handleDirectoryAccountCreated runs full identity resolution for a newly created directory account
-func handleDirectoryAccountCreated(inv eventqueue.Invocation, _ eventqueue.MutationGalaPayload) error {
-	ctx, client, accountID := inv.Context, inv.Client, inv.EntityID
+// handleDirectoryAccountMutation links, enriches, and syncs one directory account:
+// accounts with no identity holder run the full matching cascade first, while
+// already-linked accounts re-enrich and re-sync from current state
+func handleDirectoryAccountMutation(inv eventqueue.Invocation, _ eventqueue.MutationGalaPayload) error {
+	ctx, client := inv.Context, inv.Client
 
-	account, err := client.DirectoryAccount.Get(ctx, accountID)
-	if err != nil {
-		if entgen.IsNotFound(err) {
-			return nil
-		}
-
+	account, ok, err := eventqueue.LoadEntity(ctx, inv.EntityID, client.DirectoryAccount.Get)
+	if err != nil || !ok {
 		return err
 	}
 
-	holder, err := resolveIdentityHolder(ctx, client, account)
+	holder, err := accountIdentityHolder(ctx, client, account)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("directory_account_id", accountID).Msg("identity resolution failed")
+		logx.FromContext(ctx).Error().Err(err).Str("directory_account_id", account.ID).Msg("identity resolution failed")
 
 		return err
 	}
 
 	if holder == nil {
 		return nil
-	}
-
-	if err := client.DirectoryAccount.UpdateOneID(account.ID).SetIdentityHolderID(holder.ID).Exec(ctx); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("directory_account_id", accountID).Str("identity_holder_id", holder.ID).Msg("failed to link directory account to identity holder")
-
-		return err
 	}
 
 	if account.PrimarySource {
@@ -88,69 +80,29 @@ func handleDirectoryAccountCreated(inv eventqueue.Invocation, _ eventqueue.Mutat
 	return nil
 }
 
-// handleDirectoryAccountUpdated re-enriches and syncs aliases when an existing directory account is updated
-func handleDirectoryAccountUpdated(inv eventqueue.Invocation, _ eventqueue.MutationGalaPayload) error {
-	ctx, client, accountID := inv.Context, inv.Client, inv.EntityID
-
-	account, err := client.DirectoryAccount.Get(ctx, accountID)
-	if err != nil {
+// accountIdentityHolder returns the account's linked identity holder, resolving and
+// linking one via the matching cascade when none is linked yet; a linked holder that no
+// longer exists skips the event
+func accountIdentityHolder(ctx context.Context, client *entgen.Client, account *entgen.DirectoryAccount) (*entgen.IdentityHolder, error) {
+	if account.IdentityHolderID != nil && *account.IdentityHolderID != "" {
+		holder, err := client.IdentityHolder.Get(ctx, *account.IdentityHolderID)
 		if entgen.IsNotFound(err) {
-			return nil
+			return nil, nil
 		}
 
-		return err
+		return holder, err
 	}
 
-	// If no identity holder linked yet, attempt full resolution
-	if account.IdentityHolderID == nil || *account.IdentityHolderID == "" {
-		holder, err := resolveIdentityHolder(ctx, client, account)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Str("directory_account_id", accountID).Msg("identity resolution on update failed")
-
-			return err
-		}
-
-		if holder == nil {
-			return nil
-		}
-
-		if err := client.DirectoryAccount.UpdateOneID(account.ID).SetIdentityHolderID(holder.ID).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Str("directory_account_id", accountID).Str("identity_holder_id", holder.ID).Msg("failed to link directory account to identity holder on update")
-
-			return err
-		}
-
-		if account.PrimarySource {
-			if err := enrichFromPrimarySource(ctx, client, holder, account); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("identity_holder_id", holder.ID).Msg("primary source enrichment failed")
-
-				return err
-			}
-		}
-
-		return syncEmailAliases(ctx, client, holder)
+	holder, err := resolveIdentityHolder(ctx, client, account)
+	if err != nil || holder == nil {
+		return holder, err
 	}
 
-	holderID := *account.IdentityHolderID
-
-	holder, err := client.IdentityHolder.Get(ctx, holderID)
-	if err != nil {
-		if entgen.IsNotFound(err) {
-			return nil
-		}
-
-		return err
+	if err := client.DirectoryAccount.UpdateOneID(account.ID).SetIdentityHolderID(holder.ID).Exec(ctx); err != nil {
+		return nil, err
 	}
 
-	if account.PrimarySource {
-		if err := enrichFromPrimarySource(ctx, client, holder, account); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Str("identity_holder_id", holderID).Msg("primary source enrichment failed on update")
-
-			return err
-		}
-	}
-
-	return syncEmailAliases(ctx, client, holder)
+	return holder, nil
 }
 
 // resolveIdentityHolder runs a priority-ordered matching cascade to find or create
@@ -181,14 +133,8 @@ func resolveIdentityHolder(ctx context.Context, client *entgen.Client, account *
 	if hasEmail {
 		holder, err := client.IdentityHolder.Query().
 			Where(identityholder.OwnerID(ownerID),
-				identityholder.Or(
-					identityholder.EmailIn(emails...),
-					func(s *sql.Selector) {
-						s.Where(sql.Or(lo.Map(emails, func(email string, _ int) *sql.Predicate {
-							return sqljson.ValueContains(identityholder.FieldEmailAliases, email)
-						})...))
-					},
-				)).First(ctx)
+				emailOrAliasMatch(identityholder.FieldEmail, identityholder.FieldEmailAliases, emails)).
+			First(ctx)
 		if err == nil {
 			return holder, nil
 		}
@@ -205,14 +151,8 @@ func resolveIdentityHolder(ctx context.Context, client *entgen.Client, account *
 			Where(directoryaccount.OwnerID(ownerID),
 				directoryaccount.IdentityHolderIDNotNil(),
 				directoryaccount.IDNEQ(account.ID),
-				directoryaccount.Or(
-					directoryaccount.CanonicalEmailIn(emails...),
-					func(s *sql.Selector) {
-						s.Where(sql.Or(lo.Map(emails, func(email string, _ int) *sql.Predicate {
-							return sqljson.ValueContains(directoryaccount.FieldEmailAliases, email)
-						})...))
-					},
-				)).First(ctx)
+				emailOrAliasMatch(directoryaccount.FieldCanonicalEmail, directoryaccount.FieldEmailAliases, emails)).
+			First(ctx)
 		if err == nil && sibling.IdentityHolderID != nil {
 			return client.IdentityHolder.Get(ctx, *sibling.IdentityHolderID)
 		}
@@ -252,6 +192,21 @@ func resolveIdentityHolder(ctx context.Context, client *entgen.Client, account *
 	}
 
 	return createIdentityHolder(ctx, client, account)
+}
+
+// emailOrAliasMatch matches rows whose email column equals any of the given emails or
+// whose alias JSON column contains one
+func emailOrAliasMatch(emailColumn, aliasColumn string, emails []string) func(*sql.Selector) {
+	return func(s *sql.Selector) {
+		predicates := append(
+			[]*sql.Predicate{sql.In(s.C(emailColumn), lo.ToAnySlice(emails)...)},
+			lo.Map(emails, func(email string, _ int) *sql.Predicate {
+				return sqljson.ValueContains(aliasColumn, email)
+			})...,
+		)
+
+		s.Where(sql.Or(predicates...))
+	}
 }
 
 // confirmedAccountEmails returns the canonical email followed by every confirmed alias

@@ -497,7 +497,7 @@ func evaluateCELBool(ctx context.Context, expression string, value any) (bool, e
 
 	fire, err := evaluator.EvaluateBool(ctx, expression, map[string]any{"value": value})
 	if err != nil {
-		if isMissingKeyError(err) {
+		if celx.IsMissingKey(err) {
 			return false, nil
 		}
 
@@ -505,11 +505,6 @@ func evaluateCELBool(ctx context.Context, expression string, value any) (bool, e
 	}
 
 	return fire, nil
-}
-
-// isMissingKeyError reports whether err is a CEL "no such key" evaluation error
-func isMissingKeyError(err error) bool {
-	return strings.Contains(err.Error(), "no such key")
 }
 
 func evaluateCELList(ctx context.Context, expression string, value any) ([]any, error) {
@@ -520,7 +515,7 @@ func evaluateCELList(ctx context.Context, expression string, value any) ([]any, 
 
 	out, _, err := evaluator.Evaluate(ctx, expression, map[string]any{"value": value})
 	if err != nil {
-		if isMissingKeyError(err) {
+		if celx.IsMissingKey(err) {
 			return nil, nil
 		}
 

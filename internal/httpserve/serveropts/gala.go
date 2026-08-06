@@ -7,6 +7,7 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/notifications"
 	"github.com/theopenlane/core/pkg/gala"
 )
 
@@ -85,17 +86,35 @@ func ConfigureGala(ctx context.Context, galaApp, notificationGala *gala.Gala, db
 		return err
 	}
 
-	for _, registration := range hooks.GalaRegistrations {
-		runtime := galaApp
-		if registration.Runtime == hooks.GalaRuntimeNotification {
-			runtime = notificationGala
-		}
-
-		if _, err := registration.Register(runtime); err != nil {
+	for _, register := range []func(*gala.Gala) ([]gala.ListenerID, error){
+		hooks.RegisterGalaOrganizationAvatarListeners,
+		hooks.RegisterGalaTaskRuleListeners,
+		hooks.RegisterGalaEntitlementListeners,
+		hooks.RegisterGalaTrustCenterCacheListeners,
+		hooks.RegisterGalaTrustCenterWatermarkListeners,
+		hooks.RegisterGalaWorkflowListeners,
+		hooks.RegisterGalaVendorScoringListeners,
+		hooks.RegisterGalaIdentityResolutionListeners,
+		hooks.RegisterGalaDocumentAssociationListeners,
+		hooks.RegisterGalaQuestionnaireTransformListeners,
+		hooks.RegisterGalaCampaignRecurringListeners,
+		hooks.RegisterGalaSubscriberLinkListeners,
+		hooks.RegisterGalaNDAAttestationListeners,
+		hooks.RegisterGalaDomainScanSubmitListeners,
+		hooks.RegisterGalaDomainScanUpdateListener,
+		hooks.RegisterGalaIntegrationCleanupListeners,
+	} {
+		if _, err := register(galaApp); err != nil {
 			closeRuntimes()
 
 			return err
 		}
+	}
+
+	if _, err := notifications.RegisterGalaListeners(notificationGala); err != nil {
+		closeRuntimes()
+
+		return err
 	}
 
 	if err := galaApp.StartWorkers(ctx); err != nil {

@@ -10,6 +10,37 @@ import (
 	"github.com/samber/lo"
 )
 
+// ValueAtPath reads a nested value from a decoded JSON map using dotted-path notation
+// ("outer.inner"), returning false when any segment is missing or not an object
+func ValueAtPath(data map[string]any, path string) (any, bool) {
+	path = strings.TrimSpace(path)
+	if path == "" {
+		return nil, false
+	}
+
+	current := any(data)
+
+	for _, part := range strings.Split(path, ".") {
+		if part == "" {
+			return nil, false
+		}
+
+		currentMap, ok := current.(map[string]any)
+		if !ok {
+			return nil, false
+		}
+
+		value, ok := currentMap[part]
+		if !ok {
+			return nil, false
+		}
+
+		current = value
+	}
+
+	return current, true
+}
+
 // DeepCloneMapAny creates a deep copy of a map[string]any
 func DeepCloneMapAny(src map[string]any) map[string]any {
 	if src == nil {

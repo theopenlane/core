@@ -42,12 +42,8 @@ func handleSubscriberCreatedLink(inv eventqueue.Invocation, _ eventqueue.Mutatio
 		Capabilities: auth.CapBypassOrgFilter | auth.CapBypassFGA | auth.CapInternalOperation,
 	})
 
-	sub, err := client.Subscriber.Get(allowCtx, inv.EntityID)
-	if err != nil {
-		if entgen.IsNotFound(err) {
-			return nil
-		}
-
+	sub, ok, err := eventqueue.LoadEntity(allowCtx, inv.EntityID, client.Subscriber.Get)
+	if err != nil || !ok {
 		return err
 	}
 

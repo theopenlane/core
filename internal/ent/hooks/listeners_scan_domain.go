@@ -42,12 +42,8 @@ func RegisterGalaDomainScanUpdateListener(g *gala.Gala) ([]gala.ListenerID, erro
 
 // handleScanDomainCreated submits a newly created domain-type scan to the domain_scan gathering data via urlScanner, enrichment with browserRendering.JSON, and dns lookups
 func handleScanDomainCreated(inv eventqueue.Invocation, _ eventqueue.MutationGalaPayload) error {
-	scanRecord, err := inv.Client.Scan.Get(inv.Context, inv.EntityID)
-	if err != nil {
-		if generated.IsNotFound(err) {
-			return nil
-		}
-
+	scanRecord, ok, err := eventqueue.LoadEntity(inv.Context, inv.EntityID, inv.Client.Scan.Get)
+	if err != nil || !ok {
 		return err
 	}
 
@@ -93,12 +89,8 @@ func isPendingDomainScan(scanRecord *generated.Scan) bool {
 // organization's settings domains field changes; DomainScanRequestOp finds-or-creates and runs
 // each one, the same operation the REST-replacing customer request and handleScanDomainCreated use
 func handleOrganizationSettingDomainsUpdated(inv eventqueue.Invocation, _ eventqueue.MutationGalaPayload) error {
-	setting, err := inv.Client.OrganizationSetting.Get(inv.Context, inv.EntityID)
-	if err != nil {
-		if generated.IsNotFound(err) {
-			return nil
-		}
-
+	setting, ok, err := eventqueue.LoadEntity(inv.Context, inv.EntityID, inv.Client.OrganizationSetting.Get)
+	if err != nil || !ok {
 		return err
 	}
 

@@ -8,6 +8,7 @@ import (
 	"github.com/stoewer/go-strcase"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/ent/eventqueue"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
@@ -15,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -105,35 +107,42 @@ func handleDocumentNeedsApproval(ctx gala.HandlerContext, payload eventqueue.Mut
 		return ErrFailedToGetClient
 	}
 
-	allowCtx := privacy.DecisionContext(ctx.Context, privacy.Allow)
 	input := documentNotificationInput{docID: payload.EntityID, objectType: payload.MutationType}
 
 	switch payload.MutationType {
 	case generated.TypeInternalPolicy:
-		policy, err := client.InternalPolicy.Get(allowCtx, payload.EntityID)
-		switch {
-		case generated.IsNotFound(err):
-			return nil
-		case err != nil:
-			logx.FromContext(ctx.Context).Error().Err(err).Msg("failed to query internal policy")
-			return err
-		}
-
-		input.approverID, input.name, input.ownerID, input.objectLabel = policy.ApproverID, policy.Name, policy.OwnerID, "Internal Policy"
+		input.objectLabel = "Internal Policy"
 	case generated.TypeProcedure:
-		proc, err := client.Procedure.Get(allowCtx, payload.EntityID)
-		switch {
-		case generated.IsNotFound(err):
-			return nil
-		case err != nil:
-			logx.FromContext(ctx.Context).Error().Err(err).Msg("failed to query procedure")
-			return err
-		}
-
-		input.approverID, input.name, input.ownerID, input.objectLabel = proc.ApproverID, proc.Name, proc.OwnerID, "Procedure"
+		input.objectLabel = "Procedure"
 	default:
 		return nil
 	}
+
+	schema, ok := entityops.LookupSchema(payload.MutationType)
+	if !ok {
+		return nil
+	}
+
+	allowCtx := privacy.DecisionContext(ctx.Context, privacy.Allow)
+
+	row, err := schema.Load(allowCtx, client, payload.EntityID)
+	switch {
+	case generated.IsNotFound(err):
+		return nil
+	case err != nil:
+		logx.FromContext(ctx.Context).Error().Err(err).Msg("failed to load document")
+		return err
+	}
+
+	fields, err := jsonx.Decode[map[string]any](row)
+	if err != nil {
+		logx.FromContext(ctx.Context).Error().Err(err).Msg("failed to decode document row")
+		return err
+	}
+
+	input.name = schema.DisplayValue(row)
+	input.approverID, _ = fields[internalpolicy.FieldApproverID].(string)
+	input.ownerID, _ = fields[internalpolicy.FieldOwnerID].(string)
 
 	if input.approverID == "" {
 		logx.FromContext(ctx.Context).Warn().Msg("approver_id not set for document with NEEDS_APPROVAL status")
@@ -151,7 +160,7 @@ func handleDocumentNeedsApproval(ctx gala.HandlerContext, payload eventqueue.Mut
 // addTaskAssigneeNotification notifies the new assignee that a task was assigned to them
 func addTaskAssigneeNotification(ctx context.Context, client *generated.Client, assigneeID string, taskEntity *generated.Task) error {
 	dataMap := map[string]any{
-		"url": getURLPathForObject(taskEntity.ID, generated.TypeTask),
+		"url": entityops.ConsoleObjectPath(generated.TypeTask, taskEntity.ID),
 	}
 
 	topic := enums.NotificationTopicTaskAssignment
@@ -191,7 +200,7 @@ func addDocumentNotification(ctx context.Context, client *generated.Client, inpu
 	}
 
 	dataMap := map[string]any{
-		"url": getURLPathForObject(input.docID, input.objectType),
+		"url": entityops.ConsoleObjectPath(input.objectType, input.docID),
 	}
 
 	topic := enums.NotificationTopicApproval

@@ -73,6 +73,28 @@ func RegisterMutationListeners(g *gala.Gala, listeners ...MutationListener) ([]g
 	return ids, nil
 }
 
+// LoadEntity loads a listener's target row via the provided getter, treating a missing row
+// as a skipped event: the entity was deleted between mutation and delivery, so there is
+// nothing left to process. Any other load error is returned for River to retry
+func LoadEntity[T any](ctx context.Context, entityID string, load func(context.Context, string) (T, error)) (T, bool, error) {
+	entity, err := load(ctx, entityID)
+
+	switch {
+	case generated.IsNotFound(err):
+		logx.FromContext(ctx).Debug().Str("entity_id", entityID).Msg("mutation listener skipped: entity not found")
+
+		var zero T
+
+		return zero, false, nil
+	case err != nil:
+		var zero T
+
+		return zero, false, err
+	}
+
+	return entity, true, nil
+}
+
 // mutationHandler wraps a mutation listener handler with the standard preamble
 func mutationHandler(listener MutationListener) gala.Handler[MutationGalaPayload] {
 	return func(ctx gala.HandlerContext, payload MutationGalaPayload) error {

@@ -1,6 +1,8 @@
 package hooks
 
 import (
+	"errors"
+
 	"entgo.io/ent"
 	"github.com/samber/lo"
 
@@ -50,18 +52,12 @@ func handleVendorScoringConfigMutationGala(inv eventqueue.Invocation, _ eventque
 		return s.EntityID
 	}))
 
-	errs := lo.FilterMap(entityIDs, func(entityID string, _ int) (error, bool) {
+	return errors.Join(lo.Map(entityIDs, func(entityID string, _ int) error {
 		err := RecomputeEntityRiskAggregate(inv.Context, inv.Client, entityID)
 		if err != nil {
 			logx.FromContext(inv.Context).Error().Err(err).Str("entity_id", entityID).Str("config_id", configID).Msg("failed to recompute entity risk aggregate")
 		}
 
-		return err, err != nil
-	})
-
-	if len(errs) > 0 {
-		return errs[0]
-	}
-
-	return nil
+		return err
+	})...)
 }

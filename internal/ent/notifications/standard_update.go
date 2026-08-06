@@ -9,6 +9,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/ent/eventqueue"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/control"
@@ -113,7 +114,7 @@ func handleStandardMutation(ctx gala.HandlerContext, payload eventqueue.Mutation
 		}
 
 		data := map[string]any{
-			"url":                     getURLPathForObject(standardID, generated.TypeStandard),
+			"url":                     entityops.ConsoleObjectPath(generated.TypeStandard, standardID),
 			"standard_id":             standardID,
 			"standard_short_name":     std.ShortName,
 			"old_revision":            value.revision,

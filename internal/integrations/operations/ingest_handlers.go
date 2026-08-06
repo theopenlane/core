@@ -3,8 +3,10 @@ package operations
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"strings"
 
+	"github.com/riverqueue/river"
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/internal/ent/entityops"
@@ -50,7 +52,14 @@ func resolveIngestIntegration(ctx context.Context, client *ent.Client) (*ent.Int
 		return nil, ErrIngestIntegrationUnresolved
 	}
 
-	return client.Integration.Get(ctx, oc.EntityID)
+	integration, err := client.Integration.Get(ctx, oc.EntityID)
+	if ent.IsNotFound(err) {
+		// the installation was removed while record jobs were still queued; retrying can
+		// never succeed, so cancel the job instead of burning River attempts
+		return nil, river.JobCancel(fmt.Errorf("%w: %w", ErrIngestIntegrationRemoved, err))
+	}
+
+	return integration, err
 }
 
 // ingestSchemaOrder defines the registration order for ingest schema listeners

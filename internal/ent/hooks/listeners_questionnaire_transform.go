@@ -6,9 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"net/mail"
-	"strconv"
 	"strings"
-	"time"
 
 	"entgo.io/ent"
 	"github.com/stoewer/go-strcase"
@@ -23,16 +21,18 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/pkg/mapx"
 )
+
+// questionnaireTransformListenerName identifies the assessment response transform listener
+const questionnaireTransformListenerName = "questionnaire.transform.assessment"
 
 // RegisterGalaQuestionnaireTransformListeners registers listeners that transform
 // completed questionnaire document data into configured target schemas.
@@ -40,7 +40,7 @@ import (
 func RegisterGalaQuestionnaireTransformListeners(g *gala.Gala) ([]gala.ListenerID, error) {
 	return eventqueue.RegisterMutationListeners(g, eventqueue.MutationListener{
 		Schema:     entgen.TypeAssessmentResponse,
-		Name:       operations.QuestionnaireTransformOperationName,
+		Name:       questionnaireTransformListenerName,
 		Operations: []string{ent.OpCreate.String(), ent.OpUpdate.String(), ent.OpUpdateOne.String()},
 		Handle:     handleAssessmentResponse,
 	})
@@ -83,6 +83,18 @@ func handleAssessmentResponse(inv eventqueue.Invocation, payload eventqueue.Muta
 		return nil
 	}
 
+	// responses are submit-once, so the linked entity is the durable transform-complete
+	// marker: a set entity_id skips redelivered events, and failed attempts leave it
+	// empty for River's retry to re-attempt the transform
+	if response.EntityID != "" {
+		logx.FromContext(inv.Context).Debug().
+			Str("assessment_response_id", response.ID).
+			Str("entity_id", response.EntityID).
+			Msg("assessment response already transformed")
+
+		return nil
+	}
+
 	organizationID := response.OwnerID
 	if organizationID == "" {
 		organizationID = document.OwnerID
@@ -103,117 +115,32 @@ func handleAssessmentResponse(inv eventqueue.Invocation, payload eventqueue.Muta
 		Config:               config,
 	}
 
-	integrationRun, startedAt, created, err := createQuestionnaireTransformRun(allowCtx, inv.Client, req)
-	if err != nil {
+	if err := transformQuestionnaire(allowCtx, inv.Client, req); err != nil {
+		logger := logx.FromContext(inv.Context).Error().
+			Err(err).
+			Str("assessment_response_id", response.ID).
+			Str("assessment_id", assessment.ID).
+			Str("template_id", assessment.TemplateID).
+			Str("document_data_id", response.DocumentDataID)
+
+		// validation errors are permanent configuration or data problems: log and drop
+		// the event rather than burning River retries on an outcome that cannot change
+		if isQuestionnaireValidationError(err) {
+			logger.Msg("questionnaire transform skipped due to invalid transform data")
+
+			return nil
+		}
+
+		logger.Msg("questionnaire transform failed")
+
+		if errors.Is(err, entityops.ErrUpsertConflict) {
+			return nil
+		}
+
 		return err
 	}
 
-	if !created {
-		logx.FromContext(inv.Context).Debug().
-			Str("assessment_response_id", response.ID).
-			Msg("questionnaire transform run already exists")
-
-		return nil
-	}
-
-	err = transformQuestionnaire(allowCtx, inv.Client, req)
-
-	runResult := operations.RunResult{
-		Status:  enums.IntegrationRunStatusSuccess,
-		Summary: "questionnaire transform completed",
-	}
-
-	if err != nil {
-		runResult = operations.RunResult{
-			Status:  enums.IntegrationRunStatusFailed,
-			Summary: "questionnaire transformation failed",
-			Error:   err.Error(),
-		}
-	}
-
-	errFromRun := operations.CompleteRun(allowCtx, inv.Client, integrationRun.ID, startedAt, runResult)
-	if errFromRun != nil {
-		if err == nil {
-			return errFromRun
-		}
-
-		err = errors.Join(err, errFromRun)
-	}
-	if err == nil {
-		return nil
-	}
-
-	logger := logx.FromContext(inv.Context).Error().
-		Err(err).
-		Str("assessment_response_id", response.ID).
-		Str("assessment_id", assessment.ID).
-		Str("template_id", assessment.TemplateID).
-		Str("document_data_id", response.DocumentDataID)
-
-	if isQuestionnaireValidationError(err) {
-		logger.Msg("questionnaire transform skipped due to invalid transform data")
-
-		if errFromRun != nil {
-			return err
-		}
-
-		return nil
-	}
-
-	logger.Msg("questionnaire transform failed")
-
-	if errors.Is(err, operations.ErrIngestUpsertConflict) {
-		if errFromRun != nil {
-			return err
-		}
-
-		return nil
-	}
-
-	return err
-}
-
-// createQuestionnaireTransformRun claims the transform run for one assessment response: the
-// unique index admits a single run per response, a successful or in-flight run skips the
-// event, and a previously failed run is reclaimed so River's retry re-attempts the transform
-func createQuestionnaireTransformRun(ctx context.Context, client *entgen.Client, req questionnaireTransformRequest) (*entgen.IntegrationRun, time.Time, bool, error) {
-	currTime := time.Now()
-
-	run, err := client.IntegrationRun.Create().
-		SetOwnerID(req.OrganizationID).
-		SetOperationName(operations.QuestionnaireTransformOperationName).
-		SetRunType(enums.IntegrationRunTypeEvent).
-		SetStatus(enums.IntegrationRunStatusRunning).
-		SetStartedAt(currTime).
-		SetAssessmentResponseID(req.AssessmentResponseID).
-		Save(ctx)
-	if err == nil {
-		return run, currTime, true, nil
-	}
-
-	if !entgen.IsConstraintError(err) {
-		return nil, time.Time{}, false, fmt.Errorf("questionnaire transform integration run: %w", err)
-	}
-
-	existing, err := client.IntegrationRun.Query().
-		Where(
-			integrationrun.AssessmentResponseIDEQ(req.AssessmentResponseID),
-			integrationrun.OperationNameEQ(operations.QuestionnaireTransformOperationName),
-		).
-		Only(ctx)
-	if err != nil {
-		return nil, time.Time{}, false, fmt.Errorf("questionnaire transform run lookup: %w", err)
-	}
-
-	if existing.Status != enums.IntegrationRunStatusFailed {
-		return nil, time.Time{}, false, nil
-	}
-
-	if err := operations.MarkRunRunning(ctx, client, existing.ID); err != nil {
-		return nil, time.Time{}, false, fmt.Errorf("questionnaire transform run reclaim: %w", err)
-	}
-
-	return existing, currTime, true, nil
+	return nil
 }
 
 func validateQuestionnaire(response *entgen.AssessmentResponse) (*entgen.Assessment, *entgen.DocumentData, models.TemplateProjectionConfig, bool) {
@@ -316,7 +243,7 @@ func handleEntityTransform(ctx context.Context, client *entgen.Client, req quest
 		return err
 	}
 
-	record, err := persistTransformPayload(ctx, client, entityops.SchemaEntity.Name, mapped)
+	record, err := persistTransformPayload(ctx, client, entityops.SchemaEntity, req.OrganizationID, mapped)
 	if err != nil {
 		return err
 	}
@@ -340,7 +267,7 @@ func resolveTransformMappings(ctx context.Context, client *entgen.Client, schema
 	values := map[string]any{}
 
 	for _, mapping := range req.Config.Mappings {
-		rawValue, ok := valueAtPath(req.Data, mapping.From)
+		rawValue, ok := mapx.ValueAtPath(req.Data, mapping.From)
 		if !ok || isEmptyValue(rawValue) {
 			if mapping.Resolver == models.TemplateProjectionResolverInternalOwner && req.Email != "" {
 				if err := resolveInternalOwner(ctx, client, req.OrganizationID, req.Email, values); err != nil {
@@ -490,7 +417,14 @@ func resolveEnvironment(ctx context.Context, client *entgen.Client, organization
 }
 
 func setVendorEntityType(ctx context.Context, client *entgen.Client, req questionnaireTransformRequest, payload map[string]any) error {
-	if req.TemplateKind != enums.TemplateKindExternalIntake || payload[entityTransformFieldEntityTypeID] != nil {
+	// the payload carries resolved create-input keys, so the guard and the write must use
+	// the catalog's key for the field or the value is dropped at decode time
+	inputKey, ok := entityops.SchemaEntity.ResolveInputKey(entityTransformFieldEntityTypeID)
+	if !ok {
+		return &questionnaireValidationError{Message: fmt.Sprintf("unsupported %s transform field %q", entityops.SchemaEntity.Name, entityTransformFieldEntityTypeID)}
+	}
+
+	if req.TemplateKind != enums.TemplateKindExternalIntake || payload[inputKey] != nil {
 		return nil
 	}
 
@@ -509,7 +443,7 @@ func setVendorEntityType(ctx context.Context, client *entgen.Client, req questio
 		return fmt.Errorf("resolve external intake entity type: %w", err)
 	}
 
-	payload[entityTransformFieldEntityTypeID] = id
+	payload[inputKey] = id
 	return nil
 }
 
@@ -577,13 +511,15 @@ func buildMappedTransformPayload(schemaName string, values map[string]any, req q
 	return mapped, nil
 }
 
-func persistTransformPayload(ctx context.Context, client *entgen.Client, schema string, mapped mappedTransform) (*entgen.Entity, error) {
+// persistTransformPayload upserts the mapped payload through the schema catalog's
+// lookup-key upsert and returns the persisted entity
+func persistTransformPayload(ctx context.Context, client *entgen.Client, schema *entityops.Schema, ownerID string, mapped mappedTransform) (*entgen.Entity, error) {
 	payload, err := json.Marshal(mapped.Payload)
 	if err != nil {
 		return nil, fmt.Errorf("marshal transformed input: %w", err)
 	}
 
-	entityID, err := operations.PersistRecord(ctx, client, nil, schema, payload)
+	entityID, err := schema.Upsert(ctx, client, ownerID, payload)
 	if err != nil {
 		return nil, fmt.Errorf("persist transformed input: %w", err)
 	}
@@ -682,37 +618,6 @@ func transformMetadata(req questionnaireTransformRequest) map[string]any {
 	}
 }
 
-// valueAtPath lets us read keys from a json map. this also supports the
-// "outerkey.innerkey" format
-func valueAtPath(data map[string]any, path string) (any, bool) {
-	path = strings.TrimSpace(path)
-	if path == "" {
-		return nil, false
-	}
-
-	current := any(data)
-
-	for _, part := range strings.Split(path, ".") {
-		if part == "" {
-			return nil, false
-		}
-
-		currentMap, ok := current.(map[string]any)
-		if !ok {
-			return nil, false
-		}
-
-		value, ok := currentMap[part]
-		if !ok {
-			return nil, false
-		}
-
-		current = value
-	}
-
-	return current, true
-}
-
 func isEmptyValue(value any) bool {
 	if value == nil {
 		return true
@@ -725,23 +630,10 @@ func isEmptyValue(value any) bool {
 	return false
 }
 
+// getStringValue coerces payload values to strings through the shared eventqueue helper;
+// unrepresentable values coerce to the empty string
 func getStringValue(value any) string {
-	switch v := value.(type) {
-	case string:
-		return v
-	case fmt.Stringer:
-		return v.String()
-	case bool:
-		return strconv.FormatBool(v)
-	case float64:
-		return strconv.FormatFloat(v, 'f', -1, 64)
-	case float32:
-		return strconv.FormatFloat(float64(v), 'f', -1, 32)
-	case int:
-		return strconv.Itoa(v)
-	case int64:
-		return strconv.FormatInt(v, 10)
-	default:
-		return fmt.Sprintf("%v", value)
-	}
+	coerced, _ := eventqueue.ValueAsString(value)
+
+	return coerced
 }
