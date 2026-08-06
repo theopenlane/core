@@ -211,6 +211,62 @@ func (_c *OrgMembershipHistoryCreate) SetNillableSSOExemptGrantedAt(v *models.Da
 	return _c
 }
 
+// SetTfaEnforced sets the "tfa_enforced" field.
+func (_c *OrgMembershipHistoryCreate) SetTfaEnforced(v bool) *OrgMembershipHistoryCreate {
+	_c.mutation.SetTfaEnforced(v)
+	return _c
+}
+
+// SetNillableTfaEnforced sets the "tfa_enforced" field if the given value is not nil.
+func (_c *OrgMembershipHistoryCreate) SetNillableTfaEnforced(v *bool) *OrgMembershipHistoryCreate {
+	if v != nil {
+		_c.SetTfaEnforced(*v)
+	}
+	return _c
+}
+
+// SetTfaEnforcedReason sets the "tfa_enforced_reason" field.
+func (_c *OrgMembershipHistoryCreate) SetTfaEnforcedReason(v string) *OrgMembershipHistoryCreate {
+	_c.mutation.SetTfaEnforcedReason(v)
+	return _c
+}
+
+// SetNillableTfaEnforcedReason sets the "tfa_enforced_reason" field if the given value is not nil.
+func (_c *OrgMembershipHistoryCreate) SetNillableTfaEnforcedReason(v *string) *OrgMembershipHistoryCreate {
+	if v != nil {
+		_c.SetTfaEnforcedReason(*v)
+	}
+	return _c
+}
+
+// SetTfaEnforcedBy sets the "tfa_enforced_by" field.
+func (_c *OrgMembershipHistoryCreate) SetTfaEnforcedBy(v string) *OrgMembershipHistoryCreate {
+	_c.mutation.SetTfaEnforcedBy(v)
+	return _c
+}
+
+// SetNillableTfaEnforcedBy sets the "tfa_enforced_by" field if the given value is not nil.
+func (_c *OrgMembershipHistoryCreate) SetNillableTfaEnforcedBy(v *string) *OrgMembershipHistoryCreate {
+	if v != nil {
+		_c.SetTfaEnforcedBy(*v)
+	}
+	return _c
+}
+
+// SetTfaEnforcedAt sets the "tfa_enforced_at" field.
+func (_c *OrgMembershipHistoryCreate) SetTfaEnforcedAt(v models.DateTime) *OrgMembershipHistoryCreate {
+	_c.mutation.SetTfaEnforcedAt(v)
+	return _c
+}
+
+// SetNillableTfaEnforcedAt sets the "tfa_enforced_at" field if the given value is not nil.
+func (_c *OrgMembershipHistoryCreate) SetNillableTfaEnforcedAt(v *models.DateTime) *OrgMembershipHistoryCreate {
+	if v != nil {
+		_c.SetTfaEnforcedAt(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *OrgMembershipHistoryCreate) SetID(v string) *OrgMembershipHistoryCreate {
 	_c.mutation.SetID(v)
@@ -290,6 +346,10 @@ func (_c *OrgMembershipHistoryCreate) defaults() error {
 	if _, ok := _c.mutation.SSOExempt(); !ok {
 		v := orgmembershiphistory.DefaultSSOExempt
 		_c.mutation.SetSSOExempt(v)
+	}
+	if _, ok := _c.mutation.TfaEnforced(); !ok {
+		v := orgmembershiphistory.DefaultTfaEnforced
+		_c.mutation.SetTfaEnforced(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if orgmembershiphistory.DefaultID == nil {
@@ -423,6 +483,22 @@ func (_c *OrgMembershipHistoryCreate) createSpec() (*OrgMembershipHistory, *sqlg
 	if value, ok := _c.mutation.SSOExemptGrantedAt(); ok {
 		_spec.SetField(orgmembershiphistory.FieldSSOExemptGrantedAt, field.TypeTime, value)
 		_node.SSOExemptGrantedAt = &value
+	}
+	if value, ok := _c.mutation.TfaEnforced(); ok {
+		_spec.SetField(orgmembershiphistory.FieldTfaEnforced, field.TypeBool, value)
+		_node.TfaEnforced = value
+	}
+	if value, ok := _c.mutation.TfaEnforcedReason(); ok {
+		_spec.SetField(orgmembershiphistory.FieldTfaEnforcedReason, field.TypeString, value)
+		_node.TfaEnforcedReason = &value
+	}
+	if value, ok := _c.mutation.TfaEnforcedBy(); ok {
+		_spec.SetField(orgmembershiphistory.FieldTfaEnforcedBy, field.TypeString, value)
+		_node.TfaEnforcedBy = &value
+	}
+	if value, ok := _c.mutation.TfaEnforcedAt(); ok {
+		_spec.SetField(orgmembershiphistory.FieldTfaEnforcedAt, field.TypeTime, value)
+		_node.TfaEnforcedAt = &value
 	}
 	return _node, _spec
 }

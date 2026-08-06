@@ -180,6 +180,86 @@ func (_u *OrgMembershipUpdate) ClearSSOExemptGrantedAt() *OrgMembershipUpdate {
 	return _u
 }
 
+// SetTfaEnforced sets the "tfa_enforced" field.
+func (_u *OrgMembershipUpdate) SetTfaEnforced(v bool) *OrgMembershipUpdate {
+	_u.mutation.SetTfaEnforced(v)
+	return _u
+}
+
+// SetNillableTfaEnforced sets the "tfa_enforced" field if the given value is not nil.
+func (_u *OrgMembershipUpdate) SetNillableTfaEnforced(v *bool) *OrgMembershipUpdate {
+	if v != nil {
+		_u.SetTfaEnforced(*v)
+	}
+	return _u
+}
+
+// ClearTfaEnforced clears the value of the "tfa_enforced" field.
+func (_u *OrgMembershipUpdate) ClearTfaEnforced() *OrgMembershipUpdate {
+	_u.mutation.ClearTfaEnforced()
+	return _u
+}
+
+// SetTfaEnforcedReason sets the "tfa_enforced_reason" field.
+func (_u *OrgMembershipUpdate) SetTfaEnforcedReason(v string) *OrgMembershipUpdate {
+	_u.mutation.SetTfaEnforcedReason(v)
+	return _u
+}
+
+// SetNillableTfaEnforcedReason sets the "tfa_enforced_reason" field if the given value is not nil.
+func (_u *OrgMembershipUpdate) SetNillableTfaEnforcedReason(v *string) *OrgMembershipUpdate {
+	if v != nil {
+		_u.SetTfaEnforcedReason(*v)
+	}
+	return _u
+}
+
+// ClearTfaEnforcedReason clears the value of the "tfa_enforced_reason" field.
+func (_u *OrgMembershipUpdate) ClearTfaEnforcedReason() *OrgMembershipUpdate {
+	_u.mutation.ClearTfaEnforcedReason()
+	return _u
+}
+
+// SetTfaEnforcedBy sets the "tfa_enforced_by" field.
+func (_u *OrgMembershipUpdate) SetTfaEnforcedBy(v string) *OrgMembershipUpdate {
+	_u.mutation.SetTfaEnforcedBy(v)
+	return _u
+}
+
+// SetNillableTfaEnforcedBy sets the "tfa_enforced_by" field if the given value is not nil.
+func (_u *OrgMembershipUpdate) SetNillableTfaEnforcedBy(v *string) *OrgMembershipUpdate {
+	if v != nil {
+		_u.SetTfaEnforcedBy(*v)
+	}
+	return _u
+}
+
+// ClearTfaEnforcedBy clears the value of the "tfa_enforced_by" field.
+func (_u *OrgMembershipUpdate) ClearTfaEnforcedBy() *OrgMembershipUpdate {
+	_u.mutation.ClearTfaEnforcedBy()
+	return _u
+}
+
+// SetTfaEnforcedAt sets the "tfa_enforced_at" field.
+func (_u *OrgMembershipUpdate) SetTfaEnforcedAt(v models.DateTime) *OrgMembershipUpdate {
+	_u.mutation.SetTfaEnforcedAt(v)
+	return _u
+}
+
+// SetNillableTfaEnforcedAt sets the "tfa_enforced_at" field if the given value is not nil.
+func (_u *OrgMembershipUpdate) SetNillableTfaEnforcedAt(v *models.DateTime) *OrgMembershipUpdate {
+	if v != nil {
+		_u.SetTfaEnforcedAt(*v)
+	}
+	return _u
+}
+
+// ClearTfaEnforcedAt clears the value of the "tfa_enforced_at" field.
+func (_u *OrgMembershipUpdate) ClearTfaEnforcedAt() *OrgMembershipUpdate {
+	_u.mutation.ClearTfaEnforcedAt()
+	return _u
+}
+
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
 func (_u *OrgMembershipUpdate) AddEventIDs(ids ...string) *OrgMembershipUpdate {
 	_u.mutation.AddEventIDs(ids...)
@@ -347,6 +427,30 @@ func (_u *OrgMembershipUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	}
 	if _u.mutation.SSOExemptGrantedAtCleared() {
 		_spec.ClearField(orgmembership.FieldSSOExemptGrantedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.TfaEnforced(); ok {
+		_spec.SetField(orgmembership.FieldTfaEnforced, field.TypeBool, value)
+	}
+	if _u.mutation.TfaEnforcedCleared() {
+		_spec.ClearField(orgmembership.FieldTfaEnforced, field.TypeBool)
+	}
+	if value, ok := _u.mutation.TfaEnforcedReason(); ok {
+		_spec.SetField(orgmembership.FieldTfaEnforcedReason, field.TypeString, value)
+	}
+	if _u.mutation.TfaEnforcedReasonCleared() {
+		_spec.ClearField(orgmembership.FieldTfaEnforcedReason, field.TypeString)
+	}
+	if value, ok := _u.mutation.TfaEnforcedBy(); ok {
+		_spec.SetField(orgmembership.FieldTfaEnforcedBy, field.TypeString, value)
+	}
+	if _u.mutation.TfaEnforcedByCleared() {
+		_spec.ClearField(orgmembership.FieldTfaEnforcedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.TfaEnforcedAt(); ok {
+		_spec.SetField(orgmembership.FieldTfaEnforcedAt, field.TypeTime, value)
+	}
+	if _u.mutation.TfaEnforcedAtCleared() {
+		_spec.ClearField(orgmembership.FieldTfaEnforcedAt, field.TypeTime)
 	}
 	if _u.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -566,6 +670,86 @@ func (_u *OrgMembershipUpdateOne) ClearSSOExemptGrantedAt() *OrgMembershipUpdate
 	return _u
 }
 
+// SetTfaEnforced sets the "tfa_enforced" field.
+func (_u *OrgMembershipUpdateOne) SetTfaEnforced(v bool) *OrgMembershipUpdateOne {
+	_u.mutation.SetTfaEnforced(v)
+	return _u
+}
+
+// SetNillableTfaEnforced sets the "tfa_enforced" field if the given value is not nil.
+func (_u *OrgMembershipUpdateOne) SetNillableTfaEnforced(v *bool) *OrgMembershipUpdateOne {
+	if v != nil {
+		_u.SetTfaEnforced(*v)
+	}
+	return _u
+}
+
+// ClearTfaEnforced clears the value of the "tfa_enforced" field.
+func (_u *OrgMembershipUpdateOne) ClearTfaEnforced() *OrgMembershipUpdateOne {
+	_u.mutation.ClearTfaEnforced()
+	return _u
+}
+
+// SetTfaEnforcedReason sets the "tfa_enforced_reason" field.
+func (_u *OrgMembershipUpdateOne) SetTfaEnforcedReason(v string) *OrgMembershipUpdateOne {
+	_u.mutation.SetTfaEnforcedReason(v)
+	return _u
+}
+
+// SetNillableTfaEnforcedReason sets the "tfa_enforced_reason" field if the given value is not nil.
+func (_u *OrgMembershipUpdateOne) SetNillableTfaEnforcedReason(v *string) *OrgMembershipUpdateOne {
+	if v != nil {
+		_u.SetTfaEnforcedReason(*v)
+	}
+	return _u
+}
+
+// ClearTfaEnforcedReason clears the value of the "tfa_enforced_reason" field.
+func (_u *OrgMembershipUpdateOne) ClearTfaEnforcedReason() *OrgMembershipUpdateOne {
+	_u.mutation.ClearTfaEnforcedReason()
+	return _u
+}
+
+// SetTfaEnforcedBy sets the "tfa_enforced_by" field.
+func (_u *OrgMembershipUpdateOne) SetTfaEnforcedBy(v string) *OrgMembershipUpdateOne {
+	_u.mutation.SetTfaEnforcedBy(v)
+	return _u
+}
+
+// SetNillableTfaEnforcedBy sets the "tfa_enforced_by" field if the given value is not nil.
+func (_u *OrgMembershipUpdateOne) SetNillableTfaEnforcedBy(v *string) *OrgMembershipUpdateOne {
+	if v != nil {
+		_u.SetTfaEnforcedBy(*v)
+	}
+	return _u
+}
+
+// ClearTfaEnforcedBy clears the value of the "tfa_enforced_by" field.
+func (_u *OrgMembershipUpdateOne) ClearTfaEnforcedBy() *OrgMembershipUpdateOne {
+	_u.mutation.ClearTfaEnforcedBy()
+	return _u
+}
+
+// SetTfaEnforcedAt sets the "tfa_enforced_at" field.
+func (_u *OrgMembershipUpdateOne) SetTfaEnforcedAt(v models.DateTime) *OrgMembershipUpdateOne {
+	_u.mutation.SetTfaEnforcedAt(v)
+	return _u
+}
+
+// SetNillableTfaEnforcedAt sets the "tfa_enforced_at" field if the given value is not nil.
+func (_u *OrgMembershipUpdateOne) SetNillableTfaEnforcedAt(v *models.DateTime) *OrgMembershipUpdateOne {
+	if v != nil {
+		_u.SetTfaEnforcedAt(*v)
+	}
+	return _u
+}
+
+// ClearTfaEnforcedAt clears the value of the "tfa_enforced_at" field.
+func (_u *OrgMembershipUpdateOne) ClearTfaEnforcedAt() *OrgMembershipUpdateOne {
+	_u.mutation.ClearTfaEnforcedAt()
+	return _u
+}
+
 // AddEventIDs adds the "events" edge to the Event entity by IDs.
 func (_u *OrgMembershipUpdateOne) AddEventIDs(ids ...string) *OrgMembershipUpdateOne {
 	_u.mutation.AddEventIDs(ids...)
@@ -763,6 +947,30 @@ func (_u *OrgMembershipUpdateOne) sqlSave(ctx context.Context) (_node *OrgMember
 	}
 	if _u.mutation.SSOExemptGrantedAtCleared() {
 		_spec.ClearField(orgmembership.FieldSSOExemptGrantedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.TfaEnforced(); ok {
+		_spec.SetField(orgmembership.FieldTfaEnforced, field.TypeBool, value)
+	}
+	if _u.mutation.TfaEnforcedCleared() {
+		_spec.ClearField(orgmembership.FieldTfaEnforced, field.TypeBool)
+	}
+	if value, ok := _u.mutation.TfaEnforcedReason(); ok {
+		_spec.SetField(orgmembership.FieldTfaEnforcedReason, field.TypeString, value)
+	}
+	if _u.mutation.TfaEnforcedReasonCleared() {
+		_spec.ClearField(orgmembership.FieldTfaEnforcedReason, field.TypeString)
+	}
+	if value, ok := _u.mutation.TfaEnforcedBy(); ok {
+		_spec.SetField(orgmembership.FieldTfaEnforcedBy, field.TypeString, value)
+	}
+	if _u.mutation.TfaEnforcedByCleared() {
+		_spec.ClearField(orgmembership.FieldTfaEnforcedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.TfaEnforcedAt(); ok {
+		_spec.SetField(orgmembership.FieldTfaEnforcedAt, field.TypeTime, value)
+	}
+	if _u.mutation.TfaEnforcedAtCleared() {
+		_spec.ClearField(orgmembership.FieldTfaEnforcedAt, field.TypeTime)
 	}
 	if _u.mutation.EventsCleared() {
 		edge := &sqlgraph.EdgeSpec{

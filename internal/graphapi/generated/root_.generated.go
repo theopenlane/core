@@ -4524,6 +4524,10 @@ type ComplexityRoot struct {
 		SSOExemptGrantedAt    func(childComplexity int) int
 		SSOExemptGrantedBy    func(childComplexity int) int
 		SSOExemptReason       func(childComplexity int) int
+		TfaEnforced           func(childComplexity int) int
+		TfaEnforcedAt         func(childComplexity int) int
+		TfaEnforcedBy         func(childComplexity int) int
+		TfaEnforcedReason     func(childComplexity int) int
 		UpdatedAt             func(childComplexity int) int
 		UpdatedBy             func(childComplexity int) int
 		UpdatedByImpersonator func(childComplexity int) int
@@ -32530,6 +32534,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.OrgMembership.SSOExemptReason(childComplexity), true
+	case "OrgMembership.tfaEnforced":
+		if e.ComplexityRoot.OrgMembership.TfaEnforced == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrgMembership.TfaEnforced(childComplexity), true
+	case "OrgMembership.tfaEnforcedAt":
+		if e.ComplexityRoot.OrgMembership.TfaEnforcedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrgMembership.TfaEnforcedAt(childComplexity), true
+	case "OrgMembership.tfaEnforcedBy":
+		if e.ComplexityRoot.OrgMembership.TfaEnforcedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrgMembership.TfaEnforcedBy(childComplexity), true
+	case "OrgMembership.tfaEnforcedReason":
+		if e.ComplexityRoot.OrgMembership.TfaEnforcedReason == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrgMembership.TfaEnforcedReason(childComplexity), true
 	case "OrgMembership.updatedAt":
 		if e.ComplexityRoot.OrgMembership.UpdatedAt == nil {
 			break
@@ -71785,6 +71813,14 @@ input CreateOrgMembershipInput {
   reason the member was granted an SSO exemption
   """
   ssoExemptReason: String
+  """
+  member must configure multifactor authentication for this organization even when organization-wide TFA enforcement is disabled
+  """
+  tfaEnforced: Boolean
+  """
+  reason the member was required to configure multifactor authentication
+  """
+  tfaEnforcedReason: String
   organizationID: ID!
   userID: ID!
   eventIDs: [ID!]
@@ -101814,6 +101850,22 @@ type OrgMembership implements Node {
   when the SSO exemption was granted; stamped server-side, not settable via the API
   """
   ssoExemptGrantedAt: DateTime
+  """
+  member must configure multifactor authentication for this organization even when organization-wide TFA enforcement is disabled
+  """
+  tfaEnforced: Boolean
+  """
+  reason the member was required to configure multifactor authentication
+  """
+  tfaEnforcedReason: String
+  """
+  id of the user that required multifactor authentication; stamped server-side, not settable via the API
+  """
+  tfaEnforcedBy: String
+  """
+  when multifactor authentication was required; stamped server-side, not settable via the API
+  """
+  tfaEnforcedAt: DateTime
   organization: Organization!
   user: User!
   events(
@@ -102073,6 +102125,62 @@ input OrgMembershipWhereInput {
   ssoExemptGrantedAtLTE: DateTime
   ssoExemptGrantedAtIsNil: Boolean
   ssoExemptGrantedAtNotNil: Boolean
+  """
+  tfa_enforced field predicates
+  """
+  tfaEnforced: Boolean
+  tfaEnforcedNEQ: Boolean
+  tfaEnforcedIsNil: Boolean
+  tfaEnforcedNotNil: Boolean
+  """
+  tfa_enforced_reason field predicates
+  """
+  tfaEnforcedReason: String
+  tfaEnforcedReasonNEQ: String
+  tfaEnforcedReasonIn: [String!]
+  tfaEnforcedReasonNotIn: [String!]
+  tfaEnforcedReasonGT: String
+  tfaEnforcedReasonGTE: String
+  tfaEnforcedReasonLT: String
+  tfaEnforcedReasonLTE: String
+  tfaEnforcedReasonContains: String
+  tfaEnforcedReasonHasPrefix: String
+  tfaEnforcedReasonHasSuffix: String
+  tfaEnforcedReasonIsNil: Boolean
+  tfaEnforcedReasonNotNil: Boolean
+  tfaEnforcedReasonEqualFold: String
+  tfaEnforcedReasonContainsFold: String
+  """
+  tfa_enforced_by field predicates
+  """
+  tfaEnforcedBy: String
+  tfaEnforcedByNEQ: String
+  tfaEnforcedByIn: [String!]
+  tfaEnforcedByNotIn: [String!]
+  tfaEnforcedByGT: String
+  tfaEnforcedByGTE: String
+  tfaEnforcedByLT: String
+  tfaEnforcedByLTE: String
+  tfaEnforcedByContains: String
+  tfaEnforcedByHasPrefix: String
+  tfaEnforcedByHasSuffix: String
+  tfaEnforcedByIsNil: Boolean
+  tfaEnforcedByNotNil: Boolean
+  tfaEnforcedByEqualFold: String
+  tfaEnforcedByContainsFold: String
+  """
+  tfa_enforced_at field predicates
+  """
+  tfaEnforcedAt: DateTime
+  tfaEnforcedAtNEQ: DateTime
+  tfaEnforcedAtIn: [DateTime!]
+  tfaEnforcedAtNotIn: [DateTime!]
+  tfaEnforcedAtGT: DateTime
+  tfaEnforcedAtGTE: DateTime
+  tfaEnforcedAtLT: DateTime
+  tfaEnforcedAtLTE: DateTime
+  tfaEnforcedAtIsNil: Boolean
+  tfaEnforcedAtNotNil: Boolean
 }
 type OrgSubscription implements Node {
   id: ID!
@@ -139896,6 +140004,16 @@ input UpdateOrgMembershipInput {
   """
   ssoExemptReason: String
   clearSSOExemptReason: Boolean
+  """
+  member must configure multifactor authentication for this organization even when organization-wide TFA enforcement is disabled
+  """
+  tfaEnforced: Boolean
+  clearTfaEnforced: Boolean
+  """
+  reason the member was required to configure multifactor authentication
+  """
+  tfaEnforcedReason: String
+  clearTfaEnforcedReason: Boolean
   addEventIDs: [ID!]
   removeEventIDs: [ID!]
   clearEvents: Boolean
@@ -172563,6 +172681,14 @@ func (ec *executionContext) childFields_OrgMembership(ctx context.Context, field
 		return ec.fieldContext_OrgMembership_ssoExemptGrantedBy(ctx, field)
 	case "ssoExemptGrantedAt":
 		return ec.fieldContext_OrgMembership_ssoExemptGrantedAt(ctx, field)
+	case "tfaEnforced":
+		return ec.fieldContext_OrgMembership_tfaEnforced(ctx, field)
+	case "tfaEnforcedReason":
+		return ec.fieldContext_OrgMembership_tfaEnforcedReason(ctx, field)
+	case "tfaEnforcedBy":
+		return ec.fieldContext_OrgMembership_tfaEnforcedBy(ctx, field)
+	case "tfaEnforcedAt":
+		return ec.fieldContext_OrgMembership_tfaEnforcedAt(ctx, field)
 	case "organization":
 		return ec.fieldContext_OrgMembership_organization(ctx, field)
 	case "user":

@@ -18922,6 +18922,22 @@ type OrgMembershipHistory implements Node {
   when the SSO exemption was granted; stamped server-side, not settable via the API
   """
   ssoExemptGrantedAt: DateTime
+  """
+  member must configure multifactor authentication for this organization even when organization-wide TFA enforcement is disabled
+  """
+  tfaEnforced: Boolean
+  """
+  reason the member was required to configure multifactor authentication
+  """
+  tfaEnforcedReason: String
+  """
+  id of the user that required multifactor authentication; stamped server-side, not settable via the API
+  """
+  tfaEnforcedBy: String
+  """
+  when multifactor authentication was required; stamped server-side, not settable via the API
+  """
+  tfaEnforcedAt: DateTime
 }
 """
 A connection to a list of items.
@@ -19225,6 +19241,62 @@ input OrgMembershipHistoryWhereInput {
   ssoExemptGrantedAtLTE: DateTime
   ssoExemptGrantedAtIsNil: Boolean
   ssoExemptGrantedAtNotNil: Boolean
+  """
+  tfa_enforced field predicates
+  """
+  tfaEnforced: Boolean
+  tfaEnforcedNEQ: Boolean
+  tfaEnforcedIsNil: Boolean
+  tfaEnforcedNotNil: Boolean
+  """
+  tfa_enforced_reason field predicates
+  """
+  tfaEnforcedReason: String
+  tfaEnforcedReasonNEQ: String
+  tfaEnforcedReasonIn: [String!]
+  tfaEnforcedReasonNotIn: [String!]
+  tfaEnforcedReasonGT: String
+  tfaEnforcedReasonGTE: String
+  tfaEnforcedReasonLT: String
+  tfaEnforcedReasonLTE: String
+  tfaEnforcedReasonContains: String
+  tfaEnforcedReasonHasPrefix: String
+  tfaEnforcedReasonHasSuffix: String
+  tfaEnforcedReasonIsNil: Boolean
+  tfaEnforcedReasonNotNil: Boolean
+  tfaEnforcedReasonEqualFold: String
+  tfaEnforcedReasonContainsFold: String
+  """
+  tfa_enforced_by field predicates
+  """
+  tfaEnforcedBy: String
+  tfaEnforcedByNEQ: String
+  tfaEnforcedByIn: [String!]
+  tfaEnforcedByNotIn: [String!]
+  tfaEnforcedByGT: String
+  tfaEnforcedByGTE: String
+  tfaEnforcedByLT: String
+  tfaEnforcedByLTE: String
+  tfaEnforcedByContains: String
+  tfaEnforcedByHasPrefix: String
+  tfaEnforcedByHasSuffix: String
+  tfaEnforcedByIsNil: Boolean
+  tfaEnforcedByNotNil: Boolean
+  tfaEnforcedByEqualFold: String
+  tfaEnforcedByContainsFold: String
+  """
+  tfa_enforced_at field predicates
+  """
+  tfaEnforcedAt: DateTime
+  tfaEnforcedAtNEQ: DateTime
+  tfaEnforcedAtIn: [DateTime!]
+  tfaEnforcedAtNotIn: [DateTime!]
+  tfaEnforcedAtGT: DateTime
+  tfaEnforcedAtGTE: DateTime
+  tfaEnforcedAtLT: DateTime
+  tfaEnforcedAtLTE: DateTime
+  tfaEnforcedAtIsNil: Boolean
+  tfaEnforcedAtNotNil: Boolean
 }
 type OrganizationHistory implements Node {
   id: ID!

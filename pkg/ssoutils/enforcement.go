@@ -25,6 +25,8 @@ type EnforcementInput struct {
 	SSOEnforced bool
 	// TFAEnforced reports whether the organization enforces multifactor authentication
 	TFAEnforced bool
+	// MemberTFAEnforced reports whether the subject's membership requires multifactor authentication
+	MemberTFAEnforced bool
 	// ExemptDomains is the set of email domains whose existing members skip the SSO redirect
 	ExemptDomains []string
 	// IsMember reports whether the subject is already a member of the organization
@@ -59,7 +61,7 @@ type Decision struct {
 func Evaluate(in EnforcementInput) Decision {
 	d := Decision{
 		SSOEnforced: in.SSOEnforced,
-		TFARequired: in.TFAEnforced,
+		TFARequired: in.TFAEnforced || in.MemberTFAEnforced,
 	}
 
 	switch {

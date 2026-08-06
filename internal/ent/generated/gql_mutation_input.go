@@ -16351,12 +16351,14 @@ func (c *OnboardingCreate) SetInput(i CreateOnboardingInput) *OnboardingCreate {
 
 // CreateOrgMembershipInput represents a mutation input for creating orgmemberships.
 type CreateOrgMembershipInput struct {
-	Role            *enums.Role `json:"role,omitempty"`
-	SSOExempt       *bool       `json:"sso_exempt,omitempty"`
-	SSOExemptReason *string     `json:"sso_exempt_reason,omitempty"`
-	OrganizationID  string      `json:"organization_id,omitempty"`
-	UserID          string      `json:"user_id,omitempty"`
-	EventIDs        []string    `json:"event_ids,omitempty"`
+	Role              *enums.Role `json:"role,omitempty"`
+	SSOExempt         *bool       `json:"sso_exempt,omitempty"`
+	SSOExemptReason   *string     `json:"sso_exempt_reason,omitempty"`
+	TfaEnforced       *bool       `json:"tfa_enforced,omitempty"`
+	TfaEnforcedReason *string     `json:"tfa_enforced_reason,omitempty"`
+	OrganizationID    string      `json:"organization_id,omitempty"`
+	UserID            string      `json:"user_id,omitempty"`
+	EventIDs          []string    `json:"event_ids,omitempty"`
 }
 
 // Mutate applies the CreateOrgMembershipInput on the OrgMembershipMutation builder.
@@ -16369,6 +16371,12 @@ func (i *CreateOrgMembershipInput) Mutate(m *OrgMembershipMutation) {
 	}
 	if v := i.SSOExemptReason; v != nil {
 		m.SetSSOExemptReason(*v)
+	}
+	if v := i.TfaEnforced; v != nil {
+		m.SetTfaEnforced(*v)
+	}
+	if v := i.TfaEnforcedReason; v != nil {
+		m.SetTfaEnforcedReason(*v)
 	}
 	m.SetOrganizationID(i.OrganizationID)
 	m.SetUserID(i.UserID)
@@ -16385,14 +16393,18 @@ func (c *OrgMembershipCreate) SetInput(i CreateOrgMembershipInput) *OrgMembershi
 
 // UpdateOrgMembershipInput represents a mutation input for updating orgmemberships.
 type UpdateOrgMembershipInput struct {
-	Role                 *enums.Role `json:"role,omitempty"`
-	ClearSSOExempt       bool
-	SSOExempt            *bool `json:"sso_exempt,omitempty"`
-	ClearSSOExemptReason bool
-	SSOExemptReason      *string `json:"sso_exempt_reason,omitempty"`
-	ClearEvents          bool
-	AddEventIDs          []string `json:"add_event_ids,omitempty"`
-	RemoveEventIDs       []string `json:"remove_event_ids,omitempty"`
+	Role                   *enums.Role `json:"role,omitempty"`
+	ClearSSOExempt         bool
+	SSOExempt              *bool `json:"sso_exempt,omitempty"`
+	ClearSSOExemptReason   bool
+	SSOExemptReason        *string `json:"sso_exempt_reason,omitempty"`
+	ClearTfaEnforced       bool
+	TfaEnforced            *bool `json:"tfa_enforced,omitempty"`
+	ClearTfaEnforcedReason bool
+	TfaEnforcedReason      *string `json:"tfa_enforced_reason,omitempty"`
+	ClearEvents            bool
+	AddEventIDs            []string `json:"add_event_ids,omitempty"`
+	RemoveEventIDs         []string `json:"remove_event_ids,omitempty"`
 }
 
 // Mutate applies the UpdateOrgMembershipInput on the OrgMembershipMutation builder.
@@ -16411,6 +16423,18 @@ func (i *UpdateOrgMembershipInput) Mutate(m *OrgMembershipMutation) {
 	}
 	if v := i.SSOExemptReason; v != nil {
 		m.SetSSOExemptReason(*v)
+	}
+	if i.ClearTfaEnforced {
+		m.ClearTfaEnforced()
+	}
+	if v := i.TfaEnforced; v != nil {
+		m.SetTfaEnforced(*v)
+	}
+	if i.ClearTfaEnforcedReason {
+		m.ClearTfaEnforcedReason()
+	}
+	if v := i.TfaEnforcedReason; v != nil {
+		m.SetTfaEnforcedReason(*v)
 	}
 	if i.ClearEvents {
 		m.ClearEvents()

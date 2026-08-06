@@ -2235,6 +2235,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 			orgmembership.FieldSSOExemptReason:       {Type: field.TypeString, Column: orgmembership.FieldSSOExemptReason},
 			orgmembership.FieldSSOExemptGrantedBy:    {Type: field.TypeString, Column: orgmembership.FieldSSOExemptGrantedBy},
 			orgmembership.FieldSSOExemptGrantedAt:    {Type: field.TypeTime, Column: orgmembership.FieldSSOExemptGrantedAt},
+			orgmembership.FieldTfaEnforced:           {Type: field.TypeBool, Column: orgmembership.FieldTfaEnforced},
+			orgmembership.FieldTfaEnforcedReason:     {Type: field.TypeString, Column: orgmembership.FieldTfaEnforcedReason},
+			orgmembership.FieldTfaEnforcedBy:         {Type: field.TypeString, Column: orgmembership.FieldTfaEnforcedBy},
+			orgmembership.FieldTfaEnforcedAt:         {Type: field.TypeTime, Column: orgmembership.FieldTfaEnforcedAt},
 		},
 	}
 	graph.Nodes[57] = &sqlgraph.Node{
@@ -36457,6 +36461,26 @@ func (f *OrgMembershipFilter) WhereSSOExemptGrantedBy(p entql.StringP) {
 // WhereSSOExemptGrantedAt applies the entql time.Time predicate on the sso_exempt_granted_at field.
 func (f *OrgMembershipFilter) WhereSSOExemptGrantedAt(p entql.TimeP) {
 	f.Where(p.Field(orgmembership.FieldSSOExemptGrantedAt))
+}
+
+// WhereTfaEnforced applies the entql bool predicate on the tfa_enforced field.
+func (f *OrgMembershipFilter) WhereTfaEnforced(p entql.BoolP) {
+	f.Where(p.Field(orgmembership.FieldTfaEnforced))
+}
+
+// WhereTfaEnforcedReason applies the entql string predicate on the tfa_enforced_reason field.
+func (f *OrgMembershipFilter) WhereTfaEnforcedReason(p entql.StringP) {
+	f.Where(p.Field(orgmembership.FieldTfaEnforcedReason))
+}
+
+// WhereTfaEnforcedBy applies the entql string predicate on the tfa_enforced_by field.
+func (f *OrgMembershipFilter) WhereTfaEnforcedBy(p entql.StringP) {
+	f.Where(p.Field(orgmembership.FieldTfaEnforcedBy))
+}
+
+// WhereTfaEnforcedAt applies the entql time.Time predicate on the tfa_enforced_at field.
+func (f *OrgMembershipFilter) WhereTfaEnforcedAt(p entql.TimeP) {
+	f.Where(p.Field(orgmembership.FieldTfaEnforcedAt))
 }
 
 // WhereHasOrganization applies a predicate to check if query has an edge organization.

@@ -1637,6 +1637,10 @@ func init() {
 	orgmembershiphistoryDescSSOExempt := orgmembershiphistoryFields[12].Descriptor()
 	// orgmembershiphistory.DefaultSSOExempt holds the default value on creation for the sso_exempt field.
 	orgmembershiphistory.DefaultSSOExempt = orgmembershiphistoryDescSSOExempt.Default.(bool)
+	// orgmembershiphistoryDescTfaEnforced is the schema descriptor for tfa_enforced field.
+	orgmembershiphistoryDescTfaEnforced := orgmembershiphistoryFields[16].Descriptor()
+	// orgmembershiphistory.DefaultTfaEnforced holds the default value on creation for the tfa_enforced field.
+	orgmembershiphistory.DefaultTfaEnforced = orgmembershiphistoryDescTfaEnforced.Default.(bool)
 	// orgmembershiphistoryDescID is the schema descriptor for id field.
 	orgmembershiphistoryDescID := orgmembershiphistoryFields[8].Descriptor()
 	// orgmembershiphistory.DefaultID holds the default value on creation for the id field.

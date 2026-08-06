@@ -1542,6 +1542,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 			orgmembershiphistory.FieldSSOExemptReason:       {Type: field.TypeString, Column: orgmembershiphistory.FieldSSOExemptReason},
 			orgmembershiphistory.FieldSSOExemptGrantedBy:    {Type: field.TypeString, Column: orgmembershiphistory.FieldSSOExemptGrantedBy},
 			orgmembershiphistory.FieldSSOExemptGrantedAt:    {Type: field.TypeTime, Column: orgmembershiphistory.FieldSSOExemptGrantedAt},
+			orgmembershiphistory.FieldTfaEnforced:           {Type: field.TypeBool, Column: orgmembershiphistory.FieldTfaEnforced},
+			orgmembershiphistory.FieldTfaEnforcedReason:     {Type: field.TypeString, Column: orgmembershiphistory.FieldTfaEnforcedReason},
+			orgmembershiphistory.FieldTfaEnforcedBy:         {Type: field.TypeString, Column: orgmembershiphistory.FieldTfaEnforcedBy},
+			orgmembershiphistory.FieldTfaEnforcedAt:         {Type: field.TypeTime, Column: orgmembershiphistory.FieldTfaEnforcedAt},
 		},
 	}
 	graph.Nodes[34] = &sqlgraph.Node{
@@ -9430,6 +9434,26 @@ func (f *OrgMembershipHistoryFilter) WhereSSOExemptGrantedBy(p entql.StringP) {
 // WhereSSOExemptGrantedAt applies the entql time.Time predicate on the sso_exempt_granted_at field.
 func (f *OrgMembershipHistoryFilter) WhereSSOExemptGrantedAt(p entql.TimeP) {
 	f.Where(p.Field(orgmembershiphistory.FieldSSOExemptGrantedAt))
+}
+
+// WhereTfaEnforced applies the entql bool predicate on the tfa_enforced field.
+func (f *OrgMembershipHistoryFilter) WhereTfaEnforced(p entql.BoolP) {
+	f.Where(p.Field(orgmembershiphistory.FieldTfaEnforced))
+}
+
+// WhereTfaEnforcedReason applies the entql string predicate on the tfa_enforced_reason field.
+func (f *OrgMembershipHistoryFilter) WhereTfaEnforcedReason(p entql.StringP) {
+	f.Where(p.Field(orgmembershiphistory.FieldTfaEnforcedReason))
+}
+
+// WhereTfaEnforcedBy applies the entql string predicate on the tfa_enforced_by field.
+func (f *OrgMembershipHistoryFilter) WhereTfaEnforcedBy(p entql.StringP) {
+	f.Where(p.Field(orgmembershiphistory.FieldTfaEnforcedBy))
+}
+
+// WhereTfaEnforcedAt applies the entql time.Time predicate on the tfa_enforced_at field.
+func (f *OrgMembershipHistoryFilter) WhereTfaEnforcedAt(p entql.TimeP) {
+	f.Where(p.Field(orgmembershiphistory.FieldTfaEnforcedAt))
 }
 
 // addPredicate implements the predicateAdder interface.
