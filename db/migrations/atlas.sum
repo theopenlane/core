@@ -1,4 +1,4 @@
-h1:KfVdwcC5hNeeWL/fVFIS7Ru5GcfUsmyLEt3yVpJFBo4=
+h1:qDkwYcCwccihiwBlHCESVxoH6O59yShr/zPNLhR06c4=
 20251229183159_init.sql h1:3uf/ftr28zW8YUD9qAaY2GESQHC7pYmkhlI6oDWUCKU=
 20251229183201_init_history.sql h1:1tFSeCDWvZgb2Ctw80C/s3tqVPNLADQw9fSDACzL8WA=
 20251231045221_workflow.sql h1:5bLq4cHh2kxUV7xajK5bq5McKKpr88HmufYauTdsgUw=
@@ -172,5 +172,6 @@ h1:KfVdwcC5hNeeWL/fVFIS7Ru5GcfUsmyLEt3yVpJFBo4=
 20260728193948_directorymembershipindex.sql h1:GMmB5LtkGz7WAmqILpbWGoqmZD1e8kq7eRcPyOrFs7Y=
 20260730170837_dropassetnameindex.sql h1:vfvgvcqSsRer9jd8g6JzlRg/l+LOmKw5ytLMCEcqTgk=
 20260803213537_drop_notification_user_edge.sql h1:988ebIeIjtpxaIckXmIRbRl9V2GzENRBUWdLa9CTx9I=
-20260804223333_tfa_enforcement.sql h1:YRivovJl5UME4QveCeFf/P+W/d5IoeU0CA5s4gAuBdo=
-20260804223343_tfa_enforcement_history.sql h1:mQlsPpj9Bxow6OZjItEHmPO21I6XloQufPRq9VJHyuA=
+20260806055946_drop_integration_history_tables.sql h1:WpsMuHDxGn3t4hAepDLBUePTYZBgh0P/cx/DgRQCj1Q=
+20260806102606_tfa_enforcement.sql h1:iKnXbvc7CxEr0FU7GxJ6Lq7Ah92sIaytO+FP053Lybo=
+20260806102616_tfa_enforcement_history.sql h1:lYstxxJz5bNKGS3M5+WaULQnGWLpYSDWhLK2YgbeF10=

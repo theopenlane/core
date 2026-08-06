@@ -273,6 +273,12 @@ func getEntHistoryGqlExtension() *entgql.Extension {
 	return gqlExt
 }
 
+const skipper = `
+    caller, _ := auth.CallerFromContext(ctx)
+
+    return caller.HasInLineage(auth.CapBypassAuditLog)
+`
+
 // getHistoryExtension generates the history schemas and returns the history extension to be used in the ent codegen
 func getHistoryExtension(hasChanges bool) *history.Extension {
 	// generate the history schemas
@@ -290,6 +296,7 @@ func getHistoryExtension(hasChanges bool) *history.Extension {
 		history.WithFirstRun(false),
 		history.WithAllowedRelation("audit_log_viewer"),
 		history.WithUpdatedByFromSchema(history.ValueTypeString, false),
+		history.WithSkipper(skipper),
 	)
 
 	if hasChanges {

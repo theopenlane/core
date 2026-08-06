@@ -15,16 +15,11 @@ type SchemaConfig struct {
 	AssetHistory                      string // AssetHistory table.
 	CampaignHistory                   string // CampaignHistory table.
 	CampaignTargetHistory             string // CampaignTargetHistory table.
-	CheckResultHistory                string // CheckResultHistory table.
 	ContactHistory                    string // ContactHistory table.
 	ControlHistory                    string // ControlHistory table.
 	ControlImplementationHistory      string // ControlImplementationHistory table.
 	ControlObjectiveHistory           string // ControlObjectiveHistory table.
 	CustomDomainHistory               string // CustomDomainHistory table.
-	DNSVerificationHistory            string // DNSVerificationHistory table.
-	DirectoryAccountHistory           string // DirectoryAccountHistory table.
-	DirectoryGroupHistory             string // DirectoryGroupHistory table.
-	DirectoryMembershipHistory        string // DirectoryMembershipHistory table.
 	DiscussionHistory                 string // DiscussionHistory table.
 	DocumentDataHistory               string // DocumentDataHistory table.
 	EmailTemplateHistory              string // EmailTemplateHistory table.
@@ -39,7 +34,6 @@ type SchemaConfig struct {
 	GroupSettingHistory               string // GroupSettingHistory table.
 	HushHistory                       string // HushHistory table.
 	IdentityHolderHistory             string // IdentityHolderHistory table.
-	IntegrationHistory                string // IntegrationHistory table.
 	InternalPolicyHistory             string // InternalPolicyHistory table.
 	JobTemplateHistory                string // JobTemplateHistory table.
 	MappableDomainHistory             string // MappableDomainHistory table.
@@ -49,7 +43,6 @@ type SchemaConfig struct {
 	NotificationPreferenceHistory     string // NotificationPreferenceHistory table.
 	NotificationTemplateHistory       string // NotificationTemplateHistory table.
 	OrgMembershipHistory              string // OrgMembershipHistory table.
-	OrgSubscriptionHistory            string // OrgSubscriptionHistory table.
 	OrganizationHistory               string // OrganizationHistory table.
 	OrganizationSettingHistory        string // OrganizationSettingHistory table.
 	PlatformHistory                   string // PlatformHistory table.
@@ -60,7 +53,6 @@ type SchemaConfig struct {
 	ReviewHistory                     string // ReviewHistory table.
 	RiskHistory                       string // RiskHistory table.
 	SLADefinitionHistory              string // SLADefinitionHistory table.
-	ScanHistory                       string // ScanHistory table.
 	ScheduledJobHistory               string // ScheduledJobHistory table.
 	StandardHistory                   string // StandardHistory table.
 	SubcontrolHistory                 string // SubcontrolHistory table.
@@ -85,9 +77,6 @@ type SchemaConfig struct {
 	WorkflowAssignmentHistory         string // WorkflowAssignmentHistory table.
 	WorkflowAssignmentTargetHistory   string // WorkflowAssignmentTargetHistory table.
 	WorkflowDefinitionHistory         string // WorkflowDefinitionHistory table.
-	WorkflowEventHistory              string // WorkflowEventHistory table.
-	WorkflowInstanceHistory           string // WorkflowInstanceHistory table.
-	WorkflowObjectRefHistory          string // WorkflowObjectRefHistory table.
 }
 
 type schemaCtxKey struct{}

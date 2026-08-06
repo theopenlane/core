@@ -28,9 +28,6 @@ func (c *Client) WithHistory() {
 	for _, hook := range history.Hooks[*CampaignTargetMutation]() {
 		c.CampaignTarget.Use(hook)
 	}
-	for _, hook := range history.Hooks[*CheckResultMutation]() {
-		c.CheckResult.Use(hook)
-	}
 	for _, hook := range history.Hooks[*ContactMutation]() {
 		c.Contact.Use(hook)
 	}
@@ -45,18 +42,6 @@ func (c *Client) WithHistory() {
 	}
 	for _, hook := range history.Hooks[*CustomDomainMutation]() {
 		c.CustomDomain.Use(hook)
-	}
-	for _, hook := range history.Hooks[*DNSVerificationMutation]() {
-		c.DNSVerification.Use(hook)
-	}
-	for _, hook := range history.Hooks[*DirectoryAccountMutation]() {
-		c.DirectoryAccount.Use(hook)
-	}
-	for _, hook := range history.Hooks[*DirectoryGroupMutation]() {
-		c.DirectoryGroup.Use(hook)
-	}
-	for _, hook := range history.Hooks[*DirectoryMembershipMutation]() {
-		c.DirectoryMembership.Use(hook)
 	}
 	for _, hook := range history.Hooks[*DiscussionMutation]() {
 		c.Discussion.Use(hook)
@@ -100,9 +85,6 @@ func (c *Client) WithHistory() {
 	for _, hook := range history.Hooks[*IdentityHolderMutation]() {
 		c.IdentityHolder.Use(hook)
 	}
-	for _, hook := range history.Hooks[*IntegrationMutation]() {
-		c.Integration.Use(hook)
-	}
 	for _, hook := range history.Hooks[*InternalPolicyMutation]() {
 		c.InternalPolicy.Use(hook)
 	}
@@ -129,9 +111,6 @@ func (c *Client) WithHistory() {
 	}
 	for _, hook := range history.Hooks[*OrgMembershipMutation]() {
 		c.OrgMembership.Use(hook)
-	}
-	for _, hook := range history.Hooks[*OrgSubscriptionMutation]() {
-		c.OrgSubscription.Use(hook)
 	}
 	for _, hook := range history.Hooks[*OrganizationMutation]() {
 		c.Organization.Use(hook)
@@ -162,9 +141,6 @@ func (c *Client) WithHistory() {
 	}
 	for _, hook := range history.Hooks[*SLADefinitionMutation]() {
 		c.SLADefinition.Use(hook)
-	}
-	for _, hook := range history.Hooks[*ScanMutation]() {
-		c.Scan.Use(hook)
 	}
 	for _, hook := range history.Hooks[*ScheduledJobMutation]() {
 		c.ScheduledJob.Use(hook)
@@ -237,14 +213,5 @@ func (c *Client) WithHistory() {
 	}
 	for _, hook := range history.Hooks[*WorkflowDefinitionMutation]() {
 		c.WorkflowDefinition.Use(hook)
-	}
-	for _, hook := range history.Hooks[*WorkflowEventMutation]() {
-		c.WorkflowEvent.Use(hook)
-	}
-	for _, hook := range history.Hooks[*WorkflowInstanceMutation]() {
-		c.WorkflowInstance.Use(hook)
-	}
-	for _, hook := range history.Hooks[*WorkflowObjectRefMutation]() {
-		c.WorkflowObjectRef.Use(hook)
 	}
 }
