@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/iam/auth"
 )
 
 var (
@@ -30,8 +31,19 @@ func EntOpToHistoryOp(op ent.Op) history.OpType {
 	}
 }
 
+func (m *ActionPlanMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *ActionPlanMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -245,6 +257,9 @@ func (m *ActionPlanMutation) CreateHistoryFromCreate(ctx context.Context) error 
 
 func (m *ActionPlanMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -567,6 +582,9 @@ func (m *ActionPlanMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 
 func (m *ActionPlanMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -649,8 +667,19 @@ func (m *ActionPlanMutation) CreateHistoryFromDelete(ctx context.Context) error 
 	return nil
 }
 
+func (m *AssessmentMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *AssessmentMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -748,6 +777,9 @@ func (m *AssessmentMutation) CreateHistoryFromCreate(ctx context.Context) error 
 
 func (m *AssessmentMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -896,6 +928,9 @@ func (m *AssessmentMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 
 func (m *AssessmentMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -949,8 +984,19 @@ func (m *AssessmentMutation) CreateHistoryFromDelete(ctx context.Context) error 
 	return nil
 }
 
+func (m *AssessmentResponseMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *AssessmentResponseMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -1096,6 +1142,9 @@ func (m *AssessmentResponseMutation) CreateHistoryFromCreate(ctx context.Context
 
 func (m *AssessmentResponseMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -1316,6 +1365,9 @@ func (m *AssessmentResponseMutation) CreateHistoryFromUpdate(ctx context.Context
 
 func (m *AssessmentResponseMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -1381,8 +1433,19 @@ func (m *AssessmentResponseMutation) CreateHistoryFromDelete(ctx context.Context
 	return nil
 }
 
+func (m *AssetMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *AssetMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -1604,6 +1667,9 @@ func (m *AssetMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *AssetMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -1938,6 +2004,9 @@ func (m *AssetMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *AssetMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -2022,8 +2091,19 @@ func (m *AssetMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *CampaignMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *CampaignMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -2213,6 +2293,9 @@ func (m *CampaignMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *CampaignMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -2499,6 +2582,9 @@ func (m *CampaignMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *CampaignMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -2575,8 +2661,19 @@ func (m *CampaignMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *CampaignTargetMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *CampaignTargetMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -2678,6 +2775,9 @@ func (m *CampaignTargetMutation) CreateHistoryFromCreate(ctx context.Context) er
 
 func (m *CampaignTargetMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -2832,6 +2932,9 @@ func (m *CampaignTargetMutation) CreateHistoryFromUpdate(ctx context.Context) er
 
 func (m *CampaignTargetMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -2886,8 +2989,19 @@ func (m *CampaignTargetMutation) CreateHistoryFromDelete(ctx context.Context) er
 	return nil
 }
 
+func (m *CheckResultMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *CheckResultMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -2969,6 +3083,9 @@ func (m *CheckResultMutation) CreateHistoryFromCreate(ctx context.Context) error
 
 func (m *CheckResultMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -3093,6 +3210,9 @@ func (m *CheckResultMutation) CreateHistoryFromUpdate(ctx context.Context) error
 
 func (m *CheckResultMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -3142,8 +3262,19 @@ func (m *CheckResultMutation) CreateHistoryFromDelete(ctx context.Context) error
 	return nil
 }
 
+func (m *ContactMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *ContactMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -3241,6 +3372,9 @@ func (m *ContactMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *ContactMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -3389,6 +3523,9 @@ func (m *ContactMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *ContactMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -3442,8 +3579,19 @@ func (m *ContactMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *ControlMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -3681,6 +3829,9 @@ func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -4039,6 +4190,9 @@ func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -4127,8 +4281,19 @@ func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *ControlImplementationMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *ControlImplementationMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -4222,6 +4387,9 @@ func (m *ControlImplementationMutation) CreateHistoryFromCreate(ctx context.Cont
 
 func (m *ControlImplementationMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -4364,6 +4532,9 @@ func (m *ControlImplementationMutation) CreateHistoryFromUpdate(ctx context.Cont
 
 func (m *ControlImplementationMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -4416,8 +4587,19 @@ func (m *ControlImplementationMutation) CreateHistoryFromDelete(ctx context.Cont
 	return nil
 }
 
+func (m *ControlObjectiveMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *ControlObjectiveMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -4527,6 +4709,9 @@ func (m *ControlObjectiveMutation) CreateHistoryFromCreate(ctx context.Context) 
 
 func (m *ControlObjectiveMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -4693,6 +4878,9 @@ func (m *ControlObjectiveMutation) CreateHistoryFromUpdate(ctx context.Context) 
 
 func (m *ControlObjectiveMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -4749,8 +4937,19 @@ func (m *ControlObjectiveMutation) CreateHistoryFromDelete(ctx context.Context) 
 	return nil
 }
 
+func (m *CustomDomainMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *CustomDomainMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -4840,6 +5039,9 @@ func (m *CustomDomainMutation) CreateHistoryFromCreate(ctx context.Context) erro
 
 func (m *CustomDomainMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -4976,6 +5178,9 @@ func (m *CustomDomainMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 
 func (m *CustomDomainMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -5027,8 +5232,19 @@ func (m *CustomDomainMutation) CreateHistoryFromDelete(ctx context.Context) erro
 	return nil
 }
 
+func (m *DNSVerificationMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *DNSVerificationMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -5122,6 +5338,9 @@ func (m *DNSVerificationMutation) CreateHistoryFromCreate(ctx context.Context) e
 
 func (m *DNSVerificationMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -5264,6 +5483,9 @@ func (m *DNSVerificationMutation) CreateHistoryFromUpdate(ctx context.Context) e
 
 func (m *DNSVerificationMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -5316,8 +5538,19 @@ func (m *DNSVerificationMutation) CreateHistoryFromDelete(ctx context.Context) e
 	return nil
 }
 
+func (m *DirectoryAccountMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *DirectoryAccountMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -5531,6 +5764,9 @@ func (m *DirectoryAccountMutation) CreateHistoryFromCreate(ctx context.Context) 
 
 func (m *DirectoryAccountMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -5853,6 +6089,9 @@ func (m *DirectoryAccountMutation) CreateHistoryFromUpdate(ctx context.Context) 
 
 func (m *DirectoryAccountMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -5935,8 +6174,19 @@ func (m *DirectoryAccountMutation) CreateHistoryFromDelete(ctx context.Context) 
 	return nil
 }
 
+func (m *DirectoryGroupMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *DirectoryGroupMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -6098,6 +6348,9 @@ func (m *DirectoryGroupMutation) CreateHistoryFromCreate(ctx context.Context) er
 
 func (m *DirectoryGroupMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -6342,6 +6595,9 @@ func (m *DirectoryGroupMutation) CreateHistoryFromUpdate(ctx context.Context) er
 
 func (m *DirectoryGroupMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -6411,8 +6667,19 @@ func (m *DirectoryGroupMutation) CreateHistoryFromDelete(ctx context.Context) er
 	return nil
 }
 
+func (m *DirectoryMembershipMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *DirectoryMembershipMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -6542,6 +6809,9 @@ func (m *DirectoryMembershipMutation) CreateHistoryFromCreate(ctx context.Contex
 
 func (m *DirectoryMembershipMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -6738,6 +7008,9 @@ func (m *DirectoryMembershipMutation) CreateHistoryFromUpdate(ctx context.Contex
 
 func (m *DirectoryMembershipMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -6799,8 +7072,19 @@ func (m *DirectoryMembershipMutation) CreateHistoryFromDelete(ctx context.Contex
 	return nil
 }
 
+func (m *DiscussionMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *DiscussionMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -6862,6 +7146,9 @@ func (m *DiscussionMutation) CreateHistoryFromCreate(ctx context.Context) error 
 
 func (m *DiscussionMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -6956,6 +7243,9 @@ func (m *DiscussionMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 
 func (m *DiscussionMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -7000,8 +7290,19 @@ func (m *DiscussionMutation) CreateHistoryFromDelete(ctx context.Context) error 
 	return nil
 }
 
+func (m *DocumentDataMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *DocumentDataMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -7083,6 +7384,9 @@ func (m *DocumentDataMutation) CreateHistoryFromCreate(ctx context.Context) erro
 
 func (m *DocumentDataMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -7207,6 +7511,9 @@ func (m *DocumentDataMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 
 func (m *DocumentDataMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -7256,8 +7563,19 @@ func (m *DocumentDataMutation) CreateHistoryFromDelete(ctx context.Context) erro
 	return nil
 }
 
+func (m *EmailTemplateMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *EmailTemplateMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -7407,6 +7725,9 @@ func (m *EmailTemplateMutation) CreateHistoryFromCreate(ctx context.Context) err
 
 func (m *EmailTemplateMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -7633,6 +7954,9 @@ func (m *EmailTemplateMutation) CreateHistoryFromUpdate(ctx context.Context) err
 
 func (m *EmailTemplateMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -7699,8 +8023,19 @@ func (m *EmailTemplateMutation) CreateHistoryFromDelete(ctx context.Context) err
 	return nil
 }
 
+func (m *EntityMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *EntityMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -7986,6 +8321,9 @@ func (m *EntityMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *EntityMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -8416,6 +8754,9 @@ func (m *EntityMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *EntityMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -8516,8 +8857,19 @@ func (m *EntityMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *EntityTypeMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *EntityTypeMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -8591,6 +8943,9 @@ func (m *EntityTypeMutation) CreateHistoryFromCreate(ctx context.Context) error 
 
 func (m *EntityTypeMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -8703,6 +9058,9 @@ func (m *EntityTypeMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 
 func (m *EntityTypeMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -8750,8 +9108,19 @@ func (m *EntityTypeMutation) CreateHistoryFromDelete(ctx context.Context) error 
 	return nil
 }
 
+func (m *EvidenceMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *EvidenceMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -8877,6 +9246,9 @@ func (m *EvidenceMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *EvidenceMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -9067,6 +9439,9 @@ func (m *EvidenceMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *EvidenceMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -9127,8 +9502,19 @@ func (m *EvidenceMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *FileMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *FileMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -9294,6 +9680,9 @@ func (m *FileMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *FileMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -9544,6 +9933,9 @@ func (m *FileMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *FileMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -9614,8 +10006,19 @@ func (m *FileMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *FindingMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *FindingMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -9889,6 +10292,9 @@ func (m *FindingMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *FindingMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -10301,6 +10707,9 @@ func (m *FindingMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *FindingMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -10398,8 +10807,19 @@ func (m *FindingMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *FindingControlMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *FindingControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -10481,6 +10901,9 @@ func (m *FindingControlMutation) CreateHistoryFromCreate(ctx context.Context) er
 
 func (m *FindingControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -10605,6 +11028,9 @@ func (m *FindingControlMutation) CreateHistoryFromUpdate(ctx context.Context) er
 
 func (m *FindingControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -10654,8 +11080,19 @@ func (m *FindingControlMutation) CreateHistoryFromDelete(ctx context.Context) er
 	return nil
 }
 
+func (m *GroupMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *GroupMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -10773,6 +11210,9 @@ func (m *GroupMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *GroupMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -10951,6 +11391,9 @@ func (m *GroupMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *GroupMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -11009,8 +11452,19 @@ func (m *GroupMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *GroupMembershipMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *GroupMembershipMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -11064,6 +11518,9 @@ func (m *GroupMembershipMutation) CreateHistoryFromCreate(ctx context.Context) e
 
 func (m *GroupMembershipMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -11146,6 +11603,9 @@ func (m *GroupMembershipMutation) CreateHistoryFromUpdate(ctx context.Context) e
 
 func (m *GroupMembershipMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -11188,8 +11648,19 @@ func (m *GroupMembershipMutation) CreateHistoryFromDelete(ctx context.Context) e
 	return nil
 }
 
+func (m *GroupSettingMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *GroupSettingMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -11259,6 +11730,9 @@ func (m *GroupSettingMutation) CreateHistoryFromCreate(ctx context.Context) erro
 
 func (m *GroupSettingMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -11365,6 +11839,9 @@ func (m *GroupSettingMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 
 func (m *GroupSettingMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -11411,8 +11888,19 @@ func (m *GroupSettingMutation) CreateHistoryFromDelete(ctx context.Context) erro
 	return nil
 }
 
+func (m *HushMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *HushMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -11514,6 +12002,9 @@ func (m *HushMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *HushMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -11668,6 +12159,9 @@ func (m *HushMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *HushMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -11722,8 +12216,19 @@ func (m *HushMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *IdentityHolderMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *IdentityHolderMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -11901,6 +12406,9 @@ func (m *IdentityHolderMutation) CreateHistoryFromCreate(ctx context.Context) er
 
 func (m *IdentityHolderMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -12169,6 +12677,9 @@ func (m *IdentityHolderMutation) CreateHistoryFromUpdate(ctx context.Context) er
 
 func (m *IdentityHolderMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -12242,8 +12753,19 @@ func (m *IdentityHolderMutation) CreateHistoryFromDelete(ctx context.Context) er
 	return nil
 }
 
+func (m *IntegrationMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *IntegrationMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -12401,6 +12923,9 @@ func (m *IntegrationMutation) CreateHistoryFromCreate(ctx context.Context) error
 
 func (m *IntegrationMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -12639,6 +13164,9 @@ func (m *IntegrationMutation) CreateHistoryFromUpdate(ctx context.Context) error
 
 func (m *IntegrationMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -12707,8 +13235,19 @@ func (m *IntegrationMutation) CreateHistoryFromDelete(ctx context.Context) error
 	return nil
 }
 
+func (m *InternalPolicyMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *InternalPolicyMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -12902,6 +13441,9 @@ func (m *InternalPolicyMutation) CreateHistoryFromCreate(ctx context.Context) er
 
 func (m *InternalPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -13194,6 +13736,9 @@ func (m *InternalPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) er
 
 func (m *InternalPolicyMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -13271,8 +13816,19 @@ func (m *InternalPolicyMutation) CreateHistoryFromDelete(ctx context.Context) er
 	return nil
 }
 
+func (m *JobTemplateMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *JobTemplateMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -13374,6 +13930,9 @@ func (m *JobTemplateMutation) CreateHistoryFromCreate(ctx context.Context) error
 
 func (m *JobTemplateMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -13528,6 +14087,9 @@ func (m *JobTemplateMutation) CreateHistoryFromUpdate(ctx context.Context) error
 
 func (m *JobTemplateMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -13582,8 +14144,19 @@ func (m *JobTemplateMutation) CreateHistoryFromDelete(ctx context.Context) error
 	return nil
 }
 
+func (m *MappableDomainMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *MappableDomainMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -13645,6 +14218,9 @@ func (m *MappableDomainMutation) CreateHistoryFromCreate(ctx context.Context) er
 
 func (m *MappableDomainMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -13739,6 +14315,9 @@ func (m *MappableDomainMutation) CreateHistoryFromUpdate(ctx context.Context) er
 
 func (m *MappableDomainMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -13783,8 +14362,19 @@ func (m *MappableDomainMutation) CreateHistoryFromDelete(ctx context.Context) er
 	return nil
 }
 
+func (m *MappedControlMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *MappedControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -13870,6 +14460,9 @@ func (m *MappedControlMutation) CreateHistoryFromCreate(ctx context.Context) err
 
 func (m *MappedControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -14000,6 +14593,9 @@ func (m *MappedControlMutation) CreateHistoryFromUpdate(ctx context.Context) err
 
 func (m *MappedControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -14050,8 +14646,19 @@ func (m *MappedControlMutation) CreateHistoryFromDelete(ctx context.Context) err
 	return nil
 }
 
+func (m *NarrativeMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *NarrativeMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -14137,6 +14744,9 @@ func (m *NarrativeMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *NarrativeMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -14267,6 +14877,9 @@ func (m *NarrativeMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *NarrativeMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -14317,8 +14930,19 @@ func (m *NarrativeMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *NoteMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *NoteMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -14412,6 +15036,9 @@ func (m *NoteMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *NoteMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -14554,6 +15181,9 @@ func (m *NoteMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *NoteMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -14606,8 +15236,19 @@ func (m *NoteMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *NotificationPreferenceMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *NotificationPreferenceMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -14745,6 +15386,9 @@ func (m *NotificationPreferenceMutation) CreateHistoryFromCreate(ctx context.Con
 
 func (m *NotificationPreferenceMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -14953,6 +15597,9 @@ func (m *NotificationPreferenceMutation) CreateHistoryFromUpdate(ctx context.Con
 
 func (m *NotificationPreferenceMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -15016,8 +15663,19 @@ func (m *NotificationPreferenceMutation) CreateHistoryFromDelete(ctx context.Con
 	return nil
 }
 
+func (m *NotificationTemplateMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *NotificationTemplateMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -15175,6 +15833,9 @@ func (m *NotificationTemplateMutation) CreateHistoryFromCreate(ctx context.Conte
 
 func (m *NotificationTemplateMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -15413,6 +16074,9 @@ func (m *NotificationTemplateMutation) CreateHistoryFromUpdate(ctx context.Conte
 
 func (m *NotificationTemplateMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -15481,8 +16145,19 @@ func (m *NotificationTemplateMutation) CreateHistoryFromDelete(ctx context.Conte
 	return nil
 }
 
+func (m *OrgMembershipMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *OrgMembershipMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -15552,6 +16227,9 @@ func (m *OrgMembershipMutation) CreateHistoryFromCreate(ctx context.Context) err
 
 func (m *OrgMembershipMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -15658,6 +16336,9 @@ func (m *OrgMembershipMutation) CreateHistoryFromUpdate(ctx context.Context) err
 
 func (m *OrgMembershipMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -15704,8 +16385,19 @@ func (m *OrgMembershipMutation) CreateHistoryFromDelete(ctx context.Context) err
 	return nil
 }
 
+func (m *OrgSubscriptionMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *OrgSubscriptionMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -15787,6 +16479,9 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromCreate(ctx context.Context) e
 
 func (m *OrgSubscriptionMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -15911,6 +16606,9 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromUpdate(ctx context.Context) e
 
 func (m *OrgSubscriptionMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -15960,8 +16658,19 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromDelete(ctx context.Context) e
 	return nil
 }
 
+func (m *OrganizationMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *OrganizationMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -16055,6 +16764,9 @@ func (m *OrganizationMutation) CreateHistoryFromCreate(ctx context.Context) erro
 
 func (m *OrganizationMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -16197,6 +16909,9 @@ func (m *OrganizationMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 
 func (m *OrganizationMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -16249,8 +16964,19 @@ func (m *OrganizationMutation) CreateHistoryFromDelete(ctx context.Context) erro
 	return nil
 }
 
+func (m *OrganizationSettingMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *OrganizationSettingMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -16424,6 +17150,9 @@ func (m *OrganizationSettingMutation) CreateHistoryFromCreate(ctx context.Contex
 
 func (m *OrganizationSettingMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -16686,6 +17415,9 @@ func (m *OrganizationSettingMutation) CreateHistoryFromUpdate(ctx context.Contex
 
 func (m *OrganizationSettingMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -16758,8 +17490,19 @@ func (m *OrganizationSettingMutation) CreateHistoryFromDelete(ctx context.Contex
 	return nil
 }
 
+func (m *PlatformMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *PlatformMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -17013,6 +17756,9 @@ func (m *PlatformMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *PlatformMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -17395,6 +18141,9 @@ func (m *PlatformMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *PlatformMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -17487,8 +18236,19 @@ func (m *PlatformMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *ProcedureMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *ProcedureMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -17678,6 +18438,9 @@ func (m *ProcedureMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *ProcedureMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -17964,6 +18727,9 @@ func (m *ProcedureMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *ProcedureMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -18040,8 +18806,19 @@ func (m *ProcedureMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *ProgramMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *ProgramMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -18183,6 +18960,9 @@ func (m *ProgramMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *ProgramMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -18397,6 +19177,9 @@ func (m *ProgramMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *ProgramMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -18461,8 +19244,19 @@ func (m *ProgramMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *ProgramMembershipMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *ProgramMembershipMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -18516,6 +19310,9 @@ func (m *ProgramMembershipMutation) CreateHistoryFromCreate(ctx context.Context)
 
 func (m *ProgramMembershipMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -18598,6 +19395,9 @@ func (m *ProgramMembershipMutation) CreateHistoryFromUpdate(ctx context.Context)
 
 func (m *ProgramMembershipMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -18640,8 +19440,19 @@ func (m *ProgramMembershipMutation) CreateHistoryFromDelete(ctx context.Context)
 	return nil
 }
 
+func (m *RemediationMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *RemediationMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -18815,6 +19626,9 @@ func (m *RemediationMutation) CreateHistoryFromCreate(ctx context.Context) error
 
 func (m *RemediationMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -19077,6 +19891,9 @@ func (m *RemediationMutation) CreateHistoryFromUpdate(ctx context.Context) error
 
 func (m *RemediationMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -19149,8 +19966,19 @@ func (m *RemediationMutation) CreateHistoryFromDelete(ctx context.Context) error
 	return nil
 }
 
+func (m *ReviewMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *ReviewMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -19312,6 +20140,9 @@ func (m *ReviewMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *ReviewMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -19556,6 +20387,9 @@ func (m *ReviewMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *ReviewMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -19625,8 +20459,19 @@ func (m *ReviewMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *RiskMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *RiskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -19824,6 +20669,9 @@ func (m *RiskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *RiskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -20122,6 +20970,9 @@ func (m *RiskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *RiskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -20200,8 +21051,19 @@ func (m *RiskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *SLADefinitionMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *SLADefinitionMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -20271,6 +21133,9 @@ func (m *SLADefinitionMutation) CreateHistoryFromCreate(ctx context.Context) err
 
 func (m *SLADefinitionMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -20377,6 +21242,9 @@ func (m *SLADefinitionMutation) CreateHistoryFromUpdate(ctx context.Context) err
 
 func (m *SLADefinitionMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -20423,8 +21291,19 @@ func (m *SLADefinitionMutation) CreateHistoryFromDelete(ctx context.Context) err
 	return nil
 }
 
+func (m *ScanMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *ScanMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -20582,6 +21461,9 @@ func (m *ScanMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *ScanMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -20820,6 +21702,9 @@ func (m *ScanMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *ScanMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -20888,8 +21773,19 @@ func (m *ScanMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *ScheduledJobMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *ScheduledJobMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -20967,6 +21863,9 @@ func (m *ScheduledJobMutation) CreateHistoryFromCreate(ctx context.Context) erro
 
 func (m *ScheduledJobMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -21085,6 +21984,9 @@ func (m *ScheduledJobMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 
 func (m *ScheduledJobMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -21133,8 +22035,19 @@ func (m *ScheduledJobMutation) CreateHistoryFromDelete(ctx context.Context) erro
 	return nil
 }
 
+func (m *StandardMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *StandardMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -21264,6 +22177,9 @@ func (m *StandardMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *StandardMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -21460,6 +22376,9 @@ func (m *StandardMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *StandardMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -21521,8 +22440,19 @@ func (m *StandardMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *SubcontrolMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -21736,6 +22666,9 @@ func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error 
 
 func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -22058,6 +22991,9 @@ func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 
 func (m *SubcontrolMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -22140,8 +23076,19 @@ func (m *SubcontrolMutation) CreateHistoryFromDelete(ctx context.Context) error 
 	return nil
 }
 
+func (m *SubprocessorMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *SubprocessorMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -22227,6 +23174,9 @@ func (m *SubprocessorMutation) CreateHistoryFromCreate(ctx context.Context) erro
 
 func (m *SubprocessorMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -22357,6 +23307,9 @@ func (m *SubprocessorMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 
 func (m *SubprocessorMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -22407,8 +23360,19 @@ func (m *SubprocessorMutation) CreateHistoryFromDelete(ctx context.Context) erro
 	return nil
 }
 
+func (m *SystemDetailMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *SystemDetailMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -22502,6 +23466,9 @@ func (m *SystemDetailMutation) CreateHistoryFromCreate(ctx context.Context) erro
 
 func (m *SystemDetailMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -22644,6 +23611,9 @@ func (m *SystemDetailMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 
 func (m *SystemDetailMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -22696,8 +23666,19 @@ func (m *SystemDetailMutation) CreateHistoryFromDelete(ctx context.Context) erro
 	return nil
 }
 
+func (m *TaskMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *TaskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -22863,6 +23844,9 @@ func (m *TaskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *TaskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -23113,6 +24097,9 @@ func (m *TaskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *TaskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -23183,8 +24170,19 @@ func (m *TaskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *TemplateMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *TemplateMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -23302,6 +24300,9 @@ func (m *TemplateMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *TemplateMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -23480,6 +24481,9 @@ func (m *TemplateMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *TemplateMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -23538,8 +24542,19 @@ func (m *TemplateMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *TrustCenterMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *TrustCenterMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -23629,6 +24644,9 @@ func (m *TrustCenterMutation) CreateHistoryFromCreate(ctx context.Context) error
 
 func (m *TrustCenterMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -23765,6 +24783,9 @@ func (m *TrustCenterMutation) CreateHistoryFromUpdate(ctx context.Context) error
 
 func (m *TrustCenterMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -23816,8 +24837,19 @@ func (m *TrustCenterMutation) CreateHistoryFromDelete(ctx context.Context) error
 	return nil
 }
 
+func (m *TrustCenterComplianceMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *TrustCenterComplianceMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -23879,6 +24911,9 @@ func (m *TrustCenterComplianceMutation) CreateHistoryFromCreate(ctx context.Cont
 
 func (m *TrustCenterComplianceMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -23973,6 +25008,9 @@ func (m *TrustCenterComplianceMutation) CreateHistoryFromUpdate(ctx context.Cont
 
 func (m *TrustCenterComplianceMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -24017,8 +25055,19 @@ func (m *TrustCenterComplianceMutation) CreateHistoryFromDelete(ctx context.Cont
 	return nil
 }
 
+func (m *TrustCenterDocMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *TrustCenterDocMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -24112,6 +25161,9 @@ func (m *TrustCenterDocMutation) CreateHistoryFromCreate(ctx context.Context) er
 
 func (m *TrustCenterDocMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -24254,6 +25306,9 @@ func (m *TrustCenterDocMutation) CreateHistoryFromUpdate(ctx context.Context) er
 
 func (m *TrustCenterDocMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -24306,8 +25361,19 @@ func (m *TrustCenterDocMutation) CreateHistoryFromDelete(ctx context.Context) er
 	return nil
 }
 
+func (m *TrustCenterEntityMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *TrustCenterEntityMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -24377,6 +25443,9 @@ func (m *TrustCenterEntityMutation) CreateHistoryFromCreate(ctx context.Context)
 
 func (m *TrustCenterEntityMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -24483,6 +25552,9 @@ func (m *TrustCenterEntityMutation) CreateHistoryFromUpdate(ctx context.Context)
 
 func (m *TrustCenterEntityMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -24529,8 +25601,19 @@ func (m *TrustCenterEntityMutation) CreateHistoryFromDelete(ctx context.Context)
 	return nil
 }
 
+func (m *TrustCenterFAQMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *TrustCenterFAQMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -24604,6 +25687,9 @@ func (m *TrustCenterFAQMutation) CreateHistoryFromCreate(ctx context.Context) er
 
 func (m *TrustCenterFAQMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -24716,6 +25802,9 @@ func (m *TrustCenterFAQMutation) CreateHistoryFromUpdate(ctx context.Context) er
 
 func (m *TrustCenterFAQMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -24763,8 +25852,19 @@ func (m *TrustCenterFAQMutation) CreateHistoryFromDelete(ctx context.Context) er
 	return nil
 }
 
+func (m *TrustCenterNDARequestMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *TrustCenterNDARequestMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -24870,6 +25970,9 @@ func (m *TrustCenterNDARequestMutation) CreateHistoryFromCreate(ctx context.Cont
 
 func (m *TrustCenterNDARequestMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -25030,6 +26133,9 @@ func (m *TrustCenterNDARequestMutation) CreateHistoryFromUpdate(ctx context.Cont
 
 func (m *TrustCenterNDARequestMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -25085,8 +26191,19 @@ func (m *TrustCenterNDARequestMutation) CreateHistoryFromDelete(ctx context.Cont
 	return nil
 }
 
+func (m *TrustCenterSettingMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *TrustCenterSettingMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -25248,6 +26365,9 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromCreate(ctx context.Context
 
 func (m *TrustCenterSettingMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -25492,6 +26612,9 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromUpdate(ctx context.Context
 
 func (m *TrustCenterSettingMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -25561,8 +26684,19 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromDelete(ctx context.Context
 	return nil
 }
 
+func (m *TrustCenterSubprocessorMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *TrustCenterSubprocessorMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -25632,6 +26766,9 @@ func (m *TrustCenterSubprocessorMutation) CreateHistoryFromCreate(ctx context.Co
 
 func (m *TrustCenterSubprocessorMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -25738,6 +26875,9 @@ func (m *TrustCenterSubprocessorMutation) CreateHistoryFromUpdate(ctx context.Co
 
 func (m *TrustCenterSubprocessorMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -25784,8 +26924,19 @@ func (m *TrustCenterSubprocessorMutation) CreateHistoryFromDelete(ctx context.Co
 	return nil
 }
 
+func (m *TrustCenterWatermarkConfigMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *TrustCenterWatermarkConfigMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -25875,6 +27026,9 @@ func (m *TrustCenterWatermarkConfigMutation) CreateHistoryFromCreate(ctx context
 
 func (m *TrustCenterWatermarkConfigMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -26011,6 +27165,9 @@ func (m *TrustCenterWatermarkConfigMutation) CreateHistoryFromUpdate(ctx context
 
 func (m *TrustCenterWatermarkConfigMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -26062,8 +27219,19 @@ func (m *TrustCenterWatermarkConfigMutation) CreateHistoryFromDelete(ctx context
 	return nil
 }
 
+func (m *UserMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *UserMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -26189,6 +27357,9 @@ func (m *UserMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *UserMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -26379,6 +27550,9 @@ func (m *UserMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *UserMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -26439,8 +27613,19 @@ func (m *UserMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *UserSettingMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *UserSettingMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -26542,6 +27727,9 @@ func (m *UserSettingMutation) CreateHistoryFromCreate(ctx context.Context) error
 
 func (m *UserSettingMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -26696,6 +27884,9 @@ func (m *UserSettingMutation) CreateHistoryFromUpdate(ctx context.Context) error
 
 func (m *UserSettingMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -26750,8 +27941,19 @@ func (m *UserSettingMutation) CreateHistoryFromDelete(ctx context.Context) error
 	return nil
 }
 
+func (m *VendorRiskScoreMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *VendorRiskScoreMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -26861,6 +28063,9 @@ func (m *VendorRiskScoreMutation) CreateHistoryFromCreate(ctx context.Context) e
 
 func (m *VendorRiskScoreMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -27027,6 +28232,9 @@ func (m *VendorRiskScoreMutation) CreateHistoryFromUpdate(ctx context.Context) e
 
 func (m *VendorRiskScoreMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -27083,8 +28291,19 @@ func (m *VendorRiskScoreMutation) CreateHistoryFromDelete(ctx context.Context) e
 	return nil
 }
 
+func (m *VendorScoringConfigMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *VendorScoringConfigMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -27154,6 +28373,9 @@ func (m *VendorScoringConfigMutation) CreateHistoryFromCreate(ctx context.Contex
 
 func (m *VendorScoringConfigMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -27260,6 +28482,9 @@ func (m *VendorScoringConfigMutation) CreateHistoryFromUpdate(ctx context.Contex
 
 func (m *VendorScoringConfigMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -27306,8 +28531,19 @@ func (m *VendorScoringConfigMutation) CreateHistoryFromDelete(ctx context.Contex
 	return nil
 }
 
+func (m *VulnerabilityMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *VulnerabilityMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -27601,6 +28837,9 @@ func (m *VulnerabilityMutation) CreateHistoryFromCreate(ctx context.Context) err
 
 func (m *VulnerabilityMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -28043,6 +29282,9 @@ func (m *VulnerabilityMutation) CreateHistoryFromUpdate(ctx context.Context) err
 
 func (m *VulnerabilityMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -28145,8 +29387,19 @@ func (m *VulnerabilityMutation) CreateHistoryFromDelete(ctx context.Context) err
 	return nil
 }
 
+func (m *WorkflowAssignmentMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *WorkflowAssignmentMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -28272,6 +29525,9 @@ func (m *WorkflowAssignmentMutation) CreateHistoryFromCreate(ctx context.Context
 
 func (m *WorkflowAssignmentMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -28462,6 +29718,9 @@ func (m *WorkflowAssignmentMutation) CreateHistoryFromUpdate(ctx context.Context
 
 func (m *WorkflowAssignmentMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -28522,8 +29781,19 @@ func (m *WorkflowAssignmentMutation) CreateHistoryFromDelete(ctx context.Context
 	return nil
 }
 
+func (m *WorkflowAssignmentTargetMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *WorkflowAssignmentTargetMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -28605,6 +29875,9 @@ func (m *WorkflowAssignmentTargetMutation) CreateHistoryFromCreate(ctx context.C
 
 func (m *WorkflowAssignmentTargetMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -28729,6 +30002,9 @@ func (m *WorkflowAssignmentTargetMutation) CreateHistoryFromUpdate(ctx context.C
 
 func (m *WorkflowAssignmentTargetMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -28778,8 +30054,19 @@ func (m *WorkflowAssignmentTargetMutation) CreateHistoryFromDelete(ctx context.C
 	return nil
 }
 
+func (m *WorkflowDefinitionMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *WorkflowDefinitionMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -28921,6 +30208,9 @@ func (m *WorkflowDefinitionMutation) CreateHistoryFromCreate(ctx context.Context
 
 func (m *WorkflowDefinitionMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -29135,6 +30425,9 @@ func (m *WorkflowDefinitionMutation) CreateHistoryFromUpdate(ctx context.Context
 
 func (m *WorkflowDefinitionMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -29199,8 +30492,19 @@ func (m *WorkflowDefinitionMutation) CreateHistoryFromDelete(ctx context.Context
 	return nil
 }
 
+func (m *WorkflowEventMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *WorkflowEventMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -29274,6 +30578,9 @@ func (m *WorkflowEventMutation) CreateHistoryFromCreate(ctx context.Context) err
 
 func (m *WorkflowEventMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -29386,6 +30693,9 @@ func (m *WorkflowEventMutation) CreateHistoryFromUpdate(ctx context.Context) err
 
 func (m *WorkflowEventMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -29433,8 +30743,19 @@ func (m *WorkflowEventMutation) CreateHistoryFromDelete(ctx context.Context) err
 	return nil
 }
 
+func (m *WorkflowInstanceMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *WorkflowInstanceMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -29596,6 +30917,9 @@ func (m *WorkflowInstanceMutation) CreateHistoryFromCreate(ctx context.Context) 
 
 func (m *WorkflowInstanceMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -29840,6 +31164,9 @@ func (m *WorkflowInstanceMutation) CreateHistoryFromUpdate(ctx context.Context) 
 
 func (m *WorkflowInstanceMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -29909,8 +31236,19 @@ func (m *WorkflowInstanceMutation) CreateHistoryFromDelete(ctx context.Context) 
 	return nil
 }
 
+func (m *WorkflowObjectRefMutation) skipper(ctx context.Context) bool {
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *WorkflowObjectRefMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -30044,6 +31382,9 @@ func (m *WorkflowObjectRefMutation) CreateHistoryFromCreate(ctx context.Context)
 
 func (m *WorkflowObjectRefMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -30246,6 +31587,9 @@ func (m *WorkflowObjectRefMutation) CreateHistoryFromUpdate(ctx context.Context)
 
 func (m *WorkflowObjectRefMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
