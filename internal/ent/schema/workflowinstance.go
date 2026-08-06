@@ -13,6 +13,7 @@ import (
 
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/entx/history"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
@@ -320,6 +321,9 @@ func (WorkflowInstance) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
 		entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+		history.Annotations{
+			Exclude: true,
+		},
 	}
 }
 

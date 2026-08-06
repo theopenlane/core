@@ -11,17 +11,12 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/assethistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/campaignhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/campaigntargethistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/checkresulthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/contacthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/controlhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/controlimplementationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/controlobjectivehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/customdomainhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/directoryaccounthistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/directorygrouphistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/directorymembershiphistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/discussionhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/documentdatahistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/emailtemplatehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/entityhistory"
@@ -35,7 +30,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/groupsettinghistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/hushhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/identityholderhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/integrationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/internalpolicyhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/jobtemplatehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/mappabledomainhistory"
@@ -47,7 +41,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/organizationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/organizationsettinghistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/orgmembershiphistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/orgsubscriptionhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/platformhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/procedurehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/programhistory"
@@ -55,7 +48,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/remediationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/reviewhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/riskhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/scanhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/scheduledjobhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/sladefinitionhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/standardhistory"
@@ -81,9 +73,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/workflowassignmenthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/workflowassignmenttargethistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/workflowdefinitionhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/workfloweventhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/workflowinstancehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/workflowobjectrefhistory"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -93,7 +82,7 @@ import (
 
 // schemaGraph holds a representation of ent/schema at runtime.
 var schemaGraph = func() *sqlgraph.Schema {
-	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 79)}
+	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 68)}
 	graph.Nodes[0] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   actionplanhistory.Table,
@@ -402,37 +391,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 	}
 	graph.Nodes[6] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
-			Table:   checkresulthistory.Table,
-			Columns: checkresulthistory.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeString,
-				Column: checkresulthistory.FieldID,
-			},
-		},
-		Type: "CheckResultHistory",
-		Fields: map[string]*sqlgraph.FieldSpec{
-			checkresulthistory.FieldHistoryTime:           {Type: field.TypeTime, Column: checkresulthistory.FieldHistoryTime},
-			checkresulthistory.FieldRef:                   {Type: field.TypeString, Column: checkresulthistory.FieldRef},
-			checkresulthistory.FieldOperation:             {Type: field.TypeEnum, Column: checkresulthistory.FieldOperation},
-			checkresulthistory.FieldCreatedAt:             {Type: field.TypeTime, Column: checkresulthistory.FieldCreatedAt},
-			checkresulthistory.FieldUpdatedAt:             {Type: field.TypeTime, Column: checkresulthistory.FieldUpdatedAt},
-			checkresulthistory.FieldCreatedBy:             {Type: field.TypeString, Column: checkresulthistory.FieldCreatedBy},
-			checkresulthistory.FieldUpdatedBy:             {Type: field.TypeString, Column: checkresulthistory.FieldUpdatedBy},
-			checkresulthistory.FieldUpdatedByImpersonator: {Type: field.TypeString, Column: checkresulthistory.FieldUpdatedByImpersonator},
-			checkresulthistory.FieldDeletedAt:             {Type: field.TypeTime, Column: checkresulthistory.FieldDeletedAt},
-			checkresulthistory.FieldDeletedBy:             {Type: field.TypeString, Column: checkresulthistory.FieldDeletedBy},
-			checkresulthistory.FieldTags:                  {Type: field.TypeJSON, Column: checkresulthistory.FieldTags},
-			checkresulthistory.FieldStatus:                {Type: field.TypeEnum, Column: checkresulthistory.FieldStatus},
-			checkresulthistory.FieldSource:                {Type: field.TypeString, Column: checkresulthistory.FieldSource},
-			checkresulthistory.FieldLastObservedAt:        {Type: field.TypeTime, Column: checkresulthistory.FieldLastObservedAt},
-			checkresulthistory.FieldExternalURI:           {Type: field.TypeString, Column: checkresulthistory.FieldExternalURI},
-			checkresulthistory.FieldDetails:               {Type: field.TypeString, Column: checkresulthistory.FieldDetails},
-			checkresulthistory.FieldParentExternalID:      {Type: field.TypeString, Column: checkresulthistory.FieldParentExternalID},
-			checkresulthistory.FieldIntegrationID:         {Type: field.TypeString, Column: checkresulthistory.FieldIntegrationID},
-		},
-	}
-	graph.Nodes[7] = &sqlgraph.Node{
-		NodeSpec: sqlgraph.NodeSpec{
 			Table:   contacthistory.Table,
 			Columns: contacthistory.Columns,
 			ID: &sqlgraph.FieldSpec{
@@ -466,7 +424,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			contacthistory.FieldObservedAt:            {Type: field.TypeTime, Column: contacthistory.FieldObservedAt},
 		},
 	}
-	graph.Nodes[8] = &sqlgraph.Node{
+	graph.Nodes[7] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   controlhistory.Table,
 			Columns: controlhistory.Columns,
@@ -536,7 +494,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			controlhistory.FieldIsTrustCenterControl:       {Type: field.TypeBool, Column: controlhistory.FieldIsTrustCenterControl},
 		},
 	}
-	graph.Nodes[9] = &sqlgraph.Node{
+	graph.Nodes[8] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   controlimplementationhistory.Table,
 			Columns: controlimplementationhistory.Columns,
@@ -570,7 +528,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			controlimplementationhistory.FieldDetailsJSON:           {Type: field.TypeJSON, Column: controlimplementationhistory.FieldDetailsJSON},
 		},
 	}
-	graph.Nodes[10] = &sqlgraph.Node{
+	graph.Nodes[9] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   controlobjectivehistory.Table,
 			Columns: controlobjectivehistory.Columns,
@@ -608,7 +566,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			controlobjectivehistory.FieldSubcategory:           {Type: field.TypeString, Column: controlobjectivehistory.FieldSubcategory},
 		},
 	}
-	graph.Nodes[11] = &sqlgraph.Node{
+	graph.Nodes[10] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   customdomainhistory.Table,
 			Columns: customdomainhistory.Columns,
@@ -641,199 +599,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			customdomainhistory.FieldDomainType:            {Type: field.TypeEnum, Column: customdomainhistory.FieldDomainType},
 		},
 	}
-	graph.Nodes[12] = &sqlgraph.Node{
-		NodeSpec: sqlgraph.NodeSpec{
-			Table:   dnsverificationhistory.Table,
-			Columns: dnsverificationhistory.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeString,
-				Column: dnsverificationhistory.FieldID,
-			},
-		},
-		Type: "DNSVerificationHistory",
-		Fields: map[string]*sqlgraph.FieldSpec{
-			dnsverificationhistory.FieldHistoryTime:                 {Type: field.TypeTime, Column: dnsverificationhistory.FieldHistoryTime},
-			dnsverificationhistory.FieldRef:                         {Type: field.TypeString, Column: dnsverificationhistory.FieldRef},
-			dnsverificationhistory.FieldOperation:                   {Type: field.TypeEnum, Column: dnsverificationhistory.FieldOperation},
-			dnsverificationhistory.FieldCreatedAt:                   {Type: field.TypeTime, Column: dnsverificationhistory.FieldCreatedAt},
-			dnsverificationhistory.FieldUpdatedAt:                   {Type: field.TypeTime, Column: dnsverificationhistory.FieldUpdatedAt},
-			dnsverificationhistory.FieldCreatedBy:                   {Type: field.TypeString, Column: dnsverificationhistory.FieldCreatedBy},
-			dnsverificationhistory.FieldUpdatedBy:                   {Type: field.TypeString, Column: dnsverificationhistory.FieldUpdatedBy},
-			dnsverificationhistory.FieldUpdatedByImpersonator:       {Type: field.TypeString, Column: dnsverificationhistory.FieldUpdatedByImpersonator},
-			dnsverificationhistory.FieldDeletedAt:                   {Type: field.TypeTime, Column: dnsverificationhistory.FieldDeletedAt},
-			dnsverificationhistory.FieldDeletedBy:                   {Type: field.TypeString, Column: dnsverificationhistory.FieldDeletedBy},
-			dnsverificationhistory.FieldTags:                        {Type: field.TypeJSON, Column: dnsverificationhistory.FieldTags},
-			dnsverificationhistory.FieldOwnerID:                     {Type: field.TypeString, Column: dnsverificationhistory.FieldOwnerID},
-			dnsverificationhistory.FieldCloudflareHostnameID:        {Type: field.TypeString, Column: dnsverificationhistory.FieldCloudflareHostnameID},
-			dnsverificationhistory.FieldDNSTxtRecord:                {Type: field.TypeString, Column: dnsverificationhistory.FieldDNSTxtRecord},
-			dnsverificationhistory.FieldDNSTxtValue:                 {Type: field.TypeString, Column: dnsverificationhistory.FieldDNSTxtValue},
-			dnsverificationhistory.FieldDNSVerificationStatus:       {Type: field.TypeEnum, Column: dnsverificationhistory.FieldDNSVerificationStatus},
-			dnsverificationhistory.FieldDNSVerificationStatusReason: {Type: field.TypeString, Column: dnsverificationhistory.FieldDNSVerificationStatusReason},
-			dnsverificationhistory.FieldAcmeChallengePath:           {Type: field.TypeString, Column: dnsverificationhistory.FieldAcmeChallengePath},
-			dnsverificationhistory.FieldExpectedAcmeChallengeValue:  {Type: field.TypeString, Column: dnsverificationhistory.FieldExpectedAcmeChallengeValue},
-			dnsverificationhistory.FieldAcmeChallengeStatus:         {Type: field.TypeEnum, Column: dnsverificationhistory.FieldAcmeChallengeStatus},
-			dnsverificationhistory.FieldAcmeChallengeStatusReason:   {Type: field.TypeString, Column: dnsverificationhistory.FieldAcmeChallengeStatusReason},
-		},
-	}
-	graph.Nodes[13] = &sqlgraph.Node{
-		NodeSpec: sqlgraph.NodeSpec{
-			Table:   directoryaccounthistory.Table,
-			Columns: directoryaccounthistory.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeString,
-				Column: directoryaccounthistory.FieldID,
-			},
-		},
-		Type: "DirectoryAccountHistory",
-		Fields: map[string]*sqlgraph.FieldSpec{
-			directoryaccounthistory.FieldHistoryTime:           {Type: field.TypeTime, Column: directoryaccounthistory.FieldHistoryTime},
-			directoryaccounthistory.FieldRef:                   {Type: field.TypeString, Column: directoryaccounthistory.FieldRef},
-			directoryaccounthistory.FieldOperation:             {Type: field.TypeEnum, Column: directoryaccounthistory.FieldOperation},
-			directoryaccounthistory.FieldCreatedAt:             {Type: field.TypeTime, Column: directoryaccounthistory.FieldCreatedAt},
-			directoryaccounthistory.FieldUpdatedAt:             {Type: field.TypeTime, Column: directoryaccounthistory.FieldUpdatedAt},
-			directoryaccounthistory.FieldCreatedBy:             {Type: field.TypeString, Column: directoryaccounthistory.FieldCreatedBy},
-			directoryaccounthistory.FieldUpdatedBy:             {Type: field.TypeString, Column: directoryaccounthistory.FieldUpdatedBy},
-			directoryaccounthistory.FieldUpdatedByImpersonator: {Type: field.TypeString, Column: directoryaccounthistory.FieldUpdatedByImpersonator},
-			directoryaccounthistory.FieldDisplayID:             {Type: field.TypeString, Column: directoryaccounthistory.FieldDisplayID},
-			directoryaccounthistory.FieldTags:                  {Type: field.TypeJSON, Column: directoryaccounthistory.FieldTags},
-			directoryaccounthistory.FieldOwnerID:               {Type: field.TypeString, Column: directoryaccounthistory.FieldOwnerID},
-			directoryaccounthistory.FieldEnvironmentName:       {Type: field.TypeString, Column: directoryaccounthistory.FieldEnvironmentName},
-			directoryaccounthistory.FieldEnvironmentID:         {Type: field.TypeString, Column: directoryaccounthistory.FieldEnvironmentID},
-			directoryaccounthistory.FieldScopeName:             {Type: field.TypeString, Column: directoryaccounthistory.FieldScopeName},
-			directoryaccounthistory.FieldScopeID:               {Type: field.TypeString, Column: directoryaccounthistory.FieldScopeID},
-			directoryaccounthistory.FieldIntegrationID:         {Type: field.TypeString, Column: directoryaccounthistory.FieldIntegrationID},
-			directoryaccounthistory.FieldDirectorySyncRunID:    {Type: field.TypeString, Column: directoryaccounthistory.FieldDirectorySyncRunID},
-			directoryaccounthistory.FieldPlatformID:            {Type: field.TypeString, Column: directoryaccounthistory.FieldPlatformID},
-			directoryaccounthistory.FieldDirectoryInstanceID:   {Type: field.TypeString, Column: directoryaccounthistory.FieldDirectoryInstanceID},
-			directoryaccounthistory.FieldIdentityHolderID:      {Type: field.TypeString, Column: directoryaccounthistory.FieldIdentityHolderID},
-			directoryaccounthistory.FieldDirectoryName:         {Type: field.TypeString, Column: directoryaccounthistory.FieldDirectoryName},
-			directoryaccounthistory.FieldExternalID:            {Type: field.TypeString, Column: directoryaccounthistory.FieldExternalID},
-			directoryaccounthistory.FieldSecondaryKey:          {Type: field.TypeString, Column: directoryaccounthistory.FieldSecondaryKey},
-			directoryaccounthistory.FieldCanonicalEmail:        {Type: field.TypeString, Column: directoryaccounthistory.FieldCanonicalEmail},
-			directoryaccounthistory.FieldEmailAliases:          {Type: field.TypeJSON, Column: directoryaccounthistory.FieldEmailAliases},
-			directoryaccounthistory.FieldPhoneNumber:           {Type: field.TypeString, Column: directoryaccounthistory.FieldPhoneNumber},
-			directoryaccounthistory.FieldDisplayName:           {Type: field.TypeString, Column: directoryaccounthistory.FieldDisplayName},
-			directoryaccounthistory.FieldAvatarRemoteURL:       {Type: field.TypeString, Column: directoryaccounthistory.FieldAvatarRemoteURL},
-			directoryaccounthistory.FieldAvatarLocalFileID:     {Type: field.TypeString, Column: directoryaccounthistory.FieldAvatarLocalFileID},
-			directoryaccounthistory.FieldAvatarUpdatedAt:       {Type: field.TypeTime, Column: directoryaccounthistory.FieldAvatarUpdatedAt},
-			directoryaccounthistory.FieldGivenName:             {Type: field.TypeString, Column: directoryaccounthistory.FieldGivenName},
-			directoryaccounthistory.FieldFamilyName:            {Type: field.TypeString, Column: directoryaccounthistory.FieldFamilyName},
-			directoryaccounthistory.FieldJobTitle:              {Type: field.TypeString, Column: directoryaccounthistory.FieldJobTitle},
-			directoryaccounthistory.FieldDepartment:            {Type: field.TypeString, Column: directoryaccounthistory.FieldDepartment},
-			directoryaccounthistory.FieldOrganizationUnit:      {Type: field.TypeString, Column: directoryaccounthistory.FieldOrganizationUnit},
-			directoryaccounthistory.FieldAccountType:           {Type: field.TypeEnum, Column: directoryaccounthistory.FieldAccountType},
-			directoryaccounthistory.FieldStatus:                {Type: field.TypeEnum, Column: directoryaccounthistory.FieldStatus},
-			directoryaccounthistory.FieldMfaState:              {Type: field.TypeEnum, Column: directoryaccounthistory.FieldMfaState},
-			directoryaccounthistory.FieldLastSeenIP:            {Type: field.TypeString, Column: directoryaccounthistory.FieldLastSeenIP},
-			directoryaccounthistory.FieldLastLoginAt:           {Type: field.TypeTime, Column: directoryaccounthistory.FieldLastLoginAt},
-			directoryaccounthistory.FieldFirstSeenAt:           {Type: field.TypeTime, Column: directoryaccounthistory.FieldFirstSeenAt},
-			directoryaccounthistory.FieldLastSeenAt:            {Type: field.TypeTime, Column: directoryaccounthistory.FieldLastSeenAt},
-			directoryaccounthistory.FieldAddedAt:               {Type: field.TypeTime, Column: directoryaccounthistory.FieldAddedAt},
-			directoryaccounthistory.FieldRemovedAt:             {Type: field.TypeTime, Column: directoryaccounthistory.FieldRemovedAt},
-			directoryaccounthistory.FieldObservedAt:            {Type: field.TypeTime, Column: directoryaccounthistory.FieldObservedAt},
-			directoryaccounthistory.FieldProfileHash:           {Type: field.TypeString, Column: directoryaccounthistory.FieldProfileHash},
-			directoryaccounthistory.FieldProfile:               {Type: field.TypeJSON, Column: directoryaccounthistory.FieldProfile},
-			directoryaccounthistory.FieldMetadata:              {Type: field.TypeJSON, Column: directoryaccounthistory.FieldMetadata},
-			directoryaccounthistory.FieldRawProfileFileID:      {Type: field.TypeString, Column: directoryaccounthistory.FieldRawProfileFileID},
-			directoryaccounthistory.FieldSourceVersion:         {Type: field.TypeString, Column: directoryaccounthistory.FieldSourceVersion},
-			directoryaccounthistory.FieldPrimarySource:         {Type: field.TypeBool, Column: directoryaccounthistory.FieldPrimarySource},
-		},
-	}
-	graph.Nodes[14] = &sqlgraph.Node{
-		NodeSpec: sqlgraph.NodeSpec{
-			Table:   directorygrouphistory.Table,
-			Columns: directorygrouphistory.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeString,
-				Column: directorygrouphistory.FieldID,
-			},
-		},
-		Type: "DirectoryGroupHistory",
-		Fields: map[string]*sqlgraph.FieldSpec{
-			directorygrouphistory.FieldHistoryTime:            {Type: field.TypeTime, Column: directorygrouphistory.FieldHistoryTime},
-			directorygrouphistory.FieldRef:                    {Type: field.TypeString, Column: directorygrouphistory.FieldRef},
-			directorygrouphistory.FieldOperation:              {Type: field.TypeEnum, Column: directorygrouphistory.FieldOperation},
-			directorygrouphistory.FieldCreatedAt:              {Type: field.TypeTime, Column: directorygrouphistory.FieldCreatedAt},
-			directorygrouphistory.FieldUpdatedAt:              {Type: field.TypeTime, Column: directorygrouphistory.FieldUpdatedAt},
-			directorygrouphistory.FieldCreatedBy:              {Type: field.TypeString, Column: directorygrouphistory.FieldCreatedBy},
-			directorygrouphistory.FieldUpdatedBy:              {Type: field.TypeString, Column: directorygrouphistory.FieldUpdatedBy},
-			directorygrouphistory.FieldUpdatedByImpersonator:  {Type: field.TypeString, Column: directorygrouphistory.FieldUpdatedByImpersonator},
-			directorygrouphistory.FieldDisplayID:              {Type: field.TypeString, Column: directorygrouphistory.FieldDisplayID},
-			directorygrouphistory.FieldTags:                   {Type: field.TypeJSON, Column: directorygrouphistory.FieldTags},
-			directorygrouphistory.FieldOwnerID:                {Type: field.TypeString, Column: directorygrouphistory.FieldOwnerID},
-			directorygrouphistory.FieldEnvironmentName:        {Type: field.TypeString, Column: directorygrouphistory.FieldEnvironmentName},
-			directorygrouphistory.FieldEnvironmentID:          {Type: field.TypeString, Column: directorygrouphistory.FieldEnvironmentID},
-			directorygrouphistory.FieldScopeName:              {Type: field.TypeString, Column: directorygrouphistory.FieldScopeName},
-			directorygrouphistory.FieldScopeID:                {Type: field.TypeString, Column: directorygrouphistory.FieldScopeID},
-			directorygrouphistory.FieldIntegrationID:          {Type: field.TypeString, Column: directorygrouphistory.FieldIntegrationID},
-			directorygrouphistory.FieldPlatformID:             {Type: field.TypeString, Column: directorygrouphistory.FieldPlatformID},
-			directorygrouphistory.FieldDirectoryInstanceID:    {Type: field.TypeString, Column: directorygrouphistory.FieldDirectoryInstanceID},
-			directorygrouphistory.FieldDirectorySyncRunID:     {Type: field.TypeString, Column: directorygrouphistory.FieldDirectorySyncRunID},
-			directorygrouphistory.FieldExternalID:             {Type: field.TypeString, Column: directorygrouphistory.FieldExternalID},
-			directorygrouphistory.FieldEmail:                  {Type: field.TypeString, Column: directorygrouphistory.FieldEmail},
-			directorygrouphistory.FieldDisplayName:            {Type: field.TypeString, Column: directorygrouphistory.FieldDisplayName},
-			directorygrouphistory.FieldDescription:            {Type: field.TypeString, Column: directorygrouphistory.FieldDescription},
-			directorygrouphistory.FieldClassification:         {Type: field.TypeEnum, Column: directorygrouphistory.FieldClassification},
-			directorygrouphistory.FieldStatus:                 {Type: field.TypeEnum, Column: directorygrouphistory.FieldStatus},
-			directorygrouphistory.FieldExternalSharingAllowed: {Type: field.TypeBool, Column: directorygrouphistory.FieldExternalSharingAllowed},
-			directorygrouphistory.FieldMemberCount:            {Type: field.TypeInt, Column: directorygrouphistory.FieldMemberCount},
-			directorygrouphistory.FieldFirstSeenAt:            {Type: field.TypeTime, Column: directorygrouphistory.FieldFirstSeenAt},
-			directorygrouphistory.FieldLastSeenAt:             {Type: field.TypeTime, Column: directorygrouphistory.FieldLastSeenAt},
-			directorygrouphistory.FieldAddedAt:                {Type: field.TypeTime, Column: directorygrouphistory.FieldAddedAt},
-			directorygrouphistory.FieldRemovedAt:              {Type: field.TypeTime, Column: directorygrouphistory.FieldRemovedAt},
-			directorygrouphistory.FieldObservedAt:             {Type: field.TypeTime, Column: directorygrouphistory.FieldObservedAt},
-			directorygrouphistory.FieldProfileHash:            {Type: field.TypeString, Column: directorygrouphistory.FieldProfileHash},
-			directorygrouphistory.FieldProfile:                {Type: field.TypeJSON, Column: directorygrouphistory.FieldProfile},
-			directorygrouphistory.FieldMetadata:               {Type: field.TypeJSON, Column: directorygrouphistory.FieldMetadata},
-			directorygrouphistory.FieldRawProfileFileID:       {Type: field.TypeString, Column: directorygrouphistory.FieldRawProfileFileID},
-			directorygrouphistory.FieldSourceVersion:          {Type: field.TypeString, Column: directorygrouphistory.FieldSourceVersion},
-			directorygrouphistory.FieldDirectoryName:          {Type: field.TypeString, Column: directorygrouphistory.FieldDirectoryName},
-		},
-	}
-	graph.Nodes[15] = &sqlgraph.Node{
-		NodeSpec: sqlgraph.NodeSpec{
-			Table:   directorymembershiphistory.Table,
-			Columns: directorymembershiphistory.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeString,
-				Column: directorymembershiphistory.FieldID,
-			},
-		},
-		Type: "DirectoryMembershipHistory",
-		Fields: map[string]*sqlgraph.FieldSpec{
-			directorymembershiphistory.FieldHistoryTime:           {Type: field.TypeTime, Column: directorymembershiphistory.FieldHistoryTime},
-			directorymembershiphistory.FieldRef:                   {Type: field.TypeString, Column: directorymembershiphistory.FieldRef},
-			directorymembershiphistory.FieldOperation:             {Type: field.TypeEnum, Column: directorymembershiphistory.FieldOperation},
-			directorymembershiphistory.FieldCreatedAt:             {Type: field.TypeTime, Column: directorymembershiphistory.FieldCreatedAt},
-			directorymembershiphistory.FieldUpdatedAt:             {Type: field.TypeTime, Column: directorymembershiphistory.FieldUpdatedAt},
-			directorymembershiphistory.FieldCreatedBy:             {Type: field.TypeString, Column: directorymembershiphistory.FieldCreatedBy},
-			directorymembershiphistory.FieldUpdatedBy:             {Type: field.TypeString, Column: directorymembershiphistory.FieldUpdatedBy},
-			directorymembershiphistory.FieldUpdatedByImpersonator: {Type: field.TypeString, Column: directorymembershiphistory.FieldUpdatedByImpersonator},
-			directorymembershiphistory.FieldDisplayID:             {Type: field.TypeString, Column: directorymembershiphistory.FieldDisplayID},
-			directorymembershiphistory.FieldOwnerID:               {Type: field.TypeString, Column: directorymembershiphistory.FieldOwnerID},
-			directorymembershiphistory.FieldEnvironmentName:       {Type: field.TypeString, Column: directorymembershiphistory.FieldEnvironmentName},
-			directorymembershiphistory.FieldEnvironmentID:         {Type: field.TypeString, Column: directorymembershiphistory.FieldEnvironmentID},
-			directorymembershiphistory.FieldScopeName:             {Type: field.TypeString, Column: directorymembershiphistory.FieldScopeName},
-			directorymembershiphistory.FieldScopeID:               {Type: field.TypeString, Column: directorymembershiphistory.FieldScopeID},
-			directorymembershiphistory.FieldIntegrationID:         {Type: field.TypeString, Column: directorymembershiphistory.FieldIntegrationID},
-			directorymembershiphistory.FieldPlatformID:            {Type: field.TypeString, Column: directorymembershiphistory.FieldPlatformID},
-			directorymembershiphistory.FieldDirectoryInstanceID:   {Type: field.TypeString, Column: directorymembershiphistory.FieldDirectoryInstanceID},
-			directorymembershiphistory.FieldDirectorySyncRunID:    {Type: field.TypeString, Column: directorymembershiphistory.FieldDirectorySyncRunID},
-			directorymembershiphistory.FieldDirectoryAccountID:    {Type: field.TypeString, Column: directorymembershiphistory.FieldDirectoryAccountID},
-			directorymembershiphistory.FieldDirectoryGroupID:      {Type: field.TypeString, Column: directorymembershiphistory.FieldDirectoryGroupID},
-			directorymembershiphistory.FieldRole:                  {Type: field.TypeEnum, Column: directorymembershiphistory.FieldRole},
-			directorymembershiphistory.FieldSource:                {Type: field.TypeString, Column: directorymembershiphistory.FieldSource},
-			directorymembershiphistory.FieldDirectoryName:         {Type: field.TypeString, Column: directorymembershiphistory.FieldDirectoryName},
-			directorymembershiphistory.FieldFirstSeenAt:           {Type: field.TypeTime, Column: directorymembershiphistory.FieldFirstSeenAt},
-			directorymembershiphistory.FieldLastSeenAt:            {Type: field.TypeTime, Column: directorymembershiphistory.FieldLastSeenAt},
-			directorymembershiphistory.FieldAddedAt:               {Type: field.TypeTime, Column: directorymembershiphistory.FieldAddedAt},
-			directorymembershiphistory.FieldRemovedAt:             {Type: field.TypeTime, Column: directorymembershiphistory.FieldRemovedAt},
-			directorymembershiphistory.FieldObservedAt:            {Type: field.TypeTime, Column: directorymembershiphistory.FieldObservedAt},
-			directorymembershiphistory.FieldLastConfirmedRunID:    {Type: field.TypeString, Column: directorymembershiphistory.FieldLastConfirmedRunID},
-			directorymembershiphistory.FieldMetadata:              {Type: field.TypeJSON, Column: directorymembershiphistory.FieldMetadata},
-		},
-	}
-	graph.Nodes[16] = &sqlgraph.Node{
+	graph.Nodes[11] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   discussionhistory.Table,
 			Columns: discussionhistory.Columns,
@@ -859,7 +625,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			discussionhistory.FieldIsResolved:            {Type: field.TypeBool, Column: discussionhistory.FieldIsResolved},
 		},
 	}
-	graph.Nodes[17] = &sqlgraph.Node{
+	graph.Nodes[12] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   documentdatahistory.Table,
 			Columns: documentdatahistory.Columns,
@@ -890,7 +656,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			documentdatahistory.FieldData:                  {Type: field.TypeJSON, Column: documentdatahistory.FieldData},
 		},
 	}
-	graph.Nodes[18] = &sqlgraph.Node{
+	graph.Nodes[13] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   emailtemplatehistory.Table,
 			Columns: emailtemplatehistory.Columns,
@@ -938,7 +704,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			emailtemplatehistory.FieldTrustCenterID:         {Type: field.TypeString, Column: emailtemplatehistory.FieldTrustCenterID},
 		},
 	}
-	graph.Nodes[19] = &sqlgraph.Node{
+	graph.Nodes[14] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   entityhistory.Table,
 			Columns: entityhistory.Columns,
@@ -1020,7 +786,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			entityhistory.FieldObservedAt:                            {Type: field.TypeTime, Column: entityhistory.FieldObservedAt},
 		},
 	}
-	graph.Nodes[20] = &sqlgraph.Node{
+	graph.Nodes[15] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   entitytypehistory.Table,
 			Columns: entitytypehistory.Columns,
@@ -1049,7 +815,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			entitytypehistory.FieldName:                  {Type: field.TypeString, Column: entitytypehistory.FieldName},
 		},
 	}
-	graph.Nodes[21] = &sqlgraph.Node{
+	graph.Nodes[16] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   evidencehistory.Table,
 			Columns: evidencehistory.Columns,
@@ -1091,7 +857,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			evidencehistory.FieldReviewFrequency:        {Type: field.TypeEnum, Column: evidencehistory.FieldReviewFrequency},
 		},
 	}
-	graph.Nodes[22] = &sqlgraph.Node{
+	graph.Nodes[17] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   filehistory.Table,
 			Columns: filehistory.Columns,
@@ -1143,7 +909,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			filehistory.FieldLastAccessedAt:        {Type: field.TypeTime, Column: filehistory.FieldLastAccessedAt},
 		},
 	}
-	graph.Nodes[23] = &sqlgraph.Node{
+	graph.Nodes[18] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   findingcontrolhistory.Table,
 			Columns: findingcontrolhistory.Columns,
@@ -1174,7 +940,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			findingcontrolhistory.FieldDiscoveredAt:            {Type: field.TypeTime, Column: findingcontrolhistory.FieldDiscoveredAt},
 		},
 	}
-	graph.Nodes[24] = &sqlgraph.Node{
+	graph.Nodes[19] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   findinghistory.Table,
 			Columns: findinghistory.Columns,
@@ -1253,7 +1019,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			findinghistory.FieldRawPayload:             {Type: field.TypeJSON, Column: findinghistory.FieldRawPayload},
 		},
 	}
-	graph.Nodes[25] = &sqlgraph.Node{
+	graph.Nodes[20] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   grouphistory.Table,
 			Columns: grouphistory.Columns,
@@ -1293,7 +1059,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			grouphistory.FieldScimGroupMailing:      {Type: field.TypeString, Column: grouphistory.FieldScimGroupMailing},
 		},
 	}
-	graph.Nodes[26] = &sqlgraph.Node{
+	graph.Nodes[21] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   groupmembershiphistory.Table,
 			Columns: groupmembershiphistory.Columns,
@@ -1317,7 +1083,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			groupmembershiphistory.FieldUserID:                {Type: field.TypeString, Column: groupmembershiphistory.FieldUserID},
 		},
 	}
-	graph.Nodes[27] = &sqlgraph.Node{
+	graph.Nodes[22] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   groupsettinghistory.Table,
 			Columns: groupsettinghistory.Columns,
@@ -1345,7 +1111,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			groupsettinghistory.FieldGroupID:               {Type: field.TypeString, Column: groupsettinghistory.FieldGroupID},
 		},
 	}
-	graph.Nodes[28] = &sqlgraph.Node{
+	graph.Nodes[23] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   hushhistory.Table,
 			Columns: hushhistory.Columns,
@@ -1381,7 +1147,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			hushhistory.FieldExpiresAt:             {Type: field.TypeTime, Column: hushhistory.FieldExpiresAt},
 		},
 	}
-	graph.Nodes[29] = &sqlgraph.Node{
+	graph.Nodes[24] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   identityholderhistory.Table,
 			Columns: identityholderhistory.Columns,
@@ -1436,57 +1202,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			identityholderhistory.FieldAvatarRemoteURL:        {Type: field.TypeString, Column: identityholderhistory.FieldAvatarRemoteURL},
 		},
 	}
-	graph.Nodes[30] = &sqlgraph.Node{
-		NodeSpec: sqlgraph.NodeSpec{
-			Table:   integrationhistory.Table,
-			Columns: integrationhistory.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeString,
-				Column: integrationhistory.FieldID,
-			},
-		},
-		Type: "IntegrationHistory",
-		Fields: map[string]*sqlgraph.FieldSpec{
-			integrationhistory.FieldHistoryTime:              {Type: field.TypeTime, Column: integrationhistory.FieldHistoryTime},
-			integrationhistory.FieldRef:                      {Type: field.TypeString, Column: integrationhistory.FieldRef},
-			integrationhistory.FieldOperation:                {Type: field.TypeEnum, Column: integrationhistory.FieldOperation},
-			integrationhistory.FieldCreatedAt:                {Type: field.TypeTime, Column: integrationhistory.FieldCreatedAt},
-			integrationhistory.FieldUpdatedAt:                {Type: field.TypeTime, Column: integrationhistory.FieldUpdatedAt},
-			integrationhistory.FieldCreatedBy:                {Type: field.TypeString, Column: integrationhistory.FieldCreatedBy},
-			integrationhistory.FieldUpdatedBy:                {Type: field.TypeString, Column: integrationhistory.FieldUpdatedBy},
-			integrationhistory.FieldUpdatedByImpersonator:    {Type: field.TypeString, Column: integrationhistory.FieldUpdatedByImpersonator},
-			integrationhistory.FieldDeletedAt:                {Type: field.TypeTime, Column: integrationhistory.FieldDeletedAt},
-			integrationhistory.FieldDeletedBy:                {Type: field.TypeString, Column: integrationhistory.FieldDeletedBy},
-			integrationhistory.FieldTags:                     {Type: field.TypeJSON, Column: integrationhistory.FieldTags},
-			integrationhistory.FieldOwnerID:                  {Type: field.TypeString, Column: integrationhistory.FieldOwnerID},
-			integrationhistory.FieldSystemOwned:              {Type: field.TypeBool, Column: integrationhistory.FieldSystemOwned},
-			integrationhistory.FieldInternalNotes:            {Type: field.TypeString, Column: integrationhistory.FieldInternalNotes},
-			integrationhistory.FieldSystemInternalID:         {Type: field.TypeString, Column: integrationhistory.FieldSystemInternalID},
-			integrationhistory.FieldEnvironmentName:          {Type: field.TypeString, Column: integrationhistory.FieldEnvironmentName},
-			integrationhistory.FieldEnvironmentID:            {Type: field.TypeString, Column: integrationhistory.FieldEnvironmentID},
-			integrationhistory.FieldScopeName:                {Type: field.TypeString, Column: integrationhistory.FieldScopeName},
-			integrationhistory.FieldScopeID:                  {Type: field.TypeString, Column: integrationhistory.FieldScopeID},
-			integrationhistory.FieldName:                     {Type: field.TypeString, Column: integrationhistory.FieldName},
-			integrationhistory.FieldDescription:              {Type: field.TypeString, Column: integrationhistory.FieldDescription},
-			integrationhistory.FieldKind:                     {Type: field.TypeString, Column: integrationhistory.FieldKind},
-			integrationhistory.FieldIntegrationType:          {Type: field.TypeString, Column: integrationhistory.FieldIntegrationType},
-			integrationhistory.FieldPlatformID:               {Type: field.TypeString, Column: integrationhistory.FieldPlatformID},
-			integrationhistory.FieldProviderMetadata:         {Type: field.TypeJSON, Column: integrationhistory.FieldProviderMetadata},
-			integrationhistory.FieldConfig:                   {Type: field.TypeJSON, Column: integrationhistory.FieldConfig},
-			integrationhistory.FieldInstallationMetadata:     {Type: field.TypeJSON, Column: integrationhistory.FieldInstallationMetadata},
-			integrationhistory.FieldProviderState:            {Type: field.TypeJSON, Column: integrationhistory.FieldProviderState},
-			integrationhistory.FieldMetadata:                 {Type: field.TypeJSON, Column: integrationhistory.FieldMetadata},
-			integrationhistory.FieldDefinitionID:             {Type: field.TypeString, Column: integrationhistory.FieldDefinitionID},
-			integrationhistory.FieldDefinitionVersion:        {Type: field.TypeString, Column: integrationhistory.FieldDefinitionVersion},
-			integrationhistory.FieldDefinitionSlug:           {Type: field.TypeString, Column: integrationhistory.FieldDefinitionSlug},
-			integrationhistory.FieldFamily:                   {Type: field.TypeString, Column: integrationhistory.FieldFamily},
-			integrationhistory.FieldStatus:                   {Type: field.TypeEnum, Column: integrationhistory.FieldStatus},
-			integrationhistory.FieldProviderMetadataSnapshot: {Type: field.TypeJSON, Column: integrationhistory.FieldProviderMetadataSnapshot},
-			integrationhistory.FieldPrimaryDirectory:         {Type: field.TypeBool, Column: integrationhistory.FieldPrimaryDirectory},
-			integrationhistory.FieldCampaignEmail:            {Type: field.TypeBool, Column: integrationhistory.FieldCampaignEmail},
-		},
-	}
-	graph.Nodes[31] = &sqlgraph.Node{
+	graph.Nodes[25] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   internalpolicyhistory.Table,
 			Columns: internalpolicyhistory.Columns,
@@ -1545,7 +1261,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			internalpolicyhistory.FieldExternalUUID:                    {Type: field.TypeString, Column: internalpolicyhistory.FieldExternalUUID},
 		},
 	}
-	graph.Nodes[32] = &sqlgraph.Node{
+	graph.Nodes[26] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   jobtemplatehistory.Table,
 			Columns: jobtemplatehistory.Columns,
@@ -1581,7 +1297,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			jobtemplatehistory.FieldCron:                  {Type: field.TypeString, Column: jobtemplatehistory.FieldCron},
 		},
 	}
-	graph.Nodes[33] = &sqlgraph.Node{
+	graph.Nodes[27] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   mappabledomainhistory.Table,
 			Columns: mappabledomainhistory.Columns,
@@ -1607,7 +1323,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			mappabledomainhistory.FieldZoneID:                {Type: field.TypeString, Column: mappabledomainhistory.FieldZoneID},
 		},
 	}
-	graph.Nodes[34] = &sqlgraph.Node{
+	graph.Nodes[28] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   mappedcontrolhistory.Table,
 			Columns: mappedcontrolhistory.Columns,
@@ -1639,7 +1355,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			mappedcontrolhistory.FieldSource:                {Type: field.TypeEnum, Column: mappedcontrolhistory.FieldSource},
 		},
 	}
-	graph.Nodes[35] = &sqlgraph.Node{
+	graph.Nodes[29] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   narrativehistory.Table,
 			Columns: narrativehistory.Columns,
@@ -1671,7 +1387,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			narrativehistory.FieldDetails:               {Type: field.TypeString, Column: narrativehistory.FieldDetails},
 		},
 	}
-	graph.Nodes[36] = &sqlgraph.Node{
+	graph.Nodes[30] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   notehistory.Table,
 			Columns: notehistory.Columns,
@@ -1705,7 +1421,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			notehistory.FieldNotifiedAt:            {Type: field.TypeTime, Column: notehistory.FieldNotifiedAt},
 		},
 	}
-	graph.Nodes[37] = &sqlgraph.Node{
+	graph.Nodes[31] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   notificationpreferencehistory.Table,
 			Columns: notificationpreferencehistory.Columns,
@@ -1750,7 +1466,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			notificationpreferencehistory.FieldMetadata:              {Type: field.TypeJSON, Column: notificationpreferencehistory.FieldMetadata},
 		},
 	}
-	graph.Nodes[38] = &sqlgraph.Node{
+	graph.Nodes[32] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   notificationtemplatehistory.Table,
 			Columns: notificationtemplatehistory.Columns,
@@ -1800,7 +1516,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			notificationtemplatehistory.FieldDefaults:              {Type: field.TypeJSON, Column: notificationtemplatehistory.FieldDefaults},
 		},
 	}
-	graph.Nodes[39] = &sqlgraph.Node{
+	graph.Nodes[33] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   orgmembershiphistory.Table,
 			Columns: orgmembershiphistory.Columns,
@@ -1828,38 +1544,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			orgmembershiphistory.FieldSSOExemptGrantedAt:    {Type: field.TypeTime, Column: orgmembershiphistory.FieldSSOExemptGrantedAt},
 		},
 	}
-	graph.Nodes[40] = &sqlgraph.Node{
-		NodeSpec: sqlgraph.NodeSpec{
-			Table:   orgsubscriptionhistory.Table,
-			Columns: orgsubscriptionhistory.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeString,
-				Column: orgsubscriptionhistory.FieldID,
-			},
-		},
-		Type: "OrgSubscriptionHistory",
-		Fields: map[string]*sqlgraph.FieldSpec{
-			orgsubscriptionhistory.FieldHistoryTime:              {Type: field.TypeTime, Column: orgsubscriptionhistory.FieldHistoryTime},
-			orgsubscriptionhistory.FieldRef:                      {Type: field.TypeString, Column: orgsubscriptionhistory.FieldRef},
-			orgsubscriptionhistory.FieldOperation:                {Type: field.TypeEnum, Column: orgsubscriptionhistory.FieldOperation},
-			orgsubscriptionhistory.FieldCreatedAt:                {Type: field.TypeTime, Column: orgsubscriptionhistory.FieldCreatedAt},
-			orgsubscriptionhistory.FieldUpdatedAt:                {Type: field.TypeTime, Column: orgsubscriptionhistory.FieldUpdatedAt},
-			orgsubscriptionhistory.FieldCreatedBy:                {Type: field.TypeString, Column: orgsubscriptionhistory.FieldCreatedBy},
-			orgsubscriptionhistory.FieldUpdatedBy:                {Type: field.TypeString, Column: orgsubscriptionhistory.FieldUpdatedBy},
-			orgsubscriptionhistory.FieldUpdatedByImpersonator:    {Type: field.TypeString, Column: orgsubscriptionhistory.FieldUpdatedByImpersonator},
-			orgsubscriptionhistory.FieldDeletedAt:                {Type: field.TypeTime, Column: orgsubscriptionhistory.FieldDeletedAt},
-			orgsubscriptionhistory.FieldDeletedBy:                {Type: field.TypeString, Column: orgsubscriptionhistory.FieldDeletedBy},
-			orgsubscriptionhistory.FieldTags:                     {Type: field.TypeJSON, Column: orgsubscriptionhistory.FieldTags},
-			orgsubscriptionhistory.FieldOwnerID:                  {Type: field.TypeString, Column: orgsubscriptionhistory.FieldOwnerID},
-			orgsubscriptionhistory.FieldStripeSubscriptionID:     {Type: field.TypeString, Column: orgsubscriptionhistory.FieldStripeSubscriptionID},
-			orgsubscriptionhistory.FieldStripeSubscriptionStatus: {Type: field.TypeString, Column: orgsubscriptionhistory.FieldStripeSubscriptionStatus},
-			orgsubscriptionhistory.FieldActive:                   {Type: field.TypeBool, Column: orgsubscriptionhistory.FieldActive},
-			orgsubscriptionhistory.FieldExpiresAt:                {Type: field.TypeTime, Column: orgsubscriptionhistory.FieldExpiresAt},
-			orgsubscriptionhistory.FieldTrialExpiresAt:           {Type: field.TypeTime, Column: orgsubscriptionhistory.FieldTrialExpiresAt},
-			orgsubscriptionhistory.FieldDaysUntilDue:             {Type: field.TypeString, Column: orgsubscriptionhistory.FieldDaysUntilDue},
-		},
-	}
-	graph.Nodes[41] = &sqlgraph.Node{
+	graph.Nodes[34] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   organizationhistory.Table,
 			Columns: organizationhistory.Columns,
@@ -1893,7 +1578,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationhistory.FieldSlugName:              {Type: field.TypeString, Column: organizationhistory.FieldSlugName},
 		},
 	}
-	graph.Nodes[42] = &sqlgraph.Node{
+	graph.Nodes[35] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   organizationsettinghistory.Table,
 			Columns: organizationsettinghistory.Columns,
@@ -1947,7 +1632,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationsettinghistory.FieldPendingDeletionAt:                {Type: field.TypeTime, Column: organizationsettinghistory.FieldPendingDeletionAt},
 		},
 	}
-	graph.Nodes[43] = &sqlgraph.Node{
+	graph.Nodes[36] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   platformhistory.Table,
 			Columns: platformhistory.Columns,
@@ -2021,7 +1706,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			platformhistory.FieldMetadata:                       {Type: field.TypeJSON, Column: platformhistory.FieldMetadata},
 		},
 	}
-	graph.Nodes[44] = &sqlgraph.Node{
+	graph.Nodes[37] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   procedurehistory.Table,
 			Columns: procedurehistory.Columns,
@@ -2079,7 +1764,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			procedurehistory.FieldWorkflowEligibleMarker:          {Type: field.TypeBool, Column: procedurehistory.FieldWorkflowEligibleMarker},
 		},
 	}
-	graph.Nodes[45] = &sqlgraph.Node{
+	graph.Nodes[38] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   programhistory.Table,
 			Columns: programhistory.Columns,
@@ -2125,7 +1810,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			programhistory.FieldProgramOwnerID:             {Type: field.TypeString, Column: programhistory.FieldProgramOwnerID},
 		},
 	}
-	graph.Nodes[46] = &sqlgraph.Node{
+	graph.Nodes[39] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   programmembershiphistory.Table,
 			Columns: programmembershiphistory.Columns,
@@ -2149,7 +1834,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			programmembershiphistory.FieldUserID:                {Type: field.TypeString, Column: programmembershiphistory.FieldUserID},
 		},
 	}
-	graph.Nodes[47] = &sqlgraph.Node{
+	graph.Nodes[40] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   remediationhistory.Table,
 			Columns: remediationhistory.Columns,
@@ -2203,7 +1888,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			remediationhistory.FieldMetadata:               {Type: field.TypeJSON, Column: remediationhistory.FieldMetadata},
 		},
 	}
-	graph.Nodes[48] = &sqlgraph.Node{
+	graph.Nodes[41] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   reviewhistory.Table,
 			Columns: reviewhistory.Columns,
@@ -2254,7 +1939,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			reviewhistory.FieldRawPayload:            {Type: field.TypeJSON, Column: reviewhistory.FieldRawPayload},
 		},
 	}
-	graph.Nodes[49] = &sqlgraph.Node{
+	graph.Nodes[42] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   riskhistory.Table,
 			Columns: riskhistory.Columns,
@@ -2314,7 +1999,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			riskhistory.FieldRiskDecision:           {Type: field.TypeEnum, Column: riskhistory.FieldRiskDecision},
 		},
 	}
-	graph.Nodes[50] = &sqlgraph.Node{
+	graph.Nodes[43] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   sladefinitionhistory.Table,
 			Columns: sladefinitionhistory.Columns,
@@ -2342,57 +2027,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			sladefinitionhistory.FieldSecurityLevel:         {Type: field.TypeEnum, Column: sladefinitionhistory.FieldSecurityLevel},
 		},
 	}
-	graph.Nodes[51] = &sqlgraph.Node{
-		NodeSpec: sqlgraph.NodeSpec{
-			Table:   scanhistory.Table,
-			Columns: scanhistory.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeString,
-				Column: scanhistory.FieldID,
-			},
-		},
-		Type: "ScanHistory",
-		Fields: map[string]*sqlgraph.FieldSpec{
-			scanhistory.FieldHistoryTime:                {Type: field.TypeTime, Column: scanhistory.FieldHistoryTime},
-			scanhistory.FieldRef:                        {Type: field.TypeString, Column: scanhistory.FieldRef},
-			scanhistory.FieldOperation:                  {Type: field.TypeEnum, Column: scanhistory.FieldOperation},
-			scanhistory.FieldCreatedAt:                  {Type: field.TypeTime, Column: scanhistory.FieldCreatedAt},
-			scanhistory.FieldUpdatedAt:                  {Type: field.TypeTime, Column: scanhistory.FieldUpdatedAt},
-			scanhistory.FieldCreatedBy:                  {Type: field.TypeString, Column: scanhistory.FieldCreatedBy},
-			scanhistory.FieldUpdatedBy:                  {Type: field.TypeString, Column: scanhistory.FieldUpdatedBy},
-			scanhistory.FieldUpdatedByImpersonator:      {Type: field.TypeString, Column: scanhistory.FieldUpdatedByImpersonator},
-			scanhistory.FieldDeletedAt:                  {Type: field.TypeTime, Column: scanhistory.FieldDeletedAt},
-			scanhistory.FieldDeletedBy:                  {Type: field.TypeString, Column: scanhistory.FieldDeletedBy},
-			scanhistory.FieldTags:                       {Type: field.TypeJSON, Column: scanhistory.FieldTags},
-			scanhistory.FieldOwnerID:                    {Type: field.TypeString, Column: scanhistory.FieldOwnerID},
-			scanhistory.FieldSystemOwned:                {Type: field.TypeBool, Column: scanhistory.FieldSystemOwned},
-			scanhistory.FieldInternalNotes:              {Type: field.TypeString, Column: scanhistory.FieldInternalNotes},
-			scanhistory.FieldSystemInternalID:           {Type: field.TypeString, Column: scanhistory.FieldSystemInternalID},
-			scanhistory.FieldReviewedBy:                 {Type: field.TypeString, Column: scanhistory.FieldReviewedBy},
-			scanhistory.FieldReviewedByUserID:           {Type: field.TypeString, Column: scanhistory.FieldReviewedByUserID},
-			scanhistory.FieldReviewedByGroupID:          {Type: field.TypeString, Column: scanhistory.FieldReviewedByGroupID},
-			scanhistory.FieldAssignedTo:                 {Type: field.TypeString, Column: scanhistory.FieldAssignedTo},
-			scanhistory.FieldAssignedToUserID:           {Type: field.TypeString, Column: scanhistory.FieldAssignedToUserID},
-			scanhistory.FieldAssignedToGroupID:          {Type: field.TypeString, Column: scanhistory.FieldAssignedToGroupID},
-			scanhistory.FieldEnvironmentName:            {Type: field.TypeString, Column: scanhistory.FieldEnvironmentName},
-			scanhistory.FieldEnvironmentID:              {Type: field.TypeString, Column: scanhistory.FieldEnvironmentID},
-			scanhistory.FieldScopeName:                  {Type: field.TypeString, Column: scanhistory.FieldScopeName},
-			scanhistory.FieldScopeID:                    {Type: field.TypeString, Column: scanhistory.FieldScopeID},
-			scanhistory.FieldTarget:                     {Type: field.TypeString, Column: scanhistory.FieldTarget},
-			scanhistory.FieldScanType:                   {Type: field.TypeEnum, Column: scanhistory.FieldScanType},
-			scanhistory.FieldMetadata:                   {Type: field.TypeJSON, Column: scanhistory.FieldMetadata},
-			scanhistory.FieldScanDate:                   {Type: field.TypeTime, Column: scanhistory.FieldScanDate},
-			scanhistory.FieldScanSchedule:               {Type: field.TypeString, Column: scanhistory.FieldScanSchedule},
-			scanhistory.FieldNextScanRunAt:              {Type: field.TypeTime, Column: scanhistory.FieldNextScanRunAt},
-			scanhistory.FieldPerformedBy:                {Type: field.TypeString, Column: scanhistory.FieldPerformedBy},
-			scanhistory.FieldPerformedByUserID:          {Type: field.TypeString, Column: scanhistory.FieldPerformedByUserID},
-			scanhistory.FieldPerformedByGroupID:         {Type: field.TypeString, Column: scanhistory.FieldPerformedByGroupID},
-			scanhistory.FieldGeneratedByPlatformID:      {Type: field.TypeString, Column: scanhistory.FieldGeneratedByPlatformID},
-			scanhistory.FieldDiscoveredVulnerabilityIds: {Type: field.TypeJSON, Column: scanhistory.FieldDiscoveredVulnerabilityIds},
-			scanhistory.FieldStatus:                     {Type: field.TypeEnum, Column: scanhistory.FieldStatus},
-		},
-	}
-	graph.Nodes[52] = &sqlgraph.Node{
+	graph.Nodes[44] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   scheduledjobhistory.Table,
 			Columns: scheduledjobhistory.Columns,
@@ -2422,7 +2057,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			scheduledjobhistory.FieldJobRunnerID:           {Type: field.TypeString, Column: scheduledjobhistory.FieldJobRunnerID},
 		},
 	}
-	graph.Nodes[53] = &sqlgraph.Node{
+	graph.Nodes[45] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   standardhistory.Table,
 			Columns: standardhistory.Columns,
@@ -2465,7 +2100,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			standardhistory.FieldLogoFileID:            {Type: field.TypeString, Column: standardhistory.FieldLogoFileID},
 		},
 	}
-	graph.Nodes[54] = &sqlgraph.Node{
+	graph.Nodes[46] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   subcontrolhistory.Table,
 			Columns: subcontrolhistory.Columns,
@@ -2529,7 +2164,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subcontrolhistory.FieldControlID:                  {Type: field.TypeString, Column: subcontrolhistory.FieldControlID},
 		},
 	}
-	graph.Nodes[55] = &sqlgraph.Node{
+	graph.Nodes[47] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   subprocessorhistory.Table,
 			Columns: subprocessorhistory.Columns,
@@ -2561,7 +2196,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subprocessorhistory.FieldLogoFileID:            {Type: field.TypeString, Column: subprocessorhistory.FieldLogoFileID},
 		},
 	}
-	graph.Nodes[56] = &sqlgraph.Node{
+	graph.Nodes[48] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   systemdetailhistory.Table,
 			Columns: systemdetailhistory.Columns,
@@ -2595,7 +2230,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			systemdetailhistory.FieldOscalMetadataJSON:     {Type: field.TypeJSON, Column: systemdetailhistory.FieldOscalMetadataJSON},
 		},
 	}
-	graph.Nodes[57] = &sqlgraph.Node{
+	graph.Nodes[49] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   taskhistory.Table,
 			Columns: taskhistory.Columns,
@@ -2647,7 +2282,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			taskhistory.FieldParentTaskID:           {Type: field.TypeString, Column: taskhistory.FieldParentTaskID},
 		},
 	}
-	graph.Nodes[58] = &sqlgraph.Node{
+	graph.Nodes[50] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   templatehistory.Table,
 			Columns: templatehistory.Columns,
@@ -2687,7 +2322,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			templatehistory.FieldTransformConfiguration: {Type: field.TypeJSON, Column: templatehistory.FieldTransformConfiguration},
 		},
 	}
-	graph.Nodes[59] = &sqlgraph.Node{
+	graph.Nodes[51] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcentercompliancehistory.Table,
 			Columns: trustcentercompliancehistory.Columns,
@@ -2713,7 +2348,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentercompliancehistory.FieldTrustCenterID:         {Type: field.TypeString, Column: trustcentercompliancehistory.FieldTrustCenterID},
 		},
 	}
-	graph.Nodes[60] = &sqlgraph.Node{
+	graph.Nodes[52] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcenterdochistory.Table,
 			Columns: trustcenterdochistory.Columns,
@@ -2747,7 +2382,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterdochistory.FieldStandardID:             {Type: field.TypeString, Column: trustcenterdochistory.FieldStandardID},
 		},
 	}
-	graph.Nodes[61] = &sqlgraph.Node{
+	graph.Nodes[53] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcenterentityhistory.Table,
 			Columns: trustcenterentityhistory.Columns,
@@ -2775,7 +2410,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterentityhistory.FieldEntityTypeID:          {Type: field.TypeString, Column: trustcenterentityhistory.FieldEntityTypeID},
 		},
 	}
-	graph.Nodes[62] = &sqlgraph.Node{
+	graph.Nodes[54] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcenterfaqhistory.Table,
 			Columns: trustcenterfaqhistory.Columns,
@@ -2804,7 +2439,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterfaqhistory.FieldDisplayOrder:           {Type: field.TypeInt, Column: trustcenterfaqhistory.FieldDisplayOrder},
 		},
 	}
-	graph.Nodes[63] = &sqlgraph.Node{
+	graph.Nodes[55] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcenterhistory.Table,
 			Columns: trustcenterhistory.Columns,
@@ -2837,7 +2472,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterhistory.FieldSubprocessorURL:          {Type: field.TypeString, Column: trustcenterhistory.FieldSubprocessorURL},
 		},
 	}
-	graph.Nodes[64] = &sqlgraph.Node{
+	graph.Nodes[56] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcenterndarequesthistory.Table,
 			Columns: trustcenterndarequesthistory.Columns,
@@ -2874,7 +2509,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterndarequesthistory.FieldFileID:                {Type: field.TypeString, Column: trustcenterndarequesthistory.FieldFileID},
 		},
 	}
-	graph.Nodes[65] = &sqlgraph.Node{
+	graph.Nodes[57] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcentersettinghistory.Table,
 			Columns: trustcentersettinghistory.Columns,
@@ -2925,7 +2560,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersettinghistory.FieldStatusPageURL:                         {Type: field.TypeString, Column: trustcentersettinghistory.FieldStatusPageURL},
 		},
 	}
-	graph.Nodes[66] = &sqlgraph.Node{
+	graph.Nodes[58] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcentersubprocessorhistory.Table,
 			Columns: trustcentersubprocessorhistory.Columns,
@@ -2953,7 +2588,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersubprocessorhistory.FieldCountries:                       {Type: field.TypeJSON, Column: trustcentersubprocessorhistory.FieldCountries},
 		},
 	}
-	graph.Nodes[67] = &sqlgraph.Node{
+	graph.Nodes[59] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcenterwatermarkconfighistory.Table,
 			Columns: trustcenterwatermarkconfighistory.Columns,
@@ -2986,7 +2621,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterwatermarkconfighistory.FieldFont:                  {Type: field.TypeEnum, Column: trustcenterwatermarkconfighistory.FieldFont},
 		},
 	}
-	graph.Nodes[68] = &sqlgraph.Node{
+	graph.Nodes[60] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   userhistory.Table,
 			Columns: userhistory.Columns,
@@ -3028,7 +2663,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			userhistory.FieldScimLocale:            {Type: field.TypeString, Column: userhistory.FieldScimLocale},
 		},
 	}
-	graph.Nodes[69] = &sqlgraph.Node{
+	graph.Nodes[61] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   usersettinghistory.Table,
 			Columns: usersettinghistory.Columns,
@@ -3064,7 +2699,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			usersettinghistory.FieldPhoneNumber:           {Type: field.TypeString, Column: usersettinghistory.FieldPhoneNumber},
 		},
 	}
-	graph.Nodes[70] = &sqlgraph.Node{
+	graph.Nodes[62] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   vendorriskscorehistory.Table,
 			Columns: vendorriskscorehistory.Columns,
@@ -3102,7 +2737,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			vendorriskscorehistory.FieldAssessmentResponseID:  {Type: field.TypeString, Column: vendorriskscorehistory.FieldAssessmentResponseID},
 		},
 	}
-	graph.Nodes[71] = &sqlgraph.Node{
+	graph.Nodes[63] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   vendorscoringconfighistory.Table,
 			Columns: vendorscoringconfighistory.Columns,
@@ -3130,7 +2765,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			vendorscoringconfighistory.FieldRiskThresholds:        {Type: field.TypeJSON, Column: vendorscoringconfighistory.FieldRiskThresholds},
 		},
 	}
-	graph.Nodes[72] = &sqlgraph.Node{
+	graph.Nodes[64] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   vulnerabilityhistory.Table,
 			Columns: vulnerabilityhistory.Columns,
@@ -3214,7 +2849,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			vulnerabilityhistory.FieldRawPayload:              {Type: field.TypeJSON, Column: vulnerabilityhistory.FieldRawPayload},
 		},
 	}
-	graph.Nodes[73] = &sqlgraph.Node{
+	graph.Nodes[65] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   workflowassignmenthistory.Table,
 			Columns: workflowassignmenthistory.Columns,
@@ -3256,7 +2891,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			workflowassignmenthistory.FieldDueAt:                 {Type: field.TypeTime, Column: workflowassignmenthistory.FieldDueAt},
 		},
 	}
-	graph.Nodes[74] = &sqlgraph.Node{
+	graph.Nodes[66] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   workflowassignmenttargethistory.Table,
 			Columns: workflowassignmenttargethistory.Columns,
@@ -3287,7 +2922,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			workflowassignmenttargethistory.FieldResolverKey:           {Type: field.TypeString, Column: workflowassignmenttargethistory.FieldResolverKey},
 		},
 	}
-	graph.Nodes[75] = &sqlgraph.Node{
+	graph.Nodes[67] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   workflowdefinitionhistory.Table,
 			Columns: workflowdefinitionhistory.Columns,
@@ -3331,130 +2966,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			workflowdefinitionhistory.FieldApprovalSubmissionMode: {Type: field.TypeEnum, Column: workflowdefinitionhistory.FieldApprovalSubmissionMode},
 			workflowdefinitionhistory.FieldDefinitionJSON:         {Type: field.TypeJSON, Column: workflowdefinitionhistory.FieldDefinitionJSON},
 			workflowdefinitionhistory.FieldTrackedFields:          {Type: field.TypeJSON, Column: workflowdefinitionhistory.FieldTrackedFields},
-		},
-	}
-	graph.Nodes[76] = &sqlgraph.Node{
-		NodeSpec: sqlgraph.NodeSpec{
-			Table:   workfloweventhistory.Table,
-			Columns: workfloweventhistory.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeString,
-				Column: workfloweventhistory.FieldID,
-			},
-		},
-		Type: "WorkflowEventHistory",
-		Fields: map[string]*sqlgraph.FieldSpec{
-			workfloweventhistory.FieldHistoryTime:           {Type: field.TypeTime, Column: workfloweventhistory.FieldHistoryTime},
-			workfloweventhistory.FieldRef:                   {Type: field.TypeString, Column: workfloweventhistory.FieldRef},
-			workfloweventhistory.FieldOperation:             {Type: field.TypeEnum, Column: workfloweventhistory.FieldOperation},
-			workfloweventhistory.FieldCreatedAt:             {Type: field.TypeTime, Column: workfloweventhistory.FieldCreatedAt},
-			workfloweventhistory.FieldUpdatedAt:             {Type: field.TypeTime, Column: workfloweventhistory.FieldUpdatedAt},
-			workfloweventhistory.FieldCreatedBy:             {Type: field.TypeString, Column: workfloweventhistory.FieldCreatedBy},
-			workfloweventhistory.FieldUpdatedBy:             {Type: field.TypeString, Column: workfloweventhistory.FieldUpdatedBy},
-			workfloweventhistory.FieldUpdatedByImpersonator: {Type: field.TypeString, Column: workfloweventhistory.FieldUpdatedByImpersonator},
-			workfloweventhistory.FieldDeletedAt:             {Type: field.TypeTime, Column: workfloweventhistory.FieldDeletedAt},
-			workfloweventhistory.FieldDeletedBy:             {Type: field.TypeString, Column: workfloweventhistory.FieldDeletedBy},
-			workfloweventhistory.FieldDisplayID:             {Type: field.TypeString, Column: workfloweventhistory.FieldDisplayID},
-			workfloweventhistory.FieldTags:                  {Type: field.TypeJSON, Column: workfloweventhistory.FieldTags},
-			workfloweventhistory.FieldOwnerID:               {Type: field.TypeString, Column: workfloweventhistory.FieldOwnerID},
-			workfloweventhistory.FieldWorkflowInstanceID:    {Type: field.TypeString, Column: workfloweventhistory.FieldWorkflowInstanceID},
-			workfloweventhistory.FieldEventType:             {Type: field.TypeEnum, Column: workfloweventhistory.FieldEventType},
-			workfloweventhistory.FieldPayload:               {Type: field.TypeJSON, Column: workfloweventhistory.FieldPayload},
-		},
-	}
-	graph.Nodes[77] = &sqlgraph.Node{
-		NodeSpec: sqlgraph.NodeSpec{
-			Table:   workflowinstancehistory.Table,
-			Columns: workflowinstancehistory.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeString,
-				Column: workflowinstancehistory.FieldID,
-			},
-		},
-		Type: "WorkflowInstanceHistory",
-		Fields: map[string]*sqlgraph.FieldSpec{
-			workflowinstancehistory.FieldHistoryTime:           {Type: field.TypeTime, Column: workflowinstancehistory.FieldHistoryTime},
-			workflowinstancehistory.FieldRef:                   {Type: field.TypeString, Column: workflowinstancehistory.FieldRef},
-			workflowinstancehistory.FieldOperation:             {Type: field.TypeEnum, Column: workflowinstancehistory.FieldOperation},
-			workflowinstancehistory.FieldCreatedAt:             {Type: field.TypeTime, Column: workflowinstancehistory.FieldCreatedAt},
-			workflowinstancehistory.FieldUpdatedAt:             {Type: field.TypeTime, Column: workflowinstancehistory.FieldUpdatedAt},
-			workflowinstancehistory.FieldCreatedBy:             {Type: field.TypeString, Column: workflowinstancehistory.FieldCreatedBy},
-			workflowinstancehistory.FieldUpdatedBy:             {Type: field.TypeString, Column: workflowinstancehistory.FieldUpdatedBy},
-			workflowinstancehistory.FieldUpdatedByImpersonator: {Type: field.TypeString, Column: workflowinstancehistory.FieldUpdatedByImpersonator},
-			workflowinstancehistory.FieldDeletedAt:             {Type: field.TypeTime, Column: workflowinstancehistory.FieldDeletedAt},
-			workflowinstancehistory.FieldDeletedBy:             {Type: field.TypeString, Column: workflowinstancehistory.FieldDeletedBy},
-			workflowinstancehistory.FieldDisplayID:             {Type: field.TypeString, Column: workflowinstancehistory.FieldDisplayID},
-			workflowinstancehistory.FieldTags:                  {Type: field.TypeJSON, Column: workflowinstancehistory.FieldTags},
-			workflowinstancehistory.FieldOwnerID:               {Type: field.TypeString, Column: workflowinstancehistory.FieldOwnerID},
-			workflowinstancehistory.FieldWorkflowDefinitionID:  {Type: field.TypeString, Column: workflowinstancehistory.FieldWorkflowDefinitionID},
-			workflowinstancehistory.FieldWorkflowProposalID:    {Type: field.TypeString, Column: workflowinstancehistory.FieldWorkflowProposalID},
-			workflowinstancehistory.FieldState:                 {Type: field.TypeEnum, Column: workflowinstancehistory.FieldState},
-			workflowinstancehistory.FieldContext:               {Type: field.TypeJSON, Column: workflowinstancehistory.FieldContext},
-			workflowinstancehistory.FieldLastEvaluatedAt:       {Type: field.TypeTime, Column: workflowinstancehistory.FieldLastEvaluatedAt},
-			workflowinstancehistory.FieldDefinitionSnapshot:    {Type: field.TypeJSON, Column: workflowinstancehistory.FieldDefinitionSnapshot},
-			workflowinstancehistory.FieldCurrentActionIndex:    {Type: field.TypeInt, Column: workflowinstancehistory.FieldCurrentActionIndex},
-			workflowinstancehistory.FieldControlID:             {Type: field.TypeString, Column: workflowinstancehistory.FieldControlID},
-			workflowinstancehistory.FieldInternalPolicyID:      {Type: field.TypeString, Column: workflowinstancehistory.FieldInternalPolicyID},
-			workflowinstancehistory.FieldEvidenceID:            {Type: field.TypeString, Column: workflowinstancehistory.FieldEvidenceID},
-			workflowinstancehistory.FieldSubcontrolID:          {Type: field.TypeString, Column: workflowinstancehistory.FieldSubcontrolID},
-			workflowinstancehistory.FieldActionPlanID:          {Type: field.TypeString, Column: workflowinstancehistory.FieldActionPlanID},
-			workflowinstancehistory.FieldProcedureID:           {Type: field.TypeString, Column: workflowinstancehistory.FieldProcedureID},
-			workflowinstancehistory.FieldCampaignID:            {Type: field.TypeString, Column: workflowinstancehistory.FieldCampaignID},
-			workflowinstancehistory.FieldCampaignTargetID:      {Type: field.TypeString, Column: workflowinstancehistory.FieldCampaignTargetID},
-			workflowinstancehistory.FieldIdentityHolderID:      {Type: field.TypeString, Column: workflowinstancehistory.FieldIdentityHolderID},
-			workflowinstancehistory.FieldPlatformID:            {Type: field.TypeString, Column: workflowinstancehistory.FieldPlatformID},
-			workflowinstancehistory.FieldAssessmentID:          {Type: field.TypeString, Column: workflowinstancehistory.FieldAssessmentID},
-			workflowinstancehistory.FieldAssessmentResponseID:  {Type: field.TypeString, Column: workflowinstancehistory.FieldAssessmentResponseID},
-			workflowinstancehistory.FieldFindingID:             {Type: field.TypeString, Column: workflowinstancehistory.FieldFindingID},
-			workflowinstancehistory.FieldIntegrationID:         {Type: field.TypeString, Column: workflowinstancehistory.FieldIntegrationID},
-			workflowinstancehistory.FieldRemediationID:         {Type: field.TypeString, Column: workflowinstancehistory.FieldRemediationID},
-			workflowinstancehistory.FieldRiskID:                {Type: field.TypeString, Column: workflowinstancehistory.FieldRiskID},
-			workflowinstancehistory.FieldTaskID:                {Type: field.TypeString, Column: workflowinstancehistory.FieldTaskID},
-			workflowinstancehistory.FieldVulnerabilityID:       {Type: field.TypeString, Column: workflowinstancehistory.FieldVulnerabilityID},
-		},
-	}
-	graph.Nodes[78] = &sqlgraph.Node{
-		NodeSpec: sqlgraph.NodeSpec{
-			Table:   workflowobjectrefhistory.Table,
-			Columns: workflowobjectrefhistory.Columns,
-			ID: &sqlgraph.FieldSpec{
-				Type:   field.TypeString,
-				Column: workflowobjectrefhistory.FieldID,
-			},
-		},
-		Type: "WorkflowObjectRefHistory",
-		Fields: map[string]*sqlgraph.FieldSpec{
-			workflowobjectrefhistory.FieldHistoryTime:           {Type: field.TypeTime, Column: workflowobjectrefhistory.FieldHistoryTime},
-			workflowobjectrefhistory.FieldRef:                   {Type: field.TypeString, Column: workflowobjectrefhistory.FieldRef},
-			workflowobjectrefhistory.FieldOperation:             {Type: field.TypeEnum, Column: workflowobjectrefhistory.FieldOperation},
-			workflowobjectrefhistory.FieldCreatedAt:             {Type: field.TypeTime, Column: workflowobjectrefhistory.FieldCreatedAt},
-			workflowobjectrefhistory.FieldUpdatedAt:             {Type: field.TypeTime, Column: workflowobjectrefhistory.FieldUpdatedAt},
-			workflowobjectrefhistory.FieldCreatedBy:             {Type: field.TypeString, Column: workflowobjectrefhistory.FieldCreatedBy},
-			workflowobjectrefhistory.FieldUpdatedBy:             {Type: field.TypeString, Column: workflowobjectrefhistory.FieldUpdatedBy},
-			workflowobjectrefhistory.FieldUpdatedByImpersonator: {Type: field.TypeString, Column: workflowobjectrefhistory.FieldUpdatedByImpersonator},
-			workflowobjectrefhistory.FieldDisplayID:             {Type: field.TypeString, Column: workflowobjectrefhistory.FieldDisplayID},
-			workflowobjectrefhistory.FieldOwnerID:               {Type: field.TypeString, Column: workflowobjectrefhistory.FieldOwnerID},
-			workflowobjectrefhistory.FieldWorkflowInstanceID:    {Type: field.TypeString, Column: workflowobjectrefhistory.FieldWorkflowInstanceID},
-			workflowobjectrefhistory.FieldControlID:             {Type: field.TypeString, Column: workflowobjectrefhistory.FieldControlID},
-			workflowobjectrefhistory.FieldTaskID:                {Type: field.TypeString, Column: workflowobjectrefhistory.FieldTaskID},
-			workflowobjectrefhistory.FieldInternalPolicyID:      {Type: field.TypeString, Column: workflowobjectrefhistory.FieldInternalPolicyID},
-			workflowobjectrefhistory.FieldFindingID:             {Type: field.TypeString, Column: workflowobjectrefhistory.FieldFindingID},
-			workflowobjectrefhistory.FieldDirectoryAccountID:    {Type: field.TypeString, Column: workflowobjectrefhistory.FieldDirectoryAccountID},
-			workflowobjectrefhistory.FieldDirectoryGroupID:      {Type: field.TypeString, Column: workflowobjectrefhistory.FieldDirectoryGroupID},
-			workflowobjectrefhistory.FieldDirectoryMembershipID: {Type: field.TypeString, Column: workflowobjectrefhistory.FieldDirectoryMembershipID},
-			workflowobjectrefhistory.FieldEvidenceID:            {Type: field.TypeString, Column: workflowobjectrefhistory.FieldEvidenceID},
-			workflowobjectrefhistory.FieldSubcontrolID:          {Type: field.TypeString, Column: workflowobjectrefhistory.FieldSubcontrolID},
-			workflowobjectrefhistory.FieldActionPlanID:          {Type: field.TypeString, Column: workflowobjectrefhistory.FieldActionPlanID},
-			workflowobjectrefhistory.FieldProcedureID:           {Type: field.TypeString, Column: workflowobjectrefhistory.FieldProcedureID},
-			workflowobjectrefhistory.FieldCampaignID:            {Type: field.TypeString, Column: workflowobjectrefhistory.FieldCampaignID},
-			workflowobjectrefhistory.FieldCampaignTargetID:      {Type: field.TypeString, Column: workflowobjectrefhistory.FieldCampaignTargetID},
-			workflowobjectrefhistory.FieldIdentityHolderID:      {Type: field.TypeString, Column: workflowobjectrefhistory.FieldIdentityHolderID},
-			workflowobjectrefhistory.FieldPlatformID:            {Type: field.TypeString, Column: workflowobjectrefhistory.FieldPlatformID},
-			workflowobjectrefhistory.FieldVulnerabilityID:       {Type: field.TypeString, Column: workflowobjectrefhistory.FieldVulnerabilityID},
-			workflowobjectrefhistory.FieldRiskID:                {Type: field.TypeString, Column: workflowobjectrefhistory.FieldRiskID},
-			workflowobjectrefhistory.FieldAssessmentID:          {Type: field.TypeString, Column: workflowobjectrefhistory.FieldAssessmentID},
-			workflowobjectrefhistory.FieldAssessmentResponseID:  {Type: field.TypeString, Column: workflowobjectrefhistory.FieldAssessmentResponseID},
-			workflowobjectrefhistory.FieldRemediationID:         {Type: field.TypeString, Column: workflowobjectrefhistory.FieldRemediationID},
 		},
 	}
 	return graph
@@ -4847,136 +4358,6 @@ func (f *CampaignTargetHistoryFilter) WhereMetadata(p entql.BytesP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (_q *CheckResultHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	_q.predicates = append(_q.predicates, pred)
-}
-
-// Filter returns a Filter implementation to apply filters on the CheckResultHistoryQuery builder.
-func (_q *CheckResultHistoryQuery) Filter() *CheckResultHistoryFilter {
-	return &CheckResultHistoryFilter{config: _q.config, predicateAdder: _q}
-}
-
-// addPredicate implements the predicateAdder interface.
-func (m *CheckResultHistoryMutation) addPredicate(pred func(s *sql.Selector)) {
-	m.predicates = append(m.predicates, pred)
-}
-
-// Filter returns an entql.Where implementation to apply filters on the CheckResultHistoryMutation builder.
-func (m *CheckResultHistoryMutation) Filter() *CheckResultHistoryFilter {
-	return &CheckResultHistoryFilter{config: m.config, predicateAdder: m}
-}
-
-// CheckResultHistoryFilter provides a generic filtering capability at runtime for CheckResultHistoryQuery.
-type CheckResultHistoryFilter struct {
-	predicateAdder
-	config
-}
-
-// Where applies the entql predicate on the query filter.
-func (f *CheckResultHistoryFilter) Where(p entql.P) {
-	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[6].Type, p, s); err != nil {
-			s.AddError(err)
-		}
-	})
-}
-
-// WhereID applies the entql string predicate on the id field.
-func (f *CheckResultHistoryFilter) WhereID(p entql.StringP) {
-	f.Where(p.Field(checkresulthistory.FieldID))
-}
-
-// WhereHistoryTime applies the entql time.Time predicate on the history_time field.
-func (f *CheckResultHistoryFilter) WhereHistoryTime(p entql.TimeP) {
-	f.Where(p.Field(checkresulthistory.FieldHistoryTime))
-}
-
-// WhereRef applies the entql string predicate on the ref field.
-func (f *CheckResultHistoryFilter) WhereRef(p entql.StringP) {
-	f.Where(p.Field(checkresulthistory.FieldRef))
-}
-
-// WhereOperation applies the entql string predicate on the operation field.
-func (f *CheckResultHistoryFilter) WhereOperation(p entql.StringP) {
-	f.Where(p.Field(checkresulthistory.FieldOperation))
-}
-
-// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
-func (f *CheckResultHistoryFilter) WhereCreatedAt(p entql.TimeP) {
-	f.Where(p.Field(checkresulthistory.FieldCreatedAt))
-}
-
-// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
-func (f *CheckResultHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
-	f.Where(p.Field(checkresulthistory.FieldUpdatedAt))
-}
-
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *CheckResultHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(checkresulthistory.FieldCreatedBy))
-}
-
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *CheckResultHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(checkresulthistory.FieldUpdatedBy))
-}
-
-// WhereUpdatedByImpersonator applies the entql string predicate on the updated_by_impersonator field.
-func (f *CheckResultHistoryFilter) WhereUpdatedByImpersonator(p entql.StringP) {
-	f.Where(p.Field(checkresulthistory.FieldUpdatedByImpersonator))
-}
-
-// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
-func (f *CheckResultHistoryFilter) WhereDeletedAt(p entql.TimeP) {
-	f.Where(p.Field(checkresulthistory.FieldDeletedAt))
-}
-
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *CheckResultHistoryFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(checkresulthistory.FieldDeletedBy))
-}
-
-// WhereTags applies the entql json.RawMessage predicate on the tags field.
-func (f *CheckResultHistoryFilter) WhereTags(p entql.BytesP) {
-	f.Where(p.Field(checkresulthistory.FieldTags))
-}
-
-// WhereStatus applies the entql string predicate on the status field.
-func (f *CheckResultHistoryFilter) WhereStatus(p entql.StringP) {
-	f.Where(p.Field(checkresulthistory.FieldStatus))
-}
-
-// WhereSource applies the entql string predicate on the source field.
-func (f *CheckResultHistoryFilter) WhereSource(p entql.StringP) {
-	f.Where(p.Field(checkresulthistory.FieldSource))
-}
-
-// WhereLastObservedAt applies the entql time.Time predicate on the last_observed_at field.
-func (f *CheckResultHistoryFilter) WhereLastObservedAt(p entql.TimeP) {
-	f.Where(p.Field(checkresulthistory.FieldLastObservedAt))
-}
-
-// WhereExternalURI applies the entql string predicate on the external_uri field.
-func (f *CheckResultHistoryFilter) WhereExternalURI(p entql.StringP) {
-	f.Where(p.Field(checkresulthistory.FieldExternalURI))
-}
-
-// WhereDetails applies the entql string predicate on the details field.
-func (f *CheckResultHistoryFilter) WhereDetails(p entql.StringP) {
-	f.Where(p.Field(checkresulthistory.FieldDetails))
-}
-
-// WhereParentExternalID applies the entql string predicate on the parent_external_id field.
-func (f *CheckResultHistoryFilter) WhereParentExternalID(p entql.StringP) {
-	f.Where(p.Field(checkresulthistory.FieldParentExternalID))
-}
-
-// WhereIntegrationID applies the entql string predicate on the integration_id field.
-func (f *CheckResultHistoryFilter) WhereIntegrationID(p entql.StringP) {
-	f.Where(p.Field(checkresulthistory.FieldIntegrationID))
-}
-
-// addPredicate implements the predicateAdder interface.
 func (_q *ContactHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
 }
@@ -5005,7 +4386,7 @@ type ContactHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ContactHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[7].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[6].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -5155,7 +4536,7 @@ type ControlHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ControlHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[8].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[7].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -5480,7 +4861,7 @@ type ControlImplementationHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ControlImplementationHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[9].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[8].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -5625,7 +5006,7 @@ type ControlObjectiveHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ControlObjectiveHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[10].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[9].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -5790,7 +5171,7 @@ type CustomDomainHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *CustomDomainHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[11].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[10].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -5902,866 +5283,6 @@ func (f *CustomDomainHistoryFilter) WhereDomainType(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (_q *DNSVerificationHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	_q.predicates = append(_q.predicates, pred)
-}
-
-// Filter returns a Filter implementation to apply filters on the DNSVerificationHistoryQuery builder.
-func (_q *DNSVerificationHistoryQuery) Filter() *DNSVerificationHistoryFilter {
-	return &DNSVerificationHistoryFilter{config: _q.config, predicateAdder: _q}
-}
-
-// addPredicate implements the predicateAdder interface.
-func (m *DNSVerificationHistoryMutation) addPredicate(pred func(s *sql.Selector)) {
-	m.predicates = append(m.predicates, pred)
-}
-
-// Filter returns an entql.Where implementation to apply filters on the DNSVerificationHistoryMutation builder.
-func (m *DNSVerificationHistoryMutation) Filter() *DNSVerificationHistoryFilter {
-	return &DNSVerificationHistoryFilter{config: m.config, predicateAdder: m}
-}
-
-// DNSVerificationHistoryFilter provides a generic filtering capability at runtime for DNSVerificationHistoryQuery.
-type DNSVerificationHistoryFilter struct {
-	predicateAdder
-	config
-}
-
-// Where applies the entql predicate on the query filter.
-func (f *DNSVerificationHistoryFilter) Where(p entql.P) {
-	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[12].Type, p, s); err != nil {
-			s.AddError(err)
-		}
-	})
-}
-
-// WhereID applies the entql string predicate on the id field.
-func (f *DNSVerificationHistoryFilter) WhereID(p entql.StringP) {
-	f.Where(p.Field(dnsverificationhistory.FieldID))
-}
-
-// WhereHistoryTime applies the entql time.Time predicate on the history_time field.
-func (f *DNSVerificationHistoryFilter) WhereHistoryTime(p entql.TimeP) {
-	f.Where(p.Field(dnsverificationhistory.FieldHistoryTime))
-}
-
-// WhereRef applies the entql string predicate on the ref field.
-func (f *DNSVerificationHistoryFilter) WhereRef(p entql.StringP) {
-	f.Where(p.Field(dnsverificationhistory.FieldRef))
-}
-
-// WhereOperation applies the entql string predicate on the operation field.
-func (f *DNSVerificationHistoryFilter) WhereOperation(p entql.StringP) {
-	f.Where(p.Field(dnsverificationhistory.FieldOperation))
-}
-
-// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
-func (f *DNSVerificationHistoryFilter) WhereCreatedAt(p entql.TimeP) {
-	f.Where(p.Field(dnsverificationhistory.FieldCreatedAt))
-}
-
-// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
-func (f *DNSVerificationHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
-	f.Where(p.Field(dnsverificationhistory.FieldUpdatedAt))
-}
-
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *DNSVerificationHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(dnsverificationhistory.FieldCreatedBy))
-}
-
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *DNSVerificationHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(dnsverificationhistory.FieldUpdatedBy))
-}
-
-// WhereUpdatedByImpersonator applies the entql string predicate on the updated_by_impersonator field.
-func (f *DNSVerificationHistoryFilter) WhereUpdatedByImpersonator(p entql.StringP) {
-	f.Where(p.Field(dnsverificationhistory.FieldUpdatedByImpersonator))
-}
-
-// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
-func (f *DNSVerificationHistoryFilter) WhereDeletedAt(p entql.TimeP) {
-	f.Where(p.Field(dnsverificationhistory.FieldDeletedAt))
-}
-
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *DNSVerificationHistoryFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(dnsverificationhistory.FieldDeletedBy))
-}
-
-// WhereTags applies the entql json.RawMessage predicate on the tags field.
-func (f *DNSVerificationHistoryFilter) WhereTags(p entql.BytesP) {
-	f.Where(p.Field(dnsverificationhistory.FieldTags))
-}
-
-// WhereOwnerID applies the entql string predicate on the owner_id field.
-func (f *DNSVerificationHistoryFilter) WhereOwnerID(p entql.StringP) {
-	f.Where(p.Field(dnsverificationhistory.FieldOwnerID))
-}
-
-// WhereCloudflareHostnameID applies the entql string predicate on the cloudflare_hostname_id field.
-func (f *DNSVerificationHistoryFilter) WhereCloudflareHostnameID(p entql.StringP) {
-	f.Where(p.Field(dnsverificationhistory.FieldCloudflareHostnameID))
-}
-
-// WhereDNSTxtRecord applies the entql string predicate on the dns_txt_record field.
-func (f *DNSVerificationHistoryFilter) WhereDNSTxtRecord(p entql.StringP) {
-	f.Where(p.Field(dnsverificationhistory.FieldDNSTxtRecord))
-}
-
-// WhereDNSTxtValue applies the entql string predicate on the dns_txt_value field.
-func (f *DNSVerificationHistoryFilter) WhereDNSTxtValue(p entql.StringP) {
-	f.Where(p.Field(dnsverificationhistory.FieldDNSTxtValue))
-}
-
-// WhereDNSVerificationStatus applies the entql string predicate on the dns_verification_status field.
-func (f *DNSVerificationHistoryFilter) WhereDNSVerificationStatus(p entql.StringP) {
-	f.Where(p.Field(dnsverificationhistory.FieldDNSVerificationStatus))
-}
-
-// WhereDNSVerificationStatusReason applies the entql string predicate on the dns_verification_status_reason field.
-func (f *DNSVerificationHistoryFilter) WhereDNSVerificationStatusReason(p entql.StringP) {
-	f.Where(p.Field(dnsverificationhistory.FieldDNSVerificationStatusReason))
-}
-
-// WhereAcmeChallengePath applies the entql string predicate on the acme_challenge_path field.
-func (f *DNSVerificationHistoryFilter) WhereAcmeChallengePath(p entql.StringP) {
-	f.Where(p.Field(dnsverificationhistory.FieldAcmeChallengePath))
-}
-
-// WhereExpectedAcmeChallengeValue applies the entql string predicate on the expected_acme_challenge_value field.
-func (f *DNSVerificationHistoryFilter) WhereExpectedAcmeChallengeValue(p entql.StringP) {
-	f.Where(p.Field(dnsverificationhistory.FieldExpectedAcmeChallengeValue))
-}
-
-// WhereAcmeChallengeStatus applies the entql string predicate on the acme_challenge_status field.
-func (f *DNSVerificationHistoryFilter) WhereAcmeChallengeStatus(p entql.StringP) {
-	f.Where(p.Field(dnsverificationhistory.FieldAcmeChallengeStatus))
-}
-
-// WhereAcmeChallengeStatusReason applies the entql string predicate on the acme_challenge_status_reason field.
-func (f *DNSVerificationHistoryFilter) WhereAcmeChallengeStatusReason(p entql.StringP) {
-	f.Where(p.Field(dnsverificationhistory.FieldAcmeChallengeStatusReason))
-}
-
-// addPredicate implements the predicateAdder interface.
-func (_q *DirectoryAccountHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	_q.predicates = append(_q.predicates, pred)
-}
-
-// Filter returns a Filter implementation to apply filters on the DirectoryAccountHistoryQuery builder.
-func (_q *DirectoryAccountHistoryQuery) Filter() *DirectoryAccountHistoryFilter {
-	return &DirectoryAccountHistoryFilter{config: _q.config, predicateAdder: _q}
-}
-
-// addPredicate implements the predicateAdder interface.
-func (m *DirectoryAccountHistoryMutation) addPredicate(pred func(s *sql.Selector)) {
-	m.predicates = append(m.predicates, pred)
-}
-
-// Filter returns an entql.Where implementation to apply filters on the DirectoryAccountHistoryMutation builder.
-func (m *DirectoryAccountHistoryMutation) Filter() *DirectoryAccountHistoryFilter {
-	return &DirectoryAccountHistoryFilter{config: m.config, predicateAdder: m}
-}
-
-// DirectoryAccountHistoryFilter provides a generic filtering capability at runtime for DirectoryAccountHistoryQuery.
-type DirectoryAccountHistoryFilter struct {
-	predicateAdder
-	config
-}
-
-// Where applies the entql predicate on the query filter.
-func (f *DirectoryAccountHistoryFilter) Where(p entql.P) {
-	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[13].Type, p, s); err != nil {
-			s.AddError(err)
-		}
-	})
-}
-
-// WhereID applies the entql string predicate on the id field.
-func (f *DirectoryAccountHistoryFilter) WhereID(p entql.StringP) {
-	f.Where(p.Field(directoryaccounthistory.FieldID))
-}
-
-// WhereHistoryTime applies the entql time.Time predicate on the history_time field.
-func (f *DirectoryAccountHistoryFilter) WhereHistoryTime(p entql.TimeP) {
-	f.Where(p.Field(directoryaccounthistory.FieldHistoryTime))
-}
-
-// WhereRef applies the entql string predicate on the ref field.
-func (f *DirectoryAccountHistoryFilter) WhereRef(p entql.StringP) {
-	f.Where(p.Field(directoryaccounthistory.FieldRef))
-}
-
-// WhereOperation applies the entql string predicate on the operation field.
-func (f *DirectoryAccountHistoryFilter) WhereOperation(p entql.StringP) {
-	f.Where(p.Field(directoryaccounthistory.FieldOperation))
-}
-
-// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
-func (f *DirectoryAccountHistoryFilter) WhereCreatedAt(p entql.TimeP) {
-	f.Where(p.Field(directoryaccounthistory.FieldCreatedAt))
-}
-
-// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
-func (f *DirectoryAccountHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
-	f.Where(p.Field(directoryaccounthistory.FieldUpdatedAt))
-}
-
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *DirectoryAccountHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(directoryaccounthistory.FieldCreatedBy))
-}
-
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *DirectoryAccountHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(directoryaccounthistory.FieldUpdatedBy))
-}
-
-// WhereUpdatedByImpersonator applies the entql string predicate on the updated_by_impersonator field.
-func (f *DirectoryAccountHistoryFilter) WhereUpdatedByImpersonator(p entql.StringP) {
-	f.Where(p.Field(directoryaccounthistory.FieldUpdatedByImpersonator))
-}
-
-// WhereDisplayID applies the entql string predicate on the display_id field.
-func (f *DirectoryAccountHistoryFilter) WhereDisplayID(p entql.StringP) {
-	f.Where(p.Field(directoryaccounthistory.FieldDisplayID))
-}
-
-// WhereTags applies the entql json.RawMessage predicate on the tags field.
-func (f *DirectoryAccountHistoryFilter) WhereTags(p entql.BytesP) {
-	f.Where(p.Field(directoryaccounthistory.FieldTags))
-}
-
-// WhereOwnerID applies the entql string predicate on the owner_id field.
-func (f *DirectoryAccountHistoryFilter) WhereOwnerID(p entql.StringP) {
-	f.Where(p.Field(directoryaccounthistory.FieldOwnerID))
-}
-
-// WhereEnvironmentName applies the entql string predicate on the environment_name field.
-func (f *DirectoryAccountHistoryFilter) WhereEnvironmentName(p entql.StringP) {
-	f.Where(p.Field(directoryaccounthistory.FieldEnvironmentName))
-}
-
-// WhereEnvironmentID applies the entql string predicate on the environment_id field.
-func (f *DirectoryAccountHistoryFilter) WhereEnvironmentID(p entql.StringP) {
-	f.Where(p.Field(directoryaccounthistory.FieldEnvironmentID))
-}
-
-// WhereScopeName applies the entql string predicate on the scope_name field.
-func (f *DirectoryAccountHistoryFilter) WhereScopeName(p entql.StringP) {
-	f.Where(p.Field(directoryaccounthistory.FieldScopeName))
-}
-
-// WhereScopeID applies the entql string predicate on the scope_id field.
-func (f *DirectoryAccountHistoryFilter) WhereScopeID(p entql.StringP) {
-	f.Where(p.Field(directoryaccounthistory.FieldScopeID))
-}
-
-// WhereIntegrationID applies the entql string predicate on the integration_id field.
-func (f *DirectoryAccountHistoryFilter) WhereIntegrationID(p entql.StringP) {
-	f.Where(p.Field(directoryaccounthistory.FieldIntegrationID))
-}
-
-// WhereDirectorySyncRunID applies the entql string predicate on the directory_sync_run_id field.
-func (f *DirectoryAccountHistoryFilter) WhereDirectorySyncRunID(p entql.StringP) {
-	f.Where(p.Field(directoryaccounthistory.FieldDirectorySyncRunID))
-}
-
-// WherePlatformID applies the entql string predicate on the platform_id field.
-func (f *DirectoryAccountHistoryFilter) WherePlatformID(p entql.StringP) {
-	f.Where(p.Field(directoryaccounthistory.FieldPlatformID))
-}
-
-// WhereDirectoryInstanceID applies the entql string predicate on the directory_instance_id field.
-func (f *DirectoryAccountHistoryFilter) WhereDirectoryInstanceID(p entql.StringP) {
-	f.Where(p.Field(directoryaccounthistory.FieldDirectoryInstanceID))
-}
-
-// WhereIdentityHolderID applies the entql string predicate on the identity_holder_id field.
-func (f *DirectoryAccountHistoryFilter) WhereIdentityHolderID(p entql.StringP) {
-	f.Where(p.Field(directoryaccounthistory.FieldIdentityHolderID))
-}
-
-// WhereDirectoryName applies the entql string predicate on the directory_name field.
-func (f *DirectoryAccountHistoryFilter) WhereDirectoryName(p entql.StringP) {
-	f.Where(p.Field(directoryaccounthistory.FieldDirectoryName))
-}
-
-// WhereExternalID applies the entql string predicate on the external_id field.
-func (f *DirectoryAccountHistoryFilter) WhereExternalID(p entql.StringP) {
-	f.Where(p.Field(directoryaccounthistory.FieldExternalID))
-}
-
-// WhereSecondaryKey applies the entql string predicate on the secondary_key field.
-func (f *DirectoryAccountHistoryFilter) WhereSecondaryKey(p entql.StringP) {
-	f.Where(p.Field(directoryaccounthistory.FieldSecondaryKey))
-}
-
-// WhereCanonicalEmail applies the entql string predicate on the canonical_email field.
-func (f *DirectoryAccountHistoryFilter) WhereCanonicalEmail(p entql.StringP) {
-	f.Where(p.Field(directoryaccounthistory.FieldCanonicalEmail))
-}
-
-// WhereEmailAliases applies the entql json.RawMessage predicate on the email_aliases field.
-func (f *DirectoryAccountHistoryFilter) WhereEmailAliases(p entql.BytesP) {
-	f.Where(p.Field(directoryaccounthistory.FieldEmailAliases))
-}
-
-// WherePhoneNumber applies the entql string predicate on the phone_number field.
-func (f *DirectoryAccountHistoryFilter) WherePhoneNumber(p entql.StringP) {
-	f.Where(p.Field(directoryaccounthistory.FieldPhoneNumber))
-}
-
-// WhereDisplayName applies the entql string predicate on the display_name field.
-func (f *DirectoryAccountHistoryFilter) WhereDisplayName(p entql.StringP) {
-	f.Where(p.Field(directoryaccounthistory.FieldDisplayName))
-}
-
-// WhereAvatarRemoteURL applies the entql string predicate on the avatar_remote_url field.
-func (f *DirectoryAccountHistoryFilter) WhereAvatarRemoteURL(p entql.StringP) {
-	f.Where(p.Field(directoryaccounthistory.FieldAvatarRemoteURL))
-}
-
-// WhereAvatarLocalFileID applies the entql string predicate on the avatar_local_file_id field.
-func (f *DirectoryAccountHistoryFilter) WhereAvatarLocalFileID(p entql.StringP) {
-	f.Where(p.Field(directoryaccounthistory.FieldAvatarLocalFileID))
-}
-
-// WhereAvatarUpdatedAt applies the entql time.Time predicate on the avatar_updated_at field.
-func (f *DirectoryAccountHistoryFilter) WhereAvatarUpdatedAt(p entql.TimeP) {
-	f.Where(p.Field(directoryaccounthistory.FieldAvatarUpdatedAt))
-}
-
-// WhereGivenName applies the entql string predicate on the given_name field.
-func (f *DirectoryAccountHistoryFilter) WhereGivenName(p entql.StringP) {
-	f.Where(p.Field(directoryaccounthistory.FieldGivenName))
-}
-
-// WhereFamilyName applies the entql string predicate on the family_name field.
-func (f *DirectoryAccountHistoryFilter) WhereFamilyName(p entql.StringP) {
-	f.Where(p.Field(directoryaccounthistory.FieldFamilyName))
-}
-
-// WhereJobTitle applies the entql string predicate on the job_title field.
-func (f *DirectoryAccountHistoryFilter) WhereJobTitle(p entql.StringP) {
-	f.Where(p.Field(directoryaccounthistory.FieldJobTitle))
-}
-
-// WhereDepartment applies the entql string predicate on the department field.
-func (f *DirectoryAccountHistoryFilter) WhereDepartment(p entql.StringP) {
-	f.Where(p.Field(directoryaccounthistory.FieldDepartment))
-}
-
-// WhereOrganizationUnit applies the entql string predicate on the organization_unit field.
-func (f *DirectoryAccountHistoryFilter) WhereOrganizationUnit(p entql.StringP) {
-	f.Where(p.Field(directoryaccounthistory.FieldOrganizationUnit))
-}
-
-// WhereAccountType applies the entql string predicate on the account_type field.
-func (f *DirectoryAccountHistoryFilter) WhereAccountType(p entql.StringP) {
-	f.Where(p.Field(directoryaccounthistory.FieldAccountType))
-}
-
-// WhereStatus applies the entql string predicate on the status field.
-func (f *DirectoryAccountHistoryFilter) WhereStatus(p entql.StringP) {
-	f.Where(p.Field(directoryaccounthistory.FieldStatus))
-}
-
-// WhereMfaState applies the entql string predicate on the mfa_state field.
-func (f *DirectoryAccountHistoryFilter) WhereMfaState(p entql.StringP) {
-	f.Where(p.Field(directoryaccounthistory.FieldMfaState))
-}
-
-// WhereLastSeenIP applies the entql string predicate on the last_seen_ip field.
-func (f *DirectoryAccountHistoryFilter) WhereLastSeenIP(p entql.StringP) {
-	f.Where(p.Field(directoryaccounthistory.FieldLastSeenIP))
-}
-
-// WhereLastLoginAt applies the entql time.Time predicate on the last_login_at field.
-func (f *DirectoryAccountHistoryFilter) WhereLastLoginAt(p entql.TimeP) {
-	f.Where(p.Field(directoryaccounthistory.FieldLastLoginAt))
-}
-
-// WhereFirstSeenAt applies the entql time.Time predicate on the first_seen_at field.
-func (f *DirectoryAccountHistoryFilter) WhereFirstSeenAt(p entql.TimeP) {
-	f.Where(p.Field(directoryaccounthistory.FieldFirstSeenAt))
-}
-
-// WhereLastSeenAt applies the entql time.Time predicate on the last_seen_at field.
-func (f *DirectoryAccountHistoryFilter) WhereLastSeenAt(p entql.TimeP) {
-	f.Where(p.Field(directoryaccounthistory.FieldLastSeenAt))
-}
-
-// WhereAddedAt applies the entql time.Time predicate on the added_at field.
-func (f *DirectoryAccountHistoryFilter) WhereAddedAt(p entql.TimeP) {
-	f.Where(p.Field(directoryaccounthistory.FieldAddedAt))
-}
-
-// WhereRemovedAt applies the entql time.Time predicate on the removed_at field.
-func (f *DirectoryAccountHistoryFilter) WhereRemovedAt(p entql.TimeP) {
-	f.Where(p.Field(directoryaccounthistory.FieldRemovedAt))
-}
-
-// WhereObservedAt applies the entql time.Time predicate on the observed_at field.
-func (f *DirectoryAccountHistoryFilter) WhereObservedAt(p entql.TimeP) {
-	f.Where(p.Field(directoryaccounthistory.FieldObservedAt))
-}
-
-// WhereProfileHash applies the entql string predicate on the profile_hash field.
-func (f *DirectoryAccountHistoryFilter) WhereProfileHash(p entql.StringP) {
-	f.Where(p.Field(directoryaccounthistory.FieldProfileHash))
-}
-
-// WhereProfile applies the entql json.RawMessage predicate on the profile field.
-func (f *DirectoryAccountHistoryFilter) WhereProfile(p entql.BytesP) {
-	f.Where(p.Field(directoryaccounthistory.FieldProfile))
-}
-
-// WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
-func (f *DirectoryAccountHistoryFilter) WhereMetadata(p entql.BytesP) {
-	f.Where(p.Field(directoryaccounthistory.FieldMetadata))
-}
-
-// WhereRawProfileFileID applies the entql string predicate on the raw_profile_file_id field.
-func (f *DirectoryAccountHistoryFilter) WhereRawProfileFileID(p entql.StringP) {
-	f.Where(p.Field(directoryaccounthistory.FieldRawProfileFileID))
-}
-
-// WhereSourceVersion applies the entql string predicate on the source_version field.
-func (f *DirectoryAccountHistoryFilter) WhereSourceVersion(p entql.StringP) {
-	f.Where(p.Field(directoryaccounthistory.FieldSourceVersion))
-}
-
-// WherePrimarySource applies the entql bool predicate on the primary_source field.
-func (f *DirectoryAccountHistoryFilter) WherePrimarySource(p entql.BoolP) {
-	f.Where(p.Field(directoryaccounthistory.FieldPrimarySource))
-}
-
-// addPredicate implements the predicateAdder interface.
-func (_q *DirectoryGroupHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	_q.predicates = append(_q.predicates, pred)
-}
-
-// Filter returns a Filter implementation to apply filters on the DirectoryGroupHistoryQuery builder.
-func (_q *DirectoryGroupHistoryQuery) Filter() *DirectoryGroupHistoryFilter {
-	return &DirectoryGroupHistoryFilter{config: _q.config, predicateAdder: _q}
-}
-
-// addPredicate implements the predicateAdder interface.
-func (m *DirectoryGroupHistoryMutation) addPredicate(pred func(s *sql.Selector)) {
-	m.predicates = append(m.predicates, pred)
-}
-
-// Filter returns an entql.Where implementation to apply filters on the DirectoryGroupHistoryMutation builder.
-func (m *DirectoryGroupHistoryMutation) Filter() *DirectoryGroupHistoryFilter {
-	return &DirectoryGroupHistoryFilter{config: m.config, predicateAdder: m}
-}
-
-// DirectoryGroupHistoryFilter provides a generic filtering capability at runtime for DirectoryGroupHistoryQuery.
-type DirectoryGroupHistoryFilter struct {
-	predicateAdder
-	config
-}
-
-// Where applies the entql predicate on the query filter.
-func (f *DirectoryGroupHistoryFilter) Where(p entql.P) {
-	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[14].Type, p, s); err != nil {
-			s.AddError(err)
-		}
-	})
-}
-
-// WhereID applies the entql string predicate on the id field.
-func (f *DirectoryGroupHistoryFilter) WhereID(p entql.StringP) {
-	f.Where(p.Field(directorygrouphistory.FieldID))
-}
-
-// WhereHistoryTime applies the entql time.Time predicate on the history_time field.
-func (f *DirectoryGroupHistoryFilter) WhereHistoryTime(p entql.TimeP) {
-	f.Where(p.Field(directorygrouphistory.FieldHistoryTime))
-}
-
-// WhereRef applies the entql string predicate on the ref field.
-func (f *DirectoryGroupHistoryFilter) WhereRef(p entql.StringP) {
-	f.Where(p.Field(directorygrouphistory.FieldRef))
-}
-
-// WhereOperation applies the entql string predicate on the operation field.
-func (f *DirectoryGroupHistoryFilter) WhereOperation(p entql.StringP) {
-	f.Where(p.Field(directorygrouphistory.FieldOperation))
-}
-
-// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
-func (f *DirectoryGroupHistoryFilter) WhereCreatedAt(p entql.TimeP) {
-	f.Where(p.Field(directorygrouphistory.FieldCreatedAt))
-}
-
-// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
-func (f *DirectoryGroupHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
-	f.Where(p.Field(directorygrouphistory.FieldUpdatedAt))
-}
-
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *DirectoryGroupHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(directorygrouphistory.FieldCreatedBy))
-}
-
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *DirectoryGroupHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(directorygrouphistory.FieldUpdatedBy))
-}
-
-// WhereUpdatedByImpersonator applies the entql string predicate on the updated_by_impersonator field.
-func (f *DirectoryGroupHistoryFilter) WhereUpdatedByImpersonator(p entql.StringP) {
-	f.Where(p.Field(directorygrouphistory.FieldUpdatedByImpersonator))
-}
-
-// WhereDisplayID applies the entql string predicate on the display_id field.
-func (f *DirectoryGroupHistoryFilter) WhereDisplayID(p entql.StringP) {
-	f.Where(p.Field(directorygrouphistory.FieldDisplayID))
-}
-
-// WhereTags applies the entql json.RawMessage predicate on the tags field.
-func (f *DirectoryGroupHistoryFilter) WhereTags(p entql.BytesP) {
-	f.Where(p.Field(directorygrouphistory.FieldTags))
-}
-
-// WhereOwnerID applies the entql string predicate on the owner_id field.
-func (f *DirectoryGroupHistoryFilter) WhereOwnerID(p entql.StringP) {
-	f.Where(p.Field(directorygrouphistory.FieldOwnerID))
-}
-
-// WhereEnvironmentName applies the entql string predicate on the environment_name field.
-func (f *DirectoryGroupHistoryFilter) WhereEnvironmentName(p entql.StringP) {
-	f.Where(p.Field(directorygrouphistory.FieldEnvironmentName))
-}
-
-// WhereEnvironmentID applies the entql string predicate on the environment_id field.
-func (f *DirectoryGroupHistoryFilter) WhereEnvironmentID(p entql.StringP) {
-	f.Where(p.Field(directorygrouphistory.FieldEnvironmentID))
-}
-
-// WhereScopeName applies the entql string predicate on the scope_name field.
-func (f *DirectoryGroupHistoryFilter) WhereScopeName(p entql.StringP) {
-	f.Where(p.Field(directorygrouphistory.FieldScopeName))
-}
-
-// WhereScopeID applies the entql string predicate on the scope_id field.
-func (f *DirectoryGroupHistoryFilter) WhereScopeID(p entql.StringP) {
-	f.Where(p.Field(directorygrouphistory.FieldScopeID))
-}
-
-// WhereIntegrationID applies the entql string predicate on the integration_id field.
-func (f *DirectoryGroupHistoryFilter) WhereIntegrationID(p entql.StringP) {
-	f.Where(p.Field(directorygrouphistory.FieldIntegrationID))
-}
-
-// WherePlatformID applies the entql string predicate on the platform_id field.
-func (f *DirectoryGroupHistoryFilter) WherePlatformID(p entql.StringP) {
-	f.Where(p.Field(directorygrouphistory.FieldPlatformID))
-}
-
-// WhereDirectoryInstanceID applies the entql string predicate on the directory_instance_id field.
-func (f *DirectoryGroupHistoryFilter) WhereDirectoryInstanceID(p entql.StringP) {
-	f.Where(p.Field(directorygrouphistory.FieldDirectoryInstanceID))
-}
-
-// WhereDirectorySyncRunID applies the entql string predicate on the directory_sync_run_id field.
-func (f *DirectoryGroupHistoryFilter) WhereDirectorySyncRunID(p entql.StringP) {
-	f.Where(p.Field(directorygrouphistory.FieldDirectorySyncRunID))
-}
-
-// WhereExternalID applies the entql string predicate on the external_id field.
-func (f *DirectoryGroupHistoryFilter) WhereExternalID(p entql.StringP) {
-	f.Where(p.Field(directorygrouphistory.FieldExternalID))
-}
-
-// WhereEmail applies the entql string predicate on the email field.
-func (f *DirectoryGroupHistoryFilter) WhereEmail(p entql.StringP) {
-	f.Where(p.Field(directorygrouphistory.FieldEmail))
-}
-
-// WhereDisplayName applies the entql string predicate on the display_name field.
-func (f *DirectoryGroupHistoryFilter) WhereDisplayName(p entql.StringP) {
-	f.Where(p.Field(directorygrouphistory.FieldDisplayName))
-}
-
-// WhereDescription applies the entql string predicate on the description field.
-func (f *DirectoryGroupHistoryFilter) WhereDescription(p entql.StringP) {
-	f.Where(p.Field(directorygrouphistory.FieldDescription))
-}
-
-// WhereClassification applies the entql string predicate on the classification field.
-func (f *DirectoryGroupHistoryFilter) WhereClassification(p entql.StringP) {
-	f.Where(p.Field(directorygrouphistory.FieldClassification))
-}
-
-// WhereStatus applies the entql string predicate on the status field.
-func (f *DirectoryGroupHistoryFilter) WhereStatus(p entql.StringP) {
-	f.Where(p.Field(directorygrouphistory.FieldStatus))
-}
-
-// WhereExternalSharingAllowed applies the entql bool predicate on the external_sharing_allowed field.
-func (f *DirectoryGroupHistoryFilter) WhereExternalSharingAllowed(p entql.BoolP) {
-	f.Where(p.Field(directorygrouphistory.FieldExternalSharingAllowed))
-}
-
-// WhereMemberCount applies the entql int predicate on the member_count field.
-func (f *DirectoryGroupHistoryFilter) WhereMemberCount(p entql.IntP) {
-	f.Where(p.Field(directorygrouphistory.FieldMemberCount))
-}
-
-// WhereFirstSeenAt applies the entql time.Time predicate on the first_seen_at field.
-func (f *DirectoryGroupHistoryFilter) WhereFirstSeenAt(p entql.TimeP) {
-	f.Where(p.Field(directorygrouphistory.FieldFirstSeenAt))
-}
-
-// WhereLastSeenAt applies the entql time.Time predicate on the last_seen_at field.
-func (f *DirectoryGroupHistoryFilter) WhereLastSeenAt(p entql.TimeP) {
-	f.Where(p.Field(directorygrouphistory.FieldLastSeenAt))
-}
-
-// WhereAddedAt applies the entql time.Time predicate on the added_at field.
-func (f *DirectoryGroupHistoryFilter) WhereAddedAt(p entql.TimeP) {
-	f.Where(p.Field(directorygrouphistory.FieldAddedAt))
-}
-
-// WhereRemovedAt applies the entql time.Time predicate on the removed_at field.
-func (f *DirectoryGroupHistoryFilter) WhereRemovedAt(p entql.TimeP) {
-	f.Where(p.Field(directorygrouphistory.FieldRemovedAt))
-}
-
-// WhereObservedAt applies the entql time.Time predicate on the observed_at field.
-func (f *DirectoryGroupHistoryFilter) WhereObservedAt(p entql.TimeP) {
-	f.Where(p.Field(directorygrouphistory.FieldObservedAt))
-}
-
-// WhereProfileHash applies the entql string predicate on the profile_hash field.
-func (f *DirectoryGroupHistoryFilter) WhereProfileHash(p entql.StringP) {
-	f.Where(p.Field(directorygrouphistory.FieldProfileHash))
-}
-
-// WhereProfile applies the entql json.RawMessage predicate on the profile field.
-func (f *DirectoryGroupHistoryFilter) WhereProfile(p entql.BytesP) {
-	f.Where(p.Field(directorygrouphistory.FieldProfile))
-}
-
-// WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
-func (f *DirectoryGroupHistoryFilter) WhereMetadata(p entql.BytesP) {
-	f.Where(p.Field(directorygrouphistory.FieldMetadata))
-}
-
-// WhereRawProfileFileID applies the entql string predicate on the raw_profile_file_id field.
-func (f *DirectoryGroupHistoryFilter) WhereRawProfileFileID(p entql.StringP) {
-	f.Where(p.Field(directorygrouphistory.FieldRawProfileFileID))
-}
-
-// WhereSourceVersion applies the entql string predicate on the source_version field.
-func (f *DirectoryGroupHistoryFilter) WhereSourceVersion(p entql.StringP) {
-	f.Where(p.Field(directorygrouphistory.FieldSourceVersion))
-}
-
-// WhereDirectoryName applies the entql string predicate on the directory_name field.
-func (f *DirectoryGroupHistoryFilter) WhereDirectoryName(p entql.StringP) {
-	f.Where(p.Field(directorygrouphistory.FieldDirectoryName))
-}
-
-// addPredicate implements the predicateAdder interface.
-func (_q *DirectoryMembershipHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	_q.predicates = append(_q.predicates, pred)
-}
-
-// Filter returns a Filter implementation to apply filters on the DirectoryMembershipHistoryQuery builder.
-func (_q *DirectoryMembershipHistoryQuery) Filter() *DirectoryMembershipHistoryFilter {
-	return &DirectoryMembershipHistoryFilter{config: _q.config, predicateAdder: _q}
-}
-
-// addPredicate implements the predicateAdder interface.
-func (m *DirectoryMembershipHistoryMutation) addPredicate(pred func(s *sql.Selector)) {
-	m.predicates = append(m.predicates, pred)
-}
-
-// Filter returns an entql.Where implementation to apply filters on the DirectoryMembershipHistoryMutation builder.
-func (m *DirectoryMembershipHistoryMutation) Filter() *DirectoryMembershipHistoryFilter {
-	return &DirectoryMembershipHistoryFilter{config: m.config, predicateAdder: m}
-}
-
-// DirectoryMembershipHistoryFilter provides a generic filtering capability at runtime for DirectoryMembershipHistoryQuery.
-type DirectoryMembershipHistoryFilter struct {
-	predicateAdder
-	config
-}
-
-// Where applies the entql predicate on the query filter.
-func (f *DirectoryMembershipHistoryFilter) Where(p entql.P) {
-	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[15].Type, p, s); err != nil {
-			s.AddError(err)
-		}
-	})
-}
-
-// WhereID applies the entql string predicate on the id field.
-func (f *DirectoryMembershipHistoryFilter) WhereID(p entql.StringP) {
-	f.Where(p.Field(directorymembershiphistory.FieldID))
-}
-
-// WhereHistoryTime applies the entql time.Time predicate on the history_time field.
-func (f *DirectoryMembershipHistoryFilter) WhereHistoryTime(p entql.TimeP) {
-	f.Where(p.Field(directorymembershiphistory.FieldHistoryTime))
-}
-
-// WhereRef applies the entql string predicate on the ref field.
-func (f *DirectoryMembershipHistoryFilter) WhereRef(p entql.StringP) {
-	f.Where(p.Field(directorymembershiphistory.FieldRef))
-}
-
-// WhereOperation applies the entql string predicate on the operation field.
-func (f *DirectoryMembershipHistoryFilter) WhereOperation(p entql.StringP) {
-	f.Where(p.Field(directorymembershiphistory.FieldOperation))
-}
-
-// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
-func (f *DirectoryMembershipHistoryFilter) WhereCreatedAt(p entql.TimeP) {
-	f.Where(p.Field(directorymembershiphistory.FieldCreatedAt))
-}
-
-// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
-func (f *DirectoryMembershipHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
-	f.Where(p.Field(directorymembershiphistory.FieldUpdatedAt))
-}
-
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *DirectoryMembershipHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(directorymembershiphistory.FieldCreatedBy))
-}
-
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *DirectoryMembershipHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(directorymembershiphistory.FieldUpdatedBy))
-}
-
-// WhereUpdatedByImpersonator applies the entql string predicate on the updated_by_impersonator field.
-func (f *DirectoryMembershipHistoryFilter) WhereUpdatedByImpersonator(p entql.StringP) {
-	f.Where(p.Field(directorymembershiphistory.FieldUpdatedByImpersonator))
-}
-
-// WhereDisplayID applies the entql string predicate on the display_id field.
-func (f *DirectoryMembershipHistoryFilter) WhereDisplayID(p entql.StringP) {
-	f.Where(p.Field(directorymembershiphistory.FieldDisplayID))
-}
-
-// WhereOwnerID applies the entql string predicate on the owner_id field.
-func (f *DirectoryMembershipHistoryFilter) WhereOwnerID(p entql.StringP) {
-	f.Where(p.Field(directorymembershiphistory.FieldOwnerID))
-}
-
-// WhereEnvironmentName applies the entql string predicate on the environment_name field.
-func (f *DirectoryMembershipHistoryFilter) WhereEnvironmentName(p entql.StringP) {
-	f.Where(p.Field(directorymembershiphistory.FieldEnvironmentName))
-}
-
-// WhereEnvironmentID applies the entql string predicate on the environment_id field.
-func (f *DirectoryMembershipHistoryFilter) WhereEnvironmentID(p entql.StringP) {
-	f.Where(p.Field(directorymembershiphistory.FieldEnvironmentID))
-}
-
-// WhereScopeName applies the entql string predicate on the scope_name field.
-func (f *DirectoryMembershipHistoryFilter) WhereScopeName(p entql.StringP) {
-	f.Where(p.Field(directorymembershiphistory.FieldScopeName))
-}
-
-// WhereScopeID applies the entql string predicate on the scope_id field.
-func (f *DirectoryMembershipHistoryFilter) WhereScopeID(p entql.StringP) {
-	f.Where(p.Field(directorymembershiphistory.FieldScopeID))
-}
-
-// WhereIntegrationID applies the entql string predicate on the integration_id field.
-func (f *DirectoryMembershipHistoryFilter) WhereIntegrationID(p entql.StringP) {
-	f.Where(p.Field(directorymembershiphistory.FieldIntegrationID))
-}
-
-// WherePlatformID applies the entql string predicate on the platform_id field.
-func (f *DirectoryMembershipHistoryFilter) WherePlatformID(p entql.StringP) {
-	f.Where(p.Field(directorymembershiphistory.FieldPlatformID))
-}
-
-// WhereDirectoryInstanceID applies the entql string predicate on the directory_instance_id field.
-func (f *DirectoryMembershipHistoryFilter) WhereDirectoryInstanceID(p entql.StringP) {
-	f.Where(p.Field(directorymembershiphistory.FieldDirectoryInstanceID))
-}
-
-// WhereDirectorySyncRunID applies the entql string predicate on the directory_sync_run_id field.
-func (f *DirectoryMembershipHistoryFilter) WhereDirectorySyncRunID(p entql.StringP) {
-	f.Where(p.Field(directorymembershiphistory.FieldDirectorySyncRunID))
-}
-
-// WhereDirectoryAccountID applies the entql string predicate on the directory_account_id field.
-func (f *DirectoryMembershipHistoryFilter) WhereDirectoryAccountID(p entql.StringP) {
-	f.Where(p.Field(directorymembershiphistory.FieldDirectoryAccountID))
-}
-
-// WhereDirectoryGroupID applies the entql string predicate on the directory_group_id field.
-func (f *DirectoryMembershipHistoryFilter) WhereDirectoryGroupID(p entql.StringP) {
-	f.Where(p.Field(directorymembershiphistory.FieldDirectoryGroupID))
-}
-
-// WhereRole applies the entql string predicate on the role field.
-func (f *DirectoryMembershipHistoryFilter) WhereRole(p entql.StringP) {
-	f.Where(p.Field(directorymembershiphistory.FieldRole))
-}
-
-// WhereSource applies the entql string predicate on the source field.
-func (f *DirectoryMembershipHistoryFilter) WhereSource(p entql.StringP) {
-	f.Where(p.Field(directorymembershiphistory.FieldSource))
-}
-
-// WhereDirectoryName applies the entql string predicate on the directory_name field.
-func (f *DirectoryMembershipHistoryFilter) WhereDirectoryName(p entql.StringP) {
-	f.Where(p.Field(directorymembershiphistory.FieldDirectoryName))
-}
-
-// WhereFirstSeenAt applies the entql time.Time predicate on the first_seen_at field.
-func (f *DirectoryMembershipHistoryFilter) WhereFirstSeenAt(p entql.TimeP) {
-	f.Where(p.Field(directorymembershiphistory.FieldFirstSeenAt))
-}
-
-// WhereLastSeenAt applies the entql time.Time predicate on the last_seen_at field.
-func (f *DirectoryMembershipHistoryFilter) WhereLastSeenAt(p entql.TimeP) {
-	f.Where(p.Field(directorymembershiphistory.FieldLastSeenAt))
-}
-
-// WhereAddedAt applies the entql time.Time predicate on the added_at field.
-func (f *DirectoryMembershipHistoryFilter) WhereAddedAt(p entql.TimeP) {
-	f.Where(p.Field(directorymembershiphistory.FieldAddedAt))
-}
-
-// WhereRemovedAt applies the entql time.Time predicate on the removed_at field.
-func (f *DirectoryMembershipHistoryFilter) WhereRemovedAt(p entql.TimeP) {
-	f.Where(p.Field(directorymembershiphistory.FieldRemovedAt))
-}
-
-// WhereObservedAt applies the entql time.Time predicate on the observed_at field.
-func (f *DirectoryMembershipHistoryFilter) WhereObservedAt(p entql.TimeP) {
-	f.Where(p.Field(directorymembershiphistory.FieldObservedAt))
-}
-
-// WhereLastConfirmedRunID applies the entql string predicate on the last_confirmed_run_id field.
-func (f *DirectoryMembershipHistoryFilter) WhereLastConfirmedRunID(p entql.StringP) {
-	f.Where(p.Field(directorymembershiphistory.FieldLastConfirmedRunID))
-}
-
-// WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
-func (f *DirectoryMembershipHistoryFilter) WhereMetadata(p entql.BytesP) {
-	f.Where(p.Field(directorymembershiphistory.FieldMetadata))
-}
-
-// addPredicate implements the predicateAdder interface.
 func (_q *DiscussionHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
 }
@@ -6790,7 +5311,7 @@ type DiscussionHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *DiscussionHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[16].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[11].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -6895,7 +5416,7 @@ type DocumentDataHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *DocumentDataHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[17].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[12].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -7025,7 +5546,7 @@ type EmailTemplateHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *EmailTemplateHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[18].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[13].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -7240,7 +5761,7 @@ type EntityHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *EntityHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[19].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[14].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -7625,7 +6146,7 @@ type EntityTypeHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *EntityTypeHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[20].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[15].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -7745,7 +6266,7 @@ type EvidenceHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *EvidenceHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[21].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[16].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -7930,7 +6451,7 @@ type FileHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *FileHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[22].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[17].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -8165,7 +6686,7 @@ type FindingControlHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *FindingControlHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[23].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[18].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -8295,7 +6816,7 @@ type FindingHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *FindingHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[24].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[19].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -8665,7 +7186,7 @@ type GroupHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *GroupHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[25].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[20].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -8840,7 +7361,7 @@ type GroupMembershipHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *GroupMembershipHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[26].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[21].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -8935,7 +7456,7 @@ type GroupSettingHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *GroupSettingHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[27].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[22].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -9050,7 +7571,7 @@ type HushHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *HushHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[28].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[23].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -9205,7 +7726,7 @@ type IdentityHolderHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *IdentityHolderHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[29].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[24].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -9427,231 +7948,6 @@ func (f *IdentityHolderHistoryFilter) WhereAvatarRemoteURL(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (_q *IntegrationHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	_q.predicates = append(_q.predicates, pred)
-}
-
-// Filter returns a Filter implementation to apply filters on the IntegrationHistoryQuery builder.
-func (_q *IntegrationHistoryQuery) Filter() *IntegrationHistoryFilter {
-	return &IntegrationHistoryFilter{config: _q.config, predicateAdder: _q}
-}
-
-// addPredicate implements the predicateAdder interface.
-func (m *IntegrationHistoryMutation) addPredicate(pred func(s *sql.Selector)) {
-	m.predicates = append(m.predicates, pred)
-}
-
-// Filter returns an entql.Where implementation to apply filters on the IntegrationHistoryMutation builder.
-func (m *IntegrationHistoryMutation) Filter() *IntegrationHistoryFilter {
-	return &IntegrationHistoryFilter{config: m.config, predicateAdder: m}
-}
-
-// IntegrationHistoryFilter provides a generic filtering capability at runtime for IntegrationHistoryQuery.
-type IntegrationHistoryFilter struct {
-	predicateAdder
-	config
-}
-
-// Where applies the entql predicate on the query filter.
-func (f *IntegrationHistoryFilter) Where(p entql.P) {
-	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[30].Type, p, s); err != nil {
-			s.AddError(err)
-		}
-	})
-}
-
-// WhereID applies the entql string predicate on the id field.
-func (f *IntegrationHistoryFilter) WhereID(p entql.StringP) {
-	f.Where(p.Field(integrationhistory.FieldID))
-}
-
-// WhereHistoryTime applies the entql time.Time predicate on the history_time field.
-func (f *IntegrationHistoryFilter) WhereHistoryTime(p entql.TimeP) {
-	f.Where(p.Field(integrationhistory.FieldHistoryTime))
-}
-
-// WhereRef applies the entql string predicate on the ref field.
-func (f *IntegrationHistoryFilter) WhereRef(p entql.StringP) {
-	f.Where(p.Field(integrationhistory.FieldRef))
-}
-
-// WhereOperation applies the entql string predicate on the operation field.
-func (f *IntegrationHistoryFilter) WhereOperation(p entql.StringP) {
-	f.Where(p.Field(integrationhistory.FieldOperation))
-}
-
-// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
-func (f *IntegrationHistoryFilter) WhereCreatedAt(p entql.TimeP) {
-	f.Where(p.Field(integrationhistory.FieldCreatedAt))
-}
-
-// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
-func (f *IntegrationHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
-	f.Where(p.Field(integrationhistory.FieldUpdatedAt))
-}
-
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *IntegrationHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(integrationhistory.FieldCreatedBy))
-}
-
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *IntegrationHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(integrationhistory.FieldUpdatedBy))
-}
-
-// WhereUpdatedByImpersonator applies the entql string predicate on the updated_by_impersonator field.
-func (f *IntegrationHistoryFilter) WhereUpdatedByImpersonator(p entql.StringP) {
-	f.Where(p.Field(integrationhistory.FieldUpdatedByImpersonator))
-}
-
-// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
-func (f *IntegrationHistoryFilter) WhereDeletedAt(p entql.TimeP) {
-	f.Where(p.Field(integrationhistory.FieldDeletedAt))
-}
-
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *IntegrationHistoryFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(integrationhistory.FieldDeletedBy))
-}
-
-// WhereTags applies the entql json.RawMessage predicate on the tags field.
-func (f *IntegrationHistoryFilter) WhereTags(p entql.BytesP) {
-	f.Where(p.Field(integrationhistory.FieldTags))
-}
-
-// WhereOwnerID applies the entql string predicate on the owner_id field.
-func (f *IntegrationHistoryFilter) WhereOwnerID(p entql.StringP) {
-	f.Where(p.Field(integrationhistory.FieldOwnerID))
-}
-
-// WhereSystemOwned applies the entql bool predicate on the system_owned field.
-func (f *IntegrationHistoryFilter) WhereSystemOwned(p entql.BoolP) {
-	f.Where(p.Field(integrationhistory.FieldSystemOwned))
-}
-
-// WhereInternalNotes applies the entql string predicate on the internal_notes field.
-func (f *IntegrationHistoryFilter) WhereInternalNotes(p entql.StringP) {
-	f.Where(p.Field(integrationhistory.FieldInternalNotes))
-}
-
-// WhereSystemInternalID applies the entql string predicate on the system_internal_id field.
-func (f *IntegrationHistoryFilter) WhereSystemInternalID(p entql.StringP) {
-	f.Where(p.Field(integrationhistory.FieldSystemInternalID))
-}
-
-// WhereEnvironmentName applies the entql string predicate on the environment_name field.
-func (f *IntegrationHistoryFilter) WhereEnvironmentName(p entql.StringP) {
-	f.Where(p.Field(integrationhistory.FieldEnvironmentName))
-}
-
-// WhereEnvironmentID applies the entql string predicate on the environment_id field.
-func (f *IntegrationHistoryFilter) WhereEnvironmentID(p entql.StringP) {
-	f.Where(p.Field(integrationhistory.FieldEnvironmentID))
-}
-
-// WhereScopeName applies the entql string predicate on the scope_name field.
-func (f *IntegrationHistoryFilter) WhereScopeName(p entql.StringP) {
-	f.Where(p.Field(integrationhistory.FieldScopeName))
-}
-
-// WhereScopeID applies the entql string predicate on the scope_id field.
-func (f *IntegrationHistoryFilter) WhereScopeID(p entql.StringP) {
-	f.Where(p.Field(integrationhistory.FieldScopeID))
-}
-
-// WhereName applies the entql string predicate on the name field.
-func (f *IntegrationHistoryFilter) WhereName(p entql.StringP) {
-	f.Where(p.Field(integrationhistory.FieldName))
-}
-
-// WhereDescription applies the entql string predicate on the description field.
-func (f *IntegrationHistoryFilter) WhereDescription(p entql.StringP) {
-	f.Where(p.Field(integrationhistory.FieldDescription))
-}
-
-// WhereKind applies the entql string predicate on the kind field.
-func (f *IntegrationHistoryFilter) WhereKind(p entql.StringP) {
-	f.Where(p.Field(integrationhistory.FieldKind))
-}
-
-// WhereIntegrationType applies the entql string predicate on the integration_type field.
-func (f *IntegrationHistoryFilter) WhereIntegrationType(p entql.StringP) {
-	f.Where(p.Field(integrationhistory.FieldIntegrationType))
-}
-
-// WherePlatformID applies the entql string predicate on the platform_id field.
-func (f *IntegrationHistoryFilter) WherePlatformID(p entql.StringP) {
-	f.Where(p.Field(integrationhistory.FieldPlatformID))
-}
-
-// WhereProviderMetadata applies the entql json.RawMessage predicate on the provider_metadata field.
-func (f *IntegrationHistoryFilter) WhereProviderMetadata(p entql.BytesP) {
-	f.Where(p.Field(integrationhistory.FieldProviderMetadata))
-}
-
-// WhereConfig applies the entql json.RawMessage predicate on the config field.
-func (f *IntegrationHistoryFilter) WhereConfig(p entql.BytesP) {
-	f.Where(p.Field(integrationhistory.FieldConfig))
-}
-
-// WhereInstallationMetadata applies the entql json.RawMessage predicate on the installation_metadata field.
-func (f *IntegrationHistoryFilter) WhereInstallationMetadata(p entql.BytesP) {
-	f.Where(p.Field(integrationhistory.FieldInstallationMetadata))
-}
-
-// WhereProviderState applies the entql json.RawMessage predicate on the provider_state field.
-func (f *IntegrationHistoryFilter) WhereProviderState(p entql.BytesP) {
-	f.Where(p.Field(integrationhistory.FieldProviderState))
-}
-
-// WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
-func (f *IntegrationHistoryFilter) WhereMetadata(p entql.BytesP) {
-	f.Where(p.Field(integrationhistory.FieldMetadata))
-}
-
-// WhereDefinitionID applies the entql string predicate on the definition_id field.
-func (f *IntegrationHistoryFilter) WhereDefinitionID(p entql.StringP) {
-	f.Where(p.Field(integrationhistory.FieldDefinitionID))
-}
-
-// WhereDefinitionVersion applies the entql string predicate on the definition_version field.
-func (f *IntegrationHistoryFilter) WhereDefinitionVersion(p entql.StringP) {
-	f.Where(p.Field(integrationhistory.FieldDefinitionVersion))
-}
-
-// WhereDefinitionSlug applies the entql string predicate on the definition_slug field.
-func (f *IntegrationHistoryFilter) WhereDefinitionSlug(p entql.StringP) {
-	f.Where(p.Field(integrationhistory.FieldDefinitionSlug))
-}
-
-// WhereFamily applies the entql string predicate on the family field.
-func (f *IntegrationHistoryFilter) WhereFamily(p entql.StringP) {
-	f.Where(p.Field(integrationhistory.FieldFamily))
-}
-
-// WhereStatus applies the entql string predicate on the status field.
-func (f *IntegrationHistoryFilter) WhereStatus(p entql.StringP) {
-	f.Where(p.Field(integrationhistory.FieldStatus))
-}
-
-// WhereProviderMetadataSnapshot applies the entql json.RawMessage predicate on the provider_metadata_snapshot field.
-func (f *IntegrationHistoryFilter) WhereProviderMetadataSnapshot(p entql.BytesP) {
-	f.Where(p.Field(integrationhistory.FieldProviderMetadataSnapshot))
-}
-
-// WherePrimaryDirectory applies the entql bool predicate on the primary_directory field.
-func (f *IntegrationHistoryFilter) WherePrimaryDirectory(p entql.BoolP) {
-	f.Where(p.Field(integrationhistory.FieldPrimaryDirectory))
-}
-
-// WhereCampaignEmail applies the entql bool predicate on the campaign_email field.
-func (f *IntegrationHistoryFilter) WhereCampaignEmail(p entql.BoolP) {
-	f.Where(p.Field(integrationhistory.FieldCampaignEmail))
-}
-
-// addPredicate implements the predicateAdder interface.
 func (_q *InternalPolicyHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
 }
@@ -9680,7 +7976,7 @@ type InternalPolicyHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *InternalPolicyHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[31].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[25].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -9950,7 +8246,7 @@ type JobTemplateHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *JobTemplateHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[32].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[26].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -10105,7 +8401,7 @@ type MappableDomainHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *MappableDomainHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[33].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[27].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -10210,7 +8506,7 @@ type MappedControlHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *MappedControlHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[34].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[28].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -10345,7 +8641,7 @@ type NarrativeHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *NarrativeHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[35].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[29].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -10480,7 +8776,7 @@ type NoteHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *NoteHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[36].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[30].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -10625,7 +8921,7 @@ type NotificationPreferenceHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *NotificationPreferenceHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[37].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[31].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -10825,7 +9121,7 @@ type NotificationTemplateHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *NotificationTemplateHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[38].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[32].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -11050,7 +9346,7 @@ type OrgMembershipHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *OrgMembershipHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[39].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[33].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -11137,136 +9433,6 @@ func (f *OrgMembershipHistoryFilter) WhereSSOExemptGrantedAt(p entql.TimeP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (_q *OrgSubscriptionHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	_q.predicates = append(_q.predicates, pred)
-}
-
-// Filter returns a Filter implementation to apply filters on the OrgSubscriptionHistoryQuery builder.
-func (_q *OrgSubscriptionHistoryQuery) Filter() *OrgSubscriptionHistoryFilter {
-	return &OrgSubscriptionHistoryFilter{config: _q.config, predicateAdder: _q}
-}
-
-// addPredicate implements the predicateAdder interface.
-func (m *OrgSubscriptionHistoryMutation) addPredicate(pred func(s *sql.Selector)) {
-	m.predicates = append(m.predicates, pred)
-}
-
-// Filter returns an entql.Where implementation to apply filters on the OrgSubscriptionHistoryMutation builder.
-func (m *OrgSubscriptionHistoryMutation) Filter() *OrgSubscriptionHistoryFilter {
-	return &OrgSubscriptionHistoryFilter{config: m.config, predicateAdder: m}
-}
-
-// OrgSubscriptionHistoryFilter provides a generic filtering capability at runtime for OrgSubscriptionHistoryQuery.
-type OrgSubscriptionHistoryFilter struct {
-	predicateAdder
-	config
-}
-
-// Where applies the entql predicate on the query filter.
-func (f *OrgSubscriptionHistoryFilter) Where(p entql.P) {
-	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[40].Type, p, s); err != nil {
-			s.AddError(err)
-		}
-	})
-}
-
-// WhereID applies the entql string predicate on the id field.
-func (f *OrgSubscriptionHistoryFilter) WhereID(p entql.StringP) {
-	f.Where(p.Field(orgsubscriptionhistory.FieldID))
-}
-
-// WhereHistoryTime applies the entql time.Time predicate on the history_time field.
-func (f *OrgSubscriptionHistoryFilter) WhereHistoryTime(p entql.TimeP) {
-	f.Where(p.Field(orgsubscriptionhistory.FieldHistoryTime))
-}
-
-// WhereRef applies the entql string predicate on the ref field.
-func (f *OrgSubscriptionHistoryFilter) WhereRef(p entql.StringP) {
-	f.Where(p.Field(orgsubscriptionhistory.FieldRef))
-}
-
-// WhereOperation applies the entql string predicate on the operation field.
-func (f *OrgSubscriptionHistoryFilter) WhereOperation(p entql.StringP) {
-	f.Where(p.Field(orgsubscriptionhistory.FieldOperation))
-}
-
-// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
-func (f *OrgSubscriptionHistoryFilter) WhereCreatedAt(p entql.TimeP) {
-	f.Where(p.Field(orgsubscriptionhistory.FieldCreatedAt))
-}
-
-// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
-func (f *OrgSubscriptionHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
-	f.Where(p.Field(orgsubscriptionhistory.FieldUpdatedAt))
-}
-
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *OrgSubscriptionHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(orgsubscriptionhistory.FieldCreatedBy))
-}
-
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *OrgSubscriptionHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(orgsubscriptionhistory.FieldUpdatedBy))
-}
-
-// WhereUpdatedByImpersonator applies the entql string predicate on the updated_by_impersonator field.
-func (f *OrgSubscriptionHistoryFilter) WhereUpdatedByImpersonator(p entql.StringP) {
-	f.Where(p.Field(orgsubscriptionhistory.FieldUpdatedByImpersonator))
-}
-
-// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
-func (f *OrgSubscriptionHistoryFilter) WhereDeletedAt(p entql.TimeP) {
-	f.Where(p.Field(orgsubscriptionhistory.FieldDeletedAt))
-}
-
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *OrgSubscriptionHistoryFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(orgsubscriptionhistory.FieldDeletedBy))
-}
-
-// WhereTags applies the entql json.RawMessage predicate on the tags field.
-func (f *OrgSubscriptionHistoryFilter) WhereTags(p entql.BytesP) {
-	f.Where(p.Field(orgsubscriptionhistory.FieldTags))
-}
-
-// WhereOwnerID applies the entql string predicate on the owner_id field.
-func (f *OrgSubscriptionHistoryFilter) WhereOwnerID(p entql.StringP) {
-	f.Where(p.Field(orgsubscriptionhistory.FieldOwnerID))
-}
-
-// WhereStripeSubscriptionID applies the entql string predicate on the stripe_subscription_id field.
-func (f *OrgSubscriptionHistoryFilter) WhereStripeSubscriptionID(p entql.StringP) {
-	f.Where(p.Field(orgsubscriptionhistory.FieldStripeSubscriptionID))
-}
-
-// WhereStripeSubscriptionStatus applies the entql string predicate on the stripe_subscription_status field.
-func (f *OrgSubscriptionHistoryFilter) WhereStripeSubscriptionStatus(p entql.StringP) {
-	f.Where(p.Field(orgsubscriptionhistory.FieldStripeSubscriptionStatus))
-}
-
-// WhereActive applies the entql bool predicate on the active field.
-func (f *OrgSubscriptionHistoryFilter) WhereActive(p entql.BoolP) {
-	f.Where(p.Field(orgsubscriptionhistory.FieldActive))
-}
-
-// WhereExpiresAt applies the entql time.Time predicate on the expires_at field.
-func (f *OrgSubscriptionHistoryFilter) WhereExpiresAt(p entql.TimeP) {
-	f.Where(p.Field(orgsubscriptionhistory.FieldExpiresAt))
-}
-
-// WhereTrialExpiresAt applies the entql time.Time predicate on the trial_expires_at field.
-func (f *OrgSubscriptionHistoryFilter) WhereTrialExpiresAt(p entql.TimeP) {
-	f.Where(p.Field(orgsubscriptionhistory.FieldTrialExpiresAt))
-}
-
-// WhereDaysUntilDue applies the entql string predicate on the days_until_due field.
-func (f *OrgSubscriptionHistoryFilter) WhereDaysUntilDue(p entql.StringP) {
-	f.Where(p.Field(orgsubscriptionhistory.FieldDaysUntilDue))
-}
-
-// addPredicate implements the predicateAdder interface.
 func (_q *OrganizationHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
 }
@@ -11295,7 +9461,7 @@ type OrganizationHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *OrganizationHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[41].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[34].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -11440,7 +9606,7 @@ type OrganizationSettingHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *OrganizationSettingHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[42].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[35].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -11685,7 +9851,7 @@ type PlatformHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *PlatformHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[43].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[36].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -12030,7 +10196,7 @@ type ProcedureHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ProcedureHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[44].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[37].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -12295,7 +10461,7 @@ type ProgramHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ProgramHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[45].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[38].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -12500,7 +10666,7 @@ type ProgramMembershipHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ProgramMembershipHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[46].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[39].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -12595,7 +10761,7 @@ type RemediationHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *RemediationHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[47].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[40].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -12840,7 +11006,7 @@ type ReviewHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ReviewHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[48].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[41].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -13070,7 +11236,7 @@ type RiskHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *RiskHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[49].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[42].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -13345,7 +11511,7 @@ type SLADefinitionHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *SLADefinitionHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[50].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[43].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -13432,231 +11598,6 @@ func (f *SLADefinitionHistoryFilter) WhereSecurityLevel(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
-func (_q *ScanHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	_q.predicates = append(_q.predicates, pred)
-}
-
-// Filter returns a Filter implementation to apply filters on the ScanHistoryQuery builder.
-func (_q *ScanHistoryQuery) Filter() *ScanHistoryFilter {
-	return &ScanHistoryFilter{config: _q.config, predicateAdder: _q}
-}
-
-// addPredicate implements the predicateAdder interface.
-func (m *ScanHistoryMutation) addPredicate(pred func(s *sql.Selector)) {
-	m.predicates = append(m.predicates, pred)
-}
-
-// Filter returns an entql.Where implementation to apply filters on the ScanHistoryMutation builder.
-func (m *ScanHistoryMutation) Filter() *ScanHistoryFilter {
-	return &ScanHistoryFilter{config: m.config, predicateAdder: m}
-}
-
-// ScanHistoryFilter provides a generic filtering capability at runtime for ScanHistoryQuery.
-type ScanHistoryFilter struct {
-	predicateAdder
-	config
-}
-
-// Where applies the entql predicate on the query filter.
-func (f *ScanHistoryFilter) Where(p entql.P) {
-	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[51].Type, p, s); err != nil {
-			s.AddError(err)
-		}
-	})
-}
-
-// WhereID applies the entql string predicate on the id field.
-func (f *ScanHistoryFilter) WhereID(p entql.StringP) {
-	f.Where(p.Field(scanhistory.FieldID))
-}
-
-// WhereHistoryTime applies the entql time.Time predicate on the history_time field.
-func (f *ScanHistoryFilter) WhereHistoryTime(p entql.TimeP) {
-	f.Where(p.Field(scanhistory.FieldHistoryTime))
-}
-
-// WhereRef applies the entql string predicate on the ref field.
-func (f *ScanHistoryFilter) WhereRef(p entql.StringP) {
-	f.Where(p.Field(scanhistory.FieldRef))
-}
-
-// WhereOperation applies the entql string predicate on the operation field.
-func (f *ScanHistoryFilter) WhereOperation(p entql.StringP) {
-	f.Where(p.Field(scanhistory.FieldOperation))
-}
-
-// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
-func (f *ScanHistoryFilter) WhereCreatedAt(p entql.TimeP) {
-	f.Where(p.Field(scanhistory.FieldCreatedAt))
-}
-
-// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
-func (f *ScanHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
-	f.Where(p.Field(scanhistory.FieldUpdatedAt))
-}
-
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *ScanHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(scanhistory.FieldCreatedBy))
-}
-
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *ScanHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(scanhistory.FieldUpdatedBy))
-}
-
-// WhereUpdatedByImpersonator applies the entql string predicate on the updated_by_impersonator field.
-func (f *ScanHistoryFilter) WhereUpdatedByImpersonator(p entql.StringP) {
-	f.Where(p.Field(scanhistory.FieldUpdatedByImpersonator))
-}
-
-// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
-func (f *ScanHistoryFilter) WhereDeletedAt(p entql.TimeP) {
-	f.Where(p.Field(scanhistory.FieldDeletedAt))
-}
-
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *ScanHistoryFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(scanhistory.FieldDeletedBy))
-}
-
-// WhereTags applies the entql json.RawMessage predicate on the tags field.
-func (f *ScanHistoryFilter) WhereTags(p entql.BytesP) {
-	f.Where(p.Field(scanhistory.FieldTags))
-}
-
-// WhereOwnerID applies the entql string predicate on the owner_id field.
-func (f *ScanHistoryFilter) WhereOwnerID(p entql.StringP) {
-	f.Where(p.Field(scanhistory.FieldOwnerID))
-}
-
-// WhereSystemOwned applies the entql bool predicate on the system_owned field.
-func (f *ScanHistoryFilter) WhereSystemOwned(p entql.BoolP) {
-	f.Where(p.Field(scanhistory.FieldSystemOwned))
-}
-
-// WhereInternalNotes applies the entql string predicate on the internal_notes field.
-func (f *ScanHistoryFilter) WhereInternalNotes(p entql.StringP) {
-	f.Where(p.Field(scanhistory.FieldInternalNotes))
-}
-
-// WhereSystemInternalID applies the entql string predicate on the system_internal_id field.
-func (f *ScanHistoryFilter) WhereSystemInternalID(p entql.StringP) {
-	f.Where(p.Field(scanhistory.FieldSystemInternalID))
-}
-
-// WhereReviewedBy applies the entql string predicate on the reviewed_by field.
-func (f *ScanHistoryFilter) WhereReviewedBy(p entql.StringP) {
-	f.Where(p.Field(scanhistory.FieldReviewedBy))
-}
-
-// WhereReviewedByUserID applies the entql string predicate on the reviewed_by_user_id field.
-func (f *ScanHistoryFilter) WhereReviewedByUserID(p entql.StringP) {
-	f.Where(p.Field(scanhistory.FieldReviewedByUserID))
-}
-
-// WhereReviewedByGroupID applies the entql string predicate on the reviewed_by_group_id field.
-func (f *ScanHistoryFilter) WhereReviewedByGroupID(p entql.StringP) {
-	f.Where(p.Field(scanhistory.FieldReviewedByGroupID))
-}
-
-// WhereAssignedTo applies the entql string predicate on the assigned_to field.
-func (f *ScanHistoryFilter) WhereAssignedTo(p entql.StringP) {
-	f.Where(p.Field(scanhistory.FieldAssignedTo))
-}
-
-// WhereAssignedToUserID applies the entql string predicate on the assigned_to_user_id field.
-func (f *ScanHistoryFilter) WhereAssignedToUserID(p entql.StringP) {
-	f.Where(p.Field(scanhistory.FieldAssignedToUserID))
-}
-
-// WhereAssignedToGroupID applies the entql string predicate on the assigned_to_group_id field.
-func (f *ScanHistoryFilter) WhereAssignedToGroupID(p entql.StringP) {
-	f.Where(p.Field(scanhistory.FieldAssignedToGroupID))
-}
-
-// WhereEnvironmentName applies the entql string predicate on the environment_name field.
-func (f *ScanHistoryFilter) WhereEnvironmentName(p entql.StringP) {
-	f.Where(p.Field(scanhistory.FieldEnvironmentName))
-}
-
-// WhereEnvironmentID applies the entql string predicate on the environment_id field.
-func (f *ScanHistoryFilter) WhereEnvironmentID(p entql.StringP) {
-	f.Where(p.Field(scanhistory.FieldEnvironmentID))
-}
-
-// WhereScopeName applies the entql string predicate on the scope_name field.
-func (f *ScanHistoryFilter) WhereScopeName(p entql.StringP) {
-	f.Where(p.Field(scanhistory.FieldScopeName))
-}
-
-// WhereScopeID applies the entql string predicate on the scope_id field.
-func (f *ScanHistoryFilter) WhereScopeID(p entql.StringP) {
-	f.Where(p.Field(scanhistory.FieldScopeID))
-}
-
-// WhereTarget applies the entql string predicate on the target field.
-func (f *ScanHistoryFilter) WhereTarget(p entql.StringP) {
-	f.Where(p.Field(scanhistory.FieldTarget))
-}
-
-// WhereScanType applies the entql string predicate on the scan_type field.
-func (f *ScanHistoryFilter) WhereScanType(p entql.StringP) {
-	f.Where(p.Field(scanhistory.FieldScanType))
-}
-
-// WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
-func (f *ScanHistoryFilter) WhereMetadata(p entql.BytesP) {
-	f.Where(p.Field(scanhistory.FieldMetadata))
-}
-
-// WhereScanDate applies the entql time.Time predicate on the scan_date field.
-func (f *ScanHistoryFilter) WhereScanDate(p entql.TimeP) {
-	f.Where(p.Field(scanhistory.FieldScanDate))
-}
-
-// WhereScanSchedule applies the entql string predicate on the scan_schedule field.
-func (f *ScanHistoryFilter) WhereScanSchedule(p entql.StringP) {
-	f.Where(p.Field(scanhistory.FieldScanSchedule))
-}
-
-// WhereNextScanRunAt applies the entql time.Time predicate on the next_scan_run_at field.
-func (f *ScanHistoryFilter) WhereNextScanRunAt(p entql.TimeP) {
-	f.Where(p.Field(scanhistory.FieldNextScanRunAt))
-}
-
-// WherePerformedBy applies the entql string predicate on the performed_by field.
-func (f *ScanHistoryFilter) WherePerformedBy(p entql.StringP) {
-	f.Where(p.Field(scanhistory.FieldPerformedBy))
-}
-
-// WherePerformedByUserID applies the entql string predicate on the performed_by_user_id field.
-func (f *ScanHistoryFilter) WherePerformedByUserID(p entql.StringP) {
-	f.Where(p.Field(scanhistory.FieldPerformedByUserID))
-}
-
-// WherePerformedByGroupID applies the entql string predicate on the performed_by_group_id field.
-func (f *ScanHistoryFilter) WherePerformedByGroupID(p entql.StringP) {
-	f.Where(p.Field(scanhistory.FieldPerformedByGroupID))
-}
-
-// WhereGeneratedByPlatformID applies the entql string predicate on the generated_by_platform_id field.
-func (f *ScanHistoryFilter) WhereGeneratedByPlatformID(p entql.StringP) {
-	f.Where(p.Field(scanhistory.FieldGeneratedByPlatformID))
-}
-
-// WhereDiscoveredVulnerabilityIds applies the entql json.RawMessage predicate on the discovered_vulnerability_ids field.
-func (f *ScanHistoryFilter) WhereDiscoveredVulnerabilityIds(p entql.BytesP) {
-	f.Where(p.Field(scanhistory.FieldDiscoveredVulnerabilityIds))
-}
-
-// WhereStatus applies the entql string predicate on the status field.
-func (f *ScanHistoryFilter) WhereStatus(p entql.StringP) {
-	f.Where(p.Field(scanhistory.FieldStatus))
-}
-
-// addPredicate implements the predicateAdder interface.
 func (_q *ScheduledJobHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
 }
@@ -13685,7 +11626,7 @@ type ScheduledJobHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ScheduledJobHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[52].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[44].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -13810,7 +11751,7 @@ type StandardHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *StandardHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[53].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[45].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -14000,7 +11941,7 @@ type SubcontrolHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *SubcontrolHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[54].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[46].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -14295,7 +12236,7 @@ type SubprocessorHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *SubprocessorHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[55].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[47].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -14430,7 +12371,7 @@ type SystemDetailHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *SystemDetailHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[56].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[48].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -14575,7 +12516,7 @@ type TaskHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TaskHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[57].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[49].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -14810,7 +12751,7 @@ type TemplateHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TemplateHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[58].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[50].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -14985,7 +12926,7 @@ type TrustCenterComplianceHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterComplianceHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[59].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[51].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -15090,7 +13031,7 @@ type TrustCenterDocHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterDocHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[60].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[52].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -15235,7 +13176,7 @@ type TrustCenterEntityHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterEntityHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[61].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[53].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -15350,7 +13291,7 @@ type TrustCenterFAQHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterFAQHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[62].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[54].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -15470,7 +13411,7 @@ type TrustCenterHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[63].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[55].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -15610,7 +13551,7 @@ type TrustCenterNDARequestHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterNDARequestHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[64].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[56].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -15770,7 +13711,7 @@ type TrustCenterSettingHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterSettingHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[65].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[57].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -16000,7 +13941,7 @@ type TrustCenterSubprocessorHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterSubprocessorHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[66].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[58].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -16115,7 +14056,7 @@ type TrustCenterWatermarkConfigHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterWatermarkConfigHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[67].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[59].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -16255,7 +14196,7 @@ type UserHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[68].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[60].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -16440,7 +14381,7 @@ type UserSettingHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserSettingHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[69].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[61].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -16595,7 +14536,7 @@ type VendorRiskScoreHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *VendorRiskScoreHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[70].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[62].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -16760,7 +14701,7 @@ type VendorScoringConfigHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *VendorScoringConfigHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[71].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[63].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -16875,7 +14816,7 @@ type VulnerabilityHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *VulnerabilityHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[72].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[64].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -17270,7 +15211,7 @@ type WorkflowAssignmentHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WorkflowAssignmentHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[73].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[65].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -17455,7 +15396,7 @@ type WorkflowAssignmentTargetHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WorkflowAssignmentTargetHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[74].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[66].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -17585,7 +15526,7 @@ type WorkflowDefinitionHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WorkflowDefinitionHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[75].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[67].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -17759,549 +15700,4 @@ func (f *WorkflowDefinitionHistoryFilter) WhereDefinitionJSON(p entql.BytesP) {
 // WhereTrackedFields applies the entql json.RawMessage predicate on the tracked_fields field.
 func (f *WorkflowDefinitionHistoryFilter) WhereTrackedFields(p entql.BytesP) {
 	f.Where(p.Field(workflowdefinitionhistory.FieldTrackedFields))
-}
-
-// addPredicate implements the predicateAdder interface.
-func (_q *WorkflowEventHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	_q.predicates = append(_q.predicates, pred)
-}
-
-// Filter returns a Filter implementation to apply filters on the WorkflowEventHistoryQuery builder.
-func (_q *WorkflowEventHistoryQuery) Filter() *WorkflowEventHistoryFilter {
-	return &WorkflowEventHistoryFilter{config: _q.config, predicateAdder: _q}
-}
-
-// addPredicate implements the predicateAdder interface.
-func (m *WorkflowEventHistoryMutation) addPredicate(pred func(s *sql.Selector)) {
-	m.predicates = append(m.predicates, pred)
-}
-
-// Filter returns an entql.Where implementation to apply filters on the WorkflowEventHistoryMutation builder.
-func (m *WorkflowEventHistoryMutation) Filter() *WorkflowEventHistoryFilter {
-	return &WorkflowEventHistoryFilter{config: m.config, predicateAdder: m}
-}
-
-// WorkflowEventHistoryFilter provides a generic filtering capability at runtime for WorkflowEventHistoryQuery.
-type WorkflowEventHistoryFilter struct {
-	predicateAdder
-	config
-}
-
-// Where applies the entql predicate on the query filter.
-func (f *WorkflowEventHistoryFilter) Where(p entql.P) {
-	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[76].Type, p, s); err != nil {
-			s.AddError(err)
-		}
-	})
-}
-
-// WhereID applies the entql string predicate on the id field.
-func (f *WorkflowEventHistoryFilter) WhereID(p entql.StringP) {
-	f.Where(p.Field(workfloweventhistory.FieldID))
-}
-
-// WhereHistoryTime applies the entql time.Time predicate on the history_time field.
-func (f *WorkflowEventHistoryFilter) WhereHistoryTime(p entql.TimeP) {
-	f.Where(p.Field(workfloweventhistory.FieldHistoryTime))
-}
-
-// WhereRef applies the entql string predicate on the ref field.
-func (f *WorkflowEventHistoryFilter) WhereRef(p entql.StringP) {
-	f.Where(p.Field(workfloweventhistory.FieldRef))
-}
-
-// WhereOperation applies the entql string predicate on the operation field.
-func (f *WorkflowEventHistoryFilter) WhereOperation(p entql.StringP) {
-	f.Where(p.Field(workfloweventhistory.FieldOperation))
-}
-
-// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
-func (f *WorkflowEventHistoryFilter) WhereCreatedAt(p entql.TimeP) {
-	f.Where(p.Field(workfloweventhistory.FieldCreatedAt))
-}
-
-// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
-func (f *WorkflowEventHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
-	f.Where(p.Field(workfloweventhistory.FieldUpdatedAt))
-}
-
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *WorkflowEventHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(workfloweventhistory.FieldCreatedBy))
-}
-
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *WorkflowEventHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(workfloweventhistory.FieldUpdatedBy))
-}
-
-// WhereUpdatedByImpersonator applies the entql string predicate on the updated_by_impersonator field.
-func (f *WorkflowEventHistoryFilter) WhereUpdatedByImpersonator(p entql.StringP) {
-	f.Where(p.Field(workfloweventhistory.FieldUpdatedByImpersonator))
-}
-
-// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
-func (f *WorkflowEventHistoryFilter) WhereDeletedAt(p entql.TimeP) {
-	f.Where(p.Field(workfloweventhistory.FieldDeletedAt))
-}
-
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *WorkflowEventHistoryFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(workfloweventhistory.FieldDeletedBy))
-}
-
-// WhereDisplayID applies the entql string predicate on the display_id field.
-func (f *WorkflowEventHistoryFilter) WhereDisplayID(p entql.StringP) {
-	f.Where(p.Field(workfloweventhistory.FieldDisplayID))
-}
-
-// WhereTags applies the entql json.RawMessage predicate on the tags field.
-func (f *WorkflowEventHistoryFilter) WhereTags(p entql.BytesP) {
-	f.Where(p.Field(workfloweventhistory.FieldTags))
-}
-
-// WhereOwnerID applies the entql string predicate on the owner_id field.
-func (f *WorkflowEventHistoryFilter) WhereOwnerID(p entql.StringP) {
-	f.Where(p.Field(workfloweventhistory.FieldOwnerID))
-}
-
-// WhereWorkflowInstanceID applies the entql string predicate on the workflow_instance_id field.
-func (f *WorkflowEventHistoryFilter) WhereWorkflowInstanceID(p entql.StringP) {
-	f.Where(p.Field(workfloweventhistory.FieldWorkflowInstanceID))
-}
-
-// WhereEventType applies the entql string predicate on the event_type field.
-func (f *WorkflowEventHistoryFilter) WhereEventType(p entql.StringP) {
-	f.Where(p.Field(workfloweventhistory.FieldEventType))
-}
-
-// WherePayload applies the entql json.RawMessage predicate on the payload field.
-func (f *WorkflowEventHistoryFilter) WherePayload(p entql.BytesP) {
-	f.Where(p.Field(workfloweventhistory.FieldPayload))
-}
-
-// addPredicate implements the predicateAdder interface.
-func (_q *WorkflowInstanceHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	_q.predicates = append(_q.predicates, pred)
-}
-
-// Filter returns a Filter implementation to apply filters on the WorkflowInstanceHistoryQuery builder.
-func (_q *WorkflowInstanceHistoryQuery) Filter() *WorkflowInstanceHistoryFilter {
-	return &WorkflowInstanceHistoryFilter{config: _q.config, predicateAdder: _q}
-}
-
-// addPredicate implements the predicateAdder interface.
-func (m *WorkflowInstanceHistoryMutation) addPredicate(pred func(s *sql.Selector)) {
-	m.predicates = append(m.predicates, pred)
-}
-
-// Filter returns an entql.Where implementation to apply filters on the WorkflowInstanceHistoryMutation builder.
-func (m *WorkflowInstanceHistoryMutation) Filter() *WorkflowInstanceHistoryFilter {
-	return &WorkflowInstanceHistoryFilter{config: m.config, predicateAdder: m}
-}
-
-// WorkflowInstanceHistoryFilter provides a generic filtering capability at runtime for WorkflowInstanceHistoryQuery.
-type WorkflowInstanceHistoryFilter struct {
-	predicateAdder
-	config
-}
-
-// Where applies the entql predicate on the query filter.
-func (f *WorkflowInstanceHistoryFilter) Where(p entql.P) {
-	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[77].Type, p, s); err != nil {
-			s.AddError(err)
-		}
-	})
-}
-
-// WhereID applies the entql string predicate on the id field.
-func (f *WorkflowInstanceHistoryFilter) WhereID(p entql.StringP) {
-	f.Where(p.Field(workflowinstancehistory.FieldID))
-}
-
-// WhereHistoryTime applies the entql time.Time predicate on the history_time field.
-func (f *WorkflowInstanceHistoryFilter) WhereHistoryTime(p entql.TimeP) {
-	f.Where(p.Field(workflowinstancehistory.FieldHistoryTime))
-}
-
-// WhereRef applies the entql string predicate on the ref field.
-func (f *WorkflowInstanceHistoryFilter) WhereRef(p entql.StringP) {
-	f.Where(p.Field(workflowinstancehistory.FieldRef))
-}
-
-// WhereOperation applies the entql string predicate on the operation field.
-func (f *WorkflowInstanceHistoryFilter) WhereOperation(p entql.StringP) {
-	f.Where(p.Field(workflowinstancehistory.FieldOperation))
-}
-
-// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
-func (f *WorkflowInstanceHistoryFilter) WhereCreatedAt(p entql.TimeP) {
-	f.Where(p.Field(workflowinstancehistory.FieldCreatedAt))
-}
-
-// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
-func (f *WorkflowInstanceHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
-	f.Where(p.Field(workflowinstancehistory.FieldUpdatedAt))
-}
-
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *WorkflowInstanceHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(workflowinstancehistory.FieldCreatedBy))
-}
-
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *WorkflowInstanceHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(workflowinstancehistory.FieldUpdatedBy))
-}
-
-// WhereUpdatedByImpersonator applies the entql string predicate on the updated_by_impersonator field.
-func (f *WorkflowInstanceHistoryFilter) WhereUpdatedByImpersonator(p entql.StringP) {
-	f.Where(p.Field(workflowinstancehistory.FieldUpdatedByImpersonator))
-}
-
-// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
-func (f *WorkflowInstanceHistoryFilter) WhereDeletedAt(p entql.TimeP) {
-	f.Where(p.Field(workflowinstancehistory.FieldDeletedAt))
-}
-
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *WorkflowInstanceHistoryFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(workflowinstancehistory.FieldDeletedBy))
-}
-
-// WhereDisplayID applies the entql string predicate on the display_id field.
-func (f *WorkflowInstanceHistoryFilter) WhereDisplayID(p entql.StringP) {
-	f.Where(p.Field(workflowinstancehistory.FieldDisplayID))
-}
-
-// WhereTags applies the entql json.RawMessage predicate on the tags field.
-func (f *WorkflowInstanceHistoryFilter) WhereTags(p entql.BytesP) {
-	f.Where(p.Field(workflowinstancehistory.FieldTags))
-}
-
-// WhereOwnerID applies the entql string predicate on the owner_id field.
-func (f *WorkflowInstanceHistoryFilter) WhereOwnerID(p entql.StringP) {
-	f.Where(p.Field(workflowinstancehistory.FieldOwnerID))
-}
-
-// WhereWorkflowDefinitionID applies the entql string predicate on the workflow_definition_id field.
-func (f *WorkflowInstanceHistoryFilter) WhereWorkflowDefinitionID(p entql.StringP) {
-	f.Where(p.Field(workflowinstancehistory.FieldWorkflowDefinitionID))
-}
-
-// WhereWorkflowProposalID applies the entql string predicate on the workflow_proposal_id field.
-func (f *WorkflowInstanceHistoryFilter) WhereWorkflowProposalID(p entql.StringP) {
-	f.Where(p.Field(workflowinstancehistory.FieldWorkflowProposalID))
-}
-
-// WhereState applies the entql string predicate on the state field.
-func (f *WorkflowInstanceHistoryFilter) WhereState(p entql.StringP) {
-	f.Where(p.Field(workflowinstancehistory.FieldState))
-}
-
-// WhereContext applies the entql json.RawMessage predicate on the context field.
-func (f *WorkflowInstanceHistoryFilter) WhereContext(p entql.BytesP) {
-	f.Where(p.Field(workflowinstancehistory.FieldContext))
-}
-
-// WhereLastEvaluatedAt applies the entql time.Time predicate on the last_evaluated_at field.
-func (f *WorkflowInstanceHistoryFilter) WhereLastEvaluatedAt(p entql.TimeP) {
-	f.Where(p.Field(workflowinstancehistory.FieldLastEvaluatedAt))
-}
-
-// WhereDefinitionSnapshot applies the entql json.RawMessage predicate on the definition_snapshot field.
-func (f *WorkflowInstanceHistoryFilter) WhereDefinitionSnapshot(p entql.BytesP) {
-	f.Where(p.Field(workflowinstancehistory.FieldDefinitionSnapshot))
-}
-
-// WhereCurrentActionIndex applies the entql int predicate on the current_action_index field.
-func (f *WorkflowInstanceHistoryFilter) WhereCurrentActionIndex(p entql.IntP) {
-	f.Where(p.Field(workflowinstancehistory.FieldCurrentActionIndex))
-}
-
-// WhereControlID applies the entql string predicate on the control_id field.
-func (f *WorkflowInstanceHistoryFilter) WhereControlID(p entql.StringP) {
-	f.Where(p.Field(workflowinstancehistory.FieldControlID))
-}
-
-// WhereInternalPolicyID applies the entql string predicate on the internal_policy_id field.
-func (f *WorkflowInstanceHistoryFilter) WhereInternalPolicyID(p entql.StringP) {
-	f.Where(p.Field(workflowinstancehistory.FieldInternalPolicyID))
-}
-
-// WhereEvidenceID applies the entql string predicate on the evidence_id field.
-func (f *WorkflowInstanceHistoryFilter) WhereEvidenceID(p entql.StringP) {
-	f.Where(p.Field(workflowinstancehistory.FieldEvidenceID))
-}
-
-// WhereSubcontrolID applies the entql string predicate on the subcontrol_id field.
-func (f *WorkflowInstanceHistoryFilter) WhereSubcontrolID(p entql.StringP) {
-	f.Where(p.Field(workflowinstancehistory.FieldSubcontrolID))
-}
-
-// WhereActionPlanID applies the entql string predicate on the action_plan_id field.
-func (f *WorkflowInstanceHistoryFilter) WhereActionPlanID(p entql.StringP) {
-	f.Where(p.Field(workflowinstancehistory.FieldActionPlanID))
-}
-
-// WhereProcedureID applies the entql string predicate on the procedure_id field.
-func (f *WorkflowInstanceHistoryFilter) WhereProcedureID(p entql.StringP) {
-	f.Where(p.Field(workflowinstancehistory.FieldProcedureID))
-}
-
-// WhereCampaignID applies the entql string predicate on the campaign_id field.
-func (f *WorkflowInstanceHistoryFilter) WhereCampaignID(p entql.StringP) {
-	f.Where(p.Field(workflowinstancehistory.FieldCampaignID))
-}
-
-// WhereCampaignTargetID applies the entql string predicate on the campaign_target_id field.
-func (f *WorkflowInstanceHistoryFilter) WhereCampaignTargetID(p entql.StringP) {
-	f.Where(p.Field(workflowinstancehistory.FieldCampaignTargetID))
-}
-
-// WhereIdentityHolderID applies the entql string predicate on the identity_holder_id field.
-func (f *WorkflowInstanceHistoryFilter) WhereIdentityHolderID(p entql.StringP) {
-	f.Where(p.Field(workflowinstancehistory.FieldIdentityHolderID))
-}
-
-// WherePlatformID applies the entql string predicate on the platform_id field.
-func (f *WorkflowInstanceHistoryFilter) WherePlatformID(p entql.StringP) {
-	f.Where(p.Field(workflowinstancehistory.FieldPlatformID))
-}
-
-// WhereAssessmentID applies the entql string predicate on the assessment_id field.
-func (f *WorkflowInstanceHistoryFilter) WhereAssessmentID(p entql.StringP) {
-	f.Where(p.Field(workflowinstancehistory.FieldAssessmentID))
-}
-
-// WhereAssessmentResponseID applies the entql string predicate on the assessment_response_id field.
-func (f *WorkflowInstanceHistoryFilter) WhereAssessmentResponseID(p entql.StringP) {
-	f.Where(p.Field(workflowinstancehistory.FieldAssessmentResponseID))
-}
-
-// WhereFindingID applies the entql string predicate on the finding_id field.
-func (f *WorkflowInstanceHistoryFilter) WhereFindingID(p entql.StringP) {
-	f.Where(p.Field(workflowinstancehistory.FieldFindingID))
-}
-
-// WhereIntegrationID applies the entql string predicate on the integration_id field.
-func (f *WorkflowInstanceHistoryFilter) WhereIntegrationID(p entql.StringP) {
-	f.Where(p.Field(workflowinstancehistory.FieldIntegrationID))
-}
-
-// WhereRemediationID applies the entql string predicate on the remediation_id field.
-func (f *WorkflowInstanceHistoryFilter) WhereRemediationID(p entql.StringP) {
-	f.Where(p.Field(workflowinstancehistory.FieldRemediationID))
-}
-
-// WhereRiskID applies the entql string predicate on the risk_id field.
-func (f *WorkflowInstanceHistoryFilter) WhereRiskID(p entql.StringP) {
-	f.Where(p.Field(workflowinstancehistory.FieldRiskID))
-}
-
-// WhereTaskID applies the entql string predicate on the task_id field.
-func (f *WorkflowInstanceHistoryFilter) WhereTaskID(p entql.StringP) {
-	f.Where(p.Field(workflowinstancehistory.FieldTaskID))
-}
-
-// WhereVulnerabilityID applies the entql string predicate on the vulnerability_id field.
-func (f *WorkflowInstanceHistoryFilter) WhereVulnerabilityID(p entql.StringP) {
-	f.Where(p.Field(workflowinstancehistory.FieldVulnerabilityID))
-}
-
-// addPredicate implements the predicateAdder interface.
-func (_q *WorkflowObjectRefHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
-	_q.predicates = append(_q.predicates, pred)
-}
-
-// Filter returns a Filter implementation to apply filters on the WorkflowObjectRefHistoryQuery builder.
-func (_q *WorkflowObjectRefHistoryQuery) Filter() *WorkflowObjectRefHistoryFilter {
-	return &WorkflowObjectRefHistoryFilter{config: _q.config, predicateAdder: _q}
-}
-
-// addPredicate implements the predicateAdder interface.
-func (m *WorkflowObjectRefHistoryMutation) addPredicate(pred func(s *sql.Selector)) {
-	m.predicates = append(m.predicates, pred)
-}
-
-// Filter returns an entql.Where implementation to apply filters on the WorkflowObjectRefHistoryMutation builder.
-func (m *WorkflowObjectRefHistoryMutation) Filter() *WorkflowObjectRefHistoryFilter {
-	return &WorkflowObjectRefHistoryFilter{config: m.config, predicateAdder: m}
-}
-
-// WorkflowObjectRefHistoryFilter provides a generic filtering capability at runtime for WorkflowObjectRefHistoryQuery.
-type WorkflowObjectRefHistoryFilter struct {
-	predicateAdder
-	config
-}
-
-// Where applies the entql predicate on the query filter.
-func (f *WorkflowObjectRefHistoryFilter) Where(p entql.P) {
-	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[78].Type, p, s); err != nil {
-			s.AddError(err)
-		}
-	})
-}
-
-// WhereID applies the entql string predicate on the id field.
-func (f *WorkflowObjectRefHistoryFilter) WhereID(p entql.StringP) {
-	f.Where(p.Field(workflowobjectrefhistory.FieldID))
-}
-
-// WhereHistoryTime applies the entql time.Time predicate on the history_time field.
-func (f *WorkflowObjectRefHistoryFilter) WhereHistoryTime(p entql.TimeP) {
-	f.Where(p.Field(workflowobjectrefhistory.FieldHistoryTime))
-}
-
-// WhereRef applies the entql string predicate on the ref field.
-func (f *WorkflowObjectRefHistoryFilter) WhereRef(p entql.StringP) {
-	f.Where(p.Field(workflowobjectrefhistory.FieldRef))
-}
-
-// WhereOperation applies the entql string predicate on the operation field.
-func (f *WorkflowObjectRefHistoryFilter) WhereOperation(p entql.StringP) {
-	f.Where(p.Field(workflowobjectrefhistory.FieldOperation))
-}
-
-// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
-func (f *WorkflowObjectRefHistoryFilter) WhereCreatedAt(p entql.TimeP) {
-	f.Where(p.Field(workflowobjectrefhistory.FieldCreatedAt))
-}
-
-// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
-func (f *WorkflowObjectRefHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
-	f.Where(p.Field(workflowobjectrefhistory.FieldUpdatedAt))
-}
-
-// WhereCreatedBy applies the entql string predicate on the created_by field.
-func (f *WorkflowObjectRefHistoryFilter) WhereCreatedBy(p entql.StringP) {
-	f.Where(p.Field(workflowobjectrefhistory.FieldCreatedBy))
-}
-
-// WhereUpdatedBy applies the entql string predicate on the updated_by field.
-func (f *WorkflowObjectRefHistoryFilter) WhereUpdatedBy(p entql.StringP) {
-	f.Where(p.Field(workflowobjectrefhistory.FieldUpdatedBy))
-}
-
-// WhereUpdatedByImpersonator applies the entql string predicate on the updated_by_impersonator field.
-func (f *WorkflowObjectRefHistoryFilter) WhereUpdatedByImpersonator(p entql.StringP) {
-	f.Where(p.Field(workflowobjectrefhistory.FieldUpdatedByImpersonator))
-}
-
-// WhereDisplayID applies the entql string predicate on the display_id field.
-func (f *WorkflowObjectRefHistoryFilter) WhereDisplayID(p entql.StringP) {
-	f.Where(p.Field(workflowobjectrefhistory.FieldDisplayID))
-}
-
-// WhereOwnerID applies the entql string predicate on the owner_id field.
-func (f *WorkflowObjectRefHistoryFilter) WhereOwnerID(p entql.StringP) {
-	f.Where(p.Field(workflowobjectrefhistory.FieldOwnerID))
-}
-
-// WhereWorkflowInstanceID applies the entql string predicate on the workflow_instance_id field.
-func (f *WorkflowObjectRefHistoryFilter) WhereWorkflowInstanceID(p entql.StringP) {
-	f.Where(p.Field(workflowobjectrefhistory.FieldWorkflowInstanceID))
-}
-
-// WhereControlID applies the entql string predicate on the control_id field.
-func (f *WorkflowObjectRefHistoryFilter) WhereControlID(p entql.StringP) {
-	f.Where(p.Field(workflowobjectrefhistory.FieldControlID))
-}
-
-// WhereTaskID applies the entql string predicate on the task_id field.
-func (f *WorkflowObjectRefHistoryFilter) WhereTaskID(p entql.StringP) {
-	f.Where(p.Field(workflowobjectrefhistory.FieldTaskID))
-}
-
-// WhereInternalPolicyID applies the entql string predicate on the internal_policy_id field.
-func (f *WorkflowObjectRefHistoryFilter) WhereInternalPolicyID(p entql.StringP) {
-	f.Where(p.Field(workflowobjectrefhistory.FieldInternalPolicyID))
-}
-
-// WhereFindingID applies the entql string predicate on the finding_id field.
-func (f *WorkflowObjectRefHistoryFilter) WhereFindingID(p entql.StringP) {
-	f.Where(p.Field(workflowobjectrefhistory.FieldFindingID))
-}
-
-// WhereDirectoryAccountID applies the entql string predicate on the directory_account_id field.
-func (f *WorkflowObjectRefHistoryFilter) WhereDirectoryAccountID(p entql.StringP) {
-	f.Where(p.Field(workflowobjectrefhistory.FieldDirectoryAccountID))
-}
-
-// WhereDirectoryGroupID applies the entql string predicate on the directory_group_id field.
-func (f *WorkflowObjectRefHistoryFilter) WhereDirectoryGroupID(p entql.StringP) {
-	f.Where(p.Field(workflowobjectrefhistory.FieldDirectoryGroupID))
-}
-
-// WhereDirectoryMembershipID applies the entql string predicate on the directory_membership_id field.
-func (f *WorkflowObjectRefHistoryFilter) WhereDirectoryMembershipID(p entql.StringP) {
-	f.Where(p.Field(workflowobjectrefhistory.FieldDirectoryMembershipID))
-}
-
-// WhereEvidenceID applies the entql string predicate on the evidence_id field.
-func (f *WorkflowObjectRefHistoryFilter) WhereEvidenceID(p entql.StringP) {
-	f.Where(p.Field(workflowobjectrefhistory.FieldEvidenceID))
-}
-
-// WhereSubcontrolID applies the entql string predicate on the subcontrol_id field.
-func (f *WorkflowObjectRefHistoryFilter) WhereSubcontrolID(p entql.StringP) {
-	f.Where(p.Field(workflowobjectrefhistory.FieldSubcontrolID))
-}
-
-// WhereActionPlanID applies the entql string predicate on the action_plan_id field.
-func (f *WorkflowObjectRefHistoryFilter) WhereActionPlanID(p entql.StringP) {
-	f.Where(p.Field(workflowobjectrefhistory.FieldActionPlanID))
-}
-
-// WhereProcedureID applies the entql string predicate on the procedure_id field.
-func (f *WorkflowObjectRefHistoryFilter) WhereProcedureID(p entql.StringP) {
-	f.Where(p.Field(workflowobjectrefhistory.FieldProcedureID))
-}
-
-// WhereCampaignID applies the entql string predicate on the campaign_id field.
-func (f *WorkflowObjectRefHistoryFilter) WhereCampaignID(p entql.StringP) {
-	f.Where(p.Field(workflowobjectrefhistory.FieldCampaignID))
-}
-
-// WhereCampaignTargetID applies the entql string predicate on the campaign_target_id field.
-func (f *WorkflowObjectRefHistoryFilter) WhereCampaignTargetID(p entql.StringP) {
-	f.Where(p.Field(workflowobjectrefhistory.FieldCampaignTargetID))
-}
-
-// WhereIdentityHolderID applies the entql string predicate on the identity_holder_id field.
-func (f *WorkflowObjectRefHistoryFilter) WhereIdentityHolderID(p entql.StringP) {
-	f.Where(p.Field(workflowobjectrefhistory.FieldIdentityHolderID))
-}
-
-// WherePlatformID applies the entql string predicate on the platform_id field.
-func (f *WorkflowObjectRefHistoryFilter) WherePlatformID(p entql.StringP) {
-	f.Where(p.Field(workflowobjectrefhistory.FieldPlatformID))
-}
-
-// WhereVulnerabilityID applies the entql string predicate on the vulnerability_id field.
-func (f *WorkflowObjectRefHistoryFilter) WhereVulnerabilityID(p entql.StringP) {
-	f.Where(p.Field(workflowobjectrefhistory.FieldVulnerabilityID))
-}
-
-// WhereRiskID applies the entql string predicate on the risk_id field.
-func (f *WorkflowObjectRefHistoryFilter) WhereRiskID(p entql.StringP) {
-	f.Where(p.Field(workflowobjectrefhistory.FieldRiskID))
-}
-
-// WhereAssessmentID applies the entql string predicate on the assessment_id field.
-func (f *WorkflowObjectRefHistoryFilter) WhereAssessmentID(p entql.StringP) {
-	f.Where(p.Field(workflowobjectrefhistory.FieldAssessmentID))
-}
-
-// WhereAssessmentResponseID applies the entql string predicate on the assessment_response_id field.
-func (f *WorkflowObjectRefHistoryFilter) WhereAssessmentResponseID(p entql.StringP) {
-	f.Where(p.Field(workflowobjectrefhistory.FieldAssessmentResponseID))
-}
-
-// WhereRemediationID applies the entql string predicate on the remediation_id field.
-func (f *WorkflowObjectRefHistoryFilter) WhereRemediationID(p entql.StringP) {
-	f.Where(p.Field(workflowobjectrefhistory.FieldRemediationID))
 }

@@ -1,4 +1,4 @@
-h1:bjR8lISdyt+XEmbAtsQAKWrUomrbQ+m3BjKLsG3TQh8=
+h1:LZozbwRDwq/IbKHCRQy7qQPK+HHWaFlD6z4aoaVnXak=
 20251229183159_init.sql h1:3uf/ftr28zW8YUD9qAaY2GESQHC7pYmkhlI6oDWUCKU=
 20251229183201_init_history.sql h1:1tFSeCDWvZgb2Ctw80C/s3tqVPNLADQw9fSDACzL8WA=
 20251231045221_workflow.sql h1:5bLq4cHh2kxUV7xajK5bq5McKKpr88HmufYauTdsgUw=
@@ -172,3 +172,4 @@ h1:bjR8lISdyt+XEmbAtsQAKWrUomrbQ+m3BjKLsG3TQh8=
 20260728193948_directorymembershipindex.sql h1:GMmB5LtkGz7WAmqILpbWGoqmZD1e8kq7eRcPyOrFs7Y=
 20260730170837_dropassetnameindex.sql h1:vfvgvcqSsRer9jd8g6JzlRg/l+LOmKw5ytLMCEcqTgk=
 20260803213537_drop_notification_user_edge.sql h1:988ebIeIjtpxaIckXmIRbRl9V2GzENRBUWdLa9CTx9I=
+20260806055946_drop_integration_history_tables.sql h1:WpsMuHDxGn3t4hAepDLBUePTYZBgh0P/cx/DgRQCj1Q=

@@ -341,41 +341,6 @@ var (
 			},
 		},
 	}
-	// CheckResultHistoryColumns holds the columns for the "check_result_history" table.
-	CheckResultHistoryColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "history_time", Type: field.TypeTime},
-		{Name: "ref", Type: field.TypeString, Nullable: true},
-		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_impersonator", Type: field.TypeString, Nullable: true},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "status", Type: field.TypeEnum, Enums: []string{"PASS", "FAIL", "UNKNOWN"}, Default: "UNKNOWN"},
-		{Name: "source", Type: field.TypeString},
-		{Name: "last_observed_at", Type: field.TypeTime, Nullable: true},
-		{Name: "external_uri", Type: field.TypeString, Nullable: true},
-		{Name: "details", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "parent_external_id", Type: field.TypeString, Nullable: true},
-		{Name: "integration_id", Type: field.TypeString, Nullable: true},
-	}
-	// CheckResultHistoryTable holds the schema information for the "check_result_history" table.
-	CheckResultHistoryTable = &schema.Table{
-		Name:       "check_result_history",
-		Columns:    CheckResultHistoryColumns,
-		PrimaryKey: []*schema.Column{CheckResultHistoryColumns[0]},
-		Indexes: []*schema.Index{
-			{
-				Name:    "checkresulthistory_history_time",
-				Unique:  false,
-				Columns: []*schema.Column{CheckResultHistoryColumns[1]},
-			},
-		},
-	}
 	// ContactHistoryColumns holds the columns for the "contact_history" table.
 	ContactHistoryColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -603,214 +568,6 @@ var (
 				Name:    "customdomainhistory_history_time",
 				Unique:  false,
 				Columns: []*schema.Column{CustomDomainHistoryColumns[1]},
-			},
-		},
-	}
-	// DNSVerificationHistoryColumns holds the columns for the "dns_verification_history" table.
-	DNSVerificationHistoryColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "history_time", Type: field.TypeTime},
-		{Name: "ref", Type: field.TypeString, Nullable: true},
-		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_impersonator", Type: field.TypeString, Nullable: true},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "cloudflare_hostname_id", Type: field.TypeString, Size: 64},
-		{Name: "dns_txt_record", Type: field.TypeString, Size: 255},
-		{Name: "dns_txt_value", Type: field.TypeString, Size: 255},
-		{Name: "dns_verification_status", Type: field.TypeEnum, Enums: []string{"ACTIVE", "PENDING", "ACTIVE_REDEPLOYING", "MOVED", "PENDING_DELETION", "DELETED", "PENDING_BLOCKED", "PENDING_MIGRATION", "PENDING_PROVISIONED", "TEST_PENDING", "TEST_ACTIVE", "TEST_ACTIVE_APEX", "TEST_BLOCKED", "TEST_FAILED", "PROVISIONED", "BLOCKED"}, Default: "PENDING"},
-		{Name: "dns_verification_status_reason", Type: field.TypeString, Nullable: true, Size: 255},
-		{Name: "acme_challenge_path", Type: field.TypeString, Nullable: true, Size: 255},
-		{Name: "expected_acme_challenge_value", Type: field.TypeString, Nullable: true, Size: 255},
-		{Name: "acme_challenge_status", Type: field.TypeEnum, Enums: []string{"INITIALIZING", "PENDING_VALIDATION", "DELETED", "PENDING_ISSUANCE", "PENDING_DEPLOYMENT", "PENDING_DELETION", "PENDING_EXPIRATION", "EXPIRED", "ACTIVE", "INITIALIZING_TIMED_OUT", "VALIDATION_TIMED_OUT", "ISSUANCE_TIMED_OUT", "DEPLOYMENT_TIMED_OUT", "DELETION_TIMED_OUT", "PENDING_CLEANUP", "STAGING_DEPLOYMENT", "STAGING_ACTIVE", "DEACTIVATING", "INACTIVE", "BACKUP_ISSUED", "HOLDING_DEPLOYMENT"}, Default: "INITIALIZING"},
-		{Name: "acme_challenge_status_reason", Type: field.TypeString, Nullable: true, Size: 255},
-	}
-	// DNSVerificationHistoryTable holds the schema information for the "dns_verification_history" table.
-	DNSVerificationHistoryTable = &schema.Table{
-		Name:       "dns_verification_history",
-		Columns:    DNSVerificationHistoryColumns,
-		PrimaryKey: []*schema.Column{DNSVerificationHistoryColumns[0]},
-		Indexes: []*schema.Index{
-			{
-				Name:    "dnsverificationhistory_history_time",
-				Unique:  false,
-				Columns: []*schema.Column{DNSVerificationHistoryColumns[1]},
-			},
-		},
-	}
-	// DirectoryAccountHistoryColumns holds the columns for the "directory_account_history" table.
-	DirectoryAccountHistoryColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "history_time", Type: field.TypeTime},
-		{Name: "ref", Type: field.TypeString, Nullable: true},
-		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_impersonator", Type: field.TypeString, Nullable: true},
-		{Name: "display_id", Type: field.TypeString},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "environment_name", Type: field.TypeString, Nullable: true},
-		{Name: "environment_id", Type: field.TypeString, Nullable: true},
-		{Name: "scope_name", Type: field.TypeString, Nullable: true},
-		{Name: "scope_id", Type: field.TypeString, Nullable: true},
-		{Name: "integration_id", Type: field.TypeString, Nullable: true},
-		{Name: "directory_sync_run_id", Type: field.TypeString, Nullable: true},
-		{Name: "platform_id", Type: field.TypeString, Nullable: true},
-		{Name: "directory_instance_id", Type: field.TypeString, Nullable: true},
-		{Name: "identity_holder_id", Type: field.TypeString, Nullable: true},
-		{Name: "directory_name", Type: field.TypeString, Nullable: true},
-		{Name: "external_id", Type: field.TypeString},
-		{Name: "secondary_key", Type: field.TypeString, Nullable: true},
-		{Name: "canonical_email", Type: field.TypeString, Nullable: true},
-		{Name: "email_aliases", Type: field.TypeJSON, Nullable: true},
-		{Name: "phone_number", Type: field.TypeString, Nullable: true},
-		{Name: "display_name", Type: field.TypeString, Nullable: true},
-		{Name: "avatar_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
-		{Name: "avatar_local_file_id", Type: field.TypeString, Nullable: true},
-		{Name: "avatar_updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "given_name", Type: field.TypeString, Nullable: true},
-		{Name: "family_name", Type: field.TypeString, Nullable: true},
-		{Name: "job_title", Type: field.TypeString, Nullable: true},
-		{Name: "department", Type: field.TypeString, Nullable: true},
-		{Name: "organization_unit", Type: field.TypeString, Nullable: true},
-		{Name: "account_type", Type: field.TypeEnum, Nullable: true, Enums: []string{"USER", "SERVICE", "SHARED", "GUEST"}, Default: "USER"},
-		{Name: "status", Type: field.TypeEnum, Enums: []string{"ACTIVE", "INACTIVE", "SUSPENDED", "DELETED"}, Default: "ACTIVE"},
-		{Name: "mfa_state", Type: field.TypeEnum, Enums: []string{"UNKNOWN", "DISABLED", "ENABLED", "ENFORCED"}, Default: "UNKNOWN"},
-		{Name: "last_seen_ip", Type: field.TypeString, Nullable: true},
-		{Name: "last_login_at", Type: field.TypeTime, Nullable: true},
-		{Name: "first_seen_at", Type: field.TypeTime, Nullable: true},
-		{Name: "last_seen_at", Type: field.TypeTime, Nullable: true},
-		{Name: "added_at", Type: field.TypeTime, Nullable: true},
-		{Name: "removed_at", Type: field.TypeTime, Nullable: true},
-		{Name: "observed_at", Type: field.TypeTime},
-		{Name: "profile_hash", Type: field.TypeString, Default: ""},
-		{Name: "profile", Type: field.TypeJSON, Nullable: true},
-		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
-		{Name: "raw_profile_file_id", Type: field.TypeString, Nullable: true},
-		{Name: "source_version", Type: field.TypeString, Nullable: true},
-		{Name: "primary_source", Type: field.TypeBool, Default: false},
-	}
-	// DirectoryAccountHistoryTable holds the schema information for the "directory_account_history" table.
-	DirectoryAccountHistoryTable = &schema.Table{
-		Name:       "directory_account_history",
-		Columns:    DirectoryAccountHistoryColumns,
-		PrimaryKey: []*schema.Column{DirectoryAccountHistoryColumns[0]},
-		Indexes: []*schema.Index{
-			{
-				Name:    "directoryaccounthistory_history_time",
-				Unique:  false,
-				Columns: []*schema.Column{DirectoryAccountHistoryColumns[1]},
-			},
-		},
-	}
-	// DirectoryGroupHistoryColumns holds the columns for the "directory_group_history" table.
-	DirectoryGroupHistoryColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "history_time", Type: field.TypeTime},
-		{Name: "ref", Type: field.TypeString, Nullable: true},
-		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_impersonator", Type: field.TypeString, Nullable: true},
-		{Name: "display_id", Type: field.TypeString},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "environment_name", Type: field.TypeString, Nullable: true},
-		{Name: "environment_id", Type: field.TypeString, Nullable: true},
-		{Name: "scope_name", Type: field.TypeString, Nullable: true},
-		{Name: "scope_id", Type: field.TypeString, Nullable: true},
-		{Name: "integration_id", Type: field.TypeString},
-		{Name: "platform_id", Type: field.TypeString, Nullable: true},
-		{Name: "directory_instance_id", Type: field.TypeString, Nullable: true},
-		{Name: "directory_sync_run_id", Type: field.TypeString},
-		{Name: "external_id", Type: field.TypeString},
-		{Name: "email", Type: field.TypeString, Nullable: true},
-		{Name: "display_name", Type: field.TypeString, Nullable: true},
-		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "classification", Type: field.TypeEnum, Enums: []string{"SECURITY", "DISTRIBUTION", "TEAM", "DYNAMIC"}, Default: "TEAM"},
-		{Name: "status", Type: field.TypeEnum, Enums: []string{"ACTIVE", "INACTIVE", "DELETED"}, Default: "ACTIVE"},
-		{Name: "external_sharing_allowed", Type: field.TypeBool, Nullable: true, Default: false},
-		{Name: "member_count", Type: field.TypeInt, Nullable: true},
-		{Name: "first_seen_at", Type: field.TypeTime, Nullable: true},
-		{Name: "last_seen_at", Type: field.TypeTime, Nullable: true},
-		{Name: "added_at", Type: field.TypeTime, Nullable: true},
-		{Name: "removed_at", Type: field.TypeTime, Nullable: true},
-		{Name: "observed_at", Type: field.TypeTime},
-		{Name: "profile_hash", Type: field.TypeString, Default: ""},
-		{Name: "profile", Type: field.TypeJSON, Nullable: true},
-		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
-		{Name: "raw_profile_file_id", Type: field.TypeString, Nullable: true},
-		{Name: "source_version", Type: field.TypeString, Nullable: true},
-		{Name: "directory_name", Type: field.TypeString, Nullable: true},
-	}
-	// DirectoryGroupHistoryTable holds the schema information for the "directory_group_history" table.
-	DirectoryGroupHistoryTable = &schema.Table{
-		Name:       "directory_group_history",
-		Columns:    DirectoryGroupHistoryColumns,
-		PrimaryKey: []*schema.Column{DirectoryGroupHistoryColumns[0]},
-		Indexes: []*schema.Index{
-			{
-				Name:    "directorygrouphistory_history_time",
-				Unique:  false,
-				Columns: []*schema.Column{DirectoryGroupHistoryColumns[1]},
-			},
-		},
-	}
-	// DirectoryMembershipHistoryColumns holds the columns for the "directory_membership_history" table.
-	DirectoryMembershipHistoryColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "history_time", Type: field.TypeTime},
-		{Name: "ref", Type: field.TypeString, Nullable: true},
-		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_impersonator", Type: field.TypeString, Nullable: true},
-		{Name: "display_id", Type: field.TypeString},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "environment_name", Type: field.TypeString, Nullable: true},
-		{Name: "environment_id", Type: field.TypeString, Nullable: true},
-		{Name: "scope_name", Type: field.TypeString, Nullable: true},
-		{Name: "scope_id", Type: field.TypeString, Nullable: true},
-		{Name: "integration_id", Type: field.TypeString},
-		{Name: "platform_id", Type: field.TypeString, Nullable: true},
-		{Name: "directory_instance_id", Type: field.TypeString, Nullable: true},
-		{Name: "directory_sync_run_id", Type: field.TypeString},
-		{Name: "directory_account_id", Type: field.TypeString},
-		{Name: "directory_group_id", Type: field.TypeString},
-		{Name: "role", Type: field.TypeEnum, Nullable: true, Enums: []string{"MEMBER", "MAINTAINER", "MANAGER", "OWNER"}, Default: "MEMBER"},
-		{Name: "source", Type: field.TypeString, Nullable: true},
-		{Name: "directory_name", Type: field.TypeString, Nullable: true},
-		{Name: "first_seen_at", Type: field.TypeTime, Nullable: true},
-		{Name: "last_seen_at", Type: field.TypeTime, Nullable: true},
-		{Name: "added_at", Type: field.TypeTime, Nullable: true},
-		{Name: "removed_at", Type: field.TypeTime, Nullable: true},
-		{Name: "observed_at", Type: field.TypeTime},
-		{Name: "last_confirmed_run_id", Type: field.TypeString, Nullable: true},
-		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
-	}
-	// DirectoryMembershipHistoryTable holds the schema information for the "directory_membership_history" table.
-	DirectoryMembershipHistoryTable = &schema.Table{
-		Name:       "directory_membership_history",
-		Columns:    DirectoryMembershipHistoryColumns,
-		PrimaryKey: []*schema.Column{DirectoryMembershipHistoryColumns[0]},
-		Indexes: []*schema.Index{
-			{
-				Name:    "directorymembershiphistory_history_time",
-				Unique:  false,
-				Columns: []*schema.Column{DirectoryMembershipHistoryColumns[1]},
 			},
 		},
 	}
@@ -1473,60 +1230,6 @@ var (
 			},
 		},
 	}
-	// IntegrationHistoryColumns holds the columns for the "integration_history" table.
-	IntegrationHistoryColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "history_time", Type: field.TypeTime},
-		{Name: "ref", Type: field.TypeString, Nullable: true},
-		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_impersonator", Type: field.TypeString, Nullable: true},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
-		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
-		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
-		{Name: "environment_name", Type: field.TypeString, Nullable: true},
-		{Name: "environment_id", Type: field.TypeString, Nullable: true},
-		{Name: "scope_name", Type: field.TypeString, Nullable: true},
-		{Name: "scope_id", Type: field.TypeString, Nullable: true},
-		{Name: "name", Type: field.TypeString},
-		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "kind", Type: field.TypeString, Nullable: true},
-		{Name: "integration_type", Type: field.TypeString, Nullable: true},
-		{Name: "platform_id", Type: field.TypeString, Nullable: true},
-		{Name: "provider_metadata", Type: field.TypeJSON, Nullable: true},
-		{Name: "config", Type: field.TypeJSON, Nullable: true},
-		{Name: "installation_metadata", Type: field.TypeJSON, Nullable: true},
-		{Name: "provider_state", Type: field.TypeJSON, Nullable: true},
-		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
-		{Name: "definition_id", Type: field.TypeString, Nullable: true},
-		{Name: "definition_version", Type: field.TypeString, Nullable: true},
-		{Name: "definition_slug", Type: field.TypeString, Nullable: true},
-		{Name: "family", Type: field.TypeString, Nullable: true},
-		{Name: "status", Type: field.TypeEnum, Enums: []string{"PENDING", "CONNECTED", "ERRORED", "DISABLED", "DELETED"}, Default: "PENDING"},
-		{Name: "provider_metadata_snapshot", Type: field.TypeJSON, Nullable: true},
-		{Name: "primary_directory", Type: field.TypeBool, Default: false},
-		{Name: "campaign_email", Type: field.TypeBool, Default: false},
-	}
-	// IntegrationHistoryTable holds the schema information for the "integration_history" table.
-	IntegrationHistoryTable = &schema.Table{
-		Name:       "integration_history",
-		Columns:    IntegrationHistoryColumns,
-		PrimaryKey: []*schema.Column{IntegrationHistoryColumns[0]},
-		Indexes: []*schema.Index{
-			{
-				Name:    "integrationhistory_history_time",
-				Unique:  false,
-				Columns: []*schema.Column{IntegrationHistoryColumns[1]},
-			},
-		},
-	}
 	// InternalPolicyHistoryColumns holds the columns for the "internal_policy_history" table.
 	InternalPolicyHistoryColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -1902,41 +1605,6 @@ var (
 				Name:    "orgmembershiphistory_history_time",
 				Unique:  false,
 				Columns: []*schema.Column{OrgMembershipHistoryColumns[1]},
-			},
-		},
-	}
-	// OrgSubscriptionHistoryColumns holds the columns for the "org_subscription_history" table.
-	OrgSubscriptionHistoryColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "history_time", Type: field.TypeTime},
-		{Name: "ref", Type: field.TypeString, Nullable: true},
-		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_impersonator", Type: field.TypeString, Nullable: true},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "stripe_subscription_id", Type: field.TypeString, Nullable: true},
-		{Name: "stripe_subscription_status", Type: field.TypeString, Nullable: true},
-		{Name: "active", Type: field.TypeBool, Default: true},
-		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
-		{Name: "trial_expires_at", Type: field.TypeTime, Nullable: true},
-		{Name: "days_until_due", Type: field.TypeString, Nullable: true},
-	}
-	// OrgSubscriptionHistoryTable holds the schema information for the "org_subscription_history" table.
-	OrgSubscriptionHistoryTable = &schema.Table{
-		Name:       "org_subscription_history",
-		Columns:    OrgSubscriptionHistoryColumns,
-		PrimaryKey: []*schema.Column{OrgSubscriptionHistoryColumns[0]},
-		Indexes: []*schema.Index{
-			{
-				Name:    "orgsubscriptionhistory_history_time",
-				Unique:  false,
-				Columns: []*schema.Column{OrgSubscriptionHistoryColumns[1]},
 			},
 		},
 	}
@@ -2460,60 +2128,6 @@ var (
 				Name:    "sladefinitionhistory_history_time",
 				Unique:  false,
 				Columns: []*schema.Column{SLADefinitionHistoryColumns[1]},
-			},
-		},
-	}
-	// ScanHistoryColumns holds the columns for the "scan_history" table.
-	ScanHistoryColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "history_time", Type: field.TypeTime},
-		{Name: "ref", Type: field.TypeString, Nullable: true},
-		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_impersonator", Type: field.TypeString, Nullable: true},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
-		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
-		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
-		{Name: "reviewed_by", Type: field.TypeString, Nullable: true},
-		{Name: "reviewed_by_user_id", Type: field.TypeString, Nullable: true},
-		{Name: "reviewed_by_group_id", Type: field.TypeString, Nullable: true},
-		{Name: "assigned_to", Type: field.TypeString, Nullable: true},
-		{Name: "assigned_to_user_id", Type: field.TypeString, Nullable: true},
-		{Name: "assigned_to_group_id", Type: field.TypeString, Nullable: true},
-		{Name: "environment_name", Type: field.TypeString, Nullable: true},
-		{Name: "environment_id", Type: field.TypeString, Nullable: true},
-		{Name: "scope_name", Type: field.TypeString, Nullable: true},
-		{Name: "scope_id", Type: field.TypeString, Nullable: true},
-		{Name: "target", Type: field.TypeString},
-		{Name: "scan_type", Type: field.TypeEnum, Enums: []string{"DOMAIN", "VULNERABILITY", "VENDOR", "PROVIDER"}, Default: "DOMAIN"},
-		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
-		{Name: "scan_date", Type: field.TypeTime, Nullable: true},
-		{Name: "scan_schedule", Type: field.TypeString, Nullable: true},
-		{Name: "next_scan_run_at", Type: field.TypeTime, Nullable: true},
-		{Name: "performed_by", Type: field.TypeString, Nullable: true},
-		{Name: "performed_by_user_id", Type: field.TypeString, Nullable: true},
-		{Name: "performed_by_group_id", Type: field.TypeString, Nullable: true},
-		{Name: "generated_by_platform_id", Type: field.TypeString, Nullable: true},
-		{Name: "discovered_vulnerability_ids", Type: field.TypeJSON, Nullable: true},
-		{Name: "status", Type: field.TypeEnum, Enums: []string{"PENDING", "PROCESSING", "COMPLETED", "FAILED"}, Default: "PENDING"},
-	}
-	// ScanHistoryTable holds the schema information for the "scan_history" table.
-	ScanHistoryTable = &schema.Table{
-		Name:       "scan_history",
-		Columns:    ScanHistoryColumns,
-		PrimaryKey: []*schema.Column{ScanHistoryColumns[0]},
-		Indexes: []*schema.Index{
-			{
-				Name:    "scanhistory_history_time",
-				Unique:  false,
-				Columns: []*schema.Column{ScanHistoryColumns[1]},
 			},
 		},
 	}
@@ -3554,142 +3168,6 @@ var (
 			},
 		},
 	}
-	// WorkflowEventHistoryColumns holds the columns for the "workflow_event_history" table.
-	WorkflowEventHistoryColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "history_time", Type: field.TypeTime},
-		{Name: "ref", Type: field.TypeString, Nullable: true},
-		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_impersonator", Type: field.TypeString, Nullable: true},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "display_id", Type: field.TypeString},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "workflow_instance_id", Type: field.TypeString},
-		{Name: "event_type", Type: field.TypeEnum, Enums: []string{"ACTION", "TRIGGER", "DECISION", "WORKFLOW_TRIGGERED", "ACTION_STARTED", "ACTION_COMPLETED", "ACTION_FAILED", "ACTION_SKIPPED", "CONDITION_EVALUATED", "ASSIGNMENT_CREATED", "ASSIGNMENT_COMPLETED", "ASSIGNMENT_INVALIDATED", "INSTANCE_PAUSED", "INSTANCE_RESUMED", "WORKFLOW_COMPLETED", "EMIT_FAILED", "EMIT_RECOVERED", "EMIT_FAILED_TERMINAL"}},
-		{Name: "payload", Type: field.TypeJSON, Nullable: true},
-	}
-	// WorkflowEventHistoryTable holds the schema information for the "workflow_event_history" table.
-	WorkflowEventHistoryTable = &schema.Table{
-		Name:       "workflow_event_history",
-		Columns:    WorkflowEventHistoryColumns,
-		PrimaryKey: []*schema.Column{WorkflowEventHistoryColumns[0]},
-		Indexes: []*schema.Index{
-			{
-				Name:    "workfloweventhistory_history_time",
-				Unique:  false,
-				Columns: []*schema.Column{WorkflowEventHistoryColumns[1]},
-			},
-		},
-	}
-	// WorkflowInstanceHistoryColumns holds the columns for the "workflow_instance_history" table.
-	WorkflowInstanceHistoryColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "history_time", Type: field.TypeTime},
-		{Name: "ref", Type: field.TypeString, Nullable: true},
-		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_impersonator", Type: field.TypeString, Nullable: true},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "display_id", Type: field.TypeString},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "workflow_definition_id", Type: field.TypeString},
-		{Name: "workflow_proposal_id", Type: field.TypeString, Nullable: true},
-		{Name: "state", Type: field.TypeEnum, Enums: []string{"RUNNING", "COMPLETED", "FAILED", "PAUSED"}, Default: "RUNNING"},
-		{Name: "context", Type: field.TypeJSON, Nullable: true},
-		{Name: "last_evaluated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "definition_snapshot", Type: field.TypeJSON, Nullable: true},
-		{Name: "current_action_index", Type: field.TypeInt, Default: 0},
-		{Name: "control_id", Type: field.TypeString, Nullable: true},
-		{Name: "internal_policy_id", Type: field.TypeString, Nullable: true},
-		{Name: "evidence_id", Type: field.TypeString, Nullable: true},
-		{Name: "subcontrol_id", Type: field.TypeString, Nullable: true},
-		{Name: "action_plan_id", Type: field.TypeString, Nullable: true},
-		{Name: "procedure_id", Type: field.TypeString, Nullable: true},
-		{Name: "campaign_id", Type: field.TypeString, Nullable: true},
-		{Name: "campaign_target_id", Type: field.TypeString, Nullable: true},
-		{Name: "identity_holder_id", Type: field.TypeString, Nullable: true},
-		{Name: "platform_id", Type: field.TypeString, Nullable: true},
-		{Name: "assessment_id", Type: field.TypeString, Nullable: true},
-		{Name: "assessment_response_id", Type: field.TypeString, Nullable: true},
-		{Name: "finding_id", Type: field.TypeString, Nullable: true},
-		{Name: "integration_id", Type: field.TypeString, Nullable: true},
-		{Name: "remediation_id", Type: field.TypeString, Nullable: true},
-		{Name: "risk_id", Type: field.TypeString, Nullable: true},
-		{Name: "task_id", Type: field.TypeString, Nullable: true},
-		{Name: "vulnerability_id", Type: field.TypeString, Nullable: true},
-	}
-	// WorkflowInstanceHistoryTable holds the schema information for the "workflow_instance_history" table.
-	WorkflowInstanceHistoryTable = &schema.Table{
-		Name:       "workflow_instance_history",
-		Columns:    WorkflowInstanceHistoryColumns,
-		PrimaryKey: []*schema.Column{WorkflowInstanceHistoryColumns[0]},
-		Indexes: []*schema.Index{
-			{
-				Name:    "workflowinstancehistory_history_time",
-				Unique:  false,
-				Columns: []*schema.Column{WorkflowInstanceHistoryColumns[1]},
-			},
-		},
-	}
-	// WorkflowObjectRefHistoryColumns holds the columns for the "workflow_object_ref_history" table.
-	WorkflowObjectRefHistoryColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "history_time", Type: field.TypeTime},
-		{Name: "ref", Type: field.TypeString, Nullable: true},
-		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_impersonator", Type: field.TypeString, Nullable: true},
-		{Name: "display_id", Type: field.TypeString},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "workflow_instance_id", Type: field.TypeString},
-		{Name: "control_id", Type: field.TypeString, Nullable: true},
-		{Name: "task_id", Type: field.TypeString, Nullable: true},
-		{Name: "internal_policy_id", Type: field.TypeString, Nullable: true},
-		{Name: "finding_id", Type: field.TypeString, Nullable: true},
-		{Name: "directory_account_id", Type: field.TypeString, Nullable: true},
-		{Name: "directory_group_id", Type: field.TypeString, Nullable: true},
-		{Name: "directory_membership_id", Type: field.TypeString, Nullable: true},
-		{Name: "evidence_id", Type: field.TypeString, Nullable: true},
-		{Name: "subcontrol_id", Type: field.TypeString, Nullable: true},
-		{Name: "action_plan_id", Type: field.TypeString, Nullable: true},
-		{Name: "procedure_id", Type: field.TypeString, Nullable: true},
-		{Name: "campaign_id", Type: field.TypeString, Nullable: true},
-		{Name: "campaign_target_id", Type: field.TypeString, Nullable: true},
-		{Name: "identity_holder_id", Type: field.TypeString, Nullable: true},
-		{Name: "platform_id", Type: field.TypeString, Nullable: true},
-		{Name: "vulnerability_id", Type: field.TypeString, Nullable: true},
-		{Name: "risk_id", Type: field.TypeString, Nullable: true},
-		{Name: "assessment_id", Type: field.TypeString, Nullable: true},
-		{Name: "assessment_response_id", Type: field.TypeString, Nullable: true},
-		{Name: "remediation_id", Type: field.TypeString, Nullable: true},
-	}
-	// WorkflowObjectRefHistoryTable holds the schema information for the "workflow_object_ref_history" table.
-	WorkflowObjectRefHistoryTable = &schema.Table{
-		Name:       "workflow_object_ref_history",
-		Columns:    WorkflowObjectRefHistoryColumns,
-		PrimaryKey: []*schema.Column{WorkflowObjectRefHistoryColumns[0]},
-		Indexes: []*schema.Index{
-			{
-				Name:    "workflowobjectrefhistory_history_time",
-				Unique:  false,
-				Columns: []*schema.Column{WorkflowObjectRefHistoryColumns[1]},
-			},
-		},
-	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		ActionPlanHistoryTable,
@@ -3698,16 +3176,11 @@ var (
 		AssetHistoryTable,
 		CampaignHistoryTable,
 		CampaignTargetHistoryTable,
-		CheckResultHistoryTable,
 		ContactHistoryTable,
 		ControlHistoryTable,
 		ControlImplementationHistoryTable,
 		ControlObjectiveHistoryTable,
 		CustomDomainHistoryTable,
-		DNSVerificationHistoryTable,
-		DirectoryAccountHistoryTable,
-		DirectoryGroupHistoryTable,
-		DirectoryMembershipHistoryTable,
 		DiscussionHistoryTable,
 		DocumentDataHistoryTable,
 		EmailTemplateHistoryTable,
@@ -3722,7 +3195,6 @@ var (
 		GroupSettingHistoryTable,
 		HushHistoryTable,
 		IdentityHolderHistoryTable,
-		IntegrationHistoryTable,
 		InternalPolicyHistoryTable,
 		JobTemplateHistoryTable,
 		MappableDomainHistoryTable,
@@ -3732,7 +3204,6 @@ var (
 		NotificationPreferenceHistoryTable,
 		NotificationTemplateHistoryTable,
 		OrgMembershipHistoryTable,
-		OrgSubscriptionHistoryTable,
 		OrganizationHistoryTable,
 		OrganizationSettingHistoryTable,
 		PlatformHistoryTable,
@@ -3743,7 +3214,6 @@ var (
 		ReviewHistoryTable,
 		RiskHistoryTable,
 		SLADefinitionHistoryTable,
-		ScanHistoryTable,
 		ScheduledJobHistoryTable,
 		StandardHistoryTable,
 		SubcontrolHistoryTable,
@@ -3768,9 +3238,6 @@ var (
 		WorkflowAssignmentHistoryTable,
 		WorkflowAssignmentTargetHistoryTable,
 		WorkflowDefinitionHistoryTable,
-		WorkflowEventHistoryTable,
-		WorkflowInstanceHistoryTable,
-		WorkflowObjectRefHistoryTable,
 	}
 )
 
@@ -3793,9 +3260,6 @@ func init() {
 	CampaignTargetHistoryTable.Annotation = &entsql.Annotation{
 		Table: "campaign_target_history",
 	}
-	CheckResultHistoryTable.Annotation = &entsql.Annotation{
-		Table: "check_result_history",
-	}
 	ContactHistoryTable.Annotation = &entsql.Annotation{
 		Table: "contact_history",
 	}
@@ -3810,18 +3274,6 @@ func init() {
 	}
 	CustomDomainHistoryTable.Annotation = &entsql.Annotation{
 		Table: "custom_domain_history",
-	}
-	DNSVerificationHistoryTable.Annotation = &entsql.Annotation{
-		Table: "dns_verification_history",
-	}
-	DirectoryAccountHistoryTable.Annotation = &entsql.Annotation{
-		Table: "directory_account_history",
-	}
-	DirectoryGroupHistoryTable.Annotation = &entsql.Annotation{
-		Table: "directory_group_history",
-	}
-	DirectoryMembershipHistoryTable.Annotation = &entsql.Annotation{
-		Table: "directory_membership_history",
 	}
 	DiscussionHistoryTable.Annotation = &entsql.Annotation{
 		Table: "discussion_history",
@@ -3865,9 +3317,6 @@ func init() {
 	IdentityHolderHistoryTable.Annotation = &entsql.Annotation{
 		Table: "identity_holder_history",
 	}
-	IntegrationHistoryTable.Annotation = &entsql.Annotation{
-		Table: "integration_history",
-	}
 	InternalPolicyHistoryTable.Annotation = &entsql.Annotation{
 		Table: "internal_policy_history",
 	}
@@ -3894,9 +3343,6 @@ func init() {
 	}
 	OrgMembershipHistoryTable.Annotation = &entsql.Annotation{
 		Table: "org_membership_history",
-	}
-	OrgSubscriptionHistoryTable.Annotation = &entsql.Annotation{
-		Table: "org_subscription_history",
 	}
 	OrganizationHistoryTable.Annotation = &entsql.Annotation{
 		Table: "organization_history",
@@ -3927,9 +3373,6 @@ func init() {
 	}
 	SLADefinitionHistoryTable.Annotation = &entsql.Annotation{
 		Table: "sla_definition_history",
-	}
-	ScanHistoryTable.Annotation = &entsql.Annotation{
-		Table: "scan_history",
 	}
 	ScheduledJobHistoryTable.Annotation = &entsql.Annotation{
 		Table: "scheduled_job_history",
@@ -4002,14 +3445,5 @@ func init() {
 	}
 	WorkflowDefinitionHistoryTable.Annotation = &entsql.Annotation{
 		Table: "workflow_definition_history",
-	}
-	WorkflowEventHistoryTable.Annotation = &entsql.Annotation{
-		Table: "workflow_event_history",
-	}
-	WorkflowInstanceHistoryTable.Annotation = &entsql.Annotation{
-		Table: "workflow_instance_history",
-	}
-	WorkflowObjectRefHistoryTable.Annotation = &entsql.Annotation{
-		Table: "workflow_object_ref_history",
 	}
 }
