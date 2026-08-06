@@ -5,7 +5,6 @@ import (
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/iam/auth"
 
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -35,10 +34,9 @@ func (h *Handler) UserInfo(ctx echo.Context) error {
 
 	if user.Edges.Setting != nil {
 		orgID := caller.OrganizationID
-		allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
 
 		if orgID == "" {
-			orgID, err = h.getUserDefaultOrgID(allowCtx, user.ID)
+			orgID, err = h.getUserDefaultOrgID(reqCtx, user.ID)
 			if err != nil {
 				logx.FromContext(reqCtx).Error().Err(err).Msg("unable to get user default org")
 
@@ -46,7 +44,7 @@ func (h *Handler) UserInfo(ctx echo.Context) error {
 			}
 		}
 
-		status, err := h.fetchSSOStatus(allowCtx, orgID, user.ID)
+		status, err := h.fetchSSOStatus(reqCtx, orgID, user.ID)
 		if err != nil {
 			logx.FromContext(reqCtx).Error().Err(err).Msg("unable to get auth enforcement status")
 
