@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/ent/eventqueue"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
@@ -155,7 +156,7 @@ func isProgramReady(payload eventqueue.MutationGalaPayload) bool {
 func buildNotificationInputForAuditor(programEntity *generated.Program) *generated.CreateNotificationInput {
 	dataMap := map[string]any{
 		"program_id": programEntity.ID,
-		"url":        getURLPathForObject(programEntity.ID, generated.TypeProgram),
+		"url":        entityops.ConsoleObjectPath(generated.TypeProgram, programEntity.ID),
 	}
 
 	topic := enums.NotificationTopicApproval

@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/ent/eventqueue"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/task"
@@ -15,6 +16,13 @@ import (
 )
 
 func TestExtractMentionDetails(t *testing.T) {
+	spec, ok := entityops.MentionSpecFor(generated.TypeTask)
+	require.True(t, ok)
+	assert.Equal(t, task.FieldTitle, spec.NameField)
+	assert.Equal(t, task.FieldDetails, spec.DetailsField)
+	assert.Equal(t, task.FieldDetailsJSON, spec.DetailsJSONField)
+	assert.Equal(t, task.FieldOwnerID, spec.OwnerField)
+
 	payload := eventqueue.MutationGalaPayload{
 		MutationType: generated.TypeTask,
 		Operation:    ent.OpUpdateOne.String(),
@@ -29,7 +37,7 @@ func TestExtractMentionDetails(t *testing.T) {
 		},
 	}
 
-	details := extractMentionDetails(payload, task.FieldTitle, task.FieldDetails, task.FieldDetailsJSON, task.FieldOwnerID)
+	details := extractMentionDetails(payload, spec)
 
 	assert.Equal(t, "task-1", details.objectID)
 	assert.Equal(t, generated.TypeTask, details.objectType)
@@ -39,6 +47,15 @@ func TestExtractMentionDetails(t *testing.T) {
 	assert.Equal(t, "owner-1", details.ownerID)
 	assert.Empty(t, details.newDetailsJSON)
 	assert.Empty(t, details.oldDetailsJSON)
+}
+
+func TestConsoleObjectPaths(t *testing.T) {
+	assert.Equal(t, "automation/tasks?id=task-1", entityops.ConsoleObjectPath(generated.TypeTask, "task-1"))
+	assert.Equal(t, "policies/pol-1/view", entityops.ConsoleObjectPath(generated.TypeInternalPolicy, "pol-1"))
+	assert.Equal(t, "exposure/risks/risk-1", entityops.ConsoleObjectPath(generated.TypeRisk, "risk-1"))
+	assert.Equal(t, "evidence?id=ev-1", entityops.ConsoleObjectPath(generated.TypeEvidence, "ev-1"))
+	assert.Equal(t, "trust-center/NDAs", entityops.ConsoleLanding(generated.TypeTrustCenterNDARequest))
+	assert.Empty(t, entityops.ConsoleObjectPath(generated.TypeNote, "note-1"))
 }
 
 func TestNoteParent(t *testing.T) {

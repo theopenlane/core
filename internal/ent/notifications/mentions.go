@@ -2,22 +2,19 @@ package notifications
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 
 	"github.com/stoewer/go-strcase"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/ent/eventqueue"
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/generated/procedure"
-	"github.com/theopenlane/core/internal/ent/generated/risk"
-	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/slateparser"
 )
@@ -43,16 +40,21 @@ type mentionNotificationInput struct {
 
 // handleNoteMutation processes note mutations and creates notifications for mentioned users
 func handleNoteMutation(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
+	spec, ok := entityops.MentionSpecFor(generated.TypeNote)
+	if !ok {
+		return nil
+	}
+
 	ctx, client, ok := eventqueue.ClientFromHandler(ctx)
 	if !ok {
 		return ErrFailedToGetClient
 	}
 
 	// Determine which text field to use (prefer text_json if available and valid)
-	newText, _ := eventqueue.MutationStringValue(payload, note.FieldText)
+	newText, _ := eventqueue.MutationStringValue(payload, spec.DetailsField)
 
-	if raw, ok := eventqueue.MutationValue(payload, note.FieldTextJSON); ok {
-		if textJSON := jsonValueToString(raw); textJSON != "" && slateparser.IsValidSlateText(textJSON) {
+	if raw, ok := eventqueue.MutationValue(payload, spec.DetailsJSONField); ok {
+		if textJSON := jsonx.Stringify(raw); textJSON != "" && slateparser.IsValidSlateText(textJSON) {
 			newText = textJSON
 		}
 	}
@@ -60,6 +62,14 @@ func handleNoteMutation(ctx gala.HandlerContext, payload eventqueue.MutationGala
 	// If no valid text, nothing to process
 	if newText == "" {
 		return nil
+	}
+
+	oldText, _ := eventqueue.MutationOldStringValue(payload, spec.DetailsField)
+
+	if raw, ok := eventqueue.MutationOldValue(payload, spec.DetailsJSONField); ok {
+		if oldTextJSON := jsonx.Stringify(raw); oldTextJSON != "" && slateparser.IsValidSlateText(oldTextJSON) {
+			oldText = oldTextJSON
+		}
 	}
 
 	allowCtx := privacy.DecisionContext(ctx.Context, privacy.Allow)
@@ -79,14 +89,6 @@ func handleNoteMutation(ctx gala.HandlerContext, payload eventqueue.MutationGala
 	case err != nil:
 		logx.FromContext(ctx.Context).Error().Err(err).Msg("failed to query note with relationships")
 		return err
-	}
-
-	oldText, _ := eventqueue.MutationOldStringValue(payload, note.FieldText)
-
-	if raw, ok := eventqueue.MutationOldValue(payload, note.FieldTextJSON); ok {
-		if oldTextJSON := jsonValueToString(raw); oldTextJSON != "" && slateparser.IsValidSlateText(oldTextJSON) {
-			oldText = oldTextJSON
-		}
 	}
 
 	parentType, parentID, parentName := noteParent(noteEntity)
@@ -153,7 +155,7 @@ func noteParent(noteEntity *generated.Note) (string, string, string) {
 
 // addMentionNotification creates notifications for all mentioned users
 func addMentionNotification(ctx context.Context, client *generated.Client, input mentionNotificationInput) error {
-	url := getURLPathForObject(input.objectID, input.objectType)
+	url := entityops.ConsoleObjectPath(input.objectType, input.objectID)
 
 	dataMap := map[string]any{
 		"object_type": strcase.UpperSnakeCase(input.objectType),
@@ -212,48 +214,50 @@ type objectMentionDetails struct {
 	oldDetails string
 }
 
-// handleObjectMentions checks mentions in object details fields (task/risk/procedure/policy).
+// handleObjectMentions checks mentions in object details fields for every mention-eligible schema
 func handleObjectMentions(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
+	spec, ok := entityops.MentionSpecFor(payload.MutationType)
+	if !ok {
+		return nil
+	}
+
 	ctx, client, ok := eventqueue.ClientFromHandler(ctx)
 	if !ok {
 		return ErrFailedToGetClient
 	}
 
 	allowCtx := privacy.DecisionContext(ctx.Context, privacy.Allow)
-
-	var details objectMentionDetails
-
-	switch payload.MutationType {
-	case generated.TypeTask:
-		details = extractMentionDetails(payload, task.FieldTitle, task.FieldDetails, task.FieldDetailsJSON, task.FieldOwnerID)
-	case generated.TypeRisk:
-		details = extractMentionDetails(payload, risk.FieldName, risk.FieldDetails, risk.FieldDetailsJSON, risk.FieldOwnerID)
-	case generated.TypeProcedure:
-		details = extractMentionDetails(payload, procedure.FieldName, procedure.FieldDetails, procedure.FieldDetailsJSON, procedure.FieldOwnerID)
-	case generated.TypeInternalPolicy:
-		details = extractMentionDetails(payload, internalpolicy.FieldName, internalpolicy.FieldDetails, internalpolicy.FieldDetailsJSON, internalpolicy.FieldOwnerID)
-	default:
-		return nil
-	}
+	details := extractMentionDetails(payload, spec)
 
 	// name and owner are absent from the payload when unchanged by the mutation; fill
 	// them from the current row before mention context is built
 	if details.objectName == "" || details.ownerID == "" {
-		name, ownerID, err := objectNameAndOwner(allowCtx, client, payload.MutationType, payload.EntityID)
+		schema, ok := entityops.LookupSchema(payload.MutationType)
+		if !ok {
+			return nil
+		}
+
+		row, err := schema.Load(allowCtx, client, payload.EntityID)
 		switch {
 		case generated.IsNotFound(err):
 			return nil
 		case err != nil:
-			logx.FromContext(ctx.Context).Error().Err(err).Msg("failed to query mention object")
+			logx.FromContext(ctx.Context).Error().Err(err).Msg("failed to load mention object")
 			return err
 		}
 
 		if details.objectName == "" {
-			details.objectName = name
+			details.objectName = schema.DisplayValue(row)
 		}
 
 		if details.ownerID == "" {
-			details.ownerID = ownerID
+			fields, err := jsonx.Decode[map[string]any](row)
+			if err != nil {
+				logx.FromContext(ctx.Context).Error().Err(err).Msg("failed to decode mention object row")
+				return err
+			}
+
+			details.ownerID, _ = fields[spec.OwnerField].(string)
 		}
 	}
 
@@ -307,101 +311,26 @@ func handleObjectMentions(ctx gala.HandlerContext, payload eventqueue.MutationGa
 	return nil
 }
 
-// extractMentionDetails extracts new and pre-update mention detail values from the mutation payload
-func extractMentionDetails(payload eventqueue.MutationGalaPayload, nameField, detailsField, detailsJSONField, ownerField string) objectMentionDetails {
+// extractMentionDetails extracts new and pre-update mention detail values from the mutation
+// payload using the schema's mention-scan field spec
+func extractMentionDetails(payload eventqueue.MutationGalaPayload, spec entityops.MentionSpec) objectMentionDetails {
 	details := objectMentionDetails{
 		objectID:   payload.EntityID,
 		objectType: payload.MutationType,
 	}
 
-	if raw, ok := eventqueue.MutationValue(payload, detailsJSONField); ok {
-		details.newDetailsJSON = jsonValueToString(raw)
+	if raw, ok := eventqueue.MutationValue(payload, spec.DetailsJSONField); ok {
+		details.newDetailsJSON = jsonx.Stringify(raw)
 	}
 
-	if raw, ok := eventqueue.MutationOldValue(payload, detailsJSONField); ok {
-		details.oldDetailsJSON = jsonValueToString(raw)
+	if raw, ok := eventqueue.MutationOldValue(payload, spec.DetailsJSONField); ok {
+		details.oldDetailsJSON = jsonx.Stringify(raw)
 	}
 
-	details.newDetails, _ = eventqueue.MutationStringValue(payload, detailsField)
-	details.oldDetails, _ = eventqueue.MutationOldStringValue(payload, detailsField)
-	details.objectName, _ = eventqueue.MutationStringValue(payload, nameField)
-	details.ownerID, _ = eventqueue.MutationStringValue(payload, ownerField)
+	details.newDetails, _ = eventqueue.MutationStringValue(payload, spec.DetailsField)
+	details.oldDetails, _ = eventqueue.MutationOldStringValue(payload, spec.DetailsField)
+	details.objectName, _ = eventqueue.MutationStringValue(payload, spec.NameField)
+	details.ownerID, _ = eventqueue.MutationStringValue(payload, spec.OwnerField)
 
 	return details
-}
-
-// objectNameAndOwner returns the display name and owner of a mention-eligible object from its current row
-func objectNameAndOwner(ctx context.Context, client *generated.Client, mutationType, entityID string) (string, string, error) {
-	switch mutationType {
-	case generated.TypeTask:
-		taskEntity, err := client.Task.Get(ctx, entityID)
-		if err != nil {
-			return "", "", err
-		}
-
-		return taskEntity.Title, taskEntity.OwnerID, nil
-	case generated.TypeRisk:
-		riskEntity, err := client.Risk.Get(ctx, entityID)
-		if err != nil {
-			return "", "", err
-		}
-
-		return riskEntity.Name, riskEntity.OwnerID, nil
-	case generated.TypeProcedure:
-		proc, err := client.Procedure.Get(ctx, entityID)
-		if err != nil {
-			return "", "", err
-		}
-
-		return proc.Name, proc.OwnerID, nil
-	case generated.TypeInternalPolicy:
-		policy, err := client.InternalPolicy.Get(ctx, entityID)
-		if err != nil {
-			return "", "", err
-		}
-
-		return policy.Name, policy.OwnerID, nil
-	default:
-		return "", "", nil
-	}
-}
-
-// jsonSliceToString converts a []any slice to a JSON string for parsing.
-// Returns an empty string if the slice is empty or serialization fails.
-func jsonSliceToString(data []any) string {
-	if len(data) == 0 {
-		return ""
-	}
-
-	bytes, err := json.Marshal(data)
-	if err != nil {
-		return ""
-	}
-
-	return string(bytes)
-}
-
-func jsonValueToString(raw any) string {
-	if raw == nil {
-		return ""
-	}
-
-	switch value := raw.(type) {
-	case string:
-		return value
-	case []any:
-		return jsonSliceToString(value)
-	case []string:
-		if len(value) == 0 {
-			return ""
-		}
-	default:
-	}
-
-	bytes, err := json.Marshal(raw)
-	if err != nil || len(bytes) == 0 || string(bytes) == "null" {
-		return ""
-	}
-
-	return string(bytes)
 }

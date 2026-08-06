@@ -607,18 +607,67 @@ func (r *Runtime) reconcilableDefinitionIDs() []string {
 	return ids
 }
 
-// reconcileMetadataFragment builds the JSONB containment fragment used to query
-// River for an active reconcile job for the given integration and operation
+// CancelInstallationJobs cancels every queued River job bound to the installation across all
+// job families and returns how many were cancelled. Operation-context jobs (reconcile loops,
+// event operations) carry the installation as properties.entityId; ingest record jobs carry
+// properties.integration_id
+func (r *Runtime) CancelInstallationJobs(ctx context.Context, integrationID string) (int, error) {
+	fragments, err := installationJobFragments(integrationID)
+	if err != nil {
+		return 0, err
+	}
+
+	var cancelled int
+
+	for _, fragment := range fragments {
+		count, err := r.Gala().CancelActiveJobsWithMetadata(ctx, fragment)
+		if err != nil {
+			return cancelled, err
+		}
+
+		cancelled += count
+	}
+
+	return cancelled, nil
+}
+
+// installationJobFragments builds the JSONB containment fragments matching every job family
+// bound to one installation
+func installationJobFragments(integrationID string) ([]string, error) {
+	operationJobs, err := json.Marshal(map[string]map[string]string{
+		"properties": {"entityId": integrationID, "entityType": "integration"},
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	ingestJobs, err := json.Marshal(map[string]map[string]string{
+		"properties": {"integration_id": integrationID},
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return []string{string(operationJobs), string(ingestJobs)}, nil
+}
+
+// reconcileMetadataFragment builds the JSONB containment fragment used to query River for an
+// active reconcile job for the given integration and operation. The keys must match the
+// emitted GetPropertiesForOperationContext projection: installation-bound contexts promote
+// the integration as the operation's entity (entityId), and the reconcile run type keeps the
+// match disjoint from one-shot event jobs sharing the same installation and operation
 func reconcileMetadataFragment(integrationID, operationName string) (string, error) {
 	fragment := struct {
 		Properties struct {
-			InstallationID string `json:"installationId"`
-			Operation      string `json:"operation"`
+			EntityID  string `json:"entityId"`
+			Operation string `json:"operation"`
+			RunType   string `json:"runType"`
 		} `json:"properties"`
 	}{}
 
-	fragment.Properties.InstallationID = integrationID
+	fragment.Properties.EntityID = integrationID
 	fragment.Properties.Operation = operationName
+	fragment.Properties.RunType = enums.IntegrationRunTypeReconcile.String()
 
 	b, err := json.Marshal(fragment)
 	if err != nil {

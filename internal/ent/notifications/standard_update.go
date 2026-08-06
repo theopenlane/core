@@ -11,6 +11,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/ent/eventqueue"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/control"
@@ -153,6 +154,13 @@ func handleStandardMutation(ctx gala.HandlerContext, payload eventqueue.Mutation
 			},
 			"accept_all_available":        true,
 			"acceptance_updates_revision": std.Revision,
+			"url":                         entityops.ConsoleObjectPath(generated.TypeStandard, standardID),
+			"standard_id":                 standardID,
+			"standard_short_name":         std.ShortName,
+			"old_revision":                value.revision,
+			"new_revision":                std.Revision,
+			"change_type":                 detectVersionBump(value.revision, std.Revision),
+			"affected_controls_count":     value.controlCount,
 		}
 
 		topic := enums.NotificationTopicStandardUpdate

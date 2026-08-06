@@ -2,6 +2,7 @@ package eventqueue
 
 import (
 	"fmt"
+	"slices"
 	"strings"
 )
 
@@ -56,10 +57,8 @@ func ParseEnum[T ~string](raw any, parser EnumParser[T], invalid ...T) (T, bool)
 		return zero, false
 	}
 
-	for _, sentinel := range invalid {
-		if *parsed == sentinel {
-			return zero, false
-		}
+	if slices.Contains(invalid, *parsed) {
+		return zero, false
 	}
 
 	return *parsed, true

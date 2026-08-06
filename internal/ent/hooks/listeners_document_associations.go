@@ -6,10 +6,19 @@ import (
 	"entgo.io/ent"
 	"github.com/samber/lo"
 
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/ent/eventqueue"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/pkg/jsonx"
+)
+
+const (
+	// docDetailsField is the rich-text field scanned for control references on association-eligible documents
+	docDetailsField = "details"
+	// docRevisionField is the revision field re-asserted on link updates so associations do not bump revisions
+	docRevisionField = "revision"
 )
 
 // RegisterGalaDocumentAssociationListeners registers listeners that link
@@ -32,92 +41,60 @@ func documentAssociationListener(schemaType string) eventqueue.MutationListener 
 	}
 }
 
+// handleDocumentAssociationCreated links controls referenced in a new document's details
+// through the schema catalog: the row is loaded generically, matched control references
+// become add-edge keys, and a single catalog update re-asserts the loaded revision so the
+// links do not bump the document's revision
 func handleDocumentAssociationCreated(inv eventqueue.Invocation, payload eventqueue.MutationGalaPayload) error {
-	switch payload.MutationType {
-	case generated.TypeActionPlan:
-		return parseActionPlanAssociations(inv.Context, inv.Client, inv.EntityID)
-	case generated.TypeInternalPolicy:
-		return parseInternalPolicyAssociations(inv.Context, inv.Client, inv.EntityID)
-	case generated.TypeProcedure:
-		return parseProcedureAssociations(inv.Context, inv.Client, inv.EntityID)
-	default:
+	schema, ok := entityops.LookupSchema(payload.MutationType)
+	if !ok {
 		return nil
 	}
-}
 
-func parseActionPlanAssociations(ctx context.Context, client *generated.Client, documentID string) error {
-	doc, err := client.ActionPlan.Get(ctx, documentID)
-	if err != nil {
-		if generated.IsNotFound(err) {
-			return nil
-		}
-
+	row, err := schema.Load(inv.Context, inv.Client, inv.EntityID)
+	switch {
+	case generated.IsNotFound(err):
+		return nil
+	case err != nil:
 		return err
 	}
 
-	links := getDocumentAssociationsForDetails(ctx, client, doc.Details)
-	if links == nil || len(links.controlIDs) == 0 {
-		return nil
-	}
-
-	return client.ActionPlan.UpdateOneID(doc.ID).
-		SetRevision(doc.Revision).
-		AddControlIDs(lo.Uniq(links.controlIDs)...).
-		Exec(workflows.AllowContext(ctx))
-}
-
-func parseInternalPolicyAssociations(ctx context.Context, client *generated.Client, documentID string) error {
-	doc, err := client.InternalPolicy.Get(ctx, documentID)
+	fields, err := jsonx.Decode[map[string]any](row)
 	if err != nil {
-		if generated.IsNotFound(err) {
-			return nil
-		}
-
 		return err
 	}
 
-	links := getDocumentAssociationsForDetails(ctx, client, doc.Details)
-	if links == nil || !links.hasAssociations() {
+	details, _ := fields[docDetailsField].(string)
+
+	links := getDocumentAssociationsForDetails(inv.Context, inv.Client, details)
+	if !links.hasAssociations() {
 		return nil
 	}
 
-	update := client.InternalPolicy.UpdateOneID(doc.ID).SetRevision(doc.Revision)
-	if len(links.controlIDs) > 0 {
-		update.AddControlIDs(lo.Uniq(links.controlIDs)...)
-	}
+	update := map[string]any{docRevisionField: fields[docRevisionField]}
 
-	if len(links.subcontrolIDs) > 0 {
-		update.AddSubcontrolIDs(lo.Uniq(links.subcontrolIDs)...)
-	}
-
-	return update.Exec(workflows.AllowContext(ctx))
-}
-
-func parseProcedureAssociations(ctx context.Context, client *generated.Client, documentID string) error {
-	doc, err := client.Procedure.Get(ctx, documentID)
-	if err != nil {
-		if generated.IsNotFound(err) {
-			return nil
+	for edgeName, ids := range map[string][]string{
+		"controls":    links.controlIDs,
+		"subcontrols": links.subcontrolIDs,
+	} {
+		edge, ok := schema.EdgeByName(edgeName)
+		if !ok || edge.AddField == "" || len(ids) == 0 {
+			continue
 		}
 
+		update[edge.AddField] = lo.Uniq(ids)
+	}
+
+	if len(update) == 1 {
+		return nil
+	}
+
+	updatePayload, err := jsonx.ToRawMessage(update)
+	if err != nil {
 		return err
 	}
 
-	links := getDocumentAssociationsForDetails(ctx, client, doc.Details)
-	if links == nil || !links.hasAssociations() {
-		return nil
-	}
-
-	update := client.Procedure.UpdateOneID(doc.ID).SetRevision(doc.Revision)
-	if len(links.controlIDs) > 0 {
-		update.AddControlIDs(lo.Uniq(links.controlIDs)...)
-	}
-
-	if len(links.subcontrolIDs) > 0 {
-		update.AddSubcontrolIDs(lo.Uniq(links.subcontrolIDs)...)
-	}
-
-	return update.Exec(workflows.AllowContext(ctx))
+	return schema.Update(workflows.AllowContext(inv.Context), inv.Client, inv.EntityID, updatePayload)
 }
 
 func getDocumentAssociationsForDetails(ctx context.Context, client *generated.Client, details string) *edgeLinks {

@@ -368,6 +368,7 @@ func runParallelPostGenHooks(g *gen.Graph) {
 		entityops.WithLogxPackage("github.com/theopenlane/core/pkg/logx"),
 		entityops.WithContextxPackage("github.com/theopenlane/utils/contextx"),
 		entityops.WithCelxPackage("github.com/theopenlane/core/pkg/celx"),
+		entityops.WithMapxPackage("github.com/theopenlane/core/pkg/mapx"),
 		entityops.WithEnumsOutputDir(enumsDir),
 		entityops.WithEnumsPackageName("enums"),
 	)
