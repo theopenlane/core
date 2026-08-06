@@ -32,6 +32,10 @@
       "items": true,
       "type": "array"
     },
+    "[]rivertype.Plugin": {
+      "items": true,
+      "type": "array"
+    },
     "[]rivertype.WorkerMiddleware": {
       "items": true,
       "type": "array"
@@ -1345,6 +1349,10 @@
         "JobInsertMiddleware": {
           "$ref": "#/$defs/[]rivertype.JobInsertMiddleware"
         },
+        "JobStuckHandler": true,
+        "JobStuckThreshold": {
+          "type": "integer"
+        },
         "JobTimeout": {
           "type": "integer"
         },
@@ -1359,6 +1367,9 @@
         },
         "Middleware": {
           "$ref": "#/$defs/[]rivertype.Middleware"
+        },
+        "Plugins": {
+          "$ref": "#/$defs/[]rivertype.Plugin"
         },
         "PeriodicJobs": {
           "$ref": "#/$defs/[]*river.PeriodicJob"

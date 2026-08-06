@@ -270,11 +270,13 @@ jobqueue:
         id: ""
         jobcleanertimeout: 0s
         jobinsertmiddleware: []
+        jobstuckthreshold: 0s
         jobtimeout: 0s
         logger: null
         maxattempts: 0
         middleware: []
         periodicjobs: []
+        plugins: []
         pollonly: false
         queues: {}
         reindexerindexnames: []

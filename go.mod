@@ -61,11 +61,11 @@ require (
 	github.com/invopop/jsonschema v0.14.0
 	github.com/invopop/yaml v0.3.1
 	github.com/jackc/pgx/v5 v5.10.0
-	github.com/knadh/koanf/parsers/yaml v1.1.0
-	github.com/knadh/koanf/providers/env/v2 v2.0.0
+	github.com/knadh/koanf/parsers/yaml v1.1.1
+	github.com/knadh/koanf/providers/env/v2 v2.0.1
 	github.com/knadh/koanf/providers/file v1.2.1
-	github.com/knadh/koanf/providers/posflag v1.0.1
-	github.com/knadh/koanf/v2 v2.3.5
+	github.com/knadh/koanf/providers/posflag v1.0.2
+	github.com/knadh/koanf/v2 v2.3.6
 	github.com/labstack/echo-contrib v0.50.1
 	github.com/labstack/echo/v4 v4.15.4
 	github.com/labstack/gommon v0.5.0
@@ -88,9 +88,9 @@ require (
 	github.com/pressly/goose/v3 v3.27.3
 	github.com/prometheus/client_golang v1.23.2
 	github.com/redis/go-redis/v9 v9.21.0
-	github.com/riverqueue/river v0.41.1
-	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.41.1
-	github.com/riverqueue/river/rivertype v0.41.1
+	github.com/riverqueue/river v0.43.0
+	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.43.0
+	github.com/riverqueue/river/rivertype v0.43.0
 	github.com/rs/zerolog v1.35.1
 	github.com/samber/do/v2 v2.1.0
 	github.com/samber/lo v1.53.0
@@ -110,7 +110,7 @@ require (
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.35.7
 	github.com/theopenlane/newman v0.4.2
-	github.com/theopenlane/riverboat v0.9.18
+	github.com/theopenlane/riverboat v0.13.1-0.20260806190152-53b472774e27
 	github.com/theopenlane/utils v0.7.1
 	github.com/tmc/langchaingo v0.1.14
 	github.com/urfave/cli/v3 v3.10.1
@@ -192,7 +192,7 @@ require (
 	github.com/wundergraph/astjson v1.1.0
 	github.com/wundergraph/go-arena v0.0.0-20251008210416-55cb97e6f68f // indirect
 	go.uber.org/atomic v1.11.0 // indirect
-	golang.org/x/image v0.43.0 // indirect
+	golang.org/x/image v0.44.0 // indirect
 	golang.org/x/term v0.45.0 // indirect
 )
 
@@ -367,9 +367,9 @@ require (
 	github.com/prometheus/common v0.67.5 // indirect
 	github.com/prometheus/procfs v0.21.1 // indirect
 	github.com/resend/resend-go/v3 v3.10.1
-	github.com/riverqueue/river/riverdriver v0.41.1 // indirect
-	github.com/riverqueue/river/rivershared v0.41.1 // indirect
-	github.com/riverqueue/rivercontrib/otelriver v0.8.0 // indirect
+	github.com/riverqueue/river/riverdriver v0.43.0 // indirect
+	github.com/riverqueue/river/rivershared v0.43.0 // indirect
+	github.com/riverqueue/rivercontrib/otelriver v0.12.0 // indirect
 	github.com/sagikazarmark/locafero v0.12.0 // indirect
 	github.com/samber/mo v1.17.0
 	github.com/segmentio/asm v1.2.1 // indirect
@@ -408,7 +408,7 @@ require (
 	golang.org/x/time v0.15.0 // indirect
 	golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20260720211330-0afa2a65878a // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20260720211330-0afa2a65878a // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20260803160001-6ac0973c030d // indirect
 	google.golang.org/grpc v1.82.1 // indirect
 	google.golang.org/protobuf v1.36.11
 )
