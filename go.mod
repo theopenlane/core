@@ -110,7 +110,7 @@ require (
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.35.7
 	github.com/theopenlane/newman v0.4.2
-	github.com/theopenlane/riverboat v0.13.1-0.20260806202018-15d893d2d418
+	github.com/theopenlane/riverboat v0.13.1-0.20260806204736-20becc64a25a
 	github.com/theopenlane/utils v0.7.1
 	github.com/tmc/langchaingo v0.1.14
 	github.com/urfave/cli/v3 v3.10.1
