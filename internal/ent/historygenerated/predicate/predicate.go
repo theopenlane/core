@@ -26,9 +26,6 @@ type CampaignHistory func(*sql.Selector)
 // CampaignTargetHistory is the predicate function for campaigntargethistory builders.
 type CampaignTargetHistory func(*sql.Selector)
 
-// CheckResultHistory is the predicate function for checkresulthistory builders.
-type CheckResultHistory func(*sql.Selector)
-
 // ContactHistory is the predicate function for contacthistory builders.
 type ContactHistory func(*sql.Selector)
 
@@ -43,18 +40,6 @@ type ControlObjectiveHistory func(*sql.Selector)
 
 // CustomDomainHistory is the predicate function for customdomainhistory builders.
 type CustomDomainHistory func(*sql.Selector)
-
-// DNSVerificationHistory is the predicate function for dnsverificationhistory builders.
-type DNSVerificationHistory func(*sql.Selector)
-
-// DirectoryAccountHistory is the predicate function for directoryaccounthistory builders.
-type DirectoryAccountHistory func(*sql.Selector)
-
-// DirectoryGroupHistory is the predicate function for directorygrouphistory builders.
-type DirectoryGroupHistory func(*sql.Selector)
-
-// DirectoryMembershipHistory is the predicate function for directorymembershiphistory builders.
-type DirectoryMembershipHistory func(*sql.Selector)
 
 // DiscussionHistory is the predicate function for discussionhistory builders.
 type DiscussionHistory func(*sql.Selector)
@@ -98,9 +83,6 @@ type HushHistory func(*sql.Selector)
 // IdentityHolderHistory is the predicate function for identityholderhistory builders.
 type IdentityHolderHistory func(*sql.Selector)
 
-// IntegrationHistory is the predicate function for integrationhistory builders.
-type IntegrationHistory func(*sql.Selector)
-
 // InternalPolicyHistory is the predicate function for internalpolicyhistory builders.
 type InternalPolicyHistory func(*sql.Selector)
 
@@ -127,9 +109,6 @@ type NotificationTemplateHistory func(*sql.Selector)
 
 // OrgMembershipHistory is the predicate function for orgmembershiphistory builders.
 type OrgMembershipHistory func(*sql.Selector)
-
-// OrgSubscriptionHistory is the predicate function for orgsubscriptionhistory builders.
-type OrgSubscriptionHistory func(*sql.Selector)
 
 // OrganizationHistory is the predicate function for organizationhistory builders.
 type OrganizationHistory func(*sql.Selector)
@@ -160,9 +139,6 @@ type RiskHistory func(*sql.Selector)
 
 // SLADefinitionHistory is the predicate function for sladefinitionhistory builders.
 type SLADefinitionHistory func(*sql.Selector)
-
-// ScanHistory is the predicate function for scanhistory builders.
-type ScanHistory func(*sql.Selector)
 
 // ScheduledJobHistory is the predicate function for scheduledjobhistory builders.
 type ScheduledJobHistory func(*sql.Selector)
@@ -235,12 +211,3 @@ type WorkflowAssignmentTargetHistory func(*sql.Selector)
 
 // WorkflowDefinitionHistory is the predicate function for workflowdefinitionhistory builders.
 type WorkflowDefinitionHistory func(*sql.Selector)
-
-// WorkflowEventHistory is the predicate function for workfloweventhistory builders.
-type WorkflowEventHistory func(*sql.Selector)
-
-// WorkflowInstanceHistory is the predicate function for workflowinstancehistory builders.
-type WorkflowInstanceHistory func(*sql.Selector)
-
-// WorkflowObjectRefHistory is the predicate function for workflowobjectrefhistory builders.
-type WorkflowObjectRefHistory func(*sql.Selector)

@@ -8,6 +8,7 @@ import (
 
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/history"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
@@ -257,5 +258,8 @@ func (Integration) Annotations() []schema.Annotation {
 			entgql.SkipMutationCreateInput,
 			entgql.SkipMutationUpdateInput,
 		),
+		history.Annotations{
+			Exclude: true,
+		},
 	}
 }

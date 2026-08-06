@@ -601,24 +601,4 @@ func (ec *executionContext) marshalOWorkflowDefinitionDocument2githubᚗcomᚋth
 	return v
 }
 
-func (ec *executionContext) unmarshalOWorkflowEventPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐWorkflowEventPayload(ctx context.Context, v any) (models.WorkflowEventPayload, error) {
-	var res models.WorkflowEventPayload
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalOWorkflowEventPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐWorkflowEventPayload(ctx context.Context, sel ast.SelectionSet, v models.WorkflowEventPayload) graphql.Marshaler {
-	return v
-}
-
-func (ec *executionContext) unmarshalOWorkflowInstanceContext2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐWorkflowInstanceContext(ctx context.Context, v any) (models.WorkflowInstanceContext, error) {
-	var res models.WorkflowInstanceContext
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalOWorkflowInstanceContext2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐWorkflowInstanceContext(ctx context.Context, sel ast.SelectionSet, v models.WorkflowInstanceContext) graphql.Marshaler {
-	return v
-}
-
 // endregion ***************************** type.gotpl *****************************

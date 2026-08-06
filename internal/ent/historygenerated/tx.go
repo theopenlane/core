@@ -26,8 +26,6 @@ type Tx struct {
 	CampaignHistory *CampaignHistoryClient
 	// CampaignTargetHistory is the client for interacting with the CampaignTargetHistory builders.
 	CampaignTargetHistory *CampaignTargetHistoryClient
-	// CheckResultHistory is the client for interacting with the CheckResultHistory builders.
-	CheckResultHistory *CheckResultHistoryClient
 	// ContactHistory is the client for interacting with the ContactHistory builders.
 	ContactHistory *ContactHistoryClient
 	// ControlHistory is the client for interacting with the ControlHistory builders.
@@ -38,14 +36,6 @@ type Tx struct {
 	ControlObjectiveHistory *ControlObjectiveHistoryClient
 	// CustomDomainHistory is the client for interacting with the CustomDomainHistory builders.
 	CustomDomainHistory *CustomDomainHistoryClient
-	// DNSVerificationHistory is the client for interacting with the DNSVerificationHistory builders.
-	DNSVerificationHistory *DNSVerificationHistoryClient
-	// DirectoryAccountHistory is the client for interacting with the DirectoryAccountHistory builders.
-	DirectoryAccountHistory *DirectoryAccountHistoryClient
-	// DirectoryGroupHistory is the client for interacting with the DirectoryGroupHistory builders.
-	DirectoryGroupHistory *DirectoryGroupHistoryClient
-	// DirectoryMembershipHistory is the client for interacting with the DirectoryMembershipHistory builders.
-	DirectoryMembershipHistory *DirectoryMembershipHistoryClient
 	// DiscussionHistory is the client for interacting with the DiscussionHistory builders.
 	DiscussionHistory *DiscussionHistoryClient
 	// DocumentDataHistory is the client for interacting with the DocumentDataHistory builders.
@@ -74,8 +64,6 @@ type Tx struct {
 	HushHistory *HushHistoryClient
 	// IdentityHolderHistory is the client for interacting with the IdentityHolderHistory builders.
 	IdentityHolderHistory *IdentityHolderHistoryClient
-	// IntegrationHistory is the client for interacting with the IntegrationHistory builders.
-	IntegrationHistory *IntegrationHistoryClient
 	// InternalPolicyHistory is the client for interacting with the InternalPolicyHistory builders.
 	InternalPolicyHistory *InternalPolicyHistoryClient
 	// JobTemplateHistory is the client for interacting with the JobTemplateHistory builders.
@@ -94,8 +82,6 @@ type Tx struct {
 	NotificationTemplateHistory *NotificationTemplateHistoryClient
 	// OrgMembershipHistory is the client for interacting with the OrgMembershipHistory builders.
 	OrgMembershipHistory *OrgMembershipHistoryClient
-	// OrgSubscriptionHistory is the client for interacting with the OrgSubscriptionHistory builders.
-	OrgSubscriptionHistory *OrgSubscriptionHistoryClient
 	// OrganizationHistory is the client for interacting with the OrganizationHistory builders.
 	OrganizationHistory *OrganizationHistoryClient
 	// OrganizationSettingHistory is the client for interacting with the OrganizationSettingHistory builders.
@@ -116,8 +102,6 @@ type Tx struct {
 	RiskHistory *RiskHistoryClient
 	// SLADefinitionHistory is the client for interacting with the SLADefinitionHistory builders.
 	SLADefinitionHistory *SLADefinitionHistoryClient
-	// ScanHistory is the client for interacting with the ScanHistory builders.
-	ScanHistory *ScanHistoryClient
 	// ScheduledJobHistory is the client for interacting with the ScheduledJobHistory builders.
 	ScheduledJobHistory *ScheduledJobHistoryClient
 	// StandardHistory is the client for interacting with the StandardHistory builders.
@@ -166,12 +150,6 @@ type Tx struct {
 	WorkflowAssignmentTargetHistory *WorkflowAssignmentTargetHistoryClient
 	// WorkflowDefinitionHistory is the client for interacting with the WorkflowDefinitionHistory builders.
 	WorkflowDefinitionHistory *WorkflowDefinitionHistoryClient
-	// WorkflowEventHistory is the client for interacting with the WorkflowEventHistory builders.
-	WorkflowEventHistory *WorkflowEventHistoryClient
-	// WorkflowInstanceHistory is the client for interacting with the WorkflowInstanceHistory builders.
-	WorkflowInstanceHistory *WorkflowInstanceHistoryClient
-	// WorkflowObjectRefHistory is the client for interacting with the WorkflowObjectRefHistory builders.
-	WorkflowObjectRefHistory *WorkflowObjectRefHistoryClient
 
 	// lazily loaded.
 	client     *Client
@@ -309,16 +287,11 @@ func (tx *Tx) init() {
 	tx.AssetHistory = NewAssetHistoryClient(tx.config)
 	tx.CampaignHistory = NewCampaignHistoryClient(tx.config)
 	tx.CampaignTargetHistory = NewCampaignTargetHistoryClient(tx.config)
-	tx.CheckResultHistory = NewCheckResultHistoryClient(tx.config)
 	tx.ContactHistory = NewContactHistoryClient(tx.config)
 	tx.ControlHistory = NewControlHistoryClient(tx.config)
 	tx.ControlImplementationHistory = NewControlImplementationHistoryClient(tx.config)
 	tx.ControlObjectiveHistory = NewControlObjectiveHistoryClient(tx.config)
 	tx.CustomDomainHistory = NewCustomDomainHistoryClient(tx.config)
-	tx.DNSVerificationHistory = NewDNSVerificationHistoryClient(tx.config)
-	tx.DirectoryAccountHistory = NewDirectoryAccountHistoryClient(tx.config)
-	tx.DirectoryGroupHistory = NewDirectoryGroupHistoryClient(tx.config)
-	tx.DirectoryMembershipHistory = NewDirectoryMembershipHistoryClient(tx.config)
 	tx.DiscussionHistory = NewDiscussionHistoryClient(tx.config)
 	tx.DocumentDataHistory = NewDocumentDataHistoryClient(tx.config)
 	tx.EmailTemplateHistory = NewEmailTemplateHistoryClient(tx.config)
@@ -333,7 +306,6 @@ func (tx *Tx) init() {
 	tx.GroupSettingHistory = NewGroupSettingHistoryClient(tx.config)
 	tx.HushHistory = NewHushHistoryClient(tx.config)
 	tx.IdentityHolderHistory = NewIdentityHolderHistoryClient(tx.config)
-	tx.IntegrationHistory = NewIntegrationHistoryClient(tx.config)
 	tx.InternalPolicyHistory = NewInternalPolicyHistoryClient(tx.config)
 	tx.JobTemplateHistory = NewJobTemplateHistoryClient(tx.config)
 	tx.MappableDomainHistory = NewMappableDomainHistoryClient(tx.config)
@@ -343,7 +315,6 @@ func (tx *Tx) init() {
 	tx.NotificationPreferenceHistory = NewNotificationPreferenceHistoryClient(tx.config)
 	tx.NotificationTemplateHistory = NewNotificationTemplateHistoryClient(tx.config)
 	tx.OrgMembershipHistory = NewOrgMembershipHistoryClient(tx.config)
-	tx.OrgSubscriptionHistory = NewOrgSubscriptionHistoryClient(tx.config)
 	tx.OrganizationHistory = NewOrganizationHistoryClient(tx.config)
 	tx.OrganizationSettingHistory = NewOrganizationSettingHistoryClient(tx.config)
 	tx.PlatformHistory = NewPlatformHistoryClient(tx.config)
@@ -354,7 +325,6 @@ func (tx *Tx) init() {
 	tx.ReviewHistory = NewReviewHistoryClient(tx.config)
 	tx.RiskHistory = NewRiskHistoryClient(tx.config)
 	tx.SLADefinitionHistory = NewSLADefinitionHistoryClient(tx.config)
-	tx.ScanHistory = NewScanHistoryClient(tx.config)
 	tx.ScheduledJobHistory = NewScheduledJobHistoryClient(tx.config)
 	tx.StandardHistory = NewStandardHistoryClient(tx.config)
 	tx.SubcontrolHistory = NewSubcontrolHistoryClient(tx.config)
@@ -379,9 +349,6 @@ func (tx *Tx) init() {
 	tx.WorkflowAssignmentHistory = NewWorkflowAssignmentHistoryClient(tx.config)
 	tx.WorkflowAssignmentTargetHistory = NewWorkflowAssignmentTargetHistoryClient(tx.config)
 	tx.WorkflowDefinitionHistory = NewWorkflowDefinitionHistoryClient(tx.config)
-	tx.WorkflowEventHistory = NewWorkflowEventHistoryClient(tx.config)
-	tx.WorkflowInstanceHistory = NewWorkflowInstanceHistoryClient(tx.config)
-	tx.WorkflowObjectRefHistory = NewWorkflowObjectRefHistoryClient(tx.config)
 }
 
 // txDriver wraps the given dialect.Tx with a nop dialect.Driver implementation.
