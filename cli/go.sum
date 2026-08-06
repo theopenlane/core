@@ -491,6 +491,7 @@ github.com/theopenlane/eddy v0.1.0/go.mod h1:UvovGX5x0N9RdKk2Kb5CMbGziRUasARDy8x
 github.com/theopenlane/entx v0.30.3 h1:t+FEJ4Ogjr4H/STLIcgWLucae0yTvLLajdYt49W0BM8=
 github.com/theopenlane/entx v0.30.3/go.mod h1:VTL1g0OFKdqX2U8Cj7npJdEfuZu1VzAkZlyYsfpujyo=
 github.com/theopenlane/go-client v0.13.0 h1:/jSEZLu1urijrmM1skYo9kf0MsVJwe3DNpuyYGv6Pj4=
+github.com/theopenlane/go-client v0.13.0/go.mod h1:g5i+gYjkih1SSgY/lFi4p302cLZBOJ8pgCFf02eZKaI=
 github.com/theopenlane/httpsling v0.3.0 h1:Bad0dGdqCqAB8UVDyVo+YCevzRvGHhmkK22F7T3pXtY=
 github.com/theopenlane/httpsling v0.3.0/go.mod h1:iJc3XRLYTFIpfCnPpLZVMBP0xsWIPAb7ozARtQoclAE=
 github.com/theopenlane/iam v0.35.7 h1:avxRd4HSzjoG056Kd7LcZ4qC7xPIsbEcJw80nHGOCBc=
