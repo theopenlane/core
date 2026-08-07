@@ -48,12 +48,9 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "apitoken_owner_id",
+				Name:    "api_token_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{APITokensColumns[20]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 			{
 				Name:    "apitoken_token",
@@ -174,12 +171,14 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "actionplan_owner_id",
+				Name:    "action_plan_file_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{ActionPlansColumns[47]},
+			},
+			{
+				Name:    "action_plan_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{ActionPlansColumns[49]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 		},
 	}
@@ -227,12 +226,14 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "assessment_owner_id",
+				Name:    "assessment_template_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{AssessmentsColumns[19]},
+			},
+			{
+				Name:    "assessment_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{AssessmentsColumns[18]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 			{
 				Name:    "assessment_name_owner_id",
@@ -324,12 +325,14 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "assessmentresponse_owner_id",
+				Name:    "assessment_response_document_data_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{AssessmentResponsesColumns[27]},
+			},
+			{
+				Name:    "assessment_response_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{AssessmentResponsesColumns[31]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 			{
 				Name:    "assessmentresponse_assessment_id_email_is_test",
@@ -532,12 +535,19 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "asset_owner_id",
+				Name:    "asset_source_platform_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{AssetsColumns[50]},
+			},
+			{
+				Name:    "asset_integration_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{AssetsColumns[48]},
+			},
+			{
+				Name:    "asset_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{AssetsColumns[49]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 		},
 	}
@@ -650,17 +660,39 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
+				Name:    "campaign_assessment_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{CampaignsColumns[34]},
+			},
+			{
+				Name:    "campaign_template_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{CampaignsColumns[41]},
+			},
+			{
+				Name:    "campaign_integration_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{CampaignsColumns[39]},
+			},
+			{
+				Name:    "campaign_email_template_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{CampaignsColumns[37]},
+			},
+			{
+				Name:    "campaign_trust_center_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{CampaignsColumns[42]},
+			},
+			{
 				Name:    "campaign_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{CampaignsColumns[8], CampaignsColumns[40]},
 			},
 			{
-				Name:    "campaign_owner_id",
+				Name:    "campaign_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{CampaignsColumns[40]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 			{
 				Name:    "campaign_name_owner_id",
@@ -746,12 +778,9 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "campaigntarget_owner_id",
+				Name:    "campaign_target_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{CampaignTargetsColumns[18]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 			{
 				Name:    "campaigntarget_campaign_id_email",
@@ -820,6 +849,13 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "check_result_integration_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{CheckResultsColumns[15]},
+			},
+		},
 	}
 	// ContactsColumns holds the columns for the "contacts" table.
 	ContactsColumns = []*schema.Column{
@@ -859,12 +895,9 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "contact_owner_id",
+				Name:    "contact_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{ContactsColumns[19]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 		},
 	}
@@ -1003,12 +1036,9 @@ var (
 				},
 			},
 			{
-				Name:    "control_owner_id",
+				Name:    "control_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{ControlsColumns[54]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 			{
 				Name:    "control_standard_id_ref_code",
@@ -1111,12 +1141,9 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "controlimplementation_owner_id",
+				Name:    "control_implementation_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{ControlImplementationsColumns[20]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 		},
 	}
@@ -1166,12 +1193,9 @@ var (
 				Columns: []*schema.Column{ControlObjectivesColumns[8], ControlObjectivesColumns[22]},
 			},
 			{
-				Name:    "controlobjective_owner_id",
+				Name:    "control_objective_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{ControlObjectivesColumns[22]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 		},
 	}
@@ -1237,12 +1261,19 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "customdomain_owner_id",
+				Name:    "custom_domain_mappable_domain_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{CustomDomainsColumns[15]},
+			},
+			{
+				Name:    "custom_domain_dns_verification_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{CustomDomainsColumns[16]},
+			},
+			{
+				Name:    "custom_domain_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{CustomDomainsColumns[19]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 			{
 				Name:    "customdomain_cname_record",
@@ -1297,12 +1328,9 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "customtypeenum_owner_id",
+				Name:    "custom_type_enum_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{CustomTypeEnumsColumns[18]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 			{
 				Name:    "customtypeenum_name_object_type_field_owner_id",
@@ -1367,12 +1395,9 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "dnsverification_owner_id",
+				Name:    "dns_verification_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{DNSVerificationsColumns[18]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 			{
 				Name:    "dnsverification_cloudflare_hostname_id",
@@ -1493,9 +1518,19 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
+				Name:    "directory_account_avatar_local_file_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{DirectoryAccountsColumns[43]},
+			},
+			{
 				Name:    "directoryaccount_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{DirectoryAccountsColumns[6], DirectoryAccountsColumns[47]},
+			},
+			{
+				Name:    "directory_account_owner_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{DirectoryAccountsColumns[47]},
 			},
 			{
 				Name:    "directoryaccount_integration_id_external_id_directory_sync_run_id",
@@ -1638,6 +1673,11 @@ var (
 				Columns: []*schema.Column{DirectoryGroupsColumns[6], DirectoryGroupsColumns[34]},
 			},
 			{
+				Name:    "directory_group_owner_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{DirectoryGroupsColumns[34]},
+			},
+			{
 				Name:    "directorygroup_integration_id_external_id_directory_sync_run_id",
 				Unique:  true,
 				Columns: []*schema.Column{DirectoryGroupsColumns[33], DirectoryGroupsColumns[11], DirectoryGroupsColumns[32]},
@@ -1767,9 +1807,19 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
+				Name:    "directory_membership_directory_group_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{DirectoryMembershipsColumns[23]},
+			},
+			{
 				Name:    "directorymembership_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{DirectoryMembershipsColumns[6], DirectoryMembershipsColumns[26]},
+			},
+			{
+				Name:    "directory_membership_owner_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{DirectoryMembershipsColumns[26]},
 			},
 			{
 				Name:    "directorymembership_directory_account_id_directory_group_id_directory_sync_run_id",
@@ -1877,6 +1927,11 @@ var (
 				Columns: []*schema.Column{DirectorySyncRunsColumns[6], DirectorySyncRunsColumns[22]},
 			},
 			{
+				Name:    "directory_sync_run_owner_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{DirectorySyncRunsColumns[22]},
+			},
+			{
 				Name:    "directorysyncrun_integration_id_started_at",
 				Unique:  false,
 				Columns: []*schema.Column{DirectorySyncRunsColumns[21], DirectorySyncRunsColumns[11]},
@@ -1957,12 +2012,9 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "discussion_owner_id",
+				Name:    "discussion_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{DiscussionsColumns[12]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 		},
 	}
@@ -2018,12 +2070,14 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "documentdata_owner_id",
+				Name:    "document_template_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{DocumentDataColumns[15]},
+			},
+			{
+				Name:    "document_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{DocumentDataColumns[14]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 		},
 	}
@@ -2102,12 +2156,29 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "emailtemplate_owner_id",
+				Name:    "email_template_integration_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{EmailTemplatesColumns[28]},
+			},
+			{
+				Name:    "email_template_workflow_definition_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{EmailTemplatesColumns[31]},
+			},
+			{
+				Name:    "email_template_workflow_instance_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{EmailTemplatesColumns[32]},
+			},
+			{
+				Name:    "email_template_trust_center_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{EmailTemplatesColumns[30]},
+			},
+			{
+				Name:    "email_template_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{EmailTemplatesColumns[29]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 			{
 				Name:    "emailtemplate_owner_id_key",
@@ -2148,6 +2219,11 @@ var (
 			},
 		},
 		Indexes: []*schema.Index{
+			{
+				Name:    "email_verification_tokens_owner_id_fk",
+				Unique:  false,
+				Columns: []*schema.Column{EmailVerificationTokensColumns[11]},
+			},
 			{
 				Name:    "emailverificationtoken_token",
 				Unique:  true,
@@ -2323,12 +2399,19 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "entity_owner_id",
+				Name:    "entity_entity_type_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{EntitiesColumns[64]},
+			},
+			{
+				Name:    "entity_logo_file_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{EntitiesColumns[65]},
+			},
+			{
+				Name:    "entity_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{EntitiesColumns[67]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 			{
 				Name:    "entity_name_owner_id",
@@ -2377,12 +2460,9 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "entitytype_owner_id",
+				Name:    "entity_type_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{EntityTypesColumns[13]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 			{
 				Name:    "entitytype_name_owner_id",
@@ -2491,12 +2571,9 @@ var (
 				Columns: []*schema.Column{EvidencesColumns[8], EvidencesColumns[26]},
 			},
 			{
-				Name:    "evidence_owner_id",
+				Name:    "evidence_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{EvidencesColumns[26]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 			{
 				Name:    "evidence_external_uuid_owner_id",
@@ -2544,12 +2621,9 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "export_owner_id",
+				Name:    "export_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{ExportsColumns[17]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 		},
 	}
@@ -2728,6 +2802,11 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
+				Name:    "file_download_tokens_owner_id_fk",
+				Unique:  false,
+				Columns: []*schema.Column{FileDownloadTokensColumns[13]},
+			},
+			{
 				Name:    "filedownloadtoken_token",
 				Unique:  true,
 				Columns: []*schema.Column{FileDownloadTokensColumns[7]},
@@ -2866,12 +2945,9 @@ var (
 				Columns: []*schema.Column{FindingsColumns[8], FindingsColumns[63]},
 			},
 			{
-				Name:    "finding_owner_id",
+				Name:    "finding_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{FindingsColumns[63]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 			{
 				Name:    "finding_external_id_external_owner_id_owner_id",
@@ -2934,6 +3010,21 @@ var (
 			},
 		},
 		Indexes: []*schema.Index{
+			{
+				Name:    "finding_control_control_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{FindingControlsColumns[13]},
+			},
+			{
+				Name:    "finding_control_standard_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{FindingControlsColumns[14]},
+			},
+			{
+				Name:    "finding_control_owner_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{FindingControlsColumns[15]},
+			},
 			{
 				Name:    "findingcontrol_finding_id_control_id",
 				Unique:  true,
@@ -3851,17 +3942,19 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
+				Name:    "group_avatar_local_file_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{GroupsColumns[35]},
+			},
+			{
 				Name:    "group_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{GroupsColumns[8], GroupsColumns[120]},
 			},
 			{
-				Name:    "group_owner_id",
+				Name:    "group_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{GroupsColumns[120]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 			{
 				Name:    "group_name_owner_id",
@@ -3913,6 +4006,11 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
+				Name:    "group_membership_group_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{GroupMembershipsColumns[7]},
+			},
+			{
 				Name:    "groupmembership_user_id_group_id",
 				Unique:  true,
 				Columns: []*schema.Column{GroupMembershipsColumns[8], GroupMembershipsColumns[7]},
@@ -3946,6 +4044,13 @@ var (
 				Columns:    []*schema.Column{GroupSettingsColumns[12]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "group_setting_group_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{GroupSettingsColumns[12]},
 			},
 		},
 	}
@@ -3988,12 +4093,9 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "hush_owner_id",
+				Name:    "secret_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{HushesColumns[20]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 		},
 	}
@@ -4091,17 +4193,19 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
+				Name:    "identity_holder_employer_entity_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{IdentityHoldersColumns[37]},
+			},
+			{
 				Name:    "identityholder_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{IdentityHoldersColumns[8], IdentityHoldersColumns[38]},
 			},
 			{
-				Name:    "identityholder_owner_id",
+				Name:    "identity_holder_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{IdentityHoldersColumns[38]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 			{
 				Name:    "identityholder_email_owner_id",
@@ -4167,6 +4271,23 @@ var (
 				Columns:    []*schema.Column{ImpersonationEventsColumns[17]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "impersonation_event_user_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{ImpersonationEventsColumns[16]},
+			},
+			{
+				Name:    "impersonation_event_target_user_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{ImpersonationEventsColumns[17]},
+			},
+			{
+				Name:    "impersonation_event_organization_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{ImpersonationEventsColumns[15]},
 			},
 		},
 	}
@@ -4255,12 +4376,14 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "integration_owner_id",
+				Name:    "integration_platform_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{IntegrationsColumns[36]},
+			},
+			{
+				Name:    "integration_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{IntegrationsColumns[35]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 		},
 	}
@@ -4338,12 +4461,24 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "integrationrun_owner_id",
+				Name:    "integration_run_request_file_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{IntegrationRunsColumns[21]},
+			},
+			{
+				Name:    "integration_run_response_file_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{IntegrationRunsColumns[22]},
+			},
+			{
+				Name:    "integration_run_event_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{IntegrationRunsColumns[23]},
+			},
+			{
+				Name:    "integration_run_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{IntegrationRunsColumns[25]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 			{
 				Name:    "integrationrun_integration_id_started_at",
@@ -4418,12 +4553,9 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "integrationwebhook_owner_id",
+				Name:    "integration_webhook_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{IntegrationWebhooksColumns[22]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 			{
 				Name:    "integrationwebhook_integration_id_name_external_event_id",
@@ -4548,17 +4680,19 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
+				Name:    "internal_policy_file_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{InternalPoliciesColumns[43]},
+			},
+			{
 				Name:    "internalpolicy_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{InternalPoliciesColumns[8], InternalPoliciesColumns[44]},
 			},
 			{
-				Name:    "internalpolicy_owner_id",
+				Name:    "internal_policy_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{InternalPoliciesColumns[44]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 			{
 				Name:    "internalpolicy_external_uuid_owner_id",
@@ -4607,12 +4741,9 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "invite_owner_id",
+				Name:    "invite_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{InvitesColumns[18]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 			{
 				Name:    "invite_recipient_owner_id",
@@ -4670,12 +4801,19 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "jobresult_owner_id",
+				Name:    "job_result_scheduled_job_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{JobResultsColumns[13]},
+			},
+			{
+				Name:    "job_result_file_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{JobResultsColumns[14]},
+			},
+			{
+				Name:    "job_result_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{JobResultsColumns[15]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 		},
 	}
@@ -4722,12 +4860,9 @@ var (
 				Columns: []*schema.Column{JobRunnersColumns[8], JobRunnersColumns[19]},
 			},
 			{
-				Name:    "jobrunner_owner_id",
+				Name:    "job_runner_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{JobRunnersColumns[19]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 		},
 	}
@@ -4769,12 +4904,14 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "jobrunnerregistrationtoken_owner_id",
+				Name:    "job_runner_registration_token_job_runner_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{JobRunnerRegistrationTokensColumns[12]},
+			},
+			{
+				Name:    "job_runner_registration_token_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{JobRunnerRegistrationTokensColumns[13]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 		},
 	}
@@ -4813,12 +4950,9 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "jobrunnertoken_owner_id",
+				Name:    "job_runner_token_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{JobRunnerTokensColumns[16]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 			{
 				Name:    "jobrunnertoken_token_expires_at_is_active",
@@ -4871,12 +5005,9 @@ var (
 				Columns: []*schema.Column{JobTemplatesColumns[8], JobTemplatesColumns[20]},
 			},
 			{
-				Name:    "jobtemplate_owner_id",
+				Name:    "job_template_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{JobTemplatesColumns[20]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 		},
 	}
@@ -4945,12 +5076,9 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "mappedcontrol_owner_id",
+				Name:    "mapped_control_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{MappedControlsColumns[16]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 		},
 	}
@@ -5008,12 +5136,9 @@ var (
 				Columns: []*schema.Column{NarrativesColumns[8], NarrativesColumns[17]},
 			},
 			{
-				Name:    "narrative_owner_id",
+				Name:    "narrative_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{NarrativesColumns[17]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 		},
 	}
@@ -5157,17 +5282,24 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
+				Name:    "note_trust_center_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{NotesColumns[30]},
+			},
+			{
+				Name:    "note_discussion_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{NotesColumns[17]},
+			},
+			{
 				Name:    "note_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{NotesColumns[8], NotesColumns[22]},
 			},
 			{
-				Name:    "note_owner_id",
+				Name:    "note_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{NotesColumns[22]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 		},
 	}
@@ -5212,6 +5344,16 @@ var (
 			},
 		},
 		Indexes: []*schema.Index{
+			{
+				Name:    "notification_template_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{NotificationsColumns[16]},
+			},
+			{
+				Name:    "notification_owner_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{NotificationsColumns[17]},
+			},
 			{
 				Name:    "notification_user_id_read_at_owner_id",
 				Unique:  false,
@@ -5279,12 +5421,19 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "notificationpreference_owner_id",
+				Name:    "notification_preference_user_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{NotificationPreferencesColumns[27]},
+			},
+			{
+				Name:    "notification_preference_template_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{NotificationPreferencesColumns[28]},
+			},
+			{
+				Name:    "notification_preference_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{NotificationPreferencesColumns[29]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 			{
 				Name:    "notificationpreference_owner_id_user_id_channel",
@@ -5367,12 +5516,24 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "notificationtemplate_owner_id",
+				Name:    "notification_template_integration_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{NotificationTemplatesColumns[32]},
+			},
+			{
+				Name:    "notification_template_workflow_definition_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{NotificationTemplatesColumns[34]},
+			},
+			{
+				Name:    "notification_template_email_template_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{NotificationTemplatesColumns[31]},
+			},
+			{
+				Name:    "notification_template_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{NotificationTemplatesColumns[33]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 			{
 				Name:    "notificationtemplate_owner_id_channel_locale_topic_pattern",
@@ -5460,6 +5621,11 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
+				Name:    "org_membership_organization_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{OrgMembershipsColumns[15]},
+			},
+			{
 				Name:    "orgmembership_user_id_organization_id",
 				Unique:  true,
 				Columns: []*schema.Column{OrgMembershipsColumns[16], OrgMembershipsColumns[15]},
@@ -5516,12 +5682,14 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "orgmodule_owner_id",
+				Name:    "org_module_subscription_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{OrgModulesColumns[18]},
+			},
+			{
+				Name:    "org_module_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{OrgModulesColumns[19]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 		},
 	}
@@ -5565,12 +5733,14 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "orgprice_owner_id",
+				Name:    "org_price_subscription_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{OrgPricesColumns[14]},
+			},
+			{
+				Name:    "org_price_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{OrgPricesColumns[15]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 		},
 	}
@@ -5621,12 +5791,14 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "orgproduct_owner_id",
+				Name:    "org_product_subscription_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{OrgProductsColumns[15]},
+			},
+			{
+				Name:    "org_product_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{OrgProductsColumns[16]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 		},
 	}
@@ -5664,12 +5836,9 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "orgsubscription_owner_id",
+				Name:    "org_subscription_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{OrgSubscriptionsColumns[15]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 		},
 	}
@@ -5715,6 +5884,16 @@ var (
 			},
 		},
 		Indexes: []*schema.Index{
+			{
+				Name:    "organization_parent_organization_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{OrganizationsColumns[17]},
+			},
+			{
+				Name:    "organization_avatar_local_file_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{OrganizationsColumns[18]},
+			},
 			{
 				Name:    "organization_name",
 				Unique:  true,
@@ -5780,6 +5959,13 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "organization_setting_organization_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{OrganizationSettingsColumns[38]},
+			},
+		},
 	}
 	// PasswordResetTokensColumns holds the columns for the "password_reset_tokens" table.
 	PasswordResetTokensColumns = []*schema.Column{
@@ -5810,6 +5996,11 @@ var (
 			},
 		},
 		Indexes: []*schema.Index{
+			{
+				Name:    "password_reset_tokens_owner_id_fk",
+				Unique:  false,
+				Columns: []*schema.Column{PasswordResetTokensColumns[11]},
+			},
 			{
 				Name:    "passwordresettoken_token",
 				Unique:  true,
@@ -5858,6 +6049,11 @@ var (
 			},
 		},
 		Indexes: []*schema.Index{
+			{
+				Name:    "personal_access_tokens_owner_id_fk",
+				Unique:  false,
+				Columns: []*schema.Column{PersonalAccessTokensColumns[20]},
+			},
 			{
 				Name:    "personalaccesstoken_token",
 				Unique:  false,
@@ -6058,17 +6254,19 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
+				Name:    "platform_platform_owner_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{PlatformsColumns[60]},
+			},
+			{
 				Name:    "platform_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{PlatformsColumns[8], PlatformsColumns[43]},
 			},
 			{
-				Name:    "platform_owner_id",
+				Name:    "platform_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{PlatformsColumns[43]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 			{
 				Name:    "platform_name_owner_id",
@@ -6199,17 +6397,19 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
+				Name:    "procedure_file_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{ProceduresColumns[44]},
+			},
+			{
 				Name:    "procedure_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{ProceduresColumns[8], ProceduresColumns[38]},
 			},
 			{
-				Name:    "procedure_owner_id",
+				Name:    "procedure_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{ProceduresColumns[38]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 		},
 	}
@@ -6281,17 +6481,19 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
+				Name:    "program_program_owner_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{ProgramsColumns[31]},
+			},
+			{
 				Name:    "program_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{ProgramsColumns[8], ProgramsColumns[29]},
 			},
 			{
-				Name:    "program_owner_id",
+				Name:    "program_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{ProgramsColumns[29]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 			{
 				Name:    "program_external_uuid_owner_id",
@@ -6342,6 +6544,11 @@ var (
 			},
 		},
 		Indexes: []*schema.Index{
+			{
+				Name:    "program_membership_program_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{ProgramMembershipsColumns[7]},
+			},
 			{
 				Name:    "programmembership_user_id_program_id",
 				Unique:  true,
@@ -6423,12 +6630,9 @@ var (
 				Columns: []*schema.Column{RemediationsColumns[8], RemediationsColumns[36]},
 			},
 			{
-				Name:    "remediation_owner_id",
+				Name:    "remediation_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{RemediationsColumns[36]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 			{
 				Name:    "remediation_external_id_external_owner_id_owner_id",
@@ -6512,12 +6716,14 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "review_owner_id",
+				Name:    "review_reviewer_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{ReviewsColumns[35]},
+			},
+			{
+				Name:    "review_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{ReviewsColumns[32]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 			{
 				Name:    "review_external_id_external_owner_id_owner_id",
@@ -6649,17 +6855,24 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
+				Name:    "risk_stakeholder_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{RisksColumns[46]},
+			},
+			{
+				Name:    "risk_delegate_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{RisksColumns[47]},
+			},
+			{
 				Name:    "risk_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{RisksColumns[8], RisksColumns[41]},
 			},
 			{
-				Name:    "risk_owner_id",
+				Name:    "risk_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{RisksColumns[41]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 			{
 				Name:    "risk_external_uuid_owner_id",
@@ -6707,12 +6920,9 @@ var (
 				Columns: []*schema.Column{SLADefinitionsColumns[8], SLADefinitionsColumns[12]},
 			},
 			{
-				Name:    "sladefinition_owner_id",
+				Name:    "sla_definition_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{SLADefinitionsColumns[12]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 			{
 				Name:    "sladefinition_security_level_owner_id",
@@ -6838,12 +7048,24 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "scan_owner_id",
+				Name:    "scan_generated_by_platform_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{ScansColumns[26]},
+			},
+			{
+				Name:    "scan_performed_by_user_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{ScansColumns[34]},
+			},
+			{
+				Name:    "scan_performed_by_group_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{ScansColumns[35]},
+			},
+			{
+				Name:    "scan_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{ScansColumns[25]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 		},
 	}
@@ -6892,17 +7114,24 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
+				Name:    "scheduled_job_job_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{ScheduledJobsColumns[12]},
+			},
+			{
+				Name:    "scheduled_job_job_runner_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{ScheduledJobsColumns[14]},
+			},
+			{
 				Name:    "scheduledjob_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{ScheduledJobsColumns[8], ScheduledJobsColumns[13]},
 			},
 			{
-				Name:    "scheduledjob_owner_id",
+				Name:    "scheduled_job_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{ScheduledJobsColumns[13]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 		},
 	}
@@ -6950,12 +7179,19 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "scheduledjobrun_owner_id",
+				Name:    "scheduled_job_run_scheduled_job_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{ScheduledJobRunsColumns[12]},
+			},
+			{
+				Name:    "scheduled_job_run_job_runner_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{ScheduledJobRunsColumns[13]},
+			},
+			{
+				Name:    "scheduled_job_run_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{ScheduledJobRunsColumns[11]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 		},
 	}
@@ -7011,12 +7247,14 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "standard_owner_id",
+				Name:    "standard_logo_file_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{StandardsColumns[27]},
+			},
+			{
+				Name:    "standard_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{StandardsColumns[26]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 		},
 	}
@@ -7151,12 +7389,9 @@ var (
 				},
 			},
 			{
-				Name:    "subcontrol_owner_id",
+				Name:    "subcontrol_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{SubcontrolsColumns[45]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 			{
 				Name:    "subcontrol_control_id_ref_code",
@@ -7227,12 +7462,14 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "subprocessor_owner_id",
+				Name:    "subprocessor_logo_file_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{SubprocessorsColumns[16]},
+			},
+			{
+				Name:    "subprocessor_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{SubprocessorsColumns[15]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 			{
 				Name:    "subprocessor_name_owner_id",
@@ -7303,12 +7540,24 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "subscriber_owner_id",
+				Name:    "subscriber_trust_center_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{SubscribersColumns[21]},
+			},
+			{
+				Name:    "subscriber_contact_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{SubscribersColumns[19]},
+			},
+			{
+				Name:    "subscriber_user_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{SubscribersColumns[22]},
+			},
+			{
+				Name:    "subscriber_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{SubscribersColumns[20]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 			{
 				Name:    "subscriber_email_owner_id",
@@ -7370,12 +7619,9 @@ var (
 				Columns: []*schema.Column{SystemDetailsColumns[8], SystemDetailsColumns[18]},
 			},
 			{
-				Name:    "systemdetail_owner_id",
+				Name:    "system_detail_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{SystemDetailsColumns[18]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 		},
 	}
@@ -7411,6 +7657,11 @@ var (
 			},
 		},
 		Indexes: []*schema.Index{
+			{
+				Name:    "tfa_settings_owner_id_fk",
+				Unique:  false,
+				Columns: []*schema.Column{TfaSettingsColumns[14]},
+			},
 			{
 				Name:    "tfasetting_owner_id",
 				Unique:  true,
@@ -7463,12 +7714,9 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "tagdefinition_owner_id",
+				Name:    "tag_definition_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{TagDefinitionsColumns[16]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 			{
 				Name:    "tagdefinition_slug_owner_id",
@@ -7607,17 +7855,29 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
+				Name:    "task_assigner_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{TasksColumns[39]},
+			},
+			{
+				Name:    "task_assignee_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{TasksColumns[40]},
+			},
+			{
+				Name:    "task_parent_task_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{TasksColumns[38]},
+			},
+			{
 				Name:    "task_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{TasksColumns[8], TasksColumns[32]},
 			},
 			{
-				Name:    "task_owner_id",
+				Name:    "task_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{TasksColumns[32]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 			{
 				Name:    "task_external_uuid_owner_id",
@@ -7706,12 +7966,9 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "template_owner_id",
+				Name:    "template_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{TemplatesColumns[21]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 			{
 				Name:    "template_name_owner_id_template_type",
@@ -7800,12 +8057,19 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "trustcenter_owner_id",
+				Name:    "trust_center_custom_domain_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{TrustCentersColumns[16]},
+			},
+			{
+				Name:    "trust_center_preview_domain_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{TrustCentersColumns[17]},
+			},
+			{
+				Name:    "trust_center_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{TrustCentersColumns[15]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 			{
 				Name:    "trustcenter_slug",
@@ -7851,6 +8115,11 @@ var (
 			},
 		},
 		Indexes: []*schema.Index{
+			{
+				Name:    "trust_center_compliance_trust_center_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{TrustCenterCompliancesColumns[10]},
+			},
 			{
 				Name:    "trustcentercompliance_standard_id_trust_center_id",
 				Unique:  true,
@@ -7927,6 +8196,28 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "trust_center_doc_trust_center_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{TrustCenterDocsColumns[15]},
+			},
+			{
+				Name:    "trust_center_doc_standard_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{TrustCenterDocsColumns[14]},
+			},
+			{
+				Name:    "trust_center_doc_file_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{TrustCenterDocsColumns[17]},
+			},
+			{
+				Name:    "trust_center_doc_original_file_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{TrustCenterDocsColumns[18]},
+			},
+		},
 	}
 	// TrustCenterEntitiesColumns holds the columns for the "trust_center_entities" table.
 	TrustCenterEntitiesColumns = []*schema.Column{
@@ -7976,6 +8267,23 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "trust_center_entity_logo_file_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{TrustCenterEntitiesColumns[12]},
+			},
+			{
+				Name:    "trust_center_entity_trust_center_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{TrustCenterEntitiesColumns[11]},
+			},
+			{
+				Name:    "trust_center_entity_entity_type_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{TrustCenterEntitiesColumns[13]},
+			},
+		},
 	}
 	// TrustCenterFaqsColumns holds the columns for the "trust_center_faqs" table.
 	TrustCenterFaqsColumns = []*schema.Column{
@@ -8020,6 +8328,11 @@ var (
 			},
 		},
 		Indexes: []*schema.Index{
+			{
+				Name:    "trust_center_faq_trust_center_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{TrustCenterFaqsColumns[12]},
+			},
 			{
 				Name:    "trustcenterfaq_note_id_trust_center_id",
 				Unique:  true,
@@ -8084,6 +8397,28 @@ var (
 				Columns:    []*schema.Column{TrustCenterNdaRequestsColumns[21]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "trust_center_nda_request_trust_center_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{TrustCenterNdaRequestsColumns[18]},
+			},
+			{
+				Name:    "trust_center_nda_request_document_data_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{TrustCenterNdaRequestsColumns[19]},
+			},
+			{
+				Name:    "trust_center_nda_request_file_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{TrustCenterNdaRequestsColumns[20]},
+			},
+			{
+				Name:    "trust_center_nda_request_approved_by_user_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{TrustCenterNdaRequestsColumns[21]},
 			},
 		},
 	}
@@ -8159,6 +8494,26 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
+				Name:    "trust_center_setting_logo_local_file_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{TrustCenterSettingsColumns[32]},
+			},
+			{
+				Name:    "trust_center_setting_favicon_local_file_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{TrustCenterSettingsColumns[33]},
+			},
+			{
+				Name:    "trust_center_setting_hero_image_local_file_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{TrustCenterSettingsColumns[34]},
+			},
+			{
+				Name:    "trust_center_setting_nda_approver_group_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{TrustCenterSettingsColumns[35]},
+			},
+			{
 				Name:    "trustcentersetting_trust_center_id_environment",
 				Unique:  true,
 				Columns: []*schema.Column{TrustCenterSettingsColumns[8], TrustCenterSettingsColumns[23]},
@@ -8211,6 +8566,11 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
+				Name:    "trust_center_subprocessor_trust_center_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{TrustCenterSubprocessorsColumns[11]},
+			},
+			{
 				Name:    "trustcentersubprocessor_subprocessor_id_trust_center_id",
 				Unique:  true,
 				Columns: []*schema.Column{TrustCenterSubprocessorsColumns[10], TrustCenterSubprocessorsColumns[11]},
@@ -8262,12 +8622,14 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "trustcenterwatermarkconfig_owner_id",
+				Name:    "trust_center_watermark_config_logo_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{TrustCenterWatermarkConfigsColumns[17]},
+			},
+			{
+				Name:    "trust_center_watermark_config_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{TrustCenterWatermarkConfigsColumns[16]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 			{
 				Name:    "trustcenterwatermarkconfig_trust_center_id",
@@ -8377,6 +8739,13 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "user_setting_user_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{UserSettingsColumns[20]},
+			},
+		},
 	}
 	// VendorRiskScoresColumns holds the columns for the "vendor_risk_scores" table.
 	VendorRiskScoresColumns = []*schema.Column{
@@ -8458,12 +8827,24 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "vendorriskscore_owner_id",
+				Name:    "vendor_risk_score_vendor_scoring_config_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{VendorRiskScoresColumns[22]},
+			},
+			{
+				Name:    "vendor_risk_score_entity_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{VendorRiskScoresColumns[23]},
+			},
+			{
+				Name:    "vendor_risk_score_assessment_response_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{VendorRiskScoresColumns[24]},
+			},
+			{
+				Name:    "vendor_risk_score_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{VendorRiskScoresColumns[21]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 		},
 	}
@@ -8498,12 +8879,9 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "vendorscoringconfig_owner_id",
+				Name:    "vendor_scoring_config_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{VendorScoringConfigsColumns[12]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 		},
 	}
@@ -8641,12 +9019,9 @@ var (
 				Columns: []*schema.Column{VulnerabilitiesColumns[8], VulnerabilitiesColumns[61]},
 			},
 			{
-				Name:    "vulnerability_owner_id",
+				Name:    "vulnerability_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{VulnerabilitiesColumns[61]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 			{
 				Name:    "vulnerability_external_id_owner_id",
@@ -8697,6 +9072,13 @@ var (
 				Columns:    []*schema.Column{WebauthnsColumns[16]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "webauthns_owner_id_fk",
+				Unique:  false,
+				Columns: []*schema.Column{WebauthnsColumns[16]},
 			},
 		},
 	}
@@ -8770,17 +9152,24 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
+				Name:    "workflow_assignment_actor_user_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowAssignmentsColumns[25]},
+			},
+			{
+				Name:    "workflow_assignment_actor_group_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowAssignmentsColumns[26]},
+			},
+			{
 				Name:    "workflowassignment_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{WorkflowAssignmentsColumns[8], WorkflowAssignmentsColumns[23]},
 			},
 			{
-				Name:    "workflowassignment_owner_id",
+				Name:    "workflow_assignment_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{WorkflowAssignmentsColumns[23]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 			{
 				Name:    "workflowassignment_workflow_instance_id_assignment_key",
@@ -8848,17 +9237,24 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
+				Name:    "workflow_assignment_target_target_user_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowAssignmentTargetsColumns[15]},
+			},
+			{
+				Name:    "workflow_assignment_target_target_group_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowAssignmentTargetsColumns[16]},
+			},
+			{
 				Name:    "workflowassignmenttarget_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{WorkflowAssignmentTargetsColumns[8], WorkflowAssignmentTargetsColumns[12]},
 			},
 			{
-				Name:    "workflowassignmenttarget_owner_id",
+				Name:    "workflow_assignment_target_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{WorkflowAssignmentTargetsColumns[12]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 			{
 				Name:    "workflowassignmenttarget_workflow_assignment_id",
@@ -8932,12 +9328,9 @@ var (
 				Columns: []*schema.Column{WorkflowDefinitionsColumns[8], WorkflowDefinitionsColumns[30]},
 			},
 			{
-				Name:    "workflowdefinition_owner_id",
+				Name:    "workflow_definition_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{WorkflowDefinitionsColumns[30]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 		},
 	}
@@ -8986,17 +9379,19 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
+				Name:    "workflow_event_workflow_instance_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowEventsColumns[13]},
+			},
+			{
 				Name:    "workflowevent_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{WorkflowEventsColumns[8], WorkflowEventsColumns[12]},
 			},
 			{
-				Name:    "workflowevent_owner_id",
+				Name:    "workflow_event_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{WorkflowEventsColumns[12]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 		},
 	}
@@ -9174,17 +9569,109 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
+				Name:    "workflow_instance_control_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowInstancesColumns[17]},
+			},
+			{
+				Name:    "workflow_instance_internal_policy_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowInstancesColumns[18]},
+			},
+			{
+				Name:    "workflow_instance_evidence_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowInstancesColumns[19]},
+			},
+			{
+				Name:    "workflow_instance_subcontrol_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowInstancesColumns[20]},
+			},
+			{
+				Name:    "workflow_instance_action_plan_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowInstancesColumns[21]},
+			},
+			{
+				Name:    "workflow_instance_procedure_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowInstancesColumns[22]},
+			},
+			{
+				Name:    "workflow_instance_campaign_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowInstancesColumns[23]},
+			},
+			{
+				Name:    "workflow_instance_campaign_target_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowInstancesColumns[24]},
+			},
+			{
+				Name:    "workflow_instance_identity_holder_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowInstancesColumns[25]},
+			},
+			{
+				Name:    "workflow_instance_platform_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowInstancesColumns[26]},
+			},
+			{
+				Name:    "workflow_instance_assessment_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowInstancesColumns[27]},
+			},
+			{
+				Name:    "workflow_instance_assessment_response_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowInstancesColumns[28]},
+			},
+			{
+				Name:    "workflow_instance_finding_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowInstancesColumns[29]},
+			},
+			{
+				Name:    "workflow_instance_integration_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowInstancesColumns[30]},
+			},
+			{
+				Name:    "workflow_instance_remediation_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowInstancesColumns[31]},
+			},
+			{
+				Name:    "workflow_instance_risk_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowInstancesColumns[32]},
+			},
+			{
+				Name:    "workflow_instance_task_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowInstancesColumns[33]},
+			},
+			{
+				Name:    "workflow_instance_vulnerability_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowInstancesColumns[34]},
+			},
+			{
+				Name:    "workflow_instance_workflow_proposal_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowInstancesColumns[35]},
+			},
+			{
 				Name:    "workflowinstance_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{WorkflowInstancesColumns[8], WorkflowInstancesColumns[15]},
 			},
 			{
-				Name:    "workflowinstance_owner_id",
+				Name:    "workflow_instance_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{WorkflowInstancesColumns[15]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
 			},
 			{
 				Name:    "workflowinstance_workflow_definition_id",
@@ -9376,9 +9863,114 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
+				Name:    "workflow_object_ref_control_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowObjectRefsColumns[10]},
+			},
+			{
+				Name:    "workflow_object_ref_task_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowObjectRefsColumns[11]},
+			},
+			{
+				Name:    "workflow_object_ref_internal_policy_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowObjectRefsColumns[12]},
+			},
+			{
+				Name:    "workflow_object_ref_finding_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowObjectRefsColumns[13]},
+			},
+			{
+				Name:    "workflow_object_ref_directory_account_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowObjectRefsColumns[14]},
+			},
+			{
+				Name:    "workflow_object_ref_directory_group_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowObjectRefsColumns[15]},
+			},
+			{
+				Name:    "workflow_object_ref_directory_membership_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowObjectRefsColumns[16]},
+			},
+			{
+				Name:    "workflow_object_ref_evidence_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowObjectRefsColumns[17]},
+			},
+			{
+				Name:    "workflow_object_ref_subcontrol_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowObjectRefsColumns[18]},
+			},
+			{
+				Name:    "workflow_object_ref_action_plan_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowObjectRefsColumns[19]},
+			},
+			{
+				Name:    "workflow_object_ref_procedure_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowObjectRefsColumns[20]},
+			},
+			{
+				Name:    "workflow_object_ref_campaign_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowObjectRefsColumns[21]},
+			},
+			{
+				Name:    "workflow_object_ref_campaign_target_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowObjectRefsColumns[22]},
+			},
+			{
+				Name:    "workflow_object_ref_identity_holder_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowObjectRefsColumns[23]},
+			},
+			{
+				Name:    "workflow_object_ref_platform_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowObjectRefsColumns[24]},
+			},
+			{
+				Name:    "workflow_object_ref_vulnerability_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowObjectRefsColumns[25]},
+			},
+			{
+				Name:    "workflow_object_ref_risk_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowObjectRefsColumns[26]},
+			},
+			{
+				Name:    "workflow_object_ref_assessment_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowObjectRefsColumns[27]},
+			},
+			{
+				Name:    "workflow_object_ref_assessment_response_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowObjectRefsColumns[28]},
+			},
+			{
+				Name:    "workflow_object_ref_remediation_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowObjectRefsColumns[29]},
+			},
+			{
 				Name:    "workflowobjectref_display_id_owner_id",
 				Unique:  true,
 				Columns: []*schema.Column{WorkflowObjectRefsColumns[6], WorkflowObjectRefsColumns[7]},
+			},
+			{
+				Name:    "workflow_object_ref_owner_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowObjectRefsColumns[7]},
 			},
 			{
 				Name:    "workflowobjectref_workflow_instance_id_control_id",
@@ -9529,6 +10121,16 @@ var (
 			},
 		},
 		Indexes: []*schema.Index{
+			{
+				Name:    "workflow_proposal_submitted_by_user_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowProposalsColumns[17]},
+			},
+			{
+				Name:    "workflow_proposal_owner_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowProposalsColumns[15]},
+			},
 			{
 				Name:    "workflowproposal_workflow_object_ref_id_domain_key",
 				Unique:  true,

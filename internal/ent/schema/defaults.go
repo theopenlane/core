@@ -75,9 +75,12 @@ var baseDefaultMixins = []ent.Mixin{
 // - RevisionMixin (set includeRevision to true to enable)
 // - RequestorMixin (set includeRequestor to true to enable)
 // - any additional mixins can  be appended using the additionalMixins field
-func (m mixinConfig) getMixins(_ ent.Interface) []ent.Mixin {
+func (m mixinConfig) getMixins(s ent.Interface) []ent.Mixin {
 	// Start with base mixins and add auto-encryption using the passed schema
 	mixins := append([]ent.Mixin{}, baseDefaultMixins...)
+
+	// index the foreign keys the schema holds on its own table
+	mixins = append(mixins, newEdgeIndexMixin(s))
 
 	if !m.excludeSoftDelete {
 		mixins = append(mixins, mixin.SoftDeleteMixin{})
