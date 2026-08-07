@@ -1125,6 +1125,16 @@ func TestMutationOrganizationCascadeDelete(t *testing.T) {
 	// the file hook only reaches object storage on a hard delete, a soft delete leaves the object
 	assert.Check(t, suite.client.deletedStorageKeys.Has(storageKey),
 		"the object backing the deleted file should have been removed from object storage")
+
+	// the cascade runs as an internal caller, which the delete permissions hook skips by default,
+	// so without the explicit opt in every cascaded record leaves its relationships behind
+	groupTuples, err := suite.client.fga.GetTuplesForObject(context.Background(), "group:"+group1.ID)
+	assert.NilError(t, err)
+	assert.Check(t, is.Len(groupTuples, 0), "group relationship tuples should be cleaned out of FGA")
+
+	orgTuples, err := suite.client.fga.GetTuplesForObject(context.Background(), "organization:"+org.ID)
+	assert.NilError(t, err)
+	assert.Check(t, is.Len(orgTuples, 0), "organization relationship tuples should be cleaned out of FGA")
 }
 
 // assertHistoryExists checks whether the history rows for the given task and file are present

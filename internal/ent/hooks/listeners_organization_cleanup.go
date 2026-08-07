@@ -45,7 +45,7 @@ func handleOrganizationCascadeDelete(ctx gala.HandlerContext, payload eventqueue
 		return nil
 	}
 
-	cleanupCtx := entgen.NewContext(organizationCleanupContext(handlerCtx.Context), client)
+	cleanupCtx := entgen.NewContext(organizationCleanupContext(handlerCtx.Context, orgID), client)
 
 	cleanupCtx = logx.WithFields(cleanupCtx, logx.LogFields{
 		"organization_id": orgID,
@@ -81,11 +81,24 @@ func handleOrganizationCascadeDelete(ctx gala.HandlerContext, payload eventqueue
 
 // organizationCleanupContext builds the context the cascade runs under, it bypasses privacy rules,
 // turns the cascaded deletes into hard deletes and opts the cascade into purging history rows
-func organizationCleanupContext(ctx context.Context) context.Context {
+func organizationCleanupContext(ctx context.Context, orgID string) context.Context {
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-	allowCtx = auth.WithCaller(allowCtx, auth.NewWebhookCaller(""))
+	allowCtx = auth.WithCaller(allowCtx, newOrganizationCleanupCaller(orgID))
 
 	allowCtx = entx.SkipSoftDelete(allowCtx)
 
+	// explicitly cleanup tuples for every record
+	allowCtx = contextx.WithTupleCleanup(allowCtx)
+
 	return contextx.WithPurgeHistory(allowCtx)
+}
+
+// newOrganizationCleanupCaller returns the caller the cascade runs as. It needs to reach every
+// record the organization owns regardless of who is deleting it, so it bypasses the organization
+// filter and FGA checks and identifies itself as an internal operation
+func newOrganizationCleanupCaller(orgID string) *auth.Caller {
+	return &auth.Caller{
+		OrganizationID: orgID,
+		Capabilities:   auth.CapBypassOrgFilter | auth.CapBypassFGA | auth.CapInternalOperation,
+	}
 }

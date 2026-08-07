@@ -21,7 +21,7 @@ COPY --from=ghcr.io/theopenlane/riverboat:amd64-latest /bin/riverboat /bin/river
 COPY --from=redis:7.4.9 /usr/local/bin/redis-server /bin/redis-server
 
 # Copy FGA binary
-COPY --from=openfga/openfga:v1.18.1 /openfga /bin/openfga
+COPY --from=openfga/openfga:v1.18.3 /openfga /bin/openfga
 
 # Copy default model into image
 COPY fga/model/ fga/model/
@@ -42,9 +42,6 @@ USER 65532:65532
 EXPOSE 8080
 EXPOSE 8081
 EXPOSE 2112
-
-#Expose dbx ports
-EXPOSE 1337
 
 # Expose redis ports
 EXPOSE 6379

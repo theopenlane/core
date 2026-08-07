@@ -151,8 +151,7 @@ github.com/openfga/api/proto v0.0.0-20260319214821-f153694bfc20 h1:xdVG0EDz9Z9Uh
 github.com/openfga/api/proto v0.0.0-20260319214821-f153694bfc20/go.mod h1:XDX4qYNBUM2Rsa2AbKPh+oocZc2zgme+EF2fFC6amVU=
 github.com/openfga/go-sdk v0.8.2 h1:eX2RJ7RD9sbxC4Oe8ZAFDZu6n/qYuO9SDrk7XAOE0Fg=
 github.com/openfga/go-sdk v0.8.2/go.mod h1:epiUE6IfG7Ezr3cYLepiUbCasChNowgP8AtJsN4HSpI=
-github.com/openfga/language/pkg/go v0.3.1 h1:o+m3s0aHyjjLH27wqu6/7vL6VWOL8sBqyrNXV87t/e8=
-github.com/openfga/language/pkg/go v0.3.1/go.mod h1:YVuB65nNynhIA5IT8AcBxuRGZYA/Wr8lI2PFyU+jMwA=
+github.com/openfga/language/pkg/go v0.3.2-0.20260730144454-83fedf8a4e70 h1:9RtXJ5iSKUnIFB+OduCFEY+TEDqpOKOJRZcD8LZB7Ng=
 github.com/pborman/getopt v0.0.0-20170112200414-7148bc3a4c30/go.mod h1:85jBQOZwpVEaDAr341tbn15RS4fCAsIst0qp7i8ex1o=
 github.com/philhofer/fwd v1.2.0 h1:e6DnBTl7vGY+Gz322/ASL4Gyp1FspeMvx1RNDoToZuM=
 github.com/philhofer/fwd v1.2.0/go.mod h1:RqIHx9QI14HlwKwm98g9Re5prTQ6LdeRQn+gXJFxsJM=
@@ -204,8 +203,7 @@ github.com/theopenlane/go-client v0.13.0 h1:/jSEZLu1urijrmM1skYo9kf0MsVJwe3DNpuy
 github.com/theopenlane/go-client v0.13.0/go.mod h1:g5i+gYjkih1SSgY/lFi4p302cLZBOJ8pgCFf02eZKaI=
 github.com/theopenlane/httpsling v0.3.0 h1:Bad0dGdqCqAB8UVDyVo+YCevzRvGHhmkK22F7T3pXtY=
 github.com/theopenlane/httpsling v0.3.0/go.mod h1:iJc3XRLYTFIpfCnPpLZVMBP0xsWIPAb7ozARtQoclAE=
-github.com/theopenlane/iam v0.35.7 h1:avxRd4HSzjoG056Kd7LcZ4qC7xPIsbEcJw80nHGOCBc=
-github.com/theopenlane/iam v0.35.7/go.mod h1:KqpLIxEhMsow3q2wGHFn7q7OH4JoN5GcBUrZpd3yVfk=
+github.com/theopenlane/iam v0.35.8 h1:tRkO96NUfG57fgyTWFZwpyzXiKf/1Av/jx5gjFZlXZg=
 github.com/theopenlane/utils v0.7.1 h1:x+9kVMgOALYqAH6GaLaDb9tj16nzasoGM8X0v0XNTn8=
 github.com/theopenlane/utils v0.7.1/go.mod h1:uxiLqjtcqgH57yOpYl3tTfKuenGYyAROxHFMpXx6mDY=
 github.com/tinylib/msgp v1.6.4 h1:mOwYbyYDLPj35mkA2BjjYejgJk9BuHxDdvRnb6v2ZcQ=
