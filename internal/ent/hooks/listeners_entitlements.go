@@ -55,7 +55,7 @@ func handleOrganizationMutationGala(ctx gala.HandlerContext, payload eventqueue.
 	case ent.OpCreate.String():
 		return handleOrganizationCreatedGala(ctx, payload)
 	case ent.OpDelete.String(), ent.OpDeleteOne.String(), eventqueue.SoftDeleteOne:
-		return handleOrganizationDeleteGala(ctx, payload)
+		return handleOrganizationSubscriptionDeactivationGala(ctx, payload)
 	default:
 		return nil
 	}
@@ -71,18 +71,13 @@ func handleOrganizationSettingMutationGala(ctx gala.HandlerContext, payload even
 	}
 }
 
-// handleOrganizationDeleteGala deactivates an organization's customer subscription when deleted.
-func handleOrganizationDeleteGala(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
+// handleOrganizationSubscriptionDeactivationGala deactivates an organization's customer subscription when deleted.
+// The cascade delete of everything the organization owns is handled by its own listener, it must not
+// be gated on entitlements being enabled
+func handleOrganizationSubscriptionDeactivationGala(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
 	inv, ok := newEntitlementInvocation(ctx, payload, softDeleteAllowContext)
 	if !ok {
 		return nil
-	}
-
-	cleanupContext := entgen.NewContext(inv.Context(), inv.client)
-	if err := entgen.OrganizationEdgeCleanup(cleanupContext, inv.orgID); err != nil {
-		inv.Logger().Error().Err(err).Str("organization_id", inv.orgID).
-			Msg("failed to cascade delete organization edges")
-		return err
 	}
 
 	org, err := inv.client.Organization.Query().Where(

@@ -33,6 +33,10 @@ func EntOpToHistoryOp(op ent.Op) history.OpType {
 
 func (m *ActionPlanMutation) skipper(ctx context.Context) bool {
 
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
 	caller, _ := auth.CallerFromContext(ctx)
 
 	return caller.HasInLineage(auth.CapBypassAuditLog)
@@ -669,6 +673,10 @@ func (m *ActionPlanMutation) CreateHistoryFromDelete(ctx context.Context) error 
 
 func (m *AssessmentMutation) skipper(ctx context.Context) bool {
 
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
 	caller, _ := auth.CallerFromContext(ctx)
 
 	return caller.HasInLineage(auth.CapBypassAuditLog)
@@ -985,6 +993,10 @@ func (m *AssessmentMutation) CreateHistoryFromDelete(ctx context.Context) error 
 }
 
 func (m *AssessmentResponseMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
 
 	caller, _ := auth.CallerFromContext(ctx)
 
@@ -1434,6 +1446,10 @@ func (m *AssessmentResponseMutation) CreateHistoryFromDelete(ctx context.Context
 }
 
 func (m *AssetMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
 
 	caller, _ := auth.CallerFromContext(ctx)
 
@@ -2093,6 +2109,10 @@ func (m *AssetMutation) CreateHistoryFromDelete(ctx context.Context) error {
 
 func (m *CampaignMutation) skipper(ctx context.Context) bool {
 
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
 	caller, _ := auth.CallerFromContext(ctx)
 
 	return caller.HasInLineage(auth.CapBypassAuditLog)
@@ -2663,6 +2683,10 @@ func (m *CampaignMutation) CreateHistoryFromDelete(ctx context.Context) error {
 
 func (m *CampaignTargetMutation) skipper(ctx context.Context) bool {
 
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
 	caller, _ := auth.CallerFromContext(ctx)
 
 	return caller.HasInLineage(auth.CapBypassAuditLog)
@@ -2991,6 +3015,10 @@ func (m *CampaignTargetMutation) CreateHistoryFromDelete(ctx context.Context) er
 
 func (m *ContactMutation) skipper(ctx context.Context) bool {
 
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
 	caller, _ := auth.CallerFromContext(ctx)
 
 	return caller.HasInLineage(auth.CapBypassAuditLog)
@@ -3307,6 +3335,10 @@ func (m *ContactMutation) CreateHistoryFromDelete(ctx context.Context) error {
 }
 
 func (m *ControlMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
 
 	caller, _ := auth.CallerFromContext(ctx)
 
@@ -4010,6 +4042,10 @@ func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 
 func (m *ControlImplementationMutation) skipper(ctx context.Context) bool {
 
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
 	caller, _ := auth.CallerFromContext(ctx)
 
 	return caller.HasInLineage(auth.CapBypassAuditLog)
@@ -4315,6 +4351,10 @@ func (m *ControlImplementationMutation) CreateHistoryFromDelete(ctx context.Cont
 }
 
 func (m *ControlObjectiveMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
 
 	caller, _ := auth.CallerFromContext(ctx)
 
@@ -4666,6 +4706,10 @@ func (m *ControlObjectiveMutation) CreateHistoryFromDelete(ctx context.Context) 
 
 func (m *CustomDomainMutation) skipper(ctx context.Context) bool {
 
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
 	caller, _ := auth.CallerFromContext(ctx)
 
 	return caller.HasInLineage(auth.CapBypassAuditLog)
@@ -4961,6 +5005,10 @@ func (m *CustomDomainMutation) CreateHistoryFromDelete(ctx context.Context) erro
 
 func (m *DiscussionMutation) skipper(ctx context.Context) bool {
 
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
 	caller, _ := auth.CallerFromContext(ctx)
 
 	return caller.HasInLineage(auth.CapBypassAuditLog)
@@ -5178,6 +5226,10 @@ func (m *DiscussionMutation) CreateHistoryFromDelete(ctx context.Context) error 
 }
 
 func (m *DocumentDataMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
 
 	caller, _ := auth.CallerFromContext(ctx)
 
@@ -5451,6 +5503,10 @@ func (m *DocumentDataMutation) CreateHistoryFromDelete(ctx context.Context) erro
 }
 
 func (m *EmailTemplateMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
 
 	caller, _ := auth.CallerFromContext(ctx)
 
@@ -5911,6 +5967,10 @@ func (m *EmailTemplateMutation) CreateHistoryFromDelete(ctx context.Context) err
 }
 
 func (m *EntityMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
 
 	caller, _ := auth.CallerFromContext(ctx)
 
@@ -6746,6 +6806,10 @@ func (m *EntityMutation) CreateHistoryFromDelete(ctx context.Context) error {
 
 func (m *EntityTypeMutation) skipper(ctx context.Context) bool {
 
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
 	caller, _ := auth.CallerFromContext(ctx)
 
 	return caller.HasInLineage(auth.CapBypassAuditLog)
@@ -6996,6 +7060,10 @@ func (m *EntityTypeMutation) CreateHistoryFromDelete(ctx context.Context) error 
 }
 
 func (m *EvidenceMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
 
 	caller, _ := auth.CallerFromContext(ctx)
 
@@ -7390,6 +7458,10 @@ func (m *EvidenceMutation) CreateHistoryFromDelete(ctx context.Context) error {
 }
 
 func (m *FileMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
 
 	caller, _ := auth.CallerFromContext(ctx)
 
@@ -7894,6 +7966,10 @@ func (m *FileMutation) CreateHistoryFromDelete(ctx context.Context) error {
 }
 
 func (m *FindingMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
 
 	caller, _ := auth.CallerFromContext(ctx)
 
@@ -8696,6 +8772,10 @@ func (m *FindingMutation) CreateHistoryFromDelete(ctx context.Context) error {
 
 func (m *FindingControlMutation) skipper(ctx context.Context) bool {
 
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
 	caller, _ := auth.CallerFromContext(ctx)
 
 	return caller.HasInLineage(auth.CapBypassAuditLog)
@@ -8968,6 +9048,10 @@ func (m *FindingControlMutation) CreateHistoryFromDelete(ctx context.Context) er
 }
 
 func (m *GroupMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
 
 	caller, _ := auth.CallerFromContext(ctx)
 
@@ -9341,6 +9425,10 @@ func (m *GroupMutation) CreateHistoryFromDelete(ctx context.Context) error {
 
 func (m *GroupMembershipMutation) skipper(ctx context.Context) bool {
 
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
 	caller, _ := auth.CallerFromContext(ctx)
 
 	return caller.HasInLineage(auth.CapBypassAuditLog)
@@ -9536,6 +9624,10 @@ func (m *GroupMembershipMutation) CreateHistoryFromDelete(ctx context.Context) e
 }
 
 func (m *GroupSettingMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
 
 	caller, _ := auth.CallerFromContext(ctx)
 
@@ -9776,6 +9868,10 @@ func (m *GroupSettingMutation) CreateHistoryFromDelete(ctx context.Context) erro
 }
 
 func (m *HushMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
 
 	caller, _ := auth.CallerFromContext(ctx)
 
@@ -10104,6 +10200,10 @@ func (m *HushMutation) CreateHistoryFromDelete(ctx context.Context) error {
 }
 
 func (m *IdentityHolderMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
 
 	caller, _ := auth.CallerFromContext(ctx)
 
@@ -10641,6 +10741,10 @@ func (m *IdentityHolderMutation) CreateHistoryFromDelete(ctx context.Context) er
 }
 
 func (m *InternalPolicyMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
 
 	caller, _ := auth.CallerFromContext(ctx)
 
@@ -11223,6 +11327,10 @@ func (m *InternalPolicyMutation) CreateHistoryFromDelete(ctx context.Context) er
 
 func (m *JobTemplateMutation) skipper(ctx context.Context) bool {
 
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
 	caller, _ := auth.CallerFromContext(ctx)
 
 	return caller.HasInLineage(auth.CapBypassAuditLog)
@@ -11551,6 +11659,10 @@ func (m *JobTemplateMutation) CreateHistoryFromDelete(ctx context.Context) error
 
 func (m *MappableDomainMutation) skipper(ctx context.Context) bool {
 
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
 	caller, _ := auth.CallerFromContext(ctx)
 
 	return caller.HasInLineage(auth.CapBypassAuditLog)
@@ -11768,6 +11880,10 @@ func (m *MappableDomainMutation) CreateHistoryFromDelete(ctx context.Context) er
 }
 
 func (m *MappedControlMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
 
 	caller, _ := auth.CallerFromContext(ctx)
 
@@ -12053,6 +12169,10 @@ func (m *MappedControlMutation) CreateHistoryFromDelete(ctx context.Context) err
 
 func (m *NarrativeMutation) skipper(ctx context.Context) bool {
 
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
 	caller, _ := auth.CallerFromContext(ctx)
 
 	return caller.HasInLineage(auth.CapBypassAuditLog)
@@ -12336,6 +12456,10 @@ func (m *NarrativeMutation) CreateHistoryFromDelete(ctx context.Context) error {
 }
 
 func (m *NoteMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
 
 	caller, _ := auth.CallerFromContext(ctx)
 
@@ -12642,6 +12766,10 @@ func (m *NoteMutation) CreateHistoryFromDelete(ctx context.Context) error {
 }
 
 func (m *NotificationPreferenceMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
 
 	caller, _ := auth.CallerFromContext(ctx)
 
@@ -13069,6 +13197,10 @@ func (m *NotificationPreferenceMutation) CreateHistoryFromDelete(ctx context.Con
 }
 
 func (m *NotificationTemplateMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
 
 	caller, _ := auth.CallerFromContext(ctx)
 
@@ -13552,6 +13684,10 @@ func (m *NotificationTemplateMutation) CreateHistoryFromDelete(ctx context.Conte
 
 func (m *OrgMembershipMutation) skipper(ctx context.Context) bool {
 
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
 	caller, _ := auth.CallerFromContext(ctx)
 
 	return caller.HasInLineage(auth.CapBypassAuditLog)
@@ -13835,6 +13971,10 @@ func (m *OrgMembershipMutation) CreateHistoryFromDelete(ctx context.Context) err
 }
 
 func (m *OrganizationMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
 
 	caller, _ := auth.CallerFromContext(ctx)
 
@@ -14141,6 +14281,10 @@ func (m *OrganizationMutation) CreateHistoryFromDelete(ctx context.Context) erro
 }
 
 func (m *OrganizationSettingMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
 
 	caller, _ := auth.CallerFromContext(ctx)
 
@@ -14667,6 +14811,10 @@ func (m *OrganizationSettingMutation) CreateHistoryFromDelete(ctx context.Contex
 }
 
 func (m *PlatformMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
 
 	caller, _ := auth.CallerFromContext(ctx)
 
@@ -15414,6 +15562,10 @@ func (m *PlatformMutation) CreateHistoryFromDelete(ctx context.Context) error {
 
 func (m *ProcedureMutation) skipper(ctx context.Context) bool {
 
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
 	caller, _ := auth.CallerFromContext(ctx)
 
 	return caller.HasInLineage(auth.CapBypassAuditLog)
@@ -15984,6 +16136,10 @@ func (m *ProcedureMutation) CreateHistoryFromDelete(ctx context.Context) error {
 
 func (m *ProgramMutation) skipper(ctx context.Context) bool {
 
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
 	caller, _ := auth.CallerFromContext(ctx)
 
 	return caller.HasInLineage(auth.CapBypassAuditLog)
@@ -16422,6 +16578,10 @@ func (m *ProgramMutation) CreateHistoryFromDelete(ctx context.Context) error {
 
 func (m *ProgramMembershipMutation) skipper(ctx context.Context) bool {
 
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
 	caller, _ := auth.CallerFromContext(ctx)
 
 	return caller.HasInLineage(auth.CapBypassAuditLog)
@@ -16617,6 +16777,10 @@ func (m *ProgramMembershipMutation) CreateHistoryFromDelete(ctx context.Context)
 }
 
 func (m *RemediationMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
 
 	caller, _ := auth.CallerFromContext(ctx)
 
@@ -17144,6 +17308,10 @@ func (m *RemediationMutation) CreateHistoryFromDelete(ctx context.Context) error
 
 func (m *ReviewMutation) skipper(ctx context.Context) bool {
 
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
 	caller, _ := auth.CallerFromContext(ctx)
 
 	return caller.HasInLineage(auth.CapBypassAuditLog)
@@ -17636,6 +17804,10 @@ func (m *ReviewMutation) CreateHistoryFromDelete(ctx context.Context) error {
 }
 
 func (m *RiskMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
 
 	caller, _ := auth.CallerFromContext(ctx)
 
@@ -18229,6 +18401,10 @@ func (m *RiskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 
 func (m *SLADefinitionMutation) skipper(ctx context.Context) bool {
 
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
 	caller, _ := auth.CallerFromContext(ctx)
 
 	return caller.HasInLineage(auth.CapBypassAuditLog)
@@ -18468,6 +18644,10 @@ func (m *SLADefinitionMutation) CreateHistoryFromDelete(ctx context.Context) err
 }
 
 func (m *ScheduledJobMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
 
 	caller, _ := auth.CallerFromContext(ctx)
 
@@ -18730,6 +18910,10 @@ func (m *ScheduledJobMutation) CreateHistoryFromDelete(ctx context.Context) erro
 }
 
 func (m *StandardMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
 
 	caller, _ := auth.CallerFromContext(ctx)
 
@@ -19135,6 +19319,10 @@ func (m *StandardMutation) CreateHistoryFromDelete(ctx context.Context) error {
 }
 
 func (m *SubcontrolMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
 
 	caller, _ := auth.CallerFromContext(ctx)
 
@@ -19772,6 +19960,10 @@ func (m *SubcontrolMutation) CreateHistoryFromDelete(ctx context.Context) error 
 
 func (m *SubprocessorMutation) skipper(ctx context.Context) bool {
 
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
 	caller, _ := auth.CallerFromContext(ctx)
 
 	return caller.HasInLineage(auth.CapBypassAuditLog)
@@ -20055,6 +20247,10 @@ func (m *SubprocessorMutation) CreateHistoryFromDelete(ctx context.Context) erro
 }
 
 func (m *SystemDetailMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
 
 	caller, _ := auth.CallerFromContext(ctx)
 
@@ -20361,6 +20557,10 @@ func (m *SystemDetailMutation) CreateHistoryFromDelete(ctx context.Context) erro
 }
 
 func (m *TaskMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
 
 	caller, _ := auth.CallerFromContext(ctx)
 
@@ -20866,6 +21066,10 @@ func (m *TaskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 
 func (m *TemplateMutation) skipper(ctx context.Context) bool {
 
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
 	caller, _ := auth.CallerFromContext(ctx)
 
 	return caller.HasInLineage(auth.CapBypassAuditLog)
@@ -21238,6 +21442,10 @@ func (m *TemplateMutation) CreateHistoryFromDelete(ctx context.Context) error {
 
 func (m *TrustCenterMutation) skipper(ctx context.Context) bool {
 
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
 	caller, _ := auth.CallerFromContext(ctx)
 
 	return caller.HasInLineage(auth.CapBypassAuditLog)
@@ -21533,6 +21741,10 @@ func (m *TrustCenterMutation) CreateHistoryFromDelete(ctx context.Context) error
 
 func (m *TrustCenterComplianceMutation) skipper(ctx context.Context) bool {
 
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
 	caller, _ := auth.CallerFromContext(ctx)
 
 	return caller.HasInLineage(auth.CapBypassAuditLog)
@@ -21750,6 +21962,10 @@ func (m *TrustCenterComplianceMutation) CreateHistoryFromDelete(ctx context.Cont
 }
 
 func (m *TrustCenterDocMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
 
 	caller, _ := auth.CallerFromContext(ctx)
 
@@ -22057,6 +22273,10 @@ func (m *TrustCenterDocMutation) CreateHistoryFromDelete(ctx context.Context) er
 
 func (m *TrustCenterEntityMutation) skipper(ctx context.Context) bool {
 
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
 	caller, _ := auth.CallerFromContext(ctx)
 
 	return caller.HasInLineage(auth.CapBypassAuditLog)
@@ -22296,6 +22516,10 @@ func (m *TrustCenterEntityMutation) CreateHistoryFromDelete(ctx context.Context)
 }
 
 func (m *TrustCenterFAQMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
 
 	caller, _ := auth.CallerFromContext(ctx)
 
@@ -22547,6 +22771,10 @@ func (m *TrustCenterFAQMutation) CreateHistoryFromDelete(ctx context.Context) er
 }
 
 func (m *TrustCenterNDARequestMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
 
 	caller, _ := auth.CallerFromContext(ctx)
 
@@ -22886,6 +23114,10 @@ func (m *TrustCenterNDARequestMutation) CreateHistoryFromDelete(ctx context.Cont
 }
 
 func (m *TrustCenterSettingMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
 
 	caller, _ := auth.CallerFromContext(ctx)
 
@@ -23380,6 +23612,10 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromDelete(ctx context.Context
 
 func (m *TrustCenterSubprocessorMutation) skipper(ctx context.Context) bool {
 
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
 	caller, _ := auth.CallerFromContext(ctx)
 
 	return caller.HasInLineage(auth.CapBypassAuditLog)
@@ -23619,6 +23855,10 @@ func (m *TrustCenterSubprocessorMutation) CreateHistoryFromDelete(ctx context.Co
 }
 
 func (m *TrustCenterWatermarkConfigMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
 
 	caller, _ := auth.CallerFromContext(ctx)
 
@@ -23914,6 +24154,10 @@ func (m *TrustCenterWatermarkConfigMutation) CreateHistoryFromDelete(ctx context
 }
 
 func (m *UserMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
 
 	caller, _ := auth.CallerFromContext(ctx)
 
@@ -24309,6 +24553,10 @@ func (m *UserMutation) CreateHistoryFromDelete(ctx context.Context) error {
 
 func (m *UserSettingMutation) skipper(ctx context.Context) bool {
 
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
 	caller, _ := auth.CallerFromContext(ctx)
 
 	return caller.HasInLineage(auth.CapBypassAuditLog)
@@ -24636,6 +24884,10 @@ func (m *UserSettingMutation) CreateHistoryFromDelete(ctx context.Context) error
 }
 
 func (m *VendorRiskScoreMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
 
 	caller, _ := auth.CallerFromContext(ctx)
 
@@ -24987,6 +25239,10 @@ func (m *VendorRiskScoreMutation) CreateHistoryFromDelete(ctx context.Context) e
 
 func (m *VendorScoringConfigMutation) skipper(ctx context.Context) bool {
 
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
 	caller, _ := auth.CallerFromContext(ctx)
 
 	return caller.HasInLineage(auth.CapBypassAuditLog)
@@ -25226,6 +25482,10 @@ func (m *VendorScoringConfigMutation) CreateHistoryFromDelete(ctx context.Contex
 }
 
 func (m *VulnerabilityMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
 
 	caller, _ := auth.CallerFromContext(ctx)
 
@@ -26083,6 +26343,10 @@ func (m *VulnerabilityMutation) CreateHistoryFromDelete(ctx context.Context) err
 
 func (m *WorkflowAssignmentMutation) skipper(ctx context.Context) bool {
 
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
 	caller, _ := auth.CallerFromContext(ctx)
 
 	return caller.HasInLineage(auth.CapBypassAuditLog)
@@ -26477,6 +26741,10 @@ func (m *WorkflowAssignmentMutation) CreateHistoryFromDelete(ctx context.Context
 
 func (m *WorkflowAssignmentTargetMutation) skipper(ctx context.Context) bool {
 
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
 	caller, _ := auth.CallerFromContext(ctx)
 
 	return caller.HasInLineage(auth.CapBypassAuditLog)
@@ -26749,6 +27017,10 @@ func (m *WorkflowAssignmentTargetMutation) CreateHistoryFromDelete(ctx context.C
 }
 
 func (m *WorkflowDefinitionMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
 
 	caller, _ := auth.CallerFromContext(ctx)
 
