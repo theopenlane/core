@@ -3,6 +3,7 @@ package notifications
 import (
 	"context"
 	"fmt"
+	"slices"
 
 	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
@@ -14,9 +15,23 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
+	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 )
+
+type standardControl struct {
+	ID                         string  `json:"id"`
+	OwnerID                    string  `json:"owner_id"`
+	RefCode                    string  `json:"ref_code"`
+	Title                      *string `json:"title,omitempty"`
+	ReferenceFrameworkRevision *string `json:"reference_framework_revision"`
+}
+
+type standardSubcontrol struct {
+	ControlID string `json:"control_id"`
+	standardControl
+}
 
 // handleStandardMutation processes standard mutations and creates notifications
 // for org admins when a system-owned standard revision is bumped up
@@ -52,11 +67,6 @@ func handleStandardMutation(ctx gala.HandlerContext, payload eventqueue.Mutation
 		return nil
 	}
 
-	type standardControl struct {
-		OwnerID                    string  `json:"owner_id"`
-		ReferenceFrameworkRevision *string `json:"reference_framework_revision"`
-	}
-
 	var controls []standardControl
 
 	err = client.Control.Query().
@@ -65,7 +75,10 @@ func handleStandardMutation(ctx gala.HandlerContext, payload eventqueue.Mutation
 			control.OwnerIDNotNil(),
 		).
 		Select(
+			control.FieldID,
 			control.FieldOwnerID,
+			control.FieldRefCode,
+			control.FieldTitle,
 			control.FieldReferenceFrameworkRevision,
 		).
 		Scan(allowCtx, &controls)
@@ -78,32 +91,33 @@ func handleStandardMutation(ctx gala.HandlerContext, payload eventqueue.Mutation
 	}
 
 	filteredControls := lo.Filter(controls, func(c standardControl, _ int) bool {
-		return c.OwnerID != ""
+		return c.OwnerID != "" && isMajorMinorBump(lo.FromPtrOr(c.ReferenceFrameworkRevision, ""), std.Revision)
 	})
 
-	type organizations struct {
-		revision     string
-		controlCount int
+	if len(filteredControls) == 0 {
+		return nil
 	}
 
 	groups := lo.GroupBy(filteredControls, func(c standardControl) string {
 		return c.OwnerID
 	})
 
-	orgMap := lo.MapValues(groups, func(cs []standardControl, _ string) organizations {
-		return organizations{
-			revision:     lo.FromPtrOr(cs[0].ReferenceFrameworkRevision, ""),
-			controlCount: len(cs),
-		}
+	controlIDs := lo.Map(filteredControls, func(c standardControl, _ int) string {
+		return c.ID
 	})
 
-	significantOrgs := lo.PickBy(orgMap, func(_ string, info organizations) bool {
-		return detectVersionBump(info.revision, std.Revision) != ""
+	subcontrols, err := fetchAffectedSubcontrols(allowCtx, client, controlIDs, std.Revision)
+	if err != nil {
+		return err
+	}
+
+	subcontrolsByControlID := lo.GroupBy(subcontrols, func(s standardSubcontrol) string {
+		return s.ControlID
 	})
 
-	lo.ForEach(lo.Entries(significantOrgs), func(entry lo.Entry[string, organizations], _ int) {
+	lo.ForEach(lo.Entries(groups), func(entry lo.Entry[string, []standardControl], _ int) {
 		orgID := entry.Key
-		value := entry.Value
+		controls := entry.Value
 
 		ids, err := fetchOrgAdminsAndOwners(allowCtx, client, orgID)
 		if err != nil {
@@ -118,14 +132,32 @@ func handleStandardMutation(ctx gala.HandlerContext, payload eventqueue.Mutation
 			return
 		}
 
+		oldRevision := pickOldestRevision(controls)
+		changeType := models.DetectSemverBump(oldRevision, std.Revision)
+		orgSubcontrols := fetchSubcontrolsOwnedByControl(controls, subcontrolsByControlID)
+
 		data := map[string]any{
-			"url":                     getURLPathForObject(standardID, generated.TypeStandard),
-			"standard_id":             standardID,
-			"standard_short_name":     std.ShortName,
-			"old_revision":            value.revision,
-			"new_revision":            std.Revision,
-			"change_type":             detectVersionBump(value.revision, std.Revision),
-			"affected_controls_count": value.controlCount,
+			"url":                        getURLPathForObject(standardID, generated.TypeStandard),
+			"standard_id":                standardID,
+			"standard_short_name":        std.ShortName,
+			"old_revision":               oldRevision,
+			"new_revision":               std.Revision,
+			"change_type":                changeType,
+			"affected_controls_count":    len(controls),
+			"affected_subcontrols_count": len(orgSubcontrols),
+			"affected_controls":          controls,
+			"affected_subcontrols":       orgSubcontrols,
+			"diff_available":             oldRevision != "",
+			"diff_input": map[string]any{
+				"standard_id":  standardID,
+				"old_revision": oldRevision,
+				"new_revision": std.Revision,
+			},
+			"accept_all_input": map[string]any{
+				"standard_id": standardID,
+			},
+			"accept_all_available":        true,
+			"acceptance_updates_revision": std.Revision,
 		}
 
 		topic := enums.NotificationTopicStandardUpdate
@@ -156,6 +188,122 @@ func handleStandardMutation(ctx gala.HandlerContext, payload eventqueue.Mutation
 	return nil
 }
 
+func fetchAffectedSubcontrols(ctx context.Context, client *generated.Client, ids []string, revision string) ([]standardSubcontrol, error) {
+	if len(ids) == 0 {
+		return []standardSubcontrol{}, nil
+	}
+
+	var controls []standardSubcontrol
+
+	err := client.Subcontrol.Query().
+		Where(subcontrol.ControlIDIn(ids...)).
+		Select(
+			subcontrol.FieldID,
+			subcontrol.FieldControlID,
+			subcontrol.FieldRefCode,
+			subcontrol.FieldTitle,
+			subcontrol.FieldReferenceFrameworkRevision,
+		).
+		Scan(ctx, &controls)
+	if err != nil {
+		return nil, fmt.Errorf("failed to query subcontrols for standard update: %w", err)
+	}
+
+	affected := lo.Filter(controls, func(s standardSubcontrol, _ int) bool {
+		return isMajorMinorBump(lo.FromPtrOr(s.ReferenceFrameworkRevision, ""), revision)
+	})
+
+	slices.SortFunc(affected, func(a, b standardSubcontrol) int {
+		if a.ControlID == b.ControlID {
+			if a.RefCode < b.RefCode {
+				return -1
+			}
+
+			if a.RefCode > b.RefCode {
+				return 1
+			}
+
+			return 0
+		}
+
+		if a.ControlID < b.ControlID {
+			return -1
+		}
+
+		return 1
+	})
+
+	return affected, nil
+}
+
+func fetchSubcontrolsOwnedByControl(controls []standardControl, grouped map[string][]standardSubcontrol) []standardSubcontrol {
+	subcontrols := []standardSubcontrol{}
+
+	for _, c := range controls {
+		subcontrols = append(subcontrols, grouped[c.ID]...)
+	}
+
+	return subcontrols
+}
+
+func pickOldestRevision(controls []standardControl) string {
+	revisions := lo.FilterMap(controls, func(c standardControl, _ int) (string, bool) {
+		revision := lo.FromPtrOr(c.ReferenceFrameworkRevision, "")
+
+		return revision, revision != ""
+	})
+
+	if len(revisions) == 0 {
+		return ""
+	}
+
+	slices.SortFunc(revisions, func(a, b string) int {
+		aVersion, err := models.ToSemverVersion(&a)
+		if err != nil {
+			return 1
+		}
+
+		bVersion, err := models.ToSemverVersion(&b)
+		if err != nil {
+			return -1
+		}
+
+		if aVersion.Major != bVersion.Major {
+			if aVersion.Major < bVersion.Major {
+				return -1
+			}
+
+			return 1
+		}
+
+		if aVersion.Minor != bVersion.Minor {
+			if aVersion.Minor < bVersion.Minor {
+				return -1
+			}
+
+			return 1
+		}
+
+		if aVersion.Patch < bVersion.Patch {
+			return -1
+		}
+
+		if aVersion.Patch > bVersion.Patch {
+			return 1
+		}
+
+		return 0
+	})
+
+	return revisions[0]
+}
+
+func isMajorMinorBump(oldRevision, newRevision string) bool {
+	bump := models.DetectSemverBump(oldRevision, newRevision)
+
+	return bump == "major" || bump == "minor"
+}
+
 func fetchOrgAdminsAndOwners(ctx context.Context, client *generated.Client, orgID string) ([]string, error) {
 	var ids []string
 
@@ -171,26 +319,4 @@ func fetchOrgAdminsAndOwners(ctx context.Context, client *generated.Client, orgI
 	}
 
 	return ids, nil
-}
-
-func detectVersionBump(oldRevision, newRevision string) string {
-	oldVersion, err := models.ToSemverVersion(&oldRevision)
-	if err != nil {
-		return "major"
-	}
-
-	newVersion, err := models.ToSemverVersion(&newRevision)
-	if err != nil {
-		return "major"
-	}
-
-	if oldVersion.Major != newVersion.Major {
-		return "major"
-	}
-
-	if oldVersion.Minor != newVersion.Minor {
-		return "minor"
-	}
-
-	return ""
 }
