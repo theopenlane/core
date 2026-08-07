@@ -16,9 +16,7 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-// RegisterGalaOrganizationCleanupListeners registers the organization cascade delete on Gala.
-// This is deliberately independent of the entitlement listeners, the cascade has to run whether or
-// not billing is configured, otherwise the records an organization owns are left behind entirely
+// RegisterGalaOrganizationCleanupListeners registers the organization cascade delete on Gala
 func RegisterGalaOrganizationCleanupListeners(registry *gala.Registry) ([]gala.ListenerID, error) {
 	return gala.RegisterListeners(registry,
 		gala.Definition[eventqueue.MutationGalaPayload]{
@@ -35,8 +33,7 @@ func RegisterGalaOrganizationCleanupListeners(registry *gala.Registry) ([]gala.L
 }
 
 // handleOrganizationCascadeDelete removes everything an organization owns once it is deleted.
-// The records are hard deleted and their history rows purged, leaving them soft deleted would keep
-// the rows, the uploaded objects and the full field values in the history tables indefinitely
+// The records are hard deleted and their history rows purged along with files stored in object storage
 func handleOrganizationCascadeDelete(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
 	handlerCtx, client, ok := eventqueue.ClientFromHandler(ctx)
 	if !ok {
@@ -50,8 +47,12 @@ func handleOrganizationCascadeDelete(ctx gala.HandlerContext, payload eventqueue
 
 	cleanupCtx := entgen.NewContext(organizationCleanupContext(handlerCtx.Context), client)
 
+	cleanupCtx = logx.WithFields(cleanupCtx, logx.LogFields{
+		"organization_id": orgID,
+	})
+
 	if err := entgen.OrganizationEdgeCleanup(cleanupCtx, orgID); err != nil {
-		logx.FromContext(cleanupCtx).Error().Err(err).Str("organization_id", orgID).
+		logx.FromContext(cleanupCtx).Error().Err(err).
 			Msg("failed to cascade delete organization edges")
 
 		return err
@@ -59,7 +60,7 @@ func handleOrganizationCascadeDelete(ctx gala.HandlerContext, payload eventqueue
 
 	// this has to run before the organization row is removed
 	if err := entgen.PurgeOrganizationHistory(cleanupCtx, organization.ID(orgID)); err != nil {
-		logx.FromContext(cleanupCtx).Error().Err(err).Str("organization_id", orgID).
+		logx.FromContext(cleanupCtx).Error().Err(err).
 			Msg("failed to purge organization history")
 
 		return err
@@ -67,13 +68,13 @@ func handleOrganizationCascadeDelete(ctx gala.HandlerContext, payload eventqueue
 
 	// the organization row goes last, once everything it owned is gone
 	if _, err := client.Organization.Delete().Where(organization.ID(orgID)).Exec(cleanupCtx); err != nil {
-		logx.FromContext(cleanupCtx).Error().Err(err).Str("organization_id", orgID).
+		logx.FromContext(cleanupCtx).Error().Err(err).
 			Msg("failed to delete organization")
 
 		return err
 	}
 
-	logx.FromContext(cleanupCtx).Info().Str("organization_id", orgID).Msg("organization cascade delete completed")
+	logx.FromContext(cleanupCtx).Info().Msg("organization cascade delete completed")
 
 	return nil
 }
@@ -84,8 +85,6 @@ func organizationCleanupContext(ctx context.Context) context.Context {
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	allowCtx = auth.WithCaller(allowCtx, auth.NewWebhookCaller(""))
 
-	// without this the cascaded deletes are rewritten into soft deletes by the mixin, which also
-	// means the file hook never fires and the uploaded objects are orphaned in object storage
 	allowCtx = entx.SkipSoftDelete(allowCtx)
 
 	return contextx.WithPurgeHistory(allowCtx)

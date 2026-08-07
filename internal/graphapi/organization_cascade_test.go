@@ -16,9 +16,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/taskhistory"
 )
 
-// TestMutationDeleteOrganizationCascade covers what happens to the records an organization owns once
-// it is deleted, they must be hard deleted, their history rows purged and the objects backing any
-// files removed from object storage rather than left orphaned
 func TestMutationDeleteOrganizationCascade(t *testing.T) {
 	orgUser := suite.seedFreshMinimalOrgUsers(t, false)
 

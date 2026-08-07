@@ -71,9 +71,7 @@ func handleOrganizationSettingMutationGala(ctx gala.HandlerContext, payload even
 	}
 }
 
-// handleOrganizationSubscriptionDeactivationGala deactivates an organization's customer subscription when deleted.
-// The cascade delete of everything the organization owns is handled by its own listener, it must not
-// be gated on entitlements being enabled
+// handleOrganizationSubscriptionDeactivationGala deactivates an organization's customer subscription when deleted
 func handleOrganizationSubscriptionDeactivationGala(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
 	inv, ok := newEntitlementInvocation(ctx, payload, softDeleteAllowContext)
 	if !ok {
@@ -103,7 +101,7 @@ func handleOrganizationSubscriptionDeactivationGala(ctx gala.HandlerContext, pay
 	return nil
 }
 
-// handleOrganizationCreatedGala reconciles entitlements after organization creation.
+// handleOrganizationCreatedGala reconciles entitlements after organization creation
 func handleOrganizationCreatedGala(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
 	inv, ok := newEntitlementInvocation(ctx, payload, orgAllowContext)
 	if !ok {
@@ -113,7 +111,7 @@ func handleOrganizationCreatedGala(ctx gala.HandlerContext, payload eventqueue.M
 	return inv.reconcile()
 }
 
-// handleOrganizationSettingsUpdateOneGala updates Stripe customer details for billing changes.
+// handleOrganizationSettingsUpdateOneGala updates Stripe customer details for billing changes
 func handleOrganizationSettingsUpdateOneGala(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
 	if !lo.SomeBy([]string{"billing_email", "billing_phone", "billing_address"}, func(field string) bool {
 		return eventqueue.MutationFieldChanged(payload, field)
