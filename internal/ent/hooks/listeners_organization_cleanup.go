@@ -99,6 +99,6 @@ func organizationCleanupContext(ctx context.Context, orgID string) context.Conte
 func newOrganizationCleanupCaller(orgID string) *auth.Caller {
 	return &auth.Caller{
 		OrganizationID: orgID,
-		Capabilities:   auth.CapBypassOrgFilter | auth.CapBypassFGA | auth.CapInternalOperation,
+		Capabilities:   auth.CapBypassFGA | auth.CapInternalOperation,
 	}
 }
