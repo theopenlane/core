@@ -3,6 +3,7 @@ package email
 import (
 	"context"
 	"encoding/json"
+	"strings"
 	"time"
 
 	"github.com/resend/resend-go/v3"
@@ -246,21 +247,14 @@ func getTargetMetadata(metadata map[string]any, event resendWebhookEvent) map[st
 		metadata = map[string]any{}
 	}
 
-	metadata["resend_event"] = event.Type
-	metadata["resend_email_id"] = event.Data.EmailID
-	metadata["resend_timestamp"] = event.Data.CreatedAt
+	eventName := event.Type
+	if _, after, found := strings.Cut(event.Type, "."); found {
+		eventName = after
+	}
 
-	switch event.Type {
-	case resend.EventEmailDelivered:
-		metadata["resend_delivered_at"] = event.Data.CreatedAt
-	case resend.EventEmailOpened:
-		metadata["resend_opened_at"] = event.Data.CreatedAt
-	case resend.EventEmailClicked:
-		metadata["resend_clicked_at"] = event.Data.CreatedAt
-	case resend.EventEmailBounced:
-		metadata["resend_bounced_at"] = event.Data.CreatedAt
-	case resend.EventEmailFailed:
-		metadata["resend_failed_at"] = event.Data.CreatedAt
+	metadata[eventName] = map[string]string{
+		"email_id":  event.Data.EmailID,
+		"timestamp": event.Data.CreatedAt,
 	}
 
 	return metadata
