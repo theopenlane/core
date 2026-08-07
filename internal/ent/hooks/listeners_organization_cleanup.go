@@ -10,7 +10,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/eventqueue"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks/contextx"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
@@ -82,8 +81,7 @@ func handleOrganizationCascadeDelete(ctx gala.HandlerContext, payload eventqueue
 // organizationCleanupContext builds the context the cascade runs under, it bypasses privacy rules,
 // turns the cascaded deletes into hard deletes and opts the cascade into purging history rows
 func organizationCleanupContext(ctx context.Context, orgID string) context.Context {
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-	allowCtx = auth.WithCaller(allowCtx, newOrganizationCleanupCaller(orgID))
+	allowCtx := auth.WithCaller(ctx, newOrganizationCleanupCaller(orgID))
 
 	allowCtx = entx.SkipSoftDelete(allowCtx)
 
@@ -94,8 +92,7 @@ func organizationCleanupContext(ctx context.Context, orgID string) context.Conte
 }
 
 // newOrganizationCleanupCaller returns the caller the cascade runs as. It needs to reach every
-// record the organization owns regardless of who is deleting it, so it bypasses the organization
-// filter and FGA checks and identifies itself as an internal operation
+// record the organization owns regardless of who is deleting it, so it bypasses FGA checks and identifies itself as an internal operation
 func newOrganizationCleanupCaller(orgID string) *auth.Caller {
 	return &auth.Caller{
 		OrganizationID: orgID,
