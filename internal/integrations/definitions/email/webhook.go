@@ -224,12 +224,28 @@ func updateCampaignTarget(ctx context.Context, db *ent.Client, targetID, campaig
 	eventTime := parseResendEventTime(event.Data.CreatedAt)
 
 	switch event.Type {
-	case resend.EventEmailSent, resend.EventEmailDelivered, resend.EventEmailOpened, resend.EventEmailClicked:
+	case resend.EventEmailSent, resend.EventEmailDelivered:
 		update.SetStatus(enums.AssessmentResponseStatusSent)
 
 		if eventTime != nil {
 			update.SetSentAt(models.DateTime(*eventTime))
 		}
+	case resend.EventEmailOpened:
+		update.SetStatus(enums.AssessmentResponseStatusSent)
+
+		if eventTime != nil {
+			update.SetEmailOpenedAt(*eventTime)
+		}
+
+		update.AddEmailOpenCount(1)
+	case resend.EventEmailClicked:
+		update.SetStatus(enums.AssessmentResponseStatusSent)
+
+		if eventTime != nil {
+			update.SetEmailClickedAt(*eventTime)
+		}
+
+		update.AddEmailClickCount(1)
 	case resend.EventEmailBounced, resend.EventEmailFailed:
 		metadata := target.Metadata
 		if metadata == nil {
