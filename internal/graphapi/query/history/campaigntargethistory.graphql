@@ -15,10 +15,6 @@ query GetAllCampaignTargetHistories ($first: Int, $last: Int, $after: Cursor, $b
 				createdAt
 				createdBy
 				email
-				emailClickCount
-				emailClickedAt
-				emailOpenCount
-				emailOpenedAt
 				fullName
 				groupID
 				historyTime
@@ -56,10 +52,6 @@ query GetCampaignTargetHistories ($first: Int, $last: Int, $after: Cursor, $befo
 				createdAt
 				createdBy
 				email
-				emailClickCount
-				emailClickedAt
-				emailOpenCount
-				emailOpenedAt
 				fullName
 				groupID
 				historyTime

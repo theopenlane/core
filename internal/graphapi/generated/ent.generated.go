@@ -63471,98 +63471,6 @@ func (ec *executionContext) fieldContext_CampaignTarget_sentAt(_ context.Context
 	return graphql.NewScalarFieldContext("CampaignTarget", field, false, false, errors.New("field of type DateTime does not have child fields"))
 }
 
-func (ec *executionContext) _CampaignTarget_emailOpenedAt(ctx context.Context, field graphql.CollectedField, obj *generated.CampaignTarget) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_CampaignTarget_emailOpenedAt(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.EmailOpenedAt, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
-			return ec.marshalOTime2ᚖtimeᚐTime(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
-func (ec *executionContext) fieldContext_CampaignTarget_emailOpenedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("CampaignTarget", field, false, false, errors.New("field of type Time does not have child fields"))
-}
-
-func (ec *executionContext) _CampaignTarget_emailClickedAt(ctx context.Context, field graphql.CollectedField, obj *generated.CampaignTarget) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_CampaignTarget_emailClickedAt(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.EmailClickedAt, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *time.Time) graphql.Marshaler {
-			return ec.marshalOTime2ᚖtimeᚐTime(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
-func (ec *executionContext) fieldContext_CampaignTarget_emailClickedAt(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("CampaignTarget", field, false, false, errors.New("field of type Time does not have child fields"))
-}
-
-func (ec *executionContext) _CampaignTarget_emailOpenCount(ctx context.Context, field graphql.CollectedField, obj *generated.CampaignTarget) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_CampaignTarget_emailOpenCount(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.EmailOpenCount, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
-			return ec.marshalOInt2int(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
-func (ec *executionContext) fieldContext_CampaignTarget_emailOpenCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("CampaignTarget", field, false, false, errors.New("field of type Int does not have child fields"))
-}
-
-func (ec *executionContext) _CampaignTarget_emailClickCount(ctx context.Context, field graphql.CollectedField, obj *generated.CampaignTarget) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_CampaignTarget_emailClickCount(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.EmailClickCount, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v int) graphql.Marshaler {
-			return ec.marshalOInt2int(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
-func (ec *executionContext) fieldContext_CampaignTarget_emailClickCount(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("CampaignTarget", field, false, false, errors.New("field of type Int does not have child fields"))
-}
-
 func (ec *executionContext) _CampaignTarget_completedAt(ctx context.Context, field graphql.CollectedField, obj *generated.CampaignTarget) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -196443,7 +196351,7 @@ func (ec *executionContext) unmarshalInputCampaignTargetWhereInput(ctx context.C
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "idEqualFold", "idContainsFold", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorGT", "updatedByImpersonatorGTE", "updatedByImpersonatorLT", "updatedByImpersonatorLTE", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDGT", "ownerIDGTE", "ownerIDLT", "ownerIDLTE", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "campaignID", "campaignIDNEQ", "campaignIDIn", "campaignIDNotIn", "campaignIDGT", "campaignIDGTE", "campaignIDLT", "campaignIDLTE", "campaignIDContains", "campaignIDHasPrefix", "campaignIDHasSuffix", "campaignIDIsNil", "campaignIDNotNil", "campaignIDEqualFold", "campaignIDContainsFold", "contactID", "contactIDNEQ", "contactIDIn", "contactIDNotIn", "contactIDGT", "contactIDGTE", "contactIDLT", "contactIDLTE", "contactIDContains", "contactIDHasPrefix", "contactIDHasSuffix", "contactIDIsNil", "contactIDNotNil", "contactIDEqualFold", "contactIDContainsFold", "userID", "userIDNEQ", "userIDIn", "userIDNotIn", "userIDGT", "userIDGTE", "userIDLT", "userIDLTE", "userIDContains", "userIDHasPrefix", "userIDHasSuffix", "userIDIsNil", "userIDNotNil", "userIDEqualFold", "userIDContainsFold", "groupID", "groupIDNEQ", "groupIDIn", "groupIDNotIn", "groupIDGT", "groupIDGTE", "groupIDLT", "groupIDLTE", "groupIDContains", "groupIDHasPrefix", "groupIDHasSuffix", "groupIDIsNil", "groupIDNotNil", "groupIDEqualFold", "groupIDContainsFold", "subscriberID", "subscriberIDNEQ", "subscriberIDIn", "subscriberIDNotIn", "subscriberIDGT", "subscriberIDGTE", "subscriberIDLT", "subscriberIDLTE", "subscriberIDContains", "subscriberIDHasPrefix", "subscriberIDHasSuffix", "subscriberIDIsNil", "subscriberIDNotNil", "subscriberIDEqualFold", "subscriberIDContainsFold", "email", "emailNEQ", "emailIn", "emailNotIn", "emailGT", "emailGTE", "emailLT", "emailLTE", "emailContains", "emailHasPrefix", "emailHasSuffix", "emailEqualFold", "emailContainsFold", "fullName", "fullNameNEQ", "fullNameIn", "fullNameNotIn", "fullNameGT", "fullNameGTE", "fullNameLT", "fullNameLTE", "fullNameContains", "fullNameHasPrefix", "fullNameHasSuffix", "fullNameIsNil", "fullNameNotNil", "fullNameEqualFold", "fullNameContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "sentAt", "sentAtNEQ", "sentAtIn", "sentAtNotIn", "sentAtGT", "sentAtGTE", "sentAtLT", "sentAtLTE", "sentAtIsNil", "sentAtNotNil", "emailOpenedAt", "emailOpenedAtNEQ", "emailOpenedAtIn", "emailOpenedAtNotIn", "emailOpenedAtGT", "emailOpenedAtGTE", "emailOpenedAtLT", "emailOpenedAtLTE", "emailOpenedAtIsNil", "emailOpenedAtNotNil", "emailClickedAt", "emailClickedAtNEQ", "emailClickedAtIn", "emailClickedAtNotIn", "emailClickedAtGT", "emailClickedAtGTE", "emailClickedAtLT", "emailClickedAtLTE", "emailClickedAtIsNil", "emailClickedAtNotNil", "emailOpenCount", "emailOpenCountNEQ", "emailOpenCountIn", "emailOpenCountNotIn", "emailOpenCountGT", "emailOpenCountGTE", "emailOpenCountLT", "emailOpenCountLTE", "emailOpenCountIsNil", "emailOpenCountNotNil", "emailClickCount", "emailClickCountNEQ", "emailClickCountIn", "emailClickCountNotIn", "emailClickCountGT", "emailClickCountGTE", "emailClickCountLT", "emailClickCountLTE", "emailClickCountIsNil", "emailClickCountNotNil", "completedAt", "completedAtNEQ", "completedAtIn", "completedAtNotIn", "completedAtGT", "completedAtGTE", "completedAtLT", "completedAtLTE", "completedAtIsNil", "completedAtNotNil", "hasOwner", "hasOwnerWith", "hasCampaign", "hasCampaignWith", "hasContact", "hasContactWith", "hasUser", "hasUserWith", "hasGroup", "hasGroupWith", "hasSubscriber", "hasSubscriberWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idGT", "idGTE", "idLT", "idLTE", "idEqualFold", "idContainsFold", "createdAt", "createdAtNEQ", "createdAtIn", "createdAtNotIn", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtNEQ", "updatedAtIn", "updatedAtNotIn", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByGT", "createdByGTE", "createdByLT", "createdByLTE", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByGT", "updatedByGTE", "updatedByLT", "updatedByLTE", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorGT", "updatedByImpersonatorGTE", "updatedByImpersonatorLT", "updatedByImpersonatorLTE", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDGT", "ownerIDGTE", "ownerIDLT", "ownerIDLTE", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "campaignID", "campaignIDNEQ", "campaignIDIn", "campaignIDNotIn", "campaignIDGT", "campaignIDGTE", "campaignIDLT", "campaignIDLTE", "campaignIDContains", "campaignIDHasPrefix", "campaignIDHasSuffix", "campaignIDIsNil", "campaignIDNotNil", "campaignIDEqualFold", "campaignIDContainsFold", "contactID", "contactIDNEQ", "contactIDIn", "contactIDNotIn", "contactIDGT", "contactIDGTE", "contactIDLT", "contactIDLTE", "contactIDContains", "contactIDHasPrefix", "contactIDHasSuffix", "contactIDIsNil", "contactIDNotNil", "contactIDEqualFold", "contactIDContainsFold", "userID", "userIDNEQ", "userIDIn", "userIDNotIn", "userIDGT", "userIDGTE", "userIDLT", "userIDLTE", "userIDContains", "userIDHasPrefix", "userIDHasSuffix", "userIDIsNil", "userIDNotNil", "userIDEqualFold", "userIDContainsFold", "groupID", "groupIDNEQ", "groupIDIn", "groupIDNotIn", "groupIDGT", "groupIDGTE", "groupIDLT", "groupIDLTE", "groupIDContains", "groupIDHasPrefix", "groupIDHasSuffix", "groupIDIsNil", "groupIDNotNil", "groupIDEqualFold", "groupIDContainsFold", "subscriberID", "subscriberIDNEQ", "subscriberIDIn", "subscriberIDNotIn", "subscriberIDGT", "subscriberIDGTE", "subscriberIDLT", "subscriberIDLTE", "subscriberIDContains", "subscriberIDHasPrefix", "subscriberIDHasSuffix", "subscriberIDIsNil", "subscriberIDNotNil", "subscriberIDEqualFold", "subscriberIDContainsFold", "email", "emailNEQ", "emailIn", "emailNotIn", "emailGT", "emailGTE", "emailLT", "emailLTE", "emailContains", "emailHasPrefix", "emailHasSuffix", "emailEqualFold", "emailContainsFold", "fullName", "fullNameNEQ", "fullNameIn", "fullNameNotIn", "fullNameGT", "fullNameGTE", "fullNameLT", "fullNameLTE", "fullNameContains", "fullNameHasPrefix", "fullNameHasSuffix", "fullNameIsNil", "fullNameNotNil", "fullNameEqualFold", "fullNameContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "sentAt", "sentAtNEQ", "sentAtIn", "sentAtNotIn", "sentAtGT", "sentAtGTE", "sentAtLT", "sentAtLTE", "sentAtIsNil", "sentAtNotNil", "completedAt", "completedAtNEQ", "completedAtIn", "completedAtNotIn", "completedAtGT", "completedAtGTE", "completedAtLT", "completedAtLTE", "completedAtIsNil", "completedAtNotNil", "hasOwner", "hasOwnerWith", "hasCampaign", "hasCampaignWith", "hasContact", "hasContactWith", "hasUser", "hasUserWith", "hasGroup", "hasGroupWith", "hasSubscriber", "hasSubscriberWith", "hasWorkflowObjectRefs", "hasWorkflowObjectRefsWith"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -197948,286 +197856,6 @@ func (ec *executionContext) unmarshalInputCampaignTargetWhereInput(ctx context.C
 				return it, err
 			}
 			it.SentAtNotNil = data
-		case "emailOpenedAt":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailOpenedAt"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailOpenedAt = data
-		case "emailOpenedAtNEQ":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailOpenedAtNEQ"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailOpenedAtNEQ = data
-		case "emailOpenedAtIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailOpenedAtIn"))
-			data, err := ec.unmarshalOTime2ᚕtimeᚐTimeᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailOpenedAtIn = data
-		case "emailOpenedAtNotIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailOpenedAtNotIn"))
-			data, err := ec.unmarshalOTime2ᚕtimeᚐTimeᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailOpenedAtNotIn = data
-		case "emailOpenedAtGT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailOpenedAtGT"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailOpenedAtGT = data
-		case "emailOpenedAtGTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailOpenedAtGTE"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailOpenedAtGTE = data
-		case "emailOpenedAtLT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailOpenedAtLT"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailOpenedAtLT = data
-		case "emailOpenedAtLTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailOpenedAtLTE"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailOpenedAtLTE = data
-		case "emailOpenedAtIsNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailOpenedAtIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailOpenedAtIsNil = data
-		case "emailOpenedAtNotNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailOpenedAtNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailOpenedAtNotNil = data
-		case "emailClickedAt":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailClickedAt"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailClickedAt = data
-		case "emailClickedAtNEQ":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailClickedAtNEQ"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailClickedAtNEQ = data
-		case "emailClickedAtIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailClickedAtIn"))
-			data, err := ec.unmarshalOTime2ᚕtimeᚐTimeᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailClickedAtIn = data
-		case "emailClickedAtNotIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailClickedAtNotIn"))
-			data, err := ec.unmarshalOTime2ᚕtimeᚐTimeᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailClickedAtNotIn = data
-		case "emailClickedAtGT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailClickedAtGT"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailClickedAtGT = data
-		case "emailClickedAtGTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailClickedAtGTE"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailClickedAtGTE = data
-		case "emailClickedAtLT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailClickedAtLT"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailClickedAtLT = data
-		case "emailClickedAtLTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailClickedAtLTE"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailClickedAtLTE = data
-		case "emailClickedAtIsNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailClickedAtIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailClickedAtIsNil = data
-		case "emailClickedAtNotNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailClickedAtNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailClickedAtNotNil = data
-		case "emailOpenCount":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailOpenCount"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailOpenCount = data
-		case "emailOpenCountNEQ":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailOpenCountNEQ"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailOpenCountNEQ = data
-		case "emailOpenCountIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailOpenCountIn"))
-			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailOpenCountIn = data
-		case "emailOpenCountNotIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailOpenCountNotIn"))
-			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailOpenCountNotIn = data
-		case "emailOpenCountGT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailOpenCountGT"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailOpenCountGT = data
-		case "emailOpenCountGTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailOpenCountGTE"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailOpenCountGTE = data
-		case "emailOpenCountLT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailOpenCountLT"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailOpenCountLT = data
-		case "emailOpenCountLTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailOpenCountLTE"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailOpenCountLTE = data
-		case "emailOpenCountIsNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailOpenCountIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailOpenCountIsNil = data
-		case "emailOpenCountNotNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailOpenCountNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailOpenCountNotNil = data
-		case "emailClickCount":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailClickCount"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailClickCount = data
-		case "emailClickCountNEQ":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailClickCountNEQ"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailClickCountNEQ = data
-		case "emailClickCountIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailClickCountIn"))
-			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailClickCountIn = data
-		case "emailClickCountNotIn":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailClickCountNotIn"))
-			data, err := ec.unmarshalOInt2ᚕintᚄ(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailClickCountNotIn = data
-		case "emailClickCountGT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailClickCountGT"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailClickCountGT = data
-		case "emailClickCountGTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailClickCountGTE"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailClickCountGTE = data
-		case "emailClickCountLT":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailClickCountLT"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailClickCountLT = data
-		case "emailClickCountLTE":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailClickCountLTE"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailClickCountLTE = data
-		case "emailClickCountIsNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailClickCountIsNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailClickCountIsNil = data
-		case "emailClickCountNotNil":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailClickCountNotNil"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailClickCountNotNil = data
 		case "completedAt":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("completedAt"))
 			data, err := ec.unmarshalODateTime2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐDateTime(ctx, v)
@@ -214108,7 +213736,7 @@ func (ec *executionContext) unmarshalInputCreateCampaignTargetInput(ctx context.
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"workflowEligibleMarker", "email", "fullName", "status", "sentAt", "emailOpenedAt", "emailClickedAt", "emailOpenCount", "emailClickCount", "completedAt", "metadata", "ownerID", "campaignID", "contactID", "userID", "groupID", "subscriberID", "workflowObjectRefIDs"}
+	fieldsInOrder := [...]string{"workflowEligibleMarker", "email", "fullName", "status", "sentAt", "completedAt", "metadata", "ownerID", "campaignID", "contactID", "userID", "groupID", "subscriberID", "workflowObjectRefIDs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -214150,34 +213778,6 @@ func (ec *executionContext) unmarshalInputCreateCampaignTargetInput(ctx context.
 				return it, err
 			}
 			it.SentAt = data
-		case "emailOpenedAt":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailOpenedAt"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailOpenedAt = data
-		case "emailClickedAt":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailClickedAt"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailClickedAt = data
-		case "emailOpenCount":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailOpenCount"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailOpenCount = data
-		case "emailClickCount":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailClickCount"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailClickCount = data
 		case "completedAt":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("completedAt"))
 			data, err := ec.unmarshalODateTime2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐDateTime(ctx, v)
@@ -378513,7 +378113,7 @@ func (ec *executionContext) unmarshalInputUpdateCampaignTargetInput(ctx context.
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"workflowEligibleMarker", "clearWorkflowEligibleMarker", "email", "fullName", "clearFullName", "status", "sentAt", "clearSentAt", "emailOpenedAt", "clearEmailOpenedAt", "emailClickedAt", "clearEmailClickedAt", "emailOpenCount", "clearEmailOpenCount", "emailClickCount", "clearEmailClickCount", "completedAt", "clearCompletedAt", "metadata", "clearMetadata", "contactID", "clearContact", "userID", "clearUser", "groupID", "clearGroup", "subscriberID", "clearSubscriber", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs"}
+	fieldsInOrder := [...]string{"workflowEligibleMarker", "clearWorkflowEligibleMarker", "email", "fullName", "clearFullName", "status", "sentAt", "clearSentAt", "completedAt", "clearCompletedAt", "metadata", "clearMetadata", "contactID", "clearContact", "userID", "clearUser", "groupID", "clearGroup", "subscriberID", "clearSubscriber", "addWorkflowObjectRefIDs", "removeWorkflowObjectRefIDs", "clearWorkflowObjectRefs"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -378576,62 +378176,6 @@ func (ec *executionContext) unmarshalInputUpdateCampaignTargetInput(ctx context.
 				return it, err
 			}
 			it.ClearSentAt = data
-		case "emailOpenedAt":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailOpenedAt"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailOpenedAt = data
-		case "clearEmailOpenedAt":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearEmailOpenedAt"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearEmailOpenedAt = data
-		case "emailClickedAt":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailClickedAt"))
-			data, err := ec.unmarshalOTime2ᚖtimeᚐTime(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailClickedAt = data
-		case "clearEmailClickedAt":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearEmailClickedAt"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearEmailClickedAt = data
-		case "emailOpenCount":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailOpenCount"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailOpenCount = data
-		case "clearEmailOpenCount":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearEmailOpenCount"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearEmailOpenCount = data
-		case "emailClickCount":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("emailClickCount"))
-			data, err := ec.unmarshalOInt2ᚖint(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.EmailClickCount = data
-		case "clearEmailClickCount":
-			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("clearEmailClickCount"))
-			data, err := ec.unmarshalOBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-			it.ClearEmailClickCount = data
 		case "completedAt":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("completedAt"))
 			data, err := ec.unmarshalODateTime2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐDateTime(ctx, v)
@@ -446189,26 +445733,6 @@ func (ec *executionContext) _CampaignTarget(ctx context.Context, sel ast.Selecti
 			}
 		case "sentAt":
 			out.Values[i] = ec._CampaignTarget_sentAt(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				atomic.AddUint32(&out.Invalids, 1)
-			}
-		case "emailOpenedAt":
-			out.Values[i] = ec._CampaignTarget_emailOpenedAt(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				atomic.AddUint32(&out.Invalids, 1)
-			}
-		case "emailClickedAt":
-			out.Values[i] = ec._CampaignTarget_emailClickedAt(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				atomic.AddUint32(&out.Invalids, 1)
-			}
-		case "emailOpenCount":
-			out.Values[i] = ec._CampaignTarget_emailOpenCount(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				atomic.AddUint32(&out.Invalids, 1)
-			}
-		case "emailClickCount":
-			out.Values[i] = ec._CampaignTarget_emailClickCount(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				atomic.AddUint32(&out.Invalids, 1)
 			}

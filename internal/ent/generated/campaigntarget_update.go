@@ -298,100 +298,6 @@ func (_u *CampaignTargetUpdate) ClearSentAt() *CampaignTargetUpdate {
 	return _u
 }
 
-// SetEmailOpenedAt sets the "email_opened_at" field.
-func (_u *CampaignTargetUpdate) SetEmailOpenedAt(v time.Time) *CampaignTargetUpdate {
-	_u.mutation.SetEmailOpenedAt(v)
-	return _u
-}
-
-// SetNillableEmailOpenedAt sets the "email_opened_at" field if the given value is not nil.
-func (_u *CampaignTargetUpdate) SetNillableEmailOpenedAt(v *time.Time) *CampaignTargetUpdate {
-	if v != nil {
-		_u.SetEmailOpenedAt(*v)
-	}
-	return _u
-}
-
-// ClearEmailOpenedAt clears the value of the "email_opened_at" field.
-func (_u *CampaignTargetUpdate) ClearEmailOpenedAt() *CampaignTargetUpdate {
-	_u.mutation.ClearEmailOpenedAt()
-	return _u
-}
-
-// SetEmailClickedAt sets the "email_clicked_at" field.
-func (_u *CampaignTargetUpdate) SetEmailClickedAt(v time.Time) *CampaignTargetUpdate {
-	_u.mutation.SetEmailClickedAt(v)
-	return _u
-}
-
-// SetNillableEmailClickedAt sets the "email_clicked_at" field if the given value is not nil.
-func (_u *CampaignTargetUpdate) SetNillableEmailClickedAt(v *time.Time) *CampaignTargetUpdate {
-	if v != nil {
-		_u.SetEmailClickedAt(*v)
-	}
-	return _u
-}
-
-// ClearEmailClickedAt clears the value of the "email_clicked_at" field.
-func (_u *CampaignTargetUpdate) ClearEmailClickedAt() *CampaignTargetUpdate {
-	_u.mutation.ClearEmailClickedAt()
-	return _u
-}
-
-// SetEmailOpenCount sets the "email_open_count" field.
-func (_u *CampaignTargetUpdate) SetEmailOpenCount(v int) *CampaignTargetUpdate {
-	_u.mutation.ResetEmailOpenCount()
-	_u.mutation.SetEmailOpenCount(v)
-	return _u
-}
-
-// SetNillableEmailOpenCount sets the "email_open_count" field if the given value is not nil.
-func (_u *CampaignTargetUpdate) SetNillableEmailOpenCount(v *int) *CampaignTargetUpdate {
-	if v != nil {
-		_u.SetEmailOpenCount(*v)
-	}
-	return _u
-}
-
-// AddEmailOpenCount adds value to the "email_open_count" field.
-func (_u *CampaignTargetUpdate) AddEmailOpenCount(v int) *CampaignTargetUpdate {
-	_u.mutation.AddEmailOpenCount(v)
-	return _u
-}
-
-// ClearEmailOpenCount clears the value of the "email_open_count" field.
-func (_u *CampaignTargetUpdate) ClearEmailOpenCount() *CampaignTargetUpdate {
-	_u.mutation.ClearEmailOpenCount()
-	return _u
-}
-
-// SetEmailClickCount sets the "email_click_count" field.
-func (_u *CampaignTargetUpdate) SetEmailClickCount(v int) *CampaignTargetUpdate {
-	_u.mutation.ResetEmailClickCount()
-	_u.mutation.SetEmailClickCount(v)
-	return _u
-}
-
-// SetNillableEmailClickCount sets the "email_click_count" field if the given value is not nil.
-func (_u *CampaignTargetUpdate) SetNillableEmailClickCount(v *int) *CampaignTargetUpdate {
-	if v != nil {
-		_u.SetEmailClickCount(*v)
-	}
-	return _u
-}
-
-// AddEmailClickCount adds value to the "email_click_count" field.
-func (_u *CampaignTargetUpdate) AddEmailClickCount(v int) *CampaignTargetUpdate {
-	_u.mutation.AddEmailClickCount(v)
-	return _u
-}
-
-// ClearEmailClickCount clears the value of the "email_click_count" field.
-func (_u *CampaignTargetUpdate) ClearEmailClickCount() *CampaignTargetUpdate {
-	_u.mutation.ClearEmailClickCount()
-	return _u
-}
-
 // SetCompletedAt sets the "completed_at" field.
 func (_u *CampaignTargetUpdate) SetCompletedAt(v models.DateTime) *CampaignTargetUpdate {
 	_u.mutation.SetCompletedAt(v)
@@ -643,36 +549,6 @@ func (_u *CampaignTargetUpdate) sqlSave(ctx context.Context) (_node int, err err
 	}
 	if _u.mutation.SentAtCleared() {
 		_spec.ClearField(campaigntarget.FieldSentAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.EmailOpenedAt(); ok {
-		_spec.SetField(campaigntarget.FieldEmailOpenedAt, field.TypeTime, value)
-	}
-	if _u.mutation.EmailOpenedAtCleared() {
-		_spec.ClearField(campaigntarget.FieldEmailOpenedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.EmailClickedAt(); ok {
-		_spec.SetField(campaigntarget.FieldEmailClickedAt, field.TypeTime, value)
-	}
-	if _u.mutation.EmailClickedAtCleared() {
-		_spec.ClearField(campaigntarget.FieldEmailClickedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.EmailOpenCount(); ok {
-		_spec.SetField(campaigntarget.FieldEmailOpenCount, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.AddedEmailOpenCount(); ok {
-		_spec.AddField(campaigntarget.FieldEmailOpenCount, field.TypeInt, value)
-	}
-	if _u.mutation.EmailOpenCountCleared() {
-		_spec.ClearField(campaigntarget.FieldEmailOpenCount, field.TypeInt)
-	}
-	if value, ok := _u.mutation.EmailClickCount(); ok {
-		_spec.SetField(campaigntarget.FieldEmailClickCount, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.AddedEmailClickCount(); ok {
-		_spec.AddField(campaigntarget.FieldEmailClickCount, field.TypeInt, value)
-	}
-	if _u.mutation.EmailClickCountCleared() {
-		_spec.ClearField(campaigntarget.FieldEmailClickCount, field.TypeInt)
 	}
 	if value, ok := _u.mutation.CompletedAt(); ok {
 		_spec.SetField(campaigntarget.FieldCompletedAt, field.TypeTime, value)
@@ -1142,100 +1018,6 @@ func (_u *CampaignTargetUpdateOne) ClearSentAt() *CampaignTargetUpdateOne {
 	return _u
 }
 
-// SetEmailOpenedAt sets the "email_opened_at" field.
-func (_u *CampaignTargetUpdateOne) SetEmailOpenedAt(v time.Time) *CampaignTargetUpdateOne {
-	_u.mutation.SetEmailOpenedAt(v)
-	return _u
-}
-
-// SetNillableEmailOpenedAt sets the "email_opened_at" field if the given value is not nil.
-func (_u *CampaignTargetUpdateOne) SetNillableEmailOpenedAt(v *time.Time) *CampaignTargetUpdateOne {
-	if v != nil {
-		_u.SetEmailOpenedAt(*v)
-	}
-	return _u
-}
-
-// ClearEmailOpenedAt clears the value of the "email_opened_at" field.
-func (_u *CampaignTargetUpdateOne) ClearEmailOpenedAt() *CampaignTargetUpdateOne {
-	_u.mutation.ClearEmailOpenedAt()
-	return _u
-}
-
-// SetEmailClickedAt sets the "email_clicked_at" field.
-func (_u *CampaignTargetUpdateOne) SetEmailClickedAt(v time.Time) *CampaignTargetUpdateOne {
-	_u.mutation.SetEmailClickedAt(v)
-	return _u
-}
-
-// SetNillableEmailClickedAt sets the "email_clicked_at" field if the given value is not nil.
-func (_u *CampaignTargetUpdateOne) SetNillableEmailClickedAt(v *time.Time) *CampaignTargetUpdateOne {
-	if v != nil {
-		_u.SetEmailClickedAt(*v)
-	}
-	return _u
-}
-
-// ClearEmailClickedAt clears the value of the "email_clicked_at" field.
-func (_u *CampaignTargetUpdateOne) ClearEmailClickedAt() *CampaignTargetUpdateOne {
-	_u.mutation.ClearEmailClickedAt()
-	return _u
-}
-
-// SetEmailOpenCount sets the "email_open_count" field.
-func (_u *CampaignTargetUpdateOne) SetEmailOpenCount(v int) *CampaignTargetUpdateOne {
-	_u.mutation.ResetEmailOpenCount()
-	_u.mutation.SetEmailOpenCount(v)
-	return _u
-}
-
-// SetNillableEmailOpenCount sets the "email_open_count" field if the given value is not nil.
-func (_u *CampaignTargetUpdateOne) SetNillableEmailOpenCount(v *int) *CampaignTargetUpdateOne {
-	if v != nil {
-		_u.SetEmailOpenCount(*v)
-	}
-	return _u
-}
-
-// AddEmailOpenCount adds value to the "email_open_count" field.
-func (_u *CampaignTargetUpdateOne) AddEmailOpenCount(v int) *CampaignTargetUpdateOne {
-	_u.mutation.AddEmailOpenCount(v)
-	return _u
-}
-
-// ClearEmailOpenCount clears the value of the "email_open_count" field.
-func (_u *CampaignTargetUpdateOne) ClearEmailOpenCount() *CampaignTargetUpdateOne {
-	_u.mutation.ClearEmailOpenCount()
-	return _u
-}
-
-// SetEmailClickCount sets the "email_click_count" field.
-func (_u *CampaignTargetUpdateOne) SetEmailClickCount(v int) *CampaignTargetUpdateOne {
-	_u.mutation.ResetEmailClickCount()
-	_u.mutation.SetEmailClickCount(v)
-	return _u
-}
-
-// SetNillableEmailClickCount sets the "email_click_count" field if the given value is not nil.
-func (_u *CampaignTargetUpdateOne) SetNillableEmailClickCount(v *int) *CampaignTargetUpdateOne {
-	if v != nil {
-		_u.SetEmailClickCount(*v)
-	}
-	return _u
-}
-
-// AddEmailClickCount adds value to the "email_click_count" field.
-func (_u *CampaignTargetUpdateOne) AddEmailClickCount(v int) *CampaignTargetUpdateOne {
-	_u.mutation.AddEmailClickCount(v)
-	return _u
-}
-
-// ClearEmailClickCount clears the value of the "email_click_count" field.
-func (_u *CampaignTargetUpdateOne) ClearEmailClickCount() *CampaignTargetUpdateOne {
-	_u.mutation.ClearEmailClickCount()
-	return _u
-}
-
 // SetCompletedAt sets the "completed_at" field.
 func (_u *CampaignTargetUpdateOne) SetCompletedAt(v models.DateTime) *CampaignTargetUpdateOne {
 	_u.mutation.SetCompletedAt(v)
@@ -1517,36 +1299,6 @@ func (_u *CampaignTargetUpdateOne) sqlSave(ctx context.Context) (_node *Campaign
 	}
 	if _u.mutation.SentAtCleared() {
 		_spec.ClearField(campaigntarget.FieldSentAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.EmailOpenedAt(); ok {
-		_spec.SetField(campaigntarget.FieldEmailOpenedAt, field.TypeTime, value)
-	}
-	if _u.mutation.EmailOpenedAtCleared() {
-		_spec.ClearField(campaigntarget.FieldEmailOpenedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.EmailClickedAt(); ok {
-		_spec.SetField(campaigntarget.FieldEmailClickedAt, field.TypeTime, value)
-	}
-	if _u.mutation.EmailClickedAtCleared() {
-		_spec.ClearField(campaigntarget.FieldEmailClickedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.EmailOpenCount(); ok {
-		_spec.SetField(campaigntarget.FieldEmailOpenCount, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.AddedEmailOpenCount(); ok {
-		_spec.AddField(campaigntarget.FieldEmailOpenCount, field.TypeInt, value)
-	}
-	if _u.mutation.EmailOpenCountCleared() {
-		_spec.ClearField(campaigntarget.FieldEmailOpenCount, field.TypeInt)
-	}
-	if value, ok := _u.mutation.EmailClickCount(); ok {
-		_spec.SetField(campaigntarget.FieldEmailClickCount, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.AddedEmailClickCount(); ok {
-		_spec.AddField(campaigntarget.FieldEmailClickCount, field.TypeInt, value)
-	}
-	if _u.mutation.EmailClickCountCleared() {
-		_spec.ClearField(campaigntarget.FieldEmailClickCount, field.TypeInt)
 	}
 	if value, ok := _u.mutation.CompletedAt(); ok {
 		_spec.SetField(campaigntarget.FieldCompletedAt, field.TypeTime, value)

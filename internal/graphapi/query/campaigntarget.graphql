@@ -7,10 +7,6 @@ mutation CreateBulkCSVCampaignTarget ($input: Upload!) {
 			createdAt
 			createdBy
 			email
-			emailClickCount
-			emailClickedAt
-			emailOpenCount
-			emailOpenedAt
 			fullName
 			groupID
 			id
@@ -36,10 +32,6 @@ mutation CreateBulkCampaignTarget ($input: [CreateCampaignTargetInput!]) {
 			createdAt
 			createdBy
 			email
-			emailClickCount
-			emailClickedAt
-			emailOpenCount
-			emailOpenedAt
 			fullName
 			groupID
 			id
@@ -65,10 +57,6 @@ mutation CreateCampaignTarget ($input: CreateCampaignTargetInput!) {
 			createdAt
 			createdBy
 			email
-			emailClickCount
-			emailClickedAt
-			emailOpenCount
-			emailOpenedAt
 			fullName
 			groupID
 			id
@@ -107,10 +95,6 @@ query GetAllCampaignTargets ($first: Int, $last: Int, $after: Cursor, $before: C
 				createdAt
 				createdBy
 				email
-				emailClickCount
-				emailClickedAt
-				emailOpenCount
-				emailOpenedAt
 				fullName
 				groupID
 				id
@@ -136,10 +120,6 @@ query GetCampaignTargetByID ($campaignTargetId: ID!) {
 		createdAt
 		createdBy
 		email
-		emailClickCount
-		emailClickedAt
-		emailOpenCount
-		emailOpenedAt
 		fullName
 		groupID
 		id
@@ -172,10 +152,6 @@ query GetCampaignTargets ($first: Int, $last: Int, $after: Cursor, $before: Curs
 				createdAt
 				createdBy
 				email
-				emailClickCount
-				emailClickedAt
-				emailOpenCount
-				emailOpenedAt
 				fullName
 				groupID
 				id
@@ -202,10 +178,6 @@ mutation UpdateCampaignTarget ($updateCampaignTargetId: ID!, $input: UpdateCampa
 			createdAt
 			createdBy
 			email
-			emailClickCount
-			emailClickedAt
-			emailOpenCount
-			emailOpenedAt
 			fullName
 			groupID
 			id

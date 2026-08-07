@@ -7329,26 +7329,6 @@ func (_q *CampaignTargetQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, campaigntarget.FieldSentAt)
 				fieldSeen[campaigntarget.FieldSentAt] = struct{}{}
 			}
-		case "emailOpenedAt":
-			if _, ok := fieldSeen[campaigntarget.FieldEmailOpenedAt]; !ok {
-				selectedFields = append(selectedFields, campaigntarget.FieldEmailOpenedAt)
-				fieldSeen[campaigntarget.FieldEmailOpenedAt] = struct{}{}
-			}
-		case "emailClickedAt":
-			if _, ok := fieldSeen[campaigntarget.FieldEmailClickedAt]; !ok {
-				selectedFields = append(selectedFields, campaigntarget.FieldEmailClickedAt)
-				fieldSeen[campaigntarget.FieldEmailClickedAt] = struct{}{}
-			}
-		case "emailOpenCount":
-			if _, ok := fieldSeen[campaigntarget.FieldEmailOpenCount]; !ok {
-				selectedFields = append(selectedFields, campaigntarget.FieldEmailOpenCount)
-				fieldSeen[campaigntarget.FieldEmailOpenCount] = struct{}{}
-			}
-		case "emailClickCount":
-			if _, ok := fieldSeen[campaigntarget.FieldEmailClickCount]; !ok {
-				selectedFields = append(selectedFields, campaigntarget.FieldEmailClickCount)
-				fieldSeen[campaigntarget.FieldEmailClickCount] = struct{}{}
-			}
 		case "completedAt":
 			if _, ok := fieldSeen[campaigntarget.FieldCompletedAt]; !ok {
 				selectedFields = append(selectedFields, campaigntarget.FieldCompletedAt)

@@ -3020,14 +3020,6 @@ type CampaignTarget struct {
 	Status enums.AssessmentResponseStatus `json:"status"`
 	// when the campaign target was last sent a request
 	SentAt *models.DateTime `json:"sentAt,omitempty"`
-	// when the campaign email was opened by the recipient
-	EmailOpenedAt *time.Time `json:"emailOpenedAt,omitempty"`
-	// when a link in the campaign email was clicked by the recipient
-	EmailClickedAt *time.Time `json:"emailClickedAt,omitempty"`
-	// the number of times the campaign email was opened
-	EmailOpenCount *int64 `json:"emailOpenCount,omitempty"`
-	// the number of link clicks for the campaign email
-	EmailClickCount *int64 `json:"emailClickCount,omitempty"`
 	// when the campaign target completed the request
 	CompletedAt *models.DateTime `json:"completedAt,omitempty"`
 	// additional metadata about the campaign target
@@ -3335,50 +3327,6 @@ type CampaignTargetWhereInput struct {
 	SentAtLte    *models.DateTime   `json:"sentAtLTE,omitempty"`
 	SentAtIsNil  *bool              `json:"sentAtIsNil,omitempty"`
 	SentAtNotNil *bool              `json:"sentAtNotNil,omitempty"`
-	// email_opened_at field predicates
-	EmailOpenedAt       *time.Time   `json:"emailOpenedAt,omitempty"`
-	EmailOpenedAtNeq    *time.Time   `json:"emailOpenedAtNEQ,omitempty"`
-	EmailOpenedAtIn     []*time.Time `json:"emailOpenedAtIn,omitempty"`
-	EmailOpenedAtNotIn  []*time.Time `json:"emailOpenedAtNotIn,omitempty"`
-	EmailOpenedAtGt     *time.Time   `json:"emailOpenedAtGT,omitempty"`
-	EmailOpenedAtGte    *time.Time   `json:"emailOpenedAtGTE,omitempty"`
-	EmailOpenedAtLt     *time.Time   `json:"emailOpenedAtLT,omitempty"`
-	EmailOpenedAtLte    *time.Time   `json:"emailOpenedAtLTE,omitempty"`
-	EmailOpenedAtIsNil  *bool        `json:"emailOpenedAtIsNil,omitempty"`
-	EmailOpenedAtNotNil *bool        `json:"emailOpenedAtNotNil,omitempty"`
-	// email_clicked_at field predicates
-	EmailClickedAt       *time.Time   `json:"emailClickedAt,omitempty"`
-	EmailClickedAtNeq    *time.Time   `json:"emailClickedAtNEQ,omitempty"`
-	EmailClickedAtIn     []*time.Time `json:"emailClickedAtIn,omitempty"`
-	EmailClickedAtNotIn  []*time.Time `json:"emailClickedAtNotIn,omitempty"`
-	EmailClickedAtGt     *time.Time   `json:"emailClickedAtGT,omitempty"`
-	EmailClickedAtGte    *time.Time   `json:"emailClickedAtGTE,omitempty"`
-	EmailClickedAtLt     *time.Time   `json:"emailClickedAtLT,omitempty"`
-	EmailClickedAtLte    *time.Time   `json:"emailClickedAtLTE,omitempty"`
-	EmailClickedAtIsNil  *bool        `json:"emailClickedAtIsNil,omitempty"`
-	EmailClickedAtNotNil *bool        `json:"emailClickedAtNotNil,omitempty"`
-	// email_open_count field predicates
-	EmailOpenCount       *int64  `json:"emailOpenCount,omitempty"`
-	EmailOpenCountNeq    *int64  `json:"emailOpenCountNEQ,omitempty"`
-	EmailOpenCountIn     []int64 `json:"emailOpenCountIn,omitempty"`
-	EmailOpenCountNotIn  []int64 `json:"emailOpenCountNotIn,omitempty"`
-	EmailOpenCountGt     *int64  `json:"emailOpenCountGT,omitempty"`
-	EmailOpenCountGte    *int64  `json:"emailOpenCountGTE,omitempty"`
-	EmailOpenCountLt     *int64  `json:"emailOpenCountLT,omitempty"`
-	EmailOpenCountLte    *int64  `json:"emailOpenCountLTE,omitempty"`
-	EmailOpenCountIsNil  *bool   `json:"emailOpenCountIsNil,omitempty"`
-	EmailOpenCountNotNil *bool   `json:"emailOpenCountNotNil,omitempty"`
-	// email_click_count field predicates
-	EmailClickCount       *int64  `json:"emailClickCount,omitempty"`
-	EmailClickCountNeq    *int64  `json:"emailClickCountNEQ,omitempty"`
-	EmailClickCountIn     []int64 `json:"emailClickCountIn,omitempty"`
-	EmailClickCountNotIn  []int64 `json:"emailClickCountNotIn,omitempty"`
-	EmailClickCountGt     *int64  `json:"emailClickCountGT,omitempty"`
-	EmailClickCountGte    *int64  `json:"emailClickCountGTE,omitempty"`
-	EmailClickCountLt     *int64  `json:"emailClickCountLT,omitempty"`
-	EmailClickCountLte    *int64  `json:"emailClickCountLTE,omitempty"`
-	EmailClickCountIsNil  *bool   `json:"emailClickCountIsNil,omitempty"`
-	EmailClickCountNotNil *bool   `json:"emailClickCountNotNil,omitempty"`
 	// completed_at field predicates
 	CompletedAt       *models.DateTime   `json:"completedAt,omitempty"`
 	CompletedAtNeq    *models.DateTime   `json:"completedAtNEQ,omitempty"`
@@ -6959,14 +6907,6 @@ type CreateCampaignTargetInput struct {
 	Status *enums.AssessmentResponseStatus `json:"status,omitempty"`
 	// when the campaign target was last sent a request
 	SentAt *models.DateTime `json:"sentAt,omitempty"`
-	// when the campaign email was opened by the recipient
-	EmailOpenedAt *time.Time `json:"emailOpenedAt,omitempty"`
-	// when a link in the campaign email was clicked by the recipient
-	EmailClickedAt *time.Time `json:"emailClickedAt,omitempty"`
-	// the number of times the campaign email was opened
-	EmailOpenCount *int64 `json:"emailOpenCount,omitempty"`
-	// the number of link clicks for the campaign email
-	EmailClickCount *int64 `json:"emailClickCount,omitempty"`
 	// when the campaign target completed the request
 	CompletedAt *models.DateTime `json:"completedAt,omitempty"`
 	// additional metadata about the campaign target
@@ -42822,18 +42762,6 @@ type UpdateCampaignTargetInput struct {
 	// when the campaign target was last sent a request
 	SentAt      *models.DateTime `json:"sentAt,omitempty"`
 	ClearSentAt *bool            `json:"clearSentAt,omitempty"`
-	// when the campaign email was opened by the recipient
-	EmailOpenedAt      *time.Time `json:"emailOpenedAt,omitempty"`
-	ClearEmailOpenedAt *bool      `json:"clearEmailOpenedAt,omitempty"`
-	// when a link in the campaign email was clicked by the recipient
-	EmailClickedAt      *time.Time `json:"emailClickedAt,omitempty"`
-	ClearEmailClickedAt *bool      `json:"clearEmailClickedAt,omitempty"`
-	// the number of times the campaign email was opened
-	EmailOpenCount      *int64 `json:"emailOpenCount,omitempty"`
-	ClearEmailOpenCount *bool  `json:"clearEmailOpenCount,omitempty"`
-	// the number of link clicks for the campaign email
-	EmailClickCount      *int64 `json:"emailClickCount,omitempty"`
-	ClearEmailClickCount *bool  `json:"clearEmailClickCount,omitempty"`
 	// when the campaign target completed the request
 	CompletedAt      *models.DateTime `json:"completedAt,omitempty"`
 	ClearCompletedAt *bool            `json:"clearCompletedAt,omitempty"`
@@ -54698,17 +54626,13 @@ func (e CampaignOrderField) MarshalJSON() ([]byte, error) {
 type CampaignTargetOrderField string
 
 const (
-	CampaignTargetOrderFieldCreatedAt       CampaignTargetOrderField = "created_at"
-	CampaignTargetOrderFieldUpdatedAt       CampaignTargetOrderField = "updated_at"
-	CampaignTargetOrderFieldEmail           CampaignTargetOrderField = "email"
-	CampaignTargetOrderFieldFullName        CampaignTargetOrderField = "full_name"
-	CampaignTargetOrderFieldStatus          CampaignTargetOrderField = "STATUS"
-	CampaignTargetOrderFieldSentAt          CampaignTargetOrderField = "sent_at"
-	CampaignTargetOrderFieldEmailOpenedAt   CampaignTargetOrderField = "email_opened_at"
-	CampaignTargetOrderFieldEmailClickedAt  CampaignTargetOrderField = "email_clicked_at"
-	CampaignTargetOrderFieldEmailOpenCount  CampaignTargetOrderField = "email_open_count"
-	CampaignTargetOrderFieldEmailClickCount CampaignTargetOrderField = "email_click_count"
-	CampaignTargetOrderFieldCompletedAt     CampaignTargetOrderField = "completed_at"
+	CampaignTargetOrderFieldCreatedAt   CampaignTargetOrderField = "created_at"
+	CampaignTargetOrderFieldUpdatedAt   CampaignTargetOrderField = "updated_at"
+	CampaignTargetOrderFieldEmail       CampaignTargetOrderField = "email"
+	CampaignTargetOrderFieldFullName    CampaignTargetOrderField = "full_name"
+	CampaignTargetOrderFieldStatus      CampaignTargetOrderField = "STATUS"
+	CampaignTargetOrderFieldSentAt      CampaignTargetOrderField = "sent_at"
+	CampaignTargetOrderFieldCompletedAt CampaignTargetOrderField = "completed_at"
 )
 
 var AllCampaignTargetOrderField = []CampaignTargetOrderField{
@@ -54718,16 +54642,12 @@ var AllCampaignTargetOrderField = []CampaignTargetOrderField{
 	CampaignTargetOrderFieldFullName,
 	CampaignTargetOrderFieldStatus,
 	CampaignTargetOrderFieldSentAt,
-	CampaignTargetOrderFieldEmailOpenedAt,
-	CampaignTargetOrderFieldEmailClickedAt,
-	CampaignTargetOrderFieldEmailOpenCount,
-	CampaignTargetOrderFieldEmailClickCount,
 	CampaignTargetOrderFieldCompletedAt,
 }
 
 func (e CampaignTargetOrderField) IsValid() bool {
 	switch e {
-	case CampaignTargetOrderFieldCreatedAt, CampaignTargetOrderFieldUpdatedAt, CampaignTargetOrderFieldEmail, CampaignTargetOrderFieldFullName, CampaignTargetOrderFieldStatus, CampaignTargetOrderFieldSentAt, CampaignTargetOrderFieldEmailOpenedAt, CampaignTargetOrderFieldEmailClickedAt, CampaignTargetOrderFieldEmailOpenCount, CampaignTargetOrderFieldEmailClickCount, CampaignTargetOrderFieldCompletedAt:
+	case CampaignTargetOrderFieldCreatedAt, CampaignTargetOrderFieldUpdatedAt, CampaignTargetOrderFieldEmail, CampaignTargetOrderFieldFullName, CampaignTargetOrderFieldStatus, CampaignTargetOrderFieldSentAt, CampaignTargetOrderFieldCompletedAt:
 		return true
 	}
 	return false

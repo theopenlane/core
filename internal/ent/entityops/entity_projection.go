@@ -259,10 +259,6 @@ type CampaignTargetProjection struct {
 	DeletedAt              time.Time                      `json:"deleted_at,omitempty"`
 	DeletedBy              string                         `json:"deleted_by,omitempty"`
 	Email                  string                         `json:"email,omitempty"`
-	EmailClickCount        int                            `json:"email_click_count,omitempty"`
-	EmailClickedAt         time.Time                      `json:"email_clicked_at,omitempty"`
-	EmailOpenCount         int                            `json:"email_open_count,omitempty"`
-	EmailOpenedAt          time.Time                      `json:"email_opened_at,omitempty"`
 	FullName               string                         `json:"full_name,omitempty"`
 	GroupID                string                         `json:"group_id,omitempty"`
 	Metadata               map[string]interface{}         `json:"metadata,omitempty"`

@@ -224,43 +224,46 @@ func updateCampaignTarget(ctx context.Context, db *ent.Client, targetID, campaig
 	eventTime := parseResendEventTime(event.Data.CreatedAt)
 
 	switch event.Type {
-	case resend.EventEmailSent, resend.EventEmailDelivered:
+	case resend.EventEmailSent:
 		update.SetStatus(enums.AssessmentResponseStatusSent)
 
 		if eventTime != nil {
 			update.SetSentAt(models.DateTime(*eventTime))
 		}
-	case resend.EventEmailOpened:
+	case resend.EventEmailDelivered, resend.EventEmailOpened, resend.EventEmailClicked:
 		update.SetStatus(enums.AssessmentResponseStatusSent)
-
-		if eventTime != nil {
-			update.SetEmailOpenedAt(*eventTime)
-		}
-
-		update.AddEmailOpenCount(1)
-	case resend.EventEmailClicked:
-		update.SetStatus(enums.AssessmentResponseStatusSent)
-
-		if eventTime != nil {
-			update.SetEmailClickedAt(*eventTime)
-		}
-
-		update.AddEmailClickCount(1)
-	case resend.EventEmailBounced, resend.EventEmailFailed:
-		metadata := target.Metadata
-		if metadata == nil {
-			metadata = map[string]any{}
-		}
-
-		metadata["resend_event"] = event.Type
-		metadata["resend_email_id"] = event.Data.EmailID
-		metadata["resend_timestamp"] = event.Data.CreatedAt
-		update.SetMetadata(metadata)
 	}
+
+	update.SetMetadata(getTargetMetadata(target.Metadata, event))
 
 	_, err = update.Save(ctx)
 
 	return err
+}
+
+func getTargetMetadata(metadata map[string]any, event resendWebhookEvent) map[string]any {
+	if metadata == nil {
+		metadata = map[string]any{}
+	}
+
+	metadata["resend_event"] = event.Type
+	metadata["resend_email_id"] = event.Data.EmailID
+	metadata["resend_timestamp"] = event.Data.CreatedAt
+
+	switch event.Type {
+	case resend.EventEmailDelivered:
+		metadata["resend_delivered_at"] = event.Data.CreatedAt
+	case resend.EventEmailOpened:
+		metadata["resend_opened_at"] = event.Data.CreatedAt
+	case resend.EventEmailClicked:
+		metadata["resend_clicked_at"] = event.Data.CreatedAt
+	case resend.EventEmailBounced:
+		metadata["resend_bounced_at"] = event.Data.CreatedAt
+	case resend.EventEmailFailed:
+		metadata["resend_failed_at"] = event.Data.CreatedAt
+	}
+
+	return metadata
 }
 
 // parseResendEventTime parses a Resend timestamp string and returns a time.Time pointer

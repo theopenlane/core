@@ -312,10 +312,6 @@ type ComplexityRoot struct {
 		CreatedAt              func(childComplexity int) int
 		CreatedBy              func(childComplexity int) int
 		Email                  func(childComplexity int) int
-		EmailClickCount        func(childComplexity int) int
-		EmailClickedAt         func(childComplexity int) int
-		EmailOpenCount         func(childComplexity int) int
-		EmailOpenedAt          func(childComplexity int) int
 		FullName               func(childComplexity int) int
 		GroupID                func(childComplexity int) int
 		HistoryTime            func(childComplexity int) int
@@ -4415,30 +4411,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.CampaignTargetHistory.Email(childComplexity), true
-	case "CampaignTargetHistory.emailClickCount":
-		if e.ComplexityRoot.CampaignTargetHistory.EmailClickCount == nil {
-			break
-		}
-
-		return e.ComplexityRoot.CampaignTargetHistory.EmailClickCount(childComplexity), true
-	case "CampaignTargetHistory.emailClickedAt":
-		if e.ComplexityRoot.CampaignTargetHistory.EmailClickedAt == nil {
-			break
-		}
-
-		return e.ComplexityRoot.CampaignTargetHistory.EmailClickedAt(childComplexity), true
-	case "CampaignTargetHistory.emailOpenCount":
-		if e.ComplexityRoot.CampaignTargetHistory.EmailOpenCount == nil {
-			break
-		}
-
-		return e.ComplexityRoot.CampaignTargetHistory.EmailOpenCount(childComplexity), true
-	case "CampaignTargetHistory.emailOpenedAt":
-		if e.ComplexityRoot.CampaignTargetHistory.EmailOpenedAt == nil {
-			break
-		}
-
-		return e.ComplexityRoot.CampaignTargetHistory.EmailOpenedAt(childComplexity), true
 	case "CampaignTargetHistory.fullName":
 		if e.ComplexityRoot.CampaignTargetHistory.FullName == nil {
 			break
@@ -21856,22 +21828,6 @@ type CampaignTargetHistory implements Node {
   """
   sentAt: DateTime
   """
-  when the campaign email was opened by the recipient
-  """
-  emailOpenedAt: Time
-  """
-  when a link in the campaign email was clicked by the recipient
-  """
-  emailClickedAt: Time
-  """
-  the number of times the campaign email was opened
-  """
-  emailOpenCount: Int
-  """
-  the number of link clicks for the campaign email
-  """
-  emailClickCount: Int
-  """
   when the campaign target completed the request
   """
   completedAt: DateTime
@@ -21952,10 +21908,6 @@ enum CampaignTargetHistoryOrderField {
   full_name
   STATUS
   sent_at
-  email_opened_at
-  email_clicked_at
-  email_open_count
-  email_click_count
   completed_at
 }
 """
@@ -22264,58 +22216,6 @@ input CampaignTargetHistoryWhereInput {
   sentAtLTE: DateTime
   sentAtIsNil: Boolean
   sentAtNotNil: Boolean
-  """
-  email_opened_at field predicates
-  """
-  emailOpenedAt: Time
-  emailOpenedAtNEQ: Time
-  emailOpenedAtIn: [Time!]
-  emailOpenedAtNotIn: [Time!]
-  emailOpenedAtGT: Time
-  emailOpenedAtGTE: Time
-  emailOpenedAtLT: Time
-  emailOpenedAtLTE: Time
-  emailOpenedAtIsNil: Boolean
-  emailOpenedAtNotNil: Boolean
-  """
-  email_clicked_at field predicates
-  """
-  emailClickedAt: Time
-  emailClickedAtNEQ: Time
-  emailClickedAtIn: [Time!]
-  emailClickedAtNotIn: [Time!]
-  emailClickedAtGT: Time
-  emailClickedAtGTE: Time
-  emailClickedAtLT: Time
-  emailClickedAtLTE: Time
-  emailClickedAtIsNil: Boolean
-  emailClickedAtNotNil: Boolean
-  """
-  email_open_count field predicates
-  """
-  emailOpenCount: Int
-  emailOpenCountNEQ: Int
-  emailOpenCountIn: [Int!]
-  emailOpenCountNotIn: [Int!]
-  emailOpenCountGT: Int
-  emailOpenCountGTE: Int
-  emailOpenCountLT: Int
-  emailOpenCountLTE: Int
-  emailOpenCountIsNil: Boolean
-  emailOpenCountNotNil: Boolean
-  """
-  email_click_count field predicates
-  """
-  emailClickCount: Int
-  emailClickCountNEQ: Int
-  emailClickCountIn: [Int!]
-  emailClickCountNotIn: [Int!]
-  emailClickCountGT: Int
-  emailClickCountGTE: Int
-  emailClickCountLT: Int
-  emailClickCountLTE: Int
-  emailClickCountIsNil: Boolean
-  emailClickCountNotNil: Boolean
   """
   completed_at field predicates
   """
@@ -58666,14 +58566,6 @@ func (ec *executionContext) childFields_CampaignTargetHistory(ctx context.Contex
 		return ec.fieldContext_CampaignTargetHistory_status(ctx, field)
 	case "sentAt":
 		return ec.fieldContext_CampaignTargetHistory_sentAt(ctx, field)
-	case "emailOpenedAt":
-		return ec.fieldContext_CampaignTargetHistory_emailOpenedAt(ctx, field)
-	case "emailClickedAt":
-		return ec.fieldContext_CampaignTargetHistory_emailClickedAt(ctx, field)
-	case "emailOpenCount":
-		return ec.fieldContext_CampaignTargetHistory_emailOpenCount(ctx, field)
-	case "emailClickCount":
-		return ec.fieldContext_CampaignTargetHistory_emailClickCount(ctx, field)
 	case "completedAt":
 		return ec.fieldContext_CampaignTargetHistory_completedAt(ctx, field)
 	case "metadata":

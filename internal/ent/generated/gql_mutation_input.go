@@ -2678,10 +2678,6 @@ type CreateCampaignTargetInput struct {
 	FullName               *string                         `json:"full_name,omitempty"`
 	Status                 *enums.AssessmentResponseStatus `json:"status,omitempty"`
 	SentAt                 *models.DateTime                `json:"sent_at,omitempty"`
-	EmailOpenedAt          *time.Time                      `json:"email_opened_at,omitempty"`
-	EmailClickedAt         *time.Time                      `json:"email_clicked_at,omitempty"`
-	EmailOpenCount         *int                            `json:"email_open_count,omitempty"`
-	EmailClickCount        *int                            `json:"email_click_count,omitempty"`
 	CompletedAt            *models.DateTime                `json:"completed_at,omitempty"`
 	Metadata               map[string]interface{}          `json:"metadata,omitempty"`
 	OwnerID                *string                         `json:"owner_id,omitempty"`
@@ -2707,18 +2703,6 @@ func (i *CreateCampaignTargetInput) Mutate(m *CampaignTargetMutation) {
 	}
 	if v := i.SentAt; v != nil {
 		m.SetSentAt(*v)
-	}
-	if v := i.EmailOpenedAt; v != nil {
-		m.SetEmailOpenedAt(*v)
-	}
-	if v := i.EmailClickedAt; v != nil {
-		m.SetEmailClickedAt(*v)
-	}
-	if v := i.EmailOpenCount; v != nil {
-		m.SetEmailOpenCount(*v)
-	}
-	if v := i.EmailClickCount; v != nil {
-		m.SetEmailClickCount(*v)
 	}
 	if v := i.CompletedAt; v != nil {
 		m.SetCompletedAt(*v)
@@ -2765,14 +2749,6 @@ type UpdateCampaignTargetInput struct {
 	Status                      *enums.AssessmentResponseStatus `json:"status,omitempty"`
 	ClearSentAt                 bool
 	SentAt                      *models.DateTime `json:"sent_at,omitempty"`
-	ClearEmailOpenedAt          bool
-	EmailOpenedAt               *time.Time `json:"email_opened_at,omitempty"`
-	ClearEmailClickedAt         bool
-	EmailClickedAt              *time.Time `json:"email_clicked_at,omitempty"`
-	ClearEmailOpenCount         bool
-	EmailOpenCount              *int `json:"email_open_count,omitempty"`
-	ClearEmailClickCount        bool
-	EmailClickCount             *int `json:"email_click_count,omitempty"`
 	ClearCompletedAt            bool
 	CompletedAt                 *models.DateTime `json:"completed_at,omitempty"`
 	ClearMetadata               bool
@@ -2815,30 +2791,6 @@ func (i *UpdateCampaignTargetInput) Mutate(m *CampaignTargetMutation) {
 	}
 	if v := i.SentAt; v != nil {
 		m.SetSentAt(*v)
-	}
-	if i.ClearEmailOpenedAt {
-		m.ClearEmailOpenedAt()
-	}
-	if v := i.EmailOpenedAt; v != nil {
-		m.SetEmailOpenedAt(*v)
-	}
-	if i.ClearEmailClickedAt {
-		m.ClearEmailClickedAt()
-	}
-	if v := i.EmailClickedAt; v != nil {
-		m.SetEmailClickedAt(*v)
-	}
-	if i.ClearEmailOpenCount {
-		m.ClearEmailOpenCount()
-	}
-	if v := i.EmailOpenCount; v != nil {
-		m.SetEmailOpenCount(*v)
-	}
-	if i.ClearEmailClickCount {
-		m.ClearEmailClickCount()
-	}
-	if v := i.EmailClickCount; v != nil {
-		m.SetEmailClickCount(*v)
 	}
 	if i.ClearCompletedAt {
 		m.ClearCompletedAt()

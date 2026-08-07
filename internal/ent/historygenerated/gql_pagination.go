@@ -3377,88 +3377,6 @@ var (
 			}
 		},
 	}
-	// CampaignTargetHistoryOrderFieldEmailOpenedAt orders CampaignTargetHistory by email_opened_at.
-	CampaignTargetHistoryOrderFieldEmailOpenedAt = &CampaignTargetHistoryOrderField{
-		Value: func(_m *CampaignTargetHistory) (ent.Value, error) {
-			// allow for nil values for fields
-			if _m.EmailOpenedAt == nil {
-				return nil, nil
-			}
-			return _m.EmailOpenedAt, nil
-		},
-		column: campaigntargethistory.FieldEmailOpenedAt,
-		toTerm: func(opts ...sql.OrderTermOption) campaigntargethistory.OrderOption {
-			opts = append(opts, sql.OrderNullsLast())
-			return campaigntargethistory.ByEmailOpenedAt(opts...)
-		},
-		toCursor: func(_m *CampaignTargetHistory) Cursor {
-			if _m.EmailOpenedAt == nil {
-				return Cursor{
-					ID:    _m.ID,
-					Value: nil, // handle nil values for fields
-				}
-			}
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.EmailOpenedAt,
-			}
-		},
-	}
-	// CampaignTargetHistoryOrderFieldEmailClickedAt orders CampaignTargetHistory by email_clicked_at.
-	CampaignTargetHistoryOrderFieldEmailClickedAt = &CampaignTargetHistoryOrderField{
-		Value: func(_m *CampaignTargetHistory) (ent.Value, error) {
-			// allow for nil values for fields
-			if _m.EmailClickedAt == nil {
-				return nil, nil
-			}
-			return _m.EmailClickedAt, nil
-		},
-		column: campaigntargethistory.FieldEmailClickedAt,
-		toTerm: func(opts ...sql.OrderTermOption) campaigntargethistory.OrderOption {
-			opts = append(opts, sql.OrderNullsLast())
-			return campaigntargethistory.ByEmailClickedAt(opts...)
-		},
-		toCursor: func(_m *CampaignTargetHistory) Cursor {
-			if _m.EmailClickedAt == nil {
-				return Cursor{
-					ID:    _m.ID,
-					Value: nil, // handle nil values for fields
-				}
-			}
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.EmailClickedAt,
-			}
-		},
-	}
-	// CampaignTargetHistoryOrderFieldEmailOpenCount orders CampaignTargetHistory by email_open_count.
-	CampaignTargetHistoryOrderFieldEmailOpenCount = &CampaignTargetHistoryOrderField{
-		Value: func(_m *CampaignTargetHistory) (ent.Value, error) {
-			return _m.EmailOpenCount, nil
-		},
-		column: campaigntargethistory.FieldEmailOpenCount,
-		toTerm: campaigntargethistory.ByEmailOpenCount,
-		toCursor: func(_m *CampaignTargetHistory) Cursor {
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.EmailOpenCount,
-			}
-		},
-	}
-	// CampaignTargetHistoryOrderFieldEmailClickCount orders CampaignTargetHistory by email_click_count.
-	CampaignTargetHistoryOrderFieldEmailClickCount = &CampaignTargetHistoryOrderField{
-		Value: func(_m *CampaignTargetHistory) (ent.Value, error) {
-			return _m.EmailClickCount, nil
-		},
-		column: campaigntargethistory.FieldEmailClickCount,
-		toTerm: campaigntargethistory.ByEmailClickCount,
-		toCursor: func(_m *CampaignTargetHistory) Cursor {
-			return Cursor{
-				ID:    _m.ID,
-				Value: _m.EmailClickCount,
-			}
-		},
-	}
 	// CampaignTargetHistoryOrderFieldCompletedAt orders CampaignTargetHistory by completed_at.
 	CampaignTargetHistoryOrderFieldCompletedAt = &CampaignTargetHistoryOrderField{
 		Value: func(_m *CampaignTargetHistory) (ent.Value, error) {
@@ -3506,14 +3424,6 @@ func (f CampaignTargetHistoryOrderField) String() string {
 		str = "STATUS"
 	case CampaignTargetHistoryOrderFieldSentAt.column:
 		str = "sent_at"
-	case CampaignTargetHistoryOrderFieldEmailOpenedAt.column:
-		str = "email_opened_at"
-	case CampaignTargetHistoryOrderFieldEmailClickedAt.column:
-		str = "email_clicked_at"
-	case CampaignTargetHistoryOrderFieldEmailOpenCount.column:
-		str = "email_open_count"
-	case CampaignTargetHistoryOrderFieldEmailClickCount.column:
-		str = "email_click_count"
 	case CampaignTargetHistoryOrderFieldCompletedAt.column:
 		str = "completed_at"
 	}
@@ -3546,14 +3456,6 @@ func (f *CampaignTargetHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *CampaignTargetHistoryOrderFieldStatus
 	case "sent_at":
 		*f = *CampaignTargetHistoryOrderFieldSentAt
-	case "email_opened_at":
-		*f = *CampaignTargetHistoryOrderFieldEmailOpenedAt
-	case "email_clicked_at":
-		*f = *CampaignTargetHistoryOrderFieldEmailClickedAt
-	case "email_open_count":
-		*f = *CampaignTargetHistoryOrderFieldEmailOpenCount
-	case "email_click_count":
-		*f = *CampaignTargetHistoryOrderFieldEmailClickCount
 	case "completed_at":
 		*f = *CampaignTargetHistoryOrderFieldCompletedAt
 	default:
