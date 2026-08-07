@@ -62,6 +62,14 @@ type CampaignTarget struct {
 	Status enums.AssessmentResponseStatus `json:"status,omitempty"`
 	// when the campaign target was last sent a request
 	SentAt *models.DateTime `json:"sent_at,omitempty"`
+	// when the campaign email was opened by the recipient
+	EmailOpenedAt *time.Time `json:"email_opened_at,omitempty"`
+	// when a link in the campaign email was clicked by the recipient
+	EmailClickedAt *time.Time `json:"email_clicked_at,omitempty"`
+	// the number of times the campaign email was opened
+	EmailOpenCount int `json:"email_open_count,omitempty"`
+	// the number of link clicks for the campaign email
+	EmailClickCount int `json:"email_click_count,omitempty"`
 	// when the campaign target completed the request
 	CompletedAt *models.DateTime `json:"completed_at,omitempty"`
 	// additional metadata about the campaign target
@@ -183,9 +191,11 @@ func (*CampaignTarget) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case campaigntarget.FieldWorkflowEligibleMarker:
 			values[i] = new(sql.NullBool)
+		case campaigntarget.FieldEmailOpenCount, campaigntarget.FieldEmailClickCount:
+			values[i] = new(sql.NullInt64)
 		case campaigntarget.FieldID, campaigntarget.FieldCreatedBy, campaigntarget.FieldUpdatedBy, campaigntarget.FieldUpdatedByImpersonator, campaigntarget.FieldDeletedBy, campaigntarget.FieldOwnerID, campaigntarget.FieldCampaignID, campaigntarget.FieldContactID, campaigntarget.FieldUserID, campaigntarget.FieldGroupID, campaigntarget.FieldSubscriberID, campaigntarget.FieldEmail, campaigntarget.FieldFullName, campaigntarget.FieldStatus:
 			values[i] = new(sql.NullString)
-		case campaigntarget.FieldCreatedAt, campaigntarget.FieldUpdatedAt, campaigntarget.FieldDeletedAt:
+		case campaigntarget.FieldCreatedAt, campaigntarget.FieldUpdatedAt, campaigntarget.FieldDeletedAt, campaigntarget.FieldEmailOpenedAt, campaigntarget.FieldEmailClickedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -317,6 +327,32 @@ func (_m *CampaignTarget) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.SentAt = new(models.DateTime)
 				*_m.SentAt = *value.S.(*models.DateTime)
+			}
+		case campaigntarget.FieldEmailOpenedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field email_opened_at", values[i])
+			} else if value.Valid {
+				_m.EmailOpenedAt = new(time.Time)
+				*_m.EmailOpenedAt = value.Time
+			}
+		case campaigntarget.FieldEmailClickedAt:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field email_clicked_at", values[i])
+			} else if value.Valid {
+				_m.EmailClickedAt = new(time.Time)
+				*_m.EmailClickedAt = value.Time
+			}
+		case campaigntarget.FieldEmailOpenCount:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field email_open_count", values[i])
+			} else if value.Valid {
+				_m.EmailOpenCount = int(value.Int64)
+			}
+		case campaigntarget.FieldEmailClickCount:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field email_click_count", values[i])
+			} else if value.Valid {
+				_m.EmailClickCount = int(value.Int64)
 			}
 		case campaigntarget.FieldCompletedAt:
 			if value, ok := values[i].(*sql.NullScanner); !ok {
@@ -461,6 +497,22 @@ func (_m *CampaignTarget) String() string {
 		builder.WriteString("sent_at=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
+	builder.WriteString(", ")
+	if v := _m.EmailOpenedAt; v != nil {
+		builder.WriteString("email_opened_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
+	if v := _m.EmailClickedAt; v != nil {
+		builder.WriteString("email_clicked_at=")
+		builder.WriteString(v.Format(time.ANSIC))
+	}
+	builder.WriteString(", ")
+	builder.WriteString("email_open_count=")
+	builder.WriteString(fmt.Sprintf("%v", _m.EmailOpenCount))
+	builder.WriteString(", ")
+	builder.WriteString("email_click_count=")
+	builder.WriteString(fmt.Sprintf("%v", _m.EmailClickCount))
 	builder.WriteString(", ")
 	if v := _m.CompletedAt; v != nil {
 		builder.WriteString("completed_at=")

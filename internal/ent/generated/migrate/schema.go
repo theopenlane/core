@@ -724,6 +724,10 @@ var (
 		{Name: "full_name", Type: field.TypeString, Nullable: true},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"NOT_STARTED", "SENT", "COMPLETED", "OVERDUE", "DRAFT"}, Default: "NOT_STARTED"},
 		{Name: "sent_at", Type: field.TypeTime, Nullable: true},
+		{Name: "email_opened_at", Type: field.TypeTime, Nullable: true},
+		{Name: "email_clicked_at", Type: field.TypeTime, Nullable: true},
+		{Name: "email_open_count", Type: field.TypeInt, Nullable: true, Default: 0},
+		{Name: "email_click_count", Type: field.TypeInt, Nullable: true, Default: 0},
 		{Name: "completed_at", Type: field.TypeTime, Nullable: true},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
 		{Name: "campaign_id", Type: field.TypeString, Nullable: true},
@@ -741,37 +745,37 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "campaign_targets_campaigns_campaign_targets",
-				Columns:    []*schema.Column{CampaignTargetsColumns[15]},
+				Columns:    []*schema.Column{CampaignTargetsColumns[19]},
 				RefColumns: []*schema.Column{CampaignsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "campaign_targets_contacts_campaign_targets",
-				Columns:    []*schema.Column{CampaignTargetsColumns[16]},
+				Columns:    []*schema.Column{CampaignTargetsColumns[20]},
 				RefColumns: []*schema.Column{ContactsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "campaign_targets_groups_campaign_targets",
-				Columns:    []*schema.Column{CampaignTargetsColumns[17]},
+				Columns:    []*schema.Column{CampaignTargetsColumns[21]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "campaign_targets_organizations_campaign_targets",
-				Columns:    []*schema.Column{CampaignTargetsColumns[18]},
+				Columns:    []*schema.Column{CampaignTargetsColumns[22]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "campaign_targets_subscribers_campaign_targets",
-				Columns:    []*schema.Column{CampaignTargetsColumns[19]},
+				Columns:    []*schema.Column{CampaignTargetsColumns[23]},
 				RefColumns: []*schema.Column{SubscribersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "campaign_targets_users_campaign_targets",
-				Columns:    []*schema.Column{CampaignTargetsColumns[20]},
+				Columns:    []*schema.Column{CampaignTargetsColumns[24]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -780,12 +784,12 @@ var (
 			{
 				Name:    "campaign_target_owner_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{CampaignTargetsColumns[18]},
+				Columns: []*schema.Column{CampaignTargetsColumns[22]},
 			},
 			{
 				Name:    "campaigntarget_campaign_id_email",
 				Unique:  false,
-				Columns: []*schema.Column{CampaignTargetsColumns[15], CampaignTargetsColumns[9]},
+				Columns: []*schema.Column{CampaignTargetsColumns[19], CampaignTargetsColumns[9]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -798,22 +802,22 @@ var (
 			{
 				Name:    "campaigntarget_contact_id",
 				Unique:  false,
-				Columns: []*schema.Column{CampaignTargetsColumns[16]},
+				Columns: []*schema.Column{CampaignTargetsColumns[20]},
 			},
 			{
 				Name:    "campaigntarget_user_id",
 				Unique:  false,
-				Columns: []*schema.Column{CampaignTargetsColumns[20]},
+				Columns: []*schema.Column{CampaignTargetsColumns[24]},
 			},
 			{
 				Name:    "campaigntarget_group_id",
 				Unique:  false,
-				Columns: []*schema.Column{CampaignTargetsColumns[17]},
+				Columns: []*schema.Column{CampaignTargetsColumns[21]},
 			},
 			{
 				Name:    "campaigntarget_subscriber_id",
 				Unique:  false,
-				Columns: []*schema.Column{CampaignTargetsColumns[19]},
+				Columns: []*schema.Column{CampaignTargetsColumns[23]},
 			},
 		},
 	}

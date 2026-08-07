@@ -23467,6 +23467,12 @@ type CampaignTargetMutation struct {
 	full_name                   *string
 	status                      *enums.AssessmentResponseStatus
 	sent_at                     *models.DateTime
+	email_opened_at             *time.Time
+	email_clicked_at            *time.Time
+	email_open_count            *int
+	addemail_open_count         *int
+	email_click_count           *int
+	addemail_click_count        *int
 	completed_at                *models.DateTime
 	metadata                    *map[string]interface{}
 	clearedFields               map[string]struct{}
@@ -24450,6 +24456,244 @@ func (m *CampaignTargetMutation) ResetSentAt() {
 	delete(m.clearedFields, campaigntarget.FieldSentAt)
 }
 
+// SetEmailOpenedAt sets the "email_opened_at" field.
+func (m *CampaignTargetMutation) SetEmailOpenedAt(t time.Time) {
+	m.email_opened_at = &t
+}
+
+// EmailOpenedAt returns the value of the "email_opened_at" field in the mutation.
+func (m *CampaignTargetMutation) EmailOpenedAt() (r time.Time, exists bool) {
+	v := m.email_opened_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldEmailOpenedAt returns the old "email_opened_at" field's value of the CampaignTarget entity.
+// If the CampaignTarget object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CampaignTargetMutation) OldEmailOpenedAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldEmailOpenedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldEmailOpenedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldEmailOpenedAt: %w", err)
+	}
+	return oldValue.EmailOpenedAt, nil
+}
+
+// ClearEmailOpenedAt clears the value of the "email_opened_at" field.
+func (m *CampaignTargetMutation) ClearEmailOpenedAt() {
+	m.email_opened_at = nil
+	m.clearedFields[campaigntarget.FieldEmailOpenedAt] = struct{}{}
+}
+
+// EmailOpenedAtCleared returns if the "email_opened_at" field was cleared in this mutation.
+func (m *CampaignTargetMutation) EmailOpenedAtCleared() bool {
+	_, ok := m.clearedFields[campaigntarget.FieldEmailOpenedAt]
+	return ok
+}
+
+// ResetEmailOpenedAt resets all changes to the "email_opened_at" field.
+func (m *CampaignTargetMutation) ResetEmailOpenedAt() {
+	m.email_opened_at = nil
+	delete(m.clearedFields, campaigntarget.FieldEmailOpenedAt)
+}
+
+// SetEmailClickedAt sets the "email_clicked_at" field.
+func (m *CampaignTargetMutation) SetEmailClickedAt(t time.Time) {
+	m.email_clicked_at = &t
+}
+
+// EmailClickedAt returns the value of the "email_clicked_at" field in the mutation.
+func (m *CampaignTargetMutation) EmailClickedAt() (r time.Time, exists bool) {
+	v := m.email_clicked_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldEmailClickedAt returns the old "email_clicked_at" field's value of the CampaignTarget entity.
+// If the CampaignTarget object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CampaignTargetMutation) OldEmailClickedAt(ctx context.Context) (v *time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldEmailClickedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldEmailClickedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldEmailClickedAt: %w", err)
+	}
+	return oldValue.EmailClickedAt, nil
+}
+
+// ClearEmailClickedAt clears the value of the "email_clicked_at" field.
+func (m *CampaignTargetMutation) ClearEmailClickedAt() {
+	m.email_clicked_at = nil
+	m.clearedFields[campaigntarget.FieldEmailClickedAt] = struct{}{}
+}
+
+// EmailClickedAtCleared returns if the "email_clicked_at" field was cleared in this mutation.
+func (m *CampaignTargetMutation) EmailClickedAtCleared() bool {
+	_, ok := m.clearedFields[campaigntarget.FieldEmailClickedAt]
+	return ok
+}
+
+// ResetEmailClickedAt resets all changes to the "email_clicked_at" field.
+func (m *CampaignTargetMutation) ResetEmailClickedAt() {
+	m.email_clicked_at = nil
+	delete(m.clearedFields, campaigntarget.FieldEmailClickedAt)
+}
+
+// SetEmailOpenCount sets the "email_open_count" field.
+func (m *CampaignTargetMutation) SetEmailOpenCount(i int) {
+	m.email_open_count = &i
+	m.addemail_open_count = nil
+}
+
+// EmailOpenCount returns the value of the "email_open_count" field in the mutation.
+func (m *CampaignTargetMutation) EmailOpenCount() (r int, exists bool) {
+	v := m.email_open_count
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldEmailOpenCount returns the old "email_open_count" field's value of the CampaignTarget entity.
+// If the CampaignTarget object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CampaignTargetMutation) OldEmailOpenCount(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldEmailOpenCount is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldEmailOpenCount requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldEmailOpenCount: %w", err)
+	}
+	return oldValue.EmailOpenCount, nil
+}
+
+// AddEmailOpenCount adds i to the "email_open_count" field.
+func (m *CampaignTargetMutation) AddEmailOpenCount(i int) {
+	if m.addemail_open_count != nil {
+		*m.addemail_open_count += i
+	} else {
+		m.addemail_open_count = &i
+	}
+}
+
+// AddedEmailOpenCount returns the value that was added to the "email_open_count" field in this mutation.
+func (m *CampaignTargetMutation) AddedEmailOpenCount() (r int, exists bool) {
+	v := m.addemail_open_count
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearEmailOpenCount clears the value of the "email_open_count" field.
+func (m *CampaignTargetMutation) ClearEmailOpenCount() {
+	m.email_open_count = nil
+	m.addemail_open_count = nil
+	m.clearedFields[campaigntarget.FieldEmailOpenCount] = struct{}{}
+}
+
+// EmailOpenCountCleared returns if the "email_open_count" field was cleared in this mutation.
+func (m *CampaignTargetMutation) EmailOpenCountCleared() bool {
+	_, ok := m.clearedFields[campaigntarget.FieldEmailOpenCount]
+	return ok
+}
+
+// ResetEmailOpenCount resets all changes to the "email_open_count" field.
+func (m *CampaignTargetMutation) ResetEmailOpenCount() {
+	m.email_open_count = nil
+	m.addemail_open_count = nil
+	delete(m.clearedFields, campaigntarget.FieldEmailOpenCount)
+}
+
+// SetEmailClickCount sets the "email_click_count" field.
+func (m *CampaignTargetMutation) SetEmailClickCount(i int) {
+	m.email_click_count = &i
+	m.addemail_click_count = nil
+}
+
+// EmailClickCount returns the value of the "email_click_count" field in the mutation.
+func (m *CampaignTargetMutation) EmailClickCount() (r int, exists bool) {
+	v := m.email_click_count
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldEmailClickCount returns the old "email_click_count" field's value of the CampaignTarget entity.
+// If the CampaignTarget object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *CampaignTargetMutation) OldEmailClickCount(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldEmailClickCount is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldEmailClickCount requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldEmailClickCount: %w", err)
+	}
+	return oldValue.EmailClickCount, nil
+}
+
+// AddEmailClickCount adds i to the "email_click_count" field.
+func (m *CampaignTargetMutation) AddEmailClickCount(i int) {
+	if m.addemail_click_count != nil {
+		*m.addemail_click_count += i
+	} else {
+		m.addemail_click_count = &i
+	}
+}
+
+// AddedEmailClickCount returns the value that was added to the "email_click_count" field in this mutation.
+func (m *CampaignTargetMutation) AddedEmailClickCount() (r int, exists bool) {
+	v := m.addemail_click_count
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ClearEmailClickCount clears the value of the "email_click_count" field.
+func (m *CampaignTargetMutation) ClearEmailClickCount() {
+	m.email_click_count = nil
+	m.addemail_click_count = nil
+	m.clearedFields[campaigntarget.FieldEmailClickCount] = struct{}{}
+}
+
+// EmailClickCountCleared returns if the "email_click_count" field was cleared in this mutation.
+func (m *CampaignTargetMutation) EmailClickCountCleared() bool {
+	_, ok := m.clearedFields[campaigntarget.FieldEmailClickCount]
+	return ok
+}
+
+// ResetEmailClickCount resets all changes to the "email_click_count" field.
+func (m *CampaignTargetMutation) ResetEmailClickCount() {
+	m.email_click_count = nil
+	m.addemail_click_count = nil
+	delete(m.clearedFields, campaigntarget.FieldEmailClickCount)
+}
+
 // SetCompletedAt sets the "completed_at" field.
 func (m *CampaignTargetMutation) SetCompletedAt(mt models.DateTime) {
 	m.completed_at = &mt
@@ -24798,7 +25042,7 @@ func (m *CampaignTargetMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *CampaignTargetMutation) Fields() []string {
-	fields := make([]string, 0, 20)
+	fields := make([]string, 0, 24)
 	if m.created_at != nil {
 		fields = append(fields, campaigntarget.FieldCreatedAt)
 	}
@@ -24853,6 +25097,18 @@ func (m *CampaignTargetMutation) Fields() []string {
 	if m.sent_at != nil {
 		fields = append(fields, campaigntarget.FieldSentAt)
 	}
+	if m.email_opened_at != nil {
+		fields = append(fields, campaigntarget.FieldEmailOpenedAt)
+	}
+	if m.email_clicked_at != nil {
+		fields = append(fields, campaigntarget.FieldEmailClickedAt)
+	}
+	if m.email_open_count != nil {
+		fields = append(fields, campaigntarget.FieldEmailOpenCount)
+	}
+	if m.email_click_count != nil {
+		fields = append(fields, campaigntarget.FieldEmailClickCount)
+	}
 	if m.completed_at != nil {
 		fields = append(fields, campaigntarget.FieldCompletedAt)
 	}
@@ -24903,6 +25159,14 @@ func (m *CampaignTargetMutation) Field(name string) (ent.Value, bool) {
 		return m.Status()
 	case campaigntarget.FieldSentAt:
 		return m.SentAt()
+	case campaigntarget.FieldEmailOpenedAt:
+		return m.EmailOpenedAt()
+	case campaigntarget.FieldEmailClickedAt:
+		return m.EmailClickedAt()
+	case campaigntarget.FieldEmailOpenCount:
+		return m.EmailOpenCount()
+	case campaigntarget.FieldEmailClickCount:
+		return m.EmailClickCount()
 	case campaigntarget.FieldCompletedAt:
 		return m.CompletedAt()
 	case campaigntarget.FieldMetadata:
@@ -24952,6 +25216,14 @@ func (m *CampaignTargetMutation) OldField(ctx context.Context, name string) (ent
 		return m.OldStatus(ctx)
 	case campaigntarget.FieldSentAt:
 		return m.OldSentAt(ctx)
+	case campaigntarget.FieldEmailOpenedAt:
+		return m.OldEmailOpenedAt(ctx)
+	case campaigntarget.FieldEmailClickedAt:
+		return m.OldEmailClickedAt(ctx)
+	case campaigntarget.FieldEmailOpenCount:
+		return m.OldEmailOpenCount(ctx)
+	case campaigntarget.FieldEmailClickCount:
+		return m.OldEmailClickCount(ctx)
 	case campaigntarget.FieldCompletedAt:
 		return m.OldCompletedAt(ctx)
 	case campaigntarget.FieldMetadata:
@@ -25091,6 +25363,34 @@ func (m *CampaignTargetMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetSentAt(v)
 		return nil
+	case campaigntarget.FieldEmailOpenedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetEmailOpenedAt(v)
+		return nil
+	case campaigntarget.FieldEmailClickedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetEmailClickedAt(v)
+		return nil
+	case campaigntarget.FieldEmailOpenCount:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetEmailOpenCount(v)
+		return nil
+	case campaigntarget.FieldEmailClickCount:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetEmailClickCount(v)
+		return nil
 	case campaigntarget.FieldCompletedAt:
 		v, ok := value.(models.DateTime)
 		if !ok {
@@ -25112,13 +25412,26 @@ func (m *CampaignTargetMutation) SetField(name string, value ent.Value) error {
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
 func (m *CampaignTargetMutation) AddedFields() []string {
-	return nil
+	var fields []string
+	if m.addemail_open_count != nil {
+		fields = append(fields, campaigntarget.FieldEmailOpenCount)
+	}
+	if m.addemail_click_count != nil {
+		fields = append(fields, campaigntarget.FieldEmailClickCount)
+	}
+	return fields
 }
 
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
 func (m *CampaignTargetMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case campaigntarget.FieldEmailOpenCount:
+		return m.AddedEmailOpenCount()
+	case campaigntarget.FieldEmailClickCount:
+		return m.AddedEmailClickCount()
+	}
 	return nil, false
 }
 
@@ -25127,6 +25440,20 @@ func (m *CampaignTargetMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *CampaignTargetMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case campaigntarget.FieldEmailOpenCount:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddEmailOpenCount(v)
+		return nil
+	case campaigntarget.FieldEmailClickCount:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddEmailClickCount(v)
+		return nil
 	}
 	return fmt.Errorf("unknown CampaignTarget numeric field %s", name)
 }
@@ -25182,6 +25509,18 @@ func (m *CampaignTargetMutation) ClearedFields() []string {
 	}
 	if m.FieldCleared(campaigntarget.FieldSentAt) {
 		fields = append(fields, campaigntarget.FieldSentAt)
+	}
+	if m.FieldCleared(campaigntarget.FieldEmailOpenedAt) {
+		fields = append(fields, campaigntarget.FieldEmailOpenedAt)
+	}
+	if m.FieldCleared(campaigntarget.FieldEmailClickedAt) {
+		fields = append(fields, campaigntarget.FieldEmailClickedAt)
+	}
+	if m.FieldCleared(campaigntarget.FieldEmailOpenCount) {
+		fields = append(fields, campaigntarget.FieldEmailOpenCount)
+	}
+	if m.FieldCleared(campaigntarget.FieldEmailClickCount) {
+		fields = append(fields, campaigntarget.FieldEmailClickCount)
 	}
 	if m.FieldCleared(campaigntarget.FieldCompletedAt) {
 		fields = append(fields, campaigntarget.FieldCompletedAt)
@@ -25251,6 +25590,18 @@ func (m *CampaignTargetMutation) ClearField(name string) error {
 	case campaigntarget.FieldSentAt:
 		m.ClearSentAt()
 		return nil
+	case campaigntarget.FieldEmailOpenedAt:
+		m.ClearEmailOpenedAt()
+		return nil
+	case campaigntarget.FieldEmailClickedAt:
+		m.ClearEmailClickedAt()
+		return nil
+	case campaigntarget.FieldEmailOpenCount:
+		m.ClearEmailOpenCount()
+		return nil
+	case campaigntarget.FieldEmailClickCount:
+		m.ClearEmailClickCount()
+		return nil
 	case campaigntarget.FieldCompletedAt:
 		m.ClearCompletedAt()
 		return nil
@@ -25318,6 +25669,18 @@ func (m *CampaignTargetMutation) ResetField(name string) error {
 		return nil
 	case campaigntarget.FieldSentAt:
 		m.ResetSentAt()
+		return nil
+	case campaigntarget.FieldEmailOpenedAt:
+		m.ResetEmailOpenedAt()
+		return nil
+	case campaigntarget.FieldEmailClickedAt:
+		m.ResetEmailClickedAt()
+		return nil
+	case campaigntarget.FieldEmailOpenCount:
+		m.ResetEmailOpenCount()
+		return nil
+	case campaigntarget.FieldEmailClickCount:
+		m.ResetEmailClickCount()
 		return nil
 	case campaigntarget.FieldCompletedAt:
 		m.ResetCompletedAt()

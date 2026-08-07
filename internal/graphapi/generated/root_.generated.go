@@ -635,6 +635,10 @@ type ComplexityRoot struct {
 		CreatedAt               func(childComplexity int) int
 		CreatedBy               func(childComplexity int) int
 		Email                   func(childComplexity int) int
+		EmailClickCount         func(childComplexity int) int
+		EmailClickedAt          func(childComplexity int) int
+		EmailOpenCount          func(childComplexity int) int
+		EmailOpenedAt           func(childComplexity int) int
 		FullName                func(childComplexity int) int
 		Group                   func(childComplexity int) int
 		GroupID                 func(childComplexity int) int
@@ -11001,6 +11005,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.CampaignTarget.Email(childComplexity), true
+	case "CampaignTarget.emailClickCount":
+		if e.ComplexityRoot.CampaignTarget.EmailClickCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CampaignTarget.EmailClickCount(childComplexity), true
+	case "CampaignTarget.emailClickedAt":
+		if e.ComplexityRoot.CampaignTarget.EmailClickedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CampaignTarget.EmailClickedAt(childComplexity), true
+	case "CampaignTarget.emailOpenCount":
+		if e.ComplexityRoot.CampaignTarget.EmailOpenCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CampaignTarget.EmailOpenCount(childComplexity), true
+	case "CampaignTarget.emailOpenedAt":
+		if e.ComplexityRoot.CampaignTarget.EmailOpenedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CampaignTarget.EmailOpenedAt(childComplexity), true
 	case "CampaignTarget.fullName":
 		if e.ComplexityRoot.CampaignTarget.FullName == nil {
 			break
@@ -62616,6 +62644,22 @@ type CampaignTarget implements Node @modules(names: ["compliance_module","trust_
   """
   sentAt: DateTime
   """
+  when the campaign email was opened by the recipient
+  """
+  emailOpenedAt: Time
+  """
+  when a link in the campaign email was clicked by the recipient
+  """
+  emailClickedAt: Time
+  """
+  the number of times the campaign email was opened
+  """
+  emailOpenCount: Int
+  """
+  the number of link clicks for the campaign email
+  """
+  emailClickCount: Int
+  """
   when the campaign target completed the request
   """
   completedAt: DateTime
@@ -62724,6 +62768,10 @@ enum CampaignTargetOrderField {
   full_name
   STATUS
   sent_at
+  email_opened_at
+  email_clicked_at
+  email_open_count
+  email_click_count
   completed_at
 }
 """
@@ -62996,6 +63044,58 @@ input CampaignTargetWhereInput {
   sentAtLTE: DateTime
   sentAtIsNil: Boolean
   sentAtNotNil: Boolean
+  """
+  email_opened_at field predicates
+  """
+  emailOpenedAt: Time
+  emailOpenedAtNEQ: Time
+  emailOpenedAtIn: [Time!]
+  emailOpenedAtNotIn: [Time!]
+  emailOpenedAtGT: Time
+  emailOpenedAtGTE: Time
+  emailOpenedAtLT: Time
+  emailOpenedAtLTE: Time
+  emailOpenedAtIsNil: Boolean
+  emailOpenedAtNotNil: Boolean
+  """
+  email_clicked_at field predicates
+  """
+  emailClickedAt: Time
+  emailClickedAtNEQ: Time
+  emailClickedAtIn: [Time!]
+  emailClickedAtNotIn: [Time!]
+  emailClickedAtGT: Time
+  emailClickedAtGTE: Time
+  emailClickedAtLT: Time
+  emailClickedAtLTE: Time
+  emailClickedAtIsNil: Boolean
+  emailClickedAtNotNil: Boolean
+  """
+  email_open_count field predicates
+  """
+  emailOpenCount: Int
+  emailOpenCountNEQ: Int
+  emailOpenCountIn: [Int!]
+  emailOpenCountNotIn: [Int!]
+  emailOpenCountGT: Int
+  emailOpenCountGTE: Int
+  emailOpenCountLT: Int
+  emailOpenCountLTE: Int
+  emailOpenCountIsNil: Boolean
+  emailOpenCountNotNil: Boolean
+  """
+  email_click_count field predicates
+  """
+  emailClickCount: Int
+  emailClickCountNEQ: Int
+  emailClickCountIn: [Int!]
+  emailClickCountNotIn: [Int!]
+  emailClickCountGT: Int
+  emailClickCountGTE: Int
+  emailClickCountLT: Int
+  emailClickCountLTE: Int
+  emailClickCountIsNil: Boolean
+  emailClickCountNotNil: Boolean
   """
   completed_at field predicates
   """
@@ -68951,6 +69051,22 @@ input CreateCampaignTargetInput {
   when the campaign target was last sent a request
   """
   sentAt: DateTime
+  """
+  when the campaign email was opened by the recipient
+  """
+  emailOpenedAt: Time
+  """
+  when a link in the campaign email was clicked by the recipient
+  """
+  emailClickedAt: Time
+  """
+  the number of times the campaign email was opened
+  """
+  emailOpenCount: Int
+  """
+  the number of link clicks for the campaign email
+  """
+  emailClickCount: Int
   """
   when the campaign target completed the request
   """
@@ -136149,6 +136265,26 @@ input UpdateCampaignTargetInput {
   sentAt: DateTime
   clearSentAt: Boolean
   """
+  when the campaign email was opened by the recipient
+  """
+  emailOpenedAt: Time
+  clearEmailOpenedAt: Boolean
+  """
+  when a link in the campaign email was clicked by the recipient
+  """
+  emailClickedAt: Time
+  clearEmailClickedAt: Boolean
+  """
+  the number of times the campaign email was opened
+  """
+  emailOpenCount: Int
+  clearEmailOpenCount: Boolean
+  """
+  the number of link clicks for the campaign email
+  """
+  emailClickCount: Int
+  clearEmailClickCount: Boolean
+  """
   when the campaign target completed the request
   """
   completedAt: DateTime
@@ -166187,6 +166323,14 @@ func (ec *executionContext) childFields_CampaignTarget(ctx context.Context, fiel
 		return ec.fieldContext_CampaignTarget_status(ctx, field)
 	case "sentAt":
 		return ec.fieldContext_CampaignTarget_sentAt(ctx, field)
+	case "emailOpenedAt":
+		return ec.fieldContext_CampaignTarget_emailOpenedAt(ctx, field)
+	case "emailClickedAt":
+		return ec.fieldContext_CampaignTarget_emailClickedAt(ctx, field)
+	case "emailOpenCount":
+		return ec.fieldContext_CampaignTarget_emailOpenCount(ctx, field)
+	case "emailClickCount":
+		return ec.fieldContext_CampaignTarget_emailClickCount(ctx, field)
 	case "completedAt":
 		return ec.fieldContext_CampaignTarget_completedAt(ctx, field)
 	case "metadata":

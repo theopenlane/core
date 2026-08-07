@@ -325,6 +325,10 @@ var (
 		{Name: "full_name", Type: field.TypeString, Nullable: true},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"NOT_STARTED", "SENT", "COMPLETED", "OVERDUE", "DRAFT"}, Default: "NOT_STARTED"},
 		{Name: "sent_at", Type: field.TypeTime, Nullable: true},
+		{Name: "email_opened_at", Type: field.TypeTime, Nullable: true},
+		{Name: "email_clicked_at", Type: field.TypeTime, Nullable: true},
+		{Name: "email_open_count", Type: field.TypeInt, Nullable: true, Default: 0},
+		{Name: "email_click_count", Type: field.TypeInt, Nullable: true, Default: 0},
 		{Name: "completed_at", Type: field.TypeTime, Nullable: true},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
 	}

@@ -107,6 +107,34 @@ func (CampaignTarget) Fields() []ent.Field {
 				entgql.OrderField("sent_at"),
 				entx.FieldWorkflowEligible(),
 			),
+		field.Time("email_opened_at").
+			Comment("when the campaign email was opened by the recipient").
+			Optional().
+			Nillable().
+			Annotations(
+				entgql.OrderField("email_opened_at"),
+			),
+		field.Time("email_clicked_at").
+			Comment("when a link in the campaign email was clicked by the recipient").
+			Optional().
+			Nillable().
+			Annotations(
+				entgql.OrderField("email_clicked_at"),
+			),
+		field.Int("email_open_count").
+			Comment("the number of times the campaign email was opened").
+			Default(0).
+			Optional().
+			Annotations(
+				entgql.OrderField("email_open_count"),
+			),
+		field.Int("email_click_count").
+			Comment("the number of link clicks for the campaign email").
+			Default(0).
+			Optional().
+			Annotations(
+				entgql.OrderField("email_click_count"),
+			),
 		field.Time("completed_at").
 			Comment("when the campaign target completed the request").
 			GoType(models.DateTime{}).

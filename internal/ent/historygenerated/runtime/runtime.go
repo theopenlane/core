@@ -413,6 +413,14 @@ func init() {
 	campaigntargethistoryDescWorkflowEligibleMarker := campaigntargethistoryFields[12].Descriptor()
 	// campaigntargethistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
 	campaigntargethistory.DefaultWorkflowEligibleMarker = campaigntargethistoryDescWorkflowEligibleMarker.Default.(bool)
+	// campaigntargethistoryDescEmailOpenCount is the schema descriptor for email_open_count field.
+	campaigntargethistoryDescEmailOpenCount := campaigntargethistoryFields[24].Descriptor()
+	// campaigntargethistory.DefaultEmailOpenCount holds the default value on creation for the email_open_count field.
+	campaigntargethistory.DefaultEmailOpenCount = campaigntargethistoryDescEmailOpenCount.Default.(int)
+	// campaigntargethistoryDescEmailClickCount is the schema descriptor for email_click_count field.
+	campaigntargethistoryDescEmailClickCount := campaigntargethistoryFields[25].Descriptor()
+	// campaigntargethistory.DefaultEmailClickCount holds the default value on creation for the email_click_count field.
+	campaigntargethistory.DefaultEmailClickCount = campaigntargethistoryDescEmailClickCount.Default.(int)
 	// campaigntargethistoryDescID is the schema descriptor for id field.
 	campaigntargethistoryDescID := campaigntargethistoryFields[10].Descriptor()
 	// campaigntargethistory.DefaultID holds the default value on creation for the id field.

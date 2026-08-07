@@ -273,6 +273,62 @@ func (_c *CampaignTargetCreate) SetNillableSentAt(v *models.DateTime) *CampaignT
 	return _c
 }
 
+// SetEmailOpenedAt sets the "email_opened_at" field.
+func (_c *CampaignTargetCreate) SetEmailOpenedAt(v time.Time) *CampaignTargetCreate {
+	_c.mutation.SetEmailOpenedAt(v)
+	return _c
+}
+
+// SetNillableEmailOpenedAt sets the "email_opened_at" field if the given value is not nil.
+func (_c *CampaignTargetCreate) SetNillableEmailOpenedAt(v *time.Time) *CampaignTargetCreate {
+	if v != nil {
+		_c.SetEmailOpenedAt(*v)
+	}
+	return _c
+}
+
+// SetEmailClickedAt sets the "email_clicked_at" field.
+func (_c *CampaignTargetCreate) SetEmailClickedAt(v time.Time) *CampaignTargetCreate {
+	_c.mutation.SetEmailClickedAt(v)
+	return _c
+}
+
+// SetNillableEmailClickedAt sets the "email_clicked_at" field if the given value is not nil.
+func (_c *CampaignTargetCreate) SetNillableEmailClickedAt(v *time.Time) *CampaignTargetCreate {
+	if v != nil {
+		_c.SetEmailClickedAt(*v)
+	}
+	return _c
+}
+
+// SetEmailOpenCount sets the "email_open_count" field.
+func (_c *CampaignTargetCreate) SetEmailOpenCount(v int) *CampaignTargetCreate {
+	_c.mutation.SetEmailOpenCount(v)
+	return _c
+}
+
+// SetNillableEmailOpenCount sets the "email_open_count" field if the given value is not nil.
+func (_c *CampaignTargetCreate) SetNillableEmailOpenCount(v *int) *CampaignTargetCreate {
+	if v != nil {
+		_c.SetEmailOpenCount(*v)
+	}
+	return _c
+}
+
+// SetEmailClickCount sets the "email_click_count" field.
+func (_c *CampaignTargetCreate) SetEmailClickCount(v int) *CampaignTargetCreate {
+	_c.mutation.SetEmailClickCount(v)
+	return _c
+}
+
+// SetNillableEmailClickCount sets the "email_click_count" field if the given value is not nil.
+func (_c *CampaignTargetCreate) SetNillableEmailClickCount(v *int) *CampaignTargetCreate {
+	if v != nil {
+		_c.SetEmailClickCount(*v)
+	}
+	return _c
+}
+
 // SetCompletedAt sets the "completed_at" field.
 func (_c *CampaignTargetCreate) SetCompletedAt(v models.DateTime) *CampaignTargetCreate {
 	_c.mutation.SetCompletedAt(v)
@@ -411,6 +467,14 @@ func (_c *CampaignTargetCreate) defaults() error {
 		v := campaigntarget.DefaultStatus
 		_c.mutation.SetStatus(v)
 	}
+	if _, ok := _c.mutation.EmailOpenCount(); !ok {
+		v := campaigntarget.DefaultEmailOpenCount
+		_c.mutation.SetEmailOpenCount(v)
+	}
+	if _, ok := _c.mutation.EmailClickCount(); !ok {
+		v := campaigntarget.DefaultEmailClickCount
+		_c.mutation.SetEmailClickCount(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if campaigntarget.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized campaigntarget.DefaultID (forgotten import generated/runtime?)")
@@ -532,6 +596,22 @@ func (_c *CampaignTargetCreate) createSpec() (*CampaignTarget, *sqlgraph.CreateS
 	if value, ok := _c.mutation.SentAt(); ok {
 		_spec.SetField(campaigntarget.FieldSentAt, field.TypeTime, value)
 		_node.SentAt = &value
+	}
+	if value, ok := _c.mutation.EmailOpenedAt(); ok {
+		_spec.SetField(campaigntarget.FieldEmailOpenedAt, field.TypeTime, value)
+		_node.EmailOpenedAt = &value
+	}
+	if value, ok := _c.mutation.EmailClickedAt(); ok {
+		_spec.SetField(campaigntarget.FieldEmailClickedAt, field.TypeTime, value)
+		_node.EmailClickedAt = &value
+	}
+	if value, ok := _c.mutation.EmailOpenCount(); ok {
+		_spec.SetField(campaigntarget.FieldEmailOpenCount, field.TypeInt, value)
+		_node.EmailOpenCount = value
+	}
+	if value, ok := _c.mutation.EmailClickCount(); ok {
+		_spec.SetField(campaigntarget.FieldEmailClickCount, field.TypeInt, value)
+		_node.EmailClickCount = value
 	}
 	if value, ok := _c.mutation.CompletedAt(); ok {
 		_spec.SetField(campaigntarget.FieldCompletedAt, field.TypeTime, value)

@@ -154,6 +154,26 @@ func SentAt(v models.DateTime) predicate.CampaignTarget {
 	return predicate.CampaignTarget(sql.FieldEQ(FieldSentAt, v))
 }
 
+// EmailOpenedAt applies equality check predicate on the "email_opened_at" field. It's identical to EmailOpenedAtEQ.
+func EmailOpenedAt(v time.Time) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldEQ(FieldEmailOpenedAt, v))
+}
+
+// EmailClickedAt applies equality check predicate on the "email_clicked_at" field. It's identical to EmailClickedAtEQ.
+func EmailClickedAt(v time.Time) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldEQ(FieldEmailClickedAt, v))
+}
+
+// EmailOpenCount applies equality check predicate on the "email_open_count" field. It's identical to EmailOpenCountEQ.
+func EmailOpenCount(v int) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldEQ(FieldEmailOpenCount, v))
+}
+
+// EmailClickCount applies equality check predicate on the "email_click_count" field. It's identical to EmailClickCountEQ.
+func EmailClickCount(v int) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldEQ(FieldEmailClickCount, v))
+}
+
 // CompletedAt applies equality check predicate on the "completed_at" field. It's identical to CompletedAtEQ.
 func CompletedAt(v models.DateTime) predicate.CampaignTarget {
 	return predicate.CampaignTarget(sql.FieldEQ(FieldCompletedAt, v))
@@ -1297,6 +1317,206 @@ func SentAtIsNil() predicate.CampaignTarget {
 // SentAtNotNil applies the NotNil predicate on the "sent_at" field.
 func SentAtNotNil() predicate.CampaignTarget {
 	return predicate.CampaignTarget(sql.FieldNotNull(FieldSentAt))
+}
+
+// EmailOpenedAtEQ applies the EQ predicate on the "email_opened_at" field.
+func EmailOpenedAtEQ(v time.Time) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldEQ(FieldEmailOpenedAt, v))
+}
+
+// EmailOpenedAtNEQ applies the NEQ predicate on the "email_opened_at" field.
+func EmailOpenedAtNEQ(v time.Time) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldNEQ(FieldEmailOpenedAt, v))
+}
+
+// EmailOpenedAtIn applies the In predicate on the "email_opened_at" field.
+func EmailOpenedAtIn(vs ...time.Time) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldIn(FieldEmailOpenedAt, vs...))
+}
+
+// EmailOpenedAtNotIn applies the NotIn predicate on the "email_opened_at" field.
+func EmailOpenedAtNotIn(vs ...time.Time) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldNotIn(FieldEmailOpenedAt, vs...))
+}
+
+// EmailOpenedAtGT applies the GT predicate on the "email_opened_at" field.
+func EmailOpenedAtGT(v time.Time) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldGT(FieldEmailOpenedAt, v))
+}
+
+// EmailOpenedAtGTE applies the GTE predicate on the "email_opened_at" field.
+func EmailOpenedAtGTE(v time.Time) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldGTE(FieldEmailOpenedAt, v))
+}
+
+// EmailOpenedAtLT applies the LT predicate on the "email_opened_at" field.
+func EmailOpenedAtLT(v time.Time) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldLT(FieldEmailOpenedAt, v))
+}
+
+// EmailOpenedAtLTE applies the LTE predicate on the "email_opened_at" field.
+func EmailOpenedAtLTE(v time.Time) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldLTE(FieldEmailOpenedAt, v))
+}
+
+// EmailOpenedAtIsNil applies the IsNil predicate on the "email_opened_at" field.
+func EmailOpenedAtIsNil() predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldIsNull(FieldEmailOpenedAt))
+}
+
+// EmailOpenedAtNotNil applies the NotNil predicate on the "email_opened_at" field.
+func EmailOpenedAtNotNil() predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldNotNull(FieldEmailOpenedAt))
+}
+
+// EmailClickedAtEQ applies the EQ predicate on the "email_clicked_at" field.
+func EmailClickedAtEQ(v time.Time) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldEQ(FieldEmailClickedAt, v))
+}
+
+// EmailClickedAtNEQ applies the NEQ predicate on the "email_clicked_at" field.
+func EmailClickedAtNEQ(v time.Time) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldNEQ(FieldEmailClickedAt, v))
+}
+
+// EmailClickedAtIn applies the In predicate on the "email_clicked_at" field.
+func EmailClickedAtIn(vs ...time.Time) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldIn(FieldEmailClickedAt, vs...))
+}
+
+// EmailClickedAtNotIn applies the NotIn predicate on the "email_clicked_at" field.
+func EmailClickedAtNotIn(vs ...time.Time) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldNotIn(FieldEmailClickedAt, vs...))
+}
+
+// EmailClickedAtGT applies the GT predicate on the "email_clicked_at" field.
+func EmailClickedAtGT(v time.Time) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldGT(FieldEmailClickedAt, v))
+}
+
+// EmailClickedAtGTE applies the GTE predicate on the "email_clicked_at" field.
+func EmailClickedAtGTE(v time.Time) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldGTE(FieldEmailClickedAt, v))
+}
+
+// EmailClickedAtLT applies the LT predicate on the "email_clicked_at" field.
+func EmailClickedAtLT(v time.Time) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldLT(FieldEmailClickedAt, v))
+}
+
+// EmailClickedAtLTE applies the LTE predicate on the "email_clicked_at" field.
+func EmailClickedAtLTE(v time.Time) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldLTE(FieldEmailClickedAt, v))
+}
+
+// EmailClickedAtIsNil applies the IsNil predicate on the "email_clicked_at" field.
+func EmailClickedAtIsNil() predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldIsNull(FieldEmailClickedAt))
+}
+
+// EmailClickedAtNotNil applies the NotNil predicate on the "email_clicked_at" field.
+func EmailClickedAtNotNil() predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldNotNull(FieldEmailClickedAt))
+}
+
+// EmailOpenCountEQ applies the EQ predicate on the "email_open_count" field.
+func EmailOpenCountEQ(v int) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldEQ(FieldEmailOpenCount, v))
+}
+
+// EmailOpenCountNEQ applies the NEQ predicate on the "email_open_count" field.
+func EmailOpenCountNEQ(v int) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldNEQ(FieldEmailOpenCount, v))
+}
+
+// EmailOpenCountIn applies the In predicate on the "email_open_count" field.
+func EmailOpenCountIn(vs ...int) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldIn(FieldEmailOpenCount, vs...))
+}
+
+// EmailOpenCountNotIn applies the NotIn predicate on the "email_open_count" field.
+func EmailOpenCountNotIn(vs ...int) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldNotIn(FieldEmailOpenCount, vs...))
+}
+
+// EmailOpenCountGT applies the GT predicate on the "email_open_count" field.
+func EmailOpenCountGT(v int) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldGT(FieldEmailOpenCount, v))
+}
+
+// EmailOpenCountGTE applies the GTE predicate on the "email_open_count" field.
+func EmailOpenCountGTE(v int) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldGTE(FieldEmailOpenCount, v))
+}
+
+// EmailOpenCountLT applies the LT predicate on the "email_open_count" field.
+func EmailOpenCountLT(v int) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldLT(FieldEmailOpenCount, v))
+}
+
+// EmailOpenCountLTE applies the LTE predicate on the "email_open_count" field.
+func EmailOpenCountLTE(v int) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldLTE(FieldEmailOpenCount, v))
+}
+
+// EmailOpenCountIsNil applies the IsNil predicate on the "email_open_count" field.
+func EmailOpenCountIsNil() predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldIsNull(FieldEmailOpenCount))
+}
+
+// EmailOpenCountNotNil applies the NotNil predicate on the "email_open_count" field.
+func EmailOpenCountNotNil() predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldNotNull(FieldEmailOpenCount))
+}
+
+// EmailClickCountEQ applies the EQ predicate on the "email_click_count" field.
+func EmailClickCountEQ(v int) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldEQ(FieldEmailClickCount, v))
+}
+
+// EmailClickCountNEQ applies the NEQ predicate on the "email_click_count" field.
+func EmailClickCountNEQ(v int) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldNEQ(FieldEmailClickCount, v))
+}
+
+// EmailClickCountIn applies the In predicate on the "email_click_count" field.
+func EmailClickCountIn(vs ...int) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldIn(FieldEmailClickCount, vs...))
+}
+
+// EmailClickCountNotIn applies the NotIn predicate on the "email_click_count" field.
+func EmailClickCountNotIn(vs ...int) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldNotIn(FieldEmailClickCount, vs...))
+}
+
+// EmailClickCountGT applies the GT predicate on the "email_click_count" field.
+func EmailClickCountGT(v int) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldGT(FieldEmailClickCount, v))
+}
+
+// EmailClickCountGTE applies the GTE predicate on the "email_click_count" field.
+func EmailClickCountGTE(v int) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldGTE(FieldEmailClickCount, v))
+}
+
+// EmailClickCountLT applies the LT predicate on the "email_click_count" field.
+func EmailClickCountLT(v int) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldLT(FieldEmailClickCount, v))
+}
+
+// EmailClickCountLTE applies the LTE predicate on the "email_click_count" field.
+func EmailClickCountLTE(v int) predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldLTE(FieldEmailClickCount, v))
+}
+
+// EmailClickCountIsNil applies the IsNil predicate on the "email_click_count" field.
+func EmailClickCountIsNil() predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldIsNull(FieldEmailClickCount))
+}
+
+// EmailClickCountNotNil applies the NotNil predicate on the "email_click_count" field.
+func EmailClickCountNotNil() predicate.CampaignTarget {
+	return predicate.CampaignTarget(sql.FieldNotNull(FieldEmailClickCount))
 }
 
 // CompletedAtEQ applies the EQ predicate on the "completed_at" field.

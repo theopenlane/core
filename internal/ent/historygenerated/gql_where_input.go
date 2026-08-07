@@ -9494,6 +9494,54 @@ type CampaignTargetHistoryWhereInput struct {
 	SentAtIsNil  bool              `json:"sentAtIsNil,omitempty"`
 	SentAtNotNil bool              `json:"sentAtNotNil,omitempty"`
 
+	// "email_opened_at" field predicates.
+	EmailOpenedAt       *time.Time  `json:"emailOpenedAt,omitempty"`
+	EmailOpenedAtNEQ    *time.Time  `json:"emailOpenedAtNEQ,omitempty"`
+	EmailOpenedAtIn     []time.Time `json:"emailOpenedAtIn,omitempty"`
+	EmailOpenedAtNotIn  []time.Time `json:"emailOpenedAtNotIn,omitempty"`
+	EmailOpenedAtGT     *time.Time  `json:"emailOpenedAtGT,omitempty"`
+	EmailOpenedAtGTE    *time.Time  `json:"emailOpenedAtGTE,omitempty"`
+	EmailOpenedAtLT     *time.Time  `json:"emailOpenedAtLT,omitempty"`
+	EmailOpenedAtLTE    *time.Time  `json:"emailOpenedAtLTE,omitempty"`
+	EmailOpenedAtIsNil  bool        `json:"emailOpenedAtIsNil,omitempty"`
+	EmailOpenedAtNotNil bool        `json:"emailOpenedAtNotNil,omitempty"`
+
+	// "email_clicked_at" field predicates.
+	EmailClickedAt       *time.Time  `json:"emailClickedAt,omitempty"`
+	EmailClickedAtNEQ    *time.Time  `json:"emailClickedAtNEQ,omitempty"`
+	EmailClickedAtIn     []time.Time `json:"emailClickedAtIn,omitempty"`
+	EmailClickedAtNotIn  []time.Time `json:"emailClickedAtNotIn,omitempty"`
+	EmailClickedAtGT     *time.Time  `json:"emailClickedAtGT,omitempty"`
+	EmailClickedAtGTE    *time.Time  `json:"emailClickedAtGTE,omitempty"`
+	EmailClickedAtLT     *time.Time  `json:"emailClickedAtLT,omitempty"`
+	EmailClickedAtLTE    *time.Time  `json:"emailClickedAtLTE,omitempty"`
+	EmailClickedAtIsNil  bool        `json:"emailClickedAtIsNil,omitempty"`
+	EmailClickedAtNotNil bool        `json:"emailClickedAtNotNil,omitempty"`
+
+	// "email_open_count" field predicates.
+	EmailOpenCount       *int  `json:"emailOpenCount,omitempty"`
+	EmailOpenCountNEQ    *int  `json:"emailOpenCountNEQ,omitempty"`
+	EmailOpenCountIn     []int `json:"emailOpenCountIn,omitempty"`
+	EmailOpenCountNotIn  []int `json:"emailOpenCountNotIn,omitempty"`
+	EmailOpenCountGT     *int  `json:"emailOpenCountGT,omitempty"`
+	EmailOpenCountGTE    *int  `json:"emailOpenCountGTE,omitempty"`
+	EmailOpenCountLT     *int  `json:"emailOpenCountLT,omitempty"`
+	EmailOpenCountLTE    *int  `json:"emailOpenCountLTE,omitempty"`
+	EmailOpenCountIsNil  bool  `json:"emailOpenCountIsNil,omitempty"`
+	EmailOpenCountNotNil bool  `json:"emailOpenCountNotNil,omitempty"`
+
+	// "email_click_count" field predicates.
+	EmailClickCount       *int  `json:"emailClickCount,omitempty"`
+	EmailClickCountNEQ    *int  `json:"emailClickCountNEQ,omitempty"`
+	EmailClickCountIn     []int `json:"emailClickCountIn,omitempty"`
+	EmailClickCountNotIn  []int `json:"emailClickCountNotIn,omitempty"`
+	EmailClickCountGT     *int  `json:"emailClickCountGT,omitempty"`
+	EmailClickCountGTE    *int  `json:"emailClickCountGTE,omitempty"`
+	EmailClickCountLT     *int  `json:"emailClickCountLT,omitempty"`
+	EmailClickCountLTE    *int  `json:"emailClickCountLTE,omitempty"`
+	EmailClickCountIsNil  bool  `json:"emailClickCountIsNil,omitempty"`
+	EmailClickCountNotNil bool  `json:"emailClickCountNotNil,omitempty"`
+
 	// "completed_at" field predicates.
 	CompletedAt       *models.DateTime  `json:"completedAt,omitempty"`
 	CompletedAtNEQ    *models.DateTime  `json:"completedAtNEQ,omitempty"`
@@ -10291,6 +10339,126 @@ func (i *CampaignTargetHistoryWhereInput) P() (predicate.CampaignTargetHistory, 
 	}
 	if i.SentAtNotNil {
 		predicates = append(predicates, campaigntargethistory.SentAtNotNil())
+	}
+	if i.EmailOpenedAt != nil {
+		predicates = append(predicates, campaigntargethistory.EmailOpenedAtEQ(*i.EmailOpenedAt))
+	}
+	if i.EmailOpenedAtNEQ != nil {
+		predicates = append(predicates, campaigntargethistory.EmailOpenedAtNEQ(*i.EmailOpenedAtNEQ))
+	}
+	if len(i.EmailOpenedAtIn) > 0 {
+		predicates = append(predicates, campaigntargethistory.EmailOpenedAtIn(i.EmailOpenedAtIn...))
+	}
+	if len(i.EmailOpenedAtNotIn) > 0 {
+		predicates = append(predicates, campaigntargethistory.EmailOpenedAtNotIn(i.EmailOpenedAtNotIn...))
+	}
+	if i.EmailOpenedAtGT != nil {
+		predicates = append(predicates, campaigntargethistory.EmailOpenedAtGT(*i.EmailOpenedAtGT))
+	}
+	if i.EmailOpenedAtGTE != nil {
+		predicates = append(predicates, campaigntargethistory.EmailOpenedAtGTE(*i.EmailOpenedAtGTE))
+	}
+	if i.EmailOpenedAtLT != nil {
+		predicates = append(predicates, campaigntargethistory.EmailOpenedAtLT(*i.EmailOpenedAtLT))
+	}
+	if i.EmailOpenedAtLTE != nil {
+		predicates = append(predicates, campaigntargethistory.EmailOpenedAtLTE(*i.EmailOpenedAtLTE))
+	}
+	if i.EmailOpenedAtIsNil {
+		predicates = append(predicates, campaigntargethistory.EmailOpenedAtIsNil())
+	}
+	if i.EmailOpenedAtNotNil {
+		predicates = append(predicates, campaigntargethistory.EmailOpenedAtNotNil())
+	}
+	if i.EmailClickedAt != nil {
+		predicates = append(predicates, campaigntargethistory.EmailClickedAtEQ(*i.EmailClickedAt))
+	}
+	if i.EmailClickedAtNEQ != nil {
+		predicates = append(predicates, campaigntargethistory.EmailClickedAtNEQ(*i.EmailClickedAtNEQ))
+	}
+	if len(i.EmailClickedAtIn) > 0 {
+		predicates = append(predicates, campaigntargethistory.EmailClickedAtIn(i.EmailClickedAtIn...))
+	}
+	if len(i.EmailClickedAtNotIn) > 0 {
+		predicates = append(predicates, campaigntargethistory.EmailClickedAtNotIn(i.EmailClickedAtNotIn...))
+	}
+	if i.EmailClickedAtGT != nil {
+		predicates = append(predicates, campaigntargethistory.EmailClickedAtGT(*i.EmailClickedAtGT))
+	}
+	if i.EmailClickedAtGTE != nil {
+		predicates = append(predicates, campaigntargethistory.EmailClickedAtGTE(*i.EmailClickedAtGTE))
+	}
+	if i.EmailClickedAtLT != nil {
+		predicates = append(predicates, campaigntargethistory.EmailClickedAtLT(*i.EmailClickedAtLT))
+	}
+	if i.EmailClickedAtLTE != nil {
+		predicates = append(predicates, campaigntargethistory.EmailClickedAtLTE(*i.EmailClickedAtLTE))
+	}
+	if i.EmailClickedAtIsNil {
+		predicates = append(predicates, campaigntargethistory.EmailClickedAtIsNil())
+	}
+	if i.EmailClickedAtNotNil {
+		predicates = append(predicates, campaigntargethistory.EmailClickedAtNotNil())
+	}
+	if i.EmailOpenCount != nil {
+		predicates = append(predicates, campaigntargethistory.EmailOpenCountEQ(*i.EmailOpenCount))
+	}
+	if i.EmailOpenCountNEQ != nil {
+		predicates = append(predicates, campaigntargethistory.EmailOpenCountNEQ(*i.EmailOpenCountNEQ))
+	}
+	if len(i.EmailOpenCountIn) > 0 {
+		predicates = append(predicates, campaigntargethistory.EmailOpenCountIn(i.EmailOpenCountIn...))
+	}
+	if len(i.EmailOpenCountNotIn) > 0 {
+		predicates = append(predicates, campaigntargethistory.EmailOpenCountNotIn(i.EmailOpenCountNotIn...))
+	}
+	if i.EmailOpenCountGT != nil {
+		predicates = append(predicates, campaigntargethistory.EmailOpenCountGT(*i.EmailOpenCountGT))
+	}
+	if i.EmailOpenCountGTE != nil {
+		predicates = append(predicates, campaigntargethistory.EmailOpenCountGTE(*i.EmailOpenCountGTE))
+	}
+	if i.EmailOpenCountLT != nil {
+		predicates = append(predicates, campaigntargethistory.EmailOpenCountLT(*i.EmailOpenCountLT))
+	}
+	if i.EmailOpenCountLTE != nil {
+		predicates = append(predicates, campaigntargethistory.EmailOpenCountLTE(*i.EmailOpenCountLTE))
+	}
+	if i.EmailOpenCountIsNil {
+		predicates = append(predicates, campaigntargethistory.EmailOpenCountIsNil())
+	}
+	if i.EmailOpenCountNotNil {
+		predicates = append(predicates, campaigntargethistory.EmailOpenCountNotNil())
+	}
+	if i.EmailClickCount != nil {
+		predicates = append(predicates, campaigntargethistory.EmailClickCountEQ(*i.EmailClickCount))
+	}
+	if i.EmailClickCountNEQ != nil {
+		predicates = append(predicates, campaigntargethistory.EmailClickCountNEQ(*i.EmailClickCountNEQ))
+	}
+	if len(i.EmailClickCountIn) > 0 {
+		predicates = append(predicates, campaigntargethistory.EmailClickCountIn(i.EmailClickCountIn...))
+	}
+	if len(i.EmailClickCountNotIn) > 0 {
+		predicates = append(predicates, campaigntargethistory.EmailClickCountNotIn(i.EmailClickCountNotIn...))
+	}
+	if i.EmailClickCountGT != nil {
+		predicates = append(predicates, campaigntargethistory.EmailClickCountGT(*i.EmailClickCountGT))
+	}
+	if i.EmailClickCountGTE != nil {
+		predicates = append(predicates, campaigntargethistory.EmailClickCountGTE(*i.EmailClickCountGTE))
+	}
+	if i.EmailClickCountLT != nil {
+		predicates = append(predicates, campaigntargethistory.EmailClickCountLT(*i.EmailClickCountLT))
+	}
+	if i.EmailClickCountLTE != nil {
+		predicates = append(predicates, campaigntargethistory.EmailClickCountLTE(*i.EmailClickCountLTE))
+	}
+	if i.EmailClickCountIsNil {
+		predicates = append(predicates, campaigntargethistory.EmailClickCountIsNil())
+	}
+	if i.EmailClickCountNotNil {
+		predicates = append(predicates, campaigntargethistory.EmailClickCountNotNil())
 	}
 	if i.CompletedAt != nil {
 		predicates = append(predicates, campaigntargethistory.CompletedAtEQ(*i.CompletedAt))

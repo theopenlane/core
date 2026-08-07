@@ -62,6 +62,14 @@ const (
 	FieldStatus = "status"
 	// FieldSentAt holds the string denoting the sent_at field in the database.
 	FieldSentAt = "sent_at"
+	// FieldEmailOpenedAt holds the string denoting the email_opened_at field in the database.
+	FieldEmailOpenedAt = "email_opened_at"
+	// FieldEmailClickedAt holds the string denoting the email_clicked_at field in the database.
+	FieldEmailClickedAt = "email_clicked_at"
+	// FieldEmailOpenCount holds the string denoting the email_open_count field in the database.
+	FieldEmailOpenCount = "email_open_count"
+	// FieldEmailClickCount holds the string denoting the email_click_count field in the database.
+	FieldEmailClickCount = "email_click_count"
 	// FieldCompletedAt holds the string denoting the completed_at field in the database.
 	FieldCompletedAt = "completed_at"
 	// FieldMetadata holds the string denoting the metadata field in the database.
@@ -94,6 +102,10 @@ var Columns = []string{
 	FieldFullName,
 	FieldStatus,
 	FieldSentAt,
+	FieldEmailOpenedAt,
+	FieldEmailClickedAt,
+	FieldEmailOpenCount,
+	FieldEmailClickCount,
 	FieldCompletedAt,
 	FieldMetadata,
 }
@@ -127,6 +139,10 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultWorkflowEligibleMarker holds the default value on creation for the "workflow_eligible_marker" field.
 	DefaultWorkflowEligibleMarker bool
+	// DefaultEmailOpenCount holds the default value on creation for the "email_open_count" field.
+	DefaultEmailOpenCount int
+	// DefaultEmailClickCount holds the default value on creation for the "email_click_count" field.
+	DefaultEmailClickCount int
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -264,6 +280,26 @@ func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 // BySentAt orders the results by the sent_at field.
 func BySentAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSentAt, opts...).ToFunc()
+}
+
+// ByEmailOpenedAt orders the results by the email_opened_at field.
+func ByEmailOpenedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEmailOpenedAt, opts...).ToFunc()
+}
+
+// ByEmailClickedAt orders the results by the email_clicked_at field.
+func ByEmailClickedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEmailClickedAt, opts...).ToFunc()
+}
+
+// ByEmailOpenCount orders the results by the email_open_count field.
+func ByEmailOpenCount(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEmailOpenCount, opts...).ToFunc()
+}
+
+// ByEmailClickCount orders the results by the email_click_count field.
+func ByEmailClickCount(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEmailClickCount, opts...).ToFunc()
 }
 
 // ByCompletedAt orders the results by the completed_at field.

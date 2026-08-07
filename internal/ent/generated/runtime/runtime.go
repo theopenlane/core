@@ -922,6 +922,14 @@ func init() {
 			return nil
 		}
 	}()
+	// campaigntargetDescEmailOpenCount is the schema descriptor for email_open_count field.
+	campaigntargetDescEmailOpenCount := campaigntargetFields[11].Descriptor()
+	// campaigntarget.DefaultEmailOpenCount holds the default value on creation for the email_open_count field.
+	campaigntarget.DefaultEmailOpenCount = campaigntargetDescEmailOpenCount.Default.(int)
+	// campaigntargetDescEmailClickCount is the schema descriptor for email_click_count field.
+	campaigntargetDescEmailClickCount := campaigntargetFields[12].Descriptor()
+	// campaigntarget.DefaultEmailClickCount holds the default value on creation for the email_click_count field.
+	campaigntarget.DefaultEmailClickCount = campaigntargetDescEmailClickCount.Default.(int)
 	// campaigntargetDescID is the schema descriptor for id field.
 	campaigntargetDescID := campaigntargetMixinFields4[0].Descriptor()
 	// campaigntarget.DefaultID holds the default value on creation for the id field.

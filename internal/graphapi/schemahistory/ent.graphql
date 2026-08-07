@@ -3834,6 +3834,22 @@ type CampaignTargetHistory implements Node {
   """
   sentAt: DateTime
   """
+  when the campaign email was opened by the recipient
+  """
+  emailOpenedAt: Time
+  """
+  when a link in the campaign email was clicked by the recipient
+  """
+  emailClickedAt: Time
+  """
+  the number of times the campaign email was opened
+  """
+  emailOpenCount: Int
+  """
+  the number of link clicks for the campaign email
+  """
+  emailClickCount: Int
+  """
   when the campaign target completed the request
   """
   completedAt: DateTime
@@ -3914,6 +3930,10 @@ enum CampaignTargetHistoryOrderField {
   full_name
   STATUS
   sent_at
+  email_opened_at
+  email_clicked_at
+  email_open_count
+  email_click_count
   completed_at
 }
 """
@@ -4222,6 +4242,58 @@ input CampaignTargetHistoryWhereInput {
   sentAtLTE: DateTime
   sentAtIsNil: Boolean
   sentAtNotNil: Boolean
+  """
+  email_opened_at field predicates
+  """
+  emailOpenedAt: Time
+  emailOpenedAtNEQ: Time
+  emailOpenedAtIn: [Time!]
+  emailOpenedAtNotIn: [Time!]
+  emailOpenedAtGT: Time
+  emailOpenedAtGTE: Time
+  emailOpenedAtLT: Time
+  emailOpenedAtLTE: Time
+  emailOpenedAtIsNil: Boolean
+  emailOpenedAtNotNil: Boolean
+  """
+  email_clicked_at field predicates
+  """
+  emailClickedAt: Time
+  emailClickedAtNEQ: Time
+  emailClickedAtIn: [Time!]
+  emailClickedAtNotIn: [Time!]
+  emailClickedAtGT: Time
+  emailClickedAtGTE: Time
+  emailClickedAtLT: Time
+  emailClickedAtLTE: Time
+  emailClickedAtIsNil: Boolean
+  emailClickedAtNotNil: Boolean
+  """
+  email_open_count field predicates
+  """
+  emailOpenCount: Int
+  emailOpenCountNEQ: Int
+  emailOpenCountIn: [Int!]
+  emailOpenCountNotIn: [Int!]
+  emailOpenCountGT: Int
+  emailOpenCountGTE: Int
+  emailOpenCountLT: Int
+  emailOpenCountLTE: Int
+  emailOpenCountIsNil: Boolean
+  emailOpenCountNotNil: Boolean
+  """
+  email_click_count field predicates
+  """
+  emailClickCount: Int
+  emailClickCountNEQ: Int
+  emailClickCountIn: [Int!]
+  emailClickCountNotIn: [Int!]
+  emailClickCountGT: Int
+  emailClickCountGTE: Int
+  emailClickCountLT: Int
+  emailClickCountLTE: Int
+  emailClickCountIsNil: Boolean
+  emailClickCountNotNil: Boolean
   """
   completed_at field predicates
   """

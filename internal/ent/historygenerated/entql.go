@@ -385,6 +385,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 			campaigntargethistory.FieldFullName:               {Type: field.TypeString, Column: campaigntargethistory.FieldFullName},
 			campaigntargethistory.FieldStatus:                 {Type: field.TypeEnum, Column: campaigntargethistory.FieldStatus},
 			campaigntargethistory.FieldSentAt:                 {Type: field.TypeTime, Column: campaigntargethistory.FieldSentAt},
+			campaigntargethistory.FieldEmailOpenedAt:          {Type: field.TypeTime, Column: campaigntargethistory.FieldEmailOpenedAt},
+			campaigntargethistory.FieldEmailClickedAt:         {Type: field.TypeTime, Column: campaigntargethistory.FieldEmailClickedAt},
+			campaigntargethistory.FieldEmailOpenCount:         {Type: field.TypeInt, Column: campaigntargethistory.FieldEmailOpenCount},
+			campaigntargethistory.FieldEmailClickCount:        {Type: field.TypeInt, Column: campaigntargethistory.FieldEmailClickCount},
 			campaigntargethistory.FieldCompletedAt:            {Type: field.TypeTime, Column: campaigntargethistory.FieldCompletedAt},
 			campaigntargethistory.FieldMetadata:               {Type: field.TypeJSON, Column: campaigntargethistory.FieldMetadata},
 		},
@@ -4349,6 +4353,26 @@ func (f *CampaignTargetHistoryFilter) WhereStatus(p entql.StringP) {
 // WhereSentAt applies the entql time.Time predicate on the sent_at field.
 func (f *CampaignTargetHistoryFilter) WhereSentAt(p entql.TimeP) {
 	f.Where(p.Field(campaigntargethistory.FieldSentAt))
+}
+
+// WhereEmailOpenedAt applies the entql time.Time predicate on the email_opened_at field.
+func (f *CampaignTargetHistoryFilter) WhereEmailOpenedAt(p entql.TimeP) {
+	f.Where(p.Field(campaigntargethistory.FieldEmailOpenedAt))
+}
+
+// WhereEmailClickedAt applies the entql time.Time predicate on the email_clicked_at field.
+func (f *CampaignTargetHistoryFilter) WhereEmailClickedAt(p entql.TimeP) {
+	f.Where(p.Field(campaigntargethistory.FieldEmailClickedAt))
+}
+
+// WhereEmailOpenCount applies the entql int predicate on the email_open_count field.
+func (f *CampaignTargetHistoryFilter) WhereEmailOpenCount(p entql.IntP) {
+	f.Where(p.Field(campaigntargethistory.FieldEmailOpenCount))
+}
+
+// WhereEmailClickCount applies the entql int predicate on the email_click_count field.
+func (f *CampaignTargetHistoryFilter) WhereEmailClickCount(p entql.IntP) {
+	f.Where(p.Field(campaigntargethistory.FieldEmailClickCount))
 }
 
 // WhereCompletedAt applies the entql time.Time predicate on the completed_at field.

@@ -4000,6 +4000,88 @@ var (
 			}
 		},
 	}
+	// CampaignTargetOrderFieldEmailOpenedAt orders CampaignTarget by email_opened_at.
+	CampaignTargetOrderFieldEmailOpenedAt = &CampaignTargetOrderField{
+		Value: func(_m *CampaignTarget) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.EmailOpenedAt == nil {
+				return nil, nil
+			}
+			return _m.EmailOpenedAt, nil
+		},
+		column: campaigntarget.FieldEmailOpenedAt,
+		toTerm: func(opts ...sql.OrderTermOption) campaigntarget.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return campaigntarget.ByEmailOpenedAt(opts...)
+		},
+		toCursor: func(_m *CampaignTarget) Cursor {
+			if _m.EmailOpenedAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.EmailOpenedAt,
+			}
+		},
+	}
+	// CampaignTargetOrderFieldEmailClickedAt orders CampaignTarget by email_clicked_at.
+	CampaignTargetOrderFieldEmailClickedAt = &CampaignTargetOrderField{
+		Value: func(_m *CampaignTarget) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.EmailClickedAt == nil {
+				return nil, nil
+			}
+			return _m.EmailClickedAt, nil
+		},
+		column: campaigntarget.FieldEmailClickedAt,
+		toTerm: func(opts ...sql.OrderTermOption) campaigntarget.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return campaigntarget.ByEmailClickedAt(opts...)
+		},
+		toCursor: func(_m *CampaignTarget) Cursor {
+			if _m.EmailClickedAt == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.EmailClickedAt,
+			}
+		},
+	}
+	// CampaignTargetOrderFieldEmailOpenCount orders CampaignTarget by email_open_count.
+	CampaignTargetOrderFieldEmailOpenCount = &CampaignTargetOrderField{
+		Value: func(_m *CampaignTarget) (ent.Value, error) {
+			return _m.EmailOpenCount, nil
+		},
+		column: campaigntarget.FieldEmailOpenCount,
+		toTerm: campaigntarget.ByEmailOpenCount,
+		toCursor: func(_m *CampaignTarget) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.EmailOpenCount,
+			}
+		},
+	}
+	// CampaignTargetOrderFieldEmailClickCount orders CampaignTarget by email_click_count.
+	CampaignTargetOrderFieldEmailClickCount = &CampaignTargetOrderField{
+		Value: func(_m *CampaignTarget) (ent.Value, error) {
+			return _m.EmailClickCount, nil
+		},
+		column: campaigntarget.FieldEmailClickCount,
+		toTerm: campaigntarget.ByEmailClickCount,
+		toCursor: func(_m *CampaignTarget) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.EmailClickCount,
+			}
+		},
+	}
 	// CampaignTargetOrderFieldCompletedAt orders CampaignTarget by completed_at.
 	CampaignTargetOrderFieldCompletedAt = &CampaignTargetOrderField{
 		Value: func(_m *CampaignTarget) (ent.Value, error) {
@@ -4045,6 +4127,14 @@ func (f CampaignTargetOrderField) String() string {
 		str = "STATUS"
 	case CampaignTargetOrderFieldSentAt.column:
 		str = "sent_at"
+	case CampaignTargetOrderFieldEmailOpenedAt.column:
+		str = "email_opened_at"
+	case CampaignTargetOrderFieldEmailClickedAt.column:
+		str = "email_clicked_at"
+	case CampaignTargetOrderFieldEmailOpenCount.column:
+		str = "email_open_count"
+	case CampaignTargetOrderFieldEmailClickCount.column:
+		str = "email_click_count"
 	case CampaignTargetOrderFieldCompletedAt.column:
 		str = "completed_at"
 	}
@@ -4075,6 +4165,14 @@ func (f *CampaignTargetOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *CampaignTargetOrderFieldStatus
 	case "sent_at":
 		*f = *CampaignTargetOrderFieldSentAt
+	case "email_opened_at":
+		*f = *CampaignTargetOrderFieldEmailOpenedAt
+	case "email_clicked_at":
+		*f = *CampaignTargetOrderFieldEmailClickedAt
+	case "email_open_count":
+		*f = *CampaignTargetOrderFieldEmailOpenCount
+	case "email_click_count":
+		*f = *CampaignTargetOrderFieldEmailClickCount
 	case "completed_at":
 		*f = *CampaignTargetOrderFieldCompletedAt
 	default:

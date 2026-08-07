@@ -13154,6 +13154,10 @@ type CreateBulkCSVCampaignTarget_CreateBulkCSVCampaignTarget_CampaignTargets str
 	CreatedAt              *time.Time                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy              *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Email                  string                         "json:\"email\" graphql:\"email\""
+	EmailClickCount        *int64                         "json:\"emailClickCount,omitempty\" graphql:\"emailClickCount\""
+	EmailClickedAt         *time.Time                     "json:\"emailClickedAt,omitempty\" graphql:\"emailClickedAt\""
+	EmailOpenCount         *int64                         "json:\"emailOpenCount,omitempty\" graphql:\"emailOpenCount\""
+	EmailOpenedAt          *time.Time                     "json:\"emailOpenedAt,omitempty\" graphql:\"emailOpenedAt\""
 	FullName               *string                        "json:\"fullName,omitempty\" graphql:\"fullName\""
 	GroupID                *string                        "json:\"groupID,omitempty\" graphql:\"groupID\""
 	ID                     string                         "json:\"id\" graphql:\"id\""
@@ -13204,6 +13208,30 @@ func (t *CreateBulkCSVCampaignTarget_CreateBulkCSVCampaignTarget_CampaignTargets
 		t = &CreateBulkCSVCampaignTarget_CreateBulkCSVCampaignTarget_CampaignTargets{}
 	}
 	return t.Email
+}
+func (t *CreateBulkCSVCampaignTarget_CreateBulkCSVCampaignTarget_CampaignTargets) GetEmailClickCount() *int64 {
+	if t == nil {
+		t = &CreateBulkCSVCampaignTarget_CreateBulkCSVCampaignTarget_CampaignTargets{}
+	}
+	return t.EmailClickCount
+}
+func (t *CreateBulkCSVCampaignTarget_CreateBulkCSVCampaignTarget_CampaignTargets) GetEmailClickedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVCampaignTarget_CreateBulkCSVCampaignTarget_CampaignTargets{}
+	}
+	return t.EmailClickedAt
+}
+func (t *CreateBulkCSVCampaignTarget_CreateBulkCSVCampaignTarget_CampaignTargets) GetEmailOpenCount() *int64 {
+	if t == nil {
+		t = &CreateBulkCSVCampaignTarget_CreateBulkCSVCampaignTarget_CampaignTargets{}
+	}
+	return t.EmailOpenCount
+}
+func (t *CreateBulkCSVCampaignTarget_CreateBulkCSVCampaignTarget_CampaignTargets) GetEmailOpenedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCSVCampaignTarget_CreateBulkCSVCampaignTarget_CampaignTargets{}
+	}
+	return t.EmailOpenedAt
 }
 func (t *CreateBulkCSVCampaignTarget_CreateBulkCSVCampaignTarget_CampaignTargets) GetFullName() *string {
 	if t == nil {
@@ -13302,6 +13330,10 @@ type CreateBulkCampaignTarget_CreateBulkCampaignTarget_CampaignTargets struct {
 	CreatedAt              *time.Time                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy              *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Email                  string                         "json:\"email\" graphql:\"email\""
+	EmailClickCount        *int64                         "json:\"emailClickCount,omitempty\" graphql:\"emailClickCount\""
+	EmailClickedAt         *time.Time                     "json:\"emailClickedAt,omitempty\" graphql:\"emailClickedAt\""
+	EmailOpenCount         *int64                         "json:\"emailOpenCount,omitempty\" graphql:\"emailOpenCount\""
+	EmailOpenedAt          *time.Time                     "json:\"emailOpenedAt,omitempty\" graphql:\"emailOpenedAt\""
 	FullName               *string                        "json:\"fullName,omitempty\" graphql:\"fullName\""
 	GroupID                *string                        "json:\"groupID,omitempty\" graphql:\"groupID\""
 	ID                     string                         "json:\"id\" graphql:\"id\""
@@ -13352,6 +13384,30 @@ func (t *CreateBulkCampaignTarget_CreateBulkCampaignTarget_CampaignTargets) GetE
 		t = &CreateBulkCampaignTarget_CreateBulkCampaignTarget_CampaignTargets{}
 	}
 	return t.Email
+}
+func (t *CreateBulkCampaignTarget_CreateBulkCampaignTarget_CampaignTargets) GetEmailClickCount() *int64 {
+	if t == nil {
+		t = &CreateBulkCampaignTarget_CreateBulkCampaignTarget_CampaignTargets{}
+	}
+	return t.EmailClickCount
+}
+func (t *CreateBulkCampaignTarget_CreateBulkCampaignTarget_CampaignTargets) GetEmailClickedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCampaignTarget_CreateBulkCampaignTarget_CampaignTargets{}
+	}
+	return t.EmailClickedAt
+}
+func (t *CreateBulkCampaignTarget_CreateBulkCampaignTarget_CampaignTargets) GetEmailOpenCount() *int64 {
+	if t == nil {
+		t = &CreateBulkCampaignTarget_CreateBulkCampaignTarget_CampaignTargets{}
+	}
+	return t.EmailOpenCount
+}
+func (t *CreateBulkCampaignTarget_CreateBulkCampaignTarget_CampaignTargets) GetEmailOpenedAt() *time.Time {
+	if t == nil {
+		t = &CreateBulkCampaignTarget_CreateBulkCampaignTarget_CampaignTargets{}
+	}
+	return t.EmailOpenedAt
 }
 func (t *CreateBulkCampaignTarget_CreateBulkCampaignTarget_CampaignTargets) GetFullName() *string {
 	if t == nil {
@@ -13450,6 +13506,10 @@ type CreateCampaignTarget_CreateCampaignTarget_CampaignTarget struct {
 	CreatedAt              *time.Time                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy              *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Email                  string                         "json:\"email\" graphql:\"email\""
+	EmailClickCount        *int64                         "json:\"emailClickCount,omitempty\" graphql:\"emailClickCount\""
+	EmailClickedAt         *time.Time                     "json:\"emailClickedAt,omitempty\" graphql:\"emailClickedAt\""
+	EmailOpenCount         *int64                         "json:\"emailOpenCount,omitempty\" graphql:\"emailOpenCount\""
+	EmailOpenedAt          *time.Time                     "json:\"emailOpenedAt,omitempty\" graphql:\"emailOpenedAt\""
 	FullName               *string                        "json:\"fullName,omitempty\" graphql:\"fullName\""
 	GroupID                *string                        "json:\"groupID,omitempty\" graphql:\"groupID\""
 	ID                     string                         "json:\"id\" graphql:\"id\""
@@ -13500,6 +13560,30 @@ func (t *CreateCampaignTarget_CreateCampaignTarget_CampaignTarget) GetEmail() st
 		t = &CreateCampaignTarget_CreateCampaignTarget_CampaignTarget{}
 	}
 	return t.Email
+}
+func (t *CreateCampaignTarget_CreateCampaignTarget_CampaignTarget) GetEmailClickCount() *int64 {
+	if t == nil {
+		t = &CreateCampaignTarget_CreateCampaignTarget_CampaignTarget{}
+	}
+	return t.EmailClickCount
+}
+func (t *CreateCampaignTarget_CreateCampaignTarget_CampaignTarget) GetEmailClickedAt() *time.Time {
+	if t == nil {
+		t = &CreateCampaignTarget_CreateCampaignTarget_CampaignTarget{}
+	}
+	return t.EmailClickedAt
+}
+func (t *CreateCampaignTarget_CreateCampaignTarget_CampaignTarget) GetEmailOpenCount() *int64 {
+	if t == nil {
+		t = &CreateCampaignTarget_CreateCampaignTarget_CampaignTarget{}
+	}
+	return t.EmailOpenCount
+}
+func (t *CreateCampaignTarget_CreateCampaignTarget_CampaignTarget) GetEmailOpenedAt() *time.Time {
+	if t == nil {
+		t = &CreateCampaignTarget_CreateCampaignTarget_CampaignTarget{}
+	}
+	return t.EmailOpenedAt
 }
 func (t *CreateCampaignTarget_CreateCampaignTarget_CampaignTarget) GetFullName() *string {
 	if t == nil {
@@ -13641,6 +13725,10 @@ type GetAllCampaignTargets_CampaignTargets_Edges_Node struct {
 	CreatedAt              *time.Time                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy              *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Email                  string                         "json:\"email\" graphql:\"email\""
+	EmailClickCount        *int64                         "json:\"emailClickCount,omitempty\" graphql:\"emailClickCount\""
+	EmailClickedAt         *time.Time                     "json:\"emailClickedAt,omitempty\" graphql:\"emailClickedAt\""
+	EmailOpenCount         *int64                         "json:\"emailOpenCount,omitempty\" graphql:\"emailOpenCount\""
+	EmailOpenedAt          *time.Time                     "json:\"emailOpenedAt,omitempty\" graphql:\"emailOpenedAt\""
 	FullName               *string                        "json:\"fullName,omitempty\" graphql:\"fullName\""
 	GroupID                *string                        "json:\"groupID,omitempty\" graphql:\"groupID\""
 	ID                     string                         "json:\"id\" graphql:\"id\""
@@ -13691,6 +13779,30 @@ func (t *GetAllCampaignTargets_CampaignTargets_Edges_Node) GetEmail() string {
 		t = &GetAllCampaignTargets_CampaignTargets_Edges_Node{}
 	}
 	return t.Email
+}
+func (t *GetAllCampaignTargets_CampaignTargets_Edges_Node) GetEmailClickCount() *int64 {
+	if t == nil {
+		t = &GetAllCampaignTargets_CampaignTargets_Edges_Node{}
+	}
+	return t.EmailClickCount
+}
+func (t *GetAllCampaignTargets_CampaignTargets_Edges_Node) GetEmailClickedAt() *time.Time {
+	if t == nil {
+		t = &GetAllCampaignTargets_CampaignTargets_Edges_Node{}
+	}
+	return t.EmailClickedAt
+}
+func (t *GetAllCampaignTargets_CampaignTargets_Edges_Node) GetEmailOpenCount() *int64 {
+	if t == nil {
+		t = &GetAllCampaignTargets_CampaignTargets_Edges_Node{}
+	}
+	return t.EmailOpenCount
+}
+func (t *GetAllCampaignTargets_CampaignTargets_Edges_Node) GetEmailOpenedAt() *time.Time {
+	if t == nil {
+		t = &GetAllCampaignTargets_CampaignTargets_Edges_Node{}
+	}
+	return t.EmailOpenedAt
 }
 func (t *GetAllCampaignTargets_CampaignTargets_Edges_Node) GetFullName() *string {
 	if t == nil {
@@ -13814,6 +13926,10 @@ type GetCampaignTargetByID_CampaignTarget struct {
 	CreatedAt              *time.Time                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy              *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Email                  string                         "json:\"email\" graphql:\"email\""
+	EmailClickCount        *int64                         "json:\"emailClickCount,omitempty\" graphql:\"emailClickCount\""
+	EmailClickedAt         *time.Time                     "json:\"emailClickedAt,omitempty\" graphql:\"emailClickedAt\""
+	EmailOpenCount         *int64                         "json:\"emailOpenCount,omitempty\" graphql:\"emailOpenCount\""
+	EmailOpenedAt          *time.Time                     "json:\"emailOpenedAt,omitempty\" graphql:\"emailOpenedAt\""
 	FullName               *string                        "json:\"fullName,omitempty\" graphql:\"fullName\""
 	GroupID                *string                        "json:\"groupID,omitempty\" graphql:\"groupID\""
 	ID                     string                         "json:\"id\" graphql:\"id\""
@@ -13864,6 +13980,30 @@ func (t *GetCampaignTargetByID_CampaignTarget) GetEmail() string {
 		t = &GetCampaignTargetByID_CampaignTarget{}
 	}
 	return t.Email
+}
+func (t *GetCampaignTargetByID_CampaignTarget) GetEmailClickCount() *int64 {
+	if t == nil {
+		t = &GetCampaignTargetByID_CampaignTarget{}
+	}
+	return t.EmailClickCount
+}
+func (t *GetCampaignTargetByID_CampaignTarget) GetEmailClickedAt() *time.Time {
+	if t == nil {
+		t = &GetCampaignTargetByID_CampaignTarget{}
+	}
+	return t.EmailClickedAt
+}
+func (t *GetCampaignTargetByID_CampaignTarget) GetEmailOpenCount() *int64 {
+	if t == nil {
+		t = &GetCampaignTargetByID_CampaignTarget{}
+	}
+	return t.EmailOpenCount
+}
+func (t *GetCampaignTargetByID_CampaignTarget) GetEmailOpenedAt() *time.Time {
+	if t == nil {
+		t = &GetCampaignTargetByID_CampaignTarget{}
+	}
+	return t.EmailOpenedAt
 }
 func (t *GetCampaignTargetByID_CampaignTarget) GetFullName() *string {
 	if t == nil {
@@ -13983,6 +14123,10 @@ type GetCampaignTargets_CampaignTargets_Edges_Node struct {
 	CreatedAt              *time.Time                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy              *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Email                  string                         "json:\"email\" graphql:\"email\""
+	EmailClickCount        *int64                         "json:\"emailClickCount,omitempty\" graphql:\"emailClickCount\""
+	EmailClickedAt         *time.Time                     "json:\"emailClickedAt,omitempty\" graphql:\"emailClickedAt\""
+	EmailOpenCount         *int64                         "json:\"emailOpenCount,omitempty\" graphql:\"emailOpenCount\""
+	EmailOpenedAt          *time.Time                     "json:\"emailOpenedAt,omitempty\" graphql:\"emailOpenedAt\""
 	FullName               *string                        "json:\"fullName,omitempty\" graphql:\"fullName\""
 	GroupID                *string                        "json:\"groupID,omitempty\" graphql:\"groupID\""
 	ID                     string                         "json:\"id\" graphql:\"id\""
@@ -14033,6 +14177,30 @@ func (t *GetCampaignTargets_CampaignTargets_Edges_Node) GetEmail() string {
 		t = &GetCampaignTargets_CampaignTargets_Edges_Node{}
 	}
 	return t.Email
+}
+func (t *GetCampaignTargets_CampaignTargets_Edges_Node) GetEmailClickCount() *int64 {
+	if t == nil {
+		t = &GetCampaignTargets_CampaignTargets_Edges_Node{}
+	}
+	return t.EmailClickCount
+}
+func (t *GetCampaignTargets_CampaignTargets_Edges_Node) GetEmailClickedAt() *time.Time {
+	if t == nil {
+		t = &GetCampaignTargets_CampaignTargets_Edges_Node{}
+	}
+	return t.EmailClickedAt
+}
+func (t *GetCampaignTargets_CampaignTargets_Edges_Node) GetEmailOpenCount() *int64 {
+	if t == nil {
+		t = &GetCampaignTargets_CampaignTargets_Edges_Node{}
+	}
+	return t.EmailOpenCount
+}
+func (t *GetCampaignTargets_CampaignTargets_Edges_Node) GetEmailOpenedAt() *time.Time {
+	if t == nil {
+		t = &GetCampaignTargets_CampaignTargets_Edges_Node{}
+	}
+	return t.EmailOpenedAt
 }
 func (t *GetCampaignTargets_CampaignTargets_Edges_Node) GetFullName() *string {
 	if t == nil {
@@ -14156,6 +14324,10 @@ type UpdateCampaignTarget_UpdateCampaignTarget_CampaignTarget struct {
 	CreatedAt              *time.Time                     "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy              *string                        "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	Email                  string                         "json:\"email\" graphql:\"email\""
+	EmailClickCount        *int64                         "json:\"emailClickCount,omitempty\" graphql:\"emailClickCount\""
+	EmailClickedAt         *time.Time                     "json:\"emailClickedAt,omitempty\" graphql:\"emailClickedAt\""
+	EmailOpenCount         *int64                         "json:\"emailOpenCount,omitempty\" graphql:\"emailOpenCount\""
+	EmailOpenedAt          *time.Time                     "json:\"emailOpenedAt,omitempty\" graphql:\"emailOpenedAt\""
 	FullName               *string                        "json:\"fullName,omitempty\" graphql:\"fullName\""
 	GroupID                *string                        "json:\"groupID,omitempty\" graphql:\"groupID\""
 	ID                     string                         "json:\"id\" graphql:\"id\""
@@ -14206,6 +14378,30 @@ func (t *UpdateCampaignTarget_UpdateCampaignTarget_CampaignTarget) GetEmail() st
 		t = &UpdateCampaignTarget_UpdateCampaignTarget_CampaignTarget{}
 	}
 	return t.Email
+}
+func (t *UpdateCampaignTarget_UpdateCampaignTarget_CampaignTarget) GetEmailClickCount() *int64 {
+	if t == nil {
+		t = &UpdateCampaignTarget_UpdateCampaignTarget_CampaignTarget{}
+	}
+	return t.EmailClickCount
+}
+func (t *UpdateCampaignTarget_UpdateCampaignTarget_CampaignTarget) GetEmailClickedAt() *time.Time {
+	if t == nil {
+		t = &UpdateCampaignTarget_UpdateCampaignTarget_CampaignTarget{}
+	}
+	return t.EmailClickedAt
+}
+func (t *UpdateCampaignTarget_UpdateCampaignTarget_CampaignTarget) GetEmailOpenCount() *int64 {
+	if t == nil {
+		t = &UpdateCampaignTarget_UpdateCampaignTarget_CampaignTarget{}
+	}
+	return t.EmailOpenCount
+}
+func (t *UpdateCampaignTarget_UpdateCampaignTarget_CampaignTarget) GetEmailOpenedAt() *time.Time {
+	if t == nil {
+		t = &UpdateCampaignTarget_UpdateCampaignTarget_CampaignTarget{}
+	}
+	return t.EmailOpenedAt
 }
 func (t *UpdateCampaignTarget_UpdateCampaignTarget_CampaignTarget) GetFullName() *string {
 	if t == nil {
@@ -178479,6 +178675,10 @@ const CreateBulkCSVCampaignTargetDocument = `mutation CreateBulkCSVCampaignTarge
 			createdAt
 			createdBy
 			email
+			emailClickCount
+			emailClickedAt
+			emailOpenCount
+			emailOpenedAt
 			fullName
 			groupID
 			id
@@ -178523,6 +178723,10 @@ const CreateBulkCampaignTargetDocument = `mutation CreateBulkCampaignTarget ($in
 			createdAt
 			createdBy
 			email
+			emailClickCount
+			emailClickedAt
+			emailOpenCount
+			emailOpenedAt
 			fullName
 			groupID
 			id
@@ -178567,6 +178771,10 @@ const CreateCampaignTargetDocument = `mutation CreateCampaignTarget ($input: Cre
 			createdAt
 			createdBy
 			email
+			emailClickCount
+			emailClickedAt
+			emailOpenCount
+			emailOpenedAt
 			fullName
 			groupID
 			id
@@ -178643,6 +178851,10 @@ const GetAllCampaignTargetsDocument = `query GetAllCampaignTargets ($first: Int,
 				createdAt
 				createdBy
 				email
+				emailClickCount
+				emailClickedAt
+				emailOpenCount
+				emailOpenedAt
 				fullName
 				groupID
 				id
@@ -178691,6 +178903,10 @@ const GetCampaignTargetByIDDocument = `query GetCampaignTargetByID ($campaignTar
 		createdAt
 		createdBy
 		email
+		emailClickCount
+		emailClickedAt
+		emailOpenCount
+		emailOpenedAt
 		fullName
 		groupID
 		id
@@ -178742,6 +178958,10 @@ const GetCampaignTargetsDocument = `query GetCampaignTargets ($first: Int, $last
 				createdAt
 				createdBy
 				email
+				emailClickCount
+				emailClickedAt
+				emailOpenCount
+				emailOpenedAt
 				fullName
 				groupID
 				id
@@ -178792,6 +179012,10 @@ const UpdateCampaignTargetDocument = `mutation UpdateCampaignTarget ($updateCamp
 			createdAt
 			createdBy
 			email
+			emailClickCount
+			emailClickedAt
+			emailOpenCount
+			emailOpenedAt
 			fullName
 			groupID
 			id

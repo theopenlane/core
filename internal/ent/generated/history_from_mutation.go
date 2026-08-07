@@ -2760,6 +2760,22 @@ func (m *CampaignTargetMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetNillableSentAt(&sentAt)
 	}
 
+	if emailOpenedAt, exists := m.EmailOpenedAt(); exists {
+		create = create.SetNillableEmailOpenedAt(&emailOpenedAt)
+	}
+
+	if emailClickedAt, exists := m.EmailClickedAt(); exists {
+		create = create.SetNillableEmailClickedAt(&emailClickedAt)
+	}
+
+	if emailOpenCount, exists := m.EmailOpenCount(); exists {
+		create = create.SetEmailOpenCount(emailOpenCount)
+	}
+
+	if emailClickCount, exists := m.EmailClickCount(); exists {
+		create = create.SetEmailClickCount(emailClickCount)
+	}
+
 	if completedAt, exists := m.CompletedAt(); exists {
 		create = create.SetNillableCompletedAt(&completedAt)
 	}
@@ -2910,6 +2926,30 @@ func (m *CampaignTargetMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetNillableSentAt(campaigntarget.SentAt)
 		}
 
+		if emailOpenedAt, exists := m.EmailOpenedAt(); exists {
+			create = create.SetNillableEmailOpenedAt(&emailOpenedAt)
+		} else {
+			create = create.SetNillableEmailOpenedAt(campaigntarget.EmailOpenedAt)
+		}
+
+		if emailClickedAt, exists := m.EmailClickedAt(); exists {
+			create = create.SetNillableEmailClickedAt(&emailClickedAt)
+		} else {
+			create = create.SetNillableEmailClickedAt(campaigntarget.EmailClickedAt)
+		}
+
+		if emailOpenCount, exists := m.EmailOpenCount(); exists {
+			create = create.SetEmailOpenCount(emailOpenCount)
+		} else {
+			create = create.SetEmailOpenCount(campaigntarget.EmailOpenCount)
+		}
+
+		if emailClickCount, exists := m.EmailClickCount(); exists {
+			create = create.SetEmailClickCount(emailClickCount)
+		} else {
+			create = create.SetEmailClickCount(campaigntarget.EmailClickCount)
+		}
+
 		if completedAt, exists := m.CompletedAt(); exists {
 			create = create.SetNillableCompletedAt(&completedAt)
 		} else {
@@ -2978,6 +3018,10 @@ func (m *CampaignTargetMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetFullName(campaigntarget.FullName).
 			SetStatus(campaigntarget.Status).
 			SetNillableSentAt(campaigntarget.SentAt).
+			SetNillableEmailOpenedAt(campaigntarget.EmailOpenedAt).
+			SetNillableEmailClickedAt(campaigntarget.EmailClickedAt).
+			SetEmailOpenCount(campaigntarget.EmailOpenCount).
+			SetEmailClickCount(campaigntarget.EmailClickCount).
 			SetNillableCompletedAt(campaigntarget.CompletedAt).
 			SetMetadata(campaigntarget.Metadata).
 			Save(ctx)
