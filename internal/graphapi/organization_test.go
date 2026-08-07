@@ -1135,6 +1135,15 @@ func TestMutationOrganizationCascadeDelete(t *testing.T) {
 	orgTuples, err := suite.client.fga.GetTuplesForObject(context.Background(), "organization:"+org.ID)
 	assert.NilError(t, err)
 	assert.Check(t, is.Len(orgTuples, 0), "organization relationship tuples should be cleaned out of FGA")
+
+	// ensure all tuples, like feature tuples are cleaned up
+	allTuples, err := suite.client.fga.GetAllTuples(context.Background())
+	assert.NilError(t, err)
+
+	for _, tup := range allTuples {
+		assert.Check(t, tup.Key.User != "organization:"+org.ID,
+			"tuple %s#%s@%s should have been cleaned out of FGA", tup.Key.Object, tup.Key.Relation, tup.Key.User)
+	}
 }
 
 // assertHistoryExists checks whether the history rows for the given task and file are present
