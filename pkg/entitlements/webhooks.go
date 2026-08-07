@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/stripe/stripe-go/v84"
+	"github.com/stripe/stripe-go/v86"
 )
 
 const (
@@ -93,7 +93,7 @@ func (sc *StripeClient) ListWebhookEndpoints(ctx context.Context) ([]*stripe.Web
 	var endpoints []*stripe.WebhookEndpoint
 	var lastErr error
 
-	for endpoint, err := range iter {
+	for endpoint, err := range iter.All(ctx) {
 		if err != nil {
 			lastErr = err
 			break

@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"github.com/stripe/stripe-go/v84"
+	"github.com/stripe/stripe-go/v86"
 
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/entitlements/mocks"
@@ -354,10 +354,6 @@ func TestMapStripeSubscription(t *testing.T) {
 		},
 	}
 
-	stripeSubscriptionSchedule := &stripe.SubscriptionSchedule{
-		ID: "sub_sched_123",
-	}
-
 	expectedSubscription := &entitlements.Subscription{
 		ID: "sub_123",
 		Prices: []entitlements.Price{
@@ -370,12 +366,11 @@ func TestMapStripeSubscription(t *testing.T) {
 				Currency:    "usd",
 			},
 		},
-		TrialEnd:                     1620000000,
-		ProductID:                    "prod_123",
-		Status:                       "active",
-		StripeCustomerID:             "cus_123",
-		OrganizationID:               "org_123",
-		StripeSubscriptionScheduleID: "sub_sched_123",
+		TrialEnd:         1620000000,
+		ProductID:        "prod_123",
+		Status:           "active",
+		StripeCustomerID: "cus_123",
+		OrganizationID:   "org_123",
 	}
 
 	stripeBackendMock := new(mocks.MockStripeBackend)
@@ -400,7 +395,7 @@ func TestMapStripeSubscription(t *testing.T) {
 		Client: mockStripeClient,
 	}
 
-	subscription := service.MapStripeSubscription(context.Background(), stripeSubscription, stripeSubscriptionSchedule)
+	subscription := service.MapStripeSubscription(context.Background(), stripeSubscription)
 	c.Equal(expectedSubscription, subscription)
 }
 

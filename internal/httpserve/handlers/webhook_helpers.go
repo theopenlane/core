@@ -4,7 +4,7 @@ import (
 	"context"
 	"strings"
 
-	"github.com/stripe/stripe-go/v84"
+	"github.com/stripe/stripe-go/v86"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 
@@ -15,6 +15,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgproduct"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/pkg/catalog"
+	"github.com/theopenlane/core/pkg/catalog/gencatalog"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
@@ -244,6 +246,30 @@ func (h *Handler) removeAllModules(ctx context.Context, subscription *stripe.Sub
 			orgmodule.OwnerID(orgSub.OwnerID),
 			orgmodule.SubscriptionID(orgSub.ID),
 			orgmodule.ModuleNEQ(models.CatalogBaseModule),
+		),
+	).Exec(allowCtx)
+
+	return err
+}
+
+// removeNonFreeModules drops all paid modules, preserving those with zero-cost prices in the catalog
+func (h *Handler) removeNonFreeModules(ctx context.Context, subscription *stripe.Subscription) error {
+	orgSub, err := getOrgSubscription(ctx, subscription)
+	if err != nil {
+		return err
+	}
+
+	allowCtx := auth.WithCaller(ctx, auth.NewWebhookCaller(orgSub.OwnerID))
+	tx := transaction.FromContext(ctx)
+
+	cat := catalog.Catalog{Catalog: gencatalog.DefaultCatalog}
+	freeModules := cat.FreeModules()
+
+	_, err = tx.OrgModule.Delete().Where(
+		orgmodule.And(
+			orgmodule.OwnerID(orgSub.OwnerID),
+			orgmodule.SubscriptionID(orgSub.ID),
+			orgmodule.ModuleNotIn(freeModules...),
 		),
 	).Exec(allowCtx)
 

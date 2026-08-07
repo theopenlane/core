@@ -8,7 +8,7 @@ import (
 
 	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
-	"github.com/stripe/stripe-go/v84"
+	"github.com/stripe/stripe-go/v86"
 )
 
 // CreateCustomer creates a customer leveraging the openlane organization ID
@@ -79,7 +79,7 @@ func (sc *StripeClient) SearchCustomers(ctx context.Context, query string) (cust
 
 	result := sc.Client.V1Customers.Search(ctx, params)
 
-	for customer, err := range result {
+	for customer, err := range result.All(ctx) {
 		if err != nil {
 			log.Err(err).Msg("failed to search customers")
 
@@ -110,17 +110,8 @@ func (sc *StripeClient) CreateCustomerAndSubscription(ctx context.Context, o *Or
 
 	o.StripeSubscriptionID = subscription.ID
 	o.Subscription = *subscription
-	o.StripeSubscriptionScheduleID = subscription.StripeSubscriptionScheduleID
 
 	log.Debug().Str("customer_id", customer.ID).Str("subscription_id", subscription.ID).Msg("subscription created")
-
-	_, err = sc.Client.V1Customers.Update(ctx, customer.ID, sc.UpdateCustomerWithOptions(
-		&stripe.CustomerUpdateParams{}, WithUpdateCustomerMetadata(map[string]string{"subscription_schedule_id": subscription.StripeSubscriptionScheduleID})))
-	if err != nil {
-		log.Err(err).Msg("Failed to update customer with subscription schedule ID")
-
-		return err
-	}
 
 	return nil
 }

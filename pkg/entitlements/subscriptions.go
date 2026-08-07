@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/rs/zerolog/log"
-	"github.com/stripe/stripe-go/v84"
+	"github.com/stripe/stripe-go/v86"
 )
 
 const (
@@ -101,8 +101,7 @@ func (sc *StripeClient) CreateSubscriptionWithPrices(ctx context.Context, cust *
 	params.TrialPeriodDays = stripe.Int64(trialdays)
 	params.TrialSettings = &stripe.SubscriptionCreateTrialSettingsParams{
 		EndBehavior: &stripe.SubscriptionCreateTrialSettingsEndBehaviorParams{
-			// stripe does not allow you to use subscription schedules with a trial that ends in a "pause" status so we have to cancel instead
-			MissingPaymentMethod: stripe.String(stripe.SubscriptionTrialSettingsEndBehaviorMissingPaymentMethodCancel),
+			MissingPaymentMethod: stripe.String(stripe.SubscriptionTrialSettingsEndBehaviorMissingPaymentMethodPause),
 		},
 	}
 
@@ -115,14 +114,7 @@ func (sc *StripeClient) CreateSubscriptionWithPrices(ctx context.Context, cust *
 
 	log.Debug().Msgf("Created subscription with ID: %s", subs.ID)
 
-	sched, err := sc.CreateSubscriptionScheduleFromSubs(ctx, subs.ID)
-	if err != nil {
-		log.Err(err).Msg("Failed to create subscription schedule from subscription")
-
-		return nil, err
-	}
-
-	return sc.MapStripeSubscription(ctx, subs, sched), nil
+	return sc.MapStripeSubscription(ctx, subs), nil
 }
 
 // CreateSubscriptionScheduleFromSubs creates a subscription schedule from an existing subscription
@@ -140,7 +132,7 @@ func (sc *StripeClient) CreateSubscriptionScheduleFromSubs(ctx context.Context, 
 }
 
 // MapStripeSubscription maps a stripe.Subscription to a "internal" subscription struct
-func (sc *StripeClient) MapStripeSubscription(ctx context.Context, subs *stripe.Subscription, sched *stripe.SubscriptionSchedule) *Subscription {
+func (sc *StripeClient) MapStripeSubscription(ctx context.Context, subs *stripe.Subscription) *Subscription {
 	prices := []Price{}
 	productID := ""
 
@@ -179,15 +171,15 @@ func (sc *StripeClient) MapStripeSubscription(ctx context.Context, subs *stripe.
 	}
 
 	return &Subscription{
-		ID:                           subs.ID,
-		Prices:                       prices,
-		TrialEnd:                     subs.TrialEnd,
-		ProductID:                    productID,
-		Status:                       string(subs.Status),
-		StripeCustomerID:             subs.Customer.ID,
-		StripeSubscriptionScheduleID: sched.ID,
-		OrganizationID:               subs.Metadata["organization_id"],
-		DaysUntilDue:                 subs.DaysUntilDue,
+		ID:               subs.ID,
+		Prices:           prices,
+		TrialEnd:         subs.TrialEnd,
+		ProductID:        productID,
+		Status:           string(subs.Status),
+		StripeCustomerID: subs.Customer.ID,
+
+		OrganizationID: subs.Metadata["organization_id"],
+		DaysUntilDue:   subs.DaysUntilDue,
 	}
 }
 
@@ -217,7 +209,7 @@ func (sc *StripeClient) ListSubscriptions(ctx context.Context, customerID string
 	var subs []*stripe.Subscription
 
 	it := sc.Client.V1Subscriptions.List(ctx, params)
-	for s, err := range it {
+	for s, err := range it.All(ctx) {
 		if err != nil {
 			return nil, err
 		}

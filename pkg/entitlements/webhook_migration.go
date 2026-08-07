@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/stripe/stripe-go/v84"
+	"github.com/stripe/stripe-go/v86"
 )
 
 const (

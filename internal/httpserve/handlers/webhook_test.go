@@ -13,8 +13,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/stripe/stripe-go/v84"
-	"github.com/stripe/stripe-go/v84/webhook"
+	"github.com/stripe/stripe-go/v86"
+	"github.com/stripe/stripe-go/v86/webhook"
 	echo "github.com/theopenlane/echox"
 
 	models "github.com/theopenlane/core/common/openapi"
@@ -147,6 +147,22 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 				ID:         "evt_test_webhook_paused",
 				Object:     "event",
 				Type:       stripe.EventTypeCustomerSubscriptionPaused,
+				APIVersion: currentAPIVersion,
+				Data: &stripe.EventData{
+					Raw: json.RawMessage(jsonDataUpdate),
+				},
+			},
+			expectedStatus:          http.StatusOK,
+			expectRevocation:        false,
+			configAPIVersion:        strPtr(currentAPIVersion),
+			configDiscardAPIVersion: strPtr(discardAPIVersion),
+		},
+		{
+			name: "deleted subscription revokes tokens",
+			payload: &stripe.Event{
+				ID:         "evt_test_webhook_paused_no_payment",
+				Object:     "event",
+				Type:       stripe.EventTypeCustomerSubscriptionDeleted,
 				APIVersion: currentAPIVersion,
 				Data: &stripe.EventData{
 					Raw: json.RawMessage(jsonDataUpdate),
