@@ -1,25 +1,25 @@
 package contextx
 
-import "context"
+import (
+	"context"
 
-// TupleCleanupKey is the context key used to force relationship tuple cleanup on delete
-type TupleCleanupKey string
-
-const (
-	// TupleCleanup is the context value that forces tuple cleanup even for internal requests
-	TupleCleanup TupleCleanupKey = "cascade_delete_tuple_cleanup"
+	utilsctx "github.com/theopenlane/utils/contextx"
 )
+
+// tupleCleanupKey forces relationship tuple cleanup on delete even for internal requests
+var tupleCleanupKey = utilsctx.NewKey[bool]()
 
 // WithTupleCleanup returns a new context that forces the delete permissions hook to run even though
 // the request is an internal one. The organization cascade delete runs as an internal caller so it
-// can bypass privacy rules, but the records it removes still need their tuples cleaned out of FGA
+// can bypass privacy rules, but the records it removes still need their tuples cleaned out of FGA,
+// otherwise every cascaded object leaves its relationships behind pointing at rows that are gone
 func WithTupleCleanup(ctx context.Context) context.Context {
-	return context.WithValue(ctx, TupleCleanup, true)
+	return tupleCleanupKey.Set(ctx, true)
 }
 
 // TupleCleanupEnabled reports whether tuple cleanup should run despite an internal request
 func TupleCleanupEnabled(ctx context.Context) bool {
-	cleanup, ok := ctx.Value(TupleCleanup).(bool)
+	cleanup, _ := tupleCleanupKey.Get(ctx)
 
-	return ok && cleanup
+	return cleanup
 }

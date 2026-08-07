@@ -281,7 +281,7 @@ func HookCustomTypeEnumDelete() ent.Hook {
 
 			// skip the "in use" error/check when deleting via organization cascade
 			// the organization edge cleanup needs to cascade deletes
-			if ctx.Value(contextx.SkipCustomEnumInUseCheck) == true {
+			if contextx.SkipEnumInUseCheckEnabled(ctx) {
 				return next.Mutate(ctx, m)
 			}
 
