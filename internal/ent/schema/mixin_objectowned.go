@@ -6,7 +6,6 @@ import (
 	"slices"
 
 	"entgo.io/ent"
-	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
@@ -35,6 +34,8 @@ type ObjectOwnedMixin struct {
 	mixin.Schema
 	// Ref table for the id
 	Ref string
+	// SchemaName is the singular name of the schema, used to name the indexes
+	SchemaName string
 	// Kind of the object, only used for Organization owned flavors, its set by default either
 	// with the OrgOwnedMixin or using the withOrganizationOwner option
 	Kind any
@@ -94,6 +95,7 @@ func newObjectOwnedMixin[V any](schema any, opts ...objectOwnedOption) ObjectOwn
 	// defaults settings
 	o := ObjectOwnedMixin{
 		Ref:              sch.PluralName(),
+		SchemaName:       sch.Name(),
 		HookFuncs:        []HookFunc{defaultTupleUpdateFunc},
 		InterceptorFuncs: []InterceptorFunc{},
 		OwnerRelation:    fgax.ParentRelation,
@@ -248,14 +250,17 @@ func withForceFilter() objectOwnedOption {
 // Indexes of the ObjectOwnedMixin
 func (o ObjectOwnedMixin) Indexes() []ent.Index {
 	// add the organization owner index if the flag is set or the field name is included
-	if !o.SkipDeletedAt && (o.IncludeOrganizationOwner || slices.Contains(o.FieldNames, o.OwnerFieldName)) {
-		return []ent.Index{
-			index.Fields(o.OwnerFieldName).
-				Annotations(entsql.IndexWhere("deleted_at is NULL")),
-		}
+	if !o.IncludeOrganizationOwner && !slices.Contains(o.FieldNames, o.OwnerFieldName) {
+		return []ent.Index{}
 	}
 
-	return []ent.Index{}
+	// the storage key is set explicitly because the name ent derives is "<schema>_owner_id",
+	// which on some schemas is also the name of a real column and makes ent resolve the index
+	// to the wrong one
+	return []ent.Index{
+		index.Fields(o.OwnerFieldName).
+			StorageKey(fmt.Sprintf("%s_%s_idx", o.SchemaName, o.OwnerFieldName)),
+	}
 }
 
 // Fields of the ObjectOwnedMixin

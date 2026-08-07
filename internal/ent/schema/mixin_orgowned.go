@@ -40,6 +40,7 @@ func newOrgOwnedMixin(schema any, opts ...objectOwnedOption) ObjectOwnedMixin {
 		Kind:       Organization{},
 		// plural name of the schema because the organization will usually have many of these objects
 		Ref:              sch.PluralName(),
+		SchemaName:       sch.Name(),
 		HookFuncs:        []HookFunc{defaultOrgHookFunc},
 		InterceptorFuncs: []InterceptorFunc{defaultOrgInterceptorFunc},
 		OwnerFieldName:   ownerFieldName,

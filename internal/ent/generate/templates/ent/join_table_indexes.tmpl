@@ -1,0 +1,56 @@
+{{/* Generate indexes for the trailing column of every m2m join table */}}
+{{/* gotype: entgo.io/ent/entc/gen.Graph */}}
+
+{{ define "join_table_indexes" }}
+
+{{/* Add the base header for the generated file */}}
+{{ $pkg := base $.Config.Package }}
+{{ template "header" $ }}
+
+import (
+	"entgo.io/ent/dialect/sql/schema"
+
+	"{{ $.Config.Package }}/migrate"
+)
+
+// maxJoinIndexNameLen is the maximum length of an identifier in postgres, longer names are
+// silently truncated by the server which would make the generated migration diff unstable
+const maxJoinIndexNameLen = 63
+
+// joinTables are the m2m join tables ent generates from the edges in the schema
+// ent has no schema level api for indexing them, so they are amended below instead
+var joinTables = map[string]bool{
+{{- range $t := $.Tables }}
+{{- if and (eq (len $t.Columns) 2) (eq (len $t.PrimaryKey) 2) }}
+	"{{ $t.Name }}": true,
+{{- end }}
+{{- end }}
+}
+
+// init adds an index on the trailing column of every m2m join table
+// the leading column is already covered by the composite primary key, but the trailing one is
+// not, so enforcing its foreign key requires a sequential scan of the join table whenever a
+// referenced row is deleted, and traversing the edge in reverse scans it as well
+//
+// this runs for every consumer of the tables, both the auto migration and the versioned
+// migration diff, because they share this package
+func init() {
+	for _, t := range migrate.Tables {
+		if !joinTables[t.Name] {
+			continue
+		}
+
+		col := t.PrimaryKey[1]
+
+		name := t.Name + "_" + col.Name + "_idx"
+		if len(name) > maxJoinIndexNameLen {
+			name = name[:maxJoinIndexNameLen]
+		}
+
+		t.Indexes = append(t.Indexes, &schema.Index{
+			Name:    name,
+			Columns: []*schema.Column{col},
+		})
+	}
+}
+{{ end }}
