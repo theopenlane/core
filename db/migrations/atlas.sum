@@ -1,4 +1,4 @@
-h1:ZRtx8ExSIwMmpoMwjuY/XrS/zeB24Dtv4xneXGSfxvg=
+h1:WDXkpR8HUJ/jziEUfSTc7F7ZRHbT4X7cTRCFO74yex0=
 20251229183159_init.sql h1:3uf/ftr28zW8YUD9qAaY2GESQHC7pYmkhlI6oDWUCKU=
 20251229183201_init_history.sql h1:1tFSeCDWvZgb2Ctw80C/s3tqVPNLADQw9fSDACzL8WA=
 20251231045221_workflow.sql h1:5bLq4cHh2kxUV7xajK5bq5McKKpr88HmufYauTdsgUw=
@@ -176,3 +176,5 @@ h1:ZRtx8ExSIwMmpoMwjuY/XrS/zeB24Dtv4xneXGSfxvg=
 20260806102606_tfa_enforcement.sql h1:iKnXbvc7CxEr0FU7GxJ6Lq7Ah92sIaytO+FP053Lybo=
 20260806102616_tfa_enforcement_history.sql h1:lYstxxJz5bNKGS3M5+WaULQnGWLpYSDWhLK2YgbeF10=
 20260807044745_indexes.sql h1:V4MfAk/UWsmop4oCtc2k+N8PO0X2Wnhzxp8FA/MuFkA=
+20260807161537_track_campaign_email_opens.sql h1:Ar6pxyLhyOB2NvIdqD8Ar0CKZIgkNyqmuTijBbDdONI=
+20260807161548_track_campaign_email_opens_history.sql h1:J8Ht3rH8oXbSQo3jS29abOW8mo8YNI9VNh1xjOjMk04=
