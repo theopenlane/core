@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"sync"
 	"testing"
 	"time"
 
@@ -39,6 +40,7 @@ import (
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/common/storagetypes"
 	"github.com/theopenlane/core/fga/fgaversion"
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -106,14 +108,45 @@ type GraphTestSuite struct {
 
 // client contains all the clients the test need to interact with
 type client struct {
-	db               *ent.Client
-	api              *testclient.TestClient
-	apiWithPAT       *testclient.TestClient
-	apiWithToken     *testclient.TestClient
-	apiWithTokenOrg2 *testclient.TestClient
-	fga              *fgax.Client
-	objectStore      *objects.Service
-	mockProvider     *mock_shared.MockProvider
+	db                 *ent.Client
+	api                *testclient.TestClient
+	apiWithPAT         *testclient.TestClient
+	apiWithToken       *testclient.TestClient
+	apiWithTokenOrg2   *testclient.TestClient
+	fga                *fgax.Client
+	objectStore        *objects.Service
+	mockProvider       *mock_shared.MockProvider
+	deletedStorageKeys *deletedKeys
+}
+
+// deletedKeys is a concurrency safe set of the storage keys removed from object storage, the gala
+// workers deleting them run on their own goroutines while the test asserts on the main one
+type deletedKeys struct {
+	mu   sync.Mutex
+	keys map[string]struct{}
+}
+
+// newDeletedKeys returns an empty set
+func newDeletedKeys() *deletedKeys {
+	return &deletedKeys{keys: map[string]struct{}{}}
+}
+
+// Add records a storage key that was deleted
+func (d *deletedKeys) Add(key string) {
+	d.mu.Lock()
+	defer d.mu.Unlock()
+
+	d.keys[key] = struct{}{}
+}
+
+// Has reports whether the given storage key was deleted
+func (d *deletedKeys) Has(key string) bool {
+	d.mu.Lock()
+	defer d.mu.Unlock()
+
+	_, ok := d.keys[key]
+
+	return ok
 }
 
 var suite = &GraphTestSuite{}
@@ -251,11 +284,24 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	c.objectStore, c.mockProvider, err = coreutils.MockStorageServiceWithValidationAndProvider(t, nil, validators.MimeTypeValidator)
 	requireNoError(t, err)
 
+	c.deletedStorageKeys = newDeletedKeys()
+
 	c.mockProvider.On("GetPresignedURL", mock.Anything, mock.Anything, mock.Anything).Return("file:///tmp/test-presigned", nil).Maybe()
 	c.mockProvider.On("Download", mock.Anything, mock.Anything, mock.Anything).Return(&storage.DownloadedMetadata{
 		File: testPDFBytes(),
 		Size: 1024,
 	}, nil).Maybe()
+
+	// record the storage keys removed so tests can assert the objects backing deleted files are
+	// cleaned up out of object storage and not just orphaned
+	c.mockProvider.On("Delete", mock.Anything, mock.Anything, mock.Anything).Run(func(args mock.Arguments) {
+		f, ok := args.Get(1).(*storagetypes.File)
+		if !ok || f == nil {
+			return
+		}
+
+		c.deletedStorageKeys.Add(f.Key)
+	}).Return(nil).Maybe()
 
 	opts := []ent.Option{
 		ent.Authz(*fgaClient),
@@ -276,7 +322,10 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	// create database connection
 	jobOpts := []riverqueue.Option{riverqueue.WithConnectionURI(suite.tf.URI)}
 
-	db, err := entdb.NewTestClient(ctx, suite.tf, jobOpts, nil, opts)
+	// registry global hooks for tests
+	clientOpts := []entdb.Option{entdb.WithWorkflows(nil, nil)}
+
+	db, err := entdb.NewTestClient(ctx, suite.tf, jobOpts, clientOpts, opts)
 	requireNoError(t, err)
 
 	db.Use(hooks.EmitGalaEventHook(func() *gala.Gala {
@@ -306,6 +355,9 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	requireNoError(t, err)
 
 	_, err = hooks.RegisterGalaNDAAttestationListeners(galaInstance.Registry())
+	requireNoError(t, err)
+
+	_, err = hooks.RegisterGalaOrganizationCleanupListeners(galaInstance.Registry())
 	requireNoError(t, err)
 
 	requireNoError(t, galaInstance.StartWorkers(ctx))

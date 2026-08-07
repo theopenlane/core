@@ -273,7 +273,14 @@ func getEntHistoryGqlExtension() *entgql.Extension {
 	return gqlExt
 }
 
+// skipper defines what will bypass history logs, this includes
+// purge history on cascade delete as well as
+// if the caller has the cap to bypass audit logs, give to the integration caller
 const skipper = `
+    if PurgeHistoryEnabled(ctx) {
+        return true
+    }
+
     caller, _ := auth.CallerFromContext(ctx)
 
     return caller.HasInLineage(auth.CapBypassAuditLog)

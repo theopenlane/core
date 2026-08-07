@@ -88,6 +88,7 @@ func ConfigureGala(ctx context.Context, galaApp, notificationGala *gala.Gala, db
 		{galaApp, hooks.RegisterGalaOrganizationAvatarListeners},
 		{galaApp, hooks.RegisterGalaTaskRuleListeners},
 		{galaApp, hooks.RegisterGalaEntitlementListeners},
+		{galaApp, hooks.RegisterGalaOrganizationCleanupListeners},
 		{galaApp, hooks.RegisterGalaTrustCenterCacheListeners},
 		{galaApp, hooks.RegisterGalaTrustCenterWatermarkListeners},
 		{galaApp, hooks.RegisterGalaWorkflowListeners},

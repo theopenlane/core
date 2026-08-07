@@ -21,7 +21,7 @@ require (
 )
 
 require (
-	ariga.io/atlas v1.2.3 // indirect
+	ariga.io/atlas v1.3.0 // indirect
 	entgo.io/contrib v0.7.0 // indirect
 	github.com/99designs/gqlgen v0.17.94 // indirect
 	github.com/XSAM/otelsql v0.43.0 // indirect
@@ -54,7 +54,7 @@ require (
 	github.com/muhlemmer/gu v0.3.1 // indirect
 	github.com/openfga/api/proto v0.0.0-20260319214821-f153694bfc20 // indirect
 	github.com/openfga/go-sdk v0.8.2 // indirect
-	github.com/openfga/language/pkg/go v0.3.1 // indirect
+	github.com/openfga/language/pkg/go v0.3.2-0.20260730144454-83fedf8a4e70 // indirect
 	github.com/philhofer/fwd v1.2.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect

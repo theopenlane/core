@@ -31,11 +31,8 @@ func HookFileDelete() ent.Hook {
 					return nil, errInvalidStoragePath
 				}
 
-				v, err := next.Mutate(ctx, m)
-				if err != nil {
-					return nil, err
-				}
-
+				// the storage metadata has to be read before the mutation runs, a hard delete
+				// removes the rows entirely so there is nothing left to look up afterwards
 				files, err := m.Client().File.Query().Where(file.IDIn(ids...)).
 					Select(
 						file.FieldID,
@@ -47,6 +44,11 @@ func HookFileDelete() ent.Hook {
 						file.FieldStorageVolume,
 						file.FieldStorageRegion,
 					).All(ctx)
+				if err != nil {
+					return nil, err
+				}
+
+				v, err := next.Mutate(ctx, m)
 				if err != nil {
 					return nil, err
 				}

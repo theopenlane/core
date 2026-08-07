@@ -62,13 +62,14 @@ func HookOrgModuleUpdate() ent.Hook {
 				return handleOrgModuleUpdate(ctx, omm, next)
 			case ent.OpDeleteOne:
 				return handleOrgModuleDelete(ctx, omm, next)
-			case ent.OpUpdate:
+			case ent.OpUpdate, ent.OpDelete:
+				// OpUpdate is a soft delete, OpDelete is the hard delete the organization cascade uses
 				return handleOrgModuleBulkDelete(ctx, omm, next)
 			default:
 				return next.Mutate(ctx, omm)
 			}
 		})
-	}, ent.OpUpdateOne|ent.OpDeleteOne|ent.OpUpdate)
+	}, ent.OpUpdateOne|ent.OpDeleteOne|ent.OpUpdate|ent.OpDelete)
 }
 
 func handleOrgModuleUpdate(ctx context.Context, omm *generated.OrgModuleMutation, next ent.Mutator) (generated.Value, error) {
@@ -163,7 +164,8 @@ func handleOrgModuleDelete(ctx context.Context, omm *generated.OrgModuleMutation
 }
 
 func handleOrgModuleBulkDelete(ctx context.Context, omm *generated.OrgModuleMutation, next ent.Mutator) (generated.Value, error) {
-	if !entx.CheckIsSoftDeleteType(ctx, omm.Type()) {
+	// a bulk update is only a delete when it is the soft delete rewrite, a bulk delete always is
+	if !omm.Op().Is(ent.OpDelete) && !entx.CheckIsSoftDeleteType(ctx, omm.Type()) {
 		return next.Mutate(ctx, omm)
 	}
 
