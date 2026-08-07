@@ -42,8 +42,8 @@ import (
 							if err := Purge{{ $edge.Type.Name }}History(ctx, {{ $edge.Type.Name | lower }}.HasParentWith({{ $edge.Type.Name | lower }}.ID(id))); err != nil {
 								return err
 							}
-							{{- end }}
 
+							{{- end }}
 							if organizationCount, err := FromContext(ctx).{{ $edge.Type.Name  }}.Delete().Where({{ $edge.Type.Name  | lower }}.HasParentWith({{ $edge.Type.Name  | lower }}.ID(id))).Exec(ctx); err != nil {
 								logx.FromContext(ctx).Error().Err(err).Int("count", {{ $edge.Type.Name  | lower }}Count).Msg("error deleting child {{ $edge.Type.Name | lower }}")
 								return err
@@ -55,8 +55,8 @@ import (
 							if err := Purge{{ $edge.Type.Name }}History(ctx, {{ $edge.Type.Name | lower }}.{{ $annotation.Field }}(id)); err != nil {
 								return err
 							}
-							{{- end }}
 
+							{{- end }}
 							if {{ $edge.Type.Name | lower }}Count, err := FromContext(ctx).{{ $edge.Type.Name }}.Delete().Where({{ $edge.Type.Name | lower }}.{{ $annotation.Field }}(id)).Exec(ctx); err != nil {
 								logx.FromContext(ctx).Error().Err(err).Int("count", {{ $edge.Type.Name  | lower }}Count).Msg("error deleting {{ $edge.Type.Name | lower }}")
 								return err
@@ -82,8 +82,8 @@ import (
 							if err := Purge{{ $edge.Type.Name }}History(ctx, {{ $edge.Type.Name | lower }}.Has{{ $annotation.Field }}With({{ $node.Name | lower }}.ID(id))); err != nil {
 								return err
 							}
-							{{- end }}
 
+							{{- end }}
 							if {{ $edge.Type.Name | lower }}Count, err := FromContext(ctx).{{ $edge.Type.Name }}.Delete().Where({{ $edge.Type.Name | lower }}.Has{{ $annotation.Field }}With({{ $node.Name | lower }}.ID(id))).Exec(ctx); err != nil {
 								logx.FromContext(ctx).Error().Err(err).Int("count", {{ $edge.Type.Name  | lower }}Count).Msg("error deleting {{ $edge.Type.Name | lower }}")
 								return err

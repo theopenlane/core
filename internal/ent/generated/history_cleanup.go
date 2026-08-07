@@ -159,7 +159,7 @@ func PurgeHistoryEnabled(ctx context.Context) bool {
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the actionplan records themselves are deleted, the rows are matched
-// with a sub-select against the actionplan table rather than by loading the ids
+// with a sub-select against the actionplan table
 func PurgeActionPlanHistory(ctx context.Context, ps ...predicate.ActionPlan) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -190,7 +190,7 @@ func PurgeActionPlanHistory(ctx context.Context, ps ...predicate.ActionPlan) err
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the assessment records themselves are deleted, the rows are matched
-// with a sub-select against the assessment table rather than by loading the ids
+// with a sub-select against the assessment table
 func PurgeAssessmentHistory(ctx context.Context, ps ...predicate.Assessment) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -221,7 +221,7 @@ func PurgeAssessmentHistory(ctx context.Context, ps ...predicate.Assessment) err
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the assessmentresponse records themselves are deleted, the rows are matched
-// with a sub-select against the assessmentresponse table rather than by loading the ids
+// with a sub-select against the assessmentresponse table
 func PurgeAssessmentResponseHistory(ctx context.Context, ps ...predicate.AssessmentResponse) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -252,7 +252,7 @@ func PurgeAssessmentResponseHistory(ctx context.Context, ps ...predicate.Assessm
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the asset records themselves are deleted, the rows are matched
-// with a sub-select against the asset table rather than by loading the ids
+// with a sub-select against the asset table
 func PurgeAssetHistory(ctx context.Context, ps ...predicate.Asset) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -283,7 +283,7 @@ func PurgeAssetHistory(ctx context.Context, ps ...predicate.Asset) error {
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the campaign records themselves are deleted, the rows are matched
-// with a sub-select against the campaign table rather than by loading the ids
+// with a sub-select against the campaign table
 func PurgeCampaignHistory(ctx context.Context, ps ...predicate.Campaign) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -314,7 +314,7 @@ func PurgeCampaignHistory(ctx context.Context, ps ...predicate.Campaign) error {
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the campaigntarget records themselves are deleted, the rows are matched
-// with a sub-select against the campaigntarget table rather than by loading the ids
+// with a sub-select against the campaigntarget table
 func PurgeCampaignTargetHistory(ctx context.Context, ps ...predicate.CampaignTarget) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -345,7 +345,7 @@ func PurgeCampaignTargetHistory(ctx context.Context, ps ...predicate.CampaignTar
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the contact records themselves are deleted, the rows are matched
-// with a sub-select against the contact table rather than by loading the ids
+// with a sub-select against the contact table
 func PurgeContactHistory(ctx context.Context, ps ...predicate.Contact) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -376,7 +376,7 @@ func PurgeContactHistory(ctx context.Context, ps ...predicate.Contact) error {
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the control records themselves are deleted, the rows are matched
-// with a sub-select against the control table rather than by loading the ids
+// with a sub-select against the control table
 func PurgeControlHistory(ctx context.Context, ps ...predicate.Control) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -407,7 +407,7 @@ func PurgeControlHistory(ctx context.Context, ps ...predicate.Control) error {
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the controlimplementation records themselves are deleted, the rows are matched
-// with a sub-select against the controlimplementation table rather than by loading the ids
+// with a sub-select against the controlimplementation table
 func PurgeControlImplementationHistory(ctx context.Context, ps ...predicate.ControlImplementation) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -438,7 +438,7 @@ func PurgeControlImplementationHistory(ctx context.Context, ps ...predicate.Cont
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the controlobjective records themselves are deleted, the rows are matched
-// with a sub-select against the controlobjective table rather than by loading the ids
+// with a sub-select against the controlobjective table
 func PurgeControlObjectiveHistory(ctx context.Context, ps ...predicate.ControlObjective) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -469,7 +469,7 @@ func PurgeControlObjectiveHistory(ctx context.Context, ps ...predicate.ControlOb
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the customdomain records themselves are deleted, the rows are matched
-// with a sub-select against the customdomain table rather than by loading the ids
+// with a sub-select against the customdomain table
 func PurgeCustomDomainHistory(ctx context.Context, ps ...predicate.CustomDomain) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -500,7 +500,7 @@ func PurgeCustomDomainHistory(ctx context.Context, ps ...predicate.CustomDomain)
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the discussion records themselves are deleted, the rows are matched
-// with a sub-select against the discussion table rather than by loading the ids
+// with a sub-select against the discussion table
 func PurgeDiscussionHistory(ctx context.Context, ps ...predicate.Discussion) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -531,7 +531,7 @@ func PurgeDiscussionHistory(ctx context.Context, ps ...predicate.Discussion) err
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the documentdata records themselves are deleted, the rows are matched
-// with a sub-select against the documentdata table rather than by loading the ids
+// with a sub-select against the documentdata table
 func PurgeDocumentDataHistory(ctx context.Context, ps ...predicate.DocumentData) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -562,7 +562,7 @@ func PurgeDocumentDataHistory(ctx context.Context, ps ...predicate.DocumentData)
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the emailtemplate records themselves are deleted, the rows are matched
-// with a sub-select against the emailtemplate table rather than by loading the ids
+// with a sub-select against the emailtemplate table
 func PurgeEmailTemplateHistory(ctx context.Context, ps ...predicate.EmailTemplate) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -593,7 +593,7 @@ func PurgeEmailTemplateHistory(ctx context.Context, ps ...predicate.EmailTemplat
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the entity records themselves are deleted, the rows are matched
-// with a sub-select against the entity table rather than by loading the ids
+// with a sub-select against the entity table
 func PurgeEntityHistory(ctx context.Context, ps ...predicate.Entity) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -624,7 +624,7 @@ func PurgeEntityHistory(ctx context.Context, ps ...predicate.Entity) error {
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the entitytype records themselves are deleted, the rows are matched
-// with a sub-select against the entitytype table rather than by loading the ids
+// with a sub-select against the entitytype table
 func PurgeEntityTypeHistory(ctx context.Context, ps ...predicate.EntityType) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -655,7 +655,7 @@ func PurgeEntityTypeHistory(ctx context.Context, ps ...predicate.EntityType) err
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the evidence records themselves are deleted, the rows are matched
-// with a sub-select against the evidence table rather than by loading the ids
+// with a sub-select against the evidence table
 func PurgeEvidenceHistory(ctx context.Context, ps ...predicate.Evidence) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -686,7 +686,7 @@ func PurgeEvidenceHistory(ctx context.Context, ps ...predicate.Evidence) error {
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the file records themselves are deleted, the rows are matched
-// with a sub-select against the file table rather than by loading the ids
+// with a sub-select against the file table
 func PurgeFileHistory(ctx context.Context, ps ...predicate.File) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -717,7 +717,7 @@ func PurgeFileHistory(ctx context.Context, ps ...predicate.File) error {
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the finding records themselves are deleted, the rows are matched
-// with a sub-select against the finding table rather than by loading the ids
+// with a sub-select against the finding table
 func PurgeFindingHistory(ctx context.Context, ps ...predicate.Finding) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -748,7 +748,7 @@ func PurgeFindingHistory(ctx context.Context, ps ...predicate.Finding) error {
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the findingcontrol records themselves are deleted, the rows are matched
-// with a sub-select against the findingcontrol table rather than by loading the ids
+// with a sub-select against the findingcontrol table
 func PurgeFindingControlHistory(ctx context.Context, ps ...predicate.FindingControl) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -779,7 +779,7 @@ func PurgeFindingControlHistory(ctx context.Context, ps ...predicate.FindingCont
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the group records themselves are deleted, the rows are matched
-// with a sub-select against the group table rather than by loading the ids
+// with a sub-select against the group table
 func PurgeGroupHistory(ctx context.Context, ps ...predicate.Group) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -810,7 +810,7 @@ func PurgeGroupHistory(ctx context.Context, ps ...predicate.Group) error {
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the groupmembership records themselves are deleted, the rows are matched
-// with a sub-select against the groupmembership table rather than by loading the ids
+// with a sub-select against the groupmembership table
 func PurgeGroupMembershipHistory(ctx context.Context, ps ...predicate.GroupMembership) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -841,7 +841,7 @@ func PurgeGroupMembershipHistory(ctx context.Context, ps ...predicate.GroupMembe
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the groupsetting records themselves are deleted, the rows are matched
-// with a sub-select against the groupsetting table rather than by loading the ids
+// with a sub-select against the groupsetting table
 func PurgeGroupSettingHistory(ctx context.Context, ps ...predicate.GroupSetting) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -872,7 +872,7 @@ func PurgeGroupSettingHistory(ctx context.Context, ps ...predicate.GroupSetting)
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the hush records themselves are deleted, the rows are matched
-// with a sub-select against the hush table rather than by loading the ids
+// with a sub-select against the hush table
 func PurgeHushHistory(ctx context.Context, ps ...predicate.Hush) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -903,7 +903,7 @@ func PurgeHushHistory(ctx context.Context, ps ...predicate.Hush) error {
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the identityholder records themselves are deleted, the rows are matched
-// with a sub-select against the identityholder table rather than by loading the ids
+// with a sub-select against the identityholder table
 func PurgeIdentityHolderHistory(ctx context.Context, ps ...predicate.IdentityHolder) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -934,7 +934,7 @@ func PurgeIdentityHolderHistory(ctx context.Context, ps ...predicate.IdentityHol
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the internalpolicy records themselves are deleted, the rows are matched
-// with a sub-select against the internalpolicy table rather than by loading the ids
+// with a sub-select against the internalpolicy table
 func PurgeInternalPolicyHistory(ctx context.Context, ps ...predicate.InternalPolicy) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -965,7 +965,7 @@ func PurgeInternalPolicyHistory(ctx context.Context, ps ...predicate.InternalPol
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the jobtemplate records themselves are deleted, the rows are matched
-// with a sub-select against the jobtemplate table rather than by loading the ids
+// with a sub-select against the jobtemplate table
 func PurgeJobTemplateHistory(ctx context.Context, ps ...predicate.JobTemplate) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -996,7 +996,7 @@ func PurgeJobTemplateHistory(ctx context.Context, ps ...predicate.JobTemplate) e
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the mappabledomain records themselves are deleted, the rows are matched
-// with a sub-select against the mappabledomain table rather than by loading the ids
+// with a sub-select against the mappabledomain table
 func PurgeMappableDomainHistory(ctx context.Context, ps ...predicate.MappableDomain) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -1027,7 +1027,7 @@ func PurgeMappableDomainHistory(ctx context.Context, ps ...predicate.MappableDom
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the mappedcontrol records themselves are deleted, the rows are matched
-// with a sub-select against the mappedcontrol table rather than by loading the ids
+// with a sub-select against the mappedcontrol table
 func PurgeMappedControlHistory(ctx context.Context, ps ...predicate.MappedControl) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -1058,7 +1058,7 @@ func PurgeMappedControlHistory(ctx context.Context, ps ...predicate.MappedContro
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the narrative records themselves are deleted, the rows are matched
-// with a sub-select against the narrative table rather than by loading the ids
+// with a sub-select against the narrative table
 func PurgeNarrativeHistory(ctx context.Context, ps ...predicate.Narrative) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -1089,7 +1089,7 @@ func PurgeNarrativeHistory(ctx context.Context, ps ...predicate.Narrative) error
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the note records themselves are deleted, the rows are matched
-// with a sub-select against the note table rather than by loading the ids
+// with a sub-select against the note table
 func PurgeNoteHistory(ctx context.Context, ps ...predicate.Note) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -1120,7 +1120,7 @@ func PurgeNoteHistory(ctx context.Context, ps ...predicate.Note) error {
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the notificationpreference records themselves are deleted, the rows are matched
-// with a sub-select against the notificationpreference table rather than by loading the ids
+// with a sub-select against the notificationpreference table
 func PurgeNotificationPreferenceHistory(ctx context.Context, ps ...predicate.NotificationPreference) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -1151,7 +1151,7 @@ func PurgeNotificationPreferenceHistory(ctx context.Context, ps ...predicate.Not
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the notificationtemplate records themselves are deleted, the rows are matched
-// with a sub-select against the notificationtemplate table rather than by loading the ids
+// with a sub-select against the notificationtemplate table
 func PurgeNotificationTemplateHistory(ctx context.Context, ps ...predicate.NotificationTemplate) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -1182,7 +1182,7 @@ func PurgeNotificationTemplateHistory(ctx context.Context, ps ...predicate.Notif
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the orgmembership records themselves are deleted, the rows are matched
-// with a sub-select against the orgmembership table rather than by loading the ids
+// with a sub-select against the orgmembership table
 func PurgeOrgMembershipHistory(ctx context.Context, ps ...predicate.OrgMembership) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -1213,7 +1213,7 @@ func PurgeOrgMembershipHistory(ctx context.Context, ps ...predicate.OrgMembershi
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the organization records themselves are deleted, the rows are matched
-// with a sub-select against the organization table rather than by loading the ids
+// with a sub-select against the organization table
 func PurgeOrganizationHistory(ctx context.Context, ps ...predicate.Organization) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -1244,7 +1244,7 @@ func PurgeOrganizationHistory(ctx context.Context, ps ...predicate.Organization)
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the organizationsetting records themselves are deleted, the rows are matched
-// with a sub-select against the organizationsetting table rather than by loading the ids
+// with a sub-select against the organizationsetting table
 func PurgeOrganizationSettingHistory(ctx context.Context, ps ...predicate.OrganizationSetting) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -1275,7 +1275,7 @@ func PurgeOrganizationSettingHistory(ctx context.Context, ps ...predicate.Organi
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the platform records themselves are deleted, the rows are matched
-// with a sub-select against the platform table rather than by loading the ids
+// with a sub-select against the platform table
 func PurgePlatformHistory(ctx context.Context, ps ...predicate.Platform) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -1306,7 +1306,7 @@ func PurgePlatformHistory(ctx context.Context, ps ...predicate.Platform) error {
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the procedure records themselves are deleted, the rows are matched
-// with a sub-select against the procedure table rather than by loading the ids
+// with a sub-select against the procedure table
 func PurgeProcedureHistory(ctx context.Context, ps ...predicate.Procedure) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -1337,7 +1337,7 @@ func PurgeProcedureHistory(ctx context.Context, ps ...predicate.Procedure) error
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the program records themselves are deleted, the rows are matched
-// with a sub-select against the program table rather than by loading the ids
+// with a sub-select against the program table
 func PurgeProgramHistory(ctx context.Context, ps ...predicate.Program) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -1368,7 +1368,7 @@ func PurgeProgramHistory(ctx context.Context, ps ...predicate.Program) error {
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the programmembership records themselves are deleted, the rows are matched
-// with a sub-select against the programmembership table rather than by loading the ids
+// with a sub-select against the programmembership table
 func PurgeProgramMembershipHistory(ctx context.Context, ps ...predicate.ProgramMembership) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -1399,7 +1399,7 @@ func PurgeProgramMembershipHistory(ctx context.Context, ps ...predicate.ProgramM
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the remediation records themselves are deleted, the rows are matched
-// with a sub-select against the remediation table rather than by loading the ids
+// with a sub-select against the remediation table
 func PurgeRemediationHistory(ctx context.Context, ps ...predicate.Remediation) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -1430,7 +1430,7 @@ func PurgeRemediationHistory(ctx context.Context, ps ...predicate.Remediation) e
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the review records themselves are deleted, the rows are matched
-// with a sub-select against the review table rather than by loading the ids
+// with a sub-select against the review table
 func PurgeReviewHistory(ctx context.Context, ps ...predicate.Review) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -1461,7 +1461,7 @@ func PurgeReviewHistory(ctx context.Context, ps ...predicate.Review) error {
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the risk records themselves are deleted, the rows are matched
-// with a sub-select against the risk table rather than by loading the ids
+// with a sub-select against the risk table
 func PurgeRiskHistory(ctx context.Context, ps ...predicate.Risk) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -1492,7 +1492,7 @@ func PurgeRiskHistory(ctx context.Context, ps ...predicate.Risk) error {
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the sladefinition records themselves are deleted, the rows are matched
-// with a sub-select against the sladefinition table rather than by loading the ids
+// with a sub-select against the sladefinition table
 func PurgeSLADefinitionHistory(ctx context.Context, ps ...predicate.SLADefinition) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -1523,7 +1523,7 @@ func PurgeSLADefinitionHistory(ctx context.Context, ps ...predicate.SLADefinitio
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the scheduledjob records themselves are deleted, the rows are matched
-// with a sub-select against the scheduledjob table rather than by loading the ids
+// with a sub-select against the scheduledjob table
 func PurgeScheduledJobHistory(ctx context.Context, ps ...predicate.ScheduledJob) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -1554,7 +1554,7 @@ func PurgeScheduledJobHistory(ctx context.Context, ps ...predicate.ScheduledJob)
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the standard records themselves are deleted, the rows are matched
-// with a sub-select against the standard table rather than by loading the ids
+// with a sub-select against the standard table
 func PurgeStandardHistory(ctx context.Context, ps ...predicate.Standard) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -1585,7 +1585,7 @@ func PurgeStandardHistory(ctx context.Context, ps ...predicate.Standard) error {
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the subcontrol records themselves are deleted, the rows are matched
-// with a sub-select against the subcontrol table rather than by loading the ids
+// with a sub-select against the subcontrol table
 func PurgeSubcontrolHistory(ctx context.Context, ps ...predicate.Subcontrol) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -1616,7 +1616,7 @@ func PurgeSubcontrolHistory(ctx context.Context, ps ...predicate.Subcontrol) err
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the subprocessor records themselves are deleted, the rows are matched
-// with a sub-select against the subprocessor table rather than by loading the ids
+// with a sub-select against the subprocessor table
 func PurgeSubprocessorHistory(ctx context.Context, ps ...predicate.Subprocessor) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -1647,7 +1647,7 @@ func PurgeSubprocessorHistory(ctx context.Context, ps ...predicate.Subprocessor)
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the systemdetail records themselves are deleted, the rows are matched
-// with a sub-select against the systemdetail table rather than by loading the ids
+// with a sub-select against the systemdetail table
 func PurgeSystemDetailHistory(ctx context.Context, ps ...predicate.SystemDetail) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -1678,7 +1678,7 @@ func PurgeSystemDetailHistory(ctx context.Context, ps ...predicate.SystemDetail)
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the task records themselves are deleted, the rows are matched
-// with a sub-select against the task table rather than by loading the ids
+// with a sub-select against the task table
 func PurgeTaskHistory(ctx context.Context, ps ...predicate.Task) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -1709,7 +1709,7 @@ func PurgeTaskHistory(ctx context.Context, ps ...predicate.Task) error {
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the template records themselves are deleted, the rows are matched
-// with a sub-select against the template table rather than by loading the ids
+// with a sub-select against the template table
 func PurgeTemplateHistory(ctx context.Context, ps ...predicate.Template) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -1740,7 +1740,7 @@ func PurgeTemplateHistory(ctx context.Context, ps ...predicate.Template) error {
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the trustcenter records themselves are deleted, the rows are matched
-// with a sub-select against the trustcenter table rather than by loading the ids
+// with a sub-select against the trustcenter table
 func PurgeTrustCenterHistory(ctx context.Context, ps ...predicate.TrustCenter) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -1771,7 +1771,7 @@ func PurgeTrustCenterHistory(ctx context.Context, ps ...predicate.TrustCenter) e
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the trustcentercompliance records themselves are deleted, the rows are matched
-// with a sub-select against the trustcentercompliance table rather than by loading the ids
+// with a sub-select against the trustcentercompliance table
 func PurgeTrustCenterComplianceHistory(ctx context.Context, ps ...predicate.TrustCenterCompliance) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -1802,7 +1802,7 @@ func PurgeTrustCenterComplianceHistory(ctx context.Context, ps ...predicate.Trus
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the trustcenterdoc records themselves are deleted, the rows are matched
-// with a sub-select against the trustcenterdoc table rather than by loading the ids
+// with a sub-select against the trustcenterdoc table
 func PurgeTrustCenterDocHistory(ctx context.Context, ps ...predicate.TrustCenterDoc) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -1833,7 +1833,7 @@ func PurgeTrustCenterDocHistory(ctx context.Context, ps ...predicate.TrustCenter
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the trustcenterentity records themselves are deleted, the rows are matched
-// with a sub-select against the trustcenterentity table rather than by loading the ids
+// with a sub-select against the trustcenterentity table
 func PurgeTrustCenterEntityHistory(ctx context.Context, ps ...predicate.TrustCenterEntity) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -1864,7 +1864,7 @@ func PurgeTrustCenterEntityHistory(ctx context.Context, ps ...predicate.TrustCen
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the trustcenterfaq records themselves are deleted, the rows are matched
-// with a sub-select against the trustcenterfaq table rather than by loading the ids
+// with a sub-select against the trustcenterfaq table
 func PurgeTrustCenterFAQHistory(ctx context.Context, ps ...predicate.TrustCenterFAQ) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -1895,7 +1895,7 @@ func PurgeTrustCenterFAQHistory(ctx context.Context, ps ...predicate.TrustCenter
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the trustcenterndarequest records themselves are deleted, the rows are matched
-// with a sub-select against the trustcenterndarequest table rather than by loading the ids
+// with a sub-select against the trustcenterndarequest table
 func PurgeTrustCenterNDARequestHistory(ctx context.Context, ps ...predicate.TrustCenterNDARequest) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -1926,7 +1926,7 @@ func PurgeTrustCenterNDARequestHistory(ctx context.Context, ps ...predicate.Trus
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the trustcentersetting records themselves are deleted, the rows are matched
-// with a sub-select against the trustcentersetting table rather than by loading the ids
+// with a sub-select against the trustcentersetting table
 func PurgeTrustCenterSettingHistory(ctx context.Context, ps ...predicate.TrustCenterSetting) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -1957,7 +1957,7 @@ func PurgeTrustCenterSettingHistory(ctx context.Context, ps ...predicate.TrustCe
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the trustcentersubprocessor records themselves are deleted, the rows are matched
-// with a sub-select against the trustcentersubprocessor table rather than by loading the ids
+// with a sub-select against the trustcentersubprocessor table
 func PurgeTrustCenterSubprocessorHistory(ctx context.Context, ps ...predicate.TrustCenterSubprocessor) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -1988,7 +1988,7 @@ func PurgeTrustCenterSubprocessorHistory(ctx context.Context, ps ...predicate.Tr
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the trustcenterwatermarkconfig records themselves are deleted, the rows are matched
-// with a sub-select against the trustcenterwatermarkconfig table rather than by loading the ids
+// with a sub-select against the trustcenterwatermarkconfig table
 func PurgeTrustCenterWatermarkConfigHistory(ctx context.Context, ps ...predicate.TrustCenterWatermarkConfig) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -2019,7 +2019,7 @@ func PurgeTrustCenterWatermarkConfigHistory(ctx context.Context, ps ...predicate
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the user records themselves are deleted, the rows are matched
-// with a sub-select against the user table rather than by loading the ids
+// with a sub-select against the user table
 func PurgeUserHistory(ctx context.Context, ps ...predicate.User) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -2050,7 +2050,7 @@ func PurgeUserHistory(ctx context.Context, ps ...predicate.User) error {
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the usersetting records themselves are deleted, the rows are matched
-// with a sub-select against the usersetting table rather than by loading the ids
+// with a sub-select against the usersetting table
 func PurgeUserSettingHistory(ctx context.Context, ps ...predicate.UserSetting) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -2081,7 +2081,7 @@ func PurgeUserSettingHistory(ctx context.Context, ps ...predicate.UserSetting) e
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the vendorriskscore records themselves are deleted, the rows are matched
-// with a sub-select against the vendorriskscore table rather than by loading the ids
+// with a sub-select against the vendorriskscore table
 func PurgeVendorRiskScoreHistory(ctx context.Context, ps ...predicate.VendorRiskScore) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -2112,7 +2112,7 @@ func PurgeVendorRiskScoreHistory(ctx context.Context, ps ...predicate.VendorRisk
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the vendorscoringconfig records themselves are deleted, the rows are matched
-// with a sub-select against the vendorscoringconfig table rather than by loading the ids
+// with a sub-select against the vendorscoringconfig table
 func PurgeVendorScoringConfigHistory(ctx context.Context, ps ...predicate.VendorScoringConfig) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -2143,7 +2143,7 @@ func PurgeVendorScoringConfigHistory(ctx context.Context, ps ...predicate.Vendor
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the vulnerability records themselves are deleted, the rows are matched
-// with a sub-select against the vulnerability table rather than by loading the ids
+// with a sub-select against the vulnerability table
 func PurgeVulnerabilityHistory(ctx context.Context, ps ...predicate.Vulnerability) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -2174,7 +2174,7 @@ func PurgeVulnerabilityHistory(ctx context.Context, ps ...predicate.Vulnerabilit
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the workflowassignment records themselves are deleted, the rows are matched
-// with a sub-select against the workflowassignment table rather than by loading the ids
+// with a sub-select against the workflowassignment table
 func PurgeWorkflowAssignmentHistory(ctx context.Context, ps ...predicate.WorkflowAssignment) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -2205,7 +2205,7 @@ func PurgeWorkflowAssignmentHistory(ctx context.Context, ps ...predicate.Workflo
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the workflowassignmenttarget records themselves are deleted, the rows are matched
-// with a sub-select against the workflowassignmenttarget table rather than by loading the ids
+// with a sub-select against the workflowassignmenttarget table
 func PurgeWorkflowAssignmentTargetHistory(ctx context.Context, ps ...predicate.WorkflowAssignmentTarget) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
@@ -2236,7 +2236,7 @@ func PurgeWorkflowAssignmentTargetHistory(ctx context.Context, ps ...predicate.W
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the workflowdefinition records themselves are deleted, the rows are matched
-// with a sub-select against the workflowdefinition table rather than by loading the ids
+// with a sub-select against the workflowdefinition table
 func PurgeWorkflowDefinitionHistory(ctx context.Context, ps ...predicate.WorkflowDefinition) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil

@@ -39,7 +39,7 @@ func PurgeHistoryEnabled(ctx context.Context) bool {
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
 // This has to run before the {{ $pkgName }} records themselves are deleted, the rows are matched
-// with a sub-select against the {{ $pkgName }} table rather than by loading the ids
+// with a sub-select against the {{ $pkgName }} table
 func Purge{{ $node.Name }}History(ctx context.Context, ps ...predicate.{{ $node.Name }}) error {
 	if !contextx.PurgeHistoryEnabled(ctx) {
 		return nil
