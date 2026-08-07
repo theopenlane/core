@@ -12,6 +12,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/filehistory"
 	"github.com/theopenlane/entx/history"
 )
@@ -97,6 +98,8 @@ type FileHistory struct {
 	StorageRegion string `json:"storage_region,omitempty"`
 	// the storage provider the file is stored in, if applicable
 	StorageProvider string `json:"storage_provider,omitempty"`
+	// internal backup replication state for this file, if handled internally
+	BackupState models.FileBackupState `json:"backup_state,omitempty"`
 	// LastAccessedAt holds the value of the "last_accessed_at" field.
 	LastAccessedAt *time.Time `json:"last_accessed_at,omitempty"`
 	selectValues   sql.SelectValues
@@ -107,7 +110,7 @@ func (*FileHistory) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case filehistory.FieldTags, filehistory.FieldFileContents, filehistory.FieldMetadata:
+		case filehistory.FieldTags, filehistory.FieldFileContents, filehistory.FieldMetadata, filehistory.FieldBackupState:
 			values[i] = new([]byte)
 		case filehistory.FieldOperation:
 			values[i] = new(history.OpType)
@@ -375,6 +378,14 @@ func (_m *FileHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.StorageProvider = value.String
 			}
+		case filehistory.FieldBackupState:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field backup_state", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.BackupState); err != nil {
+					return fmt.Errorf("unmarshal field backup_state: %w", err)
+				}
+			}
 		case filehistory.FieldLastAccessedAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field last_accessed_at", values[i])
@@ -537,6 +548,9 @@ func (_m *FileHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("storage_provider=")
 	builder.WriteString(_m.StorageProvider)
+	builder.WriteString(", ")
+	builder.WriteString("backup_state=")
+	builder.WriteString(fmt.Sprintf("%v", _m.BackupState))
 	builder.WriteString(", ")
 	if v := _m.LastAccessedAt; v != nil {
 		builder.WriteString("last_accessed_at=")

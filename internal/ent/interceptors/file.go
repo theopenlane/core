@@ -178,6 +178,8 @@ func StorageFileFromEnt(file *generated.File) *storagetypes.File {
 		storageFile.Metadata = metadata
 	}
 
+	storageFile.BackupLocation = file.BackupState.Location()
+
 	return storageFile
 }
 

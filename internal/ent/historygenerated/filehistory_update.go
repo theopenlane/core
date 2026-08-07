@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/filehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 
@@ -644,6 +645,26 @@ func (_u *FileHistoryUpdate) ClearStorageProvider() *FileHistoryUpdate {
 	return _u
 }
 
+// SetBackupState sets the "backup_state" field.
+func (_u *FileHistoryUpdate) SetBackupState(v models.FileBackupState) *FileHistoryUpdate {
+	_u.mutation.SetBackupState(v)
+	return _u
+}
+
+// SetNillableBackupState sets the "backup_state" field if the given value is not nil.
+func (_u *FileHistoryUpdate) SetNillableBackupState(v *models.FileBackupState) *FileHistoryUpdate {
+	if v != nil {
+		_u.SetBackupState(*v)
+	}
+	return _u
+}
+
+// ClearBackupState clears the value of the "backup_state" field.
+func (_u *FileHistoryUpdate) ClearBackupState() *FileHistoryUpdate {
+	_u.mutation.ClearBackupState()
+	return _u
+}
+
 // SetLastAccessedAt sets the "last_accessed_at" field.
 func (_u *FileHistoryUpdate) SetLastAccessedAt(v time.Time) *FileHistoryUpdate {
 	_u.mutation.SetLastAccessedAt(v)
@@ -931,6 +952,12 @@ func (_u *FileHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if _u.mutation.StorageProviderCleared() {
 		_spec.ClearField(filehistory.FieldStorageProvider, field.TypeString)
+	}
+	if value, ok := _u.mutation.BackupState(); ok {
+		_spec.SetField(filehistory.FieldBackupState, field.TypeJSON, value)
+	}
+	if _u.mutation.BackupStateCleared() {
+		_spec.ClearField(filehistory.FieldBackupState, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.LastAccessedAt(); ok {
 		_spec.SetField(filehistory.FieldLastAccessedAt, field.TypeTime, value)
@@ -1572,6 +1599,26 @@ func (_u *FileHistoryUpdateOne) ClearStorageProvider() *FileHistoryUpdateOne {
 	return _u
 }
 
+// SetBackupState sets the "backup_state" field.
+func (_u *FileHistoryUpdateOne) SetBackupState(v models.FileBackupState) *FileHistoryUpdateOne {
+	_u.mutation.SetBackupState(v)
+	return _u
+}
+
+// SetNillableBackupState sets the "backup_state" field if the given value is not nil.
+func (_u *FileHistoryUpdateOne) SetNillableBackupState(v *models.FileBackupState) *FileHistoryUpdateOne {
+	if v != nil {
+		_u.SetBackupState(*v)
+	}
+	return _u
+}
+
+// ClearBackupState clears the value of the "backup_state" field.
+func (_u *FileHistoryUpdateOne) ClearBackupState() *FileHistoryUpdateOne {
+	_u.mutation.ClearBackupState()
+	return _u
+}
+
 // SetLastAccessedAt sets the "last_accessed_at" field.
 func (_u *FileHistoryUpdateOne) SetLastAccessedAt(v time.Time) *FileHistoryUpdateOne {
 	_u.mutation.SetLastAccessedAt(v)
@@ -1889,6 +1936,12 @@ func (_u *FileHistoryUpdateOne) sqlSave(ctx context.Context) (_node *FileHistory
 	}
 	if _u.mutation.StorageProviderCleared() {
 		_spec.ClearField(filehistory.FieldStorageProvider, field.TypeString)
+	}
+	if value, ok := _u.mutation.BackupState(); ok {
+		_spec.SetField(filehistory.FieldBackupState, field.TypeJSON, value)
+	}
+	if _u.mutation.BackupStateCleared() {
+		_spec.ClearField(filehistory.FieldBackupState, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.LastAccessedAt(); ok {
 		_spec.SetField(filehistory.FieldLastAccessedAt, field.TypeTime, value)

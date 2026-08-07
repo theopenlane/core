@@ -97,8 +97,24 @@ type File struct {
 	CorrelatedObjectType string
 	// ProviderType indicates which storage provider is used for this file
 	ProviderType ProviderType `json:"provider_type,omitempty"`
+	// BackupLocation describes the replica of this file at its backup provider, when one exists
+	BackupLocation *BackupLocation `json:"backup_location,omitempty"`
 	// FileMetadata contains common metadata about the file
 	FileMetadata
+}
+
+// BackupLocation describes where a replica of a file lives at its backup provider
+type BackupLocation struct {
+	// ProviderType is the backup provider holding the replica
+	ProviderType ProviderType `json:"provider_type,omitempty"`
+	// Bucket is the bucket the replica was written to
+	Bucket string `json:"bucket,omitempty"`
+	// Key is the object key of the replica, which is not guaranteed to match the source key
+	Key string `json:"key,omitempty"`
+	// Region is the region the replica was written to, if applicable
+	Region string `json:"region,omitempty"`
+	// FullURI is the full URI of the replica
+	FullURI string `json:"full_uri,omitempty"`
 }
 
 // ParentObject represents the parent object of a file

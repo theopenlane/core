@@ -26,7 +26,8 @@ func TestResolveProviderUsesConfigWhenCredentialSyncDisabled(t *testing.T) {
 		},
 	}
 
-	_, providerResolver := resolver.Build(config)
+	_, providerResolver, err := resolver.Build(config)
+	assert.NoError(t, err)
 
 	ctx := ent.NewContext(context.Background(), &ent.Client{})
 

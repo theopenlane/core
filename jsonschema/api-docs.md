@@ -116,16 +116,28 @@ Config contains the configuration for the core server
     "objectstorage": {
         "providers": {
             "s3": {
-                "credentials": {}
+                "credentials": {},
+                "backup": {
+                    "credentials": {}
+                }
             },
             "r2": {
-                "credentials": {}
+                "credentials": {},
+                "backup": {
+                    "credentials": {}
+                }
             },
             "disk": {
-                "credentials": {}
+                "credentials": {},
+                "backup": {
+                    "credentials": {}
+                }
             },
             "database": {
-                "credentials": {}
+                "credentials": {},
+                "backup": {
+                    "credentials": {}
+                }
             }
         }
     },
@@ -1380,16 +1392,28 @@ ProviderConfig contains configuration for object storage providers
 {
     "providers": {
         "s3": {
-            "credentials": {}
+            "credentials": {},
+            "backup": {
+                "credentials": {}
+            }
         },
         "r2": {
-            "credentials": {}
+            "credentials": {},
+            "backup": {
+                "credentials": {}
+            }
         },
         "disk": {
-            "credentials": {}
+            "credentials": {},
+            "backup": {
+                "credentials": {}
+            }
         },
         "database": {
-            "credentials": {}
+            "credentials": {},
+            "backup": {
+                "credentials": {}
+            }
         }
     }
 }
@@ -1419,16 +1443,28 @@ ProviderConfig contains configuration for object storage providers
 ```json
 {
     "s3": {
-        "credentials": {}
+        "credentials": {},
+        "backup": {
+            "credentials": {}
+        }
     },
     "r2": {
-        "credentials": {}
+        "credentials": {},
+        "backup": {
+            "credentials": {}
+        }
     },
     "disk": {
-        "credentials": {}
+        "credentials": {},
+        "backup": {
+            "credentials": {}
+        }
     },
     "database": {
-        "credentials": {}
+        "credentials": {},
+        "backup": {
+            "credentials": {}
+        }
     }
 }
 ```
@@ -1452,6 +1488,57 @@ This is structured to allow easy extension for additional providers in the futur
 |**proxypresignenabled**|`boolean`|ProxyPresignEnabled toggles proxy-signed download URL generation<br/>||
 |**baseurl**|`string`|BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).<br/>||
 |[**credentials**](#objectstorageproviderss3credentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
+|[**backup**](#objectstorageproviderss3backup)|`object`|BackupConfig defines an asynchronous replication target for a provider's objects<br/>||
+
+**Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "credentials": {},
+    "backup": {
+        "credentials": {}
+    }
+}
+```
+
+<a name="objectstorageproviderss3credentials"></a>
+##### objectstorage\.providers\.s3\.credentials: object
+
+ProviderCredentials contains credentials for a storage provider
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**accesskeyid**|`string`|AccessKeyID for cloud providers<br/>||
+|**secretaccesskey**|`string`|SecretAccessKey for cloud providers<br/>||
+|**projectid**|`string`|ProjectID for GCS<br/>||
+|**accountid**|`string`|AccountID for Cloudflare R2<br/>||
+|**apitoken**|`string`|APIToken for Cloudflare R2<br/>||
+
+**Additional Properties:** not allowed  
+<a name="objectstorageproviderss3backup"></a>
+##### objectstorage\.providers\.s3\.backup: object
+
+BackupConfig defines an asynchronous replication target for a provider's objects
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**provider**|`string`|Provider names the destination backend type, e.g. s3<br/>||
+|**enabled**|`boolean`|Enabled indicates if this backup target is enabled<br/>||
+|**ensureavailable**|`boolean`|EnsureAvailable enforces backup provider availability before completing server startup<br/>||
+|**readfrombackup**|`boolean`|ReadFromBackup serves reads from this backup target instead of the source provider, intended<br/>to be enabled during a disaster recovery event when the source provider storage is lost<br/>||
+|**region**|`string`|Region for cloud providers<br/>||
+|**bucket**|`string`|Bucket name for cloud providers<br/>||
+|**endpoint**|`string`|Endpoint for custom endpoints<br/>||
+|**proxypresignenabled**|`boolean`|ProxyPresignEnabled toggles proxy-signed download URL generation<br/>||
+|**baseurl**|`string`|BaseURL is the prefix for proxy download URLs<br/>||
+|[**credentials**](#objectstorageproviderss3backupcredentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -1462,8 +1549,8 @@ This is structured to allow easy extension for additional providers in the futur
 }
 ```
 
-<a name="objectstorageproviderss3credentials"></a>
-##### objectstorage\.providers\.s3\.credentials: object
+<a name="objectstorageproviderss3backupcredentials"></a>
+###### objectstorage\.providers\.s3\.backup\.credentials: object
 
 ProviderCredentials contains credentials for a storage provider
 
@@ -1498,6 +1585,57 @@ This is structured to allow easy extension for additional providers in the futur
 |**proxypresignenabled**|`boolean`|ProxyPresignEnabled toggles proxy-signed download URL generation<br/>||
 |**baseurl**|`string`|BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).<br/>||
 |[**credentials**](#objectstorageprovidersr2credentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
+|[**backup**](#objectstorageprovidersr2backup)|`object`|BackupConfig defines an asynchronous replication target for a provider's objects<br/>||
+
+**Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "credentials": {},
+    "backup": {
+        "credentials": {}
+    }
+}
+```
+
+<a name="objectstorageprovidersr2credentials"></a>
+##### objectstorage\.providers\.r2\.credentials: object
+
+ProviderCredentials contains credentials for a storage provider
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**accesskeyid**|`string`|AccessKeyID for cloud providers<br/>||
+|**secretaccesskey**|`string`|SecretAccessKey for cloud providers<br/>||
+|**projectid**|`string`|ProjectID for GCS<br/>||
+|**accountid**|`string`|AccountID for Cloudflare R2<br/>||
+|**apitoken**|`string`|APIToken for Cloudflare R2<br/>||
+
+**Additional Properties:** not allowed  
+<a name="objectstorageprovidersr2backup"></a>
+##### objectstorage\.providers\.r2\.backup: object
+
+BackupConfig defines an asynchronous replication target for a provider's objects
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**provider**|`string`|Provider names the destination backend type, e.g. s3<br/>||
+|**enabled**|`boolean`|Enabled indicates if this backup target is enabled<br/>||
+|**ensureavailable**|`boolean`|EnsureAvailable enforces backup provider availability before completing server startup<br/>||
+|**readfrombackup**|`boolean`|ReadFromBackup serves reads from this backup target instead of the source provider, intended<br/>to be enabled during a disaster recovery event when the source provider storage is lost<br/>||
+|**region**|`string`|Region for cloud providers<br/>||
+|**bucket**|`string`|Bucket name for cloud providers<br/>||
+|**endpoint**|`string`|Endpoint for custom endpoints<br/>||
+|**proxypresignenabled**|`boolean`|ProxyPresignEnabled toggles proxy-signed download URL generation<br/>||
+|**baseurl**|`string`|BaseURL is the prefix for proxy download URLs<br/>||
+|[**credentials**](#objectstorageprovidersr2backupcredentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -1508,8 +1646,8 @@ This is structured to allow easy extension for additional providers in the futur
 }
 ```
 
-<a name="objectstorageprovidersr2credentials"></a>
-##### objectstorage\.providers\.r2\.credentials: object
+<a name="objectstorageprovidersr2backupcredentials"></a>
+###### objectstorage\.providers\.r2\.backup\.credentials: object
 
 ProviderCredentials contains credentials for a storage provider
 
@@ -1544,6 +1682,57 @@ This is structured to allow easy extension for additional providers in the futur
 |**proxypresignenabled**|`boolean`|ProxyPresignEnabled toggles proxy-signed download URL generation<br/>||
 |**baseurl**|`string`|BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).<br/>||
 |[**credentials**](#objectstorageprovidersdiskcredentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
+|[**backup**](#objectstorageprovidersdiskbackup)|`object`|BackupConfig defines an asynchronous replication target for a provider's objects<br/>||
+
+**Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "credentials": {},
+    "backup": {
+        "credentials": {}
+    }
+}
+```
+
+<a name="objectstorageprovidersdiskcredentials"></a>
+##### objectstorage\.providers\.disk\.credentials: object
+
+ProviderCredentials contains credentials for a storage provider
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**accesskeyid**|`string`|AccessKeyID for cloud providers<br/>||
+|**secretaccesskey**|`string`|SecretAccessKey for cloud providers<br/>||
+|**projectid**|`string`|ProjectID for GCS<br/>||
+|**accountid**|`string`|AccountID for Cloudflare R2<br/>||
+|**apitoken**|`string`|APIToken for Cloudflare R2<br/>||
+
+**Additional Properties:** not allowed  
+<a name="objectstorageprovidersdiskbackup"></a>
+##### objectstorage\.providers\.disk\.backup: object
+
+BackupConfig defines an asynchronous replication target for a provider's objects
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**provider**|`string`|Provider names the destination backend type, e.g. s3<br/>||
+|**enabled**|`boolean`|Enabled indicates if this backup target is enabled<br/>||
+|**ensureavailable**|`boolean`|EnsureAvailable enforces backup provider availability before completing server startup<br/>||
+|**readfrombackup**|`boolean`|ReadFromBackup serves reads from this backup target instead of the source provider, intended<br/>to be enabled during a disaster recovery event when the source provider storage is lost<br/>||
+|**region**|`string`|Region for cloud providers<br/>||
+|**bucket**|`string`|Bucket name for cloud providers<br/>||
+|**endpoint**|`string`|Endpoint for custom endpoints<br/>||
+|**proxypresignenabled**|`boolean`|ProxyPresignEnabled toggles proxy-signed download URL generation<br/>||
+|**baseurl**|`string`|BaseURL is the prefix for proxy download URLs<br/>||
+|[**credentials**](#objectstorageprovidersdiskbackupcredentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -1554,8 +1743,8 @@ This is structured to allow easy extension for additional providers in the futur
 }
 ```
 
-<a name="objectstorageprovidersdiskcredentials"></a>
-##### objectstorage\.providers\.disk\.credentials: object
+<a name="objectstorageprovidersdiskbackupcredentials"></a>
+###### objectstorage\.providers\.disk\.backup\.credentials: object
 
 ProviderCredentials contains credentials for a storage provider
 
@@ -1590,6 +1779,57 @@ This is structured to allow easy extension for additional providers in the futur
 |**proxypresignenabled**|`boolean`|ProxyPresignEnabled toggles proxy-signed download URL generation<br/>||
 |**baseurl**|`string`|BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).<br/>||
 |[**credentials**](#objectstorageprovidersdatabasecredentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
+|[**backup**](#objectstorageprovidersdatabasebackup)|`object`|BackupConfig defines an asynchronous replication target for a provider's objects<br/>||
+
+**Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "credentials": {},
+    "backup": {
+        "credentials": {}
+    }
+}
+```
+
+<a name="objectstorageprovidersdatabasecredentials"></a>
+##### objectstorage\.providers\.database\.credentials: object
+
+ProviderCredentials contains credentials for a storage provider
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**accesskeyid**|`string`|AccessKeyID for cloud providers<br/>||
+|**secretaccesskey**|`string`|SecretAccessKey for cloud providers<br/>||
+|**projectid**|`string`|ProjectID for GCS<br/>||
+|**accountid**|`string`|AccountID for Cloudflare R2<br/>||
+|**apitoken**|`string`|APIToken for Cloudflare R2<br/>||
+
+**Additional Properties:** not allowed  
+<a name="objectstorageprovidersdatabasebackup"></a>
+##### objectstorage\.providers\.database\.backup: object
+
+BackupConfig defines an asynchronous replication target for a provider's objects
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**provider**|`string`|Provider names the destination backend type, e.g. s3<br/>||
+|**enabled**|`boolean`|Enabled indicates if this backup target is enabled<br/>||
+|**ensureavailable**|`boolean`|EnsureAvailable enforces backup provider availability before completing server startup<br/>||
+|**readfrombackup**|`boolean`|ReadFromBackup serves reads from this backup target instead of the source provider, intended<br/>to be enabled during a disaster recovery event when the source provider storage is lost<br/>||
+|**region**|`string`|Region for cloud providers<br/>||
+|**bucket**|`string`|Bucket name for cloud providers<br/>||
+|**endpoint**|`string`|Endpoint for custom endpoints<br/>||
+|**proxypresignenabled**|`boolean`|ProxyPresignEnabled toggles proxy-signed download URL generation<br/>||
+|**baseurl**|`string`|BaseURL is the prefix for proxy download URLs<br/>||
+|[**credentials**](#objectstorageprovidersdatabasebackupcredentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -1600,8 +1840,8 @@ This is structured to allow easy extension for additional providers in the futur
 }
 ```
 
-<a name="objectstorageprovidersdatabasecredentials"></a>
-##### objectstorage\.providers\.database\.credentials: object
+<a name="objectstorageprovidersdatabasebackupcredentials"></a>
+###### objectstorage\.providers\.database\.backup\.credentials: object
 
 ProviderCredentials contains credentials for a storage provider
 
@@ -2076,14 +2316,18 @@ CloudflareConfig contains configuration for Cloudflare integration.
 ## backfill: object
 
 Backfill configures one-time startup data backfill routines that populate fields introduced by recent
-migrations for organizations and memberships that pre-date them
+migrations for organizations and memberships that pre-date them. Enabled is the master switch; each
+routine can then be toggled individually so a single backfill can be run in isolation
 
 
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled runs the backfill routines on server startup<br/>||
+|**enabled**|`boolean`|Enabled runs the backfill routines on backfill command; individual routines are toggled below<br/>||
+|**directorysyncbackfill**|`boolean`|DirectorySyncBackfill backfills rewrites directory account and group external ids that the CEL double conversion stored in scientific notation<br/>||
+|**filebackups**|`boolean`|FileBackups replicates existing files to their configured backup provider<br/>||
+|**filerestores**|`boolean`|FileRestores copies files back from their backup provider to their source provider, used to<br/>recover after source storage is lost and replaced; off by default because it rewrites every<br/>replicated object back to the source<br/>||
 
 **Additional Properties:** not allowed  
 
