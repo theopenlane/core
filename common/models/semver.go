@@ -90,6 +90,33 @@ func ToSemverVersion(version *string) (*SemverVersion, error) {
 	return &semver, nil
 }
 
+// DetectSemverBump returns the bump type between two semver revisions.
+func DetectSemverBump(oldRevision, newRevision string) string {
+	oldVersion, err := ToSemverVersion(&oldRevision)
+	if err != nil {
+		return "major"
+	}
+
+	newVersion, err := ToSemverVersion(&newRevision)
+	if err != nil {
+		return "major"
+	}
+
+	if oldVersion.Major != newVersion.Major {
+		return "major"
+	}
+
+	if oldVersion.Minor != newVersion.Minor {
+		return "minor"
+	}
+
+	if oldVersion.Patch != newVersion.Patch {
+		return "patch"
+	}
+
+	return ""
+}
+
 // BumpMajor increments the major version by 1
 // It resets the minor and patch versions to 0
 // For example if the version is v1.7.1 the new version will be v2.0.0
