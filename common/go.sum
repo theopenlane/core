@@ -181,8 +181,8 @@ github.com/zclconf/go-cty-debug v0.0.0-20240509010212-0d6042c53940 h1:4r45xpDWB6
 github.com/zclconf/go-cty-debug v0.0.0-20240509010212-0d6042c53940/go.mod h1:CmBdvvj3nqzfzJ6nTCIwDTPZ56aVGvDrmztiO5g3qrM=
 github.com/zclconf/go-cty-yaml v1.2.0 h1:GDyL4+e/Qe/S0B7YaecMLbVvAR/Mp21CXMOSiCTOi1M=
 github.com/zclconf/go-cty-yaml v1.2.0/go.mod h1:9YLUH4g7lOhVWqUbctnVlZ5KLpg7JAprQNgxSZ1Gyxs=
-github.com/zitadel/oidc/v3 v3.47.9 h1:OnMUhwLuKfKL3EHmyc236uTdaw3BNz/U2GmJYEFGWas=
-github.com/zitadel/oidc/v3 v3.47.9/go.mod h1:NTejBboCz6SShga9FnZiFaFiMHBOQTbGqBIP16c05Ug=
+github.com/zitadel/oidc/v3 v3.48.1 h1:7uUWccuPbmwSLmmjFRFayWzqK7B8itjM8H8bBSTyr7Q=
+github.com/zitadel/oidc/v3 v3.48.1/go.mod h1:HwoguOGo0eem0RK5Gb+P6Q4aQLVinJ9LhomlVEA57ck=
 github.com/zitadel/schema v1.3.2 h1:gfJvt7dOMfTmxzhscZ9KkapKo3Nei3B6cAxjav+lyjI=
 github.com/zitadel/schema v1.3.2/go.mod h1:IZmdfF9Wu62Zu6tJJTH3UsArevs3Y4smfJIj3L8fzxw=
 go.opentelemetry.io/auto/sdk v1.2.1 h1:jXsnJ4Lmnqd11kwkBV2LgLoFMZKizbCi5fNZ/ipaZ64=

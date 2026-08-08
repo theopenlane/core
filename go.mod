@@ -117,7 +117,7 @@ require (
 	github.com/vektah/gqlparser/v2 v2.5.36
 	github.com/xeipuuv/gojsonschema v1.2.0
 	github.com/yuin/goldmark v1.8.5
-	github.com/zitadel/oidc/v3 v3.47.9
+	github.com/zitadel/oidc/v3 v3.48.1
 	goauthentik.io/api/v3 v3.2026020.16
 	gocloud.dev v0.46.0
 	golang.org/x/crypto v0.54.0
@@ -289,7 +289,6 @@ require (
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect
 	github.com/zclconf/go-cty-yaml v1.2.0 // indirect
 	github.com/zeebo/xxh3 v1.1.0 // indirect
-	github.com/zitadel/logging v0.7.0 // indirect
 	github.com/zitadel/schema v1.3.2 // indirect
 	go.opentelemetry.io/auto/sdk v1.2.1 // indirect
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.69.0 // indirect
