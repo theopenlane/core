@@ -508,8 +508,7 @@ func getOrgSubscription(ctx context.Context, subscription *stripe.Subscription) 
 					}
 				}
 
-				// if we found an org subscription by metadata, first update the stripe_subscription_id field
-				if orgSubscription != nil {
+				if orgSubscription != nil && orgSubscription.ID != "" {
 					adoptStripeSubscriptionID(ctx, orgSubscription, subscription.ID)
 
 					// but still return the org subscription to update the rest of the fields
