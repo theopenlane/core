@@ -3,6 +3,7 @@ package email
 import (
 	"context"
 	"encoding/json"
+	"strings"
 	"time"
 
 	"github.com/resend/resend-go/v3"
@@ -224,27 +225,39 @@ func updateCampaignTarget(ctx context.Context, db *ent.Client, targetID, campaig
 	eventTime := parseResendEventTime(event.Data.CreatedAt)
 
 	switch event.Type {
-	case resend.EventEmailSent, resend.EventEmailDelivered, resend.EventEmailOpened, resend.EventEmailClicked:
+	case resend.EventEmailSent:
 		update.SetStatus(enums.AssessmentResponseStatusSent)
 
 		if eventTime != nil {
 			update.SetSentAt(models.DateTime(*eventTime))
 		}
-	case resend.EventEmailBounced, resend.EventEmailFailed:
-		metadata := target.Metadata
-		if metadata == nil {
-			metadata = map[string]any{}
-		}
-
-		metadata["resend_event"] = event.Type
-		metadata["resend_email_id"] = event.Data.EmailID
-		metadata["resend_timestamp"] = event.Data.CreatedAt
-		update.SetMetadata(metadata)
+	case resend.EventEmailDelivered, resend.EventEmailOpened, resend.EventEmailClicked:
+		update.SetStatus(enums.AssessmentResponseStatusSent)
 	}
+
+	update.SetMetadata(getTargetMetadata(target.Metadata, event))
 
 	_, err = update.Save(ctx)
 
 	return err
+}
+
+func getTargetMetadata(metadata map[string]any, event resendWebhookEvent) map[string]any {
+	if metadata == nil {
+		metadata = map[string]any{}
+	}
+
+	eventName := event.Type
+	if _, after, found := strings.Cut(event.Type, "."); found {
+		eventName = after
+	}
+
+	metadata[eventName] = map[string]string{
+		"email_id":  event.Data.EmailID,
+		"timestamp": event.Data.CreatedAt,
+	}
+
+	return metadata
 }
 
 // parseResendEventTime parses a Resend timestamp string and returns a time.Time pointer
