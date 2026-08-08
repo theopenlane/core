@@ -14,7 +14,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/ent/eventqueue"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
@@ -24,34 +23,41 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/core/internal/workflows"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/mapx"
 )
 
-// questionnaireTransformListenerName identifies the assessment response transform listener
-const questionnaireTransformListenerName = "questionnaire.transform.assessment"
-
 // RegisterGalaQuestionnaireTransformListeners registers listeners that transform
 // completed questionnaire document data into configured target schemas.
 // Supported types are defined in `TemplateProjectionTarget` enums
 func RegisterGalaQuestionnaireTransformListeners(g *gala.Gala) ([]gala.ListenerID, error) {
-	return eventqueue.RegisterMutationListeners(g, eventqueue.MutationListener{
+	return registerMutationListeners(g, entityops.MutationListener{
 		Schema:     entgen.TypeAssessmentResponse,
-		Name:       questionnaireTransformListenerName,
 		Operations: []string{ent.OpCreate.String(), ent.OpUpdate.String(), ent.OpUpdateOne.String()},
-		Handle:     handleAssessmentResponse,
+		Fields: []string{
+			assessmentresponse.FieldStatus,
+			assessmentresponse.FieldDocumentDataID,
+			assessmentresponse.FieldCompletedAt,
+			assessmentresponse.FieldIsDraft,
+		},
+		Elevate: func(ctx context.Context, _ entityops.MutationPayload) context.Context {
+			return privacy.DecisionContext(rule.WithInternalContext(ctx), privacy.Allow)
+		},
+		Enrich: func(ctx context.Context, payload entityops.MutationPayload) context.Context {
+			return logx.WithFields(ctx, map[string]any{"assessment_response_id": payload.EntityID})
+		},
+		Handle: handleAssessmentResponse,
 	})
 }
 
-func handleAssessmentResponse(inv eventqueue.Invocation, payload eventqueue.MutationGalaPayload) error {
-	if !questionnaireTransformFieldChanged(payload) {
-		return nil
-	}
-
-	allowCtx := workflows.AllowContext(inv.Context)
+// handleAssessmentResponse reacts to completed assessment responses and transforms the associated
+// document data
+func handleAssessmentResponse(inv entityops.Invocation, payload entityops.MutationPayload) error {
+	ctx := inv.Context
 
 	response, err := inv.Client.AssessmentResponse.Query().
 		Where(assessmentresponse.IDEQ(inv.EntityID)).
@@ -59,21 +65,15 @@ func handleAssessmentResponse(inv eventqueue.Invocation, payload eventqueue.Muta
 		WithAssessment(func(query *entgen.AssessmentQuery) {
 			query.WithTemplate()
 		}).
-		Only(allowCtx)
+		Only(inv.Context)
 	if err != nil {
 		if entgen.IsNotFound(err) {
-			logx.FromContext(inv.Context).Error().
-				Err(err).
-				Str("assessment_response_id", inv.EntityID).
-				Msg("assessment response not found for questionnaire transform")
+			logx.FromContext(inv.Context).Error().Err(err).Msg("assessment response not found for questionnaire transform")
 
 			return nil
 		}
 
-		logx.FromContext(inv.Context).Error().
-			Err(err).
-			Str("assessment_response_id", inv.EntityID).
-			Msg("failed to load assessment response for questionnaire transform")
+		logx.FromContext(inv.Context).Error().Err(err).Msg("failed to load assessment response for questionnaire transform")
 
 		return err
 	}
@@ -87,10 +87,7 @@ func handleAssessmentResponse(inv eventqueue.Invocation, payload eventqueue.Muta
 	// marker: a set entity_id skips redelivered events, and failed attempts leave it
 	// empty for River's retry to re-attempt the transform
 	if response.EntityID != "" {
-		logx.FromContext(inv.Context).Debug().
-			Str("assessment_response_id", response.ID).
-			Str("entity_id", response.EntityID).
-			Msg("assessment response already transformed")
+		logx.FromContext(ctx).Debug().Str("entity_id", response.EntityID).Msg("assessment response already transformed")
 
 		return nil
 	}
@@ -115,23 +112,22 @@ func handleAssessmentResponse(inv eventqueue.Invocation, payload eventqueue.Muta
 		Config:               config,
 	}
 
-	if err := transformQuestionnaire(allowCtx, inv.Client, req); err != nil {
-		logger := logx.FromContext(inv.Context).Error().
-			Err(err).
-			Str("assessment_response_id", response.ID).
-			Str("assessment_id", assessment.ID).
-			Str("template_id", assessment.TemplateID).
-			Str("document_data_id", response.DocumentDataID)
+	ctx = logx.WithFields(ctx, map[string]any{
+		"assessment_id":    assessment.ID,
+		"template_id":      assessment.TemplateID,
+		"document_data_id": response.DocumentDataID,
+	})
 
+	if err := transformQuestionnaire(ctx, inv.Client, req); err != nil {
 		// validation errors are permanent configuration or data problems: log and drop
 		// the event rather than burning River retries on an outcome that cannot change
 		if isQuestionnaireValidationError(err) {
-			logger.Msg("questionnaire transform skipped due to invalid transform data")
+			logx.FromContext(ctx).Error().Err(err).Msg("questionnaire transform skipped due to invalid transform data")
 
 			return nil
 		}
 
-		logger.Msg("questionnaire transform failed")
+		logx.FromContext(ctx).Error().Err(err).Msg("questionnaire transform failed")
 
 		if errors.Is(err, entityops.ErrUpsertConflict) {
 			return nil
@@ -143,6 +139,7 @@ func handleAssessmentResponse(inv eventqueue.Invocation, payload eventqueue.Muta
 	return nil
 }
 
+// validateQuestionnaire returns the assessment, document, and transform config if the response is complete and the template has a valid transform configuration
 func validateQuestionnaire(response *entgen.AssessmentResponse) (*entgen.Assessment, *entgen.DocumentData, models.TemplateProjectionConfig, bool) {
 	if response == nil || response.Status != enums.AssessmentResponseStatusCompleted || response.DocumentDataID == "" {
 		return nil, nil, models.TemplateProjectionConfig{}, false
@@ -164,17 +161,6 @@ func validateQuestionnaire(response *entgen.AssessmentResponse) (*entgen.Assessm
 	}
 
 	return assessment, document, config, true
-}
-
-func questionnaireTransformFieldChanged(payload eventqueue.MutationGalaPayload) bool {
-	if payload.Operation == ent.OpCreate.String() {
-		return true
-	}
-
-	return eventqueue.MutationFieldChanged(payload, assessmentresponse.FieldStatus) ||
-		eventqueue.MutationFieldChanged(payload, assessmentresponse.FieldDocumentDataID) ||
-		eventqueue.MutationFieldChanged(payload, assessmentresponse.FieldCompletedAt) ||
-		eventqueue.MutationFieldChanged(payload, assessmentresponse.FieldIsDraft)
 }
 
 const transformMetadataKey = "questionnaire_transform"
@@ -459,6 +445,12 @@ func applyTransform(schema *entityops.Schema, targetField string, value any, tra
 		return strcase.KebabCase(strings.TrimSpace(getStringValue(value))), nil
 	}
 
+	// the catalog's field type is the coercion arbiter, but the declared transform must
+	// still be a known enum member so misconfigured mappings fail loudly
+	if parsed := enums.ToTemplateProjectionTransform(transform.String()); parsed == nil || *parsed == enums.TemplateProjectionTransformInvalid {
+		return nil, &questionnaireValidationError{Message: fmt.Sprintf("unsupported transform %q", transform)}
+	}
+
 	coerced, err := schema.CoerceValue(targetField, value)
 
 	switch {
@@ -633,7 +625,7 @@ func isEmptyValue(value any) bool {
 // getStringValue coerces payload values to strings through the shared eventqueue helper;
 // unrepresentable values coerce to the empty string
 func getStringValue(value any) string {
-	coerced, _ := eventqueue.ValueAsString(value)
+	coerced, _ := entityops.ValueAsString(value)
 
 	return coerced
 }

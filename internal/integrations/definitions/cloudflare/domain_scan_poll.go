@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/theopenlane/core/pkg/gala"
-	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 const (
@@ -56,15 +55,9 @@ type DomainScanPollEnvelope struct {
 	SiblingScanIDs []string `json:"siblingScanIds"`
 }
 
-// domainScanPollSchemaName is the type name derived from the JSON schema reflector
-var domainScanPollSchemaName = jsonx.SchemaID(jsonx.SchemaFrom[DomainScanPollEnvelope]())
-
-var (
-	// DomainScanPollTopic is the Gala topic name for domain scan polling
-	DomainScanPollTopic = gala.TopicName("domainscan.poll." + domainScanPollSchemaName)
-	// DomainScanPollListenerName is the Gala listener name for the domain scan poll handler
-	DomainScanPollListenerName = "domainscan.poll." + domainScanPollSchemaName + ".handler"
-)
+// domainScanPollTopic is the durable poll topic: the name derives from the envelope type
+// under the domain scan namespace
+var domainScanPollTopic = gala.TopicFor[DomainScanPollEnvelope]("domainscan.poll")
 
 // DomainScanPollHandler processes one poll cycle for a submitted scan. It returns done=true once the scan has been fully processed
 // (succeeded or given up), and done=false when the cycle re-emitted itself for another attempt

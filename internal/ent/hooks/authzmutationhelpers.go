@@ -447,8 +447,7 @@ func addUserRelation(ctx context.Context, m generated.Mutation, relation string)
 		ObjectType:  GetObjectTypeFromEntMutation(m),
 	}
 
-	logx.FromContext(ctx).Debug().Interface("request", req).
-		Msg("creating can_view tuple for user")
+	logx.FromContext(ctx).Debug().Interface("request", req).Msg("creating can_view tuple for user")
 
 	if _, err := utils.AuthzClient(ctx, m).WriteTupleKeys(ctx, []fgax.TupleKey{fgax.GetTupleKey(req)}, nil); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to create can_view relationship tuple for user")

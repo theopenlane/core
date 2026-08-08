@@ -108,7 +108,7 @@ func (r *Runtime) seedScheduledOperation(ctx context.Context, oc gala.OperationC
 
 	_, err = r.Gala().Emit(
 		ctx,
-		operations.ReconcileTopic,
+		operations.ReconcileTopic.Name,
 		operations.ReconcileEnvelope{OperationContext: oc},
 		gala.WithHeaders(gala.Headers{
 			Properties: types.GetPropertiesForOperationContext(oc),

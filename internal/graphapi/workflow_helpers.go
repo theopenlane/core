@@ -116,9 +116,7 @@ func SetupWorkflowEngine(ctx context.Context, client *generated.Client, connecti
 		return nil, err
 	}
 
-	client.Use(hooks.EmitGalaEventHook(func() *gala.Gala {
-		return runtime
-	}))
+	client.Use(hooks.EmitGalaEventHook(runtime))
 
 	if _, err := hooks.RegisterGalaWorkflowListeners(runtime); err != nil {
 		return nil, err

@@ -24,6 +24,9 @@ type Headers struct {
 	// SkipUniqueKey suppresses the topic's UniqueKey derivation; a running cycle emitting its
 	// successor would otherwise be skipped as a duplicate of itself
 	SkipUniqueKey bool `json:"skip_unique_key,omitempty"`
+	// UniqueOnce extends UniqueKey matching to terminal job states, so a finished run also
+	// blocks re-inserts for as long as River retains the job row
+	UniqueOnce bool `json:"unique_once,omitempty"`
 	// Metadata carries structured operation context as opaque JSON
 	Metadata json.RawMessage `json:"metadata,omitempty"`
 }

@@ -99,11 +99,7 @@ func (r *mutationResolver) TransferOrganizationOwnership(ctx context.Context, ne
 	}
 
 	if currentUserMembership.Role != enums.RoleOwner {
-		logx.FromContext(ctx).Info().
-			Str("user_id", currentUserID).
-			Str("organization_id", organizationID).
-			Str("role", currentUserMembership.Role.String()).
-			Msg("user attempted to transfer ownership without being owner")
+		logx.FromContext(ctx).Info().Str("user_id", currentUserID).Str("organization_id", organizationID).Str("role", currentUserMembership.Role.String()).Msg("user attempted to transfer ownership without being owner")
 		return nil, newPermissionDeniedError()
 	}
 
@@ -130,10 +126,7 @@ func (r *mutationResolver) TransferOrganizationOwnership(ctx context.Context, ne
 
 	if err != nil {
 		// User is not a member or doesn't exist - create an invite with ownership_transfer=true
-		logx.FromContext(ctx).Info().
-			Str("new_owner_email", newOwnerEmail).
-			Str("organization_id", organizationID).
-			Msg("new owner not a member, creating ownership transfer invitation")
+		logx.FromContext(ctx).Info().Str("new_owner_email", newOwnerEmail).Str("organization_id", organizationID).Msg("new owner not a member, creating ownership transfer invitation")
 
 		ownerRole := enums.RoleOwner
 		ownershipTransfer := true
@@ -153,10 +146,7 @@ func (r *mutationResolver) TransferOrganizationOwnership(ctx context.Context, ne
 		invitationSent = true
 	} else {
 		// User is already a member - directly update roles
-		logx.FromContext(ctx).Info().
-			Str("new_owner_id", newOwnerUser.ID).
-			Str("organization_id", organizationID).
-			Msg("new owner already a member, directly transferring ownership")
+		logx.FromContext(ctx).Info().Str("new_owner_id", newOwnerUser.ID).Str("organization_id", organizationID).Msg("new owner already a member, directly transferring ownership")
 
 		// Update new owner to OWNER role
 		// Use allowCtx to bypass privacy restrictions since this is an authorized ownership transfer
@@ -181,11 +171,7 @@ func (r *mutationResolver) TransferOrganizationOwnership(ctx context.Context, ne
 			return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionUpdate, Object: "org_membership"})
 		}
 
-		logx.FromContext(ctx).Info().
-			Str("organization_id", organizationID).
-			Str("old_owner_id", currentUserID).
-			Str("new_owner_id", newOwnerUser.ID).
-			Msg("organization ownership transferred successfully")
+		logx.FromContext(ctx).Info().Str("organization_id", organizationID).Str("old_owner_id", currentUserID).Str("new_owner_id", newOwnerUser.ID).Msg("organization ownership transferred successfully")
 	}
 
 	return &model.OrganizationTransferOwnershipPayload{

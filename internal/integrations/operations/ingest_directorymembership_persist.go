@@ -71,9 +71,11 @@ func persistDirectoryMembershipInput(ctx context.Context, db *ent.Client, integr
 
 // resolveDirectoryMembershipInput normalizes provider lookup values into internal record IDs before persistence
 func resolveDirectoryMembershipInput(ctx context.Context, db *ent.Client, integration *ent.Integration, input ent.CreateDirectoryMembershipInput) (ent.CreateDirectoryMembershipInput, error) {
+	ctx = logx.WithFields(ctx, map[string]any{"account_ref": input.DirectoryAccountID, "group_ref": input.DirectoryGroupID})
+
 	accountID, err := resolveDirectoryAccountID(ctx, db, integration, lo.FromPtr(input.DirectoryInstanceID), input.DirectoryAccountID)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("account_ref", input.DirectoryAccountID).Str("group_ref", input.DirectoryGroupID).Msg("unresolved directory account for membership")
+		logx.FromContext(ctx).Error().Err(err).Msg("unresolved directory account for membership")
 
 		return input, err
 	}
@@ -84,7 +86,7 @@ func resolveDirectoryMembershipInput(ctx context.Context, db *ent.Client, integr
 
 	groupID, err := resolveDirectoryGroupID(ctx, db, integration, input.DirectoryGroupID)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("account_ref", input.DirectoryAccountID).Str("group_ref", input.DirectoryGroupID).Msg("unresolved directory group for membership")
+		logx.FromContext(ctx).Error().Err(err).Msg("unresolved directory group for membership")
 
 		return input, err
 	}

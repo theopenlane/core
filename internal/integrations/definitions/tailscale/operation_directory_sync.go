@@ -164,11 +164,7 @@ func (DirectorySync) Run(ctx context.Context, client *tsclient.Client, cfg Direc
 		}
 	}
 
-	logx.FromContext(ctx).Debug().
-		Int("user_count", len(accountEnvelopes)).
-		Int("group_count", len(groupEnvelopes)).
-		Int("membership_count", len(membershipEnvelopes)).
-		Msg("tailscale: collected users, role groups, and memberships")
+	logx.FromContext(ctx).Debug().Int("user_count", len(accountEnvelopes)).Int("group_count", len(groupEnvelopes)).Int("membership_count", len(membershipEnvelopes)).Msg("tailscale: collected users, role groups, and memberships")
 
 	payloadSets = append(payloadSets,
 		types.IngestPayloadSet{

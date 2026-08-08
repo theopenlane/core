@@ -8,6 +8,7 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/notifications"
+	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/gala"
 )
 
@@ -68,11 +69,7 @@ func ConfigureGala(ctx context.Context, galaApp, notificationGala *gala.Gala, db
 		}
 	}
 
-	dbClient.Use(hooks.EmitGalaEventHook(func() *gala.Gala {
-		return galaApp
-	}, func() *gala.Gala {
-		return notificationGala
-	}))
+	dbClient.Use(hooks.EmitGalaEventHook(galaApp, notificationGala))
 
 	if err := provideGalaDependencies(galaApp, dbClient); err != nil {
 		closeRuntimes()
@@ -130,11 +127,23 @@ func ConfigureGala(ctx context.Context, galaApp, notificationGala *gala.Gala, db
 
 // provideGalaDependencies registers explicit dependencies that gala listeners resolve via samber/do
 // and the durable context codec that restores the ent client onto handler contexts; codec
-// registration failure is a wiring error and fails startup
+// registration failure is a wiring error and fails startup. Subsystems riding on the client
+// (workflow engine, entitlement manager) register here; the integrations runtime attaches
+// itself when it is constructed
 func provideGalaDependencies(galaApp *gala.Gala, dbClient *ent.Client) error {
-	return galaApp.Attach(
+	opts := []gala.AttachOption{
 		gala.WithValue(galaApp),
 		gala.WithValue(dbClient),
 		gala.WithRestoredValue("ent_client", ent.NewContext),
-	)
+	}
+
+	if wfEngine, ok := dbClient.WorkflowEngine.(*engine.WorkflowEngine); ok && wfEngine != nil {
+		opts = append(opts, gala.WithValue(wfEngine))
+	}
+
+	if dbClient.EntitlementManager != nil {
+		opts = append(opts, gala.WithValue(dbClient.EntitlementManager))
+	}
+
+	return galaApp.Attach(opts...)
 }

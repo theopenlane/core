@@ -10,35 +10,19 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/ent/eventqueue"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/internal/ent/generated/standard"
-	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
 // handleStandardMutation processes standard mutations and creates notifications
 // for org admins when a system-owned standard revision is bumped up
-func handleStandardMutation(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	if !isUpdateOperation(payload.Operation) {
-		return nil
-	}
-
-	if !eventqueue.MutationFieldChanged(payload, standard.FieldRevision) {
-		return nil
-	}
-
-	ctx, client, ok := eventqueue.ClientFromHandler(ctx)
-	if !ok {
-		return ErrFailedToGetClient
-	}
-
+func handleStandardMutation(inv entityops.Invocation, payload entityops.MutationPayload) error {
 	standardID := payload.EntityID
-	allowCtx := ctx.Context
+	allowCtx := inv.Context
 
-	std, err := client.Standard.Get(allowCtx, standardID)
+	std, err := inv.Client.Standard.Get(allowCtx, standardID)
 	if err != nil {
 		return fmt.Errorf("failed to query standard: %w", err)
 	}
@@ -54,7 +38,7 @@ func handleStandardMutation(ctx gala.HandlerContext, payload eventqueue.Mutation
 
 	var controls []standardControl
 
-	err = client.Control.Query().
+	err = inv.Client.Control.Query().
 		Where(
 			control.StandardID(standardID),
 			control.OwnerIDNotNil(),
@@ -99,12 +83,11 @@ func handleStandardMutation(ctx gala.HandlerContext, payload eventqueue.Mutation
 	lo.ForEach(lo.Entries(significantOrgs), func(entry lo.Entry[string, organizations], _ int) {
 		orgID := entry.Key
 		value := entry.Value
+		logCtx := logx.WithFields(inv.Context, map[string]any{"org_id": orgID})
 
-		ids, err := fetchOrgAdminsAndOwners(allowCtx, client, orgID)
+		ids, err := fetchOrgAdminsAndOwners(allowCtx, inv.Client, orgID)
 		if err != nil {
-			logx.FromContext(ctx.Context).Error().Err(err).
-				Str("org_id", orgID).
-				Msg("failed to get org admin and owner IDs")
+			logx.FromContext(logCtx).Error().Err(err).Msg("failed to get org admin and owner IDs")
 
 			return
 		}
@@ -134,15 +117,13 @@ func handleStandardMutation(ctx gala.HandlerContext, payload eventqueue.Mutation
 			ObjectType:       generated.TypeStandard,
 		}
 
-		notificationCtx := auth.WithCaller(ctx.Context, &auth.Caller{
+		notificationCtx := auth.WithCaller(inv.Context, &auth.Caller{
 			SubjectID:      ids[0],
 			OrganizationID: orgID,
 		})
 
-		if err := newNotificationCreation(notificationCtx, client, ids, notifInput); err != nil {
-			logx.FromContext(ctx.Context).Error().Err(err).
-				Str("org_id", orgID).
-				Msg("failed to create standard update notification")
+		if err := newNotificationCreation(notificationCtx, inv.Client, ids, notifInput); err != nil {
+			logx.FromContext(logCtx).Error().Err(err).Msg("failed to create standard update notification")
 
 			return
 		}

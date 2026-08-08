@@ -142,9 +142,14 @@ func (d *riverDispatcher) Dispatch(ctx context.Context, envelope Envelope) error
 	}
 
 	if envelope.Headers.UniqueKey != "" {
+		byState := uniqueLiveStates()
+		if envelope.Headers.UniqueOnce {
+			byState = append(byState, rivertype.JobStateCompleted, rivertype.JobStateCancelled, rivertype.JobStateDiscarded)
+		}
+
 		insertOpts.UniqueOpts = river.UniqueOpts{
 			ByArgs:  true,
-			ByState: uniqueLiveStates(),
+			ByState: byState,
 		}
 	}
 

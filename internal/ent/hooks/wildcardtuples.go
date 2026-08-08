@@ -83,8 +83,7 @@ func createWildcardTuple(ctx context.Context, m ent.Mutation) error {
 	objectType := strcase.SnakeCase(genericMut.Type())
 	wildcardTuple := fgax.CreateWildcardViewerTuple(objID, objectType)
 
-	logx.FromContext(ctx).Debug().Interface("request", wildcardTuple).
-		Msg("creating public viewer relationship tuples")
+	logx.FromContext(ctx).Debug().Interface("request", wildcardTuple).Msg("creating public viewer relationship tuples")
 
 	if _, err := genericMut.Client().Authz.WriteTupleKeys(ctx, wildcardTuple, nil); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to create public viewer relationship tuples")

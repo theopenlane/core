@@ -3,6 +3,7 @@ package serveropts
 import (
 	"context"
 
+	"github.com/samber/do/v2"
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
@@ -14,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	intobvs "github.com/theopenlane/core/internal/integrations/observability"
 	"github.com/theopenlane/core/internal/integrations/runtime"
+	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -21,27 +23,56 @@ import (
 // skipping the org-filter, FGA, and managed-group guards the membership hooks would otherwise apply
 const backfillBypassCaps = auth.CapBypassOrgFilter | auth.CapBypassFGA | auth.CapInternalOperation | auth.CapBypassManagedGroup
 
-// WithBackfill runs a one-time, non-blocking, config-gated, idempotent startup backfills
-// use-cases for this are things a db migration can't easily handle, computed data or fields, or repairs
-func WithBackfill(ctx context.Context, dbClient *ent.Client) ServerOption {
+// backfillTopic is the gala topic backfill runs are submitted on
+var backfillTopic = gala.Topic[backfillRequest]{Name: "startup.backfill"}
+
+// backfillUniqueKey is the run-once uniqueness key: every pod submits the same key, River
+// keeps the first insert and skips the rest across live and terminal job states
+const backfillUniqueKey = "startup-backfill"
+
+// backfillRequest is the payload for a backfill run submission
+type backfillRequest struct{}
+
+// WithBackfill submits the config-gated, idempotent startup backfills as a run-once gala job:
+// every pod submits the same unique key, so exactly one process executes the run per release.
+// Use-cases are things a db migration can't easily handle, computed data or fields, or repairs
+func WithBackfill(ctx context.Context, galaApp *gala.Gala) ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
-		if dbClient == nil || !s.Config.Settings.Backfill.Enabled {
+		if !s.Config.Settings.Backfill.Enabled {
 			return
 		}
 
-		rt := s.Config.Handler.IntegrationsRuntime
+		if _, err := gala.Register(galaApp, gala.Definition[backfillRequest]{
+			Topic: backfillTopic,
+			Name:  "startup.backfill",
+			Caller: func(*auth.Caller, backfillRequest) *auth.Caller {
+				return &auth.Caller{Capabilities: backfillBypassCaps}
+			},
+			Elevate: func(ctx context.Context, _ backfillRequest) context.Context {
+				return privacy.DecisionContext(ctx, privacy.Allow)
+			},
+			Handle: func(handlerCtx gala.HandlerContext, _ backfillRequest) error {
+				dbClient := do.MustInvoke[*ent.Client](handlerCtx.Injector)
+				rt := do.MustInvoke[*runtime.Runtime](handlerCtx.Injector)
 
-		go func() {
-			backfillCtx := privacy.DecisionContext(ctx, privacy.Allow)
-			backfillCtx = auth.WithCaller(backfillCtx, &auth.Caller{Capabilities: backfillBypassCaps})
+				BackfillDirectoryDuplicates(handlerCtx.Context, dbClient)
+				backfillIntegrationConfiguration(handlerCtx.Context, dbClient, rt)
+				backfillReconcileLoops(handlerCtx.Context, dbClient, rt)
 
-			BackfillDirectoryDuplicates(backfillCtx, dbClient)
+				return nil
+			},
+		}); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("backfill: failed to register listener")
 
-			if rt != nil {
-				backfillIntegrationConfiguration(backfillCtx, dbClient, rt)
-				backfillReconcileLoops(backfillCtx, dbClient, rt)
-			}
-		}()
+			return
+		}
+
+		if _, err := galaApp.Emit(ctx, backfillTopic.Name, backfillRequest{}, gala.WithHeaders(gala.Headers{
+			UniqueKey:  backfillUniqueKey,
+			UniqueOnce: true,
+		})); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("backfill: failed to submit run")
+		}
 	})
 }
 

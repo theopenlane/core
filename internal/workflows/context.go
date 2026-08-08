@@ -9,15 +9,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/gala"
-	"github.com/theopenlane/utils/contextx"
 )
-
-// skipEventEmissionFlag is used to share a mutable skip flag across hook layers.
-type skipEventEmissionFlag struct {
-	skip bool
-}
-
-var skipEventEmissionFlagContextKey = contextx.NewKey[*skipEventEmissionFlag]()
 
 // WithContext sets the workflow bypass flag in the context.
 // Operations with this context will skip workflow approval interceptors.
@@ -52,51 +44,6 @@ func AllowWorkflowEventEmission(ctx context.Context) bool {
 	}
 
 	return gala.HasFlag(ctx, gala.ContextFlagWorkflowAllowEventEmission)
-}
-
-// WithSkipEventEmission installs a mutable flag in the context so inner hooks can
-// signal that mutation events should not be emitted via MarkSkipEventEmission.
-func WithSkipEventEmission(ctx context.Context) context.Context {
-	if ctx == nil {
-		return ctx
-	}
-
-	if existing, ok := skipEventEmissionFlagContextKey.Get(ctx); ok && existing != nil {
-		return ctx
-	}
-
-	return skipEventEmissionFlagContextKey.Set(ctx, &skipEventEmissionFlag{})
-}
-
-// MarkSkipEventEmission marks the context to skip emitting mutation events.
-func MarkSkipEventEmission(ctx context.Context) {
-	if ctx == nil {
-		return
-	}
-	if flag, ok := skipEventEmissionFlagContextKey.Get(ctx); ok && flag != nil {
-		flag.skip = true
-	}
-}
-
-// SkipEventEmission installs the mutable skip flag and immediately marks it, combining
-// WithSkipEventEmission and MarkSkipEventEmission into a single call.
-func SkipEventEmission(ctx context.Context) context.Context {
-	ctx = WithSkipEventEmission(ctx)
-	MarkSkipEventEmission(ctx)
-	return ctx
-}
-
-// ShouldSkipEventEmission reports whether mutation event emission should be skipped.
-func ShouldSkipEventEmission(ctx context.Context) bool {
-	if ctx == nil {
-		return false
-	}
-
-	if flag, ok := skipEventEmissionFlagContextKey.Get(ctx); ok && flag != nil {
-		return flag.skip
-	}
-
-	return false
 }
 
 // AllowContext sets the ent privacy decision to allow for internal workflow operations.

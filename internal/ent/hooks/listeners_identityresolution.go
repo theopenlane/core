@@ -12,7 +12,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/eventqueue"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
@@ -25,18 +25,24 @@ import (
 // RegisterGalaIdentityResolutionListeners registers listeners that resolve directory
 // accounts to identity holders asynchronously after mutations commit
 func RegisterGalaIdentityResolutionListeners(g *gala.Gala) ([]gala.ListenerID, error) {
-	return eventqueue.RegisterMutationListeners(g,
-		eventqueue.MutationListener{
+	return registerMutationListeners(g,
+		entityops.MutationListener{
 			Schema:     entgen.TypeDirectoryAccount,
-			Name:       "identityresolution.directory_account_created",
+			Label:      "created",
 			Operations: []string{ent.OpCreate.String()},
-			Handle:     handleDirectoryAccountMutation,
+			Enrich: func(ctx context.Context, payload entityops.MutationPayload) context.Context {
+				return logx.WithFields(ctx, map[string]any{"directory_account_id": payload.EntityID})
+			},
+			Handle: handleDirectoryAccountMutation,
 		},
-		eventqueue.MutationListener{
+		entityops.MutationListener{
 			Schema:     entgen.TypeDirectoryAccount,
-			Name:       "identityresolution.directory_account_updated",
+			Label:      "updated",
 			Operations: []string{ent.OpUpdateOne.String()},
-			Handle:     handleDirectoryAccountMutation,
+			Enrich: func(ctx context.Context, payload entityops.MutationPayload) context.Context {
+				return logx.WithFields(ctx, map[string]any{"directory_account_id": payload.EntityID})
+			},
+			Handle: handleDirectoryAccountMutation,
 		},
 	)
 }
@@ -44,17 +50,17 @@ func RegisterGalaIdentityResolutionListeners(g *gala.Gala) ([]gala.ListenerID, e
 // handleDirectoryAccountMutation links, enriches, and syncs one directory account:
 // accounts with no identity holder run the full matching cascade first, while
 // already-linked accounts re-enrich and re-sync from current state
-func handleDirectoryAccountMutation(inv eventqueue.Invocation, _ eventqueue.MutationGalaPayload) error {
+func handleDirectoryAccountMutation(inv entityops.Invocation, _ entityops.MutationPayload) error {
 	ctx, client := inv.Context, inv.Client
 
-	account, ok, err := eventqueue.LoadEntity(ctx, inv.EntityID, client.DirectoryAccount.Get)
+	account, ok, err := entityops.LoadEntity(ctx, inv.EntityID, client.DirectoryAccount.Get)
 	if err != nil || !ok {
 		return err
 	}
 
 	holder, err := accountIdentityHolder(ctx, client, account)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("directory_account_id", account.ID).Msg("identity resolution failed")
+		logx.FromContext(ctx).Error().Err(err).Msg("identity resolution failed")
 
 		return err
 	}
@@ -63,16 +69,18 @@ func handleDirectoryAccountMutation(inv eventqueue.Invocation, _ eventqueue.Muta
 		return nil
 	}
 
+	ctx = logx.WithFields(ctx, map[string]any{"identity_holder_id": holder.ID})
+
 	if account.PrimarySource {
 		if err := enrichFromPrimarySource(ctx, client, holder, account); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Str("identity_holder_id", holder.ID).Msg("primary source enrichment failed")
+			logx.FromContext(ctx).Error().Err(err).Msg("primary source enrichment failed")
 
 			return err
 		}
 	}
 
 	if err := syncEmailAliases(ctx, client, holder); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("identity_holder_id", holder.ID).Msg("email alias sync failed")
+		logx.FromContext(ctx).Error().Err(err).Msg("email alias sync failed")
 
 		return err
 	}

@@ -3,6 +3,11 @@ package gala
 import (
 	"strings"
 	"sync"
+
+	"github.com/riverqueue/river"
+	"github.com/theopenlane/iam/auth"
+
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // Registry stores topic codecs, policies, and listeners
@@ -30,6 +35,8 @@ type registeredListener struct {
 	id ListenerID
 	// name is the human-friendly name for this listener #mitb
 	name string
+	// definitionName is the unsuffixed listener name used as the metrics label
+	definitionName string
 	// ops is the set of operations this listener is interested in, empty means topic-level interest
 	ops map[string]struct{}
 	// handle is a wrapper around the listener definition's Handle method for non-generic payloads
@@ -74,44 +81,100 @@ func registerTopic[T any](registry *registry, topic Topic[T], codec Codec[T]) er
 	return nil
 }
 
-// attachListener registers one typed listener in the registry
-func attachListener[T any](registry *registry, definition Definition[T]) (ListenerID, error) {
-	if registry == nil {
-		return "", ErrRegistryRequired
+// attachListener registers one typed listener on the gala runtime
+func attachListener[T any](g *Gala, definition Definition[T]) (ListenerID, error) {
+	if g == nil {
+		return "", ErrGalaRequired
 	}
 
 	if err := validateListenerDefinition(definition); err != nil {
 		return "", err
 	}
 
+	name := definition.Name
+	if name == "" {
+		name = string(definition.Topic.Name)
+	}
+
 	topic := definition.Topic.Name
 
-	registry.mu.Lock()
-	defer registry.mu.Unlock()
+	g.registry.mu.Lock()
+	defer g.registry.mu.Unlock()
 
-	if _, exists := registry.topics[topic]; !exists {
+	if _, exists := g.registry.topics[topic]; !exists {
 		return "", ErrListenerTopicNotRegistered
 	}
 
 	listenerID := ListenerID(NewEventID())
 
 	listener := registeredListener{
-		id:   listenerID,
-		name: definition.Name,
-		ops:  normalizeOperations(definition.Operations),
-		handle: func(handlerCtx HandlerContext, payload any) error {
-			typedPayload, ok := payload.(T)
-			if !ok {
-				return ErrPayloadTypeMismatch
-			}
-
-			return definition.Handle(handlerCtx, typedPayload)
-		},
+		id: listenerID,
+		// the id suffix keeps observability output attributable when multiple listeners
+		// share a name on one topic
+		name:           name + "#" + string(listenerID),
+		definitionName: name,
+		ops:            normalizeOperations(definition.Operations),
+		handle:         wrapDefinitionHandle(g, definition),
 	}
 
-	registry.listeners[topic] = append(registry.listeners[topic], listener)
+	g.registry.listeners[topic] = append(g.registry.listeners[topic], listener)
 
 	return listenerID, nil
+}
+
+// wrapDefinitionHandle builds the non-generic dispatch wrapper for one definition, applying
+// the dispatch pipeline in order: Gate, caller resolution, automatic log enrichment, Enrich,
+// Elevate, then the handler, classifying handler errors through Cancel
+func wrapDefinitionHandle[T any](g *Gala, definition Definition[T]) func(HandlerContext, any) error {
+	handler := definition.Handle
+	if definition.Schedule != nil {
+		handler = scheduleHandler(g, definition)
+	}
+
+	return func(handlerCtx HandlerContext, payload any) error {
+		typedPayload, ok := payload.(T)
+		if !ok {
+			return ErrPayloadTypeMismatch
+		}
+
+		if definition.Gate != nil && !definition.Gate(typedPayload) {
+			return nil
+		}
+
+		caller, found := auth.CallerFromContext(handlerCtx.Context)
+		if !found || caller == nil {
+			caller = &auth.Caller{}
+		}
+
+		if definition.Caller != nil {
+			caller = definition.Caller(caller, typedPayload)
+		}
+
+		handlerCtx.Context = auth.WithCaller(handlerCtx.Context, caller)
+		handlerCtx.Caller = caller
+
+		handlerCtx.Context = logx.WithFields(handlerCtx.Context, map[string]any{
+			"event_id":  string(handlerCtx.Envelope.ID),
+			"topic":     string(handlerCtx.Envelope.Topic),
+			"operation": payloadOperation(typedPayload),
+		})
+
+		if definition.Enrich != nil {
+			handlerCtx.Context = definition.Enrich(handlerCtx.Context, typedPayload)
+		}
+
+		if definition.Elevate != nil {
+			handlerCtx.Context = definition.Elevate(handlerCtx.Context, typedPayload)
+		}
+
+		err := handler(handlerCtx, typedPayload)
+		// scheduled definitions classify errors through Cancel inside the schedule loop
+		if err != nil && definition.Schedule == nil && definition.Cancel != nil && definition.Cancel(handlerCtx.Context, typedPayload, err) {
+			return river.JobCancel(err)
+		}
+
+		return err
+	}
 }
 
 // listenerNamesForTopic returns the registered listener names for a topic
@@ -213,11 +276,12 @@ func validateListenerDefinition[T any](definition Definition[T]) error {
 		return ErrTopicNameRequired
 	}
 
-	if definition.Name == "" {
-		return ErrListenerNameRequired
-	}
-
-	if definition.Handle == nil {
+	switch {
+	case definition.Schedule != nil && definition.Handle != nil:
+		return ErrListenerHandlerConflict
+	case definition.Schedule != nil && definition.Schedule.Handle == nil:
+		return ErrListenerHandlerRequired
+	case definition.Schedule == nil && definition.Handle == nil:
 		return ErrListenerHandlerRequired
 	}
 

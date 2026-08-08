@@ -11,7 +11,7 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/mutations"
+	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/mapx"
 )
 
@@ -69,7 +69,7 @@ func workflowProposalDomainFields(domainKey string) (string, []string, error) {
 		return objectType, nil, fmt.Errorf("%w: proposal domain key missing fields", rout.ErrBadRequest)
 	}
 
-	fields := mutations.NormalizeStrings(strings.Split(fieldsPart, ","))
+	fields := workflows.NormalizeStrings(strings.Split(fieldsPart, ","))
 	if len(fields) == 0 {
 		return objectType, nil, fmt.Errorf("%w: proposal domain key missing fields", rout.ErrBadRequest)
 	}

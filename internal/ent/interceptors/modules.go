@@ -74,10 +74,7 @@ func InterceptorModules(modulesEnabled bool) ent.Interceptor {
 				m = module.String()
 			}
 
-			logx.FromContext(ctx).Info().
-				Interface("required_features", schemaFeatures).
-				Str("missing_module", m).
-				Msg("feature not enabled for organization")
+			logx.FromContext(ctx).Info().Interface("required_features", schemaFeatures).Str("missing_module", m).Msg("feature not enabled for organization")
 
 			// force an evaluation to false always
 			// so the data to be returned will always be empty or not found

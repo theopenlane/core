@@ -7,31 +7,24 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/ent/eventqueue"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-func handleProgramMutation(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
+func handleProgramMutation(inv entityops.Invocation, payload entityops.MutationPayload) error {
 	if !isProgramReady(payload) {
 		return nil
 	}
 
-	ctx, client, ok := eventqueue.ClientFromHandler(ctx)
-	if !ok {
-		return ErrFailedToGetClient
-	}
+	ctx := logx.WithFields(inv.Context, map[string]any{"program_id": payload.EntityID})
 
-	if err := addNotificationForAuditor(ctx.Context, client, payload.EntityID); err != nil {
-		logx.FromContext(ctx.Context).Error().Err(err).
-			Str("program_id", payload.EntityID).
-			Msg("failed to send program ready for auditor notification")
+	if err := addNotificationForAuditor(ctx, inv.Client, payload.EntityID); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to send program ready for auditor notification")
 		return err
 	}
 
@@ -61,7 +54,7 @@ func addNotificationForAuditor(ctx context.Context, client *generated.Client, id
 	}
 
 	if len(ids) == 0 {
-		logx.FromContext(ctx).Warn().Str("program_id", id).Str("org_id", program.OwnerID).Msg("no auditors found for program ready notification")
+		logx.FromContext(ctx).Warn().Str("org_id", program.OwnerID).Msg("no auditors found for program ready notification")
 		return nil
 	}
 
@@ -137,14 +130,14 @@ func getOrgAuditorUserIDs(ctx context.Context, client *generated.Client, orgID s
 	return userIDs, nil
 }
 
-func isProgramReady(payload eventqueue.MutationGalaPayload) bool {
-	if raw, ok := eventqueue.MutationValue(payload, program.FieldStatus); ok {
-		if status, ok := eventqueue.ParseEnum(raw, enums.ToProgramStatus, enums.ProgramStatusInvalid); ok && status == enums.ProgramStatusReadyForAuditor {
+func isProgramReady(payload entityops.MutationPayload) bool {
+	if raw, ok := payload.Value(program.FieldStatus); ok {
+		if status, ok := entityops.ParseEnum(raw, enums.ToProgramStatus, enums.ProgramStatusInvalid); ok && status == enums.ProgramStatusReadyForAuditor {
 			return true
 		}
 	}
 
-	ready, ok := eventqueue.MutationValue(payload, program.FieldAuditorReady)
+	ready, ok := payload.Value(program.FieldAuditorReady)
 	if !ok {
 		return false
 	}

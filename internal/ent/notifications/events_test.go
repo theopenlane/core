@@ -1,6 +1,7 @@
 package notifications
 
 import (
+	"encoding/json"
 	"testing"
 
 	"entgo.io/ent"
@@ -8,7 +9,6 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/ent/eventqueue"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/pkg/gala"
@@ -23,17 +23,15 @@ func TestExtractMentionDetails(t *testing.T) {
 	assert.Equal(t, task.FieldDetailsJSON, spec.DetailsJSONField)
 	assert.Equal(t, task.FieldOwnerID, spec.OwnerField)
 
-	payload := eventqueue.MutationGalaPayload{
+	payload := entityops.MutationPayload{
 		MutationType: generated.TypeTask,
 		Operation:    ent.OpUpdateOne.String(),
 		EntityID:     "task-1",
-		ProposedChanges: map[string]any{
-			task.FieldTitle:   "Task One",
-			task.FieldDetails: "details text",
-			task.FieldOwnerID: "owner-1",
-		},
-		OldValues: map[string]any{
-			task.FieldDetails: "old details text",
+		ChangeSet: entityops.ChangeSet{
+			ProposedChanges: json.RawMessage(`{"` + task.FieldTitle + `":"Task One","` + task.FieldDetails + `":"details text","` + task.FieldOwnerID + `":"owner-1"}`),
+			OldValues: map[string]any{
+				task.FieldDetails: "old details text",
+			},
 		},
 	}
 
@@ -84,14 +82,14 @@ func TestRegisterGalaListeners(t *testing.T) {
 	require.NoError(t, err)
 	require.Len(t, ids, 8)
 
-	assert.True(t, runtime.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeTask), "create"))
-	assert.True(t, runtime.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeInternalPolicy), "update"))
-	assert.True(t, runtime.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeRisk), "delete"))
-	assert.True(t, runtime.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeProcedure), "update_one"))
-	assert.True(t, runtime.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeNote), "create"))
-	assert.True(t, runtime.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeExport), "update"))
-	assert.True(t, runtime.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeStandard), "update"))
-	assert.True(t, runtime.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeProgram), ent.OpUpdate.String()))
-	assert.True(t, runtime.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeProgram), ent.OpUpdateOne.String()))
-	assert.False(t, runtime.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, generated.TypeProgram), ent.OpCreate.String()))
+	assert.True(t, runtime.InterestedIn(gala.MutationTopicName(gala.MutationConcernNotification, generated.TypeTask), "create"))
+	assert.True(t, runtime.InterestedIn(gala.MutationTopicName(gala.MutationConcernNotification, generated.TypeInternalPolicy), "update"))
+	assert.True(t, runtime.InterestedIn(gala.MutationTopicName(gala.MutationConcernNotification, generated.TypeRisk), "delete"))
+	assert.True(t, runtime.InterestedIn(gala.MutationTopicName(gala.MutationConcernNotification, generated.TypeProcedure), "update_one"))
+	assert.True(t, runtime.InterestedIn(gala.MutationTopicName(gala.MutationConcernNotification, generated.TypeNote), "create"))
+	assert.True(t, runtime.InterestedIn(gala.MutationTopicName(gala.MutationConcernNotification, generated.TypeExport), "update"))
+	assert.True(t, runtime.InterestedIn(gala.MutationTopicName(gala.MutationConcernNotification, generated.TypeStandard), ent.OpUpdate.String()))
+	assert.True(t, runtime.InterestedIn(gala.MutationTopicName(gala.MutationConcernNotification, generated.TypeProgram), ent.OpUpdate.String()))
+	assert.True(t, runtime.InterestedIn(gala.MutationTopicName(gala.MutationConcernNotification, generated.TypeProgram), ent.OpUpdateOne.String()))
+	assert.False(t, runtime.InterestedIn(gala.MutationTopicName(gala.MutationConcernNotification, generated.TypeProgram), ent.OpCreate.String()))
 }

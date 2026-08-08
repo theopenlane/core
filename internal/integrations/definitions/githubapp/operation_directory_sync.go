@@ -208,13 +208,7 @@ func (d DirectorySync) Run(ctx context.Context, client GraphQLClient) ([]types.I
 		logx.FromContext(ctx).Info().Str("org", org.Login).Int("team_count", len(teams)).Int("membership_count", len(memberships)).Msg("githubapp_directorysync: queried organization teams")
 	}
 
-	logx.FromContext(ctx).Info().
-		Int("org_count", len(orgs)).
-		Int("member_count", len(userAccountEnvelopes)).
-		Int("team_count", len(groupEnvelopes)).
-		Int("membership_count", len(membershipEnvelopes)).
-		Bool("group_sync_disabled", d.DisableGroupSync).
-		Msg("githubapp_directorysync: collected directory records")
+	logx.FromContext(ctx).Info().Int("org_count", len(orgs)).Int("member_count", len(userAccountEnvelopes)).Int("team_count", len(groupEnvelopes)).Int("membership_count", len(membershipEnvelopes)).Bool("group_sync_disabled", d.DisableGroupSync).Msg("githubapp_directorysync: collected directory records")
 
 	payloadSets := []types.IngestPayloadSet{
 		{

@@ -8,23 +8,12 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/eventqueue"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/export"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 )
-
-type exportFields struct {
-	entityID     string
-	ownerID      string
-	requestorID  string
-	exportType   enums.ExportType
-	status       enums.ExportStatus
-	errorMessage string
-}
 
 // canProcessNotification checks if we can process a notification for a user or a virtual support user
 func canProcessNotification(ctx context.Context, client *generated.Client, requestorID string) bool {
@@ -42,24 +31,15 @@ func canProcessNotification(ctx context.Context, client *generated.Client, reque
 }
 
 // handleExportMutation processes export mutations and creates notifications when status changes to READY or FAILED.
-func handleExportMutation(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	ctx, client, ok := eventqueue.ClientFromHandler(ctx)
-	if !ok {
-		return ErrFailedToGetClient
-	}
+func handleExportMutation(inv entityops.Invocation, payload entityops.MutationPayload) error {
+	allowCtx := privacy.DecisionContext(inv.Context, privacy.Allow)
 
-	if !eventqueue.MutationFieldChanged(payload, export.FieldStatus) {
-		return nil
-	}
-
-	allowCtx := privacy.DecisionContext(ctx.Context, privacy.Allow)
-
-	exportEntity, err := client.Export.Get(allowCtx, payload.EntityID)
+	exportEntity, err := inv.Client.Export.Get(allowCtx, payload.EntityID)
 	switch {
 	case generated.IsNotFound(err):
 		return nil
 	case err != nil:
-		logx.FromContext(ctx.Context).Error().Err(err).Msg("failed to query export")
+		logx.FromContext(inv.Context).Error().Err(err).Msg("failed to query export")
 		return err
 	}
 
@@ -69,12 +49,12 @@ func handleExportMutation(ctx gala.HandlerContext, payload eventqueue.MutationGa
 	}
 
 	if exportEntity.RequestorID == "" {
-		logx.FromContext(ctx.Context).Warn().Msg("requestor_id not set for export")
+		logx.FromContext(inv.Context).Warn().Msg("requestor_id not set for export")
 		return nil
 	}
 
-	if err := addExportNotification(ctx.Context, client, exportEntity); err != nil {
-		logx.FromContext(ctx.Context).Error().Err(err).Msg("failed to add export notification")
+	if err := addExportNotification(inv.Context, inv.Client, exportEntity); err != nil {
+		logx.FromContext(inv.Context).Error().Err(err).Msg("failed to add export notification")
 		return err
 	}
 
@@ -85,14 +65,8 @@ func handleExportMutation(ctx gala.HandlerContext, payload eventqueue.MutationGa
 func addExportNotification(ctx context.Context, client *generated.Client, exportEntity *generated.Export) error {
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
-	// Verify the requestor is a user (not service account) before notifying.
-	userOK, err := client.User.Query().Where(user.ID(exportEntity.RequestorID)).Exist(allowCtx)
-	if err != nil {
-		logx.FromContext(ctx).Warn().Err(err).Msg("failed to check if requestor is a user")
-		return nil
-	}
-
-	if !userOK {
+	// Verify the requestor is a user or the virtual support user before notifying.
+	if !canProcessNotification(allowCtx, client, exportEntity.RequestorID) {
 		logx.FromContext(ctx).Debug().Msg("export requestor is not a user, skipping notification")
 		return nil
 	}

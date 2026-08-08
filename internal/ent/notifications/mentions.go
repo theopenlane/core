@@ -8,12 +8,10 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/ent/eventqueue"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/slateparser"
@@ -39,21 +37,16 @@ type mentionNotificationInput struct {
 }
 
 // handleNoteMutation processes note mutations and creates notifications for mentioned users
-func handleNoteMutation(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
+func handleNoteMutation(inv entityops.Invocation, payload entityops.MutationPayload) error {
 	spec, ok := entityops.MentionSpecFor(generated.TypeNote)
 	if !ok {
 		return nil
 	}
 
-	ctx, client, ok := eventqueue.ClientFromHandler(ctx)
-	if !ok {
-		return ErrFailedToGetClient
-	}
-
 	// Determine which text field to use (prefer text_json if available and valid)
-	newText, _ := eventqueue.MutationStringValue(payload, spec.DetailsField)
+	newText, _ := payload.StringValue(spec.DetailsField)
 
-	if raw, ok := eventqueue.MutationValue(payload, spec.DetailsJSONField); ok {
+	if raw, ok := payload.Value(spec.DetailsJSONField); ok {
 		if textJSON := jsonx.Stringify(raw); textJSON != "" && slateparser.IsValidSlateText(textJSON) {
 			newText = textJSON
 		}
@@ -64,17 +57,17 @@ func handleNoteMutation(ctx gala.HandlerContext, payload eventqueue.MutationGala
 		return nil
 	}
 
-	oldText, _ := eventqueue.MutationOldStringValue(payload, spec.DetailsField)
+	oldText, _ := payload.OldStringValue(spec.DetailsField)
 
-	if raw, ok := eventqueue.MutationOldValue(payload, spec.DetailsJSONField); ok {
+	if raw, ok := payload.OldValue(spec.DetailsJSONField); ok {
 		if oldTextJSON := jsonx.Stringify(raw); oldTextJSON != "" && slateparser.IsValidSlateText(oldTextJSON) {
 			oldText = oldTextJSON
 		}
 	}
 
-	allowCtx := privacy.DecisionContext(ctx.Context, privacy.Allow)
+	allowCtx := privacy.DecisionContext(inv.Context, privacy.Allow)
 
-	noteEntity, err := client.Note.Query().
+	noteEntity, err := inv.Client.Note.Query().
 		Where(note.ID(payload.EntityID)).
 		WithTask().
 		WithControl().
@@ -87,7 +80,7 @@ func handleNoteMutation(ctx gala.HandlerContext, payload eventqueue.MutationGala
 	case generated.IsNotFound(err):
 		return nil
 	case err != nil:
-		logx.FromContext(ctx.Context).Error().Err(err).Msg("failed to query note with relationships")
+		logx.FromContext(inv.Context).Error().Err(err).Msg("failed to query note with relationships")
 		return err
 	}
 
@@ -103,12 +96,12 @@ func handleNoteMutation(ctx gala.HandlerContext, payload eventqueue.MutationGala
 		return nil
 	}
 
-	userIDs, err := client.OrgMembership.Query().
+	userIDs, err := inv.Client.OrgMembership.Query().
 		Where(orgmembership.IDIn(mentionedOrgMemberIDs...)).
 		Select(orgmembership.FieldUserID).
 		Strings(allowCtx)
 	if err != nil {
-		logx.FromContext(ctx.Context).Error().Err(err).Msg("failed to get user IDs from org membership IDs")
+		logx.FromContext(inv.Context).Error().Err(err).Msg("failed to get user IDs from org membership IDs")
 		return err
 	}
 
@@ -122,8 +115,8 @@ func handleNoteMutation(ctx gala.HandlerContext, payload eventqueue.MutationGala
 		isComment:        true,
 	}
 
-	if err := addMentionNotification(ctx.Context, client, input); err != nil {
-		logx.FromContext(ctx.Context).Error().Err(err).Msg("failed to add mention notification")
+	if err := addMentionNotification(inv.Context, inv.Client, input); err != nil {
+		logx.FromContext(inv.Context).Error().Err(err).Msg("failed to add mention notification")
 		return err
 	}
 
@@ -215,18 +208,13 @@ type objectMentionDetails struct {
 }
 
 // handleObjectMentions checks mentions in object details fields for every mention-eligible schema
-func handleObjectMentions(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
+func handleObjectMentions(inv entityops.Invocation, payload entityops.MutationPayload) error {
 	spec, ok := entityops.MentionSpecFor(payload.MutationType)
 	if !ok {
 		return nil
 	}
 
-	ctx, client, ok := eventqueue.ClientFromHandler(ctx)
-	if !ok {
-		return ErrFailedToGetClient
-	}
-
-	allowCtx := privacy.DecisionContext(ctx.Context, privacy.Allow)
+	allowCtx := privacy.DecisionContext(inv.Context, privacy.Allow)
 	details := extractMentionDetails(payload, spec)
 
 	// name and owner are absent from the payload when unchanged by the mutation; fill
@@ -237,12 +225,12 @@ func handleObjectMentions(ctx gala.HandlerContext, payload eventqueue.MutationGa
 			return nil
 		}
 
-		row, err := schema.Load(allowCtx, client, payload.EntityID)
+		row, err := schema.Load(allowCtx, inv.Client, payload.EntityID)
 		switch {
 		case generated.IsNotFound(err):
 			return nil
 		case err != nil:
-			logx.FromContext(ctx.Context).Error().Err(err).Msg("failed to load mention object")
+			logx.FromContext(inv.Context).Error().Err(err).Msg("failed to load mention object")
 			return err
 		}
 
@@ -253,7 +241,7 @@ func handleObjectMentions(ctx gala.HandlerContext, payload eventqueue.MutationGa
 		if details.ownerID == "" {
 			fields, err := jsonx.Decode[map[string]any](row)
 			if err != nil {
-				logx.FromContext(ctx.Context).Error().Err(err).Msg("failed to decode mention object row")
+				logx.FromContext(inv.Context).Error().Err(err).Msg("failed to decode mention object row")
 				return err
 			}
 
@@ -284,12 +272,12 @@ func handleObjectMentions(ctx gala.HandlerContext, payload eventqueue.MutationGa
 		return nil
 	}
 
-	userIDs, err := client.OrgMembership.Query().
+	userIDs, err := inv.Client.OrgMembership.Query().
 		Where(orgmembership.IDIn(mentionedOrgMemberIDs...)).
 		Select(orgmembership.FieldUserID).
 		Strings(allowCtx)
 	if err != nil {
-		logx.FromContext(ctx.Context).Error().Err(err).Msg("failed to get user IDs from org membership IDs")
+		logx.FromContext(inv.Context).Error().Err(err).Msg("failed to get user IDs from org membership IDs")
 		return err
 	}
 
@@ -303,8 +291,8 @@ func handleObjectMentions(ctx gala.HandlerContext, payload eventqueue.MutationGa
 		isComment:        false,
 	}
 
-	if err := addMentionNotification(ctx.Context, client, input); err != nil {
-		logx.FromContext(ctx.Context).Error().Err(err).Msg("failed to add mention notification for object")
+	if err := addMentionNotification(inv.Context, inv.Client, input); err != nil {
+		logx.FromContext(inv.Context).Error().Err(err).Msg("failed to add mention notification for object")
 		return err
 	}
 
@@ -313,24 +301,24 @@ func handleObjectMentions(ctx gala.HandlerContext, payload eventqueue.MutationGa
 
 // extractMentionDetails extracts new and pre-update mention detail values from the mutation
 // payload using the schema's mention-scan field spec
-func extractMentionDetails(payload eventqueue.MutationGalaPayload, spec entityops.MentionSpec) objectMentionDetails {
+func extractMentionDetails(payload entityops.MutationPayload, spec entityops.MentionSpec) objectMentionDetails {
 	details := objectMentionDetails{
 		objectID:   payload.EntityID,
 		objectType: payload.MutationType,
 	}
 
-	if raw, ok := eventqueue.MutationValue(payload, spec.DetailsJSONField); ok {
+	if raw, ok := payload.Value(spec.DetailsJSONField); ok {
 		details.newDetailsJSON = jsonx.Stringify(raw)
 	}
 
-	if raw, ok := eventqueue.MutationOldValue(payload, spec.DetailsJSONField); ok {
+	if raw, ok := payload.OldValue(spec.DetailsJSONField); ok {
 		details.oldDetailsJSON = jsonx.Stringify(raw)
 	}
 
-	details.newDetails, _ = eventqueue.MutationStringValue(payload, spec.DetailsField)
-	details.oldDetails, _ = eventqueue.MutationOldStringValue(payload, spec.DetailsField)
-	details.objectName, _ = eventqueue.MutationStringValue(payload, spec.NameField)
-	details.ownerID, _ = eventqueue.MutationStringValue(payload, spec.OwnerField)
+	details.newDetails, _ = payload.StringValue(spec.DetailsField)
+	details.oldDetails, _ = payload.OldStringValue(spec.DetailsField)
+	details.objectName, _ = payload.StringValue(spec.NameField)
+	details.ownerID, _ = payload.StringValue(spec.OwnerField)
 
 	return details
 }

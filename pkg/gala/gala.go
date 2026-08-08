@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/prometheus/client_golang/prometheus"
 	"github.com/riverqueue/river"
 	"github.com/riverqueue/river/rivertype"
 	"github.com/samber/do/v2"
@@ -362,7 +363,7 @@ func (g *Gala) dispatchEnvelope(ctx context.Context, envelope Envelope) error {
 			continue
 		}
 
-		if err := g.executeListener(handlerContext, listener, decodedPayload); err != nil {
+		if err := g.executeListener(handlerContext, listener, decodedPayload, operation); err != nil {
 			// header properties are the only identity left when the emitting context carried no durable log fields
 			logx.FromContext(restoredContext).Warn().Err(err).Str("event_id", string(envelope.ID)).Str("topic", string(envelope.Topic)).Str("operation", operation).Str("listener", listener.name).Interface("envelope_properties", envelope.Headers.Properties).Msg("gala listener failed")
 
@@ -402,8 +403,17 @@ func payloadOperation(payload any) string {
 	return strings.TrimSpace(field.String())
 }
 
-// executeListener executes a single listener with panic recovery
-func (g *Gala) executeListener(handlerContext HandlerContext, listener registeredListener, payload any) (err error) {
+// executeListener executes a single listener with panic recovery, recording delivery metrics
+func (g *Gala) executeListener(handlerContext HandlerContext, listener registeredListener, payload any, operation string) (err error) {
+	start := time.Now()
+	labels := prometheus.Labels{
+		metricLabelTopic:     string(handlerContext.Envelope.Topic),
+		metricLabelListener:  listener.definitionName,
+		metricLabelOperation: operation,
+	}
+
+	listenerDeliveries.With(labels).Inc()
+
 	defer func() {
 		if recovered := recover(); recovered != nil {
 			err = ListenerError{
@@ -411,6 +421,12 @@ func (g *Gala) executeListener(handlerContext HandlerContext, listener registere
 				Cause:        fmt.Errorf("%w: %v", ErrListenerPanicked, recovered),
 				Panicked:     true,
 			}
+		}
+
+		listenerDuration.With(labels).Observe(time.Since(start).Seconds())
+
+		if err != nil {
+			listenerFailures.With(labels).Inc()
 		}
 	}()
 

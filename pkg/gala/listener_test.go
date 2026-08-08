@@ -5,10 +5,10 @@ import (
 )
 
 func TestRegisterTopicAndAttachListeners(t *testing.T) {
-	registry := newRegistry()
+	runtime := newTestGala(t, nil)
 	topic := Topic[runtimeTestPayload]{Name: TopicName("listener.registration.topic")}
 
-	if err := registerTopic(registry, topic, JSONCodec[runtimeTestPayload]{}); err != nil {
+	if err := registerTopic(runtime.registry, topic, JSONCodec[runtimeTestPayload]{}); err != nil {
 		t.Fatalf("unexpected registration error: %v", err)
 	}
 
@@ -29,7 +29,7 @@ func TestRegisterTopicAndAttachListeners(t *testing.T) {
 			},
 		},
 	} {
-		id, err := attachListener(registry, definition)
+		id, err := attachListener(runtime, definition)
 		if err != nil {
 			t.Fatalf("unexpected listener registration error: %v", err)
 		}
@@ -41,20 +41,20 @@ func TestRegisterTopicAndAttachListeners(t *testing.T) {
 		t.Fatalf("expected two listener ids, got %d", len(ids))
 	}
 
-	if got := len(registry.registeredListeners(topic.Name)); got != 2 {
+	if got := len(runtime.registry.registeredListeners(topic.Name)); got != 2 {
 		t.Fatalf("expected two listeners attached, got %d", got)
 	}
 }
 
 func TestRegisterTopicWithJSONCodecEncodesAndDecodes(t *testing.T) {
-	registry := newRegistry()
+	runtime := newTestGala(t, nil)
 	topic := Topic[runtimeTestPayload]{Name: TopicName("listener.registration.json_codec")}
 
-	if err := registerTopic(registry, topic, JSONCodec[runtimeTestPayload]{}); err != nil {
+	if err := registerTopic(runtime.registry, topic, JSONCodec[runtimeTestPayload]{}); err != nil {
 		t.Fatalf("unexpected registration error: %v", err)
 	}
 
-	if _, err := attachListener(registry, Definition[runtimeTestPayload]{
+	if _, err := attachListener(runtime, Definition[runtimeTestPayload]{
 		Topic: topic,
 		Name:  "listener.registration.json_codec",
 		Handle: func(HandlerContext, runtimeTestPayload) error {
@@ -64,7 +64,7 @@ func TestRegisterTopicWithJSONCodecEncodesAndDecodes(t *testing.T) {
 		t.Fatalf("unexpected listener registration error: %v", err)
 	}
 
-	registration, err := registry.topicRegistration(topic.Name)
+	registration, err := runtime.registry.topicRegistration(topic.Name)
 	if err != nil {
 		t.Fatalf("expected topic registration to resolve: %v", err)
 	}

@@ -2,9 +2,10 @@ package hooks
 
 import (
 	"entgo.io/ent"
+	"github.com/samber/do/v2"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/eventqueue"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	intruntime "github.com/theopenlane/core/internal/integrations/runtime"
@@ -16,20 +17,20 @@ import (
 // installation is removed or leaves the connected state, so scheduled loops and queued
 // record jobs stop eagerly instead of each discovering the removal one attempt at a time
 func RegisterGalaIntegrationCleanupListeners(g *gala.Gala) ([]gala.ListenerID, error) {
-	return eventqueue.RegisterMutationListeners(g,
-		eventqueue.MutationListener{
+	return registerMutationListeners(g,
+		entityops.MutationListener{
 			Schema: entgen.TypeIntegration,
-			Name:   "integrations.job_cleanup_removed",
+			Label:  "removed",
 			Operations: []string{
 				ent.OpDelete.String(),
 				ent.OpDeleteOne.String(),
-				eventqueue.SoftDeleteOne,
+				gala.SoftDeleteOne,
 			},
 			Handle: handleIntegrationRemoved,
 		},
-		eventqueue.MutationListener{
+		entityops.MutationListener{
 			Schema: entgen.TypeIntegration,
-			Name:   "integrations.job_cleanup_updated",
+			Label:  "updated",
 			Operations: []string{
 				ent.OpUpdate.String(),
 				ent.OpUpdateOne.String(),
@@ -41,19 +42,21 @@ func RegisterGalaIntegrationCleanupListeners(g *gala.Gala) ([]gala.ListenerID, e
 }
 
 // handleIntegrationRemoved cancels queued jobs for a deleted installation
-func handleIntegrationRemoved(inv eventqueue.Invocation, _ eventqueue.MutationGalaPayload) error {
+func handleIntegrationRemoved(inv entityops.Invocation, _ entityops.MutationPayload) error {
 	return cancelInstallationJobs(inv)
 }
 
 // handleIntegrationUpdated cancels queued jobs when an update soft-deletes the installation
 // (soft deletes surface as updates setting deleted_at) or moves it out of the connected state
-func handleIntegrationUpdated(inv eventqueue.Invocation, payload eventqueue.MutationGalaPayload) error {
-	if eventqueue.MutationFieldChanged(payload, integration.FieldDeletedAt) {
+func handleIntegrationUpdated(inv entityops.Invocation, payload entityops.MutationPayload) error {
+	if payload.FieldChanged(integration.FieldDeletedAt) {
 		return cancelInstallationJobs(inv)
 	}
 
-	status, ok := eventqueue.ParseEnum(
-		payload.ProposedChanges[integration.FieldStatus],
+	rawStatus, _ := payload.Value(integration.FieldStatus)
+
+	status, ok := entityops.ParseEnum(
+		rawStatus,
 		enums.ToIntegrationStatus,
 		enums.IntegrationStatusInvalid,
 	)
@@ -65,9 +68,9 @@ func handleIntegrationUpdated(inv eventqueue.Invocation, payload eventqueue.Muta
 }
 
 // cancelInstallationJobs cancels every queued River job bound to the mutated installation
-func cancelInstallationJobs(inv eventqueue.Invocation) error {
-	rt := intruntime.FromClient(inv.Context, inv.Client)
-	if rt == nil {
+func cancelInstallationJobs(inv entityops.Invocation) error {
+	rt, err := do.Invoke[*intruntime.Runtime](inv.Injector)
+	if err != nil || rt == nil {
 		return nil
 	}
 

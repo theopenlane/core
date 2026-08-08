@@ -14,15 +14,15 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/eventqueue"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
-	"github.com/theopenlane/core/internal/mutations"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/observability"
 	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/iam/auth"
 )
 
@@ -45,11 +45,11 @@ func NewWorkflowListeners(client *generated.Client, engine *WorkflowEngine, runt
 }
 
 // HandleWorkflowMutationGala triggers matching workflows for workflow-eligible Gala mutations.
-func (l *WorkflowListeners) HandleWorkflowMutationGala(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
+func (l *WorkflowListeners) HandleWorkflowMutationGala(ctx gala.HandlerContext, payload entityops.MutationPayload) error {
 	if workflows.IsWorkflowBypass(ctx.Context) && !workflows.AllowWorkflowEventEmission(ctx.Context) {
 		return nil
 	}
-	if workflows.ShouldSkipEventEmission(ctx.Context) {
+	if gala.ShouldSkipEventEmission(ctx.Context) {
 		return nil
 	}
 
@@ -63,14 +63,18 @@ func (l *WorkflowListeners) HandleWorkflowMutationGala(ctx gala.HandlerContext, 
 	}
 
 	eventType := workflowEventTypeFromEntOperation(payload.Operation)
-	changeSet := payload.ChangeSet()
+	changeSet := payload.ChangeSet
 
 	if len(changeSet.ChangedFields) == 0 && len(changeSet.ChangedEdges) == 0 && eventType != "CREATE" {
 		return nil
 	}
 
-	entityID, ok := eventqueue.MutationEntityID(payload, ctx.Envelope.Headers.Properties)
-	if !ok {
+	entityID := payload.EntityID
+	if entityID == "" {
+		entityID = ctx.Envelope.Headers.Properties[gala.MutationPropertyEntityID]
+	}
+
+	if entityID == "" {
 		return nil
 	}
 
@@ -80,7 +84,12 @@ func (l *WorkflowListeners) HandleWorkflowMutationGala(ctx gala.HandlerContext, 
 		return nil
 	}
 
-	definitions, err := l.engine.FindMatchingDefinitions(allowCtx, schemaType, eventType, changeSet.ChangedFields, changeSet.ChangedEdges, changeSet.AddedIDs, changeSet.RemovedIDs, changeSet.ProposedChanges, obj)
+	proposedChanges, err := jsonx.Decode[map[string]any](changeSet.ProposedChanges)
+	if err != nil {
+		proposedChanges = nil
+	}
+
+	definitions, err := l.engine.FindMatchingDefinitions(allowCtx, schemaType, eventType, changeSet.ChangedFields, changeSet.ChangedEdges, changeSet.AddedIDs, changeSet.RemovedIDs, proposedChanges, obj)
 	if err != nil || len(definitions) == 0 {
 		return nil
 	}
@@ -104,17 +113,19 @@ func (l *WorkflowListeners) HandleWorkflowMutationGala(ctx gala.HandlerContext, 
 // HandleWorkflowAssignmentMutationGala reacts to assignment status changes emitted via Gala.
 // It fires CompleteAssignment whenever a non-Pending status is committed, allowing direct
 // GraphQL mutations on assignment status to advance paused approval and review flows.
-func (l *WorkflowListeners) HandleWorkflowAssignmentMutationGala(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
+func (l *WorkflowListeners) HandleWorkflowAssignmentMutationGala(ctx gala.HandlerContext, payload entityops.MutationPayload) error {
 	if payload.Operation != ent.OpUpdate.String() && payload.Operation != ent.OpUpdateOne.String() {
 		return nil
 	}
 
-	if !eventqueue.MutationFieldChanged(payload, workflowassignment.FieldStatus) {
+	if !payload.FieldChanged(workflowassignment.FieldStatus) {
 		return nil
 	}
 
-	newStatus, ok := eventqueue.ParseEnum(
-		payload.ProposedChanges[workflowassignment.FieldStatus],
+	rawStatus, _ := payload.Value(workflowassignment.FieldStatus)
+
+	newStatus, ok := entityops.ParseEnum(
+		rawStatus,
 		enums.ToWorkflowAssignmentStatus,
 		enums.WorkflowAssignmentStatusPending,
 	)
@@ -127,8 +138,12 @@ func (l *WorkflowListeners) HandleWorkflowAssignmentMutationGala(ctx gala.Handle
 		return nil
 	}
 
-	assignmentID, ok := eventqueue.MutationEntityID(payload, ctx.Envelope.Headers.Properties)
-	if !ok {
+	assignmentID := payload.EntityID
+	if assignmentID == "" {
+		assignmentID = ctx.Envelope.Headers.Properties[gala.MutationPropertyEntityID]
+	}
+
+	if assignmentID == "" {
 		return nil
 	}
 
@@ -233,7 +248,7 @@ func (l *WorkflowListeners) HandleWorkflowTriggered(ctx gala.HandlerContext, pay
 		keys := lo.Map(gatedToStart, func(item gatedStart, _ int) string {
 			return item.action.Key
 		})
-		keys = mutations.NormalizeStrings(keys)
+		keys = workflows.NormalizeStrings(keys)
 		if len(keys) > 0 {
 			allowCtx := workflows.AllowContext(scopeCtx)
 			contextData := instance.Context
@@ -580,7 +595,7 @@ func isChangeRequestAssignment(assignment *generated.WorkflowAssignment) bool {
 }
 
 func resolveExpectedActionIndices(actions []models.WorkflowAction, parallelKeys []string, actionIndex int) (map[int]struct{}, bool) {
-	expectedKeys := mutations.NormalizeStrings(parallelKeys)
+	expectedKeys := workflows.NormalizeStrings(parallelKeys)
 	expectedIndices := make(map[int]struct{})
 	for _, key := range expectedKeys {
 		if idx := actionIndexForKey(actions, key); idx >= 0 {
@@ -715,7 +730,7 @@ func (l *WorkflowListeners) closePendingApprovalsForChangeRequest(scope *observa
 
 	// These status updates are internal side effects of a change request; avoid
 	// re-entering assignment completion through mutation emission hooks.
-	allowCtx := workflows.SkipEventEmission(workflows.AllowContext(scope.Context()))
+	allowCtx := gala.SkipEventEmission(workflows.AllowContext(scope.Context()))
 	requesterID := requesterAssignment.ActorUserID
 	decidedAt := time.Now().UTC()
 
@@ -1080,7 +1095,7 @@ func (l *WorkflowListeners) removeParallelApprovalKey(ctx context.Context, insta
 		return nil
 	}
 
-	keys := mutations.NormalizeStrings(instance.Context.ParallelApprovalKeys)
+	keys := workflows.NormalizeStrings(instance.Context.ParallelApprovalKeys)
 	if len(keys) == 0 {
 		return nil
 	}

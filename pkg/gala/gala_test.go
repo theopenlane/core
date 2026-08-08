@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"strings"
 	"sync"
 	"testing"
 	"time"
@@ -85,7 +86,7 @@ func TestRuntimeDispatchEnvelopeWithDependencyInjectionAndContextRehydration(t *
 
 	var observed string
 
-	if _, err := attachListener(runtime.registry, Definition[runtimeTestPayload]{
+	if _, err := attachListener(runtime, Definition[runtimeTestPayload]{
 		Topic: topic,
 		Name:  "runtime.test.listener",
 		Handle: func(handlerContext HandlerContext, payload runtimeTestPayload) error {
@@ -149,7 +150,7 @@ func TestRuntimeDispatchEnvelopeWithCallerContext(t *testing.T) {
 	}
 
 	var observed *auth.Caller
-	if _, err := attachListener(runtime.registry, Definition[runtimeTestPayload]{
+	if _, err := attachListener(runtime, Definition[runtimeTestPayload]{
 		Topic: topic,
 		Name:  "runtime.test.auth.listener",
 		Handle: func(handlerContext HandlerContext, _ runtimeTestPayload) error {
@@ -242,9 +243,9 @@ func TestRuntimeDispatchEnvelopeWithCallerContext(t *testing.T) {
 // TestAttachListenerRequiresTopicRegistration verifies listener registration
 // fails when the topic contract has not been registered.
 func TestAttachListenerRequiresTopicRegistration(t *testing.T) {
-	registry := newRegistry()
+	runtime := newTestGala(t, nil)
 
-	_, err := attachListener(registry, Definition[runtimeTestPayload]{
+	_, err := attachListener(runtime, Definition[runtimeTestPayload]{
 		Topic: Topic[runtimeTestPayload]{Name: TopicName("missing.topic")},
 		Name:  "runtime.test.listener",
 		Handle: func(HandlerContext, runtimeTestPayload) error {
@@ -288,7 +289,7 @@ func TestRuntimeEmitUsesDispatcher(t *testing.T) {
 	}
 
 	listenerCalls := 0
-	if _, err := attachListener(runtime.registry, Definition[runtimeTestPayload]{
+	if _, err := attachListener(runtime, Definition[runtimeTestPayload]{
 		Topic: topic,
 		Name:  "runtime.test.durable.listener",
 		Handle: func(HandlerContext, runtimeTestPayload) error {
@@ -430,7 +431,7 @@ func TestRuntimeDispatchEnvelopeWrapsListenerErrors(t *testing.T) {
 	}
 
 	listenerErr := errors.New("listener failed")
-	if _, err := attachListener(runtime.registry, Definition[runtimeTestPayload]{
+	if _, err := attachListener(runtime, Definition[runtimeTestPayload]{
 		Topic: topic,
 		Name:  "failing.listener",
 		Handle: func(HandlerContext, runtimeTestPayload) error {
@@ -459,8 +460,8 @@ func TestRuntimeDispatchEnvelopeWrapsListenerErrors(t *testing.T) {
 		t.Fatalf("expected ListenerError, got %T", err)
 	}
 
-	if listenerError.ListenerName != "failing.listener" {
-		t.Fatalf("expected listener name 'failing.listener', got %q", listenerError.ListenerName)
+	if !strings.HasPrefix(listenerError.ListenerName, "failing.listener#") {
+		t.Fatalf("expected listener name prefixed 'failing.listener#', got %q", listenerError.ListenerName)
 	}
 
 	if listenerError.Panicked {
@@ -480,7 +481,7 @@ func TestRuntimeDispatchEnvelopeRecoversPanic(t *testing.T) {
 		t.Fatalf("failed to register topic: %v", err)
 	}
 
-	if _, err := attachListener(runtime.registry, Definition[runtimeTestPayload]{
+	if _, err := attachListener(runtime, Definition[runtimeTestPayload]{
 		Topic: topic,
 		Name:  "panicking.listener",
 		Handle: func(HandlerContext, runtimeTestPayload) error {
@@ -509,8 +510,8 @@ func TestRuntimeDispatchEnvelopeRecoversPanic(t *testing.T) {
 		t.Fatalf("expected ListenerError, got %T", err)
 	}
 
-	if listenerError.ListenerName != "panicking.listener" {
-		t.Fatalf("expected listener name 'panicking.listener', got %q", listenerError.ListenerName)
+	if !strings.HasPrefix(listenerError.ListenerName, "panicking.listener#") {
+		t.Fatalf("expected listener name prefixed 'panicking.listener#', got %q", listenerError.ListenerName)
 	}
 
 	if !listenerError.Panicked {
@@ -533,7 +534,7 @@ func TestRuntimeDispatchEnvelopeFiltersListenersByOperation(t *testing.T) {
 	createCalls := 0
 	updateCalls := 0
 
-	if _, err := attachListener(runtime.registry, Definition[runtimeOperationPayload]{
+	if _, err := attachListener(runtime, Definition[runtimeOperationPayload]{
 		Topic:      topic,
 		Name:       "create.listener",
 		Operations: []string{ent.OpCreate.String()},
@@ -545,7 +546,7 @@ func TestRuntimeDispatchEnvelopeFiltersListenersByOperation(t *testing.T) {
 		t.Fatalf("failed to register create listener: %v", err)
 	}
 
-	if _, err := attachListener(runtime.registry, Definition[runtimeOperationPayload]{
+	if _, err := attachListener(runtime, Definition[runtimeOperationPayload]{
 		Topic:      topic,
 		Name:       "update.listener",
 		Operations: []string{ent.OpUpdate.String(), ent.OpUpdateOne.String()},
@@ -592,7 +593,7 @@ func TestRuntimeEmitReturnsDurableDispatchError(t *testing.T) {
 		t.Fatalf("failed to register topic: %v", err)
 	}
 
-	if _, err := attachListener(runtime.registry, Definition[runtimeTestPayload]{
+	if _, err := attachListener(runtime, Definition[runtimeTestPayload]{
 		Topic: topic,
 		Name:  "durable.listener",
 		Handle: func(HandlerContext, runtimeTestPayload) error {
@@ -608,7 +609,7 @@ func TestRuntimeEmitReturnsDurableDispatchError(t *testing.T) {
 }
 
 func TestRegistryConcurrentRegistration(t *testing.T) {
-	registry := newRegistry()
+	runtime := newTestGala(t, nil)
 
 	const numGoroutines = 100
 
@@ -621,8 +622,8 @@ func TestRegistryConcurrentRegistration(t *testing.T) {
 			defer wg.Done()
 
 			topic := Topic[runtimeTestPayload]{Name: TopicName(fmt.Sprintf("topic.%d", n))}
-			_ = registerTopic(registry, topic, JSONCodec[runtimeTestPayload]{})
-			_, _ = attachListener(registry, Definition[runtimeTestPayload]{
+			_ = registerTopic(runtime.registry, topic, JSONCodec[runtimeTestPayload]{})
+			_, _ = attachListener(runtime, Definition[runtimeTestPayload]{
 				Topic:  topic,
 				Name:   fmt.Sprintf("listener.%d", n),
 				Handle: func(HandlerContext, runtimeTestPayload) error { return nil },
@@ -703,14 +704,14 @@ func TestRegistryInterestedInNoListeners(t *testing.T) {
 }
 
 func TestRegistryInterestedInEmptyOperation(t *testing.T) {
-	registry := newRegistry()
+	runtime := newTestGala(t, nil)
 
 	topic := Topic[runtimeTestPayload]{Name: TopicName("test.empty.operation")}
-	if err := registerTopic(registry, topic, JSONCodec[runtimeTestPayload]{}); err != nil {
+	if err := registerTopic(runtime.registry, topic, JSONCodec[runtimeTestPayload]{}); err != nil {
 		t.Fatalf("failed to register topic: %v", err)
 	}
 
-	if _, err := attachListener(registry, Definition[runtimeTestPayload]{
+	if _, err := attachListener(runtime, Definition[runtimeTestPayload]{
 		Topic:  topic,
 		Name:   "test.listener",
 		Handle: func(HandlerContext, runtimeTestPayload) error { return nil },
@@ -718,24 +719,24 @@ func TestRegistryInterestedInEmptyOperation(t *testing.T) {
 		t.Fatalf("failed to attach listener: %v", err)
 	}
 
-	if !registry.InterestedIn(topic.Name, "") {
+	if !runtime.registry.InterestedIn(topic.Name, "") {
 		t.Fatalf("expected true for empty operation when listeners exist")
 	}
 
-	if !registry.InterestedIn(topic.Name, "   ") {
+	if !runtime.registry.InterestedIn(topic.Name, "   ") {
 		t.Fatalf("expected true for whitespace-only operation when listeners exist")
 	}
 }
 
 func TestRegistryInterestedInWithOperationFilter(t *testing.T) {
-	registry := newRegistry()
+	runtime := newTestGala(t, nil)
 
 	topic := Topic[runtimeOperationPayload]{Name: TopicName("test.operation.filter")}
-	if err := registerTopic(registry, topic, JSONCodec[runtimeOperationPayload]{}); err != nil {
+	if err := registerTopic(runtime.registry, topic, JSONCodec[runtimeOperationPayload]{}); err != nil {
 		t.Fatalf("failed to register topic: %v", err)
 	}
 
-	if _, err := attachListener(registry, Definition[runtimeOperationPayload]{
+	if _, err := attachListener(runtime, Definition[runtimeOperationPayload]{
 		Topic:      topic,
 		Name:       "test.create.listener",
 		Operations: []string{"create"},
@@ -744,24 +745,24 @@ func TestRegistryInterestedInWithOperationFilter(t *testing.T) {
 		t.Fatalf("failed to attach listener: %v", err)
 	}
 
-	if !registry.InterestedIn(topic.Name, "create") {
+	if !runtime.registry.InterestedIn(topic.Name, "create") {
 		t.Fatalf("expected true for matching operation")
 	}
 
-	if registry.InterestedIn(topic.Name, "update") {
+	if runtime.registry.InterestedIn(topic.Name, "update") {
 		t.Fatalf("expected false for non-matching operation")
 	}
 }
 
 func TestRegistryInterestedInWithWildcardListener(t *testing.T) {
-	registry := newRegistry()
+	runtime := newTestGala(t, nil)
 
 	topic := Topic[runtimeOperationPayload]{Name: TopicName("test.wildcard.listener")}
-	if err := registerTopic(registry, topic, JSONCodec[runtimeOperationPayload]{}); err != nil {
+	if err := registerTopic(runtime.registry, topic, JSONCodec[runtimeOperationPayload]{}); err != nil {
 		t.Fatalf("failed to register topic: %v", err)
 	}
 
-	if _, err := attachListener(registry, Definition[runtimeOperationPayload]{
+	if _, err := attachListener(runtime, Definition[runtimeOperationPayload]{
 		Topic:  topic,
 		Name:   "test.wildcard",
 		Handle: func(HandlerContext, runtimeOperationPayload) error { return nil },
@@ -769,11 +770,11 @@ func TestRegistryInterestedInWithWildcardListener(t *testing.T) {
 		t.Fatalf("failed to attach listener: %v", err)
 	}
 
-	if !registry.InterestedIn(topic.Name, "create") {
+	if !runtime.registry.InterestedIn(topic.Name, "create") {
 		t.Fatalf("expected true for wildcard listener with any operation")
 	}
 
-	if !registry.InterestedIn(topic.Name, "update") {
+	if !runtime.registry.InterestedIn(topic.Name, "update") {
 		t.Fatalf("expected true for wildcard listener with any operation")
 	}
 }
@@ -795,18 +796,18 @@ func TestValidateTopicRegistrationErrors(t *testing.T) {
 }
 
 func TestValidateListenerDefinitionErrors(t *testing.T) {
-	registry := newRegistry()
+	runtime := newTestGala(t, nil)
 	topic := Topic[runtimeTestPayload]{Name: TopicName("test.listener.validation")}
 
-	if err := registerTopic(registry, topic, JSONCodec[runtimeTestPayload]{}); err != nil {
+	if err := registerTopic(runtime.registry, topic, JSONCodec[runtimeTestPayload]{}); err != nil {
 		t.Fatalf("failed to register topic: %v", err)
 	}
 
-	if _, err := attachListener(nil, Definition[runtimeTestPayload]{}); !errors.Is(err, ErrRegistryRequired) {
-		t.Fatalf("expected ErrRegistryRequired, got %v", err)
+	if _, err := attachListener(nil, Definition[runtimeTestPayload]{}); !errors.Is(err, ErrGalaRequired) {
+		t.Fatalf("expected ErrGalaRequired, got %v", err)
 	}
 
-	if _, err := attachListener(registry, Definition[runtimeTestPayload]{
+	if _, err := attachListener(runtime, Definition[runtimeTestPayload]{
 		Topic:  Topic[runtimeTestPayload]{Name: ""},
 		Name:   "test.listener",
 		Handle: func(HandlerContext, runtimeTestPayload) error { return nil },
@@ -814,20 +815,44 @@ func TestValidateListenerDefinitionErrors(t *testing.T) {
 		t.Fatalf("expected ErrTopicNameRequired, got %v", err)
 	}
 
-	if _, err := attachListener(registry, Definition[runtimeTestPayload]{
+	if _, err := attachListener(runtime, Definition[runtimeTestPayload]{
 		Topic:  topic,
 		Name:   "",
 		Handle: func(HandlerContext, runtimeTestPayload) error { return nil },
-	}); !errors.Is(err, ErrListenerNameRequired) {
-		t.Fatalf("expected ErrListenerNameRequired, got %v", err)
+	}); err != nil {
+		t.Fatalf("expected empty listener name to default to the topic name, got %v", err)
 	}
 
-	if _, err := attachListener(registry, Definition[runtimeTestPayload]{
+	listeners := runtime.registry.registeredListeners(topic.Name)
+	if len(listeners) != 1 || !strings.HasPrefix(listeners[0].name, string(topic.Name)+"#") {
+		t.Fatalf("expected defaulted listener name prefixed %q, got %+v", string(topic.Name)+"#", listeners)
+	}
+
+	if _, err := attachListener(runtime, Definition[runtimeTestPayload]{
 		Topic:  topic,
 		Name:   "test.listener",
 		Handle: nil,
 	}); !errors.Is(err, ErrListenerHandlerRequired) {
 		t.Fatalf("expected ErrListenerHandlerRequired, got %v", err)
+	}
+
+	if _, err := attachListener(runtime, Definition[runtimeTestPayload]{
+		Topic:  topic,
+		Name:   "test.listener",
+		Handle: func(HandlerContext, runtimeTestPayload) error { return nil },
+		Schedule: &ScheduleSpec[runtimeTestPayload]{
+			Handle: func(context.Context, runtimeTestPayload) (int, error) { return 0, nil },
+		},
+	}); !errors.Is(err, ErrListenerHandlerConflict) {
+		t.Fatalf("expected ErrListenerHandlerConflict, got %v", err)
+	}
+
+	if _, err := attachListener(runtime, Definition[runtimeTestPayload]{
+		Topic:    topic,
+		Name:     "test.listener",
+		Schedule: &ScheduleSpec[runtimeTestPayload]{},
+	}); !errors.Is(err, ErrListenerHandlerRequired) {
+		t.Fatalf("expected ErrListenerHandlerRequired for schedule without handle, got %v", err)
 	}
 }
 
@@ -1030,7 +1055,7 @@ func TestInMemoryDispatchUsesPoolWorkerLimit(t *testing.T) {
 
 	callCount := 0
 	callMu := sync.Mutex{}
-	if _, err := attachListener(runtime.registry, Definition[runtimeTestPayload]{
+	if _, err := attachListener(runtime, Definition[runtimeTestPayload]{
 		Topic: topic,
 		Name:  "runtime.test.inmemory.pool.listener",
 		Handle: func(_ HandlerContext, _ runtimeTestPayload) error {
@@ -1111,7 +1136,7 @@ func TestInMemoryEmitReturnsBeforeListenerCompletes(t *testing.T) {
 	release := make(chan struct{})
 	done := make(chan struct{})
 
-	if _, err := attachListener(runtime.registry, Definition[runtimeTestPayload]{
+	if _, err := attachListener(runtime, Definition[runtimeTestPayload]{
 		Topic: topic,
 		Name:  "runtime.test.inmemory.async.listener",
 		Handle: func(_ HandlerContext, _ runtimeTestPayload) error {
@@ -1212,7 +1237,7 @@ func TestDispatchEnvelopeSkipsListenersWithMismatchedOperation(t *testing.T) {
 	}
 
 	createCalls := 0
-	if _, err := attachListener(runtime.registry, Definition[runtimeOperationPayload]{
+	if _, err := attachListener(runtime, Definition[runtimeOperationPayload]{
 		Topic:      topic,
 		Name:       "create.only.listener",
 		Operations: []string{"create"},
@@ -1255,14 +1280,14 @@ func TestRegisteredListenersReturnsEmptyForUnknownTopic(t *testing.T) {
 }
 
 func TestRegisteredListenersReturnsCopy(t *testing.T) {
-	registry := newRegistry()
+	runtime := newTestGala(t, nil)
 
 	topic := Topic[runtimeTestPayload]{Name: TopicName("test.listeners.copy")}
-	if err := registerTopic(registry, topic, JSONCodec[runtimeTestPayload]{}); err != nil {
+	if err := registerTopic(runtime.registry, topic, JSONCodec[runtimeTestPayload]{}); err != nil {
 		t.Fatalf("failed to register topic: %v", err)
 	}
 
-	if _, err := attachListener(registry, Definition[runtimeTestPayload]{
+	if _, err := attachListener(runtime, Definition[runtimeTestPayload]{
 		Topic:  topic,
 		Name:   "test.listener",
 		Handle: func(HandlerContext, runtimeTestPayload) error { return nil },
@@ -1270,8 +1295,8 @@ func TestRegisteredListenersReturnsCopy(t *testing.T) {
 		t.Fatalf("failed to attach listener: %v", err)
 	}
 
-	first := registry.registeredListeners(topic.Name)
-	second := registry.registeredListeners(topic.Name)
+	first := runtime.registry.registeredListeners(topic.Name)
+	second := runtime.registry.registeredListeners(topic.Name)
 
 	if len(first) != 1 || len(second) != 1 {
 		t.Fatalf("expected 1 listener in each copy")
@@ -1504,8 +1529,13 @@ func TestRegisterErrors(t *testing.T) {
 		Topic:  Topic[runtimeTestPayload]{Name: "test.topic"},
 		Name:   "",
 		Handle: func(HandlerContext, runtimeTestPayload) error { return nil },
-	}); !errors.Is(err, ErrListenerNameRequired) {
-		t.Fatalf("expected ErrListenerNameRequired, got %v", err)
+	}); err != nil {
+		t.Fatalf("expected empty listener name to default to the topic name, got %v", err)
+	}
+
+	listeners := runtime.registry.registeredListeners(TopicName("test.topic"))
+	if len(listeners) != 1 || !strings.HasPrefix(listeners[0].name, "test.topic#") {
+		t.Fatalf("expected defaulted listener name prefixed %q, got %+v", "test.topic#", listeners)
 	}
 }
 

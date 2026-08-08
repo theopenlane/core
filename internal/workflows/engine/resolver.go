@@ -11,7 +11,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
-	"github.com/theopenlane/core/internal/mutations"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/observability"
 	"github.com/theopenlane/core/internal/workflows/resolvers"
@@ -106,7 +105,7 @@ func (e *WorkflowEngine) getObjectTags(ctx context.Context, obj *workflows.Objec
 	if err != nil {
 		return nil, err
 	}
-	tags = mutations.NormalizeStrings(tags)
+	tags = workflows.NormalizeStrings(tags)
 	if len(tags) == 0 {
 		return nil, nil
 	}

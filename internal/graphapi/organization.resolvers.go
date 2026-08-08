@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 )
@@ -79,6 +80,10 @@ func (r *mutationResolver) DeleteOrganization(ctx context.Context, id string) (*
 
 		return nil, common.ErrResourceNotAccessibleWithToken
 	}
+
+	// organization deletion is a soft delete; flag the context so mutation-event emission
+	// classifies the delete as SoftDeleteOne without inspecting the graphql operation
+	ctx = gala.WithFlag(ctx, gala.FlagSoftDeleteOperation)
 
 	if err := withTransactionalMutation(ctx).Organization.DeleteOneID(id).Exec(ctx); err != nil {
 		logx.FromContext(ctx).Error().Str("organization_id", id).Err(err).Msg("failed to delete organization")

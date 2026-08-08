@@ -16,7 +16,6 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/ent/eventqueue"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/notification"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
@@ -40,18 +39,22 @@ var ErrExpressionNotList = errors.New("entityops: expression did not evaluate to
 // RegisterGalaTaskRuleListeners registers one gala listener per eligible schema evaluating each schema's rules on mutation and creates suggested
 // task records
 func RegisterGalaTaskRuleListeners(g *gala.Gala) ([]gala.ListenerID, error) {
-	listeners := lo.Map(entityops.TaskRuleEligibleSchemas(), func(schema *entityops.Schema, _ int) eventqueue.MutationListener {
-		return eventqueue.MutationListener{
+	listeners := lo.Map(entityops.TaskRuleEligibleSchemas(), func(schema *entityops.Schema, _ int) entityops.MutationListener {
+		return entityops.MutationListener{
 			Schema:     schema.Name,
-			Name:       "taskrules." + schema.Snake,
+			Label:      "taskrules",
 			Operations: taskRuleOperations(schema),
-			Handle: func(inv eventqueue.Invocation, payload eventqueue.MutationGalaPayload) error {
+			// CapOrgSupport bypasses the assigner user check on task creation
+			Caller: func(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
+				return restored.WithCapabilities(auth.CapInternalOperation | auth.CapOrgSupport)
+			},
+			Handle: func(inv entityops.Invocation, payload entityops.MutationPayload) error {
 				return handleTaskRuleMutation(inv, schema, payload)
 			},
 		}
 	})
 
-	return eventqueue.RegisterMutationListeners(g, listeners...)
+	return registerMutationListeners(g, listeners...)
 }
 
 // taskRuleOperations returns the mutation operations to subscribe to for schema
@@ -68,14 +71,14 @@ func taskRuleOperations(schema *entityops.Schema) []string {
 	return ops
 }
 
-func handleTaskRuleMutation(inv eventqueue.Invocation, schema *entityops.Schema, payload eventqueue.MutationGalaPayload) error {
+func handleTaskRuleMutation(inv entityops.Invocation, schema *entityops.Schema, payload entityops.MutationPayload) error {
 	if schema.Load == nil {
 		return nil
 	}
 
 	client, entityID := inv.Client, inv.EntityID
 
-	systemCtx := taskRuleSystemContext(inv.Context)
+	systemCtx := inv.Context
 
 	raw, err := schema.Load(systemCtx, client, entityID)
 	if err != nil {
@@ -163,18 +166,6 @@ func notifyOrganizationReady(ctx context.Context, client *generated.Client, orga
 		Save(ctx)
 
 	return err
-}
-
-// taskRuleSystemContext augments gala's restored caller with the capabilities task-rule
-// evaluation needs
-// CapOrgSupport is needed to bypass assigner user on task creation
-func taskRuleSystemContext(ctx context.Context) context.Context {
-	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil {
-		caller = &auth.Caller{}
-	}
-
-	return auth.WithCaller(ctx, caller.WithCapabilities(auth.CapInternalOperation|auth.CapOrgSupport))
 }
 
 // ruleValue resolves what "value" binds to in a rule's CEL expression

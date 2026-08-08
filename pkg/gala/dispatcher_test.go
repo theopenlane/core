@@ -128,7 +128,7 @@ func TestRiverDispatchWorkerWorkDispatchesEnvelope(t *testing.T) {
 	}
 
 	called := 0
-	if _, err := attachListener(runtime.registry, Definition[runtimeTestPayload]{
+	if _, err := attachListener(runtime, Definition[runtimeTestPayload]{
 		Topic: topic,
 		Name:  "gala.test.worker.listener",
 		Handle: func(_ HandlerContext, payload runtimeTestPayload) error {
