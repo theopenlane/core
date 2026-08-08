@@ -7,9 +7,9 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/ent/eventqueue"
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/workflows"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
@@ -24,7 +24,7 @@ const (
 // RegisterGalaDocumentAssociationListeners registers listeners that link
 // referenced controls to documents asynchronously after document creation.
 func RegisterGalaDocumentAssociationListeners(g *gala.Gala) ([]gala.ListenerID, error) {
-	return eventqueue.RegisterMutationListeners(g,
+	return registerMutationListeners(g,
 		documentAssociationListener(generated.TypeActionPlan),
 		documentAssociationListener(generated.TypeInternalPolicy),
 		documentAssociationListener(generated.TypeProcedure),
@@ -32,10 +32,9 @@ func RegisterGalaDocumentAssociationListeners(g *gala.Gala) ([]gala.ListenerID, 
 }
 
 // documentAssociationListener builds the document association listener for one schema type
-func documentAssociationListener(schemaType string) eventqueue.MutationListener {
-	return eventqueue.MutationListener{
+func documentAssociationListener(schemaType string) entityops.MutationListener {
+	return entityops.MutationListener{
 		Schema:     schemaType,
-		Name:       "document.associations." + schemaType,
 		Operations: []string{ent.OpCreate.String()},
 		Handle:     handleDocumentAssociationCreated,
 	}
@@ -45,7 +44,7 @@ func documentAssociationListener(schemaType string) eventqueue.MutationListener 
 // through the schema catalog: the row is loaded generically, matched control references
 // become add-edge keys, and a single catalog update re-asserts the loaded revision so the
 // links do not bump the document's revision
-func handleDocumentAssociationCreated(inv eventqueue.Invocation, payload eventqueue.MutationGalaPayload) error {
+func handleDocumentAssociationCreated(inv entityops.Invocation, payload entityops.MutationPayload) error {
 	schema, ok := entityops.LookupSchema(payload.MutationType)
 	if !ok {
 		return nil
@@ -94,7 +93,7 @@ func handleDocumentAssociationCreated(inv eventqueue.Invocation, payload eventqu
 		return err
 	}
 
-	return schema.Update(workflows.AllowContext(inv.Context), inv.Client, inv.EntityID, updatePayload)
+	return schema.Update(privacy.DecisionContext(rule.WithInternalContext(inv.Context), privacy.Allow), inv.Client, inv.EntityID, updatePayload)
 }
 
 func getDocumentAssociationsForDetails(ctx context.Context, client *generated.Client, details string) *edgeLinks {

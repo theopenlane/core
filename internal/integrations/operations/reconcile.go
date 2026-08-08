@@ -11,7 +11,6 @@ import (
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/gala"
-	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -24,20 +23,6 @@ type ReconcileEnvelope struct {
 	Schedule gala.ScheduleState `json:"schedule"`
 }
 
-// reconcileSchemaName is the type name derived from the JSON schema reflector
-var reconcileSchemaName = jsonx.SchemaID(jsonx.SchemaFrom[ReconcileEnvelope]())
-
-var (
-	// ReconcileTopic is the Gala topic name for reconciliation envelopes
-	ReconcileTopic = gala.TopicName("integration." + reconcileSchemaName)
-	// reconcileListenerName is the Gala listener name for reconciliation handlers
-	reconcileListenerName = "integration." + reconcileSchemaName + ".handler"
-)
-
-// ReconcileHandler processes one recurring cycle envelope and returns the cycle delta
-// (used for adaptive scheduling)
-type ReconcileHandler func(context.Context, ReconcileEnvelope) (int, error)
-
 // ReconcileUniqueKey derives the insert-time uniqueness key for one recurring loop, so any
 // emitter of the topic collapses to at most one live loop per installation (or runtime
 // definition) and operation
@@ -47,46 +32,54 @@ func ReconcileUniqueKey(e ReconcileEnvelope) string {
 	return "reconcile:" + src.IntegrationID + ":" + src.DefinitionID + ":" + e.Operation
 }
 
+// ReconcileTopic is the durable reconcile topic: the name derives from the envelope type
+// under the integration namespace, and every emission carries the loop uniqueness key
+var ReconcileTopic = gala.Topic[ReconcileEnvelope]{
+	Name:      gala.TopicFor[ReconcileEnvelope]("integration").Name,
+	UniqueKey: ReconcileUniqueKey,
+}
+
 // RegisterReconcileListener registers the Gala listener driving every recurring operation
 // cycle: installation-bound reconciliation and runtime-bound scheduled operations
-func RegisterReconcileListener(runtime *gala.Gala, reg *registry.Registry, handle ReconcileHandler, schedule gala.Schedule) error {
-	return RegisterScheduledListener(ScheduledListenerConfig[ReconcileEnvelope]{
-		Runtime:   runtime,
-		Topic:     ReconcileTopic,
-		UniqueKey: ReconcileUniqueKey,
-		Name:      reconcileListenerName,
-		Schedule:  schedule,
-		Handle:    handle,
-		State:     func(e ReconcileEnvelope) gala.ScheduleState { return e.Schedule },
-		Wrap: func(e ReconcileEnvelope, s gala.ScheduleState) ReconcileEnvelope {
-			return ReconcileEnvelope{
-				OperationContext: e.OperationContext,
-				Schedule:         s,
-			}
-		},
-		// log fields are snapshotted at emit, so a cycle re-emitted without them stays anonymous
-		PrepareEmit: func(ctx context.Context, e ReconcileEnvelope) (context.Context, gala.Headers) {
-			return intobvs.WithContext(ctx, e.OperationContext), gala.Headers{
-				Properties: types.GetPropertiesForOperationContext(e.OperationContext),
-				Tags:       types.GetTagsForOperationContext(e.OperationContext),
-			}
-		},
-		ShouldCancel: func(ctx context.Context, e ReconcileEnvelope, err error) bool {
+func RegisterReconcileListener(runtime *gala.Gala, reg *registry.Registry, handle func(context.Context, ReconcileEnvelope) (int, error), schedule gala.Schedule) error {
+	_, err := gala.Register(runtime, gala.Definition[ReconcileEnvelope]{
+		Topic: ReconcileTopic,
+		Cancel: func(ctx context.Context, e ReconcileEnvelope, err error) bool {
 			return reconcileShouldCancel(ctx, reg, e, err)
 		},
-		ScheduleOverride: func(e ReconcileEnvelope) *gala.Schedule {
-			if reg == nil {
-				return nil
-			}
+		Schedule: &gala.ScheduleSpec[ReconcileEnvelope]{
+			Schedule: schedule,
+			Handle:   handle,
+			State:    func(e ReconcileEnvelope) gala.ScheduleState { return e.Schedule },
+			Wrap: func(e ReconcileEnvelope, s gala.ScheduleState) ReconcileEnvelope {
+				return ReconcileEnvelope{
+					OperationContext: e.OperationContext,
+					Schedule:         s,
+				}
+			},
+			// log fields are snapshotted at emit, so a cycle re-emitted without them stays anonymous
+			PrepareEmit: func(ctx context.Context, e ReconcileEnvelope) (context.Context, gala.Headers) {
+				return intobvs.WithContext(ctx, e.OperationContext), gala.Headers{
+					Properties: types.GetPropertiesForOperationContext(e.OperationContext),
+					Tags:       types.GetTagsForOperationContext(e.OperationContext),
+				}
+			},
+			Override: func(e ReconcileEnvelope) *gala.Schedule {
+				if reg == nil {
+					return nil
+				}
 
-			op, err := reg.Operation(types.IntegrationSourceFrom(e.OperationContext).DefinitionID, e.Operation)
-			if err != nil {
-				return nil
-			}
+				op, err := reg.Operation(types.IntegrationSourceFrom(e.OperationContext).DefinitionID, e.Operation)
+				if err != nil {
+					return nil
+				}
 
-			return op.Schedule
+				return op.Schedule
+			},
 		},
 	})
+
+	return err
 }
 
 // reconcileShouldCancel classifies one cycle error, reporting whether the recurring loop should

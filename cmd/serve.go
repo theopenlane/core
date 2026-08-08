@@ -297,7 +297,7 @@ func serve(ctx context.Context) error {
 	)
 
 	// backfills run after the integrations runtime so they can use it
-	so.AddServerOptions(serveropts.WithBackfill(ctx, dbClient))
+	so.AddServerOptions(serveropts.WithBackfill(ctx, galaApp))
 
 	// add session manager
 	so.AddServerOptions(

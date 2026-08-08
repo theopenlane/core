@@ -5,7 +5,7 @@ import (
 	"github.com/samber/do/v2"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/eventqueue"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/gala"
@@ -74,12 +74,12 @@ func RegisterGalaWorkflowListeners(g *gala.Gala) ([]gala.ListenerID, error) {
 
 // RegisterGalaWorkflowMutationListeners registers workflow mutation listeners on Gala
 func RegisterGalaWorkflowMutationListeners(g *gala.Gala) ([]gala.ListenerID, error) {
-	definitions := make([]gala.Definition[eventqueue.MutationGalaPayload], 0, len(enums.WorkflowObjectTypes)+1)
+	definitions := make([]gala.Definition[entityops.MutationPayload], 0, len(enums.WorkflowObjectTypes)+1)
 
 	for _, entity := range enums.WorkflowObjectTypes {
-		topicName := eventqueue.MutationTopicName(eventqueue.MutationConcernWorkflow, entity)
-		definitions = append(definitions, gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic: eventqueue.MutationTopic(eventqueue.MutationConcernWorkflow, entity),
+		topicName := gala.MutationTopicName(gala.MutationConcernWorkflow, entity)
+		definitions = append(definitions, gala.Definition[entityops.MutationPayload]{
+			Topic: entityops.MutationTopic(gala.MutationConcernWorkflow, entity),
 			Name:  string(topicName),
 			Operations: []string{
 				ent.OpCreate.String(),
@@ -90,9 +90,9 @@ func RegisterGalaWorkflowMutationListeners(g *gala.Gala) ([]gala.ListenerID, err
 		})
 	}
 
-	assignmentTopicName := eventqueue.MutationTopicName(eventqueue.MutationConcernWorkflow, generated.TypeWorkflowAssignment)
-	definitions = append(definitions, gala.Definition[eventqueue.MutationGalaPayload]{
-		Topic: eventqueue.MutationTopic(eventqueue.MutationConcernWorkflow, generated.TypeWorkflowAssignment),
+	assignmentTopicName := gala.MutationTopicName(gala.MutationConcernWorkflow, generated.TypeWorkflowAssignment)
+	definitions = append(definitions, gala.Definition[entityops.MutationPayload]{
+		Topic: entityops.MutationTopic(gala.MutationConcernWorkflow, generated.TypeWorkflowAssignment),
 		Name:  string(assignmentTopicName),
 		Operations: []string{
 			ent.OpUpdate.String(),
@@ -120,13 +120,15 @@ func forwardToWorkflowListeners[T any](method func(*engine.WorkflowListeners, ga
 // workflowListenersFromGala resolves workflow listener dependencies from the gala injector
 // and enriches the handler context so the ent client is available to interceptors
 func workflowListenersFromGala(handlerCtx gala.HandlerContext) (gala.HandlerContext, *engine.WorkflowListeners, bool) {
-	handlerCtx, client, ok := eventqueue.ClientFromHandler(handlerCtx)
-	if !ok {
+	client, err := do.Invoke[*generated.Client](handlerCtx.Injector)
+	if err != nil || client == nil {
 		return handlerCtx, nil, false
 	}
 
-	wfEngine, ok := client.WorkflowEngine.(*engine.WorkflowEngine)
-	if !ok || wfEngine == nil {
+	handlerCtx.Context = generated.NewContext(handlerCtx.Context, client)
+
+	wfEngine, err := do.Invoke[*engine.WorkflowEngine](handlerCtx.Injector)
+	if err != nil || wfEngine == nil {
 		return handlerCtx, nil, false
 	}
 

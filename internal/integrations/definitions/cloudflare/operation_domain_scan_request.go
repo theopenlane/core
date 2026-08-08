@@ -3,13 +3,13 @@ package cloudflare
 import (
 	"context"
 	"encoding/json"
+	"github.com/theopenlane/core/pkg/gala"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/internal/workflows"
 )
 
 // DomainScanRequest queues a domain scan for a single domain by creating a pending Scan record which
@@ -79,7 +79,7 @@ func (d DomainScanRequest) Handle() types.OperationHandler {
 			// below, so skip the event emissions
 			createCtx := ctx
 			if request.Integration == nil {
-				createCtx = workflows.SkipEventEmission(ctx)
+				createCtx = gala.SkipEventEmission(ctx)
 			}
 
 			scanRecord, err = request.DB.Scan.Create().

@@ -90,7 +90,7 @@ func (e *WorkflowEngine) TriggerWorkflow(ctx context.Context, def *generated.Wor
 
 	changeSet := input.ChangeSet()
 
-	shouldRun, err := e.EvaluateConditions(ctx, def, obj, input.EventType, changeSet.ChangedFields, changeSet.ChangedEdges, changeSet.AddedIDs, changeSet.RemovedIDs, changeSet.ProposedChanges)
+	shouldRun, err := e.EvaluateConditions(ctx, def, obj, input.EventType, changeSet.ChangedFields, changeSet.ChangedEdges, changeSet.AddedIDs, changeSet.RemovedIDs, input.ProposedChanges)
 	if err != nil {
 		return nil, scope.Fail(fmt.Errorf("failed to evaluate conditions: %w", err), nil)
 	}
@@ -101,7 +101,7 @@ func (e *WorkflowEngine) TriggerWorkflow(ctx context.Context, def *generated.Wor
 	}
 
 	// Guard against multiple active instances per {object, definition}
-	domain, err := approvalDomainForTrigger(def, changeSet.ProposedChanges, changeSet.ChangedFields)
+	domain, err := approvalDomainForTrigger(def, input.ProposedChanges, changeSet.ChangedFields)
 	if err != nil {
 		return nil, scope.Fail(err, nil)
 	}
@@ -382,7 +382,7 @@ func (e *WorkflowEngine) CompleteAssignment(ctx context.Context, assignmentID st
 
 	// CompleteAssignment emits workflow-assignment-completed explicitly below;
 	// skip hook-based mutation emission to avoid re-entering completion logic.
-	allowCtx = workflows.SkipEventEmission(allowCtx)
+	allowCtx = gala.SkipEventEmission(allowCtx)
 
 	if err = update.Exec(allowCtx); err != nil {
 		return scope.Fail(fmt.Errorf("%w: %w", ErrAssignmentUpdateFailed, err), nil)

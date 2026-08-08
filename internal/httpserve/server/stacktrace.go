@@ -32,11 +32,7 @@ func CustomHTTPErrorHandler(c echo.Context, err error) {
 		errorResponse["stackTrace"] = err.StackTrace()
 	}
 
-	logx.FromContext(c.Request().Context()).Error().
-		Err(err).
-		Str("query", fmt.Sprintf("%v", c.QueryParams())).
-		Str("url", c.Request().URL.String()).
-		Msgf("Error handling %s to %s", c.Request().Method, c.Request().URL.String())
+	logx.FromContext(c.Request().Context()).Error().Err(err).Str("query", fmt.Sprintf("%v", c.QueryParams())).Str("url", c.Request().URL.String()).Msgf("Error handling %s to %s", c.Request().Method, c.Request().URL.String())
 
 	// Send response
 	if !c.Response().Committed {

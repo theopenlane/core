@@ -156,9 +156,11 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 		}
 
 		for _, envelope := range payloadSet.Envelopes {
+			envCtx := logx.WithFields(ctx, map[string]any{"schema": payloadSet.Schema, "resource": envelope.Resource})
+
 			mapping, found := findMapping(definition.Mappings, payloadSet.Schema, envelope.Variant)
 			if !found {
-				logx.FromContext(ctx).Error().Err(ErrIngestMappingNotFound).Str("schema", payloadSet.Schema).Str("resource", envelope.Resource).Msg("error mapping ingest record")
+				logx.FromContext(envCtx).Error().Err(ErrIngestMappingNotFound).Msg("error mapping ingest record")
 
 				attempted++
 				failed++
@@ -166,9 +168,9 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 				continue
 			}
 
-			record, include, mapErr := mapIngestRecord(ctx, mapping, payloadSet.Schema, envelope, installationFilterExpr)
+			record, include, mapErr := mapIngestRecord(envCtx, mapping, payloadSet.Schema, envelope, installationFilterExpr)
 			if mapErr != nil {
-				logx.FromContext(ctx).Error().Err(mapErr).Str("schema", payloadSet.Schema).Str("resource", envelope.Resource).Msg("error mapping ingest record")
+				logx.FromContext(envCtx).Error().Err(mapErr).Msg("error mapping ingest record")
 
 				attempted++
 				failed++
@@ -183,9 +185,9 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 			// inject the mapping's cross-object links into the create input, so the record is
 			// created (or emitted for async creation) with its edges already set; link rules are
 			// declared on the definition's mapping and validated at registration
-			record.Payload, err = injectLinks(ctx, ic.DB, ic.Integration.OwnerID, mapping.Links, sourceSchema, record.Payload)
+			record.Payload, err = injectLinks(envCtx, ic.DB, ic.Integration.OwnerID, mapping.Links, sourceSchema, record.Payload)
 			if err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("schema", payloadSet.Schema).Str("resource", envelope.Resource).Msg("ingest link injection failed")
+				logx.FromContext(envCtx).Error().Err(err).Msg("ingest link injection failed")
 
 				attempted++
 				failed++
@@ -195,8 +197,8 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 
 			attempted++
 
-			if handleErr := handle(ctx, record); handleErr != nil {
-				logx.FromContext(ctx).Error().Err(handleErr).Str("schema", payloadSet.Schema).Str("resource", envelope.Resource).Msg("ingest persist failed")
+			if handleErr := handle(envCtx, record); handleErr != nil {
+				logx.FromContext(envCtx).Error().Err(handleErr).Msg("ingest persist failed")
 
 				failed++
 			}

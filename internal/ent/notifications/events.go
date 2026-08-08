@@ -9,11 +9,12 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/ent/eventqueue"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/export"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -38,73 +39,63 @@ type documentNotificationInput struct {
 }
 
 // handleTaskMutation processes task mutations and creates notifications when assignee changes or mentions are added
-func handleTaskMutation(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	ctx, client, ok := eventqueue.ClientFromHandler(ctx)
-	if !ok {
-		return ErrFailedToGetClient
-	}
+func handleTaskMutation(inv entityops.Invocation, payload entityops.MutationPayload) error {
+	if assigneeID, ok := payload.StringValue(task.FieldAssigneeID); ok {
+		allowCtx := privacy.DecisionContext(inv.Context, privacy.Allow)
 
-	if assigneeID, ok := eventqueue.MutationStringValue(payload, task.FieldAssigneeID); ok {
-		allowCtx := privacy.DecisionContext(ctx.Context, privacy.Allow)
-
-		taskEntity, err := client.Task.Get(allowCtx, payload.EntityID)
+		taskEntity, err := inv.Client.Task.Get(allowCtx, payload.EntityID)
 		switch {
 		case generated.IsNotFound(err):
 			return nil
 		case err != nil:
-			logx.FromContext(ctx.Context).Error().Err(err).Msg("failed to query task")
+			logx.FromContext(inv.Context).Error().Err(err).Msg("failed to query task")
 			return err
 		}
 
-		if err := addTaskAssigneeNotification(ctx.Context, client, assigneeID, taskEntity); err != nil {
-			logx.FromContext(ctx.Context).Error().Err(err).Msg("failed to add task assignee notification")
+		if err := addTaskAssigneeNotification(inv.Context, inv.Client, assigneeID, taskEntity); err != nil {
+			logx.FromContext(inv.Context).Error().Err(err).Msg("failed to add task assignee notification")
 			return err
 		}
 	}
 
-	return handleObjectMentions(ctx, payload)
+	return handleObjectMentions(inv, payload)
 }
 
 // handleInternalPolicyMutation processes internal policy mutations and creates notifications when status requires approval or mentions are added
-func handleInternalPolicyMutation(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	if err := handleDocumentNeedsApproval(ctx, payload); err != nil {
+func handleInternalPolicyMutation(inv entityops.Invocation, payload entityops.MutationPayload) error {
+	if err := handleDocumentNeedsApproval(inv, payload); err != nil {
 		return err
 	}
 
-	return handleObjectMentions(ctx, payload)
+	return handleObjectMentions(inv, payload)
 }
 
 // handleProcedureMutation processes procedure mutations and creates notifications for mentions and approval requests
-func handleProcedureMutation(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	if err := handleDocumentNeedsApproval(ctx, payload); err != nil {
+func handleProcedureMutation(inv entityops.Invocation, payload entityops.MutationPayload) error {
+	if err := handleDocumentNeedsApproval(inv, payload); err != nil {
 		return err
 	}
 
-	return handleObjectMentions(ctx, payload)
+	return handleObjectMentions(inv, payload)
 }
 
 // handleRiskMutation processes risk mutations and creates notifications for mentions
-func handleRiskMutation(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	return handleObjectMentions(ctx, payload)
+func handleRiskMutation(inv entityops.Invocation, payload entityops.MutationPayload) error {
+	return handleObjectMentions(inv, payload)
 }
 
 // handleDocumentNeedsApproval notifies the approver group when a policy or procedure
 // transitions to NEEDS_APPROVAL; status field names are shared between internalpolicy
 // and procedure so the internalpolicy constant covers both
-func handleDocumentNeedsApproval(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	rawStatus, ok := eventqueue.MutationValue(payload, internalpolicy.FieldStatus)
+func handleDocumentNeedsApproval(inv entityops.Invocation, payload entityops.MutationPayload) error {
+	rawStatus, ok := payload.Value(internalpolicy.FieldStatus)
 	if !ok {
 		return nil
 	}
 
-	status, ok := eventqueue.ParseEnum(rawStatus, enums.ToDocumentStatus, enums.DocumentStatusInvalid)
+	status, ok := entityops.ParseEnum(rawStatus, enums.ToDocumentStatus, enums.DocumentStatusInvalid)
 	if !ok || status != enums.DocumentNeedsApproval {
 		return nil
-	}
-
-	ctx, client, ok := eventqueue.ClientFromHandler(ctx)
-	if !ok {
-		return ErrFailedToGetClient
 	}
 
 	input := documentNotificationInput{docID: payload.EntityID, objectType: payload.MutationType}
@@ -123,20 +114,20 @@ func handleDocumentNeedsApproval(ctx gala.HandlerContext, payload eventqueue.Mut
 		return nil
 	}
 
-	allowCtx := privacy.DecisionContext(ctx.Context, privacy.Allow)
+	allowCtx := privacy.DecisionContext(inv.Context, privacy.Allow)
 
-	row, err := schema.Load(allowCtx, client, payload.EntityID)
+	row, err := schema.Load(allowCtx, inv.Client, payload.EntityID)
 	switch {
 	case generated.IsNotFound(err):
 		return nil
 	case err != nil:
-		logx.FromContext(ctx.Context).Error().Err(err).Msg("failed to load document")
+		logx.FromContext(inv.Context).Error().Err(err).Msg("failed to load document")
 		return err
 	}
 
 	fields, err := jsonx.Decode[map[string]any](row)
 	if err != nil {
-		logx.FromContext(ctx.Context).Error().Err(err).Msg("failed to decode document row")
+		logx.FromContext(inv.Context).Error().Err(err).Msg("failed to decode document row")
 		return err
 	}
 
@@ -145,12 +136,12 @@ func handleDocumentNeedsApproval(ctx gala.HandlerContext, payload eventqueue.Mut
 	input.ownerID, _ = fields[internalpolicy.FieldOwnerID].(string)
 
 	if input.approverID == "" {
-		logx.FromContext(ctx.Context).Warn().Msg("approver_id not set for document with NEEDS_APPROVAL status")
+		logx.FromContext(inv.Context).Warn().Msg("approver_id not set for document with NEEDS_APPROVAL status")
 		return nil
 	}
 
-	if err := addDocumentNotification(ctx.Context, client, input); err != nil {
-		logx.FromContext(ctx.Context).Error().Err(err).Msg("failed to add document notification")
+	if err := addDocumentNotification(inv.Context, inv.Client, input); err != nil {
+		logx.FromContext(inv.Context).Error().Err(err).Msg("failed to add document notification")
 		return err
 	}
 
@@ -179,18 +170,19 @@ func addTaskAssigneeNotification(ctx context.Context, client *generated.Client, 
 
 // addDocumentNotification fans an approval-required notification out to every member of the approver group
 func addDocumentNotification(ctx context.Context, client *generated.Client, input documentNotificationInput) error {
+	ctx = logx.WithFields(ctx, map[string]any{"group_id": input.approverID})
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 	groupMemberships, err := client.GroupMembership.Query().
 		Where(groupmembership.GroupID(input.approverID)).
 		All(allowCtx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("group_id", input.approverID).Msg("failed to get approver group")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to get approver group")
 		return err
 	}
 
 	if len(groupMemberships) == 0 {
-		logx.FromContext(ctx).Warn().Str("group_id", input.approverID).Msg("no users found in approver group")
+		logx.FromContext(ctx).Warn().Msg("no users found in approver group")
 		return nil
 	}
 
@@ -238,46 +230,49 @@ func newNotificationCreation(ctx context.Context, client *generated.Client, user
 // RegisterGalaListeners registers mutation listeners for notifications on Gala.
 func RegisterGalaListeners(g *gala.Gala) ([]gala.ListenerID, error) {
 	return gala.Register(g,
-		gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic:  eventqueue.MutationTopic(eventqueue.MutationConcernNotification, generated.TypeTask),
-			Name:   "notifications.task",
-			Handle: handleTaskMutation,
-		},
-		gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic:  eventqueue.MutationTopic(eventqueue.MutationConcernNotification, generated.TypeInternalPolicy),
-			Name:   "notifications.internal_policy",
-			Handle: handleInternalPolicyMutation,
-		},
-		gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic:  eventqueue.MutationTopic(eventqueue.MutationConcernNotification, generated.TypeRisk),
-			Name:   "notifications.risk",
-			Handle: handleRiskMutation,
-		},
-		gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic:  eventqueue.MutationTopic(eventqueue.MutationConcernNotification, generated.TypeProcedure),
-			Name:   "notifications.procedure",
-			Handle: handleProcedureMutation,
-		},
-		gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic:  eventqueue.MutationTopic(eventqueue.MutationConcernNotification, generated.TypeNote),
-			Name:   "notifications.note",
-			Handle: handleNoteMutation,
-		},
-		gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic:  eventqueue.MutationTopic(eventqueue.MutationConcernNotification, generated.TypeExport),
-			Name:   "notifications.export",
-			Handle: handleExportMutation,
-		},
-		gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic:  eventqueue.MutationTopic(eventqueue.MutationConcernNotification, generated.TypeStandard),
-			Name:   "notifications.standard_update",
-			Handle: handleStandardMutation,
-		},
-		gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic:      eventqueue.MutationTopic(eventqueue.MutationConcernNotification, generated.TypeProgram),
-			Name:       "notifications.program",
+		entityops.MutationListener{
+			Concern: gala.MutationConcernNotification,
+			Schema:  generated.TypeTask,
+			Handle:  handleTaskMutation,
+		}.Definition(),
+		entityops.MutationListener{
+			Concern: gala.MutationConcernNotification,
+			Schema:  generated.TypeInternalPolicy,
+			Handle:  handleInternalPolicyMutation,
+		}.Definition(),
+		entityops.MutationListener{
+			Concern: gala.MutationConcernNotification,
+			Schema:  generated.TypeRisk,
+			Handle:  handleRiskMutation,
+		}.Definition(),
+		entityops.MutationListener{
+			Concern: gala.MutationConcernNotification,
+			Schema:  generated.TypeProcedure,
+			Handle:  handleProcedureMutation,
+		}.Definition(),
+		entityops.MutationListener{
+			Concern: gala.MutationConcernNotification,
+			Schema:  generated.TypeNote,
+			Handle:  handleNoteMutation,
+		}.Definition(),
+		entityops.MutationListener{
+			Concern: gala.MutationConcernNotification,
+			Schema:  generated.TypeExport,
+			Fields:  []string{export.FieldStatus},
+			Handle:  handleExportMutation,
+		}.Definition(),
+		entityops.MutationListener{
+			Concern:    gala.MutationConcernNotification,
+			Schema:     generated.TypeStandard,
+			Operations: []string{ent.OpUpdate.String(), ent.OpUpdateOne.String()},
+			Fields:     []string{standard.FieldRevision},
+			Handle:     handleStandardMutation,
+		}.Definition(),
+		entityops.MutationListener{
+			Concern:    gala.MutationConcernNotification,
+			Schema:     generated.TypeProgram,
 			Operations: []string{ent.OpUpdate.String(), ent.OpUpdateOne.String()},
 			Handle:     handleProgramMutation,
-		},
+		}.Definition(),
 	)
 }

@@ -11,7 +11,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/iam/auth"
 
-	"github.com/theopenlane/core/internal/ent/eventqueue"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/pkg/gala"
@@ -21,10 +21,9 @@ import (
 // RegisterGalaCampaignRecurringListeners registers mutation listeners that
 // manage recurring campaign scheduling when is_active or is_recurring changes
 func RegisterGalaCampaignRecurringListeners(g *gala.Gala) ([]gala.ListenerID, error) {
-	return eventqueue.RegisterMutationListeners(g,
-		eventqueue.MutationListener{
+	return registerMutationListeners(g,
+		entityops.MutationListener{
 			Schema: entgen.TypeCampaign,
-			Name:   "campaign.recurring.schedule_sync",
 			Operations: []string{
 				ent.OpUpdate.String(),
 				ent.OpUpdateOne.String(),
@@ -35,6 +34,11 @@ func RegisterGalaCampaignRecurringListeners(g *gala.Gala) ([]gala.ListenerID, er
 				campaign.FieldRecurrenceFrequency,
 				campaign.FieldRecurrenceInterval,
 			},
+			// internal operation grant so the recurrence schedule can be read and written
+			// without the caller's own object permissions
+			Caller: func(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
+				return restored.WithCapabilities(auth.CapInternalOperation)
+			},
 			Handle: handleCampaignRecurringMutation,
 		},
 	)
@@ -42,21 +46,19 @@ func RegisterGalaCampaignRecurringListeners(g *gala.Gala) ([]gala.ListenerID, er
 
 // handleCampaignRecurringMutation reacts to scheduling-relevant field changes
 // on campaigns to keep next_run_at consistent with the desired state
-func handleCampaignRecurringMutation(inv eventqueue.Invocation, payload eventqueue.MutationGalaPayload) error {
-	activationChanged := eventqueue.MutationFieldChanged(payload, campaign.FieldIsActive) ||
-		eventqueue.MutationFieldChanged(payload, campaign.FieldIsRecurring)
-	scheduleShapeChanged := eventqueue.MutationFieldChanged(payload, campaign.FieldRecurrenceFrequency) ||
-		eventqueue.MutationFieldChanged(payload, campaign.FieldRecurrenceInterval)
+func handleCampaignRecurringMutation(inv entityops.Invocation, payload entityops.MutationPayload) error {
+	activationChanged := payload.FieldChanged(campaign.FieldIsActive) ||
+		payload.FieldChanged(campaign.FieldIsRecurring)
+	scheduleShapeChanged := payload.FieldChanged(campaign.FieldRecurrenceFrequency) ||
+		payload.FieldChanged(campaign.FieldRecurrenceInterval)
 
-	caller, ok := auth.CallerFromContext(inv.Context)
-	if !ok || caller == nil {
-		return nil
-	}
+	// set fields in the logger context
+	ctx := withCampaignLogContext(inv.Context, inv.EntityID, inv.Caller.OrganizationID)
 
 	camp, err := inv.Client.Campaign.Query().
 		Where(
 			campaign.ID(inv.EntityID),
-			campaign.OwnerIDEQ(caller.OrganizationID),
+			campaign.OwnerIDEQ(inv.Caller.OrganizationID),
 		).
 		Select(
 			campaign.FieldIsActive,
@@ -68,9 +70,16 @@ func handleCampaignRecurringMutation(inv eventqueue.Invocation, payload eventque
 			campaign.FieldLastRunAt,
 			campaign.FieldStatus,
 		).
-		Only(inv.Context)
+		Only(ctx)
 	if err != nil {
-		logx.FromContext(inv.Context).Error().Err(err).Str("campaign_id", inv.EntityID).Msg("failed loading campaign for recurring schedule sync")
+		if entgen.IsNotFound(err) {
+			logx.FromContext(ctx).Info().Msg("failed to find campaign, campaign may have been deleted before running")
+
+			// nothing to do if the campaign can no longer be found
+			return nil
+		}
+
+		logx.FromContext(ctx).Error().Err(err).Msg("failed loading campaign for recurring schedule sync")
 
 		return err
 	}
@@ -79,11 +88,11 @@ func handleCampaignRecurringMutation(inv eventqueue.Invocation, payload eventque
 
 	switch {
 	case shouldSchedule && (activationChanged || camp.NextRunAt == nil):
-		return recomputeNextRunAt(inv.Context, inv.Client, camp)
+		return recomputeNextRunAt(ctx, inv.Client, camp)
 	case shouldSchedule && scheduleShapeChanged:
-		return recomputeNextRunAt(inv.Context, inv.Client, camp)
+		return recomputeNextRunAt(ctx, inv.Client, camp)
 	case !shouldSchedule && camp.NextRunAt != nil:
-		return clearNextRunAt(inv.Context, inv.Client, camp.ID)
+		return clearNextRunAt(ctx, inv.Client, camp.ID)
 	default:
 		return nil
 	}
@@ -134,17 +143,6 @@ func isTerminalStatus(status enums.CampaignStatus) bool {
 		enums.CampaignStatusCompleted,
 		enums.CampaignStatusCanceled,
 	}, status)
-}
-
-// campaignScheduleContext grants the internal operation capability to the restored caller so the
-// recurrence schedule can be read and written without the caller's own object permissions
-func campaignScheduleContext(ctx context.Context) context.Context {
-	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil {
-		caller = &auth.Caller{}
-	}
-
-	return auth.WithCaller(ctx, caller.WithCapabilities(auth.CapInternalOperation))
 }
 
 // withCampaignLogContext sets the campaign and organization ID in the log context

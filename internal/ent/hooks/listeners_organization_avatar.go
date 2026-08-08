@@ -1,16 +1,18 @@
 package hooks
 
 import (
+	"context"
 	"net/http"
 	"time"
 
 	"entgo.io/ent"
 
-	"github.com/theopenlane/core/internal/ent/eventqueue"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/favicon"
-	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 )
@@ -23,22 +25,23 @@ var avatarDiscoveryClient = &http.Client{
 
 // RegisterGalaOrganizationAvatarListeners registers organization avatar discovery on Gala.
 func RegisterGalaOrganizationAvatarListeners(g *gala.Gala) ([]gala.ListenerID, error) {
-	return eventqueue.RegisterMutationListeners(g, eventqueue.MutationListener{
+	return registerMutationListeners(g, entityops.MutationListener{
 		Schema:     generated.TypeOrganization,
-		Name:       "organization.avatar",
+		Label:      "avatar",
 		Operations: []string{ent.OpCreate.String()},
-		Handle:     handleOrganizationAvatarCreated,
+		Elevate: func(ctx context.Context, _ entityops.MutationPayload) context.Context {
+			return privacy.DecisionContext(rule.WithInternalContext(ctx), privacy.Allow)
+		},
+		Handle: handleOrganizationAvatarCreated,
 	})
 }
 
 // handleOrganizationAvatarCreated fetches icons from the domain name instead and sets it as the remote logo url
-func handleOrganizationAvatarCreated(inv eventqueue.Invocation, _ eventqueue.MutationGalaPayload) error {
-	allowCtx := workflows.AllowContext(inv.Context)
-
+func handleOrganizationAvatarCreated(inv entityops.Invocation, _ entityops.MutationPayload) error {
 	org, err := inv.Client.Organization.Query().
 		Where(organization.IDEQ(inv.EntityID)).
 		WithSetting().
-		Only(allowCtx)
+		Only(inv.Context)
 	if err != nil {
 		if generated.IsNotFound(err) {
 			return nil
@@ -54,9 +57,7 @@ func handleOrganizationAvatarCreated(inv eventqueue.Invocation, _ eventqueue.Mut
 
 	avatarURL, err := favicon.Discover(inv.Context, avatarDiscoveryClient, setting.Domains)
 	if err != nil {
-		logx.FromContext(inv.Context).Err(err).
-			Str("organization_id", inv.EntityID).
-			Msg("organization avatar discovery failed")
+		logx.FromContext(inv.Context).Err(err).Str("organization_id", inv.EntityID).Msg("organization avatar discovery failed")
 		return nil
 	}
 
@@ -66,5 +67,5 @@ func handleOrganizationAvatarCreated(inv eventqueue.Invocation, _ eventqueue.Mut
 
 	return inv.Client.Organization.UpdateOneID(inv.EntityID).
 		SetAvatarRemoteURL(avatarURL).
-		Exec(allowCtx)
+		Exec(inv.Context)
 }

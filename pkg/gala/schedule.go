@@ -1,6 +1,13 @@
 package gala
 
-import "time"
+import (
+	"context"
+	"time"
+
+	"github.com/riverqueue/river"
+
+	"github.com/theopenlane/core/pkg/logx"
+)
 
 const (
 	// DefaultMinInterval is the shortest allowed scheduling interval
@@ -53,6 +60,75 @@ type Schedule struct {
 	BackoffFactor float64 `json:"backoff_factor"`
 	// HighDriftThreshold is the delta count above which the interval resets to MinInterval
 	HighDriftThreshold int `json:"high_drift_threshold"`
+}
+
+// ScheduleSpec declares the adaptive re-emit loop for a scheduled listener definition
+type ScheduleSpec[T any] struct {
+	// Schedule controls adaptive interval computation
+	Schedule Schedule
+	// Handle is the handler invoked each cycle, returning the delta for scheduling
+	Handle func(context.Context, T) (int, error)
+	// State extracts the ScheduleState from the envelope
+	State func(T) ScheduleState
+	// Wrap builds a new envelope carrying the updated ScheduleState
+	Wrap func(T, ScheduleState) T
+	// PrepareEmit optionally enriches the context and headers before re-emitting
+	PrepareEmit func(context.Context, T) (context.Context, Headers)
+	// Override optionally returns a per-envelope schedule that overrides Schedule;
+	// returning nil falls back to Schedule
+	Override func(T) *Schedule
+}
+
+// scheduleHandler builds the self-sustaining loop handler for a scheduled definition: it
+// processes one cycle, computes the next adaptive interval, and re-emits the successor
+func scheduleHandler[T any](g *Gala, definition Definition[T]) Handler[T] {
+	spec := definition.Schedule
+
+	return func(ctx HandlerContext, payload T) error {
+		delta, execErr := spec.Handle(ctx.Context, payload)
+
+		if execErr != nil {
+			if definition.Cancel != nil && definition.Cancel(ctx.Context, payload, execErr) {
+				return river.JobCancel(execErr)
+			}
+
+			state := spec.State(payload)
+			logx.FromContext(ctx.Context).Warn().Err(execErr).Int("error_streak", state.ErrorStreak+1).Msg("scheduled listener cycle failed, scheduling retry with backoff")
+		}
+
+		effectiveSchedule := spec.Schedule
+		if spec.Override != nil {
+			if override := spec.Override(payload); override != nil {
+				effectiveSchedule = *override
+			}
+		}
+
+		next := effectiveSchedule.Next(spec.State(payload), delta, execErr)
+		scheduledAt := next.NextScheduledAt()
+
+		emitCtx := ctx.Context
+		headers := Headers{}
+
+		if spec.PrepareEmit != nil {
+			emitCtx, headers = spec.PrepareEmit(ctx.Context, payload)
+		}
+
+		headers.ScheduledAt = &scheduledAt
+		// the successor of a running unique job would be skipped as its own duplicate
+		headers.SkipUniqueKey = true
+
+		_, emitErr := g.Emit(emitCtx, definition.Topic.Name, spec.Wrap(payload, next), WithHeaders(headers))
+
+		if execErr != nil {
+			if emitErr != nil {
+				logx.FromContext(ctx.Context).Error().Err(emitErr).Msg("scheduled listener re-emit failed, loop will not continue")
+			}
+
+			return river.JobCancel(execErr)
+		}
+
+		return emitErr
+	}
 }
 
 // ScheduleState carries adaptive scheduling state across dispatch cycles

@@ -3,6 +3,9 @@ package gala
 import (
 	"context"
 	"testing"
+
+	"github.com/riverqueue/river"
+	"github.com/riverqueue/river/rivertype"
 )
 
 // registerUniqueTopic registers a topic deriving its unique key from the payload message
@@ -121,5 +124,52 @@ func TestDispatchArgsCarryUniqueKey(t *testing.T) {
 
 	if args.UniqueKey != "key:loop-a" {
 		t.Fatalf("UniqueKey = %q, want header key on args", args.UniqueKey)
+	}
+}
+
+// capturingInsertClient records the insert opts passed to River
+type capturingInsertClient struct {
+	opts *river.InsertOpts
+}
+
+func (c *capturingInsertClient) Insert(_ context.Context, _ river.JobArgs, opts *river.InsertOpts) (*rivertype.JobInsertResult, error) {
+	c.opts = opts
+
+	return &rivertype.JobInsertResult{Job: &rivertype.JobRow{}}, nil
+}
+
+func TestUniqueOnceExtendsByStateToTerminal(t *testing.T) {
+	t.Parallel()
+
+	client := &capturingInsertClient{}
+
+	d, err := newRiverDispatcher(client, "")
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+
+	if err := d.Dispatch(context.Background(), Envelope{Headers: Headers{UniqueKey: "once", UniqueOnce: true}}); err != nil {
+		t.Fatalf("unexpected dispatch error: %v", err)
+	}
+
+	states := map[rivertype.JobState]bool{}
+	for _, state := range client.opts.UniqueOpts.ByState {
+		states[state] = true
+	}
+
+	for _, want := range []rivertype.JobState{rivertype.JobStateCompleted, rivertype.JobStateCancelled, rivertype.JobStateDiscarded, rivertype.JobStateRunning} {
+		if !states[want] {
+			t.Fatalf("ByState missing %s with UniqueOnce set", want)
+		}
+	}
+
+	if err := d.Dispatch(context.Background(), Envelope{Headers: Headers{UniqueKey: "live-only"}}); err != nil {
+		t.Fatalf("unexpected dispatch error: %v", err)
+	}
+
+	for _, state := range client.opts.UniqueOpts.ByState {
+		if state == rivertype.JobStateCompleted {
+			t.Fatal("ByState includes completed without UniqueOnce")
+		}
 	}
 }

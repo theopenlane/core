@@ -63,9 +63,7 @@ func HookReviews() ent.Hook {
 						Where(entity.ID(id)).
 						Only(ctx)
 					if err != nil {
-						logx.FromContext(ctx).Err(err).
-							Str("entity_id", id).
-							Msg("could not fetch entity for review")
+						logx.FromContext(ctx).Err(err).Str("entity_id", id).Msg("could not fetch entity for review")
 						mu.Lock()
 						errs = append(errs, err.Error())
 						mu.Unlock()
@@ -88,8 +86,7 @@ func HookReviews() ent.Hook {
 
 					err = q.Exec(ctx)
 					if err != nil {
-						logx.FromContext(ctx).Err(err).
-							Str("entity_id", id).Msg("could not update entity reviewer")
+						logx.FromContext(ctx).Err(err).Str("entity_id", id).Msg("could not update entity reviewer")
 						mu.Lock()
 						errs = append(errs, err.Error())
 						mu.Unlock()
@@ -102,10 +99,7 @@ func HookReviews() ent.Hook {
 			}
 
 			if len(errs) > 0 {
-				logx.FromContext(ctx).Error().
-					Int("error_count", len(errs)).
-					Strs("errors", errs).
-					Msg("review file hook: entity updates failed")
+				logx.FromContext(ctx).Error().Int("error_count", len(errs)).Strs("errors", errs).Msg("review file hook: entity updates failed")
 
 				return nil, fmt.Errorf("%d entities could not be updated", len(errs)) //nolint:err113
 			}

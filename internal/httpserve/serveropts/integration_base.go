@@ -52,6 +52,11 @@ func WithIntegrationsRuntime(ctx context.Context, dbClient *ent.Client, galaInst
 		// set the runtime on the ent client so hooks/mutations can access it
 		dbClient.IntegrationsRuntime = rt
 
+		// make the runtime resolvable from gala listener injectors
+		if err := galaInstance.Attach(gala.WithValue(rt)); err != nil {
+			log.Panic().Err(err).Msg("failed to attach integration runtime to gala injector")
+		}
+
 		// ensure all connected integrations have a corresponding job
 		go func() {
 			if err := rt.SeedReconcileJobs(ctx); err != nil {

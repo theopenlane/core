@@ -327,10 +327,6 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	db, err := entdb.NewTestClient(ctx, suite.tf, jobOpts, clientOpts, opts)
 	requireNoError(t, err)
 
-	db.Use(hooks.EmitGalaEventHook(func() *gala.Gala {
-		return suite.galaRuntime
-	}))
-
 	// assign values
 	c.db = db
 	c.api, err = coreutils.TestClient(c.db, c.objectStore)
@@ -348,7 +344,9 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	})
 	requireNoError(t, err)
 
-	requireNoError(t, galaInstance.Attach(gala.WithValue(c.db)))
+	db.Use(hooks.EmitGalaEventHook(galaInstance))
+
+	requireNoError(t, galaInstance.Attach(gala.WithValue(c.db), gala.WithValue(entitlements)))
 
 	_, err = hooks.RegisterGalaEntitlementListeners(galaInstance)
 	requireNoError(t, err)
@@ -459,6 +457,7 @@ func (suite *GraphTestSuite) enableGalaForTestSuite(t *testing.T) {
 	require.NoError(t, runtime.Attach(
 		gala.WithValue(runtime),
 		gala.WithValue(suite.client.db),
+		gala.WithValue(suite.client.db.EntitlementManager),
 	))
 
 	_, err = hooks.RegisterGalaEntitlementListeners(runtime)

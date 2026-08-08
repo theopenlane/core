@@ -27,7 +27,6 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/fga/fgaversion"
 	"github.com/theopenlane/core/internal/ent/entconfig"
-	"github.com/theopenlane/core/internal/ent/eventqueue"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
@@ -46,7 +45,6 @@ import (
 	"github.com/theopenlane/core/internal/integrations/registry"
 	intruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/keystore"
-	"github.com/theopenlane/core/internal/mutations"
 	coreutils "github.com/theopenlane/core/internal/testutils"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/engine"
@@ -189,9 +187,7 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 	db, err := entdb.NewTestClient(s.ctx, s.tf, jobOpts, clientOpts, opts)
 	s.Require().NoError(err)
 
-	db.Use(hooks.EmitGalaEventHook(func() *gala.Gala {
-		return runtime
-	}))
+	db.Use(hooks.EmitGalaEventHook(runtime))
 
 	_, err = hooks.RegisterGalaWorkflowListeners(runtime)
 	s.Require().NoError(err)
@@ -314,7 +310,7 @@ func (s *WorkflowEngineTestSuite) requireWorkflowSetup(cfg *workflows.Config, ru
 	s.Require().NotNil(s.client.WorkflowEngine, "workflow engine not initialized")
 
 	s.Require().True(
-		runtime.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernWorkflow, generated.TypeControl), ent.OpCreate.String()),
+		runtime.InterestedIn(gala.MutationTopicName(gala.MutationConcernWorkflow, generated.TypeControl), ent.OpCreate.String()),
 		"mutation listeners not registered",
 	)
 
@@ -656,7 +652,7 @@ func (s *WorkflowEngineTestSuite) CreateApprovalWorkflowDefinition(ctx context.C
 		var params workflows.ApprovalActionParams
 		err := json.Unmarshal(action.Params, &params)
 		s.Require().NoError(err, "failed to parse approval action params")
-		fields := mutations.NormalizeStrings(params.Fields)
+		fields := workflows.NormalizeStrings(params.Fields)
 		if len(fields) > 0 {
 			triggerFields = fields
 		}

@@ -5,7 +5,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/eventqueue"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -19,21 +19,23 @@ import (
 // RegisterGalaNDAAttestationListeners registers listeners that process NDA attestation
 // asynchronously after document data creation
 func RegisterGalaNDAAttestationListeners(g *gala.Gala) ([]gala.ListenerID, error) {
-	return eventqueue.RegisterMutationListeners(g,
-		eventqueue.MutationListener{
+	return registerMutationListeners(g,
+		entityops.MutationListener{
 			Schema:     generated.TypeDocumentData,
-			Name:       "nda.attestation",
 			Operations: []string{ent.OpCreate.String()},
-			Handle:     handleNDAAttestationCreated,
+			Caller: func(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
+				return restored.WithCapabilities(auth.CapBypassOrgFilter)
+			},
+			Handle: handleNDAAttestationCreated,
 		},
 	)
 }
 
-func handleNDAAttestationCreated(inv eventqueue.Invocation, payload eventqueue.MutationGalaPayload) error {
+func handleNDAAttestationCreated(inv entityops.Invocation, payload entityops.MutationPayload) error {
 	client := inv.Client
 	docDataID := inv.EntityID
 
-	templateID, _ := eventqueue.MutationStringValue(payload, "template_id")
+	templateID, _ := payload.StringValue("template_id")
 	if templateID == "" {
 		logx.FromContext(inv.Context).Error().Msg("nda attestation listener: no template")
 		return nil
@@ -49,17 +51,14 @@ func handleNDAAttestationCreated(inv eventqueue.Invocation, payload eventqueue.M
 		return nil
 	}
 
-	caller, hasCaller := auth.CallerFromContext(inv.Context)
-	if !hasCaller || caller == nil || caller.SubjectEmail == "" {
+	caller := inv.Caller
+	if caller.SubjectEmail == "" {
 		logx.FromContext(inv.Context).Error().Msg("nda attestation listener: caller not available in restored context")
 
 		return nil
 	}
 
-	// bypass the org context filter when calling from inside the listener
-	allowCtx := auth.WithCaller(inv.Context, caller.WithCapabilities(auth.CapBypassOrgFilter))
-
-	docData, err := client.DocumentData.Get(allowCtx, docDataID)
+	docData, err := client.DocumentData.Get(inv.Context, docDataID)
 	if err != nil {
 		logx.FromContext(inv.Context).Error().Err(err).Str("document_data_id", docDataID).Msg("nda attestation listener: failed to get document data for nda attestation")
 
@@ -80,19 +79,21 @@ func handleNDAAttestationCreated(inv eventqueue.Invocation, payload eventqueue.M
 		return nil
 	}
 
-	result, err := attestNDADocument(allowCtx, client, docData, templateID, tcID)
+	logCtx := logx.WithFields(inv.Context, map[string]any{"email": caller.SubjectEmail, "trust_center_id": tcID})
+
+	result, err := attestNDADocument(inv.Context, client, docData, templateID, tcID)
 	if err != nil {
-		logx.FromContext(inv.Context).Error().Err(err).Msg("nda attestation listener: failed to attest NDA document")
+		logx.FromContext(logCtx).Error().Err(err).Msg("nda attestation listener: failed to attest NDA document")
 
 		return err
 	}
 
-	allowCtx = privacy.DecisionContext(allowCtx, privacy.Allow)
+	allowCtx := privacy.DecisionContext(inv.Context, privacy.Allow)
 	if err := client.TrustCenterNDARequest.Update().Where(
 		trustcenterndarequest.EmailEqualFold(caller.SubjectEmail),
 		trustcenterndarequest.TrustCenterID(tcID),
 	).SetFileID(result.TemplateFileID).Exec(allowCtx); err != nil {
-		logx.FromContext(inv.Context).Error().Err(err).Str("email", caller.SubjectEmail).Str("trust_center_id", tcID).Msg("nda attestation listener: failed to set file ID on nda request")
+		logx.FromContext(logCtx).Error().Err(err).Msg("nda attestation listener: failed to set file ID on nda request")
 
 		return err
 	}
@@ -103,7 +104,7 @@ func handleNDAAttestationCreated(inv eventqueue.Invocation, payload eventqueue.M
 		trustcenterndarequest.StatusEQ(enums.TrustCenterNDARequestStatusSigned),
 	).FirstID(allowCtx)
 	if err != nil {
-		logx.FromContext(inv.Context).Error().Err(err).Str("email", caller.SubjectEmail).Str("trust_center_id", tcID).Msg("nda attestation listener: failed to resolve nda request id for email")
+		logx.FromContext(logCtx).Error().Err(err).Msg("nda attestation listener: failed to resolve nda request id for email")
 
 		return err
 	}

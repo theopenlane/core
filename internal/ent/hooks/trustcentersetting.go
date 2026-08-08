@@ -126,9 +126,7 @@ func setDefaultCompanyName(ctx context.Context, m *generated.TrustCenterSettingM
 		Where(organization.ID(orgID)).
 		Only(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).
-			Str("owner_id", orgID).
-			Msg("failed to get organization for company name default")
+		logx.FromContext(ctx).Error().Err(err).Str("owner_id", orgID).Msg("failed to get organization for company name default")
 		return err
 	}
 

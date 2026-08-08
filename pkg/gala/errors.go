@@ -18,10 +18,10 @@ var (
 	ErrTopicNotRegistered = errors.New("gala: topic not registered")
 	// ErrCodecRequired is returned when a registration is missing a codec
 	ErrCodecRequired = errors.New("gala: codec is required")
-	// ErrListenerNameRequired is returned when a listener name is empty
-	ErrListenerNameRequired = errors.New("gala: listener name is required")
 	// ErrListenerHandlerRequired is returned when a listener callback is missing
 	ErrListenerHandlerRequired = errors.New("gala: listener handler is required")
+	// ErrListenerHandlerConflict is returned when a listener sets both Handle and Schedule
+	ErrListenerHandlerConflict = errors.New("gala: listener handle and schedule are mutually exclusive")
 	// ErrListenerTopicNotRegistered is returned when a listener is attached before topic registration
 	ErrListenerTopicNotRegistered = errors.New("gala: listener topic not registered")
 	// ErrPayloadTypeMismatch is returned when payload casting fails for a topic or listener

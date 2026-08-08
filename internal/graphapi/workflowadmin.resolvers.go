@@ -8,6 +8,7 @@ package graphapi
 import (
 	"context"
 	"fmt"
+	"github.com/theopenlane/core/pkg/gala"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -166,8 +167,8 @@ func (r *mutationResolver) AdminReassignWorkflowAssignment(ctx context.Context, 
 		return nil, ErrWorkflowsDisabled
 	}
 
-	skipCtx := workflows.WithSkipEventEmission(allowCtx)
-	workflows.MarkSkipEventEmission(skipCtx)
+	skipCtx := gala.WithSkipEventEmission(allowCtx)
+	gala.MarkSkipEventEmission(skipCtx)
 
 	if _, err := r.db.WorkflowAssignmentTarget.Delete().
 		Where(workflowassignmenttarget.WorkflowAssignmentIDEQ(assignment.ID)).

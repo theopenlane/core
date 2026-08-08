@@ -23,7 +23,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
 	"github.com/theopenlane/core/internal/ent/workflowgenerated"
-	"github.com/theopenlane/core/internal/mutations"
 	wfworkflows "github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/observability"
 	"github.com/theopenlane/core/pkg/celx"
@@ -97,7 +96,7 @@ func (e *WorkflowEngine) resolveTargetUsers(ctx context.Context, target wfworkfl
 		return nil, err
 	}
 
-	normalized := mutations.NormalizeStrings(userIDs)
+	normalized := wfworkflows.NormalizeStrings(userIDs)
 	if len(normalized) == 0 {
 		observability.WarnEngine(ctx, observability.OpExecuteAction, actionType, observability.ActionFields(actionKey, observability.Fields{
 			workflowassignmenttarget.FieldTargetType:  target.Type.String(),

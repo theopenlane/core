@@ -145,11 +145,12 @@ func (suite *HookTestSuite) setupClient() *generated.Client {
 	_, err = hooks.RegisterGalaTaskRuleListeners(galaRuntime)
 	require.NoError(t, err)
 
+	_, err = hooks.RegisterGalaCampaignRecurringListeners(galaRuntime)
+	require.NoError(t, err)
+
 	require.NoError(t, galaRuntime.Attach(gala.WithValue(client)))
 
-	client.Use(hooks.EmitGalaEventHook(func() *gala.Gala {
-		return galaRuntime
-	}))
+	client.Use(hooks.EmitGalaEventHook(galaRuntime))
 
 	suite.galaRuntime = galaRuntime
 

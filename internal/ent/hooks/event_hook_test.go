@@ -5,45 +5,12 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/theopenlane/core/internal/ent/eventqueue"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/gala"
 )
 
-func TestResolveGalaRuntimes(t *testing.T) {
-	runtimeA, err := gala.NewInMemory()
-	if err != nil {
-		t.Fatalf("failed to create first runtime: %v", err)
-	}
-
-	runtimeB, err := gala.NewInMemory()
-	if err != nil {
-		t.Fatalf("failed to create second runtime: %v", err)
-	}
-
-	providers := []func() *gala.Gala{
-		nil,
-		func() *gala.Gala { return runtimeA },
-		func() *gala.Gala { return nil },
-		func() *gala.Gala { return runtimeA },
-		func() *gala.Gala { return runtimeB },
-	}
-
-	runtimes := resolveGalaRuntimes(providers)
-	if len(runtimes) != 2 {
-		t.Fatalf("expected two runtimes, got %d", len(runtimes))
-	}
-
-	if runtimes[0] != runtimeA {
-		t.Fatalf("expected first runtime to match runtimeA")
-	}
-
-	if runtimes[1] != runtimeB {
-		t.Fatalf("expected second runtime to match runtimeB")
-	}
-}
-
-func TestMutationDispatchTargetsRoutesConcernTopicsToInterestedRuntimes(t *testing.T) {
+func TestAnyRuntimeInterestedMatchesConcernTopics(t *testing.T) {
 	workflowRuntime, err := gala.NewInMemory()
 	if err != nil {
 		t.Fatalf("failed to create workflow runtime: %v", err)
@@ -54,15 +21,15 @@ func TestMutationDispatchTargetsRoutesConcernTopicsToInterestedRuntimes(t *testi
 		t.Fatalf("failed to create notification runtime: %v", err)
 	}
 
-	workflowTopic := gala.Topic[eventqueue.MutationGalaPayload]{
-		Name: eventqueue.MutationTopicName(eventqueue.MutationConcernWorkflow, entgen.TypeTask),
+	workflowTopic := gala.Topic[entityops.MutationPayload]{
+		Name: gala.MutationTopicName(gala.MutationConcernWorkflow, entgen.TypeTask),
 	}
 	if _, err := gala.Register(workflowRuntime,
-		gala.Definition[eventqueue.MutationGalaPayload]{
+		gala.Definition[entityops.MutationPayload]{
 			Topic:      workflowTopic,
 			Name:       "workflow.listener",
 			Operations: []string{ent.OpCreate.String()},
-			Handle: func(gala.HandlerContext, eventqueue.MutationGalaPayload) error {
+			Handle: func(gala.HandlerContext, entityops.MutationPayload) error {
 				return nil
 			},
 		},
@@ -70,48 +37,33 @@ func TestMutationDispatchTargetsRoutesConcernTopicsToInterestedRuntimes(t *testi
 		t.Fatalf("failed to register workflow listener: %v", err)
 	}
 
-	notificationTopic := gala.Topic[eventqueue.MutationGalaPayload]{
-		Name: eventqueue.MutationTopicName(eventqueue.MutationConcernNotification, entgen.TypeTask),
-	}
-	if _, err := gala.Register(notificationRuntime,
-		gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic:      notificationTopic,
-			Name:       "notification.listener",
-			Operations: []string{ent.OpCreate.String()},
-			Handle: func(gala.HandlerContext, eventqueue.MutationGalaPayload) error {
-				return nil
-			},
-		},
-	); err != nil {
-		t.Fatalf("failed to register notification listener: %v", err)
+	runtimes := []*gala.Gala{workflowRuntime, notificationRuntime}
+
+	if !anyRuntimeInterested(runtimes, entgen.TypeTask, ent.OpCreate.String()) {
+		t.Fatal("expected interest on the workflow concern topic")
 	}
 
-	targets := mutationDispatchTargets(
-		[]*gala.Gala{workflowRuntime, notificationRuntime},
-		mutationDispatchTopics(entgen.TypeTask),
-		ent.OpCreate.String(),
-	)
-	if len(targets) != 2 {
-		t.Fatalf("expected 2 dispatch targets, got %d", len(targets))
+	if anyRuntimeInterested(runtimes, entgen.TypeTask, ent.OpDelete.String()) {
+		t.Fatal("expected no interest for an unregistered operation")
 	}
 
-	var sawWorkflow bool
-	var sawNotification bool
-	for _, target := range targets {
-		if target.runtime == workflowRuntime && target.topic == workflowTopic.Name {
-			sawWorkflow = true
-		}
+	if anyRuntimeInterested(runtimes, entgen.TypeControl, ent.OpCreate.String()) {
+		t.Fatal("expected no interest for an unregistered schema")
+	}
+}
 
-		if target.runtime == notificationRuntime && target.topic == notificationTopic.Name {
-			sawNotification = true
-		}
+func TestMutationConcernTopics(t *testing.T) {
+	topics := mutationConcernTopics(entgen.TypeTask)
+
+	if topics[0] != gala.MutationTopicName(gala.MutationConcernDirect, entgen.TypeTask) {
+		t.Fatalf("unexpected direct topic %q", topics[0])
 	}
 
-	if !sawWorkflow {
-		t.Fatalf("expected workflow runtime dispatch target")
+	if topics[1] != gala.MutationTopicName(gala.MutationConcernWorkflow, entgen.TypeTask) {
+		t.Fatalf("unexpected workflow topic %q", topics[1])
 	}
 
-	if !sawNotification {
-		t.Fatalf("expected notification runtime dispatch target")
+	if topics[2] != gala.MutationTopicName(gala.MutationConcernNotification, entgen.TypeTask) {
+		t.Fatalf("unexpected notification topic %q", topics[2])
 	}
 }

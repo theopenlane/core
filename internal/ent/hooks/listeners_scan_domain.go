@@ -4,9 +4,10 @@ import (
 	"encoding/json"
 
 	"entgo.io/ent"
+	"github.com/samber/do/v2"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/eventqueue"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -19,9 +20,9 @@ import (
 // RegisterGalaDomainScanSubmitListeners registers the listener that submits a openlane_domain_scan
 // when the domain scan is created in a pending state
 func RegisterGalaDomainScanSubmitListeners(g *gala.Gala) ([]gala.ListenerID, error) {
-	return eventqueue.RegisterMutationListeners(g, eventqueue.MutationListener{
+	return registerMutationListeners(g, entityops.MutationListener{
 		Schema:     generated.TypeScan,
-		Name:       "scan.domain_submit",
+		Label:      "domain_scan",
 		Operations: []string{ent.OpCreate.String()},
 		Handle:     handleScanDomainCreated,
 	})
@@ -31,9 +32,9 @@ func RegisterGalaDomainScanSubmitListeners(g *gala.Gala) ([]gala.ListenerID, err
 // every current domain whenever an organization's settings domains field changes, this would then be picked
 // up by the scan submit listener to run the scan
 func RegisterGalaDomainScanUpdateListener(g *gala.Gala) ([]gala.ListenerID, error) {
-	return eventqueue.RegisterMutationListeners(g, eventqueue.MutationListener{
+	return registerMutationListeners(g, entityops.MutationListener{
 		Schema:     generated.TypeOrganizationSetting,
-		Name:       "domainscan.organization_setting_update",
+		Label:      "domain_scan",
 		Operations: []string{ent.OpUpdateOne.String()},
 		Fields:     []string{organizationsetting.FieldDomains},
 		Handle:     handleOrganizationSettingDomainsUpdated,
@@ -41,8 +42,8 @@ func RegisterGalaDomainScanUpdateListener(g *gala.Gala) ([]gala.ListenerID, erro
 }
 
 // handleScanDomainCreated submits a newly created domain-type scan to the domain_scan gathering data via urlScanner, enrichment with browserRendering.JSON, and dns lookups
-func handleScanDomainCreated(inv eventqueue.Invocation, _ eventqueue.MutationGalaPayload) error {
-	scanRecord, ok, err := eventqueue.LoadEntity(inv.Context, inv.EntityID, inv.Client.Scan.Get)
+func handleScanDomainCreated(inv entityops.Invocation, _ entityops.MutationPayload) error {
+	scanRecord, ok, err := entityops.LoadEntity(inv.Context, inv.EntityID, inv.Client.Scan.Get)
 	if err != nil || !ok {
 		return err
 	}
@@ -51,8 +52,8 @@ func handleScanDomainCreated(inv eventqueue.Invocation, _ eventqueue.MutationGal
 		return nil
 	}
 
-	rt := intruntime.FromClient(inv.Context, inv.Client)
-	if rt == nil {
+	rt, err := do.Invoke[*intruntime.Runtime](inv.Injector)
+	if err != nil || rt == nil {
 		return nil
 	}
 
@@ -88,14 +89,14 @@ func isPendingDomainScan(scanRecord *generated.Scan) bool {
 // handleOrganizationSettingDomainsUpdated requests a scan for every current domain whenever an
 // organization's settings domains field changes; DomainScanRequestOp finds-or-creates and runs
 // each one, the same operation the REST-replacing customer request and handleScanDomainCreated use
-func handleOrganizationSettingDomainsUpdated(inv eventqueue.Invocation, _ eventqueue.MutationGalaPayload) error {
-	setting, ok, err := eventqueue.LoadEntity(inv.Context, inv.EntityID, inv.Client.OrganizationSetting.Get)
+func handleOrganizationSettingDomainsUpdated(inv entityops.Invocation, _ entityops.MutationPayload) error {
+	setting, ok, err := entityops.LoadEntity(inv.Context, inv.EntityID, inv.Client.OrganizationSetting.Get)
 	if err != nil || !ok {
 		return err
 	}
 
-	rt := intruntime.FromClient(inv.Context, inv.Client)
-	if rt == nil {
+	rt, err := do.Invoke[*intruntime.Runtime](inv.Injector)
+	if err != nil || rt == nil {
 		return nil
 	}
 

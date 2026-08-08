@@ -1,11 +1,13 @@
 package workflows
 
 import (
+	"strings"
+
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
-	"github.com/theopenlane/core/internal/mutations"
+	"github.com/theopenlane/core/pkg/mapx"
 )
 
 // eligibleFieldsRegistry holds the registered eligible fields map from generated code.
@@ -60,7 +62,7 @@ func CollectChangedFields(m utils.GenericMutation) []string {
 	objectType := enums.ToWorkflowObjectType(m.Type())
 	eligible := EligibleWorkflowFields(lo.FromPtr(objectType))
 
-	uniqueFields, _ := mutations.ChangedAndClearedFields(m)
+	uniqueFields := changedAndClearedFields(m)
 
 	if len(eligible) == 0 {
 		return uniqueFields
@@ -75,6 +77,60 @@ func CollectChangedFields(m utils.GenericMutation) []string {
 // CollectAllChangedFields returns the union of modified and cleared fields from a mutation
 // without filtering by workflow eligibility.
 func CollectAllChangedFields(m utils.GenericMutation) []string {
-	allFields, _ := mutations.ChangedAndClearedFields(m)
-	return allFields
+	return changedAndClearedFields(m)
+}
+
+// changedAndClearedFields returns the normalized union of modified and cleared fields
+func changedAndClearedFields(m utils.GenericMutation) []string {
+	return NormalizeStrings(append(append([]string(nil), m.Fields()...), m.ClearedFields()...))
+}
+
+// NormalizeStrings trims, deduplicates, and drops empty string values
+func NormalizeStrings(values []string) []string {
+	if len(values) == 0 {
+		return nil
+	}
+
+	normalized := lo.Uniq(lo.FilterMap(values, func(value string, _ int) (string, bool) {
+		value = strings.TrimSpace(value)
+		return value, value != ""
+	}))
+	if len(normalized) == 0 {
+		return nil
+	}
+
+	return normalized
+}
+
+// BuildProposedChanges materializes mutation values including explicit clears for the
+// pre-commit approval routing path
+func BuildProposedChanges(m utils.GenericMutation, changedFields []string) map[string]any {
+	if m == nil || len(changedFields) == 0 {
+		return nil
+	}
+
+	clearedSet := mapx.MapSetFromSlice(NormalizeStrings(m.ClearedFields()))
+
+	proposed := make(map[string]any, len(changedFields))
+	for _, field := range changedFields {
+		field = strings.TrimSpace(field)
+		if field == "" {
+			continue
+		}
+
+		if value, ok := m.Field(field); ok {
+			proposed[field] = value
+			continue
+		}
+
+		if _, ok := clearedSet[field]; ok {
+			proposed[field] = nil
+		}
+	}
+
+	if len(proposed) == 0 {
+		return nil
+	}
+
+	return proposed
 }

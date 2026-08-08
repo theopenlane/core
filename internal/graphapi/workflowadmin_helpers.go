@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/theopenlane/core/pkg/gala"
 	"time"
 
 	"github.com/theopenlane/iam/auth"
@@ -137,8 +138,8 @@ func closeWorkflowAssignments(ctx context.Context, client *generated.Client, ins
 	}
 
 	now := time.Now().UTC()
-	skipCtx := workflows.WithSkipEventEmission(allowCtx)
-	workflows.MarkSkipEventEmission(skipCtx)
+	skipCtx := gala.WithSkipEventEmission(allowCtx)
+	gala.MarkSkipEventEmission(skipCtx)
 
 	for _, assignment := range assignments {
 		update := client.WorkflowAssignment.UpdateOneID(assignment.ID).
@@ -192,8 +193,8 @@ func (r *mutationResolver) forceCompleteWorkflowInstance(ctx context.Context, id
 		return nil, err
 	}
 
-	skipCtx := workflows.WithSkipEventEmission(allowCtx)
-	workflows.MarkSkipEventEmission(skipCtx)
+	skipCtx := gala.WithSkipEventEmission(allowCtx)
+	gala.MarkSkipEventEmission(skipCtx)
 
 	if instance.OwnerID != "" {
 		skipCtx, err = common.SetOrganizationInAuthContext(skipCtx, &instance.OwnerID)
@@ -224,8 +225,8 @@ func (r *mutationResolver) forceCompleteWorkflowInstance(ctx context.Context, id
 			}
 
 			bypassCtx := workflows.AllowBypassContext(ctx)
-			bypassCtx = workflows.WithSkipEventEmission(bypassCtx)
-			workflows.MarkSkipEventEmission(bypassCtx)
+			bypassCtx = gala.WithSkipEventEmission(bypassCtx)
+			gala.MarkSkipEventEmission(bypassCtx)
 
 			if err := workflows.ApplyObjectFieldUpdates(bypassCtx, r.db, objectType, objectID, proposal.Changes); err != nil {
 				return nil, err
@@ -281,8 +282,8 @@ func (r *mutationResolver) cancelWorkflowInstance(ctx context.Context, id string
 		return nil, err
 	}
 
-	skipCtx := workflows.WithSkipEventEmission(allowCtx)
-	workflows.MarkSkipEventEmission(skipCtx)
+	skipCtx := gala.WithSkipEventEmission(allowCtx)
+	gala.MarkSkipEventEmission(skipCtx)
 
 	if instance.OwnerID != "" {
 		skipCtx, err = common.SetOrganizationInAuthContext(skipCtx, &instance.OwnerID)

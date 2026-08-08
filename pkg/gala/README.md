@@ -209,6 +209,17 @@ Gala's durability comes from River, which stores jobs in PostgreSQL. Key charact
 
 When a listener returns an error, the job is rescheduled for retry. Panics are recovered and converted to errors, triggering the same retry behavior.
 
+### Unique and Run-Once Emissions
+
+Set `Headers.UniqueKey` on an emission and River atomically keeps the first insert per key while a job with that key is live (queued, running, retryable) — concurrent emitters skip instead of duplicating. Add `UniqueOnce: true` and the key also matches finished jobs, so the run executes once and later emitters (e.g. other pods starting during a release) no-op until River prunes the completed row (~24h by default).
+
+```go
+galaApp.Emit(ctx, topic, payload, gala.WithHeaders(gala.Headers{
+    UniqueKey:  "startup-backfill",
+    UniqueOnce: true,
+}))
+```
+
 ## Server Integration
 
 The standard setup in `serveropts`:
@@ -229,12 +240,11 @@ if err := galaApp.Attach(gala.WithValue(dbClient)); err != nil {
     return err
 }
 
-// Register listeners from the colocated hooks table; registration is activation —
-// the mutation hook only emits to topics with interested listeners
-for _, registration := range hooks.GalaRegistrations {
-    if _, err := registration.Register(galaApp); err != nil {
-        return err
-    }
+// Register listeners via each domain's register function; registration is activation —
+// the mutation hook only emits to topics with interested listeners. Listeners are
+// declared as entityops.MutationListener values compiled to definitions via Definition()
+if _, err := hooks.RegisterGalaTaskRuleListeners(galaApp); err != nil {
+    return err
 }
 
 // Start workers only after registration: durable jobs left over from a prior

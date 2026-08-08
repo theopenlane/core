@@ -248,9 +248,7 @@ func HasOrgMutationAccess() privacy.OrganizationMutationRuleFunc {
 			return privacy.Denyf("missing organization ID information in context")
 		}
 
-		logx.FromContext(ctx).Debug().Str("relation", relation).
-			Str("organization_id", oID).
-			Msg("checking relationship tuples")
+		logx.FromContext(ctx).Debug().Str("relation", relation).Str("organization_id", oID).Msg("checking relationship tuples")
 
 		// check access to the organization
 		ac.ObjectID = oID
@@ -261,9 +259,7 @@ func HasOrgMutationAccess() privacy.OrganizationMutationRuleFunc {
 		}
 
 		if access {
-			logx.FromContext(ctx).Debug().Str("relation", relation).
-				Str("organization_id", oID).
-				Msg("access allowed")
+			logx.FromContext(ctx).Debug().Str("relation", relation).Str("organization_id", oID).Msg("access allowed")
 
 			if cache, ok := permissioncache.CacheFromContext(ctx); ok {
 				if err := cache.SetRole(ctx, caller.SubjectID, oID, relation); err != nil {

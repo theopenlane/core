@@ -1,6 +1,9 @@
 package engine
 
-import "github.com/theopenlane/core/internal/mutations"
+import (
+	"github.com/theopenlane/core/internal/ent/entityops"
+	"github.com/theopenlane/core/pkg/jsonx"
+)
 
 // TriggerInput captures the trigger metadata passed to workflow execution
 type TriggerInput struct {
@@ -20,13 +23,27 @@ type TriggerInput struct {
 	OldValues map[string]any
 }
 
-// ChangeSet returns the trigger mutation change-set from trigger input
-func (input TriggerInput) ChangeSet() mutations.ChangeSet {
-	return mutations.NewChangeSet(input.ChangedFields, input.ChangedEdges, input.AddedIDs, input.RemovedIDs, input.ProposedChanges, input.OldValues)
+// ChangeSet returns the trigger mutation change-set from trigger input, marshaling the
+// engine's map-shaped proposed changes into the delta contract's opaque JSON
+func (input TriggerInput) ChangeSet() entityops.ChangeSet {
+	proposed, err := jsonx.ToRawMessage(input.ProposedChanges)
+	if err != nil || len(input.ProposedChanges) == 0 {
+		proposed = nil
+	}
+
+	return entityops.ChangeSet{
+		ChangedFields:   input.ChangedFields,
+		ChangedEdges:    input.ChangedEdges,
+		AddedIDs:        input.AddedIDs,
+		RemovedIDs:      input.RemovedIDs,
+		ProposedChanges: proposed,
+		OldValues:       input.OldValues,
+	}
 }
 
-// SetChangeSet applies a mutation change-set onto trigger input fields
-func (input *TriggerInput) SetChangeSet(changeSet mutations.ChangeSet) {
+// SetChangeSet applies a mutation change-set onto trigger input fields, decoding the
+// opaque proposed-changes JSON into the engine's map shape
+func (input *TriggerInput) SetChangeSet(changeSet entityops.ChangeSet) {
 	if input == nil {
 		return
 	}
@@ -36,6 +53,12 @@ func (input *TriggerInput) SetChangeSet(changeSet mutations.ChangeSet) {
 	input.ChangedEdges = cloned.ChangedEdges
 	input.AddedIDs = cloned.AddedIDs
 	input.RemovedIDs = cloned.RemovedIDs
-	input.ProposedChanges = cloned.ProposedChanges
 	input.OldValues = cloned.OldValues
+
+	proposed, err := jsonx.Decode[map[string]any](cloned.ProposedChanges)
+	if err != nil {
+		proposed = nil
+	}
+
+	input.ProposedChanges = proposed
 }

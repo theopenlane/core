@@ -7,7 +7,6 @@ import (
 	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/eventqueue"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/integrations/definitions/cloudflare"
 	"github.com/theopenlane/core/pkg/gala"
@@ -23,7 +22,7 @@ func TestRegisterGalaDomainScanSubmitListeners(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Equal(t, len(ids), 1)
 
-	topic := eventqueue.MutationTopicName(eventqueue.MutationConcernDirect, generated.TypeScan)
+	topic := gala.MutationTopicName(gala.MutationConcernDirect, generated.TypeScan)
 	assert.Check(t, runtime.InterestedIn(topic, ent.OpCreate.String()))
 	assert.Check(t, !runtime.InterestedIn(topic, ent.OpUpdate.String()))
 	assert.Check(t, !runtime.InterestedIn(topic, ent.OpDelete.String()))

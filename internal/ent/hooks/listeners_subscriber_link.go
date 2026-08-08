@@ -6,7 +6,7 @@ import (
 	"entgo.io/ent"
 	"github.com/theopenlane/iam/auth"
 
-	"github.com/theopenlane/core/internal/ent/eventqueue"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
@@ -20,10 +20,9 @@ import (
 // subscriber to an existing contact and/or user with a matching email asynchronously
 // after the subscriber mutation commits
 func RegisterGalaSubscriberLinkListeners(g *gala.Gala) ([]gala.ListenerID, error) {
-	return eventqueue.RegisterMutationListeners(g,
-		eventqueue.MutationListener{
+	return registerMutationListeners(g,
+		entityops.MutationListener{
 			Schema:     entgen.TypeSubscriber,
-			Name:       "subscriber.link_identity",
 			Operations: []string{ent.OpCreate.String()},
 			Handle:     handleSubscriberCreatedLink,
 		},
@@ -35,14 +34,14 @@ func RegisterGalaSubscriberLinkListeners(g *gala.Gala) ([]gala.ListenerID, error
 // association via the contact_id and user_id edges. Matching runs under an internal
 // caller scoped to the subscriber's owner because subscribers can be created anonymously
 // through the trust center, in which case the originating caller cannot read contacts
-func handleSubscriberCreatedLink(inv eventqueue.Invocation, _ eventqueue.MutationGalaPayload) error {
+func handleSubscriberCreatedLink(inv entityops.Invocation, _ entityops.MutationPayload) error {
 	client := inv.Client
 
 	allowCtx := auth.WithCaller(privacy.DecisionContext(inv.Context, privacy.Allow), &auth.Caller{
 		Capabilities: auth.CapBypassOrgFilter | auth.CapBypassFGA | auth.CapInternalOperation,
 	})
 
-	sub, ok, err := eventqueue.LoadEntity(allowCtx, inv.EntityID, client.Subscriber.Get)
+	sub, ok, err := entityops.LoadEntity(allowCtx, inv.EntityID, client.Subscriber.Get)
 	if err != nil || !ok {
 		return err
 	}

@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/theopenlane/core/pkg/gala"
 	"time"
 
 	"entgo.io/ent"
@@ -17,7 +18,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
-	"github.com/theopenlane/core/internal/mutations"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/engine"
 )
@@ -86,7 +86,7 @@ func HookWorkflowApprovalRouting() ent.Hook {
 				Node: entity,
 			}
 
-			proposedChanges := mutations.BuildProposedChanges(mut, changedFields)
+			proposedChanges := workflows.BuildProposedChanges(mut, changedFields)
 			if len(proposedChanges) == 0 {
 				return next.Mutate(ctx, m)
 			}
@@ -124,7 +124,7 @@ func HookWorkflowApprovalRouting() ent.Hook {
 			eligibleFields, ineligibleFields := workflows.SeparateFieldsByEligibility(mut.Type(), allChangedFields)
 			ineligibleFields = excludeSystemFields(ineligibleFields)
 
-			eligibleChanges := mutations.BuildProposedChanges(mut, eligibleFields)
+			eligibleChanges := workflows.BuildProposedChanges(mut, eligibleFields)
 			hasDirectChanges := len(ineligibleFields) > 0 || len(changedEdges) > 0
 			if hasDirectChanges {
 				resetMutationFields(m, eligibleFields)
@@ -141,7 +141,7 @@ func HookWorkflowApprovalRouting() ent.Hook {
 			proposedChanges = eligibleChanges
 
 			// Route to proposed changes instead of applying directly
-			workflows.MarkSkipEventEmission(ctx)
+			gala.MarkSkipEventEmission(ctx)
 			return routeMutationToProposals(ctx, client, mut, proposedChanges, preCommitDefs)
 		})
 	}, ent.OpUpdate|ent.OpUpdateOne)

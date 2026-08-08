@@ -45,19 +45,13 @@ func domainScanListeners() types.GalaListenerRegistration {
 		Register: func(g *gala.Gala, services types.RuntimeServices) ([]gala.ListenerID, error) {
 			saga := domainScanSaga{services: services}
 
-			pollIDs, err := gala.Register(g, gala.Definition[DomainScanPollEnvelope]{
-				Topic: gala.Topic[DomainScanPollEnvelope]{Name: DomainScanPollTopic},
-				Name:  DomainScanPollListenerName,
+			return gala.Register(g, gala.Definition[DomainScanPollEnvelope]{
+				Topic: domainScanPollTopic,
 				Handle: func(hc gala.HandlerContext, envelope DomainScanPollEnvelope) error {
 					_, err := saga.handlePoll(hc.Context, envelope)
 					return err
 				},
 			})
-			if err != nil {
-				return nil, err
-			}
-
-			return pollIDs, nil
 		},
 	}
 }
@@ -155,10 +149,11 @@ func (s domainScanSaga) submitAndScheduleDomainScans(ctx context.Context, organi
 	// poll cycle ever scheduled for them
 	for i, scan := range result.Scans {
 		domain := acceptedDomains[i]
+		domainCtx := logx.WithFields(ctx, map[string]any{"domain": domain, "scan_id": scan.UUID})
 
 		internalScanID, ok := scanIDs[domain]
 		if !ok {
-			logx.FromContext(ctx).Warn().Str("domain", domain).Msg("domain scan: cloudflare returned an unexpected domain, skipping")
+			logx.FromContext(domainCtx).Warn().Msg("domain scan: cloudflare returned an unexpected domain, skipping")
 
 			continue
 		}
@@ -168,27 +163,27 @@ func (s domainScanSaga) submitAndScheduleDomainScans(ctx context.Context, organi
 		if err := s.services.DB().Scan.UpdateOneID(internalScanID).
 			SetMetadata(map[string]any{domainScanEnrichmentMetadataKey: enrichments[i]}).
 			Exec(systemCtx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Str("scan_id", scan.UUID).Msg("domain scan: failed updating scan record with enrichment")
-			s.markDomainScanFailed(ctx, organizationID, internalScanID)
+			logx.FromContext(domainCtx).Error().Err(err).Msg("domain scan: failed updating scan record with enrichment")
+			s.markDomainScanFailed(domainCtx, organizationID, internalScanID)
 
-			if notifyErr := s.maybeNotifyDomainScanGroup(ctx, organizationID, siblingScanIDs); notifyErr != nil {
-				logx.FromContext(ctx).Error().Err(notifyErr).Msg("domain scan: failed checking group completion after enrichment update failure")
+			if notifyErr := s.maybeNotifyDomainScanGroup(domainCtx, organizationID, siblingScanIDs); notifyErr != nil {
+				logx.FromContext(domainCtx).Error().Err(notifyErr).Msg("domain scan: failed checking group completion after enrichment update failure")
 			}
 
 			continue
 		}
 
-		if _, err := s.services.Gala().Emit(ctx, DomainScanPollTopic, DomainScanPollEnvelope{
+		if _, err := s.services.Gala().Emit(ctx, domainScanPollTopic.Name, DomainScanPollEnvelope{
 			OrganizationID: organizationID,
 			ScanResultID:   scan.UUID,
 			InternalScanID: internalScanID,
 			SiblingScanIDs: siblingScanIDs,
 		}); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Str("scan_id", scan.UUID).Msg("domain scan: failed scheduling poll cycle")
-			s.markDomainScanFailed(ctx, organizationID, internalScanID)
+			logx.FromContext(domainCtx).Error().Err(err).Msg("domain scan: failed scheduling poll cycle")
+			s.markDomainScanFailed(domainCtx, organizationID, internalScanID)
 
-			if notifyErr := s.maybeNotifyDomainScanGroup(ctx, organizationID, siblingScanIDs); notifyErr != nil {
-				logx.FromContext(ctx).Error().Err(notifyErr).Msg("domain scan: failed checking group completion after poll scheduling failure")
+			if notifyErr := s.maybeNotifyDomainScanGroup(domainCtx, organizationID, siblingScanIDs); notifyErr != nil {
+				logx.FromContext(domainCtx).Error().Err(notifyErr).Msg("domain scan: failed checking group completion after poll scheduling failure")
 			}
 		}
 	}
@@ -222,15 +217,16 @@ func (s domainScanSaga) finalizeDomainScansFromEnrichment(ctx context.Context, o
 
 	for i, domain := range domains {
 		internalScanID := scanIDs[domain]
+		domainCtx := logx.WithFields(ctx, map[string]any{"domain": domain})
 
 		if err := s.services.DB().Scan.UpdateOneID(internalScanID).
 			SetMetadata(map[string]any{domainScanEnrichmentMetadataKey: enrichments[i]}).
 			Exec(systemCtx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Str("domain", domain).Msg("domain scan: failed updating scan record with enrichment")
-			s.markDomainScanFailed(ctx, organizationID, internalScanID)
+			logx.FromContext(domainCtx).Error().Err(err).Msg("domain scan: failed updating scan record with enrichment")
+			s.markDomainScanFailed(domainCtx, organizationID, internalScanID)
 
-			if notifyErr := s.maybeNotifyDomainScanGroup(ctx, organizationID, siblingScanIDs); notifyErr != nil {
-				logx.FromContext(ctx).Error().Err(notifyErr).Msg("domain scan: failed checking group completion after enrichment update failure")
+			if notifyErr := s.maybeNotifyDomainScanGroup(domainCtx, organizationID, siblingScanIDs); notifyErr != nil {
+				logx.FromContext(domainCtx).Error().Err(notifyErr).Msg("domain scan: failed checking group completion after enrichment update failure")
 			}
 
 			errs = append(errs, err)
@@ -238,8 +234,8 @@ func (s domainScanSaga) finalizeDomainScansFromEnrichment(ctx context.Context, o
 			continue
 		}
 
-		if _, err := s.finalizeDomainScan(ctx, organizationID, internalScanID, siblingScanIDs, nil); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Str("domain", domain).Msg("domain scan: failed finalizing scan from enrichment")
+		if _, err := s.finalizeDomainScan(domainCtx, organizationID, internalScanID, siblingScanIDs, nil); err != nil {
+			logx.FromContext(domainCtx).Error().Err(err).Msg("domain scan: failed finalizing scan from enrichment")
 			errs = append(errs, err)
 		}
 	}
@@ -276,26 +272,28 @@ func (s domainScanSaga) gatherDomainScanEnrichments(ctx context.Context, domains
 
 	for i, domain := range domains {
 		g.Go(func() error {
+			domainCtx := logx.WithFields(ctx, map[string]any{"domain": domain})
+
 			config, err := json.Marshal(DomainScanGatherEnrichment{
 				Domain:       domain,
 				ForceRefresh: forceRefresh,
 			})
 			if err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("domain", domain).Msg("domain scan: failed encoding enrichment gather config")
+				logx.FromContext(domainCtx).Error().Err(err).Msg("domain scan: failed encoding enrichment gather config")
 
 				return nil
 			}
 
-			response, err := s.services.ExecuteRuntimeOperation(ctx, DefinitionID.ID(), DomainScanEnrichmentOp.Name(), config)
+			response, err := s.services.ExecuteRuntimeOperation(domainCtx, DefinitionID.ID(), DomainScanEnrichmentOp.Name(), config)
 			if err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("domain", domain).Msg("domain scan: failed gathering enrichment")
+				logx.FromContext(domainCtx).Error().Err(err).Msg("domain scan: failed gathering enrichment")
 
 				return nil
 			}
 
 			var result DomainScanGatherEnrichmentResult
 			if err := json.Unmarshal(response, &result); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("domain", domain).Msg("domain scan: failed decoding gathered enrichment")
+				logx.FromContext(domainCtx).Error().Err(err).Msg("domain scan: failed decoding gathered enrichment")
 
 				return nil
 			}
@@ -363,7 +361,7 @@ func (s domainScanSaga) handlePoll(ctx context.Context, envelope DomainScanPollE
 
 		scheduledAt := time.Now().Add(DomainScanPollBackoff(envelope.Attempt))
 
-		if _, err := s.services.Gala().Emit(ctx, DomainScanPollTopic, DomainScanPollEnvelope{
+		if _, err := s.services.Gala().Emit(ctx, domainScanPollTopic.Name, DomainScanPollEnvelope{
 			OrganizationID: envelope.OrganizationID,
 			ScanResultID:   envelope.ScanResultID,
 			InternalScanID: envelope.InternalScanID,

@@ -316,10 +316,7 @@ func HookCustomTypeEnumDelete() ent.Hook {
 			}
 
 			if len(errs) > 0 {
-				logx.FromContext(ctx).Error().
-					Int("error_count", len(errs)).
-					Strs("errors", errs).
-					Msg("custom enum deletion failed: enums are in use")
+				logx.FromContext(ctx).Error().Int("error_count", len(errs)).Strs("errors", errs).Msg("custom enum deletion failed: enums are in use")
 				return nil, fmt.Errorf("%w: %d enum(s) are in use and cannot be deleted", ErrCustomEnumInUse, len(errs)) //nolint:err113
 			}
 
