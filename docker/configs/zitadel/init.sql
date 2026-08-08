@@ -1,0 +1,3 @@
+CREATE DATABASE zitadel;
+
+GRANT ALL PRIVILEGES ON DATABASE zitadel TO postgres;
