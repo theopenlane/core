@@ -3,7 +3,7 @@ package entitlements
 import (
 	"context"
 
-	"github.com/stripe/stripe-go/v84"
+	"github.com/stripe/stripe-go/v86"
 )
 
 // GetProductByID gets a product by ID
@@ -43,7 +43,7 @@ func (sc *StripeClient) ListProducts(ctx context.Context) (products []*stripe.Pr
 		return nil, ErrProductListFailed
 	}
 
-	for product, err := range result {
+	for product, err := range result.All(ctx) {
 		if err != nil {
 			return nil, err
 		}
@@ -90,7 +90,7 @@ func (sc *StripeClient) GetAllProductPricesMapped(ctx context.Context) (products
 		return
 	}
 
-	for product, err := range result {
+	for product, err := range result.All(ctx) {
 		if err != nil {
 			continue
 		}
@@ -152,7 +152,7 @@ func (sc *StripeClient) GetFeaturesByProductID(ctx context.Context, productID st
 		Product: stripe.String(productID),
 	})
 
-	for feature, err := range result {
+	for feature, err := range result.All(ctx) {
 		if err != nil {
 			continue
 		}

@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/stripe/stripe-go/v84"
+	"github.com/stripe/stripe-go/v86"
 )
 
 const (
@@ -14,11 +14,17 @@ const (
 
 // SupportedEventTypes defines the Stripe events the webhook handler listens for.
 var SupportedEventTypes = []stripe.EventType{
+	// a replacement subscription added after the previous one was cancelled only announces itself
+	// here, without this the organization keeps pointing at the old cancelled subscription
+	stripe.EventTypeCustomerSubscriptionCreated,
 	stripe.EventTypeCustomerSubscriptionUpdated,
 	stripe.EventTypeCustomerSubscriptionDeleted,
 	stripe.EventTypeCustomerSubscriptionPaused,
 	stripe.EventTypeCustomerSubscriptionTrialWillEnd,
 	stripe.EventTypePaymentMethodAttached,
+	// used to detect that stripe has stopped retrying a failed payment, so the subscription can be
+	// dropped to the free modules rather than left for stripe to cancel
+	stripe.EventTypeInvoicePaymentFailed,
 }
 
 // SupportedEventTypeStrings returns SupportedEventTypes as a slice of strings.
@@ -93,7 +99,7 @@ func (sc *StripeClient) ListWebhookEndpoints(ctx context.Context) ([]*stripe.Web
 	var endpoints []*stripe.WebhookEndpoint
 	var lastErr error
 
-	for endpoint, err := range iter {
+	for endpoint, err := range iter.All(ctx) {
 		if err != nil {
 			lastErr = err
 			break

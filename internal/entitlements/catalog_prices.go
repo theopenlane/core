@@ -22,6 +22,21 @@ func TrialMonthlyPrices(useSandbox bool) []entitlements.Price {
 	}, useSandbox)
 }
 
+// FreeMonthlyPriceIDs returns Stripe price IDs for monthly prices that cost nothing. These are the
+// modules an organization keeps when its subscription is downgraded rather than cancelled, so the
+// organization stays active and can recover by adding a payment method
+func FreeMonthlyPriceIDs(useSandbox bool) []string {
+	return monthlyPriceIDs(func(f catalog.Feature) bool {
+		for _, p := range f.Billing.Prices {
+			if p.Interval == "month" && p.UnitAmount > 0 {
+				return false
+			}
+		}
+
+		return true
+	}, useSandbox)
+}
+
 // AllMonthlyPrices returns prices for all monthly modules regardless of trial status
 func AllMonthlyPrices(useSandbox bool) []entitlements.Price {
 	return monthlyPrices(func(_ catalog.Feature) bool {

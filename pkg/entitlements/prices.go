@@ -3,7 +3,7 @@ package entitlements
 import (
 	"context"
 
-	"github.com/stripe/stripe-go/v84"
+	"github.com/stripe/stripe-go/v86"
 )
 
 // MigrateToKey is the metadata key used to indicate the price that a subscription should migrate to
@@ -49,7 +49,7 @@ func (sc *StripeClient) ListPrices(ctx context.Context) ([]*stripe.Price, error)
 	params := &stripe.PriceListParams{}
 	result := sc.Client.V1Prices.List(ctx, params)
 
-	for price, err := range result {
+	for price, err := range result.All(ctx) {
 		if err != nil {
 			return nil, err
 		}
@@ -66,7 +66,7 @@ func (sc *StripeClient) GetPricesMapped(ctx context.Context) (prices []Price) {
 
 	result := sc.Client.V1Prices.List(ctx, priceParams)
 
-	for priceData, err := range result {
+	for priceData, err := range result.All(ctx) {
 		if err != nil || priceData.Product == nil {
 			continue
 		}
@@ -90,7 +90,7 @@ func (sc *StripeClient) ListPricesForProduct(ctx context.Context, productID stri
 
 	it := sc.Client.V1Prices.List(ctx, params)
 
-	for price, err := range it {
+	for price, err := range it.All(ctx) {
 		if err != nil {
 			return nil, err
 		}
@@ -117,7 +117,7 @@ func (sc *StripeClient) GetPriceByLookupKey(ctx context.Context, lookupKey strin
 
 	it := sc.Client.V1Prices.List(ctx, params)
 
-	for price, err := range it {
+	for price, err := range it.All(ctx) {
 		if err != nil {
 			return nil, err
 		}
