@@ -14,7 +14,7 @@ import (
 	"github.com/samber/do/v2"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
-	"github.com/stripe/stripe-go/v84"
+	"github.com/stripe/stripe-go/v86"
 	"github.com/theopenlane/iam/auth"
 	fgatest "github.com/theopenlane/iam/fgax/testutils"
 	"github.com/theopenlane/iam/sessions"
@@ -794,7 +794,7 @@ func (suite *WorkflowEngineTestSuite) orgSubscriptionMocks() {
 	}).Return(nil)
 
 	// mock customer search
-	suite.stripeMockBackend.On("CallRaw", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.Params"), mock.AnythingOfType("*stripe.v1SearchPage[*github.com/stripe/stripe-go/v84.Customer]")).Run(func(args mock.Arguments) {
+	suite.stripeMockBackend.On("CallRaw", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.Params"), mock.AnythingOfType("*stripe.v1SearchPage[*github.com/stripe/stripe-go/v86.Customer]")).Run(func(args mock.Arguments) {
 		out := args.Get(4) // this is *v1SearchPage[*stripe.Customer] now, but unexported
 
 		// Build a payload that matches Stripe search response shape

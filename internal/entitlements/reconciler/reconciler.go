@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/rs/zerolog/log"
-	"github.com/stripe/stripe-go/v84"
+	"github.com/stripe/stripe-go/v86"
 
 	"github.com/theopenlane/iam/auth"
 
