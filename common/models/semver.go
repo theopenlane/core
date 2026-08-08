@@ -10,6 +10,15 @@ const (
 	DefaultRevision = "v0.0.1"
 )
 
+type SemverBump string
+
+const (
+	SemverBumpNone  SemverBump = ""
+	SemverBumpPatch SemverBump = "patch"
+	SemverBumpMinor SemverBump = "minor"
+	SemverBumpMajor SemverBump = "major"
+)
+
 // SemverVersion is a custom type for semantic versioning
 // It is used to represent the version of objects stored in the database
 type SemverVersion struct {
@@ -91,30 +100,37 @@ func ToSemverVersion(version *string) (*SemverVersion, error) {
 }
 
 // DetectSemverBump returns the bump type between two semver revisions.
-func DetectSemverBump(oldRevision, newRevision string) string {
+func DetectSemverBump(oldRevision, newRevision string) SemverBump {
 	oldVersion, err := ToSemverVersion(&oldRevision)
 	if err != nil {
-		return "major"
+		return SemverBumpMajor
 	}
 
 	newVersion, err := ToSemverVersion(&newRevision)
 	if err != nil {
-		return "major"
+		return SemverBumpMajor
 	}
 
 	if oldVersion.Major != newVersion.Major {
-		return "major"
+		return SemverBumpMajor
 	}
 
 	if oldVersion.Minor != newVersion.Minor {
-		return "minor"
+		return SemverBumpMinor
 	}
 
 	if oldVersion.Patch != newVersion.Patch {
-		return "patch"
+		return SemverBumpPatch
 	}
 
-	return ""
+	return SemverBumpNone
+}
+
+// IsMajorMinorBump checks if the changes in the semver versions is either a major or minor bump.
+func IsMajorMinorBump(oldRevision, newRevision string) bool {
+	bump := DetectSemverBump(oldRevision, newRevision)
+
+	return bump == SemverBumpMajor || bump == SemverBumpMinor
 }
 
 // BumpMajor increments the major version by 1

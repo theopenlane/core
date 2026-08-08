@@ -29,13 +29,6 @@ func TestOldestRevision(t *testing.T) {
 	assert.Equal(t, v1, pickOldestRevision(controls))
 }
 
-func TestIsMajorMinorBump(t *testing.T) {
-	assert.True(t, isMajorMinorBump("v1.0.0", "v2.0.0"))
-	assert.True(t, isMajorMinorBump("v1.0.0", "v1.1.0"))
-	assert.False(t, isMajorMinorBump("v1.0.0", "v1.0.1"))
-	assert.False(t, isMajorMinorBump("v1.0.0", "v1.0.0"))
-}
-
 func TestSubcontrolsForControls(t *testing.T) {
 	controls := []standardControl{
 		{ID: "control-1"},

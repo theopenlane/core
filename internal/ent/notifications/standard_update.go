@@ -7,6 +7,7 @@ import (
 
 	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
+	"golang.org/x/mod/semver"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
@@ -91,7 +92,7 @@ func handleStandardMutation(ctx gala.HandlerContext, payload eventqueue.Mutation
 	}
 
 	filteredControls := lo.Filter(controls, func(c standardControl, _ int) bool {
-		return c.OwnerID != "" && isMajorMinorBump(lo.FromPtrOr(c.ReferenceFrameworkRevision, ""), std.Revision)
+		return c.OwnerID != "" && models.IsMajorMinorBump(lo.FromPtrOr(c.ReferenceFrameworkRevision, ""), std.Revision)
 	})
 
 	if len(filteredControls) == 0 {
@@ -210,7 +211,7 @@ func fetchAffectedSubcontrols(ctx context.Context, client *generated.Client, ids
 	}
 
 	affected := lo.Filter(controls, func(s standardSubcontrol, _ int) bool {
-		return isMajorMinorBump(lo.FromPtrOr(s.ReferenceFrameworkRevision, ""), revision)
+		return models.IsMajorMinorBump(lo.FromPtrOr(s.ReferenceFrameworkRevision, ""), revision)
 	})
 
 	slices.SortFunc(affected, func(a, b standardSubcontrol) int {
@@ -257,51 +258,9 @@ func pickOldestRevision(controls []standardControl) string {
 		return ""
 	}
 
-	slices.SortFunc(revisions, func(a, b string) int {
-		aVersion, err := models.ToSemverVersion(&a)
-		if err != nil {
-			return 1
-		}
-
-		bVersion, err := models.ToSemverVersion(&b)
-		if err != nil {
-			return -1
-		}
-
-		if aVersion.Major != bVersion.Major {
-			if aVersion.Major < bVersion.Major {
-				return -1
-			}
-
-			return 1
-		}
-
-		if aVersion.Minor != bVersion.Minor {
-			if aVersion.Minor < bVersion.Minor {
-				return -1
-			}
-
-			return 1
-		}
-
-		if aVersion.Patch < bVersion.Patch {
-			return -1
-		}
-
-		if aVersion.Patch > bVersion.Patch {
-			return 1
-		}
-
-		return 0
-	})
+	semver.Sort(revisions)
 
 	return revisions[0]
-}
-
-func isMajorMinorBump(oldRevision, newRevision string) bool {
-	bump := models.DetectSemverBump(oldRevision, newRevision)
-
-	return bump == "major" || bump == "minor"
 }
 
 func fetchOrgAdminsAndOwners(ctx context.Context, client *generated.Client, orgID string) ([]string, error) {
