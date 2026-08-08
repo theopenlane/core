@@ -10,8 +10,8 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/rs/zerolog/log"
-	"github.com/stripe/stripe-go/v84"
-	"github.com/stripe/stripe-go/v84/webhook"
+	"github.com/stripe/stripe-go/v86"
+	"github.com/stripe/stripe-go/v86/webhook"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
@@ -24,6 +24,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	catalogprices "github.com/theopenlane/core/internal/entitlements"
 	em "github.com/theopenlane/core/internal/entitlements/entmapping"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/logx"
@@ -210,7 +211,7 @@ func unmarshalEventData[T interface{}](e *stripe.Event) (*T, error) {
 // HandleEvent unmarshals event data and triggers a corresponding function to be executed based on case match
 func (h *Handler) HandleEvent(c context.Context, e *stripe.Event) error {
 	switch e.Type {
-	case stripe.EventTypeCustomerSubscriptionUpdated:
+	case stripe.EventTypeCustomerSubscriptionCreated, stripe.EventTypeCustomerSubscriptionUpdated:
 		subscription, err := unmarshalEventData[stripe.Subscription](e)
 		if err != nil {
 			return err
@@ -231,6 +232,13 @@ func (h *Handler) HandleEvent(c context.Context, e *stripe.Event) error {
 		}
 
 		return h.handleTrialWillEnd(c, subscription)
+	case stripe.EventTypeInvoicePaymentFailed:
+		invoice, err := unmarshalEventData[stripe.Invoice](e)
+		if err != nil {
+			return err
+		}
+
+		return h.handleInvoicePaymentFailed(c, invoice)
 	case stripe.EventTypeCustomerSubscriptionDeleted, stripe.EventTypeCustomerSubscriptionPaused:
 		subscription, err := unmarshalEventData[stripe.Subscription](e)
 		if err != nil {
@@ -316,6 +324,63 @@ func (h *Handler) handleSubscriptionPaused(ctx context.Context, s *stripe.Subscr
 	return h.invalidatePersonalAccessTokens(ctx, *ownerID)
 }
 
+// handleInvoicePaymentFailed drops an organization to the free modules once Stripe has stopped
+// retrying a failed payment. Stripe schedules a retry after every failed attempt, so an invoice with
+// no next attempt left means the retry window is over. Cancelling at that point takes the whole
+// organization down and is painful to unwind, keeping the subscription alive on the free modules
+// leaves it recoverable by adding a payment method
+func (h *Handler) handleInvoicePaymentFailed(ctx context.Context, invoice *stripe.Invoice) error {
+	if invoice == nil {
+		return nil
+	}
+
+	// stripe schedules the next attempt after every failure, so a next attempt still being set means
+	// the retry window is open and the organization keeps everything it has
+	if invoice.NextPaymentAttempt > 0 {
+		logx.FromContext(ctx).Debug().Str("invoice_id", invoice.ID).
+			Int64("attempt_count", invoice.AttemptCount).
+			Time("next_payment_attempt", time.Unix(invoice.NextPaymentAttempt, 0)).
+			Msg("payment failed but stripe has retries left, leaving the modules alone")
+
+		return nil
+	}
+
+	if invoice.Parent == nil || invoice.Parent.SubscriptionDetails == nil || invoice.Parent.SubscriptionDetails.Subscription == nil {
+		// not a subscription invoice, nothing to downgrade
+		return nil
+	}
+
+	subscriptionID := invoice.Parent.SubscriptionDetails.Subscription.ID
+	if subscriptionID == "" {
+		return nil
+	}
+
+	// the invoice carries a thin subscription, the items are needed to work out what to remove
+	sub, err := h.Entitlements.GetSubscriptionByID(ctx, subscriptionID)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("subscription_id", subscriptionID).
+			Msg("failed to load subscription for payment failure downgrade")
+
+		return err
+	}
+
+	freePriceIDs := catalogprices.FreeMonthlyPriceIDs(h.DBClient.EntConfig.Modules.UseSandbox)
+
+	downgraded, err := h.Entitlements.DowngradeToFreeModules(ctx, sub, freePriceIDs)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("subscription_id", subscriptionID).
+			Msg("failed to downgrade subscription to the free modules")
+
+		return err
+	}
+
+	logx.FromContext(ctx).Info().Str("subscription_id", subscriptionID).
+		Msg("payment retries exhausted, downgraded subscription to the free modules")
+
+	// sync so the modules and their feature tuples match what the subscription now carries
+	return h.handleSubscriptionUpdated(ctx, downgraded)
+}
+
 // handleSubscriptionUpdated handles subscription updated events
 func (h *Handler) handleSubscriptionUpdated(ctx context.Context, s *stripe.Subscription) error {
 	_, err := h.syncOrgSubscriptionWithStripe(ctx, s)
@@ -358,6 +423,66 @@ func (h *Handler) handlePaymentMethodAdded(ctx context.Context, paymentMethod *s
 		Exec(ctx)
 }
 
+// findOrgSubscriptionByCustomer resolves an OrgSubscription through the stripe customer on the
+// subscription. The customer outlives individual subscriptions, so this is what still connects a
+// replacement subscription to its organization once the original was cancelled. Returns nil when the
+// customer is missing or maps to no organization
+func findOrgSubscriptionByCustomer(ctx context.Context, subscription *stripe.Subscription) *ent.OrgSubscription {
+	if subscription == nil || subscription.Customer == nil || subscription.Customer.ID == "" {
+		return nil
+	}
+
+	allowCtx := auth.WithCaller(ctx, auth.NewWebhookCaller(""))
+
+	org, err := transaction.FromContext(ctx).Organization.Query().
+		Where(organization.StripeCustomerID(subscription.Customer.ID)).Only(allowCtx)
+	if err != nil {
+		logx.FromContext(ctx).Debug().Err(err).Str("stripe_customer_id", subscription.Customer.ID).
+			Msg("no organization found for stripe customer")
+
+		return nil
+	}
+
+	// an organization can accumulate more than one subscription record over its life, the most
+	// recent is the one a new stripe subscription belongs to
+	orgSub, err := transaction.FromContext(ctx).OrgSubscription.Query().
+		Where(orgsubscription.OwnerID(org.ID), orgsubscription.DeletedAtIsNil()).
+		Order(ent.Desc(orgsubscription.FieldCreatedAt)).
+		First(allowCtx)
+	if err != nil {
+		logx.FromContext(ctx).Debug().Err(err).Str("organization_id", org.ID).
+			Msg("no org subscription found for organization")
+
+		return nil
+	}
+
+	return orgSub
+}
+
+// adoptStripeSubscriptionID points an OrgSubscription at the given stripe subscription. Without this
+// an organization whose subscription was replaced keeps referring to the old, cancelled one
+func adoptStripeSubscriptionID(ctx context.Context, orgSub *ent.OrgSubscription, subscriptionID string) {
+	if orgSub == nil || subscriptionID == "" || orgSub.StripeSubscriptionID == subscriptionID {
+		return
+	}
+
+	allowCtx := auth.WithCaller(ctx, auth.NewWebhookCaller(""))
+
+	if err := transaction.FromContext(ctx).OrgSubscription.UpdateOne(orgSub).
+		SetStripeSubscriptionID(subscriptionID).
+		Exec(allowCtx); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Str("subscription_id", subscriptionID).
+			Msg("failed to update org subscription with stripe subscription id")
+
+		return
+	}
+
+	logx.FromContext(ctx).Info().Str("subscription_id", subscriptionID).Str("org_subscription_id", orgSub.ID).
+		Msg("org subscription now points at the stripe subscription")
+
+	orgSub.StripeSubscriptionID = subscriptionID
+}
+
 // getOrgSubscription retrieves the OrgSubscription from the database based on the Stripe subscription ID
 func getOrgSubscription(ctx context.Context, subscription *stripe.Subscription) (*ent.OrgSubscription, error) {
 	allowCtx := auth.WithCaller(ctx, auth.NewWebhookCaller(""))
@@ -385,16 +510,21 @@ func getOrgSubscription(ctx context.Context, subscription *stripe.Subscription) 
 
 				// if we found an org subscription by metadata, first update the stripe_subscription_id field
 				if orgSubscription != nil {
-					err = transaction.FromContext(ctx).OrgSubscription.UpdateOne(orgSubscription).
-						SetStripeSubscriptionID(subscription.ID).
-						Exec(allowCtx)
-					if err != nil {
-						logx.FromContext(ctx).Error().Err(err).Msg("failed to update org subscription with stripe subscription id")
-					}
+					adoptStripeSubscriptionID(ctx, orgSubscription, subscription.ID)
 
 					// but still return the org subscription to update the rest of the fields
 					return orgSubscription, nil
 				}
+			}
+
+			// nothing in the metadata matched, which is the normal case for a subscription created
+			// by hand in the stripe dashboard. The customer is the only remaining link back to the
+			// organization, and this is what repoints an organization at a replacement subscription
+			// after its previous one was cancelled
+			if orgSub := findOrgSubscriptionByCustomer(ctx, subscription); orgSub != nil {
+				adoptStripeSubscriptionID(ctx, orgSub, subscription.ID)
+
+				return orgSub, nil
 			}
 
 			// if we got here we could not find the org subscription

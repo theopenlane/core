@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/rs/zerolog/log"
-	"github.com/stripe/stripe-go/v84"
+	"github.com/stripe/stripe-go/v86"
 )
 
 // CreateProductFeatureWithOptions creates a product feature using functional options
@@ -28,7 +28,7 @@ func (sc *StripeClient) ListProductFeatures(ctx context.Context, productID strin
 
 	var features []*stripe.ProductFeature
 
-	for feature, err := range result {
+	for feature, err := range result.All(ctx) {
 		if err != nil {
 			log.Error().Err(err).Msg("failed to list product features")
 			continue

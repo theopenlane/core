@@ -37,6 +37,13 @@ func HookOrgModule() ent.Hook {
 				return v, fmt.Errorf("%w: owner_id", ErrFieldRequired)
 			}
 
+			// a module can be created already inactive, a subscription that is cancelled or unpaid
+			// still syncs its items. Writing the tuple regardless would grant the feature to an
+			// organization whose module record says it does not have it
+			if !orgModule.Active {
+				return v, nil
+			}
+
 			feats := []models.OrgModule{orgModule.Module}
 
 			if err := entitlements.CreateFeatureTuples(ctx, &omm.Authz, orgID, feats); err != nil {

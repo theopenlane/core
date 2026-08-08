@@ -1,6 +1,6 @@
 package entitlements
 
-import "github.com/stripe/stripe-go/v84"
+import "github.com/stripe/stripe-go/v86"
 
 // PriceCreateOption allows customizing PriceCreateParams
 type PriceCreateOption func(params *stripe.PriceCreateParams)
