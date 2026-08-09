@@ -10,7 +10,7 @@ import (
 
 const (
 	// defaultTestImage is the default docker image for test databases
-	defaultTestImage = "docker://postgres:17-alpine"
+	defaultTestImage = "docker://postgres:18-alpine"
 	// defaultTestQueueName is the default queue name for gala tests
 	defaultTestQueueName = "gala_test"
 	// defaultTestWorkerCount is the default worker count for gala tests

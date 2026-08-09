@@ -14,7 +14,7 @@ data "remote_dir" "migrations" {
 }
 
 docker "postgres" "dev" {
-  image  = "postgres:17"
+  image  = "postgres:18"
   schema = "public"
   baseline = file("baseline/extensions.sql")
 }
