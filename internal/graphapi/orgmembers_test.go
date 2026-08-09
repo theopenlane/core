@@ -709,6 +709,41 @@ func TestMutationDeleteOrgMembers(t *testing.T) {
 	cleanupOrganizationDataWithContext(localTestOrg.owner.UserCtx, t)
 }
 
+func TestMutationLeaveOrganization(t *testing.T) {
+	t.Parallel()
+
+	currentOrg := suite.seedOrgOwner(t)
+	orgToLeave := suite.seedOrgOwner(t)
+
+	memberRole := enums.RoleMember
+	member, err := suite.client.api.AddUserToOrgWithRole(orgToLeave.owner.UserCtx, testclient.CreateOrgMembershipInput{
+		OrganizationID: orgToLeave.owner.OrganizationID,
+		UserID:         currentOrg.owner.ID,
+		Role:           &memberRole,
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, member != nil)
+
+	resp, err := suite.client.api.LeaveOrganization(currentOrg.owner.UserCtx, orgToLeave.owner.OrganizationID)
+
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+	assert.Check(t, is.Equal(member.CreateOrgMembership.OrgMembership.ID, resp.LeaveOrganization.DeletedID))
+
+	members, err := suite.client.api.GetOrgMembersByOrgID(orgToLeave.owner.UserCtx, &testclient.OrgMembershipWhereInput{
+		OrganizationID: &orgToLeave.owner.OrganizationID,
+		UserID:         &currentOrg.owner.ID,
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, members != nil)
+	assert.Check(t, is.Len(members.OrgMemberships.Edges, 0))
+
+	suite.assertDefaultOrgUpdate(currentOrg.owner.UserCtx, t, currentOrg.owner.ID, orgToLeave.owner.OrganizationID, false)
+
+	cleanupOrganizationDataWithContext(currentOrg.owner.UserCtx, t)
+	cleanupOrganizationDataWithContext(orgToLeave.owner.UserCtx, t)
+}
+
 func (suite *GraphTestSuite) assertDefaultOrgUpdate(ctx context.Context, t *testing.T, userID, orgID string, isEqual bool) {
 	// when an org membership is deleted, the user default org should be updated
 	// we need to allow the request because this is not for the user making the request
