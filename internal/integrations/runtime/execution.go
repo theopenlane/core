@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/riverqueue/river"
-	"github.com/stripe/stripe-go/v84"
+	"github.com/stripe/stripe-go/v86"
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"

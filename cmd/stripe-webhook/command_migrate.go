@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/stripe/stripe-go/v84"
+	"github.com/stripe/stripe-go/v86"
 	"github.com/urfave/cli/v3"
 
 	"github.com/theopenlane/core/pkg/entitlements"

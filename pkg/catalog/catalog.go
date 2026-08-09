@@ -15,7 +15,7 @@ import (
 	"github.com/pmezard/go-difflib/difflib"
 	"github.com/rs/zerolog/log"
 
-	"github.com/stripe/stripe-go/v84"
+	"github.com/stripe/stripe-go/v86"
 
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/pkg/entitlements"

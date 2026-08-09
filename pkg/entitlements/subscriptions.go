@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/rs/zerolog/log"
-	"github.com/stripe/stripe-go/v84"
+	"github.com/stripe/stripe-go/v86"
 )
 
 const (
@@ -102,6 +102,10 @@ func (sc *StripeClient) CreateSubscriptionWithPrices(ctx context.Context, cust *
 	params.TrialSettings = &stripe.SubscriptionCreateTrialSettingsParams{
 		EndBehavior: &stripe.SubscriptionCreateTrialSettingsEndBehaviorParams{
 			// stripe does not allow you to use subscription schedules with a trial that ends in a "pause" status so we have to cancel instead
+			// worth noting that when using schedules this doesn't occur because it
+			// moves to the next phase first (not a trial) and the schedule get released right before the invoice is created
+			// because of the auto release so this doesn't actually happen right away
+			// instead the status goes to past_due
 			MissingPaymentMethod: stripe.String(stripe.SubscriptionTrialSettingsEndBehaviorMissingPaymentMethodCancel),
 		},
 	}
@@ -217,7 +221,7 @@ func (sc *StripeClient) ListSubscriptions(ctx context.Context, customerID string
 	var subs []*stripe.Subscription
 
 	it := sc.Client.V1Subscriptions.List(ctx, params)
-	for s, err := range it {
+	for s, err := range it.All(ctx) {
 		if err != nil {
 			return nil, err
 		}
@@ -253,6 +257,89 @@ func (sc *StripeClient) MigrateSubscriptionPrice(ctx context.Context, sub *strip
 	params := &stripe.SubscriptionUpdateParams{Items: updateItems}
 
 	return sc.UpdateSubscription(ctx, sub.ID, params)
+}
+
+// prorationBehaviorNone disables proration line items on a subscription update
+// see https://docs.stripe.com/billing/subscriptions/prorations#prorations-and-unpaid-invoices
+// for more info
+const prorationBehaviorNone = "none"
+
+// DowngradeToFreeModules leaves the subscription carrying the given free prices and nothing else:
+//   - an item whose price is not in the list is deleted
+//   - an item already on one of the listed prices is left untouched
+//
+// It is used once stripe has given up retrying a failed payment. Dropping the organization to the
+// free modules leaves the subscription in place so the customer can recover by adding a payment
+// method, where cancelling would tear down their access entirely.
+//
+// If a schedule is attached it is released first, so that any pending phase cannot put the paid
+// items back at the next transition
+func (sc *StripeClient) DowngradeToFreeModules(ctx context.Context, sub *stripe.Subscription, freePriceIDs []string) (*stripe.Subscription, error) {
+	if sub == nil || len(freePriceIDs) == 0 {
+		return sub, nil
+	}
+
+	if err := sc.removeSchedule(ctx, sub); err != nil {
+		return nil, err
+	}
+
+	items := buildOnlyPricesItems(sub, freePriceIDs)
+	if len(items) == 0 {
+		return sub, nil
+	}
+
+	return sc.UpdateSubscription(ctx, sub.ID, &stripe.SubscriptionUpdateParams{
+		Items: items,
+		// the customer is already behind on payment, generating proration line items on the way
+		// down just adds more to a balance they are not paying
+		ProrationBehavior: stripe.String(prorationBehaviorNone),
+	})
+}
+
+// removeSchedule detaches any subscription schedule from the subscription, leaving the subscription itself in place without future phases
+func (sc *StripeClient) removeSchedule(ctx context.Context, sub *stripe.Subscription) error {
+	if sub == nil || sub.Schedule == nil || sub.Schedule.ID == "" {
+		return nil
+	}
+
+	if _, err := sc.Client.V1SubscriptionSchedules.Release(ctx, sub.Schedule.ID, &stripe.SubscriptionScheduleReleaseParams{}); err != nil {
+		log.Err(err).Str("schedule_id", sub.Schedule.ID).Msg("failed to release subscription schedule")
+
+		return err
+	}
+
+	return nil
+}
+
+// buildOnlyPricesItems returns the item changes that remove everything except the given prices.
+// Items already on one of those prices are left out of the result entirely so they keep their
+// existing item id rather than being deleted and recreated. Every subscription carries the free base
+// module, so there is always something left behind and nothing needs adding
+func buildOnlyPricesItems(sub *stripe.Subscription, priceIDs []string) []*stripe.SubscriptionUpdateItemParams {
+	if sub == nil || sub.Items == nil {
+		return nil
+	}
+
+	keep := make(map[string]bool, len(priceIDs))
+	for _, id := range priceIDs {
+		keep[id] = true
+	}
+
+	var items []*stripe.SubscriptionUpdateItemParams
+
+	// stripe removes an item when it is passed back with deleted set
+	for _, item := range sub.Items.Data {
+		if item.Price != nil && keep[item.Price.ID] {
+			continue
+		}
+
+		items = append(items, &stripe.SubscriptionUpdateItemParams{
+			ID:      stripe.String(item.ID),
+			Deleted: stripe.Bool(true),
+		})
+	}
+
+	return items
 }
 
 // UpdateSubscription updates a subscription
