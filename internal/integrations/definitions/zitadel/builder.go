@@ -31,7 +31,6 @@ func Builder() registry.Builder {
 					Name:        "Zitadel Personal Access Token",
 					Description: "Personal Access Token used to access Zitadel instance data.",
 					Schema:      zitadelPATCredentialSchema,
-					Recommended: true,
 				},
 				{
 					Ref:         zitadelOAuthCredential.ID(),
