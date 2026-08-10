@@ -1,0 +1,16 @@
+package {{ name }}
+
+import "errors"
+
+var (
+	// ErrCredentialMetadataRequired indicates no credential metadata was provided
+	ErrCredentialMetadataRequired = errors.New("{{ name }}: credential metadata required")
+	// ErrMetadataDecode indicates credential metadata could not be decoded
+	ErrMetadataDecode = errors.New("{{ name }}: failed to decode credential metadata")
+	// ErrAPITokenMissing indicates the API token was not supplied
+	ErrAPITokenMissing = errors.New("{{ name }}: api token missing")
+	// ErrHealthCheckFailed indicates the health check request failed
+	ErrHealthCheckFailed = errors.New("{{ name }}: health check failed")
+	// ErrResultEncode indicates an operation result could not be serialized
+	ErrResultEncode = errors.New("{{ name }}: result encode failed")
+)
