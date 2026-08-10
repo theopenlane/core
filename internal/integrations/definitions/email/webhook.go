@@ -13,6 +13,7 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // resendWebhookEvent represents the structure of a Resend webhook event payload
@@ -30,15 +31,20 @@ type resendWebhookData struct {
 	// CreatedAt is the timestamp when the event occurred
 	CreatedAt string `json:"created_at"`
 	// Tags are the custom tags attached to the email for tracking purposes
-	Tags []resendWebhookTag `json:"tags"`
-}
-
-// resendWebhookTag represents a single tag from a Resend webhook event
-type resendWebhookTag struct {
-	// Name is the tag key
-	Name string `json:"name"`
-	// Value is the tag value
-	Value string `json:"value"`
+	// Resend sends this as:
+	//
+	//	"tags": {
+	//	  "assessment_response_id": "...",
+	//	  "is_test": "true"
+	//	}
+	//
+	// not:
+	//
+	//	"tags": [
+	//	  {"name": "is_test", "value": "true"},
+	//	  {"name": "assessment_response_id", "value": "..."}
+	//	]
+	Tags map[string]string `json:"tags"`
 }
 
 // ResendWebhook implements verification and event resolution for inbound Resend webhooks
@@ -79,6 +85,8 @@ func (w ResendWebhook) Verify(req types.WebhookInboundRequest) error {
 func (ResendWebhook) Event(req types.WebhookInboundRequest) (types.WebhookReceivedEvent, error) {
 	var event resendWebhookEvent
 	if err := json.Unmarshal(req.Payload, &event); err != nil {
+		logx.FromContext(req.Request.Context()).Error().Err(err).Msg("failed decoding resend webhook event")
+
 		return types.WebhookReceivedEvent{}, ErrWebhookPayloadInvalid
 	}
 
@@ -94,6 +102,8 @@ func (ResendWebhook) Event(req types.WebhookInboundRequest) (types.WebhookReceiv
 func (ResendDeliveryEvent) Handle(ctx context.Context, req types.WebhookHandleRequest) error {
 	var event resendWebhookEvent
 	if err := json.Unmarshal(req.Event.Payload, &event); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed decoding resend webhook delivery event")
+
 		return ErrWebhookPayloadInvalid
 	}
 
@@ -103,36 +113,21 @@ func (ResendDeliveryEvent) Handle(ctx context.Context, req types.WebhookHandleRe
 
 	db := ent.FromContext(ctx)
 
-	tagMap := extractTags(event.Data.Tags)
+	isTest := event.Data.Tags[TagIsTest] == "true"
 
-	isTest := tagMap[TagIsTest] == "true"
-
-	if assessmentResponseID := tagMap[TagAssessmentResponseID]; assessmentResponseID != "" {
+	if assessmentResponseID := event.Data.Tags[TagAssessmentResponseID]; assessmentResponseID != "" {
 		if err := updateAssessmentResponse(ctx, db, assessmentResponseID, event, isTest); err != nil {
 			return err
 		}
 	}
 
-	if campaignTargetID := tagMap[TagCampaignTargetID]; campaignTargetID != "" && !isTest {
+	if campaignTargetID := event.Data.Tags[TagCampaignTargetID]; campaignTargetID != "" && !isTest {
 		if err := updateCampaignTarget(ctx, db, campaignTargetID, "", event); err != nil {
 			return err
 		}
 	}
 
 	return nil
-}
-
-// extractTags builds a key→value map from Resend webhook tags
-func extractTags(tags []resendWebhookTag) map[string]string {
-	m := make(map[string]string, len(tags))
-
-	for _, tag := range tags {
-		if tag.Name != "" && tag.Value != "" {
-			m[tag.Name] = tag.Value
-		}
-	}
-
-	return m
 }
 
 // updateAssessmentResponse applies delivery events to an assessment response record
