@@ -20,17 +20,12 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/assethistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/campaignhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/campaigntargethistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/checkresulthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/contacthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/controlhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/controlimplementationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/controlobjectivehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/customdomainhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/directoryaccounthistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/directorygrouphistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/directorymembershiphistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/discussionhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/documentdatahistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/emailtemplatehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/entityhistory"
@@ -44,7 +39,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/groupsettinghistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/hushhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/identityholderhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/integrationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/internalpolicyhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/jobtemplatehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/mappabledomainhistory"
@@ -56,7 +50,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/organizationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/organizationsettinghistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/orgmembershiphistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/orgsubscriptionhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/platformhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/procedurehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/programhistory"
@@ -64,7 +57,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/remediationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/reviewhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/riskhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/scanhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/scheduledjobhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/sladefinitionhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/standardhistory"
@@ -90,9 +82,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/workflowassignmenthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/workflowassignmenttargethistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/workflowdefinitionhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/workfloweventhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/workflowinstancehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/workflowobjectrefhistory"
 )
 
 // ent aliases to avoid import conflicts in user's code.
@@ -159,16 +148,11 @@ func checkColumn(t, c string) error {
 			assethistory.Table:                      assethistory.ValidColumn,
 			campaignhistory.Table:                   campaignhistory.ValidColumn,
 			campaigntargethistory.Table:             campaigntargethistory.ValidColumn,
-			checkresulthistory.Table:                checkresulthistory.ValidColumn,
 			contacthistory.Table:                    contacthistory.ValidColumn,
 			controlhistory.Table:                    controlhistory.ValidColumn,
 			controlimplementationhistory.Table:      controlimplementationhistory.ValidColumn,
 			controlobjectivehistory.Table:           controlobjectivehistory.ValidColumn,
 			customdomainhistory.Table:               customdomainhistory.ValidColumn,
-			dnsverificationhistory.Table:            dnsverificationhistory.ValidColumn,
-			directoryaccounthistory.Table:           directoryaccounthistory.ValidColumn,
-			directorygrouphistory.Table:             directorygrouphistory.ValidColumn,
-			directorymembershiphistory.Table:        directorymembershiphistory.ValidColumn,
 			discussionhistory.Table:                 discussionhistory.ValidColumn,
 			documentdatahistory.Table:               documentdatahistory.ValidColumn,
 			emailtemplatehistory.Table:              emailtemplatehistory.ValidColumn,
@@ -183,7 +167,6 @@ func checkColumn(t, c string) error {
 			groupsettinghistory.Table:               groupsettinghistory.ValidColumn,
 			hushhistory.Table:                       hushhistory.ValidColumn,
 			identityholderhistory.Table:             identityholderhistory.ValidColumn,
-			integrationhistory.Table:                integrationhistory.ValidColumn,
 			internalpolicyhistory.Table:             internalpolicyhistory.ValidColumn,
 			jobtemplatehistory.Table:                jobtemplatehistory.ValidColumn,
 			mappabledomainhistory.Table:             mappabledomainhistory.ValidColumn,
@@ -193,7 +176,6 @@ func checkColumn(t, c string) error {
 			notificationpreferencehistory.Table:     notificationpreferencehistory.ValidColumn,
 			notificationtemplatehistory.Table:       notificationtemplatehistory.ValidColumn,
 			orgmembershiphistory.Table:              orgmembershiphistory.ValidColumn,
-			orgsubscriptionhistory.Table:            orgsubscriptionhistory.ValidColumn,
 			organizationhistory.Table:               organizationhistory.ValidColumn,
 			organizationsettinghistory.Table:        organizationsettinghistory.ValidColumn,
 			platformhistory.Table:                   platformhistory.ValidColumn,
@@ -204,7 +186,6 @@ func checkColumn(t, c string) error {
 			reviewhistory.Table:                     reviewhistory.ValidColumn,
 			riskhistory.Table:                       riskhistory.ValidColumn,
 			sladefinitionhistory.Table:              sladefinitionhistory.ValidColumn,
-			scanhistory.Table:                       scanhistory.ValidColumn,
 			scheduledjobhistory.Table:               scheduledjobhistory.ValidColumn,
 			standardhistory.Table:                   standardhistory.ValidColumn,
 			subcontrolhistory.Table:                 subcontrolhistory.ValidColumn,
@@ -229,9 +210,6 @@ func checkColumn(t, c string) error {
 			workflowassignmenthistory.Table:         workflowassignmenthistory.ValidColumn,
 			workflowassignmenttargethistory.Table:   workflowassignmenttargethistory.ValidColumn,
 			workflowdefinitionhistory.Table:         workflowdefinitionhistory.ValidColumn,
-			workfloweventhistory.Table:              workfloweventhistory.ValidColumn,
-			workflowinstancehistory.Table:           workflowinstancehistory.ValidColumn,
-			workflowobjectrefhistory.Table:          workflowobjectrefhistory.ValidColumn,
 		})
 	})
 	return columnCheck(t, c)

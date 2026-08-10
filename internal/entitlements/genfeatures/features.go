@@ -13,30 +13,30 @@ import (
 
 	"github.com/rs/zerolog/log"
 	"golang.org/x/tools/imports"
+
+	"github.com/theopenlane/core/common/models"
 )
 
 const (
 	defaultPerm = 0755
 )
 
-// GenerateModulePerSchema walks through the schema files, parses them
-// and generates a static file containing the schema and it's associated modules
-func GenerateModulePerSchema(schemaPath, featureMapDir string) error {
-	if err := os.MkdirAll(featureMapDir, defaultPerm); err != nil {
-		return fmt.Errorf("creating feature map directory: %w", err)
-	}
+// ModuleEntry pairs an ent schema name with the module constants returned by its
+// Modules() method
+type ModuleEntry struct {
+	SchemaName string
+	Modules    []string
+}
 
+// ParseModuleEntries walks through the schema files at schemaPath and returns the
+// module requirements declared by each schema's Modules() method
+func ParseModuleEntries(schemaPath string) ([]ModuleEntry, error) {
 	schemaFiles, err := filepath.Glob(filepath.Join(schemaPath, "*.go"))
 	if err != nil {
-		return fmt.Errorf("finding schema files: %w", err)
+		return nil, fmt.Errorf("finding schema files: %w", err)
 	}
 
-	type moduleEntry struct {
-		SchemaName string
-		Modules    []string
-	}
-
-	var entries []moduleEntry
+	var entries []ModuleEntry
 
 	for _, schemaFile := range schemaFiles {
 		fileName := filepath.Base(schemaFile)
@@ -48,11 +48,50 @@ func GenerateModulePerSchema(schemaPath, featureMapDir string) error {
 
 		schemaName, modules := parseSchemaInfo(schemaFile)
 		if schemaName != "" && len(modules) > 0 {
-			entries = append(entries, moduleEntry{
+			entries = append(entries, ModuleEntry{
 				SchemaName: schemaName,
 				Modules:    modules,
 			})
 		}
+	}
+
+	return entries, nil
+}
+
+// ParseSchemaModules returns the modules required by each schema, keyed by schema name,
+// resolving the constants parsed off the schema into the modules they hold
+func ParseSchemaModules(schemaPath string) (map[string][]models.OrgModule, error) {
+	entries, err := ParseModuleEntries(schemaPath)
+	if err != nil {
+		return nil, err
+	}
+
+	modules := make(map[string][]models.OrgModule, len(entries))
+
+	for _, entry := range entries {
+		for _, constName := range entry.Modules {
+			module, err := models.OrgModuleFromConstName(constName)
+			if err != nil {
+				return nil, err
+			}
+
+			modules[entry.SchemaName] = append(modules[entry.SchemaName], module)
+		}
+	}
+
+	return modules, nil
+}
+
+// GenerateModulePerSchema walks through the schema files, parses them
+// and generates a static file containing the schema and it's associated modules
+func GenerateModulePerSchema(schemaPath, featureMapDir string) error {
+	if err := os.MkdirAll(featureMapDir, defaultPerm); err != nil {
+		return fmt.Errorf("creating feature map directory: %w", err)
+	}
+
+	entries, err := ParseModuleEntries(schemaPath)
+	if err != nil {
+		return err
 	}
 
 	funcMap := template.FuncMap{
@@ -67,7 +106,7 @@ func GenerateModulePerSchema(schemaPath, featureMapDir string) error {
 	outputPath := filepath.Join(featureMapDir, "features.go")
 
 	data := struct {
-		Entries []moduleEntry
+		Entries []ModuleEntry
 	}{
 		Entries: entries,
 	}

@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/entx/history"
 	"github.com/theopenlane/iam/entfga"
 )
 
@@ -219,5 +220,8 @@ func (Scan) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.FileCategory(SchemaScan),
 		entfga.SelfAccessChecks(),
+		history.Annotations{
+			Exclude: true,
+		},
 	}
 }

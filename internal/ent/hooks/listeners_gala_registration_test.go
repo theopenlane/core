@@ -29,6 +29,23 @@ func TestRegisterGalaEntitlementListeners(t *testing.T) {
 	require.False(t, registry.InterestedIn(gala.TopicName(entgen.TypeOrganizationSetting), ent.OpDelete.String()))
 }
 
+func TestRegisterGalaOrganizationCleanupListeners(t *testing.T) {
+	t.Parallel()
+
+	registry := gala.NewRegistry()
+
+	ids, err := RegisterGalaOrganizationCleanupListeners(registry)
+	require.NoError(t, err)
+	require.Len(t, ids, 1)
+
+	topic := eventqueue.MutationTopicName(eventqueue.MutationConcernDirect, entgen.TypeOrganization)
+	require.True(t, registry.InterestedIn(topic, eventqueue.SoftDeleteOne))
+	require.True(t, registry.InterestedIn(topic, ent.OpDelete.String()))
+	require.True(t, registry.InterestedIn(topic, ent.OpDeleteOne.String()))
+	require.False(t, registry.InterestedIn(topic, ent.OpCreate.String()))
+	require.False(t, registry.InterestedIn(topic, ent.OpUpdate.String()))
+}
+
 func TestRegisterGalaOrganizationAvatarListeners(t *testing.T) {
 	t.Parallel()
 
@@ -169,6 +186,22 @@ func TestRegisterGalaDocumentAssociationListeners(t *testing.T) {
 		require.True(t, registry.InterestedIn(topic, ent.OpCreate.String()))
 		require.False(t, registry.InterestedIn(topic, ent.OpUpdate.String()))
 	}
+}
+
+func TestRegisterGalaCampaignRecurringListeners(t *testing.T) {
+	t.Parallel()
+
+	registry := gala.NewRegistry()
+
+	ids, err := RegisterGalaCampaignRecurringListeners(registry)
+	require.NoError(t, err)
+	require.Len(t, ids, 1)
+
+	topic := eventqueue.MutationTopicName(eventqueue.MutationConcernDirect, entgen.TypeCampaign)
+	require.True(t, registry.InterestedIn(topic, ent.OpUpdate.String()))
+	require.True(t, registry.InterestedIn(topic, ent.OpUpdateOne.String()))
+	require.False(t, registry.InterestedIn(topic, ent.OpCreate.String()))
+	require.False(t, registry.InterestedIn(topic, ent.OpDelete.String()))
 }
 
 func TestRegisterGalaQuestionnaireTransformListeners(t *testing.T) {

@@ -78,6 +78,29 @@ func (OrgMembership) Fields() []ent.Field {
 			).
 			Optional().
 			Nillable(),
+		field.Bool("tfa_enforced").
+			Comment("member must configure multifactor authentication for this organization even when organization-wide TFA enforcement is disabled").
+			Default(false).
+			Optional(),
+		field.String("tfa_enforced_reason").
+			Comment("reason the member was required to configure multifactor authentication").
+			Optional().
+			Nillable(),
+		field.String("tfa_enforced_by").
+			Comment("id of the user that required multifactor authentication; stamped server-side, not settable via the API").
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput | entgql.SkipMutationUpdateInput),
+			).
+			Optional().
+			Nillable(),
+		field.Time("tfa_enforced_at").
+			Comment("when multifactor authentication was required; stamped server-side, not settable via the API").
+			GoType(models.DateTime{}).
+			Annotations(
+				entgql.Skip(entgql.SkipMutationCreateInput | entgql.SkipMutationUpdateInput),
+			).
+			Optional().
+			Nillable(),
 	}
 }
 
@@ -149,7 +172,7 @@ func (OrgMembership) Hooks() []ent.Hook {
 		hooks.HookOrgMembers(),
 		hooks.HookMembershipSelf("org_memberships"),
 		hooks.HookOrgMembersDelete(),
-		hooks.SSOExemptionAttribution(),
+		hooks.AuthEnforcementAttribution(),
 	}
 }
 

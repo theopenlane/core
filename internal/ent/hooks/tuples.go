@@ -11,6 +11,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/internal/ent/hooks/contextx"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/logx"
@@ -31,6 +32,10 @@ func HookDeletePermissions() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
+			// the ids have to be resolved before the mutation runs, a bulk hard delete resolves its
+			// predicate against rows that no longer exist once the delete has executed
+			objIDs := getMutationIDs(ctx, mut)
+
 			// run the mutation first
 			retVal, err := next.Mutate(ctx, m)
 			if err != nil {
@@ -38,7 +43,7 @@ func HookDeletePermissions() ent.Hook {
 			}
 
 			// then delete the permissions
-			if err := DeletePermissionsHook(ctx, mut); err != nil {
+			if err := deletePermissionsForIDs(ctx, mut, objIDs); err != nil {
 				return nil, err
 			}
 
@@ -49,8 +54,14 @@ func HookDeletePermissions() ent.Hook {
 	)
 }
 
-// DeletePermissionsHook deletes all relationship tuples associated with the object(s) in the mutation
+// DeletePermissionsHook deletes all relationship tuples associated with the object(s) in the mutation.
+// The ids are resolved from the mutation, so this must be called before the records are hard deleted
 func DeletePermissionsHook(ctx context.Context, m utils.GenericMutation) error {
+	return deletePermissionsForIDs(ctx, m, getMutationIDs(ctx, m))
+}
+
+// deletePermissionsForIDs deletes all relationship tuples for the given object ids
+func deletePermissionsForIDs(ctx context.Context, m utils.GenericMutation, objIDs []string) error {
 	client := utils.AuthzClientFromContext(ctx)
 	if client == nil {
 		logx.FromContext(ctx).Warn().Msg("Authz client not found in context, skipping deleting relationship tuples")
@@ -63,7 +74,6 @@ func DeletePermissionsHook(ctx context.Context, m utils.GenericMutation) error {
 		return nil
 	}
 
-	objIDs := getMutationIDs(ctx, m)
 	if len(objIDs) == 0 {
 		logx.FromContext(ctx).Debug().Msg("no object IDs found in mutation, skipping deleting relationship tuples")
 
@@ -90,13 +100,19 @@ func DeletePermissionsHook(ctx context.Context, m utils.GenericMutation) error {
 
 // skipDeleteHook checks if the delete hook should be skipped based on the context and mutation
 func skipDeleteHook(ctx context.Context, m utils.GenericMutation) bool {
-	// skip if internal request
-	if rule.IsInternalRequest(ctx) {
+	// memberships go through the auth from mutation hooks as a special case
+	if strings.Contains(m.Type(), "Membership") {
 		return true
 	}
 
-	// memberships go through the auth from mutation hooks as a special case
-	if strings.Contains(m.Type(), "Membership") {
+	// the organization cascade delete runs as an internal request so it can bypass privacy rules,
+	// but the records it removes still need their tuples cleaned up, so it opts back in explicitly
+	if contextx.TupleCleanupEnabled(ctx) {
+		return false
+	}
+
+	// skip if internal request
+	if rule.IsInternalRequest(ctx) {
 		return true
 	}
 

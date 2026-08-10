@@ -5,8 +5,9 @@ import (
 	"testing"
 	"time"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/stripe/stripe-go/v84"
+	"github.com/stripe/stripe-go/v86"
 	"github.com/theopenlane/core/common/models"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 )
@@ -98,6 +99,7 @@ type moduleBuilder struct {
 	visibility      string
 	moduleLookupKey string
 	active          bool
+	activeSet       bool
 }
 
 func (b *moduleBuilder) SetModule(m models.OrgModule) *moduleBuilder { b.module = m; return b }
@@ -106,7 +108,12 @@ func (b *moduleBuilder) SetStripePriceID(id string) *moduleBuilder   { b.stripeP
 func (b *moduleBuilder) SetStatus(s string) *moduleBuilder           { b.status = s; return b }
 func (b *moduleBuilder) SetVisibility(v string) *moduleBuilder       { b.visibility = v; return b }
 func (b *moduleBuilder) SetModuleLookupKey(k string) *moduleBuilder  { b.moduleLookupKey = k; return b }
-func (b *moduleBuilder) SetActive(a bool) *moduleBuilder             { b.active = a; return b }
+func (b *moduleBuilder) SetActive(a bool) *moduleBuilder {
+	b.active = a
+	b.activeSet = true
+
+	return b
+}
 
 func TestStripePriceToOrgPrice(t *testing.T) {
 	p := &stripe.Price{
@@ -340,4 +347,68 @@ func TestApplyStripeSubscriptionItem(t *testing.T) {
 
 	require.Equal(t, b, got)
 	require.Equal(t, expected, b)
+}
+
+func TestApplyStripeSubscriptionItemActiveByStatus(t *testing.T) {
+	testCases := []struct {
+		name              string
+		status            stripe.SubscriptionStatus
+		expectDeactivated bool
+	}{
+		{
+			name:   "active leaves the module alone",
+			status: stripe.SubscriptionStatusActive,
+		},
+		{
+			name:   "trialing leaves the module alone",
+			status: stripe.SubscriptionStatusTrialing,
+		},
+		{
+			// stripe retries a failed payment for the whole retry window, deactivating here strips
+			// the feature tuples on the first failure and they only return once the subscription is
+			// active again, which rarely happens because it gets cancelled first
+			name:   "past due keeps the module active while stripe retries",
+			status: stripe.SubscriptionStatusPastDue,
+		},
+		{
+			name:              "canceled deactivates the module",
+			status:            stripe.SubscriptionStatusCanceled,
+			expectDeactivated: true,
+		},
+		{
+			name:              "paused deactivates the module",
+			status:            stripe.SubscriptionStatusPaused,
+			expectDeactivated: true,
+		},
+		{
+			// unpaid is where stripe leaves the subscription once it stops retrying, by then it has
+			// been downgraded onto the free modules and those stay usable
+			name:   "unpaid keeps the free modules usable",
+			status: stripe.SubscriptionStatusUnpaid,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			item := &stripe.SubscriptionItem{
+				Price: &stripe.Price{
+					ID:        "price_123",
+					Recurring: &stripe.PriceRecurring{Interval: stripe.PriceRecurringIntervalMonth},
+					Product:   &stripe.Product{Metadata: map[string]string{"module": "mod1"}},
+				},
+			}
+
+			b := &moduleBuilder{}
+			ApplyStripeSubscriptionItem(context.Background(), b, item, nil, string(tc.status))
+
+			if tc.expectDeactivated {
+				assert.True(t, b.activeSet, "expected the module to be deactivated")
+				assert.False(t, b.active)
+
+				return
+			}
+
+			assert.False(t, b.activeSet, "expected the active flag to be left untouched")
+		})
+	}
 }

@@ -32,6 +32,8 @@ const (
 	// ExternalSource is used to mark a field or object as being populated by an external source which
 	// would affect the ability to update the field
 	ExternalSource = "externalSource"
+	// Modules is used to indicate the modules an organization must have enabled to access the object
+	Modules = "modules"
 )
 
 // ImplementAllDirectives is a helper function that can be used to add all active directives to the gqlgen config

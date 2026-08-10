@@ -214,21 +214,25 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 			return nil, generated.ErrPermissionDenied
 		}
 
-		allow, err := r.db.Authz.CheckAccess(ctx, fgax.AccessCheck{
-			ObjectType:  generated.TypeProgram,
-			ObjectID:    *programID,
-			Relation:    fgax.CanEdit,
-			SubjectID:   caller.SubjectID,
-			SubjectType: caller.SubjectType(),
-		})
-		if err != nil {
-			return nil, err
-		}
+		// support users should skip this check but for other users,
+		// we still want to verify they have edit access to the program
+		if !caller.Has(auth.CapOrgSupport) {
+			allow, err := r.db.Authz.CheckAccess(ctx, fgax.AccessCheck{
+				ObjectType:  generated.TypeProgram,
+				ObjectID:    *programID,
+				Relation:    fgax.CanEdit,
+				SubjectID:   caller.SubjectID,
+				SubjectType: caller.SubjectType(),
+			})
+			if err != nil {
+				return nil, err
+			}
 
-		if !allow {
-			logger.Error().Str("organization_id", caller.OrganizationID).Str("user_id", caller.SubjectID).Msg("no access to edit specified program")
+			if !allow {
+				logger.Error().Str("organization_id", caller.OrganizationID).Str("user_id", caller.SubjectID).Msg("no access to edit specified program")
 
-			return nil, generated.ErrPermissionDenied
+				return nil, generated.ErrPermissionDenied
+			}
 		}
 	}
 

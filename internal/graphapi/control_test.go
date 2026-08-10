@@ -822,6 +822,18 @@ func TestMutationCreateControlsByClone(t *testing.T) {
 			ctx:                sharedTestUser1.UserCtx,
 		},
 		{
+			name: "happy path for support user, all controls under standard with program",
+			request: testclient.CloneControlInput{
+				ControlIDs: controlIDs,
+				ProgramID:  &program.ID,
+			},
+			expectedControls:   controls,
+			expectedStandard:   &publicStandard.ShortName,
+			expectedNumProgram: 1,
+			client:             suite.client.api,
+			ctx:                newSupportCtx(sharedTestUser1.UserCtx, sharedTestUser1.OrganizationID),
+		},
+		{
 			name: "all controls under standard with program no access",
 			request: testclient.CloneControlInput{
 				ControlIDs: controlIDs,

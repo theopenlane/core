@@ -14,6 +14,7 @@ import (
 
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/entx/history"
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/common/enums"
@@ -394,5 +395,8 @@ func (d DirectoryAccount) Annotations() []schema.Annotation {
 			},
 		),
 		entx.IntegrationMappingSchema().StockPersist(),
+		history.Annotations{
+			Exclude: true,
+		},
 	}
 }

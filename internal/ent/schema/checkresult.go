@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/history"
 	"github.com/theopenlane/iam/entfga"
 )
 
@@ -133,6 +134,9 @@ func (CheckResult) Annotations() []schema.Annotation {
 		entfga.SelfAccessChecks(),
 		entx.NewExportable(),
 		entx.IntegrationMappingSchema().StockPersist(),
+		history.Annotations{
+			Exclude: true,
+		},
 	}
 }
 

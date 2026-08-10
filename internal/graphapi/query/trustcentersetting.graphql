@@ -222,6 +222,7 @@ mutation UpdateTrustCenterSetting ($updateTrustCenterSettingId: ID!, $input: Upd
 			backgroundColor
 			accentColor
 			environment
+			securityContact
 		}
 	}
 }

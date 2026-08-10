@@ -19,6 +19,17 @@ func (m OrgModule) String() string {
 	return string(m)
 }
 
+// OrgModuleFromConstName returns the module held by the named constant,
+// e.g. CatalogComplianceModule returns compliance_module
+func OrgModuleFromConstName(name string) (OrgModule, error) {
+	module, ok := OrgModuleByConstName[name]
+	if !ok {
+		return "", fmt.Errorf("unknown OrgModule constant: %q", name) //nolint:err113
+	}
+
+	return module, nil
+}
+
 // UnmarshalText implements encoding.TextUnmarshaler
 func (m *OrgModule) UnmarshalText(text []byte) error {
 	*m = OrgModule(text)

@@ -168,7 +168,7 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 				}
 
 				// Add claims to context for use in downstream processing and continue handlers
-				caller, err = createCallerFromClaims(reqCtx, conf.DBClient, claims, auth.JWTAuthentication)
+				caller, err = createCallerFromClaims(reqCtx, conf, claims, auth.JWTAuthentication)
 				if err != nil {
 					return unauthorized(c, err, conf, validator)
 				}
@@ -222,7 +222,7 @@ func AuthenticateTransport(ctx context.Context, initPayload transport.InitPayloa
 		return nil, ErrUnableToAuthenticateTransport
 	}
 
-	return createCallerFromClaims(ctx, authOptions.DBClient, claims, auth.JWTAuthentication)
+	return createCallerFromClaims(ctx, authOptions, claims, auth.JWTAuthentication)
 }
 
 // getTokenType returns the authentication type based on the bearer token
@@ -313,14 +313,19 @@ func Reauthenticate(conf *Options, validator tokens.Validator) func(c echo.Conte
 }
 
 // createCallerFromClaims creates a Caller directly from the JWT claims provided
-func createCallerFromClaims(ctx context.Context, dbClient *ent.Client, claims *tokens.Claims, authType auth.AuthenticationType) (*auth.Caller, error) {
+func createCallerFromClaims(ctx context.Context, opts *Options, claims *tokens.Claims, authType auth.AuthenticationType) (*auth.Caller, error) {
+	// if this is the support user, just return a new caller for that
+	if opts.supportSubjectID != "" && claims.UserID == opts.supportSubjectID {
+		return auth.NewOrgSupportCaller(claims.OrgID, claims.UserID, opts.supportName, opts.supportEmail), nil
+	}
+
 	// get the user ID from the claims
-	user, err := dbClient.User.Get(ctx, claims.UserID)
+	user, err := opts.DBClient.User.Get(ctx, claims.UserID)
 	if err != nil {
 		return nil, err
 	}
 
-	systemAdmin, err := isSystemAdminFunc(ctx, dbClient, user.ID, auth.UserSubjectType)
+	systemAdmin, err := isSystemAdminFunc(ctx, opts.DBClient, user.ID, auth.UserSubjectType)
 	if err != nil {
 		return nil, err
 	}
@@ -335,7 +340,7 @@ func createCallerFromClaims(ctx context.Context, dbClient *ent.Client, claims *t
 		Capabilities:       capabilitiesFor(systemAdmin),
 	}
 
-	role := getOrgRoleFunc(ctx, dbClient, user.ID, claims.OrgID)
+	role := getOrgRoleFunc(ctx, opts.DBClient, user.ID, claims.OrgID)
 	if role != nil {
 		caller.OrganizationRole = *role
 	}

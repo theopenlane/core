@@ -1,0 +1,70 @@
+{{/* The line below tells Intellij/GoLand to enable the autocompletion based on the *gen.Graph type. */}}
+{{/* gotype: entgo.io/ent/entc/gen.Graph */}}
+
+{{ define "history_cleanup" }}
+
+{{/* Add the base header for the generated file */}}
+{{ $pkg := base $.Config.Package }}
+{{ template "header" $ }}
+
+import (
+	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/hooks/contextx"
+	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/entx/history"
+	{{- range $node := $.Nodes }}
+		{{- if or ( not $node.Annotations.History ) (eq $node.Annotations.History.Exclude false) }}
+	"github.com/theopenlane/core/internal/ent/historygenerated/{{ $node.Name | lower }}history"
+		{{- end }}
+	{{- end }}
+)
+
+// PurgeHistoryEnabled reports whether the current operation is purging history rather than recording
+// it. The generated history hooks use this as their skipper, a delete that is purging history must
+// not write a new row recording that delete, it would undo the purge that ran just before it
+func PurgeHistoryEnabled(ctx context.Context) bool {
+	return contextx.PurgeHistoryEnabled(ctx)
+}
+
+	{{- range $node := $.Nodes }}
+		{{/* only schemas that actually track history have a history table to purge */}}
+		{{- if or ( not $node.Annotations.History ) (eq $node.Annotations.History.Exclude false) }}
+			{{- $pkgName := $node.Name | lower }}
+
+			{{/* the ids are matched with a sub-select instead of being loaded into memory, an
+			     organization can own hundreds of thousands of records and materializing every id
+			     to build an IN list would blow up both memory and the statement size */}}
+// Purge{{ $node.Name }}History removes the history rows belonging to every {{ $pkgName }} matching
+// the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
+// deletes that should keep their audit trail are unaffected.
+// This has to run before the {{ $pkgName }} records themselves are deleted, the rows are matched
+// with a sub-select against the {{ $pkgName }} table
+func Purge{{ $node.Name }}History(ctx context.Context, ps ...predicate.{{ $node.Name }}) error {
+	if !contextx.PurgeHistoryEnabled(ctx) {
+		return nil
+	}
+
+	client := FromContext(ctx)
+	if client == nil || client.HistoryClient == nil {
+		return nil
+	}
+
+	refs := sql.Select({{ $pkgName }}.FieldID).From(sql.Table({{ $pkgName }}.Table))
+	for _, p := range ps {
+		p(refs)
+	}
+
+	if _, err := client.HistoryClient.{{ $node.Name }}History.Delete().Where(func(s *sql.Selector) {
+		s.Where(sql.In({{ $pkgName }}history.FieldRef, refs))
+	}).Exec(history.WithContext(ctx)); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error purging {{ $pkgName }} history")
+
+		return err
+	}
+
+	return nil
+}
+		{{- end }}
+	{{- end }}
+{{ end }}

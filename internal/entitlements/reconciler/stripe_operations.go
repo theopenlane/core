@@ -7,7 +7,7 @@ import (
 	"slices"
 
 	"github.com/rs/zerolog/log"
-	"github.com/stripe/stripe-go/v84"
+	"github.com/stripe/stripe-go/v86"
 
 	"github.com/theopenlane/core/internal/consts"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -67,7 +67,7 @@ func (r *Reconciler) UpdateSubscriptionsCancelBehavior(ctx context.Context, orgI
 			Status: stripe.String(string(stripeSubsStatuses[subs])),
 		})
 
-		for sub, err := range it {
+		for sub, err := range it.All(ctx) {
 			if err != nil {
 				return nil, fmt.Errorf("listing subscriptions: %w", err)
 			}
@@ -169,7 +169,7 @@ func (r *Reconciler) CreateMissingSubscriptionSchedules(ctx context.Context, org
 			},
 			Status: stripe.String(string(stripeSubsStatuses[subs])),
 		})
-		for sub, err := range it {
+		for sub, err := range it.All(ctx) {
 			if err != nil {
 				return nil, fmt.Errorf("listing subscriptions: %w", err)
 			}
@@ -316,7 +316,7 @@ func (r *Reconciler) ReportSubscriptionsWithMissingProducts(ctx context.Context,
 		},
 	})
 
-	for sub, err := range it {
+	for sub, err := range it.All(ctx) {
 		if err != nil {
 			return nil, fmt.Errorf("listing subscriptions: %w", err)
 		}
@@ -453,7 +453,7 @@ func (r *Reconciler) AnalyzeStripeSystemMismatches(ctx context.Context, action s
 			Limit: stripe.Int64(defaultStripePageLimit),
 		}})
 
-	for customer, err := range customerIt {
+	for customer, err := range customerIt.All(ctx) {
 		if err != nil {
 			return nil, fmt.Errorf("listing Stripe customers: %w", err)
 		}
@@ -580,7 +580,7 @@ func (r *Reconciler) CleanupOrphanedStripeCustomers(ctx context.Context) (*Clean
 			Limit: stripe.Int64(defaultStripePageLimit),
 		}})
 
-	for customer, err := range customerIt {
+	for customer, err := range customerIt.All(ctx) {
 		if err != nil {
 			return nil, fmt.Errorf("listing Stripe customers: %w", err)
 		}
@@ -631,7 +631,7 @@ func (r *Reconciler) CleanupOrphanedStripeCustomers(ctx context.Context) (*Clean
 
 		hasActiveSubscriptions := false
 
-		for _, err := range subscriptionIt {
+		for _, err := range subscriptionIt.All(ctx) {
 			if err != nil {
 				log.Error().Err(err).Str("customer_id", customer.ID).Msg("failed to check customer subscriptions")
 				break

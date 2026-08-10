@@ -146,6 +146,9 @@ func (suite *HookTestSuite) setupClient() *generated.Client {
 	_, err = hooks.RegisterGalaTaskRuleListeners(galaRuntime.Registry())
 	require.NoError(t, err)
 
+	_, err = hooks.RegisterGalaCampaignRecurringListeners(galaRuntime.Registry())
+	require.NoError(t, err)
+
 	do.ProvideValue(galaRuntime.Injector(), client)
 
 	client.Use(hooks.EmitGalaEventHook(func() *gala.Gala {

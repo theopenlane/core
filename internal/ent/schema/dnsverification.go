@@ -4,6 +4,7 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 
@@ -14,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/entx/history"
 )
 
 // DNSVerification holds the schema definition for the DNSVerification
@@ -137,4 +139,13 @@ func (DNSVerification) Policy() ent.Policy {
 			rule.AllowMutationIfSystemAdmin(),
 		),
 	)
+}
+
+// Annotations of the DNSVerification
+func (DNSVerification) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		history.Annotations{
+			Exclude: true,
+		},
+	}
 }

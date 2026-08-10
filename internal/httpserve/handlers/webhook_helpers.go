@@ -4,7 +4,7 @@ import (
 	"context"
 	"strings"
 
-	"github.com/stripe/stripe-go/v84"
+	"github.com/stripe/stripe-go/v86"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 

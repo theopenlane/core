@@ -2,6 +2,7 @@ package hooks
 
 import (
 	"context"
+	"strings"
 	"time"
 
 	"entgo.io/ent"
@@ -61,6 +62,12 @@ func HookTrustCenterSetting() ent.Hook {
 
 			if err := setDefaultCompanyName(ctx, m); err != nil {
 				return nil, err
+			}
+
+			// set email to lowercase if provided
+			email, ok := m.SecurityContact()
+			if ok {
+				m.SetSecurityContact(strings.ToLower(email))
 			}
 
 			initializeSubprocessorWatermark(ctx, m)

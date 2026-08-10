@@ -227,7 +227,14 @@ func getEntGqlExtension() *entgql.Extension {
 
 	schemaHooks = append(schemaHooks, xExt.GQLSchemaHooks()...)
 
-	dExt, err := directives.NewExtension()
+	// the modules are parsed from the schema files on each run rather than read from the
+	// generated feature map, which is compiled into this binary and would be a run behind
+	modules, err := genfeatures.ParseSchemaModules(schemaPath)
+	if err != nil {
+		log.Fatal().Err(err).Msg("parsing schema modules")
+	}
+
+	dExt, err := directives.NewExtension(directives.WithModules(modules))
 	if err != nil {
 		log.Fatal().Err(err).Msg("creating directives extension")
 	}
@@ -266,6 +273,19 @@ func getEntHistoryGqlExtension() *entgql.Extension {
 	return gqlExt
 }
 
+// skipper defines what will bypass history logs, this includes
+// purge history on cascade delete as well as
+// if the caller has the cap to bypass audit logs, give to the integration caller
+const skipper = `
+    if PurgeHistoryEnabled(ctx) {
+        return true
+    }
+
+    caller, _ := auth.CallerFromContext(ctx)
+
+    return caller.HasInLineage(auth.CapBypassAuditLog)
+`
+
 // getHistoryExtension generates the history schemas and returns the history extension to be used in the ent codegen
 func getHistoryExtension(hasChanges bool) *history.Extension {
 	// generate the history schemas
@@ -283,6 +303,7 @@ func getHistoryExtension(hasChanges bool) *history.Extension {
 		history.WithFirstRun(false),
 		history.WithAllowedRelation("audit_log_viewer"),
 		history.WithUpdatedByFromSchema(history.ValueTypeString, false),
+		history.WithSkipper(skipper),
 	)
 
 	if hasChanges {

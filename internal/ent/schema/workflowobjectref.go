@@ -9,6 +9,7 @@ import (
 
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/history"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/common/models"
@@ -381,6 +382,9 @@ func (WorkflowObjectRef) Annotations() []schema.Annotation {
 		entx.SchemaSearchable(false),
 		entfga.SelfAccessChecks(),
 		entgql.Skip(entgql.SkipMutationUpdateInput, entgql.SkipMutationCreateInput),
+		history.Annotations{
+			Exclude: true,
+		},
 	}
 }
 
