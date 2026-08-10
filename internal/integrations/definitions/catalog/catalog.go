@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/definitions/googleworkspace"
 	"github.com/theopenlane/core/internal/integrations/definitions/keycloak"
 	"github.com/theopenlane/core/internal/integrations/definitions/microsoftteams"
+	"github.com/theopenlane/core/internal/integrations/definitions/oci"
 	"github.com/theopenlane/core/internal/integrations/definitions/oidclocal"
 	"github.com/theopenlane/core/internal/integrations/definitions/okta"
 	"github.com/theopenlane/core/internal/integrations/definitions/onedrive"
@@ -41,6 +42,7 @@ func Builders(cfg Config, devMode bool) []registry.Builder {
 		googleworkspace.Builder(cfg.GoogleWorkspace),
 		keycloak.Builder(),
 		microsoftteams.Builder(cfg.MicrosoftTeams),
+		oci.Builder(),
 		onedrive.Builder(cfg.OneDrive),
 		oidclocal.Builder(cfg.OIDCLocal),
 		okta.Builder(),

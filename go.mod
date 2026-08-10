@@ -81,6 +81,7 @@ require (
 	github.com/oklog/ulid/v2 v2.1.2
 	github.com/okta/okta-sdk-golang/v6 v6.1.6
 	github.com/openfga/go-sdk v0.8.2
+	github.com/oracle/oci-go-sdk/v65 v65.123.0
 	github.com/pdfcpu/pdfcpu v0.13.0
 	github.com/pkg/errors v0.9.1
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2
@@ -139,6 +140,7 @@ require (
 	github.com/Masterminds/sprig/v3 v3.3.0 // indirect
 	github.com/andybalholm/cascadia v1.3.4 // indirect
 	github.com/go-resty/resty/v2 v2.7.0 // indirect
+	github.com/gofrs/flock v0.10.0 // indirect
 	github.com/google/go-github/v89 v89.0.0 // indirect
 	github.com/hhrutter/lzw v1.0.0 // indirect
 	github.com/hhrutter/pkcs7 v0.2.2 // indirect
@@ -168,6 +170,7 @@ require (
 	github.com/sendgrid/rest v2.6.9+incompatible // indirect
 	github.com/sendgrid/sendgrid-go v3.16.1+incompatible // indirect
 	github.com/shopspring/decimal v1.4.0 // indirect
+	github.com/sony/gobreaker/v2 v2.4.0 // indirect
 	github.com/ssor/bom v0.0.0-20170718123548-6386211fdfcf // indirect
 	github.com/std-uritemplate/std-uritemplate/go/v2 v2.0.8 // indirect
 	github.com/tailscale/hujson v0.0.0-20220506213045-af5ed07155e5 // indirect
@@ -175,6 +178,7 @@ require (
 	github.com/valyala/fastjson v1.6.10 // indirect
 	github.com/vanng822/css v1.0.1 // indirect
 	github.com/vanng822/go-premailer v1.34.0 // indirect
+	github.com/youmark/pkcs8 v0.0.0-20240726163527-a2c0da244d78 // indirect
 	go.yaml.in/yaml/v4 v4.0.0-rc.2 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )

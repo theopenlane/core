@@ -1,0 +1,71 @@
+package {{ name }}
+
+import (
+	"github.com/theopenlane/core/internal/integrations/registry"
+	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/jsonx"
+)
+
+// Builder returns the {{ display }} definition builder
+func Builder() registry.Builder {
+	return registry.Builder(func() (types.Definition, error) {
+		return types.Definition{
+			DefinitionSpec: types.DefinitionSpec{
+				ID:          definitionID.ID(),
+				Family:      "{{ family }}",
+				DisplayName: "{{ display }}",
+				Description: "Collect data from {{ display }}.",
+				Category:    "{{ category }}",
+				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/{{ slug }}",
+				Tags:        []string{"assets"},
+				Active:      false,
+				Visible:     true,
+			},
+			UserInput: &types.UserInputRegistration{
+				Schema: jsonx.SchemaFrom[UserInput](),
+			},
+			CredentialRegistrations: []types.CredentialRegistration{
+				{
+					Ref:         {{ name }}Credential.ID(),
+					Name:        "{{ display }} Credential",
+					Description: "API token used to access {{ display }}.",
+					Schema:      {{ name }}Schema,
+				},
+			},
+			Connections: []types.ConnectionRegistration{
+				{
+					CredentialRef:       {{ name }}Credential.ID(),
+					Name:                "{{ display }} API Token",
+					Description:         "Configure {{ display }} access using an API token scoped to your account.",
+					CredentialRefs:      []types.CredentialSlotID{ {{ name }}Credential.ID() },
+					ClientRefs:          []types.ClientID{ {{ name }}Client.ID() },
+					ValidationOperation: healthCheckOperation.Name(),
+					Integration:         installation.Registration(),
+					Disconnect: &types.DisconnectRegistration{
+						CredentialRef: {{ name }}Credential.ID(),
+						Description:   "Removes the stored API token from Openlane. If the token is no longer needed, revoke it in your {{ display }} account.",
+					},
+				},
+			},
+			Clients: []types.ClientRegistration{
+				{
+					Ref:            {{ name }}Client.ID(),
+					CredentialRefs: []types.CredentialSlotID{ {{ name }}Credential.ID() },
+					Description:    "{{ display }} API client",
+					Build:          Client{}.Build,
+				},
+			},
+			Operations: []types.OperationRegistration{
+				{
+					Name:         healthCheckOperation.Name(),
+					Description:  "Verify {{ display }} credentials",
+					Topic:        definitionID.OperationTopic(healthCheckOperation.Name()),
+					ClientRef:    {{ name }}Client.ID(),
+					Policy:       types.ExecutionPolicy{Inline: true},
+					Handle:       HealthCheck{}.Handle(),
+					ConfigSchema: healthCheckSchema,
+				},
+			},
+		}, nil
+	})
+}
