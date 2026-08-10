@@ -48,6 +48,11 @@ query GetOrgMembersByOrgID ($where: OrgMembershipWhereInput) {
 		}
 	}
 }
+mutation LeaveOrganization ($organizationID: ID!) {
+	leaveOrganization(organizationID: $organizationID) {
+		deletedID
+	}
+}
 mutation RemoveUserFromOrg ($deleteOrgMembershipId: ID!) {
 	deleteOrgMembership(id: $deleteOrgMembershipId) {
 		deletedID

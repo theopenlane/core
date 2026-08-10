@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/definitions/slack"
 	"github.com/theopenlane/core/internal/integrations/definitions/system"
 	"github.com/theopenlane/core/internal/integrations/definitions/tailscale"
+	"github.com/theopenlane/core/internal/integrations/definitions/zitadel"
 	"github.com/theopenlane/core/internal/integrations/registry"
 )
 
@@ -47,5 +48,6 @@ func Builders(cfg Config, devMode bool) []registry.Builder {
 		slack.Builder(cfg.Slack, &cfg.SlackRuntime, devMode),
 		system.Builder(cfg.PaymentReminder, cfg.OrganizationDelete),
 		tailscale.Builder(),
+		zitadel.Builder(),
 	}
 }

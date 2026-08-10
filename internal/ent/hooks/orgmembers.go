@@ -195,10 +195,11 @@ func getUserMembershipRoles(ctx context.Context, m *generated.OrgMembershipMutat
 func HookOrgMembersDelete() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.OrgMembershipFunc(func(ctx context.Context, m *generated.OrgMembershipMutation) (generated.Value, error) {
-			// we only want to do this on direct deleteOrgMembership operations
+			// we only want to do this on direct org membership delete operations
 			// deleteOrganization will be handled by the organization hook
 			rootFieldCtx := graphql.GetRootFieldContext(ctx)
-			if rootFieldCtx == nil || rootFieldCtx.Object != "deleteOrgMembership" {
+			if rootFieldCtx == nil ||
+				(rootFieldCtx.Object != "deleteOrgMembership" && rootFieldCtx.Object != "leaveOrganization") {
 				logx.FromContext(ctx).Debug().Msg("skipping org membership delete hook")
 
 				return next.Mutate(ctx, m)
