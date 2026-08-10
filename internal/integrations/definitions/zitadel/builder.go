@@ -37,6 +37,7 @@ func Builder() registry.Builder {
 					Name:        "Zitadel OAuth (Client Credentials)",
 					Description: "Service user Client ID and Client Secret used to access Zitadel instance data via the OAuth2 client-credentials grant.",
 					Schema:      zitadelOAuthCredentialSchema,
+					Recommended: true,
 				},
 			},
 			Connections: []types.ConnectionRegistration{
