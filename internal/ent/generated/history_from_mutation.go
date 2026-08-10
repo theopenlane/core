@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/iam/auth"
 )
 
 var (
@@ -30,8 +31,23 @@ func EntOpToHistoryOp(op ent.Op) history.OpType {
 	}
 }
 
+func (m *ActionPlanMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *ActionPlanMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -245,6 +261,9 @@ func (m *ActionPlanMutation) CreateHistoryFromCreate(ctx context.Context) error 
 
 func (m *ActionPlanMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -567,6 +586,9 @@ func (m *ActionPlanMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 
 func (m *ActionPlanMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -649,8 +671,23 @@ func (m *ActionPlanMutation) CreateHistoryFromDelete(ctx context.Context) error 
 	return nil
 }
 
+func (m *AssessmentMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *AssessmentMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -748,6 +785,9 @@ func (m *AssessmentMutation) CreateHistoryFromCreate(ctx context.Context) error 
 
 func (m *AssessmentMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -896,6 +936,9 @@ func (m *AssessmentMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 
 func (m *AssessmentMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -949,8 +992,23 @@ func (m *AssessmentMutation) CreateHistoryFromDelete(ctx context.Context) error 
 	return nil
 }
 
+func (m *AssessmentResponseMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *AssessmentResponseMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -1096,6 +1154,9 @@ func (m *AssessmentResponseMutation) CreateHistoryFromCreate(ctx context.Context
 
 func (m *AssessmentResponseMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -1316,6 +1377,9 @@ func (m *AssessmentResponseMutation) CreateHistoryFromUpdate(ctx context.Context
 
 func (m *AssessmentResponseMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -1381,8 +1445,23 @@ func (m *AssessmentResponseMutation) CreateHistoryFromDelete(ctx context.Context
 	return nil
 }
 
+func (m *AssetMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *AssetMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -1604,6 +1683,9 @@ func (m *AssetMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *AssetMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -1938,6 +2020,9 @@ func (m *AssetMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *AssetMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -2022,8 +2107,23 @@ func (m *AssetMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *CampaignMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *CampaignMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -2213,6 +2313,9 @@ func (m *CampaignMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *CampaignMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -2499,6 +2602,9 @@ func (m *CampaignMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *CampaignMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -2575,8 +2681,23 @@ func (m *CampaignMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *CampaignTargetMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *CampaignTargetMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -2678,6 +2799,9 @@ func (m *CampaignTargetMutation) CreateHistoryFromCreate(ctx context.Context) er
 
 func (m *CampaignTargetMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -2832,6 +2956,9 @@ func (m *CampaignTargetMutation) CreateHistoryFromUpdate(ctx context.Context) er
 
 func (m *CampaignTargetMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -2886,264 +3013,23 @@ func (m *CampaignTargetMutation) CreateHistoryFromDelete(ctx context.Context) er
 	return nil
 }
 
-func (m *CheckResultMutation) CreateHistoryFromCreate(ctx context.Context) error {
-	ctx = history.WithContext(ctx)
-	client := m.Client()
+func (m *ContactMutation) skipper(ctx context.Context) bool {
 
-	id, ok := m.ID()
-	if !ok {
-		return idNotFoundError
+	if PurgeHistoryEnabled(ctx) {
+		return true
 	}
 
-	create := client.HistoryClient.CheckResultHistory.Create()
+	caller, _ := auth.CallerFromContext(ctx)
 
-	create = create.
-		SetOperation(EntOpToHistoryOp(m.Op())).
-		SetHistoryTime(time.Now()).
-		SetRef(id)
+	return caller.HasInLineage(auth.CapBypassAuditLog)
 
-	if createdAt, exists := m.CreatedAt(); exists {
-		create = create.SetCreatedAt(createdAt)
-	}
-
-	if updatedAt, exists := m.UpdatedAt(); exists {
-		create = create.SetUpdatedAt(updatedAt)
-	}
-
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
-	}
-
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
-	}
-
-	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
-		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
-	}
-
-	if deletedAt, exists := m.DeletedAt(); exists {
-		create = create.SetDeletedAt(deletedAt)
-	}
-
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
-	}
-
-	if tags, exists := m.Tags(); exists {
-		create = create.SetTags(tags)
-	}
-
-	if status, exists := m.Status(); exists {
-		create = create.SetStatus(status)
-	}
-
-	if source, exists := m.Source(); exists {
-		create = create.SetSource(source)
-	}
-
-	if lastObservedAt, exists := m.LastObservedAt(); exists {
-		create = create.SetNillableLastObservedAt(&lastObservedAt)
-	}
-
-	if externalURI, exists := m.ExternalURI(); exists {
-		create = create.SetExternalURI(externalURI)
-	}
-
-	if details, exists := m.Details(); exists {
-		create = create.SetNillableDetails(&details)
-	}
-
-	if parentExternalID, exists := m.ParentExternalID(); exists {
-		create = create.SetParentExternalID(parentExternalID)
-	}
-
-	if integrationID, exists := m.IntegrationID(); exists {
-		create = create.SetIntegrationID(integrationID)
-	}
-
-	_, err := create.Save(ctx)
-
-	return err
-}
-
-func (m *CheckResultMutation) CreateHistoryFromUpdate(ctx context.Context) error {
-	ctx = history.WithContext(ctx)
-	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
-		return m.CreateHistoryFromDelete(ctx)
-	}
-	client := m.Client()
-
-	ids, err := m.IDs(ctx)
-	if err != nil {
-		return fmt.Errorf("getting ids: %w", err)
-	}
-
-	for _, id := range ids {
-		checkresult, err := client.CheckResult.Get(ctx, id)
-		if err != nil {
-			return err
-		}
-
-		create := client.HistoryClient.CheckResultHistory.Create()
-
-		create = create.
-			SetOperation(EntOpToHistoryOp(m.Op())).
-			SetHistoryTime(time.Now()).
-			SetRef(id)
-
-		if createdAt, exists := m.CreatedAt(); exists {
-			create = create.SetCreatedAt(createdAt)
-		} else {
-			create = create.SetCreatedAt(checkresult.CreatedAt)
-		}
-
-		if updatedAt, exists := m.UpdatedAt(); exists {
-			create = create.SetUpdatedAt(updatedAt)
-		} else {
-			create = create.SetUpdatedAt(checkresult.UpdatedAt)
-		}
-
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
-		} else {
-			create = create.SetCreatedBy(checkresult.CreatedBy)
-		}
-
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
-		} else {
-			create = create.SetUpdatedBy(checkresult.UpdatedBy)
-		}
-
-		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
-			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
-		} else {
-			create = create.SetNillableUpdatedByImpersonator(checkresult.UpdatedByImpersonator)
-		}
-
-		if deletedAt, exists := m.DeletedAt(); exists {
-			create = create.SetDeletedAt(deletedAt)
-		} else {
-			create = create.SetDeletedAt(checkresult.DeletedAt)
-		}
-
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
-		} else {
-			create = create.SetDeletedBy(checkresult.DeletedBy)
-		}
-
-		if tags, exists := m.Tags(); exists {
-			create = create.SetTags(tags)
-		} else {
-			create = create.SetTags(checkresult.Tags)
-		}
-
-		if status, exists := m.Status(); exists {
-			create = create.SetStatus(status)
-		} else {
-			create = create.SetStatus(checkresult.Status)
-		}
-
-		if source, exists := m.Source(); exists {
-			create = create.SetSource(source)
-		} else {
-			create = create.SetSource(checkresult.Source)
-		}
-
-		if lastObservedAt, exists := m.LastObservedAt(); exists {
-			create = create.SetNillableLastObservedAt(&lastObservedAt)
-		} else {
-			create = create.SetNillableLastObservedAt(checkresult.LastObservedAt)
-		}
-
-		if externalURI, exists := m.ExternalURI(); exists {
-			create = create.SetExternalURI(externalURI)
-		} else {
-			create = create.SetExternalURI(checkresult.ExternalURI)
-		}
-
-		if details, exists := m.Details(); exists {
-			create = create.SetNillableDetails(&details)
-		} else {
-			create = create.SetNillableDetails(checkresult.Details)
-		}
-
-		if parentExternalID, exists := m.ParentExternalID(); exists {
-			create = create.SetParentExternalID(parentExternalID)
-		} else {
-			create = create.SetParentExternalID(checkresult.ParentExternalID)
-		}
-
-		if integrationID, exists := m.IntegrationID(); exists {
-			create = create.SetIntegrationID(integrationID)
-		} else {
-			create = create.SetIntegrationID(checkresult.IntegrationID)
-		}
-
-		if _, err := create.Save(ctx); err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *CheckResultMutation) CreateHistoryFromDelete(ctx context.Context) error {
-	ctx = history.WithContext(ctx)
-
-	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
-		return nil
-	}
-
-	client := m.Client()
-
-	ids, err := m.IDs(ctx)
-	if err != nil {
-		return fmt.Errorf("getting ids: %w", err)
-	}
-
-	for _, id := range ids {
-		checkresult, err := client.CheckResult.Get(ctx, id)
-		if err != nil {
-			return err
-		}
-
-		create := client.HistoryClient.CheckResultHistory.Create()
-
-		_, err = create.
-			SetOperation(EntOpToHistoryOp(m.Op())).
-			SetHistoryTime(time.Now()).
-			SetRef(id).
-			SetCreatedAt(checkresult.CreatedAt).
-			SetUpdatedAt(checkresult.UpdatedAt).
-			SetCreatedBy(checkresult.CreatedBy).
-			SetUpdatedBy(checkresult.UpdatedBy).
-			SetNillableUpdatedByImpersonator(checkresult.UpdatedByImpersonator).
-			SetDeletedAt(checkresult.DeletedAt).
-			SetDeletedBy(checkresult.DeletedBy).
-			SetTags(checkresult.Tags).
-			SetStatus(checkresult.Status).
-			SetSource(checkresult.Source).
-			SetNillableLastObservedAt(checkresult.LastObservedAt).
-			SetExternalURI(checkresult.ExternalURI).
-			SetNillableDetails(checkresult.Details).
-			SetParentExternalID(checkresult.ParentExternalID).
-			SetIntegrationID(checkresult.IntegrationID).
-			Save(ctx)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
 }
 
 func (m *ContactMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -3241,6 +3127,9 @@ func (m *ContactMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *ContactMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -3389,6 +3278,9 @@ func (m *ContactMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *ContactMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -3442,8 +3334,23 @@ func (m *ContactMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *ControlMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -3681,6 +3588,9 @@ func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -4039,6 +3949,9 @@ func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -4127,8 +4040,23 @@ func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *ControlImplementationMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *ControlImplementationMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -4222,6 +4150,9 @@ func (m *ControlImplementationMutation) CreateHistoryFromCreate(ctx context.Cont
 
 func (m *ControlImplementationMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -4364,6 +4295,9 @@ func (m *ControlImplementationMutation) CreateHistoryFromUpdate(ctx context.Cont
 
 func (m *ControlImplementationMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -4416,8 +4350,23 @@ func (m *ControlImplementationMutation) CreateHistoryFromDelete(ctx context.Cont
 	return nil
 }
 
+func (m *ControlObjectiveMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *ControlObjectiveMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -4527,6 +4476,9 @@ func (m *ControlObjectiveMutation) CreateHistoryFromCreate(ctx context.Context) 
 
 func (m *ControlObjectiveMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -4693,6 +4645,9 @@ func (m *ControlObjectiveMutation) CreateHistoryFromUpdate(ctx context.Context) 
 
 func (m *ControlObjectiveMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -4749,8 +4704,23 @@ func (m *ControlObjectiveMutation) CreateHistoryFromDelete(ctx context.Context) 
 	return nil
 }
 
+func (m *CustomDomainMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *CustomDomainMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -4840,6 +4810,9 @@ func (m *CustomDomainMutation) CreateHistoryFromCreate(ctx context.Context) erro
 
 func (m *CustomDomainMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -4976,6 +4949,9 @@ func (m *CustomDomainMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 
 func (m *CustomDomainMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -5027,1780 +5003,23 @@ func (m *CustomDomainMutation) CreateHistoryFromDelete(ctx context.Context) erro
 	return nil
 }
 
-func (m *DNSVerificationMutation) CreateHistoryFromCreate(ctx context.Context) error {
-	ctx = history.WithContext(ctx)
-	client := m.Client()
+func (m *DiscussionMutation) skipper(ctx context.Context) bool {
 
-	id, ok := m.ID()
-	if !ok {
-		return idNotFoundError
+	if PurgeHistoryEnabled(ctx) {
+		return true
 	}
 
-	create := client.HistoryClient.DNSVerificationHistory.Create()
+	caller, _ := auth.CallerFromContext(ctx)
 
-	create = create.
-		SetOperation(EntOpToHistoryOp(m.Op())).
-		SetHistoryTime(time.Now()).
-		SetRef(id)
+	return caller.HasInLineage(auth.CapBypassAuditLog)
 
-	if createdAt, exists := m.CreatedAt(); exists {
-		create = create.SetCreatedAt(createdAt)
-	}
-
-	if updatedAt, exists := m.UpdatedAt(); exists {
-		create = create.SetUpdatedAt(updatedAt)
-	}
-
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
-	}
-
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
-	}
-
-	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
-		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
-	}
-
-	if deletedAt, exists := m.DeletedAt(); exists {
-		create = create.SetDeletedAt(deletedAt)
-	}
-
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
-	}
-
-	if tags, exists := m.Tags(); exists {
-		create = create.SetTags(tags)
-	}
-
-	if ownerID, exists := m.OwnerID(); exists {
-		create = create.SetOwnerID(ownerID)
-	}
-
-	if cloudflareHostnameID, exists := m.CloudflareHostnameID(); exists {
-		create = create.SetCloudflareHostnameID(cloudflareHostnameID)
-	}
-
-	if dnsTxtRecord, exists := m.DNSTxtRecord(); exists {
-		create = create.SetDNSTxtRecord(dnsTxtRecord)
-	}
-
-	if dnsTxtValue, exists := m.DNSTxtValue(); exists {
-		create = create.SetDNSTxtValue(dnsTxtValue)
-	}
-
-	if dnsVerificationStatus, exists := m.DNSVerificationStatus(); exists {
-		create = create.SetDNSVerificationStatus(dnsVerificationStatus)
-	}
-
-	if dnsVerificationStatusReason, exists := m.DNSVerificationStatusReason(); exists {
-		create = create.SetDNSVerificationStatusReason(dnsVerificationStatusReason)
-	}
-
-	if acmeChallengePath, exists := m.AcmeChallengePath(); exists {
-		create = create.SetAcmeChallengePath(acmeChallengePath)
-	}
-
-	if expectedAcmeChallengeValue, exists := m.ExpectedAcmeChallengeValue(); exists {
-		create = create.SetExpectedAcmeChallengeValue(expectedAcmeChallengeValue)
-	}
-
-	if acmeChallengeStatus, exists := m.AcmeChallengeStatus(); exists {
-		create = create.SetAcmeChallengeStatus(acmeChallengeStatus)
-	}
-
-	if acmeChallengeStatusReason, exists := m.AcmeChallengeStatusReason(); exists {
-		create = create.SetAcmeChallengeStatusReason(acmeChallengeStatusReason)
-	}
-
-	_, err := create.Save(ctx)
-
-	return err
-}
-
-func (m *DNSVerificationMutation) CreateHistoryFromUpdate(ctx context.Context) error {
-	ctx = history.WithContext(ctx)
-	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
-		return m.CreateHistoryFromDelete(ctx)
-	}
-	client := m.Client()
-
-	ids, err := m.IDs(ctx)
-	if err != nil {
-		return fmt.Errorf("getting ids: %w", err)
-	}
-
-	for _, id := range ids {
-		dnsverification, err := client.DNSVerification.Get(ctx, id)
-		if err != nil {
-			return err
-		}
-
-		create := client.HistoryClient.DNSVerificationHistory.Create()
-
-		create = create.
-			SetOperation(EntOpToHistoryOp(m.Op())).
-			SetHistoryTime(time.Now()).
-			SetRef(id)
-
-		if createdAt, exists := m.CreatedAt(); exists {
-			create = create.SetCreatedAt(createdAt)
-		} else {
-			create = create.SetCreatedAt(dnsverification.CreatedAt)
-		}
-
-		if updatedAt, exists := m.UpdatedAt(); exists {
-			create = create.SetUpdatedAt(updatedAt)
-		} else {
-			create = create.SetUpdatedAt(dnsverification.UpdatedAt)
-		}
-
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
-		} else {
-			create = create.SetCreatedBy(dnsverification.CreatedBy)
-		}
-
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
-		} else {
-			create = create.SetUpdatedBy(dnsverification.UpdatedBy)
-		}
-
-		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
-			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
-		} else {
-			create = create.SetNillableUpdatedByImpersonator(dnsverification.UpdatedByImpersonator)
-		}
-
-		if deletedAt, exists := m.DeletedAt(); exists {
-			create = create.SetDeletedAt(deletedAt)
-		} else {
-			create = create.SetDeletedAt(dnsverification.DeletedAt)
-		}
-
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
-		} else {
-			create = create.SetDeletedBy(dnsverification.DeletedBy)
-		}
-
-		if tags, exists := m.Tags(); exists {
-			create = create.SetTags(tags)
-		} else {
-			create = create.SetTags(dnsverification.Tags)
-		}
-
-		if ownerID, exists := m.OwnerID(); exists {
-			create = create.SetOwnerID(ownerID)
-		} else {
-			create = create.SetOwnerID(dnsverification.OwnerID)
-		}
-
-		if cloudflareHostnameID, exists := m.CloudflareHostnameID(); exists {
-			create = create.SetCloudflareHostnameID(cloudflareHostnameID)
-		} else {
-			create = create.SetCloudflareHostnameID(dnsverification.CloudflareHostnameID)
-		}
-
-		if dnsTxtRecord, exists := m.DNSTxtRecord(); exists {
-			create = create.SetDNSTxtRecord(dnsTxtRecord)
-		} else {
-			create = create.SetDNSTxtRecord(dnsverification.DNSTxtRecord)
-		}
-
-		if dnsTxtValue, exists := m.DNSTxtValue(); exists {
-			create = create.SetDNSTxtValue(dnsTxtValue)
-		} else {
-			create = create.SetDNSTxtValue(dnsverification.DNSTxtValue)
-		}
-
-		if dnsVerificationStatus, exists := m.DNSVerificationStatus(); exists {
-			create = create.SetDNSVerificationStatus(dnsVerificationStatus)
-		} else {
-			create = create.SetDNSVerificationStatus(dnsverification.DNSVerificationStatus)
-		}
-
-		if dnsVerificationStatusReason, exists := m.DNSVerificationStatusReason(); exists {
-			create = create.SetDNSVerificationStatusReason(dnsVerificationStatusReason)
-		} else {
-			create = create.SetDNSVerificationStatusReason(dnsverification.DNSVerificationStatusReason)
-		}
-
-		if acmeChallengePath, exists := m.AcmeChallengePath(); exists {
-			create = create.SetAcmeChallengePath(acmeChallengePath)
-		} else {
-			create = create.SetAcmeChallengePath(dnsverification.AcmeChallengePath)
-		}
-
-		if expectedAcmeChallengeValue, exists := m.ExpectedAcmeChallengeValue(); exists {
-			create = create.SetExpectedAcmeChallengeValue(expectedAcmeChallengeValue)
-		} else {
-			create = create.SetExpectedAcmeChallengeValue(dnsverification.ExpectedAcmeChallengeValue)
-		}
-
-		if acmeChallengeStatus, exists := m.AcmeChallengeStatus(); exists {
-			create = create.SetAcmeChallengeStatus(acmeChallengeStatus)
-		} else {
-			create = create.SetAcmeChallengeStatus(dnsverification.AcmeChallengeStatus)
-		}
-
-		if acmeChallengeStatusReason, exists := m.AcmeChallengeStatusReason(); exists {
-			create = create.SetAcmeChallengeStatusReason(acmeChallengeStatusReason)
-		} else {
-			create = create.SetAcmeChallengeStatusReason(dnsverification.AcmeChallengeStatusReason)
-		}
-
-		if _, err := create.Save(ctx); err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *DNSVerificationMutation) CreateHistoryFromDelete(ctx context.Context) error {
-	ctx = history.WithContext(ctx)
-
-	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
-		return nil
-	}
-
-	client := m.Client()
-
-	ids, err := m.IDs(ctx)
-	if err != nil {
-		return fmt.Errorf("getting ids: %w", err)
-	}
-
-	for _, id := range ids {
-		dnsverification, err := client.DNSVerification.Get(ctx, id)
-		if err != nil {
-			return err
-		}
-
-		create := client.HistoryClient.DNSVerificationHistory.Create()
-
-		_, err = create.
-			SetOperation(EntOpToHistoryOp(m.Op())).
-			SetHistoryTime(time.Now()).
-			SetRef(id).
-			SetCreatedAt(dnsverification.CreatedAt).
-			SetUpdatedAt(dnsverification.UpdatedAt).
-			SetCreatedBy(dnsverification.CreatedBy).
-			SetUpdatedBy(dnsverification.UpdatedBy).
-			SetNillableUpdatedByImpersonator(dnsverification.UpdatedByImpersonator).
-			SetDeletedAt(dnsverification.DeletedAt).
-			SetDeletedBy(dnsverification.DeletedBy).
-			SetTags(dnsverification.Tags).
-			SetOwnerID(dnsverification.OwnerID).
-			SetCloudflareHostnameID(dnsverification.CloudflareHostnameID).
-			SetDNSTxtRecord(dnsverification.DNSTxtRecord).
-			SetDNSTxtValue(dnsverification.DNSTxtValue).
-			SetDNSVerificationStatus(dnsverification.DNSVerificationStatus).
-			SetDNSVerificationStatusReason(dnsverification.DNSVerificationStatusReason).
-			SetAcmeChallengePath(dnsverification.AcmeChallengePath).
-			SetExpectedAcmeChallengeValue(dnsverification.ExpectedAcmeChallengeValue).
-			SetAcmeChallengeStatus(dnsverification.AcmeChallengeStatus).
-			SetAcmeChallengeStatusReason(dnsverification.AcmeChallengeStatusReason).
-			Save(ctx)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *DirectoryAccountMutation) CreateHistoryFromCreate(ctx context.Context) error {
-	ctx = history.WithContext(ctx)
-	client := m.Client()
-
-	id, ok := m.ID()
-	if !ok {
-		return idNotFoundError
-	}
-
-	create := client.HistoryClient.DirectoryAccountHistory.Create()
-
-	create = create.
-		SetOperation(EntOpToHistoryOp(m.Op())).
-		SetHistoryTime(time.Now()).
-		SetRef(id)
-
-	if createdAt, exists := m.CreatedAt(); exists {
-		create = create.SetCreatedAt(createdAt)
-	}
-
-	if updatedAt, exists := m.UpdatedAt(); exists {
-		create = create.SetUpdatedAt(updatedAt)
-	}
-
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
-	}
-
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
-	}
-
-	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
-		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
-	}
-
-	if displayID, exists := m.DisplayID(); exists {
-		create = create.SetDisplayID(displayID)
-	}
-
-	if tags, exists := m.Tags(); exists {
-		create = create.SetTags(tags)
-	}
-
-	if ownerID, exists := m.OwnerID(); exists {
-		create = create.SetOwnerID(ownerID)
-	}
-
-	if environmentName, exists := m.EnvironmentName(); exists {
-		create = create.SetEnvironmentName(environmentName)
-	}
-
-	if environmentID, exists := m.EnvironmentID(); exists {
-		create = create.SetEnvironmentID(environmentID)
-	}
-
-	if scopeName, exists := m.ScopeName(); exists {
-		create = create.SetScopeName(scopeName)
-	}
-
-	if scopeID, exists := m.ScopeID(); exists {
-		create = create.SetScopeID(scopeID)
-	}
-
-	if integrationID, exists := m.IntegrationID(); exists {
-		create = create.SetIntegrationID(integrationID)
-	}
-
-	if directorySyncRunID, exists := m.DirectorySyncRunID(); exists {
-		create = create.SetDirectorySyncRunID(directorySyncRunID)
-	}
-
-	if platformID, exists := m.PlatformID(); exists {
-		create = create.SetPlatformID(platformID)
-	}
-
-	if directoryInstanceID, exists := m.DirectoryInstanceID(); exists {
-		create = create.SetNillableDirectoryInstanceID(&directoryInstanceID)
-	}
-
-	if identityHolderID, exists := m.IdentityHolderID(); exists {
-		create = create.SetNillableIdentityHolderID(&identityHolderID)
-	}
-
-	if directoryName, exists := m.DirectoryName(); exists {
-		create = create.SetNillableDirectoryName(&directoryName)
-	}
-
-	if externalID, exists := m.ExternalID(); exists {
-		create = create.SetExternalID(externalID)
-	}
-
-	if secondaryKey, exists := m.SecondaryKey(); exists {
-		create = create.SetNillableSecondaryKey(&secondaryKey)
-	}
-
-	if canonicalEmail, exists := m.CanonicalEmail(); exists {
-		create = create.SetNillableCanonicalEmail(&canonicalEmail)
-	}
-
-	if emailAliases, exists := m.EmailAliases(); exists {
-		create = create.SetEmailAliases(emailAliases)
-	}
-
-	if phoneNumber, exists := m.PhoneNumber(); exists {
-		create = create.SetNillablePhoneNumber(&phoneNumber)
-	}
-
-	if displayName, exists := m.DisplayName(); exists {
-		create = create.SetDisplayName(displayName)
-	}
-
-	if avatarRemoteURL, exists := m.AvatarRemoteURL(); exists {
-		create = create.SetNillableAvatarRemoteURL(&avatarRemoteURL)
-	}
-
-	if avatarLocalFileID, exists := m.AvatarLocalFileID(); exists {
-		create = create.SetNillableAvatarLocalFileID(&avatarLocalFileID)
-	}
-
-	if avatarUpdatedAt, exists := m.AvatarUpdatedAt(); exists {
-		create = create.SetNillableAvatarUpdatedAt(&avatarUpdatedAt)
-	}
-
-	if givenName, exists := m.GivenName(); exists {
-		create = create.SetNillableGivenName(&givenName)
-	}
-
-	if familyName, exists := m.FamilyName(); exists {
-		create = create.SetNillableFamilyName(&familyName)
-	}
-
-	if jobTitle, exists := m.JobTitle(); exists {
-		create = create.SetNillableJobTitle(&jobTitle)
-	}
-
-	if department, exists := m.Department(); exists {
-		create = create.SetNillableDepartment(&department)
-	}
-
-	if organizationUnit, exists := m.OrganizationUnit(); exists {
-		create = create.SetNillableOrganizationUnit(&organizationUnit)
-	}
-
-	if accountType, exists := m.AccountType(); exists {
-		create = create.SetAccountType(accountType)
-	}
-
-	if status, exists := m.Status(); exists {
-		create = create.SetStatus(status)
-	}
-
-	if mfaState, exists := m.MfaState(); exists {
-		create = create.SetMfaState(mfaState)
-	}
-
-	if lastSeenIP, exists := m.LastSeenIP(); exists {
-		create = create.SetNillableLastSeenIP(&lastSeenIP)
-	}
-
-	if lastLoginAt, exists := m.LastLoginAt(); exists {
-		create = create.SetNillableLastLoginAt(&lastLoginAt)
-	}
-
-	if firstSeenAt, exists := m.FirstSeenAt(); exists {
-		create = create.SetNillableFirstSeenAt(&firstSeenAt)
-	}
-
-	if lastSeenAt, exists := m.LastSeenAt(); exists {
-		create = create.SetNillableLastSeenAt(&lastSeenAt)
-	}
-
-	if addedAt, exists := m.AddedAt(); exists {
-		create = create.SetNillableAddedAt(&addedAt)
-	}
-
-	if removedAt, exists := m.RemovedAt(); exists {
-		create = create.SetNillableRemovedAt(&removedAt)
-	}
-
-	if observedAt, exists := m.ObservedAt(); exists {
-		create = create.SetObservedAt(observedAt)
-	}
-
-	if profileHash, exists := m.ProfileHash(); exists {
-		create = create.SetProfileHash(profileHash)
-	}
-
-	if profile, exists := m.Profile(); exists {
-		create = create.SetProfile(profile)
-	}
-
-	if metadata, exists := m.Metadata(); exists {
-		create = create.SetMetadata(metadata)
-	}
-
-	if rawProfileFileID, exists := m.RawProfileFileID(); exists {
-		create = create.SetNillableRawProfileFileID(&rawProfileFileID)
-	}
-
-	if sourceVersion, exists := m.SourceVersion(); exists {
-		create = create.SetNillableSourceVersion(&sourceVersion)
-	}
-
-	if primarySource, exists := m.PrimarySource(); exists {
-		create = create.SetPrimarySource(primarySource)
-	}
-
-	_, err := create.Save(ctx)
-
-	return err
-}
-
-func (m *DirectoryAccountMutation) CreateHistoryFromUpdate(ctx context.Context) error {
-	ctx = history.WithContext(ctx)
-	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
-		return m.CreateHistoryFromDelete(ctx)
-	}
-	client := m.Client()
-
-	ids, err := m.IDs(ctx)
-	if err != nil {
-		return fmt.Errorf("getting ids: %w", err)
-	}
-
-	for _, id := range ids {
-		directoryaccount, err := client.DirectoryAccount.Get(ctx, id)
-		if err != nil {
-			return err
-		}
-
-		create := client.HistoryClient.DirectoryAccountHistory.Create()
-
-		create = create.
-			SetOperation(EntOpToHistoryOp(m.Op())).
-			SetHistoryTime(time.Now()).
-			SetRef(id)
-
-		if createdAt, exists := m.CreatedAt(); exists {
-			create = create.SetCreatedAt(createdAt)
-		} else {
-			create = create.SetCreatedAt(directoryaccount.CreatedAt)
-		}
-
-		if updatedAt, exists := m.UpdatedAt(); exists {
-			create = create.SetUpdatedAt(updatedAt)
-		} else {
-			create = create.SetUpdatedAt(directoryaccount.UpdatedAt)
-		}
-
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
-		} else {
-			create = create.SetCreatedBy(directoryaccount.CreatedBy)
-		}
-
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
-		} else {
-			create = create.SetUpdatedBy(directoryaccount.UpdatedBy)
-		}
-
-		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
-			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
-		} else {
-			create = create.SetNillableUpdatedByImpersonator(directoryaccount.UpdatedByImpersonator)
-		}
-
-		if displayID, exists := m.DisplayID(); exists {
-			create = create.SetDisplayID(displayID)
-		} else {
-			create = create.SetDisplayID(directoryaccount.DisplayID)
-		}
-
-		if tags, exists := m.Tags(); exists {
-			create = create.SetTags(tags)
-		} else {
-			create = create.SetTags(directoryaccount.Tags)
-		}
-
-		if ownerID, exists := m.OwnerID(); exists {
-			create = create.SetOwnerID(ownerID)
-		} else {
-			create = create.SetOwnerID(directoryaccount.OwnerID)
-		}
-
-		if environmentName, exists := m.EnvironmentName(); exists {
-			create = create.SetEnvironmentName(environmentName)
-		} else {
-			create = create.SetEnvironmentName(directoryaccount.EnvironmentName)
-		}
-
-		if environmentID, exists := m.EnvironmentID(); exists {
-			create = create.SetEnvironmentID(environmentID)
-		} else {
-			create = create.SetEnvironmentID(directoryaccount.EnvironmentID)
-		}
-
-		if scopeName, exists := m.ScopeName(); exists {
-			create = create.SetScopeName(scopeName)
-		} else {
-			create = create.SetScopeName(directoryaccount.ScopeName)
-		}
-
-		if scopeID, exists := m.ScopeID(); exists {
-			create = create.SetScopeID(scopeID)
-		} else {
-			create = create.SetScopeID(directoryaccount.ScopeID)
-		}
-
-		if integrationID, exists := m.IntegrationID(); exists {
-			create = create.SetIntegrationID(integrationID)
-		} else {
-			create = create.SetIntegrationID(directoryaccount.IntegrationID)
-		}
-
-		if directorySyncRunID, exists := m.DirectorySyncRunID(); exists {
-			create = create.SetDirectorySyncRunID(directorySyncRunID)
-		} else {
-			create = create.SetDirectorySyncRunID(directoryaccount.DirectorySyncRunID)
-		}
-
-		if platformID, exists := m.PlatformID(); exists {
-			create = create.SetPlatformID(platformID)
-		} else {
-			create = create.SetPlatformID(directoryaccount.PlatformID)
-		}
-
-		if directoryInstanceID, exists := m.DirectoryInstanceID(); exists {
-			create = create.SetNillableDirectoryInstanceID(&directoryInstanceID)
-		} else {
-			create = create.SetNillableDirectoryInstanceID(directoryaccount.DirectoryInstanceID)
-		}
-
-		if identityHolderID, exists := m.IdentityHolderID(); exists {
-			create = create.SetNillableIdentityHolderID(&identityHolderID)
-		} else {
-			create = create.SetNillableIdentityHolderID(directoryaccount.IdentityHolderID)
-		}
-
-		if directoryName, exists := m.DirectoryName(); exists {
-			create = create.SetNillableDirectoryName(&directoryName)
-		} else {
-			create = create.SetNillableDirectoryName(directoryaccount.DirectoryName)
-		}
-
-		if externalID, exists := m.ExternalID(); exists {
-			create = create.SetExternalID(externalID)
-		} else {
-			create = create.SetExternalID(directoryaccount.ExternalID)
-		}
-
-		if secondaryKey, exists := m.SecondaryKey(); exists {
-			create = create.SetNillableSecondaryKey(&secondaryKey)
-		} else {
-			create = create.SetNillableSecondaryKey(directoryaccount.SecondaryKey)
-		}
-
-		if canonicalEmail, exists := m.CanonicalEmail(); exists {
-			create = create.SetNillableCanonicalEmail(&canonicalEmail)
-		} else {
-			create = create.SetNillableCanonicalEmail(directoryaccount.CanonicalEmail)
-		}
-
-		if emailAliases, exists := m.EmailAliases(); exists {
-			create = create.SetEmailAliases(emailAliases)
-		} else {
-			create = create.SetEmailAliases(directoryaccount.EmailAliases)
-		}
-
-		if phoneNumber, exists := m.PhoneNumber(); exists {
-			create = create.SetNillablePhoneNumber(&phoneNumber)
-		} else {
-			create = create.SetNillablePhoneNumber(directoryaccount.PhoneNumber)
-		}
-
-		if displayName, exists := m.DisplayName(); exists {
-			create = create.SetDisplayName(displayName)
-		} else {
-			create = create.SetDisplayName(directoryaccount.DisplayName)
-		}
-
-		if avatarRemoteURL, exists := m.AvatarRemoteURL(); exists {
-			create = create.SetNillableAvatarRemoteURL(&avatarRemoteURL)
-		} else {
-			create = create.SetNillableAvatarRemoteURL(directoryaccount.AvatarRemoteURL)
-		}
-
-		if avatarLocalFileID, exists := m.AvatarLocalFileID(); exists {
-			create = create.SetNillableAvatarLocalFileID(&avatarLocalFileID)
-		} else {
-			create = create.SetNillableAvatarLocalFileID(directoryaccount.AvatarLocalFileID)
-		}
-
-		if avatarUpdatedAt, exists := m.AvatarUpdatedAt(); exists {
-			create = create.SetNillableAvatarUpdatedAt(&avatarUpdatedAt)
-		} else {
-			create = create.SetNillableAvatarUpdatedAt(directoryaccount.AvatarUpdatedAt)
-		}
-
-		if givenName, exists := m.GivenName(); exists {
-			create = create.SetNillableGivenName(&givenName)
-		} else {
-			create = create.SetNillableGivenName(directoryaccount.GivenName)
-		}
-
-		if familyName, exists := m.FamilyName(); exists {
-			create = create.SetNillableFamilyName(&familyName)
-		} else {
-			create = create.SetNillableFamilyName(directoryaccount.FamilyName)
-		}
-
-		if jobTitle, exists := m.JobTitle(); exists {
-			create = create.SetNillableJobTitle(&jobTitle)
-		} else {
-			create = create.SetNillableJobTitle(directoryaccount.JobTitle)
-		}
-
-		if department, exists := m.Department(); exists {
-			create = create.SetNillableDepartment(&department)
-		} else {
-			create = create.SetNillableDepartment(directoryaccount.Department)
-		}
-
-		if organizationUnit, exists := m.OrganizationUnit(); exists {
-			create = create.SetNillableOrganizationUnit(&organizationUnit)
-		} else {
-			create = create.SetNillableOrganizationUnit(directoryaccount.OrganizationUnit)
-		}
-
-		if accountType, exists := m.AccountType(); exists {
-			create = create.SetAccountType(accountType)
-		} else {
-			create = create.SetAccountType(directoryaccount.AccountType)
-		}
-
-		if status, exists := m.Status(); exists {
-			create = create.SetStatus(status)
-		} else {
-			create = create.SetStatus(directoryaccount.Status)
-		}
-
-		if mfaState, exists := m.MfaState(); exists {
-			create = create.SetMfaState(mfaState)
-		} else {
-			create = create.SetMfaState(directoryaccount.MfaState)
-		}
-
-		if lastSeenIP, exists := m.LastSeenIP(); exists {
-			create = create.SetNillableLastSeenIP(&lastSeenIP)
-		} else {
-			create = create.SetNillableLastSeenIP(directoryaccount.LastSeenIP)
-		}
-
-		if lastLoginAt, exists := m.LastLoginAt(); exists {
-			create = create.SetNillableLastLoginAt(&lastLoginAt)
-		} else {
-			create = create.SetNillableLastLoginAt(directoryaccount.LastLoginAt)
-		}
-
-		if firstSeenAt, exists := m.FirstSeenAt(); exists {
-			create = create.SetNillableFirstSeenAt(&firstSeenAt)
-		} else {
-			create = create.SetNillableFirstSeenAt(directoryaccount.FirstSeenAt)
-		}
-
-		if lastSeenAt, exists := m.LastSeenAt(); exists {
-			create = create.SetNillableLastSeenAt(&lastSeenAt)
-		} else {
-			create = create.SetNillableLastSeenAt(directoryaccount.LastSeenAt)
-		}
-
-		if addedAt, exists := m.AddedAt(); exists {
-			create = create.SetNillableAddedAt(&addedAt)
-		} else {
-			create = create.SetNillableAddedAt(directoryaccount.AddedAt)
-		}
-
-		if removedAt, exists := m.RemovedAt(); exists {
-			create = create.SetNillableRemovedAt(&removedAt)
-		} else {
-			create = create.SetNillableRemovedAt(directoryaccount.RemovedAt)
-		}
-
-		if observedAt, exists := m.ObservedAt(); exists {
-			create = create.SetObservedAt(observedAt)
-		} else {
-			create = create.SetObservedAt(directoryaccount.ObservedAt)
-		}
-
-		if profileHash, exists := m.ProfileHash(); exists {
-			create = create.SetProfileHash(profileHash)
-		} else {
-			create = create.SetProfileHash(directoryaccount.ProfileHash)
-		}
-
-		if profile, exists := m.Profile(); exists {
-			create = create.SetProfile(profile)
-		} else {
-			create = create.SetProfile(directoryaccount.Profile)
-		}
-
-		if metadata, exists := m.Metadata(); exists {
-			create = create.SetMetadata(metadata)
-		} else {
-			create = create.SetMetadata(directoryaccount.Metadata)
-		}
-
-		if rawProfileFileID, exists := m.RawProfileFileID(); exists {
-			create = create.SetNillableRawProfileFileID(&rawProfileFileID)
-		} else {
-			create = create.SetNillableRawProfileFileID(directoryaccount.RawProfileFileID)
-		}
-
-		if sourceVersion, exists := m.SourceVersion(); exists {
-			create = create.SetNillableSourceVersion(&sourceVersion)
-		} else {
-			create = create.SetNillableSourceVersion(directoryaccount.SourceVersion)
-		}
-
-		if primarySource, exists := m.PrimarySource(); exists {
-			create = create.SetPrimarySource(primarySource)
-		} else {
-			create = create.SetPrimarySource(directoryaccount.PrimarySource)
-		}
-
-		if _, err := create.Save(ctx); err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *DirectoryAccountMutation) CreateHistoryFromDelete(ctx context.Context) error {
-	ctx = history.WithContext(ctx)
-
-	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
-		return nil
-	}
-
-	client := m.Client()
-
-	ids, err := m.IDs(ctx)
-	if err != nil {
-		return fmt.Errorf("getting ids: %w", err)
-	}
-
-	for _, id := range ids {
-		directoryaccount, err := client.DirectoryAccount.Get(ctx, id)
-		if err != nil {
-			return err
-		}
-
-		create := client.HistoryClient.DirectoryAccountHistory.Create()
-
-		_, err = create.
-			SetOperation(EntOpToHistoryOp(m.Op())).
-			SetHistoryTime(time.Now()).
-			SetRef(id).
-			SetCreatedAt(directoryaccount.CreatedAt).
-			SetUpdatedAt(directoryaccount.UpdatedAt).
-			SetCreatedBy(directoryaccount.CreatedBy).
-			SetUpdatedBy(directoryaccount.UpdatedBy).
-			SetNillableUpdatedByImpersonator(directoryaccount.UpdatedByImpersonator).
-			SetDisplayID(directoryaccount.DisplayID).
-			SetTags(directoryaccount.Tags).
-			SetOwnerID(directoryaccount.OwnerID).
-			SetEnvironmentName(directoryaccount.EnvironmentName).
-			SetEnvironmentID(directoryaccount.EnvironmentID).
-			SetScopeName(directoryaccount.ScopeName).
-			SetScopeID(directoryaccount.ScopeID).
-			SetIntegrationID(directoryaccount.IntegrationID).
-			SetDirectorySyncRunID(directoryaccount.DirectorySyncRunID).
-			SetPlatformID(directoryaccount.PlatformID).
-			SetNillableDirectoryInstanceID(directoryaccount.DirectoryInstanceID).
-			SetNillableIdentityHolderID(directoryaccount.IdentityHolderID).
-			SetNillableDirectoryName(directoryaccount.DirectoryName).
-			SetExternalID(directoryaccount.ExternalID).
-			SetNillableSecondaryKey(directoryaccount.SecondaryKey).
-			SetNillableCanonicalEmail(directoryaccount.CanonicalEmail).
-			SetEmailAliases(directoryaccount.EmailAliases).
-			SetNillablePhoneNumber(directoryaccount.PhoneNumber).
-			SetDisplayName(directoryaccount.DisplayName).
-			SetNillableAvatarRemoteURL(directoryaccount.AvatarRemoteURL).
-			SetNillableAvatarLocalFileID(directoryaccount.AvatarLocalFileID).
-			SetNillableAvatarUpdatedAt(directoryaccount.AvatarUpdatedAt).
-			SetNillableGivenName(directoryaccount.GivenName).
-			SetNillableFamilyName(directoryaccount.FamilyName).
-			SetNillableJobTitle(directoryaccount.JobTitle).
-			SetNillableDepartment(directoryaccount.Department).
-			SetNillableOrganizationUnit(directoryaccount.OrganizationUnit).
-			SetAccountType(directoryaccount.AccountType).
-			SetStatus(directoryaccount.Status).
-			SetMfaState(directoryaccount.MfaState).
-			SetNillableLastSeenIP(directoryaccount.LastSeenIP).
-			SetNillableLastLoginAt(directoryaccount.LastLoginAt).
-			SetNillableFirstSeenAt(directoryaccount.FirstSeenAt).
-			SetNillableLastSeenAt(directoryaccount.LastSeenAt).
-			SetNillableAddedAt(directoryaccount.AddedAt).
-			SetNillableRemovedAt(directoryaccount.RemovedAt).
-			SetObservedAt(directoryaccount.ObservedAt).
-			SetProfileHash(directoryaccount.ProfileHash).
-			SetProfile(directoryaccount.Profile).
-			SetMetadata(directoryaccount.Metadata).
-			SetNillableRawProfileFileID(directoryaccount.RawProfileFileID).
-			SetNillableSourceVersion(directoryaccount.SourceVersion).
-			SetPrimarySource(directoryaccount.PrimarySource).
-			Save(ctx)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *DirectoryGroupMutation) CreateHistoryFromCreate(ctx context.Context) error {
-	ctx = history.WithContext(ctx)
-	client := m.Client()
-
-	id, ok := m.ID()
-	if !ok {
-		return idNotFoundError
-	}
-
-	create := client.HistoryClient.DirectoryGroupHistory.Create()
-
-	create = create.
-		SetOperation(EntOpToHistoryOp(m.Op())).
-		SetHistoryTime(time.Now()).
-		SetRef(id)
-
-	if createdAt, exists := m.CreatedAt(); exists {
-		create = create.SetCreatedAt(createdAt)
-	}
-
-	if updatedAt, exists := m.UpdatedAt(); exists {
-		create = create.SetUpdatedAt(updatedAt)
-	}
-
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
-	}
-
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
-	}
-
-	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
-		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
-	}
-
-	if displayID, exists := m.DisplayID(); exists {
-		create = create.SetDisplayID(displayID)
-	}
-
-	if tags, exists := m.Tags(); exists {
-		create = create.SetTags(tags)
-	}
-
-	if ownerID, exists := m.OwnerID(); exists {
-		create = create.SetOwnerID(ownerID)
-	}
-
-	if environmentName, exists := m.EnvironmentName(); exists {
-		create = create.SetEnvironmentName(environmentName)
-	}
-
-	if environmentID, exists := m.EnvironmentID(); exists {
-		create = create.SetEnvironmentID(environmentID)
-	}
-
-	if scopeName, exists := m.ScopeName(); exists {
-		create = create.SetScopeName(scopeName)
-	}
-
-	if scopeID, exists := m.ScopeID(); exists {
-		create = create.SetScopeID(scopeID)
-	}
-
-	if integrationID, exists := m.IntegrationID(); exists {
-		create = create.SetIntegrationID(integrationID)
-	}
-
-	if platformID, exists := m.PlatformID(); exists {
-		create = create.SetPlatformID(platformID)
-	}
-
-	if directoryInstanceID, exists := m.DirectoryInstanceID(); exists {
-		create = create.SetNillableDirectoryInstanceID(&directoryInstanceID)
-	}
-
-	if directorySyncRunID, exists := m.DirectorySyncRunID(); exists {
-		create = create.SetDirectorySyncRunID(directorySyncRunID)
-	}
-
-	if externalID, exists := m.ExternalID(); exists {
-		create = create.SetExternalID(externalID)
-	}
-
-	if email, exists := m.Email(); exists {
-		create = create.SetNillableEmail(&email)
-	}
-
-	if displayName, exists := m.DisplayName(); exists {
-		create = create.SetDisplayName(displayName)
-	}
-
-	if description, exists := m.Description(); exists {
-		create = create.SetNillableDescription(&description)
-	}
-
-	if classification, exists := m.Classification(); exists {
-		create = create.SetClassification(classification)
-	}
-
-	if status, exists := m.Status(); exists {
-		create = create.SetStatus(status)
-	}
-
-	if externalSharingAllowed, exists := m.ExternalSharingAllowed(); exists {
-		create = create.SetExternalSharingAllowed(externalSharingAllowed)
-	}
-
-	if memberCount, exists := m.MemberCount(); exists {
-		create = create.SetMemberCount(memberCount)
-	}
-
-	if firstSeenAt, exists := m.FirstSeenAt(); exists {
-		create = create.SetNillableFirstSeenAt(&firstSeenAt)
-	}
-
-	if lastSeenAt, exists := m.LastSeenAt(); exists {
-		create = create.SetNillableLastSeenAt(&lastSeenAt)
-	}
-
-	if addedAt, exists := m.AddedAt(); exists {
-		create = create.SetNillableAddedAt(&addedAt)
-	}
-
-	if removedAt, exists := m.RemovedAt(); exists {
-		create = create.SetNillableRemovedAt(&removedAt)
-	}
-
-	if observedAt, exists := m.ObservedAt(); exists {
-		create = create.SetObservedAt(observedAt)
-	}
-
-	if profileHash, exists := m.ProfileHash(); exists {
-		create = create.SetProfileHash(profileHash)
-	}
-
-	if profile, exists := m.Profile(); exists {
-		create = create.SetProfile(profile)
-	}
-
-	if metadata, exists := m.Metadata(); exists {
-		create = create.SetMetadata(metadata)
-	}
-
-	if rawProfileFileID, exists := m.RawProfileFileID(); exists {
-		create = create.SetNillableRawProfileFileID(&rawProfileFileID)
-	}
-
-	if sourceVersion, exists := m.SourceVersion(); exists {
-		create = create.SetNillableSourceVersion(&sourceVersion)
-	}
-
-	if directoryName, exists := m.DirectoryName(); exists {
-		create = create.SetNillableDirectoryName(&directoryName)
-	}
-
-	_, err := create.Save(ctx)
-
-	return err
-}
-
-func (m *DirectoryGroupMutation) CreateHistoryFromUpdate(ctx context.Context) error {
-	ctx = history.WithContext(ctx)
-	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
-		return m.CreateHistoryFromDelete(ctx)
-	}
-	client := m.Client()
-
-	ids, err := m.IDs(ctx)
-	if err != nil {
-		return fmt.Errorf("getting ids: %w", err)
-	}
-
-	for _, id := range ids {
-		directorygroup, err := client.DirectoryGroup.Get(ctx, id)
-		if err != nil {
-			return err
-		}
-
-		create := client.HistoryClient.DirectoryGroupHistory.Create()
-
-		create = create.
-			SetOperation(EntOpToHistoryOp(m.Op())).
-			SetHistoryTime(time.Now()).
-			SetRef(id)
-
-		if createdAt, exists := m.CreatedAt(); exists {
-			create = create.SetCreatedAt(createdAt)
-		} else {
-			create = create.SetCreatedAt(directorygroup.CreatedAt)
-		}
-
-		if updatedAt, exists := m.UpdatedAt(); exists {
-			create = create.SetUpdatedAt(updatedAt)
-		} else {
-			create = create.SetUpdatedAt(directorygroup.UpdatedAt)
-		}
-
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
-		} else {
-			create = create.SetCreatedBy(directorygroup.CreatedBy)
-		}
-
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
-		} else {
-			create = create.SetUpdatedBy(directorygroup.UpdatedBy)
-		}
-
-		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
-			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
-		} else {
-			create = create.SetNillableUpdatedByImpersonator(directorygroup.UpdatedByImpersonator)
-		}
-
-		if displayID, exists := m.DisplayID(); exists {
-			create = create.SetDisplayID(displayID)
-		} else {
-			create = create.SetDisplayID(directorygroup.DisplayID)
-		}
-
-		if tags, exists := m.Tags(); exists {
-			create = create.SetTags(tags)
-		} else {
-			create = create.SetTags(directorygroup.Tags)
-		}
-
-		if ownerID, exists := m.OwnerID(); exists {
-			create = create.SetOwnerID(ownerID)
-		} else {
-			create = create.SetOwnerID(directorygroup.OwnerID)
-		}
-
-		if environmentName, exists := m.EnvironmentName(); exists {
-			create = create.SetEnvironmentName(environmentName)
-		} else {
-			create = create.SetEnvironmentName(directorygroup.EnvironmentName)
-		}
-
-		if environmentID, exists := m.EnvironmentID(); exists {
-			create = create.SetEnvironmentID(environmentID)
-		} else {
-			create = create.SetEnvironmentID(directorygroup.EnvironmentID)
-		}
-
-		if scopeName, exists := m.ScopeName(); exists {
-			create = create.SetScopeName(scopeName)
-		} else {
-			create = create.SetScopeName(directorygroup.ScopeName)
-		}
-
-		if scopeID, exists := m.ScopeID(); exists {
-			create = create.SetScopeID(scopeID)
-		} else {
-			create = create.SetScopeID(directorygroup.ScopeID)
-		}
-
-		if integrationID, exists := m.IntegrationID(); exists {
-			create = create.SetIntegrationID(integrationID)
-		} else {
-			create = create.SetIntegrationID(directorygroup.IntegrationID)
-		}
-
-		if platformID, exists := m.PlatformID(); exists {
-			create = create.SetPlatformID(platformID)
-		} else {
-			create = create.SetPlatformID(directorygroup.PlatformID)
-		}
-
-		if directoryInstanceID, exists := m.DirectoryInstanceID(); exists {
-			create = create.SetNillableDirectoryInstanceID(&directoryInstanceID)
-		} else {
-			create = create.SetNillableDirectoryInstanceID(directorygroup.DirectoryInstanceID)
-		}
-
-		if directorySyncRunID, exists := m.DirectorySyncRunID(); exists {
-			create = create.SetDirectorySyncRunID(directorySyncRunID)
-		} else {
-			create = create.SetDirectorySyncRunID(directorygroup.DirectorySyncRunID)
-		}
-
-		if externalID, exists := m.ExternalID(); exists {
-			create = create.SetExternalID(externalID)
-		} else {
-			create = create.SetExternalID(directorygroup.ExternalID)
-		}
-
-		if email, exists := m.Email(); exists {
-			create = create.SetNillableEmail(&email)
-		} else {
-			create = create.SetNillableEmail(directorygroup.Email)
-		}
-
-		if displayName, exists := m.DisplayName(); exists {
-			create = create.SetDisplayName(displayName)
-		} else {
-			create = create.SetDisplayName(directorygroup.DisplayName)
-		}
-
-		if description, exists := m.Description(); exists {
-			create = create.SetNillableDescription(&description)
-		} else {
-			create = create.SetNillableDescription(directorygroup.Description)
-		}
-
-		if classification, exists := m.Classification(); exists {
-			create = create.SetClassification(classification)
-		} else {
-			create = create.SetClassification(directorygroup.Classification)
-		}
-
-		if status, exists := m.Status(); exists {
-			create = create.SetStatus(status)
-		} else {
-			create = create.SetStatus(directorygroup.Status)
-		}
-
-		if externalSharingAllowed, exists := m.ExternalSharingAllowed(); exists {
-			create = create.SetExternalSharingAllowed(externalSharingAllowed)
-		} else {
-			create = create.SetExternalSharingAllowed(directorygroup.ExternalSharingAllowed)
-		}
-
-		if memberCount, exists := m.MemberCount(); exists {
-			create = create.SetMemberCount(memberCount)
-		} else {
-			create = create.SetMemberCount(directorygroup.MemberCount)
-		}
-
-		if firstSeenAt, exists := m.FirstSeenAt(); exists {
-			create = create.SetNillableFirstSeenAt(&firstSeenAt)
-		} else {
-			create = create.SetNillableFirstSeenAt(directorygroup.FirstSeenAt)
-		}
-
-		if lastSeenAt, exists := m.LastSeenAt(); exists {
-			create = create.SetNillableLastSeenAt(&lastSeenAt)
-		} else {
-			create = create.SetNillableLastSeenAt(directorygroup.LastSeenAt)
-		}
-
-		if addedAt, exists := m.AddedAt(); exists {
-			create = create.SetNillableAddedAt(&addedAt)
-		} else {
-			create = create.SetNillableAddedAt(directorygroup.AddedAt)
-		}
-
-		if removedAt, exists := m.RemovedAt(); exists {
-			create = create.SetNillableRemovedAt(&removedAt)
-		} else {
-			create = create.SetNillableRemovedAt(directorygroup.RemovedAt)
-		}
-
-		if observedAt, exists := m.ObservedAt(); exists {
-			create = create.SetObservedAt(observedAt)
-		} else {
-			create = create.SetObservedAt(directorygroup.ObservedAt)
-		}
-
-		if profileHash, exists := m.ProfileHash(); exists {
-			create = create.SetProfileHash(profileHash)
-		} else {
-			create = create.SetProfileHash(directorygroup.ProfileHash)
-		}
-
-		if profile, exists := m.Profile(); exists {
-			create = create.SetProfile(profile)
-		} else {
-			create = create.SetProfile(directorygroup.Profile)
-		}
-
-		if metadata, exists := m.Metadata(); exists {
-			create = create.SetMetadata(metadata)
-		} else {
-			create = create.SetMetadata(directorygroup.Metadata)
-		}
-
-		if rawProfileFileID, exists := m.RawProfileFileID(); exists {
-			create = create.SetNillableRawProfileFileID(&rawProfileFileID)
-		} else {
-			create = create.SetNillableRawProfileFileID(directorygroup.RawProfileFileID)
-		}
-
-		if sourceVersion, exists := m.SourceVersion(); exists {
-			create = create.SetNillableSourceVersion(&sourceVersion)
-		} else {
-			create = create.SetNillableSourceVersion(directorygroup.SourceVersion)
-		}
-
-		if directoryName, exists := m.DirectoryName(); exists {
-			create = create.SetNillableDirectoryName(&directoryName)
-		} else {
-			create = create.SetNillableDirectoryName(directorygroup.DirectoryName)
-		}
-
-		if _, err := create.Save(ctx); err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *DirectoryGroupMutation) CreateHistoryFromDelete(ctx context.Context) error {
-	ctx = history.WithContext(ctx)
-
-	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
-		return nil
-	}
-
-	client := m.Client()
-
-	ids, err := m.IDs(ctx)
-	if err != nil {
-		return fmt.Errorf("getting ids: %w", err)
-	}
-
-	for _, id := range ids {
-		directorygroup, err := client.DirectoryGroup.Get(ctx, id)
-		if err != nil {
-			return err
-		}
-
-		create := client.HistoryClient.DirectoryGroupHistory.Create()
-
-		_, err = create.
-			SetOperation(EntOpToHistoryOp(m.Op())).
-			SetHistoryTime(time.Now()).
-			SetRef(id).
-			SetCreatedAt(directorygroup.CreatedAt).
-			SetUpdatedAt(directorygroup.UpdatedAt).
-			SetCreatedBy(directorygroup.CreatedBy).
-			SetUpdatedBy(directorygroup.UpdatedBy).
-			SetNillableUpdatedByImpersonator(directorygroup.UpdatedByImpersonator).
-			SetDisplayID(directorygroup.DisplayID).
-			SetTags(directorygroup.Tags).
-			SetOwnerID(directorygroup.OwnerID).
-			SetEnvironmentName(directorygroup.EnvironmentName).
-			SetEnvironmentID(directorygroup.EnvironmentID).
-			SetScopeName(directorygroup.ScopeName).
-			SetScopeID(directorygroup.ScopeID).
-			SetIntegrationID(directorygroup.IntegrationID).
-			SetPlatformID(directorygroup.PlatformID).
-			SetNillableDirectoryInstanceID(directorygroup.DirectoryInstanceID).
-			SetDirectorySyncRunID(directorygroup.DirectorySyncRunID).
-			SetExternalID(directorygroup.ExternalID).
-			SetNillableEmail(directorygroup.Email).
-			SetDisplayName(directorygroup.DisplayName).
-			SetNillableDescription(directorygroup.Description).
-			SetClassification(directorygroup.Classification).
-			SetStatus(directorygroup.Status).
-			SetExternalSharingAllowed(directorygroup.ExternalSharingAllowed).
-			SetMemberCount(directorygroup.MemberCount).
-			SetNillableFirstSeenAt(directorygroup.FirstSeenAt).
-			SetNillableLastSeenAt(directorygroup.LastSeenAt).
-			SetNillableAddedAt(directorygroup.AddedAt).
-			SetNillableRemovedAt(directorygroup.RemovedAt).
-			SetObservedAt(directorygroup.ObservedAt).
-			SetProfileHash(directorygroup.ProfileHash).
-			SetProfile(directorygroup.Profile).
-			SetMetadata(directorygroup.Metadata).
-			SetNillableRawProfileFileID(directorygroup.RawProfileFileID).
-			SetNillableSourceVersion(directorygroup.SourceVersion).
-			SetNillableDirectoryName(directorygroup.DirectoryName).
-			Save(ctx)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *DirectoryMembershipMutation) CreateHistoryFromCreate(ctx context.Context) error {
-	ctx = history.WithContext(ctx)
-	client := m.Client()
-
-	id, ok := m.ID()
-	if !ok {
-		return idNotFoundError
-	}
-
-	create := client.HistoryClient.DirectoryMembershipHistory.Create()
-
-	create = create.
-		SetOperation(EntOpToHistoryOp(m.Op())).
-		SetHistoryTime(time.Now()).
-		SetRef(id)
-
-	if createdAt, exists := m.CreatedAt(); exists {
-		create = create.SetCreatedAt(createdAt)
-	}
-
-	if updatedAt, exists := m.UpdatedAt(); exists {
-		create = create.SetUpdatedAt(updatedAt)
-	}
-
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
-	}
-
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
-	}
-
-	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
-		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
-	}
-
-	if displayID, exists := m.DisplayID(); exists {
-		create = create.SetDisplayID(displayID)
-	}
-
-	if ownerID, exists := m.OwnerID(); exists {
-		create = create.SetOwnerID(ownerID)
-	}
-
-	if environmentName, exists := m.EnvironmentName(); exists {
-		create = create.SetEnvironmentName(environmentName)
-	}
-
-	if environmentID, exists := m.EnvironmentID(); exists {
-		create = create.SetEnvironmentID(environmentID)
-	}
-
-	if scopeName, exists := m.ScopeName(); exists {
-		create = create.SetScopeName(scopeName)
-	}
-
-	if scopeID, exists := m.ScopeID(); exists {
-		create = create.SetScopeID(scopeID)
-	}
-
-	if integrationID, exists := m.IntegrationID(); exists {
-		create = create.SetIntegrationID(integrationID)
-	}
-
-	if platformID, exists := m.PlatformID(); exists {
-		create = create.SetPlatformID(platformID)
-	}
-
-	if directoryInstanceID, exists := m.DirectoryInstanceID(); exists {
-		create = create.SetNillableDirectoryInstanceID(&directoryInstanceID)
-	}
-
-	if directorySyncRunID, exists := m.DirectorySyncRunID(); exists {
-		create = create.SetDirectorySyncRunID(directorySyncRunID)
-	}
-
-	if directoryAccountID, exists := m.DirectoryAccountID(); exists {
-		create = create.SetDirectoryAccountID(directoryAccountID)
-	}
-
-	if directoryGroupID, exists := m.DirectoryGroupID(); exists {
-		create = create.SetDirectoryGroupID(directoryGroupID)
-	}
-
-	if role, exists := m.Role(); exists {
-		create = create.SetRole(role)
-	}
-
-	if source, exists := m.Source(); exists {
-		create = create.SetNillableSource(&source)
-	}
-
-	if directoryName, exists := m.DirectoryName(); exists {
-		create = create.SetNillableDirectoryName(&directoryName)
-	}
-
-	if firstSeenAt, exists := m.FirstSeenAt(); exists {
-		create = create.SetNillableFirstSeenAt(&firstSeenAt)
-	}
-
-	if lastSeenAt, exists := m.LastSeenAt(); exists {
-		create = create.SetNillableLastSeenAt(&lastSeenAt)
-	}
-
-	if addedAt, exists := m.AddedAt(); exists {
-		create = create.SetNillableAddedAt(&addedAt)
-	}
-
-	if removedAt, exists := m.RemovedAt(); exists {
-		create = create.SetNillableRemovedAt(&removedAt)
-	}
-
-	if observedAt, exists := m.ObservedAt(); exists {
-		create = create.SetObservedAt(observedAt)
-	}
-
-	if lastConfirmedRunID, exists := m.LastConfirmedRunID(); exists {
-		create = create.SetNillableLastConfirmedRunID(&lastConfirmedRunID)
-	}
-
-	if metadata, exists := m.Metadata(); exists {
-		create = create.SetMetadata(metadata)
-	}
-
-	_, err := create.Save(ctx)
-
-	return err
-}
-
-func (m *DirectoryMembershipMutation) CreateHistoryFromUpdate(ctx context.Context) error {
-	ctx = history.WithContext(ctx)
-	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
-		return m.CreateHistoryFromDelete(ctx)
-	}
-	client := m.Client()
-
-	ids, err := m.IDs(ctx)
-	if err != nil {
-		return fmt.Errorf("getting ids: %w", err)
-	}
-
-	for _, id := range ids {
-		directorymembership, err := client.DirectoryMembership.Get(ctx, id)
-		if err != nil {
-			return err
-		}
-
-		create := client.HistoryClient.DirectoryMembershipHistory.Create()
-
-		create = create.
-			SetOperation(EntOpToHistoryOp(m.Op())).
-			SetHistoryTime(time.Now()).
-			SetRef(id)
-
-		if createdAt, exists := m.CreatedAt(); exists {
-			create = create.SetCreatedAt(createdAt)
-		} else {
-			create = create.SetCreatedAt(directorymembership.CreatedAt)
-		}
-
-		if updatedAt, exists := m.UpdatedAt(); exists {
-			create = create.SetUpdatedAt(updatedAt)
-		} else {
-			create = create.SetUpdatedAt(directorymembership.UpdatedAt)
-		}
-
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
-		} else {
-			create = create.SetCreatedBy(directorymembership.CreatedBy)
-		}
-
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
-		} else {
-			create = create.SetUpdatedBy(directorymembership.UpdatedBy)
-		}
-
-		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
-			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
-		} else {
-			create = create.SetNillableUpdatedByImpersonator(directorymembership.UpdatedByImpersonator)
-		}
-
-		if displayID, exists := m.DisplayID(); exists {
-			create = create.SetDisplayID(displayID)
-		} else {
-			create = create.SetDisplayID(directorymembership.DisplayID)
-		}
-
-		if ownerID, exists := m.OwnerID(); exists {
-			create = create.SetOwnerID(ownerID)
-		} else {
-			create = create.SetOwnerID(directorymembership.OwnerID)
-		}
-
-		if environmentName, exists := m.EnvironmentName(); exists {
-			create = create.SetEnvironmentName(environmentName)
-		} else {
-			create = create.SetEnvironmentName(directorymembership.EnvironmentName)
-		}
-
-		if environmentID, exists := m.EnvironmentID(); exists {
-			create = create.SetEnvironmentID(environmentID)
-		} else {
-			create = create.SetEnvironmentID(directorymembership.EnvironmentID)
-		}
-
-		if scopeName, exists := m.ScopeName(); exists {
-			create = create.SetScopeName(scopeName)
-		} else {
-			create = create.SetScopeName(directorymembership.ScopeName)
-		}
-
-		if scopeID, exists := m.ScopeID(); exists {
-			create = create.SetScopeID(scopeID)
-		} else {
-			create = create.SetScopeID(directorymembership.ScopeID)
-		}
-
-		if integrationID, exists := m.IntegrationID(); exists {
-			create = create.SetIntegrationID(integrationID)
-		} else {
-			create = create.SetIntegrationID(directorymembership.IntegrationID)
-		}
-
-		if platformID, exists := m.PlatformID(); exists {
-			create = create.SetPlatformID(platformID)
-		} else {
-			create = create.SetPlatformID(directorymembership.PlatformID)
-		}
-
-		if directoryInstanceID, exists := m.DirectoryInstanceID(); exists {
-			create = create.SetNillableDirectoryInstanceID(&directoryInstanceID)
-		} else {
-			create = create.SetNillableDirectoryInstanceID(directorymembership.DirectoryInstanceID)
-		}
-
-		if directorySyncRunID, exists := m.DirectorySyncRunID(); exists {
-			create = create.SetDirectorySyncRunID(directorySyncRunID)
-		} else {
-			create = create.SetDirectorySyncRunID(directorymembership.DirectorySyncRunID)
-		}
-
-		if directoryAccountID, exists := m.DirectoryAccountID(); exists {
-			create = create.SetDirectoryAccountID(directoryAccountID)
-		} else {
-			create = create.SetDirectoryAccountID(directorymembership.DirectoryAccountID)
-		}
-
-		if directoryGroupID, exists := m.DirectoryGroupID(); exists {
-			create = create.SetDirectoryGroupID(directoryGroupID)
-		} else {
-			create = create.SetDirectoryGroupID(directorymembership.DirectoryGroupID)
-		}
-
-		if role, exists := m.Role(); exists {
-			create = create.SetRole(role)
-		} else {
-			create = create.SetRole(directorymembership.Role)
-		}
-
-		if source, exists := m.Source(); exists {
-			create = create.SetNillableSource(&source)
-		} else {
-			create = create.SetNillableSource(directorymembership.Source)
-		}
-
-		if directoryName, exists := m.DirectoryName(); exists {
-			create = create.SetNillableDirectoryName(&directoryName)
-		} else {
-			create = create.SetNillableDirectoryName(directorymembership.DirectoryName)
-		}
-
-		if firstSeenAt, exists := m.FirstSeenAt(); exists {
-			create = create.SetNillableFirstSeenAt(&firstSeenAt)
-		} else {
-			create = create.SetNillableFirstSeenAt(directorymembership.FirstSeenAt)
-		}
-
-		if lastSeenAt, exists := m.LastSeenAt(); exists {
-			create = create.SetNillableLastSeenAt(&lastSeenAt)
-		} else {
-			create = create.SetNillableLastSeenAt(directorymembership.LastSeenAt)
-		}
-
-		if addedAt, exists := m.AddedAt(); exists {
-			create = create.SetNillableAddedAt(&addedAt)
-		} else {
-			create = create.SetNillableAddedAt(directorymembership.AddedAt)
-		}
-
-		if removedAt, exists := m.RemovedAt(); exists {
-			create = create.SetNillableRemovedAt(&removedAt)
-		} else {
-			create = create.SetNillableRemovedAt(directorymembership.RemovedAt)
-		}
-
-		if observedAt, exists := m.ObservedAt(); exists {
-			create = create.SetObservedAt(observedAt)
-		} else {
-			create = create.SetObservedAt(directorymembership.ObservedAt)
-		}
-
-		if lastConfirmedRunID, exists := m.LastConfirmedRunID(); exists {
-			create = create.SetNillableLastConfirmedRunID(&lastConfirmedRunID)
-		} else {
-			create = create.SetNillableLastConfirmedRunID(directorymembership.LastConfirmedRunID)
-		}
-
-		if metadata, exists := m.Metadata(); exists {
-			create = create.SetMetadata(metadata)
-		} else {
-			create = create.SetMetadata(directorymembership.Metadata)
-		}
-
-		if _, err := create.Save(ctx); err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *DirectoryMembershipMutation) CreateHistoryFromDelete(ctx context.Context) error {
-	ctx = history.WithContext(ctx)
-
-	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
-		return nil
-	}
-
-	client := m.Client()
-
-	ids, err := m.IDs(ctx)
-	if err != nil {
-		return fmt.Errorf("getting ids: %w", err)
-	}
-
-	for _, id := range ids {
-		directorymembership, err := client.DirectoryMembership.Get(ctx, id)
-		if err != nil {
-			return err
-		}
-
-		create := client.HistoryClient.DirectoryMembershipHistory.Create()
-
-		_, err = create.
-			SetOperation(EntOpToHistoryOp(m.Op())).
-			SetHistoryTime(time.Now()).
-			SetRef(id).
-			SetCreatedAt(directorymembership.CreatedAt).
-			SetUpdatedAt(directorymembership.UpdatedAt).
-			SetCreatedBy(directorymembership.CreatedBy).
-			SetUpdatedBy(directorymembership.UpdatedBy).
-			SetNillableUpdatedByImpersonator(directorymembership.UpdatedByImpersonator).
-			SetDisplayID(directorymembership.DisplayID).
-			SetOwnerID(directorymembership.OwnerID).
-			SetEnvironmentName(directorymembership.EnvironmentName).
-			SetEnvironmentID(directorymembership.EnvironmentID).
-			SetScopeName(directorymembership.ScopeName).
-			SetScopeID(directorymembership.ScopeID).
-			SetIntegrationID(directorymembership.IntegrationID).
-			SetPlatformID(directorymembership.PlatformID).
-			SetNillableDirectoryInstanceID(directorymembership.DirectoryInstanceID).
-			SetDirectorySyncRunID(directorymembership.DirectorySyncRunID).
-			SetDirectoryAccountID(directorymembership.DirectoryAccountID).
-			SetDirectoryGroupID(directorymembership.DirectoryGroupID).
-			SetRole(directorymembership.Role).
-			SetNillableSource(directorymembership.Source).
-			SetNillableDirectoryName(directorymembership.DirectoryName).
-			SetNillableFirstSeenAt(directorymembership.FirstSeenAt).
-			SetNillableLastSeenAt(directorymembership.LastSeenAt).
-			SetNillableAddedAt(directorymembership.AddedAt).
-			SetNillableRemovedAt(directorymembership.RemovedAt).
-			SetObservedAt(directorymembership.ObservedAt).
-			SetNillableLastConfirmedRunID(directorymembership.LastConfirmedRunID).
-			SetMetadata(directorymembership.Metadata).
-			Save(ctx)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
 }
 
 func (m *DiscussionMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -6862,6 +5081,9 @@ func (m *DiscussionMutation) CreateHistoryFromCreate(ctx context.Context) error 
 
 func (m *DiscussionMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -6956,6 +5178,9 @@ func (m *DiscussionMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 
 func (m *DiscussionMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -7000,8 +5225,23 @@ func (m *DiscussionMutation) CreateHistoryFromDelete(ctx context.Context) error 
 	return nil
 }
 
+func (m *DocumentDataMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *DocumentDataMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -7083,6 +5323,9 @@ func (m *DocumentDataMutation) CreateHistoryFromCreate(ctx context.Context) erro
 
 func (m *DocumentDataMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -7207,6 +5450,9 @@ func (m *DocumentDataMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 
 func (m *DocumentDataMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -7256,8 +5502,23 @@ func (m *DocumentDataMutation) CreateHistoryFromDelete(ctx context.Context) erro
 	return nil
 }
 
+func (m *EmailTemplateMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *EmailTemplateMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -7407,6 +5668,9 @@ func (m *EmailTemplateMutation) CreateHistoryFromCreate(ctx context.Context) err
 
 func (m *EmailTemplateMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -7633,6 +5897,9 @@ func (m *EmailTemplateMutation) CreateHistoryFromUpdate(ctx context.Context) err
 
 func (m *EmailTemplateMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -7699,8 +5966,23 @@ func (m *EmailTemplateMutation) CreateHistoryFromDelete(ctx context.Context) err
 	return nil
 }
 
+func (m *EntityMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *EntityMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -7986,6 +6268,9 @@ func (m *EntityMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *EntityMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -8416,6 +6701,9 @@ func (m *EntityMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *EntityMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -8516,8 +6804,23 @@ func (m *EntityMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *EntityTypeMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *EntityTypeMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -8591,6 +6894,9 @@ func (m *EntityTypeMutation) CreateHistoryFromCreate(ctx context.Context) error 
 
 func (m *EntityTypeMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -8703,6 +7009,9 @@ func (m *EntityTypeMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 
 func (m *EntityTypeMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -8750,8 +7059,23 @@ func (m *EntityTypeMutation) CreateHistoryFromDelete(ctx context.Context) error 
 	return nil
 }
 
+func (m *EvidenceMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *EvidenceMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -8877,6 +7201,9 @@ func (m *EvidenceMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *EvidenceMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -9067,6 +7394,9 @@ func (m *EvidenceMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *EvidenceMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -9127,8 +7457,23 @@ func (m *EvidenceMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *FileMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *FileMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -9294,6 +7639,9 @@ func (m *FileMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *FileMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -9544,6 +7892,9 @@ func (m *FileMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *FileMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -9614,8 +7965,23 @@ func (m *FileMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *FindingMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *FindingMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -9889,6 +8255,9 @@ func (m *FindingMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *FindingMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -10301,6 +8670,9 @@ func (m *FindingMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *FindingMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -10398,8 +8770,23 @@ func (m *FindingMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *FindingControlMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *FindingControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -10481,6 +8868,9 @@ func (m *FindingControlMutation) CreateHistoryFromCreate(ctx context.Context) er
 
 func (m *FindingControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -10605,6 +8995,9 @@ func (m *FindingControlMutation) CreateHistoryFromUpdate(ctx context.Context) er
 
 func (m *FindingControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -10654,8 +9047,23 @@ func (m *FindingControlMutation) CreateHistoryFromDelete(ctx context.Context) er
 	return nil
 }
 
+func (m *GroupMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *GroupMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -10773,6 +9181,9 @@ func (m *GroupMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *GroupMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -10951,6 +9362,9 @@ func (m *GroupMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *GroupMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -11009,8 +9423,23 @@ func (m *GroupMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *GroupMembershipMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *GroupMembershipMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -11064,6 +9493,9 @@ func (m *GroupMembershipMutation) CreateHistoryFromCreate(ctx context.Context) e
 
 func (m *GroupMembershipMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -11146,6 +9578,9 @@ func (m *GroupMembershipMutation) CreateHistoryFromUpdate(ctx context.Context) e
 
 func (m *GroupMembershipMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -11188,8 +9623,23 @@ func (m *GroupMembershipMutation) CreateHistoryFromDelete(ctx context.Context) e
 	return nil
 }
 
+func (m *GroupSettingMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *GroupSettingMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -11259,6 +9709,9 @@ func (m *GroupSettingMutation) CreateHistoryFromCreate(ctx context.Context) erro
 
 func (m *GroupSettingMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -11365,6 +9818,9 @@ func (m *GroupSettingMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 
 func (m *GroupSettingMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -11411,8 +9867,23 @@ func (m *GroupSettingMutation) CreateHistoryFromDelete(ctx context.Context) erro
 	return nil
 }
 
+func (m *HushMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *HushMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -11514,6 +9985,9 @@ func (m *HushMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *HushMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -11668,6 +10142,9 @@ func (m *HushMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *HushMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -11722,8 +10199,23 @@ func (m *HushMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *IdentityHolderMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *IdentityHolderMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -11901,6 +10393,9 @@ func (m *IdentityHolderMutation) CreateHistoryFromCreate(ctx context.Context) er
 
 func (m *IdentityHolderMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -12169,6 +10664,9 @@ func (m *IdentityHolderMutation) CreateHistoryFromUpdate(ctx context.Context) er
 
 func (m *IdentityHolderMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -12242,473 +10740,23 @@ func (m *IdentityHolderMutation) CreateHistoryFromDelete(ctx context.Context) er
 	return nil
 }
 
-func (m *IntegrationMutation) CreateHistoryFromCreate(ctx context.Context) error {
-	ctx = history.WithContext(ctx)
-	client := m.Client()
+func (m *InternalPolicyMutation) skipper(ctx context.Context) bool {
 
-	id, ok := m.ID()
-	if !ok {
-		return idNotFoundError
+	if PurgeHistoryEnabled(ctx) {
+		return true
 	}
 
-	create := client.HistoryClient.IntegrationHistory.Create()
+	caller, _ := auth.CallerFromContext(ctx)
 
-	create = create.
-		SetOperation(EntOpToHistoryOp(m.Op())).
-		SetHistoryTime(time.Now()).
-		SetRef(id)
+	return caller.HasInLineage(auth.CapBypassAuditLog)
 
-	if createdAt, exists := m.CreatedAt(); exists {
-		create = create.SetCreatedAt(createdAt)
-	}
-
-	if updatedAt, exists := m.UpdatedAt(); exists {
-		create = create.SetUpdatedAt(updatedAt)
-	}
-
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
-	}
-
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
-	}
-
-	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
-		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
-	}
-
-	if deletedAt, exists := m.DeletedAt(); exists {
-		create = create.SetDeletedAt(deletedAt)
-	}
-
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
-	}
-
-	if tags, exists := m.Tags(); exists {
-		create = create.SetTags(tags)
-	}
-
-	if ownerID, exists := m.OwnerID(); exists {
-		create = create.SetOwnerID(ownerID)
-	}
-
-	if systemOwned, exists := m.SystemOwned(); exists {
-		create = create.SetSystemOwned(systemOwned)
-	}
-
-	if internalNotes, exists := m.InternalNotes(); exists {
-		create = create.SetNillableInternalNotes(&internalNotes)
-	}
-
-	if systemInternalID, exists := m.SystemInternalID(); exists {
-		create = create.SetNillableSystemInternalID(&systemInternalID)
-	}
-
-	if environmentName, exists := m.EnvironmentName(); exists {
-		create = create.SetEnvironmentName(environmentName)
-	}
-
-	if environmentID, exists := m.EnvironmentID(); exists {
-		create = create.SetEnvironmentID(environmentID)
-	}
-
-	if scopeName, exists := m.ScopeName(); exists {
-		create = create.SetScopeName(scopeName)
-	}
-
-	if scopeID, exists := m.ScopeID(); exists {
-		create = create.SetScopeID(scopeID)
-	}
-
-	if name, exists := m.Name(); exists {
-		create = create.SetName(name)
-	}
-
-	if description, exists := m.Description(); exists {
-		create = create.SetDescription(description)
-	}
-
-	if kind, exists := m.Kind(); exists {
-		create = create.SetKind(kind)
-	}
-
-	if integrationType, exists := m.IntegrationType(); exists {
-		create = create.SetIntegrationType(integrationType)
-	}
-
-	if platformID, exists := m.PlatformID(); exists {
-		create = create.SetPlatformID(platformID)
-	}
-
-	if providerMetadata, exists := m.ProviderMetadata(); exists {
-		create = create.SetProviderMetadata(providerMetadata)
-	}
-
-	if config, exists := m.Config(); exists {
-		create = create.SetConfig(config)
-	}
-
-	if installationMetadata, exists := m.InstallationMetadata(); exists {
-		create = create.SetInstallationMetadata(installationMetadata)
-	}
-
-	if providerState, exists := m.ProviderState(); exists {
-		create = create.SetProviderState(providerState)
-	}
-
-	if metadata, exists := m.Metadata(); exists {
-		create = create.SetMetadata(metadata)
-	}
-
-	if definitionID, exists := m.DefinitionID(); exists {
-		create = create.SetDefinitionID(definitionID)
-	}
-
-	if definitionVersion, exists := m.DefinitionVersion(); exists {
-		create = create.SetDefinitionVersion(definitionVersion)
-	}
-
-	if definitionSlug, exists := m.DefinitionSlug(); exists {
-		create = create.SetDefinitionSlug(definitionSlug)
-	}
-
-	if family, exists := m.Family(); exists {
-		create = create.SetFamily(family)
-	}
-
-	if status, exists := m.Status(); exists {
-		create = create.SetStatus(status)
-	}
-
-	if providerMetadataSnapshot, exists := m.ProviderMetadataSnapshot(); exists {
-		create = create.SetProviderMetadataSnapshot(providerMetadataSnapshot)
-	}
-
-	if primaryDirectory, exists := m.PrimaryDirectory(); exists {
-		create = create.SetPrimaryDirectory(primaryDirectory)
-	}
-
-	if campaignEmail, exists := m.CampaignEmail(); exists {
-		create = create.SetCampaignEmail(campaignEmail)
-	}
-
-	_, err := create.Save(ctx)
-
-	return err
-}
-
-func (m *IntegrationMutation) CreateHistoryFromUpdate(ctx context.Context) error {
-	ctx = history.WithContext(ctx)
-	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
-		return m.CreateHistoryFromDelete(ctx)
-	}
-	client := m.Client()
-
-	ids, err := m.IDs(ctx)
-	if err != nil {
-		return fmt.Errorf("getting ids: %w", err)
-	}
-
-	for _, id := range ids {
-		integration, err := client.Integration.Get(ctx, id)
-		if err != nil {
-			return err
-		}
-
-		create := client.HistoryClient.IntegrationHistory.Create()
-
-		create = create.
-			SetOperation(EntOpToHistoryOp(m.Op())).
-			SetHistoryTime(time.Now()).
-			SetRef(id)
-
-		if createdAt, exists := m.CreatedAt(); exists {
-			create = create.SetCreatedAt(createdAt)
-		} else {
-			create = create.SetCreatedAt(integration.CreatedAt)
-		}
-
-		if updatedAt, exists := m.UpdatedAt(); exists {
-			create = create.SetUpdatedAt(updatedAt)
-		} else {
-			create = create.SetUpdatedAt(integration.UpdatedAt)
-		}
-
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
-		} else {
-			create = create.SetCreatedBy(integration.CreatedBy)
-		}
-
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
-		} else {
-			create = create.SetUpdatedBy(integration.UpdatedBy)
-		}
-
-		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
-			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
-		} else {
-			create = create.SetNillableUpdatedByImpersonator(integration.UpdatedByImpersonator)
-		}
-
-		if deletedAt, exists := m.DeletedAt(); exists {
-			create = create.SetDeletedAt(deletedAt)
-		} else {
-			create = create.SetDeletedAt(integration.DeletedAt)
-		}
-
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
-		} else {
-			create = create.SetDeletedBy(integration.DeletedBy)
-		}
-
-		if tags, exists := m.Tags(); exists {
-			create = create.SetTags(tags)
-		} else {
-			create = create.SetTags(integration.Tags)
-		}
-
-		if ownerID, exists := m.OwnerID(); exists {
-			create = create.SetOwnerID(ownerID)
-		} else {
-			create = create.SetOwnerID(integration.OwnerID)
-		}
-
-		if systemOwned, exists := m.SystemOwned(); exists {
-			create = create.SetSystemOwned(systemOwned)
-		} else {
-			create = create.SetSystemOwned(integration.SystemOwned)
-		}
-
-		if internalNotes, exists := m.InternalNotes(); exists {
-			create = create.SetNillableInternalNotes(&internalNotes)
-		} else {
-			create = create.SetNillableInternalNotes(integration.InternalNotes)
-		}
-
-		if systemInternalID, exists := m.SystemInternalID(); exists {
-			create = create.SetNillableSystemInternalID(&systemInternalID)
-		} else {
-			create = create.SetNillableSystemInternalID(integration.SystemInternalID)
-		}
-
-		if environmentName, exists := m.EnvironmentName(); exists {
-			create = create.SetEnvironmentName(environmentName)
-		} else {
-			create = create.SetEnvironmentName(integration.EnvironmentName)
-		}
-
-		if environmentID, exists := m.EnvironmentID(); exists {
-			create = create.SetEnvironmentID(environmentID)
-		} else {
-			create = create.SetEnvironmentID(integration.EnvironmentID)
-		}
-
-		if scopeName, exists := m.ScopeName(); exists {
-			create = create.SetScopeName(scopeName)
-		} else {
-			create = create.SetScopeName(integration.ScopeName)
-		}
-
-		if scopeID, exists := m.ScopeID(); exists {
-			create = create.SetScopeID(scopeID)
-		} else {
-			create = create.SetScopeID(integration.ScopeID)
-		}
-
-		if name, exists := m.Name(); exists {
-			create = create.SetName(name)
-		} else {
-			create = create.SetName(integration.Name)
-		}
-
-		if description, exists := m.Description(); exists {
-			create = create.SetDescription(description)
-		} else {
-			create = create.SetDescription(integration.Description)
-		}
-
-		if kind, exists := m.Kind(); exists {
-			create = create.SetKind(kind)
-		} else {
-			create = create.SetKind(integration.Kind)
-		}
-
-		if integrationType, exists := m.IntegrationType(); exists {
-			create = create.SetIntegrationType(integrationType)
-		} else {
-			create = create.SetIntegrationType(integration.IntegrationType)
-		}
-
-		if platformID, exists := m.PlatformID(); exists {
-			create = create.SetPlatformID(platformID)
-		} else {
-			create = create.SetPlatformID(integration.PlatformID)
-		}
-
-		if providerMetadata, exists := m.ProviderMetadata(); exists {
-			create = create.SetProviderMetadata(providerMetadata)
-		} else {
-			create = create.SetProviderMetadata(integration.ProviderMetadata)
-		}
-
-		if config, exists := m.Config(); exists {
-			create = create.SetConfig(config)
-		} else {
-			create = create.SetConfig(integration.Config)
-		}
-
-		if installationMetadata, exists := m.InstallationMetadata(); exists {
-			create = create.SetInstallationMetadata(installationMetadata)
-		} else {
-			create = create.SetInstallationMetadata(integration.InstallationMetadata)
-		}
-
-		if providerState, exists := m.ProviderState(); exists {
-			create = create.SetProviderState(providerState)
-		} else {
-			create = create.SetProviderState(integration.ProviderState)
-		}
-
-		if metadata, exists := m.Metadata(); exists {
-			create = create.SetMetadata(metadata)
-		} else {
-			create = create.SetMetadata(integration.Metadata)
-		}
-
-		if definitionID, exists := m.DefinitionID(); exists {
-			create = create.SetDefinitionID(definitionID)
-		} else {
-			create = create.SetDefinitionID(integration.DefinitionID)
-		}
-
-		if definitionVersion, exists := m.DefinitionVersion(); exists {
-			create = create.SetDefinitionVersion(definitionVersion)
-		} else {
-			create = create.SetDefinitionVersion(integration.DefinitionVersion)
-		}
-
-		if definitionSlug, exists := m.DefinitionSlug(); exists {
-			create = create.SetDefinitionSlug(definitionSlug)
-		} else {
-			create = create.SetDefinitionSlug(integration.DefinitionSlug)
-		}
-
-		if family, exists := m.Family(); exists {
-			create = create.SetFamily(family)
-		} else {
-			create = create.SetFamily(integration.Family)
-		}
-
-		if status, exists := m.Status(); exists {
-			create = create.SetStatus(status)
-		} else {
-			create = create.SetStatus(integration.Status)
-		}
-
-		if providerMetadataSnapshot, exists := m.ProviderMetadataSnapshot(); exists {
-			create = create.SetProviderMetadataSnapshot(providerMetadataSnapshot)
-		} else {
-			create = create.SetProviderMetadataSnapshot(integration.ProviderMetadataSnapshot)
-		}
-
-		if primaryDirectory, exists := m.PrimaryDirectory(); exists {
-			create = create.SetPrimaryDirectory(primaryDirectory)
-		} else {
-			create = create.SetPrimaryDirectory(integration.PrimaryDirectory)
-		}
-
-		if campaignEmail, exists := m.CampaignEmail(); exists {
-			create = create.SetCampaignEmail(campaignEmail)
-		} else {
-			create = create.SetCampaignEmail(integration.CampaignEmail)
-		}
-
-		if _, err := create.Save(ctx); err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *IntegrationMutation) CreateHistoryFromDelete(ctx context.Context) error {
-	ctx = history.WithContext(ctx)
-
-	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
-		return nil
-	}
-
-	client := m.Client()
-
-	ids, err := m.IDs(ctx)
-	if err != nil {
-		return fmt.Errorf("getting ids: %w", err)
-	}
-
-	for _, id := range ids {
-		integration, err := client.Integration.Get(ctx, id)
-		if err != nil {
-			return err
-		}
-
-		create := client.HistoryClient.IntegrationHistory.Create()
-
-		_, err = create.
-			SetOperation(EntOpToHistoryOp(m.Op())).
-			SetHistoryTime(time.Now()).
-			SetRef(id).
-			SetCreatedAt(integration.CreatedAt).
-			SetUpdatedAt(integration.UpdatedAt).
-			SetCreatedBy(integration.CreatedBy).
-			SetUpdatedBy(integration.UpdatedBy).
-			SetNillableUpdatedByImpersonator(integration.UpdatedByImpersonator).
-			SetDeletedAt(integration.DeletedAt).
-			SetDeletedBy(integration.DeletedBy).
-			SetTags(integration.Tags).
-			SetOwnerID(integration.OwnerID).
-			SetSystemOwned(integration.SystemOwned).
-			SetNillableInternalNotes(integration.InternalNotes).
-			SetNillableSystemInternalID(integration.SystemInternalID).
-			SetEnvironmentName(integration.EnvironmentName).
-			SetEnvironmentID(integration.EnvironmentID).
-			SetScopeName(integration.ScopeName).
-			SetScopeID(integration.ScopeID).
-			SetName(integration.Name).
-			SetDescription(integration.Description).
-			SetKind(integration.Kind).
-			SetIntegrationType(integration.IntegrationType).
-			SetPlatformID(integration.PlatformID).
-			SetProviderMetadata(integration.ProviderMetadata).
-			SetConfig(integration.Config).
-			SetInstallationMetadata(integration.InstallationMetadata).
-			SetProviderState(integration.ProviderState).
-			SetMetadata(integration.Metadata).
-			SetDefinitionID(integration.DefinitionID).
-			SetDefinitionVersion(integration.DefinitionVersion).
-			SetDefinitionSlug(integration.DefinitionSlug).
-			SetFamily(integration.Family).
-			SetStatus(integration.Status).
-			SetProviderMetadataSnapshot(integration.ProviderMetadataSnapshot).
-			SetPrimaryDirectory(integration.PrimaryDirectory).
-			SetCampaignEmail(integration.CampaignEmail).
-			Save(ctx)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
 }
 
 func (m *InternalPolicyMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -12902,6 +10950,9 @@ func (m *InternalPolicyMutation) CreateHistoryFromCreate(ctx context.Context) er
 
 func (m *InternalPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -13194,6 +11245,9 @@ func (m *InternalPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) er
 
 func (m *InternalPolicyMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -13271,8 +11325,23 @@ func (m *InternalPolicyMutation) CreateHistoryFromDelete(ctx context.Context) er
 	return nil
 }
 
+func (m *JobTemplateMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *JobTemplateMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -13374,6 +11443,9 @@ func (m *JobTemplateMutation) CreateHistoryFromCreate(ctx context.Context) error
 
 func (m *JobTemplateMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -13528,6 +11600,9 @@ func (m *JobTemplateMutation) CreateHistoryFromUpdate(ctx context.Context) error
 
 func (m *JobTemplateMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -13582,8 +11657,23 @@ func (m *JobTemplateMutation) CreateHistoryFromDelete(ctx context.Context) error
 	return nil
 }
 
+func (m *MappableDomainMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *MappableDomainMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -13645,6 +11735,9 @@ func (m *MappableDomainMutation) CreateHistoryFromCreate(ctx context.Context) er
 
 func (m *MappableDomainMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -13739,6 +11832,9 @@ func (m *MappableDomainMutation) CreateHistoryFromUpdate(ctx context.Context) er
 
 func (m *MappableDomainMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -13783,8 +11879,23 @@ func (m *MappableDomainMutation) CreateHistoryFromDelete(ctx context.Context) er
 	return nil
 }
 
+func (m *MappedControlMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *MappedControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -13870,6 +11981,9 @@ func (m *MappedControlMutation) CreateHistoryFromCreate(ctx context.Context) err
 
 func (m *MappedControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -14000,6 +12114,9 @@ func (m *MappedControlMutation) CreateHistoryFromUpdate(ctx context.Context) err
 
 func (m *MappedControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -14050,8 +12167,23 @@ func (m *MappedControlMutation) CreateHistoryFromDelete(ctx context.Context) err
 	return nil
 }
 
+func (m *NarrativeMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *NarrativeMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -14137,6 +12269,9 @@ func (m *NarrativeMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *NarrativeMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -14267,6 +12402,9 @@ func (m *NarrativeMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *NarrativeMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -14317,8 +12455,23 @@ func (m *NarrativeMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *NoteMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *NoteMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -14412,6 +12565,9 @@ func (m *NoteMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *NoteMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -14554,6 +12710,9 @@ func (m *NoteMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *NoteMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -14606,8 +12765,23 @@ func (m *NoteMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *NotificationPreferenceMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *NotificationPreferenceMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -14745,6 +12919,9 @@ func (m *NotificationPreferenceMutation) CreateHistoryFromCreate(ctx context.Con
 
 func (m *NotificationPreferenceMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -14953,6 +13130,9 @@ func (m *NotificationPreferenceMutation) CreateHistoryFromUpdate(ctx context.Con
 
 func (m *NotificationPreferenceMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -15016,8 +13196,23 @@ func (m *NotificationPreferenceMutation) CreateHistoryFromDelete(ctx context.Con
 	return nil
 }
 
+func (m *NotificationTemplateMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *NotificationTemplateMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -15175,6 +13370,9 @@ func (m *NotificationTemplateMutation) CreateHistoryFromCreate(ctx context.Conte
 
 func (m *NotificationTemplateMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -15413,6 +13611,9 @@ func (m *NotificationTemplateMutation) CreateHistoryFromUpdate(ctx context.Conte
 
 func (m *NotificationTemplateMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -15481,8 +13682,23 @@ func (m *NotificationTemplateMutation) CreateHistoryFromDelete(ctx context.Conte
 	return nil
 }
 
+func (m *OrgMembershipMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *OrgMembershipMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -15545,6 +13761,22 @@ func (m *OrgMembershipMutation) CreateHistoryFromCreate(ctx context.Context) err
 		create = create.SetNillableSSOExemptGrantedAt(&ssoExemptGrantedAt)
 	}
 
+	if tfaEnforced, exists := m.TfaEnforced(); exists {
+		create = create.SetTfaEnforced(tfaEnforced)
+	}
+
+	if tfaEnforcedReason, exists := m.TfaEnforcedReason(); exists {
+		create = create.SetNillableTfaEnforcedReason(&tfaEnforcedReason)
+	}
+
+	if tfaEnforcedBy, exists := m.TfaEnforcedBy(); exists {
+		create = create.SetNillableTfaEnforcedBy(&tfaEnforcedBy)
+	}
+
+	if tfaEnforcedAt, exists := m.TfaEnforcedAt(); exists {
+		create = create.SetNillableTfaEnforcedAt(&tfaEnforcedAt)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -15552,6 +13784,9 @@ func (m *OrgMembershipMutation) CreateHistoryFromCreate(ctx context.Context) err
 
 func (m *OrgMembershipMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -15648,6 +13883,30 @@ func (m *OrgMembershipMutation) CreateHistoryFromUpdate(ctx context.Context) err
 			create = create.SetNillableSSOExemptGrantedAt(orgmembership.SSOExemptGrantedAt)
 		}
 
+		if tfaEnforced, exists := m.TfaEnforced(); exists {
+			create = create.SetTfaEnforced(tfaEnforced)
+		} else {
+			create = create.SetTfaEnforced(orgmembership.TfaEnforced)
+		}
+
+		if tfaEnforcedReason, exists := m.TfaEnforcedReason(); exists {
+			create = create.SetNillableTfaEnforcedReason(&tfaEnforcedReason)
+		} else {
+			create = create.SetNillableTfaEnforcedReason(orgmembership.TfaEnforcedReason)
+		}
+
+		if tfaEnforcedBy, exists := m.TfaEnforcedBy(); exists {
+			create = create.SetNillableTfaEnforcedBy(&tfaEnforcedBy)
+		} else {
+			create = create.SetNillableTfaEnforcedBy(orgmembership.TfaEnforcedBy)
+		}
+
+		if tfaEnforcedAt, exists := m.TfaEnforcedAt(); exists {
+			create = create.SetNillableTfaEnforcedAt(&tfaEnforcedAt)
+		} else {
+			create = create.SetNillableTfaEnforcedAt(orgmembership.TfaEnforcedAt)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -15658,6 +13917,9 @@ func (m *OrgMembershipMutation) CreateHistoryFromUpdate(ctx context.Context) err
 
 func (m *OrgMembershipMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -15695,6 +13957,10 @@ func (m *OrgMembershipMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetNillableSSOExemptReason(orgmembership.SSOExemptReason).
 			SetNillableSSOExemptGrantedBy(orgmembership.SSOExemptGrantedBy).
 			SetNillableSSOExemptGrantedAt(orgmembership.SSOExemptGrantedAt).
+			SetTfaEnforced(orgmembership.TfaEnforced).
+			SetNillableTfaEnforcedReason(orgmembership.TfaEnforcedReason).
+			SetNillableTfaEnforcedBy(orgmembership.TfaEnforcedBy).
+			SetNillableTfaEnforcedAt(orgmembership.TfaEnforcedAt).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -15704,264 +13970,23 @@ func (m *OrgMembershipMutation) CreateHistoryFromDelete(ctx context.Context) err
 	return nil
 }
 
-func (m *OrgSubscriptionMutation) CreateHistoryFromCreate(ctx context.Context) error {
-	ctx = history.WithContext(ctx)
-	client := m.Client()
+func (m *OrganizationMutation) skipper(ctx context.Context) bool {
 
-	id, ok := m.ID()
-	if !ok {
-		return idNotFoundError
+	if PurgeHistoryEnabled(ctx) {
+		return true
 	}
 
-	create := client.HistoryClient.OrgSubscriptionHistory.Create()
+	caller, _ := auth.CallerFromContext(ctx)
 
-	create = create.
-		SetOperation(EntOpToHistoryOp(m.Op())).
-		SetHistoryTime(time.Now()).
-		SetRef(id)
+	return caller.HasInLineage(auth.CapBypassAuditLog)
 
-	if createdAt, exists := m.CreatedAt(); exists {
-		create = create.SetCreatedAt(createdAt)
-	}
-
-	if updatedAt, exists := m.UpdatedAt(); exists {
-		create = create.SetUpdatedAt(updatedAt)
-	}
-
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
-	}
-
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
-	}
-
-	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
-		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
-	}
-
-	if deletedAt, exists := m.DeletedAt(); exists {
-		create = create.SetDeletedAt(deletedAt)
-	}
-
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
-	}
-
-	if tags, exists := m.Tags(); exists {
-		create = create.SetTags(tags)
-	}
-
-	if ownerID, exists := m.OwnerID(); exists {
-		create = create.SetOwnerID(ownerID)
-	}
-
-	if stripeSubscriptionID, exists := m.StripeSubscriptionID(); exists {
-		create = create.SetStripeSubscriptionID(stripeSubscriptionID)
-	}
-
-	if stripeSubscriptionStatus, exists := m.StripeSubscriptionStatus(); exists {
-		create = create.SetStripeSubscriptionStatus(stripeSubscriptionStatus)
-	}
-
-	if active, exists := m.Active(); exists {
-		create = create.SetActive(active)
-	}
-
-	if expiresAt, exists := m.ExpiresAt(); exists {
-		create = create.SetNillableExpiresAt(&expiresAt)
-	}
-
-	if trialExpiresAt, exists := m.TrialExpiresAt(); exists {
-		create = create.SetNillableTrialExpiresAt(&trialExpiresAt)
-	}
-
-	if daysUntilDue, exists := m.DaysUntilDue(); exists {
-		create = create.SetNillableDaysUntilDue(&daysUntilDue)
-	}
-
-	_, err := create.Save(ctx)
-
-	return err
-}
-
-func (m *OrgSubscriptionMutation) CreateHistoryFromUpdate(ctx context.Context) error {
-	ctx = history.WithContext(ctx)
-	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
-		return m.CreateHistoryFromDelete(ctx)
-	}
-	client := m.Client()
-
-	ids, err := m.IDs(ctx)
-	if err != nil {
-		return fmt.Errorf("getting ids: %w", err)
-	}
-
-	for _, id := range ids {
-		orgsubscription, err := client.OrgSubscription.Get(ctx, id)
-		if err != nil {
-			return err
-		}
-
-		create := client.HistoryClient.OrgSubscriptionHistory.Create()
-
-		create = create.
-			SetOperation(EntOpToHistoryOp(m.Op())).
-			SetHistoryTime(time.Now()).
-			SetRef(id)
-
-		if createdAt, exists := m.CreatedAt(); exists {
-			create = create.SetCreatedAt(createdAt)
-		} else {
-			create = create.SetCreatedAt(orgsubscription.CreatedAt)
-		}
-
-		if updatedAt, exists := m.UpdatedAt(); exists {
-			create = create.SetUpdatedAt(updatedAt)
-		} else {
-			create = create.SetUpdatedAt(orgsubscription.UpdatedAt)
-		}
-
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
-		} else {
-			create = create.SetCreatedBy(orgsubscription.CreatedBy)
-		}
-
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
-		} else {
-			create = create.SetUpdatedBy(orgsubscription.UpdatedBy)
-		}
-
-		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
-			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
-		} else {
-			create = create.SetNillableUpdatedByImpersonator(orgsubscription.UpdatedByImpersonator)
-		}
-
-		if deletedAt, exists := m.DeletedAt(); exists {
-			create = create.SetDeletedAt(deletedAt)
-		} else {
-			create = create.SetDeletedAt(orgsubscription.DeletedAt)
-		}
-
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
-		} else {
-			create = create.SetDeletedBy(orgsubscription.DeletedBy)
-		}
-
-		if tags, exists := m.Tags(); exists {
-			create = create.SetTags(tags)
-		} else {
-			create = create.SetTags(orgsubscription.Tags)
-		}
-
-		if ownerID, exists := m.OwnerID(); exists {
-			create = create.SetOwnerID(ownerID)
-		} else {
-			create = create.SetOwnerID(orgsubscription.OwnerID)
-		}
-
-		if stripeSubscriptionID, exists := m.StripeSubscriptionID(); exists {
-			create = create.SetStripeSubscriptionID(stripeSubscriptionID)
-		} else {
-			create = create.SetStripeSubscriptionID(orgsubscription.StripeSubscriptionID)
-		}
-
-		if stripeSubscriptionStatus, exists := m.StripeSubscriptionStatus(); exists {
-			create = create.SetStripeSubscriptionStatus(stripeSubscriptionStatus)
-		} else {
-			create = create.SetStripeSubscriptionStatus(orgsubscription.StripeSubscriptionStatus)
-		}
-
-		if active, exists := m.Active(); exists {
-			create = create.SetActive(active)
-		} else {
-			create = create.SetActive(orgsubscription.Active)
-		}
-
-		if expiresAt, exists := m.ExpiresAt(); exists {
-			create = create.SetNillableExpiresAt(&expiresAt)
-		} else {
-			create = create.SetNillableExpiresAt(orgsubscription.ExpiresAt)
-		}
-
-		if trialExpiresAt, exists := m.TrialExpiresAt(); exists {
-			create = create.SetNillableTrialExpiresAt(&trialExpiresAt)
-		} else {
-			create = create.SetNillableTrialExpiresAt(orgsubscription.TrialExpiresAt)
-		}
-
-		if daysUntilDue, exists := m.DaysUntilDue(); exists {
-			create = create.SetNillableDaysUntilDue(&daysUntilDue)
-		} else {
-			create = create.SetNillableDaysUntilDue(orgsubscription.DaysUntilDue)
-		}
-
-		if _, err := create.Save(ctx); err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *OrgSubscriptionMutation) CreateHistoryFromDelete(ctx context.Context) error {
-	ctx = history.WithContext(ctx)
-
-	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
-		return nil
-	}
-
-	client := m.Client()
-
-	ids, err := m.IDs(ctx)
-	if err != nil {
-		return fmt.Errorf("getting ids: %w", err)
-	}
-
-	for _, id := range ids {
-		orgsubscription, err := client.OrgSubscription.Get(ctx, id)
-		if err != nil {
-			return err
-		}
-
-		create := client.HistoryClient.OrgSubscriptionHistory.Create()
-
-		_, err = create.
-			SetOperation(EntOpToHistoryOp(m.Op())).
-			SetHistoryTime(time.Now()).
-			SetRef(id).
-			SetCreatedAt(orgsubscription.CreatedAt).
-			SetUpdatedAt(orgsubscription.UpdatedAt).
-			SetCreatedBy(orgsubscription.CreatedBy).
-			SetUpdatedBy(orgsubscription.UpdatedBy).
-			SetNillableUpdatedByImpersonator(orgsubscription.UpdatedByImpersonator).
-			SetDeletedAt(orgsubscription.DeletedAt).
-			SetDeletedBy(orgsubscription.DeletedBy).
-			SetTags(orgsubscription.Tags).
-			SetOwnerID(orgsubscription.OwnerID).
-			SetStripeSubscriptionID(orgsubscription.StripeSubscriptionID).
-			SetStripeSubscriptionStatus(orgsubscription.StripeSubscriptionStatus).
-			SetActive(orgsubscription.Active).
-			SetNillableExpiresAt(orgsubscription.ExpiresAt).
-			SetNillableTrialExpiresAt(orgsubscription.TrialExpiresAt).
-			SetNillableDaysUntilDue(orgsubscription.DaysUntilDue).
-			Save(ctx)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
 }
 
 func (m *OrganizationMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -16055,6 +14080,9 @@ func (m *OrganizationMutation) CreateHistoryFromCreate(ctx context.Context) erro
 
 func (m *OrganizationMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -16197,6 +14225,9 @@ func (m *OrganizationMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 
 func (m *OrganizationMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -16249,8 +14280,23 @@ func (m *OrganizationMutation) CreateHistoryFromDelete(ctx context.Context) erro
 	return nil
 }
 
+func (m *OrganizationSettingMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *OrganizationSettingMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -16424,6 +14470,9 @@ func (m *OrganizationSettingMutation) CreateHistoryFromCreate(ctx context.Contex
 
 func (m *OrganizationSettingMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -16686,6 +14735,9 @@ func (m *OrganizationSettingMutation) CreateHistoryFromUpdate(ctx context.Contex
 
 func (m *OrganizationSettingMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -16758,8 +14810,23 @@ func (m *OrganizationSettingMutation) CreateHistoryFromDelete(ctx context.Contex
 	return nil
 }
 
+func (m *PlatformMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *PlatformMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -17013,6 +15080,9 @@ func (m *PlatformMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *PlatformMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -17395,6 +15465,9 @@ func (m *PlatformMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *PlatformMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -17487,8 +15560,23 @@ func (m *PlatformMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *ProcedureMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *ProcedureMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -17678,6 +15766,9 @@ func (m *ProcedureMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *ProcedureMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -17964,6 +16055,9 @@ func (m *ProcedureMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *ProcedureMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -18040,8 +16134,23 @@ func (m *ProcedureMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *ProgramMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *ProgramMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -18183,6 +16292,9 @@ func (m *ProgramMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *ProgramMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -18397,6 +16509,9 @@ func (m *ProgramMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *ProgramMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -18461,8 +16576,23 @@ func (m *ProgramMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *ProgramMembershipMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *ProgramMembershipMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -18516,6 +16646,9 @@ func (m *ProgramMembershipMutation) CreateHistoryFromCreate(ctx context.Context)
 
 func (m *ProgramMembershipMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -18598,6 +16731,9 @@ func (m *ProgramMembershipMutation) CreateHistoryFromUpdate(ctx context.Context)
 
 func (m *ProgramMembershipMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -18640,8 +16776,23 @@ func (m *ProgramMembershipMutation) CreateHistoryFromDelete(ctx context.Context)
 	return nil
 }
 
+func (m *RemediationMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *RemediationMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -18815,6 +16966,9 @@ func (m *RemediationMutation) CreateHistoryFromCreate(ctx context.Context) error
 
 func (m *RemediationMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -19077,6 +17231,9 @@ func (m *RemediationMutation) CreateHistoryFromUpdate(ctx context.Context) error
 
 func (m *RemediationMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -19149,8 +17306,23 @@ func (m *RemediationMutation) CreateHistoryFromDelete(ctx context.Context) error
 	return nil
 }
 
+func (m *ReviewMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *ReviewMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -19312,6 +17484,9 @@ func (m *ReviewMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *ReviewMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -19556,6 +17731,9 @@ func (m *ReviewMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *ReviewMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -19625,8 +17803,23 @@ func (m *ReviewMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *RiskMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *RiskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -19824,6 +18017,9 @@ func (m *RiskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *RiskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -20122,6 +18318,9 @@ func (m *RiskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *RiskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -20200,8 +18399,23 @@ func (m *RiskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *SLADefinitionMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *SLADefinitionMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -20271,6 +18485,9 @@ func (m *SLADefinitionMutation) CreateHistoryFromCreate(ctx context.Context) err
 
 func (m *SLADefinitionMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -20377,6 +18594,9 @@ func (m *SLADefinitionMutation) CreateHistoryFromUpdate(ctx context.Context) err
 
 func (m *SLADefinitionMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -20423,473 +18643,23 @@ func (m *SLADefinitionMutation) CreateHistoryFromDelete(ctx context.Context) err
 	return nil
 }
 
-func (m *ScanMutation) CreateHistoryFromCreate(ctx context.Context) error {
-	ctx = history.WithContext(ctx)
-	client := m.Client()
+func (m *ScheduledJobMutation) skipper(ctx context.Context) bool {
 
-	id, ok := m.ID()
-	if !ok {
-		return idNotFoundError
+	if PurgeHistoryEnabled(ctx) {
+		return true
 	}
 
-	create := client.HistoryClient.ScanHistory.Create()
+	caller, _ := auth.CallerFromContext(ctx)
 
-	create = create.
-		SetOperation(EntOpToHistoryOp(m.Op())).
-		SetHistoryTime(time.Now()).
-		SetRef(id)
+	return caller.HasInLineage(auth.CapBypassAuditLog)
 
-	if createdAt, exists := m.CreatedAt(); exists {
-		create = create.SetCreatedAt(createdAt)
-	}
-
-	if updatedAt, exists := m.UpdatedAt(); exists {
-		create = create.SetUpdatedAt(updatedAt)
-	}
-
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
-	}
-
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
-	}
-
-	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
-		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
-	}
-
-	if deletedAt, exists := m.DeletedAt(); exists {
-		create = create.SetDeletedAt(deletedAt)
-	}
-
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
-	}
-
-	if tags, exists := m.Tags(); exists {
-		create = create.SetTags(tags)
-	}
-
-	if ownerID, exists := m.OwnerID(); exists {
-		create = create.SetOwnerID(ownerID)
-	}
-
-	if systemOwned, exists := m.SystemOwned(); exists {
-		create = create.SetSystemOwned(systemOwned)
-	}
-
-	if internalNotes, exists := m.InternalNotes(); exists {
-		create = create.SetNillableInternalNotes(&internalNotes)
-	}
-
-	if systemInternalID, exists := m.SystemInternalID(); exists {
-		create = create.SetNillableSystemInternalID(&systemInternalID)
-	}
-
-	if reviewedBy, exists := m.ReviewedBy(); exists {
-		create = create.SetReviewedBy(reviewedBy)
-	}
-
-	if reviewedByUserID, exists := m.ReviewedByUserID(); exists {
-		create = create.SetReviewedByUserID(reviewedByUserID)
-	}
-
-	if reviewedByGroupID, exists := m.ReviewedByGroupID(); exists {
-		create = create.SetReviewedByGroupID(reviewedByGroupID)
-	}
-
-	if assignedTo, exists := m.AssignedTo(); exists {
-		create = create.SetAssignedTo(assignedTo)
-	}
-
-	if assignedToUserID, exists := m.AssignedToUserID(); exists {
-		create = create.SetAssignedToUserID(assignedToUserID)
-	}
-
-	if assignedToGroupID, exists := m.AssignedToGroupID(); exists {
-		create = create.SetAssignedToGroupID(assignedToGroupID)
-	}
-
-	if environmentName, exists := m.EnvironmentName(); exists {
-		create = create.SetEnvironmentName(environmentName)
-	}
-
-	if environmentID, exists := m.EnvironmentID(); exists {
-		create = create.SetEnvironmentID(environmentID)
-	}
-
-	if scopeName, exists := m.ScopeName(); exists {
-		create = create.SetScopeName(scopeName)
-	}
-
-	if scopeID, exists := m.ScopeID(); exists {
-		create = create.SetScopeID(scopeID)
-	}
-
-	if target, exists := m.Target(); exists {
-		create = create.SetTarget(target)
-	}
-
-	if scanType, exists := m.ScanType(); exists {
-		create = create.SetScanType(scanType)
-	}
-
-	if metadata, exists := m.Metadata(); exists {
-		create = create.SetMetadata(metadata)
-	}
-
-	if scanDate, exists := m.ScanDate(); exists {
-		create = create.SetNillableScanDate(&scanDate)
-	}
-
-	if scanSchedule, exists := m.ScanSchedule(); exists {
-		create = create.SetNillableScanSchedule(&scanSchedule)
-	}
-
-	if nextScanRunAt, exists := m.NextScanRunAt(); exists {
-		create = create.SetNillableNextScanRunAt(&nextScanRunAt)
-	}
-
-	if performedBy, exists := m.PerformedBy(); exists {
-		create = create.SetPerformedBy(performedBy)
-	}
-
-	if performedByUserID, exists := m.PerformedByUserID(); exists {
-		create = create.SetPerformedByUserID(performedByUserID)
-	}
-
-	if performedByGroupID, exists := m.PerformedByGroupID(); exists {
-		create = create.SetPerformedByGroupID(performedByGroupID)
-	}
-
-	if generatedByPlatformID, exists := m.GeneratedByPlatformID(); exists {
-		create = create.SetGeneratedByPlatformID(generatedByPlatformID)
-	}
-
-	if discoveredVulnerabilityIds, exists := m.DiscoveredVulnerabilityIds(); exists {
-		create = create.SetDiscoveredVulnerabilityIds(discoveredVulnerabilityIds)
-	}
-
-	if status, exists := m.Status(); exists {
-		create = create.SetStatus(status)
-	}
-
-	_, err := create.Save(ctx)
-
-	return err
-}
-
-func (m *ScanMutation) CreateHistoryFromUpdate(ctx context.Context) error {
-	ctx = history.WithContext(ctx)
-	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
-		return m.CreateHistoryFromDelete(ctx)
-	}
-	client := m.Client()
-
-	ids, err := m.IDs(ctx)
-	if err != nil {
-		return fmt.Errorf("getting ids: %w", err)
-	}
-
-	for _, id := range ids {
-		scan, err := client.Scan.Get(ctx, id)
-		if err != nil {
-			return err
-		}
-
-		create := client.HistoryClient.ScanHistory.Create()
-
-		create = create.
-			SetOperation(EntOpToHistoryOp(m.Op())).
-			SetHistoryTime(time.Now()).
-			SetRef(id)
-
-		if createdAt, exists := m.CreatedAt(); exists {
-			create = create.SetCreatedAt(createdAt)
-		} else {
-			create = create.SetCreatedAt(scan.CreatedAt)
-		}
-
-		if updatedAt, exists := m.UpdatedAt(); exists {
-			create = create.SetUpdatedAt(updatedAt)
-		} else {
-			create = create.SetUpdatedAt(scan.UpdatedAt)
-		}
-
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
-		} else {
-			create = create.SetCreatedBy(scan.CreatedBy)
-		}
-
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
-		} else {
-			create = create.SetUpdatedBy(scan.UpdatedBy)
-		}
-
-		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
-			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
-		} else {
-			create = create.SetNillableUpdatedByImpersonator(scan.UpdatedByImpersonator)
-		}
-
-		if deletedAt, exists := m.DeletedAt(); exists {
-			create = create.SetDeletedAt(deletedAt)
-		} else {
-			create = create.SetDeletedAt(scan.DeletedAt)
-		}
-
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
-		} else {
-			create = create.SetDeletedBy(scan.DeletedBy)
-		}
-
-		if tags, exists := m.Tags(); exists {
-			create = create.SetTags(tags)
-		} else {
-			create = create.SetTags(scan.Tags)
-		}
-
-		if ownerID, exists := m.OwnerID(); exists {
-			create = create.SetOwnerID(ownerID)
-		} else {
-			create = create.SetOwnerID(scan.OwnerID)
-		}
-
-		if systemOwned, exists := m.SystemOwned(); exists {
-			create = create.SetSystemOwned(systemOwned)
-		} else {
-			create = create.SetSystemOwned(scan.SystemOwned)
-		}
-
-		if internalNotes, exists := m.InternalNotes(); exists {
-			create = create.SetNillableInternalNotes(&internalNotes)
-		} else {
-			create = create.SetNillableInternalNotes(scan.InternalNotes)
-		}
-
-		if systemInternalID, exists := m.SystemInternalID(); exists {
-			create = create.SetNillableSystemInternalID(&systemInternalID)
-		} else {
-			create = create.SetNillableSystemInternalID(scan.SystemInternalID)
-		}
-
-		if reviewedBy, exists := m.ReviewedBy(); exists {
-			create = create.SetReviewedBy(reviewedBy)
-		} else {
-			create = create.SetReviewedBy(scan.ReviewedBy)
-		}
-
-		if reviewedByUserID, exists := m.ReviewedByUserID(); exists {
-			create = create.SetReviewedByUserID(reviewedByUserID)
-		} else {
-			create = create.SetReviewedByUserID(scan.ReviewedByUserID)
-		}
-
-		if reviewedByGroupID, exists := m.ReviewedByGroupID(); exists {
-			create = create.SetReviewedByGroupID(reviewedByGroupID)
-		} else {
-			create = create.SetReviewedByGroupID(scan.ReviewedByGroupID)
-		}
-
-		if assignedTo, exists := m.AssignedTo(); exists {
-			create = create.SetAssignedTo(assignedTo)
-		} else {
-			create = create.SetAssignedTo(scan.AssignedTo)
-		}
-
-		if assignedToUserID, exists := m.AssignedToUserID(); exists {
-			create = create.SetAssignedToUserID(assignedToUserID)
-		} else {
-			create = create.SetAssignedToUserID(scan.AssignedToUserID)
-		}
-
-		if assignedToGroupID, exists := m.AssignedToGroupID(); exists {
-			create = create.SetAssignedToGroupID(assignedToGroupID)
-		} else {
-			create = create.SetAssignedToGroupID(scan.AssignedToGroupID)
-		}
-
-		if environmentName, exists := m.EnvironmentName(); exists {
-			create = create.SetEnvironmentName(environmentName)
-		} else {
-			create = create.SetEnvironmentName(scan.EnvironmentName)
-		}
-
-		if environmentID, exists := m.EnvironmentID(); exists {
-			create = create.SetEnvironmentID(environmentID)
-		} else {
-			create = create.SetEnvironmentID(scan.EnvironmentID)
-		}
-
-		if scopeName, exists := m.ScopeName(); exists {
-			create = create.SetScopeName(scopeName)
-		} else {
-			create = create.SetScopeName(scan.ScopeName)
-		}
-
-		if scopeID, exists := m.ScopeID(); exists {
-			create = create.SetScopeID(scopeID)
-		} else {
-			create = create.SetScopeID(scan.ScopeID)
-		}
-
-		if target, exists := m.Target(); exists {
-			create = create.SetTarget(target)
-		} else {
-			create = create.SetTarget(scan.Target)
-		}
-
-		if scanType, exists := m.ScanType(); exists {
-			create = create.SetScanType(scanType)
-		} else {
-			create = create.SetScanType(scan.ScanType)
-		}
-
-		if metadata, exists := m.Metadata(); exists {
-			create = create.SetMetadata(metadata)
-		} else {
-			create = create.SetMetadata(scan.Metadata)
-		}
-
-		if scanDate, exists := m.ScanDate(); exists {
-			create = create.SetNillableScanDate(&scanDate)
-		} else {
-			create = create.SetNillableScanDate(scan.ScanDate)
-		}
-
-		if scanSchedule, exists := m.ScanSchedule(); exists {
-			create = create.SetNillableScanSchedule(&scanSchedule)
-		} else {
-			create = create.SetNillableScanSchedule(scan.ScanSchedule)
-		}
-
-		if nextScanRunAt, exists := m.NextScanRunAt(); exists {
-			create = create.SetNillableNextScanRunAt(&nextScanRunAt)
-		} else {
-			create = create.SetNillableNextScanRunAt(scan.NextScanRunAt)
-		}
-
-		if performedBy, exists := m.PerformedBy(); exists {
-			create = create.SetPerformedBy(performedBy)
-		} else {
-			create = create.SetPerformedBy(scan.PerformedBy)
-		}
-
-		if performedByUserID, exists := m.PerformedByUserID(); exists {
-			create = create.SetPerformedByUserID(performedByUserID)
-		} else {
-			create = create.SetPerformedByUserID(scan.PerformedByUserID)
-		}
-
-		if performedByGroupID, exists := m.PerformedByGroupID(); exists {
-			create = create.SetPerformedByGroupID(performedByGroupID)
-		} else {
-			create = create.SetPerformedByGroupID(scan.PerformedByGroupID)
-		}
-
-		if generatedByPlatformID, exists := m.GeneratedByPlatformID(); exists {
-			create = create.SetGeneratedByPlatformID(generatedByPlatformID)
-		} else {
-			create = create.SetGeneratedByPlatformID(scan.GeneratedByPlatformID)
-		}
-
-		if discoveredVulnerabilityIds, exists := m.DiscoveredVulnerabilityIds(); exists {
-			create = create.SetDiscoveredVulnerabilityIds(discoveredVulnerabilityIds)
-		} else {
-			create = create.SetDiscoveredVulnerabilityIds(scan.DiscoveredVulnerabilityIds)
-		}
-
-		if status, exists := m.Status(); exists {
-			create = create.SetStatus(status)
-		} else {
-			create = create.SetStatus(scan.Status)
-		}
-
-		if _, err := create.Save(ctx); err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *ScanMutation) CreateHistoryFromDelete(ctx context.Context) error {
-	ctx = history.WithContext(ctx)
-
-	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
-		return nil
-	}
-
-	client := m.Client()
-
-	ids, err := m.IDs(ctx)
-	if err != nil {
-		return fmt.Errorf("getting ids: %w", err)
-	}
-
-	for _, id := range ids {
-		scan, err := client.Scan.Get(ctx, id)
-		if err != nil {
-			return err
-		}
-
-		create := client.HistoryClient.ScanHistory.Create()
-
-		_, err = create.
-			SetOperation(EntOpToHistoryOp(m.Op())).
-			SetHistoryTime(time.Now()).
-			SetRef(id).
-			SetCreatedAt(scan.CreatedAt).
-			SetUpdatedAt(scan.UpdatedAt).
-			SetCreatedBy(scan.CreatedBy).
-			SetUpdatedBy(scan.UpdatedBy).
-			SetNillableUpdatedByImpersonator(scan.UpdatedByImpersonator).
-			SetDeletedAt(scan.DeletedAt).
-			SetDeletedBy(scan.DeletedBy).
-			SetTags(scan.Tags).
-			SetOwnerID(scan.OwnerID).
-			SetSystemOwned(scan.SystemOwned).
-			SetNillableInternalNotes(scan.InternalNotes).
-			SetNillableSystemInternalID(scan.SystemInternalID).
-			SetReviewedBy(scan.ReviewedBy).
-			SetReviewedByUserID(scan.ReviewedByUserID).
-			SetReviewedByGroupID(scan.ReviewedByGroupID).
-			SetAssignedTo(scan.AssignedTo).
-			SetAssignedToUserID(scan.AssignedToUserID).
-			SetAssignedToGroupID(scan.AssignedToGroupID).
-			SetEnvironmentName(scan.EnvironmentName).
-			SetEnvironmentID(scan.EnvironmentID).
-			SetScopeName(scan.ScopeName).
-			SetScopeID(scan.ScopeID).
-			SetTarget(scan.Target).
-			SetScanType(scan.ScanType).
-			SetMetadata(scan.Metadata).
-			SetNillableScanDate(scan.ScanDate).
-			SetNillableScanSchedule(scan.ScanSchedule).
-			SetNillableNextScanRunAt(scan.NextScanRunAt).
-			SetPerformedBy(scan.PerformedBy).
-			SetPerformedByUserID(scan.PerformedByUserID).
-			SetPerformedByGroupID(scan.PerformedByGroupID).
-			SetGeneratedByPlatformID(scan.GeneratedByPlatformID).
-			SetDiscoveredVulnerabilityIds(scan.DiscoveredVulnerabilityIds).
-			SetStatus(scan.Status).
-			Save(ctx)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
 }
 
 func (m *ScheduledJobMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -20967,6 +18737,9 @@ func (m *ScheduledJobMutation) CreateHistoryFromCreate(ctx context.Context) erro
 
 func (m *ScheduledJobMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -21085,6 +18858,9 @@ func (m *ScheduledJobMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 
 func (m *ScheduledJobMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -21133,8 +18909,23 @@ func (m *ScheduledJobMutation) CreateHistoryFromDelete(ctx context.Context) erro
 	return nil
 }
 
+func (m *StandardMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *StandardMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -21264,6 +19055,9 @@ func (m *StandardMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *StandardMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -21460,6 +19254,9 @@ func (m *StandardMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *StandardMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -21521,8 +19318,23 @@ func (m *StandardMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *SubcontrolMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -21736,6 +19548,9 @@ func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error 
 
 func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -22058,6 +19873,9 @@ func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 
 func (m *SubcontrolMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -22140,8 +19958,23 @@ func (m *SubcontrolMutation) CreateHistoryFromDelete(ctx context.Context) error 
 	return nil
 }
 
+func (m *SubprocessorMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *SubprocessorMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -22227,6 +20060,9 @@ func (m *SubprocessorMutation) CreateHistoryFromCreate(ctx context.Context) erro
 
 func (m *SubprocessorMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -22357,6 +20193,9 @@ func (m *SubprocessorMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 
 func (m *SubprocessorMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -22407,8 +20246,23 @@ func (m *SubprocessorMutation) CreateHistoryFromDelete(ctx context.Context) erro
 	return nil
 }
 
+func (m *SystemDetailMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *SystemDetailMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -22502,6 +20356,9 @@ func (m *SystemDetailMutation) CreateHistoryFromCreate(ctx context.Context) erro
 
 func (m *SystemDetailMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -22644,6 +20501,9 @@ func (m *SystemDetailMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 
 func (m *SystemDetailMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -22696,8 +20556,23 @@ func (m *SystemDetailMutation) CreateHistoryFromDelete(ctx context.Context) erro
 	return nil
 }
 
+func (m *TaskMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *TaskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -22863,6 +20738,9 @@ func (m *TaskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *TaskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -23113,6 +20991,9 @@ func (m *TaskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *TaskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -23183,8 +21064,23 @@ func (m *TaskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *TemplateMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *TemplateMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -23302,6 +21198,9 @@ func (m *TemplateMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *TemplateMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -23480,6 +21379,9 @@ func (m *TemplateMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *TemplateMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -23538,8 +21440,23 @@ func (m *TemplateMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *TrustCenterMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *TrustCenterMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -23629,6 +21546,9 @@ func (m *TrustCenterMutation) CreateHistoryFromCreate(ctx context.Context) error
 
 func (m *TrustCenterMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -23765,6 +21685,9 @@ func (m *TrustCenterMutation) CreateHistoryFromUpdate(ctx context.Context) error
 
 func (m *TrustCenterMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -23816,8 +21739,23 @@ func (m *TrustCenterMutation) CreateHistoryFromDelete(ctx context.Context) error
 	return nil
 }
 
+func (m *TrustCenterComplianceMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *TrustCenterComplianceMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -23879,6 +21817,9 @@ func (m *TrustCenterComplianceMutation) CreateHistoryFromCreate(ctx context.Cont
 
 func (m *TrustCenterComplianceMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -23973,6 +21914,9 @@ func (m *TrustCenterComplianceMutation) CreateHistoryFromUpdate(ctx context.Cont
 
 func (m *TrustCenterComplianceMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -24017,8 +21961,23 @@ func (m *TrustCenterComplianceMutation) CreateHistoryFromDelete(ctx context.Cont
 	return nil
 }
 
+func (m *TrustCenterDocMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *TrustCenterDocMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -24112,6 +22071,9 @@ func (m *TrustCenterDocMutation) CreateHistoryFromCreate(ctx context.Context) er
 
 func (m *TrustCenterDocMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -24254,6 +22216,9 @@ func (m *TrustCenterDocMutation) CreateHistoryFromUpdate(ctx context.Context) er
 
 func (m *TrustCenterDocMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -24306,8 +22271,23 @@ func (m *TrustCenterDocMutation) CreateHistoryFromDelete(ctx context.Context) er
 	return nil
 }
 
+func (m *TrustCenterEntityMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *TrustCenterEntityMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -24377,6 +22357,9 @@ func (m *TrustCenterEntityMutation) CreateHistoryFromCreate(ctx context.Context)
 
 func (m *TrustCenterEntityMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -24483,6 +22466,9 @@ func (m *TrustCenterEntityMutation) CreateHistoryFromUpdate(ctx context.Context)
 
 func (m *TrustCenterEntityMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -24529,8 +22515,23 @@ func (m *TrustCenterEntityMutation) CreateHistoryFromDelete(ctx context.Context)
 	return nil
 }
 
+func (m *TrustCenterFAQMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *TrustCenterFAQMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -24604,6 +22605,9 @@ func (m *TrustCenterFAQMutation) CreateHistoryFromCreate(ctx context.Context) er
 
 func (m *TrustCenterFAQMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -24716,6 +22720,9 @@ func (m *TrustCenterFAQMutation) CreateHistoryFromUpdate(ctx context.Context) er
 
 func (m *TrustCenterFAQMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -24763,8 +22770,23 @@ func (m *TrustCenterFAQMutation) CreateHistoryFromDelete(ctx context.Context) er
 	return nil
 }
 
+func (m *TrustCenterNDARequestMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *TrustCenterNDARequestMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -24870,6 +22892,9 @@ func (m *TrustCenterNDARequestMutation) CreateHistoryFromCreate(ctx context.Cont
 
 func (m *TrustCenterNDARequestMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -25030,6 +23055,9 @@ func (m *TrustCenterNDARequestMutation) CreateHistoryFromUpdate(ctx context.Cont
 
 func (m *TrustCenterNDARequestMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -25085,8 +23113,23 @@ func (m *TrustCenterNDARequestMutation) CreateHistoryFromDelete(ctx context.Cont
 	return nil
 }
 
+func (m *TrustCenterSettingMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *TrustCenterSettingMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -25248,6 +23291,9 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromCreate(ctx context.Context
 
 func (m *TrustCenterSettingMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -25492,6 +23538,9 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromUpdate(ctx context.Context
 
 func (m *TrustCenterSettingMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -25561,8 +23610,23 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromDelete(ctx context.Context
 	return nil
 }
 
+func (m *TrustCenterSubprocessorMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *TrustCenterSubprocessorMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -25632,6 +23696,9 @@ func (m *TrustCenterSubprocessorMutation) CreateHistoryFromCreate(ctx context.Co
 
 func (m *TrustCenterSubprocessorMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -25738,6 +23805,9 @@ func (m *TrustCenterSubprocessorMutation) CreateHistoryFromUpdate(ctx context.Co
 
 func (m *TrustCenterSubprocessorMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -25784,8 +23854,23 @@ func (m *TrustCenterSubprocessorMutation) CreateHistoryFromDelete(ctx context.Co
 	return nil
 }
 
+func (m *TrustCenterWatermarkConfigMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *TrustCenterWatermarkConfigMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -25875,6 +23960,9 @@ func (m *TrustCenterWatermarkConfigMutation) CreateHistoryFromCreate(ctx context
 
 func (m *TrustCenterWatermarkConfigMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -26011,6 +24099,9 @@ func (m *TrustCenterWatermarkConfigMutation) CreateHistoryFromUpdate(ctx context
 
 func (m *TrustCenterWatermarkConfigMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -26062,8 +24153,23 @@ func (m *TrustCenterWatermarkConfigMutation) CreateHistoryFromDelete(ctx context
 	return nil
 }
 
+func (m *UserMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *UserMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -26189,6 +24295,9 @@ func (m *UserMutation) CreateHistoryFromCreate(ctx context.Context) error {
 
 func (m *UserMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -26379,6 +24488,9 @@ func (m *UserMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 
 func (m *UserMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -26439,8 +24551,23 @@ func (m *UserMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *UserSettingMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *UserSettingMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -26542,6 +24669,9 @@ func (m *UserSettingMutation) CreateHistoryFromCreate(ctx context.Context) error
 
 func (m *UserSettingMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -26696,6 +24826,9 @@ func (m *UserSettingMutation) CreateHistoryFromUpdate(ctx context.Context) error
 
 func (m *UserSettingMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -26750,8 +24883,23 @@ func (m *UserSettingMutation) CreateHistoryFromDelete(ctx context.Context) error
 	return nil
 }
 
+func (m *VendorRiskScoreMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *VendorRiskScoreMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -26861,6 +25009,9 @@ func (m *VendorRiskScoreMutation) CreateHistoryFromCreate(ctx context.Context) e
 
 func (m *VendorRiskScoreMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -27027,6 +25178,9 @@ func (m *VendorRiskScoreMutation) CreateHistoryFromUpdate(ctx context.Context) e
 
 func (m *VendorRiskScoreMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -27083,8 +25237,23 @@ func (m *VendorRiskScoreMutation) CreateHistoryFromDelete(ctx context.Context) e
 	return nil
 }
 
+func (m *VendorScoringConfigMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *VendorScoringConfigMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -27154,6 +25323,9 @@ func (m *VendorScoringConfigMutation) CreateHistoryFromCreate(ctx context.Contex
 
 func (m *VendorScoringConfigMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -27260,6 +25432,9 @@ func (m *VendorScoringConfigMutation) CreateHistoryFromUpdate(ctx context.Contex
 
 func (m *VendorScoringConfigMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -27306,8 +25481,23 @@ func (m *VendorScoringConfigMutation) CreateHistoryFromDelete(ctx context.Contex
 	return nil
 }
 
+func (m *VulnerabilityMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *VulnerabilityMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -27601,6 +25791,9 @@ func (m *VulnerabilityMutation) CreateHistoryFromCreate(ctx context.Context) err
 
 func (m *VulnerabilityMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -28043,6 +26236,9 @@ func (m *VulnerabilityMutation) CreateHistoryFromUpdate(ctx context.Context) err
 
 func (m *VulnerabilityMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -28145,8 +26341,23 @@ func (m *VulnerabilityMutation) CreateHistoryFromDelete(ctx context.Context) err
 	return nil
 }
 
+func (m *WorkflowAssignmentMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *WorkflowAssignmentMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -28272,6 +26483,9 @@ func (m *WorkflowAssignmentMutation) CreateHistoryFromCreate(ctx context.Context
 
 func (m *WorkflowAssignmentMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -28462,6 +26676,9 @@ func (m *WorkflowAssignmentMutation) CreateHistoryFromUpdate(ctx context.Context
 
 func (m *WorkflowAssignmentMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -28522,8 +26739,23 @@ func (m *WorkflowAssignmentMutation) CreateHistoryFromDelete(ctx context.Context
 	return nil
 }
 
+func (m *WorkflowAssignmentTargetMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *WorkflowAssignmentTargetMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -28605,6 +26837,9 @@ func (m *WorkflowAssignmentTargetMutation) CreateHistoryFromCreate(ctx context.C
 
 func (m *WorkflowAssignmentTargetMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -28729,6 +26964,9 @@ func (m *WorkflowAssignmentTargetMutation) CreateHistoryFromUpdate(ctx context.C
 
 func (m *WorkflowAssignmentTargetMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -28778,8 +27016,23 @@ func (m *WorkflowAssignmentTargetMutation) CreateHistoryFromDelete(ctx context.C
 	return nil
 }
 
+func (m *WorkflowDefinitionMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
 func (m *WorkflowDefinitionMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	client := m.Client()
 
 	id, ok := m.ID()
@@ -28921,6 +27174,9 @@ func (m *WorkflowDefinitionMutation) CreateHistoryFromCreate(ctx context.Context
 
 func (m *WorkflowDefinitionMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 	// check for soft delete operation and delete instead
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
@@ -29135,6 +27391,9 @@ func (m *WorkflowDefinitionMutation) CreateHistoryFromUpdate(ctx context.Context
 
 func (m *WorkflowDefinitionMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
 
 	// check for soft delete operation and skip so it happens on update
 	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
@@ -29190,1115 +27449,6 @@ func (m *WorkflowDefinitionMutation) CreateHistoryFromDelete(ctx context.Context
 			SetApprovalSubmissionMode(workflowdefinition.ApprovalSubmissionMode).
 			SetDefinitionJSON(workflowdefinition.DefinitionJSON).
 			SetTrackedFields(workflowdefinition.TrackedFields).
-			Save(ctx)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *WorkflowEventMutation) CreateHistoryFromCreate(ctx context.Context) error {
-	ctx = history.WithContext(ctx)
-	client := m.Client()
-
-	id, ok := m.ID()
-	if !ok {
-		return idNotFoundError
-	}
-
-	create := client.HistoryClient.WorkflowEventHistory.Create()
-
-	create = create.
-		SetOperation(EntOpToHistoryOp(m.Op())).
-		SetHistoryTime(time.Now()).
-		SetRef(id)
-
-	if createdAt, exists := m.CreatedAt(); exists {
-		create = create.SetCreatedAt(createdAt)
-	}
-
-	if updatedAt, exists := m.UpdatedAt(); exists {
-		create = create.SetUpdatedAt(updatedAt)
-	}
-
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
-	}
-
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
-	}
-
-	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
-		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
-	}
-
-	if deletedAt, exists := m.DeletedAt(); exists {
-		create = create.SetDeletedAt(deletedAt)
-	}
-
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
-	}
-
-	if displayID, exists := m.DisplayID(); exists {
-		create = create.SetDisplayID(displayID)
-	}
-
-	if tags, exists := m.Tags(); exists {
-		create = create.SetTags(tags)
-	}
-
-	if ownerID, exists := m.OwnerID(); exists {
-		create = create.SetOwnerID(ownerID)
-	}
-
-	if workflowInstanceID, exists := m.WorkflowInstanceID(); exists {
-		create = create.SetWorkflowInstanceID(workflowInstanceID)
-	}
-
-	if eventType, exists := m.EventType(); exists {
-		create = create.SetEventType(eventType)
-	}
-
-	if payload, exists := m.Payload(); exists {
-		create = create.SetPayload(payload)
-	}
-
-	_, err := create.Save(ctx)
-
-	return err
-}
-
-func (m *WorkflowEventMutation) CreateHistoryFromUpdate(ctx context.Context) error {
-	ctx = history.WithContext(ctx)
-	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
-		return m.CreateHistoryFromDelete(ctx)
-	}
-	client := m.Client()
-
-	ids, err := m.IDs(ctx)
-	if err != nil {
-		return fmt.Errorf("getting ids: %w", err)
-	}
-
-	for _, id := range ids {
-		workflowevent, err := client.WorkflowEvent.Get(ctx, id)
-		if err != nil {
-			return err
-		}
-
-		create := client.HistoryClient.WorkflowEventHistory.Create()
-
-		create = create.
-			SetOperation(EntOpToHistoryOp(m.Op())).
-			SetHistoryTime(time.Now()).
-			SetRef(id)
-
-		if createdAt, exists := m.CreatedAt(); exists {
-			create = create.SetCreatedAt(createdAt)
-		} else {
-			create = create.SetCreatedAt(workflowevent.CreatedAt)
-		}
-
-		if updatedAt, exists := m.UpdatedAt(); exists {
-			create = create.SetUpdatedAt(updatedAt)
-		} else {
-			create = create.SetUpdatedAt(workflowevent.UpdatedAt)
-		}
-
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
-		} else {
-			create = create.SetCreatedBy(workflowevent.CreatedBy)
-		}
-
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
-		} else {
-			create = create.SetUpdatedBy(workflowevent.UpdatedBy)
-		}
-
-		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
-			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
-		} else {
-			create = create.SetNillableUpdatedByImpersonator(workflowevent.UpdatedByImpersonator)
-		}
-
-		if deletedAt, exists := m.DeletedAt(); exists {
-			create = create.SetDeletedAt(deletedAt)
-		} else {
-			create = create.SetDeletedAt(workflowevent.DeletedAt)
-		}
-
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
-		} else {
-			create = create.SetDeletedBy(workflowevent.DeletedBy)
-		}
-
-		if displayID, exists := m.DisplayID(); exists {
-			create = create.SetDisplayID(displayID)
-		} else {
-			create = create.SetDisplayID(workflowevent.DisplayID)
-		}
-
-		if tags, exists := m.Tags(); exists {
-			create = create.SetTags(tags)
-		} else {
-			create = create.SetTags(workflowevent.Tags)
-		}
-
-		if ownerID, exists := m.OwnerID(); exists {
-			create = create.SetOwnerID(ownerID)
-		} else {
-			create = create.SetOwnerID(workflowevent.OwnerID)
-		}
-
-		if workflowInstanceID, exists := m.WorkflowInstanceID(); exists {
-			create = create.SetWorkflowInstanceID(workflowInstanceID)
-		} else {
-			create = create.SetWorkflowInstanceID(workflowevent.WorkflowInstanceID)
-		}
-
-		if eventType, exists := m.EventType(); exists {
-			create = create.SetEventType(eventType)
-		} else {
-			create = create.SetEventType(workflowevent.EventType)
-		}
-
-		if payload, exists := m.Payload(); exists {
-			create = create.SetPayload(payload)
-		} else {
-			create = create.SetPayload(workflowevent.Payload)
-		}
-
-		if _, err := create.Save(ctx); err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *WorkflowEventMutation) CreateHistoryFromDelete(ctx context.Context) error {
-	ctx = history.WithContext(ctx)
-
-	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
-		return nil
-	}
-
-	client := m.Client()
-
-	ids, err := m.IDs(ctx)
-	if err != nil {
-		return fmt.Errorf("getting ids: %w", err)
-	}
-
-	for _, id := range ids {
-		workflowevent, err := client.WorkflowEvent.Get(ctx, id)
-		if err != nil {
-			return err
-		}
-
-		create := client.HistoryClient.WorkflowEventHistory.Create()
-
-		_, err = create.
-			SetOperation(EntOpToHistoryOp(m.Op())).
-			SetHistoryTime(time.Now()).
-			SetRef(id).
-			SetCreatedAt(workflowevent.CreatedAt).
-			SetUpdatedAt(workflowevent.UpdatedAt).
-			SetCreatedBy(workflowevent.CreatedBy).
-			SetUpdatedBy(workflowevent.UpdatedBy).
-			SetNillableUpdatedByImpersonator(workflowevent.UpdatedByImpersonator).
-			SetDeletedAt(workflowevent.DeletedAt).
-			SetDeletedBy(workflowevent.DeletedBy).
-			SetDisplayID(workflowevent.DisplayID).
-			SetTags(workflowevent.Tags).
-			SetOwnerID(workflowevent.OwnerID).
-			SetWorkflowInstanceID(workflowevent.WorkflowInstanceID).
-			SetEventType(workflowevent.EventType).
-			SetPayload(workflowevent.Payload).
-			Save(ctx)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *WorkflowInstanceMutation) CreateHistoryFromCreate(ctx context.Context) error {
-	ctx = history.WithContext(ctx)
-	client := m.Client()
-
-	id, ok := m.ID()
-	if !ok {
-		return idNotFoundError
-	}
-
-	create := client.HistoryClient.WorkflowInstanceHistory.Create()
-
-	create = create.
-		SetOperation(EntOpToHistoryOp(m.Op())).
-		SetHistoryTime(time.Now()).
-		SetRef(id)
-
-	if createdAt, exists := m.CreatedAt(); exists {
-		create = create.SetCreatedAt(createdAt)
-	}
-
-	if updatedAt, exists := m.UpdatedAt(); exists {
-		create = create.SetUpdatedAt(updatedAt)
-	}
-
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
-	}
-
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
-	}
-
-	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
-		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
-	}
-
-	if deletedAt, exists := m.DeletedAt(); exists {
-		create = create.SetDeletedAt(deletedAt)
-	}
-
-	if deletedBy, exists := m.DeletedBy(); exists {
-		create = create.SetDeletedBy(deletedBy)
-	}
-
-	if displayID, exists := m.DisplayID(); exists {
-		create = create.SetDisplayID(displayID)
-	}
-
-	if tags, exists := m.Tags(); exists {
-		create = create.SetTags(tags)
-	}
-
-	if ownerID, exists := m.OwnerID(); exists {
-		create = create.SetOwnerID(ownerID)
-	}
-
-	if workflowDefinitionID, exists := m.WorkflowDefinitionID(); exists {
-		create = create.SetWorkflowDefinitionID(workflowDefinitionID)
-	}
-
-	if workflowProposalID, exists := m.WorkflowProposalID(); exists {
-		create = create.SetWorkflowProposalID(workflowProposalID)
-	}
-
-	if state, exists := m.State(); exists {
-		create = create.SetState(state)
-	}
-
-	if context, exists := m.Context(); exists {
-		create = create.SetContext(context)
-	}
-
-	if lastEvaluatedAt, exists := m.LastEvaluatedAt(); exists {
-		create = create.SetNillableLastEvaluatedAt(&lastEvaluatedAt)
-	}
-
-	if definitionSnapshot, exists := m.DefinitionSnapshot(); exists {
-		create = create.SetDefinitionSnapshot(definitionSnapshot)
-	}
-
-	if currentActionIndex, exists := m.CurrentActionIndex(); exists {
-		create = create.SetCurrentActionIndex(currentActionIndex)
-	}
-
-	if controlID, exists := m.ControlID(); exists {
-		create = create.SetControlID(controlID)
-	}
-
-	if internalPolicyID, exists := m.InternalPolicyID(); exists {
-		create = create.SetInternalPolicyID(internalPolicyID)
-	}
-
-	if evidenceID, exists := m.EvidenceID(); exists {
-		create = create.SetEvidenceID(evidenceID)
-	}
-
-	if subcontrolID, exists := m.SubcontrolID(); exists {
-		create = create.SetSubcontrolID(subcontrolID)
-	}
-
-	if actionPlanID, exists := m.ActionPlanID(); exists {
-		create = create.SetActionPlanID(actionPlanID)
-	}
-
-	if procedureID, exists := m.ProcedureID(); exists {
-		create = create.SetProcedureID(procedureID)
-	}
-
-	if campaignID, exists := m.CampaignID(); exists {
-		create = create.SetCampaignID(campaignID)
-	}
-
-	if campaignTargetID, exists := m.CampaignTargetID(); exists {
-		create = create.SetCampaignTargetID(campaignTargetID)
-	}
-
-	if identityHolderID, exists := m.IdentityHolderID(); exists {
-		create = create.SetIdentityHolderID(identityHolderID)
-	}
-
-	if platformID, exists := m.PlatformID(); exists {
-		create = create.SetPlatformID(platformID)
-	}
-
-	if assessmentID, exists := m.AssessmentID(); exists {
-		create = create.SetAssessmentID(assessmentID)
-	}
-
-	if assessmentResponseID, exists := m.AssessmentResponseID(); exists {
-		create = create.SetAssessmentResponseID(assessmentResponseID)
-	}
-
-	if findingID, exists := m.FindingID(); exists {
-		create = create.SetFindingID(findingID)
-	}
-
-	if integrationID, exists := m.IntegrationID(); exists {
-		create = create.SetIntegrationID(integrationID)
-	}
-
-	if remediationID, exists := m.RemediationID(); exists {
-		create = create.SetRemediationID(remediationID)
-	}
-
-	if riskID, exists := m.RiskID(); exists {
-		create = create.SetRiskID(riskID)
-	}
-
-	if taskID, exists := m.TaskID(); exists {
-		create = create.SetTaskID(taskID)
-	}
-
-	if vulnerabilityID, exists := m.VulnerabilityID(); exists {
-		create = create.SetVulnerabilityID(vulnerabilityID)
-	}
-
-	_, err := create.Save(ctx)
-
-	return err
-}
-
-func (m *WorkflowInstanceMutation) CreateHistoryFromUpdate(ctx context.Context) error {
-	ctx = history.WithContext(ctx)
-	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
-		return m.CreateHistoryFromDelete(ctx)
-	}
-	client := m.Client()
-
-	ids, err := m.IDs(ctx)
-	if err != nil {
-		return fmt.Errorf("getting ids: %w", err)
-	}
-
-	for _, id := range ids {
-		workflowinstance, err := client.WorkflowInstance.Get(ctx, id)
-		if err != nil {
-			return err
-		}
-
-		create := client.HistoryClient.WorkflowInstanceHistory.Create()
-
-		create = create.
-			SetOperation(EntOpToHistoryOp(m.Op())).
-			SetHistoryTime(time.Now()).
-			SetRef(id)
-
-		if createdAt, exists := m.CreatedAt(); exists {
-			create = create.SetCreatedAt(createdAt)
-		} else {
-			create = create.SetCreatedAt(workflowinstance.CreatedAt)
-		}
-
-		if updatedAt, exists := m.UpdatedAt(); exists {
-			create = create.SetUpdatedAt(updatedAt)
-		} else {
-			create = create.SetUpdatedAt(workflowinstance.UpdatedAt)
-		}
-
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
-		} else {
-			create = create.SetCreatedBy(workflowinstance.CreatedBy)
-		}
-
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
-		} else {
-			create = create.SetUpdatedBy(workflowinstance.UpdatedBy)
-		}
-
-		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
-			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
-		} else {
-			create = create.SetNillableUpdatedByImpersonator(workflowinstance.UpdatedByImpersonator)
-		}
-
-		if deletedAt, exists := m.DeletedAt(); exists {
-			create = create.SetDeletedAt(deletedAt)
-		} else {
-			create = create.SetDeletedAt(workflowinstance.DeletedAt)
-		}
-
-		if deletedBy, exists := m.DeletedBy(); exists {
-			create = create.SetDeletedBy(deletedBy)
-		} else {
-			create = create.SetDeletedBy(workflowinstance.DeletedBy)
-		}
-
-		if displayID, exists := m.DisplayID(); exists {
-			create = create.SetDisplayID(displayID)
-		} else {
-			create = create.SetDisplayID(workflowinstance.DisplayID)
-		}
-
-		if tags, exists := m.Tags(); exists {
-			create = create.SetTags(tags)
-		} else {
-			create = create.SetTags(workflowinstance.Tags)
-		}
-
-		if ownerID, exists := m.OwnerID(); exists {
-			create = create.SetOwnerID(ownerID)
-		} else {
-			create = create.SetOwnerID(workflowinstance.OwnerID)
-		}
-
-		if workflowDefinitionID, exists := m.WorkflowDefinitionID(); exists {
-			create = create.SetWorkflowDefinitionID(workflowDefinitionID)
-		} else {
-			create = create.SetWorkflowDefinitionID(workflowinstance.WorkflowDefinitionID)
-		}
-
-		if workflowProposalID, exists := m.WorkflowProposalID(); exists {
-			create = create.SetWorkflowProposalID(workflowProposalID)
-		} else {
-			create = create.SetWorkflowProposalID(workflowinstance.WorkflowProposalID)
-		}
-
-		if state, exists := m.State(); exists {
-			create = create.SetState(state)
-		} else {
-			create = create.SetState(workflowinstance.State)
-		}
-
-		if context, exists := m.Context(); exists {
-			create = create.SetContext(context)
-		} else {
-			create = create.SetContext(workflowinstance.Context)
-		}
-
-		if lastEvaluatedAt, exists := m.LastEvaluatedAt(); exists {
-			create = create.SetNillableLastEvaluatedAt(&lastEvaluatedAt)
-		} else {
-			create = create.SetNillableLastEvaluatedAt(workflowinstance.LastEvaluatedAt)
-		}
-
-		if definitionSnapshot, exists := m.DefinitionSnapshot(); exists {
-			create = create.SetDefinitionSnapshot(definitionSnapshot)
-		} else {
-			create = create.SetDefinitionSnapshot(workflowinstance.DefinitionSnapshot)
-		}
-
-		if currentActionIndex, exists := m.CurrentActionIndex(); exists {
-			create = create.SetCurrentActionIndex(currentActionIndex)
-		} else {
-			create = create.SetCurrentActionIndex(workflowinstance.CurrentActionIndex)
-		}
-
-		if controlID, exists := m.ControlID(); exists {
-			create = create.SetControlID(controlID)
-		} else {
-			create = create.SetControlID(workflowinstance.ControlID)
-		}
-
-		if internalPolicyID, exists := m.InternalPolicyID(); exists {
-			create = create.SetInternalPolicyID(internalPolicyID)
-		} else {
-			create = create.SetInternalPolicyID(workflowinstance.InternalPolicyID)
-		}
-
-		if evidenceID, exists := m.EvidenceID(); exists {
-			create = create.SetEvidenceID(evidenceID)
-		} else {
-			create = create.SetEvidenceID(workflowinstance.EvidenceID)
-		}
-
-		if subcontrolID, exists := m.SubcontrolID(); exists {
-			create = create.SetSubcontrolID(subcontrolID)
-		} else {
-			create = create.SetSubcontrolID(workflowinstance.SubcontrolID)
-		}
-
-		if actionPlanID, exists := m.ActionPlanID(); exists {
-			create = create.SetActionPlanID(actionPlanID)
-		} else {
-			create = create.SetActionPlanID(workflowinstance.ActionPlanID)
-		}
-
-		if procedureID, exists := m.ProcedureID(); exists {
-			create = create.SetProcedureID(procedureID)
-		} else {
-			create = create.SetProcedureID(workflowinstance.ProcedureID)
-		}
-
-		if campaignID, exists := m.CampaignID(); exists {
-			create = create.SetCampaignID(campaignID)
-		} else {
-			create = create.SetCampaignID(workflowinstance.CampaignID)
-		}
-
-		if campaignTargetID, exists := m.CampaignTargetID(); exists {
-			create = create.SetCampaignTargetID(campaignTargetID)
-		} else {
-			create = create.SetCampaignTargetID(workflowinstance.CampaignTargetID)
-		}
-
-		if identityHolderID, exists := m.IdentityHolderID(); exists {
-			create = create.SetIdentityHolderID(identityHolderID)
-		} else {
-			create = create.SetIdentityHolderID(workflowinstance.IdentityHolderID)
-		}
-
-		if platformID, exists := m.PlatformID(); exists {
-			create = create.SetPlatformID(platformID)
-		} else {
-			create = create.SetPlatformID(workflowinstance.PlatformID)
-		}
-
-		if assessmentID, exists := m.AssessmentID(); exists {
-			create = create.SetAssessmentID(assessmentID)
-		} else {
-			create = create.SetAssessmentID(workflowinstance.AssessmentID)
-		}
-
-		if assessmentResponseID, exists := m.AssessmentResponseID(); exists {
-			create = create.SetAssessmentResponseID(assessmentResponseID)
-		} else {
-			create = create.SetAssessmentResponseID(workflowinstance.AssessmentResponseID)
-		}
-
-		if findingID, exists := m.FindingID(); exists {
-			create = create.SetFindingID(findingID)
-		} else {
-			create = create.SetFindingID(workflowinstance.FindingID)
-		}
-
-		if integrationID, exists := m.IntegrationID(); exists {
-			create = create.SetIntegrationID(integrationID)
-		} else {
-			create = create.SetIntegrationID(workflowinstance.IntegrationID)
-		}
-
-		if remediationID, exists := m.RemediationID(); exists {
-			create = create.SetRemediationID(remediationID)
-		} else {
-			create = create.SetRemediationID(workflowinstance.RemediationID)
-		}
-
-		if riskID, exists := m.RiskID(); exists {
-			create = create.SetRiskID(riskID)
-		} else {
-			create = create.SetRiskID(workflowinstance.RiskID)
-		}
-
-		if taskID, exists := m.TaskID(); exists {
-			create = create.SetTaskID(taskID)
-		} else {
-			create = create.SetTaskID(workflowinstance.TaskID)
-		}
-
-		if vulnerabilityID, exists := m.VulnerabilityID(); exists {
-			create = create.SetVulnerabilityID(vulnerabilityID)
-		} else {
-			create = create.SetVulnerabilityID(workflowinstance.VulnerabilityID)
-		}
-
-		if _, err := create.Save(ctx); err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *WorkflowInstanceMutation) CreateHistoryFromDelete(ctx context.Context) error {
-	ctx = history.WithContext(ctx)
-
-	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
-		return nil
-	}
-
-	client := m.Client()
-
-	ids, err := m.IDs(ctx)
-	if err != nil {
-		return fmt.Errorf("getting ids: %w", err)
-	}
-
-	for _, id := range ids {
-		workflowinstance, err := client.WorkflowInstance.Get(ctx, id)
-		if err != nil {
-			return err
-		}
-
-		create := client.HistoryClient.WorkflowInstanceHistory.Create()
-
-		_, err = create.
-			SetOperation(EntOpToHistoryOp(m.Op())).
-			SetHistoryTime(time.Now()).
-			SetRef(id).
-			SetCreatedAt(workflowinstance.CreatedAt).
-			SetUpdatedAt(workflowinstance.UpdatedAt).
-			SetCreatedBy(workflowinstance.CreatedBy).
-			SetUpdatedBy(workflowinstance.UpdatedBy).
-			SetNillableUpdatedByImpersonator(workflowinstance.UpdatedByImpersonator).
-			SetDeletedAt(workflowinstance.DeletedAt).
-			SetDeletedBy(workflowinstance.DeletedBy).
-			SetDisplayID(workflowinstance.DisplayID).
-			SetTags(workflowinstance.Tags).
-			SetOwnerID(workflowinstance.OwnerID).
-			SetWorkflowDefinitionID(workflowinstance.WorkflowDefinitionID).
-			SetWorkflowProposalID(workflowinstance.WorkflowProposalID).
-			SetState(workflowinstance.State).
-			SetContext(workflowinstance.Context).
-			SetNillableLastEvaluatedAt(workflowinstance.LastEvaluatedAt).
-			SetDefinitionSnapshot(workflowinstance.DefinitionSnapshot).
-			SetCurrentActionIndex(workflowinstance.CurrentActionIndex).
-			SetControlID(workflowinstance.ControlID).
-			SetInternalPolicyID(workflowinstance.InternalPolicyID).
-			SetEvidenceID(workflowinstance.EvidenceID).
-			SetSubcontrolID(workflowinstance.SubcontrolID).
-			SetActionPlanID(workflowinstance.ActionPlanID).
-			SetProcedureID(workflowinstance.ProcedureID).
-			SetCampaignID(workflowinstance.CampaignID).
-			SetCampaignTargetID(workflowinstance.CampaignTargetID).
-			SetIdentityHolderID(workflowinstance.IdentityHolderID).
-			SetPlatformID(workflowinstance.PlatformID).
-			SetAssessmentID(workflowinstance.AssessmentID).
-			SetAssessmentResponseID(workflowinstance.AssessmentResponseID).
-			SetFindingID(workflowinstance.FindingID).
-			SetIntegrationID(workflowinstance.IntegrationID).
-			SetRemediationID(workflowinstance.RemediationID).
-			SetRiskID(workflowinstance.RiskID).
-			SetTaskID(workflowinstance.TaskID).
-			SetVulnerabilityID(workflowinstance.VulnerabilityID).
-			Save(ctx)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *WorkflowObjectRefMutation) CreateHistoryFromCreate(ctx context.Context) error {
-	ctx = history.WithContext(ctx)
-	client := m.Client()
-
-	id, ok := m.ID()
-	if !ok {
-		return idNotFoundError
-	}
-
-	create := client.HistoryClient.WorkflowObjectRefHistory.Create()
-
-	create = create.
-		SetOperation(EntOpToHistoryOp(m.Op())).
-		SetHistoryTime(time.Now()).
-		SetRef(id)
-
-	if createdAt, exists := m.CreatedAt(); exists {
-		create = create.SetCreatedAt(createdAt)
-	}
-
-	if updatedAt, exists := m.UpdatedAt(); exists {
-		create = create.SetUpdatedAt(updatedAt)
-	}
-
-	if createdBy, exists := m.CreatedBy(); exists {
-		create = create.SetCreatedBy(createdBy)
-	}
-
-	if updatedBy, exists := m.UpdatedBy(); exists {
-		create = create.SetUpdatedBy(updatedBy)
-	}
-
-	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
-		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
-	}
-
-	if displayID, exists := m.DisplayID(); exists {
-		create = create.SetDisplayID(displayID)
-	}
-
-	if ownerID, exists := m.OwnerID(); exists {
-		create = create.SetOwnerID(ownerID)
-	}
-
-	if workflowInstanceID, exists := m.WorkflowInstanceID(); exists {
-		create = create.SetWorkflowInstanceID(workflowInstanceID)
-	}
-
-	if controlID, exists := m.ControlID(); exists {
-		create = create.SetControlID(controlID)
-	}
-
-	if taskID, exists := m.TaskID(); exists {
-		create = create.SetTaskID(taskID)
-	}
-
-	if internalPolicyID, exists := m.InternalPolicyID(); exists {
-		create = create.SetInternalPolicyID(internalPolicyID)
-	}
-
-	if findingID, exists := m.FindingID(); exists {
-		create = create.SetFindingID(findingID)
-	}
-
-	if directoryAccountID, exists := m.DirectoryAccountID(); exists {
-		create = create.SetDirectoryAccountID(directoryAccountID)
-	}
-
-	if directoryGroupID, exists := m.DirectoryGroupID(); exists {
-		create = create.SetDirectoryGroupID(directoryGroupID)
-	}
-
-	if directoryMembershipID, exists := m.DirectoryMembershipID(); exists {
-		create = create.SetDirectoryMembershipID(directoryMembershipID)
-	}
-
-	if evidenceID, exists := m.EvidenceID(); exists {
-		create = create.SetEvidenceID(evidenceID)
-	}
-
-	if subcontrolID, exists := m.SubcontrolID(); exists {
-		create = create.SetSubcontrolID(subcontrolID)
-	}
-
-	if actionPlanID, exists := m.ActionPlanID(); exists {
-		create = create.SetActionPlanID(actionPlanID)
-	}
-
-	if procedureID, exists := m.ProcedureID(); exists {
-		create = create.SetProcedureID(procedureID)
-	}
-
-	if campaignID, exists := m.CampaignID(); exists {
-		create = create.SetCampaignID(campaignID)
-	}
-
-	if campaignTargetID, exists := m.CampaignTargetID(); exists {
-		create = create.SetCampaignTargetID(campaignTargetID)
-	}
-
-	if identityHolderID, exists := m.IdentityHolderID(); exists {
-		create = create.SetIdentityHolderID(identityHolderID)
-	}
-
-	if platformID, exists := m.PlatformID(); exists {
-		create = create.SetPlatformID(platformID)
-	}
-
-	if vulnerabilityID, exists := m.VulnerabilityID(); exists {
-		create = create.SetVulnerabilityID(vulnerabilityID)
-	}
-
-	if riskID, exists := m.RiskID(); exists {
-		create = create.SetRiskID(riskID)
-	}
-
-	if assessmentID, exists := m.AssessmentID(); exists {
-		create = create.SetAssessmentID(assessmentID)
-	}
-
-	if assessmentResponseID, exists := m.AssessmentResponseID(); exists {
-		create = create.SetAssessmentResponseID(assessmentResponseID)
-	}
-
-	if remediationID, exists := m.RemediationID(); exists {
-		create = create.SetRemediationID(remediationID)
-	}
-
-	_, err := create.Save(ctx)
-
-	return err
-}
-
-func (m *WorkflowObjectRefMutation) CreateHistoryFromUpdate(ctx context.Context) error {
-	ctx = history.WithContext(ctx)
-	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
-		return m.CreateHistoryFromDelete(ctx)
-	}
-	client := m.Client()
-
-	ids, err := m.IDs(ctx)
-	if err != nil {
-		return fmt.Errorf("getting ids: %w", err)
-	}
-
-	for _, id := range ids {
-		workflowobjectref, err := client.WorkflowObjectRef.Get(ctx, id)
-		if err != nil {
-			return err
-		}
-
-		create := client.HistoryClient.WorkflowObjectRefHistory.Create()
-
-		create = create.
-			SetOperation(EntOpToHistoryOp(m.Op())).
-			SetHistoryTime(time.Now()).
-			SetRef(id)
-
-		if createdAt, exists := m.CreatedAt(); exists {
-			create = create.SetCreatedAt(createdAt)
-		} else {
-			create = create.SetCreatedAt(workflowobjectref.CreatedAt)
-		}
-
-		if updatedAt, exists := m.UpdatedAt(); exists {
-			create = create.SetUpdatedAt(updatedAt)
-		} else {
-			create = create.SetUpdatedAt(workflowobjectref.UpdatedAt)
-		}
-
-		if createdBy, exists := m.CreatedBy(); exists {
-			create = create.SetCreatedBy(createdBy)
-		} else {
-			create = create.SetCreatedBy(workflowobjectref.CreatedBy)
-		}
-
-		if updatedBy, exists := m.UpdatedBy(); exists {
-			create = create.SetUpdatedBy(updatedBy)
-		} else {
-			create = create.SetUpdatedBy(workflowobjectref.UpdatedBy)
-		}
-
-		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
-			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
-		} else {
-			create = create.SetNillableUpdatedByImpersonator(workflowobjectref.UpdatedByImpersonator)
-		}
-
-		if displayID, exists := m.DisplayID(); exists {
-			create = create.SetDisplayID(displayID)
-		} else {
-			create = create.SetDisplayID(workflowobjectref.DisplayID)
-		}
-
-		if ownerID, exists := m.OwnerID(); exists {
-			create = create.SetOwnerID(ownerID)
-		} else {
-			create = create.SetOwnerID(workflowobjectref.OwnerID)
-		}
-
-		if workflowInstanceID, exists := m.WorkflowInstanceID(); exists {
-			create = create.SetWorkflowInstanceID(workflowInstanceID)
-		} else {
-			create = create.SetWorkflowInstanceID(workflowobjectref.WorkflowInstanceID)
-		}
-
-		if controlID, exists := m.ControlID(); exists {
-			create = create.SetControlID(controlID)
-		} else {
-			create = create.SetControlID(workflowobjectref.ControlID)
-		}
-
-		if taskID, exists := m.TaskID(); exists {
-			create = create.SetTaskID(taskID)
-		} else {
-			create = create.SetTaskID(workflowobjectref.TaskID)
-		}
-
-		if internalPolicyID, exists := m.InternalPolicyID(); exists {
-			create = create.SetInternalPolicyID(internalPolicyID)
-		} else {
-			create = create.SetInternalPolicyID(workflowobjectref.InternalPolicyID)
-		}
-
-		if findingID, exists := m.FindingID(); exists {
-			create = create.SetFindingID(findingID)
-		} else {
-			create = create.SetFindingID(workflowobjectref.FindingID)
-		}
-
-		if directoryAccountID, exists := m.DirectoryAccountID(); exists {
-			create = create.SetDirectoryAccountID(directoryAccountID)
-		} else {
-			create = create.SetDirectoryAccountID(workflowobjectref.DirectoryAccountID)
-		}
-
-		if directoryGroupID, exists := m.DirectoryGroupID(); exists {
-			create = create.SetDirectoryGroupID(directoryGroupID)
-		} else {
-			create = create.SetDirectoryGroupID(workflowobjectref.DirectoryGroupID)
-		}
-
-		if directoryMembershipID, exists := m.DirectoryMembershipID(); exists {
-			create = create.SetDirectoryMembershipID(directoryMembershipID)
-		} else {
-			create = create.SetDirectoryMembershipID(workflowobjectref.DirectoryMembershipID)
-		}
-
-		if evidenceID, exists := m.EvidenceID(); exists {
-			create = create.SetEvidenceID(evidenceID)
-		} else {
-			create = create.SetEvidenceID(workflowobjectref.EvidenceID)
-		}
-
-		if subcontrolID, exists := m.SubcontrolID(); exists {
-			create = create.SetSubcontrolID(subcontrolID)
-		} else {
-			create = create.SetSubcontrolID(workflowobjectref.SubcontrolID)
-		}
-
-		if actionPlanID, exists := m.ActionPlanID(); exists {
-			create = create.SetActionPlanID(actionPlanID)
-		} else {
-			create = create.SetActionPlanID(workflowobjectref.ActionPlanID)
-		}
-
-		if procedureID, exists := m.ProcedureID(); exists {
-			create = create.SetProcedureID(procedureID)
-		} else {
-			create = create.SetProcedureID(workflowobjectref.ProcedureID)
-		}
-
-		if campaignID, exists := m.CampaignID(); exists {
-			create = create.SetCampaignID(campaignID)
-		} else {
-			create = create.SetCampaignID(workflowobjectref.CampaignID)
-		}
-
-		if campaignTargetID, exists := m.CampaignTargetID(); exists {
-			create = create.SetCampaignTargetID(campaignTargetID)
-		} else {
-			create = create.SetCampaignTargetID(workflowobjectref.CampaignTargetID)
-		}
-
-		if identityHolderID, exists := m.IdentityHolderID(); exists {
-			create = create.SetIdentityHolderID(identityHolderID)
-		} else {
-			create = create.SetIdentityHolderID(workflowobjectref.IdentityHolderID)
-		}
-
-		if platformID, exists := m.PlatformID(); exists {
-			create = create.SetPlatformID(platformID)
-		} else {
-			create = create.SetPlatformID(workflowobjectref.PlatformID)
-		}
-
-		if vulnerabilityID, exists := m.VulnerabilityID(); exists {
-			create = create.SetVulnerabilityID(vulnerabilityID)
-		} else {
-			create = create.SetVulnerabilityID(workflowobjectref.VulnerabilityID)
-		}
-
-		if riskID, exists := m.RiskID(); exists {
-			create = create.SetRiskID(riskID)
-		} else {
-			create = create.SetRiskID(workflowobjectref.RiskID)
-		}
-
-		if assessmentID, exists := m.AssessmentID(); exists {
-			create = create.SetAssessmentID(assessmentID)
-		} else {
-			create = create.SetAssessmentID(workflowobjectref.AssessmentID)
-		}
-
-		if assessmentResponseID, exists := m.AssessmentResponseID(); exists {
-			create = create.SetAssessmentResponseID(assessmentResponseID)
-		} else {
-			create = create.SetAssessmentResponseID(workflowobjectref.AssessmentResponseID)
-		}
-
-		if remediationID, exists := m.RemediationID(); exists {
-			create = create.SetRemediationID(remediationID)
-		} else {
-			create = create.SetRemediationID(workflowobjectref.RemediationID)
-		}
-
-		if _, err := create.Save(ctx); err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (m *WorkflowObjectRefMutation) CreateHistoryFromDelete(ctx context.Context) error {
-	ctx = history.WithContext(ctx)
-
-	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
-		return nil
-	}
-
-	client := m.Client()
-
-	ids, err := m.IDs(ctx)
-	if err != nil {
-		return fmt.Errorf("getting ids: %w", err)
-	}
-
-	for _, id := range ids {
-		workflowobjectref, err := client.WorkflowObjectRef.Get(ctx, id)
-		if err != nil {
-			return err
-		}
-
-		create := client.HistoryClient.WorkflowObjectRefHistory.Create()
-
-		_, err = create.
-			SetOperation(EntOpToHistoryOp(m.Op())).
-			SetHistoryTime(time.Now()).
-			SetRef(id).
-			SetCreatedAt(workflowobjectref.CreatedAt).
-			SetUpdatedAt(workflowobjectref.UpdatedAt).
-			SetCreatedBy(workflowobjectref.CreatedBy).
-			SetUpdatedBy(workflowobjectref.UpdatedBy).
-			SetNillableUpdatedByImpersonator(workflowobjectref.UpdatedByImpersonator).
-			SetDisplayID(workflowobjectref.DisplayID).
-			SetOwnerID(workflowobjectref.OwnerID).
-			SetWorkflowInstanceID(workflowobjectref.WorkflowInstanceID).
-			SetControlID(workflowobjectref.ControlID).
-			SetTaskID(workflowobjectref.TaskID).
-			SetInternalPolicyID(workflowobjectref.InternalPolicyID).
-			SetFindingID(workflowobjectref.FindingID).
-			SetDirectoryAccountID(workflowobjectref.DirectoryAccountID).
-			SetDirectoryGroupID(workflowobjectref.DirectoryGroupID).
-			SetDirectoryMembershipID(workflowobjectref.DirectoryMembershipID).
-			SetEvidenceID(workflowobjectref.EvidenceID).
-			SetSubcontrolID(workflowobjectref.SubcontrolID).
-			SetActionPlanID(workflowobjectref.ActionPlanID).
-			SetProcedureID(workflowobjectref.ProcedureID).
-			SetCampaignID(workflowobjectref.CampaignID).
-			SetCampaignTargetID(workflowobjectref.CampaignTargetID).
-			SetIdentityHolderID(workflowobjectref.IdentityHolderID).
-			SetPlatformID(workflowobjectref.PlatformID).
-			SetVulnerabilityID(workflowobjectref.VulnerabilityID).
-			SetRiskID(workflowobjectref.RiskID).
-			SetAssessmentID(workflowobjectref.AssessmentID).
-			SetAssessmentResponseID(workflowobjectref.AssessmentResponseID).
-			SetRemediationID(workflowobjectref.RemediationID).
 			Save(ctx)
 		if err != nil {
 			return err

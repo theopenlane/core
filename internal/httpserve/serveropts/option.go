@@ -223,6 +223,7 @@ func getAuthOptions(s *ServerOptions) []authmw.Option {
 		authmw.WithCookieConfig(s.Config.SessionConfig.CookieConfig),
 		authmw.WithAllowAnonymous(true),
 		authmw.WithSkipperFunc(skipperFunc),
+		authmw.WithSupportIdentity(s.Config.Handler.SupportAccessConfig.SubjectID, s.Config.Handler.SupportAccessConfig.DisplayName, s.Config.Handler.SupportAccessConfig.Email),
 	}
 
 	if s.Config.Handler.RedisClient != nil {

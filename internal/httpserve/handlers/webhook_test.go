@@ -13,8 +13,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/stripe/stripe-go/v84"
-	"github.com/stripe/stripe-go/v84/webhook"
+	"github.com/stripe/stripe-go/v86"
+	"github.com/stripe/stripe-go/v86/webhook"
 	echo "github.com/theopenlane/echox"
 
 	models "github.com/theopenlane/core/common/openapi"

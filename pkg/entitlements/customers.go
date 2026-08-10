@@ -8,7 +8,7 @@ import (
 
 	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
-	"github.com/stripe/stripe-go/v84"
+	"github.com/stripe/stripe-go/v86"
 )
 
 // CreateCustomer creates a customer leveraging the openlane organization ID
@@ -79,7 +79,7 @@ func (sc *StripeClient) SearchCustomers(ctx context.Context, query string) (cust
 
 	result := sc.Client.V1Customers.Search(ctx, params)
 
-	for customer, err := range result {
+	for customer, err := range result.All(ctx) {
 		if err != nil {
 			log.Err(err).Msg("failed to search customers")
 

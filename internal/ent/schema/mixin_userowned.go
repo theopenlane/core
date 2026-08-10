@@ -134,14 +134,18 @@ func (userOwned UserOwnedMixin) Edges() []ent.Edge {
 
 // Indexes of the UserOwnedMixin
 func (userOwned UserOwnedMixin) Indexes() []ent.Index {
-	if !userOwned.SoftDeleteIndex {
-		return []ent.Index{}
+	// the storage key is set explicitly to avoid colliding with the unique index below
+	idx := []ent.Index{
+		index.Fields(ownerFieldName).
+			StorageKey(fmt.Sprintf("%s_owner_id_fk", userOwned.Ref)),
 	}
 
-	return []ent.Index{
-		index.Fields(ownerFieldName).
-			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
+	if userOwned.SoftDeleteIndex {
+		idx = append(idx, index.Fields(ownerFieldName).
+			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")))
 	}
+
+	return idx
 }
 
 // Hooks of the UserOwnedMixin

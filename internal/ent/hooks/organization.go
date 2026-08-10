@@ -10,7 +10,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/samber/lo"
 	"github.com/stoewer/go-strcase"
-	"github.com/stripe/stripe-go/v84"
+	"github.com/stripe/stripe-go/v86"
 
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
@@ -21,9 +21,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/internal/entitlements/reconciler"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
@@ -143,9 +143,7 @@ func HookOrganization() ent.Hook {
 func HookOrganizationDelete() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.OrganizationFunc(func(ctx context.Context, m *generated.OrganizationMutation) (generated.Value, error) {
-			// by pass checks on invite or pre-allowed request
-			// this includes things like the edge-cleanup on user deletion
-			if _, allow := privacy.DecisionFromContext(ctx); allow {
+			if rule.IsInternalRequest(ctx) {
 				return next.Mutate(ctx, m)
 			}
 

@@ -13,6 +13,7 @@ import (
 
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/entx/history"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
@@ -245,5 +246,8 @@ func (DirectoryMembership) Annotations() []schema.Annotation {
 		entx.SchemaSearchable(false),
 		entx.NewExportable(),
 		entx.IntegrationMappingSchema().StockPersist(),
+		history.Annotations{
+			Exclude: true,
+		},
 	}
 }

@@ -1,7 +1,7 @@
 package entitlements
 
 import (
-	"github.com/stripe/stripe-go/v84"
+	"github.com/stripe/stripe-go/v86"
 )
 
 // ProductUpdateOption allows customizing ProductUpdateParams

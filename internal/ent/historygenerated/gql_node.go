@@ -17,17 +17,12 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/assethistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/campaignhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/campaigntargethistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/checkresulthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/contacthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/controlhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/controlimplementationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/controlobjectivehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/customdomainhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/directoryaccounthistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/directorygrouphistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/directorymembershiphistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/discussionhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/documentdatahistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/emailtemplatehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/entityhistory"
@@ -41,7 +36,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/groupsettinghistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/hushhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/identityholderhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/integrationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/internalpolicyhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/jobtemplatehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/mappabledomainhistory"
@@ -53,7 +47,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/organizationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/organizationsettinghistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/orgmembershiphistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/orgsubscriptionhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/platformhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/procedurehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/programhistory"
@@ -61,7 +54,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/remediationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/reviewhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/riskhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/scanhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/scheduledjobhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/sladefinitionhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/standardhistory"
@@ -87,9 +79,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/workflowassignmenthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/workflowassignmenttargethistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/workflowdefinitionhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/workfloweventhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/workflowinstancehistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/workflowobjectrefhistory"
 )
 
 // Noder wraps the basic Node method.
@@ -127,11 +116,6 @@ var campaigntargethistoryImplementors = []string{"CampaignTargetHistory", "Node"
 // IsNode implements the Node interface check for GQLGen.
 func (*CampaignTargetHistory) IsNode() {}
 
-var checkresulthistoryImplementors = []string{"CheckResultHistory", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*CheckResultHistory) IsNode() {}
-
 var contacthistoryImplementors = []string{"ContactHistory", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
@@ -156,26 +140,6 @@ var customdomainhistoryImplementors = []string{"CustomDomainHistory", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*CustomDomainHistory) IsNode() {}
-
-var dnsverificationhistoryImplementors = []string{"DNSVerificationHistory", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*DNSVerificationHistory) IsNode() {}
-
-var directoryaccounthistoryImplementors = []string{"DirectoryAccountHistory", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*DirectoryAccountHistory) IsNode() {}
-
-var directorygrouphistoryImplementors = []string{"DirectoryGroupHistory", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*DirectoryGroupHistory) IsNode() {}
-
-var directorymembershiphistoryImplementors = []string{"DirectoryMembershipHistory", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*DirectoryMembershipHistory) IsNode() {}
 
 var discussionhistoryImplementors = []string{"DiscussionHistory", "Node"}
 
@@ -247,11 +211,6 @@ var identityholderhistoryImplementors = []string{"IdentityHolderHistory", "Node"
 // IsNode implements the Node interface check for GQLGen.
 func (*IdentityHolderHistory) IsNode() {}
 
-var integrationhistoryImplementors = []string{"IntegrationHistory", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*IntegrationHistory) IsNode() {}
-
 var internalpolicyhistoryImplementors = []string{"InternalPolicyHistory", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
@@ -296,11 +255,6 @@ var orgmembershiphistoryImplementors = []string{"OrgMembershipHistory", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*OrgMembershipHistory) IsNode() {}
-
-var orgsubscriptionhistoryImplementors = []string{"OrgSubscriptionHistory", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*OrgSubscriptionHistory) IsNode() {}
 
 var organizationhistoryImplementors = []string{"OrganizationHistory", "Node"}
 
@@ -351,11 +305,6 @@ var sladefinitionhistoryImplementors = []string{"SLADefinitionHistory", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*SLADefinitionHistory) IsNode() {}
-
-var scanhistoryImplementors = []string{"ScanHistory", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*ScanHistory) IsNode() {}
 
 var scheduledjobhistoryImplementors = []string{"ScheduledJobHistory", "Node"}
 
@@ -477,21 +426,6 @@ var workflowdefinitionhistoryImplementors = []string{"WorkflowDefinitionHistory"
 // IsNode implements the Node interface check for GQLGen.
 func (*WorkflowDefinitionHistory) IsNode() {}
 
-var workfloweventhistoryImplementors = []string{"WorkflowEventHistory", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*WorkflowEventHistory) IsNode() {}
-
-var workflowinstancehistoryImplementors = []string{"WorkflowInstanceHistory", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*WorkflowInstanceHistory) IsNode() {}
-
-var workflowobjectrefhistoryImplementors = []string{"WorkflowObjectRefHistory", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*WorkflowObjectRefHistory) IsNode() {}
-
 var errNodeInvalidID = &NotFoundError{"node"}
 
 // NodeOption allows configuring the Noder execution using functional options.
@@ -604,15 +538,6 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			}
 		}
 		return query.Only(ctx)
-	case checkresulthistory.Table:
-		query := c.CheckResultHistory.Query().
-			Where(checkresulthistory.ID(id))
-		if fc := graphql.GetFieldContext(ctx); fc != nil {
-			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, checkresulthistoryImplementors...); err != nil {
-				return nil, err
-			}
-		}
-		return query.Only(ctx)
 	case contacthistory.Table:
 		query := c.ContactHistory.Query().
 			Where(contacthistory.ID(id))
@@ -654,42 +579,6 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(customdomainhistory.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, customdomainhistoryImplementors...); err != nil {
-				return nil, err
-			}
-		}
-		return query.Only(ctx)
-	case dnsverificationhistory.Table:
-		query := c.DNSVerificationHistory.Query().
-			Where(dnsverificationhistory.ID(id))
-		if fc := graphql.GetFieldContext(ctx); fc != nil {
-			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, dnsverificationhistoryImplementors...); err != nil {
-				return nil, err
-			}
-		}
-		return query.Only(ctx)
-	case directoryaccounthistory.Table:
-		query := c.DirectoryAccountHistory.Query().
-			Where(directoryaccounthistory.ID(id))
-		if fc := graphql.GetFieldContext(ctx); fc != nil {
-			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, directoryaccounthistoryImplementors...); err != nil {
-				return nil, err
-			}
-		}
-		return query.Only(ctx)
-	case directorygrouphistory.Table:
-		query := c.DirectoryGroupHistory.Query().
-			Where(directorygrouphistory.ID(id))
-		if fc := graphql.GetFieldContext(ctx); fc != nil {
-			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, directorygrouphistoryImplementors...); err != nil {
-				return nil, err
-			}
-		}
-		return query.Only(ctx)
-	case directorymembershiphistory.Table:
-		query := c.DirectoryMembershipHistory.Query().
-			Where(directorymembershiphistory.ID(id))
-		if fc := graphql.GetFieldContext(ctx); fc != nil {
-			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, directorymembershiphistoryImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -820,15 +709,6 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			}
 		}
 		return query.Only(ctx)
-	case integrationhistory.Table:
-		query := c.IntegrationHistory.Query().
-			Where(integrationhistory.ID(id))
-		if fc := graphql.GetFieldContext(ctx); fc != nil {
-			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, integrationhistoryImplementors...); err != nil {
-				return nil, err
-			}
-		}
-		return query.Only(ctx)
 	case internalpolicyhistory.Table:
 		query := c.InternalPolicyHistory.Query().
 			Where(internalpolicyhistory.ID(id))
@@ -906,15 +786,6 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(orgmembershiphistory.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, orgmembershiphistoryImplementors...); err != nil {
-				return nil, err
-			}
-		}
-		return query.Only(ctx)
-	case orgsubscriptionhistory.Table:
-		query := c.OrgSubscriptionHistory.Query().
-			Where(orgsubscriptionhistory.ID(id))
-		if fc := graphql.GetFieldContext(ctx); fc != nil {
-			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, orgsubscriptionhistoryImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -1005,15 +876,6 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(sladefinitionhistory.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, sladefinitionhistoryImplementors...); err != nil {
-				return nil, err
-			}
-		}
-		return query.Only(ctx)
-	case scanhistory.Table:
-		query := c.ScanHistory.Query().
-			Where(scanhistory.ID(id))
-		if fc := graphql.GetFieldContext(ctx); fc != nil {
-			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, scanhistoryImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -1234,33 +1096,6 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			}
 		}
 		return query.Only(ctx)
-	case workfloweventhistory.Table:
-		query := c.WorkflowEventHistory.Query().
-			Where(workfloweventhistory.ID(id))
-		if fc := graphql.GetFieldContext(ctx); fc != nil {
-			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, workfloweventhistoryImplementors...); err != nil {
-				return nil, err
-			}
-		}
-		return query.Only(ctx)
-	case workflowinstancehistory.Table:
-		query := c.WorkflowInstanceHistory.Query().
-			Where(workflowinstancehistory.ID(id))
-		if fc := graphql.GetFieldContext(ctx); fc != nil {
-			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, workflowinstancehistoryImplementors...); err != nil {
-				return nil, err
-			}
-		}
-		return query.Only(ctx)
-	case workflowobjectrefhistory.Table:
-		query := c.WorkflowObjectRefHistory.Query().
-			Where(workflowobjectrefhistory.ID(id))
-		if fc := graphql.GetFieldContext(ctx); fc != nil {
-			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, workflowobjectrefhistoryImplementors...); err != nil {
-				return nil, err
-			}
-		}
-		return query.Only(ctx)
 	default:
 		return nil, fmt.Errorf("cannot resolve noder from table %q: %w", table, errNodeInvalidID)
 	}
@@ -1430,22 +1265,6 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 				*noder = node
 			}
 		}
-	case checkresulthistory.Table:
-		query := c.CheckResultHistory.Query().
-			Where(checkresulthistory.IDIn(ids...))
-		query, err := query.CollectFields(ctx, checkresulthistoryImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
 	case contacthistory.Table:
 		query := c.ContactHistory.Query().
 			Where(contacthistory.IDIn(ids...))
@@ -1514,70 +1333,6 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.CustomDomainHistory.Query().
 			Where(customdomainhistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, customdomainhistoryImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
-	case dnsverificationhistory.Table:
-		query := c.DNSVerificationHistory.Query().
-			Where(dnsverificationhistory.IDIn(ids...))
-		query, err := query.CollectFields(ctx, dnsverificationhistoryImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
-	case directoryaccounthistory.Table:
-		query := c.DirectoryAccountHistory.Query().
-			Where(directoryaccounthistory.IDIn(ids...))
-		query, err := query.CollectFields(ctx, directoryaccounthistoryImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
-	case directorygrouphistory.Table:
-		query := c.DirectoryGroupHistory.Query().
-			Where(directorygrouphistory.IDIn(ids...))
-		query, err := query.CollectFields(ctx, directorygrouphistoryImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
-	case directorymembershiphistory.Table:
-		query := c.DirectoryMembershipHistory.Query().
-			Where(directorymembershiphistory.IDIn(ids...))
-		query, err := query.CollectFields(ctx, directorymembershiphistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -1814,22 +1569,6 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 				*noder = node
 			}
 		}
-	case integrationhistory.Table:
-		query := c.IntegrationHistory.Query().
-			Where(integrationhistory.IDIn(ids...))
-		query, err := query.CollectFields(ctx, integrationhistoryImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
 	case internalpolicyhistory.Table:
 		query := c.InternalPolicyHistory.Query().
 			Where(internalpolicyhistory.IDIn(ids...))
@@ -1962,22 +1701,6 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.OrgMembershipHistory.Query().
 			Where(orgmembershiphistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, orgmembershiphistoryImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
-	case orgsubscriptionhistory.Table:
-		query := c.OrgSubscriptionHistory.Query().
-			Where(orgsubscriptionhistory.IDIn(ids...))
-		query, err := query.CollectFields(ctx, orgsubscriptionhistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -2138,22 +1861,6 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.SLADefinitionHistory.Query().
 			Where(sladefinitionhistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, sladefinitionhistoryImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
-	case scanhistory.Table:
-		query := c.ScanHistory.Query().
-			Where(scanhistory.IDIn(ids...))
-		query, err := query.CollectFields(ctx, scanhistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -2538,54 +2245,6 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.WorkflowDefinitionHistory.Query().
 			Where(workflowdefinitionhistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, workflowdefinitionhistoryImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
-	case workfloweventhistory.Table:
-		query := c.WorkflowEventHistory.Query().
-			Where(workfloweventhistory.IDIn(ids...))
-		query, err := query.CollectFields(ctx, workfloweventhistoryImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
-	case workflowinstancehistory.Table:
-		query := c.WorkflowInstanceHistory.Query().
-			Where(workflowinstancehistory.IDIn(ids...))
-		query, err := query.CollectFields(ctx, workflowinstancehistoryImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
-	case workflowobjectrefhistory.Table:
-		query := c.WorkflowObjectRefHistory.Query().
-			Where(workflowobjectrefhistory.IDIn(ids...))
-		query, err := query.CollectFields(ctx, workflowobjectrefhistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}

@@ -3,10 +3,9 @@ package handlers
 import (
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/httpsling"
+	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/pkg/logx"
-
-	"github.com/theopenlane/iam/auth"
 )
 
 // UserInfo returns the user information for the authenticated user
@@ -31,6 +30,28 @@ func (h *Handler) UserInfo(ctx echo.Context) error {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to get user by subject")
 
 		return h.BadRequest(ctx, err)
+	}
+
+	if user.Edges.Setting != nil {
+		orgID := caller.OrganizationID
+
+		if orgID == "" {
+			orgID, err = h.getUserDefaultOrgID(reqCtx, user.ID)
+			if err != nil {
+				logx.FromContext(reqCtx).Error().Err(err).Msg("unable to get user default org")
+
+				return h.BadRequest(ctx, err)
+			}
+		}
+
+		status, err := h.fetchSSOStatus(reqCtx, orgID, user.ID)
+		if err != nil {
+			logx.FromContext(reqCtx).Error().Err(err).Msg("unable to get auth enforcement status")
+
+			return h.BadRequest(ctx, err)
+		}
+
+		user.Edges.Setting.IsTfaEnabled = user.Edges.Setting.IsTfaEnabled || status.OrgTFAEnforced
 	}
 
 	return h.Success(ctx, user)

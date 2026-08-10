@@ -10,6 +10,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
+	"github.com/theopenlane/entx/history"
 )
 
 // OrgSubscription holds the schema definition for the OrgSubscription entity
@@ -97,6 +98,9 @@ func (o OrgSubscription) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entgql.QueryField(),
 		entgql.RelayConnection(),
+		history.Annotations{
+			Exclude: true,
+		},
 	}
 }
 

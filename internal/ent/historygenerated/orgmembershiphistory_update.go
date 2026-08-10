@@ -181,6 +181,86 @@ func (_u *OrgMembershipHistoryUpdate) ClearSSOExemptGrantedAt() *OrgMembershipHi
 	return _u
 }
 
+// SetTfaEnforced sets the "tfa_enforced" field.
+func (_u *OrgMembershipHistoryUpdate) SetTfaEnforced(v bool) *OrgMembershipHistoryUpdate {
+	_u.mutation.SetTfaEnforced(v)
+	return _u
+}
+
+// SetNillableTfaEnforced sets the "tfa_enforced" field if the given value is not nil.
+func (_u *OrgMembershipHistoryUpdate) SetNillableTfaEnforced(v *bool) *OrgMembershipHistoryUpdate {
+	if v != nil {
+		_u.SetTfaEnforced(*v)
+	}
+	return _u
+}
+
+// ClearTfaEnforced clears the value of the "tfa_enforced" field.
+func (_u *OrgMembershipHistoryUpdate) ClearTfaEnforced() *OrgMembershipHistoryUpdate {
+	_u.mutation.ClearTfaEnforced()
+	return _u
+}
+
+// SetTfaEnforcedReason sets the "tfa_enforced_reason" field.
+func (_u *OrgMembershipHistoryUpdate) SetTfaEnforcedReason(v string) *OrgMembershipHistoryUpdate {
+	_u.mutation.SetTfaEnforcedReason(v)
+	return _u
+}
+
+// SetNillableTfaEnforcedReason sets the "tfa_enforced_reason" field if the given value is not nil.
+func (_u *OrgMembershipHistoryUpdate) SetNillableTfaEnforcedReason(v *string) *OrgMembershipHistoryUpdate {
+	if v != nil {
+		_u.SetTfaEnforcedReason(*v)
+	}
+	return _u
+}
+
+// ClearTfaEnforcedReason clears the value of the "tfa_enforced_reason" field.
+func (_u *OrgMembershipHistoryUpdate) ClearTfaEnforcedReason() *OrgMembershipHistoryUpdate {
+	_u.mutation.ClearTfaEnforcedReason()
+	return _u
+}
+
+// SetTfaEnforcedBy sets the "tfa_enforced_by" field.
+func (_u *OrgMembershipHistoryUpdate) SetTfaEnforcedBy(v string) *OrgMembershipHistoryUpdate {
+	_u.mutation.SetTfaEnforcedBy(v)
+	return _u
+}
+
+// SetNillableTfaEnforcedBy sets the "tfa_enforced_by" field if the given value is not nil.
+func (_u *OrgMembershipHistoryUpdate) SetNillableTfaEnforcedBy(v *string) *OrgMembershipHistoryUpdate {
+	if v != nil {
+		_u.SetTfaEnforcedBy(*v)
+	}
+	return _u
+}
+
+// ClearTfaEnforcedBy clears the value of the "tfa_enforced_by" field.
+func (_u *OrgMembershipHistoryUpdate) ClearTfaEnforcedBy() *OrgMembershipHistoryUpdate {
+	_u.mutation.ClearTfaEnforcedBy()
+	return _u
+}
+
+// SetTfaEnforcedAt sets the "tfa_enforced_at" field.
+func (_u *OrgMembershipHistoryUpdate) SetTfaEnforcedAt(v models.DateTime) *OrgMembershipHistoryUpdate {
+	_u.mutation.SetTfaEnforcedAt(v)
+	return _u
+}
+
+// SetNillableTfaEnforcedAt sets the "tfa_enforced_at" field if the given value is not nil.
+func (_u *OrgMembershipHistoryUpdate) SetNillableTfaEnforcedAt(v *models.DateTime) *OrgMembershipHistoryUpdate {
+	if v != nil {
+		_u.SetTfaEnforcedAt(*v)
+	}
+	return _u
+}
+
+// ClearTfaEnforcedAt clears the value of the "tfa_enforced_at" field.
+func (_u *OrgMembershipHistoryUpdate) ClearTfaEnforcedAt() *OrgMembershipHistoryUpdate {
+	_u.mutation.ClearTfaEnforcedAt()
+	return _u
+}
+
 // Mutation returns the OrgMembershipHistoryMutation object of the builder.
 func (_u *OrgMembershipHistoryUpdate) Mutation() *OrgMembershipHistoryMutation {
 	return _u.mutation
@@ -309,6 +389,30 @@ func (_u *OrgMembershipHistoryUpdate) sqlSave(ctx context.Context) (_node int, e
 	}
 	if _u.mutation.SSOExemptGrantedAtCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldSSOExemptGrantedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.TfaEnforced(); ok {
+		_spec.SetField(orgmembershiphistory.FieldTfaEnforced, field.TypeBool, value)
+	}
+	if _u.mutation.TfaEnforcedCleared() {
+		_spec.ClearField(orgmembershiphistory.FieldTfaEnforced, field.TypeBool)
+	}
+	if value, ok := _u.mutation.TfaEnforcedReason(); ok {
+		_spec.SetField(orgmembershiphistory.FieldTfaEnforcedReason, field.TypeString, value)
+	}
+	if _u.mutation.TfaEnforcedReasonCleared() {
+		_spec.ClearField(orgmembershiphistory.FieldTfaEnforcedReason, field.TypeString)
+	}
+	if value, ok := _u.mutation.TfaEnforcedBy(); ok {
+		_spec.SetField(orgmembershiphistory.FieldTfaEnforcedBy, field.TypeString, value)
+	}
+	if _u.mutation.TfaEnforcedByCleared() {
+		_spec.ClearField(orgmembershiphistory.FieldTfaEnforcedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.TfaEnforcedAt(); ok {
+		_spec.SetField(orgmembershiphistory.FieldTfaEnforcedAt, field.TypeTime, value)
+	}
+	if _u.mutation.TfaEnforcedAtCleared() {
+		_spec.ClearField(orgmembershiphistory.FieldTfaEnforcedAt, field.TypeTime)
 	}
 	_spec.Node.Schema = _u.schemaConfig.OrgMembershipHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -480,6 +584,86 @@ func (_u *OrgMembershipHistoryUpdateOne) ClearSSOExemptGrantedAt() *OrgMembershi
 	return _u
 }
 
+// SetTfaEnforced sets the "tfa_enforced" field.
+func (_u *OrgMembershipHistoryUpdateOne) SetTfaEnforced(v bool) *OrgMembershipHistoryUpdateOne {
+	_u.mutation.SetTfaEnforced(v)
+	return _u
+}
+
+// SetNillableTfaEnforced sets the "tfa_enforced" field if the given value is not nil.
+func (_u *OrgMembershipHistoryUpdateOne) SetNillableTfaEnforced(v *bool) *OrgMembershipHistoryUpdateOne {
+	if v != nil {
+		_u.SetTfaEnforced(*v)
+	}
+	return _u
+}
+
+// ClearTfaEnforced clears the value of the "tfa_enforced" field.
+func (_u *OrgMembershipHistoryUpdateOne) ClearTfaEnforced() *OrgMembershipHistoryUpdateOne {
+	_u.mutation.ClearTfaEnforced()
+	return _u
+}
+
+// SetTfaEnforcedReason sets the "tfa_enforced_reason" field.
+func (_u *OrgMembershipHistoryUpdateOne) SetTfaEnforcedReason(v string) *OrgMembershipHistoryUpdateOne {
+	_u.mutation.SetTfaEnforcedReason(v)
+	return _u
+}
+
+// SetNillableTfaEnforcedReason sets the "tfa_enforced_reason" field if the given value is not nil.
+func (_u *OrgMembershipHistoryUpdateOne) SetNillableTfaEnforcedReason(v *string) *OrgMembershipHistoryUpdateOne {
+	if v != nil {
+		_u.SetTfaEnforcedReason(*v)
+	}
+	return _u
+}
+
+// ClearTfaEnforcedReason clears the value of the "tfa_enforced_reason" field.
+func (_u *OrgMembershipHistoryUpdateOne) ClearTfaEnforcedReason() *OrgMembershipHistoryUpdateOne {
+	_u.mutation.ClearTfaEnforcedReason()
+	return _u
+}
+
+// SetTfaEnforcedBy sets the "tfa_enforced_by" field.
+func (_u *OrgMembershipHistoryUpdateOne) SetTfaEnforcedBy(v string) *OrgMembershipHistoryUpdateOne {
+	_u.mutation.SetTfaEnforcedBy(v)
+	return _u
+}
+
+// SetNillableTfaEnforcedBy sets the "tfa_enforced_by" field if the given value is not nil.
+func (_u *OrgMembershipHistoryUpdateOne) SetNillableTfaEnforcedBy(v *string) *OrgMembershipHistoryUpdateOne {
+	if v != nil {
+		_u.SetTfaEnforcedBy(*v)
+	}
+	return _u
+}
+
+// ClearTfaEnforcedBy clears the value of the "tfa_enforced_by" field.
+func (_u *OrgMembershipHistoryUpdateOne) ClearTfaEnforcedBy() *OrgMembershipHistoryUpdateOne {
+	_u.mutation.ClearTfaEnforcedBy()
+	return _u
+}
+
+// SetTfaEnforcedAt sets the "tfa_enforced_at" field.
+func (_u *OrgMembershipHistoryUpdateOne) SetTfaEnforcedAt(v models.DateTime) *OrgMembershipHistoryUpdateOne {
+	_u.mutation.SetTfaEnforcedAt(v)
+	return _u
+}
+
+// SetNillableTfaEnforcedAt sets the "tfa_enforced_at" field if the given value is not nil.
+func (_u *OrgMembershipHistoryUpdateOne) SetNillableTfaEnforcedAt(v *models.DateTime) *OrgMembershipHistoryUpdateOne {
+	if v != nil {
+		_u.SetTfaEnforcedAt(*v)
+	}
+	return _u
+}
+
+// ClearTfaEnforcedAt clears the value of the "tfa_enforced_at" field.
+func (_u *OrgMembershipHistoryUpdateOne) ClearTfaEnforcedAt() *OrgMembershipHistoryUpdateOne {
+	_u.mutation.ClearTfaEnforcedAt()
+	return _u
+}
+
 // Mutation returns the OrgMembershipHistoryMutation object of the builder.
 func (_u *OrgMembershipHistoryUpdateOne) Mutation() *OrgMembershipHistoryMutation {
 	return _u.mutation
@@ -638,6 +822,30 @@ func (_u *OrgMembershipHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Or
 	}
 	if _u.mutation.SSOExemptGrantedAtCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldSSOExemptGrantedAt, field.TypeTime)
+	}
+	if value, ok := _u.mutation.TfaEnforced(); ok {
+		_spec.SetField(orgmembershiphistory.FieldTfaEnforced, field.TypeBool, value)
+	}
+	if _u.mutation.TfaEnforcedCleared() {
+		_spec.ClearField(orgmembershiphistory.FieldTfaEnforced, field.TypeBool)
+	}
+	if value, ok := _u.mutation.TfaEnforcedReason(); ok {
+		_spec.SetField(orgmembershiphistory.FieldTfaEnforcedReason, field.TypeString, value)
+	}
+	if _u.mutation.TfaEnforcedReasonCleared() {
+		_spec.ClearField(orgmembershiphistory.FieldTfaEnforcedReason, field.TypeString)
+	}
+	if value, ok := _u.mutation.TfaEnforcedBy(); ok {
+		_spec.SetField(orgmembershiphistory.FieldTfaEnforcedBy, field.TypeString, value)
+	}
+	if _u.mutation.TfaEnforcedByCleared() {
+		_spec.ClearField(orgmembershiphistory.FieldTfaEnforcedBy, field.TypeString)
+	}
+	if value, ok := _u.mutation.TfaEnforcedAt(); ok {
+		_spec.SetField(orgmembershiphistory.FieldTfaEnforcedAt, field.TypeTime, value)
+	}
+	if _u.mutation.TfaEnforcedAtCleared() {
+		_spec.ClearField(orgmembershiphistory.FieldTfaEnforcedAt, field.TypeTime)
 	}
 	_spec.Node.Schema = _u.schemaConfig.OrgMembershipHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

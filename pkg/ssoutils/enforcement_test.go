@@ -81,6 +81,23 @@ func TestEvaluate(t *testing.T) {
 			wantTFA:      true,
 			wantEnforced: true,
 		},
+		{
+			name:         "tfa enforcement required even when org tfa is disabled",
+			in:           EnforcementInput{SSOEnforced: false, TFAEnforced: false, MemberTFAEnforced: true, IsMember: true, Email: "user@corp.com"},
+			wantMustSSO:  false,
+			wantExempt:   false,
+			wantTFA:      true,
+			wantEnforced: false,
+		},
+		{
+			name:         "tfa enforcement required for member exempted from sso",
+			in:           EnforcementInput{SSOEnforced: true, MemberExempt: true, MemberTFAEnforced: true, IsMember: true, Email: "auditor@corp.com"},
+			wantMustSSO:  false,
+			wantExempt:   true,
+			wantReason:   ExemptReasonUser,
+			wantTFA:      true,
+			wantEnforced: true,
+		},
 	}
 
 	for _, tt := range tests {

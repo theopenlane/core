@@ -8687,10 +8687,14 @@ type CreateOrgMembershipInput struct {
 	// member is exempt from the SSO login redirect for this organization; TFA enforcement still applies. Who may set this is gated by the org membership mutation policy
 	SsoExempt *bool `json:"ssoExempt,omitempty"`
 	// reason the member was granted an SSO exemption
-	SsoExemptReason *string  `json:"ssoExemptReason,omitempty"`
-	OrganizationID  string   `json:"organizationID"`
-	UserID          string   `json:"userID"`
-	EventIDs        []string `json:"eventIDs,omitempty"`
+	SsoExemptReason *string `json:"ssoExemptReason,omitempty"`
+	// member must configure multifactor authentication for this organization even when organization-wide TFA enforcement is disabled
+	TfaEnforced *bool `json:"tfaEnforced,omitempty"`
+	// reason the member was required to configure multifactor authentication
+	TfaEnforcedReason *string  `json:"tfaEnforcedReason,omitempty"`
+	OrganizationID    string   `json:"organizationID"`
+	UserID            string   `json:"userID"`
+	EventIDs          []string `json:"eventIDs,omitempty"`
 }
 
 // CreateOrganizationInput is used for create Organization object.
@@ -26735,10 +26739,18 @@ type OrgMembership struct {
 	SsoExemptGrantedBy *string `json:"ssoExemptGrantedBy,omitempty"`
 	// when the SSO exemption was granted; stamped server-side, not settable via the API
 	SsoExemptGrantedAt *models.DateTime `json:"ssoExemptGrantedAt,omitempty"`
-	Organization       *Organization    `json:"organization"`
-	User               *User            `json:"user"`
-	Events             *EventConnection `json:"events"`
-	AdditionalRoles    []string         `json:"additionalRoles,omitempty"`
+	// member must configure multifactor authentication for this organization even when organization-wide TFA enforcement is disabled
+	TfaEnforced *bool `json:"tfaEnforced,omitempty"`
+	// reason the member was required to configure multifactor authentication
+	TfaEnforcedReason *string `json:"tfaEnforcedReason,omitempty"`
+	// id of the user that required multifactor authentication; stamped server-side, not settable via the API
+	TfaEnforcedBy *string `json:"tfaEnforcedBy,omitempty"`
+	// when multifactor authentication was required; stamped server-side, not settable via the API
+	TfaEnforcedAt   *models.DateTime `json:"tfaEnforcedAt,omitempty"`
+	Organization    *Organization    `json:"organization"`
+	User            *User            `json:"user"`
+	Events          *EventConnection `json:"events"`
+	AdditionalRoles []string         `json:"additionalRoles,omitempty"`
 }
 
 func (OrgMembership) IsNode() {}
@@ -26951,9 +26963,57 @@ type OrgMembershipWhereInput struct {
 	SsoExemptGrantedAtLte    *models.DateTime   `json:"ssoExemptGrantedAtLTE,omitempty"`
 	SsoExemptGrantedAtIsNil  *bool              `json:"ssoExemptGrantedAtIsNil,omitempty"`
 	SsoExemptGrantedAtNotNil *bool              `json:"ssoExemptGrantedAtNotNil,omitempty"`
-	OrganizationID           *string            `json:"organizationID,omitempty"`
-	UserID                   *string            `json:"userID,omitempty"`
-	HasUserWith              []*UserWhereInput  `json:"hasUserWith,omitempty"`
+	// tfa_enforced field predicates
+	TfaEnforced       *bool `json:"tfaEnforced,omitempty"`
+	TfaEnforcedNeq    *bool `json:"tfaEnforcedNEQ,omitempty"`
+	TfaEnforcedIsNil  *bool `json:"tfaEnforcedIsNil,omitempty"`
+	TfaEnforcedNotNil *bool `json:"tfaEnforcedNotNil,omitempty"`
+	// tfa_enforced_reason field predicates
+	TfaEnforcedReason             *string  `json:"tfaEnforcedReason,omitempty"`
+	TfaEnforcedReasonNeq          *string  `json:"tfaEnforcedReasonNEQ,omitempty"`
+	TfaEnforcedReasonIn           []string `json:"tfaEnforcedReasonIn,omitempty"`
+	TfaEnforcedReasonNotIn        []string `json:"tfaEnforcedReasonNotIn,omitempty"`
+	TfaEnforcedReasonGt           *string  `json:"tfaEnforcedReasonGT,omitempty"`
+	TfaEnforcedReasonGte          *string  `json:"tfaEnforcedReasonGTE,omitempty"`
+	TfaEnforcedReasonLt           *string  `json:"tfaEnforcedReasonLT,omitempty"`
+	TfaEnforcedReasonLte          *string  `json:"tfaEnforcedReasonLTE,omitempty"`
+	TfaEnforcedReasonContains     *string  `json:"tfaEnforcedReasonContains,omitempty"`
+	TfaEnforcedReasonHasPrefix    *string  `json:"tfaEnforcedReasonHasPrefix,omitempty"`
+	TfaEnforcedReasonHasSuffix    *string  `json:"tfaEnforcedReasonHasSuffix,omitempty"`
+	TfaEnforcedReasonIsNil        *bool    `json:"tfaEnforcedReasonIsNil,omitempty"`
+	TfaEnforcedReasonNotNil       *bool    `json:"tfaEnforcedReasonNotNil,omitempty"`
+	TfaEnforcedReasonEqualFold    *string  `json:"tfaEnforcedReasonEqualFold,omitempty"`
+	TfaEnforcedReasonContainsFold *string  `json:"tfaEnforcedReasonContainsFold,omitempty"`
+	// tfa_enforced_by field predicates
+	TfaEnforcedBy             *string  `json:"tfaEnforcedBy,omitempty"`
+	TfaEnforcedByNeq          *string  `json:"tfaEnforcedByNEQ,omitempty"`
+	TfaEnforcedByIn           []string `json:"tfaEnforcedByIn,omitempty"`
+	TfaEnforcedByNotIn        []string `json:"tfaEnforcedByNotIn,omitempty"`
+	TfaEnforcedByGt           *string  `json:"tfaEnforcedByGT,omitempty"`
+	TfaEnforcedByGte          *string  `json:"tfaEnforcedByGTE,omitempty"`
+	TfaEnforcedByLt           *string  `json:"tfaEnforcedByLT,omitempty"`
+	TfaEnforcedByLte          *string  `json:"tfaEnforcedByLTE,omitempty"`
+	TfaEnforcedByContains     *string  `json:"tfaEnforcedByContains,omitempty"`
+	TfaEnforcedByHasPrefix    *string  `json:"tfaEnforcedByHasPrefix,omitempty"`
+	TfaEnforcedByHasSuffix    *string  `json:"tfaEnforcedByHasSuffix,omitempty"`
+	TfaEnforcedByIsNil        *bool    `json:"tfaEnforcedByIsNil,omitempty"`
+	TfaEnforcedByNotNil       *bool    `json:"tfaEnforcedByNotNil,omitempty"`
+	TfaEnforcedByEqualFold    *string  `json:"tfaEnforcedByEqualFold,omitempty"`
+	TfaEnforcedByContainsFold *string  `json:"tfaEnforcedByContainsFold,omitempty"`
+	// tfa_enforced_at field predicates
+	TfaEnforcedAt       *models.DateTime   `json:"tfaEnforcedAt,omitempty"`
+	TfaEnforcedAtNeq    *models.DateTime   `json:"tfaEnforcedAtNEQ,omitempty"`
+	TfaEnforcedAtIn     []*models.DateTime `json:"tfaEnforcedAtIn,omitempty"`
+	TfaEnforcedAtNotIn  []*models.DateTime `json:"tfaEnforcedAtNotIn,omitempty"`
+	TfaEnforcedAtGt     *models.DateTime   `json:"tfaEnforcedAtGT,omitempty"`
+	TfaEnforcedAtGte    *models.DateTime   `json:"tfaEnforcedAtGTE,omitempty"`
+	TfaEnforcedAtLt     *models.DateTime   `json:"tfaEnforcedAtLT,omitempty"`
+	TfaEnforcedAtLte    *models.DateTime   `json:"tfaEnforcedAtLTE,omitempty"`
+	TfaEnforcedAtIsNil  *bool              `json:"tfaEnforcedAtIsNil,omitempty"`
+	TfaEnforcedAtNotNil *bool              `json:"tfaEnforcedAtNotNil,omitempty"`
+	OrganizationID      *string            `json:"organizationID,omitempty"`
+	UserID              *string            `json:"userID,omitempty"`
+	HasUserWith         []*UserWhereInput  `json:"hasUserWith,omitempty"`
 }
 
 type OrgSubscription struct {
@@ -45539,11 +45599,17 @@ type UpdateOrgMembershipInput struct {
 	SsoExempt      *bool `json:"ssoExempt,omitempty"`
 	ClearSSOExempt *bool `json:"clearSSOExempt,omitempty"`
 	// reason the member was granted an SSO exemption
-	SsoExemptReason      *string  `json:"ssoExemptReason,omitempty"`
-	ClearSSOExemptReason *bool    `json:"clearSSOExemptReason,omitempty"`
-	AddEventIDs          []string `json:"addEventIDs,omitempty"`
-	RemoveEventIDs       []string `json:"removeEventIDs,omitempty"`
-	ClearEvents          *bool    `json:"clearEvents,omitempty"`
+	SsoExemptReason      *string `json:"ssoExemptReason,omitempty"`
+	ClearSSOExemptReason *bool   `json:"clearSSOExemptReason,omitempty"`
+	// member must configure multifactor authentication for this organization even when organization-wide TFA enforcement is disabled
+	TfaEnforced      *bool `json:"tfaEnforced,omitempty"`
+	ClearTfaEnforced *bool `json:"clearTfaEnforced,omitempty"`
+	// reason the member was required to configure multifactor authentication
+	TfaEnforcedReason      *string  `json:"tfaEnforcedReason,omitempty"`
+	ClearTfaEnforcedReason *bool    `json:"clearTfaEnforcedReason,omitempty"`
+	AddEventIDs            []string `json:"addEventIDs,omitempty"`
+	RemoveEventIDs         []string `json:"removeEventIDs,omitempty"`
+	ClearEvents            *bool    `json:"clearEvents,omitempty"`
 }
 
 // UpdateOrganizationInput is used for update Organization object.

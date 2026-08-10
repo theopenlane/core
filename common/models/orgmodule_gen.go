@@ -2,6 +2,7 @@
 
 package models
 
+// modules and addons available in the catalog
 const (
 	CatalogBaseModule                    OrgModule = "base_module"
 	CatalogComplianceModule              OrgModule = "compliance_module"
@@ -15,5 +16,22 @@ const (
 	CatalogVulnerabilityManagementModule OrgModule = "vulnerability_management_module"
 )
 
+// AllOrgModules contains every module and addon in the catalog
 var AllOrgModules = []OrgModule{CatalogBaseModule, CatalogComplianceModule, CatalogDomainScanningAddon, CatalogEntityManagementModule, CatalogExtraEvidenceStorageAddon, CatalogPolicyManagementAddon, CatalogRegistryModule, CatalogRiskManagementAddon, CatalogTrustCenterModule, CatalogVulnerabilityManagementModule}
+
+// OrgModuleByConstName maps the name of each module constant to the module it holds
+var OrgModuleByConstName = map[string]OrgModule{
+	"CatalogBaseModule":                    CatalogBaseModule,
+	"CatalogComplianceModule":              CatalogComplianceModule,
+	"CatalogDomainScanningAddon":           CatalogDomainScanningAddon,
+	"CatalogEntityManagementModule":        CatalogEntityManagementModule,
+	"CatalogExtraEvidenceStorageAddon":     CatalogExtraEvidenceStorageAddon,
+	"CatalogPolicyManagementAddon":         CatalogPolicyManagementAddon,
+	"CatalogRegistryModule":                CatalogRegistryModule,
+	"CatalogRiskManagementAddon":           CatalogRiskManagementAddon,
+	"CatalogTrustCenterModule":             CatalogTrustCenterModule,
+	"CatalogVulnerabilityManagementModule": CatalogVulnerabilityManagementModule,
+}
+
+// TrialModules contains the modules and addons included with a trial
 var TrialModules = []OrgModule{CatalogBaseModule, CatalogComplianceModule, CatalogRegistryModule, CatalogTrustCenterModule}

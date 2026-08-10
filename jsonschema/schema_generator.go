@@ -179,7 +179,7 @@ func generateSchema(c schemaConfig, cfg *config.Config, commentMap map[string]st
 // generateJSONSchema creates the JSON schema file from the config structure using the invopop/jsonschema package.
 // It reuses a prebuilt Go comment map for documentation.
 func generateJSONSchema(jsonSchemaPath string, structure interface{}, commentMap map[string]string) error {
-	r := jsonschema.Reflector{Namer: namePkg}
+	r := jsonschema.Reflector{Namer: namePkg, Mapper: mapUnsupportedTypes}
 	r.ExpandedStruct = true
 	r.RequiredFromJSONSchemaTags = true
 	r.FieldNameTag = tagName
@@ -801,6 +801,10 @@ func structValueToMap(val reflect.Value) map[string]any {
 			continue
 		}
 
+		if isUnsupportedKind(field.Type.Kind()) {
+			continue
+		}
+
 		tag := field.Tag.Get("json")
 		name := strings.Split(tag, ",")[0]
 		if name == "" || name == "-" {
@@ -813,9 +817,21 @@ func structValueToMap(val reflect.Value) map[string]any {
 	return result
 }
 
+// isUnsupportedKind reports whether a kind cannot be represented in JSON or YAML. Third party
+// config structs expose callback and channel fields (for example river.Config.JobStuckHandler)
+// that are wired up in code rather than set from a config file, so they are dropped from the
+// generated output instead of failing the marshal
+func isUnsupportedKind(k reflect.Kind) bool {
+	return k == reflect.Func || k == reflect.Chan
+}
+
 // convertValueForYAML converts a reflect.Value to a juicy YAML-compatible representation
 func convertValueForYAML(val reflect.Value) any {
 	if !val.IsValid() {
+		return nil
+	}
+
+	if isUnsupportedKind(val.Kind()) {
 		return nil
 	}
 
@@ -1268,6 +1284,18 @@ func generateAndWriteHelmValues(helmValuesPath string, structure interface{}, co
 
 func namePkg(r reflect.Type) string {
 	return r.String()
+}
+
+// mapUnsupportedTypes returns an empty schema for kinds the reflector cannot represent in JSON
+// schema, which it would otherwise panic on. Function fields on third party config structs
+// (for example river.Config.JobStuckHandler) are callbacks set in code, never in config files,
+// so an empty schema matches how interface fields on those same structs are already handled
+func mapUnsupportedTypes(t reflect.Type) *jsonschema.Schema {
+	if t.Kind() == reflect.Func || t.Kind() == reflect.Chan {
+		return &jsonschema.Schema{}
+	}
+
+	return nil
 }
 
 // generateHelmValues creates a Helm-compatible values.yaml from a pre-defaulted config structure

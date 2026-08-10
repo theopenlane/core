@@ -2235,6 +2235,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 			orgmembership.FieldSSOExemptReason:       {Type: field.TypeString, Column: orgmembership.FieldSSOExemptReason},
 			orgmembership.FieldSSOExemptGrantedBy:    {Type: field.TypeString, Column: orgmembership.FieldSSOExemptGrantedBy},
 			orgmembership.FieldSSOExemptGrantedAt:    {Type: field.TypeTime, Column: orgmembership.FieldSSOExemptGrantedAt},
+			orgmembership.FieldTfaEnforced:           {Type: field.TypeBool, Column: orgmembership.FieldTfaEnforced},
+			orgmembership.FieldTfaEnforcedReason:     {Type: field.TypeString, Column: orgmembership.FieldTfaEnforcedReason},
+			orgmembership.FieldTfaEnforcedBy:         {Type: field.TypeString, Column: orgmembership.FieldTfaEnforcedBy},
+			orgmembership.FieldTfaEnforcedAt:         {Type: field.TypeTime, Column: orgmembership.FieldTfaEnforcedAt},
 		},
 	}
 	graph.Nodes[57] = &sqlgraph.Node{
@@ -10898,18 +10902,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Organization",
 	)
 	graph.MustAddE(
-		"user",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: true,
-			Table:   notification.UserTable,
-			Columns: []string{notification.UserColumn},
-			Bidi:    false,
-		},
-		"Notification",
-		"User",
-	)
-	graph.MustAddE(
 		"notification_template",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -17868,18 +17860,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"User",
 		"ImpersonationEvent",
-	)
-	graph.MustAddE(
-		"notifications",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   user.NotificationsTable,
-			Columns: []string{user.NotificationsColumn},
-			Bidi:    false,
-		},
-		"User",
-		"Notification",
 	)
 	graph.MustAddE(
 		"group_memberships",
@@ -35763,20 +35743,6 @@ func (f *NotificationFilter) WhereHasOwnerWith(preds ...predicate.Organization) 
 	})))
 }
 
-// WhereHasUser applies a predicate to check if query has an edge user.
-func (f *NotificationFilter) WhereHasUser() {
-	f.Where(entql.HasEdge("user"))
-}
-
-// WhereHasUserWith applies a predicate to check if query has an edge user with a given conditions (other predicates).
-func (f *NotificationFilter) WhereHasUserWith(preds ...predicate.User) {
-	f.Where(entql.HasEdgeWith("user", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
 // WhereHasNotificationTemplate applies a predicate to check if query has an edge notification_template.
 func (f *NotificationFilter) WhereHasNotificationTemplate() {
 	f.Where(entql.HasEdge("notification_template"))
@@ -36495,6 +36461,26 @@ func (f *OrgMembershipFilter) WhereSSOExemptGrantedBy(p entql.StringP) {
 // WhereSSOExemptGrantedAt applies the entql time.Time predicate on the sso_exempt_granted_at field.
 func (f *OrgMembershipFilter) WhereSSOExemptGrantedAt(p entql.TimeP) {
 	f.Where(p.Field(orgmembership.FieldSSOExemptGrantedAt))
+}
+
+// WhereTfaEnforced applies the entql bool predicate on the tfa_enforced field.
+func (f *OrgMembershipFilter) WhereTfaEnforced(p entql.BoolP) {
+	f.Where(p.Field(orgmembership.FieldTfaEnforced))
+}
+
+// WhereTfaEnforcedReason applies the entql string predicate on the tfa_enforced_reason field.
+func (f *OrgMembershipFilter) WhereTfaEnforcedReason(p entql.StringP) {
+	f.Where(p.Field(orgmembership.FieldTfaEnforcedReason))
+}
+
+// WhereTfaEnforcedBy applies the entql string predicate on the tfa_enforced_by field.
+func (f *OrgMembershipFilter) WhereTfaEnforcedBy(p entql.StringP) {
+	f.Where(p.Field(orgmembership.FieldTfaEnforcedBy))
+}
+
+// WhereTfaEnforcedAt applies the entql time.Time predicate on the tfa_enforced_at field.
+func (f *OrgMembershipFilter) WhereTfaEnforcedAt(p entql.TimeP) {
+	f.Where(p.Field(orgmembership.FieldTfaEnforcedAt))
 }
 
 // WhereHasOrganization applies a predicate to check if query has an edge organization.
@@ -50391,20 +50377,6 @@ func (f *UserFilter) WhereHasTargetedImpersonations() {
 // WhereHasTargetedImpersonationsWith applies a predicate to check if query has an edge targeted_impersonations with a given conditions (other predicates).
 func (f *UserFilter) WhereHasTargetedImpersonationsWith(preds ...predicate.ImpersonationEvent) {
 	f.Where(entql.HasEdgeWith("targeted_impersonations", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasNotifications applies a predicate to check if query has an edge notifications.
-func (f *UserFilter) WhereHasNotifications() {
-	f.Where(entql.HasEdge("notifications"))
-}
-
-// WhereHasNotificationsWith applies a predicate to check if query has an edge notifications with a given conditions (other predicates).
-func (f *UserFilter) WhereHasNotificationsWith(preds ...predicate.Notification) {
-	f.Where(entql.HasEdgeWith("notifications", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

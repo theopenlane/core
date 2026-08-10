@@ -177,6 +177,62 @@ func (_c *OrgMembershipCreate) SetNillableSSOExemptGrantedAt(v *models.DateTime)
 	return _c
 }
 
+// SetTfaEnforced sets the "tfa_enforced" field.
+func (_c *OrgMembershipCreate) SetTfaEnforced(v bool) *OrgMembershipCreate {
+	_c.mutation.SetTfaEnforced(v)
+	return _c
+}
+
+// SetNillableTfaEnforced sets the "tfa_enforced" field if the given value is not nil.
+func (_c *OrgMembershipCreate) SetNillableTfaEnforced(v *bool) *OrgMembershipCreate {
+	if v != nil {
+		_c.SetTfaEnforced(*v)
+	}
+	return _c
+}
+
+// SetTfaEnforcedReason sets the "tfa_enforced_reason" field.
+func (_c *OrgMembershipCreate) SetTfaEnforcedReason(v string) *OrgMembershipCreate {
+	_c.mutation.SetTfaEnforcedReason(v)
+	return _c
+}
+
+// SetNillableTfaEnforcedReason sets the "tfa_enforced_reason" field if the given value is not nil.
+func (_c *OrgMembershipCreate) SetNillableTfaEnforcedReason(v *string) *OrgMembershipCreate {
+	if v != nil {
+		_c.SetTfaEnforcedReason(*v)
+	}
+	return _c
+}
+
+// SetTfaEnforcedBy sets the "tfa_enforced_by" field.
+func (_c *OrgMembershipCreate) SetTfaEnforcedBy(v string) *OrgMembershipCreate {
+	_c.mutation.SetTfaEnforcedBy(v)
+	return _c
+}
+
+// SetNillableTfaEnforcedBy sets the "tfa_enforced_by" field if the given value is not nil.
+func (_c *OrgMembershipCreate) SetNillableTfaEnforcedBy(v *string) *OrgMembershipCreate {
+	if v != nil {
+		_c.SetTfaEnforcedBy(*v)
+	}
+	return _c
+}
+
+// SetTfaEnforcedAt sets the "tfa_enforced_at" field.
+func (_c *OrgMembershipCreate) SetTfaEnforcedAt(v models.DateTime) *OrgMembershipCreate {
+	_c.mutation.SetTfaEnforcedAt(v)
+	return _c
+}
+
+// SetNillableTfaEnforcedAt sets the "tfa_enforced_at" field if the given value is not nil.
+func (_c *OrgMembershipCreate) SetNillableTfaEnforcedAt(v *models.DateTime) *OrgMembershipCreate {
+	if v != nil {
+		_c.SetTfaEnforcedAt(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *OrgMembershipCreate) SetID(v string) *OrgMembershipCreate {
 	_c.mutation.SetID(v)
@@ -274,6 +330,10 @@ func (_c *OrgMembershipCreate) defaults() error {
 	if _, ok := _c.mutation.SSOExempt(); !ok {
 		v := orgmembership.DefaultSSOExempt
 		_c.mutation.SetSSOExempt(v)
+	}
+	if _, ok := _c.mutation.TfaEnforced(); !ok {
+		v := orgmembership.DefaultTfaEnforced
+		_c.mutation.SetTfaEnforced(v)
 	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if orgmembership.DefaultID == nil {
@@ -382,6 +442,22 @@ func (_c *OrgMembershipCreate) createSpec() (*OrgMembership, *sqlgraph.CreateSpe
 	if value, ok := _c.mutation.SSOExemptGrantedAt(); ok {
 		_spec.SetField(orgmembership.FieldSSOExemptGrantedAt, field.TypeTime, value)
 		_node.SSOExemptGrantedAt = &value
+	}
+	if value, ok := _c.mutation.TfaEnforced(); ok {
+		_spec.SetField(orgmembership.FieldTfaEnforced, field.TypeBool, value)
+		_node.TfaEnforced = value
+	}
+	if value, ok := _c.mutation.TfaEnforcedReason(); ok {
+		_spec.SetField(orgmembership.FieldTfaEnforcedReason, field.TypeString, value)
+		_node.TfaEnforcedReason = &value
+	}
+	if value, ok := _c.mutation.TfaEnforcedBy(); ok {
+		_spec.SetField(orgmembership.FieldTfaEnforcedBy, field.TypeString, value)
+		_node.TfaEnforcedBy = &value
+	}
+	if value, ok := _c.mutation.TfaEnforcedAt(); ok {
+		_spec.SetField(orgmembership.FieldTfaEnforcedAt, field.TypeTime, value)
+		_node.TfaEnforcedAt = &value
 	}
 	if nodes := _c.mutation.OrganizationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

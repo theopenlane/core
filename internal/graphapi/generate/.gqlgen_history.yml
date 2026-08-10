@@ -185,3 +185,7 @@ models:
   TemplateContextEntry:
     model:
       - github.com/theopenlane/core/common/models.TemplateContextEntry
+
+directives:
+  modules:
+    skip_runtime: true

@@ -50,6 +50,14 @@ const (
 	FieldSSOExemptGrantedBy = "sso_exempt_granted_by"
 	// FieldSSOExemptGrantedAt holds the string denoting the sso_exempt_granted_at field in the database.
 	FieldSSOExemptGrantedAt = "sso_exempt_granted_at"
+	// FieldTfaEnforced holds the string denoting the tfa_enforced field in the database.
+	FieldTfaEnforced = "tfa_enforced"
+	// FieldTfaEnforcedReason holds the string denoting the tfa_enforced_reason field in the database.
+	FieldTfaEnforcedReason = "tfa_enforced_reason"
+	// FieldTfaEnforcedBy holds the string denoting the tfa_enforced_by field in the database.
+	FieldTfaEnforcedBy = "tfa_enforced_by"
+	// FieldTfaEnforcedAt holds the string denoting the tfa_enforced_at field in the database.
+	FieldTfaEnforcedAt = "tfa_enforced_at"
 	// Table holds the table name of the orgmembershiphistory in the database.
 	Table = "org_membership_history"
 )
@@ -72,6 +80,10 @@ var Columns = []string{
 	FieldSSOExemptReason,
 	FieldSSOExemptGrantedBy,
 	FieldSSOExemptGrantedAt,
+	FieldTfaEnforced,
+	FieldTfaEnforcedReason,
+	FieldTfaEnforcedBy,
+	FieldTfaEnforcedAt,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -103,6 +115,8 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultSSOExempt holds the default value on creation for the "sso_exempt" field.
 	DefaultSSOExempt bool
+	// DefaultTfaEnforced holds the default value on creation for the "tfa_enforced" field.
+	DefaultTfaEnforced bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -210,6 +224,26 @@ func BySSOExemptGrantedBy(opts ...sql.OrderTermOption) OrderOption {
 // BySSOExemptGrantedAt orders the results by the sso_exempt_granted_at field.
 func BySSOExemptGrantedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSSOExemptGrantedAt, opts...).ToFunc()
+}
+
+// ByTfaEnforced orders the results by the tfa_enforced field.
+func ByTfaEnforced(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTfaEnforced, opts...).ToFunc()
+}
+
+// ByTfaEnforcedReason orders the results by the tfa_enforced_reason field.
+func ByTfaEnforcedReason(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTfaEnforcedReason, opts...).ToFunc()
+}
+
+// ByTfaEnforcedBy orders the results by the tfa_enforced_by field.
+func ByTfaEnforcedBy(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTfaEnforcedBy, opts...).ToFunc()
+}
+
+// ByTfaEnforcedAt orders the results by the tfa_enforced_at field.
+func ByTfaEnforcedAt(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTfaEnforcedAt, opts...).ToFunc()
 }
 
 var (

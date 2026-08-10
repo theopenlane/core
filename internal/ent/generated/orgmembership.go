@@ -45,6 +45,14 @@ type OrgMembership struct {
 	SSOExemptGrantedBy *string `json:"sso_exempt_granted_by,omitempty"`
 	// when the SSO exemption was granted; stamped server-side, not settable via the API
 	SSOExemptGrantedAt *models.DateTime `json:"sso_exempt_granted_at,omitempty"`
+	// member must configure multifactor authentication for this organization even when organization-wide TFA enforcement is disabled
+	TfaEnforced bool `json:"tfa_enforced,omitempty"`
+	// reason the member was required to configure multifactor authentication
+	TfaEnforcedReason *string `json:"tfa_enforced_reason,omitempty"`
+	// id of the user that required multifactor authentication; stamped server-side, not settable via the API
+	TfaEnforcedBy *string `json:"tfa_enforced_by,omitempty"`
+	// when multifactor authentication was required; stamped server-side, not settable via the API
+	TfaEnforcedAt *models.DateTime `json:"tfa_enforced_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the OrgMembershipQuery when eager-loading is set.
 	Edges        OrgMembershipEdges `json:"edges"`
@@ -108,11 +116,11 @@ func (*OrgMembership) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case orgmembership.FieldSSOExemptGrantedAt:
+		case orgmembership.FieldSSOExemptGrantedAt, orgmembership.FieldTfaEnforcedAt:
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
-		case orgmembership.FieldSSOExempt:
+		case orgmembership.FieldSSOExempt, orgmembership.FieldTfaEnforced:
 			values[i] = new(sql.NullBool)
-		case orgmembership.FieldID, orgmembership.FieldCreatedBy, orgmembership.FieldUpdatedBy, orgmembership.FieldUpdatedByImpersonator, orgmembership.FieldRole, orgmembership.FieldOrganizationID, orgmembership.FieldUserID, orgmembership.FieldSSOExemptReason, orgmembership.FieldSSOExemptGrantedBy:
+		case orgmembership.FieldID, orgmembership.FieldCreatedBy, orgmembership.FieldUpdatedBy, orgmembership.FieldUpdatedByImpersonator, orgmembership.FieldRole, orgmembership.FieldOrganizationID, orgmembership.FieldUserID, orgmembership.FieldSSOExemptReason, orgmembership.FieldSSOExemptGrantedBy, orgmembership.FieldTfaEnforcedReason, orgmembership.FieldTfaEnforcedBy:
 			values[i] = new(sql.NullString)
 		case orgmembership.FieldCreatedAt, orgmembership.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -213,6 +221,33 @@ func (_m *OrgMembership) assignValues(columns []string, values []any) error {
 				_m.SSOExemptGrantedAt = new(models.DateTime)
 				*_m.SSOExemptGrantedAt = *value.S.(*models.DateTime)
 			}
+		case orgmembership.FieldTfaEnforced:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field tfa_enforced", values[i])
+			} else if value.Valid {
+				_m.TfaEnforced = value.Bool
+			}
+		case orgmembership.FieldTfaEnforcedReason:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field tfa_enforced_reason", values[i])
+			} else if value.Valid {
+				_m.TfaEnforcedReason = new(string)
+				*_m.TfaEnforcedReason = value.String
+			}
+		case orgmembership.FieldTfaEnforcedBy:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field tfa_enforced_by", values[i])
+			} else if value.Valid {
+				_m.TfaEnforcedBy = new(string)
+				*_m.TfaEnforcedBy = value.String
+			}
+		case orgmembership.FieldTfaEnforcedAt:
+			if value, ok := values[i].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field tfa_enforced_at", values[i])
+			} else if value.Valid {
+				_m.TfaEnforcedAt = new(models.DateTime)
+				*_m.TfaEnforcedAt = *value.S.(*models.DateTime)
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -305,6 +340,24 @@ func (_m *OrgMembership) String() string {
 	builder.WriteString(", ")
 	if v := _m.SSOExemptGrantedAt; v != nil {
 		builder.WriteString("sso_exempt_granted_at=")
+		builder.WriteString(fmt.Sprintf("%v", *v))
+	}
+	builder.WriteString(", ")
+	builder.WriteString("tfa_enforced=")
+	builder.WriteString(fmt.Sprintf("%v", _m.TfaEnforced))
+	builder.WriteString(", ")
+	if v := _m.TfaEnforcedReason; v != nil {
+		builder.WriteString("tfa_enforced_reason=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.TfaEnforcedBy; v != nil {
+		builder.WriteString("tfa_enforced_by=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.TfaEnforcedAt; v != nil {
+		builder.WriteString("tfa_enforced_at=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
 	builder.WriteByte(')')
