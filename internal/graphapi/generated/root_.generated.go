@@ -3970,6 +3970,7 @@ type ComplexityRoot struct {
 		ForceCompleteWorkflowInstance        func(childComplexity int, id string, applyProposal *bool) int
 		ImportDomainScanReview               func(childComplexity int, input model.ImportDomainScanReviewInput) int
 		LaunchCampaign                       func(childComplexity int, input model.LaunchCampaignInput) int
+		LeaveOrganization                    func(childComplexity int, organizationID string) int
 		MarkNotificationsAsRead              func(childComplexity int, ids []string) int
 		PublishTrustCenterSetting            func(childComplexity int) int
 		ReassignWorkflowAssignment           func(childComplexity int, id string, targetUserID string) int
@@ -28733,6 +28734,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Mutation.LaunchCampaign(childComplexity, args["input"].(model.LaunchCampaignInput)), true
+	case "Mutation.leaveOrganization":
+		if e.ComplexityRoot.Mutation.LeaveOrganization == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_leaveOrganization_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Mutation.LeaveOrganization(childComplexity, args["organizationID"].(string)), true
 	case "Mutation.markNotificationsAsRead":
 		if e.ComplexityRoot.Mutation.MarkNotificationsAsRead == nil {
 			break
@@ -157358,6 +157370,15 @@ extend type Mutation{
         ID of the orgMembership
         """
         id: ID!
+    ): OrgMembershipDeletePayload!
+    """
+    Leave an organization the authenticated user belongs to
+    """
+    leaveOrganization(
+        """
+        ID of the organization to leave
+        """
+        organizationID: ID!
     ): OrgMembershipDeletePayload!
     """
     Delete multiple orgMemberships

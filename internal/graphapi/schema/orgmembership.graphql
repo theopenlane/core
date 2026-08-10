@@ -61,6 +61,15 @@ extend type Mutation{
         id: ID!
     ): OrgMembershipDeletePayload!
     """
+    Leave an organization the authenticated user belongs to
+    """
+    leaveOrganization(
+        """
+        ID of the organization to leave
+        """
+        organizationID: ID!
+    ): OrgMembershipDeletePayload!
+    """
     Delete multiple orgMemberships
     """
     deleteBulkOrgMembership(

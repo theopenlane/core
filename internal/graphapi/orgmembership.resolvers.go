@@ -126,6 +126,11 @@ func (r *mutationResolver) DeleteOrgMembership(ctx context.Context, id string) (
 	}, nil
 }
 
+// LeaveOrganization is the resolver for the leaveOrganization field.
+func (r *mutationResolver) LeaveOrganization(ctx context.Context, organizationID string) (*model.OrgMembershipDeletePayload, error) {
+	return leaveOrganization(ctx, organizationID)
+}
+
 // DeleteBulkOrgMembership is the resolver for the deleteBulkOrgMembership field.
 func (r *mutationResolver) DeleteBulkOrgMembership(ctx context.Context, ids []string) (*model.OrgMembershipBulkDeletePayload, error) {
 	if len(ids) == 0 {
