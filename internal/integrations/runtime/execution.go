@@ -55,7 +55,8 @@ func (r *Runtime) reconcileOperations(ctx context.Context, integration *ent.Inte
 		receipt := r.Gala().EmitWithHeaders(intobvs.WithContext(ctx, oc), operations.ReconcileTopic, operations.ReconcileEnvelope{
 			OperationContext: oc,
 		}, gala.Headers{
-			Properties: oc.Properties(),
+			Properties: types.GetPropertiesForOperationContext(oc),
+			Tags:       types.GetTagsForOperationContext(oc),
 		})
 
 		if receipt.Err != nil {
@@ -535,7 +536,13 @@ func (r *Runtime) seedReconcileJobsForInstallation(ctx context.Context, inst *en
 			continue
 		}
 
-		fragment, err := reconcileMetadataFragment(inst.ID, op.Name)
+		oc := types.NewOperationContext(inst.OwnerID, op.Name, types.IntegrationSource{
+			IntegrationID: inst.ID,
+			DefinitionID:  inst.DefinitionID,
+			RunType:       enums.IntegrationRunTypeReconcile,
+		})
+
+		fragment, err := reconcileMetadataFragment(oc)
 		if err != nil {
 			errs = append(errs, err)
 			continue
@@ -555,17 +562,14 @@ func (r *Runtime) seedReconcileJobsForInstallation(ctx context.Context, inst *en
 
 		logx.FromContext(ctx).Info().Str("integration_id", inst.ID).Str(intobvs.FieldOperation, op.Name).Msg("seeding missing reconcile job")
 
-		oc := types.NewOperationContext(inst.OwnerID, op.Name, types.IntegrationSource{
-			IntegrationID: inst.ID,
-			DefinitionID:  inst.DefinitionID,
-			RunType:       enums.IntegrationRunTypeReconcile,
-		})
-
 		receipt := r.Gala().EmitWithHeaders(
 			intobvs.WithContext(ctx, oc),
 			operations.ReconcileTopic,
 			operations.ReconcileEnvelope{OperationContext: oc},
-			gala.Headers{Properties: oc.Properties()},
+			gala.Headers{
+				Properties: types.GetPropertiesForOperationContext(oc),
+				Tags:       types.GetTagsForOperationContext(oc),
+			},
 		)
 		if receipt.Err != nil {
 			logx.FromContext(ctx).Error().Err(receipt.Err).Str("integration_id", inst.ID).Str(intobvs.FieldOperation, op.Name).Msg("failed to seed reconcile job")
@@ -627,16 +631,20 @@ func (r *Runtime) reconcilableDefinitionIDs() []string {
 
 // reconcileMetadataFragment builds the JSONB containment fragment used to query
 // River for an active reconcile job for the given integration and operation
-func reconcileMetadataFragment(integrationID, operationName string) (string, error) {
+func reconcileMetadataFragment(oc gala.OperationContext) (string, error) {
+	props := types.GetPropertiesForOperationContext(oc)
+
 	fragment := struct {
 		Properties struct {
 			InstallationID string `json:"installationId"`
 			Operation      string `json:"operation"`
+			RunType        string `json:"runType"`
 		} `json:"properties"`
 	}{}
 
-	fragment.Properties.InstallationID = integrationID
-	fragment.Properties.Operation = operationName
+	fragment.Properties.InstallationID = props["installationId"]
+	fragment.Properties.Operation = props["operation"]
+	fragment.Properties.RunType = props["runType"]
 
 	b, err := json.Marshal(fragment)
 	if err != nil {

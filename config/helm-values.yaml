@@ -555,9 +555,9 @@ coreConfiguration:
     # -- StripeWebhookEvents is the list of events to register when creating a webhook endpoint
     stripewebhookevents: []
     # -- StripeWebhookAPIVersion is the Stripe API version currently accepted by the webhook handler
-    stripewebhookapiversion: "2026_02_25_CLOVER"  # @schema type:string; default:2026_02_25_CLOVER
+    stripewebhookapiversion: "2026_07_29_DAHLIA"  # @schema type:string; default:2026_07_29_DAHLIA
     # -- StripeWebhookDiscardAPIVersion is the Stripe API version to discard during migration
-    stripewebhookdiscardapiversion: "2025_12_15_CLOVER"  # @schema type:string; default:2025_12_15_CLOVER
+    stripewebhookdiscardapiversion: "2026_02_25_CLOVER"  # @schema type:string; default:2026_02_25_CLOVER
   # -- Keywatcher contains the configuration for the key watcher that manages JWT signing keys
   keywatcher:
     # -- Enabled indicates whether the key watcher is enabled
@@ -1007,14 +1007,6 @@ externalSecrets:
       secretKey: "CORE_SUBSCRIPTION_STRIPEWEBHOOKSECRETS"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-subscription-stripewebhooksecrets"  # @schema type:string
-    # -- core-subscription-stripewebhooksecrets-2025_12_15_clover secret configuration
-    core-subscription-stripewebhooksecrets-2025_12_15_clover:
-      # -- Enable this external secret
-      enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for subscription.stripewebhooksecrets.2025_12_15_CLOVER
-      secretKey: "CORE_SUBSCRIPTION_STRIPEWEBHOOKSECRETS_2025_12_15_CLOVER"  # @schema type:string
-      # -- Remote key in GCP Secret Manager
-      remoteKey: "core-subscription-stripewebhooksecrets-2025_12_15_clover"  # @schema type:string
     # -- core-subscription-stripewebhooksecrets-2026_02_25_clover secret configuration
     core-subscription-stripewebhooksecrets-2026_02_25_clover:
       # -- Enable this external secret
@@ -1023,6 +1015,14 @@ externalSecrets:
       secretKey: "CORE_SUBSCRIPTION_STRIPEWEBHOOKSECRETS_2026_02_25_CLOVER"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-subscription-stripewebhooksecrets-2026_02_25_clover"  # @schema type:string
+    # -- core-subscription-stripewebhooksecrets-2026_07_29_dahlia secret configuration
+    core-subscription-stripewebhooksecrets-2026_07_29_dahlia:
+      # -- Enable this external secret
+      enabled: true  # @schema type:boolean; default:true
+      # -- Environment variable key for subscription.stripewebhooksecrets.2026_07_29_DAHLIA
+      secretKey: "CORE_SUBSCRIPTION_STRIPEWEBHOOKSECRETS_2026_07_29_DAHLIA"  # @schema type:string
+      # -- Remote key in GCP Secret Manager
+      remoteKey: "core-subscription-stripewebhooksecrets-2026_07_29_dahlia"  # @schema type:string
     # -- core-integrations-awssecurityhub-accesskeyid secret configuration
     core-integrations-awssecurityhub-accesskeyid:
       # -- Enable this external secret

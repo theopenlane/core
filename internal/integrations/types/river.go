@@ -34,6 +34,10 @@ func GetPropertiesForOperationContext(oc gala.OperationContext) map[string]strin
 	src := IntegrationSourceFrom(oc)
 	props := oc.Properties()
 
+	if src.IntegrationID != "" {
+		props["installationId"] = src.IntegrationID
+	}
+
 	if src.DefinitionID != "" {
 		props["definitionId"] = src.DefinitionID
 	}
