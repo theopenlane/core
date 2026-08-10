@@ -6,66 +6,48 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestDetectVersionBump(t *testing.T) {
-	tests := []struct {
-		name        string
-		oldRevision string
-		newRevision string
-		expected    string
-	}{
+func TestOldestRevision(t *testing.T) {
+	v1 := "v1.0.0"
+	v2 := "v2.0.0"
+	v1Minor := "v1.1.0"
+
+	controls := []standardControl{
 		{
-			name:        "major bump",
-			oldRevision: "v1.0.0",
-			newRevision: "v2.0.0",
-			expected:    "major",
+			ID:                         "control-1",
+			ReferenceFrameworkRevision: &v2,
 		},
 		{
-			name:        "minor bump",
-			oldRevision: "v1.0.0",
-			newRevision: "v1.1.0",
-			expected:    "minor",
+			ID:                         "control-2",
+			ReferenceFrameworkRevision: &v1,
 		},
 		{
-			name:        "patch only bump",
-			oldRevision: "v1.0.0",
-			newRevision: "v1.0.1",
-			expected:    "",
-		},
-		{
-			name:        "same version",
-			oldRevision: "v1.2.3",
-			newRevision: "v1.2.3",
-			expected:    "",
-		},
-		{
-			name:        "major and minor bump",
-			oldRevision: "v1.2.3",
-			newRevision: "v2.0.0",
-			expected:    "major",
-		},
-		{
-			name:        "prerelease to release minor bump",
-			oldRevision: "v1.0.0-draft",
-			newRevision: "v1.1.0",
-			expected:    "minor",
-		},
-		{
-			name:        "prerelease same major minor",
-			oldRevision: "v1.0.0",
-			newRevision: "v1.0.1-draft",
-			expected:    "",
-		},
-		{
-			name:        "empty old revision",
-			oldRevision: "",
-			newRevision: "v1.0.0",
-			expected:    "major",
+			ID:                         "control-3",
+			ReferenceFrameworkRevision: &v1Minor,
 		},
 	}
 
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			assert.Equal(t, tt.expected, detectVersionBump(tt.oldRevision, tt.newRevision))
-		})
+	assert.Equal(t, v1, pickOldestRevision(controls))
+}
+
+func TestSubcontrolsForControls(t *testing.T) {
+	controls := []standardControl{
+		{ID: "control-1"},
+		{ID: "control-2"},
 	}
+
+	grouped := map[string][]standardSubcontrol{
+		"control-1": []standardSubcontrol{
+			{standardControl: standardControl{ID: "subcontrol-1"}, ControlID: "control-1"},
+		},
+		"control-2": []standardSubcontrol{
+			{standardControl: standardControl{ID: "subcontrol-2"}, ControlID: "control-2"},
+			{standardControl: standardControl{ID: "subcontrol-3"}, ControlID: "control-2"},
+		},
+	}
+
+	assert.Equal(t, []standardSubcontrol{
+		{standardControl: standardControl{ID: "subcontrol-1"}, ControlID: "control-1"},
+		{standardControl: standardControl{ID: "subcontrol-2"}, ControlID: "control-2"},
+		{standardControl: standardControl{ID: "subcontrol-3"}, ControlID: "control-2"},
+	},fetchSubcontrolsOwnedByControl (controls, grouped))
 }
