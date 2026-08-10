@@ -136,7 +136,7 @@ func TestParseResendEventTime_Invalid(t *testing.T) {
 func TestResendDeliveryEventHandle_EmptyType(t *testing.T) {
 	t.Parallel()
 
-	payload := json.RawMessage(`{"type":"","data":{"email_id":"e_123","created_at":"","tags":[]}}`)
+	payload := json.RawMessage(`{"type":"","data":{"email_id":"e_123","created_at":"","tags":{}}}`)
 	err := ResendDeliveryEvent{}.Handle(t.Context(), types.WebhookHandleRequest{
 		Event: types.WebhookReceivedEvent{
 			Payload: payload,
