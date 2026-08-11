@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"math"
 	"strconv"
+	"strings"
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/rs/zerolog/log"
@@ -127,11 +128,12 @@ func markIntegrationErrored(ctx context.Context, dbClient *ent.Client, installat
 	return err
 }
 
-// backfillManagedGroupMemberships restores memberships in the system managed default groups
-// (Admins, Viewers, All Members) that were removed by the formerly unscoped org membership
-// cascade delete, which wiped a user's group memberships across every organization when they
-// left a single one; membership is derived from each member's role in the organization and
-// only missing rows are added, so the pass is idempotent
+// backfillManagedGroupMemberships restores memberships in the system managed groups that were
+// removed by the formerly unscoped org membership cascade delete, which wiped a user's group
+// memberships across every organization when they left a single one. The default groups
+// (Admins, Viewers, All Members) are derived from each member's role in the organization; each
+// member's personal managed group is matched by its "<display name> - <user id>" naming
+// convention. Only missing rows are added, so the pass is idempotent
 func backfillManagedGroupMemberships(ctx context.Context, dbClient *ent.Client) {
 	orgs, err := dbClient.Organization.Query().
 		Where(
@@ -152,7 +154,6 @@ func backfillManagedGroupMemberships(ctx context.Context, dbClient *ent.Client) 
 			Where(
 				group.OwnerID(org.ID),
 				group.IsManaged(true),
-				group.NameIn(hooks.AdminsGroup, hooks.ViewersGroup, hooks.AllMembersGroup),
 			).
 			All(ctx)
 		if err != nil {
@@ -166,11 +167,23 @@ func backfillManagedGroupMemberships(ctx context.Context, dbClient *ent.Client) 
 		}
 
 		groupsByName := make(map[string]*ent.Group, len(managedGroups))
+		personalGroupsByUserID := make(map[string]*ent.Group)
 		groupIDs := make([]string, 0, len(managedGroups))
 
 		for _, g := range managedGroups {
-			groupsByName[g.Name] = g
 			groupIDs = append(groupIDs, g.ID)
+
+			switch g.Name {
+			case hooks.AdminsGroup, hooks.ViewersGroup, hooks.AllMembersGroup:
+				groupsByName[g.Name] = g
+			default:
+				// personal managed groups are named "<display name> - <user id>";
+				// the user id suffix is the only stable identifier since tags do not
+				// include it and display names can change
+				if idx := strings.LastIndex(g.Name, " - "); idx >= 0 {
+					personalGroupsByUserID[g.Name[idx+len(" - "):]] = g
+				}
+			}
 		}
 
 		members, err := dbClient.OrgMembership.Query().
@@ -197,18 +210,19 @@ func backfillManagedGroupMemberships(ctx context.Context, dbClient *ent.Client) 
 		}
 
 		for _, m := range members {
-			groupNames := []string{hooks.AllMembersGroup}
+			targetGroups := []*ent.Group{groupsByName[hooks.AllMembersGroup]}
 
 			switch m.Role {
 			case enums.RoleMember:
-				groupNames = append(groupNames, hooks.ViewersGroup)
+				targetGroups = append(targetGroups, groupsByName[hooks.ViewersGroup])
 			case enums.RoleAdmin, enums.RoleSuperAdmin, enums.RoleOwner:
-				groupNames = append(groupNames, hooks.AdminsGroup)
+				targetGroups = append(targetGroups, groupsByName[hooks.AdminsGroup])
 			}
 
-			for _, name := range groupNames {
-				g, ok := groupsByName[name]
-				if !ok {
+			targetGroups = append(targetGroups, personalGroupsByUserID[m.UserID])
+
+			for _, g := range targetGroups {
+				if g == nil {
 					continue
 				}
 
@@ -224,7 +238,7 @@ func backfillManagedGroupMemberships(ctx context.Context, dbClient *ent.Client) 
 						GroupID: g.ID,
 					}).
 					Exec(ctx); err != nil {
-					logx.FromContext(ctx).Error().Err(err).Str("organization_id", org.ID).Str("user_id", m.UserID).Str("group", name).Msg("backfill: failed to restore managed group membership")
+					logx.FromContext(ctx).Error().Err(err).Str("organization_id", org.ID).Str("user_id", m.UserID).Str("group", g.Name).Msg("backfill: failed to restore managed group membership")
 
 					continue
 				}
