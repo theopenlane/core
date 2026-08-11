@@ -15,8 +15,13 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
+	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	intobvs "github.com/theopenlane/core/internal/integrations/observability"
 	"github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/pkg/logx"
@@ -47,6 +52,8 @@ func WithBackfill(ctx context.Context, dbClient *ent.Client) ServerOption {
 			backfillCtx = auth.WithCaller(backfillCtx, &auth.Caller{Capabilities: backfillBypassCaps})
 
 			backfillDirectoryExternalIDs(backfillCtx, dbClient)
+
+			backfillManagedGroupMemberships(backfillCtx, dbClient)
 
 			if rt != nil {
 				backfillIntegrationConfiguration(backfillCtx, dbClient, rt)
@@ -118,6 +125,116 @@ func markIntegrationErrored(ctx context.Context, dbClient *ent.Client, installat
 		Save(ctx)
 
 	return err
+}
+
+// backfillManagedGroupMemberships restores memberships in the system managed default groups
+// (Admins, Viewers, All Members) that were removed by the formerly unscoped org membership
+// cascade delete, which wiped a user's group memberships across every organization when they
+// left a single one; membership is derived from each member's role in the organization and
+// only missing rows are added, so the pass is idempotent
+func backfillManagedGroupMemberships(ctx context.Context, dbClient *ent.Client) {
+	orgs, err := dbClient.Organization.Query().
+		Where(
+			organization.DeletedAtIsNil(),
+			organization.PersonalOrg(false),
+		).
+		All(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("backfill: failed to query organizations for managed group membership repair")
+
+		return
+	}
+
+	restored := 0
+
+	for _, org := range orgs {
+		managedGroups, err := dbClient.Group.Query().
+			Where(
+				group.OwnerID(org.ID),
+				group.IsManaged(true),
+				group.NameIn(hooks.AdminsGroup, hooks.ViewersGroup, hooks.AllMembersGroup),
+			).
+			All(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("organization_id", org.ID).Msg("backfill: failed to query managed groups")
+
+			continue
+		}
+
+		if len(managedGroups) == 0 {
+			continue
+		}
+
+		groupsByName := make(map[string]*ent.Group, len(managedGroups))
+		groupIDs := make([]string, 0, len(managedGroups))
+
+		for _, g := range managedGroups {
+			groupsByName[g.Name] = g
+			groupIDs = append(groupIDs, g.ID)
+		}
+
+		members, err := dbClient.OrgMembership.Query().
+			Where(orgmembership.OrganizationID(org.ID)).
+			All(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("organization_id", org.ID).Msg("backfill: failed to query org memberships")
+
+			continue
+		}
+
+		existing, err := dbClient.GroupMembership.Query().
+			Where(groupmembership.GroupIDIn(groupIDs...)).
+			All(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("organization_id", org.ID).Msg("backfill: failed to query managed group memberships")
+
+			continue
+		}
+
+		present := make(map[string]struct{}, len(existing))
+		for _, gm := range existing {
+			present[gm.GroupID+"|"+gm.UserID] = struct{}{}
+		}
+
+		for _, m := range members {
+			groupNames := []string{hooks.AllMembersGroup}
+
+			switch m.Role {
+			case enums.RoleMember:
+				groupNames = append(groupNames, hooks.ViewersGroup)
+			case enums.RoleAdmin, enums.RoleSuperAdmin, enums.RoleOwner:
+				groupNames = append(groupNames, hooks.AdminsGroup)
+			}
+
+			for _, name := range groupNames {
+				g, ok := groupsByName[name]
+				if !ok {
+					continue
+				}
+
+				if _, ok := present[g.ID+"|"+m.UserID]; ok {
+					continue
+				}
+
+				role := enums.RoleMember
+				if err := dbClient.GroupMembership.Create().
+					SetInput(ent.CreateGroupMembershipInput{
+						Role:    &role,
+						UserID:  m.UserID,
+						GroupID: g.ID,
+					}).
+					Exec(ctx); err != nil {
+					logx.FromContext(ctx).Error().Err(err).Str("organization_id", org.ID).Str("user_id", m.UserID).Str("group", name).Msg("backfill: failed to restore managed group membership")
+
+					continue
+				}
+
+				restored++
+			}
+		}
+	}
+
+	logx.FromContext(ctx).Info().Int("restored_memberships", restored).Int("organizations", len(orgs)).Msg("backfill: managed group memberships repaired")
 }
 
 // backfillDirectoryExternalIDs rewrites directory account and group external ids that the CEL double
