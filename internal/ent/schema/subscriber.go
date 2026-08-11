@@ -145,6 +145,7 @@ func (s Subscriber) Edges() []ent.Edge {
 			immutable:  true,
 		}),
 		defaultEdgeToWithPagination(s, CampaignTarget{}),
+		defaultEdgeToWithPagination(s, AudienceMember{}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: s,
 			edgeSchema: Contact{},
