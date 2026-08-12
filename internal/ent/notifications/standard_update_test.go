@@ -49,5 +49,5 @@ func TestSubcontrolsForControls(t *testing.T) {
 		{standardControl: standardControl{ID: "subcontrol-1"}, ControlID: "control-1"},
 		{standardControl: standardControl{ID: "subcontrol-2"}, ControlID: "control-2"},
 		{standardControl: standardControl{ID: "subcontrol-3"}, ControlID: "control-2"},
-	},fetchSubcontrolsOwnedByControl (controls, grouped))
+	}, fetchSubcontrolsOwnedByControl(controls, grouped))
 }

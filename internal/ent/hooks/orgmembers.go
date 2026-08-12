@@ -191,6 +191,16 @@ func getUserMembershipRoles(ctx context.Context, m *generated.OrgMembershipMutat
 	return roles, nil
 }
 
+// directOrgMembershipDeleteFields are the graphql root fields that remove individual members
+// from an organization; these need the full delete handling (owner protection, default org
+// reassignment, and org-scoped group, program, and tuple cleanup). Organization deletion is
+// intentionally absent because the organization cascade delete removes everything the org owns
+var directOrgMembershipDeleteFields = map[string]bool{
+	"deleteOrgMembership":     true,
+	"deleteBulkOrgMembership": true,
+	"leaveOrganization":       true,
+}
+
 // HookOrgMembersDelete is a hook that runs during the delete operation of an org membership
 func HookOrgMembersDelete() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
@@ -198,8 +208,7 @@ func HookOrgMembersDelete() ent.Hook {
 			// we only want to do this on direct org membership delete operations
 			// deleteOrganization will be handled by the organization hook
 			rootFieldCtx := graphql.GetRootFieldContext(ctx)
-			if rootFieldCtx == nil ||
-				(rootFieldCtx.Object != "deleteOrgMembership" && rootFieldCtx.Object != "leaveOrganization") {
+			if rootFieldCtx == nil || !directOrgMembershipDeleteFields[rootFieldCtx.Object] {
 				logx.FromContext(ctx).Debug().Msg("skipping org membership delete hook")
 
 				return next.Mutate(ctx, m)
@@ -235,6 +244,11 @@ func HookOrgMembersDelete() ent.Hook {
 
 			if err := deleteSystemManagedUserGroup(allowCtx, m, orgMembership.UserID, orgMembership.OrganizationID); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("error deleting user's system managed group from organization")
+				return nil, err
+			}
+
+			if err := removeUserOrgScopedMemberships(allowCtx, m, orgMembership.UserID, orgMembership.OrganizationID); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Msg("error removing user's group and program memberships from organization")
 				return nil, err
 			}
 

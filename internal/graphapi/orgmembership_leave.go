@@ -7,7 +7,6 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
@@ -37,12 +36,10 @@ func leaveOrganization(ctx context.Context, organizationID string) (*model.OrgMe
 		return nil, hooks.ErrOrgOwnerCannotBeDeleted
 	}
 
+	// group and program memberships scoped to the organization are removed by the
+	// org membership delete hook
 	if err := withTransactionalMutation(ctx).OrgMembership.DeleteOneID(res.ID).Exec(allowCtx); err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "orgmembership"})
-	}
-
-	if err := generated.OrgMembershipEdgeCleanup(ctx, res.UserID); err != nil {
-		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.OrgMembershipDeletePayload{
