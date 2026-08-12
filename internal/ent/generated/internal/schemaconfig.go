@@ -17,6 +17,8 @@ type SchemaConfig struct {
 	AssessmentResponse                 string // AssessmentResponse table.
 	Asset                              string // Asset table.
 	AssetConnectedAssets               string // Asset-connected_assets->Asset table.
+	Audience                           string // Audience table.
+	AudienceMember                     string // AudienceMember table.
 	Campaign                           string // Campaign table.
 	CampaignBlockedGroups              string // Campaign-blocked_groups->Group table.
 	CampaignEditors                    string // Campaign-editors->Group table.
@@ -25,6 +27,7 @@ type SchemaConfig struct {
 	CampaignUsers                      string // Campaign-users->User table.
 	CampaignGroups                     string // Campaign-groups->Group table.
 	CampaignIdentityHolders            string // Campaign-identity_holders->IdentityHolder table.
+	CampaignAudiences                  string // Campaign-audiences->Audience table.
 	CampaignTarget                     string // CampaignTarget table.
 	CheckResult                        string // CheckResult table.
 	CheckResultControls                string // CheckResult-controls->Control table.

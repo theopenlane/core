@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/audiencemember"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
@@ -614,6 +615,21 @@ func (_c *UserCreate) AddCampaignTargets(v ...*CampaignTarget) *UserCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddCampaignTargetIDs(ids...)
+}
+
+// AddAudienceMemberIDs adds the "audience_members" edge to the AudienceMember entity by IDs.
+func (_c *UserCreate) AddAudienceMemberIDs(ids ...string) *UserCreate {
+	_c.mutation.AddAudienceMemberIDs(ids...)
+	return _c
+}
+
+// AddAudienceMembers adds the "audience_members" edges to the AudienceMember entity.
+func (_c *UserCreate) AddAudienceMembers(v ...*AudienceMember) *UserCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddAudienceMemberIDs(ids...)
 }
 
 // AddSubcontrolIDs adds the "subcontrols" edge to the Subcontrol entity by IDs.
@@ -1343,6 +1359,23 @@ func (_c *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.CampaignTarget
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.AudienceMembersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.AudienceMembersTable,
+			Columns: []string{user.AudienceMembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(audiencemember.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.AudienceMember
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

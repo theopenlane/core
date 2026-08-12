@@ -247,6 +247,70 @@ type ComplexityRoot struct {
 		Node   func(childComplexity int) int
 	}
 
+	AudienceHistory struct {
+		AudienceType          func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		Description           func(childComplexity int) int
+		DisplayID             func(childComplexity int) int
+		Filters               func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		Name                  func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
+	}
+
+	AudienceHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	AudienceHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	AudienceMemberHistory struct {
+		AudienceID            func(childComplexity int) int
+		ContactID             func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		DisplayID             func(childComplexity int) int
+		Email                 func(childComplexity int) int
+		FullName              func(childComplexity int) int
+		GroupID               func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		IdentityHolderID      func(childComplexity int) int
+		Metadata              func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		SubscriberID          func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
+		UserID                func(childComplexity int) int
+	}
+
+	AudienceMemberHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	AudienceMemberHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
 	CampaignHistory struct {
 		AssessmentID           func(childComplexity int) int
 		CampaignType           func(childComplexity int) int
@@ -1800,6 +1864,8 @@ type ComplexityRoot struct {
 		AssessmentHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.AssessmentHistoryOrder, where *historygenerated.AssessmentHistoryWhereInput) int
 		AssessmentResponseHistories         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.AssessmentResponseHistoryOrder, where *historygenerated.AssessmentResponseHistoryWhereInput) int
 		AssetHistories                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.AssetHistoryOrder, where *historygenerated.AssetHistoryWhereInput) int
+		AudienceHistories                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.AudienceHistoryOrder, where *historygenerated.AudienceHistoryWhereInput) int
+		AudienceMemberHistories             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.AudienceMemberHistoryOrder, where *historygenerated.AudienceMemberHistoryWhereInput) int
 		CampaignHistories                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.CampaignHistoryOrder, where *historygenerated.CampaignHistoryWhereInput) int
 		CampaignTargetHistories             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.CampaignTargetHistoryOrder, where *historygenerated.CampaignTargetHistoryWhereInput) int
 		ContactHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *historygenerated.ContactHistoryOrder, where *historygenerated.ContactHistoryWhereInput) int
@@ -4077,6 +4143,288 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.AssetHistoryEdge.Node(childComplexity), true
+
+	case "AudienceHistory.audienceType":
+		if e.ComplexityRoot.AudienceHistory.AudienceType == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceHistory.AudienceType(childComplexity), true
+	case "AudienceHistory.createdAt":
+		if e.ComplexityRoot.AudienceHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceHistory.CreatedAt(childComplexity), true
+	case "AudienceHistory.createdBy":
+		if e.ComplexityRoot.AudienceHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceHistory.CreatedBy(childComplexity), true
+	case "AudienceHistory.description":
+		if e.ComplexityRoot.AudienceHistory.Description == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceHistory.Description(childComplexity), true
+	case "AudienceHistory.displayID":
+		if e.ComplexityRoot.AudienceHistory.DisplayID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceHistory.DisplayID(childComplexity), true
+	case "AudienceHistory.filters":
+		if e.ComplexityRoot.AudienceHistory.Filters == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceHistory.Filters(childComplexity), true
+	case "AudienceHistory.historyTime":
+		if e.ComplexityRoot.AudienceHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceHistory.HistoryTime(childComplexity), true
+	case "AudienceHistory.id":
+		if e.ComplexityRoot.AudienceHistory.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceHistory.ID(childComplexity), true
+	case "AudienceHistory.name":
+		if e.ComplexityRoot.AudienceHistory.Name == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceHistory.Name(childComplexity), true
+	case "AudienceHistory.operation":
+		if e.ComplexityRoot.AudienceHistory.Operation == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceHistory.Operation(childComplexity), true
+	case "AudienceHistory.ownerID":
+		if e.ComplexityRoot.AudienceHistory.OwnerID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceHistory.OwnerID(childComplexity), true
+	case "AudienceHistory.ref":
+		if e.ComplexityRoot.AudienceHistory.Ref == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceHistory.Ref(childComplexity), true
+	case "AudienceHistory.tags":
+		if e.ComplexityRoot.AudienceHistory.Tags == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceHistory.Tags(childComplexity), true
+	case "AudienceHistory.updatedAt":
+		if e.ComplexityRoot.AudienceHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceHistory.UpdatedAt(childComplexity), true
+	case "AudienceHistory.updatedBy":
+		if e.ComplexityRoot.AudienceHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceHistory.UpdatedBy(childComplexity), true
+	case "AudienceHistory.updatedByImpersonator":
+		if e.ComplexityRoot.AudienceHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceHistory.UpdatedByImpersonator(childComplexity), true
+
+	case "AudienceHistoryConnection.edges":
+		if e.ComplexityRoot.AudienceHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceHistoryConnection.Edges(childComplexity), true
+	case "AudienceHistoryConnection.pageInfo":
+		if e.ComplexityRoot.AudienceHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceHistoryConnection.PageInfo(childComplexity), true
+	case "AudienceHistoryConnection.totalCount":
+		if e.ComplexityRoot.AudienceHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceHistoryConnection.TotalCount(childComplexity), true
+
+	case "AudienceHistoryEdge.cursor":
+		if e.ComplexityRoot.AudienceHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceHistoryEdge.Cursor(childComplexity), true
+	case "AudienceHistoryEdge.node":
+		if e.ComplexityRoot.AudienceHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceHistoryEdge.Node(childComplexity), true
+
+	case "AudienceMemberHistory.audienceID":
+		if e.ComplexityRoot.AudienceMemberHistory.AudienceID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMemberHistory.AudienceID(childComplexity), true
+	case "AudienceMemberHistory.contactID":
+		if e.ComplexityRoot.AudienceMemberHistory.ContactID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMemberHistory.ContactID(childComplexity), true
+	case "AudienceMemberHistory.createdAt":
+		if e.ComplexityRoot.AudienceMemberHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMemberHistory.CreatedAt(childComplexity), true
+	case "AudienceMemberHistory.createdBy":
+		if e.ComplexityRoot.AudienceMemberHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMemberHistory.CreatedBy(childComplexity), true
+	case "AudienceMemberHistory.displayID":
+		if e.ComplexityRoot.AudienceMemberHistory.DisplayID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMemberHistory.DisplayID(childComplexity), true
+	case "AudienceMemberHistory.email":
+		if e.ComplexityRoot.AudienceMemberHistory.Email == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMemberHistory.Email(childComplexity), true
+	case "AudienceMemberHistory.fullName":
+		if e.ComplexityRoot.AudienceMemberHistory.FullName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMemberHistory.FullName(childComplexity), true
+	case "AudienceMemberHistory.groupID":
+		if e.ComplexityRoot.AudienceMemberHistory.GroupID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMemberHistory.GroupID(childComplexity), true
+	case "AudienceMemberHistory.historyTime":
+		if e.ComplexityRoot.AudienceMemberHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMemberHistory.HistoryTime(childComplexity), true
+	case "AudienceMemberHistory.id":
+		if e.ComplexityRoot.AudienceMemberHistory.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMemberHistory.ID(childComplexity), true
+	case "AudienceMemberHistory.identityHolderID":
+		if e.ComplexityRoot.AudienceMemberHistory.IdentityHolderID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMemberHistory.IdentityHolderID(childComplexity), true
+	case "AudienceMemberHistory.metadata":
+		if e.ComplexityRoot.AudienceMemberHistory.Metadata == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMemberHistory.Metadata(childComplexity), true
+	case "AudienceMemberHistory.operation":
+		if e.ComplexityRoot.AudienceMemberHistory.Operation == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMemberHistory.Operation(childComplexity), true
+	case "AudienceMemberHistory.ownerID":
+		if e.ComplexityRoot.AudienceMemberHistory.OwnerID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMemberHistory.OwnerID(childComplexity), true
+	case "AudienceMemberHistory.ref":
+		if e.ComplexityRoot.AudienceMemberHistory.Ref == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMemberHistory.Ref(childComplexity), true
+	case "AudienceMemberHistory.subscriberID":
+		if e.ComplexityRoot.AudienceMemberHistory.SubscriberID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMemberHistory.SubscriberID(childComplexity), true
+	case "AudienceMemberHistory.updatedAt":
+		if e.ComplexityRoot.AudienceMemberHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMemberHistory.UpdatedAt(childComplexity), true
+	case "AudienceMemberHistory.updatedBy":
+		if e.ComplexityRoot.AudienceMemberHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMemberHistory.UpdatedBy(childComplexity), true
+	case "AudienceMemberHistory.updatedByImpersonator":
+		if e.ComplexityRoot.AudienceMemberHistory.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMemberHistory.UpdatedByImpersonator(childComplexity), true
+	case "AudienceMemberHistory.userID":
+		if e.ComplexityRoot.AudienceMemberHistory.UserID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMemberHistory.UserID(childComplexity), true
+
+	case "AudienceMemberHistoryConnection.edges":
+		if e.ComplexityRoot.AudienceMemberHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMemberHistoryConnection.Edges(childComplexity), true
+	case "AudienceMemberHistoryConnection.pageInfo":
+		if e.ComplexityRoot.AudienceMemberHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMemberHistoryConnection.PageInfo(childComplexity), true
+	case "AudienceMemberHistoryConnection.totalCount":
+		if e.ComplexityRoot.AudienceMemberHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMemberHistoryConnection.TotalCount(childComplexity), true
+
+	case "AudienceMemberHistoryEdge.cursor":
+		if e.ComplexityRoot.AudienceMemberHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMemberHistoryEdge.Cursor(childComplexity), true
+	case "AudienceMemberHistoryEdge.node":
+		if e.ComplexityRoot.AudienceMemberHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AudienceMemberHistoryEdge.Node(childComplexity), true
 
 	case "CampaignHistory.assessmentID":
 		if e.ComplexityRoot.CampaignHistory.AssessmentID == nil {
@@ -11557,6 +11905,28 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Query.AssetHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.AssetHistoryOrder), args["where"].(*historygenerated.AssetHistoryWhereInput)), true
+	case "Query.audienceHistories":
+		if e.ComplexityRoot.Query.AudienceHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_audienceHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.AudienceHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.AudienceHistoryOrder), args["where"].(*historygenerated.AudienceHistoryWhereInput)), true
+	case "Query.audienceMemberHistories":
+		if e.ComplexityRoot.Query.AudienceMemberHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_audienceMemberHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.AudienceMemberHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*historygenerated.AudienceMemberHistoryOrder), args["where"].(*historygenerated.AudienceMemberHistoryWhereInput)), true
 	case "Query.campaignHistories":
 		if e.ComplexityRoot.Query.CampaignHistories == nil {
 			break
@@ -17635,6 +18005,10 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputAssessmentResponseHistoryWhereInput,
 		ec.unmarshalInputAssetHistoryOrder,
 		ec.unmarshalInputAssetHistoryWhereInput,
+		ec.unmarshalInputAudienceHistoryOrder,
+		ec.unmarshalInputAudienceHistoryWhereInput,
+		ec.unmarshalInputAudienceMemberHistoryOrder,
+		ec.unmarshalInputAudienceMemberHistoryWhereInput,
 		ec.unmarshalInputCampaignHistoryOrder,
 		ec.unmarshalInputCampaignHistoryWhereInput,
 		ec.unmarshalInputCampaignTargetHistoryOrder,
@@ -20917,6 +21291,760 @@ input AssetHistoryWhereInput {
   observedAtLTE: DateTime
   observedAtIsNil: Boolean
   observedAtNotNil: Boolean
+}
+type AudienceHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: AudienceHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: String
+  """
+  the name of the audience
+  """
+  name: String!
+  """
+  the description of the audience
+  """
+  description: String
+  """
+  the type of audience
+  """
+  audienceType: AudienceHistoryAudienceType!
+  """
+  filter definition used to resolve dynamic audience members
+  """
+  filters: Map
+}
+"""
+AudienceHistoryAudienceType is enum for the field audience_type
+"""
+enum AudienceHistoryAudienceType @goModel(model: "github.com/theopenlane/core/common/enums.AudienceType") {
+  MANUAL
+  DYNAMIC
+}
+"""
+A connection to a list of items.
+"""
+type AudienceHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [AudienceHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type AudienceHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: AudienceHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+AudienceHistoryOpType is enum for the field operation
+"""
+enum AudienceHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for AudienceHistory connections
+"""
+input AudienceHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order AudienceHistories.
+  """
+  field: AudienceHistoryOrderField!
+}
+"""
+Properties by which AudienceHistory connections can be ordered.
+"""
+enum AudienceHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+  name
+  TYPE
+}
+"""
+AudienceHistoryWhereInput is used for filtering AudienceHistory objects.
+Input was generated by ent.
+"""
+input AudienceHistoryWhereInput {
+  not: AudienceHistoryWhereInput
+  and: [AudienceHistoryWhereInput!]
+  or: [AudienceHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: AudienceHistoryOpType
+  operationNEQ: AudienceHistoryOpType
+  operationIn: [AudienceHistoryOpType!]
+  operationNotIn: [AudienceHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameEqualFold: String
+  nameContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
+  audience_type field predicates
+  """
+  audienceType: AudienceHistoryAudienceType
+  audienceTypeNEQ: AudienceHistoryAudienceType
+  audienceTypeIn: [AudienceHistoryAudienceType!]
+  audienceTypeNotIn: [AudienceHistoryAudienceType!]
+}
+type AudienceMemberHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: AudienceMemberHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  the organization id that owns the object
+  """
+  ownerID: String
+  """
+  the audience this member belongs to
+  """
+  audienceID: String!
+  """
+  the contact associated with the audience member
+  """
+  contactID: String
+  """
+  the user associated with the audience member
+  """
+  userID: String
+  """
+  the group associated with the audience member
+  """
+  groupID: String
+  """
+  the subscriber associated with the audience member
+  """
+  subscriberID: String
+  """
+  the identity holder associated with the audience member
+  """
+  identityHolderID: String
+  """
+  the email address for the audience member
+  """
+  email: String!
+  """
+  the name of the audience member, if known
+  """
+  fullName: String
+  """
+  additional metadata about the audience member
+  """
+  metadata: Map
+}
+"""
+A connection to a list of items.
+"""
+type AudienceMemberHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [AudienceMemberHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type AudienceMemberHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: AudienceMemberHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+AudienceMemberHistoryOpType is enum for the field operation
+"""
+enum AudienceMemberHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for AudienceMemberHistory connections
+"""
+input AudienceMemberHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order AudienceMemberHistories.
+  """
+  field: AudienceMemberHistoryOrderField!
+}
+"""
+Properties by which AudienceMemberHistory connections can be ordered.
+"""
+enum AudienceMemberHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+  email
+  full_name
+}
+"""
+AudienceMemberHistoryWhereInput is used for filtering AudienceMemberHistory objects.
+Input was generated by ent.
+"""
+input AudienceMemberHistoryWhereInput {
+  not: AudienceMemberHistoryWhereInput
+  and: [AudienceMemberHistoryWhereInput!]
+  or: [AudienceMemberHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: AudienceMemberHistoryOpType
+  operationNEQ: AudienceMemberHistoryOpType
+  operationIn: [AudienceMemberHistoryOpType!]
+  operationNotIn: [AudienceMemberHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  audience_id field predicates
+  """
+  audienceID: String
+  audienceIDNEQ: String
+  audienceIDIn: [String!]
+  audienceIDNotIn: [String!]
+  audienceIDGT: String
+  audienceIDGTE: String
+  audienceIDLT: String
+  audienceIDLTE: String
+  audienceIDContains: String
+  audienceIDHasPrefix: String
+  audienceIDHasSuffix: String
+  audienceIDEqualFold: String
+  audienceIDContainsFold: String
+  """
+  contact_id field predicates
+  """
+  contactID: String
+  contactIDNEQ: String
+  contactIDIn: [String!]
+  contactIDNotIn: [String!]
+  contactIDGT: String
+  contactIDGTE: String
+  contactIDLT: String
+  contactIDLTE: String
+  contactIDContains: String
+  contactIDHasPrefix: String
+  contactIDHasSuffix: String
+  contactIDIsNil: Boolean
+  contactIDNotNil: Boolean
+  contactIDEqualFold: String
+  contactIDContainsFold: String
+  """
+  user_id field predicates
+  """
+  userID: String
+  userIDNEQ: String
+  userIDIn: [String!]
+  userIDNotIn: [String!]
+  userIDGT: String
+  userIDGTE: String
+  userIDLT: String
+  userIDLTE: String
+  userIDContains: String
+  userIDHasPrefix: String
+  userIDHasSuffix: String
+  userIDIsNil: Boolean
+  userIDNotNil: Boolean
+  userIDEqualFold: String
+  userIDContainsFold: String
+  """
+  group_id field predicates
+  """
+  groupID: String
+  groupIDNEQ: String
+  groupIDIn: [String!]
+  groupIDNotIn: [String!]
+  groupIDGT: String
+  groupIDGTE: String
+  groupIDLT: String
+  groupIDLTE: String
+  groupIDContains: String
+  groupIDHasPrefix: String
+  groupIDHasSuffix: String
+  groupIDIsNil: Boolean
+  groupIDNotNil: Boolean
+  groupIDEqualFold: String
+  groupIDContainsFold: String
+  """
+  subscriber_id field predicates
+  """
+  subscriberID: String
+  subscriberIDNEQ: String
+  subscriberIDIn: [String!]
+  subscriberIDNotIn: [String!]
+  subscriberIDGT: String
+  subscriberIDGTE: String
+  subscriberIDLT: String
+  subscriberIDLTE: String
+  subscriberIDContains: String
+  subscriberIDHasPrefix: String
+  subscriberIDHasSuffix: String
+  subscriberIDIsNil: Boolean
+  subscriberIDNotNil: Boolean
+  subscriberIDEqualFold: String
+  subscriberIDContainsFold: String
+  """
+  identity_holder_id field predicates
+  """
+  identityHolderID: String
+  identityHolderIDNEQ: String
+  identityHolderIDIn: [String!]
+  identityHolderIDNotIn: [String!]
+  identityHolderIDGT: String
+  identityHolderIDGTE: String
+  identityHolderIDLT: String
+  identityHolderIDLTE: String
+  identityHolderIDContains: String
+  identityHolderIDHasPrefix: String
+  identityHolderIDHasSuffix: String
+  identityHolderIDIsNil: Boolean
+  identityHolderIDNotNil: Boolean
+  identityHolderIDEqualFold: String
+  identityHolderIDContainsFold: String
+  """
+  email field predicates
+  """
+  email: String
+  emailNEQ: String
+  emailIn: [String!]
+  emailNotIn: [String!]
+  emailGT: String
+  emailGTE: String
+  emailLT: String
+  emailLTE: String
+  emailContains: String
+  emailHasPrefix: String
+  emailHasSuffix: String
+  emailEqualFold: String
+  emailContainsFold: String
+  """
+  full_name field predicates
+  """
+  fullName: String
+  fullNameNEQ: String
+  fullNameIn: [String!]
+  fullNameNotIn: [String!]
+  fullNameGT: String
+  fullNameGTE: String
+  fullNameLT: String
+  fullNameLTE: String
+  fullNameContains: String
+  fullNameHasPrefix: String
+  fullNameHasSuffix: String
+  fullNameIsNil: Boolean
+  fullNameNotNil: Boolean
+  fullNameEqualFold: String
+  fullNameContainsFold: String
 }
 type CampaignHistory implements Node {
   id: ID!
@@ -41402,6 +42530,68 @@ type Query {
     """
     where: AssetHistoryWhereInput
   ): AssetHistoryConnection!
+  audienceHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for AudienceHistories returned from the connection.
+    """
+    orderBy: AudienceHistoryOrder
+
+    """
+    Filtering options for AudienceHistories returned from the connection.
+    """
+    where: AudienceHistoryWhereInput
+  ): AudienceHistoryConnection!
+  audienceMemberHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for AudienceMemberHistories returned from the connection.
+    """
+    orderBy: AudienceMemberHistoryOrder
+
+    """
+    Filtering options for AudienceMemberHistories returned from the connection.
+    """
+    where: AudienceMemberHistoryWhereInput
+  ): AudienceMemberHistoryConnection!
   campaignHistories(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -58406,6 +59596,134 @@ func (ec *executionContext) childFields_AssetHistoryEdge(ctx context.Context, fi
 		return ec.fieldContext_AssetHistoryEdge_cursor(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type AssetHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_AudienceHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_AudienceHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_AudienceHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_AudienceHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_AudienceHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_AudienceHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_AudienceHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_AudienceHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_AudienceHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_AudienceHistory_updatedByImpersonator(ctx, field)
+	case "displayID":
+		return ec.fieldContext_AudienceHistory_displayID(ctx, field)
+	case "tags":
+		return ec.fieldContext_AudienceHistory_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_AudienceHistory_ownerID(ctx, field)
+	case "name":
+		return ec.fieldContext_AudienceHistory_name(ctx, field)
+	case "description":
+		return ec.fieldContext_AudienceHistory_description(ctx, field)
+	case "audienceType":
+		return ec.fieldContext_AudienceHistory_audienceType(ctx, field)
+	case "filters":
+		return ec.fieldContext_AudienceHistory_filters(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AudienceHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_AudienceHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_AudienceHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_AudienceHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_AudienceHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AudienceHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_AudienceHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_AudienceHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_AudienceHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AudienceHistoryEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_AudienceMemberHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_AudienceMemberHistory_id(ctx, field)
+	case "historyTime":
+		return ec.fieldContext_AudienceMemberHistory_historyTime(ctx, field)
+	case "ref":
+		return ec.fieldContext_AudienceMemberHistory_ref(ctx, field)
+	case "operation":
+		return ec.fieldContext_AudienceMemberHistory_operation(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_AudienceMemberHistory_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_AudienceMemberHistory_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_AudienceMemberHistory_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_AudienceMemberHistory_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_AudienceMemberHistory_updatedByImpersonator(ctx, field)
+	case "displayID":
+		return ec.fieldContext_AudienceMemberHistory_displayID(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_AudienceMemberHistory_ownerID(ctx, field)
+	case "audienceID":
+		return ec.fieldContext_AudienceMemberHistory_audienceID(ctx, field)
+	case "contactID":
+		return ec.fieldContext_AudienceMemberHistory_contactID(ctx, field)
+	case "userID":
+		return ec.fieldContext_AudienceMemberHistory_userID(ctx, field)
+	case "groupID":
+		return ec.fieldContext_AudienceMemberHistory_groupID(ctx, field)
+	case "subscriberID":
+		return ec.fieldContext_AudienceMemberHistory_subscriberID(ctx, field)
+	case "identityHolderID":
+		return ec.fieldContext_AudienceMemberHistory_identityHolderID(ctx, field)
+	case "email":
+		return ec.fieldContext_AudienceMemberHistory_email(ctx, field)
+	case "fullName":
+		return ec.fieldContext_AudienceMemberHistory_fullName(ctx, field)
+	case "metadata":
+		return ec.fieldContext_AudienceMemberHistory_metadata(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AudienceMemberHistory", field.Name)
+}
+
+func (ec *executionContext) childFields_AudienceMemberHistoryConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_AudienceMemberHistoryConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_AudienceMemberHistoryConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_AudienceMemberHistoryConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AudienceMemberHistoryConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_AudienceMemberHistoryEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_AudienceMemberHistoryEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_AudienceMemberHistoryEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type AudienceMemberHistoryEdge", field.Name)
 }
 
 func (ec *executionContext) childFields_CampaignHistory(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {

@@ -13,6 +13,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/audience"
+	"github.com/theopenlane/core/internal/ent/generated/audiencemember"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
@@ -141,6 +143,18 @@ func AssessmentResponseEdgeCleanup(ctx context.Context, id string) error {
 
 func AssetEdgeCleanup(ctx context.Context, id string) error {
 	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup asset edge")))
+
+	return nil
+}
+
+func AudienceEdgeCleanup(ctx context.Context, id string) error {
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup audience edge")))
+
+	return nil
+}
+
+func AudienceMemberEdgeCleanup(ctx context.Context, id string) error {
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup audiencemember edge")))
 
 	return nil
 }
@@ -1173,6 +1187,52 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 		if campaigntargetCount, err := FromContext(ctx).CampaignTarget.Delete().Where(campaigntarget.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", campaigntargetCount).Msg("error deleting campaigntarget")
+			return err
+		}
+	}
+
+	{
+		ids, err := FromContext(ctx).Audience.Query().Where(audience.HasOwnerWith(organization.ID(id))).IDs(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("error querying audience ids for cleanup")
+			return err
+		}
+		for _, edgeID := range ids {
+			if err := AudienceEdgeCleanup(ctx, edgeID); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up audience edges")
+				return err
+			}
+		}
+	}
+	if exists, err := FromContext(ctx).Audience.Query().Where((audience.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if err := PurgeAudienceHistory(ctx, audience.HasOwnerWith(organization.ID(id))); err != nil {
+			return err
+		}
+		if audienceCount, err := FromContext(ctx).Audience.Delete().Where(audience.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", audienceCount).Msg("error deleting audience")
+			return err
+		}
+	}
+
+	{
+		ids, err := FromContext(ctx).AudienceMember.Query().Where(audiencemember.HasOwnerWith(organization.ID(id))).IDs(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("error querying audiencemember ids for cleanup")
+			return err
+		}
+		for _, edgeID := range ids {
+			if err := AudienceMemberEdgeCleanup(ctx, edgeID); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up audiencemember edges")
+				return err
+			}
+		}
+	}
+	if exists, err := FromContext(ctx).AudienceMember.Query().Where((audiencemember.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if err := PurgeAudienceMemberHistory(ctx, audiencemember.HasOwnerWith(organization.ID(id))); err != nil {
+			return err
+		}
+		if audiencememberCount, err := FromContext(ctx).AudienceMember.Delete().Where(audiencemember.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", audiencememberCount).Msg("error deleting audiencemember")
 			return err
 		}
 	}

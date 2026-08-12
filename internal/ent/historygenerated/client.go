@@ -24,6 +24,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/assessmenthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/assessmentresponsehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/assethistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/audiencehistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/audiencememberhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/campaignhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/campaigntargethistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/contacthistory"
@@ -108,6 +110,10 @@ type Client struct {
 	AssessmentResponseHistory *AssessmentResponseHistoryClient
 	// AssetHistory is the client for interacting with the AssetHistory builders.
 	AssetHistory *AssetHistoryClient
+	// AudienceHistory is the client for interacting with the AudienceHistory builders.
+	AudienceHistory *AudienceHistoryClient
+	// AudienceMemberHistory is the client for interacting with the AudienceMemberHistory builders.
+	AudienceMemberHistory *AudienceMemberHistoryClient
 	// CampaignHistory is the client for interacting with the CampaignHistory builders.
 	CampaignHistory *CampaignHistoryClient
 	// CampaignTargetHistory is the client for interacting with the CampaignTargetHistory builders.
@@ -257,6 +263,8 @@ func (c *Client) init() {
 	c.AssessmentHistory = NewAssessmentHistoryClient(c.config)
 	c.AssessmentResponseHistory = NewAssessmentResponseHistoryClient(c.config)
 	c.AssetHistory = NewAssetHistoryClient(c.config)
+	c.AudienceHistory = NewAudienceHistoryClient(c.config)
+	c.AudienceMemberHistory = NewAudienceMemberHistoryClient(c.config)
 	c.CampaignHistory = NewCampaignHistoryClient(c.config)
 	c.CampaignTargetHistory = NewCampaignTargetHistoryClient(c.config)
 	c.ContactHistory = NewContactHistoryClient(c.config)
@@ -444,6 +452,8 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		AssessmentHistory:                 NewAssessmentHistoryClient(cfg),
 		AssessmentResponseHistory:         NewAssessmentResponseHistoryClient(cfg),
 		AssetHistory:                      NewAssetHistoryClient(cfg),
+		AudienceHistory:                   NewAudienceHistoryClient(cfg),
+		AudienceMemberHistory:             NewAudienceMemberHistoryClient(cfg),
 		CampaignHistory:                   NewCampaignHistoryClient(cfg),
 		CampaignTargetHistory:             NewCampaignTargetHistoryClient(cfg),
 		ContactHistory:                    NewContactHistoryClient(cfg),
@@ -531,6 +541,8 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		AssessmentHistory:                 NewAssessmentHistoryClient(cfg),
 		AssessmentResponseHistory:         NewAssessmentResponseHistoryClient(cfg),
 		AssetHistory:                      NewAssetHistoryClient(cfg),
+		AudienceHistory:                   NewAudienceHistoryClient(cfg),
+		AudienceMemberHistory:             NewAudienceMemberHistoryClient(cfg),
 		CampaignHistory:                   NewCampaignHistoryClient(cfg),
 		CampaignTargetHistory:             NewCampaignTargetHistoryClient(cfg),
 		ContactHistory:                    NewContactHistoryClient(cfg),
@@ -625,8 +637,9 @@ func (c *Client) Close() error {
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
 		c.ActionPlanHistory, c.AssessmentHistory, c.AssessmentResponseHistory,
-		c.AssetHistory, c.CampaignHistory, c.CampaignTargetHistory, c.ContactHistory,
-		c.ControlHistory, c.ControlImplementationHistory, c.ControlObjectiveHistory,
+		c.AssetHistory, c.AudienceHistory, c.AudienceMemberHistory, c.CampaignHistory,
+		c.CampaignTargetHistory, c.ContactHistory, c.ControlHistory,
+		c.ControlImplementationHistory, c.ControlObjectiveHistory,
 		c.CustomDomainHistory, c.DiscussionHistory, c.DocumentDataHistory,
 		c.EmailTemplateHistory, c.EntityHistory, c.EntityTypeHistory,
 		c.EvidenceHistory, c.FileHistory, c.FindingControlHistory, c.FindingHistory,
@@ -658,8 +671,9 @@ func (c *Client) Use(hooks ...Hook) {
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
 		c.ActionPlanHistory, c.AssessmentHistory, c.AssessmentResponseHistory,
-		c.AssetHistory, c.CampaignHistory, c.CampaignTargetHistory, c.ContactHistory,
-		c.ControlHistory, c.ControlImplementationHistory, c.ControlObjectiveHistory,
+		c.AssetHistory, c.AudienceHistory, c.AudienceMemberHistory, c.CampaignHistory,
+		c.CampaignTargetHistory, c.ContactHistory, c.ControlHistory,
+		c.ControlImplementationHistory, c.ControlObjectiveHistory,
 		c.CustomDomainHistory, c.DiscussionHistory, c.DocumentDataHistory,
 		c.EmailTemplateHistory, c.EntityHistory, c.EntityTypeHistory,
 		c.EvidenceHistory, c.FileHistory, c.FindingControlHistory, c.FindingHistory,
@@ -749,6 +763,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.AssessmentResponseHistory.mutate(ctx, m)
 	case *AssetHistoryMutation:
 		return c.AssetHistory.mutate(ctx, m)
+	case *AudienceHistoryMutation:
+		return c.AudienceHistory.mutate(ctx, m)
+	case *AudienceMemberHistoryMutation:
+		return c.AudienceMemberHistory.mutate(ctx, m)
 	case *CampaignHistoryMutation:
 		return c.CampaignHistory.mutate(ctx, m)
 	case *CampaignTargetHistoryMutation:
@@ -1419,6 +1437,276 @@ func (c *AssetHistoryClient) mutate(ctx context.Context, m *AssetHistoryMutation
 		return (&AssetHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("historygenerated: unknown AssetHistory mutation op: %q", m.Op())
+	}
+}
+
+// AudienceHistoryClient is a client for the AudienceHistory schema.
+type AudienceHistoryClient struct {
+	config
+}
+
+// NewAudienceHistoryClient returns a client for the AudienceHistory from the given config.
+func NewAudienceHistoryClient(c config) *AudienceHistoryClient {
+	return &AudienceHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `audiencehistory.Hooks(f(g(h())))`.
+func (c *AudienceHistoryClient) Use(hooks ...Hook) {
+	c.hooks.AudienceHistory = append(c.hooks.AudienceHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `audiencehistory.Intercept(f(g(h())))`.
+func (c *AudienceHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.AudienceHistory = append(c.inters.AudienceHistory, interceptors...)
+}
+
+// Create returns a builder for creating a AudienceHistory entity.
+func (c *AudienceHistoryClient) Create() *AudienceHistoryCreate {
+	mutation := newAudienceHistoryMutation(c.config, OpCreate)
+	return &AudienceHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of AudienceHistory entities.
+func (c *AudienceHistoryClient) CreateBulk(builders ...*AudienceHistoryCreate) *AudienceHistoryCreateBulk {
+	return &AudienceHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *AudienceHistoryClient) MapCreateBulk(slice any, setFunc func(*AudienceHistoryCreate, int)) *AudienceHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &AudienceHistoryCreateBulk{err: fmt.Errorf("calling to AudienceHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*AudienceHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &AudienceHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for AudienceHistory.
+func (c *AudienceHistoryClient) Update() *AudienceHistoryUpdate {
+	mutation := newAudienceHistoryMutation(c.config, OpUpdate)
+	return &AudienceHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *AudienceHistoryClient) UpdateOne(_m *AudienceHistory) *AudienceHistoryUpdateOne {
+	mutation := newAudienceHistoryMutation(c.config, OpUpdateOne, withAudienceHistory(_m))
+	return &AudienceHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *AudienceHistoryClient) UpdateOneID(id string) *AudienceHistoryUpdateOne {
+	mutation := newAudienceHistoryMutation(c.config, OpUpdateOne, withAudienceHistoryID(id))
+	return &AudienceHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for AudienceHistory.
+func (c *AudienceHistoryClient) Delete() *AudienceHistoryDelete {
+	mutation := newAudienceHistoryMutation(c.config, OpDelete)
+	return &AudienceHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *AudienceHistoryClient) DeleteOne(_m *AudienceHistory) *AudienceHistoryDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *AudienceHistoryClient) DeleteOneID(id string) *AudienceHistoryDeleteOne {
+	builder := c.Delete().Where(audiencehistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &AudienceHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for AudienceHistory.
+func (c *AudienceHistoryClient) Query() *AudienceHistoryQuery {
+	return &AudienceHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeAudienceHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a AudienceHistory entity by its id.
+func (c *AudienceHistoryClient) Get(ctx context.Context, id string) (*AudienceHistory, error) {
+	return c.Query().Where(audiencehistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *AudienceHistoryClient) GetX(ctx context.Context, id string) *AudienceHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *AudienceHistoryClient) Hooks() []Hook {
+	hooks := c.hooks.AudienceHistory
+	return append(hooks[:len(hooks):len(hooks)], audiencehistory.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *AudienceHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.AudienceHistory
+	return append(inters[:len(inters):len(inters)], audiencehistory.Interceptors[:]...)
+}
+
+func (c *AudienceHistoryClient) mutate(ctx context.Context, m *AudienceHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&AudienceHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&AudienceHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&AudienceHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&AudienceHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("historygenerated: unknown AudienceHistory mutation op: %q", m.Op())
+	}
+}
+
+// AudienceMemberHistoryClient is a client for the AudienceMemberHistory schema.
+type AudienceMemberHistoryClient struct {
+	config
+}
+
+// NewAudienceMemberHistoryClient returns a client for the AudienceMemberHistory from the given config.
+func NewAudienceMemberHistoryClient(c config) *AudienceMemberHistoryClient {
+	return &AudienceMemberHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `audiencememberhistory.Hooks(f(g(h())))`.
+func (c *AudienceMemberHistoryClient) Use(hooks ...Hook) {
+	c.hooks.AudienceMemberHistory = append(c.hooks.AudienceMemberHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `audiencememberhistory.Intercept(f(g(h())))`.
+func (c *AudienceMemberHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.AudienceMemberHistory = append(c.inters.AudienceMemberHistory, interceptors...)
+}
+
+// Create returns a builder for creating a AudienceMemberHistory entity.
+func (c *AudienceMemberHistoryClient) Create() *AudienceMemberHistoryCreate {
+	mutation := newAudienceMemberHistoryMutation(c.config, OpCreate)
+	return &AudienceMemberHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of AudienceMemberHistory entities.
+func (c *AudienceMemberHistoryClient) CreateBulk(builders ...*AudienceMemberHistoryCreate) *AudienceMemberHistoryCreateBulk {
+	return &AudienceMemberHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *AudienceMemberHistoryClient) MapCreateBulk(slice any, setFunc func(*AudienceMemberHistoryCreate, int)) *AudienceMemberHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &AudienceMemberHistoryCreateBulk{err: fmt.Errorf("calling to AudienceMemberHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*AudienceMemberHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &AudienceMemberHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for AudienceMemberHistory.
+func (c *AudienceMemberHistoryClient) Update() *AudienceMemberHistoryUpdate {
+	mutation := newAudienceMemberHistoryMutation(c.config, OpUpdate)
+	return &AudienceMemberHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *AudienceMemberHistoryClient) UpdateOne(_m *AudienceMemberHistory) *AudienceMemberHistoryUpdateOne {
+	mutation := newAudienceMemberHistoryMutation(c.config, OpUpdateOne, withAudienceMemberHistory(_m))
+	return &AudienceMemberHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *AudienceMemberHistoryClient) UpdateOneID(id string) *AudienceMemberHistoryUpdateOne {
+	mutation := newAudienceMemberHistoryMutation(c.config, OpUpdateOne, withAudienceMemberHistoryID(id))
+	return &AudienceMemberHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for AudienceMemberHistory.
+func (c *AudienceMemberHistoryClient) Delete() *AudienceMemberHistoryDelete {
+	mutation := newAudienceMemberHistoryMutation(c.config, OpDelete)
+	return &AudienceMemberHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *AudienceMemberHistoryClient) DeleteOne(_m *AudienceMemberHistory) *AudienceMemberHistoryDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *AudienceMemberHistoryClient) DeleteOneID(id string) *AudienceMemberHistoryDeleteOne {
+	builder := c.Delete().Where(audiencememberhistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &AudienceMemberHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for AudienceMemberHistory.
+func (c *AudienceMemberHistoryClient) Query() *AudienceMemberHistoryQuery {
+	return &AudienceMemberHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeAudienceMemberHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a AudienceMemberHistory entity by its id.
+func (c *AudienceMemberHistoryClient) Get(ctx context.Context, id string) (*AudienceMemberHistory, error) {
+	return c.Query().Where(audiencememberhistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *AudienceMemberHistoryClient) GetX(ctx context.Context, id string) *AudienceMemberHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *AudienceMemberHistoryClient) Hooks() []Hook {
+	hooks := c.hooks.AudienceMemberHistory
+	return append(hooks[:len(hooks):len(hooks)], audiencememberhistory.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *AudienceMemberHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.AudienceMemberHistory
+	return append(inters[:len(inters):len(inters)], audiencememberhistory.Interceptors[:]...)
+}
+
+func (c *AudienceMemberHistoryClient) mutate(ctx context.Context, m *AudienceMemberHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&AudienceMemberHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&AudienceMemberHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&AudienceMemberHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&AudienceMemberHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("historygenerated: unknown AudienceMemberHistory mutation op: %q", m.Op())
 	}
 }
 
@@ -10066,12 +10354,13 @@ func (c *WorkflowDefinitionHistoryClient) mutate(ctx context.Context, m *Workflo
 type (
 	hooks struct {
 		ActionPlanHistory, AssessmentHistory, AssessmentResponseHistory, AssetHistory,
-		CampaignHistory, CampaignTargetHistory, ContactHistory, ControlHistory,
-		ControlImplementationHistory, ControlObjectiveHistory, CustomDomainHistory,
-		DiscussionHistory, DocumentDataHistory, EmailTemplateHistory, EntityHistory,
-		EntityTypeHistory, EvidenceHistory, FileHistory, FindingControlHistory,
-		FindingHistory, GroupHistory, GroupMembershipHistory, GroupSettingHistory,
-		HushHistory, IdentityHolderHistory, InternalPolicyHistory, JobTemplateHistory,
+		AudienceHistory, AudienceMemberHistory, CampaignHistory, CampaignTargetHistory,
+		ContactHistory, ControlHistory, ControlImplementationHistory,
+		ControlObjectiveHistory, CustomDomainHistory, DiscussionHistory,
+		DocumentDataHistory, EmailTemplateHistory, EntityHistory, EntityTypeHistory,
+		EvidenceHistory, FileHistory, FindingControlHistory, FindingHistory,
+		GroupHistory, GroupMembershipHistory, GroupSettingHistory, HushHistory,
+		IdentityHolderHistory, InternalPolicyHistory, JobTemplateHistory,
 		MappableDomainHistory, MappedControlHistory, NarrativeHistory, NoteHistory,
 		NotificationPreferenceHistory, NotificationTemplateHistory,
 		OrgMembershipHistory, OrganizationHistory, OrganizationSettingHistory,
@@ -10089,12 +10378,13 @@ type (
 	}
 	inters struct {
 		ActionPlanHistory, AssessmentHistory, AssessmentResponseHistory, AssetHistory,
-		CampaignHistory, CampaignTargetHistory, ContactHistory, ControlHistory,
-		ControlImplementationHistory, ControlObjectiveHistory, CustomDomainHistory,
-		DiscussionHistory, DocumentDataHistory, EmailTemplateHistory, EntityHistory,
-		EntityTypeHistory, EvidenceHistory, FileHistory, FindingControlHistory,
-		FindingHistory, GroupHistory, GroupMembershipHistory, GroupSettingHistory,
-		HushHistory, IdentityHolderHistory, InternalPolicyHistory, JobTemplateHistory,
+		AudienceHistory, AudienceMemberHistory, CampaignHistory, CampaignTargetHistory,
+		ContactHistory, ControlHistory, ControlImplementationHistory,
+		ControlObjectiveHistory, CustomDomainHistory, DiscussionHistory,
+		DocumentDataHistory, EmailTemplateHistory, EntityHistory, EntityTypeHistory,
+		EvidenceHistory, FileHistory, FindingControlHistory, FindingHistory,
+		GroupHistory, GroupMembershipHistory, GroupSettingHistory, HushHistory,
+		IdentityHolderHistory, InternalPolicyHistory, JobTemplateHistory,
 		MappableDomainHistory, MappedControlHistory, NarrativeHistory, NoteHistory,
 		NotificationPreferenceHistory, NotificationTemplateHistory,
 		OrgMembershipHistory, OrganizationHistory, OrganizationSettingHistory,

@@ -13,6 +13,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/assessmenthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/assessmentresponsehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/assethistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/audiencehistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/audiencememberhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/campaignhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/campaigntargethistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/contacthistory"
@@ -323,6 +325,72 @@ func init() {
 	assethistoryDescID := assethistoryFields[10].Descriptor()
 	// assethistory.DefaultID holds the default value on creation for the id field.
 	assethistory.DefaultID = assethistoryDescID.Default.(func() string)
+	audiencehistory.Policy = privacy.NewPolicies(historyschema.AudienceHistory{})
+	audiencehistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := audiencehistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	audiencehistoryInters := historyschema.AudienceHistory{}.Interceptors()
+	audiencehistory.Interceptors[0] = audiencehistoryInters[0]
+	audiencehistoryFields := historyschema.AudienceHistory{}.Fields()
+	_ = audiencehistoryFields
+	// audiencehistoryDescHistoryTime is the schema descriptor for history_time field.
+	audiencehistoryDescHistoryTime := audiencehistoryFields[0].Descriptor()
+	// audiencehistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	audiencehistory.DefaultHistoryTime = audiencehistoryDescHistoryTime.Default.(func() time.Time)
+	// audiencehistoryDescCreatedAt is the schema descriptor for created_at field.
+	audiencehistoryDescCreatedAt := audiencehistoryFields[3].Descriptor()
+	// audiencehistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	audiencehistory.DefaultCreatedAt = audiencehistoryDescCreatedAt.Default.(func() time.Time)
+	// audiencehistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	audiencehistoryDescUpdatedAt := audiencehistoryFields[4].Descriptor()
+	// audiencehistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	audiencehistory.DefaultUpdatedAt = audiencehistoryDescUpdatedAt.Default.(func() time.Time)
+	// audiencehistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	audiencehistory.UpdateDefaultUpdatedAt = audiencehistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// audiencehistoryDescTags is the schema descriptor for tags field.
+	audiencehistoryDescTags := audiencehistoryFields[12].Descriptor()
+	// audiencehistory.DefaultTags holds the default value on creation for the tags field.
+	audiencehistory.DefaultTags = audiencehistoryDescTags.Default.([]string)
+	// audiencehistoryDescID is the schema descriptor for id field.
+	audiencehistoryDescID := audiencehistoryFields[10].Descriptor()
+	// audiencehistory.DefaultID holds the default value on creation for the id field.
+	audiencehistory.DefaultID = audiencehistoryDescID.Default.(func() string)
+	audiencememberhistory.Policy = privacy.NewPolicies(historyschema.AudienceMemberHistory{})
+	audiencememberhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := audiencememberhistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	audiencememberhistoryInters := historyschema.AudienceMemberHistory{}.Interceptors()
+	audiencememberhistory.Interceptors[0] = audiencememberhistoryInters[0]
+	audiencememberhistoryFields := historyschema.AudienceMemberHistory{}.Fields()
+	_ = audiencememberhistoryFields
+	// audiencememberhistoryDescHistoryTime is the schema descriptor for history_time field.
+	audiencememberhistoryDescHistoryTime := audiencememberhistoryFields[0].Descriptor()
+	// audiencememberhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	audiencememberhistory.DefaultHistoryTime = audiencememberhistoryDescHistoryTime.Default.(func() time.Time)
+	// audiencememberhistoryDescCreatedAt is the schema descriptor for created_at field.
+	audiencememberhistoryDescCreatedAt := audiencememberhistoryFields[3].Descriptor()
+	// audiencememberhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	audiencememberhistory.DefaultCreatedAt = audiencememberhistoryDescCreatedAt.Default.(func() time.Time)
+	// audiencememberhistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	audiencememberhistoryDescUpdatedAt := audiencememberhistoryFields[4].Descriptor()
+	// audiencememberhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	audiencememberhistory.DefaultUpdatedAt = audiencememberhistoryDescUpdatedAt.Default.(func() time.Time)
+	// audiencememberhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	audiencememberhistory.UpdateDefaultUpdatedAt = audiencememberhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// audiencememberhistoryDescID is the schema descriptor for id field.
+	audiencememberhistoryDescID := audiencememberhistoryFields[10].Descriptor()
+	// audiencememberhistory.DefaultID holds the default value on creation for the id field.
+	audiencememberhistory.DefaultID = audiencememberhistoryDescID.Default.(func() string)
 	campaignhistory.Policy = privacy.NewPolicies(historyschema.CampaignHistory{})
 	campaignhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {

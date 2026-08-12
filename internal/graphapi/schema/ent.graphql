@@ -4789,6 +4789,788 @@ input AssetWhereInput {
   """
   categoriesHas: String
 }
+type Audience implements Node @modules(names: ["compliance_module","trust_center_module"]) {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  the name of the audience
+  """
+  name: String!
+  """
+  the description of the audience
+  """
+  description: String
+  """
+  the type of audience
+  """
+  audienceType: AudienceAudienceType!
+  """
+  filter definition used to resolve dynamic audience members
+  """
+  filters: Map
+  owner: Organization
+  audienceMembers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for AudienceMembers returned from the connection.
+    """
+    orderBy: [AudienceMemberOrder!]
+
+    """
+    Filtering options for AudienceMembers returned from the connection.
+    """
+    where: AudienceMemberWhereInput
+  ): AudienceMemberConnection!
+  campaigns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Campaigns returned from the connection.
+    """
+    orderBy: [CampaignOrder!]
+
+    """
+    Filtering options for Campaigns returned from the connection.
+    """
+    where: CampaignWhereInput
+  ): CampaignConnection!
+}
+"""
+AudienceAudienceType is enum for the field audience_type
+"""
+enum AudienceAudienceType @goModel(model: "github.com/theopenlane/core/common/enums.AudienceType") {
+  MANUAL
+  DYNAMIC
+}
+"""
+A connection to a list of items.
+"""
+type AudienceConnection {
+  """
+  A list of edges.
+  """
+  edges: [AudienceEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type AudienceEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: Audience
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+type AudienceMember implements Node @modules(names: ["compliance_module","trust_center_module"]) {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  the audience this member belongs to
+  """
+  audienceID: ID!
+  """
+  the contact associated with the audience member
+  """
+  contactID: ID
+  """
+  the user associated with the audience member
+  """
+  userID: ID
+  """
+  the group associated with the audience member
+  """
+  groupID: ID
+  """
+  the subscriber associated with the audience member
+  """
+  subscriberID: ID
+  """
+  the identity holder associated with the audience member
+  """
+  identityHolderID: ID
+  """
+  the email address for the audience member
+  """
+  email: String!
+  """
+  the name of the audience member, if known
+  """
+  fullName: String
+  """
+  additional metadata about the audience member
+  """
+  metadata: Map
+  owner: Organization
+  audience: Audience!
+  contact: Contact
+  user: User
+  group: Group
+  subscriber: Subscriber
+  identityHolder: IdentityHolder
+}
+"""
+A connection to a list of items.
+"""
+type AudienceMemberConnection {
+  """
+  A list of edges.
+  """
+  edges: [AudienceMemberEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type AudienceMemberEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: AudienceMember
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+Ordering options for AudienceMember connections
+"""
+input AudienceMemberOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order AudienceMembers.
+  """
+  field: AudienceMemberOrderField!
+}
+"""
+Properties by which AudienceMember connections can be ordered.
+"""
+enum AudienceMemberOrderField {
+  created_at
+  updated_at
+  email
+  full_name
+}
+"""
+AudienceMemberWhereInput is used for filtering AudienceMember objects.
+Input was generated by ent.
+"""
+input AudienceMemberWhereInput {
+  not: AudienceMemberWhereInput
+  and: [AudienceMemberWhereInput!]
+  or: [AudienceMemberWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  audience_id field predicates
+  """
+  audienceID: ID
+  audienceIDNEQ: ID
+  audienceIDIn: [ID!]
+  audienceIDNotIn: [ID!]
+  audienceIDGT: ID
+  audienceIDGTE: ID
+  audienceIDLT: ID
+  audienceIDLTE: ID
+  audienceIDContains: ID
+  audienceIDHasPrefix: ID
+  audienceIDHasSuffix: ID
+  audienceIDEqualFold: ID
+  audienceIDContainsFold: ID
+  """
+  contact_id field predicates
+  """
+  contactID: ID
+  contactIDNEQ: ID
+  contactIDIn: [ID!]
+  contactIDNotIn: [ID!]
+  contactIDGT: ID
+  contactIDGTE: ID
+  contactIDLT: ID
+  contactIDLTE: ID
+  contactIDContains: ID
+  contactIDHasPrefix: ID
+  contactIDHasSuffix: ID
+  contactIDIsNil: Boolean
+  contactIDNotNil: Boolean
+  contactIDEqualFold: ID
+  contactIDContainsFold: ID
+  """
+  user_id field predicates
+  """
+  userID: ID
+  userIDNEQ: ID
+  userIDIn: [ID!]
+  userIDNotIn: [ID!]
+  userIDGT: ID
+  userIDGTE: ID
+  userIDLT: ID
+  userIDLTE: ID
+  userIDContains: ID
+  userIDHasPrefix: ID
+  userIDHasSuffix: ID
+  userIDIsNil: Boolean
+  userIDNotNil: Boolean
+  userIDEqualFold: ID
+  userIDContainsFold: ID
+  """
+  group_id field predicates
+  """
+  groupID: ID
+  groupIDNEQ: ID
+  groupIDIn: [ID!]
+  groupIDNotIn: [ID!]
+  groupIDGT: ID
+  groupIDGTE: ID
+  groupIDLT: ID
+  groupIDLTE: ID
+  groupIDContains: ID
+  groupIDHasPrefix: ID
+  groupIDHasSuffix: ID
+  groupIDIsNil: Boolean
+  groupIDNotNil: Boolean
+  groupIDEqualFold: ID
+  groupIDContainsFold: ID
+  """
+  subscriber_id field predicates
+  """
+  subscriberID: ID
+  subscriberIDNEQ: ID
+  subscriberIDIn: [ID!]
+  subscriberIDNotIn: [ID!]
+  subscriberIDGT: ID
+  subscriberIDGTE: ID
+  subscriberIDLT: ID
+  subscriberIDLTE: ID
+  subscriberIDContains: ID
+  subscriberIDHasPrefix: ID
+  subscriberIDHasSuffix: ID
+  subscriberIDIsNil: Boolean
+  subscriberIDNotNil: Boolean
+  subscriberIDEqualFold: ID
+  subscriberIDContainsFold: ID
+  """
+  identity_holder_id field predicates
+  """
+  identityHolderID: ID
+  identityHolderIDNEQ: ID
+  identityHolderIDIn: [ID!]
+  identityHolderIDNotIn: [ID!]
+  identityHolderIDGT: ID
+  identityHolderIDGTE: ID
+  identityHolderIDLT: ID
+  identityHolderIDLTE: ID
+  identityHolderIDContains: ID
+  identityHolderIDHasPrefix: ID
+  identityHolderIDHasSuffix: ID
+  identityHolderIDIsNil: Boolean
+  identityHolderIDNotNil: Boolean
+  identityHolderIDEqualFold: ID
+  identityHolderIDContainsFold: ID
+  """
+  email field predicates
+  """
+  email: String
+  emailNEQ: String
+  emailIn: [String!]
+  emailNotIn: [String!]
+  emailGT: String
+  emailGTE: String
+  emailLT: String
+  emailLTE: String
+  emailContains: String
+  emailHasPrefix: String
+  emailHasSuffix: String
+  emailEqualFold: String
+  emailContainsFold: String
+  """
+  full_name field predicates
+  """
+  fullName: String
+  fullNameNEQ: String
+  fullNameIn: [String!]
+  fullNameNotIn: [String!]
+  fullNameGT: String
+  fullNameGTE: String
+  fullNameLT: String
+  fullNameLTE: String
+  fullNameContains: String
+  fullNameHasPrefix: String
+  fullNameHasSuffix: String
+  fullNameIsNil: Boolean
+  fullNameNotNil: Boolean
+  fullNameEqualFold: String
+  fullNameContainsFold: String
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  audience edge predicates
+  """
+  hasAudience: Boolean
+  hasAudienceWith: [AudienceWhereInput!]
+  """
+  contact edge predicates
+  """
+  hasContact: Boolean
+  hasContactWith: [ContactWhereInput!]
+  """
+  user edge predicates
+  """
+  hasUser: Boolean
+  hasUserWith: [UserWhereInput!]
+  """
+  group edge predicates
+  """
+  hasGroup: Boolean
+  hasGroupWith: [GroupWhereInput!]
+  """
+  subscriber edge predicates
+  """
+  hasSubscriber: Boolean
+  hasSubscriberWith: [SubscriberWhereInput!]
+  """
+  identity_holder edge predicates
+  """
+  hasIdentityHolder: Boolean
+  hasIdentityHolderWith: [IdentityHolderWhereInput!]
+}
+"""
+Ordering options for Audience connections
+"""
+input AudienceOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order Audiences.
+  """
+  field: AudienceOrderField!
+}
+"""
+Properties by which Audience connections can be ordered.
+"""
+enum AudienceOrderField {
+  created_at
+  updated_at
+  name
+  TYPE
+}
+"""
+AudienceWhereInput is used for filtering Audience objects.
+Input was generated by ent.
+"""
+input AudienceWhereInput {
+  not: AudienceWhereInput
+  and: [AudienceWhereInput!]
+  or: [AudienceWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameEqualFold: String
+  nameContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
+  audience_type field predicates
+  """
+  audienceType: AudienceAudienceType
+  audienceTypeNEQ: AudienceAudienceType
+  audienceTypeIn: [AudienceAudienceType!]
+  audienceTypeNotIn: [AudienceAudienceType!]
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  audience_members edge predicates
+  """
+  hasAudienceMembers: Boolean
+  hasAudienceMembersWith: [AudienceMemberWhereInput!]
+  """
+  campaigns edge predicates
+  """
+  hasCampaigns: Boolean
+  hasCampaignsWith: [CampaignWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+}
 type Campaign implements Node @modules(names: ["compliance_module","trust_center_module"]) {
   id: ID!
   createdAt: Time
@@ -5227,6 +6009,37 @@ type Campaign implements Node @modules(names: ["compliance_module","trust_center
     """
     where: IdentityHolderWhereInput
   ): IdentityHolderConnection!
+  audiences(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Audiences returned from the connection.
+    """
+    orderBy: [AudienceOrder!]
+
+    """
+    Filtering options for Audiences returned from the connection.
+    """
+    where: AudienceWhereInput
+  ): AudienceConnection!
   controls(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -6517,6 +7330,11 @@ input CampaignWhereInput {
   hasIdentityHolders: Boolean
   hasIdentityHoldersWith: [IdentityHolderWhereInput!]
   """
+  audiences edge predicates
+  """
+  hasAudiences: Boolean
+  hasAudiencesWith: [AudienceWhereInput!]
+  """
   controls edge predicates
   """
   hasControls: Boolean
@@ -7190,6 +8008,37 @@ type Contact implements Node @modules(names: ["entity_management_module","compli
     """
     where: CampaignTargetWhereInput
   ): CampaignTargetConnection!
+  audienceMembers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for AudienceMembers returned from the connection.
+    """
+    orderBy: [AudienceMemberOrder!]
+
+    """
+    Filtering options for AudienceMembers returned from the connection.
+    """
+    where: AudienceMemberWhereInput
+  ): AudienceMemberConnection!
   files(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -7624,6 +8473,11 @@ input ContactWhereInput {
   """
   hasCampaignTargets: Boolean
   hasCampaignTargetsWith: [CampaignTargetWhereInput!]
+  """
+  audience_members edge predicates
+  """
+  hasAudienceMembers: Boolean
+  hasAudienceMembersWith: [AudienceMemberWhereInput!]
   """
   files edge predicates
   """
@@ -11632,6 +12486,60 @@ input CreateAssetInput {
   connectedFromIDs: [ID!]
 }
 """
+CreateAudienceInput is used for create Audience object.
+Input was generated by ent.
+"""
+input CreateAudienceInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the name of the audience
+  """
+  name: String!
+  """
+  the description of the audience
+  """
+  description: String
+  """
+  the type of audience
+  """
+  audienceType: AudienceAudienceType
+  """
+  filter definition used to resolve dynamic audience members
+  """
+  filters: Map
+  ownerID: ID
+  audienceMemberIDs: [ID!]
+  campaignIDs: [ID!]
+}
+"""
+CreateAudienceMemberInput is used for create AudienceMember object.
+Input was generated by ent.
+"""
+input CreateAudienceMemberInput {
+  """
+  the email address for the audience member
+  """
+  email: String!
+  """
+  the name of the audience member, if known
+  """
+  fullName: String
+  """
+  additional metadata about the audience member
+  """
+  metadata: Map
+  ownerID: ID
+  audienceID: ID!
+  contactID: ID
+  userID: ID
+  groupID: ID
+  subscriberID: ID
+  identityHolderID: ID
+}
+"""
 CreateCampaignInput is used for create Campaign object.
 Input was generated by ent.
 """
@@ -11754,6 +12662,7 @@ input CreateCampaignInput {
   userIDs: [ID!]
   groupIDs: [ID!]
   identityHolderIDs: [ID!]
+  audienceIDs: [ID!]
   controlIDs: [ID!]
   workflowObjectRefIDs: [ID!]
 }
@@ -11891,6 +12800,7 @@ input CreateContactInput {
   entityIDs: [ID!]
   campaignIDs: [ID!]
   campaignTargetIDs: [ID!]
+  audienceMemberIDs: [ID!]
   fileIDs: [ID!]
   subscriberIDs: [ID!]
 }
@@ -13696,6 +14606,7 @@ input CreateGroupInput {
   taskIDs: [ID!]
   campaignIDs: [ID!]
   campaignTargetIDs: [ID!]
+  audienceMemberIDs: [ID!]
 }
 """
 CreateGroupMembershipInput is used for create GroupMembership object.
@@ -13903,6 +14814,7 @@ input CreateIdentityHolderInput {
   campaignIDs: [ID!]
   taskIDs: [ID!]
   fileIDs: [ID!]
+  audienceMemberIDs: [ID!]
   findingIDs: [ID!]
   workflowObjectRefIDs: [ID!]
   accessPlatformIDs: [ID!]
@@ -14693,6 +15605,8 @@ input CreateOrganizationInput {
   apiTokenCreatorIDs: [ID!]
   assessmentCreatorIDs: [ID!]
   assetCreatorIDs: [ID!]
+  audienceCreatorIDs: [ID!]
+  audienceMemberCreatorIDs: [ID!]
   campaignCreatorIDs: [ID!]
   campaignTargetCreatorIDs: [ID!]
   checkResultCreatorIDs: [ID!]
@@ -14793,6 +15707,8 @@ input CreateOrganizationInput {
   identityHolderIDs: [ID!]
   campaignIDs: [ID!]
   campaignTargetIDs: [ID!]
+  audienceIDs: [ID!]
+  audienceMemberIDs: [ID!]
   entityTypeIDs: [ID!]
   contactIDs: [ID!]
   noteIDs: [ID!]
@@ -16268,6 +17184,7 @@ input CreateSubscriberInput {
   eventIDs: [ID!]
   trustCenterID: ID
   campaignTargetIDs: [ID!]
+  audienceMemberIDs: [ID!]
   contactID: ID
   userID: ID
 }
@@ -16967,6 +17884,7 @@ input CreateUserInput {
   actionPlanIDs: [ID!]
   campaignIDs: [ID!]
   campaignTargetIDs: [ID!]
+  audienceMemberIDs: [ID!]
   subcontrolIDs: [ID!]
   assignerTaskIDs: [ID!]
   assigneeTaskIDs: [ID!]
@@ -28082,6 +29000,7 @@ ExportExportType is enum for the field export_type
 enum ExportExportType @goModel(model: "github.com/theopenlane/core/common/enums.ExportType") {
   ASSESSMENT
   ASSET
+  AUDIENCE
   CAMPAIGN
   CHECK_RESULT
   CONTACT
@@ -33229,6 +34148,37 @@ type Group implements Node {
     """
     where: CampaignTargetWhereInput
   ): CampaignTargetConnection!
+  audienceMembers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for AudienceMembers returned from the connection.
+    """
+    orderBy: [AudienceMemberOrder!]
+
+    """
+    Filtering options for AudienceMembers returned from the connection.
+    """
+    where: AudienceMemberWhereInput
+  ): AudienceMemberConnection!
   members(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -34328,6 +35278,11 @@ input GroupWhereInput {
   hasCampaignTargets: Boolean
   hasCampaignTargetsWith: [CampaignTargetWhereInput!]
   """
+  audience_members edge predicates
+  """
+  hasAudienceMembers: Boolean
+  hasAudienceMembersWith: [AudienceMemberWhereInput!]
+  """
   members edge predicates
   """
   hasMembers: Boolean
@@ -35415,6 +36370,37 @@ type IdentityHolder implements Node @modules(names: ["compliance_module","regist
     """
     where: FileWhereInput
   ): FileConnection!
+  audienceMembers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for AudienceMembers returned from the connection.
+    """
+    orderBy: [AudienceMemberOrder!]
+
+    """
+    Filtering options for AudienceMembers returned from the connection.
+    """
+    where: AudienceMemberWhereInput
+  ): AudienceMemberConnection!
   findings(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -36284,6 +37270,11 @@ input IdentityHolderWhereInput {
   """
   hasFiles: Boolean
   hasFilesWith: [FileWhereInput!]
+  """
+  audience_members edge predicates
+  """
+  hasAudienceMembers: Boolean
+  hasAudienceMembersWith: [AudienceMemberWhereInput!]
   """
   findings edge predicates
   """
@@ -45536,6 +46527,68 @@ type Organization implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
+  audienceCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  audienceMemberCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
   campaignCreators(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -48578,6 +49631,68 @@ type Organization implements Node {
     """
     where: CampaignTargetWhereInput
   ): CampaignTargetConnection!
+  audiences(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Audiences returned from the connection.
+    """
+    orderBy: [AudienceOrder!]
+
+    """
+    Filtering options for Audiences returned from the connection.
+    """
+    where: AudienceWhereInput
+  ): AudienceConnection!
+  audienceMembers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for AudienceMembers returned from the connection.
+    """
+    orderBy: [AudienceMemberOrder!]
+
+    """
+    Filtering options for AudienceMembers returned from the connection.
+    """
+    where: AudienceMemberWhereInput
+  ): AudienceMemberConnection!
   entityTypes(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -51327,6 +52442,16 @@ input OrganizationWhereInput {
   hasAssetCreators: Boolean
   hasAssetCreatorsWith: [GroupWhereInput!]
   """
+  audience_creators edge predicates
+  """
+  hasAudienceCreators: Boolean
+  hasAudienceCreatorsWith: [GroupWhereInput!]
+  """
+  audience_member_creators edge predicates
+  """
+  hasAudienceMemberCreators: Boolean
+  hasAudienceMemberCreatorsWith: [GroupWhereInput!]
+  """
   campaign_creators edge predicates
   """
   hasCampaignCreators: Boolean
@@ -51836,6 +52961,16 @@ input OrganizationWhereInput {
   """
   hasCampaignTargets: Boolean
   hasCampaignTargetsWith: [CampaignTargetWhereInput!]
+  """
+  audiences edge predicates
+  """
+  hasAudiences: Boolean
+  hasAudiencesWith: [AudienceWhereInput!]
+  """
+  audience_members edge predicates
+  """
+  hasAudienceMembers: Boolean
+  hasAudienceMembersWith: [AudienceMemberWhereInput!]
   """
   entity_types edge predicates
   """
@@ -57867,6 +59002,68 @@ type Query {
     """
     where: AssetWhereInput
   ): AssetConnection!
+  audiences(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Audiences returned from the connection.
+    """
+    orderBy: [AudienceOrder!]
+
+    """
+    Filtering options for Audiences returned from the connection.
+    """
+    where: AudienceWhereInput
+  ): AudienceConnection!
+  audienceMembers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for AudienceMembers returned from the connection.
+    """
+    orderBy: [AudienceMemberOrder!]
+
+    """
+    Filtering options for AudienceMembers returned from the connection.
+    """
+    where: AudienceMemberWhereInput
+  ): AudienceMemberConnection!
   campaigns(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -70222,6 +71419,37 @@ type Subscriber implements Node {
     """
     where: CampaignTargetWhereInput
   ): CampaignTargetConnection!
+  audienceMembers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for AudienceMembers returned from the connection.
+    """
+    orderBy: [AudienceMemberOrder!]
+
+    """
+    Filtering options for AudienceMembers returned from the connection.
+    """
+    where: AudienceMemberWhereInput
+  ): AudienceMemberConnection!
   contact: Contact
   user: User
 }
@@ -70537,6 +71765,11 @@ input SubscriberWhereInput {
   """
   hasCampaignTargets: Boolean
   hasCampaignTargetsWith: [CampaignTargetWhereInput!]
+  """
+  audience_members edge predicates
+  """
+  hasAudienceMembers: Boolean
+  hasAudienceMembersWith: [AudienceMemberWhereInput!]
   """
   contact edge predicates
   """
@@ -78776,6 +80009,76 @@ input UpdateAssetInput {
   clearConnectedFrom: Boolean
 }
 """
+UpdateAudienceInput is used for update Audience object.
+Input was generated by ent.
+"""
+input UpdateAudienceInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  the name of the audience
+  """
+  name: String
+  """
+  the description of the audience
+  """
+  description: String
+  clearDescription: Boolean
+  """
+  the type of audience
+  """
+  audienceType: AudienceAudienceType
+  """
+  filter definition used to resolve dynamic audience members
+  """
+  filters: Map
+  clearFilters: Boolean
+  ownerID: ID
+  clearOwner: Boolean
+  addAudienceMemberIDs: [ID!]
+  removeAudienceMemberIDs: [ID!]
+  clearAudienceMembers: Boolean
+  addCampaignIDs: [ID!]
+  removeCampaignIDs: [ID!]
+  clearCampaigns: Boolean
+}
+"""
+UpdateAudienceMemberInput is used for update AudienceMember object.
+Input was generated by ent.
+"""
+input UpdateAudienceMemberInput {
+  """
+  the email address for the audience member
+  """
+  email: String
+  """
+  the name of the audience member, if known
+  """
+  fullName: String
+  clearFullName: Boolean
+  """
+  additional metadata about the audience member
+  """
+  metadata: Map
+  clearMetadata: Boolean
+  ownerID: ID
+  clearOwner: Boolean
+  contactID: ID
+  clearContact: Boolean
+  userID: ID
+  clearUser: Boolean
+  groupID: ID
+  clearGroup: Boolean
+  subscriberID: ID
+  clearSubscriber: Boolean
+  identityHolderID: ID
+  clearIdentityHolder: Boolean
+}
+"""
 UpdateCampaignInput is used for update Campaign object.
 Input was generated by ent.
 """
@@ -78944,6 +80247,9 @@ input UpdateCampaignInput {
   addIdentityHolderIDs: [ID!]
   removeIdentityHolderIDs: [ID!]
   clearIdentityHolders: Boolean
+  addAudienceIDs: [ID!]
+  removeAudienceIDs: [ID!]
+  clearAudiences: Boolean
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
   clearControls: Boolean
@@ -79127,6 +80433,9 @@ input UpdateContactInput {
   addCampaignTargetIDs: [ID!]
   removeCampaignTargetIDs: [ID!]
   clearCampaignTargets: Boolean
+  addAudienceMemberIDs: [ID!]
+  removeAudienceMemberIDs: [ID!]
+  clearAudienceMembers: Boolean
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
@@ -81674,6 +82983,9 @@ input UpdateGroupInput {
   addCampaignTargetIDs: [ID!]
   removeCampaignTargetIDs: [ID!]
   clearCampaignTargets: Boolean
+  addAudienceMemberIDs: [ID!]
+  removeAudienceMemberIDs: [ID!]
+  clearAudienceMembers: Boolean
 }
 """
 UpdateGroupMembershipInput is used for update GroupMembership object.
@@ -81946,6 +83258,9 @@ input UpdateIdentityHolderInput {
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
+  addAudienceMemberIDs: [ID!]
+  removeAudienceMemberIDs: [ID!]
+  clearAudienceMembers: Boolean
   addFindingIDs: [ID!]
   removeFindingIDs: [ID!]
   clearFindings: Boolean
@@ -82891,6 +84206,12 @@ input UpdateOrganizationInput {
   addAssetCreatorIDs: [ID!]
   removeAssetCreatorIDs: [ID!]
   clearAssetCreators: Boolean
+  addAudienceCreatorIDs: [ID!]
+  removeAudienceCreatorIDs: [ID!]
+  clearAudienceCreators: Boolean
+  addAudienceMemberCreatorIDs: [ID!]
+  removeAudienceMemberCreatorIDs: [ID!]
+  clearAudienceMemberCreators: Boolean
   addCampaignCreatorIDs: [ID!]
   removeCampaignCreatorIDs: [ID!]
   clearCampaignCreators: Boolean
@@ -83186,6 +84507,12 @@ input UpdateOrganizationInput {
   addCampaignTargetIDs: [ID!]
   removeCampaignTargetIDs: [ID!]
   clearCampaignTargets: Boolean
+  addAudienceIDs: [ID!]
+  removeAudienceIDs: [ID!]
+  clearAudiences: Boolean
+  addAudienceMemberIDs: [ID!]
+  removeAudienceMemberIDs: [ID!]
+  clearAudienceMembers: Boolean
   addEntityTypeIDs: [ID!]
   removeEntityTypeIDs: [ID!]
   clearEntityTypes: Boolean
@@ -85433,6 +86760,9 @@ input UpdateSubscriberInput {
   addCampaignTargetIDs: [ID!]
   removeCampaignTargetIDs: [ID!]
   clearCampaignTargets: Boolean
+  addAudienceMemberIDs: [ID!]
+  removeAudienceMemberIDs: [ID!]
+  clearAudienceMembers: Boolean
   contactID: ID
   clearContact: Boolean
   userID: ID
@@ -86401,6 +87731,9 @@ input UpdateUserInput {
   addCampaignTargetIDs: [ID!]
   removeCampaignTargetIDs: [ID!]
   clearCampaignTargets: Boolean
+  addAudienceMemberIDs: [ID!]
+  removeAudienceMemberIDs: [ID!]
+  clearAudienceMembers: Boolean
   addSubcontrolIDs: [ID!]
   removeSubcontrolIDs: [ID!]
   clearSubcontrols: Boolean
@@ -87379,6 +88712,37 @@ type User implements Node {
     """
     where: CampaignTargetWhereInput
   ): CampaignTargetConnection!
+  audienceMembers(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for AudienceMembers returned from the connection.
+    """
+    orderBy: [AudienceMemberOrder!]
+
+    """
+    Filtering options for AudienceMembers returned from the connection.
+    """
+    where: AudienceMemberWhereInput
+  ): AudienceMemberConnection!
   subcontrols(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -88522,6 +89886,11 @@ input UserWhereInput {
   """
   hasCampaignTargets: Boolean
   hasCampaignTargetsWith: [CampaignTargetWhereInput!]
+  """
+  audience_members edge predicates
+  """
+  hasAudienceMembers: Boolean
+  hasAudienceMembersWith: [AudienceMemberWhereInput!]
   """
   subcontrols edge predicates
   """

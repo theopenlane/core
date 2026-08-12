@@ -100,6 +100,56 @@ extend type Query{
         last: Int
     ): AssetConnection
     """
+    Search across Audience objects
+    """
+    audienceSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): AudienceConnection
+    """
+    Search across AudienceMember objects
+    """
+    audienceMemberSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): AudienceMemberConnection
+    """
     Search across Campaign objects
     """
     campaignSearch(
@@ -1038,6 +1088,8 @@ type SearchResults{
   assessments: AssessmentConnection
   assessmentResponses: AssessmentResponseConnection
   assets: AssetConnection
+  audiences: AudienceConnection
+  audienceMembers: AudienceMemberConnection
   campaigns: CampaignConnection
   campaignTargets: CampaignTargetConnection
   contacts: ContactConnection

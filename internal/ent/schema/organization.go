@@ -319,6 +319,16 @@ func (o Organization) Edges() []ent.Edge {
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema:         o,
+			edgeSchema:         Audience{},
+			cascadeDeleteOwner: true,
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         AudienceMember{},
+			cascadeDeleteOwner: true,
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
 			edgeSchema:         EntityType{},
 			cascadeDeleteOwner: true,
 		}),

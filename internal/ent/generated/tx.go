@@ -22,6 +22,10 @@ type Tx struct {
 	AssessmentResponse *AssessmentResponseClient
 	// Asset is the client for interacting with the Asset builders.
 	Asset *AssetClient
+	// Audience is the client for interacting with the Audience builders.
+	Audience *AudienceClient
+	// AudienceMember is the client for interacting with the AudienceMember builders.
+	AudienceMember *AudienceMemberClient
 	// Campaign is the client for interacting with the Campaign builders.
 	Campaign *CampaignClient
 	// CampaignTarget is the client for interacting with the CampaignTarget builders.
@@ -362,6 +366,8 @@ func (tx *Tx) init() {
 	tx.Assessment = NewAssessmentClient(tx.config)
 	tx.AssessmentResponse = NewAssessmentResponseClient(tx.config)
 	tx.Asset = NewAssetClient(tx.config)
+	tx.Audience = NewAudienceClient(tx.config)
+	tx.AudienceMember = NewAudienceMemberClient(tx.config)
 	tx.Campaign = NewCampaignClient(tx.config)
 	tx.CampaignTarget = NewCampaignTargetClient(tx.config)
 	tx.CheckResult = NewCheckResultClient(tx.config)

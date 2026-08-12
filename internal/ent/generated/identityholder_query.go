@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/audiencemember"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
@@ -67,6 +68,7 @@ type IdentityHolderQuery struct {
 	withCampaigns                *CampaignQuery
 	withTasks                    *TaskQuery
 	withFiles                    *FileQuery
+	withAudienceMembers          *AudienceMemberQuery
 	withFindings                 *FindingQuery
 	withWorkflowObjectRefs       *WorkflowObjectRefQuery
 	withAccessPlatforms          *PlatformQuery
@@ -89,6 +91,7 @@ type IdentityHolderQuery struct {
 	withNamedCampaigns           map[string]*CampaignQuery
 	withNamedTasks               map[string]*TaskQuery
 	withNamedFiles               map[string]*FileQuery
+	withNamedAudienceMembers     map[string]*AudienceMemberQuery
 	withNamedFindings            map[string]*FindingQuery
 	withNamedWorkflowObjectRefs  map[string]*WorkflowObjectRefQuery
 	withNamedAccessPlatforms     map[string]*PlatformQuery
@@ -654,6 +657,31 @@ func (_q *IdentityHolderQuery) QueryFiles() *FileQuery {
 	return query
 }
 
+// QueryAudienceMembers chains the current query on the "audience_members" edge.
+func (_q *IdentityHolderQuery) QueryAudienceMembers() *AudienceMemberQuery {
+	query := (&AudienceMemberClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(identityholder.Table, identityholder.FieldID, selector),
+			sqlgraph.To(audiencemember.Table, audiencemember.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, identityholder.AudienceMembersTable, identityholder.AudienceMembersColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.AudienceMember
+		step.Edge.Schema = schemaConfig.AudienceMember
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryFindings chains the current query on the "findings" edge.
 func (_q *IdentityHolderQuery) QueryFindings() *FindingQuery {
 	query := (&FindingClient{config: _q.config}).Query()
@@ -992,6 +1020,7 @@ func (_q *IdentityHolderQuery) Clone() *IdentityHolderQuery {
 		withCampaigns:           _q.withCampaigns.Clone(),
 		withTasks:               _q.withTasks.Clone(),
 		withFiles:               _q.withFiles.Clone(),
+		withAudienceMembers:     _q.withAudienceMembers.Clone(),
 		withFindings:            _q.withFindings.Clone(),
 		withWorkflowObjectRefs:  _q.withWorkflowObjectRefs.Clone(),
 		withAccessPlatforms:     _q.withAccessPlatforms.Clone(),
@@ -1235,6 +1264,17 @@ func (_q *IdentityHolderQuery) WithFiles(opts ...func(*FileQuery)) *IdentityHold
 	return _q
 }
 
+// WithAudienceMembers tells the query-builder to eager-load the nodes that are connected to
+// the "audience_members" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *IdentityHolderQuery) WithAudienceMembers(opts ...func(*AudienceMemberQuery)) *IdentityHolderQuery {
+	query := (&AudienceMemberClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAudienceMembers = query
+	return _q
+}
+
 // WithFindings tells the query-builder to eager-load the nodes that are connected to
 // the "findings" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *IdentityHolderQuery) WithFindings(opts ...func(*FindingQuery)) *IdentityHolderQuery {
@@ -1374,7 +1414,7 @@ func (_q *IdentityHolderQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	var (
 		nodes       = []*IdentityHolder{}
 		_spec       = _q.querySpec()
-		loadedTypes = [26]bool{
+		loadedTypes = [27]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -1396,6 +1436,7 @@ func (_q *IdentityHolderQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			_q.withCampaigns != nil,
 			_q.withTasks != nil,
 			_q.withFiles != nil,
+			_q.withAudienceMembers != nil,
 			_q.withFindings != nil,
 			_q.withWorkflowObjectRefs != nil,
 			_q.withAccessPlatforms != nil,
@@ -1571,6 +1612,15 @@ func (_q *IdentityHolderQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			return nil, err
 		}
 	}
+	if query := _q.withAudienceMembers; query != nil {
+		if err := _q.loadAudienceMembers(ctx, query, nodes,
+			func(n *IdentityHolder) { n.Edges.AudienceMembers = []*AudienceMember{} },
+			func(n *IdentityHolder, e *AudienceMember) {
+				n.Edges.AudienceMembers = append(n.Edges.AudienceMembers, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withFindings; query != nil {
 		if err := _q.loadFindings(ctx, query, nodes,
 			func(n *IdentityHolder) { n.Edges.Findings = []*Finding{} },
@@ -1711,6 +1761,13 @@ func (_q *IdentityHolderQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 		if err := _q.loadFiles(ctx, query, nodes,
 			func(n *IdentityHolder) { n.appendNamedFiles(name) },
 			func(n *IdentityHolder, e *File) { n.appendNamedFiles(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedAudienceMembers {
+		if err := _q.loadAudienceMembers(ctx, query, nodes,
+			func(n *IdentityHolder) { n.appendNamedAudienceMembers(name) },
+			func(n *IdentityHolder, e *AudienceMember) { n.appendNamedAudienceMembers(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2700,6 +2757,36 @@ func (_q *IdentityHolderQuery) loadFiles(ctx context.Context, query *FileQuery, 
 	}
 	return nil
 }
+func (_q *IdentityHolderQuery) loadAudienceMembers(ctx context.Context, query *AudienceMemberQuery, nodes []*IdentityHolder, init func(*IdentityHolder), assign func(*IdentityHolder, *AudienceMember)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*IdentityHolder)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(audiencemember.FieldIdentityHolderID)
+	}
+	query.Where(predicate.AudienceMember(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(identityholder.AudienceMembersColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.IdentityHolderID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "identity_holder_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *IdentityHolderQuery) loadFindings(ctx context.Context, query *FindingQuery, nodes []*IdentityHolder, init func(*IdentityHolder), assign func(*IdentityHolder, *Finding)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*IdentityHolder)
@@ -3242,6 +3329,20 @@ func (_q *IdentityHolderQuery) WithNamedFiles(name string, opts ...func(*FileQue
 		_q.withNamedFiles = make(map[string]*FileQuery)
 	}
 	_q.withNamedFiles[name] = query
+	return _q
+}
+
+// WithNamedAudienceMembers tells the query-builder to eager-load the nodes that are connected to the "audience_members"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *IdentityHolderQuery) WithNamedAudienceMembers(name string, opts ...func(*AudienceMemberQuery)) *IdentityHolderQuery {
+	query := (&AudienceMemberClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedAudienceMembers == nil {
+		_q.withNamedAudienceMembers = make(map[string]*AudienceMemberQuery)
+	}
+	_q.withNamedAudienceMembers[name] = query
 	return _q
 }
 

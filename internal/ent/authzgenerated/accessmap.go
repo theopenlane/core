@@ -362,6 +362,58 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
 },
+}, "audience": {"owner": {
+	ObjectType:          "owner",
+	SkipEditCheck:       true,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+}, "audience_members": {
+	ObjectType:          "audience_member",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+}, "campaigns": {
+	ObjectType:          "campaign",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+},
+}, "audience_member": {"owner": {
+	ObjectType:          "owner",
+	SkipEditCheck:       true,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+}, "audience": {
+	ObjectType:          "audience",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+}, "contact": {
+	ObjectType:          "contact",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
+}, "user": {
+	ObjectType:          "user",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
+}, "group": {
+	ObjectType:          "group",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
+}, "subscriber": {
+	ObjectType:          "subscriber",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+}, "identity_holder": {
+	ObjectType:          "identity_holder",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
+},
 }, "campaign": {"owner": {
 	ObjectType:          "owner",
 	SkipEditCheck:       true,
@@ -449,6 +501,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	HasSystemOwnedField: false,
 }, "identity_holders": {
 	ObjectType:          "identity_holder",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+}, "audiences": {
+	ObjectType:          "audience",
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
@@ -547,6 +604,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	HasSystemOwnedField: false,
 }, "campaign_targets": {
 	ObjectType:          "campaign_target",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+}, "audience_members": {
+	ObjectType:          "audience_member",
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
@@ -2169,6 +2231,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
+}, "audience_members": {
+	ObjectType:          "audience_member",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
 }, "invites": {
 	ObjectType:          "invite",
 	SkipEditCheck:       false,
@@ -2333,6 +2400,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: true,
+}, "audience_members": {
+	ObjectType:          "audience_member",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
 }, "findings": {
 	ObjectType:          "finding",
 	SkipEditCheck:       false,
@@ -3088,6 +3160,16 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       true,
 	CheckViewAccess:     true,
 	HasSystemOwnedField: false,
+}, "audience_creators": {
+	ObjectType:          "group",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
+}, "audience_member_creators": {
+	ObjectType:          "group",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
 }, "campaign_creators": {
 	ObjectType:          "group",
 	SkipEditCheck:       true,
@@ -3620,6 +3702,16 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	HasSystemOwnedField: false,
 }, "campaign_targets": {
 	ObjectType:          "campaign_target",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+}, "audiences": {
+	ObjectType:          "audience",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+}, "audience_members": {
+	ObjectType:          "audience_member",
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
@@ -5181,6 +5273,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
+}, "audience_members": {
+	ObjectType:          "audience_member",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
 }, "contact": {
 	ObjectType:          "contact",
 	SkipEditCheck:       false,
@@ -5803,6 +5900,11 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	HasSystemOwnedField: false,
 }, "campaign_targets": {
 	ObjectType:          "campaign_target",
+	SkipEditCheck:       false,
+	CheckViewAccess:     false,
+	HasSystemOwnedField: false,
+}, "audience_members": {
+	ObjectType:          "audience_member",
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,

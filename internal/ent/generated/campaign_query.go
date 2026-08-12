@@ -15,6 +15,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
+	"github.com/theopenlane/core/internal/ent/generated/audience"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
@@ -60,6 +61,7 @@ type CampaignQuery struct {
 	withUsers                    *UserQuery
 	withGroups                   *GroupQuery
 	withIdentityHolders          *IdentityHolderQuery
+	withAudiences                *AudienceQuery
 	withControls                 *ControlQuery
 	withWorkflowObjectRefs       *WorkflowObjectRefQuery
 	loadTotal                    []func(context.Context, []*Campaign) error
@@ -73,6 +75,7 @@ type CampaignQuery struct {
 	withNamedUsers               map[string]*UserQuery
 	withNamedGroups              map[string]*GroupQuery
 	withNamedIdentityHolders     map[string]*IdentityHolderQuery
+	withNamedAudiences           map[string]*AudienceQuery
 	withNamedControls            map[string]*ControlQuery
 	withNamedWorkflowObjectRefs  map[string]*WorkflowObjectRefQuery
 	// intermediate query (i.e. traversal path).
@@ -561,6 +564,31 @@ func (_q *CampaignQuery) QueryIdentityHolders() *IdentityHolderQuery {
 	return query
 }
 
+// QueryAudiences chains the current query on the "audiences" edge.
+func (_q *CampaignQuery) QueryAudiences() *AudienceQuery {
+	query := (&AudienceClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(campaign.Table, campaign.FieldID, selector),
+			sqlgraph.To(audience.Table, audience.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, campaign.AudiencesTable, campaign.AudiencesPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Audience
+		step.Edge.Schema = schemaConfig.CampaignAudiences
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryControls chains the current query on the "controls" edge.
 func (_q *CampaignQuery) QueryControls() *ControlQuery {
 	query := (&ControlClient{config: _q.config}).Query()
@@ -821,6 +849,7 @@ func (_q *CampaignQuery) Clone() *CampaignQuery {
 		withUsers:               _q.withUsers.Clone(),
 		withGroups:              _q.withGroups.Clone(),
 		withIdentityHolders:     _q.withIdentityHolders.Clone(),
+		withAudiences:           _q.withAudiences.Clone(),
 		withControls:            _q.withControls.Clone(),
 		withWorkflowObjectRefs:  _q.withWorkflowObjectRefs.Clone(),
 		// clone intermediate query.
@@ -1028,6 +1057,17 @@ func (_q *CampaignQuery) WithIdentityHolders(opts ...func(*IdentityHolderQuery))
 	return _q
 }
 
+// WithAudiences tells the query-builder to eager-load the nodes that are connected to
+// the "audiences" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *CampaignQuery) WithAudiences(opts ...func(*AudienceQuery)) *CampaignQuery {
+	query := (&AudienceClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAudiences = query
+	return _q
+}
+
 // WithControls tells the query-builder to eager-load the nodes that are connected to
 // the "controls" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *CampaignQuery) WithControls(opts ...func(*ControlQuery)) *CampaignQuery {
@@ -1134,7 +1174,7 @@ func (_q *CampaignQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cam
 	var (
 		nodes       = []*Campaign{}
 		_spec       = _q.querySpec()
-		loadedTypes = [20]bool{
+		loadedTypes = [21]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -1153,6 +1193,7 @@ func (_q *CampaignQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cam
 			_q.withUsers != nil,
 			_q.withGroups != nil,
 			_q.withIdentityHolders != nil,
+			_q.withAudiences != nil,
 			_q.withControls != nil,
 			_q.withWorkflowObjectRefs != nil,
 		}
@@ -1299,6 +1340,13 @@ func (_q *CampaignQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cam
 			return nil, err
 		}
 	}
+	if query := _q.withAudiences; query != nil {
+		if err := _q.loadAudiences(ctx, query, nodes,
+			func(n *Campaign) { n.Edges.Audiences = []*Audience{} },
+			func(n *Campaign, e *Audience) { n.Edges.Audiences = append(n.Edges.Audiences, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withControls; query != nil {
 		if err := _q.loadControls(ctx, query, nodes,
 			func(n *Campaign) { n.Edges.Controls = []*Control{} },
@@ -1375,6 +1423,13 @@ func (_q *CampaignQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cam
 		if err := _q.loadIdentityHolders(ctx, query, nodes,
 			func(n *Campaign) { n.appendNamedIdentityHolders(name) },
 			func(n *Campaign, e *IdentityHolder) { n.appendNamedIdentityHolders(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedAudiences {
+		if err := _q.loadAudiences(ctx, query, nodes,
+			func(n *Campaign) { n.appendNamedAudiences(name) },
+			func(n *Campaign, e *Audience) { n.appendNamedAudiences(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2155,6 +2210,68 @@ func (_q *CampaignQuery) loadIdentityHolders(ctx context.Context, query *Identit
 	}
 	return nil
 }
+func (_q *CampaignQuery) loadAudiences(ctx context.Context, query *AudienceQuery, nodes []*Campaign, init func(*Campaign), assign func(*Campaign, *Audience)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*Campaign)
+	nids := make(map[string]map[*Campaign]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(campaign.AudiencesTable)
+		joinT.Schema(_q.schemaConfig.CampaignAudiences)
+		s.Join(joinT).On(s.C(audience.FieldID), joinT.C(campaign.AudiencesPrimaryKey[1]))
+		s.Where(sql.InValues(joinT.C(campaign.AudiencesPrimaryKey[0]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(campaign.AudiencesPrimaryKey[0]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*Campaign]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*Audience](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "audiences" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 func (_q *CampaignQuery) loadControls(ctx context.Context, query *ControlQuery, nodes []*Campaign, init func(*Campaign), assign func(*Campaign, *Control)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Campaign)
@@ -2497,6 +2614,20 @@ func (_q *CampaignQuery) WithNamedIdentityHolders(name string, opts ...func(*Ide
 		_q.withNamedIdentityHolders = make(map[string]*IdentityHolderQuery)
 	}
 	_q.withNamedIdentityHolders[name] = query
+	return _q
+}
+
+// WithNamedAudiences tells the query-builder to eager-load the nodes that are connected to the "audiences"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *CampaignQuery) WithNamedAudiences(name string, opts ...func(*AudienceQuery)) *CampaignQuery {
+	query := (&AudienceClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedAudiences == nil {
+		_q.withNamedAudiences = make(map[string]*AudienceQuery)
+	}
+	_q.withNamedAudiences[name] = query
 	return _q
 }
 

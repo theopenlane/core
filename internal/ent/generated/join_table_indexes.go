@@ -27,6 +27,7 @@ var joinTables = map[string]bool{
 	"campaign_users":                        true,
 	"campaign_groups":                       true,
 	"campaign_identity_holders":             true,
+	"campaign_audiences":                    true,
 	"check_result_controls":                 true,
 	"contact_files":                         true,
 	"control_control_objectives":            true,

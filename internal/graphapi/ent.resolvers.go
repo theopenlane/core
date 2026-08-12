@@ -216,6 +216,74 @@ func (r *queryResolver) Assets(ctx context.Context, after *entgql.Cursor[string]
 	return res, err
 }
 
+// Audiences is the resolver for the audiences field.
+func (r *queryResolver) Audiences(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AudienceOrder, where *generated.AudienceWhereInput) (*generated.AudienceConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.AudienceOrder{
+			{
+				Field:     generated.AudienceOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).Audience.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "audience"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithAudienceOrder(orderBy),
+		generated.WithAudienceFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "audience"})
+	}
+
+	return res, err
+}
+
+// AudienceMembers is the resolver for the audienceMembers field.
+func (r *queryResolver) AudienceMembers(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AudienceMemberOrder, where *generated.AudienceMemberWhereInput) (*generated.AudienceMemberConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.AudienceMemberOrder{
+			{
+				Field:     generated.AudienceMemberOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).AudienceMember.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "audiencemember"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithAudienceMemberOrder(orderBy),
+		generated.WithAudienceMemberFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "audiencemember"})
+	}
+
+	return res, err
+}
+
 // Campaigns is the resolver for the campaigns field.
 func (r *queryResolver) Campaigns(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CampaignOrder, where *generated.CampaignWhereInput) (*generated.CampaignConnection, error) {
 	// set page limit if nothing was set

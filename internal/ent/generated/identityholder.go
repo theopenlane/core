@@ -153,6 +153,8 @@ type IdentityHolderEdges struct {
 	Tasks []*Task `json:"tasks,omitempty"`
 	// Files holds the value of the files edge.
 	Files []*File `json:"files,omitempty"`
+	// AudienceMembers holds the value of the audience_members edge.
+	AudienceMembers []*AudienceMember `json:"audience_members,omitempty"`
 	// Findings holds the value of the findings edge.
 	Findings []*Finding `json:"findings,omitempty"`
 	// WorkflowObjectRefs holds the value of the workflow_object_refs edge.
@@ -165,9 +167,9 @@ type IdentityHolderEdges struct {
 	InternalPolicies []*InternalPolicy `json:"internal_policies,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [26]bool
+	loadedTypes [27]bool
 	// totalCount holds the count of the edges above.
-	totalCount [26]map[string]int
+	totalCount [27]map[string]int
 
 	namedBlockedGroups       map[string][]*Group
 	namedEditors             map[string][]*Group
@@ -184,6 +186,7 @@ type IdentityHolderEdges struct {
 	namedCampaigns           map[string][]*Campaign
 	namedTasks               map[string][]*Task
 	namedFiles               map[string][]*File
+	namedAudienceMembers     map[string][]*AudienceMember
 	namedFindings            map[string][]*Finding
 	namedWorkflowObjectRefs  map[string][]*WorkflowObjectRef
 	namedAccessPlatforms     map[string][]*Platform
@@ -391,10 +394,19 @@ func (e IdentityHolderEdges) FilesOrErr() ([]*File, error) {
 	return nil, &NotLoadedError{edge: "files"}
 }
 
+// AudienceMembersOrErr returns the AudienceMembers value or an error if the edge
+// was not loaded in eager-loading.
+func (e IdentityHolderEdges) AudienceMembersOrErr() ([]*AudienceMember, error) {
+	if e.loadedTypes[21] {
+		return e.AudienceMembers, nil
+	}
+	return nil, &NotLoadedError{edge: "audience_members"}
+}
+
 // FindingsOrErr returns the Findings value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) FindingsOrErr() ([]*Finding, error) {
-	if e.loadedTypes[21] {
+	if e.loadedTypes[22] {
 		return e.Findings, nil
 	}
 	return nil, &NotLoadedError{edge: "findings"}
@@ -403,7 +415,7 @@ func (e IdentityHolderEdges) FindingsOrErr() ([]*Finding, error) {
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[22] {
+	if e.loadedTypes[23] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -412,7 +424,7 @@ func (e IdentityHolderEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, er
 // AccessPlatformsOrErr returns the AccessPlatforms value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) AccessPlatformsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[23] {
+	if e.loadedTypes[24] {
 		return e.AccessPlatforms, nil
 	}
 	return nil, &NotLoadedError{edge: "access_platforms"}
@@ -423,7 +435,7 @@ func (e IdentityHolderEdges) AccessPlatformsOrErr() ([]*Platform, error) {
 func (e IdentityHolderEdges) UserOrErr() (*User, error) {
 	if e.User != nil {
 		return e.User, nil
-	} else if e.loadedTypes[24] {
+	} else if e.loadedTypes[25] {
 		return nil, &NotFoundError{label: user.Label}
 	}
 	return nil, &NotLoadedError{edge: "user"}
@@ -432,7 +444,7 @@ func (e IdentityHolderEdges) UserOrErr() (*User, error) {
 // InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
 // was not loaded in eager-loading.
 func (e IdentityHolderEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
-	if e.loadedTypes[25] {
+	if e.loadedTypes[26] {
 		return e.InternalPolicies, nil
 	}
 	return nil, &NotLoadedError{edge: "internal_policies"}
@@ -834,6 +846,11 @@ func (_m *IdentityHolder) QueryTasks() *TaskQuery {
 // QueryFiles queries the "files" edge of the IdentityHolder entity.
 func (_m *IdentityHolder) QueryFiles() *FileQuery {
 	return NewIdentityHolderClient(_m.config).QueryFiles(_m)
+}
+
+// QueryAudienceMembers queries the "audience_members" edge of the IdentityHolder entity.
+func (_m *IdentityHolder) QueryAudienceMembers() *AudienceMemberQuery {
+	return NewIdentityHolderClient(_m.config).QueryAudienceMembers(_m)
 }
 
 // QueryFindings queries the "findings" edge of the IdentityHolder entity.
@@ -1369,6 +1386,30 @@ func (_m *IdentityHolder) appendNamedFiles(name string, edges ...*File) {
 		_m.Edges.namedFiles[name] = []*File{}
 	} else {
 		_m.Edges.namedFiles[name] = append(_m.Edges.namedFiles[name], edges...)
+	}
+}
+
+// NamedAudienceMembers returns the AudienceMembers named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *IdentityHolder) NamedAudienceMembers(name string) ([]*AudienceMember, error) {
+	if _m.Edges.namedAudienceMembers == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedAudienceMembers[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *IdentityHolder) appendNamedAudienceMembers(name string, edges ...*AudienceMember) {
+	if _m.Edges.namedAudienceMembers == nil {
+		_m.Edges.namedAudienceMembers = make(map[string][]*AudienceMember)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedAudienceMembers[name] = []*AudienceMember{}
+	} else {
+		_m.Edges.namedAudienceMembers[name] = append(_m.Edges.namedAudienceMembers[name], edges...)
 	}
 }
 

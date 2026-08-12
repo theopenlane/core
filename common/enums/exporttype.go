@@ -10,6 +10,8 @@ var (
 	ExportTypeAssessment ExportType = "ASSESSMENT"
 	// ExportTypeAsset indicates the asset.
 	ExportTypeAsset ExportType = "ASSET"
+	// ExportTypeAudience indicates the audience.
+	ExportTypeAudience ExportType = "AUDIENCE"
 	// ExportTypeCampaign indicates the campaign.
 	ExportTypeCampaign ExportType = "CAMPAIGN"
 	// ExportTypeCheckResult indicates the checkresult.
@@ -63,6 +65,7 @@ var (
 var exportTypeValues = []ExportType{
 	ExportTypeAssessment,
 	ExportTypeAsset,
+	ExportTypeAudience,
 	ExportTypeCampaign,
 	ExportTypeCheckResult,
 	ExportTypeContact,

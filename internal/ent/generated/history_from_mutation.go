@@ -2107,6 +2107,582 @@ func (m *AssetMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	return nil
 }
 
+func (m *AudienceMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
+func (m *AudienceMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.HistoryClient.AudienceHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if displayID, exists := m.DisplayID(); exists {
+		create = create.SetDisplayID(displayID)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if name, exists := m.Name(); exists {
+		create = create.SetName(name)
+	}
+
+	if description, exists := m.Description(); exists {
+		create = create.SetDescription(description)
+	}
+
+	if audienceType, exists := m.AudienceType(); exists {
+		create = create.SetAudienceType(audienceType)
+	}
+
+	if filters, exists := m.Filters(); exists {
+		create = create.SetFilters(filters)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *AudienceMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		audience, err := client.Audience.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.HistoryClient.AudienceHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(audience.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(audience.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(audience.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(audience.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(audience.UpdatedByImpersonator)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(audience.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(audience.DeletedBy)
+		}
+
+		if displayID, exists := m.DisplayID(); exists {
+			create = create.SetDisplayID(displayID)
+		} else {
+			create = create.SetDisplayID(audience.DisplayID)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(audience.Tags)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(audience.OwnerID)
+		}
+
+		if name, exists := m.Name(); exists {
+			create = create.SetName(name)
+		} else {
+			create = create.SetName(audience.Name)
+		}
+
+		if description, exists := m.Description(); exists {
+			create = create.SetDescription(description)
+		} else {
+			create = create.SetDescription(audience.Description)
+		}
+
+		if audienceType, exists := m.AudienceType(); exists {
+			create = create.SetAudienceType(audienceType)
+		} else {
+			create = create.SetAudienceType(audience.AudienceType)
+		}
+
+		if filters, exists := m.Filters(); exists {
+			create = create.SetFilters(filters)
+		} else {
+			create = create.SetFilters(audience.Filters)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *AudienceMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
+
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
+		return nil
+	}
+
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		audience, err := client.Audience.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.HistoryClient.AudienceHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(audience.CreatedAt).
+			SetUpdatedAt(audience.UpdatedAt).
+			SetCreatedBy(audience.CreatedBy).
+			SetUpdatedBy(audience.UpdatedBy).
+			SetNillableUpdatedByImpersonator(audience.UpdatedByImpersonator).
+			SetDeletedAt(audience.DeletedAt).
+			SetDeletedBy(audience.DeletedBy).
+			SetDisplayID(audience.DisplayID).
+			SetTags(audience.Tags).
+			SetOwnerID(audience.OwnerID).
+			SetName(audience.Name).
+			SetDescription(audience.Description).
+			SetAudienceType(audience.AudienceType).
+			SetFilters(audience.Filters).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *AudienceMemberMutation) skipper(ctx context.Context) bool {
+
+	if PurgeHistoryEnabled(ctx) {
+		return true
+	}
+
+	caller, _ := auth.CallerFromContext(ctx)
+
+	return caller.HasInLineage(auth.CapBypassAuditLog)
+
+}
+
+func (m *AudienceMemberMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.HistoryClient.AudienceMemberHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+		create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if displayID, exists := m.DisplayID(); exists {
+		create = create.SetDisplayID(displayID)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if audienceID, exists := m.AudienceID(); exists {
+		create = create.SetAudienceID(audienceID)
+	}
+
+	if contactID, exists := m.ContactID(); exists {
+		create = create.SetContactID(contactID)
+	}
+
+	if userID, exists := m.UserID(); exists {
+		create = create.SetUserID(userID)
+	}
+
+	if groupID, exists := m.GroupID(); exists {
+		create = create.SetGroupID(groupID)
+	}
+
+	if subscriberID, exists := m.SubscriberID(); exists {
+		create = create.SetSubscriberID(subscriberID)
+	}
+
+	if identityHolderID, exists := m.IdentityHolderID(); exists {
+		create = create.SetIdentityHolderID(identityHolderID)
+	}
+
+	if email, exists := m.Email(); exists {
+		create = create.SetEmail(email)
+	}
+
+	if fullName, exists := m.FullName(); exists {
+		create = create.SetFullName(fullName)
+	}
+
+	if metadata, exists := m.Metadata(); exists {
+		create = create.SetMetadata(metadata)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *AudienceMemberMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		audiencemember, err := client.AudienceMember.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.HistoryClient.AudienceMemberHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(audiencemember.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(audiencemember.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(audiencemember.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(audiencemember.UpdatedBy)
+		}
+
+		if updatedByImpersonator, exists := m.UpdatedByImpersonator(); exists {
+			create = create.SetNillableUpdatedByImpersonator(&updatedByImpersonator)
+		} else {
+			create = create.SetNillableUpdatedByImpersonator(audiencemember.UpdatedByImpersonator)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(audiencemember.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(audiencemember.DeletedBy)
+		}
+
+		if displayID, exists := m.DisplayID(); exists {
+			create = create.SetDisplayID(displayID)
+		} else {
+			create = create.SetDisplayID(audiencemember.DisplayID)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(audiencemember.OwnerID)
+		}
+
+		if audienceID, exists := m.AudienceID(); exists {
+			create = create.SetAudienceID(audienceID)
+		} else {
+			create = create.SetAudienceID(audiencemember.AudienceID)
+		}
+
+		if contactID, exists := m.ContactID(); exists {
+			create = create.SetContactID(contactID)
+		} else {
+			create = create.SetContactID(audiencemember.ContactID)
+		}
+
+		if userID, exists := m.UserID(); exists {
+			create = create.SetUserID(userID)
+		} else {
+			create = create.SetUserID(audiencemember.UserID)
+		}
+
+		if groupID, exists := m.GroupID(); exists {
+			create = create.SetGroupID(groupID)
+		} else {
+			create = create.SetGroupID(audiencemember.GroupID)
+		}
+
+		if subscriberID, exists := m.SubscriberID(); exists {
+			create = create.SetSubscriberID(subscriberID)
+		} else {
+			create = create.SetSubscriberID(audiencemember.SubscriberID)
+		}
+
+		if identityHolderID, exists := m.IdentityHolderID(); exists {
+			create = create.SetIdentityHolderID(identityHolderID)
+		} else {
+			create = create.SetIdentityHolderID(audiencemember.IdentityHolderID)
+		}
+
+		if email, exists := m.Email(); exists {
+			create = create.SetEmail(email)
+		} else {
+			create = create.SetEmail(audiencemember.Email)
+		}
+
+		if fullName, exists := m.FullName(); exists {
+			create = create.SetFullName(fullName)
+		} else {
+			create = create.SetFullName(audiencemember.FullName)
+		}
+
+		if metadata, exists := m.Metadata(); exists {
+			create = create.SetMetadata(metadata)
+		} else {
+			create = create.SetMetadata(audiencemember.Metadata)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *AudienceMemberMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	if m.skipper(ctx) {
+		return nil
+	}
+
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
+		return nil
+	}
+
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		audiencemember, err := client.AudienceMember.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.HistoryClient.AudienceMemberHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(audiencemember.CreatedAt).
+			SetUpdatedAt(audiencemember.UpdatedAt).
+			SetCreatedBy(audiencemember.CreatedBy).
+			SetUpdatedBy(audiencemember.UpdatedBy).
+			SetNillableUpdatedByImpersonator(audiencemember.UpdatedByImpersonator).
+			SetDeletedAt(audiencemember.DeletedAt).
+			SetDeletedBy(audiencemember.DeletedBy).
+			SetDisplayID(audiencemember.DisplayID).
+			SetOwnerID(audiencemember.OwnerID).
+			SetAudienceID(audiencemember.AudienceID).
+			SetContactID(audiencemember.ContactID).
+			SetUserID(audiencemember.UserID).
+			SetGroupID(audiencemember.GroupID).
+			SetSubscriberID(audiencemember.SubscriberID).
+			SetIdentityHolderID(audiencemember.IdentityHolderID).
+			SetEmail(audiencemember.Email).
+			SetFullName(audiencemember.FullName).
+			SetMetadata(audiencemember.Metadata).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *CampaignMutation) skipper(ctx context.Context) bool {
 
 	if PurgeHistoryEnabled(ctx) {

@@ -269,6 +269,7 @@ func (p IdentityHolder) Edges() []ent.Edge {
 		defaultEdgeFromWithPagination(p, Campaign{}),
 		defaultEdgeToWithPagination(p, Task{}),
 		defaultEdgeToWithPagination(p, File{}),
+		defaultEdgeToWithPagination(p, AudienceMember{}),
 		defaultEdgeFromWithPagination(p, Finding{}),
 		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: p,

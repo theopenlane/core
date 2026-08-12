@@ -1485,6 +1485,35 @@ func HasCampaignTargetsWith(preds ...predicate.CampaignTarget) predicate.Contact
 	})
 }
 
+// HasAudienceMembers applies the HasEdge predicate on the "audience_members" edge.
+func HasAudienceMembers() predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, AudienceMembersTable, AudienceMembersColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.AudienceMember
+		step.Edge.Schema = schemaConfig.AudienceMember
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasAudienceMembersWith applies the HasEdge predicate on the "audience_members" edge with a given conditions (other predicates).
+func HasAudienceMembersWith(preds ...predicate.AudienceMember) predicate.Contact {
+	return predicate.Contact(func(s *sql.Selector) {
+		step := newAudienceMembersStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.AudienceMember
+		step.Edge.Schema = schemaConfig.AudienceMember
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasFiles applies the HasEdge predicate on the "files" edge.
 func HasFiles() predicate.Contact {
 	return predicate.Contact(func(s *sql.Selector) {

@@ -13,6 +13,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/assessmenthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/assessmentresponsehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/assethistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/audiencehistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/audiencememberhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/campaignhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/campaigntargethistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/contacthistory"
@@ -1171,6 +1173,344 @@ func newAssetHistoryPaginateArgs(rv map[string]any) *assethistoryPaginateArgs {
 	}
 	if v, ok := rv[whereField].(*AssetHistoryWhereInput); ok {
 		args.opts = append(args.opts, WithAssetHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (_q *AudienceHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*AudienceHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return _q, nil
+	}
+	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return _q, nil
+}
+
+func (_q *AudienceHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(audiencehistory.Columns))
+		selectedFields = []string{audiencehistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[audiencehistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, audiencehistory.FieldHistoryTime)
+				fieldSeen[audiencehistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[audiencehistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, audiencehistory.FieldRef)
+				fieldSeen[audiencehistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[audiencehistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, audiencehistory.FieldOperation)
+				fieldSeen[audiencehistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[audiencehistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, audiencehistory.FieldCreatedAt)
+				fieldSeen[audiencehistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[audiencehistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, audiencehistory.FieldUpdatedAt)
+				fieldSeen[audiencehistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[audiencehistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, audiencehistory.FieldCreatedBy)
+				fieldSeen[audiencehistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[audiencehistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, audiencehistory.FieldUpdatedBy)
+				fieldSeen[audiencehistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[audiencehistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, audiencehistory.FieldUpdatedByImpersonator)
+				fieldSeen[audiencehistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
+		case "displayID":
+			if _, ok := fieldSeen[audiencehistory.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, audiencehistory.FieldDisplayID)
+				fieldSeen[audiencehistory.FieldDisplayID] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[audiencehistory.FieldTags]; !ok {
+				selectedFields = append(selectedFields, audiencehistory.FieldTags)
+				fieldSeen[audiencehistory.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[audiencehistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, audiencehistory.FieldOwnerID)
+				fieldSeen[audiencehistory.FieldOwnerID] = struct{}{}
+			}
+		case "name":
+			if _, ok := fieldSeen[audiencehistory.FieldName]; !ok {
+				selectedFields = append(selectedFields, audiencehistory.FieldName)
+				fieldSeen[audiencehistory.FieldName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[audiencehistory.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, audiencehistory.FieldDescription)
+				fieldSeen[audiencehistory.FieldDescription] = struct{}{}
+			}
+		case "audienceType":
+			if _, ok := fieldSeen[audiencehistory.FieldAudienceType]; !ok {
+				selectedFields = append(selectedFields, audiencehistory.FieldAudienceType)
+				fieldSeen[audiencehistory.FieldAudienceType] = struct{}{}
+			}
+		case "filters":
+			if _, ok := fieldSeen[audiencehistory.FieldFilters]; !ok {
+				selectedFields = append(selectedFields, audiencehistory.FieldFilters)
+				fieldSeen[audiencehistory.FieldFilters] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		_q.Select(selectedFields...)
+	}
+	return nil
+}
+
+type audiencehistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []AudienceHistoryPaginateOption
+}
+
+func newAudienceHistoryPaginateArgs(rv map[string]any) *audiencehistoryPaginateArgs {
+	args := &audiencehistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &AudienceHistoryOrder{Field: &AudienceHistoryOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithAudienceHistoryOrder(order))
+			}
+		case *AudienceHistoryOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithAudienceHistoryOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*AudienceHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithAudienceHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (_q *AudienceMemberHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*AudienceMemberHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return _q, nil
+	}
+	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return _q, nil
+}
+
+func (_q *AudienceMemberHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(audiencememberhistory.Columns))
+		selectedFields = []string{audiencememberhistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[audiencememberhistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, audiencememberhistory.FieldHistoryTime)
+				fieldSeen[audiencememberhistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[audiencememberhistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, audiencememberhistory.FieldRef)
+				fieldSeen[audiencememberhistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[audiencememberhistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, audiencememberhistory.FieldOperation)
+				fieldSeen[audiencememberhistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[audiencememberhistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, audiencememberhistory.FieldCreatedAt)
+				fieldSeen[audiencememberhistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[audiencememberhistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, audiencememberhistory.FieldUpdatedAt)
+				fieldSeen[audiencememberhistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[audiencememberhistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, audiencememberhistory.FieldCreatedBy)
+				fieldSeen[audiencememberhistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[audiencememberhistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, audiencememberhistory.FieldUpdatedBy)
+				fieldSeen[audiencememberhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "updatedByImpersonator":
+			if _, ok := fieldSeen[audiencememberhistory.FieldUpdatedByImpersonator]; !ok {
+				selectedFields = append(selectedFields, audiencememberhistory.FieldUpdatedByImpersonator)
+				fieldSeen[audiencememberhistory.FieldUpdatedByImpersonator] = struct{}{}
+			}
+		case "displayID":
+			if _, ok := fieldSeen[audiencememberhistory.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, audiencememberhistory.FieldDisplayID)
+				fieldSeen[audiencememberhistory.FieldDisplayID] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[audiencememberhistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, audiencememberhistory.FieldOwnerID)
+				fieldSeen[audiencememberhistory.FieldOwnerID] = struct{}{}
+			}
+		case "audienceID":
+			if _, ok := fieldSeen[audiencememberhistory.FieldAudienceID]; !ok {
+				selectedFields = append(selectedFields, audiencememberhistory.FieldAudienceID)
+				fieldSeen[audiencememberhistory.FieldAudienceID] = struct{}{}
+			}
+		case "contactID":
+			if _, ok := fieldSeen[audiencememberhistory.FieldContactID]; !ok {
+				selectedFields = append(selectedFields, audiencememberhistory.FieldContactID)
+				fieldSeen[audiencememberhistory.FieldContactID] = struct{}{}
+			}
+		case "userID":
+			if _, ok := fieldSeen[audiencememberhistory.FieldUserID]; !ok {
+				selectedFields = append(selectedFields, audiencememberhistory.FieldUserID)
+				fieldSeen[audiencememberhistory.FieldUserID] = struct{}{}
+			}
+		case "groupID":
+			if _, ok := fieldSeen[audiencememberhistory.FieldGroupID]; !ok {
+				selectedFields = append(selectedFields, audiencememberhistory.FieldGroupID)
+				fieldSeen[audiencememberhistory.FieldGroupID] = struct{}{}
+			}
+		case "subscriberID":
+			if _, ok := fieldSeen[audiencememberhistory.FieldSubscriberID]; !ok {
+				selectedFields = append(selectedFields, audiencememberhistory.FieldSubscriberID)
+				fieldSeen[audiencememberhistory.FieldSubscriberID] = struct{}{}
+			}
+		case "identityHolderID":
+			if _, ok := fieldSeen[audiencememberhistory.FieldIdentityHolderID]; !ok {
+				selectedFields = append(selectedFields, audiencememberhistory.FieldIdentityHolderID)
+				fieldSeen[audiencememberhistory.FieldIdentityHolderID] = struct{}{}
+			}
+		case "email":
+			if _, ok := fieldSeen[audiencememberhistory.FieldEmail]; !ok {
+				selectedFields = append(selectedFields, audiencememberhistory.FieldEmail)
+				fieldSeen[audiencememberhistory.FieldEmail] = struct{}{}
+			}
+		case "fullName":
+			if _, ok := fieldSeen[audiencememberhistory.FieldFullName]; !ok {
+				selectedFields = append(selectedFields, audiencememberhistory.FieldFullName)
+				fieldSeen[audiencememberhistory.FieldFullName] = struct{}{}
+			}
+		case "metadata":
+			if _, ok := fieldSeen[audiencememberhistory.FieldMetadata]; !ok {
+				selectedFields = append(selectedFields, audiencememberhistory.FieldMetadata)
+				fieldSeen[audiencememberhistory.FieldMetadata] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		_q.Select(selectedFields...)
+	}
+	return nil
+}
+
+type audiencememberhistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []AudienceMemberHistoryPaginateOption
+}
+
+func newAudienceMemberHistoryPaginateArgs(rv map[string]any) *audiencememberhistoryPaginateArgs {
+	args := &audiencememberhistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &AudienceMemberHistoryOrder{Field: &AudienceMemberHistoryOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithAudienceMemberHistoryOrder(order))
+			}
+		case *AudienceMemberHistoryOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithAudienceMemberHistoryOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*AudienceMemberHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithAudienceMemberHistoryFilter(v.Filter))
 	}
 	return args
 }

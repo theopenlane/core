@@ -15,6 +15,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/assessmenthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/assessmentresponsehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/assethistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/audiencehistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/audiencememberhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/campaignhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/campaigntargethistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/contacthistory"
@@ -105,6 +107,16 @@ var assethistoryImplementors = []string{"AssetHistory", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*AssetHistory) IsNode() {}
+
+var audiencehistoryImplementors = []string{"AudienceHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*AudienceHistory) IsNode() {}
+
+var audiencememberhistoryImplementors = []string{"AudienceMemberHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*AudienceMemberHistory) IsNode() {}
 
 var campaignhistoryImplementors = []string{"CampaignHistory", "Node"}
 
@@ -516,6 +528,24 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(assethistory.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, assethistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case audiencehistory.Table:
+		query := c.AudienceHistory.Query().
+			Where(audiencehistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, audiencehistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case audiencememberhistory.Table:
+		query := c.AudienceMemberHistory.Query().
+			Where(audiencememberhistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, audiencememberhistoryImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -1221,6 +1251,38 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.AssetHistory.Query().
 			Where(assethistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, assethistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case audiencehistory.Table:
+		query := c.AudienceHistory.Query().
+			Where(audiencehistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, audiencehistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case audiencememberhistory.Table:
+		query := c.AudienceMemberHistory.Query().
+			Where(audiencememberhistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, audiencememberhistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}
