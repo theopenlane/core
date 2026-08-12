@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
+	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 )
@@ -934,6 +935,60 @@ func TestMutationDeleteBulkOrgMembers(t *testing.T) {
 
 	cleanupOrganizationDataWithContext(homeOrg.owner.UserCtx, t)
 	cleanupOrganizationDataWithContext(bulkOrg.owner.UserCtx, t)
+}
+
+func TestMutationLeaveOrganizationReassignsDefaultOrgToMemberOrg(t *testing.T) {
+	t.Parallel()
+
+	user := suite.seedOrgOwner(t)
+	orgToLeave := suite.seedOrgOwner(t)
+
+	userID := user.owner.ID
+
+	memberRole := enums.RoleMember
+	member, err := suite.client.api.AddUserToOrgWithRole(orgToLeave.owner.UserCtx, testclient.CreateOrgMembershipInput{
+		OrganizationID: orgToLeave.owner.OrganizationID,
+		UserID:         userID,
+		Role:           &memberRole,
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, member != nil)
+
+	// make the org they are about to leave their default org
+	allowCtx := privacy.DecisionContext(context.Background(), privacy.Allow)
+	_, err = suite.client.db.UserSetting.Update().
+		Where(usersetting.UserID(userID)).
+		SetDefaultOrgID(orgToLeave.owner.OrganizationID).
+		Save(allowCtx)
+	assert.NilError(t, err)
+
+	resp, err := suite.client.api.LeaveOrganization(user.owner.UserCtx, orgToLeave.owner.OrganizationID)
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+
+	// the reassigned default org must be an org the user is actually a member of,
+	// not an arbitrary org picked from the unscoped privacy-allowed query
+	setting, err := suite.client.db.UserSetting.Query().
+		Where(usersetting.UserID(userID)).
+		WithDefaultOrg().
+		Only(allowCtx)
+	assert.NilError(t, err)
+	assert.Assert(t, setting.Edges.DefaultOrg != nil)
+
+	newDefaultOrgID := setting.Edges.DefaultOrg.ID
+	assert.Check(t, newDefaultOrgID != orgToLeave.owner.OrganizationID)
+
+	isMember, err := suite.client.db.OrgMembership.Query().
+		Where(
+			orgmembership.UserID(userID),
+			orgmembership.OrganizationID(newDefaultOrgID),
+		).
+		Exist(allowCtx)
+	assert.NilError(t, err)
+	assert.Check(t, isMember, "default org %s was reassigned to an org the user is not a member of", newDefaultOrgID)
+
+	cleanupOrganizationDataWithContext(user.owner.UserCtx, t)
+	cleanupOrganizationDataWithContext(orgToLeave.owner.UserCtx, t)
 }
 
 func (suite *GraphTestSuite) countOrgScopedGroupMemberships(t *testing.T, userID, orgID string) int {
