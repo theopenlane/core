@@ -1,3 +1,8 @@
+// this file calls the generated edge and history cleanup functions, which are excluded from
+// compilation during code generation because they reference history packages that may not be
+// generated yet, so this file must be excluded during codegen
+//go:build !codegen
+
 package hooks
 
 import (
