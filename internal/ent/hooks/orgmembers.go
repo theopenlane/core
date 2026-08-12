@@ -8,20 +8,15 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/iam/entfga"
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/generated/program"
-	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -320,46 +315,6 @@ func deleteSystemManagedUserGroup(ctx context.Context,
 
 func getUserGroupName(displayName, id string) string {
 	return fmt.Sprintf("%s - %s", displayName, id)
-}
-
-// removeUserOrgScopedMemberships removes the user's group and program memberships that belong to
-// the organization they are being removed from; memberships in other organizations are left intact
-func removeUserOrgScopedMemberships(ctx context.Context, m *generated.OrgMembershipMutation, userID, orgID string) error {
-	// delete the fga tuples for the memberships before the records are removed
-	ctx = entfga.WithDeleteTuplesFirst(ctx)
-
-	groupPreds := []predicate.GroupMembership{
-		groupmembership.UserID(userID),
-		groupmembership.HasGroupWith(group.OwnerID(orgID)),
-	}
-
-	// the history rows are matched by a sub-select on the records being removed, so this has to run first
-	if err := generated.PurgeGroupMembershipHistory(ctx, groupPreds...); err != nil {
-		return err
-	}
-
-	if _, err := m.Client().GroupMembership.Delete().Where(groupPreds...).Exec(ctx); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("error deleting user's group memberships in organization")
-
-		return err
-	}
-
-	programPreds := []predicate.ProgramMembership{
-		programmembership.UserID(userID),
-		programmembership.HasProgramWith(program.OwnerID(orgID)),
-	}
-
-	if err := generated.PurgeProgramMembershipHistory(ctx, programPreds...); err != nil {
-		return err
-	}
-
-	if _, err := m.Client().ProgramMembership.Delete().Where(programPreds...).Exec(ctx); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("error deleting user's program memberships in organization")
-
-		return err
-	}
-
-	return nil
 }
 
 // createUserManagedGroup creates a personal managed group for the user accepting the invite
