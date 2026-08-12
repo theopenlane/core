@@ -1,8 +1,3 @@
-// this file calls the generated edge and history cleanup functions, which are excluded from
-// compilation during code generation because they reference history packages that may not be
-// generated yet, so this file must be excluded during codegen
-//go:build !codegen
-
 package hooks
 
 import (
@@ -55,7 +50,7 @@ func handleOrganizationCascadeDelete(ctx gala.HandlerContext, payload eventqueue
 		"organization_id": orgID,
 	})
 
-	if err := entgen.OrganizationEdgeCleanup(cleanupCtx, orgID); err != nil {
+	if err := organizationEdgeCleanup(cleanupCtx, orgID); err != nil {
 		logx.FromContext(cleanupCtx).Error().Err(err).
 			Msg("failed to cascade delete organization edges")
 
@@ -63,7 +58,7 @@ func handleOrganizationCascadeDelete(ctx gala.HandlerContext, payload eventqueue
 	}
 
 	// this has to run before the organization row is removed
-	if err := entgen.PurgeOrganizationHistory(cleanupCtx, organization.ID(orgID)); err != nil {
+	if err := purgeOrganizationHistory(cleanupCtx, orgID); err != nil {
 		logx.FromContext(cleanupCtx).Error().Err(err).
 			Msg("failed to purge organization history")
 
