@@ -2812,6 +2812,641 @@ type AssetWhereInput struct {
 	CategoriesHas *string `json:"categoriesHas,omitempty"`
 }
 
+type Audience struct {
+	ID        string     `json:"id"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"displayID"`
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
+	// the organization id that owns the object
+	OwnerID *string `json:"ownerID,omitempty"`
+	// the name of the audience
+	Name string `json:"name"`
+	// the description of the audience
+	Description *string `json:"description,omitempty"`
+	// the type of audience
+	AudienceType enums.AudienceType `json:"audienceType"`
+	// filter definition used to resolve dynamic audience members
+	Filters         map[string]any            `json:"filters,omitempty"`
+	Owner           *Organization             `json:"owner,omitempty"`
+	AudienceMembers *AudienceMemberConnection `json:"audienceMembers"`
+	Campaigns       *CampaignConnection       `json:"campaigns"`
+}
+
+func (Audience) IsNode() {}
+
+// Return response for createBulkAudience mutation
+type AudienceBulkCreatePayload struct {
+	// Created audiences
+	Audiences []*Audience `json:"audiences,omitempty"`
+}
+
+// Return response for deleteBulkAudience mutation
+type AudienceBulkDeletePayload struct {
+	// Deleted audience IDs
+	DeletedIDs []string `json:"deletedIDs"`
+	// Error returned when the bulk delete is only partially applied
+	Error *string `json:"error,omitempty"`
+	// IDs of audiences that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs,omitempty"`
+}
+
+// Return response for updateBulkAudience mutation
+type AudienceBulkUpdatePayload struct {
+	// Updated audiences
+	Audiences []*Audience `json:"audiences,omitempty"`
+	// IDs of the updated audiences
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
+// A connection to a list of items.
+type AudienceConnection struct {
+	// A list of edges.
+	Edges []*AudienceEdge `json:"edges,omitempty"`
+	// Information to aid in pagination.
+	PageInfo *PageInfo `json:"pageInfo"`
+	// Identifies the total count of items in the connection.
+	TotalCount int64 `json:"totalCount"`
+}
+
+// Return response for createAudience mutation
+type AudienceCreatePayload struct {
+	// Created audience
+	Audience *Audience `json:"audience"`
+}
+
+// Return response for deleteAudience mutation
+type AudienceDeletePayload struct {
+	// Deleted audience ID
+	DeletedID string `json:"deletedID"`
+}
+
+// An edge in a connection.
+type AudienceEdge struct {
+	// The item at the end of the edge.
+	Node *Audience `json:"node,omitempty"`
+	// A cursor for use in pagination.
+	Cursor string `json:"cursor"`
+}
+
+type AudienceMember struct {
+	ID        string     `json:"id"`
+	CreatedAt *time.Time `json:"createdAt,omitempty"`
+	UpdatedAt *time.Time `json:"updatedAt,omitempty"`
+	CreatedBy *string    `json:"createdBy,omitempty"`
+	UpdatedBy *string    `json:"updatedBy,omitempty"`
+	// the real user acting through an impersonation session when the record was last mutated, if any
+	UpdatedByImpersonator *string `json:"updatedByImpersonator,omitempty"`
+	// a shortened prefixed id field to use as a human readable identifier
+	DisplayID string `json:"displayID"`
+	// the organization id that owns the object
+	OwnerID *string `json:"ownerID,omitempty"`
+	// the audience this member belongs to
+	AudienceID string `json:"audienceID"`
+	// the contact associated with the audience member
+	ContactID *string `json:"contactID,omitempty"`
+	// the user associated with the audience member
+	UserID *string `json:"userID,omitempty"`
+	// the group associated with the audience member
+	GroupID *string `json:"groupID,omitempty"`
+	// the subscriber associated with the audience member
+	SubscriberID *string `json:"subscriberID,omitempty"`
+	// the identity holder associated with the audience member
+	IdentityHolderID *string `json:"identityHolderID,omitempty"`
+	// the email address for the audience member
+	Email string `json:"email"`
+	// the name of the audience member, if known
+	FullName *string `json:"fullName,omitempty"`
+	// additional metadata about the audience member
+	Metadata       map[string]any  `json:"metadata,omitempty"`
+	Owner          *Organization   `json:"owner,omitempty"`
+	Audience       *Audience       `json:"audience"`
+	Contact        *Contact        `json:"contact,omitempty"`
+	User           *User           `json:"user,omitempty"`
+	Group          *Group          `json:"group,omitempty"`
+	Subscriber     *Subscriber     `json:"subscriber,omitempty"`
+	IdentityHolder *IdentityHolder `json:"identityHolder,omitempty"`
+}
+
+func (AudienceMember) IsNode() {}
+
+// Return response for createBulkAudienceMember mutation
+type AudienceMemberBulkCreatePayload struct {
+	// Created audienceMembers
+	AudienceMembers []*AudienceMember `json:"audienceMembers,omitempty"`
+}
+
+// Return response for deleteBulkAudienceMember mutation
+type AudienceMemberBulkDeletePayload struct {
+	// Deleted audienceMember IDs
+	DeletedIDs []string `json:"deletedIDs"`
+	// Error returned when the bulk delete is only partially applied
+	Error *string `json:"error,omitempty"`
+	// IDs of audienceMembers that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs,omitempty"`
+}
+
+// Return response for updateBulkAudienceMember mutation
+type AudienceMemberBulkUpdatePayload struct {
+	// Updated audienceMembers
+	AudienceMembers []*AudienceMember `json:"audienceMembers,omitempty"`
+	// IDs of the updated audienceMembers
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
+// A connection to a list of items.
+type AudienceMemberConnection struct {
+	// A list of edges.
+	Edges []*AudienceMemberEdge `json:"edges,omitempty"`
+	// Information to aid in pagination.
+	PageInfo *PageInfo `json:"pageInfo"`
+	// Identifies the total count of items in the connection.
+	TotalCount int64 `json:"totalCount"`
+}
+
+// Return response for createAudienceMember mutation
+type AudienceMemberCreatePayload struct {
+	// Created audienceMember
+	AudienceMember *AudienceMember `json:"audienceMember"`
+}
+
+// Return response for deleteAudienceMember mutation
+type AudienceMemberDeletePayload struct {
+	// Deleted audienceMember ID
+	DeletedID string `json:"deletedID"`
+}
+
+// An edge in a connection.
+type AudienceMemberEdge struct {
+	// The item at the end of the edge.
+	Node *AudienceMember `json:"node,omitempty"`
+	// A cursor for use in pagination.
+	Cursor string `json:"cursor"`
+}
+
+// Ordering options for AudienceMember connections
+type AudienceMemberOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order AudienceMembers.
+	Field AudienceMemberOrderField `json:"field"`
+}
+
+// Return response for updateAudienceMember mutation
+type AudienceMemberUpdatePayload struct {
+	// Updated audienceMember
+	AudienceMember *AudienceMember `json:"audienceMember"`
+}
+
+// AudienceMemberWhereInput is used for filtering AudienceMember objects.
+// Input was generated by ent.
+type AudienceMemberWhereInput struct {
+	Not *AudienceMemberWhereInput   `json:"not,omitempty"`
+	And []*AudienceMemberWhereInput `json:"and,omitempty"`
+	Or  []*AudienceMemberWhereInput `json:"or,omitempty"`
+	// id field predicates
+	ID             *string  `json:"id,omitempty"`
+	IDNeq          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGt           *string  `json:"idGT,omitempty"`
+	IDGte          *string  `json:"idGTE,omitempty"`
+	IDLt           *string  `json:"idLT,omitempty"`
+	IDLte          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+	// created_at field predicates
+	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
+	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []*time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []*time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGt     *time.Time   `json:"createdAtGT,omitempty"`
+	CreatedAtGte    *time.Time   `json:"createdAtGTE,omitempty"`
+	CreatedAtLt     *time.Time   `json:"createdAtLT,omitempty"`
+	CreatedAtLte    *time.Time   `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  *bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil *bool        `json:"createdAtNotNil,omitempty"`
+	// updated_at field predicates
+	UpdatedAt       *time.Time   `json:"updatedAt,omitempty"`
+	UpdatedAtNeq    *time.Time   `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []*time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []*time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGt     *time.Time   `json:"updatedAtGT,omitempty"`
+	UpdatedAtGte    *time.Time   `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLt     *time.Time   `json:"updatedAtLT,omitempty"`
+	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
+	// created_by field predicates
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGt           *string  `json:"createdByGT,omitempty"`
+	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLt           *string  `json:"createdByLT,omitempty"`
+	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
+	// display_id field predicates
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
+	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
+	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// audience_id field predicates
+	AudienceID             *string  `json:"audienceID,omitempty"`
+	AudienceIdneq          *string  `json:"audienceIDNEQ,omitempty"`
+	AudienceIDIn           []string `json:"audienceIDIn,omitempty"`
+	AudienceIDNotIn        []string `json:"audienceIDNotIn,omitempty"`
+	AudienceIdgt           *string  `json:"audienceIDGT,omitempty"`
+	AudienceIdgte          *string  `json:"audienceIDGTE,omitempty"`
+	AudienceIdlt           *string  `json:"audienceIDLT,omitempty"`
+	AudienceIdlte          *string  `json:"audienceIDLTE,omitempty"`
+	AudienceIDContains     *string  `json:"audienceIDContains,omitempty"`
+	AudienceIDHasPrefix    *string  `json:"audienceIDHasPrefix,omitempty"`
+	AudienceIDHasSuffix    *string  `json:"audienceIDHasSuffix,omitempty"`
+	AudienceIDEqualFold    *string  `json:"audienceIDEqualFold,omitempty"`
+	AudienceIDContainsFold *string  `json:"audienceIDContainsFold,omitempty"`
+	// contact_id field predicates
+	ContactID             *string  `json:"contactID,omitempty"`
+	ContactIdneq          *string  `json:"contactIDNEQ,omitempty"`
+	ContactIDIn           []string `json:"contactIDIn,omitempty"`
+	ContactIDNotIn        []string `json:"contactIDNotIn,omitempty"`
+	ContactIdgt           *string  `json:"contactIDGT,omitempty"`
+	ContactIdgte          *string  `json:"contactIDGTE,omitempty"`
+	ContactIdlt           *string  `json:"contactIDLT,omitempty"`
+	ContactIdlte          *string  `json:"contactIDLTE,omitempty"`
+	ContactIDContains     *string  `json:"contactIDContains,omitempty"`
+	ContactIDHasPrefix    *string  `json:"contactIDHasPrefix,omitempty"`
+	ContactIDHasSuffix    *string  `json:"contactIDHasSuffix,omitempty"`
+	ContactIDIsNil        *bool    `json:"contactIDIsNil,omitempty"`
+	ContactIDNotNil       *bool    `json:"contactIDNotNil,omitempty"`
+	ContactIDEqualFold    *string  `json:"contactIDEqualFold,omitempty"`
+	ContactIDContainsFold *string  `json:"contactIDContainsFold,omitempty"`
+	// user_id field predicates
+	UserID             *string  `json:"userID,omitempty"`
+	UserIdneq          *string  `json:"userIDNEQ,omitempty"`
+	UserIDIn           []string `json:"userIDIn,omitempty"`
+	UserIDNotIn        []string `json:"userIDNotIn,omitempty"`
+	UserIdgt           *string  `json:"userIDGT,omitempty"`
+	UserIdgte          *string  `json:"userIDGTE,omitempty"`
+	UserIdlt           *string  `json:"userIDLT,omitempty"`
+	UserIdlte          *string  `json:"userIDLTE,omitempty"`
+	UserIDContains     *string  `json:"userIDContains,omitempty"`
+	UserIDHasPrefix    *string  `json:"userIDHasPrefix,omitempty"`
+	UserIDHasSuffix    *string  `json:"userIDHasSuffix,omitempty"`
+	UserIDIsNil        *bool    `json:"userIDIsNil,omitempty"`
+	UserIDNotNil       *bool    `json:"userIDNotNil,omitempty"`
+	UserIDEqualFold    *string  `json:"userIDEqualFold,omitempty"`
+	UserIDContainsFold *string  `json:"userIDContainsFold,omitempty"`
+	// group_id field predicates
+	GroupID             *string  `json:"groupID,omitempty"`
+	GroupIdneq          *string  `json:"groupIDNEQ,omitempty"`
+	GroupIDIn           []string `json:"groupIDIn,omitempty"`
+	GroupIDNotIn        []string `json:"groupIDNotIn,omitempty"`
+	GroupIdgt           *string  `json:"groupIDGT,omitempty"`
+	GroupIdgte          *string  `json:"groupIDGTE,omitempty"`
+	GroupIdlt           *string  `json:"groupIDLT,omitempty"`
+	GroupIdlte          *string  `json:"groupIDLTE,omitempty"`
+	GroupIDContains     *string  `json:"groupIDContains,omitempty"`
+	GroupIDHasPrefix    *string  `json:"groupIDHasPrefix,omitempty"`
+	GroupIDHasSuffix    *string  `json:"groupIDHasSuffix,omitempty"`
+	GroupIDIsNil        *bool    `json:"groupIDIsNil,omitempty"`
+	GroupIDNotNil       *bool    `json:"groupIDNotNil,omitempty"`
+	GroupIDEqualFold    *string  `json:"groupIDEqualFold,omitempty"`
+	GroupIDContainsFold *string  `json:"groupIDContainsFold,omitempty"`
+	// subscriber_id field predicates
+	SubscriberID             *string  `json:"subscriberID,omitempty"`
+	SubscriberIdneq          *string  `json:"subscriberIDNEQ,omitempty"`
+	SubscriberIDIn           []string `json:"subscriberIDIn,omitempty"`
+	SubscriberIDNotIn        []string `json:"subscriberIDNotIn,omitempty"`
+	SubscriberIdgt           *string  `json:"subscriberIDGT,omitempty"`
+	SubscriberIdgte          *string  `json:"subscriberIDGTE,omitempty"`
+	SubscriberIdlt           *string  `json:"subscriberIDLT,omitempty"`
+	SubscriberIdlte          *string  `json:"subscriberIDLTE,omitempty"`
+	SubscriberIDContains     *string  `json:"subscriberIDContains,omitempty"`
+	SubscriberIDHasPrefix    *string  `json:"subscriberIDHasPrefix,omitempty"`
+	SubscriberIDHasSuffix    *string  `json:"subscriberIDHasSuffix,omitempty"`
+	SubscriberIDIsNil        *bool    `json:"subscriberIDIsNil,omitempty"`
+	SubscriberIDNotNil       *bool    `json:"subscriberIDNotNil,omitempty"`
+	SubscriberIDEqualFold    *string  `json:"subscriberIDEqualFold,omitempty"`
+	SubscriberIDContainsFold *string  `json:"subscriberIDContainsFold,omitempty"`
+	// identity_holder_id field predicates
+	IdentityHolderID             *string  `json:"identityHolderID,omitempty"`
+	IdentityHolderIdneq          *string  `json:"identityHolderIDNEQ,omitempty"`
+	IdentityHolderIDIn           []string `json:"identityHolderIDIn,omitempty"`
+	IdentityHolderIDNotIn        []string `json:"identityHolderIDNotIn,omitempty"`
+	IdentityHolderIdgt           *string  `json:"identityHolderIDGT,omitempty"`
+	IdentityHolderIdgte          *string  `json:"identityHolderIDGTE,omitempty"`
+	IdentityHolderIdlt           *string  `json:"identityHolderIDLT,omitempty"`
+	IdentityHolderIdlte          *string  `json:"identityHolderIDLTE,omitempty"`
+	IdentityHolderIDContains     *string  `json:"identityHolderIDContains,omitempty"`
+	IdentityHolderIDHasPrefix    *string  `json:"identityHolderIDHasPrefix,omitempty"`
+	IdentityHolderIDHasSuffix    *string  `json:"identityHolderIDHasSuffix,omitempty"`
+	IdentityHolderIDIsNil        *bool    `json:"identityHolderIDIsNil,omitempty"`
+	IdentityHolderIDNotNil       *bool    `json:"identityHolderIDNotNil,omitempty"`
+	IdentityHolderIDEqualFold    *string  `json:"identityHolderIDEqualFold,omitempty"`
+	IdentityHolderIDContainsFold *string  `json:"identityHolderIDContainsFold,omitempty"`
+	// email field predicates
+	Email             *string  `json:"email,omitempty"`
+	EmailNeq          *string  `json:"emailNEQ,omitempty"`
+	EmailIn           []string `json:"emailIn,omitempty"`
+	EmailNotIn        []string `json:"emailNotIn,omitempty"`
+	EmailGt           *string  `json:"emailGT,omitempty"`
+	EmailGte          *string  `json:"emailGTE,omitempty"`
+	EmailLt           *string  `json:"emailLT,omitempty"`
+	EmailLte          *string  `json:"emailLTE,omitempty"`
+	EmailContains     *string  `json:"emailContains,omitempty"`
+	EmailHasPrefix    *string  `json:"emailHasPrefix,omitempty"`
+	EmailHasSuffix    *string  `json:"emailHasSuffix,omitempty"`
+	EmailEqualFold    *string  `json:"emailEqualFold,omitempty"`
+	EmailContainsFold *string  `json:"emailContainsFold,omitempty"`
+	// full_name field predicates
+	FullName             *string  `json:"fullName,omitempty"`
+	FullNameNeq          *string  `json:"fullNameNEQ,omitempty"`
+	FullNameIn           []string `json:"fullNameIn,omitempty"`
+	FullNameNotIn        []string `json:"fullNameNotIn,omitempty"`
+	FullNameGt           *string  `json:"fullNameGT,omitempty"`
+	FullNameGte          *string  `json:"fullNameGTE,omitempty"`
+	FullNameLt           *string  `json:"fullNameLT,omitempty"`
+	FullNameLte          *string  `json:"fullNameLTE,omitempty"`
+	FullNameContains     *string  `json:"fullNameContains,omitempty"`
+	FullNameHasPrefix    *string  `json:"fullNameHasPrefix,omitempty"`
+	FullNameHasSuffix    *string  `json:"fullNameHasSuffix,omitempty"`
+	FullNameIsNil        *bool    `json:"fullNameIsNil,omitempty"`
+	FullNameNotNil       *bool    `json:"fullNameNotNil,omitempty"`
+	FullNameEqualFold    *string  `json:"fullNameEqualFold,omitempty"`
+	FullNameContainsFold *string  `json:"fullNameContainsFold,omitempty"`
+	// owner edge predicates
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+	// audience edge predicates
+	HasAudience     *bool                 `json:"hasAudience,omitempty"`
+	HasAudienceWith []*AudienceWhereInput `json:"hasAudienceWith,omitempty"`
+	// contact edge predicates
+	HasContact     *bool                `json:"hasContact,omitempty"`
+	HasContactWith []*ContactWhereInput `json:"hasContactWith,omitempty"`
+	// user edge predicates
+	HasUser     *bool             `json:"hasUser,omitempty"`
+	HasUserWith []*UserWhereInput `json:"hasUserWith,omitempty"`
+	// group edge predicates
+	HasGroup     *bool              `json:"hasGroup,omitempty"`
+	HasGroupWith []*GroupWhereInput `json:"hasGroupWith,omitempty"`
+	// subscriber edge predicates
+	HasSubscriber     *bool                   `json:"hasSubscriber,omitempty"`
+	HasSubscriberWith []*SubscriberWhereInput `json:"hasSubscriberWith,omitempty"`
+	// identity_holder edge predicates
+	HasIdentityHolder     *bool                       `json:"hasIdentityHolder,omitempty"`
+	HasIdentityHolderWith []*IdentityHolderWhereInput `json:"hasIdentityHolderWith,omitempty"`
+}
+
+// Ordering options for Audience connections
+type AudienceOrder struct {
+	// The ordering direction.
+	Direction OrderDirection `json:"direction"`
+	// The field by which to order Audiences.
+	Field AudienceOrderField `json:"field"`
+}
+
+// Return response for updateAudience mutation
+type AudienceUpdatePayload struct {
+	// Updated audience
+	Audience *Audience `json:"audience"`
+}
+
+// AudienceWhereInput is used for filtering Audience objects.
+// Input was generated by ent.
+type AudienceWhereInput struct {
+	Not *AudienceWhereInput   `json:"not,omitempty"`
+	And []*AudienceWhereInput `json:"and,omitempty"`
+	Or  []*AudienceWhereInput `json:"or,omitempty"`
+	// id field predicates
+	ID             *string  `json:"id,omitempty"`
+	IDNeq          *string  `json:"idNEQ,omitempty"`
+	IDIn           []string `json:"idIn,omitempty"`
+	IDNotIn        []string `json:"idNotIn,omitempty"`
+	IDGt           *string  `json:"idGT,omitempty"`
+	IDGte          *string  `json:"idGTE,omitempty"`
+	IDLt           *string  `json:"idLT,omitempty"`
+	IDLte          *string  `json:"idLTE,omitempty"`
+	IDEqualFold    *string  `json:"idEqualFold,omitempty"`
+	IDContainsFold *string  `json:"idContainsFold,omitempty"`
+	// created_at field predicates
+	CreatedAt       *time.Time   `json:"createdAt,omitempty"`
+	CreatedAtNeq    *time.Time   `json:"createdAtNEQ,omitempty"`
+	CreatedAtIn     []*time.Time `json:"createdAtIn,omitempty"`
+	CreatedAtNotIn  []*time.Time `json:"createdAtNotIn,omitempty"`
+	CreatedAtGt     *time.Time   `json:"createdAtGT,omitempty"`
+	CreatedAtGte    *time.Time   `json:"createdAtGTE,omitempty"`
+	CreatedAtLt     *time.Time   `json:"createdAtLT,omitempty"`
+	CreatedAtLte    *time.Time   `json:"createdAtLTE,omitempty"`
+	CreatedAtIsNil  *bool        `json:"createdAtIsNil,omitempty"`
+	CreatedAtNotNil *bool        `json:"createdAtNotNil,omitempty"`
+	// updated_at field predicates
+	UpdatedAt       *time.Time   `json:"updatedAt,omitempty"`
+	UpdatedAtNeq    *time.Time   `json:"updatedAtNEQ,omitempty"`
+	UpdatedAtIn     []*time.Time `json:"updatedAtIn,omitempty"`
+	UpdatedAtNotIn  []*time.Time `json:"updatedAtNotIn,omitempty"`
+	UpdatedAtGt     *time.Time   `json:"updatedAtGT,omitempty"`
+	UpdatedAtGte    *time.Time   `json:"updatedAtGTE,omitempty"`
+	UpdatedAtLt     *time.Time   `json:"updatedAtLT,omitempty"`
+	UpdatedAtLte    *time.Time   `json:"updatedAtLTE,omitempty"`
+	UpdatedAtIsNil  *bool        `json:"updatedAtIsNil,omitempty"`
+	UpdatedAtNotNil *bool        `json:"updatedAtNotNil,omitempty"`
+	// created_by field predicates
+	CreatedBy             *string  `json:"createdBy,omitempty"`
+	CreatedByNeq          *string  `json:"createdByNEQ,omitempty"`
+	CreatedByIn           []string `json:"createdByIn,omitempty"`
+	CreatedByNotIn        []string `json:"createdByNotIn,omitempty"`
+	CreatedByGt           *string  `json:"createdByGT,omitempty"`
+	CreatedByGte          *string  `json:"createdByGTE,omitempty"`
+	CreatedByLt           *string  `json:"createdByLT,omitempty"`
+	CreatedByLte          *string  `json:"createdByLTE,omitempty"`
+	CreatedByContains     *string  `json:"createdByContains,omitempty"`
+	CreatedByHasPrefix    *string  `json:"createdByHasPrefix,omitempty"`
+	CreatedByHasSuffix    *string  `json:"createdByHasSuffix,omitempty"`
+	CreatedByIsNil        *bool    `json:"createdByIsNil,omitempty"`
+	CreatedByNotNil       *bool    `json:"createdByNotNil,omitempty"`
+	CreatedByEqualFold    *string  `json:"createdByEqualFold,omitempty"`
+	CreatedByContainsFold *string  `json:"createdByContainsFold,omitempty"`
+	// updated_by field predicates
+	UpdatedBy             *string  `json:"updatedBy,omitempty"`
+	UpdatedByNeq          *string  `json:"updatedByNEQ,omitempty"`
+	UpdatedByIn           []string `json:"updatedByIn,omitempty"`
+	UpdatedByNotIn        []string `json:"updatedByNotIn,omitempty"`
+	UpdatedByGt           *string  `json:"updatedByGT,omitempty"`
+	UpdatedByGte          *string  `json:"updatedByGTE,omitempty"`
+	UpdatedByLt           *string  `json:"updatedByLT,omitempty"`
+	UpdatedByLte          *string  `json:"updatedByLTE,omitempty"`
+	UpdatedByContains     *string  `json:"updatedByContains,omitempty"`
+	UpdatedByHasPrefix    *string  `json:"updatedByHasPrefix,omitempty"`
+	UpdatedByHasSuffix    *string  `json:"updatedByHasSuffix,omitempty"`
+	UpdatedByIsNil        *bool    `json:"updatedByIsNil,omitempty"`
+	UpdatedByNotNil       *bool    `json:"updatedByNotNil,omitempty"`
+	UpdatedByEqualFold    *string  `json:"updatedByEqualFold,omitempty"`
+	UpdatedByContainsFold *string  `json:"updatedByContainsFold,omitempty"`
+	// updated_by_impersonator field predicates
+	UpdatedByImpersonator             *string  `json:"updatedByImpersonator,omitempty"`
+	UpdatedByImpersonatorNeq          *string  `json:"updatedByImpersonatorNEQ,omitempty"`
+	UpdatedByImpersonatorIn           []string `json:"updatedByImpersonatorIn,omitempty"`
+	UpdatedByImpersonatorNotIn        []string `json:"updatedByImpersonatorNotIn,omitempty"`
+	UpdatedByImpersonatorGt           *string  `json:"updatedByImpersonatorGT,omitempty"`
+	UpdatedByImpersonatorGte          *string  `json:"updatedByImpersonatorGTE,omitempty"`
+	UpdatedByImpersonatorLt           *string  `json:"updatedByImpersonatorLT,omitempty"`
+	UpdatedByImpersonatorLte          *string  `json:"updatedByImpersonatorLTE,omitempty"`
+	UpdatedByImpersonatorContains     *string  `json:"updatedByImpersonatorContains,omitempty"`
+	UpdatedByImpersonatorHasPrefix    *string  `json:"updatedByImpersonatorHasPrefix,omitempty"`
+	UpdatedByImpersonatorHasSuffix    *string  `json:"updatedByImpersonatorHasSuffix,omitempty"`
+	UpdatedByImpersonatorIsNil        *bool    `json:"updatedByImpersonatorIsNil,omitempty"`
+	UpdatedByImpersonatorNotNil       *bool    `json:"updatedByImpersonatorNotNil,omitempty"`
+	UpdatedByImpersonatorEqualFold    *string  `json:"updatedByImpersonatorEqualFold,omitempty"`
+	UpdatedByImpersonatorContainsFold *string  `json:"updatedByImpersonatorContainsFold,omitempty"`
+	// display_id field predicates
+	DisplayID             *string  `json:"displayID,omitempty"`
+	DisplayIdneq          *string  `json:"displayIDNEQ,omitempty"`
+	DisplayIDIn           []string `json:"displayIDIn,omitempty"`
+	DisplayIDNotIn        []string `json:"displayIDNotIn,omitempty"`
+	DisplayIdgt           *string  `json:"displayIDGT,omitempty"`
+	DisplayIdgte          *string  `json:"displayIDGTE,omitempty"`
+	DisplayIdlt           *string  `json:"displayIDLT,omitempty"`
+	DisplayIdlte          *string  `json:"displayIDLTE,omitempty"`
+	DisplayIDContains     *string  `json:"displayIDContains,omitempty"`
+	DisplayIDHasPrefix    *string  `json:"displayIDHasPrefix,omitempty"`
+	DisplayIDHasSuffix    *string  `json:"displayIDHasSuffix,omitempty"`
+	DisplayIDEqualFold    *string  `json:"displayIDEqualFold,omitempty"`
+	DisplayIDContainsFold *string  `json:"displayIDContainsFold,omitempty"`
+	// owner_id field predicates
+	OwnerID             *string  `json:"ownerID,omitempty"`
+	OwnerIdneq          *string  `json:"ownerIDNEQ,omitempty"`
+	OwnerIDIn           []string `json:"ownerIDIn,omitempty"`
+	OwnerIDNotIn        []string `json:"ownerIDNotIn,omitempty"`
+	OwnerIdgt           *string  `json:"ownerIDGT,omitempty"`
+	OwnerIdgte          *string  `json:"ownerIDGTE,omitempty"`
+	OwnerIdlt           *string  `json:"ownerIDLT,omitempty"`
+	OwnerIdlte          *string  `json:"ownerIDLTE,omitempty"`
+	OwnerIDContains     *string  `json:"ownerIDContains,omitempty"`
+	OwnerIDHasPrefix    *string  `json:"ownerIDHasPrefix,omitempty"`
+	OwnerIDHasSuffix    *string  `json:"ownerIDHasSuffix,omitempty"`
+	OwnerIDIsNil        *bool    `json:"ownerIDIsNil,omitempty"`
+	OwnerIDNotNil       *bool    `json:"ownerIDNotNil,omitempty"`
+	OwnerIDEqualFold    *string  `json:"ownerIDEqualFold,omitempty"`
+	OwnerIDContainsFold *string  `json:"ownerIDContainsFold,omitempty"`
+	// name field predicates
+	Name             *string  `json:"name,omitempty"`
+	NameNeq          *string  `json:"nameNEQ,omitempty"`
+	NameIn           []string `json:"nameIn,omitempty"`
+	NameNotIn        []string `json:"nameNotIn,omitempty"`
+	NameGt           *string  `json:"nameGT,omitempty"`
+	NameGte          *string  `json:"nameGTE,omitempty"`
+	NameLt           *string  `json:"nameLT,omitempty"`
+	NameLte          *string  `json:"nameLTE,omitempty"`
+	NameContains     *string  `json:"nameContains,omitempty"`
+	NameHasPrefix    *string  `json:"nameHasPrefix,omitempty"`
+	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
+	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
+	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
+	// description field predicates
+	Description             *string  `json:"description,omitempty"`
+	DescriptionNeq          *string  `json:"descriptionNEQ,omitempty"`
+	DescriptionIn           []string `json:"descriptionIn,omitempty"`
+	DescriptionNotIn        []string `json:"descriptionNotIn,omitempty"`
+	DescriptionGt           *string  `json:"descriptionGT,omitempty"`
+	DescriptionGte          *string  `json:"descriptionGTE,omitempty"`
+	DescriptionLt           *string  `json:"descriptionLT,omitempty"`
+	DescriptionLte          *string  `json:"descriptionLTE,omitempty"`
+	DescriptionContains     *string  `json:"descriptionContains,omitempty"`
+	DescriptionHasPrefix    *string  `json:"descriptionHasPrefix,omitempty"`
+	DescriptionHasSuffix    *string  `json:"descriptionHasSuffix,omitempty"`
+	DescriptionIsNil        *bool    `json:"descriptionIsNil,omitempty"`
+	DescriptionNotNil       *bool    `json:"descriptionNotNil,omitempty"`
+	DescriptionEqualFold    *string  `json:"descriptionEqualFold,omitempty"`
+	DescriptionContainsFold *string  `json:"descriptionContainsFold,omitempty"`
+	// audience_type field predicates
+	AudienceType      *enums.AudienceType  `json:"audienceType,omitempty"`
+	AudienceTypeNeq   *enums.AudienceType  `json:"audienceTypeNEQ,omitempty"`
+	AudienceTypeIn    []enums.AudienceType `json:"audienceTypeIn,omitempty"`
+	AudienceTypeNotIn []enums.AudienceType `json:"audienceTypeNotIn,omitempty"`
+	// owner edge predicates
+	HasOwner     *bool                     `json:"hasOwner,omitempty"`
+	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+	// audience_members edge predicates
+	HasAudienceMembers     *bool                       `json:"hasAudienceMembers,omitempty"`
+	HasAudienceMembersWith []*AudienceMemberWhereInput `json:"hasAudienceMembersWith,omitempty"`
+	// campaigns edge predicates
+	HasCampaigns     *bool                 `json:"hasCampaigns,omitempty"`
+	HasCampaignsWith []*CampaignWhereInput `json:"hasCampaignsWith,omitempty"`
+	// Filter for tagsHas to contain a specific value
+	TagsHas *string `json:"tagsHas,omitempty"`
+}
+
 // Return response for approveNDARequests or denyNDARequests mutation
 type BulkUpdateStatusPayload struct {
 	// Updated nda request IDs
@@ -2914,6 +3549,7 @@ type Campaign struct {
 	Users               *UserConnection               `json:"users"`
 	Groups              *GroupConnection              `json:"groups"`
 	IdentityHolders     *IdentityHolderConnection     `json:"identityHolders"`
+	Audiences           *AudienceConnection           `json:"audiences"`
 	Controls            *ControlConnection            `json:"controls"`
 	WorkflowObjectRefs  *WorkflowObjectRefConnection  `json:"workflowObjectRefs"`
 	// Indicates if this campaign has pending changes awaiting workflow approval
@@ -3903,6 +4539,9 @@ type CampaignWhereInput struct {
 	// identity_holders edge predicates
 	HasIdentityHolders     *bool                       `json:"hasIdentityHolders,omitempty"`
 	HasIdentityHoldersWith []*IdentityHolderWhereInput `json:"hasIdentityHoldersWith,omitempty"`
+	// audiences edge predicates
+	HasAudiences     *bool                 `json:"hasAudiences,omitempty"`
+	HasAudiencesWith []*AudienceWhereInput `json:"hasAudiencesWith,omitempty"`
 	// controls edge predicates
 	HasControls     *bool                `json:"hasControls,omitempty"`
 	HasControlsWith []*ControlWhereInput `json:"hasControlsWith,omitempty"`
@@ -4306,6 +4945,7 @@ type Contact struct {
 	Entities        *EntityConnection         `json:"entities"`
 	Campaigns       *CampaignConnection       `json:"campaigns"`
 	CampaignTargets *CampaignTargetConnection `json:"campaignTargets"`
+	AudienceMembers *AudienceMemberConnection `json:"audienceMembers"`
 	Files           *FileConnection           `json:"files"`
 	Subscribers     *SubscriberConnection     `json:"subscribers"`
 }
@@ -4639,6 +5279,9 @@ type ContactWhereInput struct {
 	// campaign_targets edge predicates
 	HasCampaignTargets     *bool                       `json:"hasCampaignTargets,omitempty"`
 	HasCampaignTargetsWith []*CampaignTargetWhereInput `json:"hasCampaignTargetsWith,omitempty"`
+	// audience_members edge predicates
+	HasAudienceMembers     *bool                       `json:"hasAudienceMembers,omitempty"`
+	HasAudienceMembersWith []*AudienceMemberWhereInput `json:"hasAudienceMembersWith,omitempty"`
 	// files edge predicates
 	HasFiles     *bool             `json:"hasFiles,omitempty"`
 	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
@@ -6819,6 +7462,42 @@ type CreateAssetInput struct {
 	ConnectedFromIDs          []string         `json:"connectedFromIDs,omitempty"`
 }
 
+// CreateAudienceInput is used for create Audience object.
+// Input was generated by ent.
+type CreateAudienceInput struct {
+	// tags associated with the object
+	Tags []string `json:"tags,omitempty"`
+	// the name of the audience
+	Name string `json:"name"`
+	// the description of the audience
+	Description *string `json:"description,omitempty"`
+	// the type of audience
+	AudienceType *enums.AudienceType `json:"audienceType,omitempty"`
+	// filter definition used to resolve dynamic audience members
+	Filters           map[string]any `json:"filters,omitempty"`
+	OwnerID           *string        `json:"ownerID,omitempty"`
+	AudienceMemberIDs []string       `json:"audienceMemberIDs,omitempty"`
+	CampaignIDs       []string       `json:"campaignIDs,omitempty"`
+}
+
+// CreateAudienceMemberInput is used for create AudienceMember object.
+// Input was generated by ent.
+type CreateAudienceMemberInput struct {
+	// the email address for the audience member
+	Email string `json:"email"`
+	// the name of the audience member, if known
+	FullName *string `json:"fullName,omitempty"`
+	// additional metadata about the audience member
+	Metadata         map[string]any `json:"metadata,omitempty"`
+	OwnerID          *string        `json:"ownerID,omitempty"`
+	AudienceID       string         `json:"audienceID"`
+	ContactID        *string        `json:"contactID,omitempty"`
+	UserID           *string        `json:"userID,omitempty"`
+	GroupID          *string        `json:"groupID,omitempty"`
+	SubscriberID     *string        `json:"subscriberID,omitempty"`
+	IdentityHolderID *string        `json:"identityHolderID,omitempty"`
+}
+
 // CreateCampaignInput is used for create Campaign object.
 // Input was generated by ent.
 type CreateCampaignInput struct {
@@ -6890,6 +7569,7 @@ type CreateCampaignInput struct {
 	UserIDs               []string `json:"userIDs,omitempty"`
 	GroupIDs              []string `json:"groupIDs,omitempty"`
 	IdentityHolderIDs     []string `json:"identityHolderIDs,omitempty"`
+	AudienceIDs           []string `json:"audienceIDs,omitempty"`
 	ControlIDs            []string `json:"controlIDs,omitempty"`
 	WorkflowObjectRefIDs  []string `json:"workflowObjectRefIDs,omitempty"`
 }
@@ -6982,6 +7662,7 @@ type CreateContactInput struct {
 	EntityIDs         []string         `json:"entityIDs,omitempty"`
 	CampaignIDs       []string         `json:"campaignIDs,omitempty"`
 	CampaignTargetIDs []string         `json:"campaignTargetIDs,omitempty"`
+	AudienceMemberIDs []string         `json:"audienceMemberIDs,omitempty"`
 	FileIDs           []string         `json:"fileIDs,omitempty"`
 	SubscriberIDs     []string         `json:"subscriberIDs,omitempty"`
 }
@@ -8100,6 +8781,7 @@ type CreateGroupInput struct {
 	TaskIDs                              []string                 `json:"taskIDs,omitempty"`
 	CampaignIDs                          []string                 `json:"campaignIDs,omitempty"`
 	CampaignTargetIDs                    []string                 `json:"campaignTargetIDs,omitempty"`
+	AudienceMemberIDs                    []string                 `json:"audienceMemberIDs,omitempty"`
 	CreateGroupSettings                  *CreateGroupSettingInput `json:"createGroupSettings,omitempty"`
 }
 
@@ -8228,6 +8910,7 @@ type CreateIdentityHolderInput struct {
 	CampaignIDs           []string `json:"campaignIDs,omitempty"`
 	TaskIDs               []string `json:"taskIDs,omitempty"`
 	FileIDs               []string `json:"fileIDs,omitempty"`
+	AudienceMemberIDs     []string `json:"audienceMemberIDs,omitempty"`
 	FindingIDs            []string `json:"findingIDs,omitempty"`
 	WorkflowObjectRefIDs  []string `json:"workflowObjectRefIDs,omitempty"`
 	AccessPlatformIDs     []string `json:"accessPlatformIDs,omitempty"`
@@ -8718,6 +9401,8 @@ type CreateOrganizationInput struct {
 	APITokenCreatorIDs                   []string                        `json:"apiTokenCreatorIDs,omitempty"`
 	AssessmentCreatorIDs                 []string                        `json:"assessmentCreatorIDs,omitempty"`
 	AssetCreatorIDs                      []string                        `json:"assetCreatorIDs,omitempty"`
+	AudienceCreatorIDs                   []string                        `json:"audienceCreatorIDs,omitempty"`
+	AudienceMemberCreatorIDs             []string                        `json:"audienceMemberCreatorIDs,omitempty"`
 	CampaignCreatorIDs                   []string                        `json:"campaignCreatorIDs,omitempty"`
 	CampaignTargetCreatorIDs             []string                        `json:"campaignTargetCreatorIDs,omitempty"`
 	CheckResultCreatorIDs                []string                        `json:"checkResultCreatorIDs,omitempty"`
@@ -8818,6 +9503,8 @@ type CreateOrganizationInput struct {
 	IdentityHolderIDs                    []string                        `json:"identityHolderIDs,omitempty"`
 	CampaignIDs                          []string                        `json:"campaignIDs,omitempty"`
 	CampaignTargetIDs                    []string                        `json:"campaignTargetIDs,omitempty"`
+	AudienceIDs                          []string                        `json:"audienceIDs,omitempty"`
+	AudienceMemberIDs                    []string                        `json:"audienceMemberIDs,omitempty"`
 	EntityTypeIDs                        []string                        `json:"entityTypeIDs,omitempty"`
 	ContactIDs                           []string                        `json:"contactIDs,omitempty"`
 	NoteIDs                              []string                        `json:"noteIDs,omitempty"`
@@ -9756,6 +10443,7 @@ type CreateSubscriberInput struct {
 	EventIDs          []string `json:"eventIDs,omitempty"`
 	TrustCenterID     *string  `json:"trustCenterID,omitempty"`
 	CampaignTargetIDs []string `json:"campaignTargetIDs,omitempty"`
+	AudienceMemberIDs []string `json:"audienceMemberIDs,omitempty"`
 	ContactID         *string  `json:"contactID,omitempty"`
 	UserID            *string  `json:"userID,omitempty"`
 }
@@ -10243,6 +10931,7 @@ type CreateUserInput struct {
 	ActionPlanIDs            []string `json:"actionPlanIDs,omitempty"`
 	CampaignIDs              []string `json:"campaignIDs,omitempty"`
 	CampaignTargetIDs        []string `json:"campaignTargetIDs,omitempty"`
+	AudienceMemberIDs        []string `json:"audienceMemberIDs,omitempty"`
 	SubcontrolIDs            []string `json:"subcontrolIDs,omitempty"`
 	AssignerTaskIDs          []string `json:"assignerTaskIDs,omitempty"`
 	AssigneeTaskIDs          []string `json:"assigneeTaskIDs,omitempty"`
@@ -19343,6 +20032,7 @@ type Group struct {
 	Tasks                              *TaskConnection                  `json:"tasks"`
 	Campaigns                          *CampaignConnection              `json:"campaigns"`
 	CampaignTargets                    *CampaignTargetConnection        `json:"campaignTargets"`
+	AudienceMembers                    *AudienceMemberConnection        `json:"audienceMembers"`
 	Members                            *GroupMembershipConnection       `json:"members"`
 	// permissions the group provides
 	Permissions *GroupPermissionConnection `json:"permissions"`
@@ -20332,6 +21022,9 @@ type GroupWhereInput struct {
 	// campaign_targets edge predicates
 	HasCampaignTargets     *bool                       `json:"hasCampaignTargets,omitempty"`
 	HasCampaignTargetsWith []*CampaignTargetWhereInput `json:"hasCampaignTargetsWith,omitempty"`
+	// audience_members edge predicates
+	HasAudienceMembers     *bool                       `json:"hasAudienceMembers,omitempty"`
+	HasAudienceMembersWith []*AudienceMemberWhereInput `json:"hasAudienceMembersWith,omitempty"`
 	// members edge predicates
 	HasMembers     *bool                        `json:"hasMembers,omitempty"`
 	HasMembersWith []*GroupMembershipWhereInput `json:"hasMembersWith,omitempty"`
@@ -20763,6 +21456,7 @@ type IdentityHolder struct {
 	Campaigns           *CampaignConnection           `json:"campaigns"`
 	Tasks               *TaskConnection               `json:"tasks"`
 	Files               *FileConnection               `json:"files"`
+	AudienceMembers     *AudienceMemberConnection     `json:"audienceMembers"`
 	Findings            *FindingConnection            `json:"findings"`
 	WorkflowObjectRefs  *WorkflowObjectRefConnection  `json:"workflowObjectRefs"`
 	AccessPlatforms     *PlatformConnection           `json:"accessPlatforms"`
@@ -21389,6 +22083,9 @@ type IdentityHolderWhereInput struct {
 	// files edge predicates
 	HasFiles     *bool             `json:"hasFiles,omitempty"`
 	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
+	// audience_members edge predicates
+	HasAudienceMembers     *bool                       `json:"hasAudienceMembers,omitempty"`
+	HasAudienceMembersWith []*AudienceMemberWhereInput `json:"hasAudienceMembersWith,omitempty"`
 	// findings edge predicates
 	HasFindings     *bool                `json:"hasFindings,omitempty"`
 	HasFindingsWith []*FindingWhereInput `json:"hasFindingsWith,omitempty"`
@@ -27291,6 +27988,8 @@ type Organization struct {
 	APITokenCreators                   *GroupConnection                      `json:"apiTokenCreators"`
 	AssessmentCreators                 *GroupConnection                      `json:"assessmentCreators"`
 	AssetCreators                      *GroupConnection                      `json:"assetCreators"`
+	AudienceCreators                   *GroupConnection                      `json:"audienceCreators"`
+	AudienceMemberCreators             *GroupConnection                      `json:"audienceMemberCreators"`
 	CampaignCreators                   *GroupConnection                      `json:"campaignCreators"`
 	CampaignTargetCreators             *GroupConnection                      `json:"campaignTargetCreators"`
 	CheckResultCreators                *GroupConnection                      `json:"checkResultCreators"`
@@ -27393,6 +28092,8 @@ type Organization struct {
 	IdentityHolders                    *IdentityHolderConnection             `json:"identityHolders"`
 	Campaigns                          *CampaignConnection                   `json:"campaigns"`
 	CampaignTargets                    *CampaignTargetConnection             `json:"campaignTargets"`
+	Audiences                          *AudienceConnection                   `json:"audiences"`
+	AudienceMembers                    *AudienceMemberConnection             `json:"audienceMembers"`
 	EntityTypes                        *EntityTypeConnection                 `json:"entityTypes"`
 	Contacts                           *ContactConnection                    `json:"contacts"`
 	Notes                              *NoteConnection                       `json:"notes"`
@@ -28233,6 +28934,12 @@ type OrganizationWhereInput struct {
 	// asset_creators edge predicates
 	HasAssetCreators     *bool              `json:"hasAssetCreators,omitempty"`
 	HasAssetCreatorsWith []*GroupWhereInput `json:"hasAssetCreatorsWith,omitempty"`
+	// audience_creators edge predicates
+	HasAudienceCreators     *bool              `json:"hasAudienceCreators,omitempty"`
+	HasAudienceCreatorsWith []*GroupWhereInput `json:"hasAudienceCreatorsWith,omitempty"`
+	// audience_member_creators edge predicates
+	HasAudienceMemberCreators     *bool              `json:"hasAudienceMemberCreators,omitempty"`
+	HasAudienceMemberCreatorsWith []*GroupWhereInput `json:"hasAudienceMemberCreatorsWith,omitempty"`
 	// campaign_creators edge predicates
 	HasCampaignCreators     *bool              `json:"hasCampaignCreators,omitempty"`
 	HasCampaignCreatorsWith []*GroupWhereInput `json:"hasCampaignCreatorsWith,omitempty"`
@@ -28539,6 +29246,12 @@ type OrganizationWhereInput struct {
 	// campaign_targets edge predicates
 	HasCampaignTargets     *bool                       `json:"hasCampaignTargets,omitempty"`
 	HasCampaignTargetsWith []*CampaignTargetWhereInput `json:"hasCampaignTargetsWith,omitempty"`
+	// audiences edge predicates
+	HasAudiences     *bool                 `json:"hasAudiences,omitempty"`
+	HasAudiencesWith []*AudienceWhereInput `json:"hasAudiencesWith,omitempty"`
+	// audience_members edge predicates
+	HasAudienceMembers     *bool                       `json:"hasAudienceMembers,omitempty"`
+	HasAudienceMembersWith []*AudienceMemberWhereInput `json:"hasAudienceMembersWith,omitempty"`
 	// entity_types edge predicates
 	HasEntityTypes     *bool                   `json:"hasEntityTypes,omitempty"`
 	HasEntityTypesWith []*EntityTypeWhereInput `json:"hasEntityTypesWith,omitempty"`
@@ -35264,6 +35977,8 @@ type SearchResults struct {
 	Assessments           *AssessmentConnection           `json:"assessments,omitempty"`
 	AssessmentResponses   *AssessmentResponseConnection   `json:"assessmentResponses,omitempty"`
 	Assets                *AssetConnection                `json:"assets,omitempty"`
+	Audiences             *AudienceConnection             `json:"audiences,omitempty"`
+	AudienceMembers       *AudienceMemberConnection       `json:"audienceMembers,omitempty"`
 	Campaigns             *CampaignConnection             `json:"campaigns,omitempty"`
 	CampaignTargets       *CampaignTargetConnection       `json:"campaignTargets,omitempty"`
 	Contacts              *ContactConnection              `json:"contacts,omitempty"`
@@ -36939,6 +37654,7 @@ type Subscriber struct {
 	Events          *EventConnection          `json:"events"`
 	TrustCenter     *TrustCenter              `json:"trustCenter,omitempty"`
 	CampaignTargets *CampaignTargetConnection `json:"campaignTargets"`
+	AudienceMembers *AudienceMemberConnection `json:"audienceMembers"`
 	Contact         *Contact                  `json:"contact,omitempty"`
 	User            *User                     `json:"user,omitempty"`
 }
@@ -37209,6 +37925,9 @@ type SubscriberWhereInput struct {
 	// campaign_targets edge predicates
 	HasCampaignTargets     *bool                       `json:"hasCampaignTargets,omitempty"`
 	HasCampaignTargetsWith []*CampaignTargetWhereInput `json:"hasCampaignTargetsWith,omitempty"`
+	// audience_members edge predicates
+	HasAudienceMembers     *bool                       `json:"hasAudienceMembers,omitempty"`
+	HasAudienceMembersWith []*AudienceMemberWhereInput `json:"hasAudienceMembersWith,omitempty"`
 	// contact edge predicates
 	HasContact     *bool                `json:"hasContact,omitempty"`
 	HasContactWith []*ContactWhereInput `json:"hasContactWith,omitempty"`
@@ -42621,6 +43340,58 @@ type UpdateAssetInput struct {
 	ClearConnectedFrom           *bool            `json:"clearConnectedFrom,omitempty"`
 }
 
+// UpdateAudienceInput is used for update Audience object.
+// Input was generated by ent.
+type UpdateAudienceInput struct {
+	// tags associated with the object
+	Tags       []string `json:"tags,omitempty"`
+	AppendTags []string `json:"appendTags,omitempty"`
+	ClearTags  *bool    `json:"clearTags,omitempty"`
+	// the name of the audience
+	Name *string `json:"name,omitempty"`
+	// the description of the audience
+	Description      *string `json:"description,omitempty"`
+	ClearDescription *bool   `json:"clearDescription,omitempty"`
+	// the type of audience
+	AudienceType *enums.AudienceType `json:"audienceType,omitempty"`
+	// filter definition used to resolve dynamic audience members
+	Filters                 map[string]any `json:"filters,omitempty"`
+	ClearFilters            *bool          `json:"clearFilters,omitempty"`
+	OwnerID                 *string        `json:"ownerID,omitempty"`
+	ClearOwner              *bool          `json:"clearOwner,omitempty"`
+	AddAudienceMemberIDs    []string       `json:"addAudienceMemberIDs,omitempty"`
+	RemoveAudienceMemberIDs []string       `json:"removeAudienceMemberIDs,omitempty"`
+	ClearAudienceMembers    *bool          `json:"clearAudienceMembers,omitempty"`
+	AddCampaignIDs          []string       `json:"addCampaignIDs,omitempty"`
+	RemoveCampaignIDs       []string       `json:"removeCampaignIDs,omitempty"`
+	ClearCampaigns          *bool          `json:"clearCampaigns,omitempty"`
+}
+
+// UpdateAudienceMemberInput is used for update AudienceMember object.
+// Input was generated by ent.
+type UpdateAudienceMemberInput struct {
+	// the email address for the audience member
+	Email *string `json:"email,omitempty"`
+	// the name of the audience member, if known
+	FullName      *string `json:"fullName,omitempty"`
+	ClearFullName *bool   `json:"clearFullName,omitempty"`
+	// additional metadata about the audience member
+	Metadata            map[string]any `json:"metadata,omitempty"`
+	ClearMetadata       *bool          `json:"clearMetadata,omitempty"`
+	OwnerID             *string        `json:"ownerID,omitempty"`
+	ClearOwner          *bool          `json:"clearOwner,omitempty"`
+	ContactID           *string        `json:"contactID,omitempty"`
+	ClearContact        *bool          `json:"clearContact,omitempty"`
+	UserID              *string        `json:"userID,omitempty"`
+	ClearUser           *bool          `json:"clearUser,omitempty"`
+	GroupID             *string        `json:"groupID,omitempty"`
+	ClearGroup          *bool          `json:"clearGroup,omitempty"`
+	SubscriberID        *string        `json:"subscriberID,omitempty"`
+	ClearSubscriber     *bool          `json:"clearSubscriber,omitempty"`
+	IdentityHolderID    *string        `json:"identityHolderID,omitempty"`
+	ClearIdentityHolder *bool          `json:"clearIdentityHolder,omitempty"`
+}
+
 // UpdateCampaignInput is used for update Campaign object.
 // Input was generated by ent.
 type UpdateCampaignInput struct {
@@ -42738,6 +43509,9 @@ type UpdateCampaignInput struct {
 	AddIdentityHolderIDs        []string `json:"addIdentityHolderIDs,omitempty"`
 	RemoveIdentityHolderIDs     []string `json:"removeIdentityHolderIDs,omitempty"`
 	ClearIdentityHolders        *bool    `json:"clearIdentityHolders,omitempty"`
+	AddAudienceIDs              []string `json:"addAudienceIDs,omitempty"`
+	RemoveAudienceIDs           []string `json:"removeAudienceIDs,omitempty"`
+	ClearAudiences              *bool    `json:"clearAudiences,omitempty"`
 	AddControlIDs               []string `json:"addControlIDs,omitempty"`
 	RemoveControlIDs            []string `json:"removeControlIDs,omitempty"`
 	ClearControls               *bool    `json:"clearControls,omitempty"`
@@ -42868,6 +43642,9 @@ type UpdateContactInput struct {
 	AddCampaignTargetIDs    []string         `json:"addCampaignTargetIDs,omitempty"`
 	RemoveCampaignTargetIDs []string         `json:"removeCampaignTargetIDs,omitempty"`
 	ClearCampaignTargets    *bool            `json:"clearCampaignTargets,omitempty"`
+	AddAudienceMemberIDs    []string         `json:"addAudienceMemberIDs,omitempty"`
+	RemoveAudienceMemberIDs []string         `json:"removeAudienceMemberIDs,omitempty"`
+	ClearAudienceMembers    *bool            `json:"clearAudienceMembers,omitempty"`
 	AddFileIDs              []string         `json:"addFileIDs,omitempty"`
 	RemoveFileIDs           []string         `json:"removeFileIDs,omitempty"`
 	ClearFiles              *bool            `json:"clearFiles,omitempty"`
@@ -44757,6 +45534,9 @@ type UpdateGroupInput struct {
 	AddCampaignTargetIDs                       []string                      `json:"addCampaignTargetIDs,omitempty"`
 	RemoveCampaignTargetIDs                    []string                      `json:"removeCampaignTargetIDs,omitempty"`
 	ClearCampaignTargets                       *bool                         `json:"clearCampaignTargets,omitempty"`
+	AddAudienceMemberIDs                       []string                      `json:"addAudienceMemberIDs,omitempty"`
+	RemoveAudienceMemberIDs                    []string                      `json:"removeAudienceMemberIDs,omitempty"`
+	ClearAudienceMembers                       *bool                         `json:"clearAudienceMembers,omitempty"`
 	AddGroupMembers                            []*CreateGroupMembershipInput `json:"addGroupMembers,omitempty"`
 	RemoveGroupMembers                         []string                      `json:"removeGroupMembers,omitempty"`
 	UpdateGroupSettings                        *UpdateGroupSettingInput      `json:"updateGroupSettings,omitempty"`
@@ -44959,6 +45739,9 @@ type UpdateIdentityHolderInput struct {
 	AddFileIDs                  []string `json:"addFileIDs,omitempty"`
 	RemoveFileIDs               []string `json:"removeFileIDs,omitempty"`
 	ClearFiles                  *bool    `json:"clearFiles,omitempty"`
+	AddAudienceMemberIDs        []string `json:"addAudienceMemberIDs,omitempty"`
+	RemoveAudienceMemberIDs     []string `json:"removeAudienceMemberIDs,omitempty"`
+	ClearAudienceMembers        *bool    `json:"clearAudienceMembers,omitempty"`
 	AddFindingIDs               []string `json:"addFindingIDs,omitempty"`
 	RemoveFindingIDs            []string `json:"removeFindingIDs,omitempty"`
 	ClearFindings               *bool    `json:"clearFindings,omitempty"`
@@ -45642,6 +46425,12 @@ type UpdateOrganizationInput struct {
 	AddAssetCreatorIDs                         []string                        `json:"addAssetCreatorIDs,omitempty"`
 	RemoveAssetCreatorIDs                      []string                        `json:"removeAssetCreatorIDs,omitempty"`
 	ClearAssetCreators                         *bool                           `json:"clearAssetCreators,omitempty"`
+	AddAudienceCreatorIDs                      []string                        `json:"addAudienceCreatorIDs,omitempty"`
+	RemoveAudienceCreatorIDs                   []string                        `json:"removeAudienceCreatorIDs,omitempty"`
+	ClearAudienceCreators                      *bool                           `json:"clearAudienceCreators,omitempty"`
+	AddAudienceMemberCreatorIDs                []string                        `json:"addAudienceMemberCreatorIDs,omitempty"`
+	RemoveAudienceMemberCreatorIDs             []string                        `json:"removeAudienceMemberCreatorIDs,omitempty"`
+	ClearAudienceMemberCreators                *bool                           `json:"clearAudienceMemberCreators,omitempty"`
 	AddCampaignCreatorIDs                      []string                        `json:"addCampaignCreatorIDs,omitempty"`
 	RemoveCampaignCreatorIDs                   []string                        `json:"removeCampaignCreatorIDs,omitempty"`
 	ClearCampaignCreators                      *bool                           `json:"clearCampaignCreators,omitempty"`
@@ -45937,6 +46726,12 @@ type UpdateOrganizationInput struct {
 	AddCampaignTargetIDs                       []string                        `json:"addCampaignTargetIDs,omitempty"`
 	RemoveCampaignTargetIDs                    []string                        `json:"removeCampaignTargetIDs,omitempty"`
 	ClearCampaignTargets                       *bool                           `json:"clearCampaignTargets,omitempty"`
+	AddAudienceIDs                             []string                        `json:"addAudienceIDs,omitempty"`
+	RemoveAudienceIDs                          []string                        `json:"removeAudienceIDs,omitempty"`
+	ClearAudiences                             *bool                           `json:"clearAudiences,omitempty"`
+	AddAudienceMemberIDs                       []string                        `json:"addAudienceMemberIDs,omitempty"`
+	RemoveAudienceMemberIDs                    []string                        `json:"removeAudienceMemberIDs,omitempty"`
+	ClearAudienceMembers                       *bool                           `json:"clearAudienceMembers,omitempty"`
 	AddEntityTypeIDs                           []string                        `json:"addEntityTypeIDs,omitempty"`
 	RemoveEntityTypeIDs                        []string                        `json:"removeEntityTypeIDs,omitempty"`
 	ClearEntityTypes                           *bool                           `json:"clearEntityTypes,omitempty"`
@@ -47657,6 +48452,9 @@ type UpdateSubscriberInput struct {
 	AddCampaignTargetIDs    []string `json:"addCampaignTargetIDs,omitempty"`
 	RemoveCampaignTargetIDs []string `json:"removeCampaignTargetIDs,omitempty"`
 	ClearCampaignTargets    *bool    `json:"clearCampaignTargets,omitempty"`
+	AddAudienceMemberIDs    []string `json:"addAudienceMemberIDs,omitempty"`
+	RemoveAudienceMemberIDs []string `json:"removeAudienceMemberIDs,omitempty"`
+	ClearAudienceMembers    *bool    `json:"clearAudienceMembers,omitempty"`
 	ContactID               *string  `json:"contactID,omitempty"`
 	ClearContact            *bool    `json:"clearContact,omitempty"`
 	UserID                  *string  `json:"userID,omitempty"`
@@ -48381,6 +49179,9 @@ type UpdateUserInput struct {
 	AddCampaignTargetIDs           []string `json:"addCampaignTargetIDs,omitempty"`
 	RemoveCampaignTargetIDs        []string `json:"removeCampaignTargetIDs,omitempty"`
 	ClearCampaignTargets           *bool    `json:"clearCampaignTargets,omitempty"`
+	AddAudienceMemberIDs           []string `json:"addAudienceMemberIDs,omitempty"`
+	RemoveAudienceMemberIDs        []string `json:"removeAudienceMemberIDs,omitempty"`
+	ClearAudienceMembers           *bool    `json:"clearAudienceMembers,omitempty"`
 	AddSubcontrolIDs               []string `json:"addSubcontrolIDs,omitempty"`
 	RemoveSubcontrolIDs            []string `json:"removeSubcontrolIDs,omitempty"`
 	ClearSubcontrols               *bool    `json:"clearSubcontrols,omitempty"`
@@ -48855,6 +49656,7 @@ type User struct {
 	ActionPlans            *ActionPlanConnection          `json:"actionPlans"`
 	Campaigns              *CampaignConnection            `json:"campaigns"`
 	CampaignTargets        *CampaignTargetConnection      `json:"campaignTargets"`
+	AudienceMembers        *AudienceMemberConnection      `json:"audienceMembers"`
 	Subcontrols            *SubcontrolConnection          `json:"subcontrols"`
 	AssignerTasks          *TaskConnection                `json:"assignerTasks"`
 	AssigneeTasks          *TaskConnection                `json:"assigneeTasks"`
@@ -49547,6 +50349,9 @@ type UserWhereInput struct {
 	// campaign_targets edge predicates
 	HasCampaignTargets     *bool                       `json:"hasCampaignTargets,omitempty"`
 	HasCampaignTargetsWith []*CampaignTargetWhereInput `json:"hasCampaignTargetsWith,omitempty"`
+	// audience_members edge predicates
+	HasAudienceMembers     *bool                       `json:"hasAudienceMembers,omitempty"`
+	HasAudienceMembersWith []*AudienceMemberWhereInput `json:"hasAudienceMembersWith,omitempty"`
 	// subcontrols edge predicates
 	HasSubcontrols     *bool                   `json:"hasSubcontrols,omitempty"`
 	HasSubcontrolsWith []*SubcontrolWhereInput `json:"hasSubcontrolsWith,omitempty"`
@@ -54523,6 +55328,126 @@ func (e *AssetOrderField) UnmarshalJSON(b []byte) error {
 }
 
 func (e AssetOrderField) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
+}
+
+// Properties by which AudienceMember connections can be ordered.
+type AudienceMemberOrderField string
+
+const (
+	AudienceMemberOrderFieldCreatedAt AudienceMemberOrderField = "created_at"
+	AudienceMemberOrderFieldUpdatedAt AudienceMemberOrderField = "updated_at"
+	AudienceMemberOrderFieldEmail     AudienceMemberOrderField = "email"
+	AudienceMemberOrderFieldFullName  AudienceMemberOrderField = "full_name"
+)
+
+var AllAudienceMemberOrderField = []AudienceMemberOrderField{
+	AudienceMemberOrderFieldCreatedAt,
+	AudienceMemberOrderFieldUpdatedAt,
+	AudienceMemberOrderFieldEmail,
+	AudienceMemberOrderFieldFullName,
+}
+
+func (e AudienceMemberOrderField) IsValid() bool {
+	switch e {
+	case AudienceMemberOrderFieldCreatedAt, AudienceMemberOrderFieldUpdatedAt, AudienceMemberOrderFieldEmail, AudienceMemberOrderFieldFullName:
+		return true
+	}
+	return false
+}
+
+func (e AudienceMemberOrderField) String() string {
+	return string(e)
+}
+
+func (e *AudienceMemberOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = AudienceMemberOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid AudienceMemberOrderField", str)
+	}
+	return nil
+}
+
+func (e AudienceMemberOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *AudienceMemberOrderField) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e AudienceMemberOrderField) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
+}
+
+// Properties by which Audience connections can be ordered.
+type AudienceOrderField string
+
+const (
+	AudienceOrderFieldCreatedAt AudienceOrderField = "created_at"
+	AudienceOrderFieldUpdatedAt AudienceOrderField = "updated_at"
+	AudienceOrderFieldName      AudienceOrderField = "name"
+	AudienceOrderFieldType      AudienceOrderField = "TYPE"
+)
+
+var AllAudienceOrderField = []AudienceOrderField{
+	AudienceOrderFieldCreatedAt,
+	AudienceOrderFieldUpdatedAt,
+	AudienceOrderFieldName,
+	AudienceOrderFieldType,
+}
+
+func (e AudienceOrderField) IsValid() bool {
+	switch e {
+	case AudienceOrderFieldCreatedAt, AudienceOrderFieldUpdatedAt, AudienceOrderFieldName, AudienceOrderFieldType:
+		return true
+	}
+	return false
+}
+
+func (e AudienceOrderField) String() string {
+	return string(e)
+}
+
+func (e *AudienceOrderField) UnmarshalGQL(v any) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = AudienceOrderField(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid AudienceOrderField", str)
+	}
+	return nil
+}
+
+func (e AudienceOrderField) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *AudienceOrderField) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e AudienceOrderField) MarshalJSON() ([]byte, error) {
 	var buf bytes.Buffer
 	e.MarshalGQL(&buf)
 	return buf.Bytes(), nil

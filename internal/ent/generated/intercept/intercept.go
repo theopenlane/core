@@ -13,6 +13,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/audience"
+	"github.com/theopenlane/core/internal/ent/generated/audiencemember"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/checkresult"
@@ -307,6 +309,60 @@ func (f TraverseAsset) Traverse(ctx context.Context, q generated.Query) error {
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *generated.AssetQuery", q)
+}
+
+// The AudienceFunc type is an adapter to allow the use of ordinary function as a Querier.
+type AudienceFunc func(context.Context, *generated.AudienceQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f AudienceFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.AudienceQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.AudienceQuery", q)
+}
+
+// The TraverseAudience type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseAudience func(context.Context, *generated.AudienceQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseAudience) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseAudience) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.AudienceQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.AudienceQuery", q)
+}
+
+// The AudienceMemberFunc type is an adapter to allow the use of ordinary function as a Querier.
+type AudienceMemberFunc func(context.Context, *generated.AudienceMemberQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f AudienceMemberFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.AudienceMemberQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.AudienceMemberQuery", q)
+}
+
+// The TraverseAudienceMember type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseAudienceMember func(context.Context, *generated.AudienceMemberQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseAudienceMember) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseAudienceMember) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.AudienceMemberQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.AudienceMemberQuery", q)
 }
 
 // The CampaignFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -3076,6 +3132,10 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.AssessmentResponseQuery, predicate.AssessmentResponse, assessmentresponse.OrderOption]{typ: generated.TypeAssessmentResponse, tq: q}, nil
 	case *generated.AssetQuery:
 		return &query[*generated.AssetQuery, predicate.Asset, asset.OrderOption]{typ: generated.TypeAsset, tq: q}, nil
+	case *generated.AudienceQuery:
+		return &query[*generated.AudienceQuery, predicate.Audience, audience.OrderOption]{typ: generated.TypeAudience, tq: q}, nil
+	case *generated.AudienceMemberQuery:
+		return &query[*generated.AudienceMemberQuery, predicate.AudienceMember, audiencemember.OrderOption]{typ: generated.TypeAudienceMember, tq: q}, nil
 	case *generated.CampaignQuery:
 		return &query[*generated.CampaignQuery, predicate.Campaign, campaign.OrderOption]{typ: generated.TypeCampaign, tq: q}, nil
 	case *generated.CampaignTargetQuery:

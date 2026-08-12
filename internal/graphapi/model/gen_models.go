@@ -198,6 +198,90 @@ type AssetUpdatePayload struct {
 	Asset *generated.Asset `json:"asset"`
 }
 
+// Return response for createBulkAudience mutation
+type AudienceBulkCreatePayload struct {
+	// Created audiences
+	Audiences []*generated.Audience `json:"audiences,omitempty"`
+}
+
+// Return response for deleteBulkAudience mutation
+type AudienceBulkDeletePayload struct {
+	// Deleted audience IDs
+	DeletedIDs []string `json:"deletedIDs"`
+	// Error returned when the bulk delete is only partially applied
+	Error *string `json:"error,omitempty"`
+	// IDs of audiences that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs,omitempty"`
+}
+
+// Return response for updateBulkAudience mutation
+type AudienceBulkUpdatePayload struct {
+	// Updated audiences
+	Audiences []*generated.Audience `json:"audiences,omitempty"`
+	// IDs of the updated audiences
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
+// Return response for createAudience mutation
+type AudienceCreatePayload struct {
+	// Created audience
+	Audience *generated.Audience `json:"audience"`
+}
+
+// Return response for deleteAudience mutation
+type AudienceDeletePayload struct {
+	// Deleted audience ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for createBulkAudienceMember mutation
+type AudienceMemberBulkCreatePayload struct {
+	// Created audienceMembers
+	AudienceMembers []*generated.AudienceMember `json:"audienceMembers,omitempty"`
+}
+
+// Return response for deleteBulkAudienceMember mutation
+type AudienceMemberBulkDeletePayload struct {
+	// Deleted audienceMember IDs
+	DeletedIDs []string `json:"deletedIDs"`
+	// Error returned when the bulk delete is only partially applied
+	Error *string `json:"error,omitempty"`
+	// IDs of audienceMembers that were not deleted
+	NotDeletedIDs []string `json:"notDeletedIDs,omitempty"`
+}
+
+// Return response for updateBulkAudienceMember mutation
+type AudienceMemberBulkUpdatePayload struct {
+	// Updated audienceMembers
+	AudienceMembers []*generated.AudienceMember `json:"audienceMembers,omitempty"`
+	// IDs of the updated audienceMembers
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
+// Return response for createAudienceMember mutation
+type AudienceMemberCreatePayload struct {
+	// Created audienceMember
+	AudienceMember *generated.AudienceMember `json:"audienceMember"`
+}
+
+// Return response for deleteAudienceMember mutation
+type AudienceMemberDeletePayload struct {
+	// Deleted audienceMember ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateAudienceMember mutation
+type AudienceMemberUpdatePayload struct {
+	// Updated audienceMember
+	AudienceMember *generated.AudienceMember `json:"audienceMember"`
+}
+
+// Return response for updateAudience mutation
+type AudienceUpdatePayload struct {
+	// Updated audience
+	Audience *generated.Audience `json:"audience"`
+}
+
 // Return response for approveNDARequests or denyNDARequests mutation
 type BulkUpdateStatusPayload struct {
 	// Updated nda request IDs
@@ -3014,6 +3098,8 @@ type SearchResults struct {
 	Assessments           *generated.AssessmentConnection           `json:"assessments,omitempty"`
 	AssessmentResponses   *generated.AssessmentResponseConnection   `json:"assessmentResponses,omitempty"`
 	Assets                *generated.AssetConnection                `json:"assets,omitempty"`
+	Audiences             *generated.AudienceConnection             `json:"audiences,omitempty"`
+	AudienceMembers       *generated.AudienceMemberConnection       `json:"audienceMembers,omitempty"`
 	Campaigns             *generated.CampaignConnection             `json:"campaigns,omitempty"`
 	CampaignTargets       *generated.CampaignTargetConnection       `json:"campaignTargets,omitempty"`
 	Contacts              *generated.ContactConnection              `json:"contacts,omitempty"`

@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/generated/audiencemember"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
@@ -414,6 +415,21 @@ func (_u *ContactUpdate) AddCampaignTargets(v ...*CampaignTarget) *ContactUpdate
 	return _u.AddCampaignTargetIDs(ids...)
 }
 
+// AddAudienceMemberIDs adds the "audience_members" edge to the AudienceMember entity by IDs.
+func (_u *ContactUpdate) AddAudienceMemberIDs(ids ...string) *ContactUpdate {
+	_u.mutation.AddAudienceMemberIDs(ids...)
+	return _u
+}
+
+// AddAudienceMembers adds the "audience_members" edges to the AudienceMember entity.
+func (_u *ContactUpdate) AddAudienceMembers(v ...*AudienceMember) *ContactUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddAudienceMemberIDs(ids...)
+}
+
 // AddFileIDs adds the "files" edge to the File entity by IDs.
 func (_u *ContactUpdate) AddFileIDs(ids ...string) *ContactUpdate {
 	_u.mutation.AddFileIDs(ids...)
@@ -516,6 +532,27 @@ func (_u *ContactUpdate) RemoveCampaignTargets(v ...*CampaignTarget) *ContactUpd
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveCampaignTargetIDs(ids...)
+}
+
+// ClearAudienceMembers clears all "audience_members" edges to the AudienceMember entity.
+func (_u *ContactUpdate) ClearAudienceMembers() *ContactUpdate {
+	_u.mutation.ClearAudienceMembers()
+	return _u
+}
+
+// RemoveAudienceMemberIDs removes the "audience_members" edge to AudienceMember entities by IDs.
+func (_u *ContactUpdate) RemoveAudienceMemberIDs(ids ...string) *ContactUpdate {
+	_u.mutation.RemoveAudienceMemberIDs(ids...)
+	return _u
+}
+
+// RemoveAudienceMembers removes "audience_members" edges to AudienceMember entities.
+func (_u *ContactUpdate) RemoveAudienceMembers(v ...*AudienceMember) *ContactUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveAudienceMemberIDs(ids...)
 }
 
 // ClearFiles clears all "files" edges to the File entity.
@@ -924,6 +961,54 @@ func (_u *ContactUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.CampaignTarget
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AudienceMembersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   contact.AudienceMembersTable,
+			Columns: []string{contact.AudienceMembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(audiencemember.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AudienceMember
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedAudienceMembersIDs(); len(nodes) > 0 && !_u.mutation.AudienceMembersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   contact.AudienceMembersTable,
+			Columns: []string{contact.AudienceMembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(audiencemember.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AudienceMember
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AudienceMembersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   contact.AudienceMembersTable,
+			Columns: []string{contact.AudienceMembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(audiencemember.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AudienceMember
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1423,6 +1508,21 @@ func (_u *ContactUpdateOne) AddCampaignTargets(v ...*CampaignTarget) *ContactUpd
 	return _u.AddCampaignTargetIDs(ids...)
 }
 
+// AddAudienceMemberIDs adds the "audience_members" edge to the AudienceMember entity by IDs.
+func (_u *ContactUpdateOne) AddAudienceMemberIDs(ids ...string) *ContactUpdateOne {
+	_u.mutation.AddAudienceMemberIDs(ids...)
+	return _u
+}
+
+// AddAudienceMembers adds the "audience_members" edges to the AudienceMember entity.
+func (_u *ContactUpdateOne) AddAudienceMembers(v ...*AudienceMember) *ContactUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddAudienceMemberIDs(ids...)
+}
+
 // AddFileIDs adds the "files" edge to the File entity by IDs.
 func (_u *ContactUpdateOne) AddFileIDs(ids ...string) *ContactUpdateOne {
 	_u.mutation.AddFileIDs(ids...)
@@ -1525,6 +1625,27 @@ func (_u *ContactUpdateOne) RemoveCampaignTargets(v ...*CampaignTarget) *Contact
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveCampaignTargetIDs(ids...)
+}
+
+// ClearAudienceMembers clears all "audience_members" edges to the AudienceMember entity.
+func (_u *ContactUpdateOne) ClearAudienceMembers() *ContactUpdateOne {
+	_u.mutation.ClearAudienceMembers()
+	return _u
+}
+
+// RemoveAudienceMemberIDs removes the "audience_members" edge to AudienceMember entities by IDs.
+func (_u *ContactUpdateOne) RemoveAudienceMemberIDs(ids ...string) *ContactUpdateOne {
+	_u.mutation.RemoveAudienceMemberIDs(ids...)
+	return _u
+}
+
+// RemoveAudienceMembers removes "audience_members" edges to AudienceMember entities.
+func (_u *ContactUpdateOne) RemoveAudienceMembers(v ...*AudienceMember) *ContactUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveAudienceMemberIDs(ids...)
 }
 
 // ClearFiles clears all "files" edges to the File entity.
@@ -1963,6 +2084,54 @@ func (_u *ContactUpdateOne) sqlSave(ctx context.Context) (_node *Contact, err er
 			},
 		}
 		edge.Schema = _u.schemaConfig.CampaignTarget
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AudienceMembersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   contact.AudienceMembersTable,
+			Columns: []string{contact.AudienceMembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(audiencemember.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AudienceMember
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedAudienceMembersIDs(); len(nodes) > 0 && !_u.mutation.AudienceMembersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   contact.AudienceMembersTable,
+			Columns: []string{contact.AudienceMembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(audiencemember.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AudienceMember
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AudienceMembersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   contact.AudienceMembersTable,
+			Columns: []string{contact.AudienceMembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(audiencemember.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AudienceMember
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

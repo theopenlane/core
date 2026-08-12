@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/audiencemember"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
@@ -966,6 +967,21 @@ func (_u *IdentityHolderUpdate) AddFiles(v ...*File) *IdentityHolderUpdate {
 	return _u.AddFileIDs(ids...)
 }
 
+// AddAudienceMemberIDs adds the "audience_members" edge to the AudienceMember entity by IDs.
+func (_u *IdentityHolderUpdate) AddAudienceMemberIDs(ids ...string) *IdentityHolderUpdate {
+	_u.mutation.AddAudienceMemberIDs(ids...)
+	return _u
+}
+
+// AddAudienceMembers adds the "audience_members" edges to the AudienceMember entity.
+func (_u *IdentityHolderUpdate) AddAudienceMembers(v ...*AudienceMember) *IdentityHolderUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddAudienceMemberIDs(ids...)
+}
+
 // AddFindingIDs adds the "findings" edge to the Finding entity by IDs.
 func (_u *IdentityHolderUpdate) AddFindingIDs(ids ...string) *IdentityHolderUpdate {
 	_u.mutation.AddFindingIDs(ids...)
@@ -1379,6 +1395,27 @@ func (_u *IdentityHolderUpdate) RemoveFiles(v ...*File) *IdentityHolderUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveFileIDs(ids...)
+}
+
+// ClearAudienceMembers clears all "audience_members" edges to the AudienceMember entity.
+func (_u *IdentityHolderUpdate) ClearAudienceMembers() *IdentityHolderUpdate {
+	_u.mutation.ClearAudienceMembers()
+	return _u
+}
+
+// RemoveAudienceMemberIDs removes the "audience_members" edge to AudienceMember entities by IDs.
+func (_u *IdentityHolderUpdate) RemoveAudienceMemberIDs(ids ...string) *IdentityHolderUpdate {
+	_u.mutation.RemoveAudienceMemberIDs(ids...)
+	return _u
+}
+
+// RemoveAudienceMembers removes "audience_members" edges to AudienceMember entities.
+func (_u *IdentityHolderUpdate) RemoveAudienceMembers(v ...*AudienceMember) *IdentityHolderUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveAudienceMemberIDs(ids...)
 }
 
 // ClearFindings clears all "findings" edges to the Finding entity.
@@ -2626,6 +2663,54 @@ func (_u *IdentityHolderUpdate) sqlSave(ctx context.Context) (_node int, err err
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.AudienceMembersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   identityholder.AudienceMembersTable,
+			Columns: []string{identityholder.AudienceMembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(audiencemember.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AudienceMember
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedAudienceMembersIDs(); len(nodes) > 0 && !_u.mutation.AudienceMembersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   identityholder.AudienceMembersTable,
+			Columns: []string{identityholder.AudienceMembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(audiencemember.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AudienceMember
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AudienceMembersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   identityholder.AudienceMembersTable,
+			Columns: []string{identityholder.AudienceMembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(audiencemember.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AudienceMember
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.FindingsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -3787,6 +3872,21 @@ func (_u *IdentityHolderUpdateOne) AddFiles(v ...*File) *IdentityHolderUpdateOne
 	return _u.AddFileIDs(ids...)
 }
 
+// AddAudienceMemberIDs adds the "audience_members" edge to the AudienceMember entity by IDs.
+func (_u *IdentityHolderUpdateOne) AddAudienceMemberIDs(ids ...string) *IdentityHolderUpdateOne {
+	_u.mutation.AddAudienceMemberIDs(ids...)
+	return _u
+}
+
+// AddAudienceMembers adds the "audience_members" edges to the AudienceMember entity.
+func (_u *IdentityHolderUpdateOne) AddAudienceMembers(v ...*AudienceMember) *IdentityHolderUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddAudienceMemberIDs(ids...)
+}
+
 // AddFindingIDs adds the "findings" edge to the Finding entity by IDs.
 func (_u *IdentityHolderUpdateOne) AddFindingIDs(ids ...string) *IdentityHolderUpdateOne {
 	_u.mutation.AddFindingIDs(ids...)
@@ -4200,6 +4300,27 @@ func (_u *IdentityHolderUpdateOne) RemoveFiles(v ...*File) *IdentityHolderUpdate
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveFileIDs(ids...)
+}
+
+// ClearAudienceMembers clears all "audience_members" edges to the AudienceMember entity.
+func (_u *IdentityHolderUpdateOne) ClearAudienceMembers() *IdentityHolderUpdateOne {
+	_u.mutation.ClearAudienceMembers()
+	return _u
+}
+
+// RemoveAudienceMemberIDs removes the "audience_members" edge to AudienceMember entities by IDs.
+func (_u *IdentityHolderUpdateOne) RemoveAudienceMemberIDs(ids ...string) *IdentityHolderUpdateOne {
+	_u.mutation.RemoveAudienceMemberIDs(ids...)
+	return _u
+}
+
+// RemoveAudienceMembers removes "audience_members" edges to AudienceMember entities.
+func (_u *IdentityHolderUpdateOne) RemoveAudienceMembers(v ...*AudienceMember) *IdentityHolderUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveAudienceMemberIDs(ids...)
 }
 
 // ClearFindings clears all "findings" edges to the Finding entity.
@@ -5472,6 +5593,54 @@ func (_u *IdentityHolderUpdateOne) sqlSave(ctx context.Context) (_node *Identity
 			},
 		}
 		edge.Schema = _u.schemaConfig.IdentityHolderFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AudienceMembersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   identityholder.AudienceMembersTable,
+			Columns: []string{identityholder.AudienceMembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(audiencemember.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AudienceMember
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedAudienceMembersIDs(); len(nodes) > 0 && !_u.mutation.AudienceMembersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   identityholder.AudienceMembersTable,
+			Columns: []string{identityholder.AudienceMembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(audiencemember.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AudienceMember
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AudienceMembersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   identityholder.AudienceMembersTable,
+			Columns: []string{identityholder.AudienceMembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(audiencemember.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AudienceMember
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

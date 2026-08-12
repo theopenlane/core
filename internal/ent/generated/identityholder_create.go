@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/audiencemember"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
@@ -822,6 +823,21 @@ func (_c *IdentityHolderCreate) AddFiles(v ...*File) *IdentityHolderCreate {
 	return _c.AddFileIDs(ids...)
 }
 
+// AddAudienceMemberIDs adds the "audience_members" edge to the AudienceMember entity by IDs.
+func (_c *IdentityHolderCreate) AddAudienceMemberIDs(ids ...string) *IdentityHolderCreate {
+	_c.mutation.AddAudienceMemberIDs(ids...)
+	return _c
+}
+
+// AddAudienceMembers adds the "audience_members" edges to the AudienceMember entity.
+func (_c *IdentityHolderCreate) AddAudienceMembers(v ...*AudienceMember) *IdentityHolderCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddAudienceMemberIDs(ids...)
+}
+
 // AddFindingIDs adds the "findings" edge to the Finding entity by IDs.
 func (_c *IdentityHolderCreate) AddFindingIDs(ids ...string) *IdentityHolderCreate {
 	_c.mutation.AddFindingIDs(ids...)
@@ -1568,6 +1584,23 @@ func (_c *IdentityHolderCreate) createSpec() (*IdentityHolder, *sqlgraph.CreateS
 			},
 		}
 		edge.Schema = _c.schemaConfig.IdentityHolderFiles
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.AudienceMembersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   identityholder.AudienceMembersTable,
+			Columns: []string{identityholder.AudienceMembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(audiencemember.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.AudienceMember
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

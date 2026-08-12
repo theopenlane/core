@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/audiencemember"
 	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/event"
@@ -348,6 +349,21 @@ func (_c *SubscriberCreate) AddCampaignTargets(v ...*CampaignTarget) *Subscriber
 	return _c.AddCampaignTargetIDs(ids...)
 }
 
+// AddAudienceMemberIDs adds the "audience_members" edge to the AudienceMember entity by IDs.
+func (_c *SubscriberCreate) AddAudienceMemberIDs(ids ...string) *SubscriberCreate {
+	_c.mutation.AddAudienceMemberIDs(ids...)
+	return _c
+}
+
+// AddAudienceMembers adds the "audience_members" edges to the AudienceMember entity.
+func (_c *SubscriberCreate) AddAudienceMembers(v ...*AudienceMember) *SubscriberCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddAudienceMemberIDs(ids...)
+}
+
 // SetContact sets the "contact" edge to the Contact entity.
 func (_c *SubscriberCreate) SetContact(v *Contact) *SubscriberCreate {
 	return _c.SetContactID(v.ID)
@@ -665,6 +681,23 @@ func (_c *SubscriberCreate) createSpec() (*Subscriber, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.CampaignTarget
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.AudienceMembersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   subscriber.AudienceMembersTable,
+			Columns: []string{subscriber.AudienceMembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(audiencemember.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.AudienceMember
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

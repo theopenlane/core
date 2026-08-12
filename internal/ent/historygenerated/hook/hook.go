@@ -59,6 +59,30 @@ func (f AssetHistoryFunc) Mutate(ctx context.Context, m historygenerated.Mutatio
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *historygenerated.AssetHistoryMutation", m)
 }
 
+// The AudienceHistoryFunc type is an adapter to allow the use of ordinary
+// function as AudienceHistory mutator.
+type AudienceHistoryFunc func(context.Context, *historygenerated.AudienceHistoryMutation) (historygenerated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f AudienceHistoryFunc) Mutate(ctx context.Context, m historygenerated.Mutation) (historygenerated.Value, error) {
+	if mv, ok := m.(*historygenerated.AudienceHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *historygenerated.AudienceHistoryMutation", m)
+}
+
+// The AudienceMemberHistoryFunc type is an adapter to allow the use of ordinary
+// function as AudienceMemberHistory mutator.
+type AudienceMemberHistoryFunc func(context.Context, *historygenerated.AudienceMemberHistoryMutation) (historygenerated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f AudienceMemberHistoryFunc) Mutate(ctx context.Context, m historygenerated.Mutation) (historygenerated.Value, error) {
+	if mv, ok := m.(*historygenerated.AudienceMemberHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *historygenerated.AudienceMemberHistoryMutation", m)
+}
+
 // The CampaignHistoryFunc type is an adapter to allow the use of ordinary
 // function as CampaignHistory mutator.
 type CampaignHistoryFunc func(context.Context, *historygenerated.CampaignHistoryMutation) (historygenerated.Value, error)

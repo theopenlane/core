@@ -1,0 +1,86 @@
+
+
+query GetAllAudienceMemberHistories($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [AudienceMemberHistoryOrder!]){
+  audienceMemberHistories(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    orderBy: $orderBy
+  ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        audienceID
+        contactID
+        createdAt
+        createdBy
+        displayID
+        email
+        fullName
+        groupID
+        historyTime
+        id
+        identityHolderID
+        metadata
+        operation
+        ownerID
+        ref
+        subscriberID
+        updatedAt
+        updatedBy
+        updatedByImpersonator
+        userID
+      }
+    }
+  }
+}
+
+query GetAudienceMemberHistories($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [AudienceMemberHistoryOrder!], $where: AudienceMemberHistoryWhereInput) {
+  audienceMemberHistories(
+      first: $first
+      last: $last
+      after: $after
+      before: $before
+      orderBy: $orderBy
+      where: $where
+    ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        audienceID
+        contactID
+        createdAt
+        createdBy
+        displayID
+        email
+        fullName
+        groupID
+        historyTime
+        id
+        identityHolderID
+        metadata
+        operation
+        ownerID
+        ref
+        subscriberID
+        updatedAt
+        updatedBy
+        updatedByImpersonator
+        userID
+      }
+    }
+  }
+}

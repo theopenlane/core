@@ -19,6 +19,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/audience"
+	"github.com/theopenlane/core/internal/ent/generated/audiencemember"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/checkresult"
@@ -2847,6 +2849,788 @@ func (_m *Asset) ToEdge(order *AssetOrder) *AssetEdge {
 		order = DefaultAssetOrder
 	}
 	return &AssetEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// AudienceEdge is the edge representation of Audience.
+type AudienceEdge struct {
+	Node   *Audience `json:"node"`
+	Cursor Cursor    `json:"cursor"`
+}
+
+// AudienceConnection is the connection containing edges to Audience.
+type AudienceConnection struct {
+	Edges      []*AudienceEdge `json:"edges"`
+	PageInfo   PageInfo        `json:"pageInfo"`
+	TotalCount int             `json:"totalCount"`
+}
+
+func (c *AudienceConnection) build(nodes []*Audience, pager *audiencePager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *Audience
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *Audience {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *Audience {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*AudienceEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &AudienceEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// AudiencePaginateOption enables pagination customization.
+type AudiencePaginateOption func(*audiencePager) error
+
+// WithAudienceOrder configures pagination ordering.
+func WithAudienceOrder(order []*AudienceOrder) AudiencePaginateOption {
+	return func(pager *audiencePager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithAudienceFilter configures pagination filter.
+func WithAudienceFilter(filter func(*AudienceQuery) (*AudienceQuery, error)) AudiencePaginateOption {
+	return func(pager *audiencePager) error {
+		if filter == nil {
+			return errors.New("AudienceQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type audiencePager struct {
+	reverse bool
+	order   []*AudienceOrder
+	filter  func(*AudienceQuery) (*AudienceQuery, error)
+}
+
+func newAudiencePager(opts []AudiencePaginateOption, reverse bool) (*audiencePager, error) {
+	pager := &audiencePager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *audiencePager) applyFilter(query *AudienceQuery) (*AudienceQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *audiencePager) toCursor(_m *Audience) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(_m).Value)
+	}
+	return Cursor{ID: _m.ID, Value: cs_}
+}
+
+func (p *audiencePager) applyCursors(query *AudienceQuery, after, before *Cursor) (*AudienceQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultAudienceOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
+		})
+	}
+	return query, nil
+}
+
+func (p *audiencePager) applyOrder(query *AudienceQuery) *AudienceQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultAudienceOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultAudienceOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *audiencePager) orderExpr(query *AudienceQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultAudienceOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to Audience.
+func (_m *AudienceQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...AudiencePaginateOption,
+) (*AudienceConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newAudiencePager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &AudienceConnection{Edges: []*AudienceEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimitSingle(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// AudienceOrderFieldCreatedAt orders Audience by created_at.
+	AudienceOrderFieldCreatedAt = &AudienceOrderField{
+		Value: func(_m *Audience) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: audience.FieldCreatedAt,
+		toTerm: audience.ByCreatedAt,
+		toCursor: func(_m *Audience) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// AudienceOrderFieldUpdatedAt orders Audience by updated_at.
+	AudienceOrderFieldUpdatedAt = &AudienceOrderField{
+		Value: func(_m *Audience) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: audience.FieldUpdatedAt,
+		toTerm: audience.ByUpdatedAt,
+		toCursor: func(_m *Audience) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+	// AudienceOrderFieldName orders Audience by name.
+	AudienceOrderFieldName = &AudienceOrderField{
+		Value: func(_m *Audience) (ent.Value, error) {
+			return _m.Name, nil
+		},
+		column: audience.FieldName,
+		toTerm: audience.ByName,
+		toCursor: func(_m *Audience) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Name,
+			}
+		},
+	}
+	// AudienceOrderFieldAudienceType orders Audience by audience_type.
+	AudienceOrderFieldAudienceType = &AudienceOrderField{
+		Value: func(_m *Audience) (ent.Value, error) {
+			return _m.AudienceType, nil
+		},
+		column: audience.FieldAudienceType,
+		toTerm: audience.ByAudienceType,
+		toCursor: func(_m *Audience) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.AudienceType,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f AudienceOrderField) String() string {
+	var str string
+	switch f.column {
+	case AudienceOrderFieldCreatedAt.column:
+		str = "created_at"
+	case AudienceOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case AudienceOrderFieldName.column:
+		str = "name"
+	case AudienceOrderFieldAudienceType.column:
+		str = "TYPE"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f AudienceOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *AudienceOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("AudienceOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *AudienceOrderFieldCreatedAt
+	case "updated_at":
+		*f = *AudienceOrderFieldUpdatedAt
+	case "name":
+		*f = *AudienceOrderFieldName
+	case "TYPE":
+		*f = *AudienceOrderFieldAudienceType
+	default:
+		return fmt.Errorf("%s is not a valid AudienceOrderField", str)
+	}
+	return nil
+}
+
+// AudienceOrderField defines the ordering field of Audience.
+type AudienceOrderField struct {
+	// Value extracts the ordering value from the given Audience.
+	Value    func(*Audience) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) audience.OrderOption
+	toCursor func(*Audience) Cursor
+}
+
+// AudienceOrder defines the ordering of Audience.
+type AudienceOrder struct {
+	Direction OrderDirection      `json:"direction"`
+	Field     *AudienceOrderField `json:"field"`
+}
+
+// DefaultAudienceOrder is the default ordering of Audience.
+var DefaultAudienceOrder = &AudienceOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &AudienceOrderField{
+		Value: func(_m *Audience) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: audience.FieldID,
+		toTerm: audience.ByID,
+		toCursor: func(_m *Audience) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts Audience into AudienceEdge.
+func (_m *Audience) ToEdge(order *AudienceOrder) *AudienceEdge {
+	if order == nil {
+		order = DefaultAudienceOrder
+	}
+	return &AudienceEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// AudienceMemberEdge is the edge representation of AudienceMember.
+type AudienceMemberEdge struct {
+	Node   *AudienceMember `json:"node"`
+	Cursor Cursor          `json:"cursor"`
+}
+
+// AudienceMemberConnection is the connection containing edges to AudienceMember.
+type AudienceMemberConnection struct {
+	Edges      []*AudienceMemberEdge `json:"edges"`
+	PageInfo   PageInfo              `json:"pageInfo"`
+	TotalCount int                   `json:"totalCount"`
+}
+
+func (c *AudienceMemberConnection) build(nodes []*AudienceMember, pager *audiencememberPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *AudienceMember
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *AudienceMember {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *AudienceMember {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*AudienceMemberEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &AudienceMemberEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// AudienceMemberPaginateOption enables pagination customization.
+type AudienceMemberPaginateOption func(*audiencememberPager) error
+
+// WithAudienceMemberOrder configures pagination ordering.
+func WithAudienceMemberOrder(order []*AudienceMemberOrder) AudienceMemberPaginateOption {
+	return func(pager *audiencememberPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithAudienceMemberFilter configures pagination filter.
+func WithAudienceMemberFilter(filter func(*AudienceMemberQuery) (*AudienceMemberQuery, error)) AudienceMemberPaginateOption {
+	return func(pager *audiencememberPager) error {
+		if filter == nil {
+			return errors.New("AudienceMemberQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type audiencememberPager struct {
+	reverse bool
+	order   []*AudienceMemberOrder
+	filter  func(*AudienceMemberQuery) (*AudienceMemberQuery, error)
+}
+
+func newAudienceMemberPager(opts []AudienceMemberPaginateOption, reverse bool) (*audiencememberPager, error) {
+	pager := &audiencememberPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *audiencememberPager) applyFilter(query *AudienceMemberQuery) (*AudienceMemberQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *audiencememberPager) toCursor(_m *AudienceMember) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(_m).Value)
+	}
+	return Cursor{ID: _m.ID, Value: cs_}
+}
+
+func (p *audiencememberPager) applyCursors(query *AudienceMemberQuery, after, before *Cursor) (*AudienceMemberQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultAudienceMemberOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
+		})
+	}
+	return query, nil
+}
+
+func (p *audiencememberPager) applyOrder(query *AudienceMemberQuery) *AudienceMemberQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultAudienceMemberOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultAudienceMemberOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *audiencememberPager) orderExpr(query *AudienceMemberQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultAudienceMemberOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to AudienceMember.
+func (_m *AudienceMemberQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...AudienceMemberPaginateOption,
+) (*AudienceMemberConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newAudienceMemberPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &AudienceMemberConnection{Edges: []*AudienceMemberEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimitSingle(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// AudienceMemberOrderFieldCreatedAt orders AudienceMember by created_at.
+	AudienceMemberOrderFieldCreatedAt = &AudienceMemberOrderField{
+		Value: func(_m *AudienceMember) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: audiencemember.FieldCreatedAt,
+		toTerm: audiencemember.ByCreatedAt,
+		toCursor: func(_m *AudienceMember) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// AudienceMemberOrderFieldUpdatedAt orders AudienceMember by updated_at.
+	AudienceMemberOrderFieldUpdatedAt = &AudienceMemberOrderField{
+		Value: func(_m *AudienceMember) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: audiencemember.FieldUpdatedAt,
+		toTerm: audiencemember.ByUpdatedAt,
+		toCursor: func(_m *AudienceMember) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+	// AudienceMemberOrderFieldEmail orders AudienceMember by email.
+	AudienceMemberOrderFieldEmail = &AudienceMemberOrderField{
+		Value: func(_m *AudienceMember) (ent.Value, error) {
+			return _m.Email, nil
+		},
+		column: audiencemember.FieldEmail,
+		toTerm: audiencemember.ByEmail,
+		toCursor: func(_m *AudienceMember) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Email,
+			}
+		},
+	}
+	// AudienceMemberOrderFieldFullName orders AudienceMember by full_name.
+	AudienceMemberOrderFieldFullName = &AudienceMemberOrderField{
+		Value: func(_m *AudienceMember) (ent.Value, error) {
+			return _m.FullName, nil
+		},
+		column: audiencemember.FieldFullName,
+		toTerm: audiencemember.ByFullName,
+		toCursor: func(_m *AudienceMember) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.FullName,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f AudienceMemberOrderField) String() string {
+	var str string
+	switch f.column {
+	case AudienceMemberOrderFieldCreatedAt.column:
+		str = "created_at"
+	case AudienceMemberOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case AudienceMemberOrderFieldEmail.column:
+		str = "email"
+	case AudienceMemberOrderFieldFullName.column:
+		str = "full_name"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f AudienceMemberOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *AudienceMemberOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("AudienceMemberOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *AudienceMemberOrderFieldCreatedAt
+	case "updated_at":
+		*f = *AudienceMemberOrderFieldUpdatedAt
+	case "email":
+		*f = *AudienceMemberOrderFieldEmail
+	case "full_name":
+		*f = *AudienceMemberOrderFieldFullName
+	default:
+		return fmt.Errorf("%s is not a valid AudienceMemberOrderField", str)
+	}
+	return nil
+}
+
+// AudienceMemberOrderField defines the ordering field of AudienceMember.
+type AudienceMemberOrderField struct {
+	// Value extracts the ordering value from the given AudienceMember.
+	Value    func(*AudienceMember) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) audiencemember.OrderOption
+	toCursor func(*AudienceMember) Cursor
+}
+
+// AudienceMemberOrder defines the ordering of AudienceMember.
+type AudienceMemberOrder struct {
+	Direction OrderDirection            `json:"direction"`
+	Field     *AudienceMemberOrderField `json:"field"`
+}
+
+// DefaultAudienceMemberOrder is the default ordering of AudienceMember.
+var DefaultAudienceMemberOrder = &AudienceMemberOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &AudienceMemberOrderField{
+		Value: func(_m *AudienceMember) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: audiencemember.FieldID,
+		toTerm: audiencemember.ByID,
+		toCursor: func(_m *AudienceMember) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts AudienceMember into AudienceMemberEdge.
+func (_m *AudienceMember) ToEdge(order *AudienceMemberOrder) *AudienceMemberEdge {
+	if order == nil {
+		order = DefaultAudienceMemberOrder
+	}
+	return &AudienceMemberEdge{
 		Node:   _m,
 		Cursor: order.Field.toCursor(_m),
 	}

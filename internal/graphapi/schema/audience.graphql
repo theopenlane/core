@@ -1,0 +1,166 @@
+extend type Query {
+    """
+    Look up audience by ID
+    """
+     audience(
+        """
+        ID of the audience
+        """
+        id: ID!
+    ):  Audience!
+}
+
+extend type Mutation{
+    """
+    Create a new audience
+    """
+    createAudience(
+        """
+        values of the audience
+        """
+        input: CreateAudienceInput!
+    ): AudienceCreatePayload!
+    """
+    Create multiple new audiences
+    """
+    createBulkAudience(
+        """
+        values of the audience
+        """
+        input: [CreateAudienceInput!]
+    ): AudienceBulkCreatePayload!
+    """
+    Create multiple new audiences via file upload
+    """
+    createBulkCSVAudience(
+        """
+        csv file containing values of the audience
+        """
+        input: Upload!
+    ): AudienceBulkCreatePayload!
+    """
+    Update multiple existing audiences
+    """
+    updateBulkAudience(
+        """
+        IDs of the audiences to update
+        """
+        ids: [ID!]!
+        """
+        values to update the audiences with
+        """
+        input: UpdateAudienceInput!
+    ): AudienceBulkUpdatePayload!
+    """
+    Update multiple existing audiences via file upload
+    """
+    updateBulkCSVAudience(
+        """
+        csv file containing values of the audience, must include ID column
+        """
+        input: Upload!
+    ): AudienceBulkUpdatePayload!
+    """
+    Update an existing audience
+    """
+    updateAudience(
+        """
+        ID of the audience
+        """
+        id: ID!
+        """
+        New values for the audience
+        """
+        input: UpdateAudienceInput!
+    ): AudienceUpdatePayload!
+    """
+    Delete an existing audience
+    """
+    deleteAudience(
+        """
+        ID of the audience
+        """
+        id: ID!
+    ): AudienceDeletePayload!
+    """
+    Delete multiple audiences
+    """
+    deleteBulkAudience(
+        """
+        IDs of the audiences to delete
+        """
+        ids: [ID!]!
+    ): AudienceBulkDeletePayload!
+}
+
+"""
+Return response for createAudience mutation
+"""
+type AudienceCreatePayload {
+    """
+    Created audience
+    """
+    audience: Audience!
+}
+
+"""
+Return response for updateAudience mutation
+"""
+type AudienceUpdatePayload {
+    """
+    Updated audience
+    """
+    audience: Audience!
+}
+
+"""
+Return response for deleteAudience mutation
+"""
+type AudienceDeletePayload {
+    """
+    Deleted audience ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkAudience mutation
+"""
+type AudienceBulkCreatePayload {
+    """
+    Created audiences
+    """
+    audiences: [Audience!]
+}
+
+"""
+Return response for updateBulkAudience mutation
+"""
+type AudienceBulkUpdatePayload {
+    """
+    Updated audiences
+    """
+    audiences: [Audience!]
+    """
+    IDs of the updated audiences
+    """
+    updatedIDs: [ID!]
+}
+
+"""
+Return response for deleteBulkAudience mutation
+"""
+type AudienceBulkDeletePayload {
+    """
+    Deleted audience IDs
+    """
+    deletedIDs: [ID!]!
+    """
+    Error returned when the bulk delete is only partially applied
+    """
+    error: String
+    """
+    IDs of audiences that were not deleted
+    """
+    notDeletedIDs: [ID!]
+}

@@ -157,15 +157,17 @@ type CampaignEdges struct {
 	Groups []*Group `json:"groups,omitempty"`
 	// IdentityHolders holds the value of the identity_holders edge.
 	IdentityHolders []*IdentityHolder `json:"identity_holders,omitempty"`
+	// Audiences holds the value of the audiences edge.
+	Audiences []*Audience `json:"audiences,omitempty"`
 	// Controls holds the value of the controls edge.
 	Controls []*Control `json:"controls,omitempty"`
 	// WorkflowObjectRefs holds the value of the workflow_object_refs edge.
 	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [20]bool
+	loadedTypes [21]bool
 	// totalCount holds the count of the edges above.
-	totalCount [20]map[string]int
+	totalCount [21]map[string]int
 
 	namedBlockedGroups       map[string][]*Group
 	namedEditors             map[string][]*Group
@@ -176,6 +178,7 @@ type CampaignEdges struct {
 	namedUsers               map[string][]*User
 	namedGroups              map[string][]*Group
 	namedIdentityHolders     map[string][]*IdentityHolder
+	namedAudiences           map[string][]*Audience
 	namedControls            map[string][]*Control
 	namedWorkflowObjectRefs  map[string][]*WorkflowObjectRef
 }
@@ -360,10 +363,19 @@ func (e CampaignEdges) IdentityHoldersOrErr() ([]*IdentityHolder, error) {
 	return nil, &NotLoadedError{edge: "identity_holders"}
 }
 
+// AudiencesOrErr returns the Audiences value or an error if the edge
+// was not loaded in eager-loading.
+func (e CampaignEdges) AudiencesOrErr() ([]*Audience, error) {
+	if e.loadedTypes[18] {
+		return e.Audiences, nil
+	}
+	return nil, &NotLoadedError{edge: "audiences"}
+}
+
 // ControlsOrErr returns the Controls value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) ControlsOrErr() ([]*Control, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[19] {
 		return e.Controls, nil
 	}
 	return nil, &NotLoadedError{edge: "controls"}
@@ -372,7 +384,7 @@ func (e CampaignEdges) ControlsOrErr() ([]*Control, error) {
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e CampaignEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[19] {
+	if e.loadedTypes[20] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -787,6 +799,11 @@ func (_m *Campaign) QueryIdentityHolders() *IdentityHolderQuery {
 	return NewCampaignClient(_m.config).QueryIdentityHolders(_m)
 }
 
+// QueryAudiences queries the "audiences" edge of the Campaign entity.
+func (_m *Campaign) QueryAudiences() *AudienceQuery {
+	return NewCampaignClient(_m.config).QueryAudiences(_m)
+}
+
 // QueryControls queries the "controls" edge of the Campaign entity.
 func (_m *Campaign) QueryControls() *ControlQuery {
 	return NewCampaignClient(_m.config).QueryControls(_m)
@@ -1182,6 +1199,30 @@ func (_m *Campaign) appendNamedIdentityHolders(name string, edges ...*IdentityHo
 		_m.Edges.namedIdentityHolders[name] = []*IdentityHolder{}
 	} else {
 		_m.Edges.namedIdentityHolders[name] = append(_m.Edges.namedIdentityHolders[name], edges...)
+	}
+}
+
+// NamedAudiences returns the Audiences named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Campaign) NamedAudiences(name string) ([]*Audience, error) {
+	if _m.Edges.namedAudiences == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedAudiences[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Campaign) appendNamedAudiences(name string, edges ...*Audience) {
+	if _m.Edges.namedAudiences == nil {
+		_m.Edges.namedAudiences = make(map[string][]*Audience)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedAudiences[name] = []*Audience{}
+	} else {
+		_m.Edges.namedAudiences[name] = append(_m.Edges.namedAudiences[name], edges...)
 	}
 }
 

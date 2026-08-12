@@ -2079,6 +2079,276 @@ func (c *AssetUpdateOne) SetInput(i UpdateAssetInput) *AssetUpdateOne {
 	return c
 }
 
+// CreateAudienceInput represents a mutation input for creating audiences.
+type CreateAudienceInput struct {
+	Tags              []string               `json:"tags,omitempty"`
+	Name              string                 `json:"name,omitempty"`
+	Description       *string                `json:"description,omitempty"`
+	AudienceType      *enums.AudienceType    `json:"audience_type,omitempty"`
+	Filters           map[string]interface{} `json:"filters,omitempty"`
+	OwnerID           *string                `json:"owner_id,omitempty"`
+	AudienceMemberIDs []string               `json:"audience_member_ids,omitempty"`
+	CampaignIDs       []string               `json:"campaign_ids,omitempty"`
+}
+
+// Mutate applies the CreateAudienceInput on the AudienceMutation builder.
+func (i *CreateAudienceInput) Mutate(m *AudienceMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	m.SetName(i.Name)
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.AudienceType; v != nil {
+		m.SetAudienceType(*v)
+	}
+	if v := i.Filters; v != nil {
+		m.SetFilters(v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.AudienceMemberIDs; len(v) > 0 {
+		m.AddAudienceMemberIDs(v...)
+	}
+	if v := i.CampaignIDs; len(v) > 0 {
+		m.AddCampaignIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateAudienceInput on the AudienceCreate builder.
+func (c *AudienceCreate) SetInput(i CreateAudienceInput) *AudienceCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateAudienceInput represents a mutation input for updating audiences.
+type UpdateAudienceInput struct {
+	ClearTags               bool
+	Tags                    []string `json:"tags,omitempty"`
+	AppendTags              []string
+	Name                    *string `json:"name,omitempty"`
+	ClearDescription        bool
+	Description             *string             `json:"description,omitempty"`
+	AudienceType            *enums.AudienceType `json:"audience_type,omitempty"`
+	ClearFilters            bool
+	Filters                 map[string]interface{} `json:"filters,omitempty"`
+	ClearOwner              bool
+	OwnerID                 *string `json:"owner_id,omitempty"`
+	ClearAudienceMembers    bool
+	AddAudienceMemberIDs    []string `json:"add_audience_member_ids,omitempty"`
+	RemoveAudienceMemberIDs []string `json:"remove_audience_member_ids,omitempty"`
+	ClearCampaigns          bool
+	AddCampaignIDs          []string `json:"add_campaign_ids,omitempty"`
+	RemoveCampaignIDs       []string `json:"remove_campaign_ids,omitempty"`
+}
+
+// Mutate applies the UpdateAudienceInput on the AudienceMutation builder.
+func (i *UpdateAudienceInput) Mutate(m *AudienceMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if v := i.Name; v != nil {
+		m.SetName(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.AudienceType; v != nil {
+		m.SetAudienceType(*v)
+	}
+	if i.ClearFilters {
+		m.ClearFilters()
+	}
+	if v := i.Filters; v != nil {
+		m.SetFilters(v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if i.ClearAudienceMembers {
+		m.ClearAudienceMembers()
+	}
+	if v := i.AddAudienceMemberIDs; len(v) > 0 {
+		m.AddAudienceMemberIDs(v...)
+	}
+	if v := i.RemoveAudienceMemberIDs; len(v) > 0 {
+		m.RemoveAudienceMemberIDs(v...)
+	}
+	if i.ClearCampaigns {
+		m.ClearCampaigns()
+	}
+	if v := i.AddCampaignIDs; len(v) > 0 {
+		m.AddCampaignIDs(v...)
+	}
+	if v := i.RemoveCampaignIDs; len(v) > 0 {
+		m.RemoveCampaignIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateAudienceInput on the AudienceUpdate builder.
+func (c *AudienceUpdate) SetInput(i UpdateAudienceInput) *AudienceUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateAudienceInput on the AudienceUpdateOne builder.
+func (c *AudienceUpdateOne) SetInput(i UpdateAudienceInput) *AudienceUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateAudienceMemberInput represents a mutation input for creating audiencemembers.
+type CreateAudienceMemberInput struct {
+	Email            string                 `json:"email,omitempty"`
+	FullName         *string                `json:"full_name,omitempty"`
+	Metadata         map[string]interface{} `json:"metadata,omitempty"`
+	OwnerID          *string                `json:"owner_id,omitempty"`
+	AudienceID       string                 `json:"audience_id,omitempty"`
+	ContactID        *string                `json:"contact_id,omitempty"`
+	UserID           *string                `json:"user_id,omitempty"`
+	GroupID          *string                `json:"group_id,omitempty"`
+	SubscriberID     *string                `json:"subscriber_id,omitempty"`
+	IdentityHolderID *string                `json:"identity_holder_id,omitempty"`
+}
+
+// Mutate applies the CreateAudienceMemberInput on the AudienceMemberMutation builder.
+func (i *CreateAudienceMemberInput) Mutate(m *AudienceMemberMutation) {
+	m.SetEmail(i.Email)
+	if v := i.FullName; v != nil {
+		m.SetFullName(*v)
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	m.SetAudienceID(i.AudienceID)
+	if v := i.ContactID; v != nil {
+		m.SetContactID(*v)
+	}
+	if v := i.UserID; v != nil {
+		m.SetUserID(*v)
+	}
+	if v := i.GroupID; v != nil {
+		m.SetGroupID(*v)
+	}
+	if v := i.SubscriberID; v != nil {
+		m.SetSubscriberID(*v)
+	}
+	if v := i.IdentityHolderID; v != nil {
+		m.SetIdentityHolderID(*v)
+	}
+}
+
+// SetInput applies the change-set in the CreateAudienceMemberInput on the AudienceMemberCreate builder.
+func (c *AudienceMemberCreate) SetInput(i CreateAudienceMemberInput) *AudienceMemberCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateAudienceMemberInput represents a mutation input for updating audiencemembers.
+type UpdateAudienceMemberInput struct {
+	Email               *string `json:"email,omitempty"`
+	ClearFullName       bool
+	FullName            *string `json:"full_name,omitempty"`
+	ClearMetadata       bool
+	Metadata            map[string]interface{} `json:"metadata,omitempty"`
+	ClearOwner          bool
+	OwnerID             *string `json:"owner_id,omitempty"`
+	ClearContact        bool
+	ContactID           *string `json:"contact_id,omitempty"`
+	ClearUser           bool
+	UserID              *string `json:"user_id,omitempty"`
+	ClearGroup          bool
+	GroupID             *string `json:"group_id,omitempty"`
+	ClearSubscriber     bool
+	SubscriberID        *string `json:"subscriber_id,omitempty"`
+	ClearIdentityHolder bool
+	IdentityHolderID    *string `json:"identity_holder_id,omitempty"`
+}
+
+// Mutate applies the UpdateAudienceMemberInput on the AudienceMemberMutation builder.
+func (i *UpdateAudienceMemberInput) Mutate(m *AudienceMemberMutation) {
+	if v := i.Email; v != nil {
+		m.SetEmail(*v)
+	}
+	if i.ClearFullName {
+		m.ClearFullName()
+	}
+	if v := i.FullName; v != nil {
+		m.SetFullName(*v)
+	}
+	if i.ClearMetadata {
+		m.ClearMetadata()
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if i.ClearContact {
+		m.ClearContact()
+	}
+	if v := i.ContactID; v != nil {
+		m.SetContactID(*v)
+	}
+	if i.ClearUser {
+		m.ClearUser()
+	}
+	if v := i.UserID; v != nil {
+		m.SetUserID(*v)
+	}
+	if i.ClearGroup {
+		m.ClearGroup()
+	}
+	if v := i.GroupID; v != nil {
+		m.SetGroupID(*v)
+	}
+	if i.ClearSubscriber {
+		m.ClearSubscriber()
+	}
+	if v := i.SubscriberID; v != nil {
+		m.SetSubscriberID(*v)
+	}
+	if i.ClearIdentityHolder {
+		m.ClearIdentityHolder()
+	}
+	if v := i.IdentityHolderID; v != nil {
+		m.SetIdentityHolderID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateAudienceMemberInput on the AudienceMemberUpdate builder.
+func (c *AudienceMemberUpdate) SetInput(i UpdateAudienceMemberInput) *AudienceMemberUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateAudienceMemberInput on the AudienceMemberUpdateOne builder.
+func (c *AudienceMemberUpdateOne) SetInput(i UpdateAudienceMemberInput) *AudienceMemberUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateCampaignInput represents a mutation input for creating campaigns.
 type CreateCampaignInput struct {
 	Tags                   []string               `json:"tags,omitempty"`
@@ -2124,6 +2394,7 @@ type CreateCampaignInput struct {
 	UserIDs                []string               `json:"user_ids,omitempty"`
 	GroupIDs               []string               `json:"group_ids,omitempty"`
 	IdentityHolderIDs      []string               `json:"identity_holder_ids,omitempty"`
+	AudienceIDs            []string               `json:"audience_ids,omitempty"`
 	ControlIDs             []string               `json:"control_ids,omitempty"`
 	WorkflowObjectRefIDs   []string               `json:"workflow_object_ref_ids,omitempty"`
 }
@@ -2257,6 +2528,9 @@ func (i *CreateCampaignInput) Mutate(m *CampaignMutation) {
 	if v := i.IdentityHolderIDs; len(v) > 0 {
 		m.AddIdentityHolderIDs(v...)
 	}
+	if v := i.AudienceIDs; len(v) > 0 {
+		m.AddAudienceIDs(v...)
+	}
 	if v := i.ControlIDs; len(v) > 0 {
 		m.AddControlIDs(v...)
 	}
@@ -2362,6 +2636,9 @@ type UpdateCampaignInput struct {
 	ClearIdentityHolders        bool
 	AddIdentityHolderIDs        []string `json:"add_identity_holder_ids,omitempty"`
 	RemoveIdentityHolderIDs     []string `json:"remove_identity_holder_ids,omitempty"`
+	ClearAudiences              bool
+	AddAudienceIDs              []string `json:"add_audience_ids,omitempty"`
+	RemoveAudienceIDs           []string `json:"remove_audience_ids,omitempty"`
 	ClearControls               bool
 	AddControlIDs               []string `json:"add_control_ids,omitempty"`
 	RemoveControlIDs            []string `json:"remove_control_ids,omitempty"`
@@ -2638,6 +2915,15 @@ func (i *UpdateCampaignInput) Mutate(m *CampaignMutation) {
 	}
 	if v := i.RemoveIdentityHolderIDs; len(v) > 0 {
 		m.RemoveIdentityHolderIDs(v...)
+	}
+	if i.ClearAudiences {
+		m.ClearAudiences()
+	}
+	if v := i.AddAudienceIDs; len(v) > 0 {
+		m.AddAudienceIDs(v...)
+	}
+	if v := i.RemoveAudienceIDs; len(v) > 0 {
+		m.RemoveAudienceIDs(v...)
 	}
 	if i.ClearControls {
 		m.ClearControls()
@@ -3064,6 +3350,7 @@ type CreateContactInput struct {
 	EntityIDs         []string          `json:"entity_ids,omitempty"`
 	CampaignIDs       []string          `json:"campaign_ids,omitempty"`
 	CampaignTargetIDs []string          `json:"campaign_target_ids,omitempty"`
+	AudienceMemberIDs []string          `json:"audience_member_ids,omitempty"`
 	FileIDs           []string          `json:"file_ids,omitempty"`
 	SubscriberIDs     []string          `json:"subscriber_ids,omitempty"`
 }
@@ -3115,6 +3402,9 @@ func (i *CreateContactInput) Mutate(m *ContactMutation) {
 	if v := i.CampaignTargetIDs; len(v) > 0 {
 		m.AddCampaignTargetIDs(v...)
 	}
+	if v := i.AudienceMemberIDs; len(v) > 0 {
+		m.AddAudienceMemberIDs(v...)
+	}
 	if v := i.FileIDs; len(v) > 0 {
 		m.AddFileIDs(v...)
 	}
@@ -3164,6 +3454,9 @@ type UpdateContactInput struct {
 	ClearCampaignTargets    bool
 	AddCampaignTargetIDs    []string `json:"add_campaign_target_ids,omitempty"`
 	RemoveCampaignTargetIDs []string `json:"remove_campaign_target_ids,omitempty"`
+	ClearAudienceMembers    bool
+	AddAudienceMemberIDs    []string `json:"add_audience_member_ids,omitempty"`
+	RemoveAudienceMemberIDs []string `json:"remove_audience_member_ids,omitempty"`
 	ClearFiles              bool
 	AddFileIDs              []string `json:"add_file_ids,omitempty"`
 	RemoveFileIDs           []string `json:"remove_file_ids,omitempty"`
@@ -3272,6 +3565,15 @@ func (i *UpdateContactInput) Mutate(m *ContactMutation) {
 	}
 	if v := i.RemoveCampaignTargetIDs; len(v) > 0 {
 		m.RemoveCampaignTargetIDs(v...)
+	}
+	if i.ClearAudienceMembers {
+		m.ClearAudienceMembers()
+	}
+	if v := i.AddAudienceMemberIDs; len(v) > 0 {
+		m.AddAudienceMemberIDs(v...)
+	}
+	if v := i.RemoveAudienceMemberIDs; len(v) > 0 {
+		m.RemoveAudienceMemberIDs(v...)
 	}
 	if i.ClearFiles {
 		m.ClearFiles()
@@ -11382,6 +11684,7 @@ type CreateGroupInput struct {
 	TaskIDs                              []string `json:"task_ids,omitempty"`
 	CampaignIDs                          []string `json:"campaign_ids,omitempty"`
 	CampaignTargetIDs                    []string `json:"campaign_target_ids,omitempty"`
+	AudienceMemberIDs                    []string `json:"audience_member_ids,omitempty"`
 }
 
 // Mutate applies the CreateGroupInput on the GroupMutation builder.
@@ -11573,6 +11876,9 @@ func (i *CreateGroupInput) Mutate(m *GroupMutation) {
 	if v := i.CampaignTargetIDs; len(v) > 0 {
 		m.AddCampaignTargetIDs(v...)
 	}
+	if v := i.AudienceMemberIDs; len(v) > 0 {
+		m.AddAudienceMemberIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateGroupInput on the GroupCreate builder.
@@ -11757,6 +12063,9 @@ type UpdateGroupInput struct {
 	ClearCampaignTargets                       bool
 	AddCampaignTargetIDs                       []string `json:"add_campaign_target_ids,omitempty"`
 	RemoveCampaignTargetIDs                    []string `json:"remove_campaign_target_ids,omitempty"`
+	ClearAudienceMembers                       bool
+	AddAudienceMemberIDs                       []string `json:"add_audience_member_ids,omitempty"`
+	RemoveAudienceMemberIDs                    []string `json:"remove_audience_member_ids,omitempty"`
 }
 
 // Mutate applies the UpdateGroupInput on the GroupMutation builder.
@@ -12283,6 +12592,15 @@ func (i *UpdateGroupInput) Mutate(m *GroupMutation) {
 	if v := i.RemoveCampaignTargetIDs; len(v) > 0 {
 		m.RemoveCampaignTargetIDs(v...)
 	}
+	if i.ClearAudienceMembers {
+		m.ClearAudienceMembers()
+	}
+	if v := i.AddAudienceMemberIDs; len(v) > 0 {
+		m.AddAudienceMemberIDs(v...)
+	}
+	if v := i.RemoveAudienceMemberIDs; len(v) > 0 {
+		m.RemoveAudienceMemberIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the UpdateGroupInput on the GroupUpdate builder.
@@ -12696,6 +13014,7 @@ type CreateIdentityHolderInput struct {
 	CampaignIDs            []string                  `json:"campaign_ids,omitempty"`
 	TaskIDs                []string                  `json:"task_ids,omitempty"`
 	FileIDs                []string                  `json:"file_ids,omitempty"`
+	AudienceMemberIDs      []string                  `json:"audience_member_ids,omitempty"`
 	FindingIDs             []string                  `json:"finding_ids,omitempty"`
 	WorkflowObjectRefIDs   []string                  `json:"workflow_object_ref_ids,omitempty"`
 	AccessPlatformIDs      []string                  `json:"access_platform_ids,omitempty"`
@@ -12836,6 +13155,9 @@ func (i *CreateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
 	if v := i.FileIDs; len(v) > 0 {
 		m.AddFileIDs(v...)
 	}
+	if v := i.AudienceMemberIDs; len(v) > 0 {
+		m.AddAudienceMemberIDs(v...)
+	}
 	if v := i.FindingIDs; len(v) > 0 {
 		m.AddFindingIDs(v...)
 	}
@@ -12961,6 +13283,9 @@ type UpdateIdentityHolderInput struct {
 	ClearFiles                  bool
 	AddFileIDs                  []string `json:"add_file_ids,omitempty"`
 	RemoveFileIDs               []string `json:"remove_file_ids,omitempty"`
+	ClearAudienceMembers        bool
+	AddAudienceMemberIDs        []string `json:"add_audience_member_ids,omitempty"`
+	RemoveAudienceMemberIDs     []string `json:"remove_audience_member_ids,omitempty"`
 	ClearFindings               bool
 	AddFindingIDs               []string `json:"add_finding_ids,omitempty"`
 	RemoveFindingIDs            []string `json:"remove_finding_ids,omitempty"`
@@ -13278,6 +13603,15 @@ func (i *UpdateIdentityHolderInput) Mutate(m *IdentityHolderMutation) {
 	}
 	if v := i.RemoveFileIDs; len(v) > 0 {
 		m.RemoveFileIDs(v...)
+	}
+	if i.ClearAudienceMembers {
+		m.ClearAudienceMembers()
+	}
+	if v := i.AddAudienceMemberIDs; len(v) > 0 {
+		m.AddAudienceMemberIDs(v...)
+	}
+	if v := i.RemoveAudienceMemberIDs; len(v) > 0 {
+		m.RemoveAudienceMemberIDs(v...)
 	}
 	if i.ClearFindings {
 		m.ClearFindings()
@@ -16472,6 +16806,8 @@ type CreateOrganizationInput struct {
 	APITokenCreatorIDs                   []string   `json:"api_token_creator_ids,omitempty"`
 	AssessmentCreatorIDs                 []string   `json:"assessment_creator_ids,omitempty"`
 	AssetCreatorIDs                      []string   `json:"asset_creator_ids,omitempty"`
+	AudienceCreatorIDs                   []string   `json:"audience_creator_ids,omitempty"`
+	AudienceMemberCreatorIDs             []string   `json:"audience_member_creator_ids,omitempty"`
 	CampaignCreatorIDs                   []string   `json:"campaign_creator_ids,omitempty"`
 	CampaignTargetCreatorIDs             []string   `json:"campaign_target_creator_ids,omitempty"`
 	CheckResultCreatorIDs                []string   `json:"check_result_creator_ids,omitempty"`
@@ -16572,6 +16908,8 @@ type CreateOrganizationInput struct {
 	IdentityHolderIDs                    []string   `json:"identity_holder_ids,omitempty"`
 	CampaignIDs                          []string   `json:"campaign_ids,omitempty"`
 	CampaignTargetIDs                    []string   `json:"campaign_target_ids,omitempty"`
+	AudienceIDs                          []string   `json:"audience_ids,omitempty"`
+	AudienceMemberIDs                    []string   `json:"audience_member_ids,omitempty"`
 	EntityTypeIDs                        []string   `json:"entity_type_ids,omitempty"`
 	ContactIDs                           []string   `json:"contact_ids,omitempty"`
 	NoteIDs                              []string   `json:"note_ids,omitempty"`
@@ -16661,6 +16999,12 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.AssetCreatorIDs; len(v) > 0 {
 		m.AddAssetCreatorIDs(v...)
+	}
+	if v := i.AudienceCreatorIDs; len(v) > 0 {
+		m.AddAudienceCreatorIDs(v...)
+	}
+	if v := i.AudienceMemberCreatorIDs; len(v) > 0 {
+		m.AddAudienceMemberCreatorIDs(v...)
 	}
 	if v := i.CampaignCreatorIDs; len(v) > 0 {
 		m.AddCampaignCreatorIDs(v...)
@@ -16962,6 +17306,12 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.CampaignTargetIDs; len(v) > 0 {
 		m.AddCampaignTargetIDs(v...)
 	}
+	if v := i.AudienceIDs; len(v) > 0 {
+		m.AddAudienceIDs(v...)
+	}
+	if v := i.AudienceMemberIDs; len(v) > 0 {
+		m.AddAudienceMemberIDs(v...)
+	}
 	if v := i.EntityTypeIDs; len(v) > 0 {
 		m.AddEntityTypeIDs(v...)
 	}
@@ -17159,6 +17509,12 @@ type UpdateOrganizationInput struct {
 	ClearAssetCreators                         bool
 	AddAssetCreatorIDs                         []string `json:"add_asset_creator_ids,omitempty"`
 	RemoveAssetCreatorIDs                      []string `json:"remove_asset_creator_ids,omitempty"`
+	ClearAudienceCreators                      bool
+	AddAudienceCreatorIDs                      []string `json:"add_audience_creator_ids,omitempty"`
+	RemoveAudienceCreatorIDs                   []string `json:"remove_audience_creator_ids,omitempty"`
+	ClearAudienceMemberCreators                bool
+	AddAudienceMemberCreatorIDs                []string `json:"add_audience_member_creator_ids,omitempty"`
+	RemoveAudienceMemberCreatorIDs             []string `json:"remove_audience_member_creator_ids,omitempty"`
 	ClearCampaignCreators                      bool
 	AddCampaignCreatorIDs                      []string `json:"add_campaign_creator_ids,omitempty"`
 	RemoveCampaignCreatorIDs                   []string `json:"remove_campaign_creator_ids,omitempty"`
@@ -17454,6 +17810,12 @@ type UpdateOrganizationInput struct {
 	ClearCampaignTargets                       bool
 	AddCampaignTargetIDs                       []string `json:"add_campaign_target_ids,omitempty"`
 	RemoveCampaignTargetIDs                    []string `json:"remove_campaign_target_ids,omitempty"`
+	ClearAudiences                             bool
+	AddAudienceIDs                             []string `json:"add_audience_ids,omitempty"`
+	RemoveAudienceIDs                          []string `json:"remove_audience_ids,omitempty"`
+	ClearAudienceMembers                       bool
+	AddAudienceMemberIDs                       []string `json:"add_audience_member_ids,omitempty"`
+	RemoveAudienceMemberIDs                    []string `json:"remove_audience_member_ids,omitempty"`
 	ClearEntityTypes                           bool
 	AddEntityTypeIDs                           []string `json:"add_entity_type_ids,omitempty"`
 	RemoveEntityTypeIDs                        []string `json:"remove_entity_type_ids,omitempty"`
@@ -17688,6 +18050,24 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveAssetCreatorIDs; len(v) > 0 {
 		m.RemoveAssetCreatorIDs(v...)
+	}
+	if i.ClearAudienceCreators {
+		m.ClearAudienceCreators()
+	}
+	if v := i.AddAudienceCreatorIDs; len(v) > 0 {
+		m.AddAudienceCreatorIDs(v...)
+	}
+	if v := i.RemoveAudienceCreatorIDs; len(v) > 0 {
+		m.RemoveAudienceCreatorIDs(v...)
+	}
+	if i.ClearAudienceMemberCreators {
+		m.ClearAudienceMemberCreators()
+	}
+	if v := i.AddAudienceMemberCreatorIDs; len(v) > 0 {
+		m.AddAudienceMemberCreatorIDs(v...)
+	}
+	if v := i.RemoveAudienceMemberCreatorIDs; len(v) > 0 {
+		m.RemoveAudienceMemberCreatorIDs(v...)
 	}
 	if i.ClearCampaignCreators {
 		m.ClearCampaignCreators()
@@ -18573,6 +18953,24 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveCampaignTargetIDs; len(v) > 0 {
 		m.RemoveCampaignTargetIDs(v...)
+	}
+	if i.ClearAudiences {
+		m.ClearAudiences()
+	}
+	if v := i.AddAudienceIDs; len(v) > 0 {
+		m.AddAudienceIDs(v...)
+	}
+	if v := i.RemoveAudienceIDs; len(v) > 0 {
+		m.RemoveAudienceIDs(v...)
+	}
+	if i.ClearAudienceMembers {
+		m.ClearAudienceMembers()
+	}
+	if v := i.AddAudienceMemberIDs; len(v) > 0 {
+		m.AddAudienceMemberIDs(v...)
+	}
+	if v := i.RemoveAudienceMemberIDs; len(v) > 0 {
+		m.RemoveAudienceMemberIDs(v...)
 	}
 	if i.ClearEntityTypes {
 		m.ClearEntityTypes()
@@ -26270,6 +26668,7 @@ type CreateSubscriberInput struct {
 	EventIDs          []string `json:"event_ids,omitempty"`
 	TrustCenterID     *string  `json:"trust_center_id,omitempty"`
 	CampaignTargetIDs []string `json:"campaign_target_ids,omitempty"`
+	AudienceMemberIDs []string `json:"audience_member_ids,omitempty"`
 	ContactID         *string  `json:"contact_id,omitempty"`
 	UserID            *string  `json:"user_id,omitempty"`
 }
@@ -26294,6 +26693,9 @@ func (i *CreateSubscriberInput) Mutate(m *SubscriberMutation) {
 	}
 	if v := i.CampaignTargetIDs; len(v) > 0 {
 		m.AddCampaignTargetIDs(v...)
+	}
+	if v := i.AudienceMemberIDs; len(v) > 0 {
+		m.AddAudienceMemberIDs(v...)
 	}
 	if v := i.ContactID; v != nil {
 		m.SetContactID(*v)
@@ -26326,6 +26728,9 @@ type UpdateSubscriberInput struct {
 	ClearCampaignTargets    bool
 	AddCampaignTargetIDs    []string `json:"add_campaign_target_ids,omitempty"`
 	RemoveCampaignTargetIDs []string `json:"remove_campaign_target_ids,omitempty"`
+	ClearAudienceMembers    bool
+	AddAudienceMemberIDs    []string `json:"add_audience_member_ids,omitempty"`
+	RemoveAudienceMemberIDs []string `json:"remove_audience_member_ids,omitempty"`
 	ClearContact            bool
 	ContactID               *string `json:"contact_id,omitempty"`
 	ClearUser               bool
@@ -26378,6 +26783,15 @@ func (i *UpdateSubscriberInput) Mutate(m *SubscriberMutation) {
 	}
 	if v := i.RemoveCampaignTargetIDs; len(v) > 0 {
 		m.RemoveCampaignTargetIDs(v...)
+	}
+	if i.ClearAudienceMembers {
+		m.ClearAudienceMembers()
+	}
+	if v := i.AddAudienceMemberIDs; len(v) > 0 {
+		m.AddAudienceMemberIDs(v...)
+	}
+	if v := i.RemoveAudienceMemberIDs; len(v) > 0 {
+		m.RemoveAudienceMemberIDs(v...)
 	}
 	if i.ClearContact {
 		m.ClearContact()
@@ -29521,6 +29935,7 @@ type CreateUserInput struct {
 	ActionPlanIDs            []string            `json:"action_plan_ids,omitempty"`
 	CampaignIDs              []string            `json:"campaign_ids,omitempty"`
 	CampaignTargetIDs        []string            `json:"campaign_target_ids,omitempty"`
+	AudienceMemberIDs        []string            `json:"audience_member_ids,omitempty"`
 	SubcontrolIDs            []string            `json:"subcontrol_ids,omitempty"`
 	AssignerTaskIDs          []string            `json:"assigner_task_ids,omitempty"`
 	AssigneeTaskIDs          []string            `json:"assignee_task_ids,omitempty"`
@@ -29617,6 +30032,9 @@ func (i *CreateUserInput) Mutate(m *UserMutation) {
 	}
 	if v := i.CampaignTargetIDs; len(v) > 0 {
 		m.AddCampaignTargetIDs(v...)
+	}
+	if v := i.AudienceMemberIDs; len(v) > 0 {
+		m.AddAudienceMemberIDs(v...)
 	}
 	if v := i.SubcontrolIDs; len(v) > 0 {
 		m.AddSubcontrolIDs(v...)
@@ -29722,6 +30140,9 @@ type UpdateUserInput struct {
 	ClearCampaignTargets           bool
 	AddCampaignTargetIDs           []string `json:"add_campaign_target_ids,omitempty"`
 	RemoveCampaignTargetIDs        []string `json:"remove_campaign_target_ids,omitempty"`
+	ClearAudienceMembers           bool
+	AddAudienceMemberIDs           []string `json:"add_audience_member_ids,omitempty"`
+	RemoveAudienceMemberIDs        []string `json:"remove_audience_member_ids,omitempty"`
 	ClearSubcontrols               bool
 	AddSubcontrolIDs               []string `json:"add_subcontrol_ids,omitempty"`
 	RemoveSubcontrolIDs            []string `json:"remove_subcontrol_ids,omitempty"`
@@ -29953,6 +30374,15 @@ func (i *UpdateUserInput) Mutate(m *UserMutation) {
 	}
 	if v := i.RemoveCampaignTargetIDs; len(v) > 0 {
 		m.RemoveCampaignTargetIDs(v...)
+	}
+	if i.ClearAudienceMembers {
+		m.ClearAudienceMembers()
+	}
+	if v := i.AddAudienceMemberIDs; len(v) > 0 {
+		m.AddAudienceMemberIDs(v...)
+	}
+	if v := i.RemoveAudienceMemberIDs; len(v) > 0 {
+		m.RemoveAudienceMemberIDs(v...)
 	}
 	if i.ClearSubcontrols {
 		m.ClearSubcontrols()

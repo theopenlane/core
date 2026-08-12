@@ -1378,6 +1378,64 @@ func HasAssetCreatorsWith(preds ...predicate.Group) predicate.Organization {
 	})
 }
 
+// HasAudienceCreators applies the HasEdge predicate on the "audience_creators" edge.
+func HasAudienceCreators() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, AudienceCreatorsTable, AudienceCreatorsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasAudienceCreatorsWith applies the HasEdge predicate on the "audience_creators" edge with a given conditions (other predicates).
+func HasAudienceCreatorsWith(preds ...predicate.Group) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newAudienceCreatorsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasAudienceMemberCreators applies the HasEdge predicate on the "audience_member_creators" edge.
+func HasAudienceMemberCreators() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, AudienceMemberCreatorsTable, AudienceMemberCreatorsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasAudienceMemberCreatorsWith applies the HasEdge predicate on the "audience_member_creators" edge with a given conditions (other predicates).
+func HasAudienceMemberCreatorsWith(preds ...predicate.Group) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newAudienceMemberCreatorsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasCampaignCreators applies the HasEdge predicate on the "campaign_creators" edge.
 func HasCampaignCreators() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {
@@ -4473,6 +4531,64 @@ func HasCampaignTargetsWith(preds ...predicate.CampaignTarget) predicate.Organiz
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.CampaignTarget
 		step.Edge.Schema = schemaConfig.CampaignTarget
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasAudiences applies the HasEdge predicate on the "audiences" edge.
+func HasAudiences() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, AudiencesTable, AudiencesColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Audience
+		step.Edge.Schema = schemaConfig.Audience
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasAudiencesWith applies the HasEdge predicate on the "audiences" edge with a given conditions (other predicates).
+func HasAudiencesWith(preds ...predicate.Audience) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newAudiencesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Audience
+		step.Edge.Schema = schemaConfig.Audience
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasAudienceMembers applies the HasEdge predicate on the "audience_members" edge.
+func HasAudienceMembers() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, AudienceMembersTable, AudienceMembersColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.AudienceMember
+		step.Edge.Schema = schemaConfig.AudienceMember
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasAudienceMembersWith applies the HasEdge predicate on the "audience_members" edge with a given conditions (other predicates).
+func HasAudienceMembersWith(preds ...predicate.AudienceMember) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newAudienceMembersStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.AudienceMember
+		step.Edge.Schema = schemaConfig.AudienceMember
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

@@ -1,0 +1,257 @@
+
+mutation CreateBulkCSVAudienceMember($input: Upload!) {
+  createBulkCSVAudienceMember(input: $input) {
+    audienceMembers {
+      audienceID
+      contactID
+      createdAt
+      createdBy
+      displayID
+      email
+      fullName
+      groupID
+      id
+      identityHolderID
+      metadata
+      ownerID
+      subscriberID
+      updatedAt
+      updatedBy
+      updatedByImpersonator
+      userID
+    }
+  }
+}
+
+mutation CreateBulkAudienceMember($input: [CreateAudienceMemberInput!]) {
+  createBulkAudienceMember(input: $input) {
+    audienceMembers {
+      audienceID
+      contactID
+      createdAt
+      createdBy
+      displayID
+      email
+      fullName
+      groupID
+      id
+      identityHolderID
+      metadata
+      ownerID
+      subscriberID
+      updatedAt
+      updatedBy
+      updatedByImpersonator
+      userID
+    }
+  }
+}
+
+mutation CreateAudienceMember($input: CreateAudienceMemberInput!) {
+  createAudienceMember(input: $input) {
+    audienceMember {
+      audienceID
+      contactID
+      createdAt
+      createdBy
+      displayID
+      email
+      fullName
+      groupID
+      id
+      identityHolderID
+      metadata
+      ownerID
+      subscriberID
+      updatedAt
+      updatedBy
+      updatedByImpersonator
+      userID
+    }
+  }
+}
+
+mutation DeleteAudienceMember($deleteAudienceMemberId: ID!) {
+  deleteAudienceMember(id: $deleteAudienceMemberId) {
+    deletedID
+  }
+}
+
+mutation UpdateBulkAudienceMember($ids: [ID!]!, $input: UpdateAudienceMemberInput!) {
+  updateBulkAudienceMember(ids: $ids, input: $input) {
+    audienceMembers {
+      audienceID
+      contactID
+      createdAt
+      createdBy
+      displayID
+      email
+      fullName
+      groupID
+      id
+      identityHolderID
+      metadata
+      ownerID
+      subscriberID
+      updatedAt
+      updatedBy
+      updatedByImpersonator
+      userID
+    }
+    updatedIDs
+  }
+}
+
+mutation UpdateBulkCSVAudienceMember($input: Upload!) {
+  updateBulkCSVAudienceMember(input: $input) {
+    audienceMembers {
+      audienceID
+      contactID
+      createdAt
+      createdBy
+      displayID
+      email
+      fullName
+      groupID
+      id
+      identityHolderID
+      metadata
+      ownerID
+      subscriberID
+      updatedAt
+      updatedBy
+      updatedByImpersonator
+      userID
+    }
+    updatedIDs
+  }
+}
+
+mutation DeleteBulkAudienceMember($ids: [ID!]!) {
+  deleteBulkAudienceMember(ids: $ids) {
+    deletedIDs
+  }
+}
+
+query GetAllAudienceMembers($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [AudienceMemberOrder!]){
+  audienceMembers(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    orderBy: $orderBy
+  ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        audienceID
+        contactID
+        createdAt
+        createdBy
+        displayID
+        email
+        fullName
+        groupID
+        id
+        identityHolderID
+        metadata
+        ownerID
+        subscriberID
+        updatedAt
+        updatedBy
+        updatedByImpersonator
+        userID
+      }
+    }
+  }
+}
+query GetAudienceMemberByID($audienceMemberId: ID!) {
+  audienceMember(id: $audienceMemberId) {
+    audienceID
+    contactID
+    createdAt
+    createdBy
+    displayID
+    email
+    fullName
+    groupID
+    id
+    identityHolderID
+    metadata
+    ownerID
+    subscriberID
+    updatedAt
+    updatedBy
+    updatedByImpersonator
+    userID
+  }
+}
+
+query GetAudienceMembers($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [AudienceMemberOrder!], $where: AudienceMemberWhereInput) {
+  audienceMembers(
+      first: $first
+      last: $last
+      after: $after
+      before: $before
+      orderBy: $orderBy
+      where: $where
+    ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        audienceID
+        contactID
+        createdAt
+        createdBy
+        displayID
+        email
+        fullName
+        groupID
+        id
+        identityHolderID
+        metadata
+        ownerID
+        subscriberID
+        updatedAt
+        updatedBy
+        updatedByImpersonator
+        userID
+      }
+    }
+  }
+}
+mutation UpdateAudienceMember($updateAudienceMemberId: ID!, $input: UpdateAudienceMemberInput!) {
+  updateAudienceMember(id: $updateAudienceMemberId, input: $input) {
+    audienceMember {
+      audienceID
+      contactID
+      createdAt
+      createdBy
+      displayID
+      email
+      fullName
+      groupID
+      id
+      identityHolderID
+      metadata
+      ownerID
+      subscriberID
+      updatedAt
+      updatedBy
+      updatedByImpersonator
+      userID
+    }
+  }
+}

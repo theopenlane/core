@@ -12,6 +12,7 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 )
@@ -51,10 +52,10 @@ func (Audience) Fields() []ent.Field {
 		field.String("description").
 			Comment("the description of the audience").
 			Optional(),
-		field.Enum("type").
+		field.Enum("audience_type").
 			Comment("the type of audience").
-			Values("MANUAL", "DYNAMIC").
-			Default("MANUAL").
+			GoType(enums.AudienceType("")).
+			Default(enums.AudienceTypeManual.String()).
 			Annotations(
 				entgql.OrderField("TYPE"),
 			),

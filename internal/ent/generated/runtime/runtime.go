@@ -12,6 +12,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/audience"
+	"github.com/theopenlane/core/internal/ent/generated/audiencemember"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/checkresult"
@@ -718,6 +720,159 @@ func init() {
 	assetDescID := assetMixinFields4[0].Descriptor()
 	// asset.DefaultID holds the default value on creation for the id field.
 	asset.DefaultID = assetDescID.Default.(func() string)
+	audienceMixin := schema.Audience{}.Mixin()
+	audience.Policy = privacy.NewPolicies(schema.Audience{})
+	audience.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := audience.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	audienceMixinHooks0 := audienceMixin[0].Hooks()
+	audienceMixinHooks1 := audienceMixin[1].Hooks()
+	audienceMixinHooks3 := audienceMixin[3].Hooks()
+	audienceMixinHooks4 := audienceMixin[4].Hooks()
+	audienceMixinHooks5 := audienceMixin[5].Hooks()
+	audienceMixinHooks7 := audienceMixin[7].Hooks()
+
+	audience.Hooks[1] = audienceMixinHooks0[0]
+
+	audience.Hooks[2] = audienceMixinHooks1[0]
+
+	audience.Hooks[3] = audienceMixinHooks3[0]
+
+	audience.Hooks[4] = audienceMixinHooks4[0]
+
+	audience.Hooks[5] = audienceMixinHooks5[0]
+
+	audience.Hooks[6] = audienceMixinHooks7[0]
+	audienceMixinInters3 := audienceMixin[3].Interceptors()
+	audienceMixinInters7 := audienceMixin[7].Interceptors()
+	audience.Interceptors[0] = audienceMixinInters3[0]
+	audience.Interceptors[1] = audienceMixinInters7[0]
+	audienceMixinFields0 := audienceMixin[0].Fields()
+	_ = audienceMixinFields0
+	audienceMixinFields4 := audienceMixin[4].Fields()
+	_ = audienceMixinFields4
+	audienceMixinFields5 := audienceMixin[5].Fields()
+	_ = audienceMixinFields5
+	audienceMixinFields7 := audienceMixin[7].Fields()
+	_ = audienceMixinFields7
+	audienceFields := schema.Audience{}.Fields()
+	_ = audienceFields
+	// audienceDescCreatedAt is the schema descriptor for created_at field.
+	audienceDescCreatedAt := audienceMixinFields0[0].Descriptor()
+	// audience.DefaultCreatedAt holds the default value on creation for the created_at field.
+	audience.DefaultCreatedAt = audienceDescCreatedAt.Default.(func() time.Time)
+	// audienceDescUpdatedAt is the schema descriptor for updated_at field.
+	audienceDescUpdatedAt := audienceMixinFields0[1].Descriptor()
+	// audience.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	audience.DefaultUpdatedAt = audienceDescUpdatedAt.Default.(func() time.Time)
+	// audience.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	audience.UpdateDefaultUpdatedAt = audienceDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// audienceDescDisplayID is the schema descriptor for display_id field.
+	audienceDescDisplayID := audienceMixinFields4[1].Descriptor()
+	// audience.DisplayIDValidator is a validator for the "display_id" field. It is called by the builders before save.
+	audience.DisplayIDValidator = audienceDescDisplayID.Validators[0].(func(string) error)
+	// audienceDescTags is the schema descriptor for tags field.
+	audienceDescTags := audienceMixinFields5[0].Descriptor()
+	// audience.DefaultTags holds the default value on creation for the tags field.
+	audience.DefaultTags = audienceDescTags.Default.([]string)
+	// audienceDescOwnerID is the schema descriptor for owner_id field.
+	audienceDescOwnerID := audienceMixinFields7[0].Descriptor()
+	// audience.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	audience.OwnerIDValidator = audienceDescOwnerID.Validators[0].(func(string) error)
+	// audienceDescName is the schema descriptor for name field.
+	audienceDescName := audienceFields[0].Descriptor()
+	// audience.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	audience.NameValidator = audienceDescName.Validators[0].(func(string) error)
+	// audienceDescID is the schema descriptor for id field.
+	audienceDescID := audienceMixinFields4[0].Descriptor()
+	// audience.DefaultID holds the default value on creation for the id field.
+	audience.DefaultID = audienceDescID.Default.(func() string)
+	audiencememberMixin := schema.AudienceMember{}.Mixin()
+	audiencemember.Policy = privacy.NewPolicies(schema.AudienceMember{})
+	audiencemember.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := audiencemember.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	audiencememberMixinHooks0 := audiencememberMixin[0].Hooks()
+	audiencememberMixinHooks1 := audiencememberMixin[1].Hooks()
+	audiencememberMixinHooks3 := audiencememberMixin[3].Hooks()
+	audiencememberMixinHooks4 := audiencememberMixin[4].Hooks()
+	audiencememberMixinHooks6 := audiencememberMixin[6].Hooks()
+
+	audiencemember.Hooks[1] = audiencememberMixinHooks0[0]
+
+	audiencemember.Hooks[2] = audiencememberMixinHooks1[0]
+
+	audiencemember.Hooks[3] = audiencememberMixinHooks3[0]
+
+	audiencemember.Hooks[4] = audiencememberMixinHooks4[0]
+
+	audiencemember.Hooks[5] = audiencememberMixinHooks6[0]
+	audiencememberMixinInters3 := audiencememberMixin[3].Interceptors()
+	audiencememberMixinInters6 := audiencememberMixin[6].Interceptors()
+	audiencemember.Interceptors[0] = audiencememberMixinInters3[0]
+	audiencemember.Interceptors[1] = audiencememberMixinInters6[0]
+	audiencememberMixinFields0 := audiencememberMixin[0].Fields()
+	_ = audiencememberMixinFields0
+	audiencememberMixinFields4 := audiencememberMixin[4].Fields()
+	_ = audiencememberMixinFields4
+	audiencememberMixinFields6 := audiencememberMixin[6].Fields()
+	_ = audiencememberMixinFields6
+	audiencememberFields := schema.AudienceMember{}.Fields()
+	_ = audiencememberFields
+	// audiencememberDescCreatedAt is the schema descriptor for created_at field.
+	audiencememberDescCreatedAt := audiencememberMixinFields0[0].Descriptor()
+	// audiencemember.DefaultCreatedAt holds the default value on creation for the created_at field.
+	audiencemember.DefaultCreatedAt = audiencememberDescCreatedAt.Default.(func() time.Time)
+	// audiencememberDescUpdatedAt is the schema descriptor for updated_at field.
+	audiencememberDescUpdatedAt := audiencememberMixinFields0[1].Descriptor()
+	// audiencemember.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	audiencemember.DefaultUpdatedAt = audiencememberDescUpdatedAt.Default.(func() time.Time)
+	// audiencemember.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	audiencemember.UpdateDefaultUpdatedAt = audiencememberDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// audiencememberDescDisplayID is the schema descriptor for display_id field.
+	audiencememberDescDisplayID := audiencememberMixinFields4[1].Descriptor()
+	// audiencemember.DisplayIDValidator is a validator for the "display_id" field. It is called by the builders before save.
+	audiencemember.DisplayIDValidator = audiencememberDescDisplayID.Validators[0].(func(string) error)
+	// audiencememberDescOwnerID is the schema descriptor for owner_id field.
+	audiencememberDescOwnerID := audiencememberMixinFields6[0].Descriptor()
+	// audiencemember.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	audiencemember.OwnerIDValidator = audiencememberDescOwnerID.Validators[0].(func(string) error)
+	// audiencememberDescAudienceID is the schema descriptor for audience_id field.
+	audiencememberDescAudienceID := audiencememberFields[0].Descriptor()
+	// audiencemember.AudienceIDValidator is a validator for the "audience_id" field. It is called by the builders before save.
+	audiencemember.AudienceIDValidator = audiencememberDescAudienceID.Validators[0].(func(string) error)
+	// audiencememberDescEmail is the schema descriptor for email field.
+	audiencememberDescEmail := audiencememberFields[6].Descriptor()
+	// audiencemember.EmailValidator is a validator for the "email" field. It is called by the builders before save.
+	audiencemember.EmailValidator = func() func(string) error {
+		validators := audiencememberDescEmail.Validators
+		fns := [...]func(string) error{
+			validators[0].(func(string) error),
+			validators[1].(func(string) error),
+		}
+		return func(email string) error {
+			for _, fn := range fns {
+				if err := fn(email); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// audiencememberDescID is the schema descriptor for id field.
+	audiencememberDescID := audiencememberMixinFields4[0].Descriptor()
+	// audiencemember.DefaultID holds the default value on creation for the id field.
+	audiencemember.DefaultID = audiencememberDescID.Default.(func() string)
 	campaignMixin := schema.Campaign{}.Mixin()
 	campaign.Policy = privacy.NewPolicies(schema.Campaign{})
 	campaign.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -5624,11 +5779,15 @@ func init() {
 
 	organization.Hooks[85] = organizationMixinHooks7[80]
 
-	organization.Hooks[86] = organizationHooks[0]
+	organization.Hooks[86] = organizationMixinHooks7[81]
 
-	organization.Hooks[87] = organizationHooks[1]
+	organization.Hooks[87] = organizationMixinHooks7[82]
 
-	organization.Hooks[88] = organizationHooks[2]
+	organization.Hooks[88] = organizationHooks[0]
+
+	organization.Hooks[89] = organizationHooks[1]
+
+	organization.Hooks[90] = organizationHooks[2]
 	organizationMixinInters3 := organizationMixin[3].Interceptors()
 	organizationInters := schema.Organization{}.Interceptors()
 	organization.Interceptors[0] = organizationMixinInters3[0]

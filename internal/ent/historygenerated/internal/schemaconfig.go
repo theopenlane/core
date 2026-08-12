@@ -13,6 +13,8 @@ type SchemaConfig struct {
 	AssessmentHistory                 string // AssessmentHistory table.
 	AssessmentResponseHistory         string // AssessmentResponseHistory table.
 	AssetHistory                      string // AssetHistory table.
+	AudienceHistory                   string // AudienceHistory table.
+	AudienceMemberHistory             string // AudienceMemberHistory table.
 	CampaignHistory                   string // CampaignHistory table.
 	CampaignTargetHistory             string // CampaignTargetHistory table.
 	ContactHistory                    string // ContactHistory table.

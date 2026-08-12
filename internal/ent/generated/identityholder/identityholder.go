@@ -138,6 +138,8 @@ const (
 	EdgeTasks = "tasks"
 	// EdgeFiles holds the string denoting the files edge name in mutations.
 	EdgeFiles = "files"
+	// EdgeAudienceMembers holds the string denoting the audience_members edge name in mutations.
+	EdgeAudienceMembers = "audience_members"
 	// EdgeFindings holds the string denoting the findings edge name in mutations.
 	EdgeFindings = "findings"
 	// EdgeWorkflowObjectRefs holds the string denoting the workflow_object_refs edge name in mutations.
@@ -277,6 +279,13 @@ const (
 	// FilesInverseTable is the table name for the File entity.
 	// It exists in this package in order to avoid circular dependency with the "file" package.
 	FilesInverseTable = "files"
+	// AudienceMembersTable is the table that holds the audience_members relation/edge.
+	AudienceMembersTable = "audience_members"
+	// AudienceMembersInverseTable is the table name for the AudienceMember entity.
+	// It exists in this package in order to avoid circular dependency with the "audiencemember" package.
+	AudienceMembersInverseTable = "audience_members"
+	// AudienceMembersColumn is the table column denoting the audience_members relation/edge.
+	AudienceMembersColumn = "identity_holder_id"
 	// FindingsTable is the table that holds the findings relation/edge. The primary key declared below.
 	FindingsTable = "finding_identity_holders"
 	// FindingsInverseTable is the table name for the Finding entity.
@@ -912,6 +921,20 @@ func ByFiles(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByAudienceMembersCount orders the results by audience_members count.
+func ByAudienceMembersCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newAudienceMembersStep(), opts...)
+	}
+}
+
+// ByAudienceMembers orders the results by audience_members terms.
+func ByAudienceMembers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAudienceMembersStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByFindingsCount orders the results by findings count.
 func ByFindingsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1119,6 +1142,13 @@ func newFilesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(FilesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, FilesTable, FilesPrimaryKey...),
+	)
+}
+func newAudienceMembersStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AudienceMembersInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, AudienceMembersTable, AudienceMembersColumn),
 	)
 }
 func newFindingsStep() *sqlgraph.Step {

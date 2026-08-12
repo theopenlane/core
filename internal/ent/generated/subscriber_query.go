@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/audiencemember"
 	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/event"
@@ -37,12 +38,14 @@ type SubscriberQuery struct {
 	withEvents               *EventQuery
 	withTrustCenter          *TrustCenterQuery
 	withCampaignTargets      *CampaignTargetQuery
+	withAudienceMembers      *AudienceMemberQuery
 	withContact              *ContactQuery
 	withUser                 *UserQuery
 	loadTotal                []func(context.Context, []*Subscriber) error
 	modifiers                []func(*sql.Selector)
 	withNamedEvents          map[string]*EventQuery
 	withNamedCampaignTargets map[string]*CampaignTargetQuery
+	withNamedAudienceMembers map[string]*AudienceMemberQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -173,6 +176,31 @@ func (_q *SubscriberQuery) QueryCampaignTargets() *CampaignTargetQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.CampaignTarget
 		step.Edge.Schema = schemaConfig.CampaignTarget
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryAudienceMembers chains the current query on the "audience_members" edge.
+func (_q *SubscriberQuery) QueryAudienceMembers() *AudienceMemberQuery {
+	query := (&AudienceMemberClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(subscriber.Table, subscriber.FieldID, selector),
+			sqlgraph.To(audiencemember.Table, audiencemember.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, subscriber.AudienceMembersTable, subscriber.AudienceMembersColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.AudienceMember
+		step.Edge.Schema = schemaConfig.AudienceMember
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -425,6 +453,7 @@ func (_q *SubscriberQuery) Clone() *SubscriberQuery {
 		withEvents:          _q.withEvents.Clone(),
 		withTrustCenter:     _q.withTrustCenter.Clone(),
 		withCampaignTargets: _q.withCampaignTargets.Clone(),
+		withAudienceMembers: _q.withAudienceMembers.Clone(),
 		withContact:         _q.withContact.Clone(),
 		withUser:            _q.withUser.Clone(),
 		// clone intermediate query.
@@ -475,6 +504,17 @@ func (_q *SubscriberQuery) WithCampaignTargets(opts ...func(*CampaignTargetQuery
 		opt(query)
 	}
 	_q.withCampaignTargets = query
+	return _q
+}
+
+// WithAudienceMembers tells the query-builder to eager-load the nodes that are connected to
+// the "audience_members" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *SubscriberQuery) WithAudienceMembers(opts ...func(*AudienceMemberQuery)) *SubscriberQuery {
+	query := (&AudienceMemberClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAudienceMembers = query
 	return _q
 }
 
@@ -584,11 +624,12 @@ func (_q *SubscriberQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 	var (
 		nodes       = []*Subscriber{}
 		_spec       = _q.querySpec()
-		loadedTypes = [6]bool{
+		loadedTypes = [7]bool{
 			_q.withOwner != nil,
 			_q.withEvents != nil,
 			_q.withTrustCenter != nil,
 			_q.withCampaignTargets != nil,
+			_q.withAudienceMembers != nil,
 			_q.withContact != nil,
 			_q.withUser != nil,
 		}
@@ -642,6 +683,13 @@ func (_q *SubscriberQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 			return nil, err
 		}
 	}
+	if query := _q.withAudienceMembers; query != nil {
+		if err := _q.loadAudienceMembers(ctx, query, nodes,
+			func(n *Subscriber) { n.Edges.AudienceMembers = []*AudienceMember{} },
+			func(n *Subscriber, e *AudienceMember) { n.Edges.AudienceMembers = append(n.Edges.AudienceMembers, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withContact; query != nil {
 		if err := _q.loadContact(ctx, query, nodes, nil,
 			func(n *Subscriber, e *Contact) { n.Edges.Contact = e }); err != nil {
@@ -665,6 +713,13 @@ func (_q *SubscriberQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 		if err := _q.loadCampaignTargets(ctx, query, nodes,
 			func(n *Subscriber) { n.appendNamedCampaignTargets(name) },
 			func(n *Subscriber, e *CampaignTarget) { n.appendNamedCampaignTargets(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedAudienceMembers {
+		if err := _q.loadAudienceMembers(ctx, query, nodes,
+			func(n *Subscriber) { n.appendNamedAudienceMembers(name) },
+			func(n *Subscriber, e *AudienceMember) { n.appendNamedAudienceMembers(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -814,6 +869,36 @@ func (_q *SubscriberQuery) loadCampaignTargets(ctx context.Context, query *Campa
 	}
 	query.Where(predicate.CampaignTarget(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(subscriber.CampaignTargetsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.SubscriberID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "subscriber_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *SubscriberQuery) loadAudienceMembers(ctx context.Context, query *AudienceMemberQuery, nodes []*Subscriber, init func(*Subscriber), assign func(*Subscriber, *AudienceMember)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Subscriber)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(audiencemember.FieldSubscriberID)
+	}
+	query.Where(predicate.AudienceMember(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(subscriber.AudienceMembersColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -1023,6 +1108,20 @@ func (_q *SubscriberQuery) WithNamedCampaignTargets(name string, opts ...func(*C
 		_q.withNamedCampaignTargets = make(map[string]*CampaignTargetQuery)
 	}
 	_q.withNamedCampaignTargets[name] = query
+	return _q
+}
+
+// WithNamedAudienceMembers tells the query-builder to eager-load the nodes that are connected to the "audience_members"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *SubscriberQuery) WithNamedAudienceMembers(name string, opts ...func(*AudienceMemberQuery)) *SubscriberQuery {
+	query := (&AudienceMemberClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedAudienceMembers == nil {
+		_q.withNamedAudienceMembers = make(map[string]*AudienceMemberQuery)
+	}
+	_q.withNamedAudienceMembers[name] = query
 	return _q
 }
 

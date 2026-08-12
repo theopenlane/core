@@ -12,6 +12,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/audience"
+	"github.com/theopenlane/core/internal/ent/generated/audiencemember"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
@@ -81,6 +83,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/assessmenthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/assessmentresponsehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/assethistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/audiencehistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/audiencememberhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/campaignhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/campaigntargethistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/contacthistory"
@@ -274,6 +278,68 @@ func PurgeAssetHistory(ctx context.Context, ps ...predicate.Asset) error {
 		s.Where(sql.In(assethistory.FieldRef, refs))
 	}).Exec(history.WithContext(ctx)); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error purging asset history")
+
+		return err
+	}
+
+	return nil
+}
+
+// PurgeAudienceHistory removes the history rows belonging to every audience matching
+// the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
+// deletes that should keep their audit trail are unaffected.
+// This has to run before the audience records themselves are deleted, the rows are matched
+// with a sub-select against the audience table
+func PurgeAudienceHistory(ctx context.Context, ps ...predicate.Audience) error {
+	if !contextx.PurgeHistoryEnabled(ctx) {
+		return nil
+	}
+
+	client := FromContext(ctx)
+	if client == nil || client.HistoryClient == nil {
+		return nil
+	}
+
+	refs := sql.Select(audience.FieldID).From(sql.Table(audience.Table))
+	for _, p := range ps {
+		p(refs)
+	}
+
+	if _, err := client.HistoryClient.AudienceHistory.Delete().Where(func(s *sql.Selector) {
+		s.Where(sql.In(audiencehistory.FieldRef, refs))
+	}).Exec(history.WithContext(ctx)); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error purging audience history")
+
+		return err
+	}
+
+	return nil
+}
+
+// PurgeAudienceMemberHistory removes the history rows belonging to every audiencemember matching
+// the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
+// deletes that should keep their audit trail are unaffected.
+// This has to run before the audiencemember records themselves are deleted, the rows are matched
+// with a sub-select against the audiencemember table
+func PurgeAudienceMemberHistory(ctx context.Context, ps ...predicate.AudienceMember) error {
+	if !contextx.PurgeHistoryEnabled(ctx) {
+		return nil
+	}
+
+	client := FromContext(ctx)
+	if client == nil || client.HistoryClient == nil {
+		return nil
+	}
+
+	refs := sql.Select(audiencemember.FieldID).From(sql.Table(audiencemember.Table))
+	for _, p := range ps {
+		p(refs)
+	}
+
+	if _, err := client.HistoryClient.AudienceMemberHistory.Delete().Where(func(s *sql.Selector) {
+		s.Where(sql.In(audiencememberhistory.FieldRef, refs))
+	}).Exec(history.WithContext(ctx)); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("error purging audiencemember history")
 
 		return err
 	}

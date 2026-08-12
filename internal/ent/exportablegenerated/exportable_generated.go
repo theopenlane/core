@@ -18,6 +18,9 @@ var ExportableSchemas = map[string]info{"ASSESSMENT": info{
 }, "ASSET": info{
 	hasOwnerField:       true,
 	hasSystemOwnedField: true,
+}, "AUDIENCE": info{
+	hasOwnerField:       true,
+	hasSystemOwnedField: false,
 }, "CAMPAIGN": info{
 	hasOwnerField:       true,
 	hasSystemOwnedField: false,

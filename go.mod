@@ -105,7 +105,7 @@ require (
 	github.com/theopenlane/core/common v1.0.25
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.3.0
-	github.com/theopenlane/entx v0.30.3
+	github.com/theopenlane/entx v0.30.4
 	github.com/theopenlane/go-client v0.13.0
 	github.com/theopenlane/gqlgen-plugins v0.14.7
 	github.com/theopenlane/httpsling v0.3.0
@@ -123,10 +123,10 @@ require (
 	goauthentik.io/api/v3 v3.2026020.16
 	gocloud.dev v0.46.0
 	golang.org/x/crypto v0.54.0
-	golang.org/x/mod v0.38.0
+	golang.org/x/mod v0.39.0
 	golang.org/x/oauth2 v0.36.0
 	golang.org/x/sync v0.22.0
-	golang.org/x/text v0.40.0
+	golang.org/x/text v0.41.0
 	golang.org/x/tools v0.48.0
 	google.golang.org/api v0.291.0
 	gopkg.in/yaml.v3 v3.0.1
@@ -139,6 +139,7 @@ require (
 	github.com/Masterminds/semver/v3 v3.4.0 // indirect
 	github.com/Masterminds/sprig/v3 v3.3.0 // indirect
 	github.com/andybalholm/cascadia v1.3.4 // indirect
+	github.com/apparentlymart/go-textseg/v17 v17.0.1 // indirect
 	github.com/go-resty/resty/v2 v2.7.0 // indirect
 	github.com/gofrs/flock v0.10.0 // indirect
 	github.com/google/go-github/v89 v89.0.0 // indirect
@@ -318,7 +319,7 @@ require (
 	github.com/fxamacker/cbor/v2 v2.9.2 // indirect
 	github.com/go-logr/logr v1.4.4 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
-	github.com/go-openapi/inflect v0.21.6 // indirect
+	github.com/go-openapi/inflect v1.0.0 // indirect
 	github.com/go-openapi/jsonpointer v0.22.5 // indirect
 	github.com/go-openapi/swag/jsonname v0.25.5 // indirect
 	github.com/go-redis/redis/v8 v8.11.5 // indirect
@@ -349,7 +350,7 @@ require (
 	github.com/lestrrat-go/httpcc v1.0.1 // indirect
 	github.com/magiconair/properties v1.8.10 // indirect
 	github.com/mattn/go-colorable v0.1.15 // indirect
-	github.com/mattn/go-isatty v0.0.23 // indirect
+	github.com/mattn/go-isatty v0.0.24 // indirect
 	github.com/mattn/go-runewidth v0.0.24 // indirect
 	github.com/mfridman/interpolate v0.0.2 // indirect
 	github.com/mitchellh/copystructure v1.2.0 // indirect
@@ -397,15 +398,15 @@ require (
 	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect
 	github.com/x448/float16 v0.8.4 // indirect
 	github.com/yuin/gopher-lua v1.1.1 // indirect
-	github.com/zclconf/go-cty v1.18.1 // indirect
+	github.com/zclconf/go-cty v1.19.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.69.0 // indirect
-	go.opentelemetry.io/otel v1.44.0 // indirect
-	go.opentelemetry.io/otel/metric v1.44.0 // indirect
+	go.opentelemetry.io/otel v1.45.0 // indirect
+	go.opentelemetry.io/otel/metric v1.45.0 // indirect
 	go.opentelemetry.io/otel/sdk v1.44.0 // indirect
-	go.opentelemetry.io/otel/trace v1.44.0 // indirect
+	go.opentelemetry.io/otel/trace v1.45.0 // indirect
 	go.uber.org/goleak v1.3.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
-	golang.org/x/exp v0.0.0-20260718201538-764159d718ef // indirect
+	golang.org/x/exp v0.0.0-20260812173653-3d80eb74bc5b // indirect
 	golang.org/x/net v0.57.0
 	golang.org/x/sys v0.47.0 // indirect
 	golang.org/x/time v0.15.0 // indirect

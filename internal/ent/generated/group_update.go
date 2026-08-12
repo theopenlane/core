@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
+	"github.com/theopenlane/core/internal/ent/generated/audiencemember"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/ent/generated/campaigntarget"
 	"github.com/theopenlane/core/internal/ent/generated/control"
@@ -1213,6 +1214,21 @@ func (_u *GroupUpdate) AddCampaignTargets(v ...*CampaignTarget) *GroupUpdate {
 	return _u.AddCampaignTargetIDs(ids...)
 }
 
+// AddAudienceMemberIDs adds the "audience_members" edge to the AudienceMember entity by IDs.
+func (_u *GroupUpdate) AddAudienceMemberIDs(ids ...string) *GroupUpdate {
+	_u.mutation.AddAudienceMemberIDs(ids...)
+	return _u
+}
+
+// AddAudienceMembers adds the "audience_members" edges to the AudienceMember entity.
+func (_u *GroupUpdate) AddAudienceMembers(v ...*AudienceMember) *GroupUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddAudienceMemberIDs(ids...)
+}
+
 // AddInviteIDs adds the "invites" edge to the Invite entity by IDs.
 func (_u *GroupUpdate) AddInviteIDs(ids ...string) *GroupUpdate {
 	_u.mutation.AddInviteIDs(ids...)
@@ -2293,6 +2309,27 @@ func (_u *GroupUpdate) RemoveCampaignTargets(v ...*CampaignTarget) *GroupUpdate 
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveCampaignTargetIDs(ids...)
+}
+
+// ClearAudienceMembers clears all "audience_members" edges to the AudienceMember entity.
+func (_u *GroupUpdate) ClearAudienceMembers() *GroupUpdate {
+	_u.mutation.ClearAudienceMembers()
+	return _u
+}
+
+// RemoveAudienceMemberIDs removes the "audience_members" edge to AudienceMember entities by IDs.
+func (_u *GroupUpdate) RemoveAudienceMemberIDs(ids ...string) *GroupUpdate {
+	_u.mutation.RemoveAudienceMemberIDs(ids...)
+	return _u
+}
+
+// RemoveAudienceMembers removes "audience_members" edges to AudienceMember entities.
+func (_u *GroupUpdate) RemoveAudienceMembers(v ...*AudienceMember) *GroupUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveAudienceMemberIDs(ids...)
 }
 
 // ClearInvites clears all "invites" edges to the Invite entity.
@@ -5014,6 +5051,54 @@ func (_u *GroupUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.AudienceMembersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   group.AudienceMembersTable,
+			Columns: []string{group.AudienceMembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(audiencemember.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AudienceMember
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedAudienceMembersIDs(); len(nodes) > 0 && !_u.mutation.AudienceMembersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   group.AudienceMembersTable,
+			Columns: []string{group.AudienceMembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(audiencemember.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AudienceMember
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AudienceMembersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   group.AudienceMembersTable,
+			Columns: []string{group.AudienceMembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(audiencemember.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AudienceMember
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.InvitesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -6288,6 +6373,21 @@ func (_u *GroupUpdateOne) AddCampaignTargets(v ...*CampaignTarget) *GroupUpdateO
 	return _u.AddCampaignTargetIDs(ids...)
 }
 
+// AddAudienceMemberIDs adds the "audience_members" edge to the AudienceMember entity by IDs.
+func (_u *GroupUpdateOne) AddAudienceMemberIDs(ids ...string) *GroupUpdateOne {
+	_u.mutation.AddAudienceMemberIDs(ids...)
+	return _u
+}
+
+// AddAudienceMembers adds the "audience_members" edges to the AudienceMember entity.
+func (_u *GroupUpdateOne) AddAudienceMembers(v ...*AudienceMember) *GroupUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddAudienceMemberIDs(ids...)
+}
+
 // AddInviteIDs adds the "invites" edge to the Invite entity by IDs.
 func (_u *GroupUpdateOne) AddInviteIDs(ids ...string) *GroupUpdateOne {
 	_u.mutation.AddInviteIDs(ids...)
@@ -7368,6 +7468,27 @@ func (_u *GroupUpdateOne) RemoveCampaignTargets(v ...*CampaignTarget) *GroupUpda
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveCampaignTargetIDs(ids...)
+}
+
+// ClearAudienceMembers clears all "audience_members" edges to the AudienceMember entity.
+func (_u *GroupUpdateOne) ClearAudienceMembers() *GroupUpdateOne {
+	_u.mutation.ClearAudienceMembers()
+	return _u
+}
+
+// RemoveAudienceMemberIDs removes the "audience_members" edge to AudienceMember entities by IDs.
+func (_u *GroupUpdateOne) RemoveAudienceMemberIDs(ids ...string) *GroupUpdateOne {
+	_u.mutation.RemoveAudienceMemberIDs(ids...)
+	return _u
+}
+
+// RemoveAudienceMembers removes "audience_members" edges to AudienceMember entities.
+func (_u *GroupUpdateOne) RemoveAudienceMembers(v ...*AudienceMember) *GroupUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveAudienceMemberIDs(ids...)
 }
 
 // ClearInvites clears all "invites" edges to the Invite entity.
@@ -10114,6 +10235,54 @@ func (_u *GroupUpdateOne) sqlSave(ctx context.Context) (_node *Group, err error)
 			},
 		}
 		edge.Schema = _u.schemaConfig.CampaignTarget
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AudienceMembersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   group.AudienceMembersTable,
+			Columns: []string{group.AudienceMembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(audiencemember.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AudienceMember
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedAudienceMembersIDs(); len(nodes) > 0 && !_u.mutation.AudienceMembersCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   group.AudienceMembersTable,
+			Columns: []string{group.AudienceMembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(audiencemember.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AudienceMember
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AudienceMembersIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   group.AudienceMembersTable,
+			Columns: []string{group.AudienceMembersColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(audiencemember.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AudienceMember
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

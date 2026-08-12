@@ -209,6 +209,54 @@ func (f AssetHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m histor
 	return Denyf("historygenerated/privacy: unexpected mutation type %T, expect *historygenerated.AssetHistoryMutation", m)
 }
 
+// The AudienceHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type AudienceHistoryQueryRuleFunc func(context.Context, *historygenerated.AudienceHistoryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f AudienceHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q historygenerated.Query) error {
+	if q, ok := q.(*historygenerated.AudienceHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("historygenerated/privacy: unexpected query type %T, expect *historygenerated.AudienceHistoryQuery", q)
+}
+
+// The AudienceHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type AudienceHistoryMutationRuleFunc func(context.Context, *historygenerated.AudienceHistoryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f AudienceHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m historygenerated.Mutation) error {
+	if m, ok := m.(*historygenerated.AudienceHistoryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("historygenerated/privacy: unexpected mutation type %T, expect *historygenerated.AudienceHistoryMutation", m)
+}
+
+// The AudienceMemberHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type AudienceMemberHistoryQueryRuleFunc func(context.Context, *historygenerated.AudienceMemberHistoryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f AudienceMemberHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q historygenerated.Query) error {
+	if q, ok := q.(*historygenerated.AudienceMemberHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("historygenerated/privacy: unexpected query type %T, expect *historygenerated.AudienceMemberHistoryQuery", q)
+}
+
+// The AudienceMemberHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type AudienceMemberHistoryMutationRuleFunc func(context.Context, *historygenerated.AudienceMemberHistoryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f AudienceMemberHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m historygenerated.Mutation) error {
+	if m, ok := m.(*historygenerated.AudienceMemberHistoryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("historygenerated/privacy: unexpected mutation type %T, expect *historygenerated.AudienceMemberHistoryMutation", m)
+}
+
 // The CampaignHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type CampaignHistoryQueryRuleFunc func(context.Context, *historygenerated.CampaignHistoryQuery) error
@@ -1788,6 +1836,10 @@ func queryFilter(q historygenerated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *historygenerated.AssetHistoryQuery:
 		return q.Filter(), nil
+	case *historygenerated.AudienceHistoryQuery:
+		return q.Filter(), nil
+	case *historygenerated.AudienceMemberHistoryQuery:
+		return q.Filter(), nil
 	case *historygenerated.CampaignHistoryQuery:
 		return q.Filter(), nil
 	case *historygenerated.CampaignTargetHistoryQuery:
@@ -1930,6 +1982,10 @@ func mutationFilter(m historygenerated.Mutation) (Filter, error) {
 	case *historygenerated.AssessmentResponseHistoryMutation:
 		return m.Filter(), nil
 	case *historygenerated.AssetHistoryMutation:
+		return m.Filter(), nil
+	case *historygenerated.AudienceHistoryMutation:
+		return m.Filter(), nil
+	case *historygenerated.AudienceMemberHistoryMutation:
 		return m.Filter(), nil
 	case *historygenerated.CampaignHistoryMutation:
 		return m.Filter(), nil
