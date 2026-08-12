@@ -2,6 +2,7 @@
 {{/* gotype: entgo.io/ent/entc/gen.Graph */}}
 
 {{ define "edge_cleanup" }}
+	//go:build !codegen
 
 {{/* Add the base header for the generated file */}}
 {{ $pkg := base $.Config.Package }}
