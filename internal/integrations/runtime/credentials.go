@@ -151,6 +151,8 @@ func (r *Runtime) reconcileUserInput(ctx context.Context, installation *ent.Inte
 		return err
 	}
 
+	r.keystore().InvalidateClients(installation.ID)
+
 	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 	state, err := def.ProviderState(installation.ProviderState)

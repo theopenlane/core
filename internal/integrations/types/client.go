@@ -4,6 +4,8 @@ import (
 	"context"
 	"encoding/json"
 
+	"github.com/theopenlane/iam/tokens"
+
 	generated "github.com/theopenlane/core/internal/ent/generated"
 )
 
@@ -15,6 +17,8 @@ type ClientBuildRequest struct {
 	Credentials CredentialBindings
 	// Config is the client-specific configuration payload
 	Config json.RawMessage
+	// TokenManager signs assertions for providers that authenticate via identity federation
+	TokenManager *tokens.TokenManager
 }
 
 // ClientBuilderFunc builds a client for one installation

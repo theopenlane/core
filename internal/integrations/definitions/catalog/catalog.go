@@ -25,10 +25,11 @@ import (
 	"github.com/theopenlane/core/internal/integrations/registry"
 )
 
-// Builders returns the built-in reference definition builders. devMode is the
+// Builders returns the built-in reference definition builders. federationIssuer is
+// the issuer URI customer identity providers federate against. devMode is the
 // server-level development flag; when true, integrations that support it (e.g.
 // email) use local file-based senders instead of calling provider APIs
-func Builders(cfg Config, devMode bool) []registry.Builder {
+func Builders(cfg Config, federationIssuer string, devMode bool) []registry.Builder {
 	return []registry.Builder{
 		authentik.Builder(),
 		awssecurityhub.Builder(cfg.AWSSecurityHub),
@@ -36,7 +37,7 @@ func Builders(cfg Config, devMode bool) []registry.Builder {
 		azuresecuritycenter.Builder(),
 		cloudflare.Builder(&cfg.CloudflareRuntime),
 		email.Builder(&cfg.Email, devMode),
-		gcpscc.Builder(),
+		gcpscc.Builder(federationIssuer),
 		githubapp.Builder(cfg.GitHubApp),
 		googledrive.Builder(cfg.GoogleDrive),
 		googleworkspace.Builder(cfg.GoogleWorkspace),
