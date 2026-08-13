@@ -6,6 +6,7 @@ import (
 	"errors"
 	"time"
 
+	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
@@ -37,7 +38,7 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 	case req.Runtime:
 		definitionID = req.DefinitionID
 	default:
-		record, err := db.Integration.Get(ctx, req.IntegrationID)
+		record, err := ResolveIntegration(ctx, db, req.IntegrationID, req.OwnerID, req.DefinitionID)
 		if err != nil {
 			return types.DispatchResult{}, err
 		}
@@ -54,10 +55,8 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 		return types.DispatchResult{}, err
 	}
 
-	ctx = intobvs.WithOperation(ctx, req.Operation)
-
 	if operation.DisabledForAll {
-		logx.FromContext(ctx).Debug().Msg("operation is disabled, skipping dispatch")
+		logx.FromContext(ctx).Debug().Str(intobvs.FieldOperation, req.Operation).Msg("operation is disabled, skipping dispatch")
 
 		return types.DispatchResult{Status: enums.IntegrationRunStatusCancelled}, nil
 	}
@@ -70,10 +69,7 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 		return types.DispatchResult{}, err
 	}
 
-	runType := req.RunType
-	if runType == "" {
-		runType = enums.IntegrationRunTypeManual
-	}
+	runType := lo.CoalesceOrEmpty(req.RunType, enums.IntegrationRunTypeManual)
 
 	src := types.IntegrationSource{
 		IntegrationID: req.IntegrationID,
@@ -86,13 +82,7 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 	var runID string
 
 	if installation != nil && !operation.Policy.SkipRunRecord {
-		runRecord, err := CreatePendingRun(ctx, db, installation, types.DispatchRequest{
-			IntegrationID:      req.IntegrationID,
-			Operation:          req.Operation,
-			Config:             jsonx.CloneRawMessage(req.Config),
-			ForceClientRebuild: req.ForceClientRebuild,
-			RunType:            runType,
-		})
+		runRecord, err := CreatePendingRun(ctx, db, installation, req.Operation, runType, req.Config)
 		if err != nil {
 			return types.DispatchResult{}, err
 		}
@@ -115,7 +105,7 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 
 	eventID, err := runtime.EmitWithHeaders(emitCtx, operation.Topic, Envelope{
 		OperationContext:   oc,
-		Config:             jsonx.CloneRawMessage(req.Config),
+		Config:             req.Config,
 		ForceClientRebuild: req.ForceClientRebuild,
 	}, headers, gala.WithEventID(gala.EventID(runID)))
 	if err != nil {
@@ -137,6 +127,30 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 		EventID: string(eventID),
 		Status:  enums.IntegrationRunStatusPending,
 	}, nil
+}
+
+// ResolveIntegration resolves one integration by explicit ID with optional owner
+// and definition cross-checks
+func ResolveIntegration(ctx context.Context, db *ent.Client, integrationID, ownerID, definitionID string) (*ent.Integration, error) {
+	if integrationID == "" {
+		return nil, ErrIntegrationIDRequired
+	}
+
+	query := db.Integration.Query().Where(integration.IDEQ(integrationID))
+	if ownerID != "" {
+		query = query.Where(integration.OwnerIDEQ(ownerID))
+	}
+
+	record, err := query.Only(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if definitionID != "" && record.DefinitionID != definitionID {
+		return nil, ErrInstallationDefinitionMismatch
+	}
+
+	return record, nil
 }
 
 // ResolveOwnerIntegration finds a connected integration for the given definition

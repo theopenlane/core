@@ -130,11 +130,7 @@ func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.Recon
 		return 0, operations.ErrOperationDisabled
 	}
 
-	runRecord, err := operations.CreatePendingRun(ctx, db, installation, types.DispatchRequest{
-		IntegrationID: src.IntegrationID,
-		Operation:     envelope.Operation,
-		RunType:       enums.IntegrationRunTypeReconcile,
-	})
+	runRecord, err := operations.CreatePendingRun(ctx, db, installation, envelope.Operation, enums.IntegrationRunTypeReconcile, nil)
 	if err != nil {
 		return 0, err
 	}

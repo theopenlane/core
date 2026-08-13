@@ -3,14 +3,10 @@ package runtime
 import "errors"
 
 var (
-	// ErrIntegrationIDRequired indicates resolution requires an explicit integration ID
-	ErrIntegrationIDRequired = errors.New("integrations/runtime: integration id required")
 	// ErrInstallationRequired indicates the installation record dependency is missing
 	ErrInstallationRequired = errors.New("integrations/runtime: installation required")
 	// ErrInstallationNotFound indicates no matching installation could be resolved
 	ErrInstallationNotFound = errors.New("integrations/runtime: installation not found")
-	// ErrInstallationDefinitionMismatch indicates the resolved installation does not match the requested definition
-	ErrInstallationDefinitionMismatch = errors.New("integrations/runtime: installation definition mismatch")
 	// ErrConnectionRequired indicates the installation operation requires a credential-selected connection
 	ErrConnectionRequired = errors.New("integrations/runtime: connection required")
 	// ErrConnectionNotFound indicates the requested connection could not be resolved for the definition

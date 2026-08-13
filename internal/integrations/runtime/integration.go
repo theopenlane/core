@@ -8,7 +8,6 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/integrations/operations"
@@ -27,27 +26,10 @@ type IntegrationLookup struct {
 	DefinitionID string
 }
 
-// ResolveIntegration resolves one integration by explicit ID with optional owner and definition cross-checks
+// ResolveIntegration resolves one integration by explicit ID with optional owner
+// and definition cross-checks through the shared operations resolver
 func (r *Runtime) ResolveIntegration(ctx context.Context, lookup IntegrationLookup) (*ent.Integration, error) {
-	if lookup.IntegrationID == "" {
-		return nil, ErrIntegrationIDRequired
-	}
-
-	query := r.DB().Integration.Query().Where(integration.IDEQ(lookup.IntegrationID))
-	if lookup.OwnerID != "" {
-		query = query.Where(integration.OwnerIDEQ(lookup.OwnerID))
-	}
-
-	record, err := query.Only(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	if lookup.DefinitionID != "" && record.DefinitionID != lookup.DefinitionID {
-		return nil, ErrInstallationDefinitionMismatch
-	}
-
-	return record, nil
+	return operations.ResolveIntegration(ctx, r.DB(), lookup.IntegrationID, lookup.OwnerID, lookup.DefinitionID)
 }
 
 // ResolveOwnerIntegration finds a connected integration for the given definition
