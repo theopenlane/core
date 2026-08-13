@@ -29,13 +29,13 @@ func (h HealthCheck) Handle() types.OperationHandler {
 
 // Run executes the GCP SCC health check
 func (HealthCheck) Run(ctx context.Context, credentials types.CredentialBindings, c *cloudscc.Client) (json.RawMessage, error) {
-	meta, err := resolveCredential(credentials)
+	scope, err := resolveScope(credentials)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("gcpscc: error attempting to resolve credentials")
 		return nil, err
 	}
 
-	parents, err := resolveParents(meta)
+	parents, err := resolveParents(scope)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("gcpscc: error attempting to resolve parents")
 		return nil, err

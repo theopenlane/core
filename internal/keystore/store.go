@@ -191,9 +191,10 @@ func (s *Store) BuildClient(ctx context.Context, installation *ent.Integration, 
 	}
 
 	client, err := registration.Build(ctx, types.ClientBuildRequest{
-		Integration: installation,
-		Credentials: cloneCredentialBindings(credentials),
-		Config:      jsonx.CloneRawMessage(config),
+		Integration:  installation,
+		Credentials:  cloneCredentialBindings(credentials),
+		Config:       jsonx.CloneRawMessage(config),
+		TokenManager: s.db.TokenManager,
 	})
 	if err != nil {
 		return nil, err

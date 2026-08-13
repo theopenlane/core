@@ -426,6 +426,7 @@ func RegisterRoutes(router *Router) error {
 		registerRefreshHandler,
 		registerLogoutHandler,
 		registerJwksWellKnownHandler,
+		registerOpenIDConfigurationHandler,
 		registerInviteHandler,
 		registerGithubLoginHandler,
 		registerGithubCallbackHandler,

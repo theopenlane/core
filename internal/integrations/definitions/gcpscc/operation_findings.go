@@ -45,12 +45,12 @@ func (f FindingsCollect) IngestHandle() types.IngestHandler {
 
 // Run collects GCP SCC findings from configured sources
 func (FindingsCollect) Run(ctx context.Context, credentials types.CredentialBindings, c *cloudscc.Client, cfg FindingsSync, lastRunAt *time.Time) ([]types.IngestPayloadSet, error) {
-	meta, err := resolveCredential(credentials)
+	scope, err := resolveScope(credentials)
 	if err != nil {
 		return nil, err
 	}
 
-	sources, err := resolveSources(meta)
+	sources, err := resolveSources(scope)
 	if err != nil {
 		return nil, err
 	}
@@ -173,7 +173,7 @@ func resolveFindingResource(sourceName string, finding *securitycenterpb.Finding
 }
 
 // resolveParents chooses the SCC parent resources used for health/settings checks
-func resolveParents(meta CredentialSchema) ([]string, error) {
+func resolveParents(meta CollectionScope) ([]string, error) {
 	if meta.OrganizationID != "" && meta.ProjectScope != projectScopeSpecific {
 		return []string{fmt.Sprintf("organizations/%s", meta.OrganizationID)}, nil
 	}
@@ -208,8 +208,8 @@ func resolveParents(meta CredentialSchema) ([]string, error) {
 	return nil, ErrProjectIDRequired
 }
 
-// resolveSources resolves source resource names from credential metadata
-func resolveSources(meta CredentialSchema) ([]string, error) {
+// resolveSources resolves source resource names from the collection scope
+func resolveSources(meta CollectionScope) ([]string, error) {
 	raw := make([]string, 0, len(meta.SourceIDs))
 
 	raw = append(raw, meta.SourceIDs...)
