@@ -299,6 +299,12 @@ func serve(ctx context.Context) error {
 	// backfills run after the integrations runtime so they can use it
 	so.AddServerOptions(serveropts.WithBackfill(ctx, galaApp))
 
+	// start workers only after all injector provisioning above so a dequeued job never
+	// resolves a missing dependency; earlier emissions wait in River
+	if err := serveropts.StartGalaWorkers(ctx, galaApp, so); err != nil {
+		return err
+	}
+
 	// add session manager
 	so.AddServerOptions(
 		serveropts.WithSessionMiddleware(),

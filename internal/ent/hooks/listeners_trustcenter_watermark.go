@@ -1,10 +1,6 @@
 package hooks
 
 import (
-	"context"
-
-	"entgo.io/ent"
-
 	"github.com/theopenlane/core/common/jobspec"
 	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -13,20 +9,18 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-// RegisterGalaTrustCenterWatermarkListeners registers listeners that enqueue
-// watermarking jobs after trust center document db transactions have been committed.
-func RegisterGalaTrustCenterWatermarkListeners(g *gala.Gala) ([]gala.ListenerID, error) {
-	return registerMutationListeners(g,
+// TrustCenterWatermarkListeners returns the listeners that enqueue watermarking jobs
+// after trust center document transactions commit
+func TrustCenterWatermarkListeners() []gala.Registration {
+	return []gala.Registration{
 		entityops.MutationListener{
 			Schema:     generated.TypeTrustCenterDoc,
-			Operations: []string{ent.OpCreate.String(), ent.OpUpdateOne.String()},
+			Label:      "watermark",
+			Operations: []string{entityops.OpCreate, entityops.OpUpdateOne},
 			Fields:     []string{trustcenterdoc.FieldOriginalFileID},
-			Enrich: func(ctx context.Context, payload entityops.MutationPayload) context.Context {
-				return logx.WithFields(ctx, map[string]any{"trust_center_doc_id": payload.EntityID})
-			},
-			Handle: handleTrustCenterDocWatermarkGala,
+			Handle:     handleTrustCenterDocWatermarkGala,
 		},
-	)
+	}
 }
 
 // handleTrustCenterDocWatermarkGala enqueues a watermarking job for a trust center document if watermarking is enabled

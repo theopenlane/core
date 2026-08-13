@@ -89,10 +89,6 @@ var (
 	ErrSSONotEnforceable = errors.New("you cannot enforce sso without testing the connection works correctly")
 	// ErrUnableToDetermineEventID is returned when we cannot determine the event ID for an event
 	ErrUnableToDetermineEventID = errors.New("unable to determine event ID")
-	// ErrGalaRuntimeUnavailable is returned when gala dual emit is enabled but runtime is unavailable
-	ErrGalaRuntimeUnavailable = errors.New("gala runtime unavailable")
-	// ErrGalaMutationEnqueueFailed is returned when gala mutation enqueue fails.
-	ErrGalaMutationEnqueueFailed = errors.New("gala mutation enqueue failed")
 	// ErrNotSingularTrustCenter is returned when an org is trying to create multiple trust centers
 	ErrNotSingularTrustCenter = errors.New("you can only create/manage one trust center at a time")
 	// ErrStatusApprovedNotAllowed is returned when a user attempts to set status to APPROVED without being in the approver or delegate group
@@ -257,7 +253,28 @@ var (
 	ErrFailedToGenerateAttestationPDF = errors.New("failed to generate attestation PDF")
 	// ErrInvalidScope is returned when a scope is not assignable to service subjects
 	ErrInvalidScope = errors.New("scope is not assignable to service subjects")
+	// ErrMissingTaskTemplate indicates a rule fired but no taskrules.Template is registered for it
+	ErrMissingTaskTemplate = errors.New("entityops: missing task template")
+	// ErrExpressionNotList indicates an EachElement expression evaluated to a non-list value
+	ErrExpressionNotList = errors.New("entityops: expression did not evaluate to a list")
 )
+
+// questionnaireValidationError marks a permanent questionnaire transform configuration or
+// data problem that retrying cannot fix
+type questionnaireValidationError struct {
+	// Message is the validation failure detail
+	Message string
+}
+
+// Error returns the validation failure detail
+func (e *questionnaireValidationError) Error() string { return e.Message }
+
+// isQuestionnaireValidationError reports whether err is a questionnaire transform validation error
+func isQuestionnaireValidationError(err error) bool {
+	var validationErr *questionnaireValidationError
+
+	return errors.As(err, &validationErr)
+}
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.
 // e.g. duplicate value in unique index.

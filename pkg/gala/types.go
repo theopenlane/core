@@ -15,6 +15,9 @@ type Headers struct {
 	Listeners []string `json:"listeners,omitempty"`
 	// Queue optionally overrides the River queue used for dispatch
 	Queue string `json:"queue,omitempty"`
+	// Kind optionally routes dispatch to a registered job kind; unregistered kinds fall
+	// back to the default dispatch kind
+	Kind string `json:"kind,omitempty"`
 	// MaxAttempts optionally overrides River max attempts for this envelope
 	MaxAttempts int `json:"max_attempts,omitempty"`
 	// ScheduledAt defers execution until the specified time; nil means immediate

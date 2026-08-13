@@ -67,7 +67,7 @@ func TestRegisterContextCodecsRoundTripOperationContext(t *testing.T) {
 	}
 
 	emitCtx := gala.WithOperationContext(context.Background(), oc)
-	if _, err := g.Emit(emitCtx, gala.TopicName("runtime.test.codec.roundtrip"), codecRoundTripPayload{Message: "roundtrip"}); err != nil {
+	if _, err := g.EmitWithHeaders(emitCtx, gala.TopicName("runtime.test.codec.roundtrip"), codecRoundTripPayload{Message: "roundtrip"}, gala.Headers{Kind: gala.JobKindIntegrationRun}); err != nil {
 		t.Fatalf("failed to emit: %v", err)
 	}
 

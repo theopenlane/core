@@ -6,13 +6,12 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/pkg/mapx"
 )
-
-// integrationReconfigureObjectType is the notification object type for an installation that
-// stopped syncing and needs user action to recover
-const integrationReconfigureObjectType = "integration.reconfiguration.required"
 
 // unhealthyReasonMetadataKey is the Integration.Metadata key recording why the installation
 // was marked unhealthy
@@ -23,36 +22,33 @@ const unhealthyReasonMetadataKey = "unhealthyReason"
 // installation that is already errored is left as is so repeated failures don't stack
 // duplicate notifications
 func (r *Runtime) MarkIntegrationUnhealthy(ctx context.Context, installation *ent.Integration, reason string) error {
-	if installation.Status == enums.IntegrationStatusErrored {
-		return nil
-	}
-
-	metadata := installation.Metadata
-	if metadata == nil {
-		metadata = map[string]any{}
-	}
-
-	metadata[unhealthyReasonMetadataKey] = reason
+	metadata := mapx.DeepMergeMapAny(installation.Metadata, map[string]any{unhealthyReasonMetadataKey: reason})
 
 	// health marking runs from worker contexts without a privileged caller; both writes are
 	// server-internal and require the allow decision per the notification mutation policy
 	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
-	if err := r.DB().Integration.UpdateOneID(installation.ID).
+	transitioned, err := r.DB().Integration.Update().
+		Where(integration.ID(installation.ID), integration.StatusNEQ(enums.IntegrationStatusErrored)).
 		SetStatus(enums.IntegrationStatusErrored).
 		SetMetadata(metadata).
-		Exec(systemCtx); err != nil {
+		Save(systemCtx)
+	if err != nil {
 		return err
+	}
+
+	if transitioned == 0 {
+		return nil
 	}
 
 	displayName := r.integrationDisplayName(installation)
 
 	logx.FromContext(ctx).Warn().Str("reason", reason).Msg("integration marked unhealthy, recurring operations will stop")
 
-	_, err := r.DB().Notification.Create().
+	return r.DB().Notification.Create().
 		SetOwnerID(installation.OwnerID).
 		SetNotificationType(enums.NotificationTypeOrganization).
-		SetObjectType(integrationReconfigureObjectType).
+		SetObjectType("integration.reconfiguration.required").
 		SetTitle(fmt.Sprintf("%s has stopped syncing", displayName)).
 		SetBody(fmt.Sprintf("The %s integration has stopped syncing: %s. Reconnect it to resume.", displayName, reason)).
 		SetData(map[string]any{
@@ -61,9 +57,7 @@ func (r *Runtime) MarkIntegrationUnhealthy(ctx context.Context, installation *en
 			"reason":         reason,
 		}).
 		SetTopic(enums.NotificationTopicIntegration).
-		Save(systemCtx)
-
-	return err
+		Exec(systemCtx)
 }
 
 // ClearIntegrationUnhealthy returns an errored installation to connected, removes the recorded
@@ -86,6 +80,37 @@ func (r *Runtime) ClearIntegrationUnhealthy(ctx context.Context, installation *e
 	installation.Status = enums.IntegrationStatusConnected
 
 	return r.SeedReconcileJobsForInstallation(ctx, installation)
+}
+
+// verifyInstallationHealth runs the persisted connection's validation operation under stored
+// credentials; connections without one pass
+func (r *Runtime) verifyInstallationHealth(ctx context.Context, installation *ent.Integration, def types.Definition) error {
+	connection, err := r.resolvePersistedConnection(def, installation)
+	if err != nil {
+		return err
+	}
+
+	if connection.ValidationOperation == "" {
+		return nil
+	}
+
+	validationOp, err := r.Registry().Operation(def.ID, connection.ValidationOperation)
+	if err != nil {
+		return err
+	}
+
+	bindings, err := r.loadCredentials(privacy.DecisionContext(ctx, privacy.Allow), installation, connection.CredentialRefs)
+	if err != nil {
+		return err
+	}
+
+	if _, err := r.ExecuteOperation(ctx, installation, validationOp, bindings, nil); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("health check failed after configuration update, installation stays errored")
+
+		return err
+	}
+
+	return nil
 }
 
 // IntegrationUnhealthyReason returns the recorded reason an installation was marked unhealthy,

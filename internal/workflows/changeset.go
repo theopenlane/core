@@ -42,10 +42,5 @@ func SetTriggerChangeSet(ctx *models.WorkflowInstanceContext, changeSet entityop
 	ctx.TriggerRemovedIDs = cloned.RemovedIDs
 	ctx.TriggerOldValues = cloned.OldValues
 
-	proposed, err := jsonx.Decode[map[string]any](cloned.ProposedChanges)
-	if err != nil {
-		proposed = nil
-	}
-
-	ctx.TriggerProposedChanges = proposed
+	ctx.TriggerProposedChanges = cloned.ProposedMap()
 }

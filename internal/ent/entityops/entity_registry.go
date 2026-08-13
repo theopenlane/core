@@ -417,7 +417,7 @@ func (s *Schema) LookupField() (FieldDescriptor, bool) {
 // predicates are not a single org-scoped key column (integration-scoped lookups, multi-key
 // priority) keep hand-written persistence instead
 func (s *Schema) Upsert(ctx context.Context, client *generated.Client, ownerID string, payload json.RawMessage) (string, error) {
-	ref := SchemaRef{Schema: s.Snake, Operation: OpUpsert}
+	ref := SchemaRef{Schema: s.Snake, Operation: refOpUpsert}
 
 	field, ok := s.LookupField()
 	if !ok {
@@ -536,7 +536,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[ActionPlanProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "action_plan", Operation: OpCreate}
+			ref := SchemaRef{Schema: "action_plan", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreateActionPlanInput](input)
 			if err != nil {
@@ -551,7 +551,7 @@ var (
 			return entity.ID, nil
 		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
-			ref := SchemaRef{Schema: "action_plan", Operation: OpUpdate, EntityID: entityID}
+			ref := SchemaRef{Schema: "action_plan", Operation: refOpUpdate, EntityID: entityID}
 
 			decoded, err := jsonx.Decode[generated.UpdateActionPlanInput](applyClears(input))
 			if err != nil {
@@ -565,7 +565,7 @@ var (
 			return nil
 		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "action_plan", Operation: OpQuery}
+			ref := SchemaRef{Schema: "action_plan", Operation: refOpQuery}
 
 			entities, err := client.ActionPlan.Query().
 				Where(actionplan.OwnerID(orgID)).
@@ -588,7 +588,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "action_plan", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "action_plan", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.ActionPlan.Get(ctx, entityID)
 			if err != nil {
@@ -612,7 +612,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[AssessmentProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "assessment", Operation: OpCreate}
+			ref := SchemaRef{Schema: "assessment", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreateAssessmentInput](input)
 			if err != nil {
@@ -627,7 +627,7 @@ var (
 			return entity.ID, nil
 		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
-			ref := SchemaRef{Schema: "assessment", Operation: OpUpdate, EntityID: entityID}
+			ref := SchemaRef{Schema: "assessment", Operation: refOpUpdate, EntityID: entityID}
 
 			decoded, err := jsonx.Decode[generated.UpdateAssessmentInput](applyClears(input))
 			if err != nil {
@@ -641,7 +641,7 @@ var (
 			return nil
 		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "assessment", Operation: OpQuery}
+			ref := SchemaRef{Schema: "assessment", Operation: refOpQuery}
 
 			entities, err := client.Assessment.Query().
 				Where(assessment.OwnerID(orgID)).
@@ -664,7 +664,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "assessment", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "assessment", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.Assessment.Get(ctx, entityID)
 			if err != nil {
@@ -688,7 +688,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[AssessmentResponseProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "assessment_response", Operation: OpCreate}
+			ref := SchemaRef{Schema: "assessment_response", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreateAssessmentResponseInput](input)
 			if err != nil {
@@ -703,7 +703,7 @@ var (
 			return entity.ID, nil
 		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "assessment_response", Operation: OpQuery}
+			ref := SchemaRef{Schema: "assessment_response", Operation: refOpQuery}
 
 			entities, err := client.AssessmentResponse.Query().
 				Where(assessmentresponse.OwnerID(orgID)).
@@ -726,7 +726,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "assessment_response", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "assessment_response", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.AssessmentResponse.Get(ctx, entityID)
 			if err != nil {
@@ -750,7 +750,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[AssetProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "asset", Operation: OpCreate}
+			ref := SchemaRef{Schema: "asset", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreateAssetInput](input)
 			if err != nil {
@@ -765,7 +765,7 @@ var (
 			return entity.ID, nil
 		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
-			ref := SchemaRef{Schema: "asset", Operation: OpUpdate, EntityID: entityID}
+			ref := SchemaRef{Schema: "asset", Operation: refOpUpdate, EntityID: entityID}
 
 			decoded, err := jsonx.Decode[generated.UpdateAssetInput](applyClears(input))
 			if err != nil {
@@ -779,7 +779,7 @@ var (
 			return nil
 		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "asset", Operation: OpQuery}
+			ref := SchemaRef{Schema: "asset", Operation: refOpQuery}
 
 			entities, err := client.Asset.Query().
 				Where(asset.OwnerID(orgID)).
@@ -802,7 +802,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "asset", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "asset", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.Asset.Get(ctx, entityID)
 			if err != nil {
@@ -826,7 +826,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[CampaignProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "campaign", Operation: OpCreate}
+			ref := SchemaRef{Schema: "campaign", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreateCampaignInput](input)
 			if err != nil {
@@ -841,7 +841,7 @@ var (
 			return entity.ID, nil
 		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
-			ref := SchemaRef{Schema: "campaign", Operation: OpUpdate, EntityID: entityID}
+			ref := SchemaRef{Schema: "campaign", Operation: refOpUpdate, EntityID: entityID}
 
 			decoded, err := jsonx.Decode[generated.UpdateCampaignInput](applyClears(input))
 			if err != nil {
@@ -855,7 +855,7 @@ var (
 			return nil
 		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "campaign", Operation: OpQuery}
+			ref := SchemaRef{Schema: "campaign", Operation: refOpQuery}
 
 			entities, err := client.Campaign.Query().
 				Where(campaign.OwnerID(orgID)).
@@ -878,7 +878,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "campaign", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "campaign", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.Campaign.Get(ctx, entityID)
 			if err != nil {
@@ -902,7 +902,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[CampaignTargetProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "campaign_target", Operation: OpCreate}
+			ref := SchemaRef{Schema: "campaign_target", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreateCampaignTargetInput](input)
 			if err != nil {
@@ -917,7 +917,7 @@ var (
 			return entity.ID, nil
 		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
-			ref := SchemaRef{Schema: "campaign_target", Operation: OpUpdate, EntityID: entityID}
+			ref := SchemaRef{Schema: "campaign_target", Operation: refOpUpdate, EntityID: entityID}
 
 			decoded, err := jsonx.Decode[generated.UpdateCampaignTargetInput](applyClears(input))
 			if err != nil {
@@ -931,7 +931,7 @@ var (
 			return nil
 		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "campaign_target", Operation: OpQuery}
+			ref := SchemaRef{Schema: "campaign_target", Operation: refOpQuery}
 
 			entities, err := client.CampaignTarget.Query().
 				Where(campaigntarget.OwnerID(orgID)).
@@ -954,7 +954,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "campaign_target", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "campaign_target", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.CampaignTarget.Get(ctx, entityID)
 			if err != nil {
@@ -978,7 +978,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[CheckResultProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "check_result", Operation: OpCreate}
+			ref := SchemaRef{Schema: "check_result", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreateCheckResultInput](input)
 			if err != nil {
@@ -993,7 +993,7 @@ var (
 			return entity.ID, nil
 		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
-			ref := SchemaRef{Schema: "check_result", Operation: OpUpdate, EntityID: entityID}
+			ref := SchemaRef{Schema: "check_result", Operation: refOpUpdate, EntityID: entityID}
 
 			decoded, err := jsonx.Decode[generated.UpdateCheckResultInput](applyClears(input))
 			if err != nil {
@@ -1007,7 +1007,7 @@ var (
 			return nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "check_result", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "check_result", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.CheckResult.Get(ctx, entityID)
 			if err != nil {
@@ -1031,7 +1031,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[ContactProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "contact", Operation: OpCreate}
+			ref := SchemaRef{Schema: "contact", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreateContactInput](input)
 			if err != nil {
@@ -1046,7 +1046,7 @@ var (
 			return entity.ID, nil
 		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
-			ref := SchemaRef{Schema: "contact", Operation: OpUpdate, EntityID: entityID}
+			ref := SchemaRef{Schema: "contact", Operation: refOpUpdate, EntityID: entityID}
 
 			decoded, err := jsonx.Decode[generated.UpdateContactInput](applyClears(input))
 			if err != nil {
@@ -1060,7 +1060,7 @@ var (
 			return nil
 		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "contact", Operation: OpQuery}
+			ref := SchemaRef{Schema: "contact", Operation: refOpQuery}
 
 			entities, err := client.Contact.Query().
 				Where(contact.OwnerID(orgID)).
@@ -1083,7 +1083,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "contact", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "contact", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.Contact.Get(ctx, entityID)
 			if err != nil {
@@ -1107,7 +1107,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[ControlProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "control", Operation: OpCreate}
+			ref := SchemaRef{Schema: "control", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreateControlInput](input)
 			if err != nil {
@@ -1122,7 +1122,7 @@ var (
 			return entity.ID, nil
 		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
-			ref := SchemaRef{Schema: "control", Operation: OpUpdate, EntityID: entityID}
+			ref := SchemaRef{Schema: "control", Operation: refOpUpdate, EntityID: entityID}
 
 			decoded, err := jsonx.Decode[generated.UpdateControlInput](applyClears(input))
 			if err != nil {
@@ -1136,7 +1136,7 @@ var (
 			return nil
 		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "control", Operation: OpQuery}
+			ref := SchemaRef{Schema: "control", Operation: refOpQuery}
 
 			entities, err := client.Control.Query().
 				Where(control.OwnerID(orgID)).
@@ -1159,7 +1159,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "control", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "control", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.Control.Get(ctx, entityID)
 			if err != nil {
@@ -1183,7 +1183,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[ControlImplementationProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "control_implementation", Operation: OpCreate}
+			ref := SchemaRef{Schema: "control_implementation", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreateControlImplementationInput](input)
 			if err != nil {
@@ -1198,7 +1198,7 @@ var (
 			return entity.ID, nil
 		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
-			ref := SchemaRef{Schema: "control_implementation", Operation: OpUpdate, EntityID: entityID}
+			ref := SchemaRef{Schema: "control_implementation", Operation: refOpUpdate, EntityID: entityID}
 
 			decoded, err := jsonx.Decode[generated.UpdateControlImplementationInput](applyClears(input))
 			if err != nil {
@@ -1212,7 +1212,7 @@ var (
 			return nil
 		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "control_implementation", Operation: OpQuery}
+			ref := SchemaRef{Schema: "control_implementation", Operation: refOpQuery}
 
 			entities, err := client.ControlImplementation.Query().
 				Where(controlimplementation.OwnerID(orgID)).
@@ -1235,7 +1235,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "control_implementation", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "control_implementation", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.ControlImplementation.Get(ctx, entityID)
 			if err != nil {
@@ -1259,7 +1259,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[ControlObjectiveProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "control_objective", Operation: OpCreate}
+			ref := SchemaRef{Schema: "control_objective", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreateControlObjectiveInput](input)
 			if err != nil {
@@ -1274,7 +1274,7 @@ var (
 			return entity.ID, nil
 		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
-			ref := SchemaRef{Schema: "control_objective", Operation: OpUpdate, EntityID: entityID}
+			ref := SchemaRef{Schema: "control_objective", Operation: refOpUpdate, EntityID: entityID}
 
 			decoded, err := jsonx.Decode[generated.UpdateControlObjectiveInput](applyClears(input))
 			if err != nil {
@@ -1288,7 +1288,7 @@ var (
 			return nil
 		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "control_objective", Operation: OpQuery}
+			ref := SchemaRef{Schema: "control_objective", Operation: refOpQuery}
 
 			entities, err := client.ControlObjective.Query().
 				Where(controlobjective.OwnerID(orgID)).
@@ -1311,7 +1311,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "control_objective", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "control_objective", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.ControlObjective.Get(ctx, entityID)
 			if err != nil {
@@ -1335,7 +1335,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[DirectoryAccountProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "directory_account", Operation: OpCreate}
+			ref := SchemaRef{Schema: "directory_account", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreateDirectoryAccountInput](input)
 			if err != nil {
@@ -1350,7 +1350,7 @@ var (
 			return entity.ID, nil
 		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
-			ref := SchemaRef{Schema: "directory_account", Operation: OpUpdate, EntityID: entityID}
+			ref := SchemaRef{Schema: "directory_account", Operation: refOpUpdate, EntityID: entityID}
 
 			decoded, err := jsonx.Decode[generated.UpdateDirectoryAccountInput](applyClears(input))
 			if err != nil {
@@ -1364,7 +1364,7 @@ var (
 			return nil
 		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "directory_account", Operation: OpQuery}
+			ref := SchemaRef{Schema: "directory_account", Operation: refOpQuery}
 
 			entities, err := client.DirectoryAccount.Query().
 				Where(directoryaccount.OwnerID(orgID)).
@@ -1387,7 +1387,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "directory_account", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "directory_account", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.DirectoryAccount.Get(ctx, entityID)
 			if err != nil {
@@ -1411,7 +1411,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[DirectoryGroupProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "directory_group", Operation: OpCreate}
+			ref := SchemaRef{Schema: "directory_group", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreateDirectoryGroupInput](input)
 			if err != nil {
@@ -1426,7 +1426,7 @@ var (
 			return entity.ID, nil
 		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
-			ref := SchemaRef{Schema: "directory_group", Operation: OpUpdate, EntityID: entityID}
+			ref := SchemaRef{Schema: "directory_group", Operation: refOpUpdate, EntityID: entityID}
 
 			decoded, err := jsonx.Decode[generated.UpdateDirectoryGroupInput](applyClears(input))
 			if err != nil {
@@ -1440,7 +1440,7 @@ var (
 			return nil
 		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "directory_group", Operation: OpQuery}
+			ref := SchemaRef{Schema: "directory_group", Operation: refOpQuery}
 
 			entities, err := client.DirectoryGroup.Query().
 				Where(directorygroup.OwnerID(orgID)).
@@ -1463,7 +1463,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "directory_group", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "directory_group", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.DirectoryGroup.Get(ctx, entityID)
 			if err != nil {
@@ -1487,7 +1487,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[DirectoryMembershipProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "directory_membership", Operation: OpCreate}
+			ref := SchemaRef{Schema: "directory_membership", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreateDirectoryMembershipInput](input)
 			if err != nil {
@@ -1502,7 +1502,7 @@ var (
 			return entity.ID, nil
 		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
-			ref := SchemaRef{Schema: "directory_membership", Operation: OpUpdate, EntityID: entityID}
+			ref := SchemaRef{Schema: "directory_membership", Operation: refOpUpdate, EntityID: entityID}
 
 			decoded, err := jsonx.Decode[generated.UpdateDirectoryMembershipInput](applyClears(input))
 			if err != nil {
@@ -1516,7 +1516,7 @@ var (
 			return nil
 		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "directory_membership", Operation: OpQuery}
+			ref := SchemaRef{Schema: "directory_membership", Operation: refOpQuery}
 
 			entities, err := client.DirectoryMembership.Query().
 				Where(directorymembership.OwnerID(orgID)).
@@ -1539,7 +1539,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "directory_membership", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "directory_membership", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.DirectoryMembership.Get(ctx, entityID)
 			if err != nil {
@@ -1563,7 +1563,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[DiscussionProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "discussion", Operation: OpCreate}
+			ref := SchemaRef{Schema: "discussion", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreateDiscussionInput](input)
 			if err != nil {
@@ -1578,7 +1578,7 @@ var (
 			return entity.ID, nil
 		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
-			ref := SchemaRef{Schema: "discussion", Operation: OpUpdate, EntityID: entityID}
+			ref := SchemaRef{Schema: "discussion", Operation: refOpUpdate, EntityID: entityID}
 
 			decoded, err := jsonx.Decode[generated.UpdateDiscussionInput](applyClears(input))
 			if err != nil {
@@ -1592,7 +1592,7 @@ var (
 			return nil
 		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "discussion", Operation: OpQuery}
+			ref := SchemaRef{Schema: "discussion", Operation: refOpQuery}
 
 			entities, err := client.Discussion.Query().
 				Where(discussion.OwnerID(orgID)).
@@ -1615,7 +1615,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "discussion", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "discussion", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.Discussion.Get(ctx, entityID)
 			if err != nil {
@@ -1639,7 +1639,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[DocumentDataProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "document_data", Operation: OpCreate}
+			ref := SchemaRef{Schema: "document_data", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreateDocumentDataInput](input)
 			if err != nil {
@@ -1654,7 +1654,7 @@ var (
 			return entity.ID, nil
 		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
-			ref := SchemaRef{Schema: "document_data", Operation: OpUpdate, EntityID: entityID}
+			ref := SchemaRef{Schema: "document_data", Operation: refOpUpdate, EntityID: entityID}
 
 			decoded, err := jsonx.Decode[generated.UpdateDocumentDataInput](applyClears(input))
 			if err != nil {
@@ -1668,7 +1668,7 @@ var (
 			return nil
 		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "document_data", Operation: OpQuery}
+			ref := SchemaRef{Schema: "document_data", Operation: refOpQuery}
 
 			entities, err := client.DocumentData.Query().
 				Where(documentdata.OwnerID(orgID)).
@@ -1691,7 +1691,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "document_data", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "document_data", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.DocumentData.Get(ctx, entityID)
 			if err != nil {
@@ -1715,7 +1715,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[EmailTemplateProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "email_template", Operation: OpCreate}
+			ref := SchemaRef{Schema: "email_template", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreateEmailTemplateInput](input)
 			if err != nil {
@@ -1730,7 +1730,7 @@ var (
 			return entity.ID, nil
 		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
-			ref := SchemaRef{Schema: "email_template", Operation: OpUpdate, EntityID: entityID}
+			ref := SchemaRef{Schema: "email_template", Operation: refOpUpdate, EntityID: entityID}
 
 			decoded, err := jsonx.Decode[generated.UpdateEmailTemplateInput](applyClears(input))
 			if err != nil {
@@ -1744,7 +1744,7 @@ var (
 			return nil
 		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "email_template", Operation: OpQuery}
+			ref := SchemaRef{Schema: "email_template", Operation: refOpQuery}
 
 			entities, err := client.EmailTemplate.Query().
 				Where(emailtemplate.OwnerID(orgID)).
@@ -1767,7 +1767,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "email_template", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "email_template", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.EmailTemplate.Get(ctx, entityID)
 			if err != nil {
@@ -1791,7 +1791,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[EntityProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "entity", Operation: OpCreate}
+			ref := SchemaRef{Schema: "entity", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreateEntityInput](input)
 			if err != nil {
@@ -1806,7 +1806,7 @@ var (
 			return entity.ID, nil
 		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
-			ref := SchemaRef{Schema: "entity", Operation: OpUpdate, EntityID: entityID}
+			ref := SchemaRef{Schema: "entity", Operation: refOpUpdate, EntityID: entityID}
 
 			decoded, err := jsonx.Decode[generated.UpdateEntityInput](applyClears(input))
 			if err != nil {
@@ -1820,7 +1820,7 @@ var (
 			return nil
 		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "entity", Operation: OpQuery}
+			ref := SchemaRef{Schema: "entity", Operation: refOpQuery}
 
 			entities, err := client.Entity.Query().
 				Where(entity.OwnerID(orgID)).
@@ -1843,7 +1843,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "entity", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "entity", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.Entity.Get(ctx, entityID)
 			if err != nil {
@@ -1867,7 +1867,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[EvidenceProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "evidence", Operation: OpCreate}
+			ref := SchemaRef{Schema: "evidence", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreateEvidenceInput](input)
 			if err != nil {
@@ -1882,7 +1882,7 @@ var (
 			return entity.ID, nil
 		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
-			ref := SchemaRef{Schema: "evidence", Operation: OpUpdate, EntityID: entityID}
+			ref := SchemaRef{Schema: "evidence", Operation: refOpUpdate, EntityID: entityID}
 
 			decoded, err := jsonx.Decode[generated.UpdateEvidenceInput](applyClears(input))
 			if err != nil {
@@ -1896,7 +1896,7 @@ var (
 			return nil
 		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "evidence", Operation: OpQuery}
+			ref := SchemaRef{Schema: "evidence", Operation: refOpQuery}
 
 			entities, err := client.Evidence.Query().
 				Where(evidence.OwnerID(orgID)).
@@ -1919,7 +1919,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "evidence", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "evidence", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.Evidence.Get(ctx, entityID)
 			if err != nil {
@@ -1943,7 +1943,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[FindingProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "finding", Operation: OpCreate}
+			ref := SchemaRef{Schema: "finding", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreateFindingInput](input)
 			if err != nil {
@@ -1958,7 +1958,7 @@ var (
 			return entity.ID, nil
 		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
-			ref := SchemaRef{Schema: "finding", Operation: OpUpdate, EntityID: entityID}
+			ref := SchemaRef{Schema: "finding", Operation: refOpUpdate, EntityID: entityID}
 
 			decoded, err := jsonx.Decode[generated.UpdateFindingInput](applyClears(input))
 			if err != nil {
@@ -1972,7 +1972,7 @@ var (
 			return nil
 		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "finding", Operation: OpQuery}
+			ref := SchemaRef{Schema: "finding", Operation: refOpQuery}
 
 			entities, err := client.Finding.Query().
 				Where(finding.OwnerID(orgID)).
@@ -1995,7 +1995,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "finding", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "finding", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.Finding.Get(ctx, entityID)
 			if err != nil {
@@ -2019,7 +2019,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[IdentityHolderProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "identity_holder", Operation: OpCreate}
+			ref := SchemaRef{Schema: "identity_holder", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreateIdentityHolderInput](input)
 			if err != nil {
@@ -2034,7 +2034,7 @@ var (
 			return entity.ID, nil
 		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
-			ref := SchemaRef{Schema: "identity_holder", Operation: OpUpdate, EntityID: entityID}
+			ref := SchemaRef{Schema: "identity_holder", Operation: refOpUpdate, EntityID: entityID}
 
 			decoded, err := jsonx.Decode[generated.UpdateIdentityHolderInput](applyClears(input))
 			if err != nil {
@@ -2048,7 +2048,7 @@ var (
 			return nil
 		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "identity_holder", Operation: OpQuery}
+			ref := SchemaRef{Schema: "identity_holder", Operation: refOpQuery}
 
 			entities, err := client.IdentityHolder.Query().
 				Where(identityholder.OwnerID(orgID)).
@@ -2071,7 +2071,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "identity_holder", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "identity_holder", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.IdentityHolder.Get(ctx, entityID)
 			if err != nil {
@@ -2095,7 +2095,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[InternalPolicyProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "internal_policy", Operation: OpCreate}
+			ref := SchemaRef{Schema: "internal_policy", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreateInternalPolicyInput](input)
 			if err != nil {
@@ -2110,7 +2110,7 @@ var (
 			return entity.ID, nil
 		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
-			ref := SchemaRef{Schema: "internal_policy", Operation: OpUpdate, EntityID: entityID}
+			ref := SchemaRef{Schema: "internal_policy", Operation: refOpUpdate, EntityID: entityID}
 
 			decoded, err := jsonx.Decode[generated.UpdateInternalPolicyInput](applyClears(input))
 			if err != nil {
@@ -2124,7 +2124,7 @@ var (
 			return nil
 		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "internal_policy", Operation: OpQuery}
+			ref := SchemaRef{Schema: "internal_policy", Operation: refOpQuery}
 
 			entities, err := client.InternalPolicy.Query().
 				Where(internalpolicy.OwnerID(orgID)).
@@ -2147,7 +2147,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "internal_policy", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "internal_policy", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.InternalPolicy.Get(ctx, entityID)
 			if err != nil {
@@ -2171,7 +2171,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[NarrativeProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "narrative", Operation: OpCreate}
+			ref := SchemaRef{Schema: "narrative", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreateNarrativeInput](input)
 			if err != nil {
@@ -2186,7 +2186,7 @@ var (
 			return entity.ID, nil
 		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
-			ref := SchemaRef{Schema: "narrative", Operation: OpUpdate, EntityID: entityID}
+			ref := SchemaRef{Schema: "narrative", Operation: refOpUpdate, EntityID: entityID}
 
 			decoded, err := jsonx.Decode[generated.UpdateNarrativeInput](applyClears(input))
 			if err != nil {
@@ -2200,7 +2200,7 @@ var (
 			return nil
 		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "narrative", Operation: OpQuery}
+			ref := SchemaRef{Schema: "narrative", Operation: refOpQuery}
 
 			entities, err := client.Narrative.Query().
 				Where(narrative.OwnerID(orgID)).
@@ -2223,7 +2223,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "narrative", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "narrative", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.Narrative.Get(ctx, entityID)
 			if err != nil {
@@ -2247,7 +2247,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[NotificationProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "notification", Operation: OpCreate}
+			ref := SchemaRef{Schema: "notification", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreateNotificationInput](input)
 			if err != nil {
@@ -2262,7 +2262,7 @@ var (
 			return entity.ID, nil
 		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
-			ref := SchemaRef{Schema: "notification", Operation: OpUpdate, EntityID: entityID}
+			ref := SchemaRef{Schema: "notification", Operation: refOpUpdate, EntityID: entityID}
 
 			decoded, err := jsonx.Decode[generated.UpdateNotificationInput](applyClears(input))
 			if err != nil {
@@ -2276,7 +2276,7 @@ var (
 			return nil
 		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "notification", Operation: OpQuery}
+			ref := SchemaRef{Schema: "notification", Operation: refOpQuery}
 
 			entities, err := client.Notification.Query().
 				Where(notification.OwnerID(orgID)).
@@ -2299,7 +2299,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "notification", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "notification", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.Notification.Get(ctx, entityID)
 			if err != nil {
@@ -2323,7 +2323,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[NotificationTemplateProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "notification_template", Operation: OpCreate}
+			ref := SchemaRef{Schema: "notification_template", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreateNotificationTemplateInput](input)
 			if err != nil {
@@ -2338,7 +2338,7 @@ var (
 			return entity.ID, nil
 		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
-			ref := SchemaRef{Schema: "notification_template", Operation: OpUpdate, EntityID: entityID}
+			ref := SchemaRef{Schema: "notification_template", Operation: refOpUpdate, EntityID: entityID}
 
 			decoded, err := jsonx.Decode[generated.UpdateNotificationTemplateInput](applyClears(input))
 			if err != nil {
@@ -2352,7 +2352,7 @@ var (
 			return nil
 		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "notification_template", Operation: OpQuery}
+			ref := SchemaRef{Schema: "notification_template", Operation: refOpQuery}
 
 			entities, err := client.NotificationTemplate.Query().
 				Where(notificationtemplate.OwnerID(orgID)).
@@ -2375,7 +2375,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "notification_template", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "notification_template", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.NotificationTemplate.Get(ctx, entityID)
 			if err != nil {
@@ -2399,7 +2399,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[OnboardingProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "onboarding", Operation: OpCreate}
+			ref := SchemaRef{Schema: "onboarding", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreateOnboardingInput](input)
 			if err != nil {
@@ -2414,7 +2414,7 @@ var (
 			return entity.ID, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "onboarding", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "onboarding", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.Onboarding.Get(ctx, entityID)
 			if err != nil {
@@ -2438,7 +2438,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[OrganizationProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "organization", Operation: OpCreate}
+			ref := SchemaRef{Schema: "organization", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreateOrganizationInput](input)
 			if err != nil {
@@ -2453,7 +2453,7 @@ var (
 			return entity.ID, nil
 		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
-			ref := SchemaRef{Schema: "organization", Operation: OpUpdate, EntityID: entityID}
+			ref := SchemaRef{Schema: "organization", Operation: refOpUpdate, EntityID: entityID}
 
 			decoded, err := jsonx.Decode[generated.UpdateOrganizationInput](applyClears(input))
 			if err != nil {
@@ -2467,7 +2467,7 @@ var (
 			return nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "organization", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "organization", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.Organization.Get(ctx, entityID)
 			if err != nil {
@@ -2491,7 +2491,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[PlatformProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "platform", Operation: OpCreate}
+			ref := SchemaRef{Schema: "platform", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreatePlatformInput](input)
 			if err != nil {
@@ -2506,7 +2506,7 @@ var (
 			return entity.ID, nil
 		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
-			ref := SchemaRef{Schema: "platform", Operation: OpUpdate, EntityID: entityID}
+			ref := SchemaRef{Schema: "platform", Operation: refOpUpdate, EntityID: entityID}
 
 			decoded, err := jsonx.Decode[generated.UpdatePlatformInput](applyClears(input))
 			if err != nil {
@@ -2520,7 +2520,7 @@ var (
 			return nil
 		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "platform", Operation: OpQuery}
+			ref := SchemaRef{Schema: "platform", Operation: refOpQuery}
 
 			entities, err := client.Platform.Query().
 				Where(platform.OwnerID(orgID)).
@@ -2543,7 +2543,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "platform", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "platform", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.Platform.Get(ctx, entityID)
 			if err != nil {
@@ -2567,7 +2567,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[ProcedureProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "procedure", Operation: OpCreate}
+			ref := SchemaRef{Schema: "procedure", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreateProcedureInput](input)
 			if err != nil {
@@ -2582,7 +2582,7 @@ var (
 			return entity.ID, nil
 		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
-			ref := SchemaRef{Schema: "procedure", Operation: OpUpdate, EntityID: entityID}
+			ref := SchemaRef{Schema: "procedure", Operation: refOpUpdate, EntityID: entityID}
 
 			decoded, err := jsonx.Decode[generated.UpdateProcedureInput](applyClears(input))
 			if err != nil {
@@ -2596,7 +2596,7 @@ var (
 			return nil
 		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "procedure", Operation: OpQuery}
+			ref := SchemaRef{Schema: "procedure", Operation: refOpQuery}
 
 			entities, err := client.Procedure.Query().
 				Where(procedure.OwnerID(orgID)).
@@ -2619,7 +2619,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "procedure", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "procedure", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.Procedure.Get(ctx, entityID)
 			if err != nil {
@@ -2643,7 +2643,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[RemediationProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "remediation", Operation: OpCreate}
+			ref := SchemaRef{Schema: "remediation", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreateRemediationInput](input)
 			if err != nil {
@@ -2658,7 +2658,7 @@ var (
 			return entity.ID, nil
 		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
-			ref := SchemaRef{Schema: "remediation", Operation: OpUpdate, EntityID: entityID}
+			ref := SchemaRef{Schema: "remediation", Operation: refOpUpdate, EntityID: entityID}
 
 			decoded, err := jsonx.Decode[generated.UpdateRemediationInput](applyClears(input))
 			if err != nil {
@@ -2672,7 +2672,7 @@ var (
 			return nil
 		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "remediation", Operation: OpQuery}
+			ref := SchemaRef{Schema: "remediation", Operation: refOpQuery}
 
 			entities, err := client.Remediation.Query().
 				Where(remediation.OwnerID(orgID)).
@@ -2695,7 +2695,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "remediation", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "remediation", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.Remediation.Get(ctx, entityID)
 			if err != nil {
@@ -2719,7 +2719,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[ReviewProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "review", Operation: OpCreate}
+			ref := SchemaRef{Schema: "review", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreateReviewInput](input)
 			if err != nil {
@@ -2734,7 +2734,7 @@ var (
 			return entity.ID, nil
 		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
-			ref := SchemaRef{Schema: "review", Operation: OpUpdate, EntityID: entityID}
+			ref := SchemaRef{Schema: "review", Operation: refOpUpdate, EntityID: entityID}
 
 			decoded, err := jsonx.Decode[generated.UpdateReviewInput](applyClears(input))
 			if err != nil {
@@ -2748,7 +2748,7 @@ var (
 			return nil
 		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "review", Operation: OpQuery}
+			ref := SchemaRef{Schema: "review", Operation: refOpQuery}
 
 			entities, err := client.Review.Query().
 				Where(review.OwnerID(orgID)).
@@ -2771,7 +2771,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "review", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "review", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.Review.Get(ctx, entityID)
 			if err != nil {
@@ -2795,7 +2795,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[RiskProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "risk", Operation: OpCreate}
+			ref := SchemaRef{Schema: "risk", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreateRiskInput](input)
 			if err != nil {
@@ -2810,7 +2810,7 @@ var (
 			return entity.ID, nil
 		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
-			ref := SchemaRef{Schema: "risk", Operation: OpUpdate, EntityID: entityID}
+			ref := SchemaRef{Schema: "risk", Operation: refOpUpdate, EntityID: entityID}
 
 			decoded, err := jsonx.Decode[generated.UpdateRiskInput](applyClears(input))
 			if err != nil {
@@ -2824,7 +2824,7 @@ var (
 			return nil
 		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "risk", Operation: OpQuery}
+			ref := SchemaRef{Schema: "risk", Operation: refOpQuery}
 
 			entities, err := client.Risk.Query().
 				Where(risk.OwnerID(orgID)).
@@ -2847,7 +2847,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "risk", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "risk", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.Risk.Get(ctx, entityID)
 			if err != nil {
@@ -2871,7 +2871,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[ScanProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "scan", Operation: OpCreate}
+			ref := SchemaRef{Schema: "scan", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreateScanInput](input)
 			if err != nil {
@@ -2886,7 +2886,7 @@ var (
 			return entity.ID, nil
 		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
-			ref := SchemaRef{Schema: "scan", Operation: OpUpdate, EntityID: entityID}
+			ref := SchemaRef{Schema: "scan", Operation: refOpUpdate, EntityID: entityID}
 
 			decoded, err := jsonx.Decode[generated.UpdateScanInput](applyClears(input))
 			if err != nil {
@@ -2900,7 +2900,7 @@ var (
 			return nil
 		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "scan", Operation: OpQuery}
+			ref := SchemaRef{Schema: "scan", Operation: refOpQuery}
 
 			entities, err := client.Scan.Query().
 				Where(scan.OwnerID(orgID)).
@@ -2923,7 +2923,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "scan", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "scan", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.Scan.Get(ctx, entityID)
 			if err != nil {
@@ -2947,7 +2947,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[ScheduledJobProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "scheduled_job", Operation: OpCreate}
+			ref := SchemaRef{Schema: "scheduled_job", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreateScheduledJobInput](input)
 			if err != nil {
@@ -2962,7 +2962,7 @@ var (
 			return entity.ID, nil
 		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
-			ref := SchemaRef{Schema: "scheduled_job", Operation: OpUpdate, EntityID: entityID}
+			ref := SchemaRef{Schema: "scheduled_job", Operation: refOpUpdate, EntityID: entityID}
 
 			decoded, err := jsonx.Decode[generated.UpdateScheduledJobInput](applyClears(input))
 			if err != nil {
@@ -2976,7 +2976,7 @@ var (
 			return nil
 		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "scheduled_job", Operation: OpQuery}
+			ref := SchemaRef{Schema: "scheduled_job", Operation: refOpQuery}
 
 			entities, err := client.ScheduledJob.Query().
 				Where(scheduledjob.OwnerID(orgID)).
@@ -2999,7 +2999,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "scheduled_job", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "scheduled_job", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.ScheduledJob.Get(ctx, entityID)
 			if err != nil {
@@ -3023,7 +3023,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[SubcontrolProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "subcontrol", Operation: OpCreate}
+			ref := SchemaRef{Schema: "subcontrol", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreateSubcontrolInput](input)
 			if err != nil {
@@ -3038,7 +3038,7 @@ var (
 			return entity.ID, nil
 		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
-			ref := SchemaRef{Schema: "subcontrol", Operation: OpUpdate, EntityID: entityID}
+			ref := SchemaRef{Schema: "subcontrol", Operation: refOpUpdate, EntityID: entityID}
 
 			decoded, err := jsonx.Decode[generated.UpdateSubcontrolInput](applyClears(input))
 			if err != nil {
@@ -3052,7 +3052,7 @@ var (
 			return nil
 		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "subcontrol", Operation: OpQuery}
+			ref := SchemaRef{Schema: "subcontrol", Operation: refOpQuery}
 
 			entities, err := client.Subcontrol.Query().
 				Where(subcontrol.OwnerID(orgID)).
@@ -3075,7 +3075,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "subcontrol", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "subcontrol", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.Subcontrol.Get(ctx, entityID)
 			if err != nil {
@@ -3099,7 +3099,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[SubprocessorProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "subprocessor", Operation: OpCreate}
+			ref := SchemaRef{Schema: "subprocessor", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreateSubprocessorInput](input)
 			if err != nil {
@@ -3114,7 +3114,7 @@ var (
 			return entity.ID, nil
 		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
-			ref := SchemaRef{Schema: "subprocessor", Operation: OpUpdate, EntityID: entityID}
+			ref := SchemaRef{Schema: "subprocessor", Operation: refOpUpdate, EntityID: entityID}
 
 			decoded, err := jsonx.Decode[generated.UpdateSubprocessorInput](applyClears(input))
 			if err != nil {
@@ -3128,7 +3128,7 @@ var (
 			return nil
 		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "subprocessor", Operation: OpQuery}
+			ref := SchemaRef{Schema: "subprocessor", Operation: refOpQuery}
 
 			entities, err := client.Subprocessor.Query().
 				Where(subprocessor.OwnerID(orgID)).
@@ -3151,7 +3151,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "subprocessor", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "subprocessor", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.Subprocessor.Get(ctx, entityID)
 			if err != nil {
@@ -3175,7 +3175,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[SystemDetailProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "system_detail", Operation: OpCreate}
+			ref := SchemaRef{Schema: "system_detail", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreateSystemDetailInput](input)
 			if err != nil {
@@ -3190,7 +3190,7 @@ var (
 			return entity.ID, nil
 		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
-			ref := SchemaRef{Schema: "system_detail", Operation: OpUpdate, EntityID: entityID}
+			ref := SchemaRef{Schema: "system_detail", Operation: refOpUpdate, EntityID: entityID}
 
 			decoded, err := jsonx.Decode[generated.UpdateSystemDetailInput](applyClears(input))
 			if err != nil {
@@ -3204,7 +3204,7 @@ var (
 			return nil
 		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "system_detail", Operation: OpQuery}
+			ref := SchemaRef{Schema: "system_detail", Operation: refOpQuery}
 
 			entities, err := client.SystemDetail.Query().
 				Where(systemdetail.OwnerID(orgID)).
@@ -3227,7 +3227,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "system_detail", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "system_detail", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.SystemDetail.Get(ctx, entityID)
 			if err != nil {
@@ -3251,7 +3251,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[TaskProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "task", Operation: OpCreate}
+			ref := SchemaRef{Schema: "task", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreateTaskInput](input)
 			if err != nil {
@@ -3266,7 +3266,7 @@ var (
 			return entity.ID, nil
 		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
-			ref := SchemaRef{Schema: "task", Operation: OpUpdate, EntityID: entityID}
+			ref := SchemaRef{Schema: "task", Operation: refOpUpdate, EntityID: entityID}
 
 			decoded, err := jsonx.Decode[generated.UpdateTaskInput](applyClears(input))
 			if err != nil {
@@ -3280,7 +3280,7 @@ var (
 			return nil
 		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "task", Operation: OpQuery}
+			ref := SchemaRef{Schema: "task", Operation: refOpQuery}
 
 			entities, err := client.Task.Query().
 				Where(task.OwnerID(orgID)).
@@ -3303,7 +3303,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "task", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "task", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.Task.Get(ctx, entityID)
 			if err != nil {
@@ -3327,7 +3327,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[TemplateProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "template", Operation: OpCreate}
+			ref := SchemaRef{Schema: "template", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreateTemplateInput](input)
 			if err != nil {
@@ -3342,7 +3342,7 @@ var (
 			return entity.ID, nil
 		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
-			ref := SchemaRef{Schema: "template", Operation: OpUpdate, EntityID: entityID}
+			ref := SchemaRef{Schema: "template", Operation: refOpUpdate, EntityID: entityID}
 
 			decoded, err := jsonx.Decode[generated.UpdateTemplateInput](applyClears(input))
 			if err != nil {
@@ -3356,7 +3356,7 @@ var (
 			return nil
 		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "template", Operation: OpQuery}
+			ref := SchemaRef{Schema: "template", Operation: refOpQuery}
 
 			entities, err := client.Template.Query().
 				Where(template.OwnerID(orgID)).
@@ -3379,7 +3379,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "template", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "template", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.Template.Get(ctx, entityID)
 			if err != nil {
@@ -3403,7 +3403,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[TrustCenterWatermarkConfigProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "trust_center_watermark_config", Operation: OpCreate}
+			ref := SchemaRef{Schema: "trust_center_watermark_config", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreateTrustCenterWatermarkConfigInput](input)
 			if err != nil {
@@ -3418,7 +3418,7 @@ var (
 			return entity.ID, nil
 		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
-			ref := SchemaRef{Schema: "trust_center_watermark_config", Operation: OpUpdate, EntityID: entityID}
+			ref := SchemaRef{Schema: "trust_center_watermark_config", Operation: refOpUpdate, EntityID: entityID}
 
 			decoded, err := jsonx.Decode[generated.UpdateTrustCenterWatermarkConfigInput](applyClears(input))
 			if err != nil {
@@ -3432,7 +3432,7 @@ var (
 			return nil
 		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "trust_center_watermark_config", Operation: OpQuery}
+			ref := SchemaRef{Schema: "trust_center_watermark_config", Operation: refOpQuery}
 
 			entities, err := client.TrustCenterWatermarkConfig.Query().
 				Where(trustcenterwatermarkconfig.OwnerID(orgID)).
@@ -3455,7 +3455,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "trust_center_watermark_config", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "trust_center_watermark_config", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.TrustCenterWatermarkConfig.Get(ctx, entityID)
 			if err != nil {
@@ -3479,7 +3479,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[VendorRiskScoreProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "vendor_risk_score", Operation: OpCreate}
+			ref := SchemaRef{Schema: "vendor_risk_score", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreateVendorRiskScoreInput](input)
 			if err != nil {
@@ -3494,7 +3494,7 @@ var (
 			return entity.ID, nil
 		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
-			ref := SchemaRef{Schema: "vendor_risk_score", Operation: OpUpdate, EntityID: entityID}
+			ref := SchemaRef{Schema: "vendor_risk_score", Operation: refOpUpdate, EntityID: entityID}
 
 			decoded, err := jsonx.Decode[generated.UpdateVendorRiskScoreInput](applyClears(input))
 			if err != nil {
@@ -3508,7 +3508,7 @@ var (
 			return nil
 		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "vendor_risk_score", Operation: OpQuery}
+			ref := SchemaRef{Schema: "vendor_risk_score", Operation: refOpQuery}
 
 			entities, err := client.VendorRiskScore.Query().
 				Where(vendorriskscore.OwnerID(orgID)).
@@ -3531,7 +3531,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "vendor_risk_score", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "vendor_risk_score", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.VendorRiskScore.Get(ctx, entityID)
 			if err != nil {
@@ -3555,7 +3555,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[VulnerabilityProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "vulnerability", Operation: OpCreate}
+			ref := SchemaRef{Schema: "vulnerability", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreateVulnerabilityInput](input)
 			if err != nil {
@@ -3570,7 +3570,7 @@ var (
 			return entity.ID, nil
 		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
-			ref := SchemaRef{Schema: "vulnerability", Operation: OpUpdate, EntityID: entityID}
+			ref := SchemaRef{Schema: "vulnerability", Operation: refOpUpdate, EntityID: entityID}
 
 			decoded, err := jsonx.Decode[generated.UpdateVulnerabilityInput](applyClears(input))
 			if err != nil {
@@ -3584,7 +3584,7 @@ var (
 			return nil
 		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "vulnerability", Operation: OpQuery}
+			ref := SchemaRef{Schema: "vulnerability", Operation: refOpQuery}
 
 			entities, err := client.Vulnerability.Query().
 				Where(vulnerability.OwnerID(orgID)).
@@ -3607,7 +3607,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "vulnerability", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "vulnerability", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.Vulnerability.Get(ctx, entityID)
 			if err != nil {
@@ -3631,7 +3631,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[WorkflowAssignmentProjection](),
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "workflow_assignment", Operation: OpQuery}
+			ref := SchemaRef{Schema: "workflow_assignment", Operation: refOpQuery}
 
 			entities, err := client.WorkflowAssignment.Query().
 				Where(workflowassignment.OwnerID(orgID)).
@@ -3654,7 +3654,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "workflow_assignment", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "workflow_assignment", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.WorkflowAssignment.Get(ctx, entityID)
 			if err != nil {
@@ -3678,7 +3678,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[WorkflowAssignmentTargetProjection](),
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "workflow_assignment_target", Operation: OpQuery}
+			ref := SchemaRef{Schema: "workflow_assignment_target", Operation: refOpQuery}
 
 			entities, err := client.WorkflowAssignmentTarget.Query().
 				Where(workflowassignmenttarget.OwnerID(orgID)).
@@ -3701,7 +3701,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "workflow_assignment_target", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "workflow_assignment_target", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.WorkflowAssignmentTarget.Get(ctx, entityID)
 			if err != nil {
@@ -3725,7 +3725,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[WorkflowDefinitionProjection](),
 		Create: func(ctx context.Context, client *generated.Client, input json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: "workflow_definition", Operation: OpCreate}
+			ref := SchemaRef{Schema: "workflow_definition", Operation: refOpCreate}
 
 			decoded, err := jsonx.Decode[generated.CreateWorkflowDefinitionInput](input)
 			if err != nil {
@@ -3740,7 +3740,7 @@ var (
 			return entity.ID, nil
 		},
 		Update: func(ctx context.Context, client *generated.Client, entityID string, input json.RawMessage) error {
-			ref := SchemaRef{Schema: "workflow_definition", Operation: OpUpdate, EntityID: entityID}
+			ref := SchemaRef{Schema: "workflow_definition", Operation: refOpUpdate, EntityID: entityID}
 
 			decoded, err := jsonx.Decode[generated.UpdateWorkflowDefinitionInput](applyClears(input))
 			if err != nil {
@@ -3754,7 +3754,7 @@ var (
 			return nil
 		},
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "workflow_definition", Operation: OpQuery}
+			ref := SchemaRef{Schema: "workflow_definition", Operation: refOpQuery}
 
 			entities, err := client.WorkflowDefinition.Query().
 				Where(workflowdefinition.OwnerID(orgID)).
@@ -3777,7 +3777,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "workflow_definition", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "workflow_definition", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.WorkflowDefinition.Get(ctx, entityID)
 			if err != nil {
@@ -3801,7 +3801,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[WorkflowEventProjection](),
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "workflow_event", Operation: OpQuery}
+			ref := SchemaRef{Schema: "workflow_event", Operation: refOpQuery}
 
 			entities, err := client.WorkflowEvent.Query().
 				Where(workflowevent.OwnerID(orgID)).
@@ -3824,7 +3824,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "workflow_event", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "workflow_event", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.WorkflowEvent.Get(ctx, entityID)
 			if err != nil {
@@ -3848,7 +3848,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[WorkflowInstanceProjection](),
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "workflow_instance", Operation: OpQuery}
+			ref := SchemaRef{Schema: "workflow_instance", Operation: refOpQuery}
 
 			entities, err := client.WorkflowInstance.Query().
 				Where(workflowinstance.OwnerID(orgID)).
@@ -3871,7 +3871,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "workflow_instance", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "workflow_instance", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.WorkflowInstance.Get(ctx, entityID)
 			if err != nil {
@@ -3895,7 +3895,7 @@ var (
 		},
 		ProjectionType: reflect.TypeFor[WorkflowObjectRefProjection](),
 		Query: func(ctx context.Context, client *generated.Client, orgID string) ([]json.RawMessage, error) {
-			ref := SchemaRef{Schema: "workflow_object_ref", Operation: OpQuery}
+			ref := SchemaRef{Schema: "workflow_object_ref", Operation: refOpQuery}
 
 			entities, err := client.WorkflowObjectRef.Query().
 				Where(workflowobjectref.OwnerID(orgID)).
@@ -3918,7 +3918,7 @@ var (
 			return results, nil
 		},
 		Load: func(ctx context.Context, client *generated.Client, entityID string) (json.RawMessage, error) {
-			ref := SchemaRef{Schema: "workflow_object_ref", Operation: OpLoad, EntityID: entityID}
+			ref := SchemaRef{Schema: "workflow_object_ref", Operation: refOpLoad, EntityID: entityID}
 
 			entity, err := client.WorkflowObjectRef.Get(ctx, entityID)
 			if err != nil {
@@ -5541,6 +5541,16 @@ func init() {
 	}
 	SchemaActionPlan.Edges = []EdgeDescriptor{
 		{
+			Name:             "approver",
+			Label:            "Approver",
+			TargetType:       "Group",
+			Unique:           true,
+			CreateField:      "approver_id",
+			ClearField:       "clearApprover",
+			Field:            "approver_id",
+			WorkflowEligible: true,
+		},
+		{
 			Name:        "controls",
 			Label:       "Controls",
 			Target:      SchemaControl,
@@ -5548,6 +5558,16 @@ func init() {
 			CreateField: "control_ids",
 			AddField:    "add_control_ids",
 			RemoveField: "remove_control_ids",
+		},
+		{
+			Name:             "delegate",
+			Label:            "Delegate",
+			TargetType:       "Group",
+			Unique:           true,
+			CreateField:      "delegate_id",
+			ClearField:       "clearDelegate",
+			Field:            "delegate_id",
+			WorkflowEligible: true,
 		},
 		{
 			Name:        "findings",
@@ -6181,6 +6201,15 @@ func init() {
 			RemoveField: "remove_check_result_ids",
 		},
 		{
+			Name:             "comments",
+			Label:            "Comments",
+			TargetType:       "Note",
+			CreateField:      "comment_ids",
+			AddField:         "add_comment_ids",
+			RemoveField:      "remove_comment_ids",
+			WorkflowEligible: true,
+		},
+		{
 			Name:        "control_implementations",
 			Label:       "ControlImplementations",
 			Target:      SchemaControlImplementation,
@@ -6197,6 +6226,26 @@ func init() {
 			CreateField:      "control_objective_ids",
 			AddField:         "add_control_objective_ids",
 			RemoveField:      "remove_control_objective_ids",
+			WorkflowEligible: true,
+		},
+		{
+			Name:             "control_owner",
+			Label:            "ControlOwner",
+			TargetType:       "Group",
+			Unique:           true,
+			CreateField:      "control_owner_id",
+			ClearField:       "clearControlOwner",
+			Field:            "control_owner_id",
+			WorkflowEligible: true,
+		},
+		{
+			Name:             "delegate",
+			Label:            "Delegate",
+			TargetType:       "Group",
+			Unique:           true,
+			CreateField:      "delegate_id",
+			ClearField:       "clearDelegate",
+			Field:            "delegate_id",
 			WorkflowEligible: true,
 		},
 		{
@@ -7453,6 +7502,16 @@ func init() {
 	}
 	SchemaInternalPolicy.Edges = []EdgeDescriptor{
 		{
+			Name:             "approver",
+			Label:            "Approver",
+			TargetType:       "Group",
+			Unique:           true,
+			CreateField:      "approver_id",
+			ClearField:       "clearApprover",
+			Field:            "approver_id",
+			WorkflowEligible: true,
+		},
+		{
 			Name:        "assets",
 			Label:       "Assets",
 			Target:      SchemaAsset,
@@ -7460,6 +7519,15 @@ func init() {
 			CreateField: "asset_ids",
 			AddField:    "add_asset_ids",
 			RemoveField: "remove_asset_ids",
+		},
+		{
+			Name:             "comments",
+			Label:            "Comments",
+			TargetType:       "Note",
+			CreateField:      "comment_ids",
+			AddField:         "add_comment_ids",
+			RemoveField:      "remove_comment_ids",
+			WorkflowEligible: true,
 		},
 		{
 			Name:        "control_implementations",
@@ -7489,6 +7557,16 @@ func init() {
 			RemoveField: "remove_control_ids",
 		},
 		{
+			Name:             "delegate",
+			Label:            "Delegate",
+			TargetType:       "Group",
+			Unique:           true,
+			CreateField:      "delegate_id",
+			ClearField:       "clearDelegate",
+			Field:            "delegate_id",
+			WorkflowEligible: true,
+		},
+		{
 			Name:             "discussions",
 			Label:            "Discussions",
 			Target:           SchemaDiscussion,
@@ -7506,6 +7584,16 @@ func init() {
 			CreateField: "entity_ids",
 			AddField:    "add_entity_ids",
 			RemoveField: "remove_entity_ids",
+		},
+		{
+			Name:             "file",
+			Label:            "File",
+			TargetType:       "File",
+			Unique:           true,
+			CreateField:      "file_id",
+			ClearField:       "clearFile",
+			Field:            "file_id",
+			WorkflowEligible: true,
 		},
 		{
 			Name:        "identity_holders",
@@ -8316,6 +8404,25 @@ func init() {
 	}
 	SchemaProcedure.Edges = []EdgeDescriptor{
 		{
+			Name:             "approver",
+			Label:            "Approver",
+			TargetType:       "Group",
+			Unique:           true,
+			CreateField:      "approver_id",
+			ClearField:       "clearApprover",
+			Field:            "approver_id",
+			WorkflowEligible: true,
+		},
+		{
+			Name:             "comments",
+			Label:            "Comments",
+			TargetType:       "Note",
+			CreateField:      "comment_ids",
+			AddField:         "add_comment_ids",
+			RemoveField:      "remove_comment_ids",
+			WorkflowEligible: true,
+		},
+		{
 			Name:             "controls",
 			Label:            "Controls",
 			Target:           SchemaControl,
@@ -8326,6 +8433,16 @@ func init() {
 			WorkflowEligible: true,
 		},
 		{
+			Name:             "delegate",
+			Label:            "Delegate",
+			TargetType:       "Group",
+			Unique:           true,
+			CreateField:      "delegate_id",
+			ClearField:       "clearDelegate",
+			Field:            "delegate_id",
+			WorkflowEligible: true,
+		},
+		{
 			Name:             "discussions",
 			Label:            "Discussions",
 			Target:           SchemaDiscussion,
@@ -8333,6 +8450,16 @@ func init() {
 			CreateField:      "discussion_ids",
 			AddField:         "add_discussion_ids",
 			RemoveField:      "remove_discussion_ids",
+			WorkflowEligible: true,
+		},
+		{
+			Name:             "file",
+			Label:            "File",
+			TargetType:       "File",
+			Unique:           true,
+			CreateField:      "file_id",
+			ClearField:       "clearFile",
+			Field:            "file_id",
 			WorkflowEligible: true,
 		},
 		{
@@ -8364,6 +8491,15 @@ func init() {
 			CreateField: "owner_id",
 			ClearField:  "clearOwner",
 			Field:       "owner_id",
+		},
+		{
+			Name:             "programs",
+			Label:            "Programs",
+			TargetType:       "Program",
+			CreateField:      "program_ids",
+			AddField:         "add_program_ids",
+			RemoveField:      "remove_program_ids",
+			WorkflowEligible: true,
 		},
 		{
 			Name:             "risks",
@@ -8965,6 +9101,15 @@ func init() {
 			RemoveField: "remove_asset_ids",
 		},
 		{
+			Name:             "comments",
+			Label:            "Comments",
+			TargetType:       "Note",
+			CreateField:      "comment_ids",
+			AddField:         "add_comment_ids",
+			RemoveField:      "remove_comment_ids",
+			WorkflowEligible: true,
+		},
+		{
 			Name:             "control",
 			Label:            "Control",
 			Target:           SchemaControl,
@@ -8992,6 +9137,26 @@ func init() {
 			CreateField:      "control_objective_ids",
 			AddField:         "add_control_objective_ids",
 			RemoveField:      "remove_control_objective_ids",
+			WorkflowEligible: true,
+		},
+		{
+			Name:             "control_owner",
+			Label:            "ControlOwner",
+			TargetType:       "Group",
+			Unique:           true,
+			CreateField:      "control_owner_id",
+			ClearField:       "clearControlOwner",
+			Field:            "control_owner_id",
+			WorkflowEligible: true,
+		},
+		{
+			Name:             "delegate",
+			Label:            "Delegate",
+			TargetType:       "Group",
+			Unique:           true,
+			CreateField:      "delegate_id",
+			ClearField:       "clearDelegate",
+			Field:            "delegate_id",
 			WorkflowEligible: true,
 		},
 		{
@@ -9049,6 +9214,24 @@ func init() {
 			CreateField:      "internal_policy_ids",
 			AddField:         "add_internal_policy_ids",
 			RemoveField:      "remove_internal_policy_ids",
+			WorkflowEligible: true,
+		},
+		{
+			Name:             "mapped_from_subcontrols",
+			Label:            "MappedFromSubcontrols",
+			TargetType:       "MappedControl",
+			CreateField:      "mapped_from_subcontrol_ids",
+			AddField:         "add_mapped_from_subcontrol_ids",
+			RemoveField:      "remove_mapped_from_subcontrol_ids",
+			WorkflowEligible: true,
+		},
+		{
+			Name:             "mapped_to_subcontrols",
+			Label:            "MappedToSubcontrols",
+			TargetType:       "MappedControl",
+			CreateField:      "mapped_to_subcontrol_ids",
+			AddField:         "add_mapped_to_subcontrol_ids",
+			RemoveField:      "remove_mapped_to_subcontrol_ids",
 			WorkflowEligible: true,
 		},
 		{
@@ -10166,7 +10349,7 @@ func init() {
 		},
 	}
 	SchemaActionPlan.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "action_plan", Operation: OpQuery}
+		ref := SchemaRef{Schema: "action_plan", Operation: refOpQuery}
 
 		if !SchemaActionPlan.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "action_plan"))
@@ -10194,7 +10377,7 @@ func init() {
 		return results, nil
 	}
 	SchemaAssessment.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "assessment", Operation: OpQuery}
+		ref := SchemaRef{Schema: "assessment", Operation: refOpQuery}
 
 		if !SchemaAssessment.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "assessment"))
@@ -10222,7 +10405,7 @@ func init() {
 		return results, nil
 	}
 	SchemaAssessmentResponse.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "assessment_response", Operation: OpQuery}
+		ref := SchemaRef{Schema: "assessment_response", Operation: refOpQuery}
 
 		if !SchemaAssessmentResponse.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "assessment_response"))
@@ -10250,7 +10433,7 @@ func init() {
 		return results, nil
 	}
 	SchemaAsset.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "asset", Operation: OpQuery}
+		ref := SchemaRef{Schema: "asset", Operation: refOpQuery}
 
 		if !SchemaAsset.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "asset"))
@@ -10278,7 +10461,7 @@ func init() {
 		return results, nil
 	}
 	SchemaCampaign.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "campaign", Operation: OpQuery}
+		ref := SchemaRef{Schema: "campaign", Operation: refOpQuery}
 
 		if !SchemaCampaign.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "campaign"))
@@ -10306,7 +10489,7 @@ func init() {
 		return results, nil
 	}
 	SchemaCampaignTarget.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "campaign_target", Operation: OpQuery}
+		ref := SchemaRef{Schema: "campaign_target", Operation: refOpQuery}
 
 		if !SchemaCampaignTarget.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "campaign_target"))
@@ -10334,7 +10517,7 @@ func init() {
 		return results, nil
 	}
 	SchemaContact.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "contact", Operation: OpQuery}
+		ref := SchemaRef{Schema: "contact", Operation: refOpQuery}
 
 		if !SchemaContact.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "contact"))
@@ -10362,7 +10545,7 @@ func init() {
 		return results, nil
 	}
 	SchemaControl.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "control", Operation: OpQuery}
+		ref := SchemaRef{Schema: "control", Operation: refOpQuery}
 
 		if !SchemaControl.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "control"))
@@ -10390,7 +10573,7 @@ func init() {
 		return results, nil
 	}
 	SchemaControlImplementation.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "control_implementation", Operation: OpQuery}
+		ref := SchemaRef{Schema: "control_implementation", Operation: refOpQuery}
 
 		if !SchemaControlImplementation.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "control_implementation"))
@@ -10418,7 +10601,7 @@ func init() {
 		return results, nil
 	}
 	SchemaControlObjective.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "control_objective", Operation: OpQuery}
+		ref := SchemaRef{Schema: "control_objective", Operation: refOpQuery}
 
 		if !SchemaControlObjective.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "control_objective"))
@@ -10446,7 +10629,7 @@ func init() {
 		return results, nil
 	}
 	SchemaDirectoryAccount.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "directory_account", Operation: OpQuery}
+		ref := SchemaRef{Schema: "directory_account", Operation: refOpQuery}
 
 		if !SchemaDirectoryAccount.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "directory_account"))
@@ -10474,7 +10657,7 @@ func init() {
 		return results, nil
 	}
 	SchemaDirectoryGroup.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "directory_group", Operation: OpQuery}
+		ref := SchemaRef{Schema: "directory_group", Operation: refOpQuery}
 
 		if !SchemaDirectoryGroup.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "directory_group"))
@@ -10502,7 +10685,7 @@ func init() {
 		return results, nil
 	}
 	SchemaDirectoryMembership.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "directory_membership", Operation: OpQuery}
+		ref := SchemaRef{Schema: "directory_membership", Operation: refOpQuery}
 
 		if !SchemaDirectoryMembership.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "directory_membership"))
@@ -10530,7 +10713,7 @@ func init() {
 		return results, nil
 	}
 	SchemaDiscussion.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "discussion", Operation: OpQuery}
+		ref := SchemaRef{Schema: "discussion", Operation: refOpQuery}
 
 		if !SchemaDiscussion.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "discussion"))
@@ -10558,7 +10741,7 @@ func init() {
 		return results, nil
 	}
 	SchemaDocumentData.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "document_data", Operation: OpQuery}
+		ref := SchemaRef{Schema: "document_data", Operation: refOpQuery}
 
 		if !SchemaDocumentData.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "document_data"))
@@ -10586,7 +10769,7 @@ func init() {
 		return results, nil
 	}
 	SchemaEmailTemplate.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "email_template", Operation: OpQuery}
+		ref := SchemaRef{Schema: "email_template", Operation: refOpQuery}
 
 		if !SchemaEmailTemplate.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "email_template"))
@@ -10614,7 +10797,7 @@ func init() {
 		return results, nil
 	}
 	SchemaEntity.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "entity", Operation: OpQuery}
+		ref := SchemaRef{Schema: "entity", Operation: refOpQuery}
 
 		if !SchemaEntity.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "entity"))
@@ -10642,7 +10825,7 @@ func init() {
 		return results, nil
 	}
 	SchemaEvidence.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "evidence", Operation: OpQuery}
+		ref := SchemaRef{Schema: "evidence", Operation: refOpQuery}
 
 		if !SchemaEvidence.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "evidence"))
@@ -10670,7 +10853,7 @@ func init() {
 		return results, nil
 	}
 	SchemaFinding.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "finding", Operation: OpQuery}
+		ref := SchemaRef{Schema: "finding", Operation: refOpQuery}
 
 		if !SchemaFinding.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "finding"))
@@ -10698,7 +10881,7 @@ func init() {
 		return results, nil
 	}
 	SchemaIdentityHolder.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "identity_holder", Operation: OpQuery}
+		ref := SchemaRef{Schema: "identity_holder", Operation: refOpQuery}
 
 		if !SchemaIdentityHolder.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "identity_holder"))
@@ -10726,7 +10909,7 @@ func init() {
 		return results, nil
 	}
 	SchemaInternalPolicy.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "internal_policy", Operation: OpQuery}
+		ref := SchemaRef{Schema: "internal_policy", Operation: refOpQuery}
 
 		if !SchemaInternalPolicy.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "internal_policy"))
@@ -10754,7 +10937,7 @@ func init() {
 		return results, nil
 	}
 	SchemaNarrative.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "narrative", Operation: OpQuery}
+		ref := SchemaRef{Schema: "narrative", Operation: refOpQuery}
 
 		if !SchemaNarrative.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "narrative"))
@@ -10782,7 +10965,7 @@ func init() {
 		return results, nil
 	}
 	SchemaNotification.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "notification", Operation: OpQuery}
+		ref := SchemaRef{Schema: "notification", Operation: refOpQuery}
 
 		if !SchemaNotification.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "notification"))
@@ -10810,7 +10993,7 @@ func init() {
 		return results, nil
 	}
 	SchemaNotificationTemplate.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "notification_template", Operation: OpQuery}
+		ref := SchemaRef{Schema: "notification_template", Operation: refOpQuery}
 
 		if !SchemaNotificationTemplate.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "notification_template"))
@@ -10838,7 +11021,7 @@ func init() {
 		return results, nil
 	}
 	SchemaPlatform.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "platform", Operation: OpQuery}
+		ref := SchemaRef{Schema: "platform", Operation: refOpQuery}
 
 		if !SchemaPlatform.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "platform"))
@@ -10866,7 +11049,7 @@ func init() {
 		return results, nil
 	}
 	SchemaProcedure.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "procedure", Operation: OpQuery}
+		ref := SchemaRef{Schema: "procedure", Operation: refOpQuery}
 
 		if !SchemaProcedure.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "procedure"))
@@ -10894,7 +11077,7 @@ func init() {
 		return results, nil
 	}
 	SchemaRemediation.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "remediation", Operation: OpQuery}
+		ref := SchemaRef{Schema: "remediation", Operation: refOpQuery}
 
 		if !SchemaRemediation.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "remediation"))
@@ -10922,7 +11105,7 @@ func init() {
 		return results, nil
 	}
 	SchemaReview.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "review", Operation: OpQuery}
+		ref := SchemaRef{Schema: "review", Operation: refOpQuery}
 
 		if !SchemaReview.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "review"))
@@ -10950,7 +11133,7 @@ func init() {
 		return results, nil
 	}
 	SchemaRisk.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "risk", Operation: OpQuery}
+		ref := SchemaRef{Schema: "risk", Operation: refOpQuery}
 
 		if !SchemaRisk.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "risk"))
@@ -10978,7 +11161,7 @@ func init() {
 		return results, nil
 	}
 	SchemaScan.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "scan", Operation: OpQuery}
+		ref := SchemaRef{Schema: "scan", Operation: refOpQuery}
 
 		if !SchemaScan.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "scan"))
@@ -11006,7 +11189,7 @@ func init() {
 		return results, nil
 	}
 	SchemaScheduledJob.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "scheduled_job", Operation: OpQuery}
+		ref := SchemaRef{Schema: "scheduled_job", Operation: refOpQuery}
 
 		if !SchemaScheduledJob.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "scheduled_job"))
@@ -11034,7 +11217,7 @@ func init() {
 		return results, nil
 	}
 	SchemaSubcontrol.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "subcontrol", Operation: OpQuery}
+		ref := SchemaRef{Schema: "subcontrol", Operation: refOpQuery}
 
 		if !SchemaSubcontrol.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "subcontrol"))
@@ -11062,7 +11245,7 @@ func init() {
 		return results, nil
 	}
 	SchemaSubprocessor.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "subprocessor", Operation: OpQuery}
+		ref := SchemaRef{Schema: "subprocessor", Operation: refOpQuery}
 
 		if !SchemaSubprocessor.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "subprocessor"))
@@ -11090,7 +11273,7 @@ func init() {
 		return results, nil
 	}
 	SchemaSystemDetail.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "system_detail", Operation: OpQuery}
+		ref := SchemaRef{Schema: "system_detail", Operation: refOpQuery}
 
 		if !SchemaSystemDetail.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "system_detail"))
@@ -11118,7 +11301,7 @@ func init() {
 		return results, nil
 	}
 	SchemaTask.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "task", Operation: OpQuery}
+		ref := SchemaRef{Schema: "task", Operation: refOpQuery}
 
 		if !SchemaTask.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "task"))
@@ -11146,7 +11329,7 @@ func init() {
 		return results, nil
 	}
 	SchemaTemplate.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "template", Operation: OpQuery}
+		ref := SchemaRef{Schema: "template", Operation: refOpQuery}
 
 		if !SchemaTemplate.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "template"))
@@ -11174,7 +11357,7 @@ func init() {
 		return results, nil
 	}
 	SchemaTrustCenterWatermarkConfig.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "trust_center_watermark_config", Operation: OpQuery}
+		ref := SchemaRef{Schema: "trust_center_watermark_config", Operation: refOpQuery}
 
 		if !SchemaTrustCenterWatermarkConfig.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "trust_center_watermark_config"))
@@ -11202,7 +11385,7 @@ func init() {
 		return results, nil
 	}
 	SchemaVendorRiskScore.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "vendor_risk_score", Operation: OpQuery}
+		ref := SchemaRef{Schema: "vendor_risk_score", Operation: refOpQuery}
 
 		if !SchemaVendorRiskScore.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "vendor_risk_score"))
@@ -11230,7 +11413,7 @@ func init() {
 		return results, nil
 	}
 	SchemaVulnerability.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "vulnerability", Operation: OpQuery}
+		ref := SchemaRef{Schema: "vulnerability", Operation: refOpQuery}
 
 		if !SchemaVulnerability.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "vulnerability"))
@@ -11258,7 +11441,7 @@ func init() {
 		return results, nil
 	}
 	SchemaWorkflowAssignment.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "workflow_assignment", Operation: OpQuery}
+		ref := SchemaRef{Schema: "workflow_assignment", Operation: refOpQuery}
 
 		if !SchemaWorkflowAssignment.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "workflow_assignment"))
@@ -11286,7 +11469,7 @@ func init() {
 		return results, nil
 	}
 	SchemaWorkflowAssignmentTarget.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "workflow_assignment_target", Operation: OpQuery}
+		ref := SchemaRef{Schema: "workflow_assignment_target", Operation: refOpQuery}
 
 		if !SchemaWorkflowAssignmentTarget.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "workflow_assignment_target"))
@@ -11314,7 +11497,7 @@ func init() {
 		return results, nil
 	}
 	SchemaWorkflowDefinition.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "workflow_definition", Operation: OpQuery}
+		ref := SchemaRef{Schema: "workflow_definition", Operation: refOpQuery}
 
 		if !SchemaWorkflowDefinition.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "workflow_definition"))
@@ -11342,7 +11525,7 @@ func init() {
 		return results, nil
 	}
 	SchemaWorkflowEvent.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "workflow_event", Operation: OpQuery}
+		ref := SchemaRef{Schema: "workflow_event", Operation: refOpQuery}
 
 		if !SchemaWorkflowEvent.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "workflow_event"))
@@ -11370,7 +11553,7 @@ func init() {
 		return results, nil
 	}
 	SchemaWorkflowInstance.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "workflow_instance", Operation: OpQuery}
+		ref := SchemaRef{Schema: "workflow_instance", Operation: refOpQuery}
 
 		if !SchemaWorkflowInstance.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "workflow_instance"))
@@ -11398,7 +11581,7 @@ func init() {
 		return results, nil
 	}
 	SchemaWorkflowObjectRef.QueryByKey = func(ctx context.Context, client *generated.Client, orgID string, field string, values []string) ([]json.RawMessage, error) {
-		ref := SchemaRef{Schema: "workflow_object_ref", Operation: OpQuery}
+		ref := SchemaRef{Schema: "workflow_object_ref", Operation: refOpQuery}
 
 		if !SchemaWorkflowObjectRef.MatchKeyField(field) {
 			return nil, logError(ctx, ref, ErrInvalidKeyField, fmt.Errorf("%s is not a match-key field on %s", field, "workflow_object_ref"))
@@ -11526,7 +11709,7 @@ func applyThroughEdgeIDs(ctx context.Context, client *generated.Client, s *Schem
 		}
 
 		if err := edge.LinkThrough(ctx, client, sourceID, targetIDs); err != nil {
-			return logError(ctx, SchemaRef{Schema: s.Snake, Operation: OpLink, EntityID: sourceID, Edge: name}, ErrLinkFailed, err)
+			return logError(ctx, SchemaRef{Schema: s.Snake, Operation: refOpLink, EntityID: sourceID, Edge: name}, ErrLinkFailed, err)
 		}
 	}
 
@@ -11613,9 +11796,7 @@ func LookupSchema(name string) (*Schema, bool) {
 		return s, true
 	}
 
-	normalized := strings.ToLower(strings.NewReplacer("_", "", "-", "", " ", "").Replace(name))
-
-	if s, ok := schemaLookupMap[normalized]; ok {
+	if s, ok := schemaLookupMap[normalizeSchemaKey(name)]; ok {
 		return s, true
 	}
 
@@ -11637,7 +11818,7 @@ func AllSchemas() []*Schema {
 func SelectTargets(ctx context.Context, client *generated.Client, orgID string, selector TargetSelector) ([]EntityRef, error) {
 	schema, ok := LookupSchema(selector.Schema.Name)
 	if !ok {
-		return nil, logError(ctx, SchemaRef{Schema: selector.Schema.Snake, Operation: OpQuery}, ErrSchemaNotFound, fmt.Errorf("schema %s is not registered", selector.Schema.Name))
+		return nil, logError(ctx, SchemaRef{Schema: selector.Schema.Snake, Operation: refOpQuery}, ErrSchemaNotFound, fmt.Errorf("schema %s is not registered", selector.Schema.Name))
 	}
 
 	entities, err := selectCandidates(ctx, client, schema, orgID, selector)
@@ -11665,7 +11846,7 @@ func SelectTargets(ctx context.Context, client *generated.Client, orgID string, 
 
 		eval, err = celx.NewNativeEntityEvaluator(envCfg, celx.FastEvalConfig(), schema.ProjectionType, sourceType)
 		if err != nil {
-			errorEvent(ctx, SchemaRef{Schema: schema.Snake, Operation: OpQuery}, err).Str(FieldExpression, selector.Expression).Msg(ErrEvaluatorBuildFailed.Error())
+			errorEvent(ctx, SchemaRef{Schema: schema.Snake, Operation: refOpQuery}, err).Str(FieldExpression, selector.Expression).Msg(ErrEvaluatorBuildFailed.Error())
 
 			return nil, fmt.Errorf("%w: %w", ErrEvaluatorBuildFailed, err)
 		}
@@ -11678,7 +11859,7 @@ func SelectTargets(ctx context.Context, client *generated.Client, orgID string, 
 		excludeSet[id] = struct{}{}
 	}
 
-	ref := SchemaRef{Schema: schema.Snake, Operation: OpQuery}
+	ref := SchemaRef{Schema: schema.Snake, Operation: refOpQuery}
 	var results []EntityRef
 
 	for _, data := range entities {
@@ -11708,7 +11889,7 @@ func SelectTargets(ctx context.Context, client *generated.Client, orgID string, 
 			}
 
 			if evalErr != nil {
-				errorEvent(ctx, SchemaRef{Schema: schema.Snake, Operation: OpQuery, EntityID: parsed.ID}, evalErr).Str(FieldExpression, selector.Expression).Msg(ErrEvaluationFailed.Error())
+				errorEvent(ctx, SchemaRef{Schema: schema.Snake, Operation: refOpQuery, EntityID: parsed.ID}, evalErr).Str(FieldExpression, selector.Expression).Msg(ErrEvaluationFailed.Error())
 				continue
 			}
 

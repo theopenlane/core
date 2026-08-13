@@ -2,7 +2,6 @@ package runtime
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 
 	"github.com/theopenlane/core/common/enums"
@@ -82,11 +81,18 @@ func (r *Runtime) SeedScheduledOperations(ctx context.Context) error {
 	return errors.Join(errs...)
 }
 
-// seedScheduledOperation emits one scheduled operation cycle envelope when no active job exists for it
+// seedScheduledOperation emits one scheduled operation cycle envelope unless the loop is
+// already live; successor cycles carry per-cycle unique keys the seed's key can't collide with
 func (r *Runtime) seedScheduledOperation(ctx context.Context, oc gala.OperationContext) error {
-	ctx = intobvs.WithContext(ctx, oc)
+	ctx, headers := intobvs.EmitContext(ctx, oc)
 
-	fragment, err := scheduledMetadataFragment(oc)
+	props := types.GetPropertiesForOperationContext(oc)
+
+	fragment, err := types.PropertiesFragment(map[string]string{
+		"definitionId": props["definitionId"],
+		"operation":    props["operation"],
+		"runType":      props["runType"],
+	})
 	if err != nil {
 		return err
 	}
@@ -99,41 +105,12 @@ func (r *Runtime) seedScheduledOperation(ctx context.Context, oc gala.OperationC
 	}
 
 	if active {
-		logx.FromContext(ctx).Debug().Msg("scheduled operation already active, skipping seed")
-
 		return nil
 	}
 
 	logx.FromContext(ctx).Info().Msg("seeding scheduled operation")
 
-	_, err = r.Gala().Emit(
-		ctx,
-		operations.ReconcileTopic.Name,
-		operations.ReconcileEnvelope{OperationContext: oc},
-		gala.WithHeaders(gala.Headers{
-			Properties: types.GetPropertiesForOperationContext(oc),
-			Tags:       types.GetTagsForOperationContext(oc),
-		}),
-	)
+	_, err = r.Gala().EmitWithHeaders(ctx, operations.ReconcileTopic.Name, operations.ReconcileEnvelope{OperationContext: oc}, headers)
 
 	return err
-}
-
-// scheduledMetadataFragment builds the JSONB fragment for active-job checks; the run type
-// keeps it disjoint from installation-bound reconcile cycles sharing the topic
-func scheduledMetadataFragment(oc gala.OperationContext) (string, error) {
-	props := types.GetPropertiesForOperationContext(oc)
-
-	b, err := json.Marshal(map[string]map[string]string{
-		"properties": {
-			"definitionId": props["definitionId"],
-			"operation":    props["operation"],
-			"runType":      props["runType"],
-		},
-	})
-	if err != nil {
-		return "", err
-	}
-
-	return string(b), nil
 }

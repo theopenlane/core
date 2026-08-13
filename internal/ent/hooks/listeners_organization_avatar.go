@@ -1,17 +1,14 @@
 package hooks
 
 import (
-	"context"
 	"net/http"
 	"time"
 
-	"entgo.io/ent"
+	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/favicon"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
@@ -23,17 +20,17 @@ var avatarDiscoveryClient = &http.Client{
 	Timeout: avatarFetchTimeout,
 }
 
-// RegisterGalaOrganizationAvatarListeners registers organization avatar discovery on Gala.
-func RegisterGalaOrganizationAvatarListeners(g *gala.Gala) ([]gala.ListenerID, error) {
-	return registerMutationListeners(g, entityops.MutationListener{
+// OrganizationAvatarListeners returns the organization avatar discovery listener
+func OrganizationAvatarListeners() []gala.Registration {
+	return []gala.Registration{entityops.MutationListener{
 		Schema:     generated.TypeOrganization,
 		Label:      "avatar",
-		Operations: []string{ent.OpCreate.String()},
-		Elevate: func(ctx context.Context, _ entityops.MutationPayload) context.Context {
-			return privacy.DecisionContext(rule.WithInternalContext(ctx), privacy.Allow)
+		Operations: []string{entityops.OpCreate},
+		Caller: func(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
+			return restored.WithCapabilities(auth.CapInternalOperation | auth.CapBypassOrgFilter)
 		},
 		Handle: handleOrganizationAvatarCreated,
-	})
+	}}
 }
 
 // handleOrganizationAvatarCreated fetches icons from the domain name instead and sets it as the remote logo url
@@ -57,7 +54,7 @@ func handleOrganizationAvatarCreated(inv entityops.Invocation, _ entityops.Mutat
 
 	avatarURL, err := favicon.Discover(inv.Context, avatarDiscoveryClient, setting.Domains)
 	if err != nil {
-		logx.FromContext(inv.Context).Err(err).Str("organization_id", inv.EntityID).Msg("organization avatar discovery failed")
+		logx.FromContext(inv.Context).Err(err).Msg("organization avatar discovery failed")
 		return nil
 	}
 

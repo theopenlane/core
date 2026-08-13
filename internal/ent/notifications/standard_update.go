@@ -38,9 +38,12 @@ func handleStandardMutation(inv entityops.Invocation, payload entityops.Mutation
 	standardID := payload.EntityID
 	allowCtx := inv.Context
 
-	std, err := inv.Client.Standard.Get(allowCtx, standardID)
-	if err != nil {
+	std, found, err := entityops.LoadEntity(allowCtx, standardID, inv.Client.Standard.Get)
+	switch {
+	case err != nil:
 		return fmt.Errorf("failed to query standard: %w", err)
+	case !found:
+		return nil
 	}
 
 	if !std.SystemOwned {

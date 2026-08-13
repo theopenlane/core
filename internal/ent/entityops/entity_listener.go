@@ -30,18 +30,19 @@ type FieldMatch struct {
 // MutationListener declares one mutation listener bound to a schema mutation topic and
 // compiles to a standard gala definition via Definition, so registration is always
 // gala.Register. The listener name composes from the topic and optional label; declarative
-// gating, caller resolution, elevation, enrichment, and cancel classification compile to
+// gating, caller resolution, context keys, log fields, and cancel classification compile to
 // their definition fields, and the handler runs behind the standard preamble: client
 // resolution and context seeding, and entity-id resolution
 type MutationListener struct {
 	// Concern selects the mutation topic namespace; empty means the direct concern
-	Concern gala.MutationConcern
+	Concern MutationConcern
 	// Schema is the ent schema type name whose mutations the listener observes
 	Schema string
 	// Label optionally disambiguates multiple listeners on one topic; it suffixes the
 	// composed listener name
 	Label string
-	// Operations optionally scopes listener interest to specific mutation operations
+	// Operations optionally scopes listener interest to specific mutation operations;
+	// empty expands to RegularMutationOps, so OpSoftDelete is explicit opt-in
 	Operations []string
 	// Fields optionally gates update operations on at least one of these fields having
 	// changed; create and delete operations pass the gate
@@ -51,12 +52,10 @@ type MutationListener struct {
 	// Caller optionally replaces or augments the restored caller; it receives the restored
 	// caller (never nil) and its result is set on the context and Invocation.Caller
 	Caller func(*auth.Caller, MutationPayload) *auth.Caller
-	// Elevate optionally transforms the restored context before the handler runs; existing
-	// context constructors (privacy allow, capability elevation) plug in unchanged
-	Elevate func(context.Context, MutationPayload) context.Context
-	// Enrich optionally derives observability context before the handler runs, composed
-	// after the automatic mutation identity log fields
-	Enrich func(context.Context, MutationPayload) context.Context
+	// ContextKeys are applied to the context in order before the handler runs
+	ContextKeys []func(context.Context) context.Context
+	// LogFields supplements the automatic mutation identity log fields
+	LogFields func(MutationPayload) map[string]any
 	// Cancel optionally classifies a handler error as terminal; terminal errors cancel the
 	// job instead of retrying
 	Cancel func(context.Context, MutationPayload, error) bool
@@ -70,6 +69,8 @@ type Invocation struct {
 	Context context.Context
 	// Client is the ent client resolved from the gala injector
 	Client *generated.Client
+	// Schema is the entityops schema handle for the mutated type
+	Schema *Schema
 	// EntityID is the mutated entity identifier
 	EntityID string
 	// Caller is the pre-resolved caller for this dispatch, never nil
@@ -84,7 +85,7 @@ type Invocation struct {
 // Name returns the composed listener name: the mutation topic, suffixed with the label
 // when one is set
 func (listener MutationListener) Name() string {
-	name := string(gala.MutationTopicName(listener.concern(), listener.Schema))
+	name := string(MutationTopicName(listener.concern(), listener.Schema))
 	if listener.Label != "" {
 		name += "." + listener.Label
 	}
@@ -92,10 +93,15 @@ func (listener MutationListener) Name() string {
 	return name
 }
 
+// Attach compiles the listener to its definition and registers it on the runtime
+func (listener MutationListener) Attach(g *gala.Gala) (gala.ListenerID, error) {
+	return listener.Definition().Attach(g)
+}
+
 // concern returns the listener concern, defaulting to the direct namespace
-func (listener MutationListener) concern() gala.MutationConcern {
+func (listener MutationListener) concern() MutationConcern {
 	if listener.Concern == "" {
-		return gala.MutationConcernDirect
+		return MutationConcernDirect
 	}
 
 	return listener.Concern
@@ -104,14 +110,19 @@ func (listener MutationListener) concern() gala.MutationConcern {
 // Definition compiles the listener into the standard gala definition, so mutation
 // listeners register through gala.Register like every other listener
 func (listener MutationListener) Definition() gala.Definition[MutationPayload] {
+	operations := listener.Operations
+	if len(operations) == 0 {
+		operations = RegularMutationOps
+	}
+
 	return gala.Definition[MutationPayload]{
 		Topic:      MutationTopic(listener.concern(), listener.Schema),
 		Name:       listener.Name(),
-		Operations: listener.Operations,
+		Operations: operations,
 		// the declarative field and match gates compile to the definition gate: field
 		// gates apply to update operations only, creates and deletes pass, and match
 		// predicates are AND-combined over proposed values
-		Gate: func(payload MutationPayload) bool {
+		Gate: func(_ context.Context, payload MutationPayload) bool {
 			if len(listener.Fields) > 0 && isUpdateOperationString(payload.Operation) {
 				if !lo.SomeBy(listener.Fields, payload.FieldChanged) {
 					return false
@@ -131,24 +142,11 @@ func (listener MutationListener) Definition() gala.Definition[MutationPayload] {
 
 			return true
 		},
-		Caller:  listener.Caller,
-		Elevate: listener.Elevate,
-		// mutation identity log fields enrich every listener automatically, composed
-		// with any listener-declared enrichment
-		Enrich: func(ctx context.Context, payload MutationPayload) context.Context {
-			ctx = logx.WithFields(ctx, map[string]any{
-				"entity_id":     payload.EntityID,
-				"mutation_type": payload.MutationType,
-			})
-
-			if listener.Enrich != nil {
-				ctx = listener.Enrich(ctx, payload)
-			}
-
-			return ctx
-		},
-		Cancel: listener.Cancel,
-		Handle: mutationHandler(listener),
+		Caller:      listener.Caller,
+		ContextKeys: listener.ContextKeys,
+		LogFields:   listener.LogFields,
+		Cancel:      listener.Cancel,
+		Handle:      mutationHandler(listener),
 	}
 }
 
@@ -188,18 +186,25 @@ func mutationHandler(listener MutationListener) gala.Handler[MutationPayload] {
 
 		entityID := payload.EntityID
 		if entityID == "" {
-			entityID = ctx.Envelope.Headers.Properties[gala.MutationPropertyEntityID]
-		}
-
-		if entityID == "" {
 			logx.FromContext(invocationCtx).Debug().Str("listener", listener.Name()).Msg("mutation listener skipped: entity id unresolved")
 
 			return nil
 		}
 
+		schema, _ := LookupSchema(payload.MutationType)
+
+		fields := map[string]any{"mutation": payload.Identity()}
+		// the schema-specific id key keeps log output queryable by domain name
+		if schema != nil {
+			fields[schema.Snake+"_id"] = entityID
+		}
+
+		invocationCtx = logx.WithFields(invocationCtx, fields)
+
 		return listener.Handle(Invocation{
 			Context:  invocationCtx,
 			Client:   client,
+			Schema:   schema,
 			EntityID: entityID,
 			Caller:   ctx.Caller,
 			Envelope: ctx.Envelope,

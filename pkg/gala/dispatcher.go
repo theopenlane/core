@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"strings"
+	"time"
 
 	"github.com/riverqueue/river"
 	"github.com/riverqueue/river/rivertype"
@@ -14,26 +15,22 @@ import (
 // galaProvider resolves the gala instance used by River workers
 type galaProvider func() *Gala
 
-// riverDispatchWorker processes durable gala dispatch jobs from River
+// riverDispatchWorker processes legacy-kind durable gala dispatch jobs from River
 type riverDispatchWorker struct {
-	river.WorkerDefaults[riverDispatchArgs]
+	river.WorkerDefaults[EnvelopeArgs]
 
 	galaProvider galaProvider
 }
 
-// riverDispatchJobKind is the River job kind used for durable gala dispatch
+// riverDispatchJobKind is the legacy River job kind, retained as the registered fallback
+// so pre-kind jobs and unkinded emissions always have a worker
 const riverDispatchJobKind = "gala_dispatch_v1"
 
 // DefaultQueueName is the default queue used for gala durable dispatch jobs
 const DefaultQueueName = "events"
 
-// riverDispatchArgs stores a JSON-encoded gala envelope for durable dispatch
-type riverDispatchArgs struct {
-	// Envelope is the encoded gala envelope payload
-	Envelope []byte `json:"envelope"`
-	// UniqueKey scopes the ByArgs uniqueness hash to this field alone via the river tag
-	UniqueKey string `json:"unique_key,omitempty" river:"unique"`
-}
+// DefaultJobTimeout is the default maximum run time for one dispatch job
+const DefaultJobTimeout = 15 * time.Minute
 
 // riverInsertClient represents the minimal insert capability required for durable dispatch
 type riverInsertClient interface {
@@ -47,6 +44,8 @@ type riverDispatcher struct {
 	jobClient riverInsertClient
 	// defaultQueue is the default River queue for dispatch jobs
 	defaultQueue string
+	// kindQueues maps each registered job kind to its dedicated queue
+	kindQueues map[string]string
 }
 
 // dispatcher dispatches envelopes to the configured transport
@@ -72,13 +71,13 @@ func newRiverDispatcher(jobClient riverInsertClient, defaultQueue string) (*rive
 }
 
 // newRiverDispatchArgs builds River dispatch args from an envelope
-func newRiverDispatchArgs(envelope Envelope) (riverDispatchArgs, error) {
+func newRiverDispatchArgs(envelope Envelope) (EnvelopeArgs, error) {
 	encodedEnvelope, err := json.Marshal(envelope)
 	if err != nil {
-		return riverDispatchArgs{}, ErrRiverEnvelopeEncodeFailed
+		return EnvelopeArgs{}, ErrRiverEnvelopeEncodeFailed
 	}
 
-	return riverDispatchArgs{
+	return EnvelopeArgs{
 		Envelope:  encodedEnvelope,
 		UniqueKey: envelope.Headers.UniqueKey,
 	}, nil
@@ -118,12 +117,25 @@ type riverJobMetadata struct {
 
 // Dispatch dispatches an envelope to River for processing by a Worker
 func (d *riverDispatcher) Dispatch(ctx context.Context, envelope Envelope) error {
-	args, err := newRiverDispatchArgs(envelope)
+	envelopeArgs, err := newRiverDispatchArgs(envelope)
 	if err != nil {
 		return err
 	}
 
+	kind := strings.TrimSpace(envelope.Headers.Kind)
+	if _, registered := d.kindQueues[kind]; kind != "" && !registered {
+		logx.FromContext(ctx).Warn().Str("kind", kind).Str("topic", string(envelope.Topic)).Msg("gala: unregistered job kind, dispatching under the default kind")
+
+		kind = ""
+	}
+
+	args := kindedEnvelopeArgs{EnvelopeArgs: envelopeArgs, kind: kind}
+
 	queueName := strings.TrimSpace(envelope.Headers.Queue)
+	if queueName == "" {
+		queueName = d.kindQueues[kind]
+	}
+
 	if queueName == "" {
 		queueName = d.defaultQueue
 	}
@@ -180,40 +192,40 @@ func (d *riverDispatcher) Dispatch(ctx context.Context, envelope Envelope) error
 	return nil
 }
 
-// Kind satisfies river.JobArgs
-func (riverDispatchArgs) Kind() string {
-	return riverDispatchJobKind
-}
-
-// decodeEnvelope decodes the gala envelope from dispatch args
-func (a riverDispatchArgs) decodeEnvelope() (Envelope, error) {
+// decodeDispatchEnvelope decodes a gala envelope from encoded dispatch payload bytes
+func decodeDispatchEnvelope(payload []byte) (Envelope, error) {
 	var envelope Envelope
-	if len(a.Envelope) == 0 {
+	if len(payload) == 0 {
 		return envelope, ErrRiverDispatchJobEnvelopeRequired
 	}
 
-	if err := jsonx.RoundTrip(a.Envelope, &envelope); err != nil {
+	if err := jsonx.RoundTrip(payload, &envelope); err != nil {
 		return envelope, ErrRiverEnvelopeDecodeFailed
 	}
 
 	return envelope, nil
 }
 
-// Work processes one River dispatch job and invokes Gala dispatch
-func (w *riverDispatchWorker) Work(ctx context.Context, job *river.Job[riverDispatchArgs]) error {
-	if w.galaProvider == nil {
+// workEnvelope decodes an encoded envelope and dispatches it to the topic's listeners
+func workEnvelope(ctx context.Context, provider galaProvider, payload []byte) error {
+	if provider == nil {
 		return ErrRiverGalaProviderRequired
 	}
 
-	g := w.galaProvider()
+	g := provider()
 	if g == nil {
 		return ErrGalaRequired
 	}
 
-	envelope, err := job.Args.decodeEnvelope()
+	envelope, err := decodeDispatchEnvelope(payload)
 	if err != nil {
 		return err
 	}
 
 	return g.dispatchEnvelope(context.WithoutCancel(ctx), envelope)
+}
+
+// Work processes one River dispatch job and invokes Gala dispatch
+func (w *riverDispatchWorker) Work(ctx context.Context, job *river.Job[EnvelopeArgs]) error {
+	return workEnvelope(ctx, w.galaProvider, job.Args.EnvelopePayload())
 }

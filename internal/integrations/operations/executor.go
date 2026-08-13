@@ -10,6 +10,33 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 )
 
+// integrationEnvelope constrains the envelope types carrying the integration installation as the operation entity
+type integrationEnvelope interface {
+	Envelope | WebhookEnvelope
+}
+
+// integrationNotFoundCancel builds a Cancel predicate that cancels and logs when the envelope's integration no longer exists
+func integrationNotFoundCancel[T integrationEnvelope](message string) func(context.Context, T, error) bool {
+	return func(ctx context.Context, envelope T, err error) bool {
+		if !ent.IsNotFound(err) {
+			return false
+		}
+
+		var integrationID string
+
+		switch e := any(envelope).(type) {
+		case Envelope:
+			integrationID = e.EntityID
+		case WebhookEnvelope:
+			integrationID = e.EntityID
+		}
+
+		logx.FromContext(ctx).Error().Err(err).Str("integration_id", integrationID).Msg(message)
+
+		return true
+	}
+}
+
 // RegisterRuntimeListeners registers the event, webhook, and definition-provided gala listeners for
 // the integration runtime. Adaptive-scheduled pollers (reconcile, scheduled operations) register
 // themselves at the call site via their own Register*Listener functions
@@ -20,17 +47,9 @@ func RegisterRuntimeListeners(runtime *gala.Gala, reg *registry.Registry, servic
 
 	for _, operation := range reg.Listeners() {
 		if _, err := gala.Register(runtime, gala.Definition[Envelope]{
-			Topic: gala.Topic[Envelope]{Name: operation.Topic},
-			Name:  operation.Name,
-			Cancel: func(ctx context.Context, envelope Envelope, err error) bool {
-				if !ent.IsNotFound(err) {
-					return false
-				}
-
-				logx.FromContext(ctx).Error().Err(err).Str("integration_id", envelope.EntityID).Msg("integration not found, cancelling operation")
-
-				return true
-			},
+			Topic:  gala.Topic[Envelope]{Name: operation.Topic, Kind: gala.JobKindIntegrationRun},
+			Name:   operation.Name,
+			Cancel: integrationNotFoundCancel[Envelope]("integration not found, cancelling operation"),
 			Handle: func(ctx gala.HandlerContext, envelope Envelope) error {
 				return operationHandle(ctx.Context, envelope)
 			},
@@ -45,17 +64,9 @@ func RegisterRuntimeListeners(runtime *gala.Gala, reg *registry.Registry, servic
 
 	for _, event := range reg.WebhookListeners() {
 		if _, err := gala.Register(runtime, gala.Definition[WebhookEnvelope]{
-			Topic: gala.Topic[WebhookEnvelope]{Name: event.Topic},
-			Name:  event.Name,
-			Cancel: func(ctx context.Context, envelope WebhookEnvelope, err error) bool {
-				if !ent.IsNotFound(err) {
-					return false
-				}
-
-				logx.FromContext(ctx).Error().Err(err).Str("integration_id", envelope.EntityID).Msg("integration not found, cancelling webhook event")
-
-				return true
-			},
+			Topic:  gala.Topic[WebhookEnvelope]{Name: event.Topic, Kind: gala.JobKindIntegrationWebhook},
+			Name:   event.Name,
+			Cancel: integrationNotFoundCancel[WebhookEnvelope]("integration not found, cancelling webhook event"),
 			Handle: func(ctx gala.HandlerContext, envelope WebhookEnvelope) error {
 				return webhookHandle(ctx.Context, envelope)
 			},

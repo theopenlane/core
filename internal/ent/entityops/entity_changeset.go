@@ -126,7 +126,7 @@ func (set ChangeSet) FieldChanged(field string) bool {
 		return false
 	}
 
-	if _, ok := set.proposedMap()[field]; ok {
+	if _, ok := set.ProposedMap()[field]; ok {
 		return true
 	}
 
@@ -142,7 +142,7 @@ func (set ChangeSet) Value(field string) (any, bool) {
 		return nil, false
 	}
 
-	value, ok := set.proposedMap()[field]
+	value, ok := set.ProposedMap()[field]
 
 	return value, ok
 }
@@ -276,9 +276,8 @@ func nonEmptyString(raw any) (string, bool) {
 	return value, true
 }
 
-// proposedMap decodes the proposed-changes JSON for field-level access; nil when empty
-// or undecodable
-func (set ChangeSet) proposedMap() map[string]any {
+// ProposedMap decodes the proposed-changes JSON; nil when empty or undecodable
+func (set ChangeSet) ProposedMap() map[string]any {
 	if len(set.ProposedChanges) == 0 {
 		return nil
 	}

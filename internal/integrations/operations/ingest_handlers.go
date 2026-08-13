@@ -4,10 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"strings"
 
 	"github.com/riverqueue/river"
-	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/internal/ent/entityops"
 	ent "github.com/theopenlane/core/internal/ent/generated"
@@ -82,49 +80,19 @@ var ingestSchemaOrder = []string{
 // ingestHandlers maps each supported ingest schema to its generated entityops schema handler,
 // built from the schema-specific input preparation and the hand-written upsert persistence closure
 var ingestHandlers = map[string]entityops.SchemaHandler{
-	entityops.SchemaActionPlan.Name: entityops.ActionPlanIngestHandler(ingestPersist(
-		func(_ context.Context, input ent.CreateActionPlanInput, integration *ent.Integration) ent.CreateActionPlanInput {
-			return entityops.PrepareActionPlanInput(input, integration)
-		}, persistActionPlanInput)),
-	entityops.SchemaAsset.Name: entityops.AssetIngestHandler(ingestPersist(
-		func(_ context.Context, input ent.CreateAssetInput, integration *ent.Integration) ent.CreateAssetInput {
-			return entityops.PrepareAssetInput(input, integration)
-		}, persistAssetInput)),
-	entityops.SchemaCheckResult.Name: entityops.CheckResultIngestHandler(ingestPersist(
-		func(_ context.Context, input ent.CreateCheckResultInput, integration *ent.Integration) ent.CreateCheckResultInput {
-			return entityops.PrepareCheckResultInput(input, integration)
-		}, persistCheckResultInput)),
-	entityops.SchemaContact.Name: entityops.ContactIngestHandler(ingestPersist(
-		func(_ context.Context, input ent.CreateContactInput, integration *ent.Integration) ent.CreateContactInput {
-			return entityops.PrepareContactInput(input, integration)
-		}, persistContactInput)),
+	entityops.SchemaActionPlan.Name:          entityops.ActionPlanIngestHandler(ingestPersistStatic(entityops.PrepareActionPlanInput, persistActionPlanInput)),
+	entityops.SchemaAsset.Name:               entityops.AssetIngestHandler(ingestPersistStatic(entityops.PrepareAssetInput, persistAssetInput)),
+	entityops.SchemaCheckResult.Name:         entityops.CheckResultIngestHandler(ingestPersistStatic(entityops.PrepareCheckResultInput, persistCheckResultInput)),
+	entityops.SchemaContact.Name:             entityops.ContactIngestHandler(ingestPersistStatic(entityops.PrepareContactInput, persistContactInput)),
 	entityops.SchemaDirectoryAccount.Name:    entityops.DirectoryAccountIngestHandler(ingestPersist(prepareDirectoryAccountInput, persistDirectoryAccountInput)),
 	entityops.SchemaDirectoryGroup.Name:      entityops.DirectoryGroupIngestHandler(ingestPersist(prepareDirectoryGroupInput, persistDirectoryGroupInput)),
 	entityops.SchemaDirectoryMembership.Name: entityops.DirectoryMembershipIngestHandler(ingestPersist(prepareDirectoryMembershipInput, persistDirectoryMembershipInput)),
-	entityops.SchemaEntity.Name: entityops.EntityIngestHandler(ingestPersist(
-		func(_ context.Context, input ent.CreateEntityInput, integration *ent.Integration) ent.CreateEntityInput {
-			return entityops.PrepareEntityInput(input, integration)
-		}, persistEntityInput)),
-	entityops.SchemaFinding.Name: entityops.FindingIngestHandler(ingestPersist(
-		func(_ context.Context, input ent.CreateFindingInput, integration *ent.Integration) ent.CreateFindingInput {
-			return entityops.PrepareFindingInput(input, integration)
-		}, persistFindingInput)),
-	entityops.SchemaInternalPolicy.Name: entityops.InternalPolicyIngestHandler(ingestPersist(
-		func(_ context.Context, input ent.CreateInternalPolicyInput, integration *ent.Integration) ent.CreateInternalPolicyInput {
-			return entityops.PrepareInternalPolicyInput(input, integration)
-		}, persistInternalPolicyInput)),
-	entityops.SchemaProcedure.Name: entityops.ProcedureIngestHandler(ingestPersist(
-		func(_ context.Context, input ent.CreateProcedureInput, integration *ent.Integration) ent.CreateProcedureInput {
-			return entityops.PrepareProcedureInput(input, integration)
-		}, persistProcedureInput)),
-	entityops.SchemaRisk.Name: entityops.RiskIngestHandler(ingestPersist(
-		func(_ context.Context, input ent.CreateRiskInput, integration *ent.Integration) ent.CreateRiskInput {
-			return entityops.PrepareRiskInput(input, integration)
-		}, persistRiskInput)),
-	entityops.SchemaVulnerability.Name: entityops.VulnerabilityIngestHandler(ingestPersist(
-		func(_ context.Context, input ent.CreateVulnerabilityInput, integration *ent.Integration) ent.CreateVulnerabilityInput {
-			return entityops.PrepareVulnerabilityInput(input, integration)
-		}, persistVulnerabilityInput)),
+	entityops.SchemaEntity.Name:              entityops.EntityIngestHandler(ingestPersistStatic(entityops.PrepareEntityInput, persistEntityInput)),
+	entityops.SchemaFinding.Name:             entityops.FindingIngestHandler(ingestPersistStatic(entityops.PrepareFindingInput, persistFindingInput)),
+	entityops.SchemaInternalPolicy.Name:      entityops.InternalPolicyIngestHandler(ingestPersistStatic(entityops.PrepareInternalPolicyInput, persistInternalPolicyInput)),
+	entityops.SchemaProcedure.Name:           entityops.ProcedureIngestHandler(ingestPersistStatic(entityops.PrepareProcedureInput, persistProcedureInput)),
+	entityops.SchemaRisk.Name:                entityops.RiskIngestHandler(ingestPersistStatic(entityops.PrepareRiskInput, persistRiskInput)),
+	entityops.SchemaVulnerability.Name:       entityops.VulnerabilityIngestHandler(ingestPersistStatic(entityops.PrepareVulnerabilityInput, persistVulnerabilityInput)),
 }
 
 // ingestPersist adapts a schema's prepare and persist closures into the generated handler's
@@ -140,6 +108,13 @@ func ingestPersist[TInput any](prepare func(context.Context, TInput, *ent.Integr
 
 		return persist(ctx, client, integration, input)
 	}
+}
+
+// ingestPersistStatic adapts context-free prepare functions so the generated Prepare functions pass directly
+func ingestPersistStatic[TInput any](prepare func(TInput, *ent.Integration) TInput, persist func(context.Context, *ent.Client, *ent.Integration, TInput) (string, error)) func(context.Context, *ent.Client, TInput) (string, error) {
+	return ingestPersist(func(_ context.Context, input TInput, integration *ent.Integration) TInput {
+		return prepare(input, integration)
+	}, persist)
 }
 
 // lookupIngestHandler returns the schema handler for one schema name
@@ -169,19 +144,6 @@ func RegisterIngestListeners(runtime *gala.Gala) error {
 	return nil
 }
 
-// emitMappedRecord looks up the schema handler and emits one mapped ingest record via Gala
-func emitMappedRecord(ctx context.Context, runtime *gala.Gala, integration *ent.Integration, operationName string, record mappedIngestRecord, options IngestOptions) error {
-	handler, ok := lookupIngestHandler(record.Schema)
-	if !ok {
-		return ErrIngestUnsupportedSchema
-	}
-
-	oc := buildIngestOperationContext(integration, options)
-	headers := buildIngestHeaders(integration, operationName, record, options)
-
-	return handler.Emit(ctx, runtime, oc, headers, record.Payload)
-}
-
 // persistMappedRecord looks up the schema handler and persists one mapped ingest record synchronously
 func persistMappedRecord(ctx context.Context, db *ent.Client, integration *ent.Integration, schema string, payload json.RawMessage) (string, error) {
 	handler, ok := lookupIngestHandler(schema)
@@ -192,17 +154,6 @@ func persistMappedRecord(ctx context.Context, db *ent.Client, integration *ent.I
 	ctx = withIngestIntegration(ctx, integration)
 
 	return handler.Persist(ctx, db, payload)
-}
-
-// PersistRecord persists one already-mapped record for the schema and returns the created or
-// updated entity id. Integration provenance is optional: internal callers with no installation
-// pass nil and carry ownership in the payload itself (e.g. owner_id on the create input)
-func PersistRecord(ctx context.Context, db *ent.Client, integration *ent.Integration, schema string, payload json.RawMessage) (string, error) {
-	if integration == nil {
-		integration = &ent.Integration{}
-	}
-
-	return persistMappedRecord(ctx, db, integration, schema, payload)
 }
 
 // buildIngestOperationContext builds the durable operation context for one ingest record, promoting
@@ -219,35 +170,6 @@ func buildIngestOperationContext(integration *ent.Integration, options IngestOpt
 	}
 
 	return types.NewOperationContext(integration.OwnerID, "", src)
-}
-
-// buildIngestHeaders assembles Gala message headers for one ingest record
-func buildIngestHeaders(integration *ent.Integration, operationName string, record mappedIngestRecord, options IngestOptions) gala.Headers {
-	tags := []string{integration.DefinitionID, "schema_" + strings.ToLower(record.Schema)}
-
-	properties := map[string]string{
-		"schema":         record.Schema,
-		"integration_id": integration.ID,
-		"definition_id":  integration.DefinitionID,
-		"operation":      operationName,
-		"variant":        record.Variant,
-		"run_id":         options.RunID,
-		"webhook":        options.Webhook,
-		"webhook_event":  options.WebhookEvent,
-		"delivery_id":    options.DeliveryID,
-	}
-
-	if options.WorkflowMeta != nil {
-		properties["workflow_instance_id"] = options.WorkflowMeta.InstanceID
-		properties["workflow_action_key"] = options.WorkflowMeta.ActionKey
-	}
-
-	return gala.Headers{
-		Properties: lo.PickBy(properties, func(_ string, value string) bool {
-			return value != ""
-		}),
-		Tags: tags,
-	}
 }
 
 // prepareDirectoryAccountInput applies integration-scoped defaults and the directory sync run id

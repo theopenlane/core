@@ -6,12 +6,13 @@ import (
 	"fmt"
 	"net"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 
-	"entgo.io/ent"
 	"github.com/cenkalti/backoff/v5"
 	"github.com/samber/lo"
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/httpsling/httpclient"
 
@@ -20,118 +21,163 @@ import (
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
-	notegen "github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
-	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterfaq"
-	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 	"github.com/theopenlane/core/internal/trustcenterurl"
 	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-// RegisterGalaTrustCenterCacheListeners registers trust center cache listeners on Gala.
-func RegisterGalaTrustCenterCacheListeners(g *gala.Gala) ([]gala.ListenerID, error) {
-	return registerMutationListeners(g,
+// trustCenterSoftDeleteKeys lets cache listeners load soft-deleted rows
+var trustCenterSoftDeleteKeys = []func(context.Context) context.Context{entx.SkipSoftDelete}
+
+// trustCenterIDField is the trust center linkage field name shared by every
+// trust-center-linked schema
+const trustCenterIDField = "trust_center_id"
+
+// TrustCenterCacheListeners returns the trust center cache listeners; every schema
+// listens on all operations including soft deletes so removals also refresh the cache
+func TrustCenterCacheListeners() []gala.Registration {
+	return []gala.Registration{
 		entityops.MutationListener{
-			Schema: entgen.TypeTrustCenterDoc,
-			Handle: handleTrustCenterDocMutationGala,
+			Schema:      entgen.TypeTrustCenterDoc,
+			Label:       "cache",
+			Operations:  entityops.AllMutationOps,
+			ContextKeys: trustCenterSoftDeleteKeys,
+			Handle:      handleTrustCenterDocMutationGala,
 		},
 		entityops.MutationListener{
-			Schema: entgen.TypeNote,
-			Fields: []string{notegen.FieldTrustCenterID},
-			Handle: handleNoteMutationGala,
+			Schema:      entgen.TypeNote,
+			Operations:  entityops.AllMutationOps,
+			Fields:      []string{trustCenterIDField},
+			ContextKeys: trustCenterSoftDeleteKeys,
+			Handle:      handleNoteMutationGala,
 		},
 		entityops.MutationListener{
-			Schema: entgen.TypeTrustCenterEntity,
-			Handle: func(inv entityops.Invocation, payload entityops.MutationPayload) error {
-				return refreshResolvedTrustCenter(inv, payload, trustcenterentity.FieldTrustCenterID, "entity mutation",
-					inv.Client.TrustCenterEntity.Get, func(e *entgen.TrustCenterEntity) string { return e.TrustCenterID })
+			Schema:      entgen.TypeTrustCenterEntity,
+			Operations:  entityops.AllMutationOps,
+			ContextKeys: trustCenterSoftDeleteKeys,
+			Handle:      refreshResolvedTrustCenter,
+		},
+		entityops.MutationListener{
+			Schema:      entgen.TypeTrustCenterSubprocessor,
+			Operations:  entityops.AllMutationOps,
+			ContextKeys: trustCenterSoftDeleteKeys,
+			Handle:      refreshResolvedTrustCenter,
+		},
+		entityops.MutationListener{
+			Schema:      entgen.TypeTrustCenterCompliance,
+			Operations:  entityops.AllMutationOps,
+			ContextKeys: trustCenterSoftDeleteKeys,
+			Handle:      refreshResolvedTrustCenter,
+		},
+		entityops.MutationListener{
+			Schema:      entgen.TypeTrustCenterFAQ,
+			Operations:  entityops.AllMutationOps,
+			ContextKeys: trustCenterSoftDeleteKeys,
+			Handle:      refreshResolvedTrustCenter,
+		},
+		entityops.MutationListener{
+			Schema:      entgen.TypeTrustCenterSetting,
+			Operations:  entityops.AllMutationOps,
+			ContextKeys: trustCenterSoftDeleteKeys,
+			Handle:      refreshResolvedTrustCenter,
+		},
+		entityops.MutationListener{
+			Schema:     entgen.TypeSubprocessor,
+			Operations: entityops.AllMutationOps,
+			Fields: []string{
+				subprocessor.FieldName,
+				subprocessor.FieldLogoFileID,
+				subprocessor.FieldLogoRemoteURL,
 			},
+			ContextKeys: trustCenterSoftDeleteKeys,
+			Handle:      handleSubprocessorMutationGala,
 		},
 		entityops.MutationListener{
-			Schema: entgen.TypeTrustCenterSubprocessor,
-			Handle: func(inv entityops.Invocation, payload entityops.MutationPayload) error {
-				return refreshResolvedTrustCenter(inv, payload, trustcentersubprocessor.FieldTrustCenterID, "trust center subprocessor mutation",
-					inv.Client.TrustCenterSubprocessor.Get, func(e *entgen.TrustCenterSubprocessor) string { return e.TrustCenterID })
+			Schema:     entgen.TypeStandard,
+			Operations: entityops.AllMutationOps,
+			Fields: []string{
+				standard.FieldName,
+				standard.FieldLogoFileID,
 			},
+			ContextKeys: trustCenterSoftDeleteKeys,
+			Handle:      handleStandardMutationGala,
 		},
 		entityops.MutationListener{
-			Schema: entgen.TypeTrustCenterCompliance,
-			Handle: func(inv entityops.Invocation, payload entityops.MutationPayload) error {
-				return refreshResolvedTrustCenter(inv, payload, trustcentercompliance.FieldTrustCenterID, "compliance mutation",
-					inv.Client.TrustCenterCompliance.Get, func(e *entgen.TrustCenterCompliance) string { return e.TrustCenterID })
-			},
+			Schema:      entgen.TypeTrustCenter,
+			Operations:  entityops.AllMutationOps,
+			ContextKeys: trustCenterSoftDeleteKeys,
+			Handle:      handleTrustCenterMutationGala,
 		},
-		entityops.MutationListener{
-			Schema: entgen.TypeTrustCenterFAQ,
-			Handle: func(inv entityops.Invocation, payload entityops.MutationPayload) error {
-				return refreshResolvedTrustCenter(inv, payload, trustcenterfaq.FieldTrustCenterID, "faq mutation",
-					inv.Client.TrustCenterFAQ.Get, func(e *entgen.TrustCenterFAQ) string { return e.TrustCenterID })
-			},
-		},
-		entityops.MutationListener{
-			Schema: entgen.TypeTrustCenterSetting,
-			Handle: func(inv entityops.Invocation, payload entityops.MutationPayload) error {
-				return refreshResolvedTrustCenter(inv, payload, trustcentersetting.FieldTrustCenterID, "setting mutation",
-					inv.Client.TrustCenterSetting.Get, func(e *entgen.TrustCenterSetting) string { return e.TrustCenterID })
-			},
-		},
-		entityops.MutationListener{
-			Schema: entgen.TypeSubprocessor,
-			Handle: handleSubprocessorMutationGala,
-		},
-		entityops.MutationListener{
-			Schema: entgen.TypeStandard,
-			Handle: handleStandardMutationGala,
-		},
-		entityops.MutationListener{
-			Schema: entgen.TypeTrustCenter,
-			Handle: handleTrustCenterMutationGala,
-		},
-	)
+	}
 }
 
 // trustCenterIDForMutation resolves the mutated row's trust center from the payload value
 // when present, falling back to loading the row; a missing linkage or failed load skips
 // the refresh
-func trustCenterIDForMutation[T any](inv entityops.Invocation, payload entityops.MutationPayload, field string, load func(context.Context, string) (T, error), trustCenterID func(T) string) string {
-	if id, ok := payload.StringValue(field); ok {
+func trustCenterIDForMutation(inv entityops.Invocation, payload entityops.MutationPayload) string {
+	if id, ok := payload.StringValue(trustCenterIDField); ok {
 		return id
 	}
 
-	entity, err := load(inv.Context, inv.EntityID)
+	// hard deletes stash the removed row's values; the row itself is gone
+	if id, ok := payload.OldStringValue(trustCenterIDField); ok && id != "" {
+		return id
+	}
+
+	row, err := inv.Schema.Load(inv.Context, inv.Client, inv.EntityID)
 	if err != nil {
 		logx.FromContext(inv.Context).Warn().Err(err).Str("entity_id", inv.EntityID).Msg("failed to load entity for trust center cache invalidation")
 
 		return ""
 	}
 
-	return trustCenterID(entity)
+	fields, err := jsonx.Decode[map[string]any](row)
+	if err != nil {
+		logx.FromContext(inv.Context).Warn().Err(err).Str("entity_id", inv.EntityID).Msg("failed to decode entity for trust center cache invalidation")
+
+		return ""
+	}
+
+	id, _ := fields[trustCenterIDField].(string)
+
+	return id
 }
 
-// refreshResolvedTrustCenter refreshes the cache for the trust center resolved from a mutated row
-func refreshResolvedTrustCenter[T any](inv entityops.Invocation, payload entityops.MutationPayload, field, source string, load func(context.Context, string) (T, error), trustCenterID func(T) string) error {
-	if id := trustCenterIDForMutation(inv, payload, field, load, trustCenterID); id != "" {
-		refreshTrustCenterCache(inv.Context, inv.Client, id, source)
+// refreshResolvedTrustCenter refreshes the cache for the trust center resolved from a
+// mutated row; it registers directly as the handler for every trust-center-linked schema
+func refreshResolvedTrustCenter(inv entityops.Invocation, payload entityops.MutationPayload) error {
+	if id := trustCenterIDForMutation(inv, payload); id != "" {
+		refreshTrustCenterCache(inv.Context, inv.Client, id, inv.Schema.Snake+" mutation")
 	}
 
 	return nil
 }
 
-// handleTrustCenterDocMutationGala processes TrustCenterDoc mutations and invalidates cache when needed.
+// refreshLinkedTrustCenters refreshes the cache for every distinct non-empty trust center id
+func refreshLinkedTrustCenters(inv entityops.Invocation, ids []string, source string) {
+	trustCenterIDs := lo.Uniq(lo.Filter(ids, func(id string, _ int) bool {
+		return id != ""
+	}))
+
+	for _, tcID := range trustCenterIDs {
+		refreshTrustCenterCache(inv.Context, inv.Client, tcID, source)
+	}
+}
+
+// handleTrustCenterDocMutationGala processes TrustCenterDoc mutations and invalidates cache when needed
 func handleTrustCenterDocMutationGala(inv entityops.Invocation, payload entityops.MutationPayload) error {
 	shouldClearCache := false
 
 	switch strings.TrimSpace(payload.Operation) {
-	case ent.OpDelete.String(), ent.OpDeleteOne.String(), gala.SoftDeleteOne:
+	case entityops.OpDelete, entityops.OpDeleteOne, entityops.OpSoftDelete:
 		shouldClearCache = true
-	case ent.OpCreate.String():
+	case entityops.OpCreate:
 		rawVisibility, _ := payload.Value(trustcenterdoc.FieldVisibility)
 
 		visibility, ok := entityops.ParseEnum(
@@ -145,7 +191,7 @@ func handleTrustCenterDocMutationGala(inv entityops.Invocation, payload entityop
 				shouldClearCache = true
 			}
 		}
-	case ent.OpUpdate.String(), ent.OpUpdateOne.String():
+	case entityops.OpUpdate, entityops.OpUpdateOne:
 		if payload.FieldChanged(trustcenterdoc.FieldVisibility) {
 			shouldClearCache = true
 		}
@@ -155,34 +201,26 @@ func handleTrustCenterDocMutationGala(inv entityops.Invocation, payload entityop
 		return nil
 	}
 
-	return refreshResolvedTrustCenter(inv, payload, trustcenterdoc.FieldTrustCenterID, "doc mutation",
-		inv.Client.TrustCenterDoc.Get, func(doc *entgen.TrustCenterDoc) string { return doc.TrustCenterID })
+	return refreshResolvedTrustCenter(inv, payload)
 }
 
-// handleNoteMutationGala processes Note mutations and invalidates cache when trust center linkage changes.
+// handleNoteMutationGala processes Note mutations and invalidates cache when trust center linkage changes
 func handleNoteMutationGala(inv entityops.Invocation, payload entityops.MutationPayload) error {
-	tcIDs := payload.StringSliceValue(notegen.FieldTrustCenterID)
+	tcIDs := payload.StringSliceValue(trustCenterIDField)
 
 	if len(tcIDs) == 0 {
-		if id := trustCenterIDForMutation(inv, payload, notegen.FieldTrustCenterID,
-			inv.Client.Note.Get, func(note *entgen.Note) string { return note.TrustCenterID }); id != "" {
+		if id := trustCenterIDForMutation(inv, payload); id != "" {
 			tcIDs = []string{id}
 		}
 	}
 
-	for _, tcID := range tcIDs {
-		refreshTrustCenterCache(inv.Context, inv.Client, tcID, "note mutation")
-	}
+	refreshLinkedTrustCenters(inv, tcIDs, "note mutation")
 
 	return nil
 }
 
-// handleSubprocessorMutationGala processes Subprocessor mutations and invalidates related trust center cache.
-func handleSubprocessorMutationGala(inv entityops.Invocation, payload entityops.MutationPayload) error {
-	if !cacheFieldsChanged(payload, subprocessor.FieldName, subprocessor.FieldLogoFileID, subprocessor.FieldLogoRemoteURL) {
-		return nil
-	}
-
+// handleSubprocessorMutationGala processes Subprocessor mutations and invalidates related trust center cache
+func handleSubprocessorMutationGala(inv entityops.Invocation, _ entityops.MutationPayload) error {
 	processors, err := inv.Client.TrustCenterSubprocessor.Query().
 		Where(trustcentersubprocessor.SubprocessorID(inv.EntityID)).
 		Select(trustcentersubprocessor.FieldTrustCenterID).
@@ -193,23 +231,15 @@ func handleSubprocessorMutationGala(inv entityops.Invocation, payload entityops.
 		return nil
 	}
 
-	trustCenterIDs := lo.Uniq(lo.FilterMap(processors, func(tcs *entgen.TrustCenterSubprocessor, _ int) (string, bool) {
-		return tcs.TrustCenterID, tcs.TrustCenterID != ""
-	}))
-
-	for _, tcID := range trustCenterIDs {
-		refreshTrustCenterCache(inv.Context, inv.Client, tcID, "subprocessor mutation")
-	}
+	refreshLinkedTrustCenters(inv, lo.Map(processors, func(tcs *entgen.TrustCenterSubprocessor, _ int) string {
+		return tcs.TrustCenterID
+	}), "subprocessor mutation")
 
 	return nil
 }
 
 // handleStandardMutationGala processes Standard mutations and invalidates related trust center cache
-func handleStandardMutationGala(inv entityops.Invocation, payload entityops.MutationPayload) error {
-	if !cacheFieldsChanged(payload, standard.FieldName, standard.FieldLogoFileID) {
-		return nil
-	}
-
+func handleStandardMutationGala(inv entityops.Invocation, _ entityops.MutationPayload) error {
 	trustCenterDocs, err := inv.Client.TrustCenterDoc.Query().
 		Where(trustcenterdoc.StandardID(inv.EntityID)).
 		Select(trustcenterdoc.FieldTrustCenterID).
@@ -220,35 +250,18 @@ func handleStandardMutationGala(inv entityops.Invocation, payload entityops.Muta
 		return nil
 	}
 
-	trustCenterIDs := lo.Uniq(lo.FilterMap(trustCenterDocs, func(tcd *entgen.TrustCenterDoc, _ int) (string, bool) {
-		return tcd.TrustCenterID, tcd.TrustCenterID != ""
-	}))
-
-	for _, tcID := range trustCenterIDs {
-		refreshTrustCenterCache(inv.Context, inv.Client, tcID, "standard mutation")
-	}
+	refreshLinkedTrustCenters(inv, lo.Map(trustCenterDocs, func(tcd *entgen.TrustCenterDoc, _ int) string {
+		return tcd.TrustCenterID
+	}), "standard mutation")
 
 	return nil
 }
 
-// handleTrustCenterMutationGala processes TrustCenter mutations and refreshes cache.
+// handleTrustCenterMutationGala processes TrustCenter mutations and refreshes cache
 func handleTrustCenterMutationGala(inv entityops.Invocation, _ entityops.MutationPayload) error {
 	refreshTrustCenterCache(inv.Context, inv.Client, inv.EntityID, "trust center mutation")
 
 	return nil
-}
-
-// cacheFieldsChanged reports whether a mutation removes the row or changes any of the
-// given cache-relevant fields
-func cacheFieldsChanged(payload entityops.MutationPayload, fields ...string) bool {
-	switch strings.TrimSpace(payload.Operation) {
-	case ent.OpCreate.String(), ent.OpUpdate.String(), ent.OpUpdateOne.String():
-		return lo.SomeBy(fields, payload.FieldChanged)
-	case ent.OpDelete.String(), ent.OpDeleteOne.String(), gala.SoftDeleteOne:
-		return true
-	}
-
-	return false
 }
 
 const (
@@ -381,7 +394,7 @@ func triggerCacheRefresh(ctx context.Context, targetURL string) error {
 	}
 
 	for attempt := range cacheRefreshMaxRetries {
-		resp, err := requester.ReceiveWithContext(ctx, nil, append(requestOpts, httpsling.Header("X-Cache-Refresh-Attempt", fmt.Sprintf("%d", attempt+1)))...)
+		resp, err := requester.ReceiveWithContext(ctx, nil, append(requestOpts, httpsling.Header("X-Cache-Refresh-Attempt", strconv.Itoa(attempt+1)))...)
 
 		if err != nil {
 			var dnsErr *net.DNSError
@@ -392,15 +405,20 @@ func triggerCacheRefresh(ctx context.Context, targetURL string) error {
 		}
 
 		if err == nil && resp != nil {
-			defer resp.Body.Close()
+			success := httpsling.IsSuccess(resp)
+			statusCode := resp.StatusCode
 
-			if httpsling.IsSuccess(resp) {
-				logx.FromContext(ctx).Info().Int("status_code", resp.StatusCode).Msg("successfully triggered cache refresh")
+			// close per attempt; a deferred close inside the retry loop leaks bodies
+			// across attempts
+			_ = resp.Body.Close()
+
+			if success {
+				logx.FromContext(ctx).Info().Int("status_code", statusCode).Msg("successfully triggered cache refresh")
 				return nil
 			}
 
-			if resp.StatusCode >= http.StatusBadRequest && resp.StatusCode < http.StatusInternalServerError {
-				logx.FromContext(ctx).Warn().Int("status_code", resp.StatusCode).Msg("cache refresh request failed with client error, will not retry")
+			if statusCode >= http.StatusBadRequest && statusCode < http.StatusInternalServerError {
+				logx.FromContext(ctx).Warn().Int("status_code", statusCode).Msg("cache refresh request failed with client error, will not retry")
 				return ErrCacheRefreshFailed
 			}
 		}

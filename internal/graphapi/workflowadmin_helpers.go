@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/theopenlane/core/pkg/gala"
 	"time"
 
 	"github.com/theopenlane/iam/auth"
@@ -12,6 +11,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -138,8 +138,7 @@ func closeWorkflowAssignments(ctx context.Context, client *generated.Client, ins
 	}
 
 	now := time.Now().UTC()
-	skipCtx := gala.WithSkipEventEmission(allowCtx)
-	gala.MarkSkipEventEmission(skipCtx)
+	skipCtx := entityops.WithEmissionVetoed(allowCtx)
 
 	for _, assignment := range assignments {
 		update := client.WorkflowAssignment.UpdateOneID(assignment.ID).
@@ -193,8 +192,7 @@ func (r *mutationResolver) forceCompleteWorkflowInstance(ctx context.Context, id
 		return nil, err
 	}
 
-	skipCtx := gala.WithSkipEventEmission(allowCtx)
-	gala.MarkSkipEventEmission(skipCtx)
+	skipCtx := entityops.WithEmissionVetoed(allowCtx)
 
 	if instance.OwnerID != "" {
 		skipCtx, err = common.SetOrganizationInAuthContext(skipCtx, &instance.OwnerID)
@@ -224,9 +222,7 @@ func (r *mutationResolver) forceCompleteWorkflowInstance(ctx context.Context, id
 				return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowproposal"})
 			}
 
-			bypassCtx := workflows.AllowBypassContext(ctx)
-			bypassCtx = gala.WithSkipEventEmission(bypassCtx)
-			gala.MarkSkipEventEmission(bypassCtx)
+			bypassCtx := entityops.WithEmissionVetoed(workflows.AllowBypassContext(ctx))
 
 			if err := workflows.ApplyObjectFieldUpdates(bypassCtx, r.db, objectType, objectID, proposal.Changes); err != nil {
 				return nil, err
@@ -282,8 +278,7 @@ func (r *mutationResolver) cancelWorkflowInstance(ctx context.Context, id string
 		return nil, err
 	}
 
-	skipCtx := gala.WithSkipEventEmission(allowCtx)
-	gala.MarkSkipEventEmission(skipCtx)
+	skipCtx := entityops.WithEmissionVetoed(allowCtx)
 
 	if instance.OwnerID != "" {
 		skipCtx, err = common.SetOrganizationInAuthContext(skipCtx, &instance.OwnerID)

@@ -77,25 +77,11 @@ var directorySyncRunSchemas = map[string]struct{}{
 	entityops.SchemaDirectoryMembership.Name: {},
 }
 
-// EmitPayloadSets transforms one batch of mapped payload sets and dispatches them through the appropriate ingest path
-func EmitPayloadSets(ctx context.Context, ic IngestContext, operationName string, contracts []types.IngestContract, payloadSets []types.IngestPayloadSet, options IngestOptions) error {
-	if needsDirectorySyncRun(contracts) {
-		// directory sync runs must finalize in the same process that creates them
-		return ProcessPayloadSets(ctx, ic, operationName, contracts, payloadSets, options)
-	}
-
-	if ic.Runtime == nil {
-		return ErrGalaRequired
-	}
-
-	return applyPayloadSets(ctx, ic, operationName, contracts, payloadSets, options, func(handleCtx context.Context, record mappedIngestRecord) error {
-		return emitMappedRecord(handleCtx, ic.Runtime, ic.Integration, operationName, record, options)
-	})
-}
-
-// ProcessPayloadSets persists one batch of mapped payload sets synchronously. Cross-object links are
-// resolved and injected into each create input upstream in applyPayloadSets, so persistence creates
-// each record with its edges already set
+// ProcessPayloadSets persists one batch of mapped payload sets synchronously, skipping
+// failed records; a single batch job avoids the per-record fan-out that multiplied queue
+// rows and duplicate-insert races. Cross-object links are resolved and injected into each
+// create input upstream in applyPayloadSets, so persistence creates each record with its
+// edges already set
 func ProcessPayloadSets(ctx context.Context, ic IngestContext, operationName string, contracts []types.IngestContract, payloadSets []types.IngestPayloadSet, options IngestOptions) error {
 	return applyPayloadSets(ctx, ic, operationName, contracts, payloadSets, options, func(handleCtx context.Context, record mappedIngestRecord) error {
 		_, err := persistMappedRecord(handleCtx, ic.DB, ic.Integration, record.Schema, record.Payload)
@@ -206,12 +192,15 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 	}
 
 	if failed > 0 {
-		return fmt.Errorf("%w: %d of %d records failed", ErrIngestRecordsFailed, failed, attempted)
+		// bad records are skipped, not retried: the batch imported what it could and the
+		// next cycle re-fetches; failing the job would reprocess the whole batch
+		logx.FromContext(ctx).Warn().Int("failed", failed).Int("attempted", attempted).Msg("ingest skipped records that could not be imported")
 	}
 
 	// complete-snapshot directory syncs carry the full membership state, so any active membership
-	// the run did not confirm was removed upstream; partial sources (scim, webhooks) and runs
-	// finalized elsewhere never authorize removal inference
+	// the run did not confirm was removed upstream; a skipped record risks one false removal that
+	// restores as a fresh episode on its next successful import. Partial sources (scim, webhooks)
+	// and runs finalized elsewhere never authorize removal inference
 	if directorySync && membershipSetSeen && !options.SkipDirectorySyncRunFinalization && options.CompleteDirectorySnapshot {
 		if err := markUnconfirmedDirectoryMembershipsRemoved(ctx, ic.DB, ic.Integration.ID, directorySyncRunID); err != nil {
 			return fmt.Errorf("%w: %w", ErrIngestPersistFailed, err)

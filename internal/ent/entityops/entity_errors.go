@@ -70,22 +70,22 @@ var (
 // --- Operation constants ---
 
 const (
-	// OpCreate identifies entity creation operations
-	OpCreate = "create"
-	// OpUpdate identifies entity update operations
-	OpUpdate = "update"
-	// OpLoad identifies entity load operations
-	OpLoad = "load"
-	// OpQuery identifies entity query operations
-	OpQuery = "query"
-	// OpLink identifies edge link operations
-	OpLink = "link"
-	// OpUnlink identifies edge unlink operations
-	OpUnlink = "unlink"
-	// OpEmit identifies event emission operations
-	OpEmit = "emit"
-	// OpUpsert identifies catalog-driven upsert operations
-	OpUpsert = "upsert"
+	// refOpCreate identifies entity creation operations
+	refOpCreate = "create"
+	// refOpUpdate identifies entity update operations
+	refOpUpdate = "update"
+	// refOpLoad identifies entity load operations
+	refOpLoad = "load"
+	// refOpQuery identifies entity query operations
+	refOpQuery = "query"
+	// refOpLink identifies edge link operations
+	refOpLink = "link"
+	// refOpUnlink identifies edge unlink operations
+	refOpUnlink = "unlink"
+	// refOpEmit identifies event emission operations
+	refOpEmit = "emit"
+	// refOpUpsert identifies catalog-driven upsert operations
+	refOpUpsert = "upsert"
 )
 
 // --- Log field keys ---

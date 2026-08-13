@@ -62,7 +62,7 @@ func TestRiverDispatchArgsRoundTrip(t *testing.T) {
 		t.Fatalf("unexpected job kind %q", args.Kind())
 	}
 
-	decoded, err := args.decodeEnvelope()
+	decoded, err := decodeDispatchEnvelope(args.Envelope)
 	if err != nil {
 		t.Fatalf("unexpected decode error: %v", err)
 	}
@@ -103,12 +103,12 @@ func TestRiverDispatcherDispatchInsertsWithQueueMapping(t *testing.T) {
 		t.Fatalf("unexpected queue opts: %#v", client.lastOpts)
 	}
 
-	insertedArgs, ok := client.lastArgs.(riverDispatchArgs)
+	insertedArgs, ok := client.lastArgs.(kindedEnvelopeArgs)
 	if !ok {
 		t.Fatalf("unexpected args type %T", client.lastArgs)
 	}
 
-	decoded, err := insertedArgs.decodeEnvelope()
+	decoded, err := decodeDispatchEnvelope(insertedArgs.Envelope)
 	if err != nil {
 		t.Fatalf("unexpected decode error: %v", err)
 	}
@@ -149,9 +149,10 @@ func TestRiverDispatchWorkerWorkDispatchesEnvelope(t *testing.T) {
 	}
 
 	envelope := Envelope{
-		ID:      NewEventID(),
-		Topic:   topic.Name,
-		Payload: encodedPayload,
+		ID:              NewEventID(),
+		Topic:           topic.Name,
+		Payload:         encodedPayload,
+		ContextSnapshot: testCallerSnapshot(t, runtime),
 	}
 
 	args, err := newRiverDispatchArgs(envelope)
@@ -163,7 +164,7 @@ func TestRiverDispatchWorkerWorkDispatchesEnvelope(t *testing.T) {
 		return runtime
 	})
 
-	job := &river.Job[riverDispatchArgs]{Args: args}
+	job := &river.Job[EnvelopeArgs]{Args: args}
 	if err := worker.Work(context.Background(), job); err != nil {
 		t.Fatalf("unexpected worker error: %v", err)
 	}
@@ -176,7 +177,7 @@ func TestRiverDispatchWorkerWorkDispatchesEnvelope(t *testing.T) {
 // TestRiverDispatchWorkerRequiresRuntimeProvider verifies runtime provider validation.
 func TestRiverDispatchWorkerRequiresRuntimeProvider(t *testing.T) {
 	worker := newRiverDispatchWorker(nil)
-	job := &river.Job[riverDispatchArgs]{}
+	job := &river.Job[EnvelopeArgs]{}
 
 	err := worker.Work(context.Background(), job)
 	if !errors.Is(err, ErrRiverGalaProviderRequired) {
@@ -185,12 +186,12 @@ func TestRiverDispatchWorkerRequiresRuntimeProvider(t *testing.T) {
 }
 
 func TestRiverDispatchArgsDecodeEnvelopeErrors(t *testing.T) {
-	_, err := (riverDispatchArgs{}).decodeEnvelope()
+	_, err := decodeDispatchEnvelope(nil)
 	if !errors.Is(err, ErrRiverDispatchJobEnvelopeRequired) {
 		t.Fatalf("expected ErrRiverDispatchJobEnvelopeRequired, got %v", err)
 	}
 
-	_, err = (riverDispatchArgs{Envelope: []byte("{bad")}).decodeEnvelope()
+	_, err = decodeDispatchEnvelope([]byte("{bad"))
 	if !errors.Is(err, ErrRiverEnvelopeDecodeFailed) {
 		t.Fatalf("expected ErrRiverEnvelopeDecodeFailed, got %v", err)
 	}
@@ -354,8 +355,77 @@ func TestRiverDispatchWorkerRequiresRuntimeInstance(t *testing.T) {
 		return nil
 	})
 
-	err := worker.Work(context.Background(), &river.Job[riverDispatchArgs]{})
+	err := worker.Work(context.Background(), &river.Job[EnvelopeArgs]{})
 	if !errors.Is(err, ErrGalaRequired) {
 		t.Fatalf("expected ErrGalaRequired, got %v", err)
+	}
+}
+
+// TestRiverDispatcherKindRouting verifies registered kinds route to their queue and
+// unregistered kinds fall back to the legacy kind on the default queue.
+func TestRiverDispatcherKindRouting(t *testing.T) {
+	client := &riverTestInsertClient{}
+	dispatcher, err := newRiverDispatcher(client, "events")
+	if err != nil {
+		t.Fatalf("failed to build dispatcher: %v", err)
+	}
+
+	dispatcher.kindQueues = map[string]string{"gala.mutation": "gala_mutation"}
+
+	envelope := Envelope{
+		ID:      NewEventID(),
+		Topic:   TopicName("gala.test.kinds"),
+		Payload: []byte(`{}`),
+		Headers: Headers{Kind: "gala.mutation"},
+	}
+
+	if err := dispatcher.Dispatch(context.Background(), envelope); err != nil {
+		t.Fatalf("unexpected dispatch error: %v", err)
+	}
+
+	if kind := client.lastArgs.Kind(); kind != "gala.mutation" {
+		t.Fatalf("expected registered kind on insert, got %q", kind)
+	}
+
+	if client.lastOpts.Queue != "gala_mutation" {
+		t.Fatalf("expected kind queue, got %q", client.lastOpts.Queue)
+	}
+
+	envelope.Headers.Kind = "gala.unknown"
+	if err := dispatcher.Dispatch(context.Background(), envelope); err != nil {
+		t.Fatalf("unexpected dispatch error: %v", err)
+	}
+
+	if kind := client.lastArgs.Kind(); kind != riverDispatchJobKind {
+		t.Fatalf("expected legacy fallback kind, got %q", kind)
+	}
+
+	if client.lastOpts.Queue != "events" {
+		t.Fatalf("expected default queue for fallback, got %q", client.lastOpts.Queue)
+	}
+}
+
+// TestEnvelopeKindAliases verifies registered kinds surface as worker kind aliases.
+func TestEnvelopeKindAliases(t *testing.T) {
+	registerEnvelopeKinds([]string{"gala.test.alias", "gala.test.alias"})
+
+	aliases := EnvelopeArgs{}.KindAliases()
+	count := 0
+
+	for _, alias := range aliases {
+		if alias == "gala.test.alias" {
+			count++
+		}
+	}
+
+	if count != 1 {
+		t.Fatalf("expected exactly one alias registration, got %d in %v", count, aliases)
+	}
+}
+
+// TestQueueNameForKind verifies queue name derivation satisfies the river queue grammar.
+func TestQueueNameForKind(t *testing.T) {
+	if got := QueueNameForKind("gala.integration.run"); got != "gala_integration_run" {
+		t.Fatalf("unexpected queue name %q", got)
 	}
 }

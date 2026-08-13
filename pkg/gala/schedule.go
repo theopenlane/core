@@ -2,6 +2,7 @@ package gala
 
 import (
 	"context"
+	"strconv"
 	"time"
 
 	"github.com/riverqueue/river"
@@ -104,7 +105,9 @@ func scheduleHandler[T any](g *Gala, definition Definition[T]) Handler[T] {
 		}
 
 		next := effectiveSchedule.Next(spec.State(payload), delta, execErr)
+		next.Cycle = spec.State(payload).Cycle + 1
 		scheduledAt := next.NextScheduledAt()
+		wrapped := spec.Wrap(payload, next)
 
 		emitCtx := ctx.Context
 		headers := Headers{}
@@ -114,10 +117,16 @@ func scheduleHandler[T any](g *Gala, definition Definition[T]) Handler[T] {
 		}
 
 		headers.ScheduledAt = &scheduledAt
-		// the successor of a running unique job would be skipped as its own duplicate
-		headers.SkipUniqueKey = true
 
-		_, emitErr := g.Emit(emitCtx, definition.Topic.Name, spec.Wrap(payload, next), WithHeaders(headers))
+		// a per-cycle key dedups crash-retry re-emissions without colliding with the
+		// running predecessor; keyless topics skip derivation for the same reason
+		if definition.Topic.UniqueKey != nil {
+			headers.UniqueKey = definition.Topic.UniqueKey(wrapped) + ":cycle:" + strconv.Itoa(next.Cycle)
+		} else {
+			headers.SkipUniqueKey = true
+		}
+
+		_, emitErr := g.EmitWithHeaders(emitCtx, definition.Topic.Name, wrapped, headers)
 
 		if execErr != nil {
 			if emitErr != nil {
@@ -139,6 +148,8 @@ type ScheduleState struct {
 	IdleStreak int `json:"idle_streak"`
 	// ErrorStreak is the number of consecutive runs that returned an error
 	ErrorStreak int `json:"error_streak"`
+	// Cycle is the monotonic cycle counter, keying successor emissions deterministically
+	Cycle int `json:"cycle"`
 }
 
 // NewFullFetchSchedule creates a Schedule suited for operations that always fetch all records

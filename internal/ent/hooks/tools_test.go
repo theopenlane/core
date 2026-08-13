@@ -142,10 +142,10 @@ func (suite *HookTestSuite) setupClient() *generated.Client {
 	galaRuntime, err := gala.NewInMemory()
 	require.NoError(t, err)
 
-	_, err = hooks.RegisterGalaTaskRuleListeners(galaRuntime)
+	_, err = gala.Register(galaRuntime, hooks.TaskRuleListeners()...)
 	require.NoError(t, err)
 
-	_, err = hooks.RegisterGalaCampaignRecurringListeners(galaRuntime)
+	_, err = gala.Register(galaRuntime, hooks.CampaignRecurringListeners()...)
 	require.NoError(t, err)
 
 	require.NoError(t, galaRuntime.Attach(gala.WithValue(client)))

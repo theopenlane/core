@@ -27,6 +27,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/fga/fgaversion"
 	"github.com/theopenlane/core/internal/ent/entconfig"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
@@ -189,7 +190,7 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 
 	db.Use(hooks.EmitGalaEventHook(runtime))
 
-	_, err = hooks.RegisterGalaWorkflowListeners(runtime)
+	_, err = gala.Register(runtime, hooks.WorkflowListeners()...)
 	s.Require().NoError(err)
 
 	wfEngine, ok := db.WorkflowEngine.(*engine.WorkflowEngine)
@@ -310,7 +311,7 @@ func (s *WorkflowEngineTestSuite) requireWorkflowSetup(cfg *workflows.Config, ru
 	s.Require().NotNil(s.client.WorkflowEngine, "workflow engine not initialized")
 
 	s.Require().True(
-		runtime.InterestedIn(gala.MutationTopicName(gala.MutationConcernWorkflow, generated.TypeControl), ent.OpCreate.String()),
+		runtime.InterestedIn(entityops.MutationTopicName(entityops.MutationConcernWorkflow, generated.TypeControl), ent.OpCreate.String()),
 		"mutation listeners not registered",
 	)
 

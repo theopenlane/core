@@ -1,10 +1,8 @@
 package hooks
 
 import (
-	"context"
 	"errors"
 
-	"entgo.io/ent"
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/internal/ent/entityops"
@@ -15,25 +13,22 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-// RegisterGalaVendorScoringListeners registers vendor scoring mutation listeners on Gala
-func RegisterGalaVendorScoringListeners(g *gala.Gala) ([]gala.ListenerID, error) {
-	return registerMutationListeners(g,
+// VendorScoringListeners returns the vendor scoring mutation listeners
+func VendorScoringListeners() []gala.Registration {
+	return []gala.Registration{
 		entityops.MutationListener{
 			Schema: entgen.TypeVendorScoringConfig,
 			Operations: []string{
-				ent.OpUpdate.String(),
-				ent.OpUpdateOne.String(),
+				entityops.OpUpdate,
+				entityops.OpUpdateOne,
 			},
 			Fields: []string{
 				vendorscoringconfig.FieldScoringMode,
 				vendorscoringconfig.FieldRiskThresholds,
 			},
-			Enrich: func(ctx context.Context, payload entityops.MutationPayload) context.Context {
-				return logx.WithFields(ctx, map[string]any{"config_id": payload.EntityID})
-			},
 			Handle: handleVendorScoringConfigMutationGala,
 		},
-	)
+	}
 }
 
 // handleVendorScoringConfigMutationGala recomputes entity risk aggregates when

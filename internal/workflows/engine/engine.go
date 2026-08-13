@@ -9,6 +9,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
@@ -382,7 +383,7 @@ func (e *WorkflowEngine) CompleteAssignment(ctx context.Context, assignmentID st
 
 	// CompleteAssignment emits workflow-assignment-completed explicitly below;
 	// skip hook-based mutation emission to avoid re-entering completion logic.
-	allowCtx = gala.SkipEventEmission(allowCtx)
+	allowCtx = entityops.WithEmissionVetoed(allowCtx)
 
 	if err = update.Exec(allowCtx); err != nil {
 		return scope.Fail(fmt.Errorf("%w: %w", ErrAssignmentUpdateFailed, err), nil)

@@ -274,7 +274,7 @@ func New(config Config) (*Runtime, error) {
 		return nil, err
 	}
 
-	if err := operations.RegisterReconcileListener(rt.Gala(), rt.Registry(), rt.HandleReconcile, gala.NewSchedule()); err != nil {
+	if _, err := gala.Register(rt.Gala(), operations.ReconcileDefinition(rt.Registry(), rt.HandleReconcile, gala.NewSchedule())); err != nil {
 		return nil, err
 	}
 

@@ -5,7 +5,6 @@ import (
 	"net/mail"
 	"strings"
 
-	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"github.com/samber/lo"
@@ -22,34 +21,20 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-// RegisterGalaIdentityResolutionListeners registers listeners that resolve directory
-// accounts to identity holders asynchronously after mutations commit
-func RegisterGalaIdentityResolutionListeners(g *gala.Gala) ([]gala.ListenerID, error) {
-	return registerMutationListeners(g,
+// IdentityResolutionListeners returns the listeners that resolve directory accounts to
+// identity holders asynchronously after mutations commit
+func IdentityResolutionListeners() []gala.Registration {
+	return []gala.Registration{
 		entityops.MutationListener{
 			Schema:     entgen.TypeDirectoryAccount,
-			Label:      "created",
-			Operations: []string{ent.OpCreate.String()},
-			Enrich: func(ctx context.Context, payload entityops.MutationPayload) context.Context {
-				return logx.WithFields(ctx, map[string]any{"directory_account_id": payload.EntityID})
-			},
-			Handle: handleDirectoryAccountMutation,
+			Operations: []string{entityops.OpCreate, entityops.OpUpdateOne},
+			Handle:     handleDirectoryAccountMutation,
 		},
-		entityops.MutationListener{
-			Schema:     entgen.TypeDirectoryAccount,
-			Label:      "updated",
-			Operations: []string{ent.OpUpdateOne.String()},
-			Enrich: func(ctx context.Context, payload entityops.MutationPayload) context.Context {
-				return logx.WithFields(ctx, map[string]any{"directory_account_id": payload.EntityID})
-			},
-			Handle: handleDirectoryAccountMutation,
-		},
-	)
+	}
 }
 
-// handleDirectoryAccountMutation links, enriches, and syncs one directory account:
-// accounts with no identity holder run the full matching cascade first, while
-// already-linked accounts re-enrich and re-sync from current state
+// handleDirectoryAccountMutation re-runs the matching cascade on every create and update,
+// relinking when resolution lands on a different identity holder, then enriches and syncs
 func handleDirectoryAccountMutation(inv entityops.Invocation, _ entityops.MutationPayload) error {
 	ctx, client := inv.Context, inv.Client
 
@@ -58,7 +43,7 @@ func handleDirectoryAccountMutation(inv entityops.Invocation, _ entityops.Mutati
 		return err
 	}
 
-	holder, err := accountIdentityHolder(ctx, client, account)
+	holder, err := resolveIdentityHolder(ctx, client, account)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("identity resolution failed")
 
@@ -70,6 +55,15 @@ func handleDirectoryAccountMutation(inv entityops.Invocation, _ entityops.Mutati
 	}
 
 	ctx = logx.WithFields(ctx, map[string]any{"identity_holder_id": holder.ID})
+
+	// write only on holder change so the relink update does not re-trigger this listener
+	if account.IdentityHolderID == nil || *account.IdentityHolderID != holder.ID {
+		if err := client.DirectoryAccount.UpdateOneID(account.ID).SetIdentityHolderID(holder.ID).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("failed to link directory account to identity holder")
+
+			return err
+		}
+	}
 
 	if account.PrimarySource {
 		if err := enrichFromPrimarySource(ctx, client, holder, account); err != nil {
@@ -86,31 +80,6 @@ func handleDirectoryAccountMutation(inv entityops.Invocation, _ entityops.Mutati
 	}
 
 	return nil
-}
-
-// accountIdentityHolder returns the account's linked identity holder, resolving and
-// linking one via the matching cascade when none is linked yet; a linked holder that no
-// longer exists skips the event
-func accountIdentityHolder(ctx context.Context, client *entgen.Client, account *entgen.DirectoryAccount) (*entgen.IdentityHolder, error) {
-	if account.IdentityHolderID != nil && *account.IdentityHolderID != "" {
-		holder, err := client.IdentityHolder.Get(ctx, *account.IdentityHolderID)
-		if entgen.IsNotFound(err) {
-			return nil, nil
-		}
-
-		return holder, err
-	}
-
-	holder, err := resolveIdentityHolder(ctx, client, account)
-	if err != nil || holder == nil {
-		return holder, err
-	}
-
-	if err := client.DirectoryAccount.UpdateOneID(account.ID).SetIdentityHolderID(holder.ID).Exec(ctx); err != nil {
-		return nil, err
-	}
-
-	return holder, nil
 }
 
 // resolveIdentityHolder runs a priority-ordered matching cascade to find or create

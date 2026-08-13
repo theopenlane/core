@@ -8,8 +8,8 @@ import (
 	"net/mail"
 	"strings"
 
-	"entgo.io/ent"
 	"github.com/stoewer/go-strcase"
+	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
@@ -21,37 +21,30 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/note"
-	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/mapx"
 )
 
-// RegisterGalaQuestionnaireTransformListeners registers listeners that transform
-// completed questionnaire document data into configured target schemas.
-// Supported types are defined in `TemplateProjectionTarget` enums
-func RegisterGalaQuestionnaireTransformListeners(g *gala.Gala) ([]gala.ListenerID, error) {
-	return registerMutationListeners(g, entityops.MutationListener{
+// QuestionnaireTransformListeners returns the listeners that transform completed
+// questionnaire document data into the target schemas from `TemplateProjectionTarget`
+func QuestionnaireTransformListeners() []gala.Registration {
+	return []gala.Registration{entityops.MutationListener{
 		Schema:     entgen.TypeAssessmentResponse,
-		Operations: []string{ent.OpCreate.String(), ent.OpUpdate.String(), ent.OpUpdateOne.String()},
+		Label:      "transform",
+		Operations: []string{entityops.OpCreate, entityops.OpUpdate, entityops.OpUpdateOne},
 		Fields: []string{
 			assessmentresponse.FieldStatus,
 			assessmentresponse.FieldDocumentDataID,
 			assessmentresponse.FieldCompletedAt,
 			assessmentresponse.FieldIsDraft,
 		},
-		Elevate: func(ctx context.Context, _ entityops.MutationPayload) context.Context {
-			return privacy.DecisionContext(rule.WithInternalContext(ctx), privacy.Allow)
-		},
-		Enrich: func(ctx context.Context, payload entityops.MutationPayload) context.Context {
-			return logx.WithFields(ctx, map[string]any{"assessment_response_id": payload.EntityID})
+		Caller: func(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
+			return restored.WithCapabilities(auth.CapInternalOperation | auth.CapBypassOrgFilter)
 		},
 		Handle: handleAssessmentResponse,
-	})
+	}}
 }
 
 // handleAssessmentResponse reacts to completed assessment responses and transforms the associated
@@ -87,7 +80,7 @@ func handleAssessmentResponse(inv entityops.Invocation, payload entityops.Mutati
 	// marker: a set entity_id skips redelivered events, and failed attempts leave it
 	// empty for River's retry to re-attempt the transform
 	if response.EntityID != "" {
-		logx.FromContext(ctx).Debug().Str("entity_id", response.EntityID).Msg("assessment response already transformed")
+		logx.FromContext(ctx).Debug().Str("linked_entity_id", response.EntityID).Msg("assessment response already transformed")
 
 		return nil
 	}
@@ -166,17 +159,6 @@ func validateQuestionnaire(response *entgen.AssessmentResponse) (*entgen.Assessm
 const transformMetadataKey = "questionnaire_transform"
 const entityTransformFieldNotes = "notes"
 const entityTransformFieldEntityTypeID = "entityTypeID"
-
-type questionnaireValidationError struct {
-	Message string
-}
-
-func (e *questionnaireValidationError) Error() string { return e.Message }
-
-func isQuestionnaireValidationError(err error) bool {
-	var validationErr *questionnaireValidationError
-	return errors.As(err, &validationErr)
-}
 
 type questionnaireTransformRequest struct {
 	OrganizationID       string
@@ -308,13 +290,8 @@ func resolveInternalOwner(ctx context.Context, client *entgen.Client, organizati
 	}
 
 	if _, err := mail.ParseAddress(ownerValue); err == nil {
-		userID, err := client.User.Query().
-			Where(
-				user.EmailEqualFold(ownerValue),
-				user.HasOrgMembershipsWith(orgmembership.OrganizationID(organizationID)),
-			).
-			OnlyID(ctx)
-		if err != nil && !entgen.IsNotFound(err) {
+		userID, err := orgUserIDByEmail(ctx, client, organizationID, ownerValue)
+		if err != nil {
 			return fmt.Errorf("resolve internal owner user: %w", err)
 		}
 
@@ -622,7 +599,7 @@ func isEmptyValue(value any) bool {
 	return false
 }
 
-// getStringValue coerces payload values to strings through the shared eventqueue helper;
+// getStringValue coerces payload values to strings through the shared entityops helper;
 // unrepresentable values coerce to the empty string
 func getStringValue(value any) string {
 	coerced, _ := entityops.ValueAsString(value)

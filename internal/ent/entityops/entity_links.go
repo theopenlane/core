@@ -30,7 +30,7 @@ func InjectCreateLinks(ctx context.Context, client *generated.Client, ownerID st
 	for _, link := range links {
 		edge, found := schema.EdgeByName(link.Edge)
 		if !found {
-			return nil, logError(ctx, SchemaRef{Schema: schema.Snake, Operation: OpLink, Edge: link.Edge}, ErrEdgeNotFound, fmt.Errorf("%s has no linkable edge %s", schema.Name, link.Edge))
+			return nil, logError(ctx, SchemaRef{Schema: schema.Snake, Operation: refOpLink, Edge: link.Edge}, ErrEdgeNotFound, fmt.Errorf("%s has no linkable edge %s", schema.Name, link.Edge))
 		}
 
 		selector := link.Target
@@ -64,7 +64,7 @@ func InjectCreateLinks(ctx context.Context, client *generated.Client, ownerID st
 
 		payload, _, err = jsonx.SetObjectKey(payload, edge.CreateField, value)
 		if err != nil {
-			return nil, logError(ctx, SchemaRef{Schema: schema.Snake, Operation: OpLink, Edge: name}, ErrLinkFailed, err)
+			return nil, logError(ctx, SchemaRef{Schema: schema.Snake, Operation: refOpLink, Edge: name}, ErrLinkFailed, err)
 		}
 	}
 
@@ -75,7 +75,7 @@ func InjectCreateLinks(ctx context.Context, client *generated.Client, ownerID st
 // input, so reconciliation flows can link objects created at different times. A unique edge is set
 // to the first target
 func LinkTargets(ctx context.Context, client *generated.Client, schema *Schema, entityID string, edgeName string, targetIDs ...string) error {
-	edge, err := updatableEdge(ctx, schema, entityID, edgeName, OpLink)
+	edge, err := updatableEdge(ctx, schema, entityID, edgeName, refOpLink)
 	if err != nil {
 		return err
 	}
@@ -102,18 +102,18 @@ func LinkTargets(ctx context.Context, client *generated.Client, schema *Schema, 
 // UnlinkTargets removes the target entities from a to-many edge of an existing entity, or clears an
 // optional unique edge regardless of the supplied targets
 func UnlinkTargets(ctx context.Context, client *generated.Client, schema *Schema, entityID string, edgeName string, targetIDs ...string) error {
-	edge, err := updatableEdge(ctx, schema, entityID, edgeName, OpUnlink)
+	edge, err := updatableEdge(ctx, schema, entityID, edgeName, refOpUnlink)
 	if err != nil {
 		return err
 	}
 
 	if edge.Through {
-		return logError(ctx, SchemaRef{Schema: schema.Snake, Operation: OpUnlink, EntityID: entityID, Edge: edgeName}, ErrLinkFailed, fmt.Errorf("%s.%s links through join entity rows; delete the rows directly", schema.Name, edgeName))
+		return logError(ctx, SchemaRef{Schema: schema.Snake, Operation: refOpUnlink, EntityID: entityID, Edge: edgeName}, ErrLinkFailed, fmt.Errorf("%s.%s links through join entity rows; delete the rows directly", schema.Name, edgeName))
 	}
 
 	if edge.Unique {
 		if edge.ClearField == "" {
-			return logError(ctx, SchemaRef{Schema: schema.Snake, Operation: OpUnlink, EntityID: entityID, Edge: edgeName}, ErrLinkFailed, fmt.Errorf("%s.%s is required and cannot be unlinked", schema.Name, edgeName))
+			return logError(ctx, SchemaRef{Schema: schema.Snake, Operation: refOpUnlink, EntityID: entityID, Edge: edgeName}, ErrLinkFailed, fmt.Errorf("%s.%s is required and cannot be unlinked", schema.Name, edgeName))
 		}
 
 		return applyEdgeUpdate(ctx, client, schema, entityID, edge.ClearField, true)
@@ -144,7 +144,7 @@ func updatableEdge(ctx context.Context, schema *Schema, entityID string, edgeNam
 
 // applyEdgeUpdate applies one edge mutation key to an existing entity through the schema's update input
 func applyEdgeUpdate(ctx context.Context, client *generated.Client, schema *Schema, entityID string, key string, value any) error {
-	ref := SchemaRef{Schema: schema.Snake, Operation: OpUpdate, EntityID: entityID}
+	ref := SchemaRef{Schema: schema.Snake, Operation: refOpUpdate, EntityID: entityID}
 
 	if schema.Update == nil {
 		return logError(ctx, ref, ErrLinkFailed, fmt.Errorf("%s has no update input", schema.Name))

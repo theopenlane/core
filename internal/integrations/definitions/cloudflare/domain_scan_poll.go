@@ -1,7 +1,8 @@
 package cloudflare
 
 import (
-	"context"
+	"strconv"
+
 	"math/rand/v2"
 	"time"
 
@@ -57,8 +58,10 @@ type DomainScanPollEnvelope struct {
 
 // domainScanPollTopic is the durable poll topic: the name derives from the envelope type
 // under the domain scan namespace
-var domainScanPollTopic = gala.TopicFor[DomainScanPollEnvelope]("domainscan.poll")
+// domainScanTopics is the namespace for domain scan saga topics
+var domainScanTopics = gala.NewTopicNamespace(gala.TopicNamespaceDomainScan, gala.JobKindIntegrationRun)
 
-// DomainScanPollHandler processes one poll cycle for a submitted scan. It returns done=true once the scan has been fully processed
-// (succeeded or given up), and done=false when the cycle re-emitted itself for another attempt
-type DomainScanPollHandler func(context.Context, DomainScanPollEnvelope) (done bool, err error)
+// per-attempt keys dedup crash-retry re-emissions of the poll chain
+var domainScanPollTopic = gala.NamespacedTopicFor[DomainScanPollEnvelope](domainScanTopics, gala.WithUniqueKey[DomainScanPollEnvelope](func(e DomainScanPollEnvelope) string {
+	return "domainscan:" + e.InternalScanID + ":" + strconv.Itoa(e.Attempt)
+}))

@@ -11,7 +11,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/slateparser"
@@ -36,6 +35,53 @@ type mentionNotificationInput struct {
 	isComment bool
 }
 
+// mentionTexts resolves the new and pre-mutation rich text scanned for mentions, preferring
+// each JSON candidate over its plain-text fallback only when it is valid slate text
+func mentionTexts(payload entityops.MutationPayload, spec entityops.MentionSpec) (newText, oldText string) {
+	newText, _ = payload.StringValue(spec.DetailsField)
+
+	if raw, ok := payload.Value(spec.DetailsJSONField); ok {
+		if candidate := jsonx.Stringify(raw); candidate != "" && slateparser.IsValidSlateText(candidate) {
+			newText = candidate
+		}
+	}
+
+	oldText, _ = payload.OldStringValue(spec.DetailsField)
+
+	if raw, ok := payload.OldValue(spec.DetailsJSONField); ok {
+		if candidate := jsonx.Stringify(raw); candidate != "" && slateparser.IsValidSlateText(candidate) {
+			oldText = candidate
+		}
+	}
+
+	return newText, oldText
+}
+
+// mentionedUserIDs resolves the user ids newly mentioned between the old and new rich text
+// for an object
+func mentionedUserIDs(ctx context.Context, client *generated.Client, oldText, newText, objectType, objectID, objectName string) ([]string, error) {
+	newMentions := slateparser.GetNewMentions(oldText, newText, objectType, objectID, objectName)
+	if len(newMentions) == 0 {
+		return nil, nil
+	}
+
+	mentionedOrgMemberIDs := slateparser.ExtractMentionedOrgMemberIDs(newMentions)
+	if len(mentionedOrgMemberIDs) == 0 {
+		return nil, nil
+	}
+
+	userIDs, err := client.OrgMembership.Query().
+		Where(orgmembership.IDIn(mentionedOrgMemberIDs...)).
+		Select(orgmembership.FieldUserID).
+		Strings(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to get user IDs from org membership IDs")
+		return nil, err
+	}
+
+	return userIDs, nil
+}
+
 // handleNoteMutation processes note mutations and creates notifications for mentioned users
 func handleNoteMutation(inv entityops.Invocation, payload entityops.MutationPayload) error {
 	spec, ok := entityops.MentionSpecFor(generated.TypeNote)
@@ -43,29 +89,12 @@ func handleNoteMutation(inv entityops.Invocation, payload entityops.MutationPayl
 		return nil
 	}
 
-	// Determine which text field to use (prefer text_json if available and valid)
-	newText, _ := payload.StringValue(spec.DetailsField)
-
-	if raw, ok := payload.Value(spec.DetailsJSONField); ok {
-		if textJSON := jsonx.Stringify(raw); textJSON != "" && slateparser.IsValidSlateText(textJSON) {
-			newText = textJSON
-		}
-	}
+	newText, oldText := mentionTexts(payload, spec)
 
 	// If no valid text, nothing to process
 	if newText == "" {
 		return nil
 	}
-
-	oldText, _ := payload.OldStringValue(spec.DetailsField)
-
-	if raw, ok := payload.OldValue(spec.DetailsJSONField); ok {
-		if oldTextJSON := jsonx.Stringify(raw); oldTextJSON != "" && slateparser.IsValidSlateText(oldTextJSON) {
-			oldText = oldTextJSON
-		}
-	}
-
-	allowCtx := privacy.DecisionContext(inv.Context, privacy.Allow)
 
 	noteEntity, err := inv.Client.Note.Query().
 		Where(note.ID(payload.EntityID)).
@@ -75,7 +104,7 @@ func handleNoteMutation(inv entityops.Invocation, payload entityops.MutationPayl
 		WithRisk().
 		WithInternalPolicy().
 		WithEvidence().
-		Only(allowCtx)
+		Only(inv.Context)
 	switch {
 	case generated.IsNotFound(err):
 		return nil
@@ -86,23 +115,13 @@ func handleNoteMutation(inv entityops.Invocation, payload entityops.MutationPayl
 
 	parentType, parentID, parentName := noteParent(noteEntity)
 
-	newMentions := slateparser.GetNewMentions(oldText, newText, parentType, parentID, parentName)
-	if len(newMentions) == 0 {
-		return nil
-	}
-
-	mentionedOrgMemberIDs := slateparser.ExtractMentionedOrgMemberIDs(newMentions)
-	if len(mentionedOrgMemberIDs) == 0 {
-		return nil
-	}
-
-	userIDs, err := inv.Client.OrgMembership.Query().
-		Where(orgmembership.IDIn(mentionedOrgMemberIDs...)).
-		Select(orgmembership.FieldUserID).
-		Strings(allowCtx)
+	userIDs, err := mentionedUserIDs(inv.Context, inv.Client, oldText, newText, parentType, parentID, parentName)
 	if err != nil {
-		logx.FromContext(inv.Context).Error().Err(err).Msg("failed to get user IDs from org membership IDs")
 		return err
+	}
+
+	if len(userIDs) == 0 {
+		return nil
 	}
 
 	input := mentionNotificationInput{
@@ -196,15 +215,10 @@ func addMentionNotification(ctx context.Context, client *generated.Client, input
 
 // objectMentionDetails holds extracted details for mention processing
 type objectMentionDetails struct {
-	objectID       string
-	objectType     string
-	objectName     string
-	ownerID        string
-	newDetailsJSON string
-	oldDetailsJSON string
-	// newDetails and oldDetails are plain text fallbacks when JSON fields are empty.
-	newDetails string
-	oldDetails string
+	objectID   string
+	objectType string
+	objectName string
+	ownerID    string
 }
 
 // handleObjectMentions checks mentions in object details fields for every mention-eligible schema
@@ -214,18 +228,12 @@ func handleObjectMentions(inv entityops.Invocation, payload entityops.MutationPa
 		return nil
 	}
 
-	allowCtx := privacy.DecisionContext(inv.Context, privacy.Allow)
 	details := extractMentionDetails(payload, spec)
 
 	// name and owner are absent from the payload when unchanged by the mutation; fill
 	// them from the current row before mention context is built
 	if details.objectName == "" || details.ownerID == "" {
-		schema, ok := entityops.LookupSchema(payload.MutationType)
-		if !ok {
-			return nil
-		}
-
-		row, err := schema.Load(allowCtx, inv.Client, payload.EntityID)
+		row, err := inv.Schema.Load(inv.Context, inv.Client, payload.EntityID)
 		switch {
 		case generated.IsNotFound(err):
 			return nil
@@ -235,7 +243,7 @@ func handleObjectMentions(inv entityops.Invocation, payload entityops.MutationPa
 		}
 
 		if details.objectName == "" {
-			details.objectName = schema.DisplayValue(row)
+			details.objectName = inv.Schema.DisplayValue(row)
 		}
 
 		if details.ownerID == "" {
@@ -249,36 +257,18 @@ func handleObjectMentions(inv entityops.Invocation, payload entityops.MutationPa
 		}
 	}
 
-	// Prefer JSON; fall back to plain text when needed.
-	newText := details.newDetailsJSON
-	oldText := details.oldDetailsJSON
-
+	newText, oldText := mentionTexts(payload, spec)
 	if newText == "" {
-		newText = details.newDetails
-		oldText = details.oldDetails
-	}
-
-	if newText == "" || !slateparser.IsValidSlateText(newText) {
 		return nil
 	}
 
-	newMentions := slateparser.GetNewMentions(oldText, newText, details.objectType, details.objectID, details.objectName)
-	if len(newMentions) == 0 {
-		return nil
-	}
-
-	mentionedOrgMemberIDs := slateparser.ExtractMentionedOrgMemberIDs(newMentions)
-	if len(mentionedOrgMemberIDs) == 0 {
-		return nil
-	}
-
-	userIDs, err := inv.Client.OrgMembership.Query().
-		Where(orgmembership.IDIn(mentionedOrgMemberIDs...)).
-		Select(orgmembership.FieldUserID).
-		Strings(allowCtx)
+	userIDs, err := mentionedUserIDs(inv.Context, inv.Client, oldText, newText, details.objectType, details.objectID, details.objectName)
 	if err != nil {
-		logx.FromContext(inv.Context).Error().Err(err).Msg("failed to get user IDs from org membership IDs")
 		return err
+	}
+
+	if len(userIDs) == 0 {
+		return nil
 	}
 
 	input := mentionNotificationInput{
@@ -299,24 +289,14 @@ func handleObjectMentions(inv entityops.Invocation, payload entityops.MutationPa
 	return nil
 }
 
-// extractMentionDetails extracts new and pre-update mention detail values from the mutation
-// payload using the schema's mention-scan field spec
+// extractMentionDetails extracts mention identity values from the mutation payload using
+// the schema's mention-scan field spec
 func extractMentionDetails(payload entityops.MutationPayload, spec entityops.MentionSpec) objectMentionDetails {
 	details := objectMentionDetails{
 		objectID:   payload.EntityID,
 		objectType: payload.MutationType,
 	}
 
-	if raw, ok := payload.Value(spec.DetailsJSONField); ok {
-		details.newDetailsJSON = jsonx.Stringify(raw)
-	}
-
-	if raw, ok := payload.OldValue(spec.DetailsJSONField); ok {
-		details.oldDetailsJSON = jsonx.Stringify(raw)
-	}
-
-	details.newDetails, _ = payload.StringValue(spec.DetailsField)
-	details.oldDetails, _ = payload.OldStringValue(spec.DetailsField)
 	details.objectName, _ = payload.StringValue(spec.NameField)
 	details.ownerID, _ = payload.StringValue(spec.OwnerField)
 

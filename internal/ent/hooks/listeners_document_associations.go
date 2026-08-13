@@ -3,7 +3,6 @@ package hooks
 import (
 	"context"
 
-	"entgo.io/ent"
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/internal/ent/entityops"
@@ -21,32 +20,25 @@ const (
 	docRevisionField = "revision"
 )
 
-// RegisterGalaDocumentAssociationListeners registers listeners that link
-// referenced controls to documents asynchronously after document creation.
-func RegisterGalaDocumentAssociationListeners(g *gala.Gala) ([]gala.ListenerID, error) {
-	return registerMutationListeners(g,
-		documentAssociationListener(generated.TypeActionPlan),
-		documentAssociationListener(generated.TypeInternalPolicy),
-		documentAssociationListener(generated.TypeProcedure),
-	)
-}
-
-// documentAssociationListener builds the document association listener for one schema type
-func documentAssociationListener(schemaType string) entityops.MutationListener {
-	return entityops.MutationListener{
-		Schema:     schemaType,
-		Operations: []string{ent.OpCreate.String()},
-		Handle:     handleDocumentAssociationCreated,
-	}
+// DocumentAssociationListeners returns the listeners that link referenced controls to
+// documents asynchronously after document creation
+func DocumentAssociationListeners() []gala.Registration {
+	return lo.Map([]string{generated.TypeActionPlan, generated.TypeInternalPolicy, generated.TypeProcedure}, func(schemaType string, _ int) gala.Registration {
+		return entityops.MutationListener{
+			Schema:     schemaType,
+			Operations: []string{entityops.OpCreate},
+			Handle:     handleDocumentAssociationCreated,
+		}
+	})
 }
 
 // handleDocumentAssociationCreated links controls referenced in a new document's details
 // through the schema catalog: the row is loaded generically, matched control references
 // become add-edge keys, and a single catalog update re-asserts the loaded revision so the
 // links do not bump the document's revision
-func handleDocumentAssociationCreated(inv entityops.Invocation, payload entityops.MutationPayload) error {
-	schema, ok := entityops.LookupSchema(payload.MutationType)
-	if !ok {
+func handleDocumentAssociationCreated(inv entityops.Invocation, _ entityops.MutationPayload) error {
+	schema := inv.Schema
+	if schema == nil {
 		return nil
 	}
 

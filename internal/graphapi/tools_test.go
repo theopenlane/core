@@ -348,13 +348,13 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 
 	requireNoError(t, galaInstance.Attach(gala.WithValue(c.db), gala.WithValue(entitlements)))
 
-	_, err = hooks.RegisterGalaEntitlementListeners(galaInstance)
+	_, err = gala.Register(galaInstance, hooks.EntitlementListeners()...)
 	requireNoError(t, err)
 
-	_, err = hooks.RegisterGalaNDAAttestationListeners(galaInstance)
+	_, err = gala.Register(galaInstance, hooks.NDAAttestationListeners()...)
 	requireNoError(t, err)
 
-	_, err = hooks.RegisterGalaOrganizationCleanupListeners(galaInstance.Registry())
+	_, err = gala.Register(galaInstance, hooks.OrganizationCleanupListeners()...)
 	requireNoError(t, err)
 
 	requireNoError(t, galaInstance.StartWorkers(ctx))
@@ -460,7 +460,7 @@ func (suite *GraphTestSuite) enableGalaForTestSuite(t *testing.T) {
 		gala.WithValue(suite.client.db.EntitlementManager),
 	))
 
-	_, err = hooks.RegisterGalaEntitlementListeners(runtime)
+	_, err = gala.Register(runtime, hooks.EntitlementListeners()...)
 	require.NoError(t, err)
 
 	err = runtime.StartWorkers(context.Background())

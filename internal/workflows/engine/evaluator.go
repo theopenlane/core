@@ -3,7 +3,6 @@ package engine
 import (
 	"context"
 	"fmt"
-	"github.com/theopenlane/core/pkg/jsonx"
 	"maps"
 
 	"entgo.io/ent/dialect/sql"
@@ -96,10 +95,7 @@ func (e *WorkflowEngine) buildActionCELVars(ctx context.Context, instance *gener
 	// Use trigger change-set from instance context (set when workflow was triggered)
 	triggerChangeSet := workflows.TriggerChangeSet(instance.Context)
 
-	proposedChanges, err := jsonx.Decode[map[string]any](triggerChangeSet.ProposedChanges)
-	if err != nil {
-		proposedChanges = nil
-	}
+	proposedChanges := triggerChangeSet.ProposedMap()
 
 	// Ensure the object node is loaded so CEL has access to concrete fields.
 	if obj != nil && obj.Node == nil {

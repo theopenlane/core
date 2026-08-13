@@ -58,7 +58,7 @@ func SetupIdentityResolution(ctx context.Context, client *generated.Client, conn
 
 	client.Use(hooks.EmitGalaEventHook(runtime))
 
-	if _, err := hooks.RegisterGalaIdentityResolutionListeners(runtime); err != nil {
+	if _, err := gala.Register(runtime, hooks.IdentityResolutionListeners()...); err != nil {
 		_ = runtime.Close()
 
 		return nil, err

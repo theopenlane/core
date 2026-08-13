@@ -3,11 +3,10 @@ package hooks
 import (
 	"context"
 
-	"entgo.io/ent"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 
-	"github.com/theopenlane/core/internal/ent/eventqueue"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/hooks/contextx"
@@ -15,32 +14,34 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-// RegisterGalaOrganizationCleanupListeners registers the organization cascade delete on Gala
-func RegisterGalaOrganizationCleanupListeners(g *gala.Gala) ([]gala.ListenerID, error) {
-	return eventqueue.RegisterMutationListeners(g,
-		eventqueue.MutationListener{
-			Schema: entgen.TypeOrganization,
-			Name:   "organization.cascade_delete",
-			Operations: []string{
-				ent.OpDelete.String(),
-				ent.OpDeleteOne.String(),
-				eventqueue.SoftDeleteOne,
+// OrganizationCleanupListeners returns the organization cascade delete listener
+func OrganizationCleanupListeners() []gala.Registration {
+	return []gala.Registration{
+		entityops.MutationListener{
+			Schema:     entgen.TypeOrganization,
+			Label:      "cascade_delete",
+			Operations: []string{entityops.OpSoftDelete},
+			Caller: func(_ *auth.Caller, payload entityops.MutationPayload) *auth.Caller {
+				return newOrganizationCleanupCaller(payload.EntityID)
+			},
+			// the cascade hard-deletes everything the organization owns; veto emission so
+			// the cascade itself produces no mutation events
+			ContextKeys: []func(context.Context) context.Context{
+				entx.SkipSoftDelete,
+				contextx.WithTupleCleanup,
+				contextx.WithPurgeHistory,
+				entityops.WithEmissionVetoed,
 			},
 			Handle: handleOrganizationCascadeDelete,
 		},
-	)
+	}
 }
 
 // handleOrganizationCascadeDelete removes everything an organization owns once it is deleted.
 // The records are hard deleted and their history rows purged along with files stored in object storage
-func handleOrganizationCascadeDelete(inv eventqueue.Invocation, _ eventqueue.MutationGalaPayload) error {
+func handleOrganizationCascadeDelete(inv entityops.Invocation, _ entityops.MutationPayload) error {
 	orgID := inv.EntityID
-
-	cleanupCtx := entgen.NewContext(organizationCleanupContext(inv.Context, orgID), inv.Client)
-
-	cleanupCtx = logx.WithFields(cleanupCtx, logx.LogFields{
-		"organization_id": orgID,
-	})
+	cleanupCtx := inv.Context
 
 	if err := organizationEdgeCleanup(cleanupCtx, orgID); err != nil {
 		logx.FromContext(cleanupCtx).Error().Err(err).
@@ -67,19 +68,6 @@ func handleOrganizationCascadeDelete(inv eventqueue.Invocation, _ eventqueue.Mut
 	logx.FromContext(cleanupCtx).Info().Msg("organization cascade delete completed")
 
 	return nil
-}
-
-// organizationCleanupContext builds the context the cascade runs under, it bypasses privacy rules,
-// turns the cascaded deletes into hard deletes and opts the cascade into purging history rows
-func organizationCleanupContext(ctx context.Context, orgID string) context.Context {
-	allowCtx := auth.WithCaller(ctx, newOrganizationCleanupCaller(orgID))
-
-	allowCtx = entx.SkipSoftDelete(allowCtx)
-
-	// explicitly cleanup tuples for every record
-	allowCtx = contextx.WithTupleCleanup(allowCtx)
-
-	return contextx.WithPurgeHistory(allowCtx)
 }
 
 // newOrganizationCleanupCaller returns the caller the cascade runs as. It needs to reach every

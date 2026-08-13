@@ -47,6 +47,14 @@ func domainScanListeners() types.GalaListenerRegistration {
 
 			return gala.Register(g, gala.Definition[DomainScanPollEnvelope]{
 				Topic: domainScanPollTopic,
+				LogFields: func(envelope DomainScanPollEnvelope) map[string]any {
+					return map[string]any{
+						"organization_id":  envelope.OrganizationID,
+						"scan_result_id":   envelope.ScanResultID,
+						"internal_scan_id": envelope.InternalScanID,
+						"attempt":          envelope.Attempt,
+					}
+				},
 				Handle: func(hc gala.HandlerContext, envelope DomainScanPollEnvelope) error {
 					_, err := saga.handlePoll(hc.Context, envelope)
 					return err
@@ -160,25 +168,16 @@ func (s domainScanSaga) submitAndScheduleDomainScans(ctx context.Context, organi
 
 		delete(scanIDs, domain)
 
-		if err := s.services.DB().Scan.UpdateOneID(internalScanID).
-			SetMetadata(map[string]any{domainScanEnrichmentMetadataKey: enrichments[i]}).
-			Exec(systemCtx); err != nil {
-			logx.FromContext(domainCtx).Error().Err(err).Msg("domain scan: failed updating scan record with enrichment")
-			s.markDomainScanFailed(domainCtx, organizationID, internalScanID)
-
-			if notifyErr := s.maybeNotifyDomainScanGroup(domainCtx, organizationID, siblingScanIDs); notifyErr != nil {
-				logx.FromContext(domainCtx).Error().Err(notifyErr).Msg("domain scan: failed checking group completion after enrichment update failure")
-			}
-
+		if err := s.persistDomainScanEnrichment(domainCtx, organizationID, internalScanID, enrichments[i], siblingScanIDs); err != nil {
 			continue
 		}
 
-		if _, err := s.services.Gala().Emit(ctx, domainScanPollTopic.Name, DomainScanPollEnvelope{
+		if _, err := s.services.Gala().EmitWithHeaders(ctx, domainScanPollTopic.Name, DomainScanPollEnvelope{
 			OrganizationID: organizationID,
 			ScanResultID:   scan.UUID,
 			InternalScanID: internalScanID,
 			SiblingScanIDs: siblingScanIDs,
-		}); err != nil {
+		}, gala.Headers{}); err != nil {
 			logx.FromContext(domainCtx).Error().Err(err).Msg("domain scan: failed scheduling poll cycle")
 			s.markDomainScanFailed(domainCtx, organizationID, internalScanID)
 
@@ -208,8 +207,6 @@ func (s domainScanSaga) submitAndScheduleDomainScans(ctx context.Context, organi
 // response - persists it, and finalizes each scan from that enrichment alone, so a submit-time
 // failure still surfaces whatever the other lookups found
 func (s domainScanSaga) finalizeDomainScansFromEnrichment(ctx context.Context, organizationID string, scanIDs map[string]string, forceRefresh bool, siblingScanIDs []string) error {
-	systemCtx := domainScanSystemContext(ctx, organizationID)
-
 	domains := lo.Keys(scanIDs)
 	enrichments := s.gatherDomainScanEnrichments(ctx, domains, forceRefresh)
 
@@ -219,16 +216,7 @@ func (s domainScanSaga) finalizeDomainScansFromEnrichment(ctx context.Context, o
 		internalScanID := scanIDs[domain]
 		domainCtx := logx.WithFields(ctx, map[string]any{"domain": domain})
 
-		if err := s.services.DB().Scan.UpdateOneID(internalScanID).
-			SetMetadata(map[string]any{domainScanEnrichmentMetadataKey: enrichments[i]}).
-			Exec(systemCtx); err != nil {
-			logx.FromContext(domainCtx).Error().Err(err).Msg("domain scan: failed updating scan record with enrichment")
-			s.markDomainScanFailed(domainCtx, organizationID, internalScanID)
-
-			if notifyErr := s.maybeNotifyDomainScanGroup(domainCtx, organizationID, siblingScanIDs); notifyErr != nil {
-				logx.FromContext(domainCtx).Error().Err(notifyErr).Msg("domain scan: failed checking group completion after enrichment update failure")
-			}
-
+		if err := s.persistDomainScanEnrichment(domainCtx, organizationID, internalScanID, enrichments[i], siblingScanIDs); err != nil {
 			errs = append(errs, err)
 
 			continue
@@ -241,6 +229,25 @@ func (s domainScanSaga) finalizeDomainScansFromEnrichment(ctx context.Context, o
 	}
 
 	return errors.Join(errs...)
+}
+
+// persistDomainScanEnrichment stores the enrichment on the scan record; on failure it marks the
+// scan failed and checks sibling completion so the batch never stalls
+func (s domainScanSaga) persistDomainScanEnrichment(ctx context.Context, organizationID, internalScanID string, enrichment domainscan.Enrichment, siblingScanIDs []string) error {
+	if err := s.services.DB().Scan.UpdateOneID(internalScanID).
+		SetMetadata(map[string]any{domainScanEnrichmentMetadataKey: enrichment}).
+		Exec(domainScanSystemContext(ctx, organizationID)); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("domain scan: failed updating scan record with enrichment")
+		s.markDomainScanFailed(ctx, organizationID, internalScanID)
+
+		if notifyErr := s.maybeNotifyDomainScanGroup(ctx, organizationID, siblingScanIDs); notifyErr != nil {
+			logx.FromContext(ctx).Error().Err(notifyErr).Msg("domain scan: failed checking group completion after enrichment update failure")
+		}
+
+		return err
+	}
+
+	return nil
 }
 
 // domainScanSystemContext builds a context authorized to create/update Scan and Notification records
@@ -313,14 +320,6 @@ func (s domainScanSaga) gatherDomainScanEnrichments(ctx context.Context, domains
 // another attempt while the scan is still processing, giving up after the attempt budget is
 // exhausted, and finalizing the scan once ready
 func (s domainScanSaga) handlePoll(ctx context.Context, envelope DomainScanPollEnvelope) (bool, error) {
-	ctx = logx.WithFields(ctx, logx.LogFields{
-		"organization_id":  envelope.OrganizationID,
-		"scan_result_id":   envelope.ScanResultID,
-		"internal_scan_id": envelope.InternalScanID,
-		"attempt":          envelope.Attempt,
-	},
-	)
-
 	config, err := json.Marshal(DomainScanPoll{
 		ScanResultID: envelope.ScanResultID,
 	})
@@ -361,13 +360,13 @@ func (s domainScanSaga) handlePoll(ctx context.Context, envelope DomainScanPollE
 
 		scheduledAt := time.Now().Add(DomainScanPollBackoff(envelope.Attempt))
 
-		if _, err := s.services.Gala().Emit(ctx, domainScanPollTopic.Name, DomainScanPollEnvelope{
+		if _, err := s.services.Gala().EmitWithHeaders(ctx, domainScanPollTopic.Name, DomainScanPollEnvelope{
 			OrganizationID: envelope.OrganizationID,
 			ScanResultID:   envelope.ScanResultID,
 			InternalScanID: envelope.InternalScanID,
 			Attempt:        envelope.Attempt + 1,
 			SiblingScanIDs: envelope.SiblingScanIDs,
-		}, gala.WithHeaders(gala.Headers{ScheduledAt: &scheduledAt})); err != nil {
+		}, gala.Headers{ScheduledAt: &scheduledAt}); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("domain scan: failed scheduling next poll cycle")
 
 			return true, err

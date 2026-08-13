@@ -2,50 +2,51 @@ package hooks
 
 import (
 	"context"
-	"fmt"
 	"reflect"
 
 	"entgo.io/ent"
 	"github.com/samber/lo"
+	"github.com/theopenlane/entx"
 
 	"github.com/theopenlane/core/internal/ent/entityops"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/entx"
 )
 
 // EmitGalaEventHook returns a hook that emits Gala mutation envelopes after mutations.
 // Runtimes are deduplicated once at installation; a mutation fans out to every concern
-// topic each runtime has an interested listener for
+// topic each runtime has an interested listener for, one envelope per mutated row
 func EmitGalaEventHook(runtimes ...*gala.Gala) ent.Hook {
 	galaRuntimes := lo.Uniq(lo.Compact(runtimes))
 
 	return func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, mutation ent.Mutation) (ent.Value, error) {
+			ctx = entityops.WithEmissionVeto(ctx)
+
+			op := mutation.Op().String()
 			if entx.CheckIsSoftDeleteType(ctx, mutation.Type()) {
-				return next.Mutate(ctx, mutation)
+				op = entityops.OpSoftDelete
 			}
 
-			ctx = gala.WithSkipEventEmission(ctx)
-
-			// classify before mutating: the soft-delete mixin rewrites the mutation op to
-			// an update in place, so the original delete op is only observable here
-			op := mutationOperation(ctx, mutation)
-
-			oldValues := snapshotOldValues(ctx, mutation, galaRuntimes)
+			ids, oldValues := snapshotMutation(ctx, mutation, galaRuntimes, op)
 
 			retVal, err := next.Mutate(ctx, mutation)
 			if err != nil {
 				return nil, err
 			}
 
-			if gala.ShouldSkipEventEmission(ctx) {
+			if entityops.EmissionVetoed(ctx) {
 				return retVal, err
 			}
 
-			if op != gala.SoftDeleteOne && retVal != nil && reflect.TypeOf(retVal).Kind() == reflect.Int {
-				return retVal, err
+			// a rewritten soft delete emits here on the inner update pass; veto the shared
+			// holder so the outer delete pass stays silent
+			if op == entityops.OpSoftDelete {
+				entityops.VetoEmission(ctx)
 			}
 
 			topicName := mutation.Type()
@@ -54,42 +55,43 @@ func EmitGalaEventHook(runtimes ...*gala.Gala) ent.Hook {
 			}
 
 			emit := func() {
-				if !anyRuntimeInterested(galaRuntimes, topicName, op) {
+				if !entityops.InterestedInMutation(galaRuntimes, topicName, op) {
 					return
 				}
 
-				entityID, idErr := mutationEventEntityID(ctx, mutation, op, retVal)
-				if idErr != nil || entityID == "" {
-					logx.FromContext(ctx).Error().Err(idErr).Str("mutation_type", topicName).Msg("failed to resolve mutation event id, skipping gala emission")
+				changeSet := entityops.ChangeSetFromMutation(mutation)
 
-					return
-				}
-
-				payload := entityops.MutationPayload{
-					MutationType: topicName,
-					Operation:    op,
-					EntityID:     entityID,
-					ChangeSet:    entityops.ChangeSetFromMutation(mutation),
-				}
-				payload.OldValues = oldValues
-
-				headers := entityops.MutationHeaders(payload)
-
-				// detach cancellation for best-effort dispatch after commit
-				dispatchCtx := context.WithoutCancel(ctx)
-
-				for _, runtime := range galaRuntimes {
-					for _, topic := range mutationConcernTopics(topicName) {
-						if !runtime.InterestedIn(topic, op) {
-							continue
+				switch op {
+				case entityops.OpUpdate, entityops.OpUpdateOne, entityops.OpDelete, entityops.OpDeleteOne, entityops.OpSoftDelete:
+					for _, entityID := range ids {
+						payload := entityops.MutationPayload{
+							MutationType: topicName,
+							Operation:    op,
+							EntityID:     entityID,
+							ChangeSet:    changeSet,
 						}
+						payload.OldValues = oldValues[entityID]
 
-						if _, galaErr := runtime.Emit(dispatchCtx, topic, payload,
-							gala.WithHeaders(headers),
-							gala.WithEventID(gala.EventID(entityID))); galaErr != nil {
-							logx.FromContext(ctx).Error().Err(fmt.Errorf("%w: emit: %w", ErrGalaMutationEnqueueFailed, galaErr)).Str("topic", string(topic)).Msg("gala mutation dispatch failed")
-						}
+						entityops.EmitMutation(ctx, galaRuntimes, payload)
 					}
+				default:
+					if retVal == nil || reflect.TypeOf(retVal).Kind() == reflect.Int {
+						return
+					}
+
+					entityID, idErr := mutationEventEntityID(retVal)
+					if idErr != nil || entityID == "" {
+						logx.FromContext(ctx).Error().Err(idErr).Str("mutation_type", topicName).Msg("failed to resolve mutation event id, skipping gala emission")
+
+						return
+					}
+
+					entityops.EmitMutation(ctx, galaRuntimes, entityops.MutationPayload{
+						MutationType: topicName,
+						Operation:    op,
+						EntityID:     entityID,
+						ChangeSet:    changeSet,
+					})
 				}
 			}
 
@@ -113,44 +115,62 @@ func EmitGalaEventHook(runtimes ...*gala.Gala) ent.Hook {
 	}
 }
 
-// mutationConcernTopics returns the concern topic names a schema mutation fans out to
-func mutationConcernTopics(schemaType string) [3]gala.TopicName {
-	return [3]gala.TopicName{
-		gala.MutationTopicName(gala.MutationConcernDirect, schemaType),
-		gala.MutationTopicName(gala.MutationConcernWorkflow, schemaType),
-		gala.MutationTopicName(gala.MutationConcernNotification, schemaType),
-	}
-}
-
-// anyRuntimeInterested reports whether any runtime has an interested listener on any of
-// the schema's concern topics for the operation
-func anyRuntimeInterested(runtimes []*gala.Gala, schemaType, operation string) bool {
-	for _, runtime := range runtimes {
-		for _, topic := range mutationConcernTopics(schemaType) {
-			if runtime.InterestedIn(topic, operation) {
-				return true
-			}
-		}
+// snapshotMutation captures the mutated row IDs and their pre-mutation values while the
+// database still holds the prior rows: updates stash the old values of the changed fields,
+// deletes stash the full row so delete listeners can read what was removed. Capture is
+// limited to mutations whose topics have at least one interested gala listener
+func snapshotMutation(ctx context.Context, mutation ent.Mutation, runtimes []*gala.Gala, op string) ([]string, map[string]map[string]any) {
+	isDelete := mutation.Op().Is(ent.OpDelete | ent.OpDeleteOne)
+	if !isDelete && !mutation.Op().Is(ent.OpUpdate|ent.OpUpdateOne) {
+		return nil, nil
 	}
 
-	return false
-}
-
-// snapshotOldValues captures pre-update field values before the mutation applies, while the
-// database still holds the prior row. Capture is limited to single-row updates whose topics
-// have at least one interested gala listener, so unobserved mutations cost nothing; ent
-// caches the loaded old row on the mutation, so hooks that already called OldField share it
-func snapshotOldValues(ctx context.Context, mutation ent.Mutation, runtimes []*gala.Gala) map[string]any {
-	source, ok := mutation.(entityops.OldValueSource)
-	if !ok || !mutation.Op().Is(ent.OpUpdateOne) {
-		return nil
+	if !entityops.InterestedInMutation(runtimes, mutation.Type(), op) {
+		return nil, nil
 	}
 
-	if !anyRuntimeInterested(runtimes, mutation.Type(), mutation.Op().String()) {
-		return nil
+	mut, ok := mutation.(utils.GenericMutation)
+	if !ok {
+		return nil, nil
+	}
+
+	ids := getMutationIDs(ctx, mut)
+	if len(ids) == 0 {
+		return nil, nil
+	}
+
+	schema, ok := entityops.LookupSchema(mutation.Type())
+	if !ok || mut.Client() == nil {
+		return ids, nil
 	}
 
 	changed := entityops.ChangeSetFromMutation(mutation).ChangedFields
+	if !isDelete && len(changed) == 0 {
+		return ids, nil
+	}
 
-	return entityops.BuildOldValues(ctx, source, changed)
+	lookupCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	oldValues := make(map[string]map[string]any, len(ids))
+
+	for _, id := range ids {
+		row, err := schema.Load(lookupCtx, mut.Client(), id)
+		if err != nil {
+			continue
+		}
+
+		fields, err := jsonx.Decode[map[string]any](row)
+		if err != nil {
+			continue
+		}
+
+		if isDelete {
+			oldValues[id] = fields
+
+			continue
+		}
+
+		oldValues[id] = lo.PickByKeys(fields, changed)
+	}
+
+	return ids, oldValues
 }

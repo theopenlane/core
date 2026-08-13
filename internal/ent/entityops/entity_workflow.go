@@ -97,7 +97,7 @@ func workflowRefEdgeFor(schema *Schema) (EdgeDescriptor, bool) {
 func ObjectFromWorkflowRef(ctx context.Context, ref *generated.WorkflowObjectRef) (objectType string, objectID string, ok bool) {
 	row, err := jsonx.ToRawMap(ref)
 	if err != nil {
-		logError(ctx, SchemaRef{Schema: SchemaWorkflowObjectRef.Snake, Operation: OpLoad, EntityID: ref.ID}, ErrDecodeFailed, err)
+		logError(ctx, SchemaRef{Schema: SchemaWorkflowObjectRef.Snake, Operation: refOpLoad, EntityID: ref.ID}, ErrDecodeFailed, err)
 
 		return "", "", false
 	}

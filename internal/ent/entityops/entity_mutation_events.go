@@ -3,12 +3,108 @@
 package entityops
 
 import (
+	"context"
+	"fmt"
 	"strings"
 
+	"entgo.io/ent"
 	"github.com/samber/lo"
+	"github.com/theopenlane/utils/contextx"
 
 	gala "github.com/theopenlane/core/pkg/gala"
+	logx "github.com/theopenlane/core/pkg/logx"
 )
+
+// mutation operation vocabulary for listener registration and payload matching
+var (
+	// OpCreate is the create mutation operation
+	OpCreate = ent.OpCreate.String()
+	// OpUpdate is the bulk update mutation operation
+	OpUpdate = ent.OpUpdate.String()
+	// OpUpdateOne is the single-row update mutation operation
+	OpUpdateOne = ent.OpUpdateOne.String()
+	// OpDelete is the bulk hard-delete mutation operation
+	OpDelete = ent.OpDelete.String()
+	// OpDeleteOne is the single-row hard-delete mutation operation
+	OpDeleteOne = ent.OpDeleteOne.String()
+)
+
+// OpSoftDelete is the soft-delete operation, classified at emit when the entx soft-delete
+// mixin rewrites a delete into an update
+const OpSoftDelete = "OpSoftDelete"
+
+// RegularMutationOps is every operation except soft deletes; empty listener Operations
+// expand to this set so soft deletes stay explicit opt-in
+var RegularMutationOps = []string{OpCreate, OpUpdate, OpUpdateOne, OpDelete, OpDeleteOne}
+
+// AllMutationOps is every operation including soft deletes
+var AllMutationOps = []string{OpCreate, OpUpdate, OpUpdateOne, OpDelete, OpDeleteOne, OpSoftDelete}
+
+// concern topic namespaces; all mutation concerns dispatch under the mutation job kind
+var (
+	directMutationTopics       = gala.NewTopicNamespace(gala.TopicPrefixMutation, gala.JobKindMutation)
+	workflowMutationTopics     = gala.NewTopicNamespace(gala.TopicPrefixWorkflowMutation, gala.JobKindMutation)
+	notificationMutationTopics = gala.NewTopicNamespace(gala.TopicPrefixNotificationMutation, gala.JobKindMutation)
+)
+
+// IngestTopics is the namespace for the generated per-schema ingest topics
+var IngestTopics = gala.NewTopicNamespace("entityops.", gala.JobKindIntegrationIngest)
+
+// MutationConcern identifies the eventing concern namespace for mutation topics
+type MutationConcern string
+
+const (
+	// MutationConcernDirect is the default concern for direct mutation listeners
+	MutationConcernDirect MutationConcern = "direct"
+	// MutationConcernWorkflow is the concern for workflow mutation listeners
+	MutationConcernWorkflow MutationConcern = "workflow"
+	// MutationConcernNotification is the concern for notification mutation listeners
+	MutationConcernNotification MutationConcern = "notification"
+)
+
+const (
+	// MutationPropertyEntityID is the standard mutation metadata key used for entity identifiers
+	MutationPropertyEntityID = "ID"
+	// MutationPropertyOperation is the mutation metadata key used for the operation type
+	MutationPropertyOperation = "operation"
+	// MutationPropertyMutationType is the mutation metadata key used for the ent schema type
+	MutationPropertyMutationType = "mutation_type"
+)
+
+// concernNamespace returns the topic namespace for a mutation concern
+func concernNamespace(concern MutationConcern) gala.TopicNamespace {
+	switch concern {
+	case MutationConcernWorkflow:
+		return workflowMutationTopics
+	case MutationConcernNotification:
+		return notificationMutationTopics
+	default:
+		return directMutationTopics
+	}
+}
+
+// MutationTopicName returns the mutation topic name for a concern + schema type pair
+func MutationTopicName(concern MutationConcern, schemaType string) gala.TopicName {
+	schemaType = strings.TrimSpace(schemaType)
+	if schemaType == "" {
+		return ""
+	}
+
+	return concernNamespace(concern).Name(schemaType)
+}
+
+// LegacyTopicRenames maps the historical unprefixed direct mutation topic of every schema
+// to its designated topic
+func LegacyTopicRenames() map[gala.TopicName]gala.TopicName {
+	buildSchemaLookup()
+
+	renames := make(map[gala.TopicName]gala.TopicName, len(allSchemas))
+	for _, schema := range allSchemas {
+		renames[gala.TopicName(schema.Name)] = MutationTopicName(MutationConcernDirect, schema.Name)
+	}
+
+	return renames
+}
 
 // MutationPayload is the durable mutation event payload dispatched to gala listeners.
 // Identity field json tags and the embedded ChangeSet tags are wire format for queued jobs
@@ -23,15 +119,55 @@ type MutationPayload struct {
 	ChangeSet
 }
 
+// MutationIdentity is the compact mutation identity embedded on listener log contexts
+type MutationIdentity struct {
+	EntityID      string   `json:"entity_id"`
+	MutationType  string   `json:"mutation_type"`
+	Operation     string   `json:"operation"`
+	ChangedFields []string `json:"changed_fields,omitempty"`
+}
+
+// Identity derives the loggable identity for the mutation
+func (payload MutationPayload) Identity() MutationIdentity {
+	return MutationIdentity{
+		EntityID:      payload.EntityID,
+		MutationType:  payload.MutationType,
+		Operation:     payload.Operation,
+		ChangedFields: payload.ChangedFields,
+	}
+}
+
 // MutationTopic returns the typed mutation topic for a concern + schema type pair
-func MutationTopic(concern gala.MutationConcern, schemaType string) gala.Topic[MutationPayload] {
-	return gala.Topic[MutationPayload]{Name: gala.MutationTopicName(concern, schemaType)}
+func MutationTopic(concern MutationConcern, schemaType string) gala.Topic[MutationPayload] {
+	return gala.NamespacedTopic[MutationPayload](concernNamespace(concern), strings.TrimSpace(schemaType))
+}
+
+// MutationConcernTopics returns the concern topic names a schema mutation fans out to
+func MutationConcernTopics(schemaType string) [3]gala.TopicName {
+	return [3]gala.TopicName{
+		MutationTopicName(MutationConcernDirect, schemaType),
+		MutationTopicName(MutationConcernWorkflow, schemaType),
+		MutationTopicName(MutationConcernNotification, schemaType),
+	}
+}
+
+// InterestedInMutation reports whether any runtime has an interested listener on any of the schema's concern topics
+func InterestedInMutation(runtimes []*gala.Gala, schemaType, operation string) bool {
+	for _, runtime := range runtimes {
+		for _, topic := range MutationConcernTopics(schemaType) {
+			if runtime.InterestedIn(topic, operation) {
+				return true
+			}
+		}
+	}
+
+	return false
 }
 
 // MutationHeaders builds gala headers for a mutation event: entity identity and stringified
 // proposed values as properties for queue visibility, schema type and operation as tags
 func MutationHeaders(payload MutationPayload) gala.Headers {
-	properties := lo.PickBy(lo.MapEntries(payload.proposedMap(), func(key string, value any) (string, string) {
+	properties := lo.PickBy(lo.MapEntries(payload.ProposedMap(), func(key string, value any) (string, string) {
 		stringValue, ok := ValueAsString(value)
 		if !ok {
 			return "", ""
@@ -43,15 +179,15 @@ func MutationHeaders(payload MutationPayload) gala.Headers {
 	})
 
 	if payload.EntityID != "" {
-		properties[gala.MutationPropertyEntityID] = payload.EntityID
+		properties[MutationPropertyEntityID] = payload.EntityID
 	}
 
 	if payload.Operation != "" {
-		properties[gala.MutationPropertyOperation] = payload.Operation
+		properties[MutationPropertyOperation] = payload.Operation
 	}
 
 	if payload.MutationType != "" {
-		properties[gala.MutationPropertyMutationType] = payload.MutationType
+		properties[MutationPropertyMutationType] = payload.MutationType
 	}
 
 	var tags []string
@@ -65,4 +201,64 @@ func MutationHeaders(payload MutationPayload) gala.Headers {
 	}
 
 	return gala.Headers{Properties: properties, Tags: tags}
+}
+
+// EmitMutation fans a mutation payload out to every interested concern topic on each runtime,
+// detaching cancellation for best-effort dispatch; per-topic failures are logged and do not
+// abort the fan-out
+func EmitMutation(ctx context.Context, runtimes []*gala.Gala, payload MutationPayload) {
+	headers := MutationHeaders(payload)
+
+	dispatchCtx := context.WithoutCancel(ctx)
+
+	for _, runtime := range runtimes {
+		for _, topic := range MutationConcernTopics(payload.MutationType) {
+			if !runtime.InterestedIn(topic, payload.Operation) {
+				continue
+			}
+
+			if _, err := runtime.EmitWithHeaders(dispatchCtx, topic, payload, headers,
+				gala.WithEventID(gala.EventID(payload.EntityID))); err != nil {
+				logx.FromContext(ctx).Error().Err(fmt.Errorf("%w: %w", ErrEmitFailed, err)).Str("topic", string(topic)).Msg("gala mutation dispatch failed")
+			}
+		}
+	}
+}
+
+// emissionVeto is a mutable flag inner hooks set to suppress mutation event emission
+type emissionVeto struct {
+	vetoed bool
+}
+
+var emissionVetoContextKey = contextx.NewKey[*emissionVeto]()
+
+// WithEmissionVeto installs an unset emission veto so inner hooks can call VetoEmission
+func WithEmissionVeto(ctx context.Context) context.Context {
+	if existing, ok := emissionVetoContextKey.Get(ctx); ok && existing != nil {
+		return ctx
+	}
+
+	return emissionVetoContextKey.Set(ctx, &emissionVeto{})
+}
+
+// VetoEmission suppresses mutation event emission for the current mutation
+func VetoEmission(ctx context.Context) {
+	if veto, ok := emissionVetoContextKey.Get(ctx); ok && veto != nil {
+		veto.vetoed = true
+	}
+}
+
+// WithEmissionVetoed installs the emission veto already set
+func WithEmissionVetoed(ctx context.Context) context.Context {
+	ctx = WithEmissionVeto(ctx)
+	VetoEmission(ctx)
+
+	return ctx
+}
+
+// EmissionVetoed reports whether mutation event emission is vetoed
+func EmissionVetoed(ctx context.Context) bool {
+	veto, ok := emissionVetoContextKey.Get(ctx)
+
+	return ok && veto != nil && veto.vetoed
 }

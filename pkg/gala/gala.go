@@ -13,6 +13,7 @@ import (
 	"github.com/riverqueue/river"
 	"github.com/riverqueue/river/rivertype"
 	"github.com/samber/do/v2"
+	"github.com/samber/lo"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
@@ -48,6 +49,15 @@ type Config struct {
 	// FetchPollInterval is the fallback polling interval when LISTEN/NOTIFY misses events (default 1s)
 	// This is only used when LISTEN/NOTIFY fails to deliver notifications.
 	FetchPollInterval time.Duration
+	// Kinds are the envelope job kinds this runtime registers alongside the default
+	// dispatch kind; each kind gets a dedicated queue and shares the envelope worker
+	Kinds []string
+	// TopicRenames maps retired topic names to their designated replacements, applied to
+	// queued envelopes at dispatch and during job migration
+	TopicRenames map[TopicName]TopicName
+	// JobTimeout is the maximum run time for one dispatch job; long-running batch
+	// operations need far more than River's one-minute default
+	JobTimeout time.Duration
 }
 
 // Gala provides cohesive event dispatch + worker lifecycle management
@@ -67,6 +77,10 @@ type Gala struct {
 	durableQueues []string
 	// dispatchMode captures the runtime dispatch mode.
 	dispatchMode DispatchMode
+	// jobKinds are the envelope job kinds this runtime registered
+	jobKinds []string
+	// topicRenames maps retired topic names to their designated replacements
+	topicRenames map[TopicName]TopicName
 	// inMemoryPool backs in-process dispatch when DispatchModeInMemory is enabled.
 	inMemoryPool *Pool
 }
@@ -83,6 +97,9 @@ func NewGala(ctx context.Context, config Config) (app *Gala, err error) {
 
 	app = &Gala{}
 
+	// the alias registry must carry every kind before worker registration reads it
+	registerEnvelopeKinds(config.Kinds)
+
 	workers := river.NewWorkers()
 	if err := river.AddWorkerSafely(workers, newRiverDispatchWorker(func() *Gala {
 		return app
@@ -90,9 +107,19 @@ func NewGala(ctx context.Context, config Config) (app *Gala, err error) {
 		return nil, err
 	}
 
+	queues := map[string]river.QueueConfig{config.QueueName: {MaxWorkers: config.WorkerCount}}
+	kindQueues := map[string]string{}
+
+	for _, kind := range config.Kinds {
+		queue := QueueNameForKind(kind)
+		queues[queue] = river.QueueConfig{MaxWorkers: config.WorkerCount}
+		kindQueues[kind] = queue
+	}
+
 	riverConf := river.Config{
-		Workers: workers,
-		Queues:  map[string]river.QueueConfig{config.QueueName: {MaxWorkers: config.WorkerCount}},
+		Workers:    workers,
+		Queues:     queues,
+		JobTimeout: config.JobTimeout,
 	}
 
 	if config.MaxRetries > 0 {
@@ -133,12 +160,16 @@ func NewGala(ctx context.Context, config Config) (app *Gala, err error) {
 		return nil, err
 	}
 
+	riverDispatch.kindQueues = kindQueues
+
 	if err := app.initialize(riverDispatch, DispatchModeDurable); err != nil {
 		return nil, err
 	}
 
 	app.jobClient = jobClient
-	app.durableQueues = []string{config.QueueName}
+	app.durableQueues = append([]string{config.QueueName}, lo.Values(kindQueues)...)
+	app.jobKinds = config.Kinds
+	app.topicRenames = config.TopicRenames
 
 	return app, nil
 }
@@ -183,6 +214,14 @@ func (c *Config) validate() error {
 		c.WorkerCount = 1
 	}
 
+	if c.Kinds == nil {
+		c.Kinds = JobKinds()
+	}
+
+	if c.JobTimeout <= 0 {
+		c.JobTimeout = DefaultJobTimeout
+	}
+
 	if c.DispatchMode == DispatchModeDurable && c.ConnectionURI == "" {
 		return ErrRiverConnectionURIRequired
 	}
@@ -190,7 +229,8 @@ func (c *Config) validate() error {
 	return nil
 }
 
-// InterestedIn reports whether any registered listener matches the topic and operation
+// InterestedIn reports whether any registered listener matches the topic, operation, and
+// soft-delete disposition
 func (g *Gala) InterestedIn(topic TopicName, operation string) bool {
 	return g.registry.InterestedIn(topic, operation)
 }
@@ -212,7 +252,7 @@ func WithValue[T any](value T) AttachOption {
 func WithContextCodecs(codecs ...ContextCodec) AttachOption {
 	return func(g *Gala) error {
 		for _, codec := range codecs {
-			if err := g.contextManager.Register(codec); err != nil && !errors.Is(err, ErrContextCodecAlreadyRegistered) {
+			if err := g.contextManager.Register(codec); err != nil {
 				return err
 			}
 		}
@@ -245,13 +285,6 @@ func (g *Gala) Attach(opts ...AttachOption) error {
 // EmitOption customizes one emitted envelope before dispatch
 type EmitOption func(*Envelope)
 
-// WithHeaders sets the operational headers on the emitted envelope
-func WithHeaders(headers Headers) EmitOption {
-	return func(e *Envelope) {
-		e.Headers = headers
-	}
-}
-
 // WithEventID sets an explicit event identifier on the emitted envelope,
 // making the caller's identity (e.g. a mutation event id or run id) the
 // durable dedup and traceability key instead of a freshly minted ULID
@@ -274,15 +307,25 @@ func WithRawPayload(raw json.RawMessage) EmitOption {
 	}
 }
 
-// Emit emits a payload to the topic, applying any options to the envelope before
-// dispatch, and returns the emitted event identifier
-func (g *Gala) Emit(ctx context.Context, topic TopicName, payload any, opts ...EmitOption) (EventID, error) {
+// EmitWithHeaders emits a payload to the topic under the given headers, applying any
+// options to the envelope before dispatch, and returns the emitted event identifier;
+// headers must carry a job kind
+func (g *Gala) EmitWithHeaders(ctx context.Context, topic TopicName, payload any, headers Headers, opts ...EmitOption) (EventID, error) {
+	if headers.Kind == "" {
+		headers.Kind, _ = g.registry.topicKind(topic)
+	}
+
+	if headers.Kind == "" {
+		return "", ErrJobKindRequired
+	}
+
 	registration, err := g.registry.topicRegistration(topic)
 	if err != nil {
 		return "", err
 	}
 
 	envelope := Envelope{
+		Headers:    headers,
 		ID:         NewEventID(),
 		Topic:      topic,
 		OccurredAt: time.Now().UTC(),
@@ -292,7 +335,9 @@ func (g *Gala) Emit(ctx context.Context, topic TopicName, payload any, opts ...E
 		opt(&envelope)
 	}
 
-	if len(envelope.Payload) == 0 {
+	rawPayload := len(envelope.Payload) > 0
+
+	if !rawPayload {
 		encodedPayload, err := registration.encode(payload)
 		if err != nil {
 			return "", err
@@ -302,7 +347,18 @@ func (g *Gala) Emit(ctx context.Context, topic TopicName, payload any, opts ...E
 	}
 
 	if envelope.Headers.UniqueKey == "" && !envelope.Headers.SkipUniqueKey && registration.uniqueKey != nil {
-		envelope.Headers.UniqueKey = registration.uniqueKey(payload)
+		uniqueKey := registration.uniqueKey(payload)
+		// decode raw emits so dedup keys match typed emits on the same topic
+		if uniqueKey == "" && rawPayload {
+			decodedPayload, err := registration.decode(envelope.Payload)
+			if err != nil {
+				return "", err
+			}
+
+			uniqueKey = registration.uniqueKey(decodedPayload)
+		}
+
+		envelope.Headers.UniqueKey = uniqueKey
 	}
 
 	snapshot, err := g.contextManager.Capture(ctx)
@@ -333,7 +389,16 @@ func (g *Gala) Emit(ctx context.Context, topic TopicName, payload any, opts ...E
 func (g *Gala) dispatchEnvelope(ctx context.Context, envelope Envelope) error {
 	registration, err := g.registry.topicRegistration(envelope.Topic)
 	if err != nil {
-		return err
+		renamed, renameOK := g.topicRenames[envelope.Topic]
+		if !renameOK {
+			return err
+		}
+
+		envelope.Topic = renamed
+
+		if registration, err = g.registry.topicRegistration(renamed); err != nil {
+			return err
+		}
 	}
 
 	decodedPayload, err := registration.decode(envelope.Payload)
@@ -359,7 +424,7 @@ func (g *Gala) dispatchEnvelope(ctx context.Context, envelope Envelope) error {
 	listeners := g.registry.registeredListeners(envelope.Topic)
 
 	for _, listener := range listeners {
-		if !listenerInterestedInOperation(listener, operation) {
+		if !listenerMatches(listener, operation) {
 			continue
 		}
 
@@ -412,7 +477,7 @@ func (g *Gala) executeListener(handlerContext HandlerContext, listener registere
 		metricLabelOperation: operation,
 	}
 
-	listenerDeliveries.With(labels).Inc()
+	skipped := false
 
 	defer func() {
 		if recovered := recover(); recovered != nil {
@@ -423,6 +488,11 @@ func (g *Gala) executeListener(handlerContext HandlerContext, listener registere
 			}
 		}
 
+		if skipped {
+			return
+		}
+
+		listenerDeliveries.With(labels).Inc()
 		listenerDuration.With(labels).Observe(time.Since(start).Seconds())
 
 		if err != nil {
@@ -430,7 +500,12 @@ func (g *Gala) executeListener(handlerContext HandlerContext, listener registere
 		}
 	}()
 
-	if listenerErr := listener.handle(handlerContext, payload); listenerErr != nil {
+	switch listenerErr := listener.handle(handlerContext, payload, operation); {
+	case errors.Is(listenerErr, errSkipListener):
+		skipped = true
+
+		return nil
+	case listenerErr != nil:
 		return ListenerError{
 			ListenerName: listener.name,
 			Cause:        listenerErr,
@@ -530,27 +605,22 @@ const (
 	durableWaitTimeout      = 30 * time.Second
 	durableWaitPollInterval = 50 * time.Millisecond
 	durableIdleThreshold    = 3
+	activeJobsPageSize      = 100
 )
 
-// HasActiveJobWithMetadata reports whether at least one River job whose metadata
-// JSONB contains the given fragment exists in an active state (available, scheduled,
-// running, or retryable). Returns false without error when Gala is not in durable mode
+// activeJobListParams builds JobList params for matching jobs in an "active" state
+func activeJobListParams(metadataFragment string) *river.JobListParams {
+	return river.NewJobListParams().Metadata(metadataFragment).States(rivertype.JobStateAvailable, rivertype.JobStateRunning, rivertype.JobStateScheduled, rivertype.JobStateRetryable)
+}
+
+// HasActiveJobWithMetadata reports whether at least one active-state River job matches the
+// metadata fragment; false without error when Gala is not durable
 func (g *Gala) HasActiveJobWithMetadata(ctx context.Context, metadataFragment string) (bool, error) {
 	if g.jobClient == nil {
 		return false, nil
 	}
 
-	params := river.NewJobListParams().
-		Metadata(metadataFragment).
-		States(
-			rivertype.JobStateAvailable,
-			rivertype.JobStateRunning,
-			rivertype.JobStateScheduled,
-			rivertype.JobStateRetryable,
-		).
-		First(1)
-
-	result, err := g.jobClient.GetRiverClient().JobList(ctx, params)
+	result, err := g.jobClient.GetRiverClient().JobList(ctx, activeJobListParams(metadataFragment).First(1))
 	if err != nil {
 		return false, err
 	}
@@ -558,22 +628,27 @@ func (g *Gala) HasActiveJobWithMetadata(ctx context.Context, metadataFragment st
 	return len(result.Jobs) > 0, nil
 }
 
-// activeJobsWithMetadata lists every River job whose metadata JSONB contains the given fragment
-// and is in an active state (available, scheduled, running, or retryable)
+// activeJobsWithMetadata lists every active-state River job matching the metadata fragment
 func (g *Gala) activeJobsWithMetadata(ctx context.Context, metadataFragment string) ([]*rivertype.JobRow, error) {
-	result, err := g.jobClient.GetRiverClient().JobList(ctx, river.NewJobListParams().
-		Metadata(metadataFragment).
-		States(
-			rivertype.JobStateAvailable,
-			rivertype.JobStateRunning,
-			rivertype.JobStateScheduled,
-			rivertype.JobStateRetryable,
-		))
-	if err != nil {
-		return nil, err
-	}
+	client := g.jobClient.GetRiverClient()
+	params := activeJobListParams(metadataFragment).First(activeJobsPageSize)
 
-	return result.Jobs, nil
+	var jobs []*rivertype.JobRow
+
+	for {
+		result, err := client.JobList(ctx, params)
+		if err != nil {
+			return nil, err
+		}
+
+		jobs = append(jobs, result.Jobs...)
+
+		if len(result.Jobs) < activeJobsPageSize || result.LastCursor == nil {
+			return jobs, nil
+		}
+
+		params = params.After(result.LastCursor)
+	}
 }
 
 // CountActiveJobsWithMetadata returns how many River jobs whose metadata JSONB contains the
@@ -619,6 +694,100 @@ func (g *Gala) CancelActiveJobsWithMetadata(ctx context.Context, metadataFragmen
 	}
 
 	return cancelled, nil
+}
+
+// MigrateJobs re-dispatches waiting jobs whose transform resolves a different topic or
+// whose registered kind differs from the row's, preserving schedules and cancelling
+// originals; claimable rows are excluded so pickup can't race the re-insert into a
+// double execution
+func (g *Gala) MigrateJobs(ctx context.Context, transform func(kind string, envelope Envelope) (Envelope, bool)) (int, error) {
+	if g.jobClient == nil || transform == nil {
+		return 0, nil
+	}
+
+	client := g.jobClient.GetRiverClient()
+	params := river.NewJobListParams().
+		Kinds(append([]string{riverDispatchJobKind}, g.jobKinds...)...).
+		States(rivertype.JobStateScheduled, rivertype.JobStateRetryable, rivertype.JobStatePending).
+		First(activeJobsPageSize)
+
+	var migrated int
+
+	for {
+		result, err := client.JobList(ctx, params)
+		if err != nil {
+			return migrated, err
+		}
+
+		for _, job := range result.Jobs {
+			if g.migrateJob(ctx, job, transform) {
+				migrated++
+			}
+		}
+
+		if len(result.Jobs) < activeJobsPageSize || result.LastCursor == nil {
+			return migrated, nil
+		}
+
+		params = params.After(result.LastCursor)
+	}
+}
+
+// migrateJob re-dispatches one job row under its resolved topic and kind, cancelling the row
+func (g *Gala) migrateJob(ctx context.Context, job *rivertype.JobRow, transform func(kind string, envelope Envelope) (Envelope, bool)) bool {
+	var args EnvelopeArgs
+	if err := json.Unmarshal(job.EncodedArgs, &args); err != nil {
+		logx.FromContext(ctx).Warn().Err(err).Int64("job_id", job.ID).Msg("gala: skipping job migration, undecodable args")
+
+		return false
+	}
+
+	envelope, err := decodeDispatchEnvelope(args.Envelope)
+	if err != nil {
+		logx.FromContext(ctx).Warn().Err(err).Int64("job_id", job.ID).Msg("gala: skipping job migration, undecodable envelope")
+
+		return false
+	}
+
+	originalTopic := envelope.Topic
+
+	envelope, ok := transform(job.Kind, envelope)
+	if !ok {
+		return false
+	}
+
+	kind, ok := g.registry.topicKind(envelope.Topic)
+	if !ok {
+		kind, ok = ResolveTopicKind(envelope.Topic)
+	}
+
+	if !ok || kind == "" {
+		return false
+	}
+
+	// unchanged rows never re-migrate, keeping startup reruns free of churn
+	if kind == job.Kind && envelope.Topic == originalTopic {
+		return false
+	}
+
+	envelope.Headers.Kind = kind
+	envelope.Headers.Listeners = g.registry.listenerNamesForTopic(envelope.Topic)
+
+	if scheduledAt := job.ScheduledAt; scheduledAt.After(time.Now()) {
+		envelope.Headers.ScheduledAt = &scheduledAt
+	}
+
+	if err := g.dispatcher.Dispatch(ctx, envelope); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Int64("job_id", job.ID).Str("kind", kind).Msg("gala: job migration dispatch failed, keeping original")
+
+		return false
+	}
+
+	if _, err := g.jobClient.GetRiverClient().JobCancel(ctx, job.ID); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Int64("job_id", job.ID).Msg("gala: failed cancelling migrated job")
+	}
+
+	return true
 }
 
 // Close closes the dedicated Gala queue client

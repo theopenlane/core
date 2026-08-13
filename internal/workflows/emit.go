@@ -108,7 +108,7 @@ func EmitWorkflowEventWithHeaders(ctx context.Context, runtime *gala.Gala, topic
 		}
 	}
 
-	id, err := runtime.Emit(ctx, topic, payload, gala.WithHeaders(headers))
+	id, err := runtime.EmitWithHeaders(ctx, topic, payload, headers)
 
 	return EmitReceipt{
 		EventID: string(id),

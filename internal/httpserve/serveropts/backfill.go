@@ -17,7 +17,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	intobvs "github.com/theopenlane/core/internal/integrations/observability"
 	"github.com/theopenlane/core/internal/integrations/runtime"
@@ -25,12 +24,11 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-// backfillBypassCaps lets the backfill write organizations and memberships without a request caller while
-// skipping the org-filter, FGA, and managed-group guards the membership hooks would otherwise apply
-const backfillBypassCaps = auth.CapBypassOrgFilter | auth.CapBypassFGA | auth.CapInternalOperation | auth.CapBypassManagedGroup
+// backfillBypassCaps lets the backfill write across organizations without a request caller
+const backfillBypassCaps = auth.CapBypassOrgFilter | auth.CapInternalOperation
 
 // backfillTopic is the gala topic backfill runs are submitted on
-var backfillTopic = gala.Topic[backfillRequest]{Name: "startup.backfill"}
+var backfillTopic = gala.Topic[backfillRequest]{Name: gala.TopicSystemBackfill, Kind: gala.JobKindSystem}
 
 // backfillUniqueKey is the run-once uniqueness key: every pod submits the same key, River
 // keeps the first insert and skips the rest across live and terminal job states
@@ -50,12 +48,8 @@ func WithBackfill(ctx context.Context, galaApp *gala.Gala) ServerOption {
 
 		if _, err := gala.Register(galaApp, gala.Definition[backfillRequest]{
 			Topic: backfillTopic,
-			Name:  "startup.backfill",
 			Caller: func(*auth.Caller, backfillRequest) *auth.Caller {
 				return &auth.Caller{Capabilities: backfillBypassCaps}
-			},
-			Elevate: func(ctx context.Context, _ backfillRequest) context.Context {
-				return privacy.DecisionContext(ctx, privacy.Allow)
 			},
 			Handle: func(handlerCtx gala.HandlerContext, _ backfillRequest) error {
 				dbClient := do.MustInvoke[*ent.Client](handlerCtx.Injector)
@@ -73,10 +67,10 @@ func WithBackfill(ctx context.Context, galaApp *gala.Gala) ServerOption {
 			return
 		}
 
-		if _, err := galaApp.Emit(ctx, backfillTopic.Name, backfillRequest{}, gala.WithHeaders(gala.Headers{
+		if _, err := galaApp.EmitWithHeaders(ctx, backfillTopic.Name, backfillRequest{}, gala.Headers{
 			UniqueKey:  backfillUniqueKey,
 			UniqueOnce: true,
-		})); err != nil {
+		}); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("backfill: failed to submit run")
 		}
 	})

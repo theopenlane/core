@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"slices"
 	"testing"
 
 	"github.com/theopenlane/core/common/enums"
@@ -128,65 +127,10 @@ func TestBuildIngestOperationContext(t *testing.T) {
 	})
 }
 
-func TestBuildIngestHeaders(t *testing.T) {
-	t.Parallel()
-
-	integration := &ent.Integration{ID: "int-001", DefinitionID: "def-001"}
-
-	t.Run("includes non-empty properties and tags", func(t *testing.T) {
-		t.Parallel()
-
-		record := mappedIngestRecord{Schema: "finding", Variant: "cve"}
-		options := IngestOptions{
-			RunID: "run-001",
-		}
-
-		headers := buildIngestHeaders(integration, "collect", record, options)
-
-		if headers.Properties["schema"] != "finding" {
-			t.Fatalf("schema property=%q, want %q", headers.Properties["schema"], "finding")
-		}
-		if headers.Properties["integration_id"] != "int-001" {
-			t.Fatalf("integration_id property=%q, want %q", headers.Properties["integration_id"], "int-001")
-		}
-		if _, ok := headers.Properties["delivery_id"]; ok {
-			t.Fatal("expected delivery_id to be omitted when empty")
-		}
-		if len(headers.Tags) != 2 {
-			t.Fatalf("expected 2 tags, got %d", len(headers.Tags))
-		}
-	})
-
-	t.Run("tags definition and schema", func(t *testing.T) {
-		t.Parallel()
-
-		record := mappedIngestRecord{Schema: "asset"}
-
-		headers := buildIngestHeaders(integration, "", record, IngestOptions{})
-
-		if !slices.Contains(headers.Tags, "schema_asset") {
-			t.Fatalf("expected tag %q, got %v", "schema_asset", headers.Tags)
-		}
-		if !slices.Contains(headers.Tags, "def-001") {
-			t.Fatalf("expected tag %q, got %v", "def-001", headers.Tags)
-		}
-	})
-}
-
 func TestPersistMappedRecord_UnsupportedSchema(t *testing.T) {
 	t.Parallel()
 
 	_, err := persistMappedRecord(context.Background(), nil, nil, "nonexistent_schema", json.RawMessage(`{}`))
-	if !errors.Is(err, ErrIngestUnsupportedSchema) {
-		t.Fatalf("expected ErrIngestUnsupportedSchema, got %v", err)
-	}
-}
-
-func TestEmitMappedRecord_UnsupportedSchema(t *testing.T) {
-	t.Parallel()
-
-	record := mappedIngestRecord{Schema: "nonexistent_schema"}
-	err := emitMappedRecord(context.Background(), nil, nil, "op", record, IngestOptions{})
 	if !errors.Is(err, ErrIngestUnsupportedSchema) {
 		t.Fatalf("expected ErrIngestUnsupportedSchema, got %v", err)
 	}

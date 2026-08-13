@@ -52,7 +52,7 @@ func BuildSchemaHandler[TInput any, TEvent any](cfg SchemaHandlerConfig[TInput, 
 				Topic: cfg.Topic,
 				Name:  schema,
 				Handle: func(ctx gala.HandlerContext, payload TEvent) error {
-					ref := SchemaRef{Schema: schema, Operation: OpCreate}
+					ref := SchemaRef{Schema: schema, Operation: refOpCreate}
 
 					client, err := do.Invoke[*generated.Client](ctx.Injector)
 					if err != nil {
@@ -81,7 +81,7 @@ func BuildSchemaHandler[TInput any, TEvent any](cfg SchemaHandlerConfig[TInput, 
 			return nil
 		},
 		Emit: func(ctx context.Context, runtime *gala.Gala, oc gala.OperationContext, headers gala.Headers, payload json.RawMessage) error {
-			ref := SchemaRef{Schema: schema, Operation: OpEmit}
+			ref := SchemaRef{Schema: schema, Operation: refOpEmit}
 
 			payload, throughIDs := splitThroughEdgeIDs(cfg.Schema, payload)
 
@@ -103,14 +103,14 @@ func BuildSchemaHandler[TInput any, TEvent any](cfg SchemaHandlerConfig[TInput, 
 
 			ctx = gala.WithOperationContext(ctx, oc)
 
-			if _, err := runtime.Emit(ctx, cfg.Topic.Name, event, gala.WithHeaders(headers)); err != nil {
+			if _, err := runtime.EmitWithHeaders(ctx, cfg.Topic.Name, event, headers); err != nil {
 				return logError(ctx, ref, ErrEmitFailed, err)
 			}
 
 			return nil
 		},
 		Persist: func(ctx context.Context, client *generated.Client, payload json.RawMessage) (string, error) {
-			ref := SchemaRef{Schema: schema, Operation: OpCreate}
+			ref := SchemaRef{Schema: schema, Operation: refOpCreate}
 
 			payload, throughIDs := splitThroughEdgeIDs(cfg.Schema, payload)
 

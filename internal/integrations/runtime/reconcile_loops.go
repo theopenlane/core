@@ -9,7 +9,6 @@ import (
 	intobvs "github.com/theopenlane/core/internal/integrations/observability"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -22,11 +21,9 @@ func (r *Runtime) emitReconcileLoop(ctx context.Context, installation *ent.Integ
 		RunType:       enums.IntegrationRunTypeReconcile,
 	})
 
-	ctx = intobvs.WithContext(ctx, oc)
+	ctx, headers := intobvs.EmitContext(ctx, oc)
 
-	if _, err := r.Gala().Emit(ctx, operations.ReconcileTopic.Name, operations.ReconcileEnvelope{OperationContext: oc}, gala.WithHeaders(gala.Headers{
-		Properties: types.GetPropertiesForOperationContext(oc),
-	})); err != nil {
+	if _, err := r.Gala().EmitWithHeaders(ctx, operations.ReconcileTopic.Name, operations.ReconcileEnvelope{OperationContext: oc}, headers); err != nil {
 		return err
 	}
 
@@ -75,7 +72,15 @@ func (r *Runtime) ResetReconcileLoops(ctx context.Context, installation *ent.Int
 
 		opCtx := intobvs.WithOperation(ctx, op.Name)
 
-		fragment, err := reconcileMetadataFragment(installation.ID, op.Name)
+		// the keys must match the emitted GetPropertiesForOperationContext projection:
+		// installation-bound contexts promote the integration as the operation's entity
+		// (entityId), and the reconcile run type keeps the match disjoint from one-shot
+		// event jobs sharing the same installation and operation
+		fragment, err := types.PropertiesFragment(map[string]string{
+			"entityId":  installation.ID,
+			"operation": op.Name,
+			"runType":   enums.IntegrationRunTypeReconcile.String(),
+		})
 		if err != nil {
 			errs = append(errs, err)
 			continue

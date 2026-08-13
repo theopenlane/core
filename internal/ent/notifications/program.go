@@ -9,7 +9,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/ent/generated/user"
@@ -21,7 +20,7 @@ func handleProgramMutation(inv entityops.Invocation, payload entityops.MutationP
 		return nil
 	}
 
-	ctx := logx.WithFields(inv.Context, map[string]any{"program_id": payload.EntityID})
+	ctx := inv.Context
 
 	if err := addNotificationForAuditor(ctx, inv.Client, payload.EntityID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to send program ready for auditor notification")
@@ -32,9 +31,12 @@ func handleProgramMutation(inv entityops.Invocation, payload entityops.MutationP
 }
 
 func addNotificationForAuditor(ctx context.Context, client *generated.Client, id string) error {
-	program, err := client.Program.Get(ctx, id)
-	if err != nil {
+	program, found, err := entityops.LoadEntity(ctx, id, client.Program.Get)
+	switch {
+	case err != nil:
 		return fmt.Errorf("failed to query program: %w", err)
+	case !found:
+		return nil
 	}
 
 	if err := inviteAuditor(ctx, client, program); err != nil {
@@ -67,13 +69,12 @@ func inviteAuditor(ctx context.Context, client *generated.Client, programEntity 
 		return nil
 	}
 
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	exists, err := client.OrgMembership.Query().
 		Where(
 			orgmembership.OrganizationID(programEntity.OwnerID),
 			orgmembership.HasUserWith(user.EmailEqualFold(email)),
 		).
-		Exist(allowCtx)
+		Exist(ctx)
 	if err != nil {
 		return err
 	}
@@ -95,8 +96,6 @@ func inviteAuditor(ctx context.Context, client *generated.Client, programEntity 
 }
 
 func getProgramAuditorUserIDs(ctx context.Context, client *generated.Client, programID string) ([]string, error) {
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
 	var userIDs []string
 	err := client.ProgramMembership.Query().
 		Where(
@@ -104,7 +103,7 @@ func getProgramAuditorUserIDs(ctx context.Context, client *generated.Client, pro
 			programmembership.RoleEQ(enums.RoleAuditor),
 		).
 		Select(programmembership.FieldUserID).
-		Scan(allowCtx, &userIDs)
+		Scan(ctx, &userIDs)
 	if err != nil {
 		return nil, err
 	}
@@ -113,8 +112,6 @@ func getProgramAuditorUserIDs(ctx context.Context, client *generated.Client, pro
 }
 
 func getOrgAuditorUserIDs(ctx context.Context, client *generated.Client, orgID string) ([]string, error) {
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
 	var userIDs []string
 	err := client.OrgMembership.Query().
 		Where(
@@ -122,7 +119,7 @@ func getOrgAuditorUserIDs(ctx context.Context, client *generated.Client, orgID s
 			orgmembership.RoleEQ(enums.RoleAuditor),
 		).
 		Select(orgmembership.FieldUserID).
-		Scan(allowCtx, &userIDs)
+		Scan(ctx, &userIDs)
 	if err != nil {
 		return nil, err
 	}

@@ -3,30 +3,32 @@ package hooks
 import (
 	"context"
 
-	"entgo.io/ent"
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/internal/ent/entityops"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-// RegisterGalaSubscriberLinkListeners registers a listener that links a newly created
-// subscriber to an existing contact and/or user with a matching email asynchronously
-// after the subscriber mutation commits
-func RegisterGalaSubscriberLinkListeners(g *gala.Gala) ([]gala.ListenerID, error) {
-	return registerMutationListeners(g,
+// SubscriberLinkListeners returns the listener that links a newly created subscriber to an
+// existing contact and/or user with a matching email after the subscriber mutation commits
+func SubscriberLinkListeners() []gala.Registration {
+	return []gala.Registration{
 		entityops.MutationListener{
 			Schema:     entgen.TypeSubscriber,
-			Operations: []string{ent.OpCreate.String()},
-			Handle:     handleSubscriberCreatedLink,
+			Operations: []string{entityops.OpCreate},
+			Caller: func(*auth.Caller, entityops.MutationPayload) *auth.Caller {
+				return &auth.Caller{
+					Capabilities: auth.CapBypassOrgFilter | auth.CapBypassFGA | auth.CapInternalOperation,
+				}
+			},
+			Handle: handleSubscriberCreatedLink,
 		},
-	)
+	}
 }
 
 // handleSubscriberCreatedLink matches a newly created subscriber to an existing contact
@@ -37,11 +39,7 @@ func RegisterGalaSubscriberLinkListeners(g *gala.Gala) ([]gala.ListenerID, error
 func handleSubscriberCreatedLink(inv entityops.Invocation, _ entityops.MutationPayload) error {
 	client := inv.Client
 
-	allowCtx := auth.WithCaller(privacy.DecisionContext(inv.Context, privacy.Allow), &auth.Caller{
-		Capabilities: auth.CapBypassOrgFilter | auth.CapBypassFGA | auth.CapInternalOperation,
-	})
-
-	sub, ok, err := entityops.LoadEntity(allowCtx, inv.EntityID, client.Subscriber.Get)
+	sub, ok, err := entityops.LoadEntity(inv.Context, inv.EntityID, client.Subscriber.Get)
 	if err != nil || !ok {
 		return err
 	}
@@ -54,7 +52,7 @@ func handleSubscriberCreatedLink(inv entityops.Invocation, _ entityops.MutationP
 	changed := false
 
 	if sub.ContactID == "" {
-		contactID, err := matchSubscriberContactID(allowCtx, client, sub.OwnerID, sub.Email)
+		contactID, err := matchSubscriberContactID(inv.Context, client, sub.OwnerID, sub.Email)
 		if err != nil {
 			return err
 		}
@@ -67,7 +65,7 @@ func handleSubscriberCreatedLink(inv entityops.Invocation, _ entityops.MutationP
 	}
 
 	if sub.UserID == "" {
-		userID, err := matchSubscriberUserID(allowCtx, client, sub.OwnerID, sub.Email)
+		userID, err := orgUserIDByEmail(inv.Context, client, sub.OwnerID, sub.Email)
 		if err != nil {
 			return err
 		}
@@ -83,8 +81,8 @@ func handleSubscriberCreatedLink(inv entityops.Invocation, _ entityops.MutationP
 		return nil
 	}
 
-	if err := update.Exec(allowCtx); err != nil {
-		logx.FromContext(allowCtx).Error().Err(err).Str("subscriber_id", sub.ID).Msg("failed linking subscriber to contact/user")
+	if err := update.Exec(inv.Context); err != nil {
+		logx.FromContext(inv.Context).Error().Err(err).Msg("failed linking subscriber to contact/user")
 
 		return err
 	}
@@ -112,13 +110,13 @@ func matchSubscriberContactID(ctx context.Context, client *entgen.Client, ownerI
 	return contactID, nil
 }
 
-// matchSubscriberUserID returns the id of a user who is a member of the organization and
-// whose email matches the subscriber email, or empty when no user matches
-func matchSubscriberUserID(ctx context.Context, client *entgen.Client, ownerID, email string) (string, error) {
+// orgUserIDByEmail returns the id of a user who is a member of the organization and whose
+// email matches, or empty when no user matches; duplicates resolve best-effort to the first id
+func orgUserIDByEmail(ctx context.Context, client *entgen.Client, orgID, email string) (string, error) {
 	userID, err := client.User.Query().
 		Where(
 			user.EmailEqualFold(email),
-			user.HasOrgMembershipsWith(orgmembership.OrganizationID(ownerID)),
+			user.HasOrgMembershipsWith(orgmembership.OrganizationID(orgID)),
 		).
 		FirstID(ctx)
 	if err != nil {

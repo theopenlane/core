@@ -1,15 +1,14 @@
 package hooks
 
 import (
+	"context"
 	"encoding/json"
-
-	"entgo.io/ent"
-	"github.com/samber/do/v2"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
+	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/integrations/definitions/cloudflare"
 	intruntime "github.com/theopenlane/core/internal/integrations/runtime"
@@ -17,28 +16,33 @@ import (
 	"github.com/theopenlane/core/pkg/gala"
 )
 
-// RegisterGalaDomainScanSubmitListeners registers the listener that submits a openlane_domain_scan
-// when the domain scan is created in a pending state
-func RegisterGalaDomainScanSubmitListeners(g *gala.Gala) ([]gala.ListenerID, error) {
-	return registerMutationListeners(g, entityops.MutationListener{
-		Schema:     generated.TypeScan,
-		Label:      "domain_scan",
-		Operations: []string{ent.OpCreate.String()},
-		Handle:     handleScanDomainCreated,
-	})
-}
+// domainScanListenerLabel names the domain scan listeners for resolution logging
+const domainScanListenerLabel = "domain_scan"
 
-// RegisterGalaDomainScanUpdateListener registers the listener that creates a pending domain scan for
-// every current domain whenever an organization's settings domains field changes, this would then be picked
-// up by the scan submit listener to run the scan
-func RegisterGalaDomainScanUpdateListener(g *gala.Gala) ([]gala.ListenerID, error) {
-	return registerMutationListeners(g, entityops.MutationListener{
-		Schema:     generated.TypeOrganizationSetting,
-		Label:      "domain_scan",
-		Operations: []string{ent.OpUpdateOne.String()},
-		Fields:     []string{organizationsetting.FieldDomains},
-		Handle:     handleOrganizationSettingDomainsUpdated,
-	})
+// DomainScanListeners returns the domain scan listeners: one submits a openlane_domain_scan
+// when a domain scan is created in a pending state, the other creates a pending domain scan
+// for every current domain whenever an organization's settings domains field changes
+func DomainScanListeners() []gala.Registration {
+	return []gala.Registration{
+		entityops.MutationListener{
+			Schema:     generated.TypeScan,
+			Label:      domainScanListenerLabel,
+			Operations: []string{entityops.OpCreate},
+			Match: []entityops.FieldMatch{
+				{Field: scan.FieldScanType, In: []string{string(enums.ScanTypeDomain)}},
+				{Field: scan.FieldStatus, In: []string{string(enums.ScanStatusPending)}},
+				{Field: scan.FieldPerformedBy, In: []string{cloudflare.DomainScanPerformedBy}},
+			},
+			Handle: handleScanDomainCreated,
+		},
+		entityops.MutationListener{
+			Schema:     generated.TypeOrganizationSetting,
+			Label:      domainScanListenerLabel,
+			Operations: []string{entityops.OpUpdateOne},
+			Fields:     []string{organizationsetting.FieldDomains},
+			Handle:     handleOrganizationSettingDomainsUpdated,
+		},
+	}
 }
 
 // handleScanDomainCreated submits a newly created domain-type scan to the domain_scan gathering data via urlScanner, enrichment with browserRendering.JSON, and dns lookups
@@ -48,42 +52,18 @@ func handleScanDomainCreated(inv entityops.Invocation, _ entityops.MutationPaylo
 		return err
 	}
 
-	if !isPendingDomainScan(scanRecord) {
-		return nil
-	}
-
-	rt, err := do.Invoke[*intruntime.Runtime](inv.Injector)
-	if err != nil || rt == nil {
+	rt, ok := gala.Resolve[*intruntime.Runtime](inv.Context, inv.Injector, domainScanListenerLabel)
+	if !ok {
 		return nil
 	}
 
 	forceRefresh, _ := scanRecord.Metadata["forceRefresh"].(bool)
 
-	config, err := json.Marshal(cloudflare.DomainScanRequest{
+	return dispatchDomainScan(inv.Context, rt, string(inv.Envelope.ID), cloudflare.DomainScanRequest{
 		OrganizationID: scanRecord.OwnerID,
 		Domain:         scanRecord.Target,
 		ForceRefresh:   forceRefresh,
 	})
-	if err != nil {
-		return err
-	}
-
-	_, err = rt.Dispatch(inv.Context, types.DispatchRequest{
-		DefinitionID: cloudflare.DefinitionID.ID(),
-		Operation:    cloudflare.DomainScanRequestOp.Name(),
-		Config:       config,
-		RunType:      enums.IntegrationRunTypeEvent,
-		Runtime:      true,
-	})
-
-	return err
-}
-
-// isPendingDomainScan reports whether scanRecord is a domain-type Scan still awaiting submission
-func isPendingDomainScan(scanRecord *generated.Scan) bool {
-	return scanRecord.ScanType == enums.ScanTypeDomain &&
-		scanRecord.Status == enums.ScanStatusPending &&
-		scanRecord.PerformedBy == cloudflare.DomainScanPerformedBy
 }
 
 // handleOrganizationSettingDomainsUpdated requests a scan for every current domain whenever an
@@ -95,8 +75,8 @@ func handleOrganizationSettingDomainsUpdated(inv entityops.Invocation, _ entityo
 		return err
 	}
 
-	rt, err := do.Invoke[*intruntime.Runtime](inv.Injector)
-	if err != nil || rt == nil {
+	rt, ok := gala.Resolve[*intruntime.Runtime](inv.Context, inv.Injector, domainScanListenerLabel)
+	if !ok {
 		return nil
 	}
 
@@ -106,25 +86,35 @@ func handleOrganizationSettingDomainsUpdated(inv entityops.Invocation, _ entityo
 	dispatchCtx := rule.WithInternalContext(inv.Context)
 
 	for _, domain := range setting.Domains {
-		config, err := json.Marshal(cloudflare.DomainScanRequest{
+		if err := dispatchDomainScan(dispatchCtx, rt, string(inv.Envelope.ID)+":"+domain, cloudflare.DomainScanRequest{
 			OrganizationID: setting.OrganizationID,
 			Domain:         domain,
 			GroupID:        groupID,
-		})
-		if err != nil {
-			return err
-		}
-
-		if _, err := rt.Dispatch(dispatchCtx, types.DispatchRequest{
-			DefinitionID: cloudflare.DefinitionID.ID(),
-			Operation:    cloudflare.DomainScanRequestOp.Name(),
-			Config:       config,
-			RunType:      enums.IntegrationRunTypeEvent,
-			Runtime:      true,
 		}); err != nil {
 			return err
 		}
 	}
 
 	return nil
+}
+
+// dispatchDomainScan marshals the request and dispatches the cloudflare domain scan operation
+// as an event-triggered runtime run
+func dispatchDomainScan(ctx context.Context, rt *intruntime.Runtime, dedupKey string, req cloudflare.DomainScanRequest) error {
+	config, err := json.Marshal(req)
+	if err != nil {
+		return err
+	}
+
+	_, err = rt.Dispatch(ctx, types.DispatchRequest{
+		DefinitionID: cloudflare.DefinitionID.ID(),
+		Operation:    cloudflare.DomainScanRequestOp.Name(),
+		Config:       config,
+		RunType:      enums.IntegrationRunTypeEvent,
+		Runtime:      true,
+		// a listener retry after a crashed cycle must not enqueue the scan twice
+		UniqueKey: "dispatch:" + cloudflare.DomainScanRequestOp.Name() + ":" + dedupKey,
+	})
+
+	return err
 }

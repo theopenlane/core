@@ -2,6 +2,7 @@ package gala
 
 import (
 	"context"
+	"encoding/json"
 	"testing"
 
 	"github.com/riverqueue/river"
@@ -29,7 +30,7 @@ func TestEmitDerivesTopicUniqueKey(t *testing.T) {
 	runtime := newTestGala(t, dispatcher)
 	topic := registerUniqueTopic(t, runtime, "runtime.test.unique")
 
-	if _, err := runtime.Emit(context.Background(), topic.Name, runtimeTestPayload{Message: "loop-a"}); err != nil {
+	if _, err := runtime.EmitWithHeaders(context.Background(), topic.Name, runtimeTestPayload{Message: "loop-a"}, Headers{Kind: JobKindSystem}); err != nil {
 		t.Fatalf("unexpected emit error: %v", err)
 	}
 
@@ -38,12 +39,43 @@ func TestEmitDerivesTopicUniqueKey(t *testing.T) {
 	}
 }
 
+// TestEmitRawPayloadDerivesTopicUniqueKey proves raw and typed emits derive the same unique key
+func TestEmitRawPayloadDerivesTopicUniqueKey(t *testing.T) {
+	dispatcher := &runtimeTestDispatcher{}
+	runtime := newTestGala(t, dispatcher)
+	topic := registerUniqueTopic(t, runtime, "runtime.test.unique.raw")
+
+	if _, err := runtime.EmitWithHeaders(context.Background(), topic.Name, runtimeTestPayload{Message: "loop-a"}, Headers{Kind: JobKindSystem}); err != nil {
+		t.Fatalf("unexpected typed emit error: %v", err)
+	}
+
+	encodedPayload, err := json.Marshal(runtimeTestPayload{Message: "loop-a"})
+	if err != nil {
+		t.Fatalf("failed to encode payload: %v", err)
+	}
+
+	if _, err := runtime.EmitWithHeaders(context.Background(), topic.Name, nil, Headers{Kind: JobKindSystem}, WithRawPayload(encodedPayload)); err != nil {
+		t.Fatalf("unexpected raw emit error: %v", err)
+	}
+
+	typedKey := dispatcher.envelopes[0].Headers.UniqueKey
+	rawKey := dispatcher.envelopes[1].Headers.UniqueKey
+
+	if typedKey != "key:loop-a" {
+		t.Fatalf("typed UniqueKey = %q, want derived key", typedKey)
+	}
+
+	if rawKey != typedKey {
+		t.Fatalf("raw UniqueKey = %q, want same key as typed emit %q", rawKey, typedKey)
+	}
+}
+
 func TestEmitSkipUniqueKeySuppressesDerivation(t *testing.T) {
 	dispatcher := &runtimeTestDispatcher{}
 	runtime := newTestGala(t, dispatcher)
 	topic := registerUniqueTopic(t, runtime, "runtime.test.unique.skip")
 
-	if _, err := runtime.Emit(context.Background(), topic.Name, runtimeTestPayload{Message: "loop-a"}, WithHeaders(Headers{SkipUniqueKey: true})); err != nil {
+	if _, err := runtime.EmitWithHeaders(context.Background(), topic.Name, runtimeTestPayload{Message: "loop-a"}, Headers{SkipUniqueKey: true, Kind: JobKindSystem}); err != nil {
 		t.Fatalf("unexpected emit error: %v", err)
 	}
 
@@ -57,7 +89,7 @@ func TestEmitExplicitUniqueKeyWins(t *testing.T) {
 	runtime := newTestGala(t, dispatcher)
 	topic := registerUniqueTopic(t, runtime, "runtime.test.unique.explicit")
 
-	if _, err := runtime.Emit(context.Background(), topic.Name, runtimeTestPayload{Message: "loop-a"}, WithHeaders(Headers{UniqueKey: "explicit"})); err != nil {
+	if _, err := runtime.EmitWithHeaders(context.Background(), topic.Name, runtimeTestPayload{Message: "loop-a"}, Headers{UniqueKey: "explicit", Kind: JobKindSystem}); err != nil {
 		t.Fatalf("unexpected emit error: %v", err)
 	}
 
@@ -88,7 +120,7 @@ func TestUniqueKeyEnforcedByRiver(t *testing.T) {
 	}
 
 	for range 2 {
-		if _, err := runtime.Emit(ctx, topic.Name, runtimeTestPayload{Message: "loop-a"}); err != nil {
+		if _, err := runtime.EmitWithHeaders(ctx, topic.Name, runtimeTestPayload{Message: "loop-a"}, Headers{Kind: JobKindSystem}); err != nil {
 			t.Fatalf("unexpected emit error: %v", err)
 		}
 	}
@@ -97,7 +129,7 @@ func TestUniqueKeyEnforcedByRiver(t *testing.T) {
 		t.Fatalf("live jobs = %d, want duplicate emit collapsed to 1", got)
 	}
 
-	if _, err := runtime.Emit(ctx, topic.Name, runtimeTestPayload{Message: "loop-a"}, WithHeaders(Headers{SkipUniqueKey: true})); err != nil {
+	if _, err := runtime.EmitWithHeaders(ctx, topic.Name, runtimeTestPayload{Message: "loop-a"}, Headers{SkipUniqueKey: true, Kind: JobKindSystem}); err != nil {
 		t.Fatalf("unexpected emit error: %v", err)
 	}
 
@@ -105,7 +137,7 @@ func TestUniqueKeyEnforcedByRiver(t *testing.T) {
 		t.Fatalf("live jobs = %d, want skip-key emit inserted alongside", got)
 	}
 
-	if _, err := runtime.Emit(ctx, topic.Name, runtimeTestPayload{Message: "loop-b"}); err != nil {
+	if _, err := runtime.EmitWithHeaders(ctx, topic.Name, runtimeTestPayload{Message: "loop-b"}, Headers{Kind: JobKindSystem}); err != nil {
 		t.Fatalf("unexpected emit error: %v", err)
 	}
 

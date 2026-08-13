@@ -7,7 +7,6 @@ import (
 	"testing"
 	"time"
 
-	"entgo.io/ent"
 	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/core/common/enums"
@@ -100,17 +99,14 @@ func (suite *HookTestSuite) newRecurringCampaign(orgID, name string) *generated.
 // emitCampaignMutation emits a campaign mutation event through the public gala surface
 // and waits for the in-memory pool to drain so DB side effects are observable
 func (suite *HookTestSuite) emitCampaignMutation(t *testing.T, ctx context.Context, campaignID string, changedFields ...string) {
-	topic := gala.MutationTopicName(gala.MutationConcernDirect, generated.TypeCampaign)
-
-	_, err := suite.galaRuntime.Emit(ctx, topic, entityops.MutationPayload{
+	entityops.EmitMutation(ctx, []*gala.Gala{suite.galaRuntime}, entityops.MutationPayload{
 		MutationType: generated.TypeCampaign,
-		Operation:    ent.OpUpdateOne.String(),
+		Operation:    entityops.OpUpdateOne,
 		EntityID:     campaignID,
 		ChangeSet: entityops.ChangeSet{
 			ChangedFields: changedFields,
 		},
 	})
-	assert.NilError(t, err)
 
 	suite.galaRuntime.WaitIdle()
 }

@@ -37,8 +37,6 @@ var (
 	ErrIngestUnsupportedSchema = errors.New("integrations/operations: ingest schema unsupported")
 	// ErrIngestPersistFailed indicates the mapped record could not be persisted
 	ErrIngestPersistFailed = errors.New("integrations/operations: ingest persistence failed")
-	// ErrIngestRecordsFailed indicates one or more records in the batch failed to map or persist
-	ErrIngestRecordsFailed = errors.New("integrations/operations: ingest records failed")
 	// ErrIngestIntegrationUnresolved indicates the integration record could not be resolved for an ingest operation
 	ErrIngestIntegrationUnresolved = errors.New("integrations/operations: ingest integration unresolved")
 

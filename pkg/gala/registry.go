@@ -10,7 +10,7 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-// Registry stores topic codecs, policies, and listeners
+// registry stores topic codecs, policies, and listeners
 type registry struct {
 	mu sync.RWMutex
 	// topics stores topic metadata and codec wrappers by topic name
@@ -27,6 +27,8 @@ type topicRegistration struct {
 	decode func([]byte) (any, error)
 	// uniqueKey derives the uniqueness key for non-generic payloads, nil when none declared
 	uniqueKey func(any) string
+	// kind is the job kind emissions on the topic dispatch under
+	kind string
 }
 
 // registeredListener stores non-generic listener wrappers
@@ -39,8 +41,8 @@ type registeredListener struct {
 	definitionName string
 	// ops is the set of operations this listener is interested in, empty means topic-level interest
 	ops map[string]struct{}
-	// handle is a wrapper around the listener definition's Handle method for non-generic payloads
-	handle func(HandlerContext, any) error
+	// handle wraps the definition's Handle for non-generic payloads; operation comes from dispatchEnvelope
+	handle func(HandlerContext, any, string) error
 }
 
 // newRegistry creates an empty topic/listener registry
@@ -76,6 +78,7 @@ func registerTopic[T any](registry *registry, topic Topic[T], codec Codec[T]) er
 		encode:    wrapTopicEncoder(codec),
 		decode:    wrapTopicDecoder(codec),
 		uniqueKey: wrapTopicUniqueKey(topic),
+		kind:      topic.Kind,
 	}
 
 	return nil
@@ -89,6 +92,11 @@ func attachListener[T any](g *Gala, definition Definition[T]) (ListenerID, error
 
 	if err := validateListenerDefinition(definition); err != nil {
 		return "", err
+	}
+
+	// in-memory pools take no schedules; scheduled definitions attach on durable dispatch only
+	if definition.Schedule != nil && g.dispatchMode == DispatchModeInMemory {
+		return "", nil
 	}
 
 	name := definition.Name
@@ -123,22 +131,22 @@ func attachListener[T any](g *Gala, definition Definition[T]) (ListenerID, error
 }
 
 // wrapDefinitionHandle builds the non-generic dispatch wrapper for one definition, applying
-// the dispatch pipeline in order: Gate, caller resolution, automatic log enrichment, Enrich,
-// Elevate, then the handler, classifying handler errors through Cancel
-func wrapDefinitionHandle[T any](g *Gala, definition Definition[T]) func(HandlerContext, any) error {
+// the dispatch pipeline in order: Gate, caller resolution, automatic log enrichment, LogFields,
+// ContextKeys, then the handler, classifying handler errors through Cancel
+func wrapDefinitionHandle[T any](g *Gala, definition Definition[T]) func(HandlerContext, any, string) error {
 	handler := definition.Handle
 	if definition.Schedule != nil {
 		handler = scheduleHandler(g, definition)
 	}
 
-	return func(handlerCtx HandlerContext, payload any) error {
+	return func(handlerCtx HandlerContext, payload any, operation string) error {
 		typedPayload, ok := payload.(T)
 		if !ok {
 			return ErrPayloadTypeMismatch
 		}
 
-		if definition.Gate != nil && !definition.Gate(typedPayload) {
-			return nil
+		if definition.Gate != nil && !definition.Gate(handlerCtx.Context, typedPayload) {
+			return errSkipListener
 		}
 
 		caller, found := auth.CallerFromContext(handlerCtx.Context)
@@ -153,18 +161,19 @@ func wrapDefinitionHandle[T any](g *Gala, definition Definition[T]) func(Handler
 		handlerCtx.Context = auth.WithCaller(handlerCtx.Context, caller)
 		handlerCtx.Caller = caller
 
+		handlerCtx.Context = logx.WithCallerIdentity(handlerCtx.Context)
 		handlerCtx.Context = logx.WithFields(handlerCtx.Context, map[string]any{
 			"event_id":  string(handlerCtx.Envelope.ID),
 			"topic":     string(handlerCtx.Envelope.Topic),
-			"operation": payloadOperation(typedPayload),
+			"operation": operation,
 		})
 
-		if definition.Enrich != nil {
-			handlerCtx.Context = definition.Enrich(handlerCtx.Context, typedPayload)
+		if definition.LogFields != nil {
+			handlerCtx.Context = logx.WithFields(handlerCtx.Context, definition.LogFields(typedPayload))
 		}
 
-		if definition.Elevate != nil {
-			handlerCtx.Context = definition.Elevate(handlerCtx.Context, typedPayload)
+		for _, key := range definition.ContextKeys {
+			handlerCtx.Context = key(handlerCtx.Context)
 		}
 
 		err := handler(handlerCtx, typedPayload)
@@ -229,7 +238,7 @@ func (r *registry) InterestedIn(topic TopicName, operation string) bool {
 	}
 
 	for _, listener := range listeners {
-		if listenerInterestedInOperation(listener, operation) {
+		if listenerMatches(listener, operation) {
 			return true
 		}
 	}
@@ -237,20 +246,28 @@ func (r *registry) InterestedIn(topic TopicName, operation string) bool {
 	return false
 }
 
-// listenerInterestedInOperation reports whether a listener matches an operation filter
-// Callers must pass a trimmed operation string
-func listenerInterestedInOperation(listener registeredListener, operation string) bool {
+// listenerMatches reports whether a listener matches the trimmed operation
+func listenerMatches(listener registeredListener, operation string) bool {
 	if len(listener.ops) == 0 {
 		return true
-	}
-
-	if operation == "" {
-		return false
 	}
 
 	_, ok := listener.ops[operation]
 
 	return ok
+}
+
+// topicKind returns the registered job kind for a topic
+func (r *registry) topicKind(topic TopicName) (string, bool) {
+	r.mu.RLock()
+	defer r.mu.RUnlock()
+
+	registration, exists := r.topics[topic]
+	if !exists || registration.kind == "" {
+		return "", false
+	}
+
+	return registration.kind, true
 }
 
 // topicRegistration resolves one topic registration by name
@@ -281,6 +298,10 @@ func validateListenerDefinition[T any](definition Definition[T]) error {
 		return ErrListenerHandlerConflict
 	case definition.Schedule != nil && definition.Schedule.Handle == nil:
 		return ErrListenerHandlerRequired
+	case definition.Schedule != nil && definition.Schedule.State == nil:
+		return ErrListenerScheduleStateRequired
+	case definition.Schedule != nil && definition.Schedule.Wrap == nil:
+		return ErrListenerScheduleWrapRequired
 	case definition.Schedule == nil && definition.Handle == nil:
 		return ErrListenerHandlerRequired
 	}

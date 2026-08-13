@@ -4,7 +4,6 @@ import (
 	"context"
 	"time"
 
-	"entgo.io/ent"
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/enums"
@@ -18,30 +17,25 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-// RegisterGalaCampaignRecurringListeners registers mutation listeners that
-// manage recurring campaign scheduling when is_active or is_recurring changes
-func RegisterGalaCampaignRecurringListeners(g *gala.Gala) ([]gala.ListenerID, error) {
-	return registerMutationListeners(g,
+// CampaignRecurringListeners returns the listeners that manage recurring campaign
+// scheduling when is_active or is_recurring changes
+func CampaignRecurringListeners() []gala.Registration {
+	return []gala.Registration{
 		entityops.MutationListener{
-			Schema: entgen.TypeCampaign,
-			Operations: []string{
-				ent.OpUpdate.String(),
-				ent.OpUpdateOne.String(),
-			},
+			Schema:     entgen.TypeCampaign,
+			Operations: []string{entityops.OpUpdate, entityops.OpUpdateOne},
 			Fields: []string{
 				campaign.FieldIsActive,
 				campaign.FieldIsRecurring,
 				campaign.FieldRecurrenceFrequency,
 				campaign.FieldRecurrenceInterval,
 			},
-			// internal operation grant so the recurrence schedule can be read and written
-			// without the caller's own object permissions
 			Caller: func(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
 				return restored.WithCapabilities(auth.CapInternalOperation)
 			},
 			Handle: handleCampaignRecurringMutation,
 		},
-	)
+	}
 }
 
 // handleCampaignRecurringMutation reacts to scheduling-relevant field changes
@@ -52,8 +46,7 @@ func handleCampaignRecurringMutation(inv entityops.Invocation, payload entityops
 	scheduleShapeChanged := payload.FieldChanged(campaign.FieldRecurrenceFrequency) ||
 		payload.FieldChanged(campaign.FieldRecurrenceInterval)
 
-	// set fields in the logger context
-	ctx := withCampaignLogContext(inv.Context, inv.EntityID, inv.Caller.OrganizationID)
+	ctx := inv.Context
 
 	camp, err := inv.Client.Campaign.Query().
 		Where(
@@ -87,9 +80,7 @@ func handleCampaignRecurringMutation(inv entityops.Invocation, payload entityops
 	shouldSchedule := camp.IsRecurring && camp.IsActive && !isTerminalStatus(camp.Status) && camp.RecurrenceFrequency != enums.FrequencyNone
 
 	switch {
-	case shouldSchedule && (activationChanged || camp.NextRunAt == nil):
-		return recomputeNextRunAt(ctx, inv.Client, camp)
-	case shouldSchedule && scheduleShapeChanged:
+	case shouldSchedule && (activationChanged || scheduleShapeChanged || camp.NextRunAt == nil):
 		return recomputeNextRunAt(ctx, inv.Client, camp)
 	case !shouldSchedule && camp.NextRunAt != nil:
 		return clearNextRunAt(ctx, inv.Client, camp.ID)
@@ -143,12 +134,4 @@ func isTerminalStatus(status enums.CampaignStatus) bool {
 		enums.CampaignStatusCompleted,
 		enums.CampaignStatusCanceled,
 	}, status)
-}
-
-// withCampaignLogContext sets the campaign and organization ID in the log context
-func withCampaignLogContext(ctx context.Context, campaignID, orgID string) context.Context {
-	return logx.WithFields(ctx, map[string]any{
-		"campaign_id":     campaignID,
-		"organization_id": orgID,
-	})
 }

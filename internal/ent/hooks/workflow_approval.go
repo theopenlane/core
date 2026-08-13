@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/theopenlane/core/pkg/gala"
 	"time"
 
 	"entgo.io/ent"
@@ -14,6 +13,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
@@ -49,8 +49,8 @@ func HookWorkflowApprovalRouting() ent.Hook {
 
 			allChangedFields := workflows.CollectAllChangedFields(mut)
 			changedFields := workflows.CollectChangedFields(mut)
-			changedEdges, addedIDs, removedIDs := extractChangedEdges(m)
-			if len(allChangedFields) == 0 && len(changedEdges) == 0 {
+			edgeSet := entityops.ChangeSetFromMutation(m)
+			if len(allChangedFields) == 0 && len(edgeSet.ChangedEdges) == 0 {
 				return next.Mutate(ctx, m)
 			}
 
@@ -91,7 +91,7 @@ func HookWorkflowApprovalRouting() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			definitions, err := wfEngine.FindMatchingDefinitions(allowCtx, mut.Type(), "UPDATE", changedFields, changedEdges, addedIDs, removedIDs, proposedChanges, obj)
+			definitions, err := wfEngine.FindMatchingDefinitions(allowCtx, mut.Type(), "UPDATE", changedFields, edgeSet.ChangedEdges, edgeSet.AddedIDs, edgeSet.RemovedIDs, proposedChanges, obj)
 			if err != nil || len(definitions) == 0 {
 				return next.Mutate(ctx, m)
 			}
@@ -102,7 +102,7 @@ func HookWorkflowApprovalRouting() ent.Hook {
 					continue
 				}
 
-				shouldRun, err := wfEngine.EvaluateConditions(allowCtx, def, obj, "UPDATE", changedFields, changedEdges, addedIDs, removedIDs, proposedChanges)
+				shouldRun, err := wfEngine.EvaluateConditions(allowCtx, def, obj, "UPDATE", changedFields, edgeSet.ChangedEdges, edgeSet.AddedIDs, edgeSet.RemovedIDs, proposedChanges)
 				if err != nil {
 					return nil, err
 				}
@@ -125,7 +125,7 @@ func HookWorkflowApprovalRouting() ent.Hook {
 			ineligibleFields = excludeSystemFields(ineligibleFields)
 
 			eligibleChanges := workflows.BuildProposedChanges(mut, eligibleFields)
-			hasDirectChanges := len(ineligibleFields) > 0 || len(changedEdges) > 0
+			hasDirectChanges := len(ineligibleFields) > 0 || len(edgeSet.ChangedEdges) > 0
 			if hasDirectChanges {
 				resetMutationFields(m, eligibleFields)
 				bypassCtx := workflows.WithContext(ctx)
@@ -141,7 +141,7 @@ func HookWorkflowApprovalRouting() ent.Hook {
 			proposedChanges = eligibleChanges
 
 			// Route to proposed changes instead of applying directly
-			gala.MarkSkipEventEmission(ctx)
+			entityops.VetoEmission(ctx)
 			return routeMutationToProposals(ctx, client, mut, proposedChanges, preCommitDefs)
 		})
 	}, ent.OpUpdate|ent.OpUpdateOne)

@@ -163,14 +163,13 @@ func (r *Runtime) DispatchWebhookEvent(ctx context.Context, integration *ent.Int
 
 	oc := types.NewOperationContext(ownerID, "", src)
 
-	_, err = r.Gala().Emit(intobvs.WithContext(ctx, oc), registration.Topic, operations.WebhookEnvelope{
+	emitCtx, headers := intobvs.EmitContext(ctx, oc)
+
+	_, err = r.Gala().EmitWithHeaders(emitCtx, registration.Topic, operations.WebhookEnvelope{
 		OperationContext: oc,
 		Payload:          jsonx.CloneRawMessage(event.Payload),
 		Headers:          maps.Clone(event.Headers),
-	}, gala.WithHeaders(gala.Headers{
-		Properties: oc.Properties(),
-		Tags:       types.GetTagsForOperationContext(oc),
-	}), gala.WithEventID(gala.EventID(event.DeliveryID)))
+	}, headers, gala.WithEventID(gala.EventID(event.DeliveryID)))
 
 	return err
 }
@@ -221,7 +220,7 @@ func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope operations.We
 		Webhook:     webhook,
 		Event:       event,
 		Ingest: func(ingestCtx context.Context, payloadSets []types.IngestPayloadSet) error {
-			return operations.EmitPayloadSets(ingestCtx, operations.IngestContext{
+			return operations.ProcessPayloadSets(ingestCtx, operations.IngestContext{
 				Registry:    r.Registry(),
 				DB:          r.DB(),
 				Runtime:     r.Gala(),

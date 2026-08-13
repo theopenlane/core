@@ -105,16 +105,19 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 
 	oc := types.NewOperationContext(ownerID, req.Operation, src)
 
-	emitCtx := intobvs.WithContext(ctx, oc)
-	eventID, err := runtime.Emit(emitCtx, operation.Topic, Envelope{
+	emitCtx, headers := intobvs.EmitContext(ctx, oc)
+	headers.ScheduledAt = req.ScheduledAt
+
+	if req.UniqueKey != "" {
+		headers.UniqueKey = req.UniqueKey
+		headers.UniqueOnce = true
+	}
+
+	eventID, err := runtime.EmitWithHeaders(emitCtx, operation.Topic, Envelope{
 		OperationContext:   oc,
 		Config:             jsonx.CloneRawMessage(req.Config),
-		ForceClientRebuild: req.ForceClientRebuild},
-		gala.WithHeaders(gala.Headers{
-			Properties:  oc.Properties(),
-			Tags:        types.GetTagsForOperationContext(oc),
-			ScheduledAt: req.ScheduledAt,
-		}), gala.WithEventID(gala.EventID(runID)))
+		ForceClientRebuild: req.ForceClientRebuild,
+	}, headers, gala.WithEventID(gala.EventID(runID)))
 	if err != nil {
 		if runID != "" {
 			if completeErr := CompleteRun(ctx, db, runID, time.Now(), RunResult{

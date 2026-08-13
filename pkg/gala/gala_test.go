@@ -61,13 +61,33 @@ func newTestGala(t *testing.T, d dispatcher) *Gala {
 	return newTestGalaInMemory(t, d)
 }
 
+// testCaller returns a minimal caller for dispatch tests
+func testCaller() *auth.Caller {
+	return &auth.Caller{SubjectID: "test_subject"}
+}
+
+// testCallerSnapshot captures a context snapshot carrying a minimal caller
+func testCallerSnapshot(t *testing.T, runtime *Gala) ContextSnapshot {
+	t.Helper()
+
+	snapshot, err := runtime.contextManager.Capture(auth.WithCaller(context.Background(), testCaller()))
+	if err != nil {
+		t.Fatalf("failed to capture caller snapshot: %v", err)
+	}
+
+	return snapshot
+}
+
 // TestRuntimeDispatchEnvelopeWithDependencyInjectionAndContextRehydration verifies
 // that handlers can resolve dependencies from samber/do and receive rehydrated context.
 func TestRuntimeDispatchEnvelopeWithDependencyInjectionAndContextRehydration(t *testing.T) {
 	injector := do.New()
 	do.ProvideValue(injector, &runtimeTestFormatter{Prefix: "fmt"})
 
-	contextManager, err := newContextManager(NewKeyCodec("runtime_test_actor", runtimeTestActorKey))
+	contextManager, err := newContextManager(
+		NewKeyCodec("runtime_test_actor", runtimeTestActorKey),
+		NewKeyCodec("caller", auth.CallerKey),
+	)
 	if err != nil {
 		t.Fatalf("failed to build context manager: %v", err)
 	}
@@ -110,6 +130,7 @@ func TestRuntimeDispatchEnvelopeWithDependencyInjectionAndContextRehydration(t *
 	}
 
 	emitContext := runtimeTestActorKey.Set(context.Background(), runtimeTestActor{ID: "actor-1"})
+	emitContext = auth.WithCaller(emitContext, testCaller())
 	emitContext = WithFlag(emitContext, ContextFlagWorkflowBypass)
 
 	encodedPayload, err := json.Marshal(runtimeTestPayload{Message: "hello"})
@@ -301,7 +322,7 @@ func TestRuntimeEmitUsesDispatcher(t *testing.T) {
 		t.Fatalf("failed to register listener: %v", err)
 	}
 
-	id, err := runtime.Emit(context.Background(), topic.Name, runtimeTestPayload{Message: "durable"})
+	id, err := runtime.EmitWithHeaders(context.Background(), topic.Name, runtimeTestPayload{Message: "durable"}, Headers{Kind: JobKindSystem})
 	if err != nil {
 		t.Fatalf("unexpected emit error: %v", err)
 	}
@@ -329,7 +350,7 @@ func TestRuntimeEmitRequiresDispatcher(t *testing.T) {
 		t.Fatalf("failed to register topic: %v", err)
 	}
 
-	if _, err := runtime.Emit(context.Background(), topic.Name, runtimeTestPayload{Message: "durable"}); !errors.Is(err, ErrDispatcherRequired) {
+	if _, err := runtime.EmitWithHeaders(context.Background(), topic.Name, runtimeTestPayload{Message: "durable"}, Headers{Kind: JobKindSystem}); !errors.Is(err, ErrDispatcherRequired) {
 		t.Fatalf("expected ErrDispatcherRequired, got %v", err)
 	}
 }
@@ -351,7 +372,7 @@ func TestRuntimeEmitWithEventIDUsesPrebuiltEventID(t *testing.T) {
 	}
 
 	prebuiltID := EventID("evt_prebuilt_123")
-	id, err := runtime.Emit(context.Background(), topic.Name, nil, WithEventID(prebuiltID), WithRawPayload(encodedPayload))
+	id, err := runtime.EmitWithHeaders(context.Background(), topic.Name, nil, Headers{Kind: JobKindSystem}, WithEventID(prebuiltID), WithRawPayload(encodedPayload))
 	if err != nil {
 		t.Fatalf("unexpected emit error: %v", err)
 	}
@@ -447,9 +468,10 @@ func TestRuntimeDispatchEnvelopeWrapsListenerErrors(t *testing.T) {
 	}
 
 	err = runtime.dispatchEnvelope(context.Background(), Envelope{
-		ID:      NewEventID(),
-		Topic:   topic.Name,
-		Payload: encodedPayload,
+		ID:              NewEventID(),
+		Topic:           topic.Name,
+		Payload:         encodedPayload,
+		ContextSnapshot: testCallerSnapshot(t, runtime),
 	})
 	if err == nil {
 		t.Fatalf("expected error from failing listener")
@@ -497,9 +519,10 @@ func TestRuntimeDispatchEnvelopeRecoversPanic(t *testing.T) {
 	}
 
 	err = runtime.dispatchEnvelope(context.Background(), Envelope{
-		ID:      NewEventID(),
-		Topic:   topic.Name,
-		Payload: encodedPayload,
+		ID:              NewEventID(),
+		Topic:           topic.Name,
+		Payload:         encodedPayload,
+		ContextSnapshot: testCallerSnapshot(t, runtime),
 	})
 	if err == nil {
 		t.Fatalf("expected error from panicking listener")
@@ -567,9 +590,10 @@ func TestRuntimeDispatchEnvelopeFiltersListenersByOperation(t *testing.T) {
 	}
 
 	err = runtime.dispatchEnvelope(context.Background(), Envelope{
-		ID:      NewEventID(),
-		Topic:   topic.Name,
-		Payload: encodedPayload,
+		ID:              NewEventID(),
+		Topic:           topic.Name,
+		Payload:         encodedPayload,
+		ContextSnapshot: testCallerSnapshot(t, runtime),
 	})
 	if err != nil {
 		t.Fatalf("unexpected dispatch error: %v", err)
@@ -603,7 +627,7 @@ func TestRuntimeEmitReturnsDurableDispatchError(t *testing.T) {
 		t.Fatalf("failed to register listener: %v", err)
 	}
 
-	if _, err := runtime.Emit(context.Background(), topic.Name, runtimeTestPayload{Message: "test"}); !errors.Is(err, ErrDispatchFailed) {
+	if _, err := runtime.EmitWithHeaders(context.Background(), topic.Name, runtimeTestPayload{Message: "test"}, Headers{Kind: JobKindSystem}); !errors.Is(err, ErrDispatchFailed) {
 		t.Fatalf("expected ErrDispatchFailed, got %v", err)
 	}
 }
@@ -854,6 +878,198 @@ func TestValidateListenerDefinitionErrors(t *testing.T) {
 	}); !errors.Is(err, ErrListenerHandlerRequired) {
 		t.Fatalf("expected ErrListenerHandlerRequired for schedule without handle, got %v", err)
 	}
+
+	if _, err := attachListener(runtime, Definition[runtimeTestPayload]{
+		Topic: topic,
+		Name:  "test.listener",
+		Schedule: &ScheduleSpec[runtimeTestPayload]{
+			Handle: func(context.Context, runtimeTestPayload) (int, error) { return 0, nil },
+		},
+	}); !errors.Is(err, ErrListenerScheduleStateRequired) {
+		t.Fatalf("expected ErrListenerScheduleStateRequired for schedule without state extractor, got %v", err)
+	}
+
+	if _, err := attachListener(runtime, Definition[runtimeTestPayload]{
+		Topic: topic,
+		Name:  "test.listener",
+		Schedule: &ScheduleSpec[runtimeTestPayload]{
+			Handle: func(context.Context, runtimeTestPayload) (int, error) { return 0, nil },
+			State:  func(runtimeTestPayload) ScheduleState { return ScheduleState{} },
+		},
+	}); !errors.Is(err, ErrListenerScheduleWrapRequired) {
+		t.Fatalf("expected ErrListenerScheduleWrapRequired for schedule without wrap builder, got %v", err)
+	}
+}
+
+// TestAttachListenerSkipsScheduleInMemory verifies scheduled definitions skip on an
+// in-memory runtime: no error, no listener attached
+func TestAttachListenerSkipsScheduleInMemory(t *testing.T) {
+	runtime, err := NewGala(context.Background(), Config{
+		DispatchMode: DispatchModeInMemory,
+	})
+	if err != nil {
+		t.Fatalf("unexpected in-memory gala initialization error: %v", err)
+	}
+
+	t.Cleanup(func() {
+		_ = runtime.Close()
+	})
+
+	topic := Topic[runtimeTestPayload]{Name: TopicName("runtime.test.inmemory.schedule")}
+
+	ids, err := Register(runtime, Definition[runtimeTestPayload]{
+		Topic: topic,
+		Name:  "runtime.test.inmemory.schedule.listener",
+		Schedule: &ScheduleSpec[runtimeTestPayload]{
+			Handle: func(context.Context, runtimeTestPayload) (int, error) { return 0, nil },
+			State:  func(runtimeTestPayload) ScheduleState { return ScheduleState{} },
+			Wrap:   func(p runtimeTestPayload, _ ScheduleState) runtimeTestPayload { return p },
+		},
+	})
+	if err != nil {
+		t.Fatalf("expected scheduled definition to skip without error, got %v", err)
+	}
+
+	if len(ids) != 0 {
+		t.Fatalf("expected no listener ids for a skipped scheduled definition, got %v", ids)
+	}
+
+	if runtime.InterestedIn(topic.Name, "") {
+		t.Fatal("expected no listener attached for a skipped scheduled definition")
+	}
+}
+
+// TestDispatchEnvelopeWithoutCallerUsesZeroValue verifies a caller-less dispatch installs the zero-value caller
+func TestDispatchEnvelopeWithoutCallerUsesZeroValue(t *testing.T) {
+	runtime := newTestGala(t, nil)
+
+	topic := Topic[runtimeTestPayload]{Name: TopicName("runtime.test.caller.zerovalue")}
+	if err := registerTopic(runtime.registry, topic, JSONCodec[runtimeTestPayload]{}); err != nil {
+		t.Fatalf("failed to register topic: %v", err)
+	}
+
+	var seen *auth.Caller
+
+	if _, err := attachListener(runtime, Definition[runtimeTestPayload]{
+		Topic: topic,
+		Name:  "runtime.test.caller.zerovalue.listener",
+		Handle: func(ctx HandlerContext, _ runtimeTestPayload) error {
+			seen = ctx.Caller
+
+			return nil
+		},
+	}); err != nil {
+		t.Fatalf("failed to register listener: %v", err)
+	}
+
+	encodedPayload, err := json.Marshal(runtimeTestPayload{Message: "no-caller"})
+	if err != nil {
+		t.Fatalf("failed to encode payload: %v", err)
+	}
+
+	err = runtime.dispatchEnvelope(context.Background(), Envelope{
+		ID:      NewEventID(),
+		Topic:   topic.Name,
+		Payload: encodedPayload,
+	})
+	if err != nil {
+		t.Fatalf("expected caller-less dispatch to succeed, got %v", err)
+	}
+
+	if seen == nil || seen.Capabilities != 0 || seen.OrganizationID != "" {
+		t.Fatalf("expected zero-value caller, got %+v", seen)
+	}
+}
+
+// TestDispatchEnvelopeCallerHookSuppliesCaller verifies the Caller hook receives a zero-value
+// stand-in when no caller was restored and its result reaches the handler
+func TestDispatchEnvelopeCallerHookSuppliesCaller(t *testing.T) {
+	runtime := newTestGala(t, nil)
+
+	topic := Topic[runtimeTestPayload]{Name: TopicName("runtime.test.caller.hook")}
+	if err := registerTopic(runtime.registry, topic, JSONCodec[runtimeTestPayload]{}); err != nil {
+		t.Fatalf("failed to register topic: %v", err)
+	}
+
+	var observed *auth.Caller
+
+	if _, err := attachListener(runtime, Definition[runtimeTestPayload]{
+		Topic: topic,
+		Name:  "runtime.test.caller.hook.listener",
+		Caller: func(restored *auth.Caller, _ runtimeTestPayload) *auth.Caller {
+			if restored.SubjectID != "" {
+				t.Fatalf("expected zero-value restored caller, got %q", restored.SubjectID)
+			}
+
+			return &auth.Caller{SubjectID: "hook_subject"}
+		},
+		Handle: func(handlerContext HandlerContext, _ runtimeTestPayload) error {
+			observed = handlerContext.Caller
+
+			return nil
+		},
+	}); err != nil {
+		t.Fatalf("failed to register listener: %v", err)
+	}
+
+	encodedPayload, err := json.Marshal(runtimeTestPayload{Message: "hook"})
+	if err != nil {
+		t.Fatalf("failed to encode payload: %v", err)
+	}
+
+	if err := runtime.dispatchEnvelope(context.Background(), Envelope{
+		ID:      NewEventID(),
+		Topic:   topic.Name,
+		Payload: encodedPayload,
+	}); err != nil {
+		t.Fatalf("unexpected dispatch error: %v", err)
+	}
+
+	if observed == nil || observed.SubjectID != "hook_subject" {
+		t.Fatalf("expected hook-supplied caller on handler context, got %+v", observed)
+	}
+}
+
+// TestDispatchEnvelopeGatedListenerSkipsSilently verifies a false Gate skips the handler without error
+func TestDispatchEnvelopeGatedListenerSkipsSilently(t *testing.T) {
+	runtime := newTestGala(t, nil)
+
+	topic := Topic[runtimeTestPayload]{Name: TopicName("runtime.test.gate.skip")}
+	if err := registerTopic(runtime.registry, topic, JSONCodec[runtimeTestPayload]{}); err != nil {
+		t.Fatalf("failed to register topic: %v", err)
+	}
+
+	handled := 0
+	if _, err := attachListener(runtime, Definition[runtimeTestPayload]{
+		Topic: topic,
+		Name:  "runtime.test.gate.skip.listener",
+		Gate:  func(context.Context, runtimeTestPayload) bool { return false },
+		Handle: func(HandlerContext, runtimeTestPayload) error {
+			handled++
+
+			return nil
+		},
+	}); err != nil {
+		t.Fatalf("failed to register listener: %v", err)
+	}
+
+	encodedPayload, err := json.Marshal(runtimeTestPayload{Message: "gated"})
+	if err != nil {
+		t.Fatalf("failed to encode payload: %v", err)
+	}
+
+	if err := runtime.dispatchEnvelope(context.Background(), Envelope{
+		ID:              NewEventID(),
+		Topic:           topic.Name,
+		Payload:         encodedPayload,
+		ContextSnapshot: testCallerSnapshot(t, runtime),
+	}); err != nil {
+		t.Fatalf("unexpected dispatch error: %v", err)
+	}
+
+	if handled != 0 {
+		t.Fatalf("expected gated handler not to run, got %d calls", handled)
+	}
 }
 
 func TestTopicAlreadyRegistered(t *testing.T) {
@@ -1080,16 +1296,18 @@ func TestInMemoryDispatchUsesPoolWorkerLimit(t *testing.T) {
 		t.Fatalf("failed to register listener: %v", err)
 	}
 
+	emitContext := auth.WithCaller(context.Background(), testCaller())
+
 	errs := make(chan error, 2)
 	go func() {
-		_, emitErr := runtime.Emit(context.Background(), topic.Name, runtimeTestPayload{Message: "one"})
+		_, emitErr := runtime.EmitWithHeaders(emitContext, topic.Name, runtimeTestPayload{Message: "one"}, Headers{Kind: JobKindSystem})
 		errs <- emitErr
 	}()
 
 	<-firstStarted
 
 	go func() {
-		_, emitErr := runtime.Emit(context.Background(), topic.Name, runtimeTestPayload{Message: "two"})
+		_, emitErr := runtime.EmitWithHeaders(emitContext, topic.Name, runtimeTestPayload{Message: "two"}, Headers{Kind: JobKindSystem})
 		errs <- emitErr
 	}()
 
@@ -1151,7 +1369,7 @@ func TestInMemoryEmitReturnsBeforeListenerCompletes(t *testing.T) {
 
 	emitErrCh := make(chan error, 1)
 	go func() {
-		_, emitErr := runtime.Emit(context.Background(), topic.Name, runtimeTestPayload{Message: "async"})
+		_, emitErr := runtime.EmitWithHeaders(auth.WithCaller(context.Background(), testCaller()), topic.Name, runtimeTestPayload{Message: "async"}, Headers{Kind: JobKindSystem})
 		emitErrCh <- emitErr
 	}()
 
@@ -1202,7 +1420,7 @@ func TestEmitReturnsEncodeError(t *testing.T) {
 		t.Fatalf("failed to register topic: %v", err)
 	}
 
-	if _, err := runtime.Emit(context.Background(), topic.Name, "wrong type"); !errors.Is(err, ErrPayloadTypeMismatch) {
+	if _, err := runtime.EmitWithHeaders(context.Background(), topic.Name, "wrong type", Headers{Kind: JobKindSystem}); !errors.Is(err, ErrPayloadTypeMismatch) {
 		t.Fatalf("expected ErrPayloadTypeMismatch, got %v", err)
 	}
 }
@@ -1210,7 +1428,7 @@ func TestEmitReturnsEncodeError(t *testing.T) {
 func TestEmitReturnsTopicNotFoundError(t *testing.T) {
 	runtime := newTestGala(t, nil)
 
-	if _, err := runtime.Emit(context.Background(), TopicName("missing.topic"), runtimeTestPayload{Message: "test"}); !errors.Is(err, ErrTopicNotRegistered) {
+	if _, err := runtime.EmitWithHeaders(context.Background(), TopicName("missing.topic"), runtimeTestPayload{Message: "test"}, Headers{Kind: JobKindSystem}); !errors.Is(err, ErrTopicNotRegistered) {
 		t.Fatalf("expected ErrTopicNotRegistered, got %v", err)
 	}
 }
@@ -1333,17 +1551,17 @@ func TestNormalizeOperationsEdgeCases(t *testing.T) {
 	}
 }
 
-func TestListenerInterestedInOperationEdgeCases(t *testing.T) {
+func TestListenerMatchesEdgeCases(t *testing.T) {
 	wildcardListener := registeredListener{
 		name: "wildcard",
 		ops:  nil,
 	}
 
-	if !listenerInterestedInOperation(wildcardListener, "create") {
+	if !listenerMatches(wildcardListener, "create") {
 		t.Fatalf("expected wildcard listener to match any operation")
 	}
 
-	if !listenerInterestedInOperation(wildcardListener, "") {
+	if !listenerMatches(wildcardListener, "") {
 		t.Fatalf("expected wildcard listener to match empty operation")
 	}
 
@@ -1352,15 +1570,15 @@ func TestListenerInterestedInOperationEdgeCases(t *testing.T) {
 		ops:  map[string]struct{}{"create": {}},
 	}
 
-	if listenerInterestedInOperation(filteredListener, "") {
+	if listenerMatches(filteredListener, "") {
 		t.Fatalf("expected filtered listener not to match empty operation")
 	}
 
-	if listenerInterestedInOperation(filteredListener, "update") {
+	if listenerMatches(filteredListener, "update") {
 		t.Fatalf("expected filtered listener not to match non-matching operation")
 	}
 
-	if !listenerInterestedInOperation(filteredListener, "create") {
+	if !listenerMatches(filteredListener, "create") {
 		t.Fatalf("expected filtered listener to match 'create' operation")
 	}
 }

@@ -34,15 +34,25 @@ func ReconcileUniqueKey(e ReconcileEnvelope) string {
 
 // ReconcileTopic is the durable reconcile topic: the name derives from the envelope type
 // under the integration namespace, and every emission carries the loop uniqueness key
-var ReconcileTopic = gala.Topic[ReconcileEnvelope]{
-	Name:      gala.TopicFor[ReconcileEnvelope]("integration").Name,
-	UniqueKey: ReconcileUniqueKey,
+// reconcileTopics is the namespace for recurring reconcile and scheduled cycle topics
+var reconcileTopics = gala.NewTopicNamespace(gala.TopicNamespaceIntegrationReconcile, gala.JobKindIntegrationReconcile)
+
+// ReconcileTopic is the durable reconcile topic; every emission carries the loop
+// uniqueness key
+var ReconcileTopic = gala.NamespacedTopicFor[ReconcileEnvelope](reconcileTopics, gala.WithUniqueKey[ReconcileEnvelope](ReconcileUniqueKey))
+
+// LegacyTopicRenames maps the historical reconcile topic to its designated topic
+func LegacyTopicRenames() map[gala.TopicName]gala.TopicName {
+	return map[gala.TopicName]gala.TopicName{
+		// the pre-namespace reconcile topic name
+		"integration.ReconcileEnvelope": ReconcileTopic.Name,
+	}
 }
 
-// RegisterReconcileListener registers the Gala listener driving every recurring operation
+// ReconcileDefinition builds the Gala listener definition driving every recurring operation
 // cycle: installation-bound reconciliation and runtime-bound scheduled operations
-func RegisterReconcileListener(runtime *gala.Gala, reg *registry.Registry, handle func(context.Context, ReconcileEnvelope) (int, error), schedule gala.Schedule) error {
-	_, err := gala.Register(runtime, gala.Definition[ReconcileEnvelope]{
+func ReconcileDefinition(reg *registry.Registry, handle func(context.Context, ReconcileEnvelope) (int, error), schedule gala.Schedule) gala.Definition[ReconcileEnvelope] {
+	return gala.Definition[ReconcileEnvelope]{
 		Topic: ReconcileTopic,
 		Cancel: func(ctx context.Context, e ReconcileEnvelope, err error) bool {
 			return reconcileShouldCancel(ctx, reg, e, err)
@@ -59,10 +69,7 @@ func RegisterReconcileListener(runtime *gala.Gala, reg *registry.Registry, handl
 			},
 			// log fields are snapshotted at emit, so a cycle re-emitted without them stays anonymous
 			PrepareEmit: func(ctx context.Context, e ReconcileEnvelope) (context.Context, gala.Headers) {
-				return intobvs.WithContext(ctx, e.OperationContext), gala.Headers{
-					Properties: types.GetPropertiesForOperationContext(e.OperationContext),
-					Tags:       types.GetTagsForOperationContext(e.OperationContext),
-				}
+				return intobvs.EmitContext(ctx, e.OperationContext)
 			},
 			Override: func(e ReconcileEnvelope) *gala.Schedule {
 				if reg == nil {
@@ -77,9 +84,7 @@ func RegisterReconcileListener(runtime *gala.Gala, reg *registry.Registry, handl
 				return op.Schedule
 			},
 		},
-	})
-
-	return err
+	}
 }
 
 // reconcileShouldCancel classifies one cycle error, reporting whether the recurring loop should

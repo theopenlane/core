@@ -17,21 +17,16 @@ import (
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 )
 
+// getNextReviewDate computes the review date one frequency interval after the last review; zero for non-calendar frequencies
 func getNextReviewDate(frequency enums.Frequency, lastReviewedAt models.DateTime) models.DateTime {
 	lastReviewDate := time.Time(lastReviewedAt).UTC()
 
-	switch frequency {
-	case enums.FrequencyYearly:
-		return models.DateTime(lastReviewDate.AddDate(1, 0, 0)) //nolint:mnd
-	case enums.FrequencyBiAnnually:
-		return models.DateTime(lastReviewDate.AddDate(0, 6, 0)) //nolint:mnd
-	case enums.FrequencyQuarterly:
-		return models.DateTime(lastReviewDate.AddDate(0, 3, 0)) //nolint:mnd
-	case enums.FrequencyMonthly:
-		return models.DateTime(lastReviewDate.AddDate(0, 1, 0)) //nolint:mnd
-	default:
+	next := frequency.NextOccurrence(lastReviewDate, 1, "")
+	if next.Equal(lastReviewDate) {
 		return models.DateTime{}
 	}
+
+	return models.DateTime(next)
 }
 
 // HookReviews runs on review mutations to process and update the entities tied to the review

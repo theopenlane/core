@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"entgo.io/ent"
 	"github.com/stoewer/go-strcase"
+	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/entityops"
@@ -13,7 +13,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/export"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/pkg/gala"
@@ -41,15 +40,13 @@ type documentNotificationInput struct {
 // handleTaskMutation processes task mutations and creates notifications when assignee changes or mentions are added
 func handleTaskMutation(inv entityops.Invocation, payload entityops.MutationPayload) error {
 	if assigneeID, ok := payload.StringValue(task.FieldAssigneeID); ok {
-		allowCtx := privacy.DecisionContext(inv.Context, privacy.Allow)
-
-		taskEntity, err := inv.Client.Task.Get(allowCtx, payload.EntityID)
+		taskEntity, found, err := entityops.LoadEntity(inv.Context, payload.EntityID, inv.Client.Task.Get)
 		switch {
-		case generated.IsNotFound(err):
-			return nil
 		case err != nil:
 			logx.FromContext(inv.Context).Error().Err(err).Msg("failed to query task")
 			return err
+		case !found:
+			return nil
 		}
 
 		if err := addTaskAssigneeNotification(inv.Context, inv.Client, assigneeID, taskEntity); err != nil {
@@ -109,14 +106,9 @@ func handleDocumentNeedsApproval(inv entityops.Invocation, payload entityops.Mut
 		return nil
 	}
 
-	schema, ok := entityops.LookupSchema(payload.MutationType)
-	if !ok {
-		return nil
-	}
+	schema := inv.Schema
 
-	allowCtx := privacy.DecisionContext(inv.Context, privacy.Allow)
-
-	row, err := schema.Load(allowCtx, inv.Client, payload.EntityID)
+	row, err := schema.Load(inv.Context, inv.Client, payload.EntityID)
 	switch {
 	case generated.IsNotFound(err):
 		return nil
@@ -171,11 +163,10 @@ func addTaskAssigneeNotification(ctx context.Context, client *generated.Client, 
 // addDocumentNotification fans an approval-required notification out to every member of the approver group
 func addDocumentNotification(ctx context.Context, client *generated.Client, input documentNotificationInput) error {
 	ctx = logx.WithFields(ctx, map[string]any{"group_id": input.approverID})
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 	groupMemberships, err := client.GroupMembership.Query().
 		Where(groupmembership.GroupID(input.approverID)).
-		All(allowCtx)
+		All(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to get approver group")
 		return err
@@ -214,11 +205,9 @@ func newNotificationCreation(ctx context.Context, client *generated.Client, user
 	// Ensure object type is normalized.
 	input.ObjectType = strcase.UpperSnakeCase(input.ObjectType)
 
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
 	for _, userID := range userIDs {
 		mut := client.Notification.Create().SetInput(*input).SetUserID(userID)
-		if _, err := mut.Save(allowCtx); err != nil {
+		if _, err := mut.Save(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Str("user_id", userID).Msg("failed to create notification")
 			return err
 		}
@@ -227,52 +216,66 @@ func newNotificationCreation(ctx context.Context, client *generated.Client, user
 	return nil
 }
 
-// RegisterGalaListeners registers mutation listeners for notifications on Gala.
-func RegisterGalaListeners(g *gala.Gala) ([]gala.ListenerID, error) {
-	return gala.Register(g,
+// notificationCaller grants the internal-operation capability so notification listeners
+// pass privacy without per-query allow contexts
+func notificationCaller(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
+	return restored.WithCapabilities(auth.CapInternalOperation)
+}
+
+// Listeners returns the notification mutation listeners
+func Listeners() []gala.Registration {
+	return []gala.Registration{
 		entityops.MutationListener{
-			Concern: gala.MutationConcernNotification,
+			Concern: entityops.MutationConcernNotification,
 			Schema:  generated.TypeTask,
+			Caller:  notificationCaller,
 			Handle:  handleTaskMutation,
-		}.Definition(),
+		},
 		entityops.MutationListener{
-			Concern: gala.MutationConcernNotification,
+			Concern: entityops.MutationConcernNotification,
 			Schema:  generated.TypeInternalPolicy,
+			Caller:  notificationCaller,
 			Handle:  handleInternalPolicyMutation,
-		}.Definition(),
+		},
 		entityops.MutationListener{
-			Concern: gala.MutationConcernNotification,
+			Concern: entityops.MutationConcernNotification,
 			Schema:  generated.TypeRisk,
+			Caller:  notificationCaller,
 			Handle:  handleRiskMutation,
-		}.Definition(),
+		},
 		entityops.MutationListener{
-			Concern: gala.MutationConcernNotification,
+			Concern: entityops.MutationConcernNotification,
 			Schema:  generated.TypeProcedure,
+			Caller:  notificationCaller,
 			Handle:  handleProcedureMutation,
-		}.Definition(),
+		},
 		entityops.MutationListener{
-			Concern: gala.MutationConcernNotification,
+			Concern: entityops.MutationConcernNotification,
 			Schema:  generated.TypeNote,
+			Caller:  notificationCaller,
 			Handle:  handleNoteMutation,
-		}.Definition(),
+		},
 		entityops.MutationListener{
-			Concern: gala.MutationConcernNotification,
+			Concern: entityops.MutationConcernNotification,
 			Schema:  generated.TypeExport,
 			Fields:  []string{export.FieldStatus},
+			Caller:  notificationCaller,
 			Handle:  handleExportMutation,
-		}.Definition(),
+		},
 		entityops.MutationListener{
-			Concern:    gala.MutationConcernNotification,
+			Concern:    entityops.MutationConcernNotification,
 			Schema:     generated.TypeStandard,
-			Operations: []string{ent.OpUpdate.String(), ent.OpUpdateOne.String()},
+			Operations: []string{entityops.OpUpdate, entityops.OpUpdateOne},
 			Fields:     []string{standard.FieldRevision},
+			Caller:     notificationCaller,
 			Handle:     handleStandardMutation,
-		}.Definition(),
+		},
 		entityops.MutationListener{
-			Concern:    gala.MutationConcernNotification,
+			Concern:    entityops.MutationConcernNotification,
 			Schema:     generated.TypeProgram,
-			Operations: []string{ent.OpUpdate.String(), ent.OpUpdateOne.String()},
+			Operations: []string{entityops.OpUpdate, entityops.OpUpdateOne},
+			Caller:     notificationCaller,
 			Handle:     handleProgramMutation,
-		}.Definition(),
-	)
+		},
+	}
 }

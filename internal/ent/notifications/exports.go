@@ -10,7 +10,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/logx"
 )
@@ -32,15 +31,13 @@ func canProcessNotification(ctx context.Context, client *generated.Client, reque
 
 // handleExportMutation processes export mutations and creates notifications when status changes to READY or FAILED.
 func handleExportMutation(inv entityops.Invocation, payload entityops.MutationPayload) error {
-	allowCtx := privacy.DecisionContext(inv.Context, privacy.Allow)
-
-	exportEntity, err := inv.Client.Export.Get(allowCtx, payload.EntityID)
+	exportEntity, found, err := entityops.LoadEntity(inv.Context, payload.EntityID, inv.Client.Export.Get)
 	switch {
-	case generated.IsNotFound(err):
-		return nil
 	case err != nil:
 		logx.FromContext(inv.Context).Error().Err(err).Msg("failed to query export")
 		return err
+	case !found:
+		return nil
 	}
 
 	// Only notify for READY or FAILED statuses.
@@ -63,10 +60,8 @@ func handleExportMutation(inv entityops.Invocation, payload entityops.MutationPa
 
 // addExportNotification notifies the requesting user that their export completed or failed
 func addExportNotification(ctx context.Context, client *generated.Client, exportEntity *generated.Export) error {
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
 	// Verify the requestor is a user or the virtual support user before notifying.
-	if !canProcessNotification(allowCtx, client, exportEntity.RequestorID) {
+	if !canProcessNotification(ctx, client, exportEntity.RequestorID) {
 		logx.FromContext(ctx).Debug().Msg("export requestor is not a user, skipping notification")
 		return nil
 	}
@@ -102,12 +97,5 @@ func addExportNotification(ctx context.Context, client *generated.Client, export
 		ObjectType:       exportEntity.ExportType.String(),
 	}
 
-	if _, err := client.Notification.Create().
-		SetInput(*notifInput).
-		SetUserID(exportEntity.RequestorID).
-		Save(allowCtx); err != nil {
-		return fmt.Errorf("failed to create export notification: %w", err)
-	}
-
-	return nil
+	return newNotificationCreation(ctx, client, []string{exportEntity.RequestorID}, notifInput)
 }

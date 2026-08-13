@@ -429,7 +429,7 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 
 		logx.FromContext(ctx).Info().Int("payload_sets", len(payloadSets)).Int("envelopes", totalEnvelopes).Msg("ingest handle completed")
 
-		if err := operations.EmitPayloadSets(ctx, operations.IngestContext{
+		if err := operations.ProcessPayloadSets(ctx, operations.IngestContext{
 			Registry:    r.Registry(),
 			DB:          r.DB(),
 			Runtime:     r.Gala(),
@@ -529,7 +529,13 @@ func (r *Runtime) seedReconcileJobsForInstallation(ctx context.Context, inst *en
 
 		opCtx := intobvs.WithOperation(ctx, op.Name)
 
-		fragment, err := reconcileMetadataFragment(inst.ID, op.Name)
+		// successor cycles carry per-cycle unique keys, so a live loop only surfaces
+		// through its metadata, never through the seed's insert-time key
+		fragment, err := types.PropertiesFragment(map[string]string{
+			"entityId":  inst.ID,
+			"operation": op.Name,
+			"runType":   enums.IntegrationRunTypeReconcile.String(),
+		})
 		if err != nil {
 			errs = append(errs, err)
 			continue
@@ -539,15 +545,15 @@ func (r *Runtime) seedReconcileJobsForInstallation(ctx context.Context, inst *en
 		if err != nil {
 			logx.FromContext(opCtx).Error().Err(err).Msg("failed to check for active reconcile job")
 			errs = append(errs, err)
+
 			continue
 		}
 
 		if active {
-			logx.FromContext(opCtx).Debug().Msg("reconcile job already active, skipping seed")
 			continue
 		}
 
-		logx.FromContext(opCtx).Info().Msg("seeding missing reconcile job")
+		logx.FromContext(opCtx).Info().Msg("seeding reconcile loop")
 
 		if err := r.emitReconcileLoop(opCtx, inst, op.Name); err != nil {
 			logx.FromContext(opCtx).Error().Err(err).Msg("failed to seed reconcile job")
@@ -634,47 +640,17 @@ func (r *Runtime) CancelInstallationJobs(ctx context.Context, integrationID stri
 // installationJobFragments builds the JSONB containment fragments matching every job family
 // bound to one installation
 func installationJobFragments(integrationID string) ([]string, error) {
-	operationJobs, err := json.Marshal(map[string]map[string]string{
-		"properties": {"entityId": integrationID, "entityType": "integration"},
-	})
+	operationJobs, err := types.PropertiesFragment(map[string]string{"entityId": integrationID, "entityType": "integration"})
 	if err != nil {
 		return nil, err
 	}
 
-	ingestJobs, err := json.Marshal(map[string]map[string]string{
-		"properties": {"integration_id": integrationID},
-	})
+	ingestJobs, err := types.PropertiesFragment(map[string]string{"integration_id": integrationID})
 	if err != nil {
 		return nil, err
 	}
 
-	return []string{string(operationJobs), string(ingestJobs)}, nil
-}
-
-// reconcileMetadataFragment builds the JSONB containment fragment used to query River for an
-// active reconcile job for the given integration and operation. The keys must match the
-// emitted GetPropertiesForOperationContext projection: installation-bound contexts promote
-// the integration as the operation's entity (entityId), and the reconcile run type keeps the
-// match disjoint from one-shot event jobs sharing the same installation and operation
-func reconcileMetadataFragment(integrationID, operationName string) (string, error) {
-	fragment := struct {
-		Properties struct {
-			EntityID  string `json:"entityId"`
-			Operation string `json:"operation"`
-			RunType   string `json:"runType"`
-		} `json:"properties"`
-	}{}
-
-	fragment.Properties.EntityID = integrationID
-	fragment.Properties.Operation = operationName
-	fragment.Properties.RunType = enums.IntegrationRunTypeReconcile.String()
-
-	b, err := json.Marshal(fragment)
-	if err != nil {
-		return "", err
-	}
-
-	return string(b), nil
+	return []string{operationJobs, ingestJobs}, nil
 }
 
 // resolveOperationClient resolves the client for an operation. When integration

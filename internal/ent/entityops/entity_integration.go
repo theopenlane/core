@@ -450,9 +450,7 @@ type ActionPlanIngestRequested struct {
 }
 
 // TopicActionPlan is the typed gala topic for ActionPlan ingest requests
-var TopicActionPlan = gala.Topic[ActionPlanIngestRequested]{
-	Name: "entityops.action_plan.ingest.requested",
-}
+var TopicActionPlan = gala.NamespacedTopic[ActionPlanIngestRequested](IngestTopics, "action_plan.ingest.requested")
 
 // AssetIngestRequested is the typed ingest event payload for Asset records
 type AssetIngestRequested struct {
@@ -466,9 +464,7 @@ type AssetIngestRequested struct {
 }
 
 // TopicAsset is the typed gala topic for Asset ingest requests
-var TopicAsset = gala.Topic[AssetIngestRequested]{
-	Name: "entityops.asset.ingest.requested",
-}
+var TopicAsset = gala.NamespacedTopic[AssetIngestRequested](IngestTopics, "asset.ingest.requested")
 
 // CheckResultIngestRequested is the typed ingest event payload for CheckResult records
 type CheckResultIngestRequested struct {
@@ -482,9 +478,7 @@ type CheckResultIngestRequested struct {
 }
 
 // TopicCheckResult is the typed gala topic for CheckResult ingest requests
-var TopicCheckResult = gala.Topic[CheckResultIngestRequested]{
-	Name: "entityops.check_result.ingest.requested",
-}
+var TopicCheckResult = gala.NamespacedTopic[CheckResultIngestRequested](IngestTopics, "check_result.ingest.requested")
 
 // ContactIngestRequested is the typed ingest event payload for Contact records
 type ContactIngestRequested struct {
@@ -498,9 +492,7 @@ type ContactIngestRequested struct {
 }
 
 // TopicContact is the typed gala topic for Contact ingest requests
-var TopicContact = gala.Topic[ContactIngestRequested]{
-	Name: "entityops.contact.ingest.requested",
-}
+var TopicContact = gala.NamespacedTopic[ContactIngestRequested](IngestTopics, "contact.ingest.requested")
 
 // DirectoryAccountIngestRequested is the typed ingest event payload for DirectoryAccount records
 type DirectoryAccountIngestRequested struct {
@@ -514,9 +506,7 @@ type DirectoryAccountIngestRequested struct {
 }
 
 // TopicDirectoryAccount is the typed gala topic for DirectoryAccount ingest requests
-var TopicDirectoryAccount = gala.Topic[DirectoryAccountIngestRequested]{
-	Name: "entityops.directory_account.ingest.requested",
-}
+var TopicDirectoryAccount = gala.NamespacedTopic[DirectoryAccountIngestRequested](IngestTopics, "directory_account.ingest.requested")
 
 // DirectoryGroupIngestRequested is the typed ingest event payload for DirectoryGroup records
 type DirectoryGroupIngestRequested struct {
@@ -530,9 +520,7 @@ type DirectoryGroupIngestRequested struct {
 }
 
 // TopicDirectoryGroup is the typed gala topic for DirectoryGroup ingest requests
-var TopicDirectoryGroup = gala.Topic[DirectoryGroupIngestRequested]{
-	Name: "entityops.directory_group.ingest.requested",
-}
+var TopicDirectoryGroup = gala.NamespacedTopic[DirectoryGroupIngestRequested](IngestTopics, "directory_group.ingest.requested")
 
 // DirectoryMembershipIngestRequested is the typed ingest event payload for DirectoryMembership records
 type DirectoryMembershipIngestRequested struct {
@@ -546,9 +534,7 @@ type DirectoryMembershipIngestRequested struct {
 }
 
 // TopicDirectoryMembership is the typed gala topic for DirectoryMembership ingest requests
-var TopicDirectoryMembership = gala.Topic[DirectoryMembershipIngestRequested]{
-	Name: "entityops.directory_membership.ingest.requested",
-}
+var TopicDirectoryMembership = gala.NamespacedTopic[DirectoryMembershipIngestRequested](IngestTopics, "directory_membership.ingest.requested")
 
 // EntityIngestRequested is the typed ingest event payload for Entity records
 type EntityIngestRequested struct {
@@ -562,9 +548,7 @@ type EntityIngestRequested struct {
 }
 
 // TopicEntity is the typed gala topic for Entity ingest requests
-var TopicEntity = gala.Topic[EntityIngestRequested]{
-	Name: "entityops.entity.ingest.requested",
-}
+var TopicEntity = gala.NamespacedTopic[EntityIngestRequested](IngestTopics, "entity.ingest.requested")
 
 // FindingIngestRequested is the typed ingest event payload for Finding records
 type FindingIngestRequested struct {
@@ -578,9 +562,7 @@ type FindingIngestRequested struct {
 }
 
 // TopicFinding is the typed gala topic for Finding ingest requests
-var TopicFinding = gala.Topic[FindingIngestRequested]{
-	Name: "entityops.finding.ingest.requested",
-}
+var TopicFinding = gala.NamespacedTopic[FindingIngestRequested](IngestTopics, "finding.ingest.requested")
 
 // InternalPolicyIngestRequested is the typed ingest event payload for InternalPolicy records
 type InternalPolicyIngestRequested struct {
@@ -594,9 +576,7 @@ type InternalPolicyIngestRequested struct {
 }
 
 // TopicInternalPolicy is the typed gala topic for InternalPolicy ingest requests
-var TopicInternalPolicy = gala.Topic[InternalPolicyIngestRequested]{
-	Name: "entityops.internal_policy.ingest.requested",
-}
+var TopicInternalPolicy = gala.NamespacedTopic[InternalPolicyIngestRequested](IngestTopics, "internal_policy.ingest.requested")
 
 // ProcedureIngestRequested is the typed ingest event payload for Procedure records
 type ProcedureIngestRequested struct {
@@ -610,9 +590,7 @@ type ProcedureIngestRequested struct {
 }
 
 // TopicProcedure is the typed gala topic for Procedure ingest requests
-var TopicProcedure = gala.Topic[ProcedureIngestRequested]{
-	Name: "entityops.procedure.ingest.requested",
-}
+var TopicProcedure = gala.NamespacedTopic[ProcedureIngestRequested](IngestTopics, "procedure.ingest.requested")
 
 // RiskIngestRequested is the typed ingest event payload for Risk records
 type RiskIngestRequested struct {
@@ -626,9 +604,7 @@ type RiskIngestRequested struct {
 }
 
 // TopicRisk is the typed gala topic for Risk ingest requests
-var TopicRisk = gala.Topic[RiskIngestRequested]{
-	Name: "entityops.risk.ingest.requested",
-}
+var TopicRisk = gala.NamespacedTopic[RiskIngestRequested](IngestTopics, "risk.ingest.requested")
 
 // VulnerabilityIngestRequested is the typed ingest event payload for Vulnerability records
 type VulnerabilityIngestRequested struct {
@@ -642,9 +618,7 @@ type VulnerabilityIngestRequested struct {
 }
 
 // TopicVulnerability is the typed gala topic for Vulnerability ingest requests
-var TopicVulnerability = gala.Topic[VulnerabilityIngestRequested]{
-	Name: "entityops.vulnerability.ingest.requested",
-}
+var TopicVulnerability = gala.NamespacedTopic[VulnerabilityIngestRequested](IngestTopics, "vulnerability.ingest.requested")
 
 // PrepareActionPlanInput stamps integration-scoped values onto a CreateActionPlanInput before
 // persistence. Fields are only overwritten when the input value is already zero or nil

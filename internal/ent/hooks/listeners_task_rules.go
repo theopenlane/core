@@ -3,13 +3,11 @@ package hooks
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"strings"
 	"sync"
 	"text/template"
 
-	"entgo.io/ent"
 	"github.com/google/cel-go/cel"
 	"github.com/samber/lo"
 	"github.com/theopenlane/entx"
@@ -30,16 +28,10 @@ import (
 
 const taskRuleSource = "entityops"
 
-// ErrMissingTaskTemplate indicates a rule fired but no taskrules.Template is registered for it
-var ErrMissingTaskTemplate = errors.New("entityops: missing task template")
-
-// ErrExpressionNotList indicates an EachElement expression evaluated to a non-list value
-var ErrExpressionNotList = errors.New("entityops: expression did not evaluate to a list")
-
-// RegisterGalaTaskRuleListeners registers one gala listener per eligible schema evaluating each schema's rules on mutation and creates suggested
-// task records
-func RegisterGalaTaskRuleListeners(g *gala.Gala) ([]gala.ListenerID, error) {
-	listeners := lo.Map(entityops.TaskRuleEligibleSchemas(), func(schema *entityops.Schema, _ int) entityops.MutationListener {
+// TaskRuleListeners returns one listener per eligible schema evaluating the schema's rules
+// on mutation and creating suggested task records
+func TaskRuleListeners() []gala.Registration {
+	return lo.Map(entityops.TaskRuleEligibleSchemas(), func(schema *entityops.Schema, _ int) gala.Registration {
 		return entityops.MutationListener{
 			Schema:     schema.Name,
 			Label:      "taskrules",
@@ -48,22 +40,18 @@ func RegisterGalaTaskRuleListeners(g *gala.Gala) ([]gala.ListenerID, error) {
 			Caller: func(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
 				return restored.WithCapabilities(auth.CapInternalOperation | auth.CapOrgSupport)
 			},
-			Handle: func(inv entityops.Invocation, payload entityops.MutationPayload) error {
-				return handleTaskRuleMutation(inv, schema, payload)
-			},
+			Handle: handleTaskRuleMutation,
 		}
 	})
-
-	return registerMutationListeners(g, listeners...)
 }
 
 // taskRuleOperations returns the mutation operations to subscribe to for schema
 func taskRuleOperations(schema *entityops.Schema) []string {
-	ops := []string{ent.OpCreate.String()}
+	ops := []string{entityops.OpCreate}
 
 	for _, rule := range schema.AllTaskRules() {
 		if rule.Rule.Trigger == entx.TaskRuleOnCreateOrUpdate {
-			ops = append(ops, ent.OpUpdate.String())
+			ops = append(ops, entityops.OpUpdate, entityops.OpUpdateOne)
 			break
 		}
 	}
@@ -71,10 +59,10 @@ func taskRuleOperations(schema *entityops.Schema) []string {
 	return ops
 }
 
-func handleTaskRuleMutation(inv entityops.Invocation, schema *entityops.Schema, payload entityops.MutationPayload) error {
-	if schema.Load == nil {
-		return nil
-	}
+// handleTaskRuleMutation evaluates the mutated schema's task rules against the loaded entity
+// and persists any suggested tasks the rules render
+func handleTaskRuleMutation(inv entityops.Invocation, payload entityops.MutationPayload) error {
+	schema := inv.Schema
 
 	client, entityID := inv.Client, inv.EntityID
 
@@ -125,7 +113,7 @@ func handleTaskRuleMutation(inv entityops.Invocation, schema *entityops.Schema, 
 
 	// add notification when organization create tasks are created, this allows
 	// the frontend to wait for this even to load the dashboard for the user
-	if schema.Name == generated.TypeOrganization && payload.Operation == ent.OpCreate.String() && tasksCreated > 0 {
+	if schema.Name == generated.TypeOrganization && payload.Operation == entityops.OpCreate && tasksCreated > 0 {
 		if err := notifyOrganizationReady(systemCtx, client, entityID); err != nil {
 			return err
 		}
@@ -226,10 +214,10 @@ func mergeScalarField(dst map[string]string, key string, value any) {
 
 func operationAllowed(trigger entx.TaskRuleTrigger, operation string) bool {
 	if trigger == entx.TaskRuleOnCreateOnly {
-		return operation == ent.OpCreate.String()
+		return operation == entityops.OpCreate
 	}
 
-	return operation == ent.OpCreate.String() || operation == ent.OpUpdate.String()
+	return operation == entityops.OpCreate || operation == entityops.OpUpdate || operation == entityops.OpUpdateOne
 }
 
 // renderedTask is one fully-resolved suggested task, ready to persist

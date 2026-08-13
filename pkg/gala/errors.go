@@ -22,6 +22,10 @@ var (
 	ErrListenerHandlerRequired = errors.New("gala: listener handler is required")
 	// ErrListenerHandlerConflict is returned when a listener sets both Handle and Schedule
 	ErrListenerHandlerConflict = errors.New("gala: listener handle and schedule are mutually exclusive")
+	// ErrListenerScheduleStateRequired is returned when a scheduled listener is missing the State extractor
+	ErrListenerScheduleStateRequired = errors.New("gala: listener schedule state extractor is required")
+	// ErrListenerScheduleWrapRequired is returned when a scheduled listener is missing the Wrap builder
+	ErrListenerScheduleWrapRequired = errors.New("gala: listener schedule wrap builder is required")
 	// ErrListenerTopicNotRegistered is returned when a listener is attached before topic registration
 	ErrListenerTopicNotRegistered = errors.New("gala: listener topic not registered")
 	// ErrPayloadTypeMismatch is returned when payload casting fails for a topic or listener
@@ -34,6 +38,8 @@ var (
 	ErrEnvelopePayloadRequired = errors.New("gala: envelope payload is required")
 	// ErrDispatcherRequired is returned when emit is attempted without a dispatcher
 	ErrDispatcherRequired = errors.New("gala: dispatcher is required")
+	// ErrJobKindRequired is returned when emit headers carry no job kind
+	ErrJobKindRequired = errors.New("gala: job kind is required")
 	// ErrDispatchFailed is returned when dispatch fails
 	ErrDispatchFailed = errors.New("gala: dispatch failed")
 	// ErrContextCodecRequired is returned when context codec registration receives nil
@@ -73,6 +79,9 @@ var (
 	// ErrListenerPanicked is returned when a listener panics during execution
 	ErrListenerPanicked = errors.New("gala: listener panicked")
 )
+
+// errSkipListener signals a gated skip so executeListener suppresses delivery metrics
+var errSkipListener = errors.New("gala: listener gated")
 
 // ListenerError captures a listener execution failure with context
 type ListenerError struct {

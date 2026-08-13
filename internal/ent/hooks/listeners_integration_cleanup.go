@@ -1,9 +1,6 @@
 package hooks
 
 import (
-	"entgo.io/ent"
-	"github.com/samber/do/v2"
-
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/entityops"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
@@ -13,46 +10,28 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-// RegisterGalaIntegrationCleanupListeners cancels queued integration jobs when an
-// installation is removed or leaves the connected state, so scheduled loops and queued
-// record jobs stop eagerly instead of each discovering the removal one attempt at a time
-func RegisterGalaIntegrationCleanupListeners(g *gala.Gala) ([]gala.ListenerID, error) {
-	return registerMutationListeners(g,
+// IntegrationCleanupListeners returns the listeners that cancel queued integration jobs
+// when an installation is removed or leaves the connected state
+func IntegrationCleanupListeners() []gala.Registration {
+	return []gala.Registration{
 		entityops.MutationListener{
-			Schema: entgen.TypeIntegration,
-			Label:  "removed",
-			Operations: []string{
-				ent.OpDelete.String(),
-				ent.OpDeleteOne.String(),
-				gala.SoftDeleteOne,
-			},
-			Handle: handleIntegrationRemoved,
+			Schema:     entgen.TypeIntegration,
+			Label:      "removed",
+			Operations: []string{entityops.OpSoftDelete},
+			Handle:     cancelInstallationJobs,
 		},
 		entityops.MutationListener{
-			Schema: entgen.TypeIntegration,
-			Label:  "updated",
-			Operations: []string{
-				ent.OpUpdate.String(),
-				ent.OpUpdateOne.String(),
-			},
-			Fields: []string{integration.FieldDeletedAt, integration.FieldStatus},
-			Handle: handleIntegrationUpdated,
+			Schema:     entgen.TypeIntegration,
+			Label:      "updated",
+			Operations: []string{entityops.OpUpdate, entityops.OpUpdateOne},
+			Fields:     []string{integration.FieldStatus},
+			Handle:     handleIntegrationUpdated,
 		},
-	)
-}
-
-// handleIntegrationRemoved cancels queued jobs for a deleted installation
-func handleIntegrationRemoved(inv entityops.Invocation, _ entityops.MutationPayload) error {
-	return cancelInstallationJobs(inv)
-}
-
-// handleIntegrationUpdated cancels queued jobs when an update soft-deletes the installation
-// (soft deletes surface as updates setting deleted_at) or moves it out of the connected state
-func handleIntegrationUpdated(inv entityops.Invocation, payload entityops.MutationPayload) error {
-	if payload.FieldChanged(integration.FieldDeletedAt) {
-		return cancelInstallationJobs(inv)
 	}
+}
 
+// handleIntegrationUpdated cancels queued jobs when an update moves the installation out of the connected state
+func handleIntegrationUpdated(inv entityops.Invocation, payload entityops.MutationPayload) error {
 	rawStatus, _ := payload.Value(integration.FieldStatus)
 
 	status, ok := entityops.ParseEnum(
@@ -64,13 +43,13 @@ func handleIntegrationUpdated(inv entityops.Invocation, payload entityops.Mutati
 		return nil
 	}
 
-	return cancelInstallationJobs(inv)
+	return cancelInstallationJobs(inv, payload)
 }
 
 // cancelInstallationJobs cancels every queued River job bound to the mutated installation
-func cancelInstallationJobs(inv entityops.Invocation) error {
-	rt, err := do.Invoke[*intruntime.Runtime](inv.Injector)
-	if err != nil || rt == nil {
+func cancelInstallationJobs(inv entityops.Invocation, _ entityops.MutationPayload) error {
+	rt, ok := gala.Resolve[*intruntime.Runtime](inv.Context, inv.Injector, "integration_cleanup")
+	if !ok {
 		return nil
 	}
 
@@ -80,7 +59,7 @@ func cancelInstallationJobs(inv entityops.Invocation) error {
 	}
 
 	if cancelled > 0 {
-		logx.FromContext(inv.Context).Info().Int("cancelled", cancelled).Str("integration_id", inv.EntityID).Msg("cancelled queued integration jobs")
+		logx.FromContext(inv.Context).Info().Int("cancelled", cancelled).Msg("cancelled queued integration jobs")
 	}
 
 	return nil

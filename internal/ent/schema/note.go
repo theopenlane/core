@@ -214,7 +214,7 @@ func (n Note) Annotations() []schema.Annotation {
 		// skip generating the schema for this type, this schema is used through extended types
 		entx.SchemaGenSkip(true),
 		entx.QueryGenSkip(true),
-		entx.MentionableAnnotation{DetailsField: "text", DetailsJSONField: "text_json"},
+		entx.Mentionable(entx.WithMentionDetailsField("text"), entx.WithMentionDetailsJSONField("text_json")),
 	}
 }
 

@@ -639,7 +639,7 @@ func TestProcessPayloadSets_MappingNotFound(t *testing.T) {
 		return nil
 	})
 
-	assert.ErrorIs(t, err, ErrIngestRecordsFailed)
+	assert.NilError(t, err, "unmappable records are skipped, not fatal")
 }
 
 func TestProcessPayloadSets_InvalidInstallationFilterConfig(t *testing.T) {
@@ -798,7 +798,7 @@ func TestProcessPayloadSets_HandleError(t *testing.T) {
 		return nil
 	})
 
-	assert.ErrorIs(t, err, ErrIngestRecordsFailed)
+	assert.NilError(t, err, "record failures are skipped, not fatal")
 	assert.Equal(t, 2, handled, "a failing record must not abort the remaining records")
 }
 
@@ -974,33 +974,4 @@ func TestProcessPayloadSets_NestedFilterDoesNotLeakAcrossOperations(t *testing.T
 
 	assert.NilError(t, err)
 	assert.Equal(t, handled, 2) // both pass — asset-sync has no filter
-}
-
-func TestEmitPayloadSets_NilRuntime_NonDirectorySync(t *testing.T) {
-	t.Parallel()
-
-	reg, _ := testDefinition(t, []types.MappingRegistration{
-		{
-			Schema:  entityops.SchemaAsset.Name,
-			Variant: "",
-			Spec:    types.MappingOverride{MapExpr: `payload`},
-		},
-	})
-
-	ic := IngestContext{
-		Registry:    reg,
-		Integration: &ent.Integration{DefinitionID: "test-def"},
-		Runtime:     nil,
-	}
-
-	contracts := []types.IngestContract{{Schema: entityops.SchemaAsset.Name}}
-	payloadSets := []types.IngestPayloadSet{
-		{
-			Schema:    entityops.SchemaAsset.Name,
-			Envelopes: []types.MappingEnvelope{{Payload: json.RawMessage(`{}`)}},
-		},
-	}
-
-	err := EmitPayloadSets(context.Background(), ic, "sync", contracts, payloadSets, IngestOptions{})
-	assert.ErrorIs(t, err, ErrGalaRequired)
 }

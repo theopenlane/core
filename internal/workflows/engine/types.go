@@ -55,10 +55,5 @@ func (input *TriggerInput) SetChangeSet(changeSet entityops.ChangeSet) {
 	input.RemovedIDs = cloned.RemovedIDs
 	input.OldValues = cloned.OldValues
 
-	proposed, err := jsonx.Decode[map[string]any](cloned.ProposedChanges)
-	if err != nil {
-		proposed = nil
-	}
-
-	input.ProposedChanges = proposed
+	input.ProposedChanges = cloned.ProposedMap()
 }

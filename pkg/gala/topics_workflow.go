@@ -2,21 +2,24 @@ package gala
 
 import "github.com/theopenlane/core/common/enums"
 
+// WorkflowCommandTopics is the namespace for workflow command topics
+var WorkflowCommandTopics = NewTopicNamespace(TopicPrefixWorkflowCommand, JobKindWorkflow)
+
 const (
 	// TopicWorkflowTriggered is emitted when a workflow instance is created
-	TopicWorkflowTriggered TopicName = "workflow.command.trigger"
+	TopicWorkflowTriggered TopicName = TopicPrefixWorkflowCommand + "trigger"
 	// TopicWorkflowActionStarted is emitted when a workflow action begins
-	TopicWorkflowActionStarted TopicName = "workflow.command.advance"
+	TopicWorkflowActionStarted TopicName = TopicPrefixWorkflowCommand + "advance"
 	// TopicWorkflowActionCompleted is emitted when a workflow action finishes
-	TopicWorkflowActionCompleted TopicName = "workflow.command.action_completed"
+	TopicWorkflowActionCompleted TopicName = TopicPrefixWorkflowCommand + "action_completed"
 	// TopicWorkflowAssignmentCreated is emitted when an assignment is created
-	TopicWorkflowAssignmentCreated TopicName = "workflow.command.assignment_created"
+	TopicWorkflowAssignmentCreated TopicName = TopicPrefixWorkflowCommand + "assignment_created"
 	// TopicWorkflowAssignmentCompleted is emitted when an assignment resolves
-	TopicWorkflowAssignmentCompleted TopicName = "workflow.command.assignment_completed"
+	TopicWorkflowAssignmentCompleted TopicName = TopicPrefixWorkflowCommand + "assignment_completed"
 	// TopicWorkflowInstanceCompleted is emitted when an instance reaches a terminal state
-	TopicWorkflowInstanceCompleted TopicName = "workflow.command.instance_completed"
+	TopicWorkflowInstanceCompleted TopicName = TopicPrefixWorkflowCommand + "instance_completed"
 	// TopicWorkflowTimeoutExpired is emitted when a workflow timeout expires
-	TopicWorkflowTimeoutExpired TopicName = "workflow.command.timeout_expire"
+	TopicWorkflowTimeoutExpired TopicName = TopicPrefixWorkflowCommand + "timeout_expire"
 )
 
 // WorkflowTriggeredPayload contains data for a workflow instance creation event
@@ -127,17 +130,17 @@ type WorkflowTimeoutExpiredPayload struct {
 
 var (
 	// WorkflowTriggeredEventTopic is the typed topic for workflow triggered events.
-	WorkflowTriggeredEventTopic = Topic[WorkflowTriggeredPayload]{Name: TopicWorkflowTriggered}
+	WorkflowTriggeredEventTopic = Topic[WorkflowTriggeredPayload]{Name: TopicWorkflowTriggered, Kind: WorkflowCommandTopics.Kind()}
 	// WorkflowActionStartedEventTopic is the typed topic for action started events.
-	WorkflowActionStartedEventTopic = Topic[WorkflowActionStartedPayload]{Name: TopicWorkflowActionStarted}
+	WorkflowActionStartedEventTopic = Topic[WorkflowActionStartedPayload]{Name: TopicWorkflowActionStarted, Kind: WorkflowCommandTopics.Kind()}
 	// WorkflowActionCompletedEventTopic is the typed topic for action completed events.
-	WorkflowActionCompletedEventTopic = Topic[WorkflowActionCompletedPayload]{Name: TopicWorkflowActionCompleted}
+	WorkflowActionCompletedEventTopic = Topic[WorkflowActionCompletedPayload]{Name: TopicWorkflowActionCompleted, Kind: WorkflowCommandTopics.Kind()}
 	// WorkflowAssignmentCreatedEventTopic is the typed topic for assignment created events.
-	WorkflowAssignmentCreatedEventTopic = Topic[WorkflowAssignmentCreatedPayload]{Name: TopicWorkflowAssignmentCreated}
+	WorkflowAssignmentCreatedEventTopic = Topic[WorkflowAssignmentCreatedPayload]{Name: TopicWorkflowAssignmentCreated, Kind: WorkflowCommandTopics.Kind()}
 	// WorkflowAssignmentCompletedEventTopic is the typed topic for assignment completed events.
-	WorkflowAssignmentCompletedEventTopic = Topic[WorkflowAssignmentCompletedPayload]{Name: TopicWorkflowAssignmentCompleted}
+	WorkflowAssignmentCompletedEventTopic = Topic[WorkflowAssignmentCompletedPayload]{Name: TopicWorkflowAssignmentCompleted, Kind: WorkflowCommandTopics.Kind()}
 	// WorkflowInstanceCompletedEventTopic is the typed topic for instance completed events.
-	WorkflowInstanceCompletedEventTopic = Topic[WorkflowInstanceCompletedPayload]{Name: TopicWorkflowInstanceCompleted}
+	WorkflowInstanceCompletedEventTopic = Topic[WorkflowInstanceCompletedPayload]{Name: TopicWorkflowInstanceCompleted, Kind: WorkflowCommandTopics.Kind()}
 	// WorkflowTimeoutExpiredEventTopic is the typed topic for timeout events.
-	WorkflowTimeoutExpiredEventTopic = Topic[WorkflowTimeoutExpiredPayload]{Name: TopicWorkflowTimeoutExpired}
+	WorkflowTimeoutExpiredEventTopic = Topic[WorkflowTimeoutExpiredPayload]{Name: TopicWorkflowTimeoutExpired, Kind: WorkflowCommandTopics.Kind()}
 )

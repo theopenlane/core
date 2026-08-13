@@ -4,12 +4,14 @@ import (
 	"context"
 
 	"github.com/rs/zerolog/log"
+	"github.com/samber/lo"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/notifications"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // NewGalaRuntimes creates the main and notification gala runtimes from configuration.
@@ -17,6 +19,10 @@ import (
 func NewGalaRuntimes(ctx context.Context, so *ServerOptions) (*gala.Gala, *gala.Gala, error) {
 	galaCfg := so.Config.Settings.Workflows.Gala
 	if !galaCfg.Enabled {
+		if so.Config.Settings.Backfill.Enabled {
+			return nil, nil, ErrBackfillRequiresGala
+		}
+
 		return nil, nil, nil
 	}
 
@@ -30,6 +36,7 @@ func NewGalaRuntimes(ctx context.Context, so *ServerOptions) (*gala.Gala, *gala.
 		QueueName:     galaQueueName,
 		WorkerCount:   max(galaCfg.WorkerCount, 1),
 		MaxRetries:    galaCfg.MaxRetries,
+		TopicRenames:  jobTopicRenames(),
 	})
 	if err != nil {
 		return nil, nil, err
@@ -50,14 +57,12 @@ func NewGalaRuntimes(ctx context.Context, so *ServerOptions) (*gala.Gala, *gala.
 	return galaApp, notificationGala, nil
 }
 
-// ConfigureGala wires the gala runtimes to the database client, registers all listeners,
-// and starts workers. It must be called after the database client is created.
+// ConfigureGala wires the gala runtimes to the database client and registers all listeners;
+// it must be called after the database client is created
 func ConfigureGala(ctx context.Context, galaApp, notificationGala *gala.Gala, dbClient *ent.Client, so *ServerOptions) error {
 	if galaApp == nil {
 		return nil
 	}
-
-	galaCfg := so.Config.Settings.Workflows.Gala
 
 	closeRuntimes := func() {
 		if closeErr := notificationGala.Close(); closeErr != nil {
@@ -83,45 +88,53 @@ func ConfigureGala(ctx context.Context, galaApp, notificationGala *gala.Gala, db
 		return err
 	}
 
-	for _, register := range []func(*gala.Gala) ([]gala.ListenerID, error){
-		hooks.RegisterGalaOrganizationAvatarListeners,
-		hooks.RegisterGalaTaskRuleListeners,
-		hooks.RegisterGalaEntitlementListeners,
-		hooks.RegisterGalaOrganizationCleanupListeners,
-		hooks.RegisterGalaTrustCenterCacheListeners,
-		hooks.RegisterGalaTrustCenterWatermarkListeners,
-		hooks.RegisterGalaWorkflowListeners,
-		hooks.RegisterGalaVendorScoringListeners,
-		hooks.RegisterGalaIdentityResolutionListeners,
-		hooks.RegisterGalaDocumentAssociationListeners,
-		hooks.RegisterGalaQuestionnaireTransformListeners,
-		hooks.RegisterGalaCampaignRecurringListeners,
-		hooks.RegisterGalaSubscriberLinkListeners,
-		hooks.RegisterGalaNDAAttestationListeners,
-		hooks.RegisterGalaDomainScanSubmitListeners,
-		hooks.RegisterGalaDomainScanUpdateListener,
-		hooks.RegisterGalaIntegrationCleanupListeners,
-	} {
-		if _, err := register(galaApp); err != nil {
-			closeRuntimes()
+	registrations := lo.Flatten([][]gala.Registration{
+		hooks.OrganizationAvatarListeners(),
+		hooks.TaskRuleListeners(),
+		hooks.EntitlementListeners(),
+		hooks.OrganizationCleanupListeners(),
+		hooks.TrustCenterCacheListeners(),
+		hooks.TrustCenterWatermarkListeners(),
+		hooks.WorkflowListeners(),
+		hooks.VendorScoringListeners(),
+		hooks.IdentityResolutionListeners(),
+		hooks.DocumentAssociationListeners(),
+		hooks.QuestionnaireTransformListeners(),
+		hooks.CampaignRecurringListeners(),
+		hooks.SubscriberLinkListeners(),
+		hooks.NDAAttestationListeners(),
+		hooks.DomainScanListeners(),
+		hooks.IntegrationCleanupListeners(),
+	})
 
-			return err
-		}
-	}
-
-	if _, err := notifications.RegisterGalaListeners(notificationGala); err != nil {
+	if _, err := gala.Register(galaApp, registrations...); err != nil {
 		closeRuntimes()
 
 		return err
 	}
+
+	if _, err := gala.Register(notificationGala, notifications.Listeners()...); err != nil {
+		closeRuntimes()
+
+		return err
+	}
+
+	return nil
+}
+
+// StartGalaWorkers begins job processing on the durable gala runtime; call it only after all
+// injector provisioning completes so a dequeued job never resolves a missing dependency
+func StartGalaWorkers(ctx context.Context, galaApp *gala.Gala, so *ServerOptions) error {
+	if galaApp == nil {
+		return nil
+	}
+
+	submitJobTransitionMigration(ctx, galaApp)
 
 	if err := galaApp.StartWorkers(ctx); err != nil {
-		closeRuntimes()
-
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to start gala workers")
 		return err
 	}
-
-	log.Info().Int("gala_worker_count", max(galaCfg.WorkerCount, 1)).Str("gala_queue", galaCfg.QueueName).Msg("gala worker client started")
 
 	return nil
 }

@@ -40,11 +40,11 @@ func TestExtractMentionDetails(t *testing.T) {
 	assert.Equal(t, "task-1", details.objectID)
 	assert.Equal(t, generated.TypeTask, details.objectType)
 	assert.Equal(t, "Task One", details.objectName)
-	assert.Equal(t, "details text", details.newDetails)
-	assert.Equal(t, "old details text", details.oldDetails)
 	assert.Equal(t, "owner-1", details.ownerID)
-	assert.Empty(t, details.newDetailsJSON)
-	assert.Empty(t, details.oldDetailsJSON)
+
+	newText, oldText := mentionTexts(payload, spec)
+	assert.Equal(t, "details text", newText)
+	assert.Equal(t, "old details text", oldText)
 }
 
 func TestConsoleObjectPaths(t *testing.T) {
@@ -78,18 +78,18 @@ func TestRegisterGalaListeners(t *testing.T) {
 	runtime, err := gala.NewInMemory()
 	require.NoError(t, err)
 
-	ids, err := RegisterGalaListeners(runtime)
+	ids, err := gala.Register(runtime, Listeners()...)
 	require.NoError(t, err)
 	require.Len(t, ids, 8)
 
-	assert.True(t, runtime.InterestedIn(gala.MutationTopicName(gala.MutationConcernNotification, generated.TypeTask), "create"))
-	assert.True(t, runtime.InterestedIn(gala.MutationTopicName(gala.MutationConcernNotification, generated.TypeInternalPolicy), "update"))
-	assert.True(t, runtime.InterestedIn(gala.MutationTopicName(gala.MutationConcernNotification, generated.TypeRisk), "delete"))
-	assert.True(t, runtime.InterestedIn(gala.MutationTopicName(gala.MutationConcernNotification, generated.TypeProcedure), "update_one"))
-	assert.True(t, runtime.InterestedIn(gala.MutationTopicName(gala.MutationConcernNotification, generated.TypeNote), "create"))
-	assert.True(t, runtime.InterestedIn(gala.MutationTopicName(gala.MutationConcernNotification, generated.TypeExport), "update"))
-	assert.True(t, runtime.InterestedIn(gala.MutationTopicName(gala.MutationConcernNotification, generated.TypeStandard), ent.OpUpdate.String()))
-	assert.True(t, runtime.InterestedIn(gala.MutationTopicName(gala.MutationConcernNotification, generated.TypeProgram), ent.OpUpdate.String()))
-	assert.True(t, runtime.InterestedIn(gala.MutationTopicName(gala.MutationConcernNotification, generated.TypeProgram), ent.OpUpdateOne.String()))
-	assert.False(t, runtime.InterestedIn(gala.MutationTopicName(gala.MutationConcernNotification, generated.TypeProgram), ent.OpCreate.String()))
+	assert.True(t, runtime.InterestedIn(entityops.MutationTopicName(entityops.MutationConcernNotification, generated.TypeTask), entityops.OpCreate))
+	assert.True(t, runtime.InterestedIn(entityops.MutationTopicName(entityops.MutationConcernNotification, generated.TypeInternalPolicy), entityops.OpUpdate))
+	assert.True(t, runtime.InterestedIn(entityops.MutationTopicName(entityops.MutationConcernNotification, generated.TypeRisk), entityops.OpDelete))
+	assert.True(t, runtime.InterestedIn(entityops.MutationTopicName(entityops.MutationConcernNotification, generated.TypeProcedure), entityops.OpUpdateOne))
+	assert.True(t, runtime.InterestedIn(entityops.MutationTopicName(entityops.MutationConcernNotification, generated.TypeNote), entityops.OpCreate))
+	assert.True(t, runtime.InterestedIn(entityops.MutationTopicName(entityops.MutationConcernNotification, generated.TypeExport), entityops.OpUpdate))
+	assert.True(t, runtime.InterestedIn(entityops.MutationTopicName(entityops.MutationConcernNotification, generated.TypeStandard), ent.OpUpdate.String()))
+	assert.True(t, runtime.InterestedIn(entityops.MutationTopicName(entityops.MutationConcernNotification, generated.TypeProgram), ent.OpUpdate.String()))
+	assert.True(t, runtime.InterestedIn(entityops.MutationTopicName(entityops.MutationConcernNotification, generated.TypeProgram), ent.OpUpdateOne.String()))
+	assert.False(t, runtime.InterestedIn(entityops.MutationTopicName(entityops.MutationConcernNotification, generated.TypeProgram), ent.OpCreate.String()))
 }

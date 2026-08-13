@@ -53,14 +53,24 @@ func (r DefinitionRef) ID() string {
 	return r.id
 }
 
+// OperationTopics returns the topic namespace for this definition's operations
+func (r DefinitionRef) OperationTopics() gala.TopicNamespace {
+	return gala.NewTopicNamespace(gala.TopicPrefixIntegration+r.id+".", gala.JobKindIntegrationRun)
+}
+
+// WebhookEventTopics returns the topic namespace for this definition's webhook events
+func (r DefinitionRef) WebhookEventTopics() gala.TopicNamespace {
+	return gala.NewTopicNamespace(gala.TopicPrefixIntegration+r.id+gala.TopicInfixIntegrationWebhook, gala.JobKindIntegrationWebhook)
+}
+
 // OperationTopic returns the canonical gala topic for one definition operation
 func (r DefinitionRef) OperationTopic(name string) gala.TopicName {
-	return gala.TopicName("integration." + r.id + "." + name)
+	return r.OperationTopics().Name(name)
 }
 
 // WebhookEventTopic returns the canonical gala topic for one definition webhook event
 func (r DefinitionRef) WebhookEventTopic(name string) gala.TopicName {
-	return gala.TopicName("integration." + r.id + ".webhook." + name)
+	return r.WebhookEventTopics().Name(name)
 }
 
 // =========
