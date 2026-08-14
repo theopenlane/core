@@ -45,7 +45,7 @@ func QuestionnaireTransformListeners() []gala.Registration {
 
 // handleAssessmentResponse reacts to completed assessment responses and transforms the associated
 // document data
-func handleAssessmentResponse(inv entityops.Invocation, payload entityops.MutationPayload) error {
+func handleAssessmentResponse(inv entityops.Invocation, _ entityops.MutationPayload) error {
 	ctx := inv.Context
 
 	response, err := inv.Client.AssessmentResponse.Query().

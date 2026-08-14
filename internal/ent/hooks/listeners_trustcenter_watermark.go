@@ -24,7 +24,7 @@ func TrustCenterWatermarkListeners() []gala.Registration {
 }
 
 // handleTrustCenterDocWatermarkGala enqueues a watermarking job for a trust center document if watermarking is enabled
-func handleTrustCenterDocWatermarkGala(inv entityops.Invocation, payload entityops.MutationPayload) error {
+func handleTrustCenterDocWatermarkGala(inv entityops.Invocation, _ entityops.MutationPayload) error {
 	ctx := inv.Context
 
 	document, err := inv.Client.TrustCenterDoc.Query().

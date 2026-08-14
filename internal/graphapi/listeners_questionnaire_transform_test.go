@@ -181,8 +181,50 @@ func TestQuestionnaireTransformListener(t *testing.T) {
 		assert.Check(t, is.Equal(0, entityCount))
 	})
 
-	(&Cleanup[*generated.AssessmentResponseDeleteOne]{client: suite.client.db.AssessmentResponse, IDs: []string{response.ID, response2.ID}}).MustDelete(user.UserCtx, t)
+	dateTemplate := (&TemplateBuilder{client: suite.client}).MustNew(user.UserCtx, t)
+	assert.NilError(t, suite.client.db.Template.UpdateOneID(dateTemplate.ID).SetTransformConfiguration(models.TemplateProjectionConfig{
+		Enabled: true,
+		Target:  enums.TemplateProjectionTargetEntity,
+		Mappings: []models.TemplateProjectionFieldMapping{
+			{From: "vendorName", To: "name"},
+			{From: "contractStart", To: "contract_start_date", Transform: enums.TemplateProjectionTransformDate},
+		},
+	}).Exec(allowCtx))
+
+	dateAssessment := (&AssessmentBuilder{client: suite.client, TemplateID: dateTemplate.ID}).MustNew(user.UserCtx, t)
+	vendorName3 := "acme-vendor-" + ulids.New().String()
+
+	dateDoc, err := suite.client.db.DocumentData.Create().
+		SetOwnerID(orgID).
+		SetTemplateID(dateTemplate.ID).
+		SetData(map[string]any{"vendorName": vendorName3, "contractStart": "not-a-date"}).
+		Save(allowCtx)
+	assert.NilError(t, err)
+
+	response3 := (&AssessmentResponseBuilder{client: suite.client, AssessmentID: dateAssessment.ID, OwnerID: orgID}).MustNew(user.UserCtx, t)
+
+	t.Run("invalid date value fails validation and acks without retry", func(t *testing.T) {
+		assert.NilError(t, suite.client.db.AssessmentResponse.UpdateOneID(response3.ID).
+			SetDocumentDataID(dateDoc.ID).
+			SetStatus(enums.AssessmentResponseStatusCompleted).
+			Exec(allowCtx))
+
+		// WaitIdle counts retrying jobs as active, so returning proves the ack
+		setup.Runtime.WaitIdle()
+
+		updated, err := suite.client.db.AssessmentResponse.Get(allowCtx, response3.ID)
+		assert.NilError(t, err)
+		assert.Check(t, is.Equal("", updated.EntityID))
+
+		entityCount, err := suite.client.db.Entity.Query().
+			Where(entity.ExternalIDEQ(vendorName3), entity.OwnerIDEQ(orgID)).
+			Count(allowCtx)
+		assert.NilError(t, err)
+		assert.Check(t, is.Equal(0, entityCount))
+	})
+
+	(&Cleanup[*generated.AssessmentResponseDeleteOne]{client: suite.client.db.AssessmentResponse, IDs: []string{response.ID, response2.ID, response3.ID}}).MustDelete(user.UserCtx, t)
 	(&Cleanup[*generated.EntityDeleteOne]{client: suite.client.db.Entity, ID: entityID}).MustDelete(user.UserCtx, t)
-	(&Cleanup[*generated.AssessmentDeleteOne]{client: suite.client.db.Assessment, ID: assessment.ID}).MustDelete(user.UserCtx, t)
-	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: template.ID}).MustDelete(user.UserCtx, t)
+	(&Cleanup[*generated.AssessmentDeleteOne]{client: suite.client.db.Assessment, IDs: []string{assessment.ID, dateAssessment.ID}}).MustDelete(user.UserCtx, t)
+	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, IDs: []string{template.ID, dateTemplate.ID}}).MustDelete(user.UserCtx, t)
 }
