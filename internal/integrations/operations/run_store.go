@@ -2,6 +2,7 @@ package operations
 
 import (
 	"context"
+	"encoding/json"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
@@ -9,7 +10,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/integrationrun"
-	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/mapx"
 )
@@ -26,13 +26,13 @@ type RunResult struct {
 	Metrics map[string]any
 }
 
-// CreatePendingRun inserts one pending run record for a dispatch request
-func CreatePendingRun(ctx context.Context, db *ent.Client, installation *ent.Integration, req types.DispatchRequest) (*ent.IntegrationRun, error) {
+// CreatePendingRun inserts one pending run record for a dispatched operation
+func CreatePendingRun(ctx context.Context, db *ent.Client, installation *ent.Integration, operation string, runType enums.IntegrationRunType, config json.RawMessage) (*ent.IntegrationRun, error) {
 	if installation == nil {
 		return nil, ErrInstallationIDRequired
 	}
 
-	config, err := jsonx.ToMap(req.Config)
+	configMap, err := jsonx.ToMap(config)
 	if err != nil {
 		return nil, err
 	}
@@ -40,10 +40,10 @@ func CreatePendingRun(ctx context.Context, db *ent.Client, installation *ent.Int
 	return db.IntegrationRun.Create().
 		SetOwnerID(installation.OwnerID).
 		SetIntegrationID(installation.ID).
-		SetOperationName(req.Operation).
-		SetRunType(req.RunType).
+		SetOperationName(operation).
+		SetRunType(runType).
 		SetStatus(enums.IntegrationRunStatusPending).
-		SetOperationConfig(config).
+		SetOperationConfig(configMap).
 		Save(ctx)
 }
 

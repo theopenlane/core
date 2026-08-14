@@ -84,13 +84,7 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 	var runID string
 
 	if installation != nil && !operation.Policy.SkipRunRecord {
-		runRecord, err := CreatePendingRun(ctx, db, installation, types.DispatchRequest{
-			IntegrationID:      req.IntegrationID,
-			Operation:          req.Operation,
-			Config:             jsonx.CloneRawMessage(req.Config),
-			ForceClientRebuild: req.ForceClientRebuild,
-			RunType:            runType,
-		})
+		runRecord, err := CreatePendingRun(ctx, db, installation, req.Operation, runType, req.Config)
 		if err != nil {
 			return types.DispatchResult{}, err
 		}

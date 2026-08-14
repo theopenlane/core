@@ -62,13 +62,15 @@ func ingestFindings(ctx context.Context, t *testing.T, integration *ent.Integrat
 		return integrationtypes.MappingEnvelope{Payload: json.RawMessage(p)}
 	})
 
-	return operations.ProcessPayloadSets(ctx, operations.IngestContext{
+	_, err := operations.ProcessPayloadSets(ctx, operations.IngestContext{
 		Registry:    reg,
 		DB:          suite.client.db,
 		Integration: integration,
 	}, linkTestOperationName, def.Operations[0].Ingest, []integrationtypes.IngestPayloadSet{
 		{Schema: entityops.SchemaFinding.Name, Envelopes: envelopes},
 	}, operations.IngestOptions{})
+
+	return err
 }
 
 // findingControls loads the ingested finding by external id and returns the ref codes of its linked controls

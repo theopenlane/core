@@ -33,7 +33,12 @@ func (d DirectorySync) IngestHandle() types.IngestHandler {
 
 // Run collects Authentik directory users, groups, and memberships
 func (DirectorySync) Run(ctx context.Context, c *authentikSDK.APIClient, cfg UserInput, lastRunAt *time.Time) ([]types.IngestPayloadSet, error) {
-	users, err := listDirectoryUsers(ctx, c, lastRunAt)
+	// groups embed their memberships, so group sync needs the full user set
+	userSince := lastRunAt
+	if !cfg.DisableGroupSync {
+		userSince = nil
+	}
+	users, err := listDirectoryUsers(ctx, c, userSince)
 	if err != nil {
 		return nil, err
 	}
@@ -104,6 +109,8 @@ func (DirectorySync) Run(ctx context.Context, c *authentikSDK.APIClient, cfg Use
 		types.IngestPayloadSet{
 			Schema:    entityops.SchemaDirectoryMembership.Name,
 			Envelopes: membershipEnvelopes,
+			// memberships derived from an incremental user fetch are incomplete
+			SnapshotComplete: userSince == nil,
 		},
 	)
 
