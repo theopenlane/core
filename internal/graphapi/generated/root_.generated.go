@@ -3053,6 +3053,32 @@ type ComplexityRoot struct {
 		Node   func(childComplexity int) int
 	}
 
+	IntegrationRecommendation struct {
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		DefinitionID          func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		Label                 func(childComplexity int) int
+		Owner                 func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		Tags                  func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		UpdatedByImpersonator func(childComplexity int) int
+		Weight                func(childComplexity int) int
+	}
+
+	IntegrationRecommendationConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	IntegrationRecommendationEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
 	InternalPolicy struct {
 		ActiveWorkflowInstances         func(childComplexity int) int
 		ApprovalRequired                func(childComplexity int) int
@@ -4681,6 +4707,7 @@ type ComplexityRoot struct {
 		ID                                 func(childComplexity int) int
 		IdentityHolderCreators             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		IdentityHolders                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IdentityHolderOrder, where *generated.IdentityHolderWhereInput) int
+		IntegrationRecommendations         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationRecommendationOrder, where *generated.IntegrationRecommendationWhereInput) int
 		Integrations                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
 		InternalPolicies                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
 		InternalPolicyCreators             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
@@ -5451,6 +5478,7 @@ type ComplexityRoot struct {
 		IdentityHolderSearch            func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		IdentityHolders                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IdentityHolderOrder, where *generated.IdentityHolderWhereInput) int
 		Integration                     func(childComplexity int, id string) int
+		IntegrationRecommendations      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationRecommendationOrder, where *generated.IntegrationRecommendationWhereInput) int
 		IntegrationSearch               func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Integrations                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
 		InternalPolicies                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
@@ -22271,6 +22299,111 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.IntegrationEdge.Node(childComplexity), true
 
+	case "IntegrationRecommendation.createdAt":
+		if e.ComplexityRoot.IntegrationRecommendation.CreatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRecommendation.CreatedAt(childComplexity), true
+	case "IntegrationRecommendation.createdBy":
+		if e.ComplexityRoot.IntegrationRecommendation.CreatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRecommendation.CreatedBy(childComplexity), true
+	case "IntegrationRecommendation.definitionID":
+		if e.ComplexityRoot.IntegrationRecommendation.DefinitionID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRecommendation.DefinitionID(childComplexity), true
+	case "IntegrationRecommendation.id":
+		if e.ComplexityRoot.IntegrationRecommendation.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRecommendation.ID(childComplexity), true
+	case "IntegrationRecommendation.label":
+		if e.ComplexityRoot.IntegrationRecommendation.Label == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRecommendation.Label(childComplexity), true
+	case "IntegrationRecommendation.owner":
+		if e.ComplexityRoot.IntegrationRecommendation.Owner == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRecommendation.Owner(childComplexity), true
+	case "IntegrationRecommendation.ownerID":
+		if e.ComplexityRoot.IntegrationRecommendation.OwnerID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRecommendation.OwnerID(childComplexity), true
+	case "IntegrationRecommendation.tags":
+		if e.ComplexityRoot.IntegrationRecommendation.Tags == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRecommendation.Tags(childComplexity), true
+	case "IntegrationRecommendation.updatedAt":
+		if e.ComplexityRoot.IntegrationRecommendation.UpdatedAt == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRecommendation.UpdatedAt(childComplexity), true
+	case "IntegrationRecommendation.updatedBy":
+		if e.ComplexityRoot.IntegrationRecommendation.UpdatedBy == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRecommendation.UpdatedBy(childComplexity), true
+	case "IntegrationRecommendation.updatedByImpersonator":
+		if e.ComplexityRoot.IntegrationRecommendation.UpdatedByImpersonator == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRecommendation.UpdatedByImpersonator(childComplexity), true
+	case "IntegrationRecommendation.weight":
+		if e.ComplexityRoot.IntegrationRecommendation.Weight == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRecommendation.Weight(childComplexity), true
+
+	case "IntegrationRecommendationConnection.edges":
+		if e.ComplexityRoot.IntegrationRecommendationConnection.Edges == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRecommendationConnection.Edges(childComplexity), true
+	case "IntegrationRecommendationConnection.pageInfo":
+		if e.ComplexityRoot.IntegrationRecommendationConnection.PageInfo == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRecommendationConnection.PageInfo(childComplexity), true
+	case "IntegrationRecommendationConnection.totalCount":
+		if e.ComplexityRoot.IntegrationRecommendationConnection.TotalCount == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRecommendationConnection.TotalCount(childComplexity), true
+
+	case "IntegrationRecommendationEdge.cursor":
+		if e.ComplexityRoot.IntegrationRecommendationEdge.Cursor == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRecommendationEdge.Cursor(childComplexity), true
+	case "IntegrationRecommendationEdge.node":
+		if e.ComplexityRoot.IntegrationRecommendationEdge.Node == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRecommendationEdge.Node(childComplexity), true
+
 	case "InternalPolicy.activeWorkflowInstances":
 		if e.ComplexityRoot.InternalPolicy.ActiveWorkflowInstances == nil {
 			break
@@ -33613,6 +33746,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Organization.IdentityHolders(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IdentityHolderOrder), args["where"].(*generated.IdentityHolderWhereInput)), true
+	case "Organization.integrationRecommendations":
+		if e.ComplexityRoot.Organization.IntegrationRecommendations == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_integrationRecommendations_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Organization.IntegrationRecommendations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IntegrationRecommendationOrder), args["where"].(*generated.IntegrationRecommendationWhereInput)), true
 	case "Organization.integrations":
 		if e.ComplexityRoot.Organization.Integrations == nil {
 			break
@@ -38483,6 +38627,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Query.Integration(childComplexity, args["id"].(string)), true
+	case "Query.integrationRecommendations":
+		if e.ComplexityRoot.Query.IntegrationRecommendations == nil {
+			break
+		}
+
+		args, err := ec.field_Query_integrationRecommendations_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Query.IntegrationRecommendations(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.IntegrationRecommendationOrder), args["where"].(*generated.IntegrationRecommendationWhereInput)), true
 	case "Query.integrationSearch":
 		if e.ComplexityRoot.Query.IntegrationSearch == nil {
 			break
@@ -52194,6 +52349,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateGroupSettingInput,
 		ec.unmarshalInputCreateHushInput,
 		ec.unmarshalInputCreateIdentityHolderInput,
+		ec.unmarshalInputCreateIntegrationRecommendationInput,
 		ec.unmarshalInputCreateInternalPolicyInput,
 		ec.unmarshalInputCreateInviteInput,
 		ec.unmarshalInputCreateJobResultInput,
@@ -52310,6 +52466,8 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputImportDomainScanReviewSystemInput,
 		ec.unmarshalInputImportDomainScanReviewVendorInput,
 		ec.unmarshalInputIntegrationOrder,
+		ec.unmarshalInputIntegrationRecommendationOrder,
+		ec.unmarshalInputIntegrationRecommendationWhereInput,
 		ec.unmarshalInputIntegrationWhereInput,
 		ec.unmarshalInputInternalPolicyOrder,
 		ec.unmarshalInputInternalPolicyWhereInput,
@@ -52449,6 +52607,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateGroupSettingInput,
 		ec.unmarshalInputUpdateHushInput,
 		ec.unmarshalInputUpdateIdentityHolderInput,
+		ec.unmarshalInputUpdateIntegrationRecommendationInput,
 		ec.unmarshalInputUpdateInternalPolicyInput,
 		ec.unmarshalInputUpdateInviteInput,
 		ec.unmarshalInputUpdateJobResultInput,
@@ -71091,6 +71250,29 @@ input CreateIdentityHolderInput {
   internalPolicyIDs: [ID!]
 }
 """
+CreateIntegrationRecommendationInput is used for create IntegrationRecommendation object.
+Input was generated by ent.
+"""
+input CreateIntegrationRecommendationInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the integration definition this recommendation points to
+  """
+  definitionID: String!
+  """
+  computed recommendation weight from 0 to 100
+  """
+  weight: Int!
+  """
+  user-facing summary for why this integration was recommended
+  """
+  label: String!
+  ownerID: ID
+}
+"""
 CreateInternalPolicyInput is used for create InternalPolicy object.
 Input was generated by ent.
 """
@@ -71956,6 +72138,7 @@ input CreateOrganizationInput {
   personalAccessTokenIDs: [ID!]
   apiTokenIDs: [ID!]
   emailTemplateIDs: [ID!]
+  integrationRecommendationIDs: [ID!]
   notificationPreferenceIDs: [ID!]
   notificationTemplateIDs: [ID!]
   fileIDs: [ID!]
@@ -94297,6 +94480,260 @@ enum IntegrationOrderField {
   family
   status
 }
+type IntegrationRecommendation implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  the real user acting through an impersonation session when the record was last mutated, if any
+  """
+  updatedByImpersonator: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  the integration definition this recommendation points to
+  """
+  definitionID: String!
+  """
+  computed recommendation weight from 0 to 100
+  """
+  weight: Int!
+  """
+  user-facing summary for why this integration was recommended
+  """
+  label: String!
+  owner: Organization
+}
+"""
+A connection to a list of items.
+"""
+type IntegrationRecommendationConnection {
+  """
+  A list of edges.
+  """
+  edges: [IntegrationRecommendationEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type IntegrationRecommendationEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: IntegrationRecommendation
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+Ordering options for IntegrationRecommendation connections
+"""
+input IntegrationRecommendationOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order IntegrationRecommendations.
+  """
+  field: IntegrationRecommendationOrderField!
+}
+"""
+Properties by which IntegrationRecommendation connections can be ordered.
+"""
+enum IntegrationRecommendationOrderField {
+  created_at
+  updated_at
+}
+"""
+IntegrationRecommendationWhereInput is used for filtering IntegrationRecommendation objects.
+Input was generated by ent.
+"""
+input IntegrationRecommendationWhereInput {
+  not: IntegrationRecommendationWhereInput
+  and: [IntegrationRecommendationWhereInput!]
+  or: [IntegrationRecommendationWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  updated_by_impersonator field predicates
+  """
+  updatedByImpersonator: String
+  updatedByImpersonatorNEQ: String
+  updatedByImpersonatorIn: [String!]
+  updatedByImpersonatorNotIn: [String!]
+  updatedByImpersonatorGT: String
+  updatedByImpersonatorGTE: String
+  updatedByImpersonatorLT: String
+  updatedByImpersonatorLTE: String
+  updatedByImpersonatorContains: String
+  updatedByImpersonatorHasPrefix: String
+  updatedByImpersonatorHasSuffix: String
+  updatedByImpersonatorIsNil: Boolean
+  updatedByImpersonatorNotNil: Boolean
+  updatedByImpersonatorEqualFold: String
+  updatedByImpersonatorContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  definition_id field predicates
+  """
+  definitionID: String
+  definitionIDNEQ: String
+  definitionIDIn: [String!]
+  definitionIDNotIn: [String!]
+  definitionIDGT: String
+  definitionIDGTE: String
+  definitionIDLT: String
+  definitionIDLTE: String
+  definitionIDContains: String
+  definitionIDHasPrefix: String
+  definitionIDHasSuffix: String
+  definitionIDEqualFold: String
+  definitionIDContainsFold: String
+  """
+  weight field predicates
+  """
+  weight: Int
+  weightNEQ: Int
+  weightIn: [Int!]
+  weightNotIn: [Int!]
+  weightGT: Int
+  weightGTE: Int
+  weightLT: Int
+  weightLTE: Int
+  """
+  label field predicates
+  """
+  label: String
+  labelNEQ: String
+  labelIn: [String!]
+  labelNotIn: [String!]
+  labelGT: String
+  labelGTE: String
+  labelLT: String
+  labelLTE: String
+  labelContains: String
+  labelHasPrefix: String
+  labelHasSuffix: String
+  labelEqualFold: String
+  labelContainsFold: String
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  Filter for tagsHas to contain a specific value
+  """
+  tagsHas: String
+}
 """
 IntegrationWhereInput is used for filtering Integration objects.
 Input was generated by ent.
@@ -105230,6 +105667,37 @@ type Organization implements Node {
     """
     where: EmailTemplateWhereInput
   ): EmailTemplateConnection!
+  integrationRecommendations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IntegrationRecommendations returned from the connection.
+    """
+    orderBy: [IntegrationRecommendationOrder!]
+
+    """
+    Filtering options for IntegrationRecommendations returned from the connection.
+    """
+    where: IntegrationRecommendationWhereInput
+  ): IntegrationRecommendationConnection!
   notificationPreferences(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -108922,6 +109390,11 @@ input OrganizationWhereInput {
   """
   hasEmailTemplates: Boolean
   hasEmailTemplatesWith: [EmailTemplateWhereInput!]
+  """
+  integration_recommendations edge predicates
+  """
+  hasIntegrationRecommendations: Boolean
+  hasIntegrationRecommendationsWith: [IntegrationRecommendationWhereInput!]
   """
   notification_preferences edge predicates
   """
@@ -116009,6 +116482,37 @@ type Query {
     """
     where: IntegrationWhereInput
   ): IntegrationConnection!
+  integrationRecommendations(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for IntegrationRecommendations returned from the connection.
+    """
+    orderBy: [IntegrationRecommendationOrder!]
+
+    """
+    Filtering options for IntegrationRecommendations returned from the connection.
+    """
+    where: IntegrationRecommendationWhereInput
+  ): IntegrationRecommendationConnection!
   internalPolicies(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -139143,6 +139647,32 @@ input UpdateIdentityHolderInput {
   clearInternalPolicies: Boolean
 }
 """
+UpdateIntegrationRecommendationInput is used for update IntegrationRecommendation object.
+Input was generated by ent.
+"""
+input UpdateIntegrationRecommendationInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  the integration definition this recommendation points to
+  """
+  definitionID: String
+  """
+  computed recommendation weight from 0 to 100
+  """
+  weight: Int
+  """
+  user-facing summary for why this integration was recommended
+  """
+  label: String
+  ownerID: ID
+  clearOwner: Boolean
+}
+"""
 UpdateInternalPolicyInput is used for update InternalPolicy object.
 Input was generated by ent.
 """
@@ -140314,6 +140844,9 @@ input UpdateOrganizationInput {
   addEmailTemplateIDs: [ID!]
   removeEmailTemplateIDs: [ID!]
   clearEmailTemplates: Boolean
+  addIntegrationRecommendationIDs: [ID!]
+  removeIntegrationRecommendationIDs: [ID!]
+  clearIntegrationRecommendations: Boolean
   addNotificationPreferenceIDs: [ID!]
   removeNotificationPreferenceIDs: [ID!]
   clearNotificationPreferences: Boolean
@@ -171008,6 +171541,58 @@ func (ec *executionContext) childFields_IntegrationEdge(ctx context.Context, fie
 	return nil, fmt.Errorf("no field named %q was found under type IntegrationEdge", field.Name)
 }
 
+func (ec *executionContext) childFields_IntegrationRecommendation(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_IntegrationRecommendation_id(ctx, field)
+	case "createdAt":
+		return ec.fieldContext_IntegrationRecommendation_createdAt(ctx, field)
+	case "updatedAt":
+		return ec.fieldContext_IntegrationRecommendation_updatedAt(ctx, field)
+	case "createdBy":
+		return ec.fieldContext_IntegrationRecommendation_createdBy(ctx, field)
+	case "updatedBy":
+		return ec.fieldContext_IntegrationRecommendation_updatedBy(ctx, field)
+	case "updatedByImpersonator":
+		return ec.fieldContext_IntegrationRecommendation_updatedByImpersonator(ctx, field)
+	case "tags":
+		return ec.fieldContext_IntegrationRecommendation_tags(ctx, field)
+	case "ownerID":
+		return ec.fieldContext_IntegrationRecommendation_ownerID(ctx, field)
+	case "definitionID":
+		return ec.fieldContext_IntegrationRecommendation_definitionID(ctx, field)
+	case "weight":
+		return ec.fieldContext_IntegrationRecommendation_weight(ctx, field)
+	case "label":
+		return ec.fieldContext_IntegrationRecommendation_label(ctx, field)
+	case "owner":
+		return ec.fieldContext_IntegrationRecommendation_owner(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type IntegrationRecommendation", field.Name)
+}
+
+func (ec *executionContext) childFields_IntegrationRecommendationConnection(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "edges":
+		return ec.fieldContext_IntegrationRecommendationConnection_edges(ctx, field)
+	case "pageInfo":
+		return ec.fieldContext_IntegrationRecommendationConnection_pageInfo(ctx, field)
+	case "totalCount":
+		return ec.fieldContext_IntegrationRecommendationConnection_totalCount(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type IntegrationRecommendationConnection", field.Name)
+}
+
+func (ec *executionContext) childFields_IntegrationRecommendationEdge(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "node":
+		return ec.fieldContext_IntegrationRecommendationEdge_node(ctx, field)
+	case "cursor":
+		return ec.fieldContext_IntegrationRecommendationEdge_cursor(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type IntegrationRecommendationEdge", field.Name)
+}
+
 func (ec *executionContext) childFields_InternalPolicy(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 	switch field.Name {
 	case "id":
@@ -173068,6 +173653,8 @@ func (ec *executionContext) childFields_Organization(ctx context.Context, field 
 		return ec.fieldContext_Organization_apiTokens(ctx, field)
 	case "emailTemplates":
 		return ec.fieldContext_Organization_emailTemplates(ctx, field)
+	case "integrationRecommendations":
+		return ec.fieldContext_Organization_integrationRecommendations(ctx, field)
 	case "notificationPreferences":
 		return ec.fieldContext_Organization_notificationPreferences(ctx, field)
 	case "notificationTemplates":

@@ -36,6 +36,7 @@ var FeatureOfType = map[string][]models.OrgModule{
 	"Hush":                       {models.CatalogBaseModule},
 	"IdentityHolder":             {models.CatalogComplianceModule, models.CatalogRegistryModule},
 	"Integration":                {models.CatalogBaseModule},
+	"IntegrationRecommendation":  {models.CatalogBaseModule},
 	"IntegrationRun":             {models.CatalogBaseModule},
 	"IntegrationWebhook":         {models.CatalogBaseModule},
 	"InternalPolicy":             {models.CatalogComplianceModule, models.CatalogPolicyManagementAddon},

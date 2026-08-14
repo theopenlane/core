@@ -123,6 +123,9 @@ type ImpersonationEvent func(*sql.Selector)
 // Integration is the predicate function for integration builders.
 type Integration func(*sql.Selector)
 
+// IntegrationRecommendation is the predicate function for integrationrecommendation builders.
+type IntegrationRecommendation func(*sql.Selector)
+
 // IntegrationRun is the predicate function for integrationrun builders.
 type IntegrationRun func(*sql.Selector)
 

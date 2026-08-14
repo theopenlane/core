@@ -3843,6 +3843,35 @@ func HasIntegrationRunsWith(preds ...predicate.IntegrationRun) predicate.Organiz
 	})
 }
 
+// HasIntegrationRecommendations applies the HasEdge predicate on the "integration_recommendations" edge.
+func HasIntegrationRecommendations() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, IntegrationRecommendationsTable, IntegrationRecommendationsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.IntegrationRecommendation
+		step.Edge.Schema = schemaConfig.IntegrationRecommendation
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasIntegrationRecommendationsWith applies the HasEdge predicate on the "integration_recommendations" edge with a given conditions (other predicates).
+func HasIntegrationRecommendationsWith(preds ...predicate.IntegrationRecommendation) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newIntegrationRecommendationsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.IntegrationRecommendation
+		step.Edge.Schema = schemaConfig.IntegrationRecommendation
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasNotificationPreferences applies the HasEdge predicate on the "notification_preferences" edge.
 func HasNotificationPreferences() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {

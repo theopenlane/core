@@ -13335,6 +13335,86 @@ func (c *IdentityHolderUpdateOne) SetInput(i UpdateIdentityHolderInput) *Identit
 	return c
 }
 
+// CreateIntegrationRecommendationInput represents a mutation input for creating integrationrecommendations.
+type CreateIntegrationRecommendationInput struct {
+	Tags         []string `json:"tags,omitempty"`
+	DefinitionID string   `json:"definition_id,omitempty"`
+	Weight       int      `json:"weight,omitempty"`
+	Label        string   `json:"label,omitempty"`
+	OwnerID      *string  `json:"owner_id,omitempty"`
+}
+
+// Mutate applies the CreateIntegrationRecommendationInput on the IntegrationRecommendationMutation builder.
+func (i *CreateIntegrationRecommendationInput) Mutate(m *IntegrationRecommendationMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	m.SetDefinitionID(i.DefinitionID)
+	m.SetWeight(i.Weight)
+	m.SetLabel(i.Label)
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+}
+
+// SetInput applies the change-set in the CreateIntegrationRecommendationInput on the IntegrationRecommendationCreate builder.
+func (c *IntegrationRecommendationCreate) SetInput(i CreateIntegrationRecommendationInput) *IntegrationRecommendationCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateIntegrationRecommendationInput represents a mutation input for updating integrationrecommendations.
+type UpdateIntegrationRecommendationInput struct {
+	ClearTags    bool
+	Tags         []string `json:"tags,omitempty"`
+	AppendTags   []string
+	DefinitionID *string `json:"definition_id,omitempty"`
+	Weight       *int    `json:"weight,omitempty"`
+	Label        *string `json:"label,omitempty"`
+	ClearOwner   bool
+	OwnerID      *string `json:"owner_id,omitempty"`
+}
+
+// Mutate applies the UpdateIntegrationRecommendationInput on the IntegrationRecommendationMutation builder.
+func (i *UpdateIntegrationRecommendationInput) Mutate(m *IntegrationRecommendationMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if v := i.DefinitionID; v != nil {
+		m.SetDefinitionID(*v)
+	}
+	if v := i.Weight; v != nil {
+		m.SetWeight(*v)
+	}
+	if v := i.Label; v != nil {
+		m.SetLabel(*v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateIntegrationRecommendationInput on the IntegrationRecommendationUpdate builder.
+func (c *IntegrationRecommendationUpdate) SetInput(i UpdateIntegrationRecommendationInput) *IntegrationRecommendationUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateIntegrationRecommendationInput on the IntegrationRecommendationUpdateOne builder.
+func (c *IntegrationRecommendationUpdateOne) SetInput(i UpdateIntegrationRecommendationInput) *IntegrationRecommendationUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateInternalPolicyInput represents a mutation input for creating internalpolicies.
 type CreateInternalPolicyInput struct {
 	Tags                            []string                      `json:"tags,omitempty"`
@@ -16554,6 +16634,7 @@ type CreateOrganizationInput struct {
 	PersonalAccessTokenIDs               []string   `json:"personal_access_token_ids,omitempty"`
 	APITokenIDs                          []string   `json:"api_token_ids,omitempty"`
 	EmailTemplateIDs                     []string   `json:"email_template_ids,omitempty"`
+	IntegrationRecommendationIDs         []string   `json:"integration_recommendation_ids,omitempty"`
 	NotificationPreferenceIDs            []string   `json:"notification_preference_ids,omitempty"`
 	NotificationTemplateIDs              []string   `json:"notification_template_ids,omitempty"`
 	FileIDs                              []string   `json:"file_ids,omitempty"`
@@ -16907,6 +16988,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.EmailTemplateIDs; len(v) > 0 {
 		m.AddEmailTemplateIDs(v...)
+	}
+	if v := i.IntegrationRecommendationIDs; len(v) > 0 {
+		m.AddIntegrationRecommendationIDs(v...)
 	}
 	if v := i.NotificationPreferenceIDs; len(v) > 0 {
 		m.AddNotificationPreferenceIDs(v...)
@@ -17401,6 +17485,9 @@ type UpdateOrganizationInput struct {
 	ClearEmailTemplates                        bool
 	AddEmailTemplateIDs                        []string `json:"add_email_template_ids,omitempty"`
 	RemoveEmailTemplateIDs                     []string `json:"remove_email_template_ids,omitempty"`
+	ClearIntegrationRecommendations            bool
+	AddIntegrationRecommendationIDs            []string `json:"add_integration_recommendation_ids,omitempty"`
+	RemoveIntegrationRecommendationIDs         []string `json:"remove_integration_recommendation_ids,omitempty"`
 	ClearNotificationPreferences               bool
 	AddNotificationPreferenceIDs               []string `json:"add_notification_preference_ids,omitempty"`
 	RemoveNotificationPreferenceIDs            []string `json:"remove_notification_preference_ids,omitempty"`
@@ -18414,6 +18501,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveEmailTemplateIDs; len(v) > 0 {
 		m.RemoveEmailTemplateIDs(v...)
+	}
+	if i.ClearIntegrationRecommendations {
+		m.ClearIntegrationRecommendations()
+	}
+	if v := i.AddIntegrationRecommendationIDs; len(v) > 0 {
+		m.AddIntegrationRecommendationIDs(v...)
+	}
+	if v := i.RemoveIntegrationRecommendationIDs; len(v) > 0 {
+		m.RemoveIntegrationRecommendationIDs(v...)
 	}
 	if i.ClearNotificationPreferences {
 		m.ClearNotificationPreferences()

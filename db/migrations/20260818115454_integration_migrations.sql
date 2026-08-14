@@ -1,0 +1,6 @@
+-- Create "integration_recommendations" table
+CREATE TABLE "integration_recommendations" ("id" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "updated_by_impersonator" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "tags" jsonb NULL, "definition_id" character varying NOT NULL, "weight" bigint NOT NULL, "label" character varying NOT NULL, "owner_id" character varying NULL, PRIMARY KEY ("id"), CONSTRAINT "integration_recommendations_or_5bd220e29a62508c967c53719a98f632" FOREIGN KEY ("owner_id") REFERENCES "organizations" ("id") ON UPDATE NO ACTION ON DELETE SET NULL);
+-- Create index "integration_recommendation_owner_id_idx" to table: "integration_recommendations"
+CREATE INDEX "integration_recommendation_owner_id_idx" ON "integration_recommendations" ("owner_id");
+-- Create index "integrationrecommendation_owner_id_definition_id" to table: "integration_recommendations"
+CREATE UNIQUE INDEX "integrationrecommendation_owner_id_definition_id" ON "integration_recommendations" ("owner_id", "definition_id") WHERE (deleted_at IS NULL);

@@ -44,6 +44,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/integrationrecommendation"
 	"github.com/theopenlane/core/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -456,6 +457,12 @@ func IntegrationEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
+func IntegrationRecommendationEdgeCleanup(ctx context.Context, id string) error {
+	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup integrationrecommendation edge")))
+
+	return nil
+}
+
 func IntegrationRunEdgeCleanup(ctx context.Context, id string) error {
 	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup integrationrun edge")))
 
@@ -757,6 +764,26 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 	if exists, err := FromContext(ctx).IntegrationRun.Query().Where((integrationrun.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if integrationrunCount, err := FromContext(ctx).IntegrationRun.Delete().Where(integrationrun.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", integrationrunCount).Msg("error deleting integrationrun")
+			return err
+		}
+	}
+
+	{
+		ids, err := FromContext(ctx).IntegrationRecommendation.Query().Where(integrationrecommendation.HasOwnerWith(organization.ID(id))).IDs(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("error querying integrationrecommendation ids for cleanup")
+			return err
+		}
+		for _, edgeID := range ids {
+			if err := IntegrationRecommendationEdgeCleanup(ctx, edgeID); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up integrationrecommendation edges")
+				return err
+			}
+		}
+	}
+	if exists, err := FromContext(ctx).IntegrationRecommendation.Query().Where((integrationrecommendation.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if integrationrecommendationCount, err := FromContext(ctx).IntegrationRecommendation.Delete().Where(integrationrecommendation.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", integrationrecommendationCount).Msg("error deleting integrationrecommendation")
 			return err
 		}
 	}

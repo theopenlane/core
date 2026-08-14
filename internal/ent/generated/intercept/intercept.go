@@ -47,6 +47,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/integrationrecommendation"
 	"github.com/theopenlane/core/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -1225,6 +1226,33 @@ func (f TraverseIntegration) Traverse(ctx context.Context, q generated.Query) er
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *generated.IntegrationQuery", q)
+}
+
+// The IntegrationRecommendationFunc type is an adapter to allow the use of ordinary function as a Querier.
+type IntegrationRecommendationFunc func(context.Context, *generated.IntegrationRecommendationQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f IntegrationRecommendationFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.IntegrationRecommendationQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.IntegrationRecommendationQuery", q)
+}
+
+// The TraverseIntegrationRecommendation type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseIntegrationRecommendation func(context.Context, *generated.IntegrationRecommendationQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseIntegrationRecommendation) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseIntegrationRecommendation) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.IntegrationRecommendationQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.IntegrationRecommendationQuery", q)
 }
 
 // The IntegrationRunFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -3144,6 +3172,8 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.ImpersonationEventQuery, predicate.ImpersonationEvent, impersonationevent.OrderOption]{typ: generated.TypeImpersonationEvent, tq: q}, nil
 	case *generated.IntegrationQuery:
 		return &query[*generated.IntegrationQuery, predicate.Integration, integration.OrderOption]{typ: generated.TypeIntegration, tq: q}, nil
+	case *generated.IntegrationRecommendationQuery:
+		return &query[*generated.IntegrationRecommendationQuery, predicate.IntegrationRecommendation, integrationrecommendation.OrderOption]{typ: generated.TypeIntegrationRecommendation, tq: q}, nil
 	case *generated.IntegrationRunQuery:
 		return &query[*generated.IntegrationRunQuery, predicate.IntegrationRun, integrationrun.OrderOption]{typ: generated.TypeIntegrationRun, tq: q}, nil
 	case *generated.IntegrationWebhookQuery:

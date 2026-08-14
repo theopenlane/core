@@ -477,6 +477,18 @@ func (f IntegrationFunc) Mutate(ctx context.Context, m generated.Mutation) (gene
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.IntegrationMutation", m)
 }
 
+// The IntegrationRecommendationFunc type is an adapter to allow the use of ordinary
+// function as IntegrationRecommendation mutator.
+type IntegrationRecommendationFunc func(context.Context, *generated.IntegrationRecommendationMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f IntegrationRecommendationFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.IntegrationRecommendationMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.IntegrationRecommendationMutation", m)
+}
+
 // The IntegrationRunFunc type is an adapter to allow the use of ordinary
 // function as IntegrationRun mutator.
 type IntegrationRunFunc func(context.Context, *generated.IntegrationRunMutation) (generated.Value, error)

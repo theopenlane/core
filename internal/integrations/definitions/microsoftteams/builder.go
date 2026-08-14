@@ -19,8 +19,11 @@ func Builder(cfg Config) registry.Builder {
 				Category:    "collaboration",
 				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/microsoft_teams/",
 				Tags:        []string{"messaging"},
-				Active:      false,
-				Visible:     true,
+				RecommendationSignals: []types.RecommendationSignal{
+					{Source: types.RecommendationSignalSourceVendor, Values: []string{"microsoft teams", "teams"}},
+				},
+				Active:  false,
+				Visible: true,
 			},
 			OperatorConfig: &types.OperatorConfigRegistration{
 				Schema: jsonx.SchemaFrom[Config](),

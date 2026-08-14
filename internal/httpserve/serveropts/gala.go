@@ -101,6 +101,7 @@ func ConfigureGala(ctx context.Context, galaApp, notificationGala *gala.Gala, db
 		{galaApp, hooks.RegisterGalaNDAAttestationListeners},
 		{galaApp, hooks.RegisterGalaDomainScanSubmitListeners},
 		{galaApp, hooks.RegisterGalaDomainScanUpdateListener},
+		{galaApp, hooks.RegisterGalaIntegrationRecommendationListeners},
 		{notificationGala, hooks.RegisterGalaNotificationListeners},
 	}
 

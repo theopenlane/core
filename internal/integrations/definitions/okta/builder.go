@@ -19,8 +19,12 @@ func Builder() registry.Builder {
 				Category:    "identity",
 				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/okta",
 				Tags:        []string{"directory"},
-				Active:      false,
-				Visible:     true,
+				RecommendationSignals: []types.RecommendationSignal{
+					{Source: types.RecommendationSignalSourceVendor, Values: []string{"okta"}},
+					{Source: types.RecommendationSignalSourceSSOProvider, Values: []string{"OKTA"}},
+				},
+				Active:  false,
+				Visible: true,
 			},
 			UserInput: &types.UserInputRegistration{
 				Schema: jsonx.SchemaFrom[UserInput](),

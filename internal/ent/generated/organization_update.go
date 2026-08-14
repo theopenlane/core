@@ -46,6 +46,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/integrationrecommendation"
 	"github.com/theopenlane/core/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -1685,6 +1686,21 @@ func (_u *OrganizationUpdate) AddIntegrationRuns(v ...*IntegrationRun) *Organiza
 		ids[i] = v[i].ID
 	}
 	return _u.AddIntegrationRunIDs(ids...)
+}
+
+// AddIntegrationRecommendationIDs adds the "integration_recommendations" edge to the IntegrationRecommendation entity by IDs.
+func (_u *OrganizationUpdate) AddIntegrationRecommendationIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddIntegrationRecommendationIDs(ids...)
+	return _u
+}
+
+// AddIntegrationRecommendations adds the "integration_recommendations" edges to the IntegrationRecommendation entity.
+func (_u *OrganizationUpdate) AddIntegrationRecommendations(v ...*IntegrationRecommendation) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIntegrationRecommendationIDs(ids...)
 }
 
 // AddNotificationPreferenceIDs adds the "notification_preferences" edge to the NotificationPreference entity by IDs.
@@ -4757,6 +4773,27 @@ func (_u *OrganizationUpdate) RemoveIntegrationRuns(v ...*IntegrationRun) *Organ
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveIntegrationRunIDs(ids...)
+}
+
+// ClearIntegrationRecommendations clears all "integration_recommendations" edges to the IntegrationRecommendation entity.
+func (_u *OrganizationUpdate) ClearIntegrationRecommendations() *OrganizationUpdate {
+	_u.mutation.ClearIntegrationRecommendations()
+	return _u
+}
+
+// RemoveIntegrationRecommendationIDs removes the "integration_recommendations" edge to IntegrationRecommendation entities by IDs.
+func (_u *OrganizationUpdate) RemoveIntegrationRecommendationIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveIntegrationRecommendationIDs(ids...)
+	return _u
+}
+
+// RemoveIntegrationRecommendations removes "integration_recommendations" edges to IntegrationRecommendation entities.
+func (_u *OrganizationUpdate) RemoveIntegrationRecommendations(v ...*IntegrationRecommendation) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIntegrationRecommendationIDs(ids...)
 }
 
 // ClearNotificationPreferences clears all "notification_preferences" edges to the NotificationPreference entity.
@@ -10836,6 +10873,54 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.IntegrationRecommendationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.IntegrationRecommendationsTable,
+			Columns: []string{organization.IntegrationRecommendationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrecommendation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IntegrationRecommendation
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIntegrationRecommendationsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationRecommendationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.IntegrationRecommendationsTable,
+			Columns: []string{organization.IntegrationRecommendationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrecommendation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IntegrationRecommendation
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationRecommendationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.IntegrationRecommendationsTable,
+			Columns: []string{organization.IntegrationRecommendationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrecommendation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IntegrationRecommendation
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.NotificationPreferencesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -16368,6 +16453,21 @@ func (_u *OrganizationUpdateOne) AddIntegrationRuns(v ...*IntegrationRun) *Organ
 	return _u.AddIntegrationRunIDs(ids...)
 }
 
+// AddIntegrationRecommendationIDs adds the "integration_recommendations" edge to the IntegrationRecommendation entity by IDs.
+func (_u *OrganizationUpdateOne) AddIntegrationRecommendationIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddIntegrationRecommendationIDs(ids...)
+	return _u
+}
+
+// AddIntegrationRecommendations adds the "integration_recommendations" edges to the IntegrationRecommendation entity.
+func (_u *OrganizationUpdateOne) AddIntegrationRecommendations(v ...*IntegrationRecommendation) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddIntegrationRecommendationIDs(ids...)
+}
+
 // AddNotificationPreferenceIDs adds the "notification_preferences" edge to the NotificationPreference entity by IDs.
 func (_u *OrganizationUpdateOne) AddNotificationPreferenceIDs(ids ...string) *OrganizationUpdateOne {
 	_u.mutation.AddNotificationPreferenceIDs(ids...)
@@ -19438,6 +19538,27 @@ func (_u *OrganizationUpdateOne) RemoveIntegrationRuns(v ...*IntegrationRun) *Or
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveIntegrationRunIDs(ids...)
+}
+
+// ClearIntegrationRecommendations clears all "integration_recommendations" edges to the IntegrationRecommendation entity.
+func (_u *OrganizationUpdateOne) ClearIntegrationRecommendations() *OrganizationUpdateOne {
+	_u.mutation.ClearIntegrationRecommendations()
+	return _u
+}
+
+// RemoveIntegrationRecommendationIDs removes the "integration_recommendations" edge to IntegrationRecommendation entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveIntegrationRecommendationIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveIntegrationRecommendationIDs(ids...)
+	return _u
+}
+
+// RemoveIntegrationRecommendations removes "integration_recommendations" edges to IntegrationRecommendation entities.
+func (_u *OrganizationUpdateOne) RemoveIntegrationRecommendations(v ...*IntegrationRecommendation) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveIntegrationRecommendationIDs(ids...)
 }
 
 // ClearNotificationPreferences clears all "notification_preferences" edges to the NotificationPreference entity.
@@ -25542,6 +25663,54 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 			},
 		}
 		edge.Schema = _u.schemaConfig.IntegrationRun
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.IntegrationRecommendationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.IntegrationRecommendationsTable,
+			Columns: []string{organization.IntegrationRecommendationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrecommendation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IntegrationRecommendation
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedIntegrationRecommendationsIDs(); len(nodes) > 0 && !_u.mutation.IntegrationRecommendationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.IntegrationRecommendationsTable,
+			Columns: []string{organization.IntegrationRecommendationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrecommendation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IntegrationRecommendation
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.IntegrationRecommendationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.IntegrationRecommendationsTable,
+			Columns: []string{organization.IntegrationRecommendationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrecommendation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.IntegrationRecommendation
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

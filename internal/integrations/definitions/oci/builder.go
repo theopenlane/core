@@ -20,8 +20,12 @@ func Builder() registry.Builder {
 				Category:    "security-posture",
 				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/oci",
 				Tags:        []string{"findings"},
-				Active:      false,
-				Visible:     true,
+				RecommendationSignals: []types.RecommendationSignal{
+					{Source: types.RecommendationSignalSourceAsset, Values: []string{"oracle cloud", "oracle cloud infrastructure", "oci"}},
+					{Source: types.RecommendationSignalSourceVendor, Values: []string{"oracle cloud", "oracle cloud infrastructure", "oci"}},
+				},
+				Active:  false,
+				Visible: true,
 			},
 			UserInput: &types.UserInputRegistration{
 				Schema: jsonx.SchemaFrom[UserInput](),

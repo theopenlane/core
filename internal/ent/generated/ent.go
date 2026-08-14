@@ -51,6 +51,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/integrationrecommendation"
 	"github.com/theopenlane/core/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -218,6 +219,7 @@ func checkColumn(t, c string) error {
 			identityholder.Table:             identityholder.ValidColumn,
 			impersonationevent.Table:         impersonationevent.ValidColumn,
 			integration.Table:                integration.ValidColumn,
+			integrationrecommendation.Table:  integrationrecommendation.ValidColumn,
 			integrationrun.Table:             integrationrun.ValidColumn,
 			integrationwebhook.Table:         integrationwebhook.ValidColumn,
 			internalpolicy.Table:             internalpolicy.ValidColumn,

@@ -72,6 +72,9 @@ var creatableSchemaTypes = map[string]createObjectEntry{
 	NormalizeSchemaType("GroupSetting"):   makeCreateEntry[generated.CreateGroupSettingInput](func(client *generated.Client) *generated.GroupSettingCreate { return client.GroupSetting.Create() }),
 	NormalizeSchemaType("Hush"):           makeCreateEntry[generated.CreateHushInput](func(client *generated.Client) *generated.HushCreate { return client.Hush.Create() }),
 	NormalizeSchemaType("IdentityHolder"): makeCreateEntry[generated.CreateIdentityHolderInput](func(client *generated.Client) *generated.IdentityHolderCreate { return client.IdentityHolder.Create() }),
+	NormalizeSchemaType("IntegrationRecommendation"): makeCreateEntry[generated.CreateIntegrationRecommendationInput](func(client *generated.Client) *generated.IntegrationRecommendationCreate {
+		return client.IntegrationRecommendation.Create()
+	}),
 	NormalizeSchemaType("InternalPolicy"): makeCreateEntry[generated.CreateInternalPolicyInput](func(client *generated.Client) *generated.InternalPolicyCreate { return client.InternalPolicy.Create() }),
 	NormalizeSchemaType("Invite"):         makeCreateEntry[generated.CreateInviteInput](func(client *generated.Client) *generated.InviteCreate { return client.Invite.Create() }),
 	NormalizeSchemaType("JobResult"):      makeCreateEntry[generated.CreateJobResultInput](func(client *generated.Client) *generated.JobResultCreate { return client.JobResult.Create() }),
