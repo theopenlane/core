@@ -255,6 +255,7 @@ type QueryResolver interface {
 	Hush(ctx context.Context, id string) (*generated.Hush, error)
 	IdentityHolder(ctx context.Context, id string) (*generated.IdentityHolder, error)
 	Integration(ctx context.Context, id string) (*generated.Integration, error)
+	RecommendedIntegrations(ctx context.Context) ([]*model.IntegrationRecommendation, error)
 	InternalPolicy(ctx context.Context, id string) (*generated.InternalPolicy, error)
 	Invite(ctx context.Context, id string) (*generated.Invite, error)
 	JobResult(ctx context.Context, id string) (*generated.JobResult, error)
@@ -137950,6 +137951,38 @@ func (ec *executionContext) fieldContext_Query_integration(ctx context.Context, 
 	if fc.Args, err = ec.field_Query_integration_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Query_recommendedIntegrations(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_Query_recommendedIntegrations(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return ec.Resolvers.Query().RecommendedIntegrations(ctx)
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []*model.IntegrationRecommendation) graphql.Marshaler {
+			return ec.marshalNIntegrationRecommendation2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐIntegrationRecommendationᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_Query_recommendedIntegrations(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Query",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.childFields_IntegrationRecommendation(ctx, field)
+		},
 	}
 	return fc, nil
 }
@@ -491287,6 +491320,28 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_integration(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&fs.Invalids, 1)
+				}
+				return res
+			}
+
+			rrm := func(ctx context.Context) graphql.Marshaler {
+				return ec.OperationContext.RootResolverMiddleware(ctx,
+					func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
+			}
+
+			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return rrm(innerCtx) })
+		case "recommendedIntegrations":
+			field := field
+
+			innerFunc := func(ctx context.Context, fs *graphql.FieldSet) (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_recommendedIntegrations(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&fs.Invalids, 1)
 				}

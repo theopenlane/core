@@ -25,8 +25,12 @@ func Builder(cfg Config, runtime *RuntimeSlackConfig, devMode bool) registry.Bui
 				Category:    "collaboration",
 				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/slack/overview",
 				Tags:        []string{"messaging", "directory"},
-				Active:      true,
-				Visible:     true,
+				RecommendationSignals: []types.RecommendationSignal{
+					{Source: types.RecommendationSignalSourceVendor, Values: []string{"slack"}},
+					{Source: types.RecommendationSignalSourceSSOProvider, Values: []string{"SLACK"}},
+				},
+				Active:  true,
+				Visible: true,
 			},
 			OperatorConfig: &types.OperatorConfigRegistration{
 				Schema: jsonx.SchemaFrom[Config](),

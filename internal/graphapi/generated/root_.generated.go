@@ -3053,6 +3053,21 @@ type ComplexityRoot struct {
 		Node   func(childComplexity int) int
 	}
 
+	IntegrationRecommendation struct {
+		Active      func(childComplexity int) int
+		Category    func(childComplexity int) int
+		Description func(childComplexity int) int
+		DisplayName func(childComplexity int) int
+		DocsURL     func(childComplexity int) int
+		Family      func(childComplexity int) int
+		ID          func(childComplexity int) int
+		Label       func(childComplexity int) int
+		LogoURL     func(childComplexity int) int
+		Score       func(childComplexity int) int
+		Tags        func(childComplexity int) int
+		Visible     func(childComplexity int) int
+	}
+
 	InternalPolicy struct {
 		ActiveWorkflowInstances         func(childComplexity int) int
 		ApprovalRequired                func(childComplexity int) int
@@ -5511,6 +5526,7 @@ type ComplexityRoot struct {
 		ProgramMemberships              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramMembershipOrder, where *generated.ProgramMembershipWhereInput) int
 		ProgramSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Programs                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		RecommendedIntegrations         func(childComplexity int) int
 		Remediation                     func(childComplexity int, id string) int
 		RemediationSearch               func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Remediations                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
@@ -22270,6 +22286,79 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.IntegrationEdge.Node(childComplexity), true
+
+	case "IntegrationRecommendation.active":
+		if e.ComplexityRoot.IntegrationRecommendation.Active == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRecommendation.Active(childComplexity), true
+	case "IntegrationRecommendation.category":
+		if e.ComplexityRoot.IntegrationRecommendation.Category == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRecommendation.Category(childComplexity), true
+	case "IntegrationRecommendation.description":
+		if e.ComplexityRoot.IntegrationRecommendation.Description == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRecommendation.Description(childComplexity), true
+	case "IntegrationRecommendation.displayName":
+		if e.ComplexityRoot.IntegrationRecommendation.DisplayName == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRecommendation.DisplayName(childComplexity), true
+	case "IntegrationRecommendation.docsURL":
+		if e.ComplexityRoot.IntegrationRecommendation.DocsURL == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRecommendation.DocsURL(childComplexity), true
+	case "IntegrationRecommendation.family":
+		if e.ComplexityRoot.IntegrationRecommendation.Family == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRecommendation.Family(childComplexity), true
+	case "IntegrationRecommendation.id":
+		if e.ComplexityRoot.IntegrationRecommendation.ID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRecommendation.ID(childComplexity), true
+	case "IntegrationRecommendation.label":
+		if e.ComplexityRoot.IntegrationRecommendation.Label == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRecommendation.Label(childComplexity), true
+	case "IntegrationRecommendation.logoURL":
+		if e.ComplexityRoot.IntegrationRecommendation.LogoURL == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRecommendation.LogoURL(childComplexity), true
+	case "IntegrationRecommendation.score":
+		if e.ComplexityRoot.IntegrationRecommendation.Score == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRecommendation.Score(childComplexity), true
+	case "IntegrationRecommendation.tags":
+		if e.ComplexityRoot.IntegrationRecommendation.Tags == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRecommendation.Tags(childComplexity), true
+	case "IntegrationRecommendation.visible":
+		if e.ComplexityRoot.IntegrationRecommendation.Visible == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IntegrationRecommendation.Visible(childComplexity), true
 
 	case "InternalPolicy.activeWorkflowInstances":
 		if e.ComplexityRoot.InternalPolicy.ActiveWorkflowInstances == nil {
@@ -39144,6 +39233,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Query.Programs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramOrder), args["where"].(*generated.ProgramWhereInput)), true
+	case "Query.recommendedIntegrations":
+		if e.ComplexityRoot.Query.RecommendedIntegrations == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Query.RecommendedIntegrations(childComplexity), true
 	case "Query.remediation":
 		if e.ComplexityRoot.Query.Remediation == nil {
 			break
@@ -154890,6 +154985,31 @@ type IntegrationDeletePayload {
     config: JSON
 }
 `, BuiltIn: false},
+	{Name: "../schema/integrationrecommendation.graphql", Input: `extend type Query {
+    """
+    Returns org-scoped integration recommendations derived from existing assets, vendors, SSO settings, and sign-in signals.
+    """
+    recommendedIntegrations: [IntegrationRecommendation!]!
+}
+
+"""
+IntegrationRecommendation is a computed recommendation for an installable integration definition.
+"""
+type IntegrationRecommendation {
+    id: ID!
+    family: String
+    displayName: String!
+    description: String
+    category: String
+    docsURL: String
+    logoURL: String
+    tags: [String!]!
+    active: Boolean!
+    visible: Boolean!
+    score: Int!
+    label: String!
+}
+`, BuiltIn: false},
 	{Name: "../schema/internalpolicy.graphql", Input: `extend type InternalPolicy {
     """
     Indicates if this internalPolicy has pending changes awaiting workflow approval
@@ -171006,6 +171126,36 @@ func (ec *executionContext) childFields_IntegrationEdge(ctx context.Context, fie
 		return ec.fieldContext_IntegrationEdge_cursor(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type IntegrationEdge", field.Name)
+}
+
+func (ec *executionContext) childFields_IntegrationRecommendation(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+	switch field.Name {
+	case "id":
+		return ec.fieldContext_IntegrationRecommendation_id(ctx, field)
+	case "family":
+		return ec.fieldContext_IntegrationRecommendation_family(ctx, field)
+	case "displayName":
+		return ec.fieldContext_IntegrationRecommendation_displayName(ctx, field)
+	case "description":
+		return ec.fieldContext_IntegrationRecommendation_description(ctx, field)
+	case "category":
+		return ec.fieldContext_IntegrationRecommendation_category(ctx, field)
+	case "docsURL":
+		return ec.fieldContext_IntegrationRecommendation_docsURL(ctx, field)
+	case "logoURL":
+		return ec.fieldContext_IntegrationRecommendation_logoURL(ctx, field)
+	case "tags":
+		return ec.fieldContext_IntegrationRecommendation_tags(ctx, field)
+	case "active":
+		return ec.fieldContext_IntegrationRecommendation_active(ctx, field)
+	case "visible":
+		return ec.fieldContext_IntegrationRecommendation_visible(ctx, field)
+	case "score":
+		return ec.fieldContext_IntegrationRecommendation_score(ctx, field)
+	case "label":
+		return ec.fieldContext_IntegrationRecommendation_label(ctx, field)
+	}
+	return nil, fmt.Errorf("no field named %q was found under type IntegrationRecommendation", field.Name)
 }
 
 func (ec *executionContext) childFields_InternalPolicy(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {

@@ -1062,6 +1062,24 @@
                     "logoUrl": {
                       "type": "string"
                     },
+                    "recommendationSignals": {
+                      "items": {
+                        "description": "RecommendationSignal declares source-specific values that recommend a definition",
+                        "properties": {
+                          "source": {
+                            "type": "string"
+                          },
+                          "values": {
+                            "items": {
+                              "type": "string"
+                            },
+                            "type": "array"
+                          }
+                        },
+                        "type": "object"
+                      },
+                      "type": "array"
+                    },
                     "tags": {
                       "items": {
                         "type": "string"

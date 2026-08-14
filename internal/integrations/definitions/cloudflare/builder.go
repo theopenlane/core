@@ -29,8 +29,12 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 				Category:    "security-posture",
 				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/cloudflare",
 				Tags:        []string{"directory", "assets"},
-				Active:      true,
-				Visible:     true,
+				RecommendationSignals: []types.RecommendationSignal{
+					{Source: types.RecommendationSignalSourceAsset, Values: []string{"cloudflare", "dns", "registrar", "cdn", "waf"}},
+					{Source: types.RecommendationSignalSourceVendor, Values: []string{"cloudflare"}},
+				},
+				Active:  true,
+				Visible: true,
 			},
 			OperatorConfig: &types.OperatorConfigRegistration{
 				Schema: jsonx.SchemaFrom[RuntimeConfig](),

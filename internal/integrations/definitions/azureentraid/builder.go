@@ -21,8 +21,12 @@ func Builder(cfg Config) registry.Builder {
 				Category:    "identity",
 				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/azure_entra_id/overview",
 				Tags:        []string{"directory"},
-				Active:      true,
-				Visible:     true,
+				RecommendationSignals: []types.RecommendationSignal{
+					{Source: types.RecommendationSignalSourceVendor, Values: []string{"azure entraid", "entra", "entra id", "microsoft entra", "active directory"}},
+					{Source: types.RecommendationSignalSourceSSOProvider, Values: []string{"MICROSOFT_ENTRA_ID"}},
+				},
+				Active:  true,
+				Visible: true,
 			},
 			OperatorConfig: &types.OperatorConfigRegistration{
 				Schema: jsonx.SchemaFrom[Config](),

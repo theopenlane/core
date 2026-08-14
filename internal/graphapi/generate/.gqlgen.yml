@@ -188,6 +188,9 @@ models:
   TemplateContextEntry:
     model:
       - github.com/theopenlane/core/common/models.TemplateContextEntry
+  IntegrationRecommendation:
+    model:
+      - github.com/theopenlane/core/internal/graphapi/model.IntegrationRecommendation
 
 directives:
   modules:

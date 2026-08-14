@@ -1,0 +1,24 @@
+extend type Query {
+    """
+    Returns org-scoped integration recommendations derived from existing assets, vendors, SSO settings, and sign-in signals.
+    """
+    recommendedIntegrations: [IntegrationRecommendation!]!
+}
+
+"""
+IntegrationRecommendation is a computed recommendation for an installable integration definition.
+"""
+type IntegrationRecommendation {
+    id: ID!
+    family: String
+    displayName: String!
+    description: String
+    category: String
+    docsURL: String
+    logoURL: String
+    tags: [String!]!
+    active: Boolean!
+    visible: Boolean!
+    score: Int!
+    label: String!
+}
