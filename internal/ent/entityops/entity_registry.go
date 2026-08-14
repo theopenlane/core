@@ -315,12 +315,21 @@ func (s *Schema) PersistIngest(ctx context.Context, client *generated.Client, in
 		return "", ErrIngestNotBound
 	}
 
+	// the split runs before prepare: prepare round-trips the payload through the typed create
+	// input, which drops through-edge keys the input struct cannot carry
+	payload, throughIDs := splitThroughEdgeIDs(s, payload)
+
 	payload, err := s.Ingest.prepare(ctx, integration, payload)
 	if err != nil {
 		return "", err
 	}
 
-	return s.Ingest.persist(ctx, client, integration, payload)
+	id, err := s.Ingest.persist(ctx, client, integration, payload)
+	if err != nil {
+		return "", err
+	}
+
+	return id, applyThroughEdgeIDs(ctx, client, s, id, throughIDs)
 }
 
 // handleIngest runs the mandatory consumer-side pipeline for one queued mapped entity.
@@ -465,6 +474,20 @@ func isJSONNull(raw json.RawMessage) bool {
 	return bytes.Equal(bytes.TrimSpace(raw), []byte("null"))
 }
 
+// softDeleteFieldName is the column the soft-delete mixin adds to participating schemas
+const softDeleteFieldName = "deleted_at"
+
+// SoftDeletes reports whether this schema soft-deletes rows via the deleted_at column
+func (s *Schema) SoftDeletes() bool {
+	for _, f := range s.Fields {
+		if f.Name == softDeleteFieldName {
+			return true
+		}
+	}
+
+	return false
+}
+
 // MatchKeyField reports whether field is a declared match-key column for this schema
 func (s *Schema) MatchKeyField(field string) bool {
 	for _, f := range s.Fields {
@@ -554,7 +577,8 @@ func (s *Schema) CoerceValue(name string, value any) (any, error) {
 		return coerceFloat(value)
 	case "[]string":
 		return coerceStringSlice(value), nil
-	case "time.Time":
+	case "time.Time", "models.DateTime":
+		// models.DateTime unmarshals the same RFC3339/date-only layouts coerceTime parses
 		return coerceTime(value)
 	default:
 		return value, nil

@@ -48,10 +48,6 @@ func (l *WorkflowListeners) HandleWorkflowMutationGala(inv entityops.Invocation,
 		return nil
 	}
 
-	if entityops.EmissionVetoed(inv.Context) {
-		return nil
-	}
-
 	eventType := workflowEventTypeFromEntOperation(payload.Operation)
 	changeSet := payload.ChangeSet
 

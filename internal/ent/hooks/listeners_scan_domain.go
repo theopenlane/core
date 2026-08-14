@@ -6,6 +6,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/entityops"
+	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -51,6 +52,11 @@ func handleScanDomainCreated(inv entityops.Invocation, _ entityops.MutationPaylo
 		return err
 	}
 
+	// re-check the loaded row: a scan already processed between commit and delivery is done
+	if !isPendingDomainScan(scanRecord) {
+		return nil
+	}
+
 	rt, ok := gala.Resolve[*intruntime.Runtime](inv.Context, inv.Injector, domainScanListenerLabel)
 	if !ok {
 		return nil
@@ -58,7 +64,7 @@ func handleScanDomainCreated(inv entityops.Invocation, _ entityops.MutationPaylo
 
 	forceRefresh, _ := scanRecord.Metadata["forceRefresh"].(bool)
 
-	return dispatchDomainScan(inv.Context, rt, string(inv.Envelope.ID), cloudflare.DomainScanRequest{
+	return dispatchDomainScan(inv.Context, rt, dispatchUniqueKeys.Key(cloudflare.DomainScanRequestOp.Name(), string(inv.Envelope.ID)), cloudflare.DomainScanRequest{
 		OrganizationID: scanRecord.OwnerID,
 		Domain:         scanRecord.Target,
 		ForceRefresh:   forceRefresh,
@@ -99,6 +105,13 @@ func handleOrganizationSettingDomainsUpdated(inv entityops.Invocation, _ entityo
 
 // dispatchUniqueKeys is the dedup key namespace for event-triggered dispatch runs
 var dispatchUniqueKeys = gala.NewUniqueKeyNamespace("dispatch")
+
+// isPendingDomainScan reports whether scanRecord is a domain-type Scan still awaiting submission
+func isPendingDomainScan(scanRecord *entgen.Scan) bool {
+	return scanRecord.ScanType == enums.ScanTypeDomain &&
+		scanRecord.Status == enums.ScanStatusPending &&
+		scanRecord.PerformedBy == cloudflare.DomainScanPerformedBy
+}
 
 // dispatchDomainScan marshals the request and dispatches the cloudflare domain scan operation
 // as an event-triggered runtime run

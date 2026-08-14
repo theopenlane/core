@@ -33,8 +33,7 @@ func (d DirectorySync) IngestHandle() types.IngestHandler {
 
 // Run collects Authentik directory users, groups, and memberships
 func (DirectorySync) Run(ctx context.Context, c *authentikSDK.APIClient, cfg UserInput, lastRunAt *time.Time) ([]types.IngestPayloadSet, error) {
-	// Group membership reconciliation needs every provider user because groups embed their
-	// memberships. Incremental users are only correct when group sync is disabled.
+	// groups embed their memberships, so group sync needs the full user set
 	userSince := lastRunAt
 	if !cfg.DisableGroupSync {
 		userSince = nil
@@ -108,24 +107,14 @@ func (DirectorySync) Run(ctx context.Context, c *authentikSDK.APIClient, cfg Use
 			Envelopes: groupEnvelopes,
 		},
 		types.IngestPayloadSet{
-			Schema:               entityops.SchemaDirectoryMembership.Name,
-			Envelopes:            membershipEnvelopes,
-			SnapshotCompleteness: membershipSnapshotCompleteness(userSince),
+			Schema:    entityops.SchemaDirectoryMembership.Name,
+			Envelopes: membershipEnvelopes,
+			// memberships derived from an incremental user fetch are incomplete
+			SnapshotComplete: userSince == nil,
 		},
 	)
 
 	return payloadSets, nil
-}
-
-// membershipSnapshotCompleteness reports whether the membership payload contains all active
-// provider memberships. Incremental user fetches only include changed users, so their derived
-// memberships are partial even though groups are fetched in full.
-func membershipSnapshotCompleteness(userSince *time.Time) types.SnapshotCompleteness {
-	if userSince != nil {
-		return types.SnapshotCompletenessPartial
-	}
-
-	return types.SnapshotCompletenessFull
 }
 
 // listDirectoryUsers pages through all Authentik users

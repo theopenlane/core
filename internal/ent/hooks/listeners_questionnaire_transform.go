@@ -118,7 +118,10 @@ func handleAssessmentResponse(inv entityops.Invocation, payload entityops.Mutati
 
 		logx.FromContext(ctx).Error().Err(err).Msg("questionnaire transform failed")
 
-		if errors.Is(err, entityops.ErrUpsertConflict) {
+		// deterministic persistence failures cannot succeed on redelivery: decode and
+		// ent validation failures are data problems, an upsert conflict means the
+		// entity already exists
+		if errors.Is(err, entityops.ErrUpsertConflict) || errors.Is(err, entityops.ErrDecodeFailed) || entgen.IsValidationError(err) {
 			return nil
 		}
 
@@ -212,15 +215,18 @@ func handleEntityTransform(ctx context.Context, client *entgen.Client, req quest
 		return err
 	}
 
-	if err := connectEntitySources(ctx, client, req, record); err != nil {
+	claimed, err := connectEntitySources(ctx, client, req, record)
+	if err != nil {
 		return err
 	}
 
-	if err := createEntityNote(ctx, client, req, record.ID, mapped.Notes); err != nil {
-		return err
+	// a lost claim means a concurrent delivery of the same response already owns linking
+	// and note creation
+	if !claimed {
+		return nil
 	}
 
-	return nil
+	return createEntityNote(ctx, client, req, record.ID, mapped.Notes)
 }
 
 func resolveTransformMappings(ctx context.Context, client *entgen.Client, schema *entityops.Schema, req questionnaireTransformRequest) (map[string]any, error) {
@@ -497,38 +503,48 @@ func persistTransformPayload(ctx context.Context, client *entgen.Client, schema 
 	return record, nil
 }
 
-func connectEntitySources(ctx context.Context, client *entgen.Client, req questionnaireTransformRequest, record *entgen.Entity) error {
-	if record == nil {
-		return nil
+// connectEntitySources atomically claims the assessment response by flipping its empty
+// entity_id — the claim is the transform's mutex, so concurrent deliveries of the same
+// response cannot double-link or duplicate notes — then links the document data
+func connectEntitySources(ctx context.Context, client *entgen.Client, req questionnaireTransformRequest, record *entgen.Entity) (bool, error) {
+	if record == nil || req.AssessmentResponseID == "" {
+		return false, nil
+	}
+
+	update := client.AssessmentResponse.Update().
+		Where(
+			assessmentresponse.ID(req.AssessmentResponseID),
+			assessmentresponse.Or(assessmentresponse.EntityIDIsNil(), assessmentresponse.EntityIDEQ("")),
+		).
+		SetEntityID(record.ID)
+
+	displayName := strings.TrimSpace(record.DisplayName)
+	if displayName == "" {
+		displayName = strings.TrimSpace(record.Name)
+	}
+
+	if displayName != "" {
+		update.SetDisplayName(displayName)
+	}
+
+	affected, err := update.Save(ctx)
+	if err != nil {
+		return false, fmt.Errorf("link transformed entity to assessment response: %w", err)
+	}
+
+	if affected == 0 {
+		return false, nil
 	}
 
 	if req.DocumentDataID != "" {
 		if err := client.DocumentData.UpdateOneID(req.DocumentDataID).
 			AddEntityIDs(record.ID).
 			Exec(ctx); err != nil && !entgen.IsConstraintError(err) {
-			return fmt.Errorf("link transformed entity to document data: %w", err)
+			return false, fmt.Errorf("link transformed entity to document data: %w", err)
 		}
 	}
 
-	if req.AssessmentResponseID != "" {
-		update := client.AssessmentResponse.UpdateOneID(req.AssessmentResponseID).
-			SetEntityID(record.ID)
-
-		displayName := strings.TrimSpace(record.DisplayName)
-		if displayName == "" {
-			displayName = strings.TrimSpace(record.Name)
-		}
-
-		if displayName != "" {
-			update.SetDisplayName(displayName)
-		}
-
-		if err := update.Exec(ctx); err != nil {
-			return fmt.Errorf("link transformed entity to assessment response: %w", err)
-		}
-	}
-
-	return nil
+	return true, nil
 }
 
 func createEntityNote(ctx context.Context, client *entgen.Client, req questionnaireTransformRequest, entityID string, text string) error {

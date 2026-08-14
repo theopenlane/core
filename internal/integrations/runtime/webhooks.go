@@ -229,12 +229,14 @@ func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope operations.We
 		Webhook:     webhook,
 		Event:       event,
 		Ingest: func(ingestCtx context.Context, payloadSets []types.IngestPayloadSet) error {
-			return operations.EmitPayloadSets(ingestCtx, operations.IngestContext{
+			_, ingestErr := operations.EmitPayloadSets(ingestCtx, operations.IngestContext{
 				Registry:    r.Registry(),
 				DB:          r.DB(),
 				Runtime:     r.Gala(),
 				Integration: integration,
 			}, src.Webhook, registration.Ingest, payloadSets, operations.IngestOptionsFromOperationContext(oc))
+
+			return ingestErr
 		},
 		DispatchOperation: func(dispatchCtx context.Context, operation string, config json.RawMessage) error {
 			_, dispatchErr := r.Dispatch(dispatchCtx, types.DispatchRequest{

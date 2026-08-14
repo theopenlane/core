@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	scimerrors "github.com/elimity-com/scim/errors"
+	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	definitionscim "github.com/theopenlane/core/internal/integrations/definitions/scim"
@@ -26,7 +27,7 @@ func ingestPayloadSets(ctx context.Context, client *generated.Client, rt *integr
 		contracts = append(contracts, integrationtypes.IngestContract{Schema: ps.Schema})
 	}
 
-	return integrationops.ProcessPayloadSets(
+	result, err := integrationops.ProcessPayloadSets(
 		ctx,
 		integrationops.IngestContext{
 			Registry:    rt.Registry(),
@@ -37,8 +38,16 @@ func ingestPayloadSets(ctx context.Context, client *generated.Client, rt *integr
 		"",
 		contracts,
 		payloadSets,
-		integrationops.IngestOptions{Mode: integrationops.IngestStrict},
+		integrationops.IngestOptions{},
 	)
+	if err != nil {
+		return err
+	}
+
+	// SCIM must reject records the batch skipped so the provider sees the failure status
+	return errors.Join(lo.Map(result.Failures, func(failure integrationops.RecordFailure, _ int) error {
+		return failure.Err
+	})...)
 }
 
 // handleIngestError maps shared ingest failures to SCIM-compatible errors

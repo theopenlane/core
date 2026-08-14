@@ -270,7 +270,7 @@ func TestEmitGalaEventHookHardDeleteEmits(t *testing.T) {
 		return 1, nil
 	}))
 
-	if _, err := hooked.Mutate(context.Background(), &fakeMutation{op: ent.OpDeleteOne, typ: entgen.TypeTask, id: "task-1"}); err != nil {
+	if _, err := hooked.Mutate(entx.SkipSoftDelete(context.Background()), &fakeMutation{op: ent.OpDeleteOne, typ: entgen.TypeTask, id: "task-1"}); err != nil {
 		t.Fatalf("mutate failed: %v", err)
 	}
 

@@ -221,20 +221,21 @@ func EmitMutation(ctx context.Context, runtimes []*gala.Gala, payload MutationPa
 	}
 }
 
-// emissionVeto is a mutable flag inner hooks set to suppress mutation event emission
+// emissionVeto is a mutable flag inner hooks mark to suppress mutation event emission
 type emissionVeto struct {
 	vetoed bool
 }
 
 var emissionVetoContextKey = contextx.NewKey[*emissionVeto]()
-var emissionVetoNextContextKey = contextx.NewKey[bool]()
 
-// WithEmissionVeto pushes an independent mutation frame. The soft-delete rewrite pass
-// must not push one: it shares the outer delete's frame so its veto reaches the outer pass
+// WithEmissionVeto installs a shared emission veto holder when none is present, so every
+// emission hook on the chain reads the same suppression decision
 func WithEmissionVeto(ctx context.Context) context.Context {
-	vetoed, _ := emissionVetoNextContextKey.Get(ctx)
+	if _, ok := emissionVetoContextKey.Get(ctx); ok {
+		return ctx
+	}
 
-	return emissionVetoContextKey.Set(ctx, &emissionVeto{vetoed: vetoed})
+	return emissionVetoContextKey.Set(ctx, &emissionVeto{})
 }
 
 // VetoEmission suppresses mutation event emission for the current mutation
@@ -244,9 +245,10 @@ func VetoEmission(ctx context.Context) {
 	}
 }
 
-// WithEmissionVetoed marks the next mutation frame as vetoed without mutating an existing frame.
+// WithEmissionVetoed suppresses mutation event emission for every mutation under ctx; the
+// fresh holder shadows any outer one so the veto never leaks to sibling contexts
 func WithEmissionVetoed(ctx context.Context) context.Context {
-	return emissionVetoNextContextKey.Set(ctx, true)
+	return emissionVetoContextKey.Set(ctx, &emissionVeto{vetoed: true})
 }
 
 // EmissionVetoed reports whether mutation event emission is vetoed

@@ -23,16 +23,10 @@ import (
 
 // IngestOptions carries the minimal ingest-time metadata needed by persistence
 type IngestOptions struct {
-	// Mode controls whether record-level failures are returned to the caller
-	Mode IngestMode
 	// DirectorySyncRunID groups all directory-related ingest records from one sync batch
 	DirectorySyncRunID string
 	// SkipDirectorySyncRunFinalization instructs the processor not to finalize the directory sync run after processing
 	SkipDirectorySyncRunFinalization bool
-	// CompleteDirectorySnapshot signals that the batch carries the provider's complete directory
-	// membership state, authorizing removal inference for memberships the batch did not confirm;
-	// partial sources (webhooks, scim, single-record pushes) leave this false
-	CompleteDirectorySnapshot bool
 	// RunID is a caller-supplied correlation identifier for the overall operation run
 	RunID string
 	// Webhook is the webhook name or identifier that triggered this ingest
@@ -45,40 +39,30 @@ type IngestOptions struct {
 	WorkflowMeta *types.WorkflowMeta
 }
 
-// IngestMode controls record-level failure handling for a payload batch.
-type IngestMode uint8
-
-const (
-	// IngestBestEffort imports records that can be persisted and logs failures for the next cycle.
-	IngestBestEffort IngestMode = iota
-	// IngestStrict returns all record-level failures after attempting the complete batch.
-	IngestStrict
-)
-
-// RecordFailure identifies one mapped record that could not be imported.
+// RecordFailure identifies one mapped record that could not be imported
 type RecordFailure struct {
-	// Schema is the integration mapping schema name identifying the target ent type
+	// Schema is the mapping schema name
 	Schema string
-	// Resource is the provider-assigned resource identifier for the record
+	// Resource is the provider resource identifier
 	Resource string
-	// Err is the underlying error that prevented the record from being persisted or accepted by the queue
+	// Err is the underlying failure
 	Err error
 }
 
 // IngestResult reports record-level work completed by a payload batch
 type IngestResult struct {
 	Attempted int
-	// Persisted counts records written synchronously. It excludes records accepted by a durable queue
+	// Persisted counts records written synchronously
 	Persisted int
-	// Accepted counts records accepted by a durable queue; acceptance does not mean persistence
+	// Accepted counts records queued durably; acceptance does not mean persistence
 	Accepted int
 	// Filtered counts records excluded by configured filters
 	Filtered int
-	// Succeeded is retained as the combined successful handling count for compatibility
+	// Succeeded is the combined successful handling count
 	Succeeded int
-	// Failed counts records that could not be persisted or accepted by the queue
+	// Failed counts records that could not be imported
 	Failed int
-	// Failures is the list of records that failed
+	// Failures lists each failed record with its cause
 	Failures []RecordFailure
 }
 
@@ -118,69 +102,43 @@ var directorySyncRunSchemas = map[string]struct{}{
 	entityops.SchemaDirectoryMembership.Name: {},
 }
 
-// ProcessPayloadSets persists one batch of mapped payload sets synchronously, skipping
-// failed records; a single batch job avoids the per-record fan-out that multiplied queue
-// rows and duplicate-insert races. Cross-object links are resolved and injected into each
-// create input upstream in applyPayloadSets, so persistence creates each record with its
-// edges already set
-func ProcessPayloadSets(ctx context.Context, ic IngestContext, operationName string, contracts []types.IngestContract, payloadSets []types.IngestPayloadSet, options IngestOptions) error {
-	_, err := ProcessPayloadSetsWithResult(ctx, ic, operationName, contracts, payloadSets, options, func(handleCtx context.Context, record mappedIngestRecord) error {
+// ProcessPayloadSets persists one batch of mapped payload sets synchronously; record
+// failures are skipped and reported in the result, never the error
+func ProcessPayloadSets(ctx context.Context, ic IngestContext, operationName string, contracts []types.IngestContract, payloadSets []types.IngestPayloadSet, options IngestOptions) (IngestResult, error) {
+	result, err := applyPayloadSets(ctx, ic, operationName, contracts, payloadSets, options, func(handleCtx context.Context, record mappedIngestRecord) error {
 		_, err := persistMappedRecord(handleCtx, ic.DB, ic.Integration, record.Schema, record.Payload)
 
 		return err
 	})
 
-	return err
+	result.Persisted = result.Succeeded
+
+	return result, err
 }
 
-// EmitPayloadSets maps one batch and queues each non-directory record for durable schema ingest.
-// Directory syncs remain in-process because their run finalization and membership removal
-// inference must happen after the records have been persisted.
-func EmitPayloadSets(ctx context.Context, ic IngestContext, operationName string, contracts []types.IngestContract, payloadSets []types.IngestPayloadSet, options IngestOptions) error {
-	_, err := EmitPayloadSetsWithResult(ctx, ic, operationName, contracts, payloadSets, options)
-	return err
-}
-
-// EmitPayloadSetsWithResult emits or persists a payload batch and returns accounting for the
-// work performed. Queued records are reported as Accepted, never Persisted.
-func EmitPayloadSetsWithResult(ctx context.Context, ic IngestContext, operationName string, contracts []types.IngestContract, payloadSets []types.IngestPayloadSet, options IngestOptions) (IngestResult, error) {
+// EmitPayloadSets queues each non-directory record for durable schema ingest; directory syncs
+// stay in-process because finalization and removal inference must follow persistence.
+// Queued records report as Accepted, never Persisted
+func EmitPayloadSets(ctx context.Context, ic IngestContext, operationName string, contracts []types.IngestContract, payloadSets []types.IngestPayloadSet, options IngestOptions) (IngestResult, error) {
 	if needsDirectorySyncRun(contracts) {
-		result, err := ProcessPayloadSetsWithResult(ctx, ic, operationName, contracts, payloadSets, options, func(handleCtx context.Context, record mappedIngestRecord) error {
-			_, err := persistMappedRecord(handleCtx, ic.DB, ic.Integration, record.Schema, record.Payload)
-			return err
-		})
-		result.Persisted = result.Succeeded
-		return result, err
+		return ProcessPayloadSets(ctx, ic, operationName, contracts, payloadSets, options)
 	}
+
 	if ic.Runtime == nil {
 		return IngestResult{}, ErrGalaRequired
 	}
 
-	result, err := ProcessPayloadSetsWithResult(ctx, ic, operationName, contracts, payloadSets, options, func(handleCtx context.Context, record mappedIngestRecord) error {
+	result, err := applyPayloadSets(ctx, ic, operationName, contracts, payloadSets, options, func(handleCtx context.Context, record mappedIngestRecord) error {
 		return emitMappedRecord(handleCtx, ic.Runtime, ic.Integration, operationName, record, options)
 	})
 
 	result.Accepted = result.Succeeded
-	result.Succeeded = 0
+
 	return result, err
 }
 
-// ProcessPayloadSetsWithResult persists one batch and returns record accounting. In strict mode,
-// record failures are also joined into the returned error so callers can map the underlying
-// validation or uniqueness sentinel while still receiving complete batch accounting.
-func ProcessPayloadSetsWithResult(ctx context.Context, ic IngestContext, operationName string, contracts []types.IngestContract, payloadSets []types.IngestPayloadSet, options IngestOptions, handle func(context.Context, mappedIngestRecord) error) (IngestResult, error) {
-	return applyPayloadSetsResult(ctx, ic, operationName, contracts, payloadSets, options, handle)
-}
-
 // applyPayloadSets is the shared core for both async emit and sync persist paths
-func applyPayloadSets(ctx context.Context, ic IngestContext, operationName string, contracts []types.IngestContract, payloadSets []types.IngestPayloadSet, options IngestOptions, handle func(context.Context, mappedIngestRecord) error) (err error) {
-	_, err = applyPayloadSetsResult(ctx, ic, operationName, contracts, payloadSets, options, handle)
-
-	return err
-}
-
-// applyPayloadSetsResult is the shared core for both async emit and sync persist paths.
-func applyPayloadSetsResult(ctx context.Context, ic IngestContext, operationName string, contracts []types.IngestContract, payloadSets []types.IngestPayloadSet, options IngestOptions, handle func(context.Context, mappedIngestRecord) error) (result IngestResult, err error) {
+func applyPayloadSets(ctx context.Context, ic IngestContext, operationName string, contracts []types.IngestContract, payloadSets []types.IngestPayloadSet, options IngestOptions, handle func(context.Context, mappedIngestRecord) error) (result IngestResult, err error) {
 	definition, ok := ic.Registry.Definition(ic.Integration.DefinitionID)
 	if !ok {
 		return result, ErrIngestDefinitionNotFound
@@ -216,18 +174,9 @@ func applyPayloadSetsResult(ctx context.Context, ic IngestContext, operationName
 	var attempted, failed int
 	var membershipSetSeen bool
 	var recordFailures []RecordFailure
-	completeDirectorySnapshot := options.CompleteDirectorySnapshot
+	membershipsComplete := true
 
 	for _, payloadSet := range payloadSets {
-		if payloadSet.Schema == entityops.SchemaDirectoryMembership.Name {
-			switch payloadSet.SnapshotCompleteness {
-			case types.SnapshotCompletenessPartial:
-				completeDirectorySnapshot = false
-			case types.SnapshotCompletenessFull:
-				completeDirectorySnapshot = true
-			}
-		}
-
 		if !contractIncludesSchema(contracts, payloadSet.Schema) {
 			return result, ErrIngestSchemaNotDeclared
 		}
@@ -239,6 +188,7 @@ func applyPayloadSetsResult(ctx context.Context, ic IngestContext, operationName
 
 		if payloadSet.Schema == entityops.SchemaDirectoryMembership.Name {
 			membershipSetSeen = true
+			membershipsComplete = membershipsComplete && payloadSet.SnapshotComplete
 		}
 
 		for _, envelope := range payloadSet.Envelopes {
@@ -296,36 +246,20 @@ func applyPayloadSetsResult(ctx context.Context, ic IngestContext, operationName
 	}
 
 	if failed > 0 {
-		// bad records are skipped, not retried: the batch imported what it could and the
-		// next cycle re-fetches; failing the job would reprocess the whole batch
+		// skipped records are not retried; failing the job would reprocess the whole batch
 		logx.FromContext(ctx).Warn().Int("failed", failed).Int("attempted", attempted).Msg("ingest skipped records that could not be imported")
-	}
-
-	// complete-snapshot directory syncs carry the full membership state, so any active membership
-	// the run did not confirm was removed upstream; a skipped record risks one false removal that
-	// restores as a fresh episode on its next successful import. Partial sources (scim, webhooks)
-	// and runs finalized elsewhere never authorize removal inference
-	if directorySync && membershipSetSeen && !options.SkipDirectorySyncRunFinalization && completeDirectorySnapshot && failed == 0 {
-		if err := markUnconfirmedDirectoryMembershipsRemoved(ctx, ic.DB, ic.Integration.ID, directorySyncRunID); err != nil {
-			result.Attempted = attempted
-			result.Failed = failed
-			result.Persisted = result.Succeeded
-			result.Failures = recordFailures
-			return result, fmt.Errorf("%w: %w", ErrIngestPersistFailed, err)
-		}
 	}
 
 	result.Attempted = attempted
 	result.Failed = failed
-	result.Persisted = result.Succeeded
 	result.Failures = recordFailures
-	if options.Mode == IngestStrict && len(recordFailures) > 0 {
-		joined := make([]error, 0, len(recordFailures))
-		for _, failure := range recordFailures {
-			joined = append(joined, failure.Err)
-		}
 
-		return result, errors.Join(joined...)
+	// only a fully-confirmed complete snapshot authorizes removal inference: a skipped record
+	// risks a false removal, and partial sources never carry full membership state
+	if directorySync && membershipSetSeen && membershipsComplete && !options.SkipDirectorySyncRunFinalization && failed == 0 {
+		if err := markUnconfirmedDirectoryMembershipsRemoved(ctx, ic.DB, ic.Integration.ID, directorySyncRunID); err != nil {
+			return result, fmt.Errorf("%w: %w", ErrIngestPersistFailed, err)
+		}
 	}
 
 	return result, nil

@@ -33,14 +33,28 @@ func IdentityResolutionListeners() []gala.Registration {
 	}
 }
 
-// handleDirectoryAccountMutation re-runs the matching cascade on every create and update,
-// relinking when resolution lands on a different identity holder, then enriches and syncs
+// handleDirectoryAccountMutation runs the matching cascade for unlinked accounts and links
+// the resolved holder; already-linked accounts keep their holder and only re-enrich and
+// re-sync aliases
 func handleDirectoryAccountMutation(inv entityops.Invocation, _ entityops.MutationPayload) error {
 	ctx, client := inv.Context, inv.Client
 
 	account, ok, err := entityops.LoadEntity(ctx, inv.EntityID, client.DirectoryAccount.Get)
 	if err != nil || !ok {
 		return err
+	}
+
+	if account.IdentityHolderID != nil && *account.IdentityHolderID != "" {
+		holder, err := client.IdentityHolder.Get(ctx, *account.IdentityHolderID)
+		if err != nil {
+			if entgen.IsNotFound(err) {
+				return nil
+			}
+
+			return err
+		}
+
+		return enrichAndSyncHolder(logx.WithFields(ctx, map[string]any{"identity_holder_id": holder.ID}), client, holder, account)
 	}
 
 	holder, err := resolveIdentityHolder(ctx, client, account)
@@ -56,15 +70,18 @@ func handleDirectoryAccountMutation(inv entityops.Invocation, _ entityops.Mutati
 
 	ctx = logx.WithFields(ctx, map[string]any{"identity_holder_id": holder.ID})
 
-	// write only on holder change so the relink update does not re-trigger this listener
-	if account.IdentityHolderID == nil || *account.IdentityHolderID != holder.ID {
-		if err := client.DirectoryAccount.UpdateOneID(account.ID).SetIdentityHolderID(holder.ID).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("failed to link directory account to identity holder")
+	if err := client.DirectoryAccount.UpdateOneID(account.ID).SetIdentityHolderID(holder.ID).Exec(ctx); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to link directory account to identity holder")
 
-			return err
-		}
+		return err
 	}
 
+	return enrichAndSyncHolder(ctx, client, holder, account)
+}
+
+// enrichAndSyncHolder enriches the holder from a primary-source account and rebuilds its
+// email aliases
+func enrichAndSyncHolder(ctx context.Context, client *entgen.Client, holder *entgen.IdentityHolder, account *entgen.DirectoryAccount) error {
 	if account.PrimarySource {
 		if err := enrichFromPrimarySource(ctx, client, holder, account); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("primary source enrichment failed")

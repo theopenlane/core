@@ -224,9 +224,9 @@ func (d DirectorySync) Run(ctx context.Context, client GraphQLClient) ([]types.I
 				Envelopes: groupEnvelopes,
 			},
 			types.IngestPayloadSet{
-				Schema:               entityops.SchemaDirectoryMembership.Name,
-				Envelopes:            membershipEnvelopes,
-				SnapshotCompleteness: types.SnapshotCompletenessFull,
+				Schema:           entityops.SchemaDirectoryMembership.Name,
+				Envelopes:        membershipEnvelopes,
+				SnapshotComplete: true,
 			},
 		)
 	}

@@ -25,13 +25,17 @@ func EmitGalaEventHook(runtimes ...*gala.Gala) ent.Hook {
 
 	return func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, mutation ent.Mutation) (ent.Value, error) {
-			op := mutation.Op().String()
+			// the rewritten update runs inside the delete pass, which owns emission
 			if entx.CheckIsSoftDeleteType(ctx, mutation.Type()) {
-				// the rewrite pass shares the outer delete's frame so the veto below reaches it
-				op = entityops.OpSoftDelete
-			} else {
-				ctx = entityops.WithEmissionVeto(ctx)
+				return next.Mutate(ctx, mutation)
 			}
+
+			op := mutation.Op().String()
+			if softDeleteClassified(ctx, mutation) {
+				op = entityops.OpSoftDelete
+			}
+
+			ctx = entityops.WithEmissionVeto(ctx)
 
 			changeSet := entityops.ChangeSetFromMutation(mutation)
 			ids, oldValues, snapshotErr := snapshotMutation(ctx, mutation, galaRuntimes, op, changeSet)
@@ -46,12 +50,6 @@ func EmitGalaEventHook(runtimes ...*gala.Gala) ent.Hook {
 
 			if entityops.EmissionVetoed(ctx) {
 				return retVal, err
-			}
-
-			// a rewritten soft delete emits here on the inner update pass; veto the shared
-			// holder so the outer delete pass stays silent
-			if op == entityops.OpSoftDelete {
-				entityops.VetoEmission(ctx)
 			}
 
 			topicName := mutation.Type()
@@ -116,6 +114,22 @@ func EmitGalaEventHook(runtimes ...*gala.Gala) ent.Hook {
 			return retVal, err
 		})
 	}
+}
+
+// softDeleteClassified reports whether a delete mutation will be rewritten to a soft delete:
+// the schema carries the soft-delete column and the context does not skip the rewrite
+func softDeleteClassified(ctx context.Context, mutation ent.Mutation) bool {
+	if !mutation.Op().Is(ent.OpDelete | ent.OpDeleteOne) {
+		return false
+	}
+
+	if entx.CheckSkipSoftDelete(ctx) {
+		return false
+	}
+
+	schema, ok := entityops.LookupSchema(mutation.Type())
+
+	return ok && schema.SoftDeletes()
 }
 
 // snapshotMutation captures the mutated row IDs and their pre-mutation values while the

@@ -138,9 +138,9 @@ func (DirectorySync) Run(ctx context.Context, gc *gocloak.GoCloak, token, realm 
 			Envelopes: groupEnvelopes,
 		},
 		types.IngestPayloadSet{
-			Schema:               entityops.SchemaDirectoryMembership.Name,
-			Envelopes:            membershipEnvelopes,
-			SnapshotCompleteness: types.SnapshotCompletenessFull,
+			Schema:           entityops.SchemaDirectoryMembership.Name,
+			Envelopes:        membershipEnvelopes,
+			SnapshotComplete: true,
 		},
 	)
 

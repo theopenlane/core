@@ -135,7 +135,7 @@ func TestDirectorySyncAdoptsLegacyScientificKeys(t *testing.T) {
 		},
 	}
 
-	err = operations.ProcessPayloadSets(ctx, ic, "DirectorySync", contracts, payloadSets, operations.IngestOptions{})
+	_, err = operations.ProcessPayloadSets(ctx, ic, "DirectorySync", contracts, payloadSets, operations.IngestOptions{})
 	assert.NilError(t, err)
 
 	// the seeded account was adopted and repaired in place, not duplicated
@@ -264,7 +264,7 @@ func TestDirectorySyncResolvesAccountsAcrossReinstall(t *testing.T) {
 		},
 	}
 
-	err = operations.ProcessPayloadSets(ctx, ic, "DirectorySync", contracts, payloadSets, operations.IngestOptions{})
+	_, err = operations.ProcessPayloadSets(ctx, ic, "DirectorySync", contracts, payloadSets, operations.IngestOptions{})
 	assert.NilError(t, err)
 
 	// the old installation's account row was matched by owner + instance, not duplicated

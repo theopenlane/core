@@ -421,7 +421,7 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 
 		logx.FromContext(ctx).Info().Int("payload_sets", len(payloadSets)).Int("envelopes", totalEnvelopes).Msg("ingest handle completed")
 
-		result, err := operations.EmitPayloadSetsWithResult(ctx, operations.IngestContext{
+		result, err := operations.EmitPayloadSets(ctx, operations.IngestContext{
 			Registry:    r.Registry(),
 			DB:          r.DB(),
 			Runtime:     r.Gala(),

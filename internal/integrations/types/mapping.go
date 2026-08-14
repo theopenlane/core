@@ -98,22 +98,7 @@ type IngestPayloadSet struct {
 	Schema string `json:"schema"`
 	// Envelopes are the raw provider payloads to map and ingest
 	Envelopes []MappingEnvelope `json:"envelopes,omitempty"`
-	// SnapshotCompleteness describes whether this payload set contains all records for its schema.
-	// Unknown leaves the caller's default ingest option unchanged; partial payloads must never
-	// authorize removal inference for complete directory snapshots.
-	SnapshotCompleteness SnapshotCompleteness `json:"snapshotCompleteness,omitempty"`
+	// SnapshotComplete marks this payload set as the provider's complete record set for its
+	// schema; only complete membership sets authorize removal inference
+	SnapshotComplete bool `json:"snapshotComplete,omitempty"`
 }
-
-// SnapshotCompleteness describes how much of a provider's current state an ingest payload set
-// represents. It is intentionally carried per payload set because one operation can combine full
-// group data with incremental account or membership data.
-type SnapshotCompleteness uint8
-
-const (
-	// SnapshotCompletenessUnknown leaves the caller's default behavior unchanged.
-	SnapshotCompletenessUnknown SnapshotCompleteness = iota
-	// SnapshotCompletenessPartial means the payload set cannot authorize removal inference.
-	SnapshotCompletenessPartial
-	// SnapshotCompletenessFull means the payload set contains the provider's complete state.
-	SnapshotCompletenessFull
-)
