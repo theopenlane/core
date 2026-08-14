@@ -6,43 +6,38 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/mapx"
 )
 
-// eligibleFieldsRegistry holds the registered eligible fields map from generated code.
-var eligibleFieldsRegistry map[enums.WorkflowObjectType]map[string]struct{}
-
-// RegisterEligibleFields sets the eligible fields registry from generated code.
-func RegisterEligibleFields(fields map[enums.WorkflowObjectType]map[string]struct{}) {
-	eligibleFieldsRegistry = fields
-}
-
-// EligibleWorkflowFields returns the set of fields eligible for workflow processing for a given object type.
+// EligibleWorkflowFields returns the canonical set of workflow-eligible fields for an object type.
 func EligibleWorkflowFields(objectType enums.WorkflowObjectType) map[string]struct{} {
-	if eligibleFieldsRegistry == nil {
+	schema, err := WorkflowSchema(objectType)
+	if err != nil {
 		return map[string]struct{}{}
 	}
 
-	fields, ok := eligibleFieldsRegistry[objectType]
-	if !ok {
-		return map[string]struct{}{}
+	fields := schema.WorkflowFields()
+	eligible := make(map[string]struct{}, len(fields))
+	for _, field := range fields {
+		eligible[field.Name] = struct{}{}
 	}
 
-	return fields
+	return eligible
 }
 
 // SeparateFieldsByEligibility splits fields into eligible (workflow-controlled) and
 // ineligible (pass-through) sets for a given schema type.
 func SeparateFieldsByEligibility(schemaType string, fields []string) (eligible, ineligible []string) {
-	objectType := enums.ToWorkflowObjectType(schemaType)
-	if objectType == nil {
+	schema, ok := entityops.LookupSchema(schemaType)
+	if !ok || !schema.WorkflowEligible {
 		return nil, fields
 	}
 
-	eligibleSet := EligibleWorkflowFields(*objectType)
-	if len(eligibleSet) == 0 {
-		return nil, fields
+	eligibleSet := make(map[string]struct{})
+	for _, field := range schema.WorkflowFields() {
+		eligibleSet[field.Name] = struct{}{}
 	}
 
 	for _, field := range fields {
@@ -59,13 +54,15 @@ func SeparateFieldsByEligibility(schemaType string, fields []string) (eligible, 
 // CollectChangedFields returns the union of modified and cleared fields from a mutation,
 // filtered to only include fields eligible for workflow processing.
 func CollectChangedFields(m utils.GenericMutation) []string {
-	objectType := enums.ToWorkflowObjectType(m.Type())
-	eligible := EligibleWorkflowFields(lo.FromPtr(objectType))
-
 	uniqueFields := changedAndClearedFields(m)
-
-	if len(eligible) == 0 {
+	schema, ok := entityops.LookupSchema(m.Type())
+	if !ok || !schema.WorkflowEligible {
 		return uniqueFields
+	}
+
+	eligible := make(map[string]struct{})
+	for _, field := range schema.WorkflowFields() {
+		eligible[field.Name] = struct{}{}
 	}
 
 	return lo.Filter(uniqueFields, func(f string, _ int) bool {

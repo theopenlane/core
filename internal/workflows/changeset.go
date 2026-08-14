@@ -3,24 +3,17 @@ package workflows
 import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 // TriggerChangeSet returns the trigger mutation change-set carried by workflow instance
-// context; the engine's map-shaped proposed changes marshal into the delta contract's
-// opaque JSON at this boundary
+// context.
 func TriggerChangeSet(ctx models.WorkflowInstanceContext) entityops.ChangeSet {
-	proposed, err := jsonx.ToRawMessage(ctx.TriggerProposedChanges)
-	if err != nil || len(ctx.TriggerProposedChanges) == 0 {
-		proposed = nil
-	}
-
 	set := entityops.ChangeSet{
 		ChangedFields:   ctx.TriggerChangedFields,
 		ChangedEdges:    ctx.TriggerChangedEdges,
 		AddedIDs:        ctx.TriggerAddedIDs,
 		RemovedIDs:      ctx.TriggerRemovedIDs,
-		ProposedChanges: proposed,
+		ProposedChanges: ctx.TriggerProposedChanges,
 		OldValues:       ctx.TriggerOldValues,
 	}
 
@@ -29,7 +22,7 @@ func TriggerChangeSet(ctx models.WorkflowInstanceContext) entityops.ChangeSet {
 }
 
 // SetTriggerChangeSet applies a mutation change-set to workflow instance trigger context
-// fields, decoding the opaque proposed-changes JSON into the engine's map shape
+// fields.
 func SetTriggerChangeSet(ctx *models.WorkflowInstanceContext, changeSet entityops.ChangeSet) {
 	if ctx == nil {
 		return

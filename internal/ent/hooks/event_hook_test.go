@@ -2,6 +2,7 @@ package hooks
 
 import (
 	"context"
+	"errors"
 	"sync"
 	"testing"
 
@@ -74,10 +75,11 @@ func TestMutationConcernTopics(t *testing.T) {
 
 // fakeMutation is a minimal ent.Mutation and utils.GenericMutation for driving EmitGalaEventHook without a database
 type fakeMutation struct {
-	op  ent.Op
-	typ string
-	id  string
-	ids []string
+	op    ent.Op
+	typ   string
+	id    string
+	ids   []string
+	idErr error
 }
 
 func (m *fakeMutation) Op() ent.Op                                          { return m.op }
@@ -103,11 +105,31 @@ func (m *fakeMutation) ResetEdge(string) error                              { re
 func (m *fakeMutation) OldField(context.Context, string) (ent.Value, error) { return nil, nil }
 func (m *fakeMutation) ID() (string, bool)                                  { return m.id, m.id != "" }
 func (m *fakeMutation) IDs(context.Context) ([]string, error) {
+	if m.idErr != nil {
+		return nil, m.idErr
+	}
 	if len(m.ids) > 0 {
 		return m.ids, nil
 	}
 
 	return []string{m.id}, nil
+}
+
+func TestEmitGalaEventHookIDsErrorPreventsMutation(t *testing.T) {
+	runtime, _ := newRecordingRuntime(t, entgen.TypeTask)
+	called := false
+	hooked := EmitGalaEventHook(runtime)(ent.MutateFunc(func(context.Context, ent.Mutation) (ent.Value, error) {
+		called = true
+		return 1, nil
+	}))
+	wantErr := errors.New("ids failed")
+	_, err := hooked.Mutate(context.Background(), &fakeMutation{op: ent.OpDeleteOne, typ: entgen.TypeTask, idErr: wantErr})
+	if !errors.Is(err, wantErr) {
+		t.Fatalf("expected IDs error, got %v", err)
+	}
+	if called {
+		t.Fatal("expected mutation not to run when IDs resolution fails")
+	}
 }
 func (m *fakeMutation) Client() *entgen.Client { return nil }
 

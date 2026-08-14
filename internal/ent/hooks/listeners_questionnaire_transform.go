@@ -9,8 +9,6 @@ import (
 	"strings"
 
 	"github.com/stoewer/go-strcase"
-	"github.com/theopenlane/iam/auth"
-
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/entityops"
@@ -31,7 +29,7 @@ import (
 // questionnaire document data into the target schemas from `TemplateProjectionTarget`
 func QuestionnaireTransformListeners() []gala.Registration {
 	return []gala.Registration{entityops.MutationListener{
-		Schema:     entgen.TypeAssessmentResponse,
+		Schema:     entityops.SchemaAssessmentResponse,
 		Label:      "transform",
 		Operations: []string{entityops.OpCreate, entityops.OpUpdate, entityops.OpUpdateOne},
 		Fields: []string{
@@ -40,9 +38,7 @@ func QuestionnaireTransformListeners() []gala.Registration {
 			assessmentresponse.FieldCompletedAt,
 			assessmentresponse.FieldIsDraft,
 		},
-		Caller: func(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
-			return restored.WithCapabilities(auth.CapInternalOperation | auth.CapBypassOrgFilter)
-		},
+		Caller: internalOperationBypassCaller,
 		Handle: handleAssessmentResponse,
 	}}
 }

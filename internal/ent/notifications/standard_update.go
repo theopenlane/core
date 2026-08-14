@@ -89,7 +89,7 @@ func handleStandardMutation(inv entityops.Invocation, payload entityops.Mutation
 		return c.ID
 	})
 
-	subcontrols, err := fetchAffectedSubcontrols(allowCtx, client, controlIDs, std.Revision)
+	subcontrols, err := fetchAffectedSubcontrols(allowCtx, inv.Client, controlIDs, std.Revision)
 	if err != nil {
 		return err
 	}
@@ -119,7 +119,7 @@ func handleStandardMutation(inv entityops.Invocation, payload entityops.Mutation
 		orgSubcontrols := fetchSubcontrolsOwnedByControl(controls, subcontrolsByControlID)
 
 		data := map[string]any{
-			"url":                        getURLPathForObject(standardID, generated.TypeStandard),
+			"url":                        entityops.ConsoleObjectPath(generated.TypeStandard, standardID),
 			"standard_id":                standardID,
 			"standard_short_name":        std.ShortName,
 			"old_revision":               oldRevision,
@@ -140,13 +140,6 @@ func handleStandardMutation(inv entityops.Invocation, payload entityops.Mutation
 			},
 			"accept_all_available":        true,
 			"acceptance_updates_revision": std.Revision,
-			"url":                         entityops.ConsoleObjectPath(generated.TypeStandard, standardID),
-			"standard_id":                 standardID,
-			"standard_short_name":         std.ShortName,
-			"old_revision":                value.revision,
-			"new_revision":                std.Revision,
-			"change_type":                 detectVersionBump(value.revision, std.Revision),
-			"affected_controls_count":     value.controlCount,
 		}
 
 		topic := enums.NotificationTopicStandardUpdate

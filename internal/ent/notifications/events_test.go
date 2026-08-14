@@ -1,7 +1,6 @@
 package notifications
 
 import (
-	"encoding/json"
 	"testing"
 
 	"entgo.io/ent"
@@ -28,7 +27,11 @@ func TestExtractMentionDetails(t *testing.T) {
 		Operation:    ent.OpUpdateOne.String(),
 		EntityID:     "task-1",
 		ChangeSet: entityops.ChangeSet{
-			ProposedChanges: json.RawMessage(`{"` + task.FieldTitle + `":"Task One","` + task.FieldDetails + `":"details text","` + task.FieldOwnerID + `":"owner-1"}`),
+			ProposedChanges: map[string]any{
+				task.FieldTitle:   "Task One",
+				task.FieldDetails: "details text",
+				task.FieldOwnerID: "owner-1",
+			},
 			OldValues: map[string]any{
 				task.FieldDetails: "old details text",
 			},

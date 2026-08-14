@@ -3,15 +3,12 @@
 package entityops
 
 import (
-	"context"
-	"encoding/json"
 	"fmt"
 	"strings"
 
 	"entgo.io/ent"
 	"github.com/samber/lo"
 
-	jsonx "github.com/theopenlane/core/pkg/jsonx"
 	mapx "github.com/theopenlane/core/pkg/mapx"
 )
 
@@ -29,23 +26,17 @@ type ChangeSet struct {
 	AddedIDs map[string][]string `json:"added_ids,omitempty"`
 	// RemovedIDs captures edge IDs removed by edge name
 	RemovedIDs map[string][]string `json:"removed_ids,omitempty"`
-	// ProposedChanges captures field-level proposed values as opaque JSON, cloned and
-	// forwarded without per-value deep copies
-	ProposedChanges json.RawMessage `json:"proposed_changes,omitempty"`
+	// ProposedChanges captures field-level proposed values. Its JSON shape is unchanged, while the
+	// decoded map avoids repeated full-document decoding by every listener gate and handler.
+	ProposedChanges map[string]any `json:"proposed_changes,omitempty"`
 	// OldValues captures pre-mutation values for changed fields on single-row updates
 	OldValues map[string]any `json:"old_values,omitempty"`
 }
 
-// OldValueSource captures the mutation accessors needed to snapshot pre-update field values
-type OldValueSource interface {
-	Op() ent.Op
-	OldField(ctx context.Context, name string) (ent.Value, error)
-}
-
 // ChangeSetFromMutation builds the mutation's change set: normalized changed and cleared
 // field lists, proposed field values including explicit clears, and the catalog-known edge
-// deltas flattened to name-keyed ID maps. Old values are captured separately via
-// BuildOldValues since they must be read before the mutation applies
+// deltas flattened to name-keyed ID maps. Consumers filter this canonical set rather than
+// rebuilding mutation state independently
 func ChangeSetFromMutation(mutation ent.Mutation) ChangeSet {
 	changed, cleared := changedAndClearedFields(mutation)
 
@@ -55,55 +46,11 @@ func ChangeSetFromMutation(mutation ent.Mutation) ChangeSet {
 		ProposedChanges: buildProposedChanges(mutation, changed),
 	}
 
-	for _, change := range ExtractChangedEdges(mutation) {
-		set.ChangedEdges = append(set.ChangedEdges, change.Edge)
-
-		if len(change.AddedIDs) > 0 {
-			if set.AddedIDs == nil {
-				set.AddedIDs = map[string][]string{}
-			}
-
-			set.AddedIDs[change.Edge] = change.AddedIDs
-		}
-
-		if change.RemovedIDs != nil {
-			if set.RemovedIDs == nil {
-				set.RemovedIDs = map[string][]string{}
-			}
-
-			set.RemovedIDs[change.Edge] = change.RemovedIDs
-		}
+	if schema, ok := LookupSchema(mutation.Type()); ok {
+		appendMutationEdges(&set, schema, mutation)
 	}
 
 	return set
-}
-
-// BuildOldValues snapshots pre-mutation values for the given fields; it must be called
-// before the mutation applies, while the database still holds the prior row. Only
-// single-row updates carry old values and fields that fail to resolve are skipped
-func BuildOldValues(ctx context.Context, source OldValueSource, fields []string) map[string]any {
-	if source == nil || !source.Op().Is(ent.OpUpdateOne) || len(fields) == 0 {
-		return nil
-	}
-
-	oldValues := make(map[string]any, len(fields))
-
-	for _, field := range fields {
-		field = strings.TrimSpace(field)
-		if field == "" {
-			continue
-		}
-
-		if value, err := source.OldField(ctx, field); err == nil {
-			oldValues[field] = value
-		}
-	}
-
-	if len(oldValues) == 0 {
-		return nil
-	}
-
-	return oldValues
 }
 
 // Clone returns a copy of the change set and its map-backed values
@@ -112,11 +59,33 @@ func (set ChangeSet) Clone() ChangeSet {
 		ChangedFields:   append([]string(nil), set.ChangedFields...),
 		ClearedFields:   append([]string(nil), set.ClearedFields...),
 		ChangedEdges:    append([]string(nil), set.ChangedEdges...),
-		AddedIDs:        mapx.CloneMapStringSlice(set.AddedIDs),
-		RemovedIDs:      mapx.CloneMapStringSlice(set.RemovedIDs),
-		ProposedChanges: jsonx.CloneRawMessage(set.ProposedChanges),
+		AddedIDs:        cloneStringSliceMap(set.AddedIDs),
+		RemovedIDs:      cloneStringSliceMap(set.RemovedIDs),
+		ProposedChanges: mapx.DeepCloneMapAny(set.ProposedChanges),
 		OldValues:       mapx.DeepCloneMapAny(set.OldValues),
 	}
+}
+
+// Filter returns a capability-specific view without changing the durable ChangeSet shape.
+func (set ChangeSet) Filter(keepField, keepEdge func(string) bool) ChangeSet {
+	selected := ChangeSet{
+		ChangedFields: lo.Filter(normalizeStrings(set.ChangedFields), func(name string, _ int) bool {
+			return keepField != nil && keepField(name)
+		}),
+		ClearedFields: lo.Filter(normalizeStrings(set.ClearedFields), func(name string, _ int) bool {
+			return keepField != nil && keepField(name)
+		}),
+		ChangedEdges: lo.Filter(normalizeStrings(set.ChangedEdges), func(name string, _ int) bool {
+			return keepEdge != nil && keepEdge(name)
+		}),
+	}
+
+	selected.AddedIDs = filterMap(cloneStringSliceMap(set.AddedIDs), keepEdge)
+	selected.RemovedIDs = filterMap(cloneStringSliceMap(set.RemovedIDs), keepEdge)
+	selected.OldValues = filterMap(mapx.DeepCloneMapAny(set.OldValues), keepField)
+	selected.ProposedChanges = filterMap(mapx.DeepCloneMapAny(set.ProposedChanges), keepField)
+
+	return selected
 }
 
 // FieldChanged reports whether the change set indicates the field changed
@@ -276,18 +245,9 @@ func nonEmptyString(raw any) (string, bool) {
 	return value, true
 }
 
-// ProposedMap decodes the proposed-changes JSON; nil when empty or undecodable
+// ProposedMap returns the already-decoded proposed changes.
 func (set ChangeSet) ProposedMap() map[string]any {
-	if len(set.ProposedChanges) == 0 {
-		return nil
-	}
-
-	decoded, err := jsonx.Decode[map[string]any](set.ProposedChanges)
-	if err != nil {
-		return nil
-	}
-
-	return decoded
+	return set.ProposedChanges
 }
 
 // changedAndClearedFields returns normalized changed and cleared field lists from a mutation
@@ -299,7 +259,7 @@ func changedAndClearedFields(mutation ent.Mutation) (changed []string, cleared [
 }
 
 // buildProposedChanges materializes mutation values including explicit clears
-func buildProposedChanges(mutation ent.Mutation, changedFields []string) json.RawMessage {
+func buildProposedChanges(mutation ent.Mutation, changedFields []string) map[string]any {
 	if len(changedFields) == 0 {
 		return nil
 	}
@@ -327,12 +287,90 @@ func buildProposedChanges(mutation ent.Mutation, changedFields []string) json.Ra
 		return nil
 	}
 
-	raw, err := json.Marshal(proposed)
-	if err != nil {
+	return proposed
+}
+
+// appendMutationEdges captures every changed edge present in the canonical schema catalog.
+func appendMutationEdges(set *ChangeSet, schema *Schema, mutation ent.Mutation) {
+	changed := mapx.MapSetFromSlice(normalizeStrings(append(append(
+		append([]string(nil), mutation.AddedEdges()...),
+		mutation.RemovedEdges()...),
+		mutation.ClearedEdges()...)))
+
+	for _, edge := range schema.Edges {
+		if _, ok := changed[edge.Name]; !ok {
+			continue
+		}
+
+		set.ChangedEdges = append(set.ChangedEdges, edge.Name)
+
+		if ids := stringIDs(mutation.AddedIDs(edge.Name)); len(ids) > 0 {
+			if set.AddedIDs == nil {
+				set.AddedIDs = map[string][]string{}
+			}
+
+			set.AddedIDs[edge.Name] = ids
+		}
+
+		removed := stringIDs(mutation.RemovedIDs(edge.Name))
+		if mutation.EdgeCleared(edge.Name) {
+			removed = []string{}
+		}
+
+		if removed != nil {
+			if set.RemovedIDs == nil {
+				set.RemovedIDs = map[string][]string{}
+			}
+
+			set.RemovedIDs[edge.Name] = removed
+		}
+	}
+}
+
+func stringIDs(values []ent.Value) []string {
+	return normalizeStrings(lo.FilterMap(values, func(value ent.Value, _ int) (string, bool) {
+		id, ok := value.(string)
+
+		return id, ok
+	}))
+}
+
+func filterMap[V any](values map[string]V, keep func(string) bool) map[string]V {
+	if len(values) == 0 || keep == nil {
 		return nil
 	}
 
-	return raw
+	filtered := make(map[string]V, len(values))
+	for key, value := range values {
+		if keep(key) {
+			filtered[key] = value
+		}
+	}
+
+	if len(filtered) == 0 {
+		return nil
+	}
+
+	return filtered
+}
+
+// cloneStringSliceMap preserves the distinction between an absent edge delta and an explicit clear.
+func cloneStringSliceMap(values map[string][]string) map[string][]string {
+	if values == nil {
+		return nil
+	}
+
+	cloned := make(map[string][]string, len(values))
+	for key, value := range values {
+		if value == nil {
+			cloned[key] = nil
+			continue
+		}
+
+		cloned[key] = append([]string{}, value...)
+	}
+
+	return cloned
 }
 
 // normalizeStrings trims, deduplicates, and drops empty string values

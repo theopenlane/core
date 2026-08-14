@@ -177,7 +177,7 @@ func (s domainScanSaga) submitAndScheduleDomainScans(ctx context.Context, organi
 			ScanResultID:   scan.UUID,
 			InternalScanID: internalScanID,
 			SiblingScanIDs: siblingScanIDs,
-		}, gala.Headers{}); err != nil {
+		}, gala.Headers{UniqueOnce: true}); err != nil {
 			logx.FromContext(domainCtx).Error().Err(err).Msg("domain scan: failed scheduling poll cycle")
 			s.markDomainScanFailed(domainCtx, organizationID, internalScanID)
 
@@ -366,7 +366,7 @@ func (s domainScanSaga) handlePoll(ctx context.Context, envelope DomainScanPollE
 			InternalScanID: envelope.InternalScanID,
 			Attempt:        envelope.Attempt + 1,
 			SiblingScanIDs: envelope.SiblingScanIDs,
-		}, gala.Headers{ScheduledAt: &scheduledAt}); err != nil {
+		}, gala.Headers{ScheduledAt: &scheduledAt, UniqueOnce: true}); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("domain scan: failed scheduling next poll cycle")
 
 			return true, err

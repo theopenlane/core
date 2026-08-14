@@ -58,15 +58,43 @@ func persistDirectoryMembershipInput(ctx context.Context, db *ent.Client, integr
 			return dm.ID, nil
 		},
 		func(ctx context.Context, existing *ent.DirectoryMembership, input ent.UpdateDirectoryMembershipInput) error {
-			input.LastSeenAt = &now
-			if runID != "" {
-				input.LastConfirmedRunID = &runID
+			if runID == "" {
+				input.LastSeenAt = &now
+
+				return db.DirectoryMembership.UpdateOneID(existing.ID).SetInput(input).Exec(ctx)
 			}
+
+			if !directoryMembershipRunCanAdvance(existing.LastConfirmedRunID, runID) {
+				return db.DirectoryMembership.UpdateOneID(existing.ID).SetInput(input).Exec(ctx)
+			}
+
+			input.LastSeenAt = &now
+			input.LastConfirmedRunID = &runID
+			update := db.DirectoryMembership.UpdateOneID(existing.ID).
+				SetInput(input).
+				Where(directorymembership.Or(
+					directorymembership.LastConfirmedRunIDIsNil(),
+					directorymembership.LastConfirmedRunIDLTE(runID),
+				))
+			if err := update.Exec(ctx); err == nil {
+				return nil
+			} else if !ent.IsNotFound(err) {
+				return err
+			}
+
+			// A newer run won the guarded update. Preserve unrelated field changes,
+			// but do not move confirmation or last-seen timestamps backward.
+			input.LastSeenAt = nil
+			input.LastConfirmedRunID = nil
 
 			return db.DirectoryMembership.UpdateOneID(existing.ID).SetInput(input).Exec(ctx)
 		},
 		func(dm *ent.DirectoryMembership) string { return dm.ID },
 	)
+}
+
+func directoryMembershipRunCanAdvance(currentRunID *string, incomingRunID string) bool {
+	return incomingRunID != "" && (currentRunID == nil || incomingRunID >= *currentRunID)
 }
 
 // resolveDirectoryMembershipInput normalizes provider lookup values into internal record IDs before persistence

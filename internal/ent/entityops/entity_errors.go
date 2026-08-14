@@ -53,6 +53,10 @@ var (
 	ErrValueCoercion = errors.New("entityops: value coercion failed")
 	// ErrListenerRegistrationFailed indicates a gala listener could not be registered
 	ErrListenerRegistrationFailed = errors.New("entityops: listener registration failed")
+	// ErrMutationListenerInvalid indicates a listener is missing its schema or handler
+	ErrMutationListenerInvalid = errors.New("entityops: invalid mutation listener")
+	// ErrMutationSchemaMismatch indicates a payload was delivered to a listener for another schema
+	ErrMutationSchemaMismatch = errors.New("entityops: mutation schema mismatch")
 	// ErrClientResolveFailed indicates the ent client could not be resolved from the injector
 	ErrClientResolveFailed = errors.New("entityops: client resolve failed")
 	// ErrQueryUnsupported indicates the schema does not support org-scoped queries
@@ -65,6 +69,18 @@ var (
 	ErrInvalidKeyField = errors.New("entityops: invalid key field")
 	// ErrEvaluatorBuildFailed indicates the typed CEL evaluator for a schema projection could not be built
 	ErrEvaluatorBuildFailed = errors.New("entityops: evaluator build failed")
+	// ErrIngestUnsupported indicates the schema has no generated ingest capability
+	ErrIngestUnsupported = errors.New("entityops: ingest unsupported")
+	// ErrIngestPersistRequired indicates a nil persistence operation was supplied
+	ErrIngestPersistRequired = errors.New("entityops: ingest persistence required")
+	// ErrIngestResolverRequired indicates the integration resolver was not supplied
+	ErrIngestResolverRequired = errors.New("entityops: ingest integration resolver required")
+	// ErrIngestAlreadyBound indicates a schema ingest capability was bound more than once
+	ErrIngestAlreadyBound = errors.New("entityops: ingest already bound")
+	// ErrIngestNotBound indicates a schema ingest capability has no persistence operation
+	ErrIngestNotBound = errors.New("entityops: ingest not bound")
+	// ErrIngestIntegrationResolveFailed indicates the durable command's integration could not be resolved
+	ErrIngestIntegrationResolveFailed = errors.New("entityops: ingest integration resolve failed")
 )
 
 // --- Operation constants ---
@@ -80,8 +96,6 @@ const (
 	refOpQuery = "query"
 	// refOpLink identifies edge link operations
 	refOpLink = "link"
-	// refOpUnlink identifies edge unlink operations
-	refOpUnlink = "unlink"
 	// refOpEmit identifies event emission operations
 	refOpEmit = "emit"
 	// refOpUpsert identifies catalog-driven upsert operations

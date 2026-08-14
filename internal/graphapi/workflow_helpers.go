@@ -131,6 +131,7 @@ func SetupWorkflowEngine(ctx context.Context, client *generated.Client, connecti
 		gala.WithValue(runtime),
 		gala.WithValue(client),
 		gala.WithValue(wfEngine),
+		gala.WithRestoredValue("ent_client", generated.NewContext),
 	); err != nil {
 		return nil, err
 	}

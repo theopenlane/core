@@ -346,7 +346,12 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 
 	db.Use(hooks.EmitGalaEventHook(galaInstance))
 
-	requireNoError(t, galaInstance.Attach(gala.WithValue(c.db), gala.WithValue(entitlements)))
+	requireNoError(t, galaInstance.Attach(
+		gala.WithValue(c.db),
+		gala.WithValue(entitlements),
+		// without the restored ent client every durable mutation listener fails
+		gala.WithRestoredValue("ent_client", ent.NewContext),
+	))
 
 	_, err = gala.Register(galaInstance, hooks.EntitlementListeners()...)
 	requireNoError(t, err)
@@ -355,6 +360,9 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	requireNoError(t, err)
 
 	_, err = gala.Register(galaInstance, hooks.OrganizationCleanupListeners()...)
+	requireNoError(t, err)
+
+	_, err = gala.Register(galaInstance, hooks.IntegrationCleanupListeners()...)
 	requireNoError(t, err)
 
 	requireNoError(t, galaInstance.StartWorkers(ctx))
@@ -380,6 +388,9 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 
 	c.db.IntegrationsRuntime = rt
 	suite.integrationsRT = rt
+
+	// cleanup/reseed listeners resolve the runtime from the gala injector as in production
+	requireNoError(t, galaInstance.Attach(gala.WithValue(rt)))
 
 	// Set trust center config for hooks
 	hooks.SetTrustCenterConfig(hooks.TrustCenterConfig{

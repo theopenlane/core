@@ -144,7 +144,6 @@ func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.Recon
 	ctx = intobvs.WithContext(ctx, oc)
 
 	ingestOptions := operations.IngestOptionsFromOperationContext(oc)
-	ingestOptions.CompleteDirectorySnapshot = true
 
 	response, recordCount, execErr := r.executeResolvedOperation(ctx, installation, operation, nil, nil, false, ingestOptions)
 
@@ -251,9 +250,7 @@ func (r *Runtime) executeOperationInline(ctx context.Context, integration *ent.I
 		}
 	}
 
-	response, _, err := r.executeResolvedOperation(ctx, integration, operation, credentials, config, false, operations.IngestOptions{
-		CompleteDirectorySnapshot: true,
-	})
+	response, _, err := r.executeResolvedOperation(ctx, integration, operation, credentials, config, false, operations.IngestOptions{})
 
 	return response, err
 }
@@ -319,7 +316,6 @@ func (r *Runtime) HandleOperation(ctx context.Context, envelope operations.Envel
 	}
 
 	ingestOptions := operations.IngestOptionsFromOperationContext(oc)
-	ingestOptions.CompleteDirectorySnapshot = true
 
 	response, _, err := r.executeResolvedOperation(ctx, integration, operation, nil, envelope.Config, envelope.ForceClientRebuild, ingestOptions)
 	if err != nil {
@@ -425,16 +421,21 @@ func (r *Runtime) executeResolvedOperation(ctx context.Context, integration *ent
 
 		logx.FromContext(ctx).Info().Int("payload_sets", len(payloadSets)).Int("envelopes", totalEnvelopes).Msg("ingest handle completed")
 
-		if err := operations.ProcessPayloadSets(ctx, operations.IngestContext{
+		result, err := operations.EmitPayloadSetsWithResult(ctx, operations.IngestContext{
 			Registry:    r.Registry(),
 			DB:          r.DB(),
 			Runtime:     r.Gala(),
 			Integration: integration,
-		}, operation.Name, operation.Ingest, payloadSets, ingestOptions); err != nil {
+		}, operation.Name, operation.Ingest, payloadSets, ingestOptions)
+		if err != nil {
 			return nil, 0, err
 		}
 
-		return nil, totalEnvelopes, nil
+		response, marshalErr := json.Marshal(result)
+		if marshalErr != nil {
+			return nil, 0, marshalErr
+		}
+		return response, result.Attempted, nil
 	}
 
 	response, err := operation.Handle(ctx, req)

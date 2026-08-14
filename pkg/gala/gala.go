@@ -111,7 +111,10 @@ func NewGala(ctx context.Context, config Config) (app *Gala, err error) {
 	kindQueues := map[string]string{}
 
 	for _, kind := range config.Kinds {
-		queue := QueueNameForKind(kind)
+		// scope kind queues by the runtime's base queue so runtimes sharing a database
+		// (test harnesses) don't steal each other's kind-routed jobs; pods sharing a queue
+		// name still share workers
+		queue := config.QueueName + "_" + QueueNameForKind(kind)
 		queues[queue] = river.QueueConfig{MaxWorkers: config.WorkerCount}
 		kindQueues[kind] = queue
 	}
@@ -311,17 +314,17 @@ func WithRawPayload(raw json.RawMessage) EmitOption {
 // options to the envelope before dispatch, and returns the emitted event identifier;
 // headers must carry a job kind
 func (g *Gala) EmitWithHeaders(ctx context.Context, topic TopicName, payload any, headers Headers, opts ...EmitOption) (EventID, error) {
+	registration, err := g.registry.topicRegistration(topic)
+	if err != nil {
+		return "", err
+	}
+
 	if headers.Kind == "" {
-		headers.Kind, _ = g.registry.topicKind(topic)
+		headers.Kind = registration.kind
 	}
 
 	if headers.Kind == "" {
 		return "", ErrJobKindRequired
-	}
-
-	registration, err := g.registry.topicRegistration(topic)
-	if err != nil {
-		return "", err
 	}
 
 	envelope := Envelope{
@@ -441,8 +444,18 @@ func (g *Gala) dispatchEnvelope(ctx context.Context, envelope Envelope) error {
 	return nil
 }
 
+// PayloadOperation is an optional payload contract for listener operation routing.
+// Payloads that implement it avoid reflection and can derive the operation dynamically.
+type PayloadOperation interface {
+	PayloadOperation() string
+}
+
 // payloadOperation extracts a mutation-style operation string when present
 func payloadOperation(payload any) string {
+	if operationPayload, ok := payload.(PayloadOperation); ok {
+		return strings.TrimSpace(operationPayload.PayloadOperation())
+	}
+
 	value := reflect.ValueOf(payload)
 	if !value.IsValid() {
 		return ""
@@ -694,100 +707,6 @@ func (g *Gala) CancelActiveJobsWithMetadata(ctx context.Context, metadataFragmen
 	}
 
 	return cancelled, nil
-}
-
-// MigrateJobs re-dispatches waiting jobs whose transform resolves a different topic or
-// whose registered kind differs from the row's, preserving schedules and cancelling
-// originals; claimable rows are excluded so pickup can't race the re-insert into a
-// double execution
-func (g *Gala) MigrateJobs(ctx context.Context, transform func(kind string, envelope Envelope) (Envelope, bool)) (int, error) {
-	if g.jobClient == nil || transform == nil {
-		return 0, nil
-	}
-
-	client := g.jobClient.GetRiverClient()
-	params := river.NewJobListParams().
-		Kinds(append([]string{riverDispatchJobKind}, g.jobKinds...)...).
-		States(rivertype.JobStateScheduled, rivertype.JobStateRetryable, rivertype.JobStatePending).
-		First(activeJobsPageSize)
-
-	var migrated int
-
-	for {
-		result, err := client.JobList(ctx, params)
-		if err != nil {
-			return migrated, err
-		}
-
-		for _, job := range result.Jobs {
-			if g.migrateJob(ctx, job, transform) {
-				migrated++
-			}
-		}
-
-		if len(result.Jobs) < activeJobsPageSize || result.LastCursor == nil {
-			return migrated, nil
-		}
-
-		params = params.After(result.LastCursor)
-	}
-}
-
-// migrateJob re-dispatches one job row under its resolved topic and kind, cancelling the row
-func (g *Gala) migrateJob(ctx context.Context, job *rivertype.JobRow, transform func(kind string, envelope Envelope) (Envelope, bool)) bool {
-	var args EnvelopeArgs
-	if err := json.Unmarshal(job.EncodedArgs, &args); err != nil {
-		logx.FromContext(ctx).Warn().Err(err).Int64("job_id", job.ID).Msg("gala: skipping job migration, undecodable args")
-
-		return false
-	}
-
-	envelope, err := decodeDispatchEnvelope(args.Envelope)
-	if err != nil {
-		logx.FromContext(ctx).Warn().Err(err).Int64("job_id", job.ID).Msg("gala: skipping job migration, undecodable envelope")
-
-		return false
-	}
-
-	originalTopic := envelope.Topic
-
-	envelope, ok := transform(job.Kind, envelope)
-	if !ok {
-		return false
-	}
-
-	kind, ok := g.registry.topicKind(envelope.Topic)
-	if !ok {
-		kind, ok = ResolveTopicKind(envelope.Topic)
-	}
-
-	if !ok || kind == "" {
-		return false
-	}
-
-	// unchanged rows never re-migrate, keeping startup reruns free of churn
-	if kind == job.Kind && envelope.Topic == originalTopic {
-		return false
-	}
-
-	envelope.Headers.Kind = kind
-	envelope.Headers.Listeners = g.registry.listenerNamesForTopic(envelope.Topic)
-
-	if scheduledAt := job.ScheduledAt; scheduledAt.After(time.Now()) {
-		envelope.Headers.ScheduledAt = &scheduledAt
-	}
-
-	if err := g.dispatcher.Dispatch(ctx, envelope); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Int64("job_id", job.ID).Str("kind", kind).Msg("gala: job migration dispatch failed, keeping original")
-
-		return false
-	}
-
-	if _, err := g.jobClient.GetRiverClient().JobCancel(ctx, job.ID); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Int64("job_id", job.ID).Msg("gala: failed cancelling migrated job")
-	}
-
-	return true
 }
 
 // Close closes the dedicated Gala queue client

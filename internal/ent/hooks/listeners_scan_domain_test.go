@@ -2,7 +2,6 @@ package hooks
 
 import (
 	"context"
-	"encoding/json"
 	"testing"
 
 	"entgo.io/ent"
@@ -46,7 +45,11 @@ func TestDomainScanSubmitGate(t *testing.T) {
 			Operation:    entityops.OpCreate,
 			EntityID:     "scan-1",
 			ChangeSet: entityops.ChangeSet{
-				ProposedChanges: json.RawMessage(`{"` + scan.FieldScanType + `":"` + scanType + `","` + scan.FieldStatus + `":"` + status + `","` + scan.FieldPerformedBy + `":"` + performedBy + `"}`),
+				ProposedChanges: map[string]any{
+					scan.FieldScanType:    scanType,
+					scan.FieldStatus:      status,
+					scan.FieldPerformedBy: performedBy,
+				},
 			},
 		}
 	}

@@ -33,7 +33,7 @@ const taskRuleSource = "entityops"
 func TaskRuleListeners() []gala.Registration {
 	return lo.Map(entityops.TaskRuleEligibleSchemas(), func(schema *entityops.Schema, _ int) gala.Registration {
 		return entityops.MutationListener{
-			Schema:     schema.Name,
+			Schema:     schema,
 			Label:      "taskrules",
 			Operations: taskRuleOperations(schema),
 			// CapOrgSupport bypasses the assigner user check on task creation

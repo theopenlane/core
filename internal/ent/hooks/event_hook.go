@@ -25,14 +25,19 @@ func EmitGalaEventHook(runtimes ...*gala.Gala) ent.Hook {
 
 	return func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, mutation ent.Mutation) (ent.Value, error) {
-			ctx = entityops.WithEmissionVeto(ctx)
-
 			op := mutation.Op().String()
 			if entx.CheckIsSoftDeleteType(ctx, mutation.Type()) {
+				// the rewrite pass shares the outer delete's frame so the veto below reaches it
 				op = entityops.OpSoftDelete
+			} else {
+				ctx = entityops.WithEmissionVeto(ctx)
 			}
 
-			ids, oldValues := snapshotMutation(ctx, mutation, galaRuntimes, op)
+			changeSet := entityops.ChangeSetFromMutation(mutation)
+			ids, oldValues, snapshotErr := snapshotMutation(ctx, mutation, galaRuntimes, op, changeSet)
+			if snapshotErr != nil {
+				return nil, snapshotErr
+			}
 
 			retVal, err := next.Mutate(ctx, mutation)
 			if err != nil {
@@ -58,8 +63,6 @@ func EmitGalaEventHook(runtimes ...*gala.Gala) ent.Hook {
 				if !entityops.InterestedInMutation(galaRuntimes, topicName, op) {
 					return
 				}
-
-				changeSet := entityops.ChangeSetFromMutation(mutation)
 
 				switch op {
 				case entityops.OpUpdate, entityops.OpUpdateOne, entityops.OpDelete, entityops.OpDeleteOne, entityops.OpSoftDelete:
@@ -119,34 +122,37 @@ func EmitGalaEventHook(runtimes ...*gala.Gala) ent.Hook {
 // database still holds the prior rows: updates stash the old values of the changed fields,
 // deletes stash the full row so delete listeners can read what was removed. Capture is
 // limited to mutations whose topics have at least one interested gala listener
-func snapshotMutation(ctx context.Context, mutation ent.Mutation, runtimes []*gala.Gala, op string) ([]string, map[string]map[string]any) {
+func snapshotMutation(ctx context.Context, mutation ent.Mutation, runtimes []*gala.Gala, op string, changeSet entityops.ChangeSet) ([]string, map[string]map[string]any, error) {
 	isDelete := mutation.Op().Is(ent.OpDelete | ent.OpDeleteOne)
 	if !isDelete && !mutation.Op().Is(ent.OpUpdate|ent.OpUpdateOne) {
-		return nil, nil
+		return nil, nil, nil
 	}
 
 	if !entityops.InterestedInMutation(runtimes, mutation.Type(), op) {
-		return nil, nil
+		return nil, nil, nil
 	}
 
 	mut, ok := mutation.(utils.GenericMutation)
 	if !ok {
-		return nil, nil
+		return nil, nil, nil
 	}
 
-	ids := getMutationIDs(ctx, mut)
+	ids, err := getMutationIDs(ctx, mut)
+	if err != nil {
+		return nil, nil, err
+	}
 	if len(ids) == 0 {
-		return nil, nil
+		return nil, nil, nil
 	}
 
 	schema, ok := entityops.LookupSchema(mutation.Type())
 	if !ok || mut.Client() == nil {
-		return ids, nil
+		return ids, nil, nil
 	}
 
-	changed := entityops.ChangeSetFromMutation(mutation).ChangedFields
+	changed := changeSet.ChangedFields
 	if !isDelete && len(changed) == 0 {
-		return ids, nil
+		return ids, nil, nil
 	}
 
 	lookupCtx := privacy.DecisionContext(ctx, privacy.Allow)
@@ -172,5 +178,5 @@ func snapshotMutation(ctx context.Context, mutation ent.Mutation, runtimes []*ga
 		oldValues[id] = lo.PickByKeys(fields, changed)
 	}
 
-	return ids, oldValues
+	return ids, oldValues, nil
 }

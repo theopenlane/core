@@ -7,11 +7,13 @@ import (
 	"fmt"
 	"time"
 
+	"entgo.io/ent/dialect/sql"
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/entityops"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
+	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/gala"
@@ -21,6 +23,8 @@ import (
 
 // IngestOptions carries the minimal ingest-time metadata needed by persistence
 type IngestOptions struct {
+	// Mode controls whether record-level failures are returned to the caller
+	Mode IngestMode
 	// DirectorySyncRunID groups all directory-related ingest records from one sync batch
 	DirectorySyncRunID string
 	// SkipDirectorySyncRunFinalization instructs the processor not to finalize the directory sync run after processing
@@ -39,6 +43,43 @@ type IngestOptions struct {
 	DeliveryID string
 	// WorkflowMeta carries workflow instance context
 	WorkflowMeta *types.WorkflowMeta
+}
+
+// IngestMode controls record-level failure handling for a payload batch.
+type IngestMode uint8
+
+const (
+	// IngestBestEffort imports records that can be persisted and logs failures for the next cycle.
+	IngestBestEffort IngestMode = iota
+	// IngestStrict returns all record-level failures after attempting the complete batch.
+	IngestStrict
+)
+
+// RecordFailure identifies one mapped record that could not be imported.
+type RecordFailure struct {
+	// Schema is the integration mapping schema name identifying the target ent type
+	Schema string
+	// Resource is the provider-assigned resource identifier for the record
+	Resource string
+	// Err is the underlying error that prevented the record from being persisted or accepted by the queue
+	Err error
+}
+
+// IngestResult reports record-level work completed by a payload batch
+type IngestResult struct {
+	Attempted int
+	// Persisted counts records written synchronously. It excludes records accepted by a durable queue
+	Persisted int
+	// Accepted counts records accepted by a durable queue; acceptance does not mean persistence
+	Accepted int
+	// Filtered counts records excluded by configured filters
+	Filtered int
+	// Succeeded is retained as the combined successful handling count for compatibility
+	Succeeded int
+	// Failed counts records that could not be persisted or accepted by the queue
+	Failed int
+	// Failures is the list of records that failed
+	Failures []RecordFailure
 }
 
 // IngestOptionsFromOperationContext derives ingest options from an integration operation context
@@ -83,23 +124,71 @@ var directorySyncRunSchemas = map[string]struct{}{
 // create input upstream in applyPayloadSets, so persistence creates each record with its
 // edges already set
 func ProcessPayloadSets(ctx context.Context, ic IngestContext, operationName string, contracts []types.IngestContract, payloadSets []types.IngestPayloadSet, options IngestOptions) error {
-	return applyPayloadSets(ctx, ic, operationName, contracts, payloadSets, options, func(handleCtx context.Context, record mappedIngestRecord) error {
+	_, err := ProcessPayloadSetsWithResult(ctx, ic, operationName, contracts, payloadSets, options, func(handleCtx context.Context, record mappedIngestRecord) error {
 		_, err := persistMappedRecord(handleCtx, ic.DB, ic.Integration, record.Schema, record.Payload)
 
 		return err
 	})
+
+	return err
+}
+
+// EmitPayloadSets maps one batch and queues each non-directory record for durable schema ingest.
+// Directory syncs remain in-process because their run finalization and membership removal
+// inference must happen after the records have been persisted.
+func EmitPayloadSets(ctx context.Context, ic IngestContext, operationName string, contracts []types.IngestContract, payloadSets []types.IngestPayloadSet, options IngestOptions) error {
+	_, err := EmitPayloadSetsWithResult(ctx, ic, operationName, contracts, payloadSets, options)
+	return err
+}
+
+// EmitPayloadSetsWithResult emits or persists a payload batch and returns accounting for the
+// work performed. Queued records are reported as Accepted, never Persisted.
+func EmitPayloadSetsWithResult(ctx context.Context, ic IngestContext, operationName string, contracts []types.IngestContract, payloadSets []types.IngestPayloadSet, options IngestOptions) (IngestResult, error) {
+	if needsDirectorySyncRun(contracts) {
+		result, err := ProcessPayloadSetsWithResult(ctx, ic, operationName, contracts, payloadSets, options, func(handleCtx context.Context, record mappedIngestRecord) error {
+			_, err := persistMappedRecord(handleCtx, ic.DB, ic.Integration, record.Schema, record.Payload)
+			return err
+		})
+		result.Persisted = result.Succeeded
+		return result, err
+	}
+	if ic.Runtime == nil {
+		return IngestResult{}, ErrGalaRequired
+	}
+
+	result, err := ProcessPayloadSetsWithResult(ctx, ic, operationName, contracts, payloadSets, options, func(handleCtx context.Context, record mappedIngestRecord) error {
+		return emitMappedRecord(handleCtx, ic.Runtime, ic.Integration, operationName, record, options)
+	})
+
+	result.Accepted = result.Succeeded
+	result.Succeeded = 0
+	return result, err
+}
+
+// ProcessPayloadSetsWithResult persists one batch and returns record accounting. In strict mode,
+// record failures are also joined into the returned error so callers can map the underlying
+// validation or uniqueness sentinel while still receiving complete batch accounting.
+func ProcessPayloadSetsWithResult(ctx context.Context, ic IngestContext, operationName string, contracts []types.IngestContract, payloadSets []types.IngestPayloadSet, options IngestOptions, handle func(context.Context, mappedIngestRecord) error) (IngestResult, error) {
+	return applyPayloadSetsResult(ctx, ic, operationName, contracts, payloadSets, options, handle)
 }
 
 // applyPayloadSets is the shared core for both async emit and sync persist paths
 func applyPayloadSets(ctx context.Context, ic IngestContext, operationName string, contracts []types.IngestContract, payloadSets []types.IngestPayloadSet, options IngestOptions, handle func(context.Context, mappedIngestRecord) error) (err error) {
+	_, err = applyPayloadSetsResult(ctx, ic, operationName, contracts, payloadSets, options, handle)
+
+	return err
+}
+
+// applyPayloadSetsResult is the shared core for both async emit and sync persist paths.
+func applyPayloadSetsResult(ctx context.Context, ic IngestContext, operationName string, contracts []types.IngestContract, payloadSets []types.IngestPayloadSet, options IngestOptions, handle func(context.Context, mappedIngestRecord) error) (result IngestResult, err error) {
 	definition, ok := ic.Registry.Definition(ic.Integration.DefinitionID)
 	if !ok {
-		return ErrIngestDefinitionNotFound
+		return result, ErrIngestDefinitionNotFound
 	}
 
 	installationFilterExpr, err := resolveInstallationFilterExpr(ic.Integration, definition, operationName)
 	if err != nil {
-		return ErrIngestInstallationFilterConfigInvalid
+		return result, ErrIngestInstallationFilterConfigInvalid
 	}
 
 	directorySync := needsDirectorySyncRun(contracts)
@@ -108,7 +197,7 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 	if directorySyncRunID == "" && directorySync {
 		directorySyncRunID, err = createDirectorySyncRun(ctx, ic.DB, ic.Integration)
 		if err != nil {
-			return fmt.Errorf("%w: %w", ErrIngestPersistFailed, err)
+			return result, fmt.Errorf("%w: %w", ErrIngestPersistFailed, err)
 		}
 	}
 
@@ -126,15 +215,26 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 
 	var attempted, failed int
 	var membershipSetSeen bool
+	var recordFailures []RecordFailure
+	completeDirectorySnapshot := options.CompleteDirectorySnapshot
 
 	for _, payloadSet := range payloadSets {
+		if payloadSet.Schema == entityops.SchemaDirectoryMembership.Name {
+			switch payloadSet.SnapshotCompleteness {
+			case types.SnapshotCompletenessPartial:
+				completeDirectorySnapshot = false
+			case types.SnapshotCompletenessFull:
+				completeDirectorySnapshot = true
+			}
+		}
+
 		if !contractIncludesSchema(contracts, payloadSet.Schema) {
-			return ErrIngestSchemaNotDeclared
+			return result, ErrIngestSchemaNotDeclared
 		}
 
 		sourceSchema, ok := entityops.LookupSchema(payloadSet.Schema)
 		if !ok {
-			return ErrIngestSchemaNotFound
+			return result, ErrIngestSchemaNotFound
 		}
 
 		if payloadSet.Schema == entityops.SchemaDirectoryMembership.Name {
@@ -142,14 +242,15 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 		}
 
 		for _, envelope := range payloadSet.Envelopes {
+			attempted++
 			envCtx := logx.WithFields(ctx, map[string]any{"schema": payloadSet.Schema, "resource": envelope.Resource})
 
 			mapping, found := findMapping(definition.Mappings, payloadSet.Schema, envelope.Variant)
 			if !found {
 				logx.FromContext(envCtx).Error().Err(ErrIngestMappingNotFound).Msg("error mapping ingest record")
 
-				attempted++
 				failed++
+				recordFailures = append(recordFailures, RecordFailure{Schema: payloadSet.Schema, Resource: envelope.Resource, Err: ErrIngestMappingNotFound})
 
 				continue
 			}
@@ -158,13 +259,14 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 			if mapErr != nil {
 				logx.FromContext(envCtx).Error().Err(mapErr).Msg("error mapping ingest record")
 
-				attempted++
 				failed++
+				recordFailures = append(recordFailures, RecordFailure{Schema: payloadSet.Schema, Resource: envelope.Resource, Err: mapErr})
 
 				continue
 			}
 
 			if !include {
+				result.Filtered++
 				continue
 			}
 
@@ -177,16 +279,18 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 
 				attempted++
 				failed++
+				recordFailures = append(recordFailures, RecordFailure{Schema: payloadSet.Schema, Resource: envelope.Resource, Err: err})
 
 				continue
 			}
-
-			attempted++
 
 			if handleErr := handle(envCtx, record); handleErr != nil {
 				logx.FromContext(envCtx).Error().Err(handleErr).Msg("ingest persist failed")
 
 				failed++
+				recordFailures = append(recordFailures, RecordFailure{Schema: payloadSet.Schema, Resource: envelope.Resource, Err: handleErr})
+			} else {
+				result.Succeeded++
 			}
 		}
 	}
@@ -201,19 +305,45 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 	// the run did not confirm was removed upstream; a skipped record risks one false removal that
 	// restores as a fresh episode on its next successful import. Partial sources (scim, webhooks)
 	// and runs finalized elsewhere never authorize removal inference
-	if directorySync && membershipSetSeen && !options.SkipDirectorySyncRunFinalization && options.CompleteDirectorySnapshot {
+	if directorySync && membershipSetSeen && !options.SkipDirectorySyncRunFinalization && completeDirectorySnapshot && failed == 0 {
 		if err := markUnconfirmedDirectoryMembershipsRemoved(ctx, ic.DB, ic.Integration.ID, directorySyncRunID); err != nil {
-			return fmt.Errorf("%w: %w", ErrIngestPersistFailed, err)
+			result.Attempted = attempted
+			result.Failed = failed
+			result.Persisted = result.Succeeded
+			result.Failures = recordFailures
+			return result, fmt.Errorf("%w: %w", ErrIngestPersistFailed, err)
 		}
 	}
 
-	return nil
+	result.Attempted = attempted
+	result.Failed = failed
+	result.Persisted = result.Succeeded
+	result.Failures = recordFailures
+	if options.Mode == IngestStrict && len(recordFailures) > 0 {
+		joined := make([]error, 0, len(recordFailures))
+		for _, failure := range recordFailures {
+			joined = append(joined, failure.Err)
+		}
+
+		return result, errors.Join(joined...)
+	}
+
+	return result, nil
 }
 
 // markUnconfirmedDirectoryMembershipsRemoved records the removal side of the sync delta by
 // stamping removed_at on active memberships for the integration that were not confirmed by
 // the completed sync run
 func markUnconfirmedDirectoryMembershipsRemoved(ctx context.Context, db *ent.Client, integrationID string, runID string) error {
+	current, err := isCurrentDirectorySyncRun(ctx, db, runID)
+	if err != nil {
+		return err
+	}
+	if !current {
+		logx.FromContext(ctx).Info().Str("directory_sync_run_id", runID).Msg("skipping membership removal for stale directory sync run")
+		return nil
+	}
+
 	removed, err := db.DirectoryMembership.Update().
 		Where(directorymembership.IntegrationID(integrationID),
 			directorymembership.RemovedAtIsNil(),
@@ -350,6 +480,15 @@ func createDirectorySyncRun(ctx context.Context, db *ent.Client, installation *e
 // finalizeDirectorySyncRun marks the directory sync run as completed or failed, and when markRemoved
 // is true and the sync succeeded, marks any directory accounts not seen during this sync as deleted
 func finalizeDirectorySyncRun(ctx context.Context, db *ent.Client, directorySyncRunID string, ingestErr error) error {
+	current, err := isCurrentDirectorySyncRun(ctx, db, directorySyncRunID)
+	if err != nil {
+		return err
+	}
+	if !current {
+		logx.FromContext(ctx).Info().Str("directory_sync_run_id", directorySyncRunID).Msg("skipping stale directory sync run finalization")
+		return nil
+	}
+
 	update := db.DirectorySyncRun.UpdateOneID(directorySyncRunID).
 		SetCompletedAt(time.Now())
 
@@ -362,6 +501,27 @@ func finalizeDirectorySyncRun(ctx context.Context, db *ent.Client, directorySync
 	}
 
 	return update.Exec(ctx)
+}
+
+func isCurrentDirectorySyncRun(ctx context.Context, db *ent.Client, runID string) (bool, error) {
+	run, err := db.DirectorySyncRun.Query().Where(directorysyncrun.ID(runID)).Only(ctx)
+	if err != nil {
+		return false, err
+	}
+
+	latest, err := db.DirectorySyncRun.Query().
+		Where(directorysyncrun.IntegrationID(run.IntegrationID)).
+		Order(directorysyncrun.ByStartedAt(sql.OrderDesc())).
+		First(ctx)
+	if err != nil {
+		return false, err
+	}
+
+	return sameDirectorySyncRun(run.ID, latest.ID), nil
+}
+
+func sameDirectorySyncRun(runID, latestRunID string) bool {
+	return runID != "" && runID == latestRunID
 }
 
 // wrapIngestPersistError wraps the known errors from persistence operations so we don't need the same boilerplate in multiple functions

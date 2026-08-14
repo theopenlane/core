@@ -6,7 +6,6 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -25,7 +24,7 @@ const domainScanListenerLabel = "domain_scan"
 func DomainScanListeners() []gala.Registration {
 	return []gala.Registration{
 		entityops.MutationListener{
-			Schema:     generated.TypeScan,
+			Schema:     entityops.SchemaScan,
 			Label:      domainScanListenerLabel,
 			Operations: []string{entityops.OpCreate},
 			Match: []entityops.FieldMatch{
@@ -36,7 +35,7 @@ func DomainScanListeners() []gala.Registration {
 			Handle: handleScanDomainCreated,
 		},
 		entityops.MutationListener{
-			Schema:     generated.TypeOrganizationSetting,
+			Schema:     entityops.SchemaOrganizationSetting,
 			Label:      domainScanListenerLabel,
 			Operations: []string{entityops.OpUpdateOne},
 			Fields:     []string{organizationsetting.FieldDomains},
@@ -86,7 +85,7 @@ func handleOrganizationSettingDomainsUpdated(inv entityops.Invocation, _ entityo
 	dispatchCtx := rule.WithInternalContext(inv.Context)
 
 	for _, domain := range setting.Domains {
-		if err := dispatchDomainScan(dispatchCtx, rt, string(inv.Envelope.ID)+":"+domain, cloudflare.DomainScanRequest{
+		if err := dispatchDomainScan(dispatchCtx, rt, dispatchUniqueKeys.Key(cloudflare.DomainScanRequestOp.Name(), string(inv.Envelope.ID), domain), cloudflare.DomainScanRequest{
 			OrganizationID: setting.OrganizationID,
 			Domain:         domain,
 			GroupID:        groupID,
@@ -98,9 +97,12 @@ func handleOrganizationSettingDomainsUpdated(inv entityops.Invocation, _ entityo
 	return nil
 }
 
+// dispatchUniqueKeys is the dedup key namespace for event-triggered dispatch runs
+var dispatchUniqueKeys = gala.NewUniqueKeyNamespace("dispatch")
+
 // dispatchDomainScan marshals the request and dispatches the cloudflare domain scan operation
 // as an event-triggered runtime run
-func dispatchDomainScan(ctx context.Context, rt *intruntime.Runtime, dedupKey string, req cloudflare.DomainScanRequest) error {
+func dispatchDomainScan(ctx context.Context, rt *intruntime.Runtime, uniqueKey string, req cloudflare.DomainScanRequest) error {
 	config, err := json.Marshal(req)
 	if err != nil {
 		return err
@@ -113,7 +115,7 @@ func dispatchDomainScan(ctx context.Context, rt *intruntime.Runtime, dedupKey st
 		RunType:      enums.IntegrationRunTypeEvent,
 		Runtime:      true,
 		// a listener retry after a crashed cycle must not enqueue the scan twice
-		UniqueKey: "dispatch:" + cloudflare.DomainScanRequestOp.Name() + ":" + dedupKey,
+		UniqueKey: uniqueKey,
 	})
 
 	return err

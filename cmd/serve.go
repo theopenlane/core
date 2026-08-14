@@ -206,7 +206,7 @@ func serve(ctx context.Context) error {
 		return err
 	}
 
-	if err := serveropts.ConfigureGala(ctx, galaApp, notifGala, dbClient, so); err != nil {
+	if err := serveropts.ConfigureGala(galaApp, notifGala, dbClient, so); err != nil {
 		return err
 	}
 

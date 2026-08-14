@@ -33,6 +33,32 @@ func DeriveDomainKey(objectType enums.WorkflowObjectType, fields []string) strin
 	return prefix + ":" + strings.Join(sorted, ",")
 }
 
+// ValidatedDomainKey validates an approval domain against canonical workflow field descriptors.
+func ValidatedDomainKey(objectType enums.WorkflowObjectType, fields []string) (string, error) {
+	fields = NormalizeStrings(fields)
+	if len(fields) == 0 {
+		return "", ErrWorkflowDomainFieldsRequired
+	}
+
+	schema, err := WorkflowSchema(objectType)
+	if err != nil {
+		return "", err
+	}
+
+	eligible := make(map[string]struct{})
+	for _, field := range schema.WorkflowFields() {
+		eligible[field.Name] = struct{}{}
+	}
+
+	for _, field := range fields {
+		if _, ok := eligible[field]; !ok {
+			return "", fmt.Errorf("%w: %s.%s", ErrFieldNotWorkflowEligible, objectType, field)
+		}
+	}
+
+	return DeriveDomainKey(objectType, fields), nil
+}
+
 // DomainChanges represents changes grouped by approval domain
 type DomainChanges struct {
 	// DomainKey is the derived key for the approval field set

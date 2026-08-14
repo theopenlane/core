@@ -201,6 +201,7 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 		gala.WithValue(runtime),
 		gala.WithValue(db),
 		gala.WithValue(wfEngine),
+		gala.WithRestoredValue("ent_client", generated.NewContext),
 	))
 
 	s.Require().NoError(runtime.StartWorkers(s.ctx))

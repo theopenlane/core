@@ -54,5 +54,5 @@ func NamespacedTopic[T any](n TopicNamespace, suffix string, opts ...TopicOption
 
 // NamespacedTopicFor constructs a typed topic named by the payload's JSON schema identifier
 func NamespacedTopicFor[T any](n TopicNamespace, opts ...TopicOption[T]) Topic[T] {
-	return NamespacedTopic[T](n, jsonx.SchemaID(jsonx.SchemaFrom[T]()), opts...)
+	return NamespacedTopic(n, jsonx.SchemaID(jsonx.SchemaFrom[T]()), opts...)
 }

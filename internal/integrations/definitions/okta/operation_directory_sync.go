@@ -130,8 +130,9 @@ func (DirectorySync) Run(ctx context.Context, c *oktagosdk.APIClient, cfg UserIn
 			Envelopes: groupEnvelopes,
 		},
 		types.IngestPayloadSet{
-			Schema:    entityops.SchemaDirectoryMembership.Name,
-			Envelopes: membershipEnvelopes,
+			Schema:               entityops.SchemaDirectoryMembership.Name,
+			Envelopes:            membershipEnvelopes,
+			SnapshotCompleteness: types.SnapshotCompletenessFull,
 		},
 	)
 

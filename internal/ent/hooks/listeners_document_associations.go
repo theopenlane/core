@@ -23,9 +23,9 @@ const (
 // DocumentAssociationListeners returns the listeners that link referenced controls to
 // documents asynchronously after document creation
 func DocumentAssociationListeners() []gala.Registration {
-	return lo.Map([]string{generated.TypeActionPlan, generated.TypeInternalPolicy, generated.TypeProcedure}, func(schemaType string, _ int) gala.Registration {
+	return lo.Map([]*entityops.Schema{entityops.SchemaActionPlan, entityops.SchemaInternalPolicy, entityops.SchemaProcedure}, func(schema *entityops.Schema, _ int) gala.Registration {
 		return entityops.MutationListener{
-			Schema:     schemaType,
+			Schema:     schema,
 			Operations: []string{entityops.OpCreate},
 			Handle:     handleDocumentAssociationCreated,
 		}

@@ -29,7 +29,7 @@ func TestWithDirectorySyncRunID(t *testing.T) {
 	}
 }
 
-func TestLookupIngestHandler(t *testing.T) {
+func TestLookupIngestSchema(t *testing.T) {
 	t.Parallel()
 
 	tests := []struct {
@@ -54,9 +54,9 @@ func TestLookupIngestHandler(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			_, ok := lookupIngestHandler(tc.schema)
+			_, ok := lookupIngestSchema(tc.schema)
 			if ok != tc.want {
-				t.Fatalf("lookupIngestHandler(%q)=%v, want %v", tc.schema, ok, tc.want)
+				t.Fatalf("lookupIngestSchema(%q)=%v, want %v", tc.schema, ok, tc.want)
 			}
 		})
 	}
@@ -136,58 +136,37 @@ func TestPersistMappedRecord_UnsupportedSchema(t *testing.T) {
 	}
 }
 
-func TestPrepareDirectoryAccountInput_SetsContextFields(t *testing.T) {
+func TestPrepareDirectoryAccountInput_SetsRunID(t *testing.T) {
 	t.Parallel()
 
 	ctx := withDirectorySyncRunID(context.Background(), "dsrun-001")
-	integration := &ent.Integration{
-		OwnerID: "org-001",
-	}
 
-	input := ent.CreateDirectoryAccountInput{}
-	got := prepareDirectoryAccountInput(ctx, input, integration)
+	got := prepareDirectoryAccountInput(ctx, ent.CreateDirectoryAccountInput{})
 
-	if got.OwnerID == nil || *got.OwnerID != "org-001" {
-		t.Fatalf("expected OwnerID=%q, got %v", "org-001", got.OwnerID)
-	}
 	if got.DirectorySyncRunID == nil || *got.DirectorySyncRunID != "dsrun-001" {
 		t.Fatalf("expected DirectorySyncRunID=%q, got %v", "dsrun-001", got.DirectorySyncRunID)
 	}
 }
 
-func TestPrepareDirectoryGroupInput_SetsContextFields(t *testing.T) {
+func TestPrepareDirectoryGroupInput_SetsRunID(t *testing.T) {
 	t.Parallel()
 
 	ctx := withDirectorySyncRunID(context.Background(), "dsrun-002")
-	integration := &ent.Integration{
-		OwnerID: "org-002",
-	}
 
-	input := ent.CreateDirectoryGroupInput{}
-	got := prepareDirectoryGroupInput(ctx, input, integration)
+	got := prepareDirectoryGroupInput(ctx, ent.CreateDirectoryGroupInput{})
 
-	if got.OwnerID == nil || *got.OwnerID != "org-002" {
-		t.Fatalf("expected OwnerID=%q, got %v", "org-002", got.OwnerID)
-	}
 	if got.DirectorySyncRunID != "dsrun-002" {
 		t.Fatalf("expected DirectorySyncRunID=%q, got %q", "dsrun-002", got.DirectorySyncRunID)
 	}
 }
 
-func TestPrepareDirectoryMembershipInput_SetsContextFields(t *testing.T) {
+func TestPrepareDirectoryMembershipInput_SetsRunID(t *testing.T) {
 	t.Parallel()
 
 	ctx := withDirectorySyncRunID(context.Background(), "dsrun-003")
-	integration := &ent.Integration{
-		OwnerID: "org-003",
-	}
 
-	input := ent.CreateDirectoryMembershipInput{}
-	got := prepareDirectoryMembershipInput(ctx, input, integration)
+	got := prepareDirectoryMembershipInput(ctx, ent.CreateDirectoryMembershipInput{})
 
-	if got.OwnerID == nil || *got.OwnerID != "org-003" {
-		t.Fatalf("expected OwnerID=%q, got %v", "org-003", got.OwnerID)
-	}
 	if got.DirectorySyncRunID != "dsrun-003" {
 		t.Fatalf("expected DirectorySyncRunID=%q, got %q", "dsrun-003", got.DirectorySyncRunID)
 	}
@@ -205,22 +184,13 @@ func TestRegisterIngestListeners_NilRuntime(t *testing.T) {
 func TestPrepareDirectoryAccountInput_NoOverrideWhenSet(t *testing.T) {
 	t.Parallel()
 
-	existing := "org-existing"
 	existingRunID := "existing-run"
-	integration := &ent.Integration{
-		OwnerID: "org-001",
-	}
-
 	ctx := withDirectorySyncRunID(context.Background(), "dsrun-new")
-	input := ent.CreateDirectoryAccountInput{
-		OwnerID:            &existing,
-		DirectorySyncRunID: &existingRunID,
-	}
-	got := prepareDirectoryAccountInput(ctx, input, integration)
 
-	if *got.OwnerID != "org-existing" {
-		t.Fatalf("expected OwnerID=%q, got %q", "org-existing", *got.OwnerID)
-	}
+	got := prepareDirectoryAccountInput(ctx, ent.CreateDirectoryAccountInput{
+		DirectorySyncRunID: &existingRunID,
+	})
+
 	if *got.DirectorySyncRunID != "existing-run" {
 		t.Fatalf("expected DirectorySyncRunID=%q, got %q", "existing-run", *got.DirectorySyncRunID)
 	}
@@ -229,21 +199,12 @@ func TestPrepareDirectoryAccountInput_NoOverrideWhenSet(t *testing.T) {
 func TestPrepareDirectoryGroupInput_NoOverrideWhenSet(t *testing.T) {
 	t.Parallel()
 
-	existing := "org-existing"
-	integration := &ent.Integration{
-		OwnerID: "org-001",
-	}
-
 	ctx := withDirectorySyncRunID(context.Background(), "dsrun-new")
-	input := ent.CreateDirectoryGroupInput{
-		OwnerID:            &existing,
-		DirectorySyncRunID: "existing-run",
-	}
-	got := prepareDirectoryGroupInput(ctx, input, integration)
 
-	if *got.OwnerID != "org-existing" {
-		t.Fatalf("expected OwnerID=%q, got %q", "org-existing", *got.OwnerID)
-	}
+	got := prepareDirectoryGroupInput(ctx, ent.CreateDirectoryGroupInput{
+		DirectorySyncRunID: "existing-run",
+	})
+
 	if got.DirectorySyncRunID != "existing-run" {
 		t.Fatalf("expected DirectorySyncRunID=%q, got %q", "existing-run", got.DirectorySyncRunID)
 	}
@@ -252,21 +213,12 @@ func TestPrepareDirectoryGroupInput_NoOverrideWhenSet(t *testing.T) {
 func TestPrepareDirectoryMembershipInput_NoOverrideWhenSet(t *testing.T) {
 	t.Parallel()
 
-	existing := "org-existing"
-	integration := &ent.Integration{
-		OwnerID: "org-001",
-	}
-
 	ctx := withDirectorySyncRunID(context.Background(), "dsrun-new")
-	input := ent.CreateDirectoryMembershipInput{
-		OwnerID:            &existing,
-		DirectorySyncRunID: "existing-run",
-	}
-	got := prepareDirectoryMembershipInput(ctx, input, integration)
 
-	if *got.OwnerID != "org-existing" {
-		t.Fatalf("expected OwnerID=%q, got %q", "org-existing", *got.OwnerID)
-	}
+	got := prepareDirectoryMembershipInput(ctx, ent.CreateDirectoryMembershipInput{
+		DirectorySyncRunID: "existing-run",
+	})
+
 	if got.DirectorySyncRunID != "existing-run" {
 		t.Fatalf("expected DirectorySyncRunID=%q, got %q", "existing-run", got.DirectorySyncRunID)
 	}

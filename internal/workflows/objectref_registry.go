@@ -3,49 +3,17 @@ package workflows
 import (
 	"context"
 
-	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/entityops"
 	generated "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/workflowgenerated"
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-// init wires the entityops catalog into the workflow registries: object-ref resolution, query
-// narrowing, and observability fields come from the generated object-ref edge catalog, eligible
-// fields from the generated workflow domain, and CEL activation contexts from one shape-agnostic
-// builder since every entity round-trips through JSON identically
+// init wires the workflow-owned context builders. Entity identity, fields, and edges are resolved
+// directly from entityops rather than copied into mutable registries.
 func init() {
-	RegisterObjectRefResolver(func(ref *generated.WorkflowObjectRef) (*Object, bool) {
-		typeName, objectID, ok := entityops.ObjectFromWorkflowRef(context.Background(), ref)
-		if !ok {
-			return nil, false
-		}
-
-		objectType := enums.ToWorkflowObjectType(typeName)
-		if objectType == nil {
-			return nil, false
-		}
-
-		return &Object{ID: objectID, Type: *objectType}, true
-	})
-
-	RegisterObjectRefQueryBuilder(func(query *generated.WorkflowObjectRefQuery, obj *Object) (*generated.WorkflowObjectRefQuery, bool) {
-		if obj == nil {
-			return nil, false
-		}
-
-		schema, ok := entityops.LookupSchema(obj.Type.String())
-		if !ok {
-			return nil, false
-		}
-
-		return entityops.RefsByObject(query, schema, obj.ID)
-	})
-
 	RegisterCELContextBuilder(buildCELContext)
 	RegisterAssignmentContextBuilder(buildAssignmentContext)
 	RegisterObservabilityFieldsBuilder(buildObservabilityFields)
-	RegisterEligibleFields(workflowgenerated.WorkflowEligibleFields)
 }
 
 // buildCELContext builds the CEL activation variables for any workflow object: the ent entity is

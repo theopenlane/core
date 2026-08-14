@@ -22,7 +22,7 @@ import (
 func CampaignRecurringListeners() []gala.Registration {
 	return []gala.Registration{
 		entityops.MutationListener{
-			Schema:     entgen.TypeCampaign,
+			Schema:     entityops.SchemaCampaign,
 			Operations: []string{entityops.OpUpdate, entityops.OpUpdateOne},
 			Fields: []string{
 				campaign.FieldIsActive,

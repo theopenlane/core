@@ -414,7 +414,7 @@ func (l *WorkflowListeners) HandleAssignmentCompleted(ctx gala.HandlerContext, p
 
 	def := instance.DefinitionSnapshot
 
-	obj, err := l.loadActionObject(scopeCtx, instance.ID, orgID)
+	obj, err := l.loadActionObject(workflows.AllowContext(scopeCtx), instance.ID, orgID)
 	if err != nil {
 		return scope.Fail(err, nil)
 	}
@@ -479,7 +479,7 @@ func (l *WorkflowListeners) HandleAssignmentCompleted(ctx gala.HandlerContext, p
 	}
 
 	if assignment.Status == enums.WorkflowAssignmentStatusChangesRequested {
-		if err := l.createChangeRequestAssignment(scope, instance, assignment, action, obj, orgID); err != nil {
+		if err := l.createChangeRequestAssignment(scope, instance, assignment, action, orgID); err != nil {
 			scope.Warn(err, observability.Fields{
 				workflowassignment.FieldAssignmentKey: assignment.AssignmentKey,
 			})
@@ -860,7 +860,7 @@ func assignmentActionIndex(actions []models.WorkflowAction, assignmentKey, actio
 }
 
 // createChangeRequestAssignment creates a new assignment for the requester to address change requests
-func (l *WorkflowListeners) createChangeRequestAssignment(scope *observability.Scope, instance *generated.WorkflowInstance, assignment *generated.WorkflowAssignment, action models.WorkflowAction, obj *workflows.Object, orgID string) error {
+func (l *WorkflowListeners) createChangeRequestAssignment(scope *observability.Scope, instance *generated.WorkflowInstance, assignment *generated.WorkflowAssignment, action models.WorkflowAction, orgID string) error {
 	if instance == nil || assignment == nil {
 		return nil
 	}
@@ -956,13 +956,6 @@ func (l *WorkflowListeners) createChangeRequestAssignment(scope *observability.S
 			SetOwnerID(orgID)
 		if err := targetCreate.Exec(allowCtx); err != nil && !generated.IsConstraintError(err) {
 			return err
-		}
-	}
-
-	if assignmentCreated && requesterAssignment != nil && obj != nil {
-		actionType := enums.ToWorkflowActionType(action.Type)
-		if actionType != nil {
-			l.engine.emitAssignmentCreated(allowCtx, instance, obj, requesterAssignment.ID, requesterID, *actionType)
 		}
 	}
 

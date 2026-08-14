@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -16,6 +17,12 @@ import (
 // unhealthyReasonMetadataKey is the Integration.Metadata key recording why the installation
 // was marked unhealthy
 const unhealthyReasonMetadataKey = "unhealthyReason"
+
+// integrationUnhealthyObjectType is the notification object type for a stopped installation
+const integrationUnhealthyObjectType = "INTEGRATION_RECONFIGURATION_REQUIRED"
+
+// integrationHealthyObjectType is the notification object type for a recovered installation
+const integrationHealthyObjectType = "INTEGRATION_RECONNECTED"
 
 // MarkIntegrationUnhealthy flags one installation as errored with a user-facing reason and
 // notifies the owning organization; recurring cycles stop on their next status check. An
@@ -48,20 +55,23 @@ func (r *Runtime) MarkIntegrationUnhealthy(ctx context.Context, installation *en
 	return r.DB().Notification.Create().
 		SetOwnerID(installation.OwnerID).
 		SetNotificationType(enums.NotificationTypeOrganization).
-		SetObjectType("integration.reconfiguration.required").
+		SetObjectType(integrationUnhealthyObjectType).
 		SetTitle(fmt.Sprintf("%s has stopped syncing", displayName)).
 		SetBody(fmt.Sprintf("The %s integration has stopped syncing: %s. Reconnect it to resume.", displayName, reason)).
 		SetData(map[string]any{
 			"integration_id": installation.ID,
 			"definition_id":  installation.DefinitionID,
 			"reason":         reason,
+			// the console addresses integrations by definition id
+			"url": entityops.ConsoleObjectPath(ent.TypeIntegration, installation.DefinitionID),
 		}).
 		SetTopic(enums.NotificationTopicIntegration).
 		Exec(systemCtx)
 }
 
-// ClearIntegrationUnhealthy returns an errored installation to connected, removes the recorded
-// reason, and reseeds its recurring operations
+// ClearIntegrationUnhealthy returns an errored installation to connected, notifies the
+// owning organization, and reseeds its recurring operations; a non-errored installation
+// is left as is so concurrent recoveries don't stack duplicate notifications
 func (r *Runtime) ClearIntegrationUnhealthy(ctx context.Context, installation *ent.Integration) error {
 	metadata := installation.Metadata
 	if metadata == nil {
@@ -70,14 +80,42 @@ func (r *Runtime) ClearIntegrationUnhealthy(ctx context.Context, installation *e
 
 	delete(metadata, unhealthyReasonMetadataKey)
 
-	if err := r.DB().Integration.UpdateOneID(installation.ID).
+	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+	transitioned, err := r.DB().Integration.Update().
+		Where(integration.ID(installation.ID), integration.StatusEQ(enums.IntegrationStatusErrored)).
 		SetStatus(enums.IntegrationStatusConnected).
 		SetMetadata(metadata).
-		Exec(privacy.DecisionContext(ctx, privacy.Allow)); err != nil {
+		Save(systemCtx)
+	if err != nil {
 		return err
 	}
 
+	if transitioned == 0 {
+		return nil
+	}
+
 	installation.Status = enums.IntegrationStatusConnected
+
+	displayName := r.integrationDisplayName(installation)
+
+	logx.FromContext(ctx).Info().Msg("integration recovered, recurring operations resume")
+
+	if err := r.DB().Notification.Create().
+		SetOwnerID(installation.OwnerID).
+		SetNotificationType(enums.NotificationTypeOrganization).
+		SetObjectType(integrationHealthyObjectType).
+		SetTitle(fmt.Sprintf("%s is syncing again", displayName)).
+		SetBody(fmt.Sprintf("The %s integration reconnected and syncing has resumed.", displayName)).
+		SetData(map[string]any{
+			"integration_id": installation.ID,
+			"definition_id":  installation.DefinitionID,
+			"url":            entityops.ConsoleObjectPath(ent.TypeIntegration, installation.DefinitionID),
+		}).
+		SetTopic(enums.NotificationTopicIntegration).
+		Exec(systemCtx); err != nil {
+		return err
+	}
 
 	return r.SeedReconcileJobsForInstallation(ctx, installation)
 }

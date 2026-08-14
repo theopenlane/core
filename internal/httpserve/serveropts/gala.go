@@ -59,7 +59,7 @@ func NewGalaRuntimes(ctx context.Context, so *ServerOptions) (*gala.Gala, *gala.
 
 // ConfigureGala wires the gala runtimes to the database client and registers all listeners;
 // it must be called after the database client is created
-func ConfigureGala(ctx context.Context, galaApp, notificationGala *gala.Gala, dbClient *ent.Client, so *ServerOptions) error {
+func ConfigureGala(galaApp, notificationGala *gala.Gala, dbClient *ent.Client, so *ServerOptions) error {
 	if galaApp == nil {
 		return nil
 	}
@@ -113,7 +113,9 @@ func ConfigureGala(ctx context.Context, galaApp, notificationGala *gala.Gala, db
 		return err
 	}
 
-	if _, err := gala.Register(notificationGala, notifications.Listeners()...); err != nil {
+	// Notification listeners perform durable user-visible side effects; register them on
+	// the persistent runtime so a process restart cannot lose queued mutation events.
+	if _, err := gala.Register(galaApp, notifications.Listeners()...); err != nil {
 		closeRuntimes()
 
 		return err
@@ -128,8 +130,6 @@ func StartGalaWorkers(ctx context.Context, galaApp *gala.Gala, so *ServerOptions
 	if galaApp == nil {
 		return nil
 	}
-
-	submitJobTransitionMigration(ctx, galaApp)
 
 	if err := galaApp.StartWorkers(ctx); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to start gala workers")

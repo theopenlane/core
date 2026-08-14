@@ -148,7 +148,10 @@ func (suite *HookTestSuite) setupClient() *generated.Client {
 	_, err = gala.Register(galaRuntime, hooks.CampaignRecurringListeners()...)
 	require.NoError(t, err)
 
-	require.NoError(t, galaRuntime.Attach(gala.WithValue(client)))
+	require.NoError(t, galaRuntime.Attach(
+		gala.WithValue(client),
+		gala.WithRestoredValue("ent_client", generated.NewContext),
+	))
 
 	client.Use(hooks.EmitGalaEventHook(galaRuntime))
 

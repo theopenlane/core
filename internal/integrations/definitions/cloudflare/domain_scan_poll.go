@@ -61,7 +61,10 @@ type DomainScanPollEnvelope struct {
 // domainScanTopics is the namespace for domain scan saga topics
 var domainScanTopics = gala.NewTopicNamespace(gala.TopicNamespaceDomainScan, gala.JobKindIntegrationRun)
 
+// domainScanUniqueKeys is the dedup key namespace for the poll chain
+var domainScanUniqueKeys = gala.NewUniqueKeyNamespace("domainscan")
+
 // per-attempt keys dedup crash-retry re-emissions of the poll chain
-var domainScanPollTopic = gala.NamespacedTopicFor[DomainScanPollEnvelope](domainScanTopics, gala.WithUniqueKey[DomainScanPollEnvelope](func(e DomainScanPollEnvelope) string {
-	return "domainscan:" + e.InternalScanID + ":" + strconv.Itoa(e.Attempt)
+var domainScanPollTopic = gala.NamespacedTopicFor(domainScanTopics, gala.WithUniqueKey(func(e DomainScanPollEnvelope) string {
+	return domainScanUniqueKeys.Key(e.InternalScanID, strconv.Itoa(e.Attempt))
 }))

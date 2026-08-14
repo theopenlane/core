@@ -7,36 +7,11 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
 	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/observability"
 	"github.com/theopenlane/core/pkg/gala"
 )
-
-// emitAssignmentCreated emits assignment created events and records enqueue failures
-func (e *WorkflowEngine) emitAssignmentCreated(ctx context.Context, instance *generated.WorkflowInstance, obj *workflows.Object, assignmentID string, userID string, actionType enums.WorkflowActionType) {
-	payload := gala.WorkflowAssignmentCreatedPayload{
-		AssignmentID: assignmentID,
-		InstanceID:   instance.ID,
-		TargetType:   enums.WorkflowTargetTypeUser,
-		TargetIDs:    []string{userID},
-		ObjectID:     obj.ID,
-		ObjectType:   obj.Type,
-	}
-
-	meta := workflows.EmitFailureMeta{
-		EventType:   enums.WorkflowEventTypeAssignmentCreated,
-		ActionKey:   "",
-		ActionIndex: -1,
-		ObjectID:    obj.ID,
-		ObjectType:  obj.Type,
-	}
-
-	emitEngineEvent(ctx, e, observability.OpExecuteAction, actionType.String(), instance, meta, gala.TopicWorkflowAssignmentCreated, payload, observability.Fields{
-		workflowassignmenttarget.FieldTargetUserID: userID,
-	})
-}
 
 // emitActionStarted emits action started event.
 func (l *WorkflowListeners) emitActionStarted(scope *observability.Scope, instance *generated.WorkflowInstance, actionKey string, actionIndex int, actionType enums.WorkflowActionType, obj *workflows.Object) {

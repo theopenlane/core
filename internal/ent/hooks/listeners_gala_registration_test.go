@@ -165,7 +165,7 @@ func TestRegisterGalaIntegrationCleanupListeners(t *testing.T) {
 
 	topic := entityops.MutationTopicName(entityops.MutationConcernDirect, entgen.TypeIntegration)
 	require.True(t, runtime.InterestedIn(topic, ""))
-	require.False(t, runtime.InterestedIn(topic, ent.OpDeleteOne.String()))
+	require.True(t, runtime.InterestedIn(topic, ent.OpDeleteOne.String()))
 	require.True(t, runtime.InterestedIn(topic, ent.OpUpdateOne.String()))
 	require.False(t, runtime.InterestedIn(topic, ent.OpCreate.String()))
 }

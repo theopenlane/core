@@ -2,6 +2,7 @@ package gala
 
 import (
 	"context"
+	"errors"
 	"strconv"
 	"time"
 
@@ -87,13 +88,13 @@ func scheduleHandler[T any](g *Gala, definition Definition[T]) Handler[T] {
 
 	return func(ctx HandlerContext, payload T) error {
 		delta, execErr := spec.Handle(ctx.Context, payload)
+		state := spec.State(payload)
 
 		if execErr != nil {
 			if definition.Cancel != nil && definition.Cancel(ctx.Context, payload, execErr) {
 				return river.JobCancel(execErr)
 			}
 
-			state := spec.State(payload)
 			logx.FromContext(ctx.Context).Warn().Err(execErr).Int("error_streak", state.ErrorStreak+1).Msg("scheduled listener cycle failed, scheduling retry with backoff")
 		}
 
@@ -104,8 +105,16 @@ func scheduleHandler[T any](g *Gala, definition Definition[T]) Handler[T] {
 			}
 		}
 
-		next := effectiveSchedule.Next(spec.State(payload), delta, execErr)
-		next.Cycle = spec.State(payload).Cycle + 1
+		next := effectiveSchedule.Next(state, delta, execErr)
+		next.Cycle = state.Cycle + 1
+		next.Incarnation = state.Incarnation
+		if next.Incarnation == "" {
+			next.Incarnation = string(ctx.Envelope.ID)
+			if next.Incarnation == "" {
+				next.Incarnation = string(NewEventID())
+			}
+		}
+
 		scheduledAt := next.NextScheduledAt()
 		wrapped := spec.Wrap(payload, next)
 
@@ -121,27 +130,32 @@ func scheduleHandler[T any](g *Gala, definition Definition[T]) Handler[T] {
 		// a per-cycle key dedups crash-retry re-emissions without colliding with the
 		// running predecessor; keyless topics skip derivation for the same reason
 		if definition.Topic.UniqueKey != nil {
-			headers.UniqueKey = definition.Topic.UniqueKey(wrapped) + ":cycle:" + strconv.Itoa(next.Cycle)
+			headers.UniqueKey = AppendKeySegments(definition.Topic.UniqueKey(wrapped), "incarnation", next.Incarnation, "cycle", strconv.Itoa(next.Cycle))
+			headers.UniqueOnce = true
 		} else {
 			headers.SkipUniqueKey = true
 		}
 
 		_, emitErr := g.EmitWithHeaders(emitCtx, definition.Topic.Name, wrapped, headers)
+		if emitErr != nil {
+			logx.FromContext(ctx.Context).Error().Err(emitErr).Msg("scheduled listener re-emit failed, predecessor will retry")
+
+			return errors.Join(execErr, emitErr)
+		}
 
 		if execErr != nil {
-			if emitErr != nil {
-				logx.FromContext(ctx.Context).Error().Err(emitErr).Msg("scheduled listener re-emit failed, loop will not continue")
-			}
-
 			return river.JobCancel(execErr)
 		}
 
-		return emitErr
+		return nil
 	}
 }
 
 // ScheduleState carries adaptive scheduling state across dispatch cycles
 type ScheduleState struct {
+	// Incarnation identifies one logical schedule chain across every cycle. The
+	// omitempty tag keeps queued payloads written before this field compatible.
+	Incarnation string `json:"incarnation,omitempty"`
 	// Interval is the current scheduling interval
 	Interval time.Duration `json:"interval"`
 	// IdleStreak is the number of consecutive runs with zero delta
@@ -189,21 +203,25 @@ func (s Schedule) Next(state ScheduleState, delta int, err error) ScheduleState 
 	switch {
 	case err != nil:
 		return ScheduleState{
+			Incarnation: state.Incarnation,
 			Interval:    s.clamp(time.Duration(float64(interval) * s.BackoffFactor)),
 			ErrorStreak: state.ErrorStreak + 1,
 		}
 	case delta >= s.HighDriftThreshold:
 		return ScheduleState{
-			Interval: s.MinInterval,
+			Incarnation: state.Incarnation,
+			Interval:    s.MinInterval,
 		}
 	case delta > 0:
 		return ScheduleState{
-			Interval: max(interval/intervalHalving, s.MinInterval),
+			Incarnation: state.Incarnation,
+			Interval:    max(interval/intervalHalving, s.MinInterval),
 		}
 	default:
 		return ScheduleState{
-			Interval:   s.clamp(time.Duration(float64(interval) * s.BackoffFactor)),
-			IdleStreak: state.IdleStreak + 1,
+			Incarnation: state.Incarnation,
+			Interval:    s.clamp(time.Duration(float64(interval) * s.BackoffFactor)),
+			IdleStreak:  state.IdleStreak + 1,
 		}
 	}
 }

@@ -16,6 +16,7 @@ type riverTestInsertClient struct {
 	called   int
 	lastArgs river.JobArgs
 	lastOpts *river.InsertOpts
+	result   *rivertype.JobInsertResult
 	err      error
 }
 
@@ -34,7 +35,15 @@ func (c *riverTestInsertClient) Insert(_ context.Context, args river.JobArgs, op
 		return nil, c.err
 	}
 
-	return &rivertype.JobInsertResult{}, nil
+	if c.result != nil {
+		return c.result, nil
+	}
+
+	return &rivertype.JobInsertResult{Job: &rivertype.JobRow{
+		ID:    1,
+		Kind:  args.Kind(),
+		State: rivertype.JobStateAvailable,
+	}}, nil
 }
 
 // TestNewRiverDispatcherRequiresJobClient verifies construction fails without a job client.
@@ -118,6 +127,68 @@ func TestRiverDispatcherDispatchInsertsWithQueueMapping(t *testing.T) {
 	}
 }
 
+func TestRiverDispatcherReportsDuplicateHolder(t *testing.T) {
+	holder := &rivertype.JobRow{
+		ID:    42,
+		Kind:  JobKindMutation,
+		State: rivertype.JobStateScheduled,
+	}
+	client := &riverTestInsertClient{result: &rivertype.JobInsertResult{
+		Job:                      holder,
+		UniqueSkippedAsDuplicate: true,
+	}}
+	dispatcher, err := newRiverDispatcher(client, "events")
+	if err != nil {
+		t.Fatalf("failed to build dispatcher: %v", err)
+	}
+	dispatcher.kindQueues = map[string]string{JobKindMutation: QueueNameForKind(JobKindMutation)}
+
+	result, err := dispatcher.dispatch(context.Background(), Envelope{
+		Topic: TopicName("mutation.gala.test.duplicate_holder"),
+		Headers: Headers{
+			Kind:      JobKindMutation,
+			UniqueKey: "duplicate",
+		},
+	})
+	if err != nil {
+		t.Fatalf("unexpected dispatch error: %v", err)
+	}
+	if result.inserted {
+		t.Fatal("expected duplicate dispatch outcome")
+	}
+	if result.holder != holder || result.holder.State != rivertype.JobStateScheduled {
+		t.Fatalf("unexpected duplicate holder: %#v", result.holder)
+	}
+}
+
+func TestRiverDispatcherRejectsTerminalFailedDuplicateHolder(t *testing.T) {
+	client := &riverTestInsertClient{result: &rivertype.JobInsertResult{
+		Job: &rivertype.JobRow{
+			ID:    42,
+			Kind:  JobKindMutation,
+			State: rivertype.JobStateCancelled,
+		},
+		UniqueSkippedAsDuplicate: true,
+	}}
+	dispatcher, err := newRiverDispatcher(client, "events")
+	if err != nil {
+		t.Fatalf("failed to build dispatcher: %v", err)
+	}
+	dispatcher.kindQueues = map[string]string{JobKindMutation: QueueNameForKind(JobKindMutation)}
+
+	err = dispatcher.Dispatch(context.Background(), Envelope{
+		Topic: TopicName("mutation.gala.test.cancelled_duplicate_holder"),
+		Headers: Headers{
+			Kind:       JobKindMutation,
+			UniqueKey:  "duplicate",
+			UniqueOnce: true,
+		},
+	})
+	if !errors.Is(err, ErrRiverDispatchInsertFailed) {
+		t.Fatalf("expected cancelled duplicate holder to fail dispatch, got %v", err)
+	}
+}
+
 // TestRiverDispatchWorkerWorkDispatchesEnvelope verifies worker decoding and runtime dispatch.
 func TestRiverDispatchWorkerWorkDispatchesEnvelope(t *testing.T) {
 	runtime := newTestGala(t, nil)
@@ -171,6 +242,52 @@ func TestRiverDispatchWorkerWorkDispatchesEnvelope(t *testing.T) {
 
 	if called != 1 {
 		t.Fatalf("expected listener to be called once, got %d", called)
+	}
+}
+
+// TestRiverDispatchWorkerPreservesCancellation verifies River's worker timeout
+// reaches listeners instead of being removed before dispatch.
+func TestRiverDispatchWorkerPreservesCancellation(t *testing.T) {
+	runtime := newTestGala(t, nil)
+
+	topic := Topic[runtimeTestPayload]{Name: TopicName("gala.test.worker.cancellation")}
+	if err := registerTopic(runtime.registry, topic, JSONCodec[runtimeTestPayload]{}); err != nil {
+		t.Fatalf("failed to register topic: %v", err)
+	}
+
+	if _, err := attachListener(runtime, Definition[runtimeTestPayload]{
+		Topic: topic,
+		Name:  "gala.test.worker.cancellation.listener",
+		Handle: func(handlerContext HandlerContext, _ runtimeTestPayload) error {
+			return handlerContext.Context.Err()
+		},
+	}); err != nil {
+		t.Fatalf("failed to register listener: %v", err)
+	}
+
+	encodedPayload, err := json.Marshal(runtimeTestPayload{Message: "cancelled"})
+	if err != nil {
+		t.Fatalf("failed to encode payload: %v", err)
+	}
+
+	envelope := Envelope{
+		ID:              NewEventID(),
+		Topic:           topic.Name,
+		Payload:         encodedPayload,
+		ContextSnapshot: testCallerSnapshot(t, runtime),
+	}
+	args, err := newRiverDispatchArgs(envelope)
+	if err != nil {
+		t.Fatalf("failed to build river args: %v", err)
+	}
+
+	ctx, cancel := context.WithCancel(context.Background())
+	cancel()
+
+	worker := newRiverDispatchWorker(func() *Gala { return runtime })
+	err = worker.Work(ctx, &river.Job[EnvelopeArgs]{Args: args})
+	if !errors.Is(err, context.Canceled) {
+		t.Fatalf("expected listener to observe context cancellation, got %v", err)
 	}
 }
 

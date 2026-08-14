@@ -252,7 +252,10 @@ func (suite *HandlerTestSuite) SetupSuite() {
 	suite.sharedIntegrationsRT = rt
 
 	// provide ent client to gala's injector so ingest listeners can resolve it
-	require.NoError(suite.T(), suite.galaRuntime.Attach(gala.WithValue(suite.galaDB)))
+	require.NoError(suite.T(), suite.galaRuntime.Attach(
+		gala.WithValue(suite.galaDB),
+		gala.WithRestoredValue("ent_client", ent.NewContext),
+	))
 }
 
 func (suite *HandlerTestSuite) SetupTest() {

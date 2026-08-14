@@ -4,8 +4,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/theopenlane/iam/auth"
-
 	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -23,13 +21,11 @@ var avatarDiscoveryClient = &http.Client{
 // OrganizationAvatarListeners returns the organization avatar discovery listener
 func OrganizationAvatarListeners() []gala.Registration {
 	return []gala.Registration{entityops.MutationListener{
-		Schema:     generated.TypeOrganization,
+		Schema:     entityops.SchemaOrganization,
 		Label:      "avatar",
 		Operations: []string{entityops.OpCreate},
-		Caller: func(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
-			return restored.WithCapabilities(auth.CapInternalOperation | auth.CapBypassOrgFilter)
-		},
-		Handle: handleOrganizationAvatarCreated,
+		Caller:     internalOperationBypassCaller,
+		Handle:     handleOrganizationAvatarCreated,
 	}}
 }
 

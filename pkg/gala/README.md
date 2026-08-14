@@ -101,11 +101,12 @@ gala.Definition[eventqueue.MutationGalaPayload]{
 For direct emission (outside the mutation hook flow):
 
 ```go
-id, err := galaApp.Emit(ctx, invoiceCreatedTopic.Name, InvoiceCreated{
+id, err := galaApp.EmitWithHeaders(ctx, invoiceCreatedTopic.Name, InvoiceCreated{
     InvoiceID:  "inv_123",
     CustomerID: "cus_456",
     Amount:     9900,
 },
+    gala.Headers{Kind: gala.JobKindSystem},
     gala.WithEventID("inv_123"), // caller identity becomes the durable event id
 )
 
@@ -172,7 +173,7 @@ Listeners receive a `HandlerContext` with a `do.Injector` for resolving dependen
 
 ```go
 // During server initialization
-err := runtime.Attach(
+err := galaApp.Attach(
     gala.WithValue(dbClient),                    // *generated.Client
     gala.WithValue(dbClient.EntitlementManager), // you could access via the dbclient -> *entitlements.StripeClient
     gala.WithValue(dbClient.TokenManager),       // *tokens.TokenManager
@@ -214,10 +215,11 @@ When a listener returns an error, the job is rescheduled for retry. Panics are r
 Set `Headers.UniqueKey` on an emission and River atomically keeps the first insert per key while a job with that key is live (queued, running, retryable) — concurrent emitters skip instead of duplicating. Add `UniqueOnce: true` and the key also matches finished jobs, so the run executes once and later emitters (e.g. other pods starting during a release) no-op until River prunes the completed row (~24h by default).
 
 ```go
-galaApp.Emit(ctx, topic, payload, gala.WithHeaders(gala.Headers{
+galaApp.EmitWithHeaders(ctx, topic, payload, gala.Headers{
+    Kind:       gala.JobKindSystem,
     UniqueKey:  "startup-backfill",
     UniqueOnce: true,
-}))
+})
 ```
 
 ## Server Integration
@@ -243,7 +245,7 @@ if err := galaApp.Attach(gala.WithValue(dbClient)); err != nil {
 // Register listeners via each domain's register function; registration is activation —
 // the mutation hook only emits to topics with interested listeners. Listeners are
 // declared as entityops.MutationListener values compiled to definitions via Definition()
-if _, err := hooks.RegisterGalaTaskRuleListeners(galaApp); err != nil {
+if _, err := gala.Register(galaApp, hooks.WorkflowListeners()...); err != nil {
     return err
 }
 
@@ -297,7 +299,7 @@ The entire envelope is JSON-serialized and stored as the River job's arguments. 
 For replay scenarios where you already hold the encoded payload and event identity (e.g. the workflow emit reconciler), combine the emit options:
 
 ```go
-id, err := galaApp.Emit(ctx, invoiceCreatedTopic.Name, nil,
+id, err := galaApp.EmitWithHeaders(ctx, invoiceCreatedTopic.Name, nil, gala.Headers{Kind: gala.JobKindSystem},
     gala.WithRawPayload(storedPayload),
     gala.WithEventID("evt_replay_123"),
 )
@@ -371,10 +373,10 @@ func main() {
 	}
 
 	// Emit event to the topic (triggers durable dispatch)
-	id, err := app.Emit(context.Background(), userCreatedTopic.Name, UserCreated{
+id, err := app.EmitWithHeaders(context.Background(), userCreatedTopic.Name, UserCreated{
 		UserID: "usr_123",
 		Email:  "user@example.com",
-	})
+	}, gala.Headers{Kind: gala.JobKindSystem})
 	if err != nil {
 		log.Fatal(err)
 	}

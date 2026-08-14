@@ -111,8 +111,9 @@ func (DirectorySync) Run(ctx context.Context, svc *admin.Service, customerID str
 			Envelopes: groupEnvelopes,
 		},
 		{
-			Schema:    entityops.SchemaDirectoryMembership.Name,
-			Envelopes: membershipEnvelopes,
+			Schema:               entityops.SchemaDirectoryMembership.Name,
+			Envelopes:            membershipEnvelopes,
+			SnapshotCompleteness: types.SnapshotCompletenessFull,
 		},
 	}, nil
 }

@@ -182,6 +182,24 @@ func TestNeedsDirectorySyncRun(t *testing.T) {
 	}
 }
 
+func TestSameDirectorySyncRun(t *testing.T) {
+	t.Parallel()
+
+	assert.Equal(t, sameDirectorySyncRun("run-1", "run-1"), true)
+	assert.Equal(t, sameDirectorySyncRun("run-1", "run-2"), false)
+	assert.Equal(t, sameDirectorySyncRun("", "run-1"), false)
+}
+
+func TestDirectoryMembershipRunCanAdvance(t *testing.T) {
+	t.Parallel()
+
+	current := "01J00000000000000000000001"
+	assert.Equal(t, directoryMembershipRunCanAdvance(nil, current), true)
+	assert.Equal(t, directoryMembershipRunCanAdvance(&current, current), true)
+	assert.Equal(t, directoryMembershipRunCanAdvance(&current, "01J00000000000000000000000"), false)
+	assert.Equal(t, directoryMembershipRunCanAdvance(&current, ""), false)
+}
+
 func TestResolveInstallationFilterExpr(t *testing.T) {
 	t.Parallel()
 

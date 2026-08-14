@@ -37,7 +37,7 @@ func ingestPayloadSets(ctx context.Context, client *generated.Client, rt *integr
 		"",
 		contracts,
 		payloadSets,
-		integrationops.IngestOptions{},
+		integrationops.IngestOptions{Mode: integrationops.IngestStrict},
 	)
 }
 

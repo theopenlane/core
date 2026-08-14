@@ -23,13 +23,16 @@ type ReconcileEnvelope struct {
 	Schedule gala.ScheduleState `json:"schedule"`
 }
 
+// reconcileUniqueKeys is the dedup key namespace for recurring reconcile loops
+var reconcileUniqueKeys = gala.NewUniqueKeyNamespace("reconcile")
+
 // ReconcileUniqueKey derives the insert-time uniqueness key for one recurring loop, so any
 // emitter of the topic collapses to at most one live loop per installation (or runtime
 // definition) and operation
 func ReconcileUniqueKey(e ReconcileEnvelope) string {
 	src := types.IntegrationSourceFrom(e.OperationContext)
 
-	return "reconcile:" + src.IntegrationID + ":" + src.DefinitionID + ":" + e.Operation
+	return reconcileUniqueKeys.Key(src.IntegrationID, src.DefinitionID, e.Operation)
 }
 
 // ReconcileTopic is the durable reconcile topic: the name derives from the envelope type
@@ -39,7 +42,7 @@ var reconcileTopics = gala.NewTopicNamespace(gala.TopicNamespaceIntegrationRecon
 
 // ReconcileTopic is the durable reconcile topic; every emission carries the loop
 // uniqueness key
-var ReconcileTopic = gala.NamespacedTopicFor[ReconcileEnvelope](reconcileTopics, gala.WithUniqueKey[ReconcileEnvelope](ReconcileUniqueKey))
+var ReconcileTopic = gala.NamespacedTopicFor(reconcileTopics, gala.WithUniqueKey(ReconcileUniqueKey))
 
 // LegacyTopicRenames maps the historical reconcile topic to its designated topic
 func LegacyTopicRenames() map[gala.TopicName]gala.TopicName {

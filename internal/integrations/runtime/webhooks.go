@@ -165,6 +165,12 @@ func (r *Runtime) DispatchWebhookEvent(ctx context.Context, integration *ent.Int
 
 	emitCtx, headers := intobvs.EmitContext(ctx, oc)
 
+	// provider redeliveries of one delivery id collapse to a single processed job
+	if event.DeliveryID != "" {
+		headers.UniqueKey = webhookUniqueKeys.Key(definitionID, event.DeliveryID)
+		headers.UniqueOnce = true
+	}
+
 	_, err = r.Gala().EmitWithHeaders(emitCtx, registration.Topic, operations.WebhookEnvelope{
 		OperationContext: oc,
 		Payload:          jsonx.CloneRawMessage(event.Payload),
@@ -173,6 +179,9 @@ func (r *Runtime) DispatchWebhookEvent(ctx context.Context, integration *ent.Int
 
 	return err
 }
+
+// webhookUniqueKeys is the dedup key namespace for inbound webhook deliveries
+var webhookUniqueKeys = gala.NewUniqueKeyNamespace("webhook")
 
 // HandleWebhookEvent processes one emitted integration webhook envelope
 func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope operations.WebhookEnvelope) error {
@@ -220,7 +229,7 @@ func (r *Runtime) HandleWebhookEvent(ctx context.Context, envelope operations.We
 		Webhook:     webhook,
 		Event:       event,
 		Ingest: func(ingestCtx context.Context, payloadSets []types.IngestPayloadSet) error {
-			return operations.ProcessPayloadSets(ingestCtx, operations.IngestContext{
+			return operations.EmitPayloadSets(ingestCtx, operations.IngestContext{
 				Registry:    r.Registry(),
 				DB:          r.DB(),
 				Runtime:     r.Gala(),

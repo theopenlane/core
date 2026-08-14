@@ -7,7 +7,6 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/internal/ent/entityops"
-	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/hooks/contextx"
 	"github.com/theopenlane/core/pkg/gala"
@@ -18,7 +17,7 @@ import (
 func OrganizationCleanupListeners() []gala.Registration {
 	return []gala.Registration{
 		entityops.MutationListener{
-			Schema:     entgen.TypeOrganization,
+			Schema:     entityops.SchemaOrganization,
 			Label:      "cascade_delete",
 			Operations: []string{entityops.OpSoftDelete},
 			Caller: func(_ *auth.Caller, payload entityops.MutationPayload) *auth.Caller {
@@ -42,6 +41,9 @@ func OrganizationCleanupListeners() []gala.Registration {
 func handleOrganizationCascadeDelete(inv entityops.Invocation, _ entityops.MutationPayload) error {
 	orgID := inv.EntityID
 	cleanupCtx := inv.Context
+
+	// queued integration jobs go first so no worker races the hard deletes below
+	cancelOrganizationIntegrationJobs(inv)
 
 	if err := organizationEdgeCleanup(cleanupCtx, orgID); err != nil {
 		logx.FromContext(cleanupCtx).Error().Err(err).

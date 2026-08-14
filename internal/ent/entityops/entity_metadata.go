@@ -2,119 +2,42 @@
 
 package entityops
 
-import (
-	"fmt"
-	"strings"
-)
+import "fmt"
 
-// MentionSpec describes the rich-text fields scanned for mentions on a schema
+// MentionSpec describes the rich-text fields scanned for mentions on a schema.
 type MentionSpec struct {
-	// Schema is the PascalCase schema name
-	Schema string `json:"schema"`
-	// NameField is the display-name field used in mention notification content
-	NameField string `json:"nameField"`
-	// DetailsField is the plain-text rich-text field scanned for mentions
-	DetailsField string `json:"detailsField"`
-	// DetailsJSONField is the JSON rich-text field scanned for mentions
+	Schema           string `json:"schema"`
+	NameField        string `json:"nameField"`
+	DetailsField     string `json:"detailsField"`
 	DetailsJSONField string `json:"detailsJsonField"`
-	// OwnerField is the owning-organization field on the schema
-	OwnerField string `json:"ownerField"`
+	OwnerField       string `json:"ownerField"`
 }
 
-// ConsoleRoute describes how console URLs are built for a schema's objects
+// ConsoleRoute describes how console URLs are built for a schema's objects.
 type ConsoleRoute struct {
-	// Base is the console landing path for the schema (e.g. "automation/tasks")
-	Base string `json:"base"`
-	// IDParam routes object links through a query parameter (base?<IDParam>=<id>) instead
-	// of a path segment
+	Base    string `json:"base"`
 	IDParam string `json:"idParam,omitempty"`
-	// Suffix is a path segment appended after the object ID (e.g. "view")
-	Suffix string `json:"suffix,omitempty"`
+	Suffix  string `json:"suffix,omitempty"`
 }
 
-// consoleRoutes maps normalized schema names to console route components
-var consoleRoutes = map[string]ConsoleRoute{
-	"actionplan":                 {Base: "action_plans"},
-	"assessment":                 {Base: "assessments"},
-	"assessmentresponse":         {Base: "assessment_responses"},
-	"asset":                      {Base: "assets"},
-	"campaign":                   {Base: "campaigns"},
-	"campaigntarget":             {Base: "campaign_targets"},
-	"checkresult":                {Base: "check_results"},
-	"contact":                    {Base: "contacts"},
-	"control":                    {Base: "controls"},
-	"controlimplementation":      {Base: "control_implementations"},
-	"controlobjective":           {Base: "control_objectives"},
-	"directoryaccount":           {Base: "directory_accounts"},
-	"directorygroup":             {Base: "directory_groups"},
-	"directorymembership":        {Base: "directory_memberships"},
-	"discussion":                 {Base: "discussions"},
-	"documentdata":               {Base: "document_data"},
-	"emailtemplate":              {Base: "email_templates"},
-	"entity":                     {Base: "entities"},
-	"evidence":                   {Base: "evidence", IDParam: "id"},
-	"finding":                    {Base: "findings"},
-	"identityholder":             {Base: "identity_holders"},
-	"internalpolicy":             {Base: "policies", Suffix: "view"},
-	"narrative":                  {Base: "narratives"},
-	"notification":               {Base: "notifications"},
-	"notificationtemplate":       {Base: "notification_templates"},
-	"onboarding":                 {Base: "onboardings"},
-	"organization":               {Base: "organizations"},
-	"platform":                   {Base: "platforms"},
-	"procedure":                  {Base: "procedures", Suffix: "view"},
-	"program":                    {Base: "programs"},
-	"remediation":                {Base: "remediations"},
-	"review":                     {Base: "reviews"},
-	"risk":                       {Base: "exposure/risks"},
-	"scan":                       {Base: "scans"},
-	"scheduledjob":               {Base: "scheduled_jobs"},
-	"standard":                   {Base: "standards"},
-	"subcontrol":                 {Base: "subcontrols"},
-	"subprocessor":               {Base: "subprocessors"},
-	"systemdetail":               {Base: "system_details"},
-	"task":                       {Base: "automation/tasks", IDParam: "id"},
-	"template":                   {Base: "templates"},
-	"trustcenterndarequest":      {Base: "trust-center/NDAs"},
-	"trustcenterwatermarkconfig": {Base: "trust_center_watermark_configs"},
-	"vendorriskscore":            {Base: "vendor_risk_scores"},
-	"vulnerability":              {Base: "vulnerabilities"},
-	"workflowassignment":         {Base: "workflow_assignments"},
-	"workflowassignmenttarget":   {Base: "workflow_assignment_targets"},
-	"workflowdefinition":         {Base: "workflow_definitions"},
-	"workflowevent":              {Base: "workflow_events"},
-	"workflowinstance":           {Base: "workflow_instances"},
-	"workflowobjectref":          {Base: "workflow_object_refs"},
-}
-
-// mentionSpecs maps normalized schema names to mention-scan field specs
-var mentionSpecs = map[string]MentionSpec{
-	"internalpolicy": {Schema: "InternalPolicy", NameField: "name", DetailsField: "details", DetailsJSONField: "details_json", OwnerField: "owner_id"},
-	"note":           {Schema: "Note", NameField: "title", DetailsField: "text", DetailsJSONField: "text_json", OwnerField: "owner_id"},
-	"procedure":      {Schema: "Procedure", NameField: "name", DetailsField: "details", DetailsJSONField: "details_json", OwnerField: "owner_id"},
-	"risk":           {Schema: "Risk", NameField: "name", DetailsField: "details", DetailsJSONField: "details_json", OwnerField: "owner_id"},
-	"task":           {Schema: "Task", NameField: "title", DetailsField: "details", DetailsJSONField: "details_json", OwnerField: "owner_id"},
-}
-
-// normalizeSchemaKey lowers a schema name and strips separators for metadata lookup
-func normalizeSchemaKey(name string) string {
-	return strings.ToLower(strings.NewReplacer("_", "", "-", "", " ", "").Replace(name))
-}
-
-// ConsoleLanding returns the console landing path for a schema type, accepting any schema
-// name variation; empty when the schema declares no console route
+// ConsoleLanding returns the annotation-declared console landing path for a schema.
 func ConsoleLanding(schemaType string) string {
-	return consoleRoutes[normalizeSchemaKey(schemaType)].Base
-}
-
-// ConsoleObjectPath returns the console path linking directly to an object, accepting any
-// schema name variation; empty when the schema declares no console route
-func ConsoleObjectPath(schemaType, objectID string) string {
-	route, ok := consoleRoutes[normalizeSchemaKey(schemaType)]
-	if !ok {
+	schema, ok := LookupSchema(schemaType)
+	if !ok || schema.ConsoleRoute == nil {
 		return ""
 	}
 
+	return schema.ConsoleRoute.Base
+}
+
+// ConsoleObjectPath returns the annotation-declared console path for an object.
+func ConsoleObjectPath(schemaType, objectID string) string {
+	schema, ok := LookupSchema(schemaType)
+	if !ok || schema.ConsoleRoute == nil {
+		return ""
+	}
+
+	route := schema.ConsoleRoute
 	if route.IDParam != "" {
 		return fmt.Sprintf("%s?%s=%s", route.Base, route.IDParam, objectID)
 	}
@@ -127,10 +50,12 @@ func ConsoleObjectPath(schemaType, objectID string) string {
 	return path
 }
 
-// MentionSpecFor returns the mention-scan field spec for a schema type, accepting any
-// schema name variation
+// MentionSpecFor returns the annotation-declared mention fields for a schema.
 func MentionSpecFor(schemaType string) (MentionSpec, bool) {
-	spec, ok := mentionSpecs[normalizeSchemaKey(schemaType)]
+	schema, ok := LookupSchema(schemaType)
+	if !ok || schema.MentionSpec == nil {
+		return MentionSpec{}, false
+	}
 
-	return spec, ok
+	return *schema.MentionSpec, true
 }

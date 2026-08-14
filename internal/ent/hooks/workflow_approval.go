@@ -69,7 +69,10 @@ func HookWorkflowApprovalRouting() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			id, ok := getSingleMutationID(ctx, mut)
+			id, ok, idErr := getSingleMutationID(ctx, mut)
+			if idErr != nil {
+				return nil, idErr
+			}
 			if !ok {
 				return next.Mutate(ctx, m)
 			}
@@ -159,7 +162,10 @@ func routeMutationToProposals(ctx context.Context, client *generated.Client, m u
 		return nil, ErrProposedChangesNotSupported
 	}
 
-	id, ok := getSingleMutationID(ctx, m)
+	id, ok, idErr := getSingleMutationID(ctx, m)
+	if idErr != nil {
+		return nil, idErr
+	}
 	if !ok {
 		return nil, ErrMutationMissingID
 	}

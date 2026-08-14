@@ -113,7 +113,10 @@ func HookTagDefinitionDelete() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			ids := getMutationIDs(ctx, m)
+			ids, err := getMutationIDs(ctx, m)
+			if err != nil {
+				return nil, err
+			}
 			if len(ids) == 0 {
 				return next.Mutate(ctx, m)
 			}

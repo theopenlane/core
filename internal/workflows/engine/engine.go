@@ -193,7 +193,10 @@ func (e *WorkflowEngine) guardTrigger(ctx context.Context, def *generated.Workfl
 			workflowinstance.OwnerIDEQ(orgID),
 		)
 
-	instanceQuery = generated.ApplyWorkflowInstanceObjectPredicate(instanceQuery, obj.Type, obj.ID)
+	instanceQuery, err = workflows.FilterWorkflowInstances(instanceQuery, obj.Type, obj.ID)
+	if err != nil {
+		return err
+	}
 
 	if exists, err := instanceQuery.Exist(ctx); err != nil {
 		return err
@@ -213,7 +216,10 @@ func (e *WorkflowEngine) guardTrigger(ctx context.Context, def *generated.Workfl
 			workflowinstance.OwnerIDEQ(orgID),
 		)
 
-	cooldownQuery = generated.ApplyWorkflowInstanceObjectPredicate(cooldownQuery, obj.Type, obj.ID)
+	cooldownQuery, err = workflows.FilterWorkflowInstances(cooldownQuery, obj.Type, obj.ID)
+	if err != nil {
+		return err
+	}
 
 	if exists, err := cooldownQuery.Exist(ctx); err != nil {
 		return err

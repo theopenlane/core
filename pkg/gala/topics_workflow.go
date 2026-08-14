@@ -12,14 +12,10 @@ const (
 	TopicWorkflowActionStarted TopicName = TopicPrefixWorkflowCommand + "advance"
 	// TopicWorkflowActionCompleted is emitted when a workflow action finishes
 	TopicWorkflowActionCompleted TopicName = TopicPrefixWorkflowCommand + "action_completed"
-	// TopicWorkflowAssignmentCreated is emitted when an assignment is created
-	TopicWorkflowAssignmentCreated TopicName = TopicPrefixWorkflowCommand + "assignment_created"
 	// TopicWorkflowAssignmentCompleted is emitted when an assignment resolves
 	TopicWorkflowAssignmentCompleted TopicName = TopicPrefixWorkflowCommand + "assignment_completed"
 	// TopicWorkflowInstanceCompleted is emitted when an instance reaches a terminal state
 	TopicWorkflowInstanceCompleted TopicName = TopicPrefixWorkflowCommand + "instance_completed"
-	// TopicWorkflowTimeoutExpired is emitted when a workflow timeout expires
-	TopicWorkflowTimeoutExpired TopicName = TopicPrefixWorkflowCommand + "timeout_expire"
 )
 
 // WorkflowTriggeredPayload contains data for a workflow instance creation event
@@ -72,22 +68,6 @@ type WorkflowActionCompletedPayload struct {
 	ErrorMessage string `json:"error_message,omitempty"`
 }
 
-// WorkflowAssignmentCreatedPayload contains data for created assignments
-type WorkflowAssignmentCreatedPayload struct {
-	// AssignmentID is the unique identifier for the assignment
-	AssignmentID string `json:"assignment_id"`
-	// InstanceID is the unique identifier for the workflow instance
-	InstanceID string `json:"instance_id"`
-	// TargetType is the type of the assignment target
-	TargetType enums.WorkflowTargetType `json:"target_type"`
-	// TargetIDs are the identifiers for the assignment targets
-	TargetIDs []string `json:"target_ids,omitempty"`
-	// ObjectID is the identifier for the object associated with the workflow
-	ObjectID string `json:"object_id"`
-	// ObjectType is the type of the object associated with the workflow
-	ObjectType enums.WorkflowObjectType `json:"object_type"`
-}
-
 // WorkflowAssignmentCompletedPayload contains data for completed assignments
 type WorkflowAssignmentCompletedPayload struct {
 	// AssignmentID is the unique identifier for the assignment
@@ -116,18 +96,6 @@ type WorkflowInstanceCompletedPayload struct {
 	ObjectType enums.WorkflowObjectType `json:"object_type"`
 }
 
-// WorkflowTimeoutExpiredPayload contains data for workflow timeout expiration
-type WorkflowTimeoutExpiredPayload struct {
-	// InstanceID is the unique identifier for the workflow instance
-	InstanceID string `json:"instance_id"`
-	// AssignmentID is the unique identifier for the assignment
-	AssignmentID string `json:"assignment_id"`
-	// ObjectID is the identifier for the object associated with the workflow
-	ObjectID string `json:"object_id"`
-	// ObjectType is the type of the object associated with the workflow
-	ObjectType enums.WorkflowObjectType `json:"object_type"`
-}
-
 var (
 	// WorkflowTriggeredEventTopic is the typed topic for workflow triggered events.
 	WorkflowTriggeredEventTopic = Topic[WorkflowTriggeredPayload]{Name: TopicWorkflowTriggered, Kind: WorkflowCommandTopics.Kind()}
@@ -135,12 +103,8 @@ var (
 	WorkflowActionStartedEventTopic = Topic[WorkflowActionStartedPayload]{Name: TopicWorkflowActionStarted, Kind: WorkflowCommandTopics.Kind()}
 	// WorkflowActionCompletedEventTopic is the typed topic for action completed events.
 	WorkflowActionCompletedEventTopic = Topic[WorkflowActionCompletedPayload]{Name: TopicWorkflowActionCompleted, Kind: WorkflowCommandTopics.Kind()}
-	// WorkflowAssignmentCreatedEventTopic is the typed topic for assignment created events.
-	WorkflowAssignmentCreatedEventTopic = Topic[WorkflowAssignmentCreatedPayload]{Name: TopicWorkflowAssignmentCreated, Kind: WorkflowCommandTopics.Kind()}
 	// WorkflowAssignmentCompletedEventTopic is the typed topic for assignment completed events.
 	WorkflowAssignmentCompletedEventTopic = Topic[WorkflowAssignmentCompletedPayload]{Name: TopicWorkflowAssignmentCompleted, Kind: WorkflowCommandTopics.Kind()}
 	// WorkflowInstanceCompletedEventTopic is the typed topic for instance completed events.
 	WorkflowInstanceCompletedEventTopic = Topic[WorkflowInstanceCompletedPayload]{Name: TopicWorkflowInstanceCompleted, Kind: WorkflowCommandTopics.Kind()}
-	// WorkflowTimeoutExpiredEventTopic is the typed topic for timeout events.
-	WorkflowTimeoutExpiredEventTopic = Topic[WorkflowTimeoutExpiredPayload]{Name: TopicWorkflowTimeoutExpired, Kind: WorkflowCommandTopics.Kind()}
 )

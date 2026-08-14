@@ -47,9 +47,6 @@ var (
 	notificationMutationTopics = gala.NewTopicNamespace(gala.TopicPrefixNotificationMutation, gala.JobKindMutation)
 )
 
-// IngestTopics is the namespace for the generated per-schema ingest topics
-var IngestTopics = gala.NewTopicNamespace("entityops.", gala.JobKindIntegrationIngest)
-
 // MutationConcern identifies the eventing concern namespace for mutation topics
 type MutationConcern string
 
@@ -217,8 +214,7 @@ func EmitMutation(ctx context.Context, runtimes []*gala.Gala, payload MutationPa
 				continue
 			}
 
-			if _, err := runtime.EmitWithHeaders(dispatchCtx, topic, payload, headers,
-				gala.WithEventID(gala.EventID(payload.EntityID))); err != nil {
+			if _, err := runtime.EmitWithHeaders(dispatchCtx, topic, payload, headers); err != nil {
 				logx.FromContext(ctx).Error().Err(fmt.Errorf("%w: %w", ErrEmitFailed, err)).Str("topic", string(topic)).Msg("gala mutation dispatch failed")
 			}
 		}
@@ -231,14 +227,14 @@ type emissionVeto struct {
 }
 
 var emissionVetoContextKey = contextx.NewKey[*emissionVeto]()
+var emissionVetoNextContextKey = contextx.NewKey[bool]()
 
-// WithEmissionVeto installs an unset emission veto so inner hooks can call VetoEmission
+// WithEmissionVeto pushes an independent mutation frame. The soft-delete rewrite pass
+// must not push one: it shares the outer delete's frame so its veto reaches the outer pass
 func WithEmissionVeto(ctx context.Context) context.Context {
-	if existing, ok := emissionVetoContextKey.Get(ctx); ok && existing != nil {
-		return ctx
-	}
+	vetoed, _ := emissionVetoNextContextKey.Get(ctx)
 
-	return emissionVetoContextKey.Set(ctx, &emissionVeto{})
+	return emissionVetoContextKey.Set(ctx, &emissionVeto{vetoed: vetoed})
 }
 
 // VetoEmission suppresses mutation event emission for the current mutation
@@ -248,12 +244,9 @@ func VetoEmission(ctx context.Context) {
 	}
 }
 
-// WithEmissionVetoed installs the emission veto already set
+// WithEmissionVetoed marks the next mutation frame as vetoed without mutating an existing frame.
 func WithEmissionVetoed(ctx context.Context) context.Context {
-	ctx = WithEmissionVeto(ctx)
-	VetoEmission(ctx)
-
-	return ctx
+	return emissionVetoNextContextKey.Set(ctx, true)
 }
 
 // EmissionVetoed reports whether mutation event emission is vetoed

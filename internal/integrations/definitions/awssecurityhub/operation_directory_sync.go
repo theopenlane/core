@@ -161,8 +161,9 @@ func (DirectorySync) Run(ctx context.Context, client *iam.Client, cfg DirectoryS
 			Envelopes: groupEnvelopes,
 		},
 		types.IngestPayloadSet{
-			Schema:    entityops.SchemaDirectoryMembership.Name,
-			Envelopes: membershipEnvelopes,
+			Schema:               entityops.SchemaDirectoryMembership.Name,
+			Envelopes:            membershipEnvelopes,
+			SnapshotCompleteness: types.SnapshotCompletenessFull,
 		},
 	)
 

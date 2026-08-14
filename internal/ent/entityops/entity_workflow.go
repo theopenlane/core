@@ -4,9 +4,10 @@ package entityops
 
 import (
 	"context"
-	"slices"
+	"encoding/json"
+	"fmt"
+	"reflect"
 
-	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 
 	generated "github.com/theopenlane/core/internal/ent/generated"
@@ -14,77 +15,203 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-// EdgeChange describes one mutated edge and the IDs added or removed
-type EdgeChange struct {
-	// Edge is the mutated edge name
-	Edge string `json:"edge" jsonschema:"description=Mutated edge name"`
-	// AddedIDs are the IDs added to the edge
-	AddedIDs []string `json:"addedIds,omitempty" jsonschema:"description=IDs added to the edge"`
-	// RemovedIDs are the IDs removed from the edge; an empty non-nil slice means the edge was cleared
-	RemovedIDs []string `json:"removedIds,omitempty" jsonschema:"description=IDs removed from the edge"`
-}
+func workflowPayloadFieldValue(projectionType reflect.Type, field FieldDescriptor, raw json.RawMessage) (any, error) {
+	if projectionType != nil {
+		for projectionType.Kind() == reflect.Pointer {
+			projectionType = projectionType.Elem()
+		}
 
-// WorkflowEligible reports whether the schema participates in workflows via an object-ref edge or
-// eligible fields or edges
-func (s *Schema) WorkflowEligible() bool {
-	if _, ok := workflowRefEdgeFor(s); ok {
-		return true
-	}
+		if projectionType.Kind() == reflect.Struct {
+			if projectionField, ok := projectionType.FieldByName(field.Label); ok {
+				value := reflect.New(projectionField.Type)
+				if len(raw) > 0 {
+					if err := json.Unmarshal(raw, value.Interface()); err != nil {
+						return nil, err
+					}
+				}
 
-	return slices.ContainsFunc(s.Fields, func(f FieldDescriptor) bool { return f.WorkflowEligible }) ||
-		slices.ContainsFunc(s.Edges, func(e EdgeDescriptor) bool { return e.WorkflowEligible })
-}
-
-// WorkflowFieldNames returns the snake_case names of this schema's workflow-eligible fields
-func (s *Schema) WorkflowFieldNames() []string {
-	var out []string
-
-	for _, f := range s.Fields {
-		if f.WorkflowEligible {
-			out = append(out, f.Name)
+				return value.Elem().Interface(), nil
+			}
 		}
 	}
 
-	return out
+	var value any
+	if len(raw) == 0 {
+		return value, nil
+	}
+
+	if err := json.Unmarshal(raw, &value); err != nil {
+		return nil, err
+	}
+
+	return value, nil
 }
 
-// WorkflowFields returns this schema's workflow-eligible field descriptors (name, label, type), the
-// descriptor analog of WorkflowFieldNames consumed by the workflow builder and proposal preview UI
+// WorkflowFields returns the workflow-eligible members of the schema's canonical field catalog.
 func (s *Schema) WorkflowFields() []FieldDescriptor {
-	var out []FieldDescriptor
+	if s == nil || !s.SchemaDescriptor.WorkflowEligible {
+		return nil
+	}
 
-	for _, f := range s.Fields {
-		if f.WorkflowEligible {
-			out = append(out, f)
+	fields := make([]FieldDescriptor, 0, len(s.Fields))
+	for _, field := range s.Fields {
+		if field.WorkflowEligible {
+			fields = append(fields, field)
 		}
 	}
 
-	return out
+	return fields
 }
 
-// WorkflowEdgeNames returns the names of this schema's workflow-eligible edges
-func (s *Schema) WorkflowEdgeNames() []string {
-	var out []string
+// WorkflowEdges returns the workflow-eligible members of the schema's canonical edge catalog.
+func (s *Schema) WorkflowEdges() []EdgeDescriptor {
+	if s == nil || !s.SchemaDescriptor.WorkflowEligible {
+		return nil
+	}
 
-	for _, e := range s.Edges {
-		if e.WorkflowEligible {
-			out = append(out, e.Name)
+	edges := make([]EdgeDescriptor, 0, len(s.Edges))
+	for _, edge := range s.Edges {
+		if edge.WorkflowEligible {
+			edges = append(edges, edge)
 		}
 	}
 
-	return out
+	return edges
 }
 
-// workflowRefEdgeFor returns WorkflowObjectRef's unique owning edge targeting the given schema, or
-// false when the schema has no object-ref edge. The owning workflow_instance edge is excluded: it is
-// set on every ref row and does not identify the target object
-func workflowRefEdgeFor(schema *Schema) (EdgeDescriptor, bool) {
-	for _, edge := range SchemaWorkflowObjectRef.Edges {
-		if !edge.Unique || edge.Field == "" || edge.Target == SchemaWorkflowInstance {
+// WorkflowChangeSet filters the canonical mutation delta to workflow-designated fields and edges.
+func (s *Schema) WorkflowChangeSet(changes ChangeSet) ChangeSet {
+	return changes.Filter(func(name string) bool {
+		field, ok := s.FieldByName(name)
+		return ok && field.WorkflowEligible
+	}, func(name string) bool {
+		edge, ok := s.EdgeByName(name)
+		return ok && edge.WorkflowEligible
+	})
+}
+
+// LoadWorkflowObject loads the native Ent node for a workflow-designated schema.
+func (s *Schema) LoadWorkflowObject(ctx context.Context, client *generated.Client, objectID string) (generated.Noder, error) {
+	if s == nil || !s.SchemaDescriptor.WorkflowEligible || s.LoadObject == nil {
+		return nil, fmt.Errorf("%w: workflow object %s", ErrLoadFailed, objectID)
+	}
+
+	object, err := s.LoadObject(ctx, client, objectID)
+	if err != nil {
+		return nil, err
+	}
+
+	node, ok := object.(generated.Noder)
+	if !ok {
+		return nil, fmt.Errorf("%w: %s is not a node", ErrLoadFailed, s.Name)
+	}
+
+	return node, nil
+}
+
+// WorkflowOwnerID returns the owner_id of a workflow object through the schema's existing loader.
+func (s *Schema) WorkflowOwnerID(ctx context.Context, client *generated.Client, objectID string) (string, error) {
+	if s == nil || !s.SchemaDescriptor.WorkflowEligible || s.Load == nil {
+		return "", fmt.Errorf("%w: workflow object %s", ErrLoadFailed, objectID)
+	}
+
+	raw, err := s.Load(ctx, client, objectID)
+	if err != nil {
+		return "", err
+	}
+
+	row := map[string]json.RawMessage{}
+	if err := json.Unmarshal(raw, &row); err != nil {
+		return "", logError(ctx, SchemaRef{Schema: s.Snake, Operation: refOpLoad, EntityID: objectID}, ErrDecodeFailed, err)
+	}
+
+	ownerID, err := jsonx.Decode[string](row["owner_id"])
+	if err != nil || ownerID == "" {
+		return "", logError(ctx, SchemaRef{Schema: s.Snake, Operation: refOpLoad, EntityID: objectID}, ErrDecodeFailed, err)
+	}
+
+	return ownerID, nil
+}
+
+// ApplyWorkflowFields validates and applies workflow updates through the schema's existing updater.
+func (s *Schema) ApplyWorkflowFields(ctx context.Context, client *generated.Client, objectID string, updates map[string]any) error {
+	if s == nil || !s.SchemaDescriptor.WorkflowEligible || s.Update == nil {
+		return fmt.Errorf("%w: workflow updates for %s", ErrUpdateFailed, objectID)
+	}
+
+	normalized := make(map[string]any, len(updates))
+	for name, value := range updates {
+		field, ok := s.FieldByName(name)
+		if !ok || !field.WorkflowEligible {
+			return fmt.Errorf("%w: workflow field %s.%s", ErrValidationFailed, s.Name, name)
+		}
+
+		if value == nil && !field.Clearable {
+			return fmt.Errorf("%w: workflow field %s.%s cannot be cleared", ErrValidationFailed, s.Name, name)
+		}
+
+		normalized[field.Name] = value
+	}
+
+	if len(normalized) == 0 {
+		return nil
+	}
+
+	raw, err := json.Marshal(normalized)
+	if err != nil {
+		return logError(ctx, SchemaRef{Schema: s.Snake, Operation: refOpUpdate, EntityID: objectID}, ErrMarshalFailed, err)
+	}
+
+	return s.Update(ctx, client, objectID, raw)
+}
+
+// EnrichWorkflowPayload copies designated object fields into a webhook payload. Schemas without
+// designated payload fields contribute only their object ID, preserving the existing contract.
+func (s *Schema) EnrichWorkflowPayload(ctx context.Context, client *generated.Client, objectID string, payload map[string]any) error {
+	if s == nil || !s.SchemaDescriptor.WorkflowEligible || s.Load == nil {
+		return fmt.Errorf("%w: workflow object %s", ErrLoadFailed, objectID)
+	}
+
+	raw, err := s.Load(ctx, client, objectID)
+	if err != nil {
+		return err
+	}
+
+	row := map[string]json.RawMessage{}
+	if err := json.Unmarshal(raw, &row); err != nil {
+		return logError(ctx, SchemaRef{Schema: s.Snake, Operation: refOpLoad, EntityID: objectID}, ErrDecodeFailed, err)
+	}
+
+	selected := false
+	for _, field := range s.Fields {
+		if !field.WebhookPayload {
 			continue
 		}
 
-		if edge.Target == schema {
+		value, err := workflowPayloadFieldValue(s.ProjectionType, field, row[field.Name])
+		if err != nil {
+			return logError(ctx, SchemaRef{Schema: s.Snake, Operation: refOpLoad, EntityID: objectID}, ErrDecodeFailed, err)
+		}
+
+		payload[field.Name] = value
+		selected = true
+	}
+
+	if !selected {
+		payload["id"] = objectID
+	}
+
+	return nil
+}
+
+// workflowObjectEdge resolves the owning foreign-key edge from a workflow container to a schema.
+func workflowObjectEdge(container, target *Schema) (EdgeDescriptor, bool) {
+	if container == nil || target == nil || !target.SchemaDescriptor.WorkflowEligible {
+		return EdgeDescriptor{}, false
+	}
+
+	for _, edge := range container.Edges {
+		if edge.Unique && edge.Field != "" && edge.Target == target {
 			return edge, true
 		}
 	}
@@ -92,111 +219,71 @@ func workflowRefEdgeFor(schema *Schema) (EdgeDescriptor, bool) {
 	return EdgeDescriptor{}, false
 }
 
-// ObjectFromWorkflowRef resolves the workflow object type and ID from a WorkflowObjectRef row using
-// the object-ref edge catalog, replacing the per-type resolver switch
-func ObjectFromWorkflowRef(ctx context.Context, ref *generated.WorkflowObjectRef) (objectType string, objectID string, ok bool) {
+// SetWorkflowInstanceObjectID binds a workflow instance builder to an object using the canonical edge.
+func (s *Schema) SetWorkflowInstanceObjectID(builder *generated.WorkflowInstanceCreate, objectID string) error {
+	edge, ok := workflowObjectEdge(SchemaWorkflowInstance, s)
+	if !ok {
+		return fmt.Errorf("%w: workflow instance edge for %s", ErrEdgeNotFound, s.Name)
+	}
+
+	return builder.Mutation().SetField(edge.Field, objectID)
+}
+
+// SetWorkflowObjectRefObjectID binds an object-reference builder using the canonical edge.
+func (s *Schema) SetWorkflowObjectRefObjectID(builder *generated.WorkflowObjectRefCreate, objectID string) error {
+	edge, ok := workflowObjectEdge(SchemaWorkflowObjectRef, s)
+	if !ok {
+		return fmt.Errorf("%w: workflow object-reference edge for %s", ErrEdgeNotFound, s.Name)
+	}
+
+	return builder.Mutation().SetField(edge.Field, objectID)
+}
+
+// FilterWorkflowInstances restricts a workflow instance query to one object.
+func (s *Schema) FilterWorkflowInstances(query *generated.WorkflowInstanceQuery, objectID string) (*generated.WorkflowInstanceQuery, error) {
+	edge, ok := workflowObjectEdge(SchemaWorkflowInstance, s)
+	if !ok {
+		return query, fmt.Errorf("%w: workflow instance edge for %s", ErrEdgeNotFound, s.Name)
+	}
+
+	return query.Where(predicate.WorkflowInstance(func(selector *sql.Selector) {
+		selector.Where(sql.EQ(selector.C(edge.Field), objectID))
+	})), nil
+}
+
+// FilterWorkflowObjectRefs restricts an object-reference query to one object.
+func (s *Schema) FilterWorkflowObjectRefs(query *generated.WorkflowObjectRefQuery, objectID string) (*generated.WorkflowObjectRefQuery, error) {
+	edge, ok := workflowObjectEdge(SchemaWorkflowObjectRef, s)
+	if !ok {
+		return query, fmt.Errorf("%w: workflow object-reference edge for %s", ErrEdgeNotFound, s.Name)
+	}
+
+	return query.Where(predicate.WorkflowObjectRef(func(selector *sql.Selector) {
+		selector.Where(sql.EQ(selector.C(edge.Field), objectID))
+	})), nil
+}
+
+// WorkflowObjectFromRef resolves an object-reference row through the canonical edge catalog.
+func WorkflowObjectFromRef(ref *generated.WorkflowObjectRef) (*Schema, string, error) {
+	if ref == nil {
+		return nil, "", fmt.Errorf("%w: nil workflow object reference", ErrValidationFailed)
+	}
+
 	row, err := jsonx.ToRawMap(ref)
 	if err != nil {
-		logError(ctx, SchemaRef{Schema: SchemaWorkflowObjectRef.Snake, Operation: refOpLoad, EntityID: ref.ID}, ErrDecodeFailed, err)
-
-		return "", "", false
+		return nil, "", fmt.Errorf("%w: workflow object reference %s: %w", ErrDecodeFailed, ref.ID, err)
 	}
 
 	for _, edge := range SchemaWorkflowObjectRef.Edges {
-		if !edge.Unique || edge.Field == "" || edge.Target == SchemaWorkflowInstance {
+		if !edge.Unique || edge.Field == "" || edge.Target == nil || !edge.Target.SchemaDescriptor.WorkflowEligible {
 			continue
 		}
 
-		id, err := jsonx.Decode[string](row[edge.Field])
-		if err != nil || id == "" {
-			continue
-		}
-
-		return edge.Target.Name, id, true
-	}
-
-	return "", "", false
-}
-
-// RefsByObject narrows a WorkflowObjectRef query to rows referencing the given object, using the
-// object-ref edge catalog in place of per-type predicate switches; ok is false when the schema has
-// no object-ref edge
-func RefsByObject(query *generated.WorkflowObjectRefQuery, schema *Schema, objectID string) (*generated.WorkflowObjectRefQuery, bool) {
-	edge, ok := workflowRefEdgeFor(schema)
-	if !ok {
-		return query, false
-	}
-
-	return query.Where(predicate.WorkflowObjectRef(func(s *sql.Selector) {
-		s.Where(sql.EQ(s.C(edge.Field), objectID))
-	})), true
-}
-
-// ExtractChangedEdges returns the workflow-eligible edges mutated by m, with the IDs added or removed
-func ExtractChangedEdges(m ent.Mutation) []EdgeChange {
-	schema, ok := LookupSchema(m.Type())
-	if !ok {
-		return nil
-	}
-
-	eligible := schema.WorkflowEdgeNames()
-	if len(eligible) == 0 {
-		return nil
-	}
-
-	changed := changedEdgeNames(m)
-
-	var out []EdgeChange
-
-	for _, edge := range eligible {
-		if !slices.Contains(changed, edge) {
-			continue
-		}
-
-		change := EdgeChange{Edge: edge}
-
-		if ids := toStringIDs(m.AddedIDs(edge)); len(ids) > 0 {
-			change.AddedIDs = ids
-		}
-
-		if ids := toStringIDs(m.RemovedIDs(edge)); len(ids) > 0 {
-			change.RemovedIDs = ids
-		}
-
-		if m.EdgeCleared(edge) {
-			change.RemovedIDs = []string{}
-		}
-
-		out = append(out, change)
-	}
-
-	return out
-}
-
-// changedEdgeNames returns the names of all edges touched by the mutation
-func changedEdgeNames(m ent.Mutation) []string {
-	var names []string
-
-	names = append(names, m.AddedEdges()...)
-	names = append(names, m.RemovedEdges()...)
-	names = append(names, m.ClearedEdges()...)
-
-	return names
-}
-
-// toStringIDs converts ent edge ID values to strings, dropping any non-string IDs
-func toStringIDs(values []ent.Value) []string {
-	if len(values) == 0 {
-		return nil
-	}
-
-	ids := make([]string, 0, len(values))
-
-	for _, value := range values {
-		if id, ok := value.(string); ok {
-			ids = append(ids, id)
+		objectID, err := jsonx.Decode[string](row[edge.Field])
+		if err == nil && objectID != "" {
+			return edge.Target, objectID, nil
 		}
 	}
 
-	return ids
+	return nil, "", fmt.Errorf("%w: workflow object reference %s has no object", ErrSchemaNotFound, ref.ID)
 }

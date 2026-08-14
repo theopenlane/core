@@ -5,7 +5,6 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
@@ -20,7 +19,7 @@ import (
 func NDAAttestationListeners() []gala.Registration {
 	return []gala.Registration{
 		entityops.MutationListener{
-			Schema:     generated.TypeDocumentData,
+			Schema:     entityops.SchemaDocumentData,
 			Operations: []string{entityops.OpCreate},
 			Caller: func(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
 				return restored.WithCapabilities(auth.CapBypassOrgFilter)

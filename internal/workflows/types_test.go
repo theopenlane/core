@@ -72,23 +72,12 @@ func TestBuildCELVarsCustomBuilder(t *testing.T) {
 
 // TestObjectFromRef verifies object lookup from references
 func TestObjectFromRef(t *testing.T) {
-	old := objectFromRefRegistry
-	t.Cleanup(func() { objectFromRefRegistry = old })
-	objectFromRefRegistry = nil
-
 	_, err := ObjectFromRef(&generated.WorkflowObjectRef{})
 	assert.ErrorIs(t, err, ErrMissingObjectID)
 
-	expected := &Object{ID: "obj1", Type: enums.WorkflowObjectTypeControl}
-	objectFromRefRegistry = []func(*generated.WorkflowObjectRef) (*Object, bool){
-		func(_ *generated.WorkflowObjectRef) (*Object, bool) {
-			return expected, true
-		},
-	}
-
-	obj, err := ObjectFromRef(&generated.WorkflowObjectRef{})
+	obj, err := ObjectFromRef(&generated.WorkflowObjectRef{ControlID: "obj1"})
 	assert.NoError(t, err)
-	assert.Equal(t, expected, obj)
+	assert.Equal(t, &Object{ID: "obj1", Type: enums.WorkflowObjectTypeControl}, obj)
 }
 
 // TestBuildAssignmentContext verifies assignment context construction
@@ -109,34 +98,6 @@ func TestBuildAssignmentContext(t *testing.T) {
 	vars, err = BuildAssignmentContext(ctx, nil, "instance-1")
 	assert.NoError(t, err)
 	assert.Equal(t, map[string]any{"instance_id": "instance-1"}, vars)
-}
-
-func TestRegisterObjectRefResolver(t *testing.T) {
-	old := objectFromRefRegistry
-	t.Cleanup(func() { objectFromRefRegistry = old })
-	objectFromRefRegistry = nil
-
-	RegisterObjectRefResolver(func(*generated.WorkflowObjectRef) (*Object, bool) {
-		return &Object{ID: "obj", Type: enums.WorkflowObjectTypeControl}, true
-	})
-
-	obj, err := ObjectFromRef(&generated.WorkflowObjectRef{})
-	assert.NoError(t, err)
-	assert.Equal(t, "obj", obj.ID)
-}
-
-func TestRegisterObjectRefQueryBuilder(t *testing.T) {
-	old := objectRefQueryBuilders
-	t.Cleanup(func() { objectRefQueryBuilders = old })
-	objectRefQueryBuilders = nil
-
-	RegisterObjectRefQueryBuilder(func(q *generated.WorkflowObjectRefQuery, _ *Object) (*generated.WorkflowObjectRefQuery, bool) {
-		return q, true
-	})
-
-	query := &generated.WorkflowObjectRefQuery{}
-	out := buildObjectRefQuery(query, &Object{ID: "obj"})
-	assert.Equal(t, query, out)
 }
 
 func TestRegisterAssignmentContextBuilder(t *testing.T) {

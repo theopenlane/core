@@ -34,7 +34,10 @@ func HookDeletePermissions() ent.Hook {
 
 			// the ids have to be resolved before the mutation runs, a bulk hard delete resolves its
 			// predicate against rows that no longer exist once the delete has executed
-			objIDs := getMutationIDs(ctx, mut)
+			objIDs, err := getMutationIDs(ctx, mut)
+			if err != nil {
+				return nil, err
+			}
 
 			// run the mutation first
 			retVal, err := next.Mutate(ctx, m)
@@ -57,7 +60,11 @@ func HookDeletePermissions() ent.Hook {
 // DeletePermissionsHook deletes all relationship tuples associated with the object(s) in the mutation.
 // The ids are resolved from the mutation, so this must be called before the records are hard deleted
 func DeletePermissionsHook(ctx context.Context, m utils.GenericMutation) error {
-	return deletePermissionsForIDs(ctx, m, getMutationIDs(ctx, m))
+	ids, err := getMutationIDs(ctx, m)
+	if err != nil {
+		return err
+	}
+	return deletePermissionsForIDs(ctx, m, ids)
 }
 
 // deletePermissionsForIDs deletes all relationship tuples for the given object ids

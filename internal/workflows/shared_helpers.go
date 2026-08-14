@@ -75,6 +75,14 @@ type WorkflowInstanceBuilderParams struct {
 
 // CreateWorkflowInstanceWithObjectRef builds a workflow instance and its object ref in a single helper.
 func CreateWorkflowInstanceWithObjectRef(ctx context.Context, tx *generated.Tx, params WorkflowInstanceBuilderParams) (*generated.WorkflowInstance, *generated.WorkflowObjectRef, error) {
+	schema, err := WorkflowSchema(params.ObjectType)
+	if err != nil {
+		return nil, nil, &WorkflowCreationError{
+			Stage: WorkflowCreationStageInstance,
+			Err:   err,
+		}
+	}
+
 	instanceCreate := tx.WorkflowInstance.Create().
 		SetWorkflowDefinitionID(params.WorkflowDefinitionID).
 		SetState(params.State).
@@ -82,7 +90,12 @@ func CreateWorkflowInstanceWithObjectRef(ctx context.Context, tx *generated.Tx, 
 		SetContext(params.Context).
 		SetOwnerID(params.OwnerID)
 
-	instanceCreate = generated.SetWorkflowInstanceObjectID(instanceCreate, params.ObjectType, params.ObjectID)
+	if err := schema.SetWorkflowInstanceObjectID(instanceCreate, params.ObjectID); err != nil {
+		return nil, nil, &WorkflowCreationError{
+			Stage: WorkflowCreationStageInstance,
+			Err:   err,
+		}
+	}
 
 	instance, err := instanceCreate.Save(ctx)
 	if err != nil {
@@ -95,7 +108,12 @@ func CreateWorkflowInstanceWithObjectRef(ctx context.Context, tx *generated.Tx, 
 	objectRefCreate := tx.WorkflowObjectRef.Create().
 		SetWorkflowInstanceID(instance.ID).
 		SetOwnerID(params.OwnerID)
-	objectRefCreate = generated.SetWorkflowObjectRefObjectID(objectRefCreate, params.ObjectType, params.ObjectID)
+	if err := schema.SetWorkflowObjectRefObjectID(objectRefCreate, params.ObjectID); err != nil {
+		return nil, nil, &WorkflowCreationError{
+			Stage: WorkflowCreationStageObjectRef,
+			Err:   err,
+		}
+	}
 
 	objectRef, err := objectRefCreate.Save(ctx)
 	if err != nil {

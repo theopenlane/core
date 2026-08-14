@@ -37,7 +37,6 @@ import (
 	"github.com/theopenlane/entx/genhooks"
 	"github.com/theopenlane/entx/history"
 	"github.com/theopenlane/entx/oscalgen"
-	"github.com/theopenlane/entx/workflowgen"
 	"github.com/theopenlane/iam/entfga"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/iam/sessions"
@@ -70,13 +69,12 @@ const (
 	templateDir   = "./internal/ent/generate/templates/ent"
 	featureMapDir = "./internal/entitlements/features/"
 
-	entGeneratedPath         = "internal/ent/generated"
-	entGeneratedHistoryPath  = "internal/ent/historygenerated"
-	entGeneratedAuthzPath    = "internal/ent/authzgenerated"
-	entGeneratedWorkflowPath = "internal/ent/workflowgenerated"
-	csvGeneratedPath         = "internal/ent/csvgenerated"
-	oscalGeneratedPath       = "internal/ent/oscalgenerated"
-	entityOpsGeneratedPath   = "internal/ent/entityops"
+	entGeneratedPath        = "internal/ent/generated"
+	entGeneratedHistoryPath = "internal/ent/historygenerated"
+	entGeneratedAuthzPath   = "internal/ent/authzgenerated"
+	csvGeneratedPath        = "internal/ent/csvgenerated"
+	oscalGeneratedPath      = "internal/ent/oscalgenerated"
+	entityOpsGeneratedPath  = "internal/ent/entityops"
 
 	schemaInputChecksumFile  = "./internal/ent/checksum/.schema_checksum"
 	historyInputChecksumFile = "./internal/ent/checksum/.history_schema_checksum"
@@ -148,7 +146,7 @@ func main() {
 
 	// run independent post-generation hooks in parallel using the captured ent graph;
 	// these produce output (CSV mappings, integration mappings, access maps, enums,
-	// workflow hooks, exportable validation, feature maps) that does not depend on
+	// exportable validation, feature maps) that does not depend on
 	// each other or on the graphql generation step
 	if capturedGraph != nil {
 		runParallelPostGenHooks(capturedGraph)
@@ -352,11 +350,6 @@ func runParallelPostGenHooks(g *gen.Graph) {
 		accessmap.WithPackageName("authzgenerated"),
 	)
 
-	workflowGenExt := workflowgen.New(
-		workflowgen.WithHooksOutputDir(entGeneratedWorkflowPath),
-		workflowgen.WithHooksPackageName("workflowgenerated"),
-	)
-
 	fileCategoryGen := filecategorygen.New(schemaPath, "internal/objects/store/file_category_generated.go")
 
 	entityOpsExt := entityops.New(
@@ -381,7 +374,6 @@ func runParallelPostGenHooks(g *gen.Graph) {
 		accessMapExt.Hook(),
 		fileCategoryGen.Hook(),
 		exportenums.New().Hook(),
-		workflowGenExt.Hook(),
 		entityOpsExt.Hook(),
 	}
 

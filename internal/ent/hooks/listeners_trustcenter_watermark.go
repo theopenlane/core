@@ -14,7 +14,7 @@ import (
 func TrustCenterWatermarkListeners() []gala.Registration {
 	return []gala.Registration{
 		entityops.MutationListener{
-			Schema:     generated.TypeTrustCenterDoc,
+			Schema:     entityops.SchemaTrustCenterDoc,
 			Label:      "watermark",
 			Operations: []string{entityops.OpCreate, entityops.OpUpdateOne},
 			Fields:     []string{trustcenterdoc.FieldOriginalFileID},

@@ -75,6 +75,7 @@ func (DirectorySync) Run(ctx context.Context, client *tsclient.Client, cfg Direc
 	rolesSeen := make(map[tsclient.UserRole]struct{})
 	groupEnvelopes := make([]types.MappingEnvelope, 0)
 	membershipEnvelopes := make([]types.MappingEnvelope, 0)
+	membershipCompleteness := membershipSnapshotCompleteness(nil)
 
 	for _, user := range users {
 		role := user.Role
@@ -124,6 +125,7 @@ func (DirectorySync) Run(ctx context.Context, client *tsclient.Client, cfg Direc
 	acl, err := client.PolicyFile().Get(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Warn().Err(err).Msg("tailscale: failed to fetch policy file; skipping user-defined groups")
+		membershipCompleteness = membershipSnapshotCompleteness(err)
 	} else {
 		for groupName, members := range acl.Groups {
 			group := tailscaleGroupPayload{
@@ -172,12 +174,21 @@ func (DirectorySync) Run(ctx context.Context, client *tsclient.Client, cfg Direc
 			Envelopes: groupEnvelopes,
 		},
 		types.IngestPayloadSet{
-			Schema:    entityops.SchemaDirectoryMembership.Name,
-			Envelopes: membershipEnvelopes,
+			Schema:               entityops.SchemaDirectoryMembership.Name,
+			Envelopes:            membershipEnvelopes,
+			SnapshotCompleteness: membershipCompleteness,
 		},
 	)
 
 	return payloadSets, nil
+}
+
+func membershipSnapshotCompleteness(policyErr error) types.SnapshotCompleteness {
+	if policyErr != nil {
+		return types.SnapshotCompletenessPartial
+	}
+
+	return types.SnapshotCompletenessFull
 }
 
 // listTailscaleUsers fetches all users from the Tailscale API and maps them to payloads

@@ -23,14 +23,14 @@ import (
 func EntitlementListeners() []gala.Registration {
 	return []gala.Registration{
 		entityops.MutationListener{
-			Schema:     entgen.TypeOrganization,
+			Schema:     entityops.SchemaOrganization,
 			Label:      "entitlements_created",
 			Operations: []string{entityops.OpCreate},
 			Caller:     webhookCaller,
 			Handle:     handleOrganizationCreatedGala,
 		},
 		entityops.MutationListener{
-			Schema:      entgen.TypeOrganization,
+			Schema:      entityops.SchemaOrganization,
 			Label:       "entitlements_deleted",
 			Operations:  []string{entityops.OpSoftDelete, entityops.OpDelete, entityops.OpDeleteOne},
 			Caller:      webhookCaller,
@@ -38,7 +38,7 @@ func EntitlementListeners() []gala.Registration {
 			Handle:      handleOrganizationDeleteGala,
 		},
 		entityops.MutationListener{
-			Schema:     entgen.TypeOrganizationSetting,
+			Schema:     entityops.SchemaOrganizationSetting,
 			Label:      "billing",
 			Operations: []string{entityops.OpUpdate, entityops.OpUpdateOne},
 			Fields: []string{

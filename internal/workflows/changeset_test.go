@@ -1,7 +1,6 @@
 package workflows
 
 import (
-	"encoding/json"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -33,7 +32,7 @@ func TestTriggerChangeSet(t *testing.T) {
 	changeSet := TriggerChangeSet(contextData)
 
 	require.Equal(t, []string{"status"}, changeSet.ChangedFields)
-	require.JSONEq(t, `{"status":"approved"}`, string(changeSet.ProposedChanges))
+	require.Equal(t, map[string]any{"status": "approved"}, changeSet.ProposedChanges)
 
 	changeSet.ChangedFields[0] = "mutated"
 	changeSet.AddedIDs["controls"][0] = "mutated"
@@ -57,7 +56,7 @@ func TestSetTriggerChangeSet(t *testing.T) {
 		RemovedIDs: map[string][]string{
 			"controls": {"two"},
 		},
-		ProposedChanges: json.RawMessage(`{"status":"approved"}`),
+		ProposedChanges: map[string]any{"status": "approved"},
 		OldValues: map[string]any{
 			"status": "draft",
 		},

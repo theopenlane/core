@@ -257,19 +257,6 @@ func listenerMatches(listener registeredListener, operation string) bool {
 	return ok
 }
 
-// topicKind returns the registered job kind for a topic
-func (r *registry) topicKind(topic TopicName) (string, bool) {
-	r.mu.RLock()
-	defer r.mu.RUnlock()
-
-	registration, exists := r.topics[topic]
-	if !exists || registration.kind == "" {
-		return "", false
-	}
-
-	return registration.kind, true
-}
-
 // topicRegistration resolves one topic registration by name
 func (r *registry) topicRegistration(topic TopicName) (topicRegistration, error) {
 	if topic == "" {

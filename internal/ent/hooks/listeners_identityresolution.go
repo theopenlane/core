@@ -26,7 +26,7 @@ import (
 func IdentityResolutionListeners() []gala.Registration {
 	return []gala.Registration{
 		entityops.MutationListener{
-			Schema:     entgen.TypeDirectoryAccount,
+			Schema:     entityops.SchemaDirectoryAccount,
 			Operations: []string{entityops.OpCreate, entityops.OpUpdateOne},
 			Handle:     handleDirectoryAccountMutation,
 		},

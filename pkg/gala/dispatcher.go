@@ -54,6 +54,13 @@ type dispatcher interface {
 	Dispatch(context.Context, Envelope) error
 }
 
+// dispatchResult reports whether River inserted a new row or returned the row
+// already holding the unique key
+type dispatchResult struct {
+	inserted bool
+	holder   *rivertype.JobRow
+}
+
 // newRiverDispatcher creates a River-backed durable dispatcher
 func newRiverDispatcher(jobClient riverInsertClient, defaultQueue string) (*riverDispatcher, error) {
 	if jobClient == nil {
@@ -117,9 +124,29 @@ type riverJobMetadata struct {
 
 // Dispatch dispatches an envelope to River for processing by a Worker
 func (d *riverDispatcher) Dispatch(ctx context.Context, envelope Envelope) error {
-	envelopeArgs, err := newRiverDispatchArgs(envelope)
+	result, err := d.dispatch(ctx, envelope)
 	if err != nil {
 		return err
+	}
+	if !dispatchHolderReady(result) {
+		event := logx.FromContext(ctx).Error().Str("topic", string(envelope.Topic))
+		if result.holder != nil {
+			event = event.Int64("holder_job_id", result.holder.ID).Str("holder_state", string(result.holder.State))
+		}
+
+		event.Msg("gala: dispatch has no runnable or completed holder")
+
+		return ErrRiverDispatchInsertFailed
+	}
+
+	return nil
+}
+
+// dispatch inserts an envelope and returns the inserted row or duplicate holder.
+func (d *riverDispatcher) dispatch(ctx context.Context, envelope Envelope) (dispatchResult, error) {
+	envelopeArgs, err := newRiverDispatchArgs(envelope)
+	if err != nil {
+		return dispatchResult{}, err
 	}
 
 	kind := strings.TrimSpace(envelope.Headers.Kind)
@@ -174,7 +201,7 @@ func (d *riverDispatcher) Dispatch(ctx context.Context, envelope Envelope) error
 	})
 	if err != nil {
 		logx.FromContext(ctx).Err(err).Msg("gala: error marshaling envelope")
-		return ErrRiverEnvelopeEncodeFailed
+		return dispatchResult{}, ErrRiverEnvelopeEncodeFailed
 	}
 
 	insertOpts.Metadata = meta
@@ -182,14 +209,42 @@ func (d *riverDispatcher) Dispatch(ctx context.Context, envelope Envelope) error
 	result, err := d.jobClient.Insert(ctx, args, insertOpts)
 	if err != nil {
 		logx.FromContext(ctx).Err(err).Msg("gala: error inserting dispatch job")
-		return ErrRiverDispatchInsertFailed
+		return dispatchResult{}, ErrRiverDispatchInsertFailed
+	}
+	if result == nil || result.Job == nil {
+		logx.FromContext(ctx).Error().Msg("gala: river insert returned no holder row")
+
+		return dispatchResult{}, ErrRiverDispatchInsertFailed
 	}
 
 	if result.UniqueSkippedAsDuplicate {
 		logx.FromContext(ctx).Info().Str("topic", string(envelope.Topic)).Str("unique_key", envelope.Headers.UniqueKey).Msg("gala: dispatch skipped, a live job already holds the unique key")
 	}
 
-	return nil
+	return dispatchResult{
+		inserted: !result.UniqueSkippedAsDuplicate,
+		holder:   result.Job,
+	}, nil
+}
+
+// dispatchHolderReady reports whether a transport outcome points at a row that
+// can still run or has already completed successfully.
+func dispatchHolderReady(result dispatchResult) bool {
+	if result.holder == nil || result.holder.ID == 0 {
+		return false
+	}
+
+	switch result.holder.State {
+	case rivertype.JobStateAvailable,
+		rivertype.JobStatePending,
+		rivertype.JobStateRetryable,
+		rivertype.JobStateRunning,
+		rivertype.JobStateScheduled,
+		rivertype.JobStateCompleted:
+		return true
+	default:
+		return false
+	}
 }
 
 // decodeDispatchEnvelope decodes a gala envelope from encoded dispatch payload bytes
@@ -222,7 +277,7 @@ func workEnvelope(ctx context.Context, provider galaProvider, payload []byte) er
 		return err
 	}
 
-	return g.dispatchEnvelope(context.WithoutCancel(ctx), envelope)
+	return g.dispatchEnvelope(ctx, envelope)
 }
 
 // Work processes one River dispatch job and invokes Gala dispatch

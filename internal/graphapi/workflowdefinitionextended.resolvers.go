@@ -8,9 +8,8 @@ package graphapi
 import (
 	"context"
 
-	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/resolvers"
 )
 
@@ -20,7 +19,7 @@ func (r *queryResolver) WorkflowMetadata(ctx context.Context) (*model.WorkflowMe
 	if !workflowsEnabled(r.db) {
 		return nil, ErrWorkflowsDisabled
 	}
-	meta := generated.GetWorkflowMetadata()
+	meta := workflows.WorkflowMetadata()
 	allResolverKeys := resolvers.Keys()
 
 	objectTypes := make([]*model.WorkflowObjectTypeMetadata, 0, len(meta))
@@ -34,11 +33,7 @@ func (r *queryResolver) WorkflowMetadata(ctx context.Context) (*model.WorkflowMe
 			})
 		}
 
-		var edges []string
-		if schema, ok := entityops.LookupSchema(m.Type.String()); ok {
-			edges = schema.WorkflowEdgeNames()
-		}
-
+		edges := m.EligibleEdges
 		if edges == nil {
 			edges = []string{}
 		} else {

@@ -1,7 +1,6 @@
 package hooks
 
 import (
-	"github.com/samber/do/v2"
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
@@ -15,6 +14,10 @@ import (
 // workflowMutationListenerLabel identifies the workflow mutation listener family in
 // dependency-resolution skip logs
 const workflowMutationListenerLabel = "workflow.mutation"
+
+func internalOperationBypassCaller(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
+	return restored.WithCapabilities(auth.CapInternalOperation | auth.CapBypassOrgFilter)
+}
 
 // WorkflowListeners returns the workflow mutation and command listeners
 func WorkflowListeners() []gala.Registration {
@@ -52,20 +55,23 @@ func WorkflowMutationListeners() []gala.Registration {
 	registrations := make([]gala.Registration, 0, len(enums.WorkflowObjectTypes)+1)
 
 	for _, entity := range enums.WorkflowObjectTypes {
+		schema, ok := entityops.LookupSchema(entity)
+		if !ok {
+			continue
+		}
+
 		registrations = append(registrations, entityops.MutationListener{
 			Concern:    entityops.MutationConcernWorkflow,
-			Schema:     entity,
+			Schema:     schema,
 			Operations: []string{entityops.OpCreate, entityops.OpUpdate, entityops.OpUpdateOne},
-			Caller: func(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
-				return restored.WithCapabilities(auth.CapInternalOperation | auth.CapBypassOrgFilter)
-			},
-			Handle: forwardToWorkflowMutation((*engine.WorkflowListeners).HandleWorkflowMutationGala),
+			Caller:     internalOperationBypassCaller,
+			Handle:     forwardToWorkflowMutation((*engine.WorkflowListeners).HandleWorkflowMutationGala),
 		})
 	}
 
 	return append(registrations, entityops.MutationListener{
 		Concern:    entityops.MutationConcernWorkflow,
-		Schema:     generated.TypeWorkflowAssignment,
+		Schema:     entityops.SchemaWorkflowAssignment,
 		Operations: []string{entityops.OpUpdate, entityops.OpUpdateOne},
 		Fields:     []string{workflowassignment.FieldStatus},
 		Match: []entityops.FieldMatch{{
@@ -111,20 +117,20 @@ func forwardToWorkflowListeners[T any](method func(*engine.WorkflowListeners, ga
 // workflowListenersFromGala resolves workflow listener dependencies from the gala injector
 // and enriches the handler context so the ent client is available to interceptors
 func workflowListenersFromGala(handlerCtx gala.HandlerContext) (gala.HandlerContext, *engine.WorkflowListeners, bool) {
-	client, err := do.Invoke[*generated.Client](handlerCtx.Injector)
-	if err != nil || client == nil {
+	client, ok := gala.Resolve[*generated.Client](handlerCtx.Context, handlerCtx.Injector, workflowMutationListenerLabel)
+	if !ok || client == nil {
 		return handlerCtx, nil, false
 	}
 
 	handlerCtx.Context = generated.NewContext(handlerCtx.Context, client)
 
-	wfEngine, err := do.Invoke[*engine.WorkflowEngine](handlerCtx.Injector)
-	if err != nil || wfEngine == nil {
+	wfEngine, ok := gala.Resolve[*engine.WorkflowEngine](handlerCtx.Context, handlerCtx.Injector, workflowMutationListenerLabel)
+	if !ok || wfEngine == nil {
 		return handlerCtx, nil, false
 	}
 
-	runtime, err := do.Invoke[*gala.Gala](handlerCtx.Injector)
-	if err != nil {
+	runtime, ok := gala.Resolve[*gala.Gala](handlerCtx.Context, handlerCtx.Injector, workflowMutationListenerLabel)
+	if !ok {
 		return handlerCtx, nil, false
 	}
 

@@ -17,7 +17,7 @@ import (
 func VendorScoringListeners() []gala.Registration {
 	return []gala.Registration{
 		entityops.MutationListener{
-			Schema: entgen.TypeVendorScoringConfig,
+			Schema: entityops.SchemaVendorScoringConfig,
 			Operations: []string{
 				entityops.OpUpdate,
 				entityops.OpUpdateOne,

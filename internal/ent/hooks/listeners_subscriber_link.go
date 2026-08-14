@@ -19,7 +19,7 @@ import (
 func SubscriberLinkListeners() []gala.Registration {
 	return []gala.Registration{
 		entityops.MutationListener{
-			Schema:     entgen.TypeSubscriber,
+			Schema:     entityops.SchemaSubscriber,
 			Operations: []string{entityops.OpCreate},
 			Caller: func(*auth.Caller, entityops.MutationPayload) *auth.Caller {
 				return &auth.Caller{

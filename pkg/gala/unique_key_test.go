@@ -167,7 +167,7 @@ type capturingInsertClient struct {
 func (c *capturingInsertClient) Insert(_ context.Context, _ river.JobArgs, opts *river.InsertOpts) (*rivertype.JobInsertResult, error) {
 	c.opts = opts
 
-	return &rivertype.JobInsertResult{Job: &rivertype.JobRow{}}, nil
+	return &rivertype.JobInsertResult{Job: &rivertype.JobRow{ID: 1, State: rivertype.JobStateAvailable}}, nil
 }
 
 func TestUniqueOnceExtendsByStateToTerminal(t *testing.T) {
