@@ -9,6 +9,10 @@ var (
 	ErrDispatchInputInvalid = errors.New("integrations/operations: dispatch input invalid")
 	// ErrInstallationIDRequired indicates the installation identifier is missing
 	ErrInstallationIDRequired = errors.New("integrations/operations: installation id required")
+	// ErrIntegrationIDRequired indicates resolution requires an explicit integration ID
+	ErrIntegrationIDRequired = errors.New("integrations/operations: integration id required")
+	// ErrInstallationDefinitionMismatch indicates the resolved installation does not match the requested definition
+	ErrInstallationDefinitionMismatch = errors.New("integrations/operations: installation definition mismatch")
 	// ErrOperationConfigInvalid indicates queued operation config failed caller-input validation
 	ErrOperationConfigInvalid = errors.New("integrations/operations: operation config invalid")
 	// ErrRunIDRequired indicates the run identifier is missing

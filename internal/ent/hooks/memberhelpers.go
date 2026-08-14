@@ -115,7 +115,10 @@ func createMembershipCheck(m MutationMember, actorID string) error {
 
 // updateMembershipCheck is a helper function to check if a user is trying to update themselves in a membership
 func updateMembershipCheck(ctx context.Context, m MutationMember, table string, actorID string) error {
-	memberIDs := getMutationIDs(ctx, m)
+	memberIDs, err := getMutationIDs(ctx, m)
+	if err != nil {
+		return err
+	}
 	if len(memberIDs) == 0 {
 		return nil
 	}

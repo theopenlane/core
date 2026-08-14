@@ -57,6 +57,8 @@ var (
 	ErrLinkEdgeAmbiguous = errors.New("integrations/registry: link target type is ambiguous, edge name required")
 	// ErrLinkRuleInvalid indicates a link rule sets neither or both of a field match and an expression
 	ErrLinkRuleInvalid = errors.New("integrations/registry: link rule must set exactly one of field match or expression")
+	// ErrLinkTargetNotRegistered indicates a link rule's edge targets a schema without a registry entry
+	ErrLinkTargetNotRegistered = errors.New("integrations/registry: link edge target schema is not in the entityops registry")
 	// ErrLinkTargetFieldInvalid indicates a link rule's target field is not a match key on the target schema
 	ErrLinkTargetFieldInvalid = errors.New("integrations/registry: link target field is not a match key on the target schema")
 	// ErrLinkSourceFieldInvalid indicates a link rule's source field is not a mapped input key of the required shape

@@ -326,49 +326,48 @@ type ComplexityRoot struct {
 	}
 
 	AssessmentResponse struct {
-		ActiveWorkflowInstances     func(childComplexity int) int
-		Assessment                  func(childComplexity int) int
-		AssessmentID                func(childComplexity int) int
-		AssignedAt                  func(childComplexity int) int
-		Campaign                    func(childComplexity int) int
-		CampaignID                  func(childComplexity int) int
-		CompletedAt                 func(childComplexity int) int
-		CreatedAt                   func(childComplexity int) int
-		CreatedBy                   func(childComplexity int) int
-		DisplayName                 func(childComplexity int) int
-		Document                    func(childComplexity int) int
-		DocumentDataID              func(childComplexity int) int
-		DueDate                     func(childComplexity int) int
-		Email                       func(childComplexity int) int
-		EmailClickCount             func(childComplexity int) int
-		EmailClickedAt              func(childComplexity int) int
-		EmailDeliveredAt            func(childComplexity int) int
-		EmailMetadata               func(childComplexity int) int
-		EmailOpenCount              func(childComplexity int) int
-		EmailOpenedAt               func(childComplexity int) int
-		Entity                      func(childComplexity int) int
-		EntityID                    func(childComplexity int) int
-		HasPendingWorkflow          func(childComplexity int) int
-		HasWorkflowHistory          func(childComplexity int) int
-		ID                          func(childComplexity int) int
-		IdentityHolder              func(childComplexity int) int
-		IdentityHolderID            func(childComplexity int) int
-		IsDraft                     func(childComplexity int) int
-		IsTest                      func(childComplexity int) int
-		LastEmailEventAt            func(childComplexity int) int
-		Owner                       func(childComplexity int) int
-		OwnerID                     func(childComplexity int) int
-		QuestionnaireTransformError func(childComplexity int) int
-		SendAttempts                func(childComplexity int) int
-		StartedAt                   func(childComplexity int) int
-		Status                      func(childComplexity int) int
-		UpdatedAt                   func(childComplexity int) int
-		UpdatedBy                   func(childComplexity int) int
-		UpdatedByImpersonator       func(childComplexity int) int
-		VendorRiskScores            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VendorRiskScoreOrder, where *generated.VendorRiskScoreWhereInput) int
-		WorkflowEligibleMarker      func(childComplexity int) int
-		WorkflowObjectRefs          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
-		WorkflowTimeline            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput, includeEmitFailures *bool) int
+		ActiveWorkflowInstances func(childComplexity int) int
+		Assessment              func(childComplexity int) int
+		AssessmentID            func(childComplexity int) int
+		AssignedAt              func(childComplexity int) int
+		Campaign                func(childComplexity int) int
+		CampaignID              func(childComplexity int) int
+		CompletedAt             func(childComplexity int) int
+		CreatedAt               func(childComplexity int) int
+		CreatedBy               func(childComplexity int) int
+		DisplayName             func(childComplexity int) int
+		Document                func(childComplexity int) int
+		DocumentDataID          func(childComplexity int) int
+		DueDate                 func(childComplexity int) int
+		Email                   func(childComplexity int) int
+		EmailClickCount         func(childComplexity int) int
+		EmailClickedAt          func(childComplexity int) int
+		EmailDeliveredAt        func(childComplexity int) int
+		EmailMetadata           func(childComplexity int) int
+		EmailOpenCount          func(childComplexity int) int
+		EmailOpenedAt           func(childComplexity int) int
+		Entity                  func(childComplexity int) int
+		EntityID                func(childComplexity int) int
+		HasPendingWorkflow      func(childComplexity int) int
+		HasWorkflowHistory      func(childComplexity int) int
+		ID                      func(childComplexity int) int
+		IdentityHolder          func(childComplexity int) int
+		IdentityHolderID        func(childComplexity int) int
+		IsDraft                 func(childComplexity int) int
+		IsTest                  func(childComplexity int) int
+		LastEmailEventAt        func(childComplexity int) int
+		Owner                   func(childComplexity int) int
+		OwnerID                 func(childComplexity int) int
+		SendAttempts            func(childComplexity int) int
+		StartedAt               func(childComplexity int) int
+		Status                  func(childComplexity int) int
+		UpdatedAt               func(childComplexity int) int
+		UpdatedBy               func(childComplexity int) int
+		UpdatedByImpersonator   func(childComplexity int) int
+		VendorRiskScores        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VendorRiskScoreOrder, where *generated.VendorRiskScoreWhereInput) int
+		WorkflowEligibleMarker  func(childComplexity int) int
+		WorkflowObjectRefs      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
+		WorkflowTimeline        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput, includeEmitFailures *bool) int
 	}
 
 	AssessmentResponseConnection struct {
@@ -9600,12 +9599,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.AssessmentResponse.OwnerID(childComplexity), true
-	case "AssessmentResponse.questionnaireTransformError":
-		if e.ComplexityRoot.AssessmentResponse.QuestionnaireTransformError == nil {
-			break
-		}
-
-		return e.ComplexityRoot.AssessmentResponse.QuestionnaireTransformError(childComplexity), true
 	case "AssessmentResponse.sendAttempts":
 		if e.ComplexityRoot.AssessmentResponse.SendAttempts == nil {
 			break
@@ -53406,10 +53399,6 @@ type AssessmentResponseDeletePayload {
     deletedID: ID!
 }
 
-`, BuiltIn: false},
-	{Name: "../schema/assessmentresponseextended.graphql", Input: `extend type AssessmentResponse {
-    questionnaireTransformError: String
-}
 `, BuiltIn: false},
 	{Name: "../schema/asset.graphql", Input: `extend type Query {
     """
@@ -165658,8 +165647,6 @@ func (ec *executionContext) childFields_AssessmentResponse(ctx context.Context, 
 		return ec.fieldContext_AssessmentResponse_activeWorkflowInstances(ctx, field)
 	case "workflowTimeline":
 		return ec.fieldContext_AssessmentResponse_workflowTimeline(ctx, field)
-	case "questionnaireTransformError":
-		return ec.fieldContext_AssessmentResponse_questionnaireTransformError(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type AssessmentResponse", field.Name)
 }

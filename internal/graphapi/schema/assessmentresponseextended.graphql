@@ -1,3 +1,0 @@
-extend type AssessmentResponse {
-    questionnaireTransformError: String
-}

@@ -43,7 +43,10 @@ func HookWorkflowAssignmentDecisionAuth() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			assignmentID, ok := getSingleMutationID(ctx, m)
+			assignmentID, ok, idErr := getSingleMutationID(ctx, m)
+			if idErr != nil {
+				return nil, idErr
+			}
 			if !ok {
 				return next.Mutate(ctx, m)
 			}

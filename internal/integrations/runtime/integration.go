@@ -8,7 +8,6 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/integrations/operations"
@@ -27,27 +26,10 @@ type IntegrationLookup struct {
 	DefinitionID string
 }
 
-// ResolveIntegration resolves one integration by explicit ID with optional owner and definition cross-checks
+// ResolveIntegration resolves one integration by explicit ID with optional owner
+// and definition cross-checks through the shared operations resolver
 func (r *Runtime) ResolveIntegration(ctx context.Context, lookup IntegrationLookup) (*ent.Integration, error) {
-	if lookup.IntegrationID == "" {
-		return nil, ErrIntegrationIDRequired
-	}
-
-	query := r.DB().Integration.Query().Where(integration.IDEQ(lookup.IntegrationID))
-	if lookup.OwnerID != "" {
-		query = query.Where(integration.OwnerIDEQ(lookup.OwnerID))
-	}
-
-	record, err := query.Only(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	if lookup.DefinitionID != "" && record.DefinitionID != lookup.DefinitionID {
-		return nil, ErrInstallationDefinitionMismatch
-	}
-
-	return record, nil
+	return operations.ResolveIntegration(ctx, r.DB(), lookup.IntegrationID, lookup.OwnerID, lookup.DefinitionID)
 }
 
 // ResolveOwnerIntegration finds a connected integration for the given definition
@@ -95,6 +77,8 @@ func (r *Runtime) EnsureInstallation(ctx context.Context, ownerID, integrationID
 // if it already exists, it will link the integration id
 // if it doesn't exist, it will create the record, add data from the system-owned subprocessors, and link the integration
 func (r *Runtime) createVendor(ctx context.Context, ownerID string, def types.Definition, integrationID string) {
+	ctx = logx.WithFields(ctx, map[string]any{"vendor": def.Family, "org_id": ownerID})
+
 	vendorIDs, err := r.DB().Entity.Query().Where(
 		entity.Or(
 			entity.NameEqualFold(def.Family),
@@ -103,7 +87,7 @@ func (r *Runtime) createVendor(ctx context.Context, ownerID string, def types.De
 		entity.OwnerID(ownerID),
 	).IDs(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Info().Err(err).Str("vendor", def.Family).Str("org_id", ownerID).Msg("error looking for existing vendor, skipping creation")
+		logx.FromContext(ctx).Info().Err(err).Msg("error looking for existing vendor, skipping creation")
 		return
 	}
 
@@ -112,10 +96,10 @@ func (r *Runtime) createVendor(ctx context.Context, ownerID string, def types.De
 		ctxAllow := privacy.DecisionContext(ctx, privacy.Allow)
 		if err := r.DB().Entity.Update().Where(entity.IDIn(vendorIDs...)).AddIntegrationIDs(
 			integrationID).Exec(ctxAllow); err != nil {
-			logx.FromContext(ctx).Info().Err(err).Str("vendor", def.Family).Str("org_id", ownerID).Msg("error update vendor edges to integration")
+			logx.FromContext(ctx).Info().Err(err).Msg("error update vendor edges to integration")
 		}
 
-		logx.FromContext(ctx).Debug().Str("vendor", def.Family).Str("org_id", ownerID).Msg("successfully updated vendor from integration setup")
+		logx.FromContext(ctx).Debug().Msg("successfully updated vendor from integration setup")
 
 		return
 	}
@@ -142,7 +126,7 @@ func (r *Runtime) createVendor(ctx context.Context, ownerID string, def types.De
 		).
 		Only(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Info().Err(err).Str("vendor", def.Family).Str("org_id", ownerID).Msg("error looking up vendor entity type, skipping creation")
+		logx.FromContext(ctx).Info().Err(err).Msg("error looking up vendor entity type, skipping creation")
 		return
 	}
 
@@ -151,5 +135,5 @@ func (r *Runtime) createVendor(ctx context.Context, ownerID string, def types.De
 		return
 	}
 
-	logx.FromContext(ctx).Debug().Str("vendor", def.Family).Str("org_id", ownerID).Msg("successfully created vendor from integration setup")
+	logx.FromContext(ctx).Debug().Msg("successfully created vendor from integration setup")
 }
