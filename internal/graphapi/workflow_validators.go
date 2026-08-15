@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"net/url"
 	"sort"
 	"strings"
 
@@ -15,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/internal/workflows/resolvers"
+	"github.com/theopenlane/core/pkg/urlx"
 )
 
 // allowedTriggerOperations defines the set of valid trigger operations
@@ -731,8 +731,7 @@ func validateWebhookActionParams(raw json.RawMessage, celCfg *workflows.Config) 
 		return ErrWebhookURLRequired
 	}
 
-	parsed, err := url.Parse(params.URL)
-	if err != nil || parsed.Scheme == "" || parsed.Host == "" {
+	if _, err := urlx.ParseAbsolute(params.URL); err != nil {
 		return ErrWebhookURLInvalid
 	}
 

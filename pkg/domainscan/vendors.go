@@ -1,12 +1,13 @@
 package domainscan
 
 import (
-	"net/url"
 	"sort"
 	"strings"
 
 	"github.com/cloudflare/cloudflare-go/v7/url_scanner"
 	"golang.org/x/net/publicsuffix"
+
+	"github.com/theopenlane/core/pkg/urlx"
 )
 
 // vendorGroup accumulates every signal (wappalyzer detections, third-party
@@ -307,12 +308,8 @@ func looksLikeVendorName(name string) bool {
 // registrableDomain returns the root domain from a URL using the public
 // suffix list, so vendor detections pointing at the same site can be grouped together
 func registrableDomain(rawURL string) string {
-	if rawURL == "" {
-		return ""
-	}
-
-	u, err := url.Parse(rawURL)
-	if err != nil || u.Hostname() == "" {
+	u, err := urlx.Parse(rawURL)
+	if err != nil {
 		return ""
 	}
 
@@ -371,7 +368,7 @@ func vendorNameForURL(rawURL string) (name, domain string) {
 		return "", ""
 	}
 
-	if u, err := url.Parse(rawURL); err == nil {
+	if u, err := urlx.Parse(rawURL); err == nil {
 		if override, ok := vendorHostNames[strings.ToLower(u.Hostname())]; ok {
 			name = override
 		}

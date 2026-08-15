@@ -1,10 +1,11 @@
 package hooks
 
 import (
-	"net/http"
 	"time"
 
 	"entgo.io/ent"
+	"github.com/theopenlane/httpsling"
+	"github.com/theopenlane/httpsling/httpclient"
 
 	"github.com/theopenlane/core/internal/ent/eventqueue"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -13,13 +14,10 @@ import (
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/pkg/urlx"
 )
 
 const avatarFetchTimeout = 1 * time.Minute
-
-var avatarDiscoveryClient = &http.Client{
-	Timeout: avatarFetchTimeout,
-}
 
 // RegisterGalaOrganizationAvatarListeners registers organization avatar discovery on Gala.
 func RegisterGalaOrganizationAvatarListeners(registry *gala.Registry) ([]gala.ListenerID, error) {
@@ -62,7 +60,12 @@ func handleOrganizationAvatarCreated(ctx gala.HandlerContext, payload eventqueue
 		return nil
 	}
 
-	avatarURL, err := favicon.Discover(ctx.Context, avatarDiscoveryClient, setting.Domains)
+	requester, err := urlx.NewRequester(httpsling.Client(httpclient.Timeout(avatarFetchTimeout)))
+	if err != nil {
+		return err
+	}
+
+	avatarURL, err := favicon.Discover(ctx.Context, requester, setting.Domains)
 	if err != nil {
 		logx.FromContext(ctx.Context).Err(err).
 			Str("organization_id", orgID).

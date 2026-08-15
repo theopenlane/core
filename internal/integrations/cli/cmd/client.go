@@ -10,10 +10,12 @@ import (
 	"time"
 
 	openlaneclient "github.com/theopenlane/go-client"
+	"github.com/theopenlane/httpsling"
 
 	"github.com/theopenlane/core/internal/integrations/cli/config"
 	"github.com/theopenlane/core/internal/integrations/cli/openlane"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/pkg/urlx"
 )
 
 // healthCheckTimeout is the maximum time to wait for the server livez check
@@ -52,12 +54,12 @@ func checkServer(ctx context.Context, host string) error {
 	ctx, cancel := context.WithTimeout(ctx, healthCheckTimeout)
 	defer cancel()
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, host+"/livez", nil)
+	requester, err := urlx.NewRequester()
 	if err != nil {
 		return err
 	}
 
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := requester.SendWithContext(ctx, httpsling.Get(host+"/livez"))
 	if err != nil {
 		return err
 	}

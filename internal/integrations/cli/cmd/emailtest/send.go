@@ -3,17 +3,17 @@
 package emailtest
 
 import (
-	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 
 	"github.com/samber/lo"
 	"github.com/spf13/cobra"
+	"github.com/theopenlane/httpsling"
 
 	"github.com/theopenlane/core/internal/integrations/cli/cmd"
+	"github.com/theopenlane/core/pkg/urlx"
 )
 
 // emailTestSendRequest mirrors handlers.EmailTestSendRequest
@@ -88,30 +88,26 @@ func sendTestEmail(ctx context.Context, toEmail, name, branding string) error {
 		return ErrHostRequired
 	}
 
-	body, err := json.Marshal(emailTestSendRequest{
-		To:       toEmail,
-		Name:     name,
-		Branding: branding,
-	})
+	requester, err := urlx.NewRequester()
 	if err != nil {
-		return fmt.Errorf("marshal request: %w", err)
+		return fmt.Errorf("build requester: %w", err)
 	}
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, host+"/email-test/send", bytes.NewReader(body))
-	if err != nil {
-		return fmt.Errorf("build request: %w", err)
-	}
-
-	req.Header.Set("Content-Type", "application/json")
-
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := requester.SendWithContext(ctx,
+		httpsling.Post(host+"/email-test/send"),
+		httpsling.Body(emailTestSendRequest{
+			To:       toEmail,
+			Name:     name,
+			Branding: branding,
+		}),
+	)
 	if err != nil {
 		return fmt.Errorf("request failed: %w", err)
 	}
 
 	defer resp.Body.Close()
 
-	respBody, err := io.ReadAll(resp.Body)
+	respBody, err := urlx.ReadBody(resp, nil)
 	if err != nil {
 		return fmt.Errorf("read response: %w", err)
 	}

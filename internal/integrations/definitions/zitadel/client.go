@@ -3,16 +3,14 @@ package zitadel
 import (
 	"cmp"
 	"context"
-	"net/url"
 	"strconv"
-	"strings"
 
 	"github.com/zitadel/oidc/v3/pkg/oidc"
 	"github.com/zitadel/zitadel-go/v3/pkg/client"
 	"github.com/zitadel/zitadel-go/v3/pkg/zitadel"
 
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/domain"
+	"github.com/theopenlane/core/pkg/urlx"
 )
 
 const (
@@ -52,20 +50,12 @@ func (Client) Build(ctx context.Context, req types.ClientBuildRequest) (any, err
 // Only an explicit http:// scheme opts into a plaintext, non-TLS connection via WithInsecure,
 // which is intended for self-hosted or local development instances without TLS.
 func parseHost(instance string) (string, []zitadel.Option) {
-	raw := strings.TrimSpace(instance)
-
-	// url.Parse only populates Host when a scheme is present; without one a bare
-	// "host:port" parses the host as the scheme, so assume TLS and add it back
-	if !strings.Contains(raw, "://") {
-		raw = "https://" + raw
-	}
-
-	parsed, err := url.Parse(raw)
+	parsed, err := urlx.Parse(instance)
 	if err != nil {
 		return instance, nil
 	}
 
-	host, err := domain.NormalizeHostname(raw)
+	host, err := urlx.NormalizeHostname(instance)
 	if err != nil {
 		return instance, nil
 	}

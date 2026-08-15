@@ -2,13 +2,13 @@ package authentik
 
 import (
 	"context"
-	"net/http"
-	"net/url"
 	"time"
 
+	"github.com/theopenlane/httpsling/httpclient"
 	authentikSDK "goauthentik.io/api/v3"
 
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/urlx"
 )
 
 const (
@@ -34,20 +34,19 @@ func (Client) Build(_ context.Context, req types.ClientBuildRequest) (any, error
 		return nil, ErrBaseURLMissing
 	}
 
-	host, err := extractHost(cred.BaseURL)
+	baseURL, err := urlx.Parse(cred.BaseURL)
 	if err != nil {
 		return nil, err
 	}
 
-	scheme, err := extractScheme(cred.BaseURL)
+	httpClient, err := urlx.NewHTTPClient(httpclient.Timeout(authentikRequestTimeout))
 	if err != nil {
 		return nil, err
 	}
 
 	cfg := authentikSDK.NewConfiguration()
-	cfg.Host = host
-	cfg.Scheme = scheme
-	cfg.HTTPClient = &http.Client{Timeout: authentikRequestTimeout}
+	cfg.Servers = authentikSDK.ServerConfigurations{{URL: baseURL.JoinPath("api", "v3").String()}}
+	cfg.HTTPClient = httpClient
 	cfg.AddDefaultHeader("Authorization", "Bearer "+cred.Token)
 
 	return authentikSDK.NewAPIClient(cfg), nil
@@ -67,22 +66,3 @@ func resolveCredential(bindings types.CredentialBindings) (CredentialSchema, err
 	return cred, nil
 }
 
-// extractHost extracts the host from a base URL
-func extractHost(baseURL string) (string, error) {
-	u, err := url.Parse(baseURL)
-	if err != nil {
-		return "", err
-	}
-
-	return u.Host, nil
-}
-
-// extractScheme extracts the scheme from a base URL
-func extractScheme(baseURL string) (string, error) {
-	u, err := url.Parse(baseURL)
-	if err != nil {
-		return "", err
-	}
-
-	return u.Scheme, nil
-}
