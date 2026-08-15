@@ -65,4 +65,3 @@ func resolveCredential(bindings types.CredentialBindings) (CredentialSchema, err
 
 	return cred, nil
 }
-
