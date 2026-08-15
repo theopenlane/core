@@ -133,7 +133,7 @@ func dispatchRecurringCampaign(ctx context.Context, req types.OperationRequest, 
 		return err
 	}
 
-	nextRun := operations.NextCampaignRunAt(now, camp.RecurrenceFrequency, camp.RecurrenceInterval, camp.RecurrenceTimezone)
+	nextRun := camp.RecurrenceFrequency.NextOccurrence(now, camp.RecurrenceInterval, camp.RecurrenceTimezone)
 	nowDT := models.DateTime(now)
 	exhausted := camp.RecurrenceEndAt != nil && !camp.RecurrenceEndAt.IsZero() && !nextRun.Before(time.Time(*camp.RecurrenceEndAt))
 

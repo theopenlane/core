@@ -5,8 +5,6 @@ import (
 	"errors"
 	"testing"
 	"time"
-
-	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 func TestMarkRunRunning_EmptyRunID(t *testing.T) {
@@ -30,7 +28,7 @@ func TestCompleteRun_EmptyRunID(t *testing.T) {
 func TestCreatePendingRun_NilInstallation(t *testing.T) {
 	t.Parallel()
 
-	_, err := CreatePendingRun(context.Background(), nil, nil, types.DispatchRequest{})
+	_, err := CreatePendingRun(context.Background(), nil, nil, "", "", nil)
 	if !errors.Is(err, ErrInstallationIDRequired) {
 		t.Fatalf("expected ErrInstallationIDRequired, got %v", err)
 	}

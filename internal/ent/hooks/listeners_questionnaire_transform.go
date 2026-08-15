@@ -648,7 +648,7 @@ func persistTransformPayload(ctx context.Context, client *entgen.Client, req que
 		},
 	}
 
-	if err := operations.ProcessPayloadSets(ctx, operations.IngestContext{
+	if _, err := operations.ProcessPayloadSets(ctx, operations.IngestContext{
 		Registry:    ingestRegistry,
 		DB:          client,
 		Integration: integration,
