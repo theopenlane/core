@@ -4,19 +4,20 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"io"
-	"net/http"
-	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/theopenlane/httpsling"
+	"github.com/theopenlane/httpsling/httpclient"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/pkg/urlx"
 )
 
 const (
@@ -78,16 +79,12 @@ type SeedWorkflowDefinition struct {
 
 // DefinitionSeeder upserts system-owned workflow definitions from manifest inputs.
 type DefinitionSeeder struct {
-	client     *generated.Client
-	httpClient *http.Client
+	client *generated.Client
 }
 
 // NewDefinitionSeeder creates a workflow definition seeder.
 func NewDefinitionSeeder(client *generated.Client) *DefinitionSeeder {
-	return &DefinitionSeeder{
-		client:     client,
-		httpClient: &http.Client{Timeout: defaultWorkflowSeedFetchTimeout},
-	}
+	return &DefinitionSeeder{client: client}
 }
 
 // SeedDefinitionsFromManifestFile loads and upserts definitions from a local manifest file.
@@ -109,37 +106,38 @@ func (s *DefinitionSeeder) SeedDefinitionsFromManifestFile(ctx context.Context, 
 
 // SeedDefinitionsFromManifestURL loads and upserts definitions from a remote manifest URL.
 func (s *DefinitionSeeder) SeedDefinitionsFromManifestURL(ctx context.Context, manifestURL string) error {
-	if err := validateWorkflowSeedURL(manifestURL); err != nil {
+	if _, err := urlx.ParseAbsolute(manifestURL); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("manifest_url", manifestURL).Msg("invalid workflow definition seed manifest URL")
-		return err
+		return ErrWorkflowSeedURLInvalid
 	}
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, manifestURL, nil)
+	requester, err := urlx.NewRequester(httpsling.Client(httpclient.Timeout(defaultWorkflowSeedFetchTimeout)))
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("manifest_url", manifestURL).Msg("failed building workflow definition seed manifest request")
+		logx.FromContext(ctx).Error().Err(err).Str("manifest_url", manifestURL).Msg("failed building workflow definition seed manifest requester")
 		return ErrWorkflowSeedSourceFetchFailed
 	}
 
-	response, err := s.httpClient.Do(req)
+	response, err := requester.SendWithContext(ctx, httpsling.Get(manifestURL))
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Str("manifest_url", manifestURL).Msg("failed fetching workflow definition seed manifest")
 		return ErrWorkflowSeedSourceFetchFailed
 	}
 	defer response.Body.Close()
 
-	if response.StatusCode < http.StatusOK || response.StatusCode >= http.StatusMultipleChoices {
+	if !httpsling.IsSuccess(response) {
 		logx.FromContext(ctx).Error().Int("status", response.StatusCode).Str("manifest_url", manifestURL).Msg("workflow definition seed manifest returned non-success status")
 		return ErrWorkflowSeedSourceFetchFailed
 	}
 
-	payload, err := io.ReadAll(io.LimitReader(response.Body, maxWorkflowSeedBytes+1))
+	payload, err := urlx.ReadBody(response, urlx.MaxSizeValidator(maxWorkflowSeedBytes))
 	if err != nil {
+		if errors.Is(err, urlx.ErrSizeLimitExceeded) {
+			logx.FromContext(ctx).Error().Int64("max_bytes", maxWorkflowSeedBytes).Str("manifest_url", manifestURL).Msg("workflow definition seed manifest exceeds max size")
+			return ErrWorkflowSeedSourceTooLarge
+		}
+
 		logx.FromContext(ctx).Error().Err(err).Str("manifest_url", manifestURL).Msg("failed reading workflow definition seed manifest response")
 		return ErrWorkflowSeedSourceFetchFailed
-	}
-	if int64(len(payload)) > maxWorkflowSeedBytes {
-		logx.FromContext(ctx).Error().Int64("max_bytes", maxWorkflowSeedBytes).Str("manifest_url", manifestURL).Msg("workflow definition seed manifest exceeds max size")
-		return ErrWorkflowSeedSourceTooLarge
 	}
 
 	manifest := DefinitionSeedManifest{}
@@ -335,22 +333,4 @@ func boolOrDefault(value *bool, fallback bool) bool {
 	}
 
 	return *value
-}
-
-// validateWorkflowSeedURL enforces http/https manifest URLs with hosts.
-func validateWorkflowSeedURL(rawURL string) error {
-	parsed, err := url.Parse(rawURL)
-	if err != nil || parsed == nil {
-		return ErrWorkflowSeedURLInvalid
-	}
-
-	if parsed.Scheme != "http" && parsed.Scheme != "https" {
-		return ErrWorkflowSeedURLInvalid
-	}
-
-	if parsed.Host == "" {
-		return ErrWorkflowSeedURLInvalid
-	}
-
-	return nil
 }

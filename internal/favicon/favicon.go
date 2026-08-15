@@ -14,8 +14,10 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/samber/lo"
+	"github.com/theopenlane/httpsling"
 
 	"github.com/theopenlane/core/internal/ent/validator"
+	"github.com/theopenlane/core/pkg/urlx"
 )
 
 // maxPageBytes bounds how much of a landing page is read while scanning for icon links (2MB)
@@ -24,16 +26,16 @@ const maxPageBytes = 2 << 20
 // Discover returns the first reachable icon URL scraped from the given domains, trying each
 // domain's landing page icon links (largest first, apple-touch preferred) before falling
 // back to /favicon.ico
-func Discover(ctx context.Context, client *http.Client, domains []string) (string, error) {
+func Discover(ctx context.Context, requester *httpsling.Requester, domains []string) (string, error) {
 	var errs []error
 
 	for _, domain := range domains {
-		websiteURL := normalizeURL(domain)
-		if websiteURL == "" {
+		websiteURL, err := urlx.Parse(domain)
+		if err != nil {
 			continue
 		}
 
-		avatarURL, err := fetchAvatarFromURL(ctx, client, websiteURL)
+		avatarURL, err := fetchAvatarFromURL(ctx, requester, websiteURL.String())
 		if err != nil {
 			errs = append(errs, err)
 			continue
@@ -49,17 +51,12 @@ func Discover(ctx context.Context, client *http.Client, domains []string) (strin
 	return "", errors.Join(errs...)
 }
 
-func fetchAvatarFromURL(ctx context.Context, client *http.Client, websiteURL string) (string, error) {
+func fetchAvatarFromURL(ctx context.Context, requester *httpsling.Requester, websiteURL string) (string, error) {
 	if err := validator.ValidateURL()(websiteURL); err != nil {
 		return "", err
 	}
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, websiteURL, nil)
-	if err != nil {
-		return "", err
-	}
-
-	resp, err := client.Do(req)
+	resp, err := requester.SendWithContext(ctx, httpsling.Get(websiteURL))
 	if err != nil {
 		return "", err
 	}
@@ -85,7 +82,7 @@ func fetchAvatarFromURL(ctx context.Context, client *http.Client, websiteURL str
 	availableIconURLs = append(availableIconURLs, faviconURL)
 
 	for _, iconURL := range availableIconURLs {
-		if !checkIconURL(ctx, client, iconURL) {
+		if !checkIconURL(ctx, requester, iconURL) {
 			continue
 		}
 
@@ -144,19 +141,12 @@ func retrieveAvailableIcons(document *goquery.Document, pageURL *url.URL) []stri
 }
 
 // checkIconURL checks if the url contains a valid image
-func checkIconURL(ctx context.Context, client *http.Client, iconURL string) bool {
+func checkIconURL(ctx context.Context, requester *httpsling.Requester, iconURL string) bool {
 	if err := validator.ValidateURL()(iconURL); err != nil {
 		return false
 	}
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, iconURL, nil)
-	if err != nil {
-		return false
-	}
-
-	req.Header.Set("Accept", "image/*")
-
-	resp, err := client.Do(req)
+	resp, err := requester.SendWithContext(ctx, httpsling.Get(iconURL), httpsling.Accept("image/*"))
 	if err != nil {
 		return false
 	}
@@ -166,29 +156,6 @@ func checkIconURL(ctx context.Context, client *http.Client, iconURL string) bool
 	_, _ = io.Copy(io.Discard, resp.Body)
 
 	return resp.StatusCode >= http.StatusOK && resp.StatusCode < http.StatusMultipleChoices
-}
-
-// normalizeURL adds HTTPS when the domain has no scheme.
-// if provided domain by the org during onboarding is theopenlane.io, this
-// converts it to https://theopenlane.io so we can reach it successfully
-func normalizeURL(domain string) string {
-	domain = strings.TrimSpace(domain)
-	if domain == "" {
-		return ""
-	}
-
-	parsed, err := url.Parse(domain)
-	if err != nil {
-		return ""
-	}
-
-	if parsed.Scheme == "" {
-		return "https://" + domain
-	}
-
-	parsed.Scheme = "https"
-
-	return parsed.String()
 }
 
 func getLargestIconSize(sizes string) int {

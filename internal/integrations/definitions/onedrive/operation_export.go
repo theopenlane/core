@@ -2,7 +2,6 @@ package onedrive
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -10,11 +9,13 @@ import (
 	"strings"
 
 	"github.com/samber/lo"
+	"github.com/theopenlane/httpsling"
 	"golang.org/x/oauth2"
 
 	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/pkg/urlx"
 )
 
 // Handle adapts the document export to the generic operation registration boundary
@@ -75,16 +76,22 @@ func fetchIframeEmbed(ctx context.Context, ts oauth2.TokenSource, itemID string)
 
 	u := fmt.Sprintf("https://graph.microsoft.com/v1.0/me/drive/items/%s/preview", itemID)
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, u, strings.NewReader("{}"))
+	requester, err := urlx.NewRequester()
 	if err != nil {
-		log.Warn().Err(err).Msg("onedrive: failed to get token for iframe embed")
+		log.Warn().Err(err).Msg("onedrive: failed to build preview API requester")
 		return ""
 	}
 
-	req.Header.Set("Authorization", "Bearer "+tok.AccessToken)
-	req.Header.Set("Content-Type", "application/json")
+	var result struct {
+		GetURL string `json:"getUrl"`
+	}
 
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := requester.ReceiveWithContext(ctx, &result,
+		httpsling.Post(u),
+		httpsling.BearerAuth(tok.AccessToken),
+		httpsling.Body("{}"),
+		httpsling.ContentType(httpsling.ContentTypeJSON),
+	)
 	if err != nil {
 		log.Warn().Err(err).Msg("onedrive: preview API request failed")
 		return ""
@@ -97,12 +104,8 @@ func fetchIframeEmbed(ctx context.Context, ts oauth2.TokenSource, itemID string)
 		return ""
 	}
 
-	var result struct {
-		GetURL string `json:"getUrl"`
-	}
-
-	if err := json.NewDecoder(resp.Body).Decode(&result); err != nil || result.GetURL == "" {
-		log.Warn().Err(err).Msg("onedrive: failed to decode preview response or empty getUrl")
+	if result.GetURL == "" {
+		log.Warn().Msg("onedrive: empty getUrl in preview response")
 		return ""
 	}
 
@@ -120,16 +123,14 @@ func fetchPDF(ctx context.Context, ts oauth2.TokenSource, itemID string) ([]byte
 
 	u := fmt.Sprintf("https://graph.microsoft.com/v1.0/me/drive/items/%s/content?format=pdf", itemID)
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, u, nil)
+	requester, err := urlx.NewRequester()
 	if err != nil {
 		return nil, err
 	}
 
-	req.Header.Set("Authorization", "Bearer "+tok.AccessToken)
-
-	// http.DefaultClient strips the Authorization header on cross-domain redirects,
+	// the http client strips the Authorization header on cross-domain redirects,
 	// so the CDN pre-authenticated URL receives no credentials
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := requester.SendWithContext(ctx, httpsling.Get(u), httpsling.BearerAuth(tok.AccessToken))
 	if err != nil {
 		log.Warn().Err(err).Msg("onedrive: pdf download request failed")
 		return nil, err

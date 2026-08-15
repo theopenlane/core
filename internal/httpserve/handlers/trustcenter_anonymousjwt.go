@@ -11,8 +11,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
-	"github.com/theopenlane/core/pkg/domain"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/pkg/urlx"
 )
 
 func (h *Handler) CreateTrustCenterAnonymousJWT(ctx echo.Context) error {
@@ -34,12 +34,12 @@ func (h *Handler) CreateTrustCenterAnonymousJWT(ctx echo.Context) error {
 	}
 
 	hostname := parsedURL.Hostname()
-	normalizedHost, err := domain.NormalizeHostname(hostname)
+	normalizedHost, err := urlx.NormalizeHostname(hostname)
 	if err != nil {
 		return h.BadRequest(ctx, ErrInvalidRefererURL)
 	}
 
-	normalizedDefaultDomain, err := domain.NormalizeHostname(h.DefaultTrustCenterDomain)
+	normalizedDefaultDomain, err := urlx.NormalizeHostname(h.DefaultTrustCenterDomain)
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("invalid default trust center domain")
 

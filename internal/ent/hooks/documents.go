@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"io"
 	"net/http"
 	"strings"
 	"time"
@@ -16,6 +15,9 @@ import (
 	"github.com/microcosm-cc/bluemonday"
 	"github.com/rs/zerolog/log"
 	"github.com/stoewer/go-strcase"
+	"github.com/theopenlane/httpsling"
+	"github.com/theopenlane/httpsling/httpclient"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
@@ -24,6 +26,7 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/core/pkg/urlx"
 	"github.com/theopenlane/iam/auth"
 )
 
@@ -231,10 +234,6 @@ func importFileToSchema[T importSchemaMutation](ctx context.Context, m T, update
 
 const defaultImportTimeout = time.Second * 10
 
-var client = &http.Client{
-	Timeout: defaultImportTimeout,
-}
-
 func importURLToSchema(ctx context.Context, m importSchemaMutation) error {
 	downloadURL, exists := m.URL()
 	if !exists {
@@ -244,12 +243,12 @@ func importURLToSchema(ctx context.Context, m importSchemaMutation) error {
 	ctx, cancel := context.WithTimeout(ctx, defaultImportTimeout)
 	defer cancel()
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, downloadURL, nil)
+	requester, err := urlx.NewRequester(httpsling.Client(httpclient.Timeout(defaultImportTimeout)))
 	if err != nil {
 		return err
 	}
 
-	resp, err := client.Do(req)
+	resp, err := requester.SendWithContext(ctx, httpsling.Get(downloadURL))
 	if err != nil {
 		return err
 	}
@@ -260,10 +259,8 @@ func importURLToSchema(ctx context.Context, m importSchemaMutation) error {
 		return fmt.Errorf("%d not an accepted status code. Only 200 accepted", resp.StatusCode) //nolint:err113
 	}
 
-	// Read a bounded amount of data based on configured import size to prevent memory overuse
-	reader := io.LimitReader(resp.Body, int64(m.Client().EntConfig.MaxSchemaImportSize))
-
-	buf, err := io.ReadAll(reader)
+	// Bound the read by the configured import size to prevent memory overuse
+	buf, err := urlx.ReadBody(resp, urlx.MaxSizeValidator(int64(m.Client().EntConfig.MaxSchemaImportSize)))
 	if err != nil {
 		return fmt.Errorf("failed to read response body: %w", err) //nolint:err113
 	}
