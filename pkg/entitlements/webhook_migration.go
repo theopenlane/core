@@ -7,6 +7,8 @@ import (
 	"strings"
 
 	"github.com/stripe/stripe-go/v86"
+
+	"github.com/theopenlane/core/pkg/urlx"
 )
 
 const (
@@ -76,7 +78,7 @@ func (sc *StripeClient) GetWebhookMigrationState(ctx context.Context, baseURL st
 		MigrationStage:    string(MigrationStageNone),
 	}
 
-	baseURLClean := cleanURL(baseURL)
+	baseURLClean := urlx.WithoutQuery(baseURL)
 
 	configCurrentVersion := options.CurrentVersion
 
@@ -85,7 +87,7 @@ func (sc *StripeClient) GetWebhookMigrationState(ctx context.Context, baseURL st
 	}
 
 	for _, endpoint := range endpoints {
-		endpointURLClean := cleanURL(endpoint.URL)
+		endpointURLClean := urlx.WithoutQuery(endpoint.URL)
 
 		if endpointURLClean == baseURLClean {
 			if endpoint.APIVersion == configCurrentVersion {
@@ -117,10 +119,10 @@ func (sc *StripeClient) CreateNewWebhookForMigration(ctx context.Context, baseUR
 		return nil, err
 	}
 
-	baseURLClean := cleanURL(baseURL)
+	baseURLClean := urlx.WithoutQuery(baseURL)
 
 	for _, endpoint := range endpoints {
-		endpointURLClean := cleanURL(endpoint.URL)
+		endpointURLClean := urlx.WithoutQuery(endpoint.URL)
 		if endpointURLClean == baseURLClean && endpoint.APIVersion == apiVersion {
 			return nil, fmt.Errorf("webhook with version %s already exists: %w", apiVersion, ErrNewWebhookAlreadyExists)
 		}
@@ -128,7 +130,7 @@ func (sc *StripeClient) CreateNewWebhookForMigration(ctx context.Context, baseUR
 
 	if len(events) == 0 {
 		for _, endpoint := range endpoints {
-			endpointURLClean := cleanURL(endpoint.URL)
+			endpointURLClean := urlx.WithoutQuery(endpoint.URL)
 			if endpointURLClean == baseURLClean && endpoint.Status == "enabled" {
 				events = endpoint.EnabledEvents
 				break
@@ -176,10 +178,10 @@ func (sc *StripeClient) DisableWebhookByVersion(ctx context.Context, baseURL str
 		return nil, err
 	}
 
-	baseURLClean := cleanURL(baseURL)
+	baseURLClean := urlx.WithoutQuery(baseURL)
 
 	for _, endpoint := range endpoints {
-		endpointURLClean := cleanURL(endpoint.URL)
+		endpointURLClean := urlx.WithoutQuery(endpoint.URL)
 		if endpointURLClean == baseURLClean && endpoint.APIVersion == apiVersion && endpoint.Status == "enabled" {
 			return sc.DisableWebhookEndpoint(ctx, endpoint.ID)
 		}
@@ -210,16 +212,6 @@ func (sc *StripeClient) RollbackMigration(ctx context.Context, baseURL string, o
 	}
 
 	return nil
-}
-
-func cleanURL(rawURL string) string {
-	parsedURL, err := url.Parse(rawURL)
-	if err != nil {
-		return rawURL
-	}
-
-	parsedURL.RawQuery = ""
-	return parsedURL.String()
 }
 
 func addVersionParam(baseURL, version string) string {

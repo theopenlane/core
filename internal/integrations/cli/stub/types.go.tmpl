@@ -1,0 +1,52 @@
+package {{ name }}
+
+import (
+	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/internal/integrations/types"
+)
+
+var (
+	// definitionID is the stable identifier for the {{ display }} integration definition
+	definitionID = types.NewDefinitionRef("{{ defid }}")
+	// installation is the typed installation metadata handle for the {{ display }} definition
+	installation = types.NewInstallationRef(resolveInstallationMetadata)
+	// {{ name }}Schema is the credential schema for {{ display }} credentials
+	{{ name }}Schema, {{ name }}Credential = providerkit.CredentialSchema[CredentialSchema]()
+	// {{ name }}Client is the client ref for the {{ display }} client used by this definition
+	{{ name }}Client = types.NewClientRef[*APIClient]()
+	// healthCheckSchema is the operation schema for the {{ display }} health check operation
+	healthCheckSchema, healthCheckOperation = providerkit.OperationSchema[HealthCheck]()
+)
+
+// APIClient is the client handed to {{ display }} operations; swap this for the provider SDK client type
+type APIClient struct {
+	// Credential is the resolved credential this client was built from
+	Credential CredentialSchema
+}
+
+// UserInput holds installation-specific configuration collected from the user
+type UserInput struct {
+	// FilterExpr limits imported records to envelopes matching the CEL expression
+	FilterExpr string `json:"filterExpr,omitempty" jsonschema:"title=Filter Expression,description=Optional CEL expression to apply to records before ingesting"`
+}
+
+// CredentialSchema holds the {{ display }} credentials for one installation
+type CredentialSchema struct {
+	// APIToken is the token used to authenticate against {{ display }}
+	APIToken string `json:"apiToken" jsonschema:"required,title=API Token,secret=true,description=Token used to authenticate on your behalf to {{ display }}"`
+	// AccountID is the {{ display }} account identifier used for account-scoped API calls
+	AccountID string `json:"accountId,omitempty" jsonschema:"required,title=Account ID,description=Account identifier collection is scoped to"`
+}
+
+// InstallationMetadata holds the stable {{ display }} account identity for one installation
+type InstallationMetadata struct {
+	// AccountID is the {{ display }} account identifier used for account-scoped collection
+	AccountID string `json:"accountId,omitempty" jsonschema:"title=Account ID"`
+}
+
+// InstallationIdentity implements types.InstallationIdentifiable
+func (m InstallationMetadata) InstallationIdentity() types.IntegrationInstallationIdentity {
+	return types.IntegrationInstallationIdentity{
+		ExternalID: m.AccountID,
+	}
+}

@@ -9,8 +9,8 @@ import (
 	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-// Builder returns the GCP SCC definition builder
-func Builder() registry.Builder {
+// Builder returns the GCP SCC definition builder advertising the supplied federation issuer
+func Builder(federationIssuer string) registry.Builder {
 	return registry.Builder(func() (types.Definition, error) {
 		return types.Definition{
 			DefinitionSpec: types.DefinitionSpec{
@@ -29,6 +29,13 @@ func Builder() registry.Builder {
 			},
 			CredentialRegistrations: []types.CredentialRegistration{
 				{
+					Ref:         workloadIdentityCredential.ID(),
+					Name:        "GCP Workload Identity Federation",
+					Description: "Federated access to Security Command Center with no stored keys.",
+					Schema:      workloadIdentitySchema,
+					Recommended: true,
+				},
+				{
 					Ref:         sccCredential.ID(),
 					Name:        "GCP SCC Credential",
 					Description: "GCP service account key used to access Security Command Center.",
@@ -36,6 +43,25 @@ func Builder() registry.Builder {
 				},
 			},
 			Connections: []types.ConnectionRegistration{
+				{
+					CredentialRef: workloadIdentityCredential.ID(),
+					Name:          "GCP Workload Identity Federation",
+					Description:   "Configure Security Command Center access by trusting Openlane as an OIDC identity provider, so no service account key is ever stored.",
+					Meta: map[string]types.MetaInfo{
+						"Openlane Issuer URI": {
+							Value:     federationIssuer,
+							AllowCopy: true,
+						},
+					},
+					CredentialRefs:      []types.CredentialSlotID{workloadIdentityCredential.ID()},
+					ClientRefs:          []types.ClientID{sccClient.ID()},
+					ValidationOperation: healthCheckOperation.Name(),
+					Integration:         installation.Registration(),
+					Disconnect: &types.DisconnectRegistration{
+						CredentialRef: workloadIdentityCredential.ID(),
+						Description:   "Removes the stored workload identity configuration from Openlane. If the workload identity pool is no longer needed, delete the pool and its provider from your Google Cloud project.",
+					},
+				},
 				{
 					CredentialRef:       sccCredential.ID(),
 					Name:                "GCP Service Account",
@@ -53,7 +79,7 @@ func Builder() registry.Builder {
 			Clients: []types.ClientRegistration{
 				{
 					Ref:            sccClient.ID(),
-					CredentialRefs: []types.CredentialSlotID{sccCredential.ID()},
+					CredentialRefs: []types.CredentialSlotID{workloadIdentityCredential.ID(), sccCredential.ID()},
 					Description:    "Google Cloud Security Command Center v2 client",
 					Build:          Client{}.Build,
 				},

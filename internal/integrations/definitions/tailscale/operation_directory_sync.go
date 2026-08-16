@@ -75,6 +75,7 @@ func (DirectorySync) Run(ctx context.Context, client *tsclient.Client, cfg Direc
 	rolesSeen := make(map[tsclient.UserRole]struct{})
 	groupEnvelopes := make([]types.MappingEnvelope, 0)
 	membershipEnvelopes := make([]types.MappingEnvelope, 0)
+	membershipsComplete := true
 
 	for _, user := range users {
 		role := user.Role
@@ -124,6 +125,7 @@ func (DirectorySync) Run(ctx context.Context, client *tsclient.Client, cfg Direc
 	acl, err := client.PolicyFile().Get(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Warn().Err(err).Msg("tailscale: failed to fetch policy file; skipping user-defined groups")
+		membershipsComplete = false
 	} else {
 		for groupName, members := range acl.Groups {
 			group := tailscaleGroupPayload{
@@ -164,11 +166,7 @@ func (DirectorySync) Run(ctx context.Context, client *tsclient.Client, cfg Direc
 		}
 	}
 
-	logx.FromContext(ctx).Debug().
-		Int("user_count", len(accountEnvelopes)).
-		Int("group_count", len(groupEnvelopes)).
-		Int("membership_count", len(membershipEnvelopes)).
-		Msg("tailscale: collected users, role groups, and memberships")
+	logx.FromContext(ctx).Debug().Int("user_count", len(accountEnvelopes)).Int("group_count", len(groupEnvelopes)).Int("membership_count", len(membershipEnvelopes)).Msg("tailscale: collected users, role groups, and memberships")
 
 	payloadSets = append(payloadSets,
 		types.IngestPayloadSet{
@@ -178,6 +176,8 @@ func (DirectorySync) Run(ctx context.Context, client *tsclient.Client, cfg Direc
 		types.IngestPayloadSet{
 			Schema:    entityops.SchemaDirectoryMembership.Name,
 			Envelopes: membershipEnvelopes,
+			// memberships derived without policy data are incomplete
+			SnapshotComplete: membershipsComplete,
 		},
 	)
 

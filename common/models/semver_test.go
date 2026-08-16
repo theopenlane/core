@@ -144,6 +144,78 @@ func TestToSemverVersion(t *testing.T) {
 		})
 	}
 }
+
+func TestDetectVersionBump(t *testing.T) {
+	tests := []struct {
+		name        string
+		oldRevision string
+		newRevision string
+		expected    models.SemverBump
+	}{
+		{
+			name:        "major bump",
+			oldRevision: "v1.0.0",
+			newRevision: "v2.0.0",
+			expected:    models.SemverBumpMajor,
+		},
+		{
+			name:        "minor bump",
+			oldRevision: "v1.0.0",
+			newRevision: "v1.1.0",
+			expected:    models.SemverBumpMinor,
+		},
+		{
+			name:        "patch only bump",
+			oldRevision: "v1.0.0",
+			newRevision: "v1.0.1",
+			expected:    models.SemverBumpPatch,
+		},
+		{
+			name:        "same version",
+			oldRevision: "v1.2.3",
+			newRevision: "v1.2.3",
+			expected:    models.SemverBumpNone,
+		},
+		{
+			name:        "major and minor bump",
+			oldRevision: "v1.2.3",
+			newRevision: "v2.0.0",
+			expected:    models.SemverBumpMajor,
+		},
+		{
+			name:        "prerelease to release minor bump",
+			oldRevision: "v1.0.0-draft",
+			newRevision: "v1.1.0",
+			expected:    models.SemverBumpMinor,
+		},
+		{
+			name:        "prerelease same major minor",
+			oldRevision: "v1.0.0",
+			newRevision: "v1.0.1-draft",
+			expected:    models.SemverBumpPatch,
+		},
+		{
+			name:        "empty old revision",
+			oldRevision: "",
+			newRevision: "v1.0.0",
+			expected:    models.SemverBumpMajor,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equal(t, tt.expected, models.DetectSemverBump(tt.oldRevision, tt.newRevision))
+		})
+	}
+}
+
+func TestIsMajorMinorBump(t *testing.T) {
+	assert.True(t, models.IsMajorMinorBump("v1.0.0", "v2.0.0"))
+	assert.True(t, models.IsMajorMinorBump("v1.0.0", "v1.1.0"))
+	assert.False(t, models.IsMajorMinorBump("v1.0.0", "v1.0.1"))
+	assert.False(t, models.IsMajorMinorBump("v1.0.0", "v1.0.0"))
+}
+
 func TestBumpMajor(t *testing.T) {
 	tests := []struct {
 		name     string

@@ -58,10 +58,33 @@ func persistDirectoryMembershipInput(ctx context.Context, db *ent.Client, integr
 			return dm.ID, nil
 		},
 		func(ctx context.Context, existing *ent.DirectoryMembership, input ent.UpdateDirectoryMembershipInput) error {
-			input.LastSeenAt = &now
-			if runID != "" {
-				input.LastConfirmedRunID = &runID
+			if runID == "" {
+				input.LastSeenAt = &now
+
+				return db.DirectoryMembership.UpdateOneID(existing.ID).SetInput(input).Exec(ctx)
 			}
+
+			if !directoryMembershipRunCanAdvance(existing.LastConfirmedRunID, runID) {
+				return db.DirectoryMembership.UpdateOneID(existing.ID).SetInput(input).Exec(ctx)
+			}
+
+			input.LastSeenAt = &now
+			input.LastConfirmedRunID = &runID
+			update := db.DirectoryMembership.UpdateOneID(existing.ID).
+				SetInput(input).
+				Where(directorymembership.Or(
+					directorymembership.LastConfirmedRunIDIsNil(),
+					directorymembership.LastConfirmedRunIDLTE(runID),
+				))
+			if err := update.Exec(ctx); err == nil {
+				return nil
+			} else if !ent.IsNotFound(err) {
+				return err
+			}
+
+			// a newer run won the guarded update; keep field changes but never move confirmation backward
+			input.LastSeenAt = nil
+			input.LastConfirmedRunID = nil
 
 			return db.DirectoryMembership.UpdateOneID(existing.ID).SetInput(input).Exec(ctx)
 		},
@@ -69,11 +92,19 @@ func persistDirectoryMembershipInput(ctx context.Context, db *ent.Client, integr
 	)
 }
 
+// directoryMembershipRunCanAdvance returns true if the incoming run ID is non-empty and
+// greater than or equal to the current run ID (or if the current run ID is nil)
+func directoryMembershipRunCanAdvance(currentRunID *string, incomingRunID string) bool {
+	return incomingRunID != "" && (currentRunID == nil || incomingRunID >= *currentRunID)
+}
+
 // resolveDirectoryMembershipInput normalizes provider lookup values into internal record IDs before persistence
 func resolveDirectoryMembershipInput(ctx context.Context, db *ent.Client, integration *ent.Integration, input ent.CreateDirectoryMembershipInput) (ent.CreateDirectoryMembershipInput, error) {
+	ctx = logx.WithFields(ctx, map[string]any{"account_ref": input.DirectoryAccountID, "group_ref": input.DirectoryGroupID})
+
 	accountID, err := resolveDirectoryAccountID(ctx, db, integration, lo.FromPtr(input.DirectoryInstanceID), input.DirectoryAccountID)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("account_ref", input.DirectoryAccountID).Str("group_ref", input.DirectoryGroupID).Msg("unresolved directory account for membership")
+		logx.FromContext(ctx).Error().Err(err).Msg("unresolved directory account for membership")
 
 		return input, err
 	}
@@ -84,7 +115,7 @@ func resolveDirectoryMembershipInput(ctx context.Context, db *ent.Client, integr
 
 	groupID, err := resolveDirectoryGroupID(ctx, db, integration, input.DirectoryGroupID)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("account_ref", input.DirectoryAccountID).Str("group_ref", input.DirectoryGroupID).Msg("unresolved directory group for membership")
+		logx.FromContext(ctx).Error().Err(err).Msg("unresolved directory group for membership")
 
 		return input, err
 	}

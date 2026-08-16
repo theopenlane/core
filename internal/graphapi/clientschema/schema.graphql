@@ -2529,7 +2529,6 @@ type AssessmentResponse implements Node @modules(names: ["compliance_module"]) {
 	Returns the workflow event timeline for this assessmentResponse across all workflow instances
 	"""
 	workflowTimeline(after: Cursor, first: Int, before: Cursor, last: Int, orderBy: [WorkflowEventOrder!], where: WorkflowEventWhereInput, includeEmitFailures: Boolean): WorkflowEventConnection!
-	questionnaireTransformError: String
 }
 """
 AssessmentResponseAssessmentResponseStatus is enum for the field status
@@ -49680,6 +49679,15 @@ type Mutation {
 		ID of the orgMembership
 		"""
 		id: ID!
+	): OrgMembershipDeletePayload!
+	"""
+	Leave an organization the authenticated user belongs to
+	"""
+	leaveOrganization(
+		"""
+		ID of the organization to leave
+		"""
+		organizationID: ID!
 	): OrgMembershipDeletePayload!
 	"""
 	Delete multiple orgMemberships

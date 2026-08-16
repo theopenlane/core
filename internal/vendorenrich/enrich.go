@@ -12,8 +12,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/pkg/domain"
 	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/pkg/urlx"
 )
 
 // systemVendorEntityType is the EntityType.Name that marks an Entity as a vendor
@@ -93,7 +93,7 @@ func vendorDomain(vendor map[string]any) string {
 		return ""
 	}
 
-	hostname, err := domain.NormalizeHostname(rawURL)
+	hostname, err := urlx.NormalizeHostname(rawURL)
 	if err != nil {
 		return ""
 	}

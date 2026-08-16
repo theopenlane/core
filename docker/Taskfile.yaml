@@ -236,3 +236,29 @@ tasks:
     cmds:
       - task: keycloak
       - task: keycloak:open
+
+  zitadel:
+    dir: ..
+    desc: brings up the compose environment for zitadel
+    cmds:
+      - "docker compose -f ./docker/docker-compose-pg.yml -f ./docker/docker-compose-zitadel.yml up -d"
+
+  zitadel:down:
+    dir: ..
+    desc: brings the zitadel compose environment down
+    cmds:
+      - "docker compose -f ./docker/docker-compose-pg.yml -f ./docker/docker-compose-zitadel.yml down"
+
+  zitadel:open:
+    dir: ..
+    desc: opens the Zitadel admin console
+    cmds:
+      - 'open "http://localhost:8085/ui/console"'
+
+  zitadel:up:
+    dir: ..
+    desc: brings the zitadel compose environment up and opens the admin console
+    aliases: [zitadelup]
+    cmds:
+      - task: zitadel
+      - task: zitadel:open

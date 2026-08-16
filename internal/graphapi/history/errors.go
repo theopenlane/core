@@ -14,20 +14,13 @@ import (
 // parseRequestError logs and parses the error and returns the appropriate error type for the client
 func parseRequestError(ctx context.Context, err error, a common.Action) error {
 	// log the error for debugging
-	logx.FromContext(ctx).Error().
-		Err(err).
-		Str("action", a.Action).
-		Str("object", a.Object).
-		Msg("error processing request")
+	logx.FromContext(ctx).Error().Err(err).Str("action", a.Action).Str("object", a.Object).Msg("error processing request")
 
 	switch {
 	case generated.IsValidationError(err):
 		validationError := err.(*generated.ValidationError)
 
-		logx.FromContext(ctx).Info().
-			Err(validationError).
-			Str("field", validationError.Name).
-			Msg("validation error")
+		logx.FromContext(ctx).Info().Err(validationError).Str("field", validationError.Name).Msg("validation error")
 
 		errMsg := validationError.Error()
 		if strings.Contains(strings.ToLower(errMsg), "generated:") {

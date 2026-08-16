@@ -169,7 +169,10 @@ func handleOrgModuleBulkDelete(ctx context.Context, omm *generated.OrgModuleMuta
 		return next.Mutate(ctx, omm)
 	}
 
-	ids := getMutationIDs(ctx, omm)
+	ids, err := getMutationIDs(ctx, omm)
+	if err != nil {
+		return nil, err
+	}
 	if len(ids) == 0 {
 		return next.Mutate(ctx, omm)
 	}
