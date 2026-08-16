@@ -32,8 +32,8 @@ require (
 	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.22.40
 	github.com/aws/aws-sdk-go-v2/feature/s3/transfermanager v0.3.10
 	github.com/aws/aws-sdk-go-v2/service/configservice v1.68.4
-	github.com/aws/aws-sdk-go-v2/service/iam v1.57.1
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.106.5
+	github.com/aws/aws-sdk-go-v2/service/iam v1.58.1
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.107.0
 	github.com/brianvoe/gofakeit/v7 v7.15.0
 	github.com/cenkalti/backoff/v5 v5.0.3
 	github.com/cloudflare/cloudflare-go/v7 v7.6.0
@@ -305,7 +305,7 @@ require (
 )
 
 require (
-	github.com/aws/aws-sdk-go-v2/service/securityhub v1.75.4
+	github.com/aws/aws-sdk-go-v2/service/securityhub v1.76.0
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.4.1 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
