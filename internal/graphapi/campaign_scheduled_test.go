@@ -18,7 +18,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/internal/integrations/definitions/email"
-	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/newman/providers/mock"
 )
@@ -284,7 +283,7 @@ func TestNextCampaignRunAtFrequencies(t *testing.T) {
 
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
-			result := operations.NextCampaignRunAt(base, tc.frequency, tc.interval, "")
+			result := tc.frequency.NextOccurrence(base, tc.interval, "")
 			assert.Check(t, is.Equal(tc.expected, result))
 		})
 	}
@@ -296,19 +295,19 @@ func TestNextCampaignRunAtTimezoneHandling(t *testing.T) {
 	base := time.Date(2025, time.March, 15, 10, 0, 0, 0, time.UTC)
 
 	t.Run("valid timezone", func(t *testing.T) {
-		result := operations.NextCampaignRunAt(base, enums.FrequencyMonthly, 1, "America/New_York")
+		result := enums.FrequencyMonthly.NextOccurrence(base, 1, "America/New_York")
 		assert.Check(t, result.Location() == time.UTC, "result should be in UTC")
 		assert.Check(t, result.After(base), "next run should be after base")
 	})
 
 	t.Run("invalid timezone falls back to UTC", func(t *testing.T) {
-		resultInvalid := operations.NextCampaignRunAt(base, enums.FrequencyMonthly, 1, "Invalid/Zone")
-		resultUTC := operations.NextCampaignRunAt(base, enums.FrequencyMonthly, 1, "")
+		resultInvalid := enums.FrequencyMonthly.NextOccurrence(base, 1, "Invalid/Zone")
+		resultUTC := enums.FrequencyMonthly.NextOccurrence(base, 1, "")
 		assert.Check(t, is.Equal(resultUTC, resultInvalid))
 	})
 
 	t.Run("empty timezone uses UTC", func(t *testing.T) {
-		result := operations.NextCampaignRunAt(base, enums.FrequencyMonthly, 1, "")
+		result := enums.FrequencyMonthly.NextOccurrence(base, 1, "")
 		expected := time.Date(2025, time.April, 15, 10, 0, 0, 0, time.UTC)
 		assert.Check(t, is.Equal(expected, result))
 	})

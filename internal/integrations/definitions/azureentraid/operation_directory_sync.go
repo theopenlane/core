@@ -209,8 +209,9 @@ func (DirectorySync) Run(ctx context.Context, c *msgraphsdk.GraphServiceClient, 
 			Envelopes: groupEnvelopes,
 		},
 		types.IngestPayloadSet{
-			Schema:    entityops.SchemaDirectoryMembership.Name,
-			Envelopes: membershipEnvelopes,
+			Schema:           entityops.SchemaDirectoryMembership.Name,
+			Envelopes:        membershipEnvelopes,
+			SnapshotComplete: true,
 		},
 	)
 

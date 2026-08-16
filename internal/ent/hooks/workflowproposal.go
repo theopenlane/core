@@ -32,7 +32,10 @@ func HookWorkflowProposalInvalidateAssignments() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			id, ok := getSingleMutationID(ctx, m)
+			id, ok, idErr := getSingleMutationID(ctx, m)
+			if idErr != nil {
+				return nil, idErr
+			}
 			if !ok {
 				return next.Mutate(ctx, m)
 			}
@@ -259,7 +262,10 @@ func HookWorkflowProposalTriggerOnSubmit() ent.Hook {
 				return value, nil
 			}
 
-			id, ok := getSingleMutationID(ctx, m)
+			id, ok, idErr := getSingleMutationID(ctx, m)
+			if idErr != nil {
+				return value, idErr
+			}
 			if !ok {
 				return value, nil
 			}

@@ -182,6 +182,24 @@ func TestNeedsDirectorySyncRun(t *testing.T) {
 	}
 }
 
+func TestSameDirectorySyncRun(t *testing.T) {
+	t.Parallel()
+
+	assert.Equal(t, sameDirectorySyncRun("run-1", "run-1"), true)
+	assert.Equal(t, sameDirectorySyncRun("run-1", "run-2"), false)
+	assert.Equal(t, sameDirectorySyncRun("", "run-1"), false)
+}
+
+func TestDirectoryMembershipRunCanAdvance(t *testing.T) {
+	t.Parallel()
+
+	current := "01J00000000000000000000001"
+	assert.Equal(t, directoryMembershipRunCanAdvance(nil, current), true)
+	assert.Equal(t, directoryMembershipRunCanAdvance(&current, current), true)
+	assert.Equal(t, directoryMembershipRunCanAdvance(&current, "01J00000000000000000000000"), false)
+	assert.Equal(t, directoryMembershipRunCanAdvance(&current, ""), false)
+}
+
 func TestResolveInstallationFilterExpr(t *testing.T) {
 	t.Parallel()
 
@@ -560,7 +578,7 @@ func TestProcessPayloadSets_DefinitionNotFound(t *testing.T) {
 		Integration: &ent.Integration{DefinitionID: "nonexistent"},
 	}
 
-	err := applyPayloadSets(context.Background(), ic, "", nil, nil, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
+	_, err := applyPayloadSets(context.Background(), ic, "", nil, nil, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
 		return nil
 	})
 
@@ -585,7 +603,7 @@ func TestProcessPayloadSets_SchemaNotDeclared(t *testing.T) {
 		{Schema: entityops.SchemaAsset.Name, Envelopes: []types.MappingEnvelope{{Payload: json.RawMessage(`{}`)}}},
 	}
 
-	err := applyPayloadSets(context.Background(), ic, "", contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
+	_, err := applyPayloadSets(context.Background(), ic, "", contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
 		return nil
 	})
 
@@ -607,7 +625,7 @@ func TestProcessPayloadSets_SchemaNotFound(t *testing.T) {
 		{Schema: "totally_bogus_schema", Envelopes: []types.MappingEnvelope{{Payload: json.RawMessage(`{}`)}}},
 	}
 
-	err := applyPayloadSets(context.Background(), ic, "", contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
+	_, err := applyPayloadSets(context.Background(), ic, "", contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
 		return nil
 	})
 
@@ -635,11 +653,11 @@ func TestProcessPayloadSets_MappingNotFound(t *testing.T) {
 		},
 	}
 
-	err := applyPayloadSets(context.Background(), ic, "", contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
+	_, err := applyPayloadSets(context.Background(), ic, "", contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
 		return nil
 	})
 
-	assert.ErrorIs(t, err, ErrIngestRecordsFailed)
+	assert.NilError(t, err, "unmappable records are skipped, not fatal")
 }
 
 func TestProcessPayloadSets_InvalidInstallationFilterConfig(t *testing.T) {
@@ -655,7 +673,7 @@ func TestProcessPayloadSets_InvalidInstallationFilterConfig(t *testing.T) {
 		},
 	}
 
-	err := applyPayloadSets(context.Background(), ic, "", nil, nil, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
+	_, err := applyPayloadSets(context.Background(), ic, "", nil, nil, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
 		return nil
 	})
 
@@ -690,7 +708,7 @@ func TestProcessPayloadSets_SuccessfulMapping(t *testing.T) {
 
 	var handled []mappedIngestRecord
 
-	err := applyPayloadSets(context.Background(), ic, "", contracts, payloadSets, IngestOptions{}, func(_ context.Context, record mappedIngestRecord) error {
+	_, err := applyPayloadSets(context.Background(), ic, "", contracts, payloadSets, IngestOptions{}, func(_ context.Context, record mappedIngestRecord) error {
 		handled = append(handled, record)
 		return nil
 	})
@@ -710,7 +728,7 @@ func TestProcessPayloadSets_EmptyPayloadSets(t *testing.T) {
 		Integration: &ent.Integration{DefinitionID: "test-def"},
 	}
 
-	err := applyPayloadSets(context.Background(), ic, "", nil, nil, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
+	_, err := applyPayloadSets(context.Background(), ic, "", nil, nil, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
 		t.Fatal("handler should not be called for empty payload sets")
 		return nil
 	})
@@ -750,7 +768,7 @@ func TestProcessPayloadSets_FilteredEnvelopes(t *testing.T) {
 
 	var handled int
 
-	err := applyPayloadSets(context.Background(), ic, "", contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
+	_, err := applyPayloadSets(context.Background(), ic, "", contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
 		handled++
 		return nil
 	})
@@ -789,7 +807,7 @@ func TestProcessPayloadSets_HandleError(t *testing.T) {
 	handleErr := errors.New("persist failed")
 	handled := 0
 
-	err := applyPayloadSets(context.Background(), ic, "", contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
+	_, err := applyPayloadSets(context.Background(), ic, "", contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
 		handled++
 		if handled == 1 {
 			return handleErr
@@ -798,7 +816,7 @@ func TestProcessPayloadSets_HandleError(t *testing.T) {
 		return nil
 	})
 
-	assert.ErrorIs(t, err, ErrIngestRecordsFailed)
+	assert.NilError(t, err, "record failures are skipped, not fatal")
 	assert.Equal(t, 2, handled, "a failing record must not abort the remaining records")
 }
 
@@ -871,7 +889,7 @@ func TestProcessPayloadSets_NestedInstallationFilter(t *testing.T) {
 	}
 
 	var handled int
-	err := applyPayloadSets(context.Background(), ic, "repo-sync", contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
+	_, err := applyPayloadSets(context.Background(), ic, "repo-sync", contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
 		handled++
 		return nil
 	})
@@ -967,40 +985,11 @@ func TestProcessPayloadSets_NestedFilterDoesNotLeakAcrossOperations(t *testing.T
 
 	var handled int
 	// running as asset-sync: the findingSync filterExpr must NOT apply
-	err := applyPayloadSets(context.Background(), ic, "asset-sync", contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
+	_, err := applyPayloadSets(context.Background(), ic, "asset-sync", contracts, payloadSets, IngestOptions{}, func(context.Context, mappedIngestRecord) error {
 		handled++
 		return nil
 	})
 
 	assert.NilError(t, err)
 	assert.Equal(t, handled, 2) // both pass — asset-sync has no filter
-}
-
-func TestEmitPayloadSets_NilRuntime_NonDirectorySync(t *testing.T) {
-	t.Parallel()
-
-	reg, _ := testDefinition(t, []types.MappingRegistration{
-		{
-			Schema:  entityops.SchemaAsset.Name,
-			Variant: "",
-			Spec:    types.MappingOverride{MapExpr: `payload`},
-		},
-	})
-
-	ic := IngestContext{
-		Registry:    reg,
-		Integration: &ent.Integration{DefinitionID: "test-def"},
-		Runtime:     nil,
-	}
-
-	contracts := []types.IngestContract{{Schema: entityops.SchemaAsset.Name}}
-	payloadSets := []types.IngestPayloadSet{
-		{
-			Schema:    entityops.SchemaAsset.Name,
-			Envelopes: []types.MappingEnvelope{{Payload: json.RawMessage(`{}`)}},
-		},
-	}
-
-	err := EmitPayloadSets(context.Background(), ic, "sync", contracts, payloadSets, IngestOptions{})
-	assert.ErrorIs(t, err, ErrGalaRequired)
 }

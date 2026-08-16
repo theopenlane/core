@@ -1,0 +1,40 @@
+package {{ name }}
+
+import (
+	"context"
+	"encoding/json"
+
+	"github.com/theopenlane/core/internal/integrations/providerkit"
+	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/logx"
+)
+
+// HealthCheck holds the result of a {{ display }} health check
+type HealthCheck struct {
+	// Status is the verification status returned by {{ display }}
+	Status string `json:"status,omitempty"`
+}
+
+// Handle adapts the health check to the generic operation registration boundary
+func (h HealthCheck) Handle() types.OperationHandler {
+	return providerkit.WithClientRequest({{ name }}Client, func(ctx context.Context, request types.OperationRequest, client *APIClient) (json.RawMessage, error) {
+		return h.Run(ctx, request.Credentials, client)
+	})
+}
+
+// Run verifies the stored {{ display }} credential still works
+func (HealthCheck) Run(ctx context.Context, credentials types.CredentialBindings, c *APIClient) (json.RawMessage, error) {
+	meta, err := resolveCredential(credentials)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("{{ name }}: error resolving credentials")
+		return nil, err
+	}
+
+	// swap this for the cheapest authenticated call the provider offers, e.g. a whoami or token verify
+	if meta.AccountID == "" || c.Credential.APIToken == "" {
+		logx.FromContext(ctx).Error().Msg("{{ name }}: healthcheck failed")
+		return nil, ErrHealthCheckFailed
+	}
+
+	return providerkit.EncodeResult(HealthCheck{Status: "active"}, ErrResultEncode)
+}

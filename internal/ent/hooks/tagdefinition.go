@@ -113,7 +113,10 @@ func HookTagDefinitionDelete() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			ids := getMutationIDs(ctx, m)
+			ids, err := getMutationIDs(ctx, m)
+			if err != nil {
+				return nil, err
+			}
 			if len(ids) == 0 {
 				return next.Mutate(ctx, m)
 			}
@@ -147,10 +150,7 @@ func HookTagDefinitionDelete() ent.Hook {
 			}
 
 			if len(errs) > 0 {
-				logx.FromContext(ctx).Error().
-					Int("error_count", len(errs)).
-					Strs("errors", errs).
-					Msg("tag definition deletion failed: tag definitions are in use")
+				logx.FromContext(ctx).Error().Int("error_count", len(errs)).Strs("errors", errs).Msg("tag definition deletion failed: tag definitions are in use")
 				return nil, fmt.Errorf("%w: %d tag definition(s) are in use and cannot be deleted", ErrTagDefinitionInUse, len(errs)) //nolint:err113
 			}
 
@@ -196,11 +196,7 @@ func isTagDefinitionInUse(ctx context.Context, client *generated.Client, tagDefI
 			var rows sql.Rows
 			if err := client.Driver().Query(ctx, query, []any{tagDefID}, &rows); err != nil {
 				mu.Lock()
-				logx.FromContext(ctx).Error().Err(err).
-					Str("table", config.table).
-					Str("field", config.field).
-					Str("tag_definition_id", tagDefID).
-					Msg("failed to query tag definition edges")
+				logx.FromContext(ctx).Error().Err(err).Str("table", config.table).Str("field", config.field).Str("tag_definition_id", tagDefID).Msg("failed to query tag definition edges")
 				*allErrors = append(*allErrors, fmt.Sprintf("failed to check if tag definition %s is in use: %v", tagName, err))
 				mu.Unlock()
 				return
@@ -211,11 +207,7 @@ func isTagDefinitionInUse(ctx context.Context, client *generated.Client, tagDefI
 			if rows.Next() {
 				if err := rows.Scan(&count); err != nil {
 					mu.Lock()
-					logx.FromContext(ctx).Error().Err(err).
-						Str("table", config.table).
-						Str("field", config.field).
-						Str("tag_definition_id", tagDefID).
-						Msg("failed to scan tag definition edge count")
+					logx.FromContext(ctx).Error().Err(err).Str("table", config.table).Str("field", config.field).Str("tag_definition_id", tagDefID).Msg("failed to scan tag definition edge count")
 					*allErrors = append(*allErrors, fmt.Sprintf("failed to check if tag definition %s is in use: %v", tagName, err))
 					mu.Unlock()
 					return

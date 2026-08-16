@@ -274,7 +274,10 @@ func HookCustomTypeEnumDelete() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			ids := getMutationIDs(ctx, m)
+			ids, err := getMutationIDs(ctx, m)
+			if err != nil {
+				return nil, err
+			}
 			if len(ids) == 0 {
 				return next.Mutate(ctx, m)
 			}
@@ -316,10 +319,7 @@ func HookCustomTypeEnumDelete() ent.Hook {
 			}
 
 			if len(errs) > 0 {
-				logx.FromContext(ctx).Error().
-					Int("error_count", len(errs)).
-					Strs("errors", errs).
-					Msg("custom enum deletion failed: enums are in use")
+				logx.FromContext(ctx).Error().Int("error_count", len(errs)).Strs("errors", errs).Msg("custom enum deletion failed: enums are in use")
 				return nil, fmt.Errorf("%w: %d enum(s) are in use and cannot be deleted", ErrCustomEnumInUse, len(errs)) //nolint:err113
 			}
 

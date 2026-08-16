@@ -9,6 +9,10 @@ var (
 	ErrDispatchInputInvalid = errors.New("integrations/operations: dispatch input invalid")
 	// ErrInstallationIDRequired indicates the installation identifier is missing
 	ErrInstallationIDRequired = errors.New("integrations/operations: installation id required")
+	// ErrIntegrationIDRequired indicates resolution requires an explicit integration ID
+	ErrIntegrationIDRequired = errors.New("integrations/operations: integration id required")
+	// ErrInstallationDefinitionMismatch indicates the resolved installation does not match the requested definition
+	ErrInstallationDefinitionMismatch = errors.New("integrations/operations: installation definition mismatch")
 	// ErrOperationConfigInvalid indicates queued operation config failed caller-input validation
 	ErrOperationConfigInvalid = errors.New("integrations/operations: operation config invalid")
 	// ErrRunIDRequired indicates the run identifier is missing
@@ -37,8 +41,6 @@ var (
 	ErrIngestUnsupportedSchema = errors.New("integrations/operations: ingest schema unsupported")
 	// ErrIngestPersistFailed indicates the mapped record could not be persisted
 	ErrIngestPersistFailed = errors.New("integrations/operations: ingest persistence failed")
-	// ErrIngestRecordsFailed indicates one or more records in the batch failed to map or persist
-	ErrIngestRecordsFailed = errors.New("integrations/operations: ingest records failed")
 	// ErrIngestIntegrationUnresolved indicates the integration record could not be resolved for an ingest operation
 	ErrIngestIntegrationUnresolved = errors.New("integrations/operations: ingest integration unresolved")
 	// ErrOperationDisabled indicates the operation is disabled for this installation and the reconcile cycle should stop

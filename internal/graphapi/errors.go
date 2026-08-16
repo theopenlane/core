@@ -28,11 +28,7 @@ var ErrOriginNotAllowed = errors.New("websocket origin not allowed")
 // parseRequestError logs and parses the error and returns the appropriate error type for the client
 func parseRequestError(ctx context.Context, err error, a common.Action) error {
 	// log the error for debugging, these can be user errors so we want to log at info level instead of error level to avoid alert fatigue, but we still want to log the error for debugging purposes
-	logx.FromContext(ctx).Info().
-		Err(err).
-		Str("action", a.Action).
-		Str("object", a.Object).
-		Msg("error processing request")
+	logx.FromContext(ctx).Info().Err(err).Str("action", a.Action).Str("object", a.Object).Msg("error processing request")
 
 	switch {
 	case errors.Is(err, rule.ErrRequiredScopeNotSet):
@@ -41,10 +37,7 @@ func parseRequestError(ctx context.Context, err error, a common.Action) error {
 	case generated.IsValidationError(err):
 		validationError := err.(*generated.ValidationError)
 
-		logx.FromContext(ctx).Info().
-			Err(validationError).
-			Str("field", validationError.Name).
-			Msg("validation error")
+		logx.FromContext(ctx).Info().Err(validationError).Str("field", validationError.Name).Msg("validation error")
 
 		errMsg := validationError.Error()
 		if strings.Contains(strings.ToLower(errMsg), "generated:") {

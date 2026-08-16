@@ -335,9 +335,13 @@ func ValidateLinkRules(sourceSchema *entityops.Schema, rules []types.LinkRule) e
 	return nil
 }
 
-// validateLinkRuleFields checks one resolved rule's match configuration against the catalogs of the
-// source and target schemas
+// validateLinkRuleFields checks one resolved rule's match configuration; edges targeting an
+// unregistered schema are rejected since link resolution needs the target catalog
 func validateLinkRuleFields(sourceSchema *entityops.Schema, edge entityops.EdgeDescriptor, rule types.LinkRule) error {
+	if edge.Target == nil {
+		return fmt.Errorf("%w: %s.%s targets %s", ErrLinkTargetNotRegistered, sourceSchema.Name, edge.Name, edge.TargetType)
+	}
+
 	fieldMatch := rule.TargetField != "" && (rule.SourceField != "" || rule.SourceList != "")
 
 	if fieldMatch == (rule.Expression != "") {
@@ -348,7 +352,7 @@ func validateLinkRuleFields(sourceSchema *entityops.Schema, edge entityops.EdgeD
 		return nil
 	}
 
-	if edge.Target == nil || !edge.Target.MatchKeyField(rule.TargetField) {
+	if !edge.Target.MatchKeyField(rule.TargetField) {
 		return fmt.Errorf("%w: %s is not a match-key field on %s", ErrLinkTargetFieldInvalid, rule.TargetField, edge.TargetType)
 	}
 

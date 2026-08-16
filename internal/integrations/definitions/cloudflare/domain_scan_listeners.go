@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"net/url"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
@@ -24,6 +23,7 @@ import (
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/pkg/urlx"
 )
 
 // domainScanEnrichmentMetadataKey is the Scan.Metadata key used to carry the enrichment data
@@ -213,7 +213,7 @@ func domainScanSystemContext(ctx context.Context, organizationID string) context
 
 // hostFromURL returns rawURL's host, falling back to rawURL unchanged if it doesn't parse
 func hostFromURL(rawURL string) string {
-	if parsed, err := url.Parse(rawURL); err == nil && parsed.Host != "" {
+	if parsed, err := urlx.Parse(rawURL); err == nil {
 		return parsed.Host
 	}
 

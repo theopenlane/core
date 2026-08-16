@@ -436,6 +436,8 @@ type TestGraphClient interface {
 	CreateBulkCSVOrgMembers(ctx context.Context, input graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*CreateBulkCSVOrgMembers, error)
 	CreateBulkOrgMembers(ctx context.Context, input []*CreateOrgMembershipInput, interceptors ...clientv2.RequestInterceptor) (*CreateBulkOrgMembers, error)
 	GetOrgMembersByOrgID(ctx context.Context, where *OrgMembershipWhereInput, interceptors ...clientv2.RequestInterceptor) (*GetOrgMembersByOrgID, error)
+	LeaveOrganization(ctx context.Context, organizationID string, interceptors ...clientv2.RequestInterceptor) (*LeaveOrganization, error)
+	RemoveBulkUsersFromOrg(ctx context.Context, ids []string, interceptors ...clientv2.RequestInterceptor) (*RemoveBulkUsersFromOrg, error)
 	RemoveUserFromOrg(ctx context.Context, deleteOrgMembershipID string, interceptors ...clientv2.RequestInterceptor) (*RemoveUserFromOrg, error)
 	UpdateBulkOrgMemberRoles(ctx context.Context, ids []string, input UpdateOrgMembershipInput, interceptors ...clientv2.RequestInterceptor) (*UpdateBulkOrgMemberRoles, error)
 	UpdateUserRoleInOrg(ctx context.Context, updateOrgMemberID string, input UpdateOrgMembershipInput, interceptors ...clientv2.RequestInterceptor) (*UpdateUserRoleInOrg, error)
@@ -86089,6 +86091,42 @@ func (t *GetOrgMembersByOrgID_OrgMemberships) GetEdges() []*GetOrgMembersByOrgID
 	return t.Edges
 }
 
+type LeaveOrganization_LeaveOrganization struct {
+	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
+}
+
+func (t *LeaveOrganization_LeaveOrganization) GetDeletedID() string {
+	if t == nil {
+		t = &LeaveOrganization_LeaveOrganization{}
+	}
+	return t.DeletedID
+}
+
+type RemoveBulkUsersFromOrg_DeleteBulkOrgMembership struct {
+	DeletedIDs    []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+	Error         *string  "json:\"error,omitempty\" graphql:\"error\""
+	NotDeletedIDs []string "json:\"notDeletedIDs\" graphql:\"notDeletedIDs\""
+}
+
+func (t *RemoveBulkUsersFromOrg_DeleteBulkOrgMembership) GetDeletedIDs() []string {
+	if t == nil {
+		t = &RemoveBulkUsersFromOrg_DeleteBulkOrgMembership{}
+	}
+	return t.DeletedIDs
+}
+func (t *RemoveBulkUsersFromOrg_DeleteBulkOrgMembership) GetError() *string {
+	if t == nil {
+		t = &RemoveBulkUsersFromOrg_DeleteBulkOrgMembership{}
+	}
+	return t.Error
+}
+func (t *RemoveBulkUsersFromOrg_DeleteBulkOrgMembership) GetNotDeletedIDs() []string {
+	if t == nil {
+		t = &RemoveBulkUsersFromOrg_DeleteBulkOrgMembership{}
+	}
+	return t.NotDeletedIDs
+}
+
 type RemoveUserFromOrg_DeleteOrgMembership struct {
 	DeletedID string "json:\"deletedID\" graphql:\"deletedID\""
 }
@@ -171355,6 +171393,28 @@ func (t *GetOrgMembersByOrgID) GetOrgMemberships() *GetOrgMembersByOrgID_OrgMemb
 	return &t.OrgMemberships
 }
 
+type LeaveOrganization struct {
+	LeaveOrganization LeaveOrganization_LeaveOrganization "json:\"leaveOrganization\" graphql:\"leaveOrganization\""
+}
+
+func (t *LeaveOrganization) GetLeaveOrganization() *LeaveOrganization_LeaveOrganization {
+	if t == nil {
+		t = &LeaveOrganization{}
+	}
+	return &t.LeaveOrganization
+}
+
+type RemoveBulkUsersFromOrg struct {
+	DeleteBulkOrgMembership RemoveBulkUsersFromOrg_DeleteBulkOrgMembership "json:\"deleteBulkOrgMembership\" graphql:\"deleteBulkOrgMembership\""
+}
+
+func (t *RemoveBulkUsersFromOrg) GetDeleteBulkOrgMembership() *RemoveBulkUsersFromOrg_DeleteBulkOrgMembership {
+	if t == nil {
+		t = &RemoveBulkUsersFromOrg{}
+	}
+	return &t.DeleteBulkOrgMembership
+}
+
 type RemoveUserFromOrg struct {
 	DeleteOrgMembership RemoveUserFromOrg_DeleteOrgMembership "json:\"deleteOrgMembership\" graphql:\"deleteOrgMembership\""
 }
@@ -197909,6 +197969,56 @@ func (c *Client) GetOrgMembersByOrgID(ctx context.Context, where *OrgMembershipW
 	return &res, nil
 }
 
+const LeaveOrganizationDocument = `mutation LeaveOrganization ($organizationID: ID!) {
+	leaveOrganization(organizationID: $organizationID) {
+		deletedID
+	}
+}
+`
+
+func (c *Client) LeaveOrganization(ctx context.Context, organizationID string, interceptors ...clientv2.RequestInterceptor) (*LeaveOrganization, error) {
+	vars := map[string]any{
+		"organizationID": organizationID,
+	}
+
+	var res LeaveOrganization
+	if err := c.Client.Post(ctx, "LeaveOrganization", LeaveOrganizationDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
+const RemoveBulkUsersFromOrgDocument = `mutation RemoveBulkUsersFromOrg ($ids: [ID!]!) {
+	deleteBulkOrgMembership(ids: $ids) {
+		deletedIDs
+		notDeletedIDs
+		error
+	}
+}
+`
+
+func (c *Client) RemoveBulkUsersFromOrg(ctx context.Context, ids []string, interceptors ...clientv2.RequestInterceptor) (*RemoveBulkUsersFromOrg, error) {
+	vars := map[string]any{
+		"ids": ids,
+	}
+
+	var res RemoveBulkUsersFromOrg
+	if err := c.Client.Post(ctx, "RemoveBulkUsersFromOrg", RemoveBulkUsersFromOrgDocument, &res, vars, interceptors...); err != nil {
+		if c.Client.ParseDataWhenErrors {
+			return &res, err
+		}
+
+		return nil, err
+	}
+
+	return &res, nil
+}
+
 const RemoveUserFromOrgDocument = `mutation RemoveUserFromOrg ($deleteOrgMembershipId: ID!) {
 	deleteOrgMembership(id: $deleteOrgMembershipId) {
 		deletedID
@@ -219148,6 +219258,8 @@ var DocumentOperationNames = map[string]string{
 	CreateBulkCSVOrgMembersDocument:               "CreateBulkCSVOrgMembers",
 	CreateBulkOrgMembersDocument:                  "CreateBulkOrgMembers",
 	GetOrgMembersByOrgIDDocument:                  "GetOrgMembersByOrgID",
+	LeaveOrganizationDocument:                     "LeaveOrganization",
+	RemoveBulkUsersFromOrgDocument:                "RemoveBulkUsersFromOrg",
 	RemoveUserFromOrgDocument:                     "RemoveUserFromOrg",
 	UpdateBulkOrgMemberRolesDocument:              "UpdateBulkOrgMemberRoles",
 	UpdateUserRoleInOrgDocument:                   "UpdateUserRoleInOrg",

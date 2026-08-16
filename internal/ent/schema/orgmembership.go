@@ -135,19 +135,6 @@ func (o OrgMembership) Edges() []ent.Edge {
 func (OrgMembership) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.MembershipChecks("organization"),
-		// Delete groups + program members when orgmembership is deleted
-		entx.CascadeThroughAnnotationField(
-			[]entx.ThroughCleanup{
-				{
-					Field:   "User", // use the user field because the orgmembership is deleted
-					Through: "GroupMembership",
-				},
-				{
-					Field:   "User", // use the user field because the orgmembership is deleted
-					Through: "ProgramMembership",
-				},
-			},
-		),
 		entx.FGACrudParent(Organization{}.Name()),
 	}
 }

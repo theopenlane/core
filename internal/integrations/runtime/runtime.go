@@ -39,6 +39,8 @@ type Config struct {
 	RedisClient *redis.Client
 	// CatalogConfig supplies operator-level credentials for all built-in definitions
 	CatalogConfig catalog.Config
+	// FederationIssuer is the issuer URI customer identity providers federate against
+	FederationIssuer string
 	// DevMode is the server-level development flag; when true, integrations that
 	// support it use local file-based senders instead of calling provider APIs
 	DevMode bool
@@ -239,7 +241,7 @@ func New(config Config) (*Runtime, error) {
 
 		builders := config.DefinitionBuilders
 		if len(builders) == 0 && config.Registry == nil {
-			builders = catalog.Builders(config.CatalogConfig, config.DevMode)
+			builders = catalog.Builders(config.CatalogConfig, config.FederationIssuer, config.DevMode)
 		}
 
 		if len(builders) > 0 {

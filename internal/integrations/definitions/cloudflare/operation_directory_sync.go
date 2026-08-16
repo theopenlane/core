@@ -154,8 +154,9 @@ func (DirectorySync) Run(ctx context.Context, credentials types.CredentialBindin
 			Envelopes: groupEnvelopes,
 		},
 		{
-			Schema:    entityops.SchemaDirectoryMembership.Name,
-			Envelopes: membershipEnvelopes,
+			Schema:           entityops.SchemaDirectoryMembership.Name,
+			Envelopes:        membershipEnvelopes,
+			SnapshotComplete: true,
 		},
 	}, nil
 }

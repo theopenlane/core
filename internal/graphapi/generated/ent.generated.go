@@ -58423,29 +58423,6 @@ func (ec *executionContext) fieldContext_AssessmentResponse_workflowTimeline(ctx
 	return fc, nil
 }
 
-func (ec *executionContext) _AssessmentResponse_questionnaireTransformError(ctx context.Context, field graphql.CollectedField, obj *generated.AssessmentResponse) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_AssessmentResponse_questionnaireTransformError(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.QuestionnaireTransformError, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
-			return ec.marshalOString2string(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
-func (ec *executionContext) fieldContext_AssessmentResponse_questionnaireTransformError(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	return graphql.NewScalarFieldContext("AssessmentResponse", field, false, false, errors.New("field of type String does not have child fields"))
-}
-
 func (ec *executionContext) _AssessmentResponseConnection_edges(ctx context.Context, field graphql.CollectedField, obj *generated.AssessmentResponseConnection) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -442734,11 +442711,6 @@ func (ec *executionContext) _AssessmentResponse(ctx context.Context, sel ast.Sel
 			}
 
 			out.Concurrently(i, func(ctx context.Context) graphql.Marshaler { return innerFunc(ctx, out) })
-		case "questionnaireTransformError":
-			out.Values[i] = ec._AssessmentResponse_questionnaireTransformError(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				atomic.AddUint32(&out.Invalids, 1)
-			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

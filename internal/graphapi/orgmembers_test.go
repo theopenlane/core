@@ -10,8 +10,13 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/programmembership"
+	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 )
@@ -707,6 +712,337 @@ func TestMutationDeleteOrgMembers(t *testing.T) {
 	}
 
 	cleanupOrganizationDataWithContext(localTestOrg.owner.UserCtx, t)
+}
+
+func TestMutationLeaveOrganization(t *testing.T) {
+	t.Parallel()
+
+	currentOrg := suite.seedOrgOwner(t)
+	orgToLeave := suite.seedOrgOwner(t)
+
+	memberRole := enums.RoleMember
+	member, err := suite.client.api.AddUserToOrgWithRole(orgToLeave.owner.UserCtx, testclient.CreateOrgMembershipInput{
+		OrganizationID: orgToLeave.owner.OrganizationID,
+		UserID:         currentOrg.owner.ID,
+		Role:           &memberRole,
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, member != nil)
+
+	resp, err := suite.client.api.LeaveOrganization(currentOrg.owner.UserCtx, orgToLeave.owner.OrganizationID)
+
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+	assert.Check(t, is.Equal(member.CreateOrgMembership.OrgMembership.ID, resp.LeaveOrganization.DeletedID))
+
+	members, err := suite.client.api.GetOrgMembersByOrgID(orgToLeave.owner.UserCtx, &testclient.OrgMembershipWhereInput{
+		OrganizationID: &orgToLeave.owner.OrganizationID,
+		UserID:         &currentOrg.owner.ID,
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, members != nil)
+	assert.Check(t, is.Len(members.OrgMemberships.Edges, 0))
+
+	suite.assertDefaultOrgUpdate(currentOrg.owner.UserCtx, t, currentOrg.owner.ID, orgToLeave.owner.OrganizationID, false)
+
+	cleanupOrganizationDataWithContext(currentOrg.owner.UserCtx, t)
+	cleanupOrganizationDataWithContext(orgToLeave.owner.UserCtx, t)
+}
+
+func TestMutationLeaveOrganizationPreservesOtherOrgMemberships(t *testing.T) {
+	t.Parallel()
+
+	currentOrg := suite.seedOrgOwner(t)
+	orgToLeave := suite.seedOrgOwner(t)
+
+	userID := currentOrg.owner.ID
+
+	memberRole := enums.RoleMember
+	member, err := suite.client.api.AddUserToOrgWithRole(orgToLeave.owner.UserCtx, testclient.CreateOrgMembershipInput{
+		OrganizationID: orgToLeave.owner.OrganizationID,
+		UserID:         userID,
+		Role:           &memberRole,
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, member != nil)
+
+	// creating a program adds the creator as a program admin, giving the user a
+	// program membership in the org they are staying in
+	(&ProgramBuilder{client: suite.client}).MustNew(currentOrg.owner.UserCtx, t)
+
+	// the user should be a member of the managed groups in both orgs
+	groupsBefore := suite.countOrgScopedGroupMemberships(t, userID, currentOrg.owner.OrganizationID)
+	assert.Check(t, groupsBefore > 0)
+
+	programsBefore := suite.countOrgScopedProgramMemberships(t, userID, currentOrg.owner.OrganizationID)
+	assert.Check(t, programsBefore > 0)
+
+	assert.Check(t, suite.countOrgScopedGroupMemberships(t, userID, orgToLeave.owner.OrganizationID) > 0)
+
+	resp, err := suite.client.api.LeaveOrganization(currentOrg.owner.UserCtx, orgToLeave.owner.OrganizationID)
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+
+	// memberships in the org the user left should be removed
+	assert.Check(t, is.Equal(0, suite.countOrgScopedGroupMemberships(t, userID, orgToLeave.owner.OrganizationID)))
+	assert.Check(t, is.Equal(0, suite.countOrgScopedProgramMemberships(t, userID, orgToLeave.owner.OrganizationID)))
+
+	// memberships in every other org must be left intact
+	assert.Check(t, is.Equal(groupsBefore, suite.countOrgScopedGroupMemberships(t, userID, currentOrg.owner.OrganizationID)))
+	assert.Check(t, is.Equal(programsBefore, suite.countOrgScopedProgramMemberships(t, userID, currentOrg.owner.OrganizationID)))
+
+	// the user must specifically still be in the system managed groups of the org they stayed in
+	suite.assertManagedGroupMembership(t, userID, currentOrg.owner.OrganizationID, hooks.AdminsGroup)
+	suite.assertManagedGroupMembership(t, userID, currentOrg.owner.OrganizationID, hooks.AllMembersGroup)
+
+	cleanupOrganizationDataWithContext(currentOrg.owner.UserCtx, t)
+	cleanupOrganizationDataWithContext(orgToLeave.owner.UserCtx, t)
+}
+
+func TestMutationDeleteOrgMembersPreservesOtherOrgMemberships(t *testing.T) {
+	t.Parallel()
+
+	homeOrg := suite.seedOrgOwner(t)
+	otherOrg := suite.seedOrgOwner(t)
+
+	userID := homeOrg.owner.ID
+
+	memberRole := enums.RoleMember
+	member, err := suite.client.api.AddUserToOrgWithRole(otherOrg.owner.UserCtx, testclient.CreateOrgMembershipInput{
+		OrganizationID: otherOrg.owner.OrganizationID,
+		UserID:         userID,
+		Role:           &memberRole,
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, member != nil)
+
+	groupsBefore := suite.countOrgScopedGroupMemberships(t, userID, homeOrg.owner.OrganizationID)
+	assert.Assert(t, groupsBefore > 0)
+
+	// the other org's owner removes the user from their org
+	resp, err := suite.client.api.RemoveUserFromOrg(otherOrg.owner.UserCtx, member.CreateOrgMembership.OrgMembership.ID)
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+
+	// memberships in the org the user was removed from should be gone
+	assert.Check(t, is.Equal(0, suite.countOrgScopedGroupMemberships(t, userID, otherOrg.owner.OrganizationID)))
+
+	// memberships in the user's other org must be left intact
+	assert.Check(t, is.Equal(groupsBefore, suite.countOrgScopedGroupMemberships(t, userID, homeOrg.owner.OrganizationID)))
+	suite.assertManagedGroupMembership(t, userID, homeOrg.owner.OrganizationID, hooks.AdminsGroup)
+	suite.assertManagedGroupMembership(t, userID, homeOrg.owner.OrganizationID, hooks.AllMembersGroup)
+
+	cleanupOrganizationDataWithContext(homeOrg.owner.UserCtx, t)
+	cleanupOrganizationDataWithContext(otherOrg.owner.UserCtx, t)
+}
+
+func TestMutationDeleteOrganizationPreservesOtherOrgMemberships(t *testing.T) {
+	t.Parallel()
+
+	homeOrg := suite.seedOrgOwner(t)
+	orgToDelete := suite.seedOrgOwner(t)
+
+	userID := homeOrg.owner.ID
+
+	memberRole := enums.RoleMember
+	member, err := suite.client.api.AddUserToOrgWithRole(orgToDelete.owner.UserCtx, testclient.CreateOrgMembershipInput{
+		OrganizationID: orgToDelete.owner.OrganizationID,
+		UserID:         userID,
+		Role:           &memberRole,
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, member != nil)
+
+	groupsBefore := suite.countOrgScopedGroupMemberships(t, userID, homeOrg.owner.OrganizationID)
+	assert.Assert(t, groupsBefore > 0)
+	assert.Check(t, suite.countOrgScopedGroupMemberships(t, userID, orgToDelete.owner.OrganizationID) > 0)
+
+	// delete the entire organization the user is a member of
+	resp, err := suite.client.api.DeleteOrganization(orgToDelete.owner.UserCtx, orgToDelete.owner.OrganizationID)
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+
+	// the deleted org's own groups and memberships are removed asynchronously by the
+	// organization cascade delete listener, so only the cross-org invariant is asserted here:
+	// memberships in the user's other org must be left intact
+	assert.Check(t, is.Equal(groupsBefore, suite.countOrgScopedGroupMemberships(t, userID, homeOrg.owner.OrganizationID)))
+	suite.assertManagedGroupMembership(t, userID, homeOrg.owner.OrganizationID, hooks.AdminsGroup)
+	suite.assertManagedGroupMembership(t, userID, homeOrg.owner.OrganizationID, hooks.AllMembersGroup)
+
+	cleanupOrganizationDataWithContext(homeOrg.owner.UserCtx, t)
+}
+
+func TestMutationDeleteBulkOrgMembers(t *testing.T) {
+	t.Parallel()
+
+	homeOrg := suite.seedOrgOwner(t)
+	bulkOrg := suite.seedOrgOwner(t)
+
+	crossOrgUserID := homeOrg.owner.ID
+
+	// user with a membership in another org, to verify bulk removal stays org-scoped
+	memberRole := enums.RoleMember
+	crossOrgMember, err := suite.client.api.AddUserToOrgWithRole(bulkOrg.owner.UserCtx, testclient.CreateOrgMembershipInput{
+		OrganizationID: bulkOrg.owner.OrganizationID,
+		UserID:         crossOrgUserID,
+		Role:           &memberRole,
+	})
+	assert.NilError(t, err)
+
+	otherMember := (&OrgMemberBuilder{client: suite.client}).MustNew(bulkOrg.owner.UserCtx, t)
+
+	allowCtx := privacy.DecisionContext(context.Background(), privacy.Allow)
+	ownerMembershipID, err := suite.client.db.OrgMembership.Query().
+		Where(
+			orgmembership.OrganizationID(bulkOrg.owner.OrganizationID),
+			orgmembership.UserID(bulkOrg.owner.ID),
+		).
+		OnlyID(allowCtx)
+	assert.NilError(t, err)
+
+	homeGroupsBefore := suite.countOrgScopedGroupMemberships(t, crossOrgUserID, homeOrg.owner.OrganizationID)
+	assert.Assert(t, homeGroupsBefore > 0)
+	assert.Check(t, suite.countOrgScopedGroupMemberships(t, crossOrgUserID, bulkOrg.owner.OrganizationID) > 0)
+	assert.Check(t, suite.countOrgScopedGroupMemberships(t, otherMember.UserID, bulkOrg.owner.OrganizationID) > 0)
+
+	crossOrgMembershipID := crossOrgMember.CreateOrgMembership.OrgMembership.ID
+
+	resp, err := suite.client.api.RemoveBulkUsersFromOrg(bulkOrg.owner.UserCtx, []string{
+		crossOrgMembershipID,
+		otherMember.ID,
+		ownerMembershipID,
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+
+	// the two regular members are removed, the owner is protected
+	assert.Check(t, is.Contains(resp.DeleteBulkOrgMembership.DeletedIDs, crossOrgMembershipID))
+	assert.Check(t, is.Contains(resp.DeleteBulkOrgMembership.DeletedIDs, otherMember.ID))
+	assert.Check(t, is.Contains(resp.DeleteBulkOrgMembership.NotDeletedIDs, ownerMembershipID))
+	assert.Check(t, resp.DeleteBulkOrgMembership.Error != nil)
+
+	// group memberships in the bulk org are cleaned up for the removed members
+	assert.Check(t, is.Equal(0, suite.countOrgScopedGroupMemberships(t, crossOrgUserID, bulkOrg.owner.OrganizationID)))
+	assert.Check(t, is.Equal(0, suite.countOrgScopedGroupMemberships(t, otherMember.UserID, bulkOrg.owner.OrganizationID)))
+
+	// the owner keeps their memberships in the bulk org
+	assert.Check(t, suite.countOrgScopedGroupMemberships(t, bulkOrg.owner.ID, bulkOrg.owner.OrganizationID) > 0)
+
+	// memberships in the removed user's other org must be left intact
+	assert.Check(t, is.Equal(homeGroupsBefore, suite.countOrgScopedGroupMemberships(t, crossOrgUserID, homeOrg.owner.OrganizationID)))
+	suite.assertManagedGroupMembership(t, crossOrgUserID, homeOrg.owner.OrganizationID, hooks.AdminsGroup)
+	suite.assertManagedGroupMembership(t, crossOrgUserID, homeOrg.owner.OrganizationID, hooks.AllMembersGroup)
+
+	cleanupOrganizationDataWithContext(homeOrg.owner.UserCtx, t)
+	cleanupOrganizationDataWithContext(bulkOrg.owner.UserCtx, t)
+}
+
+func TestMutationLeaveOrganizationReassignsDefaultOrgToMemberOrg(t *testing.T) {
+	t.Parallel()
+
+	user := suite.seedOrgOwner(t)
+	orgToLeave := suite.seedOrgOwner(t)
+
+	userID := user.owner.ID
+
+	memberRole := enums.RoleMember
+	member, err := suite.client.api.AddUserToOrgWithRole(orgToLeave.owner.UserCtx, testclient.CreateOrgMembershipInput{
+		OrganizationID: orgToLeave.owner.OrganizationID,
+		UserID:         userID,
+		Role:           &memberRole,
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, member != nil)
+
+	// make the org they are about to leave their default org
+	allowCtx := privacy.DecisionContext(context.Background(), privacy.Allow)
+	_, err = suite.client.db.UserSetting.Update().
+		Where(usersetting.UserID(userID)).
+		SetDefaultOrgID(orgToLeave.owner.OrganizationID).
+		Save(allowCtx)
+	assert.NilError(t, err)
+
+	resp, err := suite.client.api.LeaveOrganization(user.owner.UserCtx, orgToLeave.owner.OrganizationID)
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+
+	// the reassigned default org must be an org the user is actually a member of,
+	// not an arbitrary org picked from the unscoped privacy-allowed query
+	setting, err := suite.client.db.UserSetting.Query().
+		Where(usersetting.UserID(userID)).
+		WithDefaultOrg().
+		Only(allowCtx)
+	assert.NilError(t, err)
+	assert.Assert(t, setting.Edges.DefaultOrg != nil)
+
+	newDefaultOrgID := setting.Edges.DefaultOrg.ID
+	assert.Check(t, newDefaultOrgID != orgToLeave.owner.OrganizationID)
+
+	isMember, err := suite.client.db.OrgMembership.Query().
+		Where(
+			orgmembership.UserID(userID),
+			orgmembership.OrganizationID(newDefaultOrgID),
+		).
+		Exist(allowCtx)
+	assert.NilError(t, err)
+	assert.Check(t, isMember, "default org %s was reassigned to an org the user is not a member of", newDefaultOrgID)
+
+	cleanupOrganizationDataWithContext(user.owner.UserCtx, t)
+	cleanupOrganizationDataWithContext(orgToLeave.owner.UserCtx, t)
+}
+
+func (suite *GraphTestSuite) countOrgScopedGroupMemberships(t *testing.T, userID, orgID string) int {
+	t.Helper()
+
+	allowCtx := privacy.DecisionContext(context.Background(), privacy.Allow)
+
+	count, err := suite.client.db.GroupMembership.Query().
+		Where(
+			groupmembership.UserID(userID),
+			groupmembership.HasGroupWith(
+				group.OwnerID(orgID),
+				group.DeletedAtIsNil(),
+			),
+		).
+		Count(allowCtx)
+	assert.NilError(t, err)
+
+	return count
+}
+
+func (suite *GraphTestSuite) countOrgScopedProgramMemberships(t *testing.T, userID, orgID string) int {
+	t.Helper()
+
+	allowCtx := privacy.DecisionContext(context.Background(), privacy.Allow)
+
+	count, err := suite.client.db.ProgramMembership.Query().
+		Where(
+			programmembership.UserID(userID),
+			programmembership.HasProgramWith(program.OwnerID(orgID)),
+		).
+		Count(allowCtx)
+	assert.NilError(t, err)
+
+	return count
+}
+
+func (suite *GraphTestSuite) assertManagedGroupMembership(t *testing.T, userID, orgID, groupName string) {
+	t.Helper()
+
+	allowCtx := privacy.DecisionContext(context.Background(), privacy.Allow)
+
+	exists, err := suite.client.db.GroupMembership.Query().
+		Where(
+			groupmembership.UserID(userID),
+			groupmembership.HasGroupWith(
+				group.OwnerID(orgID),
+				group.IsManaged(true),
+				group.Name(groupName),
+			),
+		).
+		Exist(allowCtx)
+	assert.NilError(t, err)
+	assert.Check(t, exists, "expected user %s to be in managed group %q of org %s", userID, groupName, orgID)
 }
 
 func (suite *GraphTestSuite) assertDefaultOrgUpdate(ctx context.Context, t *testing.T, userID, orgID string, isEqual bool) {
