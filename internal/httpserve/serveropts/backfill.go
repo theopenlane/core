@@ -24,6 +24,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/hooks/contextx"
 	intobvs "github.com/theopenlane/core/internal/integrations/observability"
 	"github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/pkg/logx"
@@ -52,6 +53,13 @@ func WithBackfill(ctx context.Context, dbClient *ent.Client) ServerOption {
 		go func() {
 			backfillCtx := privacy.DecisionContext(ctx, privacy.Allow)
 			backfillCtx = auth.WithCaller(backfillCtx, &auth.Caller{Capabilities: backfillBypassCaps})
+
+			// the ent client carries the authz client, add it to the context to ensure its available when needed, e.g. on Delete operations to remove tuples
+			backfillCtx = ent.NewContext(backfillCtx, dbClient)
+
+			// the backfill runs as an internal request, which the delete hook otherwise skips, but the
+			// rows it removes still need their tuples cleaned up so it opts back in
+			backfillCtx = contextx.WithTupleCleanup(backfillCtx)
 
 			BackfillDirectoryDuplicates(backfillCtx, dbClient)
 
