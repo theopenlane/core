@@ -94,6 +94,7 @@ func (e *WorkflowEngine) buildActionCELVars(ctx context.Context, instance *gener
 
 	// Use trigger change-set from instance context (set when workflow was triggered)
 	triggerChangeSet := workflows.TriggerChangeSet(instance.Context)
+
 	proposedChanges := triggerChangeSet.ProposedChanges
 
 	// Ensure the object node is loaded so CEL has access to concrete fields.

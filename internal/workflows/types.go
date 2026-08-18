@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/workflows/observability"
 )
@@ -37,13 +38,17 @@ func (o *Object) CELValue() any {
 
 // ObjectFromRef builds an Object from a WorkflowObjectRef record.
 func ObjectFromRef(ref *generated.WorkflowObjectRef) (*Object, error) {
-	for _, resolver := range objectFromRefRegistry {
-		if obj, ok := resolver(ref); ok {
-			return obj, nil
-		}
+	schema, objectID, err := entityops.WorkflowObjectFromRef(ref)
+	if err != nil {
+		return nil, ErrMissingObjectID
 	}
 
-	return nil, ErrMissingObjectID
+	objectType := enums.ToWorkflowObjectType(schema.Name)
+	if objectType == nil {
+		return nil, ErrUnsupportedObjectType
+	}
+
+	return &Object{ID: objectID, Type: *objectType}, nil
 }
 
 // TargetConfig defines who should receive workflow actions
@@ -94,25 +99,6 @@ func BuildCELVars(obj *Object, changedFields []string, changedEdges []string, ad
 		"user_id":          userID,
 		"proposed_changes": proposedChanges,
 	}
-}
-
-// ObjectFromRefRegistry allows generated code to register new mappings from WorkflowObjectRef to Object.
-// This makes adding new workflowable schemas additive (codegen can call RegisterObjectRefResolver in init()).
-var objectFromRefRegistry []func(*generated.WorkflowObjectRef) (*Object, bool)
-
-// RegisterObjectRefResolver adds a resolver to the registry.
-func RegisterObjectRefResolver(resolver func(*generated.WorkflowObjectRef) (*Object, bool)) {
-	objectFromRefRegistry = append(objectFromRefRegistry, resolver)
-}
-
-// ObjectRefQueryBuilder allows generated code to register WorkflowObjectRef predicates per object type.
-type ObjectRefQueryBuilder func(*generated.WorkflowObjectRefQuery, *Object) (*generated.WorkflowObjectRefQuery, bool)
-
-var objectRefQueryBuilders []ObjectRefQueryBuilder
-
-// RegisterObjectRefQueryBuilder adds a WorkflowObjectRef query builder to the registry.
-func RegisterObjectRefQueryBuilder(builder ObjectRefQueryBuilder) {
-	objectRefQueryBuilders = append(objectRefQueryBuilders, builder)
 }
 
 // AssignmentContextBuilder builds workflow runtime context (assignments, instance, initiator) for CEL evaluation.

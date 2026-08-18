@@ -1,20 +1,20 @@
 package gala
 
 import (
+	"encoding/json"
 	"strings"
 	"sync"
+
+	"github.com/riverqueue/river"
+	"github.com/samber/lo"
+	"github.com/theopenlane/iam/auth"
+
+	"github.com/theopenlane/core/pkg/jsonx"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
-// Registration ties a typed topic to its codec
-type Registration[T any] struct {
-	// Topic defines the typed topic contract
-	Topic Topic[T]
-	// Codec serializes and deserializes payloads for the topic
-	Codec Codec[T]
-}
-
-// Registry stores topic codecs, policies, and listeners
-type Registry struct {
+// registry stores topic codecs, policies, and listeners
+type registry struct {
 	mu sync.RWMutex
 	// topics stores topic metadata and codec wrappers by topic name
 	topics map[TopicName]topicRegistration
@@ -22,12 +22,16 @@ type Registry struct {
 	listeners map[TopicName][]registeredListener
 }
 
-// topicRegistration stores non-generic topic metadata and codec wrappers
+// topicRegistration stores non-generic topic metadata and payload wrappers
 type topicRegistration struct {
-	// encode is a wrapper around the topic codec's Encode method for non-generic payloads
+	// encode JSON-serializes non-generic payloads for the topic
 	encode func(any) ([]byte, error)
-	// decode is a wrapper around the topic codec's Decode method for non-generic payloads
+	// decode JSON-deserializes payload bytes into the topic's payload type
 	decode func([]byte) (any, error)
+	// uniqueKey derives the uniqueness key for non-generic payloads
+	uniqueKey func(any) string
+	// kind is the job kind emissions on the topic dispatch under
+	kind string
 }
 
 // registeredListener stores non-generic listener wrappers
@@ -36,129 +40,157 @@ type registeredListener struct {
 	id ListenerID
 	// name is the human-friendly name for this listener #mitb
 	name string
+	// definitionName is the unsuffixed listener name used as the metrics label
+	definitionName string
 	// ops is the set of operations this listener is interested in, empty means topic-level interest
 	ops map[string]struct{}
-	// handle is a wrapper around the listener definition's Handle method for non-generic payloads
-	handle func(HandlerContext, any) error
+	// handle wraps the definition's Handle for non-generic payloads
+	handle func(HandlerContext, any, string) error
 }
 
-// NewRegistry creates an empty topic/listener registry
-func NewRegistry() *Registry {
-	return &Registry{
+// newRegistry creates an empty topic/listener registry
+func newRegistry() *registry {
+	return &registry{
 		topics:    map[TopicName]topicRegistration{},
 		listeners: map[TopicName][]registeredListener{},
 	}
 }
 
-// RegisterTopic registers one typed topic in the registry
-func RegisterTopic[T any](registry *Registry, registration Registration[T]) error {
+// registerTopic registers one typed topic and its payload wrappers in the registry
+func registerTopic[T any](registry *registry, topic Topic[T]) error {
 	if registry == nil {
 		return ErrRegistryRequired
 	}
 
-	if err := validateTopicRegistration(registration); err != nil {
-		return err
+	if topic.Name == "" {
+		return ErrTopicNameRequired
 	}
-
-	topic := registration.Topic.Name
 
 	registry.mu.Lock()
 	defer registry.mu.Unlock()
 
-	if _, exists := registry.topics[topic]; exists {
+	if _, exists := registry.topics[topic.Name]; exists {
 		return ErrTopicAlreadyRegistered
 	}
 
-	registry.topics[topic] = topicRegistration{
-		encode: wrapTopicEncoder(registration),
-		decode: wrapTopicDecoder(registration),
+	registry.topics[topic.Name] = topicRegistration{
+		encode:    encodeTopicPayload[T],
+		decode:    decodeTopicPayload[T],
+		uniqueKey: wrapTopicUniqueKey(topic),
+		kind:      topic.Kind,
 	}
 
 	return nil
 }
 
-// AttachListener registers one typed listener in the registry
-func AttachListener[T any](registry *Registry, definition Definition[T]) (ListenerID, error) {
-	if registry == nil {
-		return "", ErrRegistryRequired
+// attachListener registers one typed listener on the gala runtime
+func attachListener[T any](g *Gala, definition Definition[T]) (ListenerID, error) {
+	if g == nil {
+		return "", ErrGalaRequired
 	}
 
 	if err := validateListenerDefinition(definition); err != nil {
 		return "", err
 	}
 
+	if definition.Schedule != nil && g.dispatchMode == DispatchModeInMemory {
+		return "", nil
+	}
+
+	name := definition.Name
+	if name == "" {
+		name = string(definition.Topic.Name)
+	}
+
 	topic := definition.Topic.Name
 
-	registry.mu.Lock()
-	defer registry.mu.Unlock()
+	g.registry.mu.Lock()
+	defer g.registry.mu.Unlock()
 
-	if _, exists := registry.topics[topic]; !exists {
+	if _, exists := g.registry.topics[topic]; !exists {
 		return "", ErrListenerTopicNotRegistered
 	}
 
 	listenerID := ListenerID(NewEventID())
 
 	listener := registeredListener{
-		id:   listenerID,
-		name: definition.Name,
-		ops:  normalizeOperations(definition.Operations),
-		handle: func(handlerCtx HandlerContext, payload any) error {
-			typedPayload, ok := payload.(T)
-			if !ok {
-				return ErrPayloadTypeMismatch
-			}
-
-			return definition.Handle(handlerCtx, typedPayload)
-		},
+		id:             listenerID,
+		name:           name + "#" + string(listenerID),
+		definitionName: name,
+		ops:            normalizeOperations(definition.Operations),
+		handle:         wrapDefinitionHandle(g, definition),
 	}
 
-	registry.listeners[topic] = append(registry.listeners[topic], listener)
+	g.registry.listeners[topic] = append(g.registry.listeners[topic], listener)
 
 	return listenerID, nil
 }
 
-// EncodePayload encodes a payload for a registered topic
-func (r *Registry) EncodePayload(topic TopicName, payload any) ([]byte, error) {
-	registration, err := r.topicRegistration(topic)
-	if err != nil {
-		return nil, err
+// wrapDefinitionHandle builds the non-generic dispatch wrapper for one definition
+func wrapDefinitionHandle[T any](g *Gala, definition Definition[T]) func(HandlerContext, any, string) error {
+	handler := definition.Handle
+	if definition.Schedule != nil {
+		handler = scheduleHandler(g, definition)
 	}
 
-	encoded, err := registration.encode(payload)
-	if err != nil {
-		return nil, err
+	return func(handlerCtx HandlerContext, payload any, operation string) error {
+		typedPayload, ok := payload.(T)
+		if !ok {
+			return ErrPayloadTypeMismatch
+		}
+
+		if definition.Gate != nil && !definition.Gate(handlerCtx.Context, typedPayload) {
+			return ErrListenerGated
+		}
+
+		caller, _ := auth.CallerFromContext(handlerCtx.Context)
+
+		if definition.Caller != nil {
+			caller = definition.Caller(caller, typedPayload)
+			handlerCtx.Context = auth.WithCaller(handlerCtx.Context, caller)
+		}
+
+		handlerCtx.Caller = caller
+
+		handlerCtx.Context = logx.WithCallerIdentity(handlerCtx.Context)
+		handlerCtx.Context = logx.WithFields(handlerCtx.Context, map[string]any{
+			"event_id":  string(handlerCtx.Envelope.ID),
+			"topic":     string(handlerCtx.Envelope.Topic),
+			"operation": operation,
+		})
+
+		if definition.LogFields != nil {
+			handlerCtx.Context = logx.WithFields(handlerCtx.Context, definition.LogFields(typedPayload))
+		}
+
+		for _, key := range definition.ContextKeys {
+			handlerCtx.Context = key(handlerCtx.Context)
+		}
+
+		err := handler(handlerCtx, typedPayload)
+		// scheduled definitions classify errors through Cancel inside the schedule loop
+		if err != nil && definition.Schedule == nil && definition.Cancel != nil && definition.Cancel(handlerCtx.Context, typedPayload, err) {
+			return river.JobCancel(err)
+		}
+
+		return err
 	}
-
-	return encoded, nil
-}
-
-// DecodePayload decodes payload bytes for a registered topic
-func (r *Registry) DecodePayload(topic TopicName, payload []byte) (any, error) {
-	registration, err := r.topicRegistration(topic)
-	if err != nil {
-		return nil, err
-	}
-
-	return registration.decode(payload)
 }
 
 // listenerNamesForTopic returns the registered listener names for a topic
-func (r *Registry) listenerNamesForTopic(topic TopicName) []string {
+func (r *registry) listenerNamesForTopic(topic TopicName) []string {
 	listeners := r.registeredListeners(topic)
 	if len(listeners) == 0 {
 		return nil
 	}
 
-	names := make([]string, len(listeners))
-	for i, l := range listeners {
-		names[i] = l.name
-	}
-
-	return names
+	return lo.Map(listeners, func(l registeredListener, _ int) string {
+		return l.name
+	})
 }
 
 // registeredListeners returns a snapshot of listeners for one topic.
-func (r *Registry) registeredListeners(topic TopicName) []registeredListener {
+func (r *registry) registeredListeners(topic TopicName) []registeredListener {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
 
@@ -175,7 +207,7 @@ func (r *Registry) registeredListeners(topic TopicName) []registeredListener {
 
 // InterestedIn reports whether any listener is registered for topic+operation
 // Empty operation means topic-level interest only
-func (r *Registry) InterestedIn(topic TopicName, operation string) bool {
+func (r *registry) InterestedIn(topic TopicName, operation string) bool {
 	if topic == "" {
 		return false
 	}
@@ -194,7 +226,7 @@ func (r *Registry) InterestedIn(topic TopicName, operation string) bool {
 	}
 
 	for _, listener := range listeners {
-		if listenerInterestedInOperation(listener, operation) {
+		if listenerMatches(listener, operation) {
 			return true
 		}
 	}
@@ -202,15 +234,10 @@ func (r *Registry) InterestedIn(topic TopicName, operation string) bool {
 	return false
 }
 
-// listenerInterestedInOperation reports whether a listener matches an operation filter
-// Callers must pass a trimmed operation string
-func listenerInterestedInOperation(listener registeredListener, operation string) bool {
+// listenerMatches reports whether a listener matches the trimmed operation
+func listenerMatches(listener registeredListener, operation string) bool {
 	if len(listener.ops) == 0 {
 		return true
-	}
-
-	if operation == "" {
-		return false
 	}
 
 	_, ok := listener.ops[operation]
@@ -219,7 +246,7 @@ func listenerInterestedInOperation(listener registeredListener, operation string
 }
 
 // topicRegistration resolves one topic registration by name
-func (r *Registry) topicRegistration(topic TopicName) (topicRegistration, error) {
+func (r *registry) topicRegistration(topic TopicName) (topicRegistration, error) {
 	if topic == "" {
 		return topicRegistration{}, ErrTopicNameRequired
 	}
@@ -235,30 +262,22 @@ func (r *Registry) topicRegistration(topic TopicName) (topicRegistration, error)
 	return registration, nil
 }
 
-// validateTopicRegistration validates topic registration requirements
-func validateTopicRegistration[T any](registration Registration[T]) error {
-	if registration.Topic.Name == "" {
-		return ErrTopicNameRequired
-	}
-
-	if registration.Codec == nil {
-		return ErrCodecRequired
-	}
-
-	return nil
-}
-
 // validateListenerDefinition validates listener definition requirements
 func validateListenerDefinition[T any](definition Definition[T]) error {
 	if definition.Topic.Name == "" {
 		return ErrTopicNameRequired
 	}
 
-	if definition.Name == "" {
-		return ErrListenerNameRequired
-	}
-
-	if definition.Handle == nil {
+	switch {
+	case definition.Schedule != nil && definition.Handle != nil:
+		return ErrListenerHandlerConflict
+	case definition.Schedule != nil && definition.Schedule.Handle == nil:
+		return ErrListenerHandlerRequired
+	case definition.Schedule != nil && definition.Schedule.State == nil:
+		return ErrListenerScheduleStateRequired
+	case definition.Schedule != nil && definition.Schedule.Wrap == nil:
+		return ErrListenerScheduleWrapRequired
+	case definition.Schedule == nil && definition.Handle == nil:
 		return ErrListenerHandlerRequired
 	}
 
@@ -267,52 +286,60 @@ func validateListenerDefinition[T any](definition Definition[T]) error {
 
 // normalizeOperations normalizes operation filters for one listener registration
 func normalizeOperations(operations []string) map[string]struct{} {
-	if len(operations) == 0 {
-		return nil
-	}
-
-	normalized := map[string]struct{}{}
-	for _, operation := range operations {
+	trimmed := lo.FilterMap(operations, func(operation string, _ int) (string, bool) {
 		operation = strings.TrimSpace(operation)
-		if operation == "" {
-			continue
-		}
 
-		normalized[operation] = struct{}{}
-	}
+		return operation, operation != ""
+	})
 
-	if len(normalized) == 0 {
+	if len(trimmed) == 0 {
 		return nil
 	}
 
-	return normalized
+	return lo.Keyify(trimmed)
 }
 
-// wrapTopicEncoder coverts a type-specific codec into a common shape for registry storage (any -> T)
-func wrapTopicEncoder[T any](registration Registration[T]) func(any) ([]byte, error) {
-	return func(payload any) ([]byte, error) {
+// encodeTopicPayload narrows the payload (any -> T) and JSON-serializes it for registry storage
+func encodeTopicPayload[T any](payload any) ([]byte, error) {
+	typedPayload, ok := payload.(T)
+	if !ok {
+		return nil, ErrPayloadTypeMismatch
+	}
+
+	encoded, err := json.Marshal(typedPayload)
+	if err != nil {
+		return nil, ErrPayloadEncodeFailed
+	}
+
+	return encoded, nil
+}
+
+// decodeTopicPayload JSON-deserializes payload bytes and widens the result (T -> any) for registry storage
+func decodeTopicPayload[T any](payload []byte) (any, error) {
+	if len(payload) == 0 {
+		return nil, ErrEnvelopePayloadRequired
+	}
+
+	var decoded T
+	if err := jsonx.RoundTrip(payload, &decoded); err != nil {
+		return nil, ErrPayloadDecodeFailed
+	}
+
+	return decoded, nil
+}
+
+// wrapTopicUniqueKey narrows the payload type (any -> T) into the topic's UniqueKey derivation
+func wrapTopicUniqueKey[T any](topic Topic[T]) func(any) string {
+	if topic.UniqueKey == nil {
+		return nil
+	}
+
+	return func(payload any) string {
 		typedPayload, ok := payload.(T)
 		if !ok {
-			return nil, ErrPayloadTypeMismatch
+			return ""
 		}
 
-		encoded, err := registration.Codec.Encode(typedPayload)
-		if err != nil {
-			return nil, ErrPayloadEncodeFailed
-		}
-
-		return encoded, nil
-	}
-}
-
-// wrapTopicDecoder wides the return type on the way out from the encoder (T -> any) for registry storage
-func wrapTopicDecoder[T any](registration Registration[T]) func([]byte) (any, error) {
-	return func(payload []byte) (any, error) {
-		decoded, err := registration.Codec.Decode(payload)
-		if err != nil {
-			return nil, ErrPayloadDecodeFailed
-		}
-
-		return decoded, nil
+		return topic.UniqueKey(typedPayload)
 	}
 }

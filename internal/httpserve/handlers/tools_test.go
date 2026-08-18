@@ -17,7 +17,6 @@ import (
 	"github.com/stripe/stripe-go/v86"
 
 	"github.com/redis/go-redis/v9"
-	"github.com/samber/do/v2"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/fgax"
 	fgatest "github.com/theopenlane/iam/fgax/testutils"
@@ -253,7 +252,10 @@ func (suite *HandlerTestSuite) SetupSuite() {
 	suite.sharedIntegrationsRT = rt
 
 	// provide ent client to gala's injector so ingest listeners can resolve it
-	do.ProvideValue(suite.galaRuntime.Injector(), suite.galaDB)
+	require.NoError(suite.T(), suite.galaRuntime.Attach(
+		gala.WithValue(suite.galaDB),
+		gala.WithRestoredValue("ent_client", ent.NewContext),
+	))
 }
 
 func (suite *HandlerTestSuite) SetupTest() {

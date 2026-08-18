@@ -51,7 +51,7 @@ func TestOperationTopic(t *testing.T) {
 
 	ref := NewDefinitionRef("def_001")
 	got := ref.OperationTopic("health.default")
-	want := "integration.def_001.health.default"
+	want := "integration.run.def_001.health.default"
 	if string(got) != want {
 		t.Fatalf("OperationTopic() = %q, want %q", got, want)
 	}

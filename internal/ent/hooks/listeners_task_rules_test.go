@@ -113,6 +113,23 @@ func (suite *HookTestSuite) TestTaskRuleListenersFrameworkLinkIncludesAuditorPar
 	ctx := privacy.DecisionContext(userCtx, privacy.Allow)
 	ctx = generated.NewContext(ctx, suite.client)
 
+	// the standard must exist before the onboarding mutation fires the listener; the
+	// production catalog is seeded system-wide ahead of any onboarding
+	admin := suite.seedSystemAdmin()
+
+	sysCtx := auth.NewTestContextForSystemAdmin(admin.ID, admin.Edges.OrgMemberships[0].ID)
+	sysCtx = generated.NewContext(sysCtx, suite.client)
+
+	_, err := suite.client.Standard.Create().
+		SetSystemOwned(true).
+		SetIsPublic(true).
+		SetFramework("iso27001").
+		SetShortName("ISO 27001").
+		SetName("ISO/IEC 27001").
+		SetStatus(enums.StandardActive).
+		Save(sysCtx)
+	require.NoError(t, err)
+
 	onboarding, err := suite.client.Onboarding.Create().SetInput(generated.CreateOnboardingInput{
 		CompanyName: "Framework Link Co",
 		Compliance: map[string]interface{}{
@@ -121,15 +138,6 @@ func (suite *HookTestSuite) TestTaskRuleListenersFrameworkLinkIncludesAuditorPar
 			"auditor_email": "jane@example.com",
 		},
 	}).Save(ctx)
-	require.NoError(t, err)
-
-	_, err = suite.client.Standard.Create().
-		SetOwnerID(onboarding.OrganizationID).
-		SetFramework("iso27001").
-		SetShortName("ISO 27001").
-		SetName("ISO/IEC 27001").
-		SetStatus(enums.StandardActive).
-		Save(ctx)
 	require.NoError(t, err)
 
 	suite.galaRuntime.WaitIdle()

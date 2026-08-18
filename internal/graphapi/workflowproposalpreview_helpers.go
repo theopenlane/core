@@ -371,8 +371,8 @@ func workflowProposalHasApprover(ctx context.Context, client *generated.Client, 
 	return groupTarget, nil
 }
 
-func workflowProposalFieldMetadata(objectType enums.WorkflowObjectType) map[string]generated.WorkflowFieldInfo {
-	fields := map[string]generated.WorkflowFieldInfo{}
+func workflowProposalFieldMetadata(objectType enums.WorkflowObjectType) map[string]workflows.WorkflowFieldInfo {
+	fields := map[string]workflows.WorkflowFieldInfo{}
 	for _, meta := range workflows.WorkflowMetadata() {
 		if meta.Type != objectType {
 			continue

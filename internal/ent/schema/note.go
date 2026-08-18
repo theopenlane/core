@@ -45,14 +45,21 @@ func (Note) Fields() []ent.Field {
 		field.String("title").
 			Comment("the title of the note").
 			Optional().
-			Nillable(),
+			Nillable().
+			Annotations(
+				entx.DisplayName(),
+			),
 		field.Text("text").
 			Comment("the text of the note").
+			Annotations(
+				entx.MentionSource(),
+			).
 			NotEmpty(),
 		field.JSON("text_json", []any{}).
 			Optional().
 			Annotations(
 				entgql.Type("[Any!]"),
+				entx.MentionSource(),
 			).
 			Comment("structured details of the note in JSON format"),
 		field.String("note_ref").

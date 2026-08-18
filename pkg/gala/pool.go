@@ -1,6 +1,7 @@
 package gala
 
 import (
+	"context"
 	"time"
 
 	"github.com/alitto/pond/v2"
@@ -19,7 +20,6 @@ type Pool struct {
 	pool       pond.Pool
 	maxWorkers int
 	name       string
-	metricsReg prometheus.Registerer
 }
 
 // PoolOption configures a pool instance
@@ -41,18 +41,10 @@ func WithPoolName(name string) PoolOption {
 	}
 }
 
-// WithPoolMetricsRegisterer stores the target registerer for future metrics wiring
-func WithPoolMetricsRegisterer(reg prometheus.Registerer) PoolOption {
-	return func(p *Pool) {
-		p.metricsReg = reg
-	}
-}
-
 // NewPool creates an in-memory task pool
 func NewPool(opts ...PoolOption) *Pool {
 	p := &Pool{
 		maxWorkers: defaultPoolWorkers,
-		metricsReg: prometheus.DefaultRegisterer,
 	}
 
 	for _, opt := range opts {
@@ -61,9 +53,9 @@ func NewPool(opts ...PoolOption) *Pool {
 
 	p.pool = pond.NewPool(p.maxWorkers)
 
-	if p.metricsReg != nil && p.name != "" {
+	if p.name != "" {
 		collector := newPoolCollector(p.pool, p.name)
-		_ = p.metricsReg.Register(collector)
+		_ = prometheus.DefaultRegisterer.Register(collector)
 	}
 
 	return p
@@ -103,15 +95,26 @@ func (p *Pool) WaitIdle() {
 		return
 	}
 
+	waitStable(context.Background(), func() bool {
+		return p.pool.RunningWorkers() == 0 && p.pool.WaitingTasks() == 0
+	}, waitIdlePollInterval, waitIdleThreshold)
+}
+
+// waitStable blocks until isIdle holds for threshold consecutive polls or the context ends
+func waitStable(ctx context.Context, isIdle func() bool, interval time.Duration, threshold int) {
 	idleCount := 0
-	for idleCount < waitIdleThreshold {
-		if p.pool.RunningWorkers() == 0 && p.pool.WaitingTasks() == 0 {
+	for idleCount < threshold {
+		if ctx.Err() != nil {
+			return
+		}
+
+		if isIdle() {
 			idleCount++
 		} else {
 			idleCount = 0
 		}
 
-		time.Sleep(waitIdlePollInterval)
+		time.Sleep(interval)
 	}
 }
 

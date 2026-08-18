@@ -10,10 +10,8 @@ import (
 
 // EmitReceipt captures enqueue status for workflow events
 type EmitReceipt struct {
-	// EventID is the idempotency/event identifier when assigned
+	// EventID is the event identifier when assigned
 	EventID string
-	// Enqueued reports whether the event was accepted for processing
-	Enqueued bool
 	// Err is the enqueue/dispatch error when present
 	Err error
 }
@@ -103,51 +101,17 @@ func EmitWorkflowEvent(ctx context.Context, runtime *gala.Gala, topic gala.Topic
 
 // EmitWorkflowEventWithHeaders emits a typed workflow payload via Gala with explicit headers
 func EmitWorkflowEventWithHeaders(ctx context.Context, runtime *gala.Gala, topic gala.TopicName, payload any, headers gala.Headers) EmitReceipt {
-	eventID := string(gala.NewEventID())
-
 	if runtime == nil {
 		return EmitReceipt{
-			EventID: eventID,
+			EventID: string(gala.NewEventID()),
 			Err:     ErrEmitNoEmitter,
 		}
 	}
 
-	resolvedHeaders := headers
-	if resolvedHeaders.IdempotencyKey == "" {
-		resolvedHeaders.IdempotencyKey = eventID
-	}
-	receipt := runtime.EmitWithHeaders(ctx, topic, payload, resolvedHeaders)
-	receivedEventID := string(receipt.EventID)
-	if receivedEventID == "" {
-		receivedEventID = eventID
-	}
+	id, err := runtime.EmitWithHeaders(ctx, topic, payload, headers)
 
 	return EmitReceipt{
-		EventID:  receivedEventID,
-		Enqueued: receipt.Accepted,
-		Err:      receipt.Err,
-	}
-}
-
-// EmitWorkflowEnvelope emits a pre-built Gala envelope
-func EmitWorkflowEnvelope(ctx context.Context, runtime *gala.Gala, envelope gala.Envelope) EmitReceipt {
-	if runtime == nil {
-		return EmitReceipt{Err: ErrEmitNoEmitter}
-	}
-
-	if envelope.ID == "" {
-		envelope.ID = gala.NewEventID()
-	}
-
-	if envelope.Headers.IdempotencyKey == "" {
-		envelope.Headers.IdempotencyKey = string(envelope.ID)
-	}
-
-	err := runtime.EmitEnvelope(ctx, envelope)
-
-	return EmitReceipt{
-		EventID:  string(envelope.ID),
-		Enqueued: err == nil,
-		Err:      err,
+		EventID: string(id),
+		Err:     err,
 	}
 }

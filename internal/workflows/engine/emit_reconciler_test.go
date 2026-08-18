@@ -80,7 +80,7 @@ func (s *WorkflowEngineTestSuite) TestEmitFailureRecorded() {
 
 	details, err := workflows.ParseEmitFailureDetails(event.Payload.Details)
 	s.Require().NoError(err)
-	s.Equal(string(gala.TopicWorkflowTriggered), details.Topic)
+	s.Equal(string(engine.WorkflowTriggeredEventTopic.Name), details.Topic)
 	s.Equal(enums.WorkflowEventTypeInstanceTriggered, details.OriginalEventType)
 	s.Equal(obj.ID, details.ObjectID)
 	s.Equal(obj.Type, details.ObjectType)
@@ -161,7 +161,7 @@ func (s *WorkflowEngineTestSuite) TestReconcileEmitFailureRecovers() {
 //
 // Test Setup:
 //   - Reconciler configured with MaxAttempts = 3
-//   - Emitter that always fails (simulates persistent infrastructure issue)
+//   - Emitter with no registered topics, so every re-emit fails (simulates persistent infrastructure issue)
 //
 // Test Flow:
 //  1. Creates a workflow engine with a broken emitter (EMIT_FAILED recorded, attempts = 1)
@@ -201,7 +201,12 @@ func (s *WorkflowEngineTestSuite) TestReconcileEmitFailureTerminalAfterMaxAttemp
 	s.Require().NoError(err)
 	s.Require().NotNil(instance)
 
-	rec, err := reconciler.New(s.client, nil, reconciler.WithMaxAttempts(3))
+	// an in-memory runtime with no registered topics makes every re-emit fail with
+	// ErrTopicNotRegistered, simulating a persistently broken emitter
+	brokenEmitter, err := gala.NewGala(context.Background(), gala.Config{DispatchMode: gala.DispatchModeInMemory, WorkerCount: 3})
+	s.Require().NoError(err)
+
+	rec, err := reconciler.New(s.client, brokenEmitter, reconciler.WithMaxAttempts(3))
 	s.Require().NoError(err)
 
 	allowCtx := workflows.AllowContext(userCtx)

@@ -2,14 +2,9 @@ package serveropts
 
 import (
 	"context"
-	"fmt"
-	"math"
-	"strconv"
 	"strings"
 
-	"entgo.io/ent/dialect/sql"
-	"github.com/rs/zerolog/log"
-
+	"github.com/samber/do/v2"
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
@@ -22,11 +17,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/hooks/contextx"
 	intobvs "github.com/theopenlane/core/internal/integrations/observability"
 	"github.com/theopenlane/core/internal/integrations/runtime"
+	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -34,43 +28,53 @@ import (
 // skipping the org-filter, FGA, and managed-group guards the membership hooks would otherwise apply
 const backfillBypassCaps = auth.CapBypassOrgFilter | auth.CapBypassFGA | auth.CapInternalOperation | auth.CapBypassManagedGroup
 
-// maxExactExternalID is the largest float64 that can still hold every integer exactly (2^53)
-const maxExactExternalID = float64(1 << 53)
+// backfillTopic is the gala topic backfill runs are submitted on
+var backfillTopic = gala.NamespacedTopic[backfillRequest](gala.System, "startup.backfill")
 
-// integrationReconfigureObjectType is the notification object type for a misconfigured installation
-const integrationReconfigureObjectType = "integration.reconfiguration.required"
+// backfillUniqueKey is the run-once uniqueness key: every pod submits the same key, River
+// keeps the first insert and skips the rest across live and terminal job states
+const backfillUniqueKey = "startup-backfill"
 
-// WithBackfill runs a one-time, non-blocking, config-gated, idempotent startup backfills
-// use-cases for this are things a db migration can't easily handle, computed data or fields, or repairs
-func WithBackfill(ctx context.Context, dbClient *ent.Client) ServerOption {
+// backfillRequest is the payload for a backfill run submission
+type backfillRequest struct{}
+
+// WithBackfill submits the config-gated, idempotent startup backfills as a run-once gala job:
+// every pod submits the same unique key, so exactly one process executes the run.
+// Use-cases are things a db migration can't easily handle, computed data or fields, or repairs
+func WithBackfill(ctx context.Context, galaApp *gala.Gala) ServerOption {
 	return newApplyFunc(func(s *ServerOptions) {
-		if dbClient == nil || !s.Config.Settings.Backfill.Enabled {
+		if !s.Config.Settings.Backfill.Enabled {
 			return
 		}
 
-		rt := s.Config.Handler.IntegrationsRuntime
+		if _, err := gala.Register(galaApp, gala.Definition[backfillRequest]{
+			Topic: backfillTopic,
+			Caller: func(*auth.Caller, backfillRequest) *auth.Caller {
+				return &auth.Caller{Capabilities: backfillBypassCaps}
+			},
+			Handle: func(handlerCtx gala.HandlerContext, _ backfillRequest) error {
+				dbClient := do.MustInvoke[*ent.Client](handlerCtx.Injector)
+				rt := do.MustInvoke[*runtime.Runtime](handlerCtx.Injector)
 
-		go func() {
-			backfillCtx := privacy.DecisionContext(ctx, privacy.Allow)
-			backfillCtx = auth.WithCaller(backfillCtx, &auth.Caller{Capabilities: backfillBypassCaps})
+				BackfillDirectoryDuplicates(handlerCtx.Context, dbClient)
+				backfillManagedGroupMemberships(handlerCtx.Context, dbClient)
+				backfillIntegrationConfiguration(handlerCtx.Context, dbClient, rt)
+				backfillReconcileLoops(handlerCtx.Context, dbClient, rt)
 
-			// the ent client carries the authz client, add it to the context to ensure its available when needed, e.g. on Delete operations to remove tuples
-			backfillCtx = ent.NewContext(backfillCtx, dbClient)
+				return nil
+			},
+		}); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("backfill: failed to register listener")
 
-			// the backfill runs as an internal request, which the delete hook otherwise skips, but the
-			// rows it removes still need their tuples cleaned up so it opts back in
-			backfillCtx = contextx.WithTupleCleanup(backfillCtx)
+			return
+		}
 
-			BackfillDirectoryDuplicates(backfillCtx, dbClient)
-
-			backfillDirectoryExternalIDs(backfillCtx, dbClient)
-
-			backfillManagedGroupMemberships(backfillCtx, dbClient)
-
-			if rt != nil {
-				backfillIntegrationConfiguration(backfillCtx, dbClient, rt)
-			}
-		}()
+		if _, err := galaApp.EmitWithHeaders(ctx, backfillTopic.Name, backfillRequest{}, gala.Headers{
+			UniqueKey:  backfillUniqueKey,
+			UniqueOnce: true,
+		}); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("backfill: failed to submit run")
+		}
 	})
 }
 
@@ -101,7 +105,7 @@ func backfillIntegrationConfiguration(ctx context.Context, dbClient *ent.Client,
 			continue
 		}
 
-		if err := markIntegrationErrored(installCtx, dbClient, installation, def.DisplayName); err != nil {
+		if err := rt.MarkIntegrationUnhealthy(installCtx, installation, "it is missing required configuration"); err != nil {
 			logx.FromContext(installCtx).Error().Err(err).Msg("backfill: failed flagging misconfigured integration")
 
 			continue
@@ -113,30 +117,36 @@ func backfillIntegrationConfiguration(ctx context.Context, dbClient *ent.Client,
 	logx.FromContext(ctx).Info().Int("flagged_misconfigured", flagged).Int("reviewed", len(installations)).Msg("backfill: connected integrations reviewed")
 }
 
-// markIntegrationErrored flags one installation as misconfigured and notifies the owning organization
-func markIntegrationErrored(ctx context.Context, dbClient *ent.Client, installation *ent.Integration, displayName string) error {
-	if err := dbClient.Integration.UpdateOneID(installation.ID).
-		SetStatus(enums.IntegrationStatusErrored).
-		Exec(ctx); err != nil {
-		return err
+// backfillReconcileLoops collapses each connected installation's recurring loops to exactly one
+// per operation: every active reconcile job is cancelled and a single fresh loop is emitted with
+// insert-time uniqueness, removing duplicate loops left by historical seeding races. Emitted
+// loops are unique-keyed, so re-running the backfill against a healthy state is a reset, not a
+// duplication
+func backfillReconcileLoops(ctx context.Context, dbClient *ent.Client, rt *runtime.Runtime) {
+	installations, err := dbClient.Integration.Query().
+		Where(integration.StatusEQ(enums.IntegrationStatusConnected)).
+		All(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("backfill: failed to query connected integrations for loop reset")
+
+		return
 	}
 
-	logx.FromContext(ctx).Warn().Msg("backfill: integration is missing required configuration, marked errored")
+	var reset int
 
-	_, err := dbClient.Notification.Create().
-		SetOwnerID(installation.OwnerID).
-		SetNotificationType(enums.NotificationTypeOrganization).
-		SetObjectType(integrationReconfigureObjectType).
-		SetTitle(fmt.Sprintf("%s needs to be reconnected", displayName)).
-		SetBody(fmt.Sprintf("The %s integration is missing required configuration and has stopped syncing. Reconnect it and supply the required settings to resume.", displayName)).
-		SetData(map[string]any{
-			"integration_id": installation.ID,
-			"definition_id":  installation.DefinitionID,
-		}).
-		SetTopic(enums.NotificationTopicIntegration).
-		Save(ctx)
+	for _, installation := range installations {
+		installCtx := intobvs.WithInstallation(ctx, installation)
 
-	return err
+		if err := rt.ResetReconcileLoops(installCtx, installation); err != nil {
+			logx.FromContext(installCtx).Error().Err(err).Msg("backfill: failed resetting reconcile loops")
+
+			continue
+		}
+
+		reset++
+	}
+
+	logx.FromContext(ctx).Info().Int("reset", reset).Int("reviewed", len(installations)).Msg("backfill: reconcile loop reset completed")
 }
 
 // backfillManagedGroupMemberships restores memberships in the system managed groups that were
@@ -260,123 +270,6 @@ func backfillManagedGroupMemberships(ctx context.Context, dbClient *ent.Client) 
 	}
 
 	logx.FromContext(ctx).Info().Int("restored_memberships", restored).Int("organizations", len(orgs)).Msg("backfill: managed group memberships repaired")
-}
-
-// backfillDirectoryExternalIDs rewrites directory account and group external ids that the CEL double
-// conversion stored in scientific notation (e.g. "1.47884153e+08" back to "147884153"); the "e+"
-// contains query is just a cheap prefilter, the strict parse in decimalExternalID decides what
-// actually gets touched, so values like emails that happen to contain "e+" are never rewritten
-func backfillDirectoryExternalIDs(ctx context.Context, dbClient *ent.Client) {
-	accounts, err := dbClient.DirectoryAccount.Query().
-		Where(directoryaccount.ExternalIDContains("e+")).
-		All(ctx)
-	if err != nil {
-		log.Error().Err(err).Msg("backfill: failed to query directory accounts with scientific notation external ids")
-		return
-	}
-
-	accountsCorrected := 0
-
-	for _, account := range accounts {
-		corrected, ok := decimalExternalID(account.ExternalID)
-		if !ok {
-			continue
-		}
-
-		conflict, err := dbClient.DirectoryAccount.Query().
-			Where(
-				directoryaccount.OwnerID(account.OwnerID),
-				directoryaccount.ExternalID(corrected),
-				directoryaccount.IDNEQ(account.ID),
-			).
-			Exist(ctx)
-		if err != nil {
-			log.Error().Err(err).Str("directory_account_id", account.ID).Msg("backfill: failed to check directory account external id conflict")
-
-			continue
-		}
-
-		if conflict {
-			log.Warn().Str("directory_account_id", account.ID).Str("external_id", corrected).Msg("backfill: corrected external id already held by another directory account, skipping")
-
-			continue
-		}
-
-		// external_id is immutable, so the fix has to go through the sql modifier
-		if err := dbClient.DirectoryAccount.UpdateOneID(account.ID).
-			Modify(func(u *sql.UpdateBuilder) {
-				u.Set(directoryaccount.FieldExternalID, corrected)
-			}).
-			Exec(ctx); err != nil {
-			log.Error().Err(err).Str("directory_account_id", account.ID).Msg("backfill: failed to correct directory account external id")
-
-			continue
-		}
-
-		accountsCorrected++
-	}
-
-	groups, err := dbClient.DirectoryGroup.Query().
-		Where(directorygroup.ExternalIDContains("e+")).
-		All(ctx)
-	if err != nil {
-		log.Error().Err(err).Msg("backfill: failed to query directory groups with scientific notation external ids")
-		return
-	}
-
-	groupsCorrected := 0
-
-	for _, group := range groups {
-		corrected, ok := decimalExternalID(group.ExternalID)
-		if !ok {
-			continue
-		}
-
-		conflict, err := dbClient.DirectoryGroup.Query().
-			Where(
-				directorygroup.OwnerID(group.OwnerID),
-				directorygroup.ExternalID(corrected),
-				directorygroup.IDNEQ(group.ID),
-			).
-			Exist(ctx)
-		if err != nil {
-			log.Error().Err(err).Str("directory_group_id", group.ID).Msg("backfill: failed to check directory group external id conflict")
-
-			continue
-		}
-
-		if conflict {
-			log.Warn().Str("directory_group_id", group.ID).Str("external_id", corrected).Msg("backfill: corrected external id already held by another directory group, skipping")
-
-			continue
-		}
-
-		// external_id is immutable, so the fix has to go through the sql modifier
-		if err := dbClient.DirectoryGroup.UpdateOneID(group.ID).
-			Modify(func(u *sql.UpdateBuilder) {
-				u.Set(directorygroup.FieldExternalID, corrected)
-			}).
-			Exec(ctx); err != nil {
-			log.Error().Err(err).Str("directory_group_id", group.ID).Msg("backfill: failed to correct directory group external id")
-
-			continue
-		}
-
-		groupsCorrected++
-	}
-
-	log.Info().Int("accounts_corrected", accountsCorrected).Int("groups_corrected", groupsCorrected).Msg("backfill: directory external id notation corrected")
-}
-
-// decimalExternalID converts a scientific notation external id back to plain digits, refusing
-// anything that isn't a whole number float64 can represent exactly
-func decimalExternalID(externalID string) (string, bool) {
-	value, err := strconv.ParseFloat(externalID, 64)
-	if err != nil || value != math.Trunc(value) || math.Abs(value) >= maxExactExternalID {
-		return "", false
-	}
-
-	return strconv.FormatFloat(value, 'f', -1, 64), true
 }
 
 // directoryDupKey is one (integration_id, external_id) identity with its row count, scanned

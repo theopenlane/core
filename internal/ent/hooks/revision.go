@@ -93,9 +93,7 @@ func SetNewRevision(ctx context.Context, mut MutationWithRevision) error {
 
 	var newVersion string
 
-	logx.FromContext(ctx).Debug().Str("currentRevision", currentRevision).
-		Str("revisionBump", revisionBump.String()).
-		Msg("bumping revision")
+	logx.FromContext(ctx).Debug().Str("currentRevision", currentRevision).Str("revisionBump", revisionBump.String()).Msg("bumping revision")
 
 	switch *revisionBump {
 	case models.Major:

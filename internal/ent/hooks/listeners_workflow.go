@@ -1,202 +1,129 @@
 package hooks
 
 import (
-	"entgo.io/ent"
-	"github.com/samber/do/v2"
+	"github.com/samber/lo"
+	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/eventqueue"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/gala"
 )
 
-// RegisterGalaWorkflowListeners registers workflow mutation and command listeners on Gala
-func RegisterGalaWorkflowListeners(registry *gala.Registry) ([]gala.ListenerID, error) {
-	mutationIDs, err := RegisterGalaWorkflowMutationListeners(registry)
-	if err != nil {
-		return nil, err
-	}
+// workflowMutationListenerLabel identifies the workflow mutation listener family in
+// dependency-resolution skip logs
+const workflowMutationListenerLabel = "workflow.mutation"
 
-	commandIDs, err := gala.RegisterListeners(registry,
-		gala.Definition[gala.WorkflowTriggeredPayload]{
-			Topic:  gala.WorkflowTriggeredEventTopic,
-			Name:   string(gala.TopicWorkflowTriggered),
-			Handle: handleWorkflowTriggeredGala,
-		},
-	)
-	if err != nil {
-		return nil, err
-	}
-
-	ids, err := gala.RegisterListeners(registry,
-		gala.Definition[gala.WorkflowActionStartedPayload]{
-			Topic:  gala.WorkflowActionStartedEventTopic,
-			Name:   string(gala.TopicWorkflowActionStarted),
-			Handle: handleWorkflowActionStartedGala,
-		},
-	)
-	if err != nil {
-		return nil, err
-	}
-	commandIDs = append(commandIDs, ids...)
-
-	ids, err = gala.RegisterListeners(registry,
-		gala.Definition[gala.WorkflowActionCompletedPayload]{
-			Topic:  gala.WorkflowActionCompletedEventTopic,
-			Name:   string(gala.TopicWorkflowActionCompleted),
-			Handle: handleWorkflowActionCompletedGala,
-		},
-	)
-	if err != nil {
-		return nil, err
-	}
-	commandIDs = append(commandIDs, ids...)
-
-	ids, err = gala.RegisterListeners(registry,
-		gala.Definition[gala.WorkflowAssignmentCompletedPayload]{
-			Topic:  gala.WorkflowAssignmentCompletedEventTopic,
-			Name:   string(gala.TopicWorkflowAssignmentCompleted),
-			Handle: handleWorkflowAssignmentCompletedGala,
-		},
-	)
-	if err != nil {
-		return nil, err
-	}
-	commandIDs = append(commandIDs, ids...)
-
-	ids, err = gala.RegisterListeners(registry,
-		gala.Definition[gala.WorkflowInstanceCompletedPayload]{
-			Topic:  gala.WorkflowInstanceCompletedEventTopic,
-			Name:   string(gala.TopicWorkflowInstanceCompleted),
-			Handle: handleWorkflowInstanceCompletedGala,
-		},
-	)
-	if err != nil {
-		return nil, err
-	}
-	commandIDs = append(commandIDs, ids...)
-
-	return append(mutationIDs, commandIDs...), nil
+func internalOperationBypassCaller(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
+	return restored.WithCapabilities(auth.CapInternalOperation | auth.CapBypassOrgFilter)
 }
 
-// RegisterGalaWorkflowMutationListeners registers workflow mutation listeners on Gala
-func RegisterGalaWorkflowMutationListeners(registry *gala.Registry) ([]gala.ListenerID, error) {
-	definitions := make([]gala.Definition[eventqueue.MutationGalaPayload], 0, len(enums.WorkflowObjectTypes)+1)
-
-	for _, entity := range enums.WorkflowObjectTypes {
-		topicName := eventqueue.MutationTopicName(eventqueue.MutationConcernWorkflow, entity)
-		definitions = append(definitions, gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic: eventqueue.MutationTopic(eventqueue.MutationConcernWorkflow, entity),
-			Name:  string(topicName),
-			Operations: []string{
-				ent.OpCreate.String(),
-				ent.OpUpdate.String(),
-				ent.OpUpdateOne.String(),
-			},
-			Handle: handleWorkflowMutationGala,
-		})
-	}
-
-	assignmentTopicName := eventqueue.MutationTopicName(eventqueue.MutationConcernWorkflow, generated.TypeWorkflowAssignment)
-	definitions = append(definitions, gala.Definition[eventqueue.MutationGalaPayload]{
-		Topic: eventqueue.MutationTopic(eventqueue.MutationConcernWorkflow, generated.TypeWorkflowAssignment),
-		Name:  string(assignmentTopicName),
-		Operations: []string{
-			ent.OpUpdate.String(),
-			ent.OpUpdateOne.String(),
+// WorkflowListeners wires workflow mutations and command events to the workflow engine
+func WorkflowListeners() []gala.Registration {
+	return append(WorkflowMutationListeners(),
+		gala.Definition[engine.WorkflowTriggeredPayload]{
+			Topic:  engine.WorkflowTriggeredEventTopic,
+			Name:   string(engine.WorkflowTriggeredEventTopic.Name),
+			Handle: forwardToWorkflowListeners((*engine.WorkflowListeners).HandleWorkflowTriggered),
 		},
-		Handle: handleWorkflowAssignmentMutationGala,
+		gala.Definition[engine.WorkflowActionStartedPayload]{
+			Topic:  engine.WorkflowActionStartedEventTopic,
+			Name:   string(engine.WorkflowActionStartedEventTopic.Name),
+			Handle: forwardToWorkflowListeners((*engine.WorkflowListeners).HandleActionStarted),
+		},
+		gala.Definition[engine.WorkflowActionCompletedPayload]{
+			Topic:  engine.WorkflowActionCompletedEventTopic,
+			Name:   string(engine.WorkflowActionCompletedEventTopic.Name),
+			Handle: forwardToWorkflowListeners((*engine.WorkflowListeners).HandleActionCompleted),
+		},
+		gala.Definition[engine.WorkflowAssignmentCompletedPayload]{
+			Topic:  engine.WorkflowAssignmentCompletedEventTopic,
+			Name:   string(engine.WorkflowAssignmentCompletedEventTopic.Name),
+			Handle: forwardToWorkflowListeners((*engine.WorkflowListeners).HandleAssignmentCompleted),
+		},
+		gala.Definition[engine.WorkflowInstanceCompletedPayload]{
+			Topic:  engine.WorkflowInstanceCompletedEventTopic,
+			Name:   string(engine.WorkflowInstanceCompletedEventTopic.Name),
+			Handle: forwardToWorkflowListeners((*engine.WorkflowListeners).HandleInstanceCompleted),
+		},
+	)
+}
+
+// WorkflowMutationListeners forwards workflow-eligible mutations to the workflow engine
+func WorkflowMutationListeners() []gala.Registration {
+	schemas := lo.FilterMap(enums.WorkflowObjectTypes, func(entity string, _ int) (*entityops.Schema, bool) {
+		return entityops.LookupSchema(entity)
 	})
 
-	return gala.RegisterListeners(registry, definitions...)
+	return append(entityops.ForSchemas(schemas, entityops.MutationListener{
+		Concern:    entityops.MutationConcernWorkflow,
+		Operations: []string{entityops.OpCreate, entityops.OpUpdate, entityops.OpUpdateOne},
+		Caller:     internalOperationBypassCaller,
+		Handle:     forwardToWorkflowMutation((*engine.WorkflowListeners).HandleWorkflowMutationGala),
+	}), entityops.MutationListener{
+		Concern:    entityops.MutationConcernWorkflow,
+		Schema:     entityops.SchemaWorkflowAssignment,
+		Operations: []string{entityops.OpUpdate, entityops.OpUpdateOne},
+		Fields:     []string{workflowassignment.FieldStatus},
+		Match: []entityops.FieldMatch{{
+			Field:  workflowassignment.FieldStatus,
+			In:     []string{enums.WorkflowAssignmentStatusPending.String()},
+			Negate: true,
+		}},
+		Handle: forwardToWorkflowMutation((*engine.WorkflowListeners).HandleWorkflowAssignmentMutationGala),
+	})
 }
 
-// handleWorkflowMutationGala forwards workflow mutation envelopes to workflow listeners
-func handleWorkflowMutationGala(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	ctx, listeners, ok := workflowListenersFromGala(ctx)
-	if !ok {
-		return nil
-	}
+// forwardToWorkflowMutation adapts one engine.WorkflowListeners mutation method into a
+// mutation listener handler, resolving the workflow engine and event runtime per event
+func forwardToWorkflowMutation(method func(*engine.WorkflowListeners, entityops.Invocation, entityops.MutationPayload) error) func(entityops.Invocation, entityops.MutationPayload) error {
+	return func(inv entityops.Invocation, payload entityops.MutationPayload) error {
+		wfEngine, ok := gala.Resolve[*engine.WorkflowEngine](inv.Context, inv.Injector, workflowMutationListenerLabel)
+		if !ok {
+			return nil
+		}
 
-	return listeners.HandleWorkflowMutationGala(ctx, payload)
+		runtime, ok := gala.Resolve[*gala.Gala](inv.Context, inv.Injector, workflowMutationListenerLabel)
+		if !ok {
+			return nil
+		}
+
+		return method(engine.NewWorkflowListeners(inv.Client, wfEngine, runtime), inv, payload)
+	}
 }
 
-// handleWorkflowAssignmentMutationGala forwards assignment mutation envelopes to workflow listeners
-func handleWorkflowAssignmentMutationGala(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	ctx, listeners, ok := workflowListenersFromGala(ctx)
-	if !ok {
-		return nil
+// forwardToWorkflowListeners adapts one engine.WorkflowListeners method into a gala handler,
+// resolving the listener dependencies from the handler context per event
+func forwardToWorkflowListeners[T any](method func(*engine.WorkflowListeners, gala.HandlerContext, T) error) gala.Handler[T] {
+	return func(ctx gala.HandlerContext, payload T) error {
+		ctx, listeners, ok := workflowListenersFromGala(ctx)
+		if !ok {
+			return nil
+		}
+
+		return method(listeners, ctx, payload)
 	}
-
-	return listeners.HandleWorkflowAssignmentMutationGala(ctx, payload)
-}
-
-// handleWorkflowTriggeredGala forwards workflow trigger command envelopes to workflow listeners
-func handleWorkflowTriggeredGala(ctx gala.HandlerContext, payload gala.WorkflowTriggeredPayload) error {
-	ctx, listeners, ok := workflowListenersFromGala(ctx)
-	if !ok {
-		return nil
-	}
-
-	return listeners.HandleWorkflowTriggered(ctx, payload)
-}
-
-// handleWorkflowActionStartedGala forwards action started command envelopes to workflow listeners
-func handleWorkflowActionStartedGala(ctx gala.HandlerContext, payload gala.WorkflowActionStartedPayload) error {
-	ctx, listeners, ok := workflowListenersFromGala(ctx)
-	if !ok {
-		return nil
-	}
-
-	return listeners.HandleActionStarted(ctx, payload)
-}
-
-// handleWorkflowActionCompletedGala forwards action completed command envelopes to workflow listeners
-func handleWorkflowActionCompletedGala(ctx gala.HandlerContext, payload gala.WorkflowActionCompletedPayload) error {
-	ctx, listeners, ok := workflowListenersFromGala(ctx)
-	if !ok {
-		return nil
-	}
-
-	return listeners.HandleActionCompleted(ctx, payload)
-}
-
-// handleWorkflowAssignmentCompletedGala forwards assignment completed command envelopes to workflow listeners
-func handleWorkflowAssignmentCompletedGala(ctx gala.HandlerContext, payload gala.WorkflowAssignmentCompletedPayload) error {
-	ctx, listeners, ok := workflowListenersFromGala(ctx)
-	if !ok {
-		return nil
-	}
-
-	return listeners.HandleAssignmentCompleted(ctx, payload)
-}
-
-// handleWorkflowInstanceCompletedGala forwards instance completed command envelopes to workflow listeners
-func handleWorkflowInstanceCompletedGala(ctx gala.HandlerContext, payload gala.WorkflowInstanceCompletedPayload) error {
-	ctx, listeners, ok := workflowListenersFromGala(ctx)
-	if !ok {
-		return nil
-	}
-
-	return listeners.HandleInstanceCompleted(ctx, payload)
 }
 
 // workflowListenersFromGala resolves workflow listener dependencies from the gala injector
 // and enriches the handler context so the ent client is available to interceptors
 func workflowListenersFromGala(handlerCtx gala.HandlerContext) (gala.HandlerContext, *engine.WorkflowListeners, bool) {
-	handlerCtx, client, ok := eventqueue.ClientFromHandler(handlerCtx)
-	if !ok {
+	client, ok := gala.Resolve[*generated.Client](handlerCtx.Context, handlerCtx.Injector, workflowMutationListenerLabel)
+	if !ok || client == nil {
 		return handlerCtx, nil, false
 	}
 
-	wfEngine, ok := client.WorkflowEngine.(*engine.WorkflowEngine)
+	handlerCtx.Context = generated.NewContext(handlerCtx.Context, client)
+
+	wfEngine, ok := gala.Resolve[*engine.WorkflowEngine](handlerCtx.Context, handlerCtx.Injector, workflowMutationListenerLabel)
 	if !ok || wfEngine == nil {
 		return handlerCtx, nil, false
 	}
 
-	runtime, err := do.Invoke[*gala.Gala](handlerCtx.Injector)
-	if err != nil {
+	runtime, ok := gala.Resolve[*gala.Gala](handlerCtx.Context, handlerCtx.Injector, workflowMutationListenerLabel)
+	if !ok {
 		return handlerCtx, nil, false
 	}
 

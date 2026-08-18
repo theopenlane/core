@@ -73,8 +73,7 @@ func HookQuestionnaireAssessment() ent.Hook {
 				Only(ctx)
 			if err != nil {
 				if generated.IsNotFound(err) {
-					logx.FromContext(ctx).Warn().Str("template_id", id).
-						Msg("template not found")
+					logx.FromContext(ctx).Warn().Str("template_id", id).Msg("template not found")
 
 					return nil, ErrTemplateNotFound
 				}
@@ -83,10 +82,7 @@ func HookQuestionnaireAssessment() ent.Hook {
 			}
 
 			if template.Kind == enums.TemplateKindTrustCenterNda {
-				logx.FromContext(ctx).
-					Err(errors.New("template is not of type questionnaire")). //nolint:err113
-					Str("template_id", id).Str("kind", template.Kind.String()).
-					Msg("template is not a questionnaire type")
+				logx.FromContext(ctx).Err(errors.New("template is not of type questionnaire")).Str("template_id", id).Str("kind", template.Kind.String()).Msg("template is not a questionnaire type") //nolint:err113
 
 				return nil, ErrTemplateNotQuestionnaire
 			}

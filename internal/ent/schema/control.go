@@ -283,6 +283,7 @@ func (c Control) Annotations() []schema.Annotation {
 		),
 		entfga.SelfAccessChecks(),
 		entx.NewExportable(),
+		entx.ConsoleRoute(),
 		oscalgen.NewOSCALModel(
 			oscalgen.WithOSCALModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
 			oscalgen.WithOSCALAssembly("implemented-requirement"),

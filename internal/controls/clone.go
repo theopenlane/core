@@ -112,8 +112,7 @@ func CloneControls(ctx context.Context, client *generated.Client, controlsToClon
 	// check if there were any errors during the cloning process
 	if len(errors) > 0 {
 		// return the first error encountered
-		logx.FromContext(ctx).Error().Errs("errors", errors).
-			Msgf("error cloning controls, deleting %d controls that were created before the error occurred", len(createdControlIDs))
+		logx.FromContext(ctx).Error().Errs("errors", errors).Msgf("error cloning controls, deleting %d controls that were created before the error occurred", len(createdControlIDs))
 
 		// delete any controls that were created before the error occurred
 		if len(createdControlIDs) > 0 {

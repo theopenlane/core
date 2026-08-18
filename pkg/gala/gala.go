@@ -5,14 +5,14 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"reflect"
-	"sort"
 	"strings"
 	"time"
 
+	"github.com/prometheus/client_golang/prometheus"
 	"github.com/riverqueue/river"
 	"github.com/riverqueue/river/rivertype"
 	"github.com/samber/do/v2"
+	"github.com/samber/lo"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
@@ -32,16 +32,12 @@ const (
 type Config struct {
 	// DispatchMode controls whether events are dispatched durably (River) or in-memory.
 	DispatchMode DispatchMode
-	// Enabled toggles Gala worker startup and dispatch support when true
-	Enabled bool
 	// ConnectionURI is the database connection URI used for the dedicated gala river client
 	ConnectionURI string
 	// QueueName is the gala queue used for durable dispatch jobs
 	QueueName string
 	// WorkerCount is the max worker concurrency for the gala queue
 	WorkerCount int
-	// QueueWorkers configures additional queue worker concurrency by queue name.
-	QueueWorkers map[string]int
 	// MaxRetries sets max attempts for gala dispatch jobs when greater than zero
 	MaxRetries int
 	// RunMigrations enables River schema migrations on startup (use for tests only)
@@ -52,25 +48,47 @@ type Config struct {
 	// FetchPollInterval is the fallback polling interval when LISTEN/NOTIFY misses events (default 1s)
 	// This is only used when LISTEN/NOTIFY fails to deliver notifications.
 	FetchPollInterval time.Duration
+	// Kinds are the envelope kind namespaces this runtime registers alongside the default
+	// dispatch kind; each kind gets a dedicated queue and shares the envelope worker
+	Kinds []Namespace
+	// TopicRenames maps retired topic names to their designated replacements, applied to
+	// queued envelopes at dispatch and during job migration
+	TopicRenames map[TopicName]TopicName
+	// OperationRenames maps retired payload operation strings to their designated replacements
+	OperationRenames map[string]string
+	// JobTimeout is the maximum run time for one dispatch job; long-running batch
+	// operations need far more than River's one-minute default
+	JobTimeout time.Duration
+	// SoftStopTimeout is how long in-flight jobs may keep running after a stop begins
+	// before their contexts are cancelled
+	SoftStopTimeout time.Duration
 }
 
 // Gala provides cohesive event dispatch + worker lifecycle management
 // no black tie required, but a riverboat and some confetti wouldn't hurt
 type Gala struct {
 	// registry manages topic and listener registrations
-	registry *Registry
+	registry *registry
 	// injector provides dependency resolution for listeners
 	injector do.Injector
-	// dispatcher handles envelope dispatch to listeners
-	dispatcher Dispatcher
 	// contextManager handles context capture and restoration
 	contextManager *ContextManager
 	// jobClient is the dedicated River client used for durable dispatch
 	jobClient *riverqueue.Client
+	// insertClient is the minimal insert capability used for durable dispatch
+	insertClient riverInsertClient
+	// defaultQueue is the default River queue for dispatch jobs
+	defaultQueue string
+	// kindQueues maps each registered job kind to its dedicated queue
+	kindQueues map[string]string
 	// durableQueues tracks River queues this runtime is responsible for.
 	durableQueues []string
 	// dispatchMode captures the runtime dispatch mode.
 	dispatchMode DispatchMode
+	// topicRenames maps retired topic names to their designated replacements
+	topicRenames map[TopicName]TopicName
+	// operationRenames maps retired payload operation strings to their designated replacements
+	operationRenames map[string]string
 	// inMemoryPool backs in-process dispatch when DispatchModeInMemory is enabled.
 	inMemoryPool *Pool
 }
@@ -87,17 +105,37 @@ func NewGala(ctx context.Context, config Config) (app *Gala, err error) {
 
 	app = &Gala{}
 
+	kindNames := lo.Map(config.Kinds, func(kind Namespace, _ int) string {
+		return kind.Kind()
+	})
+
+	// the alias registry must carry every kind before worker registration reads it
+	registerEnvelopeKinds(kindNames)
+
 	workers := river.NewWorkers()
-	if err := river.AddWorkerSafely(workers, NewRiverDispatchWorker(func() *Gala {
+	if err := river.AddWorkerSafely(workers, newRiverDispatchWorker(func() *Gala {
 		return app
 	})); err != nil {
 		return nil, err
 	}
 
-	queueConfig := buildQueueConfig(config.QueueName, config.WorkerCount, config.QueueWorkers)
+	queues := map[string]river.QueueConfig{config.QueueName: {MaxWorkers: config.WorkerCount}}
+	kindQueues := map[string]string{}
+
+	for _, kind := range config.Kinds {
+		// scope kind queues by the runtime's base queue so runtimes sharing a database
+		// (test harnesses) don't steal each other's kind-routed jobs; pods sharing a queue
+		// name still share workers
+		queue := config.QueueName + "_" + kind.Queue()
+		queues[queue] = river.QueueConfig{MaxWorkers: config.WorkerCount}
+		kindQueues[kind.Kind()] = queue
+	}
+
 	riverConf := river.Config{
-		Workers: workers,
-		Queues:  queueConfig,
+		Workers:         workers,
+		Queues:          queues,
+		JobTimeout:      config.JobTimeout,
+		SoftStopTimeout: config.SoftStopTimeout,
 	}
 
 	if config.MaxRetries > 0 {
@@ -133,35 +171,38 @@ func NewGala(ctx context.Context, config Config) (app *Gala, err error) {
 		}
 	}()
 
-	dispatcher, err := NewRiverDispatcher(jobClient, config.QueueName)
-	if err != nil {
-		return nil, err
-	}
-
-	if err := app.initialize(dispatcher, DispatchModeDurable); err != nil {
+	if err := app.initialize(DispatchModeDurable); err != nil {
 		return nil, err
 	}
 
 	app.jobClient = jobClient
-	app.durableQueues = queueNamesFromConfig(queueConfig)
+	app.insertClient = jobClient
+	app.defaultQueue = config.QueueName
+	app.kindQueues = kindQueues
+	app.durableQueues = append([]string{config.QueueName}, lo.Values(kindQueues)...)
+	app.topicRenames = config.TopicRenames
+	app.operationRenames = config.OperationRenames
 
 	return app, nil
 }
 
 // initialize sets Gala core dependencies and default runtime services
 // future expansion / features may necessitate passing in additional dependencies or a more complex runtime config object but avoiding pre-optimization
-func (g *Gala) initialize(dispatcher Dispatcher, dispatchMode DispatchMode) error {
-	contextManager, err := NewContextManager(
+func (g *Gala) initialize(dispatchMode DispatchMode) error {
+	contextManager, err := newContextManager(
 		NewKeyCodec("caller", auth.CallerKey),
-		logFieldsCodec{},
+		NewKeyCodec("workflow_flags", WorkflowFlagsKey),
+		NewKeyCodec("integration_directory_sync_run_id", DirectorySyncRunIDKey),
+		NewKeyCodec("active_trust_center_id", auth.ActiveTrustCenterIDKey),
+		OperationContextCodec(),
+		logFieldsCodec(),
 	)
 	if err != nil {
 		return err
 	}
 
-	g.registry = NewRegistry()
+	g.registry = newRegistry()
 	g.injector = do.New()
-	g.dispatcher = dispatcher
 	g.contextManager = contextManager
 	g.dispatchMode = dispatchMode
 
@@ -188,6 +229,18 @@ func (c *Config) validate() error {
 		c.WorkerCount = 1
 	}
 
+	if c.Kinds == nil {
+		c.Kinds = JobKinds()
+	}
+
+	if c.JobTimeout <= 0 {
+		c.JobTimeout = DefaultJobTimeout
+	}
+
+	if c.SoftStopTimeout <= 0 {
+		c.SoftStopTimeout = DefaultSoftStopTimeout
+	}
+
 	if c.DispatchMode == DispatchModeDurable && c.ConnectionURI == "" {
 		return ErrRiverConnectionURIRequired
 	}
@@ -195,137 +248,170 @@ func (c *Config) validate() error {
 	return nil
 }
 
-// buildQueueConfig constructs the River queue config with defaults and optional overrides
-func buildQueueConfig(defaultQueueName string, defaultWorkerCount int, queueWorkers map[string]int) map[string]river.QueueConfig {
-	queues := map[string]river.QueueConfig{
-		defaultQueueName: {MaxWorkers: defaultWorkerCount},
-	}
-
-	for queueName, workers := range queueWorkers {
-		queueName = strings.TrimSpace(queueName)
-		if queueName == "" || workers < 1 {
-			continue
-		}
-
-		queues[queueName] = river.QueueConfig{MaxWorkers: workers}
-	}
-
-	return queues
+// InterestedIn reports whether any registered listener matches the topic, operation, and
+// soft-delete disposition
+func (g *Gala) InterestedIn(topic TopicName, operation string) bool {
+	return g.registry.InterestedIn(topic, operation)
 }
 
-func queueNamesFromConfig(queues map[string]river.QueueConfig) []string {
-	if len(queues) == 0 {
+// AttachOption provisions one dependency or durable context codec onto a gala runtime
+type AttachOption func(*Gala) error
+
+// WithValue provides a typed dependency that listeners resolve via HandlerContext.Injector
+func WithValue[T any](value T) AttachOption {
+	return func(g *Gala) error {
+		do.ProvideValue(g.injector, value)
+
 		return nil
 	}
+}
 
-	names := make([]string, 0, len(queues))
-	for queueName := range queues {
-		queueName = strings.TrimSpace(queueName)
-		if queueName == "" {
-			continue
+// WithRestoredValue registers a durable context codec that re-resolves a live dependency
+// from the runtime's injector on the handler side and attaches it to the restored context
+func WithRestoredValue[T any](id ContextKey, setter func(context.Context, T) context.Context) AttachOption {
+	return func(g *Gala) error {
+		return g.contextManager.Register(newInjectorCodec(id, g.injector, setter))
+	}
+}
+
+// Attach provisions dependencies and durable context codecs onto the runtime. It is
+// called during wiring, after construction and before the first emit that relies on
+// the provisioned values; registration failures are wiring errors
+func (g *Gala) Attach(opts ...AttachOption) error {
+	for _, opt := range opts {
+		if err := opt(g); err != nil {
+			return err
 		}
-
-		names = append(names, queueName)
 	}
 
-	if len(names) == 0 {
-		return nil
+	return nil
+}
+
+// EmitOption customizes one emitted envelope before dispatch
+type EmitOption func(*Envelope)
+
+// WithEventID sets an explicit event identifier on the emitted envelope,
+// making the caller's identity (e.g. a mutation event id or run id) the
+// durable dedup and traceability key instead of a freshly minted ULID
+func WithEventID(id EventID) EmitOption {
+	return func(e *Envelope) {
+		if id != "" {
+			e.ID = id
+		}
 	}
-
-	sort.Strings(names)
-
-	return names
 }
 
-// Registry returns the Gala topic/listener registry
-func (g *Gala) Registry() *Registry {
-	return g.registry
+// WithRawPayload emits pre-encoded payload bytes, bypassing the topic codec.
+// The payload argument passed to Emit is ignored when set; the topic must
+// still be registered so listeners can decode at dispatch time
+func WithRawPayload(raw json.RawMessage) EmitOption {
+	return func(e *Envelope) {
+		if len(raw) > 0 {
+			e.Payload = append(json.RawMessage(nil), raw...)
+		}
+	}
 }
 
-// Injector returns the Gala dependency injector
-func (g *Gala) Injector() do.Injector {
-	return g.injector
-}
-
-// ContextManager returns the Gala context manager
-func (g *Gala) ContextManager() *ContextManager {
-	return g.contextManager
-}
-
-// EmitWithHeaders emits a payload with explicit headers
-func (g *Gala) EmitWithHeaders(ctx context.Context, topic TopicName, payload any, headers Headers) EmitReceipt {
+// EmitWithHeaders emits a payload to the topic under the given headers, applying any
+// options to the envelope before dispatch, and returns the emitted event identifier;
+// headers must carry a job kind
+func (g *Gala) EmitWithHeaders(ctx context.Context, topic TopicName, payload any, headers Headers, opts ...EmitOption) (EventID, error) {
 	registration, err := g.registry.topicRegistration(topic)
 	if err != nil {
-		return EmitReceipt{Err: err}
+		return "", err
 	}
 
-	encodedPayload, err := registration.encode(payload)
-	if err != nil {
-		return EmitReceipt{Err: err}
+	if headers.Kind == "" {
+		headers.Kind = registration.kind
+	}
+
+	if headers.Kind == "" {
+		return "", ErrJobKindRequired
+	}
+
+	envelope := Envelope{
+		Headers:    headers,
+		ID:         NewEventID(),
+		Topic:      topic,
+		OccurredAt: time.Now().UTC(),
+	}
+
+	for _, opt := range opts {
+		opt(&envelope)
+	}
+
+	rawPayload := len(envelope.Payload) > 0
+
+	if !rawPayload {
+		encodedPayload, err := registration.encode(payload)
+		if err != nil {
+			return "", err
+		}
+
+		envelope.Payload = encodedPayload
+	}
+
+	if envelope.Headers.UniqueKey == "" && !envelope.Headers.SkipUniqueKey && registration.uniqueKey != nil {
+		uniqueKey := registration.uniqueKey(payload)
+		// decode raw emits so dedup keys match typed emits on the same topic
+		if uniqueKey == "" && rawPayload {
+			decodedPayload, err := registration.decode(envelope.Payload)
+			if err != nil {
+				return "", err
+			}
+
+			uniqueKey = registration.uniqueKey(decodedPayload)
+		}
+
+		envelope.Headers.UniqueKey = uniqueKey
 	}
 
 	snapshot, err := g.contextManager.Capture(ctx)
 	if err != nil {
-		return EmitReceipt{Err: err}
+		return "", err
 	}
 
-	envelope := Envelope{
-		ID:              NewEventID(),
-		Topic:           topic,
-		OccurredAt:      time.Now().UTC(),
-		Headers:         headers,
-		Payload:         encodedPayload,
-		ContextSnapshot: snapshot,
-	}
-
-	if g.dispatcher == nil {
-		return EmitReceipt{EventID: envelope.ID, Err: ErrDispatcherRequired}
-	}
+	envelope.ContextSnapshot = snapshot
 
 	envelope.Headers.Listeners = g.registry.listenerNamesForTopic(topic)
 
-	if err := g.dispatcher.Dispatch(ctx, envelope); err != nil {
+	if err := g.dispatch(ctx, envelope); err != nil {
 		logx.FromContext(ctx).Debug().Err(err).Str("event_id", string(envelope.ID)).Str("topic", string(topic)).Msg("gala event dispatch failed")
 
-		return EmitReceipt{EventID: envelope.ID, Err: errors.Join(ErrDispatchFailed, err)}
+		return envelope.ID, errors.Join(ErrDispatchFailed, err)
 	}
 
 	logx.FromContext(ctx).Debug().Str("event_id", string(envelope.ID)).Str("topic", string(topic)).Msg("gala event emitted")
 
-	return EmitReceipt{EventID: envelope.ID, Accepted: true}
+	return envelope.ID, nil
 }
 
-// EmitEnvelope dispatches a pre-built envelope using its topic registration.
-// When the envelope does not already carry a ContextSnapshot, one is captured
-// from ctx so that durable dispatch can reconstruct auth and other values.
-func (g *Gala) EmitEnvelope(ctx context.Context, envelope Envelope) error {
-	if _, err := g.registry.topicRegistration(envelope.Topic); err != nil {
-		return err
+// dispatch routes an envelope to the transport for the configured dispatch mode
+func (g *Gala) dispatch(ctx context.Context, envelope Envelope) error {
+	switch g.dispatchMode {
+	case DispatchModeDurable:
+		return g.dispatchDurable(ctx, envelope)
+	case DispatchModeInMemory:
+		return g.dispatchInMemory(ctx, envelope)
+	default:
+		return ErrDispatchModeInvalid
 	}
+}
 
-	if g.dispatcher == nil {
-		return ErrDispatcherRequired
-	}
-
-	if len(envelope.ContextSnapshot.Values) == 0 && len(envelope.ContextSnapshot.Flags) == 0 {
-		snapshot, err := g.contextManager.Capture(ctx)
-		if err != nil {
+// dispatchEnvelope dispatches one envelope to all listeners on the topic
+func (g *Gala) dispatchEnvelope(ctx context.Context, envelope Envelope) error {
+	registration, err := g.registry.topicRegistration(envelope.Topic)
+	if err != nil {
+		renamed, renameOK := g.topicRenames[envelope.Topic]
+		if !renameOK {
 			return err
 		}
 
-		envelope.ContextSnapshot = snapshot
-	}
+		envelope.Topic = renamed
 
-	envelope.Headers.Listeners = g.registry.listenerNamesForTopic(envelope.Topic)
-
-	return g.dispatcher.Dispatch(ctx, envelope)
-}
-
-// DispatchEnvelope dispatches one envelope to all listeners on the topic
-func (g *Gala) DispatchEnvelope(ctx context.Context, envelope Envelope) error {
-	registration, err := g.registry.topicRegistration(envelope.Topic)
-	if err != nil {
-		return err
+		if registration, err = g.registry.topicRegistration(renamed); err != nil {
+			return err
+		}
 	}
 
 	decodedPayload, err := registration.decode(envelope.Payload)
@@ -339,6 +425,10 @@ func (g *Gala) DispatchEnvelope(ctx context.Context, envelope Envelope) error {
 	}
 
 	operation := payloadOperation(decodedPayload)
+	if renamed, ok := g.operationRenames[operation]; ok {
+		operation = renamed
+		decodedPayload = payloadWithOperation(decodedPayload, renamed)
+	}
 
 	logx.FromContext(restoredContext).Debug().Str("event_id", string(envelope.ID)).Str("topic", string(envelope.Topic)).Str("operation", operation).Msg("gala processing event")
 
@@ -351,11 +441,11 @@ func (g *Gala) DispatchEnvelope(ctx context.Context, envelope Envelope) error {
 	listeners := g.registry.registeredListeners(envelope.Topic)
 
 	for _, listener := range listeners {
-		if !listenerInterestedInOperation(listener, operation) {
+		if !listenerMatches(listener, operation) {
 			continue
 		}
 
-		if err := g.executeListener(handlerContext, listener, decodedPayload); err != nil {
+		if err := g.executeListener(handlerContext, listener, decodedPayload, operation); err != nil {
 			// header properties are the only identity left when the emitting context carried no durable log fields
 			logx.FromContext(restoredContext).Warn().Err(err).Str("event_id", string(envelope.ID)).Str("topic", string(envelope.Topic)).Str("operation", operation).Str("listener", listener.name).Interface("envelope_properties", envelope.Headers.Properties).Msg("gala listener failed")
 
@@ -368,35 +458,47 @@ func (g *Gala) DispatchEnvelope(ctx context.Context, envelope Envelope) error {
 	return nil
 }
 
-// payloadOperation extracts a mutation-style operation string when present
-func payloadOperation(payload any) string {
-	value := reflect.ValueOf(payload)
-	if !value.IsValid() {
-		return ""
-	}
-
-	if value.Kind() == reflect.Pointer {
-		if value.IsNil() {
-			return ""
-		}
-
-		value = value.Elem()
-	}
-
-	if value.Kind() != reflect.Struct {
-		return ""
-	}
-
-	field := value.FieldByName("Operation")
-	if !field.IsValid() || field.Kind() != reflect.String {
-		return ""
-	}
-
-	return strings.TrimSpace(field.String())
+// PayloadOperation is the payload contract for listener operation routing; payloads
+// without it dispatch with an empty operation
+type PayloadOperation interface {
+	PayloadOperation() string
 }
 
-// executeListener executes a single listener with panic recovery
-func (g *Gala) executeListener(handlerContext HandlerContext, listener registeredListener, payload any) (err error) {
+// PayloadOperationRenamer is an optional payload contract for operation renames, returning
+// a copy of the payload carrying the renamed operation
+type PayloadOperationRenamer interface {
+	WithPayloadOperation(operation string) any
+}
+
+// payloadWithOperation returns the payload with its operation replaced when supported
+func payloadWithOperation(payload any, operation string) any {
+	if renamer, ok := payload.(PayloadOperationRenamer); ok {
+		return renamer.WithPayloadOperation(operation)
+	}
+
+	return payload
+}
+
+// payloadOperation extracts the payload's operation when the payload declares one
+func payloadOperation(payload any) string {
+	if operationPayload, ok := payload.(PayloadOperation); ok {
+		return strings.TrimSpace(operationPayload.PayloadOperation())
+	}
+
+	return ""
+}
+
+// executeListener executes a single listener with panic recovery, recording delivery metrics
+func (g *Gala) executeListener(handlerContext HandlerContext, listener registeredListener, payload any, operation string) (err error) {
+	start := time.Now()
+	labels := prometheus.Labels{
+		metricLabelTopic:     string(handlerContext.Envelope.Topic),
+		metricLabelListener:  listener.definitionName,
+		metricLabelOperation: operation,
+	}
+
+	skipped := false
+
 	defer func() {
 		if recovered := recover(); recovered != nil {
 			err = ListenerError{
@@ -405,9 +507,25 @@ func (g *Gala) executeListener(handlerContext HandlerContext, listener registere
 				Panicked:     true,
 			}
 		}
+
+		if skipped {
+			return
+		}
+
+		listenerDeliveries.With(labels).Inc()
+		listenerDuration.With(labels).Observe(time.Since(start).Seconds())
+
+		if err != nil {
+			listenerFailures.With(labels).Inc()
+		}
 	}()
 
-	if listenerErr := listener.handle(handlerContext, payload); listenerErr != nil {
+	switch listenerErr := listener.handle(handlerContext, payload, operation); {
+	case errors.Is(listenerErr, ErrListenerGated):
+		skipped = true
+
+		return nil
+	case listenerErr != nil:
 		return ListenerError{
 			ListenerName: listener.name,
 			Cause:        listenerErr,
@@ -424,10 +542,6 @@ func (g *Gala) StartWorkers(ctx context.Context) error {
 		return nil
 	}
 
-	if g.jobClient == nil {
-		return ErrRiverJobClientRequired
-	}
-
 	if err := g.jobClient.GetRiverClient().Start(ctx); err != nil {
 		return ErrRiverWorkerStartFailed
 	}
@@ -439,10 +553,6 @@ func (g *Gala) StartWorkers(ctx context.Context) error {
 func (g *Gala) StopWorkers(ctx context.Context) error {
 	if g.dispatchMode == DispatchModeInMemory {
 		return nil
-	}
-
-	if g.jobClient == nil {
-		return ErrRiverJobClientRequired
 	}
 
 	if err := g.jobClient.GetRiverClient().Stop(ctx); err != nil &&
@@ -479,12 +589,7 @@ func (g *Gala) waitDurableIdle() {
 
 	rc := g.jobClient.GetRiverClient()
 
-	idleCount := 0
-	for idleCount < durableIdleThreshold {
-		if ctx.Err() != nil {
-			return
-		}
-
+	waitStable(ctx, func() bool {
 		params := river.NewJobListParams().
 			States(rivertype.JobStateAvailable, rivertype.JobStateRunning, rivertype.JobStateScheduled).
 			First(1)
@@ -493,58 +598,104 @@ func (g *Gala) waitDurableIdle() {
 		}
 
 		result, err := rc.JobList(ctx, params)
-		if err != nil || len(result.Jobs) > 0 {
-			idleCount = 0
-		} else {
-			idleCount++
-		}
 
-		time.Sleep(durableWaitPollInterval)
-	}
+		return err == nil && len(result.Jobs) == 0
+	}, durableWaitPollInterval, durableIdleThreshold)
 }
 
 const (
 	durableWaitTimeout      = 30 * time.Second
 	durableWaitPollInterval = 50 * time.Millisecond
 	durableIdleThreshold    = 3
+	activeJobsPageSize      = 100
 )
 
-// HasActiveJobForTopic reports whether at least one River job for the given topic
-// exists in an active state (available, scheduled, running, or retryable).
-// Returns false without error when Gala is not in durable mode
-func (g *Gala) HasActiveJobForTopic(ctx context.Context, topic TopicName) (bool, error) {
-	fragment, err := json.Marshal(map[string]string{"topic": string(topic)})
-	if err != nil {
-		return false, err
-	}
-
-	return g.HasActiveJobWithMetadata(ctx, string(fragment))
+// activeJobListParams builds JobList params for matching jobs in an "active" state
+func activeJobListParams(metadataFragment string) *river.JobListParams {
+	return river.NewJobListParams().Metadata(metadataFragment).States(rivertype.JobStateAvailable, rivertype.JobStateRunning, rivertype.JobStateScheduled, rivertype.JobStateRetryable)
 }
 
-// HasActiveJobWithMetadata reports whether at least one River job whose metadata
-// JSONB contains the given fragment exists in an active state (available, scheduled,
-// running, or retryable). Returns false without error when Gala is not in durable mode
+// HasActiveJobWithMetadata reports whether at least one active-state River job matches the
+// metadata fragment; false without error when Gala is not durable
 func (g *Gala) HasActiveJobWithMetadata(ctx context.Context, metadataFragment string) (bool, error) {
 	if g.jobClient == nil {
 		return false, nil
 	}
 
-	params := river.NewJobListParams().
-		Metadata(metadataFragment).
-		States(
-			rivertype.JobStateAvailable,
-			rivertype.JobStateRunning,
-			rivertype.JobStateScheduled,
-			rivertype.JobStateRetryable,
-		).
-		First(1)
-
-	result, err := g.jobClient.GetRiverClient().JobList(ctx, params)
+	result, err := g.jobClient.GetRiverClient().JobList(ctx, activeJobListParams(metadataFragment).First(1))
 	if err != nil {
 		return false, err
 	}
 
 	return len(result.Jobs) > 0, nil
+}
+
+// activeJobsWithMetadata lists every active-state River job matching the metadata fragment
+func (g *Gala) activeJobsWithMetadata(ctx context.Context, metadataFragment string) ([]*rivertype.JobRow, error) {
+	client := g.jobClient.GetRiverClient()
+	params := activeJobListParams(metadataFragment).First(activeJobsPageSize)
+
+	var jobs []*rivertype.JobRow
+
+	for {
+		result, err := client.JobList(ctx, params)
+		if err != nil {
+			return nil, err
+		}
+
+		jobs = append(jobs, result.Jobs...)
+
+		if len(result.Jobs) < activeJobsPageSize || result.LastCursor == nil {
+			return jobs, nil
+		}
+
+		params = params.After(result.LastCursor)
+	}
+}
+
+// CountActiveJobsWithMetadata returns how many River jobs whose metadata JSONB contains the
+// given fragment are in an active state. Returns zero without error when Gala is not in durable mode
+func (g *Gala) CountActiveJobsWithMetadata(ctx context.Context, metadataFragment string) (int, error) {
+	if g.jobClient == nil {
+		return 0, nil
+	}
+
+	jobs, err := g.activeJobsWithMetadata(ctx, metadataFragment)
+	if err != nil {
+		return 0, err
+	}
+
+	return len(jobs), nil
+}
+
+// CancelActiveJobsWithMetadata cancels every River job whose metadata JSONB contains the given
+// fragment and is in an active state, returning how many were cancelled. Returns zero without
+// error when Gala is not in durable mode
+func (g *Gala) CancelActiveJobsWithMetadata(ctx context.Context, metadataFragment string) (int, error) {
+	if g.jobClient == nil {
+		return 0, nil
+	}
+
+	jobs, err := g.activeJobsWithMetadata(ctx, metadataFragment)
+	if err != nil {
+		return 0, err
+	}
+
+	client := g.jobClient.GetRiverClient()
+
+	var cancelled int
+
+	for _, job := range jobs {
+		if _, err := client.JobCancel(ctx, job.ID); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int64("job_id", job.ID).Msg("gala: failed cancelling job")
+
+			continue
+		}
+
+		cancelled++
+	}
+
+	return cancelled, nil
 }
 
 // Close closes the dedicated Gala queue client

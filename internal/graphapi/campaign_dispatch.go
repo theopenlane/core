@@ -419,9 +419,7 @@ func (r *mutationResolver) enqueueCampaignDispatchJob(ctx context.Context, state
 	}
 
 	if _, err := rt.Dispatch(ctx, req); err != nil {
-		logx.FromContext(ctx).Error().Err(err).
-			Str("campaign_id", state.campaignObj.ID).
-			Msg("failed scheduling campaign dispatch")
+		logx.FromContext(ctx).Error().Err(err).Str("campaign_id", state.campaignObj.ID).Msg("failed scheduling campaign dispatch")
 
 		return err
 	}

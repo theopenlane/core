@@ -11,7 +11,6 @@ import (
 	"entgo.io/ent/dialect"
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/rs/zerolog"
-	"github.com/samber/do/v2"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 	"github.com/theopenlane/core/fga/fgaversion"
@@ -140,20 +139,21 @@ func (suite *HookTestSuite) setupClient() *generated.Client {
 		enttest.WithMigrateOptions(entdb.EnablePostgresOption(db)),
 		enttest.WithOptions(opts...))
 
-	galaRuntime, err := gala.NewInMemory()
+	galaRuntime, err := gala.NewGala(context.Background(), gala.Config{DispatchMode: gala.DispatchModeInMemory, WorkerCount: 3})
 	require.NoError(t, err)
 
-	_, err = hooks.RegisterGalaTaskRuleListeners(galaRuntime.Registry())
+	_, err = gala.Register(galaRuntime, hooks.TaskRuleListeners()...)
 	require.NoError(t, err)
 
-	_, err = hooks.RegisterGalaCampaignRecurringListeners(galaRuntime.Registry())
+	_, err = gala.Register(galaRuntime, hooks.CampaignRecurringListeners()...)
 	require.NoError(t, err)
 
-	do.ProvideValue(galaRuntime.Injector(), client)
+	require.NoError(t, galaRuntime.Attach(
+		gala.WithValue(client),
+		gala.WithRestoredValue("ent_client", generated.NewContext),
+	))
 
-	client.Use(hooks.EmitGalaEventHook(func() *gala.Gala {
-		return galaRuntime
-	}))
+	client.Use(hooks.EmitGalaEventHook(galaRuntime))
 
 	suite.galaRuntime = galaRuntime
 

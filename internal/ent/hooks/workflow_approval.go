@@ -13,12 +13,11 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
-	"github.com/theopenlane/core/internal/ent/workflowgenerated"
-	"github.com/theopenlane/core/internal/mutations"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/engine"
 )
@@ -48,10 +47,8 @@ func HookWorkflowApprovalRouting() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			allChangedFields := workflows.CollectAllChangedFields(mut)
-			changedFields := workflows.CollectChangedFields(mut)
-			changedEdges, addedIDs, removedIDs := workflowgenerated.ExtractChangedEdges(m)
-			if len(allChangedFields) == 0 && len(changedEdges) == 0 {
+			changeSet := entityops.ChangeSetFromMutation(m)
+			if len(changeSet.ChangedFields) == 0 && len(changeSet.ChangedEdges) == 0 {
 				return next.Mutate(ctx, m)
 			}
 
@@ -69,6 +66,17 @@ func HookWorkflowApprovalRouting() ent.Hook {
 			if objectType == nil {
 				return next.Mutate(ctx, m)
 			}
+
+			schema, schemaErr := workflows.WorkflowSchema(*objectType)
+			if schemaErr != nil {
+				return next.Mutate(ctx, m)
+			}
+
+			// the workflow view of the delta: changed fields and proposed values filtered to
+			// workflow-eligible fields, while edge deltas stay unfiltered for trigger matching
+			wfChanges := schema.WorkflowChangeSet(changeSet)
+			changedFields := wfChanges.ChangedFields
+			proposedChanges := wfChanges.ProposedChanges
 
 			id, ok, idErr := getSingleMutationID(ctx, mut)
 			if idErr != nil {
@@ -90,12 +98,11 @@ func HookWorkflowApprovalRouting() ent.Hook {
 				Node: entity,
 			}
 
-			proposedChanges := mutations.BuildProposedChanges(mut, changedFields)
 			if len(proposedChanges) == 0 {
 				return next.Mutate(ctx, m)
 			}
 
-			definitions, err := wfEngine.FindMatchingDefinitions(allowCtx, mut.Type(), "UPDATE", changedFields, changedEdges, addedIDs, removedIDs, proposedChanges, obj)
+			definitions, err := wfEngine.FindMatchingDefinitions(allowCtx, mut.Type(), "UPDATE", changedFields, changeSet.ChangedEdges, changeSet.AddedIDs, changeSet.RemovedIDs, proposedChanges, obj)
 			if err != nil || len(definitions) == 0 {
 				return next.Mutate(ctx, m)
 			}
@@ -106,7 +113,7 @@ func HookWorkflowApprovalRouting() ent.Hook {
 					continue
 				}
 
-				shouldRun, err := wfEngine.EvaluateConditions(allowCtx, def, obj, "UPDATE", changedFields, changedEdges, addedIDs, removedIDs, proposedChanges)
+				shouldRun, err := wfEngine.EvaluateConditions(allowCtx, def, obj, "UPDATE", changedFields, changeSet.ChangedEdges, changeSet.AddedIDs, changeSet.RemovedIDs, proposedChanges)
 				if err != nil {
 					return nil, err
 				}
@@ -125,27 +132,19 @@ func HookWorkflowApprovalRouting() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			eligibleFields, ineligibleFields := workflows.SeparateFieldsByEligibility(mut.Type(), allChangedFields)
-			ineligibleFields = excludeSystemFields(ineligibleFields)
+			ineligibleFields := excludeSystemFields(lo.Without(changeSet.ChangedFields, changedFields...))
 
-			eligibleChanges := mutations.BuildProposedChanges(mut, eligibleFields)
-			hasDirectChanges := len(ineligibleFields) > 0 || len(changedEdges) > 0
+			hasDirectChanges := len(ineligibleFields) > 0 || len(changeSet.ChangedEdges) > 0
 			if hasDirectChanges {
-				resetMutationFields(m, eligibleFields)
+				resetMutationFields(m, changedFields)
 				bypassCtx := workflows.WithContext(ctx)
 				if _, err := next.Mutate(bypassCtx, m); err != nil {
 					return nil, err
 				}
 			}
 
-			if len(eligibleFields) == 0 {
-				return workflows.LoadWorkflowObject(allowCtx, client, mut.Type(), id)
-			}
-
-			proposedChanges = eligibleChanges
-
 			// Route to proposed changes instead of applying directly
-			workflows.MarkSkipEventEmission(ctx)
+			entityops.VetoEmission(ctx)
 			return routeMutationToProposals(ctx, client, mut, proposedChanges, preCommitDefs)
 		})
 	}, ent.OpUpdate|ent.OpUpdateOne)

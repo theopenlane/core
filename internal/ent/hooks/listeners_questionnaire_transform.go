@@ -2,22 +2,16 @@ package hooks
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"net/mail"
-	"reflect"
-	"strconv"
 	"strings"
-	"time"
 
-	"entgo.io/ent"
-	"github.com/stoewer/go-strcase"
+	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/ent/eventqueue"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
@@ -25,69 +19,48 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/note"
-	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/core/internal/integrations/operations"
-	"github.com/theopenlane/core/internal/integrations/registry"
-	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/pkg/mapx"
 )
 
-// RegisterGalaQuestionnaireTransformListeners registers listeners that transform
-// completed questionnaire document data into configured target schemas.
-// Supported types are defined in `TemplateProjectionTarget` enums
-func RegisterGalaQuestionnaireTransformListeners(registry *gala.Registry) ([]gala.ListenerID, error) {
-	return gala.RegisterListeners(registry,
-		gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic:      eventqueue.MutationTopic(eventqueue.MutationConcernDirect, entgen.TypeAssessmentResponse),
-			Name:       operations.QuestionnaireTransformOperationName,
-			Operations: []string{ent.OpCreate.String(), ent.OpUpdate.String(), ent.OpUpdateOne.String()},
-			Handle:     handleAssessmentResponse,
+// QuestionnaireTransformListeners transforms completed questionnaire document data into
+// entities using the template's transform configuration
+func QuestionnaireTransformListeners() []gala.Registration {
+	return []gala.Registration{entityops.MutationListener{
+		Schema:     entityops.SchemaAssessmentResponse,
+		Operations: []string{entityops.OpCreate, entityops.OpUpdate, entityops.OpUpdateOne},
+		Fields: []string{
+			assessmentresponse.FieldStatus,
+			assessmentresponse.FieldDocumentDataID,
+			assessmentresponse.FieldCompletedAt,
+			assessmentresponse.FieldIsDraft,
 		},
-	)
+		Caller: internalOperationBypassCaller,
+		Handle: handleAssessmentResponse,
+	}}
 }
 
-func handleAssessmentResponse(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	if !questionnaireTransformFieldChanged(payload) {
-		return nil
-	}
-
-	ctx, client, ok := eventqueue.ClientFromHandler(ctx)
-	if !ok {
-		return nil
-	}
-
-	id, ok := eventqueue.MutationEntityID(payload, ctx.Envelope.Headers.Properties)
-	if !ok || id == "" {
-		return nil
-	}
-
-	allowCtx := workflows.AllowContext(ctx.Context)
-
-	response, err := client.AssessmentResponse.Query().
-		Where(assessmentresponse.IDEQ(id)).
+// handleAssessmentResponse reacts to completed assessment responses and transforms the associated
+// document data
+func handleAssessmentResponse(inv entityops.Invocation, _ entityops.MutationPayload) error {
+	response, err := inv.Client.AssessmentResponse.Query().
+		Where(assessmentresponse.IDEQ(inv.EntityID)).
 		WithDocument().
 		WithAssessment(func(query *entgen.AssessmentQuery) {
 			query.WithTemplate()
 		}).
-		Only(allowCtx)
+		Only(inv.Context)
 	if err != nil {
 		if entgen.IsNotFound(err) {
-			logx.FromContext(ctx.Context).Error().
-				Err(err).
-				Str("assessment_response_id", id).
-				Msg("assessment response not found for questionnaire transform")
+			logx.FromContext(inv.Context).Error().Err(err).Msg("assessment response not found for questionnaire transform")
 
 			return nil
 		}
 
-		logx.FromContext(ctx.Context).Error().
-			Err(err).
-			Str("assessment_response_id", id).
-			Msg("failed to load assessment response for questionnaire transform")
+		logx.FromContext(inv.Context).Error().Err(err).Msg("failed to load assessment response for questionnaire transform")
 
 		return err
 	}
@@ -97,16 +70,8 @@ func handleAssessmentResponse(ctx gala.HandlerContext, payload eventqueue.Mutati
 		return nil
 	}
 
-	organizationID := response.OwnerID
-	if organizationID == "" {
-		organizationID = document.OwnerID
-	}
-	if organizationID == "" {
-		organizationID = assessment.OwnerID
-	}
-
 	req := questionnaireTransformRequest{
-		OrganizationID:       organizationID,
+		OrganizationID:       lo.CoalesceOrEmpty(response.OwnerID, document.OwnerID, assessment.OwnerID),
 		TemplateID:           assessment.TemplateID,
 		TemplateKind:         assessment.Edges.Template.Kind,
 		AssessmentID:         assessment.ID,
@@ -117,100 +82,31 @@ func handleAssessmentResponse(ctx gala.HandlerContext, payload eventqueue.Mutati
 		Config:               config,
 	}
 
-	integrationRun, startedAt, created, err := createQuestionnaireTransformRun(allowCtx, client, req)
-	if err != nil {
+	ctx := logx.WithFields(inv.Context, map[string]any{
+		"assessment_id":    assessment.ID,
+		"template_id":      assessment.TemplateID,
+		"document_data_id": response.DocumentDataID,
+	})
+
+	// already transformed; rerun the idempotent linking so partial deliveries heal
+	if response.EntityID != "" {
+		return linkEntitySources(ctx, inv.Client, req, response.EntityID, mappedNotes(req))
+	}
+
+	if err := transformQuestionnaire(ctx, inv.Client, req); err != nil {
+		if errors.Is(err, ErrQuestionnaireTransformInvalid) {
+			logx.FromContext(ctx).Error().Err(err).Msg("questionnaire transform failed")
+
+			return nil
+		}
+
 		return err
 	}
 
-	if !created {
-		logx.FromContext(ctx.Context).Debug().
-			Str("assessment_response_id", response.ID).
-			Msg("questionnaire transform run already exists")
-
-		return nil
-	}
-
-	req.IntegrationRunID = integrationRun.ID
-
-	err = transformQuestionnaire(allowCtx, client, req)
-
-	runResult := operations.RunResult{
-		Status:  enums.IntegrationRunStatusSuccess,
-		Summary: "questionnaire transform completed",
-	}
-
-	if err != nil {
-		runResult = operations.RunResult{
-			Status:  enums.IntegrationRunStatusFailed,
-			Summary: "questionnaire transformation failed",
-			Error:   err.Error(),
-		}
-	}
-
-	errFromRun := operations.CompleteRun(allowCtx, client, integrationRun.ID, startedAt, runResult)
-	if errFromRun != nil {
-		if err == nil {
-			return errFromRun
-		}
-
-		err = errors.Join(err, errFromRun)
-	}
-	if err == nil {
-		return nil
-	}
-
-	logger := logx.FromContext(ctx.Context).Error().
-		Err(err).
-		Str("assessment_response_id", response.ID).
-		Str("assessment_id", assessment.ID).
-		Str("template_id", assessment.TemplateID).
-		Str("document_data_id", response.DocumentDataID)
-
-	if isQuestionnaireValidationError(err) {
-		logger.Msg("questionnaire transform skipped due to invalid transform data")
-
-		if errFromRun != nil {
-			return err
-		}
-
-		return nil
-	}
-
-	logger.Msg("questionnaire transform failed")
-
-	if errors.Is(err, operations.ErrIngestUpsertConflict) {
-		if errFromRun != nil {
-			return err
-		}
-
-		return nil
-	}
-
-	return err
+	return nil
 }
 
-func createQuestionnaireTransformRun(ctx context.Context, client *entgen.Client, req questionnaireTransformRequest) (*entgen.IntegrationRun, time.Time, bool, error) {
-	currTime := time.Now()
-
-	run, err := client.IntegrationRun.Create().
-		SetOwnerID(req.OrganizationID).
-		SetOperationName(operations.QuestionnaireTransformOperationName).
-		SetRunType(enums.IntegrationRunTypeEvent).
-		SetStatus(enums.IntegrationRunStatusRunning).
-		SetStartedAt(currTime).
-		SetAssessmentResponseID(req.AssessmentResponseID).
-		Save(ctx)
-	if err != nil {
-		if entgen.IsConstraintError(err) {
-			return nil, time.Time{}, false, nil
-		}
-
-		return nil, time.Time{}, false, fmt.Errorf("questionnaire transform integration run: %w", err)
-	}
-
-	return run, currTime, true, nil
-}
-
+// validateQuestionnaire returns the assessment, document, and transform config if the response is complete and the template has a valid transform configuration
 func validateQuestionnaire(response *entgen.AssessmentResponse) (*entgen.Assessment, *entgen.DocumentData, models.TemplateProjectionConfig, bool) {
 	if response == nil || response.Status != enums.AssessmentResponseStatusCompleted || response.DocumentDataID == "" {
 		return nil, nil, models.TemplateProjectionConfig{}, false
@@ -234,182 +130,153 @@ func validateQuestionnaire(response *entgen.AssessmentResponse) (*entgen.Assessm
 	return assessment, document, config, true
 }
 
-func questionnaireTransformFieldChanged(payload eventqueue.MutationGalaPayload) bool {
-	if payload.Operation == ent.OpCreate.String() {
-		return true
-	}
-
-	return eventqueue.MutationFieldChanged(payload, assessmentresponse.FieldStatus) ||
-		eventqueue.MutationFieldChanged(payload, assessmentresponse.FieldDocumentDataID) ||
-		eventqueue.MutationFieldChanged(payload, assessmentresponse.FieldCompletedAt) ||
-		eventqueue.MutationFieldChanged(payload, assessmentresponse.FieldIsDraft)
-}
-
 const transformMetadataKey = "questionnaire_transform"
 const entityTransformFieldNotes = "notes"
-const entityTransformFieldEntityTypeID = "entityTypeID"
-const questionnaireTransformDefinitionID = "questionnaire_transform"
-
-type questionnaireValidationError struct {
-	Message string
-}
-
-func (e *questionnaireValidationError) Error() string { return e.Message }
-
-func isQuestionnaireValidationError(err error) bool {
-	var validationErr *questionnaireValidationError
-	return errors.As(err, &validationErr)
-}
 
 type questionnaireTransformRequest struct {
-	OrganizationID       string
-	TemplateID           string
-	TemplateKind         enums.TemplateKind
-	AssessmentID         string
-	AssessmentResponseID string
-	IntegrationRunID     string
-	DocumentDataID       string
-	Email                string
-	Data                 map[string]any
-	Config               models.TemplateProjectionConfig
+	OrganizationID       string                          `json:"-"`
+	TemplateID           string                          `json:"template_id"`
+	TemplateKind         enums.TemplateKind              `json:"-"`
+	AssessmentID         string                          `json:"assessment_id"`
+	AssessmentResponseID string                          `json:"assessment_response_id"`
+	DocumentDataID       string                          `json:"document_data_id"`
+	Email                string                          `json:"-"`
+	Data                 map[string]any                  `json:"-"`
+	Config               models.TemplateProjectionConfig `json:"-"`
 }
 
-type mappedTransform struct {
-	Payload    map[string]any
-	Notes      string
-	ExternalID string
-}
-
-var questionnaireTransformInputTypes = map[string]reflect.Type{
-	entityops.SchemaEntity.Name: reflect.TypeOf(entgen.CreateEntityInput{}),
-}
-
+// transformQuestionnaire maps the submitted document data into an entity, upserts it, and
+// links the response, document, and note to the persisted record
 func transformQuestionnaire(ctx context.Context, client *entgen.Client, req questionnaireTransformRequest) error {
-	// if the transformation config is enabled
-	if !req.Config.Enabled {
+	if req.OrganizationID == "" {
+		return fmt.Errorf("%w: missing organization id", ErrQuestionnaireTransformInvalid)
+	}
+
+	input, notes, err := mapEntityInput(ctx, client, req)
+	if err != nil {
+		return err
+	}
+
+	record, err := upsertEntity(ctx, client, input)
+	if err != nil {
+		return err
+	}
+
+	claimed, err := claimAssessmentResponse(ctx, client, req, record)
+	if err != nil {
+		return err
+	}
+
+	// a lost claim means a concurrent delivery of the same response already owns linking
+	// and note creation
+	if !claimed {
 		return nil
 	}
 
-	if req.OrganizationID == "" {
-		return &questionnaireValidationError{Message: "missing transform organization id"}
-	}
-
-	switch req.Config.Target {
-	case enums.TemplateProjectionTargetEntity:
-		return handleEntityTransform(ctx, client, req)
-	default:
-		return &questionnaireValidationError{Message: fmt.Sprintf("unsupported transform target %q", req.Config.Target)}
-	}
+	return linkEntitySources(ctx, client, req, record.ID, notes)
 }
 
-func handleEntityTransform(ctx context.Context, client *entgen.Client, req questionnaireTransformRequest) error {
-	values, err := resolveTransformMappings(ctx, client, req)
-	if err != nil {
-		return err
-	}
-
-	mapped, err := buildMappedTransformPayload(entityops.SchemaEntity.Name, values, req)
-	if err != nil {
-		return err
-	}
-
-	if err := setVendorEntityType(ctx, client, req, mapped.Payload); err != nil {
-		return err
-	}
-
-	record, err := persistTransformPayload(ctx, client, req, entityops.SchemaEntity.Name, mapped)
-	if err != nil {
-		return err
-	}
-
-	if err := connectEntitySources(ctx, client, req, record); err != nil {
-		return err
-	}
-
-	if err := createEntityNote(ctx, client, req, record.ID, mapped.Notes); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func resolveTransformMappings(ctx context.Context, client *entgen.Client, req questionnaireTransformRequest) (map[string]any, error) {
+// mapEntityInput builds the entity create input and note text from the template's mappings
+func mapEntityInput(ctx context.Context, client *entgen.Client, req questionnaireTransformRequest) (entgen.CreateEntityInput, string, error) {
 	if len(req.Config.Mappings) == 0 {
-		return nil, &questionnaireValidationError{Message: "transform configuration has no mappings"}
+		return entgen.CreateEntityInput{}, "", fmt.Errorf("%w: configuration has no mappings", ErrQuestionnaireTransformInvalid)
 	}
 
-	values := map[string]any{}
+	fields := map[string]any{}
+
+	var notes, ownerValue, environmentValue string
 
 	for _, mapping := range req.Config.Mappings {
-		rawValue, ok := valueAtPath(req.Data, mapping.From)
+		rawValue, ok := mapx.ValueAtPath(req.Data, mapping.From)
 		if !ok || isEmptyValue(rawValue) {
 			if mapping.Resolver == models.TemplateProjectionResolverInternalOwner && req.Email != "" {
-				if err := resolveInternalOwner(ctx, client, req.OrganizationID, req.Email, values); err != nil {
-					return nil, err
-				}
-
+				rawValue = req.Email
+			} else if mapping.Required {
+				return entgen.CreateEntityInput{}, "", fmt.Errorf("%w: missing required field %q", ErrQuestionnaireTransformInvalid, mapping.From)
+			} else {
 				continue
 			}
-
-			if mapping.Required {
-				return nil, &questionnaireValidationError{Message: fmt.Sprintf("missing required transform field %q", mapping.From)}
-			}
-
-			continue
 		}
 
-		if mapping.Resolver == models.TemplateProjectionResolverInternalOwner {
-			if err := resolveInternalOwner(ctx, client, req.OrganizationID, rawValue, values); err != nil {
-				return nil, err
-			}
-
-			continue
+		switch {
+		case mapping.Resolver == models.TemplateProjectionResolverInternalOwner:
+			ownerValue = getStringValue(rawValue)
+		case mapping.Resolver == models.TemplateProjectionResolverEnvironment:
+			environmentValue = getStringValue(rawValue)
+		case mapping.To == entityTransformFieldNotes:
+			notes = getStringValue(rawValue)
+		case mapping.To == "":
+			return entgen.CreateEntityInput{}, "", fmt.Errorf("%w: mapping for %q is missing target field", ErrQuestionnaireTransformInvalid, mapping.From)
+		default:
+			fields[mapping.To] = rawValue
 		}
-
-		if mapping.Resolver == models.TemplateProjectionResolverEnvironment {
-			if err := resolveEnvironment(ctx, client, req.OrganizationID, rawValue, values); err != nil {
-				return nil, err
-			}
-
-			continue
-		}
-
-		value, err := applyTransform(rawValue, mapping.Transform)
-		if err != nil {
-			return nil, err
-		}
-
-		if mapping.To == "" {
-			return nil, &questionnaireValidationError{Message: fmt.Sprintf("transform mapping for %q is missing target field", mapping.From)}
-		}
-
-		values[mapping.To] = value
 	}
 
-	return values, nil
+	var input entgen.CreateEntityInput
+	if err := jsonx.RoundTrip(fields, &input); err != nil {
+		return entgen.CreateEntityInput{}, "", fmt.Errorf("%w: %v", ErrQuestionnaireTransformInvalid, err)
+	}
+
+	metadata, err := transformMetadata(req)
+	if err != nil {
+		return entgen.CreateEntityInput{}, "", err
+	}
+
+	input.OwnerID = &req.OrganizationID
+	input.VendorMetadata = metadata
+
+	if lo.FromPtr(input.ExternalID) == "" {
+		input.ExternalID = input.Name
+	}
+
+	if lo.FromPtr(input.ExternalID) == "" {
+		return entgen.CreateEntityInput{}, "", fmt.Errorf("%w: requires external_id or name", ErrQuestionnaireTransformInvalid)
+	}
+
+	if err := applyInternalOwner(ctx, client, req.OrganizationID, ownerValue, &input); err != nil {
+		return entgen.CreateEntityInput{}, "", err
+	}
+
+	if err := applyEnvironment(ctx, client, req.OrganizationID, environmentValue, &input); err != nil {
+		return entgen.CreateEntityInput{}, "", err
+	}
+
+	// external intake submissions default to the org's vendor entity type
+	if req.TemplateKind == enums.TemplateKindExternalIntake && input.EntityTypeID == nil {
+		id, err := client.EntityType.Query().
+			Where(
+				entitytype.OwnerIDEQ(req.OrganizationID),
+				entitytype.NameEqualFold("vendor"),
+			).
+			FirstID(ctx)
+
+		switch {
+		case entgen.IsNotFound(err):
+		case err != nil:
+			return entgen.CreateEntityInput{}, "", err
+		default:
+			input.EntityTypeID = &id
+		}
+	}
+
+	return input, notes, nil
 }
 
-func resolveInternalOwner(ctx context.Context, client *entgen.Client, organizationID string, rawValue any, values map[string]any) error {
-	ownerValue := strings.TrimSpace(getStringValue(rawValue))
+// applyInternalOwner resolves an owner value to a user, group, or free-text internal owner
+func applyInternalOwner(ctx context.Context, client *entgen.Client, organizationID, ownerValue string, input *entgen.CreateEntityInput) error {
+	ownerValue = strings.TrimSpace(ownerValue)
 	if ownerValue == "" {
 		return nil
 	}
 
 	if _, err := mail.ParseAddress(ownerValue); err == nil {
-		userID, err := client.User.Query().
-			Where(
-				user.EmailEqualFold(ownerValue),
-				user.HasOrgMembershipsWith(orgmembership.OrganizationID(organizationID)),
-			).
-			OnlyID(ctx)
-		if err != nil && !entgen.IsNotFound(err) {
-			return fmt.Errorf("resolve internal owner user: %w", err)
+		userID, err := orgUserIDByEmail(ctx, client, organizationID, ownerValue)
+		if err != nil {
+			return err
 		}
 
 		if userID != "" {
-			values[entity.FieldInternalOwnerUserID] = userID
-			delete(values, entity.FieldInternalOwnerGroupID)
-			delete(values, entity.FieldInternalOwner)
+			input.InternalOwnerUserID = &userID
 
 			return nil
 		}
@@ -425,26 +292,23 @@ func resolveInternalOwner(ctx context.Context, client *entgen.Client, organizati
 		).
 		FirstID(ctx)
 	if err != nil && !entgen.IsNotFound(err) {
-		return fmt.Errorf("resolve internal owner group: %w", err)
+		return err
 	}
 
 	if groupID != "" {
-		values[entity.FieldInternalOwnerGroupID] = groupID
-		delete(values, entity.FieldInternalOwnerUserID)
-		delete(values, entity.FieldInternalOwner)
+		input.InternalOwnerGroupID = &groupID
 
 		return nil
 	}
 
-	values[entity.FieldInternalOwner] = ownerValue
-	delete(values, entity.FieldInternalOwnerUserID)
-	delete(values, entity.FieldInternalOwnerGroupID)
+	input.InternalOwner = &ownerValue
 
 	return nil
 }
 
-func resolveEnvironment(ctx context.Context, client *entgen.Client, organizationID string, value any, values map[string]any) error {
-	environment := strings.TrimSpace(getStringValue(value))
+// applyEnvironment finds or creates the environment custom enum and sets it on the input
+func applyEnvironment(ctx context.Context, client *entgen.Client, organizationID, environment string, input *entgen.CreateEntityInput) error {
+	environment = strings.TrimSpace(environment)
 	if environment == "" {
 		return nil
 	}
@@ -469,7 +333,7 @@ func resolveEnvironment(ctx context.Context, client *entgen.Client, organization
 	}
 
 	if err != nil && !entgen.IsNotFound(err) {
-		return fmt.Errorf("resolve environment: %w", err)
+		return err
 	}
 
 	if entgen.IsNotFound(err) {
@@ -480,253 +344,96 @@ func resolveEnvironment(ctx context.Context, client *entgen.Client, organization
 			SetOwnerID(organizationID).
 			Save(ctx)
 		if err != nil {
-			return fmt.Errorf("create environment enum: %w", err)
+			return err
 		}
 	}
 
-	values[entity.FieldEnvironmentID] = enum.ID
-	values[entity.FieldEnvironmentName] = enum.Name
+	input.EnvironmentID = &enum.ID
+	input.EnvironmentName = &enum.Name
 
 	return nil
 }
 
-func setVendorEntityType(ctx context.Context, client *entgen.Client, req questionnaireTransformRequest, payload map[string]any) error {
-	if req.TemplateKind != enums.TemplateKindExternalIntake || payload[entityTransformFieldEntityTypeID] != nil {
-		return nil
-	}
-
-	id, err := client.EntityType.Query().
+// upsertEntity creates the mapped entity, updating the existing row when the owner already
+// has an entity with the same external id
+func upsertEntity(ctx context.Context, client *entgen.Client, input entgen.CreateEntityInput) (*entgen.Entity, error) {
+	existing, err := client.Entity.Query().
 		Where(
-			entitytype.OwnerIDEQ(req.OrganizationID),
-			entitytype.NameEqualFold("vendor"),
+			entity.OwnerID(lo.FromPtr(input.OwnerID)),
+			entity.ExternalID(lo.FromPtr(input.ExternalID)),
 		).
-		FirstID(ctx)
+		First(ctx)
 
-	if entgen.IsNotFound(err) {
-		return nil
+	switch {
+	case entgen.IsNotFound(err):
+		return client.Entity.Create().SetInput(input).Save(ctx)
+	case err != nil:
+		return nil, err
 	}
 
-	if err != nil {
-		return fmt.Errorf("resolve external intake entity type: %w", err)
+	var update entgen.UpdateEntityInput
+	if err := jsonx.RoundTrip(input, &update); err != nil {
+		return nil, err
 	}
 
-	payload[entityTransformFieldEntityTypeID] = id
-	return nil
+	return client.Entity.UpdateOne(existing).SetInput(update).Save(ctx)
 }
 
-func applyTransform(value any, transform enums.TemplateProjectionTransform) (any, error) {
-	if transform == "" {
-		return value, nil
+// claimAssessmentResponse atomically claims the assessment response by flipping its empty
+// entity_id, the mutex that keeps concurrent deliveries from double-linking
+func claimAssessmentResponse(ctx context.Context, client *entgen.Client, req questionnaireTransformRequest, record *entgen.Entity) (bool, error) {
+	if record == nil || req.AssessmentResponseID == "" {
+		return false, nil
 	}
 
-	switch transform {
-	case enums.TemplateProjectionTransformString:
-		return getStringValue(value), nil
-
-	case enums.TemplateProjectionTransformSlugify:
-		return strcase.KebabCase(strings.TrimSpace(getStringValue(value))), nil
-
-	case enums.TemplateProjectionTransformDate:
-		return getDatetimeValue(value)
-
-	case enums.TemplateProjectionTransformBool:
-		return getBoolValue(value)
-
-	case enums.TemplateProjectionTransformFloat:
-		return getFloatValue(value)
-
-	case enums.TemplateProjectionTransformStringArray:
-
-		return getStringArrayValue(value), nil
-	default:
-		return nil, &questionnaireValidationError{Message: fmt.Sprintf("unsupported transform %q", transform)}
-	}
-}
-
-func buildMappedTransformPayload(schemaName string, values map[string]any, req questionnaireTransformRequest) (mappedTransform, error) {
-	schema, ok := entityops.LookupSchema(schemaName)
-	if !ok {
-		return mappedTransform{}, &questionnaireValidationError{Message: fmt.Sprintf("unsupported transform schema %q", schemaName)}
-	}
-
-	mapped := mappedTransform{
-		Payload: map[string]any{},
-	}
-
-	for field, value := range values {
-		if field == entityTransformFieldNotes {
-			mapped.Notes = strings.TrimSpace(getStringValue(value))
-
-			continue
-		}
-
-		inputKey, ok := getIntegrationKey(schemaName, schema, field)
-		if !ok {
-			return mappedTransform{}, &questionnaireValidationError{Message: fmt.Sprintf("unsupported %s transform field %q", schemaName, field)}
-		}
-
-		mapped.Payload[inputKey] = value
-	}
-
-	mapped.Payload[entityops.InputKeyEntityOwnerID] = req.OrganizationID
-	mapped.Payload[entityops.InputKeyEntityVendorMetadata] = transformMetadata(req)
-
-	if _, ok := mapped.Payload[entityops.InputKeyEntityExternalID]; !ok {
-		mapped.Payload[entityops.InputKeyEntityExternalID] = mapped.Payload[entityops.InputKeyEntityName]
-	}
-
-	mapped.ExternalID = strings.TrimSpace(getStringValue(mapped.Payload[entityops.InputKeyEntityExternalID]))
-	if mapped.ExternalID == "" {
-		return mappedTransform{}, &questionnaireValidationError{Message: "entity transform requires external_id or name"}
-	}
-
-	return mapped, nil
-}
-
-func getIntegrationKey(schemaName string, schema *entityops.Schema, key string) (string, bool) {
-	if schema.AllowedKey(key) {
-		return key, true
-	}
-
-	normalizedKey := strcase.LowerCamelCase(key)
-	if schema.AllowedKey(normalizedKey) {
-		return normalizedKey, true
-	}
-
-	for _, field := range schema.Fields {
-		if key == field.Name || strings.EqualFold(key, field.InputKey) || normalizedKey == field.InputKey {
-			return field.InputKey, true
-		}
-	}
-
-	return directInputKey(schemaName, normalizedKey)
-}
-
-func directInputKey(schemaName string, key string) (string, bool) {
-	inputType, ok := questionnaireTransformInputTypes[schemaName]
-	if !ok || key == "" {
-		return "", false
-	}
-
-	for i := 0; i < inputType.NumField(); i++ {
-		field := inputType.Field(i)
-		fieldKey := strcase.LowerCamelCase(field.Name)
-		if key == fieldKey || strings.EqualFold(key, field.Name) {
-			return fieldKey, true
-		}
-	}
-
-	return "", false
-}
-
-func persistTransformPayload(ctx context.Context, client *entgen.Client, req questionnaireTransformRequest, schema string, mapped mappedTransform) (*entgen.Entity, error) {
-	payload, err := json.Marshal(mapped.Payload)
-	if err != nil {
-		return nil, fmt.Errorf("marshal transformed input: %w", err)
-	}
-
-	ingestRegistry := registry.New()
-	if err := ingestRegistry.Register(questionnaireTransformDefinition()); err != nil {
-		return nil, fmt.Errorf("register questionnaire transform ingest definition: %w", err)
-	}
-
-	integration := &entgen.Integration{
-		DefinitionID: questionnaireTransformDefinitionID,
-		OwnerID:      req.OrganizationID,
-	}
-
-	sets := []integrationtypes.IngestPayloadSet{
-		{
-			Schema: schema,
-			Envelopes: []integrationtypes.MappingEnvelope{
-				{
-					Resource: "questionnaire_document_data",
-					Action:   "completed",
-					Payload:  payload,
-				},
-			},
-		},
-	}
-
-	if _, err := operations.ProcessPayloadSets(ctx, operations.IngestContext{
-		Registry:    ingestRegistry,
-		DB:          client,
-		Integration: integration,
-	}, "", []integrationtypes.IngestContract{
-		{Schema: schema},
-	}, sets, operations.IngestOptions{
-		RunID: req.IntegrationRunID,
-	}); err != nil {
-		return nil, fmt.Errorf("persist transformed input: %w", err)
-	}
-
-	record, err := client.Entity.Query().
+	update := client.AssessmentResponse.Update().
 		Where(
-			entity.OwnerIDEQ(req.OrganizationID),
-			entity.ExternalIDEQ(mapped.ExternalID),
+			assessmentresponse.ID(req.AssessmentResponseID),
+			assessmentresponse.Or(assessmentresponse.EntityIDIsNil(), assessmentresponse.EntityIDEQ("")),
 		).
-		Only(ctx)
+		SetEntityID(record.ID)
+
+	displayName := lo.CoalesceOrEmpty(strings.TrimSpace(record.DisplayName), strings.TrimSpace(record.Name))
+	if displayName != "" {
+		update.SetDisplayName(displayName)
+	}
+
+	affected, err := update.Save(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("query transformed entity: %w", err)
+		return false, fmt.Errorf("link transformed entity to assessment response: %w", err)
 	}
 
-	return record, nil
+	return affected > 0, nil
 }
 
-func questionnaireTransformDefinition() integrationtypes.Definition {
-	return integrationtypes.Definition{
-		DefinitionSpec: integrationtypes.DefinitionSpec{
-			ID:          questionnaireTransformDefinitionID,
-			Family:      questionnaireTransformDefinitionID,
-			DisplayName: "Questionnaire Transform",
-			Active:      true,
-			Visible:     false,
-		},
-		Mappings: []integrationtypes.MappingRegistration{
-			{
-				Schema: entityops.SchemaEntity.Name,
-				Spec: integrationtypes.MappingOverride{
-					MapExpr: "",
-				},
-			},
-		},
-	}
-}
-
-func connectEntitySources(ctx context.Context, client *entgen.Client, req questionnaireTransformRequest, record *entgen.Entity) error {
-	if record == nil {
-		return nil
-	}
-
+// linkEntitySources idempotently links the document data and note to the transformed entity
+func linkEntitySources(ctx context.Context, client *entgen.Client, req questionnaireTransformRequest, entityID string, notes string) error {
 	if req.DocumentDataID != "" {
 		if err := client.DocumentData.UpdateOneID(req.DocumentDataID).
-			AddEntityIDs(record.ID).
+			AddEntityIDs(entityID).
 			Exec(ctx); err != nil && !entgen.IsConstraintError(err) {
 			return fmt.Errorf("link transformed entity to document data: %w", err)
 		}
 	}
 
-	if req.AssessmentResponseID != "" {
-		update := client.AssessmentResponse.UpdateOneID(req.AssessmentResponseID).
-			SetEntityID(record.ID)
+	return createEntityNote(ctx, client, req, entityID, notes)
+}
 
-		displayName := strings.TrimSpace(record.DisplayName)
-		if displayName == "" {
-			displayName = strings.TrimSpace(record.Name)
-		}
-
-		if displayName != "" {
-			update.SetDisplayName(displayName)
-		}
-
-		if err := update.Exec(ctx); err != nil {
-			return fmt.Errorf("link transformed entity to assessment response: %w", err)
+// mappedNotes extracts the mapped note text from the submitted document data
+func mappedNotes(req questionnaireTransformRequest) string {
+	for _, mapping := range req.Config.Mappings {
+		if mapping.Resolver == "" && mapping.To == entityTransformFieldNotes {
+			if value, ok := mapx.ValueAtPath(req.Data, mapping.From); ok && !isEmptyValue(value) {
+				return getStringValue(value)
+			}
 		}
 	}
 
-	return nil
+	return ""
 }
 
+// createEntityNote find-or-creates the note recording the submitted note text and links it
+// to the transformed entity
 func createEntityNote(ctx context.Context, client *entgen.Client, req questionnaireTransformRequest, entityID string, text string) error {
 	text = strings.TrimSpace(text)
 	if text == "" {
@@ -746,7 +453,7 @@ func createEntityNote(ctx context.Context, client *entgen.Client, req questionna
 	}
 
 	if id == "" {
-		createdEnum, err := client.Note.Create().
+		created, err := client.Note.Create().
 			SetOwnerID(req.OrganizationID).
 			SetText(text).
 			SetNoteRef(reference).
@@ -755,7 +462,7 @@ func createEntityNote(ctx context.Context, client *entgen.Client, req questionna
 			return fmt.Errorf("create transformed entity note: %w", err)
 		}
 
-		id = createdEnum.ID
+		id = created.ID
 	}
 
 	if err := client.Entity.UpdateOneID(entityID).
@@ -767,49 +474,26 @@ func createEntityNote(ctx context.Context, client *entgen.Client, req questionna
 	return nil
 }
 
-func transformMetadata(req questionnaireTransformRequest) map[string]any {
-	return map[string]any{
-		transformMetadataKey: map[string]any{
-			"source":                 "questionnaire_transform",
-			"template_id":            req.TemplateID,
-			"assessment_id":          req.AssessmentID,
-			"assessment_response_id": req.AssessmentResponseID,
-			"document_data_id":       req.DocumentDataID,
-		},
-	}
+// questionnaireTransformMetadata is the questionnaire provenance stored on the transformed entity
+type questionnaireTransformMetadata struct {
+	Source string `json:"source"`
+	questionnaireTransformRequest
 }
 
-// valueAtPath lets us read keys from a json map. this also supports the
-// "outerkey.innerkey" format
-func valueAtPath(data map[string]any, path string) (any, bool) {
-	path = strings.TrimSpace(path)
-	if path == "" {
-		return nil, false
+// transformMetadata records the questionnaire provenance stored on the transformed entity
+func transformMetadata(req questionnaireTransformRequest) (map[string]any, error) {
+	metadata, err := jsonx.ToMap(questionnaireTransformMetadata{
+		Source:                        transformMetadataKey,
+		questionnaireTransformRequest: req,
+	})
+	if err != nil {
+		return nil, err
 	}
 
-	current := any(data)
-
-	for _, part := range strings.Split(path, ".") {
-		if part == "" {
-			return nil, false
-		}
-
-		currentMap, ok := current.(map[string]any)
-		if !ok {
-			return nil, false
-		}
-
-		value, ok := currentMap[part]
-		if !ok {
-			return nil, false
-		}
-
-		current = value
-	}
-
-	return current, true
+	return map[string]any{transformMetadataKey: metadata}, nil
 }
 
+// isEmptyValue reports whether a document value is nil or blank text
 func isEmptyValue(value any) bool {
 	if value == nil {
 		return true
@@ -822,109 +506,10 @@ func isEmptyValue(value any) bool {
 	return false
 }
 
+// getStringValue coerces payload values to strings through the shared entityops helper;
+// unrepresentable values coerce to the empty string
 func getStringValue(value any) string {
-	switch v := value.(type) {
-	case string:
-		return v
-	case fmt.Stringer:
-		return v.String()
-	case bool:
-		return strconv.FormatBool(v)
-	case float64:
-		return strconv.FormatFloat(v, 'f', -1, 64)
-	case float32:
-		return strconv.FormatFloat(float64(v), 'f', -1, 32)
-	case int:
-		return strconv.Itoa(v)
-	case int64:
-		return strconv.FormatInt(v, 10)
-	default:
-		return fmt.Sprintf("%v", value)
-	}
-}
+	coerced, _ := entityops.ValueAsString(value)
 
-func getBoolValue(value any) (bool, error) {
-	switch v := value.(type) {
-	case bool:
-		return v, nil
-	case string:
-		switch strings.ToLower(strings.TrimSpace(v)) {
-
-		case "true", "yes", "y", "1":
-
-			return true, nil
-
-		case "false", "no", "n", "0":
-
-			return false, nil
-		}
-	}
-
-	return false, &questionnaireValidationError{Message: fmt.Sprintf("unsupported transform bool value %T", value)}
-}
-
-func getFloatValue(value any) (float64, error) {
-	switch v := value.(type) {
-	case float64:
-		return v, nil
-	case float32:
-		return float64(v), nil
-	case int:
-		return float64(v), nil
-	case int64:
-		return float64(v), nil
-	case string:
-		parsed, err := strconv.ParseFloat(strings.TrimSpace(v), 64)
-		if err != nil {
-			return 0, &questionnaireValidationError{Message: fmt.Sprintf("invalid transform float %q", v)}
-		}
-
-		return parsed, nil
-	default:
-		return 0, &questionnaireValidationError{Message: fmt.Sprintf("unsupported transform float value %T", value)}
-	}
-}
-
-func getStringArrayValue(value any) []string {
-	switch v := value.(type) {
-	case []string:
-		return v
-	case []any:
-		values := make([]string, 0, len(v))
-
-		for _, i := range v {
-			value := strings.TrimSpace(getStringValue(i))
-			if value != "" {
-				values = append(values, value)
-			}
-		}
-
-		return values
-	default:
-
-		value := strings.TrimSpace(getStringValue(value))
-		if value == "" {
-			return nil
-		}
-
-		return []string{value}
-	}
-}
-
-func getDatetimeValue(value any) (models.DateTime, error) {
-	switch v := value.(type) {
-	case models.DateTime:
-		return v, nil
-	case time.Time:
-		return models.DateTime(v), nil
-	case string:
-		parsed, err := models.ToDateTime(strings.TrimSpace(v))
-		if err != nil {
-			return models.DateTime{}, &questionnaireValidationError{Message: fmt.Sprintf("invalid transform date %q", v)}
-		}
-
-		return *parsed, nil
-	default:
-		return models.DateTime{}, &questionnaireValidationError{Message: fmt.Sprintf("unsupported transform date value %T", value)}
-	}
+	return coerced
 }

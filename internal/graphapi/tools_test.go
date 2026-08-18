@@ -21,7 +21,6 @@ import (
 	"github.com/pdfcpu/pdfcpu/pkg/api"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
-	"github.com/samber/do/v2"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 	"github.com/stripe/stripe-go/v86"
@@ -328,10 +327,6 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	db, err := entdb.NewTestClient(ctx, suite.tf, jobOpts, clientOpts, opts)
 	requireNoError(t, err)
 
-	db.Use(hooks.EmitGalaEventHook(func() *gala.Gala {
-		return suite.galaRuntime
-	}))
-
 	// assign values
 	c.db = db
 	c.api, err = coreutils.TestClient(c.db, c.objectStore)
@@ -349,15 +344,25 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	})
 	requireNoError(t, err)
 
-	do.ProvideValue(galaInstance.Injector(), c.db)
+	db.Use(hooks.EmitGalaEventHook(galaInstance))
 
-	_, err = hooks.RegisterGalaEntitlementListeners(galaInstance.Registry())
+	requireNoError(t, galaInstance.Attach(
+		gala.WithValue(c.db),
+		gala.WithValue(entitlements),
+		// without the restored ent client every durable mutation listener fails
+		gala.WithRestoredValue("ent_client", ent.NewContext),
+	))
+
+	_, err = gala.Register(galaInstance, hooks.EntitlementListeners()...)
 	requireNoError(t, err)
 
-	_, err = hooks.RegisterGalaNDAAttestationListeners(galaInstance.Registry())
+	_, err = gala.Register(galaInstance, hooks.NDAAttestationListeners()...)
 	requireNoError(t, err)
 
-	_, err = hooks.RegisterGalaOrganizationCleanupListeners(galaInstance.Registry())
+	_, err = gala.Register(galaInstance, hooks.OrganizationCleanupListeners()...)
+	requireNoError(t, err)
+
+	_, err = gala.Register(galaInstance, hooks.IntegrationCleanupListeners()...)
 	requireNoError(t, err)
 
 	requireNoError(t, galaInstance.StartWorkers(ctx))
@@ -383,6 +388,9 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 
 	c.db.IntegrationsRuntime = rt
 	suite.integrationsRT = rt
+
+	// cleanup/reseed listeners resolve the runtime from the gala injector as in production
+	requireNoError(t, galaInstance.Attach(gala.WithValue(rt)))
 
 	// Set trust center config for hooks
 	hooks.SetTrustCenterConfig(hooks.TrustCenterConfig{
@@ -448,7 +456,6 @@ func (suite *GraphTestSuite) enableGalaForTestSuite(t *testing.T) {
 	}
 
 	runtime, err := gala.NewGala(context.Background(), gala.Config{
-		Enabled:           true,
 		ConnectionURI:     suite.tf.URI,
 		QueueName:         fmt.Sprintf("graphapi_test_%d", time.Now().UnixNano()),
 		WorkerCount:       1,
@@ -458,10 +465,13 @@ func (suite *GraphTestSuite) enableGalaForTestSuite(t *testing.T) {
 	})
 	require.NoError(t, err)
 
-	do.ProvideValue(runtime.Injector(), runtime)
-	do.ProvideValue(runtime.Injector(), suite.client.db)
+	require.NoError(t, runtime.Attach(
+		gala.WithValue(runtime),
+		gala.WithValue(suite.client.db),
+		gala.WithValue(suite.client.db.EntitlementManager),
+	))
 
-	_, err = hooks.RegisterGalaEntitlementListeners(runtime.Registry())
+	_, err = gala.Register(runtime, hooks.EntitlementListeners()...)
 	require.NoError(t, err)
 
 	err = runtime.StartWorkers(context.Background())

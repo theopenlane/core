@@ -206,7 +206,7 @@ func serve(ctx context.Context) error {
 		return err
 	}
 
-	if err := serveropts.ConfigureGala(ctx, galaApp, notifGala, dbClient, so); err != nil {
+	if err := serveropts.ConfigureGala(galaApp, notifGala, dbClient, so); err != nil {
 		return err
 	}
 
@@ -253,6 +253,12 @@ func serve(ctx context.Context) error {
 			}
 		}
 
+		if notifGala != nil {
+			if closeErr := notifGala.Close(); closeErr != nil {
+				log.Error().Err(closeErr).Msg("error closing notification gala runtime")
+			}
+		}
+
 		closeDB()
 	}()
 
@@ -287,11 +293,17 @@ func serve(ctx context.Context) error {
 	// add auth and integration options
 	so.AddServerOptions(
 		serveropts.WithAuth(),
-		serveropts.WithIntegrationsRuntime(ctx, dbClient),
+		serveropts.WithIntegrationsRuntime(ctx, dbClient, galaApp),
 	)
 
 	// backfills run after the integrations runtime so they can use it
-	so.AddServerOptions(serveropts.WithBackfill(ctx, dbClient))
+	so.AddServerOptions(serveropts.WithBackfill(ctx, galaApp))
+
+	// start workers only after all injector provisioning above so a dequeued job never
+	// resolves a missing dependency; earlier emissions wait in River
+	if err := serveropts.StartGalaWorkers(ctx, galaApp, so); err != nil {
+		return err
+	}
 
 	// add session manager
 	so.AddServerOptions(

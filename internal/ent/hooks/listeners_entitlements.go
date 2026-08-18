@@ -3,98 +3,95 @@ package hooks
 import (
 	"context"
 	"errors"
-	"fmt"
-	"strings"
 
-	"entgo.io/ent"
-	"github.com/rs/zerolog"
 	"github.com/samber/lo"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/eventqueue"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	sync "github.com/theopenlane/core/internal/entitlements/reconciler"
+	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
+	"github.com/theopenlane/core/internal/entitlements/reconciler"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-// RegisterGalaEntitlementListeners registers entitlement mutation listeners on Gala.
-func RegisterGalaEntitlementListeners(registry *gala.Registry) ([]gala.ListenerID, error) {
-	return gala.RegisterListeners(registry,
-		gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic: eventqueue.MutationTopic(eventqueue.MutationConcernDirect, entgen.TypeOrganization),
-			Name:  "entitlements.organization",
-			Operations: []string{
-				ent.OpCreate.String(),
-				ent.OpDelete.String(),
-				ent.OpDeleteOne.String(),
-				eventqueue.SoftDeleteOne,
+// EntitlementListeners keeps Stripe customers and subscriptions in sync with organization
+// lifecycle and billing changes
+func EntitlementListeners() []gala.Registration {
+	return []gala.Registration{
+		entityops.MutationListener{
+			Schema:     entityops.SchemaOrganization,
+			Operations: []string{entityops.OpCreate},
+			Caller: func(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
+				return auth.NewWebhookCaller("")
 			},
-			Handle: handleOrganizationMutationGala,
+			Handle: entityops.RequireDep(handleOrganizationCreatedGala),
 		},
-		gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic: eventqueue.MutationTopic(eventqueue.MutationConcernDirect, entgen.TypeOrganizationSetting),
-			Name:  "entitlements.organization_setting",
-			Operations: []string{
-				ent.OpUpdate.String(),
-				ent.OpUpdateOne.String(),
+		entityops.MutationListener{
+			Schema:     entityops.SchemaOrganization,
+			Operations: []string{entityops.OpSoftDelete, entityops.OpDelete, entityops.OpDeleteOne},
+			Caller: func(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
+				return auth.NewWebhookCaller("")
 			},
-			Handle: handleOrganizationSettingMutationGala,
+			ContextKeys: []func(context.Context) context.Context{entx.SkipSoftDelete},
+			Handle:      entityops.RequireDep(handleOrganizationDeleteGala),
 		},
-	)
-}
-
-// handleOrganizationMutationGala routes organization mutations to entitlement handlers.
-func handleOrganizationMutationGala(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	switch strings.TrimSpace(payload.Operation) {
-	case ent.OpCreate.String():
-		return handleOrganizationCreatedGala(ctx, payload)
-	case ent.OpDelete.String(), ent.OpDeleteOne.String(), eventqueue.SoftDeleteOne:
-		return handleOrganizationSubscriptionDeactivationGala(ctx, payload)
-	default:
-		return nil
+		entityops.MutationListener{
+			Schema:     entityops.SchemaOrganizationSetting,
+			Operations: []string{entityops.OpUpdate, entityops.OpUpdateOne},
+			Fields: []string{
+				organizationsetting.FieldBillingEmail,
+				organizationsetting.FieldBillingPhone,
+				organizationsetting.FieldBillingAddress,
+			},
+			Caller: func(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
+				return auth.NewWebhookCaller("")
+			},
+			Handle: entityops.RequireDep(handleOrganizationSettingsUpdateOneGala),
+		},
 	}
 }
 
-// handleOrganizationSettingMutationGala handles billing updates on organization settings.
-func handleOrganizationSettingMutationGala(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	switch strings.TrimSpace(payload.Operation) {
-	case ent.OpUpdate.String(), ent.OpUpdateOne.String():
-		return handleOrganizationSettingsUpdateOneGala(ctx, payload)
-	default:
-		return nil
-	}
-}
-
-// handleOrganizationSubscriptionDeactivationGala deactivates an organization's customer subscription when deleted
-func handleOrganizationSubscriptionDeactivationGala(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	inv, ok := newEntitlementInvocation(ctx, payload, softDeleteAllowContext)
-	if !ok {
+// handleOrganizationDeleteGala deactivates a deleted organization's customer subscription;
+// hard deletes resolve the stripe customer from captured pre-delete values
+func handleOrganizationDeleteGala(inv entityops.Invocation, payload entityops.MutationPayload, manager *entitlements.StripeClient) error {
+	if !manager.Config.IsEnabled() {
 		return nil
 	}
 
-	org, err := inv.client.Organization.Query().Where(
-		organization.And(
-			organization.ID(inv.orgID),
-			organization.DeletedAtNotNil(),
-		),
-	).Only(inv.Allow())
-	if err != nil {
-		inv.Logger().Err(err).Str("organization_id", inv.orgID).Msg("organization delete event unable to load organization")
-		return nil
+	stripeCustomerID, _ := payload.OldStringValue(organization.FieldStripeCustomerID)
+
+	if stripeCustomerID == "" {
+		org, err := inv.Client.Organization.Query().Where(
+			organization.And(
+				organization.ID(inv.EntityID),
+				organization.DeletedAtNotNil(),
+			),
+		).Only(inv.Context)
+
+		switch {
+		case entgen.IsNotFound(err):
+			return nil
+		case err != nil:
+			logx.FromContext(inv.Context).Error().Err(err).Msg("organization delete event unable to load organization")
+
+			return err
+		}
+
+		if org.StripeCustomerID == nil {
+			return nil
+		}
+
+		stripeCustomerID = *org.StripeCustomerID
 	}
 
-	if org.StripeCustomerID == nil {
-		return nil
-	}
+	if err := manager.FindAndDeactivateCustomerSubscription(inv.Context, stripeCustomerID); err != nil {
+		logx.FromContext(inv.Context).Error().Err(err).Msg("failed to deactivate customer subscription")
 
-	if err := inv.client.EntitlementManager.FindAndDeactivateCustomerSubscription(inv.Context(), *org.StripeCustomerID); err != nil {
-		inv.Logger().Error().Err(err).Msg("failed to deactivate customer subscription")
 		return err
 	}
 
@@ -102,163 +99,56 @@ func handleOrganizationSubscriptionDeactivationGala(ctx gala.HandlerContext, pay
 }
 
 // handleOrganizationCreatedGala reconciles entitlements after organization creation
-func handleOrganizationCreatedGala(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	inv, ok := newEntitlementInvocation(ctx, payload, orgAllowContext)
-	if !ok {
+func handleOrganizationCreatedGala(inv entityops.Invocation, _ entityops.MutationPayload, manager *entitlements.StripeClient) error {
+	if !manager.Config.IsEnabled() {
 		return nil
 	}
 
-	return inv.reconcile()
+	return reconcileEntitlements(inv.Context, inv.Client, manager, inv.EntityID)
 }
 
 // handleOrganizationSettingsUpdateOneGala updates Stripe customer details for billing changes
-func handleOrganizationSettingsUpdateOneGala(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	if !lo.SomeBy([]string{"billing_email", "billing_phone", "billing_address"}, func(field string) bool {
-		return eventqueue.MutationFieldChanged(payload, field)
-	}) {
+func handleOrganizationSettingsUpdateOneGala(inv entityops.Invocation, payload entityops.MutationPayload, manager *entitlements.StripeClient) error {
+	if !manager.Config.IsEnabled() {
 		return nil
 	}
 
-	inv, ok := newEntitlementInvocation(ctx, payload, orgAllowContext)
-	if !ok {
-		return nil
-	}
-
-	orgSettingID := inv.entityID
-	if orgSettingID == "" {
-		if id, ok := eventqueue.MutationEntityID(payload, ctx.Envelope.Headers.Properties); ok {
-			orgSettingID = id
-		}
-	}
-
-	if orgSettingID == "" {
-		inv.Logger().Warn().Msg("organization settings update missing entity id; skipping stripe update")
-		return nil
-	}
-
-	orgCustomer, err := fetchOrganizationCustomerByOrgSettingID(inv, orgSettingID)
-	if err != nil {
-		inv.Logger().Err(err).Str("organization_setting_id", orgSettingID).Msg("failed to fetch organization customer")
+	orgSetting, ok, err := entityops.LoadEntity(inv.Context, inv.EntityID, inv.Client.OrganizationSetting.Get)
+	if err != nil || !ok {
 		return err
 	}
 
-	if orgCustomer == nil || orgCustomer.StripeCustomerID == "" {
-		return inv.reconcile()
+	orgID := orgSetting.OrganizationID
+
+	orgCustomer, err := fetchOrganizationCustomer(inv.Context, inv.Client, orgSetting)
+	if err != nil {
+		logx.FromContext(inv.Context).Error().Err(err).Msg("failed to fetch organization customer")
+
+		return err
+	}
+
+	if orgCustomer.StripeCustomerID == "" {
+		return reconcileEntitlements(inv.Context, inv.Client, manager, orgID)
 	}
 
 	params := entitlements.GetUpdatedFields(payload.ProposedChanges, orgCustomer)
 
 	if params != nil {
-		if _, err := inv.client.EntitlementManager.UpdateCustomer(inv.Context(), orgCustomer.StripeCustomerID, params); err != nil {
-			inv.Logger().Err(err).Str("stripe_customer_id", orgCustomer.StripeCustomerID).Msg("failed to update stripe customer metadata")
+		if _, err := manager.UpdateCustomer(inv.Context, orgCustomer.StripeCustomerID, params); err != nil {
+			logx.FromContext(inv.Context).Error().Err(err).Str("stripe_customer_id", orgCustomer.StripeCustomerID).Msg("failed to update stripe customer metadata")
+
 			return err
 		}
 	}
 
-	return inv.reconcile()
+	return reconcileEntitlements(inv.Context, inv.Client, manager, orgID)
 }
 
-var errMissingOrgCustomerPrereqs = errors.New("entitlement invocation missing prerequisites")
-
-// entitlementInvocation bundles all data needed by entitlement listeners.
-type entitlementInvocation struct {
-	ctx      context.Context
-	client   *entgen.Client
-	orgID    string
-	entityID string
-	allow    context.Context
-}
-
-// Context returns the listener context associated with the invocation.
-func (inv *entitlementInvocation) Context() context.Context {
-	return inv.ctx
-}
-
-// Logger returns a contextual logger for the invocation.
-func (inv *entitlementInvocation) Logger() *zerolog.Logger {
-	return logx.FromContext(inv.Context())
-}
-
-// Allow returns the elevated context used for entitlement operations.
-func (inv *entitlementInvocation) Allow() context.Context {
-	return inv.allow
-}
-
-// orgAllowContext bypasses privacy rules for entitlement logic against an organization.
-func orgAllowContext(ctx context.Context) context.Context {
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-	return auth.WithCaller(allowCtx, auth.NewWebhookCaller(""))
-}
-
-// softDeleteAllowContext extends orgAllowContext to include soft-deleted records.
-func softDeleteAllowContext(ctx context.Context) context.Context {
-	ctx = orgAllowContext(ctx)
-
-	return entx.SkipSoftDelete(ctx)
-}
-
-// newEntitlementInvocation gathers prerequisites for entitlement mutation handling.
-func newEntitlementInvocation(handlerCtx gala.HandlerContext, payload eventqueue.MutationGalaPayload, allow func(context.Context) context.Context) (*entitlementInvocation, bool) {
-	handlerCtx, client, ok := eventqueue.ClientFromHandler(handlerCtx)
-	if !ok || client.EntitlementManager == nil || !client.EntitlementManager.Config.IsEnabled() {
-		return nil, false
-	}
-
-	if allow == nil {
-		allow = orgAllowContext
-	}
-
-	allowCtx := allow(handlerCtx.Context)
-
-	entityID, ok := eventqueue.MutationEntityID(payload, handlerCtx.Envelope.Headers.Properties)
-	if !ok {
-		return nil, false
-	}
-
-	orgID := entityID
-
-	if strings.TrimSpace(payload.MutationType) == entgen.TypeOrganizationSetting {
-		setting, err := client.OrganizationSetting.Get(allowCtx, entityID)
-		if err != nil {
-			logx.FromContext(handlerCtx.Context).Error().Err(err).Str("organization_setting_id", entityID).Msg("failed to resolve organization from organization setting")
-
-			return nil, false
-		}
-
-		orgID = setting.OrganizationID
-	}
-
-	return &entitlementInvocation{
-		ctx:      handlerCtx.Context,
-		client:   client,
-		orgID:    orgID,
-		entityID: entityID,
-		allow:    allowCtx,
-	}, true
-}
-
-// fetchOrganizationCustomerByOrgSettingID loads organization and customer data for a setting.
-func fetchOrganizationCustomerByOrgSettingID(inv *entitlementInvocation, orgSettingID string) (*entitlements.OrganizationCustomer, error) {
-	if inv == nil || inv.client == nil || orgSettingID == "" {
-		return nil, fmt.Errorf("%w: organization_setting_id=%s", errMissingOrgCustomerPrereqs, orgSettingID)
-	}
-
-	orgSetting, err := inv.client.OrganizationSetting.Get(inv.Allow(), orgSettingID)
+// fetchOrganizationCustomer builds the organization customer view for a billing settings change
+func fetchOrganizationCustomer(ctx context.Context, client *entgen.Client, orgSetting *entgen.OrganizationSetting) (*entitlements.OrganizationCustomer, error) {
+	org, err := client.Organization.Get(ctx, orgSetting.OrganizationID)
 	if err != nil {
 		return nil, err
-	}
-
-	org, err := inv.client.Organization.Query().
-		Where(organization.ID(orgSetting.OrganizationID)).
-		Only(inv.Allow())
-	if err != nil {
-		return nil, err
-	}
-
-	stripeCustomerID := ""
-	if org.StripeCustomerID != nil {
-		stripeCustomerID = *org.StripeCustomerID
 	}
 
 	contact := entitlements.ContactInfo{
@@ -279,44 +169,40 @@ func fetchOrganizationCustomerByOrgSettingID(inv *entitlementInvocation, orgSett
 		OrganizationID:         org.ID,
 		OrganizationName:       org.Name,
 		OrganizationSettingsID: orgSetting.ID,
-		StripeCustomerID:       stripeCustomerID,
+		StripeCustomerID:       lo.FromPtr(org.StripeCustomerID),
 		ContactInfo:            contact,
 	}, nil
 }
 
-// reconcile runs entitlement reconciliation for the invocation's organization.
-func (inv *entitlementInvocation) reconcile() error {
-	if inv == nil || inv.client == nil || inv.client.EntitlementManager == nil || !inv.client.EntitlementManager.Config.IsEnabled() {
-		return nil
-	}
-
-	reconciler, err := sync.New(
-		sync.WithDB(inv.client),
-		sync.WithStripeClient(inv.client.EntitlementManager),
+// reconcileEntitlements runs entitlement reconciliation for the given organization
+func reconcileEntitlements(ctx context.Context, client *entgen.Client, manager *entitlements.StripeClient, orgID string) error {
+	rec, err := reconciler.New(
+		reconciler.WithDB(client),
+		reconciler.WithStripeClient(manager),
 	)
 	if err != nil {
-		inv.Logger().Err(err).Msg("unable to construct entitlement reconciler")
+		logx.FromContext(ctx).Error().Err(err).Msg("unable to construct entitlement reconciler")
 
 		return err
 	}
 
-	if _, err := reconciler.Reconcile(inv.Context(), []string{inv.orgID}); err != nil {
+	if _, err := rec.Reconcile(ctx, []string{orgID}); err != nil {
 		unwrapped := errors.Unwrap(err)
 		// if this is a constraint error, log as warning - this is common in tests and we will still have the logs
 		// in production
 		if unwrapped != nil && entgen.IsConstraintError(unwrapped) {
-			inv.Logger().Warn().Err(err).Msgf("entitlement reconciliation failed, organization with stripe customer id already exits")
+			logx.FromContext(ctx).Warn().Err(err).Msg("entitlement reconciliation failed, organization with stripe customer id already exists")
 
 			// do not retry a constraint error
 			return nil
 		}
 
-		inv.Logger().Err(err).Msg("entitlement reconciliation failed")
+		logx.FromContext(ctx).Error().Err(err).Msg("entitlement reconciliation failed")
 
 		return err
 	}
 
-	inv.Logger().Debug().Msg("entitlement reconciliation completed")
+	logx.FromContext(ctx).Debug().Msg("entitlement reconciliation completed")
 
 	return nil
 }

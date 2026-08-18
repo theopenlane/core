@@ -411,7 +411,7 @@ func TestWebhookEventTopic(t *testing.T) {
 
 	ref := NewDefinitionRef("def_001")
 	got := ref.WebhookEventTopic("pull_request.opened")
-	want := "integration.def_001.webhook.pull_request.opened"
+	want := "integration.webhook.def_001.pull_request.opened"
 	if string(got) != want {
 		t.Fatalf("got %q, want %q", got, want)
 	}

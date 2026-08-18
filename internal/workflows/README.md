@@ -152,7 +152,7 @@ This implements GitHub-style "dismiss stale reviews" behavior.
 
 ## Workflow Metadata
 
-The `workflowMetadata` query exposes eligible fields and eligible edges per workflow object type for UI composition and trigger authoring. Eligible edges are derived from the generated edge registry (`internal/ent/workflowgenerated/workflow_edge_extractor.go`).
+The `workflowMetadata` query exposes eligible fields and eligible edges per workflow object type for UI composition and trigger authoring. Eligible fields and edges are derived from the entityops schema registry.
 
 ## Adding Workflow Support to a Schema
 

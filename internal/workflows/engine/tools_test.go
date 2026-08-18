@@ -11,7 +11,6 @@ import (
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog"
-	"github.com/samber/do/v2"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 	"github.com/stripe/stripe-go/v86"
@@ -28,7 +27,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/fga/fgaversion"
 	"github.com/theopenlane/core/internal/ent/entconfig"
-	"github.com/theopenlane/core/internal/ent/eventqueue"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
@@ -41,14 +40,12 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
-	workflowgenerated "github.com/theopenlane/core/internal/ent/workflowgenerated"
 	"github.com/theopenlane/core/internal/entdb"
 	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 	slackdef "github.com/theopenlane/core/internal/integrations/definitions/slack"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	intruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/keystore"
-	"github.com/theopenlane/core/internal/mutations"
 	coreutils "github.com/theopenlane/core/internal/testutils"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/engine"
@@ -172,8 +169,6 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 
 	jobOpts := []riverqueue.Option{riverqueue.WithConnectionURI(s.tf.URI)}
 
-	workflows.RegisterEligibleFields(workflowgenerated.WorkflowEligibleFields)
-
 	runtime, err := gala.NewGala(s.ctx, gala.Config{
 		DispatchMode:      gala.DispatchModeDurable,
 		ConnectionURI:     s.tf.URI,
@@ -193,20 +188,21 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 	db, err := entdb.NewTestClient(s.ctx, s.tf, jobOpts, clientOpts, opts)
 	s.Require().NoError(err)
 
-	db.Use(hooks.EmitGalaEventHook(func() *gala.Gala {
-		return runtime
-	}))
+	db.Use(hooks.EmitGalaEventHook(runtime))
 
-	_, err = hooks.RegisterGalaWorkflowListeners(runtime.Registry())
+	_, err = gala.Register(runtime, hooks.WorkflowListeners()...)
 	s.Require().NoError(err)
 
 	wfEngine, ok := db.WorkflowEngine.(*engine.WorkflowEngine)
 	s.Require().True(ok, "workflow engine not initialized")
 	s.Require().NotNil(wfEngine, "workflow engine not initialized")
 
-	do.ProvideValue(runtime.Injector(), runtime)
-	do.ProvideValue(runtime.Injector(), db)
-	do.ProvideValue(runtime.Injector(), wfEngine)
+	s.Require().NoError(runtime.Attach(
+		gala.WithValue(runtime),
+		gala.WithValue(db),
+		gala.WithValue(wfEngine),
+		gala.WithRestoredValue("ent_client", generated.NewContext),
+	))
 
 	s.Require().NoError(runtime.StartWorkers(s.ctx))
 
@@ -316,13 +312,13 @@ func (s *WorkflowEngineTestSuite) requireWorkflowSetup(cfg *workflows.Config, ru
 	s.Require().NotNil(s.client.WorkflowEngine, "workflow engine not initialized")
 
 	s.Require().True(
-		runtime.Registry().InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernWorkflow, generated.TypeControl), ent.OpCreate.String()),
+		runtime.InterestedIn(entityops.MutationTopicName(entityops.MutationConcernWorkflow, generated.TypeControl), ent.OpCreate.String()),
 		"mutation listeners not registered",
 	)
 
 	if cfg != nil && cfg.Enabled {
 		s.Require().True(
-			runtime.Registry().InterestedIn(gala.TopicWorkflowTriggered, ""),
+			runtime.InterestedIn(engine.WorkflowTriggeredEventTopic.Name, ""),
 			"workflow listeners not registered",
 		)
 	}
@@ -658,7 +654,7 @@ func (s *WorkflowEngineTestSuite) CreateApprovalWorkflowDefinition(ctx context.C
 		var params workflows.ApprovalActionParams
 		err := json.Unmarshal(action.Params, &params)
 		s.Require().NoError(err, "failed to parse approval action params")
-		fields := mutations.NormalizeStrings(params.Fields)
+		fields := entityops.NormalizeStrings(params.Fields)
 		if len(fields) > 0 {
 			triggerFields = fields
 		}

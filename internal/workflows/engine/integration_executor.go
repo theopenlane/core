@@ -15,7 +15,6 @@ import (
 	integrationsruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/workflows"
-	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
@@ -104,10 +103,7 @@ func (c integrationOpContext) MarshalZerologObject(e *zerolog.Event) {
 
 // logIntegrationScopeSkipped logs a debug event when an integration action is skipped by scope evaluation
 func logIntegrationScopeSkipped(ctx context.Context, definitionID, operation, integrationID, scopeExpression string) {
-	logx.FromContext(ctx).Debug().
-		EmbedObject(integrationOpContext{definitionID: definitionID, operation: operation, integrationID: integrationID}).
-		Str("scope_expression", scopeExpression).
-		Msg("integration action skipped by scope condition")
+	logx.FromContext(ctx).Debug().EmbedObject(integrationOpContext{definitionID: definitionID, operation: operation, integrationID: integrationID}).Str("scope_expression", scopeExpression).Msg("integration action skipped by scope condition")
 }
 
 // SetIntegrationDeps attaches integration dependencies and registers a post-execution
@@ -229,11 +225,7 @@ func (e *WorkflowEngine) executeIntegrationAction(ctx context.Context, action mo
 	}
 
 	if resolvedInstallationID == "" {
-		logx.FromContext(ctx).Warn().
-			Str("definition_id", params.DefinitionID).
-			Str("installation_id", params.InstallationID).
-			Str("operation", string(operationName)).
-			Msg("integration action skipped: no connected integration found")
+		logx.FromContext(ctx).Warn().Str("definition_id", params.DefinitionID).Str("installation_id", params.InstallationID).Str("operation", string(operationName)).Msg("integration action skipped: no connected integration found")
 
 		return nil
 	}
@@ -281,7 +273,7 @@ func (e *WorkflowEngine) emitWorkflowActionCompleted(ctx context.Context, envelo
 		return
 	}
 
-	actionPayload := gala.WorkflowActionCompletedPayload{
+	actionPayload := WorkflowActionCompletedPayload{
 		InstanceID:  meta.InstanceID,
 		ActionIndex: meta.ActionIndex,
 		ActionType:  enums.WorkflowActionTypeIntegration,
@@ -294,7 +286,7 @@ func (e *WorkflowEngine) emitWorkflowActionCompleted(ctx context.Context, envelo
 		actionPayload.ErrorMessage = execErr.Error()
 	}
 
-	receipt := workflows.EmitWorkflowEvent(ctx, e.gala, gala.TopicWorkflowActionCompleted, actionPayload)
+	receipt := workflows.EmitWorkflowEvent(ctx, e.gala, WorkflowActionCompletedEventTopic.Name, actionPayload)
 	if receipt.Err != nil {
 		logx.FromContext(ctx).Warn().Err(receipt.Err).Msg("failed to emit workflow action completed for integration run")
 	}

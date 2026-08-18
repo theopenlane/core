@@ -230,10 +230,7 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context) error {
 		// (e.g. JIT is off or their domain is not in the allowlist); return a clear forbidden response
 		// rather than a generic server error so the UI can guide them to request access
 		if errors.Is(err, generated.ErrPermissionDenied) {
-			logx.FromContext(reqCtx).Warn().
-				Str("email", tokens.IDTokenClaims.Email).
-				Str("organization_id", orgCookie.Value).
-				Msg("sso user authenticated but is not a member of the organization")
+			logx.FromContext(reqCtx).Warn().Str("email", tokens.IDTokenClaims.Email).Str("organization_id", orgCookie.Value).Msg("sso user authenticated but is not a member of the organization")
 
 			return h.Forbidden(ctx, ErrSSONoOrganizationAccess)
 		}

@@ -7,7 +7,6 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/samber/do/v2"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
@@ -117,11 +116,9 @@ func SetupWorkflowEngine(ctx context.Context, client *generated.Client, connecti
 		return nil, err
 	}
 
-	client.Use(hooks.EmitGalaEventHook(func() *gala.Gala {
-		return runtime
-	}))
+	client.Use(hooks.EmitGalaEventHook(runtime))
 
-	if _, err := hooks.RegisterGalaWorkflowListeners(runtime.Registry()); err != nil {
+	if _, err := gala.Register(runtime, hooks.WorkflowListeners()...); err != nil {
 		return nil, err
 	}
 
@@ -130,9 +127,14 @@ func SetupWorkflowEngine(ctx context.Context, client *generated.Client, connecti
 		return nil, err
 	}
 
-	do.ProvideValue(runtime.Injector(), runtime)
-	do.ProvideValue(runtime.Injector(), client)
-	do.ProvideValue(runtime.Injector(), wfEngine)
+	if err := runtime.Attach(
+		gala.WithValue(runtime),
+		gala.WithValue(client),
+		gala.WithValue(wfEngine),
+		gala.WithRestoredValue("ent_client", generated.NewContext),
+	); err != nil {
+		return nil, err
+	}
 
 	if err := runtime.StartWorkers(ctx); err != nil {
 		return nil, err

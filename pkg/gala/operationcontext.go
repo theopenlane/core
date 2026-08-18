@@ -10,10 +10,8 @@ import (
 )
 
 // OperationContext is the durable entity-object metadata attached to event
-// dispatch and restored on the handling side. Source-specific provenance is
-// carried as opaque JSON in Attributes and decoded into the relevant typed
-// struct on demand via DecodeAttributes. Authentication context (organization,
-// user) travels with auth.Caller and is intentionally not duplicated here.
+// dispatch and restored on the handling side; authentication context (organization,
+// user) travels with auth.Caller and is intentionally not duplicated here
 type OperationContext struct {
 	// OwnerID is the owning organization for the operation
 	OwnerID string `json:"ownerId,omitempty" jsonschema:"description=Owning organization identifier"`
@@ -42,6 +40,12 @@ func SetAttributes[T any](c *OperationContext, attributes T) error {
 // DecodeAttributes decodes the source-specific provenance payload into T
 func DecodeAttributes[T any](c OperationContext) (T, error) {
 	return jsonx.Decode[T](c.Attributes)
+}
+
+// PayloadOperation returns the operation for gala listener routing; payloads embedding
+// OperationContext satisfy the PayloadOperation contract through promotion
+func (c OperationContext) PayloadOperation() string {
+	return c.Operation
 }
 
 // Properties returns the context as a flat string map for gala header visibility

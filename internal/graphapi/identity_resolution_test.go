@@ -11,13 +11,14 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/graphapi"
 )
 
 func TestIdentityResolution(t *testing.T) {
 	ctx := setContext(sharedTestUser1.UserCtx, suite.client.db)
 
-	irSetup, err := graphapi.SetupIdentityResolution(ctx, suite.client.db, suite.tf.URI)
+	irSetup, err := graphapi.SetupListenerRuntime(ctx, suite.client.db, suite.tf.URI, hooks.IdentityResolutionListeners())
 	assert.NilError(t, err)
 	defer irSetup.Teardown()
 

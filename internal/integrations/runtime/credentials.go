@@ -109,6 +109,8 @@ func (r *Runtime) Reconcile(ctx context.Context, installation *ent.Integration, 
 
 	ctx = intobvs.WithInstallation(ctx, installation)
 
+	wasErrored := installation.Status == enums.IntegrationStatusErrored
+
 	if !jsonx.IsEmptyRawMessage(userInput) {
 		if err := r.reconcileUserInput(ctx, installation, def, userInput); err != nil {
 			return err
@@ -121,7 +123,17 @@ func (r *Runtime) Reconcile(ctx context.Context, installation *ent.Integration, 
 		}
 	}
 
-	return nil
+	if !wasErrored {
+		return nil
+	}
+
+	if credential == nil {
+		if err := r.verifyInstallationHealth(ctx, installation, def); err != nil {
+			return err
+		}
+	}
+
+	return r.ClearIntegrationUnhealthy(ctx, installation)
 }
 
 // reconcileUserInput validates and persists user input for one installation
