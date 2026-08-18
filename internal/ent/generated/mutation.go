@@ -53,6 +53,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/integrationrecommendation"
 	"github.com/theopenlane/core/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -172,6 +173,7 @@ const (
 	TypeIdentityHolder             = "IdentityHolder"
 	TypeImpersonationEvent         = "ImpersonationEvent"
 	TypeIntegration                = "Integration"
+	TypeIntegrationRecommendation  = "IntegrationRecommendation"
 	TypeIntegrationRun             = "IntegrationRun"
 	TypeIntegrationWebhook         = "IntegrationWebhook"
 	TypeInternalPolicy             = "InternalPolicy"
@@ -120870,6 +120872,1213 @@ func (m *IntegrationMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown Integration edge %s", name)
 }
 
+// IntegrationRecommendationMutation represents an operation that mutates the IntegrationRecommendation nodes in the graph.
+type IntegrationRecommendationMutation struct {
+	config
+	op                      Op
+	typ                     string
+	id                      *string
+	created_at              *time.Time
+	updated_at              *time.Time
+	created_by              *string
+	updated_by              *string
+	updated_by_impersonator *string
+	deleted_at              *time.Time
+	deleted_by              *string
+	tags                    *[]string
+	appendtags              []string
+	definition_id           *string
+	weight                  *int
+	addweight               *int
+	label                   *string
+	clearedFields           map[string]struct{}
+	owner                   *string
+	clearedowner            bool
+	done                    bool
+	oldValue                func(context.Context) (*IntegrationRecommendation, error)
+	predicates              []predicate.IntegrationRecommendation
+}
+
+var _ ent.Mutation = (*IntegrationRecommendationMutation)(nil)
+
+// integrationrecommendationOption allows management of the mutation configuration using functional options.
+type integrationrecommendationOption func(*IntegrationRecommendationMutation)
+
+// newIntegrationRecommendationMutation creates new mutation for the IntegrationRecommendation entity.
+func newIntegrationRecommendationMutation(c config, op Op, opts ...integrationrecommendationOption) *IntegrationRecommendationMutation {
+	m := &IntegrationRecommendationMutation{
+		config:        c,
+		op:            op,
+		typ:           TypeIntegrationRecommendation,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withIntegrationRecommendationID sets the ID field of the mutation.
+func withIntegrationRecommendationID(id string) integrationrecommendationOption {
+	return func(m *IntegrationRecommendationMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *IntegrationRecommendation
+		)
+		m.oldValue = func(ctx context.Context) (*IntegrationRecommendation, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().IntegrationRecommendation.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withIntegrationRecommendation sets the old IntegrationRecommendation of the mutation.
+func withIntegrationRecommendation(node *IntegrationRecommendation) integrationrecommendationOption {
+	return func(m *IntegrationRecommendationMutation) {
+		m.oldValue = func(context.Context) (*IntegrationRecommendation, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m IntegrationRecommendationMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m IntegrationRecommendationMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("generated: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of IntegrationRecommendation entities.
+func (m *IntegrationRecommendationMutation) SetID(id string) {
+	m.id = &id
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *IntegrationRecommendationMutation) ID() (id string, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *IntegrationRecommendationMutation) IDs(ctx context.Context) ([]string, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []string{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().IntegrationRecommendation.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (m *IntegrationRecommendationMutation) SetCreatedAt(t time.Time) {
+	m.created_at = &t
+}
+
+// CreatedAt returns the value of the "created_at" field in the mutation.
+func (m *IntegrationRecommendationMutation) CreatedAt() (r time.Time, exists bool) {
+	v := m.created_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedAt returns the old "created_at" field's value of the IntegrationRecommendation entity.
+// If the IntegrationRecommendation object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IntegrationRecommendationMutation) OldCreatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedAt: %w", err)
+	}
+	return oldValue.CreatedAt, nil
+}
+
+// ClearCreatedAt clears the value of the "created_at" field.
+func (m *IntegrationRecommendationMutation) ClearCreatedAt() {
+	m.created_at = nil
+	m.clearedFields[integrationrecommendation.FieldCreatedAt] = struct{}{}
+}
+
+// CreatedAtCleared returns if the "created_at" field was cleared in this mutation.
+func (m *IntegrationRecommendationMutation) CreatedAtCleared() bool {
+	_, ok := m.clearedFields[integrationrecommendation.FieldCreatedAt]
+	return ok
+}
+
+// ResetCreatedAt resets all changes to the "created_at" field.
+func (m *IntegrationRecommendationMutation) ResetCreatedAt() {
+	m.created_at = nil
+	delete(m.clearedFields, integrationrecommendation.FieldCreatedAt)
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (m *IntegrationRecommendationMutation) SetUpdatedAt(t time.Time) {
+	m.updated_at = &t
+}
+
+// UpdatedAt returns the value of the "updated_at" field in the mutation.
+func (m *IntegrationRecommendationMutation) UpdatedAt() (r time.Time, exists bool) {
+	v := m.updated_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedAt returns the old "updated_at" field's value of the IntegrationRecommendation entity.
+// If the IntegrationRecommendation object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IntegrationRecommendationMutation) OldUpdatedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedAt: %w", err)
+	}
+	return oldValue.UpdatedAt, nil
+}
+
+// ClearUpdatedAt clears the value of the "updated_at" field.
+func (m *IntegrationRecommendationMutation) ClearUpdatedAt() {
+	m.updated_at = nil
+	m.clearedFields[integrationrecommendation.FieldUpdatedAt] = struct{}{}
+}
+
+// UpdatedAtCleared returns if the "updated_at" field was cleared in this mutation.
+func (m *IntegrationRecommendationMutation) UpdatedAtCleared() bool {
+	_, ok := m.clearedFields[integrationrecommendation.FieldUpdatedAt]
+	return ok
+}
+
+// ResetUpdatedAt resets all changes to the "updated_at" field.
+func (m *IntegrationRecommendationMutation) ResetUpdatedAt() {
+	m.updated_at = nil
+	delete(m.clearedFields, integrationrecommendation.FieldUpdatedAt)
+}
+
+// SetCreatedBy sets the "created_by" field.
+func (m *IntegrationRecommendationMutation) SetCreatedBy(s string) {
+	m.created_by = &s
+}
+
+// CreatedBy returns the value of the "created_by" field in the mutation.
+func (m *IntegrationRecommendationMutation) CreatedBy() (r string, exists bool) {
+	v := m.created_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldCreatedBy returns the old "created_by" field's value of the IntegrationRecommendation entity.
+// If the IntegrationRecommendation object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IntegrationRecommendationMutation) OldCreatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldCreatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldCreatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldCreatedBy: %w", err)
+	}
+	return oldValue.CreatedBy, nil
+}
+
+// ClearCreatedBy clears the value of the "created_by" field.
+func (m *IntegrationRecommendationMutation) ClearCreatedBy() {
+	m.created_by = nil
+	m.clearedFields[integrationrecommendation.FieldCreatedBy] = struct{}{}
+}
+
+// CreatedByCleared returns if the "created_by" field was cleared in this mutation.
+func (m *IntegrationRecommendationMutation) CreatedByCleared() bool {
+	_, ok := m.clearedFields[integrationrecommendation.FieldCreatedBy]
+	return ok
+}
+
+// ResetCreatedBy resets all changes to the "created_by" field.
+func (m *IntegrationRecommendationMutation) ResetCreatedBy() {
+	m.created_by = nil
+	delete(m.clearedFields, integrationrecommendation.FieldCreatedBy)
+}
+
+// SetUpdatedBy sets the "updated_by" field.
+func (m *IntegrationRecommendationMutation) SetUpdatedBy(s string) {
+	m.updated_by = &s
+}
+
+// UpdatedBy returns the value of the "updated_by" field in the mutation.
+func (m *IntegrationRecommendationMutation) UpdatedBy() (r string, exists bool) {
+	v := m.updated_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedBy returns the old "updated_by" field's value of the IntegrationRecommendation entity.
+// If the IntegrationRecommendation object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IntegrationRecommendationMutation) OldUpdatedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedBy: %w", err)
+	}
+	return oldValue.UpdatedBy, nil
+}
+
+// ClearUpdatedBy clears the value of the "updated_by" field.
+func (m *IntegrationRecommendationMutation) ClearUpdatedBy() {
+	m.updated_by = nil
+	m.clearedFields[integrationrecommendation.FieldUpdatedBy] = struct{}{}
+}
+
+// UpdatedByCleared returns if the "updated_by" field was cleared in this mutation.
+func (m *IntegrationRecommendationMutation) UpdatedByCleared() bool {
+	_, ok := m.clearedFields[integrationrecommendation.FieldUpdatedBy]
+	return ok
+}
+
+// ResetUpdatedBy resets all changes to the "updated_by" field.
+func (m *IntegrationRecommendationMutation) ResetUpdatedBy() {
+	m.updated_by = nil
+	delete(m.clearedFields, integrationrecommendation.FieldUpdatedBy)
+}
+
+// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
+func (m *IntegrationRecommendationMutation) SetUpdatedByImpersonator(s string) {
+	m.updated_by_impersonator = &s
+}
+
+// UpdatedByImpersonator returns the value of the "updated_by_impersonator" field in the mutation.
+func (m *IntegrationRecommendationMutation) UpdatedByImpersonator() (r string, exists bool) {
+	v := m.updated_by_impersonator
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUpdatedByImpersonator returns the old "updated_by_impersonator" field's value of the IntegrationRecommendation entity.
+// If the IntegrationRecommendation object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IntegrationRecommendationMutation) OldUpdatedByImpersonator(ctx context.Context) (v *string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUpdatedByImpersonator is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUpdatedByImpersonator requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUpdatedByImpersonator: %w", err)
+	}
+	return oldValue.UpdatedByImpersonator, nil
+}
+
+// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
+func (m *IntegrationRecommendationMutation) ClearUpdatedByImpersonator() {
+	m.updated_by_impersonator = nil
+	m.clearedFields[integrationrecommendation.FieldUpdatedByImpersonator] = struct{}{}
+}
+
+// UpdatedByImpersonatorCleared returns if the "updated_by_impersonator" field was cleared in this mutation.
+func (m *IntegrationRecommendationMutation) UpdatedByImpersonatorCleared() bool {
+	_, ok := m.clearedFields[integrationrecommendation.FieldUpdatedByImpersonator]
+	return ok
+}
+
+// ResetUpdatedByImpersonator resets all changes to the "updated_by_impersonator" field.
+func (m *IntegrationRecommendationMutation) ResetUpdatedByImpersonator() {
+	m.updated_by_impersonator = nil
+	delete(m.clearedFields, integrationrecommendation.FieldUpdatedByImpersonator)
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (m *IntegrationRecommendationMutation) SetDeletedAt(t time.Time) {
+	m.deleted_at = &t
+}
+
+// DeletedAt returns the value of the "deleted_at" field in the mutation.
+func (m *IntegrationRecommendationMutation) DeletedAt() (r time.Time, exists bool) {
+	v := m.deleted_at
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedAt returns the old "deleted_at" field's value of the IntegrationRecommendation entity.
+// If the IntegrationRecommendation object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IntegrationRecommendationMutation) OldDeletedAt(ctx context.Context) (v time.Time, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedAt requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedAt: %w", err)
+	}
+	return oldValue.DeletedAt, nil
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (m *IntegrationRecommendationMutation) ClearDeletedAt() {
+	m.deleted_at = nil
+	m.clearedFields[integrationrecommendation.FieldDeletedAt] = struct{}{}
+}
+
+// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
+func (m *IntegrationRecommendationMutation) DeletedAtCleared() bool {
+	_, ok := m.clearedFields[integrationrecommendation.FieldDeletedAt]
+	return ok
+}
+
+// ResetDeletedAt resets all changes to the "deleted_at" field.
+func (m *IntegrationRecommendationMutation) ResetDeletedAt() {
+	m.deleted_at = nil
+	delete(m.clearedFields, integrationrecommendation.FieldDeletedAt)
+}
+
+// SetDeletedBy sets the "deleted_by" field.
+func (m *IntegrationRecommendationMutation) SetDeletedBy(s string) {
+	m.deleted_by = &s
+}
+
+// DeletedBy returns the value of the "deleted_by" field in the mutation.
+func (m *IntegrationRecommendationMutation) DeletedBy() (r string, exists bool) {
+	v := m.deleted_by
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDeletedBy returns the old "deleted_by" field's value of the IntegrationRecommendation entity.
+// If the IntegrationRecommendation object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IntegrationRecommendationMutation) OldDeletedBy(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDeletedBy is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDeletedBy requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDeletedBy: %w", err)
+	}
+	return oldValue.DeletedBy, nil
+}
+
+// ClearDeletedBy clears the value of the "deleted_by" field.
+func (m *IntegrationRecommendationMutation) ClearDeletedBy() {
+	m.deleted_by = nil
+	m.clearedFields[integrationrecommendation.FieldDeletedBy] = struct{}{}
+}
+
+// DeletedByCleared returns if the "deleted_by" field was cleared in this mutation.
+func (m *IntegrationRecommendationMutation) DeletedByCleared() bool {
+	_, ok := m.clearedFields[integrationrecommendation.FieldDeletedBy]
+	return ok
+}
+
+// ResetDeletedBy resets all changes to the "deleted_by" field.
+func (m *IntegrationRecommendationMutation) ResetDeletedBy() {
+	m.deleted_by = nil
+	delete(m.clearedFields, integrationrecommendation.FieldDeletedBy)
+}
+
+// SetTags sets the "tags" field.
+func (m *IntegrationRecommendationMutation) SetTags(s []string) {
+	m.tags = &s
+	m.appendtags = nil
+}
+
+// Tags returns the value of the "tags" field in the mutation.
+func (m *IntegrationRecommendationMutation) Tags() (r []string, exists bool) {
+	v := m.tags
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTags returns the old "tags" field's value of the IntegrationRecommendation entity.
+// If the IntegrationRecommendation object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IntegrationRecommendationMutation) OldTags(ctx context.Context) (v []string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTags is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTags requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTags: %w", err)
+	}
+	return oldValue.Tags, nil
+}
+
+// AppendTags adds s to the "tags" field.
+func (m *IntegrationRecommendationMutation) AppendTags(s []string) {
+	m.appendtags = append(m.appendtags, s...)
+}
+
+// AppendedTags returns the list of values that were appended to the "tags" field in this mutation.
+func (m *IntegrationRecommendationMutation) AppendedTags() ([]string, bool) {
+	if len(m.appendtags) == 0 {
+		return nil, false
+	}
+	return m.appendtags, true
+}
+
+// ClearTags clears the value of the "tags" field.
+func (m *IntegrationRecommendationMutation) ClearTags() {
+	m.tags = nil
+	m.appendtags = nil
+	m.clearedFields[integrationrecommendation.FieldTags] = struct{}{}
+}
+
+// TagsCleared returns if the "tags" field was cleared in this mutation.
+func (m *IntegrationRecommendationMutation) TagsCleared() bool {
+	_, ok := m.clearedFields[integrationrecommendation.FieldTags]
+	return ok
+}
+
+// ResetTags resets all changes to the "tags" field.
+func (m *IntegrationRecommendationMutation) ResetTags() {
+	m.tags = nil
+	m.appendtags = nil
+	delete(m.clearedFields, integrationrecommendation.FieldTags)
+}
+
+// SetOwnerID sets the "owner_id" field.
+func (m *IntegrationRecommendationMutation) SetOwnerID(s string) {
+	m.owner = &s
+}
+
+// OwnerID returns the value of the "owner_id" field in the mutation.
+func (m *IntegrationRecommendationMutation) OwnerID() (r string, exists bool) {
+	v := m.owner
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldOwnerID returns the old "owner_id" field's value of the IntegrationRecommendation entity.
+// If the IntegrationRecommendation object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IntegrationRecommendationMutation) OldOwnerID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldOwnerID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldOwnerID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldOwnerID: %w", err)
+	}
+	return oldValue.OwnerID, nil
+}
+
+// ClearOwnerID clears the value of the "owner_id" field.
+func (m *IntegrationRecommendationMutation) ClearOwnerID() {
+	m.owner = nil
+	m.clearedFields[integrationrecommendation.FieldOwnerID] = struct{}{}
+}
+
+// OwnerIDCleared returns if the "owner_id" field was cleared in this mutation.
+func (m *IntegrationRecommendationMutation) OwnerIDCleared() bool {
+	_, ok := m.clearedFields[integrationrecommendation.FieldOwnerID]
+	return ok
+}
+
+// ResetOwnerID resets all changes to the "owner_id" field.
+func (m *IntegrationRecommendationMutation) ResetOwnerID() {
+	m.owner = nil
+	delete(m.clearedFields, integrationrecommendation.FieldOwnerID)
+}
+
+// SetDefinitionID sets the "definition_id" field.
+func (m *IntegrationRecommendationMutation) SetDefinitionID(s string) {
+	m.definition_id = &s
+}
+
+// DefinitionID returns the value of the "definition_id" field in the mutation.
+func (m *IntegrationRecommendationMutation) DefinitionID() (r string, exists bool) {
+	v := m.definition_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldDefinitionID returns the old "definition_id" field's value of the IntegrationRecommendation entity.
+// If the IntegrationRecommendation object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IntegrationRecommendationMutation) OldDefinitionID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldDefinitionID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldDefinitionID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldDefinitionID: %w", err)
+	}
+	return oldValue.DefinitionID, nil
+}
+
+// ResetDefinitionID resets all changes to the "definition_id" field.
+func (m *IntegrationRecommendationMutation) ResetDefinitionID() {
+	m.definition_id = nil
+}
+
+// SetWeight sets the "weight" field.
+func (m *IntegrationRecommendationMutation) SetWeight(i int) {
+	m.weight = &i
+	m.addweight = nil
+}
+
+// Weight returns the value of the "weight" field in the mutation.
+func (m *IntegrationRecommendationMutation) Weight() (r int, exists bool) {
+	v := m.weight
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldWeight returns the old "weight" field's value of the IntegrationRecommendation entity.
+// If the IntegrationRecommendation object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IntegrationRecommendationMutation) OldWeight(ctx context.Context) (v int, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldWeight is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldWeight requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldWeight: %w", err)
+	}
+	return oldValue.Weight, nil
+}
+
+// AddWeight adds i to the "weight" field.
+func (m *IntegrationRecommendationMutation) AddWeight(i int) {
+	if m.addweight != nil {
+		*m.addweight += i
+	} else {
+		m.addweight = &i
+	}
+}
+
+// AddedWeight returns the value that was added to the "weight" field in this mutation.
+func (m *IntegrationRecommendationMutation) AddedWeight() (r int, exists bool) {
+	v := m.addweight
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetWeight resets all changes to the "weight" field.
+func (m *IntegrationRecommendationMutation) ResetWeight() {
+	m.weight = nil
+	m.addweight = nil
+}
+
+// SetLabel sets the "label" field.
+func (m *IntegrationRecommendationMutation) SetLabel(s string) {
+	m.label = &s
+}
+
+// Label returns the value of the "label" field in the mutation.
+func (m *IntegrationRecommendationMutation) Label() (r string, exists bool) {
+	v := m.label
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldLabel returns the old "label" field's value of the IntegrationRecommendation entity.
+// If the IntegrationRecommendation object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *IntegrationRecommendationMutation) OldLabel(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldLabel is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldLabel requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldLabel: %w", err)
+	}
+	return oldValue.Label, nil
+}
+
+// ResetLabel resets all changes to the "label" field.
+func (m *IntegrationRecommendationMutation) ResetLabel() {
+	m.label = nil
+}
+
+// ClearOwner clears the "owner" edge to the Organization entity.
+func (m *IntegrationRecommendationMutation) ClearOwner() {
+	m.clearedowner = true
+	m.clearedFields[integrationrecommendation.FieldOwnerID] = struct{}{}
+}
+
+// OwnerCleared reports if the "owner" edge to the Organization entity was cleared.
+func (m *IntegrationRecommendationMutation) OwnerCleared() bool {
+	return m.OwnerIDCleared() || m.clearedowner
+}
+
+// OwnerIDs returns the "owner" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// OwnerID instead. It exists only for internal usage by the builders.
+func (m *IntegrationRecommendationMutation) OwnerIDs() (ids []string) {
+	if id := m.owner; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetOwner resets all changes to the "owner" edge.
+func (m *IntegrationRecommendationMutation) ResetOwner() {
+	m.owner = nil
+	m.clearedowner = false
+}
+
+// Where appends a list predicates to the IntegrationRecommendationMutation builder.
+func (m *IntegrationRecommendationMutation) Where(ps ...predicate.IntegrationRecommendation) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the IntegrationRecommendationMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *IntegrationRecommendationMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.IntegrationRecommendation, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *IntegrationRecommendationMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *IntegrationRecommendationMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (IntegrationRecommendation).
+func (m *IntegrationRecommendationMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *IntegrationRecommendationMutation) Fields() []string {
+	fields := make([]string, 0, 12)
+	if m.created_at != nil {
+		fields = append(fields, integrationrecommendation.FieldCreatedAt)
+	}
+	if m.updated_at != nil {
+		fields = append(fields, integrationrecommendation.FieldUpdatedAt)
+	}
+	if m.created_by != nil {
+		fields = append(fields, integrationrecommendation.FieldCreatedBy)
+	}
+	if m.updated_by != nil {
+		fields = append(fields, integrationrecommendation.FieldUpdatedBy)
+	}
+	if m.updated_by_impersonator != nil {
+		fields = append(fields, integrationrecommendation.FieldUpdatedByImpersonator)
+	}
+	if m.deleted_at != nil {
+		fields = append(fields, integrationrecommendation.FieldDeletedAt)
+	}
+	if m.deleted_by != nil {
+		fields = append(fields, integrationrecommendation.FieldDeletedBy)
+	}
+	if m.tags != nil {
+		fields = append(fields, integrationrecommendation.FieldTags)
+	}
+	if m.owner != nil {
+		fields = append(fields, integrationrecommendation.FieldOwnerID)
+	}
+	if m.definition_id != nil {
+		fields = append(fields, integrationrecommendation.FieldDefinitionID)
+	}
+	if m.weight != nil {
+		fields = append(fields, integrationrecommendation.FieldWeight)
+	}
+	if m.label != nil {
+		fields = append(fields, integrationrecommendation.FieldLabel)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *IntegrationRecommendationMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case integrationrecommendation.FieldCreatedAt:
+		return m.CreatedAt()
+	case integrationrecommendation.FieldUpdatedAt:
+		return m.UpdatedAt()
+	case integrationrecommendation.FieldCreatedBy:
+		return m.CreatedBy()
+	case integrationrecommendation.FieldUpdatedBy:
+		return m.UpdatedBy()
+	case integrationrecommendation.FieldUpdatedByImpersonator:
+		return m.UpdatedByImpersonator()
+	case integrationrecommendation.FieldDeletedAt:
+		return m.DeletedAt()
+	case integrationrecommendation.FieldDeletedBy:
+		return m.DeletedBy()
+	case integrationrecommendation.FieldTags:
+		return m.Tags()
+	case integrationrecommendation.FieldOwnerID:
+		return m.OwnerID()
+	case integrationrecommendation.FieldDefinitionID:
+		return m.DefinitionID()
+	case integrationrecommendation.FieldWeight:
+		return m.Weight()
+	case integrationrecommendation.FieldLabel:
+		return m.Label()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *IntegrationRecommendationMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case integrationrecommendation.FieldCreatedAt:
+		return m.OldCreatedAt(ctx)
+	case integrationrecommendation.FieldUpdatedAt:
+		return m.OldUpdatedAt(ctx)
+	case integrationrecommendation.FieldCreatedBy:
+		return m.OldCreatedBy(ctx)
+	case integrationrecommendation.FieldUpdatedBy:
+		return m.OldUpdatedBy(ctx)
+	case integrationrecommendation.FieldUpdatedByImpersonator:
+		return m.OldUpdatedByImpersonator(ctx)
+	case integrationrecommendation.FieldDeletedAt:
+		return m.OldDeletedAt(ctx)
+	case integrationrecommendation.FieldDeletedBy:
+		return m.OldDeletedBy(ctx)
+	case integrationrecommendation.FieldTags:
+		return m.OldTags(ctx)
+	case integrationrecommendation.FieldOwnerID:
+		return m.OldOwnerID(ctx)
+	case integrationrecommendation.FieldDefinitionID:
+		return m.OldDefinitionID(ctx)
+	case integrationrecommendation.FieldWeight:
+		return m.OldWeight(ctx)
+	case integrationrecommendation.FieldLabel:
+		return m.OldLabel(ctx)
+	}
+	return nil, fmt.Errorf("unknown IntegrationRecommendation field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *IntegrationRecommendationMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case integrationrecommendation.FieldCreatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedAt(v)
+		return nil
+	case integrationrecommendation.FieldUpdatedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedAt(v)
+		return nil
+	case integrationrecommendation.FieldCreatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetCreatedBy(v)
+		return nil
+	case integrationrecommendation.FieldUpdatedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedBy(v)
+		return nil
+	case integrationrecommendation.FieldUpdatedByImpersonator:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUpdatedByImpersonator(v)
+		return nil
+	case integrationrecommendation.FieldDeletedAt:
+		v, ok := value.(time.Time)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedAt(v)
+		return nil
+	case integrationrecommendation.FieldDeletedBy:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDeletedBy(v)
+		return nil
+	case integrationrecommendation.FieldTags:
+		v, ok := value.([]string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTags(v)
+		return nil
+	case integrationrecommendation.FieldOwnerID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetOwnerID(v)
+		return nil
+	case integrationrecommendation.FieldDefinitionID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetDefinitionID(v)
+		return nil
+	case integrationrecommendation.FieldWeight:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetWeight(v)
+		return nil
+	case integrationrecommendation.FieldLabel:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetLabel(v)
+		return nil
+	}
+	return fmt.Errorf("unknown IntegrationRecommendation field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *IntegrationRecommendationMutation) AddedFields() []string {
+	var fields []string
+	if m.addweight != nil {
+		fields = append(fields, integrationrecommendation.FieldWeight)
+	}
+	return fields
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *IntegrationRecommendationMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case integrationrecommendation.FieldWeight:
+		return m.AddedWeight()
+	}
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *IntegrationRecommendationMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	case integrationrecommendation.FieldWeight:
+		v, ok := value.(int)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddWeight(v)
+		return nil
+	}
+	return fmt.Errorf("unknown IntegrationRecommendation numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *IntegrationRecommendationMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(integrationrecommendation.FieldCreatedAt) {
+		fields = append(fields, integrationrecommendation.FieldCreatedAt)
+	}
+	if m.FieldCleared(integrationrecommendation.FieldUpdatedAt) {
+		fields = append(fields, integrationrecommendation.FieldUpdatedAt)
+	}
+	if m.FieldCleared(integrationrecommendation.FieldCreatedBy) {
+		fields = append(fields, integrationrecommendation.FieldCreatedBy)
+	}
+	if m.FieldCleared(integrationrecommendation.FieldUpdatedBy) {
+		fields = append(fields, integrationrecommendation.FieldUpdatedBy)
+	}
+	if m.FieldCleared(integrationrecommendation.FieldUpdatedByImpersonator) {
+		fields = append(fields, integrationrecommendation.FieldUpdatedByImpersonator)
+	}
+	if m.FieldCleared(integrationrecommendation.FieldDeletedAt) {
+		fields = append(fields, integrationrecommendation.FieldDeletedAt)
+	}
+	if m.FieldCleared(integrationrecommendation.FieldDeletedBy) {
+		fields = append(fields, integrationrecommendation.FieldDeletedBy)
+	}
+	if m.FieldCleared(integrationrecommendation.FieldTags) {
+		fields = append(fields, integrationrecommendation.FieldTags)
+	}
+	if m.FieldCleared(integrationrecommendation.FieldOwnerID) {
+		fields = append(fields, integrationrecommendation.FieldOwnerID)
+	}
+	return fields
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *IntegrationRecommendationMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *IntegrationRecommendationMutation) ClearField(name string) error {
+	switch name {
+	case integrationrecommendation.FieldCreatedAt:
+		m.ClearCreatedAt()
+		return nil
+	case integrationrecommendation.FieldUpdatedAt:
+		m.ClearUpdatedAt()
+		return nil
+	case integrationrecommendation.FieldCreatedBy:
+		m.ClearCreatedBy()
+		return nil
+	case integrationrecommendation.FieldUpdatedBy:
+		m.ClearUpdatedBy()
+		return nil
+	case integrationrecommendation.FieldUpdatedByImpersonator:
+		m.ClearUpdatedByImpersonator()
+		return nil
+	case integrationrecommendation.FieldDeletedAt:
+		m.ClearDeletedAt()
+		return nil
+	case integrationrecommendation.FieldDeletedBy:
+		m.ClearDeletedBy()
+		return nil
+	case integrationrecommendation.FieldTags:
+		m.ClearTags()
+		return nil
+	case integrationrecommendation.FieldOwnerID:
+		m.ClearOwnerID()
+		return nil
+	}
+	return fmt.Errorf("unknown IntegrationRecommendation nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *IntegrationRecommendationMutation) ResetField(name string) error {
+	switch name {
+	case integrationrecommendation.FieldCreatedAt:
+		m.ResetCreatedAt()
+		return nil
+	case integrationrecommendation.FieldUpdatedAt:
+		m.ResetUpdatedAt()
+		return nil
+	case integrationrecommendation.FieldCreatedBy:
+		m.ResetCreatedBy()
+		return nil
+	case integrationrecommendation.FieldUpdatedBy:
+		m.ResetUpdatedBy()
+		return nil
+	case integrationrecommendation.FieldUpdatedByImpersonator:
+		m.ResetUpdatedByImpersonator()
+		return nil
+	case integrationrecommendation.FieldDeletedAt:
+		m.ResetDeletedAt()
+		return nil
+	case integrationrecommendation.FieldDeletedBy:
+		m.ResetDeletedBy()
+		return nil
+	case integrationrecommendation.FieldTags:
+		m.ResetTags()
+		return nil
+	case integrationrecommendation.FieldOwnerID:
+		m.ResetOwnerID()
+		return nil
+	case integrationrecommendation.FieldDefinitionID:
+		m.ResetDefinitionID()
+		return nil
+	case integrationrecommendation.FieldWeight:
+		m.ResetWeight()
+		return nil
+	case integrationrecommendation.FieldLabel:
+		m.ResetLabel()
+		return nil
+	}
+	return fmt.Errorf("unknown IntegrationRecommendation field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *IntegrationRecommendationMutation) AddedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.owner != nil {
+		edges = append(edges, integrationrecommendation.EdgeOwner)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *IntegrationRecommendationMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case integrationrecommendation.EdgeOwner:
+		if id := m.owner; id != nil {
+			return []ent.Value{*id}
+		}
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *IntegrationRecommendationMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 1)
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *IntegrationRecommendationMutation) RemovedIDs(name string) []ent.Value {
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *IntegrationRecommendationMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.clearedowner {
+		edges = append(edges, integrationrecommendation.EdgeOwner)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *IntegrationRecommendationMutation) EdgeCleared(name string) bool {
+	switch name {
+	case integrationrecommendation.EdgeOwner:
+		return m.clearedowner
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *IntegrationRecommendationMutation) ClearEdge(name string) error {
+	switch name {
+	case integrationrecommendation.EdgeOwner:
+		m.ClearOwner()
+		return nil
+	}
+	return fmt.Errorf("unknown IntegrationRecommendation unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *IntegrationRecommendationMutation) ResetEdge(name string) error {
+	switch name {
+	case integrationrecommendation.EdgeOwner:
+		m.ResetOwner()
+		return nil
+	}
+	return fmt.Errorf("unknown IntegrationRecommendation edge %s", name)
+}
+
 // IntegrationRunMutation represents an operation that mutates the IntegrationRun nodes in the graph.
 type IntegrationRunMutation struct {
 	config
@@ -164639,6 +165848,9 @@ type OrganizationMutation struct {
 	integration_runs                              map[string]struct{}
 	removedintegration_runs                       map[string]struct{}
 	clearedintegration_runs                       bool
+	integration_recommendations                   map[string]struct{}
+	removedintegration_recommendations            map[string]struct{}
+	clearedintegration_recommendations            bool
 	notification_preferences                      map[string]struct{}
 	removednotification_preferences               map[string]struct{}
 	clearednotification_preferences               bool
@@ -170642,6 +171854,60 @@ func (m *OrganizationMutation) ResetIntegrationRuns() {
 	m.removedintegration_runs = nil
 }
 
+// AddIntegrationRecommendationIDs adds the "integration_recommendations" edge to the IntegrationRecommendation entity by ids.
+func (m *OrganizationMutation) AddIntegrationRecommendationIDs(ids ...string) {
+	if m.integration_recommendations == nil {
+		m.integration_recommendations = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.integration_recommendations[ids[i]] = struct{}{}
+	}
+}
+
+// ClearIntegrationRecommendations clears the "integration_recommendations" edge to the IntegrationRecommendation entity.
+func (m *OrganizationMutation) ClearIntegrationRecommendations() {
+	m.clearedintegration_recommendations = true
+}
+
+// IntegrationRecommendationsCleared reports if the "integration_recommendations" edge to the IntegrationRecommendation entity was cleared.
+func (m *OrganizationMutation) IntegrationRecommendationsCleared() bool {
+	return m.clearedintegration_recommendations
+}
+
+// RemoveIntegrationRecommendationIDs removes the "integration_recommendations" edge to the IntegrationRecommendation entity by IDs.
+func (m *OrganizationMutation) RemoveIntegrationRecommendationIDs(ids ...string) {
+	if m.removedintegration_recommendations == nil {
+		m.removedintegration_recommendations = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.integration_recommendations, ids[i])
+		m.removedintegration_recommendations[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedIntegrationRecommendations returns the removed IDs of the "integration_recommendations" edge to the IntegrationRecommendation entity.
+func (m *OrganizationMutation) RemovedIntegrationRecommendationsIDs() (ids []string) {
+	for id := range m.removedintegration_recommendations {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// IntegrationRecommendationsIDs returns the "integration_recommendations" edge IDs in the mutation.
+func (m *OrganizationMutation) IntegrationRecommendationsIDs() (ids []string) {
+	for id := range m.integration_recommendations {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetIntegrationRecommendations resets all changes to the "integration_recommendations" edge.
+func (m *OrganizationMutation) ResetIntegrationRecommendations() {
+	m.integration_recommendations = nil
+	m.clearedintegration_recommendations = false
+	m.removedintegration_recommendations = nil
+}
+
 // AddNotificationPreferenceIDs adds the "notification_preferences" edge to the NotificationPreference entity by ids.
 func (m *OrganizationMutation) AddNotificationPreferenceIDs(ids ...string) {
 	if m.notification_preferences == nil {
@@ -175577,7 +176843,7 @@ func (m *OrganizationMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *OrganizationMutation) AddedEdges() []string {
-	edges := make([]string, 0, 171)
+	edges := make([]string, 0, 172)
 	if m.action_plan_creators != nil {
 		edges = append(edges, organization.EdgeActionPlanCreators)
 	}
@@ -175844,6 +177110,9 @@ func (m *OrganizationMutation) AddedEdges() []string {
 	}
 	if m.integration_runs != nil {
 		edges = append(edges, organization.EdgeIntegrationRuns)
+	}
+	if m.integration_recommendations != nil {
+		edges = append(edges, organization.EdgeIntegrationRecommendations)
 	}
 	if m.notification_preferences != nil {
 		edges = append(edges, organization.EdgeNotificationPreferences)
@@ -176628,6 +177897,12 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case organization.EdgeIntegrationRecommendations:
+		ids := make([]ent.Value, 0, len(m.integration_recommendations))
+		for id := range m.integration_recommendations {
+			ids = append(ids, id)
+		}
+		return ids
 	case organization.EdgeNotificationPreferences:
 		ids := make([]ent.Value, 0, len(m.notification_preferences))
 		for id := range m.notification_preferences {
@@ -177124,7 +178399,7 @@ func (m *OrganizationMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *OrganizationMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 171)
+	edges := make([]string, 0, 172)
 	if m.removedaction_plan_creators != nil {
 		edges = append(edges, organization.EdgeActionPlanCreators)
 	}
@@ -177385,6 +178660,9 @@ func (m *OrganizationMutation) RemovedEdges() []string {
 	}
 	if m.removedintegration_runs != nil {
 		edges = append(edges, organization.EdgeIntegrationRuns)
+	}
+	if m.removedintegration_recommendations != nil {
+		edges = append(edges, organization.EdgeIntegrationRecommendations)
 	}
 	if m.removednotification_preferences != nil {
 		edges = append(edges, organization.EdgeNotificationPreferences)
@@ -178158,6 +179436,12 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case organization.EdgeIntegrationRecommendations:
+		ids := make([]ent.Value, 0, len(m.removedintegration_recommendations))
+		for id := range m.removedintegration_recommendations {
+			ids = append(ids, id)
+		}
+		return ids
 	case organization.EdgeNotificationPreferences:
 		ids := make([]ent.Value, 0, len(m.removednotification_preferences))
 		for id := range m.removednotification_preferences {
@@ -178650,7 +179934,7 @@ func (m *OrganizationMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *OrganizationMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 171)
+	edges := make([]string, 0, 172)
 	if m.clearedaction_plan_creators {
 		edges = append(edges, organization.EdgeActionPlanCreators)
 	}
@@ -178917,6 +180201,9 @@ func (m *OrganizationMutation) ClearedEdges() []string {
 	}
 	if m.clearedintegration_runs {
 		edges = append(edges, organization.EdgeIntegrationRuns)
+	}
+	if m.clearedintegration_recommendations {
+		edges = append(edges, organization.EdgeIntegrationRecommendations)
 	}
 	if m.clearednotification_preferences {
 		edges = append(edges, organization.EdgeNotificationPreferences)
@@ -179349,6 +180636,8 @@ func (m *OrganizationMutation) EdgeCleared(name string) bool {
 		return m.clearedintegration_webhooks
 	case organization.EdgeIntegrationRuns:
 		return m.clearedintegration_runs
+	case organization.EdgeIntegrationRecommendations:
+		return m.clearedintegration_recommendations
 	case organization.EdgeNotificationPreferences:
 		return m.clearednotification_preferences
 	case organization.EdgeNotificationTemplates:
@@ -179804,6 +181093,9 @@ func (m *OrganizationMutation) ResetEdge(name string) error {
 		return nil
 	case organization.EdgeIntegrationRuns:
 		m.ResetIntegrationRuns()
+		return nil
+	case organization.EdgeIntegrationRecommendations:
+		m.ResetIntegrationRecommendations()
 		return nil
 	case organization.EdgeNotificationPreferences:
 		m.ResetNotificationPreferences()

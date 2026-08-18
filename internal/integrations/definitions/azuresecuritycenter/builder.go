@@ -19,8 +19,12 @@ func Builder() registry.Builder {
 				Category:    "security-posture",
 				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/azure_security_center",
 				Tags:        []string{"vulnerabilities", "assets"},
-				Active:      false,
-				Visible:     true,
+				RecommendationSignals: []types.RecommendationSignal{
+					{Source: types.RecommendationSignalSourceAsset, Values: []string{"azure", "microsoft defender", "defender for cloud", "security center"}},
+					{Source: types.RecommendationSignalSourceVendor, Values: []string{"azure", "microsoft defender", "defender for cloud"}},
+				},
+				Active:  false,
+				Visible: true,
 			},
 			UserInput: &types.UserInputRegistration{
 				Schema: jsonx.SchemaFrom[UserInput](),

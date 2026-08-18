@@ -58,6 +58,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/integrationrecommendation"
 	"github.com/theopenlane/core/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -229,6 +230,8 @@ type Client struct {
 	ImpersonationEvent *ImpersonationEventClient
 	// Integration is the client for interacting with the Integration builders.
 	Integration *IntegrationClient
+	// IntegrationRecommendation is the client for interacting with the IntegrationRecommendation builders.
+	IntegrationRecommendation *IntegrationRecommendationClient
 	// IntegrationRun is the client for interacting with the IntegrationRun builders.
 	IntegrationRun *IntegrationRunClient
 	// IntegrationWebhook is the client for interacting with the IntegrationWebhook builders.
@@ -424,6 +427,7 @@ func (c *Client) init() {
 	c.IdentityHolder = NewIdentityHolderClient(c.config)
 	c.ImpersonationEvent = NewImpersonationEventClient(c.config)
 	c.Integration = NewIntegrationClient(c.config)
+	c.IntegrationRecommendation = NewIntegrationRecommendationClient(c.config)
 	c.IntegrationRun = NewIntegrationRunClient(c.config)
 	c.IntegrationWebhook = NewIntegrationWebhookClient(c.config)
 	c.InternalPolicy = NewInternalPolicyClient(c.config)
@@ -738,6 +742,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		IdentityHolder:             NewIdentityHolderClient(cfg),
 		ImpersonationEvent:         NewImpersonationEventClient(cfg),
 		Integration:                NewIntegrationClient(cfg),
+		IntegrationRecommendation:  NewIntegrationRecommendationClient(cfg),
 		IntegrationRun:             NewIntegrationRunClient(cfg),
 		IntegrationWebhook:         NewIntegrationWebhookClient(cfg),
 		InternalPolicy:             NewInternalPolicyClient(cfg),
@@ -864,6 +869,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		IdentityHolder:             NewIdentityHolderClient(cfg),
 		ImpersonationEvent:         NewImpersonationEventClient(cfg),
 		Integration:                NewIntegrationClient(cfg),
+		IntegrationRecommendation:  NewIntegrationRecommendationClient(cfg),
 		IntegrationRun:             NewIntegrationRunClient(cfg),
 		IntegrationWebhook:         NewIntegrationWebhookClient(cfg),
 		InternalPolicy:             NewInternalPolicyClient(cfg),
@@ -969,11 +975,11 @@ func (c *Client) Use(hooks ...Hook) {
 		c.EmailVerificationToken, c.Entity, c.EntityType, c.Event, c.Evidence,
 		c.Export, c.File, c.FileDownloadToken, c.Finding, c.FindingControl, c.Group,
 		c.GroupMembership, c.GroupSetting, c.Hush, c.IdentityHolder,
-		c.ImpersonationEvent, c.Integration, c.IntegrationRun, c.IntegrationWebhook,
-		c.InternalPolicy, c.Invite, c.JobResult, c.JobRunner,
-		c.JobRunnerRegistrationToken, c.JobRunnerToken, c.JobTemplate,
-		c.MappableDomain, c.MappedControl, c.Narrative, c.Note, c.Notification,
-		c.NotificationPreference, c.NotificationTemplate, c.Onboarding,
+		c.ImpersonationEvent, c.Integration, c.IntegrationRecommendation,
+		c.IntegrationRun, c.IntegrationWebhook, c.InternalPolicy, c.Invite,
+		c.JobResult, c.JobRunner, c.JobRunnerRegistrationToken, c.JobRunnerToken,
+		c.JobTemplate, c.MappableDomain, c.MappedControl, c.Narrative, c.Note,
+		c.Notification, c.NotificationPreference, c.NotificationTemplate, c.Onboarding,
 		c.OrgMembership, c.OrgModule, c.OrgPrice, c.OrgProduct, c.OrgSubscription,
 		c.Organization, c.OrganizationSetting, c.PasswordResetToken,
 		c.PersonalAccessToken, c.Platform, c.Procedure, c.Program, c.ProgramMembership,
@@ -1003,11 +1009,11 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.EmailVerificationToken, c.Entity, c.EntityType, c.Event, c.Evidence,
 		c.Export, c.File, c.FileDownloadToken, c.Finding, c.FindingControl, c.Group,
 		c.GroupMembership, c.GroupSetting, c.Hush, c.IdentityHolder,
-		c.ImpersonationEvent, c.Integration, c.IntegrationRun, c.IntegrationWebhook,
-		c.InternalPolicy, c.Invite, c.JobResult, c.JobRunner,
-		c.JobRunnerRegistrationToken, c.JobRunnerToken, c.JobTemplate,
-		c.MappableDomain, c.MappedControl, c.Narrative, c.Note, c.Notification,
-		c.NotificationPreference, c.NotificationTemplate, c.Onboarding,
+		c.ImpersonationEvent, c.Integration, c.IntegrationRecommendation,
+		c.IntegrationRun, c.IntegrationWebhook, c.InternalPolicy, c.Invite,
+		c.JobResult, c.JobRunner, c.JobRunnerRegistrationToken, c.JobRunnerToken,
+		c.JobTemplate, c.MappableDomain, c.MappedControl, c.Narrative, c.Note,
+		c.Notification, c.NotificationPreference, c.NotificationTemplate, c.Onboarding,
 		c.OrgMembership, c.OrgModule, c.OrgPrice, c.OrgProduct, c.OrgSubscription,
 		c.Organization, c.OrganizationSetting, c.PasswordResetToken,
 		c.PersonalAccessToken, c.Platform, c.Procedure, c.Program, c.ProgramMembership,
@@ -1178,6 +1184,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.ImpersonationEvent.mutate(ctx, m)
 	case *IntegrationMutation:
 		return c.Integration.mutate(ctx, m)
+	case *IntegrationRecommendationMutation:
+		return c.IntegrationRecommendation.mutate(ctx, m)
 	case *IntegrationRunMutation:
 		return c.IntegrationRun.mutate(ctx, m)
 	case *IntegrationWebhookMutation:
@@ -15912,6 +15920,160 @@ func (c *IntegrationClient) mutate(ctx context.Context, m *IntegrationMutation) 
 	}
 }
 
+// IntegrationRecommendationClient is a client for the IntegrationRecommendation schema.
+type IntegrationRecommendationClient struct {
+	config
+}
+
+// NewIntegrationRecommendationClient returns a client for the IntegrationRecommendation from the given config.
+func NewIntegrationRecommendationClient(c config) *IntegrationRecommendationClient {
+	return &IntegrationRecommendationClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `integrationrecommendation.Hooks(f(g(h())))`.
+func (c *IntegrationRecommendationClient) Use(hooks ...Hook) {
+	c.hooks.IntegrationRecommendation = append(c.hooks.IntegrationRecommendation, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `integrationrecommendation.Intercept(f(g(h())))`.
+func (c *IntegrationRecommendationClient) Intercept(interceptors ...Interceptor) {
+	c.inters.IntegrationRecommendation = append(c.inters.IntegrationRecommendation, interceptors...)
+}
+
+// Create returns a builder for creating a IntegrationRecommendation entity.
+func (c *IntegrationRecommendationClient) Create() *IntegrationRecommendationCreate {
+	mutation := newIntegrationRecommendationMutation(c.config, OpCreate)
+	return &IntegrationRecommendationCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of IntegrationRecommendation entities.
+func (c *IntegrationRecommendationClient) CreateBulk(builders ...*IntegrationRecommendationCreate) *IntegrationRecommendationCreateBulk {
+	return &IntegrationRecommendationCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *IntegrationRecommendationClient) MapCreateBulk(slice any, setFunc func(*IntegrationRecommendationCreate, int)) *IntegrationRecommendationCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &IntegrationRecommendationCreateBulk{err: fmt.Errorf("calling to IntegrationRecommendationClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*IntegrationRecommendationCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &IntegrationRecommendationCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for IntegrationRecommendation.
+func (c *IntegrationRecommendationClient) Update() *IntegrationRecommendationUpdate {
+	mutation := newIntegrationRecommendationMutation(c.config, OpUpdate)
+	return &IntegrationRecommendationUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *IntegrationRecommendationClient) UpdateOne(_m *IntegrationRecommendation) *IntegrationRecommendationUpdateOne {
+	mutation := newIntegrationRecommendationMutation(c.config, OpUpdateOne, withIntegrationRecommendation(_m))
+	return &IntegrationRecommendationUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *IntegrationRecommendationClient) UpdateOneID(id string) *IntegrationRecommendationUpdateOne {
+	mutation := newIntegrationRecommendationMutation(c.config, OpUpdateOne, withIntegrationRecommendationID(id))
+	return &IntegrationRecommendationUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for IntegrationRecommendation.
+func (c *IntegrationRecommendationClient) Delete() *IntegrationRecommendationDelete {
+	mutation := newIntegrationRecommendationMutation(c.config, OpDelete)
+	return &IntegrationRecommendationDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *IntegrationRecommendationClient) DeleteOne(_m *IntegrationRecommendation) *IntegrationRecommendationDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *IntegrationRecommendationClient) DeleteOneID(id string) *IntegrationRecommendationDeleteOne {
+	builder := c.Delete().Where(integrationrecommendation.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &IntegrationRecommendationDeleteOne{builder}
+}
+
+// Query returns a query builder for IntegrationRecommendation.
+func (c *IntegrationRecommendationClient) Query() *IntegrationRecommendationQuery {
+	return &IntegrationRecommendationQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeIntegrationRecommendation},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a IntegrationRecommendation entity by its id.
+func (c *IntegrationRecommendationClient) Get(ctx context.Context, id string) (*IntegrationRecommendation, error) {
+	return c.Query().Where(integrationrecommendation.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *IntegrationRecommendationClient) GetX(ctx context.Context, id string) *IntegrationRecommendation {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a IntegrationRecommendation.
+func (c *IntegrationRecommendationClient) QueryOwner(_m *IntegrationRecommendation) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integrationrecommendation.Table, integrationrecommendation.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, integrationrecommendation.OwnerTable, integrationrecommendation.OwnerColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.IntegrationRecommendation
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *IntegrationRecommendationClient) Hooks() []Hook {
+	hooks := c.hooks.IntegrationRecommendation
+	return append(hooks[:len(hooks):len(hooks)], integrationrecommendation.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *IntegrationRecommendationClient) Interceptors() []Interceptor {
+	inters := c.inters.IntegrationRecommendation
+	return append(inters[:len(inters):len(inters)], integrationrecommendation.Interceptors[:]...)
+}
+
+func (c *IntegrationRecommendationClient) mutate(ctx context.Context, m *IntegrationRecommendationMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&IntegrationRecommendationCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&IntegrationRecommendationUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&IntegrationRecommendationUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&IntegrationRecommendationDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown IntegrationRecommendation mutation op: %q", m.Op())
+	}
+}
+
 // IntegrationRunClient is a client for the IntegrationRun schema.
 type IntegrationRunClient struct {
 	config
@@ -22727,6 +22889,25 @@ func (c *OrganizationClient) QueryIntegrationRuns(_m *Organization) *Integration
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.IntegrationRun
 		step.Edge.Schema = schemaConfig.IntegrationRun
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryIntegrationRecommendations queries the integration_recommendations edge of a Organization.
+func (c *OrganizationClient) QueryIntegrationRecommendations(_m *Organization) *IntegrationRecommendationQuery {
+	query := (&IntegrationRecommendationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(integrationrecommendation.Table, integrationrecommendation.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.IntegrationRecommendationsTable, organization.IntegrationRecommendationsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.IntegrationRecommendation
+		step.Edge.Schema = schemaConfig.IntegrationRecommendation
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -39713,21 +39894,22 @@ type (
 		Discussion, DocumentData, EmailTemplate, EmailVerificationToken, Entity,
 		EntityType, Event, Evidence, Export, File, FileDownloadToken, Finding,
 		FindingControl, Group, GroupMembership, GroupSetting, Hush, IdentityHolder,
-		ImpersonationEvent, Integration, IntegrationRun, IntegrationWebhook,
-		InternalPolicy, Invite, JobResult, JobRunner, JobRunnerRegistrationToken,
-		JobRunnerToken, JobTemplate, MappableDomain, MappedControl, Narrative, Note,
-		Notification, NotificationPreference, NotificationTemplate, Onboarding,
-		OrgMembership, OrgModule, OrgPrice, OrgProduct, OrgSubscription, Organization,
-		OrganizationSetting, PasswordResetToken, PersonalAccessToken, Platform,
-		Procedure, Program, ProgramMembership, Remediation, Review, Risk,
-		SLADefinition, Scan, ScheduledJob, ScheduledJobRun, Standard, Subcontrol,
-		Subprocessor, Subscriber, SystemDetail, TFASetting, TagDefinition, Task,
-		Template, TrustCenter, TrustCenterCompliance, TrustCenterDoc,
-		TrustCenterEntity, TrustCenterFAQ, TrustCenterNDARequest, TrustCenterSetting,
-		TrustCenterSubprocessor, TrustCenterWatermarkConfig, User, UserSetting,
-		VendorRiskScore, VendorScoringConfig, Vulnerability, Webauthn,
-		WorkflowAssignment, WorkflowAssignmentTarget, WorkflowDefinition,
-		WorkflowEvent, WorkflowInstance, WorkflowObjectRef, WorkflowProposal []ent.Hook
+		ImpersonationEvent, Integration, IntegrationRecommendation, IntegrationRun,
+		IntegrationWebhook, InternalPolicy, Invite, JobResult, JobRunner,
+		JobRunnerRegistrationToken, JobRunnerToken, JobTemplate, MappableDomain,
+		MappedControl, Narrative, Note, Notification, NotificationPreference,
+		NotificationTemplate, Onboarding, OrgMembership, OrgModule, OrgPrice,
+		OrgProduct, OrgSubscription, Organization, OrganizationSetting,
+		PasswordResetToken, PersonalAccessToken, Platform, Procedure, Program,
+		ProgramMembership, Remediation, Review, Risk, SLADefinition, Scan,
+		ScheduledJob, ScheduledJobRun, Standard, Subcontrol, Subprocessor, Subscriber,
+		SystemDetail, TFASetting, TagDefinition, Task, Template, TrustCenter,
+		TrustCenterCompliance, TrustCenterDoc, TrustCenterEntity, TrustCenterFAQ,
+		TrustCenterNDARequest, TrustCenterSetting, TrustCenterSubprocessor,
+		TrustCenterWatermarkConfig, User, UserSetting, VendorRiskScore,
+		VendorScoringConfig, Vulnerability, Webauthn, WorkflowAssignment,
+		WorkflowAssignmentTarget, WorkflowDefinition, WorkflowEvent, WorkflowInstance,
+		WorkflowObjectRef, WorkflowProposal []ent.Hook
 	}
 	inters struct {
 		APIToken, ActionPlan, Assessment, AssessmentResponse, Asset, Campaign,
@@ -39737,22 +39919,22 @@ type (
 		Discussion, DocumentData, EmailTemplate, EmailVerificationToken, Entity,
 		EntityType, Event, Evidence, Export, File, FileDownloadToken, Finding,
 		FindingControl, Group, GroupMembership, GroupSetting, Hush, IdentityHolder,
-		ImpersonationEvent, Integration, IntegrationRun, IntegrationWebhook,
-		InternalPolicy, Invite, JobResult, JobRunner, JobRunnerRegistrationToken,
-		JobRunnerToken, JobTemplate, MappableDomain, MappedControl, Narrative, Note,
-		Notification, NotificationPreference, NotificationTemplate, Onboarding,
-		OrgMembership, OrgModule, OrgPrice, OrgProduct, OrgSubscription, Organization,
-		OrganizationSetting, PasswordResetToken, PersonalAccessToken, Platform,
-		Procedure, Program, ProgramMembership, Remediation, Review, Risk,
-		SLADefinition, Scan, ScheduledJob, ScheduledJobRun, Standard, Subcontrol,
-		Subprocessor, Subscriber, SystemDetail, TFASetting, TagDefinition, Task,
-		Template, TrustCenter, TrustCenterCompliance, TrustCenterDoc,
-		TrustCenterEntity, TrustCenterFAQ, TrustCenterNDARequest, TrustCenterSetting,
-		TrustCenterSubprocessor, TrustCenterWatermarkConfig, User, UserSetting,
-		VendorRiskScore, VendorScoringConfig, Vulnerability, Webauthn,
-		WorkflowAssignment, WorkflowAssignmentTarget, WorkflowDefinition,
-		WorkflowEvent, WorkflowInstance, WorkflowObjectRef,
-		WorkflowProposal []ent.Interceptor
+		ImpersonationEvent, Integration, IntegrationRecommendation, IntegrationRun,
+		IntegrationWebhook, InternalPolicy, Invite, JobResult, JobRunner,
+		JobRunnerRegistrationToken, JobRunnerToken, JobTemplate, MappableDomain,
+		MappedControl, Narrative, Note, Notification, NotificationPreference,
+		NotificationTemplate, Onboarding, OrgMembership, OrgModule, OrgPrice,
+		OrgProduct, OrgSubscription, Organization, OrganizationSetting,
+		PasswordResetToken, PersonalAccessToken, Platform, Procedure, Program,
+		ProgramMembership, Remediation, Review, Risk, SLADefinition, Scan,
+		ScheduledJob, ScheduledJobRun, Standard, Subcontrol, Subprocessor, Subscriber,
+		SystemDetail, TFASetting, TagDefinition, Task, Template, TrustCenter,
+		TrustCenterCompliance, TrustCenterDoc, TrustCenterEntity, TrustCenterFAQ,
+		TrustCenterNDARequest, TrustCenterSetting, TrustCenterSubprocessor,
+		TrustCenterWatermarkConfig, User, UserSetting, VendorRiskScore,
+		VendorScoringConfig, Vulnerability, Webauthn, WorkflowAssignment,
+		WorkflowAssignmentTarget, WorkflowDefinition, WorkflowEvent, WorkflowInstance,
+		WorkflowObjectRef, WorkflowProposal []ent.Interceptor
 	}
 )
 

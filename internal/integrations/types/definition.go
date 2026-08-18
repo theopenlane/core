@@ -28,10 +28,28 @@ type DefinitionSpec struct {
 	LogoURL string `json:"logoUrl,omitempty"`
 	// Tags are UI-facing labels that describe what the integration provides
 	Tags []string `json:"tags,omitempty"`
+	// RecommendationSignals declares the organization signals/activities that should lead to a recommendation of this integration
+	RecommendationSignals []RecommendationSignal `json:"recommendationSignals,omitempty"`
 	// Active indicates whether the definition is enabled
 	Active bool `json:"active"`
 	// Visible indicates whether the definition is visible in catalog surfaces
 	Visible bool `json:"visible"`
+}
+
+// RecommendationSource identifies the source data for recommending an integration
+type RecommendationSource string
+
+const (
+	RecommendationSignalSourceAsset          RecommendationSource = "ASSET"
+	RecommendationSignalSourceVendor         RecommendationSource = "VENDOR"
+	RecommendationSignalSourceSSOProvider    RecommendationSource = "SSO_PROVIDER"
+	RecommendationSignalSourceSignInProvider RecommendationSource = "SIGN_IN_PROVIDER"
+)
+
+// RecommendationSignal declares source-specific values that recommend a definition
+type RecommendationSignal struct {
+	Source RecommendationSource `json:"source"`
+	Values []string             `json:"values"`
 }
 
 // Definition is the installable and executable integration unit

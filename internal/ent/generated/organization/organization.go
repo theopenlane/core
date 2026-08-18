@@ -229,6 +229,8 @@ const (
 	EdgeIntegrationWebhooks = "integration_webhooks"
 	// EdgeIntegrationRuns holds the string denoting the integration_runs edge name in mutations.
 	EdgeIntegrationRuns = "integration_runs"
+	// EdgeIntegrationRecommendations holds the string denoting the integration_recommendations edge name in mutations.
+	EdgeIntegrationRecommendations = "integration_recommendations"
 	// EdgeNotificationPreferences holds the string denoting the notification_preferences edge name in mutations.
 	EdgeNotificationPreferences = "notification_preferences"
 	// EdgeNotificationTemplates holds the string denoting the notification_templates edge name in mutations.
@@ -1010,6 +1012,13 @@ const (
 	IntegrationRunsInverseTable = "integration_runs"
 	// IntegrationRunsColumn is the table column denoting the integration_runs relation/edge.
 	IntegrationRunsColumn = "owner_id"
+	// IntegrationRecommendationsTable is the table that holds the integration_recommendations relation/edge.
+	IntegrationRecommendationsTable = "integration_recommendations"
+	// IntegrationRecommendationsInverseTable is the table name for the IntegrationRecommendation entity.
+	// It exists in this package in order to avoid circular dependency with the "integrationrecommendation" package.
+	IntegrationRecommendationsInverseTable = "integration_recommendations"
+	// IntegrationRecommendationsColumn is the table column denoting the integration_recommendations relation/edge.
+	IntegrationRecommendationsColumn = "owner_id"
 	// NotificationPreferencesTable is the table that holds the notification_preferences relation/edge.
 	NotificationPreferencesTable = "notification_preferences"
 	// NotificationPreferencesInverseTable is the table name for the NotificationPreference entity.
@@ -2988,6 +2997,20 @@ func ByIntegrationRuns(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByIntegrationRecommendationsCount orders the results by integration_recommendations count.
+func ByIntegrationRecommendationsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newIntegrationRecommendationsStep(), opts...)
+	}
+}
+
+// ByIntegrationRecommendations orders the results by integration_recommendations terms.
+func ByIntegrationRecommendations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newIntegrationRecommendationsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByNotificationPreferencesCount orders the results by notification_preferences count.
 func ByNotificationPreferencesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -4749,6 +4772,13 @@ func newIntegrationRunsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(IntegrationRunsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, IntegrationRunsTable, IntegrationRunsColumn),
+	)
+}
+func newIntegrationRecommendationsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(IntegrationRecommendationsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, IntegrationRecommendationsTable, IntegrationRecommendationsColumn),
 	)
 }
 func newNotificationPreferencesStep() *sqlgraph.Step {

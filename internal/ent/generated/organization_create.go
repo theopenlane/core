@@ -44,6 +44,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/integrationrecommendation"
 	"github.com/theopenlane/core/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -1698,6 +1699,21 @@ func (_c *OrganizationCreate) AddIntegrationRuns(v ...*IntegrationRun) *Organiza
 		ids[i] = v[i].ID
 	}
 	return _c.AddIntegrationRunIDs(ids...)
+}
+
+// AddIntegrationRecommendationIDs adds the "integration_recommendations" edge to the IntegrationRecommendation entity by IDs.
+func (_c *OrganizationCreate) AddIntegrationRecommendationIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddIntegrationRecommendationIDs(ids...)
+	return _c
+}
+
+// AddIntegrationRecommendations adds the "integration_recommendations" edges to the IntegrationRecommendation entity.
+func (_c *OrganizationCreate) AddIntegrationRecommendations(v ...*IntegrationRecommendation) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddIntegrationRecommendationIDs(ids...)
 }
 
 // AddNotificationPreferenceIDs adds the "notification_preferences" edge to the NotificationPreference entity by IDs.
@@ -4651,6 +4667,23 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			},
 		}
 		edge.Schema = _c.schemaConfig.IntegrationRun
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.IntegrationRecommendationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.IntegrationRecommendationsTable,
+			Columns: []string{organization.IntegrationRecommendationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integrationrecommendation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.IntegrationRecommendation
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

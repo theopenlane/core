@@ -50,6 +50,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/integrationrecommendation"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
 	"github.com/theopenlane/core/internal/ent/generated/jobresult"
@@ -17195,6 +17196,361 @@ func (_m *Integration) ToEdge(order *IntegrationOrder) *IntegrationEdge {
 		order = DefaultIntegrationOrder
 	}
 	return &IntegrationEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// IntegrationRecommendationEdge is the edge representation of IntegrationRecommendation.
+type IntegrationRecommendationEdge struct {
+	Node   *IntegrationRecommendation `json:"node"`
+	Cursor Cursor                     `json:"cursor"`
+}
+
+// IntegrationRecommendationConnection is the connection containing edges to IntegrationRecommendation.
+type IntegrationRecommendationConnection struct {
+	Edges      []*IntegrationRecommendationEdge `json:"edges"`
+	PageInfo   PageInfo                         `json:"pageInfo"`
+	TotalCount int                              `json:"totalCount"`
+}
+
+func (c *IntegrationRecommendationConnection) build(nodes []*IntegrationRecommendation, pager *integrationrecommendationPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *IntegrationRecommendation
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *IntegrationRecommendation {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *IntegrationRecommendation {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*IntegrationRecommendationEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &IntegrationRecommendationEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// IntegrationRecommendationPaginateOption enables pagination customization.
+type IntegrationRecommendationPaginateOption func(*integrationrecommendationPager) error
+
+// WithIntegrationRecommendationOrder configures pagination ordering.
+func WithIntegrationRecommendationOrder(order []*IntegrationRecommendationOrder) IntegrationRecommendationPaginateOption {
+	return func(pager *integrationrecommendationPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithIntegrationRecommendationFilter configures pagination filter.
+func WithIntegrationRecommendationFilter(filter func(*IntegrationRecommendationQuery) (*IntegrationRecommendationQuery, error)) IntegrationRecommendationPaginateOption {
+	return func(pager *integrationrecommendationPager) error {
+		if filter == nil {
+			return errors.New("IntegrationRecommendationQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type integrationrecommendationPager struct {
+	reverse bool
+	order   []*IntegrationRecommendationOrder
+	filter  func(*IntegrationRecommendationQuery) (*IntegrationRecommendationQuery, error)
+}
+
+func newIntegrationRecommendationPager(opts []IntegrationRecommendationPaginateOption, reverse bool) (*integrationrecommendationPager, error) {
+	pager := &integrationrecommendationPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *integrationrecommendationPager) applyFilter(query *IntegrationRecommendationQuery) (*IntegrationRecommendationQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *integrationrecommendationPager) toCursor(_m *IntegrationRecommendation) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(_m).Value)
+	}
+	return Cursor{ID: _m.ID, Value: cs_}
+}
+
+func (p *integrationrecommendationPager) applyCursors(query *IntegrationRecommendationQuery, after, before *Cursor) (*IntegrationRecommendationQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultIntegrationRecommendationOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			if i < len(fields) {
+				s.Or().Where(sql.IsNull(fields[i]))
+			}
+		})
+	}
+	return query, nil
+}
+
+func (p *integrationrecommendationPager) applyOrder(query *IntegrationRecommendationQuery) *IntegrationRecommendationQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultIntegrationRecommendationOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultIntegrationRecommendationOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *integrationrecommendationPager) orderExpr(query *IntegrationRecommendationQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultIntegrationRecommendationOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to IntegrationRecommendation.
+func (_m *IntegrationRecommendationQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...IntegrationRecommendationPaginateOption,
+) (*IntegrationRecommendationConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newIntegrationRecommendationPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &IntegrationRecommendationConnection{Edges: []*IntegrationRecommendationEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimitSingle(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// IntegrationRecommendationOrderFieldCreatedAt orders IntegrationRecommendation by created_at.
+	IntegrationRecommendationOrderFieldCreatedAt = &IntegrationRecommendationOrderField{
+		Value: func(_m *IntegrationRecommendation) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: integrationrecommendation.FieldCreatedAt,
+		toTerm: integrationrecommendation.ByCreatedAt,
+		toCursor: func(_m *IntegrationRecommendation) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// IntegrationRecommendationOrderFieldUpdatedAt orders IntegrationRecommendation by updated_at.
+	IntegrationRecommendationOrderFieldUpdatedAt = &IntegrationRecommendationOrderField{
+		Value: func(_m *IntegrationRecommendation) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: integrationrecommendation.FieldUpdatedAt,
+		toTerm: integrationrecommendation.ByUpdatedAt,
+		toCursor: func(_m *IntegrationRecommendation) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f IntegrationRecommendationOrderField) String() string {
+	var str string
+	switch f.column {
+	case IntegrationRecommendationOrderFieldCreatedAt.column:
+		str = "created_at"
+	case IntegrationRecommendationOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f IntegrationRecommendationOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *IntegrationRecommendationOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("IntegrationRecommendationOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *IntegrationRecommendationOrderFieldCreatedAt
+	case "updated_at":
+		*f = *IntegrationRecommendationOrderFieldUpdatedAt
+	default:
+		return fmt.Errorf("%s is not a valid IntegrationRecommendationOrderField", str)
+	}
+	return nil
+}
+
+// IntegrationRecommendationOrderField defines the ordering field of IntegrationRecommendation.
+type IntegrationRecommendationOrderField struct {
+	// Value extracts the ordering value from the given IntegrationRecommendation.
+	Value    func(*IntegrationRecommendation) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) integrationrecommendation.OrderOption
+	toCursor func(*IntegrationRecommendation) Cursor
+}
+
+// IntegrationRecommendationOrder defines the ordering of IntegrationRecommendation.
+type IntegrationRecommendationOrder struct {
+	Direction OrderDirection                       `json:"direction"`
+	Field     *IntegrationRecommendationOrderField `json:"field"`
+}
+
+// DefaultIntegrationRecommendationOrder is the default ordering of IntegrationRecommendation.
+var DefaultIntegrationRecommendationOrder = &IntegrationRecommendationOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &IntegrationRecommendationOrderField{
+		Value: func(_m *IntegrationRecommendation) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: integrationrecommendation.FieldID,
+		toTerm: integrationrecommendation.ByID,
+		toCursor: func(_m *IntegrationRecommendation) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts IntegrationRecommendation into IntegrationRecommendationEdge.
+func (_m *IntegrationRecommendation) ToEdge(order *IntegrationRecommendationOrder) *IntegrationRecommendationEdge {
+	if order == nil {
+		order = DefaultIntegrationRecommendationOrder
+	}
+	return &IntegrationRecommendationEdge{
 		Node:   _m,
 		Cursor: order.Field.toCursor(_m),
 	}

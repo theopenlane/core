@@ -47,6 +47,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/integrationrecommendation"
 	"github.com/theopenlane/core/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -203,6 +204,7 @@ type OrganizationQuery struct {
 	withEmailTemplates                          *EmailTemplateQuery
 	withIntegrationWebhooks                     *IntegrationWebhookQuery
 	withIntegrationRuns                         *IntegrationRunQuery
+	withIntegrationRecommendations              *IntegrationRecommendationQuery
 	withNotificationPreferences                 *NotificationPreferenceQuery
 	withNotificationTemplates                   *NotificationTemplateQuery
 	withUsers                                   *UserQuery
@@ -374,6 +376,7 @@ type OrganizationQuery struct {
 	withNamedEmailTemplates                     map[string]*EmailTemplateQuery
 	withNamedIntegrationWebhooks                map[string]*IntegrationWebhookQuery
 	withNamedIntegrationRuns                    map[string]*IntegrationRunQuery
+	withNamedIntegrationRecommendations         map[string]*IntegrationRecommendationQuery
 	withNamedNotificationPreferences            map[string]*NotificationPreferenceQuery
 	withNamedNotificationTemplates              map[string]*NotificationTemplateQuery
 	withNamedUsers                              map[string]*UserQuery
@@ -2716,6 +2719,31 @@ func (_q *OrganizationQuery) QueryIntegrationRuns() *IntegrationRunQuery {
 	return query
 }
 
+// QueryIntegrationRecommendations chains the current query on the "integration_recommendations" edge.
+func (_q *OrganizationQuery) QueryIntegrationRecommendations() *IntegrationRecommendationQuery {
+	query := (&IntegrationRecommendationClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(integrationrecommendation.Table, integrationrecommendation.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.IntegrationRecommendationsTable, organization.IntegrationRecommendationsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.IntegrationRecommendation
+		step.Edge.Schema = schemaConfig.IntegrationRecommendation
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryNotificationPreferences chains the current query on the "notification_preferences" edge.
 func (_q *OrganizationQuery) QueryNotificationPreferences() *NotificationPreferenceQuery {
 	query := (&NotificationPreferenceClient{config: _q.config}).Query()
@@ -5047,6 +5075,7 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withEmailTemplates:                     _q.withEmailTemplates.Clone(),
 		withIntegrationWebhooks:                _q.withIntegrationWebhooks.Clone(),
 		withIntegrationRuns:                    _q.withIntegrationRuns.Clone(),
+		withIntegrationRecommendations:         _q.withIntegrationRecommendations.Clone(),
 		withNotificationPreferences:            _q.withNotificationPreferences.Clone(),
 		withNotificationTemplates:              _q.withNotificationTemplates.Clone(),
 		withUsers:                              _q.withUsers.Clone(),
@@ -6115,6 +6144,17 @@ func (_q *OrganizationQuery) WithIntegrationRuns(opts ...func(*IntegrationRunQue
 	return _q
 }
 
+// WithIntegrationRecommendations tells the query-builder to eager-load the nodes that are connected to
+// the "integration_recommendations" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithIntegrationRecommendations(opts ...func(*IntegrationRecommendationQuery)) *OrganizationQuery {
+	query := (&IntegrationRecommendationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withIntegrationRecommendations = query
+	return _q
+}
+
 // WithNotificationPreferences tells the query-builder to eager-load the nodes that are connected to
 // the "notification_preferences" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *OrganizationQuery) WithNotificationPreferences(opts ...func(*NotificationPreferenceQuery)) *OrganizationQuery {
@@ -7101,7 +7141,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = _q.querySpec()
-		loadedTypes = [171]bool{
+		loadedTypes = [172]bool{
 			_q.withActionPlanCreators != nil,
 			_q.withAPITokenCreators != nil,
 			_q.withAssessmentCreators != nil,
@@ -7191,6 +7231,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withEmailTemplates != nil,
 			_q.withIntegrationWebhooks != nil,
 			_q.withIntegrationRuns != nil,
+			_q.withIntegrationRecommendations != nil,
 			_q.withNotificationPreferences != nil,
 			_q.withNotificationTemplates != nil,
 			_q.withUsers != nil,
@@ -7998,6 +8039,15 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadIntegrationRuns(ctx, query, nodes,
 			func(n *Organization) { n.Edges.IntegrationRuns = []*IntegrationRun{} },
 			func(n *Organization, e *IntegrationRun) { n.Edges.IntegrationRuns = append(n.Edges.IntegrationRuns, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withIntegrationRecommendations; query != nil {
+		if err := _q.loadIntegrationRecommendations(ctx, query, nodes,
+			func(n *Organization) { n.Edges.IntegrationRecommendations = []*IntegrationRecommendation{} },
+			func(n *Organization, e *IntegrationRecommendation) {
+				n.Edges.IntegrationRecommendations = append(n.Edges.IntegrationRecommendations, e)
+			}); err != nil {
 			return nil, err
 		}
 	}
@@ -9226,6 +9276,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadIntegrationRuns(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedIntegrationRuns(name) },
 			func(n *Organization, e *IntegrationRun) { n.appendNamedIntegrationRuns(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedIntegrationRecommendations {
+		if err := _q.loadIntegrationRecommendations(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedIntegrationRecommendations(name) },
+			func(n *Organization, e *IntegrationRecommendation) { n.appendNamedIntegrationRecommendations(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -12572,6 +12629,36 @@ func (_q *OrganizationQuery) loadIntegrationRuns(ctx context.Context, query *Int
 	}
 	query.Where(predicate.IntegrationRun(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(organization.IntegrationRunsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadIntegrationRecommendations(ctx context.Context, query *IntegrationRecommendationQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *IntegrationRecommendation)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(integrationrecommendation.FieldOwnerID)
+	}
+	query.Where(predicate.IntegrationRecommendation(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.IntegrationRecommendationsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -16494,6 +16581,20 @@ func (_q *OrganizationQuery) WithNamedIntegrationRuns(name string, opts ...func(
 		_q.withNamedIntegrationRuns = make(map[string]*IntegrationRunQuery)
 	}
 	_q.withNamedIntegrationRuns[name] = query
+	return _q
+}
+
+// WithNamedIntegrationRecommendations tells the query-builder to eager-load the nodes that are connected to the "integration_recommendations"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedIntegrationRecommendations(name string, opts ...func(*IntegrationRecommendationQuery)) *OrganizationQuery {
+	query := (&IntegrationRecommendationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedIntegrationRecommendations == nil {
+		_q.withNamedIntegrationRecommendations = make(map[string]*IntegrationRecommendationQuery)
+	}
+	_q.withNamedIntegrationRecommendations[name] = query
 	return _q
 }
 

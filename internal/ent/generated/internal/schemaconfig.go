@@ -133,6 +133,7 @@ type SchemaConfig struct {
 	IntegrationReviews                 string // Integration-reviews->Review table.
 	IntegrationRemediations            string // Integration-remediations->Remediation table.
 	IntegrationActionPlans             string // Integration-action_plans->ActionPlan table.
+	IntegrationRecommendation          string // IntegrationRecommendation table.
 	IntegrationRun                     string // IntegrationRun table.
 	IntegrationWebhook                 string // IntegrationWebhook table.
 	InternalPolicy                     string // InternalPolicy table.

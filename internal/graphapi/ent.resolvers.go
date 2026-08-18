@@ -1263,6 +1263,40 @@ func (r *queryResolver) Integrations(ctx context.Context, after *entgql.Cursor[s
 	return res, err
 }
 
+// IntegrationRecommendations is the resolver for the integrationRecommendations field.
+func (r *queryResolver) IntegrationRecommendations(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationRecommendationOrder, where *generated.IntegrationRecommendationWhereInput) (*generated.IntegrationRecommendationConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.IntegrationRecommendationOrder{
+			{
+				Field:     generated.IntegrationRecommendationOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).IntegrationRecommendation.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "integrationrecommendation"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithIntegrationRecommendationOrder(orderBy),
+		generated.WithIntegrationRecommendationFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "integrationrecommendation"})
+	}
+
+	return res, err
+}
+
 // InternalPolicies is the resolver for the internalPolicies field.
 func (r *queryResolver) InternalPolicies(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) (*generated.InternalPolicyConnection, error) {
 	// set page limit if nothing was set

@@ -4387,6 +4387,51 @@ var (
 			},
 		},
 	}
+	// IntegrationRecommendationsColumns holds the columns for the "integration_recommendations" table.
+	IntegrationRecommendationsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by_impersonator", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "definition_id", Type: field.TypeString},
+		{Name: "weight", Type: field.TypeInt},
+		{Name: "label", Type: field.TypeString},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+	}
+	// IntegrationRecommendationsTable holds the schema information for the "integration_recommendations" table.
+	IntegrationRecommendationsTable = &schema.Table{
+		Name:       "integration_recommendations",
+		Columns:    IntegrationRecommendationsColumns,
+		PrimaryKey: []*schema.Column{IntegrationRecommendationsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "integration_recommendations_organizations_integration_recommendations",
+				Columns:    []*schema.Column{IntegrationRecommendationsColumns[12]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "integration_recommendation_owner_id_idx",
+				Unique:  false,
+				Columns: []*schema.Column{IntegrationRecommendationsColumns[12]},
+			},
+			{
+				Name:    "integrationrecommendation_owner_id_definition_id",
+				Unique:  true,
+				Columns: []*schema.Column{IntegrationRecommendationsColumns[12], IntegrationRecommendationsColumns[9]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+		},
+	}
 	// IntegrationRunsColumns holds the columns for the "integration_runs" table.
 	IntegrationRunsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -15632,6 +15677,7 @@ var (
 		IdentityHoldersTable,
 		ImpersonationEventsTable,
 		IntegrationsTable,
+		IntegrationRecommendationsTable,
 		IntegrationRunsTable,
 		IntegrationWebhooksTable,
 		InternalPoliciesTable,
@@ -16228,6 +16274,7 @@ func init() {
 	IntegrationsTable.ForeignKeys[3].RefTable = CustomTypeEnumsTable
 	IntegrationsTable.ForeignKeys[4].RefTable = OrganizationsTable
 	IntegrationsTable.ForeignKeys[5].RefTable = PlatformsTable
+	IntegrationRecommendationsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	IntegrationRunsTable.ForeignKeys[0].RefTable = IntegrationsTable
 	IntegrationRunsTable.ForeignKeys[1].RefTable = FilesTable
 	IntegrationRunsTable.ForeignKeys[2].RefTable = FilesTable

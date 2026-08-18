@@ -1047,6 +1047,30 @@ func (f IntegrationMutationRuleFunc) EvalMutation(ctx context.Context, m generat
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.IntegrationMutation", m)
 }
 
+// The IntegrationRecommendationQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type IntegrationRecommendationQueryRuleFunc func(context.Context, *generated.IntegrationRecommendationQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f IntegrationRecommendationQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.IntegrationRecommendationQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.IntegrationRecommendationQuery", q)
+}
+
+// The IntegrationRecommendationMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type IntegrationRecommendationMutationRuleFunc func(context.Context, *generated.IntegrationRecommendationMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f IntegrationRecommendationMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.IntegrationRecommendationMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.IntegrationRecommendationMutation", m)
+}
+
 // The IntegrationRunQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type IntegrationRunQueryRuleFunc func(context.Context, *generated.IntegrationRunQuery) error
@@ -2792,6 +2816,8 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.IntegrationQuery:
 		return q.Filter(), nil
+	case *generated.IntegrationRecommendationQuery:
+		return q.Filter(), nil
 	case *generated.IntegrationRunQuery:
 		return q.Filter(), nil
 	case *generated.IntegrationWebhookQuery:
@@ -3012,6 +3038,8 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.ImpersonationEventMutation:
 		return m.Filter(), nil
 	case *generated.IntegrationMutation:
+		return m.Filter(), nil
+	case *generated.IntegrationRecommendationMutation:
 		return m.Filter(), nil
 	case *generated.IntegrationRunMutation:
 		return m.Filter(), nil

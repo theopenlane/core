@@ -157,6 +157,25 @@ func TestRegisterGalaVendorScoringListeners(t *testing.T) {
 	require.False(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernDirect, entgen.TypeVendorScoringConfig), ent.OpCreate.String()))
 }
 
+func TestRegisterGalaIntegrationRecommendationListeners(t *testing.T) {
+	t.Parallel()
+
+	registry := gala.NewRegistry()
+
+	ids, err := RegisterGalaIntegrationRecommendationListeners(registry)
+	require.NoError(t, err)
+	require.Len(t, ids, 7)
+
+	require.True(t, registry.InterestedIn(integrationRecommendationRecomputeTopic().Name, ""))
+	require.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernDirect, entgen.TypeAsset), ent.OpCreate.String()))
+	require.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernDirect, entgen.TypeEntity), ent.OpUpdate.String()))
+	require.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernDirect, entgen.TypeOrganizationSetting), ent.OpUpdateOne.String()))
+	require.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernDirect, entgen.TypeOrgMembership), eventqueue.SoftDeleteOne))
+	require.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernDirect, entgen.TypeUser), ent.OpUpdateOne.String()))
+	require.True(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernDirect, entgen.TypeIntegration), ent.OpCreate.String()))
+	require.False(t, registry.InterestedIn(eventqueue.MutationTopicName(eventqueue.MutationConcernDirect, entgen.TypeUser), ent.OpCreate.String()))
+}
+
 func TestRegisterGalaIdentityResolutionListeners(t *testing.T) {
 	t.Parallel()
 

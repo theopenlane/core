@@ -29,8 +29,13 @@ func Builder(cfg Config) registry.Builder {
 				Category:    "identity",
 				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/google_workspace",
 				Tags:        []string{"directory"},
-				Active:      true,
-				Visible:     true,
+				RecommendationSignals: []types.RecommendationSignal{
+					{Source: types.RecommendationSignalSourceVendor, Values: []string{"google workspace", "gmail", "google admin", "workspace"}},
+					{Source: types.RecommendationSignalSourceSSOProvider, Values: []string{"GOOGLE_WORKSPACE"}},
+					{Source: types.RecommendationSignalSourceSignInProvider, Values: []string{"GOOGLE"}},
+				},
+				Active:  true,
+				Visible: true,
 			},
 			OperatorConfig: &types.OperatorConfigRegistration{
 				Schema: jsonx.SchemaFrom[Config](),

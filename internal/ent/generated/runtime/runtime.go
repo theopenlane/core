@@ -46,6 +46,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
 	"github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/integrationrecommendation"
 	"github.com/theopenlane/core/internal/ent/generated/integrationrun"
 	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -3763,6 +3764,93 @@ func init() {
 	integrationDescID := integrationMixinFields4[0].Descriptor()
 	// integration.DefaultID holds the default value on creation for the id field.
 	integration.DefaultID = integrationDescID.Default.(func() string)
+	integrationrecommendationMixin := schema.IntegrationRecommendation{}.Mixin()
+	integrationrecommendation.Policy = privacy.NewPolicies(schema.IntegrationRecommendation{})
+	integrationrecommendation.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := integrationrecommendation.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	integrationrecommendationMixinHooks0 := integrationrecommendationMixin[0].Hooks()
+	integrationrecommendationMixinHooks1 := integrationrecommendationMixin[1].Hooks()
+	integrationrecommendationMixinHooks3 := integrationrecommendationMixin[3].Hooks()
+	integrationrecommendationMixinHooks5 := integrationrecommendationMixin[5].Hooks()
+	integrationrecommendationMixinHooks7 := integrationrecommendationMixin[7].Hooks()
+
+	integrationrecommendation.Hooks[1] = integrationrecommendationMixinHooks0[0]
+
+	integrationrecommendation.Hooks[2] = integrationrecommendationMixinHooks1[0]
+
+	integrationrecommendation.Hooks[3] = integrationrecommendationMixinHooks3[0]
+
+	integrationrecommendation.Hooks[4] = integrationrecommendationMixinHooks5[0]
+
+	integrationrecommendation.Hooks[5] = integrationrecommendationMixinHooks7[0]
+	integrationrecommendationMixinInters3 := integrationrecommendationMixin[3].Interceptors()
+	integrationrecommendationMixinInters7 := integrationrecommendationMixin[7].Interceptors()
+	integrationrecommendation.Interceptors[0] = integrationrecommendationMixinInters3[0]
+	integrationrecommendation.Interceptors[1] = integrationrecommendationMixinInters7[0]
+	integrationrecommendationMixinFields0 := integrationrecommendationMixin[0].Fields()
+	_ = integrationrecommendationMixinFields0
+	integrationrecommendationMixinFields4 := integrationrecommendationMixin[4].Fields()
+	_ = integrationrecommendationMixinFields4
+	integrationrecommendationMixinFields5 := integrationrecommendationMixin[5].Fields()
+	_ = integrationrecommendationMixinFields5
+	integrationrecommendationMixinFields7 := integrationrecommendationMixin[7].Fields()
+	_ = integrationrecommendationMixinFields7
+	integrationrecommendationFields := schema.IntegrationRecommendation{}.Fields()
+	_ = integrationrecommendationFields
+	// integrationrecommendationDescCreatedAt is the schema descriptor for created_at field.
+	integrationrecommendationDescCreatedAt := integrationrecommendationMixinFields0[0].Descriptor()
+	// integrationrecommendation.DefaultCreatedAt holds the default value on creation for the created_at field.
+	integrationrecommendation.DefaultCreatedAt = integrationrecommendationDescCreatedAt.Default.(func() time.Time)
+	// integrationrecommendationDescUpdatedAt is the schema descriptor for updated_at field.
+	integrationrecommendationDescUpdatedAt := integrationrecommendationMixinFields0[1].Descriptor()
+	// integrationrecommendation.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	integrationrecommendation.DefaultUpdatedAt = integrationrecommendationDescUpdatedAt.Default.(func() time.Time)
+	// integrationrecommendation.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	integrationrecommendation.UpdateDefaultUpdatedAt = integrationrecommendationDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// integrationrecommendationDescTags is the schema descriptor for tags field.
+	integrationrecommendationDescTags := integrationrecommendationMixinFields5[0].Descriptor()
+	// integrationrecommendation.DefaultTags holds the default value on creation for the tags field.
+	integrationrecommendation.DefaultTags = integrationrecommendationDescTags.Default.([]string)
+	// integrationrecommendationDescOwnerID is the schema descriptor for owner_id field.
+	integrationrecommendationDescOwnerID := integrationrecommendationMixinFields7[0].Descriptor()
+	// integrationrecommendation.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	integrationrecommendation.OwnerIDValidator = integrationrecommendationDescOwnerID.Validators[0].(func(string) error)
+	// integrationrecommendationDescDefinitionID is the schema descriptor for definition_id field.
+	integrationrecommendationDescDefinitionID := integrationrecommendationFields[0].Descriptor()
+	// integrationrecommendation.DefinitionIDValidator is a validator for the "definition_id" field. It is called by the builders before save.
+	integrationrecommendation.DefinitionIDValidator = integrationrecommendationDescDefinitionID.Validators[0].(func(string) error)
+	// integrationrecommendationDescWeight is the schema descriptor for weight field.
+	integrationrecommendationDescWeight := integrationrecommendationFields[1].Descriptor()
+	// integrationrecommendation.WeightValidator is a validator for the "weight" field. It is called by the builders before save.
+	integrationrecommendation.WeightValidator = func() func(int) error {
+		validators := integrationrecommendationDescWeight.Validators
+		fns := [...]func(int) error{
+			validators[0].(func(int) error),
+			validators[1].(func(int) error),
+		}
+		return func(weight int) error {
+			for _, fn := range fns {
+				if err := fn(weight); err != nil {
+					return err
+				}
+			}
+			return nil
+		}
+	}()
+	// integrationrecommendationDescLabel is the schema descriptor for label field.
+	integrationrecommendationDescLabel := integrationrecommendationFields[2].Descriptor()
+	// integrationrecommendation.LabelValidator is a validator for the "label" field. It is called by the builders before save.
+	integrationrecommendation.LabelValidator = integrationrecommendationDescLabel.Validators[0].(func(string) error)
+	// integrationrecommendationDescID is the schema descriptor for id field.
+	integrationrecommendationDescID := integrationrecommendationMixinFields4[0].Descriptor()
+	// integrationrecommendation.DefaultID holds the default value on creation for the id field.
+	integrationrecommendation.DefaultID = integrationrecommendationDescID.Default.(func() string)
 	integrationrunMixin := schema.IntegrationRun{}.Mixin()
 	integrationrun.Policy = privacy.NewPolicies(schema.IntegrationRun{})
 	integrationrun.Hooks[0] = func(next ent.Mutator) ent.Mutator {

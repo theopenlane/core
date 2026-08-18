@@ -28,8 +28,14 @@ func Builder(cfg Config) registry.Builder {
 				Category:    "source-control",
 				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/github_app",
 				Tags:        []string{"vulnerabilities", "assets", "directory"},
-				Active:      true,
-				Visible:     true,
+				RecommendationSignals: []types.RecommendationSignal{
+					{Source: types.RecommendationSignalSourceAsset, Values: []string{"github", "repository", "repositories", "source control", "scm", "dependabot", "code scanning", "secret scanning"}},
+					{Source: types.RecommendationSignalSourceVendor, Values: []string{"github", "git hub"}},
+					{Source: types.RecommendationSignalSourceSSOProvider, Values: []string{"GITHUB"}},
+					{Source: types.RecommendationSignalSourceSignInProvider, Values: []string{"GITHUB"}},
+				},
+				Active:  true,
+				Visible: true,
 			},
 			OperatorConfig: &types.OperatorConfigRegistration{
 				Schema: jsonx.SchemaFrom[Config](),

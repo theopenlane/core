@@ -21,8 +21,12 @@ func Builder(federationIssuer string) registry.Builder {
 				Category:    "security-posture",
 				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/gcp-scc",
 				Tags:        []string{"vulnerabilities", "assets", "findings", "risks"},
-				Active:      true,
-				Visible:     true,
+				RecommendationSignals: []types.RecommendationSignal{
+					{Source: types.RecommendationSignalSourceAsset, Values: []string{"google cloud", "gcp", "security command center", "scc"}},
+					{Source: types.RecommendationSignalSourceVendor, Values: []string{"google cloud", "gcp"}},
+				},
+				Active:  true,
+				Visible: true,
 			},
 			UserInput: &types.UserInputRegistration{
 				Schema: jsonx.SchemaFrom[UserInput](),

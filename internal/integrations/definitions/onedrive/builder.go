@@ -25,8 +25,12 @@ func Builder(cfg Config) registry.Builder {
 				Category:    "document",
 				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/onedrive/overview",
 				Tags:        []string{"document"},
-				Active:      true,
-				Visible:     true,
+				RecommendationSignals: []types.RecommendationSignal{
+					{Source: types.RecommendationSignalSourceAsset, Values: []string{"onedrive", "one drive"}},
+					{Source: types.RecommendationSignalSourceVendor, Values: []string{"onedrive", "one drive"}},
+				},
+				Active:  true,
+				Visible: true,
 			},
 			OperatorConfig: &types.OperatorConfigRegistration{
 				Schema: jsonx.SchemaFrom[Config](),

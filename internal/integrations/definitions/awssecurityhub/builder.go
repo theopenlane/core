@@ -22,8 +22,12 @@ func Builder(cfg Config) registry.Builder {
 				Category:    "security-posture",
 				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/aws",
 				Tags:        []string{"findings", "directory", "assets"},
-				Active:      true,
-				Visible:     true,
+				RecommendationSignals: []types.RecommendationSignal{
+					{Source: types.RecommendationSignalSourceAsset, Values: []string{"amazon web services", "aws", "security hub", "amazon"}},
+					{Source: types.RecommendationSignalSourceVendor, Values: []string{"amazon web services", "aws", "amazon"}},
+				},
+				Active:  true,
+				Visible: true,
 			},
 			UserInput: &types.UserInputRegistration{
 				Schema: jsonx.SchemaFrom[UserInput](),

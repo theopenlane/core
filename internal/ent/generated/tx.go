@@ -90,6 +90,8 @@ type Tx struct {
 	ImpersonationEvent *ImpersonationEventClient
 	// Integration is the client for interacting with the Integration builders.
 	Integration *IntegrationClient
+	// IntegrationRecommendation is the client for interacting with the IntegrationRecommendation builders.
+	IntegrationRecommendation *IntegrationRecommendationClient
 	// IntegrationRun is the client for interacting with the IntegrationRun builders.
 	IntegrationRun *IntegrationRunClient
 	// IntegrationWebhook is the client for interacting with the IntegrationWebhook builders.
@@ -396,6 +398,7 @@ func (tx *Tx) init() {
 	tx.IdentityHolder = NewIdentityHolderClient(tx.config)
 	tx.ImpersonationEvent = NewImpersonationEventClient(tx.config)
 	tx.Integration = NewIntegrationClient(tx.config)
+	tx.IntegrationRecommendation = NewIntegrationRecommendationClient(tx.config)
 	tx.IntegrationRun = NewIntegrationRunClient(tx.config)
 	tx.IntegrationWebhook = NewIntegrationWebhookClient(tx.config)
 	tx.InternalPolicy = NewInternalPolicyClient(tx.config)

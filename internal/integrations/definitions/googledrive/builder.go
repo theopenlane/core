@@ -21,8 +21,12 @@ func Builder(cfg Config) registry.Builder {
 				Category:    "document",
 				DocsURL:     "https://docs.theopenlane.io/docs/platform/integrations/google_drive",
 				Tags:        []string{"document"},
-				Active:      true,
-				Visible:     true,
+				RecommendationSignals: []types.RecommendationSignal{
+					{Source: types.RecommendationSignalSourceAsset, Values: []string{"google drive", "drive.google.com"}},
+					{Source: types.RecommendationSignalSourceVendor, Values: []string{"google drive"}},
+				},
+				Active:  true,
+				Visible: true,
 			},
 			OperatorConfig: &types.OperatorConfigRegistration{
 				Schema: jsonx.SchemaFrom[Config](),
