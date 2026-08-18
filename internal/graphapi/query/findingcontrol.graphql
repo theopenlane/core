@@ -67,6 +67,8 @@ mutation CreateFindingControl ($input: CreateFindingControlInput!) {
 mutation DeleteBulkFindingControl ($ids: [ID!]!) {
 	deleteBulkFindingControl(ids: $ids) {
 		deletedIDs
+		notDeletedIDs
+		error
 	}
 }
 mutation DeleteFindingControl ($deleteFindingControlId: ID!) {

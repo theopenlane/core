@@ -10,7 +10,7 @@ require (
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/rs/zerolog v1.35.1
 	github.com/stoewer/go-strcase v1.3.1
-	github.com/stretchr/testify v1.11.1
+	github.com/stretchr/testify v1.12.0
 	github.com/theopenlane/core v1.31.10
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/entx v0.30.3
@@ -31,7 +31,6 @@ require (
 	github.com/apparentlymart/go-textseg/v15 v15.0.0 // indirect
 	github.com/bmatcuk/doublestar v1.3.4 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
-	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/envoyproxy/protoc-gen-validate v1.3.3 // indirect
 	github.com/fxamacker/cbor/v2 v2.9.2 // indirect
 	github.com/go-jose/go-jose/v4 v4.1.4 // indirect
@@ -57,7 +56,6 @@ require (
 	github.com/openfga/language/pkg/go v0.3.2-0.20260730144454-83fedf8a4e70 // indirect
 	github.com/philhofer/fwd v1.2.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
-	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/riverqueue/river/riverdriver v0.43.0 // indirect
 	github.com/riverqueue/river/rivershared v0.43.0 // indirect
 	github.com/riverqueue/river/rivertype v0.43.0 // indirect
@@ -85,11 +83,11 @@ require (
 	golang.org/x/net v0.57.0 // indirect
 	golang.org/x/sync v0.22.0 // indirect
 	golang.org/x/sys v0.47.0 // indirect
-	golang.org/x/text v0.40.0 // indirect
+	golang.org/x/text v0.41.0 // indirect
 	golang.org/x/tools v0.48.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20260720211330-0afa2a65878a // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260803160001-6ac0973c030d // indirect
 	google.golang.org/grpc v1.83.0 // indirect
-	google.golang.org/protobuf v1.36.11 // indirect
+	google.golang.org/protobuf v1.36.12 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

@@ -545,6 +545,8 @@ mutation UpdateBulkRisk ($ids: [ID!]!, $input: UpdateRiskInput!) {
 			}
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 mutation UpdateRisk ($updateRiskId: ID!, $input: UpdateRiskInput!) {

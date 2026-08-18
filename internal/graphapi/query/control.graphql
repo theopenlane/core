@@ -220,6 +220,8 @@ mutation CreateControl ($input: CreateControlInput!) {
 mutation DeleteBulkControl ($ids: [ID!]!) {
 	deleteBulkControl(ids: $ids) {
 		deletedIDs
+		notDeletedIDs
+		error
 	}
 }
 mutation DeleteControl ($deleteControlId: ID!) {
@@ -713,6 +715,8 @@ mutation UpdateBulkControl ($ids: [ID!]!, $input: UpdateControlInput!) {
 			}
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 mutation UpdateControl ($updateControlId: ID!, $input: UpdateControlInput!) {

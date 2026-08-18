@@ -181,6 +181,52 @@ func (ec *executionContext) fieldContext_GroupMembershipBulkUpdatePayload_update
 	return graphql.NewScalarFieldContext("GroupMembershipBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
+func (ec *executionContext) _GroupMembershipBulkUpdatePayload_notUpdatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.GroupMembershipBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_GroupMembershipBulkUpdatePayload_notUpdatedIDs(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.NotUpdatedIDs, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_GroupMembershipBulkUpdatePayload_notUpdatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("GroupMembershipBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+}
+
+func (ec *executionContext) _GroupMembershipBulkUpdatePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.GroupMembershipBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_GroupMembershipBulkUpdatePayload_error(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Error, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_GroupMembershipBulkUpdatePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("GroupMembershipBulkUpdatePayload", field, false, false, errors.New("field of type String does not have child fields"))
+}
+
 func (ec *executionContext) _GroupMembershipCreatePayload_groupMembership(ctx context.Context, field graphql.CollectedField, obj *model.GroupMembershipCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -385,6 +431,16 @@ func (ec *executionContext) _GroupMembershipBulkUpdatePayload(ctx context.Contex
 			}
 		case "updatedIDs":
 			out.Values[i] = ec._GroupMembershipBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "notUpdatedIDs":
+			out.Values[i] = ec._GroupMembershipBulkUpdatePayload_notUpdatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "error":
+			out.Values[i] = ec._GroupMembershipBulkUpdatePayload_error(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}

@@ -205,6 +205,8 @@ mutation UpdateBulkSubprocessor ($ids: [ID!]!, $input: UpdateSubprocessorInput!)
 			}
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 mutation UpdateSubprocessor ($updateSubprocessorId: ID!, $input: UpdateSubprocessorInput!, $logoFile: Upload, $logoFileMetadata: FileMetadataInput) {

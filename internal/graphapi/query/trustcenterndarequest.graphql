@@ -79,6 +79,8 @@ mutation CreateTrustCenterNDARequest ($input: CreateTrustCenterNDARequestInput!)
 mutation DeleteBulkTrustCenterNDARequest ($ids: [ID!]!) {
 	deleteBulkTrustCenterNDARequest(ids: $ids) {
 		deletedIDs
+		notDeletedIDs
+		error
 	}
 }
 mutation DeleteTrustCenterNDARequest ($deleteTrustCenterNDARequestId: ID!) {

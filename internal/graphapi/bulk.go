@@ -41,11 +41,16 @@ func (r *mutationResolver) bulkUpdateActionPlan(ctx context.Context, ids []strin
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "action_plan", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.ActionPlanBulkUpdatePayload{
-			ActionPlans: []*generated.ActionPlan{},
-			UpdatedIDs:  []string{},
+			ActionPlans:   []*generated.ActionPlan{},
+			UpdatedIDs:    []string{},
+			NotUpdatedIDs: originalIDs,
+			Error:         &err,
 		}, nil
 	}
 
@@ -78,9 +83,29 @@ func (r *mutationResolver) bulkUpdateActionPlan(ctx context.Context, ids []strin
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.ActionPlanBulkUpdatePayload{
-		ActionPlans: results,
-		UpdatedIDs:  updatedIDs,
+		ActionPlans:   results,
+		UpdatedIDs:    updatedIDs,
+		NotUpdatedIDs: notUpdatedIDs,
+		Error:         err,
 	}, nil
 }
 
@@ -320,11 +345,16 @@ func (r *mutationResolver) bulkUpdateAPIToken(ctx context.Context, ids []string,
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "api_token", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.APITokenBulkUpdatePayload{
-			APITokens:  []*generated.APIToken{},
-			UpdatedIDs: []string{},
+			APITokens:     []*generated.APIToken{},
+			UpdatedIDs:    []string{},
+			NotUpdatedIDs: originalIDs,
+			Error:         &err,
 		}, nil
 	}
 
@@ -357,9 +387,29 @@ func (r *mutationResolver) bulkUpdateAPIToken(ctx context.Context, ids []string,
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.APITokenBulkUpdatePayload{
-		APITokens:  results,
-		UpdatedIDs: updatedIDs,
+		APITokens:     results,
+		UpdatedIDs:    updatedIDs,
+		NotUpdatedIDs: notUpdatedIDs,
+		Error:         err,
 	}, nil
 }
 
@@ -599,11 +649,16 @@ func (r *mutationResolver) bulkUpdateAsset(ctx context.Context, ids []string, in
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "asset", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.AssetBulkUpdatePayload{
-			Assets:     []*generated.Asset{},
-			UpdatedIDs: []string{},
+			Assets:        []*generated.Asset{},
+			UpdatedIDs:    []string{},
+			NotUpdatedIDs: originalIDs,
+			Error:         &err,
 		}, nil
 	}
 
@@ -636,9 +691,29 @@ func (r *mutationResolver) bulkUpdateAsset(ctx context.Context, ids []string, in
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.AssetBulkUpdatePayload{
-		Assets:     results,
-		UpdatedIDs: updatedIDs,
+		Assets:        results,
+		UpdatedIDs:    updatedIDs,
+		NotUpdatedIDs: notUpdatedIDs,
+		Error:         err,
 	}, nil
 }
 
@@ -746,11 +821,16 @@ func (r *mutationResolver) bulkUpdateCheckResult(ctx context.Context, ids []stri
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "check_result", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.CheckResultBulkUpdatePayload{
-			CheckResults: []*generated.CheckResult{},
-			UpdatedIDs:   []string{},
+			CheckResults:  []*generated.CheckResult{},
+			UpdatedIDs:    []string{},
+			NotUpdatedIDs: originalIDs,
+			Error:         &err,
 		}, nil
 	}
 
@@ -783,9 +863,29 @@ func (r *mutationResolver) bulkUpdateCheckResult(ctx context.Context, ids []stri
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.CheckResultBulkUpdatePayload{
-		CheckResults: results,
-		UpdatedIDs:   updatedIDs,
+		CheckResults:  results,
+		UpdatedIDs:    updatedIDs,
+		NotUpdatedIDs: notUpdatedIDs,
+		Error:         err,
 	}, nil
 }
 
@@ -940,11 +1040,16 @@ func (r *mutationResolver) bulkUpdateContact(ctx context.Context, ids []string, 
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "contact", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.ContactBulkUpdatePayload{
-			Contacts:   []*generated.Contact{},
-			UpdatedIDs: []string{},
+			Contacts:      []*generated.Contact{},
+			UpdatedIDs:    []string{},
+			NotUpdatedIDs: originalIDs,
+			Error:         &err,
 		}, nil
 	}
 
@@ -977,9 +1082,29 @@ func (r *mutationResolver) bulkUpdateContact(ctx context.Context, ids []string, 
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.ContactBulkUpdatePayload{
-		Contacts:   results,
-		UpdatedIDs: updatedIDs,
+		Contacts:      results,
+		UpdatedIDs:    updatedIDs,
+		NotUpdatedIDs: notUpdatedIDs,
+		Error:         err,
 	}, nil
 }
 
@@ -1134,11 +1259,16 @@ func (r *mutationResolver) bulkUpdateControl(ctx context.Context, ids []string, 
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "control", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.ControlBulkUpdatePayload{
-			Controls:   []*generated.Control{},
-			UpdatedIDs: []string{},
+			Controls:      []*generated.Control{},
+			UpdatedIDs:    []string{},
+			NotUpdatedIDs: originalIDs,
+			Error:         &err,
 		}, nil
 	}
 
@@ -1171,9 +1301,29 @@ func (r *mutationResolver) bulkUpdateControl(ctx context.Context, ids []string, 
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.ControlBulkUpdatePayload{
-		Controls:   results,
-		UpdatedIDs: updatedIDs,
+		Controls:      results,
+		UpdatedIDs:    updatedIDs,
+		NotUpdatedIDs: notUpdatedIDs,
+		Error:         err,
 	}, nil
 }
 
@@ -1413,11 +1563,16 @@ func (r *mutationResolver) bulkUpdateControlImplementation(ctx context.Context, 
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "control_implementation", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.ControlImplementationBulkUpdatePayload{
 			ControlImplementations: []*generated.ControlImplementation{},
 			UpdatedIDs:             []string{},
+			NotUpdatedIDs:          originalIDs,
+			Error:                  &err,
 		}, nil
 	}
 
@@ -1450,9 +1605,29 @@ func (r *mutationResolver) bulkUpdateControlImplementation(ctx context.Context, 
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.ControlImplementationBulkUpdatePayload{
 		ControlImplementations: results,
 		UpdatedIDs:             updatedIDs,
+		NotUpdatedIDs:          notUpdatedIDs,
+		Error:                  err,
 	}, nil
 }
 
@@ -1607,11 +1782,16 @@ func (r *mutationResolver) bulkUpdateControlObjective(ctx context.Context, ids [
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "control_objective", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.ControlObjectiveBulkUpdatePayload{
 			ControlObjectives: []*generated.ControlObjective{},
 			UpdatedIDs:        []string{},
+			NotUpdatedIDs:     originalIDs,
+			Error:             &err,
 		}, nil
 	}
 
@@ -1644,9 +1824,29 @@ func (r *mutationResolver) bulkUpdateControlObjective(ctx context.Context, ids [
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.ControlObjectiveBulkUpdatePayload{
 		ControlObjectives: results,
 		UpdatedIDs:        updatedIDs,
+		NotUpdatedIDs:     notUpdatedIDs,
+		Error:             err,
 	}, nil
 }
 
@@ -1801,11 +2001,16 @@ func (r *mutationResolver) bulkUpdateCustomDomain(ctx context.Context, ids []str
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "custom_domain", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.CustomDomainBulkUpdatePayload{
 			CustomDomains: []*generated.CustomDomain{},
 			UpdatedIDs:    []string{},
+			NotUpdatedIDs: originalIDs,
+			Error:         &err,
 		}, nil
 	}
 
@@ -1838,9 +2043,29 @@ func (r *mutationResolver) bulkUpdateCustomDomain(ctx context.Context, ids []str
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.CustomDomainBulkUpdatePayload{
 		CustomDomains: results,
 		UpdatedIDs:    updatedIDs,
+		NotUpdatedIDs: notUpdatedIDs,
+		Error:         err,
 	}, nil
 }
 
@@ -2109,11 +2334,16 @@ func (r *mutationResolver) bulkUpdateDNSVerification(ctx context.Context, ids []
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "dns_verification", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.DNSVerificationBulkUpdatePayload{
 			DNSVerifications: []*generated.DNSVerification{},
 			UpdatedIDs:       []string{},
+			NotUpdatedIDs:    originalIDs,
+			Error:            &err,
 		}, nil
 	}
 
@@ -2146,9 +2376,29 @@ func (r *mutationResolver) bulkUpdateDNSVerification(ctx context.Context, ids []
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.DNSVerificationBulkUpdatePayload{
 		DNSVerifications: results,
 		UpdatedIDs:       updatedIDs,
+		NotUpdatedIDs:    notUpdatedIDs,
+		Error:            err,
 	}, nil
 }
 
@@ -2303,11 +2553,16 @@ func (r *mutationResolver) bulkUpdateDocumentData(ctx context.Context, ids []str
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "document_data", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.DocumentDataBulkUpdatePayload{
-			DocumentData: []*generated.DocumentData{},
-			UpdatedIDs:   []string{},
+			DocumentData:  []*generated.DocumentData{},
+			UpdatedIDs:    []string{},
+			NotUpdatedIDs: originalIDs,
+			Error:         &err,
 		}, nil
 	}
 
@@ -2340,9 +2595,29 @@ func (r *mutationResolver) bulkUpdateDocumentData(ctx context.Context, ids []str
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.DocumentDataBulkUpdatePayload{
-		DocumentData: results,
-		UpdatedIDs:   updatedIDs,
+		DocumentData:  results,
+		UpdatedIDs:    updatedIDs,
+		NotUpdatedIDs: notUpdatedIDs,
+		Error:         err,
 	}, nil
 }
 
@@ -2412,11 +2687,16 @@ func (r *mutationResolver) bulkUpdateEmailTemplate(ctx context.Context, ids []st
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "email_template", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.EmailTemplateBulkUpdatePayload{
 			EmailTemplates: []*generated.EmailTemplate{},
 			UpdatedIDs:     []string{},
+			NotUpdatedIDs:  originalIDs,
+			Error:          &err,
 		}, nil
 	}
 
@@ -2449,9 +2729,29 @@ func (r *mutationResolver) bulkUpdateEmailTemplate(ctx context.Context, ids []st
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.EmailTemplateBulkUpdatePayload{
 		EmailTemplates: results,
 		UpdatedIDs:     updatedIDs,
+		NotUpdatedIDs:  notUpdatedIDs,
+		Error:          err,
 	}, nil
 }
 
@@ -2691,11 +2991,16 @@ func (r *mutationResolver) bulkUpdateEntity(ctx context.Context, ids []string, i
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "entity", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.EntityBulkUpdatePayload{
-			Entities:   []*generated.Entity{},
-			UpdatedIDs: []string{},
+			Entities:      []*generated.Entity{},
+			UpdatedIDs:    []string{},
+			NotUpdatedIDs: originalIDs,
+			Error:         &err,
 		}, nil
 	}
 
@@ -2728,9 +3033,29 @@ func (r *mutationResolver) bulkUpdateEntity(ctx context.Context, ids []string, i
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.EntityBulkUpdatePayload{
-		Entities:   results,
-		UpdatedIDs: updatedIDs,
+		Entities:      results,
+		UpdatedIDs:    updatedIDs,
+		NotUpdatedIDs: notUpdatedIDs,
+		Error:         err,
 	}, nil
 }
 
@@ -2885,11 +3210,16 @@ func (r *mutationResolver) bulkUpdateEntityType(ctx context.Context, ids []strin
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "entity_type", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.EntityTypeBulkUpdatePayload{
-			EntityTypes: []*generated.EntityType{},
-			UpdatedIDs:  []string{},
+			EntityTypes:   []*generated.EntityType{},
+			UpdatedIDs:    []string{},
+			NotUpdatedIDs: originalIDs,
+			Error:         &err,
 		}, nil
 	}
 
@@ -2922,9 +3252,29 @@ func (r *mutationResolver) bulkUpdateEntityType(ctx context.Context, ids []strin
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.EntityTypeBulkUpdatePayload{
-		EntityTypes: results,
-		UpdatedIDs:  updatedIDs,
+		EntityTypes:   results,
+		UpdatedIDs:    updatedIDs,
+		NotUpdatedIDs: notUpdatedIDs,
+		Error:         err,
 	}, nil
 }
 
@@ -3079,11 +3429,16 @@ func (r *mutationResolver) bulkUpdateEvent(ctx context.Context, ids []string, in
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "event", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.EventBulkUpdatePayload{
-			Events:     []*generated.Event{},
-			UpdatedIDs: []string{},
+			Events:        []*generated.Event{},
+			UpdatedIDs:    []string{},
+			NotUpdatedIDs: originalIDs,
+			Error:         &err,
 		}, nil
 	}
 
@@ -3116,9 +3471,29 @@ func (r *mutationResolver) bulkUpdateEvent(ctx context.Context, ids []string, in
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.EventBulkUpdatePayload{
-		Events:     results,
-		UpdatedIDs: updatedIDs,
+		Events:        results,
+		UpdatedIDs:    updatedIDs,
+		NotUpdatedIDs: notUpdatedIDs,
+		Error:         err,
 	}, nil
 }
 
@@ -3188,11 +3563,16 @@ func (r *mutationResolver) bulkUpdateEvidence(ctx context.Context, ids []string,
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "evidence", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.EvidenceBulkUpdatePayload{
-			Evidences:  []*generated.Evidence{},
-			UpdatedIDs: []string{},
+			Evidences:     []*generated.Evidence{},
+			UpdatedIDs:    []string{},
+			NotUpdatedIDs: originalIDs,
+			Error:         &err,
 		}, nil
 	}
 
@@ -3225,9 +3605,29 @@ func (r *mutationResolver) bulkUpdateEvidence(ctx context.Context, ids []string,
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.EvidenceBulkUpdatePayload{
-		Evidences:  results,
-		UpdatedIDs: updatedIDs,
+		Evidences:     results,
+		UpdatedIDs:    updatedIDs,
+		NotUpdatedIDs: notUpdatedIDs,
+		Error:         err,
 	}, nil
 }
 
@@ -3467,11 +3867,16 @@ func (r *mutationResolver) bulkUpdateFinding(ctx context.Context, ids []string, 
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "finding", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.FindingBulkUpdatePayload{
-			Findings:   []*generated.Finding{},
-			UpdatedIDs: []string{},
+			Findings:      []*generated.Finding{},
+			UpdatedIDs:    []string{},
+			NotUpdatedIDs: originalIDs,
+			Error:         &err,
 		}, nil
 	}
 
@@ -3504,9 +3909,29 @@ func (r *mutationResolver) bulkUpdateFinding(ctx context.Context, ids []string, 
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.FindingBulkUpdatePayload{
-		Findings:   results,
-		UpdatedIDs: updatedIDs,
+		Findings:      results,
+		UpdatedIDs:    updatedIDs,
+		NotUpdatedIDs: notUpdatedIDs,
+		Error:         err,
 	}, nil
 }
 
@@ -3850,11 +4275,16 @@ func (r *mutationResolver) bulkUpdateGroup(ctx context.Context, ids []string, in
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "group", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.GroupBulkUpdatePayload{
-			Groups:     []*generated.Group{},
-			UpdatedIDs: []string{},
+			Groups:        []*generated.Group{},
+			UpdatedIDs:    []string{},
+			NotUpdatedIDs: originalIDs,
+			Error:         &err,
 		}, nil
 	}
 
@@ -3887,9 +4317,29 @@ func (r *mutationResolver) bulkUpdateGroup(ctx context.Context, ids []string, in
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.GroupBulkUpdatePayload{
-		Groups:     results,
-		UpdatedIDs: updatedIDs,
+		Groups:        results,
+		UpdatedIDs:    updatedIDs,
+		NotUpdatedIDs: notUpdatedIDs,
+		Error:         err,
 	}, nil
 }
 
@@ -4044,11 +4494,16 @@ func (r *mutationResolver) bulkUpdateGroupMembership(ctx context.Context, ids []
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "group_membership", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.GroupMembershipBulkUpdatePayload{
 			GroupMemberships: []*generated.GroupMembership{},
 			UpdatedIDs:       []string{},
+			NotUpdatedIDs:    originalIDs,
+			Error:            &err,
 		}, nil
 	}
 
@@ -4081,9 +4536,29 @@ func (r *mutationResolver) bulkUpdateGroupMembership(ctx context.Context, ids []
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.GroupMembershipBulkUpdatePayload{
 		GroupMemberships: results,
 		UpdatedIDs:       updatedIDs,
+		NotUpdatedIDs:    notUpdatedIDs,
+		Error:            err,
 	}, nil
 }
 
@@ -4238,11 +4713,16 @@ func (r *mutationResolver) bulkUpdateGroupSetting(ctx context.Context, ids []str
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "group_setting", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.GroupSettingBulkUpdatePayload{
 			GroupSettings: []*generated.GroupSetting{},
 			UpdatedIDs:    []string{},
+			NotUpdatedIDs: originalIDs,
+			Error:         &err,
 		}, nil
 	}
 
@@ -4275,9 +4755,29 @@ func (r *mutationResolver) bulkUpdateGroupSetting(ctx context.Context, ids []str
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.GroupSettingBulkUpdatePayload{
 		GroupSettings: results,
 		UpdatedIDs:    updatedIDs,
+		NotUpdatedIDs: notUpdatedIDs,
+		Error:         err,
 	}, nil
 }
 
@@ -4347,11 +4847,16 @@ func (r *mutationResolver) bulkUpdateHush(ctx context.Context, ids []string, inp
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "hush", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.HushBulkUpdatePayload{
-			Hushes:     []*generated.Hush{},
-			UpdatedIDs: []string{},
+			Hushes:        []*generated.Hush{},
+			UpdatedIDs:    []string{},
+			NotUpdatedIDs: originalIDs,
+			Error:         &err,
 		}, nil
 	}
 
@@ -4384,9 +4889,29 @@ func (r *mutationResolver) bulkUpdateHush(ctx context.Context, ids []string, inp
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.HushBulkUpdatePayload{
-		Hushes:     results,
-		UpdatedIDs: updatedIDs,
+		Hushes:        results,
+		UpdatedIDs:    updatedIDs,
+		NotUpdatedIDs: notUpdatedIDs,
+		Error:         err,
 	}, nil
 }
 
@@ -4626,11 +5151,16 @@ func (r *mutationResolver) bulkUpdateIdentityHolder(ctx context.Context, ids []s
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "identity_holder", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.IdentityHolderBulkUpdatePayload{
 			IdentityHolders: []*generated.IdentityHolder{},
 			UpdatedIDs:      []string{},
+			NotUpdatedIDs:   originalIDs,
+			Error:           &err,
 		}, nil
 	}
 
@@ -4663,9 +5193,29 @@ func (r *mutationResolver) bulkUpdateIdentityHolder(ctx context.Context, ids []s
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.IdentityHolderBulkUpdatePayload{
 		IdentityHolders: results,
 		UpdatedIDs:      updatedIDs,
+		NotUpdatedIDs:   notUpdatedIDs,
+		Error:           err,
 	}, nil
 }
 
@@ -4735,11 +5285,16 @@ func (r *mutationResolver) bulkUpdateInternalPolicy(ctx context.Context, ids []s
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "internal_policy", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.InternalPolicyBulkUpdatePayload{
 			InternalPolicies: []*generated.InternalPolicy{},
 			UpdatedIDs:       []string{},
+			NotUpdatedIDs:    originalIDs,
+			Error:            &err,
 		}, nil
 	}
 
@@ -4772,9 +5327,29 @@ func (r *mutationResolver) bulkUpdateInternalPolicy(ctx context.Context, ids []s
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.InternalPolicyBulkUpdatePayload{
 		InternalPolicies: results,
 		UpdatedIDs:       updatedIDs,
+		NotUpdatedIDs:    notUpdatedIDs,
+		Error:            err,
 	}, nil
 }
 
@@ -5014,11 +5589,16 @@ func (r *mutationResolver) bulkUpdateInvite(ctx context.Context, ids []string, i
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "invite", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.InviteBulkUpdatePayload{
-			Invites:    []*generated.Invite{},
-			UpdatedIDs: []string{},
+			Invites:       []*generated.Invite{},
+			UpdatedIDs:    []string{},
+			NotUpdatedIDs: originalIDs,
+			Error:         &err,
 		}, nil
 	}
 
@@ -5051,9 +5631,29 @@ func (r *mutationResolver) bulkUpdateInvite(ctx context.Context, ids []string, i
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.InviteBulkUpdatePayload{
-		Invites:    results,
-		UpdatedIDs: updatedIDs,
+		Invites:       results,
+		UpdatedIDs:    updatedIDs,
+		NotUpdatedIDs: notUpdatedIDs,
+		Error:         err,
 	}, nil
 }
 
@@ -5208,11 +5808,16 @@ func (r *mutationResolver) bulkUpdateJobTemplate(ctx context.Context, ids []stri
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "job_template", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.JobTemplateBulkUpdatePayload{
-			JobTemplates: []*generated.JobTemplate{},
-			UpdatedIDs:   []string{},
+			JobTemplates:  []*generated.JobTemplate{},
+			UpdatedIDs:    []string{},
+			NotUpdatedIDs: originalIDs,
+			Error:         &err,
 		}, nil
 	}
 
@@ -5245,9 +5850,29 @@ func (r *mutationResolver) bulkUpdateJobTemplate(ctx context.Context, ids []stri
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.JobTemplateBulkUpdatePayload{
-		JobTemplates: results,
-		UpdatedIDs:   updatedIDs,
+		JobTemplates:  results,
+		UpdatedIDs:    updatedIDs,
+		NotUpdatedIDs: notUpdatedIDs,
+		Error:         err,
 	}, nil
 }
 
@@ -5402,11 +6027,16 @@ func (r *mutationResolver) bulkUpdateMappableDomain(ctx context.Context, ids []s
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "mappable_domain", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.MappableDomainBulkUpdatePayload{
 			MappableDomains: []*generated.MappableDomain{},
 			UpdatedIDs:      []string{},
+			NotUpdatedIDs:   originalIDs,
+			Error:           &err,
 		}, nil
 	}
 
@@ -5439,9 +6069,29 @@ func (r *mutationResolver) bulkUpdateMappableDomain(ctx context.Context, ids []s
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.MappableDomainBulkUpdatePayload{
 		MappableDomains: results,
 		UpdatedIDs:      updatedIDs,
+		NotUpdatedIDs:   notUpdatedIDs,
+		Error:           err,
 	}, nil
 }
 
@@ -5596,11 +6246,16 @@ func (r *mutationResolver) bulkUpdateMappedControl(ctx context.Context, ids []st
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "mapped_control", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.MappedControlBulkUpdatePayload{
 			MappedControls: []*generated.MappedControl{},
 			UpdatedIDs:     []string{},
+			NotUpdatedIDs:  originalIDs,
+			Error:          &err,
 		}, nil
 	}
 
@@ -5633,9 +6288,29 @@ func (r *mutationResolver) bulkUpdateMappedControl(ctx context.Context, ids []st
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.MappedControlBulkUpdatePayload{
 		MappedControls: results,
 		UpdatedIDs:     updatedIDs,
+		NotUpdatedIDs:  notUpdatedIDs,
+		Error:          err,
 	}, nil
 }
 
@@ -5790,11 +6465,16 @@ func (r *mutationResolver) bulkUpdateNarrative(ctx context.Context, ids []string
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "narrative", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.NarrativeBulkUpdatePayload{
-			Narratives: []*generated.Narrative{},
-			UpdatedIDs: []string{},
+			Narratives:    []*generated.Narrative{},
+			UpdatedIDs:    []string{},
+			NotUpdatedIDs: originalIDs,
+			Error:         &err,
 		}, nil
 	}
 
@@ -5827,9 +6507,29 @@ func (r *mutationResolver) bulkUpdateNarrative(ctx context.Context, ids []string
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.NarrativeBulkUpdatePayload{
-		Narratives: results,
-		UpdatedIDs: updatedIDs,
+		Narratives:    results,
+		UpdatedIDs:    updatedIDs,
+		NotUpdatedIDs: notUpdatedIDs,
+		Error:         err,
 	}, nil
 }
 
@@ -5899,11 +6599,16 @@ func (r *mutationResolver) bulkUpdateNotificationPreference(ctx context.Context,
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "notification_preference", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.NotificationPreferenceBulkUpdatePayload{
 			NotificationPreferences: []*generated.NotificationPreference{},
 			UpdatedIDs:              []string{},
+			NotUpdatedIDs:           originalIDs,
+			Error:                   &err,
 		}, nil
 	}
 
@@ -5936,9 +6641,29 @@ func (r *mutationResolver) bulkUpdateNotificationPreference(ctx context.Context,
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.NotificationPreferenceBulkUpdatePayload{
 		NotificationPreferences: results,
 		UpdatedIDs:              updatedIDs,
+		NotUpdatedIDs:           notUpdatedIDs,
+		Error:                   err,
 	}, nil
 }
 
@@ -6093,11 +6818,16 @@ func (r *mutationResolver) bulkUpdateNotificationTemplate(ctx context.Context, i
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "notification_template", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.NotificationTemplateBulkUpdatePayload{
 			NotificationTemplates: []*generated.NotificationTemplate{},
 			UpdatedIDs:            []string{},
+			NotUpdatedIDs:         originalIDs,
+			Error:                 &err,
 		}, nil
 	}
 
@@ -6130,9 +6860,29 @@ func (r *mutationResolver) bulkUpdateNotificationTemplate(ctx context.Context, i
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.NotificationTemplateBulkUpdatePayload{
 		NotificationTemplates: results,
 		UpdatedIDs:            updatedIDs,
+		NotUpdatedIDs:         notUpdatedIDs,
+		Error:                 err,
 	}, nil
 }
 
@@ -6372,11 +7122,16 @@ func (r *mutationResolver) bulkUpdateOrganizationSetting(ctx context.Context, id
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "organization_setting", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.OrganizationSettingBulkUpdatePayload{
 			OrganizationSettings: []*generated.OrganizationSetting{},
 			UpdatedIDs:           []string{},
+			NotUpdatedIDs:        originalIDs,
+			Error:                &err,
 		}, nil
 	}
 
@@ -6409,9 +7164,29 @@ func (r *mutationResolver) bulkUpdateOrganizationSetting(ctx context.Context, id
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.OrganizationSettingBulkUpdatePayload{
 		OrganizationSettings: results,
 		UpdatedIDs:           updatedIDs,
+		NotUpdatedIDs:        notUpdatedIDs,
+		Error:                err,
 	}, nil
 }
 
@@ -6566,11 +7341,16 @@ func (r *mutationResolver) bulkUpdateOrgMembership(ctx context.Context, ids []st
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "org_membership", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.OrgMembershipBulkUpdatePayload{
 			OrgMemberships: []*generated.OrgMembership{},
 			UpdatedIDs:     []string{},
+			NotUpdatedIDs:  originalIDs,
+			Error:          &err,
 		}, nil
 	}
 
@@ -6603,9 +7383,29 @@ func (r *mutationResolver) bulkUpdateOrgMembership(ctx context.Context, ids []st
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.OrgMembershipBulkUpdatePayload{
 		OrgMemberships: results,
 		UpdatedIDs:     updatedIDs,
+		NotUpdatedIDs:  notUpdatedIDs,
+		Error:          err,
 	}, nil
 }
 
@@ -6694,11 +7494,16 @@ func (r *mutationResolver) bulkUpdateProcedure(ctx context.Context, ids []string
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "procedure", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.ProcedureBulkUpdatePayload{
-			Procedures: []*generated.Procedure{},
-			UpdatedIDs: []string{},
+			Procedures:    []*generated.Procedure{},
+			UpdatedIDs:    []string{},
+			NotUpdatedIDs: originalIDs,
+			Error:         &err,
 		}, nil
 	}
 
@@ -6731,9 +7536,29 @@ func (r *mutationResolver) bulkUpdateProcedure(ctx context.Context, ids []string
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.ProcedureBulkUpdatePayload{
-		Procedures: results,
-		UpdatedIDs: updatedIDs,
+		Procedures:    results,
+		UpdatedIDs:    updatedIDs,
+		NotUpdatedIDs: notUpdatedIDs,
+		Error:         err,
 	}, nil
 }
 
@@ -6973,11 +7798,16 @@ func (r *mutationResolver) bulkUpdateProgram(ctx context.Context, ids []string, 
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "program", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.ProgramBulkUpdatePayload{
-			Programs:   []*generated.Program{},
-			UpdatedIDs: []string{},
+			Programs:      []*generated.Program{},
+			UpdatedIDs:    []string{},
+			NotUpdatedIDs: originalIDs,
+			Error:         &err,
 		}, nil
 	}
 
@@ -7010,9 +7840,29 @@ func (r *mutationResolver) bulkUpdateProgram(ctx context.Context, ids []string, 
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.ProgramBulkUpdatePayload{
-		Programs:   results,
-		UpdatedIDs: updatedIDs,
+		Programs:      results,
+		UpdatedIDs:    updatedIDs,
+		NotUpdatedIDs: notUpdatedIDs,
+		Error:         err,
 	}, nil
 }
 
@@ -7167,11 +8017,16 @@ func (r *mutationResolver) bulkUpdateProgramMembership(ctx context.Context, ids 
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "program_membership", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.ProgramMembershipBulkUpdatePayload{
 			ProgramMemberships: []*generated.ProgramMembership{},
 			UpdatedIDs:         []string{},
+			NotUpdatedIDs:      originalIDs,
+			Error:              &err,
 		}, nil
 	}
 
@@ -7204,9 +8059,29 @@ func (r *mutationResolver) bulkUpdateProgramMembership(ctx context.Context, ids 
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.ProgramMembershipBulkUpdatePayload{
 		ProgramMemberships: results,
 		UpdatedIDs:         updatedIDs,
+		NotUpdatedIDs:      notUpdatedIDs,
+		Error:              err,
 	}, nil
 }
 
@@ -7276,11 +8151,16 @@ func (r *mutationResolver) bulkUpdateRemediation(ctx context.Context, ids []stri
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "remediation", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.RemediationBulkUpdatePayload{
-			Remediations: []*generated.Remediation{},
-			UpdatedIDs:   []string{},
+			Remediations:  []*generated.Remediation{},
+			UpdatedIDs:    []string{},
+			NotUpdatedIDs: originalIDs,
+			Error:         &err,
 		}, nil
 	}
 
@@ -7313,9 +8193,29 @@ func (r *mutationResolver) bulkUpdateRemediation(ctx context.Context, ids []stri
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.RemediationBulkUpdatePayload{
-		Remediations: results,
-		UpdatedIDs:   updatedIDs,
+		Remediations:  results,
+		UpdatedIDs:    updatedIDs,
+		NotUpdatedIDs: notUpdatedIDs,
+		Error:         err,
 	}, nil
 }
 
@@ -7555,11 +8455,16 @@ func (r *mutationResolver) bulkUpdateReview(ctx context.Context, ids []string, i
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "review", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.ReviewBulkUpdatePayload{
-			Reviews:    []*generated.Review{},
-			UpdatedIDs: []string{},
+			Reviews:       []*generated.Review{},
+			UpdatedIDs:    []string{},
+			NotUpdatedIDs: originalIDs,
+			Error:         &err,
 		}, nil
 	}
 
@@ -7592,9 +8497,29 @@ func (r *mutationResolver) bulkUpdateReview(ctx context.Context, ids []string, i
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.ReviewBulkUpdatePayload{
-		Reviews:    results,
-		UpdatedIDs: updatedIDs,
+		Reviews:       results,
+		UpdatedIDs:    updatedIDs,
+		NotUpdatedIDs: notUpdatedIDs,
+		Error:         err,
 	}, nil
 }
 
@@ -7664,11 +8589,16 @@ func (r *mutationResolver) bulkUpdateRisk(ctx context.Context, ids []string, inp
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "risk", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.RiskBulkUpdatePayload{
-			Risks:      []*generated.Risk{},
-			UpdatedIDs: []string{},
+			Risks:         []*generated.Risk{},
+			UpdatedIDs:    []string{},
+			NotUpdatedIDs: originalIDs,
+			Error:         &err,
 		}, nil
 	}
 
@@ -7701,9 +8631,29 @@ func (r *mutationResolver) bulkUpdateRisk(ctx context.Context, ids []string, inp
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.RiskBulkUpdatePayload{
-		Risks:      results,
-		UpdatedIDs: updatedIDs,
+		Risks:         results,
+		UpdatedIDs:    updatedIDs,
+		NotUpdatedIDs: notUpdatedIDs,
+		Error:         err,
 	}, nil
 }
 
@@ -7858,11 +8808,16 @@ func (r *mutationResolver) bulkUpdateScan(ctx context.Context, ids []string, inp
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "scan", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.ScanBulkUpdatePayload{
-			Scans:      []*generated.Scan{},
-			UpdatedIDs: []string{},
+			Scans:         []*generated.Scan{},
+			UpdatedIDs:    []string{},
+			NotUpdatedIDs: originalIDs,
+			Error:         &err,
 		}, nil
 	}
 
@@ -7895,9 +8850,29 @@ func (r *mutationResolver) bulkUpdateScan(ctx context.Context, ids []string, inp
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.ScanBulkUpdatePayload{
-		Scans:      results,
-		UpdatedIDs: updatedIDs,
+		Scans:         results,
+		UpdatedIDs:    updatedIDs,
+		NotUpdatedIDs: notUpdatedIDs,
+		Error:         err,
 	}, nil
 }
 
@@ -8137,11 +9112,16 @@ func (r *mutationResolver) bulkUpdateScheduledJob(ctx context.Context, ids []str
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "scheduled_job", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.ScheduledJobBulkUpdatePayload{
 			ScheduledJobs: []*generated.ScheduledJob{},
 			UpdatedIDs:    []string{},
+			NotUpdatedIDs: originalIDs,
+			Error:         &err,
 		}, nil
 	}
 
@@ -8174,9 +9154,29 @@ func (r *mutationResolver) bulkUpdateScheduledJob(ctx context.Context, ids []str
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.ScheduledJobBulkUpdatePayload{
 		ScheduledJobs: results,
 		UpdatedIDs:    updatedIDs,
+		NotUpdatedIDs: notUpdatedIDs,
+		Error:         err,
 	}, nil
 }
 
@@ -8246,11 +9246,16 @@ func (r *mutationResolver) bulkUpdateSLADefinition(ctx context.Context, ids []st
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "sla_definition", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.SLADefinitionBulkUpdatePayload{
 			SLADefinitions: []*generated.SLADefinition{},
 			UpdatedIDs:     []string{},
+			NotUpdatedIDs:  originalIDs,
+			Error:          &err,
 		}, nil
 	}
 
@@ -8283,9 +9288,29 @@ func (r *mutationResolver) bulkUpdateSLADefinition(ctx context.Context, ids []st
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.SLADefinitionBulkUpdatePayload{
 		SLADefinitions: results,
 		UpdatedIDs:     updatedIDs,
+		NotUpdatedIDs:  notUpdatedIDs,
+		Error:          err,
 	}, nil
 }
 
@@ -8525,11 +9550,16 @@ func (r *mutationResolver) bulkUpdateSubcontrol(ctx context.Context, ids []strin
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "subcontrol", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.SubcontrolBulkUpdatePayload{
-			Subcontrols: []*generated.Subcontrol{},
-			UpdatedIDs:  []string{},
+			Subcontrols:   []*generated.Subcontrol{},
+			UpdatedIDs:    []string{},
+			NotUpdatedIDs: originalIDs,
+			Error:         &err,
 		}, nil
 	}
 
@@ -8562,9 +9592,29 @@ func (r *mutationResolver) bulkUpdateSubcontrol(ctx context.Context, ids []strin
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.SubcontrolBulkUpdatePayload{
-		Subcontrols: results,
-		UpdatedIDs:  updatedIDs,
+		Subcontrols:   results,
+		UpdatedIDs:    updatedIDs,
+		NotUpdatedIDs: notUpdatedIDs,
+		Error:         err,
 	}, nil
 }
 
@@ -8634,11 +9684,16 @@ func (r *mutationResolver) bulkUpdateSubprocessor(ctx context.Context, ids []str
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "subprocessor", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.SubprocessorBulkUpdatePayload{
 			Subprocessors: []*generated.Subprocessor{},
 			UpdatedIDs:    []string{},
+			NotUpdatedIDs: originalIDs,
+			Error:         &err,
 		}, nil
 	}
 
@@ -8671,9 +9726,29 @@ func (r *mutationResolver) bulkUpdateSubprocessor(ctx context.Context, ids []str
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.SubprocessorBulkUpdatePayload{
 		Subprocessors: results,
 		UpdatedIDs:    updatedIDs,
+		NotUpdatedIDs: notUpdatedIDs,
+		Error:         err,
 	}, nil
 }
 
@@ -8847,11 +9922,16 @@ func (r *mutationResolver) bulkUpdateSystemDetail(ctx context.Context, ids []str
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "system_detail", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.SystemDetailBulkUpdatePayload{
 			SystemDetails: []*generated.SystemDetail{},
 			UpdatedIDs:    []string{},
+			NotUpdatedIDs: originalIDs,
+			Error:         &err,
 		}, nil
 	}
 
@@ -8884,9 +9964,29 @@ func (r *mutationResolver) bulkUpdateSystemDetail(ctx context.Context, ids []str
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.SystemDetailBulkUpdatePayload{
 		SystemDetails: results,
 		UpdatedIDs:    updatedIDs,
+		NotUpdatedIDs: notUpdatedIDs,
+		Error:         err,
 	}, nil
 }
 
@@ -9060,11 +10160,16 @@ func (r *mutationResolver) bulkUpdateTask(ctx context.Context, ids []string, inp
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "task", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.TaskBulkUpdatePayload{
-			Tasks:      []*generated.Task{},
-			UpdatedIDs: []string{},
+			Tasks:         []*generated.Task{},
+			UpdatedIDs:    []string{},
+			NotUpdatedIDs: originalIDs,
+			Error:         &err,
 		}, nil
 	}
 
@@ -9097,9 +10202,29 @@ func (r *mutationResolver) bulkUpdateTask(ctx context.Context, ids []string, inp
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.TaskBulkUpdatePayload{
-		Tasks:      results,
-		UpdatedIDs: updatedIDs,
+		Tasks:         results,
+		UpdatedIDs:    updatedIDs,
+		NotUpdatedIDs: notUpdatedIDs,
+		Error:         err,
 	}, nil
 }
 
@@ -9339,11 +10464,16 @@ func (r *mutationResolver) bulkUpdateTemplate(ctx context.Context, ids []string,
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "template", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.TemplateBulkUpdatePayload{
-			Templates:  []*generated.Template{},
-			UpdatedIDs: []string{},
+			Templates:     []*generated.Template{},
+			UpdatedIDs:    []string{},
+			NotUpdatedIDs: originalIDs,
+			Error:         &err,
 		}, nil
 	}
 
@@ -9376,9 +10506,29 @@ func (r *mutationResolver) bulkUpdateTemplate(ctx context.Context, ids []string,
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.TemplateBulkUpdatePayload{
-		Templates:  results,
-		UpdatedIDs: updatedIDs,
+		Templates:     results,
+		UpdatedIDs:    updatedIDs,
+		NotUpdatedIDs: notUpdatedIDs,
+		Error:         err,
 	}, nil
 }
 
@@ -9533,11 +10683,16 @@ func (r *mutationResolver) bulkUpdateTrustCenterCompliance(ctx context.Context, 
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "trust_center_compliance", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.TrustCenterComplianceBulkUpdatePayload{
 			TrustCenterCompliances: []*generated.TrustCenterCompliance{},
 			UpdatedIDs:             []string{},
+			NotUpdatedIDs:          originalIDs,
+			Error:                  &err,
 		}, nil
 	}
 
@@ -9570,9 +10725,29 @@ func (r *mutationResolver) bulkUpdateTrustCenterCompliance(ctx context.Context, 
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.TrustCenterComplianceBulkUpdatePayload{
 		TrustCenterCompliances: results,
 		UpdatedIDs:             updatedIDs,
+		NotUpdatedIDs:          notUpdatedIDs,
+		Error:                  err,
 	}, nil
 }
 
@@ -9642,11 +10817,16 @@ func (r *mutationResolver) bulkUpdateTrustCenterDoc(ctx context.Context, ids []s
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "trust_center_doc", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.TrustCenterDocBulkUpdatePayload{
 			TrustCenterDocs: []*generated.TrustCenterDoc{},
 			UpdatedIDs:      []string{},
+			NotUpdatedIDs:   originalIDs,
+			Error:           &err,
 		}, nil
 	}
 
@@ -9679,9 +10859,29 @@ func (r *mutationResolver) bulkUpdateTrustCenterDoc(ctx context.Context, ids []s
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.TrustCenterDocBulkUpdatePayload{
 		TrustCenterDocs: results,
 		UpdatedIDs:      updatedIDs,
+		NotUpdatedIDs:   notUpdatedIDs,
+		Error:           err,
 	}, nil
 }
 
@@ -9940,11 +11140,16 @@ func (r *mutationResolver) bulkUpdateTrustCenterFAQ(ctx context.Context, ids []s
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "trust_center_faq", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.TrustCenterFAQBulkUpdatePayload{
 			TrustCenterFAQs: []*generated.TrustCenterFAQ{},
 			UpdatedIDs:      []string{},
+			NotUpdatedIDs:   originalIDs,
+			Error:           &err,
 		}, nil
 	}
 
@@ -9977,9 +11182,29 @@ func (r *mutationResolver) bulkUpdateTrustCenterFAQ(ctx context.Context, ids []s
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.TrustCenterFAQBulkUpdatePayload{
 		TrustCenterFAQs: results,
 		UpdatedIDs:      updatedIDs,
+		NotUpdatedIDs:   notUpdatedIDs,
+		Error:           err,
 	}, nil
 }
 
@@ -10153,11 +11378,16 @@ func (r *mutationResolver) bulkUpdateTrustCenterSubprocessor(ctx context.Context
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "trust_center_subprocessor", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.TrustCenterSubprocessorBulkUpdatePayload{
 			TrustCenterSubprocessors: []*generated.TrustCenterSubprocessor{},
 			UpdatedIDs:               []string{},
+			NotUpdatedIDs:            originalIDs,
+			Error:                    &err,
 		}, nil
 	}
 
@@ -10190,9 +11420,29 @@ func (r *mutationResolver) bulkUpdateTrustCenterSubprocessor(ctx context.Context
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.TrustCenterSubprocessorBulkUpdatePayload{
 		TrustCenterSubprocessors: results,
 		UpdatedIDs:               updatedIDs,
+		NotUpdatedIDs:            notUpdatedIDs,
+		Error:                    err,
 	}, nil
 }
 
@@ -10432,11 +11682,16 @@ func (r *mutationResolver) bulkUpdateUserSetting(ctx context.Context, ids []stri
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "user_setting", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.UserSettingBulkUpdatePayload{
-			UserSettings: []*generated.UserSetting{},
-			UpdatedIDs:   []string{},
+			UserSettings:  []*generated.UserSetting{},
+			UpdatedIDs:    []string{},
+			NotUpdatedIDs: originalIDs,
+			Error:         &err,
 		}, nil
 	}
 
@@ -10469,9 +11724,29 @@ func (r *mutationResolver) bulkUpdateUserSetting(ctx context.Context, ids []stri
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.UserSettingBulkUpdatePayload{
-		UserSettings: results,
-		UpdatedIDs:   updatedIDs,
+		UserSettings:  results,
+		UpdatedIDs:    updatedIDs,
+		NotUpdatedIDs: notUpdatedIDs,
+		Error:         err,
 	}, nil
 }
 
@@ -10541,11 +11816,16 @@ func (r *mutationResolver) bulkUpdateVendorRiskScore(ctx context.Context, ids []
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "vendor_risk_score", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.VendorRiskScoreBulkUpdatePayload{
 			VendorRiskScores: []*generated.VendorRiskScore{},
 			UpdatedIDs:       []string{},
+			NotUpdatedIDs:    originalIDs,
+			Error:            &err,
 		}, nil
 	}
 
@@ -10578,9 +11858,29 @@ func (r *mutationResolver) bulkUpdateVendorRiskScore(ctx context.Context, ids []
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.VendorRiskScoreBulkUpdatePayload{
 		VendorRiskScores: results,
 		UpdatedIDs:       updatedIDs,
+		NotUpdatedIDs:    notUpdatedIDs,
+		Error:            err,
 	}, nil
 }
 
@@ -10735,11 +12035,16 @@ func (r *mutationResolver) bulkUpdateVendorScoringConfig(ctx context.Context, id
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "vendor_scoring_config", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.VendorScoringConfigBulkUpdatePayload{
 			VendorScoringConfigs: []*generated.VendorScoringConfig{},
 			UpdatedIDs:           []string{},
+			NotUpdatedIDs:        originalIDs,
+			Error:                &err,
 		}, nil
 	}
 
@@ -10772,9 +12077,29 @@ func (r *mutationResolver) bulkUpdateVendorScoringConfig(ctx context.Context, id
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.VendorScoringConfigBulkUpdatePayload{
 		VendorScoringConfigs: results,
 		UpdatedIDs:           updatedIDs,
+		NotUpdatedIDs:        notUpdatedIDs,
+		Error:                err,
 	}, nil
 }
 
@@ -10929,11 +12254,16 @@ func (r *mutationResolver) bulkUpdateVulnerability(ctx context.Context, ids []st
 		return nil, rout.NewMissingRequiredFieldError("ids")
 	}
 
+	originalIDs := append([]string(nil), ids...)
 	ids = r.filterAuthorizedIDs(ctx, ids, "vulnerability", fgax.CanEdit)
 	if len(ids) == 0 {
+		err := gqlerrors.BulkActionIncomplete
+
 		return &model.VulnerabilityBulkUpdatePayload{
 			Vulnerabilities: []*generated.Vulnerability{},
 			UpdatedIDs:      []string{},
+			NotUpdatedIDs:   originalIDs,
+			Error:           &err,
 		}, nil
 	}
 
@@ -10966,9 +12296,29 @@ func (r *mutationResolver) bulkUpdateVulnerability(ctx context.Context, ids []st
 		updatedIDs = append(updatedIDs, id)
 	}
 
+	updated := make(map[string]struct{}, len(updatedIDs))
+	for _, id := range updatedIDs {
+		updated[id] = struct{}{}
+	}
+
+	notUpdatedIDs := make([]string, 0, len(originalIDs))
+	for _, id := range originalIDs {
+		if _, ok := updated[id]; !ok {
+			notUpdatedIDs = append(notUpdatedIDs, id)
+		}
+	}
+
+	var err *string
+	if len(notUpdatedIDs) > 0 {
+		bulkActionIncomplete := gqlerrors.BulkActionIncomplete
+		err = &bulkActionIncomplete
+	}
+
 	return &model.VulnerabilityBulkUpdatePayload{
 		Vulnerabilities: results,
 		UpdatedIDs:      updatedIDs,
+		NotUpdatedIDs:   notUpdatedIDs,
+		Error:           err,
 	}, nil
 }
 

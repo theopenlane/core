@@ -171,6 +171,8 @@ mutation DeleteAsset ($deleteAssetId: ID!) {
 mutation DeleteBulkAsset ($ids: [ID!]!) {
 	deleteBulkAsset(ids: $ids) {
 		deletedIDs
+		notDeletedIDs
+		error
 	}
 }
 query GetAllAssets ($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [AssetOrder!]) {
@@ -463,6 +465,8 @@ mutation UpdateBulkAsset ($ids: [ID!]!, $input: UpdateAssetInput!) {
 			website
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 mutation UpdateBulkCSVAsset ($input: Upload!) {
@@ -519,5 +523,7 @@ mutation UpdateBulkCSVAsset ($input: Upload!) {
 			website
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }

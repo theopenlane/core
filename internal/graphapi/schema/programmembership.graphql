@@ -163,4 +163,12 @@ type ProgramMembershipBulkUpdatePayload {
     IDs of the updated programMemberships
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }

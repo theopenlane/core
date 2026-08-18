@@ -181,6 +181,52 @@ func (ec *executionContext) fieldContext_EvidenceBulkUpdatePayload_updatedIDs(_ 
 	return graphql.NewScalarFieldContext("EvidenceBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
+func (ec *executionContext) _EvidenceBulkUpdatePayload_notUpdatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.EvidenceBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EvidenceBulkUpdatePayload_notUpdatedIDs(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.NotUpdatedIDs, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_EvidenceBulkUpdatePayload_notUpdatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("EvidenceBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+}
+
+func (ec *executionContext) _EvidenceBulkUpdatePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.EvidenceBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EvidenceBulkUpdatePayload_error(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Error, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_EvidenceBulkUpdatePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("EvidenceBulkUpdatePayload", field, false, false, errors.New("field of type String does not have child fields"))
+}
+
 func (ec *executionContext) _EvidenceCreatePayload_evidence(ctx context.Context, field graphql.CollectedField, obj *model.EvidenceCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -385,6 +431,16 @@ func (ec *executionContext) _EvidenceBulkUpdatePayload(ctx context.Context, sel 
 			}
 		case "updatedIDs":
 			out.Values[i] = ec._EvidenceBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "notUpdatedIDs":
+			out.Values[i] = ec._EvidenceBulkUpdatePayload_notUpdatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "error":
+			out.Values[i] = ec._EvidenceBulkUpdatePayload_error(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}

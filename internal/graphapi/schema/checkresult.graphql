@@ -145,6 +145,14 @@ type CheckResultBulkUpdatePayload {
     IDs of the updated checkResults
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 
 """
@@ -162,5 +170,5 @@ type CheckResultBulkDeletePayload {
     """
     IDs of checkResults that were not deleted
     """
-    notDeletedIDs: [ID!]
+    notDeletedIDs: [ID!]!
 }

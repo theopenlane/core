@@ -99,7 +99,7 @@ require (
 	github.com/slack-go/slack v0.27.0
 	github.com/spf13/cobra v1.10.2
 	github.com/stoewer/go-strcase v1.3.1
-	github.com/stretchr/testify v1.11.1
+	github.com/stretchr/testify v1.12.0
 	github.com/stripe/stripe-go/v86 v86.2.0
 	github.com/tailscale/tailscale-client-go/v2 v2.0.0-20250129222324-74c8fc3cb4d7
 	github.com/theopenlane/core/common v1.0.25
@@ -126,12 +126,14 @@ require (
 	golang.org/x/mod v0.38.0
 	golang.org/x/oauth2 v0.36.0
 	golang.org/x/sync v0.22.0
-	golang.org/x/text v0.40.0
+	golang.org/x/text v0.41.0
 	golang.org/x/tools v0.48.0
 	google.golang.org/api v0.292.0
 	gopkg.in/yaml.v3 v3.0.1
 	gotest.tools/v3 v3.5.2
 )
+
+replace github.com/theopenlane/gqlgen-plugins => ../gqlgen-plugins/
 
 require (
 	github.com/AzureAD/microsoft-authentication-library-for-go v1.7.2 // indirect
@@ -306,7 +308,6 @@ require (
 
 require (
 	github.com/aws/aws-sdk-go-v2/service/securityhub v1.76.1
-	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.4.1 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/dlclark/regexp2 v1.11.5 // indirect

@@ -116,10 +116,10 @@ func (ec *executionContext) _CheckResultBulkDeletePayload_notDeletedIDs(ctx cont
 		},
 		nil,
 		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
-			return ec.marshalOID2ᚕstringᚄ(ctx, selections, v)
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
 		},
 		true,
-		false,
+		true,
 	)
 }
 func (ec *executionContext) fieldContext_CheckResultBulkDeletePayload_notDeletedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
@@ -179,6 +179,52 @@ func (ec *executionContext) _CheckResultBulkUpdatePayload_updatedIDs(ctx context
 }
 func (ec *executionContext) fieldContext_CheckResultBulkUpdatePayload_updatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
 	return graphql.NewScalarFieldContext("CheckResultBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+}
+
+func (ec *executionContext) _CheckResultBulkUpdatePayload_notUpdatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.CheckResultBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CheckResultBulkUpdatePayload_notUpdatedIDs(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.NotUpdatedIDs, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_CheckResultBulkUpdatePayload_notUpdatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CheckResultBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+}
+
+func (ec *executionContext) _CheckResultBulkUpdatePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.CheckResultBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_CheckResultBulkUpdatePayload_error(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Error, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_CheckResultBulkUpdatePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("CheckResultBulkUpdatePayload", field, false, false, errors.New("field of type String does not have child fields"))
 }
 
 func (ec *executionContext) _CheckResultCreatePayload_checkResult(ctx context.Context, field graphql.CollectedField, obj *model.CheckResultCreatePayload) (ret graphql.Marshaler) {
@@ -342,7 +388,7 @@ func (ec *executionContext) _CheckResultBulkDeletePayload(ctx context.Context, s
 			}
 		case "notDeletedIDs":
 			out.Values[i] = ec._CheckResultBulkDeletePayload_notDeletedIDs(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
+			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
 		default:
@@ -385,6 +431,16 @@ func (ec *executionContext) _CheckResultBulkUpdatePayload(ctx context.Context, s
 			}
 		case "updatedIDs":
 			out.Values[i] = ec._CheckResultBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "notUpdatedIDs":
+			out.Values[i] = ec._CheckResultBulkUpdatePayload_notUpdatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "error":
+			out.Values[i] = ec._CheckResultBulkUpdatePayload_error(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}
