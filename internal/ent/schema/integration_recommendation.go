@@ -21,7 +21,11 @@ type IntegrationRecommendation struct {
 	ent.Schema
 }
 
-const SchemaIntegrationRecommendation = "integration_recommendation"
+const (
+	SchemaIntegrationRecommendation = "integration_recommendation"
+
+	maxIntegrationRecommendationWeight = 100
+)
 
 func (IntegrationRecommendation) Name() string {
 	return SchemaIntegrationRecommendation
@@ -43,7 +47,7 @@ func (IntegrationRecommendation) Fields() []ent.Field {
 		field.Int("weight").
 			Comment("computed recommendation weight from 0 to 100").
 			Min(0).
-			Max(100),
+			Max(maxIntegrationRecommendationWeight),
 		field.String("label").
 			Comment("user-facing summary for why this integration was recommended").
 			NotEmpty(),
