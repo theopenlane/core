@@ -3,9 +3,12 @@ package domainscan
 import (
 	"context"
 	"net/http"
-	"net/url"
+	"sync"
 
+	"github.com/theopenlane/httpsling"
 	"golang.org/x/net/publicsuffix"
+
+	"github.com/theopenlane/core/pkg/urlx"
 )
 
 // userAgent identifies this scanner to servers it probes
@@ -15,32 +18,11 @@ const userAgent = "theopenlane-domainscan/1.0"
 // company's trust/security/compliance portal, tried in this order.
 var trustCenterCandidateSubdomains = []string{"trust", "security", "compliance"}
 
-// normalizeURL parses rawURL, assuming an https:// scheme if none is given
-func normalizeURL(rawURL string) (*url.URL, bool) {
-	u, err := url.Parse(rawURL)
-	if err != nil {
-		return nil, false
-	}
-
-	if u.Scheme == "" {
-		u, err = url.Parse("https://" + rawURL)
-		if err != nil {
-			return nil, false
-		}
-	}
-
-	if u.Hostname() == "" {
-		return nil, false
-	}
-
-	return u, true
-}
-
 // apexDomain returns the registrable (eTLD+1) domain for rawURL, e.g.
 // "www.mail.example.co.uk" -> "example.co.uk"
 func apexDomain(rawURL string) (string, bool) {
-	parsed, ok := normalizeURL(rawURL)
-	if !ok {
+	parsed, err := urlx.Parse(rawURL)
+	if err != nil {
 		return "", false
 	}
 
@@ -55,8 +37,8 @@ func apexDomain(rawURL string) (string, bool) {
 // trustCenterURLs derives candidate trust center URLs for rawURL, one per
 // entry in trustCenterCandidateSubdomains (e.g. trust.<domain>, security.<domain>).
 func trustCenterURLs(rawURL string) ([]string, bool) {
-	parsed, ok := normalizeURL(rawURL)
-	if !ok {
+	parsed, err := urlx.Parse(rawURL)
+	if err != nil {
 		return nil, false
 	}
 
@@ -82,8 +64,8 @@ func trustCenterURLs(rawURL string) ([]string, bool) {
 
 // statusPageURL derives a status.<domain> URL from the given domain
 func statusPageURL(rawURL string) (string, bool) {
-	parsed, ok := normalizeURL(rawURL)
-	if !ok {
+	parsed, err := urlx.Parse(rawURL)
+	if err != nil {
 		return "", false
 	}
 
@@ -103,8 +85,8 @@ func statusPageURL(rawURL string) (string, bool) {
 
 // subpathURL returns the URL formed by pointing rawURL at path
 func subpathURL(rawURL, path string) (string, bool) {
-	parsed, ok := normalizeURL(rawURL)
-	if !ok {
+	parsed, err := urlx.Parse(rawURL)
+	if err != nil {
 		return "", false
 	}
 
@@ -115,27 +97,21 @@ func subpathURL(rawURL, path string) (string, bool) {
 	return parsed.String(), true
 }
 
-// newHeadRequest builds a HEAD request against rawURL with the scanner's User-Agent set
-func newHeadRequest(ctx context.Context, rawURL string) (*http.Request, error) {
-	req, err := http.NewRequestWithContext(ctx, http.MethodHead, rawURL, nil)
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Set("User-Agent", userAgent)
-
-	return req, nil
-}
+// scanRequester lazily builds the shared prober with the scanner User-Agent set,
+// constructed once so probes reuse pooled connections
+var scanRequester = sync.OnceValues(func() (*httpsling.Requester, error) {
+	return urlx.NewRequester(httpsling.Header(httpsling.HeaderUserAgent, userAgent))
+})
 
 // urlReachable does a lightweight HEAD request to rawURL and reports whether
 // it resolves to a non-error response, returning the final URL after any redirects.
 func urlReachable(ctx context.Context, rawURL string) (string, bool) {
-	req, err := newHeadRequest(ctx, rawURL)
+	requester, err := scanRequester()
 	if err != nil {
 		return "", false
 	}
 
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := requester.SendWithContext(ctx, httpsling.Head(rawURL))
 	if err != nil {
 		return "", false
 	}
@@ -155,12 +131,12 @@ func urlReachable(ctx context.Context, rawURL string) (string, bool) {
 
 // resolveRedirectTarget follows rawURL's HTTP redirect chain via a lightweight HEAD request and returns the origin
 func resolveRedirectTarget(ctx context.Context, rawURL string) string {
-	req, err := newHeadRequest(ctx, rawURL)
+	requester, err := scanRequester()
 	if err != nil {
 		return rawURL
 	}
 
-	resp, err := http.DefaultClient.Do(req)
+	resp, err := requester.SendWithContext(ctx, httpsling.Head(rawURL))
 	if err != nil {
 		return rawURL
 	}

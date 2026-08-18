@@ -64,30 +64,29 @@ func AddPostMutationHook[T any](hook func(ctx context.Context, v T) error) {
 }
 
 // getMutationIDs retrieves the IDs from the mutation, handling both single and multiple ID cases
-func getMutationIDs(ctx context.Context, m utils.GenericMutation) []string {
+func getMutationIDs(ctx context.Context, m utils.GenericMutation) ([]string, error) {
 	objID, ok := m.ID()
 	if ok && objID != "" {
-		return []string{objID}
+		return []string{objID}, nil
 	}
 
 	objIDs, err := m.IDs(ctx)
-	if err == nil {
-		return objIDs
-	}
-
-	return nil
+	return objIDs, err
 }
 
 // getSingleMutationID retrieves a single ID from the mutation, returning empty string and false if
 // zero or multiple IDs are present. This is a convenience wrapper around getMutationIDs for hooks
 // that only operate on single-entity mutations.
-func getSingleMutationID(ctx context.Context, m utils.GenericMutation) (string, bool) {
-	ids := getMutationIDs(ctx, m)
+func getSingleMutationID(ctx context.Context, m utils.GenericMutation) (string, bool, error) {
+	ids, err := getMutationIDs(ctx, m)
+	if err != nil {
+		return "", false, err
+	}
 	if len(ids) != 1 || ids[0] == "" {
-		return "", false
+		return "", false, nil
 	}
 
-	return ids[0], true
+	return ids[0], true, nil
 }
 
 // enqueueJob inserts a job when a job client is available, otherwise logs and skips.

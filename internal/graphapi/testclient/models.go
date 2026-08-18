@@ -1215,8 +1215,7 @@ type AssessmentResponse struct {
 	// Returns active workflow instances for this assessmentResponse (RUNNING or PAUSED)
 	ActiveWorkflowInstances []*WorkflowInstance `json:"activeWorkflowInstances"`
 	// Returns the workflow event timeline for this assessmentResponse across all workflow instances
-	WorkflowTimeline            *WorkflowEventConnection `json:"workflowTimeline"`
-	QuestionnaireTransformError *string                  `json:"questionnaireTransformError,omitempty"`
+	WorkflowTimeline *WorkflowEventConnection `json:"workflowTimeline"`
 }
 
 func (AssessmentResponse) IsNode() {}

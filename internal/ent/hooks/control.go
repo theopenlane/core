@@ -266,7 +266,10 @@ func handleControlVisibilityUpdate(ctx context.Context, m *generated.ControlMuta
 			return next.Mutate(ctx, m)
 		}
 
-		updatedIDs := getMutationIDs(ctx, m)
+		updatedIDs, err := getMutationIDs(ctx, m)
+		if err != nil {
+			return nil, err
+		}
 		if len(updatedIDs) == 0 {
 			return next.Mutate(ctx, m)
 		}

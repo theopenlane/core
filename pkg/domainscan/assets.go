@@ -6,6 +6,8 @@ import (
 	"strings"
 
 	"github.com/cloudflare/cloudflare-go/v7/url_scanner"
+
+	"github.com/theopenlane/core/pkg/urlx"
 )
 
 // legalEntitySuffixes are corporate suffixes stripped from a raw company/organization name
@@ -135,7 +137,7 @@ func buildInternalDomains(enrichment Enrichment, apexDomain, pageASNOrg string) 
 		}
 
 		for _, link := range enrichment.Company.SubdomainLinks {
-			if u, ok := normalizeURL(link); ok {
+			if u, err := urlx.Parse(link); err == nil {
 				add(u.Hostname())
 			}
 		}

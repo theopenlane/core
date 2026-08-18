@@ -45,7 +45,10 @@ func parseSoftDeleteEventID(ctx context.Context, mutation ent.Mutation) (*EventI
 		return nil, ErrUnableToDetermineEventID
 	}
 
-	ids := getMutationIDs(ctx, mut)
+	ids, err := getMutationIDs(ctx, mut)
+	if err != nil {
+		return nil, err
+	}
 	if len(ids) == 0 || ids[0] == "" {
 		return nil, ErrUnableToDetermineEventID
 	}
