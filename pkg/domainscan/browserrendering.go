@@ -15,6 +15,7 @@ import (
 	"golang.org/x/sync/errgroup"
 
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/pkg/urlx"
 )
 
 const (
@@ -313,7 +314,7 @@ func (c *Config) fetchCompanyProfilePage(ctx context.Context, url, promptSuffix 
 func (c *Config) browserRendering(ctx context.Context, target string, kind PromptType, promptSuffix string) (*browser_rendering.JsonNewResponse, error) {
 	client := cloudflare.NewClient(c.clientOptions()...)
 
-	if parsed, ok := normalizeURL(target); ok {
+	if parsed, err := urlx.Parse(target); err == nil {
 		target = parsed.String()
 	}
 

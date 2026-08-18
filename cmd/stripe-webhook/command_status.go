@@ -5,12 +5,12 @@ package main
 import (
 	"context"
 	"fmt"
-	"net/url"
 
 	"github.com/stripe/stripe-go/v86"
 	"github.com/urfave/cli/v3"
 
 	"github.com/theopenlane/core/pkg/entitlements"
+	"github.com/theopenlane/core/pkg/urlx"
 	"github.com/theopenlane/utils/cli/tables"
 )
 
@@ -138,7 +138,7 @@ func uniqueWebhookBases(endpoints []*stripe.WebhookEndpoint) []string {
 	var bases []string
 
 	for _, endpoint := range endpoints {
-		base := cleanBaseURL(endpoint.URL)
+		base := urlx.WithoutQuery(endpoint.URL)
 		if base == "" {
 			continue
 		}
@@ -149,17 +149,4 @@ func uniqueWebhookBases(endpoints []*stripe.WebhookEndpoint) []string {
 	}
 
 	return bases
-}
-
-// cleanBaseURL is the sanitizer that strips query and fragment data from a URL
-func cleanBaseURL(raw string) string {
-	parsed, err := url.Parse(raw)
-	if err != nil {
-		return raw
-	}
-
-	parsed.RawQuery = ""
-	parsed.Fragment = ""
-
-	return parsed.String()
 }

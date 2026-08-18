@@ -14,7 +14,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/eventqueue"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/campaign"
-	"github.com/theopenlane/core/internal/integrations/operations"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 )
@@ -118,7 +117,7 @@ func recomputeNextRunAt(ctx context.Context, client *entgen.Client, camp *entgen
 		base = time.Time(*camp.LastRunAt)
 	}
 
-	nextRun := operations.NextCampaignRunAt(base, camp.RecurrenceFrequency, camp.RecurrenceInterval, camp.RecurrenceTimezone)
+	nextRun := camp.RecurrenceFrequency.NextOccurrence(base, camp.RecurrenceInterval, camp.RecurrenceTimezone)
 
 	if !nextRun.After(time.Now()) {
 		nextRun = time.Now()

@@ -17,21 +17,16 @@ import (
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 )
 
+// getNextReviewDate computes the review date one frequency interval after the last review; zero for non-calendar frequencies
 func getNextReviewDate(frequency enums.Frequency, lastReviewedAt models.DateTime) models.DateTime {
 	lastReviewDate := time.Time(lastReviewedAt).UTC()
 
-	switch frequency {
-	case enums.FrequencyYearly:
-		return models.DateTime(lastReviewDate.AddDate(1, 0, 0)) //nolint:mnd
-	case enums.FrequencyBiAnnually:
-		return models.DateTime(lastReviewDate.AddDate(0, 6, 0)) //nolint:mnd
-	case enums.FrequencyQuarterly:
-		return models.DateTime(lastReviewDate.AddDate(0, 3, 0)) //nolint:mnd
-	case enums.FrequencyMonthly:
-		return models.DateTime(lastReviewDate.AddDate(0, 1, 0)) //nolint:mnd
-	default:
+	next := frequency.NextOccurrence(lastReviewDate, 1, "")
+	if next.Equal(lastReviewDate) {
 		return models.DateTime{}
 	}
+
+	return models.DateTime(next)
 }
 
 // HookReviews runs on review mutations to process and update the entities tied to the review
@@ -63,9 +58,7 @@ func HookReviews() ent.Hook {
 						Where(entity.ID(id)).
 						Only(ctx)
 					if err != nil {
-						logx.FromContext(ctx).Err(err).
-							Str("entity_id", id).
-							Msg("could not fetch entity for review")
+						logx.FromContext(ctx).Err(err).Str("entity_id", id).Msg("could not fetch entity for review")
 						mu.Lock()
 						errs = append(errs, err.Error())
 						mu.Unlock()
@@ -88,8 +81,7 @@ func HookReviews() ent.Hook {
 
 					err = q.Exec(ctx)
 					if err != nil {
-						logx.FromContext(ctx).Err(err).
-							Str("entity_id", id).Msg("could not update entity reviewer")
+						logx.FromContext(ctx).Err(err).Str("entity_id", id).Msg("could not update entity reviewer")
 						mu.Lock()
 						errs = append(errs, err.Error())
 						mu.Unlock()
@@ -102,10 +94,7 @@ func HookReviews() ent.Hook {
 			}
 
 			if len(errs) > 0 {
-				logx.FromContext(ctx).Error().
-					Int("error_count", len(errs)).
-					Strs("errors", errs).
-					Msg("review file hook: entity updates failed")
+				logx.FromContext(ctx).Error().Int("error_count", len(errs)).Strs("errors", errs).Msg("review file hook: entity updates failed")
 
 				return nil, fmt.Errorf("%d entities could not be updated", len(errs)) //nolint:err113
 			}

@@ -84,3 +84,6 @@ internal/integrations/cli/config/.integrations.yaml
 
 # claude
 .claude
+
+#generated files
+docker/pg-init-scripts/init_zitadel.sql

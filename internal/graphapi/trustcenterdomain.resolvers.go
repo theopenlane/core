@@ -12,8 +12,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/pkg/domain"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/pkg/urlx"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -27,7 +27,7 @@ func (r *mutationResolver) CreateTrustCenterDomain(ctx context.Context, input mo
 	transactionCtx := withTransactionalMutation(ctx)
 
 	normalizedCnameTarget := cnameTarget
-	if normalized, err := domain.NormalizeHostname(cnameTarget); err == nil {
+	if normalized, err := urlx.NormalizeHostname(cnameTarget); err == nil {
 		normalizedCnameTarget = normalized
 	}
 
@@ -54,7 +54,7 @@ func (r *mutationResolver) CreateTrustCenterDomain(ctx context.Context, input mo
 		return nil, parseRequestError(ctx, common.ErrTrustCenterDomainAlreadyExists, common.Action{Action: common.ActionCreate, Object: "trustcenterdomain"})
 	}
 
-	normalizedCname, err := domain.NormalizeHostname(input.CnameRecord)
+	normalizedCname, err := urlx.NormalizeHostname(input.CnameRecord)
 	if err != nil {
 		return nil, rout.InvalidField("cname_record")
 	}

@@ -14,7 +14,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/domain"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/urlx"
 )
@@ -34,7 +33,7 @@ func trustCenterBaseURL(tc *generated.TrustCenter, defaultDomain string) url.URL
 
 	if tc.Edges.CustomDomain != nil {
 		host := tc.Edges.CustomDomain.CnameRecord
-		if normalized, err := domain.NormalizeHostname(host); err == nil {
+		if normalized, err := urlx.NormalizeHostname(host); err == nil {
 			host = normalized
 		}
 
@@ -44,7 +43,7 @@ func trustCenterBaseURL(tc *generated.TrustCenter, defaultDomain string) url.URL
 	}
 
 	host := defaultDomain
-	if normalized, err := domain.NormalizeHostname(host); err == nil {
+	if normalized, err := urlx.NormalizeHostname(host); err == nil {
 		host = normalized
 	}
 

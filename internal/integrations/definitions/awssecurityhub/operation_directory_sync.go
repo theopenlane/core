@@ -153,11 +153,7 @@ func (DirectorySync) Run(ctx context.Context, client *iam.Client, cfg DirectoryS
 		}
 	}
 
-	logx.FromContext(ctx).Debug().
-		Int("user_count", len(accountEnvelopes)).
-		Int("group_count", len(groupEnvelopes)).
-		Int("membership_count", len(membershipEnvelopes)).
-		Msg("awsiam: collected IAM users, groups, and memberships")
+	logx.FromContext(ctx).Debug().Int("user_count", len(accountEnvelopes)).Int("group_count", len(groupEnvelopes)).Int("membership_count", len(membershipEnvelopes)).Msg("awsiam: collected IAM users, groups, and memberships")
 
 	payloadSets = append(payloadSets,
 		types.IngestPayloadSet{
@@ -165,8 +161,9 @@ func (DirectorySync) Run(ctx context.Context, client *iam.Client, cfg DirectoryS
 			Envelopes: groupEnvelopes,
 		},
 		types.IngestPayloadSet{
-			Schema:    entityops.SchemaDirectoryMembership.Name,
-			Envelopes: membershipEnvelopes,
+			Schema:           entityops.SchemaDirectoryMembership.Name,
+			Envelopes:        membershipEnvelopes,
+			SnapshotComplete: true,
 		},
 	)
 

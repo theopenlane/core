@@ -1,15 +1,14 @@
 package validator
 
 import (
-	"net/url"
 	"regexp"
-	"slices"
 
 	"github.com/theopenlane/utils/rout"
+
+	"github.com/theopenlane/core/pkg/urlx"
 )
 
 var (
-	validSchemes = []string{"http", "https"}
 	domainMaxLen = 255
 	urlMaxLen    = 2048
 	domainRegexp = regexp.MustCompile(`^(?i)[a-z0-9-]+(\.[a-z0-9-]+)+\.?$`)
@@ -74,33 +73,12 @@ func ValidateURLs() func(urls []string) error {
 
 // validateURL validates a url or domain and returns an error if it is invalid
 func validateURL(inputURL string) error {
-	// parse the url
-	parsedURL, err := url.Parse(inputURL)
+	parsedURL, err := urlx.Parse(inputURL)
 	if err != nil {
 		return rout.InvalidField("url")
 	}
 
-	// if the scheme is empty, add http:// to the domain and try again
-	if parsedURL.Scheme == "" {
-		parsedURL, err = url.Parse("http://" + inputURL)
-		if err != nil {
-			return rout.InvalidField("url")
-		}
-	}
-
-	// ensure the host is not empty
-	if parsedURL.Host == "" {
-		return rout.InvalidField("url")
-	}
-
-	// only allow http and https schemes
-	if parsedURL.Scheme != "" && !slices.Contains(validSchemes, parsedURL.Scheme) {
-		return rout.InvalidField("url")
-	}
-
-	// ensure the host is a valid domain
-	valid := domainRegexp.MatchString(parsedURL.Host)
-	if !valid {
+	if !domainRegexp.MatchString(parsedURL.Host) {
 		return rout.InvalidField("url")
 	}
 

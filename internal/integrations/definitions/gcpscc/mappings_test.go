@@ -18,7 +18,7 @@ import (
 func testMappings(t *testing.T) []types.MappingRegistration {
 	t.Helper()
 
-	def, err := Builder()()
+	def, err := Builder("")()
 	require.NoError(t, err)
 
 	return def.Mappings

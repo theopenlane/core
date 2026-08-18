@@ -14,14 +14,14 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/pkg/domain"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/pkg/urlx"
 	"github.com/theopenlane/utils/rout"
 )
 
 // CreateCustomDomain is the resolver for the createCustomDomain field.
 func (r *mutationResolver) CreateCustomDomain(ctx context.Context, input generated.CreateCustomDomainInput) (*model.CustomDomainCreatePayload, error) {
-	normalizedCname, err := domain.NormalizeHostname(input.CnameRecord)
+	normalizedCname, err := urlx.NormalizeHostname(input.CnameRecord)
 	if err != nil {
 		return nil, rout.InvalidField("cname_record")
 	}
@@ -53,7 +53,7 @@ func (r *mutationResolver) CreateBulkCustomDomain(ctx context.Context, input []*
 	}
 
 	for _, data := range input {
-		normalizedCname, err := domain.NormalizeHostname(data.CnameRecord)
+		normalizedCname, err := urlx.NormalizeHostname(data.CnameRecord)
 		if err != nil {
 			return nil, rout.InvalidField("cname_record")
 		}
@@ -106,7 +106,7 @@ func (r *mutationResolver) CreateBulkCSVCustomDomain(ctx context.Context, input 
 	inputs := make([]*generated.CreateCustomDomainInput, 0, len(data))
 
 	for i := range data {
-		normalizedCname, err := domain.NormalizeHostname(data[i].Input.CnameRecord)
+		normalizedCname, err := urlx.NormalizeHostname(data[i].Input.CnameRecord)
 		if err != nil {
 			return nil, rout.InvalidField("cname_record")
 		}

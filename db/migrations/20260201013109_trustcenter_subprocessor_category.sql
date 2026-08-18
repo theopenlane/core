@@ -1,2 +1,0 @@
--- Modify "trust_center_subprocessors" table
-ALTER TABLE "trust_center_subprocessors" DROP COLUMN "category", ADD COLUMN "trust_center_subprocessor_kind_name" character varying NULL, ADD COLUMN "trust_center_subprocessor_kind_id" character varying NULL, ADD CONSTRAINT "trust_center_subprocessors_cus_d5ebb915269b07a0bf77b5b0ec180583" FOREIGN KEY ("trust_center_subprocessor_kind_id") REFERENCES "custom_type_enums" ("id") ON UPDATE NO ACTION ON DELETE SET NULL;

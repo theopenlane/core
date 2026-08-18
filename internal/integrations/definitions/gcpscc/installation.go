@@ -15,26 +15,45 @@ type serviceAccountIdentity struct {
 
 // resolveInstallationMetadata derives GCP SCC installation metadata from the persisted credential
 func resolveInstallationMetadata(_ context.Context, req types.InstallationRequest) (InstallationMetadata, bool, error) {
-	meta, err := resolveCredential(req.Credentials)
+	scope, err := resolveScope(req.Credentials)
 	if err != nil {
 		return InstallationMetadata{}, false, err
 	}
 
-	if meta.OrganizationID == "" && meta.ProjectID == "" && len(meta.SourceIDs) == 0 {
+	if scope.OrganizationID == "" && scope.ProjectID == "" && len(scope.SourceIDs) == 0 {
 		return InstallationMetadata{}, false, nil
 	}
 
-	var serviceAccount serviceAccountIdentity
-	if key := normalizeServiceAccountKey(meta.ServiceAccountKey); key != "" {
-		_ = json.Unmarshal([]byte(key), &serviceAccount)
+	return InstallationMetadata{
+		OrganizationID:      scope.OrganizationID,
+		ProjectID:           scope.ProjectID,
+		ProjectScope:        scope.ProjectScope,
+		ProjectIDs:          scope.ProjectIDs,
+		SourceIDs:           scope.SourceIDs,
+		ServiceAccountEmail: serviceAccountEmail(req.Credentials),
+	}, true, nil
+}
+
+// serviceAccountEmail returns the service account the installation acts as
+func serviceAccountEmail(bindings types.CredentialBindings) string {
+	federated, ok, err := workloadIdentityCredential.Resolve(bindings)
+	if err == nil && ok {
+		return federated.ServiceAccountEmail
 	}
 
-	return InstallationMetadata{
-		OrganizationID:      meta.OrganizationID,
-		ProjectID:           meta.ProjectID,
-		ProjectScope:        meta.ProjectScope,
-		ProjectIDs:          meta.ProjectIDs,
-		SourceIDs:           meta.SourceIDs,
-		ServiceAccountEmail: serviceAccount.ClientEmail,
-	}, true, nil
+	cred, ok, err := sccCredential.Resolve(bindings)
+	if err != nil || !ok {
+		return ""
+	}
+
+	key := normalizeServiceAccountKey(cred.ServiceAccountKey)
+	if key == "" {
+		return ""
+	}
+
+	var identity serviceAccountIdentity
+
+	_ = json.Unmarshal([]byte(key), &identity)
+
+	return identity.ClientEmail
 }

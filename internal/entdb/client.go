@@ -203,9 +203,6 @@ func New(ctx context.Context, c entx.Config, jobOpts []riverqueue.Option, client
 	db.Intercept(interceptors.QueryLogger())
 	db.Intercept(BlockInterceptor())
 
-	// adds default hooks for all edge permissions
-	db.Use(hooks.HookEdgePermissions())
-
 	// apply additional client options
 	for _, co := range clientOpts {
 		co(db)

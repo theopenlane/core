@@ -7,56 +7,6 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 )
 
-func TestNormalizeURL(t *testing.T) {
-	tests := []struct {
-		name   string
-		rawURL string
-		want   string
-		wantOK bool
-	}{
-		{
-			name:   "bare host gets https scheme",
-			rawURL: "example.com",
-			want:   "https://example.com",
-			wantOK: true,
-		},
-		{
-			name:   "scheme already present is preserved",
-			rawURL: "http://example.com",
-			want:   "http://example.com",
-			wantOK: true,
-		},
-		{
-			name:   "path and query are preserved",
-			rawURL: "example.com/path?x=1",
-			want:   "https://example.com/path?x=1",
-			wantOK: true,
-		},
-		{
-			name:   "empty string has no hostname",
-			rawURL: "",
-			wantOK: false,
-		},
-		{
-			name:   "scheme with no host fails",
-			rawURL: "https://",
-			wantOK: false,
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got, ok := normalizeURL(tt.rawURL)
-
-			assert.Check(t, is.Equal(tt.wantOK, ok))
-
-			if tt.wantOK {
-				assert.Check(t, is.Equal(tt.want, got.String()))
-			}
-		})
-	}
-}
-
 func TestApexDomain(t *testing.T) {
 	tests := []struct {
 		name   string

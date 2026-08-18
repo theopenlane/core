@@ -108,22 +108,24 @@ func (r *mutationResolver) UpdateOrgMembership(ctx context.Context, id string, i
 
 // DeleteOrgMembership is the resolver for the deleteOrgMembership field.
 func (r *mutationResolver) DeleteOrgMembership(ctx context.Context, id string) (*model.OrgMembershipDeletePayload, error) {
-	res, err := withTransactionalMutation(ctx).OrgMembership.Get(ctx, id)
-	if err != nil {
+	if _, err := withTransactionalMutation(ctx).OrgMembership.Get(ctx, id); err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "orgmembership"})
 	}
 
+	// group and program memberships scoped to the organization are removed by the
+	// org membership delete hook
 	if err := withTransactionalMutation(ctx).OrgMembership.DeleteOneID(id).Exec(ctx); err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionDelete, Object: "orgmembership"})
-	}
-
-	if err := generated.OrgMembershipEdgeCleanup(ctx, res.UserID); err != nil {
-		return nil, common.NewCascadeDeleteError(ctx, err)
 	}
 
 	return &model.OrgMembershipDeletePayload{
 		DeletedID: id,
 	}, nil
+}
+
+// LeaveOrganization is the resolver for the leaveOrganization field.
+func (r *mutationResolver) LeaveOrganization(ctx context.Context, organizationID string) (*model.OrgMembershipDeletePayload, error) {
+	return leaveOrganization(ctx, organizationID)
 }
 
 // DeleteBulkOrgMembership is the resolver for the deleteBulkOrgMembership field.

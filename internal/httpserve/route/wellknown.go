@@ -7,6 +7,7 @@ import (
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/core/internal/httpserve/handlers"
+	"github.com/theopenlane/core/pkg/oidc"
 )
 
 //go:embed webauthn
@@ -53,6 +54,26 @@ func registerJwksWellKnownHandler(router *Router) (err error) {
 			}
 
 			return ctx.JSON(http.StatusOK, keys)
+		},
+	}
+
+	return router.AddUnversionedHandlerRoute(config)
+}
+
+// registerOpenIDConfigurationHandler supplies the OIDC discovery document
+func registerOpenIDConfigurationHandler(router *Router) (err error) {
+	config := Config{
+		Path:        "/.well-known/openid-configuration",
+		Method:      http.MethodGet,
+		Name:        "OpenIDConfiguration",
+		Description: "OpenID Connect discovery document for federated identity providers",
+		Tags:        []string{"well-known", "authentication"},
+		OperationID: "OpenIDConfiguration",
+		Security:    handlers.PublicSecurity,
+		Middlewares: *publicEndpoint,
+		RateLimit:   publicStaticRateLimit,
+		Handler: func(ctx echo.Context) error {
+			return ctx.JSON(http.StatusOK, oidc.DiscoveryDocument(router.Handler.TokenManager))
 		},
 	}
 

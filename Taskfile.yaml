@@ -173,6 +173,12 @@ tasks:
     cmds:
       - go generate internal/httpserve/specs/generate/generate.go
 
+  generate:integration:
+    desc: scaffolds a new integration definition stub, e.g. task generate:integration -- oci "Oracle Cloud Infrastructure"
+    silent: true
+    cmds:
+      - bash internal/integrations/cli/stub/new.sh {{.CLI_ARGS}}
+
   generate:removechecksums:
     silent: true
     desc: Remove all individual schema checksum files to force regeneration

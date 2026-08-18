@@ -35,12 +35,13 @@ func WithIntegrationsRuntime(ctx context.Context, dbClient *ent.Client) ServerOp
 
 		wf := s.Config.Handler.WorkflowEngine
 		rt, err := runtime.New(runtime.Config{
-			DB:            dbClient,
-			Gala:          galaInstance,
-			Keystore:      credStore,
-			RedisClient:   s.Config.Handler.RedisClient,
-			CatalogConfig: s.Config.Settings.Integrations,
-			DevMode:       s.Config.Settings.Server.Dev,
+			DB:               dbClient,
+			Gala:             galaInstance,
+			Keystore:         credStore,
+			RedisClient:      s.Config.Handler.RedisClient,
+			CatalogConfig:    s.Config.Settings.Integrations,
+			FederationIssuer: s.Config.Settings.Auth.Token.Issuer,
+			DevMode:          s.Config.Settings.Server.Dev,
 		})
 		if err != nil {
 			log.Panic().Err(err).Msg("failed to initialize integration runtime")

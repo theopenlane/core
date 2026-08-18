@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
@@ -475,12 +476,15 @@ func checkAndUpdateDefaultOrg(ctx context.Context, userID string, oldOrgID strin
 	// if the user's default org was deleted this will now be nil
 	if userSetting.Edges.DefaultOrg == nil || userSetting.Edges.DefaultOrg.ID == oldOrgID {
 		// set the user's default org another org
-		// get the first org that was not the org being deleted and where the user is a member
+		// get the first org that was not the org being deleted and where the user is a member;
+		// the membership predicate is required because this runs under a privacy allow context,
+		// which disables the interceptor that would otherwise scope the query to the user's orgs
 		newDefaultOrgID, err := client.
 			Organization.
 			Query().
 			Where(
 				organization.IDNEQ(oldOrgID),
+				organization.HasMembersWith(orgmembership.UserID(userID)),
 			).
 			Order(
 				// order by personal orgs last so that if there is another org available it will be set as the default instead of the personal org
