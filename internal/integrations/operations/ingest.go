@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
 	"github.com/theopenlane/core/internal/integrations/providerkit"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/internal/shutdown"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
@@ -235,6 +236,19 @@ func applyPayloadSets(ctx context.Context, ic IngestContext, operationName strin
 			}
 
 			if handleErr := handle(envCtx, record); handleErr != nil {
+				// a write refused because the process is shutting down is not a bad record, and
+				// every remaining record would fail the same way. abort so the job is retried on
+				// the next process rather than recording the whole batch as skipped
+				if shutdown.IsError(handleErr) {
+					logx.FromContext(envCtx).Info().Msg("ingest interrupted by shutdown, job will be retried")
+
+					result.Attempted = attempted
+					result.Failed = failed
+					result.Failures = recordFailures
+
+					return result, fmt.Errorf("%w: %w", ErrIngestInterrupted, handleErr)
+				}
+
 				logx.FromContext(envCtx).Error().Err(handleErr).Msg("ingest persist failed")
 
 				failed++

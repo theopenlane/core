@@ -41,6 +41,9 @@ var (
 	ErrIngestUnsupportedSchema = errors.New("integrations/operations: ingest schema unsupported")
 	// ErrIngestPersistFailed indicates the mapped record could not be persisted
 	ErrIngestPersistFailed = errors.New("integrations/operations: ingest persistence failed")
+	// ErrIngestInterrupted indicates the ingest stopped because the process began shutting down;
+	// nothing is wrong with the data and the job resumes on the next process
+	ErrIngestInterrupted = errors.New("integrations/operations: ingest interrupted by shutdown")
 	// ErrIngestIntegrationUnresolved indicates the integration record could not be resolved for an ingest operation
 	ErrIngestIntegrationUnresolved = errors.New("integrations/operations: ingest integration unresolved")
 	// ErrOperationDisabled indicates the operation is disabled for this installation and the reconcile cycle should stop

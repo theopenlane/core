@@ -29,8 +29,8 @@ import (
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 )
 
-// galaShutdownTimeout is the maximum time to wait for gala workers to stop gracefully.
-const galaShutdownTimeout = 10 * time.Second
+// galaShutdownTimeout is the maximum time to wait for gala workers to stop gracefully
+const galaShutdownTimeout = 30 * time.Second
 
 var serveCmd = &cobra.Command{
 	Use:   "serve",
