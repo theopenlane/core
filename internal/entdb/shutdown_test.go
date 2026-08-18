@@ -12,13 +12,14 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/enttest"
+	"github.com/theopenlane/core/internal/shutdown"
 	"github.com/theopenlane/utils/testutils"
 )
 
 // TestGracefulCloseWaits verifies that GracefulClose waits for in-flight
 // queries before closing the database connection
 func TestGracefulCloseWaits(t *testing.T) {
-	flag := newShutdownFlag()
+	flag := shutdown.New()
 	t.Cleanup(flag.Reset)
 	tf := NewTestFixture()
 	defer testutils.TeardownFixture(tf)
@@ -73,7 +74,7 @@ func TestGracefulCloseWaits(t *testing.T) {
 
 // TestBlockNewQueries verifies that new operations are rejected after shutdown begins
 func TestBlockNewQueries(t *testing.T) {
-	flag := newShutdownFlag()
+	flag := shutdown.New()
 	t.Cleanup(flag.Reset)
 	tf := NewTestFixture()
 	defer testutils.TeardownFixture(tf)
@@ -105,7 +106,7 @@ func TestBlockNewQueries(t *testing.T) {
 
 // TestGracefulCloseContextCancel verifies that GracefulClose returns when the context is canceled
 func TestGracefulCloseContextCancel(t *testing.T) {
-	flag := newShutdownFlag()
+	flag := shutdown.New()
 	t.Cleanup(flag.Reset)
 	tf := NewTestFixture()
 	defer testutils.TeardownFixture(tf)

@@ -11,20 +11,15 @@ import (
 	entsql "entgo.io/ent/dialect/sql"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/shutdown"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/historygenerated"
 	hintercept "github.com/theopenlane/core/internal/ent/historygenerated/intercept"
+	"github.com/theopenlane/core/internal/shutdown"
 )
 
 // ShutdownFlag tracks whether a shutdown is in progress. It lives in the shutdown package so
 // packages this one depends on can check it without an import cycle
 type ShutdownFlag = shutdown.Flag
-
-// newShutdownFlag creates a new instance of ShutdownFlag
-func newShutdownFlag() *ShutdownFlag {
-	return shutdown.New()
-}
 
 // defaultShutdown is the default shutdown flag used throughout the package
 var defaultShutdown = shutdown.Default
