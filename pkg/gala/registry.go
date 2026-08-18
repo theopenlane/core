@@ -20,6 +20,8 @@ type registry struct {
 	topics map[TopicName]topicRegistration
 	// listeners stores registered listeners by topic name
 	listeners map[TopicName][]registeredListener
+	// detached retains listener topics for retryable durable cleanup
+	detached map[ListenerID]TopicName
 }
 
 // topicRegistration stores non-generic topic metadata and payload wrappers
@@ -53,6 +55,7 @@ func newRegistry() *registry {
 	return &registry{
 		topics:    map[TopicName]topicRegistration{},
 		listeners: map[TopicName][]registeredListener{},
+		detached:  map[ListenerID]TopicName{},
 	}
 }
 
@@ -203,6 +206,64 @@ func (r *registry) registeredListeners(topic TopicName) []registeredListener {
 	copy(copied, listeners)
 
 	return copied
+}
+
+// detachListeners removes listeners and retains their topics until cleanup succeeds
+func (r *registry) detachListeners(ids []ListenerID) []TopicName {
+	if len(ids) == 0 {
+		return nil
+	}
+
+	targets := lo.Keyify(lo.Filter(ids, func(id ListenerID, _ int) bool {
+		return id != ""
+	}))
+	if len(targets) == 0 {
+		return nil
+	}
+
+	r.mu.Lock()
+	defer r.mu.Unlock()
+
+	affected := map[TopicName]struct{}{}
+	for id := range targets {
+		if topic, ok := r.detached[id]; ok {
+			affected[topic] = struct{}{}
+		}
+	}
+
+	for topic, listeners := range r.listeners {
+		kept := make([]registeredListener, 0, len(listeners))
+
+		for _, listener := range listeners {
+			if _, remove := targets[listener.id]; !remove {
+				kept = append(kept, listener)
+
+				continue
+			}
+
+			r.detached[listener.id] = topic
+			affected[topic] = struct{}{}
+		}
+
+		if len(kept) == 0 {
+			delete(r.listeners, topic)
+
+			continue
+		}
+
+		r.listeners[topic] = kept
+	}
+
+	return lo.Keys(affected)
+}
+
+func (r *registry) completeListenerRemoval(ids []ListenerID) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+
+	for _, id := range ids {
+		delete(r.detached, id)
+	}
 }
 
 // InterestedIn reports whether any listener is registered for topic+operation

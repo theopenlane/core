@@ -20,7 +20,7 @@ func TestCampaignRecurringListener(t *testing.T) {
 	user := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
 	ctx := setContext(user.UserCtx, suite.client.db)
 
-	setup, err := graphapi.SetupListenerRuntime(ctx, suite.client.db, suite.tf.URI, hooks.CampaignRecurringListeners())
+	setup, err := graphapi.SetupListenerRuntime(suite.galaRuntime, hooks.CampaignRecurringListeners())
 	assert.NilError(t, err)
 	defer setup.Teardown()
 
@@ -95,7 +95,7 @@ func TestCampaignRecurringListener(t *testing.T) {
 
 		assert.NilError(t, suite.client.db.Campaign.UpdateOneID(camp.ID).SetDescription("no schedule fields touched").Exec(ctx))
 
-		setup.Runtime.WaitIdle()
+		waitForGala(t, setup.Runtime)
 
 		next := nextRunAt(t, camp.ID)
 		assert.Assert(t, next != nil)

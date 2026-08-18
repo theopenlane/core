@@ -18,7 +18,7 @@ import (
 func TestIdentityResolution(t *testing.T) {
 	ctx := setContext(sharedTestUser1.UserCtx, suite.client.db)
 
-	irSetup, err := graphapi.SetupListenerRuntime(ctx, suite.client.db, suite.tf.URI, hooks.IdentityResolutionListeners())
+	irSetup, err := graphapi.SetupListenerRuntime(suite.galaRuntime, hooks.IdentityResolutionListeners())
 	assert.NilError(t, err)
 	defer irSetup.Teardown()
 
@@ -42,7 +42,7 @@ func TestIdentityResolution(t *testing.T) {
 			ExternalID:     "1234871001",
 		}).MustNew(ctx, t)
 
-		irSetup.Runtime.WaitIdle()
+		waitForGala(t, irSetup.Runtime)
 
 		linked, err := graphapi.WaitForIdentityHolderLink(ctx, suite.client.db, da.ID)
 		assert.NilError(t, err)
@@ -82,7 +82,7 @@ func TestIdentityResolution(t *testing.T) {
 			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
-		irSetup.Runtime.WaitIdle()
+		waitForGala(t, irSetup.Runtime)
 
 		linked1, err := graphapi.WaitForIdentityHolderLink(ctx, suite.client.db, da1.ID)
 		assert.NilError(t, err)
@@ -102,7 +102,7 @@ func TestIdentityResolution(t *testing.T) {
 			ExternalID:     "1234871001",
 		}).MustNew(ctx, t)
 
-		irSetup.Runtime.WaitIdle()
+		waitForGala(t, irSetup.Runtime)
 
 		linked2, err := graphapi.WaitForIdentityHolderLink(ctx, suite.client.db, da2.ID)
 		assert.NilError(t, err)
@@ -135,7 +135,7 @@ func TestIdentityResolution(t *testing.T) {
 			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
-		irSetup.Runtime.WaitIdle()
+		waitForGala(t, irSetup.Runtime)
 
 		linked1, err := graphapi.WaitForIdentityHolderLink(ctx, suite.client.db, da1.ID)
 		assert.NilError(t, err)
@@ -155,7 +155,7 @@ func TestIdentityResolution(t *testing.T) {
 			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
-		irSetup.Runtime.WaitIdle()
+		waitForGala(t, irSetup.Runtime)
 
 		linked2, err := graphapi.WaitForIdentityHolderLink(ctx, suite.client.db, da2.ID)
 		assert.NilError(t, err)
@@ -185,7 +185,7 @@ func TestIdentityResolution(t *testing.T) {
 			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
-		irSetup.Runtime.WaitIdle()
+		waitForGala(t, irSetup.Runtime)
 
 		linked1, err := graphapi.WaitForIdentityHolderLink(ctx, suite.client.db, da1.ID)
 		assert.NilError(t, err)
@@ -202,7 +202,7 @@ func TestIdentityResolution(t *testing.T) {
 			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
-		irSetup.Runtime.WaitIdle()
+		waitForGala(t, irSetup.Runtime)
 
 		linked2, err := graphapi.WaitForIdentityHolderLink(ctx, suite.client.db, da2.ID)
 		assert.NilError(t, err)
@@ -232,7 +232,7 @@ func TestIdentityResolution(t *testing.T) {
 			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
-		irSetup.Runtime.WaitIdle()
+		waitForGala(t, irSetup.Runtime)
 
 		linked1, err := graphapi.WaitForIdentityHolderLink(ctx, suite.client.db, da1.ID)
 		assert.NilError(t, err)
@@ -257,7 +257,7 @@ func TestIdentityResolution(t *testing.T) {
 			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
-		irSetup.Runtime.WaitIdle()
+		waitForGala(t, irSetup.Runtime)
 
 		linked2, err := graphapi.WaitForIdentityHolderLink(ctx, suite.client.db, da2.ID)
 		assert.NilError(t, err)
@@ -302,7 +302,7 @@ func TestIdentityResolution(t *testing.T) {
 					OwnerID:        sharedTestUser1.OrganizationID,
 				}).MustNew(ctx, t)
 
-				irSetup.Runtime.WaitIdle()
+				waitForGala(t, irSetup.Runtime)
 
 				linked, err := graphapi.WaitForIdentityHolderLink(ctx, suite.client.db, da.ID)
 				assert.NilError(t, err)
@@ -329,7 +329,7 @@ func TestIdentityResolution(t *testing.T) {
 			OwnerID:       sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
-		irSetup.Runtime.WaitIdle()
+		waitForGala(t, irSetup.Runtime)
 
 		account, err := suite.client.db.DirectoryAccount.Get(ctx, da.ID)
 		assert.NilError(t, err)
@@ -353,7 +353,7 @@ func TestIdentityResolution(t *testing.T) {
 			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
-		irSetup.Runtime.WaitIdle()
+		waitForGala(t, irSetup.Runtime)
 
 		linked1, err := graphapi.WaitForIdentityHolderLink(ctx, suite.client.db, da1.ID)
 		assert.NilError(t, err)
@@ -370,13 +370,13 @@ func TestIdentityResolution(t *testing.T) {
 			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
-		irSetup.Runtime.WaitIdle()
+		waitForGala(t, irSetup.Runtime)
 
 		_, err = graphapi.WaitForIdentityHolderLink(ctx, suite.client.db, da2.ID)
 		assert.NilError(t, err)
 
 		// wait for the handler to fully complete (syncEmailAliases runs after identity_holder_id is set)
-		irSetup.Runtime.WaitIdle()
+		waitForGala(t, irSetup.Runtime)
 
 		holder, err := suite.client.db.IdentityHolder.Get(ctx, holderID)
 		assert.NilError(t, err)
@@ -412,7 +412,7 @@ func TestIdentityResolution(t *testing.T) {
 			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
-		irSetup.Runtime.WaitIdle()
+		waitForGala(t, irSetup.Runtime)
 
 		linked1, err := graphapi.WaitForIdentityHolderLink(ctx, suite.client.db, da1.ID)
 		assert.NilError(t, err)
@@ -429,7 +429,7 @@ func TestIdentityResolution(t *testing.T) {
 			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
-		irSetup.Runtime.WaitIdle()
+		waitForGala(t, irSetup.Runtime)
 
 		linked2, err := graphapi.WaitForIdentityHolderLink(ctx, suite.client.db, da2.ID)
 		assert.NilError(t, err)
@@ -464,7 +464,7 @@ func TestIdentityResolution(t *testing.T) {
 			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
-		irSetup.Runtime.WaitIdle()
+		waitForGala(t, irSetup.Runtime)
 
 		linked, err := graphapi.WaitForIdentityHolderLink(ctx, suite.client.db, da.ID)
 		assert.NilError(t, err)
@@ -478,7 +478,7 @@ func TestIdentityResolution(t *testing.T) {
 			Exec(ctx)
 		assert.NilError(t, err)
 
-		irSetup.Runtime.WaitIdle()
+		waitForGala(t, irSetup.Runtime)
 
 		holder, err := suite.client.db.IdentityHolder.Get(ctx, holderID)
 		assert.NilError(t, err)
@@ -501,7 +501,7 @@ func TestIdentityResolution(t *testing.T) {
 			OwnerID:       sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
-		irSetup.Runtime.WaitIdle()
+		waitForGala(t, irSetup.Runtime)
 
 		account, err := suite.client.db.DirectoryAccount.Get(ctx, da.ID)
 		assert.NilError(t, err)
@@ -514,7 +514,7 @@ func TestIdentityResolution(t *testing.T) {
 			Exec(ctx)
 		assert.NilError(t, err)
 
-		irSetup.Runtime.WaitIdle()
+		waitForGala(t, irSetup.Runtime)
 
 		linked, err := graphapi.WaitForIdentityHolderLink(ctx, suite.client.db, da.ID)
 		assert.NilError(t, err)
@@ -547,7 +547,7 @@ func TestIdentityResolution(t *testing.T) {
 			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
-		irSetup.Runtime.WaitIdle()
+		waitForGala(t, irSetup.Runtime)
 
 		linked, err := graphapi.WaitForIdentityHolderLink(ctx, suite.client.db, da.ID)
 		assert.NilError(t, err)
@@ -570,7 +570,7 @@ func TestIdentityResolution(t *testing.T) {
 			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
-		irSetup.Runtime.WaitIdle()
+		waitForGala(t, irSetup.Runtime)
 
 		linked, err := graphapi.WaitForIdentityHolderLink(ctx, suite.client.db, da.ID)
 		assert.NilError(t, err)
@@ -596,7 +596,7 @@ func TestIdentityResolution(t *testing.T) {
 			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
-		irSetup.Runtime.WaitIdle()
+		waitForGala(t, irSetup.Runtime)
 
 		linked, err := graphapi.WaitForIdentityHolderLink(ctx, suite.client.db, da.ID)
 		assert.NilError(t, err)
@@ -624,7 +624,7 @@ func TestIdentityResolution(t *testing.T) {
 			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
-		irSetup.Runtime.WaitIdle()
+		waitForGala(t, irSetup.Runtime)
 
 		linked, err := graphapi.WaitForIdentityHolderLink(ctx, suite.client.db, da.ID)
 		assert.NilError(t, err)
@@ -656,7 +656,7 @@ func TestIdentityResolution(t *testing.T) {
 			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
-		irSetup.Runtime.WaitIdle()
+		waitForGala(t, irSetup.Runtime)
 
 		linked1, err := graphapi.WaitForIdentityHolderLink(ctx, suite.client.db, da1.ID)
 		assert.NilError(t, err)
@@ -673,7 +673,7 @@ func TestIdentityResolution(t *testing.T) {
 			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
-		irSetup.Runtime.WaitIdle()
+		waitForGala(t, irSetup.Runtime)
 
 		linked2, err := graphapi.WaitForIdentityHolderLink(ctx, suite.client.db, da2.ID)
 		assert.NilError(t, err)
@@ -689,7 +689,7 @@ func TestIdentityResolution(t *testing.T) {
 			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
-		irSetup.Runtime.WaitIdle()
+		waitForGala(t, irSetup.Runtime)
 
 		linked3, err := graphapi.WaitForIdentityHolderLink(ctx, suite.client.db, da3.ID)
 		assert.NilError(t, err)
@@ -733,7 +733,7 @@ func TestIdentityResolution(t *testing.T) {
 			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
-		irSetup.Runtime.WaitIdle()
+		waitForGala(t, irSetup.Runtime)
 
 		linked1, err := graphapi.WaitForIdentityHolderLink(ctx, suite.client.db, da1.ID)
 		assert.NilError(t, err)
@@ -751,7 +751,7 @@ func TestIdentityResolution(t *testing.T) {
 			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
-		irSetup.Runtime.WaitIdle()
+		waitForGala(t, irSetup.Runtime)
 
 		linked2, err := graphapi.WaitForIdentityHolderLink(ctx, suite.client.db, da2.ID)
 		assert.NilError(t, err)
@@ -780,7 +780,7 @@ func TestIdentityResolution(t *testing.T) {
 			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
-		irSetup.Runtime.WaitIdle()
+		waitForGala(t, irSetup.Runtime)
 
 		linked3, err := graphapi.WaitForIdentityHolderLink(ctx, suite.client.db, da3.ID)
 		assert.NilError(t, err)
@@ -818,7 +818,7 @@ func TestIdentityResolution(t *testing.T) {
 			OwnerID:        sharedTestUser1.OrganizationID,
 		}).MustNew(ctx, t)
 
-		irSetup.Runtime.WaitIdle()
+		waitForGala(t, irSetup.Runtime)
 
 		linked, err := graphapi.WaitForIdentityHolderLink(ctx, suite.client.db, da.ID)
 		assert.NilError(t, err)

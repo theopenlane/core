@@ -423,9 +423,13 @@ func (suite *HandlerTestSuite) TearDownSuite() {
 	require.NoError(suite.T(), err)
 }
 
-// WaitForEvents blocks until all durable Gala dispatch jobs have completed
+// WaitForEvents blocks until runnable and in-flight Gala jobs complete
 func (suite *HandlerTestSuite) WaitForEvents() {
-	suite.galaRuntime.WaitIdle()
+	require.NoError(suite.T(), suite.galaRuntime.WaitIdle(suite.T().Context()))
+}
+
+func (suite *HandlerTestSuite) waitForGala(runtime *gala.Gala) {
+	suite.Require().NoError(runtime.WaitIdle(suite.T().Context()))
 }
 
 func setupRouter() *route.Router {

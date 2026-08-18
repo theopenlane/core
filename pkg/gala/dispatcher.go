@@ -42,6 +42,13 @@ type riverInsertClient interface {
 	Insert(context.Context, river.JobArgs, *river.InsertOpts) (*rivertype.JobInsertResult, error)
 }
 
+// riverJobController manages durable jobs after insertion
+type riverJobController interface {
+	JobList(context.Context, *river.JobListParams) (*river.JobListResult, error)
+	JobCancel(context.Context, int64) (*rivertype.JobRow, error)
+	JobDelete(context.Context, int64) (*rivertype.JobRow, error)
+}
+
 // dispatchResult reports whether River inserted a new row or returned the row
 // already holding the unique key
 type dispatchResult struct {

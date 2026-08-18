@@ -54,6 +54,8 @@ var (
 	ErrRiverEnvelopeDecodeFailed = errors.New("gala: river envelope decode failed")
 	// ErrRiverDispatchInsertFailed is returned when inserting a durable river dispatch job fails
 	ErrRiverDispatchInsertFailed = errors.New("gala: river dispatch insert failed")
+	// ErrRiverListenerCleanupFailed is returned when detached-listener jobs cannot be purged
+	ErrRiverListenerCleanupFailed = errors.New("gala: river listener cleanup failed")
 	// ErrRiverConnectionURIRequired is returned when river runtime setup is missing a connection URI
 	ErrRiverConnectionURIRequired = errors.New("gala: river connection URI is required")
 	// ErrRiverClientInitializationFailed is returned when building the river queue client fails

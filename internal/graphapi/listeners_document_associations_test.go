@@ -53,7 +53,7 @@ func TestDocumentAssociationListeners(t *testing.T) {
 	docUser := suite.userBuilder(context.Background(), t)
 	ctx := setContext(docUser.UserCtx, suite.client.db)
 
-	setup, err := graphapi.SetupListenerRuntime(ctx, suite.client.db, suite.tf.URI, hooks.DocumentAssociationListeners())
+	setup, err := graphapi.SetupListenerRuntime(suite.galaRuntime, hooks.DocumentAssociationListeners())
 	assert.NilError(t, err)
 	defer setup.Teardown()
 
@@ -161,7 +161,7 @@ func TestDocumentAssociationListeners(t *testing.T) {
 
 		policyID := resp.CreateInternalPolicy.InternalPolicy.ID
 
-		setup.Runtime.WaitIdle()
+		waitForGala(t, setup.Runtime)
 
 		policy, err := suite.client.db.InternalPolicy.Get(ctx, policyID)
 		assert.NilError(t, err)

@@ -99,15 +99,15 @@ func (r *Runtime) ResetReconcileLoops(ctx context.Context, installation *ent.Int
 		}
 
 		if count > 1 {
-			cancelled, err := r.Gala().CancelActiveJobsWithMetadata(opCtx, fragment)
+			purged, err := r.Gala().PurgeActiveJobsWithMetadata(opCtx, fragment)
 			if err != nil {
-				logx.FromContext(opCtx).Error().Err(err).Msg("failed cancelling duplicate reconcile jobs")
+				logx.FromContext(opCtx).Error().Err(err).Msg("failed purging duplicate reconcile jobs")
 				errs = append(errs, err)
 
 				continue
 			}
 
-			logx.FromContext(opCtx).Info().Int("cancelled", cancelled).Msg("cancelled duplicate reconcile jobs")
+			logx.FromContext(opCtx).Info().Int("purged", purged).Msg("purged duplicate reconcile jobs")
 		}
 
 		if err := r.emitReconcileLoop(opCtx, installation, op.Name); err != nil {

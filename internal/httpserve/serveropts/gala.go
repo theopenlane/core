@@ -60,7 +60,7 @@ func NewGalaRuntimes(ctx context.Context, so *ServerOptions) (*gala.Gala, *gala.
 
 // ConfigureGala wires the gala runtimes to the database client and registers all listeners;
 // it must be called after the database client is created
-func ConfigureGala(galaApp, notificationGala *gala.Gala, dbClient *ent.Client, so *ServerOptions) error {
+func ConfigureGala(galaApp, notificationGala *gala.Gala, dbClient *ent.Client) error {
 	if galaApp == nil {
 		return nil
 	}
@@ -127,7 +127,7 @@ func ConfigureGala(galaApp, notificationGala *gala.Gala, dbClient *ent.Client, s
 
 // StartGalaWorkers begins job processing on the durable gala runtime; call it only after all
 // injector provisioning completes so a dequeued job never resolves a missing dependency
-func StartGalaWorkers(ctx context.Context, galaApp *gala.Gala, so *ServerOptions) error {
+func StartGalaWorkers(ctx context.Context, galaApp *gala.Gala) error {
 	if galaApp == nil {
 		return nil
 	}

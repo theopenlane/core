@@ -189,11 +189,12 @@ func mapEntityInput(ctx context.Context, client *entgen.Client, req questionnair
 	for _, mapping := range req.Config.Mappings {
 		rawValue, ok := mapx.ValueAtPath(req.Data, mapping.From)
 		if !ok || isEmptyValue(rawValue) {
-			if mapping.Resolver == models.TemplateProjectionResolverInternalOwner && req.Email != "" {
+			switch {
+			case mapping.Resolver == models.TemplateProjectionResolverInternalOwner && req.Email != "":
 				rawValue = req.Email
-			} else if mapping.Required {
+			case mapping.Required:
 				return entgen.CreateEntityInput{}, "", fmt.Errorf("%w: missing required field %q", ErrQuestionnaireTransformInvalid, mapping.From)
-			} else {
+			default:
 				continue
 			}
 		}

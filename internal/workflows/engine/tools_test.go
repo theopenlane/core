@@ -329,9 +329,9 @@ func (s *WorkflowEngineTestSuite) requireWorkflowSetup(cfg *workflows.Config, ru
 	s.Require().True(ok, "workflow eligible fields missing control.reference_id")
 }
 
-// WaitForEvents blocks until all durable Gala dispatch jobs have completed
+// WaitForEvents blocks until runnable and in-flight Gala jobs complete
 func (s *WorkflowEngineTestSuite) WaitForEvents() {
-	s.galaRuntime.WaitIdle()
+	s.Require().NoError(s.galaRuntime.WaitIdle(s.T().Context()))
 }
 
 // SetupSystemAdmin creates a system admin user and returns user ID, org ID, and admin context

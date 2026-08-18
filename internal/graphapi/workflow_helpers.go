@@ -3,35 +3,20 @@ package graphapi
 import (
 	"context"
 	"errors"
-	"fmt"
-	"sync/atomic"
 	"time"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
-	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/workflows/engine"
-	"github.com/theopenlane/core/pkg/gala"
 )
-
-// ErrConnectionURIRequired is returned when SetupWorkflowEngine is called without a connection URI
-var ErrConnectionURIRequired = errors.New("connection URI is required for durable workflow dispatch")
 
 const (
 	defaultPollInterval = 50 * time.Millisecond
 	defaultPollTimeout  = 5 * time.Second
-	defaultWorkerCount  = 5
-	defaultFetchPoll    = 10 * time.Millisecond
 )
 
-var (
-	// workflowTestQueueSeq generates unique queue names per setup to isolate River workers
-	workflowTestQueueSeq           atomic.Uint64
-	ErrTimedOutWaitingForCondition = errors.New("timed out waiting for condition")
-	ErrClientRequired              = errors.New("client is required")
-)
+var ErrTimedOutWaitingForCondition = errors.New("timed out waiting for condition")
 
 // pollUntil executes query repeatedly until condition returns true or timeout expires.
 // Returns the latest query result and a timeout error when the condition is not satisfied in time.
@@ -68,84 +53,6 @@ func pollUntil[T any](ctx context.Context, timeout time.Duration, query func() (
 	}
 
 	return result, ErrTimedOutWaitingForCondition
-}
-
-// WorkflowTestSetup contains the workflow engine and gala runtime for tests.
-type WorkflowTestSetup struct {
-	Engine  *engine.WorkflowEngine
-	Runtime *gala.Gala
-}
-
-// Teardown stops workflow runtime workers and releases connections.
-// Call this via defer after SetupWorkflowEngine.
-func (s *WorkflowTestSetup) Teardown() {
-	if s == nil || s.Runtime == nil {
-		return
-	}
-
-	_ = s.Runtime.StopWorkers(context.Background())
-	_ = s.Runtime.Close()
-}
-
-// SetupWorkflowEngine creates a workflow engine with a durable Gala runtime for integration tests.
-// Each call creates a fresh runtime with its own River queue, so connections are never stale.
-// The EmitGalaEventHook is additive on the shared client; previous hooks referencing closed
-// runtimes fail silently (errors are logged, not returned). Call Teardown on the returned
-// setup when the test completes.
-func SetupWorkflowEngine(ctx context.Context, client *generated.Client, connectionURI string) (*WorkflowTestSetup, error) {
-	if client == nil {
-		return nil, ErrClientRequired
-	}
-
-	if connectionURI == "" {
-		return nil, ErrConnectionURIRequired
-	}
-
-	queueName := fmt.Sprintf("workflow_test_%d", workflowTestQueueSeq.Add(1))
-
-	runtime, err := gala.NewGala(ctx, gala.Config{
-		DispatchMode:      gala.DispatchModeDurable,
-		ConnectionURI:     connectionURI,
-		QueueName:         queueName,
-		WorkerCount:       defaultWorkerCount,
-		RunMigrations:     true,
-		FetchCooldown:     time.Millisecond,
-		FetchPollInterval: defaultFetchPoll,
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	client.Use(hooks.EmitGalaEventHook(runtime))
-
-	if _, err := gala.Register(runtime, hooks.WorkflowListeners()...); err != nil {
-		return nil, err
-	}
-
-	wfEngine, err := engine.NewWorkflowEngine(client, runtime)
-	if err != nil {
-		return nil, err
-	}
-
-	if err := runtime.Attach(
-		gala.WithValue(runtime),
-		gala.WithValue(client),
-		gala.WithValue(wfEngine),
-		gala.WithRestoredValue("ent_client", generated.NewContext),
-	); err != nil {
-		return nil, err
-	}
-
-	if err := runtime.StartWorkers(ctx); err != nil {
-		return nil, err
-	}
-
-	client.WorkflowEngine = wfEngine
-
-	return &WorkflowTestSetup{
-		Engine:  wfEngine,
-		Runtime: runtime,
-	}, nil
 }
 
 // workflowsEnabled reports whether workflows are enabled for this resolver

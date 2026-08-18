@@ -39,7 +39,7 @@ func OrganizationCleanupListeners() []gala.Registration {
 // handleOrganizationCascadeDelete removes everything an organization owns once it is deleted.
 // The records are hard deleted and their history rows purged along with files stored in object storage
 func handleOrganizationCascadeDelete(inv entityops.Invocation, _ entityops.MutationPayload) error {
-	cancelOrganizationIntegrationJobs(inv)
+	purgeOrganizationIntegrationJobs(inv)
 
 	if err := organizationEdgeCleanup(inv.Context, inv.EntityID); err != nil {
 		logx.FromContext(inv.Context).Error().Err(err).Msg("failed to cascade delete organization edges")

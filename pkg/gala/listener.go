@@ -139,7 +139,7 @@ func Register(g *Gala, registrations ...Registration) ([]ListenerID, error) {
 	for _, registration := range registrations {
 		id, err := registration.Attach(g)
 		if err != nil {
-			return nil, err
+			return ids, err
 		}
 
 		// scheduled definitions skip on in-memory pools and return no id

@@ -28,7 +28,7 @@ func TestVendorScoringConfigListenerRecompute(t *testing.T) {
 	scoringUser := suite.userBuilder(context.Background(), t)
 	ctx := setContext(scoringUser.UserCtx, suite.client.db)
 
-	setup, err := graphapi.SetupListenerRuntime(ctx, suite.client.db, suite.tf.URI, hooks.VendorScoringListeners())
+	setup, err := graphapi.SetupListenerRuntime(suite.galaRuntime, hooks.VendorScoringListeners())
 	assert.NilError(t, err)
 	defer setup.Teardown()
 
@@ -84,7 +84,7 @@ func TestVendorScoringConfigListenerRecompute(t *testing.T) {
 		})
 		assert.NilError(t, err)
 
-		setup.Runtime.WaitIdle()
+		waitForGala(t, setup.Runtime)
 
 		unchanged, err := suite.client.db.Entity.Get(ctx, entity.ID)
 		assert.NilError(t, err)

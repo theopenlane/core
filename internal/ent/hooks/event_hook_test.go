@@ -57,6 +57,14 @@ func TestAnyRuntimeInterestedMatchesConcernTopics(t *testing.T) {
 	}
 }
 
+func waitRuntimeIdle(t *testing.T, runtime *gala.Gala) {
+	t.Helper()
+
+	if err := runtime.WaitIdle(t.Context()); err != nil {
+		t.Fatalf("failed waiting for Gala runtime: %v", err)
+	}
+}
+
 func TestMutationConcernTopics(t *testing.T) {
 	topics := entityops.MutationConcernTopics(entgen.TypeTask)
 
@@ -232,7 +240,7 @@ func TestEmitGalaEventHookDirectSoftDeleteEmitsOnce(t *testing.T) {
 	runtime, recorder := newRecordingRuntime(t, entgen.TypeTask)
 
 	mutateSoftDelete(t, EmitGalaEventHook(runtime), &fakeMutation{op: ent.OpDeleteOne, typ: entgen.TypeTask, id: "task-1"}, false)
-	runtime.WaitIdle()
+	waitRuntimeIdle(t, runtime)
 
 	events := recorder.recorded()
 	if len(events) != 1 {
@@ -256,7 +264,7 @@ func TestEmitGalaEventHookOuterSkipSuppressesSoftDeleteEmission(t *testing.T) {
 	runtime, recorder := newRecordingRuntime(t, entgen.TypeTask)
 
 	mutateSoftDelete(t, EmitGalaEventHook(runtime), &fakeMutation{op: ent.OpDeleteOne, typ: entgen.TypeTask, id: "task-1"}, true)
-	runtime.WaitIdle()
+	waitRuntimeIdle(t, runtime)
 
 	if events := recorder.recorded(); len(events) != 0 {
 		t.Fatalf("expected no emissions after outer skip, got %d", len(events))
@@ -274,7 +282,7 @@ func TestEmitGalaEventHookHardDeleteEmits(t *testing.T) {
 		t.Fatalf("mutate failed: %v", err)
 	}
 
-	runtime.WaitIdle()
+	waitRuntimeIdle(t, runtime)
 
 	events := recorder.recorded()
 	if len(events) != 1 {
@@ -306,7 +314,7 @@ func TestEmitGalaEventHookVetoedCascadeDeleteEmitsNothing(t *testing.T) {
 		t.Fatalf("mutate failed: %v", err)
 	}
 
-	runtime.WaitIdle()
+	waitRuntimeIdle(t, runtime)
 
 	if events := recorder.recorded(); len(events) != 0 {
 		t.Fatalf("expected no emissions for a vetoed cascade delete, got %d", len(events))
@@ -324,7 +332,7 @@ func TestEmitGalaEventHookBulkUpdateEmitsPerRow(t *testing.T) {
 		t.Fatalf("mutate failed: %v", err)
 	}
 
-	runtime.WaitIdle()
+	waitRuntimeIdle(t, runtime)
 
 	events := recorder.recorded()
 	if len(events) != 2 {
@@ -365,7 +373,7 @@ func TestEmitGalaEventHookUpdateNeverClassifiesSoftDelete(t *testing.T) {
 		}
 	}
 
-	runtime.WaitIdle()
+	waitRuntimeIdle(t, runtime)
 
 	events := recorder.recorded()
 	if len(events) != len(contexts) {

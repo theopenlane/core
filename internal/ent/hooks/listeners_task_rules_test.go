@@ -33,7 +33,7 @@ func (suite *HookTestSuite) TestTaskRuleListenersCreateSuggestedTasks() {
 	}).Save(ctx)
 	require.NoError(t, err)
 
-	suite.galaRuntime.WaitIdle()
+	suite.waitForEvents()
 
 	tasks, err := suite.client.Task.Query().Where(task.OwnerIDEQ(onboarding.OrganizationID)).All(ctx)
 	require.NoError(t, err)
@@ -89,7 +89,7 @@ func (suite *HookTestSuite) TestTaskRuleListenersNotificationTaskOwnerAttributio
 		Save(scanSystemCtx)
 	require.NoError(t, err)
 
-	suite.galaRuntime.WaitIdle()
+	suite.waitForEvents()
 
 	bypassCtx := generated.NewContext(scanSystemCtx, suite.client)
 
@@ -140,7 +140,7 @@ func (suite *HookTestSuite) TestTaskRuleListenersFrameworkLinkIncludesAuditorPar
 	}).Save(ctx)
 	require.NoError(t, err)
 
-	suite.galaRuntime.WaitIdle()
+	suite.waitForEvents()
 
 	tasks, err := suite.client.Task.Query().Where(task.OwnerIDEQ(onboarding.OrganizationID)).All(ctx)
 	require.NoError(t, err)

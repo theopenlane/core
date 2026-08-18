@@ -100,6 +100,102 @@ func testCallerSnapshot(t *testing.T, runtime *Gala) ContextSnapshot {
 	return snapshot
 }
 
+func TestReplaceValueRestoresRuntimeDependency(t *testing.T) {
+	runtime := newTestGala(t, nil)
+	original := &runtimeTestFormatter{Prefix: "original"}
+	replacement := &runtimeTestFormatter{Prefix: "replacement"}
+
+	if err := runtime.Attach(WithValue(original)); err != nil {
+		t.Fatalf("failed to attach original dependency: %v", err)
+	}
+
+	restore, err := ReplaceValue(runtime, replacement)
+	if err != nil {
+		t.Fatalf("failed to replace dependency: %v", err)
+	}
+	if got := do.MustInvoke[*runtimeTestFormatter](runtime.injector); got != replacement {
+		t.Fatal("expected replacement dependency to resolve")
+	}
+
+	restore()
+	restore()
+
+	if got := do.MustInvoke[*runtimeTestFormatter](runtime.injector); got != original {
+		t.Fatal("expected original dependency to be restored")
+	}
+}
+
+func TestWaitIdleIgnoresFutureRetryableJobs(t *testing.T) {
+	runtime := newTestGala(t, nil)
+	runtime.jobController = &listenerRemovalJobController{jobs: map[int64]*rivertype.JobRow{
+		1: {
+			ID:          1,
+			State:       rivertype.JobStateRetryable,
+			ScheduledAt: time.Now().Add(time.Hour),
+		},
+		2: {
+			ID:          2,
+			State:       rivertype.JobStateScheduled,
+			ScheduledAt: time.Now().Add(time.Hour),
+		},
+	}}
+
+	ctx, cancel := context.WithTimeout(t.Context(), time.Second)
+	defer cancel()
+
+	if err := runtime.WaitIdle(ctx); err != nil {
+		t.Fatalf("future retryable job should not block idle: %v", err)
+	}
+}
+
+func TestWaitIdleWaitsForDueRetryableJobs(t *testing.T) {
+	runtime := newTestGala(t, nil)
+	runtime.jobController = &listenerRemovalJobController{jobs: map[int64]*rivertype.JobRow{
+		1: {
+			ID:          1,
+			State:       rivertype.JobStateRetryable,
+			ScheduledAt: time.Now().Add(-time.Second),
+		},
+	}}
+
+	ctx, cancel := context.WithTimeout(t.Context(), 20*time.Millisecond)
+	defer cancel()
+
+	if err := runtime.WaitIdle(ctx); !errors.Is(err, context.DeadlineExceeded) {
+		t.Fatalf("expected due retryable job to block until the deadline, got %v", err)
+	}
+}
+
+func TestWaitIdleReturnsRiverQueryError(t *testing.T) {
+	wantErr := errors.New("river list failed")
+	runtime := newTestGala(t, nil)
+	runtime.jobController = &listenerRemovalJobController{
+		jobs:    map[int64]*rivertype.JobRow{},
+		listErr: wantErr,
+	}
+
+	if err := runtime.WaitIdle(t.Context()); !errors.Is(err, wantErr) {
+		t.Fatalf("expected River query error, got %v", err)
+	}
+}
+
+func TestWaitIdleReturnsContextError(t *testing.T) {
+	runtime := newTestGala(t, nil)
+	runtime.jobController = &listenerRemovalJobController{jobs: map[int64]*rivertype.JobRow{
+		1: {
+			ID:    1,
+			State: rivertype.JobStateRunning,
+		},
+	}}
+
+	ctx, cancel := context.WithTimeout(t.Context(), 20*time.Millisecond)
+	defer cancel()
+
+	if err := runtime.WaitIdle(ctx); !errors.Is(err, context.DeadlineExceeded) {
+		t.Fatalf("expected context deadline error, got %v", err)
+	}
+}
+
 // TestRuntimeDispatchEnvelopeWithDependencyInjectionAndContextRehydration verifies
 // that handlers can resolve dependencies from samber/do and receive rehydrated context.
 func TestRuntimeDispatchEnvelopeWithDependencyInjectionAndContextRehydration(t *testing.T) {

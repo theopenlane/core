@@ -3,7 +3,6 @@
 package graphapi_test
 
 import (
-	"context"
 	"fmt"
 	"strings"
 	"testing"
@@ -26,7 +25,7 @@ func TestSubscriberLinkListener(t *testing.T) {
 	ownerCtx := org.owner.UserCtx
 	allowCtx := setContext(ownerCtx, suite.client.db)
 
-	setup, err := graphapi.SetupListenerRuntime(context.Background(), suite.client.db, suite.tf.URI, hooks.SubscriberLinkListeners())
+	setup, err := graphapi.SetupListenerRuntime(suite.galaRuntime, hooks.SubscriberLinkListeners())
 	assert.NilError(t, err)
 	defer setup.Teardown()
 
@@ -45,7 +44,7 @@ func TestSubscriberLinkListener(t *testing.T) {
 
 		sub := (&SubscriberBuilder{client: suite.client, Email: strings.ToUpper(email)}).MustNew(ownerCtx, t)
 
-		setup.Runtime.WaitIdle()
+		waitForGala(t, setup.Runtime)
 
 		waitForCondition(t, func() bool {
 			return reload(t, sub.ID).ContactID == linked.ID
@@ -57,7 +56,7 @@ func TestSubscriberLinkListener(t *testing.T) {
 	t.Run("links matching org member user", func(t *testing.T) {
 		sub := (&SubscriberBuilder{client: suite.client, Email: org.member.UserInfo.Email}).MustNew(ownerCtx, t)
 
-		setup.Runtime.WaitIdle()
+		waitForGala(t, setup.Runtime)
 
 		waitForCondition(t, func() bool {
 			return reload(t, sub.ID).UserID == org.member.ID
@@ -72,7 +71,7 @@ func TestSubscriberLinkListener(t *testing.T) {
 
 		sub := (&SubscriberBuilder{client: suite.client, Email: adminEmail}).MustNew(ownerCtx, t)
 
-		setup.Runtime.WaitIdle()
+		waitForGala(t, setup.Runtime)
 
 		waitForCondition(t, func() bool {
 			s := reload(t, sub.ID)
@@ -92,7 +91,7 @@ func TestSubscriberLinkListener(t *testing.T) {
 		sentinelContact := (&ContactBuilder{client: suite.client, Email: sentinelEmail}).MustNew(ownerCtx, t)
 		sentinel := (&SubscriberBuilder{client: suite.client, Email: sentinelEmail}).MustNew(ownerCtx, t)
 
-		setup.Runtime.WaitIdle()
+		waitForGala(t, setup.Runtime)
 
 		waitForCondition(t, func() bool {
 			return reload(t, sentinel.ID).ContactID == sentinelContact.ID

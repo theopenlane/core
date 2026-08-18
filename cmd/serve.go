@@ -206,7 +206,7 @@ func serve(ctx context.Context) error {
 		return err
 	}
 
-	if err := serveropts.ConfigureGala(galaApp, notifGala, dbClient, so); err != nil {
+	if err := serveropts.ConfigureGala(galaApp, notifGala, dbClient); err != nil {
 		return err
 	}
 
@@ -301,7 +301,7 @@ func serve(ctx context.Context) error {
 
 	// start workers only after all injector provisioning above so a dequeued job never
 	// resolves a missing dependency; earlier emissions wait in River
-	if err := serveropts.StartGalaWorkers(ctx, galaApp, so); err != nil {
+	if err := serveropts.StartGalaWorkers(ctx, galaApp); err != nil {
 		return err
 	}
 

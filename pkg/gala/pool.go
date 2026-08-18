@@ -88,34 +88,50 @@ func (p *Pool) SubmitMultipleAndWait(tasks []func()) error {
 	return group.Wait()
 }
 
-// WaitIdle blocks until the pool has no running workers and no waiting tasks.
-// Handles cascading dispatches by requiring two consecutive idle observations.
-func (p *Pool) WaitIdle() {
+// WaitIdle blocks until stable idleness or context cancellation
+func (p *Pool) WaitIdle(ctx context.Context) error {
 	if p == nil {
-		return
+		return nil
 	}
 
-	waitStable(context.Background(), func() bool {
-		return p.pool.RunningWorkers() == 0 && p.pool.WaitingTasks() == 0
+	return waitStable(ctx, func() (bool, error) {
+		return p.pool.RunningWorkers() == 0 && p.pool.WaitingTasks() == 0, nil
 	}, waitIdlePollInterval, waitIdleThreshold)
 }
 
-// waitStable blocks until isIdle holds for threshold consecutive polls or the context ends
-func waitStable(ctx context.Context, isIdle func() bool, interval time.Duration, threshold int) {
+func waitStable(ctx context.Context, isIdle func() (bool, error), interval time.Duration, threshold int) error {
 	idleCount := 0
 	for idleCount < threshold {
-		if ctx.Err() != nil {
-			return
+		if err := ctx.Err(); err != nil {
+			return err
 		}
 
-		if isIdle() {
+		idle, err := isIdle()
+		if err != nil {
+			return err
+		}
+
+		if idle {
 			idleCount++
 		} else {
 			idleCount = 0
 		}
 
-		time.Sleep(interval)
+		if idleCount >= threshold {
+			return nil
+		}
+
+		timer := time.NewTimer(interval)
+		select {
+		case <-ctx.Done():
+			timer.Stop()
+
+			return ctx.Err()
+		case <-timer.C:
+		}
 	}
+
+	return nil
 }
 
 // Release stops workers and waits for completion

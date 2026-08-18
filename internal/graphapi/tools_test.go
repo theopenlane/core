@@ -60,6 +60,7 @@ import (
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/internal/objects/validators"
 	coreutils "github.com/theopenlane/core/internal/testutils"
+	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/entitlements/mocks"
 	"github.com/theopenlane/core/pkg/gala"
@@ -96,13 +97,17 @@ const (
 
 // GraphTestSuite handles the setup and teardown between tests
 type GraphTestSuite struct {
-	client             *client
-	tf                 *testutils.TestFixture
-	ofgaTF             *fgatest.OpenFGATestFixture
-	stripeMockBackend  *mocks.MockStripeBackend
-	cacheRefreshServer *httptest.Server
-	galaRuntime        *gala.Gala
-	integrationsRT     *intruntime.Runtime
+	client               *client
+	tf                   *testutils.TestFixture
+	ofgaTF               *fgatest.OpenFGATestFixture
+	stripeMockBackend    *mocks.MockStripeBackend
+	cacheRefreshServer   *httptest.Server
+	galaRuntime          *gala.Gala
+	integrationsRT       *intruntime.Runtime
+	workflowEngine       *engine.WorkflowEngine
+	workflowListenersMu  sync.Mutex
+	workflowListenerRefs int
+	workflowListenerIDs  []gala.ListenerID
 }
 
 // client contains all the clients the test need to interact with
@@ -346,9 +351,14 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 
 	db.Use(hooks.EmitGalaEventHook(galaInstance))
 
+	wfEngine, err := engine.NewWorkflowEngine(c.db, galaInstance)
+	requireNoError(t, err)
+
 	requireNoError(t, galaInstance.Attach(
+		gala.WithValue(galaInstance),
 		gala.WithValue(c.db),
 		gala.WithValue(entitlements),
+		gala.WithValue(wfEngine),
 		// without the restored ent client every durable mutation listener fails
 		gala.WithRestoredValue("ent_client", ent.NewContext),
 	))
@@ -364,10 +374,6 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 
 	_, err = gala.Register(galaInstance, hooks.IntegrationCleanupListeners()...)
 	requireNoError(t, err)
-
-	requireNoError(t, galaInstance.StartWorkers(ctx))
-
-	suite.galaRuntime = galaInstance
 
 	// wire integration runtime with mock email provider
 	credStore, err := keystore.NewStore(c.db)
@@ -391,6 +397,13 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 
 	// cleanup/reseed listeners resolve the runtime from the gala injector as in production
 	requireNoError(t, galaInstance.Attach(gala.WithValue(rt)))
+	requireNoError(t, wfEngine.SetIntegrationDeps(engine.IntegrationDeps{Runtime: rt}))
+
+	// Start workers after attaching all shared dependencies
+	requireNoError(t, galaInstance.StartWorkers(ctx))
+
+	suite.galaRuntime = galaInstance
+	suite.workflowEngine = wfEngine
 
 	// Set trust center config for hooks
 	hooks.SetTrustCenterConfig(hooks.TrustCenterConfig{
@@ -428,9 +441,69 @@ func (suite *GraphTestSuite) TearDownSuite(t *testing.T) {
 	}
 }
 
-// WaitForEvents blocks until all durable Gala dispatch jobs have completed
+// acquireWorkflowRuntime shares one workflow listener registration across parallel tests
+func (suite *GraphTestSuite) acquireWorkflowRuntime(t *testing.T) (*engine.WorkflowEngine, *gala.Gala) {
+	t.Helper()
+
+	suite.workflowListenersMu.Lock()
+	if suite.workflowListenerRefs == 0 {
+		listenerIDs, err := gala.Register(suite.galaRuntime, hooks.WorkflowListeners()...)
+		if err != nil {
+			suite.workflowListenersMu.Unlock()
+			requireNoError(t, err)
+
+			return nil, nil
+		}
+
+		suite.workflowListenerIDs = listenerIDs
+	}
+
+	suite.workflowListenerRefs++
+	workflowEngine := suite.workflowEngine
+	runtime := suite.galaRuntime
+	suite.workflowListenersMu.Unlock()
+
+	t.Cleanup(func() {
+		suite.releaseWorkflowRuntime(t)
+	})
+
+	return workflowEngine, runtime
+}
+
+// releaseWorkflowRuntime removes workflow listeners after the last borrowing test
+func (suite *GraphTestSuite) releaseWorkflowRuntime(t *testing.T) {
+	t.Helper()
+
+	suite.workflowListenersMu.Lock()
+	defer suite.workflowListenersMu.Unlock()
+
+	if suite.workflowListenerRefs == 0 {
+		return
+	}
+
+	suite.workflowListenerRefs--
+	if suite.workflowListenerRefs > 0 {
+		return
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), gala.DefaultSoftStopTimeout)
+	defer cancel()
+
+	err := suite.galaRuntime.RemoveListeners(ctx, suite.workflowListenerIDs...)
+	requireNoError(t, err)
+	suite.workflowListenerIDs = nil
+}
+
+// WaitForEvents blocks until runnable and in-flight Gala jobs complete
 func (suite *GraphTestSuite) WaitForEvents() {
-	suite.galaRuntime.WaitIdle()
+	if err := suite.galaRuntime.WaitIdle(context.Background()); err != nil {
+		panic(err)
+	}
+}
+
+func waitForGala(t *testing.T, runtime *gala.Gala) {
+	t.Helper()
+	assert.NilError(t, runtime.WaitIdle(t.Context()))
 }
 
 // mockEmailSender extracts the mock email sender from the integration runtime

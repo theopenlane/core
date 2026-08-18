@@ -63,7 +63,9 @@ func TestDispatchTimeTopicRenameFallback(t *testing.T) {
 		t.Fatalf("failed to start workers: %v", err)
 	}
 
-	upgraded.WaitIdle()
+	if err := upgraded.WaitIdle(t.Context()); err != nil {
+		t.Fatalf("failed waiting for upgraded runtime: %v", err)
+	}
 
 	if got := delivered.Load(); got != 1 {
 		t.Fatalf("expected the renamed envelope delivered once, got %d", got)

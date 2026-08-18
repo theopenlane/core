@@ -1,7 +1,6 @@
 package hooks
 
 import (
-	"net/http"
 	"time"
 
 	"github.com/theopenlane/core/internal/ent/entityops"
@@ -15,24 +14,43 @@ import (
 	"github.com/theopenlane/httpsling/httpclient"
 )
 
-const avatarFetchTimeout = 1 * time.Minute
+const avatarFetchTimeout = 5 * time.Second
 
-var avatarDiscoveryClient = &http.Client{
-	Timeout: avatarFetchTimeout,
+// OrganizationAvatarListenerOption customizes avatar discovery
+type OrganizationAvatarListenerOption func(*organizationAvatarListenerConfig)
+
+type organizationAvatarListenerConfig struct {
+	requester *httpsling.Requester
+}
+
+// WithOrganizationAvatarRequester sets the avatar discovery requester
+func WithOrganizationAvatarRequester(requester *httpsling.Requester) OrganizationAvatarListenerOption {
+	return func(config *organizationAvatarListenerConfig) {
+		if requester != nil {
+			config.requester = requester
+		}
+	}
 }
 
 // OrganizationAvatarListeners discovers an avatar from the organization's domains after creation
-func OrganizationAvatarListeners() []gala.Registration {
+func OrganizationAvatarListeners(opts ...OrganizationAvatarListenerOption) []gala.Registration {
+	config := &organizationAvatarListenerConfig{}
+	for _, opt := range opts {
+		opt(config)
+	}
+
 	return []gala.Registration{entityops.MutationListener{
 		Schema:     entityops.SchemaOrganization,
 		Operations: []string{entityops.OpCreate},
 		Caller:     internalOperationBypassCaller,
-		Handle:     handleOrganizationAvatarCreated,
+		Handle: func(inv entityops.Invocation, payload entityops.MutationPayload) error {
+			return handleOrganizationAvatarCreated(inv, payload, config.requester)
+		},
 	}}
 }
 
 // handleOrganizationAvatarCreated fetches icons from the domain name instead and sets it as the remote logo url
-func handleOrganizationAvatarCreated(inv entityops.Invocation, _ entityops.MutationPayload) error {
+func handleOrganizationAvatarCreated(inv entityops.Invocation, _ entityops.MutationPayload, requester *httpsling.Requester) error {
 	org, err := inv.Client.Organization.Query().
 		Where(organization.IDEQ(inv.EntityID)).
 		WithSetting().
@@ -50,9 +68,11 @@ func handleOrganizationAvatarCreated(inv entityops.Invocation, _ entityops.Mutat
 		return nil
 	}
 
-	requester, err := urlx.NewRequester(httpsling.Client(httpclient.Timeout(avatarFetchTimeout)))
-	if err != nil {
-		return err
+	if requester == nil {
+		requester, err = urlx.NewRequester(httpsling.Client(httpclient.Timeout(avatarFetchTimeout)))
+		if err != nil {
+			return err
+		}
 	}
 
 	avatarURL, err := favicon.Discover(inv.Context, requester, setting.Domains)

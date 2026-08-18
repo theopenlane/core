@@ -54,7 +54,7 @@ func TestTrustCenterWatermarkListeners(t *testing.T) {
 		ObjectType: "trust_center_doc",
 	}).MustNew(tcOrg.owner.UserCtx, t)
 
-	setup, err := graphapi.SetupListenerRuntime(ctx, suite.client.db, suite.tf.URI, hooks.TrustCenterWatermarkListeners())
+	setup, err := graphapi.SetupListenerRuntime(suite.galaRuntime, hooks.TrustCenterWatermarkListeners())
 	assert.NilError(t, err)
 	t.Cleanup(setup.Teardown)
 
@@ -69,7 +69,7 @@ func TestTrustCenterWatermarkListeners(t *testing.T) {
 		assert.Assert(t, doc.WatermarkingEnabled)
 		assert.Assert(t, doc.OriginalFileID != nil)
 
-		setup.Runtime.WaitIdle()
+		waitForGala(t, setup.Runtime)
 
 		assert.Check(t, is.Equal(1, watermarkJobCount(ctx, t, doc.ID)))
 	})
@@ -80,7 +80,7 @@ func TestTrustCenterWatermarkListeners(t *testing.T) {
 			Exec(dbCtx)
 		assert.NilError(t, err)
 
-		setup.Runtime.WaitIdle()
+		waitForGala(t, setup.Runtime)
 
 		assert.Check(t, is.Equal(1, watermarkJobCount(ctx, t, doc.ID)))
 	})
@@ -96,7 +96,7 @@ func TestTrustCenterWatermarkListeners(t *testing.T) {
 			Exec(dbCtx)
 		assert.NilError(t, err)
 
-		setup.Runtime.WaitIdle()
+		waitForGala(t, setup.Runtime)
 
 		assert.Check(t, is.Equal(2, watermarkJobCount(ctx, t, doc.ID)))
 	})
@@ -110,7 +110,7 @@ func TestTrustCenterWatermarkListeners(t *testing.T) {
 			Save(dbCtx)
 		assert.NilError(t, err)
 
-		setup.Runtime.WaitIdle()
+		waitForGala(t, setup.Runtime)
 
 		assert.Check(t, is.Equal(0, watermarkJobCount(ctx, t, disabledDoc.ID)))
 	})

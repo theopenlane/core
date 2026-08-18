@@ -256,6 +256,40 @@ func TestScheduleHandlerMarksSuccessorUniqueOnce(t *testing.T) {
 	}
 }
 
+func TestScheduleHandlerDoesNotEmitSuccessorAfterCancellation(t *testing.T) {
+	dispatcher := &runtimeTestDispatcher{}
+	runtime := newTestGala(t, dispatcher)
+	topic := Topic[runtimeTestPayload]{
+		Name: TopicName("gala.test.schedule.cancelled"),
+		Kind: System.Kind(),
+	}
+	if err := registerTopic(runtime.registry, topic); err != nil {
+		t.Fatalf("failed to register topic: %v", err)
+	}
+
+	ctx, cancel := context.WithCancel(context.Background())
+	definition := Definition[runtimeTestPayload]{
+		Topic: topic,
+		Schedule: &ScheduleSpec[runtimeTestPayload]{
+			Handle: func(context.Context, runtimeTestPayload) (int, error) {
+				cancel()
+
+				return 0, nil
+			},
+			State: func(runtimeTestPayload) ScheduleState { return ScheduleState{} },
+			Wrap:  func(payload runtimeTestPayload, _ ScheduleState) runtimeTestPayload { return payload },
+		},
+	}
+
+	err := scheduleHandler(runtime, definition)(HandlerContext{Context: ctx}, runtimeTestPayload{Message: "loop"})
+	if !errors.Is(err, context.Canceled) {
+		t.Fatalf("expected cancelled schedule handler, got %v", err)
+	}
+	if len(dispatcher.envelopes) != 0 {
+		t.Fatalf("expected no successor after cancellation, got %d", len(dispatcher.envelopes))
+	}
+}
+
 func TestScheduleHandlerReturnsEmitErrorWhenExecutionAndEmitFail(t *testing.T) {
 	emitErr := errors.New("successor insert failed")
 	dispatcher := &runtimeTestDispatcher{err: emitErr}

@@ -50,6 +50,10 @@ type HookTestSuite struct {
 	galaRuntime *gala.Gala
 }
 
+func (suite *HookTestSuite) waitForEvents() {
+	suite.Require().NoError(suite.galaRuntime.WaitIdle(suite.T().Context()))
+}
+
 // SetupSuite runs before the test suite
 func (suite *HookTestSuite) SetupSuite() {
 	zerolog.SetGlobalLevel(zerolog.Disabled)

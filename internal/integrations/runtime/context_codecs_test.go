@@ -61,7 +61,9 @@ func TestDefaultCodecsRoundTripOperationContext(t *testing.T) {
 		t.Fatalf("failed to emit: %v", err)
 	}
 
-	g.WaitIdle()
+	if err := g.WaitIdle(t.Context()); err != nil {
+		t.Fatalf("failed waiting for Gala runtime: %v", err)
+	}
 
 	var observed observedContext
 

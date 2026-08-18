@@ -3,7 +3,6 @@
 package graphapi_test
 
 import (
-	"context"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -56,7 +55,7 @@ func TestTrustCenterCacheListeners(t *testing.T) {
 	dbCtx := privacy.DecisionContext(setContext(tcOrg.owner.UserCtx, suite.client.db), privacy.Allow)
 
 	// the runtime is created after seeding so only the mutations under test dispatch
-	setup, err := graphapi.SetupListenerRuntime(context.Background(), suite.client.db, suite.tf.URI, hooks.TrustCenterCacheListeners())
+	setup, err := graphapi.SetupListenerRuntime(suite.galaRuntime, hooks.TrustCenterCacheListeners())
 	assert.NilError(t, err)
 	t.Cleanup(setup.Teardown)
 
@@ -65,7 +64,7 @@ func TestTrustCenterCacheListeners(t *testing.T) {
 
 		before := refreshHits.Load()
 		mutate()
-		setup.Runtime.WaitIdle()
+		waitForGala(t, setup.Runtime)
 
 		return refreshHits.Load() - before
 	}

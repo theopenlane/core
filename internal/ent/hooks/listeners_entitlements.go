@@ -26,7 +26,7 @@ func EntitlementListeners() []gala.Registration {
 		entityops.MutationListener{
 			Schema:     entityops.SchemaOrganization,
 			Operations: []string{entityops.OpCreate},
-			Caller: func(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
+			Caller: func(_ *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
 				return auth.NewWebhookCaller("")
 			},
 			Handle: entityops.RequireDep(handleOrganizationCreatedGala),
@@ -34,7 +34,7 @@ func EntitlementListeners() []gala.Registration {
 		entityops.MutationListener{
 			Schema:     entityops.SchemaOrganization,
 			Operations: []string{entityops.OpSoftDelete, entityops.OpDelete, entityops.OpDeleteOne},
-			Caller: func(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
+			Caller: func(_ *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
 				return auth.NewWebhookCaller("")
 			},
 			ContextKeys: []func(context.Context) context.Context{entx.SkipSoftDelete},
@@ -48,7 +48,7 @@ func EntitlementListeners() []gala.Registration {
 				organizationsetting.FieldBillingPhone,
 				organizationsetting.FieldBillingAddress,
 			},
-			Caller: func(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
+			Caller: func(_ *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
 				return auth.NewWebhookCaller("")
 			},
 			Handle: entityops.RequireDep(handleOrganizationSettingsUpdateOneGala),

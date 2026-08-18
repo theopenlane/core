@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
@@ -77,6 +78,8 @@ type Gala struct {
 	jobClient *riverqueue.Client
 	// insertClient is the minimal insert capability used for durable dispatch
 	insertClient riverInsertClient
+	// jobController manages durable jobs after insertion
+	jobController riverJobController
 	// defaultQueue is the default River queue for dispatch jobs
 	defaultQueue string
 	// kindQueues maps each registered job kind to its dedicated queue
@@ -177,6 +180,7 @@ func NewGala(ctx context.Context, config Config) (app *Gala, err error) {
 
 	app.jobClient = jobClient
 	app.insertClient = jobClient
+	app.jobController = jobClient.GetRiverClient()
 	app.defaultQueue = config.QueueName
 	app.kindQueues = kindQueues
 	app.durableQueues = append([]string{config.QueueName}, lo.Values(kindQueues)...)
@@ -264,6 +268,28 @@ func WithValue[T any](value T) AttachOption {
 
 		return nil
 	}
+}
+
+// ReplaceValue swaps a typed runtime dependency and returns an idempotent restore function
+func ReplaceValue[T any](g *Gala, value T) (func(), error) {
+	if g == nil {
+		return nil, ErrGalaRequired
+	}
+
+	previous, err := do.Invoke[T](g.injector)
+	if err != nil {
+		return nil, err
+	}
+
+	do.OverrideValue(g.injector, value)
+
+	var once sync.Once
+
+	return func() {
+		once.Do(func() {
+			do.OverrideValue(g.injector, previous)
+		})
+	}, nil
 }
 
 // WithRestoredValue registers a durable context codec that re-resolves a live dependency
@@ -564,65 +590,99 @@ func (g *Gala) StopWorkers(ctx context.Context) error {
 	return nil
 }
 
-// WaitIdle blocks until all dispatched work has completed.
-// For in-memory mode, it waits for the pool to drain.
-// For durable mode, it polls River for pending/running jobs.
-func (g *Gala) WaitIdle() {
+// WaitIdle blocks until runnable work drains or the context ends
+// Future scheduled and retry work does not count as busy in durable mode
+func (g *Gala) WaitIdle(ctx context.Context) error {
 	switch g.dispatchMode {
 	case DispatchModeInMemory:
 		if g.inMemoryPool != nil {
-			g.inMemoryPool.WaitIdle()
+			return g.inMemoryPool.WaitIdle(ctx)
 		}
 	case DispatchModeDurable:
-		g.waitDurableIdle()
+		return g.waitDurableIdle(ctx)
+	default:
+		return ErrDispatchModeInvalid
 	}
+
+	return nil
 }
 
-// waitDurableIdle polls configured Gala queues until no active jobs remain.
-func (g *Gala) waitDurableIdle() {
-	if g.jobClient == nil {
-		return
+// waitDurableIdle polls configured Gala queues until no runnable jobs remain
+func (g *Gala) waitDurableIdle(ctx context.Context) error {
+	if g.jobController == nil {
+		return nil
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), durableWaitTimeout)
-	defer cancel()
-
-	rc := g.jobClient.GetRiverClient()
-
-	waitStable(ctx, func() bool {
+	return waitStable(ctx, func() (bool, error) {
 		params := river.NewJobListParams().
-			States(rivertype.JobStateAvailable, rivertype.JobStateRunning, rivertype.JobStateScheduled).
+			States(rivertype.JobStateAvailable, rivertype.JobStatePending, rivertype.JobStateRunning).
 			First(1)
 		if len(g.durableQueues) > 0 {
 			params = params.Queues(g.durableQueues...)
 		}
 
-		result, err := rc.JobList(ctx, params)
+		result, err := g.jobController.JobList(ctx, params)
+		if err != nil {
+			return false, err
+		}
+		for _, job := range result.Jobs {
+			switch job.State {
+			case rivertype.JobStateAvailable, rivertype.JobStatePending, rivertype.JobStateRunning:
+				return false, nil
+			default:
+				continue
+			}
+		}
 
-		return err == nil && len(result.Jobs) == 0
+		now := time.Now().UTC()
+		retryParams := river.NewJobListParams().
+			States(rivertype.JobStateRetryable).
+			Where("scheduled_at <= @now", river.NamedArgs{"now": now}).
+			First(1)
+		if len(g.durableQueues) > 0 {
+			retryParams = retryParams.Queues(g.durableQueues...)
+		}
+
+		retries, err := g.jobController.JobList(ctx, retryParams)
+		if err != nil {
+			return false, err
+		}
+
+		for _, job := range retries.Jobs {
+			if job.State == rivertype.JobStateRetryable && !job.ScheduledAt.After(now) {
+				return false, nil
+			}
+		}
+
+		return true, nil
 	}, durableWaitPollInterval, durableIdleThreshold)
 }
 
 const (
-	durableWaitTimeout      = 30 * time.Second
-	durableWaitPollInterval = 50 * time.Millisecond
-	durableIdleThreshold    = 3
-	activeJobsPageSize      = 100
+	durableWaitPollInterval       = 50 * time.Millisecond
+	durableJobCleanupPollInterval = 10 * time.Millisecond
+	durableIdleThreshold          = 3
+	activeJobsPageSize            = 100
 )
 
 // activeJobListParams builds JobList params for matching jobs in an "active" state
 func activeJobListParams(metadataFragment string) *river.JobListParams {
-	return river.NewJobListParams().Metadata(metadataFragment).States(rivertype.JobStateAvailable, rivertype.JobStateRunning, rivertype.JobStateScheduled, rivertype.JobStateRetryable)
+	return river.NewJobListParams().Metadata(metadataFragment).States(uniqueLiveStates()...)
 }
 
 // HasActiveJobWithMetadata reports whether at least one active-state River job matches the
 // metadata fragment; false without error when Gala is not durable
 func (g *Gala) HasActiveJobWithMetadata(ctx context.Context, metadataFragment string) (bool, error) {
-	if g.jobClient == nil {
+	if g.jobController == nil {
 		return false, nil
 	}
 
-	result, err := g.jobClient.GetRiverClient().JobList(ctx, activeJobListParams(metadataFragment).First(1))
+	params := activeJobListParams(metadataFragment).First(1)
+	if len(g.durableQueues) > 0 {
+		params = params.Queues(g.durableQueues...)
+	}
+
+	result, err := g.jobController.JobList(ctx, params)
 	if err != nil {
 		return false, err
 	}
@@ -632,13 +692,15 @@ func (g *Gala) HasActiveJobWithMetadata(ctx context.Context, metadataFragment st
 
 // activeJobsWithMetadata lists every active-state River job matching the metadata fragment
 func (g *Gala) activeJobsWithMetadata(ctx context.Context, metadataFragment string) ([]*rivertype.JobRow, error) {
-	client := g.jobClient.GetRiverClient()
 	params := activeJobListParams(metadataFragment).First(activeJobsPageSize)
+	if len(g.durableQueues) > 0 {
+		params = params.Queues(g.durableQueues...)
+	}
 
 	var jobs []*rivertype.JobRow
 
 	for {
-		result, err := client.JobList(ctx, params)
+		result, err := g.jobController.JobList(ctx, params)
 		if err != nil {
 			return nil, err
 		}
@@ -656,7 +718,7 @@ func (g *Gala) activeJobsWithMetadata(ctx context.Context, metadataFragment stri
 // CountActiveJobsWithMetadata returns how many River jobs whose metadata JSONB contains the
 // given fragment are in an active state. Returns zero without error when Gala is not in durable mode
 func (g *Gala) CountActiveJobsWithMetadata(ctx context.Context, metadataFragment string) (int, error) {
-	if g.jobClient == nil {
+	if g.jobController == nil {
 		return 0, nil
 	}
 
@@ -668,34 +730,98 @@ func (g *Gala) CountActiveJobsWithMetadata(ctx context.Context, metadataFragment
 	return len(jobs), nil
 }
 
-// CancelActiveJobsWithMetadata cancels every River job whose metadata JSONB contains the given
-// fragment and is in an active state, returning how many were cancelled. Returns zero without
-// error when Gala is not in durable mode
-func (g *Gala) CancelActiveJobsWithMetadata(ctx context.Context, metadataFragment string) (int, error) {
-	if g.jobClient == nil {
+// PurgeActiveJobsWithMetadata deletes live River jobs matching a JSONB metadata fragment
+// Running jobs are cancelled before deletion and rescanned for recurring successors
+func (g *Gala) PurgeActiveJobsWithMetadata(ctx context.Context, metadataFragment string) (int, error) {
+	return g.purgeActiveJobsWithMetadata(ctx, metadataFragment, nil)
+}
+
+type activeJobPredicate func(*rivertype.JobRow) (bool, error)
+
+func (g *Gala) purgeActiveJobsWithMetadata(ctx context.Context, metadataFragment string, predicate activeJobPredicate) (int, error) {
+	if g.jobController == nil {
 		return 0, nil
 	}
 
-	jobs, err := g.activeJobsWithMetadata(ctx, metadataFragment)
-	if err != nil {
-		return 0, err
-	}
+	pendingDeletes := map[int64]bool{}
+	targeted := map[int64]struct{}{}
 
-	client := g.jobClient.GetRiverClient()
+	for {
+		jobs, err := g.activeJobsWithMetadata(ctx, metadataFragment)
+		if err != nil {
+			return len(targeted), err
+		}
 
-	var cancelled int
+		found := false
 
-	for _, job := range jobs {
-		if _, err := client.JobCancel(ctx, job.ID); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int64("job_id", job.ID).Msg("gala: failed cancelling job")
+		for _, job := range jobs {
+			if predicate != nil {
+				matched, err := predicate(job)
+				if err != nil {
+					return len(targeted), err
+				}
 
+				if !matched {
+					continue
+				}
+			}
+
+			found = true
+			targeted[job.ID] = struct{}{}
+
+			if _, tracked := pendingDeletes[job.ID]; !tracked {
+				pendingDeletes[job.ID] = false
+			}
+		}
+
+		for jobID, cancelled := range pendingDeletes {
+			if !cancelled {
+				if _, err := g.jobController.JobCancel(ctx, jobID); err != nil {
+					if errors.Is(err, rivertype.ErrNotFound) {
+						delete(pendingDeletes, jobID)
+
+						continue
+					}
+
+					return len(targeted), err
+				}
+
+				pendingDeletes[jobID] = true
+			}
+
+			if _, err := g.jobController.JobDelete(ctx, jobID); err != nil {
+				switch {
+				case errors.Is(err, rivertype.ErrNotFound):
+					delete(pendingDeletes, jobID)
+				case errors.Is(err, rivertype.ErrJobRunning):
+				default:
+					return len(targeted), err
+				}
+
+				continue
+			}
+
+			delete(pendingDeletes, jobID)
+		}
+
+		if len(pendingDeletes) == 0 {
+			if !found {
+				return len(targeted), nil
+			}
+
+			// Rescan for successors emitted by a concurrently finishing handler
 			continue
 		}
 
-		cancelled++
-	}
+		timer := time.NewTimer(durableJobCleanupPollInterval)
+		select {
+		case <-ctx.Done():
+			timer.Stop()
 
-	return cancelled, nil
+			return len(targeted), ctx.Err()
+		case <-timer.C:
+		}
+	}
 }
 
 // Close closes the dedicated Gala queue client

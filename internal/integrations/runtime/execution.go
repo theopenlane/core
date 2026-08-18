@@ -610,28 +610,28 @@ func (r *Runtime) reconcilableDefinitionIDs() []string {
 	return ids
 }
 
-// CancelInstallationJobs cancels every queued River job bound to the installation across all
-// job families and returns how many were cancelled. Operation-context jobs (reconcile loops,
+// PurgeInstallationJobs removes every queued River job bound to the installation across all
+// job families and returns how many were purged. Operation-context jobs (reconcile loops,
 // event operations) carry the installation as properties.entityId; ingest record jobs carry
 // properties.integration_id
-func (r *Runtime) CancelInstallationJobs(ctx context.Context, integrationID string) (int, error) {
+func (r *Runtime) PurgeInstallationJobs(ctx context.Context, integrationID string) (int, error) {
 	fragments, err := installationJobFragments(integrationID)
 	if err != nil {
 		return 0, err
 	}
 
-	var cancelled int
+	var purged int
 
 	for _, fragment := range fragments {
-		count, err := r.Gala().CancelActiveJobsWithMetadata(ctx, fragment)
+		count, err := r.Gala().PurgeActiveJobsWithMetadata(ctx, fragment)
 		if err != nil {
-			return cancelled, err
+			return purged, err
 		}
 
-		cancelled += count
+		purged += count
 	}
 
-	return cancelled, nil
+	return purged, nil
 }
 
 // installationJobFragments builds the JSONB containment fragments matching every job family

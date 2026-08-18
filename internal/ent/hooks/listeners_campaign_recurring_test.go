@@ -108,5 +108,5 @@ func (suite *HookTestSuite) emitCampaignMutation(_ *testing.T, ctx context.Conte
 		},
 	})
 
-	suite.galaRuntime.WaitIdle()
+	suite.waitForEvents()
 }

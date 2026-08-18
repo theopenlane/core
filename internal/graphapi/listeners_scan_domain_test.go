@@ -62,7 +62,11 @@ func TestDomainScanListeners(t *testing.T) {
 	})
 	assert.NilError(t, err)
 
-	setup, err := graphapi.SetupListenerRuntime(ctx, suite.client.db, suite.tf.URI, hooks.DomainScanListeners(), gala.WithValue(rt))
+	restoreRuntime, err := gala.ReplaceValue(suite.galaRuntime, rt)
+	assert.NilError(t, err)
+	defer restoreRuntime()
+
+	setup, err := graphapi.SetupListenerRuntime(suite.galaRuntime, hooks.DomainScanListeners())
 	assert.NilError(t, err)
 	defer setup.Teardown()
 
@@ -107,7 +111,7 @@ func TestDomainScanListeners(t *testing.T) {
 			Save(ctx)
 		assert.NilError(t, err)
 
-		setup.Runtime.WaitIdle()
+		waitForGala(t, setup.Runtime)
 
 		assert.Check(t, is.Equal(baseline+1, countRuns(t)))
 	})

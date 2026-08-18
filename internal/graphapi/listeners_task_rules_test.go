@@ -29,7 +29,7 @@ func TestTaskRuleListenersRealMutations(t *testing.T) {
 	user := suite.userBuilder(context.Background(), t)
 	allowCtx := privacy.DecisionContext(setContext(user.UserCtx, suite.client.db), privacy.Allow)
 
-	setup, err := graphapi.SetupListenerRuntime(context.Background(), suite.client.db, suite.tf.URI, hooks.TaskRuleListeners())
+	setup, err := graphapi.SetupListenerRuntime(suite.galaRuntime, hooks.TaskRuleListeners())
 	assert.NilError(t, err)
 	defer setup.Teardown()
 
@@ -94,7 +94,7 @@ func TestTaskRuleListenersRealMutations(t *testing.T) {
 	})
 
 	t.Run("redelivery does not duplicate tasks", func(t *testing.T) {
-		setup.Runtime.WaitIdle()
+		waitForGala(t, setup.Runtime)
 
 		before := taskCount(t)
 
@@ -104,7 +104,7 @@ func TestTaskRuleListenersRealMutations(t *testing.T) {
 			EntityID:     orgID,
 		})
 
-		setup.Runtime.WaitIdle()
+		waitForGala(t, setup.Runtime)
 
 		assert.Check(t, is.Equal(before, taskCount(t)))
 		assert.Check(t, is.Equal(1, notificationCount(t)))

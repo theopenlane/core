@@ -101,6 +101,11 @@ func scheduleHandler[T any](g *Gala, definition Definition[T]) Handler[T] {
 			emitCtx, headers = spec.PrepareEmit(ctx.Context, payload)
 		}
 
+		// Prevent a detached running cycle from emitting its successor
+		if err := ctx.Context.Err(); err != nil {
+			return river.JobCancel(err)
+		}
+
 		headers.ScheduledAt = &scheduledAt
 
 		// a per-cycle key dedups crash-retry re-emissions without colliding with the running predecessor
