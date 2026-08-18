@@ -4,7 +4,6 @@ import (
 	"context"
 	stdsql "database/sql"
 	"fmt"
-	"sync/atomic"
 	"time"
 
 	"ariga.io/entcache"
@@ -12,57 +11,37 @@ import (
 	entsql "entgo.io/ent/dialect/sql"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/shutdown"
 	"github.com/theopenlane/core/internal/ent/generated/intercept"
 	"github.com/theopenlane/core/internal/ent/historygenerated"
 	hintercept "github.com/theopenlane/core/internal/ent/historygenerated/intercept"
 )
 
-// ShutdownFlag tracks whether a shutdown is in progress
-type ShutdownFlag struct {
-	// flag is an atomic boolean that indicates if a shutdown is in progress
-	// atomic.Bool is used to ensure thread-safe access to the flag
-	// without the need for explicit locks
-	// this is important in a concurrent environment where multiple goroutines
-	// may be checking or setting the flag at the same time
-	flag atomic.Bool
-}
-
-// Begin sets the shutdown flag to true, indicating that a shutdown is in progress
-func (s *ShutdownFlag) Begin() {
-	s.flag.Store(true)
-}
-
-// Reset clears the shutdown flag, indicating that a shutdown is no longer in progress
-func (s *ShutdownFlag) Reset() {
-	s.flag.Store(false)
-}
-
-// IsSet checks if the shutdown flag is set to true
-func (s *ShutdownFlag) IsSet() bool {
-	return s.flag.Load()
-}
+// ShutdownFlag tracks whether a shutdown is in progress. It lives in the shutdown package so
+// packages this one depends on can check it without an import cycle
+type ShutdownFlag = shutdown.Flag
 
 // newShutdownFlag creates a new instance of ShutdownFlag
 func newShutdownFlag() *ShutdownFlag {
-	return &ShutdownFlag{}
+	return shutdown.New()
 }
 
-// / defaultShutdown is the default shutdown flag used throughout the package
-var defaultShutdown = newShutdownFlag()
+// defaultShutdown is the default shutdown flag used throughout the package
+var defaultShutdown = shutdown.Default
 
 // BeginShutdown marks the system as shutting down. It is safe to call multiple times
 func BeginShutdown() {
-	defaultShutdown.Begin()
+	shutdown.Begin()
 }
 
 // ResetShutdown clears the shutdown flag. It is intended for tests
 func ResetShutdown() {
-	defaultShutdown.Reset()
+	shutdown.Reset()
 }
 
 // IsShuttingDown reports whether GracefulClose was invoked
 func IsShuttingDown() bool {
-	return defaultShutdown.IsSet()
+	return shutdown.InProgress()
 }
 
 type dbClientWithDriver interface {
