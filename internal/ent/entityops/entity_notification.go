@@ -285,7 +285,7 @@ func approvalRecipients(spec ApprovalSpec) func(Invocation, MutationPayload, jso
 	return func(inv Invocation, _ MutationPayload, row json.RawMessage) ([]string, error) {
 		approverID := FieldValue(row, spec.ApproverField)
 		if approverID == "" {
-			logx.FromContext(inv.Context).Warn().Msg("approver not set for entity entering approval")
+			logx.FromContext(inv.Context).Info().Msg("approver not set for entity entering approval")
 			return nil, nil
 		}
 
