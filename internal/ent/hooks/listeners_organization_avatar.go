@@ -55,7 +55,7 @@ func handleOrganizationAvatarCreated(inv entityops.Invocation, _ entityops.Mutat
 		return err
 	}
 
-	avatarURL, err := favicon.Discover(ctx.Context, requester, setting.Domains)
+	avatarURL, err := favicon.Discover(inv.Context, requester, setting.Domains)
 	if err != nil {
 		logx.FromContext(inv.Context).Err(err).Msg("organization avatar discovery failed")
 		return nil
