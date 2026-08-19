@@ -10,8 +10,6 @@ tool (
 	gotest.tools/gotestsum
 )
 
-replace github.com/theopenlane/core/common => ./common
-
 require (
 	ariga.io/entcache v0.1.0
 	cloud.google.com/go/securitycenter v1.46.0
@@ -107,7 +105,7 @@ require (
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/entx v0.30.3
 	github.com/theopenlane/go-client v0.13.0
-	github.com/theopenlane/gqlgen-plugins v0.14.7
+	github.com/theopenlane/gqlgen-plugins v0.17.0
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.36.0
 	github.com/theopenlane/newman v0.4.3
