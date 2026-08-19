@@ -43,7 +43,7 @@ linters:
       - internal/httpserve/handlers/internal
       - internal/workflows/examples
       - internal/ent/csvgenerated
-      - internal/ent/integrationgenerated
+      - internal/ent/entityops
       - internal/integrations/cli
       - internal/integrations/definitions/email/themmes
       - internal/httpserve/specs
