@@ -29,6 +29,15 @@ func HookCreateCustomDomain() ent.Hook {
 					m.SetDomainType(enums.CustomDomainTypeExternal)
 				}
 
+				trustCenter, err := m.Client().TrustCenter.Query().
+					Select(trustcenter.FieldID).
+					Only(ctx)
+				if err != nil {
+					return nil, err
+				}
+
+				m.SetTrustCenterID(trustCenter.ID)
+
 				v, err := next.Mutate(ctx, m)
 				if err != nil {
 					return v, err
