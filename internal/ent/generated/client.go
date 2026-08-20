@@ -520,7 +520,6 @@ type (
 		Shortlinks         *shortlinks.Client
 		Pool               *gala.Pool
 		EmailVerifier      *validator.EmailVerifier
-
 		// Job is the job client to insert jobs into the queue.
 		Job riverqueue.JobClient
 

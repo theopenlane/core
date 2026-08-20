@@ -83,7 +83,7 @@ func HookSubscriberCreate() ent.Hook {
 
 			customDomain, slug, branding := subscriberTrustCenterDomain(ctx, m.Client(), trustCenterID)
 
-			if err := sendSystemEmail(ctx,emaildef.SubscribeOp.Name(), emaildef.SubscribeRequest{
+			if err := sendSystemEmail(ctx, emaildef.SubscribeOp.Name(), emaildef.SubscribeRequest{
 				RecipientInfo:       emaildef.RecipientInfo{Email: emailAddress},
 				TrustCenterBranding: branding,
 				OrgName:             orgName,

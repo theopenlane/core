@@ -71,7 +71,7 @@ func HookOnboarding() ent.Hook {
 			compliance, _ := m.Compliance()
 			demoRequested, _ := m.DemoRequested()
 
-			if err := sendSystemSlack(ctx,slackdef.DemoRequestOp.Name(), slackdef.DemoRequestMessage{
+			if err := sendSystemSlack(ctx, slackdef.DemoRequestOp.Name(), slackdef.DemoRequestMessage{
 				CompanyName:    companyName,
 				Email:          callerEmail,
 				Domains:        domains,
