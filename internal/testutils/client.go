@@ -16,7 +16,6 @@ import (
 	"github.com/labstack/gommon/log"
 	"github.com/theopenlane/core/internal/graphapi"
 	"github.com/theopenlane/core/internal/graphapi/common"
-	"github.com/theopenlane/core/internal/graphapi/directives"
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
@@ -204,7 +203,7 @@ func testGraphServer(c *ent.Client, u *objects.Service) *handler.Server {
 
 	conf := gqlgenerated.Config{Resolvers: r}
 
-	directives.ImplementAllDirectives(&conf)
+	graphapi.ImplementAllDirectives(&conf)
 
 	srv := handler.New(
 		gqlgenerated.NewExecutableSchema(

@@ -22,8 +22,7 @@ import (
 )
 
 const (
-	StorageValidationTimeout     = 10 * time.Second
-	StorageCredentialSyncTimeout = 10 * time.Second
+	StorageValidationTimeout = 10 * time.Second
 	// StorageCheckCacheTTL is how long a readiness check result is reused before revalidating providers
 	StorageCheckCacheTTL = 5 * time.Minute
 )

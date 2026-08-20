@@ -570,7 +570,6 @@ func (_c *StandardHistoryCreate) createSpec() (*StandardHistory, *sqlgraph.Creat
 		_node = &StandardHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(standardhistory.Table, sqlgraph.NewFieldSpec(standardhistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.StandardHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

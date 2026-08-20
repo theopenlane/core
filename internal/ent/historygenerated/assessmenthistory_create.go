@@ -445,7 +445,6 @@ func (_c *AssessmentHistoryCreate) createSpec() (*AssessmentHistory, *sqlgraph.C
 		_node = &AssessmentHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(assessmenthistory.Table, sqlgraph.NewFieldSpec(assessmenthistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.AssessmentHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

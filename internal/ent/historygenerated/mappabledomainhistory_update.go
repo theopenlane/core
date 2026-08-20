@@ -8,139 +8,24 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/historygenerated/mappabledomainhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
 )
 
 // MappableDomainHistoryUpdate is the builder for updating MappableDomainHistory entities.
 type MappableDomainHistoryUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *MappableDomainHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *MappableDomainHistoryMutation
 }
 
 // Where appends a list predicates to the MappableDomainHistoryUpdate builder.
 func (_u *MappableDomainHistoryUpdate) Where(ps ...predicate.MappableDomainHistory) *MappableDomainHistoryUpdate {
 	_u.mutation.Where(ps...)
-	return _u
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *MappableDomainHistoryUpdate) SetUpdatedAt(v time.Time) *MappableDomainHistoryUpdate {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *MappableDomainHistoryUpdate) ClearUpdatedAt() *MappableDomainHistoryUpdate {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *MappableDomainHistoryUpdate) SetUpdatedBy(v string) *MappableDomainHistoryUpdate {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *MappableDomainHistoryUpdate) SetNillableUpdatedBy(v *string) *MappableDomainHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *MappableDomainHistoryUpdate) ClearUpdatedBy() *MappableDomainHistoryUpdate {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *MappableDomainHistoryUpdate) SetUpdatedByImpersonator(v string) *MappableDomainHistoryUpdate {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *MappableDomainHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *MappableDomainHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *MappableDomainHistoryUpdate) ClearUpdatedByImpersonator() *MappableDomainHistoryUpdate {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *MappableDomainHistoryUpdate) SetDeletedAt(v time.Time) *MappableDomainHistoryUpdate {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *MappableDomainHistoryUpdate) SetNillableDeletedAt(v *time.Time) *MappableDomainHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *MappableDomainHistoryUpdate) ClearDeletedAt() *MappableDomainHistoryUpdate {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *MappableDomainHistoryUpdate) SetDeletedBy(v string) *MappableDomainHistoryUpdate {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *MappableDomainHistoryUpdate) SetNillableDeletedBy(v *string) *MappableDomainHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *MappableDomainHistoryUpdate) ClearDeletedBy() *MappableDomainHistoryUpdate {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *MappableDomainHistoryUpdate) SetTags(v []string) *MappableDomainHistoryUpdate {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *MappableDomainHistoryUpdate) AppendTags(v []string) *MappableDomainHistoryUpdate {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *MappableDomainHistoryUpdate) ClearTags() *MappableDomainHistoryUpdate {
-	_u.mutation.ClearTags()
 	return _u
 }
 
@@ -151,9 +36,6 @@ func (_u *MappableDomainHistoryUpdate) Mutation() *MappableDomainHistoryMutation
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *MappableDomainHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := _u.defaults(); err != nil {
-		return 0, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -179,24 +61,6 @@ func (_u *MappableDomainHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *MappableDomainHistoryUpdate) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if mappabledomainhistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized mappabledomainhistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := mappabledomainhistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *MappableDomainHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *MappableDomainHistoryUpdate {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *MappableDomainHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(mappabledomainhistory.Table, mappabledomainhistory.Columns, sqlgraph.NewFieldSpec(mappabledomainhistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
@@ -212,53 +76,27 @@ func (_u *MappableDomainHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(mappabledomainhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(mappabledomainhistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(mappabledomainhistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(mappabledomainhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(mappabledomainhistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(mappabledomainhistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(mappabledomainhistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(mappabledomainhistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(mappabledomainhistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(mappabledomainhistory.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(mappabledomainhistory.FieldDeletedBy, field.TypeString, value)
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(mappabledomainhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(mappabledomainhistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, mappabledomainhistory.FieldTags, value)
-		})
-	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(mappabledomainhistory.FieldTags, field.TypeJSON)
 	}
-	_spec.Node.Schema = _u.schemaConfig.MappableDomainHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{mappabledomainhistory.Label}
@@ -274,120 +112,9 @@ func (_u *MappableDomainHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 // MappableDomainHistoryUpdateOne is the builder for updating a single MappableDomainHistory entity.
 type MappableDomainHistoryUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *MappableDomainHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *MappableDomainHistoryUpdateOne) SetUpdatedAt(v time.Time) *MappableDomainHistoryUpdateOne {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *MappableDomainHistoryUpdateOne) ClearUpdatedAt() *MappableDomainHistoryUpdateOne {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *MappableDomainHistoryUpdateOne) SetUpdatedBy(v string) *MappableDomainHistoryUpdateOne {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *MappableDomainHistoryUpdateOne) SetNillableUpdatedBy(v *string) *MappableDomainHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *MappableDomainHistoryUpdateOne) ClearUpdatedBy() *MappableDomainHistoryUpdateOne {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *MappableDomainHistoryUpdateOne) SetUpdatedByImpersonator(v string) *MappableDomainHistoryUpdateOne {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *MappableDomainHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *MappableDomainHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *MappableDomainHistoryUpdateOne) ClearUpdatedByImpersonator() *MappableDomainHistoryUpdateOne {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *MappableDomainHistoryUpdateOne) SetDeletedAt(v time.Time) *MappableDomainHistoryUpdateOne {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *MappableDomainHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *MappableDomainHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *MappableDomainHistoryUpdateOne) ClearDeletedAt() *MappableDomainHistoryUpdateOne {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *MappableDomainHistoryUpdateOne) SetDeletedBy(v string) *MappableDomainHistoryUpdateOne {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *MappableDomainHistoryUpdateOne) SetNillableDeletedBy(v *string) *MappableDomainHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *MappableDomainHistoryUpdateOne) ClearDeletedBy() *MappableDomainHistoryUpdateOne {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *MappableDomainHistoryUpdateOne) SetTags(v []string) *MappableDomainHistoryUpdateOne {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *MappableDomainHistoryUpdateOne) AppendTags(v []string) *MappableDomainHistoryUpdateOne {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *MappableDomainHistoryUpdateOne) ClearTags() *MappableDomainHistoryUpdateOne {
-	_u.mutation.ClearTags()
-	return _u
+	fields   []string
+	hooks    []Hook
+	mutation *MappableDomainHistoryMutation
 }
 
 // Mutation returns the MappableDomainHistoryMutation object of the builder.
@@ -410,9 +137,6 @@ func (_u *MappableDomainHistoryUpdateOne) Select(field string, fields ...string)
 
 // Save executes the query and returns the updated MappableDomainHistory entity.
 func (_u *MappableDomainHistoryUpdateOne) Save(ctx context.Context) (*MappableDomainHistory, error) {
-	if err := _u.defaults(); err != nil {
-		return nil, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -436,24 +160,6 @@ func (_u *MappableDomainHistoryUpdateOne) ExecX(ctx context.Context) {
 	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
-}
-
-// defaults sets the default values of the builder before save.
-func (_u *MappableDomainHistoryUpdateOne) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if mappabledomainhistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized mappabledomainhistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := mappabledomainhistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *MappableDomainHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *MappableDomainHistoryUpdateOne {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
 }
 
 func (_u *MappableDomainHistoryUpdateOne) sqlSave(ctx context.Context) (_node *MappableDomainHistory, err error) {
@@ -488,53 +194,27 @@ func (_u *MappableDomainHistoryUpdateOne) sqlSave(ctx context.Context) (_node *M
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(mappabledomainhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(mappabledomainhistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(mappabledomainhistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(mappabledomainhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(mappabledomainhistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(mappabledomainhistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(mappabledomainhistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(mappabledomainhistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(mappabledomainhistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(mappabledomainhistory.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(mappabledomainhistory.FieldDeletedBy, field.TypeString, value)
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(mappabledomainhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(mappabledomainhistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, mappabledomainhistory.FieldTags, value)
-		})
-	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(mappabledomainhistory.FieldTags, field.TypeJSON)
 	}
-	_spec.Node.Schema = _u.schemaConfig.MappableDomainHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	_node = &MappableDomainHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

@@ -10,10 +10,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-
 	"github.com/theopenlane/core/internal/ent/historygenerated/hushhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
+	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 )
 
 // HushHistoryDelete is the builder for deleting a HushHistory entity.
@@ -45,8 +43,6 @@ func (_d *HushHistoryDelete) ExecX(ctx context.Context) int {
 
 func (_d *HushHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(hushhistory.Table, sqlgraph.NewFieldSpec(hushhistory.FieldID, field.TypeString))
-	_spec.Node.Schema = _d.schemaConfig.HushHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
 	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

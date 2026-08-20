@@ -429,7 +429,6 @@ func (_c *JobRunnerCreate) createSpec() (*JobRunner, *sqlgraph.CreateSpec) {
 		_node = &JobRunner{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(jobrunner.Table, sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.JobRunner
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -517,7 +516,6 @@ func (_c *JobRunnerCreate) createSpec() (*JobRunner, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.JobRunner
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -535,7 +533,6 @@ func (_c *JobRunnerCreate) createSpec() (*JobRunner, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(jobrunnertoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.JobRunnerJobRunnerTokens
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

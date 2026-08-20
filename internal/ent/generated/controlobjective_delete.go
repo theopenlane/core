@@ -8,10 +8,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
-	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/internal/ent/generated/predicate"
 )
 
 // ControlObjectiveDelete is the builder for deleting a ControlObjective entity.
@@ -43,8 +41,6 @@ func (_d *ControlObjectiveDelete) ExecX(ctx context.Context) int {
 
 func (_d *ControlObjectiveDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(controlobjective.Table, sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString))
-	_spec.Node.Schema = _d.schemaConfig.ControlObjective
-	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
 	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

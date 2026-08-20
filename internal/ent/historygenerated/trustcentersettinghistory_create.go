@@ -708,7 +708,6 @@ func (_c *TrustCenterSettingHistoryCreate) createSpec() (*TrustCenterSettingHist
 		_node = &TrustCenterSettingHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(trustcentersettinghistory.Table, sqlgraph.NewFieldSpec(trustcentersettinghistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.TrustCenterSettingHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

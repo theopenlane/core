@@ -8,245 +8,24 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/historygenerated/documentdatahistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
 )
 
 // DocumentDataHistoryUpdate is the builder for updating DocumentDataHistory entities.
 type DocumentDataHistoryUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *DocumentDataHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *DocumentDataHistoryMutation
 }
 
 // Where appends a list predicates to the DocumentDataHistoryUpdate builder.
 func (_u *DocumentDataHistoryUpdate) Where(ps ...predicate.DocumentDataHistory) *DocumentDataHistoryUpdate {
 	_u.mutation.Where(ps...)
-	return _u
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *DocumentDataHistoryUpdate) SetUpdatedAt(v time.Time) *DocumentDataHistoryUpdate {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *DocumentDataHistoryUpdate) ClearUpdatedAt() *DocumentDataHistoryUpdate {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *DocumentDataHistoryUpdate) SetUpdatedBy(v string) *DocumentDataHistoryUpdate {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *DocumentDataHistoryUpdate) SetNillableUpdatedBy(v *string) *DocumentDataHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *DocumentDataHistoryUpdate) ClearUpdatedBy() *DocumentDataHistoryUpdate {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *DocumentDataHistoryUpdate) SetUpdatedByImpersonator(v string) *DocumentDataHistoryUpdate {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *DocumentDataHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *DocumentDataHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *DocumentDataHistoryUpdate) ClearUpdatedByImpersonator() *DocumentDataHistoryUpdate {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *DocumentDataHistoryUpdate) SetDeletedAt(v time.Time) *DocumentDataHistoryUpdate {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *DocumentDataHistoryUpdate) SetNillableDeletedAt(v *time.Time) *DocumentDataHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *DocumentDataHistoryUpdate) ClearDeletedAt() *DocumentDataHistoryUpdate {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *DocumentDataHistoryUpdate) SetDeletedBy(v string) *DocumentDataHistoryUpdate {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *DocumentDataHistoryUpdate) SetNillableDeletedBy(v *string) *DocumentDataHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *DocumentDataHistoryUpdate) ClearDeletedBy() *DocumentDataHistoryUpdate {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *DocumentDataHistoryUpdate) SetTags(v []string) *DocumentDataHistoryUpdate {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *DocumentDataHistoryUpdate) AppendTags(v []string) *DocumentDataHistoryUpdate {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *DocumentDataHistoryUpdate) ClearTags() *DocumentDataHistoryUpdate {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetEnvironmentName sets the "environment_name" field.
-func (_u *DocumentDataHistoryUpdate) SetEnvironmentName(v string) *DocumentDataHistoryUpdate {
-	_u.mutation.SetEnvironmentName(v)
-	return _u
-}
-
-// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
-func (_u *DocumentDataHistoryUpdate) SetNillableEnvironmentName(v *string) *DocumentDataHistoryUpdate {
-	if v != nil {
-		_u.SetEnvironmentName(*v)
-	}
-	return _u
-}
-
-// ClearEnvironmentName clears the value of the "environment_name" field.
-func (_u *DocumentDataHistoryUpdate) ClearEnvironmentName() *DocumentDataHistoryUpdate {
-	_u.mutation.ClearEnvironmentName()
-	return _u
-}
-
-// SetEnvironmentID sets the "environment_id" field.
-func (_u *DocumentDataHistoryUpdate) SetEnvironmentID(v string) *DocumentDataHistoryUpdate {
-	_u.mutation.SetEnvironmentID(v)
-	return _u
-}
-
-// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
-func (_u *DocumentDataHistoryUpdate) SetNillableEnvironmentID(v *string) *DocumentDataHistoryUpdate {
-	if v != nil {
-		_u.SetEnvironmentID(*v)
-	}
-	return _u
-}
-
-// ClearEnvironmentID clears the value of the "environment_id" field.
-func (_u *DocumentDataHistoryUpdate) ClearEnvironmentID() *DocumentDataHistoryUpdate {
-	_u.mutation.ClearEnvironmentID()
-	return _u
-}
-
-// SetScopeName sets the "scope_name" field.
-func (_u *DocumentDataHistoryUpdate) SetScopeName(v string) *DocumentDataHistoryUpdate {
-	_u.mutation.SetScopeName(v)
-	return _u
-}
-
-// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
-func (_u *DocumentDataHistoryUpdate) SetNillableScopeName(v *string) *DocumentDataHistoryUpdate {
-	if v != nil {
-		_u.SetScopeName(*v)
-	}
-	return _u
-}
-
-// ClearScopeName clears the value of the "scope_name" field.
-func (_u *DocumentDataHistoryUpdate) ClearScopeName() *DocumentDataHistoryUpdate {
-	_u.mutation.ClearScopeName()
-	return _u
-}
-
-// SetScopeID sets the "scope_id" field.
-func (_u *DocumentDataHistoryUpdate) SetScopeID(v string) *DocumentDataHistoryUpdate {
-	_u.mutation.SetScopeID(v)
-	return _u
-}
-
-// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
-func (_u *DocumentDataHistoryUpdate) SetNillableScopeID(v *string) *DocumentDataHistoryUpdate {
-	if v != nil {
-		_u.SetScopeID(*v)
-	}
-	return _u
-}
-
-// ClearScopeID clears the value of the "scope_id" field.
-func (_u *DocumentDataHistoryUpdate) ClearScopeID() *DocumentDataHistoryUpdate {
-	_u.mutation.ClearScopeID()
-	return _u
-}
-
-// SetTemplateID sets the "template_id" field.
-func (_u *DocumentDataHistoryUpdate) SetTemplateID(v string) *DocumentDataHistoryUpdate {
-	_u.mutation.SetTemplateID(v)
-	return _u
-}
-
-// SetNillableTemplateID sets the "template_id" field if the given value is not nil.
-func (_u *DocumentDataHistoryUpdate) SetNillableTemplateID(v *string) *DocumentDataHistoryUpdate {
-	if v != nil {
-		_u.SetTemplateID(*v)
-	}
-	return _u
-}
-
-// ClearTemplateID clears the value of the "template_id" field.
-func (_u *DocumentDataHistoryUpdate) ClearTemplateID() *DocumentDataHistoryUpdate {
-	_u.mutation.ClearTemplateID()
-	return _u
-}
-
-// SetData sets the "data" field.
-func (_u *DocumentDataHistoryUpdate) SetData(v map[string]interface{}) *DocumentDataHistoryUpdate {
-	_u.mutation.SetData(v)
 	return _u
 }
 
@@ -257,9 +36,6 @@ func (_u *DocumentDataHistoryUpdate) Mutation() *DocumentDataHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *DocumentDataHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := _u.defaults(); err != nil {
-		return 0, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -285,24 +61,6 @@ func (_u *DocumentDataHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *DocumentDataHistoryUpdate) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if documentdatahistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized documentdatahistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := documentdatahistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *DocumentDataHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *DocumentDataHistoryUpdate {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *DocumentDataHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(documentdatahistory.Table, documentdatahistory.Columns, sqlgraph.NewFieldSpec(documentdatahistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
@@ -318,46 +76,23 @@ func (_u *DocumentDataHistoryUpdate) sqlSave(ctx context.Context) (_node int, er
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(documentdatahistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(documentdatahistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(documentdatahistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(documentdatahistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(documentdatahistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(documentdatahistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(documentdatahistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(documentdatahistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(documentdatahistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(documentdatahistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(documentdatahistory.FieldDeletedBy, field.TypeString, value)
-	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(documentdatahistory.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(documentdatahistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, documentdatahistory.FieldTags, value)
-		})
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(documentdatahistory.FieldTags, field.TypeJSON)
@@ -365,42 +100,21 @@ func (_u *DocumentDataHistoryUpdate) sqlSave(ctx context.Context) (_node int, er
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(documentdatahistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := _u.mutation.EnvironmentName(); ok {
-		_spec.SetField(documentdatahistory.FieldEnvironmentName, field.TypeString, value)
-	}
 	if _u.mutation.EnvironmentNameCleared() {
 		_spec.ClearField(documentdatahistory.FieldEnvironmentName, field.TypeString)
-	}
-	if value, ok := _u.mutation.EnvironmentID(); ok {
-		_spec.SetField(documentdatahistory.FieldEnvironmentID, field.TypeString, value)
 	}
 	if _u.mutation.EnvironmentIDCleared() {
 		_spec.ClearField(documentdatahistory.FieldEnvironmentID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ScopeName(); ok {
-		_spec.SetField(documentdatahistory.FieldScopeName, field.TypeString, value)
-	}
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(documentdatahistory.FieldScopeName, field.TypeString)
-	}
-	if value, ok := _u.mutation.ScopeID(); ok {
-		_spec.SetField(documentdatahistory.FieldScopeID, field.TypeString, value)
 	}
 	if _u.mutation.ScopeIDCleared() {
 		_spec.ClearField(documentdatahistory.FieldScopeID, field.TypeString)
 	}
-	if value, ok := _u.mutation.TemplateID(); ok {
-		_spec.SetField(documentdatahistory.FieldTemplateID, field.TypeString, value)
-	}
 	if _u.mutation.TemplateIDCleared() {
 		_spec.ClearField(documentdatahistory.FieldTemplateID, field.TypeString)
 	}
-	if value, ok := _u.mutation.Data(); ok {
-		_spec.SetField(documentdatahistory.FieldData, field.TypeJSON, value)
-	}
-	_spec.Node.Schema = _u.schemaConfig.DocumentDataHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{documentdatahistory.Label}
@@ -416,226 +130,9 @@ func (_u *DocumentDataHistoryUpdate) sqlSave(ctx context.Context) (_node int, er
 // DocumentDataHistoryUpdateOne is the builder for updating a single DocumentDataHistory entity.
 type DocumentDataHistoryUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *DocumentDataHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *DocumentDataHistoryUpdateOne) SetUpdatedAt(v time.Time) *DocumentDataHistoryUpdateOne {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *DocumentDataHistoryUpdateOne) ClearUpdatedAt() *DocumentDataHistoryUpdateOne {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *DocumentDataHistoryUpdateOne) SetUpdatedBy(v string) *DocumentDataHistoryUpdateOne {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *DocumentDataHistoryUpdateOne) SetNillableUpdatedBy(v *string) *DocumentDataHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *DocumentDataHistoryUpdateOne) ClearUpdatedBy() *DocumentDataHistoryUpdateOne {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *DocumentDataHistoryUpdateOne) SetUpdatedByImpersonator(v string) *DocumentDataHistoryUpdateOne {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *DocumentDataHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *DocumentDataHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *DocumentDataHistoryUpdateOne) ClearUpdatedByImpersonator() *DocumentDataHistoryUpdateOne {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *DocumentDataHistoryUpdateOne) SetDeletedAt(v time.Time) *DocumentDataHistoryUpdateOne {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *DocumentDataHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *DocumentDataHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *DocumentDataHistoryUpdateOne) ClearDeletedAt() *DocumentDataHistoryUpdateOne {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *DocumentDataHistoryUpdateOne) SetDeletedBy(v string) *DocumentDataHistoryUpdateOne {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *DocumentDataHistoryUpdateOne) SetNillableDeletedBy(v *string) *DocumentDataHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *DocumentDataHistoryUpdateOne) ClearDeletedBy() *DocumentDataHistoryUpdateOne {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *DocumentDataHistoryUpdateOne) SetTags(v []string) *DocumentDataHistoryUpdateOne {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *DocumentDataHistoryUpdateOne) AppendTags(v []string) *DocumentDataHistoryUpdateOne {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *DocumentDataHistoryUpdateOne) ClearTags() *DocumentDataHistoryUpdateOne {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetEnvironmentName sets the "environment_name" field.
-func (_u *DocumentDataHistoryUpdateOne) SetEnvironmentName(v string) *DocumentDataHistoryUpdateOne {
-	_u.mutation.SetEnvironmentName(v)
-	return _u
-}
-
-// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
-func (_u *DocumentDataHistoryUpdateOne) SetNillableEnvironmentName(v *string) *DocumentDataHistoryUpdateOne {
-	if v != nil {
-		_u.SetEnvironmentName(*v)
-	}
-	return _u
-}
-
-// ClearEnvironmentName clears the value of the "environment_name" field.
-func (_u *DocumentDataHistoryUpdateOne) ClearEnvironmentName() *DocumentDataHistoryUpdateOne {
-	_u.mutation.ClearEnvironmentName()
-	return _u
-}
-
-// SetEnvironmentID sets the "environment_id" field.
-func (_u *DocumentDataHistoryUpdateOne) SetEnvironmentID(v string) *DocumentDataHistoryUpdateOne {
-	_u.mutation.SetEnvironmentID(v)
-	return _u
-}
-
-// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
-func (_u *DocumentDataHistoryUpdateOne) SetNillableEnvironmentID(v *string) *DocumentDataHistoryUpdateOne {
-	if v != nil {
-		_u.SetEnvironmentID(*v)
-	}
-	return _u
-}
-
-// ClearEnvironmentID clears the value of the "environment_id" field.
-func (_u *DocumentDataHistoryUpdateOne) ClearEnvironmentID() *DocumentDataHistoryUpdateOne {
-	_u.mutation.ClearEnvironmentID()
-	return _u
-}
-
-// SetScopeName sets the "scope_name" field.
-func (_u *DocumentDataHistoryUpdateOne) SetScopeName(v string) *DocumentDataHistoryUpdateOne {
-	_u.mutation.SetScopeName(v)
-	return _u
-}
-
-// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
-func (_u *DocumentDataHistoryUpdateOne) SetNillableScopeName(v *string) *DocumentDataHistoryUpdateOne {
-	if v != nil {
-		_u.SetScopeName(*v)
-	}
-	return _u
-}
-
-// ClearScopeName clears the value of the "scope_name" field.
-func (_u *DocumentDataHistoryUpdateOne) ClearScopeName() *DocumentDataHistoryUpdateOne {
-	_u.mutation.ClearScopeName()
-	return _u
-}
-
-// SetScopeID sets the "scope_id" field.
-func (_u *DocumentDataHistoryUpdateOne) SetScopeID(v string) *DocumentDataHistoryUpdateOne {
-	_u.mutation.SetScopeID(v)
-	return _u
-}
-
-// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
-func (_u *DocumentDataHistoryUpdateOne) SetNillableScopeID(v *string) *DocumentDataHistoryUpdateOne {
-	if v != nil {
-		_u.SetScopeID(*v)
-	}
-	return _u
-}
-
-// ClearScopeID clears the value of the "scope_id" field.
-func (_u *DocumentDataHistoryUpdateOne) ClearScopeID() *DocumentDataHistoryUpdateOne {
-	_u.mutation.ClearScopeID()
-	return _u
-}
-
-// SetTemplateID sets the "template_id" field.
-func (_u *DocumentDataHistoryUpdateOne) SetTemplateID(v string) *DocumentDataHistoryUpdateOne {
-	_u.mutation.SetTemplateID(v)
-	return _u
-}
-
-// SetNillableTemplateID sets the "template_id" field if the given value is not nil.
-func (_u *DocumentDataHistoryUpdateOne) SetNillableTemplateID(v *string) *DocumentDataHistoryUpdateOne {
-	if v != nil {
-		_u.SetTemplateID(*v)
-	}
-	return _u
-}
-
-// ClearTemplateID clears the value of the "template_id" field.
-func (_u *DocumentDataHistoryUpdateOne) ClearTemplateID() *DocumentDataHistoryUpdateOne {
-	_u.mutation.ClearTemplateID()
-	return _u
-}
-
-// SetData sets the "data" field.
-func (_u *DocumentDataHistoryUpdateOne) SetData(v map[string]interface{}) *DocumentDataHistoryUpdateOne {
-	_u.mutation.SetData(v)
-	return _u
+	fields   []string
+	hooks    []Hook
+	mutation *DocumentDataHistoryMutation
 }
 
 // Mutation returns the DocumentDataHistoryMutation object of the builder.
@@ -658,9 +155,6 @@ func (_u *DocumentDataHistoryUpdateOne) Select(field string, fields ...string) *
 
 // Save executes the query and returns the updated DocumentDataHistory entity.
 func (_u *DocumentDataHistoryUpdateOne) Save(ctx context.Context) (*DocumentDataHistory, error) {
-	if err := _u.defaults(); err != nil {
-		return nil, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -684,24 +178,6 @@ func (_u *DocumentDataHistoryUpdateOne) ExecX(ctx context.Context) {
 	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
-}
-
-// defaults sets the default values of the builder before save.
-func (_u *DocumentDataHistoryUpdateOne) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if documentdatahistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized documentdatahistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := documentdatahistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *DocumentDataHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *DocumentDataHistoryUpdateOne {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
 }
 
 func (_u *DocumentDataHistoryUpdateOne) sqlSave(ctx context.Context) (_node *DocumentDataHistory, err error) {
@@ -736,46 +212,23 @@ func (_u *DocumentDataHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Doc
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(documentdatahistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(documentdatahistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(documentdatahistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(documentdatahistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(documentdatahistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(documentdatahistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(documentdatahistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(documentdatahistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(documentdatahistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(documentdatahistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(documentdatahistory.FieldDeletedBy, field.TypeString, value)
-	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(documentdatahistory.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(documentdatahistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, documentdatahistory.FieldTags, value)
-		})
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(documentdatahistory.FieldTags, field.TypeJSON)
@@ -783,42 +236,21 @@ func (_u *DocumentDataHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Doc
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(documentdatahistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := _u.mutation.EnvironmentName(); ok {
-		_spec.SetField(documentdatahistory.FieldEnvironmentName, field.TypeString, value)
-	}
 	if _u.mutation.EnvironmentNameCleared() {
 		_spec.ClearField(documentdatahistory.FieldEnvironmentName, field.TypeString)
-	}
-	if value, ok := _u.mutation.EnvironmentID(); ok {
-		_spec.SetField(documentdatahistory.FieldEnvironmentID, field.TypeString, value)
 	}
 	if _u.mutation.EnvironmentIDCleared() {
 		_spec.ClearField(documentdatahistory.FieldEnvironmentID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ScopeName(); ok {
-		_spec.SetField(documentdatahistory.FieldScopeName, field.TypeString, value)
-	}
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(documentdatahistory.FieldScopeName, field.TypeString)
-	}
-	if value, ok := _u.mutation.ScopeID(); ok {
-		_spec.SetField(documentdatahistory.FieldScopeID, field.TypeString, value)
 	}
 	if _u.mutation.ScopeIDCleared() {
 		_spec.ClearField(documentdatahistory.FieldScopeID, field.TypeString)
 	}
-	if value, ok := _u.mutation.TemplateID(); ok {
-		_spec.SetField(documentdatahistory.FieldTemplateID, field.TypeString, value)
-	}
 	if _u.mutation.TemplateIDCleared() {
 		_spec.ClearField(documentdatahistory.FieldTemplateID, field.TypeString)
 	}
-	if value, ok := _u.mutation.Data(); ok {
-		_spec.SetField(documentdatahistory.FieldData, field.TypeJSON, value)
-	}
-	_spec.Node.Schema = _u.schemaConfig.DocumentDataHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	_node = &DocumentDataHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

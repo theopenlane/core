@@ -10,10 +10,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
 	"github.com/theopenlane/core/internal/ent/historygenerated/jobtemplatehistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 )
 
 // JobTemplateHistoryDelete is the builder for deleting a JobTemplateHistory entity.
@@ -45,8 +43,6 @@ func (_d *JobTemplateHistoryDelete) ExecX(ctx context.Context) int {
 
 func (_d *JobTemplateHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(jobtemplatehistory.Table, sqlgraph.NewFieldSpec(jobtemplatehistory.FieldID, field.TypeString))
-	_spec.Node.Schema = _d.schemaConfig.JobTemplateHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
 	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

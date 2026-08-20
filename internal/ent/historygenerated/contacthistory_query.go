@@ -17,7 +17,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/contacthistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -28,8 +27,8 @@ type ContactHistoryQuery struct {
 	order      []contacthistory.OrderOption
 	inters     []Interceptor
 	predicates []predicate.ContactHistory
-	loadTotal  []func(context.Context, []*ContactHistory) error
 	modifiers  []func(*sql.Selector)
+	loadTotal  []func(context.Context, []*ContactHistory) error
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -259,9 +258,8 @@ func (_q *ContactHistoryQuery) Clone() *ContactHistoryQuery {
 		inters:     append([]Interceptor{}, _q.inters...),
 		predicates: append([]predicate.ContactHistory{}, _q.predicates...),
 		// clone intermediate query.
-		sql:       _q.sql.Clone(),
-		path:      _q.path,
-		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
+		sql:  _q.sql.Clone(),
+		path: _q.path,
 	}
 }
 
@@ -358,8 +356,6 @@ func (_q *ContactHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.ContactHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -382,8 +378,6 @@ func (_q *ContactHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 
 func (_q *ContactHistoryQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.ContactHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -449,12 +443,6 @@ func (_q *ContactHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.ContactHistory)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
-	for _, m := range _q.modifiers {
-		m(selector)
-	}
 	for _, p := range _q.predicates {
 		p(selector)
 	}
@@ -470,12 +458,6 @@ func (_q *ContactHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
-}
-
-// Modify adds a query modifier for attaching custom logic to queries.
-func (_q *ContactHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *ContactHistorySelect {
-	_q.modifiers = append(_q.modifiers, modifiers...)
-	return _q.Select()
 }
 
 // CountIDs returns the count of ids with FGA batch filtering applied
@@ -584,10 +566,4 @@ func (_s *ContactHistorySelect) sqlScan(ctx context.Context, root *ContactHistor
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
-}
-
-// Modify adds a query modifier for attaching custom logic to queries.
-func (_s *ContactHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *ContactHistorySelect {
-	_s.modifiers = append(_s.modifiers, modifiers...)
-	return _s
 }

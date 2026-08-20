@@ -32,7 +32,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -130,9 +129,6 @@ func (_q *TrustCenterQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, trustcenter.OwnerTable, trustcenter.OwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.TrustCenter
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -155,9 +151,6 @@ func (_q *TrustCenterQuery) QueryBlockedGroups() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, trustcenter.BlockedGroupsTable, trustcenter.BlockedGroupsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -180,9 +173,6 @@ func (_q *TrustCenterQuery) QueryEditors() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, trustcenter.EditorsTable, trustcenter.EditorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -205,9 +195,6 @@ func (_q *TrustCenterQuery) QueryCustomDomain() *CustomDomainQuery {
 			sqlgraph.To(customdomain.Table, customdomain.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, trustcenter.CustomDomainTable, trustcenter.CustomDomainColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomDomain
-		step.Edge.Schema = schemaConfig.TrustCenter
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -230,9 +217,6 @@ func (_q *TrustCenterQuery) QueryPreviewDomain() *CustomDomainQuery {
 			sqlgraph.To(customdomain.Table, customdomain.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, trustcenter.PreviewDomainTable, trustcenter.PreviewDomainColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomDomain
-		step.Edge.Schema = schemaConfig.TrustCenter
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -255,9 +239,6 @@ func (_q *TrustCenterQuery) QuerySetting() *TrustCenterSettingQuery {
 			sqlgraph.To(trustcentersetting.Table, trustcentersetting.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, trustcenter.SettingTable, trustcenter.SettingColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.TrustCenterSetting
-		step.Edge.Schema = schemaConfig.TrustCenter
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -280,9 +261,6 @@ func (_q *TrustCenterQuery) QueryPreviewSetting() *TrustCenterSettingQuery {
 			sqlgraph.To(trustcentersetting.Table, trustcentersetting.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, trustcenter.PreviewSettingTable, trustcenter.PreviewSettingColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.TrustCenterSetting
-		step.Edge.Schema = schemaConfig.TrustCenter
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -305,9 +283,6 @@ func (_q *TrustCenterQuery) QueryWatermarkConfig() *TrustCenterWatermarkConfigQu
 			sqlgraph.To(trustcenterwatermarkconfig.Table, trustcenterwatermarkconfig.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, trustcenter.WatermarkConfigTable, trustcenter.WatermarkConfigColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.TrustCenterWatermarkConfig
-		step.Edge.Schema = schemaConfig.TrustCenter
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -330,9 +305,6 @@ func (_q *TrustCenterQuery) QueryTrustCenterSubprocessors() *TrustCenterSubproce
 			sqlgraph.To(trustcentersubprocessor.Table, trustcentersubprocessor.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, trustcenter.TrustCenterSubprocessorsTable, trustcenter.TrustCenterSubprocessorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.TrustCenterSubprocessor
-		step.Edge.Schema = schemaConfig.TrustCenterSubprocessor
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -355,9 +327,6 @@ func (_q *TrustCenterQuery) QueryTrustCenterDocs() *TrustCenterDocQuery {
 			sqlgraph.To(trustcenterdoc.Table, trustcenterdoc.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, trustcenter.TrustCenterDocsTable, trustcenter.TrustCenterDocsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.TrustCenterDoc
-		step.Edge.Schema = schemaConfig.TrustCenterDoc
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -380,9 +349,6 @@ func (_q *TrustCenterQuery) QueryTrustCenterCompliances() *TrustCenterCompliance
 			sqlgraph.To(trustcentercompliance.Table, trustcentercompliance.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, trustcenter.TrustCenterCompliancesTable, trustcenter.TrustCenterCompliancesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.TrustCenterCompliance
-		step.Edge.Schema = schemaConfig.TrustCenterCompliance
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -405,9 +371,6 @@ func (_q *TrustCenterQuery) QueryTemplates() *TemplateQuery {
 			sqlgraph.To(template.Table, template.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, trustcenter.TemplatesTable, trustcenter.TemplatesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Template
-		step.Edge.Schema = schemaConfig.Template
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -430,9 +393,6 @@ func (_q *TrustCenterQuery) QueryPosts() *NoteQuery {
 			sqlgraph.To(note.Table, note.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, trustcenter.PostsTable, trustcenter.PostsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Note
-		step.Edge.Schema = schemaConfig.Note
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -455,9 +415,6 @@ func (_q *TrustCenterQuery) QueryTrustCenterEntities() *TrustCenterEntityQuery {
 			sqlgraph.To(trustcenterentity.Table, trustcenterentity.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, trustcenter.TrustCenterEntitiesTable, trustcenter.TrustCenterEntitiesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.TrustCenterEntity
-		step.Edge.Schema = schemaConfig.TrustCenterEntity
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -480,9 +437,6 @@ func (_q *TrustCenterQuery) QueryTrustCenterNdaRequests() *TrustCenterNDARequest
 			sqlgraph.To(trustcenterndarequest.Table, trustcenterndarequest.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, trustcenter.TrustCenterNdaRequestsTable, trustcenter.TrustCenterNdaRequestsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.TrustCenterNDARequest
-		step.Edge.Schema = schemaConfig.TrustCenterNDARequest
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -505,9 +459,6 @@ func (_q *TrustCenterQuery) QueryTrustCenterFaqs() *TrustCenterFAQQuery {
 			sqlgraph.To(trustcenterfaq.Table, trustcenterfaq.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, trustcenter.TrustCenterFaqsTable, trustcenter.TrustCenterFaqsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.TrustCenterFAQ
-		step.Edge.Schema = schemaConfig.TrustCenterFAQ
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -530,9 +481,6 @@ func (_q *TrustCenterQuery) QuerySubscribers() *SubscriberQuery {
 			sqlgraph.To(subscriber.Table, subscriber.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, trustcenter.SubscribersTable, trustcenter.SubscribersColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Subscriber
-		step.Edge.Schema = schemaConfig.Subscriber
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -555,9 +503,6 @@ func (_q *TrustCenterQuery) QueryEmailTemplates() *EmailTemplateQuery {
 			sqlgraph.To(emailtemplate.Table, emailtemplate.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, trustcenter.EmailTemplatesTable, trustcenter.EmailTemplatesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.EmailTemplate
-		step.Edge.Schema = schemaConfig.EmailTemplate
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -580,9 +525,6 @@ func (_q *TrustCenterQuery) QueryCampaigns() *CampaignQuery {
 			sqlgraph.To(campaign.Table, campaign.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, trustcenter.CampaignsTable, trustcenter.CampaignsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Campaign
-		step.Edge.Schema = schemaConfig.Campaign
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1138,8 +1080,6 @@ func (_q *TrustCenterQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.TrustCenter
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -1973,8 +1913,6 @@ func (_q *TrustCenterQuery) loadCampaigns(ctx context.Context, query *CampaignQu
 
 func (_q *TrustCenterQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.TrustCenter
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -2049,9 +1987,6 @@ func (_q *TrustCenterQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.TrustCenter)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}

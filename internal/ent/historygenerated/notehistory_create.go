@@ -428,7 +428,6 @@ func (_c *NoteHistoryCreate) createSpec() (*NoteHistory, *sqlgraph.CreateSpec) {
 		_node = &NoteHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(notehistory.Table, sqlgraph.NewFieldSpec(notehistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.NoteHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

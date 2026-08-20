@@ -398,7 +398,6 @@ func (_c *OrgMembershipCreate) createSpec() (*OrgMembership, *sqlgraph.CreateSpe
 		_node = &OrgMembership{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(orgmembership.Table, sqlgraph.NewFieldSpec(orgmembership.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.OrgMembership
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -470,7 +469,6 @@ func (_c *OrgMembershipCreate) createSpec() (*OrgMembership, *sqlgraph.CreateSpe
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.OrgMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -488,7 +486,6 @@ func (_c *OrgMembershipCreate) createSpec() (*OrgMembership, *sqlgraph.CreateSpe
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.OrgMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -506,7 +503,6 @@ func (_c *OrgMembershipCreate) createSpec() (*OrgMembership, *sqlgraph.CreateSpe
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.OrgMembershipEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

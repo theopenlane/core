@@ -393,7 +393,6 @@ func (_c *ScheduledJobCreate) createSpec() (*ScheduledJob, *sqlgraph.CreateSpec)
 		_node = &ScheduledJob{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(scheduledjob.Table, sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.ScheduledJob
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -453,7 +452,6 @@ func (_c *ScheduledJobCreate) createSpec() (*ScheduledJob, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ScheduledJob
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -471,7 +469,6 @@ func (_c *ScheduledJobCreate) createSpec() (*ScheduledJob, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(jobtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ScheduledJob
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -489,7 +486,6 @@ func (_c *ScheduledJobCreate) createSpec() (*ScheduledJob, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ScheduledJobControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -506,7 +502,6 @@ func (_c *ScheduledJobCreate) createSpec() (*ScheduledJob, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ScheduledJobSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -523,7 +518,6 @@ func (_c *ScheduledJobCreate) createSpec() (*ScheduledJob, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ScheduledJob
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

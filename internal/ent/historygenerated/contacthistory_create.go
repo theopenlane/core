@@ -459,7 +459,6 @@ func (_c *ContactHistoryCreate) createSpec() (*ContactHistory, *sqlgraph.CreateS
 		_node = &ContactHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(contacthistory.Table, sqlgraph.NewFieldSpec(contacthistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.ContactHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

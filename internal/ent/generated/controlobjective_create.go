@@ -657,7 +657,6 @@ func (_c *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cre
 		_node = &ControlObjective{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(controlobjective.Table, sqlgraph.NewFieldSpec(controlobjective.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.ControlObjective
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -757,7 +756,6 @@ func (_c *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cre
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ControlObjective
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -775,7 +773,6 @@ func (_c *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cre
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ControlObjectiveBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -792,7 +789,6 @@ func (_c *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cre
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ControlObjectiveEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -809,7 +805,6 @@ func (_c *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cre
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ControlObjectiveViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -826,7 +821,6 @@ func (_c *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cre
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ProgramControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -843,7 +837,6 @@ func (_c *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cre
 				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.EvidenceControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -860,7 +853,6 @@ func (_c *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cre
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ControlControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -877,7 +869,6 @@ func (_c *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cre
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.SubcontrolControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -894,7 +885,6 @@ func (_c *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cre
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.InternalPolicyControlObjectives
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -911,7 +901,6 @@ func (_c *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cre
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Procedure
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -928,7 +917,6 @@ func (_c *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cre
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Risk
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -945,7 +933,6 @@ func (_c *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cre
 				IDSpec: sqlgraph.NewFieldSpec(narrative.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Narrative
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -962,7 +949,6 @@ func (_c *ControlObjectiveCreate) createSpec() (*ControlObjective, *sqlgraph.Cre
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ControlObjectiveTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

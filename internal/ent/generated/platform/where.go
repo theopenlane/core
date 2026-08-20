@@ -10,8 +10,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // ID filters vertices based on their ID field.
@@ -4221,9 +4219,6 @@ func HasOwner() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.Platform
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -4232,9 +4227,6 @@ func HasOwner() predicate.Platform {
 func HasOwnerWith(preds ...predicate.Organization) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newOwnerStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.Platform
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -4250,9 +4242,6 @@ func HasBlockedGroups() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, BlockedGroupsTable, BlockedGroupsPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.PlatformBlockedGroups
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -4261,9 +4250,6 @@ func HasBlockedGroups() predicate.Platform {
 func HasBlockedGroupsWith(preds ...predicate.Group) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newBlockedGroupsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.PlatformBlockedGroups
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -4279,9 +4265,6 @@ func HasEditors() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, EditorsTable, EditorsPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.PlatformEditors
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -4290,9 +4273,6 @@ func HasEditors() predicate.Platform {
 func HasEditorsWith(preds ...predicate.Group) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newEditorsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.PlatformEditors
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -4308,9 +4288,6 @@ func HasViewers() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, ViewersTable, ViewersPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.PlatformViewers
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -4319,9 +4296,6 @@ func HasViewers() predicate.Platform {
 func HasViewersWith(preds ...predicate.Group) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newViewersStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.PlatformViewers
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -4337,9 +4311,6 @@ func HasInternalOwnerUser() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, InternalOwnerUserTable, InternalOwnerUserColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.Platform
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -4348,9 +4319,6 @@ func HasInternalOwnerUser() predicate.Platform {
 func HasInternalOwnerUserWith(preds ...predicate.User) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newInternalOwnerUserStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.Platform
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -4366,9 +4334,6 @@ func HasInternalOwnerGroup() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, InternalOwnerGroupTable, InternalOwnerGroupColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Platform
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -4377,9 +4342,6 @@ func HasInternalOwnerGroup() predicate.Platform {
 func HasInternalOwnerGroupWith(preds ...predicate.Group) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newInternalOwnerGroupStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Platform
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -4395,9 +4357,6 @@ func HasBusinessOwnerUser() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, BusinessOwnerUserTable, BusinessOwnerUserColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.Platform
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -4406,9 +4365,6 @@ func HasBusinessOwnerUser() predicate.Platform {
 func HasBusinessOwnerUserWith(preds ...predicate.User) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newBusinessOwnerUserStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.Platform
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -4424,9 +4380,6 @@ func HasBusinessOwnerGroup() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, BusinessOwnerGroupTable, BusinessOwnerGroupColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Platform
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -4435,9 +4388,6 @@ func HasBusinessOwnerGroup() predicate.Platform {
 func HasBusinessOwnerGroupWith(preds ...predicate.Group) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newBusinessOwnerGroupStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Platform
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -4453,9 +4403,6 @@ func HasTechnicalOwnerUser() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, TechnicalOwnerUserTable, TechnicalOwnerUserColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.Platform
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -4464,9 +4411,6 @@ func HasTechnicalOwnerUser() predicate.Platform {
 func HasTechnicalOwnerUserWith(preds ...predicate.User) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newTechnicalOwnerUserStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.Platform
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -4482,9 +4426,6 @@ func HasTechnicalOwnerGroup() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, TechnicalOwnerGroupTable, TechnicalOwnerGroupColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Platform
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -4493,9 +4434,6 @@ func HasTechnicalOwnerGroup() predicate.Platform {
 func HasTechnicalOwnerGroupWith(preds ...predicate.Group) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newTechnicalOwnerGroupStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Platform
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -4511,9 +4449,6 @@ func HasSecurityOwnerUser() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, SecurityOwnerUserTable, SecurityOwnerUserColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.Platform
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -4522,9 +4457,6 @@ func HasSecurityOwnerUser() predicate.Platform {
 func HasSecurityOwnerUserWith(preds ...predicate.User) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newSecurityOwnerUserStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.Platform
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -4540,9 +4472,6 @@ func HasSecurityOwnerGroup() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, SecurityOwnerGroupTable, SecurityOwnerGroupColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Platform
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -4551,9 +4480,6 @@ func HasSecurityOwnerGroup() predicate.Platform {
 func HasSecurityOwnerGroupWith(preds ...predicate.Group) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newSecurityOwnerGroupStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Platform
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -4569,9 +4495,6 @@ func HasPlatformKind() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, PlatformKindTable, PlatformKindColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Platform
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -4580,9 +4503,6 @@ func HasPlatformKind() predicate.Platform {
 func HasPlatformKindWith(preds ...predicate.CustomTypeEnum) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newPlatformKindStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Platform
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -4598,9 +4518,6 @@ func HasPlatformDataClassification() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, PlatformDataClassificationTable, PlatformDataClassificationColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Platform
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -4609,9 +4526,6 @@ func HasPlatformDataClassification() predicate.Platform {
 func HasPlatformDataClassificationWith(preds ...predicate.CustomTypeEnum) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newPlatformDataClassificationStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Platform
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -4627,9 +4541,6 @@ func HasEnvironment() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, EnvironmentTable, EnvironmentColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Platform
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -4638,9 +4549,6 @@ func HasEnvironment() predicate.Platform {
 func HasEnvironmentWith(preds ...predicate.CustomTypeEnum) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newEnvironmentStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Platform
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -4656,9 +4564,6 @@ func HasScope() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, ScopeTable, ScopeColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Platform
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -4667,9 +4572,6 @@ func HasScope() predicate.Platform {
 func HasScopeWith(preds ...predicate.CustomTypeEnum) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newScopeStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Platform
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -4685,9 +4587,6 @@ func HasAccessModel() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, AccessModelTable, AccessModelColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Platform
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -4696,9 +4595,6 @@ func HasAccessModel() predicate.Platform {
 func HasAccessModelWith(preds ...predicate.CustomTypeEnum) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newAccessModelStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Platform
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -4714,9 +4610,6 @@ func HasEncryptionStatus() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, EncryptionStatusTable, EncryptionStatusColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Platform
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -4725,9 +4618,6 @@ func HasEncryptionStatus() predicate.Platform {
 func HasEncryptionStatusWith(preds ...predicate.CustomTypeEnum) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newEncryptionStatusStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Platform
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -4743,9 +4633,6 @@ func HasSecurityTier() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, SecurityTierTable, SecurityTierColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Platform
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -4754,9 +4641,6 @@ func HasSecurityTier() predicate.Platform {
 func HasSecurityTierWith(preds ...predicate.CustomTypeEnum) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newSecurityTierStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Platform
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -4772,9 +4656,6 @@ func HasCriticality() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, CriticalityTable, CriticalityColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Platform
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -4783,9 +4664,6 @@ func HasCriticality() predicate.Platform {
 func HasCriticalityWith(preds ...predicate.CustomTypeEnum) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newCriticalityStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Platform
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -4801,9 +4679,6 @@ func HasAssets() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, AssetsTable, AssetsPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Asset
-		step.Edge.Schema = schemaConfig.PlatformAssets
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -4812,9 +4687,6 @@ func HasAssets() predicate.Platform {
 func HasAssetsWith(preds ...predicate.Asset) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newAssetsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Asset
-		step.Edge.Schema = schemaConfig.PlatformAssets
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -4830,9 +4702,6 @@ func HasEntities() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, EntitiesTable, EntitiesPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.PlatformEntities
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -4841,9 +4710,6 @@ func HasEntities() predicate.Platform {
 func HasEntitiesWith(preds ...predicate.Entity) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newEntitiesStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.PlatformEntities
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -4859,9 +4725,6 @@ func HasEvidence() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, EvidenceTable, EvidencePrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Evidence
-		step.Edge.Schema = schemaConfig.PlatformEvidence
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -4870,9 +4733,6 @@ func HasEvidence() predicate.Platform {
 func HasEvidenceWith(preds ...predicate.Evidence) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newEvidenceStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Evidence
-		step.Edge.Schema = schemaConfig.PlatformEvidence
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -4888,9 +4748,6 @@ func HasFiles() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, FilesTable, FilesPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.PlatformFiles
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -4899,9 +4756,6 @@ func HasFiles() predicate.Platform {
 func HasFilesWith(preds ...predicate.File) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newFilesStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.PlatformFiles
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -4917,9 +4771,6 @@ func HasArchitectureDiagrams() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, ArchitectureDiagramsTable, ArchitectureDiagramsColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.File
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -4928,9 +4779,6 @@ func HasArchitectureDiagrams() predicate.Platform {
 func HasArchitectureDiagramsWith(preds ...predicate.File) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newArchitectureDiagramsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.File
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -4946,9 +4794,6 @@ func HasDataFlowDiagrams() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, DataFlowDiagramsTable, DataFlowDiagramsColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.File
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -4957,9 +4802,6 @@ func HasDataFlowDiagrams() predicate.Platform {
 func HasDataFlowDiagramsWith(preds ...predicate.File) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newDataFlowDiagramsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.File
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -4975,9 +4817,6 @@ func HasTrustBoundaryDiagrams() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, TrustBoundaryDiagramsTable, TrustBoundaryDiagramsColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.File
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -4986,9 +4825,6 @@ func HasTrustBoundaryDiagrams() predicate.Platform {
 func HasTrustBoundaryDiagramsWith(preds ...predicate.File) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newTrustBoundaryDiagramsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.File
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -5004,9 +4840,6 @@ func HasRisks() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, RisksTable, RisksPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Risk
-		step.Edge.Schema = schemaConfig.PlatformRisks
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -5015,9 +4848,6 @@ func HasRisks() predicate.Platform {
 func HasRisksWith(preds ...predicate.Risk) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newRisksStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Risk
-		step.Edge.Schema = schemaConfig.PlatformRisks
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -5033,9 +4863,6 @@ func HasControls() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, ControlsTable, ControlsPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.PlatformControls
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -5044,9 +4871,6 @@ func HasControls() predicate.Platform {
 func HasControlsWith(preds ...predicate.Control) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newControlsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.PlatformControls
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -5062,9 +4886,6 @@ func HasAssessments() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, AssessmentsTable, AssessmentsPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Assessment
-		step.Edge.Schema = schemaConfig.PlatformAssessments
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -5073,9 +4894,6 @@ func HasAssessments() predicate.Platform {
 func HasAssessmentsWith(preds ...predicate.Assessment) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newAssessmentsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Assessment
-		step.Edge.Schema = schemaConfig.PlatformAssessments
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -5091,9 +4909,6 @@ func HasScans() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, ScansTable, ScansPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Scan
-		step.Edge.Schema = schemaConfig.PlatformScans
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -5102,9 +4917,6 @@ func HasScans() predicate.Platform {
 func HasScansWith(preds ...predicate.Scan) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newScansStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Scan
-		step.Edge.Schema = schemaConfig.PlatformScans
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -5120,9 +4932,6 @@ func HasTasks() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, TasksTable, TasksPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Task
-		step.Edge.Schema = schemaConfig.PlatformTasks
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -5131,9 +4940,6 @@ func HasTasks() predicate.Platform {
 func HasTasksWith(preds ...predicate.Task) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newTasksStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Task
-		step.Edge.Schema = schemaConfig.PlatformTasks
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -5149,9 +4955,6 @@ func HasIdentityHolders() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, IdentityHoldersTable, IdentityHoldersPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.IdentityHolder
-		step.Edge.Schema = schemaConfig.PlatformIdentityHolders
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -5160,9 +4963,6 @@ func HasIdentityHolders() predicate.Platform {
 func HasIdentityHoldersWith(preds ...predicate.IdentityHolder) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newIdentityHoldersStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.IdentityHolder
-		step.Edge.Schema = schemaConfig.PlatformIdentityHolders
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -5178,9 +4978,6 @@ func HasIntegrations() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, IntegrationsTable, IntegrationsColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Integration
-		step.Edge.Schema = schemaConfig.Integration
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -5189,9 +4986,6 @@ func HasIntegrations() predicate.Platform {
 func HasIntegrationsWith(preds ...predicate.Integration) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newIntegrationsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Integration
-		step.Edge.Schema = schemaConfig.Integration
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -5207,9 +5001,6 @@ func HasDirectorySyncRuns() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, DirectorySyncRunsTable, DirectorySyncRunsColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.DirectorySyncRun
-		step.Edge.Schema = schemaConfig.DirectorySyncRun
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -5218,9 +5009,6 @@ func HasDirectorySyncRuns() predicate.Platform {
 func HasDirectorySyncRunsWith(preds ...predicate.DirectorySyncRun) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newDirectorySyncRunsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.DirectorySyncRun
-		step.Edge.Schema = schemaConfig.DirectorySyncRun
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -5236,9 +5024,6 @@ func HasDirectoryAccounts() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, DirectoryAccountsTable, DirectoryAccountsColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.DirectoryAccount
-		step.Edge.Schema = schemaConfig.DirectoryAccount
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -5247,9 +5032,6 @@ func HasDirectoryAccounts() predicate.Platform {
 func HasDirectoryAccountsWith(preds ...predicate.DirectoryAccount) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newDirectoryAccountsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.DirectoryAccount
-		step.Edge.Schema = schemaConfig.DirectoryAccount
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -5265,9 +5047,6 @@ func HasDirectoryGroups() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, DirectoryGroupsTable, DirectoryGroupsColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.DirectoryGroup
-		step.Edge.Schema = schemaConfig.DirectoryGroup
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -5276,9 +5055,6 @@ func HasDirectoryGroups() predicate.Platform {
 func HasDirectoryGroupsWith(preds ...predicate.DirectoryGroup) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newDirectoryGroupsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.DirectoryGroup
-		step.Edge.Schema = schemaConfig.DirectoryGroup
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -5294,9 +5070,6 @@ func HasDirectoryMemberships() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, DirectoryMembershipsTable, DirectoryMembershipsColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.DirectoryMembership
-		step.Edge.Schema = schemaConfig.DirectoryMembership
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -5305,9 +5078,6 @@ func HasDirectoryMemberships() predicate.Platform {
 func HasDirectoryMembershipsWith(preds ...predicate.DirectoryMembership) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newDirectoryMembershipsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.DirectoryMembership
-		step.Edge.Schema = schemaConfig.DirectoryMembership
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -5323,9 +5093,6 @@ func HasWorkflowObjectRefs() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, WorkflowObjectRefsTable, WorkflowObjectRefsColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.WorkflowObjectRef
-		step.Edge.Schema = schemaConfig.WorkflowObjectRef
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -5334,9 +5101,6 @@ func HasWorkflowObjectRefs() predicate.Platform {
 func HasWorkflowObjectRefsWith(preds ...predicate.WorkflowObjectRef) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newWorkflowObjectRefsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.WorkflowObjectRef
-		step.Edge.Schema = schemaConfig.WorkflowObjectRef
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -5352,9 +5116,6 @@ func HasSourceAssets() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, SourceAssetsTable, SourceAssetsColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Asset
-		step.Edge.Schema = schemaConfig.Asset
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -5363,9 +5124,6 @@ func HasSourceAssets() predicate.Platform {
 func HasSourceAssetsWith(preds ...predicate.Asset) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newSourceAssetsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Asset
-		step.Edge.Schema = schemaConfig.Asset
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -5381,9 +5139,6 @@ func HasSourceEntities() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, SourceEntitiesTable, SourceEntitiesPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.PlatformSourceEntities
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -5392,9 +5147,6 @@ func HasSourceEntities() predicate.Platform {
 func HasSourceEntitiesWith(preds ...predicate.Entity) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newSourceEntitiesStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.PlatformSourceEntities
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -5410,9 +5162,6 @@ func HasOutOfScopeAssets() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, OutOfScopeAssetsTable, OutOfScopeAssetsPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Asset
-		step.Edge.Schema = schemaConfig.PlatformOutOfScopeAssets
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -5421,9 +5170,6 @@ func HasOutOfScopeAssets() predicate.Platform {
 func HasOutOfScopeAssetsWith(preds ...predicate.Asset) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newOutOfScopeAssetsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Asset
-		step.Edge.Schema = schemaConfig.PlatformOutOfScopeAssets
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -5439,9 +5185,6 @@ func HasOutOfScopeVendors() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, OutOfScopeVendorsTable, OutOfScopeVendorsPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.PlatformOutOfScopeVendors
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -5450,9 +5193,6 @@ func HasOutOfScopeVendors() predicate.Platform {
 func HasOutOfScopeVendorsWith(preds ...predicate.Entity) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newOutOfScopeVendorsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.PlatformOutOfScopeVendors
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -5468,9 +5208,6 @@ func HasApplicableFrameworks() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, ApplicableFrameworksTable, ApplicableFrameworksPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Standard
-		step.Edge.Schema = schemaConfig.PlatformApplicableFrameworks
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -5479,9 +5216,6 @@ func HasApplicableFrameworks() predicate.Platform {
 func HasApplicableFrameworksWith(preds ...predicate.Standard) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newApplicableFrameworksStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Standard
-		step.Edge.Schema = schemaConfig.PlatformApplicableFrameworks
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -5497,9 +5231,6 @@ func HasGeneratedScans() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, GeneratedScansTable, GeneratedScansColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Scan
-		step.Edge.Schema = schemaConfig.Scan
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -5508,9 +5239,6 @@ func HasGeneratedScans() predicate.Platform {
 func HasGeneratedScansWith(preds ...predicate.Scan) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newGeneratedScansStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Scan
-		step.Edge.Schema = schemaConfig.Scan
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -5526,9 +5254,6 @@ func HasPlatformOwner() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, PlatformOwnerTable, PlatformOwnerColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.Platform
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -5537,9 +5262,6 @@ func HasPlatformOwner() predicate.Platform {
 func HasPlatformOwnerWith(preds ...predicate.User) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newPlatformOwnerStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.Platform
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -5555,9 +5277,6 @@ func HasSystemDetails() predicate.Platform {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, SystemDetailsTable, SystemDetailsPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.SystemDetail
-		step.Edge.Schema = schemaConfig.PlatformSystemDetails
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -5566,9 +5285,6 @@ func HasSystemDetails() predicate.Platform {
 func HasSystemDetailsWith(preds ...predicate.SystemDetail) predicate.Platform {
 	return predicate.Platform(func(s *sql.Selector) {
 		step := newSystemDetailsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.SystemDetail
-		step.Edge.Schema = schemaConfig.PlatformSystemDetails
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

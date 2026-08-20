@@ -8,8 +8,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // ID filters vertices based on their ID field.
@@ -1229,9 +1227,6 @@ func HasOwner() predicate.PersonalAccessToken {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.PersonalAccessToken
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1240,9 +1235,6 @@ func HasOwner() predicate.PersonalAccessToken {
 func HasOwnerWith(preds ...predicate.User) predicate.PersonalAccessToken {
 	return predicate.PersonalAccessToken(func(s *sql.Selector) {
 		step := newOwnerStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.PersonalAccessToken
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1258,9 +1250,6 @@ func HasOrganizations() predicate.PersonalAccessToken {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, OrganizationsTable, OrganizationsPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.OrganizationPersonalAccessTokens
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1269,9 +1258,6 @@ func HasOrganizations() predicate.PersonalAccessToken {
 func HasOrganizationsWith(preds ...predicate.Organization) predicate.PersonalAccessToken {
 	return predicate.PersonalAccessToken(func(s *sql.Selector) {
 		step := newOrganizationsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.OrganizationPersonalAccessTokens
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1287,9 +1273,6 @@ func HasEvents() predicate.PersonalAccessToken {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, EventsTable, EventsPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Event
-		step.Edge.Schema = schemaConfig.PersonalAccessTokenEvents
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1298,9 +1281,6 @@ func HasEvents() predicate.PersonalAccessToken {
 func HasEventsWith(preds ...predicate.Event) predicate.PersonalAccessToken {
 	return predicate.PersonalAccessToken(func(s *sql.Selector) {
 		step := newEventsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Event
-		step.Edge.Schema = schemaConfig.PersonalAccessTokenEvents
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

@@ -8,256 +8,24 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/orgmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
 )
 
 // OrgMembershipHistoryUpdate is the builder for updating OrgMembershipHistory entities.
 type OrgMembershipHistoryUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *OrgMembershipHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *OrgMembershipHistoryMutation
 }
 
 // Where appends a list predicates to the OrgMembershipHistoryUpdate builder.
 func (_u *OrgMembershipHistoryUpdate) Where(ps ...predicate.OrgMembershipHistory) *OrgMembershipHistoryUpdate {
 	_u.mutation.Where(ps...)
-	return _u
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *OrgMembershipHistoryUpdate) SetUpdatedAt(v time.Time) *OrgMembershipHistoryUpdate {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *OrgMembershipHistoryUpdate) ClearUpdatedAt() *OrgMembershipHistoryUpdate {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *OrgMembershipHistoryUpdate) SetUpdatedBy(v string) *OrgMembershipHistoryUpdate {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *OrgMembershipHistoryUpdate) SetNillableUpdatedBy(v *string) *OrgMembershipHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *OrgMembershipHistoryUpdate) ClearUpdatedBy() *OrgMembershipHistoryUpdate {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *OrgMembershipHistoryUpdate) SetUpdatedByImpersonator(v string) *OrgMembershipHistoryUpdate {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *OrgMembershipHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *OrgMembershipHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *OrgMembershipHistoryUpdate) ClearUpdatedByImpersonator() *OrgMembershipHistoryUpdate {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetRole sets the "role" field.
-func (_u *OrgMembershipHistoryUpdate) SetRole(v enums.Role) *OrgMembershipHistoryUpdate {
-	_u.mutation.SetRole(v)
-	return _u
-}
-
-// SetNillableRole sets the "role" field if the given value is not nil.
-func (_u *OrgMembershipHistoryUpdate) SetNillableRole(v *enums.Role) *OrgMembershipHistoryUpdate {
-	if v != nil {
-		_u.SetRole(*v)
-	}
-	return _u
-}
-
-// SetSSOExempt sets the "sso_exempt" field.
-func (_u *OrgMembershipHistoryUpdate) SetSSOExempt(v bool) *OrgMembershipHistoryUpdate {
-	_u.mutation.SetSSOExempt(v)
-	return _u
-}
-
-// SetNillableSSOExempt sets the "sso_exempt" field if the given value is not nil.
-func (_u *OrgMembershipHistoryUpdate) SetNillableSSOExempt(v *bool) *OrgMembershipHistoryUpdate {
-	if v != nil {
-		_u.SetSSOExempt(*v)
-	}
-	return _u
-}
-
-// ClearSSOExempt clears the value of the "sso_exempt" field.
-func (_u *OrgMembershipHistoryUpdate) ClearSSOExempt() *OrgMembershipHistoryUpdate {
-	_u.mutation.ClearSSOExempt()
-	return _u
-}
-
-// SetSSOExemptReason sets the "sso_exempt_reason" field.
-func (_u *OrgMembershipHistoryUpdate) SetSSOExemptReason(v string) *OrgMembershipHistoryUpdate {
-	_u.mutation.SetSSOExemptReason(v)
-	return _u
-}
-
-// SetNillableSSOExemptReason sets the "sso_exempt_reason" field if the given value is not nil.
-func (_u *OrgMembershipHistoryUpdate) SetNillableSSOExemptReason(v *string) *OrgMembershipHistoryUpdate {
-	if v != nil {
-		_u.SetSSOExemptReason(*v)
-	}
-	return _u
-}
-
-// ClearSSOExemptReason clears the value of the "sso_exempt_reason" field.
-func (_u *OrgMembershipHistoryUpdate) ClearSSOExemptReason() *OrgMembershipHistoryUpdate {
-	_u.mutation.ClearSSOExemptReason()
-	return _u
-}
-
-// SetSSOExemptGrantedBy sets the "sso_exempt_granted_by" field.
-func (_u *OrgMembershipHistoryUpdate) SetSSOExemptGrantedBy(v string) *OrgMembershipHistoryUpdate {
-	_u.mutation.SetSSOExemptGrantedBy(v)
-	return _u
-}
-
-// SetNillableSSOExemptGrantedBy sets the "sso_exempt_granted_by" field if the given value is not nil.
-func (_u *OrgMembershipHistoryUpdate) SetNillableSSOExemptGrantedBy(v *string) *OrgMembershipHistoryUpdate {
-	if v != nil {
-		_u.SetSSOExemptGrantedBy(*v)
-	}
-	return _u
-}
-
-// ClearSSOExemptGrantedBy clears the value of the "sso_exempt_granted_by" field.
-func (_u *OrgMembershipHistoryUpdate) ClearSSOExemptGrantedBy() *OrgMembershipHistoryUpdate {
-	_u.mutation.ClearSSOExemptGrantedBy()
-	return _u
-}
-
-// SetSSOExemptGrantedAt sets the "sso_exempt_granted_at" field.
-func (_u *OrgMembershipHistoryUpdate) SetSSOExemptGrantedAt(v models.DateTime) *OrgMembershipHistoryUpdate {
-	_u.mutation.SetSSOExemptGrantedAt(v)
-	return _u
-}
-
-// SetNillableSSOExemptGrantedAt sets the "sso_exempt_granted_at" field if the given value is not nil.
-func (_u *OrgMembershipHistoryUpdate) SetNillableSSOExemptGrantedAt(v *models.DateTime) *OrgMembershipHistoryUpdate {
-	if v != nil {
-		_u.SetSSOExemptGrantedAt(*v)
-	}
-	return _u
-}
-
-// ClearSSOExemptGrantedAt clears the value of the "sso_exempt_granted_at" field.
-func (_u *OrgMembershipHistoryUpdate) ClearSSOExemptGrantedAt() *OrgMembershipHistoryUpdate {
-	_u.mutation.ClearSSOExemptGrantedAt()
-	return _u
-}
-
-// SetTfaEnforced sets the "tfa_enforced" field.
-func (_u *OrgMembershipHistoryUpdate) SetTfaEnforced(v bool) *OrgMembershipHistoryUpdate {
-	_u.mutation.SetTfaEnforced(v)
-	return _u
-}
-
-// SetNillableTfaEnforced sets the "tfa_enforced" field if the given value is not nil.
-func (_u *OrgMembershipHistoryUpdate) SetNillableTfaEnforced(v *bool) *OrgMembershipHistoryUpdate {
-	if v != nil {
-		_u.SetTfaEnforced(*v)
-	}
-	return _u
-}
-
-// ClearTfaEnforced clears the value of the "tfa_enforced" field.
-func (_u *OrgMembershipHistoryUpdate) ClearTfaEnforced() *OrgMembershipHistoryUpdate {
-	_u.mutation.ClearTfaEnforced()
-	return _u
-}
-
-// SetTfaEnforcedReason sets the "tfa_enforced_reason" field.
-func (_u *OrgMembershipHistoryUpdate) SetTfaEnforcedReason(v string) *OrgMembershipHistoryUpdate {
-	_u.mutation.SetTfaEnforcedReason(v)
-	return _u
-}
-
-// SetNillableTfaEnforcedReason sets the "tfa_enforced_reason" field if the given value is not nil.
-func (_u *OrgMembershipHistoryUpdate) SetNillableTfaEnforcedReason(v *string) *OrgMembershipHistoryUpdate {
-	if v != nil {
-		_u.SetTfaEnforcedReason(*v)
-	}
-	return _u
-}
-
-// ClearTfaEnforcedReason clears the value of the "tfa_enforced_reason" field.
-func (_u *OrgMembershipHistoryUpdate) ClearTfaEnforcedReason() *OrgMembershipHistoryUpdate {
-	_u.mutation.ClearTfaEnforcedReason()
-	return _u
-}
-
-// SetTfaEnforcedBy sets the "tfa_enforced_by" field.
-func (_u *OrgMembershipHistoryUpdate) SetTfaEnforcedBy(v string) *OrgMembershipHistoryUpdate {
-	_u.mutation.SetTfaEnforcedBy(v)
-	return _u
-}
-
-// SetNillableTfaEnforcedBy sets the "tfa_enforced_by" field if the given value is not nil.
-func (_u *OrgMembershipHistoryUpdate) SetNillableTfaEnforcedBy(v *string) *OrgMembershipHistoryUpdate {
-	if v != nil {
-		_u.SetTfaEnforcedBy(*v)
-	}
-	return _u
-}
-
-// ClearTfaEnforcedBy clears the value of the "tfa_enforced_by" field.
-func (_u *OrgMembershipHistoryUpdate) ClearTfaEnforcedBy() *OrgMembershipHistoryUpdate {
-	_u.mutation.ClearTfaEnforcedBy()
-	return _u
-}
-
-// SetTfaEnforcedAt sets the "tfa_enforced_at" field.
-func (_u *OrgMembershipHistoryUpdate) SetTfaEnforcedAt(v models.DateTime) *OrgMembershipHistoryUpdate {
-	_u.mutation.SetTfaEnforcedAt(v)
-	return _u
-}
-
-// SetNillableTfaEnforcedAt sets the "tfa_enforced_at" field if the given value is not nil.
-func (_u *OrgMembershipHistoryUpdate) SetNillableTfaEnforcedAt(v *models.DateTime) *OrgMembershipHistoryUpdate {
-	if v != nil {
-		_u.SetTfaEnforcedAt(*v)
-	}
-	return _u
-}
-
-// ClearTfaEnforcedAt clears the value of the "tfa_enforced_at" field.
-func (_u *OrgMembershipHistoryUpdate) ClearTfaEnforcedAt() *OrgMembershipHistoryUpdate {
-	_u.mutation.ClearTfaEnforcedAt()
 	return _u
 }
 
@@ -268,9 +36,6 @@ func (_u *OrgMembershipHistoryUpdate) Mutation() *OrgMembershipHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *OrgMembershipHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := _u.defaults(); err != nil {
-		return 0, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -296,38 +61,7 @@ func (_u *OrgMembershipHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *OrgMembershipHistoryUpdate) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if orgmembershiphistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized orgmembershiphistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := orgmembershiphistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *OrgMembershipHistoryUpdate) check() error {
-	if v, ok := _u.mutation.Role(); ok {
-		if err := orgmembershiphistory.RoleValidator(v); err != nil {
-			return &ValidationError{Name: "role", err: fmt.Errorf(`historygenerated: validator failed for field "OrgMembershipHistory.role": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *OrgMembershipHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrgMembershipHistoryUpdate {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *OrgMembershipHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(orgmembershiphistory.Table, orgmembershiphistory.Columns, sqlgraph.NewFieldSpec(orgmembershiphistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -342,81 +76,42 @@ func (_u *OrgMembershipHistoryUpdate) sqlSave(ctx context.Context) (_node int, e
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(orgmembershiphistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(orgmembershiphistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(orgmembershiphistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.Role(); ok {
-		_spec.SetField(orgmembershiphistory.FieldRole, field.TypeEnum, value)
-	}
-	if value, ok := _u.mutation.SSOExempt(); ok {
-		_spec.SetField(orgmembershiphistory.FieldSSOExempt, field.TypeBool, value)
-	}
 	if _u.mutation.SSOExemptCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldSSOExempt, field.TypeBool)
-	}
-	if value, ok := _u.mutation.SSOExemptReason(); ok {
-		_spec.SetField(orgmembershiphistory.FieldSSOExemptReason, field.TypeString, value)
 	}
 	if _u.mutation.SSOExemptReasonCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldSSOExemptReason, field.TypeString)
 	}
-	if value, ok := _u.mutation.SSOExemptGrantedBy(); ok {
-		_spec.SetField(orgmembershiphistory.FieldSSOExemptGrantedBy, field.TypeString, value)
-	}
 	if _u.mutation.SSOExemptGrantedByCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldSSOExemptGrantedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.SSOExemptGrantedAt(); ok {
-		_spec.SetField(orgmembershiphistory.FieldSSOExemptGrantedAt, field.TypeTime, value)
 	}
 	if _u.mutation.SSOExemptGrantedAtCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldSSOExemptGrantedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.TfaEnforced(); ok {
-		_spec.SetField(orgmembershiphistory.FieldTfaEnforced, field.TypeBool, value)
-	}
 	if _u.mutation.TfaEnforcedCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldTfaEnforced, field.TypeBool)
-	}
-	if value, ok := _u.mutation.TfaEnforcedReason(); ok {
-		_spec.SetField(orgmembershiphistory.FieldTfaEnforcedReason, field.TypeString, value)
 	}
 	if _u.mutation.TfaEnforcedReasonCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldTfaEnforcedReason, field.TypeString)
 	}
-	if value, ok := _u.mutation.TfaEnforcedBy(); ok {
-		_spec.SetField(orgmembershiphistory.FieldTfaEnforcedBy, field.TypeString, value)
-	}
 	if _u.mutation.TfaEnforcedByCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldTfaEnforcedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.TfaEnforcedAt(); ok {
-		_spec.SetField(orgmembershiphistory.FieldTfaEnforcedAt, field.TypeTime, value)
 	}
 	if _u.mutation.TfaEnforcedAtCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldTfaEnforcedAt, field.TypeTime)
 	}
-	_spec.Node.Schema = _u.schemaConfig.OrgMembershipHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{orgmembershiphistory.Label}
@@ -432,236 +127,9 @@ func (_u *OrgMembershipHistoryUpdate) sqlSave(ctx context.Context) (_node int, e
 // OrgMembershipHistoryUpdateOne is the builder for updating a single OrgMembershipHistory entity.
 type OrgMembershipHistoryUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *OrgMembershipHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *OrgMembershipHistoryUpdateOne) SetUpdatedAt(v time.Time) *OrgMembershipHistoryUpdateOne {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *OrgMembershipHistoryUpdateOne) ClearUpdatedAt() *OrgMembershipHistoryUpdateOne {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *OrgMembershipHistoryUpdateOne) SetUpdatedBy(v string) *OrgMembershipHistoryUpdateOne {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *OrgMembershipHistoryUpdateOne) SetNillableUpdatedBy(v *string) *OrgMembershipHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *OrgMembershipHistoryUpdateOne) ClearUpdatedBy() *OrgMembershipHistoryUpdateOne {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *OrgMembershipHistoryUpdateOne) SetUpdatedByImpersonator(v string) *OrgMembershipHistoryUpdateOne {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *OrgMembershipHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *OrgMembershipHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *OrgMembershipHistoryUpdateOne) ClearUpdatedByImpersonator() *OrgMembershipHistoryUpdateOne {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetRole sets the "role" field.
-func (_u *OrgMembershipHistoryUpdateOne) SetRole(v enums.Role) *OrgMembershipHistoryUpdateOne {
-	_u.mutation.SetRole(v)
-	return _u
-}
-
-// SetNillableRole sets the "role" field if the given value is not nil.
-func (_u *OrgMembershipHistoryUpdateOne) SetNillableRole(v *enums.Role) *OrgMembershipHistoryUpdateOne {
-	if v != nil {
-		_u.SetRole(*v)
-	}
-	return _u
-}
-
-// SetSSOExempt sets the "sso_exempt" field.
-func (_u *OrgMembershipHistoryUpdateOne) SetSSOExempt(v bool) *OrgMembershipHistoryUpdateOne {
-	_u.mutation.SetSSOExempt(v)
-	return _u
-}
-
-// SetNillableSSOExempt sets the "sso_exempt" field if the given value is not nil.
-func (_u *OrgMembershipHistoryUpdateOne) SetNillableSSOExempt(v *bool) *OrgMembershipHistoryUpdateOne {
-	if v != nil {
-		_u.SetSSOExempt(*v)
-	}
-	return _u
-}
-
-// ClearSSOExempt clears the value of the "sso_exempt" field.
-func (_u *OrgMembershipHistoryUpdateOne) ClearSSOExempt() *OrgMembershipHistoryUpdateOne {
-	_u.mutation.ClearSSOExempt()
-	return _u
-}
-
-// SetSSOExemptReason sets the "sso_exempt_reason" field.
-func (_u *OrgMembershipHistoryUpdateOne) SetSSOExemptReason(v string) *OrgMembershipHistoryUpdateOne {
-	_u.mutation.SetSSOExemptReason(v)
-	return _u
-}
-
-// SetNillableSSOExemptReason sets the "sso_exempt_reason" field if the given value is not nil.
-func (_u *OrgMembershipHistoryUpdateOne) SetNillableSSOExemptReason(v *string) *OrgMembershipHistoryUpdateOne {
-	if v != nil {
-		_u.SetSSOExemptReason(*v)
-	}
-	return _u
-}
-
-// ClearSSOExemptReason clears the value of the "sso_exempt_reason" field.
-func (_u *OrgMembershipHistoryUpdateOne) ClearSSOExemptReason() *OrgMembershipHistoryUpdateOne {
-	_u.mutation.ClearSSOExemptReason()
-	return _u
-}
-
-// SetSSOExemptGrantedBy sets the "sso_exempt_granted_by" field.
-func (_u *OrgMembershipHistoryUpdateOne) SetSSOExemptGrantedBy(v string) *OrgMembershipHistoryUpdateOne {
-	_u.mutation.SetSSOExemptGrantedBy(v)
-	return _u
-}
-
-// SetNillableSSOExemptGrantedBy sets the "sso_exempt_granted_by" field if the given value is not nil.
-func (_u *OrgMembershipHistoryUpdateOne) SetNillableSSOExemptGrantedBy(v *string) *OrgMembershipHistoryUpdateOne {
-	if v != nil {
-		_u.SetSSOExemptGrantedBy(*v)
-	}
-	return _u
-}
-
-// ClearSSOExemptGrantedBy clears the value of the "sso_exempt_granted_by" field.
-func (_u *OrgMembershipHistoryUpdateOne) ClearSSOExemptGrantedBy() *OrgMembershipHistoryUpdateOne {
-	_u.mutation.ClearSSOExemptGrantedBy()
-	return _u
-}
-
-// SetSSOExemptGrantedAt sets the "sso_exempt_granted_at" field.
-func (_u *OrgMembershipHistoryUpdateOne) SetSSOExemptGrantedAt(v models.DateTime) *OrgMembershipHistoryUpdateOne {
-	_u.mutation.SetSSOExemptGrantedAt(v)
-	return _u
-}
-
-// SetNillableSSOExemptGrantedAt sets the "sso_exempt_granted_at" field if the given value is not nil.
-func (_u *OrgMembershipHistoryUpdateOne) SetNillableSSOExemptGrantedAt(v *models.DateTime) *OrgMembershipHistoryUpdateOne {
-	if v != nil {
-		_u.SetSSOExemptGrantedAt(*v)
-	}
-	return _u
-}
-
-// ClearSSOExemptGrantedAt clears the value of the "sso_exempt_granted_at" field.
-func (_u *OrgMembershipHistoryUpdateOne) ClearSSOExemptGrantedAt() *OrgMembershipHistoryUpdateOne {
-	_u.mutation.ClearSSOExemptGrantedAt()
-	return _u
-}
-
-// SetTfaEnforced sets the "tfa_enforced" field.
-func (_u *OrgMembershipHistoryUpdateOne) SetTfaEnforced(v bool) *OrgMembershipHistoryUpdateOne {
-	_u.mutation.SetTfaEnforced(v)
-	return _u
-}
-
-// SetNillableTfaEnforced sets the "tfa_enforced" field if the given value is not nil.
-func (_u *OrgMembershipHistoryUpdateOne) SetNillableTfaEnforced(v *bool) *OrgMembershipHistoryUpdateOne {
-	if v != nil {
-		_u.SetTfaEnforced(*v)
-	}
-	return _u
-}
-
-// ClearTfaEnforced clears the value of the "tfa_enforced" field.
-func (_u *OrgMembershipHistoryUpdateOne) ClearTfaEnforced() *OrgMembershipHistoryUpdateOne {
-	_u.mutation.ClearTfaEnforced()
-	return _u
-}
-
-// SetTfaEnforcedReason sets the "tfa_enforced_reason" field.
-func (_u *OrgMembershipHistoryUpdateOne) SetTfaEnforcedReason(v string) *OrgMembershipHistoryUpdateOne {
-	_u.mutation.SetTfaEnforcedReason(v)
-	return _u
-}
-
-// SetNillableTfaEnforcedReason sets the "tfa_enforced_reason" field if the given value is not nil.
-func (_u *OrgMembershipHistoryUpdateOne) SetNillableTfaEnforcedReason(v *string) *OrgMembershipHistoryUpdateOne {
-	if v != nil {
-		_u.SetTfaEnforcedReason(*v)
-	}
-	return _u
-}
-
-// ClearTfaEnforcedReason clears the value of the "tfa_enforced_reason" field.
-func (_u *OrgMembershipHistoryUpdateOne) ClearTfaEnforcedReason() *OrgMembershipHistoryUpdateOne {
-	_u.mutation.ClearTfaEnforcedReason()
-	return _u
-}
-
-// SetTfaEnforcedBy sets the "tfa_enforced_by" field.
-func (_u *OrgMembershipHistoryUpdateOne) SetTfaEnforcedBy(v string) *OrgMembershipHistoryUpdateOne {
-	_u.mutation.SetTfaEnforcedBy(v)
-	return _u
-}
-
-// SetNillableTfaEnforcedBy sets the "tfa_enforced_by" field if the given value is not nil.
-func (_u *OrgMembershipHistoryUpdateOne) SetNillableTfaEnforcedBy(v *string) *OrgMembershipHistoryUpdateOne {
-	if v != nil {
-		_u.SetTfaEnforcedBy(*v)
-	}
-	return _u
-}
-
-// ClearTfaEnforcedBy clears the value of the "tfa_enforced_by" field.
-func (_u *OrgMembershipHistoryUpdateOne) ClearTfaEnforcedBy() *OrgMembershipHistoryUpdateOne {
-	_u.mutation.ClearTfaEnforcedBy()
-	return _u
-}
-
-// SetTfaEnforcedAt sets the "tfa_enforced_at" field.
-func (_u *OrgMembershipHistoryUpdateOne) SetTfaEnforcedAt(v models.DateTime) *OrgMembershipHistoryUpdateOne {
-	_u.mutation.SetTfaEnforcedAt(v)
-	return _u
-}
-
-// SetNillableTfaEnforcedAt sets the "tfa_enforced_at" field if the given value is not nil.
-func (_u *OrgMembershipHistoryUpdateOne) SetNillableTfaEnforcedAt(v *models.DateTime) *OrgMembershipHistoryUpdateOne {
-	if v != nil {
-		_u.SetTfaEnforcedAt(*v)
-	}
-	return _u
-}
-
-// ClearTfaEnforcedAt clears the value of the "tfa_enforced_at" field.
-func (_u *OrgMembershipHistoryUpdateOne) ClearTfaEnforcedAt() *OrgMembershipHistoryUpdateOne {
-	_u.mutation.ClearTfaEnforcedAt()
-	return _u
+	fields   []string
+	hooks    []Hook
+	mutation *OrgMembershipHistoryMutation
 }
 
 // Mutation returns the OrgMembershipHistoryMutation object of the builder.
@@ -684,9 +152,6 @@ func (_u *OrgMembershipHistoryUpdateOne) Select(field string, fields ...string) 
 
 // Save executes the query and returns the updated OrgMembershipHistory entity.
 func (_u *OrgMembershipHistoryUpdateOne) Save(ctx context.Context) (*OrgMembershipHistory, error) {
-	if err := _u.defaults(); err != nil {
-		return nil, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -712,38 +177,7 @@ func (_u *OrgMembershipHistoryUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *OrgMembershipHistoryUpdateOne) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if orgmembershiphistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized orgmembershiphistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := orgmembershiphistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *OrgMembershipHistoryUpdateOne) check() error {
-	if v, ok := _u.mutation.Role(); ok {
-		if err := orgmembershiphistory.RoleValidator(v); err != nil {
-			return &ValidationError{Name: "role", err: fmt.Errorf(`historygenerated: validator failed for field "OrgMembershipHistory.role": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *OrgMembershipHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *OrgMembershipHistoryUpdateOne {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *OrgMembershipHistoryUpdateOne) sqlSave(ctx context.Context) (_node *OrgMembershipHistory, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(orgmembershiphistory.Table, orgmembershiphistory.Columns, sqlgraph.NewFieldSpec(orgmembershiphistory.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
@@ -775,81 +209,42 @@ func (_u *OrgMembershipHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Or
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(orgmembershiphistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(orgmembershiphistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(orgmembershiphistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.Role(); ok {
-		_spec.SetField(orgmembershiphistory.FieldRole, field.TypeEnum, value)
-	}
-	if value, ok := _u.mutation.SSOExempt(); ok {
-		_spec.SetField(orgmembershiphistory.FieldSSOExempt, field.TypeBool, value)
-	}
 	if _u.mutation.SSOExemptCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldSSOExempt, field.TypeBool)
-	}
-	if value, ok := _u.mutation.SSOExemptReason(); ok {
-		_spec.SetField(orgmembershiphistory.FieldSSOExemptReason, field.TypeString, value)
 	}
 	if _u.mutation.SSOExemptReasonCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldSSOExemptReason, field.TypeString)
 	}
-	if value, ok := _u.mutation.SSOExemptGrantedBy(); ok {
-		_spec.SetField(orgmembershiphistory.FieldSSOExemptGrantedBy, field.TypeString, value)
-	}
 	if _u.mutation.SSOExemptGrantedByCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldSSOExemptGrantedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.SSOExemptGrantedAt(); ok {
-		_spec.SetField(orgmembershiphistory.FieldSSOExemptGrantedAt, field.TypeTime, value)
 	}
 	if _u.mutation.SSOExemptGrantedAtCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldSSOExemptGrantedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.TfaEnforced(); ok {
-		_spec.SetField(orgmembershiphistory.FieldTfaEnforced, field.TypeBool, value)
-	}
 	if _u.mutation.TfaEnforcedCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldTfaEnforced, field.TypeBool)
-	}
-	if value, ok := _u.mutation.TfaEnforcedReason(); ok {
-		_spec.SetField(orgmembershiphistory.FieldTfaEnforcedReason, field.TypeString, value)
 	}
 	if _u.mutation.TfaEnforcedReasonCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldTfaEnforcedReason, field.TypeString)
 	}
-	if value, ok := _u.mutation.TfaEnforcedBy(); ok {
-		_spec.SetField(orgmembershiphistory.FieldTfaEnforcedBy, field.TypeString, value)
-	}
 	if _u.mutation.TfaEnforcedByCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldTfaEnforcedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.TfaEnforcedAt(); ok {
-		_spec.SetField(orgmembershiphistory.FieldTfaEnforcedAt, field.TypeTime, value)
 	}
 	if _u.mutation.TfaEnforcedAtCleared() {
 		_spec.ClearField(orgmembershiphistory.FieldTfaEnforcedAt, field.TypeTime)
 	}
-	_spec.Node.Schema = _u.schemaConfig.OrgMembershipHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	_node = &OrgMembershipHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

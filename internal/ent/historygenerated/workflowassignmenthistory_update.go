@@ -8,423 +8,24 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 	"github.com/theopenlane/core/internal/ent/historygenerated/workflowassignmenthistory"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
 )
 
 // WorkflowAssignmentHistoryUpdate is the builder for updating WorkflowAssignmentHistory entities.
 type WorkflowAssignmentHistoryUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *WorkflowAssignmentHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *WorkflowAssignmentHistoryMutation
 }
 
 // Where appends a list predicates to the WorkflowAssignmentHistoryUpdate builder.
 func (_u *WorkflowAssignmentHistoryUpdate) Where(ps ...predicate.WorkflowAssignmentHistory) *WorkflowAssignmentHistoryUpdate {
 	_u.mutation.Where(ps...)
-	return _u
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *WorkflowAssignmentHistoryUpdate) SetUpdatedAt(v time.Time) *WorkflowAssignmentHistoryUpdate {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *WorkflowAssignmentHistoryUpdate) ClearUpdatedAt() *WorkflowAssignmentHistoryUpdate {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *WorkflowAssignmentHistoryUpdate) SetUpdatedBy(v string) *WorkflowAssignmentHistoryUpdate {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *WorkflowAssignmentHistoryUpdate) SetNillableUpdatedBy(v *string) *WorkflowAssignmentHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *WorkflowAssignmentHistoryUpdate) ClearUpdatedBy() *WorkflowAssignmentHistoryUpdate {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *WorkflowAssignmentHistoryUpdate) SetUpdatedByImpersonator(v string) *WorkflowAssignmentHistoryUpdate {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *WorkflowAssignmentHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *WorkflowAssignmentHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *WorkflowAssignmentHistoryUpdate) ClearUpdatedByImpersonator() *WorkflowAssignmentHistoryUpdate {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *WorkflowAssignmentHistoryUpdate) SetDeletedAt(v time.Time) *WorkflowAssignmentHistoryUpdate {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *WorkflowAssignmentHistoryUpdate) SetNillableDeletedAt(v *time.Time) *WorkflowAssignmentHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *WorkflowAssignmentHistoryUpdate) ClearDeletedAt() *WorkflowAssignmentHistoryUpdate {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *WorkflowAssignmentHistoryUpdate) SetDeletedBy(v string) *WorkflowAssignmentHistoryUpdate {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *WorkflowAssignmentHistoryUpdate) SetNillableDeletedBy(v *string) *WorkflowAssignmentHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *WorkflowAssignmentHistoryUpdate) ClearDeletedBy() *WorkflowAssignmentHistoryUpdate {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *WorkflowAssignmentHistoryUpdate) SetTags(v []string) *WorkflowAssignmentHistoryUpdate {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *WorkflowAssignmentHistoryUpdate) AppendTags(v []string) *WorkflowAssignmentHistoryUpdate {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *WorkflowAssignmentHistoryUpdate) ClearTags() *WorkflowAssignmentHistoryUpdate {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetWorkflowInstanceID sets the "workflow_instance_id" field.
-func (_u *WorkflowAssignmentHistoryUpdate) SetWorkflowInstanceID(v string) *WorkflowAssignmentHistoryUpdate {
-	_u.mutation.SetWorkflowInstanceID(v)
-	return _u
-}
-
-// SetNillableWorkflowInstanceID sets the "workflow_instance_id" field if the given value is not nil.
-func (_u *WorkflowAssignmentHistoryUpdate) SetNillableWorkflowInstanceID(v *string) *WorkflowAssignmentHistoryUpdate {
-	if v != nil {
-		_u.SetWorkflowInstanceID(*v)
-	}
-	return _u
-}
-
-// SetAssignmentKey sets the "assignment_key" field.
-func (_u *WorkflowAssignmentHistoryUpdate) SetAssignmentKey(v string) *WorkflowAssignmentHistoryUpdate {
-	_u.mutation.SetAssignmentKey(v)
-	return _u
-}
-
-// SetNillableAssignmentKey sets the "assignment_key" field if the given value is not nil.
-func (_u *WorkflowAssignmentHistoryUpdate) SetNillableAssignmentKey(v *string) *WorkflowAssignmentHistoryUpdate {
-	if v != nil {
-		_u.SetAssignmentKey(*v)
-	}
-	return _u
-}
-
-// SetRole sets the "role" field.
-func (_u *WorkflowAssignmentHistoryUpdate) SetRole(v string) *WorkflowAssignmentHistoryUpdate {
-	_u.mutation.SetRole(v)
-	return _u
-}
-
-// SetNillableRole sets the "role" field if the given value is not nil.
-func (_u *WorkflowAssignmentHistoryUpdate) SetNillableRole(v *string) *WorkflowAssignmentHistoryUpdate {
-	if v != nil {
-		_u.SetRole(*v)
-	}
-	return _u
-}
-
-// SetLabel sets the "label" field.
-func (_u *WorkflowAssignmentHistoryUpdate) SetLabel(v string) *WorkflowAssignmentHistoryUpdate {
-	_u.mutation.SetLabel(v)
-	return _u
-}
-
-// SetNillableLabel sets the "label" field if the given value is not nil.
-func (_u *WorkflowAssignmentHistoryUpdate) SetNillableLabel(v *string) *WorkflowAssignmentHistoryUpdate {
-	if v != nil {
-		_u.SetLabel(*v)
-	}
-	return _u
-}
-
-// ClearLabel clears the value of the "label" field.
-func (_u *WorkflowAssignmentHistoryUpdate) ClearLabel() *WorkflowAssignmentHistoryUpdate {
-	_u.mutation.ClearLabel()
-	return _u
-}
-
-// SetRequired sets the "required" field.
-func (_u *WorkflowAssignmentHistoryUpdate) SetRequired(v bool) *WorkflowAssignmentHistoryUpdate {
-	_u.mutation.SetRequired(v)
-	return _u
-}
-
-// SetNillableRequired sets the "required" field if the given value is not nil.
-func (_u *WorkflowAssignmentHistoryUpdate) SetNillableRequired(v *bool) *WorkflowAssignmentHistoryUpdate {
-	if v != nil {
-		_u.SetRequired(*v)
-	}
-	return _u
-}
-
-// SetStatus sets the "status" field.
-func (_u *WorkflowAssignmentHistoryUpdate) SetStatus(v enums.WorkflowAssignmentStatus) *WorkflowAssignmentHistoryUpdate {
-	_u.mutation.SetStatus(v)
-	return _u
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *WorkflowAssignmentHistoryUpdate) SetNillableStatus(v *enums.WorkflowAssignmentStatus) *WorkflowAssignmentHistoryUpdate {
-	if v != nil {
-		_u.SetStatus(*v)
-	}
-	return _u
-}
-
-// SetMetadata sets the "metadata" field.
-func (_u *WorkflowAssignmentHistoryUpdate) SetMetadata(v map[string]interface{}) *WorkflowAssignmentHistoryUpdate {
-	_u.mutation.SetMetadata(v)
-	return _u
-}
-
-// ClearMetadata clears the value of the "metadata" field.
-func (_u *WorkflowAssignmentHistoryUpdate) ClearMetadata() *WorkflowAssignmentHistoryUpdate {
-	_u.mutation.ClearMetadata()
-	return _u
-}
-
-// SetApprovalMetadata sets the "approval_metadata" field.
-func (_u *WorkflowAssignmentHistoryUpdate) SetApprovalMetadata(v models.WorkflowAssignmentApproval) *WorkflowAssignmentHistoryUpdate {
-	_u.mutation.SetApprovalMetadata(v)
-	return _u
-}
-
-// SetNillableApprovalMetadata sets the "approval_metadata" field if the given value is not nil.
-func (_u *WorkflowAssignmentHistoryUpdate) SetNillableApprovalMetadata(v *models.WorkflowAssignmentApproval) *WorkflowAssignmentHistoryUpdate {
-	if v != nil {
-		_u.SetApprovalMetadata(*v)
-	}
-	return _u
-}
-
-// ClearApprovalMetadata clears the value of the "approval_metadata" field.
-func (_u *WorkflowAssignmentHistoryUpdate) ClearApprovalMetadata() *WorkflowAssignmentHistoryUpdate {
-	_u.mutation.ClearApprovalMetadata()
-	return _u
-}
-
-// SetRejectionMetadata sets the "rejection_metadata" field.
-func (_u *WorkflowAssignmentHistoryUpdate) SetRejectionMetadata(v models.WorkflowAssignmentRejection) *WorkflowAssignmentHistoryUpdate {
-	_u.mutation.SetRejectionMetadata(v)
-	return _u
-}
-
-// SetNillableRejectionMetadata sets the "rejection_metadata" field if the given value is not nil.
-func (_u *WorkflowAssignmentHistoryUpdate) SetNillableRejectionMetadata(v *models.WorkflowAssignmentRejection) *WorkflowAssignmentHistoryUpdate {
-	if v != nil {
-		_u.SetRejectionMetadata(*v)
-	}
-	return _u
-}
-
-// ClearRejectionMetadata clears the value of the "rejection_metadata" field.
-func (_u *WorkflowAssignmentHistoryUpdate) ClearRejectionMetadata() *WorkflowAssignmentHistoryUpdate {
-	_u.mutation.ClearRejectionMetadata()
-	return _u
-}
-
-// SetInvalidationMetadata sets the "invalidation_metadata" field.
-func (_u *WorkflowAssignmentHistoryUpdate) SetInvalidationMetadata(v models.WorkflowAssignmentInvalidation) *WorkflowAssignmentHistoryUpdate {
-	_u.mutation.SetInvalidationMetadata(v)
-	return _u
-}
-
-// SetNillableInvalidationMetadata sets the "invalidation_metadata" field if the given value is not nil.
-func (_u *WorkflowAssignmentHistoryUpdate) SetNillableInvalidationMetadata(v *models.WorkflowAssignmentInvalidation) *WorkflowAssignmentHistoryUpdate {
-	if v != nil {
-		_u.SetInvalidationMetadata(*v)
-	}
-	return _u
-}
-
-// ClearInvalidationMetadata clears the value of the "invalidation_metadata" field.
-func (_u *WorkflowAssignmentHistoryUpdate) ClearInvalidationMetadata() *WorkflowAssignmentHistoryUpdate {
-	_u.mutation.ClearInvalidationMetadata()
-	return _u
-}
-
-// SetOutcomeMetadata sets the "outcome_metadata" field.
-func (_u *WorkflowAssignmentHistoryUpdate) SetOutcomeMetadata(v models.AssignmentOutcome) *WorkflowAssignmentHistoryUpdate {
-	_u.mutation.SetOutcomeMetadata(v)
-	return _u
-}
-
-// SetNillableOutcomeMetadata sets the "outcome_metadata" field if the given value is not nil.
-func (_u *WorkflowAssignmentHistoryUpdate) SetNillableOutcomeMetadata(v *models.AssignmentOutcome) *WorkflowAssignmentHistoryUpdate {
-	if v != nil {
-		_u.SetOutcomeMetadata(*v)
-	}
-	return _u
-}
-
-// ClearOutcomeMetadata clears the value of the "outcome_metadata" field.
-func (_u *WorkflowAssignmentHistoryUpdate) ClearOutcomeMetadata() *WorkflowAssignmentHistoryUpdate {
-	_u.mutation.ClearOutcomeMetadata()
-	return _u
-}
-
-// SetDecidedAt sets the "decided_at" field.
-func (_u *WorkflowAssignmentHistoryUpdate) SetDecidedAt(v time.Time) *WorkflowAssignmentHistoryUpdate {
-	_u.mutation.SetDecidedAt(v)
-	return _u
-}
-
-// SetNillableDecidedAt sets the "decided_at" field if the given value is not nil.
-func (_u *WorkflowAssignmentHistoryUpdate) SetNillableDecidedAt(v *time.Time) *WorkflowAssignmentHistoryUpdate {
-	if v != nil {
-		_u.SetDecidedAt(*v)
-	}
-	return _u
-}
-
-// ClearDecidedAt clears the value of the "decided_at" field.
-func (_u *WorkflowAssignmentHistoryUpdate) ClearDecidedAt() *WorkflowAssignmentHistoryUpdate {
-	_u.mutation.ClearDecidedAt()
-	return _u
-}
-
-// SetActorUserID sets the "actor_user_id" field.
-func (_u *WorkflowAssignmentHistoryUpdate) SetActorUserID(v string) *WorkflowAssignmentHistoryUpdate {
-	_u.mutation.SetActorUserID(v)
-	return _u
-}
-
-// SetNillableActorUserID sets the "actor_user_id" field if the given value is not nil.
-func (_u *WorkflowAssignmentHistoryUpdate) SetNillableActorUserID(v *string) *WorkflowAssignmentHistoryUpdate {
-	if v != nil {
-		_u.SetActorUserID(*v)
-	}
-	return _u
-}
-
-// ClearActorUserID clears the value of the "actor_user_id" field.
-func (_u *WorkflowAssignmentHistoryUpdate) ClearActorUserID() *WorkflowAssignmentHistoryUpdate {
-	_u.mutation.ClearActorUserID()
-	return _u
-}
-
-// SetActorGroupID sets the "actor_group_id" field.
-func (_u *WorkflowAssignmentHistoryUpdate) SetActorGroupID(v string) *WorkflowAssignmentHistoryUpdate {
-	_u.mutation.SetActorGroupID(v)
-	return _u
-}
-
-// SetNillableActorGroupID sets the "actor_group_id" field if the given value is not nil.
-func (_u *WorkflowAssignmentHistoryUpdate) SetNillableActorGroupID(v *string) *WorkflowAssignmentHistoryUpdate {
-	if v != nil {
-		_u.SetActorGroupID(*v)
-	}
-	return _u
-}
-
-// ClearActorGroupID clears the value of the "actor_group_id" field.
-func (_u *WorkflowAssignmentHistoryUpdate) ClearActorGroupID() *WorkflowAssignmentHistoryUpdate {
-	_u.mutation.ClearActorGroupID()
-	return _u
-}
-
-// SetNotes sets the "notes" field.
-func (_u *WorkflowAssignmentHistoryUpdate) SetNotes(v string) *WorkflowAssignmentHistoryUpdate {
-	_u.mutation.SetNotes(v)
-	return _u
-}
-
-// SetNillableNotes sets the "notes" field if the given value is not nil.
-func (_u *WorkflowAssignmentHistoryUpdate) SetNillableNotes(v *string) *WorkflowAssignmentHistoryUpdate {
-	if v != nil {
-		_u.SetNotes(*v)
-	}
-	return _u
-}
-
-// ClearNotes clears the value of the "notes" field.
-func (_u *WorkflowAssignmentHistoryUpdate) ClearNotes() *WorkflowAssignmentHistoryUpdate {
-	_u.mutation.ClearNotes()
-	return _u
-}
-
-// SetDueAt sets the "due_at" field.
-func (_u *WorkflowAssignmentHistoryUpdate) SetDueAt(v time.Time) *WorkflowAssignmentHistoryUpdate {
-	_u.mutation.SetDueAt(v)
-	return _u
-}
-
-// SetNillableDueAt sets the "due_at" field if the given value is not nil.
-func (_u *WorkflowAssignmentHistoryUpdate) SetNillableDueAt(v *time.Time) *WorkflowAssignmentHistoryUpdate {
-	if v != nil {
-		_u.SetDueAt(*v)
-	}
-	return _u
-}
-
-// ClearDueAt clears the value of the "due_at" field.
-func (_u *WorkflowAssignmentHistoryUpdate) ClearDueAt() *WorkflowAssignmentHistoryUpdate {
-	_u.mutation.ClearDueAt()
 	return _u
 }
 
@@ -435,9 +36,6 @@ func (_u *WorkflowAssignmentHistoryUpdate) Mutation() *WorkflowAssignmentHistory
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *WorkflowAssignmentHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := _u.defaults(); err != nil {
-		return 0, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -463,38 +61,7 @@ func (_u *WorkflowAssignmentHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *WorkflowAssignmentHistoryUpdate) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if workflowassignmenthistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized workflowassignmenthistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := workflowassignmenthistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *WorkflowAssignmentHistoryUpdate) check() error {
-	if v, ok := _u.mutation.Status(); ok {
-		if err := workflowassignmenthistory.StatusValidator(v); err != nil {
-			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "WorkflowAssignmentHistory.status": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *WorkflowAssignmentHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *WorkflowAssignmentHistoryUpdate {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *WorkflowAssignmentHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(workflowassignmenthistory.Table, workflowassignmenthistory.Columns, sqlgraph.NewFieldSpec(workflowassignmenthistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -509,46 +76,23 @@ func (_u *WorkflowAssignmentHistoryUpdate) sqlSave(ctx context.Context) (_node i
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldDeletedBy, field.TypeString, value)
-	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, workflowassignmenthistory.FieldTags, value)
-		})
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldTags, field.TypeJSON)
@@ -556,90 +100,39 @@ func (_u *WorkflowAssignmentHistoryUpdate) sqlSave(ctx context.Context) (_node i
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := _u.mutation.WorkflowInstanceID(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldWorkflowInstanceID, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.AssignmentKey(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldAssignmentKey, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.Role(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldRole, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.Label(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldLabel, field.TypeString, value)
-	}
 	if _u.mutation.LabelCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldLabel, field.TypeString)
-	}
-	if value, ok := _u.mutation.Required(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldRequired, field.TypeBool, value)
-	}
-	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldStatus, field.TypeEnum, value)
-	}
-	if value, ok := _u.mutation.Metadata(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldMetadata, field.TypeJSON, value)
 	}
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldMetadata, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.ApprovalMetadata(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldApprovalMetadata, field.TypeJSON, value)
-	}
 	if _u.mutation.ApprovalMetadataCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldApprovalMetadata, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.RejectionMetadata(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldRejectionMetadata, field.TypeJSON, value)
 	}
 	if _u.mutation.RejectionMetadataCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldRejectionMetadata, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.InvalidationMetadata(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldInvalidationMetadata, field.TypeJSON, value)
-	}
 	if _u.mutation.InvalidationMetadataCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldInvalidationMetadata, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.OutcomeMetadata(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldOutcomeMetadata, field.TypeJSON, value)
 	}
 	if _u.mutation.OutcomeMetadataCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldOutcomeMetadata, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.DecidedAt(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldDecidedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DecidedAtCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldDecidedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.ActorUserID(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldActorUserID, field.TypeString, value)
 	}
 	if _u.mutation.ActorUserIDCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldActorUserID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ActorGroupID(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldActorGroupID, field.TypeString, value)
-	}
 	if _u.mutation.ActorGroupIDCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldActorGroupID, field.TypeString)
-	}
-	if value, ok := _u.mutation.Notes(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldNotes, field.TypeString, value)
 	}
 	if _u.mutation.NotesCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldNotes, field.TypeString)
 	}
-	if value, ok := _u.mutation.DueAt(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldDueAt, field.TypeTime, value)
-	}
 	if _u.mutation.DueAtCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldDueAt, field.TypeTime)
 	}
-	_spec.Node.Schema = _u.schemaConfig.WorkflowAssignmentHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{workflowassignmenthistory.Label}
@@ -655,402 +148,9 @@ func (_u *WorkflowAssignmentHistoryUpdate) sqlSave(ctx context.Context) (_node i
 // WorkflowAssignmentHistoryUpdateOne is the builder for updating a single WorkflowAssignmentHistory entity.
 type WorkflowAssignmentHistoryUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *WorkflowAssignmentHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *WorkflowAssignmentHistoryUpdateOne) SetUpdatedAt(v time.Time) *WorkflowAssignmentHistoryUpdateOne {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *WorkflowAssignmentHistoryUpdateOne) ClearUpdatedAt() *WorkflowAssignmentHistoryUpdateOne {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *WorkflowAssignmentHistoryUpdateOne) SetUpdatedBy(v string) *WorkflowAssignmentHistoryUpdateOne {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *WorkflowAssignmentHistoryUpdateOne) SetNillableUpdatedBy(v *string) *WorkflowAssignmentHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *WorkflowAssignmentHistoryUpdateOne) ClearUpdatedBy() *WorkflowAssignmentHistoryUpdateOne {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *WorkflowAssignmentHistoryUpdateOne) SetUpdatedByImpersonator(v string) *WorkflowAssignmentHistoryUpdateOne {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *WorkflowAssignmentHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *WorkflowAssignmentHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *WorkflowAssignmentHistoryUpdateOne) ClearUpdatedByImpersonator() *WorkflowAssignmentHistoryUpdateOne {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *WorkflowAssignmentHistoryUpdateOne) SetDeletedAt(v time.Time) *WorkflowAssignmentHistoryUpdateOne {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *WorkflowAssignmentHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *WorkflowAssignmentHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *WorkflowAssignmentHistoryUpdateOne) ClearDeletedAt() *WorkflowAssignmentHistoryUpdateOne {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *WorkflowAssignmentHistoryUpdateOne) SetDeletedBy(v string) *WorkflowAssignmentHistoryUpdateOne {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *WorkflowAssignmentHistoryUpdateOne) SetNillableDeletedBy(v *string) *WorkflowAssignmentHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *WorkflowAssignmentHistoryUpdateOne) ClearDeletedBy() *WorkflowAssignmentHistoryUpdateOne {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *WorkflowAssignmentHistoryUpdateOne) SetTags(v []string) *WorkflowAssignmentHistoryUpdateOne {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *WorkflowAssignmentHistoryUpdateOne) AppendTags(v []string) *WorkflowAssignmentHistoryUpdateOne {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *WorkflowAssignmentHistoryUpdateOne) ClearTags() *WorkflowAssignmentHistoryUpdateOne {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetWorkflowInstanceID sets the "workflow_instance_id" field.
-func (_u *WorkflowAssignmentHistoryUpdateOne) SetWorkflowInstanceID(v string) *WorkflowAssignmentHistoryUpdateOne {
-	_u.mutation.SetWorkflowInstanceID(v)
-	return _u
-}
-
-// SetNillableWorkflowInstanceID sets the "workflow_instance_id" field if the given value is not nil.
-func (_u *WorkflowAssignmentHistoryUpdateOne) SetNillableWorkflowInstanceID(v *string) *WorkflowAssignmentHistoryUpdateOne {
-	if v != nil {
-		_u.SetWorkflowInstanceID(*v)
-	}
-	return _u
-}
-
-// SetAssignmentKey sets the "assignment_key" field.
-func (_u *WorkflowAssignmentHistoryUpdateOne) SetAssignmentKey(v string) *WorkflowAssignmentHistoryUpdateOne {
-	_u.mutation.SetAssignmentKey(v)
-	return _u
-}
-
-// SetNillableAssignmentKey sets the "assignment_key" field if the given value is not nil.
-func (_u *WorkflowAssignmentHistoryUpdateOne) SetNillableAssignmentKey(v *string) *WorkflowAssignmentHistoryUpdateOne {
-	if v != nil {
-		_u.SetAssignmentKey(*v)
-	}
-	return _u
-}
-
-// SetRole sets the "role" field.
-func (_u *WorkflowAssignmentHistoryUpdateOne) SetRole(v string) *WorkflowAssignmentHistoryUpdateOne {
-	_u.mutation.SetRole(v)
-	return _u
-}
-
-// SetNillableRole sets the "role" field if the given value is not nil.
-func (_u *WorkflowAssignmentHistoryUpdateOne) SetNillableRole(v *string) *WorkflowAssignmentHistoryUpdateOne {
-	if v != nil {
-		_u.SetRole(*v)
-	}
-	return _u
-}
-
-// SetLabel sets the "label" field.
-func (_u *WorkflowAssignmentHistoryUpdateOne) SetLabel(v string) *WorkflowAssignmentHistoryUpdateOne {
-	_u.mutation.SetLabel(v)
-	return _u
-}
-
-// SetNillableLabel sets the "label" field if the given value is not nil.
-func (_u *WorkflowAssignmentHistoryUpdateOne) SetNillableLabel(v *string) *WorkflowAssignmentHistoryUpdateOne {
-	if v != nil {
-		_u.SetLabel(*v)
-	}
-	return _u
-}
-
-// ClearLabel clears the value of the "label" field.
-func (_u *WorkflowAssignmentHistoryUpdateOne) ClearLabel() *WorkflowAssignmentHistoryUpdateOne {
-	_u.mutation.ClearLabel()
-	return _u
-}
-
-// SetRequired sets the "required" field.
-func (_u *WorkflowAssignmentHistoryUpdateOne) SetRequired(v bool) *WorkflowAssignmentHistoryUpdateOne {
-	_u.mutation.SetRequired(v)
-	return _u
-}
-
-// SetNillableRequired sets the "required" field if the given value is not nil.
-func (_u *WorkflowAssignmentHistoryUpdateOne) SetNillableRequired(v *bool) *WorkflowAssignmentHistoryUpdateOne {
-	if v != nil {
-		_u.SetRequired(*v)
-	}
-	return _u
-}
-
-// SetStatus sets the "status" field.
-func (_u *WorkflowAssignmentHistoryUpdateOne) SetStatus(v enums.WorkflowAssignmentStatus) *WorkflowAssignmentHistoryUpdateOne {
-	_u.mutation.SetStatus(v)
-	return _u
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *WorkflowAssignmentHistoryUpdateOne) SetNillableStatus(v *enums.WorkflowAssignmentStatus) *WorkflowAssignmentHistoryUpdateOne {
-	if v != nil {
-		_u.SetStatus(*v)
-	}
-	return _u
-}
-
-// SetMetadata sets the "metadata" field.
-func (_u *WorkflowAssignmentHistoryUpdateOne) SetMetadata(v map[string]interface{}) *WorkflowAssignmentHistoryUpdateOne {
-	_u.mutation.SetMetadata(v)
-	return _u
-}
-
-// ClearMetadata clears the value of the "metadata" field.
-func (_u *WorkflowAssignmentHistoryUpdateOne) ClearMetadata() *WorkflowAssignmentHistoryUpdateOne {
-	_u.mutation.ClearMetadata()
-	return _u
-}
-
-// SetApprovalMetadata sets the "approval_metadata" field.
-func (_u *WorkflowAssignmentHistoryUpdateOne) SetApprovalMetadata(v models.WorkflowAssignmentApproval) *WorkflowAssignmentHistoryUpdateOne {
-	_u.mutation.SetApprovalMetadata(v)
-	return _u
-}
-
-// SetNillableApprovalMetadata sets the "approval_metadata" field if the given value is not nil.
-func (_u *WorkflowAssignmentHistoryUpdateOne) SetNillableApprovalMetadata(v *models.WorkflowAssignmentApproval) *WorkflowAssignmentHistoryUpdateOne {
-	if v != nil {
-		_u.SetApprovalMetadata(*v)
-	}
-	return _u
-}
-
-// ClearApprovalMetadata clears the value of the "approval_metadata" field.
-func (_u *WorkflowAssignmentHistoryUpdateOne) ClearApprovalMetadata() *WorkflowAssignmentHistoryUpdateOne {
-	_u.mutation.ClearApprovalMetadata()
-	return _u
-}
-
-// SetRejectionMetadata sets the "rejection_metadata" field.
-func (_u *WorkflowAssignmentHistoryUpdateOne) SetRejectionMetadata(v models.WorkflowAssignmentRejection) *WorkflowAssignmentHistoryUpdateOne {
-	_u.mutation.SetRejectionMetadata(v)
-	return _u
-}
-
-// SetNillableRejectionMetadata sets the "rejection_metadata" field if the given value is not nil.
-func (_u *WorkflowAssignmentHistoryUpdateOne) SetNillableRejectionMetadata(v *models.WorkflowAssignmentRejection) *WorkflowAssignmentHistoryUpdateOne {
-	if v != nil {
-		_u.SetRejectionMetadata(*v)
-	}
-	return _u
-}
-
-// ClearRejectionMetadata clears the value of the "rejection_metadata" field.
-func (_u *WorkflowAssignmentHistoryUpdateOne) ClearRejectionMetadata() *WorkflowAssignmentHistoryUpdateOne {
-	_u.mutation.ClearRejectionMetadata()
-	return _u
-}
-
-// SetInvalidationMetadata sets the "invalidation_metadata" field.
-func (_u *WorkflowAssignmentHistoryUpdateOne) SetInvalidationMetadata(v models.WorkflowAssignmentInvalidation) *WorkflowAssignmentHistoryUpdateOne {
-	_u.mutation.SetInvalidationMetadata(v)
-	return _u
-}
-
-// SetNillableInvalidationMetadata sets the "invalidation_metadata" field if the given value is not nil.
-func (_u *WorkflowAssignmentHistoryUpdateOne) SetNillableInvalidationMetadata(v *models.WorkflowAssignmentInvalidation) *WorkflowAssignmentHistoryUpdateOne {
-	if v != nil {
-		_u.SetInvalidationMetadata(*v)
-	}
-	return _u
-}
-
-// ClearInvalidationMetadata clears the value of the "invalidation_metadata" field.
-func (_u *WorkflowAssignmentHistoryUpdateOne) ClearInvalidationMetadata() *WorkflowAssignmentHistoryUpdateOne {
-	_u.mutation.ClearInvalidationMetadata()
-	return _u
-}
-
-// SetOutcomeMetadata sets the "outcome_metadata" field.
-func (_u *WorkflowAssignmentHistoryUpdateOne) SetOutcomeMetadata(v models.AssignmentOutcome) *WorkflowAssignmentHistoryUpdateOne {
-	_u.mutation.SetOutcomeMetadata(v)
-	return _u
-}
-
-// SetNillableOutcomeMetadata sets the "outcome_metadata" field if the given value is not nil.
-func (_u *WorkflowAssignmentHistoryUpdateOne) SetNillableOutcomeMetadata(v *models.AssignmentOutcome) *WorkflowAssignmentHistoryUpdateOne {
-	if v != nil {
-		_u.SetOutcomeMetadata(*v)
-	}
-	return _u
-}
-
-// ClearOutcomeMetadata clears the value of the "outcome_metadata" field.
-func (_u *WorkflowAssignmentHistoryUpdateOne) ClearOutcomeMetadata() *WorkflowAssignmentHistoryUpdateOne {
-	_u.mutation.ClearOutcomeMetadata()
-	return _u
-}
-
-// SetDecidedAt sets the "decided_at" field.
-func (_u *WorkflowAssignmentHistoryUpdateOne) SetDecidedAt(v time.Time) *WorkflowAssignmentHistoryUpdateOne {
-	_u.mutation.SetDecidedAt(v)
-	return _u
-}
-
-// SetNillableDecidedAt sets the "decided_at" field if the given value is not nil.
-func (_u *WorkflowAssignmentHistoryUpdateOne) SetNillableDecidedAt(v *time.Time) *WorkflowAssignmentHistoryUpdateOne {
-	if v != nil {
-		_u.SetDecidedAt(*v)
-	}
-	return _u
-}
-
-// ClearDecidedAt clears the value of the "decided_at" field.
-func (_u *WorkflowAssignmentHistoryUpdateOne) ClearDecidedAt() *WorkflowAssignmentHistoryUpdateOne {
-	_u.mutation.ClearDecidedAt()
-	return _u
-}
-
-// SetActorUserID sets the "actor_user_id" field.
-func (_u *WorkflowAssignmentHistoryUpdateOne) SetActorUserID(v string) *WorkflowAssignmentHistoryUpdateOne {
-	_u.mutation.SetActorUserID(v)
-	return _u
-}
-
-// SetNillableActorUserID sets the "actor_user_id" field if the given value is not nil.
-func (_u *WorkflowAssignmentHistoryUpdateOne) SetNillableActorUserID(v *string) *WorkflowAssignmentHistoryUpdateOne {
-	if v != nil {
-		_u.SetActorUserID(*v)
-	}
-	return _u
-}
-
-// ClearActorUserID clears the value of the "actor_user_id" field.
-func (_u *WorkflowAssignmentHistoryUpdateOne) ClearActorUserID() *WorkflowAssignmentHistoryUpdateOne {
-	_u.mutation.ClearActorUserID()
-	return _u
-}
-
-// SetActorGroupID sets the "actor_group_id" field.
-func (_u *WorkflowAssignmentHistoryUpdateOne) SetActorGroupID(v string) *WorkflowAssignmentHistoryUpdateOne {
-	_u.mutation.SetActorGroupID(v)
-	return _u
-}
-
-// SetNillableActorGroupID sets the "actor_group_id" field if the given value is not nil.
-func (_u *WorkflowAssignmentHistoryUpdateOne) SetNillableActorGroupID(v *string) *WorkflowAssignmentHistoryUpdateOne {
-	if v != nil {
-		_u.SetActorGroupID(*v)
-	}
-	return _u
-}
-
-// ClearActorGroupID clears the value of the "actor_group_id" field.
-func (_u *WorkflowAssignmentHistoryUpdateOne) ClearActorGroupID() *WorkflowAssignmentHistoryUpdateOne {
-	_u.mutation.ClearActorGroupID()
-	return _u
-}
-
-// SetNotes sets the "notes" field.
-func (_u *WorkflowAssignmentHistoryUpdateOne) SetNotes(v string) *WorkflowAssignmentHistoryUpdateOne {
-	_u.mutation.SetNotes(v)
-	return _u
-}
-
-// SetNillableNotes sets the "notes" field if the given value is not nil.
-func (_u *WorkflowAssignmentHistoryUpdateOne) SetNillableNotes(v *string) *WorkflowAssignmentHistoryUpdateOne {
-	if v != nil {
-		_u.SetNotes(*v)
-	}
-	return _u
-}
-
-// ClearNotes clears the value of the "notes" field.
-func (_u *WorkflowAssignmentHistoryUpdateOne) ClearNotes() *WorkflowAssignmentHistoryUpdateOne {
-	_u.mutation.ClearNotes()
-	return _u
-}
-
-// SetDueAt sets the "due_at" field.
-func (_u *WorkflowAssignmentHistoryUpdateOne) SetDueAt(v time.Time) *WorkflowAssignmentHistoryUpdateOne {
-	_u.mutation.SetDueAt(v)
-	return _u
-}
-
-// SetNillableDueAt sets the "due_at" field if the given value is not nil.
-func (_u *WorkflowAssignmentHistoryUpdateOne) SetNillableDueAt(v *time.Time) *WorkflowAssignmentHistoryUpdateOne {
-	if v != nil {
-		_u.SetDueAt(*v)
-	}
-	return _u
-}
-
-// ClearDueAt clears the value of the "due_at" field.
-func (_u *WorkflowAssignmentHistoryUpdateOne) ClearDueAt() *WorkflowAssignmentHistoryUpdateOne {
-	_u.mutation.ClearDueAt()
-	return _u
+	fields   []string
+	hooks    []Hook
+	mutation *WorkflowAssignmentHistoryMutation
 }
 
 // Mutation returns the WorkflowAssignmentHistoryMutation object of the builder.
@@ -1073,9 +173,6 @@ func (_u *WorkflowAssignmentHistoryUpdateOne) Select(field string, fields ...str
 
 // Save executes the query and returns the updated WorkflowAssignmentHistory entity.
 func (_u *WorkflowAssignmentHistoryUpdateOne) Save(ctx context.Context) (*WorkflowAssignmentHistory, error) {
-	if err := _u.defaults(); err != nil {
-		return nil, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -1101,38 +198,7 @@ func (_u *WorkflowAssignmentHistoryUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *WorkflowAssignmentHistoryUpdateOne) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if workflowassignmenthistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized workflowassignmenthistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := workflowassignmenthistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *WorkflowAssignmentHistoryUpdateOne) check() error {
-	if v, ok := _u.mutation.Status(); ok {
-		if err := workflowassignmenthistory.StatusValidator(v); err != nil {
-			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "WorkflowAssignmentHistory.status": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *WorkflowAssignmentHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *WorkflowAssignmentHistoryUpdateOne {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *WorkflowAssignmentHistoryUpdateOne) sqlSave(ctx context.Context) (_node *WorkflowAssignmentHistory, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(workflowassignmenthistory.Table, workflowassignmenthistory.Columns, sqlgraph.NewFieldSpec(workflowassignmenthistory.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
@@ -1164,46 +230,23 @@ func (_u *WorkflowAssignmentHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldDeletedBy, field.TypeString, value)
-	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, workflowassignmenthistory.FieldTags, value)
-		})
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldTags, field.TypeJSON)
@@ -1211,90 +254,39 @@ func (_u *WorkflowAssignmentHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := _u.mutation.WorkflowInstanceID(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldWorkflowInstanceID, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.AssignmentKey(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldAssignmentKey, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.Role(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldRole, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.Label(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldLabel, field.TypeString, value)
-	}
 	if _u.mutation.LabelCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldLabel, field.TypeString)
-	}
-	if value, ok := _u.mutation.Required(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldRequired, field.TypeBool, value)
-	}
-	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldStatus, field.TypeEnum, value)
-	}
-	if value, ok := _u.mutation.Metadata(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldMetadata, field.TypeJSON, value)
 	}
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldMetadata, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.ApprovalMetadata(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldApprovalMetadata, field.TypeJSON, value)
-	}
 	if _u.mutation.ApprovalMetadataCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldApprovalMetadata, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.RejectionMetadata(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldRejectionMetadata, field.TypeJSON, value)
 	}
 	if _u.mutation.RejectionMetadataCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldRejectionMetadata, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.InvalidationMetadata(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldInvalidationMetadata, field.TypeJSON, value)
-	}
 	if _u.mutation.InvalidationMetadataCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldInvalidationMetadata, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.OutcomeMetadata(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldOutcomeMetadata, field.TypeJSON, value)
 	}
 	if _u.mutation.OutcomeMetadataCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldOutcomeMetadata, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.DecidedAt(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldDecidedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DecidedAtCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldDecidedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.ActorUserID(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldActorUserID, field.TypeString, value)
 	}
 	if _u.mutation.ActorUserIDCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldActorUserID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ActorGroupID(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldActorGroupID, field.TypeString, value)
-	}
 	if _u.mutation.ActorGroupIDCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldActorGroupID, field.TypeString)
-	}
-	if value, ok := _u.mutation.Notes(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldNotes, field.TypeString, value)
 	}
 	if _u.mutation.NotesCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldNotes, field.TypeString)
 	}
-	if value, ok := _u.mutation.DueAt(); ok {
-		_spec.SetField(workflowassignmenthistory.FieldDueAt, field.TypeTime, value)
-	}
 	if _u.mutation.DueAtCleared() {
 		_spec.ClearField(workflowassignmenthistory.FieldDueAt, field.TypeTime)
 	}
-	_spec.Node.Schema = _u.schemaConfig.WorkflowAssignmentHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	_node = &WorkflowAssignmentHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

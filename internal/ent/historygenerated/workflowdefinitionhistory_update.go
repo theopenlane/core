@@ -8,477 +8,24 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 	"github.com/theopenlane/core/internal/ent/historygenerated/workflowdefinitionhistory"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
 )
 
 // WorkflowDefinitionHistoryUpdate is the builder for updating WorkflowDefinitionHistory entities.
 type WorkflowDefinitionHistoryUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *WorkflowDefinitionHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *WorkflowDefinitionHistoryMutation
 }
 
 // Where appends a list predicates to the WorkflowDefinitionHistoryUpdate builder.
 func (_u *WorkflowDefinitionHistoryUpdate) Where(ps ...predicate.WorkflowDefinitionHistory) *WorkflowDefinitionHistoryUpdate {
 	_u.mutation.Where(ps...)
-	return _u
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *WorkflowDefinitionHistoryUpdate) SetUpdatedAt(v time.Time) *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *WorkflowDefinitionHistoryUpdate) ClearUpdatedAt() *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *WorkflowDefinitionHistoryUpdate) SetUpdatedBy(v string) *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *WorkflowDefinitionHistoryUpdate) SetNillableUpdatedBy(v *string) *WorkflowDefinitionHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *WorkflowDefinitionHistoryUpdate) ClearUpdatedBy() *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *WorkflowDefinitionHistoryUpdate) SetUpdatedByImpersonator(v string) *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *WorkflowDefinitionHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *WorkflowDefinitionHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *WorkflowDefinitionHistoryUpdate) ClearUpdatedByImpersonator() *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *WorkflowDefinitionHistoryUpdate) SetDeletedAt(v time.Time) *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *WorkflowDefinitionHistoryUpdate) SetNillableDeletedAt(v *time.Time) *WorkflowDefinitionHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *WorkflowDefinitionHistoryUpdate) ClearDeletedAt() *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *WorkflowDefinitionHistoryUpdate) SetDeletedBy(v string) *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *WorkflowDefinitionHistoryUpdate) SetNillableDeletedBy(v *string) *WorkflowDefinitionHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *WorkflowDefinitionHistoryUpdate) ClearDeletedBy() *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *WorkflowDefinitionHistoryUpdate) SetTags(v []string) *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *WorkflowDefinitionHistoryUpdate) AppendTags(v []string) *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *WorkflowDefinitionHistoryUpdate) ClearTags() *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetInternalNotes sets the "internal_notes" field.
-func (_u *WorkflowDefinitionHistoryUpdate) SetInternalNotes(v string) *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.SetInternalNotes(v)
-	return _u
-}
-
-// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
-func (_u *WorkflowDefinitionHistoryUpdate) SetNillableInternalNotes(v *string) *WorkflowDefinitionHistoryUpdate {
-	if v != nil {
-		_u.SetInternalNotes(*v)
-	}
-	return _u
-}
-
-// ClearInternalNotes clears the value of the "internal_notes" field.
-func (_u *WorkflowDefinitionHistoryUpdate) ClearInternalNotes() *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.ClearInternalNotes()
-	return _u
-}
-
-// SetSystemInternalID sets the "system_internal_id" field.
-func (_u *WorkflowDefinitionHistoryUpdate) SetSystemInternalID(v string) *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.SetSystemInternalID(v)
-	return _u
-}
-
-// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
-func (_u *WorkflowDefinitionHistoryUpdate) SetNillableSystemInternalID(v *string) *WorkflowDefinitionHistoryUpdate {
-	if v != nil {
-		_u.SetSystemInternalID(*v)
-	}
-	return _u
-}
-
-// ClearSystemInternalID clears the value of the "system_internal_id" field.
-func (_u *WorkflowDefinitionHistoryUpdate) ClearSystemInternalID() *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.ClearSystemInternalID()
-	return _u
-}
-
-// SetName sets the "name" field.
-func (_u *WorkflowDefinitionHistoryUpdate) SetName(v string) *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.SetName(v)
-	return _u
-}
-
-// SetNillableName sets the "name" field if the given value is not nil.
-func (_u *WorkflowDefinitionHistoryUpdate) SetNillableName(v *string) *WorkflowDefinitionHistoryUpdate {
-	if v != nil {
-		_u.SetName(*v)
-	}
-	return _u
-}
-
-// SetDescription sets the "description" field.
-func (_u *WorkflowDefinitionHistoryUpdate) SetDescription(v string) *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.SetDescription(v)
-	return _u
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (_u *WorkflowDefinitionHistoryUpdate) SetNillableDescription(v *string) *WorkflowDefinitionHistoryUpdate {
-	if v != nil {
-		_u.SetDescription(*v)
-	}
-	return _u
-}
-
-// ClearDescription clears the value of the "description" field.
-func (_u *WorkflowDefinitionHistoryUpdate) ClearDescription() *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.ClearDescription()
-	return _u
-}
-
-// SetWorkflowKind sets the "workflow_kind" field.
-func (_u *WorkflowDefinitionHistoryUpdate) SetWorkflowKind(v enums.WorkflowKind) *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.SetWorkflowKind(v)
-	return _u
-}
-
-// SetNillableWorkflowKind sets the "workflow_kind" field if the given value is not nil.
-func (_u *WorkflowDefinitionHistoryUpdate) SetNillableWorkflowKind(v *enums.WorkflowKind) *WorkflowDefinitionHistoryUpdate {
-	if v != nil {
-		_u.SetWorkflowKind(*v)
-	}
-	return _u
-}
-
-// SetSchemaType sets the "schema_type" field.
-func (_u *WorkflowDefinitionHistoryUpdate) SetSchemaType(v string) *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.SetSchemaType(v)
-	return _u
-}
-
-// SetNillableSchemaType sets the "schema_type" field if the given value is not nil.
-func (_u *WorkflowDefinitionHistoryUpdate) SetNillableSchemaType(v *string) *WorkflowDefinitionHistoryUpdate {
-	if v != nil {
-		_u.SetSchemaType(*v)
-	}
-	return _u
-}
-
-// SetRevision sets the "revision" field.
-func (_u *WorkflowDefinitionHistoryUpdate) SetRevision(v int) *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.ResetRevision()
-	_u.mutation.SetRevision(v)
-	return _u
-}
-
-// SetNillableRevision sets the "revision" field if the given value is not nil.
-func (_u *WorkflowDefinitionHistoryUpdate) SetNillableRevision(v *int) *WorkflowDefinitionHistoryUpdate {
-	if v != nil {
-		_u.SetRevision(*v)
-	}
-	return _u
-}
-
-// AddRevision adds value to the "revision" field.
-func (_u *WorkflowDefinitionHistoryUpdate) AddRevision(v int) *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.AddRevision(v)
-	return _u
-}
-
-// SetDraft sets the "draft" field.
-func (_u *WorkflowDefinitionHistoryUpdate) SetDraft(v bool) *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.SetDraft(v)
-	return _u
-}
-
-// SetNillableDraft sets the "draft" field if the given value is not nil.
-func (_u *WorkflowDefinitionHistoryUpdate) SetNillableDraft(v *bool) *WorkflowDefinitionHistoryUpdate {
-	if v != nil {
-		_u.SetDraft(*v)
-	}
-	return _u
-}
-
-// SetPublishedAt sets the "published_at" field.
-func (_u *WorkflowDefinitionHistoryUpdate) SetPublishedAt(v time.Time) *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.SetPublishedAt(v)
-	return _u
-}
-
-// SetNillablePublishedAt sets the "published_at" field if the given value is not nil.
-func (_u *WorkflowDefinitionHistoryUpdate) SetNillablePublishedAt(v *time.Time) *WorkflowDefinitionHistoryUpdate {
-	if v != nil {
-		_u.SetPublishedAt(*v)
-	}
-	return _u
-}
-
-// ClearPublishedAt clears the value of the "published_at" field.
-func (_u *WorkflowDefinitionHistoryUpdate) ClearPublishedAt() *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.ClearPublishedAt()
-	return _u
-}
-
-// SetCooldownSeconds sets the "cooldown_seconds" field.
-func (_u *WorkflowDefinitionHistoryUpdate) SetCooldownSeconds(v int) *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.ResetCooldownSeconds()
-	_u.mutation.SetCooldownSeconds(v)
-	return _u
-}
-
-// SetNillableCooldownSeconds sets the "cooldown_seconds" field if the given value is not nil.
-func (_u *WorkflowDefinitionHistoryUpdate) SetNillableCooldownSeconds(v *int) *WorkflowDefinitionHistoryUpdate {
-	if v != nil {
-		_u.SetCooldownSeconds(*v)
-	}
-	return _u
-}
-
-// AddCooldownSeconds adds value to the "cooldown_seconds" field.
-func (_u *WorkflowDefinitionHistoryUpdate) AddCooldownSeconds(v int) *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.AddCooldownSeconds(v)
-	return _u
-}
-
-// SetIsDefault sets the "is_default" field.
-func (_u *WorkflowDefinitionHistoryUpdate) SetIsDefault(v bool) *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.SetIsDefault(v)
-	return _u
-}
-
-// SetNillableIsDefault sets the "is_default" field if the given value is not nil.
-func (_u *WorkflowDefinitionHistoryUpdate) SetNillableIsDefault(v *bool) *WorkflowDefinitionHistoryUpdate {
-	if v != nil {
-		_u.SetIsDefault(*v)
-	}
-	return _u
-}
-
-// SetActive sets the "active" field.
-func (_u *WorkflowDefinitionHistoryUpdate) SetActive(v bool) *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.SetActive(v)
-	return _u
-}
-
-// SetNillableActive sets the "active" field if the given value is not nil.
-func (_u *WorkflowDefinitionHistoryUpdate) SetNillableActive(v *bool) *WorkflowDefinitionHistoryUpdate {
-	if v != nil {
-		_u.SetActive(*v)
-	}
-	return _u
-}
-
-// SetTriggerOperations sets the "trigger_operations" field.
-func (_u *WorkflowDefinitionHistoryUpdate) SetTriggerOperations(v []string) *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.SetTriggerOperations(v)
-	return _u
-}
-
-// AppendTriggerOperations appends value to the "trigger_operations" field.
-func (_u *WorkflowDefinitionHistoryUpdate) AppendTriggerOperations(v []string) *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.AppendTriggerOperations(v)
-	return _u
-}
-
-// ClearTriggerOperations clears the value of the "trigger_operations" field.
-func (_u *WorkflowDefinitionHistoryUpdate) ClearTriggerOperations() *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.ClearTriggerOperations()
-	return _u
-}
-
-// SetTriggerFields sets the "trigger_fields" field.
-func (_u *WorkflowDefinitionHistoryUpdate) SetTriggerFields(v []string) *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.SetTriggerFields(v)
-	return _u
-}
-
-// AppendTriggerFields appends value to the "trigger_fields" field.
-func (_u *WorkflowDefinitionHistoryUpdate) AppendTriggerFields(v []string) *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.AppendTriggerFields(v)
-	return _u
-}
-
-// ClearTriggerFields clears the value of the "trigger_fields" field.
-func (_u *WorkflowDefinitionHistoryUpdate) ClearTriggerFields() *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.ClearTriggerFields()
-	return _u
-}
-
-// SetApprovalFields sets the "approval_fields" field.
-func (_u *WorkflowDefinitionHistoryUpdate) SetApprovalFields(v []string) *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.SetApprovalFields(v)
-	return _u
-}
-
-// AppendApprovalFields appends value to the "approval_fields" field.
-func (_u *WorkflowDefinitionHistoryUpdate) AppendApprovalFields(v []string) *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.AppendApprovalFields(v)
-	return _u
-}
-
-// ClearApprovalFields clears the value of the "approval_fields" field.
-func (_u *WorkflowDefinitionHistoryUpdate) ClearApprovalFields() *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.ClearApprovalFields()
-	return _u
-}
-
-// SetApprovalEdges sets the "approval_edges" field.
-func (_u *WorkflowDefinitionHistoryUpdate) SetApprovalEdges(v []string) *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.SetApprovalEdges(v)
-	return _u
-}
-
-// AppendApprovalEdges appends value to the "approval_edges" field.
-func (_u *WorkflowDefinitionHistoryUpdate) AppendApprovalEdges(v []string) *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.AppendApprovalEdges(v)
-	return _u
-}
-
-// ClearApprovalEdges clears the value of the "approval_edges" field.
-func (_u *WorkflowDefinitionHistoryUpdate) ClearApprovalEdges() *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.ClearApprovalEdges()
-	return _u
-}
-
-// SetApprovalSubmissionMode sets the "approval_submission_mode" field.
-func (_u *WorkflowDefinitionHistoryUpdate) SetApprovalSubmissionMode(v enums.WorkflowApprovalSubmissionMode) *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.SetApprovalSubmissionMode(v)
-	return _u
-}
-
-// SetNillableApprovalSubmissionMode sets the "approval_submission_mode" field if the given value is not nil.
-func (_u *WorkflowDefinitionHistoryUpdate) SetNillableApprovalSubmissionMode(v *enums.WorkflowApprovalSubmissionMode) *WorkflowDefinitionHistoryUpdate {
-	if v != nil {
-		_u.SetApprovalSubmissionMode(*v)
-	}
-	return _u
-}
-
-// ClearApprovalSubmissionMode clears the value of the "approval_submission_mode" field.
-func (_u *WorkflowDefinitionHistoryUpdate) ClearApprovalSubmissionMode() *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.ClearApprovalSubmissionMode()
-	return _u
-}
-
-// SetDefinitionJSON sets the "definition_json" field.
-func (_u *WorkflowDefinitionHistoryUpdate) SetDefinitionJSON(v models.WorkflowDefinitionDocument) *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.SetDefinitionJSON(v)
-	return _u
-}
-
-// SetNillableDefinitionJSON sets the "definition_json" field if the given value is not nil.
-func (_u *WorkflowDefinitionHistoryUpdate) SetNillableDefinitionJSON(v *models.WorkflowDefinitionDocument) *WorkflowDefinitionHistoryUpdate {
-	if v != nil {
-		_u.SetDefinitionJSON(*v)
-	}
-	return _u
-}
-
-// ClearDefinitionJSON clears the value of the "definition_json" field.
-func (_u *WorkflowDefinitionHistoryUpdate) ClearDefinitionJSON() *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.ClearDefinitionJSON()
-	return _u
-}
-
-// SetTrackedFields sets the "tracked_fields" field.
-func (_u *WorkflowDefinitionHistoryUpdate) SetTrackedFields(v []string) *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.SetTrackedFields(v)
-	return _u
-}
-
-// AppendTrackedFields appends value to the "tracked_fields" field.
-func (_u *WorkflowDefinitionHistoryUpdate) AppendTrackedFields(v []string) *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.AppendTrackedFields(v)
-	return _u
-}
-
-// ClearTrackedFields clears the value of the "tracked_fields" field.
-func (_u *WorkflowDefinitionHistoryUpdate) ClearTrackedFields() *WorkflowDefinitionHistoryUpdate {
-	_u.mutation.ClearTrackedFields()
 	return _u
 }
 
@@ -489,9 +36,6 @@ func (_u *WorkflowDefinitionHistoryUpdate) Mutation() *WorkflowDefinitionHistory
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *WorkflowDefinitionHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := _u.defaults(); err != nil {
-		return 0, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -517,43 +61,7 @@ func (_u *WorkflowDefinitionHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *WorkflowDefinitionHistoryUpdate) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if workflowdefinitionhistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized workflowdefinitionhistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := workflowdefinitionhistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *WorkflowDefinitionHistoryUpdate) check() error {
-	if v, ok := _u.mutation.WorkflowKind(); ok {
-		if err := workflowdefinitionhistory.WorkflowKindValidator(v); err != nil {
-			return &ValidationError{Name: "workflow_kind", err: fmt.Errorf(`historygenerated: validator failed for field "WorkflowDefinitionHistory.workflow_kind": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.ApprovalSubmissionMode(); ok {
-		if err := workflowdefinitionhistory.ApprovalSubmissionModeValidator(v); err != nil {
-			return &ValidationError{Name: "approval_submission_mode", err: fmt.Errorf(`historygenerated: validator failed for field "WorkflowDefinitionHistory.approval_submission_mode": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *WorkflowDefinitionHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *WorkflowDefinitionHistoryUpdate {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *WorkflowDefinitionHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(workflowdefinitionhistory.Table, workflowdefinitionhistory.Columns, sqlgraph.NewFieldSpec(workflowdefinitionhistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -568,46 +76,23 @@ func (_u *WorkflowDefinitionHistoryUpdate) sqlSave(ctx context.Context) (_node i
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldDeletedBy, field.TypeString, value)
-	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, workflowdefinitionhistory.FieldTags, value)
-		})
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldTags, field.TypeJSON)
@@ -618,130 +103,39 @@ func (_u *WorkflowDefinitionHistoryUpdate) sqlSave(ctx context.Context) (_node i
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldSystemOwned, field.TypeBool)
 	}
-	if value, ok := _u.mutation.InternalNotes(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldInternalNotes, field.TypeString, value)
-	}
 	if _u.mutation.InternalNotesCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldInternalNotes, field.TypeString)
-	}
-	if value, ok := _u.mutation.SystemInternalID(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldSystemInternalID, field.TypeString, value)
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldSystemInternalID, field.TypeString)
 	}
-	if value, ok := _u.mutation.Name(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldName, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.Description(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldDescription, field.TypeString, value)
-	}
 	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldDescription, field.TypeString)
-	}
-	if value, ok := _u.mutation.WorkflowKind(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldWorkflowKind, field.TypeEnum, value)
-	}
-	if value, ok := _u.mutation.SchemaType(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldSchemaType, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.Revision(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldRevision, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.AddedRevision(); ok {
-		_spec.AddField(workflowdefinitionhistory.FieldRevision, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.Draft(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldDraft, field.TypeBool, value)
-	}
-	if value, ok := _u.mutation.PublishedAt(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldPublishedAt, field.TypeTime, value)
 	}
 	if _u.mutation.PublishedAtCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldPublishedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.CooldownSeconds(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldCooldownSeconds, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.AddedCooldownSeconds(); ok {
-		_spec.AddField(workflowdefinitionhistory.FieldCooldownSeconds, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.IsDefault(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldIsDefault, field.TypeBool, value)
-	}
-	if value, ok := _u.mutation.Active(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldActive, field.TypeBool, value)
-	}
-	if value, ok := _u.mutation.TriggerOperations(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldTriggerOperations, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTriggerOperations(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, workflowdefinitionhistory.FieldTriggerOperations, value)
-		})
-	}
 	if _u.mutation.TriggerOperationsCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldTriggerOperations, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.TriggerFields(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldTriggerFields, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTriggerFields(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, workflowdefinitionhistory.FieldTriggerFields, value)
-		})
 	}
 	if _u.mutation.TriggerFieldsCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldTriggerFields, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.ApprovalFields(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldApprovalFields, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedApprovalFields(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, workflowdefinitionhistory.FieldApprovalFields, value)
-		})
-	}
 	if _u.mutation.ApprovalFieldsCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldApprovalFields, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.ApprovalEdges(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldApprovalEdges, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedApprovalEdges(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, workflowdefinitionhistory.FieldApprovalEdges, value)
-		})
 	}
 	if _u.mutation.ApprovalEdgesCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldApprovalEdges, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.ApprovalSubmissionMode(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldApprovalSubmissionMode, field.TypeEnum, value)
-	}
 	if _u.mutation.ApprovalSubmissionModeCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldApprovalSubmissionMode, field.TypeEnum)
-	}
-	if value, ok := _u.mutation.DefinitionJSON(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldDefinitionJSON, field.TypeJSON, value)
 	}
 	if _u.mutation.DefinitionJSONCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldDefinitionJSON, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.TrackedFields(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldTrackedFields, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTrackedFields(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, workflowdefinitionhistory.FieldTrackedFields, value)
-		})
-	}
 	if _u.mutation.TrackedFieldsCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldTrackedFields, field.TypeJSON)
 	}
-	_spec.Node.Schema = _u.schemaConfig.WorkflowDefinitionHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{workflowdefinitionhistory.Label}
@@ -757,456 +151,9 @@ func (_u *WorkflowDefinitionHistoryUpdate) sqlSave(ctx context.Context) (_node i
 // WorkflowDefinitionHistoryUpdateOne is the builder for updating a single WorkflowDefinitionHistory entity.
 type WorkflowDefinitionHistoryUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *WorkflowDefinitionHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetUpdatedAt(v time.Time) *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) ClearUpdatedAt() *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetUpdatedBy(v string) *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetNillableUpdatedBy(v *string) *WorkflowDefinitionHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) ClearUpdatedBy() *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetUpdatedByImpersonator(v string) *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *WorkflowDefinitionHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) ClearUpdatedByImpersonator() *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetDeletedAt(v time.Time) *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *WorkflowDefinitionHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) ClearDeletedAt() *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetDeletedBy(v string) *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetNillableDeletedBy(v *string) *WorkflowDefinitionHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) ClearDeletedBy() *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetTags(v []string) *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) AppendTags(v []string) *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) ClearTags() *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetInternalNotes sets the "internal_notes" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetInternalNotes(v string) *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.SetInternalNotes(v)
-	return _u
-}
-
-// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetNillableInternalNotes(v *string) *WorkflowDefinitionHistoryUpdateOne {
-	if v != nil {
-		_u.SetInternalNotes(*v)
-	}
-	return _u
-}
-
-// ClearInternalNotes clears the value of the "internal_notes" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) ClearInternalNotes() *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.ClearInternalNotes()
-	return _u
-}
-
-// SetSystemInternalID sets the "system_internal_id" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetSystemInternalID(v string) *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.SetSystemInternalID(v)
-	return _u
-}
-
-// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetNillableSystemInternalID(v *string) *WorkflowDefinitionHistoryUpdateOne {
-	if v != nil {
-		_u.SetSystemInternalID(*v)
-	}
-	return _u
-}
-
-// ClearSystemInternalID clears the value of the "system_internal_id" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) ClearSystemInternalID() *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.ClearSystemInternalID()
-	return _u
-}
-
-// SetName sets the "name" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetName(v string) *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.SetName(v)
-	return _u
-}
-
-// SetNillableName sets the "name" field if the given value is not nil.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetNillableName(v *string) *WorkflowDefinitionHistoryUpdateOne {
-	if v != nil {
-		_u.SetName(*v)
-	}
-	return _u
-}
-
-// SetDescription sets the "description" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetDescription(v string) *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.SetDescription(v)
-	return _u
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetNillableDescription(v *string) *WorkflowDefinitionHistoryUpdateOne {
-	if v != nil {
-		_u.SetDescription(*v)
-	}
-	return _u
-}
-
-// ClearDescription clears the value of the "description" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) ClearDescription() *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.ClearDescription()
-	return _u
-}
-
-// SetWorkflowKind sets the "workflow_kind" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetWorkflowKind(v enums.WorkflowKind) *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.SetWorkflowKind(v)
-	return _u
-}
-
-// SetNillableWorkflowKind sets the "workflow_kind" field if the given value is not nil.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetNillableWorkflowKind(v *enums.WorkflowKind) *WorkflowDefinitionHistoryUpdateOne {
-	if v != nil {
-		_u.SetWorkflowKind(*v)
-	}
-	return _u
-}
-
-// SetSchemaType sets the "schema_type" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetSchemaType(v string) *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.SetSchemaType(v)
-	return _u
-}
-
-// SetNillableSchemaType sets the "schema_type" field if the given value is not nil.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetNillableSchemaType(v *string) *WorkflowDefinitionHistoryUpdateOne {
-	if v != nil {
-		_u.SetSchemaType(*v)
-	}
-	return _u
-}
-
-// SetRevision sets the "revision" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetRevision(v int) *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.ResetRevision()
-	_u.mutation.SetRevision(v)
-	return _u
-}
-
-// SetNillableRevision sets the "revision" field if the given value is not nil.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetNillableRevision(v *int) *WorkflowDefinitionHistoryUpdateOne {
-	if v != nil {
-		_u.SetRevision(*v)
-	}
-	return _u
-}
-
-// AddRevision adds value to the "revision" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) AddRevision(v int) *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.AddRevision(v)
-	return _u
-}
-
-// SetDraft sets the "draft" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetDraft(v bool) *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.SetDraft(v)
-	return _u
-}
-
-// SetNillableDraft sets the "draft" field if the given value is not nil.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetNillableDraft(v *bool) *WorkflowDefinitionHistoryUpdateOne {
-	if v != nil {
-		_u.SetDraft(*v)
-	}
-	return _u
-}
-
-// SetPublishedAt sets the "published_at" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetPublishedAt(v time.Time) *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.SetPublishedAt(v)
-	return _u
-}
-
-// SetNillablePublishedAt sets the "published_at" field if the given value is not nil.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetNillablePublishedAt(v *time.Time) *WorkflowDefinitionHistoryUpdateOne {
-	if v != nil {
-		_u.SetPublishedAt(*v)
-	}
-	return _u
-}
-
-// ClearPublishedAt clears the value of the "published_at" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) ClearPublishedAt() *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.ClearPublishedAt()
-	return _u
-}
-
-// SetCooldownSeconds sets the "cooldown_seconds" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetCooldownSeconds(v int) *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.ResetCooldownSeconds()
-	_u.mutation.SetCooldownSeconds(v)
-	return _u
-}
-
-// SetNillableCooldownSeconds sets the "cooldown_seconds" field if the given value is not nil.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetNillableCooldownSeconds(v *int) *WorkflowDefinitionHistoryUpdateOne {
-	if v != nil {
-		_u.SetCooldownSeconds(*v)
-	}
-	return _u
-}
-
-// AddCooldownSeconds adds value to the "cooldown_seconds" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) AddCooldownSeconds(v int) *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.AddCooldownSeconds(v)
-	return _u
-}
-
-// SetIsDefault sets the "is_default" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetIsDefault(v bool) *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.SetIsDefault(v)
-	return _u
-}
-
-// SetNillableIsDefault sets the "is_default" field if the given value is not nil.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetNillableIsDefault(v *bool) *WorkflowDefinitionHistoryUpdateOne {
-	if v != nil {
-		_u.SetIsDefault(*v)
-	}
-	return _u
-}
-
-// SetActive sets the "active" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetActive(v bool) *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.SetActive(v)
-	return _u
-}
-
-// SetNillableActive sets the "active" field if the given value is not nil.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetNillableActive(v *bool) *WorkflowDefinitionHistoryUpdateOne {
-	if v != nil {
-		_u.SetActive(*v)
-	}
-	return _u
-}
-
-// SetTriggerOperations sets the "trigger_operations" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetTriggerOperations(v []string) *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.SetTriggerOperations(v)
-	return _u
-}
-
-// AppendTriggerOperations appends value to the "trigger_operations" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) AppendTriggerOperations(v []string) *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.AppendTriggerOperations(v)
-	return _u
-}
-
-// ClearTriggerOperations clears the value of the "trigger_operations" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) ClearTriggerOperations() *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.ClearTriggerOperations()
-	return _u
-}
-
-// SetTriggerFields sets the "trigger_fields" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetTriggerFields(v []string) *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.SetTriggerFields(v)
-	return _u
-}
-
-// AppendTriggerFields appends value to the "trigger_fields" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) AppendTriggerFields(v []string) *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.AppendTriggerFields(v)
-	return _u
-}
-
-// ClearTriggerFields clears the value of the "trigger_fields" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) ClearTriggerFields() *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.ClearTriggerFields()
-	return _u
-}
-
-// SetApprovalFields sets the "approval_fields" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetApprovalFields(v []string) *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.SetApprovalFields(v)
-	return _u
-}
-
-// AppendApprovalFields appends value to the "approval_fields" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) AppendApprovalFields(v []string) *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.AppendApprovalFields(v)
-	return _u
-}
-
-// ClearApprovalFields clears the value of the "approval_fields" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) ClearApprovalFields() *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.ClearApprovalFields()
-	return _u
-}
-
-// SetApprovalEdges sets the "approval_edges" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetApprovalEdges(v []string) *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.SetApprovalEdges(v)
-	return _u
-}
-
-// AppendApprovalEdges appends value to the "approval_edges" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) AppendApprovalEdges(v []string) *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.AppendApprovalEdges(v)
-	return _u
-}
-
-// ClearApprovalEdges clears the value of the "approval_edges" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) ClearApprovalEdges() *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.ClearApprovalEdges()
-	return _u
-}
-
-// SetApprovalSubmissionMode sets the "approval_submission_mode" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetApprovalSubmissionMode(v enums.WorkflowApprovalSubmissionMode) *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.SetApprovalSubmissionMode(v)
-	return _u
-}
-
-// SetNillableApprovalSubmissionMode sets the "approval_submission_mode" field if the given value is not nil.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetNillableApprovalSubmissionMode(v *enums.WorkflowApprovalSubmissionMode) *WorkflowDefinitionHistoryUpdateOne {
-	if v != nil {
-		_u.SetApprovalSubmissionMode(*v)
-	}
-	return _u
-}
-
-// ClearApprovalSubmissionMode clears the value of the "approval_submission_mode" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) ClearApprovalSubmissionMode() *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.ClearApprovalSubmissionMode()
-	return _u
-}
-
-// SetDefinitionJSON sets the "definition_json" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetDefinitionJSON(v models.WorkflowDefinitionDocument) *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.SetDefinitionJSON(v)
-	return _u
-}
-
-// SetNillableDefinitionJSON sets the "definition_json" field if the given value is not nil.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetNillableDefinitionJSON(v *models.WorkflowDefinitionDocument) *WorkflowDefinitionHistoryUpdateOne {
-	if v != nil {
-		_u.SetDefinitionJSON(*v)
-	}
-	return _u
-}
-
-// ClearDefinitionJSON clears the value of the "definition_json" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) ClearDefinitionJSON() *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.ClearDefinitionJSON()
-	return _u
-}
-
-// SetTrackedFields sets the "tracked_fields" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) SetTrackedFields(v []string) *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.SetTrackedFields(v)
-	return _u
-}
-
-// AppendTrackedFields appends value to the "tracked_fields" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) AppendTrackedFields(v []string) *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.AppendTrackedFields(v)
-	return _u
-}
-
-// ClearTrackedFields clears the value of the "tracked_fields" field.
-func (_u *WorkflowDefinitionHistoryUpdateOne) ClearTrackedFields() *WorkflowDefinitionHistoryUpdateOne {
-	_u.mutation.ClearTrackedFields()
-	return _u
+	fields   []string
+	hooks    []Hook
+	mutation *WorkflowDefinitionHistoryMutation
 }
 
 // Mutation returns the WorkflowDefinitionHistoryMutation object of the builder.
@@ -1229,9 +176,6 @@ func (_u *WorkflowDefinitionHistoryUpdateOne) Select(field string, fields ...str
 
 // Save executes the query and returns the updated WorkflowDefinitionHistory entity.
 func (_u *WorkflowDefinitionHistoryUpdateOne) Save(ctx context.Context) (*WorkflowDefinitionHistory, error) {
-	if err := _u.defaults(); err != nil {
-		return nil, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -1257,43 +201,7 @@ func (_u *WorkflowDefinitionHistoryUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *WorkflowDefinitionHistoryUpdateOne) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if workflowdefinitionhistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized workflowdefinitionhistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := workflowdefinitionhistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *WorkflowDefinitionHistoryUpdateOne) check() error {
-	if v, ok := _u.mutation.WorkflowKind(); ok {
-		if err := workflowdefinitionhistory.WorkflowKindValidator(v); err != nil {
-			return &ValidationError{Name: "workflow_kind", err: fmt.Errorf(`historygenerated: validator failed for field "WorkflowDefinitionHistory.workflow_kind": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.ApprovalSubmissionMode(); ok {
-		if err := workflowdefinitionhistory.ApprovalSubmissionModeValidator(v); err != nil {
-			return &ValidationError{Name: "approval_submission_mode", err: fmt.Errorf(`historygenerated: validator failed for field "WorkflowDefinitionHistory.approval_submission_mode": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *WorkflowDefinitionHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *WorkflowDefinitionHistoryUpdateOne {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *WorkflowDefinitionHistoryUpdateOne) sqlSave(ctx context.Context) (_node *WorkflowDefinitionHistory, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(workflowdefinitionhistory.Table, workflowdefinitionhistory.Columns, sqlgraph.NewFieldSpec(workflowdefinitionhistory.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
@@ -1325,46 +233,23 @@ func (_u *WorkflowDefinitionHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldDeletedBy, field.TypeString, value)
-	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, workflowdefinitionhistory.FieldTags, value)
-		})
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldTags, field.TypeJSON)
@@ -1375,130 +260,39 @@ func (_u *WorkflowDefinitionHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldSystemOwned, field.TypeBool)
 	}
-	if value, ok := _u.mutation.InternalNotes(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldInternalNotes, field.TypeString, value)
-	}
 	if _u.mutation.InternalNotesCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldInternalNotes, field.TypeString)
-	}
-	if value, ok := _u.mutation.SystemInternalID(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldSystemInternalID, field.TypeString, value)
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldSystemInternalID, field.TypeString)
 	}
-	if value, ok := _u.mutation.Name(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldName, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.Description(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldDescription, field.TypeString, value)
-	}
 	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldDescription, field.TypeString)
-	}
-	if value, ok := _u.mutation.WorkflowKind(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldWorkflowKind, field.TypeEnum, value)
-	}
-	if value, ok := _u.mutation.SchemaType(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldSchemaType, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.Revision(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldRevision, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.AddedRevision(); ok {
-		_spec.AddField(workflowdefinitionhistory.FieldRevision, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.Draft(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldDraft, field.TypeBool, value)
-	}
-	if value, ok := _u.mutation.PublishedAt(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldPublishedAt, field.TypeTime, value)
 	}
 	if _u.mutation.PublishedAtCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldPublishedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.CooldownSeconds(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldCooldownSeconds, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.AddedCooldownSeconds(); ok {
-		_spec.AddField(workflowdefinitionhistory.FieldCooldownSeconds, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.IsDefault(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldIsDefault, field.TypeBool, value)
-	}
-	if value, ok := _u.mutation.Active(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldActive, field.TypeBool, value)
-	}
-	if value, ok := _u.mutation.TriggerOperations(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldTriggerOperations, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTriggerOperations(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, workflowdefinitionhistory.FieldTriggerOperations, value)
-		})
-	}
 	if _u.mutation.TriggerOperationsCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldTriggerOperations, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.TriggerFields(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldTriggerFields, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTriggerFields(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, workflowdefinitionhistory.FieldTriggerFields, value)
-		})
 	}
 	if _u.mutation.TriggerFieldsCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldTriggerFields, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.ApprovalFields(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldApprovalFields, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedApprovalFields(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, workflowdefinitionhistory.FieldApprovalFields, value)
-		})
-	}
 	if _u.mutation.ApprovalFieldsCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldApprovalFields, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.ApprovalEdges(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldApprovalEdges, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedApprovalEdges(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, workflowdefinitionhistory.FieldApprovalEdges, value)
-		})
 	}
 	if _u.mutation.ApprovalEdgesCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldApprovalEdges, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.ApprovalSubmissionMode(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldApprovalSubmissionMode, field.TypeEnum, value)
-	}
 	if _u.mutation.ApprovalSubmissionModeCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldApprovalSubmissionMode, field.TypeEnum)
-	}
-	if value, ok := _u.mutation.DefinitionJSON(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldDefinitionJSON, field.TypeJSON, value)
 	}
 	if _u.mutation.DefinitionJSONCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldDefinitionJSON, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.TrackedFields(); ok {
-		_spec.SetField(workflowdefinitionhistory.FieldTrackedFields, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTrackedFields(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, workflowdefinitionhistory.FieldTrackedFields, value)
-		})
-	}
 	if _u.mutation.TrackedFieldsCleared() {
 		_spec.ClearField(workflowdefinitionhistory.FieldTrackedFields, field.TypeJSON)
 	}
-	_spec.Node.Schema = _u.schemaConfig.WorkflowDefinitionHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	_node = &WorkflowDefinitionHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

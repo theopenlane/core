@@ -8,153 +8,24 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcentercompliancehistory"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
 )
 
 // TrustCenterComplianceHistoryUpdate is the builder for updating TrustCenterComplianceHistory entities.
 type TrustCenterComplianceHistoryUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *TrustCenterComplianceHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *TrustCenterComplianceHistoryMutation
 }
 
 // Where appends a list predicates to the TrustCenterComplianceHistoryUpdate builder.
 func (_u *TrustCenterComplianceHistoryUpdate) Where(ps ...predicate.TrustCenterComplianceHistory) *TrustCenterComplianceHistoryUpdate {
 	_u.mutation.Where(ps...)
-	return _u
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *TrustCenterComplianceHistoryUpdate) SetUpdatedAt(v time.Time) *TrustCenterComplianceHistoryUpdate {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *TrustCenterComplianceHistoryUpdate) ClearUpdatedAt() *TrustCenterComplianceHistoryUpdate {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *TrustCenterComplianceHistoryUpdate) SetUpdatedBy(v string) *TrustCenterComplianceHistoryUpdate {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *TrustCenterComplianceHistoryUpdate) SetNillableUpdatedBy(v *string) *TrustCenterComplianceHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *TrustCenterComplianceHistoryUpdate) ClearUpdatedBy() *TrustCenterComplianceHistoryUpdate {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *TrustCenterComplianceHistoryUpdate) SetUpdatedByImpersonator(v string) *TrustCenterComplianceHistoryUpdate {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *TrustCenterComplianceHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *TrustCenterComplianceHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *TrustCenterComplianceHistoryUpdate) ClearUpdatedByImpersonator() *TrustCenterComplianceHistoryUpdate {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *TrustCenterComplianceHistoryUpdate) SetDeletedAt(v time.Time) *TrustCenterComplianceHistoryUpdate {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *TrustCenterComplianceHistoryUpdate) SetNillableDeletedAt(v *time.Time) *TrustCenterComplianceHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *TrustCenterComplianceHistoryUpdate) ClearDeletedAt() *TrustCenterComplianceHistoryUpdate {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *TrustCenterComplianceHistoryUpdate) SetDeletedBy(v string) *TrustCenterComplianceHistoryUpdate {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *TrustCenterComplianceHistoryUpdate) SetNillableDeletedBy(v *string) *TrustCenterComplianceHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *TrustCenterComplianceHistoryUpdate) ClearDeletedBy() *TrustCenterComplianceHistoryUpdate {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *TrustCenterComplianceHistoryUpdate) SetTags(v []string) *TrustCenterComplianceHistoryUpdate {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *TrustCenterComplianceHistoryUpdate) AppendTags(v []string) *TrustCenterComplianceHistoryUpdate {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *TrustCenterComplianceHistoryUpdate) ClearTags() *TrustCenterComplianceHistoryUpdate {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetStandardID sets the "standard_id" field.
-func (_u *TrustCenterComplianceHistoryUpdate) SetStandardID(v string) *TrustCenterComplianceHistoryUpdate {
-	_u.mutation.SetStandardID(v)
-	return _u
-}
-
-// SetNillableStandardID sets the "standard_id" field if the given value is not nil.
-func (_u *TrustCenterComplianceHistoryUpdate) SetNillableStandardID(v *string) *TrustCenterComplianceHistoryUpdate {
-	if v != nil {
-		_u.SetStandardID(*v)
-	}
 	return _u
 }
 
@@ -165,9 +36,6 @@ func (_u *TrustCenterComplianceHistoryUpdate) Mutation() *TrustCenterComplianceH
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *TrustCenterComplianceHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := _u.defaults(); err != nil {
-		return 0, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -193,24 +61,6 @@ func (_u *TrustCenterComplianceHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *TrustCenterComplianceHistoryUpdate) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if trustcentercompliancehistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized trustcentercompliancehistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := trustcentercompliancehistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *TrustCenterComplianceHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterComplianceHistoryUpdate {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *TrustCenterComplianceHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(trustcentercompliancehistory.Table, trustcentercompliancehistory.Columns, sqlgraph.NewFieldSpec(trustcentercompliancehistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
@@ -226,59 +76,30 @@ func (_u *TrustCenterComplianceHistoryUpdate) sqlSave(ctx context.Context) (_nod
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(trustcentercompliancehistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(trustcentercompliancehistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(trustcentercompliancehistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(trustcentercompliancehistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(trustcentercompliancehistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(trustcentercompliancehistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(trustcentercompliancehistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(trustcentercompliancehistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(trustcentercompliancehistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(trustcentercompliancehistory.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(trustcentercompliancehistory.FieldDeletedBy, field.TypeString, value)
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(trustcentercompliancehistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(trustcentercompliancehistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, trustcentercompliancehistory.FieldTags, value)
-		})
-	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(trustcentercompliancehistory.FieldTags, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.StandardID(); ok {
-		_spec.SetField(trustcentercompliancehistory.FieldStandardID, field.TypeString, value)
 	}
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(trustcentercompliancehistory.FieldTrustCenterID, field.TypeString)
 	}
-	_spec.Node.Schema = _u.schemaConfig.TrustCenterComplianceHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{trustcentercompliancehistory.Label}
@@ -294,134 +115,9 @@ func (_u *TrustCenterComplianceHistoryUpdate) sqlSave(ctx context.Context) (_nod
 // TrustCenterComplianceHistoryUpdateOne is the builder for updating a single TrustCenterComplianceHistory entity.
 type TrustCenterComplianceHistoryUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *TrustCenterComplianceHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *TrustCenterComplianceHistoryUpdateOne) SetUpdatedAt(v time.Time) *TrustCenterComplianceHistoryUpdateOne {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *TrustCenterComplianceHistoryUpdateOne) ClearUpdatedAt() *TrustCenterComplianceHistoryUpdateOne {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *TrustCenterComplianceHistoryUpdateOne) SetUpdatedBy(v string) *TrustCenterComplianceHistoryUpdateOne {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *TrustCenterComplianceHistoryUpdateOne) SetNillableUpdatedBy(v *string) *TrustCenterComplianceHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *TrustCenterComplianceHistoryUpdateOne) ClearUpdatedBy() *TrustCenterComplianceHistoryUpdateOne {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *TrustCenterComplianceHistoryUpdateOne) SetUpdatedByImpersonator(v string) *TrustCenterComplianceHistoryUpdateOne {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *TrustCenterComplianceHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *TrustCenterComplianceHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *TrustCenterComplianceHistoryUpdateOne) ClearUpdatedByImpersonator() *TrustCenterComplianceHistoryUpdateOne {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *TrustCenterComplianceHistoryUpdateOne) SetDeletedAt(v time.Time) *TrustCenterComplianceHistoryUpdateOne {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *TrustCenterComplianceHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *TrustCenterComplianceHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *TrustCenterComplianceHistoryUpdateOne) ClearDeletedAt() *TrustCenterComplianceHistoryUpdateOne {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *TrustCenterComplianceHistoryUpdateOne) SetDeletedBy(v string) *TrustCenterComplianceHistoryUpdateOne {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *TrustCenterComplianceHistoryUpdateOne) SetNillableDeletedBy(v *string) *TrustCenterComplianceHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *TrustCenterComplianceHistoryUpdateOne) ClearDeletedBy() *TrustCenterComplianceHistoryUpdateOne {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *TrustCenterComplianceHistoryUpdateOne) SetTags(v []string) *TrustCenterComplianceHistoryUpdateOne {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *TrustCenterComplianceHistoryUpdateOne) AppendTags(v []string) *TrustCenterComplianceHistoryUpdateOne {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *TrustCenterComplianceHistoryUpdateOne) ClearTags() *TrustCenterComplianceHistoryUpdateOne {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetStandardID sets the "standard_id" field.
-func (_u *TrustCenterComplianceHistoryUpdateOne) SetStandardID(v string) *TrustCenterComplianceHistoryUpdateOne {
-	_u.mutation.SetStandardID(v)
-	return _u
-}
-
-// SetNillableStandardID sets the "standard_id" field if the given value is not nil.
-func (_u *TrustCenterComplianceHistoryUpdateOne) SetNillableStandardID(v *string) *TrustCenterComplianceHistoryUpdateOne {
-	if v != nil {
-		_u.SetStandardID(*v)
-	}
-	return _u
+	fields   []string
+	hooks    []Hook
+	mutation *TrustCenterComplianceHistoryMutation
 }
 
 // Mutation returns the TrustCenterComplianceHistoryMutation object of the builder.
@@ -444,9 +140,6 @@ func (_u *TrustCenterComplianceHistoryUpdateOne) Select(field string, fields ...
 
 // Save executes the query and returns the updated TrustCenterComplianceHistory entity.
 func (_u *TrustCenterComplianceHistoryUpdateOne) Save(ctx context.Context) (*TrustCenterComplianceHistory, error) {
-	if err := _u.defaults(); err != nil {
-		return nil, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -470,24 +163,6 @@ func (_u *TrustCenterComplianceHistoryUpdateOne) ExecX(ctx context.Context) {
 	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
-}
-
-// defaults sets the default values of the builder before save.
-func (_u *TrustCenterComplianceHistoryUpdateOne) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if trustcentercompliancehistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized trustcentercompliancehistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := trustcentercompliancehistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *TrustCenterComplianceHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterComplianceHistoryUpdateOne {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
 }
 
 func (_u *TrustCenterComplianceHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TrustCenterComplianceHistory, err error) {
@@ -522,59 +197,30 @@ func (_u *TrustCenterComplianceHistoryUpdateOne) sqlSave(ctx context.Context) (_
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(trustcentercompliancehistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(trustcentercompliancehistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(trustcentercompliancehistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(trustcentercompliancehistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(trustcentercompliancehistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(trustcentercompliancehistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(trustcentercompliancehistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(trustcentercompliancehistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(trustcentercompliancehistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(trustcentercompliancehistory.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(trustcentercompliancehistory.FieldDeletedBy, field.TypeString, value)
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(trustcentercompliancehistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(trustcentercompliancehistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, trustcentercompliancehistory.FieldTags, value)
-		})
-	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(trustcentercompliancehistory.FieldTags, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.StandardID(); ok {
-		_spec.SetField(trustcentercompliancehistory.FieldStandardID, field.TypeString, value)
 	}
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(trustcentercompliancehistory.FieldTrustCenterID, field.TypeString)
 	}
-	_spec.Node.Schema = _u.schemaConfig.TrustCenterComplianceHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	_node = &TrustCenterComplianceHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

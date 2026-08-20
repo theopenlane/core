@@ -25,7 +25,6 @@ const (
 	refreshTokenKey = "open_lane_refresh_token" //nolint:gosec
 	sessionKey      = "open_lane_session"
 
-	csrfHeader = "X-CSRF-Token"
 	csrfCookie = "ol.csrf-token" // this should match the cookie name in the server config
 	csrfPath   = "/livez"
 )

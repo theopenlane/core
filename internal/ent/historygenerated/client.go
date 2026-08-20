@@ -91,8 +91,6 @@ import (
 	"github.com/theopenlane/iam/fgax"
 
 	stdsql "database/sql"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
 )
 
 // Client is the client that holds all ent builders.
@@ -346,9 +344,6 @@ type (
 
 		// WorkflowEngine configures the workflow orchestration engine.
 		WorkflowEngine any
-
-		// schemaConfig contains alternative names for all tables.
-		schemaConfig SchemaConfig
 	}
 	// Option function to configure the client.
 	Option func(*config)
@@ -10135,17 +10130,5 @@ func Job(ctx context.Context, opts ...riverqueue.Option) Option {
 func WorkflowEngine(v any) Option {
 	return func(c *config) {
 		c.WorkflowEngine = v
-	}
-}
-
-// SchemaConfig represents alternative schema names for all tables
-// that can be passed at runtime.
-type SchemaConfig = internal.SchemaConfig
-
-// AlternateSchemas allows alternate schema names to be
-// passed into ent operations.
-func AlternateSchema(schemaConfig SchemaConfig) Option {
-	return func(c *config) {
-		c.schemaConfig = schemaConfig
 	}
 }

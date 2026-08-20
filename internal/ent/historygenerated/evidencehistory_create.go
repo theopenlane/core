@@ -574,7 +574,6 @@ func (_c *EvidenceHistoryCreate) createSpec() (*EvidenceHistory, *sqlgraph.Creat
 		_node = &EvidenceHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(evidencehistory.Table, sqlgraph.NewFieldSpec(evidencehistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.EvidenceHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

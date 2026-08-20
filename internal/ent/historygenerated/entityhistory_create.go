@@ -1128,7 +1128,6 @@ func (_c *EntityHistoryCreate) createSpec() (*EntityHistory, *sqlgraph.CreateSpe
 		_node = &EntityHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(entityhistory.Table, sqlgraph.NewFieldSpec(entityhistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.EntityHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

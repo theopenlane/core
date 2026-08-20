@@ -341,7 +341,6 @@ func (_c *TFASettingCreate) createSpec() (*TFASetting, *sqlgraph.CreateSpec) {
 		_node = &TFASetting{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(tfasetting.Table, sqlgraph.NewFieldSpec(tfasetting.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.TFASetting
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -409,7 +408,6 @@ func (_c *TFASettingCreate) createSpec() (*TFASetting, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.TFASetting
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

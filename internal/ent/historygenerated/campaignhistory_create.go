@@ -819,7 +819,6 @@ func (_c *CampaignHistoryCreate) createSpec() (*CampaignHistory, *sqlgraph.Creat
 		_node = &CampaignHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(campaignhistory.Table, sqlgraph.NewFieldSpec(campaignhistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.CampaignHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

@@ -8,10 +8,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
+	"github.com/theopenlane/core/internal/ent/generated/predicate"
 )
 
 // JobRunnerRegistrationTokenDelete is the builder for deleting a JobRunnerRegistrationToken entity.
@@ -43,8 +41,6 @@ func (_d *JobRunnerRegistrationTokenDelete) ExecX(ctx context.Context) int {
 
 func (_d *JobRunnerRegistrationTokenDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(jobrunnerregistrationtoken.Table, sqlgraph.NewFieldSpec(jobrunnerregistrationtoken.FieldID, field.TypeString))
-	_spec.Node.Schema = _d.schemaConfig.JobRunnerRegistrationToken
-	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
 	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

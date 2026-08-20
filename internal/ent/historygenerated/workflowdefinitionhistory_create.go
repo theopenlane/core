@@ -610,7 +610,6 @@ func (_c *WorkflowDefinitionHistoryCreate) createSpec() (*WorkflowDefinitionHist
 		_node = &WorkflowDefinitionHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(workflowdefinitionhistory.Table, sqlgraph.NewFieldSpec(workflowdefinitionhistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.WorkflowDefinitionHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

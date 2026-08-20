@@ -28,7 +28,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -118,9 +117,6 @@ func (_q *EventQuery) QueryUsers() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, event.UsersTable, event.UsersPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.UserEvents
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -143,9 +139,6 @@ func (_q *EventQuery) QueryGroups() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, event.GroupsTable, event.GroupsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.GroupEvents
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -168,9 +161,6 @@ func (_q *EventQuery) QueryIntegrations() *IntegrationQuery {
 			sqlgraph.To(integration.Table, integration.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, event.IntegrationsTable, event.IntegrationsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Integration
-		step.Edge.Schema = schemaConfig.IntegrationEvents
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -193,9 +183,6 @@ func (_q *EventQuery) QueryOrganizations() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, event.OrganizationsTable, event.OrganizationsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.OrganizationEvents
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -218,9 +205,6 @@ func (_q *EventQuery) QueryInvites() *InviteQuery {
 			sqlgraph.To(invite.Table, invite.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, event.InvitesTable, event.InvitesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Invite
-		step.Edge.Schema = schemaConfig.InviteEvents
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -243,9 +227,6 @@ func (_q *EventQuery) QueryPersonalAccessTokens() *PersonalAccessTokenQuery {
 			sqlgraph.To(personalaccesstoken.Table, personalaccesstoken.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, event.PersonalAccessTokensTable, event.PersonalAccessTokensPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.PersonalAccessToken
-		step.Edge.Schema = schemaConfig.PersonalAccessTokenEvents
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -268,9 +249,6 @@ func (_q *EventQuery) QuerySecrets() *HushQuery {
 			sqlgraph.To(hush.Table, hush.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, event.SecretsTable, event.SecretsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Hush
-		step.Edge.Schema = schemaConfig.HushEvents
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -293,9 +271,6 @@ func (_q *EventQuery) QueryOrgMemberships() *OrgMembershipQuery {
 			sqlgraph.To(orgmembership.Table, orgmembership.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, event.OrgMembershipsTable, event.OrgMembershipsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.OrgMembership
-		step.Edge.Schema = schemaConfig.OrgMembershipEvents
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -318,9 +293,6 @@ func (_q *EventQuery) QueryGroupMemberships() *GroupMembershipQuery {
 			sqlgraph.To(groupmembership.Table, groupmembership.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, event.GroupMembershipsTable, event.GroupMembershipsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.GroupMembership
-		step.Edge.Schema = schemaConfig.GroupMembershipEvents
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -343,9 +315,6 @@ func (_q *EventQuery) QuerySubscribers() *SubscriberQuery {
 			sqlgraph.To(subscriber.Table, subscriber.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, event.SubscribersTable, event.SubscribersPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Subscriber
-		step.Edge.Schema = schemaConfig.SubscriberEvents
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -368,9 +337,6 @@ func (_q *EventQuery) QueryFiles() *FileQuery {
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, event.FilesTable, event.FilesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.FileEvents
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -393,9 +359,6 @@ func (_q *EventQuery) QueryOrgSubscriptions() *OrgSubscriptionQuery {
 			sqlgraph.To(orgsubscription.Table, orgsubscription.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, event.OrgSubscriptionsTable, event.OrgSubscriptionsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.OrgSubscription
-		step.Edge.Schema = schemaConfig.OrgSubscriptionEvents
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -857,8 +820,6 @@ func (_q *EventQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Event,
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.Event
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -1062,7 +1023,6 @@ func (_q *EventQuery) loadUsers(ctx context.Context, query *UserQuery, nodes []*
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(event.UsersTable)
-		joinT.Schema(_q.schemaConfig.UserEvents)
 		s.Join(joinT).On(s.C(user.FieldID), joinT.C(event.UsersPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(event.UsersPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1124,7 +1084,6 @@ func (_q *EventQuery) loadGroups(ctx context.Context, query *GroupQuery, nodes [
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(event.GroupsTable)
-		joinT.Schema(_q.schemaConfig.GroupEvents)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(event.GroupsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(event.GroupsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1186,7 +1145,6 @@ func (_q *EventQuery) loadIntegrations(ctx context.Context, query *IntegrationQu
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(event.IntegrationsTable)
-		joinT.Schema(_q.schemaConfig.IntegrationEvents)
 		s.Join(joinT).On(s.C(integration.FieldID), joinT.C(event.IntegrationsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(event.IntegrationsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1248,7 +1206,6 @@ func (_q *EventQuery) loadOrganizations(ctx context.Context, query *Organization
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(event.OrganizationsTable)
-		joinT.Schema(_q.schemaConfig.OrganizationEvents)
 		s.Join(joinT).On(s.C(organization.FieldID), joinT.C(event.OrganizationsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(event.OrganizationsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1310,7 +1267,6 @@ func (_q *EventQuery) loadInvites(ctx context.Context, query *InviteQuery, nodes
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(event.InvitesTable)
-		joinT.Schema(_q.schemaConfig.InviteEvents)
 		s.Join(joinT).On(s.C(invite.FieldID), joinT.C(event.InvitesPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(event.InvitesPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1372,7 +1328,6 @@ func (_q *EventQuery) loadPersonalAccessTokens(ctx context.Context, query *Perso
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(event.PersonalAccessTokensTable)
-		joinT.Schema(_q.schemaConfig.PersonalAccessTokenEvents)
 		s.Join(joinT).On(s.C(personalaccesstoken.FieldID), joinT.C(event.PersonalAccessTokensPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(event.PersonalAccessTokensPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1434,7 +1389,6 @@ func (_q *EventQuery) loadSecrets(ctx context.Context, query *HushQuery, nodes [
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(event.SecretsTable)
-		joinT.Schema(_q.schemaConfig.HushEvents)
 		s.Join(joinT).On(s.C(hush.FieldID), joinT.C(event.SecretsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(event.SecretsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1496,7 +1450,6 @@ func (_q *EventQuery) loadOrgMemberships(ctx context.Context, query *OrgMembersh
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(event.OrgMembershipsTable)
-		joinT.Schema(_q.schemaConfig.OrgMembershipEvents)
 		s.Join(joinT).On(s.C(orgmembership.FieldID), joinT.C(event.OrgMembershipsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(event.OrgMembershipsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1558,7 +1511,6 @@ func (_q *EventQuery) loadGroupMemberships(ctx context.Context, query *GroupMemb
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(event.GroupMembershipsTable)
-		joinT.Schema(_q.schemaConfig.GroupMembershipEvents)
 		s.Join(joinT).On(s.C(groupmembership.FieldID), joinT.C(event.GroupMembershipsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(event.GroupMembershipsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1620,7 +1572,6 @@ func (_q *EventQuery) loadSubscribers(ctx context.Context, query *SubscriberQuer
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(event.SubscribersTable)
-		joinT.Schema(_q.schemaConfig.SubscriberEvents)
 		s.Join(joinT).On(s.C(subscriber.FieldID), joinT.C(event.SubscribersPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(event.SubscribersPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1682,7 +1633,6 @@ func (_q *EventQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(event.FilesTable)
-		joinT.Schema(_q.schemaConfig.FileEvents)
 		s.Join(joinT).On(s.C(file.FieldID), joinT.C(event.FilesPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(event.FilesPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1744,7 +1694,6 @@ func (_q *EventQuery) loadOrgSubscriptions(ctx context.Context, query *OrgSubscr
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(event.OrgSubscriptionsTable)
-		joinT.Schema(_q.schemaConfig.OrgSubscriptionEvents)
 		s.Join(joinT).On(s.C(orgsubscription.FieldID), joinT.C(event.OrgSubscriptionsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(event.OrgSubscriptionsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1796,8 +1745,6 @@ func (_q *EventQuery) loadOrgSubscriptions(ctx context.Context, query *OrgSubscr
 
 func (_q *EventQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.Event
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -1863,9 +1810,6 @@ func (_q *EventQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.Event)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}
