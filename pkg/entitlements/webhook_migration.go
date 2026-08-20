@@ -13,8 +13,6 @@ import (
 
 const (
 	versionQueryParam = "api_version"
-	migrationStateNew = "new"
-	migrationStateOld = "old"
 )
 
 type webhookMigrationOptions struct {

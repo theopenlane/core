@@ -11,8 +11,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
 	"github.com/theopenlane/core/internal/ent/historygenerated/sladefinitionhistory"
 )
 
@@ -45,8 +43,6 @@ func (_d *SLADefinitionHistoryDelete) ExecX(ctx context.Context) int {
 
 func (_d *SLADefinitionHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(sladefinitionhistory.Table, sqlgraph.NewFieldSpec(sladefinitionhistory.FieldID, field.TypeString))
-	_spec.Node.Schema = _d.schemaConfig.SLADefinitionHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
 	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

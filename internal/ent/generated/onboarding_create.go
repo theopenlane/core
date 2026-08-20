@@ -218,7 +218,6 @@ func (_c *OnboardingCreate) createSpec() (*Onboarding, *sqlgraph.CreateSpec) {
 		_node = &Onboarding{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(onboarding.Table, sqlgraph.NewFieldSpec(onboarding.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.Onboarding
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -266,7 +265,6 @@ func (_c *OnboardingCreate) createSpec() (*Onboarding, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Onboarding
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

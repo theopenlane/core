@@ -717,7 +717,6 @@ func (_c *RemediationHistoryCreate) createSpec() (*RemediationHistory, *sqlgraph
 		_node = &RemediationHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(remediationhistory.Table, sqlgraph.NewFieldSpec(remediationhistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.RemediationHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

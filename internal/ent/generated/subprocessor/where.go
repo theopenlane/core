@@ -8,8 +8,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // ID filters vertices based on their ID field.
@@ -1144,9 +1142,6 @@ func HasOwner() predicate.Subprocessor {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.Subprocessor
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1155,9 +1150,6 @@ func HasOwner() predicate.Subprocessor {
 func HasOwnerWith(preds ...predicate.Organization) predicate.Subprocessor {
 	return predicate.Subprocessor(func(s *sql.Selector) {
 		step := newOwnerStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.Subprocessor
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1173,9 +1165,6 @@ func HasLogoFile() predicate.Subprocessor {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, LogoFileTable, LogoFileColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.Subprocessor
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1184,9 +1173,6 @@ func HasLogoFile() predicate.Subprocessor {
 func HasLogoFileWith(preds ...predicate.File) predicate.Subprocessor {
 	return predicate.Subprocessor(func(s *sql.Selector) {
 		step := newLogoFileStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.Subprocessor
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1202,9 +1188,6 @@ func HasTrustCenterSubprocessors() predicate.Subprocessor {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterSubprocessorsTable, TrustCenterSubprocessorsColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.TrustCenterSubprocessor
-		step.Edge.Schema = schemaConfig.TrustCenterSubprocessor
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1213,9 +1196,6 @@ func HasTrustCenterSubprocessors() predicate.Subprocessor {
 func HasTrustCenterSubprocessorsWith(preds ...predicate.TrustCenterSubprocessor) predicate.Subprocessor {
 	return predicate.Subprocessor(func(s *sql.Selector) {
 		step := newTrustCenterSubprocessorsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.TrustCenterSubprocessor
-		step.Edge.Schema = schemaConfig.TrustCenterSubprocessor
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1231,9 +1211,6 @@ func HasEntities() predicate.Subprocessor {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, EntitiesTable, EntitiesPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.EntitySubprocessors
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1242,9 +1219,6 @@ func HasEntities() predicate.Subprocessor {
 func HasEntitiesWith(preds ...predicate.Entity) predicate.Subprocessor {
 	return predicate.Subprocessor(func(s *sql.Selector) {
 		step := newEntitiesStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.EntitySubprocessors
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

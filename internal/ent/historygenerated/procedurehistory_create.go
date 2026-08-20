@@ -773,7 +773,6 @@ func (_c *ProcedureHistoryCreate) createSpec() (*ProcedureHistory, *sqlgraph.Cre
 		_node = &ProcedureHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(procedurehistory.Table, sqlgraph.NewFieldSpec(procedurehistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.ProcedureHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

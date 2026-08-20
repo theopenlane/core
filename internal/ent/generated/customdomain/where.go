@@ -9,8 +9,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // ID filters vertices based on their ID field.
@@ -1165,9 +1163,6 @@ func HasOwner() predicate.CustomDomain {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.CustomDomain
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1176,9 +1171,6 @@ func HasOwner() predicate.CustomDomain {
 func HasOwnerWith(preds ...predicate.Organization) predicate.CustomDomain {
 	return predicate.CustomDomain(func(s *sql.Selector) {
 		step := newOwnerStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.CustomDomain
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1194,9 +1186,6 @@ func HasMappableDomain() predicate.CustomDomain {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, MappableDomainTable, MappableDomainColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.MappableDomain
-		step.Edge.Schema = schemaConfig.CustomDomain
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1205,9 +1194,6 @@ func HasMappableDomain() predicate.CustomDomain {
 func HasMappableDomainWith(preds ...predicate.MappableDomain) predicate.CustomDomain {
 	return predicate.CustomDomain(func(s *sql.Selector) {
 		step := newMappableDomainStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.MappableDomain
-		step.Edge.Schema = schemaConfig.CustomDomain
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1223,9 +1209,6 @@ func HasDNSVerification() predicate.CustomDomain {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, DNSVerificationTable, DNSVerificationColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.DNSVerification
-		step.Edge.Schema = schemaConfig.CustomDomain
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1234,9 +1217,6 @@ func HasDNSVerification() predicate.CustomDomain {
 func HasDNSVerificationWith(preds ...predicate.DNSVerification) predicate.CustomDomain {
 	return predicate.CustomDomain(func(s *sql.Selector) {
 		step := newDNSVerificationStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.DNSVerification
-		step.Edge.Schema = schemaConfig.CustomDomain
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

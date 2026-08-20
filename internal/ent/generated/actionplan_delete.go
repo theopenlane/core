@@ -8,10 +8,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
 	"github.com/theopenlane/core/internal/ent/generated/actionplan"
-	"github.com/theopenlane/core/internal/ent/generated/internal"
+	"github.com/theopenlane/core/internal/ent/generated/predicate"
 )
 
 // ActionPlanDelete is the builder for deleting a ActionPlan entity.
@@ -43,8 +41,6 @@ func (_d *ActionPlanDelete) ExecX(ctx context.Context) int {
 
 func (_d *ActionPlanDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(actionplan.Table, sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString))
-	_spec.Node.Schema = _d.schemaConfig.ActionPlan
-	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
 	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

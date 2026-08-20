@@ -8,6 +8,7 @@ import (
 	"embed"
 	"errors"
 	"os"
+	"strings"
 	"sync"
 
 	"github.com/rs/zerolog/log"
@@ -16,6 +17,7 @@ import (
 	"entgo.io/ent/entc"
 	"entgo.io/ent/entc/gen"
 	_ "github.com/jackc/pgx/v5"
+	"github.com/vektah/gqlparser/v2/ast"
 	"gocloud.dev/secrets"
 
 	"github.com/theopenlane/core/common/enums/exportenums"
@@ -99,16 +101,12 @@ var (
 	}
 )
 
-var enabledFeatures = []gen.Feature{
+var enabledBaseFeatures = []gen.Feature{
 	gen.FeatureVersionedMigration,
 	gen.FeaturePrivacy,
 	gen.FeatureEntQL,
 	gen.FeatureNamedEdges,
-	gen.FeatureSchemaConfig,
 	gen.FeatureIntercept,
-	gen.FeatureModifier,
-	// this is disabled because it is not compatible with the entcache driver
-	// gen.FeatureExecQuery,
 }
 
 func main() {
@@ -241,6 +239,8 @@ func getEntGqlExtension() *entgql.Extension {
 
 	schemaHooks = append(schemaHooks, genhooks.WithStringSliceWhereOps())
 
+	schemaHooks = append(schemaHooks, pruneWhereInputOps())
+
 	gqlExt, err := entgql.NewExtension(
 		entgql.WithSchemaGenerator(),
 		entgql.WithSchemaPath(graphSchemaDir+"ent.graphql"),
@@ -262,6 +262,7 @@ func getEntHistoryGqlExtension() *entgql.Extension {
 		entgql.WithSchemaPath(graphHistorySchemaDir+"ent.graphql"),
 		entgql.WithConfigPath(graphDir+"/generate/.gqlgen_history.yml"),
 		entgql.WithWhereInputs(true),
+		entgql.WithSchemaHook(pruneWhereInputOps()),
 		WithGqlWithTemplates(),
 	)
 	if err != nil {
@@ -290,9 +291,7 @@ func getHistoryExtension(hasChanges bool) *history.Extension {
 	log.Info().Msg("creating history extension")
 
 	historyExt := history.New(
-		history.WithImmutableFields(),
 		history.WithHistoryTimeIndex(),
-		history.WithNillableFields(),
 		history.WithGQLQuery(),
 		history.WithAuthzPolicy(),
 		history.WithInputSchemaPath(schemaPath),
@@ -454,7 +453,7 @@ func schemaGenerate(extensions ...entc.Extension) *gen.Graph {
 			captureGraphHook,
 		},
 		Package:    "github.com/theopenlane/core/" + entGeneratedPath,
-		Features:   enabledFeatures,
+		Features:   append(enabledBaseFeatures, gen.FeatureModifier),
 		BuildFlags: []string{buildFlags},
 	},
 		entc.Dependency(
@@ -529,7 +528,7 @@ func historySchemaGenerate(extensions ...entc.Extension) {
 			genhooks.GenQuery(graphHistoryQueryDir, graphSchemaDir),
 		},
 		Package:    "github.com/theopenlane/core/" + entGeneratedHistoryPath,
-		Features:   enabledFeatures,
+		Features:   enabledBaseFeatures,
 		BuildFlags: []string{buildFlags},
 	},
 		entc.Dependency(
@@ -546,4 +545,62 @@ func historySchemaGenerate(extensions ...entc.Extension) {
 		)); err != nil {
 		log.Fatal().Err(err).Msg("running ent codegen")
 	}
+}
+
+// droppedWhereOps lists, per GraphQL scalar, the predicate suffixes that are pruned from the
+// generated where inputs. this must stay in sync with the guard in
+// templates/entgql/gql_where.tmpl, which prunes the matching Go struct fields; entgql builds the
+// GraphQL schema from its own code rather than that template, so both sides need the same rule
+var droppedWhereOps = map[string][]string{
+	"ID":       {"GT", "GTE", "LT", "LTE"},
+	"String":   {"GT", "GTE", "LT", "LTE"},
+	"Time":     {"NEQ", "In", "NotIn"},
+	"DateTime": {"NEQ", "In", "NotIn"},
+	"Int":      {"In", "NotIn"},
+}
+
+// pruneWhereInputOps removes the predicate fields listed in droppedWhereOps from every generated
+// where input. a field is only removed when the same input also declares its base field, so a real
+// schema field whose name happens to end in an op suffix is left alone
+func pruneWhereInputOps() entgql.SchemaHook {
+	return func(_ *gen.Graph, s *ast.Schema) error {
+		for _, t := range s.Types {
+			if t.Kind != ast.InputObject || !strings.HasSuffix(t.Name, "WhereInput") {
+				continue
+			}
+
+			base := make(map[string]bool, len(t.Fields))
+			for _, f := range t.Fields {
+				base[f.Name] = true
+			}
+
+			kept := make(ast.FieldList, 0, len(t.Fields))
+
+			for _, f := range t.Fields {
+				if !prunedOp(f, base) {
+					kept = append(kept, f)
+				}
+			}
+
+			t.Fields = kept
+		}
+
+		return nil
+	}
+}
+
+// prunedOp reports whether the field is a predicate this codebase does not expose
+func prunedOp(f *ast.FieldDefinition, base map[string]bool) bool {
+	for _, op := range droppedWhereOps[f.Type.Name()] {
+		if !strings.HasSuffix(f.Name, op) {
+			continue
+		}
+
+		// only prune when the base field is present, which marks this as a generated predicate
+		if base[strings.TrimSuffix(f.Name, op)] {
+			return true
+		}
+	}
+
+	return false
 }

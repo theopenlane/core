@@ -523,7 +523,6 @@ func (_c *SubscriberCreate) createSpec() (*Subscriber, *sqlgraph.CreateSpec) {
 		_node = &Subscriber{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(subscriber.Table, sqlgraph.NewFieldSpec(subscriber.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.Subscriber
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -611,7 +610,6 @@ func (_c *SubscriberCreate) createSpec() (*Subscriber, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Subscriber
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -629,7 +627,6 @@ func (_c *SubscriberCreate) createSpec() (*Subscriber, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.SubscriberEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -646,7 +643,6 @@ func (_c *SubscriberCreate) createSpec() (*Subscriber, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Subscriber
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -664,7 +660,6 @@ func (_c *SubscriberCreate) createSpec() (*Subscriber, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(campaigntarget.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.CampaignTarget
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -681,7 +676,6 @@ func (_c *SubscriberCreate) createSpec() (*Subscriber, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Subscriber
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -699,7 +693,6 @@ func (_c *SubscriberCreate) createSpec() (*Subscriber, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Subscriber
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

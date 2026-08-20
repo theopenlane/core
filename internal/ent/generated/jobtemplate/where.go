@@ -10,8 +10,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // ID filters vertices based on their ID field.
@@ -1331,9 +1329,6 @@ func HasOwner() predicate.JobTemplate {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.JobTemplate
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1342,9 +1337,6 @@ func HasOwner() predicate.JobTemplate {
 func HasOwnerWith(preds ...predicate.Organization) predicate.JobTemplate {
 	return predicate.JobTemplate(func(s *sql.Selector) {
 		step := newOwnerStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.JobTemplate
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1360,9 +1352,6 @@ func HasScheduledJobs() predicate.JobTemplate {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, ScheduledJobsTable, ScheduledJobsColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.ScheduledJob
-		step.Edge.Schema = schemaConfig.ScheduledJob
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1371,9 +1360,6 @@ func HasScheduledJobs() predicate.JobTemplate {
 func HasScheduledJobsWith(preds ...predicate.ScheduledJob) predicate.JobTemplate {
 	return predicate.JobTemplate(func(s *sql.Selector) {
 		step := newScheduledJobsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.ScheduledJob
-		step.Edge.Schema = schemaConfig.ScheduledJob
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

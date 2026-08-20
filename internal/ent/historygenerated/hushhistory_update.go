@@ -8,307 +8,24 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/hushhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
 )
 
 // HushHistoryUpdate is the builder for updating HushHistory entities.
 type HushHistoryUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *HushHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *HushHistoryMutation
 }
 
 // Where appends a list predicates to the HushHistoryUpdate builder.
 func (_u *HushHistoryUpdate) Where(ps ...predicate.HushHistory) *HushHistoryUpdate {
 	_u.mutation.Where(ps...)
-	return _u
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *HushHistoryUpdate) SetUpdatedAt(v time.Time) *HushHistoryUpdate {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *HushHistoryUpdate) ClearUpdatedAt() *HushHistoryUpdate {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *HushHistoryUpdate) SetUpdatedBy(v string) *HushHistoryUpdate {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *HushHistoryUpdate) SetNillableUpdatedBy(v *string) *HushHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *HushHistoryUpdate) ClearUpdatedBy() *HushHistoryUpdate {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *HushHistoryUpdate) SetUpdatedByImpersonator(v string) *HushHistoryUpdate {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *HushHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *HushHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *HushHistoryUpdate) ClearUpdatedByImpersonator() *HushHistoryUpdate {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *HushHistoryUpdate) SetDeletedAt(v time.Time) *HushHistoryUpdate {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *HushHistoryUpdate) SetNillableDeletedAt(v *time.Time) *HushHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *HushHistoryUpdate) ClearDeletedAt() *HushHistoryUpdate {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *HushHistoryUpdate) SetDeletedBy(v string) *HushHistoryUpdate {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *HushHistoryUpdate) SetNillableDeletedBy(v *string) *HushHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *HushHistoryUpdate) ClearDeletedBy() *HushHistoryUpdate {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (_u *HushHistoryUpdate) SetOwnerID(v string) *HushHistoryUpdate {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *HushHistoryUpdate) SetNillableOwnerID(v *string) *HushHistoryUpdate {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *HushHistoryUpdate) ClearOwnerID() *HushHistoryUpdate {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
-// SetInternalNotes sets the "internal_notes" field.
-func (_u *HushHistoryUpdate) SetInternalNotes(v string) *HushHistoryUpdate {
-	_u.mutation.SetInternalNotes(v)
-	return _u
-}
-
-// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
-func (_u *HushHistoryUpdate) SetNillableInternalNotes(v *string) *HushHistoryUpdate {
-	if v != nil {
-		_u.SetInternalNotes(*v)
-	}
-	return _u
-}
-
-// ClearInternalNotes clears the value of the "internal_notes" field.
-func (_u *HushHistoryUpdate) ClearInternalNotes() *HushHistoryUpdate {
-	_u.mutation.ClearInternalNotes()
-	return _u
-}
-
-// SetSystemInternalID sets the "system_internal_id" field.
-func (_u *HushHistoryUpdate) SetSystemInternalID(v string) *HushHistoryUpdate {
-	_u.mutation.SetSystemInternalID(v)
-	return _u
-}
-
-// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
-func (_u *HushHistoryUpdate) SetNillableSystemInternalID(v *string) *HushHistoryUpdate {
-	if v != nil {
-		_u.SetSystemInternalID(*v)
-	}
-	return _u
-}
-
-// ClearSystemInternalID clears the value of the "system_internal_id" field.
-func (_u *HushHistoryUpdate) ClearSystemInternalID() *HushHistoryUpdate {
-	_u.mutation.ClearSystemInternalID()
-	return _u
-}
-
-// SetName sets the "name" field.
-func (_u *HushHistoryUpdate) SetName(v string) *HushHistoryUpdate {
-	_u.mutation.SetName(v)
-	return _u
-}
-
-// SetNillableName sets the "name" field if the given value is not nil.
-func (_u *HushHistoryUpdate) SetNillableName(v *string) *HushHistoryUpdate {
-	if v != nil {
-		_u.SetName(*v)
-	}
-	return _u
-}
-
-// SetDescription sets the "description" field.
-func (_u *HushHistoryUpdate) SetDescription(v string) *HushHistoryUpdate {
-	_u.mutation.SetDescription(v)
-	return _u
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (_u *HushHistoryUpdate) SetNillableDescription(v *string) *HushHistoryUpdate {
-	if v != nil {
-		_u.SetDescription(*v)
-	}
-	return _u
-}
-
-// ClearDescription clears the value of the "description" field.
-func (_u *HushHistoryUpdate) ClearDescription() *HushHistoryUpdate {
-	_u.mutation.ClearDescription()
-	return _u
-}
-
-// SetKind sets the "kind" field.
-func (_u *HushHistoryUpdate) SetKind(v string) *HushHistoryUpdate {
-	_u.mutation.SetKind(v)
-	return _u
-}
-
-// SetNillableKind sets the "kind" field if the given value is not nil.
-func (_u *HushHistoryUpdate) SetNillableKind(v *string) *HushHistoryUpdate {
-	if v != nil {
-		_u.SetKind(*v)
-	}
-	return _u
-}
-
-// ClearKind clears the value of the "kind" field.
-func (_u *HushHistoryUpdate) ClearKind() *HushHistoryUpdate {
-	_u.mutation.ClearKind()
-	return _u
-}
-
-// SetCredentialSet sets the "credential_set" field.
-func (_u *HushHistoryUpdate) SetCredentialSet(v models.CredentialSet) *HushHistoryUpdate {
-	_u.mutation.SetCredentialSet(v)
-	return _u
-}
-
-// SetNillableCredentialSet sets the "credential_set" field if the given value is not nil.
-func (_u *HushHistoryUpdate) SetNillableCredentialSet(v *models.CredentialSet) *HushHistoryUpdate {
-	if v != nil {
-		_u.SetCredentialSet(*v)
-	}
-	return _u
-}
-
-// ClearCredentialSet clears the value of the "credential_set" field.
-func (_u *HushHistoryUpdate) ClearCredentialSet() *HushHistoryUpdate {
-	_u.mutation.ClearCredentialSet()
-	return _u
-}
-
-// SetMetadata sets the "metadata" field.
-func (_u *HushHistoryUpdate) SetMetadata(v map[string]interface{}) *HushHistoryUpdate {
-	_u.mutation.SetMetadata(v)
-	return _u
-}
-
-// ClearMetadata clears the value of the "metadata" field.
-func (_u *HushHistoryUpdate) ClearMetadata() *HushHistoryUpdate {
-	_u.mutation.ClearMetadata()
-	return _u
-}
-
-// SetLastUsedAt sets the "last_used_at" field.
-func (_u *HushHistoryUpdate) SetLastUsedAt(v time.Time) *HushHistoryUpdate {
-	_u.mutation.SetLastUsedAt(v)
-	return _u
-}
-
-// SetNillableLastUsedAt sets the "last_used_at" field if the given value is not nil.
-func (_u *HushHistoryUpdate) SetNillableLastUsedAt(v *time.Time) *HushHistoryUpdate {
-	if v != nil {
-		_u.SetLastUsedAt(*v)
-	}
-	return _u
-}
-
-// ClearLastUsedAt clears the value of the "last_used_at" field.
-func (_u *HushHistoryUpdate) ClearLastUsedAt() *HushHistoryUpdate {
-	_u.mutation.ClearLastUsedAt()
-	return _u
-}
-
-// SetExpiresAt sets the "expires_at" field.
-func (_u *HushHistoryUpdate) SetExpiresAt(v time.Time) *HushHistoryUpdate {
-	_u.mutation.SetExpiresAt(v)
-	return _u
-}
-
-// SetNillableExpiresAt sets the "expires_at" field if the given value is not nil.
-func (_u *HushHistoryUpdate) SetNillableExpiresAt(v *time.Time) *HushHistoryUpdate {
-	if v != nil {
-		_u.SetExpiresAt(*v)
-	}
-	return _u
-}
-
-// ClearExpiresAt clears the value of the "expires_at" field.
-func (_u *HushHistoryUpdate) ClearExpiresAt() *HushHistoryUpdate {
-	_u.mutation.ClearExpiresAt()
 	return _u
 }
 
@@ -319,9 +36,6 @@ func (_u *HushHistoryUpdate) Mutation() *HushHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *HushHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := _u.defaults(); err != nil {
-		return 0, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -347,24 +61,6 @@ func (_u *HushHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *HushHistoryUpdate) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if hushhistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized hushhistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := hushhistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *HushHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *HushHistoryUpdate {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *HushHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(hushhistory.Table, hushhistory.Columns, sqlgraph.NewFieldSpec(hushhistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
@@ -380,41 +76,23 @@ func (_u *HushHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(hushhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(hushhistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(hushhistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(hushhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(hushhistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(hushhistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(hushhistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(hushhistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(hushhistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(hushhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(hushhistory.FieldDeletedBy, field.TypeString, value)
-	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(hushhistory.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(hushhistory.FieldOwnerID, field.TypeString, value)
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(hushhistory.FieldOwnerID, field.TypeString)
@@ -422,29 +100,14 @@ func (_u *HushHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(hushhistory.FieldSystemOwned, field.TypeBool)
 	}
-	if value, ok := _u.mutation.InternalNotes(); ok {
-		_spec.SetField(hushhistory.FieldInternalNotes, field.TypeString, value)
-	}
 	if _u.mutation.InternalNotesCleared() {
 		_spec.ClearField(hushhistory.FieldInternalNotes, field.TypeString)
-	}
-	if value, ok := _u.mutation.SystemInternalID(); ok {
-		_spec.SetField(hushhistory.FieldSystemInternalID, field.TypeString, value)
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(hushhistory.FieldSystemInternalID, field.TypeString)
 	}
-	if value, ok := _u.mutation.Name(); ok {
-		_spec.SetField(hushhistory.FieldName, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.Description(); ok {
-		_spec.SetField(hushhistory.FieldDescription, field.TypeString, value)
-	}
 	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(hushhistory.FieldDescription, field.TypeString)
-	}
-	if value, ok := _u.mutation.Kind(); ok {
-		_spec.SetField(hushhistory.FieldKind, field.TypeString, value)
 	}
 	if _u.mutation.KindCleared() {
 		_spec.ClearField(hushhistory.FieldKind, field.TypeString)
@@ -455,33 +118,18 @@ func (_u *HushHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if _u.mutation.SecretValueCleared() {
 		_spec.ClearField(hushhistory.FieldSecretValue, field.TypeString)
 	}
-	if value, ok := _u.mutation.CredentialSet(); ok {
-		_spec.SetField(hushhistory.FieldCredentialSet, field.TypeJSON, value)
-	}
 	if _u.mutation.CredentialSetCleared() {
 		_spec.ClearField(hushhistory.FieldCredentialSet, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.Metadata(); ok {
-		_spec.SetField(hushhistory.FieldMetadata, field.TypeJSON, value)
 	}
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(hushhistory.FieldMetadata, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.LastUsedAt(); ok {
-		_spec.SetField(hushhistory.FieldLastUsedAt, field.TypeTime, value)
-	}
 	if _u.mutation.LastUsedAtCleared() {
 		_spec.ClearField(hushhistory.FieldLastUsedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.ExpiresAt(); ok {
-		_spec.SetField(hushhistory.FieldExpiresAt, field.TypeTime, value)
 	}
 	if _u.mutation.ExpiresAtCleared() {
 		_spec.ClearField(hushhistory.FieldExpiresAt, field.TypeTime)
 	}
-	_spec.Node.Schema = _u.schemaConfig.HushHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{hushhistory.Label}
@@ -497,288 +145,9 @@ func (_u *HushHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 // HushHistoryUpdateOne is the builder for updating a single HushHistory entity.
 type HushHistoryUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *HushHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *HushHistoryUpdateOne) SetUpdatedAt(v time.Time) *HushHistoryUpdateOne {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *HushHistoryUpdateOne) ClearUpdatedAt() *HushHistoryUpdateOne {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *HushHistoryUpdateOne) SetUpdatedBy(v string) *HushHistoryUpdateOne {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *HushHistoryUpdateOne) SetNillableUpdatedBy(v *string) *HushHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *HushHistoryUpdateOne) ClearUpdatedBy() *HushHistoryUpdateOne {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *HushHistoryUpdateOne) SetUpdatedByImpersonator(v string) *HushHistoryUpdateOne {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *HushHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *HushHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *HushHistoryUpdateOne) ClearUpdatedByImpersonator() *HushHistoryUpdateOne {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *HushHistoryUpdateOne) SetDeletedAt(v time.Time) *HushHistoryUpdateOne {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *HushHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *HushHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *HushHistoryUpdateOne) ClearDeletedAt() *HushHistoryUpdateOne {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *HushHistoryUpdateOne) SetDeletedBy(v string) *HushHistoryUpdateOne {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *HushHistoryUpdateOne) SetNillableDeletedBy(v *string) *HushHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *HushHistoryUpdateOne) ClearDeletedBy() *HushHistoryUpdateOne {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (_u *HushHistoryUpdateOne) SetOwnerID(v string) *HushHistoryUpdateOne {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *HushHistoryUpdateOne) SetNillableOwnerID(v *string) *HushHistoryUpdateOne {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *HushHistoryUpdateOne) ClearOwnerID() *HushHistoryUpdateOne {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
-// SetInternalNotes sets the "internal_notes" field.
-func (_u *HushHistoryUpdateOne) SetInternalNotes(v string) *HushHistoryUpdateOne {
-	_u.mutation.SetInternalNotes(v)
-	return _u
-}
-
-// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
-func (_u *HushHistoryUpdateOne) SetNillableInternalNotes(v *string) *HushHistoryUpdateOne {
-	if v != nil {
-		_u.SetInternalNotes(*v)
-	}
-	return _u
-}
-
-// ClearInternalNotes clears the value of the "internal_notes" field.
-func (_u *HushHistoryUpdateOne) ClearInternalNotes() *HushHistoryUpdateOne {
-	_u.mutation.ClearInternalNotes()
-	return _u
-}
-
-// SetSystemInternalID sets the "system_internal_id" field.
-func (_u *HushHistoryUpdateOne) SetSystemInternalID(v string) *HushHistoryUpdateOne {
-	_u.mutation.SetSystemInternalID(v)
-	return _u
-}
-
-// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
-func (_u *HushHistoryUpdateOne) SetNillableSystemInternalID(v *string) *HushHistoryUpdateOne {
-	if v != nil {
-		_u.SetSystemInternalID(*v)
-	}
-	return _u
-}
-
-// ClearSystemInternalID clears the value of the "system_internal_id" field.
-func (_u *HushHistoryUpdateOne) ClearSystemInternalID() *HushHistoryUpdateOne {
-	_u.mutation.ClearSystemInternalID()
-	return _u
-}
-
-// SetName sets the "name" field.
-func (_u *HushHistoryUpdateOne) SetName(v string) *HushHistoryUpdateOne {
-	_u.mutation.SetName(v)
-	return _u
-}
-
-// SetNillableName sets the "name" field if the given value is not nil.
-func (_u *HushHistoryUpdateOne) SetNillableName(v *string) *HushHistoryUpdateOne {
-	if v != nil {
-		_u.SetName(*v)
-	}
-	return _u
-}
-
-// SetDescription sets the "description" field.
-func (_u *HushHistoryUpdateOne) SetDescription(v string) *HushHistoryUpdateOne {
-	_u.mutation.SetDescription(v)
-	return _u
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (_u *HushHistoryUpdateOne) SetNillableDescription(v *string) *HushHistoryUpdateOne {
-	if v != nil {
-		_u.SetDescription(*v)
-	}
-	return _u
-}
-
-// ClearDescription clears the value of the "description" field.
-func (_u *HushHistoryUpdateOne) ClearDescription() *HushHistoryUpdateOne {
-	_u.mutation.ClearDescription()
-	return _u
-}
-
-// SetKind sets the "kind" field.
-func (_u *HushHistoryUpdateOne) SetKind(v string) *HushHistoryUpdateOne {
-	_u.mutation.SetKind(v)
-	return _u
-}
-
-// SetNillableKind sets the "kind" field if the given value is not nil.
-func (_u *HushHistoryUpdateOne) SetNillableKind(v *string) *HushHistoryUpdateOne {
-	if v != nil {
-		_u.SetKind(*v)
-	}
-	return _u
-}
-
-// ClearKind clears the value of the "kind" field.
-func (_u *HushHistoryUpdateOne) ClearKind() *HushHistoryUpdateOne {
-	_u.mutation.ClearKind()
-	return _u
-}
-
-// SetCredentialSet sets the "credential_set" field.
-func (_u *HushHistoryUpdateOne) SetCredentialSet(v models.CredentialSet) *HushHistoryUpdateOne {
-	_u.mutation.SetCredentialSet(v)
-	return _u
-}
-
-// SetNillableCredentialSet sets the "credential_set" field if the given value is not nil.
-func (_u *HushHistoryUpdateOne) SetNillableCredentialSet(v *models.CredentialSet) *HushHistoryUpdateOne {
-	if v != nil {
-		_u.SetCredentialSet(*v)
-	}
-	return _u
-}
-
-// ClearCredentialSet clears the value of the "credential_set" field.
-func (_u *HushHistoryUpdateOne) ClearCredentialSet() *HushHistoryUpdateOne {
-	_u.mutation.ClearCredentialSet()
-	return _u
-}
-
-// SetMetadata sets the "metadata" field.
-func (_u *HushHistoryUpdateOne) SetMetadata(v map[string]interface{}) *HushHistoryUpdateOne {
-	_u.mutation.SetMetadata(v)
-	return _u
-}
-
-// ClearMetadata clears the value of the "metadata" field.
-func (_u *HushHistoryUpdateOne) ClearMetadata() *HushHistoryUpdateOne {
-	_u.mutation.ClearMetadata()
-	return _u
-}
-
-// SetLastUsedAt sets the "last_used_at" field.
-func (_u *HushHistoryUpdateOne) SetLastUsedAt(v time.Time) *HushHistoryUpdateOne {
-	_u.mutation.SetLastUsedAt(v)
-	return _u
-}
-
-// SetNillableLastUsedAt sets the "last_used_at" field if the given value is not nil.
-func (_u *HushHistoryUpdateOne) SetNillableLastUsedAt(v *time.Time) *HushHistoryUpdateOne {
-	if v != nil {
-		_u.SetLastUsedAt(*v)
-	}
-	return _u
-}
-
-// ClearLastUsedAt clears the value of the "last_used_at" field.
-func (_u *HushHistoryUpdateOne) ClearLastUsedAt() *HushHistoryUpdateOne {
-	_u.mutation.ClearLastUsedAt()
-	return _u
-}
-
-// SetExpiresAt sets the "expires_at" field.
-func (_u *HushHistoryUpdateOne) SetExpiresAt(v time.Time) *HushHistoryUpdateOne {
-	_u.mutation.SetExpiresAt(v)
-	return _u
-}
-
-// SetNillableExpiresAt sets the "expires_at" field if the given value is not nil.
-func (_u *HushHistoryUpdateOne) SetNillableExpiresAt(v *time.Time) *HushHistoryUpdateOne {
-	if v != nil {
-		_u.SetExpiresAt(*v)
-	}
-	return _u
-}
-
-// ClearExpiresAt clears the value of the "expires_at" field.
-func (_u *HushHistoryUpdateOne) ClearExpiresAt() *HushHistoryUpdateOne {
-	_u.mutation.ClearExpiresAt()
-	return _u
+	fields   []string
+	hooks    []Hook
+	mutation *HushHistoryMutation
 }
 
 // Mutation returns the HushHistoryMutation object of the builder.
@@ -801,9 +170,6 @@ func (_u *HushHistoryUpdateOne) Select(field string, fields ...string) *HushHist
 
 // Save executes the query and returns the updated HushHistory entity.
 func (_u *HushHistoryUpdateOne) Save(ctx context.Context) (*HushHistory, error) {
-	if err := _u.defaults(); err != nil {
-		return nil, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -827,24 +193,6 @@ func (_u *HushHistoryUpdateOne) ExecX(ctx context.Context) {
 	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
-}
-
-// defaults sets the default values of the builder before save.
-func (_u *HushHistoryUpdateOne) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if hushhistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized hushhistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := hushhistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *HushHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *HushHistoryUpdateOne {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
 }
 
 func (_u *HushHistoryUpdateOne) sqlSave(ctx context.Context) (_node *HushHistory, err error) {
@@ -879,41 +227,23 @@ func (_u *HushHistoryUpdateOne) sqlSave(ctx context.Context) (_node *HushHistory
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(hushhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(hushhistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(hushhistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(hushhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(hushhistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(hushhistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(hushhistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(hushhistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(hushhistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(hushhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(hushhistory.FieldDeletedBy, field.TypeString, value)
-	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(hushhistory.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(hushhistory.FieldOwnerID, field.TypeString, value)
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(hushhistory.FieldOwnerID, field.TypeString)
@@ -921,29 +251,14 @@ func (_u *HushHistoryUpdateOne) sqlSave(ctx context.Context) (_node *HushHistory
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(hushhistory.FieldSystemOwned, field.TypeBool)
 	}
-	if value, ok := _u.mutation.InternalNotes(); ok {
-		_spec.SetField(hushhistory.FieldInternalNotes, field.TypeString, value)
-	}
 	if _u.mutation.InternalNotesCleared() {
 		_spec.ClearField(hushhistory.FieldInternalNotes, field.TypeString)
-	}
-	if value, ok := _u.mutation.SystemInternalID(); ok {
-		_spec.SetField(hushhistory.FieldSystemInternalID, field.TypeString, value)
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(hushhistory.FieldSystemInternalID, field.TypeString)
 	}
-	if value, ok := _u.mutation.Name(); ok {
-		_spec.SetField(hushhistory.FieldName, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.Description(); ok {
-		_spec.SetField(hushhistory.FieldDescription, field.TypeString, value)
-	}
 	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(hushhistory.FieldDescription, field.TypeString)
-	}
-	if value, ok := _u.mutation.Kind(); ok {
-		_spec.SetField(hushhistory.FieldKind, field.TypeString, value)
 	}
 	if _u.mutation.KindCleared() {
 		_spec.ClearField(hushhistory.FieldKind, field.TypeString)
@@ -954,33 +269,18 @@ func (_u *HushHistoryUpdateOne) sqlSave(ctx context.Context) (_node *HushHistory
 	if _u.mutation.SecretValueCleared() {
 		_spec.ClearField(hushhistory.FieldSecretValue, field.TypeString)
 	}
-	if value, ok := _u.mutation.CredentialSet(); ok {
-		_spec.SetField(hushhistory.FieldCredentialSet, field.TypeJSON, value)
-	}
 	if _u.mutation.CredentialSetCleared() {
 		_spec.ClearField(hushhistory.FieldCredentialSet, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.Metadata(); ok {
-		_spec.SetField(hushhistory.FieldMetadata, field.TypeJSON, value)
 	}
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(hushhistory.FieldMetadata, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.LastUsedAt(); ok {
-		_spec.SetField(hushhistory.FieldLastUsedAt, field.TypeTime, value)
-	}
 	if _u.mutation.LastUsedAtCleared() {
 		_spec.ClearField(hushhistory.FieldLastUsedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.ExpiresAt(); ok {
-		_spec.SetField(hushhistory.FieldExpiresAt, field.TypeTime, value)
 	}
 	if _u.mutation.ExpiresAtCleared() {
 		_spec.ClearField(hushhistory.FieldExpiresAt, field.TypeTime)
 	}
-	_spec.Node.Schema = _u.schemaConfig.HushHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	_node = &HushHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

@@ -30,7 +30,6 @@ func GraphRequestPath(config *Config) string {
 const (
 	host        = "localhost:17608"
 	defaultPath = "/query"
-	historyPath = "/history/query"
 )
 
 // NewDefaultConfig returns a new default configuration for the API client

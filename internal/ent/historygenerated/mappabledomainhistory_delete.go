@@ -10,10 +10,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
 	"github.com/theopenlane/core/internal/ent/historygenerated/mappabledomainhistory"
+	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 )
 
 // MappableDomainHistoryDelete is the builder for deleting a MappableDomainHistory entity.
@@ -45,8 +43,6 @@ func (_d *MappableDomainHistoryDelete) ExecX(ctx context.Context) int {
 
 func (_d *MappableDomainHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(mappabledomainhistory.Table, sqlgraph.NewFieldSpec(mappabledomainhistory.FieldID, field.TypeString))
-	_spec.Node.Schema = _d.schemaConfig.MappableDomainHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
 	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

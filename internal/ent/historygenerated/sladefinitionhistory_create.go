@@ -350,7 +350,6 @@ func (_c *SLADefinitionHistoryCreate) createSpec() (*SLADefinitionHistory, *sqlg
 		_node = &SLADefinitionHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(sladefinitionhistory.Table, sqlgraph.NewFieldSpec(sladefinitionhistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.SLADefinitionHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

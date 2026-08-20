@@ -16,7 +16,6 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/historygenerated"
 	"github.com/theopenlane/core/internal/graphapi/common"
-	"github.com/theopenlane/core/internal/graphapi/directives"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	gqlhistorygenerated "github.com/theopenlane/core/internal/graphapi/historygenerated"
 	"github.com/theopenlane/core/pkg/gala"
@@ -78,7 +77,7 @@ type Handler struct {
 func (r *Resolver) Handler() *Handler {
 	c := &gqlhistorygenerated.Config{Resolvers: r}
 
-	directives.ImplementAllHistoryDirectives(c)
+	ImplementAllHistoryDirectives(c)
 
 	srv := handler.New(gqlhistorygenerated.NewExecutableSchema(
 		*c,

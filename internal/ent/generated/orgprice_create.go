@@ -405,7 +405,6 @@ func (_c *OrgPriceCreate) createSpec() (*OrgPrice, *sqlgraph.CreateSpec) {
 		_node = &OrgPrice{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(orgprice.Table, sqlgraph.NewFieldSpec(orgprice.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.OrgPrice
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -473,7 +472,6 @@ func (_c *OrgPriceCreate) createSpec() (*OrgPrice, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.OrgPrice
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -491,7 +489,6 @@ func (_c *OrgPriceCreate) createSpec() (*OrgPrice, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(orgproduct.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.OrgProductOrgPrices
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -508,7 +505,6 @@ func (_c *OrgPriceCreate) createSpec() (*OrgPrice, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(orgmodule.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.OrgModuleOrgPrices
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -525,7 +521,6 @@ func (_c *OrgPriceCreate) createSpec() (*OrgPrice, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(orgsubscription.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.OrgPrice
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

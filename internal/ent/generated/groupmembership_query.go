@@ -20,7 +20,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -91,9 +90,6 @@ func (_q *GroupMembershipQuery) QueryGroup() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, groupmembership.GroupTable, groupmembership.GroupColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.GroupMembership
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -116,9 +112,6 @@ func (_q *GroupMembershipQuery) QueryUser() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, groupmembership.UserTable, groupmembership.UserColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.GroupMembership
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -141,9 +134,6 @@ func (_q *GroupMembershipQuery) QueryOrgMembership() *OrgMembershipQuery {
 			sqlgraph.To(orgmembership.Table, orgmembership.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, groupmembership.OrgMembershipTable, groupmembership.OrgMembershipColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.OrgMembership
-		step.Edge.Schema = schemaConfig.GroupMembership
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -166,9 +156,6 @@ func (_q *GroupMembershipQuery) QueryEvents() *EventQuery {
 			sqlgraph.To(event.Table, event.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, groupmembership.EventsTable, groupmembership.EventsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Event
-		step.Edge.Schema = schemaConfig.GroupMembershipEvents
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -529,8 +516,6 @@ func (_q *GroupMembershipQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.GroupMembership
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -686,7 +671,6 @@ func (_q *GroupMembershipQuery) loadEvents(ctx context.Context, query *EventQuer
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(groupmembership.EventsTable)
-		joinT.Schema(_q.schemaConfig.GroupMembershipEvents)
 		s.Join(joinT).On(s.C(event.FieldID), joinT.C(groupmembership.EventsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(groupmembership.EventsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -738,8 +722,6 @@ func (_q *GroupMembershipQuery) loadEvents(ctx context.Context, query *EventQuer
 
 func (_q *GroupMembershipQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.GroupMembership
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -811,9 +793,6 @@ func (_q *GroupMembershipQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.GroupMembership)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}

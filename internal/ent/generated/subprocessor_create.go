@@ -406,7 +406,6 @@ func (_c *SubprocessorCreate) createSpec() (*Subprocessor, *sqlgraph.CreateSpec)
 		_node = &Subprocessor{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(subprocessor.Table, sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.Subprocessor
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -478,7 +477,6 @@ func (_c *SubprocessorCreate) createSpec() (*Subprocessor, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Subprocessor
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -496,7 +494,6 @@ func (_c *SubprocessorCreate) createSpec() (*Subprocessor, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Subprocessor
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -514,7 +511,6 @@ func (_c *SubprocessorCreate) createSpec() (*Subprocessor, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(trustcentersubprocessor.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.TrustCenterSubprocessor
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -531,7 +527,6 @@ func (_c *SubprocessorCreate) createSpec() (*Subprocessor, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.EntitySubprocessors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

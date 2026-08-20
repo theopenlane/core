@@ -10,8 +10,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // ID filters vertices based on their ID field.
@@ -2026,9 +2024,6 @@ func HasOrganization() predicate.OrganizationSetting {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2O, true, OrganizationTable, OrganizationColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.OrganizationSetting
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -2037,9 +2032,6 @@ func HasOrganization() predicate.OrganizationSetting {
 func HasOrganizationWith(preds ...predicate.Organization) predicate.OrganizationSetting {
 	return predicate.OrganizationSetting(func(s *sql.Selector) {
 		step := newOrganizationStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.OrganizationSetting
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -2055,9 +2047,6 @@ func HasFiles() predicate.OrganizationSetting {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, FilesTable, FilesPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.OrganizationSettingFiles
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -2066,9 +2055,6 @@ func HasFiles() predicate.OrganizationSetting {
 func HasFilesWith(preds ...predicate.File) predicate.OrganizationSetting {
 	return predicate.OrganizationSetting(func(s *sql.Selector) {
 		step := newFilesStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.OrganizationSettingFiles
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

@@ -31,7 +31,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -127,9 +126,6 @@ func (_q *CampaignQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, campaign.OwnerTable, campaign.OwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.Campaign
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -152,9 +148,6 @@ func (_q *CampaignQuery) QueryBlockedGroups() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, campaign.BlockedGroupsTable, campaign.BlockedGroupsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.CampaignBlockedGroups
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -177,9 +170,6 @@ func (_q *CampaignQuery) QueryEditors() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, campaign.EditorsTable, campaign.EditorsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.CampaignEditors
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -202,9 +192,6 @@ func (_q *CampaignQuery) QueryViewers() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, campaign.ViewersTable, campaign.ViewersPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.CampaignViewers
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -227,9 +214,6 @@ func (_q *CampaignQuery) QueryInternalOwnerUser() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, campaign.InternalOwnerUserTable, campaign.InternalOwnerUserColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.Campaign
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -252,9 +236,6 @@ func (_q *CampaignQuery) QueryInternalOwnerGroup() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, campaign.InternalOwnerGroupTable, campaign.InternalOwnerGroupColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Campaign
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -277,9 +258,6 @@ func (_q *CampaignQuery) QueryAssessment() *AssessmentQuery {
 			sqlgraph.To(assessment.Table, assessment.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, campaign.AssessmentTable, campaign.AssessmentColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Assessment
-		step.Edge.Schema = schemaConfig.Campaign
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -302,9 +280,6 @@ func (_q *CampaignQuery) QueryTemplate() *TemplateQuery {
 			sqlgraph.To(template.Table, template.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, campaign.TemplateTable, campaign.TemplateColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Template
-		step.Edge.Schema = schemaConfig.Campaign
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -327,9 +302,6 @@ func (_q *CampaignQuery) QueryIntegration() *IntegrationQuery {
 			sqlgraph.To(integration.Table, integration.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, campaign.IntegrationTable, campaign.IntegrationColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Integration
-		step.Edge.Schema = schemaConfig.Campaign
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -352,9 +324,6 @@ func (_q *CampaignQuery) QueryEmailTemplate() *EmailTemplateQuery {
 			sqlgraph.To(emailtemplate.Table, emailtemplate.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, campaign.EmailTemplateTable, campaign.EmailTemplateColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.EmailTemplate
-		step.Edge.Schema = schemaConfig.Campaign
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -377,9 +346,6 @@ func (_q *CampaignQuery) QueryEntity() *EntityQuery {
 			sqlgraph.To(entity.Table, entity.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, campaign.EntityTable, campaign.EntityColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.Campaign
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -402,9 +368,6 @@ func (_q *CampaignQuery) QueryTrustCenter() *TrustCenterQuery {
 			sqlgraph.To(trustcenter.Table, trustcenter.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, campaign.TrustCenterTable, campaign.TrustCenterColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.TrustCenter
-		step.Edge.Schema = schemaConfig.Campaign
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -427,9 +390,6 @@ func (_q *CampaignQuery) QueryCampaignTargets() *CampaignTargetQuery {
 			sqlgraph.To(campaigntarget.Table, campaigntarget.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, campaign.CampaignTargetsTable, campaign.CampaignTargetsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CampaignTarget
-		step.Edge.Schema = schemaConfig.CampaignTarget
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -452,9 +412,6 @@ func (_q *CampaignQuery) QueryAssessmentResponses() *AssessmentResponseQuery {
 			sqlgraph.To(assessmentresponse.Table, assessmentresponse.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, campaign.AssessmentResponsesTable, campaign.AssessmentResponsesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.AssessmentResponse
-		step.Edge.Schema = schemaConfig.AssessmentResponse
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -477,9 +434,6 @@ func (_q *CampaignQuery) QueryContacts() *ContactQuery {
 			sqlgraph.To(contact.Table, contact.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, campaign.ContactsTable, campaign.ContactsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Contact
-		step.Edge.Schema = schemaConfig.CampaignContacts
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -502,9 +456,6 @@ func (_q *CampaignQuery) QueryUsers() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, campaign.UsersTable, campaign.UsersPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.CampaignUsers
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -527,9 +478,6 @@ func (_q *CampaignQuery) QueryGroups() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, campaign.GroupsTable, campaign.GroupsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.CampaignGroups
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -552,9 +500,6 @@ func (_q *CampaignQuery) QueryIdentityHolders() *IdentityHolderQuery {
 			sqlgraph.To(identityholder.Table, identityholder.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, campaign.IdentityHoldersTable, campaign.IdentityHoldersPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.IdentityHolder
-		step.Edge.Schema = schemaConfig.CampaignIdentityHolders
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -577,9 +522,6 @@ func (_q *CampaignQuery) QueryControls() *ControlQuery {
 			sqlgraph.To(control.Table, control.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, campaign.ControlsTable, campaign.ControlsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.ControlCampaigns
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -602,9 +544,6 @@ func (_q *CampaignQuery) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
 			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, campaign.WorkflowObjectRefsTable, campaign.WorkflowObjectRefsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.WorkflowObjectRef
-		step.Edge.Schema = schemaConfig.WorkflowObjectRef
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1166,8 +1105,6 @@ func (_q *CampaignQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cam
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.Campaign
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -1442,7 +1379,6 @@ func (_q *CampaignQuery) loadBlockedGroups(ctx context.Context, query *GroupQuer
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(campaign.BlockedGroupsTable)
-		joinT.Schema(_q.schemaConfig.CampaignBlockedGroups)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(campaign.BlockedGroupsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(campaign.BlockedGroupsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1504,7 +1440,6 @@ func (_q *CampaignQuery) loadEditors(ctx context.Context, query *GroupQuery, nod
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(campaign.EditorsTable)
-		joinT.Schema(_q.schemaConfig.CampaignEditors)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(campaign.EditorsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(campaign.EditorsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1566,7 +1501,6 @@ func (_q *CampaignQuery) loadViewers(ctx context.Context, query *GroupQuery, nod
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(campaign.ViewersTable)
-		joinT.Schema(_q.schemaConfig.CampaignViewers)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(campaign.ViewersPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(campaign.ViewersPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1920,7 +1854,6 @@ func (_q *CampaignQuery) loadContacts(ctx context.Context, query *ContactQuery, 
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(campaign.ContactsTable)
-		joinT.Schema(_q.schemaConfig.CampaignContacts)
 		s.Join(joinT).On(s.C(contact.FieldID), joinT.C(campaign.ContactsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(campaign.ContactsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1982,7 +1915,6 @@ func (_q *CampaignQuery) loadUsers(ctx context.Context, query *UserQuery, nodes 
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(campaign.UsersTable)
-		joinT.Schema(_q.schemaConfig.CampaignUsers)
 		s.Join(joinT).On(s.C(user.FieldID), joinT.C(campaign.UsersPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(campaign.UsersPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2044,7 +1976,6 @@ func (_q *CampaignQuery) loadGroups(ctx context.Context, query *GroupQuery, node
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(campaign.GroupsTable)
-		joinT.Schema(_q.schemaConfig.CampaignGroups)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(campaign.GroupsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(campaign.GroupsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2106,7 +2037,6 @@ func (_q *CampaignQuery) loadIdentityHolders(ctx context.Context, query *Identit
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(campaign.IdentityHoldersTable)
-		joinT.Schema(_q.schemaConfig.CampaignIdentityHolders)
 		s.Join(joinT).On(s.C(identityholder.FieldID), joinT.C(campaign.IdentityHoldersPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(campaign.IdentityHoldersPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2168,7 +2098,6 @@ func (_q *CampaignQuery) loadControls(ctx context.Context, query *ControlQuery, 
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(campaign.ControlsTable)
-		joinT.Schema(_q.schemaConfig.ControlCampaigns)
 		s.Join(joinT).On(s.C(control.FieldID), joinT.C(campaign.ControlsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(campaign.ControlsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2251,8 +2180,6 @@ func (_q *CampaignQuery) loadWorkflowObjectRefs(ctx context.Context, query *Work
 
 func (_q *CampaignQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.Campaign
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -2345,9 +2272,6 @@ func (_q *CampaignQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.Campaign)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}
