@@ -23,6 +23,7 @@ require (
 	github.com/Azure/azure-sdk-for-go/sdk/azidentity v1.14.0
 	github.com/Azure/azure-sdk-for-go/sdk/resourcemanager/security/armsecurity v0.15.0
 	github.com/Nerzal/gocloak/v13 v13.9.0
+	github.com/Nerzal/gocloak/v14 v14.0.4
 	github.com/PuerkitoBio/goquery v1.12.0
 	github.com/alicebob/miniredis/v2 v2.38.0
 	github.com/alitto/pond/v2 v2.7.1
@@ -138,7 +139,7 @@ require (
 	github.com/Masterminds/semver/v3 v3.4.0 // indirect
 	github.com/Masterminds/sprig/v3 v3.3.0 // indirect
 	github.com/andybalholm/cascadia v1.3.4 // indirect
-	github.com/go-resty/resty/v2 v2.7.0 // indirect
+	github.com/go-resty/resty/v2 v2.17.2 // indirect
 	github.com/go-viper/mapstructure/v2 v2.5.0 // indirect
 	github.com/gofrs/flock v0.10.0 // indirect
 	github.com/google/go-github/v90 v90.0.0 // indirect
