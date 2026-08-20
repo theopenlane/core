@@ -139,7 +139,7 @@ func HookUserSettingEmailConfirmation() ent.Hook {
 			}
 
 			// send a welcome email to the user
-			if err := sendSystemEmail(ctx, m.Client(), emaildef.WelcomeOp.Name(), emaildef.WelcomeRequest{
+			if err := sendSystemEmail(ctx,emaildef.WelcomeOp.Name(), emaildef.WelcomeRequest{
 				RecipientInfo: emaildef.RecipientInfo{
 					Email:     user.Email,
 					FirstName: user.FirstName,
@@ -151,7 +151,7 @@ func HookUserSettingEmailConfirmation() ent.Hook {
 				return nil, err
 			}
 
-			if err := sendSystemSlack(ctx, m.Client(), slackdef.NewUserOp.Name(), slackdef.NewUserMessage{
+			if err := sendSystemSlack(ctx,slackdef.NewUserOp.Name(), slackdef.NewUserMessage{
 				Email: user.Email,
 			}); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("unable to send new user slack notification")

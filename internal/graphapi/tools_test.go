@@ -392,7 +392,7 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	})
 	requireNoError(t, err)
 
-	c.db.IntegrationsRuntime = rt
+	intruntime.SetDefault(rt)
 	suite.integrationsRT = rt
 
 	// cleanup/reseed listeners resolve the runtime from the gala injector as in production

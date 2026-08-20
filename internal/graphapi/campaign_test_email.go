@@ -69,7 +69,7 @@ func (r *mutationResolver) initTestEmailState(ctx context.Context, input model.S
 		return nil, err
 	}
 
-	rt := intruntime.FromClient(ctx, client)
+	rt := intruntime.Default()
 	if rt == nil {
 		return nil, ErrCampaignDispatchRuntimeRequired
 	}

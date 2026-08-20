@@ -10,7 +10,7 @@ import (
 // emailRuntimeClient resolves the runtime email client from the integrations runtime attached to
 // the transactional or resolver db client, matching how campaign dispatch resolves the runtime
 func (r *queryResolver) emailRuntimeClient(ctx context.Context) (*email.Client, error) {
-	rt := integrationsruntime.FromClient(ctx, r.db)
+	rt := integrationsruntime.Default()
 	if rt == nil {
 		return nil, ErrEmailClientNotAvailable
 	}

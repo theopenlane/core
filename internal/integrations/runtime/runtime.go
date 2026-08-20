@@ -3,6 +3,7 @@ package runtime
 import (
 	"context"
 	"errors"
+	"sync/atomic"
 	"time"
 
 	"github.com/redis/go-redis/v9"
@@ -70,35 +71,19 @@ func (r *Runtime) SetPostExecutionHook(hook PostExecutionHook) {
 	r.postExecutionHook = hook
 }
 
-// Enabled reports whether the integrations runtime is available for the given
-// client. It checks the context first (for the original client with
-// IntegrationsRuntime set), falling back to the provided client. This handles
-// the case where IntegrationsRuntime is set after client initialization, since
-// entity clients copy config by value.
-func Enabled(ctx context.Context, client *ent.Client) bool {
-	if ctxClient := ent.FromContext(ctx); ctxClient != nil && ctxClient.IntegrationsRuntime != nil {
-		return true
-	}
+// defaultRuntime holds the process-wide integrations runtime so callers that reach a
+// mutation with only an ent client, such as ent hooks, resolve it without a back-edge
+// on the client
+var defaultRuntime atomic.Pointer[Runtime]
 
-	return client != nil && client.IntegrationsRuntime != nil
+// SetDefault registers the process-wide integrations runtime
+func SetDefault(rt *Runtime) {
+	defaultRuntime.Store(rt)
 }
 
-// FromClient resolves the typed *Runtime from the client, checking the
-// context-based client first, then falling back to the provided client
-func FromClient(ctx context.Context, client *ent.Client) *Runtime {
-	if ctxClient := ent.FromContext(ctx); ctxClient != nil {
-		if rt, ok := ctxClient.IntegrationsRuntime.(*Runtime); ok {
-			return rt
-		}
-	}
-
-	if client != nil {
-		if rt, ok := client.IntegrationsRuntime.(*Runtime); ok {
-			return rt
-		}
-	}
-
-	return nil
+// Default returns the process-wide integrations runtime, or nil when none is registered
+func Default() *Runtime {
+	return defaultRuntime.Load()
 }
 
 // DB returns the Ent client from the injector

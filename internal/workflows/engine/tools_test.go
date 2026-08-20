@@ -226,7 +226,7 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 	})
 	s.Require().NoError(err)
 
-	db.IntegrationsRuntime = rt
+	intruntime.SetDefault(rt)
 	s.integrationsRT = rt
 
 	wfEngine, ok = db.WorkflowEngine.(*engine.WorkflowEngine)

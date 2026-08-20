@@ -314,7 +314,7 @@ func (suite *HandlerTestSuite) SetupTest() {
 	suite.mockEmailSender().Reset()
 
 	// add db to test client and wire integration runtime so email dispatch works
-	db.IntegrationsRuntime = suite.sharedIntegrationsRT
+	runtime.SetDefault(suite.sharedIntegrationsRT)
 	suite.db = db
 
 	// add the client
