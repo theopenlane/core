@@ -3,50 +3,58 @@ package hooks
 import (
 	"time"
 
-	"entgo.io/ent"
-	"github.com/theopenlane/httpsling"
-	"github.com/theopenlane/httpsling/httpclient"
-
-	"github.com/theopenlane/core/internal/ent/eventqueue"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/favicon"
-	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/urlx"
+	"github.com/theopenlane/httpsling"
+	"github.com/theopenlane/httpsling/httpclient"
 )
 
-const avatarFetchTimeout = 1 * time.Minute
+const avatarFetchTimeout = 5 * time.Second
 
-// RegisterGalaOrganizationAvatarListeners registers organization avatar discovery on Gala.
-func RegisterGalaOrganizationAvatarListeners(registry *gala.Registry) ([]gala.ListenerID, error) {
-	return gala.RegisterListeners(registry, gala.Definition[eventqueue.MutationGalaPayload]{
-		Topic:      eventqueue.MutationTopic(eventqueue.MutationConcernDirect, generated.TypeOrganization),
-		Name:       "organization.avatar",
-		Operations: []string{ent.OpCreate.String()},
-		Handle:     handleOrganizationAvatarCreated,
-	})
+// OrganizationAvatarListenerOption customizes avatar discovery
+type OrganizationAvatarListenerOption func(*organizationAvatarListenerConfig)
+
+type organizationAvatarListenerConfig struct {
+	requester *httpsling.Requester
+}
+
+// WithOrganizationAvatarRequester sets the avatar discovery requester
+func WithOrganizationAvatarRequester(requester *httpsling.Requester) OrganizationAvatarListenerOption {
+	return func(config *organizationAvatarListenerConfig) {
+		if requester != nil {
+			config.requester = requester
+		}
+	}
+}
+
+// OrganizationAvatarListeners discovers an avatar from the organization's domains after creation
+func OrganizationAvatarListeners(opts ...OrganizationAvatarListenerOption) []gala.Registration {
+	config := &organizationAvatarListenerConfig{}
+	for _, opt := range opts {
+		opt(config)
+	}
+
+	return []gala.Registration{entityops.MutationListener{
+		Schema:     entityops.SchemaOrganization,
+		Operations: []string{entityops.OpCreate},
+		Caller:     internalOperationBypassCaller,
+		Handle: func(inv entityops.Invocation, payload entityops.MutationPayload) error {
+			return handleOrganizationAvatarCreated(inv, payload, config.requester)
+		},
+	}}
 }
 
 // handleOrganizationAvatarCreated fetches icons from the domain name instead and sets it as the remote logo url
-func handleOrganizationAvatarCreated(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	ctx, client, ok := eventqueue.ClientFromHandler(ctx)
-	if !ok {
-		return nil
-	}
-
-	orgID, ok := eventqueue.MutationEntityID(payload, ctx.Envelope.Headers.Properties)
-	if !ok || orgID == "" {
-		return nil
-	}
-
-	allowCtx := workflows.AllowContext(ctx.Context)
-
-	org, err := client.Organization.Query().
-		Where(organization.IDEQ(orgID)).
+func handleOrganizationAvatarCreated(inv entityops.Invocation, _ entityops.MutationPayload, requester *httpsling.Requester) error {
+	org, err := inv.Client.Organization.Query().
+		Where(organization.IDEQ(inv.EntityID)).
 		WithSetting().
-		Only(allowCtx)
+		Only(inv.Context)
 	if err != nil {
 		if generated.IsNotFound(err) {
 			return nil
@@ -60,16 +68,16 @@ func handleOrganizationAvatarCreated(ctx gala.HandlerContext, payload eventqueue
 		return nil
 	}
 
-	requester, err := urlx.NewRequester(httpsling.Client(httpclient.Timeout(avatarFetchTimeout)))
-	if err != nil {
-		return err
+	if requester == nil {
+		requester, err = urlx.NewRequester(httpsling.Client(httpclient.Timeout(avatarFetchTimeout)))
+		if err != nil {
+			return err
+		}
 	}
 
-	avatarURL, err := favicon.Discover(ctx.Context, requester, setting.Domains)
+	avatarURL, err := favicon.Discover(inv.Context, requester, setting.Domains)
 	if err != nil {
-		logx.FromContext(ctx.Context).Err(err).
-			Str("organization_id", orgID).
-			Msg("organization avatar discovery failed")
+		logx.FromContext(inv.Context).Err(err).Msg("organization avatar discovery failed")
 		return nil
 	}
 
@@ -77,7 +85,7 @@ func handleOrganizationAvatarCreated(ctx gala.HandlerContext, payload eventqueue
 		return nil
 	}
 
-	return client.Organization.UpdateOneID(orgID).
+	return inv.Client.Organization.UpdateOneID(inv.EntityID).
 		SetAvatarRemoteURL(avatarURL).
-		Exec(allowCtx)
+		Exec(inv.Context)
 }

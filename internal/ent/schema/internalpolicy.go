@@ -181,6 +181,7 @@ func (i InternalPolicy) Annotations() []schema.Annotation {
 		entx.FileCategory(SchemaInternalPolicy),
 		entfga.SelfAccessChecks(),
 		entx.NewExportable(),
+		entx.ConsoleRoute(entx.WithConsoleBase("policies"), entx.WithConsoleSuffix("view")),
 		oscalgen.NewOSCALModel(
 			oscalgen.WithOSCALModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
 			oscalgen.WithOSCALAssembly("component"),

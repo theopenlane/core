@@ -11,8 +11,10 @@ var (
 	ErrConnectionRefNotFound = errors.New("integrations: connection credential ref not found")
 )
 
-// UnhealthyError marks an operation failure as terminal for recurring cycles: recovery
-// requires user action, so the runtime stops the loop instead of retrying forever
+// UnhealthyError marks an operation failure as terminal for recurring cycles: the installation
+// cannot recover without user action such as reauthorization or reconfiguration, so the runtime
+// marks the integration unhealthy, notifies the owning organization, and stops the loop instead
+// of retrying with backoff forever
 type UnhealthyError struct {
 	// Reason is the user-facing explanation included in the organization notification
 	Reason string

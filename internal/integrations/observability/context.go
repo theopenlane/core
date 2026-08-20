@@ -89,6 +89,15 @@ func WithContext(ctx context.Context, oc gala.OperationContext) context.Context 
 	return ctx
 }
 
+// EmitContext seeds ctx with the operation context and builds the standard emission
+// headers carrying the operation's properties, tags, and job kind
+func EmitContext(ctx context.Context, oc gala.OperationContext) (context.Context, gala.Headers) {
+	return WithContext(ctx, oc), gala.Headers{
+		Properties: types.GetPropertiesForOperationContext(oc),
+		Tags:       types.GetTagsForOperationContext(oc),
+	}
+}
+
 // WithOperation adds the operation name to the context logger
 func WithOperation(ctx context.Context, operation string) context.Context {
 	return logx.WithField(ctx, FieldOperation, operation)

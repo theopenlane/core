@@ -2,7 +2,6 @@ package runtime
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 
 	"github.com/theopenlane/core/common/enums"
@@ -61,17 +60,17 @@ func (r *Runtime) SeedScheduledOperations(ctx context.Context) error {
 				continue
 			}
 
-			if op.DisabledForAll || (op.Disabled != nil && op.Disabled(nil)) {
-				logx.FromContext(ctx).Info().Str("definition_id", def.ID).Str(intobvs.FieldOperation, op.Name).Msg("scheduled operation disabled, skipping seed")
-
-				continue
-			}
-
 			oc := types.NewOperationContext("", op.Name, types.IntegrationSource{
 				DefinitionID: def.ID,
 				RunType:      enums.IntegrationRunTypeScheduled,
 				Runtime:      true,
 			})
+
+			if op.DisabledForAll || (op.Disabled != nil && op.Disabled(nil)) {
+				logx.FromContext(intobvs.WithContext(ctx, oc)).Info().Msg("scheduled operation disabled, skipping seed")
+
+				continue
+			}
 
 			if err := r.seedScheduledOperation(ctx, oc); err != nil {
 				errs = append(errs, err)
@@ -82,58 +81,36 @@ func (r *Runtime) SeedScheduledOperations(ctx context.Context) error {
 	return errors.Join(errs...)
 }
 
-// seedScheduledOperation emits one scheduled operation cycle envelope when no active job exists for it
+// seedScheduledOperation emits one scheduled operation cycle envelope unless the loop is
+// already live; successor cycles carry per-cycle unique keys the seed's key can't collide with
 func (r *Runtime) seedScheduledOperation(ctx context.Context, oc gala.OperationContext) error {
-	src := types.IntegrationSourceFrom(oc)
+	ctx, headers := intobvs.EmitContext(ctx, oc)
 
-	fragment, err := scheduledMetadataFragment(oc)
+	props := types.GetPropertiesForOperationContext(oc)
+
+	fragment, err := types.PropertiesFragment(map[string]string{
+		"definitionId": props["definitionId"],
+		"operation":    props["operation"],
+		"runType":      props["runType"],
+	})
 	if err != nil {
 		return err
 	}
 
 	active, err := r.Gala().HasActiveJobWithMetadata(ctx, fragment)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("definition_id", src.DefinitionID).Str(intobvs.FieldOperation, oc.Operation).Msg("failed to check for active scheduled operation job")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to check for active scheduled operation job")
 
 		return err
 	}
 
 	if active {
-		logx.FromContext(ctx).Debug().Str("definition_id", src.DefinitionID).Str(intobvs.FieldOperation, oc.Operation).Msg("scheduled operation already active, skipping seed")
-
 		return nil
 	}
 
-	logx.FromContext(ctx).Info().Str("definition_id", src.DefinitionID).Str(intobvs.FieldOperation, oc.Operation).Msg("seeding scheduled operation")
+	logx.FromContext(ctx).Info().Msg("seeding scheduled operation")
 
-	receipt := r.Gala().EmitWithHeaders(
-		intobvs.WithContext(ctx, oc),
-		operations.ReconcileTopic,
-		operations.ReconcileEnvelope{OperationContext: oc},
-		gala.Headers{
-			Properties: types.GetPropertiesForOperationContext(oc),
-			Tags:       types.GetTagsForOperationContext(oc),
-		},
-	)
+	_, err = r.Gala().EmitWithHeaders(ctx, operations.ReconcileTopic.Name, operations.ReconcileEnvelope{OperationContext: oc}, headers)
 
-	return receipt.Err
-}
-
-// scheduledMetadataFragment builds the JSONB fragment for active-job checks; the run type
-// keeps it disjoint from installation-bound reconcile cycles sharing the topic
-func scheduledMetadataFragment(oc gala.OperationContext) (string, error) {
-	props := types.GetPropertiesForOperationContext(oc)
-
-	b, err := json.Marshal(map[string]map[string]string{
-		"properties": {
-			"definitionId": props["definitionId"],
-			"operation":    props["operation"],
-			"runType":      props["runType"],
-		},
-	})
-	if err != nil {
-		return "", err
-	}
-
-	return string(b), nil
+	return err
 }

@@ -6,6 +6,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"strings"
+	"unicode"
 
 	"github.com/theopenlane/entx"
 
@@ -18,15 +20,38 @@ type SchemaDescriptor struct {
 	Name string `json:"-"`
 	// Snake is the snake_case form
 	Snake string `json:"-"`
-	// Camel is the camelCase form
-	Camel string `json:"-"`
 	// Lower is the lowercase no-separator form used for fuzzy lookup
 	Lower string `json:"-"`
+	// WorkflowEligible reports whether this schema participates in workflow operations
+	WorkflowEligible bool `json:"-"`
 }
 
 // String returns the PascalCase canonical name
 func (d SchemaDescriptor) String() string {
 	return d.Name
+}
+
+// Label derives the human-readable schema label from the PascalCase name by inserting
+// spaces at word boundaries, keeping acronym runs intact (TrustCenterNDARequest -> "Trust Center NDA Request")
+func (d SchemaDescriptor) Label() string {
+	runes := []rune(d.Name)
+
+	var b strings.Builder
+
+	for i, r := range runes {
+		if i > 0 && unicode.IsUpper(r) {
+			prevLower := unicode.IsLower(runes[i-1]) || unicode.IsDigit(runes[i-1])
+			nextLower := i+1 < len(runes) && unicode.IsLower(runes[i+1])
+
+			if prevLower || (unicode.IsUpper(runes[i-1]) && nextLower) {
+				b.WriteRune(' ')
+			}
+		}
+
+		b.WriteRune(r)
+	}
+
+	return b.String()
 }
 
 // IsZero reports whether the descriptor is unset
@@ -79,6 +104,12 @@ type FieldDescriptor struct {
 	InputKey string `json:"inputKey,omitempty"`
 	// LookupKey reports whether the field is the ingest upsert lookup column for its schema
 	LookupKey bool `json:"lookupKey,omitempty"`
+	// DisplayKey reports whether the field is the schema's display-name source
+	DisplayKey bool `json:"displayKey,omitempty"`
+	// Clearable reports whether update inputs support explicitly clearing this field
+	Clearable bool `json:"clearable,omitempty"`
+	// WebhookPayload reports whether workflow webhook enrichment includes this field
+	WebhookPayload bool `json:"webhookPayload,omitempty"`
 	// TaskRules are suggested-task rules declared on this field via entx.FieldTaskRule
 	TaskRules []TaskRuleDescriptor `json:"taskRules,omitempty"`
 }
@@ -116,23 +147,12 @@ type EdgeDescriptor struct {
 	// Field is the foreign-key storage column on this schema's table for unique owning edges
 	// (e.g. "control_id"); empty when the foreign key lives on the target table
 	Field string `json:"field,omitempty"`
-	// Immutable reports whether the edge is set only at create time; LinkTargets and UnlinkTargets
-	// reject immutable edges since the update input has no setters for them
-	Immutable bool `json:"immutable,omitempty"`
 	// CreateField is the create-input JSON key used to set this edge at create time, matching the
-	// input's snake_case json tag (e.g. "control_ids"); for unique edges it doubles as the
-	// update-input key used by LinkTargets
+	// input's snake_case json tag (e.g. "control_ids")
 	CreateField string `json:"createField,omitempty"`
 	// AddField is the update-input key that adds targets to a to-many edge (e.g. "add_control_ids");
 	// empty for unique or immutable edges
 	AddField string `json:"addField,omitempty"`
-	// RemoveField is the update-input key that removes targets from a to-many edge
-	// (e.g. "remove_control_ids"); empty for unique or immutable edges
-	RemoveField string `json:"removeField,omitempty"`
-	// ClearField is the update-input key that clears an optional unique edge; it stays camelCase
-	// (e.g. "clearControl") because the generated clear booleans are untagged and bind by
-	// case-insensitive field name. Empty for to-many, required, or immutable edges
-	ClearField string `json:"clearField,omitempty"`
 	// Through reports whether the edge goes through a join entity (edge schema). Through edges
 	// are linked by creating join entity rows — one per target, each with its own generated id —
 	// because batch edge adds cannot produce per-row entity ids
@@ -160,7 +180,7 @@ type KeyMatch struct {
 type TargetSelector struct {
 	// Schema is the target entity schema
 	Schema SchemaDescriptor `json:"schema"`
-	// SourceSchema is the schema of the source entity in SourceContext; when set, SelectTargets binds
+	// SourceSchema is the schema of the source entity in SourceContext; when set, selectTargets binds
 	// "source" as that schema's native projection type so source-aware expressions resolve typed fields
 	SourceSchema SchemaDescriptor `json:"source_schema,omitempty"`
 	// KeyMatch, when set, resolves candidates with an indexed key query before any Expression filtering
@@ -174,7 +194,7 @@ type TargetSelector struct {
 }
 
 // LinkSpec describes one edge-linking operation: the named edge to link over and a target selector
-// resolving which entities to link. Resolved through SelectTargets and applied by InjectCreateLinks,
+// resolving which entities to link. Resolved through selectTargets and applied by InjectCreateLinks,
 // which sets the edge in the create mutation itself; shared by the integration ingest engine and the
 // workflow CREATE_OBJECT action so both set edges identically at create time
 type LinkSpec struct {

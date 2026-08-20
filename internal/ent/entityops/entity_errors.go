@@ -47,8 +47,18 @@ var (
 	ErrUpsertKeyMissing = errors.New("entityops: upsert key missing")
 	// ErrUpsertUnsupported indicates the schema does not support catalog-driven upserts
 	ErrUpsertUnsupported = errors.New("entityops: upsert unsupported")
+	// ErrFieldNotFound indicates a field name could not be resolved on the schema
+	ErrFieldNotFound = errors.New("entityops: field not found")
+	// ErrValueCoercion indicates a raw value could not be coerced to the field's type
+	ErrValueCoercion = errors.New("entityops: value coercion failed")
 	// ErrListenerRegistrationFailed indicates a gala listener could not be registered
 	ErrListenerRegistrationFailed = errors.New("entityops: listener registration failed")
+	// ErrMutationListenerInvalid indicates a listener is missing its schema or handler
+	ErrMutationListenerInvalid = errors.New("entityops: invalid mutation listener")
+	// ErrNotifySpecInvalid indicates a notify spec is missing recipients or content
+	ErrNotifySpecInvalid = errors.New("entityops: notify spec requires recipients, type, topic, and title and body templates")
+	// ErrMutationSchemaMismatch indicates a payload was delivered to a listener for another schema
+	ErrMutationSchemaMismatch = errors.New("entityops: mutation schema mismatch")
 	// ErrClientResolveFailed indicates the ent client could not be resolved from the injector
 	ErrClientResolveFailed = errors.New("entityops: client resolve failed")
 	// ErrQueryUnsupported indicates the schema does not support org-scoped queries
@@ -61,27 +71,32 @@ var (
 	ErrInvalidKeyField = errors.New("entityops: invalid key field")
 	// ErrEvaluatorBuildFailed indicates the typed CEL evaluator for a schema projection could not be built
 	ErrEvaluatorBuildFailed = errors.New("entityops: evaluator build failed")
+	// ErrIngestUnsupported indicates the schema has no generated ingest capability
+	ErrIngestUnsupported = errors.New("entityops: ingest unsupported")
+	// ErrIngestMisconfigured indicates a schema ingest capability was wired incorrectly at startup:
+	// bound without persistence, bound twice, or registered without its resolver or binding
+	ErrIngestMisconfigured = errors.New("entityops: ingest misconfigured")
+	// ErrIngestIntegrationResolveFailed indicates the durable command's integration could not be resolved
+	ErrIngestIntegrationResolveFailed = errors.New("entityops: ingest integration resolve failed")
 )
 
 // --- Operation constants ---
 
 const (
-	// OpCreate identifies entity creation operations
-	OpCreate = "create"
-	// OpUpdate identifies entity update operations
-	OpUpdate = "update"
-	// OpLoad identifies entity load operations
-	OpLoad = "load"
-	// OpQuery identifies entity query operations
-	OpQuery = "query"
-	// OpLink identifies edge link operations
-	OpLink = "link"
-	// OpUnlink identifies edge unlink operations
-	OpUnlink = "unlink"
-	// OpEmit identifies event emission operations
-	OpEmit = "emit"
-	// OpUpsert identifies catalog-driven upsert operations
-	OpUpsert = "upsert"
+	// refOpCreate identifies entity creation operations
+	refOpCreate = "create"
+	// refOpUpdate identifies entity update operations
+	refOpUpdate = "update"
+	// refOpLoad identifies entity load operations
+	refOpLoad = "load"
+	// refOpQuery identifies entity query operations
+	refOpQuery = "query"
+	// refOpLink identifies edge link operations
+	refOpLink = "link"
+	// refOpEmit identifies event emission operations
+	refOpEmit = "emit"
+	// refOpUpsert identifies catalog-driven upsert operations
+	refOpUpsert = "upsert"
 )
 
 // --- Log field keys ---
@@ -89,25 +104,25 @@ const (
 const (
 	// FieldSchema is the log field key for the schema name
 	FieldSchema = "schema"
-	// FieldOperation is the log field key for the operation being performed
-	FieldOperation = "operation"
-	// FieldEntityID is the log field key for the entity identifier
-	FieldEntityID = "entity_id"
-	// FieldEdge is the log field key for the edge name
-	FieldEdge = "edge"
-	// FieldOrgID is the log field key for the organization identifier
-	FieldOrgID = "org_id"
-	// FieldSourceOperation is the log field key for the originating mutation carried by the durable
+	// fieldOperation is the log field key for the operation being performed
+	fieldOperation = "operation"
+	// fieldEntityID is the log field key for the entity identifier
+	fieldEntityID = "entity_id"
+	// fieldEdge is the log field key for the edge name
+	fieldEdge = "edge"
+	// fieldOrgID is the log field key for the organization identifier
+	fieldOrgID = "org_id"
+	// fieldSourceOperation is the log field key for the originating mutation carried by the durable
 	// operation context (CREATE, UPDATE, DELETE)
-	FieldSourceOperation = "source_operation"
-	// FieldSourceEntityID is the log field key for the originating entity carried by the durable
+	fieldSourceOperation = "source_operation"
+	// fieldSourceEntityID is the log field key for the originating entity carried by the durable
 	// operation context
-	FieldSourceEntityID = "source_entity_id"
-	// FieldSourceEntityType is the log field key for the originating entity type carried by the
+	fieldSourceEntityID = "source_entity_id"
+	// fieldSourceEntityType is the log field key for the originating entity type carried by the
 	// durable operation context
-	FieldSourceEntityType = "source_entity_type"
-	// FieldExpression is the log field key for a CEL filter expression applied to target selection
-	FieldExpression = "expression"
+	fieldSourceEntityType = "source_entity_type"
+	// fieldExpression is the log field key for a CEL filter expression applied to target selection
+	fieldExpression = "expression"
 )
 
 // --- Schema log enrichment ---
@@ -129,15 +144,15 @@ func (r SchemaRef) MarshalZerologObject(e *zerolog.Event) {
 	e.Str(FieldSchema, r.Schema)
 
 	if r.Operation != "" {
-		e.Str(FieldOperation, r.Operation)
+		e.Str(fieldOperation, r.Operation)
 	}
 
 	if r.EntityID != "" {
-		e.Str(FieldEntityID, r.EntityID)
+		e.Str(fieldEntityID, r.EntityID)
 	}
 
 	if r.Edge != "" {
-		e.Str(FieldEdge, r.Edge)
+		e.Str(fieldEdge, r.Edge)
 	}
 }
 
@@ -188,19 +203,19 @@ func errorEvent(ctx context.Context, ref SchemaRef, err error) *zerolog.Event {
 	}
 
 	if oc.OwnerID != "" {
-		event = event.Str(FieldOrgID, oc.OwnerID)
+		event = event.Str(fieldOrgID, oc.OwnerID)
 	}
 
 	if oc.Operation != "" {
-		event = event.Str(FieldSourceOperation, oc.Operation)
+		event = event.Str(fieldSourceOperation, oc.Operation)
 	}
 
 	if oc.EntityID != "" {
-		event = event.Str(FieldSourceEntityID, oc.EntityID)
+		event = event.Str(fieldSourceEntityID, oc.EntityID)
 	}
 
 	if oc.EntityType != "" {
-		event = event.Str(FieldSourceEntityType, oc.EntityType)
+		event = event.Str(fieldSourceEntityType, oc.EntityType)
 	}
 
 	return event

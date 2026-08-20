@@ -198,17 +198,19 @@ func HookCustomEnums(in CustomEnumFilter) ent.Hook {
 					Only(ctx)
 			}
 
-			var enum *generated.CustomTypeEnum
-
-			if in.AllowGlobal {
-				enum, err = lookupEnum("")
-				if err != nil && generated.IsNotFound(err) {
-					enum, err = lookupEnum(in.ObjectType)
+			// resolveEnum applies the lookup preference: global first when allowed, then the scoped object type
+			resolveEnum := func() (*generated.CustomTypeEnum, error) {
+				if in.AllowGlobal {
+					found, lookupErr := lookupEnum("")
+					if lookupErr == nil || !generated.IsNotFound(lookupErr) {
+						return found, lookupErr
+					}
 				}
-			} else {
-				enum, err = lookupEnum(in.ObjectType)
+
+				return lookupEnum(in.ObjectType)
 			}
 
+			enum, err := resolveEnum()
 			if err != nil {
 				switch generated.IsNotFound(err) {
 				case true:
@@ -218,6 +220,12 @@ func HookCustomEnums(in CustomEnumFilter) ent.Hook {
 					}
 
 					enum, err = createCustomEnum(ctx, client, in, enumValue)
+					// a concurrent mutation can insert the same enum between the lookup
+					// and the create; the winner's row serves both callers
+					if generated.IsConstraintError(err) {
+						enum, err = resolveEnum()
+					}
+
 					if err != nil {
 						return nil, err
 					}

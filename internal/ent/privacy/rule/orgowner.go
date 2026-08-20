@@ -282,10 +282,7 @@ func ensureUserIsAnOrgMember(ctx context.Context, mut utils.GenericMutation, use
 
 	var rows sql.Rows
 	if err := mut.Client().Driver().Query(ctx, query, []any{userID, orgID}, &rows); err != nil {
-		logx.FromContext(ctx).Error().Err(err).
-			Str("id", userID).
-			Str("object", user.Table).
-			Msg("failed to check for object in organization")
+		logx.FromContext(ctx).Error().Err(err).Str("id", userID).Str("object", user.Table).Msg("failed to check for object in organization")
 
 		return err
 	}

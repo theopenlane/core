@@ -87,6 +87,50 @@ func ToRawMap(value any) (map[string]json.RawMessage, error) {
 	return nil, err
 }
 
+// DecodeObjectKey decodes one top-level key of a raw JSON object into a typed value, reporting
+// false when the document is not an object, the key is absent, or the value does not decode as T
+func DecodeObjectKey[T any](raw json.RawMessage, key string) (T, bool) {
+	var zero T
+
+	var doc map[string]json.RawMessage
+	if err := json.Unmarshal(raw, &doc); err != nil {
+		return zero, false
+	}
+
+	value, ok := doc[key]
+	if !ok {
+		return zero, false
+	}
+
+	decoded, err := Decode[T](value)
+	if err != nil {
+		return zero, false
+	}
+
+	return decoded, true
+}
+
+// EditObject decodes a raw JSON object, lets edit mutate its top-level keys, and re-marshals the
+// result. edit reports whether it changed the document; undecodable input, unchanged documents,
+// and re-marshal failures return the original document, making the edit best-effort
+func EditObject(raw json.RawMessage, edit func(doc map[string]json.RawMessage) bool) json.RawMessage {
+	var doc map[string]json.RawMessage
+	if err := json.Unmarshal(raw, &doc); err != nil || doc == nil {
+		return raw
+	}
+
+	if !edit(doc) {
+		return raw
+	}
+
+	out, err := json.Marshal(doc)
+	if err != nil {
+		return raw
+	}
+
+	return out
+}
+
 // CloneRawMessage copies a raw JSON document to avoid accidental aliasing
 func CloneRawMessage(raw json.RawMessage) json.RawMessage {
 	if len(raw) == 0 {

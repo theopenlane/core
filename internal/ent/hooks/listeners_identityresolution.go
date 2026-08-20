@@ -5,14 +5,13 @@ import (
 	"net/mail"
 	"strings"
 
-	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/eventqueue"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
@@ -22,49 +21,41 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-// RegisterGalaIdentityResolutionListeners registers listeners that resolve directory
-// accounts to identity holders asynchronously after mutations commit
-func RegisterGalaIdentityResolutionListeners(registry *gala.Registry) ([]gala.ListenerID, error) {
-	return gala.RegisterListeners(registry,
-		gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic:      eventqueue.MutationTopic(eventqueue.MutationConcernDirect, entgen.TypeDirectoryAccount),
-			Name:       "identityresolution.directory_account_created",
-			Operations: []string{ent.OpCreate.String()},
-			Handle:     handleDirectoryAccountCreated,
+// IdentityResolutionListeners resolves directory accounts to identity holders after mutations commit
+func IdentityResolutionListeners() []gala.Registration {
+	return []gala.Registration{
+		entityops.MutationListener{
+			Schema:     entityops.SchemaDirectoryAccount,
+			Operations: []string{entityops.OpCreate, entityops.OpUpdateOne},
+			Handle:     handleDirectoryAccountMutation,
 		},
-		gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic:      eventqueue.MutationTopic(eventqueue.MutationConcernDirect, entgen.TypeDirectoryAccount),
-			Name:       "identityresolution.directory_account_updated",
-			Operations: []string{ent.OpUpdateOne.String()},
-			Handle:     handleDirectoryAccountUpdated,
-		},
-	)
+	}
 }
 
-// handleDirectoryAccountCreated runs full identity resolution for a newly created directory account
-func handleDirectoryAccountCreated(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	ctx, client, ok := eventqueue.ClientFromHandler(ctx)
-	if !ok {
-		return nil
-	}
-
-	accountID, ok := eventqueue.MutationEntityID(payload, ctx.Envelope.Headers.Properties)
-	if !ok || accountID == "" {
-		return nil
-	}
-
-	account, err := client.DirectoryAccount.Get(ctx.Context, accountID)
-	if err != nil {
-		if entgen.IsNotFound(err) {
-			return nil
-		}
-
+// handleDirectoryAccountMutation runs the matching cascade for unlinked accounts and links
+// the resolved holder; already-linked accounts only re-enrich and re-sync aliases
+func handleDirectoryAccountMutation(inv entityops.Invocation, _ entityops.MutationPayload) error {
+	account, ok, err := entityops.LoadEntity(inv.Context, inv.EntityID, inv.Client.DirectoryAccount.Get)
+	if err != nil || !ok {
 		return err
 	}
 
-	holder, err := resolveIdentityHolder(ctx.Context, client, account)
+	if lo.FromPtr(account.IdentityHolderID) != "" {
+		holder, err := inv.Client.IdentityHolder.Get(inv.Context, *account.IdentityHolderID)
+		if err != nil {
+			if entgen.IsNotFound(err) {
+				return nil
+			}
+
+			return err
+		}
+
+		return enrichAndSyncHolder(logx.WithFields(inv.Context, map[string]any{"identity_holder_id": holder.ID}), inv.Client, holder, account)
+	}
+
+	holder, err := resolveIdentityHolder(inv.Context, inv.Client, account)
 	if err != nil {
-		logx.FromContext(ctx.Context).Error().Err(err).Str("directory_account_id", accountID).Msg("identity resolution failed")
+		logx.FromContext(inv.Context).Error().Err(err).Msg("identity resolution failed")
 
 		return err
 	}
@@ -73,22 +64,29 @@ func handleDirectoryAccountCreated(ctx gala.HandlerContext, payload eventqueue.M
 		return nil
 	}
 
-	if err := client.DirectoryAccount.UpdateOneID(account.ID).SetIdentityHolderID(holder.ID).Exec(ctx.Context); err != nil {
-		logx.FromContext(ctx.Context).Error().Err(err).Str("directory_account_id", accountID).Str("identity_holder_id", holder.ID).Msg("failed to link directory account to identity holder")
+	ctx := logx.WithFields(inv.Context, map[string]any{"identity_holder_id": holder.ID})
+
+	if err := inv.Client.DirectoryAccount.UpdateOneID(account.ID).SetIdentityHolderID(holder.ID).Exec(ctx); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to link directory account to identity holder")
 
 		return err
 	}
 
+	return enrichAndSyncHolder(ctx, inv.Client, holder, account)
+}
+
+// enrichAndSyncHolder enriches primary-source account and rebuilds its email aliases
+func enrichAndSyncHolder(ctx context.Context, client *entgen.Client, holder *entgen.IdentityHolder, account *entgen.DirectoryAccount) error {
 	if account.PrimarySource {
-		if err := enrichFromPrimarySource(ctx.Context, client, holder, account); err != nil {
-			logx.FromContext(ctx.Context).Error().Err(err).Str("identity_holder_id", holder.ID).Msg("primary source enrichment failed")
+		if err := enrichFromPrimarySource(ctx, client, holder, account); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("primary source enrichment failed")
 
 			return err
 		}
 	}
 
-	if err := syncEmailAliases(ctx.Context, client, holder); err != nil {
-		logx.FromContext(ctx.Context).Error().Err(err).Str("identity_holder_id", holder.ID).Msg("email alias sync failed")
+	if err := syncEmailAliases(ctx, client, holder); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("email alias sync failed")
 
 		return err
 	}
@@ -96,91 +94,16 @@ func handleDirectoryAccountCreated(ctx gala.HandlerContext, payload eventqueue.M
 	return nil
 }
 
-// handleDirectoryAccountUpdated re-enriches and syncs aliases when an existing directory account is updated
-func handleDirectoryAccountUpdated(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	ctx, client, ok := eventqueue.ClientFromHandler(ctx)
-	if !ok {
-		return nil
-	}
-
-	accountID, ok := eventqueue.MutationEntityID(payload, ctx.Envelope.Headers.Properties)
-	if !ok || accountID == "" {
-		return nil
-	}
-
-	account, err := client.DirectoryAccount.Get(ctx.Context, accountID)
-	if err != nil {
-		if entgen.IsNotFound(err) {
-			return nil
-		}
-
-		return err
-	}
-
-	// If no identity holder linked yet, attempt full resolution
-	if account.IdentityHolderID == nil || *account.IdentityHolderID == "" {
-		holder, err := resolveIdentityHolder(ctx.Context, client, account)
-		if err != nil {
-			logx.FromContext(ctx.Context).Error().Err(err).Str("directory_account_id", accountID).Msg("identity resolution on update failed")
-
-			return err
-		}
-
-		if holder == nil {
-			return nil
-		}
-
-		if err := client.DirectoryAccount.UpdateOneID(account.ID).SetIdentityHolderID(holder.ID).Exec(ctx.Context); err != nil {
-			logx.FromContext(ctx.Context).Error().Err(err).Str("directory_account_id", accountID).Str("identity_holder_id", holder.ID).Msg("failed to link directory account to identity holder on update")
-
-			return err
-		}
-
-		if account.PrimarySource {
-			if err := enrichFromPrimarySource(ctx.Context, client, holder, account); err != nil {
-				logx.FromContext(ctx.Context).Error().Err(err).Str("identity_holder_id", holder.ID).Msg("primary source enrichment failed")
-
-				return err
-			}
-		}
-
-		return syncEmailAliases(ctx.Context, client, holder)
-	}
-
-	holderID := *account.IdentityHolderID
-
-	holder, err := client.IdentityHolder.Get(ctx.Context, holderID)
-	if err != nil {
-		if entgen.IsNotFound(err) {
-			return nil
-		}
-
-		return err
-	}
-
-	if account.PrimarySource {
-		if err := enrichFromPrimarySource(ctx.Context, client, holder, account); err != nil {
-			logx.FromContext(ctx.Context).Error().Err(err).Str("identity_holder_id", holderID).Msg("primary source enrichment failed on update")
-
-			return err
-		}
-	}
-
-	return syncEmailAliases(ctx.Context, client, holder)
-}
-
-// resolveIdentityHolder runs a priority-ordered matching cascade to find or create
-// an identity holder for the given directory account, trying the canonical (SSO) email
-// first and then every confirmed alias before falling back to name matching or creation
+// resolveIdentityHolder runs a priority-ordered matching cascade to find or create an
+// identity holder for the directory account
 func resolveIdentityHolder(ctx context.Context, client *entgen.Client, account *entgen.DirectoryAccount) (*entgen.IdentityHolder, error) {
 	ownerID := account.OwnerID
 	emails := confirmedAccountEmails(account)
 	hasEmail := len(emails) > 0
-	hasName := account.GivenName != nil && *account.GivenName != "" &&
-		account.FamilyName != nil && *account.FamilyName != ""
+	hasName := lo.FromPtr(account.GivenName) != "" && lo.FromPtr(account.FamilyName) != ""
 
 	// exact canonical (SSO) email match on IdentityHolder
-	if account.CanonicalEmail != nil && *account.CanonicalEmail != "" {
+	if lo.FromPtr(account.CanonicalEmail) != "" {
 		holder, err := client.IdentityHolder.Query().
 			Where(identityholder.OwnerID(ownerID),
 				identityholder.Email(*account.CanonicalEmail)).Only(ctx)
@@ -197,14 +120,8 @@ func resolveIdentityHolder(ctx context.Context, client *entgen.Client, account *
 	if hasEmail {
 		holder, err := client.IdentityHolder.Query().
 			Where(identityholder.OwnerID(ownerID),
-				identityholder.Or(
-					identityholder.EmailIn(emails...),
-					func(s *sql.Selector) {
-						s.Where(sql.Or(lo.Map(emails, func(email string, _ int) *sql.Predicate {
-							return sqljson.ValueContains(identityholder.FieldEmailAliases, email)
-						})...))
-					},
-				)).First(ctx)
+				emailOrAliasMatch(identityholder.FieldEmail, identityholder.FieldEmailAliases, emails)).
+			First(ctx)
 		if err == nil {
 			return holder, nil
 		}
@@ -221,14 +138,8 @@ func resolveIdentityHolder(ctx context.Context, client *entgen.Client, account *
 			Where(directoryaccount.OwnerID(ownerID),
 				directoryaccount.IdentityHolderIDNotNil(),
 				directoryaccount.IDNEQ(account.ID),
-				directoryaccount.Or(
-					directoryaccount.CanonicalEmailIn(emails...),
-					func(s *sql.Selector) {
-						s.Where(sql.Or(lo.Map(emails, func(email string, _ int) *sql.Predicate {
-							return sqljson.ValueContains(directoryaccount.FieldEmailAliases, email)
-						})...))
-					},
-				)).First(ctx)
+				emailOrAliasMatch(directoryaccount.FieldCanonicalEmail, directoryaccount.FieldEmailAliases, emails)).
+			First(ctx)
 		if err == nil && sibling.IdentityHolderID != nil {
 			return client.IdentityHolder.Get(ctx, *sibling.IdentityHolderID)
 		}
@@ -263,33 +174,38 @@ func resolveIdentityHolder(ctx context.Context, client *entgen.Client, account *
 	}
 
 	// Step 4: create new identity holder (requires canonical email)
-	if account.CanonicalEmail == nil || *account.CanonicalEmail == "" {
+	if lo.FromPtr(account.CanonicalEmail) == "" {
 		return nil, nil
 	}
 
 	return createIdentityHolder(ctx, client, account)
 }
 
+// emailOrAliasMatch matches rows whose email column equals any of the given emails or
+// whose alias JSON column contains one
+func emailOrAliasMatch(emailColumn, aliasColumn string, emails []string) func(*sql.Selector) {
+	return func(s *sql.Selector) {
+		predicates := append(
+			[]*sql.Predicate{sql.In(s.C(emailColumn), lo.ToAnySlice(emails)...)},
+			lo.Map(emails, func(email string, _ int) *sql.Predicate {
+				return sqljson.ValueContains(aliasColumn, email)
+			})...,
+		)
+
+		s.Where(sql.Or(predicates...))
+	}
+}
+
 // confirmedAccountEmails returns the canonical email followed by every confirmed alias
 // for a directory account, deduplicated with empties removed
 func confirmedAccountEmails(account *entgen.DirectoryAccount) []string {
-	emails := make([]string, 0, len(account.EmailAliases)+1)
-
-	if account.CanonicalEmail != nil {
-		emails = append(emails, *account.CanonicalEmail)
-	}
-
-	emails = append(emails, account.EmailAliases...)
-
-	return lo.Uniq(lo.Filter(emails, func(email string, _ int) bool {
-		return email != ""
-	}))
+	return lo.Uniq(lo.Compact(append([]string{lo.FromPtr(account.CanonicalEmail)}, account.EmailAliases...)))
 }
 
 // createIdentityHolder creates a new identity holder from a directory account with
 // conservative defaults, using primary source fields when available
 func createIdentityHolder(ctx context.Context, client *entgen.Client, account *entgen.DirectoryAccount) (*entgen.IdentityHolder, error) {
-	canonicalEmail := *account.CanonicalEmail
+	canonicalEmail := lo.FromPtr(account.CanonicalEmail)
 
 	// check if it is a valid email, otherwise skip creation; identity holders are required to have a valid email address
 	if _, err := mail.ParseAddress(canonicalEmail); err != nil {

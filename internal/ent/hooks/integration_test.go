@@ -67,7 +67,6 @@ func (suite *HookTestSuite) TestIntegrationCampaignEmailUniquePerOrg() {
 
 	galaRuntime, err := gala.NewGala(context.Background(), gala.Config{
 		DispatchMode: gala.DispatchModeInMemory,
-		Enabled:      true,
 		WorkerCount:  1,
 	})
 	require.NoError(t, err)

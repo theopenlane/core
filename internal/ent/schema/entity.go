@@ -64,7 +64,7 @@ func (Entity) Fields() []ent.Field {
 			Annotations(
 				entx.FieldSearchable(),
 				entgql.OrderField("name"),
-				entx.IntegrationMappingField().UpsertKey(),
+				entx.IntegrationMappingField(),
 			),
 		field.String("display_name").
 			Comment("The entity's displayed 'friendly' name").
@@ -300,7 +300,7 @@ func (Entity) Fields() []ent.Field {
 			Optional().
 			Annotations(
 				entgql.OrderField("external_id"),
-				entx.IntegrationMappingField().UpsertKey().LookupKey(),
+				entx.IntegrationMappingField().LookupKey(),
 			),
 		field.Time("observed_at").
 			Comment("time when this entity was last observed by the source integration").

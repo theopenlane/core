@@ -3,59 +3,38 @@ package hooks
 import (
 	"context"
 
-	"entgo.io/ent"
 	"github.com/theopenlane/iam/auth"
 
-	"github.com/theopenlane/core/internal/ent/eventqueue"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-// RegisterGalaSubscriberLinkListeners registers a listener that links a newly created
-// subscriber to an existing contact and/or user with a matching email asynchronously
-// after the subscriber mutation commits
-func RegisterGalaSubscriberLinkListeners(registry *gala.Registry) ([]gala.ListenerID, error) {
-	return gala.RegisterListeners(registry,
-		gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic:      eventqueue.MutationTopic(eventqueue.MutationConcernDirect, entgen.TypeSubscriber),
-			Name:       "subscriber.link_identity",
-			Operations: []string{ent.OpCreate.String()},
-			Handle:     handleSubscriberCreatedLink,
+// SubscriberLinkListeners links a newly created subscriber to an existing contact and/or user with a matching email
+func SubscriberLinkListeners() []gala.Registration {
+	return []gala.Registration{
+		entityops.MutationListener{
+			Schema:     entityops.SchemaSubscriber,
+			Operations: []string{entityops.OpCreate},
+			Caller: func(*auth.Caller, entityops.MutationPayload) *auth.Caller {
+				return &auth.Caller{
+					Capabilities: auth.CapBypassOrgFilter | auth.CapBypassFGA | auth.CapInternalOperation,
+				}
+			},
+			Handle: handleSubscriberCreatedLink,
 		},
-	)
+	}
 }
 
-// handleSubscriberCreatedLink matches a newly created subscriber to an existing contact
-// and/or user by email within the subscriber's owning organization and records the
-// association via the contact_id and user_id edges. Matching runs under an internal
-// caller scoped to the subscriber's owner because subscribers can be created anonymously
-// through the trust center, in which case the originating caller cannot read contacts
-func handleSubscriberCreatedLink(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	ctx, client, ok := eventqueue.ClientFromHandler(ctx)
-	if !ok {
-		return nil
-	}
-
-	subscriberID, ok := eventqueue.MutationEntityID(payload, ctx.Envelope.Headers.Properties)
-	if !ok || subscriberID == "" {
-		return nil
-	}
-
-	allowCtx := auth.WithCaller(privacy.DecisionContext(ctx.Context, privacy.Allow), &auth.Caller{
-		Capabilities: auth.CapBypassOrgFilter | auth.CapBypassFGA | auth.CapInternalOperation,
-	})
-
-	sub, err := client.Subscriber.Get(allowCtx, subscriberID)
-	if err != nil {
-		if entgen.IsNotFound(err) {
-			return nil
-		}
-
+// handleSubscriberCreatedLink links a subscriber to the owning organization's contact
+// and/or user matching its email
+func handleSubscriberCreatedLink(inv entityops.Invocation, _ entityops.MutationPayload) error {
+	sub, ok, err := entityops.LoadEntity(inv.Context, inv.EntityID, inv.Client.Subscriber.Get)
+	if err != nil || !ok {
 		return err
 	}
 
@@ -63,11 +42,11 @@ func handleSubscriberCreatedLink(ctx gala.HandlerContext, payload eventqueue.Mut
 		return nil
 	}
 
-	update := client.Subscriber.UpdateOneID(sub.ID)
+	update := inv.Client.Subscriber.UpdateOneID(sub.ID)
 	changed := false
 
 	if sub.ContactID == "" {
-		contactID, err := matchSubscriberContactID(allowCtx, client, sub.OwnerID, sub.Email)
+		contactID, err := matchSubscriberContactID(inv.Context, inv.Client, sub.OwnerID, sub.Email)
 		if err != nil {
 			return err
 		}
@@ -80,7 +59,7 @@ func handleSubscriberCreatedLink(ctx gala.HandlerContext, payload eventqueue.Mut
 	}
 
 	if sub.UserID == "" {
-		userID, err := matchSubscriberUserID(allowCtx, client, sub.OwnerID, sub.Email)
+		userID, err := orgUserIDByEmail(inv.Context, inv.Client, sub.OwnerID, sub.Email)
 		if err != nil {
 			return err
 		}
@@ -96,8 +75,8 @@ func handleSubscriberCreatedLink(ctx gala.HandlerContext, payload eventqueue.Mut
 		return nil
 	}
 
-	if err := update.Exec(allowCtx); err != nil {
-		logx.FromContext(allowCtx).Error().Err(err).Str("subscriber_id", sub.ID).Msg("failed linking subscriber to contact/user")
+	if err := update.Exec(inv.Context); err != nil {
+		logx.FromContext(inv.Context).Error().Err(err).Msg("failed linking subscriber to contact/user")
 
 		return err
 	}
@@ -125,13 +104,13 @@ func matchSubscriberContactID(ctx context.Context, client *entgen.Client, ownerI
 	return contactID, nil
 }
 
-// matchSubscriberUserID returns the id of a user who is a member of the organization and
-// whose email matches the subscriber email, or empty when no user matches
-func matchSubscriberUserID(ctx context.Context, client *entgen.Client, ownerID, email string) (string, error) {
+// orgUserIDByEmail returns the id of a user who is a member of the organization and whose
+// email matches, or empty when no user matches; duplicates resolve best-effort to the first id
+func orgUserIDByEmail(ctx context.Context, client *entgen.Client, orgID, email string) (string, error) {
 	userID, err := client.User.Query().
 		Where(
 			user.EmailEqualFold(email),
-			user.HasOrgMembershipsWith(orgmembership.OrganizationID(ownerID)),
+			user.HasOrgMembershipsWith(orgmembership.OrganizationID(orgID)),
 		).
 		FirstID(ctx)
 	if err != nil {

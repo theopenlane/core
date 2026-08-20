@@ -8,8 +8,6 @@ import (
 	"github.com/theopenlane/core/pkg/gala"
 )
 
-const QuestionnaireTransformOperationName = "questionnaire.transform.assessment"
-
 // IngestContext holds the stable per-integration dependencies shared across all ingest call paths
 type IngestContext struct {
 	// Registry is the integration definition registry used to resolve mappings and definitions

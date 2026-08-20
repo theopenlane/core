@@ -57,8 +57,7 @@ func HandleUploads(ctx context.Context, svc *objects.Service, files []pkgobjects
 
 		hashSum, err := ComputeMD5Hash(file.RawFile)
 		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Str("file", file.OriginalName).
-				Msg("failed to calculate md5 hash")
+			logx.FromContext(ctx).Error().Err(err).Str("file", file.OriginalName).Msg("failed to calculate md5 hash")
 			finish("error")
 
 			return ctx, nil, err

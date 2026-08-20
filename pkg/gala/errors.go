@@ -16,12 +16,14 @@ var (
 	ErrTopicAlreadyRegistered = errors.New("gala: topic already registered")
 	// ErrTopicNotRegistered is returned when topic metadata cannot be found
 	ErrTopicNotRegistered = errors.New("gala: topic not registered")
-	// ErrCodecRequired is returned when a registration is missing a codec
-	ErrCodecRequired = errors.New("gala: codec is required")
-	// ErrListenerNameRequired is returned when a listener name is empty
-	ErrListenerNameRequired = errors.New("gala: listener name is required")
 	// ErrListenerHandlerRequired is returned when a listener callback is missing
 	ErrListenerHandlerRequired = errors.New("gala: listener handler is required")
+	// ErrListenerHandlerConflict is returned when a listener sets both Handle and Schedule
+	ErrListenerHandlerConflict = errors.New("gala: listener handle and schedule are mutually exclusive")
+	// ErrListenerScheduleStateRequired is returned when a scheduled listener is missing the State extractor
+	ErrListenerScheduleStateRequired = errors.New("gala: listener schedule state extractor is required")
+	// ErrListenerScheduleWrapRequired is returned when a scheduled listener is missing the Wrap builder
+	ErrListenerScheduleWrapRequired = errors.New("gala: listener schedule wrap builder is required")
 	// ErrListenerTopicNotRegistered is returned when a listener is attached before topic registration
 	ErrListenerTopicNotRegistered = errors.New("gala: listener topic not registered")
 	// ErrPayloadTypeMismatch is returned when payload casting fails for a topic or listener
@@ -32,12 +34,10 @@ var (
 	ErrPayloadDecodeFailed = errors.New("gala: payload decode failed")
 	// ErrEnvelopePayloadRequired is returned when an envelope has an empty payload
 	ErrEnvelopePayloadRequired = errors.New("gala: envelope payload is required")
-	// ErrDispatcherRequired is returned when emit is attempted without a dispatcher
-	ErrDispatcherRequired = errors.New("gala: dispatcher is required")
+	// ErrJobKindRequired is returned when emit headers carry no job kind
+	ErrJobKindRequired = errors.New("gala: job kind is required")
 	// ErrDispatchFailed is returned when dispatch fails
 	ErrDispatchFailed = errors.New("gala: dispatch failed")
-	// ErrContextCodecRequired is returned when context codec registration receives nil
-	ErrContextCodecRequired = errors.New("gala: context codec is required")
 	// ErrContextCodecKeyRequired is returned when a context codec key is empty
 	ErrContextCodecKeyRequired = errors.New("gala: context codec key is required")
 	// ErrContextCodecAlreadyRegistered is returned when a context codec key is duplicated
@@ -46,10 +46,6 @@ var (
 	ErrContextSnapshotCaptureFailed = errors.New("gala: context snapshot capture failed")
 	// ErrContextSnapshotRestoreFailed is returned when snapshot restore fails
 	ErrContextSnapshotRestoreFailed = errors.New("gala: context snapshot restore failed")
-	// ErrRiverJobClientRequired is returned when a river dispatcher is built without a job client
-	ErrRiverJobClientRequired = errors.New("gala: river job client is required")
-	// ErrRiverGalaProviderRequired is returned when a river worker is built without a gala provider
-	ErrRiverGalaProviderRequired = errors.New("gala: river gala provider is required")
 	// ErrRiverDispatchJobEnvelopeRequired is returned when a river dispatch job has no envelope payload
 	ErrRiverDispatchJobEnvelopeRequired = errors.New("gala: river dispatch job envelope is required")
 	// ErrRiverEnvelopeEncodeFailed is returned when encoding a river envelope payload fails
@@ -58,6 +54,8 @@ var (
 	ErrRiverEnvelopeDecodeFailed = errors.New("gala: river envelope decode failed")
 	// ErrRiverDispatchInsertFailed is returned when inserting a durable river dispatch job fails
 	ErrRiverDispatchInsertFailed = errors.New("gala: river dispatch insert failed")
+	// ErrRiverListenerCleanupFailed is returned when detached-listener jobs cannot be purged
+	ErrRiverListenerCleanupFailed = errors.New("gala: river listener cleanup failed")
 	// ErrRiverConnectionURIRequired is returned when river runtime setup is missing a connection URI
 	ErrRiverConnectionURIRequired = errors.New("gala: river connection URI is required")
 	// ErrRiverClientInitializationFailed is returned when building the river queue client fails
@@ -73,6 +71,9 @@ var (
 	// ErrListenerPanicked is returned when a listener panics during execution
 	ErrListenerPanicked = errors.New("gala: listener panicked")
 )
+
+// ErrListenerGated signals a gated skip so executeListener suppresses delivery metrics
+var ErrListenerGated = errors.New("gala: listener gated")
 
 // ListenerError captures a listener execution failure with context
 type ListenerError struct {

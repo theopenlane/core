@@ -9,31 +9,26 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/gala"
-	"github.com/theopenlane/utils/contextx"
 )
-
-// skipEventEmissionFlag is used to share a mutable skip flag across hook layers.
-type skipEventEmissionFlag struct {
-	skip bool
-}
-
-var skipEventEmissionFlagContextKey = contextx.NewKey[*skipEventEmissionFlag]()
 
 // WithContext sets the workflow bypass flag in the context.
 // Operations with this context will skip workflow approval interceptors.
 func WithContext(ctx context.Context) context.Context {
-	return gala.WithFlag(ctx, gala.ContextFlagWorkflowBypass)
+	current := gala.WorkflowFlagsKey.GetOr(ctx, gala.WorkflowFlags{})
+	current.Bypass = true
+
+	return gala.WorkflowFlagsKey.Set(ctx, current)
 }
 
 // FromContext reports whether the workflow bypass flag is set in the context.
 func FromContext(ctx context.Context) bool {
-	return gala.HasFlag(ctx, gala.ContextFlagWorkflowBypass)
+	return gala.WorkflowFlagsKey.GetOr(ctx, gala.WorkflowFlags{}).Bypass
 }
 
 // IsWorkflowBypass checks if the context has workflow bypass enabled.
 // Used by workflow interceptors to skip approval routing for system operations.
 func IsWorkflowBypass(ctx context.Context) bool {
-	return gala.HasFlag(ctx, gala.ContextFlagWorkflowBypass)
+	return gala.WorkflowFlagsKey.GetOr(ctx, gala.WorkflowFlags{}).Bypass
 }
 
 // WithAllowWorkflowEventEmission marks the context to allow workflow event emission even when bypass is set.
@@ -42,7 +37,10 @@ func WithAllowWorkflowEventEmission(ctx context.Context) context.Context {
 		return ctx
 	}
 
-	return gala.WithFlag(ctx, gala.ContextFlagWorkflowAllowEventEmission)
+	current := gala.WorkflowFlagsKey.GetOr(ctx, gala.WorkflowFlags{})
+	current.AllowEventEmission = true
+
+	return gala.WorkflowFlagsKey.Set(ctx, current)
 }
 
 // AllowWorkflowEventEmission reports whether workflow events should be emitted even when bypass is set.
@@ -51,52 +49,7 @@ func AllowWorkflowEventEmission(ctx context.Context) bool {
 		return false
 	}
 
-	return gala.HasFlag(ctx, gala.ContextFlagWorkflowAllowEventEmission)
-}
-
-// WithSkipEventEmission installs a mutable flag in the context so inner hooks can
-// signal that mutation events should not be emitted via MarkSkipEventEmission.
-func WithSkipEventEmission(ctx context.Context) context.Context {
-	if ctx == nil {
-		return ctx
-	}
-
-	if existing, ok := skipEventEmissionFlagContextKey.Get(ctx); ok && existing != nil {
-		return ctx
-	}
-
-	return skipEventEmissionFlagContextKey.Set(ctx, &skipEventEmissionFlag{})
-}
-
-// MarkSkipEventEmission marks the context to skip emitting mutation events.
-func MarkSkipEventEmission(ctx context.Context) {
-	if ctx == nil {
-		return
-	}
-	if flag, ok := skipEventEmissionFlagContextKey.Get(ctx); ok && flag != nil {
-		flag.skip = true
-	}
-}
-
-// SkipEventEmission installs the mutable skip flag and immediately marks it, combining
-// WithSkipEventEmission and MarkSkipEventEmission into a single call.
-func SkipEventEmission(ctx context.Context) context.Context {
-	ctx = WithSkipEventEmission(ctx)
-	MarkSkipEventEmission(ctx)
-	return ctx
-}
-
-// ShouldSkipEventEmission reports whether mutation event emission should be skipped.
-func ShouldSkipEventEmission(ctx context.Context) bool {
-	if ctx == nil {
-		return false
-	}
-
-	if flag, ok := skipEventEmissionFlagContextKey.Get(ctx); ok && flag != nil {
-		return flag.skip
-	}
-
-	return false
+	return gala.WorkflowFlagsKey.GetOr(ctx, gala.WorkflowFlags{}).AllowEventEmission
 }
 
 // AllowContext sets the ent privacy decision to allow for internal workflow operations.

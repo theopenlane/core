@@ -10,6 +10,7 @@ import (
 	"fmt"
 
 	"github.com/theopenlane/core/common/enums"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -166,8 +167,7 @@ func (r *mutationResolver) AdminReassignWorkflowAssignment(ctx context.Context, 
 		return nil, ErrWorkflowsDisabled
 	}
 
-	skipCtx := workflows.WithSkipEventEmission(allowCtx)
-	workflows.MarkSkipEventEmission(skipCtx)
+	skipCtx := entityops.WithEmissionVetoed(allowCtx)
 
 	if _, err := r.db.WorkflowAssignmentTarget.Delete().
 		Where(workflowassignmenttarget.WorkflowAssignmentIDEQ(assignment.ID)).

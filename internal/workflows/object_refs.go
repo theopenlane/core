@@ -30,13 +30,16 @@ func ObjectRefIDs(ctx context.Context, client *generated.Client, obj *Object) ([
 	return query.IDs(ctx)
 }
 
-// buildObjectRefQuery applies registered query builders to match the object type
+// buildObjectRefQuery applies the canonical schema predicate for the object type.
 func buildObjectRefQuery(query *generated.WorkflowObjectRefQuery, obj *Object) *generated.WorkflowObjectRefQuery {
-	for i := len(objectRefQueryBuilders) - 1; i >= 0; i-- {
-		if next, ok := objectRefQueryBuilders[i](query, obj); ok && next != nil {
-			return next
-		}
+	if obj == nil {
+		return nil
 	}
 
-	return nil
+	filtered, err := FilterWorkflowObjectRefs(query, obj.Type, obj.ID)
+	if err != nil {
+		return nil
+	}
+
+	return filtered
 }

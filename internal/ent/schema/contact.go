@@ -74,7 +74,7 @@ func (Contact) Fields() []ent.Field {
 			Annotations(
 				entx.FieldSearchable(),
 				entgql.OrderField("email"),
-				entx.IntegrationMappingField().UpsertKey().LookupKey(),
+				entx.IntegrationMappingField().LookupKey(),
 			).
 			Validate(func(email string) error {
 				_, err := mail.ParseAddress(email)
@@ -106,7 +106,7 @@ func (Contact) Fields() []ent.Field {
 			Optional().
 			Annotations(
 				entgql.OrderField("external_id"),
-				entx.IntegrationMappingField().UpsertKey().LookupKey(),
+				entx.IntegrationMappingField().LookupKey(),
 			),
 		field.String("integration_id").
 			Comment("integration that sourced this contact, when populated via integration ingest").

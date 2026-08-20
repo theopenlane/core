@@ -130,7 +130,7 @@ func (Asset) Fields() []ent.Field {
 			Optional().
 			Annotations(
 				entgql.OrderField("source_identifier"),
-				entx.IntegrationMappingField().UpsertKey().LookupKey(),
+				entx.IntegrationMappingField().LookupKey(),
 			),
 		field.String("cost_center").
 			Comment("cost center associated with the asset").
