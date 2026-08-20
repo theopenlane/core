@@ -11,14 +11,12 @@ import (
 
 func TestGetFinalFilters(t *testing.T) {
 	type testCase struct {
-		name                string
-		hasOwnerField       bool
-		hasSystemOwnedField bool
-		exportType          enums.ExportType
-		filters             string
-		ownerID             string
-		expectedErr         string
-		expectedFilters     map[string]any
+		name            string
+		exportType      enums.ExportType
+		filters         string
+		ownerID         string
+		expectedErr     string
+		expectedFilters map[string]any
 	}
 
 	cases := []testCase{

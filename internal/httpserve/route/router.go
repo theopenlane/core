@@ -120,67 +120,6 @@ type Router struct {
 	SpecTypes map[string]bool
 }
 
-// RouterOption is an option function that can be used to configure the router
-type RouterOption func(*Router)
-
-// WithLogger is a RouterOption that allows the logger to be set on the router
-func WithLogger(logger *echo.Logger) RouterOption {
-	return func(r *Router) {
-		r.Logger = logger
-	}
-}
-
-// WithHandler is a RouterOption that allows the handler to be set on the router
-func WithHandler(h *handlers.Handler) RouterOption {
-	return func(r *Router) {
-		r.Handler = h
-	}
-}
-
-// WithEcho is a RouterOption that allows the echo router to be set on the router
-func WithEcho(e *echo.Echo) RouterOption {
-	return func(r *Router) {
-		r.Echo = e
-	}
-}
-
-// WithLocalFiles is a RouterOption that allows the local files to be set on the router
-func WithLocalFiles(lf string) RouterOption {
-	return func(r *Router) {
-		r.LocalFilePath = lf
-	}
-}
-
-// WithOptions is a RouterOption that allows multiple options to be set on the router
-func WithOptions(opts ...RouterOption) RouterOption {
-	return func(r *Router) {
-		for _, opt := range opts {
-			opt(r)
-		}
-	}
-}
-
-// WithHideBanner is a RouterOption that allows the banner to be hidden on the echo server
-func WithHideBanner() RouterOption {
-	return func(r *Router) {
-		r.StartConfig = &echo.StartConfig{
-			HideBanner: true,
-		}
-	}
-}
-
-// AddEchoOnlyRoute is used to add a route to the echo router without adding it to the OpenAPI schema
-func (r *Router) AddEchoOnlyRoute(route echo.Routable) error {
-	grp := r.Base()
-
-	_, err := grp.AddRoute(route)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
 // VersionOne returns a new echo group for version 1 of the API
 func (r *Router) VersionOne() *echo.Group {
 	return r.Echo.Group("v1")

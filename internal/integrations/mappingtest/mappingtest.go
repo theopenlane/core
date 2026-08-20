@@ -39,21 +39,6 @@ func MappingSpec(t *testing.T, mappings []types.MappingRegistration, schema stri
 	return types.MappingOverride{}
 }
 
-// MappingSpecForVariant returns the MappingOverride for the mapping matching both schema and variant
-func MappingSpecForVariant(t *testing.T, mappings []types.MappingRegistration, schema, variant string) types.MappingOverride {
-	t.Helper()
-
-	for _, m := range mappings {
-		if m.Schema == schema && m.Variant == variant {
-			return m.Spec
-		}
-	}
-
-	t.Fatalf("no mapping found for schema %s variant %s", schema, variant)
-
-	return types.MappingOverride{}
-}
-
 // AssertFiltered evaluates the filter expression against the envelope and returns whether it matched
 func AssertFiltered(t *testing.T, spec types.MappingOverride, envelope types.MappingEnvelope) bool {
 	t.Helper()

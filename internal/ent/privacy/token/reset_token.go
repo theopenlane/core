@@ -10,14 +10,6 @@ type ResetToken struct {
 	token string
 }
 
-// NewResetTokenWithToken creates a new PrivacyToken of type ResetToken with
-// token set
-func NewResetTokenWithToken(token string) ResetToken {
-	return ResetToken{
-		token: token,
-	}
-}
-
 // GetToken from reset token
 func (token *ResetToken) GetToken() string {
 	return token.token
