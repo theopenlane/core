@@ -19,8 +19,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // NotificationTemplateUpdate is the builder for updating NotificationTemplate entities.
@@ -895,7 +893,6 @@ func (_u *NotificationTemplateUpdate) sqlSave(ctx context.Context) (_node int, e
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NotificationTemplate
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.IntegrationIDs(); len(nodes) > 0 {
@@ -909,7 +906,6 @@ func (_u *NotificationTemplateUpdate) sqlSave(ctx context.Context) (_node int, e
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NotificationTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -926,7 +922,6 @@ func (_u *NotificationTemplateUpdate) sqlSave(ctx context.Context) (_node int, e
 				IDSpec: sqlgraph.NewFieldSpec(workflowdefinition.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NotificationTemplate
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.WorkflowDefinitionIDs(); len(nodes) > 0 {
@@ -940,7 +935,6 @@ func (_u *NotificationTemplateUpdate) sqlSave(ctx context.Context) (_node int, e
 				IDSpec: sqlgraph.NewFieldSpec(workflowdefinition.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NotificationTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -957,7 +951,6 @@ func (_u *NotificationTemplateUpdate) sqlSave(ctx context.Context) (_node int, e
 				IDSpec: sqlgraph.NewFieldSpec(emailtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NotificationTemplate
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.EmailTemplateIDs(); len(nodes) > 0 {
@@ -971,7 +964,6 @@ func (_u *NotificationTemplateUpdate) sqlSave(ctx context.Context) (_node int, e
 				IDSpec: sqlgraph.NewFieldSpec(emailtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NotificationTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -988,7 +980,6 @@ func (_u *NotificationTemplateUpdate) sqlSave(ctx context.Context) (_node int, e
 				IDSpec: sqlgraph.NewFieldSpec(notification.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Notification
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedNotificationsIDs(); len(nodes) > 0 && !_u.mutation.NotificationsCleared() {
@@ -1002,7 +993,6 @@ func (_u *NotificationTemplateUpdate) sqlSave(ctx context.Context) (_node int, e
 				IDSpec: sqlgraph.NewFieldSpec(notification.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Notification
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1019,14 +1009,11 @@ func (_u *NotificationTemplateUpdate) sqlSave(ctx context.Context) (_node int, e
 				IDSpec: sqlgraph.NewFieldSpec(notification.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Notification
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = _u.schemaConfig.NotificationTemplate
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -1937,7 +1924,6 @@ func (_u *NotificationTemplateUpdateOne) sqlSave(ctx context.Context) (_node *No
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NotificationTemplate
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.IntegrationIDs(); len(nodes) > 0 {
@@ -1951,7 +1937,6 @@ func (_u *NotificationTemplateUpdateOne) sqlSave(ctx context.Context) (_node *No
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NotificationTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1968,7 +1953,6 @@ func (_u *NotificationTemplateUpdateOne) sqlSave(ctx context.Context) (_node *No
 				IDSpec: sqlgraph.NewFieldSpec(workflowdefinition.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NotificationTemplate
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.WorkflowDefinitionIDs(); len(nodes) > 0 {
@@ -1982,7 +1966,6 @@ func (_u *NotificationTemplateUpdateOne) sqlSave(ctx context.Context) (_node *No
 				IDSpec: sqlgraph.NewFieldSpec(workflowdefinition.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NotificationTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1999,7 +1982,6 @@ func (_u *NotificationTemplateUpdateOne) sqlSave(ctx context.Context) (_node *No
 				IDSpec: sqlgraph.NewFieldSpec(emailtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NotificationTemplate
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.EmailTemplateIDs(); len(nodes) > 0 {
@@ -2013,7 +1995,6 @@ func (_u *NotificationTemplateUpdateOne) sqlSave(ctx context.Context) (_node *No
 				IDSpec: sqlgraph.NewFieldSpec(emailtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.NotificationTemplate
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2030,7 +2011,6 @@ func (_u *NotificationTemplateUpdateOne) sqlSave(ctx context.Context) (_node *No
 				IDSpec: sqlgraph.NewFieldSpec(notification.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Notification
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedNotificationsIDs(); len(nodes) > 0 && !_u.mutation.NotificationsCleared() {
@@ -2044,7 +2024,6 @@ func (_u *NotificationTemplateUpdateOne) sqlSave(ctx context.Context) (_node *No
 				IDSpec: sqlgraph.NewFieldSpec(notification.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Notification
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2061,14 +2040,11 @@ func (_u *NotificationTemplateUpdateOne) sqlSave(ctx context.Context) (_node *No
 				IDSpec: sqlgraph.NewFieldSpec(notification.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Notification
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = _u.schemaConfig.NotificationTemplate
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	_node = &NotificationTemplate{config: _u.config}
 	_spec.Assign = _node.assignValues

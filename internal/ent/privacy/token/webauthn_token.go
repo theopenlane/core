@@ -7,10 +7,6 @@ import (
 type WebauthnCreationContextKey struct {
 }
 
-func NewWebauthnCreationContextKeyWithEmail() WebauthnCreationContextKey {
-	return WebauthnCreationContextKey{}
-}
-
 func NewContextWithWebauthnCreationContextKey(parent context.Context) context.Context {
 	ctx := webauthnCreationContextKey.Set(parent, &WebauthnCreationContextKey{})
 

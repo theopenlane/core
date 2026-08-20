@@ -785,7 +785,6 @@ func (_c *SubcontrolHistoryCreate) createSpec() (*SubcontrolHistory, *sqlgraph.C
 		_node = &SubcontrolHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(subcontrolhistory.Table, sqlgraph.NewFieldSpec(subcontrolhistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.SubcontrolHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

@@ -10,14 +10,6 @@ type OrgInviteToken struct {
 	token string
 }
 
-// NewOrgInviteTokenWithToken creates a new PrivacyToken of type OrgInviteToken with
-// token set
-func NewOrgInviteTokenWithToken(token string) OrgInviteToken {
-	return OrgInviteToken{
-		token: token,
-	}
-}
-
 // GetToken from invite token
 func (token *OrgInviteToken) GetToken() string {
 	return token.token

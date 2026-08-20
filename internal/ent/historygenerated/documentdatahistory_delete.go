@@ -10,10 +10,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-
 	"github.com/theopenlane/core/internal/ent/historygenerated/documentdatahistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
+	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 )
 
 // DocumentDataHistoryDelete is the builder for deleting a DocumentDataHistory entity.
@@ -45,8 +43,6 @@ func (_d *DocumentDataHistoryDelete) ExecX(ctx context.Context) int {
 
 func (_d *DocumentDataHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(documentdatahistory.Table, sqlgraph.NewFieldSpec(documentdatahistory.FieldID, field.TypeString))
-	_spec.Node.Schema = _d.schemaConfig.DocumentDataHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
 	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

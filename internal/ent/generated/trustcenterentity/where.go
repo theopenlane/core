@@ -8,8 +8,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // ID filters vertices based on their ID field.
@@ -949,9 +947,6 @@ func HasBlockedGroups() predicate.TrustCenterEntity {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, BlockedGroupsTable, BlockedGroupsColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -960,9 +955,6 @@ func HasBlockedGroups() predicate.TrustCenterEntity {
 func HasBlockedGroupsWith(preds ...predicate.Group) predicate.TrustCenterEntity {
 	return predicate.TrustCenterEntity(func(s *sql.Selector) {
 		step := newBlockedGroupsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -978,9 +970,6 @@ func HasEditors() predicate.TrustCenterEntity {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, EditorsTable, EditorsColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -989,9 +978,6 @@ func HasEditors() predicate.TrustCenterEntity {
 func HasEditorsWith(preds ...predicate.Group) predicate.TrustCenterEntity {
 	return predicate.TrustCenterEntity(func(s *sql.Selector) {
 		step := newEditorsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1007,9 +993,6 @@ func HasLogoFile() predicate.TrustCenterEntity {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, LogoFileTable, LogoFileColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.TrustCenterEntity
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1018,9 +1001,6 @@ func HasLogoFile() predicate.TrustCenterEntity {
 func HasLogoFileWith(preds ...predicate.File) predicate.TrustCenterEntity {
 	return predicate.TrustCenterEntity(func(s *sql.Selector) {
 		step := newLogoFileStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.TrustCenterEntity
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1036,9 +1016,6 @@ func HasTrustCenter() predicate.TrustCenterEntity {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, TrustCenterTable, TrustCenterColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.TrustCenter
-		step.Edge.Schema = schemaConfig.TrustCenterEntity
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1047,9 +1024,6 @@ func HasTrustCenter() predicate.TrustCenterEntity {
 func HasTrustCenterWith(preds ...predicate.TrustCenter) predicate.TrustCenterEntity {
 	return predicate.TrustCenterEntity(func(s *sql.Selector) {
 		step := newTrustCenterStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.TrustCenter
-		step.Edge.Schema = schemaConfig.TrustCenterEntity
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1065,9 +1039,6 @@ func HasEntityType() predicate.TrustCenterEntity {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, EntityTypeTable, EntityTypeColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.EntityType
-		step.Edge.Schema = schemaConfig.TrustCenterEntity
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1076,9 +1047,6 @@ func HasEntityType() predicate.TrustCenterEntity {
 func HasEntityTypeWith(preds ...predicate.EntityType) predicate.TrustCenterEntity {
 	return predicate.TrustCenterEntity(func(s *sql.Selector) {
 		step := newEntityTypeStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.EntityType
-		step.Edge.Schema = schemaConfig.TrustCenterEntity
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

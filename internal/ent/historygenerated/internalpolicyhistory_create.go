@@ -787,7 +787,6 @@ func (_c *InternalPolicyHistoryCreate) createSpec() (*InternalPolicyHistory, *sq
 		_node = &InternalPolicyHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(internalpolicyhistory.Table, sqlgraph.NewFieldSpec(internalpolicyhistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.InternalPolicyHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

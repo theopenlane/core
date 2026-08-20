@@ -335,7 +335,6 @@ func (_c *GroupSettingCreate) createSpec() (*GroupSetting, *sqlgraph.CreateSpec)
 		_node = &GroupSetting{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(groupsetting.Table, sqlgraph.NewFieldSpec(groupsetting.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.GroupSetting
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -395,7 +394,6 @@ func (_c *GroupSettingCreate) createSpec() (*GroupSetting, *sqlgraph.CreateSpec)
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.GroupSetting
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

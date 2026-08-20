@@ -10,14 +10,6 @@ type VerifyToken struct {
 	token string
 }
 
-// NewVerifyTokenWithToken creates a new PrivacyToken of type SignUpToken with
-// email set
-func NewVerifyTokenWithToken(token string) VerifyToken {
-	return VerifyToken{
-		token: token,
-	}
-}
-
 // GetToken from verify token
 func (token *VerifyToken) GetToken() string {
 	return token.token

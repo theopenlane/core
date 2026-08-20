@@ -280,7 +280,6 @@ func (_c *MappableDomainCreate) createSpec() (*MappableDomain, *sqlgraph.CreateS
 		_node = &MappableDomain{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(mappabledomain.Table, sqlgraph.NewFieldSpec(mappabledomain.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.MappableDomain
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -336,7 +335,6 @@ func (_c *MappableDomainCreate) createSpec() (*MappableDomain, *sqlgraph.CreateS
 				IDSpec: sqlgraph.NewFieldSpec(customdomain.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.CustomDomain
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

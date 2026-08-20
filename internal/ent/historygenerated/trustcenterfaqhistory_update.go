@@ -8,207 +8,24 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterfaqhistory"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
 )
 
 // TrustCenterFAQHistoryUpdate is the builder for updating TrustCenterFAQHistory entities.
 type TrustCenterFAQHistoryUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *TrustCenterFAQHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *TrustCenterFAQHistoryMutation
 }
 
 // Where appends a list predicates to the TrustCenterFAQHistoryUpdate builder.
 func (_u *TrustCenterFAQHistoryUpdate) Where(ps ...predicate.TrustCenterFAQHistory) *TrustCenterFAQHistoryUpdate {
 	_u.mutation.Where(ps...)
-	return _u
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *TrustCenterFAQHistoryUpdate) SetUpdatedAt(v time.Time) *TrustCenterFAQHistoryUpdate {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *TrustCenterFAQHistoryUpdate) ClearUpdatedAt() *TrustCenterFAQHistoryUpdate {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *TrustCenterFAQHistoryUpdate) SetUpdatedBy(v string) *TrustCenterFAQHistoryUpdate {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *TrustCenterFAQHistoryUpdate) SetNillableUpdatedBy(v *string) *TrustCenterFAQHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *TrustCenterFAQHistoryUpdate) ClearUpdatedBy() *TrustCenterFAQHistoryUpdate {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *TrustCenterFAQHistoryUpdate) SetUpdatedByImpersonator(v string) *TrustCenterFAQHistoryUpdate {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *TrustCenterFAQHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *TrustCenterFAQHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *TrustCenterFAQHistoryUpdate) ClearUpdatedByImpersonator() *TrustCenterFAQHistoryUpdate {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *TrustCenterFAQHistoryUpdate) SetDeletedAt(v time.Time) *TrustCenterFAQHistoryUpdate {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *TrustCenterFAQHistoryUpdate) SetNillableDeletedAt(v *time.Time) *TrustCenterFAQHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *TrustCenterFAQHistoryUpdate) ClearDeletedAt() *TrustCenterFAQHistoryUpdate {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *TrustCenterFAQHistoryUpdate) SetDeletedBy(v string) *TrustCenterFAQHistoryUpdate {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *TrustCenterFAQHistoryUpdate) SetNillableDeletedBy(v *string) *TrustCenterFAQHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *TrustCenterFAQHistoryUpdate) ClearDeletedBy() *TrustCenterFAQHistoryUpdate {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTrustCenterFaqKindName sets the "trust_center_faq_kind_name" field.
-func (_u *TrustCenterFAQHistoryUpdate) SetTrustCenterFaqKindName(v string) *TrustCenterFAQHistoryUpdate {
-	_u.mutation.SetTrustCenterFaqKindName(v)
-	return _u
-}
-
-// SetNillableTrustCenterFaqKindName sets the "trust_center_faq_kind_name" field if the given value is not nil.
-func (_u *TrustCenterFAQHistoryUpdate) SetNillableTrustCenterFaqKindName(v *string) *TrustCenterFAQHistoryUpdate {
-	if v != nil {
-		_u.SetTrustCenterFaqKindName(*v)
-	}
-	return _u
-}
-
-// ClearTrustCenterFaqKindName clears the value of the "trust_center_faq_kind_name" field.
-func (_u *TrustCenterFAQHistoryUpdate) ClearTrustCenterFaqKindName() *TrustCenterFAQHistoryUpdate {
-	_u.mutation.ClearTrustCenterFaqKindName()
-	return _u
-}
-
-// SetTrustCenterFaqKindID sets the "trust_center_faq_kind_id" field.
-func (_u *TrustCenterFAQHistoryUpdate) SetTrustCenterFaqKindID(v string) *TrustCenterFAQHistoryUpdate {
-	_u.mutation.SetTrustCenterFaqKindID(v)
-	return _u
-}
-
-// SetNillableTrustCenterFaqKindID sets the "trust_center_faq_kind_id" field if the given value is not nil.
-func (_u *TrustCenterFAQHistoryUpdate) SetNillableTrustCenterFaqKindID(v *string) *TrustCenterFAQHistoryUpdate {
-	if v != nil {
-		_u.SetTrustCenterFaqKindID(*v)
-	}
-	return _u
-}
-
-// ClearTrustCenterFaqKindID clears the value of the "trust_center_faq_kind_id" field.
-func (_u *TrustCenterFAQHistoryUpdate) ClearTrustCenterFaqKindID() *TrustCenterFAQHistoryUpdate {
-	_u.mutation.ClearTrustCenterFaqKindID()
-	return _u
-}
-
-// SetReferenceLink sets the "reference_link" field.
-func (_u *TrustCenterFAQHistoryUpdate) SetReferenceLink(v string) *TrustCenterFAQHistoryUpdate {
-	_u.mutation.SetReferenceLink(v)
-	return _u
-}
-
-// SetNillableReferenceLink sets the "reference_link" field if the given value is not nil.
-func (_u *TrustCenterFAQHistoryUpdate) SetNillableReferenceLink(v *string) *TrustCenterFAQHistoryUpdate {
-	if v != nil {
-		_u.SetReferenceLink(*v)
-	}
-	return _u
-}
-
-// ClearReferenceLink clears the value of the "reference_link" field.
-func (_u *TrustCenterFAQHistoryUpdate) ClearReferenceLink() *TrustCenterFAQHistoryUpdate {
-	_u.mutation.ClearReferenceLink()
-	return _u
-}
-
-// SetDisplayOrder sets the "display_order" field.
-func (_u *TrustCenterFAQHistoryUpdate) SetDisplayOrder(v int) *TrustCenterFAQHistoryUpdate {
-	_u.mutation.ResetDisplayOrder()
-	_u.mutation.SetDisplayOrder(v)
-	return _u
-}
-
-// SetNillableDisplayOrder sets the "display_order" field if the given value is not nil.
-func (_u *TrustCenterFAQHistoryUpdate) SetNillableDisplayOrder(v *int) *TrustCenterFAQHistoryUpdate {
-	if v != nil {
-		_u.SetDisplayOrder(*v)
-	}
-	return _u
-}
-
-// AddDisplayOrder adds value to the "display_order" field.
-func (_u *TrustCenterFAQHistoryUpdate) AddDisplayOrder(v int) *TrustCenterFAQHistoryUpdate {
-	_u.mutation.AddDisplayOrder(v)
-	return _u
-}
-
-// ClearDisplayOrder clears the value of the "display_order" field.
-func (_u *TrustCenterFAQHistoryUpdate) ClearDisplayOrder() *TrustCenterFAQHistoryUpdate {
-	_u.mutation.ClearDisplayOrder()
 	return _u
 }
 
@@ -219,9 +36,6 @@ func (_u *TrustCenterFAQHistoryUpdate) Mutation() *TrustCenterFAQHistoryMutation
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *TrustCenterFAQHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := _u.defaults(); err != nil {
-		return 0, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -247,24 +61,6 @@ func (_u *TrustCenterFAQHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *TrustCenterFAQHistoryUpdate) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if trustcenterfaqhistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized trustcenterfaqhistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := trustcenterfaqhistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *TrustCenterFAQHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterFAQHistoryUpdate {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *TrustCenterFAQHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(trustcenterfaqhistory.Table, trustcenterfaqhistory.Columns, sqlgraph.NewFieldSpec(trustcenterfaqhistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
@@ -280,47 +76,26 @@ func (_u *TrustCenterFAQHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(trustcenterfaqhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(trustcenterfaqhistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(trustcenterfaqhistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(trustcenterfaqhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(trustcenterfaqhistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(trustcenterfaqhistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(trustcenterfaqhistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(trustcenterfaqhistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(trustcenterfaqhistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(trustcenterfaqhistory.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(trustcenterfaqhistory.FieldDeletedBy, field.TypeString, value)
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(trustcenterfaqhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.TrustCenterFaqKindName(); ok {
-		_spec.SetField(trustcenterfaqhistory.FieldTrustCenterFaqKindName, field.TypeString, value)
-	}
 	if _u.mutation.TrustCenterFaqKindNameCleared() {
 		_spec.ClearField(trustcenterfaqhistory.FieldTrustCenterFaqKindName, field.TypeString)
-	}
-	if value, ok := _u.mutation.TrustCenterFaqKindID(); ok {
-		_spec.SetField(trustcenterfaqhistory.FieldTrustCenterFaqKindID, field.TypeString, value)
 	}
 	if _u.mutation.TrustCenterFaqKindIDCleared() {
 		_spec.ClearField(trustcenterfaqhistory.FieldTrustCenterFaqKindID, field.TypeString)
@@ -328,24 +103,12 @@ func (_u *TrustCenterFAQHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(trustcenterfaqhistory.FieldTrustCenterID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ReferenceLink(); ok {
-		_spec.SetField(trustcenterfaqhistory.FieldReferenceLink, field.TypeString, value)
-	}
 	if _u.mutation.ReferenceLinkCleared() {
 		_spec.ClearField(trustcenterfaqhistory.FieldReferenceLink, field.TypeString)
-	}
-	if value, ok := _u.mutation.DisplayOrder(); ok {
-		_spec.SetField(trustcenterfaqhistory.FieldDisplayOrder, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.AddedDisplayOrder(); ok {
-		_spec.AddField(trustcenterfaqhistory.FieldDisplayOrder, field.TypeInt, value)
 	}
 	if _u.mutation.DisplayOrderCleared() {
 		_spec.ClearField(trustcenterfaqhistory.FieldDisplayOrder, field.TypeInt)
 	}
-	_spec.Node.Schema = _u.schemaConfig.TrustCenterFAQHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{trustcenterfaqhistory.Label}
@@ -361,189 +124,9 @@ func (_u *TrustCenterFAQHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 // TrustCenterFAQHistoryUpdateOne is the builder for updating a single TrustCenterFAQHistory entity.
 type TrustCenterFAQHistoryUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *TrustCenterFAQHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *TrustCenterFAQHistoryUpdateOne) SetUpdatedAt(v time.Time) *TrustCenterFAQHistoryUpdateOne {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *TrustCenterFAQHistoryUpdateOne) ClearUpdatedAt() *TrustCenterFAQHistoryUpdateOne {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *TrustCenterFAQHistoryUpdateOne) SetUpdatedBy(v string) *TrustCenterFAQHistoryUpdateOne {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *TrustCenterFAQHistoryUpdateOne) SetNillableUpdatedBy(v *string) *TrustCenterFAQHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *TrustCenterFAQHistoryUpdateOne) ClearUpdatedBy() *TrustCenterFAQHistoryUpdateOne {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *TrustCenterFAQHistoryUpdateOne) SetUpdatedByImpersonator(v string) *TrustCenterFAQHistoryUpdateOne {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *TrustCenterFAQHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *TrustCenterFAQHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *TrustCenterFAQHistoryUpdateOne) ClearUpdatedByImpersonator() *TrustCenterFAQHistoryUpdateOne {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *TrustCenterFAQHistoryUpdateOne) SetDeletedAt(v time.Time) *TrustCenterFAQHistoryUpdateOne {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *TrustCenterFAQHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *TrustCenterFAQHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *TrustCenterFAQHistoryUpdateOne) ClearDeletedAt() *TrustCenterFAQHistoryUpdateOne {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *TrustCenterFAQHistoryUpdateOne) SetDeletedBy(v string) *TrustCenterFAQHistoryUpdateOne {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *TrustCenterFAQHistoryUpdateOne) SetNillableDeletedBy(v *string) *TrustCenterFAQHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *TrustCenterFAQHistoryUpdateOne) ClearDeletedBy() *TrustCenterFAQHistoryUpdateOne {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTrustCenterFaqKindName sets the "trust_center_faq_kind_name" field.
-func (_u *TrustCenterFAQHistoryUpdateOne) SetTrustCenterFaqKindName(v string) *TrustCenterFAQHistoryUpdateOne {
-	_u.mutation.SetTrustCenterFaqKindName(v)
-	return _u
-}
-
-// SetNillableTrustCenterFaqKindName sets the "trust_center_faq_kind_name" field if the given value is not nil.
-func (_u *TrustCenterFAQHistoryUpdateOne) SetNillableTrustCenterFaqKindName(v *string) *TrustCenterFAQHistoryUpdateOne {
-	if v != nil {
-		_u.SetTrustCenterFaqKindName(*v)
-	}
-	return _u
-}
-
-// ClearTrustCenterFaqKindName clears the value of the "trust_center_faq_kind_name" field.
-func (_u *TrustCenterFAQHistoryUpdateOne) ClearTrustCenterFaqKindName() *TrustCenterFAQHistoryUpdateOne {
-	_u.mutation.ClearTrustCenterFaqKindName()
-	return _u
-}
-
-// SetTrustCenterFaqKindID sets the "trust_center_faq_kind_id" field.
-func (_u *TrustCenterFAQHistoryUpdateOne) SetTrustCenterFaqKindID(v string) *TrustCenterFAQHistoryUpdateOne {
-	_u.mutation.SetTrustCenterFaqKindID(v)
-	return _u
-}
-
-// SetNillableTrustCenterFaqKindID sets the "trust_center_faq_kind_id" field if the given value is not nil.
-func (_u *TrustCenterFAQHistoryUpdateOne) SetNillableTrustCenterFaqKindID(v *string) *TrustCenterFAQHistoryUpdateOne {
-	if v != nil {
-		_u.SetTrustCenterFaqKindID(*v)
-	}
-	return _u
-}
-
-// ClearTrustCenterFaqKindID clears the value of the "trust_center_faq_kind_id" field.
-func (_u *TrustCenterFAQHistoryUpdateOne) ClearTrustCenterFaqKindID() *TrustCenterFAQHistoryUpdateOne {
-	_u.mutation.ClearTrustCenterFaqKindID()
-	return _u
-}
-
-// SetReferenceLink sets the "reference_link" field.
-func (_u *TrustCenterFAQHistoryUpdateOne) SetReferenceLink(v string) *TrustCenterFAQHistoryUpdateOne {
-	_u.mutation.SetReferenceLink(v)
-	return _u
-}
-
-// SetNillableReferenceLink sets the "reference_link" field if the given value is not nil.
-func (_u *TrustCenterFAQHistoryUpdateOne) SetNillableReferenceLink(v *string) *TrustCenterFAQHistoryUpdateOne {
-	if v != nil {
-		_u.SetReferenceLink(*v)
-	}
-	return _u
-}
-
-// ClearReferenceLink clears the value of the "reference_link" field.
-func (_u *TrustCenterFAQHistoryUpdateOne) ClearReferenceLink() *TrustCenterFAQHistoryUpdateOne {
-	_u.mutation.ClearReferenceLink()
-	return _u
-}
-
-// SetDisplayOrder sets the "display_order" field.
-func (_u *TrustCenterFAQHistoryUpdateOne) SetDisplayOrder(v int) *TrustCenterFAQHistoryUpdateOne {
-	_u.mutation.ResetDisplayOrder()
-	_u.mutation.SetDisplayOrder(v)
-	return _u
-}
-
-// SetNillableDisplayOrder sets the "display_order" field if the given value is not nil.
-func (_u *TrustCenterFAQHistoryUpdateOne) SetNillableDisplayOrder(v *int) *TrustCenterFAQHistoryUpdateOne {
-	if v != nil {
-		_u.SetDisplayOrder(*v)
-	}
-	return _u
-}
-
-// AddDisplayOrder adds value to the "display_order" field.
-func (_u *TrustCenterFAQHistoryUpdateOne) AddDisplayOrder(v int) *TrustCenterFAQHistoryUpdateOne {
-	_u.mutation.AddDisplayOrder(v)
-	return _u
-}
-
-// ClearDisplayOrder clears the value of the "display_order" field.
-func (_u *TrustCenterFAQHistoryUpdateOne) ClearDisplayOrder() *TrustCenterFAQHistoryUpdateOne {
-	_u.mutation.ClearDisplayOrder()
-	return _u
+	fields   []string
+	hooks    []Hook
+	mutation *TrustCenterFAQHistoryMutation
 }
 
 // Mutation returns the TrustCenterFAQHistoryMutation object of the builder.
@@ -566,9 +149,6 @@ func (_u *TrustCenterFAQHistoryUpdateOne) Select(field string, fields ...string)
 
 // Save executes the query and returns the updated TrustCenterFAQHistory entity.
 func (_u *TrustCenterFAQHistoryUpdateOne) Save(ctx context.Context) (*TrustCenterFAQHistory, error) {
-	if err := _u.defaults(); err != nil {
-		return nil, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -592,24 +172,6 @@ func (_u *TrustCenterFAQHistoryUpdateOne) ExecX(ctx context.Context) {
 	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
-}
-
-// defaults sets the default values of the builder before save.
-func (_u *TrustCenterFAQHistoryUpdateOne) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if trustcenterfaqhistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized trustcenterfaqhistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := trustcenterfaqhistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *TrustCenterFAQHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterFAQHistoryUpdateOne {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
 }
 
 func (_u *TrustCenterFAQHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TrustCenterFAQHistory, err error) {
@@ -644,47 +206,26 @@ func (_u *TrustCenterFAQHistoryUpdateOne) sqlSave(ctx context.Context) (_node *T
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(trustcenterfaqhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(trustcenterfaqhistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(trustcenterfaqhistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(trustcenterfaqhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(trustcenterfaqhistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(trustcenterfaqhistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(trustcenterfaqhistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(trustcenterfaqhistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(trustcenterfaqhistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(trustcenterfaqhistory.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(trustcenterfaqhistory.FieldDeletedBy, field.TypeString, value)
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(trustcenterfaqhistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.TrustCenterFaqKindName(); ok {
-		_spec.SetField(trustcenterfaqhistory.FieldTrustCenterFaqKindName, field.TypeString, value)
-	}
 	if _u.mutation.TrustCenterFaqKindNameCleared() {
 		_spec.ClearField(trustcenterfaqhistory.FieldTrustCenterFaqKindName, field.TypeString)
-	}
-	if value, ok := _u.mutation.TrustCenterFaqKindID(); ok {
-		_spec.SetField(trustcenterfaqhistory.FieldTrustCenterFaqKindID, field.TypeString, value)
 	}
 	if _u.mutation.TrustCenterFaqKindIDCleared() {
 		_spec.ClearField(trustcenterfaqhistory.FieldTrustCenterFaqKindID, field.TypeString)
@@ -692,24 +233,12 @@ func (_u *TrustCenterFAQHistoryUpdateOne) sqlSave(ctx context.Context) (_node *T
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(trustcenterfaqhistory.FieldTrustCenterID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ReferenceLink(); ok {
-		_spec.SetField(trustcenterfaqhistory.FieldReferenceLink, field.TypeString, value)
-	}
 	if _u.mutation.ReferenceLinkCleared() {
 		_spec.ClearField(trustcenterfaqhistory.FieldReferenceLink, field.TypeString)
-	}
-	if value, ok := _u.mutation.DisplayOrder(); ok {
-		_spec.SetField(trustcenterfaqhistory.FieldDisplayOrder, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.AddedDisplayOrder(); ok {
-		_spec.AddField(trustcenterfaqhistory.FieldDisplayOrder, field.TypeInt, value)
 	}
 	if _u.mutation.DisplayOrderCleared() {
 		_spec.ClearField(trustcenterfaqhistory.FieldDisplayOrder, field.TypeInt)
 	}
-	_spec.Node.Schema = _u.schemaConfig.TrustCenterFAQHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	_node = &TrustCenterFAQHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

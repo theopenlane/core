@@ -17,8 +17,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // JobRunnerUpdate is the builder for updating JobRunner entities.
@@ -543,7 +541,6 @@ func (_u *JobRunnerUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.JobRunner
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
@@ -557,7 +554,6 @@ func (_u *JobRunnerUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.JobRunner
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -574,7 +570,6 @@ func (_u *JobRunnerUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(jobrunnertoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.JobRunnerJobRunnerTokens
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedJobRunnerTokensIDs(); len(nodes) > 0 && !_u.mutation.JobRunnerTokensCleared() {
@@ -588,7 +583,6 @@ func (_u *JobRunnerUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(jobrunnertoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.JobRunnerJobRunnerTokens
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -605,14 +599,11 @@ func (_u *JobRunnerUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 				IDSpec: sqlgraph.NewFieldSpec(jobrunnertoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.JobRunnerJobRunnerTokens
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = _u.schemaConfig.JobRunner
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -1173,7 +1164,6 @@ func (_u *JobRunnerUpdateOne) sqlSave(ctx context.Context) (_node *JobRunner, er
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.JobRunner
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.OwnerIDs(); len(nodes) > 0 {
@@ -1187,7 +1177,6 @@ func (_u *JobRunnerUpdateOne) sqlSave(ctx context.Context) (_node *JobRunner, er
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.JobRunner
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1204,7 +1193,6 @@ func (_u *JobRunnerUpdateOne) sqlSave(ctx context.Context) (_node *JobRunner, er
 				IDSpec: sqlgraph.NewFieldSpec(jobrunnertoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.JobRunnerJobRunnerTokens
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedJobRunnerTokensIDs(); len(nodes) > 0 && !_u.mutation.JobRunnerTokensCleared() {
@@ -1218,7 +1206,6 @@ func (_u *JobRunnerUpdateOne) sqlSave(ctx context.Context) (_node *JobRunner, er
 				IDSpec: sqlgraph.NewFieldSpec(jobrunnertoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.JobRunnerJobRunnerTokens
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1235,14 +1222,11 @@ func (_u *JobRunnerUpdateOne) sqlSave(ctx context.Context) (_node *JobRunner, er
 				IDSpec: sqlgraph.NewFieldSpec(jobrunnertoken.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.JobRunnerJobRunnerTokens
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = _u.schemaConfig.JobRunner
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	_node = &JobRunner{config: _u.config}
 	_spec.Assign = _node.assignValues

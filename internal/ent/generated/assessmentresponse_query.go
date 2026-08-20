@@ -24,7 +24,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/vendorriskscore"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -99,9 +98,6 @@ func (_q *AssessmentResponseQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, assessmentresponse.OwnerTable, assessmentresponse.OwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.AssessmentResponse
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -124,9 +120,6 @@ func (_q *AssessmentResponseQuery) QueryAssessment() *AssessmentQuery {
 			sqlgraph.To(assessment.Table, assessment.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, assessmentresponse.AssessmentTable, assessmentresponse.AssessmentColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Assessment
-		step.Edge.Schema = schemaConfig.AssessmentResponse
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -149,9 +142,6 @@ func (_q *AssessmentResponseQuery) QueryCampaign() *CampaignQuery {
 			sqlgraph.To(campaign.Table, campaign.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, assessmentresponse.CampaignTable, assessmentresponse.CampaignColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Campaign
-		step.Edge.Schema = schemaConfig.AssessmentResponse
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -174,9 +164,6 @@ func (_q *AssessmentResponseQuery) QueryIdentityHolder() *IdentityHolderQuery {
 			sqlgraph.To(identityholder.Table, identityholder.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, assessmentresponse.IdentityHolderTable, assessmentresponse.IdentityHolderColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.IdentityHolder
-		step.Edge.Schema = schemaConfig.AssessmentResponse
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -199,9 +186,6 @@ func (_q *AssessmentResponseQuery) QueryEntity() *EntityQuery {
 			sqlgraph.To(entity.Table, entity.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, assessmentresponse.EntityTable, assessmentresponse.EntityColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.AssessmentResponse
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -224,9 +208,6 @@ func (_q *AssessmentResponseQuery) QueryDocument() *DocumentDataQuery {
 			sqlgraph.To(documentdata.Table, documentdata.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, assessmentresponse.DocumentTable, assessmentresponse.DocumentColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.DocumentData
-		step.Edge.Schema = schemaConfig.AssessmentResponse
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -249,9 +230,6 @@ func (_q *AssessmentResponseQuery) QueryVendorRiskScores() *VendorRiskScoreQuery
 			sqlgraph.To(vendorriskscore.Table, vendorriskscore.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, assessmentresponse.VendorRiskScoresTable, assessmentresponse.VendorRiskScoresColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.VendorRiskScore
-		step.Edge.Schema = schemaConfig.VendorRiskScore
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -274,9 +252,6 @@ func (_q *AssessmentResponseQuery) QueryWorkflowObjectRefs() *WorkflowObjectRefQ
 			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, assessmentresponse.WorkflowObjectRefsTable, assessmentresponse.WorkflowObjectRefsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.WorkflowObjectRef
-		step.Edge.Schema = schemaConfig.WorkflowObjectRef
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -682,8 +657,6 @@ func (_q *AssessmentResponseQuery) sqlAll(ctx context.Context, hooks ...queryHoo
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.AssessmentResponse
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -1011,8 +984,6 @@ func (_q *AssessmentResponseQuery) loadWorkflowObjectRefs(ctx context.Context, q
 
 func (_q *AssessmentResponseQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.AssessmentResponse
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -1096,9 +1067,6 @@ func (_q *AssessmentResponseQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.AssessmentResponse)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}

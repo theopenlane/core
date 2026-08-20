@@ -332,7 +332,6 @@ func (_c *EntityTypeCreate) createSpec() (*EntityType, *sqlgraph.CreateSpec) {
 		_node = &EntityType{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(entitytype.Table, sqlgraph.NewFieldSpec(entitytype.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.EntityType
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -396,7 +395,6 @@ func (_c *EntityTypeCreate) createSpec() (*EntityType, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.EntityType
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -414,7 +412,6 @@ func (_c *EntityTypeCreate) createSpec() (*EntityType, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Entity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

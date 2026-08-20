@@ -73,7 +73,6 @@ var (
 	ErrMissingStripeClient   = fmt.Errorf("missing stripe client")
 	ErrMissingDBClient       = fmt.Errorf("missing database client")
 	ErrMissingSubscriptionID = fmt.Errorf("missing organization subscription ID")
-	ErrMultiplePrices        = fmt.Errorf("multiple prices found for customer")
 	ErrMissingPrice          = fmt.Errorf("missing price for customer")
 	ErrMultipleCustomers     = fmt.Errorf("multiple customers found for organization")
 	ErrMissingCustomer       = fmt.Errorf("missing customer for organization")

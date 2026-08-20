@@ -1686,33 +1686,6 @@ func formatValue(v any) string {
 	}
 }
 
-// formatHelmDefaultLiteral formats a value as a Helm template-friendly default literal.
-func formatHelmDefaultLiteral(v any) string {
-	if v == nil {
-		return "\"\""
-	}
-
-	value := reflect.ValueOf(v)
-	for value.Kind() == reflect.Ptr {
-		if value.IsNil() {
-			return "\"\""
-		}
-		value = value.Elem()
-	}
-
-	unwrapped := value.Interface()
-
-	if b, ok := unwrapped.(bool); ok {
-		return fmt.Sprintf("%t", b)
-	}
-
-	if d, ok := unwrapped.(time.Duration); ok {
-		return strconv.Quote(d.String())
-	}
-
-	return strconv.Quote(fmt.Sprintf("%v", unwrapped))
-}
-
 // hasSecretChildren checks if a struct has any sensitive child fields
 func hasSecretChildren(v reflect.Value, prefix string) bool {
 	if !v.IsValid() || v.Kind() != reflect.Struct {

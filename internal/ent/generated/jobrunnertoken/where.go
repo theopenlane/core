@@ -8,8 +8,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // ID filters vertices based on their ID field.
@@ -1069,9 +1067,6 @@ func HasOwner() predicate.JobRunnerToken {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.JobRunnerToken
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1080,9 +1075,6 @@ func HasOwner() predicate.JobRunnerToken {
 func HasOwnerWith(preds ...predicate.Organization) predicate.JobRunnerToken {
 	return predicate.JobRunnerToken(func(s *sql.Selector) {
 		step := newOwnerStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.JobRunnerToken
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1098,9 +1090,6 @@ func HasJobRunners() predicate.JobRunnerToken {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, JobRunnersTable, JobRunnersPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.JobRunner
-		step.Edge.Schema = schemaConfig.JobRunnerJobRunnerTokens
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1109,9 +1098,6 @@ func HasJobRunners() predicate.JobRunnerToken {
 func HasJobRunnersWith(preds ...predicate.JobRunner) predicate.JobRunnerToken {
 	return predicate.JobRunnerToken(func(s *sql.Selector) {
 		step := newJobRunnersStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.JobRunner
-		step.Edge.Schema = schemaConfig.JobRunnerJobRunnerTokens
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

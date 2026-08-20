@@ -8,619 +8,24 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 	"github.com/theopenlane/core/internal/ent/historygenerated/reviewhistory"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
 )
 
 // ReviewHistoryUpdate is the builder for updating ReviewHistory entities.
 type ReviewHistoryUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *ReviewHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *ReviewHistoryMutation
 }
 
 // Where appends a list predicates to the ReviewHistoryUpdate builder.
 func (_u *ReviewHistoryUpdate) Where(ps ...predicate.ReviewHistory) *ReviewHistoryUpdate {
 	_u.mutation.Where(ps...)
-	return _u
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *ReviewHistoryUpdate) SetUpdatedAt(v time.Time) *ReviewHistoryUpdate {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *ReviewHistoryUpdate) ClearUpdatedAt() *ReviewHistoryUpdate {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *ReviewHistoryUpdate) SetUpdatedBy(v string) *ReviewHistoryUpdate {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *ReviewHistoryUpdate) SetNillableUpdatedBy(v *string) *ReviewHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *ReviewHistoryUpdate) ClearUpdatedBy() *ReviewHistoryUpdate {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *ReviewHistoryUpdate) SetUpdatedByImpersonator(v string) *ReviewHistoryUpdate {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *ReviewHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *ReviewHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *ReviewHistoryUpdate) ClearUpdatedByImpersonator() *ReviewHistoryUpdate {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *ReviewHistoryUpdate) SetDeletedAt(v time.Time) *ReviewHistoryUpdate {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *ReviewHistoryUpdate) SetNillableDeletedAt(v *time.Time) *ReviewHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *ReviewHistoryUpdate) ClearDeletedAt() *ReviewHistoryUpdate {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *ReviewHistoryUpdate) SetDeletedBy(v string) *ReviewHistoryUpdate {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *ReviewHistoryUpdate) SetNillableDeletedBy(v *string) *ReviewHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *ReviewHistoryUpdate) ClearDeletedBy() *ReviewHistoryUpdate {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *ReviewHistoryUpdate) SetTags(v []string) *ReviewHistoryUpdate {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *ReviewHistoryUpdate) AppendTags(v []string) *ReviewHistoryUpdate {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *ReviewHistoryUpdate) ClearTags() *ReviewHistoryUpdate {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetInternalNotes sets the "internal_notes" field.
-func (_u *ReviewHistoryUpdate) SetInternalNotes(v string) *ReviewHistoryUpdate {
-	_u.mutation.SetInternalNotes(v)
-	return _u
-}
-
-// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
-func (_u *ReviewHistoryUpdate) SetNillableInternalNotes(v *string) *ReviewHistoryUpdate {
-	if v != nil {
-		_u.SetInternalNotes(*v)
-	}
-	return _u
-}
-
-// ClearInternalNotes clears the value of the "internal_notes" field.
-func (_u *ReviewHistoryUpdate) ClearInternalNotes() *ReviewHistoryUpdate {
-	_u.mutation.ClearInternalNotes()
-	return _u
-}
-
-// SetSystemInternalID sets the "system_internal_id" field.
-func (_u *ReviewHistoryUpdate) SetSystemInternalID(v string) *ReviewHistoryUpdate {
-	_u.mutation.SetSystemInternalID(v)
-	return _u
-}
-
-// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
-func (_u *ReviewHistoryUpdate) SetNillableSystemInternalID(v *string) *ReviewHistoryUpdate {
-	if v != nil {
-		_u.SetSystemInternalID(*v)
-	}
-	return _u
-}
-
-// ClearSystemInternalID clears the value of the "system_internal_id" field.
-func (_u *ReviewHistoryUpdate) ClearSystemInternalID() *ReviewHistoryUpdate {
-	_u.mutation.ClearSystemInternalID()
-	return _u
-}
-
-// SetEnvironmentName sets the "environment_name" field.
-func (_u *ReviewHistoryUpdate) SetEnvironmentName(v string) *ReviewHistoryUpdate {
-	_u.mutation.SetEnvironmentName(v)
-	return _u
-}
-
-// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
-func (_u *ReviewHistoryUpdate) SetNillableEnvironmentName(v *string) *ReviewHistoryUpdate {
-	if v != nil {
-		_u.SetEnvironmentName(*v)
-	}
-	return _u
-}
-
-// ClearEnvironmentName clears the value of the "environment_name" field.
-func (_u *ReviewHistoryUpdate) ClearEnvironmentName() *ReviewHistoryUpdate {
-	_u.mutation.ClearEnvironmentName()
-	return _u
-}
-
-// SetEnvironmentID sets the "environment_id" field.
-func (_u *ReviewHistoryUpdate) SetEnvironmentID(v string) *ReviewHistoryUpdate {
-	_u.mutation.SetEnvironmentID(v)
-	return _u
-}
-
-// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
-func (_u *ReviewHistoryUpdate) SetNillableEnvironmentID(v *string) *ReviewHistoryUpdate {
-	if v != nil {
-		_u.SetEnvironmentID(*v)
-	}
-	return _u
-}
-
-// ClearEnvironmentID clears the value of the "environment_id" field.
-func (_u *ReviewHistoryUpdate) ClearEnvironmentID() *ReviewHistoryUpdate {
-	_u.mutation.ClearEnvironmentID()
-	return _u
-}
-
-// SetScopeName sets the "scope_name" field.
-func (_u *ReviewHistoryUpdate) SetScopeName(v string) *ReviewHistoryUpdate {
-	_u.mutation.SetScopeName(v)
-	return _u
-}
-
-// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
-func (_u *ReviewHistoryUpdate) SetNillableScopeName(v *string) *ReviewHistoryUpdate {
-	if v != nil {
-		_u.SetScopeName(*v)
-	}
-	return _u
-}
-
-// ClearScopeName clears the value of the "scope_name" field.
-func (_u *ReviewHistoryUpdate) ClearScopeName() *ReviewHistoryUpdate {
-	_u.mutation.ClearScopeName()
-	return _u
-}
-
-// SetScopeID sets the "scope_id" field.
-func (_u *ReviewHistoryUpdate) SetScopeID(v string) *ReviewHistoryUpdate {
-	_u.mutation.SetScopeID(v)
-	return _u
-}
-
-// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
-func (_u *ReviewHistoryUpdate) SetNillableScopeID(v *string) *ReviewHistoryUpdate {
-	if v != nil {
-		_u.SetScopeID(*v)
-	}
-	return _u
-}
-
-// ClearScopeID clears the value of the "scope_id" field.
-func (_u *ReviewHistoryUpdate) ClearScopeID() *ReviewHistoryUpdate {
-	_u.mutation.ClearScopeID()
-	return _u
-}
-
-// SetExternalID sets the "external_id" field.
-func (_u *ReviewHistoryUpdate) SetExternalID(v string) *ReviewHistoryUpdate {
-	_u.mutation.SetExternalID(v)
-	return _u
-}
-
-// SetNillableExternalID sets the "external_id" field if the given value is not nil.
-func (_u *ReviewHistoryUpdate) SetNillableExternalID(v *string) *ReviewHistoryUpdate {
-	if v != nil {
-		_u.SetExternalID(*v)
-	}
-	return _u
-}
-
-// ClearExternalID clears the value of the "external_id" field.
-func (_u *ReviewHistoryUpdate) ClearExternalID() *ReviewHistoryUpdate {
-	_u.mutation.ClearExternalID()
-	return _u
-}
-
-// SetExternalOwnerID sets the "external_owner_id" field.
-func (_u *ReviewHistoryUpdate) SetExternalOwnerID(v string) *ReviewHistoryUpdate {
-	_u.mutation.SetExternalOwnerID(v)
-	return _u
-}
-
-// SetNillableExternalOwnerID sets the "external_owner_id" field if the given value is not nil.
-func (_u *ReviewHistoryUpdate) SetNillableExternalOwnerID(v *string) *ReviewHistoryUpdate {
-	if v != nil {
-		_u.SetExternalOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearExternalOwnerID clears the value of the "external_owner_id" field.
-func (_u *ReviewHistoryUpdate) ClearExternalOwnerID() *ReviewHistoryUpdate {
-	_u.mutation.ClearExternalOwnerID()
-	return _u
-}
-
-// SetTitle sets the "title" field.
-func (_u *ReviewHistoryUpdate) SetTitle(v string) *ReviewHistoryUpdate {
-	_u.mutation.SetTitle(v)
-	return _u
-}
-
-// SetNillableTitle sets the "title" field if the given value is not nil.
-func (_u *ReviewHistoryUpdate) SetNillableTitle(v *string) *ReviewHistoryUpdate {
-	if v != nil {
-		_u.SetTitle(*v)
-	}
-	return _u
-}
-
-// SetState sets the "state" field.
-func (_u *ReviewHistoryUpdate) SetState(v string) *ReviewHistoryUpdate {
-	_u.mutation.SetState(v)
-	return _u
-}
-
-// SetNillableState sets the "state" field if the given value is not nil.
-func (_u *ReviewHistoryUpdate) SetNillableState(v *string) *ReviewHistoryUpdate {
-	if v != nil {
-		_u.SetState(*v)
-	}
-	return _u
-}
-
-// ClearState clears the value of the "state" field.
-func (_u *ReviewHistoryUpdate) ClearState() *ReviewHistoryUpdate {
-	_u.mutation.ClearState()
-	return _u
-}
-
-// SetStatus sets the "status" field.
-func (_u *ReviewHistoryUpdate) SetStatus(v enums.ReviewStatus) *ReviewHistoryUpdate {
-	_u.mutation.SetStatus(v)
-	return _u
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *ReviewHistoryUpdate) SetNillableStatus(v *enums.ReviewStatus) *ReviewHistoryUpdate {
-	if v != nil {
-		_u.SetStatus(*v)
-	}
-	return _u
-}
-
-// ClearStatus clears the value of the "status" field.
-func (_u *ReviewHistoryUpdate) ClearStatus() *ReviewHistoryUpdate {
-	_u.mutation.ClearStatus()
-	return _u
-}
-
-// SetCategory sets the "category" field.
-func (_u *ReviewHistoryUpdate) SetCategory(v string) *ReviewHistoryUpdate {
-	_u.mutation.SetCategory(v)
-	return _u
-}
-
-// SetNillableCategory sets the "category" field if the given value is not nil.
-func (_u *ReviewHistoryUpdate) SetNillableCategory(v *string) *ReviewHistoryUpdate {
-	if v != nil {
-		_u.SetCategory(*v)
-	}
-	return _u
-}
-
-// ClearCategory clears the value of the "category" field.
-func (_u *ReviewHistoryUpdate) ClearCategory() *ReviewHistoryUpdate {
-	_u.mutation.ClearCategory()
-	return _u
-}
-
-// SetClassification sets the "classification" field.
-func (_u *ReviewHistoryUpdate) SetClassification(v string) *ReviewHistoryUpdate {
-	_u.mutation.SetClassification(v)
-	return _u
-}
-
-// SetNillableClassification sets the "classification" field if the given value is not nil.
-func (_u *ReviewHistoryUpdate) SetNillableClassification(v *string) *ReviewHistoryUpdate {
-	if v != nil {
-		_u.SetClassification(*v)
-	}
-	return _u
-}
-
-// ClearClassification clears the value of the "classification" field.
-func (_u *ReviewHistoryUpdate) ClearClassification() *ReviewHistoryUpdate {
-	_u.mutation.ClearClassification()
-	return _u
-}
-
-// SetSummary sets the "summary" field.
-func (_u *ReviewHistoryUpdate) SetSummary(v string) *ReviewHistoryUpdate {
-	_u.mutation.SetSummary(v)
-	return _u
-}
-
-// SetNillableSummary sets the "summary" field if the given value is not nil.
-func (_u *ReviewHistoryUpdate) SetNillableSummary(v *string) *ReviewHistoryUpdate {
-	if v != nil {
-		_u.SetSummary(*v)
-	}
-	return _u
-}
-
-// ClearSummary clears the value of the "summary" field.
-func (_u *ReviewHistoryUpdate) ClearSummary() *ReviewHistoryUpdate {
-	_u.mutation.ClearSummary()
-	return _u
-}
-
-// SetDetails sets the "details" field.
-func (_u *ReviewHistoryUpdate) SetDetails(v string) *ReviewHistoryUpdate {
-	_u.mutation.SetDetails(v)
-	return _u
-}
-
-// SetNillableDetails sets the "details" field if the given value is not nil.
-func (_u *ReviewHistoryUpdate) SetNillableDetails(v *string) *ReviewHistoryUpdate {
-	if v != nil {
-		_u.SetDetails(*v)
-	}
-	return _u
-}
-
-// ClearDetails clears the value of the "details" field.
-func (_u *ReviewHistoryUpdate) ClearDetails() *ReviewHistoryUpdate {
-	_u.mutation.ClearDetails()
-	return _u
-}
-
-// SetReporter sets the "reporter" field.
-func (_u *ReviewHistoryUpdate) SetReporter(v string) *ReviewHistoryUpdate {
-	_u.mutation.SetReporter(v)
-	return _u
-}
-
-// SetNillableReporter sets the "reporter" field if the given value is not nil.
-func (_u *ReviewHistoryUpdate) SetNillableReporter(v *string) *ReviewHistoryUpdate {
-	if v != nil {
-		_u.SetReporter(*v)
-	}
-	return _u
-}
-
-// ClearReporter clears the value of the "reporter" field.
-func (_u *ReviewHistoryUpdate) ClearReporter() *ReviewHistoryUpdate {
-	_u.mutation.ClearReporter()
-	return _u
-}
-
-// SetApproved sets the "approved" field.
-func (_u *ReviewHistoryUpdate) SetApproved(v bool) *ReviewHistoryUpdate {
-	_u.mutation.SetApproved(v)
-	return _u
-}
-
-// SetNillableApproved sets the "approved" field if the given value is not nil.
-func (_u *ReviewHistoryUpdate) SetNillableApproved(v *bool) *ReviewHistoryUpdate {
-	if v != nil {
-		_u.SetApproved(*v)
-	}
-	return _u
-}
-
-// ClearApproved clears the value of the "approved" field.
-func (_u *ReviewHistoryUpdate) ClearApproved() *ReviewHistoryUpdate {
-	_u.mutation.ClearApproved()
-	return _u
-}
-
-// SetReviewedAt sets the "reviewed_at" field.
-func (_u *ReviewHistoryUpdate) SetReviewedAt(v models.DateTime) *ReviewHistoryUpdate {
-	_u.mutation.SetReviewedAt(v)
-	return _u
-}
-
-// SetNillableReviewedAt sets the "reviewed_at" field if the given value is not nil.
-func (_u *ReviewHistoryUpdate) SetNillableReviewedAt(v *models.DateTime) *ReviewHistoryUpdate {
-	if v != nil {
-		_u.SetReviewedAt(*v)
-	}
-	return _u
-}
-
-// ClearReviewedAt clears the value of the "reviewed_at" field.
-func (_u *ReviewHistoryUpdate) ClearReviewedAt() *ReviewHistoryUpdate {
-	_u.mutation.ClearReviewedAt()
-	return _u
-}
-
-// SetReportedAt sets the "reported_at" field.
-func (_u *ReviewHistoryUpdate) SetReportedAt(v models.DateTime) *ReviewHistoryUpdate {
-	_u.mutation.SetReportedAt(v)
-	return _u
-}
-
-// SetNillableReportedAt sets the "reported_at" field if the given value is not nil.
-func (_u *ReviewHistoryUpdate) SetNillableReportedAt(v *models.DateTime) *ReviewHistoryUpdate {
-	if v != nil {
-		_u.SetReportedAt(*v)
-	}
-	return _u
-}
-
-// ClearReportedAt clears the value of the "reported_at" field.
-func (_u *ReviewHistoryUpdate) ClearReportedAt() *ReviewHistoryUpdate {
-	_u.mutation.ClearReportedAt()
-	return _u
-}
-
-// SetApprovedAt sets the "approved_at" field.
-func (_u *ReviewHistoryUpdate) SetApprovedAt(v models.DateTime) *ReviewHistoryUpdate {
-	_u.mutation.SetApprovedAt(v)
-	return _u
-}
-
-// SetNillableApprovedAt sets the "approved_at" field if the given value is not nil.
-func (_u *ReviewHistoryUpdate) SetNillableApprovedAt(v *models.DateTime) *ReviewHistoryUpdate {
-	if v != nil {
-		_u.SetApprovedAt(*v)
-	}
-	return _u
-}
-
-// ClearApprovedAt clears the value of the "approved_at" field.
-func (_u *ReviewHistoryUpdate) ClearApprovedAt() *ReviewHistoryUpdate {
-	_u.mutation.ClearApprovedAt()
-	return _u
-}
-
-// SetReviewerID sets the "reviewer_id" field.
-func (_u *ReviewHistoryUpdate) SetReviewerID(v string) *ReviewHistoryUpdate {
-	_u.mutation.SetReviewerID(v)
-	return _u
-}
-
-// SetNillableReviewerID sets the "reviewer_id" field if the given value is not nil.
-func (_u *ReviewHistoryUpdate) SetNillableReviewerID(v *string) *ReviewHistoryUpdate {
-	if v != nil {
-		_u.SetReviewerID(*v)
-	}
-	return _u
-}
-
-// ClearReviewerID clears the value of the "reviewer_id" field.
-func (_u *ReviewHistoryUpdate) ClearReviewerID() *ReviewHistoryUpdate {
-	_u.mutation.ClearReviewerID()
-	return _u
-}
-
-// SetSource sets the "source" field.
-func (_u *ReviewHistoryUpdate) SetSource(v string) *ReviewHistoryUpdate {
-	_u.mutation.SetSource(v)
-	return _u
-}
-
-// SetNillableSource sets the "source" field if the given value is not nil.
-func (_u *ReviewHistoryUpdate) SetNillableSource(v *string) *ReviewHistoryUpdate {
-	if v != nil {
-		_u.SetSource(*v)
-	}
-	return _u
-}
-
-// ClearSource clears the value of the "source" field.
-func (_u *ReviewHistoryUpdate) ClearSource() *ReviewHistoryUpdate {
-	_u.mutation.ClearSource()
-	return _u
-}
-
-// SetExternalURI sets the "external_uri" field.
-func (_u *ReviewHistoryUpdate) SetExternalURI(v string) *ReviewHistoryUpdate {
-	_u.mutation.SetExternalURI(v)
-	return _u
-}
-
-// SetNillableExternalURI sets the "external_uri" field if the given value is not nil.
-func (_u *ReviewHistoryUpdate) SetNillableExternalURI(v *string) *ReviewHistoryUpdate {
-	if v != nil {
-		_u.SetExternalURI(*v)
-	}
-	return _u
-}
-
-// ClearExternalURI clears the value of the "external_uri" field.
-func (_u *ReviewHistoryUpdate) ClearExternalURI() *ReviewHistoryUpdate {
-	_u.mutation.ClearExternalURI()
-	return _u
-}
-
-// SetMetadata sets the "metadata" field.
-func (_u *ReviewHistoryUpdate) SetMetadata(v map[string]interface{}) *ReviewHistoryUpdate {
-	_u.mutation.SetMetadata(v)
-	return _u
-}
-
-// ClearMetadata clears the value of the "metadata" field.
-func (_u *ReviewHistoryUpdate) ClearMetadata() *ReviewHistoryUpdate {
-	_u.mutation.ClearMetadata()
-	return _u
-}
-
-// SetRawPayload sets the "raw_payload" field.
-func (_u *ReviewHistoryUpdate) SetRawPayload(v map[string]interface{}) *ReviewHistoryUpdate {
-	_u.mutation.SetRawPayload(v)
-	return _u
-}
-
-// ClearRawPayload clears the value of the "raw_payload" field.
-func (_u *ReviewHistoryUpdate) ClearRawPayload() *ReviewHistoryUpdate {
-	_u.mutation.ClearRawPayload()
 	return _u
 }
 
@@ -631,9 +36,6 @@ func (_u *ReviewHistoryUpdate) Mutation() *ReviewHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *ReviewHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := _u.defaults(); err != nil {
-		return 0, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -659,38 +61,7 @@ func (_u *ReviewHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *ReviewHistoryUpdate) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if reviewhistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized reviewhistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := reviewhistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *ReviewHistoryUpdate) check() error {
-	if v, ok := _u.mutation.Status(); ok {
-		if err := reviewhistory.StatusValidator(v); err != nil {
-			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "ReviewHistory.status": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *ReviewHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ReviewHistoryUpdate {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *ReviewHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(reviewhistory.Table, reviewhistory.Columns, sqlgraph.NewFieldSpec(reviewhistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -705,46 +76,23 @@ func (_u *ReviewHistoryUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(reviewhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(reviewhistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(reviewhistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(reviewhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(reviewhistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(reviewhistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(reviewhistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(reviewhistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(reviewhistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(reviewhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(reviewhistory.FieldDeletedBy, field.TypeString, value)
-	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(reviewhistory.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(reviewhistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, reviewhistory.FieldTags, value)
-		})
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(reviewhistory.FieldTags, field.TypeJSON)
@@ -755,156 +103,78 @@ func (_u *ReviewHistoryUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(reviewhistory.FieldSystemOwned, field.TypeBool)
 	}
-	if value, ok := _u.mutation.InternalNotes(); ok {
-		_spec.SetField(reviewhistory.FieldInternalNotes, field.TypeString, value)
-	}
 	if _u.mutation.InternalNotesCleared() {
 		_spec.ClearField(reviewhistory.FieldInternalNotes, field.TypeString)
-	}
-	if value, ok := _u.mutation.SystemInternalID(); ok {
-		_spec.SetField(reviewhistory.FieldSystemInternalID, field.TypeString, value)
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(reviewhistory.FieldSystemInternalID, field.TypeString)
 	}
-	if value, ok := _u.mutation.EnvironmentName(); ok {
-		_spec.SetField(reviewhistory.FieldEnvironmentName, field.TypeString, value)
-	}
 	if _u.mutation.EnvironmentNameCleared() {
 		_spec.ClearField(reviewhistory.FieldEnvironmentName, field.TypeString)
-	}
-	if value, ok := _u.mutation.EnvironmentID(); ok {
-		_spec.SetField(reviewhistory.FieldEnvironmentID, field.TypeString, value)
 	}
 	if _u.mutation.EnvironmentIDCleared() {
 		_spec.ClearField(reviewhistory.FieldEnvironmentID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ScopeName(); ok {
-		_spec.SetField(reviewhistory.FieldScopeName, field.TypeString, value)
-	}
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(reviewhistory.FieldScopeName, field.TypeString)
-	}
-	if value, ok := _u.mutation.ScopeID(); ok {
-		_spec.SetField(reviewhistory.FieldScopeID, field.TypeString, value)
 	}
 	if _u.mutation.ScopeIDCleared() {
 		_spec.ClearField(reviewhistory.FieldScopeID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ExternalID(); ok {
-		_spec.SetField(reviewhistory.FieldExternalID, field.TypeString, value)
-	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(reviewhistory.FieldExternalID, field.TypeString)
-	}
-	if value, ok := _u.mutation.ExternalOwnerID(); ok {
-		_spec.SetField(reviewhistory.FieldExternalOwnerID, field.TypeString, value)
 	}
 	if _u.mutation.ExternalOwnerIDCleared() {
 		_spec.ClearField(reviewhistory.FieldExternalOwnerID, field.TypeString)
 	}
-	if value, ok := _u.mutation.Title(); ok {
-		_spec.SetField(reviewhistory.FieldTitle, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.State(); ok {
-		_spec.SetField(reviewhistory.FieldState, field.TypeString, value)
-	}
 	if _u.mutation.StateCleared() {
 		_spec.ClearField(reviewhistory.FieldState, field.TypeString)
-	}
-	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(reviewhistory.FieldStatus, field.TypeEnum, value)
 	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(reviewhistory.FieldStatus, field.TypeEnum)
 	}
-	if value, ok := _u.mutation.Category(); ok {
-		_spec.SetField(reviewhistory.FieldCategory, field.TypeString, value)
-	}
 	if _u.mutation.CategoryCleared() {
 		_spec.ClearField(reviewhistory.FieldCategory, field.TypeString)
-	}
-	if value, ok := _u.mutation.Classification(); ok {
-		_spec.SetField(reviewhistory.FieldClassification, field.TypeString, value)
 	}
 	if _u.mutation.ClassificationCleared() {
 		_spec.ClearField(reviewhistory.FieldClassification, field.TypeString)
 	}
-	if value, ok := _u.mutation.Summary(); ok {
-		_spec.SetField(reviewhistory.FieldSummary, field.TypeString, value)
-	}
 	if _u.mutation.SummaryCleared() {
 		_spec.ClearField(reviewhistory.FieldSummary, field.TypeString)
-	}
-	if value, ok := _u.mutation.Details(); ok {
-		_spec.SetField(reviewhistory.FieldDetails, field.TypeString, value)
 	}
 	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(reviewhistory.FieldDetails, field.TypeString)
 	}
-	if value, ok := _u.mutation.Reporter(); ok {
-		_spec.SetField(reviewhistory.FieldReporter, field.TypeString, value)
-	}
 	if _u.mutation.ReporterCleared() {
 		_spec.ClearField(reviewhistory.FieldReporter, field.TypeString)
-	}
-	if value, ok := _u.mutation.Approved(); ok {
-		_spec.SetField(reviewhistory.FieldApproved, field.TypeBool, value)
 	}
 	if _u.mutation.ApprovedCleared() {
 		_spec.ClearField(reviewhistory.FieldApproved, field.TypeBool)
 	}
-	if value, ok := _u.mutation.ReviewedAt(); ok {
-		_spec.SetField(reviewhistory.FieldReviewedAt, field.TypeTime, value)
-	}
 	if _u.mutation.ReviewedAtCleared() {
 		_spec.ClearField(reviewhistory.FieldReviewedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.ReportedAt(); ok {
-		_spec.SetField(reviewhistory.FieldReportedAt, field.TypeTime, value)
 	}
 	if _u.mutation.ReportedAtCleared() {
 		_spec.ClearField(reviewhistory.FieldReportedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.ApprovedAt(); ok {
-		_spec.SetField(reviewhistory.FieldApprovedAt, field.TypeTime, value)
-	}
 	if _u.mutation.ApprovedAtCleared() {
 		_spec.ClearField(reviewhistory.FieldApprovedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.ReviewerID(); ok {
-		_spec.SetField(reviewhistory.FieldReviewerID, field.TypeString, value)
 	}
 	if _u.mutation.ReviewerIDCleared() {
 		_spec.ClearField(reviewhistory.FieldReviewerID, field.TypeString)
 	}
-	if value, ok := _u.mutation.Source(); ok {
-		_spec.SetField(reviewhistory.FieldSource, field.TypeString, value)
-	}
 	if _u.mutation.SourceCleared() {
 		_spec.ClearField(reviewhistory.FieldSource, field.TypeString)
-	}
-	if value, ok := _u.mutation.ExternalURI(); ok {
-		_spec.SetField(reviewhistory.FieldExternalURI, field.TypeString, value)
 	}
 	if _u.mutation.ExternalURICleared() {
 		_spec.ClearField(reviewhistory.FieldExternalURI, field.TypeString)
 	}
-	if value, ok := _u.mutation.Metadata(); ok {
-		_spec.SetField(reviewhistory.FieldMetadata, field.TypeJSON, value)
-	}
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(reviewhistory.FieldMetadata, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.RawPayload(); ok {
-		_spec.SetField(reviewhistory.FieldRawPayload, field.TypeJSON, value)
 	}
 	if _u.mutation.RawPayloadCleared() {
 		_spec.ClearField(reviewhistory.FieldRawPayload, field.TypeJSON)
 	}
-	_spec.Node.Schema = _u.schemaConfig.ReviewHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{reviewhistory.Label}
@@ -920,598 +190,9 @@ func (_u *ReviewHistoryUpdate) sqlSave(ctx context.Context) (_node int, err erro
 // ReviewHistoryUpdateOne is the builder for updating a single ReviewHistory entity.
 type ReviewHistoryUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *ReviewHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *ReviewHistoryUpdateOne) SetUpdatedAt(v time.Time) *ReviewHistoryUpdateOne {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *ReviewHistoryUpdateOne) ClearUpdatedAt() *ReviewHistoryUpdateOne {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *ReviewHistoryUpdateOne) SetUpdatedBy(v string) *ReviewHistoryUpdateOne {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *ReviewHistoryUpdateOne) SetNillableUpdatedBy(v *string) *ReviewHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *ReviewHistoryUpdateOne) ClearUpdatedBy() *ReviewHistoryUpdateOne {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *ReviewHistoryUpdateOne) SetUpdatedByImpersonator(v string) *ReviewHistoryUpdateOne {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *ReviewHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *ReviewHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *ReviewHistoryUpdateOne) ClearUpdatedByImpersonator() *ReviewHistoryUpdateOne {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *ReviewHistoryUpdateOne) SetDeletedAt(v time.Time) *ReviewHistoryUpdateOne {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *ReviewHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *ReviewHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *ReviewHistoryUpdateOne) ClearDeletedAt() *ReviewHistoryUpdateOne {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *ReviewHistoryUpdateOne) SetDeletedBy(v string) *ReviewHistoryUpdateOne {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *ReviewHistoryUpdateOne) SetNillableDeletedBy(v *string) *ReviewHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *ReviewHistoryUpdateOne) ClearDeletedBy() *ReviewHistoryUpdateOne {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *ReviewHistoryUpdateOne) SetTags(v []string) *ReviewHistoryUpdateOne {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *ReviewHistoryUpdateOne) AppendTags(v []string) *ReviewHistoryUpdateOne {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *ReviewHistoryUpdateOne) ClearTags() *ReviewHistoryUpdateOne {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetInternalNotes sets the "internal_notes" field.
-func (_u *ReviewHistoryUpdateOne) SetInternalNotes(v string) *ReviewHistoryUpdateOne {
-	_u.mutation.SetInternalNotes(v)
-	return _u
-}
-
-// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
-func (_u *ReviewHistoryUpdateOne) SetNillableInternalNotes(v *string) *ReviewHistoryUpdateOne {
-	if v != nil {
-		_u.SetInternalNotes(*v)
-	}
-	return _u
-}
-
-// ClearInternalNotes clears the value of the "internal_notes" field.
-func (_u *ReviewHistoryUpdateOne) ClearInternalNotes() *ReviewHistoryUpdateOne {
-	_u.mutation.ClearInternalNotes()
-	return _u
-}
-
-// SetSystemInternalID sets the "system_internal_id" field.
-func (_u *ReviewHistoryUpdateOne) SetSystemInternalID(v string) *ReviewHistoryUpdateOne {
-	_u.mutation.SetSystemInternalID(v)
-	return _u
-}
-
-// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
-func (_u *ReviewHistoryUpdateOne) SetNillableSystemInternalID(v *string) *ReviewHistoryUpdateOne {
-	if v != nil {
-		_u.SetSystemInternalID(*v)
-	}
-	return _u
-}
-
-// ClearSystemInternalID clears the value of the "system_internal_id" field.
-func (_u *ReviewHistoryUpdateOne) ClearSystemInternalID() *ReviewHistoryUpdateOne {
-	_u.mutation.ClearSystemInternalID()
-	return _u
-}
-
-// SetEnvironmentName sets the "environment_name" field.
-func (_u *ReviewHistoryUpdateOne) SetEnvironmentName(v string) *ReviewHistoryUpdateOne {
-	_u.mutation.SetEnvironmentName(v)
-	return _u
-}
-
-// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
-func (_u *ReviewHistoryUpdateOne) SetNillableEnvironmentName(v *string) *ReviewHistoryUpdateOne {
-	if v != nil {
-		_u.SetEnvironmentName(*v)
-	}
-	return _u
-}
-
-// ClearEnvironmentName clears the value of the "environment_name" field.
-func (_u *ReviewHistoryUpdateOne) ClearEnvironmentName() *ReviewHistoryUpdateOne {
-	_u.mutation.ClearEnvironmentName()
-	return _u
-}
-
-// SetEnvironmentID sets the "environment_id" field.
-func (_u *ReviewHistoryUpdateOne) SetEnvironmentID(v string) *ReviewHistoryUpdateOne {
-	_u.mutation.SetEnvironmentID(v)
-	return _u
-}
-
-// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
-func (_u *ReviewHistoryUpdateOne) SetNillableEnvironmentID(v *string) *ReviewHistoryUpdateOne {
-	if v != nil {
-		_u.SetEnvironmentID(*v)
-	}
-	return _u
-}
-
-// ClearEnvironmentID clears the value of the "environment_id" field.
-func (_u *ReviewHistoryUpdateOne) ClearEnvironmentID() *ReviewHistoryUpdateOne {
-	_u.mutation.ClearEnvironmentID()
-	return _u
-}
-
-// SetScopeName sets the "scope_name" field.
-func (_u *ReviewHistoryUpdateOne) SetScopeName(v string) *ReviewHistoryUpdateOne {
-	_u.mutation.SetScopeName(v)
-	return _u
-}
-
-// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
-func (_u *ReviewHistoryUpdateOne) SetNillableScopeName(v *string) *ReviewHistoryUpdateOne {
-	if v != nil {
-		_u.SetScopeName(*v)
-	}
-	return _u
-}
-
-// ClearScopeName clears the value of the "scope_name" field.
-func (_u *ReviewHistoryUpdateOne) ClearScopeName() *ReviewHistoryUpdateOne {
-	_u.mutation.ClearScopeName()
-	return _u
-}
-
-// SetScopeID sets the "scope_id" field.
-func (_u *ReviewHistoryUpdateOne) SetScopeID(v string) *ReviewHistoryUpdateOne {
-	_u.mutation.SetScopeID(v)
-	return _u
-}
-
-// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
-func (_u *ReviewHistoryUpdateOne) SetNillableScopeID(v *string) *ReviewHistoryUpdateOne {
-	if v != nil {
-		_u.SetScopeID(*v)
-	}
-	return _u
-}
-
-// ClearScopeID clears the value of the "scope_id" field.
-func (_u *ReviewHistoryUpdateOne) ClearScopeID() *ReviewHistoryUpdateOne {
-	_u.mutation.ClearScopeID()
-	return _u
-}
-
-// SetExternalID sets the "external_id" field.
-func (_u *ReviewHistoryUpdateOne) SetExternalID(v string) *ReviewHistoryUpdateOne {
-	_u.mutation.SetExternalID(v)
-	return _u
-}
-
-// SetNillableExternalID sets the "external_id" field if the given value is not nil.
-func (_u *ReviewHistoryUpdateOne) SetNillableExternalID(v *string) *ReviewHistoryUpdateOne {
-	if v != nil {
-		_u.SetExternalID(*v)
-	}
-	return _u
-}
-
-// ClearExternalID clears the value of the "external_id" field.
-func (_u *ReviewHistoryUpdateOne) ClearExternalID() *ReviewHistoryUpdateOne {
-	_u.mutation.ClearExternalID()
-	return _u
-}
-
-// SetExternalOwnerID sets the "external_owner_id" field.
-func (_u *ReviewHistoryUpdateOne) SetExternalOwnerID(v string) *ReviewHistoryUpdateOne {
-	_u.mutation.SetExternalOwnerID(v)
-	return _u
-}
-
-// SetNillableExternalOwnerID sets the "external_owner_id" field if the given value is not nil.
-func (_u *ReviewHistoryUpdateOne) SetNillableExternalOwnerID(v *string) *ReviewHistoryUpdateOne {
-	if v != nil {
-		_u.SetExternalOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearExternalOwnerID clears the value of the "external_owner_id" field.
-func (_u *ReviewHistoryUpdateOne) ClearExternalOwnerID() *ReviewHistoryUpdateOne {
-	_u.mutation.ClearExternalOwnerID()
-	return _u
-}
-
-// SetTitle sets the "title" field.
-func (_u *ReviewHistoryUpdateOne) SetTitle(v string) *ReviewHistoryUpdateOne {
-	_u.mutation.SetTitle(v)
-	return _u
-}
-
-// SetNillableTitle sets the "title" field if the given value is not nil.
-func (_u *ReviewHistoryUpdateOne) SetNillableTitle(v *string) *ReviewHistoryUpdateOne {
-	if v != nil {
-		_u.SetTitle(*v)
-	}
-	return _u
-}
-
-// SetState sets the "state" field.
-func (_u *ReviewHistoryUpdateOne) SetState(v string) *ReviewHistoryUpdateOne {
-	_u.mutation.SetState(v)
-	return _u
-}
-
-// SetNillableState sets the "state" field if the given value is not nil.
-func (_u *ReviewHistoryUpdateOne) SetNillableState(v *string) *ReviewHistoryUpdateOne {
-	if v != nil {
-		_u.SetState(*v)
-	}
-	return _u
-}
-
-// ClearState clears the value of the "state" field.
-func (_u *ReviewHistoryUpdateOne) ClearState() *ReviewHistoryUpdateOne {
-	_u.mutation.ClearState()
-	return _u
-}
-
-// SetStatus sets the "status" field.
-func (_u *ReviewHistoryUpdateOne) SetStatus(v enums.ReviewStatus) *ReviewHistoryUpdateOne {
-	_u.mutation.SetStatus(v)
-	return _u
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *ReviewHistoryUpdateOne) SetNillableStatus(v *enums.ReviewStatus) *ReviewHistoryUpdateOne {
-	if v != nil {
-		_u.SetStatus(*v)
-	}
-	return _u
-}
-
-// ClearStatus clears the value of the "status" field.
-func (_u *ReviewHistoryUpdateOne) ClearStatus() *ReviewHistoryUpdateOne {
-	_u.mutation.ClearStatus()
-	return _u
-}
-
-// SetCategory sets the "category" field.
-func (_u *ReviewHistoryUpdateOne) SetCategory(v string) *ReviewHistoryUpdateOne {
-	_u.mutation.SetCategory(v)
-	return _u
-}
-
-// SetNillableCategory sets the "category" field if the given value is not nil.
-func (_u *ReviewHistoryUpdateOne) SetNillableCategory(v *string) *ReviewHistoryUpdateOne {
-	if v != nil {
-		_u.SetCategory(*v)
-	}
-	return _u
-}
-
-// ClearCategory clears the value of the "category" field.
-func (_u *ReviewHistoryUpdateOne) ClearCategory() *ReviewHistoryUpdateOne {
-	_u.mutation.ClearCategory()
-	return _u
-}
-
-// SetClassification sets the "classification" field.
-func (_u *ReviewHistoryUpdateOne) SetClassification(v string) *ReviewHistoryUpdateOne {
-	_u.mutation.SetClassification(v)
-	return _u
-}
-
-// SetNillableClassification sets the "classification" field if the given value is not nil.
-func (_u *ReviewHistoryUpdateOne) SetNillableClassification(v *string) *ReviewHistoryUpdateOne {
-	if v != nil {
-		_u.SetClassification(*v)
-	}
-	return _u
-}
-
-// ClearClassification clears the value of the "classification" field.
-func (_u *ReviewHistoryUpdateOne) ClearClassification() *ReviewHistoryUpdateOne {
-	_u.mutation.ClearClassification()
-	return _u
-}
-
-// SetSummary sets the "summary" field.
-func (_u *ReviewHistoryUpdateOne) SetSummary(v string) *ReviewHistoryUpdateOne {
-	_u.mutation.SetSummary(v)
-	return _u
-}
-
-// SetNillableSummary sets the "summary" field if the given value is not nil.
-func (_u *ReviewHistoryUpdateOne) SetNillableSummary(v *string) *ReviewHistoryUpdateOne {
-	if v != nil {
-		_u.SetSummary(*v)
-	}
-	return _u
-}
-
-// ClearSummary clears the value of the "summary" field.
-func (_u *ReviewHistoryUpdateOne) ClearSummary() *ReviewHistoryUpdateOne {
-	_u.mutation.ClearSummary()
-	return _u
-}
-
-// SetDetails sets the "details" field.
-func (_u *ReviewHistoryUpdateOne) SetDetails(v string) *ReviewHistoryUpdateOne {
-	_u.mutation.SetDetails(v)
-	return _u
-}
-
-// SetNillableDetails sets the "details" field if the given value is not nil.
-func (_u *ReviewHistoryUpdateOne) SetNillableDetails(v *string) *ReviewHistoryUpdateOne {
-	if v != nil {
-		_u.SetDetails(*v)
-	}
-	return _u
-}
-
-// ClearDetails clears the value of the "details" field.
-func (_u *ReviewHistoryUpdateOne) ClearDetails() *ReviewHistoryUpdateOne {
-	_u.mutation.ClearDetails()
-	return _u
-}
-
-// SetReporter sets the "reporter" field.
-func (_u *ReviewHistoryUpdateOne) SetReporter(v string) *ReviewHistoryUpdateOne {
-	_u.mutation.SetReporter(v)
-	return _u
-}
-
-// SetNillableReporter sets the "reporter" field if the given value is not nil.
-func (_u *ReviewHistoryUpdateOne) SetNillableReporter(v *string) *ReviewHistoryUpdateOne {
-	if v != nil {
-		_u.SetReporter(*v)
-	}
-	return _u
-}
-
-// ClearReporter clears the value of the "reporter" field.
-func (_u *ReviewHistoryUpdateOne) ClearReporter() *ReviewHistoryUpdateOne {
-	_u.mutation.ClearReporter()
-	return _u
-}
-
-// SetApproved sets the "approved" field.
-func (_u *ReviewHistoryUpdateOne) SetApproved(v bool) *ReviewHistoryUpdateOne {
-	_u.mutation.SetApproved(v)
-	return _u
-}
-
-// SetNillableApproved sets the "approved" field if the given value is not nil.
-func (_u *ReviewHistoryUpdateOne) SetNillableApproved(v *bool) *ReviewHistoryUpdateOne {
-	if v != nil {
-		_u.SetApproved(*v)
-	}
-	return _u
-}
-
-// ClearApproved clears the value of the "approved" field.
-func (_u *ReviewHistoryUpdateOne) ClearApproved() *ReviewHistoryUpdateOne {
-	_u.mutation.ClearApproved()
-	return _u
-}
-
-// SetReviewedAt sets the "reviewed_at" field.
-func (_u *ReviewHistoryUpdateOne) SetReviewedAt(v models.DateTime) *ReviewHistoryUpdateOne {
-	_u.mutation.SetReviewedAt(v)
-	return _u
-}
-
-// SetNillableReviewedAt sets the "reviewed_at" field if the given value is not nil.
-func (_u *ReviewHistoryUpdateOne) SetNillableReviewedAt(v *models.DateTime) *ReviewHistoryUpdateOne {
-	if v != nil {
-		_u.SetReviewedAt(*v)
-	}
-	return _u
-}
-
-// ClearReviewedAt clears the value of the "reviewed_at" field.
-func (_u *ReviewHistoryUpdateOne) ClearReviewedAt() *ReviewHistoryUpdateOne {
-	_u.mutation.ClearReviewedAt()
-	return _u
-}
-
-// SetReportedAt sets the "reported_at" field.
-func (_u *ReviewHistoryUpdateOne) SetReportedAt(v models.DateTime) *ReviewHistoryUpdateOne {
-	_u.mutation.SetReportedAt(v)
-	return _u
-}
-
-// SetNillableReportedAt sets the "reported_at" field if the given value is not nil.
-func (_u *ReviewHistoryUpdateOne) SetNillableReportedAt(v *models.DateTime) *ReviewHistoryUpdateOne {
-	if v != nil {
-		_u.SetReportedAt(*v)
-	}
-	return _u
-}
-
-// ClearReportedAt clears the value of the "reported_at" field.
-func (_u *ReviewHistoryUpdateOne) ClearReportedAt() *ReviewHistoryUpdateOne {
-	_u.mutation.ClearReportedAt()
-	return _u
-}
-
-// SetApprovedAt sets the "approved_at" field.
-func (_u *ReviewHistoryUpdateOne) SetApprovedAt(v models.DateTime) *ReviewHistoryUpdateOne {
-	_u.mutation.SetApprovedAt(v)
-	return _u
-}
-
-// SetNillableApprovedAt sets the "approved_at" field if the given value is not nil.
-func (_u *ReviewHistoryUpdateOne) SetNillableApprovedAt(v *models.DateTime) *ReviewHistoryUpdateOne {
-	if v != nil {
-		_u.SetApprovedAt(*v)
-	}
-	return _u
-}
-
-// ClearApprovedAt clears the value of the "approved_at" field.
-func (_u *ReviewHistoryUpdateOne) ClearApprovedAt() *ReviewHistoryUpdateOne {
-	_u.mutation.ClearApprovedAt()
-	return _u
-}
-
-// SetReviewerID sets the "reviewer_id" field.
-func (_u *ReviewHistoryUpdateOne) SetReviewerID(v string) *ReviewHistoryUpdateOne {
-	_u.mutation.SetReviewerID(v)
-	return _u
-}
-
-// SetNillableReviewerID sets the "reviewer_id" field if the given value is not nil.
-func (_u *ReviewHistoryUpdateOne) SetNillableReviewerID(v *string) *ReviewHistoryUpdateOne {
-	if v != nil {
-		_u.SetReviewerID(*v)
-	}
-	return _u
-}
-
-// ClearReviewerID clears the value of the "reviewer_id" field.
-func (_u *ReviewHistoryUpdateOne) ClearReviewerID() *ReviewHistoryUpdateOne {
-	_u.mutation.ClearReviewerID()
-	return _u
-}
-
-// SetSource sets the "source" field.
-func (_u *ReviewHistoryUpdateOne) SetSource(v string) *ReviewHistoryUpdateOne {
-	_u.mutation.SetSource(v)
-	return _u
-}
-
-// SetNillableSource sets the "source" field if the given value is not nil.
-func (_u *ReviewHistoryUpdateOne) SetNillableSource(v *string) *ReviewHistoryUpdateOne {
-	if v != nil {
-		_u.SetSource(*v)
-	}
-	return _u
-}
-
-// ClearSource clears the value of the "source" field.
-func (_u *ReviewHistoryUpdateOne) ClearSource() *ReviewHistoryUpdateOne {
-	_u.mutation.ClearSource()
-	return _u
-}
-
-// SetExternalURI sets the "external_uri" field.
-func (_u *ReviewHistoryUpdateOne) SetExternalURI(v string) *ReviewHistoryUpdateOne {
-	_u.mutation.SetExternalURI(v)
-	return _u
-}
-
-// SetNillableExternalURI sets the "external_uri" field if the given value is not nil.
-func (_u *ReviewHistoryUpdateOne) SetNillableExternalURI(v *string) *ReviewHistoryUpdateOne {
-	if v != nil {
-		_u.SetExternalURI(*v)
-	}
-	return _u
-}
-
-// ClearExternalURI clears the value of the "external_uri" field.
-func (_u *ReviewHistoryUpdateOne) ClearExternalURI() *ReviewHistoryUpdateOne {
-	_u.mutation.ClearExternalURI()
-	return _u
-}
-
-// SetMetadata sets the "metadata" field.
-func (_u *ReviewHistoryUpdateOne) SetMetadata(v map[string]interface{}) *ReviewHistoryUpdateOne {
-	_u.mutation.SetMetadata(v)
-	return _u
-}
-
-// ClearMetadata clears the value of the "metadata" field.
-func (_u *ReviewHistoryUpdateOne) ClearMetadata() *ReviewHistoryUpdateOne {
-	_u.mutation.ClearMetadata()
-	return _u
-}
-
-// SetRawPayload sets the "raw_payload" field.
-func (_u *ReviewHistoryUpdateOne) SetRawPayload(v map[string]interface{}) *ReviewHistoryUpdateOne {
-	_u.mutation.SetRawPayload(v)
-	return _u
-}
-
-// ClearRawPayload clears the value of the "raw_payload" field.
-func (_u *ReviewHistoryUpdateOne) ClearRawPayload() *ReviewHistoryUpdateOne {
-	_u.mutation.ClearRawPayload()
-	return _u
+	fields   []string
+	hooks    []Hook
+	mutation *ReviewHistoryMutation
 }
 
 // Mutation returns the ReviewHistoryMutation object of the builder.
@@ -1534,9 +215,6 @@ func (_u *ReviewHistoryUpdateOne) Select(field string, fields ...string) *Review
 
 // Save executes the query and returns the updated ReviewHistory entity.
 func (_u *ReviewHistoryUpdateOne) Save(ctx context.Context) (*ReviewHistory, error) {
-	if err := _u.defaults(); err != nil {
-		return nil, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -1562,38 +240,7 @@ func (_u *ReviewHistoryUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *ReviewHistoryUpdateOne) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if reviewhistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized reviewhistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := reviewhistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *ReviewHistoryUpdateOne) check() error {
-	if v, ok := _u.mutation.Status(); ok {
-		if err := reviewhistory.StatusValidator(v); err != nil {
-			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "ReviewHistory.status": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *ReviewHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *ReviewHistoryUpdateOne {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *ReviewHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ReviewHistory, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(reviewhistory.Table, reviewhistory.Columns, sqlgraph.NewFieldSpec(reviewhistory.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
@@ -1625,46 +272,23 @@ func (_u *ReviewHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ReviewHis
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(reviewhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(reviewhistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(reviewhistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(reviewhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(reviewhistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(reviewhistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(reviewhistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(reviewhistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(reviewhistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(reviewhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(reviewhistory.FieldDeletedBy, field.TypeString, value)
-	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(reviewhistory.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(reviewhistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, reviewhistory.FieldTags, value)
-		})
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(reviewhistory.FieldTags, field.TypeJSON)
@@ -1675,156 +299,78 @@ func (_u *ReviewHistoryUpdateOne) sqlSave(ctx context.Context) (_node *ReviewHis
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(reviewhistory.FieldSystemOwned, field.TypeBool)
 	}
-	if value, ok := _u.mutation.InternalNotes(); ok {
-		_spec.SetField(reviewhistory.FieldInternalNotes, field.TypeString, value)
-	}
 	if _u.mutation.InternalNotesCleared() {
 		_spec.ClearField(reviewhistory.FieldInternalNotes, field.TypeString)
-	}
-	if value, ok := _u.mutation.SystemInternalID(); ok {
-		_spec.SetField(reviewhistory.FieldSystemInternalID, field.TypeString, value)
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(reviewhistory.FieldSystemInternalID, field.TypeString)
 	}
-	if value, ok := _u.mutation.EnvironmentName(); ok {
-		_spec.SetField(reviewhistory.FieldEnvironmentName, field.TypeString, value)
-	}
 	if _u.mutation.EnvironmentNameCleared() {
 		_spec.ClearField(reviewhistory.FieldEnvironmentName, field.TypeString)
-	}
-	if value, ok := _u.mutation.EnvironmentID(); ok {
-		_spec.SetField(reviewhistory.FieldEnvironmentID, field.TypeString, value)
 	}
 	if _u.mutation.EnvironmentIDCleared() {
 		_spec.ClearField(reviewhistory.FieldEnvironmentID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ScopeName(); ok {
-		_spec.SetField(reviewhistory.FieldScopeName, field.TypeString, value)
-	}
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(reviewhistory.FieldScopeName, field.TypeString)
-	}
-	if value, ok := _u.mutation.ScopeID(); ok {
-		_spec.SetField(reviewhistory.FieldScopeID, field.TypeString, value)
 	}
 	if _u.mutation.ScopeIDCleared() {
 		_spec.ClearField(reviewhistory.FieldScopeID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ExternalID(); ok {
-		_spec.SetField(reviewhistory.FieldExternalID, field.TypeString, value)
-	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(reviewhistory.FieldExternalID, field.TypeString)
-	}
-	if value, ok := _u.mutation.ExternalOwnerID(); ok {
-		_spec.SetField(reviewhistory.FieldExternalOwnerID, field.TypeString, value)
 	}
 	if _u.mutation.ExternalOwnerIDCleared() {
 		_spec.ClearField(reviewhistory.FieldExternalOwnerID, field.TypeString)
 	}
-	if value, ok := _u.mutation.Title(); ok {
-		_spec.SetField(reviewhistory.FieldTitle, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.State(); ok {
-		_spec.SetField(reviewhistory.FieldState, field.TypeString, value)
-	}
 	if _u.mutation.StateCleared() {
 		_spec.ClearField(reviewhistory.FieldState, field.TypeString)
-	}
-	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(reviewhistory.FieldStatus, field.TypeEnum, value)
 	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(reviewhistory.FieldStatus, field.TypeEnum)
 	}
-	if value, ok := _u.mutation.Category(); ok {
-		_spec.SetField(reviewhistory.FieldCategory, field.TypeString, value)
-	}
 	if _u.mutation.CategoryCleared() {
 		_spec.ClearField(reviewhistory.FieldCategory, field.TypeString)
-	}
-	if value, ok := _u.mutation.Classification(); ok {
-		_spec.SetField(reviewhistory.FieldClassification, field.TypeString, value)
 	}
 	if _u.mutation.ClassificationCleared() {
 		_spec.ClearField(reviewhistory.FieldClassification, field.TypeString)
 	}
-	if value, ok := _u.mutation.Summary(); ok {
-		_spec.SetField(reviewhistory.FieldSummary, field.TypeString, value)
-	}
 	if _u.mutation.SummaryCleared() {
 		_spec.ClearField(reviewhistory.FieldSummary, field.TypeString)
-	}
-	if value, ok := _u.mutation.Details(); ok {
-		_spec.SetField(reviewhistory.FieldDetails, field.TypeString, value)
 	}
 	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(reviewhistory.FieldDetails, field.TypeString)
 	}
-	if value, ok := _u.mutation.Reporter(); ok {
-		_spec.SetField(reviewhistory.FieldReporter, field.TypeString, value)
-	}
 	if _u.mutation.ReporterCleared() {
 		_spec.ClearField(reviewhistory.FieldReporter, field.TypeString)
-	}
-	if value, ok := _u.mutation.Approved(); ok {
-		_spec.SetField(reviewhistory.FieldApproved, field.TypeBool, value)
 	}
 	if _u.mutation.ApprovedCleared() {
 		_spec.ClearField(reviewhistory.FieldApproved, field.TypeBool)
 	}
-	if value, ok := _u.mutation.ReviewedAt(); ok {
-		_spec.SetField(reviewhistory.FieldReviewedAt, field.TypeTime, value)
-	}
 	if _u.mutation.ReviewedAtCleared() {
 		_spec.ClearField(reviewhistory.FieldReviewedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.ReportedAt(); ok {
-		_spec.SetField(reviewhistory.FieldReportedAt, field.TypeTime, value)
 	}
 	if _u.mutation.ReportedAtCleared() {
 		_spec.ClearField(reviewhistory.FieldReportedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.ApprovedAt(); ok {
-		_spec.SetField(reviewhistory.FieldApprovedAt, field.TypeTime, value)
-	}
 	if _u.mutation.ApprovedAtCleared() {
 		_spec.ClearField(reviewhistory.FieldApprovedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.ReviewerID(); ok {
-		_spec.SetField(reviewhistory.FieldReviewerID, field.TypeString, value)
 	}
 	if _u.mutation.ReviewerIDCleared() {
 		_spec.ClearField(reviewhistory.FieldReviewerID, field.TypeString)
 	}
-	if value, ok := _u.mutation.Source(); ok {
-		_spec.SetField(reviewhistory.FieldSource, field.TypeString, value)
-	}
 	if _u.mutation.SourceCleared() {
 		_spec.ClearField(reviewhistory.FieldSource, field.TypeString)
-	}
-	if value, ok := _u.mutation.ExternalURI(); ok {
-		_spec.SetField(reviewhistory.FieldExternalURI, field.TypeString, value)
 	}
 	if _u.mutation.ExternalURICleared() {
 		_spec.ClearField(reviewhistory.FieldExternalURI, field.TypeString)
 	}
-	if value, ok := _u.mutation.Metadata(); ok {
-		_spec.SetField(reviewhistory.FieldMetadata, field.TypeJSON, value)
-	}
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(reviewhistory.FieldMetadata, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.RawPayload(); ok {
-		_spec.SetField(reviewhistory.FieldRawPayload, field.TypeJSON, value)
 	}
 	if _u.mutation.RawPayloadCleared() {
 		_spec.ClearField(reviewhistory.FieldRawPayload, field.TypeJSON)
 	}
-	_spec.Node.Schema = _u.schemaConfig.ReviewHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	_node = &ReviewHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

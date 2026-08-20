@@ -9,10 +9,6 @@ import (
 	"github.com/theopenlane/core/pkg/gencmd/generate/prompts"
 )
 
-const (
-	relativeSchemaPath = "../../internal/ent/schema"
-)
-
 var generateCmd = &cobra.Command{
 	Use:   "generate",
 	Short: "generate is the command to generate the stub files for a given cli cmd",

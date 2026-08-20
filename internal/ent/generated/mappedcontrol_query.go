@@ -20,7 +20,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -98,9 +97,6 @@ func (_q *MappedControlQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, mappedcontrol.OwnerTable, mappedcontrol.OwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.MappedControl
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -123,9 +119,6 @@ func (_q *MappedControlQuery) QueryBlockedGroups() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, mappedcontrol.BlockedGroupsTable, mappedcontrol.BlockedGroupsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.MappedControlBlockedGroups
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -148,9 +141,6 @@ func (_q *MappedControlQuery) QueryEditors() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, mappedcontrol.EditorsTable, mappedcontrol.EditorsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.MappedControlEditors
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -173,9 +163,6 @@ func (_q *MappedControlQuery) QueryFromControls() *ControlQuery {
 			sqlgraph.To(control.Table, control.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, mappedcontrol.FromControlsTable, mappedcontrol.FromControlsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.MappedControlFromControls
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -198,9 +185,6 @@ func (_q *MappedControlQuery) QueryToControls() *ControlQuery {
 			sqlgraph.To(control.Table, control.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, mappedcontrol.ToControlsTable, mappedcontrol.ToControlsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.MappedControlToControls
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -223,9 +207,6 @@ func (_q *MappedControlQuery) QueryFromSubcontrols() *SubcontrolQuery {
 			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, mappedcontrol.FromSubcontrolsTable, mappedcontrol.FromSubcontrolsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.MappedControlFromSubcontrols
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -248,9 +229,6 @@ func (_q *MappedControlQuery) QueryToSubcontrols() *SubcontrolQuery {
 			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, mappedcontrol.ToSubcontrolsTable, mappedcontrol.ToSubcontrolsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.MappedControlToSubcontrols
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -643,8 +621,6 @@ func (_q *MappedControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.MappedControl
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -797,7 +773,6 @@ func (_q *MappedControlQuery) loadBlockedGroups(ctx context.Context, query *Grou
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(mappedcontrol.BlockedGroupsTable)
-		joinT.Schema(_q.schemaConfig.MappedControlBlockedGroups)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(mappedcontrol.BlockedGroupsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(mappedcontrol.BlockedGroupsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -859,7 +834,6 @@ func (_q *MappedControlQuery) loadEditors(ctx context.Context, query *GroupQuery
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(mappedcontrol.EditorsTable)
-		joinT.Schema(_q.schemaConfig.MappedControlEditors)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(mappedcontrol.EditorsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(mappedcontrol.EditorsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -921,7 +895,6 @@ func (_q *MappedControlQuery) loadFromControls(ctx context.Context, query *Contr
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(mappedcontrol.FromControlsTable)
-		joinT.Schema(_q.schemaConfig.MappedControlFromControls)
 		s.Join(joinT).On(s.C(control.FieldID), joinT.C(mappedcontrol.FromControlsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(mappedcontrol.FromControlsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -983,7 +956,6 @@ func (_q *MappedControlQuery) loadToControls(ctx context.Context, query *Control
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(mappedcontrol.ToControlsTable)
-		joinT.Schema(_q.schemaConfig.MappedControlToControls)
 		s.Join(joinT).On(s.C(control.FieldID), joinT.C(mappedcontrol.ToControlsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(mappedcontrol.ToControlsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1045,7 +1017,6 @@ func (_q *MappedControlQuery) loadFromSubcontrols(ctx context.Context, query *Su
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(mappedcontrol.FromSubcontrolsTable)
-		joinT.Schema(_q.schemaConfig.MappedControlFromSubcontrols)
 		s.Join(joinT).On(s.C(subcontrol.FieldID), joinT.C(mappedcontrol.FromSubcontrolsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(mappedcontrol.FromSubcontrolsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1107,7 +1078,6 @@ func (_q *MappedControlQuery) loadToSubcontrols(ctx context.Context, query *Subc
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(mappedcontrol.ToSubcontrolsTable)
-		joinT.Schema(_q.schemaConfig.MappedControlToSubcontrols)
 		s.Join(joinT).On(s.C(subcontrol.FieldID), joinT.C(mappedcontrol.ToSubcontrolsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(mappedcontrol.ToSubcontrolsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -1159,8 +1129,6 @@ func (_q *MappedControlQuery) loadToSubcontrols(ctx context.Context, query *Subc
 
 func (_q *MappedControlQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.MappedControl
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -1229,9 +1197,6 @@ func (_q *MappedControlQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.MappedControl)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}

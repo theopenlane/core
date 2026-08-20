@@ -444,7 +444,6 @@ func (_c *OrganizationHistoryCreate) createSpec() (*OrganizationHistory, *sqlgra
 		_node = &OrganizationHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(organizationhistory.Table, sqlgraph.NewFieldSpec(organizationhistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.OrganizationHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

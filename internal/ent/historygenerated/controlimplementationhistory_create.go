@@ -437,7 +437,6 @@ func (_c *ControlImplementationHistoryCreate) createSpec() (*ControlImplementati
 		_node = &ControlImplementationHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(controlimplementationhistory.Table, sqlgraph.NewFieldSpec(controlimplementationhistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.ControlImplementationHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

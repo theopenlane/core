@@ -20,7 +20,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -91,9 +90,6 @@ func (_q *SubprocessorQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, subprocessor.OwnerTable, subprocessor.OwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.Subprocessor
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -116,9 +112,6 @@ func (_q *SubprocessorQuery) QueryLogoFile() *FileQuery {
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, subprocessor.LogoFileTable, subprocessor.LogoFileColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.Subprocessor
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -141,9 +134,6 @@ func (_q *SubprocessorQuery) QueryTrustCenterSubprocessors() *TrustCenterSubproc
 			sqlgraph.To(trustcentersubprocessor.Table, trustcentersubprocessor.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, subprocessor.TrustCenterSubprocessorsTable, subprocessor.TrustCenterSubprocessorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.TrustCenterSubprocessor
-		step.Edge.Schema = schemaConfig.TrustCenterSubprocessor
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -166,9 +156,6 @@ func (_q *SubprocessorQuery) QueryEntities() *EntityQuery {
 			sqlgraph.To(entity.Table, entity.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, subprocessor.EntitiesTable, subprocessor.EntitiesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.EntitySubprocessors
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -522,8 +509,6 @@ func (_q *SubprocessorQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.Subprocessor
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -690,7 +675,6 @@ func (_q *SubprocessorQuery) loadEntities(ctx context.Context, query *EntityQuer
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(subprocessor.EntitiesTable)
-		joinT.Schema(_q.schemaConfig.EntitySubprocessors)
 		s.Join(joinT).On(s.C(entity.FieldID), joinT.C(subprocessor.EntitiesPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(subprocessor.EntitiesPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -742,8 +726,6 @@ func (_q *SubprocessorQuery) loadEntities(ctx context.Context, query *EntityQuer
 
 func (_q *SubprocessorQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.Subprocessor
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -815,9 +797,6 @@ func (_q *SubprocessorQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.Subprocessor)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}

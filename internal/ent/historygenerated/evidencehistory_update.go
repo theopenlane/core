@@ -8,449 +8,24 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/evidencehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
 )
 
 // EvidenceHistoryUpdate is the builder for updating EvidenceHistory entities.
 type EvidenceHistoryUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *EvidenceHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *EvidenceHistoryMutation
 }
 
 // Where appends a list predicates to the EvidenceHistoryUpdate builder.
 func (_u *EvidenceHistoryUpdate) Where(ps ...predicate.EvidenceHistory) *EvidenceHistoryUpdate {
 	_u.mutation.Where(ps...)
-	return _u
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *EvidenceHistoryUpdate) SetUpdatedAt(v time.Time) *EvidenceHistoryUpdate {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *EvidenceHistoryUpdate) ClearUpdatedAt() *EvidenceHistoryUpdate {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *EvidenceHistoryUpdate) SetUpdatedBy(v string) *EvidenceHistoryUpdate {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdate) SetNillableUpdatedBy(v *string) *EvidenceHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *EvidenceHistoryUpdate) ClearUpdatedBy() *EvidenceHistoryUpdate {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *EvidenceHistoryUpdate) SetUpdatedByImpersonator(v string) *EvidenceHistoryUpdate {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *EvidenceHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *EvidenceHistoryUpdate) ClearUpdatedByImpersonator() *EvidenceHistoryUpdate {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *EvidenceHistoryUpdate) SetDeletedAt(v time.Time) *EvidenceHistoryUpdate {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdate) SetNillableDeletedAt(v *time.Time) *EvidenceHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *EvidenceHistoryUpdate) ClearDeletedAt() *EvidenceHistoryUpdate {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *EvidenceHistoryUpdate) SetDeletedBy(v string) *EvidenceHistoryUpdate {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdate) SetNillableDeletedBy(v *string) *EvidenceHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *EvidenceHistoryUpdate) ClearDeletedBy() *EvidenceHistoryUpdate {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *EvidenceHistoryUpdate) SetTags(v []string) *EvidenceHistoryUpdate {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *EvidenceHistoryUpdate) AppendTags(v []string) *EvidenceHistoryUpdate {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *EvidenceHistoryUpdate) ClearTags() *EvidenceHistoryUpdate {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetEnvironmentName sets the "environment_name" field.
-func (_u *EvidenceHistoryUpdate) SetEnvironmentName(v string) *EvidenceHistoryUpdate {
-	_u.mutation.SetEnvironmentName(v)
-	return _u
-}
-
-// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdate) SetNillableEnvironmentName(v *string) *EvidenceHistoryUpdate {
-	if v != nil {
-		_u.SetEnvironmentName(*v)
-	}
-	return _u
-}
-
-// ClearEnvironmentName clears the value of the "environment_name" field.
-func (_u *EvidenceHistoryUpdate) ClearEnvironmentName() *EvidenceHistoryUpdate {
-	_u.mutation.ClearEnvironmentName()
-	return _u
-}
-
-// SetEnvironmentID sets the "environment_id" field.
-func (_u *EvidenceHistoryUpdate) SetEnvironmentID(v string) *EvidenceHistoryUpdate {
-	_u.mutation.SetEnvironmentID(v)
-	return _u
-}
-
-// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdate) SetNillableEnvironmentID(v *string) *EvidenceHistoryUpdate {
-	if v != nil {
-		_u.SetEnvironmentID(*v)
-	}
-	return _u
-}
-
-// ClearEnvironmentID clears the value of the "environment_id" field.
-func (_u *EvidenceHistoryUpdate) ClearEnvironmentID() *EvidenceHistoryUpdate {
-	_u.mutation.ClearEnvironmentID()
-	return _u
-}
-
-// SetScopeName sets the "scope_name" field.
-func (_u *EvidenceHistoryUpdate) SetScopeName(v string) *EvidenceHistoryUpdate {
-	_u.mutation.SetScopeName(v)
-	return _u
-}
-
-// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdate) SetNillableScopeName(v *string) *EvidenceHistoryUpdate {
-	if v != nil {
-		_u.SetScopeName(*v)
-	}
-	return _u
-}
-
-// ClearScopeName clears the value of the "scope_name" field.
-func (_u *EvidenceHistoryUpdate) ClearScopeName() *EvidenceHistoryUpdate {
-	_u.mutation.ClearScopeName()
-	return _u
-}
-
-// SetScopeID sets the "scope_id" field.
-func (_u *EvidenceHistoryUpdate) SetScopeID(v string) *EvidenceHistoryUpdate {
-	_u.mutation.SetScopeID(v)
-	return _u
-}
-
-// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdate) SetNillableScopeID(v *string) *EvidenceHistoryUpdate {
-	if v != nil {
-		_u.SetScopeID(*v)
-	}
-	return _u
-}
-
-// ClearScopeID clears the value of the "scope_id" field.
-func (_u *EvidenceHistoryUpdate) ClearScopeID() *EvidenceHistoryUpdate {
-	_u.mutation.ClearScopeID()
-	return _u
-}
-
-// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
-func (_u *EvidenceHistoryUpdate) SetWorkflowEligibleMarker(v bool) *EvidenceHistoryUpdate {
-	_u.mutation.SetWorkflowEligibleMarker(v)
-	return _u
-}
-
-// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdate) SetNillableWorkflowEligibleMarker(v *bool) *EvidenceHistoryUpdate {
-	if v != nil {
-		_u.SetWorkflowEligibleMarker(*v)
-	}
-	return _u
-}
-
-// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
-func (_u *EvidenceHistoryUpdate) ClearWorkflowEligibleMarker() *EvidenceHistoryUpdate {
-	_u.mutation.ClearWorkflowEligibleMarker()
-	return _u
-}
-
-// SetExternalUUID sets the "external_uuid" field.
-func (_u *EvidenceHistoryUpdate) SetExternalUUID(v string) *EvidenceHistoryUpdate {
-	_u.mutation.SetExternalUUID(v)
-	return _u
-}
-
-// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdate) SetNillableExternalUUID(v *string) *EvidenceHistoryUpdate {
-	if v != nil {
-		_u.SetExternalUUID(*v)
-	}
-	return _u
-}
-
-// ClearExternalUUID clears the value of the "external_uuid" field.
-func (_u *EvidenceHistoryUpdate) ClearExternalUUID() *EvidenceHistoryUpdate {
-	_u.mutation.ClearExternalUUID()
-	return _u
-}
-
-// SetName sets the "name" field.
-func (_u *EvidenceHistoryUpdate) SetName(v string) *EvidenceHistoryUpdate {
-	_u.mutation.SetName(v)
-	return _u
-}
-
-// SetNillableName sets the "name" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdate) SetNillableName(v *string) *EvidenceHistoryUpdate {
-	if v != nil {
-		_u.SetName(*v)
-	}
-	return _u
-}
-
-// SetDescription sets the "description" field.
-func (_u *EvidenceHistoryUpdate) SetDescription(v string) *EvidenceHistoryUpdate {
-	_u.mutation.SetDescription(v)
-	return _u
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdate) SetNillableDescription(v *string) *EvidenceHistoryUpdate {
-	if v != nil {
-		_u.SetDescription(*v)
-	}
-	return _u
-}
-
-// ClearDescription clears the value of the "description" field.
-func (_u *EvidenceHistoryUpdate) ClearDescription() *EvidenceHistoryUpdate {
-	_u.mutation.ClearDescription()
-	return _u
-}
-
-// SetCollectionProcedure sets the "collection_procedure" field.
-func (_u *EvidenceHistoryUpdate) SetCollectionProcedure(v string) *EvidenceHistoryUpdate {
-	_u.mutation.SetCollectionProcedure(v)
-	return _u
-}
-
-// SetNillableCollectionProcedure sets the "collection_procedure" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdate) SetNillableCollectionProcedure(v *string) *EvidenceHistoryUpdate {
-	if v != nil {
-		_u.SetCollectionProcedure(*v)
-	}
-	return _u
-}
-
-// ClearCollectionProcedure clears the value of the "collection_procedure" field.
-func (_u *EvidenceHistoryUpdate) ClearCollectionProcedure() *EvidenceHistoryUpdate {
-	_u.mutation.ClearCollectionProcedure()
-	return _u
-}
-
-// SetCreationDate sets the "creation_date" field.
-func (_u *EvidenceHistoryUpdate) SetCreationDate(v models.DateTime) *EvidenceHistoryUpdate {
-	_u.mutation.SetCreationDate(v)
-	return _u
-}
-
-// SetNillableCreationDate sets the "creation_date" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdate) SetNillableCreationDate(v *models.DateTime) *EvidenceHistoryUpdate {
-	if v != nil {
-		_u.SetCreationDate(*v)
-	}
-	return _u
-}
-
-// SetRenewalDate sets the "renewal_date" field.
-func (_u *EvidenceHistoryUpdate) SetRenewalDate(v models.DateTime) *EvidenceHistoryUpdate {
-	_u.mutation.SetRenewalDate(v)
-	return _u
-}
-
-// SetNillableRenewalDate sets the "renewal_date" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdate) SetNillableRenewalDate(v *models.DateTime) *EvidenceHistoryUpdate {
-	if v != nil {
-		_u.SetRenewalDate(*v)
-	}
-	return _u
-}
-
-// ClearRenewalDate clears the value of the "renewal_date" field.
-func (_u *EvidenceHistoryUpdate) ClearRenewalDate() *EvidenceHistoryUpdate {
-	_u.mutation.ClearRenewalDate()
-	return _u
-}
-
-// SetSource sets the "source" field.
-func (_u *EvidenceHistoryUpdate) SetSource(v string) *EvidenceHistoryUpdate {
-	_u.mutation.SetSource(v)
-	return _u
-}
-
-// SetNillableSource sets the "source" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdate) SetNillableSource(v *string) *EvidenceHistoryUpdate {
-	if v != nil {
-		_u.SetSource(*v)
-	}
-	return _u
-}
-
-// ClearSource clears the value of the "source" field.
-func (_u *EvidenceHistoryUpdate) ClearSource() *EvidenceHistoryUpdate {
-	_u.mutation.ClearSource()
-	return _u
-}
-
-// SetIsAutomated sets the "is_automated" field.
-func (_u *EvidenceHistoryUpdate) SetIsAutomated(v bool) *EvidenceHistoryUpdate {
-	_u.mutation.SetIsAutomated(v)
-	return _u
-}
-
-// SetNillableIsAutomated sets the "is_automated" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdate) SetNillableIsAutomated(v *bool) *EvidenceHistoryUpdate {
-	if v != nil {
-		_u.SetIsAutomated(*v)
-	}
-	return _u
-}
-
-// ClearIsAutomated clears the value of the "is_automated" field.
-func (_u *EvidenceHistoryUpdate) ClearIsAutomated() *EvidenceHistoryUpdate {
-	_u.mutation.ClearIsAutomated()
-	return _u
-}
-
-// SetURL sets the "url" field.
-func (_u *EvidenceHistoryUpdate) SetURL(v string) *EvidenceHistoryUpdate {
-	_u.mutation.SetURL(v)
-	return _u
-}
-
-// SetNillableURL sets the "url" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdate) SetNillableURL(v *string) *EvidenceHistoryUpdate {
-	if v != nil {
-		_u.SetURL(*v)
-	}
-	return _u
-}
-
-// ClearURL clears the value of the "url" field.
-func (_u *EvidenceHistoryUpdate) ClearURL() *EvidenceHistoryUpdate {
-	_u.mutation.ClearURL()
-	return _u
-}
-
-// SetStatus sets the "status" field.
-func (_u *EvidenceHistoryUpdate) SetStatus(v enums.EvidenceStatus) *EvidenceHistoryUpdate {
-	_u.mutation.SetStatus(v)
-	return _u
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdate) SetNillableStatus(v *enums.EvidenceStatus) *EvidenceHistoryUpdate {
-	if v != nil {
-		_u.SetStatus(*v)
-	}
-	return _u
-}
-
-// ClearStatus clears the value of the "status" field.
-func (_u *EvidenceHistoryUpdate) ClearStatus() *EvidenceHistoryUpdate {
-	_u.mutation.ClearStatus()
-	return _u
-}
-
-// SetReviewFrequency sets the "review_frequency" field.
-func (_u *EvidenceHistoryUpdate) SetReviewFrequency(v enums.Frequency) *EvidenceHistoryUpdate {
-	_u.mutation.SetReviewFrequency(v)
-	return _u
-}
-
-// SetNillableReviewFrequency sets the "review_frequency" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdate) SetNillableReviewFrequency(v *enums.Frequency) *EvidenceHistoryUpdate {
-	if v != nil {
-		_u.SetReviewFrequency(*v)
-	}
-	return _u
-}
-
-// ClearReviewFrequency clears the value of the "review_frequency" field.
-func (_u *EvidenceHistoryUpdate) ClearReviewFrequency() *EvidenceHistoryUpdate {
-	_u.mutation.ClearReviewFrequency()
 	return _u
 }
 
@@ -461,9 +36,6 @@ func (_u *EvidenceHistoryUpdate) Mutation() *EvidenceHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *EvidenceHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := _u.defaults(); err != nil {
-		return 0, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -489,43 +61,7 @@ func (_u *EvidenceHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *EvidenceHistoryUpdate) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if evidencehistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized evidencehistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := evidencehistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *EvidenceHistoryUpdate) check() error {
-	if v, ok := _u.mutation.Status(); ok {
-		if err := evidencehistory.StatusValidator(v); err != nil {
-			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "EvidenceHistory.status": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.ReviewFrequency(); ok {
-		if err := evidencehistory.ReviewFrequencyValidator(v); err != nil {
-			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`historygenerated: validator failed for field "EvidenceHistory.review_frequency": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *EvidenceHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EvidenceHistoryUpdate {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *EvidenceHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(evidencehistory.Table, evidencehistory.Columns, sqlgraph.NewFieldSpec(evidencehistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -540,46 +76,23 @@ func (_u *EvidenceHistoryUpdate) sqlSave(ctx context.Context) (_node int, err er
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(evidencehistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(evidencehistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(evidencehistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(evidencehistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(evidencehistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(evidencehistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(evidencehistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(evidencehistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(evidencehistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(evidencehistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(evidencehistory.FieldDeletedBy, field.TypeString, value)
-	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(evidencehistory.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(evidencehistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, evidencehistory.FieldTags, value)
-		})
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(evidencehistory.FieldTags, field.TypeJSON)
@@ -587,99 +100,48 @@ func (_u *EvidenceHistoryUpdate) sqlSave(ctx context.Context) (_node int, err er
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(evidencehistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := _u.mutation.EnvironmentName(); ok {
-		_spec.SetField(evidencehistory.FieldEnvironmentName, field.TypeString, value)
-	}
 	if _u.mutation.EnvironmentNameCleared() {
 		_spec.ClearField(evidencehistory.FieldEnvironmentName, field.TypeString)
-	}
-	if value, ok := _u.mutation.EnvironmentID(); ok {
-		_spec.SetField(evidencehistory.FieldEnvironmentID, field.TypeString, value)
 	}
 	if _u.mutation.EnvironmentIDCleared() {
 		_spec.ClearField(evidencehistory.FieldEnvironmentID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ScopeName(); ok {
-		_spec.SetField(evidencehistory.FieldScopeName, field.TypeString, value)
-	}
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(evidencehistory.FieldScopeName, field.TypeString)
-	}
-	if value, ok := _u.mutation.ScopeID(); ok {
-		_spec.SetField(evidencehistory.FieldScopeID, field.TypeString, value)
 	}
 	if _u.mutation.ScopeIDCleared() {
 		_spec.ClearField(evidencehistory.FieldScopeID, field.TypeString)
 	}
-	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
-		_spec.SetField(evidencehistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
-	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(evidencehistory.FieldWorkflowEligibleMarker, field.TypeBool)
-	}
-	if value, ok := _u.mutation.ExternalUUID(); ok {
-		_spec.SetField(evidencehistory.FieldExternalUUID, field.TypeString, value)
 	}
 	if _u.mutation.ExternalUUIDCleared() {
 		_spec.ClearField(evidencehistory.FieldExternalUUID, field.TypeString)
 	}
-	if value, ok := _u.mutation.Name(); ok {
-		_spec.SetField(evidencehistory.FieldName, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.Description(); ok {
-		_spec.SetField(evidencehistory.FieldDescription, field.TypeString, value)
-	}
 	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(evidencehistory.FieldDescription, field.TypeString)
-	}
-	if value, ok := _u.mutation.CollectionProcedure(); ok {
-		_spec.SetField(evidencehistory.FieldCollectionProcedure, field.TypeString, value)
 	}
 	if _u.mutation.CollectionProcedureCleared() {
 		_spec.ClearField(evidencehistory.FieldCollectionProcedure, field.TypeString)
 	}
-	if value, ok := _u.mutation.CreationDate(); ok {
-		_spec.SetField(evidencehistory.FieldCreationDate, field.TypeTime, value)
-	}
-	if value, ok := _u.mutation.RenewalDate(); ok {
-		_spec.SetField(evidencehistory.FieldRenewalDate, field.TypeTime, value)
-	}
 	if _u.mutation.RenewalDateCleared() {
 		_spec.ClearField(evidencehistory.FieldRenewalDate, field.TypeTime)
-	}
-	if value, ok := _u.mutation.Source(); ok {
-		_spec.SetField(evidencehistory.FieldSource, field.TypeString, value)
 	}
 	if _u.mutation.SourceCleared() {
 		_spec.ClearField(evidencehistory.FieldSource, field.TypeString)
 	}
-	if value, ok := _u.mutation.IsAutomated(); ok {
-		_spec.SetField(evidencehistory.FieldIsAutomated, field.TypeBool, value)
-	}
 	if _u.mutation.IsAutomatedCleared() {
 		_spec.ClearField(evidencehistory.FieldIsAutomated, field.TypeBool)
-	}
-	if value, ok := _u.mutation.URL(); ok {
-		_spec.SetField(evidencehistory.FieldURL, field.TypeString, value)
 	}
 	if _u.mutation.URLCleared() {
 		_spec.ClearField(evidencehistory.FieldURL, field.TypeString)
 	}
-	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(evidencehistory.FieldStatus, field.TypeEnum, value)
-	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(evidencehistory.FieldStatus, field.TypeEnum)
-	}
-	if value, ok := _u.mutation.ReviewFrequency(); ok {
-		_spec.SetField(evidencehistory.FieldReviewFrequency, field.TypeEnum, value)
 	}
 	if _u.mutation.ReviewFrequencyCleared() {
 		_spec.ClearField(evidencehistory.FieldReviewFrequency, field.TypeEnum)
 	}
-	_spec.Node.Schema = _u.schemaConfig.EvidenceHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{evidencehistory.Label}
@@ -695,428 +157,9 @@ func (_u *EvidenceHistoryUpdate) sqlSave(ctx context.Context) (_node int, err er
 // EvidenceHistoryUpdateOne is the builder for updating a single EvidenceHistory entity.
 type EvidenceHistoryUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *EvidenceHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *EvidenceHistoryUpdateOne) SetUpdatedAt(v time.Time) *EvidenceHistoryUpdateOne {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *EvidenceHistoryUpdateOne) ClearUpdatedAt() *EvidenceHistoryUpdateOne {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *EvidenceHistoryUpdateOne) SetUpdatedBy(v string) *EvidenceHistoryUpdateOne {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdateOne) SetNillableUpdatedBy(v *string) *EvidenceHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *EvidenceHistoryUpdateOne) ClearUpdatedBy() *EvidenceHistoryUpdateOne {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *EvidenceHistoryUpdateOne) SetUpdatedByImpersonator(v string) *EvidenceHistoryUpdateOne {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *EvidenceHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *EvidenceHistoryUpdateOne) ClearUpdatedByImpersonator() *EvidenceHistoryUpdateOne {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *EvidenceHistoryUpdateOne) SetDeletedAt(v time.Time) *EvidenceHistoryUpdateOne {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *EvidenceHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *EvidenceHistoryUpdateOne) ClearDeletedAt() *EvidenceHistoryUpdateOne {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *EvidenceHistoryUpdateOne) SetDeletedBy(v string) *EvidenceHistoryUpdateOne {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdateOne) SetNillableDeletedBy(v *string) *EvidenceHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *EvidenceHistoryUpdateOne) ClearDeletedBy() *EvidenceHistoryUpdateOne {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *EvidenceHistoryUpdateOne) SetTags(v []string) *EvidenceHistoryUpdateOne {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *EvidenceHistoryUpdateOne) AppendTags(v []string) *EvidenceHistoryUpdateOne {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *EvidenceHistoryUpdateOne) ClearTags() *EvidenceHistoryUpdateOne {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetEnvironmentName sets the "environment_name" field.
-func (_u *EvidenceHistoryUpdateOne) SetEnvironmentName(v string) *EvidenceHistoryUpdateOne {
-	_u.mutation.SetEnvironmentName(v)
-	return _u
-}
-
-// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdateOne) SetNillableEnvironmentName(v *string) *EvidenceHistoryUpdateOne {
-	if v != nil {
-		_u.SetEnvironmentName(*v)
-	}
-	return _u
-}
-
-// ClearEnvironmentName clears the value of the "environment_name" field.
-func (_u *EvidenceHistoryUpdateOne) ClearEnvironmentName() *EvidenceHistoryUpdateOne {
-	_u.mutation.ClearEnvironmentName()
-	return _u
-}
-
-// SetEnvironmentID sets the "environment_id" field.
-func (_u *EvidenceHistoryUpdateOne) SetEnvironmentID(v string) *EvidenceHistoryUpdateOne {
-	_u.mutation.SetEnvironmentID(v)
-	return _u
-}
-
-// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdateOne) SetNillableEnvironmentID(v *string) *EvidenceHistoryUpdateOne {
-	if v != nil {
-		_u.SetEnvironmentID(*v)
-	}
-	return _u
-}
-
-// ClearEnvironmentID clears the value of the "environment_id" field.
-func (_u *EvidenceHistoryUpdateOne) ClearEnvironmentID() *EvidenceHistoryUpdateOne {
-	_u.mutation.ClearEnvironmentID()
-	return _u
-}
-
-// SetScopeName sets the "scope_name" field.
-func (_u *EvidenceHistoryUpdateOne) SetScopeName(v string) *EvidenceHistoryUpdateOne {
-	_u.mutation.SetScopeName(v)
-	return _u
-}
-
-// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdateOne) SetNillableScopeName(v *string) *EvidenceHistoryUpdateOne {
-	if v != nil {
-		_u.SetScopeName(*v)
-	}
-	return _u
-}
-
-// ClearScopeName clears the value of the "scope_name" field.
-func (_u *EvidenceHistoryUpdateOne) ClearScopeName() *EvidenceHistoryUpdateOne {
-	_u.mutation.ClearScopeName()
-	return _u
-}
-
-// SetScopeID sets the "scope_id" field.
-func (_u *EvidenceHistoryUpdateOne) SetScopeID(v string) *EvidenceHistoryUpdateOne {
-	_u.mutation.SetScopeID(v)
-	return _u
-}
-
-// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdateOne) SetNillableScopeID(v *string) *EvidenceHistoryUpdateOne {
-	if v != nil {
-		_u.SetScopeID(*v)
-	}
-	return _u
-}
-
-// ClearScopeID clears the value of the "scope_id" field.
-func (_u *EvidenceHistoryUpdateOne) ClearScopeID() *EvidenceHistoryUpdateOne {
-	_u.mutation.ClearScopeID()
-	return _u
-}
-
-// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
-func (_u *EvidenceHistoryUpdateOne) SetWorkflowEligibleMarker(v bool) *EvidenceHistoryUpdateOne {
-	_u.mutation.SetWorkflowEligibleMarker(v)
-	return _u
-}
-
-// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdateOne) SetNillableWorkflowEligibleMarker(v *bool) *EvidenceHistoryUpdateOne {
-	if v != nil {
-		_u.SetWorkflowEligibleMarker(*v)
-	}
-	return _u
-}
-
-// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
-func (_u *EvidenceHistoryUpdateOne) ClearWorkflowEligibleMarker() *EvidenceHistoryUpdateOne {
-	_u.mutation.ClearWorkflowEligibleMarker()
-	return _u
-}
-
-// SetExternalUUID sets the "external_uuid" field.
-func (_u *EvidenceHistoryUpdateOne) SetExternalUUID(v string) *EvidenceHistoryUpdateOne {
-	_u.mutation.SetExternalUUID(v)
-	return _u
-}
-
-// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdateOne) SetNillableExternalUUID(v *string) *EvidenceHistoryUpdateOne {
-	if v != nil {
-		_u.SetExternalUUID(*v)
-	}
-	return _u
-}
-
-// ClearExternalUUID clears the value of the "external_uuid" field.
-func (_u *EvidenceHistoryUpdateOne) ClearExternalUUID() *EvidenceHistoryUpdateOne {
-	_u.mutation.ClearExternalUUID()
-	return _u
-}
-
-// SetName sets the "name" field.
-func (_u *EvidenceHistoryUpdateOne) SetName(v string) *EvidenceHistoryUpdateOne {
-	_u.mutation.SetName(v)
-	return _u
-}
-
-// SetNillableName sets the "name" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdateOne) SetNillableName(v *string) *EvidenceHistoryUpdateOne {
-	if v != nil {
-		_u.SetName(*v)
-	}
-	return _u
-}
-
-// SetDescription sets the "description" field.
-func (_u *EvidenceHistoryUpdateOne) SetDescription(v string) *EvidenceHistoryUpdateOne {
-	_u.mutation.SetDescription(v)
-	return _u
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdateOne) SetNillableDescription(v *string) *EvidenceHistoryUpdateOne {
-	if v != nil {
-		_u.SetDescription(*v)
-	}
-	return _u
-}
-
-// ClearDescription clears the value of the "description" field.
-func (_u *EvidenceHistoryUpdateOne) ClearDescription() *EvidenceHistoryUpdateOne {
-	_u.mutation.ClearDescription()
-	return _u
-}
-
-// SetCollectionProcedure sets the "collection_procedure" field.
-func (_u *EvidenceHistoryUpdateOne) SetCollectionProcedure(v string) *EvidenceHistoryUpdateOne {
-	_u.mutation.SetCollectionProcedure(v)
-	return _u
-}
-
-// SetNillableCollectionProcedure sets the "collection_procedure" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdateOne) SetNillableCollectionProcedure(v *string) *EvidenceHistoryUpdateOne {
-	if v != nil {
-		_u.SetCollectionProcedure(*v)
-	}
-	return _u
-}
-
-// ClearCollectionProcedure clears the value of the "collection_procedure" field.
-func (_u *EvidenceHistoryUpdateOne) ClearCollectionProcedure() *EvidenceHistoryUpdateOne {
-	_u.mutation.ClearCollectionProcedure()
-	return _u
-}
-
-// SetCreationDate sets the "creation_date" field.
-func (_u *EvidenceHistoryUpdateOne) SetCreationDate(v models.DateTime) *EvidenceHistoryUpdateOne {
-	_u.mutation.SetCreationDate(v)
-	return _u
-}
-
-// SetNillableCreationDate sets the "creation_date" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdateOne) SetNillableCreationDate(v *models.DateTime) *EvidenceHistoryUpdateOne {
-	if v != nil {
-		_u.SetCreationDate(*v)
-	}
-	return _u
-}
-
-// SetRenewalDate sets the "renewal_date" field.
-func (_u *EvidenceHistoryUpdateOne) SetRenewalDate(v models.DateTime) *EvidenceHistoryUpdateOne {
-	_u.mutation.SetRenewalDate(v)
-	return _u
-}
-
-// SetNillableRenewalDate sets the "renewal_date" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdateOne) SetNillableRenewalDate(v *models.DateTime) *EvidenceHistoryUpdateOne {
-	if v != nil {
-		_u.SetRenewalDate(*v)
-	}
-	return _u
-}
-
-// ClearRenewalDate clears the value of the "renewal_date" field.
-func (_u *EvidenceHistoryUpdateOne) ClearRenewalDate() *EvidenceHistoryUpdateOne {
-	_u.mutation.ClearRenewalDate()
-	return _u
-}
-
-// SetSource sets the "source" field.
-func (_u *EvidenceHistoryUpdateOne) SetSource(v string) *EvidenceHistoryUpdateOne {
-	_u.mutation.SetSource(v)
-	return _u
-}
-
-// SetNillableSource sets the "source" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdateOne) SetNillableSource(v *string) *EvidenceHistoryUpdateOne {
-	if v != nil {
-		_u.SetSource(*v)
-	}
-	return _u
-}
-
-// ClearSource clears the value of the "source" field.
-func (_u *EvidenceHistoryUpdateOne) ClearSource() *EvidenceHistoryUpdateOne {
-	_u.mutation.ClearSource()
-	return _u
-}
-
-// SetIsAutomated sets the "is_automated" field.
-func (_u *EvidenceHistoryUpdateOne) SetIsAutomated(v bool) *EvidenceHistoryUpdateOne {
-	_u.mutation.SetIsAutomated(v)
-	return _u
-}
-
-// SetNillableIsAutomated sets the "is_automated" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdateOne) SetNillableIsAutomated(v *bool) *EvidenceHistoryUpdateOne {
-	if v != nil {
-		_u.SetIsAutomated(*v)
-	}
-	return _u
-}
-
-// ClearIsAutomated clears the value of the "is_automated" field.
-func (_u *EvidenceHistoryUpdateOne) ClearIsAutomated() *EvidenceHistoryUpdateOne {
-	_u.mutation.ClearIsAutomated()
-	return _u
-}
-
-// SetURL sets the "url" field.
-func (_u *EvidenceHistoryUpdateOne) SetURL(v string) *EvidenceHistoryUpdateOne {
-	_u.mutation.SetURL(v)
-	return _u
-}
-
-// SetNillableURL sets the "url" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdateOne) SetNillableURL(v *string) *EvidenceHistoryUpdateOne {
-	if v != nil {
-		_u.SetURL(*v)
-	}
-	return _u
-}
-
-// ClearURL clears the value of the "url" field.
-func (_u *EvidenceHistoryUpdateOne) ClearURL() *EvidenceHistoryUpdateOne {
-	_u.mutation.ClearURL()
-	return _u
-}
-
-// SetStatus sets the "status" field.
-func (_u *EvidenceHistoryUpdateOne) SetStatus(v enums.EvidenceStatus) *EvidenceHistoryUpdateOne {
-	_u.mutation.SetStatus(v)
-	return _u
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdateOne) SetNillableStatus(v *enums.EvidenceStatus) *EvidenceHistoryUpdateOne {
-	if v != nil {
-		_u.SetStatus(*v)
-	}
-	return _u
-}
-
-// ClearStatus clears the value of the "status" field.
-func (_u *EvidenceHistoryUpdateOne) ClearStatus() *EvidenceHistoryUpdateOne {
-	_u.mutation.ClearStatus()
-	return _u
-}
-
-// SetReviewFrequency sets the "review_frequency" field.
-func (_u *EvidenceHistoryUpdateOne) SetReviewFrequency(v enums.Frequency) *EvidenceHistoryUpdateOne {
-	_u.mutation.SetReviewFrequency(v)
-	return _u
-}
-
-// SetNillableReviewFrequency sets the "review_frequency" field if the given value is not nil.
-func (_u *EvidenceHistoryUpdateOne) SetNillableReviewFrequency(v *enums.Frequency) *EvidenceHistoryUpdateOne {
-	if v != nil {
-		_u.SetReviewFrequency(*v)
-	}
-	return _u
-}
-
-// ClearReviewFrequency clears the value of the "review_frequency" field.
-func (_u *EvidenceHistoryUpdateOne) ClearReviewFrequency() *EvidenceHistoryUpdateOne {
-	_u.mutation.ClearReviewFrequency()
-	return _u
+	fields   []string
+	hooks    []Hook
+	mutation *EvidenceHistoryMutation
 }
 
 // Mutation returns the EvidenceHistoryMutation object of the builder.
@@ -1139,9 +182,6 @@ func (_u *EvidenceHistoryUpdateOne) Select(field string, fields ...string) *Evid
 
 // Save executes the query and returns the updated EvidenceHistory entity.
 func (_u *EvidenceHistoryUpdateOne) Save(ctx context.Context) (*EvidenceHistory, error) {
-	if err := _u.defaults(); err != nil {
-		return nil, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -1167,43 +207,7 @@ func (_u *EvidenceHistoryUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *EvidenceHistoryUpdateOne) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if evidencehistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized evidencehistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := evidencehistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *EvidenceHistoryUpdateOne) check() error {
-	if v, ok := _u.mutation.Status(); ok {
-		if err := evidencehistory.StatusValidator(v); err != nil {
-			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "EvidenceHistory.status": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.ReviewFrequency(); ok {
-		if err := evidencehistory.ReviewFrequencyValidator(v); err != nil {
-			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`historygenerated: validator failed for field "EvidenceHistory.review_frequency": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *EvidenceHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *EvidenceHistoryUpdateOne {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *EvidenceHistoryUpdateOne) sqlSave(ctx context.Context) (_node *EvidenceHistory, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(evidencehistory.Table, evidencehistory.Columns, sqlgraph.NewFieldSpec(evidencehistory.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
@@ -1235,46 +239,23 @@ func (_u *EvidenceHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Evidenc
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(evidencehistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(evidencehistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(evidencehistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(evidencehistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(evidencehistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(evidencehistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(evidencehistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(evidencehistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(evidencehistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(evidencehistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(evidencehistory.FieldDeletedBy, field.TypeString, value)
-	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(evidencehistory.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(evidencehistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, evidencehistory.FieldTags, value)
-		})
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(evidencehistory.FieldTags, field.TypeJSON)
@@ -1282,99 +263,48 @@ func (_u *EvidenceHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Evidenc
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(evidencehistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := _u.mutation.EnvironmentName(); ok {
-		_spec.SetField(evidencehistory.FieldEnvironmentName, field.TypeString, value)
-	}
 	if _u.mutation.EnvironmentNameCleared() {
 		_spec.ClearField(evidencehistory.FieldEnvironmentName, field.TypeString)
-	}
-	if value, ok := _u.mutation.EnvironmentID(); ok {
-		_spec.SetField(evidencehistory.FieldEnvironmentID, field.TypeString, value)
 	}
 	if _u.mutation.EnvironmentIDCleared() {
 		_spec.ClearField(evidencehistory.FieldEnvironmentID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ScopeName(); ok {
-		_spec.SetField(evidencehistory.FieldScopeName, field.TypeString, value)
-	}
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(evidencehistory.FieldScopeName, field.TypeString)
-	}
-	if value, ok := _u.mutation.ScopeID(); ok {
-		_spec.SetField(evidencehistory.FieldScopeID, field.TypeString, value)
 	}
 	if _u.mutation.ScopeIDCleared() {
 		_spec.ClearField(evidencehistory.FieldScopeID, field.TypeString)
 	}
-	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
-		_spec.SetField(evidencehistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
-	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(evidencehistory.FieldWorkflowEligibleMarker, field.TypeBool)
-	}
-	if value, ok := _u.mutation.ExternalUUID(); ok {
-		_spec.SetField(evidencehistory.FieldExternalUUID, field.TypeString, value)
 	}
 	if _u.mutation.ExternalUUIDCleared() {
 		_spec.ClearField(evidencehistory.FieldExternalUUID, field.TypeString)
 	}
-	if value, ok := _u.mutation.Name(); ok {
-		_spec.SetField(evidencehistory.FieldName, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.Description(); ok {
-		_spec.SetField(evidencehistory.FieldDescription, field.TypeString, value)
-	}
 	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(evidencehistory.FieldDescription, field.TypeString)
-	}
-	if value, ok := _u.mutation.CollectionProcedure(); ok {
-		_spec.SetField(evidencehistory.FieldCollectionProcedure, field.TypeString, value)
 	}
 	if _u.mutation.CollectionProcedureCleared() {
 		_spec.ClearField(evidencehistory.FieldCollectionProcedure, field.TypeString)
 	}
-	if value, ok := _u.mutation.CreationDate(); ok {
-		_spec.SetField(evidencehistory.FieldCreationDate, field.TypeTime, value)
-	}
-	if value, ok := _u.mutation.RenewalDate(); ok {
-		_spec.SetField(evidencehistory.FieldRenewalDate, field.TypeTime, value)
-	}
 	if _u.mutation.RenewalDateCleared() {
 		_spec.ClearField(evidencehistory.FieldRenewalDate, field.TypeTime)
-	}
-	if value, ok := _u.mutation.Source(); ok {
-		_spec.SetField(evidencehistory.FieldSource, field.TypeString, value)
 	}
 	if _u.mutation.SourceCleared() {
 		_spec.ClearField(evidencehistory.FieldSource, field.TypeString)
 	}
-	if value, ok := _u.mutation.IsAutomated(); ok {
-		_spec.SetField(evidencehistory.FieldIsAutomated, field.TypeBool, value)
-	}
 	if _u.mutation.IsAutomatedCleared() {
 		_spec.ClearField(evidencehistory.FieldIsAutomated, field.TypeBool)
-	}
-	if value, ok := _u.mutation.URL(); ok {
-		_spec.SetField(evidencehistory.FieldURL, field.TypeString, value)
 	}
 	if _u.mutation.URLCleared() {
 		_spec.ClearField(evidencehistory.FieldURL, field.TypeString)
 	}
-	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(evidencehistory.FieldStatus, field.TypeEnum, value)
-	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(evidencehistory.FieldStatus, field.TypeEnum)
-	}
-	if value, ok := _u.mutation.ReviewFrequency(); ok {
-		_spec.SetField(evidencehistory.FieldReviewFrequency, field.TypeEnum, value)
 	}
 	if _u.mutation.ReviewFrequencyCleared() {
 		_spec.ClearField(evidencehistory.FieldReviewFrequency, field.TypeEnum)
 	}
-	_spec.Node.Schema = _u.schemaConfig.EvidenceHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	_node = &EvidenceHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

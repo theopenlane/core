@@ -10,14 +10,6 @@ type DownloadToken struct {
 	token string
 }
 
-// NewDownloadTokenWithToken creates a new PrivacyToken of type SignUpToken with
-// email set
-func NewDownloadTokenWithToken(token string) DownloadToken {
-	return DownloadToken{
-		token: token,
-	}
-}
-
 // GetToken from verify token
 func (token *DownloadToken) GetToken() string {
 	return token.token

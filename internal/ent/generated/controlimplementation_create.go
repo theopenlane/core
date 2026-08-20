@@ -486,7 +486,6 @@ func (_c *ControlImplementationCreate) createSpec() (*ControlImplementation, *sq
 		_node = &ControlImplementation{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(controlimplementation.Table, sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.ControlImplementation
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -570,7 +569,6 @@ func (_c *ControlImplementationCreate) createSpec() (*ControlImplementation, *sq
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ControlImplementation
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -588,7 +586,6 @@ func (_c *ControlImplementationCreate) createSpec() (*ControlImplementation, *sq
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ControlImplementationBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -605,7 +602,6 @@ func (_c *ControlImplementationCreate) createSpec() (*ControlImplementation, *sq
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ControlImplementationEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -622,7 +618,6 @@ func (_c *ControlImplementationCreate) createSpec() (*ControlImplementation, *sq
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ControlImplementationViewers
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -639,7 +634,6 @@ func (_c *ControlImplementationCreate) createSpec() (*ControlImplementation, *sq
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ControlControlImplementations
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -656,7 +650,6 @@ func (_c *ControlImplementationCreate) createSpec() (*ControlImplementation, *sq
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.SubcontrolControlImplementations
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -673,7 +666,6 @@ func (_c *ControlImplementationCreate) createSpec() (*ControlImplementation, *sq
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ControlImplementationTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

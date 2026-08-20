@@ -9,8 +9,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterfaq"
 )
 
@@ -43,8 +41,6 @@ func (_d *TrustCenterFAQDelete) ExecX(ctx context.Context) int {
 
 func (_d *TrustCenterFAQDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(trustcenterfaq.Table, sqlgraph.NewFieldSpec(trustcenterfaq.FieldID, field.TypeString))
-	_spec.Node.Schema = _d.schemaConfig.TrustCenterFAQ
-	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
 	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

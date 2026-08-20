@@ -15,14 +15,6 @@ type SignUpToken struct {
 	email string
 }
 
-// NewSignUpTokenWithEmail creates a new PrivacyToken of type SignUpToken with
-// email set
-func NewSignUpTokenWithEmail(email string) SignUpToken {
-	return SignUpToken{
-		email: email,
-	}
-}
-
 // GetEmail from sign-up token
 func (token *SignUpToken) GetEmail() string {
 	return token.email

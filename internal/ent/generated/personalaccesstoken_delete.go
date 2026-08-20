@@ -8,10 +8,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
+	"github.com/theopenlane/core/internal/ent/generated/predicate"
 )
 
 // PersonalAccessTokenDelete is the builder for deleting a PersonalAccessToken entity.
@@ -43,8 +41,6 @@ func (_d *PersonalAccessTokenDelete) ExecX(ctx context.Context) int {
 
 func (_d *PersonalAccessTokenDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(personalaccesstoken.Table, sqlgraph.NewFieldSpec(personalaccesstoken.FieldID, field.TypeString))
-	_spec.Node.Schema = _d.schemaConfig.PersonalAccessToken
-	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
 	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

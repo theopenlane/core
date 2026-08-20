@@ -478,7 +478,6 @@ func (_c *MappedControlCreate) createSpec() (*MappedControl, *sqlgraph.CreateSpe
 		_node = &MappedControl{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(mappedcontrol.Table, sqlgraph.NewFieldSpec(mappedcontrol.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.MappedControl
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -554,7 +553,6 @@ func (_c *MappedControlCreate) createSpec() (*MappedControl, *sqlgraph.CreateSpe
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.MappedControl
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -572,7 +570,6 @@ func (_c *MappedControlCreate) createSpec() (*MappedControl, *sqlgraph.CreateSpe
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.MappedControlBlockedGroups
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -589,7 +586,6 @@ func (_c *MappedControlCreate) createSpec() (*MappedControl, *sqlgraph.CreateSpe
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.MappedControlEditors
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -606,7 +602,6 @@ func (_c *MappedControlCreate) createSpec() (*MappedControl, *sqlgraph.CreateSpe
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.MappedControlFromControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -623,7 +618,6 @@ func (_c *MappedControlCreate) createSpec() (*MappedControl, *sqlgraph.CreateSpe
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.MappedControlToControls
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -640,7 +634,6 @@ func (_c *MappedControlCreate) createSpec() (*MappedControl, *sqlgraph.CreateSpe
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.MappedControlFromSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -657,7 +650,6 @@ func (_c *MappedControlCreate) createSpec() (*MappedControl, *sqlgraph.CreateSpe
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.MappedControlToSubcontrols
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

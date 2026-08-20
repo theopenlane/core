@@ -10,8 +10,6 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // ID filters vertices based on their ID field.
@@ -1031,9 +1029,6 @@ func HasOwner() predicate.Notification {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.Notification
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1042,9 +1037,6 @@ func HasOwner() predicate.Notification {
 func HasOwnerWith(preds ...predicate.Organization) predicate.Notification {
 	return predicate.Notification(func(s *sql.Selector) {
 		step := newOwnerStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.Notification
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1060,9 +1052,6 @@ func HasNotificationTemplate() predicate.Notification {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, NotificationTemplateTable, NotificationTemplateColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.NotificationTemplate
-		step.Edge.Schema = schemaConfig.Notification
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1071,9 +1060,6 @@ func HasNotificationTemplate() predicate.Notification {
 func HasNotificationTemplateWith(preds ...predicate.NotificationTemplate) predicate.Notification {
 	return predicate.Notification(func(s *sql.Selector) {
 		step := newNotificationTemplateStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.NotificationTemplate
-		step.Edge.Schema = schemaConfig.Notification
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

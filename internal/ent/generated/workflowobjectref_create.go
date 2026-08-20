@@ -676,7 +676,6 @@ func (_c *WorkflowObjectRefCreate) createSpec() (*WorkflowObjectRef, *sqlgraph.C
 		_node = &WorkflowObjectRef{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(workflowobjectref.Table, sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.WorkflowObjectRef
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -716,7 +715,6 @@ func (_c *WorkflowObjectRefCreate) createSpec() (*WorkflowObjectRef, *sqlgraph.C
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -734,7 +732,6 @@ func (_c *WorkflowObjectRefCreate) createSpec() (*WorkflowObjectRef, *sqlgraph.C
 				IDSpec: sqlgraph.NewFieldSpec(workflowinstance.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -752,7 +749,6 @@ func (_c *WorkflowObjectRefCreate) createSpec() (*WorkflowObjectRef, *sqlgraph.C
 				IDSpec: sqlgraph.NewFieldSpec(workflowproposal.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowProposal
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -769,7 +765,6 @@ func (_c *WorkflowObjectRefCreate) createSpec() (*WorkflowObjectRef, *sqlgraph.C
 				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -787,7 +782,6 @@ func (_c *WorkflowObjectRefCreate) createSpec() (*WorkflowObjectRef, *sqlgraph.C
 				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -805,7 +799,6 @@ func (_c *WorkflowObjectRefCreate) createSpec() (*WorkflowObjectRef, *sqlgraph.C
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -823,7 +816,6 @@ func (_c *WorkflowObjectRefCreate) createSpec() (*WorkflowObjectRef, *sqlgraph.C
 				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -841,7 +833,6 @@ func (_c *WorkflowObjectRefCreate) createSpec() (*WorkflowObjectRef, *sqlgraph.C
 				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -859,7 +850,6 @@ func (_c *WorkflowObjectRefCreate) createSpec() (*WorkflowObjectRef, *sqlgraph.C
 				IDSpec: sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -877,7 +867,6 @@ func (_c *WorkflowObjectRefCreate) createSpec() (*WorkflowObjectRef, *sqlgraph.C
 				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -895,7 +884,6 @@ func (_c *WorkflowObjectRefCreate) createSpec() (*WorkflowObjectRef, *sqlgraph.C
 				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -913,7 +901,6 @@ func (_c *WorkflowObjectRefCreate) createSpec() (*WorkflowObjectRef, *sqlgraph.C
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -931,7 +918,6 @@ func (_c *WorkflowObjectRefCreate) createSpec() (*WorkflowObjectRef, *sqlgraph.C
 				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -949,7 +935,6 @@ func (_c *WorkflowObjectRefCreate) createSpec() (*WorkflowObjectRef, *sqlgraph.C
 				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -967,7 +952,6 @@ func (_c *WorkflowObjectRefCreate) createSpec() (*WorkflowObjectRef, *sqlgraph.C
 				IDSpec: sqlgraph.NewFieldSpec(campaign.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -985,7 +969,6 @@ func (_c *WorkflowObjectRefCreate) createSpec() (*WorkflowObjectRef, *sqlgraph.C
 				IDSpec: sqlgraph.NewFieldSpec(campaigntarget.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1003,7 +986,6 @@ func (_c *WorkflowObjectRefCreate) createSpec() (*WorkflowObjectRef, *sqlgraph.C
 				IDSpec: sqlgraph.NewFieldSpec(identityholder.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1021,7 +1003,6 @@ func (_c *WorkflowObjectRefCreate) createSpec() (*WorkflowObjectRef, *sqlgraph.C
 				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1039,7 +1020,6 @@ func (_c *WorkflowObjectRefCreate) createSpec() (*WorkflowObjectRef, *sqlgraph.C
 				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1057,7 +1037,6 @@ func (_c *WorkflowObjectRefCreate) createSpec() (*WorkflowObjectRef, *sqlgraph.C
 				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1075,7 +1054,6 @@ func (_c *WorkflowObjectRefCreate) createSpec() (*WorkflowObjectRef, *sqlgraph.C
 				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1093,7 +1071,6 @@ func (_c *WorkflowObjectRefCreate) createSpec() (*WorkflowObjectRef, *sqlgraph.C
 				IDSpec: sqlgraph.NewFieldSpec(assessmentresponse.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1111,7 +1088,6 @@ func (_c *WorkflowObjectRefCreate) createSpec() (*WorkflowObjectRef, *sqlgraph.C
 				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -9,8 +9,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // ID filters vertices based on their ID field.
@@ -1190,9 +1188,6 @@ func HasOwner() predicate.TrustCenterWatermarkConfig {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.TrustCenterWatermarkConfig
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1201,9 +1196,6 @@ func HasOwner() predicate.TrustCenterWatermarkConfig {
 func HasOwnerWith(preds ...predicate.Organization) predicate.TrustCenterWatermarkConfig {
 	return predicate.TrustCenterWatermarkConfig(func(s *sql.Selector) {
 		step := newOwnerStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.TrustCenterWatermarkConfig
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1219,9 +1211,6 @@ func HasBlockedGroups() predicate.TrustCenterWatermarkConfig {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, BlockedGroupsTable, BlockedGroupsColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1230,9 +1219,6 @@ func HasBlockedGroups() predicate.TrustCenterWatermarkConfig {
 func HasBlockedGroupsWith(preds ...predicate.Group) predicate.TrustCenterWatermarkConfig {
 	return predicate.TrustCenterWatermarkConfig(func(s *sql.Selector) {
 		step := newBlockedGroupsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1248,9 +1234,6 @@ func HasEditors() predicate.TrustCenterWatermarkConfig {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, EditorsTable, EditorsColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1259,9 +1242,6 @@ func HasEditors() predicate.TrustCenterWatermarkConfig {
 func HasEditorsWith(preds ...predicate.Group) predicate.TrustCenterWatermarkConfig {
 	return predicate.TrustCenterWatermarkConfig(func(s *sql.Selector) {
 		step := newEditorsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1277,9 +1257,6 @@ func HasTrustCenter() predicate.TrustCenterWatermarkConfig {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, TrustCenterTable, TrustCenterColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.TrustCenter
-		step.Edge.Schema = schemaConfig.TrustCenter
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1288,9 +1265,6 @@ func HasTrustCenter() predicate.TrustCenterWatermarkConfig {
 func HasTrustCenterWith(preds ...predicate.TrustCenter) predicate.TrustCenterWatermarkConfig {
 	return predicate.TrustCenterWatermarkConfig(func(s *sql.Selector) {
 		step := newTrustCenterStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.TrustCenter
-		step.Edge.Schema = schemaConfig.TrustCenter
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1306,9 +1280,6 @@ func HasFile() predicate.TrustCenterWatermarkConfig {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, FileTable, FileColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.TrustCenterWatermarkConfig
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1317,9 +1288,6 @@ func HasFile() predicate.TrustCenterWatermarkConfig {
 func HasFileWith(preds ...predicate.File) predicate.TrustCenterWatermarkConfig {
 	return predicate.TrustCenterWatermarkConfig(func(s *sql.Selector) {
 		step := newFileStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.TrustCenterWatermarkConfig
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

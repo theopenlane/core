@@ -9,8 +9,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // ID filters vertices based on their ID field.
@@ -830,9 +828,6 @@ func HasOwner() predicate.WorkflowEvent {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.WorkflowEvent
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -841,9 +836,6 @@ func HasOwner() predicate.WorkflowEvent {
 func HasOwnerWith(preds ...predicate.Organization) predicate.WorkflowEvent {
 	return predicate.WorkflowEvent(func(s *sql.Selector) {
 		step := newOwnerStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.WorkflowEvent
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -859,9 +851,6 @@ func HasWorkflowInstance() predicate.WorkflowEvent {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, WorkflowInstanceTable, WorkflowInstanceColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.WorkflowInstance
-		step.Edge.Schema = schemaConfig.WorkflowEvent
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -870,9 +859,6 @@ func HasWorkflowInstance() predicate.WorkflowEvent {
 func HasWorkflowInstanceWith(preds ...predicate.WorkflowInstance) predicate.WorkflowEvent {
 	return predicate.WorkflowEvent(func(s *sql.Selector) {
 		step := newWorkflowInstanceStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.WorkflowInstance
-		step.Edge.Schema = schemaConfig.WorkflowEvent
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

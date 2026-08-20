@@ -17,7 +17,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/entitytypehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -28,8 +27,8 @@ type EntityTypeHistoryQuery struct {
 	order      []entitytypehistory.OrderOption
 	inters     []Interceptor
 	predicates []predicate.EntityTypeHistory
-	loadTotal  []func(context.Context, []*EntityTypeHistory) error
 	modifiers  []func(*sql.Selector)
+	loadTotal  []func(context.Context, []*EntityTypeHistory) error
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -259,9 +258,8 @@ func (_q *EntityTypeHistoryQuery) Clone() *EntityTypeHistoryQuery {
 		inters:     append([]Interceptor{}, _q.inters...),
 		predicates: append([]predicate.EntityTypeHistory{}, _q.predicates...),
 		// clone intermediate query.
-		sql:       _q.sql.Clone(),
-		path:      _q.path,
-		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
+		sql:  _q.sql.Clone(),
+		path: _q.path,
 	}
 }
 
@@ -358,8 +356,6 @@ func (_q *EntityTypeHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook
 		nodes = append(nodes, node)
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.EntityTypeHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -382,8 +378,6 @@ func (_q *EntityTypeHistoryQuery) sqlAll(ctx context.Context, hooks ...queryHook
 
 func (_q *EntityTypeHistoryQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.EntityTypeHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -449,12 +443,6 @@ func (_q *EntityTypeHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.EntityTypeHistory)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
-	for _, m := range _q.modifiers {
-		m(selector)
-	}
 	for _, p := range _q.predicates {
 		p(selector)
 	}
@@ -470,12 +458,6 @@ func (_q *EntityTypeHistoryQuery) sqlQuery(ctx context.Context) *sql.Selector {
 		selector.Limit(*limit)
 	}
 	return selector
-}
-
-// Modify adds a query modifier for attaching custom logic to queries.
-func (_q *EntityTypeHistoryQuery) Modify(modifiers ...func(s *sql.Selector)) *EntityTypeHistorySelect {
-	_q.modifiers = append(_q.modifiers, modifiers...)
-	return _q.Select()
 }
 
 // CountIDs returns the count of ids with FGA batch filtering applied
@@ -584,10 +566,4 @@ func (_s *EntityTypeHistorySelect) sqlScan(ctx context.Context, root *EntityType
 	}
 	defer rows.Close()
 	return sql.ScanSlice(rows, v)
-}
-
-// Modify adds a query modifier for attaching custom logic to queries.
-func (_s *EntityTypeHistorySelect) Modify(modifiers ...func(s *sql.Selector)) *EntityTypeHistorySelect {
-	_s.modifiers = append(_s.modifiers, modifiers...)
-	return _s
 }

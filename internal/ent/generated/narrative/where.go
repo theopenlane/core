@@ -8,8 +8,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // ID filters vertices based on their ID field.
@@ -1134,9 +1132,6 @@ func HasOwner() predicate.Narrative {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.Narrative
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1145,9 +1140,6 @@ func HasOwner() predicate.Narrative {
 func HasOwnerWith(preds ...predicate.Organization) predicate.Narrative {
 	return predicate.Narrative(func(s *sql.Selector) {
 		step := newOwnerStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.Narrative
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1163,9 +1155,6 @@ func HasBlockedGroups() predicate.Narrative {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, BlockedGroupsTable, BlockedGroupsPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.NarrativeBlockedGroups
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1174,9 +1163,6 @@ func HasBlockedGroups() predicate.Narrative {
 func HasBlockedGroupsWith(preds ...predicate.Group) predicate.Narrative {
 	return predicate.Narrative(func(s *sql.Selector) {
 		step := newBlockedGroupsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.NarrativeBlockedGroups
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1192,9 +1178,6 @@ func HasEditors() predicate.Narrative {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, EditorsTable, EditorsPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.NarrativeEditors
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1203,9 +1186,6 @@ func HasEditors() predicate.Narrative {
 func HasEditorsWith(preds ...predicate.Group) predicate.Narrative {
 	return predicate.Narrative(func(s *sql.Selector) {
 		step := newEditorsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.NarrativeEditors
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1221,9 +1201,6 @@ func HasViewers() predicate.Narrative {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, ViewersTable, ViewersPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.NarrativeViewers
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1232,9 +1209,6 @@ func HasViewers() predicate.Narrative {
 func HasViewersWith(preds ...predicate.Group) predicate.Narrative {
 	return predicate.Narrative(func(s *sql.Selector) {
 		step := newViewersStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.NarrativeViewers
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1250,9 +1224,6 @@ func HasSatisfies() predicate.Narrative {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, SatisfiesTable, SatisfiesPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.ControlNarratives
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1261,9 +1232,6 @@ func HasSatisfies() predicate.Narrative {
 func HasSatisfiesWith(preds ...predicate.Control) predicate.Narrative {
 	return predicate.Narrative(func(s *sql.Selector) {
 		step := newSatisfiesStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.ControlNarratives
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1279,9 +1247,6 @@ func HasPrograms() predicate.Narrative {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, ProgramsTable, ProgramsPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ProgramNarratives
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1290,9 +1255,6 @@ func HasPrograms() predicate.Narrative {
 func HasProgramsWith(preds ...predicate.Program) predicate.Narrative {
 	return predicate.Narrative(func(s *sql.Selector) {
 		step := newProgramsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ProgramNarratives
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1308,9 +1270,6 @@ func HasInternalPolicies() predicate.Narrative {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, InternalPoliciesTable, InternalPoliciesPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.InternalPolicy
-		step.Edge.Schema = schemaConfig.InternalPolicyNarratives
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1319,9 +1278,6 @@ func HasInternalPolicies() predicate.Narrative {
 func HasInternalPoliciesWith(preds ...predicate.InternalPolicy) predicate.Narrative {
 	return predicate.Narrative(func(s *sql.Selector) {
 		step := newInternalPoliciesStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.InternalPolicy
-		step.Edge.Schema = schemaConfig.InternalPolicyNarratives
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1337,9 +1293,6 @@ func HasProcedures() predicate.Narrative {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, ProceduresTable, ProceduresPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Procedure
-		step.Edge.Schema = schemaConfig.ProcedureNarratives
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1348,9 +1301,6 @@ func HasProcedures() predicate.Narrative {
 func HasProceduresWith(preds ...predicate.Procedure) predicate.Narrative {
 	return predicate.Narrative(func(s *sql.Selector) {
 		step := newProceduresStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Procedure
-		step.Edge.Schema = schemaConfig.ProcedureNarratives
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

@@ -9,8 +9,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // ID filters vertices based on their ID field.
@@ -1110,9 +1108,6 @@ func HasOwner() predicate.FindingControl {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.FindingControl
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1121,9 +1116,6 @@ func HasOwner() predicate.FindingControl {
 func HasOwnerWith(preds ...predicate.Organization) predicate.FindingControl {
 	return predicate.FindingControl(func(s *sql.Selector) {
 		step := newOwnerStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.FindingControl
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1139,9 +1131,6 @@ func HasFinding() predicate.FindingControl {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, FindingTable, FindingColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Finding
-		step.Edge.Schema = schemaConfig.FindingControl
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1150,9 +1139,6 @@ func HasFinding() predicate.FindingControl {
 func HasFindingWith(preds ...predicate.Finding) predicate.FindingControl {
 	return predicate.FindingControl(func(s *sql.Selector) {
 		step := newFindingStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Finding
-		step.Edge.Schema = schemaConfig.FindingControl
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1168,9 +1154,6 @@ func HasControl() predicate.FindingControl {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, ControlTable, ControlColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.FindingControl
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1179,9 +1162,6 @@ func HasControl() predicate.FindingControl {
 func HasControlWith(preds ...predicate.Control) predicate.FindingControl {
 	return predicate.FindingControl(func(s *sql.Selector) {
 		step := newControlStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.FindingControl
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1197,9 +1177,6 @@ func HasStandard() predicate.FindingControl {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, StandardTable, StandardColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Standard
-		step.Edge.Schema = schemaConfig.FindingControl
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1208,9 +1185,6 @@ func HasStandard() predicate.FindingControl {
 func HasStandardWith(preds ...predicate.Standard) predicate.FindingControl {
 	return predicate.FindingControl(func(s *sql.Selector) {
 		step := newStandardStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Standard
-		step.Edge.Schema = schemaConfig.FindingControl
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

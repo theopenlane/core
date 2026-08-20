@@ -350,7 +350,6 @@ func (_c *WebauthnCreate) createSpec() (*Webauthn, *sqlgraph.CreateSpec) {
 		_node = &Webauthn{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(webauthn.Table, sqlgraph.NewFieldSpec(webauthn.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.Webauthn
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -426,7 +425,6 @@ func (_c *WebauthnCreate) createSpec() (*Webauthn, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Webauthn
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
