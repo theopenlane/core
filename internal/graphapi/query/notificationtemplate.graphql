@@ -118,6 +118,8 @@ mutation CreateNotificationTemplate ($input: CreateNotificationTemplateInput!) {
 mutation DeleteBulkNotificationTemplate ($ids: [ID!]!) {
 	deleteBulkNotificationTemplate(ids: $ids) {
 		deletedIDs
+		notDeletedIDs
+		error
 	}
 }
 mutation DeleteNotificationTemplate ($deleteNotificationTemplateId: ID!) {
@@ -296,6 +298,8 @@ mutation UpdateBulkCSVNotificationTemplate ($input: Upload!) {
 			workflowDefinitionID
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 mutation UpdateBulkNotificationTemplate ($ids: [ID!]!, $input: UpdateNotificationTemplateInput!) {
@@ -336,6 +340,8 @@ mutation UpdateBulkNotificationTemplate ($ids: [ID!]!, $input: UpdateNotificatio
 			workflowDefinitionID
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 mutation UpdateNotificationTemplate ($updateNotificationTemplateId: ID!, $input: UpdateNotificationTemplateInput!) {

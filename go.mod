@@ -10,8 +10,6 @@ tool (
 	gotest.tools/gotestsum
 )
 
-replace github.com/theopenlane/core/common => ./common
-
 require (
 	ariga.io/entcache v0.1.0
 	cloud.google.com/go/securitycenter v1.46.0
@@ -106,7 +104,7 @@ require (
 	github.com/theopenlane/echox v0.3.0
 	github.com/theopenlane/entx v0.32.0
 	github.com/theopenlane/go-client v0.13.0
-	github.com/theopenlane/gqlgen-plugins v0.16.0
+	github.com/theopenlane/gqlgen-plugins v0.17.0
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.37.0
 	github.com/theopenlane/newman v0.4.3
@@ -306,7 +304,7 @@ require (
 )
 
 require (
-	github.com/aws/aws-sdk-go-v2/service/securityhub v1.75.4
+	github.com/aws/aws-sdk-go-v2/service/securityhub v1.76.1
 	github.com/decred/dcrd/dcrec/secp256k1/v4 v4.4.1 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/dlclark/regexp2 v1.11.5 // indirect

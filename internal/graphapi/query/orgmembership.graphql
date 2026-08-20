@@ -74,6 +74,8 @@ mutation UpdateBulkOrgMemberRoles ($ids: [ID!]!, $input: UpdateOrgMembershipInpu
 			organizationID
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 mutation UpdateUserRoleInOrg ($updateOrgMemberId: ID!, $input: UpdateOrgMembershipInput!) {

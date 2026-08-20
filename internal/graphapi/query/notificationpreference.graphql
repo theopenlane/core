@@ -103,6 +103,8 @@ mutation CreateNotificationPreference ($input: CreateNotificationPreferenceInput
 mutation DeleteBulkNotificationPreference ($ids: [ID!]!) {
 	deleteBulkNotificationPreference(ids: $ids) {
 		deletedIDs
+		notDeletedIDs
+		error
 	}
 }
 mutation DeleteNotificationPreference ($deleteNotificationPreferenceId: ID!) {
@@ -261,6 +263,8 @@ mutation UpdateBulkCSVNotificationPreference ($input: Upload!) {
 			verifiedAt
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 mutation UpdateBulkNotificationPreference ($ids: [ID!]!, $input: UpdateNotificationPreferenceInput!) {
@@ -296,6 +300,8 @@ mutation UpdateBulkNotificationPreference ($ids: [ID!]!, $input: UpdateNotificat
 			verifiedAt
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 mutation UpdateNotificationPreference ($updateNotificationPreferenceId: ID!, $input: UpdateNotificationPreferenceInput!) {

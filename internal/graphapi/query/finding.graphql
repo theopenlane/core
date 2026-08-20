@@ -205,6 +205,8 @@ mutation CreateFinding ($input: CreateFindingInput!) {
 mutation DeleteBulkFinding ($ids: [ID!]!) {
 	deleteBulkFinding(ids: $ids) {
 		deletedIDs
+		notDeletedIDs
+		error
 	}
 }
 mutation DeleteFinding ($deleteFindingId: ID!) {
@@ -521,6 +523,8 @@ mutation UpdateBulkCSVFinding ($input: Upload!) {
 			workflowEligibleMarker
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 mutation UpdateBulkFinding ($ids: [ID!]!, $input: UpdateFindingInput!) {
@@ -590,6 +594,8 @@ mutation UpdateBulkFinding ($ids: [ID!]!, $input: UpdateFindingInput!) {
 			workflowEligibleMarker
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 mutation UpdateFinding ($updateFindingId: ID!, $input: UpdateFindingInput!) {

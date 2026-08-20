@@ -121,6 +121,8 @@ mutation CreateReview ($input: CreateReviewInput!) {
 mutation DeleteBulkReviewReview ($ids: [ID!]!) {
 	deleteBulkReview(ids: $ids) {
 		deletedIDs
+		notDeletedIDs
+		error
 	}
 }
 mutation DeleteReview ($deleteReviewId: ID!) {
@@ -283,6 +285,8 @@ mutation UpdateBulkCSVReview ($input: Upload!) {
 			updatedByImpersonator
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 mutation UpdateBulkReview ($ids: [ID!]!, $input: UpdateReviewInput!) {
@@ -324,6 +328,8 @@ mutation UpdateBulkReview ($ids: [ID!]!, $input: UpdateReviewInput!) {
 			updatedByImpersonator
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 mutation UpdateReview ($updateReviewId: ID!, $input: UpdateReviewInput!, $reviewFiles: [Upload!]) {

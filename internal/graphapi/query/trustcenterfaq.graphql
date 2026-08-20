@@ -55,6 +55,8 @@ mutation CreateTrustCenterFAQ ($input: CreateTrustCenterFAQInput!) {
 mutation DeleteBulkTrustCenterFAQ ($ids: [ID!]!) {
 	deleteBulkTrustCenterFAQ(ids: $ids) {
 		deletedIDs
+		notDeletedIDs
+		error
 	}
 }
 mutation DeleteTrustCenterFAQ ($deleteTrustCenterFAQId: ID!) {
@@ -150,6 +152,8 @@ mutation UpdateBulkCSVTrustCenterFAQ ($input: Upload!) {
 			updatedByImpersonator
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 mutation UpdateBulkTrustCenterFAQ ($ids: [ID!]!, $input: UpdateTrustCenterFAQInput!) {
@@ -169,6 +173,8 @@ mutation UpdateBulkTrustCenterFAQ ($ids: [ID!]!, $input: UpdateTrustCenterFAQInp
 			updatedByImpersonator
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 mutation UpdateTrustCenterFAQ ($updateTrustCenterFAQId: ID!, $input: UpdateTrustCenterFAQInput!) {

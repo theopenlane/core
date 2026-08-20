@@ -45,6 +45,8 @@ mutation DeleteAssessment ($deleteAssessmentId: ID!) {
 mutation DeleteBulkAssessment ($ids: [ID!]!) {
 	deleteBulkAssessment(ids: $ids) {
 		deletedIDs
+		notDeletedIDs
+		error
 	}
 }
 query GetAllAssessments {

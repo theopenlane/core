@@ -121,8 +121,8 @@ github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.19.37 h1:KGHa9iZCrgtkO
 github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.19.37/go.mod h1:FV79f0DSnZIEGsQjWenENGtUycrasyAaJZO+zRanLHA=
 github.com/aws/aws-sdk-go-v2/service/s3 v1.107.1 h1:VUTtUJMuRNMkb/7NIKmd8NQaeQLPGCMoTJxkYKre4qM=
 github.com/aws/aws-sdk-go-v2/service/s3 v1.107.1/go.mod h1:WvUaO0lP5GNMs1R6cs6qvB3mqo16GLta8yfOuf55Rpc=
-github.com/aws/aws-sdk-go-v2/service/securityhub v1.75.4 h1:zZiBp2G+FrtrT5DGcpp6733RwZh82nUemL/bZptkhHA=
-github.com/aws/aws-sdk-go-v2/service/securityhub v1.75.4/go.mod h1:zHr00dDys+8JbwQALvat8WGyudYfzc2W3dw79e+bSWs=
+github.com/aws/aws-sdk-go-v2/service/securityhub v1.76.1 h1:lEbg8OyHh1SfNYMuJLO6YPYmwinsHIQLfxsLVV9fiY4=
+github.com/aws/aws-sdk-go-v2/service/securityhub v1.76.1/go.mod h1:J6pYpnJ+hIVeDhBJOF9zaGNTDSt9Nr8m/vZsJy6/P+M=
 github.com/aws/aws-sdk-go-v2/service/signin v1.5.5 h1:0VTFBfOgPJrUSpGMgzoi8qLcXF5dbmiBuxpo14eBWUw=
 github.com/aws/aws-sdk-go-v2/service/signin v1.5.5/go.mod h1:sNZYlBxoohYMBYl47BO/bFtAM6I8HSsPa1qwwPPRGoQ=
 github.com/aws/aws-sdk-go-v2/service/sso v1.33.5 h1:jDQARFp1mJ2PEnllQf01nfFXGfWMJ59e0/HCHUTTZCk=
@@ -733,6 +733,8 @@ github.com/testcontainers/testcontainers-go v0.44.0 h1:/Fwh6HY1mIikhnm9e7HwoxGyc
 github.com/testcontainers/testcontainers-go v0.44.0/go.mod h1:IcnwQrYTO86xHXu5bvMaBH7ATlbS3Qn1M1QWW3c66rE=
 github.com/testcontainers/testcontainers-go/modules/openfga v0.44.0 h1:ql9bhSEO9muf6BAy7AD2SJm8AHw+VvVe40PCqMsbVXM=
 github.com/testcontainers/testcontainers-go/modules/openfga v0.44.0/go.mod h1:mYazHZ/v9091lsGp2eDj6al/cvQ5LPYQHFn127CReQA=
+github.com/theopenlane/core/common v1.0.25 h1:HTsiNLJeCBPudPliSqALWz/BEuCrRhg5kr601pyYvOs=
+github.com/theopenlane/core/common v1.0.25/go.mod h1:HYQjD+iqJdxdM5x3kpD9lk7q/cs6KAnNv5U23KEYn+A=
 github.com/theopenlane/echo-prometheus v0.1.0 h1:1zMejBVHe5w4zLHS+k5FV9S/46QBiwO6ggTSKi6r/7E=
 github.com/theopenlane/echo-prometheus v0.1.0/go.mod h1:Eiiv1ZLXKMsteQ3T+H1tFfSSZuXSvQfZp95qr5hmGkA=
 github.com/theopenlane/echox v0.3.0 h1:uwOKEw+r1utGQoOR6dZQqAVuY5j8TcasqnTwO5+rMsA=
@@ -743,8 +745,8 @@ github.com/theopenlane/entx v0.32.0 h1:IM7Ohm3O8TJBeUxiYOgKWessVwkM5Xvlx+dXDoQgL
 github.com/theopenlane/entx v0.32.0/go.mod h1:CQc8om4cosC0QGB6W6QgRLKRPaf/b3Wlv932vWuGFto=
 github.com/theopenlane/go-client v0.13.0 h1:/jSEZLu1urijrmM1skYo9kf0MsVJwe3DNpuyYGv6Pj4=
 github.com/theopenlane/go-client v0.13.0/go.mod h1:g5i+gYjkih1SSgY/lFi4p302cLZBOJ8pgCFf02eZKaI=
-github.com/theopenlane/gqlgen-plugins v0.16.0 h1:m/YfOCxj9RQePVZy8CS8BZpJ8ZJsM0BL6FnQYFM1SYg=
-github.com/theopenlane/gqlgen-plugins v0.16.0/go.mod h1:sgxIl2SSG5Y2jGyX3iiV4UkWSii5bcZu6A31vCJbAsQ=
+github.com/theopenlane/gqlgen-plugins v0.17.0 h1:wPu227ByD1+M9fW3wbV8b7makzB90ftelW42QxjAFJg=
+github.com/theopenlane/gqlgen-plugins v0.17.0/go.mod h1:iOSU/n2zq/uENZ9B9Vjg7mHEwCxCqDOO3HA1V8lvt8s=
 github.com/theopenlane/httpsling v0.3.0 h1:Bad0dGdqCqAB8UVDyVo+YCevzRvGHhmkK22F7T3pXtY=
 github.com/theopenlane/httpsling v0.3.0/go.mod h1:iJc3XRLYTFIpfCnPpLZVMBP0xsWIPAb7ozARtQoclAE=
 github.com/theopenlane/iam v0.37.0 h1:s0p89/V6PeUdvY7s++j99IN/Om28rmMZUJ5fUycrKs4=

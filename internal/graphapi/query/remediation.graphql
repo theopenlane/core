@@ -130,6 +130,8 @@ mutation CreateRemediation ($input: CreateRemediationInput!) {
 mutation DeleteBulkRemediation ($ids: [ID!]!) {
 	deleteBulkRemediation(ids: $ids) {
 		deletedIDs
+		notDeletedIDs
+		error
 	}
 }
 mutation DeleteRemediation ($deleteRemediationId: ID!) {
@@ -300,6 +302,8 @@ mutation UpdateBulkCSVRemediation ($input: Upload!) {
 			workflowEligibleMarker
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 mutation UpdateBulkRemediation ($ids: [ID!]!, $input: UpdateRemediationInput!) {
@@ -344,6 +348,8 @@ mutation UpdateBulkRemediation ($ids: [ID!]!, $input: UpdateRemediationInput!) {
 			workflowEligibleMarker
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 mutation UpdateRemediation ($updateRemediationId: ID!, $input: UpdateRemediationInput!) {

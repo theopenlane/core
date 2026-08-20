@@ -122,8 +122,10 @@ type ComplexityRoot struct {
 	}
 
 	APITokenBulkUpdatePayload struct {
-		APITokens  func(childComplexity int) int
-		UpdatedIDs func(childComplexity int) int
+		APITokens     func(childComplexity int) int
+		Error         func(childComplexity int) int
+		NotUpdatedIDs func(childComplexity int) int
+		UpdatedIDs    func(childComplexity int) int
 	}
 
 	APITokenConnection struct {
@@ -237,8 +239,10 @@ type ComplexityRoot struct {
 	}
 
 	ActionPlanBulkUpdatePayload struct {
-		ActionPlans func(childComplexity int) int
-		UpdatedIDs  func(childComplexity int) int
+		ActionPlans   func(childComplexity int) int
+		Error         func(childComplexity int) int
+		NotUpdatedIDs func(childComplexity int) int
+		UpdatedIDs    func(childComplexity int) int
 	}
 
 	ActionPlanConnection struct {
@@ -491,8 +495,10 @@ type ComplexityRoot struct {
 	}
 
 	AssetBulkUpdatePayload struct {
-		Assets     func(childComplexity int) int
-		UpdatedIDs func(childComplexity int) int
+		Assets        func(childComplexity int) int
+		Error         func(childComplexity int) int
+		NotUpdatedIDs func(childComplexity int) int
+		UpdatedIDs    func(childComplexity int) int
 	}
 
 	AssetConnection struct {
@@ -728,8 +734,10 @@ type ComplexityRoot struct {
 	}
 
 	CheckResultBulkUpdatePayload struct {
-		CheckResults func(childComplexity int) int
-		UpdatedIDs   func(childComplexity int) int
+		CheckResults  func(childComplexity int) int
+		Error         func(childComplexity int) int
+		NotUpdatedIDs func(childComplexity int) int
+		UpdatedIDs    func(childComplexity int) int
 	}
 
 	CheckResultConnection struct {
@@ -793,8 +801,10 @@ type ComplexityRoot struct {
 	}
 
 	ContactBulkUpdatePayload struct {
-		Contacts   func(childComplexity int) int
-		UpdatedIDs func(childComplexity int) int
+		Contacts      func(childComplexity int) int
+		Error         func(childComplexity int) int
+		NotUpdatedIDs func(childComplexity int) int
+		UpdatedIDs    func(childComplexity int) int
 	}
 
 	ContactConnection struct {
@@ -929,8 +939,10 @@ type ComplexityRoot struct {
 	}
 
 	ControlBulkUpdatePayload struct {
-		Controls   func(childComplexity int) int
-		UpdatedIDs func(childComplexity int) int
+		Controls      func(childComplexity int) int
+		Error         func(childComplexity int) int
+		NotUpdatedIDs func(childComplexity int) int
+		UpdatedIDs    func(childComplexity int) int
 	}
 
 	ControlCategory struct {
@@ -1048,6 +1060,8 @@ type ComplexityRoot struct {
 
 	ControlImplementationBulkUpdatePayload struct {
 		ControlImplementations func(childComplexity int) int
+		Error                  func(childComplexity int) int
+		NotUpdatedIDs          func(childComplexity int) int
 		UpdatedIDs             func(childComplexity int) int
 	}
 
@@ -1139,6 +1153,8 @@ type ComplexityRoot struct {
 
 	ControlObjectiveBulkUpdatePayload struct {
 		ControlObjectives func(childComplexity int) int
+		Error             func(childComplexity int) int
+		NotUpdatedIDs     func(childComplexity int) int
 		UpdatedIDs        func(childComplexity int) int
 	}
 
@@ -1242,6 +1258,8 @@ type ComplexityRoot struct {
 
 	CustomDomainBulkUpdatePayload struct {
 		CustomDomains func(childComplexity int) int
+		Error         func(childComplexity int) int
+		NotUpdatedIDs func(childComplexity int) int
 		UpdatedIDs    func(childComplexity int) int
 	}
 
@@ -1363,6 +1381,8 @@ type ComplexityRoot struct {
 
 	DNSVerificationBulkUpdatePayload struct {
 		DNSVerifications func(childComplexity int) int
+		Error            func(childComplexity int) int
+		NotUpdatedIDs    func(childComplexity int) int
 		UpdatedIDs       func(childComplexity int) int
 	}
 
@@ -1765,8 +1785,10 @@ type ComplexityRoot struct {
 	}
 
 	DocumentDataBulkUpdatePayload struct {
-		DocumentData func(childComplexity int) int
-		UpdatedIDs   func(childComplexity int) int
+		DocumentData  func(childComplexity int) int
+		Error         func(childComplexity int) int
+		NotUpdatedIDs func(childComplexity int) int
+		UpdatedIDs    func(childComplexity int) int
 	}
 
 	DocumentDataConnection struct {
@@ -1843,6 +1865,8 @@ type ComplexityRoot struct {
 
 	EmailTemplateBulkUpdatePayload struct {
 		EmailTemplates func(childComplexity int) int
+		Error          func(childComplexity int) int
+		NotUpdatedIDs  func(childComplexity int) int
 		UpdatedIDs     func(childComplexity int) int
 	}
 
@@ -2001,8 +2025,10 @@ type ComplexityRoot struct {
 	}
 
 	EntityBulkUpdatePayload struct {
-		Entities   func(childComplexity int) int
-		UpdatedIDs func(childComplexity int) int
+		Entities      func(childComplexity int) int
+		Error         func(childComplexity int) int
+		NotUpdatedIDs func(childComplexity int) int
+		UpdatedIDs    func(childComplexity int) int
 	}
 
 	EntityConnection struct {
@@ -2052,8 +2078,10 @@ type ComplexityRoot struct {
 	}
 
 	EntityTypeBulkUpdatePayload struct {
-		EntityTypes func(childComplexity int) int
-		UpdatedIDs  func(childComplexity int) int
+		EntityTypes   func(childComplexity int) int
+		Error         func(childComplexity int) int
+		NotUpdatedIDs func(childComplexity int) int
+		UpdatedIDs    func(childComplexity int) int
 	}
 
 	EntityTypeConnection struct {
@@ -2119,8 +2147,10 @@ type ComplexityRoot struct {
 	}
 
 	EventBulkUpdatePayload struct {
-		Events     func(childComplexity int) int
-		UpdatedIDs func(childComplexity int) int
+		Error         func(childComplexity int) int
+		Events        func(childComplexity int) int
+		NotUpdatedIDs func(childComplexity int) int
+		UpdatedIDs    func(childComplexity int) int
 	}
 
 	EventConnection struct {
@@ -2203,8 +2233,10 @@ type ComplexityRoot struct {
 	}
 
 	EvidenceBulkUpdatePayload struct {
-		Evidences  func(childComplexity int) int
-		UpdatedIDs func(childComplexity int) int
+		Error         func(childComplexity int) int
+		Evidences     func(childComplexity int) int
+		NotUpdatedIDs func(childComplexity int) int
+		UpdatedIDs    func(childComplexity int) int
 	}
 
 	EvidenceConnection struct {
@@ -2475,8 +2507,10 @@ type ComplexityRoot struct {
 	}
 
 	FindingBulkUpdatePayload struct {
-		Findings   func(childComplexity int) int
-		UpdatedIDs func(childComplexity int) int
+		Error         func(childComplexity int) int
+		Findings      func(childComplexity int) int
+		NotUpdatedIDs func(childComplexity int) int
+		UpdatedIDs    func(childComplexity int) int
 	}
 
 	FindingConnection struct {
@@ -2650,8 +2684,10 @@ type ComplexityRoot struct {
 	}
 
 	GroupBulkUpdatePayload struct {
-		Groups     func(childComplexity int) int
-		UpdatedIDs func(childComplexity int) int
+		Error         func(childComplexity int) int
+		Groups        func(childComplexity int) int
+		NotUpdatedIDs func(childComplexity int) int
+		UpdatedIDs    func(childComplexity int) int
 	}
 
 	GroupConnection struct {
@@ -2699,7 +2735,9 @@ type ComplexityRoot struct {
 	}
 
 	GroupMembershipBulkUpdatePayload struct {
+		Error            func(childComplexity int) int
 		GroupMemberships func(childComplexity int) int
+		NotUpdatedIDs    func(childComplexity int) int
 		UpdatedIDs       func(childComplexity int) int
 	}
 
@@ -2771,7 +2809,9 @@ type ComplexityRoot struct {
 	}
 
 	GroupSettingBulkUpdatePayload struct {
+		Error         func(childComplexity int) int
 		GroupSettings func(childComplexity int) int
+		NotUpdatedIDs func(childComplexity int) int
 		UpdatedIDs    func(childComplexity int) int
 	}
 
@@ -2838,8 +2878,10 @@ type ComplexityRoot struct {
 	}
 
 	HushBulkUpdatePayload struct {
-		Hushes     func(childComplexity int) int
-		UpdatedIDs func(childComplexity int) int
+		Error         func(childComplexity int) int
+		Hushes        func(childComplexity int) int
+		NotUpdatedIDs func(childComplexity int) int
+		UpdatedIDs    func(childComplexity int) int
 	}
 
 	HushConnection struct {
@@ -2947,7 +2989,9 @@ type ComplexityRoot struct {
 	}
 
 	IdentityHolderBulkUpdatePayload struct {
+		Error           func(childComplexity int) int
 		IdentityHolders func(childComplexity int) int
+		NotUpdatedIDs   func(childComplexity int) int
 		UpdatedIDs      func(childComplexity int) int
 	}
 
@@ -3139,7 +3183,9 @@ type ComplexityRoot struct {
 	}
 
 	InternalPolicyBulkUpdatePayload struct {
+		Error            func(childComplexity int) int
 		InternalPolicies func(childComplexity int) int
+		NotUpdatedIDs    func(childComplexity int) int
 		UpdatedIDs       func(childComplexity int) int
 	}
 
@@ -3198,8 +3244,10 @@ type ComplexityRoot struct {
 	}
 
 	InviteBulkUpdatePayload struct {
-		Invites    func(childComplexity int) int
-		UpdatedIDs func(childComplexity int) int
+		Error         func(childComplexity int) int
+		Invites       func(childComplexity int) int
+		NotUpdatedIDs func(childComplexity int) int
+		UpdatedIDs    func(childComplexity int) int
 	}
 
 	InviteConnection struct {
@@ -3431,8 +3479,10 @@ type ComplexityRoot struct {
 	}
 
 	JobTemplateBulkUpdatePayload struct {
-		JobTemplates func(childComplexity int) int
-		UpdatedIDs   func(childComplexity int) int
+		Error         func(childComplexity int) int
+		JobTemplates  func(childComplexity int) int
+		NotUpdatedIDs func(childComplexity int) int
+		UpdatedIDs    func(childComplexity int) int
 	}
 
 	JobTemplateConnection struct {
@@ -3482,7 +3532,9 @@ type ComplexityRoot struct {
 	}
 
 	MappableDomainBulkUpdatePayload struct {
+		Error           func(childComplexity int) int
 		MappableDomains func(childComplexity int) int
+		NotUpdatedIDs   func(childComplexity int) int
 		UpdatedIDs      func(childComplexity int) int
 	}
 
@@ -3545,7 +3597,9 @@ type ComplexityRoot struct {
 	}
 
 	MappedControlBulkUpdatePayload struct {
+		Error          func(childComplexity int) int
 		MappedControls func(childComplexity int) int
+		NotUpdatedIDs  func(childComplexity int) int
 		UpdatedIDs     func(childComplexity int) int
 	}
 
@@ -4227,8 +4281,10 @@ type ComplexityRoot struct {
 	}
 
 	NarrativeBulkUpdatePayload struct {
-		Narratives func(childComplexity int) int
-		UpdatedIDs func(childComplexity int) int
+		Error         func(childComplexity int) int
+		Narratives    func(childComplexity int) int
+		NotUpdatedIDs func(childComplexity int) int
+		UpdatedIDs    func(childComplexity int) int
 	}
 
 	NarrativeConnection struct {
@@ -4385,6 +4441,8 @@ type ComplexityRoot struct {
 	}
 
 	NotificationPreferenceBulkUpdatePayload struct {
+		Error                   func(childComplexity int) int
+		NotUpdatedIDs           func(childComplexity int) int
 		NotificationPreferences func(childComplexity int) int
 		UpdatedIDs              func(childComplexity int) int
 	}
@@ -4464,6 +4522,8 @@ type ComplexityRoot struct {
 	}
 
 	NotificationTemplateBulkUpdatePayload struct {
+		Error                 func(childComplexity int) int
+		NotUpdatedIDs         func(childComplexity int) int
 		NotificationTemplates func(childComplexity int) int
 		UpdatedIDs            func(childComplexity int) int
 	}
@@ -4546,6 +4606,8 @@ type ComplexityRoot struct {
 	}
 
 	OrgMembershipBulkUpdatePayload struct {
+		Error          func(childComplexity int) int
+		NotUpdatedIDs  func(childComplexity int) int
 		OrgMemberships func(childComplexity int) int
 		UpdatedIDs     func(childComplexity int) int
 	}
@@ -4862,6 +4924,8 @@ type ComplexityRoot struct {
 	}
 
 	OrganizationSettingBulkUpdatePayload struct {
+		Error                func(childComplexity int) int
+		NotUpdatedIDs        func(childComplexity int) int
 		OrganizationSettings func(childComplexity int) int
 		UpdatedIDs           func(childComplexity int) int
 	}
@@ -5179,8 +5243,10 @@ type ComplexityRoot struct {
 	}
 
 	ProcedureBulkUpdatePayload struct {
-		Procedures func(childComplexity int) int
-		UpdatedIDs func(childComplexity int) int
+		Error         func(childComplexity int) int
+		NotUpdatedIDs func(childComplexity int) int
+		Procedures    func(childComplexity int) int
+		UpdatedIDs    func(childComplexity int) int
 	}
 
 	ProcedureConnection struct {
@@ -5274,8 +5340,10 @@ type ComplexityRoot struct {
 	}
 
 	ProgramBulkUpdatePayload struct {
-		Programs   func(childComplexity int) int
-		UpdatedIDs func(childComplexity int) int
+		Error         func(childComplexity int) int
+		NotUpdatedIDs func(childComplexity int) int
+		Programs      func(childComplexity int) int
+		UpdatedIDs    func(childComplexity int) int
 	}
 
 	ProgramConnection struct {
@@ -5322,6 +5390,8 @@ type ComplexityRoot struct {
 	}
 
 	ProgramMembershipBulkUpdatePayload struct {
+		Error              func(childComplexity int) int
+		NotUpdatedIDs      func(childComplexity int) int
 		ProgramMemberships func(childComplexity int) int
 		UpdatedIDs         func(childComplexity int) int
 	}
@@ -5701,8 +5771,10 @@ type ComplexityRoot struct {
 	}
 
 	RemediationBulkUpdatePayload struct {
-		Remediations func(childComplexity int) int
-		UpdatedIDs   func(childComplexity int) int
+		Error         func(childComplexity int) int
+		NotUpdatedIDs func(childComplexity int) int
+		Remediations  func(childComplexity int) int
+		UpdatedIDs    func(childComplexity int) int
 	}
 
 	RemediationConnection struct {
@@ -5797,8 +5869,10 @@ type ComplexityRoot struct {
 	}
 
 	ReviewBulkUpdatePayload struct {
-		Reviews    func(childComplexity int) int
-		UpdatedIDs func(childComplexity int) int
+		Error         func(childComplexity int) int
+		NotUpdatedIDs func(childComplexity int) int
+		Reviews       func(childComplexity int) int
+		UpdatedIDs    func(childComplexity int) int
 	}
 
 	ReviewConnection struct {
@@ -5913,8 +5987,10 @@ type ComplexityRoot struct {
 	}
 
 	RiskBulkUpdatePayload struct {
-		Risks      func(childComplexity int) int
-		UpdatedIDs func(childComplexity int) int
+		Error         func(childComplexity int) int
+		NotUpdatedIDs func(childComplexity int) int
+		Risks         func(childComplexity int) int
+		UpdatedIDs    func(childComplexity int) int
 	}
 
 	RiskConnection struct {
@@ -5968,6 +6044,8 @@ type ComplexityRoot struct {
 	}
 
 	SLADefinitionBulkUpdatePayload struct {
+		Error          func(childComplexity int) int
+		NotUpdatedIDs  func(childComplexity int) int
 		SLADefinitions func(childComplexity int) int
 		UpdatedIDs     func(childComplexity int) int
 	}
@@ -6066,8 +6144,10 @@ type ComplexityRoot struct {
 	}
 
 	ScanBulkUpdatePayload struct {
-		Scans      func(childComplexity int) int
-		UpdatedIDs func(childComplexity int) int
+		Error         func(childComplexity int) int
+		NotUpdatedIDs func(childComplexity int) int
+		Scans         func(childComplexity int) int
+		UpdatedIDs    func(childComplexity int) int
 	}
 
 	ScanConnection struct {
@@ -6125,6 +6205,8 @@ type ComplexityRoot struct {
 	}
 
 	ScheduledJobBulkUpdatePayload struct {
+		Error         func(childComplexity int) int
+		NotUpdatedIDs func(childComplexity int) int
 		ScheduledJobs func(childComplexity int) int
 		UpdatedIDs    func(childComplexity int) int
 	}
@@ -6407,8 +6489,10 @@ type ComplexityRoot struct {
 	}
 
 	SubcontrolBulkUpdatePayload struct {
-		Subcontrols func(childComplexity int) int
-		UpdatedIDs  func(childComplexity int) int
+		Error         func(childComplexity int) int
+		NotUpdatedIDs func(childComplexity int) int
+		Subcontrols   func(childComplexity int) int
+		UpdatedIDs    func(childComplexity int) int
 	}
 
 	SubcontrolConnection struct {
@@ -6471,6 +6555,8 @@ type ComplexityRoot struct {
 	}
 
 	SubprocessorBulkUpdatePayload struct {
+		Error         func(childComplexity int) int
+		NotUpdatedIDs func(childComplexity int) int
 		Subprocessors func(childComplexity int) int
 		UpdatedIDs    func(childComplexity int) int
 	}
@@ -6592,6 +6678,8 @@ type ComplexityRoot struct {
 	}
 
 	SystemDetailBulkUpdatePayload struct {
+		Error         func(childComplexity int) int
+		NotUpdatedIDs func(childComplexity int) int
 		SystemDetails func(childComplexity int) int
 		UpdatedIDs    func(childComplexity int) int
 	}
@@ -6780,8 +6868,10 @@ type ComplexityRoot struct {
 	}
 
 	TaskBulkUpdatePayload struct {
-		Tasks      func(childComplexity int) int
-		UpdatedIDs func(childComplexity int) int
+		Error         func(childComplexity int) int
+		NotUpdatedIDs func(childComplexity int) int
+		Tasks         func(childComplexity int) int
+		UpdatedIDs    func(childComplexity int) int
 	}
 
 	TaskConnection struct {
@@ -6853,8 +6943,10 @@ type ComplexityRoot struct {
 	}
 
 	TemplateBulkUpdatePayload struct {
-		Templates  func(childComplexity int) int
-		UpdatedIDs func(childComplexity int) int
+		Error         func(childComplexity int) int
+		NotUpdatedIDs func(childComplexity int) int
+		Templates     func(childComplexity int) int
+		UpdatedIDs    func(childComplexity int) int
 	}
 
 	TemplateConnection struct {
@@ -6963,6 +7055,8 @@ type ComplexityRoot struct {
 	}
 
 	TrustCenterComplianceBulkUpdatePayload struct {
+		Error                  func(childComplexity int) int
+		NotUpdatedIDs          func(childComplexity int) int
 		TrustCenterCompliances func(childComplexity int) int
 		UpdatedIDs             func(childComplexity int) int
 	}
@@ -7042,6 +7136,8 @@ type ComplexityRoot struct {
 	}
 
 	TrustCenterDocBulkUpdatePayload struct {
+		Error           func(childComplexity int) int
+		NotUpdatedIDs   func(childComplexity int) int
 		TrustCenterDocs func(childComplexity int) int
 		UpdatedIDs      func(childComplexity int) int
 	}
@@ -7155,6 +7251,8 @@ type ComplexityRoot struct {
 	}
 
 	TrustCenterFAQBulkUpdatePayload struct {
+		Error           func(childComplexity int) int
+		NotUpdatedIDs   func(childComplexity int) int
 		TrustCenterFAQs func(childComplexity int) int
 		UpdatedIDs      func(childComplexity int) int
 	}
@@ -7357,6 +7455,8 @@ type ComplexityRoot struct {
 	}
 
 	TrustCenterSubprocessorBulkUpdatePayload struct {
+		Error                    func(childComplexity int) int
+		NotUpdatedIDs            func(childComplexity int) int
 		TrustCenterSubprocessors func(childComplexity int) int
 		UpdatedIDs               func(childComplexity int) int
 	}
@@ -7545,8 +7645,10 @@ type ComplexityRoot struct {
 	}
 
 	UserSettingBulkUpdatePayload struct {
-		UpdatedIDs   func(childComplexity int) int
-		UserSettings func(childComplexity int) int
+		Error         func(childComplexity int) int
+		NotUpdatedIDs func(childComplexity int) int
+		UpdatedIDs    func(childComplexity int) int
+		UserSettings  func(childComplexity int) int
 	}
 
 	UserSettingConnection struct {
@@ -7611,6 +7713,8 @@ type ComplexityRoot struct {
 	}
 
 	VendorRiskScoreBulkUpdatePayload struct {
+		Error            func(childComplexity int) int
+		NotUpdatedIDs    func(childComplexity int) int
 		UpdatedIDs       func(childComplexity int) int
 		VendorRiskScores func(childComplexity int) int
 	}
@@ -7665,6 +7769,8 @@ type ComplexityRoot struct {
 	}
 
 	VendorScoringConfigBulkUpdatePayload struct {
+		Error                func(childComplexity int) int
+		NotUpdatedIDs        func(childComplexity int) int
 		UpdatedIDs           func(childComplexity int) int
 		VendorScoringConfigs func(childComplexity int) int
 	}
@@ -7804,6 +7910,8 @@ type ComplexityRoot struct {
 	}
 
 	VulnerabilityBulkUpdatePayload struct {
+		Error           func(childComplexity int) int
+		NotUpdatedIDs   func(childComplexity int) int
 		UpdatedIDs      func(childComplexity int) int
 		Vulnerabilities func(childComplexity int) int
 	}
@@ -8443,6 +8551,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.APITokenBulkUpdatePayload.APITokens(childComplexity), true
+	case "APITokenBulkUpdatePayload.error":
+		if e.ComplexityRoot.APITokenBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.APITokenBulkUpdatePayload.Error(childComplexity), true
+	case "APITokenBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.APITokenBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.APITokenBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "APITokenBulkUpdatePayload.updatedIDs":
 		if e.ComplexityRoot.APITokenBulkUpdatePayload.UpdatedIDs == nil {
 			break
@@ -9038,6 +9158,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ActionPlanBulkUpdatePayload.ActionPlans(childComplexity), true
+	case "ActionPlanBulkUpdatePayload.error":
+		if e.ComplexityRoot.ActionPlanBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ActionPlanBulkUpdatePayload.Error(childComplexity), true
+	case "ActionPlanBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.ActionPlanBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ActionPlanBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "ActionPlanBulkUpdatePayload.updatedIDs":
 		if e.ComplexityRoot.ActionPlanBulkUpdatePayload.UpdatedIDs == nil {
 			break
@@ -10338,6 +10470,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.AssetBulkUpdatePayload.Assets(childComplexity), true
+	case "AssetBulkUpdatePayload.error":
+		if e.ComplexityRoot.AssetBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssetBulkUpdatePayload.Error(childComplexity), true
+	case "AssetBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.AssetBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.AssetBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "AssetBulkUpdatePayload.updatedIDs":
 		if e.ComplexityRoot.AssetBulkUpdatePayload.UpdatedIDs == nil {
 			break
@@ -11396,6 +11540,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.CheckResultBulkUpdatePayload.CheckResults(childComplexity), true
+	case "CheckResultBulkUpdatePayload.error":
+		if e.ComplexityRoot.CheckResultBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultBulkUpdatePayload.Error(childComplexity), true
+	case "CheckResultBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.CheckResultBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CheckResultBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "CheckResultBulkUpdatePayload.updatedIDs":
 		if e.ComplexityRoot.CheckResultBulkUpdatePayload.UpdatedIDs == nil {
 			break
@@ -11658,6 +11814,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ContactBulkUpdatePayload.Contacts(childComplexity), true
+	case "ContactBulkUpdatePayload.error":
+		if e.ComplexityRoot.ContactBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ContactBulkUpdatePayload.Error(childComplexity), true
+	case "ContactBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.ContactBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ContactBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "ContactBulkUpdatePayload.updatedIDs":
 		if e.ComplexityRoot.ContactBulkUpdatePayload.UpdatedIDs == nil {
 			break
@@ -12471,6 +12639,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ControlBulkUpdatePayload.Controls(childComplexity), true
+	case "ControlBulkUpdatePayload.error":
+		if e.ComplexityRoot.ControlBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlBulkUpdatePayload.Error(childComplexity), true
+	case "ControlBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.ControlBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "ControlBulkUpdatePayload.updatedIDs":
 		if e.ComplexityRoot.ControlBulkUpdatePayload.UpdatedIDs == nil {
 			break
@@ -12903,6 +13083,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ControlImplementationBulkUpdatePayload.ControlImplementations(childComplexity), true
+	case "ControlImplementationBulkUpdatePayload.error":
+		if e.ComplexityRoot.ControlImplementationBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlImplementationBulkUpdatePayload.Error(childComplexity), true
+	case "ControlImplementationBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.ControlImplementationBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlImplementationBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "ControlImplementationBulkUpdatePayload.updatedIDs":
 		if e.ComplexityRoot.ControlImplementationBulkUpdatePayload.UpdatedIDs == nil {
 			break
@@ -13339,6 +13531,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.ControlObjectiveBulkUpdatePayload.ControlObjectives(childComplexity), true
+	case "ControlObjectiveBulkUpdatePayload.error":
+		if e.ComplexityRoot.ControlObjectiveBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlObjectiveBulkUpdatePayload.Error(childComplexity), true
+	case "ControlObjectiveBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.ControlObjectiveBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ControlObjectiveBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "ControlObjectiveBulkUpdatePayload.updatedIDs":
 		if e.ComplexityRoot.ControlObjectiveBulkUpdatePayload.UpdatedIDs == nil {
 			break
@@ -13702,6 +13906,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.CustomDomainBulkUpdatePayload.CustomDomains(childComplexity), true
+	case "CustomDomainBulkUpdatePayload.error":
+		if e.ComplexityRoot.CustomDomainBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CustomDomainBulkUpdatePayload.Error(childComplexity), true
+	case "CustomDomainBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.CustomDomainBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.CustomDomainBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "CustomDomainBulkUpdatePayload.updatedIDs":
 		if e.ComplexityRoot.CustomDomainBulkUpdatePayload.UpdatedIDs == nil {
 			break
@@ -14194,6 +14410,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DNSVerificationBulkUpdatePayload.DNSVerifications(childComplexity), true
+	case "DNSVerificationBulkUpdatePayload.error":
+		if e.ComplexityRoot.DNSVerificationBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DNSVerificationBulkUpdatePayload.Error(childComplexity), true
+	case "DNSVerificationBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.DNSVerificationBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DNSVerificationBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "DNSVerificationBulkUpdatePayload.updatedIDs":
 		if e.ComplexityRoot.DNSVerificationBulkUpdatePayload.UpdatedIDs == nil {
 			break
@@ -15939,6 +16167,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.DocumentDataBulkUpdatePayload.DocumentData(childComplexity), true
+	case "DocumentDataBulkUpdatePayload.error":
+		if e.ComplexityRoot.DocumentDataBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DocumentDataBulkUpdatePayload.Error(childComplexity), true
+	case "DocumentDataBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.DocumentDataBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.DocumentDataBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "DocumentDataBulkUpdatePayload.updatedIDs":
 		if e.ComplexityRoot.DocumentDataBulkUpdatePayload.UpdatedIDs == nil {
 			break
@@ -16278,6 +16518,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EmailTemplateBulkUpdatePayload.EmailTemplates(childComplexity), true
+	case "EmailTemplateBulkUpdatePayload.error":
+		if e.ComplexityRoot.EmailTemplateBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EmailTemplateBulkUpdatePayload.Error(childComplexity), true
+	case "EmailTemplateBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.EmailTemplateBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EmailTemplateBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "EmailTemplateBulkUpdatePayload.updatedIDs":
 		if e.ComplexityRoot.EmailTemplateBulkUpdatePayload.UpdatedIDs == nil {
 			break
@@ -17180,6 +17432,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EntityBulkUpdatePayload.Entities(childComplexity), true
+	case "EntityBulkUpdatePayload.error":
+		if e.ComplexityRoot.EntityBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EntityBulkUpdatePayload.Error(childComplexity), true
+	case "EntityBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.EntityBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EntityBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "EntityBulkUpdatePayload.updatedIDs":
 		if e.ComplexityRoot.EntityBulkUpdatePayload.UpdatedIDs == nil {
 			break
@@ -17355,6 +17619,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.EntityTypeBulkUpdatePayload.EntityTypes(childComplexity), true
+	case "EntityTypeBulkUpdatePayload.error":
+		if e.ComplexityRoot.EntityTypeBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EntityTypeBulkUpdatePayload.Error(childComplexity), true
+	case "EntityTypeBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.EntityTypeBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EntityTypeBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "EntityTypeBulkUpdatePayload.updatedIDs":
 		if e.ComplexityRoot.EntityTypeBulkUpdatePayload.UpdatedIDs == nil {
 			break
@@ -17641,12 +17917,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.EventBulkDeletePayload.NotDeletedIDs(childComplexity), true
 
+	case "EventBulkUpdatePayload.error":
+		if e.ComplexityRoot.EventBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EventBulkUpdatePayload.Error(childComplexity), true
 	case "EventBulkUpdatePayload.events":
 		if e.ComplexityRoot.EventBulkUpdatePayload.Events == nil {
 			break
 		}
 
 		return e.ComplexityRoot.EventBulkUpdatePayload.Events(childComplexity), true
+	case "EventBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.EventBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EventBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "EventBulkUpdatePayload.updatedIDs":
 		if e.ComplexityRoot.EventBulkUpdatePayload.UpdatedIDs == nil {
 			break
@@ -18052,12 +18340,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.EvidenceBulkDeletePayload.NotDeletedIDs(childComplexity), true
 
+	case "EvidenceBulkUpdatePayload.error":
+		if e.ComplexityRoot.EvidenceBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EvidenceBulkUpdatePayload.Error(childComplexity), true
 	case "EvidenceBulkUpdatePayload.evidences":
 		if e.ComplexityRoot.EvidenceBulkUpdatePayload.Evidences == nil {
 			break
 		}
 
 		return e.ComplexityRoot.EvidenceBulkUpdatePayload.Evidences(childComplexity), true
+	case "EvidenceBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.EvidenceBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EvidenceBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "EvidenceBulkUpdatePayload.updatedIDs":
 		if e.ComplexityRoot.EvidenceBulkUpdatePayload.UpdatedIDs == nil {
 			break
@@ -19460,12 +19760,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.FindingBulkDeletePayload.NotDeletedIDs(childComplexity), true
 
+	case "FindingBulkUpdatePayload.error":
+		if e.ComplexityRoot.FindingBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.FindingBulkUpdatePayload.Error(childComplexity), true
 	case "FindingBulkUpdatePayload.findings":
 		if e.ComplexityRoot.FindingBulkUpdatePayload.Findings == nil {
 			break
 		}
 
 		return e.ComplexityRoot.FindingBulkUpdatePayload.Findings(childComplexity), true
+	case "FindingBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.FindingBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.FindingBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "FindingBulkUpdatePayload.updatedIDs":
 		if e.ComplexityRoot.FindingBulkUpdatePayload.UpdatedIDs == nil {
 			break
@@ -20476,12 +20788,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.GroupBulkDeletePayload.NotDeletedIDs(childComplexity), true
 
+	case "GroupBulkUpdatePayload.error":
+		if e.ComplexityRoot.GroupBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.GroupBulkUpdatePayload.Error(childComplexity), true
 	case "GroupBulkUpdatePayload.groups":
 		if e.ComplexityRoot.GroupBulkUpdatePayload.Groups == nil {
 			break
 		}
 
 		return e.ComplexityRoot.GroupBulkUpdatePayload.Groups(childComplexity), true
+	case "GroupBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.GroupBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.GroupBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "GroupBulkUpdatePayload.updatedIDs":
 		if e.ComplexityRoot.GroupBulkUpdatePayload.UpdatedIDs == nil {
 			break
@@ -20639,12 +20963,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.GroupMembershipBulkDeletePayload.NotDeletedIDs(childComplexity), true
 
+	case "GroupMembershipBulkUpdatePayload.error":
+		if e.ComplexityRoot.GroupMembershipBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.GroupMembershipBulkUpdatePayload.Error(childComplexity), true
 	case "GroupMembershipBulkUpdatePayload.groupMemberships":
 		if e.ComplexityRoot.GroupMembershipBulkUpdatePayload.GroupMemberships == nil {
 			break
 		}
 
 		return e.ComplexityRoot.GroupMembershipBulkUpdatePayload.GroupMemberships(childComplexity), true
+	case "GroupMembershipBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.GroupMembershipBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.GroupMembershipBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "GroupMembershipBulkUpdatePayload.updatedIDs":
 		if e.ComplexityRoot.GroupMembershipBulkUpdatePayload.UpdatedIDs == nil {
 			break
@@ -20867,12 +21203,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.GroupSettingBulkDeletePayload.NotDeletedIDs(childComplexity), true
 
+	case "GroupSettingBulkUpdatePayload.error":
+		if e.ComplexityRoot.GroupSettingBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.GroupSettingBulkUpdatePayload.Error(childComplexity), true
 	case "GroupSettingBulkUpdatePayload.groupSettings":
 		if e.ComplexityRoot.GroupSettingBulkUpdatePayload.GroupSettings == nil {
 			break
 		}
 
 		return e.ComplexityRoot.GroupSettingBulkUpdatePayload.GroupSettings(childComplexity), true
+	case "GroupSettingBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.GroupSettingBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.GroupSettingBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "GroupSettingBulkUpdatePayload.updatedIDs":
 		if e.ComplexityRoot.GroupSettingBulkUpdatePayload.UpdatedIDs == nil {
 			break
@@ -21114,12 +21462,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.HushBulkDeletePayload.NotDeletedIDs(childComplexity), true
 
+	case "HushBulkUpdatePayload.error":
+		if e.ComplexityRoot.HushBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.HushBulkUpdatePayload.Error(childComplexity), true
 	case "HushBulkUpdatePayload.hushes":
 		if e.ComplexityRoot.HushBulkUpdatePayload.Hushes == nil {
 			break
 		}
 
 		return e.ComplexityRoot.HushBulkUpdatePayload.Hushes(childComplexity), true
+	case "HushBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.HushBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.HushBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "HushBulkUpdatePayload.updatedIDs":
 		if e.ComplexityRoot.HushBulkUpdatePayload.UpdatedIDs == nil {
 			break
@@ -21715,12 +22075,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.IdentityHolderBulkDeletePayload.NotDeletedIDs(childComplexity), true
 
+	case "IdentityHolderBulkUpdatePayload.error":
+		if e.ComplexityRoot.IdentityHolderBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IdentityHolderBulkUpdatePayload.Error(childComplexity), true
 	case "IdentityHolderBulkUpdatePayload.identityHolders":
 		if e.ComplexityRoot.IdentityHolderBulkUpdatePayload.IdentityHolders == nil {
 			break
 		}
 
 		return e.ComplexityRoot.IdentityHolderBulkUpdatePayload.IdentityHolders(childComplexity), true
+	case "IdentityHolderBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.IdentityHolderBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.IdentityHolderBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "IdentityHolderBulkUpdatePayload.updatedIDs":
 		if e.ComplexityRoot.IdentityHolderBulkUpdatePayload.UpdatedIDs == nil {
 			break
@@ -22829,12 +23201,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.InternalPolicyBulkDeletePayload.NotDeletedIDs(childComplexity), true
 
+	case "InternalPolicyBulkUpdatePayload.error":
+		if e.ComplexityRoot.InternalPolicyBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.InternalPolicyBulkUpdatePayload.Error(childComplexity), true
 	case "InternalPolicyBulkUpdatePayload.internalPolicies":
 		if e.ComplexityRoot.InternalPolicyBulkUpdatePayload.InternalPolicies == nil {
 			break
 		}
 
 		return e.ComplexityRoot.InternalPolicyBulkUpdatePayload.InternalPolicies(childComplexity), true
+	case "InternalPolicyBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.InternalPolicyBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.InternalPolicyBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "InternalPolicyBulkUpdatePayload.updatedIDs":
 		if e.ComplexityRoot.InternalPolicyBulkUpdatePayload.UpdatedIDs == nil {
 			break
@@ -23040,12 +23424,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.InviteBulkDeletePayload.NotDeletedIDs(childComplexity), true
 
+	case "InviteBulkUpdatePayload.error":
+		if e.ComplexityRoot.InviteBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.InviteBulkUpdatePayload.Error(childComplexity), true
 	case "InviteBulkUpdatePayload.invites":
 		if e.ComplexityRoot.InviteBulkUpdatePayload.Invites == nil {
 			break
 		}
 
 		return e.ComplexityRoot.InviteBulkUpdatePayload.Invites(childComplexity), true
+	case "InviteBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.InviteBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.InviteBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "InviteBulkUpdatePayload.updatedIDs":
 		if e.ComplexityRoot.InviteBulkUpdatePayload.UpdatedIDs == nil {
 			break
@@ -23892,12 +24288,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.JobTemplateBulkDeletePayload.NotDeletedIDs(childComplexity), true
 
+	case "JobTemplateBulkUpdatePayload.error":
+		if e.ComplexityRoot.JobTemplateBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.JobTemplateBulkUpdatePayload.Error(childComplexity), true
 	case "JobTemplateBulkUpdatePayload.jobTemplates":
 		if e.ComplexityRoot.JobTemplateBulkUpdatePayload.JobTemplates == nil {
 			break
 		}
 
 		return e.ComplexityRoot.JobTemplateBulkUpdatePayload.JobTemplates(childComplexity), true
+	case "JobTemplateBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.JobTemplateBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.JobTemplateBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "JobTemplateBulkUpdatePayload.updatedIDs":
 		if e.ComplexityRoot.JobTemplateBulkUpdatePayload.UpdatedIDs == nil {
 			break
@@ -24050,12 +24458,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.MappableDomainBulkDeletePayload.NotDeletedIDs(childComplexity), true
 
+	case "MappableDomainBulkUpdatePayload.error":
+		if e.ComplexityRoot.MappableDomainBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MappableDomainBulkUpdatePayload.Error(childComplexity), true
 	case "MappableDomainBulkUpdatePayload.mappableDomains":
 		if e.ComplexityRoot.MappableDomainBulkUpdatePayload.MappableDomains == nil {
 			break
 		}
 
 		return e.ComplexityRoot.MappableDomainBulkUpdatePayload.MappableDomains(childComplexity), true
+	case "MappableDomainBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.MappableDomainBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MappableDomainBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "MappableDomainBulkUpdatePayload.updatedIDs":
 		if e.ComplexityRoot.MappableDomainBulkUpdatePayload.UpdatedIDs == nil {
 			break
@@ -24305,12 +24725,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.MappedControlBulkDeletePayload.NotDeletedIDs(childComplexity), true
 
+	case "MappedControlBulkUpdatePayload.error":
+		if e.ComplexityRoot.MappedControlBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MappedControlBulkUpdatePayload.Error(childComplexity), true
 	case "MappedControlBulkUpdatePayload.mappedControls":
 		if e.ComplexityRoot.MappedControlBulkUpdatePayload.MappedControls == nil {
 			break
 		}
 
 		return e.ComplexityRoot.MappedControlBulkUpdatePayload.MappedControls(childComplexity), true
+	case "MappedControlBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.MappedControlBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.MappedControlBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "MappedControlBulkUpdatePayload.updatedIDs":
 		if e.ComplexityRoot.MappedControlBulkUpdatePayload.UpdatedIDs == nil {
 			break
@@ -31332,12 +31764,24 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.NarrativeBulkDeletePayload.NotDeletedIDs(childComplexity), true
 
+	case "NarrativeBulkUpdatePayload.error":
+		if e.ComplexityRoot.NarrativeBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.NarrativeBulkUpdatePayload.Error(childComplexity), true
 	case "NarrativeBulkUpdatePayload.narratives":
 		if e.ComplexityRoot.NarrativeBulkUpdatePayload.Narratives == nil {
 			break
 		}
 
 		return e.ComplexityRoot.NarrativeBulkUpdatePayload.Narratives(childComplexity), true
+	case "NarrativeBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.NarrativeBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.NarrativeBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "NarrativeBulkUpdatePayload.updatedIDs":
 		if e.ComplexityRoot.NarrativeBulkUpdatePayload.UpdatedIDs == nil {
 			break
@@ -32001,6 +32445,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.NotificationPreferenceBulkDeletePayload.NotDeletedIDs(childComplexity), true
 
+	case "NotificationPreferenceBulkUpdatePayload.error":
+		if e.ComplexityRoot.NotificationPreferenceBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.NotificationPreferenceBulkUpdatePayload.Error(childComplexity), true
+	case "NotificationPreferenceBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.NotificationPreferenceBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.NotificationPreferenceBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "NotificationPreferenceBulkUpdatePayload.notificationPreferences":
 		if e.ComplexityRoot.NotificationPreferenceBulkUpdatePayload.NotificationPreferences == nil {
 			break
@@ -32327,6 +32783,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.NotificationTemplateBulkDeletePayload.NotDeletedIDs(childComplexity), true
 
+	case "NotificationTemplateBulkUpdatePayload.error":
+		if e.ComplexityRoot.NotificationTemplateBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.NotificationTemplateBulkUpdatePayload.Error(childComplexity), true
+	case "NotificationTemplateBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.NotificationTemplateBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.NotificationTemplateBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "NotificationTemplateBulkUpdatePayload.notificationTemplates":
 		if e.ComplexityRoot.NotificationTemplateBulkUpdatePayload.NotificationTemplates == nil {
 			break
@@ -32620,6 +33088,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.OrgMembershipBulkDeletePayload.NotDeletedIDs(childComplexity), true
 
+	case "OrgMembershipBulkUpdatePayload.error":
+		if e.ComplexityRoot.OrgMembershipBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrgMembershipBulkUpdatePayload.Error(childComplexity), true
+	case "OrgMembershipBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.OrgMembershipBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrgMembershipBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "OrgMembershipBulkUpdatePayload.orgMemberships":
 		if e.ComplexityRoot.OrgMembershipBulkUpdatePayload.OrgMemberships == nil {
 			break
@@ -35015,6 +35495,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.OrganizationSettingBulkDeletePayload.NotDeletedIDs(childComplexity), true
 
+	case "OrganizationSettingBulkUpdatePayload.error":
+		if e.ComplexityRoot.OrganizationSettingBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationSettingBulkUpdatePayload.Error(childComplexity), true
+	case "OrganizationSettingBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.OrganizationSettingBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.OrganizationSettingBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "OrganizationSettingBulkUpdatePayload.organizationSettings":
 		if e.ComplexityRoot.OrganizationSettingBulkUpdatePayload.OrganizationSettings == nil {
 			break
@@ -36683,6 +37175,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.ProcedureBulkDeletePayload.NotDeletedIDs(childComplexity), true
 
+	case "ProcedureBulkUpdatePayload.error":
+		if e.ComplexityRoot.ProcedureBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ProcedureBulkUpdatePayload.Error(childComplexity), true
+	case "ProcedureBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.ProcedureBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ProcedureBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "ProcedureBulkUpdatePayload.procedures":
 		if e.ComplexityRoot.ProcedureBulkUpdatePayload.Procedures == nil {
 			break
@@ -37210,6 +37714,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.ProgramBulkDeletePayload.NotDeletedIDs(childComplexity), true
 
+	case "ProgramBulkUpdatePayload.error":
+		if e.ComplexityRoot.ProgramBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ProgramBulkUpdatePayload.Error(childComplexity), true
+	case "ProgramBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.ProgramBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ProgramBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "ProgramBulkUpdatePayload.programs":
 		if e.ComplexityRoot.ProgramBulkUpdatePayload.Programs == nil {
 			break
@@ -37362,6 +37878,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.ProgramMembershipBulkDeletePayload.NotDeletedIDs(childComplexity), true
 
+	case "ProgramMembershipBulkUpdatePayload.error":
+		if e.ComplexityRoot.ProgramMembershipBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ProgramMembershipBulkUpdatePayload.Error(childComplexity), true
+	case "ProgramMembershipBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.ProgramMembershipBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ProgramMembershipBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "ProgramMembershipBulkUpdatePayload.programMemberships":
 		if e.ComplexityRoot.ProgramMembershipBulkUpdatePayload.ProgramMemberships == nil {
 			break
@@ -40702,6 +41230,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.RemediationBulkDeletePayload.NotDeletedIDs(childComplexity), true
 
+	case "RemediationBulkUpdatePayload.error":
+		if e.ComplexityRoot.RemediationBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RemediationBulkUpdatePayload.Error(childComplexity), true
+	case "RemediationBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.RemediationBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RemediationBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "RemediationBulkUpdatePayload.remediations":
 		if e.ComplexityRoot.RemediationBulkUpdatePayload.Remediations == nil {
 			break
@@ -41210,6 +41750,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.ReviewBulkDeletePayload.NotDeletedIDs(childComplexity), true
 
+	case "ReviewBulkUpdatePayload.error":
+		if e.ComplexityRoot.ReviewBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReviewBulkUpdatePayload.Error(childComplexity), true
+	case "ReviewBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.ReviewBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ReviewBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "ReviewBulkUpdatePayload.reviews":
 		if e.ComplexityRoot.ReviewBulkUpdatePayload.Reviews == nil {
 			break
@@ -41863,6 +42415,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.RiskBulkDeletePayload.NotDeletedIDs(childComplexity), true
 
+	case "RiskBulkUpdatePayload.error":
+		if e.ComplexityRoot.RiskBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RiskBulkUpdatePayload.Error(childComplexity), true
+	case "RiskBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.RiskBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.RiskBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "RiskBulkUpdatePayload.risks":
 		if e.ComplexityRoot.RiskBulkUpdatePayload.Risks == nil {
 			break
@@ -42050,6 +42614,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.SLADefinitionBulkDeletePayload.NotDeletedIDs(childComplexity), true
 
+	case "SLADefinitionBulkUpdatePayload.error":
+		if e.ComplexityRoot.SLADefinitionBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionBulkUpdatePayload.Error(childComplexity), true
+	case "SLADefinitionBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.SLADefinitionBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SLADefinitionBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "SLADefinitionBulkUpdatePayload.slaDefinitions":
 		if e.ComplexityRoot.SLADefinitionBulkUpdatePayload.SLADefinitions == nil {
 			break
@@ -42555,6 +43131,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.ScanBulkDeletePayload.NotDeletedIDs(childComplexity), true
 
+	case "ScanBulkUpdatePayload.error":
+		if e.ComplexityRoot.ScanBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ScanBulkUpdatePayload.Error(childComplexity), true
+	case "ScanBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.ScanBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ScanBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "ScanBulkUpdatePayload.scans":
 		if e.ComplexityRoot.ScanBulkUpdatePayload.Scans == nil {
 			break
@@ -42766,6 +43354,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.ScheduledJobBulkDeletePayload.NotDeletedIDs(childComplexity), true
 
+	case "ScheduledJobBulkUpdatePayload.error":
+		if e.ComplexityRoot.ScheduledJobBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ScheduledJobBulkUpdatePayload.Error(childComplexity), true
+	case "ScheduledJobBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.ScheduledJobBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.ScheduledJobBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "ScheduledJobBulkUpdatePayload.scheduledJobs":
 		if e.ComplexityRoot.ScheduledJobBulkUpdatePayload.ScheduledJobs == nil {
 			break
@@ -44163,6 +44763,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.SubcontrolBulkDeletePayload.NotDeletedIDs(childComplexity), true
 
+	case "SubcontrolBulkUpdatePayload.error":
+		if e.ComplexityRoot.SubcontrolBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SubcontrolBulkUpdatePayload.Error(childComplexity), true
+	case "SubcontrolBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.SubcontrolBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SubcontrolBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "SubcontrolBulkUpdatePayload.subcontrols":
 		if e.ComplexityRoot.SubcontrolBulkUpdatePayload.Subcontrols == nil {
 			break
@@ -44387,6 +44999,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.SubprocessorBulkDeletePayload.NotDeletedIDs(childComplexity), true
 
+	case "SubprocessorBulkUpdatePayload.error":
+		if e.ComplexityRoot.SubprocessorBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SubprocessorBulkUpdatePayload.Error(childComplexity), true
+	case "SubprocessorBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.SubprocessorBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SubprocessorBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "SubprocessorBulkUpdatePayload.subprocessors":
 		if e.ComplexityRoot.SubprocessorBulkUpdatePayload.Subprocessors == nil {
 			break
@@ -44854,6 +45478,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.SystemDetailBulkDeletePayload.NotDeletedIDs(childComplexity), true
 
+	case "SystemDetailBulkUpdatePayload.error":
+		if e.ComplexityRoot.SystemDetailBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailBulkUpdatePayload.Error(childComplexity), true
+	case "SystemDetailBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.SystemDetailBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.SystemDetailBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "SystemDetailBulkUpdatePayload.systemDetails":
 		if e.ComplexityRoot.SystemDetailBulkUpdatePayload.SystemDetails == nil {
 			break
@@ -45720,6 +46356,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.TaskBulkDeletePayload.NotDeletedIDs(childComplexity), true
 
+	case "TaskBulkUpdatePayload.error":
+		if e.ComplexityRoot.TaskBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TaskBulkUpdatePayload.Error(childComplexity), true
+	case "TaskBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.TaskBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TaskBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "TaskBulkUpdatePayload.tasks":
 		if e.ComplexityRoot.TaskBulkUpdatePayload.Tasks == nil {
 			break
@@ -46030,6 +46678,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.TemplateBulkDeletePayload.NotDeletedIDs(childComplexity), true
 
+	case "TemplateBulkUpdatePayload.error":
+		if e.ComplexityRoot.TemplateBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TemplateBulkUpdatePayload.Error(childComplexity), true
+	case "TemplateBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.TemplateBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TemplateBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "TemplateBulkUpdatePayload.templates":
 		if e.ComplexityRoot.TemplateBulkUpdatePayload.Templates == nil {
 			break
@@ -46544,6 +47204,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.TrustCenterComplianceBulkDeletePayload.NotDeletedIDs(childComplexity), true
 
+	case "TrustCenterComplianceBulkUpdatePayload.error":
+		if e.ComplexityRoot.TrustCenterComplianceBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterComplianceBulkUpdatePayload.Error(childComplexity), true
+	case "TrustCenterComplianceBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.TrustCenterComplianceBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterComplianceBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "TrustCenterComplianceBulkUpdatePayload.trustCenterCompliances":
 		if e.ComplexityRoot.TrustCenterComplianceBulkUpdatePayload.TrustCenterCompliances == nil {
 			break
@@ -46824,6 +47496,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.TrustCenterDocBulkDeletePayload.NotDeletedIDs(childComplexity), true
 
+	case "TrustCenterDocBulkUpdatePayload.error":
+		if e.ComplexityRoot.TrustCenterDocBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterDocBulkUpdatePayload.Error(childComplexity), true
+	case "TrustCenterDocBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.TrustCenterDocBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterDocBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "TrustCenterDocBulkUpdatePayload.trustCenterDocs":
 		if e.ComplexityRoot.TrustCenterDocBulkUpdatePayload.TrustCenterDocs == nil {
 			break
@@ -47216,6 +47900,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.TrustCenterFAQBulkDeletePayload.NotDeletedIDs(childComplexity), true
 
+	case "TrustCenterFAQBulkUpdatePayload.error":
+		if e.ComplexityRoot.TrustCenterFAQBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterFAQBulkUpdatePayload.Error(childComplexity), true
+	case "TrustCenterFAQBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.TrustCenterFAQBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterFAQBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "TrustCenterFAQBulkUpdatePayload.trustCenterFAQs":
 		if e.ComplexityRoot.TrustCenterFAQBulkUpdatePayload.TrustCenterFAQs == nil {
 			break
@@ -48004,6 +48700,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.TrustCenterSubprocessorBulkDeletePayload.NotDeletedIDs(childComplexity), true
 
+	case "TrustCenterSubprocessorBulkUpdatePayload.error":
+		if e.ComplexityRoot.TrustCenterSubprocessorBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterSubprocessorBulkUpdatePayload.Error(childComplexity), true
+	case "TrustCenterSubprocessorBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.TrustCenterSubprocessorBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.TrustCenterSubprocessorBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "TrustCenterSubprocessorBulkUpdatePayload.trustCenterSubprocessors":
 		if e.ComplexityRoot.TrustCenterSubprocessorBulkUpdatePayload.TrustCenterSubprocessors == nil {
 			break
@@ -48851,6 +49559,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.UserSettingBulkDeletePayload.NotDeletedIDs(childComplexity), true
 
+	case "UserSettingBulkUpdatePayload.error":
+		if e.ComplexityRoot.UserSettingBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.UserSettingBulkUpdatePayload.Error(childComplexity), true
+	case "UserSettingBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.UserSettingBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.UserSettingBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "UserSettingBulkUpdatePayload.updatedIDs":
 		if e.ComplexityRoot.UserSettingBulkUpdatePayload.UpdatedIDs == nil {
 			break
@@ -49094,6 +49814,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.VendorRiskScoreBulkDeletePayload.NotDeletedIDs(childComplexity), true
 
+	case "VendorRiskScoreBulkUpdatePayload.error":
+		if e.ComplexityRoot.VendorRiskScoreBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreBulkUpdatePayload.Error(childComplexity), true
+	case "VendorRiskScoreBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.VendorRiskScoreBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorRiskScoreBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "VendorRiskScoreBulkUpdatePayload.updatedIDs":
 		if e.ComplexityRoot.VendorRiskScoreBulkUpdatePayload.UpdatedIDs == nil {
 			break
@@ -49270,6 +50002,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.VendorScoringConfigBulkDeletePayload.NotDeletedIDs(childComplexity), true
 
+	case "VendorScoringConfigBulkUpdatePayload.error":
+		if e.ComplexityRoot.VendorScoringConfigBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorScoringConfigBulkUpdatePayload.Error(childComplexity), true
+	case "VendorScoringConfigBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.VendorScoringConfigBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VendorScoringConfigBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "VendorScoringConfigBulkUpdatePayload.updatedIDs":
 		if e.ComplexityRoot.VendorScoringConfigBulkUpdatePayload.UpdatedIDs == nil {
 			break
@@ -50051,6 +50795,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.VulnerabilityBulkDeletePayload.NotDeletedIDs(childComplexity), true
 
+	case "VulnerabilityBulkUpdatePayload.error":
+		if e.ComplexityRoot.VulnerabilityBulkUpdatePayload.Error == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityBulkUpdatePayload.Error(childComplexity), true
+	case "VulnerabilityBulkUpdatePayload.notUpdatedIDs":
+		if e.ComplexityRoot.VulnerabilityBulkUpdatePayload.NotUpdatedIDs == nil {
+			break
+		}
+
+		return e.ComplexityRoot.VulnerabilityBulkUpdatePayload.NotUpdatedIDs(childComplexity), true
 	case "VulnerabilityBulkUpdatePayload.updatedIDs":
 		if e.ComplexityRoot.VulnerabilityBulkUpdatePayload.UpdatedIDs == nil {
 			break
@@ -52956,6 +53712,14 @@ type ActionPlanBulkUpdatePayload {
     IDs of the updated actionPlans
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 
 """
@@ -53142,6 +53906,14 @@ type APITokenBulkUpdatePayload {
     IDs of the updated apiTokens
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 `, BuiltIn: false},
 	{Name: "../schema/assessment.graphql", Input: `extend type Assessment {
@@ -53565,6 +54337,14 @@ type AssetBulkUpdatePayload {
     IDs of the updated assets
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 `, BuiltIn: false},
 	{Name: "../schema/campaign.graphql", Input: `extend type Campaign {
@@ -54137,6 +54917,14 @@ type CheckResultBulkUpdatePayload {
     IDs of the updated checkResults
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 
 """
@@ -54154,7 +54942,7 @@ type CheckResultBulkDeletePayload {
     """
     IDs of checkResults that were not deleted
     """
-    notDeletedIDs: [ID!]
+    notDeletedIDs: [ID!]!
 }
 `, BuiltIn: false},
 	{Name: "../schema/contact.graphql", Input: `extend type Query {
@@ -54306,6 +55094,14 @@ type ContactBulkUpdatePayload {
     IDs of the updated contacts
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 
 """
@@ -54499,6 +55295,14 @@ type ControlBulkUpdatePayload {
     IDs of the updated controls
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 
 """
@@ -55084,6 +55888,14 @@ type ControlImplementationBulkUpdatePayload {
     IDs of the updated controlImplementations
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 `, BuiltIn: false},
 	{Name: "../schema/controlobjective.graphql", Input: `extend type Query {
@@ -55251,6 +56063,14 @@ type ControlObjectiveBulkUpdatePayload {
     IDs of the updated controlObjectives
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 `, BuiltIn: false},
 	{Name: "../schema/controlreport.graphql", Input: `extend type Query {
@@ -55766,6 +56586,14 @@ type CustomDomainBulkUpdatePayload {
     IDs of the updated customDomains
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 `, BuiltIn: false},
 	{Name: "../schema/customtypeenum.graphql", Input: `extend type Query {
@@ -56560,6 +57388,14 @@ type DNSVerificationBulkUpdatePayload {
     IDs of the updated dnsVerifications
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 `, BuiltIn: false},
 	{Name: "../schema/documentdata.graphql", Input: `extend type Query {
@@ -56732,6 +57568,14 @@ type DocumentDataBulkUpdatePayload {
     IDs of the updated documentDatas
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 `, BuiltIn: false},
 	{Name: "../schema/domainscanextended.graphql", Input: `"""
@@ -57063,6 +57907,14 @@ type EmailTemplateBulkUpdatePayload {
     IDs of the updated emailTemplates
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 
 """
@@ -152678,6 +153530,14 @@ type EntityBulkUpdatePayload {
     IDs of the updated entitys
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 `, BuiltIn: false},
 	{Name: "../schema/entityextended.graphql", Input: `extend input CreateEntityInput {
@@ -152853,6 +153713,14 @@ type EntityTypeBulkUpdatePayload {
     IDs of the updated entityTypes
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 `, BuiltIn: false},
 	{Name: "../schema/event.graphql", Input: `extend type Query {
@@ -153020,6 +153888,14 @@ type EventBulkUpdatePayload {
     IDs of the updated events
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 `, BuiltIn: false},
 	{Name: "../schema/evidence.graphql", Input: `extend type Evidence {
@@ -153201,6 +154077,14 @@ type EvidenceBulkUpdatePayload {
     IDs of the updated evidence
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 
 """
@@ -153564,6 +154448,14 @@ type FindingBulkUpdatePayload {
     IDs of the updated findings
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 
 """
@@ -153882,6 +154774,14 @@ type GroupBulkUpdatePayload {
     IDs of the updated groups
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 `, BuiltIn: false},
 	{Name: "../schema/groupextended.graphql", Input: `extend input CreateGroupInput {
@@ -154305,6 +155205,14 @@ type GroupMembershipBulkUpdatePayload {
     IDs of the updated groupMemberships
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 `, BuiltIn: false},
 	{Name: "../schema/groupsetting.graphql", Input: `extend type Query {
@@ -154472,6 +155380,14 @@ type GroupSettingBulkUpdatePayload {
     IDs of the updated groupSettings
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 `, BuiltIn: false},
 	{Name: "../schema/hush.graphql", Input: `extend type Query {
@@ -154623,6 +155539,14 @@ type HushBulkUpdatePayload {
     IDs of the updated hushs
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 
 """
@@ -154838,6 +155762,14 @@ type IdentityHolderBulkUpdatePayload {
     IDs of the updated identityHolders
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 `, BuiltIn: false},
 	{Name: "../schema/integration.graphql", Input: `extend type Query {
@@ -155080,6 +156012,14 @@ type InternalPolicyBulkUpdatePayload {
     IDs of the updated internalPolicys
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 
 """
@@ -155273,6 +156213,14 @@ type InviteBulkUpdatePayload {
     IDs of the updated invites
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 `, BuiltIn: false},
 	{Name: "../schema/jobresult.graphql", Input: `extend type Query {
@@ -155730,6 +156678,14 @@ type JobTemplateBulkUpdatePayload {
     IDs of the updated jobTemplates
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 `, BuiltIn: false},
 	{Name: "../schema/mappabledomain.graphql", Input: `extend type Query {
@@ -155897,6 +156853,14 @@ type MappableDomainBulkUpdatePayload {
     IDs of the updated mappableDomains
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 `, BuiltIn: false},
 	{Name: "../schema/mappedcontrol.graphql", Input: `extend type Query {
@@ -156064,6 +157028,14 @@ type MappedControlBulkUpdatePayload {
     IDs of the updated mappedControls
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 `, BuiltIn: false},
 	{Name: "../schema/mappedcontrolextended.graphql", Input: `extend input CreateMappedControlInput {
@@ -156249,6 +157221,14 @@ type NarrativeBulkUpdatePayload {
     IDs of the updated narratives
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 `, BuiltIn: false},
 	{Name: "../schema/note.graphql", Input: `extend type Query {
@@ -156762,6 +157742,14 @@ type NotificationPreferenceBulkUpdatePayload {
     IDs of the updated notificationPreferences
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 
 """
@@ -156929,6 +157917,14 @@ type NotificationTemplateBulkUpdatePayload {
     IDs of the updated notificationTemplates
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 
 """
@@ -157225,6 +158221,14 @@ type OrganizationSettingBulkUpdatePayload {
     IDs of the updated organizationSettings
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 `, BuiltIn: false},
 	{Name: "../schema/orgextended.graphql", Input: `extend input CreateOrganizationInput {
@@ -157476,6 +158480,14 @@ type OrgMembershipBulkUpdatePayload {
     IDs of the updated orgMemberships
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 `, BuiltIn: false},
 	{Name: "../schema/orgmembershipextended.graphql", Input: `extend type OrgMembership {
@@ -157925,6 +158937,14 @@ type ProcedureBulkUpdatePayload {
     IDs of the updated procedures
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 
 """
@@ -158110,6 +159130,14 @@ type ProgramBulkUpdatePayload {
     IDs of the updated programs
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 `, BuiltIn: false},
 	{Name: "../schema/programextended.graphql", Input: `extend input UpdateProgramInput {
@@ -158372,6 +159400,14 @@ type ProgramMembershipBulkUpdatePayload {
     IDs of the updated programMemberships
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 `, BuiltIn: false},
 	{Name: "../schema/remediation.graphql", Input: `extend type Remediation {
@@ -158548,6 +159584,14 @@ type RemediationBulkUpdatePayload {
     IDs of the updated remediations
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 
 """
@@ -158724,6 +159768,14 @@ type ReviewBulkUpdatePayload {
     IDs of the updated reviews
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 
 """
@@ -158940,6 +159992,14 @@ type RiskBulkUpdatePayload {
     IDs of the updated risks
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 
 """
@@ -159108,6 +160168,14 @@ type ScanBulkUpdatePayload {
     IDs of the updated scans
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 
 """
@@ -159292,6 +160360,14 @@ type ScheduledJobBulkUpdatePayload {
     IDs of the updated scheduledJobs
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 `, BuiltIn: false},
 	{Name: "../schema/scheduledjobrun.graphql", Input: `extend type Query {
@@ -160664,6 +161740,14 @@ type SLADefinitionBulkUpdatePayload {
     IDs of the updated slaDefinitions
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 
 """
@@ -160972,6 +162056,14 @@ type SubcontrolBulkUpdatePayload {
     IDs of the updated subcontrols
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 `, BuiltIn: false},
 	{Name: "../schema/subprocessor.graphql", Input: `extend type Query {
@@ -161131,6 +162223,14 @@ type SubprocessorBulkUpdatePayload {
     IDs of the updated subprocessors
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 
 """
@@ -161414,6 +162514,14 @@ type SystemDetailBulkUpdatePayload {
     IDs of the updated systemDetails
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 
 """
@@ -161713,6 +162821,14 @@ type TaskBulkUpdatePayload {
     IDs of the updated tasks
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 
 """
@@ -161902,6 +163018,14 @@ type TemplateBulkUpdatePayload {
     IDs of the updated templates
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 `, BuiltIn: false},
 	{Name: "../schema/templatecontext.graphql", Input: `extend type Query {
@@ -162275,6 +163399,14 @@ type TrustCenterComplianceBulkUpdatePayload {
     IDs of the updated trustCenterCompliances
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 `, BuiltIn: false},
 	{Name: "../schema/trustcenterdoc.graphql", Input: `extend type Query {
@@ -162448,6 +163580,14 @@ type TrustCenterDocBulkUpdatePayload {
     IDs of the updated trust center docs
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 `, BuiltIn: false},
 	{Name: "../schema/trustcenterdomain.graphql", Input: `extend type Mutation{
@@ -162769,6 +163909,14 @@ type TrustCenterFAQBulkUpdatePayload {
     IDs of the updated trustCenterFAQs
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 `, BuiltIn: false},
 	{Name: "../schema/trustcenternda.graphql", Input: `extend type Mutation{
@@ -163368,6 +164516,14 @@ type TrustCenterSubprocessorBulkUpdatePayload {
     IDs of the updated trustCenterSubprocessors
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 
 """
@@ -163721,6 +164877,14 @@ type UserSettingBulkUpdatePayload {
     IDs of the updated userSettings
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 `, BuiltIn: false},
 	{Name: "../schema/vendorriskscore.graphql", Input: `extend type Query {
@@ -163870,6 +165034,14 @@ type VendorRiskScoreBulkUpdatePayload {
     IDs of the updated vendorRiskScores
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 
 """
@@ -164037,6 +165209,14 @@ type VendorScoringConfigBulkUpdatePayload {
     IDs of the updated vendorScoringConfigs
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 
 """
@@ -164231,6 +165411,14 @@ type VulnerabilityBulkUpdatePayload {
     IDs of the updated vulnerabilities
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 
 """
@@ -165159,6 +166347,10 @@ func (ec *executionContext) childFields_APITokenBulkUpdatePayload(ctx context.Co
 		return ec.fieldContext_APITokenBulkUpdatePayload_apiTokens(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_APITokenBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_APITokenBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_APITokenBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type APITokenBulkUpdatePayload", field.Name)
 }
@@ -165389,6 +166581,10 @@ func (ec *executionContext) childFields_ActionPlanBulkUpdatePayload(ctx context.
 		return ec.fieldContext_ActionPlanBulkUpdatePayload_actionPlans(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_ActionPlanBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_ActionPlanBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_ActionPlanBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type ActionPlanBulkUpdatePayload", field.Name)
 }
@@ -165897,6 +167093,10 @@ func (ec *executionContext) childFields_AssetBulkUpdatePayload(ctx context.Conte
 		return ec.fieldContext_AssetBulkUpdatePayload_assets(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_AssetBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_AssetBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_AssetBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type AssetBulkUpdatePayload", field.Name)
 }
@@ -166371,6 +167571,10 @@ func (ec *executionContext) childFields_CheckResultBulkUpdatePayload(ctx context
 		return ec.fieldContext_CheckResultBulkUpdatePayload_checkResults(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_CheckResultBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_CheckResultBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_CheckResultBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type CheckResultBulkUpdatePayload", field.Name)
 }
@@ -166501,6 +167705,10 @@ func (ec *executionContext) childFields_ContactBulkUpdatePayload(ctx context.Con
 		return ec.fieldContext_ContactBulkUpdatePayload_contacts(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_ContactBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_ContactBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_ContactBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type ContactBulkUpdatePayload", field.Name)
 }
@@ -166773,6 +167981,10 @@ func (ec *executionContext) childFields_ControlBulkUpdatePayload(ctx context.Con
 		return ec.fieldContext_ControlBulkUpdatePayload_controls(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_ControlBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_ControlBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_ControlBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type ControlBulkUpdatePayload", field.Name)
 }
@@ -166997,6 +168209,10 @@ func (ec *executionContext) childFields_ControlImplementationBulkUpdatePayload(c
 		return ec.fieldContext_ControlImplementationBulkUpdatePayload_controlImplementations(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_ControlImplementationBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_ControlImplementationBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_ControlImplementationBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type ControlImplementationBulkUpdatePayload", field.Name)
 }
@@ -167179,6 +168395,10 @@ func (ec *executionContext) childFields_ControlObjectiveBulkUpdatePayload(ctx co
 		return ec.fieldContext_ControlObjectiveBulkUpdatePayload_controlObjectives(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_ControlObjectiveBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_ControlObjectiveBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_ControlObjectiveBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type ControlObjectiveBulkUpdatePayload", field.Name)
 }
@@ -167385,6 +168605,10 @@ func (ec *executionContext) childFields_CustomDomainBulkUpdatePayload(ctx contex
 		return ec.fieldContext_CustomDomainBulkUpdatePayload_customDomains(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_CustomDomainBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_CustomDomainBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_CustomDomainBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type CustomDomainBulkUpdatePayload", field.Name)
 }
@@ -167627,6 +168851,10 @@ func (ec *executionContext) childFields_DNSVerificationBulkUpdatePayload(ctx con
 		return ec.fieldContext_DNSVerificationBulkUpdatePayload_dnsVerifications(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_DNSVerificationBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_DNSVerificationBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_DNSVerificationBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type DNSVerificationBulkUpdatePayload", field.Name)
 }
@@ -168433,6 +169661,10 @@ func (ec *executionContext) childFields_DocumentDataBulkUpdatePayload(ctx contex
 		return ec.fieldContext_DocumentDataBulkUpdatePayload_documentData(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_DocumentDataBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_DocumentDataBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_DocumentDataBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type DocumentDataBulkUpdatePayload", field.Name)
 }
@@ -168587,6 +169819,10 @@ func (ec *executionContext) childFields_EmailTemplateBulkUpdatePayload(ctx conte
 		return ec.fieldContext_EmailTemplateBulkUpdatePayload_emailTemplates(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_EmailTemplateBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_EmailTemplateBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_EmailTemplateBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type EmailTemplateBulkUpdatePayload", field.Name)
 }
@@ -168905,6 +170141,10 @@ func (ec *executionContext) childFields_EntityBulkUpdatePayload(ctx context.Cont
 		return ec.fieldContext_EntityBulkUpdatePayload_entities(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_EntityBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_EntityBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_EntityBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type EntityBulkUpdatePayload", field.Name)
 }
@@ -169007,6 +170247,10 @@ func (ec *executionContext) childFields_EntityTypeBulkUpdatePayload(ctx context.
 		return ec.fieldContext_EntityTypeBulkUpdatePayload_entityTypes(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_EntityTypeBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_EntityTypeBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_EntityTypeBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type EntityTypeBulkUpdatePayload", field.Name)
 }
@@ -169141,6 +170385,10 @@ func (ec *executionContext) childFields_EventBulkUpdatePayload(ctx context.Conte
 		return ec.fieldContext_EventBulkUpdatePayload_events(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_EventBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_EventBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_EventBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type EventBulkUpdatePayload", field.Name)
 }
@@ -169309,6 +170557,10 @@ func (ec *executionContext) childFields_EvidenceBulkUpdatePayload(ctx context.Co
 		return ec.fieldContext_EvidenceBulkUpdatePayload_evidences(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_EvidenceBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_EvidenceBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_EvidenceBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type EvidenceBulkUpdatePayload", field.Name)
 }
@@ -169845,6 +171097,10 @@ func (ec *executionContext) childFields_FindingBulkUpdatePayload(ctx context.Con
 		return ec.fieldContext_FindingBulkUpdatePayload_findings(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_FindingBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_FindingBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_FindingBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type FindingBulkUpdatePayload", field.Name)
 }
@@ -170195,6 +171451,10 @@ func (ec *executionContext) childFields_GroupBulkUpdatePayload(ctx context.Conte
 		return ec.fieldContext_GroupBulkUpdatePayload_groups(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_GroupBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_GroupBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_GroupBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type GroupBulkUpdatePayload", field.Name)
 }
@@ -170293,6 +171553,10 @@ func (ec *executionContext) childFields_GroupMembershipBulkUpdatePayload(ctx con
 		return ec.fieldContext_GroupMembershipBulkUpdatePayload_groupMemberships(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_GroupMembershipBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_GroupMembershipBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_GroupMembershipBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type GroupMembershipBulkUpdatePayload", field.Name)
 }
@@ -170437,6 +171701,10 @@ func (ec *executionContext) childFields_GroupSettingBulkUpdatePayload(ctx contex
 		return ec.fieldContext_GroupSettingBulkUpdatePayload_groupSettings(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_GroupSettingBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_GroupSettingBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_GroupSettingBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type GroupSettingBulkUpdatePayload", field.Name)
 }
@@ -170571,6 +171839,10 @@ func (ec *executionContext) childFields_HushBulkUpdatePayload(ctx context.Contex
 		return ec.fieldContext_HushBulkUpdatePayload_hushes(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_HushBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_HushBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_HushBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type HushBulkUpdatePayload", field.Name)
 }
@@ -170789,6 +172061,10 @@ func (ec *executionContext) childFields_IdentityHolderBulkUpdatePayload(ctx cont
 		return ec.fieldContext_IdentityHolderBulkUpdatePayload_identityHolders(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_IdentityHolderBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_IdentityHolderBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_IdentityHolderBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type IdentityHolderBulkUpdatePayload", field.Name)
 }
@@ -171173,6 +172449,10 @@ func (ec *executionContext) childFields_InternalPolicyBulkUpdatePayload(ctx cont
 		return ec.fieldContext_InternalPolicyBulkUpdatePayload_internalPolicies(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_InternalPolicyBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_InternalPolicyBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_InternalPolicyBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type InternalPolicyBulkUpdatePayload", field.Name)
 }
@@ -171291,6 +172571,10 @@ func (ec *executionContext) childFields_InviteBulkUpdatePayload(ctx context.Cont
 		return ec.fieldContext_InviteBulkUpdatePayload_invites(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_InviteBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_InviteBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_InviteBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type InviteBulkUpdatePayload", field.Name)
 }
@@ -171741,6 +173025,10 @@ func (ec *executionContext) childFields_JobTemplateBulkUpdatePayload(ctx context
 		return ec.fieldContext_JobTemplateBulkUpdatePayload_jobTemplates(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_JobTemplateBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_JobTemplateBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_JobTemplateBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type JobTemplateBulkUpdatePayload", field.Name)
 }
@@ -171843,6 +173131,10 @@ func (ec *executionContext) childFields_MappableDomainBulkUpdatePayload(ctx cont
 		return ec.fieldContext_MappableDomainBulkUpdatePayload_mappableDomains(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_MappableDomainBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_MappableDomainBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_MappableDomainBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type MappableDomainBulkUpdatePayload", field.Name)
 }
@@ -171969,6 +173261,10 @@ func (ec *executionContext) childFields_MappedControlBulkUpdatePayload(ctx conte
 		return ec.fieldContext_MappedControlBulkUpdatePayload_mappedControls(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_MappedControlBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_MappedControlBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_MappedControlBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type MappedControlBulkUpdatePayload", field.Name)
 }
@@ -172097,6 +173393,10 @@ func (ec *executionContext) childFields_NarrativeBulkUpdatePayload(ctx context.C
 		return ec.fieldContext_NarrativeBulkUpdatePayload_narratives(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_NarrativeBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_NarrativeBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_NarrativeBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type NarrativeBulkUpdatePayload", field.Name)
 }
@@ -172413,6 +173713,10 @@ func (ec *executionContext) childFields_NotificationPreferenceBulkUpdatePayload(
 		return ec.fieldContext_NotificationPreferenceBulkUpdatePayload_notificationPreferences(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_NotificationPreferenceBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_NotificationPreferenceBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_NotificationPreferenceBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type NotificationPreferenceBulkUpdatePayload", field.Name)
 }
@@ -172571,6 +173875,10 @@ func (ec *executionContext) childFields_NotificationTemplateBulkUpdatePayload(ct
 		return ec.fieldContext_NotificationTemplateBulkUpdatePayload_notificationTemplates(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_NotificationTemplateBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_NotificationTemplateBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_NotificationTemplateBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type NotificationTemplateBulkUpdatePayload", field.Name)
 }
@@ -172735,6 +174043,10 @@ func (ec *executionContext) childFields_OrgMembershipBulkUpdatePayload(ctx conte
 		return ec.fieldContext_OrgMembershipBulkUpdatePayload_orgMemberships(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_OrgMembershipBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_OrgMembershipBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_OrgMembershipBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type OrgMembershipBulkUpdatePayload", field.Name)
 }
@@ -173359,6 +174671,10 @@ func (ec *executionContext) childFields_OrganizationSettingBulkUpdatePayload(ctx
 		return ec.fieldContext_OrganizationSettingBulkUpdatePayload_organizationSettings(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_OrganizationSettingBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_OrganizationSettingBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_OrganizationSettingBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type OrganizationSettingBulkUpdatePayload", field.Name)
 }
@@ -173985,6 +175301,10 @@ func (ec *executionContext) childFields_ProcedureBulkUpdatePayload(ctx context.C
 		return ec.fieldContext_ProcedureBulkUpdatePayload_procedures(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_ProcedureBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_ProcedureBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_ProcedureBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type ProcedureBulkUpdatePayload", field.Name)
 }
@@ -174175,6 +175495,10 @@ func (ec *executionContext) childFields_ProgramBulkUpdatePayload(ctx context.Con
 		return ec.fieldContext_ProgramBulkUpdatePayload_programs(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_ProgramBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_ProgramBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_ProgramBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type ProgramBulkUpdatePayload", field.Name)
 }
@@ -174271,6 +175595,10 @@ func (ec *executionContext) childFields_ProgramMembershipBulkUpdatePayload(ctx c
 		return ec.fieldContext_ProgramMembershipBulkUpdatePayload_programMemberships(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_ProgramMembershipBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_ProgramMembershipBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_ProgramMembershipBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type ProgramMembershipBulkUpdatePayload", field.Name)
 }
@@ -174501,6 +175829,10 @@ func (ec *executionContext) childFields_RemediationBulkUpdatePayload(ctx context
 		return ec.fieldContext_RemediationBulkUpdatePayload_remediations(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_RemediationBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_RemediationBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_RemediationBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type RemediationBulkUpdatePayload", field.Name)
 }
@@ -174693,6 +176025,10 @@ func (ec *executionContext) childFields_ReviewBulkUpdatePayload(ctx context.Cont
 		return ec.fieldContext_ReviewBulkUpdatePayload_reviews(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_ReviewBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_ReviewBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_ReviewBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type ReviewBulkUpdatePayload", field.Name)
 }
@@ -174925,6 +176261,10 @@ func (ec *executionContext) childFields_RiskBulkUpdatePayload(ctx context.Contex
 		return ec.fieldContext_RiskBulkUpdatePayload_risks(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_RiskBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_RiskBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_RiskBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type RiskBulkUpdatePayload", field.Name)
 }
@@ -175035,6 +176375,10 @@ func (ec *executionContext) childFields_SLADefinitionBulkUpdatePayload(ctx conte
 		return ec.fieldContext_SLADefinitionBulkUpdatePayload_slaDefinitions(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_SLADefinitionBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_SLADefinitionBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_SLADefinitionBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type SLADefinitionBulkUpdatePayload", field.Name)
 }
@@ -175231,6 +176575,10 @@ func (ec *executionContext) childFields_ScanBulkUpdatePayload(ctx context.Contex
 		return ec.fieldContext_ScanBulkUpdatePayload_scans(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_ScanBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_ScanBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_ScanBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type ScanBulkUpdatePayload", field.Name)
 }
@@ -175349,6 +176697,10 @@ func (ec *executionContext) childFields_ScheduledJobBulkUpdatePayload(ctx contex
 		return ec.fieldContext_ScheduledJobBulkUpdatePayload_scheduledJobs(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_ScheduledJobBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_ScheduledJobBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_ScheduledJobBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type ScheduledJobBulkUpdatePayload", field.Name)
 }
@@ -175905,6 +177257,10 @@ func (ec *executionContext) childFields_SubcontrolBulkUpdatePayload(ctx context.
 		return ec.fieldContext_SubcontrolBulkUpdatePayload_subcontrols(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_SubcontrolBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_SubcontrolBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_SubcontrolBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type SubcontrolBulkUpdatePayload", field.Name)
 }
@@ -176033,6 +177389,10 @@ func (ec *executionContext) childFields_SubprocessorBulkUpdatePayload(ctx contex
 		return ec.fieldContext_SubprocessorBulkUpdatePayload_subprocessors(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_SubprocessorBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_SubprocessorBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_SubprocessorBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type SubprocessorBulkUpdatePayload", field.Name)
 }
@@ -176267,6 +177627,10 @@ func (ec *executionContext) childFields_SystemDetailBulkUpdatePayload(ctx contex
 		return ec.fieldContext_SystemDetailBulkUpdatePayload_systemDetails(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_SystemDetailBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_SystemDetailBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_SystemDetailBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type SystemDetailBulkUpdatePayload", field.Name)
 }
@@ -176643,6 +178007,10 @@ func (ec *executionContext) childFields_TaskBulkUpdatePayload(ctx context.Contex
 		return ec.fieldContext_TaskBulkUpdatePayload_tasks(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_TaskBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_TaskBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_TaskBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type TaskBulkUpdatePayload", field.Name)
 }
@@ -176789,6 +178157,10 @@ func (ec *executionContext) childFields_TemplateBulkUpdatePayload(ctx context.Co
 		return ec.fieldContext_TemplateBulkUpdatePayload_templates(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_TemplateBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_TemplateBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_TemplateBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type TemplateBulkUpdatePayload", field.Name)
 }
@@ -177009,6 +178381,10 @@ func (ec *executionContext) childFields_TrustCenterComplianceBulkUpdatePayload(c
 		return ec.fieldContext_TrustCenterComplianceBulkUpdatePayload_trustCenterCompliances(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_TrustCenterComplianceBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_TrustCenterComplianceBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_TrustCenterComplianceBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type TrustCenterComplianceBulkUpdatePayload", field.Name)
 }
@@ -177167,6 +178543,10 @@ func (ec *executionContext) childFields_TrustCenterDocBulkUpdatePayload(ctx cont
 		return ec.fieldContext_TrustCenterDocBulkUpdatePayload_trustCenterDocs(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_TrustCenterDocBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_TrustCenterDocBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_TrustCenterDocBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type TrustCenterDocBulkUpdatePayload", field.Name)
 }
@@ -177393,6 +178773,10 @@ func (ec *executionContext) childFields_TrustCenterFAQBulkUpdatePayload(ctx cont
 		return ec.fieldContext_TrustCenterFAQBulkUpdatePayload_trustCenterFAQs(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_TrustCenterFAQBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_TrustCenterFAQBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_TrustCenterFAQBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type TrustCenterFAQBulkUpdatePayload", field.Name)
 }
@@ -177789,6 +179173,10 @@ func (ec *executionContext) childFields_TrustCenterSubprocessorBulkUpdatePayload
 		return ec.fieldContext_TrustCenterSubprocessorBulkUpdatePayload_trustCenterSubprocessors(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_TrustCenterSubprocessorBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_TrustCenterSubprocessorBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_TrustCenterSubprocessorBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type TrustCenterSubprocessorBulkUpdatePayload", field.Name)
 }
@@ -178149,6 +179537,10 @@ func (ec *executionContext) childFields_UserSettingBulkUpdatePayload(ctx context
 		return ec.fieldContext_UserSettingBulkUpdatePayload_userSettings(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_UserSettingBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_UserSettingBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_UserSettingBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type UserSettingBulkUpdatePayload", field.Name)
 }
@@ -178281,6 +179673,10 @@ func (ec *executionContext) childFields_VendorRiskScoreBulkUpdatePayload(ctx con
 		return ec.fieldContext_VendorRiskScoreBulkUpdatePayload_vendorRiskScores(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_VendorRiskScoreBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_VendorRiskScoreBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_VendorRiskScoreBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type VendorRiskScoreBulkUpdatePayload", field.Name)
 }
@@ -178389,6 +179785,10 @@ func (ec *executionContext) childFields_VendorScoringConfigBulkUpdatePayload(ctx
 		return ec.fieldContext_VendorScoringConfigBulkUpdatePayload_vendorScoringConfigs(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_VendorScoringConfigBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_VendorScoringConfigBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_VendorScoringConfigBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type VendorScoringConfigBulkUpdatePayload", field.Name)
 }
@@ -178667,6 +180067,10 @@ func (ec *executionContext) childFields_VulnerabilityBulkUpdatePayload(ctx conte
 		return ec.fieldContext_VulnerabilityBulkUpdatePayload_vulnerabilities(ctx, field)
 	case "updatedIDs":
 		return ec.fieldContext_VulnerabilityBulkUpdatePayload_updatedIDs(ctx, field)
+	case "notUpdatedIDs":
+		return ec.fieldContext_VulnerabilityBulkUpdatePayload_notUpdatedIDs(ctx, field)
+	case "error":
+		return ec.fieldContext_VulnerabilityBulkUpdatePayload_error(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type VulnerabilityBulkUpdatePayload", field.Name)
 }

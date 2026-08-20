@@ -536,6 +536,8 @@ mutation UpdateBulkInternalPolicy ($ids: [ID!]!, $input: UpdateInternalPolicyInp
 			}
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 mutation UpdateInternalPolicy ($updateInternalPolicyId: ID!, $input: UpdateInternalPolicyInput!) {

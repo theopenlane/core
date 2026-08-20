@@ -61,6 +61,8 @@ mutation CreateCheckResult ($input: CreateCheckResultInput!) {
 mutation DeleteBulkCheckResult ($ids: [ID!]!) {
 	deleteBulkCheckResult(ids: $ids) {
 		deletedIDs
+		notDeletedIDs
+		error
 	}
 }
 mutation DeleteCheckResult ($deleteCheckResultId: ID!) {
@@ -163,6 +165,8 @@ mutation UpdateBulkCSVCheckResult ($input: Upload!) {
 			updatedByImpersonator
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 mutation UpdateBulkCheckResult ($ids: [ID!]!, $input: UpdateCheckResultInput!) {
@@ -184,6 +188,8 @@ mutation UpdateBulkCheckResult ($ids: [ID!]!, $input: UpdateCheckResultInput!) {
 			updatedByImpersonator
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 mutation UpdateCheckResult ($updateCheckResultId: ID!, $input: UpdateCheckResultInput!) {
