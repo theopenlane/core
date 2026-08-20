@@ -10,6 +10,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 )
@@ -101,14 +102,7 @@ func enqueueJob(ctx context.Context, jobClient riverqueue.JobClient, args river.
 	return err
 }
 
-// workflowEngineEnabled reports whether workflows are enabled for this client.
-// It checks the context first (for the original client with WorkflowEngine set),
-// falling back to the provided client. This handles the case where WorkflowEngine
-// is set after client initialization, since entity clients copy config by value.
-func workflowEngineEnabled(ctx context.Context, client *generated.Client) bool {
-	if ctxClient := generated.FromContext(ctx); ctxClient != nil && ctxClient.WorkflowEngine != nil {
-		return true
-	}
-
-	return client != nil && client.WorkflowEngine != nil
+// workflowEngineEnabled reports whether the process-wide workflow engine is registered
+func workflowEngineEnabled() bool {
+	return engine.Default() != nil
 }

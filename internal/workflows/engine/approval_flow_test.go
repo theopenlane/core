@@ -450,7 +450,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalStagingCapturesClearedField() {
 
 	// Use engine with listeners so workflow infrastructure is created automatically
 	wfEngine := s.Engine()
-	s.client.WorkflowEngine = wfEngine
+	engine.SetDefault(wfEngine)
 
 	params := workflows.ApprovalActionParams{
 		TargetedActionParams: workflows.TargetedActionParams{
@@ -570,7 +570,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalTriggerExpressionUsesCurrentObject
 
 	// Enable engine + listeners so hooks and proposal submission are wired.
 	wfEngine := s.Engine()
-	s.client.WorkflowEngine = wfEngine
+	engine.SetDefault(wfEngine)
 
 	params := workflows.ApprovalActionParams{
 		TargetedActionParams: workflows.TargetedActionParams{
@@ -685,7 +685,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalNoTargetsAutoApplies() {
 	seedCtx := s.SeedContext(userID, orgID)
 
 	wfEngine := s.Engine()
-	s.client.WorkflowEngine = wfEngine
+	engine.SetDefault(wfEngine)
 
 	group, err := s.client.Group.Create().
 		SetName("Empty Approval Group " + ulid.Make().String()).
@@ -804,7 +804,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalHookAppliesIneligibleFields() {
 	seedCtx := s.SeedContext(userID, orgID)
 
 	wfEngine := s.Engine()
-	s.client.WorkflowEngine = wfEngine
+	engine.SetDefault(wfEngine)
 
 	params := workflows.ApprovalActionParams{
 		TargetedActionParams: workflows.TargetedActionParams{
@@ -982,7 +982,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalChangesRequestedClosesApprovalsAnd
 	approver2ID, _ := s.CreateTestUserInOrg(orgID, enums.RoleMember)
 
 	wfEngine := s.Engine()
-	s.client.WorkflowEngine = wfEngine
+	engine.SetDefault(wfEngine)
 
 	params := workflows.ApprovalActionParams{
 		TargetedActionParams: workflows.TargetedActionParams{
@@ -1136,7 +1136,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalHookCreatesInstancesForAllMatching
 	seedCtx := s.SeedContext(userID, orgID)
 
 	wfEngine := s.Engine()
-	s.client.WorkflowEngine = wfEngine
+	engine.SetDefault(wfEngine)
 
 	params := workflows.ApprovalActionParams{
 		TargetedActionParams: workflows.TargetedActionParams{
@@ -1223,7 +1223,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalActionWhenUsesProposedChanges() {
 	seedCtx := s.SeedContext(userID, orgID)
 
 	wfEngine := s.Engine()
-	s.client.WorkflowEngine = wfEngine
+	engine.SetDefault(wfEngine)
 
 	params := workflows.ApprovalActionParams{
 		TargetedActionParams: workflows.TargetedActionParams{
@@ -1335,7 +1335,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalActionWhenSkipsWhenProposedChanges
 	seedCtx := s.SeedContext(userID, orgID)
 
 	wfEngine := s.Engine()
-	s.client.WorkflowEngine = wfEngine
+	engine.SetDefault(wfEngine)
 
 	params := workflows.ApprovalActionParams{
 		TargetedActionParams: workflows.TargetedActionParams{
@@ -1569,7 +1569,7 @@ func (s *WorkflowEngineTestSuite) TestApprovalFlowEditSubmittedProposalInvalidat
 
 	// Use engine with listeners so workflow infrastructure is created automatically
 	wfEngine := s.Engine()
-	s.client.WorkflowEngine = wfEngine
+	engine.SetDefault(wfEngine)
 
 	// Create approval workflow definition
 	params := workflows.ApprovalActionParams{
@@ -1709,7 +1709,7 @@ func (s *WorkflowEngineTestSuite) TestInternalPolicyDetailsApprovalFlow() {
 	seedCtx := s.SeedContext(userID, orgID)
 
 	wfEngine := s.Engine()
-	s.client.WorkflowEngine = wfEngine
+	engine.SetDefault(wfEngine)
 
 	// Create approval workflow definition for InternalPolicy details field
 	params := workflows.ApprovalActionParams{

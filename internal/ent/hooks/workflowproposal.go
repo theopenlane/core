@@ -28,7 +28,7 @@ func HookWorkflowProposalInvalidateAssignments() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.WorkflowProposalFunc(func(ctx context.Context, m *generated.WorkflowProposalMutation) (generated.Value, error) {
 			client := m.Client()
-			if !workflowEngineEnabled(ctx, client) {
+			if !workflowEngineEnabled() {
 				return next.Mutate(ctx, m)
 			}
 
@@ -238,17 +238,13 @@ func HookWorkflowProposalTriggerOnSubmit() ent.Hook {
 				return value, err
 			}
 
-			// Prefer mutation client (transaction-aware), but ensure WorkflowEngine is available from context.
+			// Prefer the transaction-aware mutation client, falling back to the context client
 			client := m.Client()
-			if ctxClient := generated.FromContext(ctx); ctxClient != nil {
-				if client == nil {
-					client = ctxClient
-				} else if client.WorkflowEngine == nil && ctxClient.WorkflowEngine != nil {
-					client.WorkflowEngine = ctxClient.WorkflowEngine
-				}
+			if client == nil {
+				client = generated.FromContext(ctx)
 			}
 
-			if !workflowEngineEnabled(ctx, client) {
+			if !workflowEngineEnabled() {
 				return value, nil
 			}
 
@@ -304,9 +300,8 @@ func triggerWorkflowForProposal(ctx context.Context, client *generated.Client, p
 		return nil
 	}
 
-	// WorkflowEngine is injected on the ent client when workflows are enabled.
-	wfEngine, ok := client.WorkflowEngine.(*engine.WorkflowEngine)
-	if !ok || wfEngine == nil {
+	wfEngine := engine.Default()
+	if wfEngine == nil {
 		return nil
 	}
 

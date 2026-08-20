@@ -32,7 +32,7 @@ func TestWorkflowGraphQLUserApproval(t *testing.T) {
 	// Create workflow engine (nil emitter since we manually process actions in tests)
 	workflowEngine, err := engine.NewWorkflowEngine(suite.client.db, nil)
 	assert.NilError(t, err)
-	suite.client.db.WorkflowEngine = workflowEngine
+	engine.SetDefault(workflowEngine)
 
 	// Create workflow definition with approval action targeting the approver user
 	targets := []workflows.TargetConfig{
@@ -191,11 +191,11 @@ func TestWorkflowGraphQLUpdateControlRespectsPermissions(t *testing.T) {
 	viewer := suite.userBuilder(context.Background(), t, models.CatalogBaseModule, models.CatalogComplianceModule)
 	suite.addUserToOrganization(initiator.UserCtx, t, &viewer, enums.RoleMember, initiator.OrganizationID)
 
-	prevEngine := suite.client.db.WorkflowEngine
+	prevEngine := engine.Default()
 	workflowEngine, err := engine.NewWorkflowEngine(suite.client.db, nil)
 	assert.NilError(t, err)
-	suite.client.db.WorkflowEngine = workflowEngine
-	t.Cleanup(func() { suite.client.db.WorkflowEngine = prevEngine })
+	engine.SetDefault(workflowEngine)
+	t.Cleanup(func() { engine.SetDefault(prevEngine) })
 
 	ctx := setContext(initiator.UserCtx, suite.client.db)
 
@@ -292,7 +292,7 @@ func TestWorkflowGraphQLGroupApproval(t *testing.T) {
 	// Create workflow engine (nil emitter since we manually process actions in tests)
 	workflowEngine, err := engine.NewWorkflowEngine(suite.client.db, nil)
 	assert.NilError(t, err)
-	suite.client.db.WorkflowEngine = workflowEngine
+	engine.SetDefault(workflowEngine)
 
 	// Create workflow definition with approval action targeting the group
 	targets := []workflows.TargetConfig{
@@ -450,7 +450,7 @@ func TestWorkflowGraphQLMultiStepApproval(t *testing.T) {
 	// Create workflow engine (nil emitter since we manually process actions in tests)
 	workflowEngine, err := engine.NewWorkflowEngine(suite.client.db, nil)
 	assert.NilError(t, err)
-	suite.client.db.WorkflowEngine = workflowEngine
+	engine.SetDefault(workflowEngine)
 
 	// Create workflow with two sequential approval actions
 	targets1 := []workflows.TargetConfig{
@@ -644,7 +644,7 @@ func TestWorkflowGraphQLMyAssignments(t *testing.T) {
 	// Create workflow engine (nil emitter since we manually process actions in tests)
 	workflowEngine, err := engine.NewWorkflowEngine(suite.client.db, nil)
 	assert.NilError(t, err)
-	suite.client.db.WorkflowEngine = workflowEngine
+	engine.SetDefault(workflowEngine)
 
 	// Create workflow for approver1
 	targets1 := []workflows.TargetConfig{
@@ -767,7 +767,7 @@ func TestWorkflowGraphQLApprovalAuthorization(t *testing.T) {
 	// Create workflow engine
 	workflowEngine, err := engine.NewWorkflowEngine(suite.client.db, nil)
 	assert.NilError(t, err)
-	suite.client.db.WorkflowEngine = workflowEngine
+	engine.SetDefault(workflowEngine)
 
 	// Create workflow definition targeting the approver user only
 	targets := []workflows.TargetConfig{
@@ -1037,7 +1037,7 @@ func TestWorkflowGraphQLGroupApprovalAuthorization(t *testing.T) {
 	// Create workflow engine
 	workflowEngine, err := engine.NewWorkflowEngine(suite.client.db, nil)
 	assert.NilError(t, err)
-	suite.client.db.WorkflowEngine = workflowEngine
+	engine.SetDefault(workflowEngine)
 
 	// Create workflow definition targeting the group
 	targets := []workflows.TargetConfig{
@@ -1305,7 +1305,7 @@ func TestWorkflowGraphQLObjectRef(t *testing.T) {
 	// Create workflow engine (nil emitter since we manually process actions in tests)
 	workflowEngine, err := engine.NewWorkflowEngine(suite.client.db, nil)
 	assert.NilError(t, err)
-	suite.client.db.WorkflowEngine = workflowEngine
+	engine.SetDefault(workflowEngine)
 
 	// Create workflow
 	targets := []workflows.TargetConfig{

@@ -15,7 +15,7 @@ import (
 
 // WorkflowAssignmentTarget is the resolver for the workflowAssignmentTarget field.
 func (r *queryResolver) WorkflowAssignmentTarget(ctx context.Context, id string) (*generated.WorkflowAssignmentTarget, error) {
-	if !workflowsEnabled(r.db) {
+	if !workflowsEnabled() {
 		return nil, ErrWorkflowsDisabled
 	}
 

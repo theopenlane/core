@@ -152,7 +152,7 @@ func provideGalaDependencies(galaApp *gala.Gala, dbClient *ent.Client) error {
 		gala.WithRestoredValue("ent_client", ent.NewContext),
 	}
 
-	if wfEngine, ok := dbClient.WorkflowEngine.(*engine.WorkflowEngine); ok && wfEngine != nil {
+	if wfEngine := engine.Default(); wfEngine != nil {
 		opts = append(opts, gala.WithValue(wfEngine))
 	}
 

@@ -24,7 +24,7 @@ func (suite *HookTestSuite) TestHookWorkflowProposalInvalidateAssignments() {
 
 	wfEngine, err := engine.NewWorkflowEngine(suite.client, nil)
 	suite.NoError(err)
-	suite.client.WorkflowEngine = wfEngine
+	engine.SetDefault(wfEngine)
 
 	def := suite.client.WorkflowDefinition.Create().
 		SetName("Invalidate Test " + ulids.New().String()).
@@ -119,7 +119,7 @@ func (suite *HookTestSuite) TestHookWorkflowProposalInvalidateAssignments_DraftS
 
 	wfEngine, err := engine.NewWorkflowEngine(suite.client, nil)
 	suite.NoError(err)
-	suite.client.WorkflowEngine = wfEngine
+	engine.SetDefault(wfEngine)
 
 	def := suite.client.WorkflowDefinition.Create().
 		SetName("Draft Test " + ulids.New().String()).
@@ -188,7 +188,7 @@ func (suite *HookTestSuite) TestHookWorkflowProposalInvalidateAssignments_NonCha
 
 	wfEngine, err := engine.NewWorkflowEngine(suite.client, nil)
 	suite.NoError(err)
-	suite.client.WorkflowEngine = wfEngine
+	engine.SetDefault(wfEngine)
 
 	def := suite.client.WorkflowDefinition.Create().
 		SetName("NonChanges Test " + ulids.New().String()).
@@ -257,7 +257,7 @@ func (suite *HookTestSuite) TestHookWorkflowProposalTriggerOnSubmitResumesInstan
 
 	wfEngine, err := engine.NewWorkflowEngine(suite.client, nil)
 	suite.NoError(err)
-	suite.client.WorkflowEngine = wfEngine
+	engine.SetDefault(wfEngine)
 
 	params := struct {
 		Targets []workflows.TargetConfig `json:"targets"`

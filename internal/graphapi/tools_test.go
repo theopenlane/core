@@ -326,10 +326,7 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 	// create database connection
 	jobOpts := []riverqueue.Option{riverqueue.WithConnectionURI(suite.tf.URI)}
 
-	// registry global hooks for tests
-	clientOpts := []entdb.Option{entdb.WithWorkflows(nil, nil)}
-
-	db, err := entdb.NewTestClient(ctx, suite.tf, jobOpts, clientOpts, opts)
+	db, err := entdb.NewTestClient(ctx, suite.tf, jobOpts, nil, opts)
 	requireNoError(t, err)
 
 	// assign values

@@ -239,7 +239,6 @@ func (s *WorkflowEngineTestSuite) TestApprovalTimingPostCommitReviewCompletes() 
 	seedCtx := s.SeedContext(approverID, orgID)
 
 	wfEngine := s.Engine()
-	s.client.WorkflowEngine = wfEngine
 
 	params := workflows.ApprovalActionParams{
 		TargetedActionParams: workflows.TargetedActionParams{

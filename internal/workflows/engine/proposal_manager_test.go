@@ -46,9 +46,6 @@ func (s *WorkflowEngineTestSuite) TestProposalManagerComputeHashUsesDomainKey() 
 	userID, orgID, _ := s.SetupTestUser()
 	seedCtx := s.SeedContext(userID, orgID)
 
-	wfEngine := s.Engine()
-	s.client.WorkflowEngine = wfEngine
-
 	buildApprovalAction := func(key string, fields []string) models.WorkflowAction {
 		params := workflows.ApprovalActionParams{
 			TargetedActionParams: workflows.TargetedActionParams{

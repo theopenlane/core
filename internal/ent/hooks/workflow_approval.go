@@ -43,7 +43,7 @@ func HookWorkflowApprovalRouting() ent.Hook {
 			if client == nil {
 				return next.Mutate(ctx, m)
 			}
-			if !workflowEngineEnabled(ctx, client) {
+			if !workflowEngineEnabled() {
 				return next.Mutate(ctx, m)
 			}
 
@@ -52,12 +52,7 @@ func HookWorkflowApprovalRouting() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			wfEngine, _ := client.WorkflowEngine.(*engine.WorkflowEngine)
-			if wfEngine == nil {
-				if ctxClient := generated.FromContext(ctx); ctxClient != nil {
-					wfEngine, _ = ctxClient.WorkflowEngine.(*engine.WorkflowEngine)
-				}
-			}
+			wfEngine := engine.Default()
 			if wfEngine == nil {
 				return next.Mutate(ctx, m)
 			}
@@ -553,13 +548,7 @@ func createProposalWithInstance(ctx context.Context, client *generated.Client, d
 
 // triggerWorkflowAfterProposalCreation triggers a workflow for a newly created proposal
 func triggerWorkflowAfterProposalCreation(ctx context.Context, client *generated.Client, def *generated.WorkflowDefinition, objectType enums.WorkflowObjectType, objectID string, domain workflows.DomainChanges, instanceID string) error {
-	// Get the workflow engine from the client or context
-	wfEngine, _ := client.WorkflowEngine.(*engine.WorkflowEngine)
-	if wfEngine == nil {
-		if ctxClient := generated.FromContext(ctx); ctxClient != nil {
-			wfEngine, _ = ctxClient.WorkflowEngine.(*engine.WorkflowEngine)
-		}
-	}
+	wfEngine := engine.Default()
 	if wfEngine == nil {
 		log.Ctx(ctx).Debug().Str("instance_id", instanceID).Msg("workflow engine not available, skipping trigger")
 		return nil

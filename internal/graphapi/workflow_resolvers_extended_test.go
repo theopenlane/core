@@ -21,15 +21,15 @@ import (
 func ensureWorkflowEngine(t *testing.T) {
 	t.Helper()
 
-	prev := suite.client.db.WorkflowEngine
+	prev := engine.Default()
 	if prev == nil {
 		workflowEngine, err := engine.NewWorkflowEngine(suite.client.db, nil)
 		requireNoError(t, err)
-		suite.client.db.WorkflowEngine = workflowEngine
+		engine.SetDefault(workflowEngine)
 	}
 
 	t.Cleanup(func() {
-		suite.client.db.WorkflowEngine = prev
+		engine.SetDefault(prev)
 	})
 }
 
