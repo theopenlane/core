@@ -81,26 +81,6 @@ func TestClient(c *ent.Client, objectStore *objects.Service, opts ...testclient.
 	return testclient.New(config, opts...)
 }
 
-// TestRestClient creates a new OpenlaneClient for testing
-func TestRestClient(c *ent.Client, opts ...testclient.ClientOption) (*testclient.TestClient, error) {
-	service, err := MockStorageService(nil, nil)
-	if err != nil {
-		return nil, err
-	}
-	e := testEchoServer(c, service, false)
-
-	// setup interceptors
-	if opts == nil {
-		opts = []testclient.ClientOption{}
-	}
-
-	opts = append(opts, testclient.WithTransport(localRoundTripper{server: e}))
-
-	config := testclient.NewDefaultConfig()
-
-	return testclient.New(config, opts...)
-}
-
 // TestClientWithAuth creates a new OpenlaneClient for testing that includes the auth middleware
 func TestClientWithAuth(c *ent.Client, objectStore *objects.Service, opts ...testclient.ClientOption) (*testclient.TestClient, error) {
 	var service *objects.Service

@@ -35,35 +35,6 @@ func transactionFromContext(ctx context.Context) *generated.Tx {
 	return transaction.FromContext(ctx)
 }
 
-// runtimeHooks is a list of post-mutation hooks that are executed after a mutation operation is performed
-var runtimeHooks []func(ent.Mutator) ent.Mutator
-
-// The `AddPostMutationHook` function is used to add a post-mutation hook to the list of runtime hooks.
-// This function takes a hook function as a parameter, which will be executed after a mutation
-// operation is performed. The hook function is expected to take a context and a value of type `T` as
-// input parameters and return an error if any
-func AddPostMutationHook[T any](hook func(ctx context.Context, v T) error) {
-	runtimeHooks = append(runtimeHooks, func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			v, err := next.Mutate(ctx, m)
-			if err != nil {
-				return v, err
-			}
-
-			entvalue, ok := v.(T)
-
-			if ok {
-				err2 := hook(ctx, entvalue)
-				if err2 != nil {
-					logx.FromContext(ctx).Debug().Ctx(ctx).Err(err2).Msg("post mutation hook error")
-				}
-			}
-
-			return v, err
-		})
-	})
-}
-
 // getMutationIDs retrieves the IDs from the mutation, handling both single and multiple ID cases
 func getMutationIDs(ctx context.Context, m utils.GenericMutation) ([]string, error) {
 	objID, ok := m.ID()

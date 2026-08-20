@@ -1,7 +1,6 @@
 package route
 
 import (
-	"net/http"
 	"testing"
 	"time"
 
@@ -51,16 +50,5 @@ func TestRateLimitedMiddlewares(t *testing.T) {
 				t.Fatalf("expected %d middleware, got %d", tc.expected, len(got))
 			}
 		})
-	}
-}
-
-func TestAddEchoOnlyRoute(t *testing.T) {
-	r := newTestRouter()
-	rt := echo.Route{Path: "/e", Method: http.MethodGet, Handler: func(echo.Context) error { return nil }}
-	if err := r.AddEchoOnlyRoute(rt); err != nil {
-		t.Fatalf("add echo route failed: %v", err)
-	}
-	if r.OAS.Paths.Find("/e") != nil {
-		t.Fatalf("should not add to spec")
 	}
 }
