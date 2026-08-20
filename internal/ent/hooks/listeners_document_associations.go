@@ -3,134 +3,73 @@ package hooks
 import (
 	"context"
 
-	"entgo.io/ent"
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/internal/ent/eventqueue"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/workflows"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/pkg/jsonx"
 )
 
-// RegisterGalaDocumentAssociationListeners registers listeners that link
-// referenced controls to documents asynchronously after document creation.
-func RegisterGalaDocumentAssociationListeners(registry *gala.Registry) ([]gala.ListenerID, error) {
-	return gala.RegisterListeners(registry,
-		documentAssociationDefinition(generated.TypeActionPlan),
-		documentAssociationDefinition(generated.TypeInternalPolicy),
-		documentAssociationDefinition(generated.TypeProcedure),
-	)
-}
-
-func documentAssociationDefinition(schemaType string) gala.Definition[eventqueue.MutationGalaPayload] {
-	topic := eventqueue.MutationTopic(eventqueue.MutationConcernDirect, schemaType)
-
-	return gala.Definition[eventqueue.MutationGalaPayload]{
-		Topic:      topic,
-		Name:       "document.associations." + schemaType,
-		Operations: []string{ent.OpCreate.String()},
+// DocumentAssociationListeners links controls referenced in a new document's details
+func DocumentAssociationListeners() []gala.Registration {
+	return entityops.ForSchemas([]*entityops.Schema{entityops.SchemaActionPlan, entityops.SchemaInternalPolicy, entityops.SchemaProcedure}, entityops.MutationListener{
+		Operations: []string{entityops.OpCreate},
 		Handle:     handleDocumentAssociationCreated,
-	}
+	})
 }
 
-func handleDocumentAssociationCreated(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	ctx, client, ok := eventqueue.ClientFromHandler(ctx)
-	if !ok {
+// handleDocumentAssociationCreated loads the created document generically and links
+// referenced controls and subcontrols through the schema catalog
+func handleDocumentAssociationCreated(inv entityops.Invocation, _ entityops.MutationPayload) error {
+	row, err := inv.Schema.Load(inv.Context, inv.Client, inv.EntityID)
+	switch {
+	case generated.IsNotFound(err):
 		return nil
-	}
-
-	documentID, ok := eventqueue.MutationEntityID(payload, ctx.Envelope.Headers.Properties)
-	if !ok || documentID == "" {
-		return nil
-	}
-
-	switch payload.MutationType {
-	case generated.TypeActionPlan:
-		return parseActionPlanAssociations(ctx.Context, client, documentID)
-	case generated.TypeInternalPolicy:
-		return parseInternalPolicyAssociations(ctx.Context, client, documentID)
-	case generated.TypeProcedure:
-		return parseProcedureAssociations(ctx.Context, client, documentID)
-	default:
-		return nil
-	}
-}
-
-func parseActionPlanAssociations(ctx context.Context, client *generated.Client, documentID string) error {
-	doc, err := client.ActionPlan.Get(ctx, documentID)
-	if err != nil {
-		if generated.IsNotFound(err) {
-			return nil
-		}
-
+	case err != nil:
 		return err
 	}
 
-	links := getDocumentAssociationsForDetails(ctx, client, doc.Details)
-	if links == nil || len(links.controlIDs) == 0 {
-		return nil
-	}
-
-	return client.ActionPlan.UpdateOneID(doc.ID).
-		SetRevision(doc.Revision).
-		AddControlIDs(lo.Uniq(links.controlIDs)...).
-		Exec(workflows.AllowContext(ctx))
-}
-
-func parseInternalPolicyAssociations(ctx context.Context, client *generated.Client, documentID string) error {
-	doc, err := client.InternalPolicy.Get(ctx, documentID)
+	fields, err := jsonx.Decode[map[string]any](row)
 	if err != nil {
-		if generated.IsNotFound(err) {
-			return nil
-		}
-
 		return err
 	}
 
-	links := getDocumentAssociationsForDetails(ctx, client, doc.Details)
-	if links == nil || !links.hasAssociations() {
+	details, _ := fields["details"].(string)
+
+	links := getDocumentAssociationsForDetails(inv.Context, inv.Client, details)
+	if !links.hasAssociations() {
 		return nil
 	}
 
-	update := client.InternalPolicy.UpdateOneID(doc.ID).SetRevision(doc.Revision)
-	if len(links.controlIDs) > 0 {
-		update.AddControlIDs(lo.Uniq(links.controlIDs)...)
-	}
+	update := map[string]any{"revision": fields["revision"]}
 
-	if len(links.subcontrolIDs) > 0 {
-		update.AddSubcontrolIDs(lo.Uniq(links.subcontrolIDs)...)
-	}
-
-	return update.Exec(workflows.AllowContext(ctx))
-}
-
-func parseProcedureAssociations(ctx context.Context, client *generated.Client, documentID string) error {
-	doc, err := client.Procedure.Get(ctx, documentID)
-	if err != nil {
-		if generated.IsNotFound(err) {
-			return nil
+	for edgeName, ids := range map[string][]string{
+		"controls":    links.controlIDs,
+		"subcontrols": links.subcontrolIDs,
+	} {
+		edge, ok := inv.Schema.EdgeByName(edgeName)
+		if !ok || edge.AddField == "" || len(ids) == 0 {
+			continue
 		}
 
+		update[edge.AddField] = lo.Uniq(ids)
+	}
+
+	if len(update) == 1 {
+		return nil
+	}
+
+	updatePayload, err := jsonx.ToRawMessage(update)
+	if err != nil {
 		return err
 	}
 
-	links := getDocumentAssociationsForDetails(ctx, client, doc.Details)
-	if links == nil || !links.hasAssociations() {
-		return nil
-	}
-
-	update := client.Procedure.UpdateOneID(doc.ID).SetRevision(doc.Revision)
-	if len(links.controlIDs) > 0 {
-		update.AddControlIDs(lo.Uniq(links.controlIDs)...)
-	}
-
-	if len(links.subcontrolIDs) > 0 {
-		update.AddSubcontrolIDs(lo.Uniq(links.subcontrolIDs)...)
-	}
-
-	return update.Exec(workflows.AllowContext(ctx))
+	return inv.Schema.Update(rule.WithInternalContext(inv.Context), inv.Client, inv.EntityID, updatePayload)
 }
 
+// getDocumentAssociationsForDetails returns the control and subcontrol IDs referenced in a document's details
 func getDocumentAssociationsForDetails(ctx context.Context, client *generated.Client, details string) *edgeLinks {
 	if details == "" {
 		return nil

@@ -23,24 +23,10 @@ func (nopDriver) Dialect() string                               { return dialect
 
 // TestBuildObjectRefQuery verifies object ref query builder behavior
 func TestBuildObjectRefQuery(t *testing.T) {
-	old := objectRefQueryBuilders
-	t.Cleanup(func() { objectRefQueryBuilders = old })
-
 	query := &generated.WorkflowObjectRefQuery{}
 
-	objectRefQueryBuilders = nil
 	assert.Nil(t, buildObjectRefQuery(query, &Object{ID: "obj1"}))
-
-	objectRefQueryBuilders = []ObjectRefQueryBuilder{
-		func(_ *generated.WorkflowObjectRefQuery, _ *Object) (*generated.WorkflowObjectRefQuery, bool) {
-			return nil, true
-		},
-		func(q *generated.WorkflowObjectRefQuery, _ *Object) (*generated.WorkflowObjectRefQuery, bool) {
-			return q, true
-		},
-	}
-
-	assert.Equal(t, query, buildObjectRefQuery(query, &Object{ID: "obj1"}))
+	assert.Equal(t, query, buildObjectRefQuery(query, &Object{ID: "obj1", Type: enums.WorkflowObjectTypeControl}))
 }
 
 // TestObjectRefIDsErrors verifies error handling for object ref IDs
@@ -63,13 +49,9 @@ func TestObjectRefIDsMissingOrg(t *testing.T) {
 
 // TestObjectRefIDsUnsupportedType verifies unsupported object type handling
 func TestObjectRefIDsUnsupportedType(t *testing.T) {
-	old := objectRefQueryBuilders
-	t.Cleanup(func() { objectRefQueryBuilders = old })
-	objectRefQueryBuilders = nil
-
 	orgCtx := auth.NewTestContextWithOrgID(ulids.New().String(), ulids.New().String())
 	client := generated.NewClient(generated.Driver(nopDriver{}))
-	ids, err := ObjectRefIDs(orgCtx, client, &Object{ID: "obj1", Type: enums.WorkflowObjectTypeControl})
+	ids, err := ObjectRefIDs(orgCtx, client, &Object{ID: "obj1", Type: enums.WorkflowObjectType("Unsupported")})
 	assert.ErrorIs(t, err, ErrUnsupportedObjectType)
 	assert.Nil(t, ids)
 }

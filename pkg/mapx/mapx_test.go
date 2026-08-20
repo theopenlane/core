@@ -53,8 +53,9 @@ func TestCloneMapStringSlice(t *testing.T) {
 	if got := CloneMapStringSlice(nil); got != nil {
 		t.Fatalf("expected nil, got %v", got)
 	}
-	if got := CloneMapStringSlice(map[string][]string{}); got != nil {
-		t.Fatalf("expected nil, got %v", got)
+
+	if got := CloneMapStringSlice(map[string][]string{}); got == nil || len(got) != 0 {
+		t.Fatalf("expected empty non-nil map, got %v", got)
 	}
 
 	src := map[string][]string{"edgeA": {"id1", "id2"}}
@@ -68,8 +69,12 @@ func TestCloneMapStringSlice(t *testing.T) {
 		t.Fatal("expected slice copy isolation")
 	}
 
-	if got := CloneMapStringSlice(map[string][]string{" ": {"id1"}}); got != nil {
-		t.Fatalf("expected nil for blank keys, got %v", got)
+	markers := CloneMapStringSlice(map[string][]string{"absent": nil, "cleared": {}})
+	if value, ok := markers["absent"]; !ok || value != nil {
+		t.Fatalf("expected nil value preserved, got %v", markers)
+	}
+	if value, ok := markers["cleared"]; !ok || value == nil || len(value) != 0 {
+		t.Fatalf("expected explicit-empty value preserved, got %v", markers)
 	}
 }
 

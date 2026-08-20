@@ -30,10 +30,7 @@ func HookTrustCenterFAQ() ent.Hook {
 			if err := m.Client().Note.UpdateOneID(noteID).
 				SetTrustCenterID(id).
 				Exec(ctx); err != nil {
-				logx.FromContext(ctx).Warn().Err(err).
-					Str("note_id", noteID).
-					Str("trust_center_id", id).
-					Msg("failed to set trust center id on faq note")
+				logx.FromContext(ctx).Warn().Err(err).Str("note_id", noteID).Str("trust_center_id", id).Msg("failed to set trust center id on faq note")
 			}
 
 			return v, nil

@@ -11,13 +11,10 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/eventqueue"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/control"
-	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
-	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -36,32 +33,15 @@ type standardSubcontrol struct {
 
 // handleStandardMutation processes standard mutations and creates notifications
 // for org admins when a system-owned standard revision is bumped up
-func handleStandardMutation(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	if !isUpdateOperation(payload.Operation) {
-		return nil
-	}
+func handleStandardMutation(inv entityops.Invocation, payload entityops.MutationPayload) error {
+	standardID := payload.EntityID
 
-	if !eventqueue.MutationFieldChanged(payload, standard.FieldRevision) {
-		return nil
-	}
-
-	ctx, client, ok := eventqueue.ClientFromHandler(ctx)
-	if !ok {
-		return ErrFailedToGetClient
-	}
-
-	props := ctx.Envelope.Headers.Properties
-
-	standardID, ok := eventqueue.MutationEntityID(payload, props)
-	if !ok {
-		return ErrEntityIDNotFound
-	}
-
-	allowCtx := ctx.Context
-
-	std, err := client.Standard.Get(allowCtx, standardID)
-	if err != nil {
+	std, found, err := entityops.LoadEntity(inv.Context, standardID, inv.Client.Standard.Get)
+	switch {
+	case err != nil:
 		return fmt.Errorf("failed to query standard: %w", err)
+	case !found:
+		return nil
 	}
 
 	if !std.SystemOwned {
@@ -70,7 +50,7 @@ func handleStandardMutation(ctx gala.HandlerContext, payload eventqueue.Mutation
 
 	var controls []standardControl
 
-	err = client.Control.Query().
+	err = inv.Client.Control.Query().
 		Where(
 			control.StandardID(standardID),
 			control.OwnerIDNotNil(),
@@ -82,7 +62,7 @@ func handleStandardMutation(ctx gala.HandlerContext, payload eventqueue.Mutation
 			control.FieldTitle,
 			control.FieldReferenceFrameworkRevision,
 		).
-		Scan(allowCtx, &controls)
+		Scan(inv.Context, &controls)
 	if err != nil {
 		return fmt.Errorf("failed to query controls for standard: %w", err)
 	}
@@ -107,7 +87,7 @@ func handleStandardMutation(ctx gala.HandlerContext, payload eventqueue.Mutation
 		return c.ID
 	})
 
-	subcontrols, err := fetchAffectedSubcontrols(allowCtx, client, controlIDs, std.Revision)
+	subcontrols, err := fetchAffectedSubcontrols(inv.Context, inv.Client, controlIDs, std.Revision)
 	if err != nil {
 		return err
 	}
@@ -119,12 +99,11 @@ func handleStandardMutation(ctx gala.HandlerContext, payload eventqueue.Mutation
 	lo.ForEach(lo.Entries(groups), func(entry lo.Entry[string, []standardControl], _ int) {
 		orgID := entry.Key
 		controls := entry.Value
+		logCtx := logx.WithFields(inv.Context, map[string]any{"org_id": orgID})
 
-		ids, err := fetchOrgAdminsAndOwners(allowCtx, client, orgID)
+		ids, err := orgUserIDsByRole(inv.Context, inv.Client, orgID, enums.RoleOwner, enums.RoleAdmin)
 		if err != nil {
-			logx.FromContext(ctx.Context).Error().Err(err).
-				Str("org_id", orgID).
-				Msg("failed to get org admin and owner IDs")
+			logx.FromContext(logCtx).Error().Err(err).Msg("failed to get org admin and owner IDs")
 
 			return
 		}
@@ -138,7 +117,7 @@ func handleStandardMutation(ctx gala.HandlerContext, payload eventqueue.Mutation
 		orgSubcontrols := fetchSubcontrolsOwnedByControl(controls, subcontrolsByControlID)
 
 		data := map[string]any{
-			"url":                        getURLPathForObject(standardID, generated.TypeStandard),
+			"url":                        entityops.ConsoleObjectPath(generated.TypeStandard, standardID),
 			"standard_id":                standardID,
 			"standard_short_name":        std.ShortName,
 			"old_revision":               oldRevision,
@@ -172,15 +151,14 @@ func handleStandardMutation(ctx gala.HandlerContext, payload eventqueue.Mutation
 			ObjectType:       generated.TypeStandard,
 		}
 
-		notificationCtx := auth.WithCaller(ctx.Context, &auth.Caller{
+		notificationCtx := auth.WithCaller(inv.Context, &auth.Caller{
 			SubjectID:      ids[0],
 			OrganizationID: orgID,
+			Capabilities:   auth.CapInternalOperation,
 		})
 
-		if err := newNotificationCreation(notificationCtx, client, ids, notifInput); err != nil {
-			logx.FromContext(ctx.Context).Error().Err(err).
-				Str("org_id", orgID).
-				Msg("failed to create standard update notification")
+		if err := entityops.CreateNotifications(notificationCtx, inv.Client, ids, notifInput); err != nil {
+			logx.FromContext(logCtx).Error().Err(err).Msg("failed to create standard update notification")
 
 			return
 		}
@@ -238,13 +216,9 @@ func fetchAffectedSubcontrols(ctx context.Context, client *generated.Client, ids
 }
 
 func fetchSubcontrolsOwnedByControl(controls []standardControl, grouped map[string][]standardSubcontrol) []standardSubcontrol {
-	subcontrols := []standardSubcontrol{}
-
-	for _, c := range controls {
-		subcontrols = append(subcontrols, grouped[c.ID]...)
-	}
-
-	return subcontrols
+	return lo.FlatMap(controls, func(c standardControl, _ int) []standardSubcontrol {
+		return grouped[c.ID]
+	})
 }
 
 func pickOldestRevision(controls []standardControl) string {
@@ -261,21 +235,4 @@ func pickOldestRevision(controls []standardControl) string {
 	semver.Sort(revisions)
 
 	return revisions[0]
-}
-
-func fetchOrgAdminsAndOwners(ctx context.Context, client *generated.Client, orgID string) ([]string, error) {
-	var ids []string
-
-	err := client.OrgMembership.Query().
-		Where(
-			orgmembership.OrganizationIDEQ(orgID),
-			orgmembership.RoleIn(enums.RoleOwner, enums.RoleAdmin),
-		).
-		Select(orgmembership.FieldUserID).
-		Scan(ctx, &ids)
-	if err != nil {
-		return nil, err
-	}
-
-	return ids, nil
 }

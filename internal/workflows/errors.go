@@ -27,6 +27,8 @@ var (
 	ErrMissingOrganizationID = errors.New("organization id is required")
 	// ErrApprovalActionParamsInvalid is returned when approval action params are invalid
 	ErrApprovalActionParamsInvalid = errors.New("approval action params are invalid")
+	// ErrWorkflowDomainFieldsRequired is returned when an approval domain has no fields
+	ErrWorkflowDomainFieldsRequired = errors.New("workflow domain requires at least one field")
 	// ErrStringFieldMarshal is returned when string field extraction cannot marshal the node
 	ErrStringFieldMarshal = errors.New("failed to marshal node for string field extraction")
 	// ErrStringFieldUnmarshal is returned when string field extraction cannot unmarshal the node
@@ -35,8 +37,6 @@ var (
 	ErrStringFieldNil = errors.New("string field node is nil")
 	// ErrStringSliceFieldInvalid is returned when a string slice field contains non-string values
 	ErrStringSliceFieldInvalid = errors.New("string slice field contains non-string values")
-	// ErrWorkflowObjectNodeInvalid is returned when a loaded workflow object does not implement generated.Noder
-	ErrWorkflowObjectNodeInvalid = errors.New("workflow object node type is invalid")
 	// ErrRuntimeDefinitionKeyRequired is returned when a runtime definition is registered without a key
 	ErrRuntimeDefinitionKeyRequired = errors.New("runtime definition key is required")
 	// ErrRuntimeDefinitionDuplicateKey is returned when a runtime definition key is already registered

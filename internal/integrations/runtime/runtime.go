@@ -161,17 +161,6 @@ func (r *Runtime) Dispatch(ctx context.Context, req types.DispatchRequest) (type
 	return result, err
 }
 
-// registerContextCodecs registers the durable context codecs required by integration dispatch and ingest listeners
-func (r *Runtime) registerContextCodecs() error {
-	for _, codec := range operations.ContextCodecs() {
-		if err := r.Gala().ContextManager().Register(codec); err != nil && !errors.Is(err, gala.ErrContextCodecAlreadyRegistered) {
-			return err
-		}
-	}
-
-	return nil
-}
-
 // normalizeDispatchError translates registry-level dispatch errors into runtime sentinel errors
 func normalizeDispatchError(err error) error {
 	switch {
@@ -220,10 +209,6 @@ func New(config Config) (*Runtime, error) {
 	do.ProvideValue(injector, config.Gala)
 	do.ProvideValue(injector, config.Keystore)
 	do.ProvideValue(injector, config.RedisClient)
-
-	if err := rt.registerContextCodecs(); err != nil {
-		return nil, err
-	}
 
 	do.Provide(injector, func(do.Injector) (keymaker.AuthStateStore, error) {
 		if config.RedisClient != nil {
@@ -280,7 +265,7 @@ func New(config Config) (*Runtime, error) {
 		return nil, err
 	}
 
-	if err := operations.RegisterReconcileListener(rt.Gala(), rt.Registry(), rt.HandleReconcile, gala.NewSchedule()); err != nil {
+	if _, err := gala.Register(rt.Gala(), operations.ReconcileDefinition(rt.Registry(), rt.HandleReconcile, gala.Schedule{})); err != nil {
 		return nil, err
 	}
 

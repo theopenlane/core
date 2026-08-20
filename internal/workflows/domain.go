@@ -11,7 +11,8 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/mutations"
+	"github.com/theopenlane/core/internal/ent/entityops"
+	"github.com/theopenlane/core/pkg/mapx"
 )
 
 // DeriveDomainKey generates a stable domain key from a sorted list of field names.
@@ -32,6 +33,31 @@ func DeriveDomainKey(objectType enums.WorkflowObjectType, fields []string) strin
 	}
 
 	return prefix + ":" + strings.Join(sorted, ",")
+}
+
+// ValidatedDomainKey validates an approval domain against canonical workflow field descriptors.
+func ValidatedDomainKey(objectType enums.WorkflowObjectType, fields []string) (string, error) {
+	fields = entityops.NormalizeStrings(fields)
+	if len(fields) == 0 {
+		return "", ErrWorkflowDomainFieldsRequired
+	}
+
+	schema, err := WorkflowSchema(objectType)
+	if err != nil {
+		return "", err
+	}
+
+	eligible := mapx.MapSetFromSlice(lo.Map(schema.WorkflowFields(), func(field entityops.FieldDescriptor, _ int) string {
+		return field.Name
+	}))
+
+	for _, field := range fields {
+		if _, ok := eligible[field]; !ok {
+			return "", fmt.Errorf("%w: %s.%s", ErrFieldNotWorkflowEligible, objectType, field)
+		}
+	}
+
+	return DeriveDomainKey(objectType, fields), nil
 }
 
 // DomainChanges represents changes grouped by approval domain
@@ -171,7 +197,7 @@ func ApprovalDomains(doc models.WorkflowDefinitionDocument) ([][]string, error) 
 			return nil, fmt.Errorf("%w: action %q: %v", ErrApprovalActionParamsInvalid, action.Key, err)
 		}
 
-		fields := mutations.NormalizeStrings(params.Fields)
+		fields := entityops.NormalizeStrings(params.Fields)
 		if len(fields) == 0 {
 			continue
 		}

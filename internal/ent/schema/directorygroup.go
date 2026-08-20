@@ -52,7 +52,7 @@ func (DirectoryGroup) Fields() []ent.Field {
 			NotEmpty().
 			Immutable().
 			Annotations(
-				entx.IntegrationMappingField().UpsertKey().FromIntegration(),
+				entx.IntegrationMappingField().FromIntegration(),
 			),
 		field.String("platform_id").
 			Comment("optional platform associated with this directory group").
@@ -74,7 +74,7 @@ func (DirectoryGroup) Fields() []ent.Field {
 			NotEmpty().
 			Immutable().
 			Annotations(
-				entx.IntegrationMappingField().UpsertKey(),
+				entx.IntegrationMappingField(),
 			),
 		field.String("external_id").
 			Comment("stable identifier from the directory system").

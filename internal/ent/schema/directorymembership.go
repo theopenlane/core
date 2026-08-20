@@ -52,7 +52,7 @@ func (DirectoryMembership) Fields() []ent.Field {
 			NotEmpty().
 			Immutable().
 			Annotations(
-				entx.IntegrationMappingField().UpsertKey().FromIntegration(),
+				entx.IntegrationMappingField().FromIntegration(),
 			),
 		field.String("platform_id").
 			Comment("optional platform associated with this directory membership").
@@ -68,21 +68,21 @@ func (DirectoryMembership) Fields() []ent.Field {
 			NotEmpty().
 			Immutable().
 			Annotations(
-				entx.IntegrationMappingField().UpsertKey(),
+				entx.IntegrationMappingField(),
 			),
 		field.String("directory_account_id").
 			Comment("directory account participating in this membership").
 			NotEmpty().
 			Immutable().
 			Annotations(
-				entx.IntegrationMappingField().UpsertKey().LookupKey(),
+				entx.IntegrationMappingField().LookupKey(),
 			),
 		field.String("directory_group_id").
 			Comment("directory group associated with this membership").
 			NotEmpty().
 			Immutable().
 			Annotations(
-				entx.IntegrationMappingField().UpsertKey().LookupKey(),
+				entx.IntegrationMappingField().LookupKey(),
 			),
 		field.Enum("role").
 			Comment("membership role reported by the provider").

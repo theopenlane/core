@@ -71,6 +71,7 @@ func (Evidence) Fields() []ent.Field {
 			Comment("the name of the evidence").
 			Annotations(
 				entx.FieldSearchable(),
+				entx.DisplayName(),
 				entgql.OrderField("name"),
 				oscalgen.NewOSCALField(
 					oscalgen.OSCALFieldRoleTitle,
@@ -253,6 +254,7 @@ func (e Evidence) Annotations() []schema.Annotation {
 		entx.FileCategory(SchemaEvidence),
 		entfga.SelfAccessChecks(),
 		entx.NewExportable(),
+		entx.ConsoleRoute(entx.WithConsoleBase("evidence"), entx.WithConsoleIDParam("id")),
 		oscalgen.NewOSCALModel(
 			oscalgen.WithOSCALModels(
 				oscalgen.OSCALModelComponentDefinition,

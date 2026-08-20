@@ -138,10 +138,11 @@ func Builder(runtime *RuntimeConfig) registry.Builder {
 					IngestHandle:        AssetCollect{}.IngestHandle(),
 					SkipDefaultLookback: true,
 					RequiredPermissions: []string{"Registrar Domains Read"},
-					Schedule: gala.NewFullFetchSchedule(
-						gala.WithMinInterval(assetSyncMinIntervalHours*time.Hour),
-						gala.WithMaxInterval(assetSyncMaxIntervalDays*assetSyncMinIntervalHours*time.Hour),
-					),
+					Schedule: &gala.Schedule{
+						MinInterval:        assetSyncMinIntervalHours * time.Hour,
+						MaxInterval:        assetSyncMaxIntervalDays * assetSyncMinIntervalHours * time.Hour,
+						HighDriftThreshold: gala.FullHighDriftThreshold,
+					},
 				},
 				{
 					Name:               DomainScanSubmitOp.Name(),

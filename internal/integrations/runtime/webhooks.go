@@ -163,17 +163,21 @@ func (r *Runtime) DispatchWebhookEvent(ctx context.Context, integration *ent.Int
 
 	oc := types.NewOperationContext(ownerID, "", src)
 
-	receipt := r.Gala().EmitWithHeaders(intobvs.WithContext(ctx, oc), registration.Topic, operations.WebhookEnvelope{
+	emitCtx, headers := intobvs.EmitContext(ctx, oc)
+
+	// provider redeliveries of one delivery id collapse to a single processed job
+	if event.DeliveryID != "" {
+		headers.UniqueKey = types.NewDefinitionRef(definitionID).WebhookEventTopics().Key(event.DeliveryID)
+		headers.UniqueOnce = true
+	}
+
+	_, err = r.Gala().EmitWithHeaders(emitCtx, registration.Topic, operations.WebhookEnvelope{
 		OperationContext: oc,
 		Payload:          jsonx.CloneRawMessage(event.Payload),
 		Headers:          maps.Clone(event.Headers),
-	}, gala.Headers{
-		IdempotencyKey: event.DeliveryID,
-		Properties:     oc.Properties(),
-		Tags:           types.GetTagsForOperationContext(oc),
-	})
+	}, headers, gala.WithEventID(gala.EventID(event.DeliveryID)))
 
-	return receipt.Err
+	return err
 }
 
 // HandleWebhookEvent processes one emitted integration webhook envelope

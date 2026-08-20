@@ -6,6 +6,7 @@ import (
 	"errors"
 	"time"
 
+	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
@@ -68,10 +69,7 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 		return types.DispatchResult{}, err
 	}
 
-	runType := req.RunType
-	if runType == "" {
-		runType = enums.IntegrationRunTypeManual
-	}
+	runType := lo.CoalesceOrEmpty(req.RunType, enums.IntegrationRunTypeManual)
 
 	src := types.IntegrationSource{
 		IntegrationID: req.IntegrationID,
@@ -97,35 +95,36 @@ func Dispatch(ctx context.Context, reg *registry.Registry, db *ent.Client, runti
 
 	oc := types.NewOperationContext(ownerID, req.Operation, src)
 
-	emitCtx := intobvs.WithContext(ctx, oc)
-	receipt := runtime.EmitWithHeaders(emitCtx, operation.Topic, Envelope{
-		OperationContext:   oc,
-		Config:             jsonx.CloneRawMessage(req.Config),
-		ForceClientRebuild: req.ForceClientRebuild},
-		gala.Headers{
-			IdempotencyKey: runID,
-			Properties:     oc.Properties(),
-			Tags:           types.GetTagsForOperationContext(oc),
-			ScheduledAt:    req.ScheduledAt,
-		})
+	emitCtx, headers := intobvs.EmitContext(ctx, oc)
+	headers.ScheduledAt = req.ScheduledAt
 
-	if receipt.Err != nil {
+	if req.UniqueKey != "" {
+		headers.UniqueKey = req.UniqueKey
+		headers.UniqueOnce = true
+	}
+
+	eventID, err := runtime.EmitWithHeaders(emitCtx, operation.Topic, Envelope{
+		OperationContext:   oc,
+		Config:             req.Config,
+		ForceClientRebuild: req.ForceClientRebuild,
+	}, headers, gala.WithEventID(gala.EventID(runID)))
+	if err != nil {
 		if runID != "" {
 			if completeErr := CompleteRun(ctx, db, runID, time.Now(), RunResult{
 				Status:  enums.IntegrationRunStatusFailed,
 				Summary: "dispatch failed",
-				Error:   receipt.Err.Error(),
+				Error:   err.Error(),
 			}); completeErr != nil {
-				return types.DispatchResult{}, errors.Join(receipt.Err, completeErr)
+				return types.DispatchResult{}, errors.Join(err, completeErr)
 			}
 		}
 
-		return types.DispatchResult{}, receipt.Err
+		return types.DispatchResult{}, err
 	}
 
 	return types.DispatchResult{
 		RunID:   runID,
-		EventID: string(receipt.EventID),
+		EventID: string(eventID),
 		Status:  enums.IntegrationRunStatusPending,
 	}, nil
 }

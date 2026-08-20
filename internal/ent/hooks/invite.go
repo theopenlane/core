@@ -297,18 +297,12 @@ func HookInviteAccepted() ent.Hook {
 					}
 
 					if err := updateOldOwner.Exec(allowCtx); err != nil {
-						logx.FromContext(ctx).Error().Err(err).
-							Str("user_id", currentOwner.UserID).
-							Msg("unable to set current owner to super admin")
+						logx.FromContext(ctx).Error().Err(err).Str("user_id", currentOwner.UserID).Msg("unable to set current owner to super admin")
 						return nil, err
 					}
 				}
 
-				logx.FromContext(ctx).Info().
-					Str("organization_id", ownerID).
-					Str("new_owner_id", userID).
-					Int("updated_owners", len(currentOwners)).
-					Msg("organization ownership transfer completed")
+				logx.FromContext(ctx).Info().Str("organization_id", ownerID).Str("new_owner_id", userID).Int("updated_owners", len(currentOwners)).Msg("organization ownership transfer completed")
 			}
 
 			// add the user to the group as member if any were specified

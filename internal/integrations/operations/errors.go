@@ -43,6 +43,9 @@ var (
 	ErrIngestPersistFailed = errors.New("integrations/operations: ingest persistence failed")
 	// ErrIngestIntegrationUnresolved indicates the integration record could not be resolved for an ingest operation
 	ErrIngestIntegrationUnresolved = errors.New("integrations/operations: ingest integration unresolved")
+
+	// ErrIngestIntegrationRemoved indicates the integration installation was removed while ingest record jobs were still queued
+	ErrIngestIntegrationRemoved = errors.New("integrations/operations: ingest integration removed")
 	// ErrOperationDisabled indicates the operation is disabled for this installation and the reconcile cycle should stop
 	ErrOperationDisabled = errors.New("integrations/operations: operation disabled")
 	// ErrExportFailed indicates the Drive file export request failed

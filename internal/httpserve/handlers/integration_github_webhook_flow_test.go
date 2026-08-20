@@ -105,7 +105,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookPingUpdatesIntegrationMetadata()
 	assert.Equal(t, http.StatusOK, rec.Code)
 
 	// Wait for in-memory Gala pool to finish processing the dispatched webhook event
-	suite.h.IntegrationsRuntime.Gala().WaitIdle()
+	suite.waitForGala(suite.h.IntegrationsRuntime.Gala())
 
 	updated, err := suite.db.Integration.Get(user.UserCtx, integrationRecord.ID)
 	assert.NoError(t, err)
@@ -317,7 +317,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationRoutesToCorr
 	suite.e.ServeHTTP(recB, reqB)
 	assert.Equal(t, http.StatusOK, recB.Code)
 
-	suite.h.IntegrationsRuntime.Gala().WaitIdle()
+	suite.waitForGala(suite.h.IntegrationsRuntime.Gala())
 
 	// Verify integrationB was updated with webhook verification metadata
 	updatedB, err := suite.db.Integration.Get(user.UserCtx, integrationB.ID)
@@ -342,7 +342,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationRoutesToCorr
 	suite.e.ServeHTTP(recA, reqA)
 	assert.Equal(t, http.StatusOK, recA.Code)
 
-	suite.h.IntegrationsRuntime.Gala().WaitIdle()
+	suite.waitForGala(suite.h.IntegrationsRuntime.Gala())
 
 	updatedA, err = suite.db.Integration.Get(user.UserCtx, integrationA.ID)
 	assert.NoError(t, err)
@@ -405,7 +405,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertIngestsVulnerabil
 
 	assert.Equal(t, http.StatusOK, rec.Code)
 
-	suite.h.IntegrationsRuntime.Gala().WaitIdle()
+	suite.waitForGala(suite.h.IntegrationsRuntime.Gala())
 
 	// Verify the vulnerability record was persisted with correct field values
 	vulns, err := suite.db.Vulnerability.Query().
@@ -485,7 +485,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertUpsertsExistingVu
 	suite.e.ServeHTTP(recOpen, reqOpen)
 	assert.Equal(t, http.StatusOK, recOpen.Code)
 
-	suite.h.IntegrationsRuntime.Gala().WaitIdle()
+	suite.waitForGala(suite.h.IntegrationsRuntime.Gala())
 
 	// Verify creation
 	vulns, err := suite.db.Vulnerability.Query().
@@ -531,7 +531,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookDependabotAlertUpsertsExistingVu
 	suite.e.ServeHTTP(recFixed, reqFixed)
 	assert.Equal(t, http.StatusOK, recFixed.Code)
 
-	suite.h.IntegrationsRuntime.Gala().WaitIdle()
+	suite.waitForGala(suite.h.IntegrationsRuntime.Gala())
 
 	// Verify the update hit the same record, not a new one
 	vulns, err = suite.db.Vulnerability.Query().
@@ -638,7 +638,7 @@ func (suite *HandlerTestSuite) TestGitHubWebhookMultiOrgInstallationIngestsVulne
 	suite.e.ServeHTTP(recB, reqB)
 	assert.Equal(t, http.StatusOK, recB.Code)
 
-	suite.h.IntegrationsRuntime.Gala().WaitIdle()
+	suite.waitForGala(suite.h.IntegrationsRuntime.Gala())
 
 	// Both vulnerabilities should land in the same Openlane org
 	vulnA, err := suite.db.Vulnerability.Query().

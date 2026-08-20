@@ -7,35 +7,24 @@ import (
 
 // Headers defines operational metadata for an envelope
 type Headers struct {
-	// IdempotencyKey identifies duplicate-safe processing scope
-	IdempotencyKey string `json:"idempotency_key,omitempty"`
 	// Properties stores additional metadata for UI visibility
 	Properties map[string]string `json:"properties,omitempty"`
 	// Tags are low-cardinality labels forwarded to the transport layer (e.g. River job tags)
 	Tags []string `json:"tags,omitempty"`
 	// Listeners are the registered listener names for the topic, populated at dispatch time
 	Listeners []string `json:"listeners,omitempty"`
-	// Queue optionally overrides the River queue used for dispatch
-	Queue string `json:"queue,omitempty"`
-	// MaxAttempts optionally overrides River max attempts for this envelope
-	MaxAttempts int `json:"max_attempts,omitempty"`
+	// Kind optionally routes dispatch to a registered job kind
+	Kind string `json:"kind,omitempty"`
 	// ScheduledAt defers execution until the specified time; nil means immediate
 	ScheduledAt *time.Time `json:"scheduled_at,omitempty"`
+	// UniqueKey enforces at most one live job per key at insert time
+	UniqueKey string `json:"unique_key,omitempty"`
+	// SkipUniqueKey suppresses the topic's UniqueKey derivation
+	SkipUniqueKey bool `json:"skip_unique_key,omitempty"`
+	// UniqueOnce extends UniqueKey matching to terminal job states
+	UniqueOnce bool `json:"unique_once,omitempty"`
 	// Metadata carries structured operation context as opaque JSON
 	Metadata json.RawMessage `json:"metadata,omitempty"`
-}
-
-// NewHeaders returns Headers with the given tags and the input marshaled as JSON in the "input" property
-func NewHeaders(tags []string, input any) Headers {
-	raw, err := json.Marshal(input)
-	if err != nil {
-		return Headers{Tags: tags}
-	}
-
-	return Headers{
-		Tags:       tags,
-		Properties: map[string]string{"input": string(raw)},
-	}
 }
 
 // Envelope is the durable event envelope
@@ -52,14 +41,4 @@ type Envelope struct {
 	Payload json.RawMessage `json:"payload"`
 	// ContextSnapshot holds restorable context metadata
 	ContextSnapshot ContextSnapshot `json:"context_snapshot"`
-}
-
-// EmitReceipt captures synchronous dispatch results
-type EmitReceipt struct {
-	// EventID is the emitted event identifier
-	EventID EventID
-	// Accepted reports whether the event was accepted for processing
-	Accepted bool
-	// Err contains any terminal emit error
-	Err error
 }

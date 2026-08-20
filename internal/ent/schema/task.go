@@ -70,6 +70,7 @@ func (Task) Fields() []ent.Field {
 			Comment("the title of the task").
 			Annotations(
 				entx.FieldSearchable(),
+				entx.DisplayName(),
 				entgql.OrderField("title"),
 				oscalgen.NewOSCALField(
 					oscalgen.OSCALFieldRoleTitle,
@@ -81,6 +82,7 @@ func (Task) Fields() []ent.Field {
 			Comment("the details of the task").
 			Optional().
 			Annotations(
+				entx.MentionSource(),
 				oscalgen.NewOSCALField(
 					oscalgen.OSCALFieldRoleImplementationDetails,
 					oscalgen.WithOSCALFieldModels(oscalgen.OSCALModelSSP, oscalgen.OSCALModelPOAM),
@@ -90,6 +92,7 @@ func (Task) Fields() []ent.Field {
 			Optional().
 			Annotations(
 				entgql.Type("[Any!]"),
+				entx.MentionSource(),
 			).
 			Comment("structured details of the task in JSON format"),
 		field.JSON("metadata", map[string]any{}).
@@ -384,6 +387,7 @@ func (Task) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
 		entx.NewExportable(),
+		entx.ConsoleRoute(entx.WithConsoleBase("automation/tasks"), entx.WithConsoleIDParam("id")),
 		oscalgen.NewOSCALModel(
 			oscalgen.WithOSCALModels(oscalgen.OSCALModelSSP, oscalgen.OSCALModelPOAM),
 			oscalgen.WithOSCALAssembly("poam-item"),

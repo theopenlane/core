@@ -60,3 +60,11 @@ func TestBuildScanReportNilResult(t *testing.T) {
 
 	assert.Check(t, is.Len(report.Findings.SecurityViolations, 0))
 }
+
+func TestEnrichmentIsEmpty(t *testing.T) {
+	assert.Check(t, Enrichment{}.IsEmpty())
+
+	assert.Check(t, !Enrichment{Company: &CompanyProfile{Name: "Acme"}}.IsEmpty())
+	assert.Check(t, !Enrichment{Compliance: &CompliancePage{}}.IsEmpty())
+	assert.Check(t, !Enrichment{DNS: &DNSVendorInfo{}}.IsEmpty())
+}

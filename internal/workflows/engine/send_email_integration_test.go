@@ -478,7 +478,7 @@ func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_DefaultSender() {
 }
 
 // TestExecuteSendEmail_FullAsyncPath verifies the complete end-to-end path:
-// Control mutation -> Gala mutation event -> TriggerWorkflow -> TopicWorkflowTriggered ->
+// Control mutation -> Gala mutation event -> TriggerWorkflow -> workflow.command.trigger ->
 // ProcessAction -> executeSendEmail -> River job inserted with correct email payload
 func (s *WorkflowEngineTestSuite) TestExecuteSendEmail_FullAsyncPath() {
 	userID, orgID, userCtx := s.SetupTestUser()

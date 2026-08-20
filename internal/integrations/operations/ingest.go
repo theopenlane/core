@@ -273,7 +273,6 @@ func markUnconfirmedDirectoryMembershipsRemoved(ctx context.Context, db *ent.Cli
 	if err != nil {
 		return err
 	}
-
 	if !current {
 		logx.FromContext(ctx).Info().Str("directory_sync_run_id", runID).Msg("skipping membership removal for stale directory sync run")
 		return nil
@@ -419,7 +418,6 @@ func finalizeDirectorySyncRun(ctx context.Context, db *ent.Client, directorySync
 	if err != nil {
 		return err
 	}
-
 	if !current {
 		logx.FromContext(ctx).Info().Str("directory_sync_run_id", directorySyncRunID).Msg("skipping stale directory sync run finalization")
 		return nil
@@ -439,7 +437,6 @@ func finalizeDirectorySyncRun(ctx context.Context, db *ent.Client, directorySync
 	return update.Exec(ctx)
 }
 
-// isCurrentDirectorySyncRun returns true if the given run ID is the latest run for its integration; false if a newer run has already started
 func isCurrentDirectorySyncRun(ctx context.Context, db *ent.Client, runID string) (bool, error) {
 	run, err := db.DirectorySyncRun.Query().Where(directorysyncrun.ID(runID)).Only(ctx)
 	if err != nil {
@@ -457,7 +454,6 @@ func isCurrentDirectorySyncRun(ctx context.Context, db *ent.Client, runID string
 	return sameDirectorySyncRun(run.ID, latest.ID), nil
 }
 
-// sameDirectorySyncRun returns true if the two run IDs are non-empty and equal
 func sameDirectorySyncRun(runID, latestRunID string) bool {
 	return runID != "" && runID == latestRunID
 }

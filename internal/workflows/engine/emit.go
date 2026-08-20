@@ -7,40 +7,15 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
 	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/observability"
 	"github.com/theopenlane/core/pkg/gala"
 )
 
-// emitAssignmentCreated emits assignment created events and records enqueue failures
-func (e *WorkflowEngine) emitAssignmentCreated(ctx context.Context, instance *generated.WorkflowInstance, obj *workflows.Object, assignmentID string, userID string, actionType enums.WorkflowActionType) {
-	payload := gala.WorkflowAssignmentCreatedPayload{
-		AssignmentID: assignmentID,
-		InstanceID:   instance.ID,
-		TargetType:   enums.WorkflowTargetTypeUser,
-		TargetIDs:    []string{userID},
-		ObjectID:     obj.ID,
-		ObjectType:   obj.Type,
-	}
-
-	meta := workflows.EmitFailureMeta{
-		EventType:   enums.WorkflowEventTypeAssignmentCreated,
-		ActionKey:   "",
-		ActionIndex: -1,
-		ObjectID:    obj.ID,
-		ObjectType:  obj.Type,
-	}
-
-	emitEngineEvent(ctx, e, observability.OpExecuteAction, actionType.String(), instance, meta, gala.TopicWorkflowAssignmentCreated, payload, observability.Fields{
-		workflowassignmenttarget.FieldTargetUserID: userID,
-	})
-}
-
 // emitActionStarted emits action started event.
 func (l *WorkflowListeners) emitActionStarted(scope *observability.Scope, instance *generated.WorkflowInstance, actionKey string, actionIndex int, actionType enums.WorkflowActionType, obj *workflows.Object) {
-	payload := gala.WorkflowActionStartedPayload{
+	payload := WorkflowActionStartedPayload{
 		InstanceID:  instance.ID,
 		ActionIndex: actionIndex,
 		ActionType:  actionType,
@@ -56,12 +31,12 @@ func (l *WorkflowListeners) emitActionStarted(scope *observability.Scope, instan
 		ObjectType:  obj.Type,
 	}
 
-	emitListenerEvent(scope, l, instance, meta, gala.TopicWorkflowActionStarted, payload)
+	emitListenerEvent(scope, l, instance, meta, WorkflowActionStartedEventTopic.Name, payload)
 }
 
 // emitActionCompleted emits action completed event.
 func (l *WorkflowListeners) emitActionCompleted(scope *observability.Scope, instance *generated.WorkflowInstance, actionKey string, actionIndex int, actionType enums.WorkflowActionType, obj *workflows.Object, execErr error, skipped bool) {
-	payload := gala.WorkflowActionCompletedPayload{
+	payload := WorkflowActionCompletedPayload{
 		InstanceID:  instance.ID,
 		ActionIndex: actionIndex,
 		ActionType:  actionType,
@@ -82,12 +57,12 @@ func (l *WorkflowListeners) emitActionCompleted(scope *observability.Scope, inst
 		ObjectType:  obj.Type,
 	}
 
-	emitListenerEvent(scope, l, instance, meta, gala.TopicWorkflowActionCompleted, payload)
+	emitListenerEvent(scope, l, instance, meta, WorkflowActionCompletedEventTopic.Name, payload)
 }
 
 // emitInstanceCompleted emits instance completed event.
 func (l *WorkflowListeners) emitInstanceCompleted(scope *observability.Scope, instance *generated.WorkflowInstance, state enums.WorkflowInstanceState, obj *workflows.Object) {
-	payload := gala.WorkflowInstanceCompletedPayload{
+	payload := WorkflowInstanceCompletedPayload{
 		InstanceID: instance.ID,
 		State:      state,
 		ObjectID:   obj.ID,
@@ -102,12 +77,12 @@ func (l *WorkflowListeners) emitInstanceCompleted(scope *observability.Scope, in
 		ObjectType:  obj.Type,
 	}
 
-	emitListenerEvent(scope, l, instance, meta, gala.TopicWorkflowInstanceCompleted, payload)
+	emitListenerEvent(scope, l, instance, meta, WorkflowInstanceCompletedEventTopic.Name, payload)
 }
 
 // emitWorkflowTriggered emits workflow.command.trigger for a workflow instance.
 func (e *WorkflowEngine) emitWorkflowTriggered(ctx context.Context, op observability.OperationName, trigger string, instance *generated.WorkflowInstance, defID string, obj *workflows.Object, changedFields []string) {
-	payload := gala.WorkflowTriggeredPayload{
+	payload := WorkflowTriggeredPayload{
 		InstanceID:           instance.ID,
 		DefinitionID:         defID,
 		ObjectID:             obj.ID,
@@ -124,7 +99,7 @@ func (e *WorkflowEngine) emitWorkflowTriggered(ctx context.Context, op observabi
 		ObjectType:  obj.Type,
 	}
 
-	emitEngineEvent(ctx, e, op, trigger, instance, meta, gala.TopicWorkflowTriggered, payload, observability.Fields{
+	emitEngineEvent(ctx, e, op, trigger, instance, meta, WorkflowTriggeredEventTopic.Name, payload, observability.Fields{
 		workflowevent.FieldWorkflowInstanceID: instance.ID,
 	})
 }

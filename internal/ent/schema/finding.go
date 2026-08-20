@@ -57,7 +57,7 @@ func (Finding) Fields() []ent.Field {
 			Annotations(
 				entx.FieldSearchable(),
 				entgql.OrderField("external_id"),
-				entx.IntegrationMappingField().UpsertKey().LookupKey(),
+				entx.IntegrationMappingField().LookupKey(),
 			),
 		field.Enum("security_level").
 			Comment("incoming source severity").

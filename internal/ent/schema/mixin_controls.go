@@ -233,6 +233,7 @@ var controlFields = []ent.Field{
 		Optional().
 		Annotations(
 			entx.FieldSearchable(),
+			entx.DisplayName(),
 			entgql.OrderField("title"),
 			entx.FieldWebhookPayloadField(),
 			directives.ExternalSourceDirectiveAnnotation,

@@ -6,45 +6,22 @@ import (
 	"strings"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/internal/ent/eventqueue"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-func handleProgramMutation(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	props := ctx.Envelope.Headers.Properties
-	if !isProgramReady(payload, props) {
+func handleProgramMutation(inv entityops.Invocation, payload entityops.MutationPayload) error {
+	if !isProgramReady(payload) {
 		return nil
 	}
 
-	ctx, client, ok := eventqueue.ClientFromHandler(ctx)
-	if !ok {
-		return ErrFailedToGetClient
-	}
-
-	if client == nil {
-		return ErrFailedToGetClient
-	}
-
-	programID, ok := eventqueue.MutationEntityID(payload, props)
-	if !ok {
-		return ErrEntityIDNotFound
-	}
-
-	if programID == "" {
-		return ErrEntityIDNotFound
-	}
-
-	if err := addNotificationForAuditor(ctx.Context, client, programID); err != nil {
-		logx.FromContext(ctx.Context).Error().Err(err).
-			Str("program_id", programID).
-			Msg("failed to send program ready for auditor notification")
+	if err := addNotificationForAuditor(inv.Context, inv.Client, payload.EntityID); err != nil {
+		logx.FromContext(inv.Context).Error().Err(err).Msg("failed to send program ready for auditor notification")
 		return err
 	}
 
@@ -52,9 +29,12 @@ func handleProgramMutation(ctx gala.HandlerContext, payload eventqueue.MutationG
 }
 
 func addNotificationForAuditor(ctx context.Context, client *generated.Client, id string) error {
-	program, err := client.Program.Get(ctx, id)
-	if err != nil {
+	program, found, err := entityops.LoadEntity(ctx, id, client.Program.Get)
+	switch {
+	case err != nil:
 		return fmt.Errorf("failed to query program: %w", err)
+	case !found:
+		return nil
 	}
 
 	if err := inviteAuditor(ctx, client, program); err != nil {
@@ -67,18 +47,18 @@ func addNotificationForAuditor(ctx context.Context, client *generated.Client, id
 	}
 
 	if len(ids) == 0 {
-		ids, err = getOrgAuditorUserIDs(ctx, client, program.OwnerID)
+		ids, err = orgUserIDsByRole(ctx, client, program.OwnerID, enums.RoleAuditor)
 		if err != nil {
 			return err
 		}
 	}
 
 	if len(ids) == 0 {
-		logx.FromContext(ctx).Warn().Str("program_id", id).Str("org_id", program.OwnerID).Msg("no auditors found for program ready notification")
+		logx.FromContext(ctx).Warn().Str("org_id", program.OwnerID).Msg("no auditors found for program ready notification")
 		return nil
 	}
 
-	return newNotificationCreation(ctx, client, ids, buildNotificationInputForAuditor(program))
+	return entityops.CreateNotifications(ctx, client, ids, buildNotificationInputForAuditor(program))
 }
 
 func inviteAuditor(ctx context.Context, client *generated.Client, programEntity *generated.Program) error {
@@ -87,13 +67,12 @@ func inviteAuditor(ctx context.Context, client *generated.Client, programEntity 
 		return nil
 	}
 
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	exists, err := client.OrgMembership.Query().
 		Where(
 			orgmembership.OrganizationID(programEntity.OwnerID),
 			orgmembership.HasUserWith(user.EmailEqualFold(email)),
 		).
-		Exist(allowCtx)
+		Exist(ctx)
 	if err != nil {
 		return err
 	}
@@ -115,8 +94,6 @@ func inviteAuditor(ctx context.Context, client *generated.Client, programEntity 
 }
 
 func getProgramAuditorUserIDs(ctx context.Context, client *generated.Client, programID string) ([]string, error) {
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
 	var userIDs []string
 	err := client.ProgramMembership.Query().
 		Where(
@@ -124,7 +101,7 @@ func getProgramAuditorUserIDs(ctx context.Context, client *generated.Client, pro
 			programmembership.RoleEQ(enums.RoleAuditor),
 		).
 		Select(programmembership.FieldUserID).
-		Scan(allowCtx, &userIDs)
+		Scan(ctx, &userIDs)
 	if err != nil {
 		return nil, err
 	}
@@ -132,41 +109,14 @@ func getProgramAuditorUserIDs(ctx context.Context, client *generated.Client, pro
 	return userIDs, nil
 }
 
-func getOrgAuditorUserIDs(ctx context.Context, client *generated.Client, orgID string) ([]string, error) {
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-	var userIDs []string
-	err := client.OrgMembership.Query().
-		Where(
-			orgmembership.OrganizationID(orgID),
-			orgmembership.RoleEQ(enums.RoleAuditor),
-		).
-		Select(orgmembership.FieldUserID).
-		Scan(allowCtx, &userIDs)
-	if err != nil {
-		return nil, err
-	}
-
-	return userIDs, nil
-}
-
-func isProgramReady(payload eventqueue.MutationGalaPayload, props map[string]string) bool {
-	status, ok := eventqueue.MutationValue(payload, program.FieldStatus)
-	if !ok {
-		if value := eventqueue.MutationStringFromProperties(props, program.FieldStatus); value != "" {
-			status = value
-			ok = true
-		}
-	}
-
-	if ok {
-		status, ok := eventqueue.ParseEnum(status, enums.ToProgramStatus, enums.ProgramStatusInvalid)
-		if ok && status == enums.ProgramStatusReadyForAuditor {
+func isProgramReady(payload entityops.MutationPayload) bool {
+	if raw, ok := payload.Value(program.FieldStatus); ok {
+		if status, ok := entityops.ParseEnum(raw, enums.ToProgramStatus, enums.ProgramStatusInvalid); ok && status == enums.ProgramStatusReadyForAuditor {
 			return true
 		}
 	}
 
-	ready, ok := eventqueue.MutationValue(payload, program.FieldAuditorReady)
+	ready, ok := payload.Value(program.FieldAuditorReady)
 	if !ok {
 		return false
 	}
@@ -178,7 +128,7 @@ func isProgramReady(payload eventqueue.MutationGalaPayload, props map[string]str
 func buildNotificationInputForAuditor(programEntity *generated.Program) *generated.CreateNotificationInput {
 	dataMap := map[string]any{
 		"program_id": programEntity.ID,
-		"url":        getURLPathForObject(programEntity.ID, generated.TypeProgram),
+		"url":        entityops.ConsoleObjectPath(generated.TypeProgram, programEntity.ID),
 	}
 
 	topic := enums.NotificationTopicApproval

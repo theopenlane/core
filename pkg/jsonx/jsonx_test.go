@@ -362,3 +362,64 @@ func TestApplyOverlay(t *testing.T) {
 		t.Fatalf("expected map merge, got %#v", out.Meta)
 	}
 }
+
+func TestDecodeObjectKey(t *testing.T) {
+	t.Parallel()
+
+	raw := json.RawMessage(`{"id":"abc","count":3,"tags":["a","b"]}`)
+
+	id, ok := DecodeObjectKey[string](raw, "id")
+	if !ok || id != "abc" {
+		t.Fatalf("expected abc, got %q ok=%v", id, ok)
+	}
+
+	tags, ok := DecodeObjectKey[[]string](raw, "tags")
+	if !ok || len(tags) != 2 {
+		t.Fatalf("expected two tags, got %v ok=%v", tags, ok)
+	}
+
+	if _, ok := DecodeObjectKey[string](raw, "missing"); ok {
+		t.Fatal("expected absent key to report false")
+	}
+
+	if _, ok := DecodeObjectKey[string](raw, "count"); ok {
+		t.Fatal("expected type mismatch to report false")
+	}
+
+	if _, ok := DecodeObjectKey[string](json.RawMessage(`[1]`), "id"); ok {
+		t.Fatal("expected non-object to report false")
+	}
+}
+
+func TestEditObject(t *testing.T) {
+	t.Parallel()
+
+	raw := json.RawMessage(`{"keep":1,"drop":null}`)
+
+	edited := EditObject(raw, func(doc map[string]json.RawMessage) bool {
+		delete(doc, "drop")
+		doc["added"] = json.RawMessage(`true`)
+		return true
+	})
+
+	var decoded map[string]any
+	if err := json.Unmarshal(edited, &decoded); err != nil {
+		t.Fatalf("edited document invalid: %v", err)
+	}
+	if _, ok := decoded["drop"]; ok {
+		t.Fatal("expected drop removed")
+	}
+	if decoded["added"] != true || decoded["keep"] != float64(1) {
+		t.Fatalf("unexpected edit result: %v", decoded)
+	}
+
+	unchanged := EditObject(raw, func(map[string]json.RawMessage) bool { return false })
+	if string(unchanged) != string(raw) {
+		t.Fatal("expected unchanged document returned as-is")
+	}
+
+	invalid := json.RawMessage(`not json`)
+	if got := EditObject(invalid, func(map[string]json.RawMessage) bool { return true }); string(got) != string(invalid) {
+		t.Fatal("expected undecodable input returned as-is")
+	}
+}
