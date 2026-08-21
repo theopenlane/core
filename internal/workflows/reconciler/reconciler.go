@@ -6,10 +6,12 @@ import (
 	"errors"
 	"fmt"
 
+	"entgo.io/ent/privacy"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/gala"
 )
@@ -80,7 +82,7 @@ func New(client *generated.Client, runtime *gala.Gala, opts ...Option) (*Reconci
 func (r *Reconciler) ReconcileEmitFailures(ctx context.Context) (EmitReconcileResult, error) {
 	var result EmitReconcileResult
 
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := privacy.DecisionContext(rule.WithInternalContext(ctx), privacy.Allow)
 
 	events, err := r.client.WorkflowEvent.Query().
 		Where(workflowevent.EventTypeEQ(enums.WorkflowEventTypeEmitFailed)).

@@ -11,6 +11,7 @@ import (
 	"strings"
 	"time"
 
+	"entgo.io/ent/privacy"
 	"github.com/cenkalti/backoff/v5"
 	"github.com/samber/lo"
 	"github.com/theopenlane/httpsling"
@@ -90,7 +91,7 @@ type gatedActionConfig struct {
 
 // resolveTargetUsers resolves target user IDs and logs warnings if no users are found
 func (e *WorkflowEngine) resolveTargetUsers(ctx context.Context, target wfworkflows.TargetConfig, obj *wfworkflows.Object, actionType string, actionKey string) ([]string, error) {
-	allowCtx := wfworkflows.AllowContext(ctx)
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	userIDs, err := e.ResolveTargets(allowCtx, target, obj)
 	if err != nil {
 		return nil, err
@@ -109,7 +110,7 @@ func (e *WorkflowEngine) resolveTargetUsers(ctx context.Context, target wfworkfl
 
 // executeGatedAction creates workflow assignments for approval and review actions
 func (e *WorkflowEngine) executeGatedAction(ctx context.Context, action models.WorkflowAction, instance *generated.WorkflowInstance, obj *wfworkflows.Object, cfg gatedActionConfig) error {
-	allowCtx := wfworkflows.AllowContext(ctx)
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 	if len(cfg.Targets) == 0 {
 		observability.WarnEngine(ctx, observability.OpExecuteAction, action.Type, observability.ActionFields(action.Key, nil), nil)
@@ -410,7 +411,7 @@ func (e *WorkflowEngine) dispatchWorkflowNotifications(ctx context.Context, obj 
 				builder.SetTopic(enums.NotificationTopic(topic))
 			}
 
-			if err := builder.Exec(wfworkflows.AllowContext(ctx)); err != nil {
+			if err := builder.Exec(privacy.DecisionContext(ctx, privacy.Allow)); err != nil {
 				return nil, fmt.Errorf("%w: %w", ErrNotificationCreationFailed, err)
 			}
 		}
@@ -449,7 +450,7 @@ func (e *WorkflowEngine) executeWebhook(ctx context.Context, action models.Workf
 	_, basePayload := wfworkflows.BuildWorkflowActionContext(instance, obj, action.Key)
 
 	// Resolve user IDs to display names for human-readable webhook payloads
-	allowCtx := wfworkflows.AllowContext(ctx)
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	// Get initiator from the object that triggered the workflow (not the service that created the instance)
 	initiatorID := wfworkflows.GetObjectUpdatedBy(obj)
 	if initiatorID == "" {

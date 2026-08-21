@@ -17,7 +17,7 @@ func TestWorkflowContexts(t *testing.T) {
 	bypass := WithContext(base)
 	assert.True(t, IsWorkflowBypass(bypass))
 
-	decision, ok := privacy.DecisionFromContext(AllowContext(base))
+	decision, ok := privacy.DecisionFromContext(AllowContextForOrg(base, ""))
 	assert.True(t, ok)
 	assert.NoError(t, decision)
 
@@ -28,14 +28,6 @@ func TestWorkflowContexts(t *testing.T) {
 	assert.NoError(t, err)
 	assert.Equal(t, orgID, resolvedOrg)
 	decision, ok = privacy.DecisionFromContext(allowCtx)
-	assert.True(t, ok)
-	assert.NoError(t, decision)
-
-	bypassCtx, resolvedOrg, err := AllowBypassContextWithOrg(orgCtx)
-	assert.NoError(t, err)
-	assert.Equal(t, orgID, resolvedOrg)
-	assert.True(t, IsWorkflowBypass(bypassCtx))
-	decision, ok = privacy.DecisionFromContext(bypassCtx)
 	assert.True(t, ok)
 	assert.NoError(t, decision)
 
@@ -89,7 +81,7 @@ func TestAllowContextForOrgSeedsCaller(t *testing.T) {
 	assert.NotNil(t, caller)
 	assert.Equal(t, orgID, caller.OrganizationID)
 	assert.Contains(t, caller.OrganizationIDs, orgID)
-	assert.True(t, caller.Has(auth.CapInternalOperation))
+	assert.False(t, caller.Has(auth.CapBypassOrgFilter))
 
 	decision, decisionOK := privacy.DecisionFromContext(allowCtx)
 	assert.True(t, decisionOK)

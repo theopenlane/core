@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	"entgo.io/ent/privacy"
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/httpsling/httpclient"
 
@@ -16,6 +17,7 @@ import (
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/urlx"
 )
@@ -151,7 +153,7 @@ func (s *DefinitionSeeder) SeedDefinitionsFromManifestURL(ctx context.Context, m
 
 // SeedDefinitionsFromManifest upserts system-owned definitions from an in-memory manifest payload.
 func (s *DefinitionSeeder) SeedDefinitionsFromManifest(ctx context.Context, manifest DefinitionSeedManifest) error {
-	allowCtx := AllowContext(ctx)
+	allowCtx := privacy.DecisionContext(rule.WithInternalContext(ctx), privacy.Allow)
 
 	for _, item := range manifest.Definitions {
 		if _, err := s.upsertWorkflowDefinition(allowCtx, item); err != nil {

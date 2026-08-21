@@ -14,6 +14,7 @@ import (
 	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -31,7 +32,7 @@ func (r *mutationResolver) UpdateWorkflowProposalChanges(ctx context.Context, in
 
 	// this is required to fetch the proposal but the requireworkflowObjectEditAccess check
 	// enforces permissions
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	proposal, err := r.db.WorkflowProposal.Get(allowCtx, input.ID)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowproposal"})
@@ -86,7 +87,7 @@ func (r *mutationResolver) SubmitWorkflowProposal(ctx context.Context, id string
 		return nil, ErrWorkflowsDisabled
 	}
 
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	proposal, err := r.db.WorkflowProposal.Get(allowCtx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowproposal"})
@@ -151,7 +152,7 @@ func (r *mutationResolver) WithdrawWorkflowProposal(ctx context.Context, id stri
 		return nil, ErrWorkflowsDisabled
 	}
 
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	proposal, err := r.db.WorkflowProposal.Get(allowCtx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowproposal"})
@@ -228,7 +229,7 @@ func (r *queryResolver) WorkflowProposal(ctx context.Context, id string) (*gener
 		return nil, ErrWorkflowsDisabled
 	}
 
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	proposal, err := r.db.WorkflowProposal.Get(allowCtx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowproposal"})
@@ -282,7 +283,7 @@ func (r *queryResolver) WorkflowProposalsForObject(ctx context.Context, objectTy
 		return nil, err
 	}
 
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	ownerID, err := workflows.ObjectOwnerID(allowCtx, r.db, *objType, objectID)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowobject"})

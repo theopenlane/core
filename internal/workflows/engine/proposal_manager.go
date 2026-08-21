@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"entgo.io/ent/privacy"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
@@ -126,7 +127,7 @@ func (m *ProposalManager) ComputeHash(ctx context.Context, instance *generated.W
 		return "", nil
 	}
 
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	objRefIDs, err := workflows.ObjectRefIDs(allowCtx, m.client, obj)
 	if err != nil {
 		return "", fmt.Errorf("%w: %w", ErrFailedToQueryObjectRefs, err)
@@ -156,7 +157,7 @@ func (m *ProposalManager) Apply(scope *observability.Scope, proposalID string, o
 
 	orgID := caller.OrganizationID
 
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	proposal, err := m.client.WorkflowProposal.Query().
 		Where(
 			workflowproposal.IDEQ(proposalID),

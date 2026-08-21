@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"entgo.io/ent/privacy"
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/enums"
@@ -156,7 +157,7 @@ func (e *WorkflowEngine) TriggerExistingInstance(ctx context.Context, instance *
 	userID, _ := auth.GetSubjectIDFromContext(ctx)
 	contextData := applyTriggerContext(instance.Context, def.ID, obj, input, userID)
 
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	if err := e.client.WorkflowInstance.UpdateOneID(instance.ID).
 		SetWorkflowDefinitionID(def.ID).
 		SetState(enums.WorkflowInstanceStateRunning).
@@ -309,7 +310,7 @@ func (e *WorkflowEngine) ProcessAction(ctx context.Context, instance *generated.
 	}
 
 	// Use allow context for internal workflow operations
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 	objRef, err := e.client.WorkflowObjectRef.
 		Query().
@@ -407,7 +408,7 @@ func (e *WorkflowEngine) CompleteAssignment(ctx context.Context, assignmentID st
 		CompletedBy:  userID,
 	}
 
-	allowCtx = workflows.AllowContext(ctx)
+	allowCtx = privacy.DecisionContext(ctx, privacy.Allow)
 
 	instance, instanceErr := loadWorkflowInstance(allowCtx, e.client, assignment.WorkflowInstanceID, orgID)
 	if instanceErr != nil {

@@ -5,10 +5,12 @@ package hooks_test
 import (
 	"encoding/json"
 
+	"entgo.io/ent/privacy"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/iam/auth"
@@ -20,7 +22,7 @@ func (suite *HookTestSuite) TestHookWorkflowProposalInvalidateAssignments() {
 	orgID := user.Edges.OrgMemberships[0].OrganizationID
 	userCtx := auth.NewTestContextForSystemAdmin(user.ID, orgID)
 	userCtx = generated.NewContext(userCtx, suite.client)
-	internalCtx := workflows.AllowContext(userCtx)
+	internalCtx := privacy.DecisionContext(rule.WithInternalContext(userCtx), privacy.Allow)
 
 	wfEngine, err := engine.NewWorkflowEngine(suite.client, nil)
 	suite.NoError(err)
@@ -115,7 +117,7 @@ func (suite *HookTestSuite) TestHookWorkflowProposalInvalidateAssignments_DraftS
 	orgID := user.Edges.OrgMemberships[0].OrganizationID
 	userCtx := auth.NewTestContextForSystemAdmin(user.ID, orgID)
 	userCtx = generated.NewContext(userCtx, suite.client)
-	internalCtx := workflows.AllowContext(userCtx)
+	internalCtx := privacy.DecisionContext(rule.WithInternalContext(userCtx), privacy.Allow)
 
 	wfEngine, err := engine.NewWorkflowEngine(suite.client, nil)
 	suite.NoError(err)
@@ -184,7 +186,7 @@ func (suite *HookTestSuite) TestHookWorkflowProposalInvalidateAssignments_NonCha
 	orgID := user.Edges.OrgMemberships[0].OrganizationID
 	userCtx := auth.NewTestContextForSystemAdmin(user.ID, orgID)
 	userCtx = generated.NewContext(userCtx, suite.client)
-	internalCtx := workflows.AllowContext(userCtx)
+	internalCtx := privacy.DecisionContext(rule.WithInternalContext(userCtx), privacy.Allow)
 
 	wfEngine, err := engine.NewWorkflowEngine(suite.client, nil)
 	suite.NoError(err)
@@ -253,7 +255,7 @@ func (suite *HookTestSuite) TestHookWorkflowProposalTriggerOnSubmitResumesInstan
 	orgID := user.Edges.OrgMemberships[0].OrganizationID
 	userCtx := auth.NewTestContextForSystemAdmin(user.ID, orgID)
 	userCtx = generated.NewContext(userCtx, suite.client)
-	internalCtx := workflows.AllowContext(userCtx)
+	internalCtx := privacy.DecisionContext(rule.WithInternalContext(userCtx), privacy.Allow)
 
 	wfEngine, err := engine.NewWorkflowEngine(suite.client, nil)
 	suite.NoError(err)

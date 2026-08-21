@@ -14,11 +14,11 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
 	"github.com/theopenlane/core/internal/graphapi/common"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/iam/auth"
@@ -42,8 +42,7 @@ func (r *mutationResolver) ApproveWorkflowAssignment(ctx context.Context, id str
 	approvalMeta.ApprovedAt = decidedAt.Format(time.RFC3339)
 	approvalMeta.ApprovedByUserID = decisionCtx.UserID
 
-	// Use allow context for the update since we've already validated the user is an authorized target
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 	updatedCount, err := withTransactionalMutation(ctx).WorkflowAssignment.Update().
 		Where(
@@ -95,8 +94,7 @@ func (r *mutationResolver) RejectWorkflowAssignment(ctx context.Context, id stri
 		rejectionMeta.ActionKey = resolveAssignmentActionKey(assignment)
 	}
 
-	// Use allow context for the update since we've already validated the user is an authorized target
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 	updatedCount, err := withTransactionalMutation(ctx).WorkflowAssignment.Update().
 		Where(
@@ -165,7 +163,7 @@ func (r *mutationResolver) RequestChangesWorkflowAssignment(ctx context.Context,
 		rejectionMeta.ActionKey = resolveAssignmentActionKey(assignment)
 	}
 
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 	update := withTransactionalMutation(ctx).WorkflowAssignment.Update().
 		Where(
@@ -219,7 +217,7 @@ func (r *mutationResolver) ReassignWorkflowAssignment(ctx context.Context, id st
 	}
 
 	assignment := decisionCtx.Assignment
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 	create := withTransactionalMutation(ctx).WorkflowAssignmentTarget.Create().
 		SetWorkflowAssignmentID(assignment.ID).

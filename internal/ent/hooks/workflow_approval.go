@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/internal/workflows"
@@ -86,7 +87,7 @@ func HookWorkflowApprovalRouting() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			allowCtx := workflows.AllowContext(ctx)
+			allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 			entity, err := workflows.LoadWorkflowObject(allowCtx, client, mut.Type(), id)
 			if err != nil {
 				return nil, err
@@ -170,7 +171,7 @@ func routeMutationToProposals(ctx context.Context, client *generated.Client, m u
 		return nil, ErrMutationMissingID
 	}
 
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 	if len(proposedChanges) == 0 {
 		return workflows.LoadWorkflowObject(allowCtx, client, m.Type(), id)
@@ -267,7 +268,7 @@ func resolveApprovalSubmissionMode(def *generated.WorkflowDefinition) enums.Work
 // stageProposalChanges creates or updates WorkflowProposal records for each domain
 func stageProposalChanges(ctx context.Context, client *generated.Client, def *generated.WorkflowDefinition, objectType enums.WorkflowObjectType, objectID string, domainChanges []workflows.DomainChanges, userID string) error {
 	// Use privacy bypass for internal workflow operations
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 	submissionMode := resolveApprovalSubmissionMode(def)
 	initialState := lo.Ternary(
@@ -338,7 +339,7 @@ func stageProposalChanges(ctx context.Context, client *generated.Client, def *ge
 // ensureInstanceForExistingProposal makes sure a workflow instance exists for the definition + proposal.
 func ensureInstanceForExistingProposal(ctx context.Context, client *generated.Client, def *generated.WorkflowDefinition, objectType enums.WorkflowObjectType, objectID, ownerID string, proposal *generated.WorkflowProposal) (*generated.WorkflowInstance, error) {
 	// Use privacy bypass for internal workflow operations
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 	instance, err := client.WorkflowInstance.Query().
 		Where(
@@ -420,7 +421,7 @@ func stageWorkflowProposals(ctx context.Context, client *generated.Client, def *
 // updateExistingProposal updates an existing proposal with new changes
 func updateExistingProposal(ctx context.Context, def *generated.WorkflowDefinition, existing *generated.WorkflowProposal, changes map[string]any, proposedHash, userID string, now time.Time) error {
 	// Use privacy bypass for internal workflow operations
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 	submissionMode := resolveApprovalSubmissionMode(def)
 	updater := existing.Update().
@@ -452,7 +453,7 @@ type proposalCreationResult struct {
 // createProposalWithInstance creates a new WorkflowInstance, WorkflowObjectRef, and WorkflowProposal in a transaction
 func createProposalWithInstance(ctx context.Context, client *generated.Client, def *generated.WorkflowDefinition, objectType enums.WorkflowObjectType, objectID string, domain workflows.DomainChanges, proposedHash, ownerID, userID string, initialState enums.WorkflowProposalState, now time.Time) (*proposalCreationResult, error) {
 	// Use privacy bypass for internal workflow operations
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 	var result proposalCreationResult
 
@@ -565,7 +566,7 @@ func triggerWorkflowAfterProposalCreation(ctx context.Context, client *generated
 		return nil
 	}
 
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 	instance, err := client.WorkflowInstance.Get(allowCtx, instanceID)
 	if err != nil {

@@ -7,6 +7,7 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqljson"
+	"entgo.io/ent/privacy"
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/common/enums"
@@ -17,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/observability"
 	"github.com/theopenlane/iam/auth"
@@ -99,7 +101,7 @@ func (e *WorkflowEngine) buildActionCELVars(ctx context.Context, instance *gener
 
 	// Ensure the object node is loaded so CEL has access to concrete fields.
 	if obj != nil && obj.Node == nil {
-		allowCtx := workflows.AllowContext(ctx)
+		allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 		if _, err := e.loadObjectNode(allowCtx, obj); err != nil {
 			return nil, err
 		}
@@ -135,8 +137,7 @@ func (e *WorkflowEngine) buildActionCELVars(ctx context.Context, instance *gener
 	)
 
 	// Merge assignment context (assignments, instance, initiator)
-	// Use privacy bypass for internal workflow operations that query assignment state
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	assignmentCtx, err := workflows.BuildAssignmentContext(allowCtx, e.client, instance.ID)
 	if err != nil {
 		return nil, err
@@ -162,11 +163,14 @@ func (e *WorkflowEngine) FindMatchingDefinitions(ctx context.Context, schemaType
 	ctx = scope.Context()
 	defer scope.End(err, nil)
 
-	// Use privacy bypass for internal workflow operations
 	allowCtx, orgID, err := workflows.AllowContextWithOrg(ctx)
 	if err != nil {
 		return nil, scope.Fail(err, nil)
 	}
+
+	// system-owned definitions are owned outside the caller's organization, so bypass the org
+	// filter to read them alongside the caller's own definitions
+	allowCtx = rule.WithInternalContext(allowCtx)
 
 	query := e.client.WorkflowDefinition.
 		Query().

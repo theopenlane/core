@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"entgo.io/ent/privacy"
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/pkg/logx"
@@ -195,7 +196,7 @@ func (l *WorkflowListeners) HandleWorkflowTriggered(ctx gala.HandlerContext, pay
 		})
 		keys = entityops.NormalizeStrings(keys)
 		if len(keys) > 0 {
-			allowCtx := workflows.AllowContext(scopeCtx)
+			allowCtx := privacy.DecisionContext(scopeCtx, privacy.Allow)
 			contextData := instance.Context
 			// ParallelApprovalKeys includes review actions as well.
 			contextData.ParallelApprovalKeys = keys
@@ -245,7 +246,7 @@ func (l *WorkflowListeners) HandleActionStarted(ctx gala.HandlerContext, payload
 	action := def.Actions[payload.ActionIndex]
 	scope.WithFields(observability.ActionFields(action.Key, nil))
 
-	allowCtx := workflows.AllowContext(scopeCtx)
+	allowCtx := privacy.DecisionContext(scopeCtx, privacy.Allow)
 	if err := l.client.WorkflowInstance.UpdateOneID(instance.ID).
 		SetCurrentActionIndex(payload.ActionIndex).
 		Exec(allowCtx); err != nil {
@@ -410,7 +411,7 @@ func (l *WorkflowListeners) HandleAssignmentCompleted(ctx gala.HandlerContext, p
 
 	def := instance.DefinitionSnapshot
 
-	obj, err := l.loadActionObject(workflows.AllowContext(scopeCtx), instance.ID, orgID)
+	obj, err := l.loadActionObject(privacy.DecisionContext(scopeCtx, privacy.Allow), instance.ID, orgID)
 	if err != nil {
 		return scope.Fail(err, nil)
 	}
@@ -675,7 +676,7 @@ func (l *WorkflowListeners) closePendingApprovalsForChangeRequest(scope *observa
 
 	// These status updates are internal side effects of a change request; avoid
 	// re-entering assignment completion through mutation emission hooks.
-	allowCtx := entityops.WithEmissionVetoed(workflows.AllowContext(scope.Context()))
+	allowCtx := entityops.WithEmissionVetoed(privacy.DecisionContext(scope.Context(), privacy.Allow))
 	requesterID := requesterAssignment.ActorUserID
 	decidedAt := time.Now().UTC()
 
@@ -739,7 +740,7 @@ func (l *WorkflowListeners) HandleInstanceCompleted(ctx gala.HandlerContext, pay
 
 	// Use allow context to avoid GraphQL/FGA edit checks blocking system completion
 	// while preserving the original context (organization, client, etc.)
-	allowCtx := workflows.AllowContext(scopeCtx)
+	allowCtx := privacy.DecisionContext(scopeCtx, privacy.Allow)
 
 	// Use compare-and-swap to prevent double-completion races
 	updated, err := l.client.WorkflowInstance.Update().
@@ -767,7 +768,7 @@ func (l *WorkflowListeners) HandleInstanceCompleted(ctx gala.HandlerContext, pay
 
 // resumeWorkflowAfterApproval advances a paused workflow after approvals complete
 func (l *WorkflowListeners) resumeWorkflowAfterApproval(scope *observability.Scope, instance *generated.WorkflowInstance, orgID string, actionIndex int, obj *workflows.Object, def models.WorkflowDefinitionDocument, clearParallel bool) error {
-	allowCtx := workflows.AllowContext(scope.Context())
+	allowCtx := privacy.DecisionContext(scope.Context(), privacy.Allow)
 	update := l.client.WorkflowInstance.Update().
 		Where(
 			workflowinstance.IDEQ(instance.ID),
@@ -815,7 +816,7 @@ func actionKeyForIndex(actions []models.WorkflowAction, index int) string {
 
 // advanceWorkflow updates the current index and emits the next action or completion event
 func (l *WorkflowListeners) advanceWorkflow(scope *observability.Scope, instance *generated.WorkflowInstance, orgID string, def models.WorkflowDefinitionDocument, nextIndex int, obj *workflows.Object) error {
-	allowCtx := workflows.AllowContext(scope.Context())
+	allowCtx := privacy.DecisionContext(scope.Context(), privacy.Allow)
 	if err := l.client.WorkflowInstance.Update().
 		Where(
 			workflowinstance.IDEQ(instance.ID),
@@ -895,7 +896,7 @@ func (l *WorkflowListeners) createChangeRequestAssignment(scope *observability.S
 		metadata["change_requested_at"] = assignment.RejectionMetadata.RejectedAt
 	}
 
-	allowCtx := workflows.AllowContext(scope.Context())
+	allowCtx := privacy.DecisionContext(scope.Context(), privacy.Allow)
 
 	create := l.client.WorkflowAssignment.Create().
 		SetWorkflowInstanceID(instance.ID).
@@ -971,7 +972,6 @@ func requiredApprovalCount(_ models.WorkflowAction, meta models.WorkflowAssignme
 }
 
 // loadInstanceForScope loads a workflow instance and annotates scope fields
-// Uses AllowContext since all callers are internal workflow operations
 func (l *WorkflowListeners) loadInstanceForScope(scope *observability.Scope, instanceID string) (*generated.WorkflowInstance, string, error) {
 	ctx := scope.Context()
 
@@ -982,7 +982,7 @@ func (l *WorkflowListeners) loadInstanceForScope(scope *observability.Scope, ins
 
 	orgID := instanceCaller.OrganizationID
 
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 	instance, err := loadWorkflowInstance(allowCtx, l.client, instanceID, orgID)
 	if err != nil {
@@ -1045,7 +1045,7 @@ func (l *WorkflowListeners) removeParallelApprovalKey(ctx context.Context, insta
 		return nil
 	}
 
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	contextData := instance.Context
 	contextData.ParallelApprovalKeys = updatedKeys
 	if err := l.client.WorkflowInstance.UpdateOneID(instance.ID).

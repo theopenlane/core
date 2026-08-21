@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 
+	"entgo.io/ent/privacy"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -186,7 +187,7 @@ func (l *WorkflowListeners) recordEmitFailure(scope *observability.Scope, instan
 
 // persistWorkflowEvent stores a workflow event payload for an instance.
 func persistWorkflowEvent(ctx context.Context, client *generated.Client, instance *generated.WorkflowInstance, eventType enums.WorkflowEventType, actionKey string, details any) error {
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 	payload := models.WorkflowEventPayload{
 		EventType: eventType,

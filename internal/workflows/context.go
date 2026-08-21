@@ -7,7 +7,6 @@ import (
 	"github.com/samber/lo"
 	"github.com/theopenlane/iam/auth"
 
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/gala"
 )
 
@@ -20,19 +19,14 @@ func WithContext(ctx context.Context) context.Context {
 	return gala.WorkflowFlagsKey.Set(ctx, current)
 }
 
-// FromContext reports whether the workflow bypass flag is set in the context.
-func FromContext(ctx context.Context) bool {
-	return gala.WorkflowFlagsKey.GetOr(ctx, gala.WorkflowFlags{}).Bypass
-}
-
 // IsWorkflowBypass checks if the context has workflow bypass enabled.
 // Used by workflow interceptors to skip approval routing for system operations.
 func IsWorkflowBypass(ctx context.Context) bool {
 	return gala.WorkflowFlagsKey.GetOr(ctx, gala.WorkflowFlags{}).Bypass
 }
 
-// WithAllowWorkflowEventEmission marks the context to allow workflow event emission even when bypass is set.
-func WithAllowWorkflowEventEmission(ctx context.Context) context.Context {
+// withAllowWorkflowEventEmission marks the context to allow workflow event emission even when bypass is set.
+func withAllowWorkflowEventEmission(ctx context.Context) context.Context {
 	if ctx == nil {
 		return ctx
 	}
@@ -52,22 +46,18 @@ func AllowWorkflowEventEmission(ctx context.Context) bool {
 	return gala.WorkflowFlagsKey.GetOr(ctx, gala.WorkflowFlags{}).AllowEventEmission
 }
 
-// AllowContext sets the ent privacy decision to allow for internal workflow operations.
-// It also sets the internal request marker so FGA checks are bypassed.
-func AllowContext(ctx context.Context) context.Context {
-	return privacy.DecisionContext(rule.WithInternalContext(ctx), privacy.Allow)
-}
-
-// AllowContextForOrg returns an allow context scoped to the supplied organization.
+// AllowContextForOrg returns a privacy-allow context pinned to the supplied organization for
+// internal workflow operations. It does not bypass the organization filter; queries stay scoped
+// to orgID
 func AllowContextForOrg(ctx context.Context, orgID string) context.Context {
-	allowCtx := AllowContext(ctx)
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	if orgID == "" {
 		return allowCtx
 	}
 
 	caller, ok := auth.CallerFromContext(allowCtx)
 	if !ok || caller == nil {
-		return allowCtx
+		caller = &auth.Caller{}
 	}
 
 	scoped := *caller
@@ -77,32 +67,21 @@ func AllowContextForOrg(ctx context.Context, orgID string) context.Context {
 	return auth.WithCaller(allowCtx, &scoped)
 }
 
-// AllowBypassContext sets workflow bypass and allow decision for internal workflow operations.
+// AllowBypassContext sets the workflow-approval bypass flag on a privacy-allow context for
+// internal workflow operations
 func AllowBypassContext(ctx context.Context) context.Context {
-	return WithContext(AllowContext(ctx))
+	return WithContext(privacy.DecisionContext(ctx, privacy.Allow))
 }
 
-// AllowBypassContextWithEvents sets workflow bypass, allow decision, and preserves workflow event emission.
+// AllowBypassContextWithEvents sets the workflow-approval bypass flag and preserves workflow event
+// emission on a privacy-allow context
 func AllowBypassContextWithEvents(ctx context.Context) context.Context {
-	return WithAllowWorkflowEventEmission(AllowBypassContext(ctx))
+	return withAllowWorkflowEventEmission(AllowBypassContext(ctx))
 }
 
-// AllowContextWithOrg returns an allow context plus the organization ID.
+// AllowContextWithOrg returns a privacy-allow context plus the caller's active organization ID
 func AllowContextWithOrg(ctx context.Context) (context.Context, string, error) {
-	return allowContextWithOrg(ctx, false)
-}
-
-// AllowBypassContextWithOrg returns an allow/bypass context plus the organization ID.
-func AllowBypassContextWithOrg(ctx context.Context) (context.Context, string, error) {
-	return allowContextWithOrg(ctx, true)
-}
-
-// allowContextWithOrg returns an allow context plus the organization ID with optional workflow bypass
-func allowContextWithOrg(ctx context.Context, bypass bool) (context.Context, string, error) {
-	allowCtx := AllowContext(ctx)
-	if bypass {
-		allowCtx = WithContext(allowCtx)
-	}
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 
 	caller, ok := auth.CallerFromContext(ctx)
 	if !ok || caller == nil {

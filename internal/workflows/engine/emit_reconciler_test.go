@@ -5,8 +5,10 @@ package engine_test
 import (
 	"context"
 
+	"entgo.io/ent/privacy"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/engine"
 	"github.com/theopenlane/core/internal/workflows/reconciler"
@@ -16,7 +18,7 @@ import (
 
 // clearEmitFailedEvents removes emit failure events to isolate test cases.
 func (s *WorkflowEngineTestSuite) clearEmitFailedEvents(ctx context.Context) {
-	allowCtx := workflows.AllowContext(ctx)
+	allowCtx := privacy.DecisionContext(rule.WithInternalContext(ctx), privacy.Allow)
 	_, err := s.client.WorkflowEvent.Delete().
 		Where(workflowevent.EventTypeEQ(enums.WorkflowEventTypeEmitFailed)).
 		Exec(allowCtx)
@@ -66,7 +68,7 @@ func (s *WorkflowEngineTestSuite) TestEmitFailureRecorded() {
 	s.Require().NoError(err)
 	s.Require().NotNil(instance)
 
-	allowCtx := workflows.AllowContext(userCtx)
+	allowCtx := privacy.DecisionContext(rule.WithInternalContext(userCtx), privacy.Allow)
 	event, err := s.client.WorkflowEvent.Query().
 		Where(
 			workflowevent.WorkflowInstanceIDEQ(instance.ID),
@@ -138,7 +140,7 @@ func (s *WorkflowEngineTestSuite) TestReconcileEmitFailureRecovers() {
 	s.Equal(1, result.Attempted)
 	s.Equal(1, result.Recovered)
 
-	allowCtx := workflows.AllowContext(userCtx)
+	allowCtx := privacy.DecisionContext(rule.WithInternalContext(userCtx), privacy.Allow)
 	recovered, err := s.client.WorkflowEvent.Query().
 		Where(
 			workflowevent.WorkflowInstanceIDEQ(instance.ID),
@@ -209,7 +211,7 @@ func (s *WorkflowEngineTestSuite) TestReconcileEmitFailureTerminalAfterMaxAttemp
 	rec, err := reconciler.New(s.client, brokenEmitter, reconciler.WithMaxAttempts(3))
 	s.Require().NoError(err)
 
-	allowCtx := workflows.AllowContext(userCtx)
+	allowCtx := privacy.DecisionContext(rule.WithInternalContext(userCtx), privacy.Allow)
 
 	_, err = rec.ReconcileEmitFailures(userCtx)
 	s.Require().NoError(err)

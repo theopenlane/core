@@ -4,6 +4,7 @@ import (
 	"context"
 	"maps"
 
+	"entgo.io/ent/privacy"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
@@ -12,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/mapx"
 )
 
@@ -22,7 +24,7 @@ func FindOrphanWorkflowInstanceIDs(ctx context.Context, client *generated.Client
 		return nil, ErrNilClient
 	}
 
-	allowCtx := AllowContext(ctx)
+	allowCtx := privacy.DecisionContext(rule.WithInternalContext(ctx), privacy.Allow)
 
 	query := client.WorkflowInstance.Query().
 		Where(
@@ -46,7 +48,7 @@ func DeleteWorkflowInstanceChildren(ctx context.Context, client *generated.Clien
 		return nil
 	}
 
-	allowCtx := AllowContext(ctx)
+	allowCtx := privacy.DecisionContext(rule.WithInternalContext(ctx), privacy.Allow)
 
 	assignmentIDs, err := client.WorkflowAssignment.Query().
 		Where(workflowassignment.WorkflowInstanceIDIn(instanceIDs...)).
@@ -142,7 +144,7 @@ func DeleteWorkflowInstancesCascade(ctx context.Context, client *generated.Clien
 		return nil
 	}
 
-	allowCtx := AllowContext(ctx)
+	allowCtx := privacy.DecisionContext(rule.WithInternalContext(ctx), privacy.Allow)
 
 	if _, err := client.WorkflowInstance.Delete().
 		Where(workflowinstance.IDIn(instanceIDs...)).

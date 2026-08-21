@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 
+	"entgo.io/ent/privacy"
 	"github.com/oklog/ulid/v2"
 
 	"github.com/theopenlane/core/common/enums"
@@ -16,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/engine"
@@ -499,8 +501,7 @@ func (s *WorkflowEngineTestSuite) TestApplyObjectFieldUpdates_CoercesEnums() {
 		Save(seedCtx)
 	s.Require().NoError(err)
 
-	// Use AllowContext for workflow operations that need privacy bypass
-	bypassCtx := workflows.AllowContext(userCtx)
+	bypassCtx := privacy.DecisionContext(rule.WithInternalContext(userCtx), privacy.Allow)
 
 	obj := &workflows.Object{
 		ID:   control.ID,
