@@ -237,7 +237,9 @@ func (a Asset) Edges() []ent.Edge {
 			edgeSchema: Integration{},
 			field:      "integration_id",
 			immutable:  true,
-			comment:    "integration that owns this asset",
+			comment:    "integration that owns this asset", annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Organization{}.Name()),
+			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: a,

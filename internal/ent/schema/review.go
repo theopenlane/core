@@ -144,6 +144,9 @@ func (r Review) Edges() []ent.Edge {
 			fromSchema: r,
 			edgeSchema: Integration{},
 			comment:    "integration that produced the review",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Organization{}.Name()),
+			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: r,

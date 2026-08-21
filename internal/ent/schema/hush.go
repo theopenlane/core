@@ -8,6 +8,7 @@ import (
 
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/accessmap"
 
 	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/mixin"
@@ -104,6 +105,9 @@ func (h Hush) Edges() []ent.Edge {
 			fromSchema: h,
 			edgeSchema: Integration{},
 			comment:    "the integration associated with the secret",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Organization{}.Name()),
+			},
 		}),
 		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: h,

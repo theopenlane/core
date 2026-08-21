@@ -134,6 +134,9 @@ func (i InternalPolicy) Edges() []ent.Edge {
 			fromSchema: i,
 			edgeSchema: Integration{},
 			comment:    "integration that manages this policy (if applicable)",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Organization{}.Name()),
+			},
 		}),
 	}
 }

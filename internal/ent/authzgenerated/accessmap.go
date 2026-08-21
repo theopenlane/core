@@ -99,10 +99,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
 }, "integrations": {
-	ObjectType:          "integration",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: true,
+	ObjectType:          "organization",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
 }, "file": {
 	ObjectType:          "file",
 	SkipEditCheck:       false,
@@ -347,10 +347,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess:     true,
 	HasSystemOwnedField: false,
 }, "integration": {
-	ObjectType:          "integration",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: true,
+	ObjectType:          "organization",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
 }, "connected_assets": {
 	ObjectType:          "connected_asset",
 	SkipEditCheck:       false,
@@ -403,10 +403,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess:     true,
 	HasSystemOwnedField: true,
 }, "integration": {
-	ObjectType:          "integration",
+	ObjectType:          "organization",
 	SkipEditCheck:       true,
 	CheckViewAccess:     true,
-	HasSystemOwnedField: true,
+	HasSystemOwnedField: false,
 }, "email_template": {
 	ObjectType:          "email_template",
 	SkipEditCheck:       true,
@@ -489,9 +489,9 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess:     true,
 	HasSystemOwnedField: false,
 }, "subscriber": {
-	ObjectType:          "subscriber",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
+	ObjectType:          "organization",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
 	HasSystemOwnedField: false,
 }, "workflow_object_refs": {
 	ObjectType:          "workflow_object_ref",
@@ -525,10 +525,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess:     false,
 	HasSystemOwnedField: true,
 }, "integration": {
-	ObjectType:          "integration",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: true,
+	ObjectType:          "organization",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
 },
 }, "contact": {"owner": {
 	ObjectType:          "owner",
@@ -958,10 +958,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
 }, "integration": {
-	ObjectType:          "integration",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: true,
+	ObjectType:          "organization",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
 }, "directory_sync_run": {
 	ObjectType:          "directory_sync_run",
 	SkipEditCheck:       false,
@@ -1019,10 +1019,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
 }, "integration": {
-	ObjectType:          "integration",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: true,
+	ObjectType:          "organization",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
 }, "directory_sync_run": {
 	ObjectType:          "directory_sync_run",
 	SkipEditCheck:       false,
@@ -1065,10 +1065,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
 }, "integration": {
-	ObjectType:          "integration",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: true,
+	ObjectType:          "organization",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
 }, "directory_sync_run": {
 	ObjectType:          "directory_sync_run",
 	SkipEditCheck:       false,
@@ -1116,10 +1116,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
 }, "integration": {
-	ObjectType:          "integration",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: true,
+	ObjectType:          "organization",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
 }, "platform": {
 	ObjectType:          "platform",
 	SkipEditCheck:       false,
@@ -1229,10 +1229,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess:     true,
 	HasSystemOwnedField: false,
 }, "integration": {
-	ObjectType:          "integration",
+	ObjectType:          "organization",
 	SkipEditCheck:       true,
 	CheckViewAccess:     true,
-	HasSystemOwnedField: true,
+	HasSystemOwnedField: false,
 }, "workflow_definition": {
 	ObjectType:          "workflow_definition",
 	SkipEditCheck:       true,
@@ -1788,10 +1788,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
 }, "integrations": {
-	ObjectType:          "integration",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: true,
+	ObjectType:          "organization",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
 }, "vulnerabilities": {
 	ObjectType:          "vulnerability",
 	SkipEditCheck:       true,
@@ -2213,10 +2213,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
 }, "integrations": {
-	ObjectType:          "integration",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: true,
+	ObjectType:          "organization",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
 }, "files": {
 	ObjectType:          "file",
 	SkipEditCheck:       false,
@@ -2512,10 +2512,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
 }, "integration": {
-	ObjectType:          "integration",
+	ObjectType:          "organization",
 	SkipEditCheck:       true,
 	CheckViewAccess:     true,
-	HasSystemOwnedField: true,
+	HasSystemOwnedField: false,
 }, "request_file": {
 	ObjectType:          "request_file",
 	SkipEditCheck:       false,
@@ -2543,10 +2543,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
 }, "integration": {
-	ObjectType:          "integration",
+	ObjectType:          "organization",
 	SkipEditCheck:       true,
 	CheckViewAccess:     true,
-	HasSystemOwnedField: true,
+	HasSystemOwnedField: false,
 },
 }, "internal_policy": {"owner": {
 	ObjectType:          "owner",
@@ -2674,10 +2674,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess:     false,
 	HasSystemOwnedField: true,
 }, "integrations": {
-	ObjectType:          "integration",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: true,
+	ObjectType:          "organization",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
 },
 }, "invite": {"owner": {
 	ObjectType:          "owner",
@@ -2937,10 +2937,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
 }, "integration": {
-	ObjectType:          "integration",
+	ObjectType:          "organization",
 	SkipEditCheck:       true,
 	CheckViewAccess:     true,
-	HasSystemOwnedField: true,
+	HasSystemOwnedField: false,
 }, "workflow_definition": {
 	ObjectType:          "workflow_definition",
 	SkipEditCheck:       true,
@@ -4457,10 +4457,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
 }, "integrations": {
-	ObjectType:          "integration",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: true,
+	ObjectType:          "organization",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
 }, "scans": {
 	ObjectType:          "scan",
 	SkipEditCheck:       true,
@@ -4563,10 +4563,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
 }, "integrations": {
-	ObjectType:          "integration",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: true,
+	ObjectType:          "organization",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
 }, "findings": {
 	ObjectType:          "finding",
 	SkipEditCheck:       true,
@@ -5966,10 +5966,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess:     false,
 	HasSystemOwnedField: false,
 }, "integrations": {
-	ObjectType:          "integration",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: true,
+	ObjectType:          "organization",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
 }, "findings": {
 	ObjectType:          "finding",
 	SkipEditCheck:       true,
@@ -6232,10 +6232,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess:     false,
 	HasSystemOwnedField: true,
 }, "integration": {
-	ObjectType:          "integration",
-	SkipEditCheck:       false,
-	CheckViewAccess:     false,
-	HasSystemOwnedField: true,
+	ObjectType:          "organization",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: false,
 }, "remediation": {
 	ObjectType:          "remediation",
 	SkipEditCheck:       false,

@@ -297,6 +297,9 @@ func (d DirectoryAccount) Edges() []ent.Edge {
 			field:      "integration_id",
 			immutable:  true,
 			comment:    "integration that owns this directory account",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Organization{}.Name()),
+			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: d,

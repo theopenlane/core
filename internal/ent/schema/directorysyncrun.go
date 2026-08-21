@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -119,6 +120,9 @@ func (r DirectorySyncRun) Edges() []ent.Edge {
 			required:   true,
 			immutable:  true,
 			comment:    "integration that executed this sync run",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Organization{}.Name()),
+			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: r,

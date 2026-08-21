@@ -7,6 +7,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/common/enums"
@@ -116,6 +117,9 @@ func (a ActionPlan) Edges() []ent.Edge {
 			fromSchema: a,
 			edgeSchema: Integration{},
 			comment:    "integration that generated the action plan",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Organization{}.Name()),
+			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: a,
