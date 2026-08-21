@@ -47,6 +47,7 @@ linters:
       - internal/integrations/cli
       - internal/integrations/definitions/email/themmes
       - internal/httpserve/specs
+      - internal/ent/generate/entdrop
 formatters:
   enable:
     - gofmt
