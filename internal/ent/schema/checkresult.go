@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/entx/history"
 	"github.com/theopenlane/iam/entfga"
 )
@@ -119,6 +120,9 @@ func (c CheckResult) Edges() []ent.Edge {
 			required:   false,
 			immutable:  true,
 			comment:    "integration that owns this control health",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Organization{}.Name()),
+			},
 		}),
 	}
 }

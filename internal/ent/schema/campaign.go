@@ -291,7 +291,7 @@ func (c Campaign) Edges() []ent.Edge {
 			edgeSchema: Integration{},
 			field:      "integration_id",
 			annotations: []schema.Annotation{
-				accessmap.EdgeViewCheck(Integration{}.Name()),
+				accessmap.EdgeViewCheck(Organization{}.Name()),
 			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{

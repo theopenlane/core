@@ -166,6 +166,9 @@ func (m DirectoryMembership) Edges() []ent.Edge {
 			required:   true,
 			immutable:  true,
 			comment:    "integration that owns this directory membership",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Organization{}.Name()),
+			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: m,

@@ -224,6 +224,9 @@ func (w WorkflowInstance) Edges() []ent.Edge {
 			edgeSchema: Integration{},
 			field:      "integration_id",
 			comment:    "Integration this workflow instance is associated with",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Organization{}.Name()),
+			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: w,
