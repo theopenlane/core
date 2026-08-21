@@ -2153,5 +2153,3 @@ func (r *queryResolver) WorkflowDefinitionHistories(ctx context.Context, after *
 func (r *Resolver) Query() gqlhistorygenerated.QueryResolver { return &queryResolver{r} }
 
 type queryResolver struct{ *Resolver }
-
-// !!! WARNING !!!

@@ -463,7 +463,15 @@ func stripDeadResolvers(path string) error {
 			continue
 		}
 
-		for i > 0 && strings.TrimSpace(lines[i-1]) == "" {
+		// the marker sits inside a banner that opens with "// !!! WARNING !!!", so
+		// walk back over the whole comment block, not just blank lines, or the
+		// banner is left behind
+		for i > 0 {
+			prev := strings.TrimSpace(lines[i-1])
+			if prev != "" && !strings.HasPrefix(prev, "//") {
+				break
+			}
+
 			i--
 		}
 
