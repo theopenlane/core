@@ -90,15 +90,43 @@ func TestQueryCustomDomainByID(t *testing.T) {
 	}
 	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: customDomain.MappableDomainID}).MustDelete(tcOrg.owner.UserCtx, t)
 	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: customDomain.ID}).MustDelete(tcOrg.owner.UserCtx, t)
+
+	cleanupTrustCenterDataWithContext(tcOrg.owner.UserCtx,t)
 }
 
 func TestQueryCustomDomains(t *testing.T) {
-	mappableDomain := (&MappableDomainBuilder{client: suite.client}).MustNew(sharedSystemAdminUser.UserCtx, t)
-	mappableDomain2 := (&MappableDomainBuilder{client: suite.client}).MustNew(sharedSystemAdminUser.UserCtx, t)
+	tcOrg := createFreshOrgWithTrustCenter(t)
 
-	customDomain1 := (&CustomDomainBuilder{client: suite.client, MappableDomainID: mappableDomain2.ID}).MustNew(sharedTestUser1.UserCtx, t)
-	customDomain2 := (&CustomDomainBuilder{client: suite.client, MappableDomainID: mappableDomain.ID}).MustNew(sharedTestUser1.UserCtx, t)
-	customDomain3 := (&CustomDomainBuilder{client: suite.client, MappableDomainID: mappableDomain.ID}).MustNew(sharedTestUser2.UserCtx, t)
+	viewOnlyUser := suite.userBuilder(tcOrg.owner.UserCtx, t)
+
+	_, err := suite.client.api.AddUserToOrgWithRole(tcOrg.owner.UserCtx, testclient.CreateOrgMembershipInput{
+		OrganizationID: tcOrg.organizationID,
+		UserID:         viewOnlyUser.ID,
+		Role:           lo.ToPtr(enums.RoleMember),
+	})
+
+	assert.NilError(t, err)
+
+	viewOnlyUser.UserCtx = auth.NewTestContextWithOrgID(viewOnlyUser.ID, tcOrg.organizationID, auth.WithOrganizationRole(auth.MemberRole))
+
+	viewOnlyUser2 := suite.userBuilder(tcOrg.owner.UserCtx, t)
+
+	_, err = suite.client.api.AddUserToOrgWithRole(tcOrg.owner.UserCtx, testclient.CreateOrgMembershipInput{
+		OrganizationID: tcOrg.organizationID,
+		UserID:         viewOnlyUser2.ID,
+		Role:           lo.ToPtr(enums.RoleMember),
+	})
+
+	assert.NilError(t, err)
+
+	viewOnlyUser2.UserCtx = auth.NewTestContextWithOrgID(viewOnlyUser2.ID, tcOrg.organizationID, auth.WithOrganizationRole(auth.MemberRole))
+
+	mappableDomain := (&MappableDomainBuilder{client: suite.client}).MustNew(tcOrg.owner.UserCtx, t)
+	mappableDomain2 := (&MappableDomainBuilder{client: suite.client}).MustNew(tcOrg.owner.UserCtx, t)
+
+	customDomain1 := (&CustomDomainBuilder{client: suite.client, MappableDomainID: mappableDomain2.ID}).MustNew(viewOnlyUser.UserCtx, t)
+	customDomain2 := (&CustomDomainBuilder{client: suite.client, MappableDomainID: mappableDomain.ID}).MustNew(viewOnlyUser.UserCtx, t)
+	customDomain3 := (&CustomDomainBuilder{client: suite.client, MappableDomainID: mappableDomain.ID}).MustNew(viewOnlyUser2.UserCtx, t)
 
 	nonExistentDomain := "nonexistent.example.com"
 
@@ -112,19 +140,19 @@ func TestQueryCustomDomains(t *testing.T) {
 		{
 			name:            "return all",
 			client:          suite.client.api,
-			ctx:             sharedTestUser1.UserCtx,
-			expectedResults: 2,
+			ctx:             tcOrg.owner.UserCtx,
+			expectedResults: 3,
 		},
 		{
 			name:            "return all, ro user",
 			client:          suite.client.api,
-			ctx:             sharedViewOnlyUser.UserCtx,
-			expectedResults: 2,
+			ctx:             viewOnlyUser.UserCtx,
+			expectedResults: 3,
 		},
 		{
 			name:   "query by domain",
 			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			ctx:    viewOnlyUser.UserCtx,
 			where: &testclient.CustomDomainWhereInput{
 				CnameRecord: &customDomain1.CnameRecord,
 			},
@@ -133,7 +161,7 @@ func TestQueryCustomDomains(t *testing.T) {
 		{
 			name:   "query by domain, not found",
 			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			ctx:    viewOnlyUser.UserCtx,
 			where: &testclient.CustomDomainWhereInput{
 				CnameRecord: &nonExistentDomain,
 			},
@@ -142,7 +170,7 @@ func TestQueryCustomDomains(t *testing.T) {
 		{
 			name:   "query by mappable domain",
 			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			ctx:    viewOnlyUser.UserCtx,
 			where: &testclient.CustomDomainWhereInput{
 				MappableDomainID: &customDomain1.MappableDomainID,
 			},
@@ -160,19 +188,34 @@ func TestQueryCustomDomains(t *testing.T) {
 			assert.Check(t, is.Equal(tc.expectedResults, resp.CustomDomains.TotalCount))
 
 			for _, domain := range resp.CustomDomains.Edges {
-				assert.Check(t, is.Equal(*domain.Node.OwnerID, sharedTestUser1.OrganizationID))
+				assert.Check(t, is.Equal(*domain.Node.OwnerID, tcOrg.organizationID))
 			}
 		})
 	}
 
-	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, IDs: []string{mappableDomain.ID, mappableDomain2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, IDs: []string{mappableDomain.ID, mappableDomain2.ID}}).MustDelete(tcOrg.owner.UserCtx, t)
 
-	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, IDs: []string{customDomain1.ID, customDomain2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: customDomain3.ID}).MustDelete(sharedTestUser2.UserCtx, t)
+	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, IDs: []string{customDomain1.ID, customDomain2.ID, customDomain3.ID}}).MustDelete(tcOrg.owner.UserCtx, t)
+
+	cleanupTrustCenterDataWithContext(tcOrg.owner.UserCtx, t)
 }
 
 func TestMutationCreateCustomDomain(t *testing.T) {
-	mappableDomain := (&MappableDomainBuilder{client: suite.client}).MustNew(sharedSystemAdminUser.UserCtx, t)
+	tcOrg := createFreshOrgWithTrustCenter(t)
+
+	viewOnlyUser := suite.userBuilder(tcOrg.owner.UserCtx, t)
+
+	_, err := suite.client.api.AddUserToOrgWithRole(tcOrg.owner.UserCtx, testclient.CreateOrgMembershipInput{
+		OrganizationID: tcOrg.organizationID,
+		UserID:         viewOnlyUser.ID,
+		Role:           lo.ToPtr(enums.RoleMember),
+	})
+
+	assert.NilError(t, err)
+
+	viewOnlyUser.UserCtx = auth.NewTestContextWithOrgID(viewOnlyUser.ID, tcOrg.organizationID, auth.WithOrganizationRole(auth.MemberRole))
+
+	mappableDomain := (&MappableDomainBuilder{client: suite.client}).MustNew(tcOrg.owner.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -186,30 +229,30 @@ func TestMutationCreateCustomDomain(t *testing.T) {
 			request: testclient.CreateCustomDomainInput{
 				CnameRecord:      "test.example.com",
 				MappableDomainID: mappableDomain.ID,
-				OwnerID:          lo.ToPtr(sharedTestUser1.OrganizationID),
+				OwnerID:          lo.ToPtr(tcOrg.organizationID),
 			},
 			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			ctx:    tcOrg.owner.UserCtx,
 		},
 		{
 			name: "happy path, adminUser",
 			request: testclient.CreateCustomDomainInput{
 				CnameRecord:      "test.example.com",
 				MappableDomainID: mappableDomain.ID,
-				OwnerID:          lo.ToPtr(sharedTestUser1.OrganizationID),
+				OwnerID:          lo.ToPtr(tcOrg.organizationID),
 			},
 			client: suite.client.api,
-			ctx:    sharedAdminUser.UserCtx,
+			ctx:    tcOrg.admin.UserCtx,
 		},
 		{
 			name: "not authorized",
 			request: testclient.CreateCustomDomainInput{
 				CnameRecord:      "test.example.com",
 				MappableDomainID: mappableDomain.ID,
-				OwnerID:          lo.ToPtr(sharedTestUser1.OrganizationID),
+				OwnerID:          lo.ToPtr(tcOrg.organizationID),
 			},
 			client:      suite.client.api,
-			ctx:         sharedViewOnlyUser.UserCtx,
+			ctx:         viewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
@@ -217,20 +260,20 @@ func TestMutationCreateCustomDomain(t *testing.T) {
 			request: testclient.CreateCustomDomainInput{
 				CnameRecord:      "!invalid-domain",
 				MappableDomainID: mappableDomain.ID,
-				OwnerID:          lo.ToPtr(sharedTestUser1.OrganizationID),
+				OwnerID:          lo.ToPtr(tcOrg.organizationID),
 			},
 			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			ctx:         tcOrg.owner.UserCtx,
 			expectedErr: "invalid or unparsable field: url",
 		},
 		{
 			name: "missing mappable domain",
 			request: testclient.CreateCustomDomainInput{
 				CnameRecord: "test2.example.com",
-				OwnerID:     lo.ToPtr(sharedTestUser1.OrganizationID),
+				OwnerID:     lo.ToPtr(tcOrg.organizationID),
 			},
 			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			ctx:         tcOrg.owner.UserCtx,
 			expectedErr: "mappable_domain_id",
 		},
 	}
@@ -256,17 +299,35 @@ func TestMutationCreateCustomDomain(t *testing.T) {
 		})
 	}
 
-	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: mappableDomain.ID}).MustDelete(sharedSystemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: mappableDomain.ID}).MustDelete(tcOrg.owner.UserCtx, t)
+	cleanupTrustCenterDataWithContext(tcOrg.owner.UserCtx, t)
 }
 
 func TestMutationDeleteCustomDomain(t *testing.T) {
-	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	customDomain2 := (&CustomDomainBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	customDomain3 := (&CustomDomainBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	tcOrg := createFreshOrgWithTrustCenter(t)
 
-	anotherUser := suite.userBuilder(context.Background(), t)
-	custDomainForTrustCenter := (&CustomDomainBuilder{client: suite.client}).MustNew(anotherUser.UserCtx, t)
-	trustCenter := (&TrustCenterBuilder{client: suite.client, CustomDomainID: custDomainForTrustCenter.ID}).MustNew(anotherUser.UserCtx, t)
+	viewOnlyUser := suite.userBuilder(tcOrg.owner.UserCtx, t)
+
+	_, err := suite.client.api.AddUserToOrgWithRole(tcOrg.owner.UserCtx, testclient.CreateOrgMembershipInput{
+		OrganizationID: tcOrg.organizationID,
+		UserID:         viewOnlyUser.ID,
+		Role:           lo.ToPtr(enums.RoleMember),
+	})
+
+	assert.NilError(t, err)
+
+	viewOnlyUser.UserCtx = auth.NewTestContextWithOrgID(viewOnlyUser.ID, tcOrg.organizationID, auth.WithOrganizationRole(auth.MemberRole))
+
+	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(tcOrg.owner.UserCtx, t)
+	customDomain2 := (&CustomDomainBuilder{client: suite.client}).MustNew(tcOrg.owner.UserCtx, t)
+	customDomain3 := (&CustomDomainBuilder{client: suite.client}).MustNew(tcOrg.owner.UserCtx, t)
+	custDomainForTrustCenter := (&CustomDomainBuilder{client: suite.client}).MustNew(tcOrg.owner.UserCtx, t)
+
+	trustCenter := tcOrg.trustCenter
+	err = suite.client.db.TrustCenter.UpdateOneID(trustCenter.ID).
+		SetCustomDomainID(custDomainForTrustCenter.ID).
+		Exec(setContext(tcOrg.owner.UserCtx, suite.client.db))
+	assert.NilError(t, err)
 	nonExistentID := "non-existent-id"
 
 	testCases := []struct {
@@ -286,26 +347,26 @@ func TestMutationDeleteCustomDomain(t *testing.T) {
 			name:   "delete domain, owner user",
 			id:     customDomain3.ID,
 			client: suite.client.api,
-			ctx:    sharedTestUser1.UserCtx,
+			ctx:    tcOrg.owner.UserCtx,
 		},
 		{
 			name:   "delete domain, owner user with trust center",
 			id:     custDomainForTrustCenter.ID,
 			client: suite.client.api,
-			ctx:    anotherUser.UserCtx,
+			ctx:    tcOrg.owner.UserCtx,
 		},
 		{
 			name:        "unauthorized",
 			id:          customDomain2.ID,
 			client:      suite.client.api,
-			ctx:         sharedViewOnlyUser.UserCtx,
+			ctx:         viewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:        "domain not found",
 			id:          nonExistentID,
 			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			ctx:         tcOrg.owner.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
 	}
@@ -346,15 +407,16 @@ func TestMutationDeleteCustomDomain(t *testing.T) {
 			}
 		})
 	}
-	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, IDs: []string{customDomain.MappableDomainID, customDomain2.MappableDomainID, customDomain3.MappableDomainID}}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: customDomain2.ID}).MustDelete(sharedTestUser1.UserCtx, t)
-
-	cleanupOrganizationDataWithContext(anotherUser.UserCtx, t)
+	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, IDs: []string{customDomain.MappableDomainID, customDomain2.MappableDomainID, customDomain3.MappableDomainID, custDomainForTrustCenter.MappableDomainID}}).MustDelete(tcOrg.owner.UserCtx, t)
+	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: customDomain2.ID}).MustDelete(tcOrg.owner.UserCtx, t)
+	cleanupTrustCenterDataWithContext(tcOrg.owner.UserCtx, t)
 }
 
 func TestUpdateCustomDomain(t *testing.T) {
-	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	dnsVerification := (&DNSVerificationBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	tcOrg := createFreshOrgWithTrustCenter(t)
+
+	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(tcOrg.owner.UserCtx, t)
+	dnsVerification := (&DNSVerificationBuilder{client: suite.client}).MustNew(tcOrg.owner.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -395,7 +457,7 @@ func TestUpdateCustomDomain(t *testing.T) {
 			name:    "not allowed",
 			queryID: customDomain.ID,
 			client:  suite.client.api,
-			ctx:     sharedTestUser1.UserCtx,
+			ctx:     tcOrg.owner.UserCtx,
 			updateInput: testclient.UpdateCustomDomainInput{
 				Tags: []string{"hello"},
 			},
@@ -416,13 +478,28 @@ func TestUpdateCustomDomain(t *testing.T) {
 			assert.Assert(t, resp != nil)
 		})
 	}
-	(&Cleanup[*generated.DNSVerificationDeleteOne]{client: suite.client.db.DNSVerification, ID: dnsVerification.ID}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, IDs: []string{customDomain.MappableDomainID}}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: customDomain.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.DNSVerificationDeleteOne]{client: suite.client.db.DNSVerification, ID: dnsVerification.ID}).MustDelete(tcOrg.owner.UserCtx, t)
+	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, IDs: []string{customDomain.MappableDomainID}}).MustDelete(tcOrg.owner.UserCtx, t)
+	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: customDomain.ID}).MustDelete(tcOrg.owner.UserCtx, t)
+	cleanupTrustCenterDataWithContext(tcOrg.owner.UserCtx, t)
 }
 
 func TestMutationCreateBulkCustomDomain(t *testing.T) {
-	mappableDomain := (&MappableDomainBuilder{client: suite.client}).MustNew(sharedSystemAdminUser.UserCtx, t)
+	tcOrg := createFreshOrgWithTrustCenter(t)
+
+	viewOnlyUser := suite.userBuilder(tcOrg.owner.UserCtx, t)
+
+	_, err := suite.client.api.AddUserToOrgWithRole(tcOrg.owner.UserCtx, testclient.CreateOrgMembershipInput{
+		OrganizationID: tcOrg.organizationID,
+		UserID:         viewOnlyUser.ID,
+		Role:           lo.ToPtr(enums.RoleMember),
+	})
+
+	assert.NilError(t, err)
+
+	viewOnlyUser.UserCtx = auth.NewTestContextWithOrgID(viewOnlyUser.ID, tcOrg.organizationID, auth.WithOrganizationRole(auth.MemberRole))
+
+	mappableDomain := (&MappableDomainBuilder{client: suite.client}).MustNew(tcOrg.owner.UserCtx, t)
 
 	testCases := []struct {
 		name        string
@@ -438,21 +515,21 @@ func TestMutationCreateBulkCustomDomain(t *testing.T) {
 				{
 					CnameRecord:      "bulk1.example.com",
 					MappableDomainID: mappableDomain.ID,
-					OwnerID:          lo.ToPtr(sharedTestUser1.OrganizationID),
+					OwnerID:          lo.ToPtr(tcOrg.organizationID),
 				},
 				{
 					CnameRecord:      "bulk2.example.com",
 					MappableDomainID: mappableDomain.ID,
-					OwnerID:          lo.ToPtr(sharedTestUser1.OrganizationID),
+					OwnerID:          lo.ToPtr(tcOrg.organizationID),
 				},
 				{
 					CnameRecord:      "bulk3.example.com",
 					MappableDomainID: mappableDomain.ID,
-					OwnerID:          lo.ToPtr(sharedTestUser1.OrganizationID),
+					OwnerID:          lo.ToPtr(tcOrg.organizationID),
 				},
 			},
 			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			ctx:         tcOrg.owner.UserCtx,
 			numExpected: 3,
 		},
 		{
@@ -461,11 +538,11 @@ func TestMutationCreateBulkCustomDomain(t *testing.T) {
 				{
 					CnameRecord:      "singlebulk.example.com",
 					MappableDomainID: mappableDomain.ID,
-					OwnerID:          lo.ToPtr(sharedTestUser1.OrganizationID),
+					OwnerID:          lo.ToPtr(tcOrg.organizationID),
 				},
 			},
 			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			ctx:         tcOrg.owner.UserCtx,
 			numExpected: 1,
 		},
 		{
@@ -474,11 +551,11 @@ func TestMutationCreateBulkCustomDomain(t *testing.T) {
 				{
 					CnameRecord:      "adminbulk.example.com",
 					MappableDomainID: mappableDomain.ID,
-					OwnerID:          lo.ToPtr(sharedTestUser1.OrganizationID),
+					OwnerID:          lo.ToPtr(tcOrg.organizationID),
 				},
 			},
 			client:      suite.client.api,
-			ctx:         sharedAdminUser.UserCtx,
+			ctx:         tcOrg.admin.UserCtx,
 			numExpected: 1,
 		},
 		{
@@ -487,16 +564,16 @@ func TestMutationCreateBulkCustomDomain(t *testing.T) {
 				{
 					CnameRecord:      "valid.example.com",
 					MappableDomainID: mappableDomain.ID,
-					OwnerID:          lo.ToPtr(sharedTestUser1.OrganizationID),
+					OwnerID:          lo.ToPtr(tcOrg.organizationID),
 				},
 				{
 					CnameRecord:      "!invalid-domain",
 					MappableDomainID: mappableDomain.ID,
-					OwnerID:          lo.ToPtr(sharedTestUser1.OrganizationID),
+					OwnerID:          lo.ToPtr(tcOrg.organizationID),
 				},
 			},
 			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			ctx:         tcOrg.owner.UserCtx,
 			expectedErr: "invalid or unparsable field: url",
 		},
 		{
@@ -505,18 +582,18 @@ func TestMutationCreateBulkCustomDomain(t *testing.T) {
 				{
 					CnameRecord:      "unauthorized.example.com",
 					MappableDomainID: mappableDomain.ID,
-					OwnerID:          lo.ToPtr(sharedTestUser1.OrganizationID),
+					OwnerID:          lo.ToPtr(tcOrg.organizationID),
 				},
 			},
 			client:      suite.client.api,
-			ctx:         sharedViewOnlyUser.UserCtx,
+			ctx:         viewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name:        "empty input",
 			requests:    []*testclient.CreateCustomDomainInput{},
 			client:      suite.client.api,
-			ctx:         sharedTestUser1.UserCtx,
+			ctx:         tcOrg.owner.UserCtx,
 			expectedErr: "input is required",
 		},
 	}
@@ -549,35 +626,53 @@ func TestMutationCreateBulkCustomDomain(t *testing.T) {
 			}
 		})
 	}
-	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: mappableDomain.ID}).MustDelete(sharedSystemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: mappableDomain.ID}).MustDelete(tcOrg.owner.UserCtx, t)
+	cleanupTrustCenterDataWithContext(tcOrg.owner.UserCtx, t)
 }
 
 func TestGetAllCustomDomains(t *testing.T) {
-	// Create test mappable domain
-	mappableDomain := (&MappableDomainBuilder{client: suite.client}).MustNew(sharedSystemAdminUser.UserCtx, t)
-	deletectx := setContext(sharedSystemAdminUser.UserCtx, suite.client.db)
-	d, err := suite.client.db.CustomDomain.Query().All(deletectx)
-	assert.Assert(t, err == nil)
+	tcOrg := createFreshOrgWithTrustCenter(t)
 
-	for _, cd := range d {
-		suite.client.db.CustomDomain.DeleteOneID(cd.ID).ExecX(deletectx)
-	}
+	viewOnlyUser := suite.userBuilder(tcOrg.owner.UserCtx, t)
 
-	// Create test custom domains with different users
+	_, err := suite.client.api.AddUserToOrgWithRole(tcOrg.owner.UserCtx, testclient.CreateOrgMembershipInput{
+		OrganizationID: tcOrg.organizationID,
+		UserID:         viewOnlyUser.ID,
+		Role:           lo.ToPtr(enums.RoleMember),
+	})
+
+	assert.NilError(t, err)
+
+	viewOnlyUser.UserCtx = auth.NewTestContextWithOrgID(viewOnlyUser.ID, tcOrg.organizationID, auth.WithOrganizationRole(auth.MemberRole))
+
+	viewOnlyUser2 := suite.userBuilder(tcOrg.owner.UserCtx, t)
+
+	_, err = suite.client.api.AddUserToOrgWithRole(tcOrg.owner.UserCtx, testclient.CreateOrgMembershipInput{
+		OrganizationID: tcOrg.organizationID,
+		UserID:         viewOnlyUser2.ID,
+		Role:           lo.ToPtr(enums.RoleMember),
+	})
+
+	assert.NilError(t, err)
+
+	viewOnlyUser2.UserCtx = auth.NewTestContextWithOrgID(viewOnlyUser2.ID, tcOrg.organizationID, auth.WithOrganizationRole(auth.MemberRole))
+
+	mappableDomain := (&MappableDomainBuilder{client: suite.client}).MustNew(tcOrg.owner.UserCtx, t)
+
 	customDomain1 := (&CustomDomainBuilder{
 		client:           suite.client,
 		MappableDomainID: mappableDomain.ID,
-	}).MustNew(sharedTestUser1.UserCtx, t)
+	}).MustNew(viewOnlyUser.UserCtx, t)
 
 	customDomain2 := (&CustomDomainBuilder{
 		client:           suite.client,
 		MappableDomainID: mappableDomain.ID,
-	}).MustNew(sharedTestUser1.UserCtx, t)
+	}).MustNew(viewOnlyUser.UserCtx, t)
 
 	customDomain3 := (&CustomDomainBuilder{
 		client:           suite.client,
 		MappableDomainID: mappableDomain.ID,
-	}).MustNew(sharedTestUser2.UserCtx, t)
+	}).MustNew(viewOnlyUser2.UserCtx, t)
 
 	testCases := []struct {
 		name            string
@@ -589,26 +684,26 @@ func TestGetAllCustomDomains(t *testing.T) {
 		{
 			name:            "happy path - regular user sees only their domains",
 			client:          suite.client.api,
-			ctx:             sharedTestUser1.UserCtx,
-			expectedResults: 2, // Should see only domains owned by sharedTestUser1
+			ctx:             tcOrg.owner.UserCtx,
+			expectedResults: 3,
 		},
 		{
 			name:            "happy path - admin user sees all domains",
 			client:          suite.client.api,
-			ctx:             sharedAdminUser.UserCtx,
-			expectedResults: 2, // Should see all owned by testUser
+			ctx:             tcOrg.admin.UserCtx,
+			expectedResults: 3,
 		},
 		{
 			name:            "happy path - view only user",
 			client:          suite.client.api,
-			ctx:             sharedViewOnlyUser.UserCtx,
-			expectedResults: 2, // Should see only domains from their organization
+			ctx:             viewOnlyUser.UserCtx,
+			expectedResults: 3,
 		},
 		{
 			name:            "happy path - different user sees only their domains",
 			client:          suite.client.api,
-			ctx:             sharedTestUser2.UserCtx,
-			expectedResults: 1, // Should see only domains owned by testUser2
+			ctx:             viewOnlyUser2.UserCtx,
+			expectedResults: 3,
 		},
 	}
 
@@ -643,30 +738,30 @@ func TestGetAllCustomDomains(t *testing.T) {
 			}
 
 			// Verify that users only see domains from their organization
-			if tc.ctx == sharedTestUser1.UserCtx || tc.ctx == sharedViewOnlyUser.UserCtx {
-				for _, edge := range resp.CustomDomains.Edges {
-					assert.Check(t, is.Equal(sharedTestUser1.OrganizationID, *edge.Node.OwnerID))
-				}
-			} else if tc.ctx == sharedTestUser2.UserCtx {
-				for _, edge := range resp.CustomDomains.Edges {
-					assert.Check(t, is.Equal(sharedTestUser2.OrganizationID, *edge.Node.OwnerID))
-				}
+			for _, edge := range resp.CustomDomains.Edges {
+				assert.Check(t, is.Equal(tcOrg.organizationID, *edge.Node.OwnerID))
 			}
 		})
 	}
 
-	// Clean up created domains
-	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, IDs: []string{customDomain1.ID, customDomain2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
-	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: customDomain3.ID}).MustDelete(sharedTestUser2.UserCtx, t)
-	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: mappableDomain.ID}).MustDelete(sharedSystemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, IDs: []string{customDomain1.ID, customDomain2.ID, customDomain3.ID}}).MustDelete(tcOrg.owner.UserCtx, t)
+	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: mappableDomain.ID}).MustDelete(tcOrg.owner.UserCtx, t)
+	cleanupTrustCenterDataWithContext(tcOrg.owner.UserCtx, t)
 }
 
 func TestMutationDeleteCustomDomainWithTrustCenter(t *testing.T) {
 	t.Parallel()
-	tcOrg := createFreshOrgWithTrustCenter(t, withCustomDomain())
+	tcOrg := createFreshOrgWithTrustCenter(t)
 	trustCenter := tcOrg.trustCenter
 
-	customDomain, err := suite.client.api.GetCustomDomainByID(tcOrg.owner.UserCtx, *trustCenter.CustomDomainID)
+	createdCustomDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(tcOrg.owner.UserCtx, t)
+
+	_, err := suite.client.db.TrustCenter.UpdateOneID(trustCenter.ID).
+		SetCustomDomainID(createdCustomDomain.ID).
+		Save(setContext(tcOrg.owner.UserCtx, suite.client.db))
+	requireNoError(t, err)
+
+	customDomain, err := suite.client.api.GetCustomDomainByID(tcOrg.owner.UserCtx, createdCustomDomain.ID)
 	requireNoError(t, err)
 
 	// Verify the trust center has the expected FGA tuples before deletion
@@ -734,21 +829,23 @@ func TestMutationDeleteCustomDomainWithTrustCenter(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Check(t, serviceWildcardCheckAfter, "trust center should still have service:* can_view tuple after custom domain deletion")
 
-	// Cleanup
+	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: createdCustomDomain.MappableDomainID}).MustDelete(tcOrg.owner.UserCtx, t)
 	cleanupOrganizationDataWithContext(tcOrg.owner.UserCtx, t)
 }
 
 func TestDeleteCustomDomainClearsPreviewDomain(t *testing.T) {
-	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
-	previewDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(sharedTestUser1.UserCtx, t)
+	tcOrg := createFreshOrgWithTrustCenter(t)
 
-	dbCtx := setContext(sharedTestUser1.UserCtx, suite.client.db)
+	trustCenter := tcOrg.trustCenter
+	previewDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(tcOrg.owner.UserCtx, t)
+
+	dbCtx := setContext(tcOrg.owner.UserCtx, suite.client.db)
 	_, err := suite.client.db.TrustCenter.UpdateOneID(trustCenter.ID).
 		SetPreviewDomainID(previewDomain.ID).
 		Save(dbCtx)
 	assert.NilError(t, err)
 
-	resp, err := suite.client.api.DeleteCustomDomain(sharedTestUser1.UserCtx, previewDomain.ID)
+	resp, err := suite.client.api.DeleteCustomDomain(tcOrg.owner.UserCtx, previewDomain.ID)
 	assert.NilError(t, err)
 	assert.Check(t, is.Equal(previewDomain.ID, resp.DeleteCustomDomain.DeletedID))
 
@@ -756,6 +853,6 @@ func TestDeleteCustomDomainClearsPreviewDomain(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Check(t, is.Equal("", updatedTrustCenter.PreviewDomainID))
 
-	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: previewDomain.MappableDomainID}).MustDelete(sharedSystemAdminUser.UserCtx, t)
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: previewDomain.MappableDomainID}).MustDelete(tcOrg.owner.UserCtx, t)
+	cleanupTrustCenterDataWithContext(tcOrg.owner.UserCtx, t)
 }

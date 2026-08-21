@@ -26,12 +26,6 @@ func cleanupOrganizationDataWithContext(ctx context.Context, t *testing.T) {
 	requireNoError(t, err)
 }
 
-// cleanupTrustCenterData for the sharedTestUser1 context
-func cleanupTrustCenterData(t *testing.T) {
-	t.Helper()
-	cleanupTrustCenterDataWithContext(sharedTestUser1.UserCtx, t)
-}
-
 // cleanupTrustCenterData removes all trust centers and watermark configs for the context of the passed in user context.
 // This ensures the Only() query in hooks works correctly when tests expect a single watermark config.
 func cleanupTrustCenterDataWithContext(ctx context.Context, t *testing.T) {
