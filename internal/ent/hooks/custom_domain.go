@@ -32,7 +32,7 @@ func HookCreateCustomDomain() ent.Hook {
 				trustCenter, err := m.Client().TrustCenter.Query().
 					Select(trustcenter.FieldID).
 					Only(ctx)
-				if err != nil && !generated.IsNotFound(err) {
+				if err != nil && !generated.IsNotFound(err) && !generated.IsNotSingular(err) {
 					return nil, err
 				}
 
