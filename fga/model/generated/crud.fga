@@ -182,26 +182,6 @@ extend type organization
     define can_delete_invite: [service, user] or full_access
     define can_create_invite: can_edit or can_edit_invite
 
-    define can_view_job_runner: [service, user] or can_edit_job_runner or can_manage_workflows or full_access
-    define can_edit_job_runner: [service, user] or can_delete_job_runner or can_manage_workflows or full_access
-    define can_delete_job_runner: [service, user] or can_manage_workflows or full_access
-    define can_create_job_runner: can_edit or can_edit_job_runner or can_manage_workflows
-
-    define can_view_job_runner_registration_token: [service, user] or can_edit_job_runner_registration_token or full_access
-    define can_edit_job_runner_registration_token: [service, user] or can_delete_job_runner_registration_token or full_access
-    define can_delete_job_runner_registration_token: [service, user] or full_access
-    define can_create_job_runner_registration_token: can_edit or can_edit_job_runner_registration_token
-
-    define can_view_job_runner_token: [service, user] or can_edit_job_runner_token or full_access
-    define can_edit_job_runner_token: [service, user] or can_delete_job_runner_token or full_access
-    define can_delete_job_runner_token: [service, user] or full_access
-    define can_create_job_runner_token: can_edit or can_edit_job_runner_token
-
-    define can_view_job_template: [service, user] or can_edit_job_template or can_manage_workflows or full_access
-    define can_edit_job_template: [service, user] or can_delete_job_template or can_manage_workflows or full_access
-    define can_delete_job_template: [service, user] or can_manage_workflows or full_access
-    define can_create_job_template: can_edit or can_edit_job_template or can_manage_workflows
-
     define can_view_mapped_control: [service, user, group#member] or can_edit_mapped_control or can_manage_compliance or full_access
     define can_edit_mapped_control: [service, user, group#member] or can_delete_mapped_control or can_manage_compliance or full_access
     define can_delete_mapped_control: [service, user, group#member] or can_manage_compliance or full_access
@@ -293,16 +273,6 @@ extend type organization
     define can_delete_scan: [service, user, group#member] or can_manage_compliance or can_manage_risk or full_access
     define scan_creator: [group#member]
     define can_create_scan: can_edit or can_edit_scan or scan_creator or can_manage_risk or can_manage_compliance
-
-    define can_view_scheduled_job: [service, user] or can_edit_scheduled_job or can_manage_workflows or full_access
-    define can_edit_scheduled_job: [service, user] or can_delete_scheduled_job or can_manage_workflows or full_access
-    define can_delete_scheduled_job: [service, user] or can_manage_workflows or full_access
-    define can_create_scheduled_job: can_edit or can_edit_scheduled_job or can_manage_workflows
-
-    define can_view_scheduled_job_run: [service, user] or can_edit_scheduled_job_run or full_access
-    define can_edit_scheduled_job_run: [service, user] or can_delete_scheduled_job_run or full_access
-    define can_delete_scheduled_job_run: [service, user] or full_access
-    define can_create_scheduled_job_run: can_edit or can_edit_scheduled_job_run
 
     define can_view_standard: [service, user] or can_edit_standard or can_manage_compliance or full_access
     define can_edit_standard: [service, user] or can_delete_standard or can_manage_compliance or full_access

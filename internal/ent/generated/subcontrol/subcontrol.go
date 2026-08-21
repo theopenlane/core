@@ -154,8 +154,6 @@ const (
 	EdgeControl = "control"
 	// EdgeControlImplementations holds the string denoting the control_implementations edge name in mutations.
 	EdgeControlImplementations = "control_implementations"
-	// EdgeScheduledJobs holds the string denoting the scheduled_jobs edge name in mutations.
-	EdgeScheduledJobs = "scheduled_jobs"
 	// EdgeMappedToSubcontrols holds the string denoting the mapped_to_subcontrols edge name in mutations.
 	EdgeMappedToSubcontrols = "mapped_to_subcontrols"
 	// EdgeMappedFromSubcontrols holds the string denoting the mapped_from_subcontrols edge name in mutations.
@@ -294,11 +292,6 @@ const (
 	// ControlImplementationsInverseTable is the table name for the ControlImplementation entity.
 	// It exists in this package in order to avoid circular dependency with the "controlimplementation" package.
 	ControlImplementationsInverseTable = "control_implementations"
-	// ScheduledJobsTable is the table that holds the scheduled_jobs relation/edge. The primary key declared below.
-	ScheduledJobsTable = "scheduled_job_subcontrols"
-	// ScheduledJobsInverseTable is the table name for the ScheduledJob entity.
-	// It exists in this package in order to avoid circular dependency with the "scheduledjob" package.
-	ScheduledJobsInverseTable = "scheduled_jobs"
 	// MappedToSubcontrolsTable is the table that holds the mapped_to_subcontrols relation/edge. The primary key declared below.
 	MappedToSubcontrolsTable = "mapped_control_to_subcontrols"
 	// MappedToSubcontrolsInverseTable is the table name for the MappedControl entity.
@@ -435,9 +428,6 @@ var (
 	// ControlImplementationsPrimaryKey and ControlImplementationsColumn2 are the table columns denoting the
 	// primary key for the control_implementations relation (M2M).
 	ControlImplementationsPrimaryKey = []string{"subcontrol_id", "control_implementation_id"}
-	// ScheduledJobsPrimaryKey and ScheduledJobsColumn2 are the table columns denoting the
-	// primary key for the scheduled_jobs relation (M2M).
-	ScheduledJobsPrimaryKey = []string{"scheduled_job_id", "subcontrol_id"}
 	// MappedToSubcontrolsPrimaryKey and MappedToSubcontrolsColumn2 are the table columns denoting the
 	// primary key for the mapped_to_subcontrols relation (M2M).
 	MappedToSubcontrolsPrimaryKey = []string{"mapped_control_id", "subcontrol_id"}
@@ -973,20 +963,6 @@ func ByControlImplementations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderO
 	}
 }
 
-// ByScheduledJobsCount orders the results by scheduled_jobs count.
-func ByScheduledJobsCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newScheduledJobsStep(), opts...)
-	}
-}
-
-// ByScheduledJobs orders the results by scheduled_jobs terms.
-func ByScheduledJobs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newScheduledJobsStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByMappedToSubcontrolsCount orders the results by mapped_to_subcontrols count.
 func ByMappedToSubcontrolsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1236,13 +1212,6 @@ func newControlImplementationsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ControlImplementationsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, ControlImplementationsTable, ControlImplementationsPrimaryKey...),
-	)
-}
-func newScheduledJobsStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ScheduledJobsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, ScheduledJobsTable, ScheduledJobsPrimaryKey...),
 	)
 }
 func newMappedToSubcontrolsStep() *sqlgraph.Step {

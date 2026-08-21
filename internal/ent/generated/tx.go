@@ -98,16 +98,6 @@ type Tx struct {
 	InternalPolicy *InternalPolicyClient
 	// Invite is the client for interacting with the Invite builders.
 	Invite *InviteClient
-	// JobResult is the client for interacting with the JobResult builders.
-	JobResult *JobResultClient
-	// JobRunner is the client for interacting with the JobRunner builders.
-	JobRunner *JobRunnerClient
-	// JobRunnerRegistrationToken is the client for interacting with the JobRunnerRegistrationToken builders.
-	JobRunnerRegistrationToken *JobRunnerRegistrationTokenClient
-	// JobRunnerToken is the client for interacting with the JobRunnerToken builders.
-	JobRunnerToken *JobRunnerTokenClient
-	// JobTemplate is the client for interacting with the JobTemplate builders.
-	JobTemplate *JobTemplateClient
 	// MappableDomain is the client for interacting with the MappableDomain builders.
 	MappableDomain *MappableDomainClient
 	// MappedControl is the client for interacting with the MappedControl builders.
@@ -160,10 +150,6 @@ type Tx struct {
 	SLADefinition *SLADefinitionClient
 	// Scan is the client for interacting with the Scan builders.
 	Scan *ScanClient
-	// ScheduledJob is the client for interacting with the ScheduledJob builders.
-	ScheduledJob *ScheduledJobClient
-	// ScheduledJobRun is the client for interacting with the ScheduledJobRun builders.
-	ScheduledJobRun *ScheduledJobRunClient
 	// Standard is the client for interacting with the Standard builders.
 	Standard *StandardClient
 	// Subcontrol is the client for interacting with the Subcontrol builders.
@@ -400,11 +386,6 @@ func (tx *Tx) init() {
 	tx.IntegrationWebhook = NewIntegrationWebhookClient(tx.config)
 	tx.InternalPolicy = NewInternalPolicyClient(tx.config)
 	tx.Invite = NewInviteClient(tx.config)
-	tx.JobResult = NewJobResultClient(tx.config)
-	tx.JobRunner = NewJobRunnerClient(tx.config)
-	tx.JobRunnerRegistrationToken = NewJobRunnerRegistrationTokenClient(tx.config)
-	tx.JobRunnerToken = NewJobRunnerTokenClient(tx.config)
-	tx.JobTemplate = NewJobTemplateClient(tx.config)
 	tx.MappableDomain = NewMappableDomainClient(tx.config)
 	tx.MappedControl = NewMappedControlClient(tx.config)
 	tx.Narrative = NewNarrativeClient(tx.config)
@@ -431,8 +412,6 @@ func (tx *Tx) init() {
 	tx.Risk = NewRiskClient(tx.config)
 	tx.SLADefinition = NewSLADefinitionClient(tx.config)
 	tx.Scan = NewScanClient(tx.config)
-	tx.ScheduledJob = NewScheduledJobClient(tx.config)
-	tx.ScheduledJobRun = NewScheduledJobRunClient(tx.config)
 	tx.Standard = NewStandardClient(tx.config)
 	tx.Subcontrol = NewSubcontrolClient(tx.config)
 	tx.Subprocessor = NewSubprocessorClient(tx.config)

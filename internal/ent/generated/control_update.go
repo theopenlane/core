@@ -41,7 +41,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/review"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
-	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
@@ -1410,21 +1409,6 @@ func (_u *ControlUpdate) AddSubcontrols(v ...*Subcontrol) *ControlUpdate {
 	return _u.AddSubcontrolIDs(ids...)
 }
 
-// AddScheduledJobIDs adds the "scheduled_jobs" edge to the ScheduledJob entity by IDs.
-func (_u *ControlUpdate) AddScheduledJobIDs(ids ...string) *ControlUpdate {
-	_u.mutation.AddScheduledJobIDs(ids...)
-	return _u
-}
-
-// AddScheduledJobs adds the "scheduled_jobs" edges to the ScheduledJob entity.
-func (_u *ControlUpdate) AddScheduledJobs(v ...*ScheduledJob) *ControlUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddScheduledJobIDs(ids...)
-}
-
 // AddMappedToControlIDs adds the "mapped_to_controls" edge to the MappedControl entity by IDs.
 func (_u *ControlUpdate) AddMappedToControlIDs(ids ...string) *ControlUpdate {
 	_u.mutation.AddMappedToControlIDs(ids...)
@@ -2076,27 +2060,6 @@ func (_u *ControlUpdate) RemoveSubcontrols(v ...*Subcontrol) *ControlUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveSubcontrolIDs(ids...)
-}
-
-// ClearScheduledJobs clears all "scheduled_jobs" edges to the ScheduledJob entity.
-func (_u *ControlUpdate) ClearScheduledJobs() *ControlUpdate {
-	_u.mutation.ClearScheduledJobs()
-	return _u
-}
-
-// RemoveScheduledJobIDs removes the "scheduled_jobs" edge to ScheduledJob entities by IDs.
-func (_u *ControlUpdate) RemoveScheduledJobIDs(ids ...string) *ControlUpdate {
-	_u.mutation.RemoveScheduledJobIDs(ids...)
-	return _u
-}
-
-// RemoveScheduledJobs removes "scheduled_jobs" edges to ScheduledJob entities.
-func (_u *ControlUpdate) RemoveScheduledJobs(v ...*ScheduledJob) *ControlUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveScheduledJobIDs(ids...)
 }
 
 // ClearMappedToControls clears all "mapped_to_controls" edges to the MappedControl entity.
@@ -3987,51 +3950,6 @@ func (_u *ControlUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if _u.mutation.ScheduledJobsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   control.ScheduledJobsTable,
-			Columns: control.ScheduledJobsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedScheduledJobsIDs(); len(nodes) > 0 && !_u.mutation.ScheduledJobsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   control.ScheduledJobsTable,
-			Columns: control.ScheduledJobsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.ScheduledJobsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   control.ScheduledJobsTable,
-			Columns: control.ScheduledJobsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	if _u.mutation.MappedToControlsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -5581,21 +5499,6 @@ func (_u *ControlUpdateOne) AddSubcontrols(v ...*Subcontrol) *ControlUpdateOne {
 	return _u.AddSubcontrolIDs(ids...)
 }
 
-// AddScheduledJobIDs adds the "scheduled_jobs" edge to the ScheduledJob entity by IDs.
-func (_u *ControlUpdateOne) AddScheduledJobIDs(ids ...string) *ControlUpdateOne {
-	_u.mutation.AddScheduledJobIDs(ids...)
-	return _u
-}
-
-// AddScheduledJobs adds the "scheduled_jobs" edges to the ScheduledJob entity.
-func (_u *ControlUpdateOne) AddScheduledJobs(v ...*ScheduledJob) *ControlUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddScheduledJobIDs(ids...)
-}
-
 // AddMappedToControlIDs adds the "mapped_to_controls" edge to the MappedControl entity by IDs.
 func (_u *ControlUpdateOne) AddMappedToControlIDs(ids ...string) *ControlUpdateOne {
 	_u.mutation.AddMappedToControlIDs(ids...)
@@ -6247,27 +6150,6 @@ func (_u *ControlUpdateOne) RemoveSubcontrols(v ...*Subcontrol) *ControlUpdateOn
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveSubcontrolIDs(ids...)
-}
-
-// ClearScheduledJobs clears all "scheduled_jobs" edges to the ScheduledJob entity.
-func (_u *ControlUpdateOne) ClearScheduledJobs() *ControlUpdateOne {
-	_u.mutation.ClearScheduledJobs()
-	return _u
-}
-
-// RemoveScheduledJobIDs removes the "scheduled_jobs" edge to ScheduledJob entities by IDs.
-func (_u *ControlUpdateOne) RemoveScheduledJobIDs(ids ...string) *ControlUpdateOne {
-	_u.mutation.RemoveScheduledJobIDs(ids...)
-	return _u
-}
-
-// RemoveScheduledJobs removes "scheduled_jobs" edges to ScheduledJob entities.
-func (_u *ControlUpdateOne) RemoveScheduledJobs(v ...*ScheduledJob) *ControlUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveScheduledJobIDs(ids...)
 }
 
 // ClearMappedToControls clears all "mapped_to_controls" edges to the MappedControl entity.
@@ -8181,51 +8063,6 @@ func (_u *ControlUpdateOne) sqlSave(ctx context.Context) (_node *Control, err er
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.ScheduledJobsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   control.ScheduledJobsTable,
-			Columns: control.ScheduledJobsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
-			},
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedScheduledJobsIDs(); len(nodes) > 0 && !_u.mutation.ScheduledJobsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   control.ScheduledJobsTable,
-			Columns: control.ScheduledJobsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.ScheduledJobsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   control.ScheduledJobsTable,
-			Columns: control.ScheduledJobsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

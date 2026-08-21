@@ -35,7 +35,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/hushhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/identityholderhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/internalpolicyhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/jobtemplatehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/mappabledomainhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/mappedcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/narrativehistory"
@@ -52,7 +51,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/remediationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/reviewhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/riskhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/scheduledjobhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/sladefinitionhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/subcontrolhistory"
@@ -1273,43 +1271,6 @@ func init() {
 	internalpolicyhistoryDescID := internalpolicyhistoryFields[10].Descriptor()
 	// internalpolicyhistory.DefaultID holds the default value on creation for the id field.
 	internalpolicyhistory.DefaultID = internalpolicyhistoryDescID.Default.(func() string)
-	jobtemplatehistory.Policy = privacy.NewPolicies(historyschema.JobTemplateHistory{})
-	jobtemplatehistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := jobtemplatehistory.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
-	jobtemplatehistoryInters := historyschema.JobTemplateHistory{}.Interceptors()
-	jobtemplatehistory.Interceptors[0] = jobtemplatehistoryInters[0]
-	jobtemplatehistoryFields := historyschema.JobTemplateHistory{}.Fields()
-	_ = jobtemplatehistoryFields
-	// jobtemplatehistoryDescHistoryTime is the schema descriptor for history_time field.
-	jobtemplatehistoryDescHistoryTime := jobtemplatehistoryFields[0].Descriptor()
-	// jobtemplatehistory.DefaultHistoryTime holds the default value on creation for the history_time field.
-	jobtemplatehistory.DefaultHistoryTime = jobtemplatehistoryDescHistoryTime.Default.(func() time.Time)
-	// jobtemplatehistoryDescCreatedAt is the schema descriptor for created_at field.
-	jobtemplatehistoryDescCreatedAt := jobtemplatehistoryFields[3].Descriptor()
-	// jobtemplatehistory.DefaultCreatedAt holds the default value on creation for the created_at field.
-	jobtemplatehistory.DefaultCreatedAt = jobtemplatehistoryDescCreatedAt.Default.(func() time.Time)
-	// jobtemplatehistoryDescUpdatedAt is the schema descriptor for updated_at field.
-	jobtemplatehistoryDescUpdatedAt := jobtemplatehistoryFields[4].Descriptor()
-	// jobtemplatehistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	jobtemplatehistory.DefaultUpdatedAt = jobtemplatehistoryDescUpdatedAt.Default.(func() time.Time)
-	// jobtemplatehistoryDescTags is the schema descriptor for tags field.
-	jobtemplatehistoryDescTags := jobtemplatehistoryFields[12].Descriptor()
-	// jobtemplatehistory.DefaultTags holds the default value on creation for the tags field.
-	jobtemplatehistory.DefaultTags = jobtemplatehistoryDescTags.Default.([]string)
-	// jobtemplatehistoryDescSystemOwned is the schema descriptor for system_owned field.
-	jobtemplatehistoryDescSystemOwned := jobtemplatehistoryFields[14].Descriptor()
-	// jobtemplatehistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
-	jobtemplatehistory.DefaultSystemOwned = jobtemplatehistoryDescSystemOwned.Default.(bool)
-	// jobtemplatehistoryDescID is the schema descriptor for id field.
-	jobtemplatehistoryDescID := jobtemplatehistoryFields[10].Descriptor()
-	// jobtemplatehistory.DefaultID holds the default value on creation for the id field.
-	jobtemplatehistory.DefaultID = jobtemplatehistoryDescID.Default.(func() string)
 	mappabledomainhistory.Policy = privacy.NewPolicies(historyschema.MappableDomainHistory{})
 	mappabledomainhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
@@ -2039,39 +2000,6 @@ func init() {
 	sladefinitionhistoryDescID := sladefinitionhistoryFields[10].Descriptor()
 	// sladefinitionhistory.DefaultID holds the default value on creation for the id field.
 	sladefinitionhistory.DefaultID = sladefinitionhistoryDescID.Default.(func() string)
-	scheduledjobhistory.Policy = privacy.NewPolicies(historyschema.ScheduledJobHistory{})
-	scheduledjobhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
-		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-			if err := scheduledjobhistory.Policy.EvalMutation(ctx, m); err != nil {
-				return nil, err
-			}
-			return next.Mutate(ctx, m)
-		})
-	}
-	scheduledjobhistoryInters := historyschema.ScheduledJobHistory{}.Interceptors()
-	scheduledjobhistory.Interceptors[0] = scheduledjobhistoryInters[0]
-	scheduledjobhistoryFields := historyschema.ScheduledJobHistory{}.Fields()
-	_ = scheduledjobhistoryFields
-	// scheduledjobhistoryDescHistoryTime is the schema descriptor for history_time field.
-	scheduledjobhistoryDescHistoryTime := scheduledjobhistoryFields[0].Descriptor()
-	// scheduledjobhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
-	scheduledjobhistory.DefaultHistoryTime = scheduledjobhistoryDescHistoryTime.Default.(func() time.Time)
-	// scheduledjobhistoryDescCreatedAt is the schema descriptor for created_at field.
-	scheduledjobhistoryDescCreatedAt := scheduledjobhistoryFields[3].Descriptor()
-	// scheduledjobhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
-	scheduledjobhistory.DefaultCreatedAt = scheduledjobhistoryDescCreatedAt.Default.(func() time.Time)
-	// scheduledjobhistoryDescUpdatedAt is the schema descriptor for updated_at field.
-	scheduledjobhistoryDescUpdatedAt := scheduledjobhistoryFields[4].Descriptor()
-	// scheduledjobhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	scheduledjobhistory.DefaultUpdatedAt = scheduledjobhistoryDescUpdatedAt.Default.(func() time.Time)
-	// scheduledjobhistoryDescActive is the schema descriptor for active field.
-	scheduledjobhistoryDescActive := scheduledjobhistoryFields[14].Descriptor()
-	// scheduledjobhistory.DefaultActive holds the default value on creation for the active field.
-	scheduledjobhistory.DefaultActive = scheduledjobhistoryDescActive.Default.(bool)
-	// scheduledjobhistoryDescID is the schema descriptor for id field.
-	scheduledjobhistoryDescID := scheduledjobhistoryFields[10].Descriptor()
-	// scheduledjobhistory.DefaultID holds the default value on creation for the id field.
-	scheduledjobhistory.DefaultID = scheduledjobhistoryDescID.Default.(func() string)
 	standardhistory.Policy = privacy.NewPolicies(historyschema.StandardHistory{})
 	standardhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {

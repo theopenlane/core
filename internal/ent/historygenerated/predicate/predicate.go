@@ -86,9 +86,6 @@ type IdentityHolderHistory func(*sql.Selector)
 // InternalPolicyHistory is the predicate function for internalpolicyhistory builders.
 type InternalPolicyHistory func(*sql.Selector)
 
-// JobTemplateHistory is the predicate function for jobtemplatehistory builders.
-type JobTemplateHistory func(*sql.Selector)
-
 // MappableDomainHistory is the predicate function for mappabledomainhistory builders.
 type MappableDomainHistory func(*sql.Selector)
 
@@ -139,9 +136,6 @@ type RiskHistory func(*sql.Selector)
 
 // SLADefinitionHistory is the predicate function for sladefinitionhistory builders.
 type SLADefinitionHistory func(*sql.Selector)
-
-// ScheduledJobHistory is the predicate function for scheduledjobhistory builders.
-type ScheduledJobHistory func(*sql.Selector)
 
 // StandardHistory is the predicate function for standardhistory builders.
 type StandardHistory func(*sql.Selector)

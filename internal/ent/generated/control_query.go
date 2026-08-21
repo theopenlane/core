@@ -41,7 +41,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/review"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
-	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
@@ -92,7 +91,6 @@ type ControlQuery struct {
 	withFindings                    *FindingQuery
 	withControlImplementations      *ControlImplementationQuery
 	withSubcontrols                 *SubcontrolQuery
-	withScheduledJobs               *ScheduledJobQuery
 	withMappedToControls            *MappedControlQuery
 	withMappedFromControls          *MappedControlQuery
 	withWorkflowObjectRefs          *WorkflowObjectRefQuery
@@ -126,7 +124,6 @@ type ControlQuery struct {
 	withNamedFindings               map[string]*FindingQuery
 	withNamedControlImplementations map[string]*ControlImplementationQuery
 	withNamedSubcontrols            map[string]*SubcontrolQuery
-	withNamedScheduledJobs          map[string]*ScheduledJobQuery
 	withNamedMappedToControls       map[string]*MappedControlQuery
 	withNamedMappedFromControls     map[string]*MappedControlQuery
 	withNamedWorkflowObjectRefs     map[string]*WorkflowObjectRefQuery
@@ -915,28 +912,6 @@ func (_q *ControlQuery) QuerySubcontrols() *SubcontrolQuery {
 	return query
 }
 
-// QueryScheduledJobs chains the current query on the "scheduled_jobs" edge.
-func (_q *ControlQuery) QueryScheduledJobs() *ScheduledJobQuery {
-	query := (&ScheduledJobClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(control.Table, control.FieldID, selector),
-			sqlgraph.To(scheduledjob.Table, scheduledjob.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, control.ScheduledJobsTable, control.ScheduledJobsPrimaryKey...),
-		)
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
 // QueryMappedToControls chains the current query on the "mapped_to_controls" edge.
 func (_q *ControlQuery) QueryMappedToControls() *MappedControlQuery {
 	query := (&MappedControlClient{config: _q.config}).Query()
@@ -1251,7 +1226,6 @@ func (_q *ControlQuery) Clone() *ControlQuery {
 		withFindings:               _q.withFindings.Clone(),
 		withControlImplementations: _q.withControlImplementations.Clone(),
 		withSubcontrols:            _q.withSubcontrols.Clone(),
-		withScheduledJobs:          _q.withScheduledJobs.Clone(),
 		withMappedToControls:       _q.withMappedToControls.Clone(),
 		withMappedFromControls:     _q.withMappedFromControls.Clone(),
 		withWorkflowObjectRefs:     _q.withWorkflowObjectRefs.Clone(),
@@ -1637,17 +1611,6 @@ func (_q *ControlQuery) WithSubcontrols(opts ...func(*SubcontrolQuery)) *Control
 	return _q
 }
 
-// WithScheduledJobs tells the query-builder to eager-load the nodes that are connected to
-// the "scheduled_jobs" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *ControlQuery) WithScheduledJobs(opts ...func(*ScheduledJobQuery)) *ControlQuery {
-	query := (&ScheduledJobClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withScheduledJobs = query
-	return _q
-}
-
 // WithMappedToControls tells the query-builder to eager-load the nodes that are connected to
 // the "mapped_to_controls" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *ControlQuery) WithMappedToControls(opts ...func(*MappedControlQuery)) *ControlQuery {
@@ -1777,7 +1740,7 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 		nodes       = []*Control{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [39]bool{
+		loadedTypes = [38]bool{
 			_q.withEvidence != nil,
 			_q.withControlObjectives != nil,
 			_q.withTasks != nil,
@@ -1812,7 +1775,6 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			_q.withFindings != nil,
 			_q.withControlImplementations != nil,
 			_q.withSubcontrols != nil,
-			_q.withScheduledJobs != nil,
 			_q.withMappedToControls != nil,
 			_q.withMappedFromControls != nil,
 			_q.withWorkflowObjectRefs != nil,
@@ -2077,13 +2039,6 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			return nil, err
 		}
 	}
-	if query := _q.withScheduledJobs; query != nil {
-		if err := _q.loadScheduledJobs(ctx, query, nodes,
-			func(n *Control) { n.Edges.ScheduledJobs = []*ScheduledJob{} },
-			func(n *Control, e *ScheduledJob) { n.Edges.ScheduledJobs = append(n.Edges.ScheduledJobs, e) }); err != nil {
-			return nil, err
-		}
-	}
 	if query := _q.withMappedToControls; query != nil {
 		if err := _q.loadMappedToControls(ctx, query, nodes,
 			func(n *Control) { n.Edges.MappedToControls = []*MappedControl{} },
@@ -2293,13 +2248,6 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 		if err := _q.loadSubcontrols(ctx, query, nodes,
 			func(n *Control) { n.appendNamedSubcontrols(name) },
 			func(n *Control, e *Subcontrol) { n.appendNamedSubcontrols(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range _q.withNamedScheduledJobs {
-		if err := _q.loadScheduledJobs(ctx, query, nodes,
-			func(n *Control) { n.appendNamedScheduledJobs(name) },
-			func(n *Control, e *ScheduledJob) { n.appendNamedScheduledJobs(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -4070,67 +4018,6 @@ func (_q *ControlQuery) loadSubcontrols(ctx context.Context, query *SubcontrolQu
 	}
 	return nil
 }
-func (_q *ControlQuery) loadScheduledJobs(ctx context.Context, query *ScheduledJobQuery, nodes []*Control, init func(*Control), assign func(*Control, *ScheduledJob)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[string]*Control)
-	nids := make(map[string]map[*Control]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
-		if init != nil {
-			init(node)
-		}
-	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(control.ScheduledJobsTable)
-		s.Join(joinT).On(s.C(scheduledjob.FieldID), joinT.C(control.ScheduledJobsPrimaryKey[0]))
-		s.Where(sql.InValues(joinT.C(control.ScheduledJobsPrimaryKey[1]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(control.ScheduledJobsPrimaryKey[1]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
-	}
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-			assign := spec.Assign
-			values := spec.ScanValues
-			spec.ScanValues = func(columns []string) ([]any, error) {
-				values, err := values(columns[1:])
-				if err != nil {
-					return nil, err
-				}
-				return append([]any{new(sql.NullString)}, values...), nil
-			}
-			spec.Assign = func(columns []string, values []any) error {
-				outValue := values[0].(*sql.NullString).String
-				inValue := values[1].(*sql.NullString).String
-				if nids[inValue] == nil {
-					nids[inValue] = map[*Control]struct{}{byID[outValue]: {}}
-					return assign(columns[1:], values[1:])
-				}
-				nids[inValue][byID[outValue]] = struct{}{}
-				return nil
-			}
-		})
-	})
-	neighbors, err := withInterceptors[[]*ScheduledJob](ctx, query, qr, query.inters)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected "scheduled_jobs" node returned %v`, n.ID)
-		}
-		for kn := range nodes {
-			assign(kn, n)
-		}
-	}
-	return nil
-}
 func (_q *ControlQuery) loadMappedToControls(ctx context.Context, query *MappedControlQuery, nodes []*Control, init func(*Control), assign func(*Control, *MappedControl)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*Control)
@@ -4793,20 +4680,6 @@ func (_q *ControlQuery) WithNamedSubcontrols(name string, opts ...func(*Subcontr
 		_q.withNamedSubcontrols = make(map[string]*SubcontrolQuery)
 	}
 	_q.withNamedSubcontrols[name] = query
-	return _q
-}
-
-// WithNamedScheduledJobs tells the query-builder to eager-load the nodes that are connected to the "scheduled_jobs"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (_q *ControlQuery) WithNamedScheduledJobs(name string, opts ...func(*ScheduledJobQuery)) *ControlQuery {
-	query := (&ScheduledJobClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if _q.withNamedScheduledJobs == nil {
-		_q.withNamedScheduledJobs = make(map[string]*ScheduledJobQuery)
-	}
-	_q.withNamedScheduledJobs[name] = query
 	return _q
 }
 
