@@ -57,6 +57,20 @@ tasks:
       - go generate ./...
       - task: tidy
 
+  drop:schema:
+    desc: "remove ent schemas end to end: task drop:schema -- ScheduledJob JobRunner"
+    cmds:
+      - go run ./internal/ent/generate/entdrop --phase pre --migration drop_{{.CLI_ARGS | replace " " "_" | lower}} {{.CLI_ARGS}}
+      - task: regenerate
+      - go run ./internal/ent/generate/entdrop --phase post {{.CLI_ARGS}}
+
+  drop:field:
+    desc: "remove ent fields end to end: task drop:field -- Control.ref_code"
+    cmds:
+      - go run ./internal/ent/generate/entdrop --field --phase pre {{.CLI_ARGS}}
+      - task: regenerate
+      - go run ./internal/ent/generate/entdrop --field --phase post {{.CLI_ARGS}}
+
   regenerate:
     desc: regenerate all codegen artifacts from scratch, removing checksums to force regeneration
     cmds:
