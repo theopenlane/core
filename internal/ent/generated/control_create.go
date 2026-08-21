@@ -39,7 +39,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/review"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
-	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
@@ -1142,21 +1141,6 @@ func (_c *ControlCreate) AddSubcontrols(v ...*Subcontrol) *ControlCreate {
 	return _c.AddSubcontrolIDs(ids...)
 }
 
-// AddScheduledJobIDs adds the "scheduled_jobs" edge to the ScheduledJob entity by IDs.
-func (_c *ControlCreate) AddScheduledJobIDs(ids ...string) *ControlCreate {
-	_c.mutation.AddScheduledJobIDs(ids...)
-	return _c
-}
-
-// AddScheduledJobs adds the "scheduled_jobs" edges to the ScheduledJob entity.
-func (_c *ControlCreate) AddScheduledJobs(v ...*ScheduledJob) *ControlCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddScheduledJobIDs(ids...)
-}
-
 // AddMappedToControlIDs adds the "mapped_to_controls" edge to the MappedControl entity by IDs.
 func (_c *ControlCreate) AddMappedToControlIDs(ids ...string) *ControlCreate {
 	_c.mutation.AddMappedToControlIDs(ids...)
@@ -2129,22 +2113,6 @@ func (_c *ControlCreate) createSpec() (*Control, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(subcontrol.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.ScheduledJobsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   control.ScheduledJobsTable,
-			Columns: control.ScheduledJobsPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

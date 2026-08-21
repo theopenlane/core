@@ -137,10 +137,6 @@ func (c Control) Edges() []ent.Edge {
 		}),
 		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: c,
-			edgeSchema: ScheduledJob{},
-		}),
-		edgeFromWithPagination(&edgeDefinition{
-			fromSchema: c,
 			ref:        "to_controls",
 			name:       "mapped_to_controls",
 			t:          MappedControl.Type,

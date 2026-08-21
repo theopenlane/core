@@ -135,21 +135,6 @@ type InternalPolicy func(*sql.Selector)
 // Invite is the predicate function for invite builders.
 type Invite func(*sql.Selector)
 
-// JobResult is the predicate function for jobresult builders.
-type JobResult func(*sql.Selector)
-
-// JobRunner is the predicate function for jobrunner builders.
-type JobRunner func(*sql.Selector)
-
-// JobRunnerRegistrationToken is the predicate function for jobrunnerregistrationtoken builders.
-type JobRunnerRegistrationToken func(*sql.Selector)
-
-// JobRunnerToken is the predicate function for jobrunnertoken builders.
-type JobRunnerToken func(*sql.Selector)
-
-// JobTemplate is the predicate function for jobtemplate builders.
-type JobTemplate func(*sql.Selector)
-
 // MappableDomain is the predicate function for mappabledomain builders.
 type MappableDomain func(*sql.Selector)
 
@@ -227,12 +212,6 @@ type SLADefinition func(*sql.Selector)
 
 // Scan is the predicate function for scan builders.
 type Scan func(*sql.Selector)
-
-// ScheduledJob is the predicate function for scheduledjob builders.
-type ScheduledJob func(*sql.Selector)
-
-// ScheduledJobRun is the predicate function for scheduledjobrun builders.
-type ScheduledJobRun func(*sql.Selector)
 
 // Standard is the predicate function for standard builders.
 type Standard func(*sql.Selector)

@@ -116,10 +116,6 @@ func (s Subcontrol) Edges() []ent.Edge {
 		}),
 		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: s,
-			edgeSchema: ScheduledJob{},
-		}),
-		edgeFromWithPagination(&edgeDefinition{
-			fromSchema: s,
 			ref:        "to_subcontrols",
 			name:       "mapped_to_subcontrols",
 			t:          MappedControl.Type,

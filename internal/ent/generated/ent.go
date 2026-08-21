@@ -55,11 +55,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
-	"github.com/theopenlane/core/internal/ent/generated/jobresult"
-	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
-	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
-	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
-	"github.com/theopenlane/core/internal/ent/generated/jobtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
@@ -85,8 +80,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/review"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
-	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
-	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
 	"github.com/theopenlane/core/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
@@ -222,11 +215,6 @@ func checkColumn(t, c string) error {
 			integrationwebhook.Table:         integrationwebhook.ValidColumn,
 			internalpolicy.Table:             internalpolicy.ValidColumn,
 			invite.Table:                     invite.ValidColumn,
-			jobresult.Table:                  jobresult.ValidColumn,
-			jobrunner.Table:                  jobrunner.ValidColumn,
-			jobrunnerregistrationtoken.Table: jobrunnerregistrationtoken.ValidColumn,
-			jobrunnertoken.Table:             jobrunnertoken.ValidColumn,
-			jobtemplate.Table:                jobtemplate.ValidColumn,
 			mappabledomain.Table:             mappabledomain.ValidColumn,
 			mappedcontrol.Table:              mappedcontrol.ValidColumn,
 			narrative.Table:                  narrative.ValidColumn,
@@ -253,8 +241,6 @@ func checkColumn(t, c string) error {
 			risk.Table:                       risk.ValidColumn,
 			sladefinition.Table:              sladefinition.ValidColumn,
 			scan.Table:                       scan.ValidColumn,
-			scheduledjob.Table:               scheduledjob.ValidColumn,
-			scheduledjobrun.Table:            scheduledjobrun.ValidColumn,
 			standard.Table:                   standard.ValidColumn,
 			subcontrol.Table:                 subcontrol.ValidColumn,
 			subprocessor.Table:               subprocessor.ValidColumn,

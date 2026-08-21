@@ -37,7 +37,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/hushhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/identityholderhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/internalpolicyhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/jobtemplatehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/mappabledomainhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/mappedcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/narrativehistory"
@@ -54,7 +53,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/remediationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/reviewhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/riskhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/scheduledjobhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/sladefinitionhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/subcontrolhistory"
@@ -216,11 +214,6 @@ var internalpolicyhistoryImplementors = []string{"InternalPolicyHistory", "Node"
 // IsNode implements the Node interface check for GQLGen.
 func (*InternalPolicyHistory) IsNode() {}
 
-var jobtemplatehistoryImplementors = []string{"JobTemplateHistory", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*JobTemplateHistory) IsNode() {}
-
 var mappabledomainhistoryImplementors = []string{"MappableDomainHistory", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
@@ -305,11 +298,6 @@ var sladefinitionhistoryImplementors = []string{"SLADefinitionHistory", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*SLADefinitionHistory) IsNode() {}
-
-var scheduledjobhistoryImplementors = []string{"ScheduledJobHistory", "Node"}
-
-// IsNode implements the Node interface check for GQLGen.
-func (*ScheduledJobHistory) IsNode() {}
 
 var standardhistoryImplementors = []string{"StandardHistory", "Node"}
 
@@ -718,15 +706,6 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			}
 		}
 		return query.Only(ctx)
-	case jobtemplatehistory.Table:
-		query := c.JobTemplateHistory.Query().
-			Where(jobtemplatehistory.ID(id))
-		if fc := graphql.GetFieldContext(ctx); fc != nil {
-			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, jobtemplatehistoryImplementors...); err != nil {
-				return nil, err
-			}
-		}
-		return query.Only(ctx)
 	case mappabledomainhistory.Table:
 		query := c.MappableDomainHistory.Query().
 			Where(mappabledomainhistory.ID(id))
@@ -876,15 +855,6 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(sladefinitionhistory.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, sladefinitionhistoryImplementors...); err != nil {
-				return nil, err
-			}
-		}
-		return query.Only(ctx)
-	case scheduledjobhistory.Table:
-		query := c.ScheduledJobHistory.Query().
-			Where(scheduledjobhistory.ID(id))
-		if fc := graphql.GetFieldContext(ctx); fc != nil {
-			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, scheduledjobhistoryImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -1585,22 +1555,6 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 				*noder = node
 			}
 		}
-	case jobtemplatehistory.Table:
-		query := c.JobTemplateHistory.Query().
-			Where(jobtemplatehistory.IDIn(ids...))
-		query, err := query.CollectFields(ctx, jobtemplatehistoryImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
 	case mappabledomainhistory.Table:
 		query := c.MappableDomainHistory.Query().
 			Where(mappabledomainhistory.IDIn(ids...))
@@ -1861,22 +1815,6 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.SLADefinitionHistory.Query().
 			Where(sladefinitionhistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, sladefinitionhistoryImplementors...)
-		if err != nil {
-			return nil, err
-		}
-		nodes, err := query.All(ctx)
-		if err != nil {
-			return nil, err
-		}
-		for _, node := range nodes {
-			for _, noder := range idmap[node.ID] {
-				*noder = node
-			}
-		}
-	case scheduledjobhistory.Table:
-		query := c.ScheduledJobHistory.Query().
-			Where(scheduledjobhistory.IDIn(ids...))
-		query, err := query.CollectFields(ctx, scheduledjobhistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}

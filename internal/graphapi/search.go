@@ -28,8 +28,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
-	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
-	"github.com/theopenlane/core/internal/ent/generated/jobtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/notificationtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -401,43 +399,6 @@ func searchInvites(ctx context.Context, query string, after *entgql.Cursor[strin
 			invite.Or(
 				invite.ID(query),                    // search equal to ID
 				invite.RecipientContainsFold(query), // search by Recipient
-			),
-		)
-
-	return request.Paginate(ctx, after, first, before, last)
-}
-
-// searchJobRunner searches for JobRunner based on the query string looking for matches
-func searchJobRunners(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.JobRunnerConnection, error) {
-	request := withTransactionalMutation(ctx).JobRunner.Query().
-		Where(
-			jobrunner.Or(
-				jobrunner.DisplayID(query),        // search equal to DisplayID
-				jobrunner.ID(query),               // search equal to ID
-				jobrunner.NameContainsFold(query), // search by Name
-				func(s *sql.Selector) {
-					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
-				},
-			),
-		)
-
-	return request.Paginate(ctx, after, first, before, last)
-}
-
-// searchJobTemplate searches for JobTemplate based on the query string looking for matches
-func searchJobTemplates(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.JobTemplateConnection, error) {
-	request := withTransactionalMutation(ctx).JobTemplate.Query().
-		Where(
-			jobtemplate.Or(
-				jobtemplate.DescriptionContainsFold(query), // search by Description
-				jobtemplate.DisplayID(query),               // search equal to DisplayID
-				jobtemplate.ID(query),                      // search equal to ID
-				func(s *sql.Selector) {
-					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
-				},
-				jobtemplate.TitleContainsFold(query), // search by Title
 			),
 		)
 

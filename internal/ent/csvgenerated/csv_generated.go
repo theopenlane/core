@@ -1333,26 +1333,6 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 		SchemaName: "Invite",
 		Rules:      []CSVReferenceRule{},
 	},
-	"JobResult": {
-		SchemaName: "JobResult",
-		Rules:      []CSVReferenceRule{},
-	},
-	"JobRunner": {
-		SchemaName: "JobRunner",
-		Rules:      []CSVReferenceRule{},
-	},
-	"JobRunnerRegistrationToken": {
-		SchemaName: "JobRunnerRegistrationToken",
-		Rules:      []CSVReferenceRule{},
-	},
-	"JobRunnerToken": {
-		SchemaName: "JobRunnerToken",
-		Rules:      []CSVReferenceRule{},
-	},
-	"JobTemplate": {
-		SchemaName: "JobTemplate",
-		Rules:      []CSVReferenceRule{},
-	},
 	"MappableDomain": {
 		SchemaName: "MappableDomain",
 		Rules:      []CSVReferenceRule{},
@@ -1727,23 +1707,6 @@ var CSVReferenceRegistry = map[string]CSVSchemaInfo{
 				CreateIfMissing: false,
 			},
 		},
-	},
-	"ScheduledJob": {
-		SchemaName: "ScheduledJob",
-		Rules: []CSVReferenceRule{
-			{
-				SourceColumn:    "ControlRefCodes",
-				TargetField:     "ControlIDs",
-				TargetEntity:    "Control",
-				MatchField:      "ref_code",
-				IsSlice:         true,
-				CreateIfMissing: false,
-			},
-		},
-	},
-	"ScheduledJobRun": {
-		SchemaName: "ScheduledJobRun",
-		Rules:      []CSVReferenceRule{},
 	},
 	"Standard": {
 		SchemaName: "Standard",
@@ -2735,96 +2698,6 @@ type InviteCSVUpdateInput struct {
 // CSVInputWrapper marks InviteCSVUpdateInput for CSV header preprocessing.
 func (InviteCSVUpdateInput) CSVInputWrapper() {}
 
-// JobResultCSVInput wraps CreateJobResultInput with CSV reference columns.
-type JobResultCSVInput struct {
-	Input generated.CreateJobResultInput
-}
-
-// CSVInputWrapper marks JobResultCSVInput for CSV header preprocessing.
-func (JobResultCSVInput) CSVInputWrapper() {}
-
-// JobResultCSVUpdateInput wraps UpdateJobResultInput with CSV reference columns for bulk updates.
-type JobResultCSVUpdateInput struct {
-	// ID is the entity ID to update
-	ID    string `csv:"ID"`
-	Input generated.UpdateJobResultInput
-}
-
-// CSVInputWrapper marks JobResultCSVUpdateInput for CSV header preprocessing.
-func (JobResultCSVUpdateInput) CSVInputWrapper() {}
-
-// JobRunnerCSVInput wraps CreateJobRunnerInput with CSV reference columns.
-type JobRunnerCSVInput struct {
-	Input generated.CreateJobRunnerInput
-}
-
-// CSVInputWrapper marks JobRunnerCSVInput for CSV header preprocessing.
-func (JobRunnerCSVInput) CSVInputWrapper() {}
-
-// JobRunnerCSVUpdateInput wraps UpdateJobRunnerInput with CSV reference columns for bulk updates.
-type JobRunnerCSVUpdateInput struct {
-	// ID is the entity ID to update
-	ID    string `csv:"ID"`
-	Input generated.UpdateJobRunnerInput
-}
-
-// CSVInputWrapper marks JobRunnerCSVUpdateInput for CSV header preprocessing.
-func (JobRunnerCSVUpdateInput) CSVInputWrapper() {}
-
-// JobRunnerRegistrationTokenCSVInput wraps CreateJobRunnerRegistrationTokenInput with CSV reference columns.
-type JobRunnerRegistrationTokenCSVInput struct {
-	Input generated.CreateJobRunnerRegistrationTokenInput
-}
-
-// CSVInputWrapper marks JobRunnerRegistrationTokenCSVInput for CSV header preprocessing.
-func (JobRunnerRegistrationTokenCSVInput) CSVInputWrapper() {}
-
-// JobRunnerRegistrationTokenCSVUpdateInput wraps UpdateJobRunnerRegistrationTokenInput with CSV reference columns for bulk updates.
-type JobRunnerRegistrationTokenCSVUpdateInput struct {
-	// ID is the entity ID to update
-	ID    string `csv:"ID"`
-	Input generated.UpdateJobRunnerRegistrationTokenInput
-}
-
-// CSVInputWrapper marks JobRunnerRegistrationTokenCSVUpdateInput for CSV header preprocessing.
-func (JobRunnerRegistrationTokenCSVUpdateInput) CSVInputWrapper() {}
-
-// JobRunnerTokenCSVInput wraps CreateJobRunnerTokenInput with CSV reference columns.
-type JobRunnerTokenCSVInput struct {
-	Input generated.CreateJobRunnerTokenInput
-}
-
-// CSVInputWrapper marks JobRunnerTokenCSVInput for CSV header preprocessing.
-func (JobRunnerTokenCSVInput) CSVInputWrapper() {}
-
-// JobRunnerTokenCSVUpdateInput wraps UpdateJobRunnerTokenInput with CSV reference columns for bulk updates.
-type JobRunnerTokenCSVUpdateInput struct {
-	// ID is the entity ID to update
-	ID    string `csv:"ID"`
-	Input generated.UpdateJobRunnerTokenInput
-}
-
-// CSVInputWrapper marks JobRunnerTokenCSVUpdateInput for CSV header preprocessing.
-func (JobRunnerTokenCSVUpdateInput) CSVInputWrapper() {}
-
-// JobTemplateCSVInput wraps CreateJobTemplateInput with CSV reference columns.
-type JobTemplateCSVInput struct {
-	Input generated.CreateJobTemplateInput
-}
-
-// CSVInputWrapper marks JobTemplateCSVInput for CSV header preprocessing.
-func (JobTemplateCSVInput) CSVInputWrapper() {}
-
-// JobTemplateCSVUpdateInput wraps UpdateJobTemplateInput with CSV reference columns for bulk updates.
-type JobTemplateCSVUpdateInput struct {
-	// ID is the entity ID to update
-	ID    string `csv:"ID"`
-	Input generated.UpdateJobTemplateInput
-}
-
-// CSVInputWrapper marks JobTemplateCSVUpdateInput for CSV header preprocessing.
-func (JobTemplateCSVUpdateInput) CSVInputWrapper() {}
-
 // MappableDomainCSVInput wraps CreateMappableDomainInput with CSV reference columns.
 type MappableDomainCSVInput struct {
 	Input generated.CreateMappableDomainInput
@@ -3246,44 +3119,6 @@ type ScanCSVUpdateInput struct {
 
 // CSVInputWrapper marks ScanCSVUpdateInput for CSV header preprocessing.
 func (ScanCSVUpdateInput) CSVInputWrapper() {}
-
-// ScheduledJobCSVInput wraps CreateScheduledJobInput with CSV reference columns.
-type ScheduledJobCSVInput struct {
-	Input           generated.CreateScheduledJobInput
-	ControlRefCodes []string `csv:"ControlRefCodes"`
-}
-
-// CSVInputWrapper marks ScheduledJobCSVInput for CSV header preprocessing.
-func (ScheduledJobCSVInput) CSVInputWrapper() {}
-
-// ScheduledJobCSVUpdateInput wraps UpdateScheduledJobInput with CSV reference columns for bulk updates.
-type ScheduledJobCSVUpdateInput struct {
-	// ID is the entity ID to update
-	ID              string `csv:"ID"`
-	Input           generated.UpdateScheduledJobInput
-	ControlRefCodes []string `csv:"ControlRefCodes"`
-}
-
-// CSVInputWrapper marks ScheduledJobCSVUpdateInput for CSV header preprocessing.
-func (ScheduledJobCSVUpdateInput) CSVInputWrapper() {}
-
-// ScheduledJobRunCSVInput wraps CreateScheduledJobRunInput with CSV reference columns.
-type ScheduledJobRunCSVInput struct {
-	Input generated.CreateScheduledJobRunInput
-}
-
-// CSVInputWrapper marks ScheduledJobRunCSVInput for CSV header preprocessing.
-func (ScheduledJobRunCSVInput) CSVInputWrapper() {}
-
-// ScheduledJobRunCSVUpdateInput wraps UpdateScheduledJobRunInput with CSV reference columns for bulk updates.
-type ScheduledJobRunCSVUpdateInput struct {
-	// ID is the entity ID to update
-	ID    string `csv:"ID"`
-	Input generated.UpdateScheduledJobRunInput
-}
-
-// CSVInputWrapper marks ScheduledJobRunCSVUpdateInput for CSV header preprocessing.
-func (ScheduledJobRunCSVUpdateInput) CSVInputWrapper() {}
 
 // StandardCSVInput wraps CreateStandardInput with CSV reference columns.
 type StandardCSVInput struct {
