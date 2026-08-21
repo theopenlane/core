@@ -174,6 +174,9 @@ func (c CampaignTarget) Edges() []ent.Edge {
 			fromSchema: c,
 			edgeSchema: Subscriber{},
 			field:      "subscriber_id",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Organization{}.Name()),
+			},
 		}),
 		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: c,

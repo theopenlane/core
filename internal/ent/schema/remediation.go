@@ -152,6 +152,9 @@ func (r Remediation) Edges() []ent.Edge {
 			fromSchema: r,
 			edgeSchema: Integration{},
 			comment:    "integration that produced the remediation",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Organization{}.Name()),
+			},
 		}),
 		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: r,

@@ -13,6 +13,7 @@ import (
 	"github.com/gertd/go-pluralize"
 
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/entx/history"
 
 	"github.com/theopenlane/core/common/enums"
@@ -215,6 +216,9 @@ func (g DirectoryGroup) Edges() []ent.Edge {
 			required:   true,
 			immutable:  true,
 			comment:    "integration that owns this directory group",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Organization{}.Name()),
+			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: g,
