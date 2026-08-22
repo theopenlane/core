@@ -145,7 +145,6 @@ func TestMutationCreateTrustCenterDomain(t *testing.T) {
 }
 
 func TestMutationCreateTrustCenterDomainMappableDomainNotExists(t *testing.T) {
-	t.Parallel()
 	// Create a new user to avoid slug conflicts
 	testUser := suite.userBuilder(t.Context(), t)
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)

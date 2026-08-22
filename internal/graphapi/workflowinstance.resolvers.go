@@ -15,7 +15,7 @@ import (
 
 // WorkflowInstance is the resolver for the workflowInstance field.
 func (r *queryResolver) WorkflowInstance(ctx context.Context, id string) (*generated.WorkflowInstance, error) {
-	if !workflowsEnabled(r.db) {
+	if !workflowsEnabled() {
 		return nil, ErrWorkflowsDisabled
 	}
 

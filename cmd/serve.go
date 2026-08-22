@@ -196,7 +196,6 @@ func serve(ctx context.Context) error {
 	}
 
 	clientOpts := []entdb.Option{
-		entdb.WithWorkflows(&so.Config.Settings.Workflows, galaApp),
 		entdb.WithModules(),
 		entdb.WithMetricsHook(),
 	}
@@ -206,15 +205,21 @@ func serve(ctx context.Context) error {
 		return err
 	}
 
-	if err := serveropts.ConfigureGala(galaApp, notifGala, dbClient); err != nil {
-		return err
-	}
+	var wfEngine *engine.WorkflowEngine
 
 	if so.Config.Settings.Workflows.Enabled {
-		if wfEngine, ok := dbClient.WorkflowEngine.(*engine.WorkflowEngine); ok {
-			so.AddServerOptions(serveropts.WithWorkflows(wfEngine))
-			log.Info().Msg("workflow engine initialized")
+		wfEngine, err = engine.NewWorkflowEngineWithConfig(dbClient, galaApp, &so.Config.Settings.Workflows)
+		if err != nil {
+			return err
 		}
+
+		engine.SetDefault(wfEngine)
+		so.AddServerOptions(serveropts.WithWorkflows(wfEngine))
+		log.Info().Msg("workflow engine initialized")
+	}
+
+	if err := serveropts.ConfigureGala(galaApp, notifGala, dbClient, wfEngine); err != nil {
+		return err
 	}
 
 	so.AddServerOptions(serveropts.WithCloudflareConfig())

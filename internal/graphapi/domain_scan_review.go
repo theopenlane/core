@@ -78,7 +78,7 @@ func (r *mutationResolver) importDomainScanReview(ctx context.Context, input mod
 		return nil, err
 	}
 
-	rt := intruntime.FromClient(ctx, client)
+	rt := intruntime.Default()
 	if rt == nil {
 		return nil, ErrCampaignDispatchRuntimeRequired
 	}

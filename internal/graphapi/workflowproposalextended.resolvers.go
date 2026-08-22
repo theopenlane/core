@@ -25,7 +25,7 @@ import (
 
 // UpdateWorkflowProposalChanges is the resolver for the updateWorkflowProposalChanges field.
 func (r *mutationResolver) UpdateWorkflowProposalChanges(ctx context.Context, input model.UpdateWorkflowProposalChangesInput) (*model.WorkflowProposalUpdatePayload, error) {
-	if !workflowsEnabled(r.db) {
+	if !workflowsEnabled() {
 		return nil, ErrWorkflowsDisabled
 	}
 
@@ -82,7 +82,7 @@ func (r *mutationResolver) UpdateWorkflowProposalChanges(ctx context.Context, in
 
 // SubmitWorkflowProposal is the resolver for the submitWorkflowProposal field.
 func (r *mutationResolver) SubmitWorkflowProposal(ctx context.Context, id string) (*model.WorkflowProposalSubmitPayload, error) {
-	if !workflowsEnabled(r.db) {
+	if !workflowsEnabled() {
 		return nil, ErrWorkflowsDisabled
 	}
 
@@ -147,7 +147,7 @@ func (r *mutationResolver) SubmitWorkflowProposal(ctx context.Context, id string
 
 // WithdrawWorkflowProposal is the resolver for the withdrawWorkflowProposal field.
 func (r *mutationResolver) WithdrawWorkflowProposal(ctx context.Context, id string, reason *string) (*model.WorkflowProposalWithdrawPayload, error) {
-	if !workflowsEnabled(r.db) {
+	if !workflowsEnabled() {
 		return nil, ErrWorkflowsDisabled
 	}
 
@@ -224,7 +224,7 @@ func (r *mutationResolver) WithdrawWorkflowProposal(ctx context.Context, id stri
 
 // WorkflowProposal is the resolver for the workflowProposal field.
 func (r *queryResolver) WorkflowProposal(ctx context.Context, id string) (*generated.WorkflowProposal, error) {
-	if !workflowsEnabled(r.db) {
+	if !workflowsEnabled() {
 		return nil, ErrWorkflowsDisabled
 	}
 
@@ -265,7 +265,7 @@ func (r *queryResolver) WorkflowProposal(ctx context.Context, id string) (*gener
 
 // WorkflowProposalsForObject is the resolver for the workflowProposalsForObject field.
 func (r *queryResolver) WorkflowProposalsForObject(ctx context.Context, objectType string, objectID string, includeStates []enums.WorkflowProposalState) ([]*generated.WorkflowProposal, error) {
-	if !workflowsEnabled(r.db) {
+	if !workflowsEnabled() {
 		return nil, ErrWorkflowsDisabled
 	}
 

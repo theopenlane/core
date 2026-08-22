@@ -338,14 +338,8 @@ type (
 		inters    *inters
 		EntConfig *entconfig.Config
 		Authz     fgax.Client
-		// IntegrationsRuntime configures the integrations runtime.
-		IntegrationsRuntime any
-
 		// Job is the job client to insert jobs into the queue.
 		Job riverqueue.JobClient
-
-		// WorkflowEngine configures the workflow orchestration engine.
-		WorkflowEngine any
 
 		// schemaConfig contains alternative names for all tables.
 		schemaConfig SchemaConfig
@@ -10112,13 +10106,6 @@ type (
 	}
 )
 
-// IntegrationsRuntime configures the integrations runtime.
-func IntegrationsRuntime(v any) Option {
-	return func(c *config) {
-		c.IntegrationsRuntime = v
-	}
-}
-
 // Job option added by the client template to add the job client.
 func Job(ctx context.Context, opts ...riverqueue.Option) Option {
 	return func(c *config) {
@@ -10128,13 +10115,6 @@ func Job(ctx context.Context, opts ...riverqueue.Option) Option {
 		if err != nil {
 			panic(err)
 		}
-	}
-}
-
-// WorkflowEngine configures the workflow orchestration engine.
-func WorkflowEngine(v any) Option {
-	return func(c *config) {
-		c.WorkflowEngine = v
 	}
 }
 

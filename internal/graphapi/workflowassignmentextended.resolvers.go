@@ -27,7 +27,7 @@ import (
 
 // ApproveWorkflowAssignment is the resolver for the approveWorkflowAssignment field.
 func (r *mutationResolver) ApproveWorkflowAssignment(ctx context.Context, id string) (*model.WorkflowAssignmentApprovePayload, error) {
-	if !workflowsEnabled(r.db) {
+	if !workflowsEnabled() {
 		return nil, ErrWorkflowsDisabled
 	}
 
@@ -74,7 +74,7 @@ func (r *mutationResolver) ApproveWorkflowAssignment(ctx context.Context, id str
 
 // RejectWorkflowAssignment is the resolver for the rejectWorkflowAssignment field.
 func (r *mutationResolver) RejectWorkflowAssignment(ctx context.Context, id string, reason *string) (*model.WorkflowAssignmentRejectPayload, error) {
-	if !workflowsEnabled(r.db) {
+	if !workflowsEnabled() {
 		return nil, ErrWorkflowsDisabled
 	}
 
@@ -127,7 +127,7 @@ func (r *mutationResolver) RejectWorkflowAssignment(ctx context.Context, id stri
 
 // RequestChangesWorkflowAssignment is the resolver for the requestChangesWorkflowAssignment field.
 func (r *mutationResolver) RequestChangesWorkflowAssignment(ctx context.Context, id string, reason *string, inputs map[string]any) (*model.WorkflowAssignmentRejectPayload, error) {
-	if !workflowsEnabled(r.db) {
+	if !workflowsEnabled() {
 		return nil, ErrWorkflowsDisabled
 	}
 
@@ -202,7 +202,7 @@ func (r *mutationResolver) RequestChangesWorkflowAssignment(ctx context.Context,
 
 // ReassignWorkflowAssignment is the resolver for the reassignWorkflowAssignment field.
 func (r *mutationResolver) ReassignWorkflowAssignment(ctx context.Context, id string, targetUserID string) (*generated.WorkflowAssignment, error) {
-	if !workflowsEnabled(r.db) {
+	if !workflowsEnabled() {
 		return nil, ErrWorkflowsDisabled
 	}
 
@@ -243,7 +243,7 @@ func (r *mutationResolver) ReassignWorkflowAssignment(ctx context.Context, id st
 
 // MyWorkflowAssignments is the resolver for the myWorkflowAssignments field.
 func (r *queryResolver) MyWorkflowAssignments(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowAssignmentOrder, where *generated.WorkflowAssignmentWhereInput) (*generated.WorkflowAssignmentConnection, error) {
-	if !workflowsEnabled(r.db) {
+	if !workflowsEnabled() {
 		return nil, ErrWorkflowsDisabled
 	}
 

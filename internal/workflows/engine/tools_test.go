@@ -181,21 +181,18 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 	s.Require().NoError(err)
 
 	workflowCfg := workflows.NewDefaultConfig(workflows.WithEnabled(true))
-	clientOpts := []entdb.Option{
-		entdb.WithWorkflows(workflowCfg, runtime),
-	}
 
-	db, err := entdb.NewTestClient(s.ctx, s.tf, jobOpts, clientOpts, opts)
+	db, err := entdb.NewTestClient(s.ctx, s.tf, jobOpts, nil, opts)
 	s.Require().NoError(err)
+
+	wfEngine, err := engine.NewWorkflowEngineWithConfig(db, runtime, workflowCfg)
+	s.Require().NoError(err)
+	engine.SetDefault(wfEngine)
 
 	db.Use(hooks.EmitGalaEventHook(runtime))
 
 	_, err = gala.Register(runtime, hooks.WorkflowListeners()...)
 	s.Require().NoError(err)
-
-	wfEngine, ok := db.WorkflowEngine.(*engine.WorkflowEngine)
-	s.Require().True(ok, "workflow engine not initialized")
-	s.Require().NotNil(wfEngine, "workflow engine not initialized")
 
 	s.Require().NoError(runtime.Attach(
 		gala.WithValue(runtime),
@@ -226,11 +223,8 @@ func (s *WorkflowEngineTestSuite) SetupSuite() {
 	})
 	s.Require().NoError(err)
 
-	db.IntegrationsRuntime = rt
+	intruntime.SetDefault(rt)
 	s.integrationsRT = rt
-
-	wfEngine, ok = db.WorkflowEngine.(*engine.WorkflowEngine)
-	s.Require().True(ok)
 
 	s.Require().NoError(wfEngine.SetIntegrationDeps(engine.IntegrationDeps{
 		Runtime: rt,
@@ -290,8 +284,8 @@ func (s *WorkflowEngineTestSuite) Context() context.Context {
 
 // Engine returns the suite's workflow engine initialized in SetupSuite
 func (s *WorkflowEngineTestSuite) Engine() *engine.WorkflowEngine {
-	wfEngine, ok := s.client.WorkflowEngine.(*engine.WorkflowEngine)
-	s.Require().True(ok, "workflow engine not initialized")
+	wfEngine := engine.Default()
+	s.Require().NotNil(wfEngine, "workflow engine not initialized")
 
 	return wfEngine
 }
@@ -309,7 +303,7 @@ func (s *WorkflowEngineTestSuite) requireWorkflowSetup(cfg *workflows.Config, ru
 	s.Require().NotNil(s.client, "ent client not initialized")
 	s.Require().NotNil(runtime, "gala runtime not initialized")
 
-	s.Require().NotNil(s.client.WorkflowEngine, "workflow engine not initialized")
+	s.Require().NotNil(engine.Default(), "workflow engine not initialized")
 
 	s.Require().True(
 		runtime.InterestedIn(entityops.MutationTopicName(entityops.MutationConcernWorkflow, generated.TypeControl), ent.OpCreate.String()),
@@ -632,7 +626,7 @@ func (s *WorkflowEngineTestSuite) SeedContext(userID, orgID string) context.Cont
 	ctx = generated.NewContext(ctx, s.client)
 	ctxClient := generated.FromContext(ctx)
 	s.Require().NotNil(ctxClient, "seed context missing ent client")
-	s.Require().NotNil(ctxClient.WorkflowEngine, "seed context missing workflow engine")
+	s.Require().NotNil(engine.Default(), "workflow engine not initialized")
 	seedCaller, seedCallerOk := auth.CallerFromContext(ctx)
 	s.Require().True(seedCallerOk && seedCaller != nil && seedCaller.OrganizationID != "", "seed context missing org")
 	return ctx
