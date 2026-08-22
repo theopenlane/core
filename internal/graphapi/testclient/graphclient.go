@@ -138214,6 +138214,7 @@ type CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain struct {
 	CreatedBy         *string                                                                       "json:\"createdBy,omitempty\" graphql:\"createdBy\""
 	DNSVerification   *CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain_DNSVerification "json:\"dnsVerification,omitempty\" graphql:\"dnsVerification\""
 	DNSVerificationID *string                                                                       "json:\"dnsVerificationID,omitempty\" graphql:\"dnsVerificationID\""
+	DomainType        enums.CustomDomainType                                                        "json:\"domainType\" graphql:\"domainType\""
 	ID                string                                                                        "json:\"id\" graphql:\"id\""
 	MappableDomainID  string                                                                        "json:\"mappableDomainID\" graphql:\"mappableDomainID\""
 	OwnerID           *string                                                                       "json:\"ownerID,omitempty\" graphql:\"ownerID\""
@@ -138252,6 +138253,12 @@ func (t *CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain) GetDNSVer
 		t = &CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain{}
 	}
 	return t.DNSVerificationID
+}
+func (t *CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain) GetDomainType() *enums.CustomDomainType {
+	if t == nil {
+		t = &CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain{}
+	}
+	return &t.DomainType
 }
 func (t *CreateTrustCenterDomain_CreateTrustCenterDomain_CustomDomain) GetID() string {
 	if t == nil {
@@ -211627,6 +211634,7 @@ const CreateTrustCenterDomainDocument = `mutation CreateTrustCenterDomain ($inpu
 			createdAt
 			createdBy
 			dnsVerificationID
+			domainType
 			dnsVerification {
 				id
 				dnsTxtRecord
