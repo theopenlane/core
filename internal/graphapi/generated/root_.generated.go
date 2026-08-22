@@ -163617,11 +163617,16 @@ input CreateTrustCenterDomainInput {
 	the name of the custom domain
 	"""
 	cnameRecord: String!
+	"""
+	the type of the custom domain
+	"""
+	domainType: CustomDomainCustomDomainType
     """
     trust center ID
     """
     trustCenterID: ID!
-}`, BuiltIn: false},
+}
+`, BuiltIn: false},
 	{Name: "../schema/trustcenterentity.graphql", Input: `extend type Query {
     """
     Look up trustCenterEntity by ID

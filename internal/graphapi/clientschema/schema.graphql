@@ -18134,6 +18134,10 @@ input CreateTrustCenterDomainInput {
 	"""
 	cnameRecord: String!
 	"""
+	the type of the custom domain
+	"""
+	domainType: CustomDomainCustomDomainType
+	"""
 	trust center ID
 	"""
 	trustCenterID: ID!
