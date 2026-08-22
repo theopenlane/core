@@ -75,6 +75,7 @@ require (
 	github.com/microsoft/kiota-authentication-azure-go v1.3.1
 	github.com/microsoftgraph/msgraph-sdk-go v1.100.0
 	github.com/nyaruka/phonenumbers v1.8.1
+	github.com/nyaruka/phonenumbers/v2 v2.0.7
 	github.com/oklog/ulid/v2 v2.1.2
 	github.com/okta/okta-sdk-golang/v6 v6.1.7
 	github.com/openfga/go-sdk v0.8.2
