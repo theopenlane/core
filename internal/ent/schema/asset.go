@@ -130,7 +130,7 @@ func (Asset) Fields() []ent.Field {
 			Optional().
 			Annotations(
 				entgql.OrderField("source_identifier"),
-				entx.IntegrationMappingField().UpsertKey().LookupKey(),
+				entx.IntegrationMappingField().LookupKey(),
 			),
 		field.String("cost_center").
 			Comment("cost center associated with the asset").
@@ -238,6 +238,9 @@ func (a Asset) Edges() []ent.Edge {
 			field:      "integration_id",
 			immutable:  true,
 			comment:    "integration that owns this asset",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Organization{}.Name()),
+			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: a,

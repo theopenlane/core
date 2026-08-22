@@ -4,14 +4,17 @@ import (
 	"context"
 	"testing"
 
-	"github.com/samber/do/v2"
-
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/gala"
 )
 
-func TestRegisterContextCodecsRoundTripOperationContext(t *testing.T) {
+// codecRoundTripPayload is the fixture payload dispatched through the in-memory runtime
+type codecRoundTripPayload struct {
+	Message string `json:"message"`
+}
+
+func TestDefaultCodecsRoundTripOperationContext(t *testing.T) {
 	t.Parallel()
 
 	g, err := gala.NewGala(context.Background(), gala.Config{
@@ -21,14 +24,6 @@ func TestRegisterContextCodecsRoundTripOperationContext(t *testing.T) {
 		t.Fatalf("failed to create gala: %v", err)
 	}
 	t.Cleanup(func() { _ = g.Close() })
-
-	injector := do.New()
-	do.ProvideValue(injector, g)
-	rt := &Runtime{injector: injector}
-
-	if err := rt.registerContextCodecs(); err != nil {
-		t.Fatalf("failed to register codecs: %v", err)
-	}
 
 	oc := types.NewOperationContext("org_123", "health.check", types.IntegrationSource{
 		IntegrationID: "int_123",
@@ -41,21 +36,48 @@ func TestRegisterContextCodecsRoundTripOperationContext(t *testing.T) {
 		},
 	})
 
-	snapshot, err := g.ContextManager().Capture(gala.WithOperationContext(context.Background(), oc))
-	if err != nil {
-		t.Fatalf("failed to capture snapshot: %v", err)
+	type observedContext struct {
+		oc gala.OperationContext
+		ok bool
 	}
 
-	restored, err := g.ContextManager().Restore(context.Background(), snapshot)
-	if err != nil {
-		t.Fatalf("failed to restore snapshot: %v", err)
+	observedCh := make(chan observedContext, 1)
+
+	if _, err := gala.Register(g, gala.Definition[codecRoundTripPayload]{
+		Topic: gala.Topic[codecRoundTripPayload]{Name: gala.TopicName("runtime.test.codec.roundtrip")},
+		Name:  "runtime.test.codec.roundtrip.listener",
+		Handle: func(hc gala.HandlerContext, _ codecRoundTripPayload) error {
+			restoredOC, ok := gala.OperationContextFromContext(hc.Context)
+			observedCh <- observedContext{oc: restoredOC, ok: ok}
+
+			return nil
+		},
+	}); err != nil {
+		t.Fatalf("failed to register listener: %v", err)
 	}
 
-	restoredOC, ok := gala.OperationContextFromContext(restored)
-	if !ok {
+	emitCtx := gala.WithOperationContext(context.Background(), oc)
+	if _, err := g.EmitWithHeaders(emitCtx, gala.TopicName("runtime.test.codec.roundtrip"), codecRoundTripPayload{Message: "roundtrip"}, gala.Headers{Kind: gala.IntegrationRun.Kind()}); err != nil {
+		t.Fatalf("failed to emit: %v", err)
+	}
+
+	if err := g.WaitIdle(t.Context()); err != nil {
+		t.Fatalf("failed waiting for Gala runtime: %v", err)
+	}
+
+	var observed observedContext
+
+	select {
+	case observed = <-observedCh:
+	default:
+		t.Fatal("expected listener to run")
+	}
+
+	if !observed.ok {
 		t.Fatal("expected operation context to be restored")
 	}
 
+	restoredOC := observed.oc
 	if restoredOC.OwnerID != oc.OwnerID {
 		t.Fatalf("expected owner %q, got %q", oc.OwnerID, restoredOC.OwnerID)
 	}

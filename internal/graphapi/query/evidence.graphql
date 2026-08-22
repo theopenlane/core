@@ -376,6 +376,8 @@ mutation UpdateBulkEvidence ($ids: [ID!]!, $input: UpdateEvidenceInput!) {
 			workflowEligibleMarker
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 mutation UpdateEvidence ($updateEvidenceId: ID!, $input: UpdateEvidenceInput!, $evidenceFiles: [Upload!]) {

@@ -2,8 +2,6 @@ package models
 
 import (
 	"io"
-
-	"github.com/theopenlane/core/common/enums"
 )
 
 // TemplateProjectionResolver resolves a source value to another record or field.
@@ -20,10 +18,6 @@ const (
 type TemplateProjectionConfig struct {
 	// Enabled controls whether projection should run for this template.
 	Enabled bool `json:"enabled,omitempty"`
-	// Target is the destination object type, e.g. Entity or Asset.
-	Target enums.TemplateProjectionTarget `json:"target,omitempty"`
-	// Operation is the persistence behavior for the projection.
-	Operation enums.TemplateProjectionOperation `json:"operation,omitempty"`
 	// Mappings maps document data fields to target schema fields.
 	Mappings []TemplateProjectionFieldMapping `json:"mappings,omitempty"`
 }
@@ -34,8 +28,6 @@ type TemplateProjectionFieldMapping struct {
 	From string `json:"from,omitempty"`
 	// To is the target schema field name.
 	To string `json:"to,omitempty"`
-	// Transform converts the source value before assignment.
-	Transform enums.TemplateProjectionTransform `json:"transform,omitempty"`
 	// Resolver resolves a source value to one or more target fields.
 	Resolver TemplateProjectionResolver `json:"resolver,omitempty"`
 	// Required marks the source value as required before projection can run.
@@ -48,6 +40,6 @@ func (c TemplateProjectionConfig) MarshalGQL(w io.Writer) {
 }
 
 // UnmarshalGQL implements the Unmarshaler interface for gqlgen.
-func (c *TemplateProjectionConfig) UnmarshalGQL(v interface{}) error {
+func (c *TemplateProjectionConfig) UnmarshalGQL(v any) error {
 	return unmarshalGQLJSON(v, c)
 }

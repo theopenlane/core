@@ -58,7 +58,7 @@ func (DirectoryAccount) Fields() []ent.Field {
 			NotEmpty().
 			Immutable().
 			Annotations(
-				entx.IntegrationMappingField().UpsertKey().FromIntegration(),
+				entx.IntegrationMappingField().FromIntegration(),
 			),
 		field.String("directory_sync_run_id").
 			Comment("optional sync run that produced this snapshot").
@@ -66,7 +66,7 @@ func (DirectoryAccount) Fields() []ent.Field {
 			NotEmpty().
 			Immutable().
 			Annotations(
-				entx.IntegrationMappingField().UpsertKey(),
+				entx.IntegrationMappingField(),
 			),
 		field.String("platform_id").
 			Comment("optional platform associated with this directory account").
@@ -102,7 +102,7 @@ func (DirectoryAccount) Fields() []ent.Field {
 			NotEmpty().
 			Immutable().
 			Annotations(
-				entx.IntegrationMappingField().UpsertKey().LookupKey(),
+				entx.IntegrationMappingField().LookupKey(),
 				entgql.OrderField("external_id"),
 			),
 		field.String("secondary_key").
@@ -114,7 +114,7 @@ func (DirectoryAccount) Fields() []ent.Field {
 			Optional().
 			Nillable().
 			Annotations(
-				entx.IntegrationMappingField().UpsertKey(),
+				entx.IntegrationMappingField(),
 				entgql.OrderField("canonical_email"),
 			),
 		field.Strings("email_aliases").
@@ -297,6 +297,9 @@ func (d DirectoryAccount) Edges() []ent.Edge {
 			field:      "integration_id",
 			immutable:  true,
 			comment:    "integration that owns this directory account",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Organization{}.Name()),
+			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: d,

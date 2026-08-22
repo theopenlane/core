@@ -7,19 +7,17 @@ import (
 	"strings"
 	"time"
 
-	"entgo.io/ent"
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/core/pkg/logx"
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
-	"github.com/theopenlane/core/internal/ent/eventqueue"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
-	"github.com/theopenlane/core/internal/mutations"
 	"github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/observability"
 	"github.com/theopenlane/core/pkg/gala"
@@ -44,43 +42,25 @@ func NewWorkflowListeners(client *generated.Client, engine *WorkflowEngine, runt
 	}
 }
 
-// HandleWorkflowMutationGala triggers matching workflows for workflow-eligible Gala mutations.
-func (l *WorkflowListeners) HandleWorkflowMutationGala(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	if workflows.IsWorkflowBypass(ctx.Context) && !workflows.AllowWorkflowEventEmission(ctx.Context) {
-		return nil
-	}
-	if workflows.ShouldSkipEventEmission(ctx.Context) {
-		return nil
-	}
-
-	if payload.Operation != ent.OpUpdate.String() && payload.Operation != ent.OpUpdateOne.String() && payload.Operation != ent.OpCreate.String() {
-		return nil
-	}
-
-	schemaType := strings.TrimSpace(payload.MutationType)
-	if schemaType == "" {
+// HandleWorkflowMutationGala triggers matching workflows for workflow-eligible Gala mutations
+func (l *WorkflowListeners) HandleWorkflowMutationGala(inv entityops.Invocation, payload entityops.MutationPayload) error {
+	if workflows.IsWorkflowBypass(inv.Context) && !workflows.AllowWorkflowEventEmission(inv.Context) {
 		return nil
 	}
 
 	eventType := workflowEventTypeFromEntOperation(payload.Operation)
-	changeSet := payload.ChangeSet()
+	changeSet := payload.ChangeSet
 
 	if len(changeSet.ChangedFields) == 0 && len(changeSet.ChangedEdges) == 0 && eventType != "CREATE" {
 		return nil
 	}
 
-	entityID, ok := eventqueue.MutationEntityID(payload, ctx.Envelope.Headers.Properties)
-	if !ok {
-		return nil
-	}
-
-	allowCtx := workflows.AllowContext(ctx.Context)
-	obj, err := loadWorkflowObject(allowCtx, l.client, schemaType, entityID)
+	obj, err := loadWorkflowObject(inv.Context, l.client, payload.MutationType, inv.EntityID)
 	if err != nil {
 		return nil
 	}
 
-	definitions, err := l.engine.FindMatchingDefinitions(allowCtx, schemaType, eventType, changeSet.ChangedFields, changeSet.ChangedEdges, changeSet.AddedIDs, changeSet.RemovedIDs, changeSet.ProposedChanges, obj)
+	definitions, err := l.engine.FindMatchingDefinitions(inv.Context, payload.MutationType, eventType, changeSet.ChangedFields, changeSet.ChangedEdges, changeSet.AddedIDs, changeSet.RemovedIDs, changeSet.ProposedChanges, obj)
 	if err != nil || len(definitions) == 0 {
 		return nil
 	}
@@ -92,49 +72,29 @@ func (l *WorkflowListeners) HandleWorkflowMutationGala(ctx gala.HandlerContext, 
 
 		triggerInput := TriggerInput{EventType: eventType}
 		triggerInput.SetChangeSet(changeSet)
-		_, err := l.engine.TriggerWorkflow(ctx.Context, def, obj, triggerInput)
-		if err != nil && !errors.Is(err, workflows.ErrWorkflowAlreadyActive) {
-			logx.FromContext(ctx.Context).Error().Err(err).Str("definition_id", def.ID).Msg("failed to trigger workflow")
+
+		if _, err := l.engine.TriggerWorkflow(inv.Context, def, obj, triggerInput); err != nil && !errors.Is(err, workflows.ErrWorkflowAlreadyActive) {
+			logx.FromContext(inv.Context).Error().Err(err).Str("definition_id", def.ID).Msg("failed to trigger workflow")
 		}
 	}
 
 	return nil
 }
 
-// HandleWorkflowAssignmentMutationGala reacts to assignment status changes emitted via Gala.
-// It fires CompleteAssignment whenever a non-Pending status is committed, allowing direct
-// GraphQL mutations on assignment status to advance paused approval and review flows.
-func (l *WorkflowListeners) HandleWorkflowAssignmentMutationGala(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-	if payload.Operation != ent.OpUpdate.String() && payload.Operation != ent.OpUpdateOne.String() {
-		return nil
-	}
+// HandleWorkflowAssignmentMutationGala reacts to committed non-Pending assignment status
+// changes emitted via Gala, firing CompleteAssignment so direct GraphQL mutations on
+// assignment status advance paused approval and review flows
+func (l *WorkflowListeners) HandleWorkflowAssignmentMutationGala(inv entityops.Invocation, payload entityops.MutationPayload) error {
+	rawStatus, _ := payload.Value(workflowassignment.FieldStatus)
 
-	if !eventqueue.MutationFieldChanged(payload, workflowassignment.FieldStatus) {
-		return nil
-	}
-
-	newStatus, ok := eventqueue.ParseEnum(
-		payload.ProposedChanges[workflowassignment.FieldStatus],
-		enums.ToWorkflowAssignmentStatus,
-		enums.WorkflowAssignmentStatusPending,
-	)
+	newStatus, ok := entityops.ParseEnum(rawStatus, enums.ToWorkflowAssignmentStatus)
 	if !ok {
 		return nil
 	}
 
-	// Only advance workflows for terminal decision statuses — Pending means no decision was made.
-	if newStatus == enums.WorkflowAssignmentStatusPending {
-		return nil
-	}
+	logx.FromContext(inv.Context).Info().Str("new_status", newStatus.String()).Msg("workflow assignment status changed via mutation")
 
-	assignmentID, ok := eventqueue.MutationEntityID(payload, ctx.Envelope.Headers.Properties)
-	if !ok {
-		return nil
-	}
-
-	logx.FromContext(ctx.Context).Info().Str("assignment_id", assignmentID).Str("new_status", newStatus.String()).Msg("workflow assignment status changed via mutation")
-
-	return l.engine.CompleteAssignment(ctx.Context, assignmentID, newStatus, nil, nil)
+	return l.engine.CompleteAssignment(inv.Context, inv.EntityID, newStatus, nil, nil)
 }
 
 // loadWorkflowObject loads a workflow object from the generated registry.
@@ -156,14 +116,14 @@ func loadWorkflowObject(ctx context.Context, client *generated.Client, schemaTyp
 	}, nil
 }
 
-// workflowEventTypeFromEntOperation maps ent mutation ops to workflow event types.
+// workflowEventTypeFromEntOperation maps ent mutation ops to workflow event types
 func workflowEventTypeFromEntOperation(operation string) string {
 	switch operation {
-	case ent.OpUpdate.String(), ent.OpUpdateOne.String():
+	case entityops.OpUpdate, entityops.OpUpdateOne:
 		return "UPDATE"
-	case ent.OpCreate.String():
+	case entityops.OpCreate:
 		return "CREATE"
-	case ent.OpDelete.String(), ent.OpDeleteOne.String():
+	case entityops.OpDelete, entityops.OpDeleteOne:
 		return "DELETE"
 	default:
 		return operation
@@ -174,8 +134,8 @@ func workflowEventTypeFromEntOperation(operation string) string {
 // For approval actions with When conditions, all matching actions are started concurrently.
 // This enables workflows where multiple fields change in a single mutation to trigger
 // their respective approval requirements simultaneously.
-func (l *WorkflowListeners) HandleWorkflowTriggered(ctx gala.HandlerContext, payload gala.WorkflowTriggeredPayload) (err error) {
-	scope := observability.BeginListenerTopic(ctx, l.observer, gala.TopicWorkflowTriggered, payload, nil)
+func (l *WorkflowListeners) HandleWorkflowTriggered(ctx gala.HandlerContext, payload WorkflowTriggeredPayload) (err error) {
+	scope := observability.BeginListenerTopic(ctx, l.observer, WorkflowTriggeredEventTopic.Name, payload, nil)
 	scopeCtx := scope.Context()
 	defer scope.End(err, nil)
 
@@ -233,7 +193,7 @@ func (l *WorkflowListeners) HandleWorkflowTriggered(ctx gala.HandlerContext, pay
 		keys := lo.Map(gatedToStart, func(item gatedStart, _ int) string {
 			return item.action.Key
 		})
-		keys = mutations.NormalizeStrings(keys)
+		keys = entityops.NormalizeStrings(keys)
 		if len(keys) > 0 {
 			allowCtx := workflows.AllowContext(scopeCtx)
 			contextData := instance.Context
@@ -263,8 +223,8 @@ func (l *WorkflowListeners) HandleWorkflowTriggered(ctx gala.HandlerContext, pay
 }
 
 // HandleActionStarted executes a workflow action.
-func (l *WorkflowListeners) HandleActionStarted(ctx gala.HandlerContext, payload gala.WorkflowActionStartedPayload) (err error) {
-	scope := observability.BeginListenerTopic(ctx, l.observer, gala.TopicWorkflowActionStarted, payload, nil)
+func (l *WorkflowListeners) HandleActionStarted(ctx gala.HandlerContext, payload WorkflowActionStartedPayload) (err error) {
+	scope := observability.BeginListenerTopic(ctx, l.observer, WorkflowActionStartedEventTopic.Name, payload, nil)
 	scopeCtx := scope.Context()
 	defer scope.End(err, nil)
 
@@ -335,8 +295,8 @@ func (l *WorkflowListeners) HandleActionStarted(ctx gala.HandlerContext, payload
 }
 
 // HandleActionCompleted determines next steps after action completion.
-func (l *WorkflowListeners) HandleActionCompleted(ctx gala.HandlerContext, payload gala.WorkflowActionCompletedPayload) (err error) {
-	scope := observability.BeginListenerTopic(ctx, l.observer, gala.TopicWorkflowActionCompleted, payload, nil)
+func (l *WorkflowListeners) HandleActionCompleted(ctx gala.HandlerContext, payload WorkflowActionCompletedPayload) (err error) {
+	scope := observability.BeginListenerTopic(ctx, l.observer, WorkflowActionCompletedEventTopic.Name, payload, nil)
 	defer scope.End(err, nil)
 
 	instance, orgID, err := l.loadInstanceForScope(scope, payload.InstanceID)
@@ -405,8 +365,8 @@ func (l *WorkflowListeners) HandleActionCompleted(ctx gala.HandlerContext, paylo
 }
 
 // HandleAssignmentCompleted handles approval decisions and continues/cancels workflows.
-func (l *WorkflowListeners) HandleAssignmentCompleted(ctx gala.HandlerContext, payload gala.WorkflowAssignmentCompletedPayload) (err error) {
-	scope := observability.BeginListenerTopic(ctx, l.observer, gala.TopicWorkflowAssignmentCompleted, payload, nil)
+func (l *WorkflowListeners) HandleAssignmentCompleted(ctx gala.HandlerContext, payload WorkflowAssignmentCompletedPayload) (err error) {
+	scope := observability.BeginListenerTopic(ctx, l.observer, WorkflowAssignmentCompletedEventTopic.Name, payload, nil)
 	scopeCtx := scope.Context()
 	defer scope.End(err, nil)
 
@@ -450,7 +410,7 @@ func (l *WorkflowListeners) HandleAssignmentCompleted(ctx gala.HandlerContext, p
 
 	def := instance.DefinitionSnapshot
 
-	obj, err := l.loadActionObject(scopeCtx, instance.ID, orgID)
+	obj, err := l.loadActionObject(workflows.AllowContext(scopeCtx), instance.ID, orgID)
 	if err != nil {
 		return scope.Fail(err, nil)
 	}
@@ -515,7 +475,7 @@ func (l *WorkflowListeners) HandleAssignmentCompleted(ctx gala.HandlerContext, p
 	}
 
 	if assignment.Status == enums.WorkflowAssignmentStatusChangesRequested {
-		if err := l.createChangeRequestAssignment(scope, instance, assignment, action, obj, orgID); err != nil {
+		if err := l.createChangeRequestAssignment(scope, instance, assignment, action, orgID); err != nil {
 			scope.Warn(err, observability.Fields{
 				workflowassignment.FieldAssignmentKey: assignment.AssignmentKey,
 			})
@@ -580,7 +540,7 @@ func isChangeRequestAssignment(assignment *generated.WorkflowAssignment) bool {
 }
 
 func resolveExpectedActionIndices(actions []models.WorkflowAction, parallelKeys []string, actionIndex int) (map[int]struct{}, bool) {
-	expectedKeys := mutations.NormalizeStrings(parallelKeys)
+	expectedKeys := entityops.NormalizeStrings(parallelKeys)
 	expectedIndices := make(map[int]struct{})
 	for _, key := range expectedKeys {
 		if idx := actionIndexForKey(actions, key); idx >= 0 {
@@ -715,7 +675,7 @@ func (l *WorkflowListeners) closePendingApprovalsForChangeRequest(scope *observa
 
 	// These status updates are internal side effects of a change request; avoid
 	// re-entering assignment completion through mutation emission hooks.
-	allowCtx := workflows.SkipEventEmission(workflows.AllowContext(scope.Context()))
+	allowCtx := entityops.WithEmissionVetoed(workflows.AllowContext(scope.Context()))
 	requesterID := requesterAssignment.ActorUserID
 	decidedAt := time.Now().UTC()
 
@@ -765,8 +725,8 @@ func (l *WorkflowListeners) closePendingApprovalsForChangeRequest(scope *observa
 }
 
 // HandleInstanceCompleted marks a workflow instance as completed or failed.
-func (l *WorkflowListeners) HandleInstanceCompleted(ctx gala.HandlerContext, payload gala.WorkflowInstanceCompletedPayload) (err error) {
-	scope := observability.BeginListenerTopic(ctx, l.observer, gala.TopicWorkflowInstanceCompleted, payload, nil)
+func (l *WorkflowListeners) HandleInstanceCompleted(ctx gala.HandlerContext, payload WorkflowInstanceCompletedPayload) (err error) {
+	scope := observability.BeginListenerTopic(ctx, l.observer, WorkflowInstanceCompletedEventTopic.Name, payload, nil)
 	scopeCtx := scope.Context()
 	defer scope.End(err, nil)
 
@@ -896,7 +856,7 @@ func assignmentActionIndex(actions []models.WorkflowAction, assignmentKey, actio
 }
 
 // createChangeRequestAssignment creates a new assignment for the requester to address change requests
-func (l *WorkflowListeners) createChangeRequestAssignment(scope *observability.Scope, instance *generated.WorkflowInstance, assignment *generated.WorkflowAssignment, action models.WorkflowAction, obj *workflows.Object, orgID string) error {
+func (l *WorkflowListeners) createChangeRequestAssignment(scope *observability.Scope, instance *generated.WorkflowInstance, assignment *generated.WorkflowAssignment, action models.WorkflowAction, orgID string) error {
 	if instance == nil || assignment == nil {
 		return nil
 	}
@@ -995,13 +955,6 @@ func (l *WorkflowListeners) createChangeRequestAssignment(scope *observability.S
 		}
 	}
 
-	if assignmentCreated && requesterAssignment != nil && obj != nil {
-		actionType := enums.ToWorkflowActionType(action.Type)
-		if actionType != nil {
-			l.engine.emitAssignmentCreated(allowCtx, instance, obj, requesterAssignment.ID, requesterID, *actionType)
-		}
-	}
-
 	return nil
 }
 
@@ -1061,7 +1014,7 @@ func workflowObjectFromPayload(objectID string, objectType enums.WorkflowObjectT
 }
 
 // skipAction records a skipped action and emits completion when possible
-func (l *WorkflowListeners) skipAction(scope *observability.Scope, instance *generated.WorkflowInstance, action models.WorkflowAction, payload gala.WorkflowActionStartedPayload, obj *workflows.Object) {
+func (l *WorkflowListeners) skipAction(scope *observability.Scope, instance *generated.WorkflowInstance, action models.WorkflowAction, payload WorkflowActionStartedPayload, obj *workflows.Object) {
 	actionType := enums.ToWorkflowActionType(action.Type)
 	if actionType != nil {
 		l.emitActionCompleted(scope, instance, action.Key, payload.ActionIndex, *actionType, obj, nil, true)
@@ -1069,7 +1022,7 @@ func (l *WorkflowListeners) skipAction(scope *observability.Scope, instance *gen
 }
 
 // recordActionResult records the completed or failed action event
-func (l *WorkflowListeners) recordActionResult(scope *observability.Scope, instance *generated.WorkflowInstance, actionKey string, payload gala.WorkflowActionCompletedPayload) {
+func (l *WorkflowListeners) recordActionResult(scope *observability.Scope, instance *generated.WorkflowInstance, actionKey string, payload WorkflowActionCompletedPayload) {
 	details := actionCompletedDetailsFromPayload(actionKey, payload)
 	l.recordEvent(scope, instance, enums.WorkflowEventTypeActionCompleted, actionKey, details)
 }
@@ -1080,7 +1033,7 @@ func (l *WorkflowListeners) removeParallelApprovalKey(ctx context.Context, insta
 		return nil
 	}
 
-	keys := mutations.NormalizeStrings(instance.Context.ParallelApprovalKeys)
+	keys := entityops.NormalizeStrings(instance.Context.ParallelApprovalKeys)
 	if len(keys) == 0 {
 		return nil
 	}

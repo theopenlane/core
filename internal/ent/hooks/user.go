@@ -469,8 +469,7 @@ func updateSystemManagedGroupForUser(ctx context.Context, m *generated.UserMutat
 
 		err = update.Exec(privacy.DecisionContext(newCtx, privacy.Allow))
 		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).
-				Msg("error updating system managed group for user")
+			logx.FromContext(ctx).Error().Err(err).Msg("error updating system managed group for user")
 
 			return err
 		}

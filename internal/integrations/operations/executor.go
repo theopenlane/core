@@ -3,13 +3,40 @@ package operations
 import (
 	"context"
 
-	"github.com/riverqueue/river"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/gala"
 	"github.com/theopenlane/core/pkg/logx"
 )
+
+// integrationEnvelope constrains the envelope types carrying the integration installation as the operation entity
+type integrationEnvelope interface {
+	Envelope | WebhookEnvelope
+}
+
+// integrationNotFoundCancel builds a Cancel predicate that cancels and logs when the envelope's integration no longer exists
+func integrationNotFoundCancel[T integrationEnvelope](message string) func(context.Context, T, error) bool {
+	return func(ctx context.Context, envelope T, err error) bool {
+		if !ent.IsNotFound(err) {
+			return false
+		}
+
+		var integrationID string
+
+		switch e := any(envelope).(type) {
+		case Envelope:
+			integrationID = e.EntityID
+		case WebhookEnvelope:
+			integrationID = e.EntityID
+		}
+
+		logx.FromContext(ctx).Error().Err(err).Str("integration_id", integrationID).Msg(message)
+
+		return true
+	}
+}
 
 // RegisterRuntimeListeners registers the event, webhook, and definition-provided gala listeners for
 // the integration runtime. Adaptive-scheduled pollers (reconcile, scheduled operations) register
@@ -20,39 +47,35 @@ func RegisterRuntimeListeners(runtime *gala.Gala, reg *registry.Registry, servic
 	}
 
 	for _, operation := range reg.Listeners() {
-		if _, err := gala.RegisterListeners(runtime.Registry(), gala.Definition[Envelope]{
-			Topic: gala.Topic[Envelope]{Name: operation.Topic},
-			Name:  operation.Name,
+		if _, err := gala.Register(runtime, gala.Definition[Envelope]{
+			Topic:  gala.Topic[Envelope]{Name: operation.Topic, Kind: gala.IntegrationRun.Kind()},
+			Name:   operation.Name,
+			Cancel: integrationNotFoundCancel[Envelope]("integration not found, cancelling operation"),
 			Handle: func(ctx gala.HandlerContext, envelope Envelope) error {
-				err := operationHandle(ctx.Context, envelope)
-				if ent.IsNotFound(err) {
-					logx.FromContext(ctx.Context).Error().Err(err).Str("integration_id", envelope.EntityID).Msg("integration not found, cancelling operation")
-					return river.JobCancel(err)
-				}
-
-				return err
+				return operationHandle(ctx.Context, envelope)
 			},
 		}); err != nil {
 			return err
 		}
 	}
 
-	if err := RegisterIngestListeners(runtime); err != nil {
+	if err := bindIngestPersistence(); err != nil {
+		return err
+	}
+
+	if err := entityops.RegisterIngestListeners(runtime, func(ctx context.Context, client *ent.Client, _ gala.OperationContext) (*ent.Integration, error) {
+		return resolveIngestIntegration(ctx, client)
+	}); err != nil {
 		return err
 	}
 
 	for _, event := range reg.WebhookListeners() {
-		if _, err := gala.RegisterListeners(runtime.Registry(), gala.Definition[WebhookEnvelope]{
-			Topic: gala.Topic[WebhookEnvelope]{Name: event.Topic},
-			Name:  event.Name,
+		if _, err := gala.Register(runtime, gala.Definition[WebhookEnvelope]{
+			Topic:  gala.Topic[WebhookEnvelope]{Name: event.Topic, Kind: gala.IntegrationWebhook.Kind()},
+			Name:   event.Name,
+			Cancel: integrationNotFoundCancel[WebhookEnvelope]("integration not found, cancelling webhook event"),
 			Handle: func(ctx gala.HandlerContext, envelope WebhookEnvelope) error {
-				err := webhookHandle(ctx.Context, envelope)
-				if ent.IsNotFound(err) {
-					logx.FromContext(ctx.Context).Error().Err(err).Str("integration_id", envelope.EntityID).Msg("integration not found, cancelling webhook event")
-					return river.JobCancel(err)
-				}
-
-				return err
+				return webhookHandle(ctx.Context, envelope)
 			},
 		}); err != nil {
 			return err
@@ -60,7 +83,7 @@ func RegisterRuntimeListeners(runtime *gala.Gala, reg *registry.Registry, servic
 	}
 
 	for _, listener := range reg.GalaListeners() {
-		if _, err := listener.Register(runtime.Registry(), services); err != nil {
+		if _, err := listener.Register(runtime, services); err != nil {
 			return err
 		}
 	}

@@ -70,6 +70,8 @@ mutation CreateSystemDetail ($input: CreateSystemDetailInput!) {
 mutation DeleteBulkSystemDetail ($ids: [ID!]!) {
 	deleteBulkSystemDetail(ids: $ids) {
 		deletedIDs
+		notDeletedIDs
+		error
 	}
 }
 mutation DeleteSystemDetail ($deleteSystemDetailId: ID!) {
@@ -184,6 +186,8 @@ mutation UpdateBulkCSVSystemDetail ($input: Upload!) {
 			version
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 mutation UpdateBulkSystemDetail ($ids: [ID!]!, $input: UpdateSystemDetailInput!) {
@@ -208,6 +212,8 @@ mutation UpdateBulkSystemDetail ($ids: [ID!]!, $input: UpdateSystemDetailInput!)
 			version
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 mutation UpdateSystemDetail ($updateSystemDetailId: ID!, $input: UpdateSystemDetailInput!) {

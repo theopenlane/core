@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/entx/history"
 	"github.com/theopenlane/iam/entfga"
 )
@@ -75,14 +76,14 @@ func (CheckResult) Fields() []ent.Field {
 			Comment("external parent reference id for the aggregate rule, e.g. in aws config this is the config rule name").
 			Optional().
 			Annotations(
-				entx.IntegrationMappingField().UpsertKey().LookupKey(),
+				entx.IntegrationMappingField().LookupKey(),
 			),
 		field.String("integration_id").
 			Comment("integration that owns this directory group").
 			Optional().
 			Immutable().
 			Annotations(
-				entx.IntegrationMappingField().UpsertKey().FromIntegration(),
+				entx.IntegrationMappingField().FromIntegration(),
 			),
 	}
 }
@@ -119,6 +120,9 @@ func (c CheckResult) Edges() []ent.Edge {
 			required:   false,
 			immutable:  true,
 			comment:    "integration that owns this control health",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Organization{}.Name()),
+			},
 		}),
 	}
 }

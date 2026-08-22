@@ -114,6 +114,8 @@ type WorkflowInstanceContext struct {
 	TriggerEventType string `json:"triggerEventType,omitempty"`
 	// TriggerChangedFields lists fields changed by the triggering mutation
 	TriggerChangedFields []string `json:"triggerChangedFields,omitempty"`
+	// TriggerClearedFields lists fields explicitly cleared by the triggering mutation
+	TriggerClearedFields []string `json:"triggerClearedFields,omitempty"`
 	// TriggerChangedEdges lists relationships changed by the triggering mutation
 	TriggerChangedEdges []string `json:"triggerChangedEdges,omitempty"`
 	// TriggerAddedIDs maps relationship names to added identifiers from the triggering mutation
@@ -124,6 +126,8 @@ type WorkflowInstanceContext struct {
 	TriggerUserID string `json:"triggerUserId,omitempty"`
 	// TriggerProposedChanges contains normalized proposed field values from the triggering mutation
 	TriggerProposedChanges map[string]any `json:"triggerProposedChanges,omitempty"`
+	// TriggerOldValues contains pre-mutation values for changed fields from the triggering mutation
+	TriggerOldValues map[string]any `json:"triggerOldValues,omitempty"`
 	// ParallelApprovalKeys tracks approval action keys that can execute concurrently
 	ParallelApprovalKeys []string `json:"parallelApprovalKeys,omitempty"`
 	// ExecutedNotifications tracks conditional notification action keys that have already fired

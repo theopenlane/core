@@ -43,8 +43,7 @@ linters:
       - internal/httpserve/handlers/internal
       - internal/workflows/examples
       - internal/ent/csvgenerated
-      - internal/ent/workflowgenerated
-      - internal/ent/integrationgenerated
+      - internal/ent/entityops
       - internal/integrations/cli
       - internal/integrations/definitions/email/themmes
       - internal/httpserve/specs
@@ -62,5 +61,4 @@ formatters:
       - internal/ent/hush/examples/*
       - internal/workflows/examples/*
       - internal/ent/csvgenerated/*
-      - internal/ent/workflowgenerated/*
       - internal/httpserve/specs/*

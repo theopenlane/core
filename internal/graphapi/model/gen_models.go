@@ -36,6 +36,10 @@ type APITokenBulkUpdatePayload struct {
 	APITokens []*generated.APIToken `json:"apiTokens,omitempty"`
 	// IDs of the updated apiTokens
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createAPIToken mutation
@@ -84,6 +88,10 @@ type ActionPlanBulkUpdatePayload struct {
 	ActionPlans []*generated.ActionPlan `json:"actionPlans,omitempty"`
 	// IDs of the updated actionPlans
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createActionPlan mutation
@@ -178,6 +186,10 @@ type AssetBulkUpdatePayload struct {
 	Assets []*generated.Asset `json:"assets,omitempty"`
 	// IDs of the updated assets
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createAsset mutation
@@ -293,7 +305,7 @@ type CheckResultBulkDeletePayload struct {
 	// Error returned when the bulk delete is only partially applied
 	Error *string `json:"error,omitempty"`
 	// IDs of checkResults that were not deleted
-	NotDeletedIDs []string `json:"notDeletedIDs,omitempty"`
+	NotDeletedIDs []string `json:"notDeletedIDs"`
 }
 
 // Return response for updateBulkCheckResult mutation
@@ -302,6 +314,10 @@ type CheckResultBulkUpdatePayload struct {
 	CheckResults []*generated.CheckResult `json:"checkResults,omitempty"`
 	// IDs of the updated checkResults
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createCheckResult mutation
@@ -395,6 +411,10 @@ type ContactBulkUpdatePayload struct {
 	Contacts []*generated.Contact `json:"contacts,omitempty"`
 	// IDs of the updated contacts
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createContact mutation
@@ -437,6 +457,10 @@ type ControlBulkUpdatePayload struct {
 	Controls []*generated.Control `json:"controls,omitempty"`
 	// IDs of the updated controls
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 type ControlCategory struct {
@@ -575,6 +599,10 @@ type ControlImplementationBulkUpdatePayload struct {
 	ControlImplementations []*generated.ControlImplementation `json:"controlImplementations,omitempty"`
 	// IDs of the updated controlImplementations
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createControlImplementation mutation
@@ -647,6 +675,10 @@ type ControlObjectiveBulkUpdatePayload struct {
 	ControlObjectives []*generated.ControlObjective `json:"controlObjectives,omitempty"`
 	// IDs of the updated controlObjectives
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createControlObjective mutation
@@ -874,6 +906,10 @@ type CustomDomainBulkUpdatePayload struct {
 	CustomDomains []*generated.CustomDomain `json:"customDomains,omitempty"`
 	// IDs of the updated customDomains
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createCustomDomain mutation
@@ -946,6 +982,10 @@ type DNSVerificationBulkUpdatePayload struct {
 	DNSVerifications []*generated.DNSVerification `json:"dnsVerifications,omitempty"`
 	// IDs of the updated dnsVerifications
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createDNSVerification mutation
@@ -1108,6 +1148,10 @@ type DocumentDataBulkUpdatePayload struct {
 	DocumentData []*generated.DocumentData `json:"documentData,omitempty"`
 	// IDs of the updated documentDatas
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createDocumentData mutation
@@ -1150,6 +1194,10 @@ type EmailTemplateBulkUpdatePayload struct {
 	EmailTemplates []*generated.EmailTemplate `json:"emailTemplates,omitempty"`
 	// IDs of the updated emailTemplates
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // EmailTemplateCatalog contains the available customer-selectable email template types
@@ -1228,6 +1276,10 @@ type EntityBulkUpdatePayload struct {
 	Entities []*generated.Entity `json:"entities,omitempty"`
 	// IDs of the updated entitys
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createEntity mutation
@@ -1264,6 +1316,10 @@ type EntityTypeBulkUpdatePayload struct {
 	EntityTypes []*generated.EntityType `json:"entityTypes,omitempty"`
 	// IDs of the updated entityTypes
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createEntityType mutation
@@ -1312,6 +1368,10 @@ type EventBulkUpdatePayload struct {
 	Events []*generated.Event `json:"events,omitempty"`
 	// IDs of the updated events
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createEvent mutation
@@ -1354,6 +1414,10 @@ type EvidenceBulkUpdatePayload struct {
 	Evidences []*generated.Evidence `json:"evidences,omitempty"`
 	// IDs of the updated evidence
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // EvidenceCountByStatus pairs an evidence status with the number of evidence items in that state
@@ -1451,6 +1515,10 @@ type FindingBulkUpdatePayload struct {
 	Findings []*generated.Finding `json:"findings,omitempty"`
 	// IDs of the updated findings
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createBulkFindingControl mutation
@@ -1527,6 +1595,10 @@ type GroupBulkUpdatePayload struct {
 	Groups []*generated.Group `json:"groups,omitempty"`
 	// IDs of the updated groups
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createGroup mutation
@@ -1570,6 +1642,10 @@ type GroupMembershipBulkUpdatePayload struct {
 	GroupMemberships []*generated.GroupMembership `json:"groupMemberships,omitempty"`
 	// IDs of the updated groupMemberships
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createGroupMembership mutation
@@ -1709,6 +1785,10 @@ type GroupSettingBulkUpdatePayload struct {
 	GroupSettings []*generated.GroupSetting `json:"groupSettings,omitempty"`
 	// IDs of the updated groupSettings
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createGroupSetting mutation
@@ -1757,6 +1837,10 @@ type HushBulkUpdatePayload struct {
 	Hushes []*generated.Hush `json:"hushes,omitempty"`
 	// IDs of the updated hushs
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createHush mutation
@@ -1799,6 +1883,10 @@ type IdentityHolderBulkUpdatePayload struct {
 	IdentityHolders []*generated.IdentityHolder `json:"identityHolders,omitempty"`
 	// IDs of the updated identityHolders
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createIdentityHolder mutation
@@ -1942,6 +2030,10 @@ type InternalPolicyBulkUpdatePayload struct {
 	InternalPolicies []*generated.InternalPolicy `json:"internalPolicies,omitempty"`
 	// IDs of the updated internalPolicys
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createInternalPolicy mutation
@@ -1984,6 +2076,10 @@ type InviteBulkUpdatePayload struct {
 	Invites []*generated.Invite `json:"invites,omitempty"`
 	// IDs of the updated invites
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createInvite mutation
@@ -2098,6 +2194,10 @@ type JobTemplateBulkUpdatePayload struct {
 	JobTemplates []*generated.JobTemplate `json:"jobTemplates,omitempty"`
 	// IDs of the updated jobTemplates
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createJobTemplate mutation
@@ -2150,6 +2250,10 @@ type MappableDomainBulkUpdatePayload struct {
 	MappableDomains []*generated.MappableDomain `json:"mappableDomains,omitempty"`
 	// IDs of the updated mappableDomains
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createMappableDomain mutation
@@ -2192,6 +2296,10 @@ type MappedControlBulkUpdatePayload struct {
 	MappedControls []*generated.MappedControl `json:"mappedControls,omitempty"`
 	// IDs of the updated mappedControls
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createMappedControl mutation
@@ -2234,6 +2342,10 @@ type NarrativeBulkUpdatePayload struct {
 	Narratives []*generated.Narrative `json:"narratives,omitempty"`
 	// IDs of the updated narratives
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createNarrative mutation
@@ -2288,6 +2400,10 @@ type NotificationPreferenceBulkUpdatePayload struct {
 	NotificationPreferences []*generated.NotificationPreference `json:"notificationPreferences,omitempty"`
 	// IDs of the updated notificationPreferences
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createNotificationPreference mutation
@@ -2330,6 +2446,10 @@ type NotificationTemplateBulkUpdatePayload struct {
 	NotificationTemplates []*generated.NotificationTemplate `json:"notificationTemplates,omitempty"`
 	// IDs of the updated notificationTemplates
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createNotificationTemplate mutation
@@ -2391,6 +2511,10 @@ type OrgMembershipBulkUpdatePayload struct {
 	OrgMemberships []*generated.OrgMembership `json:"orgMemberships,omitempty"`
 	// IDs of the updated orgMemberships
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createOrgMembership mutation
@@ -2451,6 +2575,10 @@ type OrganizationSettingBulkUpdatePayload struct {
 	OrganizationSettings []*generated.OrganizationSetting `json:"organizationSettings,omitempty"`
 	// IDs of the updated organizationSettings
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createOrganizationSetting mutation
@@ -2569,6 +2697,10 @@ type ProcedureBulkUpdatePayload struct {
 	Procedures []*generated.Procedure `json:"procedures,omitempty"`
 	// IDs of the updated procedures
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createProcedure mutation
@@ -2611,6 +2743,10 @@ type ProgramBulkUpdatePayload struct {
 	Programs []*generated.Program `json:"programs,omitempty"`
 	// IDs of the updated programs
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createProgram mutation
@@ -2647,6 +2783,10 @@ type ProgramMembershipBulkUpdatePayload struct {
 	ProgramMemberships []*generated.ProgramMembership `json:"programMemberships,omitempty"`
 	// IDs of the updated programMemberships
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createProgramMembership mutation
@@ -2731,6 +2871,10 @@ type RemediationBulkUpdatePayload struct {
 	Remediations []*generated.Remediation `json:"remediations,omitempty"`
 	// IDs of the updated remediations
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createRemediation mutation
@@ -2799,6 +2943,10 @@ type ReviewBulkUpdatePayload struct {
 	Reviews []*generated.Review `json:"reviews,omitempty"`
 	// IDs of the updated reviews
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createReview mutation
@@ -2841,6 +2989,10 @@ type RiskBulkUpdatePayload struct {
 	Risks []*generated.Risk `json:"risks,omitempty"`
 	// IDs of the updated risks
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createRisk mutation
@@ -2883,6 +3035,10 @@ type SLADefinitionBulkUpdatePayload struct {
 	SLADefinitions []*generated.SLADefinition `json:"slaDefinitions,omitempty"`
 	// IDs of the updated slaDefinitions
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createSLADefinition mutation
@@ -2925,6 +3081,10 @@ type ScanBulkUpdatePayload struct {
 	Scans []*generated.Scan `json:"scans,omitempty"`
 	// IDs of the updated scans
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createScan mutation
@@ -2967,6 +3127,10 @@ type ScheduledJobBulkUpdatePayload struct {
 	ScheduledJobs []*generated.ScheduledJob `json:"scheduledJobs,omitempty"`
 	// IDs of the updated scheduledJobs
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createScheduledJob mutation
@@ -3108,6 +3272,10 @@ type SubcontrolBulkUpdatePayload struct {
 	Subcontrols []*generated.Subcontrol `json:"subcontrols,omitempty"`
 	// IDs of the updated subcontrols
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createSubcontrol mutation
@@ -3161,6 +3329,10 @@ type SubprocessorBulkUpdatePayload struct {
 	Subprocessors []*generated.Subprocessor `json:"subprocessors,omitempty"`
 	// IDs of the updated subprocessors
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createSubprocessor mutation
@@ -3230,6 +3402,10 @@ type SystemDetailBulkUpdatePayload struct {
 	SystemDetails []*generated.SystemDetail `json:"systemDetails,omitempty"`
 	// IDs of the updated systemDetails
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createSystemDetail mutation
@@ -3313,6 +3489,10 @@ type TaskBulkUpdatePayload struct {
 	Tasks []*generated.Task `json:"tasks,omitempty"`
 	// IDs of the updated tasks
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createTask mutation
@@ -3355,6 +3535,10 @@ type TemplateBulkUpdatePayload struct {
 	Templates []*generated.Template `json:"templates,omitempty"`
 	// IDs of the updated templates
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createTemplate mutation
@@ -3411,6 +3595,10 @@ type TrustCenterComplianceBulkUpdatePayload struct {
 	TrustCenterCompliances []*generated.TrustCenterCompliance `json:"trustCenterCompliances,omitempty"`
 	// IDs of the updated trustCenterCompliances
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createTrustCenterCompliance mutation
@@ -3465,6 +3653,10 @@ type TrustCenterDocBulkUpdatePayload struct {
 	TrustCenterDocs []*generated.TrustCenterDoc `json:"trustCenterDocs,omitempty"`
 	// IDs of the updated trust center docs
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createTrustCenterDoc mutation
@@ -3536,6 +3728,10 @@ type TrustCenterFAQBulkUpdatePayload struct {
 	TrustCenterFAQs []*generated.TrustCenterFAQ `json:"trustCenterFAQs,omitempty"`
 	// IDs of the updated trustCenterFAQs
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createTrustCenterFAQ mutation
@@ -3650,6 +3846,10 @@ type TrustCenterSubprocessorBulkUpdatePayload struct {
 	TrustCenterSubprocessors []*generated.TrustCenterSubprocessor `json:"trustCenterSubprocessors,omitempty"`
 	// IDs of the updated trustCenterSubprocessors
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createTrustCenterSubprocessor mutation
@@ -3755,6 +3955,10 @@ type UserSettingBulkUpdatePayload struct {
 	UserSettings []*generated.UserSetting `json:"userSettings,omitempty"`
 	// IDs of the updated userSettings
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createUserSetting mutation
@@ -3797,6 +4001,10 @@ type VendorRiskScoreBulkUpdatePayload struct {
 	VendorRiskScores []*generated.VendorRiskScore `json:"vendorRiskScores,omitempty"`
 	// IDs of the updated vendorRiskScores
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createVendorRiskScore mutation
@@ -3839,6 +4047,10 @@ type VendorScoringConfigBulkUpdatePayload struct {
 	VendorScoringConfigs []*generated.VendorScoringConfig `json:"vendorScoringConfigs,omitempty"`
 	// IDs of the updated vendorScoringConfigs
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createVendorScoringConfig mutation
@@ -3881,6 +4093,10 @@ type VulnerabilityBulkUpdatePayload struct {
 	Vulnerabilities []*generated.Vulnerability `json:"vulnerabilities,omitempty"`
 	// IDs of the updated vulnerabilities
 	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+	// IDs that were not updated
+	NotUpdatedIDs []string `json:"notUpdatedIDs"`
+	// Error message when the bulk update did not apply to every requested ID
+	Error *string `json:"error,omitempty"`
 }
 
 // Return response for createVulnerability mutation

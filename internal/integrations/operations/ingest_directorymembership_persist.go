@@ -82,7 +82,8 @@ func persistDirectoryMembershipInput(ctx context.Context, db *ent.Client, integr
 				return err
 			}
 
-			// a newer run won the guarded update; keep field changes but never move confirmation backward
+			// A newer run won the guarded update. Preserve unrelated field changes,
+			// but do not move confirmation or last-seen timestamps backward.
 			input.LastSeenAt = nil
 			input.LastConfirmedRunID = nil
 
@@ -92,8 +93,6 @@ func persistDirectoryMembershipInput(ctx context.Context, db *ent.Client, integr
 	)
 }
 
-// directoryMembershipRunCanAdvance returns true if the incoming run ID is non-empty and
-// greater than or equal to the current run ID (or if the current run ID is nil)
 func directoryMembershipRunCanAdvance(currentRunID *string, incomingRunID string) bool {
 	return incomingRunID != "" && (currentRunID == nil || incomingRunID >= *currentRunID)
 }

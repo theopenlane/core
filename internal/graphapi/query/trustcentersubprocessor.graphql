@@ -171,6 +171,8 @@ mutation UpdateBulkTrustCenterSubprocessor ($ids: [ID!]!, $input: UpdateTrustCen
 			}
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 mutation UpdateTrustCenterSubprocessor ($updateTrustCenterSubprocessorId: ID!, $input: UpdateTrustCenterSubprocessorInput!) {

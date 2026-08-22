@@ -98,6 +98,7 @@ type IngestPayloadSet struct {
 	Schema string `json:"schema"`
 	// Envelopes are the raw provider payloads to map and ingest
 	Envelopes []MappingEnvelope `json:"envelopes,omitempty"`
-	// SnapshotComplete marks this payload set as the provider's complete record set
+	// SnapshotComplete marks this payload set as the provider's complete record set for its
+	// schema; only complete membership sets authorize removal inference
 	SnapshotComplete bool `json:"snapshotComplete,omitempty"`
 }

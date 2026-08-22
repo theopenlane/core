@@ -181,6 +181,52 @@ func (ec *executionContext) fieldContext_RiskBulkUpdatePayload_updatedIDs(_ cont
 	return graphql.NewScalarFieldContext("RiskBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
 }
 
+func (ec *executionContext) _RiskBulkUpdatePayload_notUpdatedIDs(ctx context.Context, field graphql.CollectedField, obj *model.RiskBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_RiskBulkUpdatePayload_notUpdatedIDs(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.NotUpdatedIDs, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v []string) graphql.Marshaler {
+			return ec.marshalNID2ᚕstringᚄ(ctx, selections, v)
+		},
+		true,
+		true,
+	)
+}
+func (ec *executionContext) fieldContext_RiskBulkUpdatePayload_notUpdatedIDs(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("RiskBulkUpdatePayload", field, false, false, errors.New("field of type ID does not have child fields"))
+}
+
+func (ec *executionContext) _RiskBulkUpdatePayload_error(ctx context.Context, field graphql.CollectedField, obj *model.RiskBulkUpdatePayload) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_RiskBulkUpdatePayload_error(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.Error, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v *string) graphql.Marshaler {
+			return ec.marshalOString2ᚖstring(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_RiskBulkUpdatePayload_error(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("RiskBulkUpdatePayload", field, false, false, errors.New("field of type String does not have child fields"))
+}
+
 func (ec *executionContext) _RiskCreatePayload_risk(ctx context.Context, field graphql.CollectedField, obj *model.RiskCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -385,6 +431,16 @@ func (ec *executionContext) _RiskBulkUpdatePayload(ctx context.Context, sel ast.
 			}
 		case "updatedIDs":
 			out.Values[i] = ec._RiskBulkUpdatePayload_updatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "notUpdatedIDs":
+			out.Values[i] = ec._RiskBulkUpdatePayload_notUpdatedIDs(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "error":
+			out.Values[i] = ec._RiskBulkUpdatePayload_error(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}

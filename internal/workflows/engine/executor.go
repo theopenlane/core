@@ -19,11 +19,10 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
-	"github.com/theopenlane/core/internal/ent/workflowgenerated"
-	"github.com/theopenlane/core/internal/mutations"
 	wfworkflows "github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/internal/workflows/observability"
 	"github.com/theopenlane/core/pkg/celx"
@@ -97,7 +96,7 @@ func (e *WorkflowEngine) resolveTargetUsers(ctx context.Context, target wfworkfl
 		return nil, err
 	}
 
-	normalized := mutations.NormalizeStrings(userIDs)
+	normalized := entityops.NormalizeStrings(userIDs)
 	if len(normalized) == 0 {
 		observability.WarnEngine(ctx, observability.OpExecuteAction, actionType, observability.ActionFields(actionKey, observability.Fields{
 			workflowassignmenttarget.FieldTargetType:  target.Type.String(),
@@ -176,7 +175,7 @@ func (e *WorkflowEngine) executeGatedAction(ctx context.Context, action models.W
 				assignmentCreate.SetRole(cfg.Role)
 			}
 
-			assignment, assignmentCreated, err := upsertAssignment(allowCtx, assignmentCreate, func() (*generated.WorkflowAssignment, error) {
+			assignment, _, err := upsertAssignment(allowCtx, assignmentCreate, func() (*generated.WorkflowAssignment, error) {
 				return e.client.WorkflowAssignment.Query().
 					Where(
 						workflowassignment.WorkflowInstanceIDEQ(instance.ID),
@@ -222,9 +221,6 @@ func (e *WorkflowEngine) executeGatedAction(ctx context.Context, action models.W
 				}
 			}
 
-			if assignmentCreated {
-				e.emitAssignmentCreated(ctx, instance, obj, assignment.ID, userID, cfg.ActionType)
-			}
 		}
 	}
 
@@ -305,11 +301,11 @@ func (e *WorkflowEngine) executeApproval(ctx context.Context, action models.Work
 	if obj != nil {
 		domainKey := ""
 		if len(params.Fields) > 0 {
-			domain, err := workflowgenerated.NewWorkflowDomain(obj.Type, params.Fields)
+			validated, err := wfworkflows.ValidatedDomainKey(obj.Type, params.Fields)
 			if err != nil {
-				return fmt.Errorf("%w: %v", wfworkflows.ErrApprovalActionParamsInvalid, err)
+				return fmt.Errorf("%w: %w", wfworkflows.ErrApprovalActionParamsInvalid, err)
 			}
-			domainKey = domain.Key()
+			domainKey = validated
 		}
 		hash, err := e.proposalManager.ComputeHash(ctx, instance, obj, domainKey)
 		if err != nil {
@@ -466,9 +462,9 @@ func (e *WorkflowEngine) executeWebhook(ctx context.Context, action models.Workf
 	basePayload["initiator"] = initiatorName
 	basePayload["object_type"] = obj.Type.String()
 
-	// Enrich with object-specific details when possible using generated helper.
+	// Enrich with object-specific details from canonical schema annotations.
 	// This adds fields like ref_code, title, name, status based on schema annotations.
-	if err := e.client.EnrichWebhookPayload(allowCtx, obj.Type, obj.ID, basePayload); err != nil {
+	if err := wfworkflows.EnrichWorkflowPayload(allowCtx, e.client, obj.Type, obj.ID, basePayload); err != nil {
 		return fmt.Errorf("%w: %w", ErrFailedToEnrichWebhookPayload, err)
 	}
 
@@ -560,7 +556,11 @@ func (e *WorkflowEngine) executeWebhook(ctx context.Context, action models.Workf
 		if wait == backoff.Stop {
 			wait = defaultWebhookFallbackBackoffMS * time.Millisecond
 		}
-		time.Sleep(wait)
+		select {
+		case <-ctx.Done():
+			return ctx.Err()
+		case <-time.After(wait):
+		}
 	}
 
 	return nil

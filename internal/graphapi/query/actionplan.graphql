@@ -366,5 +366,7 @@ mutation UpdateBulkActionPlan ($ids: [ID!]!, $input: UpdateActionPlanInput!) {
 			workflowEligibleMarker
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }

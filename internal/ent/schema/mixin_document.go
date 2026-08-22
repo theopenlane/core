@@ -80,6 +80,7 @@ func getDocumentFields(documentType string) []ent.Field {
 		Comment(fmt.Sprintf("the name of the %s", documentType)).
 		Annotations(
 			entx.FieldSearchable(),
+			entx.DisplayName(),
 			entgql.OrderField("name"),
 			entx.IntegrationMappingField(),
 		).
@@ -90,6 +91,7 @@ func getDocumentFields(documentType string) []ent.Field {
 			Annotations(
 				entgql.OrderField("STATUS"),
 				entx.FieldWorkflowEligible(),
+				entx.ApprovalStatus(),
 			).
 			Optional().
 			Comment(fmt.Sprintf("status of the %s, e.g. draft, published, archived, etc.", documentType)),
@@ -107,6 +109,7 @@ func getDocumentFields(documentType string) []ent.Field {
 			Annotations(
 				entx.FieldSearchable(),
 				entx.FieldWorkflowEligible(),
+				entx.MentionSource(),
 			).
 			Comment(fmt.Sprintf("details of the %s", documentType)),
 		field.JSON("details_json", []any{}).
@@ -114,6 +117,7 @@ func getDocumentFields(documentType string) []ent.Field {
 			Annotations(
 				entgql.Type("[Any!]"),
 				entx.FieldWorkflowEligible(),
+				entx.MentionSource(),
 			).
 			Comment(fmt.Sprintf("structured details of the %s in JSON format", documentType)),
 		field.Bool("approval_required").
@@ -140,6 +144,7 @@ func getDocumentFields(documentType string) []ent.Field {
 			Unique().
 			Annotations(
 				entx.CSVRef().FromColumn("ApproverGroupName").MatchOn("name"),
+				entx.ApprovalApprover(),
 			).
 			Comment(fmt.Sprintf("the id of the group responsible for approving the %s", documentType)).
 			StructTag(`json:"approver_id,omitempty"`),
@@ -196,7 +201,7 @@ func getDocumentFields(documentType string) []ent.Field {
 			Optional().
 			Nillable().
 			Annotations(
-				entx.IntegrationMappingField().UpsertKey().LookupKey(),
+				entx.IntegrationMappingField().LookupKey(),
 			),
 		field.String("external_contents").
 			Comment("The contents of externally managed files, if available").

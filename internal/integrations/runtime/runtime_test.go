@@ -21,7 +21,6 @@ func newTestGala(t *testing.T) *gala.Gala {
 
 	g, err := gala.NewGala(context.Background(), gala.Config{
 		DispatchMode: gala.DispatchModeInMemory,
-		Enabled:      true,
 		WorkerCount:  1,
 	})
 	if err != nil {

@@ -228,6 +228,8 @@ mutation CreateUploadProcedure ($procedureFile: Upload!, $ownerID: ID, $manageme
 mutation DeleteBulkProcedure ($ids: [ID!]!) {
 	deleteBulkProcedure(ids: $ids) {
 		deletedIDs
+		notDeletedIDs
+		error
 	}
 }
 mutation DeleteProcedure ($deleteProcedureId: ID!) {
@@ -453,6 +455,8 @@ mutation UpdateBulkProcedure ($ids: [ID!]!, $input: UpdateProcedureInput!) {
 			}
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 mutation UpdateProcedure ($updateProcedureId: ID!, $input: UpdateProcedureInput!) {

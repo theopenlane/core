@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
 	"github.com/theopenlane/core/internal/graphapi/common"
+	"github.com/theopenlane/core/internal/workflows"
 )
 
 // workflowResolverHasPending checks if the object has any pending workflow proposals (draft or submitted).
@@ -26,8 +27,10 @@ func workflowResolverHasPending(ctx context.Context, objectType string, objectID
 		return false, nil
 	}
 
-	query := withTransactionalMutation(ctx).WorkflowObjectRef.Query()
-	query = generated.ApplyWorkflowObjectRefObjectPredicate(query, *wfType, objectID)
+	query, err := workflows.FilterWorkflowObjectRefs(withTransactionalMutation(ctx).WorkflowObjectRef.Query(), *wfType, objectID)
+	if err != nil {
+		return false, err
+	}
 
 	exists, err := query.Where(
 		workflowobjectref.HasWorkflowProposalsWith(
@@ -55,8 +58,10 @@ func workflowResolverHasHistory(ctx context.Context, objectType string, objectID
 		return false, nil
 	}
 
-	query := withTransactionalMutation(ctx).WorkflowInstance.Query()
-	query = generated.ApplyWorkflowInstanceObjectPredicate(query, *wfType, objectID)
+	query, err := workflows.FilterWorkflowInstances(withTransactionalMutation(ctx).WorkflowInstance.Query(), *wfType, objectID)
+	if err != nil {
+		return false, err
+	}
 
 	exists, err := query.Where(
 		workflowinstance.StateIn(
@@ -94,21 +99,6 @@ func workflowResolverActiveInstances(ctx context.Context, objectType string, obj
 	}
 
 	return res, nil
-}
-
-// workflowResolverActiveInstance returns the most recent active workflow instance for the object.
-// If none exist, it returns nil without error.
-func workflowResolverActiveInstance(ctx context.Context, objectType string, objectID string) (*generated.WorkflowInstance, error) {
-	instances, err := workflowResolverActiveInstances(ctx, objectType, objectID)
-	if err != nil {
-		return nil, err
-	}
-
-	if len(instances) == 0 {
-		return nil, nil
-	}
-
-	return instances[0], nil
 }
 
 // workflowResolverTimeline returns the workflow event timeline for an object across all its workflow instances.
@@ -177,8 +167,10 @@ func workflowResolverTimeline(ctx context.Context, objectType string, objectID s
 
 // workflowResolverInstanceIDs returns all workflow instance IDs for the given object.
 func workflowResolverInstanceIDs(ctx context.Context, wfType enums.WorkflowObjectType, objectID string) ([]string, error) {
-	query := withTransactionalMutation(ctx).WorkflowInstance.Query()
-	query = generated.ApplyWorkflowInstanceObjectPredicate(query, wfType, objectID)
+	query, err := workflows.FilterWorkflowInstances(withTransactionalMutation(ctx).WorkflowInstance.Query(), wfType, objectID)
+	if err != nil {
+		return nil, err
+	}
 
 	return query.IDs(ctx)
 }
@@ -199,7 +191,10 @@ func workflowResolverInstanceQuery(ctx context.Context, objectType string, objec
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionGet, Object: "workflowinstance"})
 	}
 
-	query = generated.ApplyWorkflowInstanceObjectPredicate(query, *wfType, objectID)
+	query, err = workflows.FilterWorkflowInstances(query, *wfType, objectID)
+	if err != nil {
+		return nil, err
+	}
 
 	return query, nil
 }

@@ -52,6 +52,8 @@ mutation CreateSLADefinition ($input: CreateSLADefinitionInput!) {
 mutation DeleteBulkSLADefinition ($ids: [ID!]!) {
 	deleteBulkSLADefinition(ids: $ids) {
 		deletedIDs
+		notDeletedIDs
+		error
 	}
 }
 mutation DeleteSLADefinition ($deleteSLADefinitionId: ID!) {
@@ -142,6 +144,8 @@ mutation UpdateBulkCSVSLADefinition ($input: Upload!) {
 			updatedByImpersonator
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 mutation UpdateBulkSLADefinition ($ids: [ID!]!, $input: UpdateSLADefinitionInput!) {
@@ -160,6 +164,8 @@ mutation UpdateBulkSLADefinition ($ids: [ID!]!, $input: UpdateSLADefinitionInput
 			updatedByImpersonator
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 mutation UpdateSLADefinition ($updateSLADefinitionId: ID!, $input: UpdateSLADefinitionInput!) {

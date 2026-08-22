@@ -3153,8 +3153,10 @@ func (t *UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans) GetWorkflowEligi
 }
 
 type UpdateBulkActionPlan_UpdateBulkActionPlan struct {
-	ActionPlans []*UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans "json:\"actionPlans,omitempty\" graphql:\"actionPlans\""
-	UpdatedIDs  []string                                                 "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+	ActionPlans   []*UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans "json:\"actionPlans,omitempty\" graphql:\"actionPlans\""
+	Error         *string                                                  "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs []string                                                 "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
+	UpdatedIDs    []string                                                 "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 }
 
 func (t *UpdateBulkActionPlan_UpdateBulkActionPlan) GetActionPlans() []*UpdateBulkActionPlan_UpdateBulkActionPlan_ActionPlans {
@@ -3162,6 +3164,18 @@ func (t *UpdateBulkActionPlan_UpdateBulkActionPlan) GetActionPlans() []*UpdateBu
 		t = &UpdateBulkActionPlan_UpdateBulkActionPlan{}
 	}
 	return t.ActionPlans
+}
+func (t *UpdateBulkActionPlan_UpdateBulkActionPlan) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkActionPlan_UpdateBulkActionPlan{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkActionPlan_UpdateBulkActionPlan) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkActionPlan_UpdateBulkActionPlan{}
+	}
+	return t.NotUpdatedIDs
 }
 func (t *UpdateBulkActionPlan_UpdateBulkActionPlan) GetUpdatedIDs() []string {
 	if t == nil {
@@ -4160,7 +4174,9 @@ func (t *DeleteAssessment_DeleteAssessment) GetDeletedID() string {
 }
 
 type DeleteBulkAssessment_DeleteBulkAssessment struct {
-	DeletedIDs []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+	DeletedIDs    []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+	Error         *string  "json:\"error,omitempty\" graphql:\"error\""
+	NotDeletedIDs []string "json:\"notDeletedIDs\" graphql:\"notDeletedIDs\""
 }
 
 func (t *DeleteBulkAssessment_DeleteBulkAssessment) GetDeletedIDs() []string {
@@ -4168,6 +4184,18 @@ func (t *DeleteBulkAssessment_DeleteBulkAssessment) GetDeletedIDs() []string {
 		t = &DeleteBulkAssessment_DeleteBulkAssessment{}
 	}
 	return t.DeletedIDs
+}
+func (t *DeleteBulkAssessment_DeleteBulkAssessment) GetError() *string {
+	if t == nil {
+		t = &DeleteBulkAssessment_DeleteBulkAssessment{}
+	}
+	return t.Error
+}
+func (t *DeleteBulkAssessment_DeleteBulkAssessment) GetNotDeletedIDs() []string {
+	if t == nil {
+		t = &DeleteBulkAssessment_DeleteBulkAssessment{}
+	}
+	return t.NotDeletedIDs
 }
 
 type GetAllAssessments_Assessments_PageInfo struct {
@@ -6798,7 +6826,9 @@ func (t *DeleteAsset_DeleteAsset) GetDeletedID() string {
 }
 
 type DeleteBulkAsset_DeleteBulkAsset struct {
-	DeletedIDs []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+	DeletedIDs    []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+	Error         *string  "json:\"error,omitempty\" graphql:\"error\""
+	NotDeletedIDs []string "json:\"notDeletedIDs\" graphql:\"notDeletedIDs\""
 }
 
 func (t *DeleteBulkAsset_DeleteBulkAsset) GetDeletedIDs() []string {
@@ -6806,6 +6836,18 @@ func (t *DeleteBulkAsset_DeleteBulkAsset) GetDeletedIDs() []string {
 		t = &DeleteBulkAsset_DeleteBulkAsset{}
 	}
 	return t.DeletedIDs
+}
+func (t *DeleteBulkAsset_DeleteBulkAsset) GetError() *string {
+	if t == nil {
+		t = &DeleteBulkAsset_DeleteBulkAsset{}
+	}
+	return t.Error
+}
+func (t *DeleteBulkAsset_DeleteBulkAsset) GetNotDeletedIDs() []string {
+	if t == nil {
+		t = &DeleteBulkAsset_DeleteBulkAsset{}
+	}
+	return t.NotDeletedIDs
 }
 
 type GetAllAssets_Assets_PageInfo struct {
@@ -8691,8 +8733,10 @@ func (t *UpdateBulkAsset_UpdateBulkAsset_Assets) GetWebsite() *string {
 }
 
 type UpdateBulkAsset_UpdateBulkAsset struct {
-	Assets     []*UpdateBulkAsset_UpdateBulkAsset_Assets "json:\"assets,omitempty\" graphql:\"assets\""
-	UpdatedIDs []string                                  "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+	Assets        []*UpdateBulkAsset_UpdateBulkAsset_Assets "json:\"assets,omitempty\" graphql:\"assets\""
+	Error         *string                                   "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs []string                                  "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
+	UpdatedIDs    []string                                  "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 }
 
 func (t *UpdateBulkAsset_UpdateBulkAsset) GetAssets() []*UpdateBulkAsset_UpdateBulkAsset_Assets {
@@ -8700,6 +8744,18 @@ func (t *UpdateBulkAsset_UpdateBulkAsset) GetAssets() []*UpdateBulkAsset_UpdateB
 		t = &UpdateBulkAsset_UpdateBulkAsset{}
 	}
 	return t.Assets
+}
+func (t *UpdateBulkAsset_UpdateBulkAsset) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkAsset_UpdateBulkAsset{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkAsset_UpdateBulkAsset) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkAsset_UpdateBulkAsset{}
+	}
+	return t.NotUpdatedIDs
 }
 func (t *UpdateBulkAsset_UpdateBulkAsset) GetUpdatedIDs() []string {
 	if t == nil {
@@ -9056,8 +9112,10 @@ func (t *UpdateBulkCSVAsset_UpdateBulkCSVAsset_Assets) GetWebsite() *string {
 }
 
 type UpdateBulkCSVAsset_UpdateBulkCSVAsset struct {
-	Assets     []*UpdateBulkCSVAsset_UpdateBulkCSVAsset_Assets "json:\"assets,omitempty\" graphql:\"assets\""
-	UpdatedIDs []string                                        "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+	Assets        []*UpdateBulkCSVAsset_UpdateBulkCSVAsset_Assets "json:\"assets,omitempty\" graphql:\"assets\""
+	Error         *string                                         "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs []string                                        "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
+	UpdatedIDs    []string                                        "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 }
 
 func (t *UpdateBulkCSVAsset_UpdateBulkCSVAsset) GetAssets() []*UpdateBulkCSVAsset_UpdateBulkCSVAsset_Assets {
@@ -9065,6 +9123,18 @@ func (t *UpdateBulkCSVAsset_UpdateBulkCSVAsset) GetAssets() []*UpdateBulkCSVAsse
 		t = &UpdateBulkCSVAsset_UpdateBulkCSVAsset{}
 	}
 	return t.Assets
+}
+func (t *UpdateBulkCSVAsset_UpdateBulkCSVAsset) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkCSVAsset_UpdateBulkCSVAsset{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkCSVAsset_UpdateBulkCSVAsset) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkCSVAsset_UpdateBulkCSVAsset{}
+	}
+	return t.NotUpdatedIDs
 }
 func (t *UpdateBulkCSVAsset_UpdateBulkCSVAsset) GetUpdatedIDs() []string {
 	if t == nil {
@@ -14639,7 +14709,9 @@ func (t *CreateCheckResult_CreateCheckResult) GetCheckResult() *CreateCheckResul
 }
 
 type DeleteBulkCheckResult_DeleteBulkCheckResult struct {
-	DeletedIDs []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+	DeletedIDs    []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+	Error         *string  "json:\"error,omitempty\" graphql:\"error\""
+	NotDeletedIDs []string "json:\"notDeletedIDs\" graphql:\"notDeletedIDs\""
 }
 
 func (t *DeleteBulkCheckResult_DeleteBulkCheckResult) GetDeletedIDs() []string {
@@ -14647,6 +14719,18 @@ func (t *DeleteBulkCheckResult_DeleteBulkCheckResult) GetDeletedIDs() []string {
 		t = &DeleteBulkCheckResult_DeleteBulkCheckResult{}
 	}
 	return t.DeletedIDs
+}
+func (t *DeleteBulkCheckResult_DeleteBulkCheckResult) GetError() *string {
+	if t == nil {
+		t = &DeleteBulkCheckResult_DeleteBulkCheckResult{}
+	}
+	return t.Error
+}
+func (t *DeleteBulkCheckResult_DeleteBulkCheckResult) GetNotDeletedIDs() []string {
+	if t == nil {
+		t = &DeleteBulkCheckResult_DeleteBulkCheckResult{}
+	}
+	return t.NotDeletedIDs
 }
 
 type DeleteCheckResult_DeleteCheckResult struct {
@@ -15205,8 +15289,10 @@ func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults) GetUpda
 }
 
 type UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult struct {
-	CheckResults []*UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults "json:\"checkResults,omitempty\" graphql:\"checkResults\""
-	UpdatedIDs   []string                                                          "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+	CheckResults  []*UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults "json:\"checkResults,omitempty\" graphql:\"checkResults\""
+	Error         *string                                                           "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs []string                                                          "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
+	UpdatedIDs    []string                                                          "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 }
 
 func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult) GetCheckResults() []*UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult_CheckResults {
@@ -15214,6 +15300,18 @@ func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult) GetCheckResults() []
 		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult{}
 	}
 	return t.CheckResults
+}
+func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult{}
+	}
+	return t.NotUpdatedIDs
 }
 func (t *UpdateBulkCSVCheckResult_UpdateBulkCSVCheckResult) GetUpdatedIDs() []string {
 	if t == nil {
@@ -15325,8 +15423,10 @@ func (t *UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults) GetUpdatedByI
 }
 
 type UpdateBulkCheckResult_UpdateBulkCheckResult struct {
-	CheckResults []*UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults "json:\"checkResults,omitempty\" graphql:\"checkResults\""
-	UpdatedIDs   []string                                                    "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+	CheckResults  []*UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults "json:\"checkResults,omitempty\" graphql:\"checkResults\""
+	Error         *string                                                     "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs []string                                                    "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
+	UpdatedIDs    []string                                                    "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 }
 
 func (t *UpdateBulkCheckResult_UpdateBulkCheckResult) GetCheckResults() []*UpdateBulkCheckResult_UpdateBulkCheckResult_CheckResults {
@@ -15334,6 +15434,18 @@ func (t *UpdateBulkCheckResult_UpdateBulkCheckResult) GetCheckResults() []*Updat
 		t = &UpdateBulkCheckResult_UpdateBulkCheckResult{}
 	}
 	return t.CheckResults
+}
+func (t *UpdateBulkCheckResult_UpdateBulkCheckResult) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkCheckResult_UpdateBulkCheckResult{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkCheckResult_UpdateBulkCheckResult) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkCheckResult_UpdateBulkCheckResult{}
+	}
+	return t.NotUpdatedIDs
 }
 func (t *UpdateBulkCheckResult_UpdateBulkCheckResult) GetUpdatedIDs() []string {
 	if t == nil {
@@ -16398,8 +16510,10 @@ func (t *UpdateBulkContact_UpdateBulkContact_Contacts) GetUpdatedByImpersonator(
 }
 
 type UpdateBulkContact_UpdateBulkContact struct {
-	Contacts   []*UpdateBulkContact_UpdateBulkContact_Contacts "json:\"contacts,omitempty\" graphql:\"contacts\""
-	UpdatedIDs []string                                        "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+	Contacts      []*UpdateBulkContact_UpdateBulkContact_Contacts "json:\"contacts,omitempty\" graphql:\"contacts\""
+	Error         *string                                         "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs []string                                        "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
+	UpdatedIDs    []string                                        "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 }
 
 func (t *UpdateBulkContact_UpdateBulkContact) GetContacts() []*UpdateBulkContact_UpdateBulkContact_Contacts {
@@ -16407,6 +16521,18 @@ func (t *UpdateBulkContact_UpdateBulkContact) GetContacts() []*UpdateBulkContact
 		t = &UpdateBulkContact_UpdateBulkContact{}
 	}
 	return t.Contacts
+}
+func (t *UpdateBulkContact_UpdateBulkContact) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkContact_UpdateBulkContact{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkContact_UpdateBulkContact) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkContact_UpdateBulkContact{}
+	}
+	return t.NotUpdatedIDs
 }
 func (t *UpdateBulkContact_UpdateBulkContact) GetUpdatedIDs() []string {
 	if t == nil {
@@ -17967,7 +18093,9 @@ func (t *CreateControl_CreateControl) GetControl() *CreateControl_CreateControl_
 }
 
 type DeleteBulkControl_DeleteBulkControl struct {
-	DeletedIDs []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+	DeletedIDs    []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+	Error         *string  "json:\"error,omitempty\" graphql:\"error\""
+	NotDeletedIDs []string "json:\"notDeletedIDs\" graphql:\"notDeletedIDs\""
 }
 
 func (t *DeleteBulkControl_DeleteBulkControl) GetDeletedIDs() []string {
@@ -17975,6 +18103,18 @@ func (t *DeleteBulkControl_DeleteBulkControl) GetDeletedIDs() []string {
 		t = &DeleteBulkControl_DeleteBulkControl{}
 	}
 	return t.DeletedIDs
+}
+func (t *DeleteBulkControl_DeleteBulkControl) GetError() *string {
+	if t == nil {
+		t = &DeleteBulkControl_DeleteBulkControl{}
+	}
+	return t.Error
+}
+func (t *DeleteBulkControl_DeleteBulkControl) GetNotDeletedIDs() []string {
+	if t == nil {
+		t = &DeleteBulkControl_DeleteBulkControl{}
+	}
+	return t.NotDeletedIDs
 }
 
 type DeleteControl_DeleteControl struct {
@@ -21006,8 +21146,10 @@ func (t *UpdateBulkControl_UpdateBulkControl_Controls) GetWorkflowEligibleMarker
 }
 
 type UpdateBulkControl_UpdateBulkControl struct {
-	Controls   []*UpdateBulkControl_UpdateBulkControl_Controls "json:\"controls,omitempty\" graphql:\"controls\""
-	UpdatedIDs []string                                        "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+	Controls      []*UpdateBulkControl_UpdateBulkControl_Controls "json:\"controls,omitempty\" graphql:\"controls\""
+	Error         *string                                         "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs []string                                        "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
+	UpdatedIDs    []string                                        "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 }
 
 func (t *UpdateBulkControl_UpdateBulkControl) GetControls() []*UpdateBulkControl_UpdateBulkControl_Controls {
@@ -21015,6 +21157,18 @@ func (t *UpdateBulkControl_UpdateBulkControl) GetControls() []*UpdateBulkControl
 		t = &UpdateBulkControl_UpdateBulkControl{}
 	}
 	return t.Controls
+}
+func (t *UpdateBulkControl_UpdateBulkControl) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkControl_UpdateBulkControl) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkControl_UpdateBulkControl{}
+	}
+	return t.NotUpdatedIDs
 }
 func (t *UpdateBulkControl_UpdateBulkControl) GetUpdatedIDs() []string {
 	if t == nil {
@@ -40438,7 +40592,9 @@ func (t *CreateEmailTemplate_CreateEmailTemplate) GetEmailTemplate() *CreateEmai
 }
 
 type DeleteBulkEmailTemplate_DeleteBulkEmailTemplate struct {
-	DeletedIDs []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+	DeletedIDs    []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+	Error         *string  "json:\"error,omitempty\" graphql:\"error\""
+	NotDeletedIDs []string "json:\"notDeletedIDs\" graphql:\"notDeletedIDs\""
 }
 
 func (t *DeleteBulkEmailTemplate_DeleteBulkEmailTemplate) GetDeletedIDs() []string {
@@ -40446,6 +40602,18 @@ func (t *DeleteBulkEmailTemplate_DeleteBulkEmailTemplate) GetDeletedIDs() []stri
 		t = &DeleteBulkEmailTemplate_DeleteBulkEmailTemplate{}
 	}
 	return t.DeletedIDs
+}
+func (t *DeleteBulkEmailTemplate_DeleteBulkEmailTemplate) GetError() *string {
+	if t == nil {
+		t = &DeleteBulkEmailTemplate_DeleteBulkEmailTemplate{}
+	}
+	return t.Error
+}
+func (t *DeleteBulkEmailTemplate_DeleteBulkEmailTemplate) GetNotDeletedIDs() []string {
+	if t == nil {
+		t = &DeleteBulkEmailTemplate_DeleteBulkEmailTemplate{}
+	}
+	return t.NotDeletedIDs
 }
 
 type DeleteEmailTemplate_DeleteEmailTemplate struct {
@@ -41313,6 +41481,8 @@ func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates) G
 
 type UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate struct {
 	EmailTemplates []*UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate_EmailTemplates "json:\"emailTemplates,omitempty\" graphql:\"emailTemplates\""
+	Error          *string                                                                 "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs  []string                                                                "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
 	UpdatedIDs     []string                                                                "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 }
 
@@ -41321,6 +41491,18 @@ func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate) GetEmailTemplate
 		t = &UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate{}
 	}
 	return t.EmailTemplates
+}
+func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate{}
+	}
+	return t.NotUpdatedIDs
 }
 func (t *UpdateBulkCSVEmailTemplate_UpdateBulkCSVEmailTemplate) GetUpdatedIDs() []string {
 	if t == nil {
@@ -41510,6 +41692,8 @@ func (t *UpdateBulkEmailTemplate_UpdateBulkEmailTemplate_EmailTemplates) GetWork
 
 type UpdateBulkEmailTemplate_UpdateBulkEmailTemplate struct {
 	EmailTemplates []*UpdateBulkEmailTemplate_UpdateBulkEmailTemplate_EmailTemplates "json:\"emailTemplates,omitempty\" graphql:\"emailTemplates\""
+	Error          *string                                                           "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs  []string                                                          "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
 	UpdatedIDs     []string                                                          "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 }
 
@@ -41518,6 +41702,18 @@ func (t *UpdateBulkEmailTemplate_UpdateBulkEmailTemplate) GetEmailTemplates() []
 		t = &UpdateBulkEmailTemplate_UpdateBulkEmailTemplate{}
 	}
 	return t.EmailTemplates
+}
+func (t *UpdateBulkEmailTemplate_UpdateBulkEmailTemplate) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkEmailTemplate_UpdateBulkEmailTemplate{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkEmailTemplate_UpdateBulkEmailTemplate) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkEmailTemplate_UpdateBulkEmailTemplate{}
+	}
+	return t.NotUpdatedIDs
 }
 func (t *UpdateBulkEmailTemplate_UpdateBulkEmailTemplate) GetUpdatedIDs() []string {
 	if t == nil {
@@ -47707,15 +47903,29 @@ func (t *UpdateBulkEvidence_UpdateBulkEvidence_Evidences) GetWorkflowEligibleMar
 }
 
 type UpdateBulkEvidence_UpdateBulkEvidence struct {
-	Evidences  []*UpdateBulkEvidence_UpdateBulkEvidence_Evidences "json:\"evidences,omitempty\" graphql:\"evidences\""
-	UpdatedIDs []string                                           "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+	Error         *string                                            "json:\"error,omitempty\" graphql:\"error\""
+	Evidences     []*UpdateBulkEvidence_UpdateBulkEvidence_Evidences "json:\"evidences,omitempty\" graphql:\"evidences\""
+	NotUpdatedIDs []string                                           "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
+	UpdatedIDs    []string                                           "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 }
 
+func (t *UpdateBulkEvidence_UpdateBulkEvidence) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkEvidence_UpdateBulkEvidence{}
+	}
+	return t.Error
+}
 func (t *UpdateBulkEvidence_UpdateBulkEvidence) GetEvidences() []*UpdateBulkEvidence_UpdateBulkEvidence_Evidences {
 	if t == nil {
 		t = &UpdateBulkEvidence_UpdateBulkEvidence{}
 	}
 	return t.Evidences
+}
+func (t *UpdateBulkEvidence_UpdateBulkEvidence) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkEvidence_UpdateBulkEvidence{}
+	}
+	return t.NotUpdatedIDs
 }
 func (t *UpdateBulkEvidence_UpdateBulkEvidence) GetUpdatedIDs() []string {
 	if t == nil {
@@ -48883,7 +49093,9 @@ func (t *CreateExport_CreateExport) GetExport() *CreateExport_CreateExport_Expor
 }
 
 type DeleteBulkExport_DeleteBulkExport struct {
-	DeletedIDs []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+	DeletedIDs    []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+	Error         *string  "json:\"error,omitempty\" graphql:\"error\""
+	NotDeletedIDs []string "json:\"notDeletedIDs\" graphql:\"notDeletedIDs\""
 }
 
 func (t *DeleteBulkExport_DeleteBulkExport) GetDeletedIDs() []string {
@@ -48891,6 +49103,18 @@ func (t *DeleteBulkExport_DeleteBulkExport) GetDeletedIDs() []string {
 		t = &DeleteBulkExport_DeleteBulkExport{}
 	}
 	return t.DeletedIDs
+}
+func (t *DeleteBulkExport_DeleteBulkExport) GetError() *string {
+	if t == nil {
+		t = &DeleteBulkExport_DeleteBulkExport{}
+	}
+	return t.Error
+}
+func (t *DeleteBulkExport_DeleteBulkExport) GetNotDeletedIDs() []string {
+	if t == nil {
+		t = &DeleteBulkExport_DeleteBulkExport{}
+	}
+	return t.NotDeletedIDs
 }
 
 type DeleteExport_DeleteExport struct {
@@ -51577,7 +51801,9 @@ func (t *CreateFinding_CreateFinding) GetFinding() *CreateFinding_CreateFinding_
 }
 
 type DeleteBulkFinding_DeleteBulkFinding struct {
-	DeletedIDs []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+	DeletedIDs    []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+	Error         *string  "json:\"error,omitempty\" graphql:\"error\""
+	NotDeletedIDs []string "json:\"notDeletedIDs\" graphql:\"notDeletedIDs\""
 }
 
 func (t *DeleteBulkFinding_DeleteBulkFinding) GetDeletedIDs() []string {
@@ -51585,6 +51811,18 @@ func (t *DeleteBulkFinding_DeleteBulkFinding) GetDeletedIDs() []string {
 		t = &DeleteBulkFinding_DeleteBulkFinding{}
 	}
 	return t.DeletedIDs
+}
+func (t *DeleteBulkFinding_DeleteBulkFinding) GetError() *string {
+	if t == nil {
+		t = &DeleteBulkFinding_DeleteBulkFinding{}
+	}
+	return t.Error
+}
+func (t *DeleteBulkFinding_DeleteBulkFinding) GetNotDeletedIDs() []string {
+	if t == nil {
+		t = &DeleteBulkFinding_DeleteBulkFinding{}
+	}
+	return t.NotDeletedIDs
 }
 
 type DeleteFinding_DeleteFinding struct {
@@ -53587,15 +53825,29 @@ func (t *UpdateBulkCSVFinding_UpdateBulkCSVFinding_Findings) GetWorkflowEligible
 }
 
 type UpdateBulkCSVFinding_UpdateBulkCSVFinding struct {
-	Findings   []*UpdateBulkCSVFinding_UpdateBulkCSVFinding_Findings "json:\"findings,omitempty\" graphql:\"findings\""
-	UpdatedIDs []string                                              "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+	Error         *string                                               "json:\"error,omitempty\" graphql:\"error\""
+	Findings      []*UpdateBulkCSVFinding_UpdateBulkCSVFinding_Findings "json:\"findings,omitempty\" graphql:\"findings\""
+	NotUpdatedIDs []string                                              "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
+	UpdatedIDs    []string                                              "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 }
 
+func (t *UpdateBulkCSVFinding_UpdateBulkCSVFinding) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkCSVFinding_UpdateBulkCSVFinding{}
+	}
+	return t.Error
+}
 func (t *UpdateBulkCSVFinding_UpdateBulkCSVFinding) GetFindings() []*UpdateBulkCSVFinding_UpdateBulkCSVFinding_Findings {
 	if t == nil {
 		t = &UpdateBulkCSVFinding_UpdateBulkCSVFinding{}
 	}
 	return t.Findings
+}
+func (t *UpdateBulkCSVFinding_UpdateBulkCSVFinding) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkCSVFinding_UpdateBulkCSVFinding{}
+	}
+	return t.NotUpdatedIDs
 }
 func (t *UpdateBulkCSVFinding_UpdateBulkCSVFinding) GetUpdatedIDs() []string {
 	if t == nil {
@@ -54043,15 +54295,29 @@ func (t *UpdateBulkFinding_UpdateBulkFinding_Findings) GetWorkflowEligibleMarker
 }
 
 type UpdateBulkFinding_UpdateBulkFinding struct {
-	Findings   []*UpdateBulkFinding_UpdateBulkFinding_Findings "json:\"findings,omitempty\" graphql:\"findings\""
-	UpdatedIDs []string                                        "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+	Error         *string                                         "json:\"error,omitempty\" graphql:\"error\""
+	Findings      []*UpdateBulkFinding_UpdateBulkFinding_Findings "json:\"findings,omitempty\" graphql:\"findings\""
+	NotUpdatedIDs []string                                        "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
+	UpdatedIDs    []string                                        "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 }
 
+func (t *UpdateBulkFinding_UpdateBulkFinding) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkFinding_UpdateBulkFinding{}
+	}
+	return t.Error
+}
 func (t *UpdateBulkFinding_UpdateBulkFinding) GetFindings() []*UpdateBulkFinding_UpdateBulkFinding_Findings {
 	if t == nil {
 		t = &UpdateBulkFinding_UpdateBulkFinding{}
 	}
 	return t.Findings
+}
+func (t *UpdateBulkFinding_UpdateBulkFinding) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkFinding_UpdateBulkFinding{}
+	}
+	return t.NotUpdatedIDs
 }
 func (t *UpdateBulkFinding_UpdateBulkFinding) GetUpdatedIDs() []string {
 	if t == nil {
@@ -54891,7 +55157,9 @@ func (t *CreateFindingControl_CreateFindingControl) GetFindingControl() *CreateF
 }
 
 type DeleteBulkFindingControl_DeleteBulkFindingControl struct {
-	DeletedIDs []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+	DeletedIDs    []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+	Error         *string  "json:\"error,omitempty\" graphql:\"error\""
+	NotDeletedIDs []string "json:\"notDeletedIDs\" graphql:\"notDeletedIDs\""
 }
 
 func (t *DeleteBulkFindingControl_DeleteBulkFindingControl) GetDeletedIDs() []string {
@@ -54899,6 +55167,18 @@ func (t *DeleteBulkFindingControl_DeleteBulkFindingControl) GetDeletedIDs() []st
 		t = &DeleteBulkFindingControl_DeleteBulkFindingControl{}
 	}
 	return t.DeletedIDs
+}
+func (t *DeleteBulkFindingControl_DeleteBulkFindingControl) GetError() *string {
+	if t == nil {
+		t = &DeleteBulkFindingControl_DeleteBulkFindingControl{}
+	}
+	return t.Error
+}
+func (t *DeleteBulkFindingControl_DeleteBulkFindingControl) GetNotDeletedIDs() []string {
+	if t == nil {
+		t = &DeleteBulkFindingControl_DeleteBulkFindingControl{}
+	}
+	return t.NotDeletedIDs
 }
 
 type DeleteFindingControl_DeleteFindingControl struct {
@@ -67617,15 +67897,29 @@ func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies) Get
 }
 
 type UpdateBulkInternalPolicy_UpdateBulkInternalPolicy struct {
+	Error            *string                                                               "json:\"error,omitempty\" graphql:\"error\""
 	InternalPolicies []*UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies "json:\"internalPolicies,omitempty\" graphql:\"internalPolicies\""
+	NotUpdatedIDs    []string                                                              "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
 	UpdatedIDs       []string                                                              "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 }
 
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy{}
+	}
+	return t.Error
+}
 func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy) GetInternalPolicies() []*UpdateBulkInternalPolicy_UpdateBulkInternalPolicy_InternalPolicies {
 	if t == nil {
 		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy{}
 	}
 	return t.InternalPolicies
+}
+func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkInternalPolicy_UpdateBulkInternalPolicy{}
+	}
+	return t.NotUpdatedIDs
 }
 func (t *UpdateBulkInternalPolicy_UpdateBulkInternalPolicy) GetUpdatedIDs() []string {
 	if t == nil {
@@ -78168,7 +78462,9 @@ func (t *CreateNotificationPreference_CreateNotificationPreference) GetNotificat
 }
 
 type DeleteBulkNotificationPreference_DeleteBulkNotificationPreference struct {
-	DeletedIDs []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+	DeletedIDs    []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+	Error         *string  "json:\"error,omitempty\" graphql:\"error\""
+	NotDeletedIDs []string "json:\"notDeletedIDs\" graphql:\"notDeletedIDs\""
 }
 
 func (t *DeleteBulkNotificationPreference_DeleteBulkNotificationPreference) GetDeletedIDs() []string {
@@ -78176,6 +78472,18 @@ func (t *DeleteBulkNotificationPreference_DeleteBulkNotificationPreference) GetD
 		t = &DeleteBulkNotificationPreference_DeleteBulkNotificationPreference{}
 	}
 	return t.DeletedIDs
+}
+func (t *DeleteBulkNotificationPreference_DeleteBulkNotificationPreference) GetError() *string {
+	if t == nil {
+		t = &DeleteBulkNotificationPreference_DeleteBulkNotificationPreference{}
+	}
+	return t.Error
+}
+func (t *DeleteBulkNotificationPreference_DeleteBulkNotificationPreference) GetNotDeletedIDs() []string {
+	if t == nil {
+		t = &DeleteBulkNotificationPreference_DeleteBulkNotificationPreference{}
+	}
+	return t.NotDeletedIDs
 }
 
 type DeleteNotificationPreference_DeleteNotificationPreference struct {
@@ -79126,10 +79434,24 @@ func (t *UpdateBulkCSVNotificationPreference_UpdateBulkCSVNotificationPreference
 }
 
 type UpdateBulkCSVNotificationPreference_UpdateBulkCSVNotificationPreference struct {
+	Error                   *string                                                                                            "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs           []string                                                                                           "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
 	NotificationPreferences []*UpdateBulkCSVNotificationPreference_UpdateBulkCSVNotificationPreference_NotificationPreferences "json:\"notificationPreferences,omitempty\" graphql:\"notificationPreferences\""
 	UpdatedIDs              []string                                                                                           "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 }
 
+func (t *UpdateBulkCSVNotificationPreference_UpdateBulkCSVNotificationPreference) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkCSVNotificationPreference_UpdateBulkCSVNotificationPreference{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkCSVNotificationPreference_UpdateBulkCSVNotificationPreference) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkCSVNotificationPreference_UpdateBulkCSVNotificationPreference{}
+	}
+	return t.NotUpdatedIDs
+}
 func (t *UpdateBulkCSVNotificationPreference_UpdateBulkCSVNotificationPreference) GetNotificationPreferences() []*UpdateBulkCSVNotificationPreference_UpdateBulkCSVNotificationPreference_NotificationPreferences {
 	if t == nil {
 		t = &UpdateBulkCSVNotificationPreference_UpdateBulkCSVNotificationPreference{}
@@ -79344,10 +79666,24 @@ func (t *UpdateBulkNotificationPreference_UpdateBulkNotificationPreference_Notif
 }
 
 type UpdateBulkNotificationPreference_UpdateBulkNotificationPreference struct {
+	Error                   *string                                                                                      "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs           []string                                                                                     "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
 	NotificationPreferences []*UpdateBulkNotificationPreference_UpdateBulkNotificationPreference_NotificationPreferences "json:\"notificationPreferences,omitempty\" graphql:\"notificationPreferences\""
 	UpdatedIDs              []string                                                                                     "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 }
 
+func (t *UpdateBulkNotificationPreference_UpdateBulkNotificationPreference) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkNotificationPreference_UpdateBulkNotificationPreference{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkNotificationPreference_UpdateBulkNotificationPreference) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkNotificationPreference_UpdateBulkNotificationPreference{}
+	}
+	return t.NotUpdatedIDs
+}
 func (t *UpdateBulkNotificationPreference_UpdateBulkNotificationPreference) GetNotificationPreferences() []*UpdateBulkNotificationPreference_UpdateBulkNotificationPreference_NotificationPreferences {
 	if t == nil {
 		t = &UpdateBulkNotificationPreference_UpdateBulkNotificationPreference{}
@@ -80311,7 +80647,9 @@ func (t *CreateNotificationTemplate_CreateNotificationTemplate) GetNotificationT
 }
 
 type DeleteBulkNotificationTemplate_DeleteBulkNotificationTemplate struct {
-	DeletedIDs []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+	DeletedIDs    []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+	Error         *string  "json:\"error,omitempty\" graphql:\"error\""
+	NotDeletedIDs []string "json:\"notDeletedIDs\" graphql:\"notDeletedIDs\""
 }
 
 func (t *DeleteBulkNotificationTemplate_DeleteBulkNotificationTemplate) GetDeletedIDs() []string {
@@ -80319,6 +80657,18 @@ func (t *DeleteBulkNotificationTemplate_DeleteBulkNotificationTemplate) GetDelet
 		t = &DeleteBulkNotificationTemplate_DeleteBulkNotificationTemplate{}
 	}
 	return t.DeletedIDs
+}
+func (t *DeleteBulkNotificationTemplate_DeleteBulkNotificationTemplate) GetError() *string {
+	if t == nil {
+		t = &DeleteBulkNotificationTemplate_DeleteBulkNotificationTemplate{}
+	}
+	return t.Error
+}
+func (t *DeleteBulkNotificationTemplate_DeleteBulkNotificationTemplate) GetNotDeletedIDs() []string {
+	if t == nil {
+		t = &DeleteBulkNotificationTemplate_DeleteBulkNotificationTemplate{}
+	}
+	return t.NotDeletedIDs
 }
 
 type DeleteNotificationTemplate_DeleteNotificationTemplate struct {
@@ -81409,10 +81759,24 @@ func (t *UpdateBulkCSVNotificationTemplate_UpdateBulkCSVNotificationTemplate_Not
 }
 
 type UpdateBulkCSVNotificationTemplate_UpdateBulkCSVNotificationTemplate struct {
+	Error                 *string                                                                                      "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs         []string                                                                                     "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
 	NotificationTemplates []*UpdateBulkCSVNotificationTemplate_UpdateBulkCSVNotificationTemplate_NotificationTemplates "json:\"notificationTemplates,omitempty\" graphql:\"notificationTemplates\""
 	UpdatedIDs            []string                                                                                     "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 }
 
+func (t *UpdateBulkCSVNotificationTemplate_UpdateBulkCSVNotificationTemplate) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkCSVNotificationTemplate_UpdateBulkCSVNotificationTemplate{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkCSVNotificationTemplate_UpdateBulkCSVNotificationTemplate) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkCSVNotificationTemplate_UpdateBulkCSVNotificationTemplate{}
+	}
+	return t.NotUpdatedIDs
+}
 func (t *UpdateBulkCSVNotificationTemplate_UpdateBulkCSVNotificationTemplate) GetNotificationTemplates() []*UpdateBulkCSVNotificationTemplate_UpdateBulkCSVNotificationTemplate_NotificationTemplates {
 	if t == nil {
 		t = &UpdateBulkCSVNotificationTemplate_UpdateBulkCSVNotificationTemplate{}
@@ -81662,10 +82026,24 @@ func (t *UpdateBulkNotificationTemplate_UpdateBulkNotificationTemplate_Notificat
 }
 
 type UpdateBulkNotificationTemplate_UpdateBulkNotificationTemplate struct {
+	Error                 *string                                                                                "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs         []string                                                                               "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
 	NotificationTemplates []*UpdateBulkNotificationTemplate_UpdateBulkNotificationTemplate_NotificationTemplates "json:\"notificationTemplates,omitempty\" graphql:\"notificationTemplates\""
 	UpdatedIDs            []string                                                                               "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 }
 
+func (t *UpdateBulkNotificationTemplate_UpdateBulkNotificationTemplate) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkNotificationTemplate_UpdateBulkNotificationTemplate{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkNotificationTemplate_UpdateBulkNotificationTemplate) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkNotificationTemplate_UpdateBulkNotificationTemplate{}
+	}
+	return t.NotUpdatedIDs
+}
 func (t *UpdateBulkNotificationTemplate_UpdateBulkNotificationTemplate) GetNotificationTemplates() []*UpdateBulkNotificationTemplate_UpdateBulkNotificationTemplate_NotificationTemplates {
 	if t == nil {
 		t = &UpdateBulkNotificationTemplate_UpdateBulkNotificationTemplate{}
@@ -86171,10 +86549,24 @@ func (t *UpdateBulkOrgMemberRoles_UpdateBulkOrgMembership_OrgMemberships) GetUse
 }
 
 type UpdateBulkOrgMemberRoles_UpdateBulkOrgMembership struct {
+	Error          *string                                                            "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs  []string                                                           "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
 	OrgMemberships []*UpdateBulkOrgMemberRoles_UpdateBulkOrgMembership_OrgMemberships "json:\"orgMemberships,omitempty\" graphql:\"orgMemberships\""
 	UpdatedIDs     []string                                                           "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 }
 
+func (t *UpdateBulkOrgMemberRoles_UpdateBulkOrgMembership) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkOrgMemberRoles_UpdateBulkOrgMembership{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkOrgMemberRoles_UpdateBulkOrgMembership) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkOrgMemberRoles_UpdateBulkOrgMembership{}
+	}
+	return t.NotUpdatedIDs
+}
 func (t *UpdateBulkOrgMemberRoles_UpdateBulkOrgMembership) GetOrgMemberships() []*UpdateBulkOrgMemberRoles_UpdateBulkOrgMembership_OrgMemberships {
 	if t == nil {
 		t = &UpdateBulkOrgMemberRoles_UpdateBulkOrgMembership{}
@@ -93396,7 +93788,9 @@ func (t *CreateUploadProcedure_CreateUploadProcedure) GetProcedure() *CreateUplo
 }
 
 type DeleteBulkProcedure_DeleteBulkProcedure struct {
-	DeletedIDs []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+	DeletedIDs    []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+	Error         *string  "json:\"error,omitempty\" graphql:\"error\""
+	NotDeletedIDs []string "json:\"notDeletedIDs\" graphql:\"notDeletedIDs\""
 }
 
 func (t *DeleteBulkProcedure_DeleteBulkProcedure) GetDeletedIDs() []string {
@@ -93404,6 +93798,18 @@ func (t *DeleteBulkProcedure_DeleteBulkProcedure) GetDeletedIDs() []string {
 		t = &DeleteBulkProcedure_DeleteBulkProcedure{}
 	}
 	return t.DeletedIDs
+}
+func (t *DeleteBulkProcedure_DeleteBulkProcedure) GetError() *string {
+	if t == nil {
+		t = &DeleteBulkProcedure_DeleteBulkProcedure{}
+	}
+	return t.Error
+}
+func (t *DeleteBulkProcedure_DeleteBulkProcedure) GetNotDeletedIDs() []string {
+	if t == nil {
+		t = &DeleteBulkProcedure_DeleteBulkProcedure{}
+	}
+	return t.NotDeletedIDs
 }
 
 type DeleteProcedure_DeleteProcedure struct {
@@ -94751,10 +95157,24 @@ func (t *UpdateBulkProcedure_UpdateBulkProcedure_Procedures) GetWorkflowEligible
 }
 
 type UpdateBulkProcedure_UpdateBulkProcedure struct {
-	Procedures []*UpdateBulkProcedure_UpdateBulkProcedure_Procedures "json:\"procedures,omitempty\" graphql:\"procedures\""
-	UpdatedIDs []string                                              "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+	Error         *string                                               "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs []string                                              "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
+	Procedures    []*UpdateBulkProcedure_UpdateBulkProcedure_Procedures "json:\"procedures,omitempty\" graphql:\"procedures\""
+	UpdatedIDs    []string                                              "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 }
 
+func (t *UpdateBulkProcedure_UpdateBulkProcedure) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkProcedure_UpdateBulkProcedure) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkProcedure_UpdateBulkProcedure{}
+	}
+	return t.NotUpdatedIDs
+}
 func (t *UpdateBulkProcedure_UpdateBulkProcedure) GetProcedures() []*UpdateBulkProcedure_UpdateBulkProcedure_Procedures {
 	if t == nil {
 		t = &UpdateBulkProcedure_UpdateBulkProcedure{}
@@ -101332,7 +101752,9 @@ func (t *CreateRemediation_CreateRemediation) GetRemediation() *CreateRemediatio
 }
 
 type DeleteBulkRemediation_DeleteBulkRemediation struct {
-	DeletedIDs []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+	DeletedIDs    []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+	Error         *string  "json:\"error,omitempty\" graphql:\"error\""
+	NotDeletedIDs []string "json:\"notDeletedIDs\" graphql:\"notDeletedIDs\""
 }
 
 func (t *DeleteBulkRemediation_DeleteBulkRemediation) GetDeletedIDs() []string {
@@ -101340,6 +101762,18 @@ func (t *DeleteBulkRemediation_DeleteBulkRemediation) GetDeletedIDs() []string {
 		t = &DeleteBulkRemediation_DeleteBulkRemediation{}
 	}
 	return t.DeletedIDs
+}
+func (t *DeleteBulkRemediation_DeleteBulkRemediation) GetError() *string {
+	if t == nil {
+		t = &DeleteBulkRemediation_DeleteBulkRemediation{}
+	}
+	return t.Error
+}
+func (t *DeleteBulkRemediation_DeleteBulkRemediation) GetNotDeletedIDs() []string {
+	if t == nil {
+		t = &DeleteBulkRemediation_DeleteBulkRemediation{}
+	}
+	return t.NotDeletedIDs
 }
 
 type DeleteRemediation_DeleteRemediation struct {
@@ -102374,10 +102808,24 @@ func (t *UpdateBulkCSVRemediation_UpdateBulkCSVRemediation_Remediations) GetWork
 }
 
 type UpdateBulkCSVRemediation_UpdateBulkCSVRemediation struct {
-	Remediations []*UpdateBulkCSVRemediation_UpdateBulkCSVRemediation_Remediations "json:\"remediations,omitempty\" graphql:\"remediations\""
-	UpdatedIDs   []string                                                          "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+	Error         *string                                                           "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs []string                                                          "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
+	Remediations  []*UpdateBulkCSVRemediation_UpdateBulkCSVRemediation_Remediations "json:\"remediations,omitempty\" graphql:\"remediations\""
+	UpdatedIDs    []string                                                          "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 }
 
+func (t *UpdateBulkCSVRemediation_UpdateBulkCSVRemediation) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkCSVRemediation_UpdateBulkCSVRemediation{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkCSVRemediation_UpdateBulkCSVRemediation) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkCSVRemediation_UpdateBulkCSVRemediation{}
+	}
+	return t.NotUpdatedIDs
+}
 func (t *UpdateBulkCSVRemediation_UpdateBulkCSVRemediation) GetRemediations() []*UpdateBulkCSVRemediation_UpdateBulkCSVRemediation_Remediations {
 	if t == nil {
 		t = &UpdateBulkCSVRemediation_UpdateBulkCSVRemediation{}
@@ -102655,10 +103103,24 @@ func (t *UpdateBulkRemediation_UpdateBulkRemediation_Remediations) GetWorkflowEl
 }
 
 type UpdateBulkRemediation_UpdateBulkRemediation struct {
-	Remediations []*UpdateBulkRemediation_UpdateBulkRemediation_Remediations "json:\"remediations,omitempty\" graphql:\"remediations\""
-	UpdatedIDs   []string                                                    "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+	Error         *string                                                     "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs []string                                                    "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
+	Remediations  []*UpdateBulkRemediation_UpdateBulkRemediation_Remediations "json:\"remediations,omitempty\" graphql:\"remediations\""
+	UpdatedIDs    []string                                                    "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 }
 
+func (t *UpdateBulkRemediation_UpdateBulkRemediation) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkRemediation_UpdateBulkRemediation{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkRemediation_UpdateBulkRemediation) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkRemediation_UpdateBulkRemediation{}
+	}
+	return t.NotUpdatedIDs
+}
 func (t *UpdateBulkRemediation_UpdateBulkRemediation) GetRemediations() []*UpdateBulkRemediation_UpdateBulkRemediation_Remediations {
 	if t == nil {
 		t = &UpdateBulkRemediation_UpdateBulkRemediation{}
@@ -103706,7 +104168,9 @@ func (t *CreateReview_CreateReview) GetReview() *CreateReview_CreateReview_Revie
 }
 
 type DeleteBulkReviewReview_DeleteBulkReview struct {
-	DeletedIDs []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+	DeletedIDs    []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+	Error         *string  "json:\"error,omitempty\" graphql:\"error\""
+	NotDeletedIDs []string "json:\"notDeletedIDs\" graphql:\"notDeletedIDs\""
 }
 
 func (t *DeleteBulkReviewReview_DeleteBulkReview) GetDeletedIDs() []string {
@@ -103714,6 +104178,18 @@ func (t *DeleteBulkReviewReview_DeleteBulkReview) GetDeletedIDs() []string {
 		t = &DeleteBulkReviewReview_DeleteBulkReview{}
 	}
 	return t.DeletedIDs
+}
+func (t *DeleteBulkReviewReview_DeleteBulkReview) GetError() *string {
+	if t == nil {
+		t = &DeleteBulkReviewReview_DeleteBulkReview{}
+	}
+	return t.Error
+}
+func (t *DeleteBulkReviewReview_DeleteBulkReview) GetNotDeletedIDs() []string {
+	if t == nil {
+		t = &DeleteBulkReviewReview_DeleteBulkReview{}
+	}
+	return t.NotDeletedIDs
 }
 
 type DeleteReview_DeleteReview struct {
@@ -104692,10 +105168,24 @@ func (t *UpdateBulkCSVReview_UpdateBulkCSVReview_Reviews) GetUpdatedByImpersonat
 }
 
 type UpdateBulkCSVReview_UpdateBulkCSVReview struct {
-	Reviews    []*UpdateBulkCSVReview_UpdateBulkCSVReview_Reviews "json:\"reviews,omitempty\" graphql:\"reviews\""
-	UpdatedIDs []string                                           "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+	Error         *string                                            "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs []string                                           "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
+	Reviews       []*UpdateBulkCSVReview_UpdateBulkCSVReview_Reviews "json:\"reviews,omitempty\" graphql:\"reviews\""
+	UpdatedIDs    []string                                           "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 }
 
+func (t *UpdateBulkCSVReview_UpdateBulkCSVReview) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkCSVReview_UpdateBulkCSVReview{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkCSVReview_UpdateBulkCSVReview) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkCSVReview_UpdateBulkCSVReview{}
+	}
+	return t.NotUpdatedIDs
+}
 func (t *UpdateBulkCSVReview_UpdateBulkCSVReview) GetReviews() []*UpdateBulkCSVReview_UpdateBulkCSVReview_Reviews {
 	if t == nil {
 		t = &UpdateBulkCSVReview_UpdateBulkCSVReview{}
@@ -104952,10 +105442,24 @@ func (t *UpdateBulkReview_UpdateBulkReview_Reviews) GetUpdatedByImpersonator() *
 }
 
 type UpdateBulkReview_UpdateBulkReview struct {
-	Reviews    []*UpdateBulkReview_UpdateBulkReview_Reviews "json:\"reviews,omitempty\" graphql:\"reviews\""
-	UpdatedIDs []string                                     "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+	Error         *string                                      "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs []string                                     "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
+	Reviews       []*UpdateBulkReview_UpdateBulkReview_Reviews "json:\"reviews,omitempty\" graphql:\"reviews\""
+	UpdatedIDs    []string                                     "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 }
 
+func (t *UpdateBulkReview_UpdateBulkReview) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkReview_UpdateBulkReview{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkReview_UpdateBulkReview) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkReview_UpdateBulkReview{}
+	}
+	return t.NotUpdatedIDs
+}
 func (t *UpdateBulkReview_UpdateBulkReview) GetReviews() []*UpdateBulkReview_UpdateBulkReview_Reviews {
 	if t == nil {
 		t = &UpdateBulkReview_UpdateBulkReview{}
@@ -108896,10 +109400,24 @@ func (t *UpdateBulkRisk_UpdateBulkRisk_Risks) GetWorkflowEligibleMarker() *bool 
 }
 
 type UpdateBulkRisk_UpdateBulkRisk struct {
-	Risks      []*UpdateBulkRisk_UpdateBulkRisk_Risks "json:\"risks,omitempty\" graphql:\"risks\""
-	UpdatedIDs []string                               "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+	Error         *string                                "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs []string                               "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
+	Risks         []*UpdateBulkRisk_UpdateBulkRisk_Risks "json:\"risks,omitempty\" graphql:\"risks\""
+	UpdatedIDs    []string                               "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 }
 
+func (t *UpdateBulkRisk_UpdateBulkRisk) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkRisk_UpdateBulkRisk) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkRisk_UpdateBulkRisk{}
+	}
+	return t.NotUpdatedIDs
+}
 func (t *UpdateBulkRisk_UpdateBulkRisk) GetRisks() []*UpdateBulkRisk_UpdateBulkRisk_Risks {
 	if t == nil {
 		t = &UpdateBulkRisk_UpdateBulkRisk{}
@@ -117616,7 +118134,9 @@ func (t *CreateSLADefinition_CreateSLADefinition) GetSLADefinition() *CreateSLAD
 }
 
 type DeleteBulkSLADefinition_DeleteBulkSLADefinition struct {
-	DeletedIDs []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+	DeletedIDs    []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+	Error         *string  "json:\"error,omitempty\" graphql:\"error\""
+	NotDeletedIDs []string "json:\"notDeletedIDs\" graphql:\"notDeletedIDs\""
 }
 
 func (t *DeleteBulkSLADefinition_DeleteBulkSLADefinition) GetDeletedIDs() []string {
@@ -117624,6 +118144,18 @@ func (t *DeleteBulkSLADefinition_DeleteBulkSLADefinition) GetDeletedIDs() []stri
 		t = &DeleteBulkSLADefinition_DeleteBulkSLADefinition{}
 	}
 	return t.DeletedIDs
+}
+func (t *DeleteBulkSLADefinition_DeleteBulkSLADefinition) GetError() *string {
+	if t == nil {
+		t = &DeleteBulkSLADefinition_DeleteBulkSLADefinition{}
+	}
+	return t.Error
+}
+func (t *DeleteBulkSLADefinition_DeleteBulkSLADefinition) GetNotDeletedIDs() []string {
+	if t == nil {
+		t = &DeleteBulkSLADefinition_DeleteBulkSLADefinition{}
+	}
+	return t.NotDeletedIDs
 }
 
 type DeleteSLADefinition_DeleteSLADefinition struct {
@@ -118098,10 +118630,24 @@ func (t *UpdateBulkCSVSLADefinition_UpdateBulkCSVSLADefinition_SLADefinitions) G
 }
 
 type UpdateBulkCSVSLADefinition_UpdateBulkCSVSLADefinition struct {
+	Error          *string                                                                 "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs  []string                                                                "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
 	SLADefinitions []*UpdateBulkCSVSLADefinition_UpdateBulkCSVSLADefinition_SLADefinitions "json:\"slaDefinitions,omitempty\" graphql:\"slaDefinitions\""
 	UpdatedIDs     []string                                                                "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 }
 
+func (t *UpdateBulkCSVSLADefinition_UpdateBulkCSVSLADefinition) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkCSVSLADefinition_UpdateBulkCSVSLADefinition{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkCSVSLADefinition_UpdateBulkCSVSLADefinition) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkCSVSLADefinition_UpdateBulkCSVSLADefinition{}
+	}
+	return t.NotUpdatedIDs
+}
 func (t *UpdateBulkCSVSLADefinition_UpdateBulkCSVSLADefinition) GetSLADefinitions() []*UpdateBulkCSVSLADefinition_UpdateBulkCSVSLADefinition_SLADefinitions {
 	if t == nil {
 		t = &UpdateBulkCSVSLADefinition_UpdateBulkCSVSLADefinition{}
@@ -118197,10 +118743,24 @@ func (t *UpdateBulkSLADefinition_UpdateBulkSLADefinition_SLADefinitions) GetUpda
 }
 
 type UpdateBulkSLADefinition_UpdateBulkSLADefinition struct {
+	Error          *string                                                           "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs  []string                                                          "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
 	SLADefinitions []*UpdateBulkSLADefinition_UpdateBulkSLADefinition_SLADefinitions "json:\"slaDefinitions,omitempty\" graphql:\"slaDefinitions\""
 	UpdatedIDs     []string                                                          "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 }
 
+func (t *UpdateBulkSLADefinition_UpdateBulkSLADefinition) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkSLADefinition_UpdateBulkSLADefinition{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkSLADefinition_UpdateBulkSLADefinition) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkSLADefinition_UpdateBulkSLADefinition{}
+	}
+	return t.NotUpdatedIDs
+}
 func (t *UpdateBulkSLADefinition_UpdateBulkSLADefinition) GetSLADefinitions() []*UpdateBulkSLADefinition_UpdateBulkSLADefinition_SLADefinitions {
 	if t == nil {
 		t = &UpdateBulkSLADefinition_UpdateBulkSLADefinition{}
@@ -123667,10 +124227,24 @@ func (t *UpdateBulkSubprocessor_UpdateBulkSubprocessor_Subprocessors) GetUpdated
 }
 
 type UpdateBulkSubprocessor_UpdateBulkSubprocessor struct {
+	Error         *string                                                        "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs []string                                                       "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
 	Subprocessors []*UpdateBulkSubprocessor_UpdateBulkSubprocessor_Subprocessors "json:\"subprocessors,omitempty\" graphql:\"subprocessors\""
 	UpdatedIDs    []string                                                       "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 }
 
+func (t *UpdateBulkSubprocessor_UpdateBulkSubprocessor) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkSubprocessor_UpdateBulkSubprocessor{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkSubprocessor_UpdateBulkSubprocessor) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkSubprocessor_UpdateBulkSubprocessor{}
+	}
+	return t.NotUpdatedIDs
+}
 func (t *UpdateBulkSubprocessor_UpdateBulkSubprocessor) GetSubprocessors() []*UpdateBulkSubprocessor_UpdateBulkSubprocessor_Subprocessors {
 	if t == nil {
 		t = &UpdateBulkSubprocessor_UpdateBulkSubprocessor{}
@@ -125211,7 +125785,9 @@ func (t *CreateSystemDetail_CreateSystemDetail) GetSystemDetail() *CreateSystemD
 }
 
 type DeleteBulkSystemDetail_DeleteBulkSystemDetail struct {
-	DeletedIDs []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+	DeletedIDs    []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+	Error         *string  "json:\"error,omitempty\" graphql:\"error\""
+	NotDeletedIDs []string "json:\"notDeletedIDs\" graphql:\"notDeletedIDs\""
 }
 
 func (t *DeleteBulkSystemDetail_DeleteBulkSystemDetail) GetDeletedIDs() []string {
@@ -125219,6 +125795,18 @@ func (t *DeleteBulkSystemDetail_DeleteBulkSystemDetail) GetDeletedIDs() []string
 		t = &DeleteBulkSystemDetail_DeleteBulkSystemDetail{}
 	}
 	return t.DeletedIDs
+}
+func (t *DeleteBulkSystemDetail_DeleteBulkSystemDetail) GetError() *string {
+	if t == nil {
+		t = &DeleteBulkSystemDetail_DeleteBulkSystemDetail{}
+	}
+	return t.Error
+}
+func (t *DeleteBulkSystemDetail_DeleteBulkSystemDetail) GetNotDeletedIDs() []string {
+	if t == nil {
+		t = &DeleteBulkSystemDetail_DeleteBulkSystemDetail{}
+	}
+	return t.NotDeletedIDs
 }
 
 type DeleteSystemDetail_DeleteSystemDetail struct {
@@ -125861,10 +126449,24 @@ func (t *UpdateBulkCSVSystemDetail_UpdateBulkCSVSystemDetail_SystemDetails) GetV
 }
 
 type UpdateBulkCSVSystemDetail_UpdateBulkCSVSystemDetail struct {
+	Error         *string                                                              "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs []string                                                             "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
 	SystemDetails []*UpdateBulkCSVSystemDetail_UpdateBulkCSVSystemDetail_SystemDetails "json:\"systemDetails,omitempty\" graphql:\"systemDetails\""
 	UpdatedIDs    []string                                                             "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 }
 
+func (t *UpdateBulkCSVSystemDetail_UpdateBulkCSVSystemDetail) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkCSVSystemDetail_UpdateBulkCSVSystemDetail{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkCSVSystemDetail_UpdateBulkCSVSystemDetail) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkCSVSystemDetail_UpdateBulkCSVSystemDetail{}
+	}
+	return t.NotUpdatedIDs
+}
 func (t *UpdateBulkCSVSystemDetail_UpdateBulkCSVSystemDetail) GetSystemDetails() []*UpdateBulkCSVSystemDetail_UpdateBulkCSVSystemDetail_SystemDetails {
 	if t == nil {
 		t = &UpdateBulkCSVSystemDetail_UpdateBulkCSVSystemDetail{}
@@ -126002,10 +126604,24 @@ func (t *UpdateBulkSystemDetail_UpdateBulkSystemDetail_SystemDetails) GetVersion
 }
 
 type UpdateBulkSystemDetail_UpdateBulkSystemDetail struct {
+	Error         *string                                                        "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs []string                                                       "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
 	SystemDetails []*UpdateBulkSystemDetail_UpdateBulkSystemDetail_SystemDetails "json:\"systemDetails,omitempty\" graphql:\"systemDetails\""
 	UpdatedIDs    []string                                                       "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 }
 
+func (t *UpdateBulkSystemDetail_UpdateBulkSystemDetail) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkSystemDetail_UpdateBulkSystemDetail{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkSystemDetail_UpdateBulkSystemDetail) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkSystemDetail_UpdateBulkSystemDetail{}
+	}
+	return t.NotUpdatedIDs
+}
 func (t *UpdateBulkSystemDetail_UpdateBulkSystemDetail) GetSystemDetails() []*UpdateBulkSystemDetail_UpdateBulkSystemDetail_SystemDetails {
 	if t == nil {
 		t = &UpdateBulkSystemDetail_UpdateBulkSystemDetail{}
@@ -130272,10 +130888,24 @@ func (t *UpdateBulkTask_UpdateBulkTask_Tasks) GetWorkflowEligibleMarker() *bool 
 }
 
 type UpdateBulkTask_UpdateBulkTask struct {
-	Tasks      []*UpdateBulkTask_UpdateBulkTask_Tasks "json:\"tasks,omitempty\" graphql:\"tasks\""
-	UpdatedIDs []string                               "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
+	Error         *string                                "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs []string                               "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
+	Tasks         []*UpdateBulkTask_UpdateBulkTask_Tasks "json:\"tasks,omitempty\" graphql:\"tasks\""
+	UpdatedIDs    []string                               "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 }
 
+func (t *UpdateBulkTask_UpdateBulkTask) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkTask_UpdateBulkTask{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkTask_UpdateBulkTask) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkTask_UpdateBulkTask{}
+	}
+	return t.NotUpdatedIDs
+}
 func (t *UpdateBulkTask_UpdateBulkTask) GetTasks() []*UpdateBulkTask_UpdateBulkTask_Tasks {
 	if t == nil {
 		t = &UpdateBulkTask_UpdateBulkTask{}
@@ -138865,7 +139495,9 @@ func (t *CreateTrustCenterFAQ_CreateTrustCenterFaq) GetTrustCenterFaq() *CreateT
 }
 
 type DeleteBulkTrustCenterFAQ_DeleteBulkTrustCenterFaq struct {
-	DeletedIDs []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+	DeletedIDs    []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+	Error         *string  "json:\"error,omitempty\" graphql:\"error\""
+	NotDeletedIDs []string "json:\"notDeletedIDs\" graphql:\"notDeletedIDs\""
 }
 
 func (t *DeleteBulkTrustCenterFAQ_DeleteBulkTrustCenterFaq) GetDeletedIDs() []string {
@@ -138873,6 +139505,18 @@ func (t *DeleteBulkTrustCenterFAQ_DeleteBulkTrustCenterFaq) GetDeletedIDs() []st
 		t = &DeleteBulkTrustCenterFAQ_DeleteBulkTrustCenterFaq{}
 	}
 	return t.DeletedIDs
+}
+func (t *DeleteBulkTrustCenterFAQ_DeleteBulkTrustCenterFaq) GetError() *string {
+	if t == nil {
+		t = &DeleteBulkTrustCenterFAQ_DeleteBulkTrustCenterFaq{}
+	}
+	return t.Error
+}
+func (t *DeleteBulkTrustCenterFAQ_DeleteBulkTrustCenterFaq) GetNotDeletedIDs() []string {
+	if t == nil {
+		t = &DeleteBulkTrustCenterFAQ_DeleteBulkTrustCenterFaq{}
+	}
+	return t.NotDeletedIDs
 }
 
 type DeleteTrustCenterFAQ_DeleteTrustCenterFaq struct {
@@ -139379,10 +140023,24 @@ func (t *UpdateBulkCSVTrustCenterFAQ_UpdateBulkCSVTrustCenterFaq_TrustCenterFAQs
 }
 
 type UpdateBulkCSVTrustCenterFAQ_UpdateBulkCSVTrustCenterFaq struct {
+	Error           *string                                                                    "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs   []string                                                                   "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
 	TrustCenterFAQs []*UpdateBulkCSVTrustCenterFAQ_UpdateBulkCSVTrustCenterFaq_TrustCenterFAQs "json:\"trustCenterFAQs,omitempty\" graphql:\"trustCenterFAQs\""
 	UpdatedIDs      []string                                                                   "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 }
 
+func (t *UpdateBulkCSVTrustCenterFAQ_UpdateBulkCSVTrustCenterFaq) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkCSVTrustCenterFAQ_UpdateBulkCSVTrustCenterFaq{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkCSVTrustCenterFAQ_UpdateBulkCSVTrustCenterFaq) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkCSVTrustCenterFAQ_UpdateBulkCSVTrustCenterFaq{}
+	}
+	return t.NotUpdatedIDs
+}
 func (t *UpdateBulkCSVTrustCenterFAQ_UpdateBulkCSVTrustCenterFaq) GetTrustCenterFAQs() []*UpdateBulkCSVTrustCenterFAQ_UpdateBulkCSVTrustCenterFaq_TrustCenterFAQs {
 	if t == nil {
 		t = &UpdateBulkCSVTrustCenterFAQ_UpdateBulkCSVTrustCenterFaq{}
@@ -139485,10 +140143,24 @@ func (t *UpdateBulkTrustCenterFAQ_UpdateBulkTrustCenterFaq_TrustCenterFAQs) GetU
 }
 
 type UpdateBulkTrustCenterFAQ_UpdateBulkTrustCenterFaq struct {
+	Error           *string                                                              "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs   []string                                                             "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
 	TrustCenterFAQs []*UpdateBulkTrustCenterFAQ_UpdateBulkTrustCenterFaq_TrustCenterFAQs "json:\"trustCenterFAQs,omitempty\" graphql:\"trustCenterFAQs\""
 	UpdatedIDs      []string                                                             "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 }
 
+func (t *UpdateBulkTrustCenterFAQ_UpdateBulkTrustCenterFaq) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkTrustCenterFAQ_UpdateBulkTrustCenterFaq{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkTrustCenterFAQ_UpdateBulkTrustCenterFaq) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkTrustCenterFAQ_UpdateBulkTrustCenterFaq{}
+	}
+	return t.NotUpdatedIDs
+}
 func (t *UpdateBulkTrustCenterFAQ_UpdateBulkTrustCenterFaq) GetTrustCenterFAQs() []*UpdateBulkTrustCenterFAQ_UpdateBulkTrustCenterFaq_TrustCenterFAQs {
 	if t == nil {
 		t = &UpdateBulkTrustCenterFAQ_UpdateBulkTrustCenterFaq{}
@@ -140283,7 +140955,9 @@ func (t *CreateTrustCenterNDARequest_CreateTrustCenterNDARequest) GetTrustCenter
 }
 
 type DeleteBulkTrustCenterNDARequest_DeleteBulkTrustCenterNDARequest struct {
-	DeletedIDs []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+	DeletedIDs    []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+	Error         *string  "json:\"error,omitempty\" graphql:\"error\""
+	NotDeletedIDs []string "json:\"notDeletedIDs\" graphql:\"notDeletedIDs\""
 }
 
 func (t *DeleteBulkTrustCenterNDARequest_DeleteBulkTrustCenterNDARequest) GetDeletedIDs() []string {
@@ -140291,6 +140965,18 @@ func (t *DeleteBulkTrustCenterNDARequest_DeleteBulkTrustCenterNDARequest) GetDel
 		t = &DeleteBulkTrustCenterNDARequest_DeleteBulkTrustCenterNDARequest{}
 	}
 	return t.DeletedIDs
+}
+func (t *DeleteBulkTrustCenterNDARequest_DeleteBulkTrustCenterNDARequest) GetError() *string {
+	if t == nil {
+		t = &DeleteBulkTrustCenterNDARequest_DeleteBulkTrustCenterNDARequest{}
+	}
+	return t.Error
+}
+func (t *DeleteBulkTrustCenterNDARequest_DeleteBulkTrustCenterNDARequest) GetNotDeletedIDs() []string {
+	if t == nil {
+		t = &DeleteBulkTrustCenterNDARequest_DeleteBulkTrustCenterNDARequest{}
+	}
+	return t.NotDeletedIDs
 }
 
 type DeleteTrustCenterNDARequest_DeleteTrustCenterNDARequest struct {
@@ -143535,10 +144221,24 @@ func (t *UpdateBulkTrustCenterSubprocessor_UpdateBulkTrustCenterSubprocessor_Tru
 }
 
 type UpdateBulkTrustCenterSubprocessor_UpdateBulkTrustCenterSubprocessor struct {
+	Error                    *string                                                                                         "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs            []string                                                                                        "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
 	TrustCenterSubprocessors []*UpdateBulkTrustCenterSubprocessor_UpdateBulkTrustCenterSubprocessor_TrustCenterSubprocessors "json:\"trustCenterSubprocessors,omitempty\" graphql:\"trustCenterSubprocessors\""
 	UpdatedIDs               []string                                                                                        "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 }
 
+func (t *UpdateBulkTrustCenterSubprocessor_UpdateBulkTrustCenterSubprocessor) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkTrustCenterSubprocessor_UpdateBulkTrustCenterSubprocessor{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkTrustCenterSubprocessor_UpdateBulkTrustCenterSubprocessor) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkTrustCenterSubprocessor_UpdateBulkTrustCenterSubprocessor{}
+	}
+	return t.NotUpdatedIDs
+}
 func (t *UpdateBulkTrustCenterSubprocessor_UpdateBulkTrustCenterSubprocessor) GetTrustCenterSubprocessors() []*UpdateBulkTrustCenterSubprocessor_UpdateBulkTrustCenterSubprocessor_TrustCenterSubprocessors {
 	if t == nil {
 		t = &UpdateBulkTrustCenterSubprocessor_UpdateBulkTrustCenterSubprocessor{}
@@ -147436,7 +148136,9 @@ func (t *CreateVendorRiskScore_CreateVendorRiskScore) GetVendorRiskScore() *Crea
 }
 
 type DeleteBulkVendorRiskScore_DeleteBulkVendorRiskScore struct {
-	DeletedIDs []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+	DeletedIDs    []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+	Error         *string  "json:\"error,omitempty\" graphql:\"error\""
+	NotDeletedIDs []string "json:\"notDeletedIDs\" graphql:\"notDeletedIDs\""
 }
 
 func (t *DeleteBulkVendorRiskScore_DeleteBulkVendorRiskScore) GetDeletedIDs() []string {
@@ -147444,6 +148146,18 @@ func (t *DeleteBulkVendorRiskScore_DeleteBulkVendorRiskScore) GetDeletedIDs() []
 		t = &DeleteBulkVendorRiskScore_DeleteBulkVendorRiskScore{}
 	}
 	return t.DeletedIDs
+}
+func (t *DeleteBulkVendorRiskScore_DeleteBulkVendorRiskScore) GetError() *string {
+	if t == nil {
+		t = &DeleteBulkVendorRiskScore_DeleteBulkVendorRiskScore{}
+	}
+	return t.Error
+}
+func (t *DeleteBulkVendorRiskScore_DeleteBulkVendorRiskScore) GetNotDeletedIDs() []string {
+	if t == nil {
+		t = &DeleteBulkVendorRiskScore_DeleteBulkVendorRiskScore{}
+	}
+	return t.NotDeletedIDs
 }
 
 type DeleteVendorRiskScore_DeleteVendorRiskScore struct {
@@ -148198,10 +148912,24 @@ func (t *UpdateBulkCSVVendorRiskScore_UpdateBulkCSVVendorRiskScore_VendorRiskSco
 }
 
 type UpdateBulkCSVVendorRiskScore_UpdateBulkCSVVendorRiskScore struct {
+	Error            *string                                                                       "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs    []string                                                                      "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
 	UpdatedIDs       []string                                                                      "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 	VendorRiskScores []*UpdateBulkCSVVendorRiskScore_UpdateBulkCSVVendorRiskScore_VendorRiskScores "json:\"vendorRiskScores,omitempty\" graphql:\"vendorRiskScores\""
 }
 
+func (t *UpdateBulkCSVVendorRiskScore_UpdateBulkCSVVendorRiskScore) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkCSVVendorRiskScore_UpdateBulkCSVVendorRiskScore{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkCSVVendorRiskScore_UpdateBulkCSVVendorRiskScore) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkCSVVendorRiskScore_UpdateBulkCSVVendorRiskScore{}
+	}
+	return t.NotUpdatedIDs
+}
 func (t *UpdateBulkCSVVendorRiskScore_UpdateBulkCSVVendorRiskScore) GetUpdatedIDs() []string {
 	if t == nil {
 		t = &UpdateBulkCSVVendorRiskScore_UpdateBulkCSVVendorRiskScore{}
@@ -148367,10 +149095,24 @@ func (t *UpdateBulkVendorRiskScore_UpdateBulkVendorRiskScore_VendorRiskScores) G
 }
 
 type UpdateBulkVendorRiskScore_UpdateBulkVendorRiskScore struct {
+	Error            *string                                                                 "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs    []string                                                                "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
 	UpdatedIDs       []string                                                                "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 	VendorRiskScores []*UpdateBulkVendorRiskScore_UpdateBulkVendorRiskScore_VendorRiskScores "json:\"vendorRiskScores,omitempty\" graphql:\"vendorRiskScores\""
 }
 
+func (t *UpdateBulkVendorRiskScore_UpdateBulkVendorRiskScore) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkVendorRiskScore_UpdateBulkVendorRiskScore{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkVendorRiskScore_UpdateBulkVendorRiskScore) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkVendorRiskScore_UpdateBulkVendorRiskScore{}
+	}
+	return t.NotUpdatedIDs
+}
 func (t *UpdateBulkVendorRiskScore_UpdateBulkVendorRiskScore) GetUpdatedIDs() []string {
 	if t == nil {
 		t = &UpdateBulkVendorRiskScore_UpdateBulkVendorRiskScore{}
@@ -148823,7 +149565,9 @@ func (t *CreateVendorScoringConfig_CreateVendorScoringConfig) GetVendorScoringCo
 }
 
 type DeleteBulkVendorScoringConfig_DeleteBulkVendorScoringConfig struct {
-	DeletedIDs []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+	DeletedIDs    []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+	Error         *string  "json:\"error,omitempty\" graphql:\"error\""
+	NotDeletedIDs []string "json:\"notDeletedIDs\" graphql:\"notDeletedIDs\""
 }
 
 func (t *DeleteBulkVendorScoringConfig_DeleteBulkVendorScoringConfig) GetDeletedIDs() []string {
@@ -148831,6 +149575,18 @@ func (t *DeleteBulkVendorScoringConfig_DeleteBulkVendorScoringConfig) GetDeleted
 		t = &DeleteBulkVendorScoringConfig_DeleteBulkVendorScoringConfig{}
 	}
 	return t.DeletedIDs
+}
+func (t *DeleteBulkVendorScoringConfig_DeleteBulkVendorScoringConfig) GetError() *string {
+	if t == nil {
+		t = &DeleteBulkVendorScoringConfig_DeleteBulkVendorScoringConfig{}
+	}
+	return t.Error
+}
+func (t *DeleteBulkVendorScoringConfig_DeleteBulkVendorScoringConfig) GetNotDeletedIDs() []string {
+	if t == nil {
+		t = &DeleteBulkVendorScoringConfig_DeleteBulkVendorScoringConfig{}
+	}
+	return t.NotDeletedIDs
 }
 
 type DeleteVendorScoringConfig_DeleteVendorScoringConfig struct {
@@ -149305,10 +150061,24 @@ func (t *UpdateBulkCSVVendorScoringConfig_UpdateBulkCSVVendorScoringConfig_Vendo
 }
 
 type UpdateBulkCSVVendorScoringConfig_UpdateBulkCSVVendorScoringConfig struct {
+	Error                *string                                                                                   "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs        []string                                                                                  "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
 	UpdatedIDs           []string                                                                                  "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 	VendorScoringConfigs []*UpdateBulkCSVVendorScoringConfig_UpdateBulkCSVVendorScoringConfig_VendorScoringConfigs "json:\"vendorScoringConfigs,omitempty\" graphql:\"vendorScoringConfigs\""
 }
 
+func (t *UpdateBulkCSVVendorScoringConfig_UpdateBulkCSVVendorScoringConfig) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkCSVVendorScoringConfig_UpdateBulkCSVVendorScoringConfig{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkCSVVendorScoringConfig_UpdateBulkCSVVendorScoringConfig) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkCSVVendorScoringConfig_UpdateBulkCSVVendorScoringConfig{}
+	}
+	return t.NotUpdatedIDs
+}
 func (t *UpdateBulkCSVVendorScoringConfig_UpdateBulkCSVVendorScoringConfig) GetUpdatedIDs() []string {
 	if t == nil {
 		t = &UpdateBulkCSVVendorScoringConfig_UpdateBulkCSVVendorScoringConfig{}
@@ -149404,10 +150174,24 @@ func (t *UpdateBulkVendorScoringConfig_UpdateBulkVendorScoringConfig_VendorScori
 }
 
 type UpdateBulkVendorScoringConfig_UpdateBulkVendorScoringConfig struct {
+	Error                *string                                                                             "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs        []string                                                                            "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
 	UpdatedIDs           []string                                                                            "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 	VendorScoringConfigs []*UpdateBulkVendorScoringConfig_UpdateBulkVendorScoringConfig_VendorScoringConfigs "json:\"vendorScoringConfigs,omitempty\" graphql:\"vendorScoringConfigs\""
 }
 
+func (t *UpdateBulkVendorScoringConfig_UpdateBulkVendorScoringConfig) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkVendorScoringConfig_UpdateBulkVendorScoringConfig{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkVendorScoringConfig_UpdateBulkVendorScoringConfig) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkVendorScoringConfig_UpdateBulkVendorScoringConfig{}
+	}
+	return t.NotUpdatedIDs
+}
 func (t *UpdateBulkVendorScoringConfig_UpdateBulkVendorScoringConfig) GetUpdatedIDs() []string {
 	if t == nil {
 		t = &UpdateBulkVendorScoringConfig_UpdateBulkVendorScoringConfig{}
@@ -150966,7 +151750,9 @@ func (t *CreateVulnerability_CreateVulnerability) GetVulnerability() *CreateVuln
 }
 
 type DeleteBulkVulnerability_DeleteBulkVulnerability struct {
-	DeletedIDs []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+	DeletedIDs    []string "json:\"deletedIDs\" graphql:\"deletedIDs\""
+	Error         *string  "json:\"error,omitempty\" graphql:\"error\""
+	NotDeletedIDs []string "json:\"notDeletedIDs\" graphql:\"notDeletedIDs\""
 }
 
 func (t *DeleteBulkVulnerability_DeleteBulkVulnerability) GetDeletedIDs() []string {
@@ -150974,6 +151760,18 @@ func (t *DeleteBulkVulnerability_DeleteBulkVulnerability) GetDeletedIDs() []stri
 		t = &DeleteBulkVulnerability_DeleteBulkVulnerability{}
 	}
 	return t.DeletedIDs
+}
+func (t *DeleteBulkVulnerability_DeleteBulkVulnerability) GetError() *string {
+	if t == nil {
+		t = &DeleteBulkVulnerability_DeleteBulkVulnerability{}
+	}
+	return t.Error
+}
+func (t *DeleteBulkVulnerability_DeleteBulkVulnerability) GetNotDeletedIDs() []string {
+	if t == nil {
+		t = &DeleteBulkVulnerability_DeleteBulkVulnerability{}
+	}
+	return t.NotDeletedIDs
 }
 
 type DeleteVulnerability_DeleteVulnerability struct {
@@ -152792,10 +153590,24 @@ func (t *UpdateBulkCSVVulnerability_UpdateBulkCSVVulnerability_Vulnerabilities) 
 }
 
 type UpdateBulkCSVVulnerability_UpdateBulkCSVVulnerability struct {
+	Error           *string                                                                  "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs   []string                                                                 "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
 	UpdatedIDs      []string                                                                 "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 	Vulnerabilities []*UpdateBulkCSVVulnerability_UpdateBulkCSVVulnerability_Vulnerabilities "json:\"vulnerabilities,omitempty\" graphql:\"vulnerabilities\""
 }
 
+func (t *UpdateBulkCSVVulnerability_UpdateBulkCSVVulnerability) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkCSVVulnerability_UpdateBulkCSVVulnerability{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkCSVVulnerability_UpdateBulkCSVVulnerability) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkCSVVulnerability_UpdateBulkCSVVulnerability{}
+	}
+	return t.NotUpdatedIDs
+}
 func (t *UpdateBulkCSVVulnerability_UpdateBulkCSVVulnerability) GetUpdatedIDs() []string {
 	if t == nil {
 		t = &UpdateBulkCSVVulnerability_UpdateBulkCSVVulnerability{}
@@ -153283,10 +154095,24 @@ func (t *UpdateBulkVulnerability_UpdateBulkVulnerability_Vulnerabilities) GetWor
 }
 
 type UpdateBulkVulnerability_UpdateBulkVulnerability struct {
+	Error           *string                                                            "json:\"error,omitempty\" graphql:\"error\""
+	NotUpdatedIDs   []string                                                           "json:\"notUpdatedIDs\" graphql:\"notUpdatedIDs\""
 	UpdatedIDs      []string                                                           "json:\"updatedIDs,omitempty\" graphql:\"updatedIDs\""
 	Vulnerabilities []*UpdateBulkVulnerability_UpdateBulkVulnerability_Vulnerabilities "json:\"vulnerabilities,omitempty\" graphql:\"vulnerabilities\""
 }
 
+func (t *UpdateBulkVulnerability_UpdateBulkVulnerability) GetError() *string {
+	if t == nil {
+		t = &UpdateBulkVulnerability_UpdateBulkVulnerability{}
+	}
+	return t.Error
+}
+func (t *UpdateBulkVulnerability_UpdateBulkVulnerability) GetNotUpdatedIDs() []string {
+	if t == nil {
+		t = &UpdateBulkVulnerability_UpdateBulkVulnerability{}
+	}
+	return t.NotUpdatedIDs
+}
 func (t *UpdateBulkVulnerability_UpdateBulkVulnerability) GetUpdatedIDs() []string {
 	if t == nil {
 		t = &UpdateBulkVulnerability_UpdateBulkVulnerability{}
@@ -176066,6 +176892,8 @@ const UpdateBulkActionPlanDocument = `mutation UpdateBulkActionPlan ($ids: [ID!]
 			workflowEligibleMarker
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `
@@ -176437,6 +177265,8 @@ func (c *Client) DeleteAssessment(ctx context.Context, deleteAssessmentID string
 const DeleteBulkAssessmentDocument = `mutation DeleteBulkAssessment ($ids: [ID!]!) {
 	deleteBulkAssessment(ids: $ids) {
 		deletedIDs
+		notDeletedIDs
+		error
 	}
 }
 `
@@ -177140,6 +177970,8 @@ func (c *Client) DeleteAsset(ctx context.Context, deleteAssetID string, intercep
 const DeleteBulkAssetDocument = `mutation DeleteBulkAsset ($ids: [ID!]!) {
 	deleteBulkAsset(ids: $ids) {
 		deletedIDs
+		notDeletedIDs
+		error
 	}
 }
 `
@@ -177537,6 +178369,8 @@ const UpdateBulkAssetDocument = `mutation UpdateBulkAsset ($ids: [ID!]!, $input:
 			website
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `
@@ -177613,6 +178447,8 @@ const UpdateBulkCSVAssetDocument = `mutation UpdateBulkCSVAsset ($input: Upload!
 			website
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `
@@ -179008,6 +179844,8 @@ func (c *Client) CreateCheckResult(ctx context.Context, input CreateCheckResultI
 const DeleteBulkCheckResultDocument = `mutation DeleteBulkCheckResult ($ids: [ID!]!) {
 	deleteBulkCheckResult(ids: $ids) {
 		deletedIDs
+		notDeletedIDs
+		error
 	}
 }
 `
@@ -179214,6 +180052,8 @@ const UpdateBulkCSVCheckResultDocument = `mutation UpdateBulkCSVCheckResult ($in
 			updatedByImpersonator
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `
@@ -179254,6 +180094,8 @@ const UpdateBulkCheckResultDocument = `mutation UpdateBulkCheckResult ($ids: [ID
 			updatedByImpersonator
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `
@@ -179613,6 +180455,8 @@ const UpdateBulkContactDocument = `mutation UpdateBulkContact ($ids: [ID!]!, $in
 			updatedByImpersonator
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `
@@ -179958,6 +180802,8 @@ func (c *Client) CreateControl(ctx context.Context, input CreateControlInput, in
 const DeleteBulkControlDocument = `mutation DeleteBulkControl ($ids: [ID!]!) {
 	deleteBulkControl(ids: $ids) {
 		deletedIDs
+		notDeletedIDs
+		error
 	}
 }
 `
@@ -180585,6 +181431,8 @@ const UpdateBulkControlDocument = `mutation UpdateBulkControl ($ids: [ID!]!, $in
 			}
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `
@@ -185806,6 +186654,8 @@ func (c *Client) CreateEmailTemplate(ctx context.Context, input CreateEmailTempl
 const DeleteBulkEmailTemplateDocument = `mutation DeleteBulkEmailTemplate ($ids: [ID!]!) {
 	deleteBulkEmailTemplate(ids: $ids) {
 		deletedIDs
+		notDeletedIDs
+		error
 	}
 }
 `
@@ -186079,6 +186929,8 @@ const UpdateBulkCSVEmailTemplateDocument = `mutation UpdateBulkCSVEmailTemplate 
 			workflowInstanceID
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `
@@ -186130,6 +186982,8 @@ const UpdateBulkEmailTemplateDocument = `mutation UpdateBulkEmailTemplate ($ids:
 			workflowInstanceID
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `
@@ -187808,6 +188662,8 @@ const UpdateBulkEvidenceDocument = `mutation UpdateBulkEvidence ($ids: [ID!]!, $
 			workflowEligibleMarker
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `
@@ -188089,6 +188945,8 @@ func (c *Client) CreateExport(ctx context.Context, input CreateExportInput, inte
 const DeleteBulkExportDocument = `mutation DeleteBulkExport ($ids: [ID!]!) {
 	deleteBulkExport(ids: $ids) {
 		deletedIDs
+		notDeletedIDs
+		error
 	}
 }
 `
@@ -188774,6 +189632,8 @@ func (c *Client) CreateFinding(ctx context.Context, input CreateFindingInput, in
 const DeleteBulkFindingDocument = `mutation DeleteBulkFinding ($ids: [ID!]!) {
 	deleteBulkFinding(ids: $ids) {
 		deletedIDs
+		notDeletedIDs
+		error
 	}
 }
 `
@@ -189185,6 +190045,8 @@ const UpdateBulkCSVFindingDocument = `mutation UpdateBulkCSVFinding ($input: Upl
 			workflowEligibleMarker
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `
@@ -189273,6 +190135,8 @@ const UpdateBulkFindingDocument = `mutation UpdateBulkFinding ($ids: [ID!]!, $in
 			workflowEligibleMarker
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `
@@ -189509,6 +190373,8 @@ func (c *Client) CreateFindingControl(ctx context.Context, input CreateFindingCo
 const DeleteBulkFindingControlDocument = `mutation DeleteBulkFindingControl ($ids: [ID!]!) {
 	deleteBulkFindingControl(ids: $ids) {
 		deletedIDs
+		notDeletedIDs
+		error
 	}
 }
 `
@@ -192738,6 +193604,8 @@ const UpdateBulkInternalPolicyDocument = `mutation UpdateBulkInternalPolicy ($id
 			}
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `
@@ -195954,6 +196822,8 @@ func (c *Client) CreateNotificationPreference(ctx context.Context, input CreateN
 const DeleteBulkNotificationPreferenceDocument = `mutation DeleteBulkNotificationPreference ($ids: [ID!]!) {
 	deleteBulkNotificationPreference(ids: $ids) {
 		deletedIDs
+		notDeletedIDs
+		error
 	}
 }
 `
@@ -196216,6 +197086,8 @@ const UpdateBulkCSVNotificationPreferenceDocument = `mutation UpdateBulkCSVNotif
 			verifiedAt
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `
@@ -196270,6 +197142,8 @@ const UpdateBulkNotificationPreferenceDocument = `mutation UpdateBulkNotificatio
 			verifiedAt
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `
@@ -196523,6 +197397,8 @@ func (c *Client) CreateNotificationTemplate(ctx context.Context, input CreateNot
 const DeleteBulkNotificationTemplateDocument = `mutation DeleteBulkNotificationTemplate ($ids: [ID!]!) {
 	deleteBulkNotificationTemplate(ids: $ids) {
 		deletedIDs
+		notDeletedIDs
+		error
 	}
 }
 `
@@ -196805,6 +197681,8 @@ const UpdateBulkCSVNotificationTemplateDocument = `mutation UpdateBulkCSVNotific
 			workflowDefinitionID
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `
@@ -196864,6 +197742,8 @@ const UpdateBulkNotificationTemplateDocument = `mutation UpdateBulkNotificationT
 			workflowDefinitionID
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `
@@ -198052,6 +198932,8 @@ const UpdateBulkOrgMemberRolesDocument = `mutation UpdateBulkOrgMemberRoles ($id
 			organizationID
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `
@@ -199676,6 +200558,8 @@ func (c *Client) CreateUploadProcedure(ctx context.Context, procedureFile graphq
 const DeleteBulkProcedureDocument = `mutation DeleteBulkProcedure ($ids: [ID!]!) {
 	deleteBulkProcedure(ids: $ids) {
 		deletedIDs
+		notDeletedIDs
+		error
 	}
 }
 `
@@ -199994,6 +200878,8 @@ const UpdateBulkProcedureDocument = `mutation UpdateBulkProcedure ($ids: [ID!]!,
 			}
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `
@@ -201701,6 +202587,8 @@ func (c *Client) CreateRemediation(ctx context.Context, input CreateRemediationI
 const DeleteBulkRemediationDocument = `mutation DeleteBulkRemediation ($ids: [ID!]!) {
 	deleteBulkRemediation(ids: $ids) {
 		deletedIDs
+		notDeletedIDs
+		error
 	}
 }
 `
@@ -201966,6 +202854,8 @@ const UpdateBulkCSVRemediationDocument = `mutation UpdateBulkCSVRemediation ($in
 			workflowEligibleMarker
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `
@@ -202029,6 +202919,8 @@ const UpdateBulkRemediationDocument = `mutation UpdateBulkRemediation ($ids: [ID
 			workflowEligibleMarker
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `
@@ -202294,6 +203186,8 @@ func (c *Client) CreateReview(ctx context.Context, input CreateReviewInput, inte
 const DeleteBulkReviewReviewDocument = `mutation DeleteBulkReviewReview ($ids: [ID!]!) {
 	deleteBulkReview(ids: $ids) {
 		deletedIDs
+		notDeletedIDs
+		error
 	}
 }
 `
@@ -202551,6 +203445,8 @@ const UpdateBulkCSVReviewDocument = `mutation UpdateBulkCSVReview ($input: Uploa
 			updatedByImpersonator
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `
@@ -202611,6 +203507,8 @@ const UpdateBulkReviewDocument = `mutation UpdateBulkReview ($ids: [ID!]!, $inpu
 			updatedByImpersonator
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `
@@ -203447,6 +204345,8 @@ const UpdateBulkRiskDocument = `mutation UpdateBulkRisk ($ids: [ID!]!, $input: U
 			}
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `
@@ -205425,6 +206325,8 @@ func (c *Client) CreateSLADefinition(ctx context.Context, input CreateSLADefinit
 const DeleteBulkSLADefinitionDocument = `mutation DeleteBulkSLADefinition ($ids: [ID!]!) {
 	deleteBulkSLADefinition(ids: $ids) {
 		deletedIDs
+		notDeletedIDs
+		error
 	}
 }
 `
@@ -205619,6 +206521,8 @@ const UpdateBulkCSVSLADefinitionDocument = `mutation UpdateBulkCSVSLADefinition 
 			updatedByImpersonator
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `
@@ -205656,6 +206560,8 @@ const UpdateBulkSLADefinitionDocument = `mutation UpdateBulkSLADefinition ($ids:
 			updatedByImpersonator
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `
@@ -206996,6 +207902,8 @@ const UpdateBulkSubprocessorDocument = `mutation UpdateBulkSubprocessor ($ids: [
 			}
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `
@@ -207529,6 +208437,8 @@ func (c *Client) CreateSystemDetail(ctx context.Context, input CreateSystemDetai
 const DeleteBulkSystemDetailDocument = `mutation DeleteBulkSystemDetail ($ids: [ID!]!) {
 	deleteBulkSystemDetail(ids: $ids) {
 		deletedIDs
+		notDeletedIDs
+		error
 	}
 }
 `
@@ -207747,6 +208657,8 @@ const UpdateBulkCSVSystemDetailDocument = `mutation UpdateBulkCSVSystemDetail ($
 			version
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `
@@ -207790,6 +208702,8 @@ const UpdateBulkSystemDetailDocument = `mutation UpdateBulkSystemDetail ($ids: [
 			version
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `
@@ -208822,6 +209736,8 @@ const UpdateBulkTaskDocument = `mutation UpdateBulkTask ($ids: [ID!]!, $input: U
 			}
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `
@@ -211178,6 +212094,8 @@ func (c *Client) CreateTrustCenterFaq(ctx context.Context, input CreateTrustCent
 const DeleteBulkTrustCenterFaqDocument = `mutation DeleteBulkTrustCenterFAQ ($ids: [ID!]!) {
 	deleteBulkTrustCenterFAQ(ids: $ids) {
 		deletedIDs
+		notDeletedIDs
+		error
 	}
 }
 `
@@ -211377,6 +212295,8 @@ const UpdateBulkCSVTrustCenterFaqDocument = `mutation UpdateBulkCSVTrustCenterFA
 			updatedByImpersonator
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `
@@ -211415,6 +212335,8 @@ const UpdateBulkTrustCenterFaqDocument = `mutation UpdateBulkTrustCenterFAQ ($id
 			updatedByImpersonator
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `
@@ -211717,6 +212639,8 @@ func (c *Client) CreateTrustCenterNDARequest(ctx context.Context, input CreateTr
 const DeleteBulkTrustCenterNDARequestDocument = `mutation DeleteBulkTrustCenterNDARequest ($ids: [ID!]!) {
 	deleteBulkTrustCenterNDARequest(ids: $ids) {
 		deletedIDs
+		notDeletedIDs
+		error
 	}
 }
 `
@@ -212696,6 +213620,8 @@ const UpdateBulkTrustCenterSubprocessorDocument = `mutation UpdateBulkTrustCente
 			}
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `
@@ -213782,6 +214708,8 @@ func (c *Client) CreateVendorRiskScore(ctx context.Context, input CreateVendorRi
 const DeleteBulkVendorRiskScoreDocument = `mutation DeleteBulkVendorRiskScore ($ids: [ID!]!) {
 	deleteBulkVendorRiskScore(ids: $ids) {
 		deletedIDs
+		notDeletedIDs
+		error
 	}
 }
 `
@@ -214016,6 +214944,8 @@ const UpdateBulkCSVVendorRiskScoreDocument = `mutation UpdateBulkCSVVendorRiskSc
 			vendorScoringConfigID
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `
@@ -214063,6 +214993,8 @@ const UpdateBulkVendorRiskScoreDocument = `mutation UpdateBulkVendorRiskScore ($
 			vendorScoringConfigID
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `
@@ -214243,6 +215175,8 @@ func (c *Client) CreateVendorScoringConfig(ctx context.Context, input CreateVend
 const DeleteBulkVendorScoringConfigDocument = `mutation DeleteBulkVendorScoringConfig ($ids: [ID!]!) {
 	deleteBulkVendorScoringConfig(ids: $ids) {
 		deletedIDs
+		notDeletedIDs
+		error
 	}
 }
 `
@@ -214437,6 +215371,8 @@ const UpdateBulkCSVVendorScoringConfigDocument = `mutation UpdateBulkCSVVendorSc
 			updatedByImpersonator
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `
@@ -214474,6 +215410,8 @@ const UpdateBulkVendorScoringConfigDocument = `mutation UpdateBulkVendorScoringC
 			updatedByImpersonator
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `
@@ -214812,6 +215750,8 @@ func (c *Client) CreateVulnerability(ctx context.Context, input CreateVulnerabil
 const DeleteBulkVulnerabilityDocument = `mutation DeleteBulkVulnerability ($ids: [ID!]!) {
 	deleteBulkVulnerability(ids: $ids) {
 		deletedIDs
+		notDeletedIDs
+		error
 	}
 }
 `
@@ -215192,6 +216132,8 @@ const UpdateBulkCSVVulnerabilityDocument = `mutation UpdateBulkCSVVulnerability 
 			workflowEligibleMarker
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `
@@ -215285,6 +216227,8 @@ const UpdateBulkVulnerabilityDocument = `mutation UpdateBulkVulnerability ($ids:
 			workflowEligibleMarker
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 `

@@ -13,6 +13,7 @@ import (
 	"github.com/gertd/go-pluralize"
 
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/entx/history"
 
 	"github.com/theopenlane/core/common/enums"
@@ -52,7 +53,7 @@ func (DirectoryGroup) Fields() []ent.Field {
 			NotEmpty().
 			Immutable().
 			Annotations(
-				entx.IntegrationMappingField().UpsertKey().FromIntegration(),
+				entx.IntegrationMappingField().FromIntegration(),
 			),
 		field.String("platform_id").
 			Comment("optional platform associated with this directory group").
@@ -74,7 +75,7 @@ func (DirectoryGroup) Fields() []ent.Field {
 			NotEmpty().
 			Immutable().
 			Annotations(
-				entx.IntegrationMappingField().UpsertKey(),
+				entx.IntegrationMappingField(),
 			),
 		field.String("external_id").
 			Comment("stable identifier from the directory system").
@@ -215,6 +216,9 @@ func (g DirectoryGroup) Edges() []ent.Edge {
 			required:   true,
 			immutable:  true,
 			comment:    "integration that owns this directory group",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Organization{}.Name()),
+			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: g,

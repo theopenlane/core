@@ -1,6 +1,9 @@
 package celx
 
-import "errors"
+import (
+	"errors"
+	"strings"
+)
 
 var (
 	// ErrJSONMapExpected indicates a CEL value could not be converted into a JSON object map
@@ -14,3 +17,10 @@ var (
 	// ErrEntityDataInvalid indicates entity JSON could not be unmarshaled for expression evaluation
 	ErrEntityDataInvalid = errors.New("failed to unmarshal entity data for evaluation")
 )
+
+// IsMissingKey reports whether err is a CEL "no such key" evaluation error, raised when an
+// expression indexes a map key absent from the evaluation input; CEL surfaces it only as
+// error text, so classification is by message
+func IsMissingKey(err error) bool {
+	return err != nil && strings.Contains(err.Error(), "no such key")
+}

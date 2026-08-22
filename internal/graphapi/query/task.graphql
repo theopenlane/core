@@ -504,6 +504,8 @@ mutation UpdateBulkTask ($ids: [ID!]!, $input: UpdateTaskInput!) {
 			}
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 mutation UpdateTask ($updateTaskId: ID!, $input: UpdateTaskInput!) {

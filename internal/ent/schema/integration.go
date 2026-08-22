@@ -253,6 +253,8 @@ func (Integration) Modules() []models.OrgModule {
 func (Integration) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entx.FileCategory(SchemaIntegration),
+		// the console addresses integrations by definition id, not installation row id
+		entx.ConsoleRoute(entx.WithConsoleBase("automation/integrations")),
 		entgql.Skip(
 			// integrations are created by an oauth flow, not by the user directly
 			entgql.SkipMutationCreateInput,

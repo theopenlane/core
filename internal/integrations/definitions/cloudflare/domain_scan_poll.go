@@ -1,36 +1,36 @@
 package cloudflare
 
 import (
-	"context"
+	"strconv"
+
 	"math/rand/v2"
 	"time"
 
 	"github.com/theopenlane/core/pkg/gala"
-	"github.com/theopenlane/core/pkg/jsonx"
 )
 
 const (
-	// DomainScanPollIntervalMin is the wait before the first retry, and the starting point the backoff doubles from
-	DomainScanPollIntervalMin = 10 * time.Second
-	// DomainScanPollIntervalMax caps how long the backoff is allowed to grow to between poll cycles
-	DomainScanPollIntervalMax = 60 * time.Second
+	// DomainScanPollMinInterval is the wait before the first retry, and the starting point the backoff doubles from
+	DomainScanPollMinInterval = 10 * time.Second
+	// DomainScanPollMaxInterval caps how long the backoff is allowed to grow to between poll cycles
+	DomainScanPollMaxInterval = 60 * time.Second
 	// DomainScanMaxAttempts bounds how many poll cycles are attempted before giving up on a scan
 	DomainScanMaxAttempts = 30
 )
 
 // DomainScanPollBackoff returns the wait before the next poll cycle for a scan that's still
-// processing. The interval doubles from DomainScanPollIntervalMin up to DomainScanPollIntervalMax
+// processing. The interval doubles from DomainScanPollMinInterval up to DomainScanPollMaxInterval
 // as attempt grows, so slow scans are checked less often instead of exhausting the attempt budget
 // at a flat cadence. Jitter is added on top to desynchronize scans that were submitted together
 // and would otherwise poll Cloudflare in lockstep
 func DomainScanPollBackoff(attempt int) time.Duration {
-	interval := DomainScanPollIntervalMin
-	for i := 0; i < attempt && interval < DomainScanPollIntervalMax; i++ {
+	interval := DomainScanPollMinInterval
+	for i := 0; i < attempt && interval < DomainScanPollMaxInterval; i++ {
 		interval *= 2
 	}
 
-	if interval > DomainScanPollIntervalMax {
-		interval = DomainScanPollIntervalMax
+	if interval > DomainScanPollMaxInterval {
+		interval = DomainScanPollMaxInterval
 	}
 
 	jitter := time.Duration(rand.Int64N(int64(interval) / 4)) //nolint:gosec,mnd
@@ -56,16 +56,11 @@ type DomainScanPollEnvelope struct {
 	SiblingScanIDs []string `json:"siblingScanIds"`
 }
 
-// domainScanPollSchemaName is the type name derived from the JSON schema reflector
-var domainScanPollSchemaName = jsonx.SchemaID(jsonx.SchemaFrom[DomainScanPollEnvelope]())
+// domainScanTopics is the namespace for domain scan saga topics
+var domainScanTopics = gala.IntegrationRun.At("domainscan.poll")
 
-var (
-	// DomainScanPollTopic is the Gala topic name for domain scan polling
-	DomainScanPollTopic = gala.TopicName("domainscan.poll." + domainScanPollSchemaName)
-	// DomainScanPollListenerName is the Gala listener name for the domain scan poll handler
-	DomainScanPollListenerName = "domainscan.poll." + domainScanPollSchemaName + ".handler"
-)
-
-// DomainScanPollHandler processes one poll cycle for a submitted scan. It returns done=true once the scan has been fully processed
-// (succeeded or given up), and done=false when the cycle re-emitted itself for another attempt
-type DomainScanPollHandler func(context.Context, DomainScanPollEnvelope) (done bool, err error)
+// domainScanPollTopic is the durable poll topic: the name derives from the envelope type
+// under the domain scan namespace; per-attempt keys dedup crash-retry re-emissions of the poll chain
+var domainScanPollTopic = gala.NamespacedTopicFor(domainScanTopics, gala.WithUniqueKey(func(e DomainScanPollEnvelope) string {
+	return domainScanTopics.Key(e.InternalScanID, strconv.Itoa(e.Attempt))
+}))

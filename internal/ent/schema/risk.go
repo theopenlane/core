@@ -57,7 +57,7 @@ func (Risk) Fields() []ent.Field {
 			Optional().
 			Annotations(
 				entgql.OrderField("external_id"),
-				entx.IntegrationMappingField().UpsertKey().LookupKey(),
+				entx.IntegrationMappingField().LookupKey(),
 			),
 		field.String("integration_id").
 			Comment("integration that surfaced this risk, when sourced via integration ingest").
@@ -88,12 +88,13 @@ func (Risk) Fields() []ent.Field {
 			NotEmpty().
 			Annotations(
 				entx.FieldSearchable(),
+				entx.DisplayName(),
 				entgql.OrderField("name"),
 				oscalgen.NewOSCALField(
 					oscalgen.OSCALFieldRoleTitle,
 					oscalgen.WithOSCALFieldModels(oscalgen.OSCALModelPOAM, oscalgen.OSCALModelSSP),
 				),
-				entx.IntegrationMappingField().UpsertKey(),
+				entx.IntegrationMappingField(),
 			).
 			Comment("the name of the risk"),
 		field.Enum("status").
@@ -141,6 +142,7 @@ func (Risk) Fields() []ent.Field {
 		field.Text("details").
 			Optional().
 			Annotations(
+				entx.MentionSource(),
 				oscalgen.NewOSCALField(
 					oscalgen.OSCALFieldRoleDescription,
 					oscalgen.WithOSCALFieldModels(oscalgen.OSCALModelPOAM, oscalgen.OSCALModelSSP),
@@ -151,6 +153,7 @@ func (Risk) Fields() []ent.Field {
 			Optional().
 			Annotations(
 				entgql.Type("[Any!]"),
+				entx.MentionSource(),
 			).
 			Comment("structured details of the risk in JSON format"),
 		field.Text("business_costs").
@@ -447,6 +450,7 @@ func (r Risk) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
 		entx.NewExportable(),
+		entx.ConsoleRoute(entx.WithConsoleBase("exposure/risks")),
 		oscalgen.NewOSCALModel(
 			oscalgen.WithOSCALModels(oscalgen.OSCALModelPOAM, oscalgen.OSCALModelSSP),
 			oscalgen.WithOSCALAssembly("risk"),

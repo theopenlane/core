@@ -3,70 +3,59 @@ package hooks
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
+	"maps"
 	"strings"
 	"sync"
 	"text/template"
 
-	"entgo.io/ent"
 	"github.com/google/cel-go/cel"
+	"github.com/samber/lo"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/internal/ent/entityops"
-	"github.com/theopenlane/core/internal/ent/eventqueue"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/notification"
+	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/taskrules"
 	"github.com/theopenlane/core/pkg/celx"
 	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/pkg/jsonx"
 	"github.com/theopenlane/core/pkg/logx"
 
 	"github.com/theopenlane/core/common/enums"
 )
 
-const taskRuleSource = "entityops"
-
-// ErrMissingTaskTemplate indicates a rule fired but no taskrules.Template is registered for it
-var ErrMissingTaskTemplate = errors.New("entityops: missing task template")
-
-// ErrExpressionNotList indicates an EachElement expression evaluated to a non-list value
-var ErrExpressionNotList = errors.New("entityops: expression did not evaluate to a list")
-
-// RegisterGalaTaskRuleListeners registers one gala listener per eligible schema evaluating each schema's rules on mutation and creates suggested
-// task records
-func RegisterGalaTaskRuleListeners(registry *gala.Registry) ([]gala.ListenerID, error) {
-	var ids []gala.ListenerID
-
-	for _, schema := range entityops.TaskRuleEligibleSchemas() {
-		listenerIDs, err := gala.RegisterListeners(registry, gala.Definition[eventqueue.MutationGalaPayload]{
-			Topic:      eventqueue.MutationTopic(eventqueue.MutationConcernDirect, schema.Name),
-			Name:       "taskrules." + schema.Snake,
+// TaskRuleListeners evaluates schema task rules on mutation and creates suggested tasks
+func TaskRuleListeners() []gala.Registration {
+	return lo.Map(entityops.TaskRuleEligibleSchemas(), func(schema *entityops.Schema, _ int) gala.Registration {
+		listener := entityops.MutationListener{
+			Schema:     schema,
 			Operations: taskRuleOperations(schema),
-			Handle: func(ctx gala.HandlerContext, payload eventqueue.MutationGalaPayload) error {
-				return handleTaskRuleMutation(ctx, schema, payload)
+			Caller: func(restored *auth.Caller, _ entityops.MutationPayload) *auth.Caller {
+				return restored.WithCapabilities(auth.CapInternalOperation | auth.CapOrgSupport)
 			},
-		})
-		if err != nil {
-			return nil, err
+			Handle: handleTaskRuleMutation,
 		}
 
-		ids = append(ids, listenerIDs...)
-	}
+		if schema.Name == generated.TypeOrganization {
+			listener.Match = []entityops.FieldMatch{{Field: organization.FieldPersonalOrg, In: []string{"true"}, Negate: true}}
+		}
 
-	return ids, nil
+		return listener
+	})
 }
 
 // taskRuleOperations returns the mutation operations to subscribe to for schema
 func taskRuleOperations(schema *entityops.Schema) []string {
-	ops := []string{ent.OpCreate.String()}
+	ops := []string{entityops.OpCreate}
 
 	for _, rule := range schema.AllTaskRules() {
 		if rule.Rule.Trigger == entx.TaskRuleOnCreateOrUpdate {
-			ops = append(ops, ent.OpUpdate.String())
+			ops = append(ops, entityops.OpUpdate, entityops.OpUpdateOne)
 			break
 		}
 	}
@@ -74,20 +63,10 @@ func taskRuleOperations(schema *entityops.Schema) []string {
 	return ops
 }
 
-func handleTaskRuleMutation(ctx gala.HandlerContext, schema *entityops.Schema, payload eventqueue.MutationGalaPayload) error {
-	handlerCtx, client, ok := eventqueue.ClientFromHandler(ctx)
-	if !ok {
-		return nil
-	}
-
-	entityID, ok := eventqueue.MutationEntityID(payload, ctx.Envelope.Headers.Properties)
-	if !ok || entityID == "" || schema.Load == nil {
-		return nil
-	}
-
-	systemCtx := taskRuleSystemContext(handlerCtx.Context)
-
-	raw, err := schema.Load(systemCtx, client, entityID)
+// handleTaskRuleMutation evaluates the mutated schema's task rules against the loaded entity
+// and persists any suggested tasks the rules render
+func handleTaskRuleMutation(inv entityops.Invocation, payload entityops.MutationPayload) error {
+	raw, err := inv.Schema.Load(inv.Context, inv.Client, inv.EntityID)
 	if err != nil {
 		if generated.IsNotFound(err) {
 			return nil
@@ -96,16 +75,16 @@ func handleTaskRuleMutation(ctx gala.HandlerContext, schema *entityops.Schema, p
 		return err
 	}
 
-	entity := map[string]json.RawMessage{}
-	if err := json.Unmarshal(raw, &entity); err != nil {
+	entity, err := jsonx.Decode[map[string]json.RawMessage](raw)
+	if err != nil {
 		return err
 	}
 
-	placeholders := entityPlaceholders(entityID, entity)
+	placeholders := entityPlaceholders(inv.EntityID, entity)
 
 	var tasksCreated int
 
-	for _, fieldRule := range schema.AllTaskRules() {
+	for _, fieldRule := range inv.Schema.AllTaskRules() {
 		if !operationAllowed(fieldRule.Rule.Trigger, payload.Operation) {
 			continue
 		}
@@ -115,14 +94,15 @@ func handleTaskRuleMutation(ctx gala.HandlerContext, schema *entityops.Schema, p
 			continue
 		}
 
-		rendered, err := evaluateRule(systemCtx, client, fieldRule.Rule, value, placeholders)
+		rendered, err := evaluateRule(inv.Context, inv.Client, fieldRule.Rule, value, placeholders)
 		if err != nil {
-			logx.FromContext(systemCtx).Error().Err(err).Str("rule", fieldRule.Rule.RuleID).Msg("entityops: task rule evaluation failed")
+			logx.FromContext(inv.Context).Error().Err(err).Str("rule", fieldRule.Rule.RuleID).Msg("entityops: task rule evaluation failed")
+
 			continue
 		}
 
 		for _, t := range rendered {
-			if err := createSuggestedTask(systemCtx, client, schema, entityID, t); err != nil {
+			if err := createSuggestedTask(inv.Context, inv.Client, inv.Schema, inv.EntityID, t); err != nil {
 				return err
 			}
 
@@ -132,8 +112,8 @@ func handleTaskRuleMutation(ctx gala.HandlerContext, schema *entityops.Schema, p
 
 	// add notification when organization create tasks are created, this allows
 	// the frontend to wait for this even to load the dashboard for the user
-	if schema.Name == generated.TypeOrganization && payload.Operation == ent.OpCreate.String() && tasksCreated > 0 {
-		if err := notifyOrganizationReady(systemCtx, client, entityID); err != nil {
+	if inv.Schema.Name == generated.TypeOrganization && payload.Operation == entityops.OpCreate && tasksCreated > 0 {
+		if err := notifyOrganizationReady(inv.Context, inv.Client, inv.EntityID); err != nil {
 			return err
 		}
 	}
@@ -173,18 +153,6 @@ func notifyOrganizationReady(ctx context.Context, client *generated.Client, orga
 		Save(ctx)
 
 	return err
-}
-
-// taskRuleSystemContext augments gala's restored caller with the capabilities task-rule
-// evaluation needs
-// CapOrgSupport is needed to bypass assigner user on task creation
-func taskRuleSystemContext(ctx context.Context) context.Context {
-	caller, ok := auth.CallerFromContext(ctx)
-	if !ok || caller == nil {
-		caller = &auth.Caller{}
-	}
-
-	return auth.WithCaller(ctx, caller.WithCapabilities(auth.CapInternalOperation|auth.CapOrgSupport))
 }
 
 // ruleValue resolves what "value" binds to in a rule's CEL expression
@@ -245,10 +213,10 @@ func mergeScalarField(dst map[string]string, key string, value any) {
 
 func operationAllowed(trigger entx.TaskRuleTrigger, operation string) bool {
 	if trigger == entx.TaskRuleOnCreateOnly {
-		return operation == ent.OpCreate.String()
+		return operation == entityops.OpCreate
 	}
 
-	return operation == ent.OpCreate.String() || operation == ent.OpUpdate.String()
+	return lo.Contains([]string{entityops.OpCreate, entityops.OpUpdate, entityops.OpUpdateOne}, operation)
 }
 
 // renderedTask is one fully-resolved suggested task, ready to persist
@@ -280,9 +248,7 @@ func evaluateRule(ctx context.Context, client *generated.Client, rule entityops.
 
 		if m, ok := value.(map[string]any); ok {
 			merged := make(map[string]string, len(placeholders)+len(m))
-			for k, v := range placeholders {
-				merged[k] = v
-			}
+			maps.Copy(merged, placeholders)
 
 			for k, v := range m {
 				mergeScalarField(merged, k, v)
@@ -433,7 +399,7 @@ func createSuggestedTask(ctx context.Context, client *generated.Client, schema *
 	}
 
 	sourceKey := schema.Snake + rendered.Key
-	idempotencyKey := fmt.Sprintf("%s:%s:%s%s", taskRuleSource, schema.Snake, entityID, rendered.Key)
+	idempotencyKey := fmt.Sprintf("%s:%s:%s%s", "entityops", schema.Snake, entityID, rendered.Key)
 
 	exists, err := client.Task.Query().
 		Where(
@@ -507,7 +473,7 @@ func evaluateCELBool(ctx context.Context, expression string, value any) (bool, e
 
 	fire, err := evaluator.EvaluateBool(ctx, expression, map[string]any{"value": value})
 	if err != nil {
-		if isMissingKeyError(err) {
+		if celx.IsMissingKey(err) {
 			return false, nil
 		}
 
@@ -515,11 +481,6 @@ func evaluateCELBool(ctx context.Context, expression string, value any) (bool, e
 	}
 
 	return fire, nil
-}
-
-// isMissingKeyError reports whether err is a CEL "no such key" evaluation error
-func isMissingKeyError(err error) bool {
-	return strings.Contains(err.Error(), "no such key")
 }
 
 func evaluateCELList(ctx context.Context, expression string, value any) ([]any, error) {
@@ -530,7 +491,7 @@ func evaluateCELList(ctx context.Context, expression string, value any) ([]any, 
 
 	out, _, err := evaluator.Evaluate(ctx, expression, map[string]any{"value": value})
 	if err != nil {
-		if isMissingKeyError(err) {
+		if celx.IsMissingKey(err) {
 			return nil, nil
 		}
 

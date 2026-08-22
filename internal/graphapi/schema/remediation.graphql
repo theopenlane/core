@@ -172,6 +172,14 @@ type RemediationBulkUpdatePayload {
     IDs of the updated remediations
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }
 
 """

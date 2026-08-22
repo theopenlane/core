@@ -40,32 +40,18 @@ func (r *Runtime) reconcileOperations(ctx context.Context, integration *ent.Inte
 			continue
 		}
 
+		opCtx := intobvs.WithOperation(ctx, op.Name)
+
 		if op.Disabled != nil && op.Disabled(integration.Config.ClientConfig) {
-			logx.FromContext(ctx).Debug().Str(intobvs.FieldOperation, op.Name).Msg("operation is disabled, skipping reconcile")
+			logx.FromContext(opCtx).Debug().Msg("operation is disabled, skipping reconcile")
 
 			continue
 		}
 
-		oc := types.NewOperationContext(integration.OwnerID, op.Name, types.IntegrationSource{
-			IntegrationID: integration.ID,
-			DefinitionID:  integration.DefinitionID,
-			RunType:       enums.IntegrationRunTypeReconcile,
-		})
-
-		receipt := r.Gala().EmitWithHeaders(intobvs.WithContext(ctx, oc), operations.ReconcileTopic, operations.ReconcileEnvelope{
-			OperationContext: oc,
-		}, gala.Headers{
-			Properties: oc.Properties(),
-		})
-
-		if receipt.Err != nil {
-			logx.FromContext(ctx).Error().Err(receipt.Err).Str(intobvs.FieldOperation, op.Name).Msg("failed to emit reconcile envelope")
-			errs = append(errs, receipt.Err)
-
-			continue
+		if err := r.emitReconcileLoop(opCtx, integration, op.Name); err != nil {
+			logx.FromContext(opCtx).Error().Err(err).Msg("failed to emit reconcile envelope")
+			errs = append(errs, err)
 		}
-
-		logx.FromContext(ctx).Info().Str(intobvs.FieldOperation, op.Name).Msg("reconcile envelope emitted")
 	}
 
 	return errors.Join(errs...)
@@ -112,9 +98,7 @@ func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.Recon
 	ctx = auth.EnsureIntegrationCaller(ctx, installation.OwnerID)
 
 	if installation.Status != enums.IntegrationStatusConnected {
-		logx.FromContext(ctx).Info().Str("integration_id", installation.ID).
-			Str("status", installation.Status.String()).
-			Msg("integration is not connected, skipping current run")
+		logx.FromContext(ctx).Info().Str("status", installation.Status.String()).Msg("integration is not connected, skipping current run")
 
 		return 0, operations.ErrOperationDisabled
 	}
@@ -125,7 +109,7 @@ func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.Recon
 	}
 
 	if !ok {
-		logx.FromContext(ctx).Info().Str("integration_id", installation.ID).Str("owner_id", installation.OwnerID).Msg("owner subscription is not active, stopping reconcile cycle")
+		logx.FromContext(ctx).Info().Msg("owner subscription is not active, stopping reconcile cycle")
 
 		return 0, operations.ErrOperationDisabled
 	}
@@ -186,6 +170,12 @@ func (r *Runtime) HandleReconcile(ctx context.Context, envelope operations.Recon
 			DurationMS:    time.Since(startedAt).Milliseconds(),
 		}); outputErr != nil {
 			logx.FromContext(ctx).Error().Err(outputErr).Msg("failed to record river output")
+		}
+
+		if unhealthy, ok := types.UnhealthyFrom(execErr); ok {
+			if markErr := r.MarkIntegrationUnhealthy(ctx, installation, unhealthy.Reason); markErr != nil {
+				logx.FromContext(ctx).Error().Err(markErr).Msg("failed marking integration unhealthy after terminal operation failure")
+			}
 		}
 
 		return 0, execErr
@@ -505,13 +495,15 @@ func (r *Runtime) seedReconcileJobsForInstallation(ctx context.Context, inst *en
 		return nil
 	}
 
+	ctx = intobvs.WithInstallation(ctx, inst)
+
 	active, err := r.isOrgSubscriptionActive(ctx, inst.OwnerID)
 	if err != nil {
 		return err
 	}
 
 	if !active {
-		logx.FromContext(ctx).Info().Str("integration_id", inst.ID).Str("owner_id", inst.OwnerID).Msg("owner subscription is not active, skipping reconcile seed")
+		logx.FromContext(ctx).Info().Msg("owner subscription is not active, skipping reconcile seed")
 
 		return nil
 	}
@@ -532,41 +524,37 @@ func (r *Runtime) seedReconcileJobsForInstallation(ctx context.Context, inst *en
 			continue
 		}
 
-		fragment, err := reconcileMetadataFragment(inst.ID, op.Name)
+		opCtx := intobvs.WithOperation(ctx, op.Name)
+
+		// successor cycles carry per-cycle unique keys, so a live loop only surfaces
+		// through its metadata, never through the seed's insert-time key
+		fragment, err := types.PropertiesFragment(map[string]string{
+			"entityId":  inst.ID,
+			"operation": op.Name,
+			"runType":   enums.IntegrationRunTypeReconcile.String(),
+		})
 		if err != nil {
 			errs = append(errs, err)
 			continue
 		}
 
-		active, err := r.Gala().HasActiveJobWithMetadata(ctx, fragment)
+		active, err := r.Gala().HasActiveJobWithMetadata(opCtx, fragment)
 		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Str("integration_id", inst.ID).Str(intobvs.FieldOperation, op.Name).Msg("failed to check for active reconcile job")
+			logx.FromContext(opCtx).Error().Err(err).Msg("failed to check for active reconcile job")
 			errs = append(errs, err)
+
 			continue
 		}
 
 		if active {
-			logx.FromContext(ctx).Debug().Str("integration_id", inst.ID).Str(intobvs.FieldOperation, op.Name).Msg("reconcile job already active, skipping seed")
 			continue
 		}
 
-		logx.FromContext(ctx).Info().Str("integration_id", inst.ID).Str(intobvs.FieldOperation, op.Name).Msg("seeding missing reconcile job")
+		logx.FromContext(opCtx).Info().Msg("seeding reconcile loop")
 
-		oc := types.NewOperationContext(inst.OwnerID, op.Name, types.IntegrationSource{
-			IntegrationID: inst.ID,
-			DefinitionID:  inst.DefinitionID,
-			RunType:       enums.IntegrationRunTypeReconcile,
-		})
-
-		receipt := r.Gala().EmitWithHeaders(
-			intobvs.WithContext(ctx, oc),
-			operations.ReconcileTopic,
-			operations.ReconcileEnvelope{OperationContext: oc},
-			gala.Headers{Properties: oc.Properties()},
-		)
-		if receipt.Err != nil {
-			logx.FromContext(ctx).Error().Err(receipt.Err).Str("integration_id", inst.ID).Str(intobvs.FieldOperation, op.Name).Msg("failed to seed reconcile job")
-			errs = append(errs, receipt.Err)
+		if err := r.emitReconcileLoop(opCtx, inst, op.Name); err != nil {
+			logx.FromContext(opCtx).Error().Err(err).Msg("failed to seed reconcile job")
+			errs = append(errs, err)
 		}
 	}
 
@@ -622,25 +610,44 @@ func (r *Runtime) reconcilableDefinitionIDs() []string {
 	return ids
 }
 
-// reconcileMetadataFragment builds the JSONB containment fragment used to query
-// River for an active reconcile job for the given integration and operation
-func reconcileMetadataFragment(integrationID, operationName string) (string, error) {
-	fragment := struct {
-		Properties struct {
-			InstallationID string `json:"installationId"`
-			Operation      string `json:"operation"`
-		} `json:"properties"`
-	}{}
-
-	fragment.Properties.InstallationID = integrationID
-	fragment.Properties.Operation = operationName
-
-	b, err := json.Marshal(fragment)
+// PurgeInstallationJobs removes every queued River job bound to the installation across all
+// job families and returns how many were purged. Operation-context jobs (reconcile loops,
+// event operations) carry the installation as properties.entityId; ingest record jobs carry
+// properties.integration_id
+func (r *Runtime) PurgeInstallationJobs(ctx context.Context, integrationID string) (int, error) {
+	fragments, err := installationJobFragments(integrationID)
 	if err != nil {
-		return "", err
+		return 0, err
 	}
 
-	return string(b), nil
+	var purged int
+
+	for _, fragment := range fragments {
+		count, err := r.Gala().PurgeActiveJobsWithMetadata(ctx, fragment)
+		if err != nil {
+			return purged, err
+		}
+
+		purged += count
+	}
+
+	return purged, nil
+}
+
+// installationJobFragments builds the JSONB containment fragments matching every job family
+// bound to one installation
+func installationJobFragments(integrationID string) ([]string, error) {
+	operationJobs, err := types.PropertiesFragment(map[string]string{"entityId": integrationID, "entityType": "integration"})
+	if err != nil {
+		return nil, err
+	}
+
+	ingestJobs, err := types.PropertiesFragment(map[string]string{"integration_id": integrationID})
+	if err != nil {
+		return nil, err
+	}
+
+	return []string{operationJobs, ingestJobs}, nil
 }
 
 // resolveOperationClient resolves the client for an operation. When integration

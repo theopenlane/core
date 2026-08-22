@@ -17,7 +17,6 @@ import (
 	"github.com/stripe/stripe-go/v86"
 
 	"github.com/redis/go-redis/v9"
-	"github.com/samber/do/v2"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/fgax"
 	fgatest "github.com/theopenlane/iam/fgax/testutils"
@@ -253,7 +252,10 @@ func (suite *HandlerTestSuite) SetupSuite() {
 	suite.sharedIntegrationsRT = rt
 
 	// provide ent client to gala's injector so ingest listeners can resolve it
-	do.ProvideValue(suite.galaRuntime.Injector(), suite.galaDB)
+	require.NoError(suite.T(), suite.galaRuntime.Attach(
+		gala.WithValue(suite.galaDB),
+		gala.WithRestoredValue("ent_client", ent.NewContext),
+	))
 }
 
 func (suite *HandlerTestSuite) SetupTest() {
@@ -421,9 +423,13 @@ func (suite *HandlerTestSuite) TearDownSuite() {
 	require.NoError(suite.T(), err)
 }
 
-// WaitForEvents blocks until all durable Gala dispatch jobs have completed
+// WaitForEvents blocks until runnable and in-flight Gala jobs complete
 func (suite *HandlerTestSuite) WaitForEvents() {
-	suite.galaRuntime.WaitIdle()
+	require.NoError(suite.T(), suite.galaRuntime.WaitIdle(suite.T().Context()))
+}
+
+func (suite *HandlerTestSuite) waitForGala(runtime *gala.Gala) {
+	suite.Require().NoError(runtime.WaitIdle(suite.T().Context()))
 }
 
 func setupRouter() *route.Router {

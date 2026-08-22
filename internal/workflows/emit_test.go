@@ -15,19 +15,6 @@ func TestEmitWorkflowEventNoRuntime(t *testing.T) {
 	if receipt.Err != ErrEmitNoEmitter {
 		t.Fatalf("expected ErrEmitNoEmitter, got %v", receipt.Err)
 	}
-	if receipt.Enqueued {
-		t.Fatalf("expected Enqueued false when runtime is missing")
-	}
-}
-
-func TestEmitWorkflowEnvelopeNoRuntime(t *testing.T) {
-	receipt := EmitWorkflowEnvelope(context.Background(), nil, gala.Envelope{Topic: gala.TopicName("test.topic")})
-	if receipt.Err != ErrEmitNoEmitter {
-		t.Fatalf("expected ErrEmitNoEmitter, got %v", receipt.Err)
-	}
-	if receipt.Enqueued {
-		t.Fatalf("expected Enqueued false when runtime is missing")
-	}
 }
 
 func TestEmitFailureDetailsRoundTrip(t *testing.T) {

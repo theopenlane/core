@@ -9,6 +9,7 @@ import (
 
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/common/models"
+	"github.com/theopenlane/core/internal/ent/entityops"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
 	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
@@ -90,7 +91,7 @@ func (e *WorkflowEngine) TriggerWorkflow(ctx context.Context, def *generated.Wor
 
 	changeSet := input.ChangeSet()
 
-	shouldRun, err := e.EvaluateConditions(ctx, def, obj, input.EventType, changeSet.ChangedFields, changeSet.ChangedEdges, changeSet.AddedIDs, changeSet.RemovedIDs, changeSet.ProposedChanges)
+	shouldRun, err := e.EvaluateConditions(ctx, def, obj, input.EventType, changeSet.ChangedFields, changeSet.ChangedEdges, changeSet.AddedIDs, changeSet.RemovedIDs, input.ProposedChanges)
 	if err != nil {
 		return nil, scope.Fail(fmt.Errorf("failed to evaluate conditions: %w", err), nil)
 	}
@@ -101,7 +102,7 @@ func (e *WorkflowEngine) TriggerWorkflow(ctx context.Context, def *generated.Wor
 	}
 
 	// Guard against multiple active instances per {object, definition}
-	domain, err := approvalDomainForTrigger(def, changeSet.ProposedChanges, changeSet.ChangedFields)
+	domain, err := approvalDomainForTrigger(def, input.ProposedChanges, changeSet.ChangedFields)
 	if err != nil {
 		return nil, scope.Fail(err, nil)
 	}
@@ -192,7 +193,10 @@ func (e *WorkflowEngine) guardTrigger(ctx context.Context, def *generated.Workfl
 			workflowinstance.OwnerIDEQ(orgID),
 		)
 
-	instanceQuery = generated.ApplyWorkflowInstanceObjectPredicate(instanceQuery, obj.Type, obj.ID)
+	instanceQuery, err = workflows.FilterWorkflowInstances(instanceQuery, obj.Type, obj.ID)
+	if err != nil {
+		return err
+	}
 
 	if exists, err := instanceQuery.Exist(ctx); err != nil {
 		return err
@@ -212,7 +216,10 @@ func (e *WorkflowEngine) guardTrigger(ctx context.Context, def *generated.Workfl
 			workflowinstance.OwnerIDEQ(orgID),
 		)
 
-	cooldownQuery = generated.ApplyWorkflowInstanceObjectPredicate(cooldownQuery, obj.Type, obj.ID)
+	cooldownQuery, err = workflows.FilterWorkflowInstances(cooldownQuery, obj.Type, obj.ID)
+	if err != nil {
+		return err
+	}
 
 	if exists, err := cooldownQuery.Exist(ctx); err != nil {
 		return err
@@ -382,7 +389,7 @@ func (e *WorkflowEngine) CompleteAssignment(ctx context.Context, assignmentID st
 
 	// CompleteAssignment emits workflow-assignment-completed explicitly below;
 	// skip hook-based mutation emission to avoid re-entering completion logic.
-	allowCtx = workflows.SkipEventEmission(allowCtx)
+	allowCtx = entityops.WithEmissionVetoed(allowCtx)
 
 	if err = update.Exec(allowCtx); err != nil {
 		return scope.Fail(fmt.Errorf("%w: %w", ErrAssignmentUpdateFailed, err), nil)
@@ -393,7 +400,7 @@ func (e *WorkflowEngine) CompleteAssignment(ctx context.Context, assignmentID st
 		return scope.Fail(fmt.Errorf("failed to get subject ID from context: %w", userErr), nil)
 	}
 
-	payload := gala.WorkflowAssignmentCompletedPayload{
+	payload := WorkflowAssignmentCompletedPayload{
 		AssignmentID: assignmentID,
 		InstanceID:   assignment.WorkflowInstanceID,
 		Status:       status,
@@ -423,7 +430,7 @@ func (e *WorkflowEngine) CompleteAssignment(ctx context.Context, assignmentID st
 		meta.ObjectType = instance.Context.ObjectType
 	}
 
-	emitEngineEvent(allowCtx, e, observability.OpCompleteAssignment, status.String(), instance, meta, gala.TopicWorkflowAssignmentCompleted, payload, observability.Fields{
+	emitEngineEvent(allowCtx, e, observability.OpCompleteAssignment, status.String(), instance, meta, WorkflowAssignmentCompletedEventTopic.Name, payload, observability.Fields{
 		workflowassignment.FieldWorkflowInstanceID: assignment.WorkflowInstanceID,
 	})
 

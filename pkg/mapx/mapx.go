@@ -10,6 +10,37 @@ import (
 	"github.com/samber/lo"
 )
 
+// ValueAtPath reads a nested value from a decoded JSON map using dotted-path notation
+// ("outer.inner"), returning false when any segment is missing or not an object
+func ValueAtPath(data map[string]any, path string) (any, bool) {
+	path = strings.TrimSpace(path)
+	if path == "" {
+		return nil, false
+	}
+
+	current := any(data)
+
+	for _, part := range strings.Split(path, ".") {
+		if part == "" {
+			return nil, false
+		}
+
+		currentMap, ok := current.(map[string]any)
+		if !ok {
+			return nil, false
+		}
+
+		value, ok := currentMap[part]
+		if !ok {
+			return nil, false
+		}
+
+		current = value
+	}
+
+	return current, true
+}
+
 // DeepCloneMapAny creates a deep copy of a map[string]any
 func DeepCloneMapAny(src map[string]any) map[string]any {
 	if src == nil {
@@ -46,23 +77,21 @@ func cloneAny(value any) any {
 	}
 }
 
-// CloneMapStringSlice clones a map[string][]string, skipping blank keys
+// CloneMapStringSlice clones a map[string][]string, preserving the nil-vs-empty distinction of
+// both the map and its value slices so explicit-empty markers survive the copy
 func CloneMapStringSlice(src map[string][]string) map[string][]string {
-	if len(src) == 0 {
+	if src == nil {
 		return nil
 	}
 
 	dst := make(map[string][]string, len(src))
 	for key, value := range src {
-		if strings.TrimSpace(key) == "" {
+		if value == nil {
+			dst[key] = nil
 			continue
 		}
 
-		dst[key] = append([]string(nil), value...)
-	}
-
-	if len(dst) == 0 {
-		return nil
+		dst[key] = append([]string{}, value...)
 	}
 
 	return dst

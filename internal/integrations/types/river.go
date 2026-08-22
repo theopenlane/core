@@ -1,6 +1,8 @@
 package types //nolint:revive
 
 import (
+	"encoding/json"
+
 	"github.com/theopenlane/core/pkg/gala"
 )
 
@@ -43,4 +45,14 @@ func GetPropertiesForOperationContext(oc gala.OperationContext) map[string]strin
 	}
 
 	return props
+}
+
+// PropertiesFragment builds a JSONB containment fragment over job header properties
+func PropertiesFragment(properties map[string]string) (string, error) {
+	fragment, err := json.Marshal(map[string]map[string]string{"properties": properties})
+	if err != nil {
+		return "", err
+	}
+
+	return string(fragment), nil
 }

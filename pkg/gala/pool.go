@@ -1,6 +1,7 @@
 package gala
 
 import (
+	"context"
 	"time"
 
 	"github.com/alitto/pond/v2"
@@ -19,7 +20,6 @@ type Pool struct {
 	pool       pond.Pool
 	maxWorkers int
 	name       string
-	metricsReg prometheus.Registerer
 }
 
 // PoolOption configures a pool instance
@@ -41,18 +41,10 @@ func WithPoolName(name string) PoolOption {
 	}
 }
 
-// WithPoolMetricsRegisterer stores the target registerer for future metrics wiring
-func WithPoolMetricsRegisterer(reg prometheus.Registerer) PoolOption {
-	return func(p *Pool) {
-		p.metricsReg = reg
-	}
-}
-
 // NewPool creates an in-memory task pool
 func NewPool(opts ...PoolOption) *Pool {
 	p := &Pool{
 		maxWorkers: defaultPoolWorkers,
-		metricsReg: prometheus.DefaultRegisterer,
 	}
 
 	for _, opt := range opts {
@@ -61,9 +53,9 @@ func NewPool(opts ...PoolOption) *Pool {
 
 	p.pool = pond.NewPool(p.maxWorkers)
 
-	if p.metricsReg != nil && p.name != "" {
+	if p.name != "" {
 		collector := newPoolCollector(p.pool, p.name)
-		_ = p.metricsReg.Register(collector)
+		_ = prometheus.DefaultRegisterer.Register(collector)
 	}
 
 	return p
@@ -96,23 +88,50 @@ func (p *Pool) SubmitMultipleAndWait(tasks []func()) error {
 	return group.Wait()
 }
 
-// WaitIdle blocks until the pool has no running workers and no waiting tasks.
-// Handles cascading dispatches by requiring two consecutive idle observations.
-func (p *Pool) WaitIdle() {
+// WaitIdle blocks until stable idleness or context cancellation
+func (p *Pool) WaitIdle(ctx context.Context) error {
 	if p == nil {
-		return
+		return nil
 	}
 
+	return waitStable(ctx, func() (bool, error) {
+		return p.pool.RunningWorkers() == 0 && p.pool.WaitingTasks() == 0, nil
+	}, waitIdlePollInterval, waitIdleThreshold)
+}
+
+func waitStable(ctx context.Context, isIdle func() (bool, error), interval time.Duration, threshold int) error {
 	idleCount := 0
-	for idleCount < waitIdleThreshold {
-		if p.pool.RunningWorkers() == 0 && p.pool.WaitingTasks() == 0 {
+	for idleCount < threshold {
+		if err := ctx.Err(); err != nil {
+			return err
+		}
+
+		idle, err := isIdle()
+		if err != nil {
+			return err
+		}
+
+		if idle {
 			idleCount++
 		} else {
 			idleCount = 0
 		}
 
-		time.Sleep(waitIdlePollInterval)
+		if idleCount >= threshold {
+			return nil
+		}
+
+		timer := time.NewTimer(interval)
+		select {
+		case <-ctx.Done():
+			timer.Stop()
+
+			return ctx.Err()
+		case <-timer.C:
+		}
 	}
+
+	return nil
 }
 
 // Release stops workers and waits for completion

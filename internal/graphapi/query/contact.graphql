@@ -164,6 +164,8 @@ mutation UpdateBulkContact ($ids: [ID!]!, $input: UpdateContactInput!) {
 			updatedByImpersonator
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 mutation UpdateContact ($updateContactId: ID!, $input: UpdateContactInput!) {

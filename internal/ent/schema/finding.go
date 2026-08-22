@@ -57,7 +57,7 @@ func (Finding) Fields() []ent.Field {
 			Annotations(
 				entx.FieldSearchable(),
 				entgql.OrderField("external_id"),
-				entx.IntegrationMappingField().UpsertKey().LookupKey(),
+				entx.IntegrationMappingField().LookupKey(),
 			),
 		field.Enum("security_level").
 			Comment("incoming source severity").
@@ -286,6 +286,9 @@ func (f Finding) Edges() []ent.Edge {
 			fromSchema: f,
 			edgeSchema: Integration{},
 			comment:    "integration that produced the finding",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Organization{}.Name()),
+			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: f,

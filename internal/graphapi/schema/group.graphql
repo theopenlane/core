@@ -167,4 +167,12 @@ type GroupBulkUpdatePayload {
     IDs of the updated groups
     """
     updatedIDs: [ID!]
+    """
+    IDs that were not updated
+    """
+    notUpdatedIDs: [ID!]!
+    """
+    Error message when the bulk update did not apply to every requested ID
+    """
+    error: String
 }

@@ -124,6 +124,14 @@ type APITokenBulkUpdatePayload {
 	IDs of the updated apiTokens
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -1117,6 +1125,14 @@ type ActionPlanBulkUpdatePayload {
 	IDs of the updated actionPlans
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -4148,6 +4164,14 @@ type AssetBulkUpdatePayload {
 	IDs of the updated assets
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -7313,7 +7337,7 @@ type CheckResultBulkDeletePayload {
 	"""
 	IDs of checkResults that were not deleted
 	"""
-	notDeletedIDs: [ID!]
+	notDeletedIDs: [ID!]!
 }
 """
 Return response for updateBulkCheckResult mutation
@@ -7327,6 +7351,14 @@ type CheckResultBulkUpdatePayload {
 	IDs of the updated checkResults
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 CheckResultCheckStatus is enum for the field status
@@ -8006,6 +8038,14 @@ type ContactBulkUpdatePayload {
 	IDs of the updated contacts
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -9593,6 +9633,14 @@ type ControlBulkUpdatePayload {
 	IDs of the updated controls
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 type ControlCategory {
 	name: String!
@@ -10117,6 +10165,14 @@ type ControlImplementationBulkUpdatePayload {
 	IDs of the updated controlImplementations
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -11011,6 +11067,14 @@ type ControlObjectiveBulkUpdatePayload {
 	IDs of the updated controlObjectives
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -19061,6 +19125,14 @@ type CustomDomainBulkUpdatePayload {
 	IDs of the updated customDomains
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -20310,6 +20382,14 @@ type DNSVerificationBulkUpdatePayload {
 	IDs of the updated dnsVerifications
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -24528,6 +24608,14 @@ type DocumentDataBulkUpdatePayload {
 	IDs of the updated documentDatas
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -25166,6 +25254,14 @@ type EmailTemplateBulkUpdatePayload {
 	IDs of the updated emailTemplates
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 EmailTemplateCatalog contains the available customer-selectable email template types
@@ -26937,6 +27033,14 @@ type EntityBulkUpdatePayload {
 	IDs of the updated entitys
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -27167,6 +27271,14 @@ type EntityTypeBulkUpdatePayload {
 	IDs of the updated entityTypes
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -28980,6 +29092,14 @@ type EventBulkUpdatePayload {
 	IDs of the updated events
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -29743,6 +29863,14 @@ type EvidenceBulkUpdatePayload {
 	IDs of the updated evidence
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -32804,6 +32932,14 @@ type FindingBulkUpdatePayload {
 	IDs of the updated findings
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -35950,6 +36086,14 @@ type GroupBulkUpdatePayload {
 	IDs of the updated groups
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -36092,6 +36236,14 @@ type GroupMembershipBulkUpdatePayload {
 	IDs of the updated groupMemberships
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -36519,6 +36671,14 @@ type GroupSettingBulkUpdatePayload {
 	IDs of the updated groupSettings
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -37526,6 +37686,14 @@ type HushBulkUpdatePayload {
 	IDs of the updated hushs
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -38658,6 +38826,14 @@ type IdentityHolderBulkUpdatePayload {
 	IDs of the updated identityHolders
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -41770,6 +41946,14 @@ type InternalPolicyBulkUpdatePayload {
 	IDs of the updated internalPolicys
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -42707,6 +42891,14 @@ type InviteBulkUpdatePayload {
 	IDs of the updated invites
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -44628,6 +44820,14 @@ type JobTemplateBulkUpdatePayload {
 	IDs of the updated jobTemplates
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -45062,6 +45262,14 @@ type MappableDomainBulkUpdatePayload {
 	IDs of the updated mappableDomains
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -45556,6 +45764,14 @@ type MappedControlBulkUpdatePayload {
 	IDs of the updated mappedControls
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -52707,6 +52923,14 @@ type NarrativeBulkUpdatePayload {
 	IDs of the updated narratives
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -53853,6 +54077,14 @@ type NotificationPreferenceBulkUpdatePayload {
 	IDs of the updated notificationPreferences
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 NotificationPreferenceChannel is enum for the field channel
@@ -54519,6 +54751,14 @@ type NotificationTemplateBulkUpdatePayload {
 	IDs of the updated notificationTemplates
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 NotificationTemplateChannel is enum for the field channel
@@ -55320,6 +55560,14 @@ type OrgMembershipBulkUpdatePayload {
 	IDs of the updated orgMemberships
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -61251,6 +61499,14 @@ type OrganizationSettingBulkUpdatePayload {
 	IDs of the updated organizationSettings
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -66309,6 +66565,14 @@ type ProcedureBulkUpdatePayload {
 	IDs of the updated procedures
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -67874,6 +68138,14 @@ type ProgramBulkUpdatePayload {
 	IDs of the updated programs
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -67977,6 +68249,14 @@ type ProgramMembershipBulkUpdatePayload {
 	IDs of the updated programMemberships
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -74881,6 +75161,14 @@ type RemediationBulkUpdatePayload {
 	IDs of the updated remediations
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -76400,6 +76688,14 @@ type ReviewBulkUpdatePayload {
 	IDs of the updated reviews
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -77979,6 +78275,14 @@ type RiskBulkUpdatePayload {
 	IDs of the updated risks
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -78996,6 +79300,14 @@ type SLADefinitionBulkUpdatePayload {
 	IDs of the updated slaDefinitions
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -79865,6 +80177,14 @@ type ScanBulkUpdatePayload {
 	IDs of the updated scans
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -80706,6 +81026,14 @@ type ScheduledJobBulkUpdatePayload {
 	IDs of the updated scheduledJobs
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -83045,6 +83373,14 @@ type SubcontrolBulkUpdatePayload {
 	IDs of the updated subcontrols
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -84047,6 +84383,14 @@ type SubprocessorBulkUpdatePayload {
 	IDs of the updated subprocessors
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -85095,6 +85439,14 @@ type SystemDetailBulkUpdatePayload {
 	IDs of the updated systemDetails
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -86777,6 +87129,14 @@ type TaskBulkUpdatePayload {
 	IDs of the updated tasks
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -87756,6 +88116,14 @@ type TemplateBulkUpdatePayload {
 	IDs of the updated templates
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -88857,6 +89225,14 @@ type TrustCenterComplianceBulkUpdatePayload {
 	IDs of the updated trustCenterCompliances
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -89296,6 +89672,14 @@ type TrustCenterDocBulkUpdatePayload {
 	IDs of the updated trust center docs
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -90219,6 +90603,14 @@ type TrustCenterFAQBulkUpdatePayload {
 	IDs of the updated trustCenterFAQs
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -92184,6 +92576,14 @@ type TrustCenterSubprocessorBulkUpdatePayload {
 	IDs of the updated trustCenterSubprocessors
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -103121,6 +103521,14 @@ type UserSettingBulkUpdatePayload {
 	IDs of the updated userSettings
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -104017,6 +104425,14 @@ type VendorRiskScoreBulkUpdatePayload {
 	IDs of the updated vendorRiskScores
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -104565,6 +104981,14 @@ type VendorScoringConfigBulkUpdatePayload {
 	IDs of the updated vendorScoringConfigs
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.
@@ -105707,6 +106131,14 @@ type VulnerabilityBulkUpdatePayload {
 	IDs of the updated vulnerabilities
 	"""
 	updatedIDs: [ID!]
+	"""
+	IDs that were not updated
+	"""
+	notUpdatedIDs: [ID!]!
+	"""
+	Error message when the bulk update did not apply to every requested ID
+	"""
+	error: String
 }
 """
 A connection to a list of items.

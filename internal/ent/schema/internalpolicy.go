@@ -134,6 +134,9 @@ func (i InternalPolicy) Edges() []ent.Edge {
 			fromSchema: i,
 			edgeSchema: Integration{},
 			comment:    "integration that manages this policy (if applicable)",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Organization{}.Name()),
+			},
 		}),
 	}
 }
@@ -181,6 +184,7 @@ func (i InternalPolicy) Annotations() []schema.Annotation {
 		entx.FileCategory(SchemaInternalPolicy),
 		entfga.SelfAccessChecks(),
 		entx.NewExportable(),
+		entx.ConsoleRoute(entx.WithConsoleBase("policies"), entx.WithConsoleSuffix("view")),
 		oscalgen.NewOSCALModel(
 			oscalgen.WithOSCALModels(oscalgen.OSCALModelComponentDefinition, oscalgen.OSCALModelSSP),
 			oscalgen.WithOSCALAssembly("component"),

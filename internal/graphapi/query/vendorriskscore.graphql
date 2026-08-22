@@ -82,6 +82,8 @@ mutation CreateVendorRiskScore ($input: CreateVendorRiskScoreInput!) {
 mutation DeleteBulkVendorRiskScore ($ids: [ID!]!) {
 	deleteBulkVendorRiskScore(ids: $ids) {
 		deletedIDs
+		notDeletedIDs
+		error
 	}
 }
 mutation DeleteVendorRiskScore ($deleteVendorRiskScoreId: ID!) {
@@ -212,6 +214,8 @@ mutation UpdateBulkCSVVendorRiskScore ($input: Upload!) {
 			vendorScoringConfigID
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 mutation UpdateBulkVendorRiskScore ($ids: [ID!]!, $input: UpdateVendorRiskScoreInput!) {
@@ -240,6 +244,8 @@ mutation UpdateBulkVendorRiskScore ($ids: [ID!]!, $input: UpdateVendorRiskScoreI
 			vendorScoringConfigID
 		}
 		updatedIDs
+		notUpdatedIDs
+		error
 	}
 }
 mutation UpdateVendorRiskScore ($updateVendorRiskScoreId: ID!, $input: UpdateVendorRiskScoreInput!) {
