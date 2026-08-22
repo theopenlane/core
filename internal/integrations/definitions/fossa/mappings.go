@@ -38,6 +38,17 @@ var mapExprVulnerability = providerkit.CelMapExpr([]providerkit.CelMapEntry{
 	{Key: entityops.InputKeyVulnerabilityPublishedAt, Expr: `'published' in payload ? payload.published : null`},
 	{Key: entityops.InputKeyVulnerabilityDiscoveredAt, Expr: `'createdAt' in payload ? payload.createdAt : null`},
 	{Key: entityops.InputKeyVulnerabilitySourceUpdatedAt, Expr: `'projects' in payload && payload.projects != null && size(payload.projects) > 0 && payload.projects[0] != null && 'scannedAt' in payload.projects[0] ? payload.projects[0].scannedAt : null`},
+	// metadata carries the remediation guidance and scoring detail that has no dedicated field:
+	// the partial fix and upgrade distances, the EPSS percentile, and the CVSS metric breakdown
+	{Key: entityops.InputKeyVulnerabilityMetadata, Expr: `{
+		"remediation": 'remediation' in payload && payload.remediation != null ? payload.remediation : {},
+		"epss": 'epss' in payload && payload.epss != null ? payload.epss : {},
+		"cvssMetrics": 'metrics' in payload && payload.metrics != null ? payload.metrics : [],
+		"fossaVulnId": 'vulnId' in payload && payload.vulnId != null ? payload.vulnId : "",
+		"cveStatus": 'cveStatus' in payload && payload.cveStatus != null ? payload.cveStatus : "",
+		"fossaExploitability": 'exploitability' in payload && payload.exploitability != null ? payload.exploitability : "",
+		"patchedVersionRanges": 'patchedVersionRanges' in payload && payload.patchedVersionRanges != null ? payload.patchedVersionRanges : []
+	}`},
 	{Key: entityops.InputKeyVulnerabilitySource, Expr: `"FOSSA"`},
 	{Key: entityops.InputKeyVulnerabilityRawPayload, Expr: "payload"},
 })

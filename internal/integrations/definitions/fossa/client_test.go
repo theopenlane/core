@@ -97,7 +97,7 @@ func TestClientSendsBearerTokenAndEncodesQuery(t *testing.T) {
 	}))
 	defer server.Close()
 
-	client, err := newAPIClient(server.URL, "token-123")
+	client, err := NewAPIClient(server.URL, "token-123")
 	require.NoError(t, err)
 
 	issues, err := client.listIssues(context.Background(), categoryVulnerability, statusActive, 1)
@@ -135,7 +135,7 @@ func TestClientStatusErrors(t *testing.T) {
 			}))
 			defer server.Close()
 
-			client, err := newAPIClient(server.URL, "token-123")
+			client, err := NewAPIClient(server.URL, "token-123")
 			require.NoError(t, err)
 
 			_, err = client.issueCategories(context.Background())
@@ -152,7 +152,7 @@ func TestOrganizationIdentifier(t *testing.T) {
 	}))
 	defer server.Close()
 
-	client, err := newAPIClient(server.URL, "token-123")
+	client, err := NewAPIClient(server.URL, "token-123")
 	require.NoError(t, err)
 
 	org, err := client.organization(context.Background())

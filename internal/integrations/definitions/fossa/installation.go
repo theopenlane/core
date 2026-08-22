@@ -26,7 +26,7 @@ func resolveInstallationMetadata(ctx context.Context, req types.InstallationRequ
 
 	baseURL := baseURLOrDefault(cred.BaseURL)
 
-	client, err := newAPIClient(baseURL, cred.APIToken)
+	client, err := NewAPIClient(baseURL, cred.APIToken)
 	if err != nil {
 		return InstallationMetadata{}, false, err
 	}

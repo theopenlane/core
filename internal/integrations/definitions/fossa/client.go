@@ -25,8 +25,8 @@ type APIClient struct {
 	requester *httpsling.Requester
 }
 
-// newAPIClient constructs a FOSSA API client for the supplied base URL and token
-func newAPIClient(baseURL, token string) (*APIClient, error) {
+// NewAPIClient constructs a FOSSA API client for the supplied base URL and token
+func NewAPIClient(baseURL, token string) (*APIClient, error) {
 	requester, err := httpsling.New(
 		httpsling.Client(httpclient.Timeout(fossaRequestTimeout)),
 		httpsling.URL(baseURL),
@@ -101,7 +101,7 @@ func (ClientBuilder) Build(_ context.Context, req types.ClientBuildRequest) (any
 		return nil, ErrAPITokenMissing
 	}
 
-	return newAPIClient(baseURLOrDefault(cred.BaseURL), cred.APIToken)
+	return NewAPIClient(baseURLOrDefault(cred.BaseURL), cred.APIToken)
 }
 
 // resolveCredential extracts the CredentialSchema from the provided credential bindings

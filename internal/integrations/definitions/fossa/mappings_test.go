@@ -75,6 +75,7 @@ func TestNullArrayPayloads(t *testing.T) {
 		assert.Equal(t, false, mapped["open"])
 		assert.DeepEqual(t, []any{}, mapped["cwe_ids"])
 		assert.DeepEqual(t, []any{}, mapped["references"])
+		assert.DeepEqual(t, map[string]any{}, mapped["metadata"].(map[string]any)["remediation"])
 	})
 
 	t.Run("finding_null_fields", func(t *testing.T) {
@@ -162,6 +163,27 @@ func TestExamplePayloads(t *testing.T) {
 		assert.Equal(t, "2026-08-18T04:33:33.54962+00:00", mapped["source_updated_at"])
 		assert.Equal(t, "FOSSA", mapped["source"])
 		assert.DeepEqual(t, []any{"CWE-1333", "CWE-400"}, mapped["cwe_ids"])
+
+		// remediation guidance is a ticket requirement: the complete fix is promoted to a first
+		// class field, and the partial fix plus upgrade distances are preserved in metadata
+		metadata, ok := mapped["metadata"].(map[string]any)
+		assert.Assert(t, ok, "expected metadata to be an object")
+
+		remediation, ok := metadata["remediation"].(map[string]any)
+		assert.Assert(t, ok, "expected metadata.remediation to be an object")
+
+		assert.Equal(t, "6.14.0", remediation["completeFix"])
+		assert.Equal(t, "6.14.0", remediation["partialFix"])
+		assert.Equal(t, "MINOR", remediation["completeFixDistance"])
+		assert.Equal(t, "MINOR", remediation["partialFixDistance"])
+
+		assert.Equal(t, "CVE-2025-69873_npm+ajv", metadata["fossaVulnId"])
+		assert.Equal(t, "COMPLETED", metadata["cveStatus"])
+		assert.Equal(t, "UNKNOWN", metadata["fossaExploitability"])
+
+		epss, ok := metadata["epss"].(map[string]any)
+		assert.Assert(t, ok, "expected metadata.epss to be an object")
+		assert.Equal(t, 0.40057, epss["percentile"])
 	})
 
 	t.Run("finding_json", func(t *testing.T) {
