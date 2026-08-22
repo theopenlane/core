@@ -43,17 +43,14 @@ func HookWorkflowApprovalRouting() ent.Hook {
 			if client == nil {
 				return next.Mutate(ctx, m)
 			}
-			if !workflowEngineEnabled() {
+
+			wfEngine := engine.Default()
+			if wfEngine == nil {
 				return next.Mutate(ctx, m)
 			}
 
 			changeSet := entityops.ChangeSetFromMutation(m)
 			if len(changeSet.ChangedFields) == 0 && len(changeSet.ChangedEdges) == 0 {
-				return next.Mutate(ctx, m)
-			}
-
-			wfEngine := engine.Default()
-			if wfEngine == nil {
 				return next.Mutate(ctx, m)
 			}
 

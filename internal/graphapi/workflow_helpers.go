@@ -58,7 +58,7 @@ func pollUntil[T any](ctx context.Context, timeout time.Duration, query func() (
 
 // workflowsEnabled reports whether the process-wide workflow engine is registered
 func workflowsEnabled() bool {
-	return engine.Default() != nil
+	return engine.Enabled()
 }
 
 // WaitForInstanceState polls until the workflow instance reaches the expected state or times out.

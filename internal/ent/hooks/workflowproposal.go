@@ -238,13 +238,10 @@ func HookWorkflowProposalTriggerOnSubmit() ent.Hook {
 				return value, err
 			}
 
-			// Prefer the transaction-aware mutation client, falling back to the context client
 			client := m.Client()
-			if client == nil {
-				client = generated.FromContext(ctx)
-			}
 
-			if !workflowEngineEnabled() {
+			wfEngine := engine.Default()
+			if wfEngine == nil {
 				return value, nil
 			}
 
@@ -284,7 +281,7 @@ func HookWorkflowProposalTriggerOnSubmit() ent.Hook {
 				return value, ErrFailedToLoadWorkflowProposalForTrigger
 			}
 
-			if err := triggerWorkflowForProposal(ctx, client, proposal); err != nil {
+			if err := triggerWorkflowForProposal(ctx, client, wfEngine, proposal); err != nil {
 				log.Ctx(ctx).Error().Err(err).Str("proposal_id", proposal.ID).Msg("failed to trigger workflow for submitted proposal")
 				return value, err
 			}
@@ -295,13 +292,8 @@ func HookWorkflowProposalTriggerOnSubmit() ent.Hook {
 }
 
 // triggerWorkflowForProposal starts workflows for a submitted proposal
-func triggerWorkflowForProposal(ctx context.Context, client *generated.Client, proposal *generated.WorkflowProposal) error {
+func triggerWorkflowForProposal(ctx context.Context, client *generated.Client, wfEngine *engine.WorkflowEngine, proposal *generated.WorkflowProposal) error {
 	if proposal.State != enums.WorkflowProposalStateSubmitted {
-		return nil
-	}
-
-	wfEngine := engine.Default()
-	if wfEngine == nil {
 		return nil
 	}
 

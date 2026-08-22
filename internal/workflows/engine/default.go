@@ -1,17 +1,21 @@
 package engine
 
-import "sync/atomic"
+import "github.com/theopenlane/core/pkg/singleton"
 
-// defaultEngine holds the process-wide workflow engine so ent hooks and resolvers resolve it
-// without a back-edge on the ent client
-var defaultEngine atomic.Pointer[WorkflowEngine]
+// defaultEngine holds the process-wide workflow engine
+var defaultEngine singleton.Value[WorkflowEngine]
 
 // SetDefault registers the process-wide workflow engine
 func SetDefault(e *WorkflowEngine) {
-	defaultEngine.Store(e)
+	defaultEngine.Set(e)
 }
 
 // Default returns the process-wide workflow engine, or nil when none is registered
 func Default() *WorkflowEngine {
-	return defaultEngine.Load()
+	return defaultEngine.Get()
+}
+
+// Enabled reports whether a process-wide workflow engine is registered
+func Enabled() bool {
+	return Default() != nil
 }

@@ -3,7 +3,6 @@ package runtime
 import (
 	"context"
 	"errors"
-	"sync/atomic"
 	"time"
 
 	"github.com/redis/go-redis/v9"
@@ -17,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/pkg/gala"
+	"github.com/theopenlane/core/pkg/singleton"
 )
 
 const (
@@ -71,19 +71,17 @@ func (r *Runtime) SetPostExecutionHook(hook PostExecutionHook) {
 	r.postExecutionHook = hook
 }
 
-// defaultRuntime holds the process-wide integrations runtime so callers that reach a
-// mutation with only an ent client, such as ent hooks, resolve it without a back-edge
-// on the client
-var defaultRuntime atomic.Pointer[Runtime]
+// defaultRuntime holds the process-wide integrations runtime
+var defaultRuntime singleton.Value[Runtime]
 
 // SetDefault registers the process-wide integrations runtime
 func SetDefault(rt *Runtime) {
-	defaultRuntime.Store(rt)
+	defaultRuntime.Set(rt)
 }
 
 // Default returns the process-wide integrations runtime, or nil when none is registered
 func Default() *Runtime {
-	return defaultRuntime.Load()
+	return defaultRuntime.Get()
 }
 
 // DB returns the Ent client from the injector

@@ -205,8 +205,10 @@ func serve(ctx context.Context) error {
 		return err
 	}
 
+	var wfEngine *engine.WorkflowEngine
+
 	if so.Config.Settings.Workflows.Enabled {
-		wfEngine, err := engine.NewWorkflowEngineWithConfig(dbClient, galaApp, &so.Config.Settings.Workflows)
+		wfEngine, err = engine.NewWorkflowEngineWithConfig(dbClient, galaApp, &so.Config.Settings.Workflows)
 		if err != nil {
 			return err
 		}
@@ -216,7 +218,7 @@ func serve(ctx context.Context) error {
 		log.Info().Msg("workflow engine initialized")
 	}
 
-	if err := serveropts.ConfigureGala(galaApp, notifGala, dbClient); err != nil {
+	if err := serveropts.ConfigureGala(galaApp, notifGala, dbClient, wfEngine); err != nil {
 		return err
 	}
 

@@ -104,5 +104,5 @@ func enqueueJob(ctx context.Context, jobClient riverqueue.JobClient, args river.
 
 // workflowEngineEnabled reports whether the process-wide workflow engine is registered
 func workflowEngineEnabled() bool {
-	return engine.Default() != nil
+	return engine.Enabled()
 }

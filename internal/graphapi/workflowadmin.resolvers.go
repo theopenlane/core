@@ -104,7 +104,8 @@ func (r *mutationResolver) BulkCancelWorkflowInstances(ctx context.Context, ids 
 
 // AdminReassignWorkflowAssignment is the resolver for the adminReassignWorkflowAssignment field.
 func (r *mutationResolver) AdminReassignWorkflowAssignment(ctx context.Context, input model.ReassignWorkflowAssignmentInput) (*model.WorkflowAssignmentReassignPayload, error) {
-	if !workflowsEnabled() {
+	wfEngine := engine.Default()
+	if wfEngine == nil {
 		return nil, ErrWorkflowsDisabled
 	}
 
@@ -160,11 +161,6 @@ func (r *mutationResolver) AdminReassignWorkflowAssignment(ctx context.Context, 
 
 	if err := validateTargets(targets); err != nil {
 		return nil, err
-	}
-
-	wfEngine := engine.Default()
-	if wfEngine == nil {
-		return nil, ErrWorkflowsDisabled
 	}
 
 	skipCtx := entityops.WithEmissionVetoed(allowCtx)

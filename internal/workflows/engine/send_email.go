@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/emailtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
+	intruntime "github.com/theopenlane/core/internal/integrations/runtime"
 	"github.com/theopenlane/core/internal/integrations/types"
 	wfworkflows "github.com/theopenlane/core/internal/workflows"
 	"github.com/theopenlane/core/pkg/jsonx"
@@ -26,6 +27,10 @@ import (
 // framework. It resolves the email template, recipients, and routes through either
 // a linked integration installation or the runtime email definition
 func (e *WorkflowEngine) executeSendEmail(ctx context.Context, action models.WorkflowAction, instance *generated.WorkflowInstance, obj *wfworkflows.Object) error {
+	if e.integrationRuntime == nil {
+		e.integrationRuntime = intruntime.Default()
+	}
+
 	if e.integrationRuntime == nil {
 		return ErrIntegrationOperationsRequired
 	}
