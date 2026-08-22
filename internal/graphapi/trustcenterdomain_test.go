@@ -4,12 +4,13 @@ import (
 	"testing"
 
 	"github.com/brianvoe/gofakeit/v7"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
+
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/internal/testutils"
-	"gotest.tools/v3/assert"
-	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestMutationCreateTrustCenterDomain(t *testing.T) {
@@ -78,6 +79,41 @@ func TestMutationCreateTrustCenterDomain(t *testing.T) {
 			TrustCenterID: tcOrg.owner.ID,
 		})
 		assert.ErrorContains(t, err, notFoundErrorMsg)
+	})
+
+	t.Run("only one domain type can be added per trustcenter", func(t *testing.T) {
+		freshOrg := createFreshOrgWithTrustCenter(t)
+
+		resp, err := suite.client.api.CreateTrustCenterDomain(freshOrg.owner.UserCtx, testclient.CreateTrustCenterDomainInput{
+			CnameRecord:   gofakeit.DomainName(),
+			TrustCenterID: freshOrg.trustCenter.ID,
+		})
+		assert.NilError(t, err)
+		assert.Check(t, is.Equal(enums.CustomDomainTypeExternal, resp.CreateTrustCenterDomain.CustomDomain.DomainType))
+
+		previewDomainType := enums.CustomDomainTypePreview
+		previewResp, err := suite.client.api.CreateTrustCenterDomain(freshOrg.owner.UserCtx, testclient.CreateTrustCenterDomainInput{
+			CnameRecord:   gofakeit.DomainName(),
+			DomainType:    &previewDomainType,
+			TrustCenterID: freshOrg.trustCenter.ID,
+		})
+		assert.NilError(t, err)
+		assert.Check(t, is.Equal(enums.CustomDomainTypePreview, previewResp.CreateTrustCenterDomain.CustomDomain.DomainType))
+
+		_, err = suite.client.api.CreateTrustCenterDomain(freshOrg.owner.UserCtx, testclient.CreateTrustCenterDomainInput{
+			CnameRecord:   gofakeit.DomainName(),
+			TrustCenterID: freshOrg.trustCenter.ID,
+		})
+		assert.ErrorContains(t, err, "domain already exists for this trust center")
+
+		_, err = suite.client.api.CreateTrustCenterDomain(freshOrg.owner.UserCtx, testclient.CreateTrustCenterDomainInput{
+			CnameRecord:   gofakeit.DomainName(),
+			DomainType:    &previewDomainType,
+			TrustCenterID: freshOrg.trustCenter.ID,
+		})
+		assert.ErrorContains(t, err, "domain already exists for this trust center")
+
+		cleanupOrganizationDataWithContext(freshOrg.owner.UserCtx, t)
 	})
 
 	t.Run("trust center already has a domain", func(t *testing.T) {
