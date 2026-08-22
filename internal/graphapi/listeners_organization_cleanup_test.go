@@ -32,7 +32,7 @@ func TestOrganizationCleanupListenerCascadeWithIntegrations(t *testing.T) {
 	task1 := (&TaskBuilder{client: suite.client}).MustNew(ownerCtx, t)
 	contact1 := (&ContactBuilder{client: suite.client}).MustNew(ownerCtx, t)
 
-	installation, fragment := seedConnectedSlackInstallation(t, allowCtx)
+	installation, fragment := seedHarnessLoop(t, allowCtx)
 	assert.Equal(t, orgID, installation.OwnerID)
 
 	resp, err := suite.client.api.DeleteOrganization(ownerCtx, orgID)

@@ -196,6 +196,10 @@ func TestScheduleWithDefaultsFillsZeroValues(t *testing.T) {
 	if filled.HighDriftThreshold != defaultHighDriftThreshold {
 		t.Fatalf("expected HighDriftThreshold %v, got %v", defaultHighDriftThreshold, filled.HighDriftThreshold)
 	}
+
+	if filled.MaxErrorStreak != defaultMaxErrorStreak {
+		t.Fatalf("expected MaxErrorStreak %v, got %v", defaultMaxErrorStreak, filled.MaxErrorStreak)
+	}
 }
 
 func TestScheduleHandlerMarksSuccessorUniqueOnce(t *testing.T) {
@@ -352,5 +356,75 @@ func TestScheduleStateIncarnationJSONCompatibility(t *testing.T) {
 	}
 	if !strings.Contains(string(encoded), `"incarnation":"chain-1"`) {
 		t.Fatalf("incarnation missing from encoded state: %s", encoded)
+	}
+}
+
+func TestScheduleHandlerStopsLoopWhenErrorStreakExhausted(t *testing.T) {
+	execErr := errors.New("cycle failed")
+
+	cases := []struct {
+		slug          string
+		priorStreak   int
+		wantSuccessor bool
+		wantExhausted bool
+	}{
+		{slug: "below", priorStreak: 1, wantSuccessor: true, wantExhausted: false},
+		{slug: "at", priorStreak: 2, wantSuccessor: false, wantExhausted: true},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.slug, func(t *testing.T) {
+			dispatcher := &runtimeTestDispatcher{}
+			runtime := newTestGala(t, dispatcher)
+			topic := Topic[runtimeTestPayload]{
+				Name:      TopicName("gala.test.schedule.exhausted." + tc.slug),
+				Kind:      System.Kind(),
+				UniqueKey: func(payload runtimeTestPayload) string { return payload.Message },
+			}
+			if err := registerTopic(runtime.registry, topic); err != nil {
+				t.Fatalf("failed to register topic: %v", err)
+			}
+
+			exhaustedCalls := 0
+
+			var exhaustedErr error
+
+			definition := Definition[runtimeTestPayload]{
+				Topic: topic,
+				OnExhausted: func(_ context.Context, _ runtimeTestPayload, err error) {
+					exhaustedCalls++
+					exhaustedErr = err
+				},
+				Schedule: &ScheduleSpec[runtimeTestPayload]{
+					Schedule: Schedule{MinInterval: time.Millisecond, MaxErrorStreak: 3},
+					Handle:   func(context.Context, runtimeTestPayload) (int, error) { return 0, execErr },
+					State:    func(runtimeTestPayload) ScheduleState { return ScheduleState{ErrorStreak: tc.priorStreak} },
+					Wrap:     func(payload runtimeTestPayload, _ ScheduleState) runtimeTestPayload { return payload },
+				},
+			}
+
+			err := scheduleHandler(runtime, definition)(HandlerContext{Context: context.Background()}, runtimeTestPayload{Message: "loop"})
+
+			// both paths cancel the current job; the difference is whether a successor was scheduled first
+			if _, ok := errors.AsType[*river.JobCancelError](err); !ok {
+				t.Fatalf("expected JobCancel, got %v", err)
+			}
+			if !errors.Is(err, execErr) {
+				t.Fatalf("expected execution error in chain, got %v", err)
+			}
+
+			if gotSuccessor := len(dispatcher.envelopes) > 0; gotSuccessor != tc.wantSuccessor {
+				t.Fatalf("successor emitted = %v, want %v", gotSuccessor, tc.wantSuccessor)
+			}
+
+			switch {
+			case tc.wantExhausted && exhaustedCalls != 1:
+				t.Fatalf("expected OnExhausted called once, got %d", exhaustedCalls)
+			case tc.wantExhausted && !errors.Is(exhaustedErr, execErr):
+				t.Fatalf("OnExhausted received %v, want chain containing %v", exhaustedErr, execErr)
+			case !tc.wantExhausted && exhaustedCalls != 0:
+				t.Fatalf("expected OnExhausted not called, got %d", exhaustedCalls)
+			}
+		})
 	}
 }

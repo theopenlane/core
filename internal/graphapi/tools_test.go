@@ -52,6 +52,7 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/internal/httpserve/config"
 	emaildef "github.com/theopenlane/core/internal/integrations/definitions/email"
+	testint "github.com/theopenlane/core/internal/testutils/integrations"
 	slackdef "github.com/theopenlane/core/internal/integrations/definitions/slack"
 	systemdef "github.com/theopenlane/core/internal/integrations/definitions/system"
 	"github.com/theopenlane/core/internal/integrations/registry"
@@ -388,6 +389,7 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 			emaildef.Builder(emaildef.MockRuntimeConfig(), false),
 			slackdef.Builder(slackdef.Config{}, &slackdef.RuntimeSlackConfig{WebhookURL: "https://hooks.slack.com/services/test/mock/url"}, false),
 			systemdef.Builder(systemdef.PaymentReminderConfig{}, systemdef.OrganizationDeleteConfig{}),
+			testint.Builder(),
 		},
 	})
 	requireNoError(t, err)

@@ -4,20 +4,18 @@ package graphapi_test
 
 import (
 	"context"
-	"encoding/json"
 	"testing"
 
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/openapi"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/notification"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	slackdef "github.com/theopenlane/core/internal/integrations/definitions/slack"
 	intobvs "github.com/theopenlane/core/internal/integrations/observability"
 	"github.com/theopenlane/core/internal/integrations/operations"
 	integrationtypes "github.com/theopenlane/core/internal/integrations/types"
+	testint "github.com/theopenlane/core/internal/testutils/integrations"
 )
 
 // notification object types mirrored from internal/integrations/runtime/health.go
@@ -26,23 +24,63 @@ const (
 	integrationReconnectedObjectType             = "INTEGRATION_RECONNECTED"
 )
 
-// slackReconcileOperation resolves the slack definition's reconcile-policy operation name
-// from the live registry so the test matches the exact name the loops are keyed on
-func slackReconcileOperation(t *testing.T) string {
+// harnessReconcileOperation returns the reconcile operation name for one harness mode
+func harnessReconcileOperation(t *testing.T, mode string) string {
 	t.Helper()
 
-	def, ok := suite.integrationsRT.Registry().Definition(slackdef.DefinitionID.ID())
-	require.True(t, ok, "slack definition must be registered")
-
-	for _, op := range def.Operations {
-		if op.Policy.Reconcile {
-			return op.Name
-		}
+	switch mode {
+	case testint.ModeRecurring:
+		return testint.RecurringOp.Name()
+	case testint.ModeExhausting:
+		return testint.ExhaustingOp.Name()
+	case testint.ModeUnresolvable:
+		return testint.UnresolvableOp.Name()
 	}
 
-	t.Fatal("slack definition has no reconcile operation")
+	t.Fatalf("unknown harness mode %q", mode)
 
 	return ""
+}
+
+// newHarnessInstallation installs the test integration in the given mode through the prod
+// connect flow; the unresolvable mode stores a non-token credential so the client cannot build
+func newHarnessInstallation(t *testing.T, ctx context.Context, mode string) (*ent.Integration, string) {
+	t.Helper()
+
+	installation, err := suite.client.db.Integration.Create().
+		SetName(randomName(t)).
+		SetKind("testintegration").
+		SetDefinitionID(testint.DefinitionID.ID()).
+		Save(ctx)
+	require.NoError(t, err)
+
+	credentialRef := testint.TokenCredential.ID()
+	credential := testint.TokenCredentialSet("test-token")
+
+	if mode == testint.ModeUnresolvable {
+		credentialRef = testint.ServiceAccountCredential.ID()
+		credential = testint.ServiceAccountCredentialSet("test-project", "svc@example.com")
+	}
+
+	require.NoError(t, suite.integrationsRT.Reconcile(ctx, installation, testint.ModeInput(mode), credentialRef, &credential, nil))
+
+	fragment := reconcileLoopFragment(t, installation.ID, harnessReconcileOperation(t, mode))
+
+	return reloadIntegration(t, ctx, installation.ID), fragment
+}
+
+// seedHarnessLoop installs the test integration in recurring mode and asserts the connect flow
+// seeded exactly one loop
+func seedHarnessLoop(t *testing.T, ctx context.Context) (*ent.Integration, string) {
+	t.Helper()
+
+	installation, fragment := newHarnessInstallation(t, ctx, testint.ModeRecurring)
+
+	suite.WaitForEvents()
+
+	require.Equal(t, 1, activeReconcileJobs(t, fragment))
+
+	return installation, fragment
 }
 
 // reconcileLoopFragment builds the metadata containment fragment identifying the recurring
@@ -104,22 +142,10 @@ func TestIntegrationLifecycle(t *testing.T) {
 	allowCtx := privacy.DecisionContext(setContext(org.owner.UserCtx, suite.client.db), privacy.Allow)
 	ownerCtx := setContext(org.owner.UserCtx, suite.client.db)
 
-	// empty UserInput keeps the reconcile operation enabled
-	clientConfig, err := json.Marshal(slackdef.UserInput{})
-	require.NoError(t, err)
-
-	installation, err := suite.client.db.Integration.Create().
-		SetName("Slack Lifecycle Test").
-		SetKind("slack").
-		SetDefinitionID(slackdef.DefinitionID.ID()).
-		SetStatus(enums.IntegrationStatusConnected).
-		SetConfig(openapi.IntegrationConfig{ClientConfig: clientConfig}).
-		Save(allowCtx)
-	require.NoError(t, err)
+	installation, fragment := newHarnessInstallation(t, allowCtx, testint.ModeRecurring)
 	require.Equal(t, org.owner.OrganizationID, installation.OwnerID)
 
-	opName := slackReconcileOperation(t)
-	fragment := reconcileLoopFragment(t, installation.ID, opName)
+	opName := harnessReconcileOperation(t, testint.ModeRecurring)
 
 	t.Run("seeding creates exactly one loop", func(t *testing.T) {
 		require.NoError(t, suite.integrationsRT.ResetReconcileLoops(allowCtx, installation))

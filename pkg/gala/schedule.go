@@ -23,11 +23,14 @@ const (
 	defaultHighDriftThreshold = 200
 	// intervalHalving is the divisor used to halve the interval on positive drift
 	intervalHalving = 2
-
+	// defaultMaxErrorStreak stops a loop after this many consecutive failed cycles
+	defaultMaxErrorStreak = 5
 	// fullFetchMinInterval is the minimum interval for operations that always fetch all records
 	fullFetchMinInterval = time.Hour
 	// FullHighDriftThreshold is the delta above which a full-fetch schedule snaps to minimum
 	FullHighDriftThreshold = 1000
+	// UnlimitedErrorStreak disables error-streak exhaustion
+	UnlimitedErrorStreak = -1
 )
 
 // Schedule defines the adaptive scheduling policy for recurring work
@@ -40,6 +43,8 @@ type Schedule struct {
 	BackoffFactor float64 `json:"backoff_factor"`
 	// HighDriftThreshold is the delta count above which the interval resets to MinInterval
 	HighDriftThreshold int `json:"high_drift_threshold"`
+	// MaxErrorStreak stops the loop after this many consecutive failed cycles; UnlimitedErrorStreak disables exhaustion
+	MaxErrorStreak int `json:"max_error_streak"`
 }
 
 // ScheduleSpec declares the adaptive re-emit loop for a scheduled listener definition
@@ -66,19 +71,32 @@ func scheduleHandler[T any](g *Gala, definition Definition[T]) Handler[T] {
 		delta, execErr := spec.Handle(ctx.Context, payload)
 		state := spec.State(payload)
 
-		if execErr != nil {
-			if definition.Cancel != nil && definition.Cancel(ctx.Context, payload, execErr) {
-				return river.JobCancel(execErr)
-			}
-
-			logx.FromContext(ctx.Context).Warn().Err(execErr).Int("error_streak", state.ErrorStreak+1).Msg("scheduled listener cycle failed, scheduling retry with backoff")
-		}
-
 		effectiveSchedule := spec.Schedule
 		if spec.Override != nil {
 			if override := spec.Override(payload); override != nil {
 				effectiveSchedule = *override
 			}
+		}
+
+		if execErr != nil {
+			if definition.Cancel != nil && definition.Cancel(ctx.Context, payload, execErr) {
+				logx.FromContext(ctx.Context).Error().Err(execErr).Msg("scheduled listener cycle failed, canceling loop")
+
+				return river.JobCancel(execErr)
+			}
+
+			streak := state.ErrorStreak + 1
+			if effectiveSchedule.exhausted(streak) {
+				if definition.OnExhausted != nil {
+					definition.OnExhausted(ctx.Context, payload, execErr)
+				}
+
+				logx.FromContext(ctx.Context).Error().Err(execErr).Int("error_streak", streak).Msg("scheduled listener exhausted error budget, stopping loop")
+
+				return river.JobCancel(execErr)
+			}
+
+			logx.FromContext(ctx.Context).Warn().Err(execErr).Int("error_streak", streak).Msg("scheduled listener cycle failed, scheduling retry with backoff")
 		}
 
 		next := effectiveSchedule.Next(state, delta, execErr)
@@ -222,5 +240,16 @@ func (s Schedule) withDefaults() Schedule {
 		s.HighDriftThreshold = defaultHighDriftThreshold
 	}
 
+	if s.MaxErrorStreak == 0 {
+		s.MaxErrorStreak = defaultMaxErrorStreak
+	}
+
 	return s
+}
+
+// exhausted reports whether a consecutive-error streak has reached the stop threshold
+func (s Schedule) exhausted(streak int) bool {
+	limit := s.withDefaults().MaxErrorStreak
+
+	return limit > 0 && streak >= limit
 }
