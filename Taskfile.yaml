@@ -28,8 +28,8 @@ includes:
 
 
 env:
-  ATLAS_POSTGRES_DB_URI: "postgres:17-alpine"
-  TEST_DB_URL: "docker://postgres:17-alpine"
+  ATLAS_POSTGRES_DB_URI: "postgres:18-alpine"
+  TEST_DB_URL: "docker://postgres:18-alpine"
   TEST_DB_CONTAINER_EXPIRY: "20" # in minutes
   TEST_FGA_URL: "localhost:8080"
   ENV: config
@@ -327,7 +327,7 @@ tasks:
     desc: runs and outputs results of created go tests
     aliases: ["go:test:psql", "test:psql"]
     env:
-      TEST_DB_URL: "docker://postgres:17-alpine"
+      TEST_DB_URL: "docker://postgres:18-alpine"
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     cmds:
       - go test -v ./... -tags test
