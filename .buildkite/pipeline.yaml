@@ -744,7 +744,7 @@ steps:
                 - from: "bin/${APP_NAME}"
                   to: "${APP_NAME}"
               step: "gobuild-server"
-          - docker-login#v3.0.0: # we need to login for the image to be accessible on the host
+          - docker-login#v3.1.0: # we need to login for the image to be accessible on the host
               username: openlane-bender
               password-env: SECRET_GHCR_PUBLISH_TOKEN
               server: ghcr.io
@@ -777,7 +777,7 @@ steps:
                 - from: "bin/${APP_NAME}"
                   to: "${APP_NAME}"
               step: "gobuild-server-release"
-          - docker-login#v3.0.0:
+          - docker-login#v3.1.0:
               username: openlane-bender
               password-env: SECRET_GHCR_PUBLISH_TOKEN
               server: ghcr.io
