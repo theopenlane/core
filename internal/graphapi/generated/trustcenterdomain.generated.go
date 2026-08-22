@@ -71,7 +71,7 @@ func (ec *executionContext) unmarshalInputCreateTrustCenterDomainInput(ctx conte
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"cnameRecord", "trustCenterID"}
+	fieldsInOrder := [...]string{"cnameRecord", "domainType", "trustCenterID"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -85,6 +85,13 @@ func (ec *executionContext) unmarshalInputCreateTrustCenterDomainInput(ctx conte
 				return it, err
 			}
 			it.CnameRecord = data
+		case "domainType":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("domainType"))
+			data, err := ec.unmarshalOCustomDomainCustomDomainType2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋenumsᚐCustomDomainType(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.DomainType = data
 		case "trustCenterID":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("trustCenterID"))
 			data, err := ec.unmarshalNID2string(ctx, v)

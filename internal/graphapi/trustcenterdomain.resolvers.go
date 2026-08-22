@@ -8,6 +8,7 @@ package graphapi
 import (
 	"context"
 
+	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/internal/graphapi/common"
@@ -50,7 +51,16 @@ func (r *mutationResolver) CreateTrustCenterDomain(ctx context.Context, input mo
 		}
 	}
 
-	if trustCenter.CustomDomainID != nil {
+	domainType := enums.CustomDomainTypeExternal
+	if input.DomainType != nil && *input.DomainType != enums.CustomDomainTypeUnknown {
+		domainType = *input.DomainType
+	}
+
+	if domainType == enums.CustomDomainTypePreview && trustCenter.PreviewDomainID != "" {
+		return nil, parseRequestError(ctx, common.ErrTrustCenterDomainAlreadyExists, common.Action{Action: common.ActionCreate, Object: "trustcenterdomain"})
+	}
+
+	if domainType == enums.CustomDomainTypeExternal && trustCenter.CustomDomainID != nil {
 		return nil, parseRequestError(ctx, common.ErrTrustCenterDomainAlreadyExists, common.Action{Action: common.ActionCreate, Object: "trustcenterdomain"})
 	}
 
@@ -74,15 +84,21 @@ func (r *mutationResolver) CreateTrustCenterDomain(ctx context.Context, input mo
 			OwnerID:          &trustCenter.OwnerID,
 			MappableDomainID: mappableDomainID,
 			TrustCenterID:    &trustCenter.ID,
+			DomainType:       &domainType,
 		}).
 		Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, common.Action{Action: common.ActionCreate, Object: "customdomain"})
 	}
 
-	updateReq := trustCenter.Update().SetInput(generated.UpdateTrustCenterInput{
-		CustomDomainID: &customDomain.ID,
-	})
+	updateInput := generated.UpdateTrustCenterInput{}
+	if domainType == enums.CustomDomainTypePreview {
+		updateInput.PreviewDomainID = &customDomain.ID
+	} else {
+		updateInput.CustomDomainID = &customDomain.ID
+	}
+
+	updateReq := trustCenter.Update().SetInput(updateInput)
 
 	_, err = updateReq.Save(ctx)
 	if err != nil {

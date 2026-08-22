@@ -843,6 +843,8 @@ type CreateProgramWithMembersInput struct {
 type CreateTrustCenterDomainInput struct {
 	// the name of the custom domain
 	CnameRecord string `json:"cnameRecord"`
+	// the type of the custom domain
+	DomainType *enums.CustomDomainType `json:"domainType,omitempty"`
 	// trust center ID
 	TrustCenterID string `json:"trustCenterID"`
 }
