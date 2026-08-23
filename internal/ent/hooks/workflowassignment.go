@@ -20,7 +20,7 @@ import (
 func HookWorkflowAssignmentDecisionAuth() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.WorkflowAssignmentFunc(func(ctx context.Context, m *generated.WorkflowAssignmentMutation) (generated.Value, error) {
-			if !workflowEngineEnabled(ctx, m.Client()) {
+			if !workflowEngineEnabled() {
 				return next.Mutate(ctx, m)
 			}
 

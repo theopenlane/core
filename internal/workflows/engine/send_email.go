@@ -28,9 +28,7 @@ import (
 // a linked integration installation or the runtime email definition
 func (e *WorkflowEngine) executeSendEmail(ctx context.Context, action models.WorkflowAction, instance *generated.WorkflowInstance, obj *wfworkflows.Object) error {
 	if e.integrationRuntime == nil {
-		if rt := intruntime.FromClient(ctx, e.client); rt != nil {
-			e.integrationRuntime = rt
-		}
+		e.integrationRuntime = intruntime.Default()
 	}
 
 	if e.integrationRuntime == nil {

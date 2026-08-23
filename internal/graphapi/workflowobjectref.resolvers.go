@@ -15,7 +15,7 @@ import (
 
 // WorkflowObjectRef is the resolver for the workflowObjectRef field.
 func (r *queryResolver) WorkflowObjectRef(ctx context.Context, id string) (*generated.WorkflowObjectRef, error) {
-	if !workflowsEnabled(r.db) {
+	if !workflowsEnabled() {
 		return nil, ErrWorkflowsDisabled
 	}
 

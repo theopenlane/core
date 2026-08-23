@@ -106,7 +106,7 @@ func HookTrustCenterNDARequestCreate() ent.Hook {
 				return v, nil
 			}
 
-			if err := sendSystemEmail(ctx, m.Client(), emaildef.TCNDARequestOp.Name(), emaildef.TrustCenterNDARequestEmail{
+			if err := sendSystemEmail(ctx, emaildef.TCNDARequestOp.Name(), emaildef.TrustCenterNDARequestEmail{
 				RecipientInfo: emaildef.RecipientInfo{Email: request.Email},
 				RequestID:     request.ID,
 				TrustCenterID: request.TrustCenterID,
@@ -122,7 +122,7 @@ func HookTrustCenterNDARequestCreate() ent.Hook {
 func handleExistingNDARequest(ctx, queryCtx context.Context, client *generated.Client, existing *generated.TrustCenterNDARequest) (*generated.TrustCenterNDARequest, error) {
 	switch existing.Status {
 	case enums.TrustCenterNDARequestStatusSigned:
-		if err := sendSystemEmail(ctx, client, emaildef.TCAuthOp.Name(), emaildef.TrustCenterAuthEmail{
+		if err := sendSystemEmail(ctx, emaildef.TCAuthOp.Name(), emaildef.TrustCenterAuthEmail{
 			RecipientInfo: emaildef.RecipientInfo{Email: existing.Email},
 			RequestID:     existing.ID,
 			TrustCenterID: existing.TrustCenterID,
@@ -132,7 +132,7 @@ func handleExistingNDARequest(ctx, queryCtx context.Context, client *generated.C
 
 		return existing, nil
 	case enums.TrustCenterNDARequestStatusApproved, enums.TrustCenterNDARequestStatusRequested:
-		if err := sendSystemEmail(ctx, client, emaildef.TCNDARequestOp.Name(), emaildef.TrustCenterNDARequestEmail{
+		if err := sendSystemEmail(ctx, emaildef.TCNDARequestOp.Name(), emaildef.TrustCenterNDARequestEmail{
 			RecipientInfo: emaildef.RecipientInfo{Email: existing.Email},
 			RequestID:     existing.ID,
 			TrustCenterID: existing.TrustCenterID,
@@ -263,7 +263,7 @@ func HookTrustCenterNDARequestUpdate() ent.Hook {
 				return v, nil
 			}
 
-			if err := sendSystemEmail(ctx, m.Client(), emaildef.TCNDARequestOp.Name(), emaildef.TrustCenterNDARequestEmail{
+			if err := sendSystemEmail(ctx, emaildef.TCNDARequestOp.Name(), emaildef.TrustCenterNDARequestEmail{
 				RecipientInfo: emaildef.RecipientInfo{Email: request.Email},
 				RequestID:     request.ID,
 				TrustCenterID: request.TrustCenterID,
@@ -383,7 +383,7 @@ func sendNDAApprovalRequestEmails(ctx context.Context, client *generated.Client,
 		requesterName = ""
 	}
 
-	return sendSystemEmail(ctx, client, emaildef.TCNDAApprovalRequestOp.Name(), emaildef.TrustCenterNDAApprovalRequestEmail{
+	return sendSystemEmail(ctx, emaildef.TCNDAApprovalRequestOp.Name(), emaildef.TrustCenterNDAApprovalRequestEmail{
 		RecipientInfo:  emaildef.RecipientInfo{Email: emails[0], Recipients: emails},
 		OrgName:        org.DisplayName,
 		RequesterName:  requesterName,

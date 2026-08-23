@@ -145,7 +145,7 @@ func HookBillingEmailChange() ent.Hook {
 				return retVal, nil
 			}
 
-			if err := sendBillingEmailChangeNotifications(ctx, m.Client(), orgName, oldEmail, newEmail); err != nil {
+			if err := sendBillingEmailChangeNotifications(ctx, orgName, oldEmail, newEmail); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Msg("failed to send billing email change notifications")
 			}
 
@@ -159,7 +159,7 @@ func HookBillingEmailChange() ent.Hook {
 	)
 }
 
-func sendBillingEmailChangeNotifications(ctx context.Context, client *generated.Client, orgName, previousEmail, newEmail string) error {
+func sendBillingEmailChangeNotifications(ctx context.Context, orgName, previousEmail, newEmail string) error {
 	changedAt := time.Now().UTC()
 
 	for _, currentEmail := range []string{previousEmail, newEmail} {
@@ -167,7 +167,7 @@ func sendBillingEmailChangeNotifications(ctx context.Context, client *generated.
 			continue
 		}
 
-		if err := sendSystemEmail(ctx, client, emaildef.BillingEmailChangedOp.Name(), emaildef.BillingEmailChangedEmail{
+		if err := sendSystemEmail(ctx, emaildef.BillingEmailChangedOp.Name(), emaildef.BillingEmailChangedEmail{
 			RecipientInfo:   emaildef.RecipientInfo{Email: currentEmail},
 			OrgName:         orgName,
 			OldBillingEmail: previousEmail,

@@ -16,7 +16,7 @@ import (
 // WorkflowMetadata is a resolver for the UI to allow composition of CEL statements based on eligible fields and objects
 // its intentionally public and doesn't have any access restrictions as it only exposes metadata
 func (r *queryResolver) WorkflowMetadata(ctx context.Context) (*model.WorkflowMetadata, error) {
-	if !workflowsEnabled(r.db) {
+	if !workflowsEnabled() {
 		return nil, ErrWorkflowsDisabled
 	}
 	meta := workflows.WorkflowMetadata()

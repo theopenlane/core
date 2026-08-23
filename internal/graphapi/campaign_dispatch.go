@@ -218,7 +218,7 @@ func (r *mutationResolver) processDispatchTargets(ctx context.Context, state *ca
 // integration runtime. It performs an active lookup for the email integration at
 // dispatch time so integrations created after campaign creation are picked up
 func (r *mutationResolver) dispatchCampaignOperation(ctx context.Context, state *campaignDispatchState) error {
-	rt := intruntime.FromClient(ctx, withTransactionalMutation(ctx))
+	rt := intruntime.Default()
 	if rt == nil {
 		return ErrCampaignDispatchRuntimeRequired
 	}
@@ -408,7 +408,7 @@ func (r *mutationResolver) enqueueCampaignDispatchJob(ctx context.Context, state
 		return ErrCampaignDispatchScheduleRequired
 	}
 
-	rt := intruntime.FromClient(ctx, withTransactionalMutation(ctx))
+	rt := intruntime.Default()
 	if rt == nil {
 		return ErrCampaignDispatchRuntimeRequired
 	}

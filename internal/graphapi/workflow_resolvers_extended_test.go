@@ -2,6 +2,7 @@ package graphapi_test
 
 import (
 	"context"
+	"sync"
 	"testing"
 	"time"
 
@@ -18,19 +19,26 @@ import (
 	"github.com/theopenlane/utils/ulids"
 )
 
-func ensureWorkflowEngine(t *testing.T) {
+var (
+	workflowEngineOnce   sync.Once
+	workflowEngineErr    error
+	sharedWorkflowEngine *engine.WorkflowEngine
+)
+
+// ensureWorkflowEngine registers one shared process-wide workflow engine; it is never
+// unset so parallel tests always see a stable default
+func ensureWorkflowEngine(t *testing.T) *engine.WorkflowEngine {
 	t.Helper()
 
-	prev := suite.client.db.WorkflowEngine
-	if prev == nil {
-		workflowEngine, err := engine.NewWorkflowEngine(suite.client.db, nil)
-		requireNoError(t, err)
-		suite.client.db.WorkflowEngine = workflowEngine
-	}
-
-	t.Cleanup(func() {
-		suite.client.db.WorkflowEngine = prev
+	workflowEngineOnce.Do(func() {
+		sharedWorkflowEngine, workflowEngineErr = engine.NewWorkflowEngine(suite.client.db, nil)
+		if workflowEngineErr == nil {
+			engine.SetDefault(sharedWorkflowEngine)
+		}
 	})
+	requireNoError(t, workflowEngineErr)
+
+	return sharedWorkflowEngine
 }
 
 func createWorkflowDefinition(t *testing.T, ctx context.Context, ownerID string) *ent.WorkflowDefinition {
