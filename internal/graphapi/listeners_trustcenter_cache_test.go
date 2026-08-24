@@ -37,15 +37,15 @@ func TestTrustCenterCacheListeners(t *testing.T) {
 	// the http scheme puts trustcenterurl.BuildURL in test mode, routing every refresh to the
 	// local server so refreshes succeed instead of retrying against unresolvable hosts
 	hooks.SetTrustCenterConfig(hooks.TrustCenterConfig{
-		PreviewZoneID:            previewZoneTestID,
 		CnameTarget:              cnameTargetTest,
+		PreviewCnameTarget:       previewCnameTargetTest,
 		DefaultTrustCenterDomain: strings.TrimPrefix(refreshServer.URL, "http://"),
 		CacheRefreshScheme:       "http",
 	})
 	t.Cleanup(func() {
 		hooks.SetTrustCenterConfig(hooks.TrustCenterConfig{
-			PreviewZoneID:            previewZoneTestID,
 			CnameTarget:              cnameTargetTest,
+			PreviewCnameTarget:       previewCnameTargetTest,
 			DefaultTrustCenterDomain: defaultDomainTest,
 		})
 	})

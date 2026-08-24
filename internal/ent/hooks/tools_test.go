@@ -33,7 +33,9 @@ import (
 )
 
 const (
-	fgaModuleFile = "../../../fga/model/fga.mod"
+	fgaModuleFile             = "../../../fga/model/fga.mod"
+	previewCnameTargetTest    = "preview-cname.test.net"
+	previewMappableZoneIDTest = "preview-zone-id"
 )
 
 // TestHookSuite runs all the tests in the TestHookSuite
@@ -63,6 +65,17 @@ func (suite *HookTestSuite) SetupSuite() {
 	}
 
 	suite.client = suite.setupClient()
+
+	hooks.SetTrustCenterConfig(hooks.TrustCenterConfig{
+		PreviewCnameTarget: previewCnameTargetTest,
+	})
+
+	ctx := privacy.DecisionContext(context.Background(), privacy.Allow)
+	_, err := suite.client.MappableDomain.Create().
+		SetName(previewCnameTargetTest).
+		SetZoneID(previewMappableZoneIDTest).
+		Save(ctx)
+	require.NoError(suite.T(), err)
 }
 
 // TearDownSuite runs after the test suite

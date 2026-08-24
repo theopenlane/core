@@ -149,8 +149,8 @@ type Server struct {
 	// TrustCenterCnameTarget is the cname target for the trust center
 	// Used for mapping the vanity domains to the trust centers
 	TrustCenterCnameTarget string `json:"trustcentercnametarget" koanf:"trustcentercnametarget" default:""`
-	// TrustCenterPreviewZoneID is the cloudflare zone id for the trust center preview domain
-	TrustCenterPreviewZoneID string `json:"trustcenterpreviewzoneid" koanf:"trustcenterpreviewzoneid" default:""`
+	// TrustCenterPreviewCnameTarget is the cname target for trust center preview domains
+	TrustCenterPreviewCnameTarget string `json:"trustcenterpreviewcnametarget" koanf:"trustcenterpreviewcnametarget" default:""`
 	// NotificationLookbackDays is the number of days of read notifications to pull when starting a notification subscription
 	// Unread notifications are always pulled regardless of this setting
 	NotificationLookbackDays int `json:"notificationlookbackdays" koanf:"notificationlookbackdays" default:"30"`

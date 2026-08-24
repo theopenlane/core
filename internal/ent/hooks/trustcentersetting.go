@@ -13,10 +13,12 @@ import (
 	"github.com/theopenlane/core/common/jobspec"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/trustcenterurl"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/pkg/urlx"
 )
 
 var trustCenterConfig TrustCenterConfig
@@ -28,7 +30,6 @@ func SetTrustCenterConfig(cfg TrustCenterConfig) {
 	trustCenterConfig = cfg
 
 	trustcenterurl.SetConfig(trustcenterurl.Config{
-		PreviewZoneID:            cfg.PreviewZoneID,
 		CnameTarget:              cfg.CnameTarget,
 		DefaultTrustCenterDomain: cfg.DefaultTrustCenterDomain,
 		CacheRefreshScheme:       cfg.CacheRefreshScheme,
@@ -37,8 +38,8 @@ func SetTrustCenterConfig(cfg TrustCenterConfig) {
 
 // TrustCenterConfig holds the trust center configuration
 type TrustCenterConfig struct {
-	PreviewZoneID            string
 	CnameTarget              string
+	PreviewCnameTarget       string
 	DefaultTrustCenterDomain string
 	CacheRefreshScheme       string
 }
@@ -172,11 +173,17 @@ func HookTrustCenterSettingCreatePreview() ent.Hook {
 				return v, nil
 			}
 
-			// Insert job to create preview domain with config values
+			previewZoneID, err := getTrustCenterPreviewZoneID(ctx, m.Client())
+			if err != nil {
+				logx.FromContext(ctx).Error().Err(err).Str("cname_target", trustCenterConfig.PreviewCnameTarget).Msg("failed to get mappable domain for preview domain")
+
+				return nil, err
+			}
+
 			if err = enqueueJob(ctx, m.Job, jobspec.CreatePreviewDomainArgs{
 				TrustCenterID:            trustCenterID,
-				TrustCenterPreviewZoneID: trustCenterConfig.PreviewZoneID,
-				TrustCenterCnameTarget:   trustCenterConfig.CnameTarget,
+				TrustCenterPreviewZoneID: previewZoneID,
+				TrustCenterCnameTarget:   trustCenterConfig.PreviewCnameTarget,
 			}, nil); err != nil {
 				logx.FromContext(ctx).Error().Err(err).Str("trust_center_id", trustCenterID).Msg("failed to enqueue create preview domain job")
 
@@ -186,6 +193,23 @@ func HookTrustCenterSettingCreatePreview() ent.Hook {
 			return v, nil
 		})
 	}, ent.OpCreate|ent.OpUpdateOne)
+}
+
+func getTrustCenterPreviewZoneID(ctx context.Context, client *generated.Client) (string, error) {
+	canonicalizedCname := trustCenterConfig.PreviewCnameTarget
+	if normalized, err := urlx.NormalizeHostname(trustCenterConfig.PreviewCnameTarget); err == nil {
+		canonicalizedCname = normalized
+	}
+
+	domain, err := client.MappableDomain.Query().
+		Where(mappabledomain.Name(canonicalizedCname)).
+		Select(mappabledomain.FieldZoneID).
+		Only(ctx)
+	if err != nil {
+		return "", err
+	}
+
+	return domain.ZoneID, nil
 }
 
 // isPreviewSetting checks if the trust center setting mutation is for the preview environment

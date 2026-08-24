@@ -371,9 +371,9 @@
           "type": "string",
           "description": "TrustCenterCnameTarget is the cname target for the trust center\nUsed for mapping the vanity domains to the trust centers"
         },
-        "trustcenterpreviewzoneid": {
+        "trustcenterpreviewcnametarget": {
           "type": "string",
-          "description": "TrustCenterPreviewZoneID is the cloudflare zone id for the trust center preview domain"
+          "description": "TrustCenterPreviewCnameTarget is the cname target for trust center preview domains"
         },
         "notificationlookbackdays": {
           "type": "integer",

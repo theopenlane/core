@@ -43,6 +43,7 @@ import (
 	"github.com/theopenlane/core/fga/fgaversion"
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/internal/entdb"
@@ -91,9 +92,10 @@ const (
 	seedStripeSubscriptionID = "sub_test_subscription"
 	webhookSecret            = "whsec_test_secret"
 
-	previewZoneTestID = "test-zone-id"
-	cnameTargetTest   = "cname-target.test.com"
-	defaultDomainTest = "test.default.domain"
+	mappableDomainZoneTestID = "mappable-domain-zone-id"
+	cnameTargetTest          = "cname-target.test.com"
+	previewCnameTargetTest   = "preview-cname-target.test.com"
+	defaultDomainTest        = "test.default.domain"
 )
 
 // GraphTestSuite handles the setup and teardown between tests
@@ -406,10 +408,16 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 
 	// Set trust center config for hooks
 	hooks.SetTrustCenterConfig(hooks.TrustCenterConfig{
-		PreviewZoneID:            previewZoneTestID,
 		CnameTarget:              cnameTargetTest,
+		PreviewCnameTarget:       previewCnameTargetTest,
 		DefaultTrustCenterDomain: defaultDomainTest,
 	})
+
+	_, err = c.db.MappableDomain.Create().
+		SetName(previewCnameTargetTest).
+		SetZoneID(mappableDomainZoneTestID).
+		Save(privacy.DecisionContext(ctx, privacy.Allow))
+	requireNoError(t, err)
 
 	suite.client = c
 }

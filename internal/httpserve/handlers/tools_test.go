@@ -30,6 +30,8 @@ import (
 	"github.com/theopenlane/core/fga/fgaversion"
 	"github.com/theopenlane/core/internal/ent/entconfig"
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/entdb"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
@@ -72,8 +74,10 @@ var (
 )
 
 const (
-	fgaModuleFile            = "../../../fga/model/fga.mod"
-	seedStripeSubscriptionID = "sub_test_subscription"
+	fgaModuleFile                   = "../../../fga/model/fga.mod"
+	seedStripeSubscriptionID        = "sub_test_subscription"
+	previewCnameTargetTest          = "preview-cname.test.net"
+	previewMappableDomainZoneIDTest = "preview-zone-id"
 )
 
 // HandlerTestSuite handles the setup and teardown between tests
@@ -219,6 +223,17 @@ func (suite *HandlerTestSuite) SetupSuite() {
 	require.NoError(suite.T(), err)
 
 	suite.galaDB = galaDB
+
+	hooks.SetTrustCenterConfig(hooks.TrustCenterConfig{
+		PreviewCnameTarget: previewCnameTargetTest,
+	})
+
+	previewDomainCtx := privacy.DecisionContext(context.Background(), privacy.Allow)
+	_, err = suite.galaDB.MappableDomain.Create().
+		SetName(previewCnameTargetTest).
+		SetZoneID(previewMappableDomainZoneIDTest).
+		Save(previewDomainCtx)
+	require.NoError(suite.T(), err)
 
 	// single integration runtime for the entire suite — listeners registered once
 	credStore, err := keystore.NewStore(suite.galaDB)
