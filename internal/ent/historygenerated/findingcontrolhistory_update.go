@@ -8,213 +8,24 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/findingcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
 )
 
 // FindingControlHistoryUpdate is the builder for updating FindingControlHistory entities.
 type FindingControlHistoryUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *FindingControlHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *FindingControlHistoryMutation
 }
 
 // Where appends a list predicates to the FindingControlHistoryUpdate builder.
 func (_u *FindingControlHistoryUpdate) Where(ps ...predicate.FindingControlHistory) *FindingControlHistoryUpdate {
 	_u.mutation.Where(ps...)
-	return _u
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *FindingControlHistoryUpdate) SetUpdatedAt(v time.Time) *FindingControlHistoryUpdate {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *FindingControlHistoryUpdate) ClearUpdatedAt() *FindingControlHistoryUpdate {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *FindingControlHistoryUpdate) SetUpdatedBy(v string) *FindingControlHistoryUpdate {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *FindingControlHistoryUpdate) SetNillableUpdatedBy(v *string) *FindingControlHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *FindingControlHistoryUpdate) ClearUpdatedBy() *FindingControlHistoryUpdate {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *FindingControlHistoryUpdate) SetUpdatedByImpersonator(v string) *FindingControlHistoryUpdate {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *FindingControlHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *FindingControlHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *FindingControlHistoryUpdate) ClearUpdatedByImpersonator() *FindingControlHistoryUpdate {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (_u *FindingControlHistoryUpdate) SetOwnerID(v string) *FindingControlHistoryUpdate {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *FindingControlHistoryUpdate) SetNillableOwnerID(v *string) *FindingControlHistoryUpdate {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *FindingControlHistoryUpdate) ClearOwnerID() *FindingControlHistoryUpdate {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
-// SetExternalStandard sets the "external_standard" field.
-func (_u *FindingControlHistoryUpdate) SetExternalStandard(v string) *FindingControlHistoryUpdate {
-	_u.mutation.SetExternalStandard(v)
-	return _u
-}
-
-// SetNillableExternalStandard sets the "external_standard" field if the given value is not nil.
-func (_u *FindingControlHistoryUpdate) SetNillableExternalStandard(v *string) *FindingControlHistoryUpdate {
-	if v != nil {
-		_u.SetExternalStandard(*v)
-	}
-	return _u
-}
-
-// ClearExternalStandard clears the value of the "external_standard" field.
-func (_u *FindingControlHistoryUpdate) ClearExternalStandard() *FindingControlHistoryUpdate {
-	_u.mutation.ClearExternalStandard()
-	return _u
-}
-
-// SetExternalStandardVersion sets the "external_standard_version" field.
-func (_u *FindingControlHistoryUpdate) SetExternalStandardVersion(v string) *FindingControlHistoryUpdate {
-	_u.mutation.SetExternalStandardVersion(v)
-	return _u
-}
-
-// SetNillableExternalStandardVersion sets the "external_standard_version" field if the given value is not nil.
-func (_u *FindingControlHistoryUpdate) SetNillableExternalStandardVersion(v *string) *FindingControlHistoryUpdate {
-	if v != nil {
-		_u.SetExternalStandardVersion(*v)
-	}
-	return _u
-}
-
-// ClearExternalStandardVersion clears the value of the "external_standard_version" field.
-func (_u *FindingControlHistoryUpdate) ClearExternalStandardVersion() *FindingControlHistoryUpdate {
-	_u.mutation.ClearExternalStandardVersion()
-	return _u
-}
-
-// SetExternalControlID sets the "external_control_id" field.
-func (_u *FindingControlHistoryUpdate) SetExternalControlID(v string) *FindingControlHistoryUpdate {
-	_u.mutation.SetExternalControlID(v)
-	return _u
-}
-
-// SetNillableExternalControlID sets the "external_control_id" field if the given value is not nil.
-func (_u *FindingControlHistoryUpdate) SetNillableExternalControlID(v *string) *FindingControlHistoryUpdate {
-	if v != nil {
-		_u.SetExternalControlID(*v)
-	}
-	return _u
-}
-
-// ClearExternalControlID clears the value of the "external_control_id" field.
-func (_u *FindingControlHistoryUpdate) ClearExternalControlID() *FindingControlHistoryUpdate {
-	_u.mutation.ClearExternalControlID()
-	return _u
-}
-
-// SetSource sets the "source" field.
-func (_u *FindingControlHistoryUpdate) SetSource(v string) *FindingControlHistoryUpdate {
-	_u.mutation.SetSource(v)
-	return _u
-}
-
-// SetNillableSource sets the "source" field if the given value is not nil.
-func (_u *FindingControlHistoryUpdate) SetNillableSource(v *string) *FindingControlHistoryUpdate {
-	if v != nil {
-		_u.SetSource(*v)
-	}
-	return _u
-}
-
-// ClearSource clears the value of the "source" field.
-func (_u *FindingControlHistoryUpdate) ClearSource() *FindingControlHistoryUpdate {
-	_u.mutation.ClearSource()
-	return _u
-}
-
-// SetMetadata sets the "metadata" field.
-func (_u *FindingControlHistoryUpdate) SetMetadata(v map[string]interface{}) *FindingControlHistoryUpdate {
-	_u.mutation.SetMetadata(v)
-	return _u
-}
-
-// ClearMetadata clears the value of the "metadata" field.
-func (_u *FindingControlHistoryUpdate) ClearMetadata() *FindingControlHistoryUpdate {
-	_u.mutation.ClearMetadata()
-	return _u
-}
-
-// SetDiscoveredAt sets the "discovered_at" field.
-func (_u *FindingControlHistoryUpdate) SetDiscoveredAt(v models.DateTime) *FindingControlHistoryUpdate {
-	_u.mutation.SetDiscoveredAt(v)
-	return _u
-}
-
-// SetNillableDiscoveredAt sets the "discovered_at" field if the given value is not nil.
-func (_u *FindingControlHistoryUpdate) SetNillableDiscoveredAt(v *models.DateTime) *FindingControlHistoryUpdate {
-	if v != nil {
-		_u.SetDiscoveredAt(*v)
-	}
-	return _u
-}
-
-// ClearDiscoveredAt clears the value of the "discovered_at" field.
-func (_u *FindingControlHistoryUpdate) ClearDiscoveredAt() *FindingControlHistoryUpdate {
-	_u.mutation.ClearDiscoveredAt()
 	return _u
 }
 
@@ -225,9 +36,6 @@ func (_u *FindingControlHistoryUpdate) Mutation() *FindingControlHistoryMutation
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *FindingControlHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := _u.defaults(); err != nil {
-		return 0, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -253,24 +61,6 @@ func (_u *FindingControlHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *FindingControlHistoryUpdate) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if findingcontrolhistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized findingcontrolhistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := findingcontrolhistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *FindingControlHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *FindingControlHistoryUpdate {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *FindingControlHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	_spec := sqlgraph.NewUpdateSpec(findingcontrolhistory.Table, findingcontrolhistory.Columns, sqlgraph.NewFieldSpec(findingcontrolhistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
@@ -286,29 +76,17 @@ func (_u *FindingControlHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(findingcontrolhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(findingcontrolhistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(findingcontrolhistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(findingcontrolhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(findingcontrolhistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(findingcontrolhistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(findingcontrolhistory.FieldUpdatedByImpersonator, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(findingcontrolhistory.FieldUpdatedByImpersonator, field.TypeString)
-	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(findingcontrolhistory.FieldOwnerID, field.TypeString, value)
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(findingcontrolhistory.FieldOwnerID, field.TypeString)
@@ -316,45 +94,24 @@ func (_u *FindingControlHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	if _u.mutation.StandardIDCleared() {
 		_spec.ClearField(findingcontrolhistory.FieldStandardID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ExternalStandard(); ok {
-		_spec.SetField(findingcontrolhistory.FieldExternalStandard, field.TypeString, value)
-	}
 	if _u.mutation.ExternalStandardCleared() {
 		_spec.ClearField(findingcontrolhistory.FieldExternalStandard, field.TypeString)
-	}
-	if value, ok := _u.mutation.ExternalStandardVersion(); ok {
-		_spec.SetField(findingcontrolhistory.FieldExternalStandardVersion, field.TypeString, value)
 	}
 	if _u.mutation.ExternalStandardVersionCleared() {
 		_spec.ClearField(findingcontrolhistory.FieldExternalStandardVersion, field.TypeString)
 	}
-	if value, ok := _u.mutation.ExternalControlID(); ok {
-		_spec.SetField(findingcontrolhistory.FieldExternalControlID, field.TypeString, value)
-	}
 	if _u.mutation.ExternalControlIDCleared() {
 		_spec.ClearField(findingcontrolhistory.FieldExternalControlID, field.TypeString)
-	}
-	if value, ok := _u.mutation.Source(); ok {
-		_spec.SetField(findingcontrolhistory.FieldSource, field.TypeString, value)
 	}
 	if _u.mutation.SourceCleared() {
 		_spec.ClearField(findingcontrolhistory.FieldSource, field.TypeString)
 	}
-	if value, ok := _u.mutation.Metadata(); ok {
-		_spec.SetField(findingcontrolhistory.FieldMetadata, field.TypeJSON, value)
-	}
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(findingcontrolhistory.FieldMetadata, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.DiscoveredAt(); ok {
-		_spec.SetField(findingcontrolhistory.FieldDiscoveredAt, field.TypeTime, value)
 	}
 	if _u.mutation.DiscoveredAtCleared() {
 		_spec.ClearField(findingcontrolhistory.FieldDiscoveredAt, field.TypeTime)
 	}
-	_spec.Node.Schema = _u.schemaConfig.FindingControlHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{findingcontrolhistory.Label}
@@ -370,194 +127,9 @@ func (_u *FindingControlHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 // FindingControlHistoryUpdateOne is the builder for updating a single FindingControlHistory entity.
 type FindingControlHistoryUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *FindingControlHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *FindingControlHistoryUpdateOne) SetUpdatedAt(v time.Time) *FindingControlHistoryUpdateOne {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *FindingControlHistoryUpdateOne) ClearUpdatedAt() *FindingControlHistoryUpdateOne {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *FindingControlHistoryUpdateOne) SetUpdatedBy(v string) *FindingControlHistoryUpdateOne {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *FindingControlHistoryUpdateOne) SetNillableUpdatedBy(v *string) *FindingControlHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *FindingControlHistoryUpdateOne) ClearUpdatedBy() *FindingControlHistoryUpdateOne {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *FindingControlHistoryUpdateOne) SetUpdatedByImpersonator(v string) *FindingControlHistoryUpdateOne {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *FindingControlHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *FindingControlHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *FindingControlHistoryUpdateOne) ClearUpdatedByImpersonator() *FindingControlHistoryUpdateOne {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (_u *FindingControlHistoryUpdateOne) SetOwnerID(v string) *FindingControlHistoryUpdateOne {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *FindingControlHistoryUpdateOne) SetNillableOwnerID(v *string) *FindingControlHistoryUpdateOne {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *FindingControlHistoryUpdateOne) ClearOwnerID() *FindingControlHistoryUpdateOne {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
-// SetExternalStandard sets the "external_standard" field.
-func (_u *FindingControlHistoryUpdateOne) SetExternalStandard(v string) *FindingControlHistoryUpdateOne {
-	_u.mutation.SetExternalStandard(v)
-	return _u
-}
-
-// SetNillableExternalStandard sets the "external_standard" field if the given value is not nil.
-func (_u *FindingControlHistoryUpdateOne) SetNillableExternalStandard(v *string) *FindingControlHistoryUpdateOne {
-	if v != nil {
-		_u.SetExternalStandard(*v)
-	}
-	return _u
-}
-
-// ClearExternalStandard clears the value of the "external_standard" field.
-func (_u *FindingControlHistoryUpdateOne) ClearExternalStandard() *FindingControlHistoryUpdateOne {
-	_u.mutation.ClearExternalStandard()
-	return _u
-}
-
-// SetExternalStandardVersion sets the "external_standard_version" field.
-func (_u *FindingControlHistoryUpdateOne) SetExternalStandardVersion(v string) *FindingControlHistoryUpdateOne {
-	_u.mutation.SetExternalStandardVersion(v)
-	return _u
-}
-
-// SetNillableExternalStandardVersion sets the "external_standard_version" field if the given value is not nil.
-func (_u *FindingControlHistoryUpdateOne) SetNillableExternalStandardVersion(v *string) *FindingControlHistoryUpdateOne {
-	if v != nil {
-		_u.SetExternalStandardVersion(*v)
-	}
-	return _u
-}
-
-// ClearExternalStandardVersion clears the value of the "external_standard_version" field.
-func (_u *FindingControlHistoryUpdateOne) ClearExternalStandardVersion() *FindingControlHistoryUpdateOne {
-	_u.mutation.ClearExternalStandardVersion()
-	return _u
-}
-
-// SetExternalControlID sets the "external_control_id" field.
-func (_u *FindingControlHistoryUpdateOne) SetExternalControlID(v string) *FindingControlHistoryUpdateOne {
-	_u.mutation.SetExternalControlID(v)
-	return _u
-}
-
-// SetNillableExternalControlID sets the "external_control_id" field if the given value is not nil.
-func (_u *FindingControlHistoryUpdateOne) SetNillableExternalControlID(v *string) *FindingControlHistoryUpdateOne {
-	if v != nil {
-		_u.SetExternalControlID(*v)
-	}
-	return _u
-}
-
-// ClearExternalControlID clears the value of the "external_control_id" field.
-func (_u *FindingControlHistoryUpdateOne) ClearExternalControlID() *FindingControlHistoryUpdateOne {
-	_u.mutation.ClearExternalControlID()
-	return _u
-}
-
-// SetSource sets the "source" field.
-func (_u *FindingControlHistoryUpdateOne) SetSource(v string) *FindingControlHistoryUpdateOne {
-	_u.mutation.SetSource(v)
-	return _u
-}
-
-// SetNillableSource sets the "source" field if the given value is not nil.
-func (_u *FindingControlHistoryUpdateOne) SetNillableSource(v *string) *FindingControlHistoryUpdateOne {
-	if v != nil {
-		_u.SetSource(*v)
-	}
-	return _u
-}
-
-// ClearSource clears the value of the "source" field.
-func (_u *FindingControlHistoryUpdateOne) ClearSource() *FindingControlHistoryUpdateOne {
-	_u.mutation.ClearSource()
-	return _u
-}
-
-// SetMetadata sets the "metadata" field.
-func (_u *FindingControlHistoryUpdateOne) SetMetadata(v map[string]interface{}) *FindingControlHistoryUpdateOne {
-	_u.mutation.SetMetadata(v)
-	return _u
-}
-
-// ClearMetadata clears the value of the "metadata" field.
-func (_u *FindingControlHistoryUpdateOne) ClearMetadata() *FindingControlHistoryUpdateOne {
-	_u.mutation.ClearMetadata()
-	return _u
-}
-
-// SetDiscoveredAt sets the "discovered_at" field.
-func (_u *FindingControlHistoryUpdateOne) SetDiscoveredAt(v models.DateTime) *FindingControlHistoryUpdateOne {
-	_u.mutation.SetDiscoveredAt(v)
-	return _u
-}
-
-// SetNillableDiscoveredAt sets the "discovered_at" field if the given value is not nil.
-func (_u *FindingControlHistoryUpdateOne) SetNillableDiscoveredAt(v *models.DateTime) *FindingControlHistoryUpdateOne {
-	if v != nil {
-		_u.SetDiscoveredAt(*v)
-	}
-	return _u
-}
-
-// ClearDiscoveredAt clears the value of the "discovered_at" field.
-func (_u *FindingControlHistoryUpdateOne) ClearDiscoveredAt() *FindingControlHistoryUpdateOne {
-	_u.mutation.ClearDiscoveredAt()
-	return _u
+	fields   []string
+	hooks    []Hook
+	mutation *FindingControlHistoryMutation
 }
 
 // Mutation returns the FindingControlHistoryMutation object of the builder.
@@ -580,9 +152,6 @@ func (_u *FindingControlHistoryUpdateOne) Select(field string, fields ...string)
 
 // Save executes the query and returns the updated FindingControlHistory entity.
 func (_u *FindingControlHistoryUpdateOne) Save(ctx context.Context) (*FindingControlHistory, error) {
-	if err := _u.defaults(); err != nil {
-		return nil, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -606,24 +175,6 @@ func (_u *FindingControlHistoryUpdateOne) ExecX(ctx context.Context) {
 	if err := _u.Exec(ctx); err != nil {
 		panic(err)
 	}
-}
-
-// defaults sets the default values of the builder before save.
-func (_u *FindingControlHistoryUpdateOne) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if findingcontrolhistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized findingcontrolhistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := findingcontrolhistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *FindingControlHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *FindingControlHistoryUpdateOne {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
 }
 
 func (_u *FindingControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *FindingControlHistory, err error) {
@@ -658,29 +209,17 @@ func (_u *FindingControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *F
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(findingcontrolhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(findingcontrolhistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(findingcontrolhistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(findingcontrolhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(findingcontrolhistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(findingcontrolhistory.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(findingcontrolhistory.FieldUpdatedByImpersonator, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(findingcontrolhistory.FieldUpdatedByImpersonator, field.TypeString)
-	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(findingcontrolhistory.FieldOwnerID, field.TypeString, value)
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(findingcontrolhistory.FieldOwnerID, field.TypeString)
@@ -688,45 +227,24 @@ func (_u *FindingControlHistoryUpdateOne) sqlSave(ctx context.Context) (_node *F
 	if _u.mutation.StandardIDCleared() {
 		_spec.ClearField(findingcontrolhistory.FieldStandardID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ExternalStandard(); ok {
-		_spec.SetField(findingcontrolhistory.FieldExternalStandard, field.TypeString, value)
-	}
 	if _u.mutation.ExternalStandardCleared() {
 		_spec.ClearField(findingcontrolhistory.FieldExternalStandard, field.TypeString)
-	}
-	if value, ok := _u.mutation.ExternalStandardVersion(); ok {
-		_spec.SetField(findingcontrolhistory.FieldExternalStandardVersion, field.TypeString, value)
 	}
 	if _u.mutation.ExternalStandardVersionCleared() {
 		_spec.ClearField(findingcontrolhistory.FieldExternalStandardVersion, field.TypeString)
 	}
-	if value, ok := _u.mutation.ExternalControlID(); ok {
-		_spec.SetField(findingcontrolhistory.FieldExternalControlID, field.TypeString, value)
-	}
 	if _u.mutation.ExternalControlIDCleared() {
 		_spec.ClearField(findingcontrolhistory.FieldExternalControlID, field.TypeString)
-	}
-	if value, ok := _u.mutation.Source(); ok {
-		_spec.SetField(findingcontrolhistory.FieldSource, field.TypeString, value)
 	}
 	if _u.mutation.SourceCleared() {
 		_spec.ClearField(findingcontrolhistory.FieldSource, field.TypeString)
 	}
-	if value, ok := _u.mutation.Metadata(); ok {
-		_spec.SetField(findingcontrolhistory.FieldMetadata, field.TypeJSON, value)
-	}
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(findingcontrolhistory.FieldMetadata, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.DiscoveredAt(); ok {
-		_spec.SetField(findingcontrolhistory.FieldDiscoveredAt, field.TypeTime, value)
 	}
 	if _u.mutation.DiscoveredAtCleared() {
 		_spec.ClearField(findingcontrolhistory.FieldDiscoveredAt, field.TypeTime)
 	}
-	_spec.Node.Schema = _u.schemaConfig.FindingControlHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	_node = &FindingControlHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

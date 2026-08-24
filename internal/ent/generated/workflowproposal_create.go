@@ -431,7 +431,6 @@ func (_c *WorkflowProposalCreate) createSpec() (*WorkflowProposal, *sqlgraph.Cre
 		_node = &WorkflowProposal{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(workflowproposal.Table, sqlgraph.NewFieldSpec(workflowproposal.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.WorkflowProposal
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -503,7 +502,6 @@ func (_c *WorkflowProposalCreate) createSpec() (*WorkflowProposal, *sqlgraph.Cre
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowProposal
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -521,7 +519,6 @@ func (_c *WorkflowProposalCreate) createSpec() (*WorkflowProposal, *sqlgraph.Cre
 				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowProposal
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -539,7 +536,6 @@ func (_c *WorkflowProposalCreate) createSpec() (*WorkflowProposal, *sqlgraph.Cre
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowProposal
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -557,7 +553,6 @@ func (_c *WorkflowProposalCreate) createSpec() (*WorkflowProposal, *sqlgraph.Cre
 				IDSpec: sqlgraph.NewFieldSpec(workflowinstance.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowInstance
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

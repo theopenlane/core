@@ -633,7 +633,6 @@ func (_c *EmailTemplateHistoryCreate) createSpec() (*EmailTemplateHistory, *sqlg
 		_node = &EmailTemplateHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(emailtemplatehistory.Table, sqlgraph.NewFieldSpec(emailtemplatehistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.EmailTemplateHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

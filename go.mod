@@ -96,15 +96,15 @@ require (
 	github.com/slack-go/slack v0.27.0
 	github.com/spf13/cobra v1.10.2
 	github.com/stoewer/go-strcase v1.3.1
-	github.com/stretchr/testify v1.12.0
+	github.com/stretchr/testify v1.12.1
 	github.com/stripe/stripe-go/v86 v86.2.0
 	github.com/tailscale/tailscale-client-go/v2 v2.0.0-20250129222324-74c8fc3cb4d7
 	github.com/theopenlane/core/common v1.0.25
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.3.0
-	github.com/theopenlane/entx v0.32.0
+	github.com/theopenlane/entx v0.33.0
 	github.com/theopenlane/go-client v0.13.0
-	github.com/theopenlane/gqlgen-plugins v0.17.0
+	github.com/theopenlane/gqlgen-plugins v0.17.1
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.37.0
 	github.com/theopenlane/newman v0.4.3

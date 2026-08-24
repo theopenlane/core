@@ -8,8 +8,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // ID filters vertices based on their ID field.
@@ -1054,9 +1052,6 @@ func HasOwner() predicate.OrgProduct {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.OrgProduct
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1065,9 +1060,6 @@ func HasOwner() predicate.OrgProduct {
 func HasOwnerWith(preds ...predicate.Organization) predicate.OrgProduct {
 	return predicate.OrgProduct(func(s *sql.Selector) {
 		step := newOwnerStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.OrgProduct
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1083,9 +1075,6 @@ func HasOrgSubscription() predicate.OrgProduct {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, OrgSubscriptionTable, OrgSubscriptionColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.OrgSubscription
-		step.Edge.Schema = schemaConfig.OrgProduct
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1094,9 +1083,6 @@ func HasOrgSubscription() predicate.OrgProduct {
 func HasOrgSubscriptionWith(preds ...predicate.OrgSubscription) predicate.OrgProduct {
 	return predicate.OrgProduct(func(s *sql.Selector) {
 		step := newOrgSubscriptionStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.OrgSubscription
-		step.Edge.Schema = schemaConfig.OrgProduct
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1112,9 +1098,6 @@ func HasOrgPrices() predicate.OrgProduct {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, OrgPricesTable, OrgPricesPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.OrgPrice
-		step.Edge.Schema = schemaConfig.OrgProductOrgPrices
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1123,9 +1106,6 @@ func HasOrgPrices() predicate.OrgProduct {
 func HasOrgPricesWith(preds ...predicate.OrgPrice) predicate.OrgProduct {
 	return predicate.OrgProduct(func(s *sql.Selector) {
 		step := newOrgPricesStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.OrgPrice
-		step.Edge.Schema = schemaConfig.OrgProductOrgPrices
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1141,9 +1121,6 @@ func HasOrgModules() predicate.OrgProduct {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, OrgModulesTable, OrgModulesColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.OrgModule
-		step.Edge.Schema = schemaConfig.OrgModule
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1152,9 +1129,6 @@ func HasOrgModules() predicate.OrgProduct {
 func HasOrgModulesWith(preds ...predicate.OrgModule) predicate.OrgProduct {
 	return predicate.OrgProduct(func(s *sql.Selector) {
 		step := newOrgModulesStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.OrgModule
-		step.Edge.Schema = schemaConfig.OrgModule
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

@@ -384,7 +384,6 @@ func (_c *DocumentDataHistoryCreate) createSpec() (*DocumentDataHistory, *sqlgra
 		_node = &DocumentDataHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(documentdatahistory.Table, sqlgraph.NewFieldSpec(documentdatahistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.DocumentDataHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

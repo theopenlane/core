@@ -18,7 +18,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -86,9 +85,6 @@ func (_q *JobRunnerQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, jobrunner.OwnerTable, jobrunner.OwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.JobRunner
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -111,9 +107,6 @@ func (_q *JobRunnerQuery) QueryJobRunnerTokens() *JobRunnerTokenQuery {
 			sqlgraph.To(jobrunnertoken.Table, jobrunnertoken.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, jobrunner.JobRunnerTokensTable, jobrunner.JobRunnerTokensPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.JobRunnerToken
-		step.Edge.Schema = schemaConfig.JobRunnerJobRunnerTokens
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -441,8 +434,6 @@ func (_q *JobRunnerQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Jo
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.JobRunner
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -525,7 +516,6 @@ func (_q *JobRunnerQuery) loadJobRunnerTokens(ctx context.Context, query *JobRun
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(jobrunner.JobRunnerTokensTable)
-		joinT.Schema(_q.schemaConfig.JobRunnerJobRunnerTokens)
 		s.Join(joinT).On(s.C(jobrunnertoken.FieldID), joinT.C(jobrunner.JobRunnerTokensPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(jobrunner.JobRunnerTokensPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -577,8 +567,6 @@ func (_q *JobRunnerQuery) loadJobRunnerTokens(ctx context.Context, query *JobRun
 
 func (_q *JobRunnerQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.JobRunner
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -647,9 +635,6 @@ func (_q *JobRunnerQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.JobRunner)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}

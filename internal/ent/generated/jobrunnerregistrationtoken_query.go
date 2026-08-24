@@ -17,7 +17,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -84,9 +83,6 @@ func (_q *JobRunnerRegistrationTokenQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, jobrunnerregistrationtoken.OwnerTable, jobrunnerregistrationtoken.OwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.JobRunnerRegistrationToken
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -109,9 +105,6 @@ func (_q *JobRunnerRegistrationTokenQuery) QueryJobRunner() *JobRunnerQuery {
 			sqlgraph.To(jobrunner.Table, jobrunner.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, jobrunnerregistrationtoken.JobRunnerTable, jobrunnerregistrationtoken.JobRunnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.JobRunner
-		step.Edge.Schema = schemaConfig.JobRunnerRegistrationToken
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -439,8 +432,6 @@ func (_q *JobRunnerRegistrationTokenQuery) sqlAll(ctx context.Context, hooks ...
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.JobRunnerRegistrationToken
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -534,8 +525,6 @@ func (_q *JobRunnerRegistrationTokenQuery) loadJobRunner(ctx context.Context, qu
 
 func (_q *JobRunnerRegistrationTokenQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.JobRunnerRegistrationToken
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -607,9 +596,6 @@ func (_q *JobRunnerRegistrationTokenQuery) sqlQuery(ctx context.Context) *sql.Se
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.JobRunnerRegistrationToken)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}

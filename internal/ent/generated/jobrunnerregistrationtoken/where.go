@@ -8,8 +8,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // ID filters vertices based on their ID field.
@@ -899,9 +897,6 @@ func HasOwner() predicate.JobRunnerRegistrationToken {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.JobRunnerRegistrationToken
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -910,9 +905,6 @@ func HasOwner() predicate.JobRunnerRegistrationToken {
 func HasOwnerWith(preds ...predicate.Organization) predicate.JobRunnerRegistrationToken {
 	return predicate.JobRunnerRegistrationToken(func(s *sql.Selector) {
 		step := newOwnerStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.JobRunnerRegistrationToken
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -928,9 +920,6 @@ func HasJobRunner() predicate.JobRunnerRegistrationToken {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, JobRunnerTable, JobRunnerColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.JobRunner
-		step.Edge.Schema = schemaConfig.JobRunnerRegistrationToken
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -939,9 +928,6 @@ func HasJobRunner() predicate.JobRunnerRegistrationToken {
 func HasJobRunnerWith(preds ...predicate.JobRunner) predicate.JobRunnerRegistrationToken {
 	return predicate.JobRunnerRegistrationToken(func(s *sql.Selector) {
 		step := newJobRunnerStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.JobRunner
-		step.Edge.Schema = schemaConfig.JobRunnerRegistrationToken
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

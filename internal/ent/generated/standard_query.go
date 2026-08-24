@@ -22,7 +22,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -97,9 +96,6 @@ func (_q *StandardQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, standard.OwnerTable, standard.OwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.Standard
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -122,9 +118,6 @@ func (_q *StandardQuery) QueryControls() *ControlQuery {
 			sqlgraph.To(control.Table, control.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, standard.ControlsTable, standard.ControlsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.Control
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -147,9 +140,6 @@ func (_q *StandardQuery) QueryTrustCenterCompliances() *TrustCenterComplianceQue
 			sqlgraph.To(trustcentercompliance.Table, trustcentercompliance.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, standard.TrustCenterCompliancesTable, standard.TrustCenterCompliancesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.TrustCenterCompliance
-		step.Edge.Schema = schemaConfig.TrustCenterCompliance
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -172,9 +162,6 @@ func (_q *StandardQuery) QueryTrustCenterDocs() *TrustCenterDocQuery {
 			sqlgraph.To(trustcenterdoc.Table, trustcenterdoc.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, standard.TrustCenterDocsTable, standard.TrustCenterDocsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.TrustCenterDoc
-		step.Edge.Schema = schemaConfig.TrustCenterDoc
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -197,9 +184,6 @@ func (_q *StandardQuery) QueryApplicablePlatforms() *PlatformQuery {
 			sqlgraph.To(platform.Table, platform.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, standard.ApplicablePlatformsTable, standard.ApplicablePlatformsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Platform
-		step.Edge.Schema = schemaConfig.PlatformApplicableFrameworks
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -222,9 +206,6 @@ func (_q *StandardQuery) QueryLogoFile() *FileQuery {
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, standard.LogoFileTable, standard.LogoFileColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.Standard
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -604,8 +585,6 @@ func (_q *StandardQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Sta
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.Standard
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -830,7 +809,6 @@ func (_q *StandardQuery) loadApplicablePlatforms(ctx context.Context, query *Pla
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(standard.ApplicablePlatformsTable)
-		joinT.Schema(_q.schemaConfig.PlatformApplicableFrameworks)
 		s.Join(joinT).On(s.C(platform.FieldID), joinT.C(standard.ApplicablePlatformsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(standard.ApplicablePlatformsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -914,8 +892,6 @@ func (_q *StandardQuery) loadLogoFile(ctx context.Context, query *FileQuery, nod
 
 func (_q *StandardQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.Standard
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -987,9 +963,6 @@ func (_q *StandardQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.Standard)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}

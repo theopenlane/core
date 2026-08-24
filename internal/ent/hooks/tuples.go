@@ -57,16 +57,6 @@ func HookDeletePermissions() ent.Hook {
 	)
 }
 
-// DeletePermissionsHook deletes all relationship tuples associated with the object(s) in the mutation.
-// The ids are resolved from the mutation, so this must be called before the records are hard deleted
-func DeletePermissionsHook(ctx context.Context, m utils.GenericMutation) error {
-	ids, err := getMutationIDs(ctx, m)
-	if err != nil {
-		return err
-	}
-	return deletePermissionsForIDs(ctx, m, ids)
-}
-
 // deletePermissionsForIDs deletes all relationship tuples for the given object ids
 func deletePermissionsForIDs(ctx context.Context, m utils.GenericMutation, objIDs []string) error {
 	client := utils.AuthzClientFromContext(ctx)

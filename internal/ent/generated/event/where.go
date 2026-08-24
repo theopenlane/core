@@ -8,8 +8,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // ID filters vertices based on their ID field.
@@ -594,9 +592,6 @@ func HasUsers() predicate.Event {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, UsersTable, UsersPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.UserEvents
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -605,9 +600,6 @@ func HasUsers() predicate.Event {
 func HasUsersWith(preds ...predicate.User) predicate.Event {
 	return predicate.Event(func(s *sql.Selector) {
 		step := newUsersStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.UserEvents
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -623,9 +615,6 @@ func HasGroups() predicate.Event {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, GroupsTable, GroupsPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.GroupEvents
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -634,9 +623,6 @@ func HasGroups() predicate.Event {
 func HasGroupsWith(preds ...predicate.Group) predicate.Event {
 	return predicate.Event(func(s *sql.Selector) {
 		step := newGroupsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.GroupEvents
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -652,9 +638,6 @@ func HasIntegrations() predicate.Event {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, IntegrationsTable, IntegrationsPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Integration
-		step.Edge.Schema = schemaConfig.IntegrationEvents
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -663,9 +646,6 @@ func HasIntegrations() predicate.Event {
 func HasIntegrationsWith(preds ...predicate.Integration) predicate.Event {
 	return predicate.Event(func(s *sql.Selector) {
 		step := newIntegrationsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Integration
-		step.Edge.Schema = schemaConfig.IntegrationEvents
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -681,9 +661,6 @@ func HasOrganizations() predicate.Event {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, OrganizationsTable, OrganizationsPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.OrganizationEvents
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -692,9 +669,6 @@ func HasOrganizations() predicate.Event {
 func HasOrganizationsWith(preds ...predicate.Organization) predicate.Event {
 	return predicate.Event(func(s *sql.Selector) {
 		step := newOrganizationsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.OrganizationEvents
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -710,9 +684,6 @@ func HasInvites() predicate.Event {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, InvitesTable, InvitesPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Invite
-		step.Edge.Schema = schemaConfig.InviteEvents
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -721,9 +692,6 @@ func HasInvites() predicate.Event {
 func HasInvitesWith(preds ...predicate.Invite) predicate.Event {
 	return predicate.Event(func(s *sql.Selector) {
 		step := newInvitesStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Invite
-		step.Edge.Schema = schemaConfig.InviteEvents
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -739,9 +707,6 @@ func HasPersonalAccessTokens() predicate.Event {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, PersonalAccessTokensTable, PersonalAccessTokensPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.PersonalAccessToken
-		step.Edge.Schema = schemaConfig.PersonalAccessTokenEvents
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -750,9 +715,6 @@ func HasPersonalAccessTokens() predicate.Event {
 func HasPersonalAccessTokensWith(preds ...predicate.PersonalAccessToken) predicate.Event {
 	return predicate.Event(func(s *sql.Selector) {
 		step := newPersonalAccessTokensStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.PersonalAccessToken
-		step.Edge.Schema = schemaConfig.PersonalAccessTokenEvents
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -768,9 +730,6 @@ func HasSecrets() predicate.Event {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, SecretsTable, SecretsPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Hush
-		step.Edge.Schema = schemaConfig.HushEvents
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -779,9 +738,6 @@ func HasSecrets() predicate.Event {
 func HasSecretsWith(preds ...predicate.Hush) predicate.Event {
 	return predicate.Event(func(s *sql.Selector) {
 		step := newSecretsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Hush
-		step.Edge.Schema = schemaConfig.HushEvents
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -797,9 +753,6 @@ func HasOrgMemberships() predicate.Event {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, OrgMembershipsTable, OrgMembershipsPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.OrgMembership
-		step.Edge.Schema = schemaConfig.OrgMembershipEvents
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -808,9 +761,6 @@ func HasOrgMemberships() predicate.Event {
 func HasOrgMembershipsWith(preds ...predicate.OrgMembership) predicate.Event {
 	return predicate.Event(func(s *sql.Selector) {
 		step := newOrgMembershipsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.OrgMembership
-		step.Edge.Schema = schemaConfig.OrgMembershipEvents
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -826,9 +776,6 @@ func HasGroupMemberships() predicate.Event {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, GroupMembershipsTable, GroupMembershipsPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.GroupMembership
-		step.Edge.Schema = schemaConfig.GroupMembershipEvents
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -837,9 +784,6 @@ func HasGroupMemberships() predicate.Event {
 func HasGroupMembershipsWith(preds ...predicate.GroupMembership) predicate.Event {
 	return predicate.Event(func(s *sql.Selector) {
 		step := newGroupMembershipsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.GroupMembership
-		step.Edge.Schema = schemaConfig.GroupMembershipEvents
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -855,9 +799,6 @@ func HasSubscribers() predicate.Event {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, SubscribersTable, SubscribersPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Subscriber
-		step.Edge.Schema = schemaConfig.SubscriberEvents
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -866,9 +807,6 @@ func HasSubscribers() predicate.Event {
 func HasSubscribersWith(preds ...predicate.Subscriber) predicate.Event {
 	return predicate.Event(func(s *sql.Selector) {
 		step := newSubscribersStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Subscriber
-		step.Edge.Schema = schemaConfig.SubscriberEvents
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -884,9 +822,6 @@ func HasFiles() predicate.Event {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, FilesTable, FilesPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.FileEvents
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -895,9 +830,6 @@ func HasFiles() predicate.Event {
 func HasFilesWith(preds ...predicate.File) predicate.Event {
 	return predicate.Event(func(s *sql.Selector) {
 		step := newFilesStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.FileEvents
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -913,9 +845,6 @@ func HasOrgSubscriptions() predicate.Event {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, OrgSubscriptionsTable, OrgSubscriptionsPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.OrgSubscription
-		step.Edge.Schema = schemaConfig.OrgSubscriptionEvents
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -924,9 +853,6 @@ func HasOrgSubscriptions() predicate.Event {
 func HasOrgSubscriptionsWith(preds ...predicate.OrgSubscription) predicate.Event {
 	return predicate.Event(func(s *sql.Selector) {
 		step := newOrgSubscriptionsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.OrgSubscription
-		step.Edge.Schema = schemaConfig.OrgSubscriptionEvents
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

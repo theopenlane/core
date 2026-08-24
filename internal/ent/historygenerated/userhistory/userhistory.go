@@ -141,14 +141,10 @@ var (
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
 	DefaultUpdatedAt func() time.Time
-	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
-	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
 	// DefaultAvatarUpdatedAt holds the default value on creation for the "avatar_updated_at" field.
 	DefaultAvatarUpdatedAt func() time.Time
-	// UpdateDefaultLastSeen holds the default value on update for the "last_seen" field.
-	UpdateDefaultLastSeen func() time.Time
 	// DefaultScimActive holds the default value on creation for the "scim_active" field.
 	DefaultScimActive bool
 	// DefaultID holds the default value on creation for the "id" field.

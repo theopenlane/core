@@ -67,13 +67,6 @@ func withGlobalEnum() customEnumOptions {
 	}
 }
 
-// withNoEnumAutoCreation disables auto-creation of the enum if it doesn't exist
-func withNoEnumAutoCreation() customEnumOptions { //nolint:unused
-	return func(c *CustomEnumMixin) {
-		c.DisableAutoCreate = true
-	}
-}
-
 // Fields of the CustomEnumMixin.
 func (c CustomEnumMixin) Fields() []ent.Field {
 	schema := toSchemaFuncs(c.schemaType)

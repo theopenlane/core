@@ -309,7 +309,6 @@ func (_c *MappableDomainHistoryCreate) createSpec() (*MappableDomainHistory, *sq
 		_node = &MappableDomainHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(mappabledomainhistory.Table, sqlgraph.NewFieldSpec(mappabledomainhistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.MappableDomainHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

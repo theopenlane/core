@@ -14,7 +14,6 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/common"
-	"github.com/theopenlane/core/internal/graphapi/directives"
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/internal/graphsubscriptions"
@@ -121,7 +120,7 @@ type Handler struct {
 func (r *Resolver) Handler() *Handler {
 	c := &gqlgenerated.Config{Resolvers: r}
 
-	directives.ImplementAllDirectives(c)
+	ImplementAllDirectives(c)
 
 	srv := handler.New(gqlgenerated.NewExecutableSchema(
 		*c,

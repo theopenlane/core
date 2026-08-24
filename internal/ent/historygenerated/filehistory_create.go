@@ -656,7 +656,6 @@ func (_c *FileHistoryCreate) createSpec() (*FileHistory, *sqlgraph.CreateSpec) {
 		_node = &FileHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(filehistory.Table, sqlgraph.NewFieldSpec(filehistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.FileHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

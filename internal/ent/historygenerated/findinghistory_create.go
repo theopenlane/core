@@ -1039,7 +1039,6 @@ func (_c *FindingHistoryCreate) createSpec() (*FindingHistory, *sqlgraph.CreateS
 		_node = &FindingHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(findinghistory.Table, sqlgraph.NewFieldSpec(findinghistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.FindingHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

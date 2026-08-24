@@ -459,7 +459,6 @@ func (_c *HushCreate) createSpec() (*Hush, *sqlgraph.CreateSpec) {
 		_node = &Hush{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(hush.Table, sqlgraph.NewFieldSpec(hush.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.Hush
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -551,7 +550,6 @@ func (_c *HushCreate) createSpec() (*Hush, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.Hush
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -569,7 +567,6 @@ func (_c *HushCreate) createSpec() (*Hush, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.IntegrationSecrets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -586,7 +583,6 @@ func (_c *HushCreate) createSpec() (*Hush, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.FileSecrets
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -603,7 +599,6 @@ func (_c *HushCreate) createSpec() (*Hush, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.HushEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

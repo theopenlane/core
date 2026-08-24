@@ -21,7 +21,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -93,9 +92,6 @@ func (_q *ScheduledJobQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, scheduledjob.OwnerTable, scheduledjob.OwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.ScheduledJob
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -118,9 +114,6 @@ func (_q *ScheduledJobQuery) QueryJobTemplate() *JobTemplateQuery {
 			sqlgraph.To(jobtemplate.Table, jobtemplate.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, scheduledjob.JobTemplateTable, scheduledjob.JobTemplateColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.JobTemplate
-		step.Edge.Schema = schemaConfig.ScheduledJob
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -143,9 +136,6 @@ func (_q *ScheduledJobQuery) QueryControls() *ControlQuery {
 			sqlgraph.To(control.Table, control.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, scheduledjob.ControlsTable, scheduledjob.ControlsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.ScheduledJobControls
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -168,9 +158,6 @@ func (_q *ScheduledJobQuery) QuerySubcontrols() *SubcontrolQuery {
 			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, scheduledjob.SubcontrolsTable, scheduledjob.SubcontrolsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.ScheduledJobSubcontrols
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -193,9 +180,6 @@ func (_q *ScheduledJobQuery) QueryJobRunner() *JobRunnerQuery {
 			sqlgraph.To(jobrunner.Table, jobrunner.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, scheduledjob.JobRunnerTable, scheduledjob.JobRunnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.JobRunner
-		step.Edge.Schema = schemaConfig.ScheduledJob
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -562,8 +546,6 @@ func (_q *ScheduledJobQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.ScheduledJob
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -701,7 +683,6 @@ func (_q *ScheduledJobQuery) loadControls(ctx context.Context, query *ControlQue
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(scheduledjob.ControlsTable)
-		joinT.Schema(_q.schemaConfig.ScheduledJobControls)
 		s.Join(joinT).On(s.C(control.FieldID), joinT.C(scheduledjob.ControlsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(scheduledjob.ControlsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -763,7 +744,6 @@ func (_q *ScheduledJobQuery) loadSubcontrols(ctx context.Context, query *Subcont
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(scheduledjob.SubcontrolsTable)
-		joinT.Schema(_q.schemaConfig.ScheduledJobSubcontrols)
 		s.Join(joinT).On(s.C(subcontrol.FieldID), joinT.C(scheduledjob.SubcontrolsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(scheduledjob.SubcontrolsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -844,8 +824,6 @@ func (_q *ScheduledJobQuery) loadJobRunner(ctx context.Context, query *JobRunner
 
 func (_q *ScheduledJobQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.ScheduledJob
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -920,9 +898,6 @@ func (_q *ScheduledJobQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.ScheduledJob)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}

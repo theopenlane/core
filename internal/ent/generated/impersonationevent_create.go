@@ -373,7 +373,6 @@ func (_c *ImpersonationEventCreate) createSpec() (*ImpersonationEvent, *sqlgraph
 		_node = &ImpersonationEvent{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(impersonationevent.Table, sqlgraph.NewFieldSpec(impersonationevent.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.ImpersonationEvent
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -445,7 +444,6 @@ func (_c *ImpersonationEventCreate) createSpec() (*ImpersonationEvent, *sqlgraph
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ImpersonationEvent
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -463,7 +461,6 @@ func (_c *ImpersonationEventCreate) createSpec() (*ImpersonationEvent, *sqlgraph
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ImpersonationEvent
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -481,7 +478,6 @@ func (_c *ImpersonationEventCreate) createSpec() (*ImpersonationEvent, *sqlgraph
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.ImpersonationEvent
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -20,7 +20,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -94,9 +93,6 @@ func (_q *OrgSubscriptionQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, orgsubscription.OwnerTable, orgsubscription.OwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.OrgSubscription
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -119,9 +115,6 @@ func (_q *OrgSubscriptionQuery) QueryEvents() *EventQuery {
 			sqlgraph.To(event.Table, event.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, orgsubscription.EventsTable, orgsubscription.EventsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Event
-		step.Edge.Schema = schemaConfig.OrgSubscriptionEvents
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -144,9 +137,6 @@ func (_q *OrgSubscriptionQuery) QueryModules() *OrgModuleQuery {
 			sqlgraph.To(orgmodule.Table, orgmodule.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, orgsubscription.ModulesTable, orgsubscription.ModulesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.OrgModule
-		step.Edge.Schema = schemaConfig.OrgModule
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -169,9 +159,6 @@ func (_q *OrgSubscriptionQuery) QueryProducts() *OrgProductQuery {
 			sqlgraph.To(orgproduct.Table, orgproduct.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, orgsubscription.ProductsTable, orgsubscription.ProductsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.OrgProduct
-		step.Edge.Schema = schemaConfig.OrgProduct
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -194,9 +181,6 @@ func (_q *OrgSubscriptionQuery) QueryPrices() *OrgPriceQuery {
 			sqlgraph.To(orgprice.Table, orgprice.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, orgsubscription.PricesTable, orgsubscription.PricesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.OrgPrice
-		step.Edge.Schema = schemaConfig.OrgPrice
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -557,8 +541,6 @@ func (_q *OrgSubscriptionQuery) sqlAll(ctx context.Context, hooks ...queryHook) 
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.OrgSubscription
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -683,7 +665,6 @@ func (_q *OrgSubscriptionQuery) loadEvents(ctx context.Context, query *EventQuer
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(orgsubscription.EventsTable)
-		joinT.Schema(_q.schemaConfig.OrgSubscriptionEvents)
 		s.Join(joinT).On(s.C(event.FieldID), joinT.C(orgsubscription.EventsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(orgsubscription.EventsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -827,8 +808,6 @@ func (_q *OrgSubscriptionQuery) loadPrices(ctx context.Context, query *OrgPriceQ
 
 func (_q *OrgSubscriptionQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.OrgSubscription
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -897,9 +876,6 @@ func (_q *OrgSubscriptionQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.OrgSubscription)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}

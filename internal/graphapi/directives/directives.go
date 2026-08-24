@@ -10,8 +10,6 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/samber/lo"
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
-	gqlhistorygenerated "github.com/theopenlane/core/internal/graphapi/historygenerated"
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/common/enums"
@@ -35,24 +33,6 @@ const (
 	// Modules is used to indicate the modules an organization must have enabled to access the object
 	Modules = "modules"
 )
-
-// ImplementAllDirectives is a helper function that can be used to add all active directives to the gqlgen config
-// in the resolver setup
-func ImplementAllDirectives(cfg *gqlgenerated.Config) {
-	cfg.Directives.Hidden = HiddenDirective
-	cfg.Directives.ReadOnly = ReadOnlyDirective
-	cfg.Directives.ExternalReadOnly = ExternalReadOnlyDirective
-	cfg.Directives.ExternalSource = ExternalSourceDirective
-}
-
-// ImplementAllHistoryDirectives is a helper function that can be used to add all active directives to the gqlgen config
-// in the resolver setup for the history api
-func ImplementAllHistoryDirectives(cfg *gqlhistorygenerated.Config) {
-	cfg.Directives.Hidden = HiddenDirective
-	cfg.Directives.ReadOnly = ReadOnlyDirective
-	cfg.Directives.ExternalReadOnly = ExternalReadOnlyDirective
-	cfg.Directives.ExternalSource = ExternalSourceDirective
-}
 
 // NewHiddenDirective returns a new hidden directive with the value set
 // to add @hidden(if: true) to a field or object

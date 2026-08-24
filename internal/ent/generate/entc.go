@@ -99,16 +99,12 @@ var (
 	}
 )
 
-var enabledFeatures = []gen.Feature{
+var enabledBaseFeatures = []gen.Feature{
 	gen.FeatureVersionedMigration,
 	gen.FeaturePrivacy,
 	gen.FeatureEntQL,
 	gen.FeatureNamedEdges,
-	gen.FeatureSchemaConfig,
 	gen.FeatureIntercept,
-	gen.FeatureModifier,
-	// this is disabled because it is not compatible with the entcache driver
-	// gen.FeatureExecQuery,
 }
 
 func main() {
@@ -241,6 +237,8 @@ func getEntGqlExtension() *entgql.Extension {
 
 	schemaHooks = append(schemaHooks, genhooks.WithStringSliceWhereOps())
 
+	schemaHooks = append(schemaHooks, genhelpers.PruneWhereInputOps())
+
 	gqlExt, err := entgql.NewExtension(
 		entgql.WithSchemaGenerator(),
 		entgql.WithSchemaPath(graphSchemaDir+"ent.graphql"),
@@ -262,6 +260,7 @@ func getEntHistoryGqlExtension() *entgql.Extension {
 		entgql.WithSchemaPath(graphHistorySchemaDir+"ent.graphql"),
 		entgql.WithConfigPath(graphDir+"/generate/.gqlgen_history.yml"),
 		entgql.WithWhereInputs(true),
+		entgql.WithSchemaHook(genhelpers.PruneWhereInputOps()),
 		WithGqlWithTemplates(),
 	)
 	if err != nil {
@@ -290,9 +289,7 @@ func getHistoryExtension(hasChanges bool) *history.Extension {
 	log.Info().Msg("creating history extension")
 
 	historyExt := history.New(
-		history.WithImmutableFields(),
 		history.WithHistoryTimeIndex(),
-		history.WithNillableFields(),
 		history.WithGQLQuery(),
 		history.WithAuthzPolicy(),
 		history.WithInputSchemaPath(schemaPath),
@@ -454,7 +451,7 @@ func schemaGenerate(extensions ...entc.Extension) *gen.Graph {
 			captureGraphHook,
 		},
 		Package:    "github.com/theopenlane/core/" + entGeneratedPath,
-		Features:   enabledFeatures,
+		Features:   append(enabledBaseFeatures, gen.FeatureModifier),
 		BuildFlags: []string{buildFlags},
 	},
 		entc.Dependency(
@@ -529,7 +526,7 @@ func historySchemaGenerate(extensions ...entc.Extension) {
 			genhooks.GenQuery(graphHistoryQueryDir, graphSchemaDir),
 		},
 		Package:    "github.com/theopenlane/core/" + entGeneratedHistoryPath,
-		Features:   enabledFeatures,
+		Features:   enabledBaseFeatures,
 		BuildFlags: []string{buildFlags},
 	},
 		entc.Dependency(
