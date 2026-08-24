@@ -14,13 +14,13 @@ Schema for Openlane workflow definitions
 |**approvalSubmissionMode**|`string`|Enum: `"MANUAL_SUBMIT"`, `"AUTO_SUBMIT"`<br/>||
 |**approvalTiming**|`string`|Enum: `"PRE_COMMIT"`, `"POST_COMMIT"`<br/>||
 |**version**|`string`|||
-|[**targets**](#targets)|`object`|||
+|[**targets**](#defsworkflowselector)|`object`|||
 |[**triggers**](#triggers)|`array`|||
 |[**conditions**](#conditions)|`array`|||
 |[**actions**](#actions)|`array`|||
 |[**metadata**](#metadata)|`object`|||
 
-**Additional Properties:** not allowed  
+**Additional Properties:** not allowed   
 **Example**
 
 ```json
@@ -41,40 +41,7 @@ Schema for Openlane workflow definitions
 }
 ```
 
-<a name="targets"></a>
-## targets: object
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|[**tagIds**](#targetstagids)|`string[]`|||
-|[**groupIds**](#targetsgroupids)|`string[]`|||
-|[**objectTypes**](#targetsobjecttypes)|`string[]`|||
-
-**Additional Properties:** not allowed  
-<a name="targetstagids"></a>
-### targets\.tagIds\[\]: array
-
-**Items**
-
-**Item Type:** `string`  
-<a name="targetsgroupids"></a>
-### targets\.groupIds\[\]: array
-
-**Items**
-
-**Item Type:** `string`  
-<a name="targetsobjecttypes"></a>
-### targets\.objectTypes\[\]: array
-
-**Items**
-
-
-The object type the workflow applies to
-
-**Item Type:** `string`  
-**Item Enum:** `"ActionPlan"`, `"Assessment"`, `"AssessmentResponse"`, `"Campaign"`, `"CampaignTarget"`, `"Control"`, `"Evidence"`, `"Finding"`, `"IdentityHolder"`, `"InternalPolicy"`, `"Platform"`, `"Procedure"`, `"Remediation"`, `"Risk"`, `"Subcontrol"`, `"Task"`, `"Vulnerability"`  
+   
 <a name="triggers"></a>
 ## triggers\[\]: array
 
@@ -90,6 +57,7 @@ The object type the workflow applies to
 ]
 ```
 
+   
 <a name="conditions"></a>
 ## conditions\[\]: array
 
@@ -103,6 +71,7 @@ The object type the workflow applies to
 ]
 ```
 
+   
 <a name="actions"></a>
 ## actions\[\]: array
 
@@ -116,9 +85,48 @@ The object type the workflow applies to
 ]
 ```
 
+   
 <a name="metadata"></a>
 ## metadata: object
 
 **No properties.**
 
+   
+<a name="defsworkflowselector"></a>
+## $defs/WorkflowSelector: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|[**tagIds**](#defsworkflowselectortagids)|`string[]`|||
+|[**groupIds**](#defsworkflowselectorgroupids)|`string[]`|||
+|[**objectTypes**](#defsworkflowselectorobjecttypes)|`string[]`|||
+
+**Additional Properties:** not allowed   
+   
+<a name="defsworkflowselectortagids"></a>
+### $defs/WorkflowSelector\.tagIds\[\]: array
+
+**Items**
+
+**Item Type:** `string`   
+   
+<a name="defsworkflowselectorgroupids"></a>
+### $defs/WorkflowSelector\.groupIds\[\]: array
+
+**Items**
+
+**Item Type:** `string`   
+   
+<a name="defsworkflowselectorobjecttypes"></a>
+### $defs/WorkflowSelector\.objectTypes\[\]: array
+
+**Items**
+
+
+The object type the workflow applies to
+
+**Item Type:** `string`   
+**Item Enum:** `"ActionPlan"`, `"Assessment"`, `"AssessmentResponse"`, `"Campaign"`, `"CampaignTarget"`, `"Control"`, `"Evidence"`, `"Finding"`, `"IdentityHolder"`, `"InternalPolicy"`, `"Platform"`, `"Procedure"`, `"Remediation"`, `"Risk"`, `"Subcontrol"`, `"Task"`, `"Vulnerability"`   
 

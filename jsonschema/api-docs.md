@@ -9,27 +9,27 @@ Config contains the configuration for the core server
 |----|----|-----------|--------|
 |**domain**|`string`|Domain provides a global domain value for other modules to inherit<br/>||
 |**refreshinterval**|`integer`|RefreshInterval determines how often to reload the config<br/>||
-|[**server**](#server)|`object`|Server settings for the echo server<br/>|yes|
-|[**entconfig**](#entconfig)|`object`|Config holds the configuration for the ent server<br/>||
-|[**auth**](#auth)|`object`|Auth settings including oauth2 providers and token configuration<br/>|yes|
-|[**authz**](#authz)|`object`||yes|
-|[**db**](#db)|`object`||yes|
-|[**jobqueue**](#jobqueue)|`object`|||
-|[**redis**](#redis)|`object`|||
-|[**sessions**](#sessions)|`object`|||
-|[**totp**](#totp)|`object`|||
-|[**ratelimit**](#ratelimit)|`object`|Config defines the configuration settings for the rate limiter middleware.<br/>||
-|[**ratelimitunmatched**](#ratelimitunmatched)|`object`|Config defines the configuration settings for the rate limiter middleware.<br/>||
-|[**objectstorage**](#objectstorage)|`object`|ProviderConfig contains configuration for object storage providers<br/>||
-|[**subscription**](#subscription)|`object`|||
-|[**keywatcher**](#keywatcher)|`object`|KeyWatcher contains settings for the key watcher that manages JWT signing keys<br/>||
-|[**integrations**](#integrations)|`object`|||
-|[**workflows**](#workflows)|`object`|||
-|[**cloudflare**](#cloudflare)|`object`|CloudflareConfig contains configuration for Cloudflare integration.<br/>||
-|[**shortlinks**](#shortlinks)|`object`|||
-|[**backfill**](#backfill)|`object`|Backfill configures one-time startup data backfill routines that populate fields introduced by recent<br/>||
+|[**server**](#defsconfigserver)|`object`|Server settings for the echo server<br/>|yes|
+|[**entconfig**](#defsentconfigconfig)|`object`|Config holds the configuration for the ent server<br/>||
+|[**auth**](#defsconfigauth)|`object`|Auth settings including oauth2 providers and token configuration<br/>|yes|
+|[**authz**](#defsfgaxconfig)|`object`||yes|
+|[**db**](#defsentxconfig)|`object`||yes|
+|[**jobqueue**](#defsriverqueueconfig)|`object`|||
+|[**redis**](#defscacheconfig)|`object`|||
+|[**sessions**](#defssessionsconfig)|`object`|||
+|[**totp**](#defstotpconfig)|`object`|||
+|[**ratelimit**](#defsratelimitconfig)|`object`|Config defines the configuration settings for the rate limiter middleware.<br/>||
+|[**ratelimitunmatched**](#defsratelimitconfig)|`object`|Config defines the configuration settings for the rate limiter middleware.<br/>||
+|[**objectstorage**](#defsstorageproviderconfig)|`object`|ProviderConfig contains configuration for object storage providers<br/>||
+|[**subscription**](#defsentitlementsconfig)|`object`|||
+|[**keywatcher**](#defsconfigkeywatcher)|`object`|KeyWatcher contains settings for the key watcher that manages JWT signing keys<br/>||
+|[**integrations**](#defscatalogconfig)|`object`|||
+|[**workflows**](#defsworkflowsconfig)|`object`|||
+|[**cloudflare**](#defshandlerscloudflareconfig)|`object`|CloudflareConfig contains configuration for Cloudflare integration.<br/>||
+|[**shortlinks**](#defsshortlinksconfig)|`object`|||
+|[**backfill**](#defsconfigbackfill)|`object`|Backfill configures one-time startup data backfill routines that populate fields introduced by recent<br/>||
 
-**Additional Properties:** not allowed  
+**Additional Properties:** not allowed   
 **Example**
 
 ```json
@@ -168,8 +168,9 @@ Config contains the configuration for the core server
 }
 ```
 
-<a name="server"></a>
-## server: object
+   
+<a name="defsconfigserver"></a>
+## $defs/config\.Server: object
 
 Server settings for the echo server
 
@@ -186,24 +187,24 @@ Server settings for the echo server
 |**writetimeout**|`integer`|WriteTimeout sets the maximum duration before timing out writes of the response<br/>|no|
 |**idletimeout**|`integer`|IdleTimeout sets the maximum amount of time to wait for the next request when keep-alives are enabled<br/>|no|
 |**readheadertimeout**|`integer`|ReadHeaderTimeout sets the amount of time allowed to read request headers<br/>|no|
-|[**tls**](#servertls)|`object`|TLS settings for the server for secure connections<br/>|no|
-|[**cors**](#servercors)|`object`|Config holds the cors configuration settings<br/>|no|
-|[**secure**](#serversecure)|`object`|Config contains the types used in the mw middleware<br/>|no|
-|[**cachecontrol**](#servercachecontrol)|`object`|Config is the config values for the cache-control middleware<br/>|no|
-|[**mime**](#servermime)|`object`|Config defines the config for Mime middleware<br/>|no|
-|[**graphpool**](#servergraphpool)|`object`|PoolConfig contains the settings for the goroutine pool<br/>|no|
+|[**tls**](#defsconfigtls)|`object`|TLS settings for the server for secure connections<br/>||
+|[**cors**](#defscorsconfig)|`object`|Config holds the cors configuration settings<br/>||
+|[**secure**](#defssecureconfig)|`object`|Config contains the types used in the mw middleware<br/>||
+|[**cachecontrol**](#defscachecontrolconfig)|`object`|Config is the config values for the cache-control middleware<br/>||
+|[**mime**](#defsmimeconfig)|`object`|Config defines the config for Mime middleware<br/>||
+|[**graphpool**](#defsconfigpoolconfig)|`object`|PoolConfig contains the settings for the goroutine pool<br/>||
 |**enablegraphextensions**|`boolean`|EnableGraphExtensions enables the graph extensions for the graph resolvers<br/>|no|
 |**enablegraphsubscriptions**|`boolean`|EnableGraphSubscriptions enables graphql subscriptions to the server using websockets or sse<br/>|no|
 |**complexitylimit**|`integer`|ComplexityLimit sets the maximum complexity allowed for a query<br/>|no|
 |**maxresultlimit**|`integer`|MaxResultLimit sets the maximum number of results allowed for a query<br/>|no|
-|[**csrfprotection**](#servercsrfprotection)|`object`|Config defines configuration for the CSRF middleware wrapper.<br/>|no|
+|[**csrfprotection**](#defscsrfconfig)|`object`|Config defines configuration for the CSRF middleware wrapper.<br/>||
 |**secretmanager**|`string`|SecretManagerSecret is the name of the GCP Secret Manager secret containing the JWT signing key<br/>|no|
 |**defaulttrustcenterdomain**|`string`|DefaultTrustCenterDomain is the default domain to use for the trust center if no custom domain is set<br/>|no|
 |**trustcentercnametarget**|`string`|TrustCenterCnameTarget is the cname target for the trust center<br/>Used for mapping the vanity domains to the trust centers<br/>|no|
 |**trustcenterpreviewcnametarget**|`string`|TrustCenterPreviewCnameTarget is the cname target for trust center preview domains<br/>|no|
 |**notificationlookbackdays**|`integer`|NotificationLookbackDays is the number of days of read notifications to pull when starting a notification subscription<br/>Unread notifications are always pulled regardless of this setting<br/>|no|
 
-**Additional Properties:** not allowed  
+**Additional Properties:** not allowed   
 **Example**
 
 ```json
@@ -222,8 +223,9 @@ Server settings for the echo server
 }
 ```
 
-<a name="servertls"></a>
-### server\.tls: object
+   
+<a name="defsconfigtls"></a>
+### $defs/config\.TLS: object
 
 TLS settings for the server for secure connections
 
@@ -237,9 +239,10 @@ TLS settings for the server for secure connections
 |**certkey**|`string`|CertKey file location for the TLS server<br/>||
 |**autocert**|`boolean`|AutoCert generates the cert with letsencrypt, this does not work on localhost<br/>||
 
-**Additional Properties:** not allowed  
-<a name="servercors"></a>
-### server\.cors: object
+**Additional Properties:** not allowed   
+   
+<a name="defscorsconfig"></a>
+### $defs/cors\.Config: object
 
 Config holds the cors configuration settings
 
@@ -249,11 +252,11 @@ Config holds the cors configuration settings
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |**enabled**|`boolean`|Enable or disable the CORS middleware<br/>||
-|[**prefixes**](#servercorsprefixes)|`object`|||
-|[**alloworigins**](#servercorsalloworigins)|`string[]`|||
+|[**prefixes**](#defsmapstringstring)|`object`|||
+|[**alloworigins**](#defsstring)|`string[]`|||
 |**cookieinsecure**|`boolean`|CookieInsecure sets the cookie to be insecure<br/>||
 
-**Additional Properties:** not allowed  
+**Additional Properties:** not allowed   
 **Example**
 
 ```json
@@ -262,29 +265,33 @@ Config holds the cors configuration settings
 }
 ```
 
-<a name="servercorsprefixes"></a>
-#### server\.cors\.prefixes: object
+   
+<a name="defsmapstringstring"></a>
+#### $defs/map\[string\]\[\]string: object
 
 **Additional Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|[**Additional Properties**](#servercorsprefixesadditionalproperties)|`string[]`|||
+|[**Additional Properties**](#defsstring)|`string[]`|||
 
-<a name="servercorsprefixesadditionalproperties"></a>
-##### server\.cors\.prefixes\.additionalProperties: array
-
-**Items**
-
-**Item Type:** `string`  
-<a name="servercorsalloworigins"></a>
-#### server\.cors\.alloworigins: array
+   
+<a name="defsstring"></a>
+##### $defs/\[\]string: array
 
 **Items**
 
-**Item Type:** `string`  
-<a name="serversecure"></a>
-### server\.secure: object
+**Item Type:** `string`   
+   
+<a name="defsstring"></a>
+##### $defs/\[\]string: array
+
+**Items**
+
+**Item Type:** `string`   
+   
+<a name="defssecureconfig"></a>
+### $defs/secure\.Config: object
 
 Config contains the types used in the mw middleware
 
@@ -303,9 +310,10 @@ Config contains the types used in the mw middleware
 |**referrerpolicy**|`string`|ReferrerPolicy is the value to set the Referrer-Policy header to - default is same-origin<br/>||
 |**cspreportonly**|`boolean`|CSPReportOnly is a boolean to enable the Content-Security-Policy-Report-Only header - default is false<br/>||
 
-**Additional Properties:** not allowed  
-<a name="servercachecontrol"></a>
-### server\.cachecontrol: object
+**Additional Properties:** not allowed   
+   
+<a name="defscachecontrolconfig"></a>
+### $defs/cachecontrol\.Config: object
 
 Config is the config values for the cache-control middleware
 
@@ -315,10 +323,10 @@ Config is the config values for the cache-control middleware
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |**enabled**|`boolean`|||
-|[**nocacheheaders**](#servercachecontrolnocacheheaders)|`object`|||
-|[**etagheaders**](#servercachecontroletagheaders)|`string[]`|||
+|[**nocacheheaders**](#defsmapstringstring)|`object`|||
+|[**etagheaders**](#defsstring)|`string[]`|||
 
-**Additional Properties:** not allowed  
+**Additional Properties:** not allowed   
 **Example**
 
 ```json
@@ -327,8 +335,9 @@ Config is the config values for the cache-control middleware
 }
 ```
 
-<a name="servercachecontrolnocacheheaders"></a>
-#### server\.cachecontrol\.nocacheheaders: object
+   
+<a name="defsmapstringstring"></a>
+#### $defs/map\[string\]string: object
 
 **Additional Properties**
 
@@ -336,14 +345,16 @@ Config is the config values for the cache-control middleware
 |----|----|-----------|--------|
 |**Additional Properties**|`string`|||
 
-<a name="servercachecontroletagheaders"></a>
-#### server\.cachecontrol\.etagheaders: array
+   
+<a name="defsstring"></a>
+#### $defs/\[\]string: array
 
 **Items**
 
-**Item Type:** `string`  
-<a name="servermime"></a>
-### server\.mime: object
+**Item Type:** `string`   
+   
+<a name="defsmimeconfig"></a>
+### $defs/mime\.Config: object
 
 Config defines the config for Mime middleware
 
@@ -356,9 +367,10 @@ Config defines the config for Mime middleware
 |**mimetypesfile**|`string`|MimeTypesFile is the file to load mime types from<br/>||
 |**defaultcontenttype**|`string`|DefaultContentType is the default content type to set if no mime type is found<br/>||
 
-**Additional Properties:** not allowed  
-<a name="servergraphpool"></a>
-### server\.graphpool: object
+**Additional Properties:** not allowed   
+   
+<a name="defsconfigpoolconfig"></a>
+### $defs/config\.PoolConfig: object
 
 PoolConfig contains the settings for the goroutine pool
 
@@ -369,9 +381,10 @@ PoolConfig contains the settings for the goroutine pool
 |----|----|-----------|--------|
 |**maxworkers**|`integer`|MaxWorkers is the maximum number of workers in the pool<br/>||
 
-**Additional Properties:** not allowed  
-<a name="servercsrfprotection"></a>
-### server\.csrfprotection: object
+**Additional Properties:** not allowed   
+   
+<a name="defscsrfconfig"></a>
+### $defs/csrf\.Config: object
 
 Config defines configuration for the CSRF middleware wrapper.
 
@@ -389,9 +402,10 @@ Config defines configuration for the CSRF middleware wrapper.
 |**cookiedomain**|`string`|CookieDomain specifies the domain for the CSRF cookie, default to no domain<br/>||
 |**cookiepath**|`string`|CookiePath specifies the path for the CSRF cookie, default to "/"<br/>||
 
-**Additional Properties:** not allowed  
-<a name="entconfig"></a>
-## entconfig: object
+**Additional Properties:** not allowed   
+   
+<a name="defsentconfigconfig"></a>
+## $defs/entconfig\.Config: object
 
 Config holds the configuration for the ent server
 
@@ -400,17 +414,17 @@ Config holds the configuration for the ent server
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|[**entitytypes**](#entconfigentitytypes)|`string[]`|||
-|[**summarizer**](#entconfigsummarizer)|`object`|Config holds configuration for the text summarization functionality<br/>||
+|[**entitytypes**](#defsstring)|`string[]`|||
+|[**summarizer**](#defssummarizerconfig)|`object`|Config holds configuration for the text summarization functionality<br/>||
 |**maxpoolsize**|`integer`|MaxPoolSize is the max worker pool size that can be used by the ent client<br/>||
-|[**modules**](#entconfigmodules)|`object`|Modules settings for features access<br/>||
+|[**modules**](#defsentconfigmodules)|`object`|Modules settings for features access<br/>||
 |**maxschemaimportsize**|`integer`|MaxSchemaImportSize is the maximum size allowed for schema imports in bytes<br/>||
-|[**emailvalidation**](#entconfigemailvalidation)|`object`|EmailVerificationConfig is the configuration for email verification<br/>||
-|[**billing**](#entconfigbilling)|`object`|Billing settings for feature access<br/>||
-|[**notifications**](#entconfignotifications)|`object`|Notifications settings for notifications sent to users based on events<br/>||
+|[**emailvalidation**](#defsvalidatoremailverificationconfig)|`object`|EmailVerificationConfig is the configuration for email verification<br/>||
+|[**billing**](#defsentconfigbilling)|`object`|Billing settings for feature access<br/>||
+|[**notifications**](#defsentconfignotifications)|`object`|Notifications settings for notifications sent to users based on events<br/>||
 |**questionnaireproducturl**|`string`|QuestionnaireProductURL is the product URL used to build questionnaire access links<br/>||
 
-**Additional Properties:** not allowed  
+**Additional Properties:** not allowed   
 **Example**
 
 ```json
@@ -431,14 +445,16 @@ Config holds the configuration for the ent server
 }
 ```
 
-<a name="entconfigentitytypes"></a>
-### entconfig\.entitytypes: array
+   
+<a name="defsstring"></a>
+### $defs/\[\]string: array
 
 **Items**
 
-**Item Type:** `string`  
-<a name="entconfigsummarizer"></a>
-### entconfig\.summarizer: object
+**Item Type:** `string`   
+   
+<a name="defssummarizerconfig"></a>
+### $defs/summarizer\.Config: object
 
 Config holds configuration for the text summarization functionality
 
@@ -448,10 +464,10 @@ Config holds configuration for the text summarization functionality
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |**type**|`string`|Type specifies the summarization algorithm to use<br/>||
-|[**llm**](#entconfigsummarizerllm)|`object`|LLM contains configuration for multiple LLM providers<br/>||
+|[**llm**](#defssummarizerllm)|`object`|LLM contains configuration for multiple LLM providers<br/>||
 |**maximumsentences**|`integer`|MaximumSentences specifies the maximum number of sentences in the summary<br/>||
 
-**Additional Properties:** not allowed  
+**Additional Properties:** not allowed   
 **Example**
 
 ```json
@@ -464,8 +480,9 @@ Config holds configuration for the text summarization functionality
 }
 ```
 
-<a name="entconfigsummarizerllm"></a>
-#### entconfig\.summarizer\.llm: object
+   
+<a name="defssummarizerllm"></a>
+#### $defs/summarizer\.LLM: object
 
 LLM contains configuration for multiple LLM providers
 
@@ -475,11 +492,11 @@ LLM contains configuration for multiple LLM providers
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |**provider**|`string`|Provider specifies which LLM service to use<br/>||
-|[**anthropic**](#entconfigsummarizerllmanthropic)|`object`|AnthropicConfig contains Anthropic specific configuration<br/>||
-|[**cloudflare**](#entconfigsummarizerllmcloudflare)|`object`|CloudflareConfig contains Cloudflare specific configuration<br/>||
-|[**openai**](#entconfigsummarizerllmopenai)|`object`|OpenAIConfig contains OpenAI specific configuration<br/>||
+|[**anthropic**](#defssummarizeranthropicconfig)|`object`|AnthropicConfig contains Anthropic specific configuration<br/>||
+|[**cloudflare**](#defssummarizercloudflareconfig)|`object`|CloudflareConfig contains Cloudflare specific configuration<br/>||
+|[**openai**](#defssummarizeropenaiconfig)|`object`|OpenAIConfig contains OpenAI specific configuration<br/>||
 
-**Additional Properties:** not allowed  
+**Additional Properties:** not allowed   
 **Example**
 
 ```json
@@ -490,8 +507,9 @@ LLM contains configuration for multiple LLM providers
 }
 ```
 
-<a name="entconfigsummarizerllmanthropic"></a>
-##### entconfig\.summarizer\.llm\.anthropic: object
+   
+<a name="defssummarizeranthropicconfig"></a>
+##### $defs/summarizer\.AnthropicConfig: object
 
 AnthropicConfig contains Anthropic specific configuration
 
@@ -506,9 +524,10 @@ AnthropicConfig contains Anthropic specific configuration
 |**model**|`string`|Model specifies the model name to use<br/>||
 |**apikey**|`string`|APIKey contains the authentication key for the service<br/>||
 
-**Additional Properties:** not allowed  
-<a name="entconfigsummarizerllmcloudflare"></a>
-##### entconfig\.summarizer\.llm\.cloudflare: object
+**Additional Properties:** not allowed   
+   
+<a name="defssummarizercloudflareconfig"></a>
+##### $defs/summarizer\.CloudflareConfig: object
 
 CloudflareConfig contains Cloudflare specific configuration
 
@@ -522,9 +541,10 @@ CloudflareConfig contains Cloudflare specific configuration
 |**accountid**|`string`|AccountID specifies the Cloudflare account ID<br/>||
 |**serverurl**|`string`|ServerURL specifies the API endpoint<br/>||
 
-**Additional Properties:** not allowed  
-<a name="entconfigsummarizerllmopenai"></a>
-##### entconfig\.summarizer\.llm\.openai: object
+**Additional Properties:** not allowed   
+   
+<a name="defssummarizeropenaiconfig"></a>
+##### $defs/summarizer\.OpenAIConfig: object
 
 OpenAIConfig contains OpenAI specific configuration
 
@@ -538,9 +558,10 @@ OpenAIConfig contains OpenAI specific configuration
 |**url**|`string`|URL specifies the API endpoint<br/>||
 |**organizationid**|`string`|OrganizationID specifies the OpenAI organization ID<br/>||
 
-**Additional Properties:** not allowed  
-<a name="entconfigmodules"></a>
-### entconfig\.modules: object
+**Additional Properties:** not allowed   
+   
+<a name="defsentconfigmodules"></a>
+### $defs/entconfig\.Modules: object
 
 Modules settings for features access
 
@@ -553,9 +574,10 @@ Modules settings for features access
 |**usesandbox**|`boolean`|UseSandbox indicates whether to use the sandbox catalog for module access checks<br/>||
 |**devmode**|`boolean`|DevMode enables all modules for local development regardless of trial status<br/>||
 
-**Additional Properties:** not allowed  
-<a name="entconfigemailvalidation"></a>
-### entconfig\.emailvalidation: object
+**Additional Properties:** not allowed   
+   
+<a name="defsvalidatoremailverificationconfig"></a>
+### $defs/validator\.EmailVerificationConfig: object
 
 EmailVerificationConfig is the configuration for email verification
 
@@ -568,9 +590,9 @@ EmailVerificationConfig is the configuration for email verification
 |**enableautoupdatedisposable**|`boolean`|EnableAutoUpdateDisposable indicates whether to automatically update disposable email addresses<br/>||
 |**enablegravatarcheck**|`boolean`|EnableGravatarCheck indicates whether to check for Gravatar existence<br/>||
 |**enablesmtpcheck**|`boolean`|EnableSMTPCheck indicates whether to check email by smtp<br/>||
-|[**allowedemailtypes**](#entconfigemailvalidationallowedemailtypes)|`object`|AllowedEmailTypes defines the allowed email types for verification<br/>||
+|[**allowedemailtypes**](#defsvalidatorallowedemailtypes)|`object`|AllowedEmailTypes defines the allowed email types for verification<br/>||
 
-**Additional Properties:** not allowed  
+**Additional Properties:** not allowed   
 **Example**
 
 ```json
@@ -579,8 +601,9 @@ EmailVerificationConfig is the configuration for email verification
 }
 ```
 
-<a name="entconfigemailvalidationallowedemailtypes"></a>
-#### entconfig\.emailvalidation\.allowedemailtypes: object
+   
+<a name="defsvalidatorallowedemailtypes"></a>
+#### $defs/validator\.AllowedEmailTypes: object
 
 AllowedEmailTypes defines the allowed email types for verification
 
@@ -593,9 +616,10 @@ AllowedEmailTypes defines the allowed email types for verification
 |**free**|`boolean`|Free indicates whether free email addresses are allowed<br/>||
 |**role**|`boolean`|Role indicates whether role-based email addresses are allowed<br/>||
 
-**Additional Properties:** not allowed  
-<a name="entconfigbilling"></a>
-### entconfig\.billing: object
+**Additional Properties:** not allowed   
+   
+<a name="defsentconfigbilling"></a>
+### $defs/entconfig\.Billing: object
 
 Billing settings for feature access
 
@@ -605,17 +629,19 @@ Billing settings for feature access
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |**requirepaymentmethod**|`boolean`|RequirePaymentMethod indicates whether to check if a payment method<br/>exists for orgs before they can access some resource<br/>||
-|[**bypassemaildomains**](#entconfigbillingbypassemaildomains)|`string[]`|||
+|[**bypassemaildomains**](#defsstring)|`string[]`|||
 
-**Additional Properties:** not allowed  
-<a name="entconfigbillingbypassemaildomains"></a>
-#### entconfig\.billing\.bypassemaildomains: array
+**Additional Properties:** not allowed   
+   
+<a name="defsstring"></a>
+#### $defs/\[\]string: array
 
 **Items**
 
-**Item Type:** `string`  
-<a name="entconfignotifications"></a>
-### entconfig\.notifications: object
+**Item Type:** `string`   
+   
+<a name="defsentconfignotifications"></a>
+### $defs/entconfig\.Notifications: object
 
 Notifications settings for notifications sent to users based on events
 
@@ -626,9 +652,10 @@ Notifications settings for notifications sent to users based on events
 |----|----|-----------|--------|
 |**consoleurl**|`string`|ConsoleURL for ui links used in notifications<br/>||
 
-**Additional Properties:** not allowed  
-<a name="auth"></a>
-## auth: object
+**Additional Properties:** not allowed   
+   
+<a name="defsconfigauth"></a>
+## $defs/config\.Auth: object
 
 Auth settings including oauth2 providers and token configuration
 
@@ -638,12 +665,12 @@ Auth settings including oauth2 providers and token configuration
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |**enabled**|`boolean`|Enabled authentication on the server, not recommended to disable<br/>|no|
-|[**token**](#authtoken)|`object`||yes|
-|[**supportedproviders**](#authsupportedproviders)|`string[]`||no|
-|[**providers**](#authproviders)|`object`|OauthProviderConfig represents the configuration for OAuth providers such as Github and Google<br/>|no|
-|[**supportaccess**](#authsupportaccess)|`object`|SupportAccessConfig contains configuration for the Openlane support access flow. The support<br/>|no|
+|[**token**](#defstokensconfig)|`object`||yes|
+|[**supportedproviders**](#defsstring)|`string[]`|||
+|[**providers**](#defshandlersoauthproviderconfig)|`object`|OauthProviderConfig represents the configuration for OAuth providers such as Github and Google<br/>||
+|[**supportaccess**](#defshandlerssupportaccessconfig)|`object`|SupportAccessConfig contains configuration for the Openlane support access flow. The support<br/>||
 
-**Additional Properties:** not allowed  
+**Additional Properties:** not allowed   
 **Example**
 
 ```json
@@ -666,8 +693,9 @@ Auth settings including oauth2 providers and token configuration
 }
 ```
 
-<a name="authtoken"></a>
-### auth\.token: object
+   
+<a name="defstokensconfig"></a>
+### $defs/tokens\.Config: object
 
 **Properties**
 
@@ -681,15 +709,15 @@ Auth settings including oauth2 providers and token configuration
 |**refreshduration**|`integer`||no|
 |**refreshoverlap**|`integer`||no|
 |**jwksendpoint**|`string`||no|
-|[**keys**](#authtokenkeys)|`object`||yes|
+|[**keys**](#defsmapstringstring)|`object`|||
 |**generatekeys**|`boolean`||no|
 |**jwkscachettl**|`integer`||no|
-|[**redis**](#authtokenredis)|`object`||no|
-|[**apitokens**](#authtokenapitokens)|`object`||no|
+|[**redis**](#defstokensredisconfig)|`object`|||
+|[**apitokens**](#defstokensapitokenconfig)|`object`|||
 |**assessmentaccessduration**|`integer`||no|
 |**trustcenterndarequestaccessduration**|`integer`||no|
 
-**Additional Properties:** not allowed  
+**Additional Properties:** not allowed   
 **Example**
 
 ```json
@@ -704,8 +732,9 @@ Auth settings including oauth2 providers and token configuration
 }
 ```
 
-<a name="authtokenkeys"></a>
-#### auth\.token\.keys: object
+   
+<a name="defsmapstringstring"></a>
+#### $defs/map\[string\]string: object
 
 **Additional Properties**
 
@@ -713,18 +742,19 @@ Auth settings including oauth2 providers and token configuration
 |----|----|-----------|--------|
 |**Additional Properties**|`string`|||
 
-<a name="authtokenredis"></a>
-#### auth\.token\.redis: object
+   
+<a name="defstokensredisconfig"></a>
+#### $defs/tokens\.RedisConfig: object
 
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |**enabled**|`boolean`|||
-|[**config**](#authtokenredisconfig)|`object`|||
+|[**config**](#defscacheconfig)|`object`|||
 |**blacklistprefix**|`string`|||
 
-**Additional Properties:** not allowed  
+**Additional Properties:** not allowed   
 **Example**
 
 ```json
@@ -733,8 +763,9 @@ Auth settings including oauth2 providers and token configuration
 }
 ```
 
-<a name="authtokenredisconfig"></a>
-##### auth\.token\.redis\.config: object
+   
+<a name="defscacheconfig"></a>
+##### $defs/cache\.Config: object
 
 **Properties**
 
@@ -754,9 +785,10 @@ Auth settings including oauth2 providers and token configuration
 |**maxidleconns**|`integer`|||
 |**maxactiveconns**|`integer`|||
 
-**Additional Properties:** not allowed  
-<a name="authtokenapitokens"></a>
-#### auth\.token\.apitokens: object
+**Additional Properties:** not allowed   
+   
+<a name="defstokensapitokenconfig"></a>
+#### $defs/tokens\.APITokenConfig: object
 
 **Properties**
 
@@ -764,12 +796,12 @@ Auth settings including oauth2 providers and token configuration
 |----|----|-----------|--------|
 |**enabled**|`boolean`|||
 |**envprefix**|`string`|||
-|[**keys**](#authtokenapitokenskeys)|`object`|||
+|[**keys**](#defsmapstringtokensapitokenkeyconfig)|`object`|||
 |**secretsize**|`integer`|||
 |**delimiter**|`string`|||
 |**prefix**|`string`|||
 
-**Additional Properties:** not allowed  
+**Additional Properties:** not allowed   
 **Example**
 
 ```json
@@ -778,17 +810,19 @@ Auth settings including oauth2 providers and token configuration
 }
 ```
 
-<a name="authtokenapitokenskeys"></a>
-##### auth\.token\.apitokens\.keys: object
+   
+<a name="defsmapstringtokensapitokenkeyconfig"></a>
+##### $defs/map\[string\]tokens\.APITokenKeyConfig: object
 
 **Additional Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|[**Additional Properties**](#authtokenapitokenskeysadditionalproperties)|`object`|||
+|[**Additional Properties**](#defstokensapitokenkeyconfig)|`object`|||
 
-<a name="authtokenapitokenskeysadditionalproperties"></a>
-###### auth\.token\.apitokens\.keys\.additionalProperties: object
+   
+<a name="defstokensapitokenkeyconfig"></a>
+###### $defs/tokens\.APITokenKeyConfig: object
 
 **Properties**
 
@@ -797,15 +831,17 @@ Auth settings including oauth2 providers and token configuration
 |**secret**|`string`|||
 |**status**|`string`|||
 
-**Additional Properties:** not allowed  
-<a name="authsupportedproviders"></a>
-### auth\.supportedproviders: array
+**Additional Properties:** not allowed   
+   
+<a name="defsstring"></a>
+### $defs/\[\]string: array
 
 **Items**
 
-**Item Type:** `string`  
-<a name="authproviders"></a>
-### auth\.providers: object
+**Item Type:** `string`   
+   
+<a name="defshandlersoauthproviderconfig"></a>
+### $defs/handlers\.OauthProviderConfig: object
 
 OauthProviderConfig represents the configuration for OAuth providers such as Github and Google
 
@@ -815,11 +851,11 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |**redirecturl**|`string`|RedirectURL is the URL that the OAuth2 client will redirect to after authentication is complete<br/>||
-|[**github**](#authprovidersgithub)|`object`||yes|
-|[**google**](#authprovidersgoogle)|`object`||yes|
-|[**webauthn**](#authproviderswebauthn)|`object`||yes|
+|[**github**](#defsgithubproviderconfig)|`object`||yes|
+|[**google**](#defsgoogleproviderconfig)|`object`||yes|
+|[**webauthn**](#defswebauthnproviderconfig)|`object`||yes|
 
-**Additional Properties:** not allowed  
+**Additional Properties:** not allowed   
 **Example**
 
 ```json
@@ -830,8 +866,9 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 }
 ```
 
-<a name="authprovidersgithub"></a>
-#### auth\.providers\.github: object
+   
+<a name="defsgithubproviderconfig"></a>
+#### $defs/github\.ProviderConfig: object
 
 **Properties**
 
@@ -840,18 +877,20 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |**clientid**|`string`||yes|
 |**clientsecret**|`string`||yes|
 |**clientendpoint**|`string`||no|
-|[**scopes**](#authprovidersgithubscopes)|`string[]`||yes|
+|[**scopes**](#defsstring)|`string[]`|||
 |**redirecturl**|`string`||yes|
 
-**Additional Properties:** not allowed  
-<a name="authprovidersgithubscopes"></a>
-##### auth\.providers\.github\.scopes: array
+**Additional Properties:** not allowed   
+   
+<a name="defsstring"></a>
+##### $defs/\[\]string: array
 
 **Items**
 
-**Item Type:** `string`  
-<a name="authprovidersgoogle"></a>
-#### auth\.providers\.google: object
+**Item Type:** `string`   
+   
+<a name="defsgoogleproviderconfig"></a>
+#### $defs/google\.ProviderConfig: object
 
 **Properties**
 
@@ -860,18 +899,20 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |**clientid**|`string`||yes|
 |**clientsecret**|`string`||yes|
 |**clientendpoint**|`string`||no|
-|[**scopes**](#authprovidersgooglescopes)|`string[]`||yes|
+|[**scopes**](#defsstring)|`string[]`|||
 |**redirecturl**|`string`||yes|
 
-**Additional Properties:** not allowed  
-<a name="authprovidersgooglescopes"></a>
-##### auth\.providers\.google\.scopes: array
+**Additional Properties:** not allowed   
+   
+<a name="defsstring"></a>
+##### $defs/\[\]string: array
 
 **Items**
 
-**Item Type:** `string`  
-<a name="authproviderswebauthn"></a>
-#### auth\.providers\.webauthn: object
+**Item Type:** `string`   
+   
+<a name="defswebauthnproviderconfig"></a>
+#### $defs/webauthn\.ProviderConfig: object
 
 **Properties**
 
@@ -880,21 +921,23 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |**enabled**|`boolean`||no|
 |**displayname**|`string`||yes|
 |**relyingpartyid**|`string`||yes|
-|[**requestorigins**](#authproviderswebauthnrequestorigins)|`string[]`||yes|
+|[**requestorigins**](#defsstring)|`string[]`|||
 |**maxdevices**|`integer`||no|
 |**enforcetimeout**|`boolean`||no|
 |**timeout**|`integer`||no|
 |**debug**|`boolean`||no|
 
-**Additional Properties:** not allowed  
-<a name="authproviderswebauthnrequestorigins"></a>
-##### auth\.providers\.webauthn\.requestorigins: array
+**Additional Properties:** not allowed   
+   
+<a name="defsstring"></a>
+##### $defs/\[\]string: array
 
 **Items**
 
-**Item Type:** `string`  
-<a name="authsupportaccess"></a>
-### auth\.supportaccess: object
+**Item Type:** `string`   
+   
+<a name="defshandlerssupportaccessconfig"></a>
+### $defs/handlers\.SupportAccessConfig: object
 
 SupportAccessConfig contains configuration for the Openlane support access flow. The support
 identity is virtual and authenticated entirely from these values, never from the database. This is
@@ -918,9 +961,10 @@ identity provider configuration, since both authentications must occur together
 |**redirecturl**|`string`|RedirectURL is the callback URL registered with the second factor identity provider<br/>||
 |**alloweddomain**|`string`|AllowedDomain restricts which email domain may complete the second factor (e.g. theopenlane.io)<br/>||
 
-**Additional Properties:** not allowed  
-<a name="authz"></a>
-## authz: object
+**Additional Properties:** not allowed   
+   
+<a name="defsfgaxconfig"></a>
+## $defs/fgax\.Config: object
 
 **Properties**
 
@@ -934,13 +978,13 @@ identity provider configuration, since both authentications must occur together
 |**createnewmodel**|`boolean`|force create a new model<br/>|no|
 |**modelfile**|`string`|path to the fga model file<br/>|no|
 |**modulefile**|`string`|path to the fga module file<br/>|no|
-|[**credentials**](#authzcredentials)|`object`||no|
+|[**credentials**](#defsfgaxcredentials)|`object`|||
 |**maxbatchwritesize**|`integer`|maximum number of writes per batch in a transaction<br/>|no|
 |**enableparentcontext**|`boolean`|disables the automatic addition of parent context tuples<br/>|no|
-|[**parentcontextskipkinds**](#authzparentcontextskipkinds)|`string[]`||no|
-|[**parentcontextconditions**](#authzparentcontextconditions)|`array`||no|
+|[**parentcontextskipkinds**](#defsstring)|`string[]`|||
+|[**parentcontextconditions**](#defsfgaxparentcontextconditionconfig)|`array`|||
 
-**Additional Properties:** not allowed  
+**Additional Properties:** not allowed   
 **Example**
 
 ```json
@@ -954,8 +998,9 @@ identity provider configuration, since both authentications must occur together
 }
 ```
 
-<a name="authzcredentials"></a>
-### authz\.credentials: object
+   
+<a name="defsfgaxcredentials"></a>
+### $defs/fgax\.Credentials: object
 
 **Properties**
 
@@ -968,15 +1013,17 @@ identity provider configuration, since both authentications must occur together
 |**issuer**|`string`|issuer for the openFGA client<br/>||
 |**scopes**|`string`|scopes for the openFGA client<br/>||
 
-**Additional Properties:** not allowed  
-<a name="authzparentcontextskipkinds"></a>
-### authz\.parentcontextskipkinds: array
+**Additional Properties:** not allowed   
+   
+<a name="defsstring"></a>
+### $defs/\[\]string: array
 
 **Items**
 
-**Item Type:** `string`  
-<a name="authzparentcontextconditions"></a>
-### authz\.parentcontextconditions: array
+**Item Type:** `string`   
+   
+<a name="defsfgaxparentcontextconditionconfig"></a>
+### $defs/\[\]fgax\.ParentContextConditionConfig: array
 
 **Items**
 
@@ -990,8 +1037,9 @@ identity provider configuration, since both authentications must occur together
 ]
 ```
 
-<a name="db"></a>
-## db: object
+   
+<a name="defsentxconfig"></a>
+## $defs/entx\.Config: object
 
 **Properties**
 
@@ -1010,9 +1058,10 @@ identity provider configuration, since both authentications must occur together
 |**maxconnections**|`integer`|maximum number of connections to the database<br/>|no|
 |**maxidleconnections**|`integer`|maximum number of idle connections to the database<br/>|no|
 
-**Additional Properties:** not allowed  
-<a name="jobqueue"></a>
-## jobqueue: object
+**Additional Properties:** not allowed   
+   
+<a name="defsriverqueueconfig"></a>
+## $defs/riverqueue\.Config: object
 
 **Properties**
 
@@ -1020,10 +1069,10 @@ identity provider configuration, since both authentications must occur together
 |----|----|-----------|--------|
 |**connectionuri**|`string`|||
 |**runmigrations**|`boolean`|||
-|[**riverconf**](#jobqueueriverconf)|`object`|||
-|[**metrics**](#jobqueuemetrics)|`object`|||
+|[**riverconf**](#defsriverconfig)|`object`|||
+|[**metrics**](#defsriverqueuemetricsconfig)|`object`|||
 
-**Additional Properties:** not allowed  
+**Additional Properties:** not allowed   
 **Example**
 
 ```json
@@ -1041,8 +1090,9 @@ identity provider configuration, since both authentications must occur together
 }
 ```
 
-<a name="jobqueueriverconf"></a>
-### jobqueue\.riverconf: object
+   
+<a name="defsriverconfig"></a>
+### $defs/river\.Config: object
 
 **Properties**
 
@@ -1057,20 +1107,20 @@ identity provider configuration, since both authentications must occur together
 |**FetchPollInterval**|`integer`|||
 |**ID**|`string`|||
 |**JobCleanerTimeout**|`integer`|||
-|[**JobInsertMiddleware**](#jobqueueriverconfjobinsertmiddleware)|`array`|||
+|[**JobInsertMiddleware**](#defsrivertypejobinsertmiddleware)|`array`|||
 |**JobStuckHandler**||||
 |**JobStuckThreshold**|`integer`|||
 |**JobTimeout**|`integer`|||
-|[**Hooks**](#jobqueueriverconfhooks)|`array`|||
-|[**Logger**](#jobqueueriverconflogger)|`object`|||
+|[**Hooks**](#defsrivertypehook)|`array`|||
+|[**Logger**](#defssloglogger)|`object`|||
 |**MaxAttempts**|`integer`|||
-|[**Middleware**](#jobqueueriverconfmiddleware)|`array`|||
-|[**Plugins**](#jobqueueriverconfplugins)|`array`|||
-|[**PeriodicJobs**](#jobqueueriverconfperiodicjobs)|`array`|||
+|[**Middleware**](#defsrivertypemiddleware)|`array`|||
+|[**Plugins**](#defsrivertypeplugin)|`array`|||
+|[**PeriodicJobs**](#defsriverperiodicjob)|`array`|||
 |**PollOnly**|`boolean`|||
-|[**Queues**](#jobqueueriverconfqueues)|`object`|||
+|[**Queues**](#defsmapstringriverqueueconfig)|`object`|||
 |**ReindexerSchedule**||||
-|[**ReindexerIndexNames**](#jobqueueriverconfreindexerindexnames)|`string[]`|||
+|[**ReindexerIndexNames**](#defsstring)|`string[]`|||
 |**ReindexerTimeout**|`integer`|||
 |**RescueStuckJobsAfter**|`integer`|||
 |**RetryPolicy**||||
@@ -1078,12 +1128,12 @@ identity provider configuration, since both authentications must occur together
 |**SoftStopTimeout**|`integer`|||
 |**SkipJobKindValidation**|`boolean`|||
 |**SkipUnknownJobCheck**|`boolean`|||
-|[**Test**](#jobqueueriverconftest)|`object`|||
+|[**Test**](#defsrivertestconfig)|`object`|||
 |**TestOnly**|`boolean`|||
-|[**Workers**](#jobqueueriverconfworkers)|`object`|||
-|[**WorkerMiddleware**](#jobqueueriverconfworkermiddleware)|`array`|||
+|[**Workers**](#defsriverworkers)|`object`|||
+|[**WorkerMiddleware**](#defsrivertypeworkermiddleware)|`array`|||
 
-**Additional Properties:** not allowed  
+**Additional Properties:** not allowed   
 **Example**
 
 ```json
@@ -1098,34 +1148,40 @@ identity provider configuration, since both authentications must occur together
 }
 ```
 
-<a name="jobqueueriverconfjobinsertmiddleware"></a>
-#### jobqueue\.riverconf\.JobInsertMiddleware: array
+   
+<a name="defsrivertypejobinsertmiddleware"></a>
+#### $defs/\[\]rivertype\.JobInsertMiddleware: array
 
 **Items**
 
-<a name="jobqueueriverconfhooks"></a>
-#### jobqueue\.riverconf\.Hooks: array
+   
+<a name="defsrivertypehook"></a>
+#### $defs/\[\]rivertype\.Hook: array
 
 **Items**
 
-<a name="jobqueueriverconflogger"></a>
-#### jobqueue\.riverconf\.Logger: object
+   
+<a name="defssloglogger"></a>
+#### $defs/slog\.Logger: object
 
 **No properties.**
 
-**Additional Properties:** not allowed  
-<a name="jobqueueriverconfmiddleware"></a>
-#### jobqueue\.riverconf\.Middleware: array
+**Additional Properties:** not allowed   
+   
+<a name="defsrivertypemiddleware"></a>
+#### $defs/\[\]rivertype\.Middleware: array
 
 **Items**
 
-<a name="jobqueueriverconfplugins"></a>
-#### jobqueue\.riverconf\.Plugins: array
+   
+<a name="defsrivertypeplugin"></a>
+#### $defs/\[\]rivertype\.Plugin: array
 
 **Items**
 
-<a name="jobqueueriverconfperiodicjobs"></a>
-#### jobqueue\.riverconf\.PeriodicJobs: array
+   
+<a name="defsriverperiodicjob"></a>
+#### $defs/\[\]\*river\.PeriodicJob: array
 
 **Items**
 
@@ -1137,17 +1193,19 @@ identity provider configuration, since both authentications must occur together
 ]
 ```
 
-<a name="jobqueueriverconfqueues"></a>
-#### jobqueue\.riverconf\.Queues: object
+   
+<a name="defsmapstringriverqueueconfig"></a>
+#### $defs/map\[string\]river\.QueueConfig: object
 
 **Additional Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|[**Additional Properties**](#jobqueueriverconfqueuesadditionalproperties)|`object`|||
+|[**Additional Properties**](#defsriverqueueconfig)|`object`|||
 
-<a name="jobqueueriverconfqueuesadditionalproperties"></a>
-##### jobqueue\.riverconf\.Queues\.additionalProperties: object
+   
+<a name="defsriverqueueconfig"></a>
+##### $defs/river\.QueueConfig: object
 
 **Properties**
 
@@ -1157,15 +1215,17 @@ identity provider configuration, since both authentications must occur together
 |**FetchPollInterval**|`integer`|||
 |**MaxWorkers**|`integer`|||
 
-**Additional Properties:** not allowed  
-<a name="jobqueueriverconfreindexerindexnames"></a>
-#### jobqueue\.riverconf\.ReindexerIndexNames: array
+**Additional Properties:** not allowed   
+   
+<a name="defsstring"></a>
+#### $defs/\[\]string: array
 
 **Items**
 
-**Item Type:** `string`  
-<a name="jobqueueriverconftest"></a>
-#### jobqueue\.riverconf\.Test: object
+**Item Type:** `string`   
+   
+<a name="defsrivertestconfig"></a>
+#### $defs/river\.TestConfig: object
 
 **Properties**
 
@@ -1174,20 +1234,23 @@ identity provider configuration, since both authentications must occur together
 |**DisableUniqueEnforcement**|`boolean`|||
 |**Time**||||
 
-**Additional Properties:** not allowed  
-<a name="jobqueueriverconfworkers"></a>
-#### jobqueue\.riverconf\.Workers: object
+**Additional Properties:** not allowed   
+   
+<a name="defsriverworkers"></a>
+#### $defs/river\.Workers: object
 
 **No properties.**
 
-**Additional Properties:** not allowed  
-<a name="jobqueueriverconfworkermiddleware"></a>
-#### jobqueue\.riverconf\.WorkerMiddleware: array
+**Additional Properties:** not allowed   
+   
+<a name="defsrivertypeworkermiddleware"></a>
+#### $defs/\[\]rivertype\.WorkerMiddleware: array
 
 **Items**
 
-<a name="jobqueuemetrics"></a>
-### jobqueue\.metrics: object
+   
+<a name="defsriverqueuemetricsconfig"></a>
+### $defs/riverqueue\.MetricsConfig: object
 
 **Properties**
 
@@ -1197,9 +1260,10 @@ identity provider configuration, since both authentications must occur together
 |**metricsdurationunit**|`string`|||
 |**enablesemanticmetrics**|`boolean`|||
 
-**Additional Properties:** not allowed  
-<a name="redis"></a>
-## redis: object
+**Additional Properties:** not allowed   
+   
+<a name="defscacheconfig"></a>
+##### $defs/cache\.Config: object
 
 **Properties**
 
@@ -1219,9 +1283,10 @@ identity provider configuration, since both authentications must occur together
 |**maxidleconns**|`integer`|||
 |**maxactiveconns**|`integer`|||
 
-**Additional Properties:** not allowed  
-<a name="sessions"></a>
-## sessions: object
+**Additional Properties:** not allowed   
+   
+<a name="defssessionsconfig"></a>
+## $defs/sessions\.Config: object
 
 **Properties**
 
@@ -1235,9 +1300,10 @@ identity provider configuration, since both authentications must occur together
 |**httponly**|`boolean`|||
 |**samesite**|`string`|||
 
-**Additional Properties:** not allowed  
-<a name="totp"></a>
-## totp: object
+**Additional Properties:** not allowed   
+   
+<a name="defstotpconfig"></a>
+## $defs/totp\.Config: object
 
 **Properties**
 
@@ -1251,9 +1317,10 @@ identity provider configuration, since both authentications must occur together
 |**recoverycodecount**|`integer`|||
 |**recoverycodelength**|`integer`|||
 
-**Additional Properties:** not allowed  
-<a name="ratelimit"></a>
-## ratelimit: object
+**Additional Properties:** not allowed   
+   
+<a name="defsratelimitconfig"></a>
+## $defs/ratelimit\.Config: object
 
 Config defines the configuration settings for the rate limiter middleware.
 
@@ -1263,8 +1330,8 @@ Config defines the configuration settings for the rate limiter middleware.
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |**enabled**|`boolean`|||
-|[**options**](#ratelimitoptions)|`array`|||
-|[**headers**](#ratelimitheaders)|`string[]`|||
+|[**options**](#defsratelimitrateoption)|`array`|||
+|[**headers**](#defsstring)|`string[]`|||
 |**forwardedindexfrombehind**|`integer`|ForwardedIndexFromBehind selects which IP from X-Forwarded-For should be used.<br/>0 means the closest client, 1 the proxy behind it, etc.<br/>||
 |**includepath**|`boolean`|IncludePath appends the request path to the limiter key when true.<br/>||
 |**includemethod**|`boolean`|IncludeMethod appends the request method to the limiter key when true.<br/>||
@@ -1274,7 +1341,7 @@ Config defines the configuration settings for the rate limiter middleware.
 |**sendretryafterheader**|`boolean`|SendRetryAfterHeader toggles whether the Retry-After header should be added when available.<br/>||
 |**dryrun**|`boolean`|DryRun enables logging rate limit decisions without blocking requests.<br/>||
 
-**Additional Properties:** not allowed  
+**Additional Properties:** not allowed   
 **Example**
 
 ```json
@@ -1285,8 +1352,9 @@ Config defines the configuration settings for the rate limiter middleware.
 }
 ```
 
-<a name="ratelimitoptions"></a>
-### ratelimit\.options: array
+   
+<a name="defsratelimitrateoption"></a>
+### $defs/\[\]ratelimit\.RateOption: array
 
 **Items**
 
@@ -1298,66 +1366,16 @@ Config defines the configuration settings for the rate limiter middleware.
 ]
 ```
 
-<a name="ratelimitheaders"></a>
-### ratelimit\.headers: array
+   
+<a name="defsstring"></a>
+### $defs/\[\]string: array
 
 **Items**
 
-**Item Type:** `string`  
-<a name="ratelimitunmatched"></a>
-## ratelimitunmatched: object
-
-Config defines the configuration settings for the rate limiter middleware.
-
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**enabled**|`boolean`|||
-|[**options**](#ratelimitunmatchedoptions)|`array`|||
-|[**headers**](#ratelimitunmatchedheaders)|`string[]`|||
-|**forwardedindexfrombehind**|`integer`|ForwardedIndexFromBehind selects which IP from X-Forwarded-For should be used.<br/>0 means the closest client, 1 the proxy behind it, etc.<br/>||
-|**includepath**|`boolean`|IncludePath appends the request path to the limiter key when true.<br/>||
-|**includemethod**|`boolean`|IncludeMethod appends the request method to the limiter key when true.<br/>||
-|**keyprefix**|`string`|KeyPrefix allows scoping the limiter key space with a static prefix.<br/>||
-|**denystatus**|`integer`|DenyStatus overrides the HTTP status code returned when a rate limit is exceeded.<br/>||
-|**denymessage**|`string`|DenyMessage customises the error payload when a rate limit is exceeded.<br/>||
-|**sendretryafterheader**|`boolean`|SendRetryAfterHeader toggles whether the Retry-After header should be added when available.<br/>||
-|**dryrun**|`boolean`|DryRun enables logging rate limit decisions without blocking requests.<br/>||
-
-**Additional Properties:** not allowed  
-**Example**
-
-```json
-{
-    "options": [
-        {}
-    ]
-}
-```
-
-<a name="ratelimitunmatchedoptions"></a>
-### ratelimitunmatched\.options: array
-
-**Items**
-
-**Example**
-
-```json
-[
-    {}
-]
-```
-
-<a name="ratelimitunmatchedheaders"></a>
-### ratelimitunmatched\.headers: array
-
-**Items**
-
-**Item Type:** `string`  
-<a name="objectstorage"></a>
-## objectstorage: object
+**Item Type:** `string`   
+   
+<a name="defsstorageproviderconfig"></a>
+## $defs/storage\.ProviderConfig: object
 
 ProviderConfig contains configuration for object storage providers
 
@@ -1367,13 +1385,13 @@ ProviderConfig contains configuration for object storage providers
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |**enabled**|`boolean`|Enabled indicates if object storage is enabled<br/>||
-|[**keys**](#objectstoragekeys)|`string[]`|||
+|[**keys**](#defsstring)|`string[]`|||
 |**maxsizemb**|`integer`|MaxSizeMB is the maximum file size allowed in MB<br/>||
 |**maxmemorymb**|`integer`|MaxMemoryMB is the maximum memory to use for file uploads in MB<br/>||
 |**devmode**|`boolean`|DevMode automatically configures a local disk storage provider (and ensures directories exist) and ignores other provider configs<br/>||
-|[**providers**](#objectstorageproviders)|`object`|||
+|[**providers**](#defsstorageproviders)|`object`|||
 
-**Additional Properties:** not allowed  
+**Additional Properties:** not allowed   
 **Example**
 
 ```json
@@ -1395,25 +1413,27 @@ ProviderConfig contains configuration for object storage providers
 }
 ```
 
-<a name="objectstoragekeys"></a>
-### objectstorage\.keys: array
+   
+<a name="defsstring"></a>
+### $defs/\[\]string: array
 
 **Items**
 
-**Item Type:** `string`  
-<a name="objectstorageproviders"></a>
-### objectstorage\.providers: object
+**Item Type:** `string`   
+   
+<a name="defsstorageproviders"></a>
+### $defs/storage\.Providers: object
 
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|[**s3**](#objectstorageproviderss3)|`object`|ProviderConfigs contains configuration for all storage providers<br/>||
-|[**r2**](#objectstorageprovidersr2)|`object`|ProviderConfigs contains configuration for all storage providers<br/>||
-|[**disk**](#objectstorageprovidersdisk)|`object`|ProviderConfigs contains configuration for all storage providers<br/>||
-|[**database**](#objectstorageprovidersdatabase)|`object`|ProviderConfigs contains configuration for all storage providers<br/>||
+|[**s3**](#defsstorageproviderconfigs)|`object`|ProviderConfigs contains configuration for all storage providers<br/>||
+|[**r2**](#defsstorageproviderconfigs)|`object`|ProviderConfigs contains configuration for all storage providers<br/>||
+|[**disk**](#defsstorageproviderconfigs)|`object`|ProviderConfigs contains configuration for all storage providers<br/>||
+|[**database**](#defsstorageproviderconfigs)|`object`|ProviderConfigs contains configuration for all storage providers<br/>||
 
-**Additional Properties:** not allowed  
+**Additional Properties:** not allowed   
 **Example**
 
 ```json
@@ -1433,8 +1453,9 @@ ProviderConfig contains configuration for object storage providers
 }
 ```
 
-<a name="objectstorageproviderss3"></a>
-#### objectstorage\.providers\.s3: object
+   
+<a name="defsstorageproviderconfigs"></a>
+#### $defs/storage\.ProviderConfigs: object
 
 ProviderConfigs contains configuration for all storage providers
 This is structured to allow easy extension for additional providers in the future
@@ -1451,9 +1472,9 @@ This is structured to allow easy extension for additional providers in the futur
 |**endpoint**|`string`|Endpoint for custom endpoints<br/>||
 |**proxypresignenabled**|`boolean`|ProxyPresignEnabled toggles proxy-signed download URL generation<br/>||
 |**baseurl**|`string`|BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).<br/>||
-|[**credentials**](#objectstorageproviderss3credentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
+|[**credentials**](#defsstorageprovidercredentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
 
-**Additional Properties:** not allowed  
+**Additional Properties:** not allowed   
 **Example**
 
 ```json
@@ -1462,8 +1483,9 @@ This is structured to allow easy extension for additional providers in the futur
 }
 ```
 
-<a name="objectstorageproviderss3credentials"></a>
-##### objectstorage\.providers\.s3\.credentials: object
+   
+<a name="defsstorageprovidercredentials"></a>
+##### $defs/storage\.ProviderCredentials: object
 
 ProviderCredentials contains credentials for a storage provider
 
@@ -1478,147 +1500,10 @@ ProviderCredentials contains credentials for a storage provider
 |**accountid**|`string`|AccountID for Cloudflare R2<br/>||
 |**apitoken**|`string`|APIToken for Cloudflare R2<br/>||
 
-**Additional Properties:** not allowed  
-<a name="objectstorageprovidersr2"></a>
-#### objectstorage\.providers\.r2: object
-
-ProviderConfigs contains configuration for all storage providers
-This is structured to allow easy extension for additional providers in the future
-
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled indicates if this provider is enabled<br/>||
-|**ensureavailable**|`boolean`|EnsureAvailable enforces provider availability before completing server startup<br/>||
-|**region**|`string`|Region for cloud providers<br/>||
-|**bucket**|`string`|Bucket name for cloud providers<br/>||
-|**endpoint**|`string`|Endpoint for custom endpoints<br/>||
-|**proxypresignenabled**|`boolean`|ProxyPresignEnabled toggles proxy-signed download URL generation<br/>||
-|**baseurl**|`string`|BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).<br/>||
-|[**credentials**](#objectstorageprovidersr2credentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
-
-**Additional Properties:** not allowed  
-**Example**
-
-```json
-{
-    "credentials": {}
-}
-```
-
-<a name="objectstorageprovidersr2credentials"></a>
-##### objectstorage\.providers\.r2\.credentials: object
-
-ProviderCredentials contains credentials for a storage provider
-
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**accesskeyid**|`string`|AccessKeyID for cloud providers<br/>||
-|**secretaccesskey**|`string`|SecretAccessKey for cloud providers<br/>||
-|**projectid**|`string`|ProjectID for GCS<br/>||
-|**accountid**|`string`|AccountID for Cloudflare R2<br/>||
-|**apitoken**|`string`|APIToken for Cloudflare R2<br/>||
-
-**Additional Properties:** not allowed  
-<a name="objectstorageprovidersdisk"></a>
-#### objectstorage\.providers\.disk: object
-
-ProviderConfigs contains configuration for all storage providers
-This is structured to allow easy extension for additional providers in the future
-
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled indicates if this provider is enabled<br/>||
-|**ensureavailable**|`boolean`|EnsureAvailable enforces provider availability before completing server startup<br/>||
-|**region**|`string`|Region for cloud providers<br/>||
-|**bucket**|`string`|Bucket name for cloud providers<br/>||
-|**endpoint**|`string`|Endpoint for custom endpoints<br/>||
-|**proxypresignenabled**|`boolean`|ProxyPresignEnabled toggles proxy-signed download URL generation<br/>||
-|**baseurl**|`string`|BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).<br/>||
-|[**credentials**](#objectstorageprovidersdiskcredentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
-
-**Additional Properties:** not allowed  
-**Example**
-
-```json
-{
-    "credentials": {}
-}
-```
-
-<a name="objectstorageprovidersdiskcredentials"></a>
-##### objectstorage\.providers\.disk\.credentials: object
-
-ProviderCredentials contains credentials for a storage provider
-
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**accesskeyid**|`string`|AccessKeyID for cloud providers<br/>||
-|**secretaccesskey**|`string`|SecretAccessKey for cloud providers<br/>||
-|**projectid**|`string`|ProjectID for GCS<br/>||
-|**accountid**|`string`|AccountID for Cloudflare R2<br/>||
-|**apitoken**|`string`|APIToken for Cloudflare R2<br/>||
-
-**Additional Properties:** not allowed  
-<a name="objectstorageprovidersdatabase"></a>
-#### objectstorage\.providers\.database: object
-
-ProviderConfigs contains configuration for all storage providers
-This is structured to allow easy extension for additional providers in the future
-
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled indicates if this provider is enabled<br/>||
-|**ensureavailable**|`boolean`|EnsureAvailable enforces provider availability before completing server startup<br/>||
-|**region**|`string`|Region for cloud providers<br/>||
-|**bucket**|`string`|Bucket name for cloud providers<br/>||
-|**endpoint**|`string`|Endpoint for custom endpoints<br/>||
-|**proxypresignenabled**|`boolean`|ProxyPresignEnabled toggles proxy-signed download URL generation<br/>||
-|**baseurl**|`string`|BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).<br/>||
-|[**credentials**](#objectstorageprovidersdatabasecredentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
-
-**Additional Properties:** not allowed  
-**Example**
-
-```json
-{
-    "credentials": {}
-}
-```
-
-<a name="objectstorageprovidersdatabasecredentials"></a>
-##### objectstorage\.providers\.database\.credentials: object
-
-ProviderCredentials contains credentials for a storage provider
-
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**accesskeyid**|`string`|AccessKeyID for cloud providers<br/>||
-|**secretaccesskey**|`string`|SecretAccessKey for cloud providers<br/>||
-|**projectid**|`string`|ProjectID for GCS<br/>||
-|**accountid**|`string`|AccountID for Cloudflare R2<br/>||
-|**apitoken**|`string`|APIToken for Cloudflare R2<br/>||
-
-**Additional Properties:** not allowed  
-<a name="subscription"></a>
-## subscription: object
+**Additional Properties:** not allowed   
+   
+<a name="defsentitlementsconfig"></a>
+## $defs/entitlements\.Config: object
 
 **Properties**
 
@@ -1627,15 +1512,15 @@ ProviderCredentials contains credentials for a storage provider
 |**enabled**|`boolean`|Enabled determines if the entitlements service is enabled<br/>||
 |**privatestripekey**|`string`|PrivateStripeKey is the key for the stripe service<br/>||
 |**stripewebhooksecret**|`string`|StripeWebhookSecret is the secret for the stripe service (legacy, use StripeWebhookSecrets for version-specific secrets)<br/>||
-|[**stripewebhooksecrets**](#subscriptionstripewebhooksecrets)|`object`|||
+|[**stripewebhooksecrets**](#defsmapstringstring)|`object`|||
 |**stripewebhookurl**|`string`|StripeWebhookURL is the URL for the stripe webhook<br/>||
 |**stripebillingportalsuccessurl**|`string`|StripeBillingPortalSuccessURL<br/>||
 |**stripecancellationreturnurl**|`string`|StripeCancellationReturnURL is the URL for the stripe cancellation return<br/>||
-|[**stripewebhookevents**](#subscriptionstripewebhookevents)|`string[]`|||
+|[**stripewebhookevents**](#defsstring)|`string[]`|||
 |**stripewebhookapiversion**|`string`|StripeWebhookAPIVersion is the Stripe API version currently accepted by the webhook handler<br/>||
 |**stripewebhookdiscardapiversion**|`string`|StripeWebhookDiscardAPIVersion is the Stripe API version to discard during migration<br/>||
 
-**Additional Properties:** not allowed  
+**Additional Properties:** not allowed   
 **Example**
 
 ```json
@@ -1644,8 +1529,9 @@ ProviderCredentials contains credentials for a storage provider
 }
 ```
 
-<a name="subscriptionstripewebhooksecrets"></a>
-### subscription\.stripewebhooksecrets: object
+   
+<a name="defsmapstringstring"></a>
+### $defs/map\[string\]string: object
 
 **Additional Properties**
 
@@ -1653,14 +1539,16 @@ ProviderCredentials contains credentials for a storage provider
 |----|----|-----------|--------|
 |**Additional Properties**|`string`|||
 
-<a name="subscriptionstripewebhookevents"></a>
-### subscription\.stripewebhookevents: array
+   
+<a name="defsstring"></a>
+### $defs/\[\]string: array
 
 **Items**
 
-**Item Type:** `string`  
-<a name="keywatcher"></a>
-## keywatcher: object
+**Item Type:** `string`   
+   
+<a name="defsconfigkeywatcher"></a>
+## $defs/config\.KeyWatcher: object
 
 KeyWatcher contains settings for the key watcher that manages JWT signing keys
 
@@ -1672,31 +1560,32 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**enabled**|`boolean`|Enabled indicates whether the key watcher is enabled<br/>||
 |**keydir**|`string`|KeyDir is the path to the directory containing PEM keys for JWT signing<br/>||
 
-**Additional Properties:** not allowed  
-<a name="integrations"></a>
-## integrations: object
+**Additional Properties:** not allowed   
+   
+<a name="defscatalogconfig"></a>
+## $defs/catalog\.Config: object
 
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |**consoleintegrationpath**|`string`|||
-|[**awssecurityhub**](#integrationsawssecurityhub)|`object`|||
-|[**cloudflareruntime**](#integrationscloudflareruntime)|`object`|||
-|[**githubapp**](#integrationsgithubapp)|`object`|||
-|[**slack**](#integrationsslack)|`object`|||
-|[**slackruntime**](#integrationsslackruntime)|`object`|||
-|[**googledrive**](#integrationsgoogledrive)|`object`|||
-|[**googleworkspace**](#integrationsgoogleworkspace)|`object`|||
-|[**azureentraid**](#integrationsazureentraid)|`object`|||
-|[**microsoftteams**](#integrationsmicrosoftteams)|`object`|||
-|[**onedrive**](#integrationsonedrive)|`object`|||
-|[**oidclocal**](#integrationsoidclocal)|`object`|||
-|[**email**](#integrationsemail)|`object`||yes|
-|[**paymentreminder**](#integrationspaymentreminder)|`object`|||
-|[**organizationdelete**](#integrationsorganizationdelete)|`object`|||
+|[**awssecurityhub**](#defsawssecurityhubconfig)|`object`|||
+|[**cloudflareruntime**](#defscloudflareruntimeconfig)|`object`|||
+|[**githubapp**](#defsgithubappconfig)|`object`|||
+|[**slack**](#defsslackconfig)|`object`|||
+|[**slackruntime**](#defsslackruntimeslackconfig)|`object`|||
+|[**googledrive**](#defsgoogledriveconfig)|`object`|||
+|[**googleworkspace**](#defsgoogleworkspaceconfig)|`object`|||
+|[**azureentraid**](#defsazureentraidconfig)|`object`|||
+|[**microsoftteams**](#defsmicrosoftteamsconfig)|`object`|||
+|[**onedrive**](#defsonedriveconfig)|`object`|||
+|[**oidclocal**](#defsoidclocalconfig)|`object`|||
+|[**email**](#defsemailruntimeemailconfig)|`object`||yes|
+|[**paymentreminder**](#defssystempaymentreminderconfig)|`object`|||
+|[**organizationdelete**](#defssystemorganizationdeleteconfig)|`object`|||
 
-**Additional Properties:** not allowed  
+**Additional Properties:** not allowed   
 **Example**
 
 ```json
@@ -1727,8 +1616,9 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 }
 ```
 
-<a name="integrationsawssecurityhub"></a>
-### integrations\.awssecurityhub: object
+   
+<a name="defsawssecurityhubconfig"></a>
+### $defs/awssecurityhub\.Config: object
 
 **Properties**
 
@@ -1738,9 +1628,10 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**secretaccesskey**|`string`|||
 |**arn**|`string`|||
 
-**Additional Properties:** not allowed  
-<a name="integrationscloudflareruntime"></a>
-### integrations\.cloudflareruntime: object
+**Additional Properties:** not allowed   
+   
+<a name="defscloudflareruntimeconfig"></a>
+### $defs/cloudflare\.RuntimeConfig: object
 
 **Properties**
 
@@ -1748,9 +1639,9 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |----|----|-----------|--------|
 |**apitoken**|`string`|Cloudflare API token for the operator-owned account<br/>||
 |**accountid**|`string`|Cloudflare account ID for the operator-owned account<br/>||
-|[**domainscan**](#integrationscloudflareruntimedomainscan)|`object`|||
+|[**domainscan**](#defsdomainscanreportconfig)|`object`|||
 
-**Additional Properties:** not allowed  
+**Additional Properties:** not allowed   
 **Example**
 
 ```json
@@ -1759,32 +1650,29 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 }
 ```
 
-<a name="integrationscloudflareruntimedomainscan"></a>
-#### integrations\.cloudflareruntime\.domainscan: object
+   
+<a name="defsdomainscanreportconfig"></a>
+#### $defs/domainscan\.ReportConfig: object
 
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|[**nonvendorcategories**](#integrationscloudflareruntimedomainscannonvendorcategories)|`string[]`|||
-|[**deniedvendornames**](#integrationscloudflareruntimedomainscandeniedvendornames)|`string[]`|||
+|[**nonvendorcategories**](#defsstring)|`string[]`|||
+|[**deniedvendornames**](#defsstring)|`string[]`|||
 |**scanttl**|`integer`|||
 
-**Additional Properties:** not allowed  
-<a name="integrationscloudflareruntimedomainscannonvendorcategories"></a>
-##### integrations\.cloudflareruntime\.domainscan\.nonvendorcategories: array
+**Additional Properties:** not allowed   
+   
+<a name="defsstring"></a>
+##### $defs/\[\]string: array
 
 **Items**
 
-**Item Type:** `string`  
-<a name="integrationscloudflareruntimedomainscandeniedvendornames"></a>
-##### integrations\.cloudflareruntime\.domainscan\.deniedvendornames: array
-
-**Items**
-
-**Item Type:** `string`  
-<a name="integrationsgithubapp"></a>
-### integrations\.githubapp: object
+**Item Type:** `string`   
+   
+<a name="defsgithubappconfig"></a>
+### $defs/githubapp\.Config: object
 
 **Properties**
 
@@ -1795,9 +1683,10 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**webhooksecret**|`string`|||
 |**appslug**|`string`|||
 
-**Additional Properties:** not allowed  
-<a name="integrationsslack"></a>
-### integrations\.slack: object
+**Additional Properties:** not allowed   
+   
+<a name="defsslackconfig"></a>
+### $defs/slack\.Config: object
 
 **Properties**
 
@@ -1808,9 +1697,10 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**redirecturl**|`string`|||
 |**appid**|`string`|||
 
-**Additional Properties:** not allowed  
-<a name="integrationsslackruntime"></a>
-### integrations\.slackruntime: object
+**Additional Properties:** not allowed   
+   
+<a name="defsslackruntimeslackconfig"></a>
+### $defs/slack\.RuntimeSlackConfig: object
 
 **Properties**
 
@@ -1820,9 +1710,10 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**botToken**|`string`|Bot User OAuth Token for full Web API access to the platform workspace<br/>||
 |**defaultChannel**|`string`|Default channel id for system messages when no explicit channel is provided<br/>||
 
-**Additional Properties:** not allowed  
-<a name="integrationsgoogledrive"></a>
-### integrations\.googledrive: object
+**Additional Properties:** not allowed   
+   
+<a name="defsgoogledriveconfig"></a>
+### $defs/googledrive\.Config: object
 
 **Properties**
 
@@ -1832,9 +1723,10 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**clientsecret**|`string`|||
 |**redirecturl**|`string`|||
 
-**Additional Properties:** not allowed  
-<a name="integrationsgoogleworkspace"></a>
-### integrations\.googleworkspace: object
+**Additional Properties:** not allowed   
+   
+<a name="defsgoogleworkspaceconfig"></a>
+### $defs/googleworkspace\.Config: object
 
 **Properties**
 
@@ -1844,9 +1736,10 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**clientsecret**|`string`|||
 |**redirecturl**|`string`|||
 
-**Additional Properties:** not allowed  
-<a name="integrationsazureentraid"></a>
-### integrations\.azureentraid: object
+**Additional Properties:** not allowed   
+   
+<a name="defsazureentraidconfig"></a>
+### $defs/azureentraid\.Config: object
 
 **Properties**
 
@@ -1858,9 +1751,10 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**defaulttenant**|`string`|||
 |**applicationid**|`string`|||
 
-**Additional Properties:** not allowed  
-<a name="integrationsmicrosoftteams"></a>
-### integrations\.microsoftteams: object
+**Additional Properties:** not allowed   
+   
+<a name="defsmicrosoftteamsconfig"></a>
+### $defs/microsoftteams\.Config: object
 
 **Properties**
 
@@ -1871,9 +1765,10 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**redirecturl**|`string`|||
 |**applicationid**|`string`|||
 
-**Additional Properties:** not allowed  
-<a name="integrationsonedrive"></a>
-### integrations\.onedrive: object
+**Additional Properties:** not allowed   
+   
+<a name="defsonedriveconfig"></a>
+### $defs/onedrive\.Config: object
 
 **Properties**
 
@@ -1885,9 +1780,10 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**contentmode**|`string`|||
 |**applicationid**|`string`|||
 
-**Additional Properties:** not allowed  
-<a name="integrationsoidclocal"></a>
-### integrations\.oidclocal: object
+**Additional Properties:** not allowed   
+   
+<a name="defsoidclocalconfig"></a>
+### $defs/oidclocal\.Config: object
 
 **Properties**
 
@@ -1899,9 +1795,10 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**discoveryurl**|`string`|||
 |**redirecturl**|`string`|||
 
-**Additional Properties:** not allowed  
-<a name="integrationsemail"></a>
-### integrations\.email: object
+**Additional Properties:** not allowed   
+   
+<a name="defsemailruntimeemailconfig"></a>
+### $defs/email\.RuntimeEmailConfig: object
 
 **Properties**
 
@@ -1941,9 +1838,10 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**AccentBorderColor**|`string`|Decorative accent color applied to borders only<br/>|no|
 |**Tagline**|`string`|Short descriptive footer line rendered above the social row in modern themes<br/>|no|
 
-**Additional Properties:** not allowed  
-<a name="integrationspaymentreminder"></a>
-### integrations\.paymentreminder: object
+**Additional Properties:** not allowed   
+   
+<a name="defssystempaymentreminderconfig"></a>
+### $defs/system\.PaymentReminderConfig: object
 
 **Properties**
 
@@ -1954,7 +1852,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**enabled**|`boolean`|Whether the payment reminder listener is enabled<br/>Default: `false`<br/>||
 |**dryrun**|`boolean`|If true only log organization IDs that would be processed<br/>Default: `true`<br/>||
 
-**Additional Properties:** not allowed  
+**Additional Properties:** not allowed   
 **Example**
 
 ```json
@@ -1966,8 +1864,9 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 }
 ```
 
-<a name="integrationsorganizationdelete"></a>
-### integrations\.organizationdelete: object
+   
+<a name="defssystemorganizationdeleteconfig"></a>
+### $defs/system\.OrganizationDeleteConfig: object
 
 **Properties**
 
@@ -1976,7 +1875,7 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**maxdeletesperrun**|`integer`|Maximum overdue organizations to delete per run<br/>Default: `25`<br/>||
 |**enabled**|`boolean`|Whether the organization deletion listener is enabled<br/>||
 
-**Additional Properties:** not allowed  
+**Additional Properties:** not allowed   
 **Example**
 
 ```json
@@ -1985,18 +1884,19 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 }
 ```
 
-<a name="workflows"></a>
-## workflows: object
+   
+<a name="defsworkflowsconfig"></a>
+## $defs/workflows\.Config: object
 
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |**enabled**|`boolean`|||
-|[**cel**](#workflowscel)|`object`|||
-|[**gala**](#workflowsgala)|`object`|||
+|[**cel**](#defsworkflowscelconfig)|`object`|||
+|[**gala**](#defsworkflowsgalaconfig)|`object`|||
 
-**Additional Properties:** not allowed  
+**Additional Properties:** not allowed   
 **Example**
 
 ```json
@@ -2006,8 +1906,9 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 }
 ```
 
-<a name="workflowscel"></a>
-### workflows\.cel: object
+   
+<a name="defsworkflowscelconfig"></a>
+### $defs/workflows\.CELConfig: object
 
 **Properties**
 
@@ -2027,9 +1928,10 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**evaloptimize**|`boolean`|||
 |**trackstate**|`boolean`|||
 
-**Additional Properties:** not allowed  
-<a name="workflowsgala"></a>
-### workflows\.gala: object
+**Additional Properties:** not allowed   
+   
+<a name="defsworkflowsgalaconfig"></a>
+### $defs/workflows\.GalaConfig: object
 
 **Properties**
 
@@ -2041,9 +1943,10 @@ KeyWatcher contains settings for the key watcher that manages JWT signing keys
 |**failonenqueueerror**|`boolean`|||
 |**queuename**|`string`|||
 
-**Additional Properties:** not allowed  
-<a name="cloudflare"></a>
-## cloudflare: object
+**Additional Properties:** not allowed   
+   
+<a name="defshandlerscloudflareconfig"></a>
+## $defs/handlers\.CloudflareConfig: object
 
 CloudflareConfig contains configuration for Cloudflare integration.
 
@@ -2058,9 +1961,10 @@ CloudflareConfig contains configuration for Cloudflare integration.
 |**clientid**|`string`|ClientID is the Cloudflare Access client ID for shortlink API requests<br/>||
 |**clientsecret**|`string`|ClientSecret is the Cloudflare Access client secret for shortlink API requests<br/>||
 
-**Additional Properties:** not allowed  
-<a name="shortlinks"></a>
-## shortlinks: object
+**Additional Properties:** not allowed   
+   
+<a name="defsshortlinksconfig"></a>
+## $defs/shortlinks\.Config: object
 
 **Properties**
 
@@ -2071,9 +1975,10 @@ CloudflareConfig contains configuration for Cloudflare integration.
 |**clientsecret**|`string`|||
 |**endpointurl**|`string`|||
 
-**Additional Properties:** not allowed  
-<a name="backfill"></a>
-## backfill: object
+**Additional Properties:** not allowed   
+   
+<a name="defsconfigbackfill"></a>
+## $defs/config\.Backfill: object
 
 Backfill configures one-time startup data backfill routines that populate fields introduced by recent
 migrations for organizations and memberships that pre-date them
@@ -2085,5 +1990,5 @@ migrations for organizations and memberships that pre-date them
 |----|----|-----------|--------|
 |**enabled**|`boolean`|Enabled runs the backfill routines on server startup<br/>||
 
-**Additional Properties:** not allowed  
+**Additional Properties:** not allowed   
 
