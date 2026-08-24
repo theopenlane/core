@@ -1188,6 +1188,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			evidence.FieldURL:                    {Type: field.TypeString, Column: evidence.FieldURL},
 			evidence.FieldStatus:                 {Type: field.TypeEnum, Column: evidence.FieldStatus},
 			evidence.FieldReviewFrequency:        {Type: field.TypeEnum, Column: evidence.FieldReviewFrequency},
+			evidence.FieldAuditorReferenceID:     {Type: field.TypeString, Column: evidence.FieldAuditorReferenceID},
 		},
 	}
 	graph.Nodes[27] = &sqlgraph.Node{
@@ -27475,6 +27476,11 @@ func (f *EvidenceFilter) WhereStatus(p entql.StringP) {
 // WhereReviewFrequency applies the entql string predicate on the review_frequency field.
 func (f *EvidenceFilter) WhereReviewFrequency(p entql.StringP) {
 	f.Where(p.Field(evidence.FieldReviewFrequency))
+}
+
+// WhereAuditorReferenceID applies the entql string predicate on the auditor_reference_id field.
+func (f *EvidenceFilter) WhereAuditorReferenceID(p entql.StringP) {
+	f.Where(p.Field(evidence.FieldAuditorReferenceID))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.

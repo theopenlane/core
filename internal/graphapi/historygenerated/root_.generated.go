@@ -762,6 +762,7 @@ type ComplexityRoot struct {
 	}
 
 	EvidenceHistory struct {
+		AuditorReferenceID     func(childComplexity int) int
 		CollectionProcedure    func(childComplexity int) int
 		CreatedAt              func(childComplexity int) int
 		CreatedBy              func(childComplexity int) int
@@ -6483,6 +6484,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.ComplexityRoot.EntityTypeHistoryEdge.Node(childComplexity), true
 
+	case "EvidenceHistory.auditorReferenceID":
+		if e.ComplexityRoot.EvidenceHistory.AuditorReferenceID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.EvidenceHistory.AuditorReferenceID(childComplexity), true
 	case "EvidenceHistory.collectionProcedure":
 		if e.ComplexityRoot.EvidenceHistory.CollectionProcedure == nil {
 			break
@@ -26142,6 +26149,10 @@ type EvidenceHistory implements Node {
   the cadence for reviewing the evidence
   """
   reviewFrequency: EvidenceHistoryFrequency
+  """
+  external auditor id of the control, can be used to map to external audit partner mappings
+  """
+  auditorReferenceID: String
 }
 """
 A connection to a list of items.
@@ -26555,6 +26566,20 @@ input EvidenceHistoryWhereInput {
   reviewFrequencyNotIn: [EvidenceHistoryFrequency!]
   reviewFrequencyIsNil: Boolean
   reviewFrequencyNotNil: Boolean
+  """
+  auditor_reference_id field predicates
+  """
+  auditorReferenceID: String
+  auditorReferenceIDNEQ: String
+  auditorReferenceIDIn: [String!]
+  auditorReferenceIDNotIn: [String!]
+  auditorReferenceIDContains: String
+  auditorReferenceIDHasPrefix: String
+  auditorReferenceIDHasSuffix: String
+  auditorReferenceIDIsNil: Boolean
+  auditorReferenceIDNotNil: Boolean
+  auditorReferenceIDEqualFold: String
+  auditorReferenceIDContainsFold: String
 }
 type FileHistory implements Node {
   id: ID!
@@ -53044,6 +53069,8 @@ func (ec *executionContext) childFields_EvidenceHistory(ctx context.Context, fie
 		return ec.fieldContext_EvidenceHistory_status(ctx, field)
 	case "reviewFrequency":
 		return ec.fieldContext_EvidenceHistory_reviewFrequency(ctx, field)
+	case "auditorReferenceID":
+		return ec.fieldContext_EvidenceHistory_auditorReferenceID(ctx, field)
 	}
 	return nil, fmt.Errorf("no field named %q was found under type EvidenceHistory", field.Name)
 }

@@ -13673,6 +13673,10 @@ input CreateEvidenceInput {
 	the cadence for reviewing the evidence
 	"""
 	reviewFrequency: EvidenceFrequency
+	"""
+	external auditor id of the control, can be used to map to external audit partner mappings
+	"""
+	auditorReferenceID: String
 	ownerID: ID
 	environmentID: ID
 	scopeID: ID
@@ -27295,6 +27299,10 @@ type Evidence implements Node @modules(names: ["compliance_module","policy_manag
 	the cadence for reviewing the evidence
 	"""
 	reviewFrequency: EvidenceFrequency
+	"""
+	external auditor id of the control, can be used to map to external audit partner mappings
+	"""
+	auditorReferenceID: String
 	owner: Organization
 	environment: CustomTypeEnum
 	scope: CustomTypeEnum
@@ -28121,6 +28129,20 @@ input EvidenceWhereInput {
 	reviewFrequencyNotIn: [EvidenceFrequency!]
 	reviewFrequencyIsNil: Boolean
 	reviewFrequencyNotNil: Boolean
+	"""
+	auditor_reference_id field predicates
+	"""
+	auditorReferenceID: String
+	auditorReferenceIDNEQ: String
+	auditorReferenceIDIn: [String!]
+	auditorReferenceIDNotIn: [String!]
+	auditorReferenceIDContains: String
+	auditorReferenceIDHasPrefix: String
+	auditorReferenceIDHasSuffix: String
+	auditorReferenceIDIsNil: Boolean
+	auditorReferenceIDNotNil: Boolean
+	auditorReferenceIDEqualFold: String
+	auditorReferenceIDContainsFold: String
 	"""
 	owner edge predicates
 	"""
@@ -86981,6 +87003,11 @@ input UpdateEvidenceInput {
 	"""
 	reviewFrequency: EvidenceFrequency
 	clearReviewFrequency: Boolean
+	"""
+	external auditor id of the control, can be used to map to external audit partner mappings
+	"""
+	auditorReferenceID: String
+	clearAuditorReferenceID: Boolean
 	environmentID: ID
 	clearEnvironment: Boolean
 	scopeID: ID

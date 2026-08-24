@@ -399,6 +399,20 @@ func (_c *EvidenceHistoryCreate) SetNillableReviewFrequency(v *enums.Frequency) 
 	return _c
 }
 
+// SetAuditorReferenceID sets the "auditor_reference_id" field.
+func (_c *EvidenceHistoryCreate) SetAuditorReferenceID(v string) *EvidenceHistoryCreate {
+	_c.mutation.SetAuditorReferenceID(v)
+	return _c
+}
+
+// SetNillableAuditorReferenceID sets the "auditor_reference_id" field if the given value is not nil.
+func (_c *EvidenceHistoryCreate) SetNillableAuditorReferenceID(v *string) *EvidenceHistoryCreate {
+	if v != nil {
+		_c.SetAuditorReferenceID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *EvidenceHistoryCreate) SetID(v string) *EvidenceHistoryCreate {
 	_c.mutation.SetID(v)
@@ -693,6 +707,10 @@ func (_c *EvidenceHistoryCreate) createSpec() (*EvidenceHistory, *sqlgraph.Creat
 	if value, ok := _c.mutation.ReviewFrequency(); ok {
 		_spec.SetField(evidencehistory.FieldReviewFrequency, field.TypeEnum, value)
 		_node.ReviewFrequency = value
+	}
+	if value, ok := _c.mutation.AuditorReferenceID(); ok {
+		_spec.SetField(evidencehistory.FieldAuditorReferenceID, field.TypeString, value)
+		_node.AuditorReferenceID = value
 	}
 	return _node, _spec
 }

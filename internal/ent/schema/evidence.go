@@ -148,6 +148,10 @@ func (Evidence) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("REVIEW_FREQUENCY"),
 			),
+		field.String("auditor_reference_id").
+			Annotations(entx.FieldWorkflowEligible()).
+			Optional().
+			Comment("external auditor id of the control, can be used to map to external audit partner mappings"),
 	}
 }
 

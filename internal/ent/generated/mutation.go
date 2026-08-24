@@ -79229,6 +79229,7 @@ type EvidenceMutation struct {
 	url                            *string
 	status                         *enums.EvidenceStatus
 	review_frequency               *enums.Frequency
+	auditor_reference_id           *string
 	clearedFields                  map[string]struct{}
 	owner                          *string
 	clearedowner                   bool
@@ -80629,6 +80630,55 @@ func (m *EvidenceMutation) ResetReviewFrequency() {
 	delete(m.clearedFields, evidence.FieldReviewFrequency)
 }
 
+// SetAuditorReferenceID sets the "auditor_reference_id" field.
+func (m *EvidenceMutation) SetAuditorReferenceID(s string) {
+	m.auditor_reference_id = &s
+}
+
+// AuditorReferenceID returns the value of the "auditor_reference_id" field in the mutation.
+func (m *EvidenceMutation) AuditorReferenceID() (r string, exists bool) {
+	v := m.auditor_reference_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldAuditorReferenceID returns the old "auditor_reference_id" field's value of the Evidence entity.
+// If the Evidence object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *EvidenceMutation) OldAuditorReferenceID(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldAuditorReferenceID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldAuditorReferenceID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldAuditorReferenceID: %w", err)
+	}
+	return oldValue.AuditorReferenceID, nil
+}
+
+// ClearAuditorReferenceID clears the value of the "auditor_reference_id" field.
+func (m *EvidenceMutation) ClearAuditorReferenceID() {
+	m.auditor_reference_id = nil
+	m.clearedFields[evidence.FieldAuditorReferenceID] = struct{}{}
+}
+
+// AuditorReferenceIDCleared returns if the "auditor_reference_id" field was cleared in this mutation.
+func (m *EvidenceMutation) AuditorReferenceIDCleared() bool {
+	_, ok := m.clearedFields[evidence.FieldAuditorReferenceID]
+	return ok
+}
+
+// ResetAuditorReferenceID resets all changes to the "auditor_reference_id" field.
+func (m *EvidenceMutation) ResetAuditorReferenceID() {
+	m.auditor_reference_id = nil
+	delete(m.clearedFields, evidence.FieldAuditorReferenceID)
+}
+
 // ClearOwner clears the "owner" edge to the Organization entity.
 func (m *EvidenceMutation) ClearOwner() {
 	m.clearedowner = true
@@ -81338,7 +81388,7 @@ func (m *EvidenceMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *EvidenceMutation) Fields() []string {
-	fields := make([]string, 0, 26)
+	fields := make([]string, 0, 27)
 	if m.created_at != nil {
 		fields = append(fields, evidence.FieldCreatedAt)
 	}
@@ -81417,6 +81467,9 @@ func (m *EvidenceMutation) Fields() []string {
 	if m.review_frequency != nil {
 		fields = append(fields, evidence.FieldReviewFrequency)
 	}
+	if m.auditor_reference_id != nil {
+		fields = append(fields, evidence.FieldAuditorReferenceID)
+	}
 	return fields
 }
 
@@ -81477,6 +81530,8 @@ func (m *EvidenceMutation) Field(name string) (ent.Value, bool) {
 		return m.Status()
 	case evidence.FieldReviewFrequency:
 		return m.ReviewFrequency()
+	case evidence.FieldAuditorReferenceID:
+		return m.AuditorReferenceID()
 	}
 	return nil, false
 }
@@ -81538,6 +81593,8 @@ func (m *EvidenceMutation) OldField(ctx context.Context, name string) (ent.Value
 		return m.OldStatus(ctx)
 	case evidence.FieldReviewFrequency:
 		return m.OldReviewFrequency(ctx)
+	case evidence.FieldAuditorReferenceID:
+		return m.OldAuditorReferenceID(ctx)
 	}
 	return nil, fmt.Errorf("unknown Evidence field %s", name)
 }
@@ -81729,6 +81786,13 @@ func (m *EvidenceMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetReviewFrequency(v)
 		return nil
+	case evidence.FieldAuditorReferenceID:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetAuditorReferenceID(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Evidence field %s", name)
 }
@@ -81828,6 +81892,9 @@ func (m *EvidenceMutation) ClearedFields() []string {
 	if m.FieldCleared(evidence.FieldReviewFrequency) {
 		fields = append(fields, evidence.FieldReviewFrequency)
 	}
+	if m.FieldCleared(evidence.FieldAuditorReferenceID) {
+		fields = append(fields, evidence.FieldAuditorReferenceID)
+	}
 	return fields
 }
 
@@ -81910,6 +81977,9 @@ func (m *EvidenceMutation) ClearField(name string) error {
 		return nil
 	case evidence.FieldReviewFrequency:
 		m.ClearReviewFrequency()
+		return nil
+	case evidence.FieldAuditorReferenceID:
+		m.ClearAuditorReferenceID()
 		return nil
 	}
 	return fmt.Errorf("unknown Evidence nullable field %s", name)
@@ -81996,6 +82066,9 @@ func (m *EvidenceMutation) ResetField(name string) error {
 		return nil
 	case evidence.FieldReviewFrequency:
 		m.ResetReviewFrequency()
+		return nil
+	case evidence.FieldAuditorReferenceID:
+		m.ResetAuditorReferenceID()
 		return nil
 	}
 	return fmt.Errorf("unknown Evidence field %s", name)

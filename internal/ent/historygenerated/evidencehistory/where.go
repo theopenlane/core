@@ -194,6 +194,11 @@ func URL(v string) predicate.EvidenceHistory {
 	return predicate.EvidenceHistory(sql.FieldEQ(FieldURL, v))
 }
 
+// AuditorReferenceID applies equality check predicate on the "auditor_reference_id" field. It's identical to AuditorReferenceIDEQ.
+func AuditorReferenceID(v string) predicate.EvidenceHistory {
+	return predicate.EvidenceHistory(sql.FieldEQ(FieldAuditorReferenceID, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.EvidenceHistory {
 	return predicate.EvidenceHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -1877,6 +1882,81 @@ func ReviewFrequencyIsNil() predicate.EvidenceHistory {
 // ReviewFrequencyNotNil applies the NotNil predicate on the "review_frequency" field.
 func ReviewFrequencyNotNil() predicate.EvidenceHistory {
 	return predicate.EvidenceHistory(sql.FieldNotNull(FieldReviewFrequency))
+}
+
+// AuditorReferenceIDEQ applies the EQ predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDEQ(v string) predicate.EvidenceHistory {
+	return predicate.EvidenceHistory(sql.FieldEQ(FieldAuditorReferenceID, v))
+}
+
+// AuditorReferenceIDNEQ applies the NEQ predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDNEQ(v string) predicate.EvidenceHistory {
+	return predicate.EvidenceHistory(sql.FieldNEQ(FieldAuditorReferenceID, v))
+}
+
+// AuditorReferenceIDIn applies the In predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDIn(vs ...string) predicate.EvidenceHistory {
+	return predicate.EvidenceHistory(sql.FieldIn(FieldAuditorReferenceID, vs...))
+}
+
+// AuditorReferenceIDNotIn applies the NotIn predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDNotIn(vs ...string) predicate.EvidenceHistory {
+	return predicate.EvidenceHistory(sql.FieldNotIn(FieldAuditorReferenceID, vs...))
+}
+
+// AuditorReferenceIDGT applies the GT predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDGT(v string) predicate.EvidenceHistory {
+	return predicate.EvidenceHistory(sql.FieldGT(FieldAuditorReferenceID, v))
+}
+
+// AuditorReferenceIDGTE applies the GTE predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDGTE(v string) predicate.EvidenceHistory {
+	return predicate.EvidenceHistory(sql.FieldGTE(FieldAuditorReferenceID, v))
+}
+
+// AuditorReferenceIDLT applies the LT predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDLT(v string) predicate.EvidenceHistory {
+	return predicate.EvidenceHistory(sql.FieldLT(FieldAuditorReferenceID, v))
+}
+
+// AuditorReferenceIDLTE applies the LTE predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDLTE(v string) predicate.EvidenceHistory {
+	return predicate.EvidenceHistory(sql.FieldLTE(FieldAuditorReferenceID, v))
+}
+
+// AuditorReferenceIDContains applies the Contains predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDContains(v string) predicate.EvidenceHistory {
+	return predicate.EvidenceHistory(sql.FieldContains(FieldAuditorReferenceID, v))
+}
+
+// AuditorReferenceIDHasPrefix applies the HasPrefix predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDHasPrefix(v string) predicate.EvidenceHistory {
+	return predicate.EvidenceHistory(sql.FieldHasPrefix(FieldAuditorReferenceID, v))
+}
+
+// AuditorReferenceIDHasSuffix applies the HasSuffix predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDHasSuffix(v string) predicate.EvidenceHistory {
+	return predicate.EvidenceHistory(sql.FieldHasSuffix(FieldAuditorReferenceID, v))
+}
+
+// AuditorReferenceIDIsNil applies the IsNil predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDIsNil() predicate.EvidenceHistory {
+	return predicate.EvidenceHistory(sql.FieldIsNull(FieldAuditorReferenceID))
+}
+
+// AuditorReferenceIDNotNil applies the NotNil predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDNotNil() predicate.EvidenceHistory {
+	return predicate.EvidenceHistory(sql.FieldNotNull(FieldAuditorReferenceID))
+}
+
+// AuditorReferenceIDEqualFold applies the EqualFold predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDEqualFold(v string) predicate.EvidenceHistory {
+	return predicate.EvidenceHistory(sql.FieldEqualFold(FieldAuditorReferenceID, v))
+}
+
+// AuditorReferenceIDContainsFold applies the ContainsFold predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDContainsFold(v string) predicate.EvidenceHistory {
+	return predicate.EvidenceHistory(sql.FieldContainsFold(FieldAuditorReferenceID, v))
 }
 
 // And groups predicates with the AND operator between them.
