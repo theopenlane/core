@@ -3376,7 +3376,6 @@ type CreateControlInput struct {
 	CampaignIDs                []string                            `json:"campaign_ids,omitempty"`
 	ControlImplementationIDs   []string                            `json:"control_implementation_ids,omitempty"`
 	SubcontrolIDs              []string                            `json:"subcontrol_ids,omitempty"`
-	ScheduledJobIDs            []string                            `json:"scheduled_job_ids,omitempty"`
 	WorkflowObjectRefIDs       []string                            `json:"workflow_object_ref_ids,omitempty"`
 }
 
@@ -3587,9 +3586,6 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	if v := i.SubcontrolIDs; len(v) > 0 {
 		m.AddSubcontrolIDs(v...)
 	}
-	if v := i.ScheduledJobIDs; len(v) > 0 {
-		m.AddScheduledJobIDs(v...)
-	}
 	if v := i.WorkflowObjectRefIDs; len(v) > 0 {
 		m.AddWorkflowObjectRefIDs(v...)
 	}
@@ -3773,9 +3769,6 @@ type UpdateControlInput struct {
 	ClearSubcontrols                bool
 	AddSubcontrolIDs                []string `json:"add_subcontrol_ids,omitempty"`
 	RemoveSubcontrolIDs             []string `json:"remove_subcontrol_ids,omitempty"`
-	ClearScheduledJobs              bool
-	AddScheduledJobIDs              []string `json:"add_scheduled_job_ids,omitempty"`
-	RemoveScheduledJobIDs           []string `json:"remove_scheduled_job_ids,omitempty"`
 	ClearWorkflowObjectRefs         bool
 	AddWorkflowObjectRefIDs         []string `json:"add_workflow_object_ref_ids,omitempty"`
 	RemoveWorkflowObjectRefIDs      []string `json:"remove_workflow_object_ref_ids,omitempty"`
@@ -4292,15 +4285,6 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
 		m.RemoveSubcontrolIDs(v...)
-	}
-	if i.ClearScheduledJobs {
-		m.ClearScheduledJobs()
-	}
-	if v := i.AddScheduledJobIDs; len(v) > 0 {
-		m.AddScheduledJobIDs(v...)
-	}
-	if v := i.RemoveScheduledJobIDs; len(v) > 0 {
-		m.RemoveScheduledJobIDs(v...)
 	}
 	if i.ClearWorkflowObjectRefs {
 		m.ClearWorkflowObjectRefs()
@@ -14235,628 +14219,6 @@ func (c *InviteUpdateOne) SetInput(i UpdateInviteInput) *InviteUpdateOne {
 	return c
 }
 
-// CreateJobResultInput represents a mutation input for creating jobresults.
-type CreateJobResultInput struct {
-	Status         enums.JobExecutionStatus `json:"status,omitempty"`
-	ExitCode       int                      `json:"exit_code,omitempty"`
-	FinishedAt     *time.Time               `json:"finished_at,omitempty"`
-	StartedAt      *time.Time               `json:"started_at,omitempty"`
-	Log            *string                  `json:"log,omitempty"`
-	OwnerID        *string                  `json:"owner_id,omitempty"`
-	ScheduledJobID string                   `json:"scheduled_job_id,omitempty"`
-	FileID         string                   `json:"file_id,omitempty"`
-}
-
-// Mutate applies the CreateJobResultInput on the JobResultMutation builder.
-func (i *CreateJobResultInput) Mutate(m *JobResultMutation) {
-	m.SetStatus(i.Status)
-	m.SetExitCode(i.ExitCode)
-	if v := i.FinishedAt; v != nil {
-		m.SetFinishedAt(*v)
-	}
-	if v := i.StartedAt; v != nil {
-		m.SetStartedAt(*v)
-	}
-	if v := i.Log; v != nil {
-		m.SetLog(*v)
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
-	}
-	m.SetScheduledJobID(i.ScheduledJobID)
-	m.SetFileID(i.FileID)
-}
-
-// SetInput applies the change-set in the CreateJobResultInput on the JobResultCreate builder.
-func (c *JobResultCreate) SetInput(i CreateJobResultInput) *JobResultCreate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// UpdateJobResultInput represents a mutation input for updating jobresults.
-type UpdateJobResultInput struct {
-	Status         *enums.JobExecutionStatus `json:"status,omitempty"`
-	ClearLog       bool
-	Log            *string `json:"log,omitempty"`
-	ClearOwner     bool
-	OwnerID        *string `json:"owner_id,omitempty"`
-	ScheduledJobID *string `json:"scheduled_job_id,omitempty"`
-	FileID         *string `json:"file_id,omitempty"`
-}
-
-// Mutate applies the UpdateJobResultInput on the JobResultMutation builder.
-func (i *UpdateJobResultInput) Mutate(m *JobResultMutation) {
-	if v := i.Status; v != nil {
-		m.SetStatus(*v)
-	}
-	if i.ClearLog {
-		m.ClearLog()
-	}
-	if v := i.Log; v != nil {
-		m.SetLog(*v)
-	}
-	if i.ClearOwner {
-		m.ClearOwner()
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
-	}
-	if v := i.ScheduledJobID; v != nil {
-		m.SetScheduledJobID(*v)
-	}
-	if v := i.FileID; v != nil {
-		m.SetFileID(*v)
-	}
-}
-
-// SetInput applies the change-set in the UpdateJobResultInput on the JobResultUpdate builder.
-func (c *JobResultUpdate) SetInput(i UpdateJobResultInput) *JobResultUpdate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// SetInput applies the change-set in the UpdateJobResultInput on the JobResultUpdateOne builder.
-func (c *JobResultUpdateOne) SetInput(i UpdateJobResultInput) *JobResultUpdateOne {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// CreateJobRunnerInput represents a mutation input for creating jobrunners.
-type CreateJobRunnerInput struct {
-	Tags              []string   `json:"tags,omitempty"`
-	InternalNotes     *string    `json:"internal_notes,omitempty"`
-	SystemInternalID  *string    `json:"system_internal_id,omitempty"`
-	Name              string     `json:"name,omitempty"`
-	IPAddress         *string    `json:"ip_address,omitempty"`
-	LastSeen          *time.Time `json:"last_seen,omitempty"`
-	Version           *string    `json:"version,omitempty"`
-	Os                *string    `json:"os,omitempty"`
-	OwnerID           *string    `json:"owner_id,omitempty"`
-	JobRunnerTokenIDs []string   `json:"job_runner_token_ids,omitempty"`
-}
-
-// Mutate applies the CreateJobRunnerInput on the JobRunnerMutation builder.
-func (i *CreateJobRunnerInput) Mutate(m *JobRunnerMutation) {
-	if v := i.Tags; v != nil {
-		m.SetTags(v)
-	}
-	if v := i.InternalNotes; v != nil {
-		m.SetInternalNotes(*v)
-	}
-	if v := i.SystemInternalID; v != nil {
-		m.SetSystemInternalID(*v)
-	}
-	m.SetName(i.Name)
-	if v := i.IPAddress; v != nil {
-		m.SetIPAddress(*v)
-	}
-	if v := i.LastSeen; v != nil {
-		m.SetLastSeen(*v)
-	}
-	if v := i.Version; v != nil {
-		m.SetVersion(*v)
-	}
-	if v := i.Os; v != nil {
-		m.SetOs(*v)
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
-	}
-	if v := i.JobRunnerTokenIDs; len(v) > 0 {
-		m.AddJobRunnerTokenIDs(v...)
-	}
-}
-
-// SetInput applies the change-set in the CreateJobRunnerInput on the JobRunnerCreate builder.
-func (c *JobRunnerCreate) SetInput(i CreateJobRunnerInput) *JobRunnerCreate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// UpdateJobRunnerInput represents a mutation input for updating jobrunners.
-type UpdateJobRunnerInput struct {
-	ClearTags               bool
-	Tags                    []string `json:"tags,omitempty"`
-	AppendTags              []string
-	ClearInternalNotes      bool
-	InternalNotes           *string `json:"internal_notes,omitempty"`
-	ClearSystemInternalID   bool
-	SystemInternalID        *string `json:"system_internal_id,omitempty"`
-	Name                    *string `json:"name,omitempty"`
-	ClearIPAddress          bool
-	IPAddress               *string `json:"ip_address,omitempty"`
-	ClearLastSeen           bool
-	LastSeen                *time.Time `json:"last_seen,omitempty"`
-	ClearVersion            bool
-	Version                 *string `json:"version,omitempty"`
-	ClearOs                 bool
-	Os                      *string `json:"os,omitempty"`
-	ClearOwner              bool
-	OwnerID                 *string `json:"owner_id,omitempty"`
-	ClearJobRunnerTokens    bool
-	AddJobRunnerTokenIDs    []string `json:"add_job_runner_token_ids,omitempty"`
-	RemoveJobRunnerTokenIDs []string `json:"remove_job_runner_token_ids,omitempty"`
-}
-
-// Mutate applies the UpdateJobRunnerInput on the JobRunnerMutation builder.
-func (i *UpdateJobRunnerInput) Mutate(m *JobRunnerMutation) {
-	if i.ClearTags {
-		m.ClearTags()
-	}
-	if v := i.Tags; v != nil {
-		m.SetTags(v)
-	}
-	if i.AppendTags != nil {
-		m.AppendTags(i.Tags)
-	}
-	if i.ClearInternalNotes {
-		m.ClearInternalNotes()
-	}
-	if v := i.InternalNotes; v != nil {
-		m.SetInternalNotes(*v)
-	}
-	if i.ClearSystemInternalID {
-		m.ClearSystemInternalID()
-	}
-	if v := i.SystemInternalID; v != nil {
-		m.SetSystemInternalID(*v)
-	}
-	if v := i.Name; v != nil {
-		m.SetName(*v)
-	}
-	if i.ClearIPAddress {
-		m.ClearIPAddress()
-	}
-	if v := i.IPAddress; v != nil {
-		m.SetIPAddress(*v)
-	}
-	if i.ClearLastSeen {
-		m.ClearLastSeen()
-	}
-	if v := i.LastSeen; v != nil {
-		m.SetLastSeen(*v)
-	}
-	if i.ClearVersion {
-		m.ClearVersion()
-	}
-	if v := i.Version; v != nil {
-		m.SetVersion(*v)
-	}
-	if i.ClearOs {
-		m.ClearOs()
-	}
-	if v := i.Os; v != nil {
-		m.SetOs(*v)
-	}
-	if i.ClearOwner {
-		m.ClearOwner()
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
-	}
-	if i.ClearJobRunnerTokens {
-		m.ClearJobRunnerTokens()
-	}
-	if v := i.AddJobRunnerTokenIDs; len(v) > 0 {
-		m.AddJobRunnerTokenIDs(v...)
-	}
-	if v := i.RemoveJobRunnerTokenIDs; len(v) > 0 {
-		m.RemoveJobRunnerTokenIDs(v...)
-	}
-}
-
-// SetInput applies the change-set in the UpdateJobRunnerInput on the JobRunnerUpdate builder.
-func (c *JobRunnerUpdate) SetInput(i UpdateJobRunnerInput) *JobRunnerUpdate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// SetInput applies the change-set in the UpdateJobRunnerInput on the JobRunnerUpdateOne builder.
-func (c *JobRunnerUpdateOne) SetInput(i UpdateJobRunnerInput) *JobRunnerUpdateOne {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// CreateJobRunnerRegistrationTokenInput represents a mutation input for creating jobrunnerregistrationtokens.
-type CreateJobRunnerRegistrationTokenInput struct {
-	Tags        []string   `json:"tags,omitempty"`
-	LastUsedAt  *time.Time `json:"last_used_at,omitempty"`
-	OwnerID     *string    `json:"owner_id,omitempty"`
-	JobRunnerID *string    `json:"job_runner_id,omitempty"`
-}
-
-// Mutate applies the CreateJobRunnerRegistrationTokenInput on the JobRunnerRegistrationTokenMutation builder.
-func (i *CreateJobRunnerRegistrationTokenInput) Mutate(m *JobRunnerRegistrationTokenMutation) {
-	if v := i.Tags; v != nil {
-		m.SetTags(v)
-	}
-	if v := i.LastUsedAt; v != nil {
-		m.SetLastUsedAt(*v)
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
-	}
-	if v := i.JobRunnerID; v != nil {
-		m.SetJobRunnerID(*v)
-	}
-}
-
-// SetInput applies the change-set in the CreateJobRunnerRegistrationTokenInput on the JobRunnerRegistrationTokenCreate builder.
-func (c *JobRunnerRegistrationTokenCreate) SetInput(i CreateJobRunnerRegistrationTokenInput) *JobRunnerRegistrationTokenCreate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// UpdateJobRunnerRegistrationTokenInput represents a mutation input for updating jobrunnerregistrationtokens.
-type UpdateJobRunnerRegistrationTokenInput struct {
-	ClearTags       bool
-	Tags            []string `json:"tags,omitempty"`
-	AppendTags      []string
-	ClearLastUsedAt bool
-	LastUsedAt      *time.Time `json:"last_used_at,omitempty"`
-	ClearOwner      bool
-	OwnerID         *string `json:"owner_id,omitempty"`
-	ClearJobRunner  bool
-	JobRunnerID     *string `json:"job_runner_id,omitempty"`
-}
-
-// Mutate applies the UpdateJobRunnerRegistrationTokenInput on the JobRunnerRegistrationTokenMutation builder.
-func (i *UpdateJobRunnerRegistrationTokenInput) Mutate(m *JobRunnerRegistrationTokenMutation) {
-	if i.ClearTags {
-		m.ClearTags()
-	}
-	if v := i.Tags; v != nil {
-		m.SetTags(v)
-	}
-	if i.AppendTags != nil {
-		m.AppendTags(i.Tags)
-	}
-	if i.ClearLastUsedAt {
-		m.ClearLastUsedAt()
-	}
-	if v := i.LastUsedAt; v != nil {
-		m.SetLastUsedAt(*v)
-	}
-	if i.ClearOwner {
-		m.ClearOwner()
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
-	}
-	if i.ClearJobRunner {
-		m.ClearJobRunner()
-	}
-	if v := i.JobRunnerID; v != nil {
-		m.SetJobRunnerID(*v)
-	}
-}
-
-// SetInput applies the change-set in the UpdateJobRunnerRegistrationTokenInput on the JobRunnerRegistrationTokenUpdate builder.
-func (c *JobRunnerRegistrationTokenUpdate) SetInput(i UpdateJobRunnerRegistrationTokenInput) *JobRunnerRegistrationTokenUpdate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// SetInput applies the change-set in the UpdateJobRunnerRegistrationTokenInput on the JobRunnerRegistrationTokenUpdateOne builder.
-func (c *JobRunnerRegistrationTokenUpdateOne) SetInput(i UpdateJobRunnerRegistrationTokenInput) *JobRunnerRegistrationTokenUpdateOne {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// CreateJobRunnerTokenInput represents a mutation input for creating jobrunnertokens.
-type CreateJobRunnerTokenInput struct {
-	Tags          []string   `json:"tags,omitempty"`
-	ExpiresAt     *time.Time `json:"expires_at,omitempty"`
-	LastUsedAt    *time.Time `json:"last_used_at,omitempty"`
-	IsActive      *bool      `json:"is_active,omitempty"`
-	RevokedReason *string    `json:"revoked_reason,omitempty"`
-	RevokedBy     *string    `json:"revoked_by,omitempty"`
-	RevokedAt     *time.Time `json:"revoked_at,omitempty"`
-	OwnerID       *string    `json:"owner_id,omitempty"`
-	JobRunnerIDs  []string   `json:"job_runner_ids,omitempty"`
-}
-
-// Mutate applies the CreateJobRunnerTokenInput on the JobRunnerTokenMutation builder.
-func (i *CreateJobRunnerTokenInput) Mutate(m *JobRunnerTokenMutation) {
-	if v := i.Tags; v != nil {
-		m.SetTags(v)
-	}
-	if v := i.ExpiresAt; v != nil {
-		m.SetExpiresAt(*v)
-	}
-	if v := i.LastUsedAt; v != nil {
-		m.SetLastUsedAt(*v)
-	}
-	if v := i.IsActive; v != nil {
-		m.SetIsActive(*v)
-	}
-	if v := i.RevokedReason; v != nil {
-		m.SetRevokedReason(*v)
-	}
-	if v := i.RevokedBy; v != nil {
-		m.SetRevokedBy(*v)
-	}
-	if v := i.RevokedAt; v != nil {
-		m.SetRevokedAt(*v)
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
-	}
-	if v := i.JobRunnerIDs; len(v) > 0 {
-		m.AddJobRunnerIDs(v...)
-	}
-}
-
-// SetInput applies the change-set in the CreateJobRunnerTokenInput on the JobRunnerTokenCreate builder.
-func (c *JobRunnerTokenCreate) SetInput(i CreateJobRunnerTokenInput) *JobRunnerTokenCreate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// UpdateJobRunnerTokenInput represents a mutation input for updating jobrunnertokens.
-type UpdateJobRunnerTokenInput struct {
-	ClearTags          bool
-	Tags               []string `json:"tags,omitempty"`
-	AppendTags         []string
-	ClearLastUsedAt    bool
-	LastUsedAt         *time.Time `json:"last_used_at,omitempty"`
-	ClearIsActive      bool
-	IsActive           *bool `json:"is_active,omitempty"`
-	ClearRevokedReason bool
-	RevokedReason      *string `json:"revoked_reason,omitempty"`
-	ClearRevokedBy     bool
-	RevokedBy          *string `json:"revoked_by,omitempty"`
-	ClearRevokedAt     bool
-	RevokedAt          *time.Time `json:"revoked_at,omitempty"`
-	ClearOwner         bool
-	OwnerID            *string `json:"owner_id,omitempty"`
-	ClearJobRunners    bool
-	AddJobRunnerIDs    []string `json:"add_job_runner_ids,omitempty"`
-	RemoveJobRunnerIDs []string `json:"remove_job_runner_ids,omitempty"`
-}
-
-// Mutate applies the UpdateJobRunnerTokenInput on the JobRunnerTokenMutation builder.
-func (i *UpdateJobRunnerTokenInput) Mutate(m *JobRunnerTokenMutation) {
-	if i.ClearTags {
-		m.ClearTags()
-	}
-	if v := i.Tags; v != nil {
-		m.SetTags(v)
-	}
-	if i.AppendTags != nil {
-		m.AppendTags(i.Tags)
-	}
-	if i.ClearLastUsedAt {
-		m.ClearLastUsedAt()
-	}
-	if v := i.LastUsedAt; v != nil {
-		m.SetLastUsedAt(*v)
-	}
-	if i.ClearIsActive {
-		m.ClearIsActive()
-	}
-	if v := i.IsActive; v != nil {
-		m.SetIsActive(*v)
-	}
-	if i.ClearRevokedReason {
-		m.ClearRevokedReason()
-	}
-	if v := i.RevokedReason; v != nil {
-		m.SetRevokedReason(*v)
-	}
-	if i.ClearRevokedBy {
-		m.ClearRevokedBy()
-	}
-	if v := i.RevokedBy; v != nil {
-		m.SetRevokedBy(*v)
-	}
-	if i.ClearRevokedAt {
-		m.ClearRevokedAt()
-	}
-	if v := i.RevokedAt; v != nil {
-		m.SetRevokedAt(*v)
-	}
-	if i.ClearOwner {
-		m.ClearOwner()
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
-	}
-	if i.ClearJobRunners {
-		m.ClearJobRunners()
-	}
-	if v := i.AddJobRunnerIDs; len(v) > 0 {
-		m.AddJobRunnerIDs(v...)
-	}
-	if v := i.RemoveJobRunnerIDs; len(v) > 0 {
-		m.RemoveJobRunnerIDs(v...)
-	}
-}
-
-// SetInput applies the change-set in the UpdateJobRunnerTokenInput on the JobRunnerTokenUpdate builder.
-func (c *JobRunnerTokenUpdate) SetInput(i UpdateJobRunnerTokenInput) *JobRunnerTokenUpdate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// SetInput applies the change-set in the UpdateJobRunnerTokenInput on the JobRunnerTokenUpdateOne builder.
-func (c *JobRunnerTokenUpdateOne) SetInput(i UpdateJobRunnerTokenInput) *JobRunnerTokenUpdateOne {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// CreateJobTemplateInput represents a mutation input for creating jobtemplates.
-type CreateJobTemplateInput struct {
-	Tags             []string                `json:"tags,omitempty"`
-	InternalNotes    *string                 `json:"internal_notes,omitempty"`
-	SystemInternalID *string                 `json:"system_internal_id,omitempty"`
-	Title            string                  `json:"title,omitempty"`
-	Description      *string                 `json:"description,omitempty"`
-	Platform         enums.JobPlatformType   `json:"platform,omitempty"`
-	DownloadURL      string                  `json:"download_url,omitempty"`
-	Configuration    models.JobConfiguration `json:"configuration,omitempty"`
-	Cron             *models.Cron            `json:"cron,omitempty"`
-	OwnerID          *string                 `json:"owner_id,omitempty"`
-}
-
-// Mutate applies the CreateJobTemplateInput on the JobTemplateMutation builder.
-func (i *CreateJobTemplateInput) Mutate(m *JobTemplateMutation) {
-	if v := i.Tags; v != nil {
-		m.SetTags(v)
-	}
-	if v := i.InternalNotes; v != nil {
-		m.SetInternalNotes(*v)
-	}
-	if v := i.SystemInternalID; v != nil {
-		m.SetSystemInternalID(*v)
-	}
-	m.SetTitle(i.Title)
-	if v := i.Description; v != nil {
-		m.SetDescription(*v)
-	}
-	m.SetPlatform(i.Platform)
-	m.SetDownloadURL(i.DownloadURL)
-	if v := i.Configuration; v != nil {
-		m.SetConfiguration(v)
-	}
-	if v := i.Cron; v != nil {
-		m.SetCron(*v)
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
-	}
-}
-
-// SetInput applies the change-set in the CreateJobTemplateInput on the JobTemplateCreate builder.
-func (c *JobTemplateCreate) SetInput(i CreateJobTemplateInput) *JobTemplateCreate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// UpdateJobTemplateInput represents a mutation input for updating jobtemplates.
-type UpdateJobTemplateInput struct {
-	ClearTags             bool
-	Tags                  []string `json:"tags,omitempty"`
-	AppendTags            []string
-	ClearInternalNotes    bool
-	InternalNotes         *string `json:"internal_notes,omitempty"`
-	ClearSystemInternalID bool
-	SystemInternalID      *string `json:"system_internal_id,omitempty"`
-	Title                 *string `json:"title,omitempty"`
-	ClearDescription      bool
-	Description           *string `json:"description,omitempty"`
-	DownloadURL           *string `json:"download_url,omitempty"`
-	ClearConfiguration    bool
-	Configuration         models.JobConfiguration `json:"configuration,omitempty"`
-	AppendConfiguration   models.JobConfiguration
-	ClearCron             bool
-	Cron                  *models.Cron `json:"cron,omitempty"`
-	ClearOwner            bool
-	OwnerID               *string `json:"owner_id,omitempty"`
-	ClearScheduledJobs    bool
-	AddScheduledJobIDs    []string `json:"add_scheduled_job_ids,omitempty"`
-	RemoveScheduledJobIDs []string `json:"remove_scheduled_job_ids,omitempty"`
-}
-
-// Mutate applies the UpdateJobTemplateInput on the JobTemplateMutation builder.
-func (i *UpdateJobTemplateInput) Mutate(m *JobTemplateMutation) {
-	if i.ClearTags {
-		m.ClearTags()
-	}
-	if v := i.Tags; v != nil {
-		m.SetTags(v)
-	}
-	if i.AppendTags != nil {
-		m.AppendTags(i.Tags)
-	}
-	if i.ClearInternalNotes {
-		m.ClearInternalNotes()
-	}
-	if v := i.InternalNotes; v != nil {
-		m.SetInternalNotes(*v)
-	}
-	if i.ClearSystemInternalID {
-		m.ClearSystemInternalID()
-	}
-	if v := i.SystemInternalID; v != nil {
-		m.SetSystemInternalID(*v)
-	}
-	if v := i.Title; v != nil {
-		m.SetTitle(*v)
-	}
-	if i.ClearDescription {
-		m.ClearDescription()
-	}
-	if v := i.Description; v != nil {
-		m.SetDescription(*v)
-	}
-	if v := i.DownloadURL; v != nil {
-		m.SetDownloadURL(*v)
-	}
-	if i.ClearConfiguration {
-		m.ClearConfiguration()
-	}
-	if v := i.Configuration; v != nil {
-		m.SetConfiguration(v)
-	}
-	if i.AppendConfiguration != nil {
-		m.AppendConfiguration(i.Configuration)
-	}
-	if i.ClearCron {
-		m.ClearCron()
-	}
-	if v := i.Cron; v != nil {
-		m.SetCron(*v)
-	}
-	if i.ClearOwner {
-		m.ClearOwner()
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
-	}
-	if i.ClearScheduledJobs {
-		m.ClearScheduledJobs()
-	}
-	if v := i.AddScheduledJobIDs; len(v) > 0 {
-		m.AddScheduledJobIDs(v...)
-	}
-	if v := i.RemoveScheduledJobIDs; len(v) > 0 {
-		m.RemoveScheduledJobIDs(v...)
-	}
-}
-
-// SetInput applies the change-set in the UpdateJobTemplateInput on the JobTemplateUpdate builder.
-func (c *JobTemplateUpdate) SetInput(i UpdateJobTemplateInput) *JobTemplateUpdate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// SetInput applies the change-set in the UpdateJobTemplateInput on the JobTemplateUpdateOne builder.
-func (c *JobTemplateUpdateOne) SetInput(i UpdateJobTemplateInput) *JobTemplateUpdateOne {
-	i.Mutate(c.Mutation())
-	return c
-}
-
 // CreateMappableDomainInput represents a mutation input for creating mappabledomains.
 type CreateMappableDomainInput struct {
 	Tags            []string `json:"tags,omitempty"`
@@ -16501,10 +15863,6 @@ type CreateOrganizationInput struct {
 	IdentityHolderCreatorIDs             []string   `json:"identity_holder_creator_ids,omitempty"`
 	InternalPolicyCreatorIDs             []string   `json:"internal_policy_creator_ids,omitempty"`
 	InviteCreatorIDs                     []string   `json:"invite_creator_ids,omitempty"`
-	JobRunnerCreatorIDs                  []string   `json:"job_runner_creator_ids,omitempty"`
-	JobRunnerRegistrationTokenCreatorIDs []string   `json:"job_runner_registration_token_creator_ids,omitempty"`
-	JobRunnerTokenCreatorIDs             []string   `json:"job_runner_token_creator_ids,omitempty"`
-	JobTemplateCreatorIDs                []string   `json:"job_template_creator_ids,omitempty"`
 	MappedControlCreatorIDs              []string   `json:"mapped_control_creator_ids,omitempty"`
 	NarrativeCreatorIDs                  []string   `json:"narrative_creator_ids,omitempty"`
 	NoteCreatorIDs                       []string   `json:"note_creator_ids,omitempty"`
@@ -16518,8 +15876,6 @@ type CreateOrganizationInput struct {
 	ReviewCreatorIDs                     []string   `json:"review_creator_ids,omitempty"`
 	RiskCreatorIDs                       []string   `json:"risk_creator_ids,omitempty"`
 	ScanCreatorIDs                       []string   `json:"scan_creator_ids,omitempty"`
-	ScheduledJobCreatorIDs               []string   `json:"scheduled_job_creator_ids,omitempty"`
-	ScheduledJobRunCreatorIDs            []string   `json:"scheduled_job_run_creator_ids,omitempty"`
 	SLADefinitionCreatorIDs              []string   `json:"sla_definition_creator_ids,omitempty"`
 	StandardCreatorIDs                   []string   `json:"standard_creator_ids,omitempty"`
 	SubcontrolCreatorIDs                 []string   `json:"subcontrol_creator_ids,omitempty"`
@@ -16591,14 +15947,7 @@ type CreateOrganizationInput struct {
 	StandardIDs                          []string   `json:"standard_ids,omitempty"`
 	ActionPlanIDs                        []string   `json:"action_plan_ids,omitempty"`
 	CustomDomainIDs                      []string   `json:"custom_domain_ids,omitempty"`
-	JobRunnerIDs                         []string   `json:"job_runner_ids,omitempty"`
-	JobRunnerTokenIDs                    []string   `json:"job_runner_token_ids,omitempty"`
-	JobRunnerRegistrationTokenIDs        []string   `json:"job_runner_registration_token_ids,omitempty"`
 	DNSVerificationIDs                   []string   `json:"dns_verification_ids,omitempty"`
-	JobTemplateIDs                       []string   `json:"job_template_ids,omitempty"`
-	ScheduledJobIDs                      []string   `json:"scheduled_job_ids,omitempty"`
-	JobResultIDs                         []string   `json:"job_result_ids,omitempty"`
-	ScheduledJobRunIDs                   []string   `json:"scheduled_job_run_ids,omitempty"`
 	TrustCenterIDs                       []string   `json:"trust_center_ids,omitempty"`
 	AssetIDs                             []string   `json:"asset_ids,omitempty"`
 	ScanIDs                              []string   `json:"scan_ids,omitempty"`
@@ -16749,18 +16098,6 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.InviteCreatorIDs; len(v) > 0 {
 		m.AddInviteCreatorIDs(v...)
 	}
-	if v := i.JobRunnerCreatorIDs; len(v) > 0 {
-		m.AddJobRunnerCreatorIDs(v...)
-	}
-	if v := i.JobRunnerRegistrationTokenCreatorIDs; len(v) > 0 {
-		m.AddJobRunnerRegistrationTokenCreatorIDs(v...)
-	}
-	if v := i.JobRunnerTokenCreatorIDs; len(v) > 0 {
-		m.AddJobRunnerTokenCreatorIDs(v...)
-	}
-	if v := i.JobTemplateCreatorIDs; len(v) > 0 {
-		m.AddJobTemplateCreatorIDs(v...)
-	}
 	if v := i.MappedControlCreatorIDs; len(v) > 0 {
 		m.AddMappedControlCreatorIDs(v...)
 	}
@@ -16799,12 +16136,6 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.ScanCreatorIDs; len(v) > 0 {
 		m.AddScanCreatorIDs(v...)
-	}
-	if v := i.ScheduledJobCreatorIDs; len(v) > 0 {
-		m.AddScheduledJobCreatorIDs(v...)
-	}
-	if v := i.ScheduledJobRunCreatorIDs; len(v) > 0 {
-		m.AddScheduledJobRunCreatorIDs(v...)
 	}
 	if v := i.SLADefinitionCreatorIDs; len(v) > 0 {
 		m.AddSLADefinitionCreatorIDs(v...)
@@ -17019,29 +16350,8 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.CustomDomainIDs; len(v) > 0 {
 		m.AddCustomDomainIDs(v...)
 	}
-	if v := i.JobRunnerIDs; len(v) > 0 {
-		m.AddJobRunnerIDs(v...)
-	}
-	if v := i.JobRunnerTokenIDs; len(v) > 0 {
-		m.AddJobRunnerTokenIDs(v...)
-	}
-	if v := i.JobRunnerRegistrationTokenIDs; len(v) > 0 {
-		m.AddJobRunnerRegistrationTokenIDs(v...)
-	}
 	if v := i.DNSVerificationIDs; len(v) > 0 {
 		m.AddDNSVerificationIDs(v...)
-	}
-	if v := i.JobTemplateIDs; len(v) > 0 {
-		m.AddJobTemplateIDs(v...)
-	}
-	if v := i.ScheduledJobIDs; len(v) > 0 {
-		m.AddScheduledJobIDs(v...)
-	}
-	if v := i.JobResultIDs; len(v) > 0 {
-		m.AddJobResultIDs(v...)
-	}
-	if v := i.ScheduledJobRunIDs; len(v) > 0 {
-		m.AddScheduledJobRunIDs(v...)
 	}
 	if v := i.TrustCenterIDs; len(v) > 0 {
 		m.AddTrustCenterIDs(v...)
@@ -17246,18 +16556,6 @@ type UpdateOrganizationInput struct {
 	ClearInviteCreators                        bool
 	AddInviteCreatorIDs                        []string `json:"add_invite_creator_ids,omitempty"`
 	RemoveInviteCreatorIDs                     []string `json:"remove_invite_creator_ids,omitempty"`
-	ClearJobRunnerCreators                     bool
-	AddJobRunnerCreatorIDs                     []string `json:"add_job_runner_creator_ids,omitempty"`
-	RemoveJobRunnerCreatorIDs                  []string `json:"remove_job_runner_creator_ids,omitempty"`
-	ClearJobRunnerRegistrationTokenCreators    bool
-	AddJobRunnerRegistrationTokenCreatorIDs    []string `json:"add_job_runner_registration_token_creator_ids,omitempty"`
-	RemoveJobRunnerRegistrationTokenCreatorIDs []string `json:"remove_job_runner_registration_token_creator_ids,omitempty"`
-	ClearJobRunnerTokenCreators                bool
-	AddJobRunnerTokenCreatorIDs                []string `json:"add_job_runner_token_creator_ids,omitempty"`
-	RemoveJobRunnerTokenCreatorIDs             []string `json:"remove_job_runner_token_creator_ids,omitempty"`
-	ClearJobTemplateCreators                   bool
-	AddJobTemplateCreatorIDs                   []string `json:"add_job_template_creator_ids,omitempty"`
-	RemoveJobTemplateCreatorIDs                []string `json:"remove_job_template_creator_ids,omitempty"`
 	ClearMappedControlCreators                 bool
 	AddMappedControlCreatorIDs                 []string `json:"add_mapped_control_creator_ids,omitempty"`
 	RemoveMappedControlCreatorIDs              []string `json:"remove_mapped_control_creator_ids,omitempty"`
@@ -17297,12 +16595,6 @@ type UpdateOrganizationInput struct {
 	ClearScanCreators                          bool
 	AddScanCreatorIDs                          []string `json:"add_scan_creator_ids,omitempty"`
 	RemoveScanCreatorIDs                       []string `json:"remove_scan_creator_ids,omitempty"`
-	ClearScheduledJobCreators                  bool
-	AddScheduledJobCreatorIDs                  []string `json:"add_scheduled_job_creator_ids,omitempty"`
-	RemoveScheduledJobCreatorIDs               []string `json:"remove_scheduled_job_creator_ids,omitempty"`
-	ClearScheduledJobRunCreators               bool
-	AddScheduledJobRunCreatorIDs               []string `json:"add_scheduled_job_run_creator_ids,omitempty"`
-	RemoveScheduledJobRunCreatorIDs            []string `json:"remove_scheduled_job_run_creator_ids,omitempty"`
 	ClearSLADefinitionCreators                 bool
 	AddSLADefinitionCreatorIDs                 []string `json:"add_sla_definition_creator_ids,omitempty"`
 	RemoveSLADefinitionCreatorIDs              []string `json:"remove_sla_definition_creator_ids,omitempty"`
@@ -17511,30 +16803,9 @@ type UpdateOrganizationInput struct {
 	ClearCustomDomains                         bool
 	AddCustomDomainIDs                         []string `json:"add_custom_domain_ids,omitempty"`
 	RemoveCustomDomainIDs                      []string `json:"remove_custom_domain_ids,omitempty"`
-	ClearJobRunners                            bool
-	AddJobRunnerIDs                            []string `json:"add_job_runner_ids,omitempty"`
-	RemoveJobRunnerIDs                         []string `json:"remove_job_runner_ids,omitempty"`
-	ClearJobRunnerTokens                       bool
-	AddJobRunnerTokenIDs                       []string `json:"add_job_runner_token_ids,omitempty"`
-	RemoveJobRunnerTokenIDs                    []string `json:"remove_job_runner_token_ids,omitempty"`
-	ClearJobRunnerRegistrationTokens           bool
-	AddJobRunnerRegistrationTokenIDs           []string `json:"add_job_runner_registration_token_ids,omitempty"`
-	RemoveJobRunnerRegistrationTokenIDs        []string `json:"remove_job_runner_registration_token_ids,omitempty"`
 	ClearDNSVerifications                      bool
 	AddDNSVerificationIDs                      []string `json:"add_dns_verification_ids,omitempty"`
 	RemoveDNSVerificationIDs                   []string `json:"remove_dns_verification_ids,omitempty"`
-	ClearJobTemplates                          bool
-	AddJobTemplateIDs                          []string `json:"add_job_template_ids,omitempty"`
-	RemoveJobTemplateIDs                       []string `json:"remove_job_template_ids,omitempty"`
-	ClearScheduledJobs                         bool
-	AddScheduledJobIDs                         []string `json:"add_scheduled_job_ids,omitempty"`
-	RemoveScheduledJobIDs                      []string `json:"remove_scheduled_job_ids,omitempty"`
-	ClearJobResults                            bool
-	AddJobResultIDs                            []string `json:"add_job_result_ids,omitempty"`
-	RemoveJobResultIDs                         []string `json:"remove_job_result_ids,omitempty"`
-	ClearScheduledJobRuns                      bool
-	AddScheduledJobRunIDs                      []string `json:"add_scheduled_job_run_ids,omitempty"`
-	RemoveScheduledJobRunIDs                   []string `json:"remove_scheduled_job_run_ids,omitempty"`
 	ClearTrustCenters                          bool
 	AddTrustCenterIDs                          []string `json:"add_trust_center_ids,omitempty"`
 	RemoveTrustCenterIDs                       []string `json:"remove_trust_center_ids,omitempty"`
@@ -17950,42 +17221,6 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.RemoveInviteCreatorIDs; len(v) > 0 {
 		m.RemoveInviteCreatorIDs(v...)
 	}
-	if i.ClearJobRunnerCreators {
-		m.ClearJobRunnerCreators()
-	}
-	if v := i.AddJobRunnerCreatorIDs; len(v) > 0 {
-		m.AddJobRunnerCreatorIDs(v...)
-	}
-	if v := i.RemoveJobRunnerCreatorIDs; len(v) > 0 {
-		m.RemoveJobRunnerCreatorIDs(v...)
-	}
-	if i.ClearJobRunnerRegistrationTokenCreators {
-		m.ClearJobRunnerRegistrationTokenCreators()
-	}
-	if v := i.AddJobRunnerRegistrationTokenCreatorIDs; len(v) > 0 {
-		m.AddJobRunnerRegistrationTokenCreatorIDs(v...)
-	}
-	if v := i.RemoveJobRunnerRegistrationTokenCreatorIDs; len(v) > 0 {
-		m.RemoveJobRunnerRegistrationTokenCreatorIDs(v...)
-	}
-	if i.ClearJobRunnerTokenCreators {
-		m.ClearJobRunnerTokenCreators()
-	}
-	if v := i.AddJobRunnerTokenCreatorIDs; len(v) > 0 {
-		m.AddJobRunnerTokenCreatorIDs(v...)
-	}
-	if v := i.RemoveJobRunnerTokenCreatorIDs; len(v) > 0 {
-		m.RemoveJobRunnerTokenCreatorIDs(v...)
-	}
-	if i.ClearJobTemplateCreators {
-		m.ClearJobTemplateCreators()
-	}
-	if v := i.AddJobTemplateCreatorIDs; len(v) > 0 {
-		m.AddJobTemplateCreatorIDs(v...)
-	}
-	if v := i.RemoveJobTemplateCreatorIDs; len(v) > 0 {
-		m.RemoveJobTemplateCreatorIDs(v...)
-	}
 	if i.ClearMappedControlCreators {
 		m.ClearMappedControlCreators()
 	}
@@ -18102,24 +17337,6 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveScanCreatorIDs; len(v) > 0 {
 		m.RemoveScanCreatorIDs(v...)
-	}
-	if i.ClearScheduledJobCreators {
-		m.ClearScheduledJobCreators()
-	}
-	if v := i.AddScheduledJobCreatorIDs; len(v) > 0 {
-		m.AddScheduledJobCreatorIDs(v...)
-	}
-	if v := i.RemoveScheduledJobCreatorIDs; len(v) > 0 {
-		m.RemoveScheduledJobCreatorIDs(v...)
-	}
-	if i.ClearScheduledJobRunCreators {
-		m.ClearScheduledJobRunCreators()
-	}
-	if v := i.AddScheduledJobRunCreatorIDs; len(v) > 0 {
-		m.AddScheduledJobRunCreatorIDs(v...)
-	}
-	if v := i.RemoveScheduledJobRunCreatorIDs; len(v) > 0 {
-		m.RemoveScheduledJobRunCreatorIDs(v...)
 	}
 	if i.ClearSLADefinitionCreators {
 		m.ClearSLADefinitionCreators()
@@ -18745,33 +17962,6 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.RemoveCustomDomainIDs; len(v) > 0 {
 		m.RemoveCustomDomainIDs(v...)
 	}
-	if i.ClearJobRunners {
-		m.ClearJobRunners()
-	}
-	if v := i.AddJobRunnerIDs; len(v) > 0 {
-		m.AddJobRunnerIDs(v...)
-	}
-	if v := i.RemoveJobRunnerIDs; len(v) > 0 {
-		m.RemoveJobRunnerIDs(v...)
-	}
-	if i.ClearJobRunnerTokens {
-		m.ClearJobRunnerTokens()
-	}
-	if v := i.AddJobRunnerTokenIDs; len(v) > 0 {
-		m.AddJobRunnerTokenIDs(v...)
-	}
-	if v := i.RemoveJobRunnerTokenIDs; len(v) > 0 {
-		m.RemoveJobRunnerTokenIDs(v...)
-	}
-	if i.ClearJobRunnerRegistrationTokens {
-		m.ClearJobRunnerRegistrationTokens()
-	}
-	if v := i.AddJobRunnerRegistrationTokenIDs; len(v) > 0 {
-		m.AddJobRunnerRegistrationTokenIDs(v...)
-	}
-	if v := i.RemoveJobRunnerRegistrationTokenIDs; len(v) > 0 {
-		m.RemoveJobRunnerRegistrationTokenIDs(v...)
-	}
 	if i.ClearDNSVerifications {
 		m.ClearDNSVerifications()
 	}
@@ -18780,42 +17970,6 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveDNSVerificationIDs; len(v) > 0 {
 		m.RemoveDNSVerificationIDs(v...)
-	}
-	if i.ClearJobTemplates {
-		m.ClearJobTemplates()
-	}
-	if v := i.AddJobTemplateIDs; len(v) > 0 {
-		m.AddJobTemplateIDs(v...)
-	}
-	if v := i.RemoveJobTemplateIDs; len(v) > 0 {
-		m.RemoveJobTemplateIDs(v...)
-	}
-	if i.ClearScheduledJobs {
-		m.ClearScheduledJobs()
-	}
-	if v := i.AddScheduledJobIDs; len(v) > 0 {
-		m.AddScheduledJobIDs(v...)
-	}
-	if v := i.RemoveScheduledJobIDs; len(v) > 0 {
-		m.RemoveScheduledJobIDs(v...)
-	}
-	if i.ClearJobResults {
-		m.ClearJobResults()
-	}
-	if v := i.AddJobResultIDs; len(v) > 0 {
-		m.AddJobResultIDs(v...)
-	}
-	if v := i.RemoveJobResultIDs; len(v) > 0 {
-		m.RemoveJobResultIDs(v...)
-	}
-	if i.ClearScheduledJobRuns {
-		m.ClearScheduledJobRuns()
-	}
-	if v := i.AddScheduledJobRunIDs; len(v) > 0 {
-		m.AddScheduledJobRunIDs(v...)
-	}
-	if v := i.RemoveScheduledJobRunIDs; len(v) > 0 {
-		m.RemoveScheduledJobRunIDs(v...)
 	}
 	if i.ClearTrustCenters {
 		m.ClearTrustCenters()
@@ -24729,200 +23883,6 @@ func (c *ScanUpdateOne) SetInput(i UpdateScanInput) *ScanUpdateOne {
 	return c
 }
 
-// CreateScheduledJobInput represents a mutation input for creating scheduledjobs.
-type CreateScheduledJobInput struct {
-	Active        *bool                   `json:"active,omitempty"`
-	Configuration models.JobConfiguration `json:"configuration,omitempty"`
-	Cron          *models.Cron            `json:"cron,omitempty"`
-	OwnerID       *string                 `json:"owner_id,omitempty"`
-	JobTemplateID string                  `json:"job_template_id,omitempty"`
-	ControlIDs    []string                `json:"control_ids,omitempty"`
-	SubcontrolIDs []string                `json:"subcontrol_ids,omitempty"`
-	JobRunnerID   *string                 `json:"job_runner_id,omitempty"`
-}
-
-// Mutate applies the CreateScheduledJobInput on the ScheduledJobMutation builder.
-func (i *CreateScheduledJobInput) Mutate(m *ScheduledJobMutation) {
-	if v := i.Active; v != nil {
-		m.SetActive(*v)
-	}
-	if v := i.Configuration; v != nil {
-		m.SetConfiguration(v)
-	}
-	if v := i.Cron; v != nil {
-		m.SetCron(*v)
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
-	}
-	m.SetJobTemplateID(i.JobTemplateID)
-	if v := i.ControlIDs; len(v) > 0 {
-		m.AddControlIDs(v...)
-	}
-	if v := i.SubcontrolIDs; len(v) > 0 {
-		m.AddSubcontrolIDs(v...)
-	}
-	if v := i.JobRunnerID; v != nil {
-		m.SetJobRunnerID(*v)
-	}
-}
-
-// SetInput applies the change-set in the CreateScheduledJobInput on the ScheduledJobCreate builder.
-func (c *ScheduledJobCreate) SetInput(i CreateScheduledJobInput) *ScheduledJobCreate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// UpdateScheduledJobInput represents a mutation input for updating scheduledjobs.
-type UpdateScheduledJobInput struct {
-	Active              *bool `json:"active,omitempty"`
-	ClearConfiguration  bool
-	Configuration       models.JobConfiguration `json:"configuration,omitempty"`
-	AppendConfiguration models.JobConfiguration
-	ClearCron           bool
-	Cron                *models.Cron `json:"cron,omitempty"`
-	JobTemplateID       *string      `json:"job_template_id,omitempty"`
-	ClearControls       bool
-	AddControlIDs       []string `json:"add_control_ids,omitempty"`
-	RemoveControlIDs    []string `json:"remove_control_ids,omitempty"`
-	ClearSubcontrols    bool
-	AddSubcontrolIDs    []string `json:"add_subcontrol_ids,omitempty"`
-	RemoveSubcontrolIDs []string `json:"remove_subcontrol_ids,omitempty"`
-	ClearJobRunner      bool
-	JobRunnerID         *string `json:"job_runner_id,omitempty"`
-}
-
-// Mutate applies the UpdateScheduledJobInput on the ScheduledJobMutation builder.
-func (i *UpdateScheduledJobInput) Mutate(m *ScheduledJobMutation) {
-	if v := i.Active; v != nil {
-		m.SetActive(*v)
-	}
-	if i.ClearConfiguration {
-		m.ClearConfiguration()
-	}
-	if v := i.Configuration; v != nil {
-		m.SetConfiguration(v)
-	}
-	if i.AppendConfiguration != nil {
-		m.AppendConfiguration(i.Configuration)
-	}
-	if i.ClearCron {
-		m.ClearCron()
-	}
-	if v := i.Cron; v != nil {
-		m.SetCron(*v)
-	}
-	if v := i.JobTemplateID; v != nil {
-		m.SetJobTemplateID(*v)
-	}
-	if i.ClearControls {
-		m.ClearControls()
-	}
-	if v := i.AddControlIDs; len(v) > 0 {
-		m.AddControlIDs(v...)
-	}
-	if v := i.RemoveControlIDs; len(v) > 0 {
-		m.RemoveControlIDs(v...)
-	}
-	if i.ClearSubcontrols {
-		m.ClearSubcontrols()
-	}
-	if v := i.AddSubcontrolIDs; len(v) > 0 {
-		m.AddSubcontrolIDs(v...)
-	}
-	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
-		m.RemoveSubcontrolIDs(v...)
-	}
-	if i.ClearJobRunner {
-		m.ClearJobRunner()
-	}
-	if v := i.JobRunnerID; v != nil {
-		m.SetJobRunnerID(*v)
-	}
-}
-
-// SetInput applies the change-set in the UpdateScheduledJobInput on the ScheduledJobUpdate builder.
-func (c *ScheduledJobUpdate) SetInput(i UpdateScheduledJobInput) *ScheduledJobUpdate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// SetInput applies the change-set in the UpdateScheduledJobInput on the ScheduledJobUpdateOne builder.
-func (c *ScheduledJobUpdateOne) SetInput(i UpdateScheduledJobInput) *ScheduledJobUpdateOne {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// CreateScheduledJobRunInput represents a mutation input for creating scheduledjobruns.
-type CreateScheduledJobRunInput struct {
-	Status                *enums.ScheduledJobRunStatus `json:"status,omitempty"`
-	ExpectedExecutionTime time.Time                    `json:"expected_execution_time,omitempty"`
-	Script                string                       `json:"script,omitempty"`
-	OwnerID               *string                      `json:"owner_id,omitempty"`
-	ScheduledJobID        string                       `json:"scheduled_job_id,omitempty"`
-	JobRunnerID           string                       `json:"job_runner_id,omitempty"`
-}
-
-// Mutate applies the CreateScheduledJobRunInput on the ScheduledJobRunMutation builder.
-func (i *CreateScheduledJobRunInput) Mutate(m *ScheduledJobRunMutation) {
-	if v := i.Status; v != nil {
-		m.SetStatus(*v)
-	}
-	m.SetExpectedExecutionTime(i.ExpectedExecutionTime)
-	m.SetScript(i.Script)
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
-	}
-	m.SetScheduledJobID(i.ScheduledJobID)
-	m.SetJobRunnerID(i.JobRunnerID)
-}
-
-// SetInput applies the change-set in the CreateScheduledJobRunInput on the ScheduledJobRunCreate builder.
-func (c *ScheduledJobRunCreate) SetInput(i CreateScheduledJobRunInput) *ScheduledJobRunCreate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// UpdateScheduledJobRunInput represents a mutation input for updating scheduledjobruns.
-type UpdateScheduledJobRunInput struct {
-	Status         *enums.ScheduledJobRunStatus `json:"status,omitempty"`
-	ClearOwner     bool
-	OwnerID        *string `json:"owner_id,omitempty"`
-	ScheduledJobID *string `json:"scheduled_job_id,omitempty"`
-	JobRunnerID    *string `json:"job_runner_id,omitempty"`
-}
-
-// Mutate applies the UpdateScheduledJobRunInput on the ScheduledJobRunMutation builder.
-func (i *UpdateScheduledJobRunInput) Mutate(m *ScheduledJobRunMutation) {
-	if v := i.Status; v != nil {
-		m.SetStatus(*v)
-	}
-	if i.ClearOwner {
-		m.ClearOwner()
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
-	}
-	if v := i.ScheduledJobID; v != nil {
-		m.SetScheduledJobID(*v)
-	}
-	if v := i.JobRunnerID; v != nil {
-		m.SetJobRunnerID(*v)
-	}
-}
-
-// SetInput applies the change-set in the UpdateScheduledJobRunInput on the ScheduledJobRunUpdate builder.
-func (c *ScheduledJobRunUpdate) SetInput(i UpdateScheduledJobRunInput) *ScheduledJobRunUpdate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// SetInput applies the change-set in the UpdateScheduledJobRunInput on the ScheduledJobRunUpdateOne builder.
-func (c *ScheduledJobRunUpdateOne) SetInput(i UpdateScheduledJobRunInput) *ScheduledJobRunUpdateOne {
-	i.Mutate(c.Mutation())
-	return c
-}
-
 // CreateStandardInput represents a mutation input for creating standards.
 type CreateStandardInput struct {
 	Tags                     []string              `json:"tags,omitempty"`
@@ -25306,7 +24266,6 @@ type CreateSubcontrolInput struct {
 	SubcontrolKindID           *string                            `json:"subcontrol_kind_id,omitempty"`
 	ControlID                  string                             `json:"control_id,omitempty"`
 	ControlImplementationIDs   []string                           `json:"control_implementation_ids,omitempty"`
-	ScheduledJobIDs            []string                           `json:"scheduled_job_ids,omitempty"`
 	WorkflowObjectRefIDs       []string                           `json:"workflow_object_ref_ids,omitempty"`
 	AssetIDs                   []string                           `json:"asset_ids,omitempty"`
 	EntityIDs                  []string                           `json:"entity_ids,omitempty"`
@@ -25472,9 +24431,6 @@ func (i *CreateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	if v := i.ControlImplementationIDs; len(v) > 0 {
 		m.AddControlImplementationIDs(v...)
 	}
-	if v := i.ScheduledJobIDs; len(v) > 0 {
-		m.AddScheduledJobIDs(v...)
-	}
 	if v := i.WorkflowObjectRefIDs; len(v) > 0 {
 		m.AddWorkflowObjectRefIDs(v...)
 	}
@@ -25629,9 +24585,6 @@ type UpdateSubcontrolInput struct {
 	ClearControlImplementations     bool
 	AddControlImplementationIDs     []string `json:"add_control_implementation_ids,omitempty"`
 	RemoveControlImplementationIDs  []string `json:"remove_control_implementation_ids,omitempty"`
-	ClearScheduledJobs              bool
-	AddScheduledJobIDs              []string `json:"add_scheduled_job_ids,omitempty"`
-	RemoveScheduledJobIDs           []string `json:"remove_scheduled_job_ids,omitempty"`
 	ClearWorkflowObjectRefs         bool
 	AddWorkflowObjectRefIDs         []string `json:"add_workflow_object_ref_ids,omitempty"`
 	RemoveWorkflowObjectRefIDs      []string `json:"remove_workflow_object_ref_ids,omitempty"`
@@ -26031,15 +24984,6 @@ func (i *UpdateSubcontrolInput) Mutate(m *SubcontrolMutation) {
 	}
 	if v := i.RemoveControlImplementationIDs; len(v) > 0 {
 		m.RemoveControlImplementationIDs(v...)
-	}
-	if i.ClearScheduledJobs {
-		m.ClearScheduledJobs()
-	}
-	if v := i.AddScheduledJobIDs; len(v) > 0 {
-		m.AddScheduledJobIDs(v...)
-	}
-	if v := i.RemoveScheduledJobIDs; len(v) > 0 {
-		m.RemoveScheduledJobIDs(v...)
 	}
 	if i.ClearWorkflowObjectRefs {
 		m.ClearWorkflowObjectRefs()

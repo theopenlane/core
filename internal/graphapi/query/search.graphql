@@ -339,41 +339,6 @@ query GlobalSearch($query: String!) {
         }
       }
     }
-    jobRunners {
-      totalCount
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-      edges {
-        node {
-          displayID
-          id
-          name
-          tags
-        }
-      }
-    }
-    jobTemplates {
-      totalCount
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-      edges {
-        node {
-          description
-          displayID
-          id
-          tags
-          title
-        }
-      }
-    }
     narratives {
       totalCount
       pageInfo {

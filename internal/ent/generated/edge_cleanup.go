@@ -48,11 +48,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
-	"github.com/theopenlane/core/internal/ent/generated/jobresult"
-	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
-	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
-	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
-	"github.com/theopenlane/core/internal/ent/generated/jobtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/note"
@@ -76,8 +71,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/review"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
-	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
-	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
 	"github.com/theopenlane/core/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
@@ -476,59 +469,6 @@ func InternalPolicyEdgeCleanup(ctx context.Context, id string) error {
 
 func InviteEdgeCleanup(ctx context.Context, id string) error {
 	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup invite edge")))
-
-	return nil
-}
-
-func JobResultEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup jobresult edge")))
-
-	return nil
-}
-
-func JobRunnerEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup jobrunner edge")))
-
-	return nil
-}
-
-func JobRunnerRegistrationTokenEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup jobrunnerregistrationtoken edge")))
-
-	return nil
-}
-
-func JobRunnerTokenEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup jobrunnertoken edge")))
-
-	return nil
-}
-
-func JobTemplateEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup jobtemplate edge")))
-
-	{
-		ids, err := FromContext(ctx).ScheduledJob.Query().Where(scheduledjob.HasJobTemplateWith(jobtemplate.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying scheduledjob ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := ScheduledJobEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up scheduledjob edges")
-				return err
-			}
-		}
-	}
-	if exists, err := FromContext(ctx).ScheduledJob.Query().Where((scheduledjob.HasJobTemplateWith(jobtemplate.ID(id)))).Exist(ctx); err == nil && exists {
-		if err := PurgeScheduledJobHistory(ctx, scheduledjob.HasJobTemplateWith(jobtemplate.ID(id))); err != nil {
-			return err
-		}
-		if scheduledjobCount, err := FromContext(ctx).ScheduledJob.Delete().Where(scheduledjob.HasJobTemplateWith(jobtemplate.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", scheduledjobCount).Msg("error deleting scheduledjob")
-			return err
-		}
-	}
 
 	return nil
 }
@@ -1615,66 +1555,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 	}
 
 	{
-		ids, err := FromContext(ctx).JobRunner.Query().Where(jobrunner.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying jobrunner ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := JobRunnerEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up jobrunner edges")
-				return err
-			}
-		}
-	}
-	if exists, err := FromContext(ctx).JobRunner.Query().Where((jobrunner.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
-		if jobrunnerCount, err := FromContext(ctx).JobRunner.Delete().Where(jobrunner.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", jobrunnerCount).Msg("error deleting jobrunner")
-			return err
-		}
-	}
-
-	{
-		ids, err := FromContext(ctx).JobRunnerToken.Query().Where(jobrunnertoken.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying jobrunnertoken ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := JobRunnerTokenEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up jobrunnertoken edges")
-				return err
-			}
-		}
-	}
-	if exists, err := FromContext(ctx).JobRunnerToken.Query().Where((jobrunnertoken.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
-		if jobrunnertokenCount, err := FromContext(ctx).JobRunnerToken.Delete().Where(jobrunnertoken.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", jobrunnertokenCount).Msg("error deleting jobrunnertoken")
-			return err
-		}
-	}
-
-	{
-		ids, err := FromContext(ctx).JobRunnerRegistrationToken.Query().Where(jobrunnerregistrationtoken.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying jobrunnerregistrationtoken ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := JobRunnerRegistrationTokenEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up jobrunnerregistrationtoken edges")
-				return err
-			}
-		}
-	}
-	if exists, err := FromContext(ctx).JobRunnerRegistrationToken.Query().Where((jobrunnerregistrationtoken.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
-		if jobrunnerregistrationtokenCount, err := FromContext(ctx).JobRunnerRegistrationToken.Delete().Where(jobrunnerregistrationtoken.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", jobrunnerregistrationtokenCount).Msg("error deleting jobrunnerregistrationtoken")
-			return err
-		}
-	}
-
-	{
 		ids, err := FromContext(ctx).DNSVerification.Query().Where(dnsverification.HasOwnerWith(organization.ID(id))).IDs(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Error().Err(err).Msg("error querying dnsverification ids for cleanup")
@@ -1690,92 +1570,6 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 	if exists, err := FromContext(ctx).DNSVerification.Query().Where((dnsverification.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if dnsverificationCount, err := FromContext(ctx).DNSVerification.Delete().Where(dnsverification.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", dnsverificationCount).Msg("error deleting dnsverification")
-			return err
-		}
-	}
-
-	{
-		ids, err := FromContext(ctx).JobTemplate.Query().Where(jobtemplate.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying jobtemplate ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := JobTemplateEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up jobtemplate edges")
-				return err
-			}
-		}
-	}
-	if exists, err := FromContext(ctx).JobTemplate.Query().Where((jobtemplate.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
-		if err := PurgeJobTemplateHistory(ctx, jobtemplate.HasOwnerWith(organization.ID(id))); err != nil {
-			return err
-		}
-		if jobtemplateCount, err := FromContext(ctx).JobTemplate.Delete().Where(jobtemplate.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", jobtemplateCount).Msg("error deleting jobtemplate")
-			return err
-		}
-	}
-
-	{
-		ids, err := FromContext(ctx).ScheduledJob.Query().Where(scheduledjob.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying scheduledjob ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := ScheduledJobEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up scheduledjob edges")
-				return err
-			}
-		}
-	}
-	if exists, err := FromContext(ctx).ScheduledJob.Query().Where((scheduledjob.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
-		if err := PurgeScheduledJobHistory(ctx, scheduledjob.HasOwnerWith(organization.ID(id))); err != nil {
-			return err
-		}
-		if scheduledjobCount, err := FromContext(ctx).ScheduledJob.Delete().Where(scheduledjob.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", scheduledjobCount).Msg("error deleting scheduledjob")
-			return err
-		}
-	}
-
-	{
-		ids, err := FromContext(ctx).JobResult.Query().Where(jobresult.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying jobresult ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := JobResultEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up jobresult edges")
-				return err
-			}
-		}
-	}
-	if exists, err := FromContext(ctx).JobResult.Query().Where((jobresult.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
-		if jobresultCount, err := FromContext(ctx).JobResult.Delete().Where(jobresult.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", jobresultCount).Msg("error deleting jobresult")
-			return err
-		}
-	}
-
-	{
-		ids, err := FromContext(ctx).ScheduledJobRun.Query().Where(scheduledjobrun.HasOwnerWith(organization.ID(id))).IDs(ctx)
-		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("error querying scheduledjobrun ids for cleanup")
-			return err
-		}
-		for _, edgeID := range ids {
-			if err := ScheduledJobRunEdgeCleanup(ctx, edgeID); err != nil {
-				logx.FromContext(ctx).Error().Err(err).Str("id", edgeID).Msg("error cleaning up scheduledjobrun edges")
-				return err
-			}
-		}
-	}
-	if exists, err := FromContext(ctx).ScheduledJobRun.Query().Where((scheduledjobrun.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
-		if scheduledjobrunCount, err := FromContext(ctx).ScheduledJobRun.Delete().Where(scheduledjobrun.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", scheduledjobrunCount).Msg("error deleting scheduledjobrun")
 			return err
 		}
 	}
@@ -2547,18 +2341,6 @@ func SLADefinitionEdgeCleanup(ctx context.Context, id string) error {
 
 func ScanEdgeCleanup(ctx context.Context, id string) error {
 	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup scan edge")))
-
-	return nil
-}
-
-func ScheduledJobEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup scheduledjob edge")))
-
-	return nil
-}
-
-func ScheduledJobRunEdgeCleanup(ctx context.Context, id string) error {
-	ctx = entfga.WithDeleteTuplesFirst(privacy.DecisionContext(ctx, privacy.Allowf("cleanup scheduledjobrun edge")))
 
 	return nil
 }

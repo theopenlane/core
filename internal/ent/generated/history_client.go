@@ -88,9 +88,6 @@ func (c *Client) WithHistory() {
 	for _, hook := range history.Hooks[*InternalPolicyMutation]() {
 		c.InternalPolicy.Use(hook)
 	}
-	for _, hook := range history.Hooks[*JobTemplateMutation]() {
-		c.JobTemplate.Use(hook)
-	}
 	for _, hook := range history.Hooks[*MappableDomainMutation]() {
 		c.MappableDomain.Use(hook)
 	}
@@ -141,9 +138,6 @@ func (c *Client) WithHistory() {
 	}
 	for _, hook := range history.Hooks[*SLADefinitionMutation]() {
 		c.SLADefinition.Use(hook)
-	}
-	for _, hook := range history.Hooks[*ScheduledJobMutation]() {
-		c.ScheduledJob.Use(hook)
 	}
 	for _, hook := range history.Hooks[*StandardMutation]() {
 		c.Standard.Use(hook)

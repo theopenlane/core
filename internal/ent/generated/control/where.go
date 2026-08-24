@@ -3908,29 +3908,6 @@ func HasSubcontrolsWith(preds ...predicate.Subcontrol) predicate.Control {
 	})
 }
 
-// HasScheduledJobs applies the HasEdge predicate on the "scheduled_jobs" edge.
-func HasScheduledJobs() predicate.Control {
-	return predicate.Control(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, ScheduledJobsTable, ScheduledJobsPrimaryKey...),
-		)
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasScheduledJobsWith applies the HasEdge predicate on the "scheduled_jobs" edge with a given conditions (other predicates).
-func HasScheduledJobsWith(preds ...predicate.ScheduledJob) predicate.Control {
-	return predicate.Control(func(s *sql.Selector) {
-		step := newScheduledJobsStep()
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
 // HasMappedToControls applies the HasEdge predicate on the "mapped_to_controls" edge.
 func HasMappedToControls() predicate.Control {
 	return predicate.Control(func(s *sql.Selector) {

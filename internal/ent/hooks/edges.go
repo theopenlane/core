@@ -46,7 +46,6 @@ func skipperEdgePermissionChecks(ctx context.Context) bool {
 		&token.SignUpToken{},
 		&token.OrgInviteToken{},
 		&token.ResetToken{},
-		&token.JobRunnerRegistrationToken{},
 	}
 
 	if skip := rule.SkipTokenInContext(ctx, skipTokenType); skip {

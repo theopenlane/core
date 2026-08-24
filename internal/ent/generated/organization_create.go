@@ -48,11 +48,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
-	"github.com/theopenlane/core/internal/ent/generated/jobresult"
-	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
-	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
-	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
-	"github.com/theopenlane/core/internal/ent/generated/jobtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/note"
@@ -74,8 +69,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/review"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
-	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
-	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
 	"github.com/theopenlane/core/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
@@ -852,66 +845,6 @@ func (_c *OrganizationCreate) AddInviteCreators(v ...*Group) *OrganizationCreate
 	return _c.AddInviteCreatorIDs(ids...)
 }
 
-// AddJobRunnerCreatorIDs adds the "job_runner_creators" edge to the Group entity by IDs.
-func (_c *OrganizationCreate) AddJobRunnerCreatorIDs(ids ...string) *OrganizationCreate {
-	_c.mutation.AddJobRunnerCreatorIDs(ids...)
-	return _c
-}
-
-// AddJobRunnerCreators adds the "job_runner_creators" edges to the Group entity.
-func (_c *OrganizationCreate) AddJobRunnerCreators(v ...*Group) *OrganizationCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddJobRunnerCreatorIDs(ids...)
-}
-
-// AddJobRunnerRegistrationTokenCreatorIDs adds the "job_runner_registration_token_creators" edge to the Group entity by IDs.
-func (_c *OrganizationCreate) AddJobRunnerRegistrationTokenCreatorIDs(ids ...string) *OrganizationCreate {
-	_c.mutation.AddJobRunnerRegistrationTokenCreatorIDs(ids...)
-	return _c
-}
-
-// AddJobRunnerRegistrationTokenCreators adds the "job_runner_registration_token_creators" edges to the Group entity.
-func (_c *OrganizationCreate) AddJobRunnerRegistrationTokenCreators(v ...*Group) *OrganizationCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddJobRunnerRegistrationTokenCreatorIDs(ids...)
-}
-
-// AddJobRunnerTokenCreatorIDs adds the "job_runner_token_creators" edge to the Group entity by IDs.
-func (_c *OrganizationCreate) AddJobRunnerTokenCreatorIDs(ids ...string) *OrganizationCreate {
-	_c.mutation.AddJobRunnerTokenCreatorIDs(ids...)
-	return _c
-}
-
-// AddJobRunnerTokenCreators adds the "job_runner_token_creators" edges to the Group entity.
-func (_c *OrganizationCreate) AddJobRunnerTokenCreators(v ...*Group) *OrganizationCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddJobRunnerTokenCreatorIDs(ids...)
-}
-
-// AddJobTemplateCreatorIDs adds the "job_template_creators" edge to the Group entity by IDs.
-func (_c *OrganizationCreate) AddJobTemplateCreatorIDs(ids ...string) *OrganizationCreate {
-	_c.mutation.AddJobTemplateCreatorIDs(ids...)
-	return _c
-}
-
-// AddJobTemplateCreators adds the "job_template_creators" edges to the Group entity.
-func (_c *OrganizationCreate) AddJobTemplateCreators(v ...*Group) *OrganizationCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddJobTemplateCreatorIDs(ids...)
-}
-
 // AddMappedControlCreatorIDs adds the "mapped_control_creators" edge to the Group entity by IDs.
 func (_c *OrganizationCreate) AddMappedControlCreatorIDs(ids ...string) *OrganizationCreate {
 	_c.mutation.AddMappedControlCreatorIDs(ids...)
@@ -1105,36 +1038,6 @@ func (_c *OrganizationCreate) AddScanCreators(v ...*Group) *OrganizationCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddScanCreatorIDs(ids...)
-}
-
-// AddScheduledJobCreatorIDs adds the "scheduled_job_creators" edge to the Group entity by IDs.
-func (_c *OrganizationCreate) AddScheduledJobCreatorIDs(ids ...string) *OrganizationCreate {
-	_c.mutation.AddScheduledJobCreatorIDs(ids...)
-	return _c
-}
-
-// AddScheduledJobCreators adds the "scheduled_job_creators" edges to the Group entity.
-func (_c *OrganizationCreate) AddScheduledJobCreators(v ...*Group) *OrganizationCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddScheduledJobCreatorIDs(ids...)
-}
-
-// AddScheduledJobRunCreatorIDs adds the "scheduled_job_run_creators" edge to the Group entity by IDs.
-func (_c *OrganizationCreate) AddScheduledJobRunCreatorIDs(ids ...string) *OrganizationCreate {
-	_c.mutation.AddScheduledJobRunCreatorIDs(ids...)
-	return _c
-}
-
-// AddScheduledJobRunCreators adds the "scheduled_job_run_creators" edges to the Group entity.
-func (_c *OrganizationCreate) AddScheduledJobRunCreators(v ...*Group) *OrganizationCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddScheduledJobRunCreatorIDs(ids...)
 }
 
 // AddSLADefinitionCreatorIDs adds the "sla_definition_creators" edge to the Group entity by IDs.
@@ -2319,51 +2222,6 @@ func (_c *OrganizationCreate) AddCustomDomains(v ...*CustomDomain) *Organization
 	return _c.AddCustomDomainIDs(ids...)
 }
 
-// AddJobRunnerIDs adds the "job_runners" edge to the JobRunner entity by IDs.
-func (_c *OrganizationCreate) AddJobRunnerIDs(ids ...string) *OrganizationCreate {
-	_c.mutation.AddJobRunnerIDs(ids...)
-	return _c
-}
-
-// AddJobRunners adds the "job_runners" edges to the JobRunner entity.
-func (_c *OrganizationCreate) AddJobRunners(v ...*JobRunner) *OrganizationCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddJobRunnerIDs(ids...)
-}
-
-// AddJobRunnerTokenIDs adds the "job_runner_tokens" edge to the JobRunnerToken entity by IDs.
-func (_c *OrganizationCreate) AddJobRunnerTokenIDs(ids ...string) *OrganizationCreate {
-	_c.mutation.AddJobRunnerTokenIDs(ids...)
-	return _c
-}
-
-// AddJobRunnerTokens adds the "job_runner_tokens" edges to the JobRunnerToken entity.
-func (_c *OrganizationCreate) AddJobRunnerTokens(v ...*JobRunnerToken) *OrganizationCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddJobRunnerTokenIDs(ids...)
-}
-
-// AddJobRunnerRegistrationTokenIDs adds the "job_runner_registration_tokens" edge to the JobRunnerRegistrationToken entity by IDs.
-func (_c *OrganizationCreate) AddJobRunnerRegistrationTokenIDs(ids ...string) *OrganizationCreate {
-	_c.mutation.AddJobRunnerRegistrationTokenIDs(ids...)
-	return _c
-}
-
-// AddJobRunnerRegistrationTokens adds the "job_runner_registration_tokens" edges to the JobRunnerRegistrationToken entity.
-func (_c *OrganizationCreate) AddJobRunnerRegistrationTokens(v ...*JobRunnerRegistrationToken) *OrganizationCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddJobRunnerRegistrationTokenIDs(ids...)
-}
-
 // AddDNSVerificationIDs adds the "dns_verifications" edge to the DNSVerification entity by IDs.
 func (_c *OrganizationCreate) AddDNSVerificationIDs(ids ...string) *OrganizationCreate {
 	_c.mutation.AddDNSVerificationIDs(ids...)
@@ -2377,66 +2235,6 @@ func (_c *OrganizationCreate) AddDNSVerifications(v ...*DNSVerification) *Organi
 		ids[i] = v[i].ID
 	}
 	return _c.AddDNSVerificationIDs(ids...)
-}
-
-// AddJobTemplateIDs adds the "job_templates" edge to the JobTemplate entity by IDs.
-func (_c *OrganizationCreate) AddJobTemplateIDs(ids ...string) *OrganizationCreate {
-	_c.mutation.AddJobTemplateIDs(ids...)
-	return _c
-}
-
-// AddJobTemplates adds the "job_templates" edges to the JobTemplate entity.
-func (_c *OrganizationCreate) AddJobTemplates(v ...*JobTemplate) *OrganizationCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddJobTemplateIDs(ids...)
-}
-
-// AddScheduledJobIDs adds the "scheduled_jobs" edge to the ScheduledJob entity by IDs.
-func (_c *OrganizationCreate) AddScheduledJobIDs(ids ...string) *OrganizationCreate {
-	_c.mutation.AddScheduledJobIDs(ids...)
-	return _c
-}
-
-// AddScheduledJobs adds the "scheduled_jobs" edges to the ScheduledJob entity.
-func (_c *OrganizationCreate) AddScheduledJobs(v ...*ScheduledJob) *OrganizationCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddScheduledJobIDs(ids...)
-}
-
-// AddJobResultIDs adds the "job_results" edge to the JobResult entity by IDs.
-func (_c *OrganizationCreate) AddJobResultIDs(ids ...string) *OrganizationCreate {
-	_c.mutation.AddJobResultIDs(ids...)
-	return _c
-}
-
-// AddJobResults adds the "job_results" edges to the JobResult entity.
-func (_c *OrganizationCreate) AddJobResults(v ...*JobResult) *OrganizationCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddJobResultIDs(ids...)
-}
-
-// AddScheduledJobRunIDs adds the "scheduled_job_runs" edge to the ScheduledJobRun entity by IDs.
-func (_c *OrganizationCreate) AddScheduledJobRunIDs(ids ...string) *OrganizationCreate {
-	_c.mutation.AddScheduledJobRunIDs(ids...)
-	return _c
-}
-
-// AddScheduledJobRuns adds the "scheduled_job_runs" edges to the ScheduledJobRun entity.
-func (_c *OrganizationCreate) AddScheduledJobRuns(v ...*ScheduledJobRun) *OrganizationCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddScheduledJobRunIDs(ids...)
 }
 
 // AddTrustCenterIDs adds the "trust_centers" edge to the TrustCenter entity by IDs.
@@ -3669,70 +3467,6 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := _c.mutation.JobRunnerCreatorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobRunnerCreatorsTable,
-			Columns: []string{organization.JobRunnerCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.JobRunnerRegistrationTokenCreatorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobRunnerRegistrationTokenCreatorsTable,
-			Columns: []string{organization.JobRunnerRegistrationTokenCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.JobRunnerTokenCreatorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobRunnerTokenCreatorsTable,
-			Columns: []string{organization.JobRunnerTokenCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.JobTemplateCreatorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobTemplateCreatorsTable,
-			Columns: []string{organization.JobTemplateCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
 	if nodes := _c.mutation.MappedControlCreatorsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -3931,38 +3665,6 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			Inverse: false,
 			Table:   organization.ScanCreatorsTable,
 			Columns: []string{organization.ScanCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.ScheduledJobCreatorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.ScheduledJobCreatorsTable,
-			Columns: []string{organization.ScheduledJobCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.ScheduledJobRunCreatorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.ScheduledJobRunCreatorsTable,
-			Columns: []string{organization.ScheduledJobRunCreatorsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -5230,54 +4932,6 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := _c.mutation.JobRunnersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobRunnersTable,
-			Columns: []string{organization.JobRunnersColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.JobRunnerTokensIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobRunnerTokensTable,
-			Columns: []string{organization.JobRunnerTokensColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(jobrunnertoken.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.JobRunnerRegistrationTokensIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobRunnerRegistrationTokensTable,
-			Columns: []string{organization.JobRunnerRegistrationTokensColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(jobrunnerregistrationtoken.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
 	if nodes := _c.mutation.DNSVerificationsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -5287,70 +4941,6 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(dnsverification.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.JobTemplatesIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobTemplatesTable,
-			Columns: []string{organization.JobTemplatesColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(jobtemplate.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.ScheduledJobsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.ScheduledJobsTable,
-			Columns: []string{organization.ScheduledJobsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scheduledjob.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.JobResultsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.JobResultsTable,
-			Columns: []string{organization.JobResultsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(jobresult.FieldID, field.TypeString),
-			},
-		}
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.ScheduledJobRunsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.ScheduledJobRunsTable,
-			Columns: []string{organization.ScheduledJobRunsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(scheduledjobrun.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

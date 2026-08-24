@@ -2102,124 +2102,6 @@ type InviteUpdatePayload struct {
 	Invite *generated.Invite `json:"invite"`
 }
 
-// Return response for createJobResult mutation
-type JobResultCreatePayload struct {
-	// Created jobResult
-	JobResult *generated.JobResult `json:"jobResult"`
-}
-
-// Return response for deleteJobResult mutation
-type JobResultDeletePayload struct {
-	// Deleted jobResult ID
-	DeletedID string `json:"deletedID"`
-}
-
-// Return response for updateJobResult mutation
-type JobResultUpdatePayload struct {
-	// Updated jobResult
-	JobResult *generated.JobResult `json:"jobResult"`
-}
-
-// Return response for createJobRunner mutation
-type JobRunnerCreatePayload struct {
-	// Created jobRunner
-	JobRunner *generated.JobRunner `json:"jobRunner"`
-}
-
-// Return response for deleteJobRunner mutation
-type JobRunnerDeletePayload struct {
-	// Deleted jobRunner ID
-	DeletedID string `json:"deletedID"`
-}
-
-// Return response for createBulkJobRunnerRegistrationToken mutation
-type JobRunnerRegistrationTokenBulkCreatePayload struct {
-	// Created jobRunnerRegistrationTokens
-	JobRunnerRegistrationTokens []*generated.JobRunnerRegistrationToken `json:"jobRunnerRegistrationTokens,omitempty"`
-}
-
-// Return response for createJobRunnerRegistrationToken mutation
-type JobRunnerRegistrationTokenCreatePayload struct {
-	// Created jobRunnerRegistrationToken
-	JobRunnerRegistrationToken *generated.JobRunnerRegistrationToken `json:"jobRunnerRegistrationToken"`
-}
-
-// Return response for deleteJobRunnerRegistrationToken mutation
-type JobRunnerRegistrationTokenDeletePayload struct {
-	// Deleted jobRunnerRegistrationToken ID
-	DeletedID string `json:"deletedID"`
-}
-
-// Return response for createJobRunnerToken mutation
-type JobRunnerTokenCreatePayload struct {
-	// Created jobRunnerToken
-	JobRunnerToken *generated.JobRunnerToken `json:"jobRunnerToken"`
-}
-
-// Return response for deleteJobRunnerToken mutation
-type JobRunnerTokenDeletePayload struct {
-	// Deleted jobRunnerToken ID
-	DeletedID string `json:"deletedID"`
-}
-
-// Return response for updateJobRunnerToken mutation
-type JobRunnerTokenUpdatePayload struct {
-	// Updated jobRunnerToken
-	JobRunnerToken *generated.JobRunnerToken `json:"jobRunnerToken"`
-}
-
-// Return response for updateJobRunner mutation
-type JobRunnerUpdatePayload struct {
-	// Updated jobRunner
-	JobRunner *generated.JobRunner `json:"jobRunner"`
-}
-
-// Return response for createBulkJobTemplate mutation
-type JobTemplateBulkCreatePayload struct {
-	// Created jobTemplates
-	JobTemplates []*generated.JobTemplate `json:"jobTemplates,omitempty"`
-}
-
-// Return response for deleteBulkJobTemplate mutation
-type JobTemplateBulkDeletePayload struct {
-	// Deleted jobTemplate IDs
-	DeletedIDs []string `json:"deletedIDs"`
-	// IDs that were not deleted
-	NotDeletedIDs []string `json:"notDeletedIDs"`
-	// Error message when the bulk delete did not apply to every requested ID
-	Error *string `json:"error,omitempty"`
-}
-
-// Return response for updateBulkJobTemplate mutation
-type JobTemplateBulkUpdatePayload struct {
-	// Updated jobTemplates
-	JobTemplates []*generated.JobTemplate `json:"jobTemplates,omitempty"`
-	// IDs of the updated jobTemplates
-	UpdatedIDs []string `json:"updatedIDs,omitempty"`
-	// IDs that were not updated
-	NotUpdatedIDs []string `json:"notUpdatedIDs"`
-	// Error message when the bulk update did not apply to every requested ID
-	Error *string `json:"error,omitempty"`
-}
-
-// Return response for createJobTemplate mutation
-type JobTemplateCreatePayload struct {
-	// Created jobTemplate
-	JobTemplate *generated.JobTemplate `json:"jobTemplate"`
-}
-
-// Return response for deleteJobTemplate mutation
-type JobTemplateDeletePayload struct {
-	// Deleted jobTemplate ID
-	DeletedID string `json:"deletedID"`
-}
-
-// Return response for updateJobTemplate mutation
-type JobTemplateUpdatePayload struct {
-	// Updated jobTemplate
-	JobTemplate *generated.JobTemplate `json:"jobTemplate"`
-}
-
 // Input for launchCampaign mutation
 type LaunchCampaignInput struct {
 	// ID of the campaign
@@ -3107,70 +2989,6 @@ type ScanUpdatePayload struct {
 	Scan *generated.Scan `json:"scan"`
 }
 
-// Return response for createBulkScheduledJob mutation
-type ScheduledJobBulkCreatePayload struct {
-	// Created scheduledJobs
-	ScheduledJobs []*generated.ScheduledJob `json:"scheduledJobs,omitempty"`
-}
-
-// Return response for deleteBulkScheduledJob mutation
-type ScheduledJobBulkDeletePayload struct {
-	// Deleted scheduledJob IDs
-	DeletedIDs []string `json:"deletedIDs"`
-	// IDs that were not deleted
-	NotDeletedIDs []string `json:"notDeletedIDs"`
-	// Error message when the bulk delete did not apply to every requested ID
-	Error *string `json:"error,omitempty"`
-}
-
-// Return response for updateBulkScheduledJob mutation
-type ScheduledJobBulkUpdatePayload struct {
-	// Updated scheduledJobs
-	ScheduledJobs []*generated.ScheduledJob `json:"scheduledJobs,omitempty"`
-	// IDs of the updated scheduledJobs
-	UpdatedIDs []string `json:"updatedIDs,omitempty"`
-	// IDs that were not updated
-	NotUpdatedIDs []string `json:"notUpdatedIDs"`
-	// Error message when the bulk update did not apply to every requested ID
-	Error *string `json:"error,omitempty"`
-}
-
-// Return response for createScheduledJob mutation
-type ScheduledJobCreatePayload struct {
-	// Created scheduledJob
-	ScheduledJob *generated.ScheduledJob `json:"scheduledJob"`
-}
-
-// Return response for deleteScheduledJob mutation
-type ScheduledJobDeletePayload struct {
-	// Deleted scheduledJob ID
-	DeletedID string `json:"deletedID"`
-}
-
-// Return response for createScheduledJobRun mutation
-type ScheduledJobRunCreatePayload struct {
-	// Created scheduledJobRun
-	ScheduledJobRun *generated.ScheduledJobRun `json:"scheduledJobRun"`
-}
-
-// Return response for deleteScheduledJobRun mutation
-type ScheduledJobRunDeletePayload struct {
-	// Deleted scheduledJobRun ID
-	DeletedID string `json:"deletedID"`
-}
-
-// Return response for updateScheduledJobRun mutation
-type ScheduledJobRunUpdatePayload struct {
-	// Updated scheduledJobRun
-	ScheduledJobRun *generated.ScheduledJobRun `json:"scheduledJobRun"`
-}
-
-// Return response for updateScheduledJob mutation
-type ScheduledJobUpdatePayload struct {
-	// Updated scheduledJob
-	ScheduledJob *generated.ScheduledJob `json:"scheduledJob"`
-}
-
 type SearchResults struct {
 	// Information to aid in pagination.
 	Page *entgql.PageInfo[string] `json:"page"`
@@ -3195,8 +3013,6 @@ type SearchResults struct {
 	Integrations          *generated.IntegrationConnection          `json:"integrations,omitempty"`
 	InternalPolicies      *generated.InternalPolicyConnection       `json:"internalPolicies,omitempty"`
 	Invites               *generated.InviteConnection               `json:"invites,omitempty"`
-	JobRunners            *generated.JobRunnerConnection            `json:"jobRunners,omitempty"`
-	JobTemplates          *generated.JobTemplateConnection          `json:"jobTemplates,omitempty"`
 	Narratives            *generated.NarrativeConnection            `json:"narratives,omitempty"`
 	NotificationTemplates *generated.NotificationTemplateConnection `json:"notificationTemplates,omitempty"`
 	Organizations         *generated.OrganizationConnection         `json:"organizations,omitempty"`
