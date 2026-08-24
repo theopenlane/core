@@ -470,7 +470,7 @@ server:
         certkey: server.key
         enabled: false
     trustcentercnametarget: ""
-    trustcenterpreviewzoneid: ""
+    trustcenterpreviewcnametarget: ""
     writetimeout: 15000000000
 sessions:
     domain: ""

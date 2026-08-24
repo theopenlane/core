@@ -10,8 +10,6 @@ import (
 
 // Config holds the trust center URL-building configuration, set once at server startup
 type Config struct {
-	// PreviewZoneID is the cloudflare zone id used for preview domains
-	PreviewZoneID string
 	// CnameTarget is the CNAME target custom domains point at
 	CnameTarget string
 	// DefaultTrustCenterDomain is the shared domain slugged trust centers are served from

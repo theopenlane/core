@@ -193,8 +193,8 @@ data:
       {{- if .Values.openlane.coreConfiguration.server.trustcentercnametarget }}
       trustcentercnametarget: {{ .Values.openlane.coreConfiguration.server.trustcentercnametarget | quote }}
       {{- end }}
-      {{- if .Values.openlane.coreConfiguration.server.trustcenterpreviewzoneid }}
-      trustcenterpreviewzoneid: {{ .Values.openlane.coreConfiguration.server.trustcenterpreviewzoneid | quote }}
+      {{- if .Values.openlane.coreConfiguration.server.trustcenterpreviewcnametarget }}
+      trustcenterpreviewcnametarget: {{ .Values.openlane.coreConfiguration.server.trustcenterpreviewcnametarget | quote }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.server.notificationlookbackdays }}
       notificationlookbackdays: {{ .Values.openlane.coreConfiguration.server.notificationlookbackdays }}
