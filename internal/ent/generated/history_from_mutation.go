@@ -7194,6 +7194,10 @@ func (m *EvidenceMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetReviewFrequency(reviewFrequency)
 	}
 
+	if auditorReferenceID, exists := m.AuditorReferenceID(); exists {
+		create = create.SetAuditorReferenceID(auditorReferenceID)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -7384,6 +7388,12 @@ func (m *EvidenceMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetReviewFrequency(evidence.ReviewFrequency)
 		}
 
+		if auditorReferenceID, exists := m.AuditorReferenceID(); exists {
+			create = create.SetAuditorReferenceID(auditorReferenceID)
+		} else {
+			create = create.SetAuditorReferenceID(evidence.AuditorReferenceID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -7448,6 +7458,7 @@ func (m *EvidenceMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetURL(evidence.URL).
 			SetStatus(evidence.Status).
 			SetReviewFrequency(evidence.ReviewFrequency).
+			SetAuditorReferenceID(evidence.AuditorReferenceID).
 			Save(ctx)
 		if err != nil {
 			return err

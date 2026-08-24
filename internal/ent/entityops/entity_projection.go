@@ -774,6 +774,7 @@ type EventProjection struct {
 type EvidenceProjection struct {
 	// ID is the entity identifier, exposed to expressions as "id"
 	ID                     string               `json:"id,omitempty"`
+	AuditorReferenceID     string               `json:"auditor_reference_id,omitempty"`
 	CollectionProcedure    string               `json:"collection_procedure,omitempty"`
 	CreatedAt              time.Time            `json:"created_at,omitempty"`
 	CreatedBy              string               `json:"created_by,omitempty"`

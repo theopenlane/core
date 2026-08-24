@@ -18809,6 +18809,19 @@ type EvidenceHistoryWhereInput struct {
 	ReviewFrequencyIsNil  bool              `json:"reviewFrequencyIsNil,omitempty"`
 	ReviewFrequencyNotNil bool              `json:"reviewFrequencyNotNil,omitempty"`
 
+	// "auditor_reference_id" field predicates.
+	AuditorReferenceID             *string  `json:"auditorReferenceID,omitempty"`
+	AuditorReferenceIDNEQ          *string  `json:"auditorReferenceIDNEQ,omitempty"`
+	AuditorReferenceIDIn           []string `json:"auditorReferenceIDIn,omitempty"`
+	AuditorReferenceIDNotIn        []string `json:"auditorReferenceIDNotIn,omitempty"`
+	AuditorReferenceIDContains     *string  `json:"auditorReferenceIDContains,omitempty"`
+	AuditorReferenceIDHasPrefix    *string  `json:"auditorReferenceIDHasPrefix,omitempty"`
+	AuditorReferenceIDHasSuffix    *string  `json:"auditorReferenceIDHasSuffix,omitempty"`
+	AuditorReferenceIDIsNil        bool     `json:"auditorReferenceIDIsNil,omitempty"`
+	AuditorReferenceIDNotNil       bool     `json:"auditorReferenceIDNotNil,omitempty"`
+	AuditorReferenceIDEqualFold    *string  `json:"auditorReferenceIDEqualFold,omitempty"`
+	AuditorReferenceIDContainsFold *string  `json:"auditorReferenceIDContainsFold,omitempty"`
+
 	// "tags" JSON-string-array predicates.
 	TagsHas *string `json:"tagsHas,omitempty"`
 }
@@ -19582,6 +19595,39 @@ func (i *EvidenceHistoryWhereInput) P() (predicate.EvidenceHistory, error) {
 	}
 	if i.ReviewFrequencyNotNil {
 		predicates = append(predicates, evidencehistory.ReviewFrequencyNotNil())
+	}
+	if i.AuditorReferenceID != nil {
+		predicates = append(predicates, evidencehistory.AuditorReferenceIDEQ(*i.AuditorReferenceID))
+	}
+	if i.AuditorReferenceIDNEQ != nil {
+		predicates = append(predicates, evidencehistory.AuditorReferenceIDNEQ(*i.AuditorReferenceIDNEQ))
+	}
+	if len(i.AuditorReferenceIDIn) > 0 {
+		predicates = append(predicates, evidencehistory.AuditorReferenceIDIn(i.AuditorReferenceIDIn...))
+	}
+	if len(i.AuditorReferenceIDNotIn) > 0 {
+		predicates = append(predicates, evidencehistory.AuditorReferenceIDNotIn(i.AuditorReferenceIDNotIn...))
+	}
+	if i.AuditorReferenceIDContains != nil {
+		predicates = append(predicates, evidencehistory.AuditorReferenceIDContains(*i.AuditorReferenceIDContains))
+	}
+	if i.AuditorReferenceIDHasPrefix != nil {
+		predicates = append(predicates, evidencehistory.AuditorReferenceIDHasPrefix(*i.AuditorReferenceIDHasPrefix))
+	}
+	if i.AuditorReferenceIDHasSuffix != nil {
+		predicates = append(predicates, evidencehistory.AuditorReferenceIDHasSuffix(*i.AuditorReferenceIDHasSuffix))
+	}
+	if i.AuditorReferenceIDIsNil {
+		predicates = append(predicates, evidencehistory.AuditorReferenceIDIsNil())
+	}
+	if i.AuditorReferenceIDNotNil {
+		predicates = append(predicates, evidencehistory.AuditorReferenceIDNotNil())
+	}
+	if i.AuditorReferenceIDEqualFold != nil {
+		predicates = append(predicates, evidencehistory.AuditorReferenceIDEqualFold(*i.AuditorReferenceIDEqualFold))
+	}
+	if i.AuditorReferenceIDContainsFold != nil {
+		predicates = append(predicates, evidencehistory.AuditorReferenceIDContainsFold(*i.AuditorReferenceIDContainsFold))
 	}
 
 	if i.TagsHas != nil {

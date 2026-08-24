@@ -2177,6 +2177,7 @@ type ComplexityRoot struct {
 
 	Evidence struct {
 		ActiveWorkflowInstances func(childComplexity int) int
+		AuditorReferenceID      func(childComplexity int) int
 		CollectionProcedure     func(childComplexity int) int
 		Comments                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
 		ControlImplementations  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
@@ -17591,6 +17592,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Evidence.ActiveWorkflowInstances(childComplexity), true
+	case "Evidence.auditorReferenceID":
+		if e.ComplexityRoot.Evidence.AuditorReferenceID == nil {
+			break
+		}
+
+		return e.ComplexityRoot.Evidence.AuditorReferenceID(childComplexity), true
 	case "Evidence.collectionProcedure":
 		if e.ComplexityRoot.Evidence.CollectionProcedure == nil {
 			break
@@ -67882,6 +67889,10 @@ input CreateEvidenceInput {
   the cadence for reviewing the evidence
   """
   reviewFrequency: EvidenceFrequency
+  """
+  external auditor id of the control, can be used to map to external audit partner mappings
+  """
+  auditorReferenceID: String
   ownerID: ID
   environmentID: ID
   scopeID: ID
@@ -80556,6 +80567,10 @@ type Evidence implements Node @modules(names: ["compliance_module","policy_manag
   the cadence for reviewing the evidence
   """
   reviewFrequency: EvidenceFrequency
+  """
+  external auditor id of the control, can be used to map to external audit partner mappings
+  """
+  auditorReferenceID: String
   owner: Organization
   environment: CustomTypeEnum
   scope: CustomTypeEnum
@@ -81275,6 +81290,20 @@ input EvidenceWhereInput {
   reviewFrequencyNotIn: [EvidenceFrequency!]
   reviewFrequencyIsNil: Boolean
   reviewFrequencyNotNil: Boolean
+  """
+  auditor_reference_id field predicates
+  """
+  auditorReferenceID: String
+  auditorReferenceIDNEQ: String
+  auditorReferenceIDIn: [String!]
+  auditorReferenceIDNotIn: [String!]
+  auditorReferenceIDContains: String
+  auditorReferenceIDHasPrefix: String
+  auditorReferenceIDHasSuffix: String
+  auditorReferenceIDIsNil: Boolean
+  auditorReferenceIDNotNil: Boolean
+  auditorReferenceIDEqualFold: String
+  auditorReferenceIDContainsFold: String
   """
   owner edge predicates
   """
@@ -127826,6 +127855,11 @@ input UpdateEvidenceInput {
   """
   reviewFrequency: EvidenceFrequency
   clearReviewFrequency: Boolean
+  """
+  external auditor id of the control, can be used to map to external audit partner mappings
+  """
+  auditorReferenceID: String
+  clearAuditorReferenceID: Boolean
   environmentID: ID
   clearEnvironment: Boolean
   scopeID: ID
@@ -157566,6 +157600,8 @@ func (ec *executionContext) childFields_Evidence(ctx context.Context, field grap
 		return ec.fieldContext_Evidence_status(ctx, field)
 	case "reviewFrequency":
 		return ec.fieldContext_Evidence_reviewFrequency(ctx, field)
+	case "auditorReferenceID":
+		return ec.fieldContext_Evidence_auditorReferenceID(ctx, field)
 	case "owner":
 		return ec.fieldContext_Evidence_owner(ctx, field)
 	case "environment":

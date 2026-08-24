@@ -8608,6 +8608,10 @@ type EvidenceHistory implements Node {
 	the cadence for reviewing the evidence
 	"""
 	reviewFrequency: EvidenceHistoryFrequency
+	"""
+	external auditor id of the control, can be used to map to external audit partner mappings
+	"""
+	auditorReferenceID: String
 }
 """
 A connection to a list of items.
@@ -9021,6 +9025,20 @@ input EvidenceHistoryWhereInput {
 	reviewFrequencyNotIn: [EvidenceHistoryFrequency!]
 	reviewFrequencyIsNil: Boolean
 	reviewFrequencyNotNil: Boolean
+	"""
+	auditor_reference_id field predicates
+	"""
+	auditorReferenceID: String
+	auditorReferenceIDNEQ: String
+	auditorReferenceIDIn: [String!]
+	auditorReferenceIDNotIn: [String!]
+	auditorReferenceIDContains: String
+	auditorReferenceIDHasPrefix: String
+	auditorReferenceIDHasSuffix: String
+	auditorReferenceIDIsNil: Boolean
+	auditorReferenceIDNotNil: Boolean
+	auditorReferenceIDEqualFold: String
+	auditorReferenceIDContainsFold: String
 }
 """
 The EvidenceRequests scalar type that represents documents or artifacts that can be collected to demonstrate compliance with a control

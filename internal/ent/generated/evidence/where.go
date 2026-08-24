@@ -182,6 +182,11 @@ func URL(v string) predicate.Evidence {
 	return predicate.Evidence(sql.FieldEQ(FieldURL, v))
 }
 
+// AuditorReferenceID applies equality check predicate on the "auditor_reference_id" field. It's identical to AuditorReferenceIDEQ.
+func AuditorReferenceID(v string) predicate.Evidence {
+	return predicate.Evidence(sql.FieldEQ(FieldAuditorReferenceID, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Evidence {
 	return predicate.Evidence(sql.FieldEQ(FieldCreatedAt, v))
@@ -1730,6 +1735,81 @@ func ReviewFrequencyIsNil() predicate.Evidence {
 // ReviewFrequencyNotNil applies the NotNil predicate on the "review_frequency" field.
 func ReviewFrequencyNotNil() predicate.Evidence {
 	return predicate.Evidence(sql.FieldNotNull(FieldReviewFrequency))
+}
+
+// AuditorReferenceIDEQ applies the EQ predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDEQ(v string) predicate.Evidence {
+	return predicate.Evidence(sql.FieldEQ(FieldAuditorReferenceID, v))
+}
+
+// AuditorReferenceIDNEQ applies the NEQ predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDNEQ(v string) predicate.Evidence {
+	return predicate.Evidence(sql.FieldNEQ(FieldAuditorReferenceID, v))
+}
+
+// AuditorReferenceIDIn applies the In predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDIn(vs ...string) predicate.Evidence {
+	return predicate.Evidence(sql.FieldIn(FieldAuditorReferenceID, vs...))
+}
+
+// AuditorReferenceIDNotIn applies the NotIn predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDNotIn(vs ...string) predicate.Evidence {
+	return predicate.Evidence(sql.FieldNotIn(FieldAuditorReferenceID, vs...))
+}
+
+// AuditorReferenceIDGT applies the GT predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDGT(v string) predicate.Evidence {
+	return predicate.Evidence(sql.FieldGT(FieldAuditorReferenceID, v))
+}
+
+// AuditorReferenceIDGTE applies the GTE predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDGTE(v string) predicate.Evidence {
+	return predicate.Evidence(sql.FieldGTE(FieldAuditorReferenceID, v))
+}
+
+// AuditorReferenceIDLT applies the LT predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDLT(v string) predicate.Evidence {
+	return predicate.Evidence(sql.FieldLT(FieldAuditorReferenceID, v))
+}
+
+// AuditorReferenceIDLTE applies the LTE predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDLTE(v string) predicate.Evidence {
+	return predicate.Evidence(sql.FieldLTE(FieldAuditorReferenceID, v))
+}
+
+// AuditorReferenceIDContains applies the Contains predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDContains(v string) predicate.Evidence {
+	return predicate.Evidence(sql.FieldContains(FieldAuditorReferenceID, v))
+}
+
+// AuditorReferenceIDHasPrefix applies the HasPrefix predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDHasPrefix(v string) predicate.Evidence {
+	return predicate.Evidence(sql.FieldHasPrefix(FieldAuditorReferenceID, v))
+}
+
+// AuditorReferenceIDHasSuffix applies the HasSuffix predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDHasSuffix(v string) predicate.Evidence {
+	return predicate.Evidence(sql.FieldHasSuffix(FieldAuditorReferenceID, v))
+}
+
+// AuditorReferenceIDIsNil applies the IsNil predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDIsNil() predicate.Evidence {
+	return predicate.Evidence(sql.FieldIsNull(FieldAuditorReferenceID))
+}
+
+// AuditorReferenceIDNotNil applies the NotNil predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDNotNil() predicate.Evidence {
+	return predicate.Evidence(sql.FieldNotNull(FieldAuditorReferenceID))
+}
+
+// AuditorReferenceIDEqualFold applies the EqualFold predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDEqualFold(v string) predicate.Evidence {
+	return predicate.Evidence(sql.FieldEqualFold(FieldAuditorReferenceID, v))
+}
+
+// AuditorReferenceIDContainsFold applies the ContainsFold predicate on the "auditor_reference_id" field.
+func AuditorReferenceIDContainsFold(v string) predicate.Evidence {
+	return predicate.Evidence(sql.FieldContainsFold(FieldAuditorReferenceID, v))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

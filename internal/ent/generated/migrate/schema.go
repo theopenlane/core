@@ -2535,6 +2535,7 @@ var (
 		{Name: "url", Type: field.TypeString, Nullable: true},
 		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"REQUESTED", "DRAFT", "SUBMITTED", "READY_FOR_AUDITOR", "AUDITOR_APPROVED", "IN_REVIEW", "MISSING_ARTIFACT", "NEEDS_RENEWAL", "REJECTED"}},
 		{Name: "review_frequency", Type: field.TypeEnum, Nullable: true, Enums: []string{"YEARLY", "QUARTERLY", "BIANNUALLY", "MONTHLY", "NONE", "BIENNIALLY", "TRIENNIALLY"}, Default: "YEARLY"},
+		{Name: "auditor_reference_id", Type: field.TypeString, Nullable: true},
 		{Name: "environment_id", Type: field.TypeString, Nullable: true},
 		{Name: "scope_id", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
@@ -2547,19 +2548,19 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "evidences_custom_type_enums_environment",
-				Columns:    []*schema.Column{EvidencesColumns[24]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "evidences_custom_type_enums_scope",
 				Columns:    []*schema.Column{EvidencesColumns[25]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "evidences_organizations_evidence",
+				Symbol:     "evidences_custom_type_enums_scope",
 				Columns:    []*schema.Column{EvidencesColumns[26]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "evidences_organizations_evidence",
+				Columns:    []*schema.Column{EvidencesColumns[27]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2568,17 +2569,17 @@ var (
 			{
 				Name:    "evidence_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{EvidencesColumns[8], EvidencesColumns[26]},
+				Columns: []*schema.Column{EvidencesColumns[8], EvidencesColumns[27]},
 			},
 			{
 				Name:    "evidence_owner_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{EvidencesColumns[26]},
+				Columns: []*schema.Column{EvidencesColumns[27]},
 			},
 			{
 				Name:    "evidence_external_uuid_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{EvidencesColumns[13], EvidencesColumns[26]},
+				Columns: []*schema.Column{EvidencesColumns[13], EvidencesColumns[27]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},

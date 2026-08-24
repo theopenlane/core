@@ -45622,6 +45622,7 @@ func (t *UpdateEvent_UpdateEvent) GetEvent() *UpdateEvent_UpdateEvent_Event {
 }
 
 type CreateBulkCSVEvidence_CreateBulkCSVEvidence_Evidences struct {
+	AuditorReferenceID     *string               "json:\"auditorReferenceID,omitempty\" graphql:\"auditorReferenceID\""
 	CollectionProcedure    *string               "json:\"collectionProcedure,omitempty\" graphql:\"collectionProcedure\""
 	CreatedAt              *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy              *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
@@ -45649,6 +45650,12 @@ type CreateBulkCSVEvidence_CreateBulkCSVEvidence_Evidences struct {
 	WorkflowEligibleMarker *bool                 "json:\"workflowEligibleMarker,omitempty\" graphql:\"workflowEligibleMarker\""
 }
 
+func (t *CreateBulkCSVEvidence_CreateBulkCSVEvidence_Evidences) GetAuditorReferenceID() *string {
+	if t == nil {
+		t = &CreateBulkCSVEvidence_CreateBulkCSVEvidence_Evidences{}
+	}
+	return t.AuditorReferenceID
+}
 func (t *CreateBulkCSVEvidence_CreateBulkCSVEvidence_Evidences) GetCollectionProcedure() *string {
 	if t == nil {
 		t = &CreateBulkCSVEvidence_CreateBulkCSVEvidence_Evidences{}
@@ -47004,6 +47011,7 @@ func (t *GetEvidenceByID_Evidence_ControlObjectives) GetEdges() []*GetEvidenceBy
 }
 
 type GetEvidenceByID_Evidence struct {
+	AuditorReferenceID     *string                                    "json:\"auditorReferenceID,omitempty\" graphql:\"auditorReferenceID\""
 	CollectionProcedure    *string                                    "json:\"collectionProcedure,omitempty\" graphql:\"collectionProcedure\""
 	ControlObjectives      GetEvidenceByID_Evidence_ControlObjectives "json:\"controlObjectives\" graphql:\"controlObjectives\""
 	Controls               GetEvidenceByID_Evidence_Controls          "json:\"controls\" graphql:\"controls\""
@@ -47037,6 +47045,12 @@ type GetEvidenceByID_Evidence struct {
 	WorkflowEligibleMarker *bool                                      "json:\"workflowEligibleMarker,omitempty\" graphql:\"workflowEligibleMarker\""
 }
 
+func (t *GetEvidenceByID_Evidence) GetAuditorReferenceID() *string {
+	if t == nil {
+		t = &GetEvidenceByID_Evidence{}
+	}
+	return t.AuditorReferenceID
+}
 func (t *GetEvidenceByID_Evidence) GetCollectionProcedure() *string {
 	if t == nil {
 		t = &GetEvidenceByID_Evidence{}
@@ -47680,6 +47694,7 @@ func (t *GetEvidences_Evidences) GetEdges() []*GetEvidences_Evidences_Edges {
 }
 
 type UpdateBulkEvidence_UpdateBulkEvidence_Evidences struct {
+	AuditorReferenceID     *string               "json:\"auditorReferenceID,omitempty\" graphql:\"auditorReferenceID\""
 	CollectionProcedure    *string               "json:\"collectionProcedure,omitempty\" graphql:\"collectionProcedure\""
 	CreatedAt              *time.Time            "json:\"createdAt,omitempty\" graphql:\"createdAt\""
 	CreatedBy              *string               "json:\"createdBy,omitempty\" graphql:\"createdBy\""
@@ -47707,6 +47722,12 @@ type UpdateBulkEvidence_UpdateBulkEvidence_Evidences struct {
 	WorkflowEligibleMarker *bool                 "json:\"workflowEligibleMarker,omitempty\" graphql:\"workflowEligibleMarker\""
 }
 
+func (t *UpdateBulkEvidence_UpdateBulkEvidence_Evidences) GetAuditorReferenceID() *string {
+	if t == nil {
+		t = &UpdateBulkEvidence_UpdateBulkEvidence_Evidences{}
+	}
+	return t.AuditorReferenceID
+}
 func (t *UpdateBulkEvidence_UpdateBulkEvidence_Evidences) GetCollectionProcedure() *string {
 	if t == nil {
 		t = &UpdateBulkEvidence_UpdateBulkEvidence_Evidences{}
@@ -182252,6 +182273,7 @@ func (c *Client) UpdateEvent(ctx context.Context, updateEventID string, input Up
 const CreateBulkCSVEvidenceDocument = `mutation CreateBulkCSVEvidence ($input: Upload!) {
 	createBulkCSVEvidence(input: $input) {
 		evidences {
+			auditorReferenceID
 			collectionProcedure
 			createdAt
 			createdBy
@@ -182516,6 +182538,7 @@ func (c *Client) GetAllEvidences(ctx context.Context, interceptors ...clientv2.R
 
 const GetEvidenceByIDDocument = `query GetEvidenceByID ($evidenceId: ID!) {
 	evidence(id: $evidenceId) {
+		auditorReferenceID
 		collectionProcedure
 		createdAt
 		createdBy
@@ -182713,6 +182736,7 @@ func (c *Client) GetEvidences(ctx context.Context, where *EvidenceWhereInput, in
 const UpdateBulkEvidenceDocument = `mutation UpdateBulkEvidence ($ids: [ID!]!, $input: UpdateEvidenceInput!) {
 	updateBulkEvidence(ids: $ids, input: $input) {
 		evidences {
+			auditorReferenceID
 			collectionProcedure
 			createdAt
 			createdBy

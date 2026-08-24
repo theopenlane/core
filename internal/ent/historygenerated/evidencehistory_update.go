@@ -142,6 +142,9 @@ func (_u *EvidenceHistoryUpdate) sqlSave(ctx context.Context) (_node int, err er
 	if _u.mutation.ReviewFrequencyCleared() {
 		_spec.ClearField(evidencehistory.FieldReviewFrequency, field.TypeEnum)
 	}
+	if _u.mutation.AuditorReferenceIDCleared() {
+		_spec.ClearField(evidencehistory.FieldAuditorReferenceID, field.TypeString)
+	}
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{evidencehistory.Label}
@@ -304,6 +307,9 @@ func (_u *EvidenceHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Evidenc
 	}
 	if _u.mutation.ReviewFrequencyCleared() {
 		_spec.ClearField(evidencehistory.FieldReviewFrequency, field.TypeEnum)
+	}
+	if _u.mutation.AuditorReferenceIDCleared() {
+		_spec.ClearField(evidencehistory.FieldAuditorReferenceID, field.TypeString)
 	}
 	_node = &EvidenceHistory{config: _u.config}
 	_spec.Assign = _node.assignValues

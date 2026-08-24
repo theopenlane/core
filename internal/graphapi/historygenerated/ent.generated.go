@@ -18692,6 +18692,29 @@ func (ec *executionContext) fieldContext_EvidenceHistory_reviewFrequency(_ conte
 	return graphql.NewScalarFieldContext("EvidenceHistory", field, false, false, errors.New("field of type EvidenceHistoryFrequency does not have child fields"))
 }
 
+func (ec *executionContext) _EvidenceHistory_auditorReferenceID(ctx context.Context, field graphql.CollectedField, obj *historygenerated.EvidenceHistory) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			return ec.fieldContext_EvidenceHistory_auditorReferenceID(ctx, field)
+		},
+		func(ctx context.Context) (any, error) {
+			return obj.AuditorReferenceID, nil
+		},
+		nil,
+		func(ctx context.Context, selections ast.SelectionSet, v string) graphql.Marshaler {
+			return ec.marshalOString2string(ctx, selections, v)
+		},
+		true,
+		false,
+	)
+}
+func (ec *executionContext) fieldContext_EvidenceHistory_auditorReferenceID(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	return graphql.NewScalarFieldContext("EvidenceHistory", field, false, false, errors.New("field of type String does not have child fields"))
+}
+
 func (ec *executionContext) _EvidenceHistoryConnection_edges(ctx context.Context, field graphql.CollectedField, obj *historygenerated.EvidenceHistoryConnection) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -90141,7 +90164,7 @@ func (ec *executionContext) unmarshalInputEvidenceHistoryWhereInput(ctx context.
 		asMap[k] = v
 	}
 
-	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "externalUUID", "externalUUIDNEQ", "externalUUIDIn", "externalUUIDNotIn", "externalUUIDContains", "externalUUIDHasPrefix", "externalUUIDHasSuffix", "externalUUIDIsNil", "externalUUIDNotNil", "externalUUIDEqualFold", "externalUUIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "collectionProcedure", "collectionProcedureNEQ", "collectionProcedureIn", "collectionProcedureNotIn", "collectionProcedureContains", "collectionProcedureHasPrefix", "collectionProcedureHasSuffix", "collectionProcedureIsNil", "collectionProcedureNotNil", "collectionProcedureEqualFold", "collectionProcedureContainsFold", "creationDate", "creationDateGT", "creationDateGTE", "creationDateLT", "creationDateLTE", "renewalDate", "renewalDateGT", "renewalDateGTE", "renewalDateLT", "renewalDateLTE", "renewalDateIsNil", "renewalDateNotNil", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceContains", "sourceHasPrefix", "sourceHasSuffix", "sourceIsNil", "sourceNotNil", "sourceEqualFold", "sourceContainsFold", "isAutomated", "isAutomatedNEQ", "isAutomatedIsNil", "isAutomatedNotNil", "url", "urlNEQ", "urlIn", "urlNotIn", "urlContains", "urlHasPrefix", "urlHasSuffix", "urlIsNil", "urlNotNil", "urlEqualFold", "urlContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "reviewFrequency", "reviewFrequencyNEQ", "reviewFrequencyIn", "reviewFrequencyNotIn", "reviewFrequencyIsNil", "reviewFrequencyNotNil"}
+	fieldsInOrder := [...]string{"not", "and", "or", "id", "idNEQ", "idIn", "idNotIn", "idEqualFold", "idContainsFold", "historyTime", "historyTimeGT", "historyTimeGTE", "historyTimeLT", "historyTimeLTE", "ref", "refNEQ", "refIn", "refNotIn", "refContains", "refHasPrefix", "refHasSuffix", "refIsNil", "refNotNil", "refEqualFold", "refContainsFold", "operation", "operationNEQ", "operationIn", "operationNotIn", "createdAt", "createdAtGT", "createdAtGTE", "createdAtLT", "createdAtLTE", "createdAtIsNil", "createdAtNotNil", "updatedAt", "updatedAtGT", "updatedAtGTE", "updatedAtLT", "updatedAtLTE", "updatedAtIsNil", "updatedAtNotNil", "createdBy", "createdByNEQ", "createdByIn", "createdByNotIn", "createdByContains", "createdByHasPrefix", "createdByHasSuffix", "createdByIsNil", "createdByNotNil", "createdByEqualFold", "createdByContainsFold", "updatedBy", "updatedByNEQ", "updatedByIn", "updatedByNotIn", "updatedByContains", "updatedByHasPrefix", "updatedByHasSuffix", "updatedByIsNil", "updatedByNotNil", "updatedByEqualFold", "updatedByContainsFold", "updatedByImpersonator", "updatedByImpersonatorNEQ", "updatedByImpersonatorIn", "updatedByImpersonatorNotIn", "updatedByImpersonatorContains", "updatedByImpersonatorHasPrefix", "updatedByImpersonatorHasSuffix", "updatedByImpersonatorIsNil", "updatedByImpersonatorNotNil", "updatedByImpersonatorEqualFold", "updatedByImpersonatorContainsFold", "displayID", "displayIDNEQ", "displayIDIn", "displayIDNotIn", "displayIDContains", "displayIDHasPrefix", "displayIDHasSuffix", "displayIDEqualFold", "displayIDContainsFold", "ownerID", "ownerIDNEQ", "ownerIDIn", "ownerIDNotIn", "ownerIDContains", "ownerIDHasPrefix", "ownerIDHasSuffix", "ownerIDIsNil", "ownerIDNotNil", "ownerIDEqualFold", "ownerIDContainsFold", "environmentName", "environmentNameNEQ", "environmentNameIn", "environmentNameNotIn", "environmentNameContains", "environmentNameHasPrefix", "environmentNameHasSuffix", "environmentNameIsNil", "environmentNameNotNil", "environmentNameEqualFold", "environmentNameContainsFold", "environmentID", "environmentIDNEQ", "environmentIDIn", "environmentIDNotIn", "environmentIDContains", "environmentIDHasPrefix", "environmentIDHasSuffix", "environmentIDIsNil", "environmentIDNotNil", "environmentIDEqualFold", "environmentIDContainsFold", "scopeName", "scopeNameNEQ", "scopeNameIn", "scopeNameNotIn", "scopeNameContains", "scopeNameHasPrefix", "scopeNameHasSuffix", "scopeNameIsNil", "scopeNameNotNil", "scopeNameEqualFold", "scopeNameContainsFold", "scopeID", "scopeIDNEQ", "scopeIDIn", "scopeIDNotIn", "scopeIDContains", "scopeIDHasPrefix", "scopeIDHasSuffix", "scopeIDIsNil", "scopeIDNotNil", "scopeIDEqualFold", "scopeIDContainsFold", "workflowEligibleMarker", "workflowEligibleMarkerNEQ", "workflowEligibleMarkerIsNil", "workflowEligibleMarkerNotNil", "externalUUID", "externalUUIDNEQ", "externalUUIDIn", "externalUUIDNotIn", "externalUUIDContains", "externalUUIDHasPrefix", "externalUUIDHasSuffix", "externalUUIDIsNil", "externalUUIDNotNil", "externalUUIDEqualFold", "externalUUIDContainsFold", "name", "nameNEQ", "nameIn", "nameNotIn", "nameContains", "nameHasPrefix", "nameHasSuffix", "nameEqualFold", "nameContainsFold", "description", "descriptionNEQ", "descriptionIn", "descriptionNotIn", "descriptionContains", "descriptionHasPrefix", "descriptionHasSuffix", "descriptionIsNil", "descriptionNotNil", "descriptionEqualFold", "descriptionContainsFold", "collectionProcedure", "collectionProcedureNEQ", "collectionProcedureIn", "collectionProcedureNotIn", "collectionProcedureContains", "collectionProcedureHasPrefix", "collectionProcedureHasSuffix", "collectionProcedureIsNil", "collectionProcedureNotNil", "collectionProcedureEqualFold", "collectionProcedureContainsFold", "creationDate", "creationDateGT", "creationDateGTE", "creationDateLT", "creationDateLTE", "renewalDate", "renewalDateGT", "renewalDateGTE", "renewalDateLT", "renewalDateLTE", "renewalDateIsNil", "renewalDateNotNil", "source", "sourceNEQ", "sourceIn", "sourceNotIn", "sourceContains", "sourceHasPrefix", "sourceHasSuffix", "sourceIsNil", "sourceNotNil", "sourceEqualFold", "sourceContainsFold", "isAutomated", "isAutomatedNEQ", "isAutomatedIsNil", "isAutomatedNotNil", "url", "urlNEQ", "urlIn", "urlNotIn", "urlContains", "urlHasPrefix", "urlHasSuffix", "urlIsNil", "urlNotNil", "urlEqualFold", "urlContainsFold", "status", "statusNEQ", "statusIn", "statusNotIn", "statusIsNil", "statusNotNil", "reviewFrequency", "reviewFrequencyNEQ", "reviewFrequencyIn", "reviewFrequencyNotIn", "reviewFrequencyIsNil", "reviewFrequencyNotNil", "auditorReferenceID", "auditorReferenceIDNEQ", "auditorReferenceIDIn", "auditorReferenceIDNotIn", "auditorReferenceIDContains", "auditorReferenceIDHasPrefix", "auditorReferenceIDHasSuffix", "auditorReferenceIDIsNil", "auditorReferenceIDNotNil", "auditorReferenceIDEqualFold", "auditorReferenceIDContainsFold"}
 	for _, k := range fieldsInOrder {
 		v, ok := asMap[k]
 		if !ok {
@@ -91800,6 +91823,83 @@ func (ec *executionContext) unmarshalInputEvidenceHistoryWhereInput(ctx context.
 				return it, err
 			}
 			it.ReviewFrequencyNotNil = data
+		case "auditorReferenceID":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("auditorReferenceID"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AuditorReferenceID = data
+		case "auditorReferenceIDNEQ":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("auditorReferenceIDNEQ"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AuditorReferenceIDNEQ = data
+		case "auditorReferenceIDIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("auditorReferenceIDIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AuditorReferenceIDIn = data
+		case "auditorReferenceIDNotIn":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("auditorReferenceIDNotIn"))
+			data, err := ec.unmarshalOString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AuditorReferenceIDNotIn = data
+		case "auditorReferenceIDContains":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("auditorReferenceIDContains"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AuditorReferenceIDContains = data
+		case "auditorReferenceIDHasPrefix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("auditorReferenceIDHasPrefix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AuditorReferenceIDHasPrefix = data
+		case "auditorReferenceIDHasSuffix":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("auditorReferenceIDHasSuffix"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AuditorReferenceIDHasSuffix = data
+		case "auditorReferenceIDIsNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("auditorReferenceIDIsNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AuditorReferenceIDIsNil = data
+		case "auditorReferenceIDNotNil":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("auditorReferenceIDNotNil"))
+			data, err := ec.unmarshalOBoolean2bool(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AuditorReferenceIDNotNil = data
+		case "auditorReferenceIDEqualFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("auditorReferenceIDEqualFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AuditorReferenceIDEqualFold = data
+		case "auditorReferenceIDContainsFold":
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("auditorReferenceIDContainsFold"))
+			data, err := ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+			it.AuditorReferenceIDContainsFold = data
 		}
 	}
 	return it, nil
@@ -176165,6 +176265,11 @@ func (ec *executionContext) _EvidenceHistory(ctx context.Context, sel ast.Select
 			}
 		case "reviewFrequency":
 			out.Values[i] = ec._EvidenceHistory_reviewFrequency(ctx, field, obj)
+			if out.Values[i] == graphql.RequiredNull {
+				out.Invalids++
+			}
+		case "auditorReferenceID":
+			out.Values[i] = ec._EvidenceHistory_auditorReferenceID(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}

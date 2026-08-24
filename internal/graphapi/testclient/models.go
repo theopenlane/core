@@ -6833,21 +6833,23 @@ type CreateEvidenceInput struct {
 	// the status of the evidence, ready, approved, needs renewal, missing artifact, rejected
 	Status *enums.EvidenceStatus `json:"status,omitempty"`
 	// the cadence for reviewing the evidence
-	ReviewFrequency          *enums.Frequency `json:"reviewFrequency,omitempty"`
-	OwnerID                  *string          `json:"ownerID,omitempty"`
-	EnvironmentID            *string          `json:"environmentID,omitempty"`
-	ScopeID                  *string          `json:"scopeID,omitempty"`
-	ControlIDs               []string         `json:"controlIDs,omitempty"`
-	SubcontrolIDs            []string         `json:"subcontrolIDs,omitempty"`
-	ControlObjectiveIDs      []string         `json:"controlObjectiveIDs,omitempty"`
-	ControlImplementationIDs []string         `json:"controlImplementationIDs,omitempty"`
-	FileIDs                  []string         `json:"fileIDs,omitempty"`
-	ProgramIDs               []string         `json:"programIDs,omitempty"`
-	TaskIDs                  []string         `json:"taskIDs,omitempty"`
-	PlatformIDs              []string         `json:"platformIDs,omitempty"`
-	ScanIDs                  []string         `json:"scanIDs,omitempty"`
-	CommentIDs               []string         `json:"commentIDs,omitempty"`
-	WorkflowObjectRefIDs     []string         `json:"workflowObjectRefIDs,omitempty"`
+	ReviewFrequency *enums.Frequency `json:"reviewFrequency,omitempty"`
+	// external auditor id of the control, can be used to map to external audit partner mappings
+	AuditorReferenceID       *string  `json:"auditorReferenceID,omitempty"`
+	OwnerID                  *string  `json:"ownerID,omitempty"`
+	EnvironmentID            *string  `json:"environmentID,omitempty"`
+	ScopeID                  *string  `json:"scopeID,omitempty"`
+	ControlIDs               []string `json:"controlIDs,omitempty"`
+	SubcontrolIDs            []string `json:"subcontrolIDs,omitempty"`
+	ControlObjectiveIDs      []string `json:"controlObjectiveIDs,omitempty"`
+	ControlImplementationIDs []string `json:"controlImplementationIDs,omitempty"`
+	FileIDs                  []string `json:"fileIDs,omitempty"`
+	ProgramIDs               []string `json:"programIDs,omitempty"`
+	TaskIDs                  []string `json:"taskIDs,omitempty"`
+	PlatformIDs              []string `json:"platformIDs,omitempty"`
+	ScanIDs                  []string `json:"scanIDs,omitempty"`
+	CommentIDs               []string `json:"commentIDs,omitempty"`
+	WorkflowObjectRefIDs     []string `json:"workflowObjectRefIDs,omitempty"`
 }
 
 // CreateExportInput is used for create Export object.
@@ -14514,7 +14516,9 @@ type Evidence struct {
 	// the status of the evidence, ready, approved, needs renewal, missing artifact, rejected
 	Status *enums.EvidenceStatus `json:"status,omitempty"`
 	// the cadence for reviewing the evidence
-	ReviewFrequency        *enums.Frequency                 `json:"reviewFrequency,omitempty"`
+	ReviewFrequency *enums.Frequency `json:"reviewFrequency,omitempty"`
+	// external auditor id of the control, can be used to map to external audit partner mappings
+	AuditorReferenceID     *string                          `json:"auditorReferenceID,omitempty"`
 	Owner                  *Organization                    `json:"owner,omitempty"`
 	Environment            *CustomTypeEnum                  `json:"environment,omitempty"`
 	Scope                  *CustomTypeEnum                  `json:"scope,omitempty"`
@@ -14864,6 +14868,18 @@ type EvidenceWhereInput struct {
 	ReviewFrequencyNotIn  []enums.Frequency `json:"reviewFrequencyNotIn,omitempty"`
 	ReviewFrequencyIsNil  *bool             `json:"reviewFrequencyIsNil,omitempty"`
 	ReviewFrequencyNotNil *bool             `json:"reviewFrequencyNotNil,omitempty"`
+	// auditor_reference_id field predicates
+	AuditorReferenceID             *string  `json:"auditorReferenceID,omitempty"`
+	AuditorReferenceIdneq          *string  `json:"auditorReferenceIDNEQ,omitempty"`
+	AuditorReferenceIDIn           []string `json:"auditorReferenceIDIn,omitempty"`
+	AuditorReferenceIDNotIn        []string `json:"auditorReferenceIDNotIn,omitempty"`
+	AuditorReferenceIDContains     *string  `json:"auditorReferenceIDContains,omitempty"`
+	AuditorReferenceIDHasPrefix    *string  `json:"auditorReferenceIDHasPrefix,omitempty"`
+	AuditorReferenceIDHasSuffix    *string  `json:"auditorReferenceIDHasSuffix,omitempty"`
+	AuditorReferenceIDIsNil        *bool    `json:"auditorReferenceIDIsNil,omitempty"`
+	AuditorReferenceIDNotNil       *bool    `json:"auditorReferenceIDNotNil,omitempty"`
+	AuditorReferenceIDEqualFold    *string  `json:"auditorReferenceIDEqualFold,omitempty"`
+	AuditorReferenceIDContainsFold *string  `json:"auditorReferenceIDContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -36879,8 +36895,11 @@ type UpdateEvidenceInput struct {
 	Status      *enums.EvidenceStatus `json:"status,omitempty"`
 	ClearStatus *bool                 `json:"clearStatus,omitempty"`
 	// the cadence for reviewing the evidence
-	ReviewFrequency                *enums.Frequency `json:"reviewFrequency,omitempty"`
-	ClearReviewFrequency           *bool            `json:"clearReviewFrequency,omitempty"`
+	ReviewFrequency      *enums.Frequency `json:"reviewFrequency,omitempty"`
+	ClearReviewFrequency *bool            `json:"clearReviewFrequency,omitempty"`
+	// external auditor id of the control, can be used to map to external audit partner mappings
+	AuditorReferenceID             *string          `json:"auditorReferenceID,omitempty"`
+	ClearAuditorReferenceID        *bool            `json:"clearAuditorReferenceID,omitempty"`
 	EnvironmentID                  *string          `json:"environmentID,omitempty"`
 	ClearEnvironment               *bool            `json:"clearEnvironment,omitempty"`
 	ScopeID                        *string          `json:"scopeID,omitempty"`

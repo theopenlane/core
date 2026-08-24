@@ -462,6 +462,26 @@ func (_u *EvidenceUpdate) ClearReviewFrequency() *EvidenceUpdate {
 	return _u
 }
 
+// SetAuditorReferenceID sets the "auditor_reference_id" field.
+func (_u *EvidenceUpdate) SetAuditorReferenceID(v string) *EvidenceUpdate {
+	_u.mutation.SetAuditorReferenceID(v)
+	return _u
+}
+
+// SetNillableAuditorReferenceID sets the "auditor_reference_id" field if the given value is not nil.
+func (_u *EvidenceUpdate) SetNillableAuditorReferenceID(v *string) *EvidenceUpdate {
+	if v != nil {
+		_u.SetAuditorReferenceID(*v)
+	}
+	return _u
+}
+
+// ClearAuditorReferenceID clears the value of the "auditor_reference_id" field.
+func (_u *EvidenceUpdate) ClearAuditorReferenceID() *EvidenceUpdate {
+	_u.mutation.ClearAuditorReferenceID()
+	return _u
+}
+
 // SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
 func (_u *EvidenceUpdate) SetEnvironment(v *CustomTypeEnum) *EvidenceUpdate {
 	return _u.SetEnvironmentID(v.ID)
@@ -1094,6 +1114,12 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.ReviewFrequencyCleared() {
 		_spec.ClearField(evidence.FieldReviewFrequency, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.AuditorReferenceID(); ok {
+		_spec.SetField(evidence.FieldAuditorReferenceID, field.TypeString, value)
+	}
+	if _u.mutation.AuditorReferenceIDCleared() {
+		_spec.ClearField(evidence.FieldAuditorReferenceID, field.TypeString)
 	}
 	if _u.mutation.EnvironmentCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -2088,6 +2114,26 @@ func (_u *EvidenceUpdateOne) ClearReviewFrequency() *EvidenceUpdateOne {
 	return _u
 }
 
+// SetAuditorReferenceID sets the "auditor_reference_id" field.
+func (_u *EvidenceUpdateOne) SetAuditorReferenceID(v string) *EvidenceUpdateOne {
+	_u.mutation.SetAuditorReferenceID(v)
+	return _u
+}
+
+// SetNillableAuditorReferenceID sets the "auditor_reference_id" field if the given value is not nil.
+func (_u *EvidenceUpdateOne) SetNillableAuditorReferenceID(v *string) *EvidenceUpdateOne {
+	if v != nil {
+		_u.SetAuditorReferenceID(*v)
+	}
+	return _u
+}
+
+// ClearAuditorReferenceID clears the value of the "auditor_reference_id" field.
+func (_u *EvidenceUpdateOne) ClearAuditorReferenceID() *EvidenceUpdateOne {
+	_u.mutation.ClearAuditorReferenceID()
+	return _u
+}
+
 // SetEnvironment sets the "environment" edge to the CustomTypeEnum entity.
 func (_u *EvidenceUpdateOne) SetEnvironment(v *CustomTypeEnum) *EvidenceUpdateOne {
 	return _u.SetEnvironmentID(v.ID)
@@ -2750,6 +2796,12 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 	}
 	if _u.mutation.ReviewFrequencyCleared() {
 		_spec.ClearField(evidence.FieldReviewFrequency, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.AuditorReferenceID(); ok {
+		_spec.SetField(evidence.FieldAuditorReferenceID, field.TypeString, value)
+	}
+	if _u.mutation.AuditorReferenceIDCleared() {
+		_spec.ClearField(evidence.FieldAuditorReferenceID, field.TypeString)
 	}
 	if _u.mutation.EnvironmentCleared() {
 		edge := &sqlgraph.EdgeSpec{

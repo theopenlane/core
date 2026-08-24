@@ -9026,6 +9026,7 @@ type CreateEvidenceInput struct {
 	URL                      *string               `json:"url,omitempty"`
 	Status                   *enums.EvidenceStatus `json:"status,omitempty"`
 	ReviewFrequency          *enums.Frequency      `json:"review_frequency,omitempty"`
+	AuditorReferenceID       *string               `json:"auditor_reference_id,omitempty"`
 	OwnerID                  *string               `json:"owner_id,omitempty"`
 	EnvironmentID            *string               `json:"environment_id,omitempty"`
 	ScopeID                  *string               `json:"scope_id,omitempty"`
@@ -9086,6 +9087,9 @@ func (i *CreateEvidenceInput) Mutate(m *EvidenceMutation) {
 	}
 	if v := i.ReviewFrequency; v != nil {
 		m.SetReviewFrequency(*v)
+	}
+	if v := i.AuditorReferenceID; v != nil {
+		m.SetAuditorReferenceID(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -9168,6 +9172,8 @@ type UpdateEvidenceInput struct {
 	Status                         *enums.EvidenceStatus `json:"status,omitempty"`
 	ClearReviewFrequency           bool
 	ReviewFrequency                *enums.Frequency `json:"review_frequency,omitempty"`
+	ClearAuditorReferenceID        bool
+	AuditorReferenceID             *string `json:"auditor_reference_id,omitempty"`
 	ClearEnvironment               bool
 	EnvironmentID                  *string `json:"environment_id,omitempty"`
 	ClearScope                     bool
@@ -9295,6 +9301,12 @@ func (i *UpdateEvidenceInput) Mutate(m *EvidenceMutation) {
 	}
 	if v := i.ReviewFrequency; v != nil {
 		m.SetReviewFrequency(*v)
+	}
+	if i.ClearAuditorReferenceID {
+		m.ClearAuditorReferenceID()
+	}
+	if v := i.AuditorReferenceID; v != nil {
+		m.SetAuditorReferenceID(*v)
 	}
 	if i.ClearEnvironment {
 		m.ClearEnvironment()

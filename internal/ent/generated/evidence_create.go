@@ -375,6 +375,20 @@ func (_c *EvidenceCreate) SetNillableReviewFrequency(v *enums.Frequency) *Eviden
 	return _c
 }
 
+// SetAuditorReferenceID sets the "auditor_reference_id" field.
+func (_c *EvidenceCreate) SetAuditorReferenceID(v string) *EvidenceCreate {
+	_c.mutation.SetAuditorReferenceID(v)
+	return _c
+}
+
+// SetNillableAuditorReferenceID sets the "auditor_reference_id" field if the given value is not nil.
+func (_c *EvidenceCreate) SetNillableAuditorReferenceID(v *string) *EvidenceCreate {
+	if v != nil {
+		_c.SetAuditorReferenceID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *EvidenceCreate) SetID(v string) *EvidenceCreate {
 	_c.mutation.SetID(v)
@@ -827,6 +841,10 @@ func (_c *EvidenceCreate) createSpec() (*Evidence, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.ReviewFrequency(); ok {
 		_spec.SetField(evidence.FieldReviewFrequency, field.TypeEnum, value)
 		_node.ReviewFrequency = value
+	}
+	if value, ok := _c.mutation.AuditorReferenceID(); ok {
+		_spec.SetField(evidence.FieldAuditorReferenceID, field.TypeString, value)
+		_node.AuditorReferenceID = value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

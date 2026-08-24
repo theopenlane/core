@@ -74,6 +74,8 @@ type Evidence struct {
 	Status enums.EvidenceStatus `json:"status,omitempty"`
 	// the cadence for reviewing the evidence
 	ReviewFrequency enums.Frequency `json:"review_frequency,omitempty"`
+	// external auditor id of the control, can be used to map to external audit partner mappings
+	AuditorReferenceID string `json:"auditor_reference_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the EvidenceQuery when eager-loading is set.
 	Edges        EvidenceEdges `json:"edges"`
@@ -272,7 +274,7 @@ func (*Evidence) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case evidence.FieldWorkflowEligibleMarker, evidence.FieldIsAutomated:
 			values[i] = new(sql.NullBool)
-		case evidence.FieldID, evidence.FieldCreatedBy, evidence.FieldUpdatedBy, evidence.FieldUpdatedByImpersonator, evidence.FieldDeletedBy, evidence.FieldDisplayID, evidence.FieldOwnerID, evidence.FieldEnvironmentName, evidence.FieldEnvironmentID, evidence.FieldScopeName, evidence.FieldScopeID, evidence.FieldExternalUUID, evidence.FieldName, evidence.FieldDescription, evidence.FieldCollectionProcedure, evidence.FieldSource, evidence.FieldURL, evidence.FieldStatus, evidence.FieldReviewFrequency:
+		case evidence.FieldID, evidence.FieldCreatedBy, evidence.FieldUpdatedBy, evidence.FieldUpdatedByImpersonator, evidence.FieldDeletedBy, evidence.FieldDisplayID, evidence.FieldOwnerID, evidence.FieldEnvironmentName, evidence.FieldEnvironmentID, evidence.FieldScopeName, evidence.FieldScopeID, evidence.FieldExternalUUID, evidence.FieldName, evidence.FieldDescription, evidence.FieldCollectionProcedure, evidence.FieldSource, evidence.FieldURL, evidence.FieldStatus, evidence.FieldReviewFrequency, evidence.FieldAuditorReferenceID:
 			values[i] = new(sql.NullString)
 		case evidence.FieldCreatedAt, evidence.FieldUpdatedAt, evidence.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -458,6 +460,12 @@ func (_m *Evidence) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field review_frequency", values[i])
 			} else if value.Valid {
 				_m.ReviewFrequency = enums.Frequency(value.String)
+			}
+		case evidence.FieldAuditorReferenceID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field auditor_reference_id", values[i])
+			} else if value.Valid {
+				_m.AuditorReferenceID = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -650,6 +658,9 @@ func (_m *Evidence) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("review_frequency=")
 	builder.WriteString(fmt.Sprintf("%v", _m.ReviewFrequency))
+	builder.WriteString(", ")
+	builder.WriteString("auditor_reference_id=")
+	builder.WriteString(_m.AuditorReferenceID)
 	builder.WriteByte(')')
 	return builder.String()
 }
