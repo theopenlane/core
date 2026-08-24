@@ -20,7 +20,6 @@ var FileCategoryDefaults = map[string]string{
 	"Integration":                "integration",
 	"IntegrationRun":             "integration_run",
 	"InternalPolicy":             "internal_policy",
-	"JobResult":                  "job_result",
 	"Note":                       "note",
 	"Organization":               "organization",
 	"OrganizationSetting":        "organization_setting",

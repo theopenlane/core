@@ -78,10 +78,6 @@ type TFASettingBuilder struct {
 	totpAllowed *bool
 }
 
-type JobRunnerBuilder struct {
-	client *client
-}
-
 type WebauthnBuilder struct {
 	client *client
 }
@@ -710,20 +706,6 @@ func (tf *TFASettingBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TFA
 	}
 
 	return setting
-}
-
-// MustNew JobRunner settings builder is used to create runners
-func (w *JobRunnerBuilder) MustNew(ctx context.Context, t *testing.T) *ent.JobRunner {
-	ctx = setContext(ctx, w.client.db)
-
-	ip := getValidIPAddress(t)
-	wn, err := w.client.db.JobRunner.Create().
-		SetName(randomName(t)).
-		SetIPAddress(ip).
-		Save(ctx)
-	requireNoError(t, err)
-
-	return wn
 }
 
 func getValidIPAddress(t *testing.T) string {
@@ -1783,60 +1765,6 @@ func (c *CustomDomainBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Cu
 	return customDomain
 }
 
-type JobRunnerTokenBuilder struct {
-	client *client
-
-	// Fields
-	JobRunnerID string
-	ExpiresAt   *time.Time
-	IsActive    *bool
-}
-
-func (j *JobRunnerTokenBuilder) MustNew(ctx context.Context, t *testing.T) *generated.JobRunnerToken {
-	ctx = setContext(ctx, j.client.db)
-
-	create := j.client.db.JobRunnerToken.Create()
-
-	if j.JobRunnerID == "" {
-		jobRunner := (&JobRunnerBuilder{client: j.client}).MustNew(ctx, t)
-		create.AddJobRunnerIDs(jobRunner.ID)
-	}
-
-	if j.ExpiresAt != nil {
-		create.SetExpiresAt(*j.ExpiresAt)
-	}
-
-	if j.IsActive != nil {
-		create.SetIsActive(*j.IsActive)
-	}
-
-	token, err := create.Save(ctx)
-	requireNoError(t, err)
-
-	return token
-}
-
-type JobRunnerRegistrationTokenBuilder struct {
-	client *client
-
-	WithRunner bool
-}
-
-func (j *JobRunnerRegistrationTokenBuilder) MustNew(ctx context.Context, t *testing.T) *generated.JobRunnerRegistrationToken {
-	ctx = setContext(ctx, j.client.db)
-
-	create := j.client.db.JobRunnerRegistrationToken.Create()
-	if j.WithRunner {
-		jobRunner := (&JobRunnerBuilder{client: j.client}).MustNew(ctx, t)
-		create.SetJobRunnerID(jobRunner.ID)
-	}
-
-	token, err := create.Save(ctx)
-	requireNoError(t, err)
-
-	return token
-}
-
 // MustNew DNS verification builder is used to create, without authz checks, DNS verifications in the database
 func (d *DNSVerificationBuilder) MustNew(ctx context.Context, t *testing.T) *ent.DNSVerification {
 	ctx = setContext(ctx, d.client.db)
@@ -1886,87 +1814,7 @@ func (d *DNSVerificationBuilder) MustNew(ctx context.Context, t *testing.T) *ent
 	return dnsVerification
 }
 
-type JobTemplateBuilder struct {
-	client *client
-
-	Title       string
-	Description *string
-	Cron        string
-	Platform    enums.JobPlatformType
-	DownloadURL string
-}
-
 const testScriptURL = "https://raw.githubusercontent.com/theopenlane/jobs-examples/refs/heads/main/basic/print.go"
-
-func (j *JobTemplateBuilder) MustNew(ctx context.Context, t *testing.T) *ent.JobTemplate {
-	ctx = setContext(ctx, j.client.db)
-
-	if j.Title == "" {
-		j.Title = "Test Job Template"
-	}
-
-	if j.DownloadURL == "" {
-		j.DownloadURL = testScriptURL
-	}
-
-	if j.Platform == "" {
-		j.Platform = enums.JobPlatformTypeGo
-	}
-
-	mut := j.client.db.JobTemplate.Create().
-		SetTitle(j.Title).
-		SetDownloadURL(j.DownloadURL).
-		SetPlatform(j.Platform)
-
-	if j.Description != nil {
-		mut.SetDescription(*j.Description)
-	}
-
-	if j.Cron != "" {
-		mut.SetCron(models.Cron(j.Cron))
-	}
-
-	if j.Description != nil {
-		mut.SetDescription(*j.Description)
-	}
-
-	jt, err := mut.Save(ctx)
-	requireNoError(t, err)
-
-	return jt
-}
-
-type ScheduledJobBuilder struct {
-	client *client
-
-	// Fields
-	JobID         string
-	Configuration models.JobConfiguration
-	Cron          *string
-	JobRunnerID   string
-	ControlIDs    []string
-	Active        bool
-}
-
-func (b *ScheduledJobBuilder) MustNew(ctx context.Context, t *testing.T) *generated.ScheduledJob {
-	ctx = setContext(ctx, b.client.db)
-
-	job := b.client.db.ScheduledJob.Create().
-		SetJobID(b.JobID)
-
-	if b.JobRunnerID != "" {
-		job.SetJobRunnerID(b.JobRunnerID)
-	}
-
-	if len(b.ControlIDs) > 0 {
-		job.AddControlIDs(b.ControlIDs...)
-	}
-
-	result, err := job.Save(ctx)
-	requireNoError(t, err)
-
-	return result
-}
 
 // TrustCenterBuilder is used to create trust centers
 type TrustCenterBuilder struct {

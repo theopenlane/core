@@ -62,11 +62,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
-	"github.com/theopenlane/core/internal/ent/generated/jobresult"
-	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
-	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
-	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
-	"github.com/theopenlane/core/internal/ent/generated/jobtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
@@ -92,8 +87,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/review"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
-	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
-	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
 	"github.com/theopenlane/core/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
@@ -235,16 +228,6 @@ type Client struct {
 	InternalPolicy *InternalPolicyClient
 	// Invite is the client for interacting with the Invite builders.
 	Invite *InviteClient
-	// JobResult is the client for interacting with the JobResult builders.
-	JobResult *JobResultClient
-	// JobRunner is the client for interacting with the JobRunner builders.
-	JobRunner *JobRunnerClient
-	// JobRunnerRegistrationToken is the client for interacting with the JobRunnerRegistrationToken builders.
-	JobRunnerRegistrationToken *JobRunnerRegistrationTokenClient
-	// JobRunnerToken is the client for interacting with the JobRunnerToken builders.
-	JobRunnerToken *JobRunnerTokenClient
-	// JobTemplate is the client for interacting with the JobTemplate builders.
-	JobTemplate *JobTemplateClient
 	// MappableDomain is the client for interacting with the MappableDomain builders.
 	MappableDomain *MappableDomainClient
 	// MappedControl is the client for interacting with the MappedControl builders.
@@ -297,10 +280,6 @@ type Client struct {
 	SLADefinition *SLADefinitionClient
 	// Scan is the client for interacting with the Scan builders.
 	Scan *ScanClient
-	// ScheduledJob is the client for interacting with the ScheduledJob builders.
-	ScheduledJob *ScheduledJobClient
-	// ScheduledJobRun is the client for interacting with the ScheduledJobRun builders.
-	ScheduledJobRun *ScheduledJobRunClient
 	// Standard is the client for interacting with the Standard builders.
 	Standard *StandardClient
 	// Subcontrol is the client for interacting with the Subcontrol builders.
@@ -426,11 +405,6 @@ func (c *Client) init() {
 	c.IntegrationWebhook = NewIntegrationWebhookClient(c.config)
 	c.InternalPolicy = NewInternalPolicyClient(c.config)
 	c.Invite = NewInviteClient(c.config)
-	c.JobResult = NewJobResultClient(c.config)
-	c.JobRunner = NewJobRunnerClient(c.config)
-	c.JobRunnerRegistrationToken = NewJobRunnerRegistrationTokenClient(c.config)
-	c.JobRunnerToken = NewJobRunnerTokenClient(c.config)
-	c.JobTemplate = NewJobTemplateClient(c.config)
 	c.MappableDomain = NewMappableDomainClient(c.config)
 	c.MappedControl = NewMappedControlClient(c.config)
 	c.Narrative = NewNarrativeClient(c.config)
@@ -457,8 +431,6 @@ func (c *Client) init() {
 	c.Risk = NewRiskClient(c.config)
 	c.SLADefinition = NewSLADefinitionClient(c.config)
 	c.Scan = NewScanClient(c.config)
-	c.ScheduledJob = NewScheduledJobClient(c.config)
-	c.ScheduledJobRun = NewScheduledJobRunClient(c.config)
 	c.Standard = NewStandardClient(c.config)
 	c.Subcontrol = NewSubcontrolClient(c.config)
 	c.Subprocessor = NewSubprocessorClient(c.config)
@@ -731,11 +703,6 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		IntegrationWebhook:         NewIntegrationWebhookClient(cfg),
 		InternalPolicy:             NewInternalPolicyClient(cfg),
 		Invite:                     NewInviteClient(cfg),
-		JobResult:                  NewJobResultClient(cfg),
-		JobRunner:                  NewJobRunnerClient(cfg),
-		JobRunnerRegistrationToken: NewJobRunnerRegistrationTokenClient(cfg),
-		JobRunnerToken:             NewJobRunnerTokenClient(cfg),
-		JobTemplate:                NewJobTemplateClient(cfg),
 		MappableDomain:             NewMappableDomainClient(cfg),
 		MappedControl:              NewMappedControlClient(cfg),
 		Narrative:                  NewNarrativeClient(cfg),
@@ -762,8 +729,6 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Risk:                       NewRiskClient(cfg),
 		SLADefinition:              NewSLADefinitionClient(cfg),
 		Scan:                       NewScanClient(cfg),
-		ScheduledJob:               NewScheduledJobClient(cfg),
-		ScheduledJobRun:            NewScheduledJobRunClient(cfg),
 		Standard:                   NewStandardClient(cfg),
 		Subcontrol:                 NewSubcontrolClient(cfg),
 		Subprocessor:               NewSubprocessorClient(cfg),
@@ -857,11 +822,6 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		IntegrationWebhook:         NewIntegrationWebhookClient(cfg),
 		InternalPolicy:             NewInternalPolicyClient(cfg),
 		Invite:                     NewInviteClient(cfg),
-		JobResult:                  NewJobResultClient(cfg),
-		JobRunner:                  NewJobRunnerClient(cfg),
-		JobRunnerRegistrationToken: NewJobRunnerRegistrationTokenClient(cfg),
-		JobRunnerToken:             NewJobRunnerTokenClient(cfg),
-		JobTemplate:                NewJobTemplateClient(cfg),
 		MappableDomain:             NewMappableDomainClient(cfg),
 		MappedControl:              NewMappedControlClient(cfg),
 		Narrative:                  NewNarrativeClient(cfg),
@@ -888,8 +848,6 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Risk:                       NewRiskClient(cfg),
 		SLADefinition:              NewSLADefinitionClient(cfg),
 		Scan:                       NewScanClient(cfg),
-		ScheduledJob:               NewScheduledJobClient(cfg),
-		ScheduledJobRun:            NewScheduledJobRunClient(cfg),
 		Standard:                   NewStandardClient(cfg),
 		Subcontrol:                 NewSubcontrolClient(cfg),
 		Subprocessor:               NewSubprocessorClient(cfg),
@@ -959,22 +917,20 @@ func (c *Client) Use(hooks ...Hook) {
 		c.Export, c.File, c.FileDownloadToken, c.Finding, c.FindingControl, c.Group,
 		c.GroupMembership, c.GroupSetting, c.Hush, c.IdentityHolder,
 		c.ImpersonationEvent, c.Integration, c.IntegrationRun, c.IntegrationWebhook,
-		c.InternalPolicy, c.Invite, c.JobResult, c.JobRunner,
-		c.JobRunnerRegistrationToken, c.JobRunnerToken, c.JobTemplate,
-		c.MappableDomain, c.MappedControl, c.Narrative, c.Note, c.Notification,
-		c.NotificationPreference, c.NotificationTemplate, c.Onboarding,
-		c.OrgMembership, c.OrgModule, c.OrgPrice, c.OrgProduct, c.OrgSubscription,
-		c.Organization, c.OrganizationSetting, c.PasswordResetToken,
+		c.InternalPolicy, c.Invite, c.MappableDomain, c.MappedControl, c.Narrative,
+		c.Note, c.Notification, c.NotificationPreference, c.NotificationTemplate,
+		c.Onboarding, c.OrgMembership, c.OrgModule, c.OrgPrice, c.OrgProduct,
+		c.OrgSubscription, c.Organization, c.OrganizationSetting, c.PasswordResetToken,
 		c.PersonalAccessToken, c.Platform, c.Procedure, c.Program, c.ProgramMembership,
-		c.Remediation, c.Review, c.Risk, c.SLADefinition, c.Scan, c.ScheduledJob,
-		c.ScheduledJobRun, c.Standard, c.Subcontrol, c.Subprocessor, c.Subscriber,
-		c.SystemDetail, c.TFASetting, c.TagDefinition, c.Task, c.Template,
-		c.TrustCenter, c.TrustCenterCompliance, c.TrustCenterDoc, c.TrustCenterEntity,
-		c.TrustCenterFAQ, c.TrustCenterNDARequest, c.TrustCenterSetting,
-		c.TrustCenterSubprocessor, c.TrustCenterWatermarkConfig, c.User, c.UserSetting,
-		c.VendorRiskScore, c.VendorScoringConfig, c.Vulnerability, c.Webauthn,
-		c.WorkflowAssignment, c.WorkflowAssignmentTarget, c.WorkflowDefinition,
-		c.WorkflowEvent, c.WorkflowInstance, c.WorkflowObjectRef, c.WorkflowProposal,
+		c.Remediation, c.Review, c.Risk, c.SLADefinition, c.Scan, c.Standard,
+		c.Subcontrol, c.Subprocessor, c.Subscriber, c.SystemDetail, c.TFASetting,
+		c.TagDefinition, c.Task, c.Template, c.TrustCenter, c.TrustCenterCompliance,
+		c.TrustCenterDoc, c.TrustCenterEntity, c.TrustCenterFAQ,
+		c.TrustCenterNDARequest, c.TrustCenterSetting, c.TrustCenterSubprocessor,
+		c.TrustCenterWatermarkConfig, c.User, c.UserSetting, c.VendorRiskScore,
+		c.VendorScoringConfig, c.Vulnerability, c.Webauthn, c.WorkflowAssignment,
+		c.WorkflowAssignmentTarget, c.WorkflowDefinition, c.WorkflowEvent,
+		c.WorkflowInstance, c.WorkflowObjectRef, c.WorkflowProposal,
 	} {
 		n.Use(hooks...)
 	}
@@ -993,22 +949,20 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.Export, c.File, c.FileDownloadToken, c.Finding, c.FindingControl, c.Group,
 		c.GroupMembership, c.GroupSetting, c.Hush, c.IdentityHolder,
 		c.ImpersonationEvent, c.Integration, c.IntegrationRun, c.IntegrationWebhook,
-		c.InternalPolicy, c.Invite, c.JobResult, c.JobRunner,
-		c.JobRunnerRegistrationToken, c.JobRunnerToken, c.JobTemplate,
-		c.MappableDomain, c.MappedControl, c.Narrative, c.Note, c.Notification,
-		c.NotificationPreference, c.NotificationTemplate, c.Onboarding,
-		c.OrgMembership, c.OrgModule, c.OrgPrice, c.OrgProduct, c.OrgSubscription,
-		c.Organization, c.OrganizationSetting, c.PasswordResetToken,
+		c.InternalPolicy, c.Invite, c.MappableDomain, c.MappedControl, c.Narrative,
+		c.Note, c.Notification, c.NotificationPreference, c.NotificationTemplate,
+		c.Onboarding, c.OrgMembership, c.OrgModule, c.OrgPrice, c.OrgProduct,
+		c.OrgSubscription, c.Organization, c.OrganizationSetting, c.PasswordResetToken,
 		c.PersonalAccessToken, c.Platform, c.Procedure, c.Program, c.ProgramMembership,
-		c.Remediation, c.Review, c.Risk, c.SLADefinition, c.Scan, c.ScheduledJob,
-		c.ScheduledJobRun, c.Standard, c.Subcontrol, c.Subprocessor, c.Subscriber,
-		c.SystemDetail, c.TFASetting, c.TagDefinition, c.Task, c.Template,
-		c.TrustCenter, c.TrustCenterCompliance, c.TrustCenterDoc, c.TrustCenterEntity,
-		c.TrustCenterFAQ, c.TrustCenterNDARequest, c.TrustCenterSetting,
-		c.TrustCenterSubprocessor, c.TrustCenterWatermarkConfig, c.User, c.UserSetting,
-		c.VendorRiskScore, c.VendorScoringConfig, c.Vulnerability, c.Webauthn,
-		c.WorkflowAssignment, c.WorkflowAssignmentTarget, c.WorkflowDefinition,
-		c.WorkflowEvent, c.WorkflowInstance, c.WorkflowObjectRef, c.WorkflowProposal,
+		c.Remediation, c.Review, c.Risk, c.SLADefinition, c.Scan, c.Standard,
+		c.Subcontrol, c.Subprocessor, c.Subscriber, c.SystemDetail, c.TFASetting,
+		c.TagDefinition, c.Task, c.Template, c.TrustCenter, c.TrustCenterCompliance,
+		c.TrustCenterDoc, c.TrustCenterEntity, c.TrustCenterFAQ,
+		c.TrustCenterNDARequest, c.TrustCenterSetting, c.TrustCenterSubprocessor,
+		c.TrustCenterWatermarkConfig, c.User, c.UserSetting, c.VendorRiskScore,
+		c.VendorScoringConfig, c.Vulnerability, c.Webauthn, c.WorkflowAssignment,
+		c.WorkflowAssignmentTarget, c.WorkflowDefinition, c.WorkflowEvent,
+		c.WorkflowInstance, c.WorkflowObjectRef, c.WorkflowProposal,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -1175,16 +1129,6 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.InternalPolicy.mutate(ctx, m)
 	case *InviteMutation:
 		return c.Invite.mutate(ctx, m)
-	case *JobResultMutation:
-		return c.JobResult.mutate(ctx, m)
-	case *JobRunnerMutation:
-		return c.JobRunner.mutate(ctx, m)
-	case *JobRunnerRegistrationTokenMutation:
-		return c.JobRunnerRegistrationToken.mutate(ctx, m)
-	case *JobRunnerTokenMutation:
-		return c.JobRunnerToken.mutate(ctx, m)
-	case *JobTemplateMutation:
-		return c.JobTemplate.mutate(ctx, m)
 	case *MappableDomainMutation:
 		return c.MappableDomain.mutate(ctx, m)
 	case *MappedControlMutation:
@@ -1237,10 +1181,6 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.SLADefinition.mutate(ctx, m)
 	case *ScanMutation:
 		return c.Scan.mutate(ctx, m)
-	case *ScheduledJobMutation:
-		return c.ScheduledJob.mutate(ctx, m)
-	case *ScheduledJobRunMutation:
-		return c.ScheduledJobRun.mutate(ctx, m)
 	case *StandardMutation:
 		return c.Standard.mutate(ctx, m)
 	case *SubcontrolMutation:
@@ -4896,22 +4836,6 @@ func (c *ControlClient) QuerySubcontrols(_m *Control) *SubcontrolQuery {
 			sqlgraph.From(control.Table, control.FieldID, id),
 			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, control.SubcontrolsTable, control.SubcontrolsColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryScheduledJobs queries the scheduled_jobs edge of a Control.
-func (c *ControlClient) QueryScheduledJobs(_m *Control) *ScheduledJobQuery {
-	query := (&ScheduledJobClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(control.Table, control.FieldID, id),
-			sqlgraph.To(scheduledjob.Table, scheduledjob.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, control.ScheduledJobsTable, control.ScheduledJobsPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -15560,857 +15484,6 @@ func (c *InviteClient) mutate(ctx context.Context, m *InviteMutation) (Value, er
 	}
 }
 
-// JobResultClient is a client for the JobResult schema.
-type JobResultClient struct {
-	config
-}
-
-// NewJobResultClient returns a client for the JobResult from the given config.
-func NewJobResultClient(c config) *JobResultClient {
-	return &JobResultClient{config: c}
-}
-
-// Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `jobresult.Hooks(f(g(h())))`.
-func (c *JobResultClient) Use(hooks ...Hook) {
-	c.hooks.JobResult = append(c.hooks.JobResult, hooks...)
-}
-
-// Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `jobresult.Intercept(f(g(h())))`.
-func (c *JobResultClient) Intercept(interceptors ...Interceptor) {
-	c.inters.JobResult = append(c.inters.JobResult, interceptors...)
-}
-
-// Create returns a builder for creating a JobResult entity.
-func (c *JobResultClient) Create() *JobResultCreate {
-	mutation := newJobResultMutation(c.config, OpCreate)
-	return &JobResultCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// CreateBulk returns a builder for creating a bulk of JobResult entities.
-func (c *JobResultClient) CreateBulk(builders ...*JobResultCreate) *JobResultCreateBulk {
-	return &JobResultCreateBulk{config: c.config, builders: builders}
-}
-
-// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
-// a builder and applies setFunc on it.
-func (c *JobResultClient) MapCreateBulk(slice any, setFunc func(*JobResultCreate, int)) *JobResultCreateBulk {
-	rv := reflect.ValueOf(slice)
-	if rv.Kind() != reflect.Slice {
-		return &JobResultCreateBulk{err: fmt.Errorf("calling to JobResultClient.MapCreateBulk with wrong type %T, need slice", slice)}
-	}
-	builders := make([]*JobResultCreate, rv.Len())
-	for i := 0; i < rv.Len(); i++ {
-		builders[i] = c.Create()
-		setFunc(builders[i], i)
-	}
-	return &JobResultCreateBulk{config: c.config, builders: builders}
-}
-
-// Update returns an update builder for JobResult.
-func (c *JobResultClient) Update() *JobResultUpdate {
-	mutation := newJobResultMutation(c.config, OpUpdate)
-	return &JobResultUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOne returns an update builder for the given entity.
-func (c *JobResultClient) UpdateOne(_m *JobResult) *JobResultUpdateOne {
-	mutation := newJobResultMutation(c.config, OpUpdateOne, withJobResult(_m))
-	return &JobResultUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOneID returns an update builder for the given id.
-func (c *JobResultClient) UpdateOneID(id string) *JobResultUpdateOne {
-	mutation := newJobResultMutation(c.config, OpUpdateOne, withJobResultID(id))
-	return &JobResultUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// Delete returns a delete builder for JobResult.
-func (c *JobResultClient) Delete() *JobResultDelete {
-	mutation := newJobResultMutation(c.config, OpDelete)
-	return &JobResultDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// DeleteOne returns a builder for deleting the given entity.
-func (c *JobResultClient) DeleteOne(_m *JobResult) *JobResultDeleteOne {
-	return c.DeleteOneID(_m.ID)
-}
-
-// DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *JobResultClient) DeleteOneID(id string) *JobResultDeleteOne {
-	builder := c.Delete().Where(jobresult.ID(id))
-	builder.mutation.id = &id
-	builder.mutation.op = OpDeleteOne
-	return &JobResultDeleteOne{builder}
-}
-
-// Query returns a query builder for JobResult.
-func (c *JobResultClient) Query() *JobResultQuery {
-	return &JobResultQuery{
-		config: c.config,
-		ctx:    &QueryContext{Type: TypeJobResult},
-		inters: c.Interceptors(),
-	}
-}
-
-// Get returns a JobResult entity by its id.
-func (c *JobResultClient) Get(ctx context.Context, id string) (*JobResult, error) {
-	return c.Query().Where(jobresult.ID(id)).Only(ctx)
-}
-
-// GetX is like Get, but panics if an error occurs.
-func (c *JobResultClient) GetX(ctx context.Context, id string) *JobResult {
-	obj, err := c.Get(ctx, id)
-	if err != nil {
-		panic(err)
-	}
-	return obj
-}
-
-// QueryOwner queries the owner edge of a JobResult.
-func (c *JobResultClient) QueryOwner(_m *JobResult) *OrganizationQuery {
-	query := (&OrganizationClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(jobresult.Table, jobresult.FieldID, id),
-			sqlgraph.To(organization.Table, organization.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, jobresult.OwnerTable, jobresult.OwnerColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryScheduledJob queries the scheduled_job edge of a JobResult.
-func (c *JobResultClient) QueryScheduledJob(_m *JobResult) *ScheduledJobQuery {
-	query := (&ScheduledJobClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(jobresult.Table, jobresult.FieldID, id),
-			sqlgraph.To(scheduledjob.Table, scheduledjob.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, jobresult.ScheduledJobTable, jobresult.ScheduledJobColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryFile queries the file edge of a JobResult.
-func (c *JobResultClient) QueryFile(_m *JobResult) *FileQuery {
-	query := (&FileClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(jobresult.Table, jobresult.FieldID, id),
-			sqlgraph.To(file.Table, file.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, jobresult.FileTable, jobresult.FileColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// Hooks returns the client hooks.
-func (c *JobResultClient) Hooks() []Hook {
-	hooks := c.hooks.JobResult
-	return append(hooks[:len(hooks):len(hooks)], jobresult.Hooks[:]...)
-}
-
-// Interceptors returns the client interceptors.
-func (c *JobResultClient) Interceptors() []Interceptor {
-	inters := c.inters.JobResult
-	return append(inters[:len(inters):len(inters)], jobresult.Interceptors[:]...)
-}
-
-func (c *JobResultClient) mutate(ctx context.Context, m *JobResultMutation) (Value, error) {
-	switch m.Op() {
-	case OpCreate:
-		return (&JobResultCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdate:
-		return (&JobResultUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdateOne:
-		return (&JobResultUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpDelete, OpDeleteOne:
-		return (&JobResultDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
-	default:
-		return nil, fmt.Errorf("generated: unknown JobResult mutation op: %q", m.Op())
-	}
-}
-
-// JobRunnerClient is a client for the JobRunner schema.
-type JobRunnerClient struct {
-	config
-}
-
-// NewJobRunnerClient returns a client for the JobRunner from the given config.
-func NewJobRunnerClient(c config) *JobRunnerClient {
-	return &JobRunnerClient{config: c}
-}
-
-// Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `jobrunner.Hooks(f(g(h())))`.
-func (c *JobRunnerClient) Use(hooks ...Hook) {
-	c.hooks.JobRunner = append(c.hooks.JobRunner, hooks...)
-}
-
-// Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `jobrunner.Intercept(f(g(h())))`.
-func (c *JobRunnerClient) Intercept(interceptors ...Interceptor) {
-	c.inters.JobRunner = append(c.inters.JobRunner, interceptors...)
-}
-
-// Create returns a builder for creating a JobRunner entity.
-func (c *JobRunnerClient) Create() *JobRunnerCreate {
-	mutation := newJobRunnerMutation(c.config, OpCreate)
-	return &JobRunnerCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// CreateBulk returns a builder for creating a bulk of JobRunner entities.
-func (c *JobRunnerClient) CreateBulk(builders ...*JobRunnerCreate) *JobRunnerCreateBulk {
-	return &JobRunnerCreateBulk{config: c.config, builders: builders}
-}
-
-// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
-// a builder and applies setFunc on it.
-func (c *JobRunnerClient) MapCreateBulk(slice any, setFunc func(*JobRunnerCreate, int)) *JobRunnerCreateBulk {
-	rv := reflect.ValueOf(slice)
-	if rv.Kind() != reflect.Slice {
-		return &JobRunnerCreateBulk{err: fmt.Errorf("calling to JobRunnerClient.MapCreateBulk with wrong type %T, need slice", slice)}
-	}
-	builders := make([]*JobRunnerCreate, rv.Len())
-	for i := 0; i < rv.Len(); i++ {
-		builders[i] = c.Create()
-		setFunc(builders[i], i)
-	}
-	return &JobRunnerCreateBulk{config: c.config, builders: builders}
-}
-
-// Update returns an update builder for JobRunner.
-func (c *JobRunnerClient) Update() *JobRunnerUpdate {
-	mutation := newJobRunnerMutation(c.config, OpUpdate)
-	return &JobRunnerUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOne returns an update builder for the given entity.
-func (c *JobRunnerClient) UpdateOne(_m *JobRunner) *JobRunnerUpdateOne {
-	mutation := newJobRunnerMutation(c.config, OpUpdateOne, withJobRunner(_m))
-	return &JobRunnerUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOneID returns an update builder for the given id.
-func (c *JobRunnerClient) UpdateOneID(id string) *JobRunnerUpdateOne {
-	mutation := newJobRunnerMutation(c.config, OpUpdateOne, withJobRunnerID(id))
-	return &JobRunnerUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// Delete returns a delete builder for JobRunner.
-func (c *JobRunnerClient) Delete() *JobRunnerDelete {
-	mutation := newJobRunnerMutation(c.config, OpDelete)
-	return &JobRunnerDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// DeleteOne returns a builder for deleting the given entity.
-func (c *JobRunnerClient) DeleteOne(_m *JobRunner) *JobRunnerDeleteOne {
-	return c.DeleteOneID(_m.ID)
-}
-
-// DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *JobRunnerClient) DeleteOneID(id string) *JobRunnerDeleteOne {
-	builder := c.Delete().Where(jobrunner.ID(id))
-	builder.mutation.id = &id
-	builder.mutation.op = OpDeleteOne
-	return &JobRunnerDeleteOne{builder}
-}
-
-// Query returns a query builder for JobRunner.
-func (c *JobRunnerClient) Query() *JobRunnerQuery {
-	return &JobRunnerQuery{
-		config: c.config,
-		ctx:    &QueryContext{Type: TypeJobRunner},
-		inters: c.Interceptors(),
-	}
-}
-
-// Get returns a JobRunner entity by its id.
-func (c *JobRunnerClient) Get(ctx context.Context, id string) (*JobRunner, error) {
-	return c.Query().Where(jobrunner.ID(id)).Only(ctx)
-}
-
-// GetX is like Get, but panics if an error occurs.
-func (c *JobRunnerClient) GetX(ctx context.Context, id string) *JobRunner {
-	obj, err := c.Get(ctx, id)
-	if err != nil {
-		panic(err)
-	}
-	return obj
-}
-
-// QueryOwner queries the owner edge of a JobRunner.
-func (c *JobRunnerClient) QueryOwner(_m *JobRunner) *OrganizationQuery {
-	query := (&OrganizationClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(jobrunner.Table, jobrunner.FieldID, id),
-			sqlgraph.To(organization.Table, organization.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, jobrunner.OwnerTable, jobrunner.OwnerColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryJobRunnerTokens queries the job_runner_tokens edge of a JobRunner.
-func (c *JobRunnerClient) QueryJobRunnerTokens(_m *JobRunner) *JobRunnerTokenQuery {
-	query := (&JobRunnerTokenClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(jobrunner.Table, jobrunner.FieldID, id),
-			sqlgraph.To(jobrunnertoken.Table, jobrunnertoken.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, jobrunner.JobRunnerTokensTable, jobrunner.JobRunnerTokensPrimaryKey...),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// Hooks returns the client hooks.
-func (c *JobRunnerClient) Hooks() []Hook {
-	hooks := c.hooks.JobRunner
-	return append(hooks[:len(hooks):len(hooks)], jobrunner.Hooks[:]...)
-}
-
-// Interceptors returns the client interceptors.
-func (c *JobRunnerClient) Interceptors() []Interceptor {
-	inters := c.inters.JobRunner
-	return append(inters[:len(inters):len(inters)], jobrunner.Interceptors[:]...)
-}
-
-func (c *JobRunnerClient) mutate(ctx context.Context, m *JobRunnerMutation) (Value, error) {
-	switch m.Op() {
-	case OpCreate:
-		return (&JobRunnerCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdate:
-		return (&JobRunnerUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdateOne:
-		return (&JobRunnerUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpDelete, OpDeleteOne:
-		return (&JobRunnerDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
-	default:
-		return nil, fmt.Errorf("generated: unknown JobRunner mutation op: %q", m.Op())
-	}
-}
-
-// JobRunnerRegistrationTokenClient is a client for the JobRunnerRegistrationToken schema.
-type JobRunnerRegistrationTokenClient struct {
-	config
-}
-
-// NewJobRunnerRegistrationTokenClient returns a client for the JobRunnerRegistrationToken from the given config.
-func NewJobRunnerRegistrationTokenClient(c config) *JobRunnerRegistrationTokenClient {
-	return &JobRunnerRegistrationTokenClient{config: c}
-}
-
-// Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `jobrunnerregistrationtoken.Hooks(f(g(h())))`.
-func (c *JobRunnerRegistrationTokenClient) Use(hooks ...Hook) {
-	c.hooks.JobRunnerRegistrationToken = append(c.hooks.JobRunnerRegistrationToken, hooks...)
-}
-
-// Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `jobrunnerregistrationtoken.Intercept(f(g(h())))`.
-func (c *JobRunnerRegistrationTokenClient) Intercept(interceptors ...Interceptor) {
-	c.inters.JobRunnerRegistrationToken = append(c.inters.JobRunnerRegistrationToken, interceptors...)
-}
-
-// Create returns a builder for creating a JobRunnerRegistrationToken entity.
-func (c *JobRunnerRegistrationTokenClient) Create() *JobRunnerRegistrationTokenCreate {
-	mutation := newJobRunnerRegistrationTokenMutation(c.config, OpCreate)
-	return &JobRunnerRegistrationTokenCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// CreateBulk returns a builder for creating a bulk of JobRunnerRegistrationToken entities.
-func (c *JobRunnerRegistrationTokenClient) CreateBulk(builders ...*JobRunnerRegistrationTokenCreate) *JobRunnerRegistrationTokenCreateBulk {
-	return &JobRunnerRegistrationTokenCreateBulk{config: c.config, builders: builders}
-}
-
-// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
-// a builder and applies setFunc on it.
-func (c *JobRunnerRegistrationTokenClient) MapCreateBulk(slice any, setFunc func(*JobRunnerRegistrationTokenCreate, int)) *JobRunnerRegistrationTokenCreateBulk {
-	rv := reflect.ValueOf(slice)
-	if rv.Kind() != reflect.Slice {
-		return &JobRunnerRegistrationTokenCreateBulk{err: fmt.Errorf("calling to JobRunnerRegistrationTokenClient.MapCreateBulk with wrong type %T, need slice", slice)}
-	}
-	builders := make([]*JobRunnerRegistrationTokenCreate, rv.Len())
-	for i := 0; i < rv.Len(); i++ {
-		builders[i] = c.Create()
-		setFunc(builders[i], i)
-	}
-	return &JobRunnerRegistrationTokenCreateBulk{config: c.config, builders: builders}
-}
-
-// Update returns an update builder for JobRunnerRegistrationToken.
-func (c *JobRunnerRegistrationTokenClient) Update() *JobRunnerRegistrationTokenUpdate {
-	mutation := newJobRunnerRegistrationTokenMutation(c.config, OpUpdate)
-	return &JobRunnerRegistrationTokenUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOne returns an update builder for the given entity.
-func (c *JobRunnerRegistrationTokenClient) UpdateOne(_m *JobRunnerRegistrationToken) *JobRunnerRegistrationTokenUpdateOne {
-	mutation := newJobRunnerRegistrationTokenMutation(c.config, OpUpdateOne, withJobRunnerRegistrationToken(_m))
-	return &JobRunnerRegistrationTokenUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOneID returns an update builder for the given id.
-func (c *JobRunnerRegistrationTokenClient) UpdateOneID(id string) *JobRunnerRegistrationTokenUpdateOne {
-	mutation := newJobRunnerRegistrationTokenMutation(c.config, OpUpdateOne, withJobRunnerRegistrationTokenID(id))
-	return &JobRunnerRegistrationTokenUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// Delete returns a delete builder for JobRunnerRegistrationToken.
-func (c *JobRunnerRegistrationTokenClient) Delete() *JobRunnerRegistrationTokenDelete {
-	mutation := newJobRunnerRegistrationTokenMutation(c.config, OpDelete)
-	return &JobRunnerRegistrationTokenDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// DeleteOne returns a builder for deleting the given entity.
-func (c *JobRunnerRegistrationTokenClient) DeleteOne(_m *JobRunnerRegistrationToken) *JobRunnerRegistrationTokenDeleteOne {
-	return c.DeleteOneID(_m.ID)
-}
-
-// DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *JobRunnerRegistrationTokenClient) DeleteOneID(id string) *JobRunnerRegistrationTokenDeleteOne {
-	builder := c.Delete().Where(jobrunnerregistrationtoken.ID(id))
-	builder.mutation.id = &id
-	builder.mutation.op = OpDeleteOne
-	return &JobRunnerRegistrationTokenDeleteOne{builder}
-}
-
-// Query returns a query builder for JobRunnerRegistrationToken.
-func (c *JobRunnerRegistrationTokenClient) Query() *JobRunnerRegistrationTokenQuery {
-	return &JobRunnerRegistrationTokenQuery{
-		config: c.config,
-		ctx:    &QueryContext{Type: TypeJobRunnerRegistrationToken},
-		inters: c.Interceptors(),
-	}
-}
-
-// Get returns a JobRunnerRegistrationToken entity by its id.
-func (c *JobRunnerRegistrationTokenClient) Get(ctx context.Context, id string) (*JobRunnerRegistrationToken, error) {
-	return c.Query().Where(jobrunnerregistrationtoken.ID(id)).Only(ctx)
-}
-
-// GetX is like Get, but panics if an error occurs.
-func (c *JobRunnerRegistrationTokenClient) GetX(ctx context.Context, id string) *JobRunnerRegistrationToken {
-	obj, err := c.Get(ctx, id)
-	if err != nil {
-		panic(err)
-	}
-	return obj
-}
-
-// QueryOwner queries the owner edge of a JobRunnerRegistrationToken.
-func (c *JobRunnerRegistrationTokenClient) QueryOwner(_m *JobRunnerRegistrationToken) *OrganizationQuery {
-	query := (&OrganizationClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(jobrunnerregistrationtoken.Table, jobrunnerregistrationtoken.FieldID, id),
-			sqlgraph.To(organization.Table, organization.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, jobrunnerregistrationtoken.OwnerTable, jobrunnerregistrationtoken.OwnerColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryJobRunner queries the job_runner edge of a JobRunnerRegistrationToken.
-func (c *JobRunnerRegistrationTokenClient) QueryJobRunner(_m *JobRunnerRegistrationToken) *JobRunnerQuery {
-	query := (&JobRunnerClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(jobrunnerregistrationtoken.Table, jobrunnerregistrationtoken.FieldID, id),
-			sqlgraph.To(jobrunner.Table, jobrunner.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, jobrunnerregistrationtoken.JobRunnerTable, jobrunnerregistrationtoken.JobRunnerColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// Hooks returns the client hooks.
-func (c *JobRunnerRegistrationTokenClient) Hooks() []Hook {
-	hooks := c.hooks.JobRunnerRegistrationToken
-	return append(hooks[:len(hooks):len(hooks)], jobrunnerregistrationtoken.Hooks[:]...)
-}
-
-// Interceptors returns the client interceptors.
-func (c *JobRunnerRegistrationTokenClient) Interceptors() []Interceptor {
-	inters := c.inters.JobRunnerRegistrationToken
-	return append(inters[:len(inters):len(inters)], jobrunnerregistrationtoken.Interceptors[:]...)
-}
-
-func (c *JobRunnerRegistrationTokenClient) mutate(ctx context.Context, m *JobRunnerRegistrationTokenMutation) (Value, error) {
-	switch m.Op() {
-	case OpCreate:
-		return (&JobRunnerRegistrationTokenCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdate:
-		return (&JobRunnerRegistrationTokenUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdateOne:
-		return (&JobRunnerRegistrationTokenUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpDelete, OpDeleteOne:
-		return (&JobRunnerRegistrationTokenDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
-	default:
-		return nil, fmt.Errorf("generated: unknown JobRunnerRegistrationToken mutation op: %q", m.Op())
-	}
-}
-
-// JobRunnerTokenClient is a client for the JobRunnerToken schema.
-type JobRunnerTokenClient struct {
-	config
-}
-
-// NewJobRunnerTokenClient returns a client for the JobRunnerToken from the given config.
-func NewJobRunnerTokenClient(c config) *JobRunnerTokenClient {
-	return &JobRunnerTokenClient{config: c}
-}
-
-// Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `jobrunnertoken.Hooks(f(g(h())))`.
-func (c *JobRunnerTokenClient) Use(hooks ...Hook) {
-	c.hooks.JobRunnerToken = append(c.hooks.JobRunnerToken, hooks...)
-}
-
-// Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `jobrunnertoken.Intercept(f(g(h())))`.
-func (c *JobRunnerTokenClient) Intercept(interceptors ...Interceptor) {
-	c.inters.JobRunnerToken = append(c.inters.JobRunnerToken, interceptors...)
-}
-
-// Create returns a builder for creating a JobRunnerToken entity.
-func (c *JobRunnerTokenClient) Create() *JobRunnerTokenCreate {
-	mutation := newJobRunnerTokenMutation(c.config, OpCreate)
-	return &JobRunnerTokenCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// CreateBulk returns a builder for creating a bulk of JobRunnerToken entities.
-func (c *JobRunnerTokenClient) CreateBulk(builders ...*JobRunnerTokenCreate) *JobRunnerTokenCreateBulk {
-	return &JobRunnerTokenCreateBulk{config: c.config, builders: builders}
-}
-
-// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
-// a builder and applies setFunc on it.
-func (c *JobRunnerTokenClient) MapCreateBulk(slice any, setFunc func(*JobRunnerTokenCreate, int)) *JobRunnerTokenCreateBulk {
-	rv := reflect.ValueOf(slice)
-	if rv.Kind() != reflect.Slice {
-		return &JobRunnerTokenCreateBulk{err: fmt.Errorf("calling to JobRunnerTokenClient.MapCreateBulk with wrong type %T, need slice", slice)}
-	}
-	builders := make([]*JobRunnerTokenCreate, rv.Len())
-	for i := 0; i < rv.Len(); i++ {
-		builders[i] = c.Create()
-		setFunc(builders[i], i)
-	}
-	return &JobRunnerTokenCreateBulk{config: c.config, builders: builders}
-}
-
-// Update returns an update builder for JobRunnerToken.
-func (c *JobRunnerTokenClient) Update() *JobRunnerTokenUpdate {
-	mutation := newJobRunnerTokenMutation(c.config, OpUpdate)
-	return &JobRunnerTokenUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOne returns an update builder for the given entity.
-func (c *JobRunnerTokenClient) UpdateOne(_m *JobRunnerToken) *JobRunnerTokenUpdateOne {
-	mutation := newJobRunnerTokenMutation(c.config, OpUpdateOne, withJobRunnerToken(_m))
-	return &JobRunnerTokenUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOneID returns an update builder for the given id.
-func (c *JobRunnerTokenClient) UpdateOneID(id string) *JobRunnerTokenUpdateOne {
-	mutation := newJobRunnerTokenMutation(c.config, OpUpdateOne, withJobRunnerTokenID(id))
-	return &JobRunnerTokenUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// Delete returns a delete builder for JobRunnerToken.
-func (c *JobRunnerTokenClient) Delete() *JobRunnerTokenDelete {
-	mutation := newJobRunnerTokenMutation(c.config, OpDelete)
-	return &JobRunnerTokenDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// DeleteOne returns a builder for deleting the given entity.
-func (c *JobRunnerTokenClient) DeleteOne(_m *JobRunnerToken) *JobRunnerTokenDeleteOne {
-	return c.DeleteOneID(_m.ID)
-}
-
-// DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *JobRunnerTokenClient) DeleteOneID(id string) *JobRunnerTokenDeleteOne {
-	builder := c.Delete().Where(jobrunnertoken.ID(id))
-	builder.mutation.id = &id
-	builder.mutation.op = OpDeleteOne
-	return &JobRunnerTokenDeleteOne{builder}
-}
-
-// Query returns a query builder for JobRunnerToken.
-func (c *JobRunnerTokenClient) Query() *JobRunnerTokenQuery {
-	return &JobRunnerTokenQuery{
-		config: c.config,
-		ctx:    &QueryContext{Type: TypeJobRunnerToken},
-		inters: c.Interceptors(),
-	}
-}
-
-// Get returns a JobRunnerToken entity by its id.
-func (c *JobRunnerTokenClient) Get(ctx context.Context, id string) (*JobRunnerToken, error) {
-	return c.Query().Where(jobrunnertoken.ID(id)).Only(ctx)
-}
-
-// GetX is like Get, but panics if an error occurs.
-func (c *JobRunnerTokenClient) GetX(ctx context.Context, id string) *JobRunnerToken {
-	obj, err := c.Get(ctx, id)
-	if err != nil {
-		panic(err)
-	}
-	return obj
-}
-
-// QueryOwner queries the owner edge of a JobRunnerToken.
-func (c *JobRunnerTokenClient) QueryOwner(_m *JobRunnerToken) *OrganizationQuery {
-	query := (&OrganizationClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(jobrunnertoken.Table, jobrunnertoken.FieldID, id),
-			sqlgraph.To(organization.Table, organization.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, jobrunnertoken.OwnerTable, jobrunnertoken.OwnerColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryJobRunners queries the job_runners edge of a JobRunnerToken.
-func (c *JobRunnerTokenClient) QueryJobRunners(_m *JobRunnerToken) *JobRunnerQuery {
-	query := (&JobRunnerClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(jobrunnertoken.Table, jobrunnertoken.FieldID, id),
-			sqlgraph.To(jobrunner.Table, jobrunner.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, jobrunnertoken.JobRunnersTable, jobrunnertoken.JobRunnersPrimaryKey...),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// Hooks returns the client hooks.
-func (c *JobRunnerTokenClient) Hooks() []Hook {
-	hooks := c.hooks.JobRunnerToken
-	return append(hooks[:len(hooks):len(hooks)], jobrunnertoken.Hooks[:]...)
-}
-
-// Interceptors returns the client interceptors.
-func (c *JobRunnerTokenClient) Interceptors() []Interceptor {
-	inters := c.inters.JobRunnerToken
-	return append(inters[:len(inters):len(inters)], jobrunnertoken.Interceptors[:]...)
-}
-
-func (c *JobRunnerTokenClient) mutate(ctx context.Context, m *JobRunnerTokenMutation) (Value, error) {
-	switch m.Op() {
-	case OpCreate:
-		return (&JobRunnerTokenCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdate:
-		return (&JobRunnerTokenUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdateOne:
-		return (&JobRunnerTokenUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpDelete, OpDeleteOne:
-		return (&JobRunnerTokenDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
-	default:
-		return nil, fmt.Errorf("generated: unknown JobRunnerToken mutation op: %q", m.Op())
-	}
-}
-
-// JobTemplateClient is a client for the JobTemplate schema.
-type JobTemplateClient struct {
-	config
-}
-
-// NewJobTemplateClient returns a client for the JobTemplate from the given config.
-func NewJobTemplateClient(c config) *JobTemplateClient {
-	return &JobTemplateClient{config: c}
-}
-
-// Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `jobtemplate.Hooks(f(g(h())))`.
-func (c *JobTemplateClient) Use(hooks ...Hook) {
-	c.hooks.JobTemplate = append(c.hooks.JobTemplate, hooks...)
-}
-
-// Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `jobtemplate.Intercept(f(g(h())))`.
-func (c *JobTemplateClient) Intercept(interceptors ...Interceptor) {
-	c.inters.JobTemplate = append(c.inters.JobTemplate, interceptors...)
-}
-
-// Create returns a builder for creating a JobTemplate entity.
-func (c *JobTemplateClient) Create() *JobTemplateCreate {
-	mutation := newJobTemplateMutation(c.config, OpCreate)
-	return &JobTemplateCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// CreateBulk returns a builder for creating a bulk of JobTemplate entities.
-func (c *JobTemplateClient) CreateBulk(builders ...*JobTemplateCreate) *JobTemplateCreateBulk {
-	return &JobTemplateCreateBulk{config: c.config, builders: builders}
-}
-
-// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
-// a builder and applies setFunc on it.
-func (c *JobTemplateClient) MapCreateBulk(slice any, setFunc func(*JobTemplateCreate, int)) *JobTemplateCreateBulk {
-	rv := reflect.ValueOf(slice)
-	if rv.Kind() != reflect.Slice {
-		return &JobTemplateCreateBulk{err: fmt.Errorf("calling to JobTemplateClient.MapCreateBulk with wrong type %T, need slice", slice)}
-	}
-	builders := make([]*JobTemplateCreate, rv.Len())
-	for i := 0; i < rv.Len(); i++ {
-		builders[i] = c.Create()
-		setFunc(builders[i], i)
-	}
-	return &JobTemplateCreateBulk{config: c.config, builders: builders}
-}
-
-// Update returns an update builder for JobTemplate.
-func (c *JobTemplateClient) Update() *JobTemplateUpdate {
-	mutation := newJobTemplateMutation(c.config, OpUpdate)
-	return &JobTemplateUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOne returns an update builder for the given entity.
-func (c *JobTemplateClient) UpdateOne(_m *JobTemplate) *JobTemplateUpdateOne {
-	mutation := newJobTemplateMutation(c.config, OpUpdateOne, withJobTemplate(_m))
-	return &JobTemplateUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOneID returns an update builder for the given id.
-func (c *JobTemplateClient) UpdateOneID(id string) *JobTemplateUpdateOne {
-	mutation := newJobTemplateMutation(c.config, OpUpdateOne, withJobTemplateID(id))
-	return &JobTemplateUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// Delete returns a delete builder for JobTemplate.
-func (c *JobTemplateClient) Delete() *JobTemplateDelete {
-	mutation := newJobTemplateMutation(c.config, OpDelete)
-	return &JobTemplateDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// DeleteOne returns a builder for deleting the given entity.
-func (c *JobTemplateClient) DeleteOne(_m *JobTemplate) *JobTemplateDeleteOne {
-	return c.DeleteOneID(_m.ID)
-}
-
-// DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *JobTemplateClient) DeleteOneID(id string) *JobTemplateDeleteOne {
-	builder := c.Delete().Where(jobtemplate.ID(id))
-	builder.mutation.id = &id
-	builder.mutation.op = OpDeleteOne
-	return &JobTemplateDeleteOne{builder}
-}
-
-// Query returns a query builder for JobTemplate.
-func (c *JobTemplateClient) Query() *JobTemplateQuery {
-	return &JobTemplateQuery{
-		config: c.config,
-		ctx:    &QueryContext{Type: TypeJobTemplate},
-		inters: c.Interceptors(),
-	}
-}
-
-// Get returns a JobTemplate entity by its id.
-func (c *JobTemplateClient) Get(ctx context.Context, id string) (*JobTemplate, error) {
-	return c.Query().Where(jobtemplate.ID(id)).Only(ctx)
-}
-
-// GetX is like Get, but panics if an error occurs.
-func (c *JobTemplateClient) GetX(ctx context.Context, id string) *JobTemplate {
-	obj, err := c.Get(ctx, id)
-	if err != nil {
-		panic(err)
-	}
-	return obj
-}
-
-// QueryOwner queries the owner edge of a JobTemplate.
-func (c *JobTemplateClient) QueryOwner(_m *JobTemplate) *OrganizationQuery {
-	query := (&OrganizationClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(jobtemplate.Table, jobtemplate.FieldID, id),
-			sqlgraph.To(organization.Table, organization.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, jobtemplate.OwnerTable, jobtemplate.OwnerColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryScheduledJobs queries the scheduled_jobs edge of a JobTemplate.
-func (c *JobTemplateClient) QueryScheduledJobs(_m *JobTemplate) *ScheduledJobQuery {
-	query := (&ScheduledJobClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(jobtemplate.Table, jobtemplate.FieldID, id),
-			sqlgraph.To(scheduledjob.Table, scheduledjob.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, jobtemplate.ScheduledJobsTable, jobtemplate.ScheduledJobsColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// Hooks returns the client hooks.
-func (c *JobTemplateClient) Hooks() []Hook {
-	hooks := c.hooks.JobTemplate
-	return append(hooks[:len(hooks):len(hooks)], jobtemplate.Hooks[:]...)
-}
-
-// Interceptors returns the client interceptors.
-func (c *JobTemplateClient) Interceptors() []Interceptor {
-	inters := c.inters.JobTemplate
-	return append(inters[:len(inters):len(inters)], jobtemplate.Interceptors[:]...)
-}
-
-func (c *JobTemplateClient) mutate(ctx context.Context, m *JobTemplateMutation) (Value, error) {
-	switch m.Op() {
-	case OpCreate:
-		return (&JobTemplateCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdate:
-		return (&JobTemplateUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdateOne:
-		return (&JobTemplateUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpDelete, OpDeleteOne:
-		return (&JobTemplateDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
-	default:
-		return nil, fmt.Errorf("generated: unknown JobTemplate mutation op: %q", m.Op())
-	}
-}
-
 // MappableDomainClient is a client for the MappableDomain schema.
 type MappableDomainClient struct {
 	config
@@ -19762,70 +18835,6 @@ func (c *OrganizationClient) QueryInviteCreators(_m *Organization) *GroupQuery {
 	return query
 }
 
-// QueryJobRunnerCreators queries the job_runner_creators edge of a Organization.
-func (c *OrganizationClient) QueryJobRunnerCreators(_m *Organization) *GroupQuery {
-	query := (&GroupClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, id),
-			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.JobRunnerCreatorsTable, organization.JobRunnerCreatorsColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryJobRunnerRegistrationTokenCreators queries the job_runner_registration_token_creators edge of a Organization.
-func (c *OrganizationClient) QueryJobRunnerRegistrationTokenCreators(_m *Organization) *GroupQuery {
-	query := (&GroupClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, id),
-			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.JobRunnerRegistrationTokenCreatorsTable, organization.JobRunnerRegistrationTokenCreatorsColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryJobRunnerTokenCreators queries the job_runner_token_creators edge of a Organization.
-func (c *OrganizationClient) QueryJobRunnerTokenCreators(_m *Organization) *GroupQuery {
-	query := (&GroupClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, id),
-			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.JobRunnerTokenCreatorsTable, organization.JobRunnerTokenCreatorsColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryJobTemplateCreators queries the job_template_creators edge of a Organization.
-func (c *OrganizationClient) QueryJobTemplateCreators(_m *Organization) *GroupQuery {
-	query := (&GroupClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, id),
-			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.JobTemplateCreatorsTable, organization.JobTemplateCreatorsColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // QueryMappedControlCreators queries the mapped_control_creators edge of a Organization.
 func (c *OrganizationClient) QueryMappedControlCreators(_m *Organization) *GroupQuery {
 	query := (&GroupClient{config: c.config}).Query()
@@ -20027,38 +19036,6 @@ func (c *OrganizationClient) QueryScanCreators(_m *Organization) *GroupQuery {
 			sqlgraph.From(organization.Table, organization.FieldID, id),
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.ScanCreatorsTable, organization.ScanCreatorsColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryScheduledJobCreators queries the scheduled_job_creators edge of a Organization.
-func (c *OrganizationClient) QueryScheduledJobCreators(_m *Organization) *GroupQuery {
-	query := (&GroupClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, id),
-			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.ScheduledJobCreatorsTable, organization.ScheduledJobCreatorsColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryScheduledJobRunCreators queries the scheduled_job_run_creators edge of a Organization.
-func (c *OrganizationClient) QueryScheduledJobRunCreators(_m *Organization) *GroupQuery {
-	query := (&GroupClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, id),
-			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.ScheduledJobRunCreatorsTable, organization.ScheduledJobRunCreatorsColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -21314,54 +20291,6 @@ func (c *OrganizationClient) QueryCustomDomains(_m *Organization) *CustomDomainQ
 	return query
 }
 
-// QueryJobRunners queries the job_runners edge of a Organization.
-func (c *OrganizationClient) QueryJobRunners(_m *Organization) *JobRunnerQuery {
-	query := (&JobRunnerClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, id),
-			sqlgraph.To(jobrunner.Table, jobrunner.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.JobRunnersTable, organization.JobRunnersColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryJobRunnerTokens queries the job_runner_tokens edge of a Organization.
-func (c *OrganizationClient) QueryJobRunnerTokens(_m *Organization) *JobRunnerTokenQuery {
-	query := (&JobRunnerTokenClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, id),
-			sqlgraph.To(jobrunnertoken.Table, jobrunnertoken.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.JobRunnerTokensTable, organization.JobRunnerTokensColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryJobRunnerRegistrationTokens queries the job_runner_registration_tokens edge of a Organization.
-func (c *OrganizationClient) QueryJobRunnerRegistrationTokens(_m *Organization) *JobRunnerRegistrationTokenQuery {
-	query := (&JobRunnerRegistrationTokenClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, id),
-			sqlgraph.To(jobrunnerregistrationtoken.Table, jobrunnerregistrationtoken.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.JobRunnerRegistrationTokensTable, organization.JobRunnerRegistrationTokensColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // QueryDNSVerifications queries the dns_verifications edge of a Organization.
 func (c *OrganizationClient) QueryDNSVerifications(_m *Organization) *DNSVerificationQuery {
 	query := (&DNSVerificationClient{config: c.config}).Query()
@@ -21371,70 +20300,6 @@ func (c *OrganizationClient) QueryDNSVerifications(_m *Organization) *DNSVerific
 			sqlgraph.From(organization.Table, organization.FieldID, id),
 			sqlgraph.To(dnsverification.Table, dnsverification.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.DNSVerificationsTable, organization.DNSVerificationsColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryJobTemplates queries the job_templates edge of a Organization.
-func (c *OrganizationClient) QueryJobTemplates(_m *Organization) *JobTemplateQuery {
-	query := (&JobTemplateClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, id),
-			sqlgraph.To(jobtemplate.Table, jobtemplate.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.JobTemplatesTable, organization.JobTemplatesColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryScheduledJobs queries the scheduled_jobs edge of a Organization.
-func (c *OrganizationClient) QueryScheduledJobs(_m *Organization) *ScheduledJobQuery {
-	query := (&ScheduledJobClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, id),
-			sqlgraph.To(scheduledjob.Table, scheduledjob.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.ScheduledJobsTable, organization.ScheduledJobsColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryJobResults queries the job_results edge of a Organization.
-func (c *OrganizationClient) QueryJobResults(_m *Organization) *JobResultQuery {
-	query := (&JobResultClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, id),
-			sqlgraph.To(jobresult.Table, jobresult.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.JobResultsTable, organization.JobResultsColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryScheduledJobRuns queries the scheduled_job_runs edge of a Organization.
-func (c *OrganizationClient) QueryScheduledJobRuns(_m *Organization) *ScheduledJobRunQuery {
-	query := (&ScheduledJobRunClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, id),
-			sqlgraph.To(scheduledjobrun.Table, scheduledjobrun.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.ScheduledJobRunsTable, organization.ScheduledJobRunsColumn),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -26769,404 +25634,6 @@ func (c *ScanClient) mutate(ctx context.Context, m *ScanMutation) (Value, error)
 	}
 }
 
-// ScheduledJobClient is a client for the ScheduledJob schema.
-type ScheduledJobClient struct {
-	config
-}
-
-// NewScheduledJobClient returns a client for the ScheduledJob from the given config.
-func NewScheduledJobClient(c config) *ScheduledJobClient {
-	return &ScheduledJobClient{config: c}
-}
-
-// Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `scheduledjob.Hooks(f(g(h())))`.
-func (c *ScheduledJobClient) Use(hooks ...Hook) {
-	c.hooks.ScheduledJob = append(c.hooks.ScheduledJob, hooks...)
-}
-
-// Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `scheduledjob.Intercept(f(g(h())))`.
-func (c *ScheduledJobClient) Intercept(interceptors ...Interceptor) {
-	c.inters.ScheduledJob = append(c.inters.ScheduledJob, interceptors...)
-}
-
-// Create returns a builder for creating a ScheduledJob entity.
-func (c *ScheduledJobClient) Create() *ScheduledJobCreate {
-	mutation := newScheduledJobMutation(c.config, OpCreate)
-	return &ScheduledJobCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// CreateBulk returns a builder for creating a bulk of ScheduledJob entities.
-func (c *ScheduledJobClient) CreateBulk(builders ...*ScheduledJobCreate) *ScheduledJobCreateBulk {
-	return &ScheduledJobCreateBulk{config: c.config, builders: builders}
-}
-
-// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
-// a builder and applies setFunc on it.
-func (c *ScheduledJobClient) MapCreateBulk(slice any, setFunc func(*ScheduledJobCreate, int)) *ScheduledJobCreateBulk {
-	rv := reflect.ValueOf(slice)
-	if rv.Kind() != reflect.Slice {
-		return &ScheduledJobCreateBulk{err: fmt.Errorf("calling to ScheduledJobClient.MapCreateBulk with wrong type %T, need slice", slice)}
-	}
-	builders := make([]*ScheduledJobCreate, rv.Len())
-	for i := 0; i < rv.Len(); i++ {
-		builders[i] = c.Create()
-		setFunc(builders[i], i)
-	}
-	return &ScheduledJobCreateBulk{config: c.config, builders: builders}
-}
-
-// Update returns an update builder for ScheduledJob.
-func (c *ScheduledJobClient) Update() *ScheduledJobUpdate {
-	mutation := newScheduledJobMutation(c.config, OpUpdate)
-	return &ScheduledJobUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOne returns an update builder for the given entity.
-func (c *ScheduledJobClient) UpdateOne(_m *ScheduledJob) *ScheduledJobUpdateOne {
-	mutation := newScheduledJobMutation(c.config, OpUpdateOne, withScheduledJob(_m))
-	return &ScheduledJobUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOneID returns an update builder for the given id.
-func (c *ScheduledJobClient) UpdateOneID(id string) *ScheduledJobUpdateOne {
-	mutation := newScheduledJobMutation(c.config, OpUpdateOne, withScheduledJobID(id))
-	return &ScheduledJobUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// Delete returns a delete builder for ScheduledJob.
-func (c *ScheduledJobClient) Delete() *ScheduledJobDelete {
-	mutation := newScheduledJobMutation(c.config, OpDelete)
-	return &ScheduledJobDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// DeleteOne returns a builder for deleting the given entity.
-func (c *ScheduledJobClient) DeleteOne(_m *ScheduledJob) *ScheduledJobDeleteOne {
-	return c.DeleteOneID(_m.ID)
-}
-
-// DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *ScheduledJobClient) DeleteOneID(id string) *ScheduledJobDeleteOne {
-	builder := c.Delete().Where(scheduledjob.ID(id))
-	builder.mutation.id = &id
-	builder.mutation.op = OpDeleteOne
-	return &ScheduledJobDeleteOne{builder}
-}
-
-// Query returns a query builder for ScheduledJob.
-func (c *ScheduledJobClient) Query() *ScheduledJobQuery {
-	return &ScheduledJobQuery{
-		config: c.config,
-		ctx:    &QueryContext{Type: TypeScheduledJob},
-		inters: c.Interceptors(),
-	}
-}
-
-// Get returns a ScheduledJob entity by its id.
-func (c *ScheduledJobClient) Get(ctx context.Context, id string) (*ScheduledJob, error) {
-	return c.Query().Where(scheduledjob.ID(id)).Only(ctx)
-}
-
-// GetX is like Get, but panics if an error occurs.
-func (c *ScheduledJobClient) GetX(ctx context.Context, id string) *ScheduledJob {
-	obj, err := c.Get(ctx, id)
-	if err != nil {
-		panic(err)
-	}
-	return obj
-}
-
-// QueryOwner queries the owner edge of a ScheduledJob.
-func (c *ScheduledJobClient) QueryOwner(_m *ScheduledJob) *OrganizationQuery {
-	query := (&OrganizationClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(scheduledjob.Table, scheduledjob.FieldID, id),
-			sqlgraph.To(organization.Table, organization.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, scheduledjob.OwnerTable, scheduledjob.OwnerColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryJobTemplate queries the job_template edge of a ScheduledJob.
-func (c *ScheduledJobClient) QueryJobTemplate(_m *ScheduledJob) *JobTemplateQuery {
-	query := (&JobTemplateClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(scheduledjob.Table, scheduledjob.FieldID, id),
-			sqlgraph.To(jobtemplate.Table, jobtemplate.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, scheduledjob.JobTemplateTable, scheduledjob.JobTemplateColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryControls queries the controls edge of a ScheduledJob.
-func (c *ScheduledJobClient) QueryControls(_m *ScheduledJob) *ControlQuery {
-	query := (&ControlClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(scheduledjob.Table, scheduledjob.FieldID, id),
-			sqlgraph.To(control.Table, control.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, scheduledjob.ControlsTable, scheduledjob.ControlsPrimaryKey...),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QuerySubcontrols queries the subcontrols edge of a ScheduledJob.
-func (c *ScheduledJobClient) QuerySubcontrols(_m *ScheduledJob) *SubcontrolQuery {
-	query := (&SubcontrolClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(scheduledjob.Table, scheduledjob.FieldID, id),
-			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, scheduledjob.SubcontrolsTable, scheduledjob.SubcontrolsPrimaryKey...),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryJobRunner queries the job_runner edge of a ScheduledJob.
-func (c *ScheduledJobClient) QueryJobRunner(_m *ScheduledJob) *JobRunnerQuery {
-	query := (&JobRunnerClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(scheduledjob.Table, scheduledjob.FieldID, id),
-			sqlgraph.To(jobrunner.Table, jobrunner.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, scheduledjob.JobRunnerTable, scheduledjob.JobRunnerColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// Hooks returns the client hooks.
-func (c *ScheduledJobClient) Hooks() []Hook {
-	hooks := c.hooks.ScheduledJob
-	return append(hooks[:len(hooks):len(hooks)], scheduledjob.Hooks[:]...)
-}
-
-// Interceptors returns the client interceptors.
-func (c *ScheduledJobClient) Interceptors() []Interceptor {
-	inters := c.inters.ScheduledJob
-	return append(inters[:len(inters):len(inters)], scheduledjob.Interceptors[:]...)
-}
-
-func (c *ScheduledJobClient) mutate(ctx context.Context, m *ScheduledJobMutation) (Value, error) {
-	switch m.Op() {
-	case OpCreate:
-		return (&ScheduledJobCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdate:
-		return (&ScheduledJobUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdateOne:
-		return (&ScheduledJobUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpDelete, OpDeleteOne:
-		return (&ScheduledJobDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
-	default:
-		return nil, fmt.Errorf("generated: unknown ScheduledJob mutation op: %q", m.Op())
-	}
-}
-
-// ScheduledJobRunClient is a client for the ScheduledJobRun schema.
-type ScheduledJobRunClient struct {
-	config
-}
-
-// NewScheduledJobRunClient returns a client for the ScheduledJobRun from the given config.
-func NewScheduledJobRunClient(c config) *ScheduledJobRunClient {
-	return &ScheduledJobRunClient{config: c}
-}
-
-// Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `scheduledjobrun.Hooks(f(g(h())))`.
-func (c *ScheduledJobRunClient) Use(hooks ...Hook) {
-	c.hooks.ScheduledJobRun = append(c.hooks.ScheduledJobRun, hooks...)
-}
-
-// Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `scheduledjobrun.Intercept(f(g(h())))`.
-func (c *ScheduledJobRunClient) Intercept(interceptors ...Interceptor) {
-	c.inters.ScheduledJobRun = append(c.inters.ScheduledJobRun, interceptors...)
-}
-
-// Create returns a builder for creating a ScheduledJobRun entity.
-func (c *ScheduledJobRunClient) Create() *ScheduledJobRunCreate {
-	mutation := newScheduledJobRunMutation(c.config, OpCreate)
-	return &ScheduledJobRunCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// CreateBulk returns a builder for creating a bulk of ScheduledJobRun entities.
-func (c *ScheduledJobRunClient) CreateBulk(builders ...*ScheduledJobRunCreate) *ScheduledJobRunCreateBulk {
-	return &ScheduledJobRunCreateBulk{config: c.config, builders: builders}
-}
-
-// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
-// a builder and applies setFunc on it.
-func (c *ScheduledJobRunClient) MapCreateBulk(slice any, setFunc func(*ScheduledJobRunCreate, int)) *ScheduledJobRunCreateBulk {
-	rv := reflect.ValueOf(slice)
-	if rv.Kind() != reflect.Slice {
-		return &ScheduledJobRunCreateBulk{err: fmt.Errorf("calling to ScheduledJobRunClient.MapCreateBulk with wrong type %T, need slice", slice)}
-	}
-	builders := make([]*ScheduledJobRunCreate, rv.Len())
-	for i := 0; i < rv.Len(); i++ {
-		builders[i] = c.Create()
-		setFunc(builders[i], i)
-	}
-	return &ScheduledJobRunCreateBulk{config: c.config, builders: builders}
-}
-
-// Update returns an update builder for ScheduledJobRun.
-func (c *ScheduledJobRunClient) Update() *ScheduledJobRunUpdate {
-	mutation := newScheduledJobRunMutation(c.config, OpUpdate)
-	return &ScheduledJobRunUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOne returns an update builder for the given entity.
-func (c *ScheduledJobRunClient) UpdateOne(_m *ScheduledJobRun) *ScheduledJobRunUpdateOne {
-	mutation := newScheduledJobRunMutation(c.config, OpUpdateOne, withScheduledJobRun(_m))
-	return &ScheduledJobRunUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOneID returns an update builder for the given id.
-func (c *ScheduledJobRunClient) UpdateOneID(id string) *ScheduledJobRunUpdateOne {
-	mutation := newScheduledJobRunMutation(c.config, OpUpdateOne, withScheduledJobRunID(id))
-	return &ScheduledJobRunUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// Delete returns a delete builder for ScheduledJobRun.
-func (c *ScheduledJobRunClient) Delete() *ScheduledJobRunDelete {
-	mutation := newScheduledJobRunMutation(c.config, OpDelete)
-	return &ScheduledJobRunDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// DeleteOne returns a builder for deleting the given entity.
-func (c *ScheduledJobRunClient) DeleteOne(_m *ScheduledJobRun) *ScheduledJobRunDeleteOne {
-	return c.DeleteOneID(_m.ID)
-}
-
-// DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *ScheduledJobRunClient) DeleteOneID(id string) *ScheduledJobRunDeleteOne {
-	builder := c.Delete().Where(scheduledjobrun.ID(id))
-	builder.mutation.id = &id
-	builder.mutation.op = OpDeleteOne
-	return &ScheduledJobRunDeleteOne{builder}
-}
-
-// Query returns a query builder for ScheduledJobRun.
-func (c *ScheduledJobRunClient) Query() *ScheduledJobRunQuery {
-	return &ScheduledJobRunQuery{
-		config: c.config,
-		ctx:    &QueryContext{Type: TypeScheduledJobRun},
-		inters: c.Interceptors(),
-	}
-}
-
-// Get returns a ScheduledJobRun entity by its id.
-func (c *ScheduledJobRunClient) Get(ctx context.Context, id string) (*ScheduledJobRun, error) {
-	return c.Query().Where(scheduledjobrun.ID(id)).Only(ctx)
-}
-
-// GetX is like Get, but panics if an error occurs.
-func (c *ScheduledJobRunClient) GetX(ctx context.Context, id string) *ScheduledJobRun {
-	obj, err := c.Get(ctx, id)
-	if err != nil {
-		panic(err)
-	}
-	return obj
-}
-
-// QueryOwner queries the owner edge of a ScheduledJobRun.
-func (c *ScheduledJobRunClient) QueryOwner(_m *ScheduledJobRun) *OrganizationQuery {
-	query := (&OrganizationClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(scheduledjobrun.Table, scheduledjobrun.FieldID, id),
-			sqlgraph.To(organization.Table, organization.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, scheduledjobrun.OwnerTable, scheduledjobrun.OwnerColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryScheduledJob queries the scheduled_job edge of a ScheduledJobRun.
-func (c *ScheduledJobRunClient) QueryScheduledJob(_m *ScheduledJobRun) *ScheduledJobQuery {
-	query := (&ScheduledJobClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(scheduledjobrun.Table, scheduledjobrun.FieldID, id),
-			sqlgraph.To(scheduledjob.Table, scheduledjob.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, scheduledjobrun.ScheduledJobTable, scheduledjobrun.ScheduledJobColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryJobRunner queries the job_runner edge of a ScheduledJobRun.
-func (c *ScheduledJobRunClient) QueryJobRunner(_m *ScheduledJobRun) *JobRunnerQuery {
-	query := (&JobRunnerClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(scheduledjobrun.Table, scheduledjobrun.FieldID, id),
-			sqlgraph.To(jobrunner.Table, jobrunner.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, scheduledjobrun.JobRunnerTable, scheduledjobrun.JobRunnerColumn),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// Hooks returns the client hooks.
-func (c *ScheduledJobRunClient) Hooks() []Hook {
-	hooks := c.hooks.ScheduledJobRun
-	return append(hooks[:len(hooks):len(hooks)], scheduledjobrun.Hooks[:]...)
-}
-
-// Interceptors returns the client interceptors.
-func (c *ScheduledJobRunClient) Interceptors() []Interceptor {
-	inters := c.inters.ScheduledJobRun
-	return append(inters[:len(inters):len(inters)], scheduledjobrun.Interceptors[:]...)
-}
-
-func (c *ScheduledJobRunClient) mutate(ctx context.Context, m *ScheduledJobRunMutation) (Value, error) {
-	switch m.Op() {
-	case OpCreate:
-		return (&ScheduledJobRunCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdate:
-		return (&ScheduledJobRunUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdateOne:
-		return (&ScheduledJobRunUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpDelete, OpDeleteOne:
-		return (&ScheduledJobRunDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
-	default:
-		return nil, fmt.Errorf("generated: unknown ScheduledJobRun mutation op: %q", m.Op())
-	}
-}
-
 // StandardClient is a client for the Standard schema.
 type StandardClient struct {
 	config
@@ -27819,22 +26286,6 @@ func (c *SubcontrolClient) QueryControlImplementations(_m *Subcontrol) *ControlI
 			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, id),
 			sqlgraph.To(controlimplementation.Table, controlimplementation.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, subcontrol.ControlImplementationsTable, subcontrol.ControlImplementationsPrimaryKey...),
-		)
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryScheduledJobs queries the scheduled_jobs edge of a Subcontrol.
-func (c *SubcontrolClient) QueryScheduledJobs(_m *Subcontrol) *ScheduledJobQuery {
-	query := (&ScheduledJobClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(subcontrol.Table, subcontrol.FieldID, id),
-			sqlgraph.To(scheduledjob.Table, scheduledjob.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, subcontrol.ScheduledJobsTable, subcontrol.ScheduledJobsPrimaryKey...),
 		)
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
@@ -35923,20 +34374,19 @@ type (
 		EntityType, Event, Evidence, Export, File, FileDownloadToken, Finding,
 		FindingControl, Group, GroupMembership, GroupSetting, Hush, IdentityHolder,
 		ImpersonationEvent, Integration, IntegrationRun, IntegrationWebhook,
-		InternalPolicy, Invite, JobResult, JobRunner, JobRunnerRegistrationToken,
-		JobRunnerToken, JobTemplate, MappableDomain, MappedControl, Narrative, Note,
+		InternalPolicy, Invite, MappableDomain, MappedControl, Narrative, Note,
 		Notification, NotificationPreference, NotificationTemplate, Onboarding,
 		OrgMembership, OrgModule, OrgPrice, OrgProduct, OrgSubscription, Organization,
 		OrganizationSetting, PasswordResetToken, PersonalAccessToken, Platform,
 		Procedure, Program, ProgramMembership, Remediation, Review, Risk,
-		SLADefinition, Scan, ScheduledJob, ScheduledJobRun, Standard, Subcontrol,
-		Subprocessor, Subscriber, SystemDetail, TFASetting, TagDefinition, Task,
-		Template, TrustCenter, TrustCenterCompliance, TrustCenterDoc,
-		TrustCenterEntity, TrustCenterFAQ, TrustCenterNDARequest, TrustCenterSetting,
-		TrustCenterSubprocessor, TrustCenterWatermarkConfig, User, UserSetting,
-		VendorRiskScore, VendorScoringConfig, Vulnerability, Webauthn,
-		WorkflowAssignment, WorkflowAssignmentTarget, WorkflowDefinition,
-		WorkflowEvent, WorkflowInstance, WorkflowObjectRef, WorkflowProposal []ent.Hook
+		SLADefinition, Scan, Standard, Subcontrol, Subprocessor, Subscriber,
+		SystemDetail, TFASetting, TagDefinition, Task, Template, TrustCenter,
+		TrustCenterCompliance, TrustCenterDoc, TrustCenterEntity, TrustCenterFAQ,
+		TrustCenterNDARequest, TrustCenterSetting, TrustCenterSubprocessor,
+		TrustCenterWatermarkConfig, User, UserSetting, VendorRiskScore,
+		VendorScoringConfig, Vulnerability, Webauthn, WorkflowAssignment,
+		WorkflowAssignmentTarget, WorkflowDefinition, WorkflowEvent, WorkflowInstance,
+		WorkflowObjectRef, WorkflowProposal []ent.Hook
 	}
 	inters struct {
 		APIToken, ActionPlan, Assessment, AssessmentResponse, Asset, Campaign,
@@ -35947,21 +34397,19 @@ type (
 		EntityType, Event, Evidence, Export, File, FileDownloadToken, Finding,
 		FindingControl, Group, GroupMembership, GroupSetting, Hush, IdentityHolder,
 		ImpersonationEvent, Integration, IntegrationRun, IntegrationWebhook,
-		InternalPolicy, Invite, JobResult, JobRunner, JobRunnerRegistrationToken,
-		JobRunnerToken, JobTemplate, MappableDomain, MappedControl, Narrative, Note,
+		InternalPolicy, Invite, MappableDomain, MappedControl, Narrative, Note,
 		Notification, NotificationPreference, NotificationTemplate, Onboarding,
 		OrgMembership, OrgModule, OrgPrice, OrgProduct, OrgSubscription, Organization,
 		OrganizationSetting, PasswordResetToken, PersonalAccessToken, Platform,
 		Procedure, Program, ProgramMembership, Remediation, Review, Risk,
-		SLADefinition, Scan, ScheduledJob, ScheduledJobRun, Standard, Subcontrol,
-		Subprocessor, Subscriber, SystemDetail, TFASetting, TagDefinition, Task,
-		Template, TrustCenter, TrustCenterCompliance, TrustCenterDoc,
-		TrustCenterEntity, TrustCenterFAQ, TrustCenterNDARequest, TrustCenterSetting,
-		TrustCenterSubprocessor, TrustCenterWatermarkConfig, User, UserSetting,
-		VendorRiskScore, VendorScoringConfig, Vulnerability, Webauthn,
-		WorkflowAssignment, WorkflowAssignmentTarget, WorkflowDefinition,
-		WorkflowEvent, WorkflowInstance, WorkflowObjectRef,
-		WorkflowProposal []ent.Interceptor
+		SLADefinition, Scan, Standard, Subcontrol, Subprocessor, Subscriber,
+		SystemDetail, TFASetting, TagDefinition, Task, Template, TrustCenter,
+		TrustCenterCompliance, TrustCenterDoc, TrustCenterEntity, TrustCenterFAQ,
+		TrustCenterNDARequest, TrustCenterSetting, TrustCenterSubprocessor,
+		TrustCenterWatermarkConfig, User, UserSetting, VendorRiskScore,
+		VendorScoringConfig, Vulnerability, Webauthn, WorkflowAssignment,
+		WorkflowAssignmentTarget, WorkflowDefinition, WorkflowEvent, WorkflowInstance,
+		WorkflowObjectRef, WorkflowProposal []ent.Interceptor
 	}
 )
 

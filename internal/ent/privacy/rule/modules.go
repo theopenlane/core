@@ -255,7 +255,6 @@ func ShouldSkipFeatureCheck(ctx context.Context) bool {
 		&token.SignUpToken{},
 		&token.OrgInviteToken{},
 		&token.ResetToken{},
-		&token.JobRunnerRegistrationToken{},
 	}
 
 	return SkipTokenInContext(ctx, skipTokenType)

@@ -20,7 +20,6 @@ contents:
     - automation/assessments.fga
     - automation/directory.fga
     - automation/integrations.fga
-    - automation/jobs.fga
     - automation/notifications.fga
     - automation/workflows.fga
 

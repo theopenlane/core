@@ -426,13 +426,6 @@
       "isSlice": false
     }
   ],
-  "ScheduledJob": [
-    {
-      "csvColumn": "ControlRefCodes",
-      "targetField": "ControlIDs",
-      "isSlice": true
-    }
-  ],
   "Subcontrol": [
     {
       "csvColumn": "ActionPlanNames",

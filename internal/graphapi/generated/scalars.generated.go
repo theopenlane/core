@@ -601,22 +601,6 @@ func (ec *executionContext) marshalOImplementationGuidance2ᚕgithubᚗcomᚋthe
 	return ret
 }
 
-func (ec *executionContext) unmarshalOJobConfiguration2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐJobConfiguration(ctx context.Context, v any) (models.JobConfiguration, error) {
-	if v == nil {
-		return nil, nil
-	}
-	var res models.JobConfiguration
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalOJobConfiguration2githubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐJobConfiguration(ctx context.Context, sel ast.SelectionSet, v models.JobConfiguration) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return v
-}
-
 func (ec *executionContext) unmarshalOReference2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋcommonᚋmodelsᚐReferenceᚄ(ctx context.Context, v any) ([]models.Reference, error) {
 	if v == nil {
 		return nil, nil

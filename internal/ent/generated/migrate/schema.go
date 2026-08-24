@@ -3106,10 +3106,6 @@ var (
 		{Name: "organization_identity_holder_creators", Type: field.TypeString, Nullable: true},
 		{Name: "organization_internal_policy_creators", Type: field.TypeString, Nullable: true},
 		{Name: "organization_invite_creators", Type: field.TypeString, Nullable: true},
-		{Name: "organization_job_runner_creators", Type: field.TypeString, Nullable: true},
-		{Name: "organization_job_runner_registration_token_creators", Type: field.TypeString, Nullable: true},
-		{Name: "organization_job_runner_token_creators", Type: field.TypeString, Nullable: true},
-		{Name: "organization_job_template_creators", Type: field.TypeString, Nullable: true},
 		{Name: "organization_mapped_control_creators", Type: field.TypeString, Nullable: true},
 		{Name: "organization_narrative_creators", Type: field.TypeString, Nullable: true},
 		{Name: "organization_note_creators", Type: field.TypeString, Nullable: true},
@@ -3123,8 +3119,6 @@ var (
 		{Name: "organization_review_creators", Type: field.TypeString, Nullable: true},
 		{Name: "organization_risk_creators", Type: field.TypeString, Nullable: true},
 		{Name: "organization_scan_creators", Type: field.TypeString, Nullable: true},
-		{Name: "organization_scheduled_job_creators", Type: field.TypeString, Nullable: true},
-		{Name: "organization_scheduled_job_run_creators", Type: field.TypeString, Nullable: true},
 		{Name: "organization_sla_definition_creators", Type: field.TypeString, Nullable: true},
 		{Name: "organization_standard_creators", Type: field.TypeString, Nullable: true},
 		{Name: "organization_subcontrol_creators", Type: field.TypeString, Nullable: true},
@@ -3484,458 +3478,422 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_job_runner_creators",
+				Symbol:     "groups_organizations_mapped_control_creators",
 				Columns:    []*schema.Column{GroupsColumns[72]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_job_runner_registration_token_creators",
+				Symbol:     "groups_organizations_narrative_creators",
 				Columns:    []*schema.Column{GroupsColumns[73]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_job_runner_token_creators",
+				Symbol:     "groups_organizations_note_creators",
 				Columns:    []*schema.Column{GroupsColumns[74]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_job_template_creators",
+				Symbol:     "groups_organizations_notification_template_creators",
 				Columns:    []*schema.Column{GroupsColumns[75]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_mapped_control_creators",
+				Symbol:     "groups_organizations_org_membership_creators",
 				Columns:    []*schema.Column{GroupsColumns[76]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_narrative_creators",
+				Symbol:     "groups_organizations_platform_creators",
 				Columns:    []*schema.Column{GroupsColumns[77]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_note_creators",
+				Symbol:     "groups_organizations_procedure_creators",
 				Columns:    []*schema.Column{GroupsColumns[78]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_notification_template_creators",
+				Symbol:     "groups_organizations_program_creators",
 				Columns:    []*schema.Column{GroupsColumns[79]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_org_membership_creators",
+				Symbol:     "groups_organizations_program_membership_creators",
 				Columns:    []*schema.Column{GroupsColumns[80]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_platform_creators",
+				Symbol:     "groups_organizations_remediation_creators",
 				Columns:    []*schema.Column{GroupsColumns[81]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_procedure_creators",
+				Symbol:     "groups_organizations_review_creators",
 				Columns:    []*schema.Column{GroupsColumns[82]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_program_creators",
+				Symbol:     "groups_organizations_risk_creators",
 				Columns:    []*schema.Column{GroupsColumns[83]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_program_membership_creators",
+				Symbol:     "groups_organizations_scan_creators",
 				Columns:    []*schema.Column{GroupsColumns[84]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_remediation_creators",
+				Symbol:     "groups_organizations_sla_definition_creators",
 				Columns:    []*schema.Column{GroupsColumns[85]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_review_creators",
+				Symbol:     "groups_organizations_standard_creators",
 				Columns:    []*schema.Column{GroupsColumns[86]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_risk_creators",
+				Symbol:     "groups_organizations_subcontrol_creators",
 				Columns:    []*schema.Column{GroupsColumns[87]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_scan_creators",
+				Symbol:     "groups_organizations_subprocessor_creators",
 				Columns:    []*schema.Column{GroupsColumns[88]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_scheduled_job_creators",
+				Symbol:     "groups_organizations_subscriber_creators",
 				Columns:    []*schema.Column{GroupsColumns[89]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_scheduled_job_run_creators",
+				Symbol:     "groups_organizations_system_detail_creators",
 				Columns:    []*schema.Column{GroupsColumns[90]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_sla_definition_creators",
+				Symbol:     "groups_organizations_tag_definition_creators",
 				Columns:    []*schema.Column{GroupsColumns[91]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_standard_creators",
+				Symbol:     "groups_organizations_task_creators",
 				Columns:    []*schema.Column{GroupsColumns[92]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_subcontrol_creators",
+				Symbol:     "groups_organizations_template_creators",
 				Columns:    []*schema.Column{GroupsColumns[93]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_subprocessor_creators",
+				Symbol:     "groups_organizations_trust_center_creators",
 				Columns:    []*schema.Column{GroupsColumns[94]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_subscriber_creators",
+				Symbol:     "groups_organizations_trust_center_compliance_creators",
 				Columns:    []*schema.Column{GroupsColumns[95]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_system_detail_creators",
+				Symbol:     "groups_organizations_trust_center_doc_creators",
 				Columns:    []*schema.Column{GroupsColumns[96]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_tag_definition_creators",
+				Symbol:     "groups_organizations_trust_center_entity_creators",
 				Columns:    []*schema.Column{GroupsColumns[97]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_task_creators",
+				Symbol:     "groups_organizations_trust_center_faq_creators",
 				Columns:    []*schema.Column{GroupsColumns[98]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_template_creators",
+				Symbol:     "groups_organizations_trust_center_nda_request_creators",
 				Columns:    []*schema.Column{GroupsColumns[99]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_trust_center_creators",
+				Symbol:     "groups_organizations_trust_center_subprocessor_creators",
 				Columns:    []*schema.Column{GroupsColumns[100]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_trust_center_compliance_creators",
+				Symbol:     "groups_organizations_trust_center_watermark_config_creators",
 				Columns:    []*schema.Column{GroupsColumns[101]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_trust_center_doc_creators",
+				Symbol:     "groups_organizations_vendor_risk_score_creators",
 				Columns:    []*schema.Column{GroupsColumns[102]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_trust_center_entity_creators",
+				Symbol:     "groups_organizations_vendor_scoring_config_creators",
 				Columns:    []*schema.Column{GroupsColumns[103]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_trust_center_faq_creators",
+				Symbol:     "groups_organizations_vulnerability_creators",
 				Columns:    []*schema.Column{GroupsColumns[104]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_trust_center_nda_request_creators",
+				Symbol:     "groups_organizations_workflow_definition_creators",
 				Columns:    []*schema.Column{GroupsColumns[105]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_trust_center_subprocessor_creators",
+				Symbol:     "groups_organizations_campaigns_manager",
 				Columns:    []*schema.Column{GroupsColumns[106]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_trust_center_watermark_config_creators",
+				Symbol:     "groups_organizations_compliance_manager",
 				Columns:    []*schema.Column{GroupsColumns[107]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_vendor_risk_score_creators",
+				Symbol:     "groups_organizations_group_manager",
 				Columns:    []*schema.Column{GroupsColumns[108]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_vendor_scoring_config_creators",
+				Symbol:     "groups_organizations_policies_manager",
 				Columns:    []*schema.Column{GroupsColumns[109]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_vulnerability_creators",
+				Symbol:     "groups_organizations_registry_manager",
 				Columns:    []*schema.Column{GroupsColumns[110]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_workflow_definition_creators",
+				Symbol:     "groups_organizations_risk_manager",
 				Columns:    []*schema.Column{GroupsColumns[111]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_campaigns_manager",
+				Symbol:     "groups_organizations_trust_center_manager",
 				Columns:    []*schema.Column{GroupsColumns[112]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_compliance_manager",
+				Symbol:     "groups_organizations_workflows_manager",
 				Columns:    []*schema.Column{GroupsColumns[113]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_group_manager",
+				Symbol:     "groups_organizations_groups",
 				Columns:    []*schema.Column{GroupsColumns[114]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_policies_manager",
-				Columns:    []*schema.Column{GroupsColumns[115]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "groups_organizations_registry_manager",
-				Columns:    []*schema.Column{GroupsColumns[116]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "groups_organizations_risk_manager",
-				Columns:    []*schema.Column{GroupsColumns[117]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "groups_organizations_trust_center_manager",
-				Columns:    []*schema.Column{GroupsColumns[118]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "groups_organizations_workflows_manager",
-				Columns:    []*schema.Column{GroupsColumns[119]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "groups_organizations_groups",
-				Columns:    []*schema.Column{GroupsColumns[120]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
 				Symbol:     "groups_sla_definitions_blocked_groups",
-				Columns:    []*schema.Column{GroupsColumns[121]},
+				Columns:    []*schema.Column{GroupsColumns[115]},
 				RefColumns: []*schema.Column{SLADefinitionsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_sla_definitions_editors",
-				Columns:    []*schema.Column{GroupsColumns[122]},
+				Columns:    []*schema.Column{GroupsColumns[116]},
 				RefColumns: []*schema.Column{SLADefinitionsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_trust_centers_blocked_groups",
-				Columns:    []*schema.Column{GroupsColumns[123]},
+				Columns:    []*schema.Column{GroupsColumns[117]},
 				RefColumns: []*schema.Column{TrustCentersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_trust_centers_editors",
-				Columns:    []*schema.Column{GroupsColumns[124]},
+				Columns:    []*schema.Column{GroupsColumns[118]},
 				RefColumns: []*schema.Column{TrustCentersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_trust_center_compliances_blocked_groups",
-				Columns:    []*schema.Column{GroupsColumns[125]},
+				Columns:    []*schema.Column{GroupsColumns[119]},
 				RefColumns: []*schema.Column{TrustCenterCompliancesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_trust_center_compliances_editors",
-				Columns:    []*schema.Column{GroupsColumns[126]},
+				Columns:    []*schema.Column{GroupsColumns[120]},
 				RefColumns: []*schema.Column{TrustCenterCompliancesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_trust_center_docs_blocked_groups",
-				Columns:    []*schema.Column{GroupsColumns[127]},
+				Columns:    []*schema.Column{GroupsColumns[121]},
 				RefColumns: []*schema.Column{TrustCenterDocsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_trust_center_docs_editors",
-				Columns:    []*schema.Column{GroupsColumns[128]},
+				Columns:    []*schema.Column{GroupsColumns[122]},
 				RefColumns: []*schema.Column{TrustCenterDocsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_trust_center_entities_blocked_groups",
-				Columns:    []*schema.Column{GroupsColumns[129]},
+				Columns:    []*schema.Column{GroupsColumns[123]},
 				RefColumns: []*schema.Column{TrustCenterEntitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_trust_center_entities_editors",
-				Columns:    []*schema.Column{GroupsColumns[130]},
+				Columns:    []*schema.Column{GroupsColumns[124]},
 				RefColumns: []*schema.Column{TrustCenterEntitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_trust_center_faqs_blocked_groups",
-				Columns:    []*schema.Column{GroupsColumns[131]},
+				Columns:    []*schema.Column{GroupsColumns[125]},
 				RefColumns: []*schema.Column{TrustCenterFaqsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_trust_center_faqs_editors",
-				Columns:    []*schema.Column{GroupsColumns[132]},
+				Columns:    []*schema.Column{GroupsColumns[126]},
 				RefColumns: []*schema.Column{TrustCenterFaqsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_trust_center_nda_requests_blocked_groups",
-				Columns:    []*schema.Column{GroupsColumns[133]},
+				Columns:    []*schema.Column{GroupsColumns[127]},
 				RefColumns: []*schema.Column{TrustCenterNdaRequestsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_trust_center_nda_requests_editors",
-				Columns:    []*schema.Column{GroupsColumns[134]},
+				Columns:    []*schema.Column{GroupsColumns[128]},
 				RefColumns: []*schema.Column{TrustCenterNdaRequestsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_trust_center_settings_blocked_groups",
-				Columns:    []*schema.Column{GroupsColumns[135]},
+				Columns:    []*schema.Column{GroupsColumns[129]},
 				RefColumns: []*schema.Column{TrustCenterSettingsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_trust_center_settings_editors",
-				Columns:    []*schema.Column{GroupsColumns[136]},
+				Columns:    []*schema.Column{GroupsColumns[130]},
 				RefColumns: []*schema.Column{TrustCenterSettingsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_trust_center_subprocessors_blocked_groups",
-				Columns:    []*schema.Column{GroupsColumns[137]},
+				Columns:    []*schema.Column{GroupsColumns[131]},
 				RefColumns: []*schema.Column{TrustCenterSubprocessorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_trust_center_subprocessors_editors",
-				Columns:    []*schema.Column{GroupsColumns[138]},
+				Columns:    []*schema.Column{GroupsColumns[132]},
 				RefColumns: []*schema.Column{TrustCenterSubprocessorsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_trust_center_watermark_configs_blocked_groups",
-				Columns:    []*schema.Column{GroupsColumns[139]},
+				Columns:    []*schema.Column{GroupsColumns[133]},
 				RefColumns: []*schema.Column{TrustCenterWatermarkConfigsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_trust_center_watermark_configs_editors",
-				Columns:    []*schema.Column{GroupsColumns[140]},
+				Columns:    []*schema.Column{GroupsColumns[134]},
 				RefColumns: []*schema.Column{TrustCenterWatermarkConfigsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_vulnerabilities_blocked_groups",
-				Columns:    []*schema.Column{GroupsColumns[141]},
+				Columns:    []*schema.Column{GroupsColumns[135]},
 				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_vulnerabilities_editors",
-				Columns:    []*schema.Column{GroupsColumns[142]},
+				Columns:    []*schema.Column{GroupsColumns[136]},
 				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_vulnerabilities_viewers",
-				Columns:    []*schema.Column{GroupsColumns[143]},
+				Columns:    []*schema.Column{GroupsColumns[137]},
 				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_workflow_definitions_blocked_groups",
-				Columns:    []*schema.Column{GroupsColumns[144]},
+				Columns:    []*schema.Column{GroupsColumns[138]},
 				RefColumns: []*schema.Column{WorkflowDefinitionsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_workflow_definitions_editors",
-				Columns:    []*schema.Column{GroupsColumns[145]},
+				Columns:    []*schema.Column{GroupsColumns[139]},
 				RefColumns: []*schema.Column{WorkflowDefinitionsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_workflow_definitions_viewers",
-				Columns:    []*schema.Column{GroupsColumns[146]},
+				Columns:    []*schema.Column{GroupsColumns[140]},
 				RefColumns: []*schema.Column{WorkflowDefinitionsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_workflow_definitions_groups",
-				Columns:    []*schema.Column{GroupsColumns[147]},
+				Columns:    []*schema.Column{GroupsColumns[141]},
 				RefColumns: []*schema.Column{WorkflowDefinitionsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -3949,17 +3907,17 @@ var (
 			{
 				Name:    "group_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{GroupsColumns[8], GroupsColumns[120]},
+				Columns: []*schema.Column{GroupsColumns[8], GroupsColumns[114]},
 			},
 			{
 				Name:    "group_owner_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{GroupsColumns[120]},
+				Columns: []*schema.Column{GroupsColumns[114]},
 			},
 			{
 				Name:    "group_name_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{GroupsColumns[10], GroupsColumns[120]},
+				Columns: []*schema.Column{GroupsColumns[10], GroupsColumns[114]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -4752,262 +4710,6 @@ var (
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
-			},
-		},
-	}
-	// JobResultsColumns holds the columns for the "job_results" table.
-	JobResultsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_impersonator", Type: field.TypeString, Nullable: true},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "status", Type: field.TypeEnum, Enums: []string{"CANCELED", "SUCCESS", "PENDING", "FAILED"}},
-		{Name: "exit_code", Type: field.TypeInt},
-		{Name: "finished_at", Type: field.TypeTime},
-		{Name: "started_at", Type: field.TypeTime},
-		{Name: "log", Type: field.TypeString, Nullable: true, Size: 2147483647},
-		{Name: "scheduled_job_id", Type: field.TypeString},
-		{Name: "file_id", Type: field.TypeString},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-	}
-	// JobResultsTable holds the schema information for the "job_results" table.
-	JobResultsTable = &schema.Table{
-		Name:       "job_results",
-		Columns:    JobResultsColumns,
-		PrimaryKey: []*schema.Column{JobResultsColumns[0]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "job_results_scheduled_jobs_scheduled_job",
-				Columns:    []*schema.Column{JobResultsColumns[13]},
-				RefColumns: []*schema.Column{ScheduledJobsColumns[0]},
-				OnDelete:   schema.NoAction,
-			},
-			{
-				Symbol:     "job_results_files_file",
-				Columns:    []*schema.Column{JobResultsColumns[14]},
-				RefColumns: []*schema.Column{FilesColumns[0]},
-				OnDelete:   schema.NoAction,
-			},
-			{
-				Symbol:     "job_results_organizations_job_results",
-				Columns:    []*schema.Column{JobResultsColumns[15]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-		},
-		Indexes: []*schema.Index{
-			{
-				Name:    "job_result_scheduled_job_id_idx",
-				Unique:  false,
-				Columns: []*schema.Column{JobResultsColumns[13]},
-			},
-			{
-				Name:    "job_result_file_id_idx",
-				Unique:  false,
-				Columns: []*schema.Column{JobResultsColumns[14]},
-			},
-			{
-				Name:    "job_result_owner_id_idx",
-				Unique:  false,
-				Columns: []*schema.Column{JobResultsColumns[15]},
-			},
-		},
-	}
-	// JobRunnersColumns holds the columns for the "job_runners" table.
-	JobRunnersColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_impersonator", Type: field.TypeString, Nullable: true},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "display_id", Type: field.TypeString},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
-		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
-		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
-		{Name: "name", Type: field.TypeString},
-		{Name: "status", Type: field.TypeEnum, Enums: []string{"ONLINE", "OFFLINE"}, Default: "OFFLINE"},
-		{Name: "ip_address", Type: field.TypeString, Nullable: true},
-		{Name: "last_seen", Type: field.TypeTime, Nullable: true},
-		{Name: "version", Type: field.TypeString, Nullable: true},
-		{Name: "os", Type: field.TypeString, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-	}
-	// JobRunnersTable holds the schema information for the "job_runners" table.
-	JobRunnersTable = &schema.Table{
-		Name:       "job_runners",
-		Columns:    JobRunnersColumns,
-		PrimaryKey: []*schema.Column{JobRunnersColumns[0]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "job_runners_organizations_job_runners",
-				Columns:    []*schema.Column{JobRunnersColumns[19]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-		},
-		Indexes: []*schema.Index{
-			{
-				Name:    "jobrunner_display_id_owner_id",
-				Unique:  true,
-				Columns: []*schema.Column{JobRunnersColumns[8], JobRunnersColumns[19]},
-			},
-			{
-				Name:    "job_runner_owner_id_idx",
-				Unique:  false,
-				Columns: []*schema.Column{JobRunnersColumns[19]},
-			},
-		},
-	}
-	// JobRunnerRegistrationTokensColumns holds the columns for the "job_runner_registration_tokens" table.
-	JobRunnerRegistrationTokensColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_impersonator", Type: field.TypeString, Nullable: true},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "token", Type: field.TypeString, Unique: true},
-		{Name: "expires_at", Type: field.TypeTime},
-		{Name: "last_used_at", Type: field.TypeTime, Nullable: true},
-		{Name: "job_runner_id", Type: field.TypeString, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-	}
-	// JobRunnerRegistrationTokensTable holds the schema information for the "job_runner_registration_tokens" table.
-	JobRunnerRegistrationTokensTable = &schema.Table{
-		Name:       "job_runner_registration_tokens",
-		Columns:    JobRunnerRegistrationTokensColumns,
-		PrimaryKey: []*schema.Column{JobRunnerRegistrationTokensColumns[0]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "job_runner_registration_tokens_job_runners_job_runner",
-				Columns:    []*schema.Column{JobRunnerRegistrationTokensColumns[12]},
-				RefColumns: []*schema.Column{JobRunnersColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "job_runner_registration_tokens_organizations_job_runner_registration_tokens",
-				Columns:    []*schema.Column{JobRunnerRegistrationTokensColumns[13]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-		},
-		Indexes: []*schema.Index{
-			{
-				Name:    "job_runner_registration_token_job_runner_id_idx",
-				Unique:  false,
-				Columns: []*schema.Column{JobRunnerRegistrationTokensColumns[12]},
-			},
-			{
-				Name:    "job_runner_registration_token_owner_id_idx",
-				Unique:  false,
-				Columns: []*schema.Column{JobRunnerRegistrationTokensColumns[13]},
-			},
-		},
-	}
-	// JobRunnerTokensColumns holds the columns for the "job_runner_tokens" table.
-	JobRunnerTokensColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_impersonator", Type: field.TypeString, Nullable: true},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "token", Type: field.TypeString, Unique: true},
-		{Name: "expires_at", Type: field.TypeTime, Nullable: true},
-		{Name: "last_used_at", Type: field.TypeTime, Nullable: true},
-		{Name: "is_active", Type: field.TypeBool, Nullable: true, Default: true},
-		{Name: "revoked_reason", Type: field.TypeString, Nullable: true},
-		{Name: "revoked_by", Type: field.TypeString, Nullable: true},
-		{Name: "revoked_at", Type: field.TypeTime, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-	}
-	// JobRunnerTokensTable holds the schema information for the "job_runner_tokens" table.
-	JobRunnerTokensTable = &schema.Table{
-		Name:       "job_runner_tokens",
-		Columns:    JobRunnerTokensColumns,
-		PrimaryKey: []*schema.Column{JobRunnerTokensColumns[0]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "job_runner_tokens_organizations_job_runner_tokens",
-				Columns:    []*schema.Column{JobRunnerTokensColumns[16]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-		},
-		Indexes: []*schema.Index{
-			{
-				Name:    "job_runner_token_owner_id_idx",
-				Unique:  false,
-				Columns: []*schema.Column{JobRunnerTokensColumns[16]},
-			},
-			{
-				Name:    "jobrunnertoken_token_expires_at_is_active",
-				Unique:  false,
-				Columns: []*schema.Column{JobRunnerTokensColumns[9], JobRunnerTokensColumns[10], JobRunnerTokensColumns[12]},
-			},
-		},
-	}
-	// JobTemplatesColumns holds the columns for the "job_templates" table.
-	JobTemplatesColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_impersonator", Type: field.TypeString, Nullable: true},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "display_id", Type: field.TypeString},
-		{Name: "tags", Type: field.TypeJSON, Nullable: true},
-		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
-		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
-		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
-		{Name: "title", Type: field.TypeString},
-		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "platform", Type: field.TypeEnum, Enums: []string{"GO", "TS"}},
-		{Name: "windmill_path", Type: field.TypeString, Nullable: true},
-		{Name: "download_url", Type: field.TypeString},
-		{Name: "configuration", Type: field.TypeJSON, Nullable: true},
-		{Name: "cron", Type: field.TypeString, Nullable: true},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-	}
-	// JobTemplatesTable holds the schema information for the "job_templates" table.
-	JobTemplatesTable = &schema.Table{
-		Name:       "job_templates",
-		Columns:    JobTemplatesColumns,
-		PrimaryKey: []*schema.Column{JobTemplatesColumns[0]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "job_templates_organizations_job_templates",
-				Columns:    []*schema.Column{JobTemplatesColumns[20]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-		},
-		Indexes: []*schema.Index{
-			{
-				Name:    "jobtemplate_display_id_owner_id",
-				Unique:  true,
-				Columns: []*schema.Column{JobTemplatesColumns[8], JobTemplatesColumns[20]},
-			},
-			{
-				Name:    "job_template_owner_id_idx",
-				Unique:  false,
-				Columns: []*schema.Column{JobTemplatesColumns[20]},
 			},
 		},
 	}
@@ -7066,132 +6768,6 @@ var (
 				Name:    "scan_owner_id_idx",
 				Unique:  false,
 				Columns: []*schema.Column{ScansColumns[25]},
-			},
-		},
-	}
-	// ScheduledJobsColumns holds the columns for the "scheduled_jobs" table.
-	ScheduledJobsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_impersonator", Type: field.TypeString, Nullable: true},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "display_id", Type: field.TypeString},
-		{Name: "active", Type: field.TypeBool, Default: true},
-		{Name: "configuration", Type: field.TypeJSON, Nullable: true},
-		{Name: "cron", Type: field.TypeString, Nullable: true},
-		{Name: "job_id", Type: field.TypeString},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "job_runner_id", Type: field.TypeString, Nullable: true},
-	}
-	// ScheduledJobsTable holds the schema information for the "scheduled_jobs" table.
-	ScheduledJobsTable = &schema.Table{
-		Name:       "scheduled_jobs",
-		Columns:    ScheduledJobsColumns,
-		PrimaryKey: []*schema.Column{ScheduledJobsColumns[0]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "scheduled_jobs_job_templates_scheduled_jobs",
-				Columns:    []*schema.Column{ScheduledJobsColumns[12]},
-				RefColumns: []*schema.Column{JobTemplatesColumns[0]},
-				OnDelete:   schema.NoAction,
-			},
-			{
-				Symbol:     "scheduled_jobs_organizations_scheduled_jobs",
-				Columns:    []*schema.Column{ScheduledJobsColumns[13]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "scheduled_jobs_job_runners_job_runner",
-				Columns:    []*schema.Column{ScheduledJobsColumns[14]},
-				RefColumns: []*schema.Column{JobRunnersColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-		},
-		Indexes: []*schema.Index{
-			{
-				Name:    "scheduled_job_job_id_idx",
-				Unique:  false,
-				Columns: []*schema.Column{ScheduledJobsColumns[12]},
-			},
-			{
-				Name:    "scheduled_job_job_runner_id_idx",
-				Unique:  false,
-				Columns: []*schema.Column{ScheduledJobsColumns[14]},
-			},
-			{
-				Name:    "scheduledjob_display_id_owner_id",
-				Unique:  true,
-				Columns: []*schema.Column{ScheduledJobsColumns[8], ScheduledJobsColumns[13]},
-			},
-			{
-				Name:    "scheduled_job_owner_id_idx",
-				Unique:  false,
-				Columns: []*schema.Column{ScheduledJobsColumns[13]},
-			},
-		},
-	}
-	// ScheduledJobRunsColumns holds the columns for the "scheduled_job_runs" table.
-	ScheduledJobRunsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeString},
-		{Name: "created_at", Type: field.TypeTime, Nullable: true},
-		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
-		{Name: "created_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "updated_by_impersonator", Type: field.TypeString, Nullable: true},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "status", Type: field.TypeEnum, Enums: []string{"PENDING", "ACQUIRED"}, Default: "PENDING"},
-		{Name: "expected_execution_time", Type: field.TypeTime},
-		{Name: "script", Type: field.TypeString},
-		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "scheduled_job_id", Type: field.TypeString},
-		{Name: "job_runner_id", Type: field.TypeString},
-	}
-	// ScheduledJobRunsTable holds the schema information for the "scheduled_job_runs" table.
-	ScheduledJobRunsTable = &schema.Table{
-		Name:       "scheduled_job_runs",
-		Columns:    ScheduledJobRunsColumns,
-		PrimaryKey: []*schema.Column{ScheduledJobRunsColumns[0]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "scheduled_job_runs_organizations_scheduled_job_runs",
-				Columns:    []*schema.Column{ScheduledJobRunsColumns[11]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "scheduled_job_runs_scheduled_jobs_scheduled_job",
-				Columns:    []*schema.Column{ScheduledJobRunsColumns[12]},
-				RefColumns: []*schema.Column{ScheduledJobsColumns[0]},
-				OnDelete:   schema.NoAction,
-			},
-			{
-				Symbol:     "scheduled_job_runs_job_runners_job_runner",
-				Columns:    []*schema.Column{ScheduledJobRunsColumns[13]},
-				RefColumns: []*schema.Column{JobRunnersColumns[0]},
-				OnDelete:   schema.NoAction,
-			},
-		},
-		Indexes: []*schema.Index{
-			{
-				Name:    "scheduled_job_run_scheduled_job_id_idx",
-				Unique:  false,
-				Columns: []*schema.Column{ScheduledJobRunsColumns[12]},
-			},
-			{
-				Name:    "scheduled_job_run_job_runner_id_idx",
-				Unique:  false,
-				Columns: []*schema.Column{ScheduledJobRunsColumns[13]},
-			},
-			{
-				Name:    "scheduled_job_run_owner_id_idx",
-				Unique:  false,
-				Columns: []*schema.Column{ScheduledJobRunsColumns[11]},
 			},
 		},
 	}
@@ -12616,31 +12192,6 @@ var (
 			},
 		},
 	}
-	// JobRunnerJobRunnerTokensColumns holds the columns for the "job_runner_job_runner_tokens" table.
-	JobRunnerJobRunnerTokensColumns = []*schema.Column{
-		{Name: "job_runner_id", Type: field.TypeString},
-		{Name: "job_runner_token_id", Type: field.TypeString},
-	}
-	// JobRunnerJobRunnerTokensTable holds the schema information for the "job_runner_job_runner_tokens" table.
-	JobRunnerJobRunnerTokensTable = &schema.Table{
-		Name:       "job_runner_job_runner_tokens",
-		Columns:    JobRunnerJobRunnerTokensColumns,
-		PrimaryKey: []*schema.Column{JobRunnerJobRunnerTokensColumns[0], JobRunnerJobRunnerTokensColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "job_runner_job_runner_tokens_job_runner_id",
-				Columns:    []*schema.Column{JobRunnerJobRunnerTokensColumns[0]},
-				RefColumns: []*schema.Column{JobRunnersColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "job_runner_job_runner_tokens_job_runner_token_id",
-				Columns:    []*schema.Column{JobRunnerJobRunnerTokensColumns[1]},
-				RefColumns: []*schema.Column{JobRunnerTokensColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
 	// MappedControlBlockedGroupsColumns holds the columns for the "mapped_control_blocked_groups" table.
 	MappedControlBlockedGroupsColumns = []*schema.Column{
 		{Name: "mapped_control_id", Type: field.TypeString},
@@ -14966,56 +14517,6 @@ var (
 			},
 		},
 	}
-	// ScheduledJobControlsColumns holds the columns for the "scheduled_job_controls" table.
-	ScheduledJobControlsColumns = []*schema.Column{
-		{Name: "scheduled_job_id", Type: field.TypeString},
-		{Name: "control_id", Type: field.TypeString},
-	}
-	// ScheduledJobControlsTable holds the schema information for the "scheduled_job_controls" table.
-	ScheduledJobControlsTable = &schema.Table{
-		Name:       "scheduled_job_controls",
-		Columns:    ScheduledJobControlsColumns,
-		PrimaryKey: []*schema.Column{ScheduledJobControlsColumns[0], ScheduledJobControlsColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "scheduled_job_controls_scheduled_job_id",
-				Columns:    []*schema.Column{ScheduledJobControlsColumns[0]},
-				RefColumns: []*schema.Column{ScheduledJobsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "scheduled_job_controls_control_id",
-				Columns:    []*schema.Column{ScheduledJobControlsColumns[1]},
-				RefColumns: []*schema.Column{ControlsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
-	// ScheduledJobSubcontrolsColumns holds the columns for the "scheduled_job_subcontrols" table.
-	ScheduledJobSubcontrolsColumns = []*schema.Column{
-		{Name: "scheduled_job_id", Type: field.TypeString},
-		{Name: "subcontrol_id", Type: field.TypeString},
-	}
-	// ScheduledJobSubcontrolsTable holds the schema information for the "scheduled_job_subcontrols" table.
-	ScheduledJobSubcontrolsTable = &schema.Table{
-		Name:       "scheduled_job_subcontrols",
-		Columns:    ScheduledJobSubcontrolsColumns,
-		PrimaryKey: []*schema.Column{ScheduledJobSubcontrolsColumns[0], ScheduledJobSubcontrolsColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "scheduled_job_subcontrols_scheduled_job_id",
-				Columns:    []*schema.Column{ScheduledJobSubcontrolsColumns[0]},
-				RefColumns: []*schema.Column{ScheduledJobsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "scheduled_job_subcontrols_subcontrol_id",
-				Columns:    []*schema.Column{ScheduledJobSubcontrolsColumns[1]},
-				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
 	// SubcontrolControlObjectivesColumns holds the columns for the "subcontrol_control_objectives" table.
 	SubcontrolControlObjectivesColumns = []*schema.Column{
 		{Name: "subcontrol_id", Type: field.TypeString},
@@ -15636,11 +15137,6 @@ var (
 		IntegrationWebhooksTable,
 		InternalPoliciesTable,
 		InvitesTable,
-		JobResultsTable,
-		JobRunnersTable,
-		JobRunnerRegistrationTokensTable,
-		JobRunnerTokensTable,
-		JobTemplatesTable,
 		MappableDomainsTable,
 		MappedControlsTable,
 		NarrativesTable,
@@ -15667,8 +15163,6 @@ var (
 		RisksTable,
 		SLADefinitionsTable,
 		ScansTable,
-		ScheduledJobsTable,
-		ScheduledJobRunsTable,
 		StandardsTable,
 		SubcontrolsTable,
 		SubprocessorsTable,
@@ -15799,7 +15293,6 @@ var (
 		InternalPolicyIdentityHoldersTable,
 		InviteEventsTable,
 		InviteGroupsTable,
-		JobRunnerJobRunnerTokensTable,
 		MappedControlBlockedGroupsTable,
 		MappedControlEditorsTable,
 		MappedControlFromControlsTable,
@@ -15893,8 +15386,6 @@ var (
 		ScanRemediationsTable,
 		ScanActionPlansTable,
 		ScanTasksTable,
-		ScheduledJobControlsTable,
-		ScheduledJobSubcontrolsTable,
 		SubcontrolControlObjectivesTable,
 		SubcontrolTasksTable,
 		SubcontrolRisksTable,
@@ -16174,39 +15665,33 @@ func init() {
 	GroupsTable.ForeignKeys[89].RefTable = OrganizationsTable
 	GroupsTable.ForeignKeys[90].RefTable = OrganizationsTable
 	GroupsTable.ForeignKeys[91].RefTable = OrganizationsTable
-	GroupsTable.ForeignKeys[92].RefTable = OrganizationsTable
-	GroupsTable.ForeignKeys[93].RefTable = OrganizationsTable
-	GroupsTable.ForeignKeys[94].RefTable = OrganizationsTable
-	GroupsTable.ForeignKeys[95].RefTable = OrganizationsTable
-	GroupsTable.ForeignKeys[96].RefTable = OrganizationsTable
-	GroupsTable.ForeignKeys[97].RefTable = OrganizationsTable
-	GroupsTable.ForeignKeys[98].RefTable = SLADefinitionsTable
-	GroupsTable.ForeignKeys[99].RefTable = SLADefinitionsTable
-	GroupsTable.ForeignKeys[100].RefTable = TrustCentersTable
-	GroupsTable.ForeignKeys[101].RefTable = TrustCentersTable
-	GroupsTable.ForeignKeys[102].RefTable = TrustCenterCompliancesTable
-	GroupsTable.ForeignKeys[103].RefTable = TrustCenterCompliancesTable
-	GroupsTable.ForeignKeys[104].RefTable = TrustCenterDocsTable
-	GroupsTable.ForeignKeys[105].RefTable = TrustCenterDocsTable
-	GroupsTable.ForeignKeys[106].RefTable = TrustCenterEntitiesTable
-	GroupsTable.ForeignKeys[107].RefTable = TrustCenterEntitiesTable
-	GroupsTable.ForeignKeys[108].RefTable = TrustCenterFaqsTable
-	GroupsTable.ForeignKeys[109].RefTable = TrustCenterFaqsTable
-	GroupsTable.ForeignKeys[110].RefTable = TrustCenterNdaRequestsTable
-	GroupsTable.ForeignKeys[111].RefTable = TrustCenterNdaRequestsTable
-	GroupsTable.ForeignKeys[112].RefTable = TrustCenterSettingsTable
-	GroupsTable.ForeignKeys[113].RefTable = TrustCenterSettingsTable
-	GroupsTable.ForeignKeys[114].RefTable = TrustCenterSubprocessorsTable
-	GroupsTable.ForeignKeys[115].RefTable = TrustCenterSubprocessorsTable
-	GroupsTable.ForeignKeys[116].RefTable = TrustCenterWatermarkConfigsTable
-	GroupsTable.ForeignKeys[117].RefTable = TrustCenterWatermarkConfigsTable
-	GroupsTable.ForeignKeys[118].RefTable = VulnerabilitiesTable
-	GroupsTable.ForeignKeys[119].RefTable = VulnerabilitiesTable
-	GroupsTable.ForeignKeys[120].RefTable = VulnerabilitiesTable
-	GroupsTable.ForeignKeys[121].RefTable = WorkflowDefinitionsTable
-	GroupsTable.ForeignKeys[122].RefTable = WorkflowDefinitionsTable
-	GroupsTable.ForeignKeys[123].RefTable = WorkflowDefinitionsTable
-	GroupsTable.ForeignKeys[124].RefTable = WorkflowDefinitionsTable
+	GroupsTable.ForeignKeys[92].RefTable = SLADefinitionsTable
+	GroupsTable.ForeignKeys[93].RefTable = SLADefinitionsTable
+	GroupsTable.ForeignKeys[94].RefTable = TrustCentersTable
+	GroupsTable.ForeignKeys[95].RefTable = TrustCentersTable
+	GroupsTable.ForeignKeys[96].RefTable = TrustCenterCompliancesTable
+	GroupsTable.ForeignKeys[97].RefTable = TrustCenterCompliancesTable
+	GroupsTable.ForeignKeys[98].RefTable = TrustCenterDocsTable
+	GroupsTable.ForeignKeys[99].RefTable = TrustCenterDocsTable
+	GroupsTable.ForeignKeys[100].RefTable = TrustCenterEntitiesTable
+	GroupsTable.ForeignKeys[101].RefTable = TrustCenterEntitiesTable
+	GroupsTable.ForeignKeys[102].RefTable = TrustCenterFaqsTable
+	GroupsTable.ForeignKeys[103].RefTable = TrustCenterFaqsTable
+	GroupsTable.ForeignKeys[104].RefTable = TrustCenterNdaRequestsTable
+	GroupsTable.ForeignKeys[105].RefTable = TrustCenterNdaRequestsTable
+	GroupsTable.ForeignKeys[106].RefTable = TrustCenterSettingsTable
+	GroupsTable.ForeignKeys[107].RefTable = TrustCenterSettingsTable
+	GroupsTable.ForeignKeys[108].RefTable = TrustCenterSubprocessorsTable
+	GroupsTable.ForeignKeys[109].RefTable = TrustCenterSubprocessorsTable
+	GroupsTable.ForeignKeys[110].RefTable = TrustCenterWatermarkConfigsTable
+	GroupsTable.ForeignKeys[111].RefTable = TrustCenterWatermarkConfigsTable
+	GroupsTable.ForeignKeys[112].RefTable = VulnerabilitiesTable
+	GroupsTable.ForeignKeys[113].RefTable = VulnerabilitiesTable
+	GroupsTable.ForeignKeys[114].RefTable = VulnerabilitiesTable
+	GroupsTable.ForeignKeys[115].RefTable = WorkflowDefinitionsTable
+	GroupsTable.ForeignKeys[116].RefTable = WorkflowDefinitionsTable
+	GroupsTable.ForeignKeys[117].RefTable = WorkflowDefinitionsTable
+	GroupsTable.ForeignKeys[118].RefTable = WorkflowDefinitionsTable
 	GroupMembershipsTable.ForeignKeys[0].RefTable = GroupsTable
 	GroupMembershipsTable.ForeignKeys[1].RefTable = UsersTable
 	GroupMembershipsTable.ForeignKeys[2].RefTable = OrgMembershipsTable
@@ -16245,14 +15730,6 @@ func init() {
 	InternalPoliciesTable.ForeignKeys[6].RefTable = FilesTable
 	InternalPoliciesTable.ForeignKeys[7].RefTable = OrganizationsTable
 	InvitesTable.ForeignKeys[0].RefTable = OrganizationsTable
-	JobResultsTable.ForeignKeys[0].RefTable = ScheduledJobsTable
-	JobResultsTable.ForeignKeys[1].RefTable = FilesTable
-	JobResultsTable.ForeignKeys[2].RefTable = OrganizationsTable
-	JobRunnersTable.ForeignKeys[0].RefTable = OrganizationsTable
-	JobRunnerRegistrationTokensTable.ForeignKeys[0].RefTable = JobRunnersTable
-	JobRunnerRegistrationTokensTable.ForeignKeys[1].RefTable = OrganizationsTable
-	JobRunnerTokensTable.ForeignKeys[0].RefTable = OrganizationsTable
-	JobTemplatesTable.ForeignKeys[0].RefTable = OrganizationsTable
 	MappedControlsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	NarrativesTable.ForeignKeys[0].RefTable = ControlObjectivesTable
 	NarrativesTable.ForeignKeys[1].RefTable = OrganizationsTable
@@ -16364,12 +15841,6 @@ func init() {
 	ScansTable.ForeignKeys[8].RefTable = CustomTypeEnumsTable
 	ScansTable.ForeignKeys[9].RefTable = UsersTable
 	ScansTable.ForeignKeys[10].RefTable = GroupsTable
-	ScheduledJobsTable.ForeignKeys[0].RefTable = JobTemplatesTable
-	ScheduledJobsTable.ForeignKeys[1].RefTable = OrganizationsTable
-	ScheduledJobsTable.ForeignKeys[2].RefTable = JobRunnersTable
-	ScheduledJobRunsTable.ForeignKeys[0].RefTable = OrganizationsTable
-	ScheduledJobRunsTable.ForeignKeys[1].RefTable = ScheduledJobsTable
-	ScheduledJobRunsTable.ForeignKeys[2].RefTable = JobRunnersTable
 	StandardsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	StandardsTable.ForeignKeys[1].RefTable = FilesTable
 	SubcontrolsTable.ForeignKeys[0].RefTable = ControlsTable
@@ -16729,8 +16200,6 @@ func init() {
 	InviteEventsTable.ForeignKeys[1].RefTable = EventsTable
 	InviteGroupsTable.ForeignKeys[0].RefTable = InvitesTable
 	InviteGroupsTable.ForeignKeys[1].RefTable = GroupsTable
-	JobRunnerJobRunnerTokensTable.ForeignKeys[0].RefTable = JobRunnersTable
-	JobRunnerJobRunnerTokensTable.ForeignKeys[1].RefTable = JobRunnerTokensTable
 	MappedControlBlockedGroupsTable.ForeignKeys[0].RefTable = MappedControlsTable
 	MappedControlBlockedGroupsTable.ForeignKeys[1].RefTable = GroupsTable
 	MappedControlEditorsTable.ForeignKeys[0].RefTable = MappedControlsTable
@@ -16917,10 +16386,6 @@ func init() {
 	ScanActionPlansTable.ForeignKeys[1].RefTable = ActionPlansTable
 	ScanTasksTable.ForeignKeys[0].RefTable = ScansTable
 	ScanTasksTable.ForeignKeys[1].RefTable = TasksTable
-	ScheduledJobControlsTable.ForeignKeys[0].RefTable = ScheduledJobsTable
-	ScheduledJobControlsTable.ForeignKeys[1].RefTable = ControlsTable
-	ScheduledJobSubcontrolsTable.ForeignKeys[0].RefTable = ScheduledJobsTable
-	ScheduledJobSubcontrolsTable.ForeignKeys[1].RefTable = SubcontrolsTable
 	SubcontrolControlObjectivesTable.ForeignKeys[0].RefTable = SubcontrolsTable
 	SubcontrolControlObjectivesTable.ForeignKeys[1].RefTable = ControlObjectivesTable
 	SubcontrolTasksTable.ForeignKeys[0].RefTable = SubcontrolsTable

@@ -34,7 +34,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hush"
 	"github.com/theopenlane/core/internal/ent/generated/identityholder"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
-	"github.com/theopenlane/core/internal/ent/generated/jobtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
@@ -52,7 +51,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/remediation"
 	"github.com/theopenlane/core/internal/ent/generated/review"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
-	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
 	"github.com/theopenlane/core/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
@@ -103,7 +101,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/hushhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/identityholderhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/internalpolicyhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/jobtemplatehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/mappabledomainhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/mappedcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/narrativehistory"
@@ -120,7 +117,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/remediationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/reviewhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/riskhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/scheduledjobhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/sladefinitionhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/subcontrolhistory"
@@ -963,37 +959,6 @@ func PurgeInternalPolicyHistory(ctx context.Context, ps ...predicate.InternalPol
 	return nil
 }
 
-// PurgeJobTemplateHistory removes the history rows belonging to every jobtemplate matching
-// the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
-// deletes that should keep their audit trail are unaffected.
-// This has to run before the jobtemplate records themselves are deleted, the rows are matched
-// with a sub-select against the jobtemplate table
-func PurgeJobTemplateHistory(ctx context.Context, ps ...predicate.JobTemplate) error {
-	if !contextx.PurgeHistoryEnabled(ctx) {
-		return nil
-	}
-
-	client := FromContext(ctx)
-	if client == nil || client.HistoryClient == nil {
-		return nil
-	}
-
-	refs := sql.Select(jobtemplate.FieldID).From(sql.Table(jobtemplate.Table))
-	for _, p := range ps {
-		p(refs)
-	}
-
-	if _, err := client.HistoryClient.JobTemplateHistory.Delete().Where(func(s *sql.Selector) {
-		s.Where(sql.In(jobtemplatehistory.FieldRef, refs))
-	}).Exec(history.WithContext(ctx)); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("error purging jobtemplate history")
-
-		return err
-	}
-
-	return nil
-}
-
 // PurgeMappableDomainHistory removes the history rows belonging to every mappabledomain matching
 // the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
 // deletes that should keep their audit trail are unaffected.
@@ -1514,37 +1479,6 @@ func PurgeSLADefinitionHistory(ctx context.Context, ps ...predicate.SLADefinitio
 		s.Where(sql.In(sladefinitionhistory.FieldRef, refs))
 	}).Exec(history.WithContext(ctx)); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("error purging sladefinition history")
-
-		return err
-	}
-
-	return nil
-}
-
-// PurgeScheduledJobHistory removes the history rows belonging to every scheduledjob matching
-// the given predicates. It is a no-op unless the context opts in via contextx.WithPurgeHistory, so
-// deletes that should keep their audit trail are unaffected.
-// This has to run before the scheduledjob records themselves are deleted, the rows are matched
-// with a sub-select against the scheduledjob table
-func PurgeScheduledJobHistory(ctx context.Context, ps ...predicate.ScheduledJob) error {
-	if !contextx.PurgeHistoryEnabled(ctx) {
-		return nil
-	}
-
-	client := FromContext(ctx)
-	if client == nil || client.HistoryClient == nil {
-		return nil
-	}
-
-	refs := sql.Select(scheduledjob.FieldID).From(sql.Table(scheduledjob.Table))
-	for _, p := range ps {
-		p(refs)
-	}
-
-	if _, err := client.HistoryClient.ScheduledJobHistory.Delete().Where(func(s *sql.Selector) {
-		s.Where(sql.In(scheduledjobhistory.FieldRef, refs))
-	}).Exec(history.WithContext(ctx)); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("error purging scheduledjob history")
 
 		return err
 	}

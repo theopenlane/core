@@ -51,11 +51,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/integrationwebhook"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/invite"
-	"github.com/theopenlane/core/internal/ent/generated/jobresult"
-	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
-	"github.com/theopenlane/core/internal/ent/generated/jobrunnerregistrationtoken"
-	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
-	"github.com/theopenlane/core/internal/ent/generated/jobtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
@@ -82,8 +77,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/review"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
-	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
-	"github.com/theopenlane/core/internal/ent/generated/scheduledjobrun"
 	"github.com/theopenlane/core/internal/ent/generated/sladefinition"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
@@ -1335,141 +1328,6 @@ func (f TraverseInvite) Traverse(ctx context.Context, q generated.Query) error {
 	return fmt.Errorf("unexpected query type %T. expect *generated.InviteQuery", q)
 }
 
-// The JobResultFunc type is an adapter to allow the use of ordinary function as a Querier.
-type JobResultFunc func(context.Context, *generated.JobResultQuery) (generated.Value, error)
-
-// Query calls f(ctx, q).
-func (f JobResultFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
-	if q, ok := q.(*generated.JobResultQuery); ok {
-		return f(ctx, q)
-	}
-	return nil, fmt.Errorf("unexpected query type %T. expect *generated.JobResultQuery", q)
-}
-
-// The TraverseJobResult type is an adapter to allow the use of ordinary function as Traverser.
-type TraverseJobResult func(context.Context, *generated.JobResultQuery) error
-
-// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
-func (f TraverseJobResult) Intercept(next generated.Querier) generated.Querier {
-	return next
-}
-
-// Traverse calls f(ctx, q).
-func (f TraverseJobResult) Traverse(ctx context.Context, q generated.Query) error {
-	if q, ok := q.(*generated.JobResultQuery); ok {
-		return f(ctx, q)
-	}
-	return fmt.Errorf("unexpected query type %T. expect *generated.JobResultQuery", q)
-}
-
-// The JobRunnerFunc type is an adapter to allow the use of ordinary function as a Querier.
-type JobRunnerFunc func(context.Context, *generated.JobRunnerQuery) (generated.Value, error)
-
-// Query calls f(ctx, q).
-func (f JobRunnerFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
-	if q, ok := q.(*generated.JobRunnerQuery); ok {
-		return f(ctx, q)
-	}
-	return nil, fmt.Errorf("unexpected query type %T. expect *generated.JobRunnerQuery", q)
-}
-
-// The TraverseJobRunner type is an adapter to allow the use of ordinary function as Traverser.
-type TraverseJobRunner func(context.Context, *generated.JobRunnerQuery) error
-
-// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
-func (f TraverseJobRunner) Intercept(next generated.Querier) generated.Querier {
-	return next
-}
-
-// Traverse calls f(ctx, q).
-func (f TraverseJobRunner) Traverse(ctx context.Context, q generated.Query) error {
-	if q, ok := q.(*generated.JobRunnerQuery); ok {
-		return f(ctx, q)
-	}
-	return fmt.Errorf("unexpected query type %T. expect *generated.JobRunnerQuery", q)
-}
-
-// The JobRunnerRegistrationTokenFunc type is an adapter to allow the use of ordinary function as a Querier.
-type JobRunnerRegistrationTokenFunc func(context.Context, *generated.JobRunnerRegistrationTokenQuery) (generated.Value, error)
-
-// Query calls f(ctx, q).
-func (f JobRunnerRegistrationTokenFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
-	if q, ok := q.(*generated.JobRunnerRegistrationTokenQuery); ok {
-		return f(ctx, q)
-	}
-	return nil, fmt.Errorf("unexpected query type %T. expect *generated.JobRunnerRegistrationTokenQuery", q)
-}
-
-// The TraverseJobRunnerRegistrationToken type is an adapter to allow the use of ordinary function as Traverser.
-type TraverseJobRunnerRegistrationToken func(context.Context, *generated.JobRunnerRegistrationTokenQuery) error
-
-// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
-func (f TraverseJobRunnerRegistrationToken) Intercept(next generated.Querier) generated.Querier {
-	return next
-}
-
-// Traverse calls f(ctx, q).
-func (f TraverseJobRunnerRegistrationToken) Traverse(ctx context.Context, q generated.Query) error {
-	if q, ok := q.(*generated.JobRunnerRegistrationTokenQuery); ok {
-		return f(ctx, q)
-	}
-	return fmt.Errorf("unexpected query type %T. expect *generated.JobRunnerRegistrationTokenQuery", q)
-}
-
-// The JobRunnerTokenFunc type is an adapter to allow the use of ordinary function as a Querier.
-type JobRunnerTokenFunc func(context.Context, *generated.JobRunnerTokenQuery) (generated.Value, error)
-
-// Query calls f(ctx, q).
-func (f JobRunnerTokenFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
-	if q, ok := q.(*generated.JobRunnerTokenQuery); ok {
-		return f(ctx, q)
-	}
-	return nil, fmt.Errorf("unexpected query type %T. expect *generated.JobRunnerTokenQuery", q)
-}
-
-// The TraverseJobRunnerToken type is an adapter to allow the use of ordinary function as Traverser.
-type TraverseJobRunnerToken func(context.Context, *generated.JobRunnerTokenQuery) error
-
-// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
-func (f TraverseJobRunnerToken) Intercept(next generated.Querier) generated.Querier {
-	return next
-}
-
-// Traverse calls f(ctx, q).
-func (f TraverseJobRunnerToken) Traverse(ctx context.Context, q generated.Query) error {
-	if q, ok := q.(*generated.JobRunnerTokenQuery); ok {
-		return f(ctx, q)
-	}
-	return fmt.Errorf("unexpected query type %T. expect *generated.JobRunnerTokenQuery", q)
-}
-
-// The JobTemplateFunc type is an adapter to allow the use of ordinary function as a Querier.
-type JobTemplateFunc func(context.Context, *generated.JobTemplateQuery) (generated.Value, error)
-
-// Query calls f(ctx, q).
-func (f JobTemplateFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
-	if q, ok := q.(*generated.JobTemplateQuery); ok {
-		return f(ctx, q)
-	}
-	return nil, fmt.Errorf("unexpected query type %T. expect *generated.JobTemplateQuery", q)
-}
-
-// The TraverseJobTemplate type is an adapter to allow the use of ordinary function as Traverser.
-type TraverseJobTemplate func(context.Context, *generated.JobTemplateQuery) error
-
-// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
-func (f TraverseJobTemplate) Intercept(next generated.Querier) generated.Querier {
-	return next
-}
-
-// Traverse calls f(ctx, q).
-func (f TraverseJobTemplate) Traverse(ctx context.Context, q generated.Query) error {
-	if q, ok := q.(*generated.JobTemplateQuery); ok {
-		return f(ctx, q)
-	}
-	return fmt.Errorf("unexpected query type %T. expect *generated.JobTemplateQuery", q)
-}
-
 // The MappableDomainFunc type is an adapter to allow the use of ordinary function as a Querier.
 type MappableDomainFunc func(context.Context, *generated.MappableDomainQuery) (generated.Value, error)
 
@@ -2170,60 +2028,6 @@ func (f TraverseScan) Traverse(ctx context.Context, q generated.Query) error {
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *generated.ScanQuery", q)
-}
-
-// The ScheduledJobFunc type is an adapter to allow the use of ordinary function as a Querier.
-type ScheduledJobFunc func(context.Context, *generated.ScheduledJobQuery) (generated.Value, error)
-
-// Query calls f(ctx, q).
-func (f ScheduledJobFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
-	if q, ok := q.(*generated.ScheduledJobQuery); ok {
-		return f(ctx, q)
-	}
-	return nil, fmt.Errorf("unexpected query type %T. expect *generated.ScheduledJobQuery", q)
-}
-
-// The TraverseScheduledJob type is an adapter to allow the use of ordinary function as Traverser.
-type TraverseScheduledJob func(context.Context, *generated.ScheduledJobQuery) error
-
-// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
-func (f TraverseScheduledJob) Intercept(next generated.Querier) generated.Querier {
-	return next
-}
-
-// Traverse calls f(ctx, q).
-func (f TraverseScheduledJob) Traverse(ctx context.Context, q generated.Query) error {
-	if q, ok := q.(*generated.ScheduledJobQuery); ok {
-		return f(ctx, q)
-	}
-	return fmt.Errorf("unexpected query type %T. expect *generated.ScheduledJobQuery", q)
-}
-
-// The ScheduledJobRunFunc type is an adapter to allow the use of ordinary function as a Querier.
-type ScheduledJobRunFunc func(context.Context, *generated.ScheduledJobRunQuery) (generated.Value, error)
-
-// Query calls f(ctx, q).
-func (f ScheduledJobRunFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
-	if q, ok := q.(*generated.ScheduledJobRunQuery); ok {
-		return f(ctx, q)
-	}
-	return nil, fmt.Errorf("unexpected query type %T. expect *generated.ScheduledJobRunQuery", q)
-}
-
-// The TraverseScheduledJobRun type is an adapter to allow the use of ordinary function as Traverser.
-type TraverseScheduledJobRun func(context.Context, *generated.ScheduledJobRunQuery) error
-
-// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
-func (f TraverseScheduledJobRun) Intercept(next generated.Querier) generated.Querier {
-	return next
-}
-
-// Traverse calls f(ctx, q).
-func (f TraverseScheduledJobRun) Traverse(ctx context.Context, q generated.Query) error {
-	if q, ok := q.(*generated.ScheduledJobRunQuery); ok {
-		return f(ctx, q)
-	}
-	return fmt.Errorf("unexpected query type %T. expect *generated.ScheduledJobRunQuery", q)
 }
 
 // The StandardFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -3152,16 +2956,6 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.InternalPolicyQuery, predicate.InternalPolicy, internalpolicy.OrderOption]{typ: generated.TypeInternalPolicy, tq: q}, nil
 	case *generated.InviteQuery:
 		return &query[*generated.InviteQuery, predicate.Invite, invite.OrderOption]{typ: generated.TypeInvite, tq: q}, nil
-	case *generated.JobResultQuery:
-		return &query[*generated.JobResultQuery, predicate.JobResult, jobresult.OrderOption]{typ: generated.TypeJobResult, tq: q}, nil
-	case *generated.JobRunnerQuery:
-		return &query[*generated.JobRunnerQuery, predicate.JobRunner, jobrunner.OrderOption]{typ: generated.TypeJobRunner, tq: q}, nil
-	case *generated.JobRunnerRegistrationTokenQuery:
-		return &query[*generated.JobRunnerRegistrationTokenQuery, predicate.JobRunnerRegistrationToken, jobrunnerregistrationtoken.OrderOption]{typ: generated.TypeJobRunnerRegistrationToken, tq: q}, nil
-	case *generated.JobRunnerTokenQuery:
-		return &query[*generated.JobRunnerTokenQuery, predicate.JobRunnerToken, jobrunnertoken.OrderOption]{typ: generated.TypeJobRunnerToken, tq: q}, nil
-	case *generated.JobTemplateQuery:
-		return &query[*generated.JobTemplateQuery, predicate.JobTemplate, jobtemplate.OrderOption]{typ: generated.TypeJobTemplate, tq: q}, nil
 	case *generated.MappableDomainQuery:
 		return &query[*generated.MappableDomainQuery, predicate.MappableDomain, mappabledomain.OrderOption]{typ: generated.TypeMappableDomain, tq: q}, nil
 	case *generated.MappedControlQuery:
@@ -3214,10 +3008,6 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.SLADefinitionQuery, predicate.SLADefinition, sladefinition.OrderOption]{typ: generated.TypeSLADefinition, tq: q}, nil
 	case *generated.ScanQuery:
 		return &query[*generated.ScanQuery, predicate.Scan, scan.OrderOption]{typ: generated.TypeScan, tq: q}, nil
-	case *generated.ScheduledJobQuery:
-		return &query[*generated.ScheduledJobQuery, predicate.ScheduledJob, scheduledjob.OrderOption]{typ: generated.TypeScheduledJob, tq: q}, nil
-	case *generated.ScheduledJobRunQuery:
-		return &query[*generated.ScheduledJobRunQuery, predicate.ScheduledJobRun, scheduledjobrun.OrderOption]{typ: generated.TypeScheduledJobRun, tq: q}, nil
 	case *generated.StandardQuery:
 		return &query[*generated.StandardQuery, predicate.Standard, standard.OrderOption]{typ: generated.TypeStandard, tq: q}, nil
 	case *generated.SubcontrolQuery:

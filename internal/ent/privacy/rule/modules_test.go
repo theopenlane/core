@@ -262,12 +262,6 @@ func TestDenyIfMissingAllModules_BypassScenarios(t *testing.T) {
 		assert.Contains(t, err.Error(), "skip rule")
 	})
 
-	t.Run("bypass with JobRunnerRegistrationToken", func(t *testing.T) {
-		ctx := token.NewContextWithJobRunnerRegistrationToken(baseCtx, "test-job-token")
-		err := featureRule.EvalMutation(ctx, testMutation)
-		require.Error(t, err)
-		assert.Contains(t, err.Error(), "skip rule")
-	})
 }
 
 func TestModulesEnabledBase(t *testing.T) {
