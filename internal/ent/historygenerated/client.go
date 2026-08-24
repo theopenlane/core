@@ -46,7 +46,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/hushhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/identityholderhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/internalpolicyhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/jobtemplatehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/mappabledomainhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/mappedcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/narrativehistory"
@@ -63,7 +62,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/remediationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/reviewhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/riskhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/scheduledjobhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/sladefinitionhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/subcontrolhistory"
@@ -150,8 +148,6 @@ type Client struct {
 	IdentityHolderHistory *IdentityHolderHistoryClient
 	// InternalPolicyHistory is the client for interacting with the InternalPolicyHistory builders.
 	InternalPolicyHistory *InternalPolicyHistoryClient
-	// JobTemplateHistory is the client for interacting with the JobTemplateHistory builders.
-	JobTemplateHistory *JobTemplateHistoryClient
 	// MappableDomainHistory is the client for interacting with the MappableDomainHistory builders.
 	MappableDomainHistory *MappableDomainHistoryClient
 	// MappedControlHistory is the client for interacting with the MappedControlHistory builders.
@@ -186,8 +182,6 @@ type Client struct {
 	RiskHistory *RiskHistoryClient
 	// SLADefinitionHistory is the client for interacting with the SLADefinitionHistory builders.
 	SLADefinitionHistory *SLADefinitionHistoryClient
-	// ScheduledJobHistory is the client for interacting with the ScheduledJobHistory builders.
-	ScheduledJobHistory *ScheduledJobHistoryClient
 	// StandardHistory is the client for interacting with the StandardHistory builders.
 	StandardHistory *StandardHistoryClient
 	// SubcontrolHistory is the client for interacting with the SubcontrolHistory builders.
@@ -277,7 +271,6 @@ func (c *Client) init() {
 	c.HushHistory = NewHushHistoryClient(c.config)
 	c.IdentityHolderHistory = NewIdentityHolderHistoryClient(c.config)
 	c.InternalPolicyHistory = NewInternalPolicyHistoryClient(c.config)
-	c.JobTemplateHistory = NewJobTemplateHistoryClient(c.config)
 	c.MappableDomainHistory = NewMappableDomainHistoryClient(c.config)
 	c.MappedControlHistory = NewMappedControlHistoryClient(c.config)
 	c.NarrativeHistory = NewNarrativeHistoryClient(c.config)
@@ -295,7 +288,6 @@ func (c *Client) init() {
 	c.ReviewHistory = NewReviewHistoryClient(c.config)
 	c.RiskHistory = NewRiskHistoryClient(c.config)
 	c.SLADefinitionHistory = NewSLADefinitionHistoryClient(c.config)
-	c.ScheduledJobHistory = NewScheduledJobHistoryClient(c.config)
 	c.StandardHistory = NewStandardHistoryClient(c.config)
 	c.SubcontrolHistory = NewSubcontrolHistoryClient(c.config)
 	c.SubprocessorHistory = NewSubprocessorHistoryClient(c.config)
@@ -455,7 +447,6 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		HushHistory:                       NewHushHistoryClient(cfg),
 		IdentityHolderHistory:             NewIdentityHolderHistoryClient(cfg),
 		InternalPolicyHistory:             NewInternalPolicyHistoryClient(cfg),
-		JobTemplateHistory:                NewJobTemplateHistoryClient(cfg),
 		MappableDomainHistory:             NewMappableDomainHistoryClient(cfg),
 		MappedControlHistory:              NewMappedControlHistoryClient(cfg),
 		NarrativeHistory:                  NewNarrativeHistoryClient(cfg),
@@ -473,7 +464,6 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		ReviewHistory:                     NewReviewHistoryClient(cfg),
 		RiskHistory:                       NewRiskHistoryClient(cfg),
 		SLADefinitionHistory:              NewSLADefinitionHistoryClient(cfg),
-		ScheduledJobHistory:               NewScheduledJobHistoryClient(cfg),
 		StandardHistory:                   NewStandardHistoryClient(cfg),
 		SubcontrolHistory:                 NewSubcontrolHistoryClient(cfg),
 		SubprocessorHistory:               NewSubprocessorHistoryClient(cfg),
@@ -542,7 +532,6 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		HushHistory:                       NewHushHistoryClient(cfg),
 		IdentityHolderHistory:             NewIdentityHolderHistoryClient(cfg),
 		InternalPolicyHistory:             NewInternalPolicyHistoryClient(cfg),
-		JobTemplateHistory:                NewJobTemplateHistoryClient(cfg),
 		MappableDomainHistory:             NewMappableDomainHistoryClient(cfg),
 		MappedControlHistory:              NewMappedControlHistoryClient(cfg),
 		NarrativeHistory:                  NewNarrativeHistoryClient(cfg),
@@ -560,7 +549,6 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		ReviewHistory:                     NewReviewHistoryClient(cfg),
 		RiskHistory:                       NewRiskHistoryClient(cfg),
 		SLADefinitionHistory:              NewSLADefinitionHistoryClient(cfg),
-		ScheduledJobHistory:               NewScheduledJobHistoryClient(cfg),
 		StandardHistory:                   NewStandardHistoryClient(cfg),
 		SubcontrolHistory:                 NewSubcontrolHistoryClient(cfg),
 		SubprocessorHistory:               NewSubprocessorHistoryClient(cfg),
@@ -620,15 +608,14 @@ func (c *Client) Use(hooks ...Hook) {
 		c.EmailTemplateHistory, c.EntityHistory, c.EntityTypeHistory,
 		c.EvidenceHistory, c.FileHistory, c.FindingControlHistory, c.FindingHistory,
 		c.GroupHistory, c.GroupMembershipHistory, c.GroupSettingHistory, c.HushHistory,
-		c.IdentityHolderHistory, c.InternalPolicyHistory, c.JobTemplateHistory,
-		c.MappableDomainHistory, c.MappedControlHistory, c.NarrativeHistory,
-		c.NoteHistory, c.NotificationPreferenceHistory, c.NotificationTemplateHistory,
+		c.IdentityHolderHistory, c.InternalPolicyHistory, c.MappableDomainHistory,
+		c.MappedControlHistory, c.NarrativeHistory, c.NoteHistory,
+		c.NotificationPreferenceHistory, c.NotificationTemplateHistory,
 		c.OrgMembershipHistory, c.OrganizationHistory, c.OrganizationSettingHistory,
 		c.PlatformHistory, c.ProcedureHistory, c.ProgramHistory,
 		c.ProgramMembershipHistory, c.RemediationHistory, c.ReviewHistory,
-		c.RiskHistory, c.SLADefinitionHistory, c.ScheduledJobHistory,
-		c.StandardHistory, c.SubcontrolHistory, c.SubprocessorHistory,
-		c.SystemDetailHistory, c.TaskHistory, c.TemplateHistory,
+		c.RiskHistory, c.SLADefinitionHistory, c.StandardHistory, c.SubcontrolHistory,
+		c.SubprocessorHistory, c.SystemDetailHistory, c.TaskHistory, c.TemplateHistory,
 		c.TrustCenterComplianceHistory, c.TrustCenterDocHistory,
 		c.TrustCenterEntityHistory, c.TrustCenterFAQHistory, c.TrustCenterHistory,
 		c.TrustCenterNDARequestHistory, c.TrustCenterSettingHistory,
@@ -653,15 +640,14 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.EmailTemplateHistory, c.EntityHistory, c.EntityTypeHistory,
 		c.EvidenceHistory, c.FileHistory, c.FindingControlHistory, c.FindingHistory,
 		c.GroupHistory, c.GroupMembershipHistory, c.GroupSettingHistory, c.HushHistory,
-		c.IdentityHolderHistory, c.InternalPolicyHistory, c.JobTemplateHistory,
-		c.MappableDomainHistory, c.MappedControlHistory, c.NarrativeHistory,
-		c.NoteHistory, c.NotificationPreferenceHistory, c.NotificationTemplateHistory,
+		c.IdentityHolderHistory, c.InternalPolicyHistory, c.MappableDomainHistory,
+		c.MappedControlHistory, c.NarrativeHistory, c.NoteHistory,
+		c.NotificationPreferenceHistory, c.NotificationTemplateHistory,
 		c.OrgMembershipHistory, c.OrganizationHistory, c.OrganizationSettingHistory,
 		c.PlatformHistory, c.ProcedureHistory, c.ProgramHistory,
 		c.ProgramMembershipHistory, c.RemediationHistory, c.ReviewHistory,
-		c.RiskHistory, c.SLADefinitionHistory, c.ScheduledJobHistory,
-		c.StandardHistory, c.SubcontrolHistory, c.SubprocessorHistory,
-		c.SystemDetailHistory, c.TaskHistory, c.TemplateHistory,
+		c.RiskHistory, c.SLADefinitionHistory, c.StandardHistory, c.SubcontrolHistory,
+		c.SubprocessorHistory, c.SystemDetailHistory, c.TaskHistory, c.TemplateHistory,
 		c.TrustCenterComplianceHistory, c.TrustCenterDocHistory,
 		c.TrustCenterEntityHistory, c.TrustCenterFAQHistory, c.TrustCenterHistory,
 		c.TrustCenterNDARequestHistory, c.TrustCenterSettingHistory,
@@ -782,8 +768,6 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.IdentityHolderHistory.mutate(ctx, m)
 	case *InternalPolicyHistoryMutation:
 		return c.InternalPolicyHistory.mutate(ctx, m)
-	case *JobTemplateHistoryMutation:
-		return c.JobTemplateHistory.mutate(ctx, m)
 	case *MappableDomainHistoryMutation:
 		return c.MappableDomainHistory.mutate(ctx, m)
 	case *MappedControlHistoryMutation:
@@ -818,8 +802,6 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.RiskHistory.mutate(ctx, m)
 	case *SLADefinitionHistoryMutation:
 		return c.SLADefinitionHistory.mutate(ctx, m)
-	case *ScheduledJobHistoryMutation:
-		return c.ScheduledJobHistory.mutate(ctx, m)
 	case *StandardHistoryMutation:
 		return c.StandardHistory.mutate(ctx, m)
 	case *SubcontrolHistoryMutation:
@@ -4381,141 +4363,6 @@ func (c *InternalPolicyHistoryClient) mutate(ctx context.Context, m *InternalPol
 	}
 }
 
-// JobTemplateHistoryClient is a client for the JobTemplateHistory schema.
-type JobTemplateHistoryClient struct {
-	config
-}
-
-// NewJobTemplateHistoryClient returns a client for the JobTemplateHistory from the given config.
-func NewJobTemplateHistoryClient(c config) *JobTemplateHistoryClient {
-	return &JobTemplateHistoryClient{config: c}
-}
-
-// Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `jobtemplatehistory.Hooks(f(g(h())))`.
-func (c *JobTemplateHistoryClient) Use(hooks ...Hook) {
-	c.hooks.JobTemplateHistory = append(c.hooks.JobTemplateHistory, hooks...)
-}
-
-// Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `jobtemplatehistory.Intercept(f(g(h())))`.
-func (c *JobTemplateHistoryClient) Intercept(interceptors ...Interceptor) {
-	c.inters.JobTemplateHistory = append(c.inters.JobTemplateHistory, interceptors...)
-}
-
-// Create returns a builder for creating a JobTemplateHistory entity.
-func (c *JobTemplateHistoryClient) Create() *JobTemplateHistoryCreate {
-	mutation := newJobTemplateHistoryMutation(c.config, OpCreate)
-	return &JobTemplateHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// CreateBulk returns a builder for creating a bulk of JobTemplateHistory entities.
-func (c *JobTemplateHistoryClient) CreateBulk(builders ...*JobTemplateHistoryCreate) *JobTemplateHistoryCreateBulk {
-	return &JobTemplateHistoryCreateBulk{config: c.config, builders: builders}
-}
-
-// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
-// a builder and applies setFunc on it.
-func (c *JobTemplateHistoryClient) MapCreateBulk(slice any, setFunc func(*JobTemplateHistoryCreate, int)) *JobTemplateHistoryCreateBulk {
-	rv := reflect.ValueOf(slice)
-	if rv.Kind() != reflect.Slice {
-		return &JobTemplateHistoryCreateBulk{err: fmt.Errorf("calling to JobTemplateHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
-	}
-	builders := make([]*JobTemplateHistoryCreate, rv.Len())
-	for i := 0; i < rv.Len(); i++ {
-		builders[i] = c.Create()
-		setFunc(builders[i], i)
-	}
-	return &JobTemplateHistoryCreateBulk{config: c.config, builders: builders}
-}
-
-// Update returns an update builder for JobTemplateHistory.
-func (c *JobTemplateHistoryClient) Update() *JobTemplateHistoryUpdate {
-	mutation := newJobTemplateHistoryMutation(c.config, OpUpdate)
-	return &JobTemplateHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOne returns an update builder for the given entity.
-func (c *JobTemplateHistoryClient) UpdateOne(_m *JobTemplateHistory) *JobTemplateHistoryUpdateOne {
-	mutation := newJobTemplateHistoryMutation(c.config, OpUpdateOne, withJobTemplateHistory(_m))
-	return &JobTemplateHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOneID returns an update builder for the given id.
-func (c *JobTemplateHistoryClient) UpdateOneID(id string) *JobTemplateHistoryUpdateOne {
-	mutation := newJobTemplateHistoryMutation(c.config, OpUpdateOne, withJobTemplateHistoryID(id))
-	return &JobTemplateHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// Delete returns a delete builder for JobTemplateHistory.
-func (c *JobTemplateHistoryClient) Delete() *JobTemplateHistoryDelete {
-	mutation := newJobTemplateHistoryMutation(c.config, OpDelete)
-	return &JobTemplateHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// DeleteOne returns a builder for deleting the given entity.
-func (c *JobTemplateHistoryClient) DeleteOne(_m *JobTemplateHistory) *JobTemplateHistoryDeleteOne {
-	return c.DeleteOneID(_m.ID)
-}
-
-// DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *JobTemplateHistoryClient) DeleteOneID(id string) *JobTemplateHistoryDeleteOne {
-	builder := c.Delete().Where(jobtemplatehistory.ID(id))
-	builder.mutation.id = &id
-	builder.mutation.op = OpDeleteOne
-	return &JobTemplateHistoryDeleteOne{builder}
-}
-
-// Query returns a query builder for JobTemplateHistory.
-func (c *JobTemplateHistoryClient) Query() *JobTemplateHistoryQuery {
-	return &JobTemplateHistoryQuery{
-		config: c.config,
-		ctx:    &QueryContext{Type: TypeJobTemplateHistory},
-		inters: c.Interceptors(),
-	}
-}
-
-// Get returns a JobTemplateHistory entity by its id.
-func (c *JobTemplateHistoryClient) Get(ctx context.Context, id string) (*JobTemplateHistory, error) {
-	return c.Query().Where(jobtemplatehistory.ID(id)).Only(ctx)
-}
-
-// GetX is like Get, but panics if an error occurs.
-func (c *JobTemplateHistoryClient) GetX(ctx context.Context, id string) *JobTemplateHistory {
-	obj, err := c.Get(ctx, id)
-	if err != nil {
-		panic(err)
-	}
-	return obj
-}
-
-// Hooks returns the client hooks.
-func (c *JobTemplateHistoryClient) Hooks() []Hook {
-	hooks := c.hooks.JobTemplateHistory
-	return append(hooks[:len(hooks):len(hooks)], jobtemplatehistory.Hooks[:]...)
-}
-
-// Interceptors returns the client interceptors.
-func (c *JobTemplateHistoryClient) Interceptors() []Interceptor {
-	inters := c.inters.JobTemplateHistory
-	return append(inters[:len(inters):len(inters)], jobtemplatehistory.Interceptors[:]...)
-}
-
-func (c *JobTemplateHistoryClient) mutate(ctx context.Context, m *JobTemplateHistoryMutation) (Value, error) {
-	switch m.Op() {
-	case OpCreate:
-		return (&JobTemplateHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdate:
-		return (&JobTemplateHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdateOne:
-		return (&JobTemplateHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpDelete, OpDeleteOne:
-		return (&JobTemplateHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
-	default:
-		return nil, fmt.Errorf("historygenerated: unknown JobTemplateHistory mutation op: %q", m.Op())
-	}
-}
-
 // MappableDomainHistoryClient is a client for the MappableDomainHistory schema.
 type MappableDomainHistoryClient struct {
 	config
@@ -6808,141 +6655,6 @@ func (c *SLADefinitionHistoryClient) mutate(ctx context.Context, m *SLADefinitio
 		return (&SLADefinitionHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("historygenerated: unknown SLADefinitionHistory mutation op: %q", m.Op())
-	}
-}
-
-// ScheduledJobHistoryClient is a client for the ScheduledJobHistory schema.
-type ScheduledJobHistoryClient struct {
-	config
-}
-
-// NewScheduledJobHistoryClient returns a client for the ScheduledJobHistory from the given config.
-func NewScheduledJobHistoryClient(c config) *ScheduledJobHistoryClient {
-	return &ScheduledJobHistoryClient{config: c}
-}
-
-// Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `scheduledjobhistory.Hooks(f(g(h())))`.
-func (c *ScheduledJobHistoryClient) Use(hooks ...Hook) {
-	c.hooks.ScheduledJobHistory = append(c.hooks.ScheduledJobHistory, hooks...)
-}
-
-// Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `scheduledjobhistory.Intercept(f(g(h())))`.
-func (c *ScheduledJobHistoryClient) Intercept(interceptors ...Interceptor) {
-	c.inters.ScheduledJobHistory = append(c.inters.ScheduledJobHistory, interceptors...)
-}
-
-// Create returns a builder for creating a ScheduledJobHistory entity.
-func (c *ScheduledJobHistoryClient) Create() *ScheduledJobHistoryCreate {
-	mutation := newScheduledJobHistoryMutation(c.config, OpCreate)
-	return &ScheduledJobHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// CreateBulk returns a builder for creating a bulk of ScheduledJobHistory entities.
-func (c *ScheduledJobHistoryClient) CreateBulk(builders ...*ScheduledJobHistoryCreate) *ScheduledJobHistoryCreateBulk {
-	return &ScheduledJobHistoryCreateBulk{config: c.config, builders: builders}
-}
-
-// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
-// a builder and applies setFunc on it.
-func (c *ScheduledJobHistoryClient) MapCreateBulk(slice any, setFunc func(*ScheduledJobHistoryCreate, int)) *ScheduledJobHistoryCreateBulk {
-	rv := reflect.ValueOf(slice)
-	if rv.Kind() != reflect.Slice {
-		return &ScheduledJobHistoryCreateBulk{err: fmt.Errorf("calling to ScheduledJobHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
-	}
-	builders := make([]*ScheduledJobHistoryCreate, rv.Len())
-	for i := 0; i < rv.Len(); i++ {
-		builders[i] = c.Create()
-		setFunc(builders[i], i)
-	}
-	return &ScheduledJobHistoryCreateBulk{config: c.config, builders: builders}
-}
-
-// Update returns an update builder for ScheduledJobHistory.
-func (c *ScheduledJobHistoryClient) Update() *ScheduledJobHistoryUpdate {
-	mutation := newScheduledJobHistoryMutation(c.config, OpUpdate)
-	return &ScheduledJobHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOne returns an update builder for the given entity.
-func (c *ScheduledJobHistoryClient) UpdateOne(_m *ScheduledJobHistory) *ScheduledJobHistoryUpdateOne {
-	mutation := newScheduledJobHistoryMutation(c.config, OpUpdateOne, withScheduledJobHistory(_m))
-	return &ScheduledJobHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// UpdateOneID returns an update builder for the given id.
-func (c *ScheduledJobHistoryClient) UpdateOneID(id string) *ScheduledJobHistoryUpdateOne {
-	mutation := newScheduledJobHistoryMutation(c.config, OpUpdateOne, withScheduledJobHistoryID(id))
-	return &ScheduledJobHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// Delete returns a delete builder for ScheduledJobHistory.
-func (c *ScheduledJobHistoryClient) Delete() *ScheduledJobHistoryDelete {
-	mutation := newScheduledJobHistoryMutation(c.config, OpDelete)
-	return &ScheduledJobHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
-}
-
-// DeleteOne returns a builder for deleting the given entity.
-func (c *ScheduledJobHistoryClient) DeleteOne(_m *ScheduledJobHistory) *ScheduledJobHistoryDeleteOne {
-	return c.DeleteOneID(_m.ID)
-}
-
-// DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *ScheduledJobHistoryClient) DeleteOneID(id string) *ScheduledJobHistoryDeleteOne {
-	builder := c.Delete().Where(scheduledjobhistory.ID(id))
-	builder.mutation.id = &id
-	builder.mutation.op = OpDeleteOne
-	return &ScheduledJobHistoryDeleteOne{builder}
-}
-
-// Query returns a query builder for ScheduledJobHistory.
-func (c *ScheduledJobHistoryClient) Query() *ScheduledJobHistoryQuery {
-	return &ScheduledJobHistoryQuery{
-		config: c.config,
-		ctx:    &QueryContext{Type: TypeScheduledJobHistory},
-		inters: c.Interceptors(),
-	}
-}
-
-// Get returns a ScheduledJobHistory entity by its id.
-func (c *ScheduledJobHistoryClient) Get(ctx context.Context, id string) (*ScheduledJobHistory, error) {
-	return c.Query().Where(scheduledjobhistory.ID(id)).Only(ctx)
-}
-
-// GetX is like Get, but panics if an error occurs.
-func (c *ScheduledJobHistoryClient) GetX(ctx context.Context, id string) *ScheduledJobHistory {
-	obj, err := c.Get(ctx, id)
-	if err != nil {
-		panic(err)
-	}
-	return obj
-}
-
-// Hooks returns the client hooks.
-func (c *ScheduledJobHistoryClient) Hooks() []Hook {
-	hooks := c.hooks.ScheduledJobHistory
-	return append(hooks[:len(hooks):len(hooks)], scheduledjobhistory.Hooks[:]...)
-}
-
-// Interceptors returns the client interceptors.
-func (c *ScheduledJobHistoryClient) Interceptors() []Interceptor {
-	inters := c.inters.ScheduledJobHistory
-	return append(inters[:len(inters):len(inters)], scheduledjobhistory.Interceptors[:]...)
-}
-
-func (c *ScheduledJobHistoryClient) mutate(ctx context.Context, m *ScheduledJobHistoryMutation) (Value, error) {
-	switch m.Op() {
-	case OpCreate:
-		return (&ScheduledJobHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdate:
-		return (&ScheduledJobHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpUpdateOne:
-		return (&ScheduledJobHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
-	case OpDelete, OpDeleteOne:
-		return (&ScheduledJobHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
-	default:
-		return nil, fmt.Errorf("historygenerated: unknown ScheduledJobHistory mutation op: %q", m.Op())
 	}
 }
 
@@ -10060,21 +9772,20 @@ type (
 		DiscussionHistory, DocumentDataHistory, EmailTemplateHistory, EntityHistory,
 		EntityTypeHistory, EvidenceHistory, FileHistory, FindingControlHistory,
 		FindingHistory, GroupHistory, GroupMembershipHistory, GroupSettingHistory,
-		HushHistory, IdentityHolderHistory, InternalPolicyHistory, JobTemplateHistory,
+		HushHistory, IdentityHolderHistory, InternalPolicyHistory,
 		MappableDomainHistory, MappedControlHistory, NarrativeHistory, NoteHistory,
 		NotificationPreferenceHistory, NotificationTemplateHistory,
 		OrgMembershipHistory, OrganizationHistory, OrganizationSettingHistory,
 		PlatformHistory, ProcedureHistory, ProgramHistory, ProgramMembershipHistory,
 		RemediationHistory, ReviewHistory, RiskHistory, SLADefinitionHistory,
-		ScheduledJobHistory, StandardHistory, SubcontrolHistory, SubprocessorHistory,
-		SystemDetailHistory, TaskHistory, TemplateHistory,
-		TrustCenterComplianceHistory, TrustCenterDocHistory, TrustCenterEntityHistory,
-		TrustCenterFAQHistory, TrustCenterHistory, TrustCenterNDARequestHistory,
-		TrustCenterSettingHistory, TrustCenterSubprocessorHistory,
-		TrustCenterWatermarkConfigHistory, UserHistory, UserSettingHistory,
-		VendorRiskScoreHistory, VendorScoringConfigHistory, VulnerabilityHistory,
-		WorkflowAssignmentHistory, WorkflowAssignmentTargetHistory,
-		WorkflowDefinitionHistory []ent.Hook
+		StandardHistory, SubcontrolHistory, SubprocessorHistory, SystemDetailHistory,
+		TaskHistory, TemplateHistory, TrustCenterComplianceHistory,
+		TrustCenterDocHistory, TrustCenterEntityHistory, TrustCenterFAQHistory,
+		TrustCenterHistory, TrustCenterNDARequestHistory, TrustCenterSettingHistory,
+		TrustCenterSubprocessorHistory, TrustCenterWatermarkConfigHistory, UserHistory,
+		UserSettingHistory, VendorRiskScoreHistory, VendorScoringConfigHistory,
+		VulnerabilityHistory, WorkflowAssignmentHistory,
+		WorkflowAssignmentTargetHistory, WorkflowDefinitionHistory []ent.Hook
 	}
 	inters struct {
 		ActionPlanHistory, AssessmentHistory, AssessmentResponseHistory, AssetHistory,
@@ -10083,21 +9794,20 @@ type (
 		DiscussionHistory, DocumentDataHistory, EmailTemplateHistory, EntityHistory,
 		EntityTypeHistory, EvidenceHistory, FileHistory, FindingControlHistory,
 		FindingHistory, GroupHistory, GroupMembershipHistory, GroupSettingHistory,
-		HushHistory, IdentityHolderHistory, InternalPolicyHistory, JobTemplateHistory,
+		HushHistory, IdentityHolderHistory, InternalPolicyHistory,
 		MappableDomainHistory, MappedControlHistory, NarrativeHistory, NoteHistory,
 		NotificationPreferenceHistory, NotificationTemplateHistory,
 		OrgMembershipHistory, OrganizationHistory, OrganizationSettingHistory,
 		PlatformHistory, ProcedureHistory, ProgramHistory, ProgramMembershipHistory,
 		RemediationHistory, ReviewHistory, RiskHistory, SLADefinitionHistory,
-		ScheduledJobHistory, StandardHistory, SubcontrolHistory, SubprocessorHistory,
-		SystemDetailHistory, TaskHistory, TemplateHistory,
-		TrustCenterComplianceHistory, TrustCenterDocHistory, TrustCenterEntityHistory,
-		TrustCenterFAQHistory, TrustCenterHistory, TrustCenterNDARequestHistory,
-		TrustCenterSettingHistory, TrustCenterSubprocessorHistory,
-		TrustCenterWatermarkConfigHistory, UserHistory, UserSettingHistory,
-		VendorRiskScoreHistory, VendorScoringConfigHistory, VulnerabilityHistory,
-		WorkflowAssignmentHistory, WorkflowAssignmentTargetHistory,
-		WorkflowDefinitionHistory []ent.Interceptor
+		StandardHistory, SubcontrolHistory, SubprocessorHistory, SystemDetailHistory,
+		TaskHistory, TemplateHistory, TrustCenterComplianceHistory,
+		TrustCenterDocHistory, TrustCenterEntityHistory, TrustCenterFAQHistory,
+		TrustCenterHistory, TrustCenterNDARequestHistory, TrustCenterSettingHistory,
+		TrustCenterSubprocessorHistory, TrustCenterWatermarkConfigHistory, UserHistory,
+		UserSettingHistory, VendorRiskScoreHistory, VendorScoringConfigHistory,
+		VulnerabilityHistory, WorkflowAssignmentHistory,
+		WorkflowAssignmentTargetHistory, WorkflowDefinitionHistory []ent.Interceptor
 	}
 )
 

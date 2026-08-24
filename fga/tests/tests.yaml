@@ -29,7 +29,6 @@ tests:
           can_create_program: true
           can_create_risk: true
           can_create_action_plan: true
-          can_create_scheduled_job: true
           can_create_standard: true
           can_create_template: true
           can_create_evidence: true
@@ -70,7 +69,6 @@ tests:
           can_create_program: true
           can_create_risk: true
           can_create_action_plan: true
-          can_create_scheduled_job: true
           can_create_standard: true
           can_create_template: true
           can_create_evidence: true
@@ -108,7 +106,6 @@ tests:
           can_create_program: false
           can_create_risk: false
           can_create_action_plan: false
-          can_create_scheduled_job: false
           can_create_standard: false
           can_create_template: false
           can_create_entity: true # group tuple set to allow
@@ -147,7 +144,6 @@ tests:
           can_create_program: true
           can_create_risk: true
           can_create_action_plan: true
-          can_create_scheduled_job: true
           can_create_template: true
           can_create_evidence: true
           can_create_trust_center_doc: true
@@ -184,7 +180,6 @@ tests:
           can_create_program: false
           can_create_risk: false
           can_create_action_plan: false
-          can_create_scheduled_job: false
           can_create_template: false
           can_create_evidence: false
           can_create_trust_center_doc: false
@@ -218,7 +213,6 @@ tests:
           can_create_risk: true
           can_create_action_plan: true
           can_create_standard: true
-          can_create_scheduled_job: true
           can_create_evidence: true
           can_create_template: true
           can_create_mapped_control: true
@@ -358,7 +352,6 @@ tests:
           can_create_program: false
           can_create_risk: false
           can_create_action_plan: false
-          can_create_scheduled_job: false
           can_create_standard: false
           can_create_template: false
           can_create_evidence: true
@@ -399,7 +392,6 @@ tests:
           can_create_program: false
           can_create_risk: true
           can_create_action_plan: true
-          can_create_scheduled_job: false
           can_create_standard: false
           can_create_template: false
           can_create_evidence: false
@@ -440,7 +432,6 @@ tests:
           can_create_program: false
           can_create_risk: false
           can_create_action_plan: false
-          can_create_scheduled_job: false
           can_create_standard: false
           can_create_template: false
           can_create_evidence: false
@@ -481,7 +472,6 @@ tests:
           can_create_program: false
           can_create_risk: false
           can_create_action_plan: false
-          can_create_scheduled_job: false
           can_create_standard: false
           can_create_template: false
           can_create_evidence: false
@@ -522,7 +512,6 @@ tests:
           can_create_program: false
           can_create_risk: false
           can_create_action_plan: false
-          can_create_scheduled_job: false
           can_create_standard: false
           can_create_template: true
           can_create_evidence: false
@@ -566,7 +555,6 @@ tests:
           can_create_program: true
           can_create_risk: true
           can_create_action_plan: true
-          can_create_scheduled_job: false
           can_create_standard: true
           can_create_template: false
           can_create_evidence: true
@@ -607,7 +595,6 @@ tests:
           can_create_program: false
           can_create_risk: false
           can_create_action_plan: false
-          can_create_scheduled_job: true
           can_create_standard: false
           can_create_template: false
           can_create_evidence: false

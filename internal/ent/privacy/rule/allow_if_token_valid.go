@@ -123,9 +123,6 @@ func privacyTokenFromContextByType(ctx context.Context, tokenType reflect.Type) 
 	case reflect.TypeOf(&token.ResetToken{}):
 		t := token.ResetTokenFromContext(ctx)
 		return t, t != nil
-	case reflect.TypeOf(&token.JobRunnerRegistrationToken{}):
-		t := token.JobRunnerRegistrationTokenFromContext(ctx)
-		return t, t != nil
 	case reflect.TypeOf(&token.DownloadToken{}):
 		t := token.DownloadTokenFromContext(ctx)
 		return t, t != nil

@@ -40,7 +40,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/hushhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/identityholderhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/internalpolicyhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/jobtemplatehistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/mappabledomainhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/mappedcontrolhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/narrativehistory"
@@ -57,7 +56,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/historygenerated/remediationhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/reviewhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/riskhistory"
-	"github.com/theopenlane/core/internal/ent/historygenerated/scheduledjobhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/sladefinitionhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/standardhistory"
 	"github.com/theopenlane/core/internal/ent/historygenerated/subcontrolhistory"
@@ -168,7 +166,6 @@ func checkColumn(t, c string) error {
 			hushhistory.Table:                       hushhistory.ValidColumn,
 			identityholderhistory.Table:             identityholderhistory.ValidColumn,
 			internalpolicyhistory.Table:             internalpolicyhistory.ValidColumn,
-			jobtemplatehistory.Table:                jobtemplatehistory.ValidColumn,
 			mappabledomainhistory.Table:             mappabledomainhistory.ValidColumn,
 			mappedcontrolhistory.Table:              mappedcontrolhistory.ValidColumn,
 			narrativehistory.Table:                  narrativehistory.ValidColumn,
@@ -186,7 +183,6 @@ func checkColumn(t, c string) error {
 			reviewhistory.Table:                     reviewhistory.ValidColumn,
 			riskhistory.Table:                       riskhistory.ValidColumn,
 			sladefinitionhistory.Table:              sladefinitionhistory.ValidColumn,
-			scheduledjobhistory.Table:               scheduledjobhistory.ValidColumn,
 			standardhistory.Table:                   standardhistory.ValidColumn,
 			subcontrolhistory.Table:                 subcontrolhistory.ValidColumn,
 			subprocessorhistory.Table:               subprocessorhistory.ValidColumn,

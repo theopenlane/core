@@ -66,8 +66,6 @@ type Tx struct {
 	IdentityHolderHistory *IdentityHolderHistoryClient
 	// InternalPolicyHistory is the client for interacting with the InternalPolicyHistory builders.
 	InternalPolicyHistory *InternalPolicyHistoryClient
-	// JobTemplateHistory is the client for interacting with the JobTemplateHistory builders.
-	JobTemplateHistory *JobTemplateHistoryClient
 	// MappableDomainHistory is the client for interacting with the MappableDomainHistory builders.
 	MappableDomainHistory *MappableDomainHistoryClient
 	// MappedControlHistory is the client for interacting with the MappedControlHistory builders.
@@ -102,8 +100,6 @@ type Tx struct {
 	RiskHistory *RiskHistoryClient
 	// SLADefinitionHistory is the client for interacting with the SLADefinitionHistory builders.
 	SLADefinitionHistory *SLADefinitionHistoryClient
-	// ScheduledJobHistory is the client for interacting with the ScheduledJobHistory builders.
-	ScheduledJobHistory *ScheduledJobHistoryClient
 	// StandardHistory is the client for interacting with the StandardHistory builders.
 	StandardHistory *StandardHistoryClient
 	// SubcontrolHistory is the client for interacting with the SubcontrolHistory builders.
@@ -307,7 +303,6 @@ func (tx *Tx) init() {
 	tx.HushHistory = NewHushHistoryClient(tx.config)
 	tx.IdentityHolderHistory = NewIdentityHolderHistoryClient(tx.config)
 	tx.InternalPolicyHistory = NewInternalPolicyHistoryClient(tx.config)
-	tx.JobTemplateHistory = NewJobTemplateHistoryClient(tx.config)
 	tx.MappableDomainHistory = NewMappableDomainHistoryClient(tx.config)
 	tx.MappedControlHistory = NewMappedControlHistoryClient(tx.config)
 	tx.NarrativeHistory = NewNarrativeHistoryClient(tx.config)
@@ -325,7 +320,6 @@ func (tx *Tx) init() {
 	tx.ReviewHistory = NewReviewHistoryClient(tx.config)
 	tx.RiskHistory = NewRiskHistoryClient(tx.config)
 	tx.SLADefinitionHistory = NewSLADefinitionHistoryClient(tx.config)
-	tx.ScheduledJobHistory = NewScheduledJobHistoryClient(tx.config)
 	tx.StandardHistory = NewStandardHistoryClient(tx.config)
 	tx.SubcontrolHistory = NewSubcontrolHistoryClient(tx.config)
 	tx.SubprocessorHistory = NewSubprocessorHistoryClient(tx.config)

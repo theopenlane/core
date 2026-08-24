@@ -690,70 +690,6 @@ func (ec *executionContext) fieldContext_SearchResults_invites(_ context.Context
 	return fc, nil
 }
 
-func (ec *executionContext) _SearchResults_jobRunners(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_SearchResults_jobRunners(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.JobRunners, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.JobRunnerConnection) graphql.Marshaler {
-			return ec.marshalOJobRunnerConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobRunnerConnection(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
-func (ec *executionContext) fieldContext_SearchResults_jobRunners(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "SearchResults",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_JobRunnerConnection(ctx, field)
-		},
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _SearchResults_jobTemplates(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.fieldContext_SearchResults_jobTemplates(ctx, field)
-		},
-		func(ctx context.Context) (any, error) {
-			return obj.JobTemplates, nil
-		},
-		nil,
-		func(ctx context.Context, selections ast.SelectionSet, v *generated.JobTemplateConnection) graphql.Marshaler {
-			return ec.marshalOJobTemplateConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobTemplateConnection(ctx, selections, v)
-		},
-		true,
-		false,
-	)
-}
-func (ec *executionContext) fieldContext_SearchResults_jobTemplates(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "SearchResults",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			return ec.childFields_JobTemplateConnection(ctx, field)
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _SearchResults_narratives(ctx context.Context, field graphql.CollectedField, obj *model.SearchResults) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -1552,16 +1488,6 @@ func (ec *executionContext) _SearchResults(ctx context.Context, sel ast.Selectio
 			}
 		case "invites":
 			out.Values[i] = ec._SearchResults_invites(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				out.Invalids++
-			}
-		case "jobRunners":
-			out.Values[i] = ec._SearchResults_jobRunners(ctx, field, obj)
-			if out.Values[i] == graphql.RequiredNull {
-				out.Invalids++
-			}
-		case "jobTemplates":
-			out.Values[i] = ec._SearchResults_jobTemplates(ctx, field, obj)
 			if out.Values[i] == graphql.RequiredNull {
 				out.Invalids++
 			}

@@ -210,8 +210,6 @@ type ControlEdges struct {
 	ControlImplementations []*ControlImplementation `json:"control_implementations,omitempty"`
 	// Subcontrols holds the value of the subcontrols edge.
 	Subcontrols []*Subcontrol `json:"subcontrols,omitempty"`
-	// ScheduledJobs holds the value of the scheduled_jobs edge.
-	ScheduledJobs []*ScheduledJob `json:"scheduled_jobs,omitempty"`
 	// MappedToControls holds the value of the mapped_to_controls edge.
 	MappedToControls []*MappedControl `json:"mapped_to_controls,omitempty"`
 	// MappedFromControls holds the value of the mapped_from_controls edge.
@@ -222,9 +220,9 @@ type ControlEdges struct {
 	ControlMappings []*FindingControl `json:"control_mappings,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [39]bool
+	loadedTypes [38]bool
 	// totalCount holds the count of the edges above.
-	totalCount [37]map[string]int
+	totalCount [36]map[string]int
 
 	namedEvidence               map[string][]*Evidence
 	namedControlObjectives      map[string][]*ControlObjective
@@ -252,7 +250,6 @@ type ControlEdges struct {
 	namedFindings               map[string][]*Finding
 	namedControlImplementations map[string][]*ControlImplementation
 	namedSubcontrols            map[string][]*Subcontrol
-	namedScheduledJobs          map[string][]*ScheduledJob
 	namedMappedToControls       map[string][]*MappedControl
 	namedMappedFromControls     map[string][]*MappedControl
 	namedWorkflowObjectRefs     map[string][]*WorkflowObjectRef
@@ -581,19 +578,10 @@ func (e ControlEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 	return nil, &NotLoadedError{edge: "subcontrols"}
 }
 
-// ScheduledJobsOrErr returns the ScheduledJobs value or an error if the edge
-// was not loaded in eager-loading.
-func (e ControlEdges) ScheduledJobsOrErr() ([]*ScheduledJob, error) {
-	if e.loadedTypes[34] {
-		return e.ScheduledJobs, nil
-	}
-	return nil, &NotLoadedError{edge: "scheduled_jobs"}
-}
-
 // MappedToControlsOrErr returns the MappedToControls value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) MappedToControlsOrErr() ([]*MappedControl, error) {
-	if e.loadedTypes[35] {
+	if e.loadedTypes[34] {
 		return e.MappedToControls, nil
 	}
 	return nil, &NotLoadedError{edge: "mapped_to_controls"}
@@ -602,7 +590,7 @@ func (e ControlEdges) MappedToControlsOrErr() ([]*MappedControl, error) {
 // MappedFromControlsOrErr returns the MappedFromControls value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) MappedFromControlsOrErr() ([]*MappedControl, error) {
-	if e.loadedTypes[36] {
+	if e.loadedTypes[35] {
 		return e.MappedFromControls, nil
 	}
 	return nil, &NotLoadedError{edge: "mapped_from_controls"}
@@ -611,7 +599,7 @@ func (e ControlEdges) MappedFromControlsOrErr() ([]*MappedControl, error) {
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[37] {
+	if e.loadedTypes[36] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -620,7 +608,7 @@ func (e ControlEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
 // ControlMappingsOrErr returns the ControlMappings value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) ControlMappingsOrErr() ([]*FindingControl, error) {
-	if e.loadedTypes[38] {
+	if e.loadedTypes[37] {
 		return e.ControlMappings, nil
 	}
 	return nil, &NotLoadedError{edge: "control_mappings"}
@@ -1206,11 +1194,6 @@ func (_m *Control) QueryControlImplementations() *ControlImplementationQuery {
 // QuerySubcontrols queries the "subcontrols" edge of the Control entity.
 func (_m *Control) QuerySubcontrols() *SubcontrolQuery {
 	return NewControlClient(_m.config).QuerySubcontrols(_m)
-}
-
-// QueryScheduledJobs queries the "scheduled_jobs" edge of the Control entity.
-func (_m *Control) QueryScheduledJobs() *ScheduledJobQuery {
-	return NewControlClient(_m.config).QueryScheduledJobs(_m)
 }
 
 // QueryMappedToControls queries the "mapped_to_controls" edge of the Control entity.
@@ -2058,30 +2041,6 @@ func (_m *Control) appendNamedSubcontrols(name string, edges ...*Subcontrol) {
 		_m.Edges.namedSubcontrols[name] = []*Subcontrol{}
 	} else {
 		_m.Edges.namedSubcontrols[name] = append(_m.Edges.namedSubcontrols[name], edges...)
-	}
-}
-
-// NamedScheduledJobs returns the ScheduledJobs named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (_m *Control) NamedScheduledJobs(name string) ([]*ScheduledJob, error) {
-	if _m.Edges.namedScheduledJobs == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := _m.Edges.namedScheduledJobs[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (_m *Control) appendNamedScheduledJobs(name string, edges ...*ScheduledJob) {
-	if _m.Edges.namedScheduledJobs == nil {
-		_m.Edges.namedScheduledJobs = make(map[string][]*ScheduledJob)
-	}
-	if len(edges) == 0 {
-		_m.Edges.namedScheduledJobs[name] = []*ScheduledJob{}
-	} else {
-		_m.Edges.namedScheduledJobs[name] = append(_m.Edges.namedScheduledJobs[name], edges...)
 	}
 }
 

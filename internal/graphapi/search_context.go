@@ -367,28 +367,6 @@ func highlightSearchContext(_ context.Context, query string, results any, tracke
 				tracker.addMatch(node.ID, "Invite", matchedFields, node)
 			}
 		}
-	case *generated.JobRunnerConnection:
-		for _, edge := range conn.Edges {
-			if edge == nil || edge.Node == nil {
-				continue
-			}
-			node := edge.Node
-			matchedFields := checker.check(node, []string{"DisplayID", "Name", "Tags"})
-			if len(matchedFields) > 0 {
-				tracker.addMatch(node.ID, "JobRunner", matchedFields, node)
-			}
-		}
-	case *generated.JobTemplateConnection:
-		for _, edge := range conn.Edges {
-			if edge == nil || edge.Node == nil {
-				continue
-			}
-			node := edge.Node
-			matchedFields := checker.check(node, []string{"Description", "DisplayID", "Tags", "Title"})
-			if len(matchedFields) > 0 {
-				tracker.addMatch(node.ID, "JobTemplate", matchedFields, node)
-			}
-		}
 	case *generated.NarrativeConnection:
 		for _, edge := range conn.Edges {
 			if edge == nil || edge.Node == nil {

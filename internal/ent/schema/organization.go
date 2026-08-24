@@ -414,42 +414,7 @@ func (o Organization) Edges() []ent.Edge {
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema:         o,
-			edgeSchema:         JobRunner{},
-			cascadeDeleteOwner: true,
-		}),
-		edgeToWithPagination(&edgeDefinition{
-			fromSchema:         o,
-			edgeSchema:         JobRunnerToken{},
-			cascadeDeleteOwner: true,
-		}),
-		edgeToWithPagination(&edgeDefinition{
-			fromSchema:         o,
-			edgeSchema:         JobRunnerRegistrationToken{},
-			cascadeDeleteOwner: true,
-		}),
-		edgeToWithPagination(&edgeDefinition{
-			fromSchema:         o,
 			edgeSchema:         DNSVerification{},
-			cascadeDeleteOwner: true,
-		}),
-		edgeToWithPagination(&edgeDefinition{
-			fromSchema:         o,
-			edgeSchema:         JobTemplate{},
-			cascadeDeleteOwner: true,
-		}),
-		edgeToWithPagination(&edgeDefinition{
-			fromSchema:         o,
-			edgeSchema:         ScheduledJob{},
-			cascadeDeleteOwner: true,
-		}),
-		edgeToWithPagination(&edgeDefinition{
-			fromSchema:         o,
-			edgeSchema:         JobResult{},
-			cascadeDeleteOwner: true,
-		}),
-		edgeToWithPagination(&edgeDefinition{
-			fromSchema:         o,
-			edgeSchema:         ScheduledJobRun{},
 			cascadeDeleteOwner: true,
 		}),
 		edgeToWithPagination(&edgeDefinition{
