@@ -457,7 +457,6 @@ func (_c *IntegrationWebhookCreate) createSpec() (*IntegrationWebhook, *sqlgraph
 		_node = &IntegrationWebhook{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(integrationwebhook.Table, sqlgraph.NewFieldSpec(integrationwebhook.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.IntegrationWebhook
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -553,7 +552,6 @@ func (_c *IntegrationWebhookCreate) createSpec() (*IntegrationWebhook, *sqlgraph
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.IntegrationWebhook
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -571,7 +569,6 @@ func (_c *IntegrationWebhookCreate) createSpec() (*IntegrationWebhook, *sqlgraph
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.IntegrationWebhook
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

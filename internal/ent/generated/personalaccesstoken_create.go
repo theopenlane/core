@@ -439,7 +439,6 @@ func (_c *PersonalAccessTokenCreate) createSpec() (*PersonalAccessToken, *sqlgra
 		_node = &PersonalAccessToken{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(personalaccesstoken.Table, sqlgraph.NewFieldSpec(personalaccesstoken.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.PersonalAccessToken
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -531,7 +530,6 @@ func (_c *PersonalAccessTokenCreate) createSpec() (*PersonalAccessToken, *sqlgra
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.PersonalAccessToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -549,7 +547,6 @@ func (_c *PersonalAccessTokenCreate) createSpec() (*PersonalAccessToken, *sqlgra
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.OrganizationPersonalAccessTokens
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -566,7 +563,6 @@ func (_c *PersonalAccessTokenCreate) createSpec() (*PersonalAccessToken, *sqlgra
 				IDSpec: sqlgraph.NewFieldSpec(event.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.PersonalAccessTokenEvents
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

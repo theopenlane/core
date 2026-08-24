@@ -9,8 +9,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // ID filters vertices based on their ID field.
@@ -1240,9 +1238,6 @@ func HasOwner() predicate.DNSVerification {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.DNSVerification
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1251,9 +1246,6 @@ func HasOwner() predicate.DNSVerification {
 func HasOwnerWith(preds ...predicate.Organization) predicate.DNSVerification {
 	return predicate.DNSVerification(func(s *sql.Selector) {
 		step := newOwnerStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.DNSVerification
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1269,9 +1261,6 @@ func HasCustomDomains() predicate.DNSVerification {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, CustomDomainsTable, CustomDomainsColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.CustomDomain
-		step.Edge.Schema = schemaConfig.CustomDomain
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1280,9 +1269,6 @@ func HasCustomDomains() predicate.DNSVerification {
 func HasCustomDomainsWith(preds ...predicate.CustomDomain) predicate.DNSVerification {
 	return predicate.DNSVerification(func(s *sql.Selector) {
 		step := newCustomDomainsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.CustomDomain
-		step.Edge.Schema = schemaConfig.CustomDomain
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

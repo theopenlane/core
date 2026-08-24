@@ -306,7 +306,6 @@ func (_c *FileDownloadTokenCreate) createSpec() (*FileDownloadToken, *sqlgraph.C
 		_node = &FileDownloadToken{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(filedownloadtoken.Table, sqlgraph.NewFieldSpec(filedownloadtoken.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.FileDownloadToken
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -370,7 +369,6 @@ func (_c *FileDownloadTokenCreate) createSpec() (*FileDownloadToken, *sqlgraph.C
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.FileDownloadToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

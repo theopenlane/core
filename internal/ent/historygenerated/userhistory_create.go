@@ -566,7 +566,6 @@ func (_c *UserHistoryCreate) createSpec() (*UserHistory, *sqlgraph.CreateSpec) {
 		_node = &UserHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(userhistory.Table, sqlgraph.NewFieldSpec(userhistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.UserHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

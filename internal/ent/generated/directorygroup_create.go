@@ -748,7 +748,6 @@ func (_c *DirectoryGroupCreate) createSpec() (*DirectoryGroup, *sqlgraph.CreateS
 		_node = &DirectoryGroup{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(directorygroup.Table, sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.DirectoryGroup
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -880,7 +879,6 @@ func (_c *DirectoryGroupCreate) createSpec() (*DirectoryGroup, *sqlgraph.CreateS
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.DirectoryGroup
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -898,7 +896,6 @@ func (_c *DirectoryGroupCreate) createSpec() (*DirectoryGroup, *sqlgraph.CreateS
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.DirectoryGroup
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -916,7 +913,6 @@ func (_c *DirectoryGroupCreate) createSpec() (*DirectoryGroup, *sqlgraph.CreateS
 				IDSpec: sqlgraph.NewFieldSpec(customtypeenum.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.DirectoryGroup
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -934,7 +930,6 @@ func (_c *DirectoryGroupCreate) createSpec() (*DirectoryGroup, *sqlgraph.CreateS
 				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.DirectoryGroup
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -952,7 +947,6 @@ func (_c *DirectoryGroupCreate) createSpec() (*DirectoryGroup, *sqlgraph.CreateS
 				IDSpec: sqlgraph.NewFieldSpec(directorysyncrun.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.DirectoryGroup
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -970,7 +964,6 @@ func (_c *DirectoryGroupCreate) createSpec() (*DirectoryGroup, *sqlgraph.CreateS
 				IDSpec: sqlgraph.NewFieldSpec(platform.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.DirectoryGroup
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -988,7 +981,6 @@ func (_c *DirectoryGroupCreate) createSpec() (*DirectoryGroup, *sqlgraph.CreateS
 				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.DirectoryMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1012,7 +1004,6 @@ func (_c *DirectoryGroupCreate) createSpec() (*DirectoryGroup, *sqlgraph.CreateS
 				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowObjectRef
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1029,7 +1020,6 @@ func (_c *DirectoryGroupCreate) createSpec() (*DirectoryGroup, *sqlgraph.CreateS
 				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.DirectoryMembership
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

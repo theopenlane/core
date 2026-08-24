@@ -596,7 +596,6 @@ func (_c *NotificationPreferenceHistoryCreate) createSpec() (*NotificationPrefer
 		_node = &NotificationPreferenceHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(notificationpreferencehistory.Table, sqlgraph.NewFieldSpec(notificationpreferencehistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.NotificationPreferenceHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

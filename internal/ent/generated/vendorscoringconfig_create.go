@@ -347,7 +347,6 @@ func (_c *VendorScoringConfigCreate) createSpec() (*VendorScoringConfig, *sqlgra
 		_node = &VendorScoringConfig{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(vendorscoringconfig.Table, sqlgraph.NewFieldSpec(vendorscoringconfig.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.VendorScoringConfig
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -407,7 +406,6 @@ func (_c *VendorScoringConfigCreate) createSpec() (*VendorScoringConfig, *sqlgra
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.VendorScoringConfig
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -425,7 +423,6 @@ func (_c *VendorScoringConfigCreate) createSpec() (*VendorScoringConfig, *sqlgra
 				IDSpec: sqlgraph.NewFieldSpec(vendorriskscore.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.VendorRiskScore
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

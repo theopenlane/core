@@ -112,8 +112,6 @@ func init() {
 	actionplanhistoryDescUpdatedAt := actionplanhistoryFields[4].Descriptor()
 	// actionplanhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	actionplanhistory.DefaultUpdatedAt = actionplanhistoryDescUpdatedAt.Default.(func() time.Time)
-	// actionplanhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	actionplanhistory.UpdateDefaultUpdatedAt = actionplanhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// actionplanhistoryDescTags is the schema descriptor for tags field.
 	actionplanhistoryDescTags := actionplanhistoryFields[11].Descriptor()
 	// actionplanhistory.DefaultTags holds the default value on creation for the tags field.
@@ -199,8 +197,6 @@ func init() {
 	assessmenthistoryDescUpdatedAt := assessmenthistoryFields[4].Descriptor()
 	// assessmenthistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	assessmenthistory.DefaultUpdatedAt = assessmenthistoryDescUpdatedAt.Default.(func() time.Time)
-	// assessmenthistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	assessmenthistory.UpdateDefaultUpdatedAt = assessmenthistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// assessmenthistoryDescTags is the schema descriptor for tags field.
 	assessmenthistoryDescTags := assessmenthistoryFields[11].Descriptor()
 	// assessmenthistory.DefaultTags holds the default value on creation for the tags field.
@@ -242,8 +238,6 @@ func init() {
 	assessmentresponsehistoryDescUpdatedAt := assessmentresponsehistoryFields[4].Descriptor()
 	// assessmentresponsehistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	assessmentresponsehistory.DefaultUpdatedAt = assessmentresponsehistoryDescUpdatedAt.Default.(func() time.Time)
-	// assessmentresponsehistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	assessmentresponsehistory.UpdateDefaultUpdatedAt = assessmentresponsehistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// assessmentresponsehistoryDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
 	assessmentresponsehistoryDescWorkflowEligibleMarker := assessmentresponsehistoryFields[12].Descriptor()
 	// assessmentresponsehistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
@@ -305,8 +299,6 @@ func init() {
 	assethistoryDescUpdatedAt := assethistoryFields[4].Descriptor()
 	// assethistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	assethistory.DefaultUpdatedAt = assethistoryDescUpdatedAt.Default.(func() time.Time)
-	// assethistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	assethistory.UpdateDefaultUpdatedAt = assethistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// assethistoryDescTags is the schema descriptor for tags field.
 	assethistoryDescTags := assethistoryFields[11].Descriptor()
 	// assethistory.DefaultTags holds the default value on creation for the tags field.
@@ -348,8 +340,6 @@ func init() {
 	campaignhistoryDescUpdatedAt := campaignhistoryFields[4].Descriptor()
 	// campaignhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	campaignhistory.DefaultUpdatedAt = campaignhistoryDescUpdatedAt.Default.(func() time.Time)
-	// campaignhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	campaignhistory.UpdateDefaultUpdatedAt = campaignhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// campaignhistoryDescTags is the schema descriptor for tags field.
 	campaignhistoryDescTags := campaignhistoryFields[12].Descriptor()
 	// campaignhistory.DefaultTags holds the default value on creation for the tags field.
@@ -407,8 +397,6 @@ func init() {
 	campaigntargethistoryDescUpdatedAt := campaigntargethistoryFields[4].Descriptor()
 	// campaigntargethistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	campaigntargethistory.DefaultUpdatedAt = campaigntargethistoryDescUpdatedAt.Default.(func() time.Time)
-	// campaigntargethistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	campaigntargethistory.UpdateDefaultUpdatedAt = campaigntargethistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// campaigntargethistoryDescWorkflowEligibleMarker is the schema descriptor for workflow_eligible_marker field.
 	campaigntargethistoryDescWorkflowEligibleMarker := campaigntargethistoryFields[12].Descriptor()
 	// campaigntargethistory.DefaultWorkflowEligibleMarker holds the default value on creation for the workflow_eligible_marker field.
@@ -442,8 +430,6 @@ func init() {
 	contacthistoryDescUpdatedAt := contacthistoryFields[4].Descriptor()
 	// contacthistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	contacthistory.DefaultUpdatedAt = contacthistoryDescUpdatedAt.Default.(func() time.Time)
-	// contacthistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	contacthistory.UpdateDefaultUpdatedAt = contacthistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// contacthistoryDescTags is the schema descriptor for tags field.
 	contacthistoryDescTags := contacthistoryFields[11].Descriptor()
 	// contacthistory.DefaultTags holds the default value on creation for the tags field.
@@ -477,8 +463,6 @@ func init() {
 	controlhistoryDescUpdatedAt := controlhistoryFields[4].Descriptor()
 	// controlhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	controlhistory.DefaultUpdatedAt = controlhistoryDescUpdatedAt.Default.(func() time.Time)
-	// controlhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	controlhistory.UpdateDefaultUpdatedAt = controlhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// controlhistoryDescTags is the schema descriptor for tags field.
 	controlhistoryDescTags := controlhistoryFields[12].Descriptor()
 	// controlhistory.DefaultTags holds the default value on creation for the tags field.
@@ -524,8 +508,6 @@ func init() {
 	controlimplementationhistoryDescUpdatedAt := controlimplementationhistoryFields[4].Descriptor()
 	// controlimplementationhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	controlimplementationhistory.DefaultUpdatedAt = controlimplementationhistoryDescUpdatedAt.Default.(func() time.Time)
-	// controlimplementationhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	controlimplementationhistory.UpdateDefaultUpdatedAt = controlimplementationhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// controlimplementationhistoryDescTags is the schema descriptor for tags field.
 	controlimplementationhistoryDescTags := controlimplementationhistoryFields[11].Descriptor()
 	// controlimplementationhistory.DefaultTags holds the default value on creation for the tags field.
@@ -563,8 +545,6 @@ func init() {
 	controlobjectivehistoryDescUpdatedAt := controlobjectivehistoryFields[4].Descriptor()
 	// controlobjectivehistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	controlobjectivehistory.DefaultUpdatedAt = controlobjectivehistoryDescUpdatedAt.Default.(func() time.Time)
-	// controlobjectivehistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	controlobjectivehistory.UpdateDefaultUpdatedAt = controlobjectivehistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// controlobjectivehistoryDescTags is the schema descriptor for tags field.
 	controlobjectivehistoryDescTags := controlobjectivehistoryFields[12].Descriptor()
 	// controlobjectivehistory.DefaultTags holds the default value on creation for the tags field.
@@ -606,8 +586,6 @@ func init() {
 	customdomainhistoryDescUpdatedAt := customdomainhistoryFields[4].Descriptor()
 	// customdomainhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	customdomainhistory.DefaultUpdatedAt = customdomainhistoryDescUpdatedAt.Default.(func() time.Time)
-	// customdomainhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	customdomainhistory.UpdateDefaultUpdatedAt = customdomainhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// customdomainhistoryDescTags is the schema descriptor for tags field.
 	customdomainhistoryDescTags := customdomainhistoryFields[11].Descriptor()
 	// customdomainhistory.DefaultTags holds the default value on creation for the tags field.
@@ -645,8 +623,6 @@ func init() {
 	discussionhistoryDescUpdatedAt := discussionhistoryFields[4].Descriptor()
 	// discussionhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	discussionhistory.DefaultUpdatedAt = discussionhistoryDescUpdatedAt.Default.(func() time.Time)
-	// discussionhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	discussionhistory.UpdateDefaultUpdatedAt = discussionhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// discussionhistoryDescIsResolved is the schema descriptor for is_resolved field.
 	discussionhistoryDescIsResolved := discussionhistoryFields[13].Descriptor()
 	// discussionhistory.DefaultIsResolved holds the default value on creation for the is_resolved field.
@@ -680,8 +656,6 @@ func init() {
 	documentdatahistoryDescUpdatedAt := documentdatahistoryFields[4].Descriptor()
 	// documentdatahistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	documentdatahistory.DefaultUpdatedAt = documentdatahistoryDescUpdatedAt.Default.(func() time.Time)
-	// documentdatahistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	documentdatahistory.UpdateDefaultUpdatedAt = documentdatahistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// documentdatahistoryDescTags is the schema descriptor for tags field.
 	documentdatahistoryDescTags := documentdatahistoryFields[11].Descriptor()
 	// documentdatahistory.DefaultTags holds the default value on creation for the tags field.
@@ -715,8 +689,6 @@ func init() {
 	emailtemplatehistoryDescUpdatedAt := emailtemplatehistoryFields[4].Descriptor()
 	// emailtemplatehistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	emailtemplatehistory.DefaultUpdatedAt = emailtemplatehistoryDescUpdatedAt.Default.(func() time.Time)
-	// emailtemplatehistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	emailtemplatehistory.UpdateDefaultUpdatedAt = emailtemplatehistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// emailtemplatehistoryDescRevision is the schema descriptor for revision field.
 	emailtemplatehistoryDescRevision := emailtemplatehistoryFields[11].Descriptor()
 	// emailtemplatehistory.DefaultRevision holds the default value on creation for the revision field.
@@ -766,8 +738,6 @@ func init() {
 	entityhistoryDescUpdatedAt := entityhistoryFields[4].Descriptor()
 	// entityhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	entityhistory.DefaultUpdatedAt = entityhistoryDescUpdatedAt.Default.(func() time.Time)
-	// entityhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	entityhistory.UpdateDefaultUpdatedAt = entityhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// entityhistoryDescTags is the schema descriptor for tags field.
 	entityhistoryDescTags := entityhistoryFields[11].Descriptor()
 	// entityhistory.DefaultTags holds the default value on creation for the tags field.
@@ -845,8 +815,6 @@ func init() {
 	entitytypehistoryDescUpdatedAt := entitytypehistoryFields[4].Descriptor()
 	// entitytypehistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	entitytypehistory.DefaultUpdatedAt = entitytypehistoryDescUpdatedAt.Default.(func() time.Time)
-	// entitytypehistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	entitytypehistory.UpdateDefaultUpdatedAt = entitytypehistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// entitytypehistoryDescTags is the schema descriptor for tags field.
 	entitytypehistoryDescTags := entitytypehistoryFields[11].Descriptor()
 	// entitytypehistory.DefaultTags holds the default value on creation for the tags field.
@@ -884,8 +852,6 @@ func init() {
 	evidencehistoryDescUpdatedAt := evidencehistoryFields[4].Descriptor()
 	// evidencehistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	evidencehistory.DefaultUpdatedAt = evidencehistoryDescUpdatedAt.Default.(func() time.Time)
-	// evidencehistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	evidencehistory.UpdateDefaultUpdatedAt = evidencehistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// evidencehistoryDescTags is the schema descriptor for tags field.
 	evidencehistoryDescTags := evidencehistoryFields[12].Descriptor()
 	// evidencehistory.DefaultTags holds the default value on creation for the tags field.
@@ -935,8 +901,6 @@ func init() {
 	filehistoryDescUpdatedAt := filehistoryFields[4].Descriptor()
 	// filehistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	filehistory.DefaultUpdatedAt = filehistoryDescUpdatedAt.Default.(func() time.Time)
-	// filehistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	filehistory.UpdateDefaultUpdatedAt = filehistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// filehistoryDescTags is the schema descriptor for tags field.
 	filehistoryDescTags := filehistoryFields[11].Descriptor()
 	// filehistory.DefaultTags holds the default value on creation for the tags field.
@@ -974,8 +938,6 @@ func init() {
 	findingcontrolhistoryDescUpdatedAt := findingcontrolhistoryFields[4].Descriptor()
 	// findingcontrolhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	findingcontrolhistory.DefaultUpdatedAt = findingcontrolhistoryDescUpdatedAt.Default.(func() time.Time)
-	// findingcontrolhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	findingcontrolhistory.UpdateDefaultUpdatedAt = findingcontrolhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// findingcontrolhistoryDescID is the schema descriptor for id field.
 	findingcontrolhistoryDescID := findingcontrolhistoryFields[8].Descriptor()
 	// findingcontrolhistory.DefaultID holds the default value on creation for the id field.
@@ -1005,8 +967,6 @@ func init() {
 	findinghistoryDescUpdatedAt := findinghistoryFields[4].Descriptor()
 	// findinghistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	findinghistory.DefaultUpdatedAt = findinghistoryDescUpdatedAt.Default.(func() time.Time)
-	// findinghistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	findinghistory.UpdateDefaultUpdatedAt = findinghistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// findinghistoryDescTags is the schema descriptor for tags field.
 	findinghistoryDescTags := findinghistoryFields[12].Descriptor()
 	// findinghistory.DefaultTags holds the default value on creation for the tags field.
@@ -1068,8 +1028,6 @@ func init() {
 	grouphistoryDescUpdatedAt := grouphistoryFields[4].Descriptor()
 	// grouphistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	grouphistory.DefaultUpdatedAt = grouphistoryDescUpdatedAt.Default.(func() time.Time)
-	// grouphistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	grouphistory.UpdateDefaultUpdatedAt = grouphistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// grouphistoryDescTags is the schema descriptor for tags field.
 	grouphistoryDescTags := grouphistoryFields[12].Descriptor()
 	// grouphistory.DefaultTags holds the default value on creation for the tags field.
@@ -1115,8 +1073,6 @@ func init() {
 	groupmembershiphistoryDescUpdatedAt := groupmembershiphistoryFields[4].Descriptor()
 	// groupmembershiphistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	groupmembershiphistory.DefaultUpdatedAt = groupmembershiphistoryDescUpdatedAt.Default.(func() time.Time)
-	// groupmembershiphistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	groupmembershiphistory.UpdateDefaultUpdatedAt = groupmembershiphistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// groupmembershiphistoryDescID is the schema descriptor for id field.
 	groupmembershiphistoryDescID := groupmembershiphistoryFields[8].Descriptor()
 	// groupmembershiphistory.DefaultID holds the default value on creation for the id field.
@@ -1146,8 +1102,6 @@ func init() {
 	groupsettinghistoryDescUpdatedAt := groupsettinghistoryFields[4].Descriptor()
 	// groupsettinghistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	groupsettinghistory.DefaultUpdatedAt = groupsettinghistoryDescUpdatedAt.Default.(func() time.Time)
-	// groupsettinghistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	groupsettinghistory.UpdateDefaultUpdatedAt = groupsettinghistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// groupsettinghistoryDescSyncToSlack is the schema descriptor for sync_to_slack field.
 	groupsettinghistoryDescSyncToSlack := groupsettinghistoryFields[13].Descriptor()
 	// groupsettinghistory.DefaultSyncToSlack holds the default value on creation for the sync_to_slack field.
@@ -1185,8 +1139,6 @@ func init() {
 	hushhistoryDescUpdatedAt := hushhistoryFields[4].Descriptor()
 	// hushhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	hushhistory.DefaultUpdatedAt = hushhistoryDescUpdatedAt.Default.(func() time.Time)
-	// hushhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	hushhistory.UpdateDefaultUpdatedAt = hushhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// hushhistoryDescSystemOwned is the schema descriptor for system_owned field.
 	hushhistoryDescSystemOwned := hushhistoryFields[12].Descriptor()
 	// hushhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
@@ -1220,8 +1172,6 @@ func init() {
 	identityholderhistoryDescUpdatedAt := identityholderhistoryFields[4].Descriptor()
 	// identityholderhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	identityholderhistory.DefaultUpdatedAt = identityholderhistoryDescUpdatedAt.Default.(func() time.Time)
-	// identityholderhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	identityholderhistory.UpdateDefaultUpdatedAt = identityholderhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// identityholderhistoryDescTags is the schema descriptor for tags field.
 	identityholderhistoryDescTags := identityholderhistoryFields[12].Descriptor()
 	// identityholderhistory.DefaultTags holds the default value on creation for the tags field.
@@ -1271,8 +1221,6 @@ func init() {
 	internalpolicyhistoryDescUpdatedAt := internalpolicyhistoryFields[4].Descriptor()
 	// internalpolicyhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	internalpolicyhistory.DefaultUpdatedAt = internalpolicyhistoryDescUpdatedAt.Default.(func() time.Time)
-	// internalpolicyhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	internalpolicyhistory.UpdateDefaultUpdatedAt = internalpolicyhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// internalpolicyhistoryDescTags is the schema descriptor for tags field.
 	internalpolicyhistoryDescTags := internalpolicyhistoryFields[12].Descriptor()
 	// internalpolicyhistory.DefaultTags holds the default value on creation for the tags field.
@@ -1350,8 +1298,6 @@ func init() {
 	jobtemplatehistoryDescUpdatedAt := jobtemplatehistoryFields[4].Descriptor()
 	// jobtemplatehistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	jobtemplatehistory.DefaultUpdatedAt = jobtemplatehistoryDescUpdatedAt.Default.(func() time.Time)
-	// jobtemplatehistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	jobtemplatehistory.UpdateDefaultUpdatedAt = jobtemplatehistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// jobtemplatehistoryDescTags is the schema descriptor for tags field.
 	jobtemplatehistoryDescTags := jobtemplatehistoryFields[12].Descriptor()
 	// jobtemplatehistory.DefaultTags holds the default value on creation for the tags field.
@@ -1389,8 +1335,6 @@ func init() {
 	mappabledomainhistoryDescUpdatedAt := mappabledomainhistoryFields[4].Descriptor()
 	// mappabledomainhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	mappabledomainhistory.DefaultUpdatedAt = mappabledomainhistoryDescUpdatedAt.Default.(func() time.Time)
-	// mappabledomainhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	mappabledomainhistory.UpdateDefaultUpdatedAt = mappabledomainhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// mappabledomainhistoryDescTags is the schema descriptor for tags field.
 	mappabledomainhistoryDescTags := mappabledomainhistoryFields[11].Descriptor()
 	// mappabledomainhistory.DefaultTags holds the default value on creation for the tags field.
@@ -1424,8 +1368,6 @@ func init() {
 	mappedcontrolhistoryDescUpdatedAt := mappedcontrolhistoryFields[4].Descriptor()
 	// mappedcontrolhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	mappedcontrolhistory.DefaultUpdatedAt = mappedcontrolhistoryDescUpdatedAt.Default.(func() time.Time)
-	// mappedcontrolhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	mappedcontrolhistory.UpdateDefaultUpdatedAt = mappedcontrolhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// mappedcontrolhistoryDescTags is the schema descriptor for tags field.
 	mappedcontrolhistoryDescTags := mappedcontrolhistoryFields[11].Descriptor()
 	// mappedcontrolhistory.DefaultTags holds the default value on creation for the tags field.
@@ -1463,8 +1405,6 @@ func init() {
 	narrativehistoryDescUpdatedAt := narrativehistoryFields[4].Descriptor()
 	// narrativehistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	narrativehistory.DefaultUpdatedAt = narrativehistoryDescUpdatedAt.Default.(func() time.Time)
-	// narrativehistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	narrativehistory.UpdateDefaultUpdatedAt = narrativehistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// narrativehistoryDescTags is the schema descriptor for tags field.
 	narrativehistoryDescTags := narrativehistoryFields[12].Descriptor()
 	// narrativehistory.DefaultTags holds the default value on creation for the tags field.
@@ -1502,8 +1442,6 @@ func init() {
 	notehistoryDescUpdatedAt := notehistoryFields[4].Descriptor()
 	// notehistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	notehistory.DefaultUpdatedAt = notehistoryDescUpdatedAt.Default.(func() time.Time)
-	// notehistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	notehistory.UpdateDefaultUpdatedAt = notehistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// notehistoryDescIsEdited is the schema descriptor for is_edited field.
 	notehistoryDescIsEdited := notehistoryFields[18].Descriptor()
 	// notehistory.DefaultIsEdited holds the default value on creation for the is_edited field.
@@ -1541,8 +1479,6 @@ func init() {
 	notificationpreferencehistoryDescUpdatedAt := notificationpreferencehistoryFields[4].Descriptor()
 	// notificationpreferencehistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	notificationpreferencehistory.DefaultUpdatedAt = notificationpreferencehistoryDescUpdatedAt.Default.(func() time.Time)
-	// notificationpreferencehistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	notificationpreferencehistory.UpdateDefaultUpdatedAt = notificationpreferencehistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// notificationpreferencehistoryDescEnabled is the schema descriptor for enabled field.
 	notificationpreferencehistoryDescEnabled := notificationpreferencehistoryFields[18].Descriptor()
 	// notificationpreferencehistory.DefaultEnabled holds the default value on creation for the enabled field.
@@ -1580,8 +1516,6 @@ func init() {
 	notificationtemplatehistoryDescUpdatedAt := notificationtemplatehistoryFields[4].Descriptor()
 	// notificationtemplatehistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	notificationtemplatehistory.DefaultUpdatedAt = notificationtemplatehistoryDescUpdatedAt.Default.(func() time.Time)
-	// notificationtemplatehistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	notificationtemplatehistory.UpdateDefaultUpdatedAt = notificationtemplatehistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// notificationtemplatehistoryDescRevision is the schema descriptor for revision field.
 	notificationtemplatehistoryDescRevision := notificationtemplatehistoryFields[11].Descriptor()
 	// notificationtemplatehistory.DefaultRevision holds the default value on creation for the revision field.
@@ -1631,8 +1565,6 @@ func init() {
 	orgmembershiphistoryDescUpdatedAt := orgmembershiphistoryFields[4].Descriptor()
 	// orgmembershiphistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	orgmembershiphistory.DefaultUpdatedAt = orgmembershiphistoryDescUpdatedAt.Default.(func() time.Time)
-	// orgmembershiphistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	orgmembershiphistory.UpdateDefaultUpdatedAt = orgmembershiphistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// orgmembershiphistoryDescSSOExempt is the schema descriptor for sso_exempt field.
 	orgmembershiphistoryDescSSOExempt := orgmembershiphistoryFields[12].Descriptor()
 	// orgmembershiphistory.DefaultSSOExempt holds the default value on creation for the sso_exempt field.
@@ -1670,8 +1602,6 @@ func init() {
 	organizationhistoryDescUpdatedAt := organizationhistoryFields[4].Descriptor()
 	// organizationhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	organizationhistory.DefaultUpdatedAt = organizationhistoryDescUpdatedAt.Default.(func() time.Time)
-	// organizationhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	organizationhistory.UpdateDefaultUpdatedAt = organizationhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// organizationhistoryDescTags is the schema descriptor for tags field.
 	organizationhistoryDescTags := organizationhistoryFields[11].Descriptor()
 	// organizationhistory.DefaultTags holds the default value on creation for the tags field.
@@ -1717,8 +1647,6 @@ func init() {
 	organizationsettinghistoryDescUpdatedAt := organizationsettinghistoryFields[4].Descriptor()
 	// organizationsettinghistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	organizationsettinghistory.DefaultUpdatedAt = organizationsettinghistoryDescUpdatedAt.Default.(func() time.Time)
-	// organizationsettinghistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	organizationsettinghistory.UpdateDefaultUpdatedAt = organizationsettinghistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// organizationsettinghistoryDescTags is the schema descriptor for tags field.
 	organizationsettinghistoryDescTags := organizationsettinghistoryFields[11].Descriptor()
 	// organizationsettinghistory.DefaultTags holds the default value on creation for the tags field.
@@ -1788,8 +1716,6 @@ func init() {
 	platformhistoryDescUpdatedAt := platformhistoryFields[4].Descriptor()
 	// platformhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	platformhistory.DefaultUpdatedAt = platformhistoryDescUpdatedAt.Default.(func() time.Time)
-	// platformhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	platformhistory.UpdateDefaultUpdatedAt = platformhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// platformhistoryDescTags is the schema descriptor for tags field.
 	platformhistoryDescTags := platformhistoryFields[12].Descriptor()
 	// platformhistory.DefaultTags holds the default value on creation for the tags field.
@@ -1831,8 +1757,6 @@ func init() {
 	procedurehistoryDescUpdatedAt := procedurehistoryFields[4].Descriptor()
 	// procedurehistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	procedurehistory.DefaultUpdatedAt = procedurehistoryDescUpdatedAt.Default.(func() time.Time)
-	// procedurehistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	procedurehistory.UpdateDefaultUpdatedAt = procedurehistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// procedurehistoryDescTags is the schema descriptor for tags field.
 	procedurehistoryDescTags := procedurehistoryFields[12].Descriptor()
 	// procedurehistory.DefaultTags holds the default value on creation for the tags field.
@@ -1910,8 +1834,6 @@ func init() {
 	programhistoryDescUpdatedAt := programhistoryFields[4].Descriptor()
 	// programhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	programhistory.DefaultUpdatedAt = programhistoryDescUpdatedAt.Default.(func() time.Time)
-	// programhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	programhistory.UpdateDefaultUpdatedAt = programhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// programhistoryDescTags is the schema descriptor for tags field.
 	programhistoryDescTags := programhistoryFields[12].Descriptor()
 	// programhistory.DefaultTags holds the default value on creation for the tags field.
@@ -1957,8 +1879,6 @@ func init() {
 	programmembershiphistoryDescUpdatedAt := programmembershiphistoryFields[4].Descriptor()
 	// programmembershiphistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	programmembershiphistory.DefaultUpdatedAt = programmembershiphistoryDescUpdatedAt.Default.(func() time.Time)
-	// programmembershiphistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	programmembershiphistory.UpdateDefaultUpdatedAt = programmembershiphistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// programmembershiphistoryDescID is the schema descriptor for id field.
 	programmembershiphistoryDescID := programmembershiphistoryFields[8].Descriptor()
 	// programmembershiphistory.DefaultID holds the default value on creation for the id field.
@@ -1988,8 +1908,6 @@ func init() {
 	remediationhistoryDescUpdatedAt := remediationhistoryFields[4].Descriptor()
 	// remediationhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	remediationhistory.DefaultUpdatedAt = remediationhistoryDescUpdatedAt.Default.(func() time.Time)
-	// remediationhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	remediationhistory.UpdateDefaultUpdatedAt = remediationhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// remediationhistoryDescTags is the schema descriptor for tags field.
 	remediationhistoryDescTags := remediationhistoryFields[12].Descriptor()
 	// remediationhistory.DefaultTags holds the default value on creation for the tags field.
@@ -2031,8 +1949,6 @@ func init() {
 	reviewhistoryDescUpdatedAt := reviewhistoryFields[4].Descriptor()
 	// reviewhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	reviewhistory.DefaultUpdatedAt = reviewhistoryDescUpdatedAt.Default.(func() time.Time)
-	// reviewhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	reviewhistory.UpdateDefaultUpdatedAt = reviewhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// reviewhistoryDescTags is the schema descriptor for tags field.
 	reviewhistoryDescTags := reviewhistoryFields[11].Descriptor()
 	// reviewhistory.DefaultTags holds the default value on creation for the tags field.
@@ -2074,8 +1990,6 @@ func init() {
 	riskhistoryDescUpdatedAt := riskhistoryFields[4].Descriptor()
 	// riskhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	riskhistory.DefaultUpdatedAt = riskhistoryDescUpdatedAt.Default.(func() time.Time)
-	// riskhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	riskhistory.UpdateDefaultUpdatedAt = riskhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// riskhistoryDescTags is the schema descriptor for tags field.
 	riskhistoryDescTags := riskhistoryFields[12].Descriptor()
 	// riskhistory.DefaultTags holds the default value on creation for the tags field.
@@ -2117,8 +2031,6 @@ func init() {
 	sladefinitionhistoryDescUpdatedAt := sladefinitionhistoryFields[4].Descriptor()
 	// sladefinitionhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	sladefinitionhistory.DefaultUpdatedAt = sladefinitionhistoryDescUpdatedAt.Default.(func() time.Time)
-	// sladefinitionhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	sladefinitionhistory.UpdateDefaultUpdatedAt = sladefinitionhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// sladefinitionhistoryDescTags is the schema descriptor for tags field.
 	sladefinitionhistoryDescTags := sladefinitionhistoryFields[12].Descriptor()
 	// sladefinitionhistory.DefaultTags holds the default value on creation for the tags field.
@@ -2152,8 +2064,6 @@ func init() {
 	scheduledjobhistoryDescUpdatedAt := scheduledjobhistoryFields[4].Descriptor()
 	// scheduledjobhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	scheduledjobhistory.DefaultUpdatedAt = scheduledjobhistoryDescUpdatedAt.Default.(func() time.Time)
-	// scheduledjobhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	scheduledjobhistory.UpdateDefaultUpdatedAt = scheduledjobhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// scheduledjobhistoryDescActive is the schema descriptor for active field.
 	scheduledjobhistoryDescActive := scheduledjobhistoryFields[14].Descriptor()
 	// scheduledjobhistory.DefaultActive holds the default value on creation for the active field.
@@ -2187,8 +2097,6 @@ func init() {
 	standardhistoryDescUpdatedAt := standardhistoryFields[4].Descriptor()
 	// standardhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	standardhistory.DefaultUpdatedAt = standardhistoryDescUpdatedAt.Default.(func() time.Time)
-	// standardhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	standardhistory.UpdateDefaultUpdatedAt = standardhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// standardhistoryDescTags is the schema descriptor for tags field.
 	standardhistoryDescTags := standardhistoryFields[11].Descriptor()
 	// standardhistory.DefaultTags holds the default value on creation for the tags field.
@@ -2238,8 +2146,6 @@ func init() {
 	subcontrolhistoryDescUpdatedAt := subcontrolhistoryFields[4].Descriptor()
 	// subcontrolhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	subcontrolhistory.DefaultUpdatedAt = subcontrolhistoryDescUpdatedAt.Default.(func() time.Time)
-	// subcontrolhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	subcontrolhistory.UpdateDefaultUpdatedAt = subcontrolhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// subcontrolhistoryDescTags is the schema descriptor for tags field.
 	subcontrolhistoryDescTags := subcontrolhistoryFields[12].Descriptor()
 	// subcontrolhistory.DefaultTags holds the default value on creation for the tags field.
@@ -2281,8 +2187,6 @@ func init() {
 	subprocessorhistoryDescUpdatedAt := subprocessorhistoryFields[4].Descriptor()
 	// subprocessorhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	subprocessorhistory.DefaultUpdatedAt = subprocessorhistoryDescUpdatedAt.Default.(func() time.Time)
-	// subprocessorhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	subprocessorhistory.UpdateDefaultUpdatedAt = subprocessorhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// subprocessorhistoryDescTags is the schema descriptor for tags field.
 	subprocessorhistoryDescTags := subprocessorhistoryFields[11].Descriptor()
 	// subprocessorhistory.DefaultTags holds the default value on creation for the tags field.
@@ -2320,8 +2224,6 @@ func init() {
 	systemdetailhistoryDescUpdatedAt := systemdetailhistoryFields[4].Descriptor()
 	// systemdetailhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	systemdetailhistory.DefaultUpdatedAt = systemdetailhistoryDescUpdatedAt.Default.(func() time.Time)
-	// systemdetailhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	systemdetailhistory.UpdateDefaultUpdatedAt = systemdetailhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// systemdetailhistoryDescTags is the schema descriptor for tags field.
 	systemdetailhistoryDescTags := systemdetailhistoryFields[12].Descriptor()
 	// systemdetailhistory.DefaultTags holds the default value on creation for the tags field.
@@ -2355,8 +2257,6 @@ func init() {
 	taskhistoryDescUpdatedAt := taskhistoryFields[4].Descriptor()
 	// taskhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	taskhistory.DefaultUpdatedAt = taskhistoryDescUpdatedAt.Default.(func() time.Time)
-	// taskhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	taskhistory.UpdateDefaultUpdatedAt = taskhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// taskhistoryDescTags is the schema descriptor for tags field.
 	taskhistoryDescTags := taskhistoryFields[12].Descriptor()
 	// taskhistory.DefaultTags holds the default value on creation for the tags field.
@@ -2410,8 +2310,6 @@ func init() {
 	templatehistoryDescUpdatedAt := templatehistoryFields[4].Descriptor()
 	// templatehistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	templatehistory.DefaultUpdatedAt = templatehistoryDescUpdatedAt.Default.(func() time.Time)
-	// templatehistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	templatehistory.UpdateDefaultUpdatedAt = templatehistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// templatehistoryDescTags is the schema descriptor for tags field.
 	templatehistoryDescTags := templatehistoryFields[11].Descriptor()
 	// templatehistory.DefaultTags holds the default value on creation for the tags field.
@@ -2449,8 +2347,6 @@ func init() {
 	trustcentercompliancehistoryDescUpdatedAt := trustcentercompliancehistoryFields[4].Descriptor()
 	// trustcentercompliancehistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	trustcentercompliancehistory.DefaultUpdatedAt = trustcentercompliancehistoryDescUpdatedAt.Default.(func() time.Time)
-	// trustcentercompliancehistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	trustcentercompliancehistory.UpdateDefaultUpdatedAt = trustcentercompliancehistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// trustcentercompliancehistoryDescTags is the schema descriptor for tags field.
 	trustcentercompliancehistoryDescTags := trustcentercompliancehistoryFields[11].Descriptor()
 	// trustcentercompliancehistory.DefaultTags holds the default value on creation for the tags field.
@@ -2484,8 +2380,6 @@ func init() {
 	trustcenterdochistoryDescUpdatedAt := trustcenterdochistoryFields[4].Descriptor()
 	// trustcenterdochistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	trustcenterdochistory.DefaultUpdatedAt = trustcenterdochistoryDescUpdatedAt.Default.(func() time.Time)
-	// trustcenterdochistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	trustcenterdochistory.UpdateDefaultUpdatedAt = trustcenterdochistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// trustcenterdochistoryDescTags is the schema descriptor for tags field.
 	trustcenterdochistoryDescTags := trustcenterdochistoryFields[11].Descriptor()
 	// trustcenterdochistory.DefaultTags holds the default value on creation for the tags field.
@@ -2519,8 +2413,6 @@ func init() {
 	trustcenterentityhistoryDescUpdatedAt := trustcenterentityhistoryFields[4].Descriptor()
 	// trustcenterentityhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	trustcenterentityhistory.DefaultUpdatedAt = trustcenterentityhistoryDescUpdatedAt.Default.(func() time.Time)
-	// trustcenterentityhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	trustcenterentityhistory.UpdateDefaultUpdatedAt = trustcenterentityhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// trustcenterentityhistoryDescID is the schema descriptor for id field.
 	trustcenterentityhistoryDescID := trustcenterentityhistoryFields[10].Descriptor()
 	// trustcenterentityhistory.DefaultID holds the default value on creation for the id field.
@@ -2550,8 +2442,6 @@ func init() {
 	trustcenterfaqhistoryDescUpdatedAt := trustcenterfaqhistoryFields[4].Descriptor()
 	// trustcenterfaqhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	trustcenterfaqhistory.DefaultUpdatedAt = trustcenterfaqhistoryDescUpdatedAt.Default.(func() time.Time)
-	// trustcenterfaqhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	trustcenterfaqhistory.UpdateDefaultUpdatedAt = trustcenterfaqhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// trustcenterfaqhistoryDescDisplayOrder is the schema descriptor for display_order field.
 	trustcenterfaqhistoryDescDisplayOrder := trustcenterfaqhistoryFields[16].Descriptor()
 	// trustcenterfaqhistory.DefaultDisplayOrder holds the default value on creation for the display_order field.
@@ -2585,8 +2475,6 @@ func init() {
 	trustcenterhistoryDescUpdatedAt := trustcenterhistoryFields[4].Descriptor()
 	// trustcenterhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	trustcenterhistory.DefaultUpdatedAt = trustcenterhistoryDescUpdatedAt.Default.(func() time.Time)
-	// trustcenterhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	trustcenterhistory.UpdateDefaultUpdatedAt = trustcenterhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// trustcenterhistoryDescTags is the schema descriptor for tags field.
 	trustcenterhistoryDescTags := trustcenterhistoryFields[11].Descriptor()
 	// trustcenterhistory.DefaultTags holds the default value on creation for the tags field.
@@ -2620,8 +2508,6 @@ func init() {
 	trustcenterndarequesthistoryDescUpdatedAt := trustcenterndarequesthistoryFields[4].Descriptor()
 	// trustcenterndarequesthistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	trustcenterndarequesthistory.DefaultUpdatedAt = trustcenterndarequesthistoryDescUpdatedAt.Default.(func() time.Time)
-	// trustcenterndarequesthistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	trustcenterndarequesthistory.UpdateDefaultUpdatedAt = trustcenterndarequesthistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// trustcenterndarequesthistoryDescTags is the schema descriptor for tags field.
 	trustcenterndarequesthistoryDescTags := trustcenterndarequesthistoryFields[11].Descriptor()
 	// trustcenterndarequesthistory.DefaultTags holds the default value on creation for the tags field.
@@ -2655,8 +2541,6 @@ func init() {
 	trustcentersettinghistoryDescUpdatedAt := trustcentersettinghistoryFields[4].Descriptor()
 	// trustcentersettinghistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	trustcentersettinghistory.DefaultUpdatedAt = trustcentersettinghistoryDescUpdatedAt.Default.(func() time.Time)
-	// trustcentersettinghistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	trustcentersettinghistory.UpdateDefaultUpdatedAt = trustcentersettinghistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// trustcentersettinghistoryDescRemoveBranding is the schema descriptor for remove_branding field.
 	trustcentersettinghistoryDescRemoveBranding := trustcentersettinghistoryFields[30].Descriptor()
 	// trustcentersettinghistory.DefaultRemoveBranding holds the default value on creation for the remove_branding field.
@@ -2702,8 +2586,6 @@ func init() {
 	trustcentersubprocessorhistoryDescUpdatedAt := trustcentersubprocessorhistoryFields[4].Descriptor()
 	// trustcentersubprocessorhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	trustcentersubprocessorhistory.DefaultUpdatedAt = trustcentersubprocessorhistoryDescUpdatedAt.Default.(func() time.Time)
-	// trustcentersubprocessorhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	trustcentersubprocessorhistory.UpdateDefaultUpdatedAt = trustcentersubprocessorhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// trustcentersubprocessorhistoryDescID is the schema descriptor for id field.
 	trustcentersubprocessorhistoryDescID := trustcentersubprocessorhistoryFields[10].Descriptor()
 	// trustcentersubprocessorhistory.DefaultID holds the default value on creation for the id field.
@@ -2733,8 +2615,6 @@ func init() {
 	trustcenterwatermarkconfighistoryDescUpdatedAt := trustcenterwatermarkconfighistoryFields[4].Descriptor()
 	// trustcenterwatermarkconfighistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	trustcenterwatermarkconfighistory.DefaultUpdatedAt = trustcenterwatermarkconfighistoryDescUpdatedAt.Default.(func() time.Time)
-	// trustcenterwatermarkconfighistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	trustcenterwatermarkconfighistory.UpdateDefaultUpdatedAt = trustcenterwatermarkconfighistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// trustcenterwatermarkconfighistoryDescIsEnabled is the schema descriptor for is_enabled field.
 	trustcenterwatermarkconfighistoryDescIsEnabled := trustcenterwatermarkconfighistoryFields[13].Descriptor()
 	// trustcenterwatermarkconfighistory.DefaultIsEnabled holds the default value on creation for the is_enabled field.
@@ -2784,8 +2664,6 @@ func init() {
 	userhistoryDescUpdatedAt := userhistoryFields[4].Descriptor()
 	// userhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	userhistory.DefaultUpdatedAt = userhistoryDescUpdatedAt.Default.(func() time.Time)
-	// userhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	userhistory.UpdateDefaultUpdatedAt = userhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// userhistoryDescTags is the schema descriptor for tags field.
 	userhistoryDescTags := userhistoryFields[11].Descriptor()
 	// userhistory.DefaultTags holds the default value on creation for the tags field.
@@ -2794,10 +2672,6 @@ func init() {
 	userhistoryDescAvatarUpdatedAt := userhistoryFields[18].Descriptor()
 	// userhistory.DefaultAvatarUpdatedAt holds the default value on creation for the avatar_updated_at field.
 	userhistory.DefaultAvatarUpdatedAt = userhistoryDescAvatarUpdatedAt.Default.(func() time.Time)
-	// userhistoryDescLastSeen is the schema descriptor for last_seen field.
-	userhistoryDescLastSeen := userhistoryFields[19].Descriptor()
-	// userhistory.UpdateDefaultLastSeen holds the default value on update for the last_seen field.
-	userhistory.UpdateDefaultLastSeen = userhistoryDescLastSeen.UpdateDefault.(func() time.Time)
 	// userhistoryDescScimActive is the schema descriptor for scim_active field.
 	userhistoryDescScimActive := userhistoryFields[27].Descriptor()
 	// userhistory.DefaultScimActive holds the default value on creation for the scim_active field.
@@ -2831,8 +2705,6 @@ func init() {
 	usersettinghistoryDescUpdatedAt := usersettinghistoryFields[4].Descriptor()
 	// usersettinghistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	usersettinghistory.DefaultUpdatedAt = usersettinghistoryDescUpdatedAt.Default.(func() time.Time)
-	// usersettinghistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	usersettinghistory.UpdateDefaultUpdatedAt = usersettinghistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// usersettinghistoryDescTags is the schema descriptor for tags field.
 	usersettinghistoryDescTags := usersettinghistoryFields[11].Descriptor()
 	// usersettinghistory.DefaultTags holds the default value on creation for the tags field.
@@ -2882,8 +2754,6 @@ func init() {
 	vendorriskscorehistoryDescUpdatedAt := vendorriskscorehistoryFields[4].Descriptor()
 	// vendorriskscorehistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	vendorriskscorehistory.DefaultUpdatedAt = vendorriskscorehistoryDescUpdatedAt.Default.(func() time.Time)
-	// vendorriskscorehistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	vendorriskscorehistory.UpdateDefaultUpdatedAt = vendorriskscorehistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// vendorriskscorehistoryDescTags is the schema descriptor for tags field.
 	vendorriskscorehistoryDescTags := vendorriskscorehistoryFields[11].Descriptor()
 	// vendorriskscorehistory.DefaultTags holds the default value on creation for the tags field.
@@ -2921,8 +2791,6 @@ func init() {
 	vendorscoringconfighistoryDescUpdatedAt := vendorscoringconfighistoryFields[4].Descriptor()
 	// vendorscoringconfighistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	vendorscoringconfighistory.DefaultUpdatedAt = vendorscoringconfighistoryDescUpdatedAt.Default.(func() time.Time)
-	// vendorscoringconfighistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	vendorscoringconfighistory.UpdateDefaultUpdatedAt = vendorscoringconfighistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// vendorscoringconfighistoryDescTags is the schema descriptor for tags field.
 	vendorscoringconfighistoryDescTags := vendorscoringconfighistoryFields[11].Descriptor()
 	// vendorscoringconfighistory.DefaultTags holds the default value on creation for the tags field.
@@ -2964,8 +2832,6 @@ func init() {
 	vulnerabilityhistoryDescUpdatedAt := vulnerabilityhistoryFields[4].Descriptor()
 	// vulnerabilityhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	vulnerabilityhistory.DefaultUpdatedAt = vulnerabilityhistoryDescUpdatedAt.Default.(func() time.Time)
-	// vulnerabilityhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	vulnerabilityhistory.UpdateDefaultUpdatedAt = vulnerabilityhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// vulnerabilityhistoryDescTags is the schema descriptor for tags field.
 	vulnerabilityhistoryDescTags := vulnerabilityhistoryFields[12].Descriptor()
 	// vulnerabilityhistory.DefaultTags holds the default value on creation for the tags field.
@@ -3027,8 +2893,6 @@ func init() {
 	workflowassignmenthistoryDescUpdatedAt := workflowassignmenthistoryFields[4].Descriptor()
 	// workflowassignmenthistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	workflowassignmenthistory.DefaultUpdatedAt = workflowassignmenthistoryDescUpdatedAt.Default.(func() time.Time)
-	// workflowassignmenthistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	workflowassignmenthistory.UpdateDefaultUpdatedAt = workflowassignmenthistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// workflowassignmenthistoryDescTags is the schema descriptor for tags field.
 	workflowassignmenthistoryDescTags := workflowassignmenthistoryFields[12].Descriptor()
 	// workflowassignmenthistory.DefaultTags holds the default value on creation for the tags field.
@@ -3070,8 +2934,6 @@ func init() {
 	workflowassignmenttargethistoryDescUpdatedAt := workflowassignmenttargethistoryFields[4].Descriptor()
 	// workflowassignmenttargethistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	workflowassignmenttargethistory.DefaultUpdatedAt = workflowassignmenttargethistoryDescUpdatedAt.Default.(func() time.Time)
-	// workflowassignmenttargethistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	workflowassignmenttargethistory.UpdateDefaultUpdatedAt = workflowassignmenttargethistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// workflowassignmenttargethistoryDescTags is the schema descriptor for tags field.
 	workflowassignmenttargethistoryDescTags := workflowassignmenttargethistoryFields[12].Descriptor()
 	// workflowassignmenttargethistory.DefaultTags holds the default value on creation for the tags field.
@@ -3105,8 +2967,6 @@ func init() {
 	workflowdefinitionhistoryDescUpdatedAt := workflowdefinitionhistoryFields[4].Descriptor()
 	// workflowdefinitionhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	workflowdefinitionhistory.DefaultUpdatedAt = workflowdefinitionhistoryDescUpdatedAt.Default.(func() time.Time)
-	// workflowdefinitionhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	workflowdefinitionhistory.UpdateDefaultUpdatedAt = workflowdefinitionhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
 	// workflowdefinitionhistoryDescTags is the schema descriptor for tags field.
 	workflowdefinitionhistoryDescTags := workflowdefinitionhistoryFields[12].Descriptor()
 	// workflowdefinitionhistory.DefaultTags holds the default value on creation for the tags field.

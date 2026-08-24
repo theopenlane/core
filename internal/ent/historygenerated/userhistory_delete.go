@@ -11,8 +11,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
 	"github.com/theopenlane/core/internal/ent/historygenerated/userhistory"
 )
 
@@ -45,8 +43,6 @@ func (_d *UserHistoryDelete) ExecX(ctx context.Context) int {
 
 func (_d *UserHistoryDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(userhistory.Table, sqlgraph.NewFieldSpec(userhistory.FieldID, field.TypeString))
-	_spec.Node.Schema = _d.schemaConfig.UserHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
 	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

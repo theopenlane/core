@@ -9,8 +9,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // ID filters vertices based on their ID field.
@@ -1300,9 +1298,6 @@ func HasOwner() predicate.JobRunner {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.JobRunner
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1311,9 +1306,6 @@ func HasOwner() predicate.JobRunner {
 func HasOwnerWith(preds ...predicate.Organization) predicate.JobRunner {
 	return predicate.JobRunner(func(s *sql.Selector) {
 		step := newOwnerStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.JobRunner
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1329,9 +1321,6 @@ func HasJobRunnerTokens() predicate.JobRunner {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, JobRunnerTokensTable, JobRunnerTokensPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.JobRunnerToken
-		step.Edge.Schema = schemaConfig.JobRunnerJobRunnerTokens
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1340,9 +1329,6 @@ func HasJobRunnerTokens() predicate.JobRunner {
 func HasJobRunnerTokensWith(preds ...predicate.JobRunnerToken) predicate.JobRunner {
 	return predicate.JobRunner(func(s *sql.Selector) {
 		step := newJobRunnerTokensStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.JobRunnerToken
-		step.Edge.Schema = schemaConfig.JobRunnerJobRunnerTokens
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

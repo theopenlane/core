@@ -48,7 +48,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -184,9 +183,6 @@ func (_q *ControlQuery) QueryEvidence() *EvidenceQuery {
 			sqlgraph.To(evidence.Table, evidence.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, control.EvidenceTable, control.EvidencePrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Evidence
-		step.Edge.Schema = schemaConfig.EvidenceControls
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -209,9 +205,6 @@ func (_q *ControlQuery) QueryControlObjectives() *ControlObjectiveQuery {
 			sqlgraph.To(controlobjective.Table, controlobjective.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, control.ControlObjectivesTable, control.ControlObjectivesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.ControlObjective
-		step.Edge.Schema = schemaConfig.ControlControlObjectives
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -234,9 +227,6 @@ func (_q *ControlQuery) QueryTasks() *TaskQuery {
 			sqlgraph.To(task.Table, task.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, control.TasksTable, control.TasksPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Task
-		step.Edge.Schema = schemaConfig.ControlTasks
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -259,9 +249,6 @@ func (_q *ControlQuery) QueryNarratives() *NarrativeQuery {
 			sqlgraph.To(narrative.Table, narrative.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, control.NarrativesTable, control.NarrativesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Narrative
-		step.Edge.Schema = schemaConfig.ControlNarratives
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -284,9 +271,6 @@ func (_q *ControlQuery) QueryRisks() *RiskQuery {
 			sqlgraph.To(risk.Table, risk.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, control.RisksTable, control.RisksPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Risk
-		step.Edge.Schema = schemaConfig.ControlRisks
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -309,9 +293,6 @@ func (_q *ControlQuery) QueryActionPlans() *ActionPlanQuery {
 			sqlgraph.To(actionplan.Table, actionplan.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, control.ActionPlansTable, control.ActionPlansPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.ActionPlan
-		step.Edge.Schema = schemaConfig.ControlActionPlans
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -334,9 +315,6 @@ func (_q *ControlQuery) QueryProcedures() *ProcedureQuery {
 			sqlgraph.To(procedure.Table, procedure.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, control.ProceduresTable, control.ProceduresPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Procedure
-		step.Edge.Schema = schemaConfig.ControlProcedures
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -359,9 +337,6 @@ func (_q *ControlQuery) QueryInternalPolicies() *InternalPolicyQuery {
 			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, control.InternalPoliciesTable, control.InternalPoliciesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.InternalPolicy
-		step.Edge.Schema = schemaConfig.InternalPolicyControls
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -384,9 +359,6 @@ func (_q *ControlQuery) QueryComments() *NoteQuery {
 			sqlgraph.To(note.Table, note.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, control.CommentsTable, control.CommentsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Note
-		step.Edge.Schema = schemaConfig.Note
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -409,9 +381,6 @@ func (_q *ControlQuery) QueryDiscussions() *DiscussionQuery {
 			sqlgraph.To(discussion.Table, discussion.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, control.DiscussionsTable, control.DiscussionsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Discussion
-		step.Edge.Schema = schemaConfig.Discussion
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -434,9 +403,6 @@ func (_q *ControlQuery) QueryControlOwner() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, control.ControlOwnerTable, control.ControlOwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Control
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -459,9 +425,6 @@ func (_q *ControlQuery) QueryDelegate() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, control.DelegateTable, control.DelegateColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Control
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -484,9 +447,6 @@ func (_q *ControlQuery) QueryResponsibleParty() *EntityQuery {
 			sqlgraph.To(entity.Table, entity.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, control.ResponsiblePartyTable, control.ResponsiblePartyColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.Control
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -509,9 +469,6 @@ func (_q *ControlQuery) QueryReviews() *ReviewQuery {
 			sqlgraph.To(review.Table, review.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, control.ReviewsTable, control.ReviewsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Review
-		step.Edge.Schema = schemaConfig.ReviewControls
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -534,9 +491,6 @@ func (_q *ControlQuery) QueryRemediations() *RemediationQuery {
 			sqlgraph.To(remediation.Table, remediation.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, control.RemediationsTable, control.RemediationsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Remediation
-		step.Edge.Schema = schemaConfig.RemediationControls
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -559,9 +513,6 @@ func (_q *ControlQuery) QueryScans() *ScanQuery {
 			sqlgraph.To(scan.Table, scan.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, control.ScansTable, control.ScansPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Scan
-		step.Edge.Schema = schemaConfig.ControlScans
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -584,9 +535,6 @@ func (_q *ControlQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, control.OwnerTable, control.OwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.Control
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -609,9 +557,6 @@ func (_q *ControlQuery) QueryBlockedGroups() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, control.BlockedGroupsTable, control.BlockedGroupsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.ControlBlockedGroups
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -634,9 +579,6 @@ func (_q *ControlQuery) QueryEditors() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, control.EditorsTable, control.EditorsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.ControlEditors
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -659,9 +601,6 @@ func (_q *ControlQuery) QueryControlKind() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, control.ControlKindTable, control.ControlKindColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Control
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -684,9 +623,6 @@ func (_q *ControlQuery) QueryEnvironment() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, control.EnvironmentTable, control.EnvironmentColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Control
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -709,9 +645,6 @@ func (_q *ControlQuery) QueryScope() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, control.ScopeTable, control.ScopeColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.Control
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -734,9 +667,6 @@ func (_q *ControlQuery) QueryStandard() *StandardQuery {
 			sqlgraph.To(standard.Table, standard.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, control.StandardTable, control.StandardColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Standard
-		step.Edge.Schema = schemaConfig.Control
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -759,9 +689,6 @@ func (_q *ControlQuery) QueryCheckResults() *CheckResultQuery {
 			sqlgraph.To(checkresult.Table, checkresult.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, control.CheckResultsTable, control.CheckResultsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CheckResult
-		step.Edge.Schema = schemaConfig.CheckResultControls
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -784,9 +711,6 @@ func (_q *ControlQuery) QueryPrograms() *ProgramQuery {
 			sqlgraph.To(program.Table, program.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, control.ProgramsTable, control.ProgramsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ProgramControls
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -809,9 +733,6 @@ func (_q *ControlQuery) QueryPlatforms() *PlatformQuery {
 			sqlgraph.To(platform.Table, platform.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, control.PlatformsTable, control.PlatformsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Platform
-		step.Edge.Schema = schemaConfig.PlatformControls
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -834,9 +755,6 @@ func (_q *ControlQuery) QueryVulnerabilities() *VulnerabilityQuery {
 			sqlgraph.To(vulnerability.Table, vulnerability.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, control.VulnerabilitiesTable, control.VulnerabilitiesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Vulnerability
-		step.Edge.Schema = schemaConfig.VulnerabilityControls
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -859,9 +777,6 @@ func (_q *ControlQuery) QueryAssets() *AssetQuery {
 			sqlgraph.To(asset.Table, asset.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, control.AssetsTable, control.AssetsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Asset
-		step.Edge.Schema = schemaConfig.ControlAssets
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -884,9 +799,6 @@ func (_q *ControlQuery) QueryEntities() *EntityQuery {
 			sqlgraph.To(entity.Table, entity.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, control.EntitiesTable, control.EntitiesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.ControlEntities
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -909,9 +821,6 @@ func (_q *ControlQuery) QueryIdentityHolders() *IdentityHolderQuery {
 			sqlgraph.To(identityholder.Table, identityholder.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, control.IdentityHoldersTable, control.IdentityHoldersPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.IdentityHolder
-		step.Edge.Schema = schemaConfig.ControlIdentityHolders
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -934,9 +843,6 @@ func (_q *ControlQuery) QueryCampaigns() *CampaignQuery {
 			sqlgraph.To(campaign.Table, campaign.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, control.CampaignsTable, control.CampaignsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Campaign
-		step.Edge.Schema = schemaConfig.ControlCampaigns
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -959,9 +865,6 @@ func (_q *ControlQuery) QueryFindings() *FindingQuery {
 			sqlgraph.To(finding.Table, finding.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, control.FindingsTable, control.FindingsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Finding
-		step.Edge.Schema = schemaConfig.FindingControl
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -984,9 +887,6 @@ func (_q *ControlQuery) QueryControlImplementations() *ControlImplementationQuer
 			sqlgraph.To(controlimplementation.Table, controlimplementation.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, control.ControlImplementationsTable, control.ControlImplementationsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.ControlImplementation
-		step.Edge.Schema = schemaConfig.ControlControlImplementations
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1009,9 +909,6 @@ func (_q *ControlQuery) QuerySubcontrols() *SubcontrolQuery {
 			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, control.SubcontrolsTable, control.SubcontrolsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.Subcontrol
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1034,9 +931,6 @@ func (_q *ControlQuery) QueryScheduledJobs() *ScheduledJobQuery {
 			sqlgraph.To(scheduledjob.Table, scheduledjob.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, control.ScheduledJobsTable, control.ScheduledJobsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.ScheduledJob
-		step.Edge.Schema = schemaConfig.ScheduledJobControls
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1059,9 +953,6 @@ func (_q *ControlQuery) QueryMappedToControls() *MappedControlQuery {
 			sqlgraph.To(mappedcontrol.Table, mappedcontrol.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, control.MappedToControlsTable, control.MappedToControlsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.MappedControl
-		step.Edge.Schema = schemaConfig.MappedControlToControls
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1084,9 +975,6 @@ func (_q *ControlQuery) QueryMappedFromControls() *MappedControlQuery {
 			sqlgraph.To(mappedcontrol.Table, mappedcontrol.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, control.MappedFromControlsTable, control.MappedFromControlsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.MappedControl
-		step.Edge.Schema = schemaConfig.MappedControlFromControls
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1109,9 +997,6 @@ func (_q *ControlQuery) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
 			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, control.WorkflowObjectRefsTable, control.WorkflowObjectRefsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.WorkflowObjectRef
-		step.Edge.Schema = schemaConfig.WorkflowObjectRef
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1134,9 +1019,6 @@ func (_q *ControlQuery) QueryControlMappings() *FindingControlQuery {
 			sqlgraph.To(findingcontrol.Table, findingcontrol.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, control.ControlMappingsTable, control.ControlMappingsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.FindingControl
-		step.Edge.Schema = schemaConfig.FindingControl
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1949,8 +1831,6 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.Control
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -2472,7 +2352,6 @@ func (_q *ControlQuery) loadEvidence(ctx context.Context, query *EvidenceQuery, 
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(control.EvidenceTable)
-		joinT.Schema(_q.schemaConfig.EvidenceControls)
 		s.Join(joinT).On(s.C(evidence.FieldID), joinT.C(control.EvidencePrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(control.EvidencePrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2534,7 +2413,6 @@ func (_q *ControlQuery) loadControlObjectives(ctx context.Context, query *Contro
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(control.ControlObjectivesTable)
-		joinT.Schema(_q.schemaConfig.ControlControlObjectives)
 		s.Join(joinT).On(s.C(controlobjective.FieldID), joinT.C(control.ControlObjectivesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(control.ControlObjectivesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2596,7 +2474,6 @@ func (_q *ControlQuery) loadTasks(ctx context.Context, query *TaskQuery, nodes [
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(control.TasksTable)
-		joinT.Schema(_q.schemaConfig.ControlTasks)
 		s.Join(joinT).On(s.C(task.FieldID), joinT.C(control.TasksPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(control.TasksPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2658,7 +2535,6 @@ func (_q *ControlQuery) loadNarratives(ctx context.Context, query *NarrativeQuer
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(control.NarrativesTable)
-		joinT.Schema(_q.schemaConfig.ControlNarratives)
 		s.Join(joinT).On(s.C(narrative.FieldID), joinT.C(control.NarrativesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(control.NarrativesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2720,7 +2596,6 @@ func (_q *ControlQuery) loadRisks(ctx context.Context, query *RiskQuery, nodes [
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(control.RisksTable)
-		joinT.Schema(_q.schemaConfig.ControlRisks)
 		s.Join(joinT).On(s.C(risk.FieldID), joinT.C(control.RisksPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(control.RisksPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2782,7 +2657,6 @@ func (_q *ControlQuery) loadActionPlans(ctx context.Context, query *ActionPlanQu
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(control.ActionPlansTable)
-		joinT.Schema(_q.schemaConfig.ControlActionPlans)
 		s.Join(joinT).On(s.C(actionplan.FieldID), joinT.C(control.ActionPlansPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(control.ActionPlansPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2844,7 +2718,6 @@ func (_q *ControlQuery) loadProcedures(ctx context.Context, query *ProcedureQuer
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(control.ProceduresTable)
-		joinT.Schema(_q.schemaConfig.ControlProcedures)
 		s.Join(joinT).On(s.C(procedure.FieldID), joinT.C(control.ProceduresPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(control.ProceduresPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2906,7 +2779,6 @@ func (_q *ControlQuery) loadInternalPolicies(ctx context.Context, query *Interna
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(control.InternalPoliciesTable)
-		joinT.Schema(_q.schemaConfig.InternalPolicyControls)
 		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(control.InternalPoliciesPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(control.InternalPoliciesPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3120,7 +2992,6 @@ func (_q *ControlQuery) loadReviews(ctx context.Context, query *ReviewQuery, nod
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(control.ReviewsTable)
-		joinT.Schema(_q.schemaConfig.ReviewControls)
 		s.Join(joinT).On(s.C(review.FieldID), joinT.C(control.ReviewsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(control.ReviewsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3182,7 +3053,6 @@ func (_q *ControlQuery) loadRemediations(ctx context.Context, query *Remediation
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(control.RemediationsTable)
-		joinT.Schema(_q.schemaConfig.RemediationControls)
 		s.Join(joinT).On(s.C(remediation.FieldID), joinT.C(control.RemediationsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(control.RemediationsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3244,7 +3114,6 @@ func (_q *ControlQuery) loadScans(ctx context.Context, query *ScanQuery, nodes [
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(control.ScansTable)
-		joinT.Schema(_q.schemaConfig.ControlScans)
 		s.Join(joinT).On(s.C(scan.FieldID), joinT.C(control.ScansPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(control.ScansPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3335,7 +3204,6 @@ func (_q *ControlQuery) loadBlockedGroups(ctx context.Context, query *GroupQuery
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(control.BlockedGroupsTable)
-		joinT.Schema(_q.schemaConfig.ControlBlockedGroups)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(control.BlockedGroupsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(control.BlockedGroupsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3397,7 +3265,6 @@ func (_q *ControlQuery) loadEditors(ctx context.Context, query *GroupQuery, node
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(control.EditorsTable)
-		joinT.Schema(_q.schemaConfig.ControlEditors)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(control.EditorsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(control.EditorsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3575,7 +3442,6 @@ func (_q *ControlQuery) loadCheckResults(ctx context.Context, query *CheckResult
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(control.CheckResultsTable)
-		joinT.Schema(_q.schemaConfig.CheckResultControls)
 		s.Join(joinT).On(s.C(checkresult.FieldID), joinT.C(control.CheckResultsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(control.CheckResultsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3637,7 +3503,6 @@ func (_q *ControlQuery) loadPrograms(ctx context.Context, query *ProgramQuery, n
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(control.ProgramsTable)
-		joinT.Schema(_q.schemaConfig.ProgramControls)
 		s.Join(joinT).On(s.C(program.FieldID), joinT.C(control.ProgramsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(control.ProgramsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3699,7 +3564,6 @@ func (_q *ControlQuery) loadPlatforms(ctx context.Context, query *PlatformQuery,
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(control.PlatformsTable)
-		joinT.Schema(_q.schemaConfig.PlatformControls)
 		s.Join(joinT).On(s.C(platform.FieldID), joinT.C(control.PlatformsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(control.PlatformsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3761,7 +3625,6 @@ func (_q *ControlQuery) loadVulnerabilities(ctx context.Context, query *Vulnerab
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(control.VulnerabilitiesTable)
-		joinT.Schema(_q.schemaConfig.VulnerabilityControls)
 		s.Join(joinT).On(s.C(vulnerability.FieldID), joinT.C(control.VulnerabilitiesPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(control.VulnerabilitiesPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3823,7 +3686,6 @@ func (_q *ControlQuery) loadAssets(ctx context.Context, query *AssetQuery, nodes
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(control.AssetsTable)
-		joinT.Schema(_q.schemaConfig.ControlAssets)
 		s.Join(joinT).On(s.C(asset.FieldID), joinT.C(control.AssetsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(control.AssetsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3885,7 +3747,6 @@ func (_q *ControlQuery) loadEntities(ctx context.Context, query *EntityQuery, no
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(control.EntitiesTable)
-		joinT.Schema(_q.schemaConfig.ControlEntities)
 		s.Join(joinT).On(s.C(entity.FieldID), joinT.C(control.EntitiesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(control.EntitiesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -3947,7 +3808,6 @@ func (_q *ControlQuery) loadIdentityHolders(ctx context.Context, query *Identity
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(control.IdentityHoldersTable)
-		joinT.Schema(_q.schemaConfig.ControlIdentityHolders)
 		s.Join(joinT).On(s.C(identityholder.FieldID), joinT.C(control.IdentityHoldersPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(control.IdentityHoldersPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -4009,7 +3869,6 @@ func (_q *ControlQuery) loadCampaigns(ctx context.Context, query *CampaignQuery,
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(control.CampaignsTable)
-		joinT.Schema(_q.schemaConfig.ControlCampaigns)
 		s.Join(joinT).On(s.C(campaign.FieldID), joinT.C(control.CampaignsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(control.CampaignsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -4071,7 +3930,6 @@ func (_q *ControlQuery) loadFindings(ctx context.Context, query *FindingQuery, n
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(control.FindingsTable)
-		joinT.Schema(_q.schemaConfig.FindingControl)
 		s.Join(joinT).On(s.C(finding.FieldID), joinT.C(control.FindingsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(control.FindingsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -4133,7 +3991,6 @@ func (_q *ControlQuery) loadControlImplementations(ctx context.Context, query *C
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(control.ControlImplementationsTable)
-		joinT.Schema(_q.schemaConfig.ControlControlImplementations)
 		s.Join(joinT).On(s.C(controlimplementation.FieldID), joinT.C(control.ControlImplementationsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(control.ControlImplementationsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -4226,7 +4083,6 @@ func (_q *ControlQuery) loadScheduledJobs(ctx context.Context, query *ScheduledJ
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(control.ScheduledJobsTable)
-		joinT.Schema(_q.schemaConfig.ScheduledJobControls)
 		s.Join(joinT).On(s.C(scheduledjob.FieldID), joinT.C(control.ScheduledJobsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(control.ScheduledJobsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -4288,7 +4144,6 @@ func (_q *ControlQuery) loadMappedToControls(ctx context.Context, query *MappedC
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(control.MappedToControlsTable)
-		joinT.Schema(_q.schemaConfig.MappedControlToControls)
 		s.Join(joinT).On(s.C(mappedcontrol.FieldID), joinT.C(control.MappedToControlsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(control.MappedToControlsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -4350,7 +4205,6 @@ func (_q *ControlQuery) loadMappedFromControls(ctx context.Context, query *Mappe
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(control.MappedFromControlsTable)
-		joinT.Schema(_q.schemaConfig.MappedControlFromControls)
 		s.Join(joinT).On(s.C(mappedcontrol.FieldID), joinT.C(control.MappedFromControlsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(control.MappedFromControlsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -4463,8 +4317,6 @@ func (_q *ControlQuery) loadControlMappings(ctx context.Context, query *FindingC
 
 func (_q *ControlQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.Control
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -4554,9 +4406,6 @@ func (_q *ControlQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.Control)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}

@@ -9,8 +9,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // ID filters vertices based on their ID field.
@@ -1040,9 +1038,6 @@ func HasOwner() predicate.MappedControl {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.MappedControl
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1051,9 +1046,6 @@ func HasOwner() predicate.MappedControl {
 func HasOwnerWith(preds ...predicate.Organization) predicate.MappedControl {
 	return predicate.MappedControl(func(s *sql.Selector) {
 		step := newOwnerStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.MappedControl
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1069,9 +1061,6 @@ func HasBlockedGroups() predicate.MappedControl {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, BlockedGroupsTable, BlockedGroupsPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.MappedControlBlockedGroups
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1080,9 +1069,6 @@ func HasBlockedGroups() predicate.MappedControl {
 func HasBlockedGroupsWith(preds ...predicate.Group) predicate.MappedControl {
 	return predicate.MappedControl(func(s *sql.Selector) {
 		step := newBlockedGroupsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.MappedControlBlockedGroups
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1098,9 +1084,6 @@ func HasEditors() predicate.MappedControl {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, EditorsTable, EditorsPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.MappedControlEditors
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1109,9 +1092,6 @@ func HasEditors() predicate.MappedControl {
 func HasEditorsWith(preds ...predicate.Group) predicate.MappedControl {
 	return predicate.MappedControl(func(s *sql.Selector) {
 		step := newEditorsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.MappedControlEditors
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1127,9 +1107,6 @@ func HasFromControls() predicate.MappedControl {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, FromControlsTable, FromControlsPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.MappedControlFromControls
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1138,9 +1115,6 @@ func HasFromControls() predicate.MappedControl {
 func HasFromControlsWith(preds ...predicate.Control) predicate.MappedControl {
 	return predicate.MappedControl(func(s *sql.Selector) {
 		step := newFromControlsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.MappedControlFromControls
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1156,9 +1130,6 @@ func HasToControls() predicate.MappedControl {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, ToControlsTable, ToControlsPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.MappedControlToControls
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1167,9 +1138,6 @@ func HasToControls() predicate.MappedControl {
 func HasToControlsWith(preds ...predicate.Control) predicate.MappedControl {
 	return predicate.MappedControl(func(s *sql.Selector) {
 		step := newToControlsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.MappedControlToControls
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1185,9 +1153,6 @@ func HasFromSubcontrols() predicate.MappedControl {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, FromSubcontrolsTable, FromSubcontrolsPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.MappedControlFromSubcontrols
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1196,9 +1161,6 @@ func HasFromSubcontrols() predicate.MappedControl {
 func HasFromSubcontrolsWith(preds ...predicate.Subcontrol) predicate.MappedControl {
 	return predicate.MappedControl(func(s *sql.Selector) {
 		step := newFromSubcontrolsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.MappedControlFromSubcontrols
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1214,9 +1176,6 @@ func HasToSubcontrols() predicate.MappedControl {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, ToSubcontrolsTable, ToSubcontrolsPrimaryKey...),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.MappedControlToSubcontrols
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1225,9 +1184,6 @@ func HasToSubcontrols() predicate.MappedControl {
 func HasToSubcontrolsWith(preds ...predicate.Subcontrol) predicate.MappedControl {
 	return predicate.MappedControl(func(s *sql.Selector) {
 		step := newToSubcontrolsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.MappedControlToSubcontrols
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

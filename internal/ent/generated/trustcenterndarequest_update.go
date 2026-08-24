@@ -21,8 +21,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterndarequest"
 	"github.com/theopenlane/core/internal/ent/generated/user"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // TrustCenterNDARequestUpdate is the builder for updating TrustCenterNDARequest entities.
@@ -724,7 +722,6 @@ func (_u *TrustCenterNDARequestUpdate) sqlSave(ctx context.Context) (_node int, 
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.BlockedGroupsCleared() {
@@ -738,7 +735,6 @@ func (_u *TrustCenterNDARequestUpdate) sqlSave(ctx context.Context) (_node int, 
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -755,7 +751,6 @@ func (_u *TrustCenterNDARequestUpdate) sqlSave(ctx context.Context) (_node int, 
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -772,7 +767,6 @@ func (_u *TrustCenterNDARequestUpdate) sqlSave(ctx context.Context) (_node int, 
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !_u.mutation.EditorsCleared() {
@@ -786,7 +780,6 @@ func (_u *TrustCenterNDARequestUpdate) sqlSave(ctx context.Context) (_node int, 
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -803,7 +796,6 @@ func (_u *TrustCenterNDARequestUpdate) sqlSave(ctx context.Context) (_node int, 
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -820,7 +812,6 @@ func (_u *TrustCenterNDARequestUpdate) sqlSave(ctx context.Context) (_node int, 
 				IDSpec: sqlgraph.NewFieldSpec(trustcenterdoc.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustCenterDoc
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTrustCenterDocsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterDocsCleared() {
@@ -834,7 +825,6 @@ func (_u *TrustCenterNDARequestUpdate) sqlSave(ctx context.Context) (_node int, 
 				IDSpec: sqlgraph.NewFieldSpec(trustcenterdoc.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustCenterDoc
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -851,7 +841,6 @@ func (_u *TrustCenterNDARequestUpdate) sqlSave(ctx context.Context) (_node int, 
 				IDSpec: sqlgraph.NewFieldSpec(trustcenterdoc.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustCenterDoc
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -868,7 +857,6 @@ func (_u *TrustCenterNDARequestUpdate) sqlSave(ctx context.Context) (_node int, 
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustCenterNDARequest
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.DocumentIDs(); len(nodes) > 0 {
@@ -882,7 +870,6 @@ func (_u *TrustCenterNDARequestUpdate) sqlSave(ctx context.Context) (_node int, 
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustCenterNDARequest
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -899,7 +886,6 @@ func (_u *TrustCenterNDARequestUpdate) sqlSave(ctx context.Context) (_node int, 
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustCenterNDARequest
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.FileIDs(); len(nodes) > 0 {
@@ -913,7 +899,6 @@ func (_u *TrustCenterNDARequestUpdate) sqlSave(ctx context.Context) (_node int, 
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustCenterNDARequest
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -930,7 +915,6 @@ func (_u *TrustCenterNDARequestUpdate) sqlSave(ctx context.Context) (_node int, 
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustCenterNDARequest
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.ApprovedByUserIDs(); len(nodes) > 0 {
@@ -944,14 +928,11 @@ func (_u *TrustCenterNDARequestUpdate) sqlSave(ctx context.Context) (_node int, 
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustCenterNDARequest
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = _u.schemaConfig.TrustCenterNDARequest
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -1689,7 +1670,6 @@ func (_u *TrustCenterNDARequestUpdateOne) sqlSave(ctx context.Context) (_node *T
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedBlockedGroupsIDs(); len(nodes) > 0 && !_u.mutation.BlockedGroupsCleared() {
@@ -1703,7 +1683,6 @@ func (_u *TrustCenterNDARequestUpdateOne) sqlSave(ctx context.Context) (_node *T
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1720,7 +1699,6 @@ func (_u *TrustCenterNDARequestUpdateOne) sqlSave(ctx context.Context) (_node *T
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1737,7 +1715,6 @@ func (_u *TrustCenterNDARequestUpdateOne) sqlSave(ctx context.Context) (_node *T
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedEditorsIDs(); len(nodes) > 0 && !_u.mutation.EditorsCleared() {
@@ -1751,7 +1728,6 @@ func (_u *TrustCenterNDARequestUpdateOne) sqlSave(ctx context.Context) (_node *T
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1768,7 +1744,6 @@ func (_u *TrustCenterNDARequestUpdateOne) sqlSave(ctx context.Context) (_node *T
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.Group
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1785,7 +1760,6 @@ func (_u *TrustCenterNDARequestUpdateOne) sqlSave(ctx context.Context) (_node *T
 				IDSpec: sqlgraph.NewFieldSpec(trustcenterdoc.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustCenterDoc
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedTrustCenterDocsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterDocsCleared() {
@@ -1799,7 +1773,6 @@ func (_u *TrustCenterNDARequestUpdateOne) sqlSave(ctx context.Context) (_node *T
 				IDSpec: sqlgraph.NewFieldSpec(trustcenterdoc.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustCenterDoc
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1816,7 +1789,6 @@ func (_u *TrustCenterNDARequestUpdateOne) sqlSave(ctx context.Context) (_node *T
 				IDSpec: sqlgraph.NewFieldSpec(trustcenterdoc.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustCenterDoc
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1833,7 +1805,6 @@ func (_u *TrustCenterNDARequestUpdateOne) sqlSave(ctx context.Context) (_node *T
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustCenterNDARequest
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.DocumentIDs(); len(nodes) > 0 {
@@ -1847,7 +1818,6 @@ func (_u *TrustCenterNDARequestUpdateOne) sqlSave(ctx context.Context) (_node *T
 				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustCenterNDARequest
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1864,7 +1834,6 @@ func (_u *TrustCenterNDARequestUpdateOne) sqlSave(ctx context.Context) (_node *T
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustCenterNDARequest
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.FileIDs(); len(nodes) > 0 {
@@ -1878,7 +1847,6 @@ func (_u *TrustCenterNDARequestUpdateOne) sqlSave(ctx context.Context) (_node *T
 				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustCenterNDARequest
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1895,7 +1863,6 @@ func (_u *TrustCenterNDARequestUpdateOne) sqlSave(ctx context.Context) (_node *T
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustCenterNDARequest
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.ApprovedByUserIDs(); len(nodes) > 0 {
@@ -1909,14 +1876,11 @@ func (_u *TrustCenterNDARequestUpdateOne) sqlSave(ctx context.Context) (_node *T
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustCenterNDARequest
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = _u.schemaConfig.TrustCenterNDARequest
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	_node = &TrustCenterNDARequest{config: _u.config}
 	_spec.Assign = _node.assignValues

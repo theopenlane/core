@@ -16,7 +16,6 @@ import (
 	"github.com/labstack/gommon/log"
 	"github.com/theopenlane/core/internal/graphapi"
 	"github.com/theopenlane/core/internal/graphapi/common"
-	"github.com/theopenlane/core/internal/graphapi/directives"
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
@@ -68,26 +67,6 @@ func TestClient(c *ent.Client, objectStore *objects.Service, opts ...testclient.
 		}
 	}
 
-	e := testEchoServer(c, service, false)
-
-	// setup interceptors
-	if opts == nil {
-		opts = []testclient.ClientOption{}
-	}
-
-	opts = append(opts, testclient.WithTransport(localRoundTripper{server: e}))
-
-	config := testclient.NewDefaultConfig()
-
-	return testclient.New(config, opts...)
-}
-
-// TestRestClient creates a new OpenlaneClient for testing
-func TestRestClient(c *ent.Client, opts ...testclient.ClientOption) (*testclient.TestClient, error) {
-	service, err := MockStorageService(nil, nil)
-	if err != nil {
-		return nil, err
-	}
 	e := testEchoServer(c, service, false)
 
 	// setup interceptors
@@ -204,7 +183,7 @@ func testGraphServer(c *ent.Client, u *objects.Service) *handler.Server {
 
 	conf := gqlgenerated.Config{Resolvers: r}
 
-	directives.ImplementAllDirectives(&conf)
+	graphapi.ImplementAllDirectives(&conf)
 
 	srv := handler.New(
 		gqlgenerated.NewExecutableSchema(

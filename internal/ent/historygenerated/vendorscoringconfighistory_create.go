@@ -375,7 +375,6 @@ func (_c *VendorScoringConfigHistoryCreate) createSpec() (*VendorScoringConfigHi
 		_node = &VendorScoringConfigHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(vendorscoringconfighistory.Table, sqlgraph.NewFieldSpec(vendorscoringconfighistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.VendorScoringConfigHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

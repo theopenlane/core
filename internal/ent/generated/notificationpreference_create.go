@@ -586,7 +586,6 @@ func (_c *NotificationPreferenceCreate) createSpec() (*NotificationPreference, *
 		_node = &NotificationPreference{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(notificationpreference.Table, sqlgraph.NewFieldSpec(notificationpreference.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.NotificationPreference
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -706,7 +705,6 @@ func (_c *NotificationPreferenceCreate) createSpec() (*NotificationPreference, *
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.NotificationPreference
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -724,7 +722,6 @@ func (_c *NotificationPreferenceCreate) createSpec() (*NotificationPreference, *
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.NotificationPreference
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -742,7 +739,6 @@ func (_c *NotificationPreferenceCreate) createSpec() (*NotificationPreference, *
 				IDSpec: sqlgraph.NewFieldSpec(notificationtemplate.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.NotificationPreference
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

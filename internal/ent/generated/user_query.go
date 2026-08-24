@@ -40,7 +40,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -157,9 +156,6 @@ func (_q *UserQuery) QueryPersonalAccessTokens() *PersonalAccessTokenQuery {
 			sqlgraph.To(personalaccesstoken.Table, personalaccesstoken.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, user.PersonalAccessTokensTable, user.PersonalAccessTokensColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.PersonalAccessToken
-		step.Edge.Schema = schemaConfig.PersonalAccessToken
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -182,9 +178,6 @@ func (_q *UserQuery) QueryTfaSettings() *TFASettingQuery {
 			sqlgraph.To(tfasetting.Table, tfasetting.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, user.TfaSettingsTable, user.TfaSettingsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.TFASetting
-		step.Edge.Schema = schemaConfig.TFASetting
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -207,9 +200,6 @@ func (_q *UserQuery) QuerySetting() *UserSettingQuery {
 			sqlgraph.To(usersetting.Table, usersetting.FieldID),
 			sqlgraph.Edge(sqlgraph.O2O, false, user.SettingTable, user.SettingColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.UserSetting
-		step.Edge.Schema = schemaConfig.UserSetting
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -232,9 +222,6 @@ func (_q *UserQuery) QueryEmailVerificationTokens() *EmailVerificationTokenQuery
 			sqlgraph.To(emailverificationtoken.Table, emailverificationtoken.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, user.EmailVerificationTokensTable, user.EmailVerificationTokensColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.EmailVerificationToken
-		step.Edge.Schema = schemaConfig.EmailVerificationToken
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -257,9 +244,6 @@ func (_q *UserQuery) QueryFileDownloadTokens() *FileDownloadTokenQuery {
 			sqlgraph.To(filedownloadtoken.Table, filedownloadtoken.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, user.FileDownloadTokensTable, user.FileDownloadTokensColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.FileDownloadToken
-		step.Edge.Schema = schemaConfig.FileDownloadToken
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -282,9 +266,6 @@ func (_q *UserQuery) QueryPasswordResetTokens() *PasswordResetTokenQuery {
 			sqlgraph.To(passwordresettoken.Table, passwordresettoken.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, user.PasswordResetTokensTable, user.PasswordResetTokensColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.PasswordResetToken
-		step.Edge.Schema = schemaConfig.PasswordResetToken
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -307,9 +288,6 @@ func (_q *UserQuery) QuerySubscribers() *SubscriberQuery {
 			sqlgraph.To(subscriber.Table, subscriber.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, user.SubscribersTable, user.SubscribersColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Subscriber
-		step.Edge.Schema = schemaConfig.Subscriber
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -332,9 +310,6 @@ func (_q *UserQuery) QueryGroups() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, user.GroupsTable, user.GroupsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.GroupMembership
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -357,9 +332,6 @@ func (_q *UserQuery) QueryOrganizations() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, user.OrganizationsTable, user.OrganizationsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.OrgMembership
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -382,9 +354,6 @@ func (_q *UserQuery) QueryWebauthns() *WebauthnQuery {
 			sqlgraph.To(webauthn.Table, webauthn.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, user.WebauthnsTable, user.WebauthnsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Webauthn
-		step.Edge.Schema = schemaConfig.Webauthn
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -407,9 +376,6 @@ func (_q *UserQuery) QueryAvatarFile() *FileQuery {
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, user.AvatarFileTable, user.AvatarFileColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.User
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -432,9 +398,6 @@ func (_q *UserQuery) QueryEvents() *EventQuery {
 			sqlgraph.To(event.Table, event.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, user.EventsTable, user.EventsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Event
-		step.Edge.Schema = schemaConfig.UserEvents
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -457,9 +420,6 @@ func (_q *UserQuery) QueryActionPlans() *ActionPlanQuery {
 			sqlgraph.To(actionplan.Table, actionplan.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, user.ActionPlansTable, user.ActionPlansColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.ActionPlan
-		step.Edge.Schema = schemaConfig.ActionPlan
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -482,9 +442,6 @@ func (_q *UserQuery) QueryCampaigns() *CampaignQuery {
 			sqlgraph.To(campaign.Table, campaign.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, user.CampaignsTable, user.CampaignsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Campaign
-		step.Edge.Schema = schemaConfig.CampaignUsers
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -507,9 +464,6 @@ func (_q *UserQuery) QueryCampaignTargets() *CampaignTargetQuery {
 			sqlgraph.To(campaigntarget.Table, campaigntarget.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, user.CampaignTargetsTable, user.CampaignTargetsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CampaignTarget
-		step.Edge.Schema = schemaConfig.CampaignTarget
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -532,9 +486,6 @@ func (_q *UserQuery) QuerySubcontrols() *SubcontrolQuery {
 			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, user.SubcontrolsTable, user.SubcontrolsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.Subcontrol
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -557,9 +508,6 @@ func (_q *UserQuery) QueryAssignerTasks() *TaskQuery {
 			sqlgraph.To(task.Table, task.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, user.AssignerTasksTable, user.AssignerTasksColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Task
-		step.Edge.Schema = schemaConfig.Task
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -582,9 +530,6 @@ func (_q *UserQuery) QueryAssigneeTasks() *TaskQuery {
 			sqlgraph.To(task.Table, task.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, user.AssigneeTasksTable, user.AssigneeTasksColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Task
-		step.Edge.Schema = schemaConfig.Task
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -607,9 +552,6 @@ func (_q *UserQuery) QueryPrograms() *ProgramQuery {
 			sqlgraph.To(program.Table, program.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, user.ProgramsTable, user.ProgramsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.ProgramMembership
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -632,9 +574,6 @@ func (_q *UserQuery) QueryProgramsOwned() *ProgramQuery {
 			sqlgraph.To(program.Table, program.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, user.ProgramsOwnedTable, user.ProgramsOwnedColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.Program
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -657,9 +596,6 @@ func (_q *UserQuery) QueryPlatformsOwned() *PlatformQuery {
 			sqlgraph.To(platform.Table, platform.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, user.PlatformsOwnedTable, user.PlatformsOwnedColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Platform
-		step.Edge.Schema = schemaConfig.Platform
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -682,9 +618,6 @@ func (_q *UserQuery) QueryIdentityHolderProfiles() *IdentityHolderQuery {
 			sqlgraph.To(identityholder.Table, identityholder.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, user.IdentityHolderProfilesTable, user.IdentityHolderProfilesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.IdentityHolder
-		step.Edge.Schema = schemaConfig.IdentityHolder
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -707,9 +640,6 @@ func (_q *UserQuery) QueryImpersonationEvents() *ImpersonationEventQuery {
 			sqlgraph.To(impersonationevent.Table, impersonationevent.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, user.ImpersonationEventsTable, user.ImpersonationEventsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.ImpersonationEvent
-		step.Edge.Schema = schemaConfig.ImpersonationEvent
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -732,9 +662,6 @@ func (_q *UserQuery) QueryTargetedImpersonations() *ImpersonationEventQuery {
 			sqlgraph.To(impersonationevent.Table, impersonationevent.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, user.TargetedImpersonationsTable, user.TargetedImpersonationsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.ImpersonationEvent
-		step.Edge.Schema = schemaConfig.ImpersonationEvent
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -757,9 +684,6 @@ func (_q *UserQuery) QueryGroupMemberships() *GroupMembershipQuery {
 			sqlgraph.To(groupmembership.Table, groupmembership.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, user.GroupMembershipsTable, user.GroupMembershipsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.GroupMembership
-		step.Edge.Schema = schemaConfig.GroupMembership
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -782,9 +706,6 @@ func (_q *UserQuery) QueryOrgMemberships() *OrgMembershipQuery {
 			sqlgraph.To(orgmembership.Table, orgmembership.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, user.OrgMembershipsTable, user.OrgMembershipsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.OrgMembership
-		step.Edge.Schema = schemaConfig.OrgMembership
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -807,9 +728,6 @@ func (_q *UserQuery) QueryProgramMemberships() *ProgramMembershipQuery {
 			sqlgraph.To(programmembership.Table, programmembership.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, user.ProgramMembershipsTable, user.ProgramMembershipsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.ProgramMembership
-		step.Edge.Schema = schemaConfig.ProgramMembership
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1462,8 +1380,6 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.User
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -2083,7 +1999,6 @@ func (_q *UserQuery) loadGroups(ctx context.Context, query *GroupQuery, nodes []
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(user.GroupsTable)
-		joinT.Schema(_q.schemaConfig.GroupMembership)
 		s.Join(joinT).On(s.C(group.FieldID), joinT.C(user.GroupsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(user.GroupsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2145,7 +2060,6 @@ func (_q *UserQuery) loadOrganizations(ctx context.Context, query *OrganizationQ
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(user.OrganizationsTable)
-		joinT.Schema(_q.schemaConfig.OrgMembership)
 		s.Join(joinT).On(s.C(organization.FieldID), joinT.C(user.OrganizationsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(user.OrganizationsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2269,7 +2183,6 @@ func (_q *UserQuery) loadEvents(ctx context.Context, query *EventQuery, nodes []
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(user.EventsTable)
-		joinT.Schema(_q.schemaConfig.UserEvents)
 		s.Join(joinT).On(s.C(event.FieldID), joinT.C(user.EventsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(user.EventsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2362,7 +2275,6 @@ func (_q *UserQuery) loadCampaigns(ctx context.Context, query *CampaignQuery, no
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(user.CampaignsTable)
-		joinT.Schema(_q.schemaConfig.CampaignUsers)
 		s.Join(joinT).On(s.C(campaign.FieldID), joinT.C(user.CampaignsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(user.CampaignsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2547,7 +2459,6 @@ func (_q *UserQuery) loadPrograms(ctx context.Context, query *ProgramQuery, node
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(user.ProgramsTable)
-		joinT.Schema(_q.schemaConfig.ProgramMembership)
 		s.Join(joinT).On(s.C(program.FieldID), joinT.C(user.ProgramsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(user.ProgramsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2843,8 +2754,6 @@ func (_q *UserQuery) loadProgramMemberships(ctx context.Context, query *ProgramM
 
 func (_q *UserQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.User
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -2913,9 +2822,6 @@ func (_q *UserQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.User)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}

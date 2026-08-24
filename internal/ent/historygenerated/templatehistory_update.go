@@ -8,387 +8,24 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 	"github.com/theopenlane/core/internal/ent/historygenerated/templatehistory"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
 )
 
 // TemplateHistoryUpdate is the builder for updating TemplateHistory entities.
 type TemplateHistoryUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *TemplateHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *TemplateHistoryMutation
 }
 
 // Where appends a list predicates to the TemplateHistoryUpdate builder.
 func (_u *TemplateHistoryUpdate) Where(ps ...predicate.TemplateHistory) *TemplateHistoryUpdate {
 	_u.mutation.Where(ps...)
-	return _u
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *TemplateHistoryUpdate) SetUpdatedAt(v time.Time) *TemplateHistoryUpdate {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *TemplateHistoryUpdate) ClearUpdatedAt() *TemplateHistoryUpdate {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *TemplateHistoryUpdate) SetUpdatedBy(v string) *TemplateHistoryUpdate {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *TemplateHistoryUpdate) SetNillableUpdatedBy(v *string) *TemplateHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *TemplateHistoryUpdate) ClearUpdatedBy() *TemplateHistoryUpdate {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *TemplateHistoryUpdate) SetUpdatedByImpersonator(v string) *TemplateHistoryUpdate {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *TemplateHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *TemplateHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *TemplateHistoryUpdate) ClearUpdatedByImpersonator() *TemplateHistoryUpdate {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *TemplateHistoryUpdate) SetDeletedAt(v time.Time) *TemplateHistoryUpdate {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *TemplateHistoryUpdate) SetNillableDeletedAt(v *time.Time) *TemplateHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *TemplateHistoryUpdate) ClearDeletedAt() *TemplateHistoryUpdate {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *TemplateHistoryUpdate) SetDeletedBy(v string) *TemplateHistoryUpdate {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *TemplateHistoryUpdate) SetNillableDeletedBy(v *string) *TemplateHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *TemplateHistoryUpdate) ClearDeletedBy() *TemplateHistoryUpdate {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *TemplateHistoryUpdate) SetTags(v []string) *TemplateHistoryUpdate {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *TemplateHistoryUpdate) AppendTags(v []string) *TemplateHistoryUpdate {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *TemplateHistoryUpdate) ClearTags() *TemplateHistoryUpdate {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetInternalNotes sets the "internal_notes" field.
-func (_u *TemplateHistoryUpdate) SetInternalNotes(v string) *TemplateHistoryUpdate {
-	_u.mutation.SetInternalNotes(v)
-	return _u
-}
-
-// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
-func (_u *TemplateHistoryUpdate) SetNillableInternalNotes(v *string) *TemplateHistoryUpdate {
-	if v != nil {
-		_u.SetInternalNotes(*v)
-	}
-	return _u
-}
-
-// ClearInternalNotes clears the value of the "internal_notes" field.
-func (_u *TemplateHistoryUpdate) ClearInternalNotes() *TemplateHistoryUpdate {
-	_u.mutation.ClearInternalNotes()
-	return _u
-}
-
-// SetSystemInternalID sets the "system_internal_id" field.
-func (_u *TemplateHistoryUpdate) SetSystemInternalID(v string) *TemplateHistoryUpdate {
-	_u.mutation.SetSystemInternalID(v)
-	return _u
-}
-
-// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
-func (_u *TemplateHistoryUpdate) SetNillableSystemInternalID(v *string) *TemplateHistoryUpdate {
-	if v != nil {
-		_u.SetSystemInternalID(*v)
-	}
-	return _u
-}
-
-// ClearSystemInternalID clears the value of the "system_internal_id" field.
-func (_u *TemplateHistoryUpdate) ClearSystemInternalID() *TemplateHistoryUpdate {
-	_u.mutation.ClearSystemInternalID()
-	return _u
-}
-
-// SetEnvironmentName sets the "environment_name" field.
-func (_u *TemplateHistoryUpdate) SetEnvironmentName(v string) *TemplateHistoryUpdate {
-	_u.mutation.SetEnvironmentName(v)
-	return _u
-}
-
-// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
-func (_u *TemplateHistoryUpdate) SetNillableEnvironmentName(v *string) *TemplateHistoryUpdate {
-	if v != nil {
-		_u.SetEnvironmentName(*v)
-	}
-	return _u
-}
-
-// ClearEnvironmentName clears the value of the "environment_name" field.
-func (_u *TemplateHistoryUpdate) ClearEnvironmentName() *TemplateHistoryUpdate {
-	_u.mutation.ClearEnvironmentName()
-	return _u
-}
-
-// SetEnvironmentID sets the "environment_id" field.
-func (_u *TemplateHistoryUpdate) SetEnvironmentID(v string) *TemplateHistoryUpdate {
-	_u.mutation.SetEnvironmentID(v)
-	return _u
-}
-
-// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
-func (_u *TemplateHistoryUpdate) SetNillableEnvironmentID(v *string) *TemplateHistoryUpdate {
-	if v != nil {
-		_u.SetEnvironmentID(*v)
-	}
-	return _u
-}
-
-// ClearEnvironmentID clears the value of the "environment_id" field.
-func (_u *TemplateHistoryUpdate) ClearEnvironmentID() *TemplateHistoryUpdate {
-	_u.mutation.ClearEnvironmentID()
-	return _u
-}
-
-// SetScopeName sets the "scope_name" field.
-func (_u *TemplateHistoryUpdate) SetScopeName(v string) *TemplateHistoryUpdate {
-	_u.mutation.SetScopeName(v)
-	return _u
-}
-
-// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
-func (_u *TemplateHistoryUpdate) SetNillableScopeName(v *string) *TemplateHistoryUpdate {
-	if v != nil {
-		_u.SetScopeName(*v)
-	}
-	return _u
-}
-
-// ClearScopeName clears the value of the "scope_name" field.
-func (_u *TemplateHistoryUpdate) ClearScopeName() *TemplateHistoryUpdate {
-	_u.mutation.ClearScopeName()
-	return _u
-}
-
-// SetScopeID sets the "scope_id" field.
-func (_u *TemplateHistoryUpdate) SetScopeID(v string) *TemplateHistoryUpdate {
-	_u.mutation.SetScopeID(v)
-	return _u
-}
-
-// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
-func (_u *TemplateHistoryUpdate) SetNillableScopeID(v *string) *TemplateHistoryUpdate {
-	if v != nil {
-		_u.SetScopeID(*v)
-	}
-	return _u
-}
-
-// ClearScopeID clears the value of the "scope_id" field.
-func (_u *TemplateHistoryUpdate) ClearScopeID() *TemplateHistoryUpdate {
-	_u.mutation.ClearScopeID()
-	return _u
-}
-
-// SetName sets the "name" field.
-func (_u *TemplateHistoryUpdate) SetName(v string) *TemplateHistoryUpdate {
-	_u.mutation.SetName(v)
-	return _u
-}
-
-// SetNillableName sets the "name" field if the given value is not nil.
-func (_u *TemplateHistoryUpdate) SetNillableName(v *string) *TemplateHistoryUpdate {
-	if v != nil {
-		_u.SetName(*v)
-	}
-	return _u
-}
-
-// SetTemplateType sets the "template_type" field.
-func (_u *TemplateHistoryUpdate) SetTemplateType(v enums.DocumentType) *TemplateHistoryUpdate {
-	_u.mutation.SetTemplateType(v)
-	return _u
-}
-
-// SetNillableTemplateType sets the "template_type" field if the given value is not nil.
-func (_u *TemplateHistoryUpdate) SetNillableTemplateType(v *enums.DocumentType) *TemplateHistoryUpdate {
-	if v != nil {
-		_u.SetTemplateType(*v)
-	}
-	return _u
-}
-
-// SetDescription sets the "description" field.
-func (_u *TemplateHistoryUpdate) SetDescription(v string) *TemplateHistoryUpdate {
-	_u.mutation.SetDescription(v)
-	return _u
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (_u *TemplateHistoryUpdate) SetNillableDescription(v *string) *TemplateHistoryUpdate {
-	if v != nil {
-		_u.SetDescription(*v)
-	}
-	return _u
-}
-
-// ClearDescription clears the value of the "description" field.
-func (_u *TemplateHistoryUpdate) ClearDescription() *TemplateHistoryUpdate {
-	_u.mutation.ClearDescription()
-	return _u
-}
-
-// SetKind sets the "kind" field.
-func (_u *TemplateHistoryUpdate) SetKind(v enums.TemplateKind) *TemplateHistoryUpdate {
-	_u.mutation.SetKind(v)
-	return _u
-}
-
-// SetNillableKind sets the "kind" field if the given value is not nil.
-func (_u *TemplateHistoryUpdate) SetNillableKind(v *enums.TemplateKind) *TemplateHistoryUpdate {
-	if v != nil {
-		_u.SetKind(*v)
-	}
-	return _u
-}
-
-// ClearKind clears the value of the "kind" field.
-func (_u *TemplateHistoryUpdate) ClearKind() *TemplateHistoryUpdate {
-	_u.mutation.ClearKind()
-	return _u
-}
-
-// SetJsonconfig sets the "jsonconfig" field.
-func (_u *TemplateHistoryUpdate) SetJsonconfig(v map[string]interface{}) *TemplateHistoryUpdate {
-	_u.mutation.SetJsonconfig(v)
-	return _u
-}
-
-// SetUischema sets the "uischema" field.
-func (_u *TemplateHistoryUpdate) SetUischema(v map[string]interface{}) *TemplateHistoryUpdate {
-	_u.mutation.SetUischema(v)
-	return _u
-}
-
-// ClearUischema clears the value of the "uischema" field.
-func (_u *TemplateHistoryUpdate) ClearUischema() *TemplateHistoryUpdate {
-	_u.mutation.ClearUischema()
-	return _u
-}
-
-// SetTrustCenterID sets the "trust_center_id" field.
-func (_u *TemplateHistoryUpdate) SetTrustCenterID(v string) *TemplateHistoryUpdate {
-	_u.mutation.SetTrustCenterID(v)
-	return _u
-}
-
-// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
-func (_u *TemplateHistoryUpdate) SetNillableTrustCenterID(v *string) *TemplateHistoryUpdate {
-	if v != nil {
-		_u.SetTrustCenterID(*v)
-	}
-	return _u
-}
-
-// ClearTrustCenterID clears the value of the "trust_center_id" field.
-func (_u *TemplateHistoryUpdate) ClearTrustCenterID() *TemplateHistoryUpdate {
-	_u.mutation.ClearTrustCenterID()
-	return _u
-}
-
-// SetTransformConfiguration sets the "transform_configuration" field.
-func (_u *TemplateHistoryUpdate) SetTransformConfiguration(v models.TemplateProjectionConfig) *TemplateHistoryUpdate {
-	_u.mutation.SetTransformConfiguration(v)
-	return _u
-}
-
-// SetNillableTransformConfiguration sets the "transform_configuration" field if the given value is not nil.
-func (_u *TemplateHistoryUpdate) SetNillableTransformConfiguration(v *models.TemplateProjectionConfig) *TemplateHistoryUpdate {
-	if v != nil {
-		_u.SetTransformConfiguration(*v)
-	}
-	return _u
-}
-
-// ClearTransformConfiguration clears the value of the "transform_configuration" field.
-func (_u *TemplateHistoryUpdate) ClearTransformConfiguration() *TemplateHistoryUpdate {
-	_u.mutation.ClearTransformConfiguration()
 	return _u
 }
 
@@ -399,9 +36,6 @@ func (_u *TemplateHistoryUpdate) Mutation() *TemplateHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *TemplateHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := _u.defaults(); err != nil {
-		return 0, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -427,43 +61,7 @@ func (_u *TemplateHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *TemplateHistoryUpdate) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if templatehistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized templatehistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := templatehistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *TemplateHistoryUpdate) check() error {
-	if v, ok := _u.mutation.TemplateType(); ok {
-		if err := templatehistory.TemplateTypeValidator(v); err != nil {
-			return &ValidationError{Name: "template_type", err: fmt.Errorf(`historygenerated: validator failed for field "TemplateHistory.template_type": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.Kind(); ok {
-		if err := templatehistory.KindValidator(v); err != nil {
-			return &ValidationError{Name: "kind", err: fmt.Errorf(`historygenerated: validator failed for field "TemplateHistory.kind": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *TemplateHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TemplateHistoryUpdate {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *TemplateHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(templatehistory.Table, templatehistory.Columns, sqlgraph.NewFieldSpec(templatehistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -478,46 +76,23 @@ func (_u *TemplateHistoryUpdate) sqlSave(ctx context.Context) (_node int, err er
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(templatehistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(templatehistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(templatehistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(templatehistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(templatehistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(templatehistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(templatehistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(templatehistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(templatehistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(templatehistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(templatehistory.FieldDeletedBy, field.TypeString, value)
-	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(templatehistory.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(templatehistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, templatehistory.FieldTags, value)
-		})
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(templatehistory.FieldTags, field.TypeJSON)
@@ -528,84 +103,39 @@ func (_u *TemplateHistoryUpdate) sqlSave(ctx context.Context) (_node int, err er
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(templatehistory.FieldSystemOwned, field.TypeBool)
 	}
-	if value, ok := _u.mutation.InternalNotes(); ok {
-		_spec.SetField(templatehistory.FieldInternalNotes, field.TypeString, value)
-	}
 	if _u.mutation.InternalNotesCleared() {
 		_spec.ClearField(templatehistory.FieldInternalNotes, field.TypeString)
-	}
-	if value, ok := _u.mutation.SystemInternalID(); ok {
-		_spec.SetField(templatehistory.FieldSystemInternalID, field.TypeString, value)
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(templatehistory.FieldSystemInternalID, field.TypeString)
 	}
-	if value, ok := _u.mutation.EnvironmentName(); ok {
-		_spec.SetField(templatehistory.FieldEnvironmentName, field.TypeString, value)
-	}
 	if _u.mutation.EnvironmentNameCleared() {
 		_spec.ClearField(templatehistory.FieldEnvironmentName, field.TypeString)
-	}
-	if value, ok := _u.mutation.EnvironmentID(); ok {
-		_spec.SetField(templatehistory.FieldEnvironmentID, field.TypeString, value)
 	}
 	if _u.mutation.EnvironmentIDCleared() {
 		_spec.ClearField(templatehistory.FieldEnvironmentID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ScopeName(); ok {
-		_spec.SetField(templatehistory.FieldScopeName, field.TypeString, value)
-	}
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(templatehistory.FieldScopeName, field.TypeString)
-	}
-	if value, ok := _u.mutation.ScopeID(); ok {
-		_spec.SetField(templatehistory.FieldScopeID, field.TypeString, value)
 	}
 	if _u.mutation.ScopeIDCleared() {
 		_spec.ClearField(templatehistory.FieldScopeID, field.TypeString)
 	}
-	if value, ok := _u.mutation.Name(); ok {
-		_spec.SetField(templatehistory.FieldName, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.TemplateType(); ok {
-		_spec.SetField(templatehistory.FieldTemplateType, field.TypeEnum, value)
-	}
-	if value, ok := _u.mutation.Description(); ok {
-		_spec.SetField(templatehistory.FieldDescription, field.TypeString, value)
-	}
 	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(templatehistory.FieldDescription, field.TypeString)
-	}
-	if value, ok := _u.mutation.Kind(); ok {
-		_spec.SetField(templatehistory.FieldKind, field.TypeEnum, value)
 	}
 	if _u.mutation.KindCleared() {
 		_spec.ClearField(templatehistory.FieldKind, field.TypeEnum)
 	}
-	if value, ok := _u.mutation.Jsonconfig(); ok {
-		_spec.SetField(templatehistory.FieldJsonconfig, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.Uischema(); ok {
-		_spec.SetField(templatehistory.FieldUischema, field.TypeJSON, value)
-	}
 	if _u.mutation.UischemaCleared() {
 		_spec.ClearField(templatehistory.FieldUischema, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.TrustCenterID(); ok {
-		_spec.SetField(templatehistory.FieldTrustCenterID, field.TypeString, value)
 	}
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(templatehistory.FieldTrustCenterID, field.TypeString)
 	}
-	if value, ok := _u.mutation.TransformConfiguration(); ok {
-		_spec.SetField(templatehistory.FieldTransformConfiguration, field.TypeJSON, value)
-	}
 	if _u.mutation.TransformConfigurationCleared() {
 		_spec.ClearField(templatehistory.FieldTransformConfiguration, field.TypeJSON)
 	}
-	_spec.Node.Schema = _u.schemaConfig.TemplateHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{templatehistory.Label}
@@ -621,366 +151,9 @@ func (_u *TemplateHistoryUpdate) sqlSave(ctx context.Context) (_node int, err er
 // TemplateHistoryUpdateOne is the builder for updating a single TemplateHistory entity.
 type TemplateHistoryUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *TemplateHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *TemplateHistoryUpdateOne) SetUpdatedAt(v time.Time) *TemplateHistoryUpdateOne {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *TemplateHistoryUpdateOne) ClearUpdatedAt() *TemplateHistoryUpdateOne {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *TemplateHistoryUpdateOne) SetUpdatedBy(v string) *TemplateHistoryUpdateOne {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *TemplateHistoryUpdateOne) SetNillableUpdatedBy(v *string) *TemplateHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *TemplateHistoryUpdateOne) ClearUpdatedBy() *TemplateHistoryUpdateOne {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *TemplateHistoryUpdateOne) SetUpdatedByImpersonator(v string) *TemplateHistoryUpdateOne {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *TemplateHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *TemplateHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *TemplateHistoryUpdateOne) ClearUpdatedByImpersonator() *TemplateHistoryUpdateOne {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *TemplateHistoryUpdateOne) SetDeletedAt(v time.Time) *TemplateHistoryUpdateOne {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *TemplateHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *TemplateHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *TemplateHistoryUpdateOne) ClearDeletedAt() *TemplateHistoryUpdateOne {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *TemplateHistoryUpdateOne) SetDeletedBy(v string) *TemplateHistoryUpdateOne {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *TemplateHistoryUpdateOne) SetNillableDeletedBy(v *string) *TemplateHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *TemplateHistoryUpdateOne) ClearDeletedBy() *TemplateHistoryUpdateOne {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *TemplateHistoryUpdateOne) SetTags(v []string) *TemplateHistoryUpdateOne {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *TemplateHistoryUpdateOne) AppendTags(v []string) *TemplateHistoryUpdateOne {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *TemplateHistoryUpdateOne) ClearTags() *TemplateHistoryUpdateOne {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetInternalNotes sets the "internal_notes" field.
-func (_u *TemplateHistoryUpdateOne) SetInternalNotes(v string) *TemplateHistoryUpdateOne {
-	_u.mutation.SetInternalNotes(v)
-	return _u
-}
-
-// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
-func (_u *TemplateHistoryUpdateOne) SetNillableInternalNotes(v *string) *TemplateHistoryUpdateOne {
-	if v != nil {
-		_u.SetInternalNotes(*v)
-	}
-	return _u
-}
-
-// ClearInternalNotes clears the value of the "internal_notes" field.
-func (_u *TemplateHistoryUpdateOne) ClearInternalNotes() *TemplateHistoryUpdateOne {
-	_u.mutation.ClearInternalNotes()
-	return _u
-}
-
-// SetSystemInternalID sets the "system_internal_id" field.
-func (_u *TemplateHistoryUpdateOne) SetSystemInternalID(v string) *TemplateHistoryUpdateOne {
-	_u.mutation.SetSystemInternalID(v)
-	return _u
-}
-
-// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
-func (_u *TemplateHistoryUpdateOne) SetNillableSystemInternalID(v *string) *TemplateHistoryUpdateOne {
-	if v != nil {
-		_u.SetSystemInternalID(*v)
-	}
-	return _u
-}
-
-// ClearSystemInternalID clears the value of the "system_internal_id" field.
-func (_u *TemplateHistoryUpdateOne) ClearSystemInternalID() *TemplateHistoryUpdateOne {
-	_u.mutation.ClearSystemInternalID()
-	return _u
-}
-
-// SetEnvironmentName sets the "environment_name" field.
-func (_u *TemplateHistoryUpdateOne) SetEnvironmentName(v string) *TemplateHistoryUpdateOne {
-	_u.mutation.SetEnvironmentName(v)
-	return _u
-}
-
-// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
-func (_u *TemplateHistoryUpdateOne) SetNillableEnvironmentName(v *string) *TemplateHistoryUpdateOne {
-	if v != nil {
-		_u.SetEnvironmentName(*v)
-	}
-	return _u
-}
-
-// ClearEnvironmentName clears the value of the "environment_name" field.
-func (_u *TemplateHistoryUpdateOne) ClearEnvironmentName() *TemplateHistoryUpdateOne {
-	_u.mutation.ClearEnvironmentName()
-	return _u
-}
-
-// SetEnvironmentID sets the "environment_id" field.
-func (_u *TemplateHistoryUpdateOne) SetEnvironmentID(v string) *TemplateHistoryUpdateOne {
-	_u.mutation.SetEnvironmentID(v)
-	return _u
-}
-
-// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
-func (_u *TemplateHistoryUpdateOne) SetNillableEnvironmentID(v *string) *TemplateHistoryUpdateOne {
-	if v != nil {
-		_u.SetEnvironmentID(*v)
-	}
-	return _u
-}
-
-// ClearEnvironmentID clears the value of the "environment_id" field.
-func (_u *TemplateHistoryUpdateOne) ClearEnvironmentID() *TemplateHistoryUpdateOne {
-	_u.mutation.ClearEnvironmentID()
-	return _u
-}
-
-// SetScopeName sets the "scope_name" field.
-func (_u *TemplateHistoryUpdateOne) SetScopeName(v string) *TemplateHistoryUpdateOne {
-	_u.mutation.SetScopeName(v)
-	return _u
-}
-
-// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
-func (_u *TemplateHistoryUpdateOne) SetNillableScopeName(v *string) *TemplateHistoryUpdateOne {
-	if v != nil {
-		_u.SetScopeName(*v)
-	}
-	return _u
-}
-
-// ClearScopeName clears the value of the "scope_name" field.
-func (_u *TemplateHistoryUpdateOne) ClearScopeName() *TemplateHistoryUpdateOne {
-	_u.mutation.ClearScopeName()
-	return _u
-}
-
-// SetScopeID sets the "scope_id" field.
-func (_u *TemplateHistoryUpdateOne) SetScopeID(v string) *TemplateHistoryUpdateOne {
-	_u.mutation.SetScopeID(v)
-	return _u
-}
-
-// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
-func (_u *TemplateHistoryUpdateOne) SetNillableScopeID(v *string) *TemplateHistoryUpdateOne {
-	if v != nil {
-		_u.SetScopeID(*v)
-	}
-	return _u
-}
-
-// ClearScopeID clears the value of the "scope_id" field.
-func (_u *TemplateHistoryUpdateOne) ClearScopeID() *TemplateHistoryUpdateOne {
-	_u.mutation.ClearScopeID()
-	return _u
-}
-
-// SetName sets the "name" field.
-func (_u *TemplateHistoryUpdateOne) SetName(v string) *TemplateHistoryUpdateOne {
-	_u.mutation.SetName(v)
-	return _u
-}
-
-// SetNillableName sets the "name" field if the given value is not nil.
-func (_u *TemplateHistoryUpdateOne) SetNillableName(v *string) *TemplateHistoryUpdateOne {
-	if v != nil {
-		_u.SetName(*v)
-	}
-	return _u
-}
-
-// SetTemplateType sets the "template_type" field.
-func (_u *TemplateHistoryUpdateOne) SetTemplateType(v enums.DocumentType) *TemplateHistoryUpdateOne {
-	_u.mutation.SetTemplateType(v)
-	return _u
-}
-
-// SetNillableTemplateType sets the "template_type" field if the given value is not nil.
-func (_u *TemplateHistoryUpdateOne) SetNillableTemplateType(v *enums.DocumentType) *TemplateHistoryUpdateOne {
-	if v != nil {
-		_u.SetTemplateType(*v)
-	}
-	return _u
-}
-
-// SetDescription sets the "description" field.
-func (_u *TemplateHistoryUpdateOne) SetDescription(v string) *TemplateHistoryUpdateOne {
-	_u.mutation.SetDescription(v)
-	return _u
-}
-
-// SetNillableDescription sets the "description" field if the given value is not nil.
-func (_u *TemplateHistoryUpdateOne) SetNillableDescription(v *string) *TemplateHistoryUpdateOne {
-	if v != nil {
-		_u.SetDescription(*v)
-	}
-	return _u
-}
-
-// ClearDescription clears the value of the "description" field.
-func (_u *TemplateHistoryUpdateOne) ClearDescription() *TemplateHistoryUpdateOne {
-	_u.mutation.ClearDescription()
-	return _u
-}
-
-// SetKind sets the "kind" field.
-func (_u *TemplateHistoryUpdateOne) SetKind(v enums.TemplateKind) *TemplateHistoryUpdateOne {
-	_u.mutation.SetKind(v)
-	return _u
-}
-
-// SetNillableKind sets the "kind" field if the given value is not nil.
-func (_u *TemplateHistoryUpdateOne) SetNillableKind(v *enums.TemplateKind) *TemplateHistoryUpdateOne {
-	if v != nil {
-		_u.SetKind(*v)
-	}
-	return _u
-}
-
-// ClearKind clears the value of the "kind" field.
-func (_u *TemplateHistoryUpdateOne) ClearKind() *TemplateHistoryUpdateOne {
-	_u.mutation.ClearKind()
-	return _u
-}
-
-// SetJsonconfig sets the "jsonconfig" field.
-func (_u *TemplateHistoryUpdateOne) SetJsonconfig(v map[string]interface{}) *TemplateHistoryUpdateOne {
-	_u.mutation.SetJsonconfig(v)
-	return _u
-}
-
-// SetUischema sets the "uischema" field.
-func (_u *TemplateHistoryUpdateOne) SetUischema(v map[string]interface{}) *TemplateHistoryUpdateOne {
-	_u.mutation.SetUischema(v)
-	return _u
-}
-
-// ClearUischema clears the value of the "uischema" field.
-func (_u *TemplateHistoryUpdateOne) ClearUischema() *TemplateHistoryUpdateOne {
-	_u.mutation.ClearUischema()
-	return _u
-}
-
-// SetTrustCenterID sets the "trust_center_id" field.
-func (_u *TemplateHistoryUpdateOne) SetTrustCenterID(v string) *TemplateHistoryUpdateOne {
-	_u.mutation.SetTrustCenterID(v)
-	return _u
-}
-
-// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
-func (_u *TemplateHistoryUpdateOne) SetNillableTrustCenterID(v *string) *TemplateHistoryUpdateOne {
-	if v != nil {
-		_u.SetTrustCenterID(*v)
-	}
-	return _u
-}
-
-// ClearTrustCenterID clears the value of the "trust_center_id" field.
-func (_u *TemplateHistoryUpdateOne) ClearTrustCenterID() *TemplateHistoryUpdateOne {
-	_u.mutation.ClearTrustCenterID()
-	return _u
-}
-
-// SetTransformConfiguration sets the "transform_configuration" field.
-func (_u *TemplateHistoryUpdateOne) SetTransformConfiguration(v models.TemplateProjectionConfig) *TemplateHistoryUpdateOne {
-	_u.mutation.SetTransformConfiguration(v)
-	return _u
-}
-
-// SetNillableTransformConfiguration sets the "transform_configuration" field if the given value is not nil.
-func (_u *TemplateHistoryUpdateOne) SetNillableTransformConfiguration(v *models.TemplateProjectionConfig) *TemplateHistoryUpdateOne {
-	if v != nil {
-		_u.SetTransformConfiguration(*v)
-	}
-	return _u
-}
-
-// ClearTransformConfiguration clears the value of the "transform_configuration" field.
-func (_u *TemplateHistoryUpdateOne) ClearTransformConfiguration() *TemplateHistoryUpdateOne {
-	_u.mutation.ClearTransformConfiguration()
-	return _u
+	fields   []string
+	hooks    []Hook
+	mutation *TemplateHistoryMutation
 }
 
 // Mutation returns the TemplateHistoryMutation object of the builder.
@@ -1003,9 +176,6 @@ func (_u *TemplateHistoryUpdateOne) Select(field string, fields ...string) *Temp
 
 // Save executes the query and returns the updated TemplateHistory entity.
 func (_u *TemplateHistoryUpdateOne) Save(ctx context.Context) (*TemplateHistory, error) {
-	if err := _u.defaults(); err != nil {
-		return nil, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -1031,43 +201,7 @@ func (_u *TemplateHistoryUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *TemplateHistoryUpdateOne) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if templatehistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized templatehistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := templatehistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *TemplateHistoryUpdateOne) check() error {
-	if v, ok := _u.mutation.TemplateType(); ok {
-		if err := templatehistory.TemplateTypeValidator(v); err != nil {
-			return &ValidationError{Name: "template_type", err: fmt.Errorf(`historygenerated: validator failed for field "TemplateHistory.template_type": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.Kind(); ok {
-		if err := templatehistory.KindValidator(v); err != nil {
-			return &ValidationError{Name: "kind", err: fmt.Errorf(`historygenerated: validator failed for field "TemplateHistory.kind": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *TemplateHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TemplateHistoryUpdateOne {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *TemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TemplateHistory, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(templatehistory.Table, templatehistory.Columns, sqlgraph.NewFieldSpec(templatehistory.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
@@ -1099,46 +233,23 @@ func (_u *TemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Templat
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(templatehistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(templatehistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(templatehistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(templatehistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(templatehistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(templatehistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(templatehistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(templatehistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(templatehistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(templatehistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(templatehistory.FieldDeletedBy, field.TypeString, value)
-	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(templatehistory.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(templatehistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, templatehistory.FieldTags, value)
-		})
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(templatehistory.FieldTags, field.TypeJSON)
@@ -1149,84 +260,39 @@ func (_u *TemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Templat
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(templatehistory.FieldSystemOwned, field.TypeBool)
 	}
-	if value, ok := _u.mutation.InternalNotes(); ok {
-		_spec.SetField(templatehistory.FieldInternalNotes, field.TypeString, value)
-	}
 	if _u.mutation.InternalNotesCleared() {
 		_spec.ClearField(templatehistory.FieldInternalNotes, field.TypeString)
-	}
-	if value, ok := _u.mutation.SystemInternalID(); ok {
-		_spec.SetField(templatehistory.FieldSystemInternalID, field.TypeString, value)
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(templatehistory.FieldSystemInternalID, field.TypeString)
 	}
-	if value, ok := _u.mutation.EnvironmentName(); ok {
-		_spec.SetField(templatehistory.FieldEnvironmentName, field.TypeString, value)
-	}
 	if _u.mutation.EnvironmentNameCleared() {
 		_spec.ClearField(templatehistory.FieldEnvironmentName, field.TypeString)
-	}
-	if value, ok := _u.mutation.EnvironmentID(); ok {
-		_spec.SetField(templatehistory.FieldEnvironmentID, field.TypeString, value)
 	}
 	if _u.mutation.EnvironmentIDCleared() {
 		_spec.ClearField(templatehistory.FieldEnvironmentID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ScopeName(); ok {
-		_spec.SetField(templatehistory.FieldScopeName, field.TypeString, value)
-	}
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(templatehistory.FieldScopeName, field.TypeString)
-	}
-	if value, ok := _u.mutation.ScopeID(); ok {
-		_spec.SetField(templatehistory.FieldScopeID, field.TypeString, value)
 	}
 	if _u.mutation.ScopeIDCleared() {
 		_spec.ClearField(templatehistory.FieldScopeID, field.TypeString)
 	}
-	if value, ok := _u.mutation.Name(); ok {
-		_spec.SetField(templatehistory.FieldName, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.TemplateType(); ok {
-		_spec.SetField(templatehistory.FieldTemplateType, field.TypeEnum, value)
-	}
-	if value, ok := _u.mutation.Description(); ok {
-		_spec.SetField(templatehistory.FieldDescription, field.TypeString, value)
-	}
 	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(templatehistory.FieldDescription, field.TypeString)
-	}
-	if value, ok := _u.mutation.Kind(); ok {
-		_spec.SetField(templatehistory.FieldKind, field.TypeEnum, value)
 	}
 	if _u.mutation.KindCleared() {
 		_spec.ClearField(templatehistory.FieldKind, field.TypeEnum)
 	}
-	if value, ok := _u.mutation.Jsonconfig(); ok {
-		_spec.SetField(templatehistory.FieldJsonconfig, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.Uischema(); ok {
-		_spec.SetField(templatehistory.FieldUischema, field.TypeJSON, value)
-	}
 	if _u.mutation.UischemaCleared() {
 		_spec.ClearField(templatehistory.FieldUischema, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.TrustCenterID(); ok {
-		_spec.SetField(templatehistory.FieldTrustCenterID, field.TypeString, value)
 	}
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(templatehistory.FieldTrustCenterID, field.TypeString)
 	}
-	if value, ok := _u.mutation.TransformConfiguration(); ok {
-		_spec.SetField(templatehistory.FieldTransformConfiguration, field.TypeJSON, value)
-	}
 	if _u.mutation.TransformConfigurationCleared() {
 		_spec.ClearField(templatehistory.FieldTransformConfiguration, field.TypeJSON)
 	}
-	_spec.Node.Schema = _u.schemaConfig.TemplateHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	_node = &TemplateHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

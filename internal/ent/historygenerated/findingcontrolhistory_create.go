@@ -376,7 +376,6 @@ func (_c *FindingControlHistoryCreate) createSpec() (*FindingControlHistory, *sq
 		_node = &FindingControlHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(findingcontrolhistory.Table, sqlgraph.NewFieldSpec(findingcontrolhistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.FindingControlHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

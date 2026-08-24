@@ -548,7 +548,6 @@ func (_c *WorkflowAssignmentHistoryCreate) createSpec() (*WorkflowAssignmentHist
 		_node = &WorkflowAssignmentHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(workflowassignmenthistory.Table, sqlgraph.NewFieldSpec(workflowassignmenthistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.WorkflowAssignmentHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

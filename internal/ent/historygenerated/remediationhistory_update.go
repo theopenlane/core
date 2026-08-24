@@ -8,673 +8,24 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 	"github.com/theopenlane/core/internal/ent/historygenerated/remediationhistory"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
 )
 
 // RemediationHistoryUpdate is the builder for updating RemediationHistory entities.
 type RemediationHistoryUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *RemediationHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *RemediationHistoryMutation
 }
 
 // Where appends a list predicates to the RemediationHistoryUpdate builder.
 func (_u *RemediationHistoryUpdate) Where(ps ...predicate.RemediationHistory) *RemediationHistoryUpdate {
 	_u.mutation.Where(ps...)
-	return _u
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *RemediationHistoryUpdate) SetUpdatedAt(v time.Time) *RemediationHistoryUpdate {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *RemediationHistoryUpdate) ClearUpdatedAt() *RemediationHistoryUpdate {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *RemediationHistoryUpdate) SetUpdatedBy(v string) *RemediationHistoryUpdate {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *RemediationHistoryUpdate) SetNillableUpdatedBy(v *string) *RemediationHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *RemediationHistoryUpdate) ClearUpdatedBy() *RemediationHistoryUpdate {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *RemediationHistoryUpdate) SetUpdatedByImpersonator(v string) *RemediationHistoryUpdate {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *RemediationHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *RemediationHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *RemediationHistoryUpdate) ClearUpdatedByImpersonator() *RemediationHistoryUpdate {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *RemediationHistoryUpdate) SetDeletedAt(v time.Time) *RemediationHistoryUpdate {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *RemediationHistoryUpdate) SetNillableDeletedAt(v *time.Time) *RemediationHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *RemediationHistoryUpdate) ClearDeletedAt() *RemediationHistoryUpdate {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *RemediationHistoryUpdate) SetDeletedBy(v string) *RemediationHistoryUpdate {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *RemediationHistoryUpdate) SetNillableDeletedBy(v *string) *RemediationHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *RemediationHistoryUpdate) ClearDeletedBy() *RemediationHistoryUpdate {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *RemediationHistoryUpdate) SetTags(v []string) *RemediationHistoryUpdate {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *RemediationHistoryUpdate) AppendTags(v []string) *RemediationHistoryUpdate {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *RemediationHistoryUpdate) ClearTags() *RemediationHistoryUpdate {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetInternalNotes sets the "internal_notes" field.
-func (_u *RemediationHistoryUpdate) SetInternalNotes(v string) *RemediationHistoryUpdate {
-	_u.mutation.SetInternalNotes(v)
-	return _u
-}
-
-// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
-func (_u *RemediationHistoryUpdate) SetNillableInternalNotes(v *string) *RemediationHistoryUpdate {
-	if v != nil {
-		_u.SetInternalNotes(*v)
-	}
-	return _u
-}
-
-// ClearInternalNotes clears the value of the "internal_notes" field.
-func (_u *RemediationHistoryUpdate) ClearInternalNotes() *RemediationHistoryUpdate {
-	_u.mutation.ClearInternalNotes()
-	return _u
-}
-
-// SetSystemInternalID sets the "system_internal_id" field.
-func (_u *RemediationHistoryUpdate) SetSystemInternalID(v string) *RemediationHistoryUpdate {
-	_u.mutation.SetSystemInternalID(v)
-	return _u
-}
-
-// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
-func (_u *RemediationHistoryUpdate) SetNillableSystemInternalID(v *string) *RemediationHistoryUpdate {
-	if v != nil {
-		_u.SetSystemInternalID(*v)
-	}
-	return _u
-}
-
-// ClearSystemInternalID clears the value of the "system_internal_id" field.
-func (_u *RemediationHistoryUpdate) ClearSystemInternalID() *RemediationHistoryUpdate {
-	_u.mutation.ClearSystemInternalID()
-	return _u
-}
-
-// SetEnvironmentName sets the "environment_name" field.
-func (_u *RemediationHistoryUpdate) SetEnvironmentName(v string) *RemediationHistoryUpdate {
-	_u.mutation.SetEnvironmentName(v)
-	return _u
-}
-
-// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
-func (_u *RemediationHistoryUpdate) SetNillableEnvironmentName(v *string) *RemediationHistoryUpdate {
-	if v != nil {
-		_u.SetEnvironmentName(*v)
-	}
-	return _u
-}
-
-// ClearEnvironmentName clears the value of the "environment_name" field.
-func (_u *RemediationHistoryUpdate) ClearEnvironmentName() *RemediationHistoryUpdate {
-	_u.mutation.ClearEnvironmentName()
-	return _u
-}
-
-// SetEnvironmentID sets the "environment_id" field.
-func (_u *RemediationHistoryUpdate) SetEnvironmentID(v string) *RemediationHistoryUpdate {
-	_u.mutation.SetEnvironmentID(v)
-	return _u
-}
-
-// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
-func (_u *RemediationHistoryUpdate) SetNillableEnvironmentID(v *string) *RemediationHistoryUpdate {
-	if v != nil {
-		_u.SetEnvironmentID(*v)
-	}
-	return _u
-}
-
-// ClearEnvironmentID clears the value of the "environment_id" field.
-func (_u *RemediationHistoryUpdate) ClearEnvironmentID() *RemediationHistoryUpdate {
-	_u.mutation.ClearEnvironmentID()
-	return _u
-}
-
-// SetScopeName sets the "scope_name" field.
-func (_u *RemediationHistoryUpdate) SetScopeName(v string) *RemediationHistoryUpdate {
-	_u.mutation.SetScopeName(v)
-	return _u
-}
-
-// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
-func (_u *RemediationHistoryUpdate) SetNillableScopeName(v *string) *RemediationHistoryUpdate {
-	if v != nil {
-		_u.SetScopeName(*v)
-	}
-	return _u
-}
-
-// ClearScopeName clears the value of the "scope_name" field.
-func (_u *RemediationHistoryUpdate) ClearScopeName() *RemediationHistoryUpdate {
-	_u.mutation.ClearScopeName()
-	return _u
-}
-
-// SetScopeID sets the "scope_id" field.
-func (_u *RemediationHistoryUpdate) SetScopeID(v string) *RemediationHistoryUpdate {
-	_u.mutation.SetScopeID(v)
-	return _u
-}
-
-// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
-func (_u *RemediationHistoryUpdate) SetNillableScopeID(v *string) *RemediationHistoryUpdate {
-	if v != nil {
-		_u.SetScopeID(*v)
-	}
-	return _u
-}
-
-// ClearScopeID clears the value of the "scope_id" field.
-func (_u *RemediationHistoryUpdate) ClearScopeID() *RemediationHistoryUpdate {
-	_u.mutation.ClearScopeID()
-	return _u
-}
-
-// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
-func (_u *RemediationHistoryUpdate) SetWorkflowEligibleMarker(v bool) *RemediationHistoryUpdate {
-	_u.mutation.SetWorkflowEligibleMarker(v)
-	return _u
-}
-
-// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
-func (_u *RemediationHistoryUpdate) SetNillableWorkflowEligibleMarker(v *bool) *RemediationHistoryUpdate {
-	if v != nil {
-		_u.SetWorkflowEligibleMarker(*v)
-	}
-	return _u
-}
-
-// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
-func (_u *RemediationHistoryUpdate) ClearWorkflowEligibleMarker() *RemediationHistoryUpdate {
-	_u.mutation.ClearWorkflowEligibleMarker()
-	return _u
-}
-
-// SetExternalID sets the "external_id" field.
-func (_u *RemediationHistoryUpdate) SetExternalID(v string) *RemediationHistoryUpdate {
-	_u.mutation.SetExternalID(v)
-	return _u
-}
-
-// SetNillableExternalID sets the "external_id" field if the given value is not nil.
-func (_u *RemediationHistoryUpdate) SetNillableExternalID(v *string) *RemediationHistoryUpdate {
-	if v != nil {
-		_u.SetExternalID(*v)
-	}
-	return _u
-}
-
-// ClearExternalID clears the value of the "external_id" field.
-func (_u *RemediationHistoryUpdate) ClearExternalID() *RemediationHistoryUpdate {
-	_u.mutation.ClearExternalID()
-	return _u
-}
-
-// SetExternalOwnerID sets the "external_owner_id" field.
-func (_u *RemediationHistoryUpdate) SetExternalOwnerID(v string) *RemediationHistoryUpdate {
-	_u.mutation.SetExternalOwnerID(v)
-	return _u
-}
-
-// SetNillableExternalOwnerID sets the "external_owner_id" field if the given value is not nil.
-func (_u *RemediationHistoryUpdate) SetNillableExternalOwnerID(v *string) *RemediationHistoryUpdate {
-	if v != nil {
-		_u.SetExternalOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearExternalOwnerID clears the value of the "external_owner_id" field.
-func (_u *RemediationHistoryUpdate) ClearExternalOwnerID() *RemediationHistoryUpdate {
-	_u.mutation.ClearExternalOwnerID()
-	return _u
-}
-
-// SetTitle sets the "title" field.
-func (_u *RemediationHistoryUpdate) SetTitle(v string) *RemediationHistoryUpdate {
-	_u.mutation.SetTitle(v)
-	return _u
-}
-
-// SetNillableTitle sets the "title" field if the given value is not nil.
-func (_u *RemediationHistoryUpdate) SetNillableTitle(v *string) *RemediationHistoryUpdate {
-	if v != nil {
-		_u.SetTitle(*v)
-	}
-	return _u
-}
-
-// ClearTitle clears the value of the "title" field.
-func (_u *RemediationHistoryUpdate) ClearTitle() *RemediationHistoryUpdate {
-	_u.mutation.ClearTitle()
-	return _u
-}
-
-// SetStatus sets the "status" field.
-func (_u *RemediationHistoryUpdate) SetStatus(v enums.RemediationStatus) *RemediationHistoryUpdate {
-	_u.mutation.SetStatus(v)
-	return _u
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *RemediationHistoryUpdate) SetNillableStatus(v *enums.RemediationStatus) *RemediationHistoryUpdate {
-	if v != nil {
-		_u.SetStatus(*v)
-	}
-	return _u
-}
-
-// ClearStatus clears the value of the "status" field.
-func (_u *RemediationHistoryUpdate) ClearStatus() *RemediationHistoryUpdate {
-	_u.mutation.ClearStatus()
-	return _u
-}
-
-// SetState sets the "state" field.
-func (_u *RemediationHistoryUpdate) SetState(v string) *RemediationHistoryUpdate {
-	_u.mutation.SetState(v)
-	return _u
-}
-
-// SetNillableState sets the "state" field if the given value is not nil.
-func (_u *RemediationHistoryUpdate) SetNillableState(v *string) *RemediationHistoryUpdate {
-	if v != nil {
-		_u.SetState(*v)
-	}
-	return _u
-}
-
-// ClearState clears the value of the "state" field.
-func (_u *RemediationHistoryUpdate) ClearState() *RemediationHistoryUpdate {
-	_u.mutation.ClearState()
-	return _u
-}
-
-// SetIntent sets the "intent" field.
-func (_u *RemediationHistoryUpdate) SetIntent(v string) *RemediationHistoryUpdate {
-	_u.mutation.SetIntent(v)
-	return _u
-}
-
-// SetNillableIntent sets the "intent" field if the given value is not nil.
-func (_u *RemediationHistoryUpdate) SetNillableIntent(v *string) *RemediationHistoryUpdate {
-	if v != nil {
-		_u.SetIntent(*v)
-	}
-	return _u
-}
-
-// ClearIntent clears the value of the "intent" field.
-func (_u *RemediationHistoryUpdate) ClearIntent() *RemediationHistoryUpdate {
-	_u.mutation.ClearIntent()
-	return _u
-}
-
-// SetSummary sets the "summary" field.
-func (_u *RemediationHistoryUpdate) SetSummary(v string) *RemediationHistoryUpdate {
-	_u.mutation.SetSummary(v)
-	return _u
-}
-
-// SetNillableSummary sets the "summary" field if the given value is not nil.
-func (_u *RemediationHistoryUpdate) SetNillableSummary(v *string) *RemediationHistoryUpdate {
-	if v != nil {
-		_u.SetSummary(*v)
-	}
-	return _u
-}
-
-// ClearSummary clears the value of the "summary" field.
-func (_u *RemediationHistoryUpdate) ClearSummary() *RemediationHistoryUpdate {
-	_u.mutation.ClearSummary()
-	return _u
-}
-
-// SetExplanation sets the "explanation" field.
-func (_u *RemediationHistoryUpdate) SetExplanation(v string) *RemediationHistoryUpdate {
-	_u.mutation.SetExplanation(v)
-	return _u
-}
-
-// SetNillableExplanation sets the "explanation" field if the given value is not nil.
-func (_u *RemediationHistoryUpdate) SetNillableExplanation(v *string) *RemediationHistoryUpdate {
-	if v != nil {
-		_u.SetExplanation(*v)
-	}
-	return _u
-}
-
-// ClearExplanation clears the value of the "explanation" field.
-func (_u *RemediationHistoryUpdate) ClearExplanation() *RemediationHistoryUpdate {
-	_u.mutation.ClearExplanation()
-	return _u
-}
-
-// SetInstructions sets the "instructions" field.
-func (_u *RemediationHistoryUpdate) SetInstructions(v string) *RemediationHistoryUpdate {
-	_u.mutation.SetInstructions(v)
-	return _u
-}
-
-// SetNillableInstructions sets the "instructions" field if the given value is not nil.
-func (_u *RemediationHistoryUpdate) SetNillableInstructions(v *string) *RemediationHistoryUpdate {
-	if v != nil {
-		_u.SetInstructions(*v)
-	}
-	return _u
-}
-
-// ClearInstructions clears the value of the "instructions" field.
-func (_u *RemediationHistoryUpdate) ClearInstructions() *RemediationHistoryUpdate {
-	_u.mutation.ClearInstructions()
-	return _u
-}
-
-// SetOwnerReference sets the "owner_reference" field.
-func (_u *RemediationHistoryUpdate) SetOwnerReference(v string) *RemediationHistoryUpdate {
-	_u.mutation.SetOwnerReference(v)
-	return _u
-}
-
-// SetNillableOwnerReference sets the "owner_reference" field if the given value is not nil.
-func (_u *RemediationHistoryUpdate) SetNillableOwnerReference(v *string) *RemediationHistoryUpdate {
-	if v != nil {
-		_u.SetOwnerReference(*v)
-	}
-	return _u
-}
-
-// ClearOwnerReference clears the value of the "owner_reference" field.
-func (_u *RemediationHistoryUpdate) ClearOwnerReference() *RemediationHistoryUpdate {
-	_u.mutation.ClearOwnerReference()
-	return _u
-}
-
-// SetRepositoryURI sets the "repository_uri" field.
-func (_u *RemediationHistoryUpdate) SetRepositoryURI(v string) *RemediationHistoryUpdate {
-	_u.mutation.SetRepositoryURI(v)
-	return _u
-}
-
-// SetNillableRepositoryURI sets the "repository_uri" field if the given value is not nil.
-func (_u *RemediationHistoryUpdate) SetNillableRepositoryURI(v *string) *RemediationHistoryUpdate {
-	if v != nil {
-		_u.SetRepositoryURI(*v)
-	}
-	return _u
-}
-
-// ClearRepositoryURI clears the value of the "repository_uri" field.
-func (_u *RemediationHistoryUpdate) ClearRepositoryURI() *RemediationHistoryUpdate {
-	_u.mutation.ClearRepositoryURI()
-	return _u
-}
-
-// SetPullRequestURI sets the "pull_request_uri" field.
-func (_u *RemediationHistoryUpdate) SetPullRequestURI(v string) *RemediationHistoryUpdate {
-	_u.mutation.SetPullRequestURI(v)
-	return _u
-}
-
-// SetNillablePullRequestURI sets the "pull_request_uri" field if the given value is not nil.
-func (_u *RemediationHistoryUpdate) SetNillablePullRequestURI(v *string) *RemediationHistoryUpdate {
-	if v != nil {
-		_u.SetPullRequestURI(*v)
-	}
-	return _u
-}
-
-// ClearPullRequestURI clears the value of the "pull_request_uri" field.
-func (_u *RemediationHistoryUpdate) ClearPullRequestURI() *RemediationHistoryUpdate {
-	_u.mutation.ClearPullRequestURI()
-	return _u
-}
-
-// SetTicketReference sets the "ticket_reference" field.
-func (_u *RemediationHistoryUpdate) SetTicketReference(v string) *RemediationHistoryUpdate {
-	_u.mutation.SetTicketReference(v)
-	return _u
-}
-
-// SetNillableTicketReference sets the "ticket_reference" field if the given value is not nil.
-func (_u *RemediationHistoryUpdate) SetNillableTicketReference(v *string) *RemediationHistoryUpdate {
-	if v != nil {
-		_u.SetTicketReference(*v)
-	}
-	return _u
-}
-
-// ClearTicketReference clears the value of the "ticket_reference" field.
-func (_u *RemediationHistoryUpdate) ClearTicketReference() *RemediationHistoryUpdate {
-	_u.mutation.ClearTicketReference()
-	return _u
-}
-
-// SetDueAt sets the "due_at" field.
-func (_u *RemediationHistoryUpdate) SetDueAt(v models.DateTime) *RemediationHistoryUpdate {
-	_u.mutation.SetDueAt(v)
-	return _u
-}
-
-// SetNillableDueAt sets the "due_at" field if the given value is not nil.
-func (_u *RemediationHistoryUpdate) SetNillableDueAt(v *models.DateTime) *RemediationHistoryUpdate {
-	if v != nil {
-		_u.SetDueAt(*v)
-	}
-	return _u
-}
-
-// ClearDueAt clears the value of the "due_at" field.
-func (_u *RemediationHistoryUpdate) ClearDueAt() *RemediationHistoryUpdate {
-	_u.mutation.ClearDueAt()
-	return _u
-}
-
-// SetCompletedAt sets the "completed_at" field.
-func (_u *RemediationHistoryUpdate) SetCompletedAt(v models.DateTime) *RemediationHistoryUpdate {
-	_u.mutation.SetCompletedAt(v)
-	return _u
-}
-
-// SetNillableCompletedAt sets the "completed_at" field if the given value is not nil.
-func (_u *RemediationHistoryUpdate) SetNillableCompletedAt(v *models.DateTime) *RemediationHistoryUpdate {
-	if v != nil {
-		_u.SetCompletedAt(*v)
-	}
-	return _u
-}
-
-// ClearCompletedAt clears the value of the "completed_at" field.
-func (_u *RemediationHistoryUpdate) ClearCompletedAt() *RemediationHistoryUpdate {
-	_u.mutation.ClearCompletedAt()
-	return _u
-}
-
-// SetPrGeneratedAt sets the "pr_generated_at" field.
-func (_u *RemediationHistoryUpdate) SetPrGeneratedAt(v models.DateTime) *RemediationHistoryUpdate {
-	_u.mutation.SetPrGeneratedAt(v)
-	return _u
-}
-
-// SetNillablePrGeneratedAt sets the "pr_generated_at" field if the given value is not nil.
-func (_u *RemediationHistoryUpdate) SetNillablePrGeneratedAt(v *models.DateTime) *RemediationHistoryUpdate {
-	if v != nil {
-		_u.SetPrGeneratedAt(*v)
-	}
-	return _u
-}
-
-// ClearPrGeneratedAt clears the value of the "pr_generated_at" field.
-func (_u *RemediationHistoryUpdate) ClearPrGeneratedAt() *RemediationHistoryUpdate {
-	_u.mutation.ClearPrGeneratedAt()
-	return _u
-}
-
-// SetError sets the "error" field.
-func (_u *RemediationHistoryUpdate) SetError(v string) *RemediationHistoryUpdate {
-	_u.mutation.SetError(v)
-	return _u
-}
-
-// SetNillableError sets the "error" field if the given value is not nil.
-func (_u *RemediationHistoryUpdate) SetNillableError(v *string) *RemediationHistoryUpdate {
-	if v != nil {
-		_u.SetError(*v)
-	}
-	return _u
-}
-
-// ClearError clears the value of the "error" field.
-func (_u *RemediationHistoryUpdate) ClearError() *RemediationHistoryUpdate {
-	_u.mutation.ClearError()
-	return _u
-}
-
-// SetSource sets the "source" field.
-func (_u *RemediationHistoryUpdate) SetSource(v string) *RemediationHistoryUpdate {
-	_u.mutation.SetSource(v)
-	return _u
-}
-
-// SetNillableSource sets the "source" field if the given value is not nil.
-func (_u *RemediationHistoryUpdate) SetNillableSource(v *string) *RemediationHistoryUpdate {
-	if v != nil {
-		_u.SetSource(*v)
-	}
-	return _u
-}
-
-// ClearSource clears the value of the "source" field.
-func (_u *RemediationHistoryUpdate) ClearSource() *RemediationHistoryUpdate {
-	_u.mutation.ClearSource()
-	return _u
-}
-
-// SetExternalURI sets the "external_uri" field.
-func (_u *RemediationHistoryUpdate) SetExternalURI(v string) *RemediationHistoryUpdate {
-	_u.mutation.SetExternalURI(v)
-	return _u
-}
-
-// SetNillableExternalURI sets the "external_uri" field if the given value is not nil.
-func (_u *RemediationHistoryUpdate) SetNillableExternalURI(v *string) *RemediationHistoryUpdate {
-	if v != nil {
-		_u.SetExternalURI(*v)
-	}
-	return _u
-}
-
-// ClearExternalURI clears the value of the "external_uri" field.
-func (_u *RemediationHistoryUpdate) ClearExternalURI() *RemediationHistoryUpdate {
-	_u.mutation.ClearExternalURI()
-	return _u
-}
-
-// SetMetadata sets the "metadata" field.
-func (_u *RemediationHistoryUpdate) SetMetadata(v map[string]interface{}) *RemediationHistoryUpdate {
-	_u.mutation.SetMetadata(v)
-	return _u
-}
-
-// ClearMetadata clears the value of the "metadata" field.
-func (_u *RemediationHistoryUpdate) ClearMetadata() *RemediationHistoryUpdate {
-	_u.mutation.ClearMetadata()
 	return _u
 }
 
@@ -685,9 +36,6 @@ func (_u *RemediationHistoryUpdate) Mutation() *RemediationHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *RemediationHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := _u.defaults(); err != nil {
-		return 0, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -713,38 +61,7 @@ func (_u *RemediationHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *RemediationHistoryUpdate) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if remediationhistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized remediationhistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := remediationhistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *RemediationHistoryUpdate) check() error {
-	if v, ok := _u.mutation.Status(); ok {
-		if err := remediationhistory.StatusValidator(v); err != nil {
-			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "RemediationHistory.status": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *RemediationHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *RemediationHistoryUpdate {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *RemediationHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(remediationhistory.Table, remediationhistory.Columns, sqlgraph.NewFieldSpec(remediationhistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -759,46 +76,23 @@ func (_u *RemediationHistoryUpdate) sqlSave(ctx context.Context) (_node int, err
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(remediationhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(remediationhistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(remediationhistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(remediationhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(remediationhistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(remediationhistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(remediationhistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(remediationhistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(remediationhistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(remediationhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(remediationhistory.FieldDeletedBy, field.TypeString, value)
-	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(remediationhistory.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(remediationhistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, remediationhistory.FieldTags, value)
-		})
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(remediationhistory.FieldTags, field.TypeJSON)
@@ -809,171 +103,87 @@ func (_u *RemediationHistoryUpdate) sqlSave(ctx context.Context) (_node int, err
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(remediationhistory.FieldSystemOwned, field.TypeBool)
 	}
-	if value, ok := _u.mutation.InternalNotes(); ok {
-		_spec.SetField(remediationhistory.FieldInternalNotes, field.TypeString, value)
-	}
 	if _u.mutation.InternalNotesCleared() {
 		_spec.ClearField(remediationhistory.FieldInternalNotes, field.TypeString)
-	}
-	if value, ok := _u.mutation.SystemInternalID(); ok {
-		_spec.SetField(remediationhistory.FieldSystemInternalID, field.TypeString, value)
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(remediationhistory.FieldSystemInternalID, field.TypeString)
 	}
-	if value, ok := _u.mutation.EnvironmentName(); ok {
-		_spec.SetField(remediationhistory.FieldEnvironmentName, field.TypeString, value)
-	}
 	if _u.mutation.EnvironmentNameCleared() {
 		_spec.ClearField(remediationhistory.FieldEnvironmentName, field.TypeString)
-	}
-	if value, ok := _u.mutation.EnvironmentID(); ok {
-		_spec.SetField(remediationhistory.FieldEnvironmentID, field.TypeString, value)
 	}
 	if _u.mutation.EnvironmentIDCleared() {
 		_spec.ClearField(remediationhistory.FieldEnvironmentID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ScopeName(); ok {
-		_spec.SetField(remediationhistory.FieldScopeName, field.TypeString, value)
-	}
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(remediationhistory.FieldScopeName, field.TypeString)
-	}
-	if value, ok := _u.mutation.ScopeID(); ok {
-		_spec.SetField(remediationhistory.FieldScopeID, field.TypeString, value)
 	}
 	if _u.mutation.ScopeIDCleared() {
 		_spec.ClearField(remediationhistory.FieldScopeID, field.TypeString)
 	}
-	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
-		_spec.SetField(remediationhistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
-	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(remediationhistory.FieldWorkflowEligibleMarker, field.TypeBool)
-	}
-	if value, ok := _u.mutation.ExternalID(); ok {
-		_spec.SetField(remediationhistory.FieldExternalID, field.TypeString, value)
 	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(remediationhistory.FieldExternalID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ExternalOwnerID(); ok {
-		_spec.SetField(remediationhistory.FieldExternalOwnerID, field.TypeString, value)
-	}
 	if _u.mutation.ExternalOwnerIDCleared() {
 		_spec.ClearField(remediationhistory.FieldExternalOwnerID, field.TypeString)
-	}
-	if value, ok := _u.mutation.Title(); ok {
-		_spec.SetField(remediationhistory.FieldTitle, field.TypeString, value)
 	}
 	if _u.mutation.TitleCleared() {
 		_spec.ClearField(remediationhistory.FieldTitle, field.TypeString)
 	}
-	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(remediationhistory.FieldStatus, field.TypeEnum, value)
-	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(remediationhistory.FieldStatus, field.TypeEnum)
-	}
-	if value, ok := _u.mutation.State(); ok {
-		_spec.SetField(remediationhistory.FieldState, field.TypeString, value)
 	}
 	if _u.mutation.StateCleared() {
 		_spec.ClearField(remediationhistory.FieldState, field.TypeString)
 	}
-	if value, ok := _u.mutation.Intent(); ok {
-		_spec.SetField(remediationhistory.FieldIntent, field.TypeString, value)
-	}
 	if _u.mutation.IntentCleared() {
 		_spec.ClearField(remediationhistory.FieldIntent, field.TypeString)
-	}
-	if value, ok := _u.mutation.Summary(); ok {
-		_spec.SetField(remediationhistory.FieldSummary, field.TypeString, value)
 	}
 	if _u.mutation.SummaryCleared() {
 		_spec.ClearField(remediationhistory.FieldSummary, field.TypeString)
 	}
-	if value, ok := _u.mutation.Explanation(); ok {
-		_spec.SetField(remediationhistory.FieldExplanation, field.TypeString, value)
-	}
 	if _u.mutation.ExplanationCleared() {
 		_spec.ClearField(remediationhistory.FieldExplanation, field.TypeString)
-	}
-	if value, ok := _u.mutation.Instructions(); ok {
-		_spec.SetField(remediationhistory.FieldInstructions, field.TypeString, value)
 	}
 	if _u.mutation.InstructionsCleared() {
 		_spec.ClearField(remediationhistory.FieldInstructions, field.TypeString)
 	}
-	if value, ok := _u.mutation.OwnerReference(); ok {
-		_spec.SetField(remediationhistory.FieldOwnerReference, field.TypeString, value)
-	}
 	if _u.mutation.OwnerReferenceCleared() {
 		_spec.ClearField(remediationhistory.FieldOwnerReference, field.TypeString)
-	}
-	if value, ok := _u.mutation.RepositoryURI(); ok {
-		_spec.SetField(remediationhistory.FieldRepositoryURI, field.TypeString, value)
 	}
 	if _u.mutation.RepositoryURICleared() {
 		_spec.ClearField(remediationhistory.FieldRepositoryURI, field.TypeString)
 	}
-	if value, ok := _u.mutation.PullRequestURI(); ok {
-		_spec.SetField(remediationhistory.FieldPullRequestURI, field.TypeString, value)
-	}
 	if _u.mutation.PullRequestURICleared() {
 		_spec.ClearField(remediationhistory.FieldPullRequestURI, field.TypeString)
-	}
-	if value, ok := _u.mutation.TicketReference(); ok {
-		_spec.SetField(remediationhistory.FieldTicketReference, field.TypeString, value)
 	}
 	if _u.mutation.TicketReferenceCleared() {
 		_spec.ClearField(remediationhistory.FieldTicketReference, field.TypeString)
 	}
-	if value, ok := _u.mutation.DueAt(); ok {
-		_spec.SetField(remediationhistory.FieldDueAt, field.TypeTime, value)
-	}
 	if _u.mutation.DueAtCleared() {
 		_spec.ClearField(remediationhistory.FieldDueAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.CompletedAt(); ok {
-		_spec.SetField(remediationhistory.FieldCompletedAt, field.TypeTime, value)
 	}
 	if _u.mutation.CompletedAtCleared() {
 		_spec.ClearField(remediationhistory.FieldCompletedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.PrGeneratedAt(); ok {
-		_spec.SetField(remediationhistory.FieldPrGeneratedAt, field.TypeTime, value)
-	}
 	if _u.mutation.PrGeneratedAtCleared() {
 		_spec.ClearField(remediationhistory.FieldPrGeneratedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.Error(); ok {
-		_spec.SetField(remediationhistory.FieldError, field.TypeString, value)
 	}
 	if _u.mutation.ErrorCleared() {
 		_spec.ClearField(remediationhistory.FieldError, field.TypeString)
 	}
-	if value, ok := _u.mutation.Source(); ok {
-		_spec.SetField(remediationhistory.FieldSource, field.TypeString, value)
-	}
 	if _u.mutation.SourceCleared() {
 		_spec.ClearField(remediationhistory.FieldSource, field.TypeString)
-	}
-	if value, ok := _u.mutation.ExternalURI(); ok {
-		_spec.SetField(remediationhistory.FieldExternalURI, field.TypeString, value)
 	}
 	if _u.mutation.ExternalURICleared() {
 		_spec.ClearField(remediationhistory.FieldExternalURI, field.TypeString)
 	}
-	if value, ok := _u.mutation.Metadata(); ok {
-		_spec.SetField(remediationhistory.FieldMetadata, field.TypeJSON, value)
-	}
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(remediationhistory.FieldMetadata, field.TypeJSON)
 	}
-	_spec.Node.Schema = _u.schemaConfig.RemediationHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{remediationhistory.Label}
@@ -989,652 +199,9 @@ func (_u *RemediationHistoryUpdate) sqlSave(ctx context.Context) (_node int, err
 // RemediationHistoryUpdateOne is the builder for updating a single RemediationHistory entity.
 type RemediationHistoryUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *RemediationHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *RemediationHistoryUpdateOne) SetUpdatedAt(v time.Time) *RemediationHistoryUpdateOne {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *RemediationHistoryUpdateOne) ClearUpdatedAt() *RemediationHistoryUpdateOne {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *RemediationHistoryUpdateOne) SetUpdatedBy(v string) *RemediationHistoryUpdateOne {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *RemediationHistoryUpdateOne) SetNillableUpdatedBy(v *string) *RemediationHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *RemediationHistoryUpdateOne) ClearUpdatedBy() *RemediationHistoryUpdateOne {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *RemediationHistoryUpdateOne) SetUpdatedByImpersonator(v string) *RemediationHistoryUpdateOne {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *RemediationHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *RemediationHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *RemediationHistoryUpdateOne) ClearUpdatedByImpersonator() *RemediationHistoryUpdateOne {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *RemediationHistoryUpdateOne) SetDeletedAt(v time.Time) *RemediationHistoryUpdateOne {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *RemediationHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *RemediationHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *RemediationHistoryUpdateOne) ClearDeletedAt() *RemediationHistoryUpdateOne {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *RemediationHistoryUpdateOne) SetDeletedBy(v string) *RemediationHistoryUpdateOne {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *RemediationHistoryUpdateOne) SetNillableDeletedBy(v *string) *RemediationHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *RemediationHistoryUpdateOne) ClearDeletedBy() *RemediationHistoryUpdateOne {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *RemediationHistoryUpdateOne) SetTags(v []string) *RemediationHistoryUpdateOne {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *RemediationHistoryUpdateOne) AppendTags(v []string) *RemediationHistoryUpdateOne {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *RemediationHistoryUpdateOne) ClearTags() *RemediationHistoryUpdateOne {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetInternalNotes sets the "internal_notes" field.
-func (_u *RemediationHistoryUpdateOne) SetInternalNotes(v string) *RemediationHistoryUpdateOne {
-	_u.mutation.SetInternalNotes(v)
-	return _u
-}
-
-// SetNillableInternalNotes sets the "internal_notes" field if the given value is not nil.
-func (_u *RemediationHistoryUpdateOne) SetNillableInternalNotes(v *string) *RemediationHistoryUpdateOne {
-	if v != nil {
-		_u.SetInternalNotes(*v)
-	}
-	return _u
-}
-
-// ClearInternalNotes clears the value of the "internal_notes" field.
-func (_u *RemediationHistoryUpdateOne) ClearInternalNotes() *RemediationHistoryUpdateOne {
-	_u.mutation.ClearInternalNotes()
-	return _u
-}
-
-// SetSystemInternalID sets the "system_internal_id" field.
-func (_u *RemediationHistoryUpdateOne) SetSystemInternalID(v string) *RemediationHistoryUpdateOne {
-	_u.mutation.SetSystemInternalID(v)
-	return _u
-}
-
-// SetNillableSystemInternalID sets the "system_internal_id" field if the given value is not nil.
-func (_u *RemediationHistoryUpdateOne) SetNillableSystemInternalID(v *string) *RemediationHistoryUpdateOne {
-	if v != nil {
-		_u.SetSystemInternalID(*v)
-	}
-	return _u
-}
-
-// ClearSystemInternalID clears the value of the "system_internal_id" field.
-func (_u *RemediationHistoryUpdateOne) ClearSystemInternalID() *RemediationHistoryUpdateOne {
-	_u.mutation.ClearSystemInternalID()
-	return _u
-}
-
-// SetEnvironmentName sets the "environment_name" field.
-func (_u *RemediationHistoryUpdateOne) SetEnvironmentName(v string) *RemediationHistoryUpdateOne {
-	_u.mutation.SetEnvironmentName(v)
-	return _u
-}
-
-// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
-func (_u *RemediationHistoryUpdateOne) SetNillableEnvironmentName(v *string) *RemediationHistoryUpdateOne {
-	if v != nil {
-		_u.SetEnvironmentName(*v)
-	}
-	return _u
-}
-
-// ClearEnvironmentName clears the value of the "environment_name" field.
-func (_u *RemediationHistoryUpdateOne) ClearEnvironmentName() *RemediationHistoryUpdateOne {
-	_u.mutation.ClearEnvironmentName()
-	return _u
-}
-
-// SetEnvironmentID sets the "environment_id" field.
-func (_u *RemediationHistoryUpdateOne) SetEnvironmentID(v string) *RemediationHistoryUpdateOne {
-	_u.mutation.SetEnvironmentID(v)
-	return _u
-}
-
-// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
-func (_u *RemediationHistoryUpdateOne) SetNillableEnvironmentID(v *string) *RemediationHistoryUpdateOne {
-	if v != nil {
-		_u.SetEnvironmentID(*v)
-	}
-	return _u
-}
-
-// ClearEnvironmentID clears the value of the "environment_id" field.
-func (_u *RemediationHistoryUpdateOne) ClearEnvironmentID() *RemediationHistoryUpdateOne {
-	_u.mutation.ClearEnvironmentID()
-	return _u
-}
-
-// SetScopeName sets the "scope_name" field.
-func (_u *RemediationHistoryUpdateOne) SetScopeName(v string) *RemediationHistoryUpdateOne {
-	_u.mutation.SetScopeName(v)
-	return _u
-}
-
-// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
-func (_u *RemediationHistoryUpdateOne) SetNillableScopeName(v *string) *RemediationHistoryUpdateOne {
-	if v != nil {
-		_u.SetScopeName(*v)
-	}
-	return _u
-}
-
-// ClearScopeName clears the value of the "scope_name" field.
-func (_u *RemediationHistoryUpdateOne) ClearScopeName() *RemediationHistoryUpdateOne {
-	_u.mutation.ClearScopeName()
-	return _u
-}
-
-// SetScopeID sets the "scope_id" field.
-func (_u *RemediationHistoryUpdateOne) SetScopeID(v string) *RemediationHistoryUpdateOne {
-	_u.mutation.SetScopeID(v)
-	return _u
-}
-
-// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
-func (_u *RemediationHistoryUpdateOne) SetNillableScopeID(v *string) *RemediationHistoryUpdateOne {
-	if v != nil {
-		_u.SetScopeID(*v)
-	}
-	return _u
-}
-
-// ClearScopeID clears the value of the "scope_id" field.
-func (_u *RemediationHistoryUpdateOne) ClearScopeID() *RemediationHistoryUpdateOne {
-	_u.mutation.ClearScopeID()
-	return _u
-}
-
-// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
-func (_u *RemediationHistoryUpdateOne) SetWorkflowEligibleMarker(v bool) *RemediationHistoryUpdateOne {
-	_u.mutation.SetWorkflowEligibleMarker(v)
-	return _u
-}
-
-// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
-func (_u *RemediationHistoryUpdateOne) SetNillableWorkflowEligibleMarker(v *bool) *RemediationHistoryUpdateOne {
-	if v != nil {
-		_u.SetWorkflowEligibleMarker(*v)
-	}
-	return _u
-}
-
-// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
-func (_u *RemediationHistoryUpdateOne) ClearWorkflowEligibleMarker() *RemediationHistoryUpdateOne {
-	_u.mutation.ClearWorkflowEligibleMarker()
-	return _u
-}
-
-// SetExternalID sets the "external_id" field.
-func (_u *RemediationHistoryUpdateOne) SetExternalID(v string) *RemediationHistoryUpdateOne {
-	_u.mutation.SetExternalID(v)
-	return _u
-}
-
-// SetNillableExternalID sets the "external_id" field if the given value is not nil.
-func (_u *RemediationHistoryUpdateOne) SetNillableExternalID(v *string) *RemediationHistoryUpdateOne {
-	if v != nil {
-		_u.SetExternalID(*v)
-	}
-	return _u
-}
-
-// ClearExternalID clears the value of the "external_id" field.
-func (_u *RemediationHistoryUpdateOne) ClearExternalID() *RemediationHistoryUpdateOne {
-	_u.mutation.ClearExternalID()
-	return _u
-}
-
-// SetExternalOwnerID sets the "external_owner_id" field.
-func (_u *RemediationHistoryUpdateOne) SetExternalOwnerID(v string) *RemediationHistoryUpdateOne {
-	_u.mutation.SetExternalOwnerID(v)
-	return _u
-}
-
-// SetNillableExternalOwnerID sets the "external_owner_id" field if the given value is not nil.
-func (_u *RemediationHistoryUpdateOne) SetNillableExternalOwnerID(v *string) *RemediationHistoryUpdateOne {
-	if v != nil {
-		_u.SetExternalOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearExternalOwnerID clears the value of the "external_owner_id" field.
-func (_u *RemediationHistoryUpdateOne) ClearExternalOwnerID() *RemediationHistoryUpdateOne {
-	_u.mutation.ClearExternalOwnerID()
-	return _u
-}
-
-// SetTitle sets the "title" field.
-func (_u *RemediationHistoryUpdateOne) SetTitle(v string) *RemediationHistoryUpdateOne {
-	_u.mutation.SetTitle(v)
-	return _u
-}
-
-// SetNillableTitle sets the "title" field if the given value is not nil.
-func (_u *RemediationHistoryUpdateOne) SetNillableTitle(v *string) *RemediationHistoryUpdateOne {
-	if v != nil {
-		_u.SetTitle(*v)
-	}
-	return _u
-}
-
-// ClearTitle clears the value of the "title" field.
-func (_u *RemediationHistoryUpdateOne) ClearTitle() *RemediationHistoryUpdateOne {
-	_u.mutation.ClearTitle()
-	return _u
-}
-
-// SetStatus sets the "status" field.
-func (_u *RemediationHistoryUpdateOne) SetStatus(v enums.RemediationStatus) *RemediationHistoryUpdateOne {
-	_u.mutation.SetStatus(v)
-	return _u
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *RemediationHistoryUpdateOne) SetNillableStatus(v *enums.RemediationStatus) *RemediationHistoryUpdateOne {
-	if v != nil {
-		_u.SetStatus(*v)
-	}
-	return _u
-}
-
-// ClearStatus clears the value of the "status" field.
-func (_u *RemediationHistoryUpdateOne) ClearStatus() *RemediationHistoryUpdateOne {
-	_u.mutation.ClearStatus()
-	return _u
-}
-
-// SetState sets the "state" field.
-func (_u *RemediationHistoryUpdateOne) SetState(v string) *RemediationHistoryUpdateOne {
-	_u.mutation.SetState(v)
-	return _u
-}
-
-// SetNillableState sets the "state" field if the given value is not nil.
-func (_u *RemediationHistoryUpdateOne) SetNillableState(v *string) *RemediationHistoryUpdateOne {
-	if v != nil {
-		_u.SetState(*v)
-	}
-	return _u
-}
-
-// ClearState clears the value of the "state" field.
-func (_u *RemediationHistoryUpdateOne) ClearState() *RemediationHistoryUpdateOne {
-	_u.mutation.ClearState()
-	return _u
-}
-
-// SetIntent sets the "intent" field.
-func (_u *RemediationHistoryUpdateOne) SetIntent(v string) *RemediationHistoryUpdateOne {
-	_u.mutation.SetIntent(v)
-	return _u
-}
-
-// SetNillableIntent sets the "intent" field if the given value is not nil.
-func (_u *RemediationHistoryUpdateOne) SetNillableIntent(v *string) *RemediationHistoryUpdateOne {
-	if v != nil {
-		_u.SetIntent(*v)
-	}
-	return _u
-}
-
-// ClearIntent clears the value of the "intent" field.
-func (_u *RemediationHistoryUpdateOne) ClearIntent() *RemediationHistoryUpdateOne {
-	_u.mutation.ClearIntent()
-	return _u
-}
-
-// SetSummary sets the "summary" field.
-func (_u *RemediationHistoryUpdateOne) SetSummary(v string) *RemediationHistoryUpdateOne {
-	_u.mutation.SetSummary(v)
-	return _u
-}
-
-// SetNillableSummary sets the "summary" field if the given value is not nil.
-func (_u *RemediationHistoryUpdateOne) SetNillableSummary(v *string) *RemediationHistoryUpdateOne {
-	if v != nil {
-		_u.SetSummary(*v)
-	}
-	return _u
-}
-
-// ClearSummary clears the value of the "summary" field.
-func (_u *RemediationHistoryUpdateOne) ClearSummary() *RemediationHistoryUpdateOne {
-	_u.mutation.ClearSummary()
-	return _u
-}
-
-// SetExplanation sets the "explanation" field.
-func (_u *RemediationHistoryUpdateOne) SetExplanation(v string) *RemediationHistoryUpdateOne {
-	_u.mutation.SetExplanation(v)
-	return _u
-}
-
-// SetNillableExplanation sets the "explanation" field if the given value is not nil.
-func (_u *RemediationHistoryUpdateOne) SetNillableExplanation(v *string) *RemediationHistoryUpdateOne {
-	if v != nil {
-		_u.SetExplanation(*v)
-	}
-	return _u
-}
-
-// ClearExplanation clears the value of the "explanation" field.
-func (_u *RemediationHistoryUpdateOne) ClearExplanation() *RemediationHistoryUpdateOne {
-	_u.mutation.ClearExplanation()
-	return _u
-}
-
-// SetInstructions sets the "instructions" field.
-func (_u *RemediationHistoryUpdateOne) SetInstructions(v string) *RemediationHistoryUpdateOne {
-	_u.mutation.SetInstructions(v)
-	return _u
-}
-
-// SetNillableInstructions sets the "instructions" field if the given value is not nil.
-func (_u *RemediationHistoryUpdateOne) SetNillableInstructions(v *string) *RemediationHistoryUpdateOne {
-	if v != nil {
-		_u.SetInstructions(*v)
-	}
-	return _u
-}
-
-// ClearInstructions clears the value of the "instructions" field.
-func (_u *RemediationHistoryUpdateOne) ClearInstructions() *RemediationHistoryUpdateOne {
-	_u.mutation.ClearInstructions()
-	return _u
-}
-
-// SetOwnerReference sets the "owner_reference" field.
-func (_u *RemediationHistoryUpdateOne) SetOwnerReference(v string) *RemediationHistoryUpdateOne {
-	_u.mutation.SetOwnerReference(v)
-	return _u
-}
-
-// SetNillableOwnerReference sets the "owner_reference" field if the given value is not nil.
-func (_u *RemediationHistoryUpdateOne) SetNillableOwnerReference(v *string) *RemediationHistoryUpdateOne {
-	if v != nil {
-		_u.SetOwnerReference(*v)
-	}
-	return _u
-}
-
-// ClearOwnerReference clears the value of the "owner_reference" field.
-func (_u *RemediationHistoryUpdateOne) ClearOwnerReference() *RemediationHistoryUpdateOne {
-	_u.mutation.ClearOwnerReference()
-	return _u
-}
-
-// SetRepositoryURI sets the "repository_uri" field.
-func (_u *RemediationHistoryUpdateOne) SetRepositoryURI(v string) *RemediationHistoryUpdateOne {
-	_u.mutation.SetRepositoryURI(v)
-	return _u
-}
-
-// SetNillableRepositoryURI sets the "repository_uri" field if the given value is not nil.
-func (_u *RemediationHistoryUpdateOne) SetNillableRepositoryURI(v *string) *RemediationHistoryUpdateOne {
-	if v != nil {
-		_u.SetRepositoryURI(*v)
-	}
-	return _u
-}
-
-// ClearRepositoryURI clears the value of the "repository_uri" field.
-func (_u *RemediationHistoryUpdateOne) ClearRepositoryURI() *RemediationHistoryUpdateOne {
-	_u.mutation.ClearRepositoryURI()
-	return _u
-}
-
-// SetPullRequestURI sets the "pull_request_uri" field.
-func (_u *RemediationHistoryUpdateOne) SetPullRequestURI(v string) *RemediationHistoryUpdateOne {
-	_u.mutation.SetPullRequestURI(v)
-	return _u
-}
-
-// SetNillablePullRequestURI sets the "pull_request_uri" field if the given value is not nil.
-func (_u *RemediationHistoryUpdateOne) SetNillablePullRequestURI(v *string) *RemediationHistoryUpdateOne {
-	if v != nil {
-		_u.SetPullRequestURI(*v)
-	}
-	return _u
-}
-
-// ClearPullRequestURI clears the value of the "pull_request_uri" field.
-func (_u *RemediationHistoryUpdateOne) ClearPullRequestURI() *RemediationHistoryUpdateOne {
-	_u.mutation.ClearPullRequestURI()
-	return _u
-}
-
-// SetTicketReference sets the "ticket_reference" field.
-func (_u *RemediationHistoryUpdateOne) SetTicketReference(v string) *RemediationHistoryUpdateOne {
-	_u.mutation.SetTicketReference(v)
-	return _u
-}
-
-// SetNillableTicketReference sets the "ticket_reference" field if the given value is not nil.
-func (_u *RemediationHistoryUpdateOne) SetNillableTicketReference(v *string) *RemediationHistoryUpdateOne {
-	if v != nil {
-		_u.SetTicketReference(*v)
-	}
-	return _u
-}
-
-// ClearTicketReference clears the value of the "ticket_reference" field.
-func (_u *RemediationHistoryUpdateOne) ClearTicketReference() *RemediationHistoryUpdateOne {
-	_u.mutation.ClearTicketReference()
-	return _u
-}
-
-// SetDueAt sets the "due_at" field.
-func (_u *RemediationHistoryUpdateOne) SetDueAt(v models.DateTime) *RemediationHistoryUpdateOne {
-	_u.mutation.SetDueAt(v)
-	return _u
-}
-
-// SetNillableDueAt sets the "due_at" field if the given value is not nil.
-func (_u *RemediationHistoryUpdateOne) SetNillableDueAt(v *models.DateTime) *RemediationHistoryUpdateOne {
-	if v != nil {
-		_u.SetDueAt(*v)
-	}
-	return _u
-}
-
-// ClearDueAt clears the value of the "due_at" field.
-func (_u *RemediationHistoryUpdateOne) ClearDueAt() *RemediationHistoryUpdateOne {
-	_u.mutation.ClearDueAt()
-	return _u
-}
-
-// SetCompletedAt sets the "completed_at" field.
-func (_u *RemediationHistoryUpdateOne) SetCompletedAt(v models.DateTime) *RemediationHistoryUpdateOne {
-	_u.mutation.SetCompletedAt(v)
-	return _u
-}
-
-// SetNillableCompletedAt sets the "completed_at" field if the given value is not nil.
-func (_u *RemediationHistoryUpdateOne) SetNillableCompletedAt(v *models.DateTime) *RemediationHistoryUpdateOne {
-	if v != nil {
-		_u.SetCompletedAt(*v)
-	}
-	return _u
-}
-
-// ClearCompletedAt clears the value of the "completed_at" field.
-func (_u *RemediationHistoryUpdateOne) ClearCompletedAt() *RemediationHistoryUpdateOne {
-	_u.mutation.ClearCompletedAt()
-	return _u
-}
-
-// SetPrGeneratedAt sets the "pr_generated_at" field.
-func (_u *RemediationHistoryUpdateOne) SetPrGeneratedAt(v models.DateTime) *RemediationHistoryUpdateOne {
-	_u.mutation.SetPrGeneratedAt(v)
-	return _u
-}
-
-// SetNillablePrGeneratedAt sets the "pr_generated_at" field if the given value is not nil.
-func (_u *RemediationHistoryUpdateOne) SetNillablePrGeneratedAt(v *models.DateTime) *RemediationHistoryUpdateOne {
-	if v != nil {
-		_u.SetPrGeneratedAt(*v)
-	}
-	return _u
-}
-
-// ClearPrGeneratedAt clears the value of the "pr_generated_at" field.
-func (_u *RemediationHistoryUpdateOne) ClearPrGeneratedAt() *RemediationHistoryUpdateOne {
-	_u.mutation.ClearPrGeneratedAt()
-	return _u
-}
-
-// SetError sets the "error" field.
-func (_u *RemediationHistoryUpdateOne) SetError(v string) *RemediationHistoryUpdateOne {
-	_u.mutation.SetError(v)
-	return _u
-}
-
-// SetNillableError sets the "error" field if the given value is not nil.
-func (_u *RemediationHistoryUpdateOne) SetNillableError(v *string) *RemediationHistoryUpdateOne {
-	if v != nil {
-		_u.SetError(*v)
-	}
-	return _u
-}
-
-// ClearError clears the value of the "error" field.
-func (_u *RemediationHistoryUpdateOne) ClearError() *RemediationHistoryUpdateOne {
-	_u.mutation.ClearError()
-	return _u
-}
-
-// SetSource sets the "source" field.
-func (_u *RemediationHistoryUpdateOne) SetSource(v string) *RemediationHistoryUpdateOne {
-	_u.mutation.SetSource(v)
-	return _u
-}
-
-// SetNillableSource sets the "source" field if the given value is not nil.
-func (_u *RemediationHistoryUpdateOne) SetNillableSource(v *string) *RemediationHistoryUpdateOne {
-	if v != nil {
-		_u.SetSource(*v)
-	}
-	return _u
-}
-
-// ClearSource clears the value of the "source" field.
-func (_u *RemediationHistoryUpdateOne) ClearSource() *RemediationHistoryUpdateOne {
-	_u.mutation.ClearSource()
-	return _u
-}
-
-// SetExternalURI sets the "external_uri" field.
-func (_u *RemediationHistoryUpdateOne) SetExternalURI(v string) *RemediationHistoryUpdateOne {
-	_u.mutation.SetExternalURI(v)
-	return _u
-}
-
-// SetNillableExternalURI sets the "external_uri" field if the given value is not nil.
-func (_u *RemediationHistoryUpdateOne) SetNillableExternalURI(v *string) *RemediationHistoryUpdateOne {
-	if v != nil {
-		_u.SetExternalURI(*v)
-	}
-	return _u
-}
-
-// ClearExternalURI clears the value of the "external_uri" field.
-func (_u *RemediationHistoryUpdateOne) ClearExternalURI() *RemediationHistoryUpdateOne {
-	_u.mutation.ClearExternalURI()
-	return _u
-}
-
-// SetMetadata sets the "metadata" field.
-func (_u *RemediationHistoryUpdateOne) SetMetadata(v map[string]interface{}) *RemediationHistoryUpdateOne {
-	_u.mutation.SetMetadata(v)
-	return _u
-}
-
-// ClearMetadata clears the value of the "metadata" field.
-func (_u *RemediationHistoryUpdateOne) ClearMetadata() *RemediationHistoryUpdateOne {
-	_u.mutation.ClearMetadata()
-	return _u
+	fields   []string
+	hooks    []Hook
+	mutation *RemediationHistoryMutation
 }
 
 // Mutation returns the RemediationHistoryMutation object of the builder.
@@ -1657,9 +224,6 @@ func (_u *RemediationHistoryUpdateOne) Select(field string, fields ...string) *R
 
 // Save executes the query and returns the updated RemediationHistory entity.
 func (_u *RemediationHistoryUpdateOne) Save(ctx context.Context) (*RemediationHistory, error) {
-	if err := _u.defaults(); err != nil {
-		return nil, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -1685,38 +249,7 @@ func (_u *RemediationHistoryUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *RemediationHistoryUpdateOne) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if remediationhistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized remediationhistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := remediationhistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *RemediationHistoryUpdateOne) check() error {
-	if v, ok := _u.mutation.Status(); ok {
-		if err := remediationhistory.StatusValidator(v); err != nil {
-			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "RemediationHistory.status": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *RemediationHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *RemediationHistoryUpdateOne {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *RemediationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *RemediationHistory, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(remediationhistory.Table, remediationhistory.Columns, sqlgraph.NewFieldSpec(remediationhistory.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
@@ -1748,46 +281,23 @@ func (_u *RemediationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Reme
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(remediationhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(remediationhistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(remediationhistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(remediationhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(remediationhistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(remediationhistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(remediationhistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(remediationhistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(remediationhistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(remediationhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(remediationhistory.FieldDeletedBy, field.TypeString, value)
-	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(remediationhistory.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(remediationhistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, remediationhistory.FieldTags, value)
-		})
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(remediationhistory.FieldTags, field.TypeJSON)
@@ -1798,171 +308,87 @@ func (_u *RemediationHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Reme
 	if _u.mutation.SystemOwnedCleared() {
 		_spec.ClearField(remediationhistory.FieldSystemOwned, field.TypeBool)
 	}
-	if value, ok := _u.mutation.InternalNotes(); ok {
-		_spec.SetField(remediationhistory.FieldInternalNotes, field.TypeString, value)
-	}
 	if _u.mutation.InternalNotesCleared() {
 		_spec.ClearField(remediationhistory.FieldInternalNotes, field.TypeString)
-	}
-	if value, ok := _u.mutation.SystemInternalID(); ok {
-		_spec.SetField(remediationhistory.FieldSystemInternalID, field.TypeString, value)
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(remediationhistory.FieldSystemInternalID, field.TypeString)
 	}
-	if value, ok := _u.mutation.EnvironmentName(); ok {
-		_spec.SetField(remediationhistory.FieldEnvironmentName, field.TypeString, value)
-	}
 	if _u.mutation.EnvironmentNameCleared() {
 		_spec.ClearField(remediationhistory.FieldEnvironmentName, field.TypeString)
-	}
-	if value, ok := _u.mutation.EnvironmentID(); ok {
-		_spec.SetField(remediationhistory.FieldEnvironmentID, field.TypeString, value)
 	}
 	if _u.mutation.EnvironmentIDCleared() {
 		_spec.ClearField(remediationhistory.FieldEnvironmentID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ScopeName(); ok {
-		_spec.SetField(remediationhistory.FieldScopeName, field.TypeString, value)
-	}
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(remediationhistory.FieldScopeName, field.TypeString)
-	}
-	if value, ok := _u.mutation.ScopeID(); ok {
-		_spec.SetField(remediationhistory.FieldScopeID, field.TypeString, value)
 	}
 	if _u.mutation.ScopeIDCleared() {
 		_spec.ClearField(remediationhistory.FieldScopeID, field.TypeString)
 	}
-	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
-		_spec.SetField(remediationhistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
-	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(remediationhistory.FieldWorkflowEligibleMarker, field.TypeBool)
-	}
-	if value, ok := _u.mutation.ExternalID(); ok {
-		_spec.SetField(remediationhistory.FieldExternalID, field.TypeString, value)
 	}
 	if _u.mutation.ExternalIDCleared() {
 		_spec.ClearField(remediationhistory.FieldExternalID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ExternalOwnerID(); ok {
-		_spec.SetField(remediationhistory.FieldExternalOwnerID, field.TypeString, value)
-	}
 	if _u.mutation.ExternalOwnerIDCleared() {
 		_spec.ClearField(remediationhistory.FieldExternalOwnerID, field.TypeString)
-	}
-	if value, ok := _u.mutation.Title(); ok {
-		_spec.SetField(remediationhistory.FieldTitle, field.TypeString, value)
 	}
 	if _u.mutation.TitleCleared() {
 		_spec.ClearField(remediationhistory.FieldTitle, field.TypeString)
 	}
-	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(remediationhistory.FieldStatus, field.TypeEnum, value)
-	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(remediationhistory.FieldStatus, field.TypeEnum)
-	}
-	if value, ok := _u.mutation.State(); ok {
-		_spec.SetField(remediationhistory.FieldState, field.TypeString, value)
 	}
 	if _u.mutation.StateCleared() {
 		_spec.ClearField(remediationhistory.FieldState, field.TypeString)
 	}
-	if value, ok := _u.mutation.Intent(); ok {
-		_spec.SetField(remediationhistory.FieldIntent, field.TypeString, value)
-	}
 	if _u.mutation.IntentCleared() {
 		_spec.ClearField(remediationhistory.FieldIntent, field.TypeString)
-	}
-	if value, ok := _u.mutation.Summary(); ok {
-		_spec.SetField(remediationhistory.FieldSummary, field.TypeString, value)
 	}
 	if _u.mutation.SummaryCleared() {
 		_spec.ClearField(remediationhistory.FieldSummary, field.TypeString)
 	}
-	if value, ok := _u.mutation.Explanation(); ok {
-		_spec.SetField(remediationhistory.FieldExplanation, field.TypeString, value)
-	}
 	if _u.mutation.ExplanationCleared() {
 		_spec.ClearField(remediationhistory.FieldExplanation, field.TypeString)
-	}
-	if value, ok := _u.mutation.Instructions(); ok {
-		_spec.SetField(remediationhistory.FieldInstructions, field.TypeString, value)
 	}
 	if _u.mutation.InstructionsCleared() {
 		_spec.ClearField(remediationhistory.FieldInstructions, field.TypeString)
 	}
-	if value, ok := _u.mutation.OwnerReference(); ok {
-		_spec.SetField(remediationhistory.FieldOwnerReference, field.TypeString, value)
-	}
 	if _u.mutation.OwnerReferenceCleared() {
 		_spec.ClearField(remediationhistory.FieldOwnerReference, field.TypeString)
-	}
-	if value, ok := _u.mutation.RepositoryURI(); ok {
-		_spec.SetField(remediationhistory.FieldRepositoryURI, field.TypeString, value)
 	}
 	if _u.mutation.RepositoryURICleared() {
 		_spec.ClearField(remediationhistory.FieldRepositoryURI, field.TypeString)
 	}
-	if value, ok := _u.mutation.PullRequestURI(); ok {
-		_spec.SetField(remediationhistory.FieldPullRequestURI, field.TypeString, value)
-	}
 	if _u.mutation.PullRequestURICleared() {
 		_spec.ClearField(remediationhistory.FieldPullRequestURI, field.TypeString)
-	}
-	if value, ok := _u.mutation.TicketReference(); ok {
-		_spec.SetField(remediationhistory.FieldTicketReference, field.TypeString, value)
 	}
 	if _u.mutation.TicketReferenceCleared() {
 		_spec.ClearField(remediationhistory.FieldTicketReference, field.TypeString)
 	}
-	if value, ok := _u.mutation.DueAt(); ok {
-		_spec.SetField(remediationhistory.FieldDueAt, field.TypeTime, value)
-	}
 	if _u.mutation.DueAtCleared() {
 		_spec.ClearField(remediationhistory.FieldDueAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.CompletedAt(); ok {
-		_spec.SetField(remediationhistory.FieldCompletedAt, field.TypeTime, value)
 	}
 	if _u.mutation.CompletedAtCleared() {
 		_spec.ClearField(remediationhistory.FieldCompletedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.PrGeneratedAt(); ok {
-		_spec.SetField(remediationhistory.FieldPrGeneratedAt, field.TypeTime, value)
-	}
 	if _u.mutation.PrGeneratedAtCleared() {
 		_spec.ClearField(remediationhistory.FieldPrGeneratedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.Error(); ok {
-		_spec.SetField(remediationhistory.FieldError, field.TypeString, value)
 	}
 	if _u.mutation.ErrorCleared() {
 		_spec.ClearField(remediationhistory.FieldError, field.TypeString)
 	}
-	if value, ok := _u.mutation.Source(); ok {
-		_spec.SetField(remediationhistory.FieldSource, field.TypeString, value)
-	}
 	if _u.mutation.SourceCleared() {
 		_spec.ClearField(remediationhistory.FieldSource, field.TypeString)
-	}
-	if value, ok := _u.mutation.ExternalURI(); ok {
-		_spec.SetField(remediationhistory.FieldExternalURI, field.TypeString, value)
 	}
 	if _u.mutation.ExternalURICleared() {
 		_spec.ClearField(remediationhistory.FieldExternalURI, field.TypeString)
 	}
-	if value, ok := _u.mutation.Metadata(); ok {
-		_spec.SetField(remediationhistory.FieldMetadata, field.TypeJSON, value)
-	}
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(remediationhistory.FieldMetadata, field.TypeJSON)
 	}
-	_spec.Node.Schema = _u.schemaConfig.RemediationHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	_node = &RemediationHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

@@ -8,203 +8,24 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 	"github.com/theopenlane/core/internal/ent/historygenerated/vendorscoringconfighistory"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
 )
 
 // VendorScoringConfigHistoryUpdate is the builder for updating VendorScoringConfigHistory entities.
 type VendorScoringConfigHistoryUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *VendorScoringConfigHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *VendorScoringConfigHistoryMutation
 }
 
 // Where appends a list predicates to the VendorScoringConfigHistoryUpdate builder.
 func (_u *VendorScoringConfigHistoryUpdate) Where(ps ...predicate.VendorScoringConfigHistory) *VendorScoringConfigHistoryUpdate {
 	_u.mutation.Where(ps...)
-	return _u
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *VendorScoringConfigHistoryUpdate) SetUpdatedAt(v time.Time) *VendorScoringConfigHistoryUpdate {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *VendorScoringConfigHistoryUpdate) ClearUpdatedAt() *VendorScoringConfigHistoryUpdate {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *VendorScoringConfigHistoryUpdate) SetUpdatedBy(v string) *VendorScoringConfigHistoryUpdate {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *VendorScoringConfigHistoryUpdate) SetNillableUpdatedBy(v *string) *VendorScoringConfigHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *VendorScoringConfigHistoryUpdate) ClearUpdatedBy() *VendorScoringConfigHistoryUpdate {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *VendorScoringConfigHistoryUpdate) SetUpdatedByImpersonator(v string) *VendorScoringConfigHistoryUpdate {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *VendorScoringConfigHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *VendorScoringConfigHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *VendorScoringConfigHistoryUpdate) ClearUpdatedByImpersonator() *VendorScoringConfigHistoryUpdate {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *VendorScoringConfigHistoryUpdate) SetDeletedAt(v time.Time) *VendorScoringConfigHistoryUpdate {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *VendorScoringConfigHistoryUpdate) SetNillableDeletedAt(v *time.Time) *VendorScoringConfigHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *VendorScoringConfigHistoryUpdate) ClearDeletedAt() *VendorScoringConfigHistoryUpdate {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *VendorScoringConfigHistoryUpdate) SetDeletedBy(v string) *VendorScoringConfigHistoryUpdate {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *VendorScoringConfigHistoryUpdate) SetNillableDeletedBy(v *string) *VendorScoringConfigHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *VendorScoringConfigHistoryUpdate) ClearDeletedBy() *VendorScoringConfigHistoryUpdate {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *VendorScoringConfigHistoryUpdate) SetTags(v []string) *VendorScoringConfigHistoryUpdate {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *VendorScoringConfigHistoryUpdate) AppendTags(v []string) *VendorScoringConfigHistoryUpdate {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *VendorScoringConfigHistoryUpdate) ClearTags() *VendorScoringConfigHistoryUpdate {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (_u *VendorScoringConfigHistoryUpdate) SetOwnerID(v string) *VendorScoringConfigHistoryUpdate {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *VendorScoringConfigHistoryUpdate) SetNillableOwnerID(v *string) *VendorScoringConfigHistoryUpdate {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *VendorScoringConfigHistoryUpdate) ClearOwnerID() *VendorScoringConfigHistoryUpdate {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
-// SetQuestions sets the "questions" field.
-func (_u *VendorScoringConfigHistoryUpdate) SetQuestions(v models.VendorScoringQuestionsConfig) *VendorScoringConfigHistoryUpdate {
-	_u.mutation.SetQuestions(v)
-	return _u
-}
-
-// SetNillableQuestions sets the "questions" field if the given value is not nil.
-func (_u *VendorScoringConfigHistoryUpdate) SetNillableQuestions(v *models.VendorScoringQuestionsConfig) *VendorScoringConfigHistoryUpdate {
-	if v != nil {
-		_u.SetQuestions(*v)
-	}
-	return _u
-}
-
-// SetScoringMode sets the "scoring_mode" field.
-func (_u *VendorScoringConfigHistoryUpdate) SetScoringMode(v enums.VendorScoringMode) *VendorScoringConfigHistoryUpdate {
-	_u.mutation.SetScoringMode(v)
-	return _u
-}
-
-// SetNillableScoringMode sets the "scoring_mode" field if the given value is not nil.
-func (_u *VendorScoringConfigHistoryUpdate) SetNillableScoringMode(v *enums.VendorScoringMode) *VendorScoringConfigHistoryUpdate {
-	if v != nil {
-		_u.SetScoringMode(*v)
-	}
-	return _u
-}
-
-// SetRiskThresholds sets the "risk_thresholds" field.
-func (_u *VendorScoringConfigHistoryUpdate) SetRiskThresholds(v models.RiskThresholdsConfig) *VendorScoringConfigHistoryUpdate {
-	_u.mutation.SetRiskThresholds(v)
-	return _u
-}
-
-// SetNillableRiskThresholds sets the "risk_thresholds" field if the given value is not nil.
-func (_u *VendorScoringConfigHistoryUpdate) SetNillableRiskThresholds(v *models.RiskThresholdsConfig) *VendorScoringConfigHistoryUpdate {
-	if v != nil {
-		_u.SetRiskThresholds(*v)
-	}
 	return _u
 }
 
@@ -215,9 +36,6 @@ func (_u *VendorScoringConfigHistoryUpdate) Mutation() *VendorScoringConfigHisto
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *VendorScoringConfigHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := _u.defaults(); err != nil {
-		return 0, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -243,38 +61,7 @@ func (_u *VendorScoringConfigHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *VendorScoringConfigHistoryUpdate) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if vendorscoringconfighistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized vendorscoringconfighistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := vendorscoringconfighistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *VendorScoringConfigHistoryUpdate) check() error {
-	if v, ok := _u.mutation.ScoringMode(); ok {
-		if err := vendorscoringconfighistory.ScoringModeValidator(v); err != nil {
-			return &ValidationError{Name: "scoring_mode", err: fmt.Errorf(`historygenerated: validator failed for field "VendorScoringConfigHistory.scoring_mode": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *VendorScoringConfigHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *VendorScoringConfigHistoryUpdate {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *VendorScoringConfigHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(vendorscoringconfighistory.Table, vendorscoringconfighistory.Columns, sqlgraph.NewFieldSpec(vendorscoringconfighistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -289,68 +76,30 @@ func (_u *VendorScoringConfigHistoryUpdate) sqlSave(ctx context.Context) (_node 
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(vendorscoringconfighistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(vendorscoringconfighistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(vendorscoringconfighistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(vendorscoringconfighistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(vendorscoringconfighistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(vendorscoringconfighistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(vendorscoringconfighistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(vendorscoringconfighistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(vendorscoringconfighistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(vendorscoringconfighistory.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(vendorscoringconfighistory.FieldDeletedBy, field.TypeString, value)
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(vendorscoringconfighistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(vendorscoringconfighistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, vendorscoringconfighistory.FieldTags, value)
-		})
-	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(vendorscoringconfighistory.FieldTags, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(vendorscoringconfighistory.FieldOwnerID, field.TypeString, value)
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(vendorscoringconfighistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := _u.mutation.Questions(); ok {
-		_spec.SetField(vendorscoringconfighistory.FieldQuestions, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.ScoringMode(); ok {
-		_spec.SetField(vendorscoringconfighistory.FieldScoringMode, field.TypeEnum, value)
-	}
-	if value, ok := _u.mutation.RiskThresholds(); ok {
-		_spec.SetField(vendorscoringconfighistory.FieldRiskThresholds, field.TypeJSON, value)
-	}
-	_spec.Node.Schema = _u.schemaConfig.VendorScoringConfigHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{vendorscoringconfighistory.Label}
@@ -366,182 +115,9 @@ func (_u *VendorScoringConfigHistoryUpdate) sqlSave(ctx context.Context) (_node 
 // VendorScoringConfigHistoryUpdateOne is the builder for updating a single VendorScoringConfigHistory entity.
 type VendorScoringConfigHistoryUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *VendorScoringConfigHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *VendorScoringConfigHistoryUpdateOne) SetUpdatedAt(v time.Time) *VendorScoringConfigHistoryUpdateOne {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *VendorScoringConfigHistoryUpdateOne) ClearUpdatedAt() *VendorScoringConfigHistoryUpdateOne {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *VendorScoringConfigHistoryUpdateOne) SetUpdatedBy(v string) *VendorScoringConfigHistoryUpdateOne {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *VendorScoringConfigHistoryUpdateOne) SetNillableUpdatedBy(v *string) *VendorScoringConfigHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *VendorScoringConfigHistoryUpdateOne) ClearUpdatedBy() *VendorScoringConfigHistoryUpdateOne {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *VendorScoringConfigHistoryUpdateOne) SetUpdatedByImpersonator(v string) *VendorScoringConfigHistoryUpdateOne {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *VendorScoringConfigHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *VendorScoringConfigHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *VendorScoringConfigHistoryUpdateOne) ClearUpdatedByImpersonator() *VendorScoringConfigHistoryUpdateOne {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *VendorScoringConfigHistoryUpdateOne) SetDeletedAt(v time.Time) *VendorScoringConfigHistoryUpdateOne {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *VendorScoringConfigHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *VendorScoringConfigHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *VendorScoringConfigHistoryUpdateOne) ClearDeletedAt() *VendorScoringConfigHistoryUpdateOne {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *VendorScoringConfigHistoryUpdateOne) SetDeletedBy(v string) *VendorScoringConfigHistoryUpdateOne {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *VendorScoringConfigHistoryUpdateOne) SetNillableDeletedBy(v *string) *VendorScoringConfigHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *VendorScoringConfigHistoryUpdateOne) ClearDeletedBy() *VendorScoringConfigHistoryUpdateOne {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *VendorScoringConfigHistoryUpdateOne) SetTags(v []string) *VendorScoringConfigHistoryUpdateOne {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *VendorScoringConfigHistoryUpdateOne) AppendTags(v []string) *VendorScoringConfigHistoryUpdateOne {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *VendorScoringConfigHistoryUpdateOne) ClearTags() *VendorScoringConfigHistoryUpdateOne {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetOwnerID sets the "owner_id" field.
-func (_u *VendorScoringConfigHistoryUpdateOne) SetOwnerID(v string) *VendorScoringConfigHistoryUpdateOne {
-	_u.mutation.SetOwnerID(v)
-	return _u
-}
-
-// SetNillableOwnerID sets the "owner_id" field if the given value is not nil.
-func (_u *VendorScoringConfigHistoryUpdateOne) SetNillableOwnerID(v *string) *VendorScoringConfigHistoryUpdateOne {
-	if v != nil {
-		_u.SetOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearOwnerID clears the value of the "owner_id" field.
-func (_u *VendorScoringConfigHistoryUpdateOne) ClearOwnerID() *VendorScoringConfigHistoryUpdateOne {
-	_u.mutation.ClearOwnerID()
-	return _u
-}
-
-// SetQuestions sets the "questions" field.
-func (_u *VendorScoringConfigHistoryUpdateOne) SetQuestions(v models.VendorScoringQuestionsConfig) *VendorScoringConfigHistoryUpdateOne {
-	_u.mutation.SetQuestions(v)
-	return _u
-}
-
-// SetNillableQuestions sets the "questions" field if the given value is not nil.
-func (_u *VendorScoringConfigHistoryUpdateOne) SetNillableQuestions(v *models.VendorScoringQuestionsConfig) *VendorScoringConfigHistoryUpdateOne {
-	if v != nil {
-		_u.SetQuestions(*v)
-	}
-	return _u
-}
-
-// SetScoringMode sets the "scoring_mode" field.
-func (_u *VendorScoringConfigHistoryUpdateOne) SetScoringMode(v enums.VendorScoringMode) *VendorScoringConfigHistoryUpdateOne {
-	_u.mutation.SetScoringMode(v)
-	return _u
-}
-
-// SetNillableScoringMode sets the "scoring_mode" field if the given value is not nil.
-func (_u *VendorScoringConfigHistoryUpdateOne) SetNillableScoringMode(v *enums.VendorScoringMode) *VendorScoringConfigHistoryUpdateOne {
-	if v != nil {
-		_u.SetScoringMode(*v)
-	}
-	return _u
-}
-
-// SetRiskThresholds sets the "risk_thresholds" field.
-func (_u *VendorScoringConfigHistoryUpdateOne) SetRiskThresholds(v models.RiskThresholdsConfig) *VendorScoringConfigHistoryUpdateOne {
-	_u.mutation.SetRiskThresholds(v)
-	return _u
-}
-
-// SetNillableRiskThresholds sets the "risk_thresholds" field if the given value is not nil.
-func (_u *VendorScoringConfigHistoryUpdateOne) SetNillableRiskThresholds(v *models.RiskThresholdsConfig) *VendorScoringConfigHistoryUpdateOne {
-	if v != nil {
-		_u.SetRiskThresholds(*v)
-	}
-	return _u
+	fields   []string
+	hooks    []Hook
+	mutation *VendorScoringConfigHistoryMutation
 }
 
 // Mutation returns the VendorScoringConfigHistoryMutation object of the builder.
@@ -564,9 +140,6 @@ func (_u *VendorScoringConfigHistoryUpdateOne) Select(field string, fields ...st
 
 // Save executes the query and returns the updated VendorScoringConfigHistory entity.
 func (_u *VendorScoringConfigHistoryUpdateOne) Save(ctx context.Context) (*VendorScoringConfigHistory, error) {
-	if err := _u.defaults(); err != nil {
-		return nil, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -592,38 +165,7 @@ func (_u *VendorScoringConfigHistoryUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *VendorScoringConfigHistoryUpdateOne) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if vendorscoringconfighistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized vendorscoringconfighistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := vendorscoringconfighistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *VendorScoringConfigHistoryUpdateOne) check() error {
-	if v, ok := _u.mutation.ScoringMode(); ok {
-		if err := vendorscoringconfighistory.ScoringModeValidator(v); err != nil {
-			return &ValidationError{Name: "scoring_mode", err: fmt.Errorf(`historygenerated: validator failed for field "VendorScoringConfigHistory.scoring_mode": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *VendorScoringConfigHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *VendorScoringConfigHistoryUpdateOne {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *VendorScoringConfigHistoryUpdateOne) sqlSave(ctx context.Context) (_node *VendorScoringConfigHistory, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(vendorscoringconfighistory.Table, vendorscoringconfighistory.Columns, sqlgraph.NewFieldSpec(vendorscoringconfighistory.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
@@ -655,68 +197,30 @@ func (_u *VendorScoringConfigHistoryUpdateOne) sqlSave(ctx context.Context) (_no
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(vendorscoringconfighistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(vendorscoringconfighistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(vendorscoringconfighistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(vendorscoringconfighistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(vendorscoringconfighistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(vendorscoringconfighistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(vendorscoringconfighistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(vendorscoringconfighistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(vendorscoringconfighistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(vendorscoringconfighistory.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(vendorscoringconfighistory.FieldDeletedBy, field.TypeString, value)
 	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(vendorscoringconfighistory.FieldDeletedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(vendorscoringconfighistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, vendorscoringconfighistory.FieldTags, value)
-		})
-	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(vendorscoringconfighistory.FieldTags, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.OwnerID(); ok {
-		_spec.SetField(vendorscoringconfighistory.FieldOwnerID, field.TypeString, value)
 	}
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(vendorscoringconfighistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := _u.mutation.Questions(); ok {
-		_spec.SetField(vendorscoringconfighistory.FieldQuestions, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.ScoringMode(); ok {
-		_spec.SetField(vendorscoringconfighistory.FieldScoringMode, field.TypeEnum, value)
-	}
-	if value, ok := _u.mutation.RiskThresholds(); ok {
-		_spec.SetField(vendorscoringconfighistory.FieldRiskThresholds, field.TypeJSON, value)
-	}
-	_spec.Node.Schema = _u.schemaConfig.VendorScoringConfigHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	_node = &VendorScoringConfigHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

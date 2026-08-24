@@ -19,8 +19,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 	"github.com/theopenlane/core/internal/ent/generated/workflowproposal"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // WorkflowProposalUpdate is the builder for updating WorkflowProposal entities.
@@ -530,7 +528,6 @@ func (_u *WorkflowProposalUpdate) sqlSave(ctx context.Context) (_node int, err e
 				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowProposal
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.WorkflowObjectRefIDs(); len(nodes) > 0 {
@@ -544,7 +541,6 @@ func (_u *WorkflowProposalUpdate) sqlSave(ctx context.Context) (_node int, err e
 				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowProposal
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -561,7 +557,6 @@ func (_u *WorkflowProposalUpdate) sqlSave(ctx context.Context) (_node int, err e
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowProposal
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.UserIDs(); len(nodes) > 0 {
@@ -575,7 +570,6 @@ func (_u *WorkflowProposalUpdate) sqlSave(ctx context.Context) (_node int, err e
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowProposal
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -592,7 +586,6 @@ func (_u *WorkflowProposalUpdate) sqlSave(ctx context.Context) (_node int, err e
 				IDSpec: sqlgraph.NewFieldSpec(workflowinstance.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowInstance
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedWorkflowInstancesIDs(); len(nodes) > 0 && !_u.mutation.WorkflowInstancesCleared() {
@@ -606,7 +599,6 @@ func (_u *WorkflowProposalUpdate) sqlSave(ctx context.Context) (_node int, err e
 				IDSpec: sqlgraph.NewFieldSpec(workflowinstance.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowInstance
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -623,14 +615,11 @@ func (_u *WorkflowProposalUpdate) sqlSave(ctx context.Context) (_node int, err e
 				IDSpec: sqlgraph.NewFieldSpec(workflowinstance.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowInstance
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = _u.schemaConfig.WorkflowProposal
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -1176,7 +1165,6 @@ func (_u *WorkflowProposalUpdateOne) sqlSave(ctx context.Context) (_node *Workfl
 				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowProposal
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.WorkflowObjectRefIDs(); len(nodes) > 0 {
@@ -1190,7 +1178,6 @@ func (_u *WorkflowProposalUpdateOne) sqlSave(ctx context.Context) (_node *Workfl
 				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowProposal
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1207,7 +1194,6 @@ func (_u *WorkflowProposalUpdateOne) sqlSave(ctx context.Context) (_node *Workfl
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowProposal
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.UserIDs(); len(nodes) > 0 {
@@ -1221,7 +1207,6 @@ func (_u *WorkflowProposalUpdateOne) sqlSave(ctx context.Context) (_node *Workfl
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowProposal
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1238,7 +1223,6 @@ func (_u *WorkflowProposalUpdateOne) sqlSave(ctx context.Context) (_node *Workfl
 				IDSpec: sqlgraph.NewFieldSpec(workflowinstance.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowInstance
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.RemovedWorkflowInstancesIDs(); len(nodes) > 0 && !_u.mutation.WorkflowInstancesCleared() {
@@ -1252,7 +1236,6 @@ func (_u *WorkflowProposalUpdateOne) sqlSave(ctx context.Context) (_node *Workfl
 				IDSpec: sqlgraph.NewFieldSpec(workflowinstance.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowInstance
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1269,14 +1252,11 @@ func (_u *WorkflowProposalUpdateOne) sqlSave(ctx context.Context) (_node *Workfl
 				IDSpec: sqlgraph.NewFieldSpec(workflowinstance.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.WorkflowInstance
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	_spec.Node.Schema = _u.schemaConfig.WorkflowProposal
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	_node = &WorkflowProposal{config: _u.config}
 	_spec.Assign = _node.assignValues

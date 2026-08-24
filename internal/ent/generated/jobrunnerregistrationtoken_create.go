@@ -340,7 +340,6 @@ func (_c *JobRunnerRegistrationTokenCreate) createSpec() (*JobRunnerRegistration
 		_node = &JobRunnerRegistrationToken{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(jobrunnerregistrationtoken.Table, sqlgraph.NewFieldSpec(jobrunnerregistrationtoken.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.JobRunnerRegistrationToken
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -400,7 +399,6 @@ func (_c *JobRunnerRegistrationTokenCreate) createSpec() (*JobRunnerRegistration
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.JobRunnerRegistrationToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -418,7 +416,6 @@ func (_c *JobRunnerRegistrationTokenCreate) createSpec() (*JobRunnerRegistration
 				IDSpec: sqlgraph.NewFieldSpec(jobrunner.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.JobRunnerRegistrationToken
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

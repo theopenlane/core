@@ -14,8 +14,6 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/onboarding"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // OnboardingUpdate is the builder for updating Onboarding entities.
@@ -257,8 +255,6 @@ func (_u *OnboardingUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	if _u.mutation.DemoRequestedCleared() {
 		_spec.ClearField(onboarding.FieldDemoRequested, field.TypeBool)
 	}
-	_spec.Node.Schema = _u.schemaConfig.Onboarding
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -536,8 +532,6 @@ func (_u *OnboardingUpdateOne) sqlSave(ctx context.Context) (_node *Onboarding, 
 	if _u.mutation.DemoRequestedCleared() {
 		_spec.ClearField(onboarding.FieldDemoRequested, field.TypeBool)
 	}
-	_spec.Node.Schema = _u.schemaConfig.Onboarding
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
 	_node = &Onboarding{config: _u.config}
 	_spec.Assign = _node.assignValues

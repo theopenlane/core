@@ -9,8 +9,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // ID filters vertices based on their ID field.
@@ -1025,9 +1023,6 @@ func HasOwner() predicate.JobResult {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.JobResult
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1036,9 +1031,6 @@ func HasOwner() predicate.JobResult {
 func HasOwnerWith(preds ...predicate.Organization) predicate.JobResult {
 	return predicate.JobResult(func(s *sql.Selector) {
 		step := newOwnerStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.JobResult
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1054,9 +1046,6 @@ func HasScheduledJob() predicate.JobResult {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, ScheduledJobTable, ScheduledJobColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.ScheduledJob
-		step.Edge.Schema = schemaConfig.JobResult
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1065,9 +1054,6 @@ func HasScheduledJob() predicate.JobResult {
 func HasScheduledJobWith(preds ...predicate.ScheduledJob) predicate.JobResult {
 	return predicate.JobResult(func(s *sql.Selector) {
 		step := newScheduledJobStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.ScheduledJob
-		step.Edge.Schema = schemaConfig.JobResult
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1083,9 +1069,6 @@ func HasFile() predicate.JobResult {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, FileTable, FileColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.JobResult
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1094,9 +1077,6 @@ func HasFile() predicate.JobResult {
 func HasFileWith(preds ...predicate.File) predicate.JobResult {
 	return predicate.JobResult(func(s *sql.Selector) {
 		step := newFileStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.JobResult
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

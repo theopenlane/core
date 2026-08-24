@@ -8,620 +8,24 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 	"github.com/theopenlane/core/internal/ent/historygenerated/taskhistory"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
 )
 
 // TaskHistoryUpdate is the builder for updating TaskHistory entities.
 type TaskHistoryUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *TaskHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *TaskHistoryMutation
 }
 
 // Where appends a list predicates to the TaskHistoryUpdate builder.
 func (_u *TaskHistoryUpdate) Where(ps ...predicate.TaskHistory) *TaskHistoryUpdate {
 	_u.mutation.Where(ps...)
-	return _u
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *TaskHistoryUpdate) SetUpdatedAt(v time.Time) *TaskHistoryUpdate {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *TaskHistoryUpdate) ClearUpdatedAt() *TaskHistoryUpdate {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *TaskHistoryUpdate) SetUpdatedBy(v string) *TaskHistoryUpdate {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *TaskHistoryUpdate) SetNillableUpdatedBy(v *string) *TaskHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *TaskHistoryUpdate) ClearUpdatedBy() *TaskHistoryUpdate {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *TaskHistoryUpdate) SetUpdatedByImpersonator(v string) *TaskHistoryUpdate {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *TaskHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *TaskHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *TaskHistoryUpdate) ClearUpdatedByImpersonator() *TaskHistoryUpdate {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *TaskHistoryUpdate) SetDeletedAt(v time.Time) *TaskHistoryUpdate {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *TaskHistoryUpdate) SetNillableDeletedAt(v *time.Time) *TaskHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *TaskHistoryUpdate) ClearDeletedAt() *TaskHistoryUpdate {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *TaskHistoryUpdate) SetDeletedBy(v string) *TaskHistoryUpdate {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *TaskHistoryUpdate) SetNillableDeletedBy(v *string) *TaskHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *TaskHistoryUpdate) ClearDeletedBy() *TaskHistoryUpdate {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *TaskHistoryUpdate) SetTags(v []string) *TaskHistoryUpdate {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *TaskHistoryUpdate) AppendTags(v []string) *TaskHistoryUpdate {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *TaskHistoryUpdate) ClearTags() *TaskHistoryUpdate {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetTaskKindName sets the "task_kind_name" field.
-func (_u *TaskHistoryUpdate) SetTaskKindName(v string) *TaskHistoryUpdate {
-	_u.mutation.SetTaskKindName(v)
-	return _u
-}
-
-// SetNillableTaskKindName sets the "task_kind_name" field if the given value is not nil.
-func (_u *TaskHistoryUpdate) SetNillableTaskKindName(v *string) *TaskHistoryUpdate {
-	if v != nil {
-		_u.SetTaskKindName(*v)
-	}
-	return _u
-}
-
-// ClearTaskKindName clears the value of the "task_kind_name" field.
-func (_u *TaskHistoryUpdate) ClearTaskKindName() *TaskHistoryUpdate {
-	_u.mutation.ClearTaskKindName()
-	return _u
-}
-
-// SetTaskKindID sets the "task_kind_id" field.
-func (_u *TaskHistoryUpdate) SetTaskKindID(v string) *TaskHistoryUpdate {
-	_u.mutation.SetTaskKindID(v)
-	return _u
-}
-
-// SetNillableTaskKindID sets the "task_kind_id" field if the given value is not nil.
-func (_u *TaskHistoryUpdate) SetNillableTaskKindID(v *string) *TaskHistoryUpdate {
-	if v != nil {
-		_u.SetTaskKindID(*v)
-	}
-	return _u
-}
-
-// ClearTaskKindID clears the value of the "task_kind_id" field.
-func (_u *TaskHistoryUpdate) ClearTaskKindID() *TaskHistoryUpdate {
-	_u.mutation.ClearTaskKindID()
-	return _u
-}
-
-// SetEnvironmentName sets the "environment_name" field.
-func (_u *TaskHistoryUpdate) SetEnvironmentName(v string) *TaskHistoryUpdate {
-	_u.mutation.SetEnvironmentName(v)
-	return _u
-}
-
-// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
-func (_u *TaskHistoryUpdate) SetNillableEnvironmentName(v *string) *TaskHistoryUpdate {
-	if v != nil {
-		_u.SetEnvironmentName(*v)
-	}
-	return _u
-}
-
-// ClearEnvironmentName clears the value of the "environment_name" field.
-func (_u *TaskHistoryUpdate) ClearEnvironmentName() *TaskHistoryUpdate {
-	_u.mutation.ClearEnvironmentName()
-	return _u
-}
-
-// SetEnvironmentID sets the "environment_id" field.
-func (_u *TaskHistoryUpdate) SetEnvironmentID(v string) *TaskHistoryUpdate {
-	_u.mutation.SetEnvironmentID(v)
-	return _u
-}
-
-// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
-func (_u *TaskHistoryUpdate) SetNillableEnvironmentID(v *string) *TaskHistoryUpdate {
-	if v != nil {
-		_u.SetEnvironmentID(*v)
-	}
-	return _u
-}
-
-// ClearEnvironmentID clears the value of the "environment_id" field.
-func (_u *TaskHistoryUpdate) ClearEnvironmentID() *TaskHistoryUpdate {
-	_u.mutation.ClearEnvironmentID()
-	return _u
-}
-
-// SetScopeName sets the "scope_name" field.
-func (_u *TaskHistoryUpdate) SetScopeName(v string) *TaskHistoryUpdate {
-	_u.mutation.SetScopeName(v)
-	return _u
-}
-
-// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
-func (_u *TaskHistoryUpdate) SetNillableScopeName(v *string) *TaskHistoryUpdate {
-	if v != nil {
-		_u.SetScopeName(*v)
-	}
-	return _u
-}
-
-// ClearScopeName clears the value of the "scope_name" field.
-func (_u *TaskHistoryUpdate) ClearScopeName() *TaskHistoryUpdate {
-	_u.mutation.ClearScopeName()
-	return _u
-}
-
-// SetScopeID sets the "scope_id" field.
-func (_u *TaskHistoryUpdate) SetScopeID(v string) *TaskHistoryUpdate {
-	_u.mutation.SetScopeID(v)
-	return _u
-}
-
-// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
-func (_u *TaskHistoryUpdate) SetNillableScopeID(v *string) *TaskHistoryUpdate {
-	if v != nil {
-		_u.SetScopeID(*v)
-	}
-	return _u
-}
-
-// ClearScopeID clears the value of the "scope_id" field.
-func (_u *TaskHistoryUpdate) ClearScopeID() *TaskHistoryUpdate {
-	_u.mutation.ClearScopeID()
-	return _u
-}
-
-// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
-func (_u *TaskHistoryUpdate) SetWorkflowEligibleMarker(v bool) *TaskHistoryUpdate {
-	_u.mutation.SetWorkflowEligibleMarker(v)
-	return _u
-}
-
-// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
-func (_u *TaskHistoryUpdate) SetNillableWorkflowEligibleMarker(v *bool) *TaskHistoryUpdate {
-	if v != nil {
-		_u.SetWorkflowEligibleMarker(*v)
-	}
-	return _u
-}
-
-// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
-func (_u *TaskHistoryUpdate) ClearWorkflowEligibleMarker() *TaskHistoryUpdate {
-	_u.mutation.ClearWorkflowEligibleMarker()
-	return _u
-}
-
-// SetExternalUUID sets the "external_uuid" field.
-func (_u *TaskHistoryUpdate) SetExternalUUID(v string) *TaskHistoryUpdate {
-	_u.mutation.SetExternalUUID(v)
-	return _u
-}
-
-// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
-func (_u *TaskHistoryUpdate) SetNillableExternalUUID(v *string) *TaskHistoryUpdate {
-	if v != nil {
-		_u.SetExternalUUID(*v)
-	}
-	return _u
-}
-
-// ClearExternalUUID clears the value of the "external_uuid" field.
-func (_u *TaskHistoryUpdate) ClearExternalUUID() *TaskHistoryUpdate {
-	_u.mutation.ClearExternalUUID()
-	return _u
-}
-
-// SetTitle sets the "title" field.
-func (_u *TaskHistoryUpdate) SetTitle(v string) *TaskHistoryUpdate {
-	_u.mutation.SetTitle(v)
-	return _u
-}
-
-// SetNillableTitle sets the "title" field if the given value is not nil.
-func (_u *TaskHistoryUpdate) SetNillableTitle(v *string) *TaskHistoryUpdate {
-	if v != nil {
-		_u.SetTitle(*v)
-	}
-	return _u
-}
-
-// SetDetails sets the "details" field.
-func (_u *TaskHistoryUpdate) SetDetails(v string) *TaskHistoryUpdate {
-	_u.mutation.SetDetails(v)
-	return _u
-}
-
-// SetNillableDetails sets the "details" field if the given value is not nil.
-func (_u *TaskHistoryUpdate) SetNillableDetails(v *string) *TaskHistoryUpdate {
-	if v != nil {
-		_u.SetDetails(*v)
-	}
-	return _u
-}
-
-// ClearDetails clears the value of the "details" field.
-func (_u *TaskHistoryUpdate) ClearDetails() *TaskHistoryUpdate {
-	_u.mutation.ClearDetails()
-	return _u
-}
-
-// SetDetailsJSON sets the "details_json" field.
-func (_u *TaskHistoryUpdate) SetDetailsJSON(v []interface{}) *TaskHistoryUpdate {
-	_u.mutation.SetDetailsJSON(v)
-	return _u
-}
-
-// AppendDetailsJSON appends value to the "details_json" field.
-func (_u *TaskHistoryUpdate) AppendDetailsJSON(v []interface{}) *TaskHistoryUpdate {
-	_u.mutation.AppendDetailsJSON(v)
-	return _u
-}
-
-// ClearDetailsJSON clears the value of the "details_json" field.
-func (_u *TaskHistoryUpdate) ClearDetailsJSON() *TaskHistoryUpdate {
-	_u.mutation.ClearDetailsJSON()
-	return _u
-}
-
-// SetMetadata sets the "metadata" field.
-func (_u *TaskHistoryUpdate) SetMetadata(v map[string]interface{}) *TaskHistoryUpdate {
-	_u.mutation.SetMetadata(v)
-	return _u
-}
-
-// ClearMetadata clears the value of the "metadata" field.
-func (_u *TaskHistoryUpdate) ClearMetadata() *TaskHistoryUpdate {
-	_u.mutation.ClearMetadata()
-	return _u
-}
-
-// SetStatus sets the "status" field.
-func (_u *TaskHistoryUpdate) SetStatus(v enums.TaskStatus) *TaskHistoryUpdate {
-	_u.mutation.SetStatus(v)
-	return _u
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *TaskHistoryUpdate) SetNillableStatus(v *enums.TaskStatus) *TaskHistoryUpdate {
-	if v != nil {
-		_u.SetStatus(*v)
-	}
-	return _u
-}
-
-// SetDue sets the "due" field.
-func (_u *TaskHistoryUpdate) SetDue(v models.DateTime) *TaskHistoryUpdate {
-	_u.mutation.SetDue(v)
-	return _u
-}
-
-// SetNillableDue sets the "due" field if the given value is not nil.
-func (_u *TaskHistoryUpdate) SetNillableDue(v *models.DateTime) *TaskHistoryUpdate {
-	if v != nil {
-		_u.SetDue(*v)
-	}
-	return _u
-}
-
-// ClearDue clears the value of the "due" field.
-func (_u *TaskHistoryUpdate) ClearDue() *TaskHistoryUpdate {
-	_u.mutation.ClearDue()
-	return _u
-}
-
-// SetCompleted sets the "completed" field.
-func (_u *TaskHistoryUpdate) SetCompleted(v models.DateTime) *TaskHistoryUpdate {
-	_u.mutation.SetCompleted(v)
-	return _u
-}
-
-// SetNillableCompleted sets the "completed" field if the given value is not nil.
-func (_u *TaskHistoryUpdate) SetNillableCompleted(v *models.DateTime) *TaskHistoryUpdate {
-	if v != nil {
-		_u.SetCompleted(*v)
-	}
-	return _u
-}
-
-// ClearCompleted clears the value of the "completed" field.
-func (_u *TaskHistoryUpdate) ClearCompleted() *TaskHistoryUpdate {
-	_u.mutation.ClearCompleted()
-	return _u
-}
-
-// SetAssigneeID sets the "assignee_id" field.
-func (_u *TaskHistoryUpdate) SetAssigneeID(v string) *TaskHistoryUpdate {
-	_u.mutation.SetAssigneeID(v)
-	return _u
-}
-
-// SetNillableAssigneeID sets the "assignee_id" field if the given value is not nil.
-func (_u *TaskHistoryUpdate) SetNillableAssigneeID(v *string) *TaskHistoryUpdate {
-	if v != nil {
-		_u.SetAssigneeID(*v)
-	}
-	return _u
-}
-
-// ClearAssigneeID clears the value of the "assignee_id" field.
-func (_u *TaskHistoryUpdate) ClearAssigneeID() *TaskHistoryUpdate {
-	_u.mutation.ClearAssigneeID()
-	return _u
-}
-
-// SetAssignerID sets the "assigner_id" field.
-func (_u *TaskHistoryUpdate) SetAssignerID(v string) *TaskHistoryUpdate {
-	_u.mutation.SetAssignerID(v)
-	return _u
-}
-
-// SetNillableAssignerID sets the "assigner_id" field if the given value is not nil.
-func (_u *TaskHistoryUpdate) SetNillableAssignerID(v *string) *TaskHistoryUpdate {
-	if v != nil {
-		_u.SetAssignerID(*v)
-	}
-	return _u
-}
-
-// ClearAssignerID clears the value of the "assigner_id" field.
-func (_u *TaskHistoryUpdate) ClearAssignerID() *TaskHistoryUpdate {
-	_u.mutation.ClearAssignerID()
-	return _u
-}
-
-// SetSystemGenerated sets the "system_generated" field.
-func (_u *TaskHistoryUpdate) SetSystemGenerated(v bool) *TaskHistoryUpdate {
-	_u.mutation.SetSystemGenerated(v)
-	return _u
-}
-
-// SetNillableSystemGenerated sets the "system_generated" field if the given value is not nil.
-func (_u *TaskHistoryUpdate) SetNillableSystemGenerated(v *bool) *TaskHistoryUpdate {
-	if v != nil {
-		_u.SetSystemGenerated(*v)
-	}
-	return _u
-}
-
-// SetIsTemplate sets the "is_template" field.
-func (_u *TaskHistoryUpdate) SetIsTemplate(v bool) *TaskHistoryUpdate {
-	_u.mutation.SetIsTemplate(v)
-	return _u
-}
-
-// SetNillableIsTemplate sets the "is_template" field if the given value is not nil.
-func (_u *TaskHistoryUpdate) SetNillableIsTemplate(v *bool) *TaskHistoryUpdate {
-	if v != nil {
-		_u.SetIsTemplate(*v)
-	}
-	return _u
-}
-
-// SetIsSuggested sets the "is_suggested" field.
-func (_u *TaskHistoryUpdate) SetIsSuggested(v bool) *TaskHistoryUpdate {
-	_u.mutation.SetIsSuggested(v)
-	return _u
-}
-
-// SetNillableIsSuggested sets the "is_suggested" field if the given value is not nil.
-func (_u *TaskHistoryUpdate) SetNillableIsSuggested(v *bool) *TaskHistoryUpdate {
-	if v != nil {
-		_u.SetIsSuggested(*v)
-	}
-	return _u
-}
-
-// SetPriority sets the "priority" field.
-func (_u *TaskHistoryUpdate) SetPriority(v int) *TaskHistoryUpdate {
-	_u.mutation.ResetPriority()
-	_u.mutation.SetPriority(v)
-	return _u
-}
-
-// SetNillablePriority sets the "priority" field if the given value is not nil.
-func (_u *TaskHistoryUpdate) SetNillablePriority(v *int) *TaskHistoryUpdate {
-	if v != nil {
-		_u.SetPriority(*v)
-	}
-	return _u
-}
-
-// AddPriority adds value to the "priority" field.
-func (_u *TaskHistoryUpdate) AddPriority(v int) *TaskHistoryUpdate {
-	_u.mutation.AddPriority(v)
-	return _u
-}
-
-// SetSource sets the "source" field.
-func (_u *TaskHistoryUpdate) SetSource(v string) *TaskHistoryUpdate {
-	_u.mutation.SetSource(v)
-	return _u
-}
-
-// SetNillableSource sets the "source" field if the given value is not nil.
-func (_u *TaskHistoryUpdate) SetNillableSource(v *string) *TaskHistoryUpdate {
-	if v != nil {
-		_u.SetSource(*v)
-	}
-	return _u
-}
-
-// ClearSource clears the value of the "source" field.
-func (_u *TaskHistoryUpdate) ClearSource() *TaskHistoryUpdate {
-	_u.mutation.ClearSource()
-	return _u
-}
-
-// SetSourceKey sets the "source_key" field.
-func (_u *TaskHistoryUpdate) SetSourceKey(v string) *TaskHistoryUpdate {
-	_u.mutation.SetSourceKey(v)
-	return _u
-}
-
-// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
-func (_u *TaskHistoryUpdate) SetNillableSourceKey(v *string) *TaskHistoryUpdate {
-	if v != nil {
-		_u.SetSourceKey(*v)
-	}
-	return _u
-}
-
-// ClearSourceKey clears the value of the "source_key" field.
-func (_u *TaskHistoryUpdate) ClearSourceKey() *TaskHistoryUpdate {
-	_u.mutation.ClearSourceKey()
-	return _u
-}
-
-// SetIdempotencyKey sets the "idempotency_key" field.
-func (_u *TaskHistoryUpdate) SetIdempotencyKey(v string) *TaskHistoryUpdate {
-	_u.mutation.SetIdempotencyKey(v)
-	return _u
-}
-
-// SetNillableIdempotencyKey sets the "idempotency_key" field if the given value is not nil.
-func (_u *TaskHistoryUpdate) SetNillableIdempotencyKey(v *string) *TaskHistoryUpdate {
-	if v != nil {
-		_u.SetIdempotencyKey(*v)
-	}
-	return _u
-}
-
-// ClearIdempotencyKey clears the value of the "idempotency_key" field.
-func (_u *TaskHistoryUpdate) ClearIdempotencyKey() *TaskHistoryUpdate {
-	_u.mutation.ClearIdempotencyKey()
-	return _u
-}
-
-// SetExternalReferenceURL sets the "external_reference_url" field.
-func (_u *TaskHistoryUpdate) SetExternalReferenceURL(v []string) *TaskHistoryUpdate {
-	_u.mutation.SetExternalReferenceURL(v)
-	return _u
-}
-
-// AppendExternalReferenceURL appends value to the "external_reference_url" field.
-func (_u *TaskHistoryUpdate) AppendExternalReferenceURL(v []string) *TaskHistoryUpdate {
-	_u.mutation.AppendExternalReferenceURL(v)
-	return _u
-}
-
-// ClearExternalReferenceURL clears the value of the "external_reference_url" field.
-func (_u *TaskHistoryUpdate) ClearExternalReferenceURL() *TaskHistoryUpdate {
-	_u.mutation.ClearExternalReferenceURL()
-	return _u
-}
-
-// SetParentTaskID sets the "parent_task_id" field.
-func (_u *TaskHistoryUpdate) SetParentTaskID(v string) *TaskHistoryUpdate {
-	_u.mutation.SetParentTaskID(v)
-	return _u
-}
-
-// SetNillableParentTaskID sets the "parent_task_id" field if the given value is not nil.
-func (_u *TaskHistoryUpdate) SetNillableParentTaskID(v *string) *TaskHistoryUpdate {
-	if v != nil {
-		_u.SetParentTaskID(*v)
-	}
-	return _u
-}
-
-// ClearParentTaskID clears the value of the "parent_task_id" field.
-func (_u *TaskHistoryUpdate) ClearParentTaskID() *TaskHistoryUpdate {
-	_u.mutation.ClearParentTaskID()
 	return _u
 }
 
@@ -632,9 +36,6 @@ func (_u *TaskHistoryUpdate) Mutation() *TaskHistoryMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *TaskHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := _u.defaults(); err != nil {
-		return 0, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -660,38 +61,7 @@ func (_u *TaskHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *TaskHistoryUpdate) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if taskhistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized taskhistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := taskhistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *TaskHistoryUpdate) check() error {
-	if v, ok := _u.mutation.Status(); ok {
-		if err := taskhistory.StatusValidator(v); err != nil {
-			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "TaskHistory.status": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *TaskHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TaskHistoryUpdate {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *TaskHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(taskhistory.Table, taskhistory.Columns, sqlgraph.NewFieldSpec(taskhistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -706,46 +76,23 @@ func (_u *TaskHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(taskhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(taskhistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(taskhistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(taskhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(taskhistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(taskhistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(taskhistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(taskhistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(taskhistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(taskhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(taskhistory.FieldDeletedBy, field.TypeString, value)
-	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(taskhistory.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(taskhistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, taskhistory.FieldTags, value)
-		})
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(taskhistory.FieldTags, field.TypeJSON)
@@ -753,160 +100,66 @@ func (_u *TaskHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(taskhistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := _u.mutation.TaskKindName(); ok {
-		_spec.SetField(taskhistory.FieldTaskKindName, field.TypeString, value)
-	}
 	if _u.mutation.TaskKindNameCleared() {
 		_spec.ClearField(taskhistory.FieldTaskKindName, field.TypeString)
-	}
-	if value, ok := _u.mutation.TaskKindID(); ok {
-		_spec.SetField(taskhistory.FieldTaskKindID, field.TypeString, value)
 	}
 	if _u.mutation.TaskKindIDCleared() {
 		_spec.ClearField(taskhistory.FieldTaskKindID, field.TypeString)
 	}
-	if value, ok := _u.mutation.EnvironmentName(); ok {
-		_spec.SetField(taskhistory.FieldEnvironmentName, field.TypeString, value)
-	}
 	if _u.mutation.EnvironmentNameCleared() {
 		_spec.ClearField(taskhistory.FieldEnvironmentName, field.TypeString)
-	}
-	if value, ok := _u.mutation.EnvironmentID(); ok {
-		_spec.SetField(taskhistory.FieldEnvironmentID, field.TypeString, value)
 	}
 	if _u.mutation.EnvironmentIDCleared() {
 		_spec.ClearField(taskhistory.FieldEnvironmentID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ScopeName(); ok {
-		_spec.SetField(taskhistory.FieldScopeName, field.TypeString, value)
-	}
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(taskhistory.FieldScopeName, field.TypeString)
-	}
-	if value, ok := _u.mutation.ScopeID(); ok {
-		_spec.SetField(taskhistory.FieldScopeID, field.TypeString, value)
 	}
 	if _u.mutation.ScopeIDCleared() {
 		_spec.ClearField(taskhistory.FieldScopeID, field.TypeString)
 	}
-	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
-		_spec.SetField(taskhistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
-	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(taskhistory.FieldWorkflowEligibleMarker, field.TypeBool)
-	}
-	if value, ok := _u.mutation.ExternalUUID(); ok {
-		_spec.SetField(taskhistory.FieldExternalUUID, field.TypeString, value)
 	}
 	if _u.mutation.ExternalUUIDCleared() {
 		_spec.ClearField(taskhistory.FieldExternalUUID, field.TypeString)
 	}
-	if value, ok := _u.mutation.Title(); ok {
-		_spec.SetField(taskhistory.FieldTitle, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.Details(); ok {
-		_spec.SetField(taskhistory.FieldDetails, field.TypeString, value)
-	}
 	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(taskhistory.FieldDetails, field.TypeString)
-	}
-	if value, ok := _u.mutation.DetailsJSON(); ok {
-		_spec.SetField(taskhistory.FieldDetailsJSON, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedDetailsJSON(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, taskhistory.FieldDetailsJSON, value)
-		})
 	}
 	if _u.mutation.DetailsJSONCleared() {
 		_spec.ClearField(taskhistory.FieldDetailsJSON, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.Metadata(); ok {
-		_spec.SetField(taskhistory.FieldMetadata, field.TypeJSON, value)
-	}
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(taskhistory.FieldMetadata, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(taskhistory.FieldStatus, field.TypeEnum, value)
-	}
-	if value, ok := _u.mutation.Due(); ok {
-		_spec.SetField(taskhistory.FieldDue, field.TypeTime, value)
 	}
 	if _u.mutation.DueCleared() {
 		_spec.ClearField(taskhistory.FieldDue, field.TypeTime)
 	}
-	if value, ok := _u.mutation.Completed(); ok {
-		_spec.SetField(taskhistory.FieldCompleted, field.TypeTime, value)
-	}
 	if _u.mutation.CompletedCleared() {
 		_spec.ClearField(taskhistory.FieldCompleted, field.TypeTime)
-	}
-	if value, ok := _u.mutation.AssigneeID(); ok {
-		_spec.SetField(taskhistory.FieldAssigneeID, field.TypeString, value)
 	}
 	if _u.mutation.AssigneeIDCleared() {
 		_spec.ClearField(taskhistory.FieldAssigneeID, field.TypeString)
 	}
-	if value, ok := _u.mutation.AssignerID(); ok {
-		_spec.SetField(taskhistory.FieldAssignerID, field.TypeString, value)
-	}
 	if _u.mutation.AssignerIDCleared() {
 		_spec.ClearField(taskhistory.FieldAssignerID, field.TypeString)
-	}
-	if value, ok := _u.mutation.SystemGenerated(); ok {
-		_spec.SetField(taskhistory.FieldSystemGenerated, field.TypeBool, value)
-	}
-	if value, ok := _u.mutation.IsTemplate(); ok {
-		_spec.SetField(taskhistory.FieldIsTemplate, field.TypeBool, value)
-	}
-	if value, ok := _u.mutation.IsSuggested(); ok {
-		_spec.SetField(taskhistory.FieldIsSuggested, field.TypeBool, value)
-	}
-	if value, ok := _u.mutation.Priority(); ok {
-		_spec.SetField(taskhistory.FieldPriority, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.AddedPriority(); ok {
-		_spec.AddField(taskhistory.FieldPriority, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.Source(); ok {
-		_spec.SetField(taskhistory.FieldSource, field.TypeString, value)
 	}
 	if _u.mutation.SourceCleared() {
 		_spec.ClearField(taskhistory.FieldSource, field.TypeString)
 	}
-	if value, ok := _u.mutation.SourceKey(); ok {
-		_spec.SetField(taskhistory.FieldSourceKey, field.TypeString, value)
-	}
 	if _u.mutation.SourceKeyCleared() {
 		_spec.ClearField(taskhistory.FieldSourceKey, field.TypeString)
-	}
-	if value, ok := _u.mutation.IdempotencyKey(); ok {
-		_spec.SetField(taskhistory.FieldIdempotencyKey, field.TypeString, value)
 	}
 	if _u.mutation.IdempotencyKeyCleared() {
 		_spec.ClearField(taskhistory.FieldIdempotencyKey, field.TypeString)
 	}
-	if value, ok := _u.mutation.ExternalReferenceURL(); ok {
-		_spec.SetField(taskhistory.FieldExternalReferenceURL, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedExternalReferenceURL(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, taskhistory.FieldExternalReferenceURL, value)
-		})
-	}
 	if _u.mutation.ExternalReferenceURLCleared() {
 		_spec.ClearField(taskhistory.FieldExternalReferenceURL, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.ParentTaskID(); ok {
-		_spec.SetField(taskhistory.FieldParentTaskID, field.TypeString, value)
 	}
 	if _u.mutation.ParentTaskIDCleared() {
 		_spec.ClearField(taskhistory.FieldParentTaskID, field.TypeString)
 	}
-	_spec.Node.Schema = _u.schemaConfig.TaskHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{taskhistory.Label}
@@ -922,599 +175,9 @@ func (_u *TaskHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 // TaskHistoryUpdateOne is the builder for updating a single TaskHistory entity.
 type TaskHistoryUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *TaskHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *TaskHistoryUpdateOne) SetUpdatedAt(v time.Time) *TaskHistoryUpdateOne {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *TaskHistoryUpdateOne) ClearUpdatedAt() *TaskHistoryUpdateOne {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *TaskHistoryUpdateOne) SetUpdatedBy(v string) *TaskHistoryUpdateOne {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *TaskHistoryUpdateOne) SetNillableUpdatedBy(v *string) *TaskHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *TaskHistoryUpdateOne) ClearUpdatedBy() *TaskHistoryUpdateOne {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *TaskHistoryUpdateOne) SetUpdatedByImpersonator(v string) *TaskHistoryUpdateOne {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *TaskHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *TaskHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *TaskHistoryUpdateOne) ClearUpdatedByImpersonator() *TaskHistoryUpdateOne {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *TaskHistoryUpdateOne) SetDeletedAt(v time.Time) *TaskHistoryUpdateOne {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *TaskHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *TaskHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *TaskHistoryUpdateOne) ClearDeletedAt() *TaskHistoryUpdateOne {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *TaskHistoryUpdateOne) SetDeletedBy(v string) *TaskHistoryUpdateOne {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *TaskHistoryUpdateOne) SetNillableDeletedBy(v *string) *TaskHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *TaskHistoryUpdateOne) ClearDeletedBy() *TaskHistoryUpdateOne {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *TaskHistoryUpdateOne) SetTags(v []string) *TaskHistoryUpdateOne {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *TaskHistoryUpdateOne) AppendTags(v []string) *TaskHistoryUpdateOne {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *TaskHistoryUpdateOne) ClearTags() *TaskHistoryUpdateOne {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetTaskKindName sets the "task_kind_name" field.
-func (_u *TaskHistoryUpdateOne) SetTaskKindName(v string) *TaskHistoryUpdateOne {
-	_u.mutation.SetTaskKindName(v)
-	return _u
-}
-
-// SetNillableTaskKindName sets the "task_kind_name" field if the given value is not nil.
-func (_u *TaskHistoryUpdateOne) SetNillableTaskKindName(v *string) *TaskHistoryUpdateOne {
-	if v != nil {
-		_u.SetTaskKindName(*v)
-	}
-	return _u
-}
-
-// ClearTaskKindName clears the value of the "task_kind_name" field.
-func (_u *TaskHistoryUpdateOne) ClearTaskKindName() *TaskHistoryUpdateOne {
-	_u.mutation.ClearTaskKindName()
-	return _u
-}
-
-// SetTaskKindID sets the "task_kind_id" field.
-func (_u *TaskHistoryUpdateOne) SetTaskKindID(v string) *TaskHistoryUpdateOne {
-	_u.mutation.SetTaskKindID(v)
-	return _u
-}
-
-// SetNillableTaskKindID sets the "task_kind_id" field if the given value is not nil.
-func (_u *TaskHistoryUpdateOne) SetNillableTaskKindID(v *string) *TaskHistoryUpdateOne {
-	if v != nil {
-		_u.SetTaskKindID(*v)
-	}
-	return _u
-}
-
-// ClearTaskKindID clears the value of the "task_kind_id" field.
-func (_u *TaskHistoryUpdateOne) ClearTaskKindID() *TaskHistoryUpdateOne {
-	_u.mutation.ClearTaskKindID()
-	return _u
-}
-
-// SetEnvironmentName sets the "environment_name" field.
-func (_u *TaskHistoryUpdateOne) SetEnvironmentName(v string) *TaskHistoryUpdateOne {
-	_u.mutation.SetEnvironmentName(v)
-	return _u
-}
-
-// SetNillableEnvironmentName sets the "environment_name" field if the given value is not nil.
-func (_u *TaskHistoryUpdateOne) SetNillableEnvironmentName(v *string) *TaskHistoryUpdateOne {
-	if v != nil {
-		_u.SetEnvironmentName(*v)
-	}
-	return _u
-}
-
-// ClearEnvironmentName clears the value of the "environment_name" field.
-func (_u *TaskHistoryUpdateOne) ClearEnvironmentName() *TaskHistoryUpdateOne {
-	_u.mutation.ClearEnvironmentName()
-	return _u
-}
-
-// SetEnvironmentID sets the "environment_id" field.
-func (_u *TaskHistoryUpdateOne) SetEnvironmentID(v string) *TaskHistoryUpdateOne {
-	_u.mutation.SetEnvironmentID(v)
-	return _u
-}
-
-// SetNillableEnvironmentID sets the "environment_id" field if the given value is not nil.
-func (_u *TaskHistoryUpdateOne) SetNillableEnvironmentID(v *string) *TaskHistoryUpdateOne {
-	if v != nil {
-		_u.SetEnvironmentID(*v)
-	}
-	return _u
-}
-
-// ClearEnvironmentID clears the value of the "environment_id" field.
-func (_u *TaskHistoryUpdateOne) ClearEnvironmentID() *TaskHistoryUpdateOne {
-	_u.mutation.ClearEnvironmentID()
-	return _u
-}
-
-// SetScopeName sets the "scope_name" field.
-func (_u *TaskHistoryUpdateOne) SetScopeName(v string) *TaskHistoryUpdateOne {
-	_u.mutation.SetScopeName(v)
-	return _u
-}
-
-// SetNillableScopeName sets the "scope_name" field if the given value is not nil.
-func (_u *TaskHistoryUpdateOne) SetNillableScopeName(v *string) *TaskHistoryUpdateOne {
-	if v != nil {
-		_u.SetScopeName(*v)
-	}
-	return _u
-}
-
-// ClearScopeName clears the value of the "scope_name" field.
-func (_u *TaskHistoryUpdateOne) ClearScopeName() *TaskHistoryUpdateOne {
-	_u.mutation.ClearScopeName()
-	return _u
-}
-
-// SetScopeID sets the "scope_id" field.
-func (_u *TaskHistoryUpdateOne) SetScopeID(v string) *TaskHistoryUpdateOne {
-	_u.mutation.SetScopeID(v)
-	return _u
-}
-
-// SetNillableScopeID sets the "scope_id" field if the given value is not nil.
-func (_u *TaskHistoryUpdateOne) SetNillableScopeID(v *string) *TaskHistoryUpdateOne {
-	if v != nil {
-		_u.SetScopeID(*v)
-	}
-	return _u
-}
-
-// ClearScopeID clears the value of the "scope_id" field.
-func (_u *TaskHistoryUpdateOne) ClearScopeID() *TaskHistoryUpdateOne {
-	_u.mutation.ClearScopeID()
-	return _u
-}
-
-// SetWorkflowEligibleMarker sets the "workflow_eligible_marker" field.
-func (_u *TaskHistoryUpdateOne) SetWorkflowEligibleMarker(v bool) *TaskHistoryUpdateOne {
-	_u.mutation.SetWorkflowEligibleMarker(v)
-	return _u
-}
-
-// SetNillableWorkflowEligibleMarker sets the "workflow_eligible_marker" field if the given value is not nil.
-func (_u *TaskHistoryUpdateOne) SetNillableWorkflowEligibleMarker(v *bool) *TaskHistoryUpdateOne {
-	if v != nil {
-		_u.SetWorkflowEligibleMarker(*v)
-	}
-	return _u
-}
-
-// ClearWorkflowEligibleMarker clears the value of the "workflow_eligible_marker" field.
-func (_u *TaskHistoryUpdateOne) ClearWorkflowEligibleMarker() *TaskHistoryUpdateOne {
-	_u.mutation.ClearWorkflowEligibleMarker()
-	return _u
-}
-
-// SetExternalUUID sets the "external_uuid" field.
-func (_u *TaskHistoryUpdateOne) SetExternalUUID(v string) *TaskHistoryUpdateOne {
-	_u.mutation.SetExternalUUID(v)
-	return _u
-}
-
-// SetNillableExternalUUID sets the "external_uuid" field if the given value is not nil.
-func (_u *TaskHistoryUpdateOne) SetNillableExternalUUID(v *string) *TaskHistoryUpdateOne {
-	if v != nil {
-		_u.SetExternalUUID(*v)
-	}
-	return _u
-}
-
-// ClearExternalUUID clears the value of the "external_uuid" field.
-func (_u *TaskHistoryUpdateOne) ClearExternalUUID() *TaskHistoryUpdateOne {
-	_u.mutation.ClearExternalUUID()
-	return _u
-}
-
-// SetTitle sets the "title" field.
-func (_u *TaskHistoryUpdateOne) SetTitle(v string) *TaskHistoryUpdateOne {
-	_u.mutation.SetTitle(v)
-	return _u
-}
-
-// SetNillableTitle sets the "title" field if the given value is not nil.
-func (_u *TaskHistoryUpdateOne) SetNillableTitle(v *string) *TaskHistoryUpdateOne {
-	if v != nil {
-		_u.SetTitle(*v)
-	}
-	return _u
-}
-
-// SetDetails sets the "details" field.
-func (_u *TaskHistoryUpdateOne) SetDetails(v string) *TaskHistoryUpdateOne {
-	_u.mutation.SetDetails(v)
-	return _u
-}
-
-// SetNillableDetails sets the "details" field if the given value is not nil.
-func (_u *TaskHistoryUpdateOne) SetNillableDetails(v *string) *TaskHistoryUpdateOne {
-	if v != nil {
-		_u.SetDetails(*v)
-	}
-	return _u
-}
-
-// ClearDetails clears the value of the "details" field.
-func (_u *TaskHistoryUpdateOne) ClearDetails() *TaskHistoryUpdateOne {
-	_u.mutation.ClearDetails()
-	return _u
-}
-
-// SetDetailsJSON sets the "details_json" field.
-func (_u *TaskHistoryUpdateOne) SetDetailsJSON(v []interface{}) *TaskHistoryUpdateOne {
-	_u.mutation.SetDetailsJSON(v)
-	return _u
-}
-
-// AppendDetailsJSON appends value to the "details_json" field.
-func (_u *TaskHistoryUpdateOne) AppendDetailsJSON(v []interface{}) *TaskHistoryUpdateOne {
-	_u.mutation.AppendDetailsJSON(v)
-	return _u
-}
-
-// ClearDetailsJSON clears the value of the "details_json" field.
-func (_u *TaskHistoryUpdateOne) ClearDetailsJSON() *TaskHistoryUpdateOne {
-	_u.mutation.ClearDetailsJSON()
-	return _u
-}
-
-// SetMetadata sets the "metadata" field.
-func (_u *TaskHistoryUpdateOne) SetMetadata(v map[string]interface{}) *TaskHistoryUpdateOne {
-	_u.mutation.SetMetadata(v)
-	return _u
-}
-
-// ClearMetadata clears the value of the "metadata" field.
-func (_u *TaskHistoryUpdateOne) ClearMetadata() *TaskHistoryUpdateOne {
-	_u.mutation.ClearMetadata()
-	return _u
-}
-
-// SetStatus sets the "status" field.
-func (_u *TaskHistoryUpdateOne) SetStatus(v enums.TaskStatus) *TaskHistoryUpdateOne {
-	_u.mutation.SetStatus(v)
-	return _u
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *TaskHistoryUpdateOne) SetNillableStatus(v *enums.TaskStatus) *TaskHistoryUpdateOne {
-	if v != nil {
-		_u.SetStatus(*v)
-	}
-	return _u
-}
-
-// SetDue sets the "due" field.
-func (_u *TaskHistoryUpdateOne) SetDue(v models.DateTime) *TaskHistoryUpdateOne {
-	_u.mutation.SetDue(v)
-	return _u
-}
-
-// SetNillableDue sets the "due" field if the given value is not nil.
-func (_u *TaskHistoryUpdateOne) SetNillableDue(v *models.DateTime) *TaskHistoryUpdateOne {
-	if v != nil {
-		_u.SetDue(*v)
-	}
-	return _u
-}
-
-// ClearDue clears the value of the "due" field.
-func (_u *TaskHistoryUpdateOne) ClearDue() *TaskHistoryUpdateOne {
-	_u.mutation.ClearDue()
-	return _u
-}
-
-// SetCompleted sets the "completed" field.
-func (_u *TaskHistoryUpdateOne) SetCompleted(v models.DateTime) *TaskHistoryUpdateOne {
-	_u.mutation.SetCompleted(v)
-	return _u
-}
-
-// SetNillableCompleted sets the "completed" field if the given value is not nil.
-func (_u *TaskHistoryUpdateOne) SetNillableCompleted(v *models.DateTime) *TaskHistoryUpdateOne {
-	if v != nil {
-		_u.SetCompleted(*v)
-	}
-	return _u
-}
-
-// ClearCompleted clears the value of the "completed" field.
-func (_u *TaskHistoryUpdateOne) ClearCompleted() *TaskHistoryUpdateOne {
-	_u.mutation.ClearCompleted()
-	return _u
-}
-
-// SetAssigneeID sets the "assignee_id" field.
-func (_u *TaskHistoryUpdateOne) SetAssigneeID(v string) *TaskHistoryUpdateOne {
-	_u.mutation.SetAssigneeID(v)
-	return _u
-}
-
-// SetNillableAssigneeID sets the "assignee_id" field if the given value is not nil.
-func (_u *TaskHistoryUpdateOne) SetNillableAssigneeID(v *string) *TaskHistoryUpdateOne {
-	if v != nil {
-		_u.SetAssigneeID(*v)
-	}
-	return _u
-}
-
-// ClearAssigneeID clears the value of the "assignee_id" field.
-func (_u *TaskHistoryUpdateOne) ClearAssigneeID() *TaskHistoryUpdateOne {
-	_u.mutation.ClearAssigneeID()
-	return _u
-}
-
-// SetAssignerID sets the "assigner_id" field.
-func (_u *TaskHistoryUpdateOne) SetAssignerID(v string) *TaskHistoryUpdateOne {
-	_u.mutation.SetAssignerID(v)
-	return _u
-}
-
-// SetNillableAssignerID sets the "assigner_id" field if the given value is not nil.
-func (_u *TaskHistoryUpdateOne) SetNillableAssignerID(v *string) *TaskHistoryUpdateOne {
-	if v != nil {
-		_u.SetAssignerID(*v)
-	}
-	return _u
-}
-
-// ClearAssignerID clears the value of the "assigner_id" field.
-func (_u *TaskHistoryUpdateOne) ClearAssignerID() *TaskHistoryUpdateOne {
-	_u.mutation.ClearAssignerID()
-	return _u
-}
-
-// SetSystemGenerated sets the "system_generated" field.
-func (_u *TaskHistoryUpdateOne) SetSystemGenerated(v bool) *TaskHistoryUpdateOne {
-	_u.mutation.SetSystemGenerated(v)
-	return _u
-}
-
-// SetNillableSystemGenerated sets the "system_generated" field if the given value is not nil.
-func (_u *TaskHistoryUpdateOne) SetNillableSystemGenerated(v *bool) *TaskHistoryUpdateOne {
-	if v != nil {
-		_u.SetSystemGenerated(*v)
-	}
-	return _u
-}
-
-// SetIsTemplate sets the "is_template" field.
-func (_u *TaskHistoryUpdateOne) SetIsTemplate(v bool) *TaskHistoryUpdateOne {
-	_u.mutation.SetIsTemplate(v)
-	return _u
-}
-
-// SetNillableIsTemplate sets the "is_template" field if the given value is not nil.
-func (_u *TaskHistoryUpdateOne) SetNillableIsTemplate(v *bool) *TaskHistoryUpdateOne {
-	if v != nil {
-		_u.SetIsTemplate(*v)
-	}
-	return _u
-}
-
-// SetIsSuggested sets the "is_suggested" field.
-func (_u *TaskHistoryUpdateOne) SetIsSuggested(v bool) *TaskHistoryUpdateOne {
-	_u.mutation.SetIsSuggested(v)
-	return _u
-}
-
-// SetNillableIsSuggested sets the "is_suggested" field if the given value is not nil.
-func (_u *TaskHistoryUpdateOne) SetNillableIsSuggested(v *bool) *TaskHistoryUpdateOne {
-	if v != nil {
-		_u.SetIsSuggested(*v)
-	}
-	return _u
-}
-
-// SetPriority sets the "priority" field.
-func (_u *TaskHistoryUpdateOne) SetPriority(v int) *TaskHistoryUpdateOne {
-	_u.mutation.ResetPriority()
-	_u.mutation.SetPriority(v)
-	return _u
-}
-
-// SetNillablePriority sets the "priority" field if the given value is not nil.
-func (_u *TaskHistoryUpdateOne) SetNillablePriority(v *int) *TaskHistoryUpdateOne {
-	if v != nil {
-		_u.SetPriority(*v)
-	}
-	return _u
-}
-
-// AddPriority adds value to the "priority" field.
-func (_u *TaskHistoryUpdateOne) AddPriority(v int) *TaskHistoryUpdateOne {
-	_u.mutation.AddPriority(v)
-	return _u
-}
-
-// SetSource sets the "source" field.
-func (_u *TaskHistoryUpdateOne) SetSource(v string) *TaskHistoryUpdateOne {
-	_u.mutation.SetSource(v)
-	return _u
-}
-
-// SetNillableSource sets the "source" field if the given value is not nil.
-func (_u *TaskHistoryUpdateOne) SetNillableSource(v *string) *TaskHistoryUpdateOne {
-	if v != nil {
-		_u.SetSource(*v)
-	}
-	return _u
-}
-
-// ClearSource clears the value of the "source" field.
-func (_u *TaskHistoryUpdateOne) ClearSource() *TaskHistoryUpdateOne {
-	_u.mutation.ClearSource()
-	return _u
-}
-
-// SetSourceKey sets the "source_key" field.
-func (_u *TaskHistoryUpdateOne) SetSourceKey(v string) *TaskHistoryUpdateOne {
-	_u.mutation.SetSourceKey(v)
-	return _u
-}
-
-// SetNillableSourceKey sets the "source_key" field if the given value is not nil.
-func (_u *TaskHistoryUpdateOne) SetNillableSourceKey(v *string) *TaskHistoryUpdateOne {
-	if v != nil {
-		_u.SetSourceKey(*v)
-	}
-	return _u
-}
-
-// ClearSourceKey clears the value of the "source_key" field.
-func (_u *TaskHistoryUpdateOne) ClearSourceKey() *TaskHistoryUpdateOne {
-	_u.mutation.ClearSourceKey()
-	return _u
-}
-
-// SetIdempotencyKey sets the "idempotency_key" field.
-func (_u *TaskHistoryUpdateOne) SetIdempotencyKey(v string) *TaskHistoryUpdateOne {
-	_u.mutation.SetIdempotencyKey(v)
-	return _u
-}
-
-// SetNillableIdempotencyKey sets the "idempotency_key" field if the given value is not nil.
-func (_u *TaskHistoryUpdateOne) SetNillableIdempotencyKey(v *string) *TaskHistoryUpdateOne {
-	if v != nil {
-		_u.SetIdempotencyKey(*v)
-	}
-	return _u
-}
-
-// ClearIdempotencyKey clears the value of the "idempotency_key" field.
-func (_u *TaskHistoryUpdateOne) ClearIdempotencyKey() *TaskHistoryUpdateOne {
-	_u.mutation.ClearIdempotencyKey()
-	return _u
-}
-
-// SetExternalReferenceURL sets the "external_reference_url" field.
-func (_u *TaskHistoryUpdateOne) SetExternalReferenceURL(v []string) *TaskHistoryUpdateOne {
-	_u.mutation.SetExternalReferenceURL(v)
-	return _u
-}
-
-// AppendExternalReferenceURL appends value to the "external_reference_url" field.
-func (_u *TaskHistoryUpdateOne) AppendExternalReferenceURL(v []string) *TaskHistoryUpdateOne {
-	_u.mutation.AppendExternalReferenceURL(v)
-	return _u
-}
-
-// ClearExternalReferenceURL clears the value of the "external_reference_url" field.
-func (_u *TaskHistoryUpdateOne) ClearExternalReferenceURL() *TaskHistoryUpdateOne {
-	_u.mutation.ClearExternalReferenceURL()
-	return _u
-}
-
-// SetParentTaskID sets the "parent_task_id" field.
-func (_u *TaskHistoryUpdateOne) SetParentTaskID(v string) *TaskHistoryUpdateOne {
-	_u.mutation.SetParentTaskID(v)
-	return _u
-}
-
-// SetNillableParentTaskID sets the "parent_task_id" field if the given value is not nil.
-func (_u *TaskHistoryUpdateOne) SetNillableParentTaskID(v *string) *TaskHistoryUpdateOne {
-	if v != nil {
-		_u.SetParentTaskID(*v)
-	}
-	return _u
-}
-
-// ClearParentTaskID clears the value of the "parent_task_id" field.
-func (_u *TaskHistoryUpdateOne) ClearParentTaskID() *TaskHistoryUpdateOne {
-	_u.mutation.ClearParentTaskID()
-	return _u
+	fields   []string
+	hooks    []Hook
+	mutation *TaskHistoryMutation
 }
 
 // Mutation returns the TaskHistoryMutation object of the builder.
@@ -1537,9 +200,6 @@ func (_u *TaskHistoryUpdateOne) Select(field string, fields ...string) *TaskHist
 
 // Save executes the query and returns the updated TaskHistory entity.
 func (_u *TaskHistoryUpdateOne) Save(ctx context.Context) (*TaskHistory, error) {
-	if err := _u.defaults(); err != nil {
-		return nil, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -1565,38 +225,7 @@ func (_u *TaskHistoryUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *TaskHistoryUpdateOne) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if taskhistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized taskhistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := taskhistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *TaskHistoryUpdateOne) check() error {
-	if v, ok := _u.mutation.Status(); ok {
-		if err := taskhistory.StatusValidator(v); err != nil {
-			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "TaskHistory.status": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *TaskHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TaskHistoryUpdateOne {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *TaskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TaskHistory, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(taskhistory.Table, taskhistory.Columns, sqlgraph.NewFieldSpec(taskhistory.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
@@ -1628,46 +257,23 @@ func (_u *TaskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TaskHistory
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(taskhistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(taskhistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(taskhistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(taskhistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(taskhistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(taskhistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(taskhistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(taskhistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(taskhistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(taskhistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(taskhistory.FieldDeletedBy, field.TypeString, value)
-	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(taskhistory.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(taskhistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, taskhistory.FieldTags, value)
-		})
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(taskhistory.FieldTags, field.TypeJSON)
@@ -1675,160 +281,66 @@ func (_u *TaskHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TaskHistory
 	if _u.mutation.OwnerIDCleared() {
 		_spec.ClearField(taskhistory.FieldOwnerID, field.TypeString)
 	}
-	if value, ok := _u.mutation.TaskKindName(); ok {
-		_spec.SetField(taskhistory.FieldTaskKindName, field.TypeString, value)
-	}
 	if _u.mutation.TaskKindNameCleared() {
 		_spec.ClearField(taskhistory.FieldTaskKindName, field.TypeString)
-	}
-	if value, ok := _u.mutation.TaskKindID(); ok {
-		_spec.SetField(taskhistory.FieldTaskKindID, field.TypeString, value)
 	}
 	if _u.mutation.TaskKindIDCleared() {
 		_spec.ClearField(taskhistory.FieldTaskKindID, field.TypeString)
 	}
-	if value, ok := _u.mutation.EnvironmentName(); ok {
-		_spec.SetField(taskhistory.FieldEnvironmentName, field.TypeString, value)
-	}
 	if _u.mutation.EnvironmentNameCleared() {
 		_spec.ClearField(taskhistory.FieldEnvironmentName, field.TypeString)
-	}
-	if value, ok := _u.mutation.EnvironmentID(); ok {
-		_spec.SetField(taskhistory.FieldEnvironmentID, field.TypeString, value)
 	}
 	if _u.mutation.EnvironmentIDCleared() {
 		_spec.ClearField(taskhistory.FieldEnvironmentID, field.TypeString)
 	}
-	if value, ok := _u.mutation.ScopeName(); ok {
-		_spec.SetField(taskhistory.FieldScopeName, field.TypeString, value)
-	}
 	if _u.mutation.ScopeNameCleared() {
 		_spec.ClearField(taskhistory.FieldScopeName, field.TypeString)
-	}
-	if value, ok := _u.mutation.ScopeID(); ok {
-		_spec.SetField(taskhistory.FieldScopeID, field.TypeString, value)
 	}
 	if _u.mutation.ScopeIDCleared() {
 		_spec.ClearField(taskhistory.FieldScopeID, field.TypeString)
 	}
-	if value, ok := _u.mutation.WorkflowEligibleMarker(); ok {
-		_spec.SetField(taskhistory.FieldWorkflowEligibleMarker, field.TypeBool, value)
-	}
 	if _u.mutation.WorkflowEligibleMarkerCleared() {
 		_spec.ClearField(taskhistory.FieldWorkflowEligibleMarker, field.TypeBool)
-	}
-	if value, ok := _u.mutation.ExternalUUID(); ok {
-		_spec.SetField(taskhistory.FieldExternalUUID, field.TypeString, value)
 	}
 	if _u.mutation.ExternalUUIDCleared() {
 		_spec.ClearField(taskhistory.FieldExternalUUID, field.TypeString)
 	}
-	if value, ok := _u.mutation.Title(); ok {
-		_spec.SetField(taskhistory.FieldTitle, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.Details(); ok {
-		_spec.SetField(taskhistory.FieldDetails, field.TypeString, value)
-	}
 	if _u.mutation.DetailsCleared() {
 		_spec.ClearField(taskhistory.FieldDetails, field.TypeString)
-	}
-	if value, ok := _u.mutation.DetailsJSON(); ok {
-		_spec.SetField(taskhistory.FieldDetailsJSON, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedDetailsJSON(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, taskhistory.FieldDetailsJSON, value)
-		})
 	}
 	if _u.mutation.DetailsJSONCleared() {
 		_spec.ClearField(taskhistory.FieldDetailsJSON, field.TypeJSON)
 	}
-	if value, ok := _u.mutation.Metadata(); ok {
-		_spec.SetField(taskhistory.FieldMetadata, field.TypeJSON, value)
-	}
 	if _u.mutation.MetadataCleared() {
 		_spec.ClearField(taskhistory.FieldMetadata, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(taskhistory.FieldStatus, field.TypeEnum, value)
-	}
-	if value, ok := _u.mutation.Due(); ok {
-		_spec.SetField(taskhistory.FieldDue, field.TypeTime, value)
 	}
 	if _u.mutation.DueCleared() {
 		_spec.ClearField(taskhistory.FieldDue, field.TypeTime)
 	}
-	if value, ok := _u.mutation.Completed(); ok {
-		_spec.SetField(taskhistory.FieldCompleted, field.TypeTime, value)
-	}
 	if _u.mutation.CompletedCleared() {
 		_spec.ClearField(taskhistory.FieldCompleted, field.TypeTime)
-	}
-	if value, ok := _u.mutation.AssigneeID(); ok {
-		_spec.SetField(taskhistory.FieldAssigneeID, field.TypeString, value)
 	}
 	if _u.mutation.AssigneeIDCleared() {
 		_spec.ClearField(taskhistory.FieldAssigneeID, field.TypeString)
 	}
-	if value, ok := _u.mutation.AssignerID(); ok {
-		_spec.SetField(taskhistory.FieldAssignerID, field.TypeString, value)
-	}
 	if _u.mutation.AssignerIDCleared() {
 		_spec.ClearField(taskhistory.FieldAssignerID, field.TypeString)
-	}
-	if value, ok := _u.mutation.SystemGenerated(); ok {
-		_spec.SetField(taskhistory.FieldSystemGenerated, field.TypeBool, value)
-	}
-	if value, ok := _u.mutation.IsTemplate(); ok {
-		_spec.SetField(taskhistory.FieldIsTemplate, field.TypeBool, value)
-	}
-	if value, ok := _u.mutation.IsSuggested(); ok {
-		_spec.SetField(taskhistory.FieldIsSuggested, field.TypeBool, value)
-	}
-	if value, ok := _u.mutation.Priority(); ok {
-		_spec.SetField(taskhistory.FieldPriority, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.AddedPriority(); ok {
-		_spec.AddField(taskhistory.FieldPriority, field.TypeInt, value)
-	}
-	if value, ok := _u.mutation.Source(); ok {
-		_spec.SetField(taskhistory.FieldSource, field.TypeString, value)
 	}
 	if _u.mutation.SourceCleared() {
 		_spec.ClearField(taskhistory.FieldSource, field.TypeString)
 	}
-	if value, ok := _u.mutation.SourceKey(); ok {
-		_spec.SetField(taskhistory.FieldSourceKey, field.TypeString, value)
-	}
 	if _u.mutation.SourceKeyCleared() {
 		_spec.ClearField(taskhistory.FieldSourceKey, field.TypeString)
-	}
-	if value, ok := _u.mutation.IdempotencyKey(); ok {
-		_spec.SetField(taskhistory.FieldIdempotencyKey, field.TypeString, value)
 	}
 	if _u.mutation.IdempotencyKeyCleared() {
 		_spec.ClearField(taskhistory.FieldIdempotencyKey, field.TypeString)
 	}
-	if value, ok := _u.mutation.ExternalReferenceURL(); ok {
-		_spec.SetField(taskhistory.FieldExternalReferenceURL, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedExternalReferenceURL(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, taskhistory.FieldExternalReferenceURL, value)
-		})
-	}
 	if _u.mutation.ExternalReferenceURLCleared() {
 		_spec.ClearField(taskhistory.FieldExternalReferenceURL, field.TypeJSON)
-	}
-	if value, ok := _u.mutation.ParentTaskID(); ok {
-		_spec.SetField(taskhistory.FieldParentTaskID, field.TypeString, value)
 	}
 	if _u.mutation.ParentTaskIDCleared() {
 		_spec.ClearField(taskhistory.FieldParentTaskID, field.TypeString)
 	}
-	_spec.Node.Schema = _u.schemaConfig.TaskHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	_node = &TaskHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

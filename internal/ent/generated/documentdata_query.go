@@ -21,7 +21,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -94,9 +93,6 @@ func (_q *DocumentDataQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, documentdata.OwnerTable, documentdata.OwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.DocumentData
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -119,9 +115,6 @@ func (_q *DocumentDataQuery) QueryEnvironment() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, documentdata.EnvironmentTable, documentdata.EnvironmentColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.DocumentData
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -144,9 +137,6 @@ func (_q *DocumentDataQuery) QueryScope() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, documentdata.ScopeTable, documentdata.ScopeColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.DocumentData
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -169,9 +159,6 @@ func (_q *DocumentDataQuery) QueryTemplate() *TemplateQuery {
 			sqlgraph.To(template.Table, template.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, documentdata.TemplateTable, documentdata.TemplateColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Template
-		step.Edge.Schema = schemaConfig.DocumentData
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -194,9 +181,6 @@ func (_q *DocumentDataQuery) QueryEntities() *EntityQuery {
 			sqlgraph.To(entity.Table, entity.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, documentdata.EntitiesTable, documentdata.EntitiesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.EntityDocuments
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -219,9 +203,6 @@ func (_q *DocumentDataQuery) QueryFiles() *FileQuery {
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, documentdata.FilesTable, documentdata.FilesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.DocumentDataFiles
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -601,8 +582,6 @@ func (_q *DocumentDataQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.DocumentData
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -804,7 +783,6 @@ func (_q *DocumentDataQuery) loadEntities(ctx context.Context, query *EntityQuer
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(documentdata.EntitiesTable)
-		joinT.Schema(_q.schemaConfig.EntityDocuments)
 		s.Join(joinT).On(s.C(entity.FieldID), joinT.C(documentdata.EntitiesPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(documentdata.EntitiesPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -866,7 +844,6 @@ func (_q *DocumentDataQuery) loadFiles(ctx context.Context, query *FileQuery, no
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(documentdata.FilesTable)
-		joinT.Schema(_q.schemaConfig.DocumentDataFiles)
 		s.Join(joinT).On(s.C(file.FieldID), joinT.C(documentdata.FilesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(documentdata.FilesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -918,8 +895,6 @@ func (_q *DocumentDataQuery) loadFiles(ctx context.Context, query *FileQuery, no
 
 func (_q *DocumentDataQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.DocumentData
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -997,9 +972,6 @@ func (_q *DocumentDataQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.DocumentData)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}

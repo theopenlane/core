@@ -35,7 +35,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -145,9 +144,6 @@ func (_q *IdentityHolderQuery) QueryOwner() *OrganizationQuery {
 			sqlgraph.To(organization.Table, organization.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, identityholder.OwnerTable, identityholder.OwnerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.IdentityHolder
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -170,9 +166,6 @@ func (_q *IdentityHolderQuery) QueryBlockedGroups() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, identityholder.BlockedGroupsTable, identityholder.BlockedGroupsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -195,9 +188,6 @@ func (_q *IdentityHolderQuery) QueryEditors() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, identityholder.EditorsTable, identityholder.EditorsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -220,9 +210,6 @@ func (_q *IdentityHolderQuery) QueryViewers() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, identityholder.ViewersTable, identityholder.ViewersColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -245,9 +232,6 @@ func (_q *IdentityHolderQuery) QueryInternalOwnerUser() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, identityholder.InternalOwnerUserTable, identityholder.InternalOwnerUserColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.IdentityHolder
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -270,9 +254,6 @@ func (_q *IdentityHolderQuery) QueryInternalOwnerGroup() *GroupQuery {
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, identityholder.InternalOwnerGroupTable, identityholder.InternalOwnerGroupColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.IdentityHolder
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -295,9 +276,6 @@ func (_q *IdentityHolderQuery) QueryEnvironment() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, identityholder.EnvironmentTable, identityholder.EnvironmentColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.IdentityHolder
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -320,9 +298,6 @@ func (_q *IdentityHolderQuery) QueryScope() *CustomTypeEnumQuery {
 			sqlgraph.To(customtypeenum.Table, customtypeenum.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, identityholder.ScopeTable, identityholder.ScopeColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.IdentityHolder
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -345,9 +320,6 @@ func (_q *IdentityHolderQuery) QueryEmployer() *EntityQuery {
 			sqlgraph.To(entity.Table, entity.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, identityholder.EmployerTable, identityholder.EmployerColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.IdentityHolder
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -370,9 +342,6 @@ func (_q *IdentityHolderQuery) QueryAssessmentResponses() *AssessmentResponseQue
 			sqlgraph.To(assessmentresponse.Table, assessmentresponse.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, identityholder.AssessmentResponsesTable, identityholder.AssessmentResponsesColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.AssessmentResponse
-		step.Edge.Schema = schemaConfig.AssessmentResponse
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -395,9 +364,6 @@ func (_q *IdentityHolderQuery) QueryAssessments() *AssessmentQuery {
 			sqlgraph.To(assessment.Table, assessment.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, identityholder.AssessmentsTable, identityholder.AssessmentsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Assessment
-		step.Edge.Schema = schemaConfig.IdentityHolderAssessments
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -420,9 +386,6 @@ func (_q *IdentityHolderQuery) QueryTemplates() *TemplateQuery {
 			sqlgraph.To(template.Table, template.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, identityholder.TemplatesTable, identityholder.TemplatesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Template
-		step.Edge.Schema = schemaConfig.IdentityHolderTemplates
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -445,9 +408,6 @@ func (_q *IdentityHolderQuery) QueryAssets() *AssetQuery {
 			sqlgraph.To(asset.Table, asset.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, identityholder.AssetsTable, identityholder.AssetsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Asset
-		step.Edge.Schema = schemaConfig.IdentityHolderAssets
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -470,9 +430,6 @@ func (_q *IdentityHolderQuery) QueryEntities() *EntityQuery {
 			sqlgraph.To(entity.Table, entity.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, identityholder.EntitiesTable, identityholder.EntitiesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Entity
-		step.Edge.Schema = schemaConfig.IdentityHolderEntities
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -495,9 +452,6 @@ func (_q *IdentityHolderQuery) QueryDirectoryAccounts() *DirectoryAccountQuery {
 			sqlgraph.To(directoryaccount.Table, directoryaccount.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, identityholder.DirectoryAccountsTable, identityholder.DirectoryAccountsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.DirectoryAccount
-		step.Edge.Schema = schemaConfig.DirectoryAccount
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -520,9 +474,6 @@ func (_q *IdentityHolderQuery) QueryControls() *ControlQuery {
 			sqlgraph.To(control.Table, control.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, identityholder.ControlsTable, identityholder.ControlsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.ControlIdentityHolders
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -545,9 +496,6 @@ func (_q *IdentityHolderQuery) QuerySubcontrols() *SubcontrolQuery {
 			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, identityholder.SubcontrolsTable, identityholder.SubcontrolsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.SubcontrolIdentityHolders
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -570,9 +518,6 @@ func (_q *IdentityHolderQuery) QueryPlatforms() *PlatformQuery {
 			sqlgraph.To(platform.Table, platform.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, identityholder.PlatformsTable, identityholder.PlatformsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Platform
-		step.Edge.Schema = schemaConfig.PlatformIdentityHolders
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -595,9 +540,6 @@ func (_q *IdentityHolderQuery) QueryCampaigns() *CampaignQuery {
 			sqlgraph.To(campaign.Table, campaign.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, identityholder.CampaignsTable, identityholder.CampaignsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Campaign
-		step.Edge.Schema = schemaConfig.CampaignIdentityHolders
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -620,9 +562,6 @@ func (_q *IdentityHolderQuery) QueryTasks() *TaskQuery {
 			sqlgraph.To(task.Table, task.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, identityholder.TasksTable, identityholder.TasksPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Task
-		step.Edge.Schema = schemaConfig.IdentityHolderTasks
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -645,9 +584,6 @@ func (_q *IdentityHolderQuery) QueryFiles() *FileQuery {
 			sqlgraph.To(file.Table, file.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, false, identityholder.FilesTable, identityholder.FilesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.IdentityHolderFiles
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -670,9 +606,6 @@ func (_q *IdentityHolderQuery) QueryFindings() *FindingQuery {
 			sqlgraph.To(finding.Table, finding.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, identityholder.FindingsTable, identityholder.FindingsPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Finding
-		step.Edge.Schema = schemaConfig.FindingIdentityHolders
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -695,9 +628,6 @@ func (_q *IdentityHolderQuery) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery
 			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, true, identityholder.WorkflowObjectRefsTable, identityholder.WorkflowObjectRefsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.WorkflowObjectRef
-		step.Edge.Schema = schemaConfig.WorkflowObjectRef
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -720,9 +650,6 @@ func (_q *IdentityHolderQuery) QueryAccessPlatforms() *PlatformQuery {
 			sqlgraph.To(platform.Table, platform.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, identityholder.AccessPlatformsTable, identityholder.AccessPlatformsColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.Platform
-		step.Edge.Schema = schemaConfig.Platform
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -745,9 +672,6 @@ func (_q *IdentityHolderQuery) QueryUser() *UserQuery {
 			sqlgraph.To(user.Table, user.FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, identityholder.UserTable, identityholder.UserColumn),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.IdentityHolder
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -770,9 +694,6 @@ func (_q *IdentityHolderQuery) QueryInternalPolicies() *InternalPolicyQuery {
 			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
 			sqlgraph.Edge(sqlgraph.M2M, true, identityholder.InternalPoliciesTable, identityholder.InternalPoliciesPrimaryKey...),
 		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.InternalPolicy
-		step.Edge.Schema = schemaConfig.InternalPolicyIdentityHolders
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -1412,8 +1333,6 @@ func (_q *IdentityHolderQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
-	_spec.Node.Schema = _q.schemaConfig.IdentityHolder
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -2060,7 +1979,6 @@ func (_q *IdentityHolderQuery) loadAssessments(ctx context.Context, query *Asses
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(identityholder.AssessmentsTable)
-		joinT.Schema(_q.schemaConfig.IdentityHolderAssessments)
 		s.Join(joinT).On(s.C(assessment.FieldID), joinT.C(identityholder.AssessmentsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(identityholder.AssessmentsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2122,7 +2040,6 @@ func (_q *IdentityHolderQuery) loadTemplates(ctx context.Context, query *Templat
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(identityholder.TemplatesTable)
-		joinT.Schema(_q.schemaConfig.IdentityHolderTemplates)
 		s.Join(joinT).On(s.C(template.FieldID), joinT.C(identityholder.TemplatesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(identityholder.TemplatesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2184,7 +2101,6 @@ func (_q *IdentityHolderQuery) loadAssets(ctx context.Context, query *AssetQuery
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(identityholder.AssetsTable)
-		joinT.Schema(_q.schemaConfig.IdentityHolderAssets)
 		s.Join(joinT).On(s.C(asset.FieldID), joinT.C(identityholder.AssetsPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(identityholder.AssetsPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2246,7 +2162,6 @@ func (_q *IdentityHolderQuery) loadEntities(ctx context.Context, query *EntityQu
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(identityholder.EntitiesTable)
-		joinT.Schema(_q.schemaConfig.IdentityHolderEntities)
 		s.Join(joinT).On(s.C(entity.FieldID), joinT.C(identityholder.EntitiesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(identityholder.EntitiesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2341,7 +2256,6 @@ func (_q *IdentityHolderQuery) loadControls(ctx context.Context, query *ControlQ
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(identityholder.ControlsTable)
-		joinT.Schema(_q.schemaConfig.ControlIdentityHolders)
 		s.Join(joinT).On(s.C(control.FieldID), joinT.C(identityholder.ControlsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(identityholder.ControlsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2403,7 +2317,6 @@ func (_q *IdentityHolderQuery) loadSubcontrols(ctx context.Context, query *Subco
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(identityholder.SubcontrolsTable)
-		joinT.Schema(_q.schemaConfig.SubcontrolIdentityHolders)
 		s.Join(joinT).On(s.C(subcontrol.FieldID), joinT.C(identityholder.SubcontrolsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(identityholder.SubcontrolsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2465,7 +2378,6 @@ func (_q *IdentityHolderQuery) loadPlatforms(ctx context.Context, query *Platfor
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(identityholder.PlatformsTable)
-		joinT.Schema(_q.schemaConfig.PlatformIdentityHolders)
 		s.Join(joinT).On(s.C(platform.FieldID), joinT.C(identityholder.PlatformsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(identityholder.PlatformsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2527,7 +2439,6 @@ func (_q *IdentityHolderQuery) loadCampaigns(ctx context.Context, query *Campaig
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(identityholder.CampaignsTable)
-		joinT.Schema(_q.schemaConfig.CampaignIdentityHolders)
 		s.Join(joinT).On(s.C(campaign.FieldID), joinT.C(identityholder.CampaignsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(identityholder.CampaignsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2589,7 +2500,6 @@ func (_q *IdentityHolderQuery) loadTasks(ctx context.Context, query *TaskQuery, 
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(identityholder.TasksTable)
-		joinT.Schema(_q.schemaConfig.IdentityHolderTasks)
 		s.Join(joinT).On(s.C(task.FieldID), joinT.C(identityholder.TasksPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(identityholder.TasksPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2651,7 +2561,6 @@ func (_q *IdentityHolderQuery) loadFiles(ctx context.Context, query *FileQuery, 
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(identityholder.FilesTable)
-		joinT.Schema(_q.schemaConfig.IdentityHolderFiles)
 		s.Join(joinT).On(s.C(file.FieldID), joinT.C(identityholder.FilesPrimaryKey[1]))
 		s.Where(sql.InValues(joinT.C(identityholder.FilesPrimaryKey[0]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2713,7 +2622,6 @@ func (_q *IdentityHolderQuery) loadFindings(ctx context.Context, query *FindingQ
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(identityholder.FindingsTable)
-		joinT.Schema(_q.schemaConfig.FindingIdentityHolders)
 		s.Join(joinT).On(s.C(finding.FieldID), joinT.C(identityholder.FindingsPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(identityholder.FindingsPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2866,7 +2774,6 @@ func (_q *IdentityHolderQuery) loadInternalPolicies(ctx context.Context, query *
 	}
 	query.Where(func(s *sql.Selector) {
 		joinT := sql.Table(identityholder.InternalPoliciesTable)
-		joinT.Schema(_q.schemaConfig.InternalPolicyIdentityHolders)
 		s.Join(joinT).On(s.C(internalpolicy.FieldID), joinT.C(identityholder.InternalPoliciesPrimaryKey[0]))
 		s.Where(sql.InValues(joinT.C(identityholder.InternalPoliciesPrimaryKey[1]), edgeIDs...))
 		columns := s.SelectedColumns()
@@ -2918,8 +2825,6 @@ func (_q *IdentityHolderQuery) loadInternalPolicies(ctx context.Context, query *
 
 func (_q *IdentityHolderQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
-	_spec.Node.Schema = _q.schemaConfig.IdentityHolder
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
 	if len(_q.modifiers) > 0 {
 		_spec.Modifiers = _q.modifiers
 	}
@@ -3006,9 +2911,6 @@ func (_q *IdentityHolderQuery) sqlQuery(ctx context.Context) *sql.Selector {
 	if _q.ctx.Unique != nil && *_q.ctx.Unique {
 		selector.Distinct()
 	}
-	t1.Schema(_q.schemaConfig.IdentityHolder)
-	ctx = internal.NewSchemaConfigContext(ctx, _q.schemaConfig)
-	selector.WithContext(ctx)
 	for _, m := range _q.modifiers {
 		m(selector)
 	}

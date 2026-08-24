@@ -584,7 +584,6 @@ func (_c *WorkflowAssignmentCreate) createSpec() (*WorkflowAssignment, *sqlgraph
 		_node = &WorkflowAssignment{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(workflowassignment.Table, sqlgraph.NewFieldSpec(workflowassignment.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.WorkflowAssignment
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id
@@ -688,7 +687,6 @@ func (_c *WorkflowAssignmentCreate) createSpec() (*WorkflowAssignment, *sqlgraph
 				IDSpec: sqlgraph.NewFieldSpec(organization.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowAssignment
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -706,7 +704,6 @@ func (_c *WorkflowAssignmentCreate) createSpec() (*WorkflowAssignment, *sqlgraph
 				IDSpec: sqlgraph.NewFieldSpec(workflowinstance.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowAssignment
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -724,7 +721,6 @@ func (_c *WorkflowAssignmentCreate) createSpec() (*WorkflowAssignment, *sqlgraph
 				IDSpec: sqlgraph.NewFieldSpec(workflowassignmenttarget.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowAssignmentTarget
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -741,7 +737,6 @@ func (_c *WorkflowAssignmentCreate) createSpec() (*WorkflowAssignment, *sqlgraph
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowAssignment
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -759,7 +754,6 @@ func (_c *WorkflowAssignmentCreate) createSpec() (*WorkflowAssignment, *sqlgraph
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.WorkflowAssignment
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

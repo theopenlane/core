@@ -9,8 +9,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/common/enums"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // ID filters vertices based on their ID field.
@@ -680,9 +678,6 @@ func HasOwner() predicate.VendorScoringConfig {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.VendorScoringConfig
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -691,9 +686,6 @@ func HasOwner() predicate.VendorScoringConfig {
 func HasOwnerWith(preds ...predicate.Organization) predicate.VendorScoringConfig {
 	return predicate.VendorScoringConfig(func(s *sql.Selector) {
 		step := newOwnerStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.VendorScoringConfig
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -709,9 +701,6 @@ func HasVendorRiskScores() predicate.VendorScoringConfig {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, VendorRiskScoresTable, VendorRiskScoresColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.VendorRiskScore
-		step.Edge.Schema = schemaConfig.VendorRiskScore
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -720,9 +709,6 @@ func HasVendorRiskScores() predicate.VendorScoringConfig {
 func HasVendorRiskScoresWith(preds ...predicate.VendorRiskScore) predicate.VendorScoringConfig {
 	return predicate.VendorScoringConfig(func(s *sql.Selector) {
 		step := newVendorRiskScoresStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.VendorRiskScore
-		step.Edge.Schema = schemaConfig.VendorRiskScore
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

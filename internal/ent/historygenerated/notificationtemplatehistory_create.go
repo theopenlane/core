@@ -648,7 +648,6 @@ func (_c *NotificationTemplateHistoryCreate) createSpec() (*NotificationTemplate
 		_node = &NotificationTemplateHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(notificationtemplatehistory.Table, sqlgraph.NewFieldSpec(notificationtemplatehistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.NotificationTemplateHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

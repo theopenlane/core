@@ -8,363 +8,24 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/common/enums"
-	"github.com/theopenlane/core/common/models"
 	"github.com/theopenlane/core/internal/ent/historygenerated/predicate"
 	"github.com/theopenlane/core/internal/ent/historygenerated/trustcenterndarequesthistory"
-
-	"github.com/theopenlane/core/internal/ent/historygenerated/internal"
 )
 
 // TrustCenterNDARequestHistoryUpdate is the builder for updating TrustCenterNDARequestHistory entities.
 type TrustCenterNDARequestHistoryUpdate struct {
 	config
-	hooks     []Hook
-	mutation  *TrustCenterNDARequestHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
+	hooks    []Hook
+	mutation *TrustCenterNDARequestHistoryMutation
 }
 
 // Where appends a list predicates to the TrustCenterNDARequestHistoryUpdate builder.
 func (_u *TrustCenterNDARequestHistoryUpdate) Where(ps ...predicate.TrustCenterNDARequestHistory) *TrustCenterNDARequestHistoryUpdate {
 	_u.mutation.Where(ps...)
-	return _u
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *TrustCenterNDARequestHistoryUpdate) SetUpdatedAt(v time.Time) *TrustCenterNDARequestHistoryUpdate {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *TrustCenterNDARequestHistoryUpdate) ClearUpdatedAt() *TrustCenterNDARequestHistoryUpdate {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *TrustCenterNDARequestHistoryUpdate) SetUpdatedBy(v string) *TrustCenterNDARequestHistoryUpdate {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *TrustCenterNDARequestHistoryUpdate) SetNillableUpdatedBy(v *string) *TrustCenterNDARequestHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *TrustCenterNDARequestHistoryUpdate) ClearUpdatedBy() *TrustCenterNDARequestHistoryUpdate {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *TrustCenterNDARequestHistoryUpdate) SetUpdatedByImpersonator(v string) *TrustCenterNDARequestHistoryUpdate {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *TrustCenterNDARequestHistoryUpdate) SetNillableUpdatedByImpersonator(v *string) *TrustCenterNDARequestHistoryUpdate {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *TrustCenterNDARequestHistoryUpdate) ClearUpdatedByImpersonator() *TrustCenterNDARequestHistoryUpdate {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *TrustCenterNDARequestHistoryUpdate) SetDeletedAt(v time.Time) *TrustCenterNDARequestHistoryUpdate {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *TrustCenterNDARequestHistoryUpdate) SetNillableDeletedAt(v *time.Time) *TrustCenterNDARequestHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *TrustCenterNDARequestHistoryUpdate) ClearDeletedAt() *TrustCenterNDARequestHistoryUpdate {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *TrustCenterNDARequestHistoryUpdate) SetDeletedBy(v string) *TrustCenterNDARequestHistoryUpdate {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *TrustCenterNDARequestHistoryUpdate) SetNillableDeletedBy(v *string) *TrustCenterNDARequestHistoryUpdate {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *TrustCenterNDARequestHistoryUpdate) ClearDeletedBy() *TrustCenterNDARequestHistoryUpdate {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *TrustCenterNDARequestHistoryUpdate) SetTags(v []string) *TrustCenterNDARequestHistoryUpdate {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *TrustCenterNDARequestHistoryUpdate) AppendTags(v []string) *TrustCenterNDARequestHistoryUpdate {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *TrustCenterNDARequestHistoryUpdate) ClearTags() *TrustCenterNDARequestHistoryUpdate {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetFirstName sets the "first_name" field.
-func (_u *TrustCenterNDARequestHistoryUpdate) SetFirstName(v string) *TrustCenterNDARequestHistoryUpdate {
-	_u.mutation.SetFirstName(v)
-	return _u
-}
-
-// SetNillableFirstName sets the "first_name" field if the given value is not nil.
-func (_u *TrustCenterNDARequestHistoryUpdate) SetNillableFirstName(v *string) *TrustCenterNDARequestHistoryUpdate {
-	if v != nil {
-		_u.SetFirstName(*v)
-	}
-	return _u
-}
-
-// SetLastName sets the "last_name" field.
-func (_u *TrustCenterNDARequestHistoryUpdate) SetLastName(v string) *TrustCenterNDARequestHistoryUpdate {
-	_u.mutation.SetLastName(v)
-	return _u
-}
-
-// SetNillableLastName sets the "last_name" field if the given value is not nil.
-func (_u *TrustCenterNDARequestHistoryUpdate) SetNillableLastName(v *string) *TrustCenterNDARequestHistoryUpdate {
-	if v != nil {
-		_u.SetLastName(*v)
-	}
-	return _u
-}
-
-// SetEmail sets the "email" field.
-func (_u *TrustCenterNDARequestHistoryUpdate) SetEmail(v string) *TrustCenterNDARequestHistoryUpdate {
-	_u.mutation.SetEmail(v)
-	return _u
-}
-
-// SetNillableEmail sets the "email" field if the given value is not nil.
-func (_u *TrustCenterNDARequestHistoryUpdate) SetNillableEmail(v *string) *TrustCenterNDARequestHistoryUpdate {
-	if v != nil {
-		_u.SetEmail(*v)
-	}
-	return _u
-}
-
-// SetCompanyName sets the "company_name" field.
-func (_u *TrustCenterNDARequestHistoryUpdate) SetCompanyName(v string) *TrustCenterNDARequestHistoryUpdate {
-	_u.mutation.SetCompanyName(v)
-	return _u
-}
-
-// SetNillableCompanyName sets the "company_name" field if the given value is not nil.
-func (_u *TrustCenterNDARequestHistoryUpdate) SetNillableCompanyName(v *string) *TrustCenterNDARequestHistoryUpdate {
-	if v != nil {
-		_u.SetCompanyName(*v)
-	}
-	return _u
-}
-
-// ClearCompanyName clears the value of the "company_name" field.
-func (_u *TrustCenterNDARequestHistoryUpdate) ClearCompanyName() *TrustCenterNDARequestHistoryUpdate {
-	_u.mutation.ClearCompanyName()
-	return _u
-}
-
-// SetReason sets the "reason" field.
-func (_u *TrustCenterNDARequestHistoryUpdate) SetReason(v string) *TrustCenterNDARequestHistoryUpdate {
-	_u.mutation.SetReason(v)
-	return _u
-}
-
-// SetNillableReason sets the "reason" field if the given value is not nil.
-func (_u *TrustCenterNDARequestHistoryUpdate) SetNillableReason(v *string) *TrustCenterNDARequestHistoryUpdate {
-	if v != nil {
-		_u.SetReason(*v)
-	}
-	return _u
-}
-
-// ClearReason clears the value of the "reason" field.
-func (_u *TrustCenterNDARequestHistoryUpdate) ClearReason() *TrustCenterNDARequestHistoryUpdate {
-	_u.mutation.ClearReason()
-	return _u
-}
-
-// SetAccessLevel sets the "access_level" field.
-func (_u *TrustCenterNDARequestHistoryUpdate) SetAccessLevel(v enums.TrustCenterNDARequestAccessLevel) *TrustCenterNDARequestHistoryUpdate {
-	_u.mutation.SetAccessLevel(v)
-	return _u
-}
-
-// SetNillableAccessLevel sets the "access_level" field if the given value is not nil.
-func (_u *TrustCenterNDARequestHistoryUpdate) SetNillableAccessLevel(v *enums.TrustCenterNDARequestAccessLevel) *TrustCenterNDARequestHistoryUpdate {
-	if v != nil {
-		_u.SetAccessLevel(*v)
-	}
-	return _u
-}
-
-// ClearAccessLevel clears the value of the "access_level" field.
-func (_u *TrustCenterNDARequestHistoryUpdate) ClearAccessLevel() *TrustCenterNDARequestHistoryUpdate {
-	_u.mutation.ClearAccessLevel()
-	return _u
-}
-
-// SetStatus sets the "status" field.
-func (_u *TrustCenterNDARequestHistoryUpdate) SetStatus(v enums.TrustCenterNDARequestStatus) *TrustCenterNDARequestHistoryUpdate {
-	_u.mutation.SetStatus(v)
-	return _u
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *TrustCenterNDARequestHistoryUpdate) SetNillableStatus(v *enums.TrustCenterNDARequestStatus) *TrustCenterNDARequestHistoryUpdate {
-	if v != nil {
-		_u.SetStatus(*v)
-	}
-	return _u
-}
-
-// ClearStatus clears the value of the "status" field.
-func (_u *TrustCenterNDARequestHistoryUpdate) ClearStatus() *TrustCenterNDARequestHistoryUpdate {
-	_u.mutation.ClearStatus()
-	return _u
-}
-
-// SetApprovedAt sets the "approved_at" field.
-func (_u *TrustCenterNDARequestHistoryUpdate) SetApprovedAt(v models.DateTime) *TrustCenterNDARequestHistoryUpdate {
-	_u.mutation.SetApprovedAt(v)
-	return _u
-}
-
-// SetNillableApprovedAt sets the "approved_at" field if the given value is not nil.
-func (_u *TrustCenterNDARequestHistoryUpdate) SetNillableApprovedAt(v *models.DateTime) *TrustCenterNDARequestHistoryUpdate {
-	if v != nil {
-		_u.SetApprovedAt(*v)
-	}
-	return _u
-}
-
-// ClearApprovedAt clears the value of the "approved_at" field.
-func (_u *TrustCenterNDARequestHistoryUpdate) ClearApprovedAt() *TrustCenterNDARequestHistoryUpdate {
-	_u.mutation.ClearApprovedAt()
-	return _u
-}
-
-// SetApprovedByUserID sets the "approved_by_user_id" field.
-func (_u *TrustCenterNDARequestHistoryUpdate) SetApprovedByUserID(v string) *TrustCenterNDARequestHistoryUpdate {
-	_u.mutation.SetApprovedByUserID(v)
-	return _u
-}
-
-// SetNillableApprovedByUserID sets the "approved_by_user_id" field if the given value is not nil.
-func (_u *TrustCenterNDARequestHistoryUpdate) SetNillableApprovedByUserID(v *string) *TrustCenterNDARequestHistoryUpdate {
-	if v != nil {
-		_u.SetApprovedByUserID(*v)
-	}
-	return _u
-}
-
-// ClearApprovedByUserID clears the value of the "approved_by_user_id" field.
-func (_u *TrustCenterNDARequestHistoryUpdate) ClearApprovedByUserID() *TrustCenterNDARequestHistoryUpdate {
-	_u.mutation.ClearApprovedByUserID()
-	return _u
-}
-
-// SetSignedAt sets the "signed_at" field.
-func (_u *TrustCenterNDARequestHistoryUpdate) SetSignedAt(v models.DateTime) *TrustCenterNDARequestHistoryUpdate {
-	_u.mutation.SetSignedAt(v)
-	return _u
-}
-
-// SetNillableSignedAt sets the "signed_at" field if the given value is not nil.
-func (_u *TrustCenterNDARequestHistoryUpdate) SetNillableSignedAt(v *models.DateTime) *TrustCenterNDARequestHistoryUpdate {
-	if v != nil {
-		_u.SetSignedAt(*v)
-	}
-	return _u
-}
-
-// ClearSignedAt clears the value of the "signed_at" field.
-func (_u *TrustCenterNDARequestHistoryUpdate) ClearSignedAt() *TrustCenterNDARequestHistoryUpdate {
-	_u.mutation.ClearSignedAt()
-	return _u
-}
-
-// SetDocumentDataID sets the "document_data_id" field.
-func (_u *TrustCenterNDARequestHistoryUpdate) SetDocumentDataID(v string) *TrustCenterNDARequestHistoryUpdate {
-	_u.mutation.SetDocumentDataID(v)
-	return _u
-}
-
-// SetNillableDocumentDataID sets the "document_data_id" field if the given value is not nil.
-func (_u *TrustCenterNDARequestHistoryUpdate) SetNillableDocumentDataID(v *string) *TrustCenterNDARequestHistoryUpdate {
-	if v != nil {
-		_u.SetDocumentDataID(*v)
-	}
-	return _u
-}
-
-// ClearDocumentDataID clears the value of the "document_data_id" field.
-func (_u *TrustCenterNDARequestHistoryUpdate) ClearDocumentDataID() *TrustCenterNDARequestHistoryUpdate {
-	_u.mutation.ClearDocumentDataID()
-	return _u
-}
-
-// SetFileID sets the "file_id" field.
-func (_u *TrustCenterNDARequestHistoryUpdate) SetFileID(v string) *TrustCenterNDARequestHistoryUpdate {
-	_u.mutation.SetFileID(v)
-	return _u
-}
-
-// SetNillableFileID sets the "file_id" field if the given value is not nil.
-func (_u *TrustCenterNDARequestHistoryUpdate) SetNillableFileID(v *string) *TrustCenterNDARequestHistoryUpdate {
-	if v != nil {
-		_u.SetFileID(*v)
-	}
-	return _u
-}
-
-// ClearFileID clears the value of the "file_id" field.
-func (_u *TrustCenterNDARequestHistoryUpdate) ClearFileID() *TrustCenterNDARequestHistoryUpdate {
-	_u.mutation.ClearFileID()
 	return _u
 }
 
@@ -375,9 +36,6 @@ func (_u *TrustCenterNDARequestHistoryUpdate) Mutation() *TrustCenterNDARequestH
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (_u *TrustCenterNDARequestHistoryUpdate) Save(ctx context.Context) (int, error) {
-	if err := _u.defaults(); err != nil {
-		return 0, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -403,43 +61,7 @@ func (_u *TrustCenterNDARequestHistoryUpdate) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *TrustCenterNDARequestHistoryUpdate) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if trustcenterndarequesthistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized trustcenterndarequesthistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := trustcenterndarequesthistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *TrustCenterNDARequestHistoryUpdate) check() error {
-	if v, ok := _u.mutation.AccessLevel(); ok {
-		if err := trustcenterndarequesthistory.AccessLevelValidator(v); err != nil {
-			return &ValidationError{Name: "access_level", err: fmt.Errorf(`historygenerated: validator failed for field "TrustCenterNDARequestHistory.access_level": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.Status(); ok {
-		if err := trustcenterndarequesthistory.StatusValidator(v); err != nil {
-			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "TrustCenterNDARequestHistory.status": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *TrustCenterNDARequestHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterNDARequestHistoryUpdate {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *TrustCenterNDARequestHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(trustcenterndarequesthistory.Table, trustcenterndarequesthistory.Columns, sqlgraph.NewFieldSpec(trustcenterndarequesthistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -454,46 +76,23 @@ func (_u *TrustCenterNDARequestHistoryUpdate) sqlSave(ctx context.Context) (_nod
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(trustcenterndarequesthistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(trustcenterndarequesthistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(trustcenterndarequesthistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(trustcenterndarequesthistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(trustcenterndarequesthistory.FieldDeletedBy, field.TypeString, value)
-	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(trustcenterndarequesthistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, trustcenterndarequesthistory.FieldTags, value)
-		})
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldTags, field.TypeJSON)
@@ -501,72 +100,33 @@ func (_u *TrustCenterNDARequestHistoryUpdate) sqlSave(ctx context.Context) (_nod
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldTrustCenterID, field.TypeString)
 	}
-	if value, ok := _u.mutation.FirstName(); ok {
-		_spec.SetField(trustcenterndarequesthistory.FieldFirstName, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.LastName(); ok {
-		_spec.SetField(trustcenterndarequesthistory.FieldLastName, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.Email(); ok {
-		_spec.SetField(trustcenterndarequesthistory.FieldEmail, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.CompanyName(); ok {
-		_spec.SetField(trustcenterndarequesthistory.FieldCompanyName, field.TypeString, value)
-	}
 	if _u.mutation.CompanyNameCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldCompanyName, field.TypeString)
-	}
-	if value, ok := _u.mutation.Reason(); ok {
-		_spec.SetField(trustcenterndarequesthistory.FieldReason, field.TypeString, value)
 	}
 	if _u.mutation.ReasonCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldReason, field.TypeString)
 	}
-	if value, ok := _u.mutation.AccessLevel(); ok {
-		_spec.SetField(trustcenterndarequesthistory.FieldAccessLevel, field.TypeEnum, value)
-	}
 	if _u.mutation.AccessLevelCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldAccessLevel, field.TypeEnum)
-	}
-	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(trustcenterndarequesthistory.FieldStatus, field.TypeEnum, value)
 	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldStatus, field.TypeEnum)
 	}
-	if value, ok := _u.mutation.ApprovedAt(); ok {
-		_spec.SetField(trustcenterndarequesthistory.FieldApprovedAt, field.TypeTime, value)
-	}
 	if _u.mutation.ApprovedAtCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldApprovedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.ApprovedByUserID(); ok {
-		_spec.SetField(trustcenterndarequesthistory.FieldApprovedByUserID, field.TypeString, value)
 	}
 	if _u.mutation.ApprovedByUserIDCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldApprovedByUserID, field.TypeString)
 	}
-	if value, ok := _u.mutation.SignedAt(); ok {
-		_spec.SetField(trustcenterndarequesthistory.FieldSignedAt, field.TypeTime, value)
-	}
 	if _u.mutation.SignedAtCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldSignedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DocumentDataID(); ok {
-		_spec.SetField(trustcenterndarequesthistory.FieldDocumentDataID, field.TypeString, value)
 	}
 	if _u.mutation.DocumentDataIDCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldDocumentDataID, field.TypeString)
 	}
-	if value, ok := _u.mutation.FileID(); ok {
-		_spec.SetField(trustcenterndarequesthistory.FieldFileID, field.TypeString, value)
-	}
 	if _u.mutation.FileIDCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldFileID, field.TypeString)
 	}
-	_spec.Node.Schema = _u.schemaConfig.TrustCenterNDARequestHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	if _node, err = sqlgraph.UpdateNodes(ctx, _u.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{trustcenterndarequesthistory.Label}
@@ -582,342 +142,9 @@ func (_u *TrustCenterNDARequestHistoryUpdate) sqlSave(ctx context.Context) (_nod
 // TrustCenterNDARequestHistoryUpdateOne is the builder for updating a single TrustCenterNDARequestHistory entity.
 type TrustCenterNDARequestHistoryUpdateOne struct {
 	config
-	fields    []string
-	hooks     []Hook
-	mutation  *TrustCenterNDARequestHistoryMutation
-	modifiers []func(*sql.UpdateBuilder)
-}
-
-// SetUpdatedAt sets the "updated_at" field.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) SetUpdatedAt(v time.Time) *TrustCenterNDARequestHistoryUpdateOne {
-	_u.mutation.SetUpdatedAt(v)
-	return _u
-}
-
-// ClearUpdatedAt clears the value of the "updated_at" field.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) ClearUpdatedAt() *TrustCenterNDARequestHistoryUpdateOne {
-	_u.mutation.ClearUpdatedAt()
-	return _u
-}
-
-// SetUpdatedBy sets the "updated_by" field.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) SetUpdatedBy(v string) *TrustCenterNDARequestHistoryUpdateOne {
-	_u.mutation.SetUpdatedBy(v)
-	return _u
-}
-
-// SetNillableUpdatedBy sets the "updated_by" field if the given value is not nil.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) SetNillableUpdatedBy(v *string) *TrustCenterNDARequestHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedBy(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedBy clears the value of the "updated_by" field.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) ClearUpdatedBy() *TrustCenterNDARequestHistoryUpdateOne {
-	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetUpdatedByImpersonator sets the "updated_by_impersonator" field.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) SetUpdatedByImpersonator(v string) *TrustCenterNDARequestHistoryUpdateOne {
-	_u.mutation.SetUpdatedByImpersonator(v)
-	return _u
-}
-
-// SetNillableUpdatedByImpersonator sets the "updated_by_impersonator" field if the given value is not nil.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) SetNillableUpdatedByImpersonator(v *string) *TrustCenterNDARequestHistoryUpdateOne {
-	if v != nil {
-		_u.SetUpdatedByImpersonator(*v)
-	}
-	return _u
-}
-
-// ClearUpdatedByImpersonator clears the value of the "updated_by_impersonator" field.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) ClearUpdatedByImpersonator() *TrustCenterNDARequestHistoryUpdateOne {
-	_u.mutation.ClearUpdatedByImpersonator()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) SetDeletedAt(v time.Time) *TrustCenterNDARequestHistoryUpdateOne {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) SetNillableDeletedAt(v *time.Time) *TrustCenterNDARequestHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) ClearDeletedAt() *TrustCenterNDARequestHistoryUpdateOne {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) SetDeletedBy(v string) *TrustCenterNDARequestHistoryUpdateOne {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) SetNillableDeletedBy(v *string) *TrustCenterNDARequestHistoryUpdateOne {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) ClearDeletedBy() *TrustCenterNDARequestHistoryUpdateOne {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
-// SetTags sets the "tags" field.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) SetTags(v []string) *TrustCenterNDARequestHistoryUpdateOne {
-	_u.mutation.SetTags(v)
-	return _u
-}
-
-// AppendTags appends value to the "tags" field.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) AppendTags(v []string) *TrustCenterNDARequestHistoryUpdateOne {
-	_u.mutation.AppendTags(v)
-	return _u
-}
-
-// ClearTags clears the value of the "tags" field.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) ClearTags() *TrustCenterNDARequestHistoryUpdateOne {
-	_u.mutation.ClearTags()
-	return _u
-}
-
-// SetFirstName sets the "first_name" field.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) SetFirstName(v string) *TrustCenterNDARequestHistoryUpdateOne {
-	_u.mutation.SetFirstName(v)
-	return _u
-}
-
-// SetNillableFirstName sets the "first_name" field if the given value is not nil.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) SetNillableFirstName(v *string) *TrustCenterNDARequestHistoryUpdateOne {
-	if v != nil {
-		_u.SetFirstName(*v)
-	}
-	return _u
-}
-
-// SetLastName sets the "last_name" field.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) SetLastName(v string) *TrustCenterNDARequestHistoryUpdateOne {
-	_u.mutation.SetLastName(v)
-	return _u
-}
-
-// SetNillableLastName sets the "last_name" field if the given value is not nil.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) SetNillableLastName(v *string) *TrustCenterNDARequestHistoryUpdateOne {
-	if v != nil {
-		_u.SetLastName(*v)
-	}
-	return _u
-}
-
-// SetEmail sets the "email" field.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) SetEmail(v string) *TrustCenterNDARequestHistoryUpdateOne {
-	_u.mutation.SetEmail(v)
-	return _u
-}
-
-// SetNillableEmail sets the "email" field if the given value is not nil.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) SetNillableEmail(v *string) *TrustCenterNDARequestHistoryUpdateOne {
-	if v != nil {
-		_u.SetEmail(*v)
-	}
-	return _u
-}
-
-// SetCompanyName sets the "company_name" field.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) SetCompanyName(v string) *TrustCenterNDARequestHistoryUpdateOne {
-	_u.mutation.SetCompanyName(v)
-	return _u
-}
-
-// SetNillableCompanyName sets the "company_name" field if the given value is not nil.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) SetNillableCompanyName(v *string) *TrustCenterNDARequestHistoryUpdateOne {
-	if v != nil {
-		_u.SetCompanyName(*v)
-	}
-	return _u
-}
-
-// ClearCompanyName clears the value of the "company_name" field.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) ClearCompanyName() *TrustCenterNDARequestHistoryUpdateOne {
-	_u.mutation.ClearCompanyName()
-	return _u
-}
-
-// SetReason sets the "reason" field.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) SetReason(v string) *TrustCenterNDARequestHistoryUpdateOne {
-	_u.mutation.SetReason(v)
-	return _u
-}
-
-// SetNillableReason sets the "reason" field if the given value is not nil.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) SetNillableReason(v *string) *TrustCenterNDARequestHistoryUpdateOne {
-	if v != nil {
-		_u.SetReason(*v)
-	}
-	return _u
-}
-
-// ClearReason clears the value of the "reason" field.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) ClearReason() *TrustCenterNDARequestHistoryUpdateOne {
-	_u.mutation.ClearReason()
-	return _u
-}
-
-// SetAccessLevel sets the "access_level" field.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) SetAccessLevel(v enums.TrustCenterNDARequestAccessLevel) *TrustCenterNDARequestHistoryUpdateOne {
-	_u.mutation.SetAccessLevel(v)
-	return _u
-}
-
-// SetNillableAccessLevel sets the "access_level" field if the given value is not nil.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) SetNillableAccessLevel(v *enums.TrustCenterNDARequestAccessLevel) *TrustCenterNDARequestHistoryUpdateOne {
-	if v != nil {
-		_u.SetAccessLevel(*v)
-	}
-	return _u
-}
-
-// ClearAccessLevel clears the value of the "access_level" field.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) ClearAccessLevel() *TrustCenterNDARequestHistoryUpdateOne {
-	_u.mutation.ClearAccessLevel()
-	return _u
-}
-
-// SetStatus sets the "status" field.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) SetStatus(v enums.TrustCenterNDARequestStatus) *TrustCenterNDARequestHistoryUpdateOne {
-	_u.mutation.SetStatus(v)
-	return _u
-}
-
-// SetNillableStatus sets the "status" field if the given value is not nil.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) SetNillableStatus(v *enums.TrustCenterNDARequestStatus) *TrustCenterNDARequestHistoryUpdateOne {
-	if v != nil {
-		_u.SetStatus(*v)
-	}
-	return _u
-}
-
-// ClearStatus clears the value of the "status" field.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) ClearStatus() *TrustCenterNDARequestHistoryUpdateOne {
-	_u.mutation.ClearStatus()
-	return _u
-}
-
-// SetApprovedAt sets the "approved_at" field.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) SetApprovedAt(v models.DateTime) *TrustCenterNDARequestHistoryUpdateOne {
-	_u.mutation.SetApprovedAt(v)
-	return _u
-}
-
-// SetNillableApprovedAt sets the "approved_at" field if the given value is not nil.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) SetNillableApprovedAt(v *models.DateTime) *TrustCenterNDARequestHistoryUpdateOne {
-	if v != nil {
-		_u.SetApprovedAt(*v)
-	}
-	return _u
-}
-
-// ClearApprovedAt clears the value of the "approved_at" field.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) ClearApprovedAt() *TrustCenterNDARequestHistoryUpdateOne {
-	_u.mutation.ClearApprovedAt()
-	return _u
-}
-
-// SetApprovedByUserID sets the "approved_by_user_id" field.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) SetApprovedByUserID(v string) *TrustCenterNDARequestHistoryUpdateOne {
-	_u.mutation.SetApprovedByUserID(v)
-	return _u
-}
-
-// SetNillableApprovedByUserID sets the "approved_by_user_id" field if the given value is not nil.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) SetNillableApprovedByUserID(v *string) *TrustCenterNDARequestHistoryUpdateOne {
-	if v != nil {
-		_u.SetApprovedByUserID(*v)
-	}
-	return _u
-}
-
-// ClearApprovedByUserID clears the value of the "approved_by_user_id" field.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) ClearApprovedByUserID() *TrustCenterNDARequestHistoryUpdateOne {
-	_u.mutation.ClearApprovedByUserID()
-	return _u
-}
-
-// SetSignedAt sets the "signed_at" field.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) SetSignedAt(v models.DateTime) *TrustCenterNDARequestHistoryUpdateOne {
-	_u.mutation.SetSignedAt(v)
-	return _u
-}
-
-// SetNillableSignedAt sets the "signed_at" field if the given value is not nil.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) SetNillableSignedAt(v *models.DateTime) *TrustCenterNDARequestHistoryUpdateOne {
-	if v != nil {
-		_u.SetSignedAt(*v)
-	}
-	return _u
-}
-
-// ClearSignedAt clears the value of the "signed_at" field.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) ClearSignedAt() *TrustCenterNDARequestHistoryUpdateOne {
-	_u.mutation.ClearSignedAt()
-	return _u
-}
-
-// SetDocumentDataID sets the "document_data_id" field.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) SetDocumentDataID(v string) *TrustCenterNDARequestHistoryUpdateOne {
-	_u.mutation.SetDocumentDataID(v)
-	return _u
-}
-
-// SetNillableDocumentDataID sets the "document_data_id" field if the given value is not nil.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) SetNillableDocumentDataID(v *string) *TrustCenterNDARequestHistoryUpdateOne {
-	if v != nil {
-		_u.SetDocumentDataID(*v)
-	}
-	return _u
-}
-
-// ClearDocumentDataID clears the value of the "document_data_id" field.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) ClearDocumentDataID() *TrustCenterNDARequestHistoryUpdateOne {
-	_u.mutation.ClearDocumentDataID()
-	return _u
-}
-
-// SetFileID sets the "file_id" field.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) SetFileID(v string) *TrustCenterNDARequestHistoryUpdateOne {
-	_u.mutation.SetFileID(v)
-	return _u
-}
-
-// SetNillableFileID sets the "file_id" field if the given value is not nil.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) SetNillableFileID(v *string) *TrustCenterNDARequestHistoryUpdateOne {
-	if v != nil {
-		_u.SetFileID(*v)
-	}
-	return _u
-}
-
-// ClearFileID clears the value of the "file_id" field.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) ClearFileID() *TrustCenterNDARequestHistoryUpdateOne {
-	_u.mutation.ClearFileID()
-	return _u
+	fields   []string
+	hooks    []Hook
+	mutation *TrustCenterNDARequestHistoryMutation
 }
 
 // Mutation returns the TrustCenterNDARequestHistoryMutation object of the builder.
@@ -940,9 +167,6 @@ func (_u *TrustCenterNDARequestHistoryUpdateOne) Select(field string, fields ...
 
 // Save executes the query and returns the updated TrustCenterNDARequestHistory entity.
 func (_u *TrustCenterNDARequestHistoryUpdateOne) Save(ctx context.Context) (*TrustCenterNDARequestHistory, error) {
-	if err := _u.defaults(); err != nil {
-		return nil, err
-	}
 	return withHooks(ctx, _u.sqlSave, _u.mutation, _u.hooks)
 }
 
@@ -968,43 +192,7 @@ func (_u *TrustCenterNDARequestHistoryUpdateOne) ExecX(ctx context.Context) {
 	}
 }
 
-// defaults sets the default values of the builder before save.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) defaults() error {
-	if _, ok := _u.mutation.UpdatedAt(); !ok && !_u.mutation.UpdatedAtCleared() {
-		if trustcenterndarequesthistory.UpdateDefaultUpdatedAt == nil {
-			return fmt.Errorf("historygenerated: uninitialized trustcenterndarequesthistory.UpdateDefaultUpdatedAt (forgotten import historygenerated/runtime?)")
-		}
-		v := trustcenterndarequesthistory.UpdateDefaultUpdatedAt()
-		_u.mutation.SetUpdatedAt(v)
-	}
-	return nil
-}
-
-// check runs all checks and user-defined validators on the builder.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) check() error {
-	if v, ok := _u.mutation.AccessLevel(); ok {
-		if err := trustcenterndarequesthistory.AccessLevelValidator(v); err != nil {
-			return &ValidationError{Name: "access_level", err: fmt.Errorf(`historygenerated: validator failed for field "TrustCenterNDARequestHistory.access_level": %w`, err)}
-		}
-	}
-	if v, ok := _u.mutation.Status(); ok {
-		if err := trustcenterndarequesthistory.StatusValidator(v); err != nil {
-			return &ValidationError{Name: "status", err: fmt.Errorf(`historygenerated: validator failed for field "TrustCenterNDARequestHistory.status": %w`, err)}
-		}
-	}
-	return nil
-}
-
-// Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
-func (_u *TrustCenterNDARequestHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterNDARequestHistoryUpdateOne {
-	_u.modifiers = append(_u.modifiers, modifiers...)
-	return _u
-}
-
 func (_u *TrustCenterNDARequestHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TrustCenterNDARequestHistory, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(trustcenterndarequesthistory.Table, trustcenterndarequesthistory.Columns, sqlgraph.NewFieldSpec(trustcenterndarequesthistory.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
@@ -1036,46 +224,23 @@ func (_u *TrustCenterNDARequestHistoryUpdateOne) sqlSave(ctx context.Context) (_
 	if _u.mutation.CreatedAtCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldCreatedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.UpdatedAt(); ok {
-		_spec.SetField(trustcenterndarequesthistory.FieldUpdatedAt, field.TypeTime, value)
-	}
 	if _u.mutation.UpdatedAtCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldUpdatedAt, field.TypeTime)
 	}
 	if _u.mutation.CreatedByCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldCreatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.UpdatedBy(); ok {
-		_spec.SetField(trustcenterndarequesthistory.FieldUpdatedBy, field.TypeString, value)
-	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.UpdatedByImpersonator(); ok {
-		_spec.SetField(trustcenterndarequesthistory.FieldUpdatedByImpersonator, field.TypeString, value)
 	}
 	if _u.mutation.UpdatedByImpersonatorCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldUpdatedByImpersonator, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(trustcenterndarequesthistory.FieldDeletedAt, field.TypeTime, value)
-	}
 	if _u.mutation.DeletedAtCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldDeletedAt, field.TypeTime)
 	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(trustcenterndarequesthistory.FieldDeletedBy, field.TypeString, value)
-	}
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldDeletedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.Tags(); ok {
-		_spec.SetField(trustcenterndarequesthistory.FieldTags, field.TypeJSON, value)
-	}
-	if value, ok := _u.mutation.AppendedTags(); ok {
-		_spec.AddModifier(func(u *sql.UpdateBuilder) {
-			sqljson.Append(u, trustcenterndarequesthistory.FieldTags, value)
-		})
 	}
 	if _u.mutation.TagsCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldTags, field.TypeJSON)
@@ -1083,72 +248,33 @@ func (_u *TrustCenterNDARequestHistoryUpdateOne) sqlSave(ctx context.Context) (_
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldTrustCenterID, field.TypeString)
 	}
-	if value, ok := _u.mutation.FirstName(); ok {
-		_spec.SetField(trustcenterndarequesthistory.FieldFirstName, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.LastName(); ok {
-		_spec.SetField(trustcenterndarequesthistory.FieldLastName, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.Email(); ok {
-		_spec.SetField(trustcenterndarequesthistory.FieldEmail, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.CompanyName(); ok {
-		_spec.SetField(trustcenterndarequesthistory.FieldCompanyName, field.TypeString, value)
-	}
 	if _u.mutation.CompanyNameCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldCompanyName, field.TypeString)
-	}
-	if value, ok := _u.mutation.Reason(); ok {
-		_spec.SetField(trustcenterndarequesthistory.FieldReason, field.TypeString, value)
 	}
 	if _u.mutation.ReasonCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldReason, field.TypeString)
 	}
-	if value, ok := _u.mutation.AccessLevel(); ok {
-		_spec.SetField(trustcenterndarequesthistory.FieldAccessLevel, field.TypeEnum, value)
-	}
 	if _u.mutation.AccessLevelCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldAccessLevel, field.TypeEnum)
-	}
-	if value, ok := _u.mutation.Status(); ok {
-		_spec.SetField(trustcenterndarequesthistory.FieldStatus, field.TypeEnum, value)
 	}
 	if _u.mutation.StatusCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldStatus, field.TypeEnum)
 	}
-	if value, ok := _u.mutation.ApprovedAt(); ok {
-		_spec.SetField(trustcenterndarequesthistory.FieldApprovedAt, field.TypeTime, value)
-	}
 	if _u.mutation.ApprovedAtCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldApprovedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.ApprovedByUserID(); ok {
-		_spec.SetField(trustcenterndarequesthistory.FieldApprovedByUserID, field.TypeString, value)
 	}
 	if _u.mutation.ApprovedByUserIDCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldApprovedByUserID, field.TypeString)
 	}
-	if value, ok := _u.mutation.SignedAt(); ok {
-		_spec.SetField(trustcenterndarequesthistory.FieldSignedAt, field.TypeTime, value)
-	}
 	if _u.mutation.SignedAtCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldSignedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DocumentDataID(); ok {
-		_spec.SetField(trustcenterndarequesthistory.FieldDocumentDataID, field.TypeString, value)
 	}
 	if _u.mutation.DocumentDataIDCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldDocumentDataID, field.TypeString)
 	}
-	if value, ok := _u.mutation.FileID(); ok {
-		_spec.SetField(trustcenterndarequesthistory.FieldFileID, field.TypeString, value)
-	}
 	if _u.mutation.FileIDCleared() {
 		_spec.ClearField(trustcenterndarequesthistory.FieldFileID, field.TypeString)
 	}
-	_spec.Node.Schema = _u.schemaConfig.TrustCenterNDARequestHistory
-	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
-	_spec.AddModifiers(_u.modifiers...)
 	_node = &TrustCenterNDARequestHistory{config: _u.config}
 	_spec.Assign = _node.assignValues
 	_spec.ScanValues = _node.scanValues

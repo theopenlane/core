@@ -512,7 +512,6 @@ func (_c *GroupHistoryCreate) createSpec() (*GroupHistory, *sqlgraph.CreateSpec)
 		_node = &GroupHistory{config: _c.config}
 		_spec = sqlgraph.NewCreateSpec(grouphistory.Table, sqlgraph.NewFieldSpec(grouphistory.FieldID, field.TypeString))
 	)
-	_spec.Schema = _c.schemaConfig.GroupHistory
 	if id, ok := _c.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = id

@@ -8,10 +8,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 	"github.com/theopenlane/core/internal/ent/generated/note"
+	"github.com/theopenlane/core/internal/ent/generated/predicate"
 )
 
 // NoteDelete is the builder for deleting a Note entity.
@@ -43,8 +41,6 @@ func (_d *NoteDelete) ExecX(ctx context.Context) int {
 
 func (_d *NoteDelete) sqlExec(ctx context.Context) (int, error) {
 	_spec := sqlgraph.NewDeleteSpec(note.Table, sqlgraph.NewFieldSpec(note.FieldID, field.TypeString))
-	_spec.Node.Schema = _d.schemaConfig.Note
-	ctx = internal.NewSchemaConfigContext(ctx, _d.schemaConfig)
 	if ps := _d.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {

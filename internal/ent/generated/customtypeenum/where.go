@@ -8,8 +8,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // ID filters vertices based on their ID field.
@@ -1274,9 +1272,6 @@ func HasOwner() predicate.CustomTypeEnum {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.CustomTypeEnum
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1285,9 +1280,6 @@ func HasOwner() predicate.CustomTypeEnum {
 func HasOwnerWith(preds ...predicate.Organization) predicate.CustomTypeEnum {
 	return predicate.CustomTypeEnum(func(s *sql.Selector) {
 		step := newOwnerStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Organization
-		step.Edge.Schema = schemaConfig.CustomTypeEnum
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1303,9 +1295,6 @@ func HasTasks() predicate.CustomTypeEnum {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, TasksTable, TasksColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Task
-		step.Edge.Schema = schemaConfig.Task
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1314,9 +1303,6 @@ func HasTasks() predicate.CustomTypeEnum {
 func HasTasksWith(preds ...predicate.Task) predicate.CustomTypeEnum {
 	return predicate.CustomTypeEnum(func(s *sql.Selector) {
 		step := newTasksStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Task
-		step.Edge.Schema = schemaConfig.Task
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1332,9 +1318,6 @@ func HasControls() predicate.CustomTypeEnum {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, ControlsTable, ControlsColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.Control
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1343,9 +1326,6 @@ func HasControls() predicate.CustomTypeEnum {
 func HasControlsWith(preds ...predicate.Control) predicate.CustomTypeEnum {
 	return predicate.CustomTypeEnum(func(s *sql.Selector) {
 		step := newControlsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Control
-		step.Edge.Schema = schemaConfig.Control
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1361,9 +1341,6 @@ func HasSubcontrols() predicate.CustomTypeEnum {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, SubcontrolsTable, SubcontrolsColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.Subcontrol
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1372,9 +1349,6 @@ func HasSubcontrols() predicate.CustomTypeEnum {
 func HasSubcontrolsWith(preds ...predicate.Subcontrol) predicate.CustomTypeEnum {
 	return predicate.CustomTypeEnum(func(s *sql.Selector) {
 		step := newSubcontrolsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Subcontrol
-		step.Edge.Schema = schemaConfig.Subcontrol
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1390,9 +1364,6 @@ func HasRisks() predicate.CustomTypeEnum {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, RisksTable, RisksColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Risk
-		step.Edge.Schema = schemaConfig.Risk
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1401,9 +1372,6 @@ func HasRisks() predicate.CustomTypeEnum {
 func HasRisksWith(preds ...predicate.Risk) predicate.CustomTypeEnum {
 	return predicate.CustomTypeEnum(func(s *sql.Selector) {
 		step := newRisksStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Risk
-		step.Edge.Schema = schemaConfig.Risk
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1419,9 +1387,6 @@ func HasRiskCategories() predicate.CustomTypeEnum {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, RiskCategoriesTable, RiskCategoriesColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Risk
-		step.Edge.Schema = schemaConfig.Risk
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1430,9 +1395,6 @@ func HasRiskCategories() predicate.CustomTypeEnum {
 func HasRiskCategoriesWith(preds ...predicate.Risk) predicate.CustomTypeEnum {
 	return predicate.CustomTypeEnum(func(s *sql.Selector) {
 		step := newRiskCategoriesStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Risk
-		step.Edge.Schema = schemaConfig.Risk
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1448,9 +1410,6 @@ func HasInternalPolicies() predicate.CustomTypeEnum {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, InternalPoliciesTable, InternalPoliciesColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.InternalPolicy
-		step.Edge.Schema = schemaConfig.InternalPolicy
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1459,9 +1418,6 @@ func HasInternalPolicies() predicate.CustomTypeEnum {
 func HasInternalPoliciesWith(preds ...predicate.InternalPolicy) predicate.CustomTypeEnum {
 	return predicate.CustomTypeEnum(func(s *sql.Selector) {
 		step := newInternalPoliciesStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.InternalPolicy
-		step.Edge.Schema = schemaConfig.InternalPolicy
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1477,9 +1433,6 @@ func HasProcedures() predicate.CustomTypeEnum {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, ProceduresTable, ProceduresColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Procedure
-		step.Edge.Schema = schemaConfig.Procedure
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1488,9 +1441,6 @@ func HasProcedures() predicate.CustomTypeEnum {
 func HasProceduresWith(preds ...predicate.Procedure) predicate.CustomTypeEnum {
 	return predicate.CustomTypeEnum(func(s *sql.Selector) {
 		step := newProceduresStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Procedure
-		step.Edge.Schema = schemaConfig.Procedure
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1506,9 +1456,6 @@ func HasActionPlans() predicate.CustomTypeEnum {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, ActionPlansTable, ActionPlansColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.ActionPlan
-		step.Edge.Schema = schemaConfig.ActionPlan
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1517,9 +1464,6 @@ func HasActionPlans() predicate.CustomTypeEnum {
 func HasActionPlansWith(preds ...predicate.ActionPlan) predicate.CustomTypeEnum {
 	return predicate.CustomTypeEnum(func(s *sql.Selector) {
 		step := newActionPlansStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.ActionPlan
-		step.Edge.Schema = schemaConfig.ActionPlan
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1535,9 +1479,6 @@ func HasPrograms() predicate.CustomTypeEnum {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, ProgramsTable, ProgramsColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.Program
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1546,9 +1487,6 @@ func HasPrograms() predicate.CustomTypeEnum {
 func HasProgramsWith(preds ...predicate.Program) predicate.CustomTypeEnum {
 	return predicate.CustomTypeEnum(func(s *sql.Selector) {
 		step := newProgramsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Program
-		step.Edge.Schema = schemaConfig.Program
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -1564,9 +1502,6 @@ func HasPlatforms() predicate.CustomTypeEnum {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, PlatformsTable, PlatformsColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Platform
-		step.Edge.Schema = schemaConfig.Platform
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1575,9 +1510,6 @@ func HasPlatforms() predicate.CustomTypeEnum {
 func HasPlatformsWith(preds ...predicate.Platform) predicate.CustomTypeEnum {
 	return predicate.CustomTypeEnum(func(s *sql.Selector) {
 		step := newPlatformsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Platform
-		step.Edge.Schema = schemaConfig.Platform
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

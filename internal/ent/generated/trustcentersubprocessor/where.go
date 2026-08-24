@@ -8,8 +8,6 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-
-	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
 
 // ID filters vertices based on their ID field.
@@ -879,9 +877,6 @@ func HasTrustCenterSubprocessorKind() predicate.TrustCenterSubprocessor {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, false, TrustCenterSubprocessorKindTable, TrustCenterSubprocessorKindColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.TrustCenterSubprocessor
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -890,9 +885,6 @@ func HasTrustCenterSubprocessorKind() predicate.TrustCenterSubprocessor {
 func HasTrustCenterSubprocessorKindWith(preds ...predicate.CustomTypeEnum) predicate.TrustCenterSubprocessor {
 	return predicate.TrustCenterSubprocessor(func(s *sql.Selector) {
 		step := newTrustCenterSubprocessorKindStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.CustomTypeEnum
-		step.Edge.Schema = schemaConfig.TrustCenterSubprocessor
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -908,9 +900,6 @@ func HasBlockedGroups() predicate.TrustCenterSubprocessor {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, BlockedGroupsTable, BlockedGroupsColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -919,9 +908,6 @@ func HasBlockedGroups() predicate.TrustCenterSubprocessor {
 func HasBlockedGroupsWith(preds ...predicate.Group) predicate.TrustCenterSubprocessor {
 	return predicate.TrustCenterSubprocessor(func(s *sql.Selector) {
 		step := newBlockedGroupsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -937,9 +923,6 @@ func HasEditors() predicate.TrustCenterSubprocessor {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, EditorsTable, EditorsColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -948,9 +931,6 @@ func HasEditors() predicate.TrustCenterSubprocessor {
 func HasEditorsWith(preds ...predicate.Group) predicate.TrustCenterSubprocessor {
 	return predicate.TrustCenterSubprocessor(func(s *sql.Selector) {
 		step := newEditorsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -966,9 +946,6 @@ func HasTrustCenter() predicate.TrustCenterSubprocessor {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, TrustCenterTable, TrustCenterColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.TrustCenter
-		step.Edge.Schema = schemaConfig.TrustCenterSubprocessor
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -977,9 +954,6 @@ func HasTrustCenter() predicate.TrustCenterSubprocessor {
 func HasTrustCenterWith(preds ...predicate.TrustCenter) predicate.TrustCenterSubprocessor {
 	return predicate.TrustCenterSubprocessor(func(s *sql.Selector) {
 		step := newTrustCenterStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.TrustCenter
-		step.Edge.Schema = schemaConfig.TrustCenterSubprocessor
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -995,9 +969,6 @@ func HasSubprocessor() predicate.TrustCenterSubprocessor {
 			sqlgraph.From(Table, FieldID),
 			sqlgraph.Edge(sqlgraph.M2O, true, SubprocessorTable, SubprocessorColumn),
 		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Subprocessor
-		step.Edge.Schema = schemaConfig.TrustCenterSubprocessor
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -1006,9 +977,6 @@ func HasSubprocessor() predicate.TrustCenterSubprocessor {
 func HasSubprocessorWith(preds ...predicate.Subprocessor) predicate.TrustCenterSubprocessor {
 	return predicate.TrustCenterSubprocessor(func(s *sql.Selector) {
 		step := newSubprocessorStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Subprocessor
-		step.Edge.Schema = schemaConfig.TrustCenterSubprocessor
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
