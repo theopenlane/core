@@ -625,8 +625,8 @@ github.com/redis/go-redis/v9 v9.22.0 h1:laDvpYXTJtZLloinw1fA5Kqd6HAEH2XKxOkG/PDq
 github.com/redis/go-redis/v9 v9.22.0/go.mod h1:y2g0Wj8rQvuK0ELM+oxSudcLtC09JScs98I/X9gRWY4=
 github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec h1:W09IVJc94icq4NjY3clb7Lk8O1qJ8BdBEF8z0ibU0rE=
 github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec/go.mod h1:qqbHyh8v60DhA7CoWK5oRCqLrMHRGoxYCSS9EjAz6Eo=
-github.com/resend/resend-go/v3 v3.12.0 h1:fzoMd76NShVv1vzjym5owBYrnpA/U1GfyqvUN43Brks=
-github.com/resend/resend-go/v3 v3.12.0/go.mod h1:iI7VA0NoGjWvsNii5iNC5Dy0llsI3HncXPejhniYzwE=
+github.com/resend/resend-go/v3 v3.14.0 h1:xURYjb7zosEEHa1D7dGI6y+2W/1gVz3uL6oCUm80TzY=
+github.com/resend/resend-go/v3 v3.14.0/go.mod h1:iI7VA0NoGjWvsNii5iNC5Dy0llsI3HncXPejhniYzwE=
 github.com/riverqueue/river v0.43.0 h1:3Dx6D3s6x+LM64UXRNJ79LvHxbE7XHywQUbMJOKEkbg=
 github.com/riverqueue/river v0.43.0/go.mod h1:cj0PdXI8jFTyNSAuVsItUhceQPYgRKdWLzBH5COLN4g=
 github.com/riverqueue/river/riverdriver v0.43.0 h1:gZOXFrUO4eoltx1aS389qBcMnYu0/vHjwUiLRjhKAd0=
