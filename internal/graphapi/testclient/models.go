@@ -6843,6 +6843,8 @@ type CreateEvidenceInput struct {
 	SubcontrolIDs            []string `json:"subcontrolIDs,omitempty"`
 	ControlObjectiveIDs      []string `json:"controlObjectiveIDs,omitempty"`
 	ControlImplementationIDs []string `json:"controlImplementationIDs,omitempty"`
+	InternalPolicyIDs        []string `json:"internalPolicyIDs,omitempty"`
+	ProcedureIDs             []string `json:"procedureIDs,omitempty"`
 	FileIDs                  []string `json:"fileIDs,omitempty"`
 	ProgramIDs               []string `json:"programIDs,omitempty"`
 	TaskIDs                  []string `json:"taskIDs,omitempty"`
@@ -14526,6 +14528,8 @@ type Evidence struct {
 	Subcontrols            *SubcontrolConnection            `json:"subcontrols"`
 	ControlObjectives      *ControlObjectiveConnection      `json:"controlObjectives"`
 	ControlImplementations *ControlImplementationConnection `json:"controlImplementations"`
+	InternalPolicies       *InternalPolicyConnection        `json:"internalPolicies"`
+	Procedures             *ProcedureConnection             `json:"procedures"`
 	Files                  *FileConnection                  `json:"files"`
 	Programs               *ProgramConnection               `json:"programs"`
 	Tasks                  *TaskConnection                  `json:"tasks"`
@@ -14901,6 +14905,12 @@ type EvidenceWhereInput struct {
 	// control_implementations edge predicates
 	HasControlImplementations     *bool                              `json:"hasControlImplementations,omitempty"`
 	HasControlImplementationsWith []*ControlImplementationWhereInput `json:"hasControlImplementationsWith,omitempty"`
+	// internal_policies edge predicates
+	HasInternalPolicies     *bool                       `json:"hasInternalPolicies,omitempty"`
+	HasInternalPoliciesWith []*InternalPolicyWhereInput `json:"hasInternalPoliciesWith,omitempty"`
+	// procedures edge predicates
+	HasProcedures     *bool                  `json:"hasProcedures,omitempty"`
+	HasProceduresWith []*ProcedureWhereInput `json:"hasProceduresWith,omitempty"`
 	// files edge predicates
 	HasFiles     *bool             `json:"hasFiles,omitempty"`
 	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
@@ -36916,6 +36926,12 @@ type UpdateEvidenceInput struct {
 	AddControlImplementationIDs    []string         `json:"addControlImplementationIDs,omitempty"`
 	RemoveControlImplementationIDs []string         `json:"removeControlImplementationIDs,omitempty"`
 	ClearControlImplementations    *bool            `json:"clearControlImplementations,omitempty"`
+	AddInternalPolicyIDs           []string         `json:"addInternalPolicyIDs,omitempty"`
+	RemoveInternalPolicyIDs        []string         `json:"removeInternalPolicyIDs,omitempty"`
+	ClearInternalPolicies          *bool            `json:"clearInternalPolicies,omitempty"`
+	AddProcedureIDs                []string         `json:"addProcedureIDs,omitempty"`
+	RemoveProcedureIDs             []string         `json:"removeProcedureIDs,omitempty"`
+	ClearProcedures                *bool            `json:"clearProcedures,omitempty"`
 	AddFileIDs                     []string         `json:"addFileIDs,omitempty"`
 	RemoveFileIDs                  []string         `json:"removeFileIDs,omitempty"`
 	ClearFiles                     *bool            `json:"clearFiles,omitempty"`

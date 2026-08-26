@@ -4574,6 +4574,7 @@ var (
 		{Name: "workflow_eligible_marker", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "external_uuid", Type: field.TypeString, Nullable: true},
 		{Name: "custom_type_enum_internal_policies", Type: field.TypeString, Nullable: true},
+		{Name: "evidence_internal_policies", Type: field.TypeString, Nullable: true},
 		{Name: "approver_id", Type: field.TypeString, Nullable: true},
 		{Name: "delegate_id", Type: field.TypeString, Nullable: true},
 		{Name: "internal_policy_kind_id", Type: field.TypeString, Nullable: true},
@@ -4595,44 +4596,50 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "internal_policies_groups_approver",
+				Symbol:     "internal_policies_evidences_internal_policies",
 				Columns:    []*schema.Column{InternalPoliciesColumns[38]},
-				RefColumns: []*schema.Column{GroupsColumns[0]},
+				RefColumns: []*schema.Column{EvidencesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "internal_policies_groups_delegate",
+				Symbol:     "internal_policies_groups_approver",
 				Columns:    []*schema.Column{InternalPoliciesColumns[39]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "internal_policies_custom_type_enums_internal_policy_kind",
+				Symbol:     "internal_policies_groups_delegate",
 				Columns:    []*schema.Column{InternalPoliciesColumns[40]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "internal_policies_custom_type_enums_environment",
+				Symbol:     "internal_policies_custom_type_enums_internal_policy_kind",
 				Columns:    []*schema.Column{InternalPoliciesColumns[41]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "internal_policies_custom_type_enums_scope",
+				Symbol:     "internal_policies_custom_type_enums_environment",
 				Columns:    []*schema.Column{InternalPoliciesColumns[42]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "internal_policies_files_file",
+				Symbol:     "internal_policies_custom_type_enums_scope",
 				Columns:    []*schema.Column{InternalPoliciesColumns[43]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "internal_policies_files_file",
+				Columns:    []*schema.Column{InternalPoliciesColumns[44]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "internal_policies_organizations_internal_policies",
-				Columns:    []*schema.Column{InternalPoliciesColumns[44]},
+				Columns:    []*schema.Column{InternalPoliciesColumns[45]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -4641,22 +4648,22 @@ var (
 			{
 				Name:    "internal_policy_file_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{InternalPoliciesColumns[43]},
+				Columns: []*schema.Column{InternalPoliciesColumns[44]},
 			},
 			{
 				Name:    "internalpolicy_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{InternalPoliciesColumns[8], InternalPoliciesColumns[44]},
+				Columns: []*schema.Column{InternalPoliciesColumns[8], InternalPoliciesColumns[45]},
 			},
 			{
 				Name:    "internal_policy_owner_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{InternalPoliciesColumns[44]},
+				Columns: []*schema.Column{InternalPoliciesColumns[45]},
 			},
 			{
 				Name:    "internalpolicy_external_uuid_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{InternalPoliciesColumns[36], InternalPoliciesColumns[44]},
+				Columns: []*schema.Column{InternalPoliciesColumns[36], InternalPoliciesColumns[45]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -6029,6 +6036,7 @@ var (
 		{Name: "workflow_eligible_marker", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "control_objective_procedures", Type: field.TypeString, Nullable: true},
 		{Name: "custom_type_enum_procedures", Type: field.TypeString, Nullable: true},
+		{Name: "evidence_procedures", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "approver_id", Type: field.TypeString, Nullable: true},
 		{Name: "delegate_id", Type: field.TypeString, Nullable: true},
@@ -6056,44 +6064,50 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "procedures_organizations_procedures",
+				Symbol:     "procedures_evidences_procedures",
 				Columns:    []*schema.Column{ProceduresColumns[38]},
+				RefColumns: []*schema.Column{EvidencesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "procedures_organizations_procedures",
+				Columns:    []*schema.Column{ProceduresColumns[39]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "procedures_groups_approver",
-				Columns:    []*schema.Column{ProceduresColumns[39]},
-				RefColumns: []*schema.Column{GroupsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "procedures_groups_delegate",
 				Columns:    []*schema.Column{ProceduresColumns[40]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "procedures_custom_type_enums_procedure_kind",
+				Symbol:     "procedures_groups_delegate",
 				Columns:    []*schema.Column{ProceduresColumns[41]},
-				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "procedures_custom_type_enums_environment",
+				Symbol:     "procedures_custom_type_enums_procedure_kind",
 				Columns:    []*schema.Column{ProceduresColumns[42]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "procedures_custom_type_enums_scope",
+				Symbol:     "procedures_custom_type_enums_environment",
 				Columns:    []*schema.Column{ProceduresColumns[43]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "procedures_files_file",
+				Symbol:     "procedures_custom_type_enums_scope",
 				Columns:    []*schema.Column{ProceduresColumns[44]},
+				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "procedures_files_file",
+				Columns:    []*schema.Column{ProceduresColumns[45]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -6102,17 +6116,17 @@ var (
 			{
 				Name:    "procedure_file_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{ProceduresColumns[44]},
+				Columns: []*schema.Column{ProceduresColumns[45]},
 			},
 			{
 				Name:    "procedure_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ProceduresColumns[8], ProceduresColumns[38]},
+				Columns: []*schema.Column{ProceduresColumns[8], ProceduresColumns[39]},
 			},
 			{
 				Name:    "procedure_owner_id_idx",
 				Unique:  false,
-				Columns: []*schema.Column{ProceduresColumns[38]},
+				Columns: []*schema.Column{ProceduresColumns[39]},
 			},
 		},
 	}
@@ -15723,13 +15737,14 @@ func init() {
 	IntegrationWebhooksTable.ForeignKeys[0].RefTable = IntegrationsTable
 	IntegrationWebhooksTable.ForeignKeys[1].RefTable = OrganizationsTable
 	InternalPoliciesTable.ForeignKeys[0].RefTable = CustomTypeEnumsTable
-	InternalPoliciesTable.ForeignKeys[1].RefTable = GroupsTable
+	InternalPoliciesTable.ForeignKeys[1].RefTable = EvidencesTable
 	InternalPoliciesTable.ForeignKeys[2].RefTable = GroupsTable
-	InternalPoliciesTable.ForeignKeys[3].RefTable = CustomTypeEnumsTable
+	InternalPoliciesTable.ForeignKeys[3].RefTable = GroupsTable
 	InternalPoliciesTable.ForeignKeys[4].RefTable = CustomTypeEnumsTable
 	InternalPoliciesTable.ForeignKeys[5].RefTable = CustomTypeEnumsTable
-	InternalPoliciesTable.ForeignKeys[6].RefTable = FilesTable
-	InternalPoliciesTable.ForeignKeys[7].RefTable = OrganizationsTable
+	InternalPoliciesTable.ForeignKeys[6].RefTable = CustomTypeEnumsTable
+	InternalPoliciesTable.ForeignKeys[7].RefTable = FilesTable
+	InternalPoliciesTable.ForeignKeys[8].RefTable = OrganizationsTable
 	InvitesTable.ForeignKeys[0].RefTable = OrganizationsTable
 	MappedControlsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	NarrativesTable.ForeignKeys[0].RefTable = ControlObjectivesTable
@@ -15799,13 +15814,14 @@ func init() {
 	PlatformsTable.ForeignKeys[19].RefTable = UsersTable
 	ProceduresTable.ForeignKeys[0].RefTable = ControlObjectivesTable
 	ProceduresTable.ForeignKeys[1].RefTable = CustomTypeEnumsTable
-	ProceduresTable.ForeignKeys[2].RefTable = OrganizationsTable
-	ProceduresTable.ForeignKeys[3].RefTable = GroupsTable
+	ProceduresTable.ForeignKeys[2].RefTable = EvidencesTable
+	ProceduresTable.ForeignKeys[3].RefTable = OrganizationsTable
 	ProceduresTable.ForeignKeys[4].RefTable = GroupsTable
-	ProceduresTable.ForeignKeys[5].RefTable = CustomTypeEnumsTable
+	ProceduresTable.ForeignKeys[5].RefTable = GroupsTable
 	ProceduresTable.ForeignKeys[6].RefTable = CustomTypeEnumsTable
 	ProceduresTable.ForeignKeys[7].RefTable = CustomTypeEnumsTable
-	ProceduresTable.ForeignKeys[8].RefTable = FilesTable
+	ProceduresTable.ForeignKeys[8].RefTable = CustomTypeEnumsTable
+	ProceduresTable.ForeignKeys[9].RefTable = FilesTable
 	ProgramsTable.ForeignKeys[0].RefTable = CustomTypeEnumsTable
 	ProgramsTable.ForeignKeys[1].RefTable = OrganizationsTable
 	ProgramsTable.ForeignKeys[2].RefTable = CustomTypeEnumsTable

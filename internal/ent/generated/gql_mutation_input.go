@@ -9034,6 +9034,8 @@ type CreateEvidenceInput struct {
 	SubcontrolIDs            []string              `json:"subcontrol_ids,omitempty"`
 	ControlObjectiveIDs      []string              `json:"control_objective_ids,omitempty"`
 	ControlImplementationIDs []string              `json:"control_implementation_ids,omitempty"`
+	InternalPolicyIDs        []string              `json:"internal_policy_ids,omitempty"`
+	ProcedureIDs             []string              `json:"procedure_ids,omitempty"`
 	FileIDs                  []string              `json:"file_ids,omitempty"`
 	ProgramIDs               []string              `json:"program_ids,omitempty"`
 	TaskIDs                  []string              `json:"task_ids,omitempty"`
@@ -9111,6 +9113,12 @@ func (i *CreateEvidenceInput) Mutate(m *EvidenceMutation) {
 	}
 	if v := i.ControlImplementationIDs; len(v) > 0 {
 		m.AddControlImplementationIDs(v...)
+	}
+	if v := i.InternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
+	}
+	if v := i.ProcedureIDs; len(v) > 0 {
+		m.AddProcedureIDs(v...)
 	}
 	if v := i.FileIDs; len(v) > 0 {
 		m.AddFileIDs(v...)
@@ -9190,6 +9198,12 @@ type UpdateEvidenceInput struct {
 	ClearControlImplementations    bool
 	AddControlImplementationIDs    []string `json:"add_control_implementation_ids,omitempty"`
 	RemoveControlImplementationIDs []string `json:"remove_control_implementation_ids,omitempty"`
+	ClearInternalPolicies          bool
+	AddInternalPolicyIDs           []string `json:"add_internal_policy_ids,omitempty"`
+	RemoveInternalPolicyIDs        []string `json:"remove_internal_policy_ids,omitempty"`
+	ClearProcedures                bool
+	AddProcedureIDs                []string `json:"add_procedure_ids,omitempty"`
+	RemoveProcedureIDs             []string `json:"remove_procedure_ids,omitempty"`
 	ClearFiles                     bool
 	AddFileIDs                     []string `json:"add_file_ids,omitempty"`
 	RemoveFileIDs                  []string `json:"remove_file_ids,omitempty"`
@@ -9355,6 +9369,24 @@ func (i *UpdateEvidenceInput) Mutate(m *EvidenceMutation) {
 	}
 	if v := i.RemoveControlImplementationIDs; len(v) > 0 {
 		m.RemoveControlImplementationIDs(v...)
+	}
+	if i.ClearInternalPolicies {
+		m.ClearInternalPolicies()
+	}
+	if v := i.AddInternalPolicyIDs; len(v) > 0 {
+		m.AddInternalPolicyIDs(v...)
+	}
+	if v := i.RemoveInternalPolicyIDs; len(v) > 0 {
+		m.RemoveInternalPolicyIDs(v...)
+	}
+	if i.ClearProcedures {
+		m.ClearProcedures()
+	}
+	if v := i.AddProcedureIDs; len(v) > 0 {
+		m.AddProcedureIDs(v...)
+	}
+	if v := i.RemoveProcedureIDs; len(v) > 0 {
+		m.RemoveProcedureIDs(v...)
 	}
 	if i.ClearFiles {
 		m.ClearFiles()

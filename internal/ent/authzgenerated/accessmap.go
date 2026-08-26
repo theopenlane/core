@@ -1568,6 +1568,16 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:       false,
 	CheckViewAccess:     false,
 	HasSystemOwnedField: true,
+}, "internal_policies": {
+	ObjectType:          "internal_policy",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: true,
+}, "procedures": {
+	ObjectType:          "procedure",
+	SkipEditCheck:       true,
+	CheckViewAccess:     true,
+	HasSystemOwnedField: true,
 }, "files": {
 	ObjectType:          "file",
 	SkipEditCheck:       false,

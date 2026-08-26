@@ -9761,6 +9761,38 @@ func (c *EvidenceClient) QueryControlImplementations(_m *Evidence) *ControlImple
 	return query
 }
 
+// QueryInternalPolicies queries the internal_policies edge of a Evidence.
+func (c *EvidenceClient) QueryInternalPolicies(_m *Evidence) *InternalPolicyQuery {
+	query := (&InternalPolicyClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(evidence.Table, evidence.FieldID, id),
+			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, evidence.InternalPoliciesTable, evidence.InternalPoliciesColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryProcedures queries the procedures edge of a Evidence.
+func (c *EvidenceClient) QueryProcedures(_m *Evidence) *ProcedureQuery {
+	query := (&ProcedureClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(evidence.Table, evidence.FieldID, id),
+			sqlgraph.To(procedure.Table, procedure.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, evidence.ProceduresTable, evidence.ProceduresColumn),
+		)
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryFiles queries the files edge of a Evidence.
 func (c *EvidenceClient) QueryFiles(_m *Evidence) *FileQuery {
 	query := (&FileClient{config: c.config}).Query()
