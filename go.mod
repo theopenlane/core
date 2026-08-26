@@ -368,7 +368,7 @@ require (
 	github.com/prometheus/client_model v0.6.2 // indirect
 	github.com/prometheus/common v0.70.1 // indirect
 	github.com/prometheus/procfs v0.21.1 // indirect
-	github.com/resend/resend-go/v3 v3.12.0
+	github.com/resend/resend-go/v3 v3.14.0
 	github.com/riverqueue/river/riverdriver v0.43.0 // indirect
 	github.com/riverqueue/river/rivershared v0.43.0 // indirect
 	github.com/sagikazarmark/locafero v0.12.0 // indirect
