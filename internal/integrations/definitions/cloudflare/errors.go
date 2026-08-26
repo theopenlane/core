@@ -35,7 +35,7 @@ var (
 	ErrRuntimeConfigDecode = errors.New("cloudflare: runtime config decode failed")
 	// ErrRuntimeConfigInvalid indicates the runtime Cloudflare config is missing required fields
 	ErrRuntimeConfigInvalid = errors.New("cloudflare: runtime config invalid")
-	// ErrDomainScanSubmitFailed indicates the URL Scanner bulk submission request failed
+	// ErrDomainScanSubmitFailed indicates a URL Scanner submission request failed
 	ErrDomainScanSubmitFailed = errors.New("cloudflare: domain scan submit failed")
 	// ErrDomainScanResultFailed indicates the URL Scanner result retrieval request failed
 	ErrDomainScanResultFailed = errors.New("cloudflare: domain scan result fetch failed")

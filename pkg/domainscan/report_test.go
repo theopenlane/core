@@ -3,6 +3,7 @@ package domainscan
 import (
 	"testing"
 
+	"github.com/mcuadros/go-defaults"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
@@ -65,6 +66,26 @@ func TestEnrichmentIsEmpty(t *testing.T) {
 	assert.Check(t, Enrichment{}.IsEmpty())
 
 	assert.Check(t, !Enrichment{Company: &CompanyProfile{Name: "Acme"}}.IsEmpty())
+	assert.Check(t, !Enrichment{Branding: &BrandDesignProfile{PrimaryColor: "#123456"}}.IsEmpty())
 	assert.Check(t, !Enrichment{Compliance: &CompliancePage{}}.IsEmpty())
 	assert.Check(t, !Enrichment{DNS: &DNSVendorInfo{}}.IsEmpty())
+}
+
+func TestBuildScanReportWithRenderedBranding(t *testing.T) {
+	enrichment := Enrichment{
+		Branding: &BrandDesignProfile{
+			PrimaryColor:    "#123456",
+			Font:            "Inter",
+			BackgroundColor: "#FFFFFF",
+		},
+	}
+
+	data := BuildScanReport(nil, enrichment, nil, nil)
+
+	var report ScanReport
+	assert.NilError(t, jsonx.RoundTrip(data, &report))
+	assert.Assert(t, report.Branding != nil)
+	assert.Equal(t, report.Branding.PrimaryColor, "#123456")
+	assert.Equal(t, report.Branding.Font, "Inter")
+	assert.Equal(t, report.Branding.BackgroundColor, "#FFFFFF")
 }

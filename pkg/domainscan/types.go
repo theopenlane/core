@@ -12,12 +12,31 @@ type JSONSchemaProperty struct {
 type JSONSchema struct {
 	Type       string                        `json:"type"`
 	Properties map[string]JSONSchemaProperty `json:"properties"`
+	Required   []string                      `json:"required,omitempty"`
 }
 
 // ResponseFormat specifies JSON schema extraction
 type ResponseFormat struct {
 	Type   string     `json:"type"`
 	Schema JSONSchema `json:"json_schema"`
+}
+
+// BrandDesignProfile is the visual branding extracted from a rendered website
+type BrandDesignProfile struct {
+	PrimaryColor             string `json:"primary_color,omitempty"`
+	Font                     string `json:"font,omitempty"`
+	ForegroundColor          string `json:"foreground_color,omitempty"`
+	BackgroundColor          string `json:"background_color,omitempty"`
+	AccentColor              string `json:"accent_color,omitempty"`
+	SecondaryBackgroundColor string `json:"secondary_background_color,omitempty"`
+	SecondaryForegroundColor string `json:"secondary_foreground_color,omitempty"`
+}
+
+// IsEmpty reports whether browser rendering found any branding values
+func (b BrandDesignProfile) IsEmpty() bool {
+	return b.PrimaryColor == "" && b.Font == "" && b.ForegroundColor == "" &&
+		b.BackgroundColor == "" && b.AccentColor == "" &&
+		b.SecondaryBackgroundColor == "" && b.SecondaryForegroundColor == ""
 }
 
 // CompanyProfile is the company information extracted from a website by

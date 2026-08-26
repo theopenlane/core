@@ -15,6 +15,8 @@ import (
 type Enrichment struct {
 	// Company is the base company profile
 	Company *CompanyProfile `json:"company,omitempty"`
+	// Branding is visual design data extracted from the rendered website
+	Branding *BrandDesignProfile `json:"branding,omitempty"`
 	// Compliance is compliance specific data such as soc2 attestation, subprocessors, etc
 	Compliance *CompliancePage `json:"compliance,omitempty"`
 	// DNS includes DNS probed data
@@ -23,12 +25,13 @@ type Enrichment struct {
 
 // IsEmpty reports whether no enrichment lookup produced any data
 func (e Enrichment) IsEmpty() bool {
-	return e.Company == nil && e.Compliance == nil && e.DNS == nil
+	return e.Company == nil && e.Branding == nil && e.Compliance == nil && e.DNS == nil
 }
 
 // EnrichmentErrors holds the per-lookup errors from GatherEnrichment, each nil on success
 type EnrichmentErrors struct {
 	Company    error
+	Branding   error
 	Compliance error
 	DNS        error
 }
@@ -36,6 +39,9 @@ type EnrichmentErrors struct {
 // ReportConfig configures how BuildScanReport classifies vendors versus
 // technologies and which vendor names it always excludes
 type ReportConfig struct {
+	// BulkScan submits all domains through Cloudflare's bulk URL Scanner endpoint. When disabled,
+	// domains are submitted sequentially through the single URL Scanner endpoint
+	BulkScan bool `json:"bulkscan" koanf:"bulkscan" default:"true"`
 	// NonVendorCategories lists wappalyzer categories treated as technologies
 	// instead of vendors when building an onboarding domain scan report
 	NonVendorCategories []string `json:"nonvendorcategories" koanf:"nonvendorcategories" default:"[Miscellaneous,JavaScript frameworks,JavaScript libraries,Static site generator]"`
@@ -45,7 +51,7 @@ type ReportConfig struct {
 	ScanTTL int `json:"scanttl" koanf:"scanttl" default:"86400"`
 }
 
-// GatherEnrichment runs the company profile, compliance, and DNS vendor
+// GatherEnrichment runs the company profile, branding, compliance, and DNS vendor
 // lookups for domain concurrently, bounded by timeout. Each lookup is
 // best-effort
 func (c *Config) GatherEnrichment(ctx context.Context, domain string, timeout time.Duration) (Enrichment, EnrichmentErrors) {
@@ -63,6 +69,16 @@ func (c *Config) GatherEnrichment(ctx context.Context, domain string, timeout ti
 			errs.Company = err
 		} else {
 			enrichment.Company = profile
+		}
+
+		return nil
+	})
+
+	g.Go(func() error {
+		if branding, err := c.GetBrandingData(ctx, domain); err != nil {
+			errs.Branding = err
+		} else if !branding.IsEmpty() {
+			enrichment.Branding = branding
 		}
 
 		return nil
@@ -107,7 +123,7 @@ func BuildScanReport(result *url_scanner.ScanGetResponse, enrichment Enrichment,
 
 	report.Vendors, report.Technologies = buildVendorsAndTechnologies(result, enrichment, nonVendorCategories, deniedVendorNames)
 	report.Assets = buildAssets(result, enrichment)
-	report.Branding = buildBranding(result)
+	report.Branding = buildBranding(result, enrichment.Branding)
 	report.Meta = buildMeta(result)
 	report.Platform = buildPlatform(enrichment)
 	report.Systems = buildSystems(enrichment)

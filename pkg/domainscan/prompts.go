@@ -10,6 +10,8 @@ func getPrompt(t PromptType) string {
 		return compliancePagePrompt
 	case promptTrustCenter:
 		return trustCenterPrompt
+	case promptBranding:
+		return brandingPrompt
 	}
 
 	return ""
@@ -19,7 +21,21 @@ const (
 	promptCompany     PromptType = "COMPANY"
 	promptCompliance  PromptType = "COMPLIANCE"
 	promptTrustCenter PromptType = "TRUST_CENTER"
+	promptBranding    PromptType = "BRANDING"
 )
+
+// brandingPrompt guides the AI to extract the visual design tokens of the rendered site
+const brandingPrompt = `Extract the visual branding used by this rendered website.
+
+Inspect the rendered page and its computed styles, including the header, navigation, hero, buttons, links, cards, and footer. Make sure to return the primary brand color, foreground/text color, page background color, accent color, secondary background color, secondary foreground color, and primary font family.
+
+Return every color as a six-digit hexadecimal value in #RRGGBB format. Colors that are visibly used in the actual rendered UI should be preferred over those found only in metadata, hidden elements, illustrations and others like third-party widgets. 
+
+The primary color should be the company's most recognizable brand color; the accent color should be the prominent color used for things like CTAs (call to action ), links, or highlights. 
+
+The foreground and background colors should be the main readable page surface colors, while secondary foreground and background colors would be the contrasting sections, cards, or navigations.
+
+Return the font family name used for the majority of body text, without CSS fallbacks, quotes, weights, or style descriptors. If the font cannot be reliably determined, return an empty string instead of making an uninformed guess`
 
 // companyProfilePrompt guides the AI to extract company information from a website
 const companyProfilePrompt = `Extract company profile information from this website.
