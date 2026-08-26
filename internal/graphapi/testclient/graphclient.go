@@ -46100,6 +46100,100 @@ func (t *CreateEvidence_CreateEvidence_Evidence_ControlObjectives) GetEdges() []
 	return t.Edges
 }
 
+type CreateEvidence_CreateEvidence_Evidence_InternalPolicies_Edges_Node struct {
+	DisplayID string "json:\"displayID\" graphql:\"displayID\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateEvidence_CreateEvidence_Evidence_InternalPolicies_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &CreateEvidence_CreateEvidence_Evidence_InternalPolicies_Edges_Node{}
+	}
+	return t.DisplayID
+}
+func (t *CreateEvidence_CreateEvidence_Evidence_InternalPolicies_Edges_Node) GetID() string {
+	if t == nil {
+		t = &CreateEvidence_CreateEvidence_Evidence_InternalPolicies_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *CreateEvidence_CreateEvidence_Evidence_InternalPolicies_Edges_Node) GetName() string {
+	if t == nil {
+		t = &CreateEvidence_CreateEvidence_Evidence_InternalPolicies_Edges_Node{}
+	}
+	return t.Name
+}
+
+type CreateEvidence_CreateEvidence_Evidence_InternalPolicies_Edges struct {
+	Node *CreateEvidence_CreateEvidence_Evidence_InternalPolicies_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *CreateEvidence_CreateEvidence_Evidence_InternalPolicies_Edges) GetNode() *CreateEvidence_CreateEvidence_Evidence_InternalPolicies_Edges_Node {
+	if t == nil {
+		t = &CreateEvidence_CreateEvidence_Evidence_InternalPolicies_Edges{}
+	}
+	return t.Node
+}
+
+type CreateEvidence_CreateEvidence_Evidence_InternalPolicies struct {
+	Edges []*CreateEvidence_CreateEvidence_Evidence_InternalPolicies_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *CreateEvidence_CreateEvidence_Evidence_InternalPolicies) GetEdges() []*CreateEvidence_CreateEvidence_Evidence_InternalPolicies_Edges {
+	if t == nil {
+		t = &CreateEvidence_CreateEvidence_Evidence_InternalPolicies{}
+	}
+	return t.Edges
+}
+
+type CreateEvidence_CreateEvidence_Evidence_Procedures_Edges_Node struct {
+	DisplayID string "json:\"displayID\" graphql:\"displayID\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
+}
+
+func (t *CreateEvidence_CreateEvidence_Evidence_Procedures_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &CreateEvidence_CreateEvidence_Evidence_Procedures_Edges_Node{}
+	}
+	return t.DisplayID
+}
+func (t *CreateEvidence_CreateEvidence_Evidence_Procedures_Edges_Node) GetID() string {
+	if t == nil {
+		t = &CreateEvidence_CreateEvidence_Evidence_Procedures_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *CreateEvidence_CreateEvidence_Evidence_Procedures_Edges_Node) GetName() string {
+	if t == nil {
+		t = &CreateEvidence_CreateEvidence_Evidence_Procedures_Edges_Node{}
+	}
+	return t.Name
+}
+
+type CreateEvidence_CreateEvidence_Evidence_Procedures_Edges struct {
+	Node *CreateEvidence_CreateEvidence_Evidence_Procedures_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *CreateEvidence_CreateEvidence_Evidence_Procedures_Edges) GetNode() *CreateEvidence_CreateEvidence_Evidence_Procedures_Edges_Node {
+	if t == nil {
+		t = &CreateEvidence_CreateEvidence_Evidence_Procedures_Edges{}
+	}
+	return t.Node
+}
+
+type CreateEvidence_CreateEvidence_Evidence_Procedures struct {
+	Edges []*CreateEvidence_CreateEvidence_Evidence_Procedures_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *CreateEvidence_CreateEvidence_Evidence_Procedures) GetEdges() []*CreateEvidence_CreateEvidence_Evidence_Procedures_Edges {
+	if t == nil {
+		t = &CreateEvidence_CreateEvidence_Evidence_Procedures{}
+	}
+	return t.Edges
+}
+
 type CreateEvidence_CreateEvidence_Evidence struct {
 	CollectionProcedure *string                                                  "json:\"collectionProcedure,omitempty\" graphql:\"collectionProcedure\""
 	ControlObjectives   CreateEvidence_CreateEvidence_Evidence_ControlObjectives "json:\"controlObjectives\" graphql:\"controlObjectives\""
@@ -46111,9 +46205,11 @@ type CreateEvidence_CreateEvidence_Evidence struct {
 	DisplayID           string                                                   "json:\"displayID\" graphql:\"displayID\""
 	Files               CreateEvidence_CreateEvidence_Evidence_Files             "json:\"files\" graphql:\"files\""
 	ID                  string                                                   "json:\"id\" graphql:\"id\""
+	InternalPolicies    CreateEvidence_CreateEvidence_Evidence_InternalPolicies  "json:\"internalPolicies\" graphql:\"internalPolicies\""
 	IsAutomated         *bool                                                    "json:\"isAutomated,omitempty\" graphql:\"isAutomated\""
 	Name                string                                                   "json:\"name\" graphql:\"name\""
 	OwnerID             *string                                                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Procedures          CreateEvidence_CreateEvidence_Evidence_Procedures        "json:\"procedures\" graphql:\"procedures\""
 	Programs            CreateEvidence_CreateEvidence_Evidence_Programs          "json:\"programs\" graphql:\"programs\""
 	RenewalDate         *models.DateTime                                         "json:\"renewalDate,omitempty\" graphql:\"renewalDate\""
 	Source              *string                                                  "json:\"source,omitempty\" graphql:\"source\""
@@ -46186,6 +46282,12 @@ func (t *CreateEvidence_CreateEvidence_Evidence) GetID() string {
 	}
 	return t.ID
 }
+func (t *CreateEvidence_CreateEvidence_Evidence) GetInternalPolicies() *CreateEvidence_CreateEvidence_Evidence_InternalPolicies {
+	if t == nil {
+		t = &CreateEvidence_CreateEvidence_Evidence{}
+	}
+	return &t.InternalPolicies
+}
 func (t *CreateEvidence_CreateEvidence_Evidence) GetIsAutomated() *bool {
 	if t == nil {
 		t = &CreateEvidence_CreateEvidence_Evidence{}
@@ -46203,6 +46305,12 @@ func (t *CreateEvidence_CreateEvidence_Evidence) GetOwnerID() *string {
 		t = &CreateEvidence_CreateEvidence_Evidence{}
 	}
 	return t.OwnerID
+}
+func (t *CreateEvidence_CreateEvidence_Evidence) GetProcedures() *CreateEvidence_CreateEvidence_Evidence_Procedures {
+	if t == nil {
+		t = &CreateEvidence_CreateEvidence_Evidence{}
+	}
+	return &t.Procedures
 }
 func (t *CreateEvidence_CreateEvidence_Evidence) GetPrograms() *CreateEvidence_CreateEvidence_Evidence_Programs {
 	if t == nil {
@@ -47010,6 +47118,100 @@ func (t *GetEvidenceByID_Evidence_ControlObjectives) GetEdges() []*GetEvidenceBy
 	return t.Edges
 }
 
+type GetEvidenceByID_Evidence_InternalPolicies_Edges_Node struct {
+	DisplayID string "json:\"displayID\" graphql:\"displayID\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetEvidenceByID_Evidence_InternalPolicies_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetEvidenceByID_Evidence_InternalPolicies_Edges_Node{}
+	}
+	return t.DisplayID
+}
+func (t *GetEvidenceByID_Evidence_InternalPolicies_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetEvidenceByID_Evidence_InternalPolicies_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetEvidenceByID_Evidence_InternalPolicies_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetEvidenceByID_Evidence_InternalPolicies_Edges_Node{}
+	}
+	return t.Name
+}
+
+type GetEvidenceByID_Evidence_InternalPolicies_Edges struct {
+	Node *GetEvidenceByID_Evidence_InternalPolicies_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetEvidenceByID_Evidence_InternalPolicies_Edges) GetNode() *GetEvidenceByID_Evidence_InternalPolicies_Edges_Node {
+	if t == nil {
+		t = &GetEvidenceByID_Evidence_InternalPolicies_Edges{}
+	}
+	return t.Node
+}
+
+type GetEvidenceByID_Evidence_InternalPolicies struct {
+	Edges []*GetEvidenceByID_Evidence_InternalPolicies_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetEvidenceByID_Evidence_InternalPolicies) GetEdges() []*GetEvidenceByID_Evidence_InternalPolicies_Edges {
+	if t == nil {
+		t = &GetEvidenceByID_Evidence_InternalPolicies{}
+	}
+	return t.Edges
+}
+
+type GetEvidenceByID_Evidence_Procedures_Edges_Node struct {
+	DisplayID string "json:\"displayID\" graphql:\"displayID\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
+}
+
+func (t *GetEvidenceByID_Evidence_Procedures_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &GetEvidenceByID_Evidence_Procedures_Edges_Node{}
+	}
+	return t.DisplayID
+}
+func (t *GetEvidenceByID_Evidence_Procedures_Edges_Node) GetID() string {
+	if t == nil {
+		t = &GetEvidenceByID_Evidence_Procedures_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *GetEvidenceByID_Evidence_Procedures_Edges_Node) GetName() string {
+	if t == nil {
+		t = &GetEvidenceByID_Evidence_Procedures_Edges_Node{}
+	}
+	return t.Name
+}
+
+type GetEvidenceByID_Evidence_Procedures_Edges struct {
+	Node *GetEvidenceByID_Evidence_Procedures_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *GetEvidenceByID_Evidence_Procedures_Edges) GetNode() *GetEvidenceByID_Evidence_Procedures_Edges_Node {
+	if t == nil {
+		t = &GetEvidenceByID_Evidence_Procedures_Edges{}
+	}
+	return t.Node
+}
+
+type GetEvidenceByID_Evidence_Procedures struct {
+	Edges []*GetEvidenceByID_Evidence_Procedures_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *GetEvidenceByID_Evidence_Procedures) GetEdges() []*GetEvidenceByID_Evidence_Procedures_Edges {
+	if t == nil {
+		t = &GetEvidenceByID_Evidence_Procedures{}
+	}
+	return t.Edges
+}
+
 type GetEvidenceByID_Evidence struct {
 	AuditorReferenceID     *string                                    "json:\"auditorReferenceID,omitempty\" graphql:\"auditorReferenceID\""
 	CollectionProcedure    *string                                    "json:\"collectionProcedure,omitempty\" graphql:\"collectionProcedure\""
@@ -47025,9 +47227,11 @@ type GetEvidenceByID_Evidence struct {
 	ExternalUUID           *string                                    "json:\"externalUUID,omitempty\" graphql:\"externalUUID\""
 	Files                  GetEvidenceByID_Evidence_Files             "json:\"files\" graphql:\"files\""
 	ID                     string                                     "json:\"id\" graphql:\"id\""
+	InternalPolicies       GetEvidenceByID_Evidence_InternalPolicies  "json:\"internalPolicies\" graphql:\"internalPolicies\""
 	IsAutomated            *bool                                      "json:\"isAutomated,omitempty\" graphql:\"isAutomated\""
 	Name                   string                                     "json:\"name\" graphql:\"name\""
 	OwnerID                *string                                    "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Procedures             GetEvidenceByID_Evidence_Procedures        "json:\"procedures\" graphql:\"procedures\""
 	Programs               GetEvidenceByID_Evidence_Programs          "json:\"programs\" graphql:\"programs\""
 	RenewalDate            *models.DateTime                           "json:\"renewalDate,omitempty\" graphql:\"renewalDate\""
 	ReviewFrequency        *enums.Frequency                           "json:\"reviewFrequency,omitempty\" graphql:\"reviewFrequency\""
@@ -47129,6 +47333,12 @@ func (t *GetEvidenceByID_Evidence) GetID() string {
 	}
 	return t.ID
 }
+func (t *GetEvidenceByID_Evidence) GetInternalPolicies() *GetEvidenceByID_Evidence_InternalPolicies {
+	if t == nil {
+		t = &GetEvidenceByID_Evidence{}
+	}
+	return &t.InternalPolicies
+}
 func (t *GetEvidenceByID_Evidence) GetIsAutomated() *bool {
 	if t == nil {
 		t = &GetEvidenceByID_Evidence{}
@@ -47146,6 +47356,12 @@ func (t *GetEvidenceByID_Evidence) GetOwnerID() *string {
 		t = &GetEvidenceByID_Evidence{}
 	}
 	return t.OwnerID
+}
+func (t *GetEvidenceByID_Evidence) GetProcedures() *GetEvidenceByID_Evidence_Procedures {
+	if t == nil {
+		t = &GetEvidenceByID_Evidence{}
+	}
+	return &t.Procedures
 }
 func (t *GetEvidenceByID_Evidence) GetPrograms() *GetEvidenceByID_Evidence_Programs {
 	if t == nil {
@@ -48179,6 +48395,100 @@ func (t *UpdateEvidence_UpdateEvidence_Evidence_ControlObjectives) GetEdges() []
 	return t.Edges
 }
 
+type UpdateEvidence_UpdateEvidence_Evidence_InternalPolicies_Edges_Node struct {
+	DisplayID string "json:\"displayID\" graphql:\"displayID\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateEvidence_UpdateEvidence_Evidence_InternalPolicies_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &UpdateEvidence_UpdateEvidence_Evidence_InternalPolicies_Edges_Node{}
+	}
+	return t.DisplayID
+}
+func (t *UpdateEvidence_UpdateEvidence_Evidence_InternalPolicies_Edges_Node) GetID() string {
+	if t == nil {
+		t = &UpdateEvidence_UpdateEvidence_Evidence_InternalPolicies_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *UpdateEvidence_UpdateEvidence_Evidence_InternalPolicies_Edges_Node) GetName() string {
+	if t == nil {
+		t = &UpdateEvidence_UpdateEvidence_Evidence_InternalPolicies_Edges_Node{}
+	}
+	return t.Name
+}
+
+type UpdateEvidence_UpdateEvidence_Evidence_InternalPolicies_Edges struct {
+	Node *UpdateEvidence_UpdateEvidence_Evidence_InternalPolicies_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *UpdateEvidence_UpdateEvidence_Evidence_InternalPolicies_Edges) GetNode() *UpdateEvidence_UpdateEvidence_Evidence_InternalPolicies_Edges_Node {
+	if t == nil {
+		t = &UpdateEvidence_UpdateEvidence_Evidence_InternalPolicies_Edges{}
+	}
+	return t.Node
+}
+
+type UpdateEvidence_UpdateEvidence_Evidence_InternalPolicies struct {
+	Edges []*UpdateEvidence_UpdateEvidence_Evidence_InternalPolicies_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *UpdateEvidence_UpdateEvidence_Evidence_InternalPolicies) GetEdges() []*UpdateEvidence_UpdateEvidence_Evidence_InternalPolicies_Edges {
+	if t == nil {
+		t = &UpdateEvidence_UpdateEvidence_Evidence_InternalPolicies{}
+	}
+	return t.Edges
+}
+
+type UpdateEvidence_UpdateEvidence_Evidence_Procedures_Edges_Node struct {
+	DisplayID string "json:\"displayID\" graphql:\"displayID\""
+	ID        string "json:\"id\" graphql:\"id\""
+	Name      string "json:\"name\" graphql:\"name\""
+}
+
+func (t *UpdateEvidence_UpdateEvidence_Evidence_Procedures_Edges_Node) GetDisplayID() string {
+	if t == nil {
+		t = &UpdateEvidence_UpdateEvidence_Evidence_Procedures_Edges_Node{}
+	}
+	return t.DisplayID
+}
+func (t *UpdateEvidence_UpdateEvidence_Evidence_Procedures_Edges_Node) GetID() string {
+	if t == nil {
+		t = &UpdateEvidence_UpdateEvidence_Evidence_Procedures_Edges_Node{}
+	}
+	return t.ID
+}
+func (t *UpdateEvidence_UpdateEvidence_Evidence_Procedures_Edges_Node) GetName() string {
+	if t == nil {
+		t = &UpdateEvidence_UpdateEvidence_Evidence_Procedures_Edges_Node{}
+	}
+	return t.Name
+}
+
+type UpdateEvidence_UpdateEvidence_Evidence_Procedures_Edges struct {
+	Node *UpdateEvidence_UpdateEvidence_Evidence_Procedures_Edges_Node "json:\"node,omitempty\" graphql:\"node\""
+}
+
+func (t *UpdateEvidence_UpdateEvidence_Evidence_Procedures_Edges) GetNode() *UpdateEvidence_UpdateEvidence_Evidence_Procedures_Edges_Node {
+	if t == nil {
+		t = &UpdateEvidence_UpdateEvidence_Evidence_Procedures_Edges{}
+	}
+	return t.Node
+}
+
+type UpdateEvidence_UpdateEvidence_Evidence_Procedures struct {
+	Edges []*UpdateEvidence_UpdateEvidence_Evidence_Procedures_Edges "json:\"edges,omitempty\" graphql:\"edges\""
+}
+
+func (t *UpdateEvidence_UpdateEvidence_Evidence_Procedures) GetEdges() []*UpdateEvidence_UpdateEvidence_Evidence_Procedures_Edges {
+	if t == nil {
+		t = &UpdateEvidence_UpdateEvidence_Evidence_Procedures{}
+	}
+	return t.Edges
+}
+
 type UpdateEvidence_UpdateEvidence_Evidence struct {
 	CollectionProcedure *string                                                  "json:\"collectionProcedure,omitempty\" graphql:\"collectionProcedure\""
 	ControlObjectives   UpdateEvidence_UpdateEvidence_Evidence_ControlObjectives "json:\"controlObjectives\" graphql:\"controlObjectives\""
@@ -48190,9 +48500,11 @@ type UpdateEvidence_UpdateEvidence_Evidence struct {
 	DisplayID           string                                                   "json:\"displayID\" graphql:\"displayID\""
 	Files               UpdateEvidence_UpdateEvidence_Evidence_Files             "json:\"files\" graphql:\"files\""
 	ID                  string                                                   "json:\"id\" graphql:\"id\""
+	InternalPolicies    UpdateEvidence_UpdateEvidence_Evidence_InternalPolicies  "json:\"internalPolicies\" graphql:\"internalPolicies\""
 	IsAutomated         *bool                                                    "json:\"isAutomated,omitempty\" graphql:\"isAutomated\""
 	Name                string                                                   "json:\"name\" graphql:\"name\""
 	OwnerID             *string                                                  "json:\"ownerID,omitempty\" graphql:\"ownerID\""
+	Procedures          UpdateEvidence_UpdateEvidence_Evidence_Procedures        "json:\"procedures\" graphql:\"procedures\""
 	Programs            UpdateEvidence_UpdateEvidence_Evidence_Programs          "json:\"programs\" graphql:\"programs\""
 	RenewalDate         *models.DateTime                                         "json:\"renewalDate,omitempty\" graphql:\"renewalDate\""
 	Source              *string                                                  "json:\"source,omitempty\" graphql:\"source\""
@@ -48265,6 +48577,12 @@ func (t *UpdateEvidence_UpdateEvidence_Evidence) GetID() string {
 	}
 	return t.ID
 }
+func (t *UpdateEvidence_UpdateEvidence_Evidence) GetInternalPolicies() *UpdateEvidence_UpdateEvidence_Evidence_InternalPolicies {
+	if t == nil {
+		t = &UpdateEvidence_UpdateEvidence_Evidence{}
+	}
+	return &t.InternalPolicies
+}
 func (t *UpdateEvidence_UpdateEvidence_Evidence) GetIsAutomated() *bool {
 	if t == nil {
 		t = &UpdateEvidence_UpdateEvidence_Evidence{}
@@ -48282,6 +48600,12 @@ func (t *UpdateEvidence_UpdateEvidence_Evidence) GetOwnerID() *string {
 		t = &UpdateEvidence_UpdateEvidence_Evidence{}
 	}
 	return t.OwnerID
+}
+func (t *UpdateEvidence_UpdateEvidence_Evidence) GetProcedures() *UpdateEvidence_UpdateEvidence_Evidence_Procedures {
+	if t == nil {
+		t = &UpdateEvidence_UpdateEvidence_Evidence{}
+	}
+	return &t.Procedures
 }
 func (t *UpdateEvidence_UpdateEvidence_Evidence) GetPrograms() *UpdateEvidence_UpdateEvidence_Evidence_Programs {
 	if t == nil {
@@ -182395,6 +182719,24 @@ const CreateEvidenceDocument = `mutation CreateEvidence ($input: CreateEvidenceI
 					}
 				}
 			}
+			internalPolicies {
+				edges {
+					node {
+						id
+						displayID
+						name
+					}
+				}
+			}
+			procedures {
+				edges {
+					node {
+						id
+						displayID
+						name
+					}
+				}
+			}
 		}
 	}
 }
@@ -182608,6 +182950,24 @@ const GetEvidenceByIDDocument = `query GetEvidenceByID ($evidenceId: ID!) {
 			}
 		}
 		controlObjectives {
+			edges {
+				node {
+					id
+					displayID
+					name
+				}
+			}
+		}
+		internalPolicies {
+			edges {
+				node {
+					id
+					displayID
+					name
+				}
+			}
+		}
+		procedures {
 			edges {
 				node {
 					id
@@ -182852,6 +183212,24 @@ const UpdateEvidenceDocument = `mutation UpdateEvidence ($updateEvidenceId: ID!,
 				}
 			}
 			controlObjectives {
+				edges {
+					node {
+						id
+						displayID
+						name
+					}
+				}
+			}
+			internalPolicies {
+				edges {
+					node {
+						id
+						displayID
+						name
+					}
+				}
+			}
+			procedures {
 				edges {
 					node {
 						id

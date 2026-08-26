@@ -104,6 +104,24 @@ mutation CreateEvidence ($input: CreateEvidenceInput!, $evidenceFiles: [Upload!]
 					}
 				}
 			}
+			internalPolicies {
+				edges {
+					node {
+						id
+						displayID
+						name
+					}
+				}
+			}
+			procedures {
+				edges {
+					node {
+						id
+						displayID
+						name
+					}
+				}
+			}
 		}
 	}
 }
@@ -261,6 +279,24 @@ query GetEvidenceByID ($evidenceId: ID!) {
 			}
 		}
 		controlObjectives {
+			edges {
+				node {
+					id
+					displayID
+					name
+				}
+			}
+		}
+		internalPolicies {
+			edges {
+				node {
+					id
+					displayID
+					name
+				}
+			}
+		}
+		procedures {
 			edges {
 				node {
 					id
@@ -447,6 +483,24 @@ mutation UpdateEvidence ($updateEvidenceId: ID!, $input: UpdateEvidenceInput!, $
 				}
 			}
 			controlObjectives {
+				edges {
+					node {
+						id
+						displayID
+						name
+					}
+				}
+			}
+			internalPolicies {
+				edges {
+					node {
+						id
+						displayID
+						name
+					}
+				}
+			}
+			procedures {
 				edges {
 					node {
 						id
