@@ -99,8 +99,8 @@ github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.18.37 h1:b5tb+CZItBkydC7r3hTNdS
 github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.18.37/go.mod h1:ZQ+6SU9X0oz6+7MUCSswv9Mjci4eaqZr21HI2RVy/yA=
 github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.22.43 h1:Fhx4uwBshQF0+jmhV/FKDM4LPj7L9iUy5n3MvLxLy00=
 github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.22.43/go.mod h1:4Tyfc1eIPEyrAMysLCVkcYL1Hm/hkGWbElLo8pejHPo=
-github.com/aws/aws-sdk-go-v2/feature/s3/transfermanager v0.3.13 h1:pM4L5lw8RaUkDAZYpHenVWLI2DJ4Qz5S4oDphjxoPvk=
-github.com/aws/aws-sdk-go-v2/feature/s3/transfermanager v0.3.13/go.mod h1:Wl+WygckBndyBhVf1kOVUCYBtS4KI2pHgcN8jGsYhwE=
+github.com/aws/aws-sdk-go-v2/feature/s3/transfermanager v0.3.14 h1:ZH5pitzSx4Q7UUVVfTAJTxlbhmELBI8aafgF0wWF5l4=
+github.com/aws/aws-sdk-go-v2/feature/s3/transfermanager v0.3.14/go.mod h1:Wl+WygckBndyBhVf1kOVUCYBtS4KI2pHgcN8jGsYhwE=
 github.com/aws/aws-sdk-go-v2/internal/configsources v1.4.37 h1:lznzIOvvbqjfe8UAaciCRJgBgJsxuTROKlhZuXQWfv8=
 github.com/aws/aws-sdk-go-v2/internal/configsources v1.4.37/go.mod h1:otfkzyfQeMMLZAqX59GSXTL3o22BR/l6HFaRzzbWSqA=
 github.com/aws/aws-sdk-go-v2/internal/endpoints/v2 v2.7.37 h1:zCEORWo0eU0gDjG+IyApE/2B+ZGG1m+GU7B263XV8ds=
@@ -577,8 +577,8 @@ github.com/openfga/openfga v1.18.3 h1:BJE8cdVjURq0YhFOh8OgeJ7OfzXGyiGgTAbpbmiZZ1
 github.com/openfga/openfga v1.18.3/go.mod h1:Bxir9445ZY3SLPSh//uN3/+s/SsR+ejuWiYBFDUMnEE=
 github.com/opentracing/opentracing-go v1.2.0 h1:uEJPy/1a5RIPAJ0Ov+OIO8OxWu77jEv+1B0VhjKrZUs=
 github.com/opentracing/opentracing-go v1.2.0/go.mod h1:GxEUsuufX4nBwe+T+Wl9TAgYrxe9dPLANfrWvHYVTgc=
-github.com/oracle/oci-go-sdk/v65 v65.123.1 h1:UE8xEOuF++LnrnvQDcn4gbviD9N4ZFGOFrV8tW2bHbU=
-github.com/oracle/oci-go-sdk/v65 v65.123.1/go.mod h1:Pzy+BpgkDesvGZXEHgslwhIYobHCPHg6wRta1mWnlqQ=
+github.com/oracle/oci-go-sdk/v65 v65.123.2 h1:Xg/OEjuj+xNkJKgjTVDG9R5rq7oxKIKHWIeNFZd9etU=
+github.com/oracle/oci-go-sdk/v65 v65.123.2/go.mod h1:Pzy+BpgkDesvGZXEHgslwhIYobHCPHg6wRta1mWnlqQ=
 github.com/ory/dockertest v3.3.5+incompatible h1:iLLK6SQwIhcbrG783Dghaaa3WPzGc+4Emza6EbVUUGA=
 github.com/ory/dockertest v3.3.5+incompatible/go.mod h1:1vX4m9wsvi00u5bseYwXaSnhNrne+V0E6LAcBILJdPs=
 github.com/patrickmn/go-cache v2.1.0+incompatible h1:HRMgzkcYKYpi3C8ajMPV8OFXaaRUnok+kx1WdO15EQc=
