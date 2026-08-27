@@ -10287,6 +10287,14 @@ func init() {
 			AddField:    "add_file_ids",
 		},
 		{
+			Name:        "internal_policies",
+			Label:       "InternalPolicies",
+			Target:      SchemaInternalPolicy,
+			TargetType:  "InternalPolicy",
+			CreateField: "internal_policy_ids",
+			AddField:    "add_internal_policy_ids",
+		},
+		{
 			Name:        "owner",
 			Label:       "Owner",
 			Target:      SchemaOrganization,
@@ -10302,6 +10310,14 @@ func init() {
 			TargetType:  "Platform",
 			CreateField: "platform_ids",
 			AddField:    "add_platform_ids",
+		},
+		{
+			Name:        "procedures",
+			Label:       "Procedures",
+			Target:      SchemaProcedure,
+			TargetType:  "Procedure",
+			CreateField: "procedure_ids",
+			AddField:    "add_procedure_ids",
 		},
 		{
 			Name:        "programs",

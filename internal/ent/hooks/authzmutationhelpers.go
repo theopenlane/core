@@ -7,6 +7,7 @@ import (
 	"entgo.io/ent"
 	goUpper "github.com/99designs/gqlgen/codegen/templates"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/gertd/go-pluralize"
 	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
@@ -315,7 +316,7 @@ func getRemovedParentIDsFromEntMutation(ctx context.Context, m ent.Mutation, par
 // or not an set edge at all
 func checkForEdge(parentField, edgeField string) string {
 	parentEdge := strings.ReplaceAll(parentField, "_id", "")
-	pluralEdge := parentEdge + "s"
+	pluralEdge := pluralize.NewClient().Plural(parentEdge)
 	foundEdge := ""
 
 	// determine if the edge is the parent field or the parent field pluralized

@@ -173,6 +173,12 @@ func TestCheckForEdge(t *testing.T) {
 			want:        "parents",
 		},
 		{
+			name:        "edge matches non standard pluralized parent field",
+			parentField: "internal_policy_id",
+			edgeField:   "internal_policies",
+			want:        "internal_policies",
+		},
+		{
 			name:        "edge does not match parent field",
 			parentField: "parent_id",
 			edgeField:   "child",

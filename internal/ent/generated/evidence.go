@@ -98,6 +98,10 @@ type EvidenceEdges struct {
 	ControlObjectives []*ControlObjective `json:"control_objectives,omitempty"`
 	// ControlImplementations holds the value of the control_implementations edge.
 	ControlImplementations []*ControlImplementation `json:"control_implementations,omitempty"`
+	// InternalPolicies holds the value of the internal_policies edge.
+	InternalPolicies []*InternalPolicy `json:"internal_policies,omitempty"`
+	// Procedures holds the value of the procedures edge.
+	Procedures []*Procedure `json:"procedures,omitempty"`
 	// Files holds the value of the files edge.
 	Files []*File `json:"files,omitempty"`
 	// Programs holds the value of the programs edge.
@@ -114,14 +118,16 @@ type EvidenceEdges struct {
 	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [14]bool
+	loadedTypes [16]bool
 	// totalCount holds the count of the edges above.
-	totalCount [14]map[string]int
+	totalCount [16]map[string]int
 
 	namedControls               map[string][]*Control
 	namedSubcontrols            map[string][]*Subcontrol
 	namedControlObjectives      map[string][]*ControlObjective
 	namedControlImplementations map[string][]*ControlImplementation
+	namedInternalPolicies       map[string][]*InternalPolicy
+	namedProcedures             map[string][]*Procedure
 	namedFiles                  map[string][]*File
 	namedPrograms               map[string][]*Program
 	namedTasks                  map[string][]*Task
@@ -200,10 +206,28 @@ func (e EvidenceEdges) ControlImplementationsOrErr() ([]*ControlImplementation, 
 	return nil, &NotLoadedError{edge: "control_implementations"}
 }
 
+// InternalPoliciesOrErr returns the InternalPolicies value or an error if the edge
+// was not loaded in eager-loading.
+func (e EvidenceEdges) InternalPoliciesOrErr() ([]*InternalPolicy, error) {
+	if e.loadedTypes[7] {
+		return e.InternalPolicies, nil
+	}
+	return nil, &NotLoadedError{edge: "internal_policies"}
+}
+
+// ProceduresOrErr returns the Procedures value or an error if the edge
+// was not loaded in eager-loading.
+func (e EvidenceEdges) ProceduresOrErr() ([]*Procedure, error) {
+	if e.loadedTypes[8] {
+		return e.Procedures, nil
+	}
+	return nil, &NotLoadedError{edge: "procedures"}
+}
+
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e EvidenceEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[9] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -212,7 +236,7 @@ func (e EvidenceEdges) FilesOrErr() ([]*File, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e EvidenceEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[10] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -221,7 +245,7 @@ func (e EvidenceEdges) ProgramsOrErr() ([]*Program, error) {
 // TasksOrErr returns the Tasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e EvidenceEdges) TasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[9] {
+	if e.loadedTypes[11] {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
@@ -230,7 +254,7 @@ func (e EvidenceEdges) TasksOrErr() ([]*Task, error) {
 // PlatformsOrErr returns the Platforms value or an error if the edge
 // was not loaded in eager-loading.
 func (e EvidenceEdges) PlatformsOrErr() ([]*Platform, error) {
-	if e.loadedTypes[10] {
+	if e.loadedTypes[12] {
 		return e.Platforms, nil
 	}
 	return nil, &NotLoadedError{edge: "platforms"}
@@ -239,7 +263,7 @@ func (e EvidenceEdges) PlatformsOrErr() ([]*Platform, error) {
 // ScansOrErr returns the Scans value or an error if the edge
 // was not loaded in eager-loading.
 func (e EvidenceEdges) ScansOrErr() ([]*Scan, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[13] {
 		return e.Scans, nil
 	}
 	return nil, &NotLoadedError{edge: "scans"}
@@ -248,7 +272,7 @@ func (e EvidenceEdges) ScansOrErr() ([]*Scan, error) {
 // CommentsOrErr returns the Comments value or an error if the edge
 // was not loaded in eager-loading.
 func (e EvidenceEdges) CommentsOrErr() ([]*Note, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[14] {
 		return e.Comments, nil
 	}
 	return nil, &NotLoadedError{edge: "comments"}
@@ -257,7 +281,7 @@ func (e EvidenceEdges) CommentsOrErr() ([]*Note, error) {
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e EvidenceEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[15] {
 		return e.WorkflowObjectRefs, nil
 	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
@@ -515,6 +539,16 @@ func (_m *Evidence) QueryControlImplementations() *ControlImplementationQuery {
 	return NewEvidenceClient(_m.config).QueryControlImplementations(_m)
 }
 
+// QueryInternalPolicies queries the "internal_policies" edge of the Evidence entity.
+func (_m *Evidence) QueryInternalPolicies() *InternalPolicyQuery {
+	return NewEvidenceClient(_m.config).QueryInternalPolicies(_m)
+}
+
+// QueryProcedures queries the "procedures" edge of the Evidence entity.
+func (_m *Evidence) QueryProcedures() *ProcedureQuery {
+	return NewEvidenceClient(_m.config).QueryProcedures(_m)
+}
+
 // QueryFiles queries the "files" edge of the Evidence entity.
 func (_m *Evidence) QueryFiles() *FileQuery {
 	return NewEvidenceClient(_m.config).QueryFiles(_m)
@@ -758,6 +792,54 @@ func (_m *Evidence) appendNamedControlImplementations(name string, edges ...*Con
 		_m.Edges.namedControlImplementations[name] = []*ControlImplementation{}
 	} else {
 		_m.Edges.namedControlImplementations[name] = append(_m.Edges.namedControlImplementations[name], edges...)
+	}
+}
+
+// NamedInternalPolicies returns the InternalPolicies named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Evidence) NamedInternalPolicies(name string) ([]*InternalPolicy, error) {
+	if _m.Edges.namedInternalPolicies == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedInternalPolicies[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Evidence) appendNamedInternalPolicies(name string, edges ...*InternalPolicy) {
+	if _m.Edges.namedInternalPolicies == nil {
+		_m.Edges.namedInternalPolicies = make(map[string][]*InternalPolicy)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedInternalPolicies[name] = []*InternalPolicy{}
+	} else {
+		_m.Edges.namedInternalPolicies[name] = append(_m.Edges.namedInternalPolicies[name], edges...)
+	}
+}
+
+// NamedProcedures returns the Procedures named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Evidence) NamedProcedures(name string) ([]*Procedure, error) {
+	if _m.Edges.namedProcedures == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedProcedures[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Evidence) appendNamedProcedures(name string, edges ...*Procedure) {
+	if _m.Edges.namedProcedures == nil {
+		_m.Edges.namedProcedures = make(map[string][]*Procedure)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedProcedures[name] = []*Procedure{}
+	} else {
+		_m.Edges.namedProcedures[name] = append(_m.Edges.namedProcedures[name], edges...)
 	}
 }
 
