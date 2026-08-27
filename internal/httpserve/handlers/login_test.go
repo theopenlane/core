@@ -167,7 +167,6 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 		models.CatalogBaseModule.String(),
 		models.CatalogComplianceModule.String(),
 		models.CatalogTrustCenterModule.String(),
-		models.CatalogRegistryModule.String(),
 	}
 
 	testCases := []struct {
