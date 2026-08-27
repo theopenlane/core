@@ -324,6 +324,10 @@ func (h *Handler) handleSubscriptionPaused(ctx context.Context, s *stripe.Subscr
 	return h.invalidatePersonalAccessTokens(ctx, *ownerID)
 }
 
+// maxRetryAttempts is what the stripe smart retry setup is set to
+// this is set in stripe to max of 8 retries over 2 weeks for credit cards
+const maxRetryAttempts = 8
+
 // handleInvoicePaymentFailed drops an organization to the free modules once Stripe has stopped
 // retrying a failed payment. Stripe schedules a retry after every failed attempt, so an invoice with
 // no next attempt left means the retry window is over. Cancelling at that point takes the whole
@@ -334,9 +338,8 @@ func (h *Handler) handleInvoicePaymentFailed(ctx context.Context, invoice *strip
 		return nil
 	}
 
-	// stripe schedules the next attempt after every failure, so a next attempt still being set means
-	// the retry window is open and the organization keeps everything it has
-	if invoice.NextPaymentAttempt > 0 {
+	// stripe is configured to a max number of retries, as long as we are under that keep the modules as-is
+	if invoice.AttemptCount < maxRetryAttempts {
 		logx.FromContext(ctx).Debug().Str("invoice_id", invoice.ID).
 			Int64("attempt_count", invoice.AttemptCount).
 			Time("next_payment_attempt", time.Unix(invoice.NextPaymentAttempt, 0)).

@@ -2196,11 +2196,13 @@ type ComplexityRoot struct {
 		HasPendingWorkflow      func(childComplexity int) int
 		HasWorkflowHistory      func(childComplexity int) int
 		ID                      func(childComplexity int) int
+		InternalPolicies        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
 		IsAutomated             func(childComplexity int) int
 		Name                    func(childComplexity int) int
 		Owner                   func(childComplexity int) int
 		OwnerID                 func(childComplexity int) int
 		Platforms               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PlatformOrder, where *generated.PlatformWhereInput) int
+		Procedures              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
 		Programs                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
 		RenewalDate             func(childComplexity int) int
 		ReviewFrequency         func(childComplexity int) int
@@ -17731,6 +17733,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Evidence.ID(childComplexity), true
+	case "Evidence.internalPolicies":
+		if e.ComplexityRoot.Evidence.InternalPolicies == nil {
+			break
+		}
+
+		args, err := ec.field_Evidence_internalPolicies_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Evidence.InternalPolicies(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.InternalPolicyOrder), args["where"].(*generated.InternalPolicyWhereInput)), true
 	case "Evidence.isAutomated":
 		if e.ComplexityRoot.Evidence.IsAutomated == nil {
 			break
@@ -17766,6 +17779,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.ComplexityRoot.Evidence.Platforms(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.PlatformOrder), args["where"].(*generated.PlatformWhereInput)), true
+	case "Evidence.procedures":
+		if e.ComplexityRoot.Evidence.Procedures == nil {
+			break
+		}
+
+		args, err := ec.field_Evidence_procedures_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.ComplexityRoot.Evidence.Procedures(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProcedureOrder), args["where"].(*generated.ProcedureWhereInput)), true
 	case "Evidence.programs":
 		if e.ComplexityRoot.Evidence.Programs == nil {
 			break
@@ -67900,6 +67924,8 @@ input CreateEvidenceInput {
   subcontrolIDs: [ID!]
   controlObjectiveIDs: [ID!]
   controlImplementationIDs: [ID!]
+  internalPolicyIDs: [ID!]
+  procedureIDs: [ID!]
   fileIDs: [ID!]
   programIDs: [ID!]
   taskIDs: [ID!]
@@ -80698,6 +80724,68 @@ type Evidence implements Node @modules(names: ["compliance_module","policy_manag
     """
     where: ControlImplementationWhereInput
   ): ControlImplementationConnection!
+  internalPolicies(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for InternalPolicies returned from the connection.
+    """
+    orderBy: [InternalPolicyOrder!]
+
+    """
+    Filtering options for InternalPolicies returned from the connection.
+    """
+    where: InternalPolicyWhereInput
+  ): InternalPolicyConnection!
+  procedures(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Procedures returned from the connection.
+    """
+    orderBy: [ProcedureOrder!]
+
+    """
+    Filtering options for Procedures returned from the connection.
+    """
+    where: ProcedureWhereInput
+  ): ProcedureConnection!
   files(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -81339,6 +81427,16 @@ input EvidenceWhereInput {
   """
   hasControlImplementations: Boolean
   hasControlImplementationsWith: [ControlImplementationWhereInput!]
+  """
+  internal_policies edge predicates
+  """
+  hasInternalPolicies: Boolean
+  hasInternalPoliciesWith: [InternalPolicyWhereInput!]
+  """
+  procedures edge predicates
+  """
+  hasProcedures: Boolean
+  hasProceduresWith: [ProcedureWhereInput!]
   """
   files edge predicates
   """
@@ -127876,6 +127974,12 @@ input UpdateEvidenceInput {
   addControlImplementationIDs: [ID!]
   removeControlImplementationIDs: [ID!]
   clearControlImplementations: Boolean
+  addInternalPolicyIDs: [ID!]
+  removeInternalPolicyIDs: [ID!]
+  clearInternalPolicies: Boolean
+  addProcedureIDs: [ID!]
+  removeProcedureIDs: [ID!]
+  clearProcedures: Boolean
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
@@ -157616,6 +157720,10 @@ func (ec *executionContext) childFields_Evidence(ctx context.Context, field grap
 		return ec.fieldContext_Evidence_controlObjectives(ctx, field)
 	case "controlImplementations":
 		return ec.fieldContext_Evidence_controlImplementations(ctx, field)
+	case "internalPolicies":
+		return ec.fieldContext_Evidence_internalPolicies(ctx, field)
+	case "procedures":
+		return ec.fieldContext_Evidence_procedures(ctx, field)
 	case "files":
 		return ec.fieldContext_Evidence_files(ctx, field)
 	case "programs":

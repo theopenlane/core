@@ -214,6 +214,20 @@ func (e Evidence) Edges() []ent.Edge {
 		}),
 		defaultEdgeToWithPagination(e, ControlObjective{}),
 		defaultEdgeToWithPagination(e, ControlImplementation{}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: e,
+			edgeSchema: InternalPolicy{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(InternalPolicy{}.Name()),
+			},
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: e,
+			edgeSchema: Procedure{},
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Procedure{}.Name()),
+			},
+		}),
 		defaultEdgeToWithPagination(e, File{}),
 		edgeFromWithPagination(&edgeDefinition{
 			fromSchema: e,

@@ -30,17 +30,25 @@ func TestQueryEvidence(t *testing.T) {
 
 	// create a control to be queried using adminUser that access is granted via the control
 	control := (&ControlBuilder{client: suite.client}).MustNew(sharedAdminUser.UserCtx, t)
-
 	evidenceControl := (&EvidenceBuilder{client: suite.client, ControlID: control.ID}).MustNew(sharedTestUser1.UserCtx, t)
+
+	internalPolicy := (&InternalPolicyBuilder{client: suite.client}).MustNew(sharedAdminUser.UserCtx, t)
+	evidenceInternalPolicy := (&EvidenceBuilder{client: suite.client, InternalPolicyID: internalPolicy.ID}).MustNew(sharedAdminUser.UserCtx, t)
+
+	procedure := (&ProcedureBuilder{client: suite.client}).MustNew(sharedAdminUser.UserCtx, t)
+	evidenceProcedure := (&EvidenceBuilder{client: suite.client, ProcedureID: procedure.ID}).MustNew(sharedAdminUser.UserCtx, t)
+
 	anonymousContext := createAnonymousTrustCenterContext(ulids.New().String(), sharedTestUser1.OrganizationID)
 
 	// add test cases for querying the Evidence
 	testCases := []struct {
-		name     string
-		queryID  string
-		client   *testclient.TestClient
-		ctx      context.Context
-		errorMsg string
+		name        string
+		queryID     string
+		client      *testclient.TestClient
+		ctx         context.Context
+		errorMsg    string
+		policyID    string
+		procedureID string
 	}{
 		{
 			name:    "happy path, creator of the evidence no parent",
@@ -100,6 +108,20 @@ func TestQueryEvidence(t *testing.T) {
 			ctx:     sharedViewOnlyUser.UserCtx,
 		},
 		{
+			name:     "read only user in organization, has access via internal policy",
+			queryID:  evidenceInternalPolicy.ID,
+			client:   suite.client.api,
+			ctx:      sharedViewOnlyUser.UserCtx,
+			policyID: internalPolicy.ID,
+		},
+		{
+			name:        "read only user in organization, has access via procedure",
+			queryID:     evidenceProcedure.ID,
+			client:      suite.client.api,
+			ctx:         sharedViewOnlyUser.UserCtx,
+			procedureID: procedure.ID,
+		},
+		{
 			name:    "happy path using personal access token",
 			queryID: evidence.ID,
 			client:  suite.client.apiWithPAT,
@@ -147,13 +169,25 @@ func TestQueryEvidence(t *testing.T) {
 			assert.Check(t, len(resp.Evidence.DisplayID) != 0)
 			assert.Check(t, !resp.Evidence.CreatedAt.IsZero())
 			assert.Check(t, !resp.Evidence.UpdatedAt.IsZero())
+
+			if tc.policyID != "" {
+				assert.Check(t, is.Len(resp.Evidence.InternalPolicies.Edges, 1))
+				assert.Check(t, is.Equal(tc.policyID, resp.Evidence.InternalPolicies.Edges[0].Node.ID))
+			}
+
+			if tc.procedureID != "" {
+				assert.Check(t, is.Len(resp.Evidence.Procedures.Edges, 1))
+				assert.Check(t, is.Equal(tc.procedureID, resp.Evidence.Procedures.Edges[0].Node.ID))
+			}
 		})
 	}
 
 	// delete created evidence
-	(&Cleanup[*generated.EvidenceDeleteOne]{client: suite.client.db.Evidence, IDs: []string{evidence.ID, evidenceControl.ID, evidenceNoParent.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.EvidenceDeleteOne]{client: suite.client.db.Evidence, IDs: []string{evidence.ID, evidenceControl.ID, evidenceInternalPolicy.ID, evidenceProcedure.ID, evidenceNoParent.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
 	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, ID: internalPolicy.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.ProcedureDeleteOne]{client: suite.client.db.Procedure, ID: procedure.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestQueryEvidences(t *testing.T) {
@@ -236,10 +270,16 @@ func TestMutationCreateEvidence(t *testing.T) {
 	controlObjective2 := (&ControlObjectiveBuilder{client: suite.client}).MustNew(sharedAdminUser.UserCtx, t)
 	subcontrol1 := (&SubcontrolBuilder{client: suite.client}).MustNew(sharedAdminUser.UserCtx, t)
 	subcontrol2 := (&SubcontrolBuilder{client: suite.client}).MustNew(sharedAdminUser.UserCtx, t)
+	internalPolicy1 := (&InternalPolicyBuilder{client: suite.client}).MustNew(sharedAdminUser.UserCtx, t)
+	internalPolicy2 := (&InternalPolicyBuilder{client: suite.client}).MustNew(sharedAdminUser.UserCtx, t)
+	procedure1 := (&ProcedureBuilder{client: suite.client}).MustNew(sharedAdminUser.UserCtx, t)
+	procedure2 := (&ProcedureBuilder{client: suite.client}).MustNew(sharedAdminUser.UserCtx, t)
 
 	// create system owned control to test that it cannot be linked
 	systemOwnedSubcontrol := (&SubcontrolBuilder{client: suite.client}).MustNew(sharedSystemAdminUser.UserCtx, t)
 	systemOwnedControl := (&ControlBuilder{client: suite.client}).MustNew(sharedSystemAdminUser.UserCtx, t)
+	systemOwnedInternalPolicy := (&InternalPolicyBuilder{client: suite.client}).MustNew(sharedSystemAdminUser.UserCtx, t)
+	systemOwnedProcedure := (&ProcedureBuilder{client: suite.client}).MustNew(sharedSystemAdminUser.UserCtx, t)
 
 	// create a task for view only user
 	taskViewOnly := (&TaskBuilder{client: suite.client}).MustNew(sharedViewOnlyUser.UserCtx, t)
@@ -295,6 +335,8 @@ func TestMutationCreateEvidence(t *testing.T) {
 				ControlIDs:          []string{control1.ID, control2.ID},
 				ControlObjectiveIDs: []string{controlObjective1.ID, controlObjective2.ID},
 				SubcontrolIDs:       []string{subcontrol1.ID, subcontrol2.ID},
+				InternalPolicyIDs:   []string{internalPolicy1.ID, internalPolicy2.ID},
+				ProcedureIDs:        []string{procedure1.ID, procedure2.ID},
 			},
 			files: []*graphql.Upload{
 				pngFile,
@@ -353,9 +395,31 @@ func TestMutationCreateEvidence(t *testing.T) {
 			expectedErr: notFoundErrorMsg,
 		},
 		{
+			name: "attempt to link system owned internal policy",
+			request: testclient.CreateEvidenceInput{
+				Name:              "System owned Evidence",
+				TaskIDs:           []string{taskViewOnly.ID},
+				InternalPolicyIDs: []string{systemOwnedInternalPolicy.ID},
+			},
+			client:      suite.client.api,
+			ctx:         sharedViewOnlyUser.UserCtx,
+			expectedErr: notFoundErrorMsg,
+		},
+		{
+			name: "attempt to link system owned procedure",
+			request: testclient.CreateEvidenceInput{
+				Name:              "System owned Evidence",
+				TaskIDs:      []string{taskViewOnly.ID},
+				ProcedureIDs: []string{systemOwnedProcedure.ID},
+			},
+			client:      suite.client.api,
+			ctx:         sharedViewOnlyUser.UserCtx,
+			expectedErr: notFoundErrorMsg,
+		},
+		{
 			name: "attempt to link system owned control and org owned control",
 			request: testclient.CreateEvidenceInput{
-				Name:       "Test Evidence",
+				Name:              "System owned Evidence",
 				TaskIDs:    []string{taskViewOnly.ID},
 				ControlIDs: []string{systemOwnedControl.ID, control1.ID},
 			},
@@ -556,6 +620,18 @@ func TestMutationCreateEvidence(t *testing.T) {
 				assert.Check(t, is.Len(resp.CreateEvidence.Evidence.Tasks.Edges, 0))
 			}
 
+			if tc.request.InternalPolicyIDs != nil {
+				assert.Check(t, is.Len(resp.CreateEvidence.Evidence.InternalPolicies.Edges, len(tc.request.InternalPolicyIDs)))
+			} else {
+				assert.Check(t, is.Len(resp.CreateEvidence.Evidence.InternalPolicies.Edges, 0))
+			}
+
+			if tc.request.ProcedureIDs != nil {
+				assert.Check(t, is.Len(resp.CreateEvidence.Evidence.Procedures.Edges, len(tc.request.ProcedureIDs)))
+			} else {
+				assert.Check(t, is.Len(resp.CreateEvidence.Evidence.Procedures.Edges, 0))
+			}
+
 			if len(tc.files) > 0 {
 				assert.Check(t, is.Len(resp.CreateEvidence.Evidence.Files.Edges, len(tc.files)))
 			} else {
@@ -587,9 +663,13 @@ func TestMutationCreateEvidence(t *testing.T) {
 	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: []string{subcontrol1.ID, subcontrol2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
 	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: []string{task.ID, taskViewOnly.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
 	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, IDs: []string{internalPolicy1.ID, internalPolicy2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.ProcedureDeleteOne]{client: suite.client.db.Procedure, IDs: []string{procedure1.ID, procedure2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
 	// delete system owned controls and subcontrols
 	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, ID: systemOwnedSubcontrol.ID}).MustDelete(sharedSystemAdminUser.UserCtx, t)
 	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{systemOwnedControl.ID, systemOwnedSubcontrol.ControlID}}).MustDelete(sharedSystemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, ID: systemOwnedInternalPolicy.ID}).MustDelete(sharedSystemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.ProcedureDeleteOne]{client: suite.client.db.Procedure, ID: systemOwnedProcedure.ID}).MustDelete(sharedSystemAdminUser.UserCtx, t)
 }
 
 func TestMutationCreateBulkCSVEvidence(t *testing.T) {
@@ -657,6 +737,10 @@ func TestMutationCreateBulkCSVEvidence(t *testing.T) {
 func TestMutationUpdateEvidence(t *testing.T) {
 	program := (&ProgramBuilder{client: suite.client}).MustNew(sharedAdminUser.UserCtx, t)
 	evidence := (&EvidenceBuilder{client: suite.client, ProgramID: program.ID}).MustNew(sharedAdminUser.UserCtx, t)
+	internalPolicy1 := (&InternalPolicyBuilder{client: suite.client}).MustNew(sharedAdminUser.UserCtx, t)
+	internalPolicy2 := (&InternalPolicyBuilder{client: suite.client}).MustNew(sharedAdminUser.UserCtx, t)
+	procedure1 := (&ProcedureBuilder{client: suite.client}).MustNew(sharedAdminUser.UserCtx, t)
+	procedure2 := (&ProcedureBuilder{client: suite.client}).MustNew(sharedAdminUser.UserCtx, t)
 
 	// add view only user to the program so that they have access to the evidence for testing update permissions
 	pm := (&ProgramMemberBuilder{client: suite.client, UserID: sharedViewOnlyUser.ID, ProgramID: program.ID}).MustNew(sharedAdminUser.UserCtx, t)
@@ -670,6 +754,8 @@ func TestMutationUpdateEvidence(t *testing.T) {
 		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
+		policyID    string
+		procedureID string
 	}{
 		{
 			name: "happy path, update field",
@@ -710,6 +796,39 @@ func TestMutationUpdateEvidence(t *testing.T) {
 			},
 			client: suite.client.api,
 			ctx:    sharedAuditorUser.UserCtx,
+		},
+		{
+			name: "add internal policy and procedure",
+			request: testclient.UpdateEvidenceInput{
+				AddInternalPolicyIDs: []string{internalPolicy1.ID},
+				AddProcedureIDs:      []string{procedure1.ID},
+			},
+			client:      suite.client.api,
+			ctx:         sharedAdminUser.UserCtx,
+			policyID:    internalPolicy1.ID,
+			procedureID: procedure1.ID,
+		},
+		{
+			name: "replace internal policy and procedure",
+			request: testclient.UpdateEvidenceInput{
+				AddInternalPolicyIDs:    []string{internalPolicy2.ID},
+				RemoveInternalPolicyIDs: []string{internalPolicy1.ID},
+				AddProcedureIDs:         []string{procedure2.ID},
+				RemoveProcedureIDs:      []string{procedure1.ID},
+			},
+			client:      suite.client.api,
+			ctx:         sharedAdminUser.UserCtx,
+			policyID:    internalPolicy2.ID,
+			procedureID: procedure2.ID,
+		},
+		{
+			name: "clear internal policies and procedures",
+			request: testclient.UpdateEvidenceInput{
+				ClearInternalPolicies: lo.ToPtr(true),
+				ClearProcedures:       lo.ToPtr(true),
+			},
+			client: suite.client.api,
+			ctx:    sharedAdminUser.UserCtx,
 		},
 		{
 			name: "update not allowed, no permissions to update but can view due to program membership",
@@ -785,6 +904,20 @@ func TestMutationUpdateEvidence(t *testing.T) {
 			if len(tc.files) > 0 {
 				assert.Check(t, is.Len(resp.UpdateEvidence.Evidence.Files.Edges, len(tc.files)))
 			}
+
+			if tc.policyID != "" {
+				assert.Check(t, is.Len(resp.UpdateEvidence.Evidence.InternalPolicies.Edges, 1))
+				assert.Check(t, is.Equal(tc.policyID, resp.UpdateEvidence.Evidence.InternalPolicies.Edges[0].Node.ID))
+			} else if tc.request.ClearInternalPolicies != nil && *tc.request.ClearInternalPolicies {
+				assert.Check(t, is.Len(resp.UpdateEvidence.Evidence.InternalPolicies.Edges, 0))
+			}
+
+			if tc.procedureID != "" {
+				assert.Check(t, is.Len(resp.UpdateEvidence.Evidence.Procedures.Edges, 1))
+				assert.Check(t, is.Equal(tc.procedureID, resp.UpdateEvidence.Evidence.Procedures.Edges[0].Node.ID))
+			} else if tc.request.ClearProcedures != nil && *tc.request.ClearProcedures {
+				assert.Check(t, is.Len(resp.UpdateEvidence.Evidence.Procedures.Edges, 0))
+			}
 		})
 	}
 
@@ -793,6 +926,8 @@ func TestMutationUpdateEvidence(t *testing.T) {
 	// delete created program and membership
 	(&Cleanup[*generated.ProgramMembershipDeleteOne]{client: suite.client.db.ProgramMembership, ID: pm.ID}).MustDelete(sharedTestUser1.UserCtx, t)
 	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, IDs: []string{internalPolicy1.ID, internalPolicy2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
+	(&Cleanup[*generated.ProcedureDeleteOne]{client: suite.client.db.Procedure, IDs: []string{procedure1.ID, procedure2.ID}}).MustDelete(sharedTestUser1.UserCtx, t)
 }
 
 func TestMutationDeleteEvidence(t *testing.T) {

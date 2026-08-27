@@ -20,9 +20,11 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
@@ -552,6 +554,36 @@ func (_u *EvidenceUpdate) AddControlImplementations(v ...*ControlImplementation)
 	return _u.AddControlImplementationIDs(ids...)
 }
 
+// AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
+func (_u *EvidenceUpdate) AddInternalPolicyIDs(ids ...string) *EvidenceUpdate {
+	_u.mutation.AddInternalPolicyIDs(ids...)
+	return _u
+}
+
+// AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
+func (_u *EvidenceUpdate) AddInternalPolicies(v ...*InternalPolicy) *EvidenceUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddInternalPolicyIDs(ids...)
+}
+
+// AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
+func (_u *EvidenceUpdate) AddProcedureIDs(ids ...string) *EvidenceUpdate {
+	_u.mutation.AddProcedureIDs(ids...)
+	return _u
+}
+
+// AddProcedures adds the "procedures" edges to the Procedure entity.
+func (_u *EvidenceUpdate) AddProcedures(v ...*Procedure) *EvidenceUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddProcedureIDs(ids...)
+}
+
 // AddFileIDs adds the "files" edge to the File entity by IDs.
 func (_u *EvidenceUpdate) AddFileIDs(ids ...string) *EvidenceUpdate {
 	_u.mutation.AddFileIDs(ids...)
@@ -756,6 +788,48 @@ func (_u *EvidenceUpdate) RemoveControlImplementations(v ...*ControlImplementati
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveControlImplementationIDs(ids...)
+}
+
+// ClearInternalPolicies clears all "internal_policies" edges to the InternalPolicy entity.
+func (_u *EvidenceUpdate) ClearInternalPolicies() *EvidenceUpdate {
+	_u.mutation.ClearInternalPolicies()
+	return _u
+}
+
+// RemoveInternalPolicyIDs removes the "internal_policies" edge to InternalPolicy entities by IDs.
+func (_u *EvidenceUpdate) RemoveInternalPolicyIDs(ids ...string) *EvidenceUpdate {
+	_u.mutation.RemoveInternalPolicyIDs(ids...)
+	return _u
+}
+
+// RemoveInternalPolicies removes "internal_policies" edges to InternalPolicy entities.
+func (_u *EvidenceUpdate) RemoveInternalPolicies(v ...*InternalPolicy) *EvidenceUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveInternalPolicyIDs(ids...)
+}
+
+// ClearProcedures clears all "procedures" edges to the Procedure entity.
+func (_u *EvidenceUpdate) ClearProcedures() *EvidenceUpdate {
+	_u.mutation.ClearProcedures()
+	return _u
+}
+
+// RemoveProcedureIDs removes the "procedures" edge to Procedure entities by IDs.
+func (_u *EvidenceUpdate) RemoveProcedureIDs(ids ...string) *EvidenceUpdate {
+	_u.mutation.RemoveProcedureIDs(ids...)
+	return _u
+}
+
+// RemoveProcedures removes "procedures" edges to Procedure entities.
+func (_u *EvidenceUpdate) RemoveProcedures(v ...*Procedure) *EvidenceUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveProcedureIDs(ids...)
 }
 
 // ClearFiles clears all "files" edges to the File entity.
@@ -1352,6 +1426,96 @@ func (_u *EvidenceUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalPoliciesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   evidence.InternalPoliciesTable,
+			Columns: []string{evidence.InternalPoliciesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !_u.mutation.InternalPoliciesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   evidence.InternalPoliciesTable,
+			Columns: []string{evidence.InternalPoliciesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   evidence.InternalPoliciesTable,
+			Columns: []string{evidence.InternalPoliciesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ProceduresCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   evidence.ProceduresTable,
+			Columns: []string{evidence.ProceduresColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedProceduresIDs(); len(nodes) > 0 && !_u.mutation.ProceduresCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   evidence.ProceduresTable,
+			Columns: []string{evidence.ProceduresColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ProceduresIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   evidence.ProceduresTable,
+			Columns: []string{evidence.ProceduresColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {
@@ -2204,6 +2368,36 @@ func (_u *EvidenceUpdateOne) AddControlImplementations(v ...*ControlImplementati
 	return _u.AddControlImplementationIDs(ids...)
 }
 
+// AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by IDs.
+func (_u *EvidenceUpdateOne) AddInternalPolicyIDs(ids ...string) *EvidenceUpdateOne {
+	_u.mutation.AddInternalPolicyIDs(ids...)
+	return _u
+}
+
+// AddInternalPolicies adds the "internal_policies" edges to the InternalPolicy entity.
+func (_u *EvidenceUpdateOne) AddInternalPolicies(v ...*InternalPolicy) *EvidenceUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddInternalPolicyIDs(ids...)
+}
+
+// AddProcedureIDs adds the "procedures" edge to the Procedure entity by IDs.
+func (_u *EvidenceUpdateOne) AddProcedureIDs(ids ...string) *EvidenceUpdateOne {
+	_u.mutation.AddProcedureIDs(ids...)
+	return _u
+}
+
+// AddProcedures adds the "procedures" edges to the Procedure entity.
+func (_u *EvidenceUpdateOne) AddProcedures(v ...*Procedure) *EvidenceUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddProcedureIDs(ids...)
+}
+
 // AddFileIDs adds the "files" edge to the File entity by IDs.
 func (_u *EvidenceUpdateOne) AddFileIDs(ids ...string) *EvidenceUpdateOne {
 	_u.mutation.AddFileIDs(ids...)
@@ -2408,6 +2602,48 @@ func (_u *EvidenceUpdateOne) RemoveControlImplementations(v ...*ControlImplement
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveControlImplementationIDs(ids...)
+}
+
+// ClearInternalPolicies clears all "internal_policies" edges to the InternalPolicy entity.
+func (_u *EvidenceUpdateOne) ClearInternalPolicies() *EvidenceUpdateOne {
+	_u.mutation.ClearInternalPolicies()
+	return _u
+}
+
+// RemoveInternalPolicyIDs removes the "internal_policies" edge to InternalPolicy entities by IDs.
+func (_u *EvidenceUpdateOne) RemoveInternalPolicyIDs(ids ...string) *EvidenceUpdateOne {
+	_u.mutation.RemoveInternalPolicyIDs(ids...)
+	return _u
+}
+
+// RemoveInternalPolicies removes "internal_policies" edges to InternalPolicy entities.
+func (_u *EvidenceUpdateOne) RemoveInternalPolicies(v ...*InternalPolicy) *EvidenceUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveInternalPolicyIDs(ids...)
+}
+
+// ClearProcedures clears all "procedures" edges to the Procedure entity.
+func (_u *EvidenceUpdateOne) ClearProcedures() *EvidenceUpdateOne {
+	_u.mutation.ClearProcedures()
+	return _u
+}
+
+// RemoveProcedureIDs removes the "procedures" edge to Procedure entities by IDs.
+func (_u *EvidenceUpdateOne) RemoveProcedureIDs(ids ...string) *EvidenceUpdateOne {
+	_u.mutation.RemoveProcedureIDs(ids...)
+	return _u
+}
+
+// RemoveProcedures removes "procedures" edges to Procedure entities.
+func (_u *EvidenceUpdateOne) RemoveProcedures(v ...*Procedure) *EvidenceUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveProcedureIDs(ids...)
 }
 
 // ClearFiles clears all "files" edges to the File entity.
@@ -3034,6 +3270,96 @@ func (_u *EvidenceUpdateOne) sqlSave(ctx context.Context) (_node *Evidence, err 
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(controlimplementation.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.InternalPoliciesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   evidence.InternalPoliciesTable,
+			Columns: []string{evidence.InternalPoliciesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedInternalPoliciesIDs(); len(nodes) > 0 && !_u.mutation.InternalPoliciesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   evidence.InternalPoliciesTable,
+			Columns: []string{evidence.InternalPoliciesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.InternalPoliciesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   evidence.InternalPoliciesTable,
+			Columns: []string{evidence.InternalPoliciesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ProceduresCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   evidence.ProceduresTable,
+			Columns: []string{evidence.ProceduresColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedProceduresIDs(); len(nodes) > 0 && !_u.mutation.ProceduresCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   evidence.ProceduresTable,
+			Columns: []string{evidence.ProceduresColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ProceduresIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   evidence.ProceduresTable,
+			Columns: []string{evidence.ProceduresColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(procedure.FieldID, field.TypeString),
 			},
 		}
 		for _, k := range nodes {

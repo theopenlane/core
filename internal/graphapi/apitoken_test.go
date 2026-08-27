@@ -483,7 +483,7 @@ func TestAPITokenObjectScopeTuples(t *testing.T) {
 	editRelation := fgamodel.NormalizeScope("evidence:write")
 
 	t.Run("read-only evidence scope", func(t *testing.T) {
-		token, client := makeTokenClient([]string{"evidence:read", "file:read", "control:read", "task:read", "subcontrol:read", "program:read", "control_objective:read"})
+		token, client := makeTokenClient([]string{"evidence:read", "file:read", "control:read", "task:read", "subcontrol:read", "program:read", "control_objective:read", "internal_policy:read", "procedure:read"})
 
 		ids := listScopedOrgIDs(token.ID, viewRelation)
 		assert.Check(t, lo.Contains(ids, orgUser.OrganizationID))
@@ -501,7 +501,7 @@ func TestAPITokenObjectScopeTuples(t *testing.T) {
 	})
 
 	t.Run("scope addition and removal update tuples", func(t *testing.T) {
-		token, client := makeTokenClient([]string{"evidence:read", "file:read", "control:read", "task:read", "subcontrol:read", "program:read", "control_objective:read"})
+		token, client := makeTokenClient([]string{"evidence:read", "file:read", "control:read", "task:read", "subcontrol:read", "program:read", "control_objective:read", "internal_policy:read", "procedure:read"})
 
 		assert.Check(t, lo.Contains(listScopedOrgIDs(token.ID, viewRelation), orgUser.OrganizationID))
 		assert.Check(t, !lo.Contains(listScopedOrgIDs(token.ID, editRelation), orgUser.OrganizationID))

@@ -364,6 +364,7 @@ var Columns = []string{
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"custom_type_enum_internal_policies",
+	"evidence_internal_policies",
 }
 
 var (

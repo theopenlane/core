@@ -19,10 +19,12 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/platform"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/procedure"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
@@ -46,6 +48,8 @@ type EvidenceQuery struct {
 	withSubcontrols                 *SubcontrolQuery
 	withControlObjectives           *ControlObjectiveQuery
 	withControlImplementations      *ControlImplementationQuery
+	withInternalPolicies            *InternalPolicyQuery
+	withProcedures                  *ProcedureQuery
 	withFiles                       *FileQuery
 	withPrograms                    *ProgramQuery
 	withTasks                       *TaskQuery
@@ -59,6 +63,8 @@ type EvidenceQuery struct {
 	withNamedSubcontrols            map[string]*SubcontrolQuery
 	withNamedControlObjectives      map[string]*ControlObjectiveQuery
 	withNamedControlImplementations map[string]*ControlImplementationQuery
+	withNamedInternalPolicies       map[string]*InternalPolicyQuery
+	withNamedProcedures             map[string]*ProcedureQuery
 	withNamedFiles                  map[string]*FileQuery
 	withNamedPrograms               map[string]*ProgramQuery
 	withNamedTasks                  map[string]*TaskQuery
@@ -249,6 +255,50 @@ func (_q *EvidenceQuery) QueryControlImplementations() *ControlImplementationQue
 			sqlgraph.From(evidence.Table, evidence.FieldID, selector),
 			sqlgraph.To(controlimplementation.Table, controlimplementation.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, evidence.ControlImplementationsTable, evidence.ControlImplementationsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryInternalPolicies chains the current query on the "internal_policies" edge.
+func (_q *EvidenceQuery) QueryInternalPolicies() *InternalPolicyQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(evidence.Table, evidence.FieldID, selector),
+			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, evidence.InternalPoliciesTable, evidence.InternalPoliciesColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryProcedures chains the current query on the "procedures" edge.
+func (_q *EvidenceQuery) QueryProcedures() *ProcedureQuery {
+	query := (&ProcedureClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(evidence.Table, evidence.FieldID, selector),
+			sqlgraph.To(procedure.Table, procedure.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, evidence.ProceduresTable, evidence.ProceduresColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -609,6 +659,8 @@ func (_q *EvidenceQuery) Clone() *EvidenceQuery {
 		withSubcontrols:            _q.withSubcontrols.Clone(),
 		withControlObjectives:      _q.withControlObjectives.Clone(),
 		withControlImplementations: _q.withControlImplementations.Clone(),
+		withInternalPolicies:       _q.withInternalPolicies.Clone(),
+		withProcedures:             _q.withProcedures.Clone(),
 		withFiles:                  _q.withFiles.Clone(),
 		withPrograms:               _q.withPrograms.Clone(),
 		withTasks:                  _q.withTasks.Clone(),
@@ -697,6 +749,28 @@ func (_q *EvidenceQuery) WithControlImplementations(opts ...func(*ControlImpleme
 		opt(query)
 	}
 	_q.withControlImplementations = query
+	return _q
+}
+
+// WithInternalPolicies tells the query-builder to eager-load the nodes that are connected to
+// the "internal_policies" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EvidenceQuery) WithInternalPolicies(opts ...func(*InternalPolicyQuery)) *EvidenceQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withInternalPolicies = query
+	return _q
+}
+
+// WithProcedures tells the query-builder to eager-load the nodes that are connected to
+// the "procedures" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EvidenceQuery) WithProcedures(opts ...func(*ProcedureQuery)) *EvidenceQuery {
+	query := (&ProcedureClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withProcedures = query
 	return _q
 }
 
@@ -861,7 +935,7 @@ func (_q *EvidenceQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Evi
 	var (
 		nodes       = []*Evidence{}
 		_spec       = _q.querySpec()
-		loadedTypes = [14]bool{
+		loadedTypes = [16]bool{
 			_q.withOwner != nil,
 			_q.withEnvironment != nil,
 			_q.withScope != nil,
@@ -869,6 +943,8 @@ func (_q *EvidenceQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Evi
 			_q.withSubcontrols != nil,
 			_q.withControlObjectives != nil,
 			_q.withControlImplementations != nil,
+			_q.withInternalPolicies != nil,
+			_q.withProcedures != nil,
 			_q.withFiles != nil,
 			_q.withPrograms != nil,
 			_q.withTasks != nil,
@@ -949,6 +1025,20 @@ func (_q *EvidenceQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Evi
 			return nil, err
 		}
 	}
+	if query := _q.withInternalPolicies; query != nil {
+		if err := _q.loadInternalPolicies(ctx, query, nodes,
+			func(n *Evidence) { n.Edges.InternalPolicies = []*InternalPolicy{} },
+			func(n *Evidence, e *InternalPolicy) { n.Edges.InternalPolicies = append(n.Edges.InternalPolicies, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withProcedures; query != nil {
+		if err := _q.loadProcedures(ctx, query, nodes,
+			func(n *Evidence) { n.Edges.Procedures = []*Procedure{} },
+			func(n *Evidence, e *Procedure) { n.Edges.Procedures = append(n.Edges.Procedures, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withFiles; query != nil {
 		if err := _q.loadFiles(ctx, query, nodes,
 			func(n *Evidence) { n.Edges.Files = []*File{} },
@@ -1025,6 +1115,20 @@ func (_q *EvidenceQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Evi
 		if err := _q.loadControlImplementations(ctx, query, nodes,
 			func(n *Evidence) { n.appendNamedControlImplementations(name) },
 			func(n *Evidence, e *ControlImplementation) { n.appendNamedControlImplementations(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedInternalPolicies {
+		if err := _q.loadInternalPolicies(ctx, query, nodes,
+			func(n *Evidence) { n.appendNamedInternalPolicies(name) },
+			func(n *Evidence, e *InternalPolicy) { n.appendNamedInternalPolicies(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedProcedures {
+		if err := _q.loadProcedures(ctx, query, nodes,
+			func(n *Evidence) { n.appendNamedProcedures(name) },
+			func(n *Evidence, e *Procedure) { n.appendNamedProcedures(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1381,6 +1485,68 @@ func (_q *EvidenceQuery) loadControlImplementations(ctx context.Context, query *
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "evidence_control_implementations" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *EvidenceQuery) loadInternalPolicies(ctx context.Context, query *InternalPolicyQuery, nodes []*Evidence, init func(*Evidence), assign func(*Evidence, *InternalPolicy)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Evidence)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.InternalPolicy(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(evidence.InternalPoliciesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.evidence_internal_policies
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "evidence_internal_policies" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "evidence_internal_policies" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *EvidenceQuery) loadProcedures(ctx context.Context, query *ProcedureQuery, nodes []*Evidence, init func(*Evidence), assign func(*Evidence, *Procedure)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Evidence)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Procedure(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(evidence.ProceduresColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.evidence_procedures
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "evidence_procedures" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "evidence_procedures" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -1909,6 +2075,34 @@ func (_q *EvidenceQuery) WithNamedControlImplementations(name string, opts ...fu
 		_q.withNamedControlImplementations = make(map[string]*ControlImplementationQuery)
 	}
 	_q.withNamedControlImplementations[name] = query
+	return _q
+}
+
+// WithNamedInternalPolicies tells the query-builder to eager-load the nodes that are connected to the "internal_policies"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *EvidenceQuery) WithNamedInternalPolicies(name string, opts ...func(*InternalPolicyQuery)) *EvidenceQuery {
+	query := (&InternalPolicyClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedInternalPolicies == nil {
+		_q.withNamedInternalPolicies = make(map[string]*InternalPolicyQuery)
+	}
+	_q.withNamedInternalPolicies[name] = query
+	return _q
+}
+
+// WithNamedProcedures tells the query-builder to eager-load the nodes that are connected to the "procedures"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *EvidenceQuery) WithNamedProcedures(name string, opts ...func(*ProcedureQuery)) *EvidenceQuery {
+	query := (&ProcedureClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedProcedures == nil {
+		_q.withNamedProcedures = make(map[string]*ProcedureQuery)
+	}
+	_q.withNamedProcedures[name] = query
 	return _q
 }
 

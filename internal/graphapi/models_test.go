@@ -328,11 +328,13 @@ type EvidenceBuilder struct {
 	client *client
 
 	// Fields
-	Name        string
-	ProgramID   string
-	ControlID   string
-	IncludeFile bool
-	Status      *enums.EvidenceStatus
+	Name             string
+	ProgramID        string
+	ControlID        string
+	InternalPolicyID string
+	ProcedureID      string
+	IncludeFile      bool
+	Status           *enums.EvidenceStatus
 }
 
 type StandardBuilder struct {
@@ -1488,6 +1490,14 @@ func (e *EvidenceBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Eviden
 
 	if e.ControlID != "" {
 		mutation.AddControlIDs(e.ControlID)
+	}
+
+	if e.InternalPolicyID != "" {
+		mutation.AddInternalPolicyIDs(e.InternalPolicyID)
+	}
+
+	if e.ProcedureID != "" {
+		mutation.AddProcedureIDs(e.ProcedureID)
 	}
 
 	if e.IncludeFile {

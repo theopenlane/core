@@ -79249,6 +79249,12 @@ type EvidenceMutation struct {
 	control_implementations        map[string]struct{}
 	removedcontrol_implementations map[string]struct{}
 	clearedcontrol_implementations bool
+	internal_policies              map[string]struct{}
+	removedinternal_policies       map[string]struct{}
+	clearedinternal_policies       bool
+	procedures                     map[string]struct{}
+	removedprocedures              map[string]struct{}
+	clearedprocedures              bool
 	files                          map[string]struct{}
 	removedfiles                   map[string]struct{}
 	clearedfiles                   bool
@@ -80976,6 +80982,114 @@ func (m *EvidenceMutation) ResetControlImplementations() {
 	m.removedcontrol_implementations = nil
 }
 
+// AddInternalPolicyIDs adds the "internal_policies" edge to the InternalPolicy entity by ids.
+func (m *EvidenceMutation) AddInternalPolicyIDs(ids ...string) {
+	if m.internal_policies == nil {
+		m.internal_policies = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.internal_policies[ids[i]] = struct{}{}
+	}
+}
+
+// ClearInternalPolicies clears the "internal_policies" edge to the InternalPolicy entity.
+func (m *EvidenceMutation) ClearInternalPolicies() {
+	m.clearedinternal_policies = true
+}
+
+// InternalPoliciesCleared reports if the "internal_policies" edge to the InternalPolicy entity was cleared.
+func (m *EvidenceMutation) InternalPoliciesCleared() bool {
+	return m.clearedinternal_policies
+}
+
+// RemoveInternalPolicyIDs removes the "internal_policies" edge to the InternalPolicy entity by IDs.
+func (m *EvidenceMutation) RemoveInternalPolicyIDs(ids ...string) {
+	if m.removedinternal_policies == nil {
+		m.removedinternal_policies = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.internal_policies, ids[i])
+		m.removedinternal_policies[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedInternalPolicies returns the removed IDs of the "internal_policies" edge to the InternalPolicy entity.
+func (m *EvidenceMutation) RemovedInternalPoliciesIDs() (ids []string) {
+	for id := range m.removedinternal_policies {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// InternalPoliciesIDs returns the "internal_policies" edge IDs in the mutation.
+func (m *EvidenceMutation) InternalPoliciesIDs() (ids []string) {
+	for id := range m.internal_policies {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetInternalPolicies resets all changes to the "internal_policies" edge.
+func (m *EvidenceMutation) ResetInternalPolicies() {
+	m.internal_policies = nil
+	m.clearedinternal_policies = false
+	m.removedinternal_policies = nil
+}
+
+// AddProcedureIDs adds the "procedures" edge to the Procedure entity by ids.
+func (m *EvidenceMutation) AddProcedureIDs(ids ...string) {
+	if m.procedures == nil {
+		m.procedures = make(map[string]struct{})
+	}
+	for i := range ids {
+		m.procedures[ids[i]] = struct{}{}
+	}
+}
+
+// ClearProcedures clears the "procedures" edge to the Procedure entity.
+func (m *EvidenceMutation) ClearProcedures() {
+	m.clearedprocedures = true
+}
+
+// ProceduresCleared reports if the "procedures" edge to the Procedure entity was cleared.
+func (m *EvidenceMutation) ProceduresCleared() bool {
+	return m.clearedprocedures
+}
+
+// RemoveProcedureIDs removes the "procedures" edge to the Procedure entity by IDs.
+func (m *EvidenceMutation) RemoveProcedureIDs(ids ...string) {
+	if m.removedprocedures == nil {
+		m.removedprocedures = make(map[string]struct{})
+	}
+	for i := range ids {
+		delete(m.procedures, ids[i])
+		m.removedprocedures[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedProcedures returns the removed IDs of the "procedures" edge to the Procedure entity.
+func (m *EvidenceMutation) RemovedProceduresIDs() (ids []string) {
+	for id := range m.removedprocedures {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ProceduresIDs returns the "procedures" edge IDs in the mutation.
+func (m *EvidenceMutation) ProceduresIDs() (ids []string) {
+	for id := range m.procedures {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetProcedures resets all changes to the "procedures" edge.
+func (m *EvidenceMutation) ResetProcedures() {
+	m.procedures = nil
+	m.clearedprocedures = false
+	m.removedprocedures = nil
+}
+
 // AddFileIDs adds the "files" edge to the File entity by ids.
 func (m *EvidenceMutation) AddFileIDs(ids ...string) {
 	if m.files == nil {
@@ -82076,7 +82190,7 @@ func (m *EvidenceMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *EvidenceMutation) AddedEdges() []string {
-	edges := make([]string, 0, 14)
+	edges := make([]string, 0, 16)
 	if m.owner != nil {
 		edges = append(edges, evidence.EdgeOwner)
 	}
@@ -82097,6 +82211,12 @@ func (m *EvidenceMutation) AddedEdges() []string {
 	}
 	if m.control_implementations != nil {
 		edges = append(edges, evidence.EdgeControlImplementations)
+	}
+	if m.internal_policies != nil {
+		edges = append(edges, evidence.EdgeInternalPolicies)
+	}
+	if m.procedures != nil {
+		edges = append(edges, evidence.EdgeProcedures)
 	}
 	if m.files != nil {
 		edges = append(edges, evidence.EdgeFiles)
@@ -82162,6 +82282,18 @@ func (m *EvidenceMutation) AddedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case evidence.EdgeInternalPolicies:
+		ids := make([]ent.Value, 0, len(m.internal_policies))
+		for id := range m.internal_policies {
+			ids = append(ids, id)
+		}
+		return ids
+	case evidence.EdgeProcedures:
+		ids := make([]ent.Value, 0, len(m.procedures))
+		for id := range m.procedures {
+			ids = append(ids, id)
+		}
+		return ids
 	case evidence.EdgeFiles:
 		ids := make([]ent.Value, 0, len(m.files))
 		for id := range m.files {
@@ -82210,7 +82342,7 @@ func (m *EvidenceMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *EvidenceMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 14)
+	edges := make([]string, 0, 16)
 	if m.removedcontrols != nil {
 		edges = append(edges, evidence.EdgeControls)
 	}
@@ -82222,6 +82354,12 @@ func (m *EvidenceMutation) RemovedEdges() []string {
 	}
 	if m.removedcontrol_implementations != nil {
 		edges = append(edges, evidence.EdgeControlImplementations)
+	}
+	if m.removedinternal_policies != nil {
+		edges = append(edges, evidence.EdgeInternalPolicies)
+	}
+	if m.removedprocedures != nil {
+		edges = append(edges, evidence.EdgeProcedures)
 	}
 	if m.removedfiles != nil {
 		edges = append(edges, evidence.EdgeFiles)
@@ -82275,6 +82413,18 @@ func (m *EvidenceMutation) RemovedIDs(name string) []ent.Value {
 			ids = append(ids, id)
 		}
 		return ids
+	case evidence.EdgeInternalPolicies:
+		ids := make([]ent.Value, 0, len(m.removedinternal_policies))
+		for id := range m.removedinternal_policies {
+			ids = append(ids, id)
+		}
+		return ids
+	case evidence.EdgeProcedures:
+		ids := make([]ent.Value, 0, len(m.removedprocedures))
+		for id := range m.removedprocedures {
+			ids = append(ids, id)
+		}
+		return ids
 	case evidence.EdgeFiles:
 		ids := make([]ent.Value, 0, len(m.removedfiles))
 		for id := range m.removedfiles {
@@ -82323,7 +82473,7 @@ func (m *EvidenceMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *EvidenceMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 14)
+	edges := make([]string, 0, 16)
 	if m.clearedowner {
 		edges = append(edges, evidence.EdgeOwner)
 	}
@@ -82344,6 +82494,12 @@ func (m *EvidenceMutation) ClearedEdges() []string {
 	}
 	if m.clearedcontrol_implementations {
 		edges = append(edges, evidence.EdgeControlImplementations)
+	}
+	if m.clearedinternal_policies {
+		edges = append(edges, evidence.EdgeInternalPolicies)
+	}
+	if m.clearedprocedures {
+		edges = append(edges, evidence.EdgeProcedures)
 	}
 	if m.clearedfiles {
 		edges = append(edges, evidence.EdgeFiles)
@@ -82387,6 +82543,10 @@ func (m *EvidenceMutation) EdgeCleared(name string) bool {
 		return m.clearedcontrol_objectives
 	case evidence.EdgeControlImplementations:
 		return m.clearedcontrol_implementations
+	case evidence.EdgeInternalPolicies:
+		return m.clearedinternal_policies
+	case evidence.EdgeProcedures:
+		return m.clearedprocedures
 	case evidence.EdgeFiles:
 		return m.clearedfiles
 	case evidence.EdgePrograms:
@@ -82446,6 +82606,12 @@ func (m *EvidenceMutation) ResetEdge(name string) error {
 		return nil
 	case evidence.EdgeControlImplementations:
 		m.ResetControlImplementations()
+		return nil
+	case evidence.EdgeInternalPolicies:
+		m.ResetInternalPolicies()
+		return nil
+	case evidence.EdgeProcedures:
+		m.ResetProcedures()
 		return nil
 	case evidence.EdgeFiles:
 		m.ResetFiles()

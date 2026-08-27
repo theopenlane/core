@@ -311,6 +311,7 @@ var Columns = []string{
 var ForeignKeys = []string{
 	"control_objective_procedures",
 	"custom_type_enum_procedures",
+	"evidence_procedures",
 }
 
 var (
