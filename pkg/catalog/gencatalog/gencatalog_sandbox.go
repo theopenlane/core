@@ -171,7 +171,6 @@ var DefaultSandboxCatalog = models.Catalog{
 			}}},
 			Description:          "Registry",
 			DisplayName:          "Registry",
-			IncludeWithTrial:     true,
 			LookupKey:            "registry_module",
 			MarketingDescription: "A complete, always-current record of your organization platforms, systems and their owners, assets, vendors, personnel, and contacts",
 			ProductID:            "prod_UlcOm2q6nv0DJC",
